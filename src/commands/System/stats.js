@@ -20,7 +20,7 @@ module.exports = class extends Command {
 			`• Users      :: ${this.client.users.size.toLocaleString()}`,
 			`• Servers    :: ${this.client.guilds.size.toLocaleString()}`,
 			`• Channels   :: ${this.client.channels.size.toLocaleString()}`,
-			`• Klasa     :: v${klasaVersion}`,
+			`• Klasa      :: v${klasaVersion}`,
 			`• Discord.js :: v${discordVersion}`
 		]);
 	}

@@ -11,8 +11,8 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [piece]) {
-		piece.enabled();
-		return msg.sendCode('diff', `+ Successfully enabled ${piece.type}: ${piece.name}`);
+		piece.enable();
+		return msg.sendCode('diff', `+ Successfully enabled ${piece.type}: ${piece.name || piece.conf.name}`);
 	}
 
 };

@@ -12,7 +12,7 @@ module.exports = class extends Command {
 
 	async run(msg, [piece]) {
 		piece.disable();
-		return msg.sendCode('diff', `+ Successfully disabled ${piece.type}: ${piece.name}`);
+		return msg.sendCode('diff', `+ Successfully disabled ${piece.type}: ${piece.name || piece.help.name}`);
 	}
 
 };
