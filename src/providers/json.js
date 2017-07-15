@@ -1,120 +1,140 @@
+const { Provider } = require('../index');
 const { resolve } = require('path');
 const fs = require('fs-nextra');
 
-let baseDir;
+module.exports = class extends Provider {
 
-exports.init = (client) => {
-	if (baseDir) return null;
-	baseDir = resolve(client.clientBaseDir, 'bwd', 'provider', 'json');
-	return fs.ensureDir(baseDir).catch(err => client.emit('log', err, 'error'));
-};
+	constructor(...args) {
+		super(...args, 'json', { description: 'Allows you to use JSON functionality throught Klasa' });
+		this.baseDir = resolve(this.client.clientBaseDir, 'bwd', 'provider', 'json');
+	}
 
-/* Table methods */
+	init() {
+		return fs.ensureDir(this.baseDir).catch(err => this.client.emit('log', err, 'error'));
+	}
 
-/**
- * Checks if a directory exists.
- * @param {string} table The name of the table you want to check.
- * @returns {Promise<boolean>}
- */
-exports.hasTable = table => fs.pathExists(resolve(baseDir, table));
+	/* Table methods */
 
-/**
- * Creates a new directory.
- * @param {string} table The name for the new directory.
- * @returns {Promise<Void>}
- */
-exports.createTable = table => fs.mkdir(resolve(baseDir, table));
+	/**
+	 * Checks if a directory exists.
+	 * @param {string} table The name of the table you want to check.
+	 * @returns {Promise<boolean>}
+	 */
+	hasTable(table) {
+		return fs.pathExists(resolve(this.baseDir, table));
+	}
 
-/**
- * Recursively deletes a directory.
- * @param {string} table The directory's name to delete.
- * @returns {Promise<Void>}
- */
-exports.deleteTable = table => this.hasTable(table)
-  .then(exists => exists ? fs.emptyDir(resolve(baseDir, table)).then(() => fs.remove(resolve(baseDir, table))) : null);
+	/**
+	 * Creates a new directory.
+	 * @param {string} table The name for the new directory.
+	 * @returns {Promise<Void>}
+	 */
+	createTable(table) {
+		return fs.mkdir(resolve(this.baseDir, table));
+	}
 
-/* Document methods */
+	/**
+	 * Recursively deletes a directory.
+	 * @param {string} table The directory's name to delete.
+	 * @returns {Promise<Void>}
+	 */
+	deleteTable(table) {
+		this.hasTable(table)
+			.then(exists => exists ? fs.emptyDir(resolve(this.baseDir, table)).then(() => fs.remove(resolve(this.baseDir, table))) : null);
+	}
 
-/**
- * Get all documents from a directory.
- * @param {string} table The name of the directory to fetch from.
- * @returns {Promise<Object[]>}
- */
-exports.getAll = (table) => {
-	const dir = resolve(baseDir, table);
-	return fs.readdir(dir)
-    .then(files => Promise.all(files.map(file => fs.readJSON(resolve(dir, file)))));
-};
+	/* Document methods */
 
-/**
- * Get a document from a directory.
- * @param {string} table The name of the directory.
- * @param {string} document The document name.
- * @returns {Promise<?Object>}
- */
-exports.get = (table, document) => fs.readJSON(resolve(baseDir, table, `${document}.json`)).catch(() => null);
+	/**
+	 * Get all documents from a directory.
+	 * @param {string} table The name of the directory to fetch from.
+	 * @returns {Promise<Object[]>}
+	 */
+	getAll(table) {
+		const dir = resolve(this.baseDir, table);
+		return fs.readdir(dir)
+			.then(files => Promise.all(files.map(file => fs.readJSON(resolve(dir, file)))));
+	}
 
-/**
- * Check if the document exists.
- * @param {string} table The name of the directory.
- * @param {string} document The document name.
- * @returns {Promise<boolean>}
- */
-exports.has = (table, document) => fs.pathExists(resolve(baseDir, table, `${document}.json`));
+	/**
+	 * Get a document from a directory.
+	 * @param {string} table The name of the directory.
+	 * @param {string} document The document name.
+	 * @returns {Promise<?Object>}
+	 */
+	get(table, document) {
+		return fs.readJSON(resolve(this.baseDir, table, `${document}.json`)).catch(() => null);
+	}
 
-/**
- * Get a random document from a directory.
- * @param {string} table The name of the directory.
- * @returns {Promise<Object>}
- */
-exports.getRandom = table => this.getAll(table).then(data => data[Math.floor(Math.random() * data.length)]);
+	/**
+	 * Check if the document exists.
+	 * @param {string} table The name of the directory.
+	 * @param {string} document The document name.
+	 * @returns {Promise<boolean>}
+	 */
+	has(table, document) {
+		return fs.pathExists(resolve(this.baseDir, table, `${document}.json`));
+	}
 
-/**
- * Insert a new document into a directory.
- * @param {string} table The name of the directory.
- * @param {string} document The document name.
- * @param {Object} data The object with all properties you want to insert into the document.
- * @returns {Promise<Void>}
- */
-exports.create = (table, document, data) => fs.outputJSONAtomic(resolve(baseDir, table, `${document}.json`), Object.assign(data, { id: document }));
-exports.set = (...args) => this.create(...args);
-exports.insert = (...args) => this.create(...args);
+	/**
+	 * Get a random document from a directory.
+	 * @param {string} table The name of the directory.
+	 * @returns {Promise<Object>}
+	 */
+	getRandom(table) {
+		this.getAll(table).then(data => data[Math.floor(Math.random() * data.length)]);
+	}
 
-/**
- * Update a document from a directory.
- * @param {string} table The name of the directory.
- * @param {string} document The document name.
- * @param {Object} data The object with all the properties you want to update.
- * @returns {Promise<Void>}
- */
-exports.update = (table, document, data) => this.get(table, document)
-  .then(current => fs.outputJSONAtomic(resolve(baseDir, table, `${document}.json`), Object.assign(current, data)));
+	/**
+	 * Insert a new document into a directory.
+	 * @param {string} table The name of the directory.
+	 * @param {string} document The document name.
+	 * @param {Object} data The object with all properties you want to insert into the document.
+	 * @returns {Promise<Void>}
+	 */
+	create(table, document, data) {
+		return fs.outputJSONAtomic(resolve(this.baseDir, table, `${document}.json`), Object.assign(data, { id: document }));
+	}
 
-/**
- * Replace all the data from a document.
- * @param {string} table The name of the directory.
- * @param {string} document The document name.
- * @param {Object} data The new data for the document.
- * @returns {Promise<Void>}
- */
-exports.replace = (table, document, data) => fs.outputJSONAtomic(resolve(baseDir, table, `${document}.json`), data);
+	set(...args) {
+		return this.create(...args);
+	}
 
-/**
- * Delete a document from the table.
- * @param {string} table The name of the directory.
- * @param {string} document The document name.
- * @returns {Promise<Void>}
- */
-exports.delete = (table, document) => fs.unlink(resolve(baseDir, table, `${document}.json`));
+	insert(...args) {
+		return this.create(...args);
+	}
 
-exports.conf = {
-	moduleName: 'json',
-	enabled: true,
-	requiredModules: ['fs-nextra']
-};
+	/**
+	 * Update a document from a directory.
+	 * @param {string} table The name of the directory.
+	 * @param {string} document The document name.
+	 * @param {Object} data The object with all the properties you want to update.
+	 * @returns {Promise<Void>}
+	 */
+	update(table, document, data) {
+		return this.get(table, document)
+			.then(current => fs.outputJSONAtomic(resolve(this.baseDir, table, `${document}.json`), Object.assign(current, data)));
+	}
 
-exports.help = {
-	name: 'json',
-	type: 'providers',
-	description: 'Allows you to use JSON functionality throught Klasa'
+	/**
+	 * Replace all the data from a document.
+	 * @param {string} table The name of the directory.
+	 * @param {string} document The document name.
+	 * @param {Object} data The new data for the document.
+	 * @returns {Promise<Void>}
+	 */
+	replace(table, document, data) {
+		return fs.outputJSONAtomic(resolve(this.baseDir, table, `${document}.json`), data);
+	}
+
+	/**
+	 * Delete a document from the table.
+	 * @param {string} table The name of the directory.
+	 * @param {string} document The document name.
+	 * @returns {Promise<Void>}
+	 */
+	delete(table, document) {
+		return fs.unlink(resolve(this.baseDir, table, `${document}.json`));
+	}
+
 };
