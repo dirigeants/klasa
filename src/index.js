@@ -25,5 +25,5 @@ module.exports = {
 	parsedUsage: require('./lib/parsers/parsedUsage'),
 	Resolver: require('./lib/parsers/Resolver'),
 	settingResolver: require('./lib/parsers/settingResolver'),
-	version: require('./package').version
+	version: require('../package').version
 };
