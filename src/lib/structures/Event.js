@@ -5,6 +5,7 @@ module.exports = class Event {
 		this.dir = dir;
 		this.file = file;
 		this.name = name;
+		this.type = 'event';
 	}
 
 	async reload() {

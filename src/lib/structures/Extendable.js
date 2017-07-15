@@ -7,6 +7,7 @@ module.exports = class Extendable {
 		this.dir = dir;
 		this.file = file;
 		this.name = name;
+		this.type = 'extendable';
 		this.appliesTo = appliesTo;
 	}
 

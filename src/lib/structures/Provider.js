@@ -5,6 +5,7 @@ module.exports = class Provider {
 		this.dir = dir;
 		this.file = file;
 		this.name = name;
+		this.type = 'provider';
 	}
 
 	async reload() {

@@ -42,13 +42,13 @@ module.exports = class FinalizerStore extends Collection {
 		return this.size;
 	}
 
-	run(msg, user, cmd, selective = false) {
+	run(msg, cmd, selective = false) {
 		const mps = [true];
 		let i = 1;
 		let usage;
 		this.forEach((mProc, key) => {
 			if (key === 'usage') usage = i;
-			if (!mProc.spamProtection || !selective) mps.push(mProc.run(msg, user, cmd));
+			if (!mProc.spamProtection || !selective) mps.push(mProc.run(msg, cmd));
 			i++;
 		});
 		return Promise.all(mps).then(value => value[usage]);

@@ -1,21 +1,17 @@
-exports.run = async (client, msg) => {
-	await msg.sendMessage('Rebooting...').catch(err => client.emit('error', err));
-	process.exit();
-};
+const { Command } = require('../../index');
 
-exports.conf = {
-	enabled: true,
-	runIn: ['text', 'dm', 'group'],
-	aliases: [],
-	permLevel: 10,
-	botPerms: [],
-	requiredFuncs: [],
-	requiredSettings: []
-};
+module.exports = class extends Command {
 
-exports.help = {
-	name: 'reboot',
-	description: 'Reboots the bot.',
-	usage: '',
-	usageDelim: ''
+	constructor(...args) {
+		super(...args, 'reboot', {
+			permLevel: 10,
+			description: 'Reboots the bot.'
+		});
+	}
+
+	async run(msg) {
+		await msg.sendMessage('Rebooting...').catch(err => this.client.emit('error', err));
+		process.exit();
+	}
+
 };

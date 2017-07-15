@@ -1,3 +1,4 @@
+const { Command } = require('../../index');
 const snek = require('snekfetch');
 const fs = require('fs-nextra');
 const { sep, resolve } = require('path');
@@ -8,34 +9,31 @@ const types = ['commands', 'functions', 'monitors', 'inhibitors', 'providers', '
 
 const mod = { exports: {} };
 
-/* eslint-disable no-throw-literal, no-use-before-define */
-exports.run = async (client, msg, [link, piece, folder = 'Downloaded']) => {
-	const proposedURL = types.includes(link) ? `${piecesURL}${link}/${piece}.js` : link;
-	if (link === 'commands' && !/\w+\/\w+/.test(piece)) {
-		return msg.sendMessage(`${msg.author} | You provided an invalid or no subfolder for a command. Please provide a valid folder name from the Pieces Repo. Example: Misc/test`);
+module.exports = class extends Command {
+
+	constructor(...args) {
+		super(...args, 'download', {
+			permLevel: 10,
+			description: 'Downloads a piece, either from a link or our Pieces Repository, and installs it.',
+			usage: '<commands|functions|monitors|inhibitors|providers|finalizers|extendables|url:url> [location:str] [folder:str]',
+			usageDelim: ' '
+		});
 	}
 
-	return requestAndCheck(proposedURL)
-    .then(text => process(client, msg, text, link, folder))
-    .catch(err => msg.sendMessage(`${msg.author} | ${err}`));
+	async run(msg, [link, piece, folder = 'Downloaded']) {
+		const proposedURL = types.includes(link) ? `${piecesURL}${link}/${piece}.js` : link;
+		if (link === 'commands' && !/\w+\/\w+/.test(piece)) {
+			return msg.sendMessage(`${msg.author} | You provided an invalid or no subfolder for a command. Please provide a valid folder name from the Pieces Repo. Example: Misc/test`);
+		}
+
+		return requestAndCheck(proposedURL)
+			.then(text => process(this.client, msg, text, link, folder))
+			.catch(err => msg.sendMessage(`${msg.author} | ${err}`));
+	}
+
 };
 
-exports.conf = {
-	enabled: true,
-	runIn: ['text', 'dm', 'group'],
-	aliases: [],
-	permLevel: 10,
-	botPerms: [],
-	requiredFuncs: [],
-	requiredSettings: []
-};
-
-exports.help = {
-	name: 'download',
-	description: 'Downloads a piece, either from a link or our Pieces Repository, and installs it.',
-	usage: '<commands|functions|monitors|inhibitors|providers|finalizers|extendables|url:url> [location:str] [folder:str]',
-	usageDelim: ' '
-};
+// I CBA to sort this out right now
 
 const process = async (client, msg, text, link, folder) => {
 	try {
@@ -68,7 +66,7 @@ const process = async (client, msg, text, link, folder) => {
 	];
 
 	await msg.sendMessage(`Are you sure you want to load the following ${type} into your bot? This will also install all required modules. This prompt will abort after 20 seconds.${code.join('\n')}`);
-	const collector = msg.channel.createMessageCollector(m => m.author === msg.author, { time: 20000 });
+	const collector = msg.channel.createMessageCollector(mes => mes.author === msg.author, { time: 20000 });
 
 	collector.on('collect', (mes) => {
 		if (mes.content.toLowerCase() === 'no') collector.stop('aborted');
@@ -81,10 +79,10 @@ const process = async (client, msg, text, link, folder) => {
 		await msg.sendMessage(`📥 \`Loading ${type}\``).catch(err => client.emit('log', err, 'error'));
 		if (Array.isArray(modules) && modules.length > 0) {
 			await client.funcs.installNPM(modules.join(' '))
-        .catch((err) => {
-	client.emit('error', err);
-	process.exit();
-});
+				.catch((err) => {
+					client.emit('error', err);
+					process.exit();
+				});
 		}
 		return load[type](client, msg, type, text, name, mod.exports.help.category || client.funcs.toTitleCase(folder));
 	});
@@ -93,12 +91,12 @@ const process = async (client, msg, text, link, folder) => {
 };
 
 const requestAndCheck = async newURL => snek.get(newURL)
-  .then(d => d.text)
-  .catch((error) => {
-	if (error.message === 'Unexpected token <') throw `An error has occured: **${error.message}** | This typically happens when you try to download a file from a link that isn't raw github information. Try a raw link instead!`;
-	if (error.message === 'Not Found') throw `An error has occured: **${error.message}** | This typically happens when you try to download a piece that doesn't exist. Try verifying it exists.`;
-	throw `An error has occured: **${error}** | We're not sure what happened here... Report this to our Developers to get it checked out!`;
-});
+	.then(data => data.text)
+	.catch((error) => {
+		if (error.message === 'Unexpected token <') throw `An error has occured: **${error.message}** | This typically happens when you try to download a file from a link that isn't raw github information. Try a raw link instead!`;
+		if (error.message === 'Not Found') throw `An error has occured: **${error.message}** | This typically happens when you try to download a piece that doesn't exist. Try verifying it exists.`;
+		throw `An error has occured: **${error}** | We're not sure what happened here... Report this to our Developers to get it checked out!`;
+	});
 
 const runChecks = (client, type, name) => {
 	if (!name) throw 'I have stopped the load of this piece because it does not have a name value, and I cannot determine the file name without it. Please ask the Developer of this piece to add it.';
@@ -134,11 +132,11 @@ const load = {
 		await fs.ensureDir(dir).catch(err => client.emit('log', err, 'error'));
 		await fs.writeFile(`${dir}${name}.js`, text);
 		return client.funcs.reloadCommand(`${category}/${name}`)
-      .then(message => msg.sendMessage(`📥 ${message}`))
-      .catch((response) => {
-	msg.sendMessage(`📵 Command load failed ${name}\n\`\`\`${response}\`\`\``);
-	return fs.unlink(`${dir}${name}.js`);
-});
+			.then(message => msg.sendMessage(`📥 ${message}`))
+			.catch((response) => {
+				msg.sendMessage(`📵 Command load failed ${name}\n\`\`\`${response}\`\`\``);
+				return fs.unlink(`${dir}${name}.js`);
+			});
 	},
 	functions: async (client, msg, type, text, name) => {
 		const dir = resolve(`${client.clientBaseDir}/functions/`) + sep;
@@ -146,11 +144,11 @@ const load = {
 		await fs.ensureDir(dir).catch(err => client.emit('log', err, 'error'));
 		await fs.writeFile(`${dir}${name}.js`, text).catch(err => client.emit('log', err, 'error'));
 		return client.funcs.reloadFunction(name)
-      .then(message => msg.sendMessage(`📥 ${message}`))
-      .catch((response) => {
-	msg.sendMessage(`📵 Function load failed ${name}\n\`\`\`${response}\`\`\``);
-	return fs.unlink(`${dir}${name}.js`);
-});
+			.then(message => msg.sendMessage(`📥 ${message}`))
+			.catch((response) => {
+				msg.sendMessage(`📵 Function load failed ${name}\n\`\`\`${response}\`\`\``);
+				return fs.unlink(`${dir}${name}.js`);
+			});
 	},
 	inhibitors: async (client, msg, type, text, name) => {
 		const dir = resolve(`${client.clientBaseDir}/inhibitors/`) + sep;
@@ -158,11 +156,11 @@ const load = {
 		await fs.ensureDir(dir).catch(err => client.emit('log', err, 'error'));
 		await fs.writeFile(`${dir}${name}.js`, text).catch(err => client.emit('log', err, 'error'));
 		return client.funcs.reloadInhibitor(name)
-      .then(message => msg.sendMessage(`📥 ${message}`))
-      .catch((response) => {
-	msg.sendMessage(`📵 Inhibitor load failed ${name}\n\`\`\`${response}\`\`\``);
-	return fs.unlink(`${dir}${name}.js`);
-});
+			.then(message => msg.sendMessage(`📥 ${message}`))
+			.catch((response) => {
+				msg.sendMessage(`📵 Inhibitor load failed ${name}\n\`\`\`${response}\`\`\``);
+				return fs.unlink(`${dir}${name}.js`);
+			});
 	},
 	monitors: async (client, msg, type, text, name) => {
 		const dir = resolve(`${client.clientBaseDir}/monitors/`) + sep;
@@ -170,11 +168,11 @@ const load = {
 		await fs.ensureDir(dir).catch(err => client.emit('log', err, 'error'));
 		await fs.writeFile(`${dir}${name}.js`, text).catch(err => client.emit('log', err, 'error'));
 		return client.funcs.reloadMessageMonitor(name)
-      .then(message => msg.sendMessage(`📥 ${message}`))
-      .catch((response) => {
-	msg.sendMessage(`📵 Monitor load failed ${name}\n\`\`\`${response}\`\`\``);
-	return fs.unlink(`${dir}${name}.js`);
-});
+			.then(message => msg.sendMessage(`📥 ${message}`))
+			.catch((response) => {
+				msg.sendMessage(`📵 Monitor load failed ${name}\n\`\`\`${response}\`\`\``);
+				return fs.unlink(`${dir}${name}.js`);
+			});
 	},
 	providers: async (client, msg, type, text, name) => {
 		const dir = resolve(`${client.clientBaseDir}/providers/`) + sep;
@@ -182,11 +180,11 @@ const load = {
 		await fs.ensureDir(dir).catch(err => client.emit('log', err, 'error'));
 		await fs.writeFile(`${dir}${name}.js`, text).catch(err => client.emit('log', err, 'error'));
 		return client.funcs.reloadProvider(name)
-      .then(message => msg.sendMessage(`📥 ${message}`))
-      .catch((response) => {
-	msg.sendMessage(`📵 Provider load failed ${name}\n\`\`\`${response}\`\`\``);
-	return fs.unlink(`${dir}${name}.js`);
-});
+			.then(message => msg.sendMessage(`📥 ${message}`))
+			.catch((response) => {
+				msg.sendMessage(`📵 Provider load failed ${name}\n\`\`\`${response}\`\`\``);
+				return fs.unlink(`${dir}${name}.js`);
+			});
 	},
 	finalizers: async (client, msg, type, text, name) => {
 		const dir = resolve(`${client.clientBaseDir}/finalizers/`) + sep;
@@ -194,11 +192,11 @@ const load = {
 		await fs.ensureDir(dir).catch(err => client.emit('log', err, 'error'));
 		await fs.writeFile(`${dir}${name}.js`, text).catch(err => client.emit('log', err, 'error'));
 		return client.funcs.reloadFinalizer(name)
-      .then(message => msg.sendMessage(`📥 ${message}`))
-      .catch((response) => {
-	msg.sendMessage(`📵 Finalizer load failed ${name}\n\`\`\`${response}\`\`\``);
-	return fs.unlink(`${dir}${name}.js`);
-});
+			.then(message => msg.sendMessage(`📥 ${message}`))
+			.catch((response) => {
+				msg.sendMessage(`📵 Finalizer load failed ${name}\n\`\`\`${response}\`\`\``);
+				return fs.unlink(`${dir}${name}.js`);
+			});
 	},
 	extendables: async (client, msg, type, text, name) => {
 		const dir = resolve(`${client.clientBaseDir}/extendables/`) + sep;

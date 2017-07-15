@@ -1,36 +1,28 @@
+const { Command } = require('../../index');
 const { version: discordVersion } = require('discord.js');
 const moment = require('moment');
 require('moment-duration-format');
 const { version: klasaVersion } = require('../../../package.json');
 
-exports.run = async (client, msg) => {
-	const duration = moment.duration(client.uptime).format(' D [days], H [hrs], m [mins], s [secs]');
-	return msg.sendCode('asciidoc', [
-		'= STATISTICS =',
-		'',
-		`• Mem Usage  :: ${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB`,
-		`• Uptime     :: ${duration}`,
-		`• Users      :: ${client.users.size.toLocaleString()}`,
-		`• Servers    :: ${client.guilds.size.toLocaleString()}`,
-		`• Channels   :: ${client.channels.size.toLocaleString()}`,
-		`• Klasa     :: v${klasaVersion}`,
-		`• Discord.js :: v${discordVersion}`
-	]);
-};
+module.exports = class extends Command {
 
-exports.conf = {
-	enabled: true,
-	runIn: ['text', 'dm', 'group'],
-	aliases: ['details', 'what'],
-	permLevel: 0,
-	botPerms: [],
-	requiredFuncs: [],
-	requiredSettings: []
-};
+	constructor(...args) {
+		super(...args, 'stats', { description: 'Provides some details about the bot and stats.' });
+	}
 
-exports.help = {
-	name: 'stats',
-	description: 'Provides some details about the bot and stats.',
-	usage: '',
-	usageDelim: ''
+	async run(msg) {
+		const duration = moment.duration(this.client.uptime).format(' D [days], H [hrs], m [mins], s [secs]');
+		return msg.sendCode('asciidoc', [
+			'= STATISTICS =',
+			'',
+			`• Mem Usage  :: ${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB`,
+			`• Uptime     :: ${duration}`,
+			`• Users      :: ${this.client.users.size.toLocaleString()}`,
+			`• Servers    :: ${this.client.guilds.size.toLocaleString()}`,
+			`• Channels   :: ${this.client.channels.size.toLocaleString()}`,
+			`• Klasa     :: v${klasaVersion}`,
+			`• Discord.js :: v${discordVersion}`
+		]);
+	}
+
 };

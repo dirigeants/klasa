@@ -1,25 +1,18 @@
-const longTypes = { command: 'commands', inhibitor: 'inhibitors', monitor: 'monitors', finalizer: 'finalizers' };
+const { Command } = require('../../index');
 
-exports.run = async (client, msg, [type, name]) => {
-	const toDisable = client[longTypes[type]].get(name);
-	if (!toDisable) return msg.sendCode('diff', `- I cannot find the ${type}: ${name}`);
-	toDisable.conf.enabled = false;
-	return msg.sendCode('diff', `+ Successfully disabled ${type}: ${name}`);
-};
+module.exports = class extends Command {
 
-exports.conf = {
-	enabled: true,
-	runIn: ['text', 'dm', 'group'],
-	aliases: [],
-	permLevel: 10,
-	botPerms: [],
-	requiredFuncs: [],
-	requiredSettings: []
-};
+	constructor(...args) {
+		super(...args, 'disable', {
+			permLevel: 10,
+			description: 'Re-disables or temporarily disables a command/inhibitor/monitor/finalizer. Default state restored on reboot.',
+			usage: '<Command:cmd|Inhibitor:inhibitor|Monitor:monitor|Finalizer:finalizer>'
+		});
+	}
 
-exports.help = {
-	name: 'disable',
-	description: 'Re-disables or temporarily disables a command/inhibitor/monitor/finalizer. Default state restored on reboot.',
-	usage: '<command|inhibitor|monitor|finalizer> <name:str>',
-	usageDelim: ' '
+	async run(msg, [piece]) {
+		piece.disable();
+		return msg.sendCode('diff', `+ Successfully disabled ${piece.type}: ${piece.name}`);
+	}
+
 };

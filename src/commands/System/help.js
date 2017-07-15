@@ -1,69 +1,61 @@
-exports.run = async (client, msg, [cmd]) => {
-	const method = client.user.bot ? 'author' : 'channel';
-	if (cmd) {
-		cmd = client.commands.get(cmd);
-		if (!cmd) return msg.sendMessage('❌ | Unknown command, please run the help command with no arguments to get a list of them all.');
-		const info = [
-			`= ${cmd.help.name} = `,
-			cmd.help.description,
-			`usage :: ${cmd.usage.fullUsage(msg)}`,
-			'Extended Help ::',
-			cmd.help.extendedHelp || 'No extended help available.'
-		].join('\n');
-		return msg.sendMessage(info, { code: 'asciidoc' });
+const { Command } = require('../../index');
+
+module.exports = class extends Command {
+
+	constructor(...args) {
+		super(...args, 'help', {
+			aliases: ['commands'],
+			description: 'Display help for a command.',
+			usage: '[Command:cmd]'
+		});
 	}
-	const help = this.buildHelp(client, msg);
-	const categories = Object.keys(help);
-	const helpMessage = [];
-	for (let cat = 0; cat < categories.length; cat++) {
-		helpMessage.push(`**${categories[cat]} Commands**: \`\`\`asciidoc`);
-		const subCategories = Object.keys(help[categories[cat]]);
-		for (let subCat = 0; subCat < subCategories.length; subCat++) helpMessage.push(`= ${subCategories[subCat]} =`, `${help[categories[cat]][subCategories[subCat]].join('\n')}\n`);
-		helpMessage.push('```\n\u200b');
-	}
-	return msg[method].send(helpMessage, { split: { char: '\u200b' } })
-    .then(() => { if (msg.channel.type !== 'dm' && client.user.bot) msg.sendMessage('📥 | Commands have been sent to your DMs.'); })
-    .catch(() => { if (msg.channel.type !== 'dm' && client.user.bot) msg.sendMessage("❌ | You have DMs disabled, I couldn't send you the commands in DMs."); });
-};
 
-exports.conf = {
-	enabled: true,
-	runIn: ['text', 'dm', 'group'],
-	aliases: ['commands'],
-	permLevel: 0,
-	botPerms: [],
-	requiredFuncs: [],
-	requiredSettings: []
-};
-
-exports.help = {
-	name: 'help',
-	description: 'Display help for a command.',
-	usage: '[command:str]',
-	usageDelim: ''
-};
-
-/* eslint-disable no-restricted-syntax, no-prototype-builtins */
-exports.buildHelp = (client, msg) => {
-	const help = {};
-
-	const commandNames = Array.from(client.commands.keys());
-	const longest = commandNames.reduce((long, str) => Math.max(long, str.length), 0);
-
-	for (const command of client.commands.values()) {
-		if (this.runCommandInhibitors(client, msg, command)) {
-			const cat = command.help.category;
-			const subcat = command.help.subCategory;
-			if (!help.hasOwnProperty(cat)) help[cat] = {};
-			if (!help[cat].hasOwnProperty(subcat)) help[cat][subcat] = [];
-			help[cat][subcat].push(`${msg.guildSettings.prefix}${command.help.name.padEnd(longest)} :: ${command.help.description}`);
+	async run(msg, [cmd]) {
+		const method = this.client.user.bot ? 'author' : 'channel';
+		if (cmd) {
+			const info = [
+				`= ${cmd.help.name} = `,
+				cmd.help.description,
+				`usage :: ${cmd.usage.fullUsage(msg)}`,
+				'Extended Help ::',
+				cmd.help.extendedHelp || 'No extended help available.'
+			].join('\n');
+			return msg.sendMessage(info, { code: 'asciidoc' });
 		}
+		const help = await this.buildHelp(msg);
+		const categories = Object.keys(help);
+		const helpMessage = [];
+		for (let cat = 0; cat < categories.length; cat++) {
+			helpMessage.push(`**${categories[cat]} Commands**: \`\`\`asciidoc`);
+			const subCategories = Object.keys(help[categories[cat]]);
+			for (let subCat = 0; subCat < subCategories.length; subCat++) helpMessage.push(`= ${subCategories[subCat]} =`, `${help[categories[cat]][subCategories[subCat]].join('\n')}\n`);
+			helpMessage.push('```\n\u200b');
+		}
+		return msg[method].send(helpMessage, { split: { char: '\u200b' } })
+			.then(() => { if (msg.channel.type !== 'dm' && this.client.user.bot) msg.sendMessage('📥 | Commands have been sent to your DMs.'); })
+			.catch(() => { if (msg.channel.type !== 'dm' && this.client.user.bot) msg.sendMessage("❌ | You have DMs disabled, I couldn't send you the commands in DMs."); });
 	}
 
-	return help;
-};
+	async buildHelp(msg) {
+		const help = {};
 
-exports.runCommandInhibitors = (client, msg, command) => !client.commandInhibitors.some((inhibitor) => {
-	if (!inhibitor.conf.spamProtection && inhibitor.conf.enabled) return inhibitor.run(client, msg, command);
-	return false;
-});
+		const commandNames = Array.from(this.client.commands.keys());
+		const longest = commandNames.reduce((long, str) => Math.max(long, str.length), 0);
+
+		await Promise.all(this.client.commands.map((command) =>
+			this.client.inhibitors.run(this.msg, this.msg.author, command, true)
+				.then(() => {
+					if (!help.hasOwnProperty(command.help.category)) help[command.help.category] = {};
+					if (!help[command.help.category].hasOwnProperty(command.help.subCategory)) help[command.help.category][command.help.subCategory] = [];
+					help[command.help.category][command.help.subCategory].push(`${msg.guildSettings.prefix}${command.help.name.padEnd(longest)} :: ${command.help.description}`);
+					return;
+				})
+				.catch(() => {
+					// noop
+				})
+		));
+
+		return help;
+	}
+
+};

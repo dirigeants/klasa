@@ -5,6 +5,7 @@ module.exports = class Inhibitor {
 		this.dir = dir;
 		this.dir = file;
 		this.name = name;
+		this.type = 'inhibitor';
 		this.enabled = enabled;
 		this.spamProtection = spamProtection;
 	}
@@ -13,6 +14,16 @@ module.exports = class Inhibitor {
 		const inh = this.client.inhibitors.load(this.dir, this.file);
 		inh.init();
 		return inh;
+	}
+
+	disable() {
+		this.enabled = false;
+		return this;
+	}
+
+	enable() {
+		this.enabled = true;
+		return this;
 	}
 
 	run() {
