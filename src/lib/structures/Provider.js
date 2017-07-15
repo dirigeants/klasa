@@ -1,6 +1,6 @@
 module.exports = class Provider {
 
-	constructor(client, dir, file, name, { description = '', enabled = true }) {
+	constructor(client, dir, file, name, { description = '', enabled = true, sql = false }) {
 		this.client = client;
 		this.dir = dir;
 		this.file = file;
@@ -8,6 +8,7 @@ module.exports = class Provider {
 		this.type = 'provider';
 		this.description = description;
 		this.enabled = enabled;
+		this.sql = sql;
 	}
 
 	async reload() {

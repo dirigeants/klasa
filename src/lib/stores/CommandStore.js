@@ -72,19 +72,19 @@ module.exports = class CommandStore extends Collection {
 	static async walk(store, dir) {
 		const files = await fs.readdir(dir).catch(() => { fs.ensureDir(dir).catch(err => store.client.emit('errorlog', err)); });
 		if (!files) return false;
-		files.filter(file => file.endsWith('.js')).map(file => store.load([file]));
+		files.filter(file => file.endsWith('.js')).map(file => store.load(dir, [file]));
 		const subfolders = [];
 		const mps1 = files.filter(file => !file.includes('.')).map(async (folder) => {
 			const subFiles = await fs.readdir(resolve(dir, folder));
 			if (!subFiles) return true;
 			subFiles.filter(file => !file.includes('.')).forEach(subfolder => subfolders.push({ folder: folder, subfolder: subfolder }));
-			return subFiles.filter(file => file.endsWith('.js')).map(file => store.load([folder, file]));
+			return subFiles.filter(file => file.endsWith('.js')).map(file => store.load(dir, [folder, file]));
 		});
 		await Promise.all(mps1).catch(err => { throw err; });
 		const mps2 = subfolders.map(async (subfolder) => {
 			const subSubFiles = await fs.readdir(resolve(dir, subfolder.folder, subfolder.subfolder));
 			if (!subSubFiles) return true;
-			return subSubFiles.filter(file => file.endsWith('.js')).map(file => store.load([subfolder.folder, subfolder.subfolder, file]));
+			return subSubFiles.filter(file => file.endsWith('.js')).map(file => store.load(dir, [subfolder.folder, subfolder.subfolder, file]));
 		});
 		return Promise.all(mps2).catch(err => { throw err; });
 	}

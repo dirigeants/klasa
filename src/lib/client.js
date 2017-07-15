@@ -98,7 +98,7 @@ module.exports = class Klasa extends Discord.Client {
 			console.error(err);
 			process.exit();
 		});
-		this.client.emit('log', [
+		this.emit('log', [
 			`Loaded ${commands} commands, with ${aliases} aliases.`,
 			`Loaded ${inhibitors} command inhibitors.`,
 			`Loaded ${finalizers} command finalizers.`,
