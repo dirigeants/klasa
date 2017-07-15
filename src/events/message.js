@@ -1,109 +1,107 @@
+const { Event } = require('../index');
 const now = require('performance-now');
 
-exports.run = async (client, msg) => {
-	if (!client.ready) return;
-	await this.runMessageMonitors(client, msg);
-	if (!this.handleMessage(client, msg)) return;
-	const res = await this.parseCommand(client, msg);
-	if (!res.command) return;
-	this.handleCommand(client, msg, res);
-};
+module.exports = class extends Event {
 
-exports.runMessageMonitors = (client, msg) => {
-	client.messageMonitors.forEach((monit) => {
-		if (monit.conf.enabled) {
-			if (monit.conf.ignoreBots && msg.author.bot) return;
-			if (monit.conf.ignoreSelf && client.user === msg.author) return;
-			monit.run(client, msg);
-		}
-	});
-};
-
-exports.handleMessage = (client, msg) => {
-  // Ignore Bots if True
-	if (client.config.ignoreBots && msg.author.bot) return false;
-  // Ignore Self if true
-	if (client.config.ignoreSelf && msg.author.id === client.user.id) return false;
-  // Ignore other users if selfbot
-	if (!client.user.bot && msg.author.id !== client.user.id) return false;
-  // Ignore self if bot
-	if (client.user.bot && msg.author.id === client.user.id) return false;
-	return true;
-};
-
-exports.parseCommand = async (client, msg, usage = false) => {
-	const prefix = await client.funcs.getPrefix(client, msg);
-	if (!prefix) return false;
-	const prefixLength = this.getLength(client, msg, prefix);
-	if (usage) return prefixLength;
-	return {
-		command: msg.content.slice(prefixLength).split(' ')[0].toLowerCase(),
-		prefix,
-		prefixLength
-	};
-};
-
-exports.getLength = (client, msg, prefix) => {
-	if (client.config.prefixMention === prefix) return prefix.exec(msg.content)[0].length + 1;
-	return prefix.exec(msg.content)[0].length;
-};
-
-exports.handleCommand = (client, msg, { command, prefix, prefixLength }) => {
-	const validCommand = client.commands.get(command);
-	if (!validCommand) return;
-	const start = now();
-	const response = this.runInhibitors(client, msg, validCommand);
-	if (response) {
-		if (typeof response === 'string') msg.reply(response);
-		return;
+	constructor(...args) {
+		super(...args, 'message');
 	}
-	msg.cmdMsg = new client.CommandMessage(msg, validCommand, prefix, prefixLength);
-	this.runCommand(client, msg, start);
-};
 
-exports.runCommand = (client, msg, start) => {
-	msg.cmdMsg.validateArgs()
-    .then((params) => {
-	msg.cmdMsg.cmd.run(client, msg, params)
-        .then(mes => this.runFinalizers(client, msg, mes, start))
-        .catch(error => client.funcs.handleError(client, msg, error));
-})
-    .catch((error) => {
-	if (error.code === 1 && client.config.cmdPrompt) {
-		return this.awaitMessage(client, msg, start, error.message)
-          .catch(err => client.funcs.handleError(client, msg, err));
+	async run(msg) {
+		if (!this.client.ready) return;
+		await this.client.monitors.run(msg);
+		if (!this.handleMessage(msg)) return;
+		const res = await this.parseCommand(msg);
+		if (!res.command) return;
+		this.handleCommand(msg, res);
 	}
-	return client.funcs.handleError(client, msg, error);
-});
-};
 
-/* eslint-disable no-throw-literal */
-exports.awaitMessage = async (client, msg, start, error) => {
-	const message = await msg.channel.send(`<@!${msg.member.id}> | **${error}** | You have **30** seconds to respond to this prompt with a valid argument. Type **"ABORT"** to abort this prompt.`)
-    .catch((err) => { throw client.funcs.newError(err); });
+	handleMessage(msg) {
+		// Ignore Bots if True
+		if (this.client.config.ignoreBots && msg.author.bot) return false;
+		// Ignore Self if true
+		if (this.client.config.ignoreSelf && msg.author.id === this.client.user.id) return false;
+		// Ignore other users if selfbot
+		if (!this.client.user.bot && msg.author.id !== this.client.user.id) return false;
+		// Ignore self if bot
+		if (this.client.user.bot && msg.author.id === this.client.user.id) return false;
+		return true;
+	}
 
-	const param = await msg.channel.awaitMessages(response => response.member.id === msg.author.id && response.id !== message.id, { max: 1, time: 30000, errors: ['time'] });
-	if (param.first().content.toLowerCase() === 'abort') throw 'Aborted';
-	msg.cmdMsg.args[msg.cmdMsg.args.lastIndexOf(null)] = param.first().content;
-	msg.cmdMsg.reprompted = true;
+	async parseCommand(msg, usage = false) {
+		const prefix = await this.getPrefix(msg);
+		if (!prefix) return false;
+		const prefixLength = this.getLength(msg, prefix);
+		if (usage) return prefixLength;
+		return {
+			command: msg.content.slice(prefixLength).split(' ')[0].toLowerCase(),
+			prefix,
+			prefixLength
+		};
+	}
 
-	if (message.deletable) message.delete();
+	getLength(msg, prefix) {
+		if (this.client.config.prefixMention === prefix) return prefix.exec(msg.content)[0].length + 1;
+		return prefix.exec(msg.content)[0].length;
+	}
 
-	return this.runCommand(client, msg, start);
-};
+	handleCommand(msg, { command, prefix, prefixLength }) {
+		const validCommand = this.client.commands.get(command);
+		if (!validCommand) return;
+		const start = now();
+		this.client.inhibitors.run(msg, validCommand)
+			.then(() => {
+				msg.cmdMsg = new this.client.methods.CommandMessage(msg, validCommand, prefix, prefixLength);
+				this.runCommand(msg, start);
+			})
+			.catch((response) => msg.reply(response));
+	}
 
-exports.runInhibitors = (client, msg, command) => {
-	let response;
-	client.commandInhibitors.some((inhibitor) => {
-		if (inhibitor.conf.enabled) {
-			response = inhibitor.run(client, msg, command);
-			if (response) return true;
-		}
+	runCommand(msg, start) {
+		msg.cmdMsg.validateArgs()
+			.then((params) => {
+				msg.cmdMsg.cmd.run(msg, params)
+					.then(mes => this.client.finalizers.run(msg, mes, start))
+					.catch(error => this.handleError(msg, error));
+			})
+			.catch((error) => {
+				if (error.code === 1 && this.client.config.cmdPrompt) {
+					return this.awaitMessage(this.client, msg, start, error.message)
+						.catch(err => this.handleError(msg, err));
+				}
+				return this.handleError(msg, error);
+			});
+	}
+
+	async awaitMessage(msg, start, error) {
+		const message = await msg.channel.send(`<@!${msg.member.id}> | **${error}** | You have **30** seconds to respond to this prompt with a valid argument. Type **"ABORT"** to abort this prompt.`)
+			.catch((err) => { throw this.client.methods.util.newError(err); });
+
+		const param = await msg.channel.awaitMessages(response => response.member.id === msg.author.id && response.id !== message.id, { max: 1, time: 30000, errors: ['time'] });
+		if (param.first().content.toLowerCase() === 'abort') throw 'Aborted';
+		msg.cmdMsg.args[msg.cmdMsg.args.lastIndexOf(null)] = param.first().content;
+		msg.cmdMsg.reprompted = true;
+
+		if (message.deletable) message.delete();
+
+		return this.runCommand(msg, start);
+	}
+
+	handleError(msg, error) {
+		if (error.stack) this.client.emit('error', error.stack);
+		else if (error.message) msg.sendCode('JSON', error.message).catch(err => this.client.emit('error', err));
+		else msg.sendMessage(error).catch(err => this.client.emit('error', err));
+	}
+
+	async getPrefix(client, msg) {
+		if (client.config.prefixMention.test(msg.content)) return client.config.prefixMention;
+		const { prefix } = msg.guildSettings;
+		const { regExpEsc } = client.methods.util;
+		if (prefix instanceof Array) {
+			for (let i = prefix.length - 1; i >= 0; i--) if (msg.content.startsWith(prefix[i])) return new RegExp(`^${regExpEsc(prefix[i])}`);
+		} else if (prefix && msg.content.startsWith(prefix)) { return new RegExp(`^${regExpEsc(prefix)}`); }
 		return false;
-	});
-	return response;
+	}
+
 };
 
-exports.runFinalizers = (client, msg, mes, start) => {
-	Promise.all(client.commandFinalizers.map(item => item.run(client, msg, mes, start)));
-};

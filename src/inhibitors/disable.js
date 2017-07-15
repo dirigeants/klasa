@@ -1,10 +1,14 @@
-exports.conf = {
-	enabled: true,
-	spamProtection: false,
-	priority: 9
-};
+const { Inhibitor } = require('../index');
 
-exports.run = (client, msg, cmd) => {
-	if (cmd.conf.enabled && !msg.guildSettings.disabledCommands.includes(cmd.help.name)) return false;
-	return 'This command is currently disabled';
+module.exports = class extends Inhibitor {
+
+	constructor(...args) {
+		super(...args, 'cooldown', { });
+	}
+
+	async run(msg, cmd) {
+		if (cmd.conf.enabled && !msg.guildSettings.disabledCommands.includes(cmd.help.name)) return;
+		throw 'This command is currently disabled';
+	}
+
 };

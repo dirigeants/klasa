@@ -1,8 +1,17 @@
-/* eslint-disable no-restricted-syntax */
-exports.run = (client, msg) => {
-	for (const [key, value] of client.commandMessages) {
-		if (key === msg.id) return client.commandMessages.delete(key);
-		if (msg.id === value.response.id) return client.commandMessages.delete(key);
+const { Event } = require('../index');
+
+module.exports = class extends Event {
+
+	constructor(...args) {
+		super(...args, 'messageDelete');
 	}
-	return false;
+
+	run(msg) {
+		for (const [key, value] of this.client.commandMessages) {
+			if (key === msg.id) return this.client.commandMessages.delete(key);
+			if (msg.id === value.response.id) return this.client.commandMessages.delete(key);
+		}
+		return false;
+	}
+
 };

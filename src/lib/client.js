@@ -125,6 +125,7 @@ module.exports = class Klasa extends Discord.Client {
 		await this.inhibitors.init();
 		await this.finalizers.init();
 		await this.monitors.init();
+		util.initClean(this);
 		this.setInterval(this.sweepCommandMessages.bind(this), this.commandMessageLifetime);
 		this.ready = true;
 		this.emit('log', this.config.readyMessage || `Successfully initialized. Ready to serve ${this.guilds.size} guilds.`);

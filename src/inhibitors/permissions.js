@@ -1,12 +1,19 @@
-exports.conf = {
-	enabled: true,
-	spamProtection: false,
-	priority: 10
-};
+const { Inhibitor } = require('../index');
 
-exports.run = (client, msg, cmd) => {
-	const res = client.funcs.checkPerms(client, msg, cmd.conf.permLevel);
-	if (res === null) return true;
-	else if (!res) return 'You do not have permission to use this command.';
-	return false;
+module.exports = class extends Inhibitor {
+
+	constructor(...args) {
+		super(...args, 'permissions', {});
+	}
+
+	async run(msg, cmd) {
+		const min = typeof cmd === 'number' ? cmd : cmd.conf.permLevel;
+		const mps = [];
+		for (let i = min; i < 11; i++) {
+			mps.push(this.client.permStructure[i].check(this.client, msg));
+			if (this.permStructure[i].break) break;
+		}
+		return Promise.race(mps).catch(() => { throw 'You do not have permission to use this command.'; });
+	}
+
 };

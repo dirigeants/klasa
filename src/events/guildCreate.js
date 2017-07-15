@@ -1,3 +1,13 @@
-exports.run = (client, guild) => {
-	if (guild.available) client.settingGateway.create(guild).catch(e => client.emit('log', e, 'error'));
+const { Event } = require('../index');
+
+module.exports = class extends Event {
+
+	constructor(...args) {
+		super(...args, 'guildCreate');
+	}
+
+	run(guild) {
+		if (guild.available) this.client.settingGateway.create(guild).catch(err => this.client.emit('log', err, 'error'));
+	}
+
 };
