@@ -8,7 +8,7 @@ const { Finalizer } = require('../index');
 module.exports = class extends Finalizer {
 
 	constructor(...args) {
-		super(...args, 'commandCooldown');
+		super(...args, 'commandCooldown', {});
 	}
 
 	run(msg, mes, start) {

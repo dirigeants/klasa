@@ -1,7 +1,7 @@
-const SettingResolver = require('./settingResolver');
-const CacheManager = require('./cacheManager');
-const SchemaManager = require('./schemaManager');
-const SQL = require('./sql');
+const SettingResolver = require('../parsers/SettingResolver');
+const CacheManager = require('./CacheManager');
+const SchemaManager = require('./SchemaManager');
+const SQL = require('./SQL');
 
 module.exports = class SettingGateway extends CacheManager {
 
