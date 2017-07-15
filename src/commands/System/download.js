@@ -13,6 +13,7 @@ module.exports = class extends Command {
 
 	constructor(...args) {
 		super(...args, 'download', {
+			enable: false,
 			permLevel: 10,
 			description: 'Downloads a piece, either from a link or our Pieces Repository, and installs it.',
 			usage: '<commands|functions|monitors|inhibitors|providers|finalizers|extendables|url:url> [location:str] [folder:str]',
