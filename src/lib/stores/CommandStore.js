@@ -28,7 +28,7 @@ module.exports = class CommandStore extends Collection {
 	set(command) {
 		if (!(command instanceof Command)) return this.client.emit('error', 'Only commands may be stored in the CommandStore.');
 		const existing = this.get(command.name);
-		if (existing) existing.delete();
+		if (existing) this.delete(existing);
 		super.set(command.help.name, command);
 		command.conf.aliases.forEach(alias => this.aliases.set(alias, command));
 		return command;
