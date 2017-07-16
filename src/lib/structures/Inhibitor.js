@@ -12,8 +12,12 @@ module.exports = class Inhibitor {
 
 	async reload() {
 		const inh = this.client.inhibitors.load(this.dir, this.file);
-		inh.init();
+		await inh.init();
 		return inh;
+	}
+
+	unload() {
+		this.client.inhibitors.delete(this);
 	}
 
 	disable() {

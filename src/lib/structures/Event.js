@@ -10,8 +10,12 @@ module.exports = class Event {
 
 	async reload() {
 		const evt = this.client.events.load(this.dir, this.file);
-		evt.init();
+		await evt.init();
 		return evt;
+	}
+
+	unload() {
+		return this.client.events.delete(this);
 	}
 
 	run() {

@@ -13,8 +13,12 @@ module.exports = class Provider {
 
 	async reload() {
 		const pro = this.client.providers.load(this.dir, this.file);
-		pro.init();
+		await pro.init();
 		return pro;
+	}
+
+	unload() {
+		return this.client.providers.delete(this);
 	}
 
 	disable() {

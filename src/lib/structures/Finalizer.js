@@ -11,8 +11,12 @@ module.exports = class Finalizer {
 
 	async reload() {
 		const fin = this.client.finalizers.load(this.dir, this.file);
-		fin.init();
+		await fin.init();
 		return fin;
+	}
+
+	unload() {
+		return this.client.finalizers.delete(this);
 	}
 
 	disable() {

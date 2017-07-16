@@ -11,8 +11,12 @@ module.exports = class Monitor {
 
 	async reload() {
 		const mon = this.client.monitors.load(this.dir, this.file);
-		mon.init();
+		await mon.init();
 		return mon;
+	}
+
+	unload() {
+		return this.client.monitors.delete(this);
 	}
 
 	disable() {

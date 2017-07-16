@@ -40,8 +40,12 @@ module.exports = class Command {
 
 	async reload() {
 		const cmd = this.client.commands.load(this.dir, this.file);
-		cmd.init();
+		await cmd.init();
 		return cmd;
+	}
+
+	unload() {
+		return this.client.commands.delete(this);
 	}
 
 	disable() {
