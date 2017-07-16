@@ -18,8 +18,8 @@ module.exports = class extends Command {
 		await fs.access(fileLocation).catch(() => { throw '❌ That file has been transfered already or never existed.'; });
 		return fs.copy(fileLocation, resolve(this.client.clientBaseDir, `${piece.type}s`, name))
 			.then(() => {
-				this.client[`${piece.type}s`].load(resolve(this.client.clientBaseDir, `${piece.type}s`), name).catch((response) => { throw `❌ ${response}`; });
-				return msg.sendMessage(`✅ Successfully Transferred ${piece.type}: ${piece.name}`);
+				this.client[`${piece.type}s`].load(this.client.clientBaseDir, [`${piece.type}s`, name]);
+				return msg.sendMessage(`✅ Successfully Transferred ${piece.type}: ${piece.help.name}`);
 			})
 			.catch((err) => {
 				this.client.emit('error', err.stack);
