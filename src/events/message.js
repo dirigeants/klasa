@@ -51,16 +51,16 @@ module.exports = class extends Event {
 		const start = now();
 		this.client.inhibitors.run(msg, validCommand)
 			.then(() => {
-				msg.cmdMsg = new this.client.methods.CommandMessage(msg, validCommand, prefix, prefixLength);
-				this.runCommand(msg, start);
+				const proxy = this.makeProxy(msg, new this.client.methods.CommandMessage(msg, validCommand, prefix, prefixLength));
+				this.runCommand(proxy, start);
 			})
 			.catch((response) => msg.reply(response));
 	}
 
 	runCommand(msg, start) {
-		msg.cmdMsg.validateArgs()
+		msg.validateArgs()
 			.then((params) => {
-				msg.cmdMsg.cmd.run(msg, params)
+				msg.cmd.run(msg, params)
 					.then(mes => this.client.finalizers.run(msg, mes, start))
 					.catch(error => this.handleError(msg, error));
 			})
@@ -101,6 +101,14 @@ module.exports = class extends Event {
 			for (let i = prefix.length - 1; i >= 0; i--) if (msg.content.startsWith(prefix[i])) return new RegExp(`^${regExpEsc(prefix[i])}`);
 		} else if (prefix && msg.content.startsWith(prefix)) { return new RegExp(`^${regExpEsc(prefix)}`); }
 		return false;
+	}
+
+	makeProxy(msg, cmdMsg) {
+		return new Proxy(msg, {
+			get: function handler(target, param) {
+				return param in msg ? msg[param] : cmdMsg[param];
+			}
+		});
 	}
 
 };

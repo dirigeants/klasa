@@ -15,8 +15,8 @@ module.exports = class extends Finalizer {
 		if (this.client.config.cmdLogging) {
 			clk.enabled = !this.client.config.disableLogColor;
 			this.client.emit('log', [
-				`${msg.cmdMsg.cmd.help.name}(${msg.cmdMsg.args.join(', ')})`,
-				msg.cmdMsg.reprompted ? `${clk.bgRed(`[${(now() - start).toFixed(2)}ms]`)}` : `${clk.bgBlue(`[${(now() - start).toFixed(2)}ms]`)}`,
+				`${msg.cmd.help.name}(${msg.args.join(', ')})`,
+				msg.reprompted ? `${clk.bgRed(`[${(now() - start).toFixed(2)}ms]`)}` : `${clk.bgBlue(`[${(now() - start).toFixed(2)}ms]`)}`,
 				`${clk.black.bgYellow(`${msg.author.username}[${msg.author.id}]`)}`,
 				this[msg.channel.type](msg)
 			].join(' '), 'log');
