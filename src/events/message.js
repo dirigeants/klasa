@@ -79,8 +79,8 @@ module.exports = class extends Event {
 
 		const param = await msg.channel.awaitMessages(response => response.member.id === msg.author.id && response.id !== message.id, { max: 1, time: 30000, errors: ['time'] });
 		if (param.first().content.toLowerCase() === 'abort') throw 'Aborted';
-		msg.cmdMsg.args[msg.cmdMsg.args.lastIndexOf(null)] = param.first().content;
-		msg.cmdMsg.reprompted = true;
+		msg.args[msg.args.lastIndexOf(null)] = param.first().content;
+		msg.reprompted = true;
 
 		if (message.deletable) message.delete();
 
