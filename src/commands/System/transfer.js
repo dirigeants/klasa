@@ -1,6 +1,6 @@
 const { Command } = require('../../index');
 const fs = require('fs-nextra');
-const { resolve, join } = require('path');
+const { resolve, join, sep } = require('path');
 
 module.exports = class extends Command {
 
@@ -18,8 +18,8 @@ module.exports = class extends Command {
 		await fs.access(fileLocation).catch(() => { throw '❌ That file has been transfered already or never existed.'; });
 		return fs.copy(fileLocation, resolve(this.client.clientBaseDir, `${piece.type}s`, name))
 			.then(() => {
-				this.client[`${piece.type}s`].load(this.client.clientBaseDir, [`${piece.type}s`, name]);
-				return msg.sendMessage(`✅ Successfully Transferred ${piece.type}: ${piece.help.name}`);
+				this.client[`${piece.type}s`].load(resolve(this.client.clientBaseDir, `${piece.type}s`), name.split(sep));
+				return msg.sendMessage(`✅ Successfully Transferred ${piece.type}: ${piece.name || piece.help.name}`);
 			})
 			.catch((err) => {
 				this.client.emit('error', err.stack);
