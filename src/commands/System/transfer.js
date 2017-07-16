@@ -1,6 +1,6 @@
 const { Command } = require('../../index');
 const fs = require('fs-nextra');
-const { resolve, join, sep } = require('path');
+const { resolve, join } = require('path');
 
 module.exports = class extends Command {
 
