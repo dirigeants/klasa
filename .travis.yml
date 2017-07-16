@@ -2,6 +2,15 @@ language: node_js
 node_js:
   - "8"
 install: npm install
+jobs:
+  include:
+    - stage: test
+      script: npm test
+    - stage: deploy
+      script: bash ./.travis-deploy.sh
+cache:
+  directories:
+    - node_modules
 #notifications:
 #  webhooks:
 #    urls:

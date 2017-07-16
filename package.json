@@ -15,7 +15,8 @@
   },
   "scripts": {
     "lint": "npm run test -- --fix",
-    "test": "eslint src"
+    "test": "eslint src",
+    "docs": "./node_modules/.bin/jsdoc -c ./.docstrap.json -R README.md"
   },
   "dependencies": {
     "chalk": "^2.0.1",
@@ -26,7 +27,9 @@
     "performance-now": "^2.1.0"
   },
   "devDependencies": {
-    "eslint": "^3.19.0"
+    "eslint": "^4.2.0",
+    "ink-docstrap": "github:bdistin/docstrap#klasa",
+    "jsdoc": "github:jsdoc3/jsdoc"
   },
   "peerDependencies": {
     "dotenv": "^4.0.0"
