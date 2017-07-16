@@ -37,17 +37,17 @@ module.exports = class FinalizerStore extends Collection {
 	}
 
 	load(dir, file) {
-		const fin = this.set(new (require(join(dir, ...file)))(this.client, dir, ...file));
-		delete require.cache[join(dir, ...file)];
+		const fin = this.set(new (require(join(dir, file)))(this.client, dir, file));
+		delete require.cache[join(dir, file)];
 		return fin;
 	}
 
 	async loadAll() {
 		this.clear();
 		const coreFiles = await fs.readdir(this.coreDir).catch(() => { fs.ensureDir(this.coreDir).catch(err => this.client.emit('errorlog', err)); });
-		if (coreFiles) await Promise.all(coreFiles.map(file => this.load(this.coreDir, [file])));
+		if (coreFiles) await Promise.all(coreFiles.map(this.load.bind(this, this.coreDir)));
 		const userFiles = await fs.readdir(this.userDir).catch(() => { fs.ensureDir(this.userDir).catch(err => this.client.emit('errorlog', err)); });
-		if (userFiles) await Promise.all(userFiles.map(file => this.load(this.userDir, [file])));
+		if (userFiles) await Promise.all(userFiles.map(this.load.bind(this, this.userDir)));
 		return this.size;
 	}
 
