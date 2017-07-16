@@ -23,7 +23,7 @@ module.exports = class extends Command {
 			})
 			.catch((err) => {
 				this.client.emit('error', err.stack);
-				return msg.sendMessage(`Transfer of ${piece.type}: ${piece.name} to Client has failed. Please check your Console.`);
+				return msg.sendMessage(`Transfer of ${piece.type}: ${piece.name || piece.help.name} to Client has failed. Please check your Console.`);
 			});
 	}
 
