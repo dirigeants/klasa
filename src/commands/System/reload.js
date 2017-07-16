@@ -14,7 +14,7 @@ module.exports = class extends Command {
 	async run(msg, [piece]) {
 		if (typeof piece === 'string') return this.client[piece].loadAll().then(() => msg.sendMessage(`✅ Reloaded all ${piece}.`));
 		return piece.reload()
-			.then(itm => msg.sendMessage(`✅ Reloaded: ${itm.name}`))
+			.then(itm => msg.sendMessage(`✅ Reloaded ${itm.type}: ${itm.name}`))
 			.catch(err => {
 				this.client[`${piece.type}s`].set(piece);
 				msg.sendMessage(`❌ ${err}`);

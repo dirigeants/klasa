@@ -39,7 +39,7 @@ module.exports = class extends Provider {
 	 * @returns {Promise<Void>}
 	 */
 	deleteTable(table) {
-		this.hasTable(table)
+		return this.hasTable(table)
 			.then(exists => exists ? fs.emptyDir(resolve(this.baseDir, table)).then(() => fs.remove(resolve(this.baseDir, table))) : null);
 	}
 
@@ -82,7 +82,7 @@ module.exports = class extends Provider {
 	 * @returns {Promise<Object>}
 	 */
 	getRandom(table) {
-		this.getAll(table).then(data => data[Math.floor(Math.random() * data.length)]);
+		return this.getAll(table).then(data => data[Math.floor(Math.random() * data.length)]);
 	}
 
 	/**

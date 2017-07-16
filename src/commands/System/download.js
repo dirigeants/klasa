@@ -5,7 +5,7 @@ const { sep, resolve } = require('path');
 const vm = require('vm');
 
 const piecesURL = 'https://raw.githubusercontent.com/dirigeants/komada-pieces/master/';
-const types = ['commands', 'functions', 'monitors', 'inhibitors', 'providers', 'finalizers', 'extendables'];
+const types = ['commands', 'monitors', 'inhibitors', 'providers', 'finalizers', 'extendables'];
 
 const mod = { exports: {} };
 
@@ -16,7 +16,7 @@ module.exports = class extends Command {
 			enable: false,
 			permLevel: 10,
 			description: 'Downloads a piece, either from a link or our Pieces Repository, and installs it.',
-			usage: '<commands|functions|monitors|inhibitors|providers|finalizers|extendables|url:url> [location:str] [folder:str]',
+			usage: '<commands|monitors|inhibitors|providers|finalizers|extendables|url:url> [location:str] [folder:str]',
 			usageDelim: ' '
 		});
 	}
@@ -107,9 +107,6 @@ const runChecks = (client, type, name) => {
 		case 'commands':
 			if (client.commands.has(name)) throw 'That command already exists in your bot. Aborting the load.';
 			break;
-		case 'functions':
-			if (client.funcs[name]) throw 'That function already exists in your bot. Aborting the load.';
-			break;
 		case 'inhibitors':
 			if (client.commandInhibitors.has(name)) throw 'That command inhibitor already exists in your bot. Aborting the load.';
 			break;
@@ -136,18 +133,6 @@ const load = {
 			.then(message => msg.sendMessage(`📥 ${message}`))
 			.catch((response) => {
 				msg.sendMessage(`📵 Command load failed ${name}\n\`\`\`${response}\`\`\``);
-				return fs.unlink(`${dir}${name}.js`);
-			});
-	},
-	functions: async (client, msg, type, text, name) => {
-		const dir = resolve(`${client.clientBaseDir}/functions/`) + sep;
-		await msg.sendMessage(`📥 \`Loading ${type} into ${dir}${name}.js...\``);
-		await fs.ensureDir(dir).catch(err => client.emit('log', err, 'error'));
-		await fs.writeFile(`${dir}${name}.js`, text).catch(err => client.emit('log', err, 'error'));
-		return client.funcs.reloadFunction(name)
-			.then(message => msg.sendMessage(`📥 ${message}`))
-			.catch((response) => {
-				msg.sendMessage(`📵 Function load failed ${name}\n\`\`\`${response}\`\`\``);
 				return fs.unlink(`${dir}${name}.js`);
 			});
 	},
