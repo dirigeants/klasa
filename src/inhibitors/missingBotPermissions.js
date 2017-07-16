@@ -1,4 +1,4 @@
-const { Inhibitor } = require('../index');
+const { Inhibitor } = require('klasa');
 const { Permissions } = require('discord.js');
 
 module.exports = class extends Inhibitor {
@@ -6,15 +6,15 @@ module.exports = class extends Inhibitor {
 	constructor(...args) {
 		super(...args, 'missingBotPermissions', {});
 		this.impliedPermissions = new Permissions([
-			"READ_MESSAGES",
-			"SEND_MESSAGES",
-			"SEND_TTS_MESSAGES",
-			"EMBED_LINKS",
-			"ATTACH_FILES",
-			"READ_MESSAGE_HISTORY",
-			"MENTION_EVERYONE",
-			"USE_EXTERNAL_EMOJIS",
-			"ADD_REACTIONS"
+			'READ_MESSAGES',
+			'SEND_MESSAGES',
+			'SEND_TTS_MESSAGES',
+			'EMBED_LINKS',
+			'ATTACH_FILES',
+			'READ_MESSAGE_HISTORY',
+			'MENTION_EVERYONE',
+			'USE_EXTERNAL_EMOJIS',
+			'ADD_REACTIONS'
 		]);
 	}
 

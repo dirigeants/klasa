@@ -1,8 +1,7 @@
-const { Command } = require('../../index');
+const { Command, version: klasaVersion } = require('klasa');
 const { version: discordVersion } = require('discord.js');
 const moment = require('moment');
 require('moment-duration-format');
-const { version: klasaVersion } = require('../../../package.json');
 
 module.exports = class extends Command {
 

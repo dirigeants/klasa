@@ -1,9 +1,8 @@
+const { Finalizer } = require('klasa');
 const now = require('performance-now');
 const chalk = require('chalk');
 
 const clk = new chalk.constructor({ enabled: true });
-
-const { Finalizer } = require('../index');
 
 module.exports = class extends Finalizer {
 

@@ -1,4 +1,4 @@
-const { Command } = require('../../index');
+const { Command } = require('klasa');
 const snek = require('snekfetch');
 const fs = require('fs-nextra');
 const { sep, resolve } = require('path');

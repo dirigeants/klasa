@@ -1,4 +1,4 @@
-const { Provider } = require('../index');
+const { Provider } = require('klasa');
 const { resolve } = require('path');
 const fs = require('fs-nextra');
 

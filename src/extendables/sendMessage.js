@@ -1,4 +1,4 @@
-const { Extendable } = require('../index');
+const { Extendable } = require('klasa');
 
 module.exports = class extends Extendable {
 
