@@ -12,7 +12,8 @@ module.exports = class Command {
 		requiredSettings = [],
 		description = '',
 		usage = '',
-		usageDelim = undefined
+		usageDelim = undefined,
+		extendedHelp = 'No extended help available.'
 	}) {
 		this.client = client;
 		this.type = 'command';
@@ -25,6 +26,7 @@ module.exports = class Command {
 		this.requiredSettings = requiredSettings;
 		this.name = name;
 		this.description = description;
+		this.extendedHelp = extendedHelp;
 		this.usageString = usage;
 		this.usageDelim = usageDelim;
 		this.fullCategory = file;

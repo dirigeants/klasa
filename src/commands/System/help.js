@@ -18,7 +18,7 @@ module.exports = class extends Command {
 				cmd.description,
 				`usage :: ${cmd.usage.fullUsage(msg)}`,
 				'Extended Help ::',
-				cmd.extendedHelp || 'No extended help available.'
+				cmd.extendedHelp
 			].join('\n');
 			return msg.sendMessage(info, { code: 'asciidoc' });
 		}
