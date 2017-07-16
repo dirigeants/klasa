@@ -92,7 +92,7 @@ module.exports = class CommandMessage {
 
 
 	static getArgs(cmdMsg) {
-		const args = cmdMsg.msg.content.slice(cmdMsg.prefixLength).trim().split(' ').slice(1).join(' ').split(cmdMsg.cmd.help.usageDelim !== '' ? cmdMsg.cmd.help.usageDelim : undefined);
+		const args = cmdMsg.msg.content.slice(cmdMsg.prefixLength).trim().split(' ').slice(1).join(' ').split(cmdMsg.cmd.usageDelim !== '' ? cmdMsg.cmd.usageDelim : undefined);
 		if (args[0] === '') return [];
 		return args;
 	}

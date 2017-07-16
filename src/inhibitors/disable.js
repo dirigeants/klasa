@@ -3,11 +3,11 @@ const { Inhibitor } = require('klasa');
 module.exports = class extends Inhibitor {
 
 	constructor(...args) {
-		super(...args, 'cooldown', { });
+		super(...args, 'disable', { });
 	}
 
 	async run(msg, cmd) {
-		if (cmd.conf.enabled && !msg.guildSettings.disabledCommands.includes(cmd.help.name)) return;
+		if (cmd.enabled && !msg.guildSettings.disabledCommands.includes(cmd.name)) return;
 		throw 'This command is currently disabled';
 	}
 

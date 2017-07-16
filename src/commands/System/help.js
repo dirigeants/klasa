@@ -14,11 +14,11 @@ module.exports = class extends Command {
 		const method = this.client.user.bot ? 'author' : 'channel';
 		if (cmd) {
 			const info = [
-				`= ${cmd.help.name} = `,
-				cmd.help.description,
+				`= ${cmd.name} = `,
+				cmd.description,
 				`usage :: ${cmd.usage.fullUsage(msg)}`,
 				'Extended Help ::',
-				cmd.help.extendedHelp || 'No extended help available.'
+				cmd.extendedHelp || 'No extended help available.'
 			].join('\n');
 			return msg.sendMessage(info, { code: 'asciidoc' });
 		}
@@ -46,9 +46,9 @@ module.exports = class extends Command {
 		await Promise.all(this.client.commands.map((command) =>
 			this.client.inhibitors.run(this.msg, command, true)
 				.then(() => {
-					if (!help.hasOwnProperty(command.help.category)) help[command.help.category] = {};
-					if (!help[command.help.category].hasOwnProperty(command.help.subCategory)) help[command.help.category][command.help.subCategory] = [];
-					help[command.help.category][command.help.subCategory].push(`${msg.guildSettings.prefix}${command.help.name.padEnd(longest)} :: ${command.help.description}`);
+					if (!help.hasOwnProperty(command.category)) help[command.category] = {};
+					if (!help[command.category].hasOwnProperty(command.subCategory)) help[command.category][command.subCategory] = [];
+					help[command.category][command.subCategory].push(`${msg.guildSettings.prefix}${command.name.padEnd(longest)} :: ${command.description}`);
 					return;
 				})
 				.catch(() => {

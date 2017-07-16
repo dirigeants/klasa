@@ -7,7 +7,7 @@ module.exports = class extends Inhibitor {
 	}
 
 	async run(msg, cmd) {
-		const min = typeof cmd === 'number' ? cmd : cmd.conf.permLevel;
+		const min = typeof cmd === 'number' ? cmd : cmd.permLevel;
 		const mps = [];
 		for (let i = min; i < 11; i++) {
 			mps.push(this.client.permStructure[i].check(this.client, msg));

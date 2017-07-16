@@ -12,7 +12,7 @@ module.exports = class extends Command {
 
 	async run(msg, [piece]) {
 		piece.enable();
-		return msg.sendCode('diff', `+ Successfully enabled ${piece.type}: ${piece.name || piece.conf.name}`);
+		return msg.sendCode('diff', `+ Successfully enabled ${piece.type}: ${piece.name}`);
 	}
 
 };

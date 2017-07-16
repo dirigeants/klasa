@@ -61,7 +61,7 @@ module.exports = class SettingResolver extends Resolver {
 	async command(data) {
 		const command = this.client.commands.get(data.toLowerCase());
 		if (!command) throw 'This key expects a Command.';
-		return command.help.name;
+		return command.name;
 	}
 
   /**

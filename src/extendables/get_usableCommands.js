@@ -8,7 +8,7 @@ module.exports = class extends Extendable {
 
 	get extend() {
 		this.client.commands.filter(command => !this.client.commandInhibitors.some((inhibitor) => {
-			if (inhibitor.conf.enabled && !inhibitor.conf.spamProtection) return inhibitor.run(this.client, this, command);
+			if (inhibitor.enabled && !inhibitor.spamProtection) return inhibitor.run(this.client, this, command);
 			return false;
 		}));
 	}

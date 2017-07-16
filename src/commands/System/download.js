@@ -43,14 +43,14 @@ const process = async (client, msg, text, link, folder) => {
 		return client.emit('log', err, 'error');
 	}
 
-	const name = mod.exports.help.name;
-	const description = mod.exports.help.description || 'No description provided.';
-	const type = mod.exports.help.type || link;
-	const modules = mod.exports.conf.requiredModules || 'No required modules.. Yay!';
+	const name = mod.exports.name;
+	const description = mod.exports.description || 'No description provided.';
+	const type = mod.exports.type || link;
+	const modules = mod.exports.requiredModules || 'No required modules.. Yay!';
 
 	try {
 		runChecks(client, type, name);
-		if (mod.exports.conf.selfbot && client.user.bot) throw `I am not a selfbot, so I cannot download nor use ${name}.`;
+		if (mod.exports.selfbot && client.user.bot) throw `I am not a selfbot, so I cannot download nor use ${name}.`;
 	} catch (err) {
 		return msg.sendMessage(`${msg.author} | ${err}`);
 	}
@@ -85,7 +85,7 @@ const process = async (client, msg, text, link, folder) => {
 					process.exit();
 				});
 		}
-		return load[type](client, msg, type, text, name, mod.exports.help.category || client.funcs.toTitleCase(folder));
+		return load[type](client, msg, type, text, name, mod.exports.category || client.funcs.toTitleCase(folder));
 	});
 
 	return true;

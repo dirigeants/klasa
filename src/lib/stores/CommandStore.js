@@ -29,16 +29,16 @@ module.exports = class CommandStore extends Collection {
 		if (!(command instanceof Command)) return this.client.emit('error', 'Only commands may be stored in the CommandStore.');
 		const existing = this.get(command.name);
 		if (existing) this.delete(existing);
-		super.set(command.help.name, command);
-		command.conf.aliases.forEach(alias => this.aliases.set(alias, command));
+		super.set(command.name, command);
+		command.aliases.forEach(alias => this.aliases.set(alias, command));
 		return command;
 	}
 
 	delete(name) {
 		const command = this.resolve(name);
 		if (!command) return false;
-		super.delete(command.help.name);
-		command.conf.aliases.forEach(alias => this.aliases.delete(alias));
+		super.delete(command.name);
+		command.aliases.forEach(alias => this.aliases.delete(alias));
 		return true;
 	}
 

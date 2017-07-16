@@ -8,16 +8,16 @@ module.exports = class extends Inhibitor {
 
 	async run(msg, cmd) {
 		if (msg.author.id === this.client.config.ownerID) return;
-		if (!cmd.conf.cooldown || cmd.conf.cooldown <= 0) return;
+		if (!cmd.cooldown || cmd.cooldown <= 0) return;
 
-		const instance = cmd.cooldown.get(msg.author.id);
+		const instance = cmd.cooldowns.get(msg.author.id);
 
 		if (!instance) return;
 
-		const remaining = ((cmd.conf.cooldown * 1000) - (Date.now() - instance)) / 1000;
+		const remaining = ((cmd.cooldown * 1000) - (Date.now() - instance)) / 1000;
 
 		if (remaining < 0) {
-			cmd.cooldown.delete(msg.author.id);
+			cmd.cooldowns.delete(msg.author.id);
 			return;
 		}
 
