@@ -94,7 +94,9 @@ const process = async (client, msg, text, link, folder) => {
 const requestAndCheck = async newURL => snek.get(newURL)
 	.then(data => data.text)
 	.catch((error) => {
-		if (error.message === 'Unexpected token <') throw `An error has occured: **${error.message}** | This typically happens when you try to download a file from a link that isn't raw github information. Try a raw link instead!`;
+		if (error.message === 'Unexpected token <') {
+			throw `An error has occured: **${error.message}** | This typically happens when you try to download a file from a link that isn't raw github information. Try a raw link instead!`;
+		}
 		if (error.message === 'Not Found') throw `An error has occured: **${error.message}** | This typically happens when you try to download a piece that doesn't exist. Try verifying it exists.`;
 		throw `An error has occured: **${error}** | We're not sure what happened here... Report this to our Developers to get it checked out!`;
 	});
@@ -119,7 +121,7 @@ const runChecks = (client, type, name) => {
 		case 'finalizers':
 			if (client.commandFinalizers.has(name)) throw 'That finalizer already exists in your bot. Aborting the load.';
 			break;
-    // no default
+				// no default
 	}
 };
 

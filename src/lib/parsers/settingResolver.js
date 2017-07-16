@@ -64,7 +64,7 @@ module.exports = class SettingResolver extends Resolver {
 		return command.name;
 	}
 
-  /**
+	/**
    * Check if the input is valid with min and/or max values.
    * @static
    * @param {any} value The value to check.

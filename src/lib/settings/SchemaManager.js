@@ -11,7 +11,7 @@ class SchemaManager {
 		this.defaults = {};
 	}
 
-  /**
+	/**
    * Initialize the SchemaManager.
    * @returns {void}
    */
@@ -20,11 +20,11 @@ class SchemaManager {
 		await fs.ensureDir(baseDir);
 		this.filePath = resolve(baseDir, 'schema.json');
 		const schema = await fs.readJSON(this.filePath)
-      .catch(() => fs.outputJSONAtomic(this.filePath, this.defaultDataSchema).then(() => this.defaultDataSchema));
+			.catch(() => fs.outputJSONAtomic(this.filePath, this.defaultDataSchema).then(() => this.defaultDataSchema));
 		return this.validate(schema);
 	}
 
-  /**
+	/**
    * Validate the Schema manager.
    * @param {Object} schema The Schema object that will be used for the configuration system.
    * @returns {void}
@@ -51,7 +51,7 @@ class SchemaManager {
 		}
 	}
 
-  /**
+	/**
    * Add a new key to the schema.
    * @param {string} key The key to add.
    * @param {Object} options Options for the key.
@@ -84,7 +84,7 @@ class SchemaManager {
 		return fs.outputJSONAtomic(this.filePath, this.schema);
 	}
 
-  /**
+	/**
    * Remove a key from the schema.
    * @param {string} key The key to remove.
    * @param {boolean} [force=false] Whether this change should modify all configurations or not.
@@ -97,7 +97,7 @@ class SchemaManager {
 		return fs.outputJSONAtomic(this.filePath, this.schema);
 	}
 
-  /**
+	/**
    * Modify all configurations.
    * @param {string} action Whether reset, add, or delete.
    * @param {string} key The key to update.
@@ -120,7 +120,7 @@ class SchemaManager {
 		return this.settingGateway.sync();
 	}
 
-  /**
+	/**
    * Shortcut for settingGateway
    * @readonly
    * @memberof SchemaManager
@@ -129,7 +129,7 @@ class SchemaManager {
 		return this.client.settingGateway;
 	}
 
-  /**
+	/**
    * Get the default DataSchema from Klasa.
    * @readonly
    * @returns {Object}

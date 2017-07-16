@@ -8,17 +8,17 @@ module.exports = class SettingGateway extends CacheManager {
 	constructor(client) {
 		super(client);
 
-    /** @type {Client} */
+		/** @type {Client} */
 		this.client = client;
 
-    /** @type {string} */
+		/** @type {string} */
 		this.engine = client.config.provider.engine || 'json';
 
 		this.resolver = new SettingResolver(client);
 		this.schemaManager = new SchemaManager(this.client);
 	}
 
-  /**
+	/**
    * Initialize the configuration for all Guilds.
    * @returns {void}
    */
@@ -39,7 +39,7 @@ module.exports = class SettingGateway extends CacheManager {
 		if (data[0]) for (const key of data) super.set(key.id, key);
 	}
 
-  /**
+	/**
    * Get the current DataSchema.
    * @readonly
    * @returns {Object}
@@ -48,7 +48,7 @@ module.exports = class SettingGateway extends CacheManager {
 		return this.schemaManager.schema;
 	}
 
-  /**
+	/**
    * Get the default values from the current DataSchema.
    * @readonly
    * @returns {Object}
@@ -57,7 +57,7 @@ module.exports = class SettingGateway extends CacheManager {
 		return this.schemaManager.defaults;
 	}
 
-  /**
+	/**
    * Create a new Guild entry for the configuration.
    * @param {Guild|Snowflake} guild The Guild object or snowflake.
    * @returns {void}
@@ -68,7 +68,7 @@ module.exports = class SettingGateway extends CacheManager {
 		super.set(target.id, this.schemaManager.defaults);
 	}
 
-  /**
+	/**
    * Remove a Guild entry from the configuration.
    * @param {Snowflake} guild The Guild object or snowflake.
    * @returns {void}
@@ -78,7 +78,7 @@ module.exports = class SettingGateway extends CacheManager {
 		super.delete('guilds', guild);
 	}
 
-  /**
+	/**
    * Get a Guild entry from the configuration.
    * @param {(Guild|Snowflake)} guild The Guild object or snowflake.
    * @returns {Object}
@@ -88,7 +88,7 @@ module.exports = class SettingGateway extends CacheManager {
 		return super.get(guild) || this.schemaManager.defaults;
 	}
 
-  /**
+	/**
    * Get a Resolved Guild entry from the configuration.
    * @param {(Guild|Snowflake)} guild The Guild object or snowflake.
    * @returns {Object}
@@ -103,7 +103,7 @@ module.exports = class SettingGateway extends CacheManager {
 		return Object.assign({}, ...resolved);
 	}
 
-  /**
+	/**
    * Sync either all Guild entries from the configuration, or a single one.
    * @param {(Guild|Snowflake)} [guild=null] The configuration for the selected Guild, if specified.
    * @returns {void}
@@ -121,7 +121,7 @@ module.exports = class SettingGateway extends CacheManager {
 		await super.set(target.id, data);
 	}
 
-  /**
+	/**
    * Reset a key's value to default from a Guild configuration.
    * @param {(Guild|Snowflake)} guild The Guild object or snowflake.
    * @param {string} key The key to reset.
@@ -136,7 +136,7 @@ module.exports = class SettingGateway extends CacheManager {
 		return defaultKey;
 	}
 
-  /**
+	/**
    * Update a Guild's configuration.
    * @param {(Guild|Snowflake)} guild The Guild object or snowflake.
    * @param {string} key The key to update.
@@ -153,7 +153,7 @@ module.exports = class SettingGateway extends CacheManager {
 		return result;
 	}
 
-  /**
+	/**
    * Update an array from the a Guild's configuration.
    * @param {(Guild|Snowflake)} guild The Guild object or snowflake.
    * @param {string} type Either 'add' or 'remove'.
@@ -184,7 +184,7 @@ module.exports = class SettingGateway extends CacheManager {
 		return true;
 	}
 
-  /**
+	/**
    * Checks if a Guild is valid.
    * @param {(Guild|Snowflake)} guild The Guild object or snowflake.
    * @returns {Guild}

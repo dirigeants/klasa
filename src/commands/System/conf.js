@@ -38,8 +38,8 @@ module.exports = class extends Command {
 		if (!configs.id) await this.client.settingGateway.create(msg.guild);
 		if (!this.client.settingGateway.schema[key].array) return msg.sendMessage("This key is not array type. Use the action 'reset' instead.");
 		return this.client.settingGateway.updateArray(msg.guild, 'remove', key, value.join(' '))
-				.then(() => msg.sendMessage(`Successfully removed the value \`${value.join(' ')}\` from the key: **${key}**`))
-				.catch(err => msg.sendMessage(err));
+			.then(() => msg.sendMessage(`Successfully removed the value \`${value.join(' ')}\` from the key: **${key}**`))
+			.catch(err => msg.sendMessage(err));
 	}
 
 	async get(msg, configs, key) {

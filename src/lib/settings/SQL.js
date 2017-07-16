@@ -16,7 +16,7 @@ class SQL {
 		this.provider = provider;
 	}
 
-  /**
+	/**
    * Generate an automatic SQL schema for a single row.
    * @param {Object} value The Schema<Value> object.
    * @returns {string}
@@ -37,7 +37,7 @@ class SQL {
 		return `${selectType(value.type)}${type}`;
 	}
 
-  /**
+	/**
    * Generate an automatic SQL schema for all rows.
    * @param {any} schema The Schema Object.
    * @returns {string[]}
@@ -50,7 +50,7 @@ class SQL {
 		return output;
 	}
 
-  /**
+	/**
    * Init the deserialization keys for SQL providers.
    * @param {Object} schema The schema object.
    * @returns {void}
@@ -62,7 +62,7 @@ class SQL {
 		}
 	}
 
-  /**
+	/**
    * Deserialize stringified objects.
    * @param {Object} data The GuildSettings object.
    * @return {void}
@@ -72,7 +72,7 @@ class SQL {
 		for (let i = 0; i < deserialize.length; i++) data[deserialize[i]] = JSON.parse(data[deserialize[i]]);
 	}
 
-  /**
+	/**
    * Create/Remove columns from a SQL database, by the current Schema.
    * @param {Object} schema The Schema object.
    * @param {Object} defaults The Schema<Defaults> object.
@@ -94,7 +94,7 @@ class SQL {
 		return true;
 	}
 
-  /**
+	/**
    * Shortcut for Schema.
    * @readonly
    */
@@ -102,7 +102,7 @@ class SQL {
 		return this.client.schemaManager.schema;
 	}
 
-  /**
+	/**
    * Shortcut for Schema<Defaults>
    * @readonly
    */

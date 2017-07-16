@@ -14,7 +14,7 @@ module.exports = class Resolver {
 		Object.defineProperty(this, 'client', { value: client });
 	}
 
-  /**
+	/**
    * Fetch a Message object by its Snowflake or instanceof Message.
    * @param {Snowflake} message The message snowflake to validate.
    * @param {Channel} channel The Channel object in which the message can be found.
@@ -25,7 +25,7 @@ module.exports = class Resolver {
 		return regex.snowflake.test(message) ? channel.fetchMessage(message).catch(() => null) : undefined;
 	}
 
-  /**
+	/**
    * Resolve a User object by its instance of User, GuildMember, or by its Snowflake.
    * @param {User} user The user to validate.
    * @returns {Promise<?User>}
@@ -33,11 +33,13 @@ module.exports = class Resolver {
 	async user(user) {
 		if (user instanceof User) return user;
 		if (user instanceof GuildMember) return user.user;
-		if (typeof user === 'string' && regex.userOrMember.test(user)) return this.client.user.bot ? this.client.fetchUser(regex.userOrMember.exec(user)[1]).catch(() => null) : this.client.users.get(regex.userOrMember.exec(user)[1]);
+		if (typeof user === 'string' && regex.userOrMember.test(user)) {
+			return this.client.user.bot ? this.client.fetchUser(regex.userOrMember.exec(user)[1]).catch(() => null) : this.client.users.get(regex.userOrMember.exec(user)[1]);
+		}
 		return null;
 	}
 
-  /**
+	/**
    * Resolve a GuildMember object by its instance of GuildMember, User, or by its Snowflake.
    * @param {(GuildMember|User|Snowflake)} member The number to validate.
    * @param {Guild} guild The Guild object in which the member can be found.
@@ -53,7 +55,7 @@ module.exports = class Resolver {
 		return null;
 	}
 
-  /**
+	/**
    * Resolve a Channel object by its instance of Channel, or by its Snowflake.
    * @param {(Channel|Snowflake)} channel The channel to validate.
    * @returns {Promise<?Channel>}
@@ -64,7 +66,7 @@ module.exports = class Resolver {
 		return null;
 	}
 
-  /**
+	/**
    * Resolve a Guild object by its instance of Guild, or by its Snowflake.
    * @param {(Guild|Snowflake)} guild The guild to validate/find.
    * @returns {Promise<?Guild>}
@@ -75,7 +77,7 @@ module.exports = class Resolver {
 		return null;
 	}
 
-  /**
+	/**
    * Resolve a Role object by its instance of Role, or by its Snowflake.
    * @param {(Role|Snowflake)} role The role to validate/find.
    * @param {Guild} guild The Guild object in which the role can be found.
@@ -87,7 +89,7 @@ module.exports = class Resolver {
 		return null;
 	}
 
-  /**
+	/**
    * Resolve a Boolean instance.
    * @param {(boolean|string)} bool The boolean to validate.
    * @returns {Promise<?boolean>}
@@ -99,7 +101,7 @@ module.exports = class Resolver {
 		return null;
 	}
 
-  /**
+	/**
    * Resolve a String instance.
    * @param {string} string The string to validate.
    * @returns {Promise<?string>}
@@ -108,7 +110,7 @@ module.exports = class Resolver {
 		return String(string);
 	}
 
-  /**
+	/**
    * Resolve an Integer.
    * @param {(string|number)} integer The integer to validate.
    * @returns {Promise<?number>}
@@ -119,7 +121,7 @@ module.exports = class Resolver {
 		return null;
 	}
 
-  /**
+	/**
    * Resolve a Float.
    * @param {(string|number)} number The float to validate.
    * @returns {Promise<?number>}
@@ -130,7 +132,7 @@ module.exports = class Resolver {
 		return null;
 	}
 
-  /**
+	/**
    * Resolve a hyperlink.
    * @param {string} hyperlink The hyperlink to validate.
    * @returns {Promise<?string>}
