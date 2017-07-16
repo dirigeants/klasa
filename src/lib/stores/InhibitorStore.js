@@ -3,7 +3,7 @@ const { Collection } = require('discord.js');
 const fs = require('fs-nextra');
 const Inhibitor = require('../structures/Inhibitor');
 
-module.exports = class FinalizerStore extends Collection {
+module.exports = class InhibitorStore extends Collection {
 
 	constructor(client) {
 		super();
