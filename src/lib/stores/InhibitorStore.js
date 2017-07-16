@@ -3,7 +3,7 @@ const { Collection } = require('discord.js');
 const fs = require('fs-nextra');
 const Inhibitor = require('../structures/Inhibitor');
 
-module.exports = class FinalizerStore extends Collection {
+module.exports = class InhibitorStore extends Collection {
 
 	constructor(client) {
 		super();
@@ -14,8 +14,17 @@ module.exports = class FinalizerStore extends Collection {
 
 	set(inhibitor) {
 		if (!(inhibitor instanceof Inhibitor)) return this.client.emit('error', 'Only inhibitors may be stored in the InhibitorStore.');
+		const existing = this.get(inhibitor.name);
+		if (existing) this.delete(existing);
 		super.set(inhibitor.name, inhibitor);
 		return inhibitor;
+	}
+
+	delete(name) {
+		const inhibitor = this.resolve(name);
+		if (!inhibitor) return false;
+		super.delete(inhibitor.name);
+		return true;
 	}
 
 	init() {

@@ -3,7 +3,7 @@ const { Collection } = require('discord.js');
 const fs = require('fs-nextra');
 const Monitor = require('../structures/Monitor');
 
-module.exports = class FinalizerStore extends Collection {
+module.exports = class MonitorStore extends Collection {
 
 	constructor(client) {
 		super();
@@ -14,8 +14,17 @@ module.exports = class FinalizerStore extends Collection {
 
 	set(monitor) {
 		if (!(monitor instanceof Monitor)) return this.client.emit('error', 'Only monitors may be stored in the MonitorStore.');
+		const existing = this.get(monitor.name);
+		if (existing) this.delete(existing);
 		super.set(monitor.name, monitor);
 		return monitor;
+	}
+
+	delete(name) {
+		const monitor = this.resolve(name);
+		if (!monitor) return false;
+		super.delete(monitor.name);
+		return true;
 	}
 
 	init() {

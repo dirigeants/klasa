@@ -14,8 +14,17 @@ module.exports = class FinalizerStore extends Collection {
 
 	set(finalizer) {
 		if (!(finalizer instanceof Finalizer)) return this.client.emit('error', 'Only finalizers may be stored in the FinalizerStore.');
+		const existing = this.get(finalizer.name);
+		if (existing) this.delete(existing);
 		super.set(finalizer.name, finalizer);
 		return finalizer;
+	}
+
+	delete(name) {
+		const finalizer = this.resolve(name);
+		if (!finalizer) return false;
+		super.delete(finalizer.name);
+		return true;
 	}
 
 	init() {

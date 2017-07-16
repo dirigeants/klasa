@@ -3,7 +3,7 @@ const { Collection } = require('discord.js');
 const fs = require('fs-nextra');
 const Event = require('../structures/Event');
 
-module.exports = class CommandStore extends Collection {
+module.exports = class EventStore extends Collection {
 
 	constructor(client) {
 		super();
@@ -15,7 +15,7 @@ module.exports = class CommandStore extends Collection {
 	set(event) {
 		if (!(event instanceof Event)) return this.client.emit('error', 'Only events may be stored in the EventStore.');
 		const existing = this.get(event.name);
-		if (existing) existing.delete();
+		if (existing) this.delete(existing);
 		this.client.on(event.name, event.run.bind(event));
 		super.set(event.name, event);
 		return event;

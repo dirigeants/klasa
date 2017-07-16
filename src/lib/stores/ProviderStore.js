@@ -3,7 +3,7 @@ const { Collection } = require('discord.js');
 const fs = require('fs-nextra');
 const Provider = require('../structures/Provider');
 
-module.exports = class FinalizerStore extends Collection {
+module.exports = class ProviderStore extends Collection {
 
 	constructor(client) {
 		super();
@@ -14,8 +14,17 @@ module.exports = class FinalizerStore extends Collection {
 
 	set(provider) {
 		if (!(provider instanceof Provider)) return this.client.emit('error', 'Only providers may be stored in the ProviderStore.');
+		const existing = this.get(provider.name);
+		if (existing) this.delete(existing);
 		super.set(provider.name, provider);
 		return provider;
+	}
+
+	delete(name) {
+		const provider = this.resolve(name);
+		if (!provider) return false;
+		super.delete(provider.name);
+		return true;
 	}
 
 	init() {
