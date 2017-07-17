@@ -32,10 +32,10 @@ class SQL {
 	}
 
 	/**
-   * Generate an automatic SQL schema for a single row.
-   * @param {Object} value The Schema<Value> object.
-   * @returns {string}
-   */
+	 * Generate an automatic SQL schema for a single row.
+	 * @param {Object} value The Schema<Value> object.
+	 * @returns {string}
+	 */
 	buildSingleSQLSchema(value) {
 		let constants = this.provider.CONSTANTS;
 		if (!constants) {
@@ -53,10 +53,10 @@ class SQL {
 	}
 
 	/**
-   * Generate an automatic SQL schema for all rows.
-   * @param {any} schema The Schema Object.
-   * @returns {string[]}
-   */
+	 * Generate an automatic SQL schema for all rows.
+	 * @param {any} schema The Schema Object.
+	 * @returns {string[]}
+	 */
 	buildSQLSchema(schema) {
 		const output = ['id TEXT NOT NULL UNIQUE'];
 		for (const [key, value] of Object.entries(schema)) {
@@ -66,10 +66,10 @@ class SQL {
 	}
 
 	/**
-   * Init the deserialization keys for SQL providers.
-   * @param {Object} schema The schema object.
-   * @returns {void}
-   */
+	 * Init the deserialization keys for SQL providers.
+	 * @param {Object} schema The schema object.
+	 * @returns {void}
+	 */
 	initDeserialize() {
 		this.deserializeKeys = [];
 		for (const [key, value] of Object.entries(this.schema)) {
@@ -78,22 +78,22 @@ class SQL {
 	}
 
 	/**
-   * Deserialize stringified objects.
-   * @param {Object} data The GuildSettings object.
-   * @return {void}
-   */
+	 * Deserialize stringified objects.
+	 * @param {Object} data The GuildSettings object.
+	 * @return {void}
+	 */
 	deserializer(data) {
 		const deserialize = this.deserializeKeys;
 		for (let i = 0; i < deserialize.length; i++) data[deserialize[i]] = JSON.parse(data[deserialize[i]]);
 	}
 
 	/**
-   * Create/Remove columns from a SQL database, by the current Schema.
-   * @param {Object} schema The Schema object.
-   * @param {Object} defaults The Schema<Defaults> object.
-   * @param {string} key The key which is updated.
-   * @returns {boolean}
-   */
+	 * Create/Remove columns from a SQL database, by the current Schema.
+	 * @param {Object} schema The Schema object.
+	 * @param {Object} defaults The Schema<Defaults> object.
+	 * @param {string} key The key which is updated.
+	 * @returns {boolean}
+	 */
 	async updateColumns(schema, defaults, key) {
 		if (!this.provider.updateColumns) {
 			this.client.emit('log', 'This SQL Provider does not seem to have a updateColumns exports. Force action cancelled.', 'error');
@@ -110,17 +110,17 @@ class SQL {
 	}
 
 	/**
-   * Shortcut for Schema.
-   * @readonly
-   */
+	 * Shortcut for Schema.
+	 * @readonly
+	 */
 	get schema() {
 		return this.client.schemaManager.schema;
 	}
 
 	/**
-   * Shortcut for Schema<Defaults>
-   * @readonly
-   */
+	 * Shortcut for Schema<Defaults>
+	 * @readonly
+	 */
 	get defaults() {
 		return this.client.schemaManager.defaults;
 	}

@@ -16,7 +16,7 @@
         "dateFormat"            : "dddd, MMMM Do YYYY, h:mm:ss a",
         "syntaxTheme"           : "dark",
         "sort"                  : true,
-        "search"                : false 
+        "search"                : true 
     },
     "source": {
         "include"               : [ "./src"]
@@ -25,6 +25,7 @@
         "template"              : "./node_modules/ink-docstrap/template",
         "encoding"              : "utf8",
         "destination"           : "./docs/",
-        "recurse"               : true
+        "recurse"               : true,
+        "tutorials"             : "./tutorials"
     }
 }
