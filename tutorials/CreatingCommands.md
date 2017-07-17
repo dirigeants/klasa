@@ -24,11 +24,11 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [...params]) {
-        // This is where you place the code you want to run for your command
+		// This is where you place the code you want to run for your command
 	}
 
 	async init() {
-        // You can optionally define this method which will be run when the bot starts (after login, so discord data is available via this.client)
+		// You can optionally define this method which will be run when the bot starts (after login, so discord data is available via this.client)
 	}
 
 };
