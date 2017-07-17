@@ -6,6 +6,9 @@ let sensitivePattern;
  */
 class Util {
 
+	/**
+	 * This class may not be initiated with new
+	 */
 	constructor() {
 		throw new Error('This class may not be initiated with new');
 	}
