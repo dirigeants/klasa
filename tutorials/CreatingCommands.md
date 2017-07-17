@@ -36,4 +36,6 @@ module.exports = class extends Command {
 
 > All commands are required to return an [Object Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise) you can do that by adding the `async` keyword to the function, there's no need to change anything else.
 
-`[...params]` represents a variable number of arguments give when the command is run. The name of the arguments in the array (and their count) is determined by the `usage` property and its given arguments.
+> All [command options]{@link CommandOptions} are optional, the code above shows all default values. You can delete any line with an optional value that matches the default value.
+
+>`[...params]` represents a variable number of arguments give when the command is run. The name of the arguments in the array (and their count) is determined by the `usage` property and its given arguments.
