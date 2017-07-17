@@ -124,8 +124,9 @@ module.exports = class extends Command {
 
 };</code></pre><blockquote>
 <p>All commands are required to return an <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise">Object Promise</a> you can do that by adding the <code>async</code> keyword to the function, there's no need to change anything else.</p>
-</blockquote>
+<p>All <a href="global.html#CommandOptions"><code>command options</code></a> are optional, the code above shows all default values. You can delete any line with an optional value that matches the default value.</p>
 <p><code>[...params]</code> represents a variable number of arguments give when the command is run. The name of the arguments in the array (and their count) is determined by the <code>usage</code> property and its given arguments.</p>
+</blockquote>
 </article>
 
 </section>
