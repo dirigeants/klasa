@@ -16,7 +16,7 @@ const ExtendableStore = require('./stores/ExtendableStore');
 
 /**
  * The client for handling everything
- * @extends {Client}
+ * @extends external:Client
  */
 class KlasaClient extends Discord.Client {
 
@@ -113,7 +113,7 @@ class KlasaClient extends Discord.Client {
 
 		/**
 		 * The cache of command messages and responses to be used for command editing
-		 * @type {Collection}
+		 * @type {external:Collection}
 		 */
 		this.commandMessages = new Discord.Collection();
 
