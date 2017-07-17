@@ -1,13 +1,13 @@
 class Inhibitor {
 
-	constructor(client, dir, file, name, { enabled = true, spamProtection = false }) {
+	constructor(client, dir, file, name, options = {}) {
 		this.client = client;
 		this.dir = dir;
 		this.dir = file;
 		this.name = name;
 		this.type = 'inhibitor';
-		this.enabled = enabled;
-		this.spamProtection = spamProtection;
+		this.enabled = options.enabled || true;
+		this.spamProtection = options.spamProtection || false;
 	}
 
 	async reload() {

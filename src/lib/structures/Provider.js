@@ -1,14 +1,14 @@
 class Provider {
 
-	constructor(client, dir, file, name, { description = '', enabled = true, sql = false }) {
+	constructor(client, dir, file, name, options = {}) {
 		this.client = client;
 		this.dir = dir;
 		this.file = file;
 		this.name = name;
 		this.type = 'provider';
-		this.description = description;
-		this.enabled = enabled;
-		this.sql = sql;
+		this.description = options.description || '';
+		this.enabled = options.enabled || true;
+		this.sql = options.sql || false;
 	}
 
 	async reload() {

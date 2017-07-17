@@ -27,21 +27,9 @@ class Command {
 	 * @param {string} dir The path to the core or user command pieces folder
 	 * @param {Array} file The path from the pieces folder to the command file
 	 * @param {string} name The name of the command
-	 * @param {CommandOptions} options Optional Command settings
+	 * @param {CommandOptions} [options = {}] Optional Command settings
 	 */
-	constructor(client, dir, file, name, {
-		enabled = true,
-		runIn = ['text', 'dm', 'group'],
-		cooldown = 0,
-		aliases = [],
-		permLevel = 0,
-		botPerms = [],
-		requiredSettings = [],
-		description = '',
-		usage = '',
-		usageDelim = undefined,
-		extendedHelp = 'No extended help available.'
-	}) {
+	constructor(client, dir, file, name, options = {}) {
 		/**
 		 * @type {KlasaClient}
 		 */
@@ -57,43 +45,43 @@ class Command {
 		 * If the command is enabled or not
 		 * @type {boolean}
 		 */
-		this.enabled = enabled;
+		this.enabled = options.enabled || true;
 
 		/**
 		 * What channels the command should run in
 		 * @type {Array<string>}
 		 */
-		this.runIn = runIn;
+		this.runIn = options.runIn || ['text', 'dm', 'group'];
 
 		/**
 		 * The cooldown in seconds this command has
 		 * @type {number}
 		 */
-		this.cooldown = cooldown;
+		this.cooldown = options.cooldown || 0;
 
 		/**
 		 * The aliases for this command
 		 * @type {Array<string>}
 		 */
-		this.aliases = aliases;
+		this.aliases = options.aliases || [];
 
 		/**
 		 * The required permLevel to run this command
 		 * @type {number}
 		 */
-		this.permLevel = permLevel;
+		this.permLevel = options.permLevel || 0;
 
 		/**
 		 * The required bot permissions to run this command
 		 * @type {Array<string>}
 		 */
-		this.botPerms = botPerms;
+		this.botPerms = options.botPerms || [];
 
 		/**
 		 * The required guild settings to run this command
 		 * @type {Array<string>}
 		 */
-		this.requiredSettings = requiredSettings;
+		this.requiredSettings = options.requiredSettings || [];
 
 		/**
 		 * The name of the command
@@ -105,25 +93,25 @@ class Command {
 		 * The description of the command
 		 * @type {string}
 		 */
-		this.description = description;
+		this.description = options.description || '';
 
 		/**
 		 * The extended help for the command
 		 * @type {string}
 		 */
-		this.extendedHelp = extendedHelp;
+		this.extendedHelp = options.extendedHelp || 'No extended help available.';
 
 		/**
 		 * The usage string for the command
 		 * @type {string}
 		 */
-		this.usageString = usage;
+		this.usageString = options.usage || '';
 
 		/**
 		 * The usage deliminator for the command input
-		 * @type {string}
+		 * @type {?string}
 		 */
-		this.usageDelim = usageDelim;
+		this.usageDelim = options.usageDelim || undefined;
 
 		/**
 		 * The full category for the command

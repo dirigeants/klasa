@@ -14,7 +14,7 @@ module.exports = class extends Event {
 	}
 
 	run(...params) {
-		// This is where you place the code you want to run for your command
+		// This is where you place the code you want to run for your event
 	}
 
 	async init() {

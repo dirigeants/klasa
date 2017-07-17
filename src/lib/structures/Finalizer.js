@@ -1,12 +1,12 @@
 class Finalizer {
 
-	constructor(client, dir, file, name, { enabled = true }) {
+	constructor(client, dir, file, name, options = {}) {
 		this.client = client;
 		this.dir = dir;
 		this.file = file;
 		this.name = name;
 		this.type = 'finalizer';
-		this.enabled = enabled;
+		this.enabled = options.enabled || true;
 	}
 
 	async reload() {
