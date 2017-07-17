@@ -9,7 +9,7 @@ class Command {
 
 	/**
 	 * @typedef {Object} CommandOptions
-	 * @property {boolean} [enabled=true] Whether the command is enabled
+	 * @property {boolean} [enabled=true] Whether the command is enabled or not
 	 * @property {Array<string>} [runIn=['text','dm','group']] What channel types the command should run in
 	 * @property {number} [cooldown=0] The amount of time before the user can run the command again in seconds
 	 * @property {Array<string>} [aliases=[]] Any comand aliases
@@ -198,7 +198,7 @@ class Command {
 	 * @param {CommandMessage} msg The command message mapped on top of the message used to trigger this command
 	 * @param {Array<any>} params The fully resolved parameters based on your usage / usageDelim
 	 * @abstract
-	 * @returns {Promise<Message>} You should return the response message whenever possible
+	 * @returns {Promise<external:Message>} You should return the response message whenever possible
 	 */
 	async run() {
 		// Defined in extension Classes
