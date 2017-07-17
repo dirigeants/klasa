@@ -1,6 +1,6 @@
 module.exports = {
 	Client: require('./lib/client'),
-	PermLevels: require('./lib/util/permLevels'),
+	PermLevels: require('./lib/util/PermLevels'),
 	util: require('./lib/util/util'),
 	Command: require('./lib/structures/Command'),
 	CommandMessage: require('./lib/structures/CommandMessage'),
