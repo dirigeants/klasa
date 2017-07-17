@@ -15,11 +15,39 @@ class Extendable {
 	 * @param {string[]} appliesTo The discord classes this extendable applies to
 	 */
 	constructor(client, dir, file, name, appliesTo = []) {
+		/**
+		 * @type {KlasaClient}
+		 */
 		this.client = client;
+
+		/**
+		 * The directory to where this extendable piece is stored
+		 * @type {string}
+		 */
 		this.dir = dir;
+
+		/**
+		 * The file location where this extendable is stored
+		 * @type {string}
+		 */
 		this.file = file;
+
+		/**
+		 * The name of the extendable
+		 * @type {string}
+		 */
 		this.name = name;
+
+		/**
+		 * The type of Klasa piece this is
+		 * @type {string}
+		 */
 		this.type = 'extendable';
+
+		/**
+		 * The discord classes this extendable applies to
+		 * @type{string[]}
+		 */
 		this.appliesTo = appliesTo;
 	}
 

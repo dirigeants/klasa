@@ -18,11 +18,39 @@ class Finalizer {
 	 * @param {FinalizerOptions} [options = {}] Optional Finalizer settings
 	 */
 	constructor(client, dir, file, name, options = {}) {
+		/**
+		 * @type {KlasaClient}
+		 */
 		this.client = client;
+
+		/**
+		 * The directory to where this finalizer piece is stored
+		 * @type {string}
+		 */
 		this.dir = dir;
+
+		/**
+		 * The file location where this finalizer is stored
+		 * @type {string}
+		 */
 		this.file = file;
+
+		/**
+		 * The name of the finalizer
+		 * @type {string}
+		 */
 		this.name = name;
+
+		/**
+		 * The type of Klasa piece this is
+		 * @type {string}
+		 */
 		this.type = 'finalizer';
+
+		/**
+		 * If the finalizer is enabled or not
+		 * @type {boolean}
+		 */
 		this.enabled = options.enabled || true;
 	}
 
