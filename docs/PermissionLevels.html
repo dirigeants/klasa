@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Klasa External: ReactionEmoji</title>
+	<title>Klasa Class: PermissionLevels</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -68,14 +68,16 @@
 		<div id="main">
 			
 
-	<h1 class="page-title">External: ReactionEmoji</h1>
+	<h1 class="page-title">Class: PermissionLevels</h1>
 <section>
 
 <header>
     
         <h2>
-        ReactionEmoji
+        PermissionLevels
         </h2>
+        
+            <div class="class-description">A helper class to building valid permission structures</div>
         
     
 </header>
@@ -85,8 +87,28 @@
     <div class="container-overview">
     
         
+<hr>
+<dt>
+    <h4 class="name" id="PermissionLevels"><span class="type-signature"></span>new PermissionLevels()</h4>
+    
+    
+</dt>
+<dd>
 
-        
+    
+    <div class="description">
+        Creates a new PermissionLevels
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
 <dl class="details">
     
 
@@ -119,25 +141,32 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/index.js#L111">index.js#L111</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/util/permLevels.js#L20">lib/util/permLevels.js#L20</a>	</dd>
 	
 
 	
 
-	
-	<dt class="tag-see method-doc-label method-doc-details-label">See:</dt>
-	<dd class="tag-see">
-		<ul>
-			<li><a href="https://discord.js.org/#/docs/main/master/class/ReactionEmoji">https://discord.js.org/#/docs/main/master/class/ReactionEmoji</a></li>
-			</ul>
-	</dd>
 	
 
 	
 </dl>
 
 
-        
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
     
     </div>
 
@@ -152,7 +181,369 @@
     
 
     
+        <h3 class="subsection-title">Members</h3>
 
+        <dl>
+            
+<hr>
+<dt class="name" id="levels">
+    <h4 id="levels"><span class="type-signature"></span>levels<span class="type-signature"> :Map</span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        A cache of levels submitted with addLevel
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Map</span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/util/permLevels.js#L25">lib/util/permLevels.js#L25</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt class="name" id="structure">
+    <h4 id="structure"><span class="type-signature">&lt;readonly> </span>structure<span class="type-signature"> :<a href="global.html#validPermStructure">validPermStructure</a></span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        The current valid permissions structure
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type"><a href="global.html#validPermStructure">validPermStructure</a></span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/util/permLevels.js#L46">lib/util/permLevels.js#L46</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        </dl>
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        <dl>
+            
+<hr>
+<dt>
+    <h4 class="name" id="addLevel"><span class="type-signature"></span>addLevel(level, brk, check)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Adds levels to the levels cache to be converted to valid permission structure
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>level</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The permission number for the level you are defining</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>brk</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Whether the level should break (stop processing higher levels, and inhibit a no permission error)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>check</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The permission checking function</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/util/permLevels.js#L35">lib/util/permLevels.js#L35</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    This permission levels
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="PermissionLevels.html">PermissionLevels</a></span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        </dl>
     
 
     
