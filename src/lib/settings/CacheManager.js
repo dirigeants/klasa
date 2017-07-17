@@ -1,4 +1,4 @@
-module.exports = class CacheManager {
+class CacheManager {
 
 	constructor(client) {
 		this.cacheEngine = client.config.provider.cache || 'js';
@@ -25,4 +25,6 @@ module.exports = class CacheManager {
 		return this.data.delete('guilds', guild);
 	}
 
-};
+}
+
+module.exports = CacheManager;

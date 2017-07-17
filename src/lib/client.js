@@ -14,7 +14,7 @@ const ProviderStore = require('./stores/ProviderStore');
 const EventStore = require('./stores/EventStore');
 const ExtendableStore = require('./stores/ExtendableStore');
 
-module.exports = class Klasa extends Discord.Client {
+class Klasa extends Discord.Client {
 
 	constructor(config = {}) {
 		if (typeof config !== 'object') throw new TypeError('Configuration for Klasa must be an object.');
@@ -150,9 +150,11 @@ module.exports = class Klasa extends Discord.Client {
 		return messages - this.commandMessages.size;
 	}
 
-};
+}
 
 process.on('unhandledRejection', (err) => {
 	if (!err) return;
 	console.error(`Uncaught Promise Error: \n${err.stack || err}`);
 });
+
+module.exports = Klasa;

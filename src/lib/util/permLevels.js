@@ -1,4 +1,4 @@
-module.exports = class PermissionLevels {
+class PermissionLevels {
 
 	constructor() {
 		this.levels = new Map();
@@ -20,4 +20,6 @@ module.exports = class PermissionLevels {
 		return structure;
 	}
 
-};
+}
+
+module.exports = PermissionLevels;

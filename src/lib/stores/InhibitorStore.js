@@ -3,7 +3,7 @@ const { Collection } = require('discord.js');
 const fs = require('fs-nextra');
 const Inhibitor = require('../structures/Inhibitor');
 
-module.exports = class InhibitorStore extends Collection {
+class InhibitorStore extends Collection {
 
 	constructor(client) {
 		super();
@@ -63,4 +63,6 @@ module.exports = class InhibitorStore extends Collection {
 		return Promise.all(mps).then(value => value[usage]);
 	}
 
-};
+}
+
+module.exports = InhibitorStore;

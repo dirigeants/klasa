@@ -1,4 +1,4 @@
-module.exports = class Provider {
+class Provider {
 
 	constructor(client, dir, file, name, { description = '', enabled = true, sql = false }) {
 		this.client = client;
@@ -39,4 +39,6 @@ module.exports = class Provider {
 		// Optionally defined in extension Classes
 	}
 
-};
+}
+
+module.exports = Provider;

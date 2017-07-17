@@ -8,9 +8,19 @@ const regex = {
 	snowflake: new RegExp('^(\\d{17,21})$')
 };
 
-module.exports = class Resolver {
+/**
+ * The base resolver class
+ */
+class Resolver {
 
+	/**
+	 * @param {KlasaClient} client The Klasa Client
+	 */
 	constructor(client) {
+		/**
+		 * The Klasa Client
+		 * @type {KlasaClient}
+		 */
 		Object.defineProperty(this, 'client', { value: client });
 	}
 
@@ -143,4 +153,6 @@ module.exports = class Resolver {
 		return null;
 	}
 
-};
+}
+
+module.exports = Resolver;

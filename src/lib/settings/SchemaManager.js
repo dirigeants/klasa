@@ -3,18 +3,35 @@ const fs = require('fs-nextra');
 
 const validTypes = ['User', 'Channel', 'Guild', 'Role', 'Boolean', 'String', 'Integer', 'Float', 'url', 'Command'];
 
+/**
+ * Manages the Schema for Settings
+ */
 class SchemaManager {
 
+	/**
+	 * @param {KlasaClient} client The Klasa client
+	 */
 	constructor(client) {
+		/**
+		 * @type {KlasaClient} The klasa client
+		 */
 		this.client = client;
+
+		/**
+		 * @type {Object} The current schema
+		 */
 		this.schema = {};
+
+		/**
+		 * @type {Object} The current default values
+		 */
 		this.defaults = {};
 	}
 
 	/**
-   * Initialize the SchemaManager.
-   * @returns {void}
-   */
+	 * Initialize the SchemaManager.
+	 * @returns {void}
+	 */
 	async init() {
 		const baseDir = resolve(this.client.clientBaseDir, 'bwd');
 		await fs.ensureDir(baseDir);
@@ -25,10 +42,10 @@ class SchemaManager {
 	}
 
 	/**
-   * Validate the Schema manager.
-   * @param {Object} schema The Schema object that will be used for the configuration system.
-   * @returns {void}
-   */
+	 * Validate the Schema manager.
+	 * @param {Object} schema The Schema object that will be used for the configuration system.
+	 * @returns {void}
+	 */
 	validate(schema) {
 		if (!('prefix' in schema)) {
 			this.client.emit('log', "The key 'prefix' is obligatory", 'error');
@@ -52,17 +69,17 @@ class SchemaManager {
 	}
 
 	/**
-   * Add a new key to the schema.
-   * @param {string} key The key to add.
-   * @param {Object} options Options for the key.
-   * @param {string} options.type The type for the key.
-   * @param {string} options.default The default value for the key.
-   * @param {boolean} options.array Whether the key should be stored as Array or not.
-   * @param {number} options.min The min value for the key (String.length for String, value for number).
-   * @param {number} options.max The max value for the key (String.length for String, value for number).
-   * @param {boolean} [force=false] Whether this change should modify all configurations or not.
-   * @returns {Promise<void>}
-   */
+	 * Add a new key to the schema.
+	 * @param {string} key The key to add.
+	 * @param {Object} options Options for the key.
+	 * @param {string} options.type The type for the key.
+	 * @param {string} options.default The default value for the key.
+	 * @param {boolean} options.array Whether the key should be stored as Array or not.
+	 * @param {number} options.min The min value for the key (String.length for String, value for number).
+	 * @param {number} options.max The max value for the key (String.length for String, value for number).
+	 * @param {boolean} [force=false] Whether this change should modify all configurations or not.
+	 * @returns {Promise<void>}
+	 */
 	async add(key, options, force = false) {
 		if (key in this.schema) throw `The key ${key} already exists in the current schema.`;
 		if (!options.type) throw 'The option type is required.';
@@ -85,11 +102,11 @@ class SchemaManager {
 	}
 
 	/**
-   * Remove a key from the schema.
-   * @param {string} key The key to remove.
-   * @param {boolean} [force=false] Whether this change should modify all configurations or not.
-   * @returns {Promise<void>}
-   */
+	 * Remove a key from the schema.
+	 * @param {string} key The key to remove.
+	 * @param {boolean} [force=false] Whether this change should modify all configurations or not.
+	 * @returns {Promise<void>}
+	 */
 	async remove(key, force = false) {
 		if (key === 'prefix') throw "You can't remove the prefix key.";
 		delete this.schema[key];
@@ -98,11 +115,11 @@ class SchemaManager {
 	}
 
 	/**
-   * Modify all configurations.
-   * @param {string} action Whether reset, add, or delete.
-   * @param {string} key The key to update.
-   * @returns {void}
-   */
+	 * Modify all configurations.
+	 * @param {string} action Whether reset, add, or delete.
+	 * @param {string} key The key to update.
+	 * @returns {void}
+	 */
 	async force(action, key) {
 		if (this.settingGateway.sql) {
 			await this.settingGateway.sql.updateColumns(this.schema, this.defaults, key);
@@ -121,19 +138,19 @@ class SchemaManager {
 	}
 
 	/**
-   * Shortcut for settingGateway
-   * @readonly
-   * @memberof SchemaManager
-   */
+	 * Shortcut for settingGateway
+	 * @readonly
+	 * @memberof SchemaManager
+	 */
 	get settingGateway() {
 		return this.client.settingGateway;
 	}
 
 	/**
-   * Get the default DataSchema from Klasa.
-   * @readonly
-   * @returns {Object}
-   */
+	 * Get the default DataSchema from Klasa.
+	 * @readonly
+	 * @returns {Object}
+	 */
 	get defaultDataSchema() {
 		return {
 			prefix: {

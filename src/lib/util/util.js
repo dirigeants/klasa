@@ -1,7 +1,7 @@
 const zws = String.fromCharCode(8203);
 let sensitivePattern;
 
-module.exports = class Util {
+class Util {
 
 	constructor() {
 		throw new Error('This class may not be initiated with new');
@@ -46,4 +46,6 @@ module.exports = class Util {
 		return str.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
 	}
 
-};
+}
+
+module.exports = Util;

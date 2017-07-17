@@ -1,4 +1,4 @@
-module.exports = class Inhibitor {
+class Inhibitor {
 
 	constructor(client, dir, file, name, { enabled = true, spamProtection = false }) {
 		this.client = client;
@@ -38,4 +38,6 @@ module.exports = class Inhibitor {
 		// Optionally defined in extension Classes
 	}
 
-};
+}
+
+module.exports = Inhibitor;

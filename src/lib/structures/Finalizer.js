@@ -1,4 +1,4 @@
-module.exports = class Finalizer {
+class Finalizer {
 
 	constructor(client, dir, file, name, { enabled = true }) {
 		this.client = client;
@@ -37,4 +37,6 @@ module.exports = class Finalizer {
 		// Optionally defined in extension Classes
 	}
 
-};
+}
+
+module.exports = Finalizer;

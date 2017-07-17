@@ -3,8 +3,15 @@ const CacheManager = require('./CacheManager');
 const SchemaManager = require('./SchemaManager');
 const SQL = require('./SQL');
 
-module.exports = class SettingGateway extends CacheManager {
+/**
+ * The gateway to all settings
+ * @extends {CacheManager}
+ */
+class SettingGateway extends CacheManager {
 
+	/**
+	 * @param {KlasaClient} client The Klasa Client
+	 */
 	constructor(client) {
 		super(client);
 
@@ -19,9 +26,9 @@ module.exports = class SettingGateway extends CacheManager {
 	}
 
 	/**
-   * Initialize the configuration for all Guilds.
-   * @returns {void}
-   */
+	 * Initialize the configuration for all Guilds.
+	 * @returns {void}
+	 */
 	async init() {
 		this.provider = this.client.providers.get(this.engine);
 		if (!this.provider) throw `This provider (${this.engine}) does not exist in your system.`;
@@ -40,28 +47,28 @@ module.exports = class SettingGateway extends CacheManager {
 	}
 
 	/**
-   * Get the current DataSchema.
-   * @readonly
-   * @returns {Object}
-   */
+	 * Get the current DataSchema.
+	 * @readonly
+	 * @returns {Object}
+	 */
 	get schema() {
 		return this.schemaManager.schema;
 	}
 
 	/**
-   * Get the default values from the current DataSchema.
-   * @readonly
-   * @returns {Object}
-   */
+	 * Get the default values from the current DataSchema.
+	 * @readonly
+	 * @returns {Object}
+	 */
 	get defaults() {
 		return this.schemaManager.defaults;
 	}
 
 	/**
-   * Create a new Guild entry for the configuration.
-   * @param {Guild|Snowflake} guild The Guild object or snowflake.
-   * @returns {void}
-   */
+	 * Create a new Guild entry for the configuration.
+	 * @param {Guild|Snowflake} guild The Guild object or snowflake.
+	 * @returns {void}
+	 */
 	async create(guild) {
 		const target = await this.validateGuild(guild);
 		await this.provider.create('guilds', target.id, this.schemaManager.defaults);
@@ -69,30 +76,30 @@ module.exports = class SettingGateway extends CacheManager {
 	}
 
 	/**
-   * Remove a Guild entry from the configuration.
-   * @param {Snowflake} guild The Guild object or snowflake.
-   * @returns {void}
-   */
+	 * Remove a Guild entry from the configuration.
+	 * @param {Snowflake} guild The Guild object or snowflake.
+	 * @returns {void}
+	 */
 	async destroy(guild) {
 		await this.provider.delete('guilds', guild);
 		super.delete('guilds', guild);
 	}
 
 	/**
-   * Get a Guild entry from the configuration.
-   * @param {(Guild|Snowflake)} guild The Guild object or snowflake.
-   * @returns {Object}
-   */
+	 * Get a Guild entry from the configuration.
+	 * @param {(Guild|Snowflake)} guild The Guild object or snowflake.
+	 * @returns {Object}
+	 */
 	get(guild) {
 		if (guild === 'default') return this.schemaManager.defaults;
 		return super.get(guild) || this.schemaManager.defaults;
 	}
 
 	/**
-   * Get a Resolved Guild entry from the configuration.
-   * @param {(Guild|Snowflake)} guild The Guild object or snowflake.
-   * @returns {Object}
-   */
+	 * Get a Resolved Guild entry from the configuration.
+	 * @param {(Guild|Snowflake)} guild The Guild object or snowflake.
+	 * @returns {Object}
+	 */
 	async getResolved(guild) {
 		guild = await this.validateGuild(guild);
 		const settings = this.get(guild.id);
@@ -104,10 +111,10 @@ module.exports = class SettingGateway extends CacheManager {
 	}
 
 	/**
-   * Sync either all Guild entries from the configuration, or a single one.
-   * @param {(Guild|Snowflake)} [guild=null] The configuration for the selected Guild, if specified.
-   * @returns {void}
-   */
+	 * Sync either all Guild entries from the configuration, or a single one.
+	 * @param {(Guild|Snowflake)} [guild=null] The configuration for the selected Guild, if specified.
+	 * @returns {void}
+	 */
 	async sync(guild = null) {
 		if (!guild) {
 			const data = await this.provider.getAll('guilds');
@@ -122,11 +129,11 @@ module.exports = class SettingGateway extends CacheManager {
 	}
 
 	/**
-   * Reset a key's value to default from a Guild configuration.
-   * @param {(Guild|Snowflake)} guild The Guild object or snowflake.
-   * @param {string} key The key to reset.
-   * @returns {*}
-   */
+	 * Reset a key's value to default from a Guild configuration.
+	 * @param {(Guild|Snowflake)} guild The Guild object or snowflake.
+	 * @param {string} key The key to reset.
+	 * @returns {*}
+	 */
 	async reset(guild, key) {
 		const target = await this.validateGuild(guild);
 		if (!(key in this.schema)) throw `The key ${key} does not exist in the current data schema.`;
@@ -137,12 +144,12 @@ module.exports = class SettingGateway extends CacheManager {
 	}
 
 	/**
-   * Update a Guild's configuration.
-   * @param {(Guild|Snowflake)} guild The Guild object or snowflake.
-   * @param {string} key The key to update.
-   * @param {any} data The new value for the key.
-   * @returns {any}
-   */
+	 * Update a Guild's configuration.
+	 * @param {(Guild|Snowflake)} guild The Guild object or snowflake.
+	 * @param {string} key The key to update.
+	 * @param {any} data The new value for the key.
+	 * @returns {any}
+	 */
 	async update(guild, key, data) {
 		if (!(key in this.schema)) throw `The key ${key} does not exist in the current data schema.`;
 		const target = await this.validateGuild(guild);
@@ -154,13 +161,13 @@ module.exports = class SettingGateway extends CacheManager {
 	}
 
 	/**
-   * Update an array from the a Guild's configuration.
-   * @param {(Guild|Snowflake)} guild The Guild object or snowflake.
-   * @param {string} type Either 'add' or 'remove'.
-   * @param {string} key The key from the Schema.
-   * @param {any} data The value to be added or removed.
-   * @returns {boolean}
-   */
+	 * Update an array from the a Guild's configuration.
+	 * @param {(Guild|Snowflake)} guild The Guild object or snowflake.
+	 * @param {string} type Either 'add' or 'remove'.
+	 * @param {string} key The key from the Schema.
+	 * @param {any} data The value to be added or removed.
+	 * @returns {boolean}
+	 */
 	async updateArray(guild, type, key, data) {
 		if (!['add', 'remove'].includes(type)) throw 'The type parameter must be either add or remove.';
 		if (!(key in this.schema)) throw `The key ${key} does not exist in the current data schema.`;
@@ -185,14 +192,16 @@ module.exports = class SettingGateway extends CacheManager {
 	}
 
 	/**
-   * Checks if a Guild is valid.
-   * @param {(Guild|Snowflake)} guild The Guild object or snowflake.
-   * @returns {Guild}
-   */
+	 * Checks if a Guild is valid.
+	 * @param {(Guild|Snowflake)} guild The Guild object or snowflake.
+	 * @returns {Guild}
+	 */
 	async validateGuild(guild) {
 		const result = await this.resolver.guild(guild);
 		if (!result) throw 'The parameter <Guild> expects either a Guild or a Guild Object.';
 		return result;
 	}
 
-};
+}
+
+module.exports = SettingGateway;

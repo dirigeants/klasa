@@ -1,4 +1,4 @@
-module.exports = class ParsedUsage {
+class ParsedUsage {
 
 	constructor(client, command) {
 		Object.defineProperty(this, 'client', { value: client });
@@ -170,4 +170,6 @@ module.exports = class ParsedUsage {
 		return toRet;
 	}
 
-};
+}
+
+module.exports = ParsedUsage;

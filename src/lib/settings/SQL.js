@@ -8,11 +8,26 @@ const DefaultDataTypes = {
 	AutoTS: 'DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL'
 };
 
-/* eslint-disable no-restricted-syntax */
+/**
+ * The sql building class for sql based providers
+ */
 class SQL {
 
+	/**
+	 * @param {KlasaClient} client The Klasa Client
+	 * @param {Provider} provider The sql prividor to use with this instance
+	 */
 	constructor(client, provider) {
+		/**
+		 * The Client
+		 * @type {KlasaClient}
+		 */
 		this.client = client;
+
+		/**
+		 * The Provider
+		 * @type {Provider}
+		 */
 		this.provider = provider;
 	}
 

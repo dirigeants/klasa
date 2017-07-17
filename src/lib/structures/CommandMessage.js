@@ -1,4 +1,4 @@
-module.exports = class CommandMessage {
+class CommandMessage {
 
 	constructor(msg, cmd, prefix, prefixLength) {
 		Object.defineProperty(this, 'client', { value: msg.client });
@@ -97,5 +97,6 @@ module.exports = class CommandMessage {
 		return args;
 	}
 
+}
 
-};
+module.exports = CommandMessage;

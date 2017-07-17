@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 
-module.exports = class Extendable {
+class Extendable {
 
 	constructor(client, dir, file, name, appliesTo = []) {
 		this.client = client;
@@ -19,4 +19,6 @@ module.exports = class Extendable {
 		for (const structure of this.appliesTo) Object.defineProperty(Discord[structure].prototype, this.name, Object.getOwnPropertyDescriptor(this.constructor.prototype, 'extend'));
 	}
 
-};
+}
+
+module.exports = Extendable;

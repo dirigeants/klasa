@@ -1,6 +1,6 @@
 const Resolver = require('./Resolver');
 
-module.exports = class ArgResolver extends Resolver {
+class ArgResolver extends Resolver {
 
 	async command(...args) {
 		return this.cmd(...args);
@@ -206,4 +206,6 @@ module.exports = class ArgResolver extends Resolver {
 		throw `${currentUsage.possibles[possible].name} must be a valid url.`;
 	}
 
-};
+}
+
+module.exports = ArgResolver;

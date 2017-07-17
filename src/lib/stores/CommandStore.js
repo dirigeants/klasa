@@ -3,7 +3,7 @@ const { Collection } = require('discord.js');
 const fs = require('fs-nextra');
 const Command = require('../structures/Command');
 
-module.exports = class CommandStore extends Collection {
+class CommandStore extends Collection {
 
 	constructor(client) {
 		super();
@@ -90,4 +90,6 @@ module.exports = class CommandStore extends Collection {
 	}
 
 
-};
+}
+
+module.exports = CommandStore;

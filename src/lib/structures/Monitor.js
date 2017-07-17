@@ -1,4 +1,4 @@
-module.exports = class Monitor {
+class Monitor {
 
 	constructor(client, dir, file, name, { enabled = true }) {
 		this.client = client;
@@ -37,4 +37,6 @@ module.exports = class Monitor {
 		// Optionally defined in extension Classes
 	}
 
-};
+}
+
+module.exports = Monitor;

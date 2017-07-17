@@ -3,7 +3,7 @@ const { Collection } = require('discord.js');
 const fs = require('fs-nextra');
 const Provider = require('../structures/Provider');
 
-module.exports = class ProviderStore extends Collection {
+class ProviderStore extends Collection {
 
 	constructor(client) {
 		super();
@@ -51,4 +51,6 @@ module.exports = class ProviderStore extends Collection {
 		return this.size;
 	}
 
-};
+}
+
+module.exports = ProviderStore;

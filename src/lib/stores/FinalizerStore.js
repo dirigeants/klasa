@@ -3,7 +3,7 @@ const { Collection } = require('discord.js');
 const fs = require('fs-nextra');
 const Finalizer = require('../structures/Finalizer');
 
-module.exports = class FinalizerStore extends Collection {
+class FinalizerStore extends Collection {
 
 	constructor(client) {
 		super();
@@ -55,4 +55,6 @@ module.exports = class FinalizerStore extends Collection {
 		this.forEach(finalizer => finalizer.run(...args));
 	}
 
-};
+}
+
+module.exports = FinalizerStore;

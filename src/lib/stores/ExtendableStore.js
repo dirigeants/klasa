@@ -3,7 +3,7 @@ const { Collection } = require('discord.js');
 const fs = require('fs-nextra');
 const Extendable = require('../structures/Extendable');
 
-module.exports = class ExtendableStore extends Collection {
+class ExtendableStore extends Collection {
 
 	constructor(client) {
 		super();
@@ -43,4 +43,6 @@ module.exports = class ExtendableStore extends Collection {
 		return this.size;
 	}
 
-};
+}
+
+module.exports = ExtendableStore;

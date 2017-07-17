@@ -1,4 +1,4 @@
-module.exports = class Event {
+class Event {
 
 	constructor(client, dir, file, name) {
 		this.client = client;
@@ -26,4 +26,6 @@ module.exports = class Event {
 		// Optionally defined in extension Classes
 	}
 
-};
+}
+
+module.exports = Event;

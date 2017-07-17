@@ -1,6 +1,6 @@
 const Resolver = require('./Resolver');
 
-module.exports = class SettingResolver extends Resolver {
+class SettingResolver extends Resolver {
 
 	async user(data) {
 		const result = await super.user(data);
@@ -65,13 +65,13 @@ module.exports = class SettingResolver extends Resolver {
 	}
 
 	/**
-   * Check if the input is valid with min and/or max values.
-   * @static
-   * @param {any} value The value to check.
-   * @param {?number} min Min value.
-   * @param {?number} max Max value.
-   * @returns {?boolean}
-   */
+	 * Check if the input is valid with min and/or max values.
+	 * @static
+	 * @param {any} value The value to check.
+	 * @param {?number} min Min value.
+	 * @param {?number} max Max value.
+	 * @returns {?boolean}
+	 */
 	static async maxOrMin(value, min, max) {
 		if (min && max) {
 			if (value >= min && value <= max) return true;
@@ -87,4 +87,6 @@ module.exports = class SettingResolver extends Resolver {
 		return null;
 	}
 
-};
+}
+
+module.exports = SettingResolver;
