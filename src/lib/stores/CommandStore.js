@@ -11,30 +11,30 @@ class CommandStore extends Collection {
 
 	constructor(client) {
 		super();
-	/**
-		* The client this CommandStore was created with.
-		* @name CommandStore#client
-		* @type {Client}
-		* @readonly
-		*/
+		/**
+			* The client this CommandStore was created with.
+			* @name CommandStore#client
+			* @type {Client}
+			* @readonly
+			*/
 		Object.defineProperty(this, 'client', { value: client });
 
-	/**
-		* The different aliases that represent the commands in this store.
-		* @type external:Collection
-		*/
+		/**
+			* The different aliases that represent the commands in this store.
+			* @type external:Collection
+			*/
 		this.aliases = new Collection();
 
-	/**
-		* The directory of where Klasa is relative to where its installed.
-		* @type {String}
-		*/
+		/**
+			* The directory of where Klasa is relative to where its installed.
+			* @type {String}
+			*/
 		this.coreDir = join(this.client.coreBaseDir, 'commands');
 
-	/**
-		* The directory of where Klasa is relative to where you run the file from.
-		* @type {String}
-		*/
+		/**
+			* The directory of where Klasa is relative to where you run the file from.
+			* @type {String}
+			*/
 		this.userDir = join(this.client.clientBaseDir, 'commands');
 	}
 
