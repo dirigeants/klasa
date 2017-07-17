@@ -14,6 +14,9 @@ class PermissionLevels {
 	 * @property {Function} check The permission checking function
 	 */
 
+	/**
+	 * Creates a new PermissionLevels
+	 */
 	constructor() {
 		/**
 		 * A cache of levels submitted with addLevel
