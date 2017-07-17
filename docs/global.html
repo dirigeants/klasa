@@ -33,7 +33,7 @@
 			<li class="dropdown">
 				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="Command.html">Command</a></li><li><a href="CommandStore.html">CommandStore</a></li><li><a href="Event.html">Event</a></li><li><a href="EventStore.html">EventStore</a></li><li><a href="Extendable.html">Extendable</a></li><li><a href="ExtendableStore.html">ExtendableStore</a></li><li><a href="Finalizer.html">Finalizer</a></li><li><a href="FinalizerStore.html">FinalizerStore</a></li><li><a href="InhibitorStore.html">InhibitorStore</a></li><li><a href="KlasaClient.html">KlasaClient</a></li><li><a href="Monitor.html">Monitor</a></li><li><a href="PermissionLevels.html">PermissionLevels</a></li><li><a href="ProviderStore.html">ProviderStore</a></li><li><a href="Resolver.html">Resolver</a></li><li><a href="SchemaManager.html">SchemaManager</a></li><li><a href="SettingGateway.html">SettingGateway</a></li><li><a href="SQL.html">SQL</a></li><li><a href="Util.html">Util</a></li>
+					<li><a href="Command.html">Command</a></li><li><a href="CommandStore.html">CommandStore</a></li><li><a href="Event.html">Event</a></li><li><a href="EventStore.html">EventStore</a></li><li><a href="Extendable.html">Extendable</a></li><li><a href="ExtendableStore.html">ExtendableStore</a></li><li><a href="Finalizer.html">Finalizer</a></li><li><a href="FinalizerStore.html">FinalizerStore</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorStore.html">InhibitorStore</a></li><li><a href="KlasaClient.html">KlasaClient</a></li><li><a href="Monitor.html">Monitor</a></li><li><a href="PermissionLevels.html">PermissionLevels</a></li><li><a href="ProviderStore.html">ProviderStore</a></li><li><a href="Resolver.html">Resolver</a></li><li><a href="SchemaManager.html">SchemaManager</a></li><li><a href="SettingGateway.html">SettingGateway</a></li><li><a href="SQL.html">SQL</a></li><li><a href="Util.html">Util</a></li>
 				</ul>
 			</li>
 			
@@ -816,6 +816,186 @@
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
 		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Finalizer.js#L8">lib/structures/Finalizer.js#L8</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+            
+                
+<hr>
+<dt class="name" id="InhibitorOptions">
+    <h4 id="InhibitorOptions">InhibitorOptions</h4>
+
+    
+</dt>
+<dd>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Object</span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    <dl>
+
+<table class="props table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Argument</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>enabled</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    true
+                
+                </td>
+            
+
+            <td class="description last">Whether the inhibitor is enabled</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>spamProtection</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last">If this inhibitor is meant for spamProtection (disables the inhibitor while generating help)</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+</dl>
+
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Inhibitor.js#L8">lib/structures/Inhibitor.js#L8</a>	</dd>
 	
 
 	
@@ -1688,7 +1868,7 @@
                 </td>
             
 
-            <td class="description last">Whether the monitor ignores bots</td>
+            <td class="description last">Whether the monitor ignores bots or not</td>
         </tr>
 
     
@@ -1726,7 +1906,7 @@
                 </td>
             
 
-            <td class="description last">Whether the monitor ignores itself</td>
+            <td class="description last">Whether the monitor ignores itself or not</td>
         </tr>
 
     
