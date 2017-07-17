@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Klasa Class: Event</title>
+	<title>Klasa Class: ExtendableStore</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -86,17 +86,16 @@
 		<div id="main">
 			
 
-	<h1 class="page-title">Class: Event</h1>
+	<h1 class="page-title">Class: ExtendableStore</h1>
 <section>
 
 <header>
     
         <h2>
-        Event
+        ExtendableStore
         </h2>
         
-            <div class="class-description">Base class for all Klasa Events. See <a href="tutorial-CreatingEvents.html">CreatingEvents</a> for more information how to use this class
-to build custom events.</div>
+            <div class="class-description">Stores all of our extendables that extend Discord.js</div>
         
     
 </header>
@@ -108,12 +107,16 @@ to build custom events.</div>
         
 <hr>
 <dt>
-    <h4 class="name" id="Event"><span class="type-signature"></span>new Event(client, dir, file, name)</h4>
+    <h4 class="name" id="ExtendableStore"><span class="type-signature"></span>new ExtendableStore(client)</h4>
     
     
 </dt>
 <dd>
 
+    
+    <div class="description">
+        Constructs our ExtendableStore for use in Klasa
+    </div>
     
 
     
@@ -164,79 +167,7 @@ to build custom events.</div>
 
             
 
-            <td class="description last">The klasa client</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>dir</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The path to the core or user event pieces folder</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>file</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The path from the pieces folder to the event file</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>name</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The name of the event</td>
+            <td class="description last">The Klasa client</td>
         </tr>
 
     
@@ -278,16 +209,9 @@ to build custom events.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L14">lib/structures/Event.js#L14</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/ExtendableStore.js#L16">lib/stores/ExtendableStore.js#L16</a>	</dd>
 	
 
-	
-	<dt class="tag-tutorial method-doc-label method-doc-details-label">Tutorials:</dt>
-	<dd class="tag-tutorial">
-		<ul>
-			<li><a href="tutorial-CreatingEvents.html">CreatingEvents</a></li>
-			</ul>
-	</dd>
 	
 
 	
@@ -315,6 +239,17 @@ to build custom events.</div>
     </div>
 
     
+        <h3 class="subsection-title">Extends</h3>
+
+        
+
+
+    <ul>
+        <li><a href="external-Collection.html">external:Collection</a></li>
+    </ul>
+
+
+    
 
     
 
@@ -331,11 +266,15 @@ to build custom events.</div>
             
 <hr>
 <dt class="name" id="client">
-    <h4 id="client"><span class="type-signature"></span>client<span class="type-signature"> :<a href="KlasaClient.html">KlasaClient</a></span></h4>
+    <h4 id="client"><span class="type-signature">&lt;readonly> </span>client<span class="type-signature"> :<a href="KlasaClient.html">KlasaClient</a></span></h4>
 
     
 </dt>
 <dd>
+    
+    <div class="description">
+        The client this CommandStore was created with.
+    </div>
     
 
     
@@ -384,7 +323,7 @@ to build custom events.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L18">lib/structures/Event.js#L18</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/ExtendableStore.js#L18">lib/stores/ExtendableStore.js#L18</a>	</dd>
 	
 
 	
@@ -401,15 +340,15 @@ to build custom events.</div>
         
             
 <hr>
-<dt class="name" id="dir">
-    <h4 id="dir"><span class="type-signature"></span>dir<span class="type-signature"> :string</span></h4>
+<dt class="name" id="coreDir">
+    <h4 id="coreDir"><span class="type-signature"></span>coreDir<span class="type-signature"> :String</span></h4>
 
     
 </dt>
 <dd>
     
     <div class="description">
-        The directory to where this event piece is stored
+        The directory of extendables in Klasa relative to where its installed.
     </div>
     
 
@@ -418,7 +357,7 @@ to build custom events.</div>
         <ul>
             <li>
                 
-<span class="param-type">string</span>
+<span class="param-type">String</span>
 
 
 
@@ -459,7 +398,7 @@ to build custom events.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L24">lib/structures/Event.js#L24</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/ExtendableStore.js#L30">lib/stores/ExtendableStore.js#L30</a>	</dd>
 	
 
 	
@@ -476,15 +415,15 @@ to build custom events.</div>
         
             
 <hr>
-<dt class="name" id="file">
-    <h4 id="file"><span class="type-signature"></span>file<span class="type-signature"> :string</span></h4>
+<dt class="name" id="userDir">
+    <h4 id="userDir"><span class="type-signature"></span>userDir<span class="type-signature"> :String</span></h4>
 
     
 </dt>
 <dd>
     
     <div class="description">
-        The file location where this event is stored
+        The directory of local extendables relative to where you run Klasa from.
     </div>
     
 
@@ -493,7 +432,7 @@ to build custom events.</div>
         <ul>
             <li>
                 
-<span class="param-type">string</span>
+<span class="param-type">String</span>
 
 
 
@@ -534,157 +473,7 @@ to build custom events.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L30">lib/structures/Event.js#L30</a>	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt class="name" id="name">
-    <h4 id="name"><span class="type-signature"></span>name<span class="type-signature"> :string</span></h4>
-
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        The name of the command
-    </div>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">string</span>
-
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L36">lib/structures/Event.js#L36</a>	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt class="name" id="type">
-    <h4 id="type"><span class="type-signature"></span>type<span class="type-signature"> :string</span></h4>
-
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        The type of Klasa piece this is
-    </div>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">string</span>
-
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L42">lib/structures/Event.js#L42</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/ExtendableStore.js#L36">lib/stores/ExtendableStore.js#L36</a>	</dd>
 	
 
 	
@@ -708,7 +497,7 @@ to build custom events.</div>
             
 <hr>
 <dt>
-    <h4 class="name" id="init"><span class="type-signature">&lt;abstract> </span>init()</h4>
+    <h4 class="name" id="init"><span class="type-signature"></span>init()</h4>
     
     
 </dt>
@@ -716,7 +505,7 @@ to build custom events.</div>
 
     
     <div class="description">
-        The init method to be optionaly overwritten in actual events
+        Initializes all of our extendables.
     </div>
     
 
@@ -760,7 +549,7 @@ to build custom events.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L78">lib/structures/Event.js#L78</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/ExtendableStore.js#L55">lib/stores/ExtendableStore.js#L55</a>	</dd>
 	
 
 	
@@ -793,7 +582,7 @@ to build custom events.</div>
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;void></span>
+<span class="param-type">Promise.&lt;Array></span>
 
 
 
@@ -810,7 +599,7 @@ to build custom events.</div>
             
 <hr>
 <dt>
-    <h4 class="name" id="reload"><span class="type-signature">&lt;async> </span>reload()</h4>
+    <h4 class="name" id="load"><span class="type-signature"></span>load(dir, file)</h4>
     
     
 </dt>
@@ -818,113 +607,7 @@ to build custom events.</div>
 
     
     <div class="description">
-        Reloads this event
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L49">lib/structures/Event.js#L49</a>	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    The newly loaded event
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;<a href="Event.html">Event</a>></span>
-
-
-
-    </dd>
-</dl>
-
-
-        
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="run"><span class="type-signature">&lt;abstract> </span>run(param)</h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        The run method to be overwritten in actual event handlers
+        Loads all of our extendables from both the user and core directories.
     </div>
     
 
@@ -959,13 +642,13 @@ to build custom events.</div>
 
         <tr>
             
-                <td class="name"><code>param</code></td>
+                <td class="name"><code>dir</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">any</span>
+<span class="param-type">string</span>
 
 
 
@@ -976,7 +659,31 @@ to build custom events.</div>
 
             
 
-            <td class="description last">The event parameters emited</td>
+            <td class="description last">The user directory or core directory where this file is saved.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>file</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">A string showing where the file is located</td>
         </tr>
 
     
@@ -1018,7 +725,7 @@ to build custom events.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L69">lib/structures/Event.js#L69</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/ExtendableStore.js#L75">lib/stores/ExtendableStore.js#L75</a>	</dd>
 	
 
 	
@@ -1043,10 +750,6 @@ to build custom events.</div>
     <h5>Returns:</h5>
     
             
-<div class="param-desc">
-    You should return the response message whenever possible
-</div>
-
 
 
 <dl>
@@ -1055,7 +758,7 @@ to build custom events.</div>
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;Message></span>
+<span class="param-type">Extendable</span>
 
 
 
@@ -1072,7 +775,7 @@ to build custom events.</div>
             
 <hr>
 <dt>
-    <h4 class="name" id="unload"><span class="type-signature"></span>unload()</h4>
+    <h4 class="name" id="loadAll"><span class="type-signature">&lt;async> </span>loadAll()</h4>
     
     
 </dt>
@@ -1080,7 +783,7 @@ to build custom events.</div>
 
     
     <div class="description">
-        Unloads this event
+        Loads all of our extends from both the user and core directories.
     </div>
     
 
@@ -1124,7 +827,166 @@ to build custom events.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L59">lib/structures/Event.js#L59</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/ExtendableStore.js#L85">lib/stores/ExtendableStore.js#L85</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    The number of extendables loaded.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;number></span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="resolve"><span class="type-signature"></span>resolve(name)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Resolves a string or extendable into a extendable object
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Extendable</span>
+|
+
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The extendable object or a string representing the name of the extendable</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/ExtendableStore.js#L64">lib/stores/ExtendableStore.js#L64</a>	</dd>
 	
 
 	
@@ -1157,7 +1019,159 @@ to build custom events.</div>
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Extendable</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="set"><span class="type-signature"></span>set(extendable)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Sets up an extendable in our store.
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>extendable</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Extendable</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The extendable object we are setting up.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/ExtendableStore.js#L44">lib/stores/ExtendableStore.js#L44</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Extendable</span>
 
 
 

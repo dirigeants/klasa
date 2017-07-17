@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Klasa Class: Event</title>
+	<title>Klasa Class: ProviderStore</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -86,17 +86,16 @@
 		<div id="main">
 			
 
-	<h1 class="page-title">Class: Event</h1>
+	<h1 class="page-title">Class: ProviderStore</h1>
 <section>
 
 <header>
     
         <h2>
-        Event
+        ProviderStore
         </h2>
         
-            <div class="class-description">Base class for all Klasa Events. See <a href="tutorial-CreatingEvents.html">CreatingEvents</a> for more information how to use this class
-to build custom events.</div>
+            <div class="class-description">Stores all providers for use in Klasa</div>
         
     
 </header>
@@ -108,12 +107,16 @@ to build custom events.</div>
         
 <hr>
 <dt>
-    <h4 class="name" id="Event"><span class="type-signature"></span>new Event(client, dir, file, name)</h4>
+    <h4 class="name" id="ProviderStore"><span class="type-signature"></span>new ProviderStore(client)</h4>
     
     
 </dt>
 <dd>
 
+    
+    <div class="description">
+        Constructs our ProviderStore for use in Klasa
+    </div>
     
 
     
@@ -164,79 +167,7 @@ to build custom events.</div>
 
             
 
-            <td class="description last">The klasa client</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>dir</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The path to the core or user event pieces folder</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>file</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The path from the pieces folder to the event file</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>name</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The name of the event</td>
+            <td class="description last">The Klasa client</td>
         </tr>
 
     
@@ -278,16 +209,9 @@ to build custom events.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L14">lib/structures/Event.js#L14</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/ProviderStore.js#L16">lib/stores/ProviderStore.js#L16</a>	</dd>
 	
 
-	
-	<dt class="tag-tutorial method-doc-label method-doc-details-label">Tutorials:</dt>
-	<dd class="tag-tutorial">
-		<ul>
-			<li><a href="tutorial-CreatingEvents.html">CreatingEvents</a></li>
-			</ul>
-	</dd>
 	
 
 	
@@ -313,6 +237,17 @@ to build custom events.</div>
 
     
     </div>
+
+    
+        <h3 class="subsection-title">Extends</h3>
+
+        
+
+
+    <ul>
+        <li><a href="external-Collection.html">external:Collection</a></li>
+    </ul>
+
 
     
 
@@ -330,12 +265,16 @@ to build custom events.</div>
         <dl>
             
 <hr>
-<dt class="name" id="client">
-    <h4 id="client"><span class="type-signature"></span>client<span class="type-signature"> :<a href="KlasaClient.html">KlasaClient</a></span></h4>
+<dt class="name" id="coreDir">
+    <h4 id="coreDir"><span class="type-signature"></span>coreDir<span class="type-signature"> :String</span></h4>
 
     
 </dt>
 <dd>
+    
+    <div class="description">
+        The directory of providers in Klasa relative to where its installed.
+    </div>
     
 
     
@@ -343,7 +282,7 @@ to build custom events.</div>
         <ul>
             <li>
                 
-<span class="param-type"><a href="KlasaClient.html">KlasaClient</a></span>
+<span class="param-type">String</span>
 
 
 
@@ -384,7 +323,7 @@ to build custom events.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L18">lib/structures/Event.js#L18</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/ProviderStore.js#L30">lib/stores/ProviderStore.js#L30</a>	</dd>
 	
 
 	
@@ -401,15 +340,15 @@ to build custom events.</div>
         
             
 <hr>
-<dt class="name" id="dir">
-    <h4 id="dir"><span class="type-signature"></span>dir<span class="type-signature"> :string</span></h4>
+<dt class="name" id="userDir">
+    <h4 id="userDir"><span class="type-signature"></span>userDir<span class="type-signature"> :String</span></h4>
 
     
 </dt>
 <dd>
     
     <div class="description">
-        The directory to where this event piece is stored
+        The directory of local providers relative to where you run Klasa from.
     </div>
     
 
@@ -418,7 +357,7 @@ to build custom events.</div>
         <ul>
             <li>
                 
-<span class="param-type">string</span>
+<span class="param-type">String</span>
 
 
 
@@ -459,232 +398,7 @@ to build custom events.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L24">lib/structures/Event.js#L24</a>	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt class="name" id="file">
-    <h4 id="file"><span class="type-signature"></span>file<span class="type-signature"> :string</span></h4>
-
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        The file location where this event is stored
-    </div>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">string</span>
-
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L30">lib/structures/Event.js#L30</a>	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt class="name" id="name">
-    <h4 id="name"><span class="type-signature"></span>name<span class="type-signature"> :string</span></h4>
-
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        The name of the command
-    </div>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">string</span>
-
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L36">lib/structures/Event.js#L36</a>	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt class="name" id="type">
-    <h4 id="type"><span class="type-signature"></span>type<span class="type-signature"> :string</span></h4>
-
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        The type of Klasa piece this is
-    </div>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">string</span>
-
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L42">lib/structures/Event.js#L42</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/ProviderStore.js#L36">lib/stores/ProviderStore.js#L36</a>	</dd>
 	
 
 	
@@ -708,7 +422,7 @@ to build custom events.</div>
             
 <hr>
 <dt>
-    <h4 class="name" id="init"><span class="type-signature">&lt;abstract> </span>init()</h4>
+    <h4 class="name" id="delete"><span class="type-signature"></span>delete(name)</h4>
     
     
 </dt>
@@ -716,215 +430,7 @@ to build custom events.</div>
 
     
     <div class="description">
-        The init method to be optionaly overwritten in actual events
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L78">lib/structures/Event.js#L78</a>	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;void></span>
-
-
-
-    </dd>
-</dl>
-
-
-        
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="reload"><span class="type-signature">&lt;async> </span>reload()</h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Reloads this event
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L49">lib/structures/Event.js#L49</a>	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    The newly loaded event
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;<a href="Event.html">Event</a>></span>
-
-
-
-    </dd>
-</dl>
-
-
-        
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="run"><span class="type-signature">&lt;abstract> </span>run(param)</h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        The run method to be overwritten in actual event handlers
+        Deletes a provider from the store.
     </div>
     
 
@@ -959,13 +465,16 @@ to build custom events.</div>
 
         <tr>
             
-                <td class="name"><code>param</code></td>
+                <td class="name"><code>name</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">any</span>
+<span class="param-type">Provider</span>
+|
+
+<span class="param-type">string</span>
 
 
 
@@ -976,7 +485,7 @@ to build custom events.</div>
 
             
 
-            <td class="description last">The event parameters emited</td>
+            <td class="description last">A provider object or a string representing a provider.</td>
         </tr>
 
     
@@ -1018,7 +527,7 @@ to build custom events.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L69">lib/structures/Event.js#L69</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/ProviderStore.js#L57">lib/stores/ProviderStore.js#L57</a>	</dd>
 	
 
 	
@@ -1044,7 +553,7 @@ to build custom events.</div>
     
             
 <div class="param-desc">
-    You should return the response message whenever possible
+    whether or not the delete was successful.
 </div>
 
 
@@ -1055,7 +564,7 @@ to build custom events.</div>
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;Message></span>
+<span class="param-type">boolean</span>
 
 
 
@@ -1072,7 +581,7 @@ to build custom events.</div>
             
 <hr>
 <dt>
-    <h4 class="name" id="unload"><span class="type-signature"></span>unload()</h4>
+    <h4 class="name" id="init"><span class="type-signature"></span>init()</h4>
     
     
 </dt>
@@ -1080,7 +589,7 @@ to build custom events.</div>
 
     
     <div class="description">
-        Unloads this event
+        Initializes all of our providers
     </div>
     
 
@@ -1124,7 +633,7 @@ to build custom events.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L59">lib/structures/Event.js#L59</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/ProviderStore.js#L68">lib/stores/ProviderStore.js#L68</a>	</dd>
 	
 
 	
@@ -1157,7 +666,596 @@ to build custom events.</div>
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;Array></span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="load"><span class="type-signature"></span>load(dir, file)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Loads an provider into Klasa so it can be saved in this store.
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>dir</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The user directory or the core directory where this file is saved.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>file</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">A string showing where the file is located.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/ProviderStore.js#L88">lib/stores/ProviderStore.js#L88</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Provider</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="loadAll"><span class="type-signature">&lt;async> </span>loadAll()</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Loads all of our providers from both the user and core directories.
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/ProviderStore.js#L98">lib/stores/ProviderStore.js#L98</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    The number of providers loaded into this store.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;number></span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="resolve"><span class="type-signature"></span>resolve(name)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Resolve a string or provider into a provider object.
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Provider</span>
+|
+
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The providere object or a string representing a provider.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/ProviderStore.js#L77">lib/stores/ProviderStore.js#L77</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Provider</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="set"><span class="type-signature"></span>set(provider)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Sets up a provider in our store.
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>provider</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Provider</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The provider object we are setting up.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/ProviderStore.js#L44">lib/stores/ProviderStore.js#L44</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Provider</span>
 
 
 
