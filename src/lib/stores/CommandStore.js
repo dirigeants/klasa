@@ -10,6 +10,7 @@ const Command = require('../structures/Command');
 class CommandStore extends Collection {
 
 	/**
+	 * Constructs our CommandStore for use in Klasa
 	 * @param {KlasaClient} client The Klasa Client
 	 */
 	constructor(client) {
@@ -29,13 +30,13 @@ class CommandStore extends Collection {
 		this.aliases = new Collection();
 
 		/**
-		 * The directory of where Klasa is relative to where its installed.
+		 * The directory of commands in Klasa relative to where its installed.
 		 * @type {String}
 		 */
 		this.coreDir = join(this.client.coreBaseDir, 'commands');
 
 		/**
-		 * The directory of where Klasa is relative to where you run the file from.
+		 * The directory of local commands relative to where you run Klasa from.
 		 * @type {String}
 		 */
 		this.userDir = join(this.client.clientBaseDir, 'commands');
@@ -104,8 +105,8 @@ class CommandStore extends Collection {
 	}
 
 	/**
-	 * Initializing all of our commands upon receiving a klasa 'full ready'.
-	 * @returns {void}
+	 * Initializes all of our commands
+	 * @returns {Promise<Array>}
 	 */
 	init() {
 		return Promise.all(this.map(piece => piece.init()));
@@ -133,9 +134,16 @@ class CommandStore extends Collection {
 		return cmd;
 	}
 
+
+	/**
+	 * @typedef {Array} LoadedArray
+	 * @property {number} The amount of commands Loaded
+	 * @property {number} The amount of aliases loaded
+	 */
+
 	/**
 	 * Loads all of our commands from both the user and core directories.
-	 * @returns {Array<number, number>} The number of commands and aliases loaded.
+	 * @returns {Promise<LoadedArray>} The number of commands and aliases loaded.
 	 */
 	async loadAll() {
 		this.clear();
