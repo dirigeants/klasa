@@ -13,17 +13,20 @@ class SchemaManager {
 	 */
 	constructor(client) {
 		/**
-		 * @type {KlasaClient} The klasa client
+		 * The klasa client
+		 * @type {KlasaClient} 
 		 */
 		this.client = client;
 
 		/**
-		 * @type {Object} The current schema
+		 * The current schema
+		 * @type {Object}
 		 */
 		this.schema = {};
 
 		/**
-		 * @type {Object} The current default values
+		 * The current default values
+		 * @type {Object} 
 		 */
 		this.defaults = {};
 	}

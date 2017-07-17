@@ -14,28 +14,145 @@ const ProviderStore = require('./stores/ProviderStore');
 const EventStore = require('./stores/EventStore');
 const ExtendableStore = require('./stores/ExtendableStore');
 
-class Klasa extends Discord.Client {
+/**
+ * The client for handling everything
+ * @extends {Client}
+ */
+class KlasaClient extends Discord.Client {
 
+	/**
+	 * @typedef {Object} KlasaClientConfig
+	 * @property {DiscordJSConfig} clientOptions The options to pass to D.JS
+	 * @property {string} prefix The default prefix the bot should respond to
+	 * @property {number} [commandMessageLifetime=1800] The threshold for how old command messages can be before sweeping since the last edit in seconds
+	 * @property {number} [commandMessageSweep=900] The interval duration for which command messages should be sweept in seconds
+	 * @property {object} [provider] The provider to use in Klasa
+	 * @property {boolean} [disableLogTimestamps=false] Whether or not to disable the log timestamps
+	 * @property {boolean} [disableLogColor=false] Whether or not to disable the log colors
+	 * @property {boolean} [ignoreBots=true] Whether or not this bot should ignore other bots
+	 * @property {boolean} [ignoreSelf=true] Whether or not this bot should ignore itself
+	 * @property {RegExp} [prefixMention] The prefix mention for your bot (Automatically Generated)
+	 * @property {boolean} [cmdPrompt=false] Whether the bot should prompt missing parameters
+	 * @property {boolean} [cmdEditing=false] Whether the bot should update responses if the command is edited
+	 * @property {string} [ownerID] The discord user id for the user the bot should respect as the owner (gotten from Discord api if not provided)
+	 */
+
+	/**
+	 * @param {KlasaClientConfig} config The config to pass to the new client
+	 */
 	constructor(config = {}) {
 		if (typeof config !== 'object') throw new TypeError('Configuration for Klasa must be an object.');
 		super(config.clientOptions);
+
+		/**
+		 * The config passed to the new Klasa.Client
+		 * @type {KlasaClientConfig}
+		 */
 		this.config = config;
 		this.config.provider = config.provider || {};
+
+		/**
+		 * The directory to the node_modules folder where Klasa exists
+		 * @type {string}
+		 */
 		this.coreBaseDir = path.join(__dirname, '../');
+
+		/**
+		 * The directory where the user files are at
+		 * @type {string}
+		 */
 		this.clientBaseDir = process.cwd();
+
+		/**
+		 * The argument resolver
+		 * @type {ArgResolver}
+		 */
 		this.argResolver = new ArgResolver(this);
+
+		/**
+		 * The cache where commands are stored
+		 * @type {CommandStore}
+		 */
 		this.commands = new CommandStore(this);
+
+		/**
+		 * The cache where inhibitors are stored
+		 * @type {InhibitorStore}
+		 */
 		this.inhibitors = new InhibitorStore(this);
+
+		/**
+		 * The cache where finalizers are stored
+		 * @type {FinalizerStore}
+		 */
 		this.finalizers = new FinalizerStore(this);
+
+		/**
+		 * The cache where monitors are stored
+		 * @type {MonitorStore}
+		 */
 		this.monitors = new MonitorStore(this);
+
+		/**
+		 * The cache where providers are stored
+		 * @type {ProviderStore}
+		 */
 		this.providers = new ProviderStore(this);
+
+		/**
+		 * The cache where events are stored
+		 * @type {EventStore}
+		 */
 		this.events = new EventStore(this);
+
+		/**
+		 * The cache where extendables are stored
+		 * @type {ExtendableStore}
+		 */
 		this.extendables = new ExtendableStore(this);
+
+		/**
+		 * The cache of command messages and responses to be used for command editing
+		 * @type {Collection}
+		 */
 		this.commandMessages = new Discord.Collection();
+
+		/**
+		 * The permissions structure for this bot
+		 * @type {ValidPermStructure}
+		 */
 		this.permStructure = this.validatePermStructure();
+
+		/**
+		 * The threshold for how old command messages can be before sweeping since the last edit in seconds
+		 * @type {number}
+		 */
 		this.commandMessageLifetime = config.commandMessageLifetime || 1800;
+
+		/**
+		 * The interval duration for which command messages should be sweept in seconds
+		 * @type {number}
+		 */
 		this.commandMessageSweep = config.commandMessageSweep || 900;
+
+		/**
+		 * Whether the client is truely ready or not
+		 * @type {boolean}
+		 */
 		this.ready = false;
+
+		/**
+		 * Additional methods to be used elsewhere in the bot
+		 * @type {object}
+		 * @property {class} Collection A discord.js collection
+		 * @property {class} Embed A discord.js Message Embed
+		 * @property {class} MessageCollector A discord.js MessageCollector
+		 * @property {class} Webhook A discord.js WebhookClient
+		 * @property {function} escapeMarkdown A discord.js escape markdown function
+		 * @property {function} splitMessage A discord.js split message function
+		 * @property {class} CommandMessage A command message
+		 * @property {Util} util A collection of static methods to be used thoughout the bot
+		 */
 		this.methods = {
 			Collection: Discord.Collection,
 			Embed: Discord.MessageEmbed,
@@ -46,17 +163,38 @@ class Klasa extends Discord.Client {
 			CommandMessage,
 			util
 		};
+
+		/**
+		 * The settings gateway instance
+		 * @type {SettingGateway}
+		 */
 		this.settingGateway = new SettingGateway(this);
+
+		/**
+		 * The application info cached from the discord api
+		 * @type {object}
+		 */
 		this.application = null;
+
 		this.once('ready', this._ready.bind(this));
 	}
 
+	/**
+	 * The invite link for the bot
+	 * @readonly
+	 * @returns {string}
+	 */
 	get invite() {
 		if (!this.user.bot) throw 'Why would you need an invite link for a selfbot...';
 		const permissions = Discord.Permissions.resolve([...new Set(this.commands.reduce((a, b) => a.concat(b.botPerms), ['READ_MESSAGES', 'SEND_MESSAGES']))]);
 		return `https://discordapp.com/oauth2/authorize?client_id=${this.application.id}&permissions=${permissions}&scope=bot`;
 	}
 
+	/**
+	 * Validates the permission structure passed to the client
+	 * @private
+	 * @returns {ValidPermStructure}
+	 */
 	validatePermStructure() {
 		const defaultPermStructure = new PermLevels()
 			.addLevel(0, false, () => true)
@@ -84,6 +222,10 @@ class Klasa extends Discord.Client {
 		return permStructure;
 	}
 
+	/**
+	 * Use this to login to Discord with your bot
+	 * @param {string} token Your bot token
+	 */
 	async login(token) {
 		const start = now();
 		const [[commands, aliases], inhibitors, finalizers, events, monitors, providers, extendables] = await Promise.all([
@@ -111,10 +253,19 @@ class Klasa extends Discord.Client {
 		super.login(token);
 	}
 
+	/**
+	 * The schema manager for this bot
+	 * @readonly
+	 * @type {SchemaManager}
+	 */
 	get schemaManager() {
 		return this.settingGateway.schemaManager;
 	}
 
+	/**
+	 * The once ready function for the client to init all pieces
+	 * @private
+	 */
 	async _ready() {
 		this.config.prefixMention = new RegExp(`^<@!?${this.user.id}>`);
 		if (this.user.bot) this.application = await super.fetchApplication();
@@ -131,6 +282,11 @@ class Klasa extends Discord.Client {
 		this.emit('log', this.config.readyMessage || `Successfully initialized. Ready to serve ${this.guilds.size} guilds.`);
 	}
 
+	/**
+	 * Sweeps command messages based on the lifetime parameter
+	 * @param {number} lifetime The threshold for how old command messages can be before sweeping since the last edit in seconds
+	 * @returns {number} The amount of messages swept
+	 */
 	sweepCommandMessages(lifetime = this.commandMessageLifetime) {
 		if (typeof lifetime !== 'number' || isNaN(lifetime)) throw new TypeError('The lifetime must be a number.');
 		if (lifetime <= 0) {
@@ -157,4 +313,4 @@ process.on('unhandledRejection', (err) => {
 	console.error(`Uncaught Promise Error: \n${err.stack || err}`);
 });
 
-module.exports = Klasa;
+module.exports = KlasaClient;
