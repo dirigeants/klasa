@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Klasa External: DiscordJSConfig</title>
+	<title>Klasa Class: Extendable</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -86,14 +86,17 @@
 		<div id="main">
 			
 
-	<h1 class="page-title">External: DiscordJSConfig</h1>
+	<h1 class="page-title">Class: Extendable</h1>
 <section>
 
 <header>
     
         <h2>
-        DiscordJSConfig
+        Extendable
         </h2>
+        
+            <div class="class-description">Base class for all Klasa Extendables. See CreatingExtendables for more information how to use this class
+to build custom extendables.</div>
         
     
 </header>
@@ -103,8 +106,170 @@
     <div class="container-overview">
     
         
+<hr>
+<dt>
+    <h4 class="name" id="Extendable"><span class="type-signature"></span>new Extendable(client, dir, file, name, appliesTo)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
 
         
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>client</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="KlasaClient.html">KlasaClient</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The klasa client</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>dir</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The path to the core or user extendable pieces folder</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>file</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The path from the pieces folder to the extendable file</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of the extendable</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>appliesTo</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The discord classes this extendable applies to</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
 <dl class="details">
     
 
@@ -137,25 +302,39 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/index.js#L39">index.js#L39</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Extendable.js#L17">lib/structures/Extendable.js#L17</a>	</dd>
 	
 
 	
-
-	
-	<dt class="tag-see method-doc-label method-doc-details-label">See:</dt>
-	<dd class="tag-see">
+	<dt class="tag-tutorial method-doc-label method-doc-details-label">Tutorials:</dt>
+	<dd class="tag-tutorial">
 		<ul>
-			<li><a href="https://discord.js.org/#/docs/main/master/typedef/ClientOptions">https://discord.js.org/#/docs/main/master/typedef/ClientOptions</a></li>
+			<li><em class="disabled">Tutorial: CreatingExtendables</em></li>
 			</ul>
 	</dd>
+	
+
 	
 
 	
 </dl>
 
 
-        
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
     
     </div>
 
@@ -171,6 +350,162 @@
 
     
 
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        <dl>
+            
+<hr>
+<dt>
+    <h4 class="name" id="extend"><span class="type-signature">&lt;abstract> </span>extend(params)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        The extend method to be overwritten in actual extend pieces
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>params</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">any</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Any parameters you want</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Extendable.js#L32">lib/structures/Extendable.js#L32</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">any</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        </dl>
     
 
     
