@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Klasa Class: PermissionLevels</title>
+	<title>Klasa Class: Event</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -86,16 +86,17 @@
 		<div id="main">
 			
 
-	<h1 class="page-title">Class: PermissionLevels</h1>
+	<h1 class="page-title">Class: Event</h1>
 <section>
 
 <header>
     
         <h2>
-        PermissionLevels
+        Event
         </h2>
         
-            <div class="class-description">A helper class to building valid permission structures</div>
+            <div class="class-description">Base class for all Klasa Events. See <a href="tutorial-CreatingEvents.html">CreatingEvents</a> for more information how to use this class
+to build custom events.</div>
         
     
 </header>
@@ -107,23 +108,141 @@
         
 <hr>
 <dt>
-    <h4 class="name" id="PermissionLevels"><span class="type-signature"></span>new PermissionLevels()</h4>
+    <h4 class="name" id="Event"><span class="type-signature"></span>new Event(client, dir, file, name)</h4>
     
     
 </dt>
 <dd>
 
     
-    <div class="description">
-        Creates a new PermissionLevels
-    </div>
-    
 
     
 
     
 
     
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>client</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="KlasaClient.html">KlasaClient</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The klasa client</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>dir</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The path to the core or user event pieces folder</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>file</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The path from the pieces folder to the event file</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of the event</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
     
 
     
@@ -159,9 +278,16 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/util/permLevels.js#L20">lib/util/permLevels.js#L20</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L14">lib/structures/Event.js#L14</a>	</dd>
 	
 
+	
+	<dt class="tag-tutorial method-doc-label method-doc-details-label">Tutorials:</dt>
+	<dd class="tag-tutorial">
+		<ul>
+			<li><a href="tutorial-CreatingEvents.html">CreatingEvents</a></li>
+			</ul>
+	</dd>
 	
 
 	
@@ -204,16 +330,12 @@
         <dl>
             
 <hr>
-<dt class="name" id="levels">
-    <h4 id="levels"><span class="type-signature"></span>levels<span class="type-signature"> :Map</span></h4>
+<dt class="name" id="client">
+    <h4 id="client"><span class="type-signature"></span>client<span class="type-signature"> :<a href="KlasaClient.html">KlasaClient</a></span></h4>
 
     
 </dt>
 <dd>
-    
-    <div class="description">
-        A cache of levels submitted with addLevel
-    </div>
     
 
     
@@ -221,7 +343,7 @@
         <ul>
             <li>
                 
-<span class="param-type">Map</span>
+<span class="param-type"><a href="KlasaClient.html">KlasaClient</a></span>
 
 
 
@@ -262,7 +384,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/util/permLevels.js#L25">lib/util/permLevels.js#L25</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L18">lib/structures/Event.js#L18</a>	</dd>
 	
 
 	
@@ -279,15 +401,15 @@
         
             
 <hr>
-<dt class="name" id="structure">
-    <h4 id="structure"><span class="type-signature">&lt;readonly> </span>structure<span class="type-signature"> :<a href="global.html#validPermStructure">validPermStructure</a></span></h4>
+<dt class="name" id="dir">
+    <h4 id="dir"><span class="type-signature"></span>dir<span class="type-signature"> :string</span></h4>
 
     
 </dt>
 <dd>
     
     <div class="description">
-        The current valid permissions structure
+        The directory to where this event piece is stored
     </div>
     
 
@@ -296,7 +418,7 @@
         <ul>
             <li>
                 
-<span class="param-type"><a href="global.html#validPermStructure">validPermStructure</a></span>
+<span class="param-type">string</span>
 
 
 
@@ -337,7 +459,232 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/util/permLevels.js#L46">lib/util/permLevels.js#L46</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L24">lib/structures/Event.js#L24</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt class="name" id="file">
+    <h4 id="file"><span class="type-signature"></span>file<span class="type-signature"> :string</span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        The file location where this event is stored
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">string</span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L30">lib/structures/Event.js#L30</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt class="name" id="name">
+    <h4 id="name"><span class="type-signature"></span>name<span class="type-signature"> :string</span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        The name of the command
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">string</span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L36">lib/structures/Event.js#L36</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt class="name" id="type">
+    <h4 id="type"><span class="type-signature"></span>type<span class="type-signature"> :string</span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        The type of Klasa piece this is
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">string</span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L42">lib/structures/Event.js#L42</a>	</dd>
 	
 
 	
@@ -361,7 +708,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="addLevel"><span class="type-signature"></span>addLevel(level, brk, check)</h4>
+    <h4 class="name" id="init"><span class="type-signature">&lt;abstract> </span>init()</h4>
     
     
 </dt>
@@ -369,7 +716,215 @@
 
     
     <div class="description">
-        Adds levels to the levels cache to be converted to valid permission structure
+        The init method to be optionaly overwritten in actual events
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L78">lib/structures/Event.js#L78</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;void></span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="reload"><span class="type-signature">&lt;async> </span>reload()</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Reloads this event
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L49">lib/structures/Event.js#L49</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    The newly loaded event
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;<a href="Event.html">Event</a>></span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="run"><span class="type-signature">&lt;abstract> </span>run(param)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        The run method to be overwritten in actual event handlers
     </div>
     
 
@@ -404,13 +959,13 @@
 
         <tr>
             
-                <td class="name"><code>level</code></td>
+                <td class="name"><code>param</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type">any</span>
 
 
 
@@ -421,55 +976,7 @@
 
             
 
-            <td class="description last">The permission number for the level you are defining</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>brk</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">boolean</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Whether the level should break (stop processing higher levels, and inhibit a no permission error)</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>check</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The permission checking function</td>
+            <td class="description last">The event parameters emited</td>
         </tr>
 
     
@@ -511,7 +1018,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/util/permLevels.js#L35">lib/util/permLevels.js#L35</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L69">lib/structures/Event.js#L69</a>	</dd>
 	
 
 	
@@ -537,7 +1044,7 @@
     
             
 <div class="param-desc">
-    This permission levels
+    You should return the response message whenever possible
 </div>
 
 
@@ -548,7 +1055,109 @@
     </dt>
     <dd>
         
-<span class="param-type"><a href="PermissionLevels.html">PermissionLevels</a></span>
+<span class="param-type">Promise.&lt;Message></span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="unload"><span class="type-signature"></span>unload()</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Unloads this event
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L59">lib/structures/Event.js#L59</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
 
 
 
