@@ -64,7 +64,7 @@ class Event {
 	 * The run method to be overwritten in actual event handlers
 	 * @param {any} param The event parameters emited
 	 * @abstract
-	 * @returns {Promise<Message>} You should return the response message whenever possible
+	 * @returns {void}
 	 */
 	run() {
 		// Defined in extension Classes
@@ -75,7 +75,7 @@ class Event {
 	 * @abstract
 	 * @returns {Promise<void>}
 	 */
-	init() {
+	async init() {
 		// Optionally defined in extension Classes
 	}
 
