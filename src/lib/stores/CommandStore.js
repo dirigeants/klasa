@@ -9,8 +9,8 @@ const Command = require('../structures/Command');
 	*/
 class CommandStore extends Collection {
 
-  /**
-    * @param {KlasaClient} client The Klasa Client
+	/**
+		* @param {KlasaClient} client The Klasa Client
 		*/
 	constructor(client) {
 		super();
