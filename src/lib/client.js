@@ -119,7 +119,7 @@ class KlasaClient extends Discord.Client {
 
 		/**
 		 * The permissions structure for this bot
-		 * @type {ValidPermStructure}
+		 * @type {validPermStructure}
 		 */
 		this.permStructure = this.validatePermStructure();
 
@@ -193,7 +193,7 @@ class KlasaClient extends Discord.Client {
 	/**
 	 * Validates the permission structure passed to the client
 	 * @private
-	 * @returns {ValidPermStructure}
+	 * @returns {validPermStructure}
 	 */
 	validatePermStructure() {
 		const defaultPermStructure = new PermLevels()
