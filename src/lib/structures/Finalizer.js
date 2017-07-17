@@ -12,10 +12,10 @@ class Finalizer {
 
 	/**
 	 * @param {KlasaClient} client The Klasa Client
-	 * @param {string} dir The path to the core or user command pieces folder
-	 * @param {Array} file The path from the pieces folder to the command file
-	 * @param {string} name The name of the command
-	 * @param {FinalizerOptions} [options = {}] Optional Command settings
+	 * @param {string} dir The path to the core or user finalizer pieces folder
+	 * @param {Array} file The path from the pieces folder to the finalizer file
+	 * @param {string} name The name of the finalizer
+	 * @param {FinalizerOptions} [options = {}] Optional Finalizer settings
 	 */
 	constructor(client, dir, file, name, options = {}) {
 		this.client = client;
