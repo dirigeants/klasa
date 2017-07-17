@@ -17,7 +17,7 @@ class ProviderStore extends Collection {
 		super();
 		/**
 		 * The client this CommandStore was created with.
-		 * @name CommandStore#client
+		 * @name ProviderStore#client
 		 * @type {KlasaClient}
 		 * @readonly
 		 */

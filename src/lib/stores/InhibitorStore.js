@@ -17,7 +17,7 @@ class InhibitorStore extends Collection {
 		super();
 		/**
 		 * The client this CommandStore was created with.
-		 * @name CommandStore#client
+		 * @name InhibitorStore#client
 		 * @type {KlasaClient}
 		 * @readonly
 		 */

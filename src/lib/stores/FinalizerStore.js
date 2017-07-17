@@ -17,7 +17,7 @@ class FinalizerStore extends Collection {
 		super();
 		/**
 		 * The client this CommandStore was created with.
-		 * @name CommandStore#client
+		 * @name FinalizerStore#client
 		 * @type {KlasaClient}
 		 * @readonly
 		 */
