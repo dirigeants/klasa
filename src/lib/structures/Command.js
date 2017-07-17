@@ -17,7 +17,7 @@ class Command {
 	 * @property {string} [description=''] The help description for the command
 	 * @property {string} [usage=''] The usage string for the command
 	 * @property {?string} [usageDelim=undefined] The string to deliminate the command input for usage
-	 * @property {string} [extendedHelp='No extended help available.'] Extended help strings 
+	 * @property {string} [extendedHelp='No extended help available.'] Extended help strings
 	 */
 
 	/**
