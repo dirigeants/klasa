@@ -31,10 +31,6 @@ class Provider {
 		return this;
 	}
 
-	run() {
-		// Defined in extension Classes
-	}
-
 	init() {
 		// Optionally defined in extension Classes
 	}

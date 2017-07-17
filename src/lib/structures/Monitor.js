@@ -8,8 +8,8 @@ class Monitor {
 	/**
 	 * @typedef {Object} MonitorOptions
 	 * @property {boolean} [enabled=true] Whether the monitor is enabled
-	 * @property {boolean} [ignoreBots=true] Whether the monitor ignores bots
-	 * @property {boolean} [ignoreSelf=true] Whether the monitor ignores itself
+	 * @property {boolean} [ignoreBots=true] Whether the monitor ignores bots or not
+	 * @property {boolean} [ignoreSelf=true] Whether the monitor ignores itself or not
 	 */
 
 	/**
@@ -20,13 +20,51 @@ class Monitor {
 	 * @param {MonitorOptions} [options = {}] Optional Monitor settings
 	 */
 	constructor(client, dir, file, name, options = {}) {
+		/**
+		 * @type {KlasaClient}
+		 */
 		this.client = client;
+
+		/**
+		 * The directory to where this monitor piece is stored
+		 * @type {string}
+		 */
 		this.dir = dir;
+
+		/**
+		 * The file location where this monitor is stored
+		 * @type {string}
+		 */
 		this.file = file;
+
+		/**
+		 * The name of the monitor
+		 * @type {string}
+		 */
 		this.name = name;
+
+		/**
+		 * The type of Klasa piece this is
+		 * @type {string}
+		 */
 		this.type = 'monitor';
+
+		/**
+		 * If the monitor is enabled or not
+		 * @type {boolean}
+		 */
 		this.enabled = options.enabled || true;
+
+		/**
+		 * Whether the monitor ignores bots or not
+		 * @type {boolean}
+		 */
 		this.ignoreBots = options.ignoreBots || true;
+
+		/**
+		 * Whether the monitor ignores itself or not
+		 * @type {boolean}
+		 */
 		this.ignoreSelf = options.ignoreSelf || true;
 	}
 
