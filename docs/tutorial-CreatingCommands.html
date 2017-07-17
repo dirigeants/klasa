@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Klasa External: TextChannel</title>
+	<title>Klasa Tutorial: CreatingCommands</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -81,117 +81,60 @@
 <div class="row">
 
 	
-	<div class="col-md-8">
+	<div class="col-md-12">
 	
 		<div id="main">
-			
-
-	<h1 class="page-title">External: TextChannel</h1>
-<section>
+			<section class="tutorial-section">
 
 <header>
     
-        <h2>
-        TextChannel
-        </h2>
-        
-    
+
+    <h2>CreatingCommands</h2>
 </header>
 
-
 <article>
-    <div class="container-overview">
-    
-        
+    <h1>Creating your own Commands</h1><p>New commands are created in the <code>./commands/</code> folder, where subfolders are the categories offered in the help command. For instance adding <code>./commands/Misc/test.js</code> will create a command named <code>test</code> in the <code>Misc</code> category. Subcategories can also be created by adding a second folder level.</p>
+<pre class="prettyprint source lang-js"><code>const { Command } = require('klasa');
 
-        
-<dl class="details">
-    
+module.exports = class extends Command {
 
-	
+    constructor(...args) {
+        super(...args, 'info', {
+            enabled: true,
+            runIn: ['text', 'dm', 'group'],
+            cooldown: 0,
+            aliases: [],
+            permLevel: 0,
+            botPerms: [],
+            requiredSettings: [],
+            description: '',
+            usage: '',
+            usageDelim: undefined,
+            extendedHelp: 'No extended help available.'
+        });
+    }
 
-	
+    async run(msg, [...params]) {
+        // This is where you place the code you want to run for your command
+    }
 
-	
+    async init() {
+        // You can optionally define this method which will be run when the bot starts (after login, so discord data is available via this.client)
+    }
 
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/index.js#L95">index.js#L95</a>	</dd>
-	
-
-	
-
-	
-	<dt class="tag-see method-doc-label method-doc-details-label">See:</dt>
-	<dd class="tag-see">
-		<ul>
-			<li><a href="https://discord.js.org/#/docs/main/master/class/TextChannel">https://discord.js.org/#/docs/main/master/class/TextChannel</a></li>
-			</ul>
-	</dd>
-	
-
-	
-</dl>
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
+};</code></pre><blockquote>
+<p>All commands are required to return an <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise">Object Promise</a> you can do that by adding the <code>async</code> keyword to the function, there's no need to change anything else.</p>
+</blockquote>
+<p><code>[...params]</code> represents a variable number of arguments give when the command is run. The name of the arguments in the array (and their count) is determined by the <code>usage</code> property and its given arguments.</p>
 </article>
 
 </section>
-
-
-
 
 		</div>
 	</div>
 
 	<div class="clearfix"></div>
 
-	
-		<div class="col-md-3">
-			<div id="toc" class="col-md-3 hidden-xs hidden-sm hidden-md"></div>
-		</div>
 	
 
 </div>
