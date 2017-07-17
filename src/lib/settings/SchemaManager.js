@@ -14,7 +14,7 @@ class SchemaManager {
 	constructor(client) {
 		/**
 		 * The klasa client
-		 * @type {KlasaClient} 
+		 * @type {KlasaClient}
 		 */
 		this.client = client;
 
@@ -26,7 +26,7 @@ class SchemaManager {
 
 		/**
 		 * The current default values
-		 * @type {Object} 
+		 * @type {Object}
 		 */
 		this.defaults = {};
 	}
