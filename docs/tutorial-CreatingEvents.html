@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Klasa External: Client</title>
+	<title>Klasa Tutorial: CreatingEvents</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -81,117 +81,46 @@
 <div class="row">
 
 	
-	<div class="col-md-8">
+	<div class="col-md-12">
 	
 		<div id="main">
-			
-
-	<h1 class="page-title">External: Client</h1>
-<section>
+			<section class="tutorial-section">
 
 <header>
     
-        <h2>
-        Client
-        </h2>
-        
-    
+
+    <h2>CreatingEvents</h2>
 </header>
 
-
 <article>
-    <div class="container-overview">
-    
-        
+    <h1>Creating Event Handlers</h1><p>Events are placed in <code>./events/</code> and their filename must be <code>eventName.js</code>. If a conflicting event is present in both the core and your client, <em>both</em> are loaded and will run when that event is triggered.</p>
+<p>Their structure is the following:</p>
+<pre class="prettyprint source lang-javascript"><code>const { Event } = require('klasa');
 
-        
-<dl class="details">
-    
+module.exports = class extends Event {
 
-	
+    constructor(...args) {
+        super(...args, 'yourEventName');
+    }
 
-	
+    run(...params) {
+        // This is where you place the code you want to run for your command
+    }
 
-	
+    init() {
+        // You can optionally define this method which will be run when the bot starts (after login, so discord data is available via this.client)
+    }
 
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/index.js#L35">index.js#L35</a>	</dd>
-	
-
-	
-
-	
-	<dt class="tag-see method-doc-label method-doc-details-label">See:</dt>
-	<dd class="tag-see">
-		<ul>
-			<li><a href="https://discord.js.org/#/docs/main/master/class/Client">https://discord.js.org/#/docs/main/master/class/Client</a></li>
-			</ul>
-	</dd>
-	
-
-	
-</dl>
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
+};</code></pre><p>Where <code>...params</code> are arguments you would <em>normally</em> get from those events. For example, while the <code>ready</code> event would only have none, the <code>guildMemberAdd</code> event would be <code>member</code>.</p>
 </article>
 
 </section>
-
-
-
 
 		</div>
 	</div>
 
 	<div class="clearfix"></div>
 
-	
-		<div class="col-md-3">
-			<div id="toc" class="col-md-3 hidden-xs hidden-sm hidden-md"></div>
-		</div>
 	
 
 </div>
