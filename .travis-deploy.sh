@@ -3,8 +3,8 @@
 
 set -e
 
-if [ "$TRAVIS_BRANCH" == "stable" -o -n "$TRAVIS_TAG" -o "$TRAVIS_PULL_REQUEST" != "false" ]; then
-  echo -e "Not building for a stable branch push - building without deploying."
+if [ "$TRAVIS_BRANCH" != "master" -o -n "$TRAVIS_TAG" -o "$TRAVIS_PULL_REQUEST" != "false" ]; then
+  echo -e "Not building for a non master branch push - building without deploying."
   npm run docs
   exit 0
 fi
