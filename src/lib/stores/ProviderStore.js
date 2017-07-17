@@ -16,7 +16,7 @@ class ProviderStore extends Collection {
 	constructor(client) {
 		super();
 		/**
-		 * The client this CommandStore was created with.
+		 * The client this ProviderStore was created with.
 		 * @name ProviderStore#client
 		 * @type {KlasaClient}
 		 * @readonly
@@ -71,7 +71,7 @@ class ProviderStore extends Collection {
 
 	/**
 	 * Resolve a string or provider into a provider object.
-	 * @param {Provider|string} name The providere object or a string representing a provider.
+	 * @param {Provider|string} name The provider object or a string representing a provider.
 	 * @returns {Provider}
 	 */
 	resolve(name) {

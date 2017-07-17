@@ -5,7 +5,7 @@ const Inhibitor = require('../structures/Inhibitor');
 
 /**
  * Stores all the inhibitors in Klasa
- * @textends external:Collection
+ * @extends external:Collection
  */
 class InhibitorStore extends Collection {
 
@@ -16,7 +16,7 @@ class InhibitorStore extends Collection {
 	constructor(client) {
 		super();
 		/**
-		 * The client this CommandStore was created with.
+		 * The client this InhibitorStore was created with.
 		 * @name InhibitorStore#client
 		 * @type {KlasaClient}
 		 * @readonly
@@ -107,7 +107,7 @@ class InhibitorStore extends Collection {
 
 	/**
 	 * Runs our inhibitors on the command.
-	 * @param  {Message} msg The message object from Discord.js
+	 * @param  {external:Message} msg The message object from Discord.js
 	 * @param  {Command} cmd The command being ran.
 	 * @param  {boolean} [selective=false] Whether or not we should ignore certain inhibitors to prevent spam.
 	 * @return {Promise<number>}

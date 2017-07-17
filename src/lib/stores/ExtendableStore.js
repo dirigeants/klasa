@@ -16,7 +16,7 @@ class ExtendableStore extends Collection {
 	constructor(client) {
 		super();
 		/**
-		 * The client this CommandStore was created with.
+		 * The client this ExtendableStore was created with.
 		 * @name ExtendableStore#client
 		 * @type {KlasaClient}
 		 * @readonly

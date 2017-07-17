@@ -134,16 +134,9 @@ class CommandStore extends Collection {
 		return cmd;
 	}
 
-
-	/**
-	 * @typedef {Array} LoadedArray
-	 * @property {number} The amount of commands Loaded
-	 * @property {number} The amount of aliases loaded
-	 */
-
 	/**
 	 * Loads all of our commands from both the user and core directories.
-	 * @returns {Promise<LoadedArray>} The number of commands and aliases loaded.
+	 * @returns {Promise<number[]>} The number of commands and aliases loaded.
 	 */
 	async loadAll() {
 		this.clear();

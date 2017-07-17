@@ -1,6 +1,6 @@
 /**
  * Base class for all Klasa Monitors. See {@tutorial CreatingMonitors} for more information how to use this class
- * to build custom commands.
+ * to build custom monitors.
  * @tutorial CreatingMonitors
  */
 class Monitor {
@@ -105,7 +105,7 @@ class Monitor {
 	}
 
 	/**
-	 * The run method to be overwritten in actual event handlers
+	 * The run method to be overwritten in actual monitor pieces
 	 * @param {external:Message} msg The discord message
 	 * @abstract
 	 * @returns {void}
@@ -115,7 +115,7 @@ class Monitor {
 	}
 
 	/**
-	 * The init method to be optionaly overwritten in actual events
+	 * The init method to be optionaly overwritten in actual monitor pieces
 	 * @abstract
 	 * @returns {Promise<void>}
 	 */

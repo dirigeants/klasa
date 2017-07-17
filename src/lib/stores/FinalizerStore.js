@@ -16,7 +16,7 @@ class FinalizerStore extends Collection {
 	constructor(client) {
 		super();
 		/**
-		 * The client this CommandStore was created with.
+		 * The client this FinalizerStore was created with.
 		 * @name FinalizerStore#client
 		 * @type {KlasaClient}
 		 * @readonly

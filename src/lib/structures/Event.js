@@ -30,7 +30,7 @@ class Event {
 		this.file = file;
 
 		/**
-		 * The name of the command
+		 * The name of the event
 		 * @type {string}
 		 */
 		this.name = name;
