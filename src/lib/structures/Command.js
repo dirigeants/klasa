@@ -1,7 +1,8 @@
 const ParsedUsage = require('../parsers/ParsedUsage');
 
 /**
- * Base class for all Klasa Commands.
+ * Base class for all Klasa Commands. See {@tutorial CreatingCommands} for more information how to use this class
+ * to build custom commands.
  * @tutorial CreatingCommands
  */
 class Command {
