@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Klasa Class: Util</title>
+	<title>Klasa Class: MonitorStore</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -86,16 +86,16 @@
 		<div id="main">
 			
 
-	<h1 class="page-title">Class: Util</h1>
+	<h1 class="page-title">Class: MonitorStore</h1>
 <section>
 
 <header>
     
         <h2>
-        Util
+        MonitorStore
         </h2>
         
-            <div class="class-description">Contains static methods to be used throughout klasa</div>
+            <div class="class-description">Stores all monitors for use in Klasa</div>
         
     
 </header>
@@ -107,7 +107,7 @@
         
 <hr>
 <dt>
-    <h4 class="name" id="Util"><span class="type-signature"></span>new Util()</h4>
+    <h4 class="name" id="MonitorStore"><span class="type-signature"></span>new MonitorStore(client)</h4>
     
     
 </dt>
@@ -115,7 +115,7 @@
 
     
     <div class="description">
-        This class may not be initiated with new
+        Constructs our MonitorStore for use in Klasa
     </div>
     
 
@@ -124,6 +124,56 @@
     
 
     
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>client</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="KlasaClient.html">KlasaClient</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The Klasa Client</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
     
 
     
@@ -159,7 +209,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/util/util.js#L12">lib/util/util.js#L12</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/MonitorStore.js#L16">lib/stores/MonitorStore.js#L16</a>	</dd>
 	
 
 	
@@ -189,6 +239,15 @@
     </div>
 
     
+        <h3 class="subsection-title">Extends</h3>
+
+        
+
+
+    <ul>
+        <li><a href="external-Collection.html">external:Collection</a></li>
+    </ul>
+
 
     
 
@@ -198,6 +257,237 @@
 
     
 
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        <dl>
+            
+<hr>
+<dt class="name" id="client">
+    <h4 id="client"><span class="type-signature">&lt;readonly> </span>client<span class="type-signature"> :<a href="KlasaClient.html">KlasaClient</a></span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        The client this MonitorStore was created with.
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type"><a href="KlasaClient.html">KlasaClient</a></span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/MonitorStore.js#L18">lib/stores/MonitorStore.js#L18</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt class="name" id="coreDir">
+    <h4 id="coreDir"><span class="type-signature"></span>coreDir<span class="type-signature"> :String</span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        The directory of monitors in Klasa relative to where its installed.
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">String</span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/MonitorStore.js#L30">lib/stores/MonitorStore.js#L30</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt class="name" id="userDir">
+    <h4 id="userDir"><span class="type-signature"></span>userDir<span class="type-signature"> :String</span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        The directory of local monitors relative to where you run Klasa from.
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">String</span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/MonitorStore.js#L36">lib/stores/MonitorStore.js#L36</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        </dl>
     
 
     
@@ -207,7 +497,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id=".clean"><span class="type-signature">&lt;static> </span>clean(text)</h4>
+    <h4 class="name" id="delete"><span class="type-signature"></span>delete(name)</h4>
     
     
 </dt>
@@ -215,7 +505,7 @@
 
     
     <div class="description">
-        Cleans sensitive info from strings
+        Deletes a monitor from the store.
     </div>
     
 
@@ -250,12 +540,15 @@
 
         <tr>
             
-                <td class="name"><code>text</code></td>
+                <td class="name"><code>name</code></td>
             
 
             <td class="type">
             
                 
+<span class="param-type"><a href="Monitor.html">Monitor</a></span>
+|
+
 <span class="param-type">string</span>
 
 
@@ -267,7 +560,7 @@
 
             
 
-            <td class="description last">The text to clean</td>
+            <td class="description last">A monitor object or a string representing a monitor.</td>
         </tr>
 
     
@@ -309,7 +602,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/util/util.js#L31">lib/util/util.js#L31</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/MonitorStore.js#L57">lib/stores/MonitorStore.js#L57</a>	</dd>
 	
 
 	
@@ -334,6 +627,10 @@
     <h5>Returns:</h5>
     
             
+<div class="param-desc">
+    whether or not the delete was successful.
+</div>
+
 
 
 <dl>
@@ -342,7 +639,7 @@
     </dt>
     <dd>
         
-<span class="param-type">string</span>
+<span class="param-type">boolean</span>
 
 
 
@@ -359,7 +656,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id=".codeBlock"><span class="type-signature">&lt;static> </span>codeBlock(lang, expression)</h4>
+    <h4 class="name" id="init"><span class="type-signature"></span>init()</h4>
     
     
 </dt>
@@ -367,7 +664,7 @@
 
     
     <div class="description">
-        Makes a codeblock markup string
+        Initializes all of our monitors
     </div>
     
 
@@ -376,80 +673,6 @@
     
 
     
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>lang</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The codeblock language</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>expression</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The expression to be wrapped in the codeblock</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
     
 
     
@@ -485,7 +708,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/util/util.js#L22">lib/util/util.js#L22</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/MonitorStore.js#L68">lib/stores/MonitorStore.js#L68</a>	</dd>
 	
 
 	
@@ -518,7 +741,7 @@
     </dt>
     <dd>
         
-<span class="param-type">string</span>
+<span class="param-type">Promise.&lt;Array></span>
 
 
 
@@ -535,7 +758,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id=".newError"><span class="type-signature">&lt;static> </span>newError(error, code)</h4>
+    <h4 class="name" id="load"><span class="type-signature"></span>load(dir, file)</h4>
     
     
 </dt>
@@ -543,7 +766,7 @@
 
     
     <div class="description">
-        Generates an error object used for argument reprompting
+        Loads an monitor into Klasa so it can be saved in this store.
     </div>
     
 
@@ -578,13 +801,13 @@
 
         <tr>
             
-                <td class="name"><code>error</code></td>
+                <td class="name"><code>dir</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Error</span>
+<span class="param-type">string</span>
 
 
 
@@ -595,20 +818,20 @@
 
             
 
-            <td class="description last">An error object</td>
+            <td class="description last">The user directory or the core directory where this file is saved.</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>code</code></td>
+                <td class="name"><code>file</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type">string</span>
 
 
 
@@ -619,7 +842,7 @@
 
             
 
-            <td class="description last">The status code to assign to the error</td>
+            <td class="description last">A string showing where the file is located.</td>
         </tr>
 
     
@@ -661,7 +884,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/util/util.js#L64">lib/util/util.js#L64</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/MonitorStore.js#L88">lib/stores/MonitorStore.js#L88</a>	</dd>
 	
 
 	
@@ -694,7 +917,7 @@
     </dt>
     <dd>
         
-<span class="param-type">Error</span>
+<span class="param-type"><a href="Monitor.html">Monitor</a></span>
 
 
 
@@ -711,7 +934,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id=".regExpEsc"><span class="type-signature">&lt;static> </span>regExpEsc(str)</h4>
+    <h4 class="name" id="loadAll"><span class="type-signature">&lt;async> </span>loadAll()</h4>
     
     
 </dt>
@@ -719,7 +942,7 @@
 
     
     <div class="description">
-        Cleans a string from regex injection
+        Loads all of our monitors from both the user and core directories.
     </div>
     
 
@@ -728,56 +951,6 @@
     
 
     
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>str</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The string to clean</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
     
 
     
@@ -813,7 +986,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/util/util.js#L83">lib/util/util.js#L83</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/MonitorStore.js#L98">lib/stores/MonitorStore.js#L98</a>	</dd>
 	
 
 	
@@ -838,6 +1011,10 @@
     <h5>Returns:</h5>
     
             
+<div class="param-desc">
+    The number of monitors loaded into this store.
+</div>
+
 
 
 <dl>
@@ -846,7 +1023,7 @@
     </dt>
     <dd>
         
-<span class="param-type">string</span>
+<span class="param-type">Promise.&lt;number></span>
 
 
 
@@ -863,7 +1040,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id=".toTitleCase"><span class="type-signature">&lt;static> </span>toTitleCase(str)</h4>
+    <h4 class="name" id="resolve"><span class="type-signature"></span>resolve(name)</h4>
     
     
 </dt>
@@ -871,7 +1048,7 @@
 
     
     <div class="description">
-        Converts a string to Title Case
+        Resolve a string or monitor into a monitor object.
     </div>
     
 
@@ -906,12 +1083,15 @@
 
         <tr>
             
-                <td class="name"><code>str</code></td>
+                <td class="name"><code>name</code></td>
             
 
             <td class="type">
             
                 
+<span class="param-type"><a href="Monitor.html">Monitor</a></span>
+|
+
 <span class="param-type">string</span>
 
 
@@ -923,7 +1103,7 @@
 
             
 
-            <td class="description last">The string to titlecaseify</td>
+            <td class="description last">The monitor object or a string representing a monitor.</td>
         </tr>
 
     
@@ -965,7 +1145,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/util/util.js#L54">lib/util/util.js#L54</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/MonitorStore.js#L77">lib/stores/MonitorStore.js#L77</a>	</dd>
 	
 
 	
@@ -998,7 +1178,291 @@
     </dt>
     <dd>
         
-<span class="param-type">string</span>
+<span class="param-type"><a href="Monitor.html">Monitor</a></span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="run"><span class="type-signature"></span>run(msg)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Runs our monitors on the message.
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>msg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="external-Message.html">external:Message</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The message object from Discord.js</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/MonitorStore.js#L111">lib/stores/MonitorStore.js#L111</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="set"><span class="type-signature"></span>set(monitor)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Sets up a monitors in our store.
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>monitor</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Monitor.html">Monitor</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The monitors object we are setting up.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/MonitorStore.js#L44">lib/stores/MonitorStore.js#L44</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Monitor.html">Monitor</a></span>
 
 
 

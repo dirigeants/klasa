@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Klasa Class: Monitor</title>
+	<title>Klasa Class: Provider</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -86,17 +86,17 @@
 		<div id="main">
 			
 
-	<h1 class="page-title">Class: Monitor</h1>
+	<h1 class="page-title">Class: Provider</h1>
 <section>
 
 <header>
     
         <h2>
-        Monitor
+        Provider
         </h2>
         
-            <div class="class-description">Base class for all Klasa Monitors. See <a href="tutorial-CreatingMonitors.html">CreatingMonitors</a> for more information how to use this class
-to build custom monitors.</div>
+            <div class="class-description">Base class for all Klasa Providers. See CreatingProviders for more information how to use this class
+to build custom providers.</div>
         
     
 </header>
@@ -108,7 +108,7 @@ to build custom monitors.</div>
         
 <hr>
 <dt>
-    <h4 class="name" id="Monitor"><span class="type-signature"></span>new Monitor(client, dir, file, name [, options])</h4>
+    <h4 class="name" id="Provider"><span class="type-signature"></span>new Provider(client, dir, file, name [, options])</h4>
     
     
 </dt>
@@ -216,7 +216,7 @@ to build custom monitors.</div>
                 </td>
             
 
-            <td class="description last">The path to the core or user monitor pieces folder</td>
+            <td class="description last">The path to the core or user provider pieces folder</td>
         </tr>
 
     
@@ -252,7 +252,7 @@ to build custom monitors.</div>
                 </td>
             
 
-            <td class="description last">The path from the pieces folder to the monitor file</td>
+            <td class="description last">The path from the pieces folder to the provider file</td>
         </tr>
 
     
@@ -288,7 +288,7 @@ to build custom monitors.</div>
                 </td>
             
 
-            <td class="description last">The name of the monitor</td>
+            <td class="description last">The name of the provider</td>
         </tr>
 
     
@@ -301,7 +301,7 @@ to build custom monitors.</div>
             <td class="type">
             
                 
-<span class="param-type"><a href="global.html#MonitorOptions">MonitorOptions</a></span>
+<span class="param-type"><a href="global.html#ProviderOptions">ProviderOptions</a></span>
 
 
 
@@ -328,7 +328,7 @@ to build custom monitors.</div>
                 </td>
             
 
-            <td class="description last">Optional Monitor settings</td>
+            <td class="description last">Optional Provider settings</td>
         </tr>
 
     
@@ -370,14 +370,14 @@ to build custom monitors.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Monitor.js#L22">lib/structures/Monitor.js#L22</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Provider.js#L22">lib/structures/Provider.js#L22</a>	</dd>
 	
 
 	
 	<dt class="tag-tutorial method-doc-label method-doc-details-label">Tutorials:</dt>
 	<dd class="tag-tutorial">
 		<ul>
-			<li><a href="tutorial-CreatingMonitors.html">CreatingMonitors</a></li>
+			<li><em class="disabled">Tutorial: CreatingProviders</em></li>
 			</ul>
 	</dd>
 	
@@ -476,7 +476,82 @@ to build custom monitors.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Monitor.js#L26">lib/structures/Monitor.js#L26</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Provider.js#L26">lib/structures/Provider.js#L26</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt class="name" id="description">
+    <h4 id="description"><span class="type-signature"></span>description<span class="type-signature"> :string</span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        The description of the provider
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">string</span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Provider.js#L62">lib/structures/Provider.js#L62</a>	</dd>
 	
 
 	
@@ -501,7 +576,7 @@ to build custom monitors.</div>
 <dd>
     
     <div class="description">
-        The directory to where this monitor piece is stored
+        The directory to where this provider piece is stored
     </div>
     
 
@@ -551,7 +626,7 @@ to build custom monitors.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Monitor.js#L32">lib/structures/Monitor.js#L32</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Provider.js#L32">lib/structures/Provider.js#L32</a>	</dd>
 	
 
 	
@@ -576,7 +651,7 @@ to build custom monitors.</div>
 <dd>
     
     <div class="description">
-        If the monitor is enabled or not
+        If the provider is enabled or not
     </div>
     
 
@@ -626,7 +701,7 @@ to build custom monitors.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Monitor.js#L56">lib/structures/Monitor.js#L56</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Provider.js#L56">lib/structures/Provider.js#L56</a>	</dd>
 	
 
 	
@@ -651,7 +726,7 @@ to build custom monitors.</div>
 <dd>
     
     <div class="description">
-        The file location where this monitor is stored
+        The file location where this provider is stored
     </div>
     
 
@@ -701,157 +776,7 @@ to build custom monitors.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Monitor.js#L38">lib/structures/Monitor.js#L38</a>	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt class="name" id="ignoreBots">
-    <h4 id="ignoreBots"><span class="type-signature"></span>ignoreBots<span class="type-signature"> :boolean</span></h4>
-
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        Whether the monitor ignores bots or not
-    </div>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">boolean</span>
-
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Monitor.js#L62">lib/structures/Monitor.js#L62</a>	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt class="name" id="ignoreSelf">
-    <h4 id="ignoreSelf"><span class="type-signature"></span>ignoreSelf<span class="type-signature"> :boolean</span></h4>
-
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        Whether the monitor ignores itself or not
-    </div>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">boolean</span>
-
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Monitor.js#L68">lib/structures/Monitor.js#L68</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Provider.js#L38">lib/structures/Provider.js#L38</a>	</dd>
 	
 
 	
@@ -876,7 +801,7 @@ to build custom monitors.</div>
 <dd>
     
     <div class="description">
-        The name of the monitor
+        The name of the provider
     </div>
     
 
@@ -926,7 +851,82 @@ to build custom monitors.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Monitor.js#L44">lib/structures/Monitor.js#L44</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Provider.js#L44">lib/structures/Provider.js#L44</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt class="name" id="sql">
+    <h4 id="sql"><span class="type-signature"></span>sql<span class="type-signature"> :boolean</span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        If the provider provides to a sql datasource
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">boolean</span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Provider.js#L68">lib/structures/Provider.js#L68</a>	</dd>
 	
 
 	
@@ -1001,7 +1001,7 @@ to build custom monitors.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Monitor.js#L50">lib/structures/Monitor.js#L50</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Provider.js#L50">lib/structures/Provider.js#L50</a>	</dd>
 	
 
 	
@@ -1033,7 +1033,7 @@ to build custom monitors.</div>
 
     
     <div class="description">
-        Disables this monitor
+        Disables this provider
     </div>
     
 
@@ -1077,7 +1077,7 @@ to build custom monitors.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Monitor.js#L93">lib/structures/Monitor.js#L93</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Provider.js#L93">lib/structures/Provider.js#L93</a>	</dd>
 	
 
 	
@@ -1103,7 +1103,7 @@ to build custom monitors.</div>
     
             
 <div class="param-desc">
-    This monitor
+    This provider
 </div>
 
 
@@ -1114,7 +1114,7 @@ to build custom monitors.</div>
     </dt>
     <dd>
         
-<span class="param-type"><a href="Monitor.html">Monitor</a></span>
+<span class="param-type"><a href="Provider.html">Provider</a></span>
 
 
 
@@ -1139,7 +1139,7 @@ to build custom monitors.</div>
 
     
     <div class="description">
-        Enables this monitor
+        Enables this provider
     </div>
     
 
@@ -1183,7 +1183,7 @@ to build custom monitors.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Monitor.js#L102">lib/structures/Monitor.js#L102</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Provider.js#L102">lib/structures/Provider.js#L102</a>	</dd>
 	
 
 	
@@ -1209,7 +1209,7 @@ to build custom monitors.</div>
     
             
 <div class="param-desc">
-    This monitor
+    This provider
 </div>
 
 
@@ -1220,7 +1220,7 @@ to build custom monitors.</div>
     </dt>
     <dd>
         
-<span class="param-type"><a href="Monitor.html">Monitor</a></span>
+<span class="param-type"><a href="Provider.html">Provider</a></span>
 
 
 
@@ -1245,7 +1245,7 @@ to build custom monitors.</div>
 
     
     <div class="description">
-        The init method to be optionaly overwritten in actual monitor pieces
+        The init method to be optionaly overwritten in actual provider pieces
     </div>
     
 
@@ -1289,7 +1289,7 @@ to build custom monitors.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Monitor.js#L122">lib/structures/Monitor.js#L122</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Provider.js#L112">lib/structures/Provider.js#L112</a>	</dd>
 	
 
 	
@@ -1347,7 +1347,7 @@ to build custom monitors.</div>
 
     
     <div class="description">
-        Reloads this monitor
+        Reloads this provider
     </div>
     
 
@@ -1391,7 +1391,7 @@ to build custom monitors.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Monitor.js#L75">lib/structures/Monitor.js#L75</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Provider.js#L75">lib/structures/Provider.js#L75</a>	</dd>
 	
 
 	
@@ -1417,7 +1417,7 @@ to build custom monitors.</div>
     
             
 <div class="param-desc">
-    The newly loaded monitor
+    The newly loaded provider
 </div>
 
 
@@ -1428,159 +1428,7 @@ to build custom monitors.</div>
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;<a href="Monitor.html">Monitor</a>></span>
-
-
-
-    </dd>
-</dl>
-
-
-        
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="run"><span class="type-signature">&lt;abstract> </span>run(msg)</h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        The run method to be overwritten in actual monitor pieces
-    </div>
-    
-
-    
-
-    
-
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>msg</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="external-Message.html">external:Message</a></span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The discord message</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Monitor.js#L113">lib/structures/Monitor.js#L113</a>	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">void</span>
+<span class="param-type">Promise.&lt;<a href="Provider.html">Provider</a>></span>
 
 
 
@@ -1605,7 +1453,7 @@ to build custom monitors.</div>
 
     
     <div class="description">
-        Unloads this monitor
+        Unloads this provider
     </div>
     
 
@@ -1649,7 +1497,7 @@ to build custom monitors.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Monitor.js#L85">lib/structures/Monitor.js#L85</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Provider.js#L85">lib/structures/Provider.js#L85</a>	</dd>
 	
 
 	
