@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Klasa Class: SettingGateway</title>
+	<title>Klasa Class: CommandStore</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -68,16 +68,16 @@
 		<div id="main">
 			
 
-	<h1 class="page-title">Class: SettingGateway</h1>
+	<h1 class="page-title">Class: CommandStore</h1>
 <section>
 
 <header>
     
         <h2>
-        SettingGateway
+        CommandStore
         </h2>
         
-            <div class="class-description">The gateway to all settings</div>
+            <div class="class-description">Stores all the commands usable in Klasa</div>
         
     
 </header>
@@ -89,7 +89,7 @@
         
 <hr>
 <dt>
-    <h4 class="name" id="SettingGateway"><span class="type-signature"></span>new SettingGateway(client)</h4>
+    <h4 class="name" id="CommandStore"><span class="type-signature"></span>new CommandStore(client)</h4>
     
     
 </dt>
@@ -187,7 +187,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/settings/SettingGateway.js#L15">lib/settings/SettingGateway.js#L15</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/CommandStore.js#L15">lib/stores/CommandStore.js#L15</a>	</dd>
 	
 
 	
@@ -223,7 +223,7 @@
 
 
     <ul>
-        <li>CacheManager</li>
+        <li><a href="external-Collection.html">external:Collection</a></li>
     </ul>
 
 
@@ -243,12 +243,91 @@
         <dl>
             
 <hr>
+<dt class="name" id="aliases">
+    <h4 id="aliases"><span class="type-signature"></span>aliases<span class="type-signature"> :<a href="external-Collection.html">external:Collection</a></span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        The different aliases that represent the commands in this store.
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type"><a href="external-Collection.html">external:Collection</a></span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/CommandStore.js#L29">lib/stores/CommandStore.js#L29</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<hr>
 <dt class="name" id="client">
-    <h4 id="client"><span class="type-signature"></span>client<span class="type-signature"> :Client</span></h4>
+    <h4 id="client"><span class="type-signature">&lt;readonly> </span>client<span class="type-signature"> :<a href="KlasaClient.html">KlasaClient</a></span></h4>
 
     
 </dt>
 <dd>
+    
+    <div class="description">
+        The client this CommandStore was created with.
+    </div>
     
 
     
@@ -256,7 +335,7 @@
         <ul>
             <li>
                 
-<span class="param-type">Client</span>
+<span class="param-type"><a href="KlasaClient.html">KlasaClient</a></span>
 
 
 
@@ -297,7 +376,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/settings/SettingGateway.js#L19">lib/settings/SettingGateway.js#L19</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/CommandStore.js#L17">lib/stores/CommandStore.js#L17</a>	</dd>
 	
 
 	
@@ -314,76 +393,16 @@
         
             
 <hr>
-<dt class="name" id="defaults">
-    <h4 id="defaults"><span class="type-signature">&lt;readonly> </span>defaults<span class="type-signature"></span></h4>
+<dt class="name" id="coreDir">
+    <h4 id="coreDir"><span class="type-signature"></span>coreDir<span class="type-signature"> :String</span></h4>
 
     
 </dt>
 <dd>
     
     <div class="description">
-        Get the default values from the current DataSchema.
+        The directory of where Klasa is relative to where its installed.
     </div>
-    
-
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/settings/SettingGateway.js#L63">lib/settings/SettingGateway.js#L63</a>	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt class="name" id="engine">
-    <h4 id="engine"><span class="type-signature"></span>engine<span class="type-signature"> :string</span></h4>
-
-    
-</dt>
-<dd>
     
 
     
@@ -391,7 +410,7 @@
         <ul>
             <li>
                 
-<span class="param-type">string</span>
+<span class="param-type">String</span>
 
 
 
@@ -432,7 +451,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/settings/SettingGateway.js#L22">lib/settings/SettingGateway.js#L22</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/CommandStore.js#L35">lib/stores/CommandStore.js#L35</a>	</dd>
 	
 
 	
@@ -449,18 +468,29 @@
         
             
 <hr>
-<dt class="name" id="schema">
-    <h4 id="schema"><span class="type-signature">&lt;readonly> </span>schema<span class="type-signature"></span></h4>
+<dt class="name" id="help">
+    <h4 id="help"><span class="type-signature">&lt;readonly> </span>help<span class="type-signature"> :Array.&lt;Object></span></h4>
 
     
 </dt>
 <dd>
     
     <div class="description">
-        Get the current DataSchema.
+        The specific command information needed to make our help command.
     </div>
     
 
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Array.&lt;Object></span>
+
+
+
+            </li>
+        </ul>
     
 
     
@@ -496,7 +526,82 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/settings/SettingGateway.js#L54">lib/settings/SettingGateway.js#L54</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/CommandStore.js#L49">lib/stores/CommandStore.js#L49</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt class="name" id="userDir">
+    <h4 id="userDir"><span class="type-signature"></span>userDir<span class="type-signature"> :String</span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        The directory of where Klasa is relative to where you run the file from.
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">String</span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/CommandStore.js#L41">lib/stores/CommandStore.js#L41</a>	</dd>
 	
 
 	
@@ -520,7 +625,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="create"><span class="type-signature">&lt;async> </span>create(guild)</h4>
+    <h4 class="name" id=".walk"><span class="type-signature">&lt;async, static> </span>walk(store, dir)</h4>
     
     
 </dt>
@@ -528,7 +633,7 @@
 
     
     <div class="description">
-        Create a new Guild entry for the configuration.
+        Walks our directory of commands for the user and core directories.
     </div>
     
 
@@ -563,16 +668,13 @@
 
         <tr>
             
-                <td class="name"><code>guild</code></td>
+                <td class="name"><code>store</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Guild</span>
-|
-
-<span class="param-type">Snowflake</span>
+<span class="param-type"><a href="CommandStore.html">CommandStore</a></span>
 
 
 
@@ -583,7 +685,31 @@
 
             
 
-            <td class="description last">The Guild object or snowflake.</td>
+            <td class="description last">The command store we're loading into.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>dir</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The directory of commands we're using to load commands from.</td>
         </tr>
 
     
@@ -625,7 +751,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/settings/SettingGateway.js#L72">lib/settings/SettingGateway.js#L72</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/CommandStore.js#L153">lib/stores/CommandStore.js#L153</a>	</dd>
 	
 
 	
@@ -675,7 +801,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="destroy"><span class="type-signature">&lt;async> </span>destroy(guild)</h4>
+    <h4 class="name" id="clear"><span class="type-signature"></span>clear()</h4>
     
     
 </dt>
@@ -683,7 +809,7 @@
 
     
     <div class="description">
-        Remove a Guild entry from the configuration.
+        Clears the commands and aliases from this store
     </div>
     
 
@@ -692,56 +818,6 @@
     
 
     
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>guild</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Snowflake</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The Guild object or snowflake.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
     
 
     
@@ -777,7 +853,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/settings/SettingGateway.js#L83">lib/settings/SettingGateway.js#L83</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/CommandStore.js#L101">lib/stores/CommandStore.js#L101</a>	</dd>
 	
 
 	
@@ -827,7 +903,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="get"><span class="type-signature"></span>get(guild)</h4>
+    <h4 class="name" id="delete"><span class="type-signature"></span>delete(name)</h4>
     
     
 </dt>
@@ -835,7 +911,7 @@
 
     
     <div class="description">
-        Get a Guild entry from the configuration.
+        Deletes a command from the store.
     </div>
     
 
@@ -870,16 +946,16 @@
 
         <tr>
             
-                <td class="name"><code>guild</code></td>
+                <td class="name"><code>name</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Guild</span>
+<span class="param-type"><a href="Command.html">Command</a></span>
 |
 
-<span class="param-type">Snowflake</span>
+<span class="param-type">string</span>
 
 
 
@@ -890,7 +966,7 @@
 
             
 
-            <td class="description last">The Guild object or snowflake.</td>
+            <td class="description last">A command object or a string representing a command or alias name.</td>
         </tr>
 
     
@@ -932,7 +1008,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/settings/SettingGateway.js#L93">lib/settings/SettingGateway.js#L93</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/CommandStore.js#L89">lib/stores/CommandStore.js#L89</a>	</dd>
 	
 
 	
@@ -957,6 +1033,10 @@
     <h5>Returns:</h5>
     
             
+<div class="param-desc">
+    whether or not the delete was successful.
+</div>
+
 
 
 <dl>
@@ -965,7 +1045,7 @@
     </dt>
     <dd>
         
-<span class="param-type">Object</span>
+<span class="param-type">boolean</span>
 
 
 
@@ -982,7 +1062,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="getResolved"><span class="type-signature">&lt;async> </span>getResolved(guild)</h4>
+    <h4 class="name" id="get"><span class="type-signature"></span>get(name)</h4>
     
     
 </dt>
@@ -990,7 +1070,7 @@
 
     
     <div class="description">
-        Get a Resolved Guild entry from the configuration.
+        Returns a command in the store if it exists by its name or by an alias.
     </div>
     
 
@@ -1025,291 +1105,7 @@
 
         <tr>
             
-                <td class="name"><code>guild</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Guild</span>
-|
-
-<span class="param-type">Snowflake</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The Guild object or snowflake.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/settings/SettingGateway.js#L103">lib/settings/SettingGateway.js#L103</a>	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Object</span>
-
-
-
-    </dd>
-</dl>
-
-
-        
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="init"><span class="type-signature">&lt;async> </span>init()</h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Initialize the configuration for all Guilds.
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/settings/SettingGateway.js#L32">lib/settings/SettingGateway.js#L32</a>	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">void</span>
-
-
-
-    </dd>
-</dl>
-
-
-        
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="reset"><span class="type-signature">&lt;async> </span>reset(guild, key)</h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Reset a key's value to default from a Guild configuration.
-    </div>
-    
-
-    
-
-    
-
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>guild</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Guild</span>
-|
-
-<span class="param-type">Snowflake</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The Guild object or snowflake.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>key</code></td>
+                <td class="name"><code>name</code></td>
             
 
             <td class="type">
@@ -1326,7 +1122,7 @@
 
             
 
-            <td class="description last">The key to reset.</td>
+            <td class="description last">A command or alias name.</td>
         </tr>
 
     
@@ -1368,7 +1164,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/settings/SettingGateway.js#L137">lib/settings/SettingGateway.js#L137</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/CommandStore.js#L58">lib/stores/CommandStore.js#L58</a>	</dd>
 	
 
 	
@@ -1401,7 +1197,7 @@
     </dt>
     <dd>
         
-<span class="param-type">*</span>
+<span class="param-type"><a href="Command.html">Command</a></span>
 
 
 
@@ -1418,7 +1214,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="sync"><span class="type-signature">&lt;async> </span>sync( [guild])</h4>
+    <h4 class="name" id="has"><span class="type-signature"></span>has(name)</h4>
     
     
 </dt>
@@ -1426,182 +1222,7 @@
 
     
     <div class="description">
-        Sync either all Guild entries from the configuration, or a single one.
-    </div>
-    
-
-    
-
-    
-
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Argument</th>
-        
-
-        
-        <th>Default</th>
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>guild</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Guild</span>
-|
-
-<span class="param-type">Snowflake</span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    null
-                
-                </td>
-            
-
-            <td class="description last">The configuration for the selected Guild, if specified.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/settings/SettingGateway.js#L118">lib/settings/SettingGateway.js#L118</a>	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">void</span>
-
-
-
-    </dd>
-</dl>
-
-
-        
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="update"><span class="type-signature">&lt;async> </span>update(guild, key, data)</h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Update a Guild's configuration.
+        Returns a boolean if the command or alias is found within the store.
     </div>
     
 
@@ -1636,34 +1257,7 @@
 
         <tr>
             
-                <td class="name"><code>guild</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Guild</span>
-|
-
-<span class="param-type">Snowflake</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The Guild object or snowflake.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>key</code></td>
+                <td class="name"><code>name</code></td>
             
 
             <td class="type">
@@ -1680,31 +1274,7 @@
 
             
 
-            <td class="description last">The key to update.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>data</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">any</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The new value for the key.</td>
+            <td class="description last">A command or alias name</td>
         </tr>
 
     
@@ -1746,234 +1316,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/settings/SettingGateway.js#L153">lib/settings/SettingGateway.js#L153</a>	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">any</span>
-
-
-
-    </dd>
-</dl>
-
-
-        
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="updateArray"><span class="type-signature">&lt;async> </span>updateArray(guild, type, key, data)</h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Update an array from the a Guild's configuration.
-    </div>
-    
-
-    
-
-    
-
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>guild</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Guild</span>
-|
-
-<span class="param-type">Snowflake</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The Guild object or snowflake.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>type</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Either 'add' or 'remove'.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>key</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The key from the Schema.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>data</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">any</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The value to be added or removed.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/settings/SettingGateway.js#L171">lib/settings/SettingGateway.js#L171</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/CommandStore.js#L66">lib/stores/CommandStore.js#L66</a>	</dd>
 	
 
 	
@@ -2023,7 +1366,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="validateGuild"><span class="type-signature">&lt;async> </span>validateGuild(guild)</h4>
+    <h4 class="name" id="init"><span class="type-signature"></span>init()</h4>
     
     
 </dt>
@@ -2031,7 +1374,109 @@
 
     
     <div class="description">
-        Checks if a Guild is valid.
+        Initializing all of our commands upon receiving a klasa 'full ready'.
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/CommandStore.js#L110">lib/stores/CommandStore.js#L110</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="load"><span class="type-signature"></span>load(dir, file)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Loads a command file into Klasa so it can saved in this store.
     </div>
     
 
@@ -2066,16 +1511,13 @@
 
         <tr>
             
-                <td class="name"><code>guild</code></td>
+                <td class="name"><code>dir</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Guild</span>
-|
-
-<span class="param-type">Snowflake</span>
+<span class="param-type">string</span>
 
 
 
@@ -2086,7 +1528,31 @@
 
             
 
-            <td class="description last">The Guild object or snowflake.</td>
+            <td class="description last">The user directory or core directory where this file is saved.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>file</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">An array containing information about it's category structure.</td>
         </tr>
 
     
@@ -2128,7 +1594,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/settings/SettingGateway.js#L199">lib/settings/SettingGateway.js#L199</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/CommandStore.js#L130">lib/stores/CommandStore.js#L130</a>	</dd>
 	
 
 	
@@ -2161,7 +1627,420 @@
     </dt>
     <dd>
         
-<span class="param-type">Guild</span>
+<span class="param-type"><a href="Command.html">Command</a></span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="loadAll"><span class="type-signature">&lt;async> </span>loadAll()</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Loads all of our commands from both the user and core directories.
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/CommandStore.js#L140">lib/stores/CommandStore.js#L140</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    The number of commands and aliases loaded.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array.&lt;number, number></span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="resolve"><span class="type-signature"></span>resolve(name)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Resolve a string or command into a command object.
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Command.html">Command</a></span>
+|
+
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The command object or a string representing a command name or alias.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/CommandStore.js#L119">lib/stores/CommandStore.js#L119</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Command.html">Command</a></span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="set"><span class="type-signature"></span>set(command)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Sets up a command in our store.
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>command</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Command.html">Command</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The command object we are setting up.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/stores/CommandStore.js#L75">lib/stores/CommandStore.js#L75</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Command.html">Command</a></span>
 
 
 
