@@ -92,10 +92,10 @@ class InhibitorStore extends Collection {
 	}
 
 
-		/**
-		 * Loads all of our inhibitors from both the user and core directories.
-		 * @returns {Promise<number>} The number of inhibitors loaded.
-		 */
+	/**
+ 	* Loads all of our inhibitors from both the user and core directories.
+ 	* @returns {Promise<number>} The number of inhibitors loaded.
+ 	*/
 	async loadAll() {
 		this.clear();
 		const coreFiles = await fs.readdir(this.coreDir).catch(() => { fs.ensureDir(this.coreDir).catch(err => this.client.emit('errorlog', err)); });
