@@ -94,7 +94,7 @@
 
 <article>
     <h1>Creating your own Commands</h1><p>New commands are created in the <code>./commands/</code> folder, where subfolders are the categories offered in the help command. For instance adding <code>./commands/Misc/test.js</code> will create a command named <code>test</code> in the <code>Misc</code> category. Subcategories can also be created by adding a second folder level.</p>
-<pre class="prettyprint source"><code>const { Command } = require('klasa');
+<pre class="prettyprint source lang-javascript"><code>const { Command } = require('klasa');
 
 module.exports = class extends Command {
 
