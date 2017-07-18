@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Klasa External: MessageOptions</title>
+	<title>Klasa Tutorial: CreatingProviders</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -81,117 +81,174 @@
 <div class="row">
 
 	
-	<div class="col-md-8">
+	<div class="col-md-12">
 	
 		<div id="main">
-			
-
-	<h1 class="page-title">External: MessageOptions</h1>
-<section>
+			<section class="tutorial-section">
 
 <header>
     
-        <h2>
-        MessageOptions
-        </h2>
-        
-    
+
+    <h2>CreatingProviders</h2>
 </header>
 
-
 <article>
-    <div class="container-overview">
-    
-        
+    <h1>Creating Data Providers</h1><p>Data Providers are special classes designed to make your life easier when you're
+using a <strong>database</strong>, there's <strong>no</strong> rule to make them. By default, Klasa uses
+JSON to store per-guild configuration.</p>
+<p>When you create a data provider, you can access to them by: <code>client.providers.get(ProviderName)</code>.</p>
+<pre class="prettyprint source lang-js"><code>const { Provider } = require('klasa');
+const { resolve } = require('path');
+const fs = require('fs-nextra');
 
-        
-<dl class="details">
-    
+module.exports = class extends Provider {
 
-	
+    constructor(...args) {
+        super(...args, 'json', { description: 'Allows you to use JSON functionality throught Klasa' });
+        this.baseDir = resolve(this.client.clientBaseDir, 'bwd', 'provider', 'json');
+    }
 
-	
+    init() {
+        return fs.ensureDir(this.baseDir).catch(err => this.client.emit('log', err, 'error'));
+    }
 
-	
+    /* Table methods */
 
-    
+    /**
+     * Checks if a directory exists.
+     * @param {string} table The name of the table you want to check.
+     * @returns {Promise&lt;boolean>}
+     */
+    hasTable(table) {
+        return fs.pathExists(resolve(this.baseDir, table));
+    }
 
-    
+    /**
+     * Creates a new directory.
+     * @param {string} table The name for the new directory.
+     * @returns {Promise&lt;Void>}
+     */
+    createTable(table) {
+        return fs.mkdir(resolve(this.baseDir, table));
+    }
 
-    
+    /**
+     * Recursively deletes a directory.
+     * @param {string} table The directory's name to delete.
+     * @returns {Promise&lt;Void>}
+     */
+    deleteTable(table) {
+        return this.hasTable(table)
+            .then(exists => exists ? fs.emptyDir(resolve(this.baseDir, table)).then(() => fs.remove(resolve(this.baseDir, table))) : null);
+    }
 
-    
+    /* Document methods */
 
-	
+    /**
+     * Get all documents from a directory.
+     * @param {string} table The name of the directory to fetch from.
+     * @returns {Promise&lt;Object[]>}
+     */
+    getAll(table) {
+        const dir = resolve(this.baseDir, table);
+        return fs.readdir(dir)
+            .then(files => Promise.all(files.map(file => fs.readJSON(resolve(dir, file)))));
+    }
 
-	
+    /**
+     * Get a document from a directory.
+     * @param {string} table The name of the directory.
+     * @param {string} document The document name.
+     * @returns {Promise&lt;?Object>}
+     */
+    get(table, document) {
+        return fs.readJSON(resolve(this.baseDir, table, `${document}.json`)).catch(() => null);
+    }
 
-	
+    /**
+     * Check if the document exists.
+     * @param {string} table The name of the directory.
+     * @param {string} document The document name.
+     * @returns {Promise&lt;boolean>}
+     */
+    has(table, document) {
+        return fs.pathExists(resolve(this.baseDir, table, `${document}.json`));
+    }
 
-	
+    /**
+     * Get a random document from a directory.
+     * @param {string} table The name of the directory.
+     * @returns {Promise&lt;Object>}
+     */
+    getRandom(table) {
+        return this.getAll(table).then(data => data[Math.floor(Math.random() * data.length)]);
+    }
 
-	
+    /**
+     * Insert a new document into a directory.
+     * @param {string} table The name of the directory.
+     * @param {string} document The document name.
+     * @param {Object} data The object with all properties you want to insert into the document.
+     * @returns {Promise&lt;Void>}
+     */
+    create(table, document, data) {
+        return fs.outputJSONAtomic(resolve(this.baseDir, table, `${document}.json`), Object.assign(data, { id: document }));
+    }
 
+    set(...args) {
+        return this.create(...args);
+    }
 
+    insert(...args) {
+        return this.create(...args);
+    }
 
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/index.js#L83">index.js#L83</a>	</dd>
-	
+    /**
+     * Update a document from a directory.
+     * @param {string} table The name of the directory.
+     * @param {string} document The document name.
+     * @param {Object} data The object with all the properties you want to update.
+     * @returns {Promise&lt;Void>}
+     */
+    update(table, document, data) {
+        return this.get(table, document)
+            .then(current => fs.outputJSONAtomic(resolve(this.baseDir, table, `${document}.json`), Object.assign(current, data)));
+    }
 
-	
+    /**
+     * Replace all the data from a document.
+     * @param {string} table The name of the directory.
+     * @param {string} document The document name.
+     * @param {Object} data The new data for the document.
+     * @returns {Promise&lt;Void>}
+     */
+    replace(table, document, data) {
+        return fs.outputJSONAtomic(resolve(this.baseDir, table, `${document}.json`), data);
+    }
 
-	
-	<dt class="tag-see method-doc-label method-doc-details-label">See:</dt>
-	<dd class="tag-see">
-		<ul>
-			<li><a href="https://discord.js.org/#/docs/main/master/typedef/MessageOptions">https://discord.js.org/#/docs/main/master/typedef/MessageOptions</a></li>
-			</ul>
-	</dd>
-	
+    /**
+     * Delete a document from the table.
+     * @param {string} table The name of the directory.
+     * @param {string} document The document name.
+     * @returns {Promise&lt;Void>}
+     */
+    delete(table, document) {
+        return fs.unlink(resolve(this.baseDir, table, `${document}.json`));
+    }
 
-	
-</dl>
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
+};</code></pre><p>The example above is the JSON provider used in klasa, and interfacing with the settingGateway.</p>
+<h2>Accessing Providers</h2><p>Providers are stored in the main <code>client</code> object, in the <code>providers</code> property. This has an entry
+for each provider added, based on its <code>name</code>. So for example if you have it set as
+<code>sqlite</code> , you can access it through <code>client.providers.get(&quot;sqlite&quot;);</code>.</p>
 </article>
 
 </section>
-
-
-
 
 		</div>
 	</div>
 
 	<div class="clearfix"></div>
 
-	
-		<div class="col-md-3">
-			<div id="toc" class="col-md-3 hidden-xs hidden-sm hidden-md"></div>
-		</div>
 	
 
 </div>
