@@ -151,21 +151,8 @@ class ArgResolver extends Resolver {
 		if (arg === null) {
 			if (currentUsage.type === 'optional' && !repeat) return null;
 			throw `${currentUsage.possibles[possible].name} must be an integer.`;
-		} else if (min && max) {
-			if (arg >= min && arg <= max) return arg;
-			if (currentUsage.type === 'optional' && !repeat) return null;
-			if (min === max) throw `${currentUsage.possibles[possible].name} must be exactly ${min}\nSo why didn't the dev use a literal?`;
-			throw `${currentUsage.possibles[possible].name} must be between ${min} and ${max}.`;
-		} else if (min) {
-			if (arg >= min) return arg;
-			if (currentUsage.type === 'optional' && !repeat) return null;
-			throw `${currentUsage.possibles[possible].name} must be greater than ${min}.`;
-		} else if (max) {
-			if (arg <= max) return arg;
-			if (currentUsage.type === 'optional' && !repeat) return null;
-			throw `${currentUsage.possibles[possible].name} must be less than ${max}.`;
 		}
-		return arg;
+		return this.constructor.minOrMax(arg, min, max, currentUsage, possible, repeat);
 	}
 
 	num(...args) {
@@ -182,7 +169,19 @@ class ArgResolver extends Resolver {
 		if (arg === null) {
 			if (currentUsage.type === 'optional' && !repeat) return null;
 			throw `${currentUsage.possibles[possible].name} must be a valid number.`;
-		} else if (min && max) {
+		}
+		return this.constructor.minOrMax(arg, min, max, currentUsage, possible, repeat);
+	}
+
+	async url(arg, currentUsage, possible, repeat) {
+		const hyperlink = await super.url(arg);
+		if (hyperlink !== null) return hyperlink;
+		if (currentUsage.type === 'optional' && !repeat) return null;
+		throw `${currentUsage.possibles[possible].name} must be a valid url.`;
+	}
+
+	static minOrMax(arg, min, max, currentUsage, possible, repeat) {
+		if (min && max) {
 			if (arg >= min && arg <= max) return arg;
 			if (currentUsage.type === 'optional' && !repeat) return null;
 			if (min === max) throw `${currentUsage.possibles[possible].name} must be exactly ${min}\nSo why didn't the dev use a literal?`;
@@ -197,13 +196,6 @@ class ArgResolver extends Resolver {
 			throw `${currentUsage.possibles[possible].name} must be less than ${max}.`;
 		}
 		return arg;
-	}
-
-	async url(arg, currentUsage, possible, repeat) {
-		const hyperlink = await super.url(arg);
-		if (hyperlink !== null) return hyperlink;
-		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw `${currentUsage.possibles[possible].name} must be a valid url.`;
 	}
 
 }
