@@ -124,21 +124,8 @@ class ArgResolver extends Resolver {
 
 	async string(arg, currentUsage, possible, repeat) {
 		const { min, max } = currentUsage.possibles[possible];
-		if (min && max) {
-			if (arg.length >= min && arg.length <= max) return arg;
-			if (currentUsage.type === 'optional' && !repeat) return null;
-			if (min === max) throw `${currentUsage.possibles[possible].name} must be exactly ${min} characters.`;
-			throw `${currentUsage.possibles[possible].name} must be between ${min} and ${max} characters.`;
-		} else if (min) {
-			if (arg.length >= min) return arg;
-			if (currentUsage.type === 'optional' && !repeat) return null;
-			throw `${currentUsage.possibles[possible].name} must be longer than ${min} characters.`;
-		} else if (max) {
-			if (arg.length <= max) return arg;
-			if (currentUsage.type === 'optional' && !repeat) return null;
-			throw `${currentUsage.possibles[possible].name} must be shorter than ${max} characters.`;
-		}
-		return arg;
+		if (this.constructor.minOrMax(arg.length, min, max, currentUsage, possible, repeat, ' characters')) return arg;
+		return null;
 	}
 
 	int(...args) {
@@ -152,7 +139,8 @@ class ArgResolver extends Resolver {
 			if (currentUsage.type === 'optional' && !repeat) return null;
 			throw `${currentUsage.possibles[possible].name} must be an integer.`;
 		}
-		return this.constructor.minOrMax(arg, min, max, currentUsage, possible, repeat);
+		if (this.constructor.minOrMax(arg, min, max, currentUsage, possible, repeat)) return arg;
+		return null;
 	}
 
 	num(...args) {
@@ -170,7 +158,8 @@ class ArgResolver extends Resolver {
 			if (currentUsage.type === 'optional' && !repeat) return null;
 			throw `${currentUsage.possibles[possible].name} must be a valid number.`;
 		}
-		return this.constructor.minOrMax(arg, min, max, currentUsage, possible, repeat);
+		if (this.constructor.minOrMax(arg, min, max, currentUsage, possible, repeat)) return arg;
+		return null;
 	}
 
 	async url(arg, currentUsage, possible, repeat) {
@@ -180,22 +169,22 @@ class ArgResolver extends Resolver {
 		throw `${currentUsage.possibles[possible].name} must be a valid url.`;
 	}
 
-	static minOrMax(arg, min, max, currentUsage, possible, repeat) {
+	static minOrMax(arg, min, max, currentUsage, possible, repeat, suffix = '') {
 		if (min && max) {
-			if (arg >= min && arg <= max) return arg;
-			if (currentUsage.type === 'optional' && !repeat) return null;
-			if (min === max) throw `${currentUsage.possibles[possible].name} must be exactly ${min}\nSo why didn't the dev use a literal?`;
-			throw `${currentUsage.possibles[possible].name} must be between ${min} and ${max}.`;
+			if (arg >= min && arg <= max) return true;
+			if (currentUsage.type === 'optional' && !repeat) return false;
+			if (min === max) throw `${currentUsage.possibles[possible].name} must be exactly ${min}${suffix}.`;
+			throw `${currentUsage.possibles[possible].name} must be between ${min} and ${max}${suffix}.`;
 		} else if (min) {
-			if (arg >= min) return arg;
-			if (currentUsage.type === 'optional' && !repeat) return null;
-			throw `${currentUsage.possibles[possible].name} must be greater than ${min}.`;
+			if (arg >= min) return true;
+			if (currentUsage.type === 'optional' && !repeat) return false;
+			throw `${currentUsage.possibles[possible].name} must be greater than ${min}${suffix}.`;
 		} else if (max) {
-			if (arg <= max) return arg;
-			if (currentUsage.type === 'optional' && !repeat) return null;
-			throw `${currentUsage.possibles[possible].name} must be less than ${max}.`;
+			if (arg <= max) return true;
+			if (currentUsage.type === 'optional' && !repeat) return false;
+			throw `${currentUsage.possibles[possible].name} must be less than ${max}${suffix}.`;
 		}
-		return arg;
+		return true;
 	}
 
 }
