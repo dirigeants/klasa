@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Klasa External: MessageOptions</title>
+	<title>Klasa Tutorial: CreatingFinalizers</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -81,117 +81,59 @@
 <div class="row">
 
 	
-	<div class="col-md-8">
+	<div class="col-md-12">
 	
 		<div id="main">
-			
-
-	<h1 class="page-title">External: MessageOptions</h1>
-<section>
+			<section class="tutorial-section">
 
 <header>
     
-        <h2>
-        MessageOptions
-        </h2>
-        
-    
+
+    <h2>CreatingFinalizers</h2>
 </header>
 
-
 <article>
-    <div class="container-overview">
-    
-        
+    <h1>Creating Finalizers</h1><p>Finalizers are functions run after successful commands, and this is the reason of why all commands <strong>must</strong> return an
+<a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise">Object Promise</a>.</p>
+<p>Finalizers have the following syntax:</p>
+<pre class="prettyprint source lang-js"><code>const { Finalizer } = require('klasa');
 
-        
-<dl class="details">
-    
+module.exports = class extends Finalizer {
 
-	
+    constructor(...args) {
+        super(...args, 'myFinalizerName', {
+            enabled: true
+        });
+    }
 
-	
+    run(msg, mes, start) {
+        // This is where you place the code you want to run for your finalizer
+    }
 
-	
+    async init() {
+        // You can optionally define this method which will be run when the bot starts (after login, so discord data is available via this.client)
+    }
 
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/index.js#L83">index.js#L83</a>	</dd>
-	
-
-	
-
-	
-	<dt class="tag-see method-doc-label method-doc-details-label">See:</dt>
-	<dd class="tag-see">
-		<ul>
-			<li><a href="https://discord.js.org/#/docs/main/master/typedef/MessageOptions">https://discord.js.org/#/docs/main/master/typedef/MessageOptions</a></li>
-			</ul>
-	</dd>
-	
-
-	
-</dl>
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
+};</code></pre><h2>Arguments:</h2><ul>
+<li><strong>msg</strong>: The message object.</li>
+<li><strong>mes</strong>: The value the command returns.</li>
+<li><strong>start</strong>: The time in which the command has been run, by <code>performance.now()</code>, ideal for benchmarking.</li>
+</ul>
+<h2>Existing finalizers</h2><p>Komada has two preinstalled finalizers: <code>commandCooldown</code> and <code>commandlogging</code>.</p>
+<h3>commandCooldown</h3><p>This finalizer applies the cooldown from the commands' <code>exports.conf.cooldown</code> (if
+exists and its value is above <code>0</code>).</p>
+<h3>commandlogging</h3><p>This finalizer, unlike commandCooldown, it's only run if the property <code>cmdLogging</code> of
+your Komada's configs is set to <code>true</code>. It prints in the cmd prompt the command run, where,
+the user who ran it, and the time it took to process the command.</p>
 </article>
 
 </section>
-
-
-
 
 		</div>
 	</div>
 
 	<div class="clearfix"></div>
 
-	
-		<div class="col-md-3">
-			<div id="toc" class="col-md-3 hidden-xs hidden-sm hidden-md"></div>
-		</div>
 	
 
 </div>

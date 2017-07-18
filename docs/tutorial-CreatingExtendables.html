@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Klasa External: MessageOptions</title>
+	<title>Klasa Tutorial: CreatingExtendables</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -81,117 +81,83 @@
 <div class="row">
 
 	
-	<div class="col-md-8">
+	<div class="col-md-12">
 	
 		<div id="main">
-			
-
-	<h1 class="page-title">External: MessageOptions</h1>
-<section>
+			<section class="tutorial-section">
 
 <header>
     
-        <h2>
-        MessageOptions
-        </h2>
-        
-    
+
+    <h2>CreatingExtendables</h2>
 </header>
 
-
 <article>
-    <div class="container-overview">
-    
-        
+    <h1>Creating Extendables</h1><p>Extendables are functions that extend current Discord.js classes by adding methods or properties.</p>
+<p>Extendables have the following syntax:</p>
+<pre class="prettyprint source lang-javascript"><code>const { Extendable } = require('klasa');
 
-        
-<dl class="details">
-    
+module.exports = class extends Extendable {
 
-	
+    constructor(...args) {
+        super(...args, 'myExtendableName', ['Message']);
+    }
 
-	
+// Getters
 
-	
+    get extend() {
+        // Make a getter
+    }
 
-    
+// Setters
 
-    
+    set extend() {
+        // Make a setters
+    }
 
-    
+// Methods
 
-    
+    extend() {
+        // Make a methods
+    }
 
-	
+};</code></pre><h2>Understanding extendable settings</h2><pre class="prettyprint source lang-js"><code>constructor(...args) {
+    super(...args, name, appliesTo);
+}</code></pre><ul>
+<li><strong>name</strong>: The name of the method/property.</li>
+<li><strong>appliesTo</strong>: An array of affected properties from Discord.js. You can get a list <a href="https://github.com/hydrabolt/discord.js/blob/master/src/index.js">here</a>.</li>
+</ul>
+<h2>Understanding extend</h2><p>The extend method can only be a setter, getter, or method. You cannot define multiple in one file as the above example may imply.</p>
+<h2>Examples</h2><p>Imagine we want to extend the <a href="https://discord.js.org/#/docs/main/master/class/Message">Message</a> class
+so it has a method called <code>prompt</code> so you can do <code>Message#prompt(&quot;Are you sure you want to continue?&quot;)</code>
+everywhere in your code, resolving if the user confirms the prompt, or rejecting otherwise. Then, your
+extendable is likely to be like the following:</p>
+<blockquote>
+<p>You can extend the Message object with this because you're likely to lock the prompt for a user in a channel,
+and Message has both properties of <code>author</code> and <code>channel</code>.</p>
+</blockquote>
+<pre class="prettyprint source lang-js"><code>const { Extendable } = require('klasa');
 
-	
+module.exports = class extends Extendable {
 
-	
+    constructor(...args) {
+        super(...args, 'prompt', ['Message']);
+    }
 
-	
+    extend() {
+        return prompt();
+    }
 
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/index.js#L83">index.js#L83</a>	</dd>
-	
-
-	
-
-	
-	<dt class="tag-see method-doc-label method-doc-details-label">See:</dt>
-	<dd class="tag-see">
-		<ul>
-			<li><a href="https://discord.js.org/#/docs/main/master/typedef/MessageOptions">https://discord.js.org/#/docs/main/master/typedef/MessageOptions</a></li>
-			</ul>
-	</dd>
-	
-
-	
-</dl>
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
+};</code></pre><p>Where <code>prompt()</code> is your prompt function.</p>
 </article>
 
 </section>
-
-
-
 
 		</div>
 	</div>
 
 	<div class="clearfix"></div>
 
-	
-		<div class="col-md-3">
-			<div id="toc" class="col-md-3 hidden-xs hidden-sm hidden-md"></div>
-		</div>
 	
 
 </div>

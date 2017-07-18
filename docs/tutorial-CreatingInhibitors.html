@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Klasa External: MessageOptions</title>
+	<title>Klasa Tutorial: CreatingInhibitors</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -81,117 +81,60 @@
 <div class="row">
 
 	
-	<div class="col-md-8">
+	<div class="col-md-12">
 	
 		<div id="main">
-			
-
-	<h1 class="page-title">External: MessageOptions</h1>
-<section>
+			<section class="tutorial-section">
 
 <header>
     
-        <h2>
-        MessageOptions
-        </h2>
-        
-    
+
+    <h2>CreatingInhibitors</h2>
 </header>
 
-
 <article>
-    <div class="container-overview">
-    
-        
+    <h1>Creating Inhibitors</h1><p>Inhibitors are only ran on commands. They are used to check a variety of conditions
+before a command is ever ran, such as checking if a user has the right amount of permissions
+to use a command. Inhibitors are loaded as core first, and if your code contains a inhibitor
+of the same name it overrides the core inhibitor.</p>
+<p>Their structure is restricted, meaning to work they must be defined exactly like
+the following example. They <em>must</em> return an <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise">Object Promise</a>.
+You can accomplish this by adding the <code>async</code> identifier, or returning a new promise.
+An inhibitor blocks a command by rejecting the promise, either with a string or <code>undefined</code> for silent rejections.</p>
+<pre class="prettyprint source lang-javascript"><code>const { Inhibitor } = require('klasa');
 
-        
-<dl class="details">
-    
+module.exports = class extends Inhibitor {
 
-	
+    constructor(...args) {
+        super(...args, 'myInhibitorName', {
+            enabled: true,
+            spamProtection: false
+        });
+    }
 
-	
+    async run(msg, cmd) {
+        // This is where you place the code you want to run for your inhibitor
+    }
 
-	
+    async init() {
+        // You can optionally define this method which will be run when the bot starts (after login, so discord data is available via this.client)
+    }
 
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/index.js#L83">index.js#L83</a>	</dd>
-	
-
-	
-
-	
-	<dt class="tag-see method-doc-label method-doc-details-label">See:</dt>
-	<dd class="tag-see">
-		<ul>
-			<li><a href="https://discord.js.org/#/docs/main/master/typedef/MessageOptions">https://discord.js.org/#/docs/main/master/typedef/MessageOptions</a></li>
-			</ul>
-	</dd>
-	
-
-	
-</dl>
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
+};</code></pre><h2>Configuration</h2><ul>
+<li><strong>enabled</strong>: Represents if the inhibitor should be enabled or disabled, it must be
+a boolean. Set to false to completely disable this inhibitor, it cannot be forcefully enabled.</li>
+<li><strong>spamProtection</strong>: Represents if the inhibitor is meant to prevent bot/command spam. Setting
+spamProtection to true will prevent the inhibitor to run while doing tasks such as generating help.</li>
+</ul>
 </article>
 
 </section>
-
-
-
 
 		</div>
 	</div>
 
 	<div class="clearfix"></div>
 
-	
-		<div class="col-md-3">
-			<div id="toc" class="col-md-3 hidden-xs hidden-sm hidden-md"></div>
-		</div>
 	
 
 </div>
