@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Klasa Tutorial: CreatingProviders</title>
+	<title>Klasa Tutorial: GettingStarted</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -89,157 +89,37 @@
 <header>
     
 
-    <h2>CreatingProviders</h2>
+    <h2>GettingStarted</h2>
 </header>
 
 <article>
-    <h1>Creating Data Providers</h1><p>Data Providers are special classes designed to make your life easier when you're
-using a <strong>database</strong>, there's <strong>no</strong> rule to make them. By default, Klasa uses
-JSON to store per-guild configuration.</p>
-<p>When you create a data provider, you can access to them by: <code>client.providers.get(ProviderName)</code>.</p>
-<pre class="prettyprint source lang-javascript"><code>const { Provider } = require('klasa');
-const { resolve } = require('path');
-const fs = require('fs-nextra');
+    <p>#Getting Started</p>
+<h2>Installing Klasa</h2><p>Time to take the plunge! Klasa is on NPM and can be easily installed.</p>
+<blockquote>
+<p>I assume you know how to open a command prompt in a folder where you want to install this. Please don't prove me wrong.</p>
+</blockquote>
+<pre class="prettyprint source"><code>npm install --save klasa</code></pre><p>Create a file called <code>app.js</code> (or whatever you prefer) which will initiate and configure Komada.</p>
+<pre class="prettyprint source lang-js"><code>const klasa = require(&quot;klasa&quot;);
 
-module.exports = class extends Provider {
+const client = new klasa.Client({
+    clientOptions: {
+        fetchAllMembers: false,
+    },
+    prefix: &quot;+&quot;,
+    cmdPrompt: true,
+    cmdEditing: true
+});
 
-    constructor(...args) {
-        super(...args, 'json', { description: 'Allows you to use JSON functionality throught Klasa' });
-        this.baseDir = resolve(this.client.clientBaseDir, 'bwd', 'provider', 'json');
-    }
-
-    init() {
-        return fs.ensureDir(this.baseDir).catch(err => this.client.emit('log', err, 'error'));
-    }
-
-    /* Table methods */
-
-    /**
-     * Checks if a directory exists.
-     * @param {string} table The name of the table you want to check.
-     * @returns {Promise&lt;boolean>}
-     */
-    hasTable(table) {
-        return fs.pathExists(resolve(this.baseDir, table));
-    }
-
-    /**
-     * Creates a new directory.
-     * @param {string} table The name for the new directory.
-     * @returns {Promise&lt;Void>}
-     */
-    createTable(table) {
-        return fs.mkdir(resolve(this.baseDir, table));
-    }
-
-    /**
-     * Recursively deletes a directory.
-     * @param {string} table The directory's name to delete.
-     * @returns {Promise&lt;Void>}
-     */
-    deleteTable(table) {
-        return this.hasTable(table)
-            .then(exists => exists ? fs.emptyDir(resolve(this.baseDir, table)).then(() => fs.remove(resolve(this.baseDir, table))) : null);
-    }
-
-    /* Document methods */
-
-    /**
-     * Get all documents from a directory.
-     * @param {string} table The name of the directory to fetch from.
-     * @returns {Promise&lt;Object[]>}
-     */
-    getAll(table) {
-        const dir = resolve(this.baseDir, table);
-        return fs.readdir(dir)
-            .then(files => Promise.all(files.map(file => fs.readJSON(resolve(dir, file)))));
-    }
-
-    /**
-     * Get a document from a directory.
-     * @param {string} table The name of the directory.
-     * @param {string} document The document name.
-     * @returns {Promise&lt;?Object>}
-     */
-    get(table, document) {
-        return fs.readJSON(resolve(this.baseDir, table, `${document}.json`)).catch(() => null);
-    }
-
-    /**
-     * Check if the document exists.
-     * @param {string} table The name of the directory.
-     * @param {string} document The document name.
-     * @returns {Promise&lt;boolean>}
-     */
-    has(table, document) {
-        return fs.pathExists(resolve(this.baseDir, table, `${document}.json`));
-    }
-
-    /**
-     * Get a random document from a directory.
-     * @param {string} table The name of the directory.
-     * @returns {Promise&lt;Object>}
-     */
-    getRandom(table) {
-        return this.getAll(table).then(data => data[Math.floor(Math.random() * data.length)]);
-    }
-
-    /**
-     * Insert a new document into a directory.
-     * @param {string} table The name of the directory.
-     * @param {string} document The document name.
-     * @param {Object} data The object with all properties you want to insert into the document.
-     * @returns {Promise&lt;Void>}
-     */
-    create(table, document, data) {
-        return fs.outputJSONAtomic(resolve(this.baseDir, table, `${document}.json`), Object.assign(data, { id: document }));
-    }
-
-    set(...args) {
-        return this.create(...args);
-    }
-
-    insert(...args) {
-        return this.create(...args);
-    }
-
-    /**
-     * Update a document from a directory.
-     * @param {string} table The name of the directory.
-     * @param {string} document The document name.
-     * @param {Object} data The object with all the properties you want to update.
-     * @returns {Promise&lt;Void>}
-     */
-    update(table, document, data) {
-        return this.get(table, document)
-            .then(current => fs.outputJSONAtomic(resolve(this.baseDir, table, `${document}.json`), Object.assign(current, data)));
-    }
-
-    /**
-     * Replace all the data from a document.
-     * @param {string} table The name of the directory.
-     * @param {string} document The document name.
-     * @param {Object} data The new data for the document.
-     * @returns {Promise&lt;Void>}
-     */
-    replace(table, document, data) {
-        return fs.outputJSONAtomic(resolve(this.baseDir, table, `${document}.json`), data);
-    }
-
-    /**
-     * Delete a document from the table.
-     * @param {string} table The name of the directory.
-     * @param {string} document The document name.
-     * @returns {Promise&lt;Void>}
-     */
-    delete(table, document) {
-        return fs.unlink(resolve(this.baseDir, table, `${document}.json`));
-    }
-
-};</code></pre><p>The example above is the JSON provider used in klasa, and interfacing with the settingGateway.</p>
-<h2>Accessing Providers</h2><p>Providers are stored in the main <code>client</code> object, in the <code>providers</code> property. This has an entry
-for each provider added, based on its <code>name</code>. So for example if you have it set as
-<code>sqlite</code> , you can access it through <code>client.providers.get(&quot;sqlite&quot;);</code>.</p>
+client.login(&quot;your-bot-token&quot;)</code></pre><h3>Configuration Options</h3><ul>
+<li><strong>botToken</strong>: The MFA token for your bot. To get this, please see <a href="https://anidiotsguide.gitbooks.io/discord-js-bot-guide/getting-started/the-long-version.html">This discord.js Getting Started Guide</a>, which explains how to create the bot and get the token.</li>
+<li><strong>prefix</strong>: The default prefix(es) when the bot first boots up. This option becomes useless after first boot, since the prefix is written to the default configuration system. Pass an array to accept multiple prefixes.</li>
+<li><strong>clientOptions</strong>: These are passed directly to the discord.js library. They are optional. For more information on which options are available, see <a href="https://discord.js.org/#/docs/main/stable/typedef/ClientOptions">ClientOptions in the discord.js docs</a>.</li>
+</ul>
+<h2>Running the bot</h2><p>Then, run the following in your folder:</p>
+<pre class="prettyprint source"><code>npm install
+node app.js</code></pre><blockquote>
+<p><strong>Requirements</strong>: Requires Node 8.1.0 or higher to run. Depends on Discord.js v12.0.0-dev or higher (the appropriate version is automatically installed).</p>
+</blockquote>
 </article>
 
 </section>
