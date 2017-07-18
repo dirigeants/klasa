@@ -14,6 +14,6 @@ Following suit from Komada (the Croatian word for "pieces"), Klasa is the croati
 
 ## Time to get started!
 
-See the following [tutorial](https://dirigeants.github.io/klasa/tutorial-GettingStarted.html) on how to get started using Klasa.
+See the following [tutorial](https://klasa.js.org/tutorial-GettingStarted.html) on how to get started using Klasa.
 
->Documentation for klasa can be found at: [https://dirigeants.github.io/klasa/index.html](https://dirigeants.github.io/klasa/index.html)
+>Documentation for klasa can be found at: [https://klasa.js.org/](https://klasa.js.org/)
