@@ -8,7 +8,7 @@ Time to take the plunge! Klasa is on NPM and can be easily installed.
 npm install --save klasa
 ```
 
-Create a file called `app.js` (or whatever you prefer) which will initiate and configure Komada.
+Create a file called `app.js` (or whatever you prefer) which will initiate and configure Klasa.
 
 ```javascript
 const klasa = require("klasa");
