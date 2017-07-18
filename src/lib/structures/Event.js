@@ -6,12 +6,18 @@
 class Event {
 
 	/**
+	 * @typedef {Object} EventOptions
+	 * @property {boolean} [enabled=true] Whether the event is enabled or not
+	 */
+
+	/**
 	 * @param {KlasaClient} client The klasa client
 	 * @param {string} dir The path to the core or user event pieces folder
 	 * @param {string} file The path from the pieces folder to the event file
 	 * @param {string} name The name of the event
+	 * @param {EventOptions} [options={}] The Event options
 	 */
-	constructor(client, dir, file, name) {
+	constructor(client, dir, file, name, options = {}) {
 		/**
 		 * @type {KlasaClient}
 		 */
@@ -40,6 +46,12 @@ class Event {
 		 * @type {string}
 		 */
 		this.type = 'event';
+
+		/**
+		 * If the event is enabled or not
+		 * @type {boolean}
+		 */
+		this.enabled = options.enabled || true;
 	}
 
 	/**
@@ -58,6 +70,34 @@ class Event {
 	 */
 	unload() {
 		return this.client.events.delete(this);
+	}
+
+	/**
+	 * Disables this finalizer
+	 * @returns {Finalizer} This finalizer
+	 */
+	disable() {
+		this.enabled = false;
+		return this;
+	}
+
+	/**
+	 * Enables this finalizer
+	 * @returns {Finalizer} This finalizer
+	 */
+	enable() {
+		this.enabled = true;
+		return this;
+	}
+
+	/**
+	 * A wrapper for the run method, to easily disable/enable events
+	 * @param {any} param The event parameters emited
+	 * @private
+	 * @returns {void}
+	 */
+	_run(...args) {
+		if (this.enabled) this.run(...args);
 	}
 
 	/**
