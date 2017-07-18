@@ -17,6 +17,6 @@ jspm_packages
 .eslintrc.json
 .travis-deploy.sh
 .travis.yml
-packaage-lock.json
+package-lock.json
 tutorials
 docs

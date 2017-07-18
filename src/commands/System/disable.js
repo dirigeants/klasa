@@ -11,6 +11,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [piece]) {
+		if (piece.type === 'event' && piece.name === 'Message') return msg.sendMessage('You probably don\'t want to disable the message event, since you wouldn\'t be able to enable it again');
 		piece.disable();
 		return msg.sendCode('diff', `+ Successfully disabled ${piece.type}: ${piece.name}`);
 	}
