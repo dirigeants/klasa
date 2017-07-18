@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Klasa Tutorial: CreatingCommands</title>
+	<title>Klasa Tutorial: CreatingUsageStrings</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -89,56 +89,132 @@
 <header>
     
 
-    <h2>CreatingCommands</h2>
+    <h2>CreatingUsageStrings</h2>
 </header>
 
 <article>
-    <h1>Creating your own Commands</h1><p>New commands are created in the <code>./commands/</code> folder, where subfolders are the categories offered in the help command. For instance adding <code>./commands/Misc/test.js</code> will create a command named <code>test</code> in the <code>Misc</code> category. Subcategories can also be created by adding a second folder level.</p>
-<pre class="prettyprint source lang-javascript"><code>const { Command } = require('klasa');
-
-module.exports = class extends Command {
-
-    constructor(...args) {
-        super(...args, 'yourCommandName', {
-            enabled: true,
-            runIn: ['text', 'dm', 'group'],
-            cooldown: 0,
-            aliases: [],
-            permLevel: 0,
-            botPerms: [],
-            requiredSettings: [],
-            description: '',
-            usage: '',
-            usageDelim: undefined,
-            extendedHelp: 'No extended help available.'
-        });
-    }
-
-    async run(msg, [...params]) {
-        // This is where you place the code you want to run for your command
-    }
-
-    async init() {
-        // You can optionally define this method which will be run when the bot starts (after login, so discord data is available via this.client)
-    }
-
-};</code></pre><h2>Configuration</h2><ul>
-<li><strong>enabled</strong>: Represents if the inhibitor should be enabled or disabled, it must be
-a boolean. Set to false to completely disable this inhibitor, it cannot be forcefully enabled.</li>
-<li><strong>runIn</strong>: The channels types this command is allowed to run in.</li>
-<li><strong>cooldown</strong>: The time in seconds before a user can use this command again. (Does not apply to bot owners)</li>
-<li><strong>aliases</strong>: Other names this command will respond to.</li>
-<li><strong>permLevel</strong>: The permission level required to run this command. From 0 as everyone, to 10 as bot owner only with default permlevels.</li>
-<li><strong>requiredSettings</strong>: Any required guild settings, that must be set before you can use this command.</li>
-<li><strong>description</strong>: The command description.</li>
-<li><strong>usage</strong>: The expected arguments for this command. See <a href="tutorial-CreatingUsageStrings.html">CreatingUsageStrings</a> for information on how to use this.</li>
-<li><strong>usageDelim</strong>: The deliminator for how the usage will be deliminated. Popular ones are <code>' '</code> (a space), and <code>', '</code> (a comma space).</li>
-<li><strong>extendedHelp</strong>: A more in depth help string if you would like to define it.</li>
+    <h2>Usage Structure</h2><p><code>&lt;&gt;</code> required argument, <code>[]</code> optional argument <code>&lt;Name:Type{min,max}&gt;</code></p>
+<ul>
+<li><strong>Name</strong> Mostly used for debugging message, unless the type is Literal in which it compares the argument to the name.</li>
+<li><strong>Type</strong> The type of variable you are expecting.</li>
+<li><strong>Min, Max</strong> Minimum or Maximum for a giving variable (works on strings in terms of length, and on all types of numbers in terms of value) You are allowed to define any combination of min and max. Omit for none, <code>{min}</code> for min, <code>{,max}</code> for max. If you set <code>min</code> and <code>max</code> with the same integer, then the provided string must have equal length.</li>
+<li><strong>Special Repeat Tag</strong> <code>[...]</code> will repeat the last usage optionally until you run out of arguments. Useful for doing something like <code>&lt;SearchTerm:str&gt; [...]</code> which will allow you to take as many search terms as you want, per your Usage Delimiter.</li>
 </ul>
 <blockquote>
-<p>All commands are required to return an <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise">Object Promise</a> you can do that by adding the <code>async</code> keyword to the function, there's no need to change anything else.</p>
-<p>All <a href="global.html#CommandOptions"><code>command options</code></a> are optional, the code above shows all default values. You can delete any line with an optional value that matches the default value.</p>
-<p><code>[...params]</code> represents a variable number of arguments give when the command is run. The name of the arguments in the array (and their count) is determined by the <code>usage</code> property and its given arguments.</p>
+<p>Note: You can set multiple options in an argument by writting <code>|</code>. For example: <code>&lt;Message:msg|Content:string{4,16}&gt;</code> will work when you provide a message ID or a string with a length between 4 and 16 (including both limits).</p>
+</blockquote>
+<h3>Usage Types</h3><table>
+<thead>
+<tr>
+<th style="text-align:right">Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right"><code>literal</code></td>
+<td>Literally equal to the Name. This is the default type if none is defined.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>str</code> \</td>
+<td><code>string</code></td>
+<td>A <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>int</code> \</td>
+<td><code>integer</code></td>
+<td>An <a href="https://en.wikipedia.org/wiki/Integer">Integer</a>.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>num</code> \</td>
+<td><code>number</code> \</td>
+<td><code>float</code></td>
+<td>A <a href="https://en.wikipedia.org/wiki/Floating-point_arithmetic">Floating Point Number</a>.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>boolean</code></td>
+<td>A <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a>.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>url</code></td>
+<td>A <a href="https://en.wikipedia.org/wiki/URL">URL</a>.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>msg</code> \</td>
+<td><code>message</code></td>
+<td>A <a href="https://discord.js.org/#/docs/main/master/class/Message">Message</a> instance returned from the message ID.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>role</code></td>
+<td>A <a href="https://discord.js.org/#/docs/main/master/class/Role">Role</a> instance returned from the role ID or mention.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>channel</code></td>
+<td>A <a href="https://discord.js.org/#/docs/main/master/class/TextChannel">TextChannel</a> instance returned from the channel ID or channel tag.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>guild</code></td>
+<td>A <a href="https://discord.js.org/#/docs/main/master/class/Guild">Guild</a> instance returned from the guild ID.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>user</code> \</td>
+<td><code>mention</code></td>
+<td>A <a href="https://discord.js.org/#/docs/main/master/class/User">User</a> instance returned from the user ID or mention.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>member</code></td>
+<td>A <a href="https://discord.js.org/#/docs/main/master/class/GuildMember">GuildMember</a> instance returned from the member ID or mention.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>cmd</code> \</td>
+<td><code>command</code></td>
+<td>A <a href="Command.html"><code>Command</code></a> instance returned from the command name or alias.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>event</code></td>
+<td>A <a href="Event.html"><code>Event</code></a> instance returned from the event name.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>inhibitor</code></td>
+<td>A <a href="Inhibitor.html"><code>Inhibitor</code></a> instance returned from the inhibitor name.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>finalizer</code></td>
+<td>A <a href="Finalizer.html"><code>Finalizer</code></a> instance returned from the finalizer name.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>monitor</code></td>
+<td>A <a href="Monitor.html"><code>Monitor</code></a> instance returned from the monitor name.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>provider</code></td>
+<td>A <a href="Provider.html"><code>Provider</code></a> instance returned from the provider name.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Note: <code>Literal</code> is very useful in arguments with multiple options.</p>
+</blockquote>
+<hr>
+<h1>Using arguments in your command.</h1><p>Now, after we understand how to configurate the command, we'll start writting it:</p>
+<pre class="prettyprint source lang-javascript"><code>async run(msg, [...params]) {
+    // This is where you place the code you want to run for your command
+}</code></pre><p><code>[...params]</code> represents a variable number of parameters given when the command is run. The name of the parameters in the array (and their count) is determined by the <code>usage</code> property and its given arguments.</p>
+<blockquote>
+<p>Note that the commands' parameters are an array. This is a trick called <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment">Destructuring assignment</a>.</p>
+</blockquote>
+<p>For example, when you have: <code>&quot;&lt;Message:msg&gt; &lt;delete|edit&gt; [newContent:string]&quot;</code> as your usage, and <code>&quot;|&quot;</code> as your usageDelim, then the following code block is an example of how it would look like, and how we would work with them.</p>
+<pre class="prettyprint source lang-javascript"><code>async run(msg, [message, action, newContent]) {
+  // code
+};</code></pre><p>In which <code>message</code> is the argument assigned to the message object as provided in <code>&lt;Message:msg&gt;</code> argument from usage. Same does <code>action</code> for <code>&lt;delete|edit&gt;</code> and respectively.</p>
+<blockquote>
+<p>Keep in mind that we declared <code>newContent</code> as an optional argument, if it's not provided, it'll return undefined.</p>
+</blockquote>
+<p>Keep in mind that arguments are delimited by the character or combination of characters written in <em>usageDelim</em>. In this case, we have assigned the character <code>|</code> for it. How do we use this command? Easy:</p>
+<p><code>+messager 293107496191655936|delete</code></p>
+<p>The line above will execute the command with the name <code>messager</code> (or a command with <code>messager</code> as an alias), it'll use <a href="https://discord.js.org/#/docs/main/stable/class/TextChannel?scrollTo=fetchMessage">Channel.fetchMessages</a> (or <a href="https://discord.js.org/#/docs/main/stable/class/TextChannel?scrollTo=fetchMessages">Channel.fetchMessages</a> if the bot is a userbot). If the message is not found (you mistyped it or the message is in another channel) it'll warn you that the message hasn't been found. The next argument is a literal, in which must be either <code>delete</code> or <code>edit</code>.</p>
+<blockquote>
+<p>If you need something created before the command is ever ran, you can specify <code>init() {...}</code> to make Klasa run that portion of code beforehand.</p>
 </blockquote>
 </article>
 
