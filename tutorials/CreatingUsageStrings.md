@@ -14,18 +14,18 @@
 |                         Type | Description
 | ---------------------------: | -----------
 |                    `literal` | Literally equal to the Name. This is the default type if none is defined.
-|            `str` \| `string` | A [String](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/String).
-|           `int` \| `integer` | An [Integer](https://en.wikipedia.org/wiki/Integer).
-| `num` \| `number` \| `float` | A [Floating Point Number](https://en.wikipedia.org/wiki/Floating-point_arithmetic).
+|             `str` , `string` | A [String](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/String).
+|            `int` , `integer` | An [Integer](https://en.wikipedia.org/wiki/Integer).
+|   `num` , `number` , `float` | A [Floating Point Number](https://en.wikipedia.org/wiki/Floating-point_arithmetic).
 |                    `boolean` | A [Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean).
 |                        `url` | A [URL](https://en.wikipedia.org/wiki/URL).
-|           `msg` \| `message` | A [Message](https://discord.js.org/#/docs/main/master/class/Message) instance returned from the message ID.
+|            `msg` , `message` | A [Message](https://discord.js.org/#/docs/main/master/class/Message) instance returned from the message ID.
 |                       `role` | A [Role](https://discord.js.org/#/docs/main/master/class/Role) instance returned from the role ID or mention.
 |                    `channel` | A [TextChannel](https://discord.js.org/#/docs/main/master/class/TextChannel) instance returned from the channel ID or channel tag.
 |                      `guild` | A [Guild](https://discord.js.org/#/docs/main/master/class/Guild) instance returned from the guild ID.
-|          `user` \| `mention` | A [User](https://discord.js.org/#/docs/main/master/class/User) instance returned from the user ID or mention.
+|           `user` , `mention` | A [User](https://discord.js.org/#/docs/main/master/class/User) instance returned from the user ID or mention.
 |                     `member` | A [GuildMember](https://discord.js.org/#/docs/main/master/class/GuildMember) instance returned from the member ID or mention.
-|           `cmd` \| `command` | A {@link Command} instance returned from the command name or alias.
+|            `cmd` , `command` | A {@link Command} instance returned from the command name or alias.
 |                      `event` | A {@link Event} instance returned from the event name.
 |                  `inhibitor` | A {@link Inhibitor} instance returned from the inhibitor name.
 |                  `finalizer` | A {@link Finalizer} instance returned from the finalizer name.
