@@ -122,7 +122,20 @@ module.exports = class extends Command {
         // You can optionally define this method which will be run when the bot starts (after login, so discord data is available via this.client)
     }
 
-};</code></pre><blockquote>
+};</code></pre><h2>Configuration</h2><ul>
+<li><strong>enabled</strong>: Represents if the inhibitor should be enabled or disabled, it must be
+a boolean. Set to false to completely disable this inhibitor, it cannot be forcefully enabled.</li>
+<li><strong>runIn</strong>: The channels types this command is allowed to run in.</li>
+<li><strong>cooldown</strong>: The time in seconds before a user can use this command again. (Does not apply to bot owners)</li>
+<li><strong>aliases</strong>: Other names this command will respond to.</li>
+<li><strong>permLevel</strong>: The permission level required to run this command. From 0 as everyone, to 10 as bot owner only with default permlevels.</li>
+<li><strong>requiredSettings</strong>: Any required guild settings, that must be set before you can use this command.</li>
+<li><strong>description</strong>: The command description.</li>
+<li><strong>usage</strong>: The expected arguments for this command. See CreatingUsageStrings for information on how to use this.</li>
+<li><strong>usageDelim</strong>: The deliminator for how the usage will be deliminated. Popular ones are <code>' '</code> (a space), and <code>', '</code> (a comma space).</li>
+<li><strong>extendedHelp</strong>: A more in depth help string if you would like to define it.</li>
+</ul>
+<blockquote>
 <p>All commands are required to return an <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise">Object Promise</a> you can do that by adding the <code>async</code> keyword to the function, there's no need to change anything else.</p>
 <p>All <a href="global.html#CommandOptions"><code>command options</code></a> are optional, the code above shows all default values. You can delete any line with an optional value that matches the default value.</p>
 <p><code>[...params]</code> represents a variable number of arguments give when the command is run. The name of the arguments in the array (and their count) is determined by the <code>usage</code> property and its given arguments.</p>
