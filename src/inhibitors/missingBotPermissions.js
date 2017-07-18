@@ -4,7 +4,7 @@ const { Permissions } = require('discord.js');
 module.exports = class extends Inhibitor {
 
 	constructor(...args) {
-		super(...args, 'missingBotPermissions', {});
+		super(...args, 'missingBotPermissions');
 		this.impliedPermissions = new Permissions([
 			'READ_MESSAGES',
 			'SEND_MESSAGES',

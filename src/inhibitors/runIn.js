@@ -3,7 +3,7 @@ const { Inhibitor } = require('klasa');
 module.exports = class extends Inhibitor {
 
 	constructor(...args) {
-		super(...args, 'runIn', {});
+		super(...args, 'runIn');
 	}
 
 	async run(msg, cmd) {
