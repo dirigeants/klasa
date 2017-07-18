@@ -6,7 +6,7 @@ JSON to store per-guild configuration.
 
 When you create a data provider, you can access to them by: `client.providers.get(ProviderName)`.
 
-```js
+```javascript
 const { Provider } = require('klasa');
 const { resolve } = require('path');
 const fs = require('fs-nextra');

@@ -15,8 +15,9 @@ const EventStore = require('./stores/EventStore');
 const ExtendableStore = require('./stores/ExtendableStore');
 
 /**
- * The client for handling everything
+ * The client for handling everything. See {@tutorial GettingStarted} for more information how to get started using this class.
  * @extends external:Client
+ * @tutorial GettingStarted
  */
 class KlasaClient extends Discord.Client {
 
