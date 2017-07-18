@@ -41,3 +41,16 @@ node app.js
 ```
 
 > **Requirements**: Requires Node 8.1.0 or higher to run. Depends on Discord.js v12.0.0-dev or higher (the appropriate version is automatically installed).
+
+## What's next?
+
+Klasa will create folders in your directory to make your own custom pieces in. Klasa will automatically check these folders on bootup, or if you reload all of a type of piece. `+reload commands` ect assuming your prefix is `+` like the example app.js file above.
+
+See the following tutorials on making your own custom pieces:
+- {@tutorial CreatingCommands}
+- {@tutorial CreatingEvents}
+- {@tutorial CreatingExtendables}
+- {@tutorial CreatingFinalizers}
+- {@tutorial CreatingInhibitors}
+- {@tutorial CreatingMonitors}
+- {@tutorial CreatingProviders}
