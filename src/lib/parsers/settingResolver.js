@@ -7,12 +7,6 @@ const Resolver = require('./Resolver');
 class SettingResolver extends Resolver {
 
 	/**
-	 * @typedef {object} minMax
-	 * @property {?number} min The minimum value
-	 * @property {?number} max The maximum value
-	 */
-
-	/**
 	 * Resolves a user
 	 * @param {any} data The data to resolve
 	 * @returns {external:User}
@@ -72,7 +66,7 @@ class SettingResolver extends Resolver {
 	 * Resolves a string
 	 * @param {any} data The data to resolve
 	 * @param {external:Guild} guild The guild this setting is for
-	 * @param {minMax} minMax The minimum and maximum
+	 * @param {{min: ?number, max: ?number}} minMax The minimum and maximum
 	 * @returns {string}
 	 */
 	async string(data, guild, { min, max }) {
@@ -85,7 +79,7 @@ class SettingResolver extends Resolver {
 	 * Resolves a integer
 	 * @param {any} data The data to resolve
 	 * @param {external:Guild} guild The guild this setting is for
-	 * @param {minMax} minMax The minimum and maximum
+	 * @param {{min: ?number, max: ?number}} minMax The minimum and maximum
 	 * @returns {number}
 	 */
 	async integer(data, guild, { min, max }) {
@@ -99,7 +93,7 @@ class SettingResolver extends Resolver {
 	 * Resolves a float
 	 * @param {any} data The data to resolve
 	 * @param {external:Guild} guild The guild this setting is for
-	 * @param {minMax} minMax The minimum and maximum
+	 * @param {{min: ?number, max: ?number}} minMax The minimum and maximum
 	 * @returns {number}
 	 */
 	async float(data, guild, { min, max }) {
