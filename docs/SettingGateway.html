@@ -33,7 +33,7 @@
 			<li class="dropdown">
 				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="ArgResolver.html">ArgResolver</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandStore.html">CommandStore</a></li><li><a href="Event.html">Event</a></li><li><a href="EventStore.html">EventStore</a></li><li><a href="Extendable.html">Extendable</a></li><li><a href="ExtendableStore.html">ExtendableStore</a></li><li><a href="Finalizer.html">Finalizer</a></li><li><a href="FinalizerStore.html">FinalizerStore</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorStore.html">InhibitorStore</a></li><li><a href="KlasaClient.html">KlasaClient</a></li><li><a href="Monitor.html">Monitor</a></li><li><a href="MonitorStore.html">MonitorStore</a></li><li><a href="PermissionLevels.html">PermissionLevels</a></li><li><a href="Provider.html">Provider</a></li><li><a href="ProviderStore.html">ProviderStore</a></li><li><a href="Resolver.html">Resolver</a></li><li><a href="SchemaManager.html">SchemaManager</a></li><li><a href="SettingGateway.html">SettingGateway</a></li><li><a href="SettingResolver.html">SettingResolver</a></li><li><a href="SQL.html">SQL</a></li><li><a href="Util.html">Util</a></li>
+					<li><a href="ArgResolver.html">ArgResolver</a></li><li><a href="CacheManager.html">CacheManager</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandStore.html">CommandStore</a></li><li><a href="Event.html">Event</a></li><li><a href="EventStore.html">EventStore</a></li><li><a href="Extendable.html">Extendable</a></li><li><a href="ExtendableStore.html">ExtendableStore</a></li><li><a href="Finalizer.html">Finalizer</a></li><li><a href="FinalizerStore.html">FinalizerStore</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorStore.html">InhibitorStore</a></li><li><a href="KlasaClient.html">KlasaClient</a></li><li><a href="Monitor.html">Monitor</a></li><li><a href="MonitorStore.html">MonitorStore</a></li><li><a href="PermissionLevels.html">PermissionLevels</a></li><li><a href="Provider.html">Provider</a></li><li><a href="ProviderStore.html">ProviderStore</a></li><li><a href="Resolver.html">Resolver</a></li><li><a href="SchemaManager.html">SchemaManager</a></li><li><a href="SettingGateway.html">SettingGateway</a></li><li><a href="SettingResolver.html">SettingResolver</a></li><li><a href="SQL.html">SQL</a></li><li><a href="Util.html">Util</a></li>
 				</ul>
 			</li>
 			
@@ -241,7 +241,7 @@
 
 
     <ul>
-        <li>CacheManager</li>
+        <li><a href="CacheManager.html">CacheManager</a></li>
     </ul>
 
 
@@ -693,6 +693,172 @@
             
 <hr>
 <dt>
+    <h4 class="name" id="delete"><span class="type-signature"></span>delete(guild)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Deletes a guild from cache
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>guild</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The guild id</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+	<dt class="inherited-from method-doc-label method-doc-details-label">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="CacheManager.html#delete">CacheManager#delete</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="CacheManager.html#delete">CacheManager#delete</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/settings/CacheManager.js#L49">lib/settings/CacheManager.js#L49</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
     <h4 class="name" id="destroy"><span class="type-signature">&lt;async> </span>destroy(guild)</h4>
     
     
@@ -928,6 +1094,11 @@
 	
 
     
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="CacheManager.html#get">CacheManager#get</a>
+    </li></ul></dd>
+    
 
     
 
@@ -984,6 +1155,126 @@
     <dd>
         
 <span class="param-type">Object</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="getAll"><span class="type-signature"></span>getAll()</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Gets all guilds from cache
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+	<dt class="inherited-from method-doc-label method-doc-details-label">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="CacheManager.html#getAll">CacheManager#getAll</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="CacheManager.html#getAll">CacheManager#getAll</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/settings/CacheManager.js#L28">lib/settings/CacheManager.js#L28</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    All guild setting objects
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array.&lt;Object></span>
 
 
 
@@ -1420,6 +1711,196 @@
     <dd>
         
 <span class="param-type">*</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="set"><span class="type-signature"></span>set(guild, data)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Sets a guild setting object to cache
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>guild</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The guild id</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The guild setting object</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+	<dt class="inherited-from method-doc-label method-doc-details-label">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="CacheManager.html#set">CacheManager#set</a>
+			</li>
+		</ul>
+	</dd>
+	
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="CacheManager.html#set">CacheManager#set</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/settings/CacheManager.js#L39">lib/settings/CacheManager.js#L39</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
 
 
 
