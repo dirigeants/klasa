@@ -1,5 +1,12 @@
+/**
+ * Converts usage strings into objects to compare against later
+ */
 class ParsedUsage {
 
+	/**
+	 * @param {KlasaClient} client The klasa client
+	 * @param {Command} command The command this parsed usage is for
+	 */
 	constructor(client, command) {
 		Object.defineProperty(this, 'client', { value: client });
 		this.names = [command.name, ...command.aliases];
@@ -10,11 +17,21 @@ class ParsedUsage {
 		this.nearlyFullUsage = `${this.commands}${this.deliminatedUsage}`;
 	}
 
+	/**
+	 * Creates a full usage string including prefix and commands/aliases for documentation/help purposes
+	 * @param {external:Message} msg a message to check to get the current prefix
+	 * @returns {string}
+	 */
 	fullUsage(msg) {
 		const prefix = msg.guildSettings.prefix;
 		return `${prefix.length !== 1 ? `${prefix} ` : prefix}${this.nearlyFullUsage}`;
 	}
 
+	/**
+	 * Method responsible for building the usage object to check against
+	 * @private
+	 * @returns {Object}
+	 */
 	parseUsage() {
 		let usage = {
 			tags: [],
