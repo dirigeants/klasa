@@ -26,8 +26,8 @@
 |           `user` , `mention` | A [User](https://discord.js.org/#/docs/main/master/class/User) instance returned from the user ID or mention.
 |                     `member` | A [GuildMember](https://discord.js.org/#/docs/main/master/class/GuildMember) instance returned from the member ID or mention.
 |            `cmd` , `command` | A {@link Command} instance returned from the command name or alias.
-|                      `event` | A {@link Event} instance returned from the event name.
-|                  `inhibitor` | A {@link Inhibitor} instance returned from the inhibitor name.
+|                      `event` | An {@link Event} instance returned from the event name.
+|                  `inhibitor` | An {@link Inhibitor} instance returned from the inhibitor name.
 |                  `finalizer` | A {@link Finalizer} instance returned from the finalizer name.
 |                    `monitor` | A {@link Monitor} instance returned from the monitor name.
 |                   `provider` | A {@link Provider} instance returned from the provider name.

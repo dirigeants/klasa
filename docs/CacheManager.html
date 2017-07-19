@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Klasa Externals</title>
+	<title>Klasa Class: CacheManager</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -86,14 +86,16 @@
 		<div id="main">
 			
 
-	<h1 class="page-title">Externals</h1>
+	<h1 class="page-title">Class: CacheManager</h1>
 <section>
 
 <header>
     
         <h2>
-        
+        CacheManager
         </h2>
+        
+            <div class="class-description">Manages the local cache</div>
         
     
 </header>
@@ -103,8 +105,74 @@
     <div class="container-overview">
     
         
+<hr>
+<dt>
+    <h4 class="name" id="CacheManager"><span class="type-signature"></span>new CacheManager(client)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
 
         
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>client</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="KlasaClient.html">KlasaClient</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The Klasa client</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
 <dl class="details">
     
 
@@ -135,6 +203,10 @@
 
 
 	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/settings/CacheManager.js#L9">lib/settings/CacheManager.js#L9</a>	</dd>
+	
 
 	
 
@@ -144,7 +216,21 @@
 </dl>
 
 
-        
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
     
     </div>
 
@@ -153,95 +239,607 @@
     
 
     
-        <h3 class="subsection-title">Classes</h3>
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
 
         <dl>
-            <dt><a href="ArgResolver.html">ArgResolver</a></dt>
-            <dd></dd>
+            
+<hr>
+<dt>
+    <h4 class="name" id="delete"><span class="type-signature"></span>delete(guild)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Deletes a guild from cache
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
         
-            <dt><a href="CacheManager.html">CacheManager</a></dt>
-            <dd></dd>
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
         
-            <dt><a href="Command.html">Command</a></dt>
-            <dd></dd>
+        <th>Name</th>
         
-            <dt><a href="CommandMessage.html">CommandMessage</a></dt>
-            <dd></dd>
+
+        <th>Type</th>
+
         
-            <dt><a href="CommandStore.html">CommandStore</a></dt>
-            <dd></dd>
+
         
-            <dt><a href="Event.html">Event</a></dt>
-            <dd></dd>
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>guild</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The guild id</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/settings/CacheManager.js#L49">lib/settings/CacheManager.js#L49</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
         
-            <dt><a href="EventStore.html">EventStore</a></dt>
-            <dd></dd>
+<span class="param-type">void</span>
+
+
+
+    </dd>
+</dl>
+
+
         
-            <dt><a href="Extendable.html">Extendable</a></dt>
-            <dd></dd>
+
+    
+</dd>
+
         
-            <dt><a href="ExtendableStore.html">ExtendableStore</a></dt>
-            <dd></dd>
+            
+<hr>
+<dt>
+    <h4 class="name" id="get"><span class="type-signature"></span>get(guild)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Gets a guild from cache
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
         
-            <dt><a href="Finalizer.html">Finalizer</a></dt>
-            <dd></dd>
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
         
-            <dt><a href="FinalizerStore.html">FinalizerStore</a></dt>
-            <dd></dd>
+        <th>Name</th>
         
-            <dt><a href="Inhibitor.html">Inhibitor</a></dt>
-            <dd></dd>
+
+        <th>Type</th>
+
         
-            <dt><a href="InhibitorStore.html">InhibitorStore</a></dt>
-            <dd></dd>
+
         
-            <dt><a href="KlasaClient.html">KlasaClient</a></dt>
-            <dd></dd>
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>guild</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The guild id</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/settings/CacheManager.js#L19">lib/settings/CacheManager.js#L19</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    The guild setting object
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
         
-            <dt><a href="Monitor.html">Monitor</a></dt>
-            <dd></dd>
+<span class="param-type">Object</span>
+
+
+
+    </dd>
+</dl>
+
+
         
-            <dt><a href="MonitorStore.html">MonitorStore</a></dt>
-            <dd></dd>
+
+    
+</dd>
+
         
-            <dt><a href="ParsedUsage.html">ParsedUsage</a></dt>
-            <dd></dd>
+            
+<hr>
+<dt>
+    <h4 class="name" id="getAll"><span class="type-signature"></span>getAll()</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Gets all guilds from cache
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/settings/CacheManager.js#L28">lib/settings/CacheManager.js#L28</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    All guild setting objects
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
         
-            <dt><a href="PermissionLevels.html">PermissionLevels</a></dt>
-            <dd></dd>
+<span class="param-type">Array.&lt;Object></span>
+
+
+
+    </dd>
+</dl>
+
+
         
-            <dt><a href="Provider.html">Provider</a></dt>
-            <dd></dd>
+
+    
+</dd>
+
         
-            <dt><a href="ProviderStore.html">ProviderStore</a></dt>
-            <dd></dd>
+            
+<hr>
+<dt>
+    <h4 class="name" id="set"><span class="type-signature"></span>set(guild, data)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Sets a guild setting object to cache
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
         
-            <dt><a href="Resolver.html">Resolver</a></dt>
-            <dd></dd>
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
         
-            <dt><a href="SchemaManager.html">SchemaManager</a></dt>
-            <dd></dd>
+        <th>Name</th>
         
-            <dt><a href="SettingGateway.html">SettingGateway</a></dt>
-            <dd></dd>
+
+        <th>Type</th>
+
         
-            <dt><a href="SettingResolver.html">SettingResolver</a></dt>
-            <dd></dd>
+
         
-            <dt><a href="SQL.html">SQL</a></dt>
-            <dd></dd>
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>guild</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The guild id</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The guild setting object</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/settings/CacheManager.js#L39">lib/settings/CacheManager.js#L39</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
         
-            <dt><a href="Util.html">Util</a></dt>
-            <dd></dd>
+<span class="param-type">void</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
         </dl>
-    
-
-    
-
-    
-
-    
-
     
 
     
