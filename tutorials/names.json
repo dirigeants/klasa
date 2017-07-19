@@ -1,0 +1,31 @@
+ {
+     "GettingStarted": {
+         "title": "Getting Started",
+         "children": {
+             "CreatingCommands": {
+                 "title": "Creating Commands"
+             },
+             "CreatingEvents": {
+                 "title": "Creating Events"
+             },
+             "CreatingExtendables": {
+                 "title": "Creating Extendables"
+             },
+             "CreatingFinalizers": {
+                 "title": "Creating Finalizers"
+             },
+             "CreatingInhibitors": {
+                 "title": "Creating Inhibitors"
+             },
+             "CreatingMonitors": {
+                 "title": "Creating Monitors"
+             },
+             "CreatingProviders": {
+                 "title": "Creating Providers"
+             }
+         }
+     },
+     "CreatingUsageStrings": {
+         "title": "Understanding Usage Strings"
+     }
+ }
