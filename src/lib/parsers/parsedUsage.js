@@ -10,7 +10,7 @@ class ParsedUsage {
 	constructor(client, command) {
 		/**
 		 * The client this CommandMessage was created with.
-		 * @name CommandMessage#client
+		 * @name ParsedUsage#client
 		 * @type {KlasaClient}
 		 * @readonly
 		 */
