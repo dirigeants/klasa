@@ -8,12 +8,48 @@ class ParsedUsage {
 	 * @param {Command} command The command this parsed usage is for
 	 */
 	constructor(client, command) {
+		/**
+		 * The client this CommandMessage was created with.
+		 * @name CommandMessage#client
+		 * @type {KlasaClient}
+		 * @readonly
+		 */
 		Object.defineProperty(this, 'client', { value: client });
+
+		/**
+		 * All names and aliases for the command
+		 * @type {string[]}
+		 */
 		this.names = [command.name, ...command.aliases];
+
+		/**
+		 * The compiled string for all names/aliases in a usage string
+		 * @type {string}
+		 */
 		this.commands = this.names.length === 1 ? this.names[0] : `(${this.names.join('|')})`;
+
+		/**
+		 * The usage string re-deliminated with the usageDelim
+		 * @type {string}
+		 */
 		this.deliminatedUsage = command.usageString !== '' ? ` ${command.usageString.split(' ').join(command.usageDelim)}` : '';
+
+		/**
+		 * The usage string
+		 * @type {string}
+		 */
 		this.usageString = command.usageString;
+
+		/**
+		 * The usage object to compare against later
+		 * @type {Object[]}
+		 */
 		this.parsedUsage = this.parseUsage();
+
+		/**
+		 * The concatenated string of this.commands and this.deliminatedUsage
+		 * @type {string}
+		 */
 		this.nearlyFullUsage = `${this.commands}${this.deliminatedUsage}`;
 	}
 
