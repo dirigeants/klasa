@@ -155,3 +155,12 @@ The example above is the JSON provider used in klasa, and interfacing with the s
 Providers are stored in the main `client` object, in the `providers` property. This has an entry
 for each provider added, based on its `name`. So for example if you have it set as
 `sqlite` , you can access it through `client.providers.get("sqlite");`.
+
+
+## Further Reading:
+- {@tutorial CreatingCommands}
+- {@tutorial CreatingEvents}
+- {@tutorial CreatingExtendables}
+- {@tutorial CreatingFinalizers}
+- {@tutorial CreatingInhibitors}
+- {@tutorial CreatingMonitors}

@@ -45,3 +45,12 @@ exists and its value is above `0`).
 This finalizer, unlike commandCooldown, it's only run if the property `cmdLogging` of
 your Komada's configs is set to `true`. It prints in the cmd prompt the command run, where,
 the user who ran it, and the time it took to process the command.
+
+
+## Further Reading:
+- {@tutorial CreatingCommands}
+- {@tutorial CreatingEvents}
+- {@tutorial CreatingExtendables}
+- {@tutorial CreatingInhibitors}
+- {@tutorial CreatingMonitors}
+- {@tutorial CreatingProviders}

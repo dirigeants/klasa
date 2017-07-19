@@ -1,177 +1,31 @@
  {
      "GettingStarted": {
-        "title": "Getting Started",
-		"children": [
-			"CreatingCommands",
-			"CreatingEvents",
-			"CreatingFinalizers",
-			"CreatingInhibitors",
-			"CreatingMonitors",
-			"CreatingProviders"
-		]
+         "title": "Getting Started",
+         "children": {
+             "CreatingCommands": {
+                 "title": "Creating Commands"
+             },
+             "CreatingEvents": {
+                 "title": "Creating Events"
+             },
+             "CreatingExtendables": {
+                 "title": "Creating Extendables"
+             },
+             "CreatingFinalizers": {
+                 "title": "Creating Finalizers"
+             },
+             "CreatingInhibitors": {
+                 "title": "Creating Inhibitors"
+             },
+             "CreatingMonitors": {
+                 "title": "Creating Monitors"
+             },
+             "CreatingProviders": {
+                 "title": "Creating Providers"
+             }
+         }
      },
      "CreatingUsageStrings": {
-		"title": "Understanding Usage Strings"
-	 },
-	"CreatingCommands": {
-	"title": "Creating Commands",
-	"children": {
-		"CreatingEvents": {
-			"title": "Creating Events"
-		},
-		"CreatingExtendables": {
-			"title": "Creating Extendables"
-		},
-		"CreatingFinalizers": {
-			"title": "Creating Finalizers"
-		},
-		"CreatingInhibitors": {
-			"title": "Creating Inhibitors"
-		},
-		"CreatingMonitors": {
-			"title": "Creating Monitors"
-		},
-		"CreatingProviders": {
-			"title": "Creating Providers"
-		}
-	}
-	},
-	"CreatingEvents": {
-	"title": "Creating Events",
-	"children": {
-		"CreatingCommands": {
-			"title": "Creating Commands"
-		},
-		"CreatingExtendables": {
-			"title": "Creating Extendables"
-		},
-		"CreatingFinalizers": {
-			"title": "Creating Finalizers"
-		},
-		"CreatingInhibitors": {
-			"title": "Creating Inhibitors"
-		},
-		"CreatingMonitors": {
-			"title": "Creating Monitors"
-		},
-		"CreatingProviders": {
-			"title": "Creating Providers"
-		}
-	}
-	},
-	"CreatingExtendables": {
-	"title": "Creating Extendables",
-	"children": {
-		"CreatingCommands": {
-			"title": "Creating Commands"
-		},
-		"CreatingEvents": {
-			"title": "Creating Events"
-		},
-		"CreatingFinalizers": {
-			"title": "Creating Finalizers"
-		},
-		"CreatingInhibitors": {
-			"title": "Creating Inhibitors"
-		},
-		"CreatingMonitors": {
-			"title": "Creating Monitors"
-		},
-		"CreatingProviders": {
-			"title": "Creating Providers"
-		}
-	}
-	},
-	"CreatingFinalizers": {
-	"title": "Creating Finalizers",
-	"children": {
-		"CreatingCommands": {
-			"title": "Creating Commands"
-		},
-		"CreatingEvents": {
-			"title": "Creating Events"
-		},
-		"CreatingExtendables": {
-			"title": "Creating Extendables"
-		},
-		"CreatingInhibitors": {
-			"title": "Creating Inhibitors"
-		},
-		"CreatingMonitors": {
-			"title": "Creating Monitors"
-		},
-		"CreatingProviders": {
-			"title": "Creating Providers"
-		}
-	}
-	},
-	"CreatingInhibitors": {
-	"title": "Creating Inhibitors",
-	"children": {
-		"CreatingCommands": {
-			"title": "Creating Commands"
-		},
-		"CreatingEvents": {
-			"title": "Creating Events"
-		},
-		"CreatingExtendables": {
-			"title": "Creating Extendables"
-		},
-		"CreatingFinalizers": {
-			"title": "Creating Finalizers"
-		},
-		"CreatingMonitors": {
-			"title": "Creating Monitors"
-		},
-		"CreatingProviders": {
-			"title": "Creating Providers"
-		}
-	}
-	},
-	"CreatingMonitors": {
-	"title": "Creating Monitors",
-	"children": {
-		"CreatingCommands": {
-			"title": "Creating Commands"
-		},
-		"CreatingEvents": {
-			"title": "Creating Events"
-		},
-		"CreatingExtendables": {
-			"title": "Creating Extendables"
-		},
-		"CreatingFinalizers": {
-			"title": "Creating Finalizers"
-		},
-		"CreatingInhibitors": {
-			"title": "Creating Inhibitors"
-		},
-		"CreatingProviders": {
-			"title": "Creating Providers"
-		}
-	}
-	},
-	"CreatingProviders": {
-		"title": "Creating Providers",
-	"children": {
-		"CreatingCommands": {
-			"title": "Creating Commands"
-		},
-		"CreatingEvents": {
-			"title": "Creating Events"
-		},
-		"CreatingExtendables": {
-			"title": "Creating Extendables"
-		},
-		"CreatingFinalizers": {
-			"title": "Creating Finalizers"
-		},
-		"CreatingInhibitors": {
-			"title": "Creating Inhibitors"
-		},
-		"CreatingMonitors": {
-			"title": "Creating Monitors"
-		}
-	}
-	}
+         "title": "Understanding Usage Strings"
+     }
  }

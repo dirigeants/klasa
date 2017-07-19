@@ -37,3 +37,12 @@ module.exports = class extends Inhibitor {
 a boolean. Set to false to completely disable this inhibitor, it cannot be forcefully enabled.
 - **spamProtection**: Represents if the inhibitor is meant to prevent bot/command spam. Setting
 spamProtection to true will prevent the inhibitor to run while doing tasks such as generating help.
+
+
+## Further Reading:
+- {@tutorial CreatingCommands}
+- {@tutorial CreatingEvents}
+- {@tutorial CreatingExtendables}
+- {@tutorial CreatingFinalizers}
+- {@tutorial CreatingMonitors}
+- {@tutorial CreatingProviders}

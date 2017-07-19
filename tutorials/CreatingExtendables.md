@@ -74,3 +74,12 @@ module.exports = class extends Extendable {
 ```
 
 Where `prompt()` is your prompt function.
+
+
+## Further Reading:
+- {@tutorial CreatingCommands}
+- {@tutorial CreatingEvents}
+- {@tutorial CreatingFinalizers}
+- {@tutorial CreatingInhibitors}
+- {@tutorial CreatingMonitors}
+- {@tutorial CreatingProviders}
