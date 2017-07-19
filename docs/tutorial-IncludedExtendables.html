@@ -91,7 +91,134 @@
 </header>
 
 <article>
-    <h2>get attachable</h2><h2>get embedable</h2><h2>get guildSettings</h2><h2>get postable</h2><h2>get reactable</h2><h2>get readable</h2><h2>get settings</h2><h2>get usableCommands</h2><h2>hasAtleastPermissionLevel</h2><h2>send</h2><h2>sendCode</h2><h2>sendEmbed</h2><h2>sendFile</h2><h2>sendFiles</h2><h2>sendMessage</h2>
+    <h2>get attachable</h2><p>A getter to check and see if you can attach files in the channel.</p>
+<p><strong>Applies to:</strong></p>
+<ul>
+<li><a href="external-GroupDMChannel.html"><code>external:GroupDMChannel</code></a></li>
+<li><a href="external-DMChannel.html"><code>external:DMChannel</code></a></li>
+<li><a href="external-TextChannel.html"><code>external:TextChannel</code></a>
+<strong>Source:</strong>
+<a href="https://github.com/dirigeants/klasa/blob/master/src/extendables/get_attachable.js">extendables/get_attachable.js</a></li>
+</ul>
+<h2>get embedable</h2><p>A getter to check and see if you can embed links in the channel.</p>
+<p><strong>Applies to:</strong></p>
+<ul>
+<li><a href="external-GroupDMChannel.html"><code>external:GroupDMChannel</code></a></li>
+<li><a href="external-DMChannel.html"><code>external:DMChannel</code></a></li>
+<li><a href="external-TextChannel.html"><code>external:TextChannel</code></a>
+<strong>Source:</strong>
+<a href="https://github.com/dirigeants/klasa/blob/master/src/extendables/get_embedable.js">extendables/get_embedable.js</a></li>
+</ul>
+<h2>get guildSettings</h2><p>A getter to check get either the guild settings if in a guild, or the default bot settings in dm/group dm.</p>
+<p><strong>Applies to:</strong></p>
+<ul>
+<li><a href="external-Message.html"><code>external:Message</code></a>
+<strong>Source:</strong>
+<a href="https://github.com/dirigeants/klasa/blob/master/src/extendables/get_guildSettings.js">extendables/get_guildSettings.js</a></li>
+</ul>
+<h2>get postable</h2><p>A getter to check and see if you can send messages in the channel.</p>
+<p><strong>Applies to:</strong></p>
+<ul>
+<li><a href="external-GroupDMChannel.html"><code>external:GroupDMChannel</code></a></li>
+<li><a href="external-DMChannel.html"><code>external:DMChannel</code></a></li>
+<li><a href="external-TextChannel.html"><code>external:TextChannel</code></a>
+<strong>Source:</strong>
+<a href="https://github.com/dirigeants/klasa/blob/master/src/extendables/get_postable.js">extendables/get_postable.js</a></li>
+</ul>
+<h2>get reactable</h2><p>A getter to check and see if you can react in the channel.</p>
+<p><strong>Applies to:</strong></p>
+<ul>
+<li><a href="external-GroupDMChannel.html"><code>external:GroupDMChannel</code></a></li>
+<li><a href="external-DMChannel.html"><code>external:DMChannel</code></a></li>
+<li><a href="external-TextChannel.html"><code>external:TextChannel</code></a>
+<strong>Source:</strong>
+<a href="https://github.com/dirigeants/klasa/blob/master/src/extendables/get_reactable.js">extendables/get_reactable.js</a></li>
+</ul>
+<h2>get readable</h2><p>A getter to check and see if you can read in the channel.</p>
+<p><strong>Applies to:</strong></p>
+<ul>
+<li><a href="external-GroupDMChannel.html"><code>external:GroupDMChannel</code></a></li>
+<li><a href="external-DMChannel.html"><code>external:DMChannel</code></a></li>
+<li><a href="external-TextChannel.html"><code>external:TextChannel</code></a>
+<strong>Source:</strong>
+<a href="https://github.com/dirigeants/klasa/blob/master/src/extendables/get_readable.js">extendables/get_readable.js</a></li>
+</ul>
+<h2>get settings</h2><p>A getter to get the settings in a guild.</p>
+<p><strong>Applies to:</strong></p>
+<ul>
+<li><a href="external-Guild.html"><code>external:Guild</code></a>
+<strong>Source:</strong>
+<a href="https://github.com/dirigeants/klasa/blob/master/src/extendables/get_settings.js">extendables/get_settings.js</a></li>
+</ul>
+<h2>get usableCommands</h2><p>A getter to return a collection of usable commands by the message author/member.</p>
+<p><strong>Applies to:</strong></p>
+<ul>
+<li><a href="external-Message.html"><code>external:Message</code></a>
+<strong>Source:</strong>
+<a href="https://github.com/dirigeants/klasa/blob/master/src/extendables/get_usableCommands.js">extendables/get_usableCommands.js</a></li>
+</ul>
+<h2>hasAtleastPermissionLevel(permission:number)</h2><p>Checks to see if the author/member has atleast the Permission level passed.</p>
+<p><strong>Applies to:</strong></p>
+<ul>
+<li><a href="external-Message.html"><code>external:Message</code></a>
+<strong>Source:</strong>
+<a href="https://github.com/dirigeants/klasa/blob/master/src/extendables/hasAtleastPermissionLevel.js">extendables/hasAtleastPermissionLevel.js</a></li>
+</ul>
+<h2>send(content:string, options:Object)</h2><p>A shortcut to channel.send, but also makes the response an editable command.</p>
+<p><strong>Applies to:</strong></p>
+<ul>
+<li><a href="external-Message.html"><code>external:Message</code></a>
+<strong>Source:</strong>
+<a href="https://github.com/dirigeants/klasa/blob/master/src/extendables/send.js">extendables/send.js</a></li>
+</ul>
+<h2>sendCode</h2><p>A shortcut to channel.send, but also makes the response an editable command.</p>
+<p><strong>Applies to:</strong></p>
+<ul>
+<li><a href="external-Message.html"><code>external:Message</code></a></li>
+<li><a href="external-GroupDMChannel.html"><code>external:GroupDMChannel</code></a></li>
+<li><a href="external-DMChannel.html"><code>external:DMChannel</code></a></li>
+<li><a href="external-TextChannel.html"><code>external:TextChannel</code></a>
+<strong>Source:</strong>
+<a href="https://github.com/dirigeants/klasa/blob/master/src/extendables/sendCode.js">extendables/sendCode.js</a></li>
+</ul>
+<h2>sendEmbed</h2><p>A shortcut to channel.send, but also makes the response an editable command.</p>
+<p><strong>Applies to:</strong></p>
+<ul>
+<li><a href="external-Message.html"><code>external:Message</code></a></li>
+<li><a href="external-GroupDMChannel.html"><code>external:GroupDMChannel</code></a></li>
+<li><a href="external-DMChannel.html"><code>external:DMChannel</code></a></li>
+<li><a href="external-TextChannel.html"><code>external:TextChannel</code></a>
+<strong>Source:</strong>
+<a href="https://github.com/dirigeants/klasa/blob/master/src/extendables/sendEmbed.js">extendables/sendEmbed.js</a></li>
+</ul>
+<h2>sendFile</h2><p>A alias to channel.send({files:{file:....</p>
+<p><strong>Applies to:</strong></p>
+<ul>
+<li><a href="external-GroupDMChannel.html"><code>external:GroupDMChannel</code></a></li>
+<li><a href="external-DMChannel.html"><code>external:DMChannel</code></a></li>
+<li><a href="external-TextChannel.html"><code>external:TextChannel</code></a>
+<strong>Source:</strong>
+<a href="https://github.com/dirigeants/klasa/blob/master/src/extendables/sendFile.js">extendables/sendFile.js</a></li>
+</ul>
+<h2>sendFiles</h2><p>A alias to channel.send({files:...</p>
+<p><strong>Applies to:</strong></p>
+<ul>
+<li><a href="external-GroupDMChannel.html"><code>external:GroupDMChannel</code></a></li>
+<li><a href="external-DMChannel.html"><code>external:DMChannel</code></a></li>
+<li><a href="external-TextChannel.html"><code>external:TextChannel</code></a>
+<strong>Source:</strong>
+<a href="https://github.com/dirigeants/klasa/blob/master/src/extendables/sendFiles.js">extendables/sendFiles.js</a></li>
+</ul>
+<h2>sendMessage</h2><p>A shortcut to channel.send, but also makes the response an editable command.</p>
+<p><strong>Applies to:</strong></p>
+<ul>
+<li><a href="external-Message.html"><code>external:Message</code></a></li>
+<li><a href="external-GroupDMChannel.html"><code>external:GroupDMChannel</code></a></li>
+<li><a href="external-DMChannel.html"><code>external:DMChannel</code></a></li>
+<li><a href="external-TextChannel.html"><code>external:TextChannel</code></a>
+<strong>Source:</strong>
+<a href="https://github.com/dirigeants/klasa/blob/master/src/extendables/sendMessage.js">extendables/sendMessage.js</a></li>
+</ul>
 </article>
 
 
