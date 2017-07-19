@@ -1,6 +1,6 @@
  {
      "GettingStarted": {
-         "title": "Getting Started",
+        "title": "Getting Started",
 		"children": [
 			"CreatingCommands",
 			"CreatingEvents",
