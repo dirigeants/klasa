@@ -3,7 +3,12 @@
          "title": "Getting Started",
          "children": {
              "CreatingCommands": {
-                 "title": "Creating Commands"
+                 "title": "Creating Commands",
+                 "children": {
+                     "CreatingUsageStrings": {
+                         "title": "Understanding Usage Strings"
+                     }
+                 }
              },
              "CreatingEvents": {
                  "title": "Creating Events"
