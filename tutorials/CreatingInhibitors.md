@@ -1,5 +1,3 @@
-# Creating Inhibitors
-
 Inhibitors are only ran on commands. They are used to check a variety of conditions
 before a command is ever ran, such as checking if a user has the right amount of permissions
 to use a command. Inhibitors are loaded as core first, and if your code contains a inhibitor

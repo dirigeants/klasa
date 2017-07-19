@@ -1,5 +1,3 @@
-# Creating Extendables
-
 Extendables are functions that extend current Discord.js classes by adding methods or properties.
 
 Extendables have the following syntax:

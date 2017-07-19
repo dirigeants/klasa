@@ -1,5 +1,3 @@
-# Creating Monitors
-
 Monitors are special in that they will always run on any message. This is particularly
 useful when you need to do checking on the message, such as checking if a message
 contains a vulgar word (profanity filter). They are almost completely identical to

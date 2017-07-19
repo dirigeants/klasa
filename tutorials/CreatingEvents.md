@@ -1,5 +1,3 @@
-# Creating Event Handlers
-
 Events are placed in `./events/`. If a conflicting event is present in both the core and your client, *only your client version* is loaded and will run when that event is triggered.
 
 Their structure is the following:

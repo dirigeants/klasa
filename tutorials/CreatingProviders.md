@@ -1,5 +1,3 @@
-# Creating Data Providers
-
 Data Providers are special classes designed to make your life easier when you're
 using a **database**, there's **no** rule to make them. By default, Klasa uses
 JSON to store per-guild configuration.

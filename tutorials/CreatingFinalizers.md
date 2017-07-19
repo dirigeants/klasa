@@ -1,5 +1,3 @@
-# Creating Finalizers
-
 Finalizers are functions run after successful commands, and this is the reason of why all commands **must** return an
 [Object Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise).
 
