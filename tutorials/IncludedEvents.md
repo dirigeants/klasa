@@ -1,0 +1,10 @@
+## debug
+## disconnect
+## error
+## guildCreate
+## guildDelete
+## log
+## message
+## messageBulkDelete
+## messageUpdate
+## warn

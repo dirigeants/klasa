@@ -269,6 +269,8 @@ class KlasaClient extends Discord.Client {
 	 */
 	async _ready() {
 		this.config.prefixMention = new RegExp(`^<@!?${this.user.id}>`);
+		if (this.config.ignoreBots === undefined) this.config.ignoreBots = true;
+		if (this.config.ignoreSelf === undefined) this.config.ignoreSelf = this.user.bot;
 		if (this.user.bot) this.application = await super.fetchApplication();
 		if (!this.config.ownerID) this.config.ownerID = this.user.bot ? this.application.owner.id : this.user.id;
 		await this.providers.init();

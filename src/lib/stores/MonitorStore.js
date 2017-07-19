@@ -110,7 +110,7 @@ class MonitorStore extends Collection {
 	 */
 	run(msg) {
 		this.forEach(monit => {
-			if (monit.conf.enabled && !(monit.conf.ignoreBots && msg.author.bot) && !(monit.conf.ignoreSelf && this.client.user === msg.author)) monit.run(msg);
+			if (monit.enabled && !(monit.ignoreBots && msg.author.bot) && !(monit.ignoreSelf && this.client.user === msg.author)) monit.run(msg);
 		});
 	}
 
