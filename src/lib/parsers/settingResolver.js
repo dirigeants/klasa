@@ -66,7 +66,9 @@ class SettingResolver extends Resolver {
 	 * Resolves a string
 	 * @param {any} data The data to resolve
 	 * @param {external:Guild} guild The guild this setting is for
-	 * @param {{min: ?number, max: ?number}} minMax The minimum and maximum
+	 * @param {Object} minMax The minimum and maximum
+	 * @param {?number} minMax.min The minumum value
+	 * @param {?number} minMax.max The maximum value
 	 * @returns {string}
 	 */
 	async string(data, guild, { min, max }) {
@@ -79,7 +81,9 @@ class SettingResolver extends Resolver {
 	 * Resolves a integer
 	 * @param {any} data The data to resolve
 	 * @param {external:Guild} guild The guild this setting is for
-	 * @param {{min: ?number, max: ?number}} minMax The minimum and maximum
+	 * @param {Object} minMax The minimum and maximum
+	 * @param {?number} minMax.min The minumum value
+	 * @param {?number} minMax.max The maximum value
 	 * @returns {number}
 	 */
 	async integer(data, guild, { min, max }) {
@@ -93,7 +97,9 @@ class SettingResolver extends Resolver {
 	 * Resolves a float
 	 * @param {any} data The data to resolve
 	 * @param {external:Guild} guild The guild this setting is for
-	 * @param {{min: ?number, max: ?number}} minMax The minimum and maximum
+	 * @param {Object} minMax The minimum and maximum
+	 * @param {?number} minMax.min The minumum value
+	 * @param {?number} minMax.max The maximum value
 	 * @returns {number}
 	 */
 	async float(data, guild, { min, max }) {
