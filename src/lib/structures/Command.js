@@ -117,7 +117,7 @@ class Command {
 		 * The full category for the command
 		 * @type {Array<string>}
 		 */
-		this.fullCategory = file.slice(-1);
+		this.fullCategory = file.slice(0, -1);
 
 		/**
 		 * The main category for the command
