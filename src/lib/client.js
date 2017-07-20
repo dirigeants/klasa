@@ -280,7 +280,7 @@ class KlasaClient extends Discord.Client {
 		await this.finalizers.init();
 		await this.monitors.init();
 		util.initClean(this);
-		this.setInterval(this.sweepCommandMessages.bind(this), this.commandMessageLifetime);
+		this.setInterval(this.sweepCommandMessages.bind(this), this.commandMessageSweep * 1000);
 		this.ready = true;
 		this.emit('log', this.config.readyMessage || `Successfully initialized. Ready to serve ${this.guilds.size} guilds.`);
 	}
