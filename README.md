@@ -21,6 +21,7 @@ Klasa offers a different interface than Komada, namly all pieces extend base cla
 ## What is different from Komada?
 
 There are a number of differences currently:
+- Client isn't passed to the `run` of pieces, it is built into the base pieces object and is accessable as `this.client`
 - Inhibitors are async in klasa, requiring rejection of undefined or a message if you want to inhibit the command
 - The piece stores (caches) aren't just Discord.Collections like in komada, they are extensions of collections which includes all loading, getting, setting, deleting, ect built right in and abstracted away. `<EventStore>.delete(eventName)` not only removes the event from the collection, but unregisters the event as a listener. `<CommandStore>.get(name)` not only gets the command if it's the command name, but if it's a command alias as well. ect.
 - No `<Client>.funcs`. All functions have been abstracted away into OOP paradigms, or moved to the util class (only functions which have no reason to ever change, such as `util.toTitleCase()` or `util.codeBlock()`). If you would like to add functions that are shared among multiple things, you can do so in the standard node.js way via `module.exports` and `require()`
