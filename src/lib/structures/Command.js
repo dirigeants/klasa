@@ -117,19 +117,19 @@ class Command {
 		 * The full category for the command
 		 * @type {Array<string>}
 		 */
-		this.fullCategory = file;
+		this.fullCategory = file.slice(-1);
 
 		/**
 		 * The main category for the command
 		 * @type {string}
 		 */
-		this.category = file[0] || 'General';
+		this.category = this.fullCategory[0] || 'General';
 
 		/**
 		 * The sub category for the command
 		 * @type {string}
 		 */
-		this.subCategory = file[1] || 'General';
+		this.subCategory = this.fullCategory[1] || 'General';
 
 		/**
 		 * The parsed usage for the command
