@@ -52,7 +52,7 @@ class Inhibitor {
 		 * If the inhibitor is enabled or not
 		 * @type {boolean}
 		 */
-		this.enabled = options.enabled || true;
+		this.enabled = 'enabled' in options ? options.enabled : true;
 
 		/**
 		 * If this inhibitor is meant for spamProtection (disables the inhibitor while generating help)

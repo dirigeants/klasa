@@ -53,7 +53,7 @@ class Provider {
 		 * If the provider is enabled or not
 		 * @type {boolean}
 		 */
-		this.enabled = options.enabled || true;
+		this.enabled = 'enabled' in options ? options.enabled : true;
 
 		/**
 		 * The description of the provider
@@ -65,7 +65,7 @@ class Provider {
 		 * If the provider provides to a sql datasource
 		 * @type {boolean}
 		 */
-		this.sql = options.sql || false;
+		this.sql = 'sql' in options ? options.sql : false;
 	}
 
 	/**

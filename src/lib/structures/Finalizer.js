@@ -51,7 +51,7 @@ class Finalizer {
 		 * If the finalizer is enabled or not
 		 * @type {boolean}
 		 */
-		this.enabled = options.enabled || true;
+		this.enabled = 'enabled' in options ? options.enabled : true;
 	}
 
 	/**

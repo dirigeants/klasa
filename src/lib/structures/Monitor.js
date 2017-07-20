@@ -53,19 +53,19 @@ class Monitor {
 		 * If the monitor is enabled or not
 		 * @type {boolean}
 		 */
-		this.enabled = options.enabled || true;
+		this.enabled = 'enabled' in options ? options.enabled : true;
 
 		/**
 		 * Whether the monitor ignores bots or not
 		 * @type {boolean}
 		 */
-		this.ignoreBots = options.ignoreBots || true;
+		this.ignoreBots = 'ignoreBots' in options ? options.ignoreBots : true;
 
 		/**
 		 * Whether the monitor ignores itself or not
 		 * @type {boolean}
 		 */
-		this.ignoreSelf = options.ignoreSelf || true;
+		this.ignoreSelf = 'ignoreSelf' in options ? options.ignoreSelf : true;
 	}
 
 	/**

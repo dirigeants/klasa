@@ -45,7 +45,7 @@ class Command {
 		 * If the command is enabled or not
 		 * @type {boolean}
 		 */
-		this.enabled = options.enabled || true;
+		this.enabled = 'enabled' in options ? options.enabled : true;
 
 		/**
 		 * What channels the command should run in
