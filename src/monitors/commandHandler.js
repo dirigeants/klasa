@@ -1,4 +1,4 @@
-const { Monitor } = require('klasa');
+const { Monitor, CommandMessage, util: { regExpEsc, newError } } = require('klasa');
 const now = require('performance-now');
 
 module.exports = class extends Monitor {
@@ -10,48 +10,34 @@ module.exports = class extends Monitor {
 	async run(msg) {
 		// Ignore other users if selfbot
 		if (!this.client.user.bot && msg.author.id !== this.client.user.id) return;
-		const res = await this.parseCommand(msg);
-		if (!res.command) return;
-		this.handleCommand(msg, res);
-	}
-
-	handleCommand(msg, { command, prefix, prefixLength }) {
+		const { command, prefix, prefixLength } = this.parseCommand(msg);
+		if (!command) return;
 		const validCommand = this.client.commands.get(command);
 		if (!validCommand) return;
 		const start = now();
 		this.client.inhibitors.run(msg, validCommand)
-			.then(() => {
-				const proxy = this.makeProxy(msg, new this.client.methods.CommandMessage(msg, validCommand, prefix, prefixLength));
-				this.runCommand(proxy, start);
-			})
+			.then(() => this.runCommand(this.makeProxy(msg, new CommandMessage(msg, validCommand, prefix, prefixLength)), start))
 			.catch((response) => msg.reply(response));
 	}
 
-	async parseCommand(msg, usage = false) {
-		const prefix = await this.getPrefix(msg);
-		if (!prefix) return false;
-		const prefixLength = this.getLength(msg, prefix);
-		if (usage) return prefixLength;
+	parseCommand(msg) {
+		const prefix = this.getPrefix(msg);
+		if (!prefix) return { command: false };
+		const prefixLength = prefix.exec(msg.content)[0].length;
 		return {
-			command: msg.content.slice(prefixLength).split(' ')[0].toLowerCase(),
+			command: msg.content.slice(prefixLength).trim().split(' ')[0].toLowerCase(),
 			prefix,
 			prefixLength
 		};
 	}
 
-	async getPrefix(msg) {
+	getPrefix(msg) {
 		if (this.client.config.prefixMention.test(msg.content)) return this.client.config.prefixMention;
 		const { prefix } = msg.guildSettings;
-		const { regExpEsc } = this.client.methods.util;
 		if (prefix instanceof Array) {
 			for (let i = prefix.length - 1; i >= 0; i--) if (msg.content.startsWith(prefix[i])) return new RegExp(`^${regExpEsc(prefix[i])}`);
 		} else if (prefix && msg.content.startsWith(prefix)) { return new RegExp(`^${regExpEsc(prefix)}`); }
 		return false;
-	}
-
-	getLength(msg, prefix) {
-		if (this.client.config.prefixMention === prefix) return prefix.exec(msg.content)[0].length + 1;
-		return prefix.exec(msg.content)[0].length;
 	}
 
 	makeProxy(msg, cmdMsg) {
@@ -85,10 +71,10 @@ module.exports = class extends Monitor {
 	}
 
 	async awaitMessage(msg, start, error) {
-		const message = await msg.channel.send(`<@!${msg.member.id}> | **${error}** | You have **30** seconds to respond to this prompt with a valid argument. Type **"ABORT"** to abort this prompt.`)
-			.catch((err) => { throw this.client.methods.util.newError(err); });
+		const message = await msg.channel.send(`<@!${msg.author.id}> | **${error}** | You have **30** seconds to respond to this prompt with a valid argument. Type **"ABORT"** to abort this prompt.`)
+			.catch((err) => { throw newError(err); });
 
-		const param = await msg.channel.awaitMessages(response => response.member.id === msg.author.id && response.id !== message.id, { max: 1, time: 30000, errors: ['time'] });
+		const param = await msg.channel.awaitMessages(response => response.author.id === msg.author.id && response.id !== message.id, { max: 1, time: 30000, errors: ['time'] });
 		if (param.first().content.toLowerCase() === 'abort') throw 'Aborted';
 		msg.args[msg.args.lastIndexOf(null)] = param.first().content;
 		msg.reprompted = true;
