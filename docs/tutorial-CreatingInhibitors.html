@@ -104,7 +104,8 @@ An inhibitor blocks a command by rejecting the promise, either with a string or 
 module.exports = class extends Inhibitor {
 
     constructor(...args) {
-        super(...args, 'myInhibitorName', {
+        super(...args, {
+            name: 'myInhibitorName',
             enabled: true,
             spamProtection: false
         });

@@ -139,7 +139,7 @@ and Message has both properties of <code>author</code> and <code>channel</code>.
 module.exports = class extends Extendable {
 
     constructor(...args) {
-        super(...args, 'prompt', ['Message']);
+        super(...args, ['Message'], { name: 'prompt' });
     }
 
     extend() {
