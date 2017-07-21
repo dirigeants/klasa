@@ -43,7 +43,7 @@ const process = async (client, msg, text, link, folder) => {
 		return client.emit('log', err, 'error');
 	}
 
-	const name = mod.exports.name;
+	const { name } = mod.exports;
 	const description = mod.exports.description || 'No description provided.';
 	const type = mod.exports.type || link;
 	const modules = mod.exports.requiredModules || 'No required modules.. Yay!';

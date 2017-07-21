@@ -59,7 +59,7 @@ class ParsedUsage {
 	 * @returns {string}
 	 */
 	fullUsage(msg) {
-		const prefix = msg.guildSettings.prefix;
+		const { prefix } = msg.guildSettings;
 		return `${prefix.length !== 1 ? `${prefix} ` : prefix}${this.nearlyFullUsage}`;
 	}
 
