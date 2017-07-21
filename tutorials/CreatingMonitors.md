@@ -14,7 +14,8 @@ const { Monitor } = require('klasa');
 module.exports = class extends Monitor {
 
 	constructor(...args) {
-		super(...args, 'yourMonitorName', {
+		super(...args, {
+			name: 'yourMonitorName',
 			enabled: true,
 			ignoreBots: true,
 			ignoreSelf: true

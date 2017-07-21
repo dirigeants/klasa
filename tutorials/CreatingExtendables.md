@@ -63,7 +63,7 @@ const { Extendable } = require('klasa');
 module.exports = class extends Extendable {
 
 	constructor(...args) {
-		super(...args, 'prompt', ['Message']);
+		super(...args, ['Message'], { name: 'prompt' });
 	}
 
 	extend() {

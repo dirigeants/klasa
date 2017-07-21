@@ -9,7 +9,8 @@ const { Finalizer } = require('klasa');
 module.exports = class extends Finalizer {
 
 	constructor(...args) {
-		super(...args, 'myFinalizerName', {
+		super(...args, {
+			name: 'myFinalizerName',
             enabled: true
         });
 	}
