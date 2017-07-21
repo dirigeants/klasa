@@ -3,7 +3,7 @@ const { Event } = require('klasa');
 module.exports = class extends Event {
 
 	constructor(...args) {
-		super(...args, 'debug', { enabled: false });
+		super(...args, { enabled: false });
 	}
 
 	run(warning) {

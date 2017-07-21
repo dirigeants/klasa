@@ -3,7 +3,7 @@ const { Command } = require('klasa');
 module.exports = class extends Command {
 
 	constructor(...args) {
-		super(...args, 'reload', {
+		super(...args, {
 			aliases: ['r'],
 			permLevel: 10,
 			description: "Reloads the klasa piece, if it's been updated or modified.",

@@ -9,6 +9,7 @@ class Command {
 
 	/**
 	 * @typedef {Object} CommandOptions
+	 * @property {string} [name = theFileName] The name of the command
 	 * @property {boolean} [enabled=true] Whether the command is enabled or not
 	 * @property {Array<string>} [runIn=['text','dm','group']] What channel types the command should run in
 	 * @property {number} [cooldown=0] The amount of time before the user can run the command again in seconds
@@ -26,10 +27,9 @@ class Command {
 	 * @param {KlasaClient} client The Klasa Client
 	 * @param {string} dir The path to the core or user command pieces folder
 	 * @param {Array} file The path from the pieces folder to the command file
-	 * @param {string} name The name of the command
 	 * @param {CommandOptions} [options = {}] Optional Command settings
 	 */
-	constructor(client, dir, file, name, options = {}) {
+	constructor(client, dir, file, options = {}) {
 		/**
 		 * @type {KlasaClient}
 		 */
@@ -87,7 +87,7 @@ class Command {
 		 * The name of the command
 		 * @type {string}
 		 */
-		this.name = name;
+		this.name = options.name || file[file.length - 1].slice(0, -3);
 
 		/**
 		 * The description of the command

@@ -12,7 +12,7 @@ const mod = { exports: {} };
 module.exports = class extends Command {
 
 	constructor(...args) {
-		super(...args, 'download', {
+		super(...args, {
 			enable: false,
 			permLevel: 10,
 			description: 'Downloads a piece, either from a link or our Pieces Repository, and installs it.',

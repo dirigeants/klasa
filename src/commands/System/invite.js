@@ -3,7 +3,7 @@ const { Command, util } = require('klasa');
 module.exports = class extends Command {
 
 	constructor(...args) {
-		super(...args, 'invite', {
+		super(...args, {
 			runIn: ['text'],
 			description: 'Displays the join server link of the bot.'
 		});

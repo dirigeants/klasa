@@ -3,10 +3,6 @@ const now = require('performance-now');
 
 module.exports = class extends Monitor {
 
-	constructor(...args) {
-		super(...args, 'commandHandler');
-	}
-
 	async run(msg) {
 		// Ignore other users if selfbot
 		if (!this.client.user.bot && msg.author.id !== this.client.user.id) return;

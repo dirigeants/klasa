@@ -7,6 +7,7 @@ class Inhibitor {
 
 	/**
 	 * @typedef {Object} InhibitorOptions
+	 * @property {string} [name = theFileName] The name of the inhibitor
 	 * @property {boolean} [enabled=true] Whether the inhibitor is enabled
 	 * @property {boolean} [spamProtection=false] If this inhibitor is meant for spamProtection (disables the inhibitor while generating help)
 	 */
@@ -15,10 +16,9 @@ class Inhibitor {
 	 * @param {KlasaClient} client The Klasa client
 	 * @param {string} dir The path to the core or user inhibitor pieces folder
 	 * @param {string} file The path from the pieces folder to the inhibitor file
-	 * @param {string} name The name of the inhibitor
 	 * @param {InhibitorOptions} [options = {}] Optional Inhibitor settings
 	 */
-	constructor(client, dir, file, name, options = {}) {
+	constructor(client, dir, file, options = {}) {
 		/**
 		 * @type {KlasaClient}
 		 */
@@ -40,7 +40,7 @@ class Inhibitor {
 		 * The name of the inhibitor
 		 * @type {string}
 		 */
-		this.name = name;
+		this.name = options.name || file.slice(0, -3);
 
 		/**
 		 * The type of Klasa piece this is

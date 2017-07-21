@@ -6,10 +6,6 @@ const clk = new chalk.constructor({ enabled: true });
 
 module.exports = class extends Finalizer {
 
-	constructor(...args) {
-		super(...args, 'commandLogging');
-	}
-
 	run(msg, mes, start) {
 		clk.enabled = !this.client.config.disableLogColor;
 		this.client.emit('log', [

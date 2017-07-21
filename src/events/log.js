@@ -7,10 +7,6 @@ const clk = new chalk.constructor({ enabled: true });
 
 module.exports = class extends Event {
 
-	constructor(...args) {
-		super(...args, 'log');
-	}
-
 	run(data, type = 'log') {
 		type = type.toLowerCase();
 

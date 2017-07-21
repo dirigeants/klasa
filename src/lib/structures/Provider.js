@@ -7,6 +7,7 @@ class Provider {
 
 	/**
 	 * @typedef {Object} ProviderOptions
+	 * @property {string} [name=theFileName] The name of the command
 	 * @property {boolean} [enabled=true] Whether the provider is enabled or not
 	 * @property {string} [description=''] The provider description
 	 * @property {boolean} [sql=false] If the provider provides to a sql datasource
@@ -16,10 +17,9 @@ class Provider {
 	 * @param {KlasaClient} client The Klasa client
 	 * @param {string} dir The path to the core or user provider pieces folder
 	 * @param {string} file The path from the pieces folder to the provider file
-	 * @param {string} name The name of the provider
 	 * @param {ProviderOptions} [options = {}] Optional Provider settings
 	 */
-	constructor(client, dir, file, name, options = {}) {
+	constructor(client, dir, file, options = {}) {
 		/**
 		 * @type {KlasaClient}
 		 */
@@ -41,7 +41,7 @@ class Provider {
 		 * The name of the provider
 		 * @type {string}
 		 */
-		this.name = name;
+		this.name = options.name || file.slice(0, -3);
 
 		/**
 		 * The type of Klasa piece this is

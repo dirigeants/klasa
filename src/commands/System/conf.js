@@ -4,7 +4,7 @@ const { inspect } = require('util');
 module.exports = class extends Command {
 
 	constructor(...args) {
-		super(...args, 'conf', {
+		super(...args, {
 			runIn: ['text'],
 			permLevel: 3,
 			description: 'Define per-server configuration.',

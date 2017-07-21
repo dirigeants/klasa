@@ -7,6 +7,7 @@ class Event {
 
 	/**
 	 * @typedef {Object} EventOptions
+	 * @property {string} [name = theFileName] The name of the event
 	 * @property {boolean} [enabled=true] Whether the event is enabled or not
 	 */
 
@@ -14,10 +15,9 @@ class Event {
 	 * @param {KlasaClient} client The klasa client
 	 * @param {string} dir The path to the core or user event pieces folder
 	 * @param {string} file The path from the pieces folder to the event file
-	 * @param {string} name The name of the event
 	 * @param {EventOptions} [options={}] The Event options
 	 */
-	constructor(client, dir, file, name, options = {}) {
+	constructor(client, dir, file, options = {}) {
 		/**
 		 * @type {KlasaClient}
 		 */
@@ -39,7 +39,7 @@ class Event {
 		 * The name of the event
 		 * @type {string}
 		 */
-		this.name = name;
+		this.name = options.name || file.slice(0, -3);
 
 		/**
 		 * The type of Klasa piece this is

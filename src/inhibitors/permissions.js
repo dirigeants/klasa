@@ -2,10 +2,6 @@ const { Inhibitor } = require('klasa');
 
 module.exports = class extends Inhibitor {
 
-	constructor(...args) {
-		super(...args, 'permissions');
-	}
-
 	async run(msg, cmd) {
 		const min = typeof cmd === 'number' ? cmd : cmd.permLevel;
 		const mps = [];
