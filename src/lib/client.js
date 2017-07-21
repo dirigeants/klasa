@@ -25,6 +25,7 @@ class KlasaClient extends Discord.Client {
 	 * @typedef {Object} KlasaClientConfig
 	 * @property {DiscordJSConfig} clientOptions The options to pass to D.JS
 	 * @property {string} prefix The default prefix the bot should respond to
+	 * @property {string} [clientBaseDir=process.cwd()] The directory where all piece folders can be found
 	 * @property {number} [commandMessageLifetime=1800] The threshold for how old command messages can be before sweeping since the last edit in seconds
 	 * @property {number} [commandMessageSweep=900] The interval duration for which command messages should be sweept in seconds
 	 * @property {object} [provider] The provider to use in Klasa
@@ -62,7 +63,7 @@ class KlasaClient extends Discord.Client {
 		 * The directory where the user files are at
 		 * @type {string}
 		 */
-		this.clientBaseDir = process.cwd();
+		this.clientBaseDir = config.clientBaseDir || process.cwd();
 
 		/**
 		 * The argument resolver
