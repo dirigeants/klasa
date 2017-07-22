@@ -13,7 +13,9 @@ module.exports = class extends Monitor {
 		const start = now();
 		this.client.inhibitors.run(msg, validCommand)
 			.then(() => this.runCommand(this.makeProxy(msg, new CommandMessage(msg, validCommand, prefix, prefixLength)), start))
-			.catch((response) => msg.reply(response));
+			.catch((response) => {
+				if (response) msg.reply(response);
+			});
 	}
 
 	parseCommand(msg) {
