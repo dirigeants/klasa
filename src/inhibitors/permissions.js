@@ -13,7 +13,7 @@ module.exports = class extends Inhibitor {
 				break;
 			}
 		}
-		const responses = Promise.all(mps);
+		const responses = await Promise.all(mps);
 		if (responses.includes(true)) return;
 		throw broke ? 'You do not have permission to use this command' : undefined;
 	}
