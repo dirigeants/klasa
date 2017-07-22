@@ -5,11 +5,17 @@ module.exports = class extends Inhibitor {
 	async run(msg, cmd) {
 		const min = typeof cmd === 'number' ? cmd : cmd.permLevel;
 		const mps = [];
+		let broke = false;
 		for (let i = min; i < 11; i++) {
 			mps.push(this.client.permStructure[i].check(this.client, msg));
-			if (this.client.permStructure[i].break) break;
+			if (this.client.permStructure[i].break) {
+				broke = true;
+				break;
+			}
 		}
-		return Promise.race(mps).catch(() => { throw 'You do not have permission to use this command.'; });
+		const responses = Promise.all(mps);
+		if (responses.includes(true)) return;
+		throw broke ? 'You do not have permission to use this command' : undefined;
 	}
 
 };
