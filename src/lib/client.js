@@ -210,9 +210,9 @@ class KlasaClient extends Discord.Client {
 				const adminRole = msg.guild.roles.get(msg.guild.settings.adminRole);
 				return adminRole && msg.member.roles.has(adminRole.id);
 			})
-			.addLevel(4, false, (client, msg) => msg.guild && msg.author.id === msg.guild.owner.id)
-			.addLevel(9, true, (client, msg) => msg.author.id === client.config.ownerID)
-			.addLevel(10, false, (client, msg) => msg.author.id === client.config.ownerID);
+			.addLevel(4, false, (client, msg) => msg.guild && msg.author === msg.guild.owner)
+			.addLevel(9, true, (client, msg) => msg.author === client.owner)
+			.addLevel(10, false, (client, msg) => msg.author === client.owner);
 
 		const structure = this.config.permStructure instanceof PermLevels ? this.config.permStructure.structure : null;
 		const permStructure = structure || this.config.permStructure || defaultPermStructure.structure;
@@ -253,6 +253,15 @@ class KlasaClient extends Discord.Client {
 		].join('\n'));
 		this.emit('log', `Loaded in ${(now() - start).toFixed(2)}ms.`);
 		super.login(token);
+	}
+
+	/**
+	 * The owner for this bot
+	 * @readonly
+	 * @type {external:User}
+	 */
+	get owner() {
+		return this.users.get(this.config.ownerID);
 	}
 
 	/**
