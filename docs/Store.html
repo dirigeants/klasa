@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Klasa Class: Event</title>
+	<title>Klasa Class: Store</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -86,17 +86,16 @@
 		<div id="main">
 			
 
-	<h1 class="page-title">Class: Event</h1>
+	<h1 class="page-title">Class: Store</h1>
 <section>
 
 <header>
     
         <h2>
-        Event
+        Store
         </h2>
         
-            <div class="class-description">Base class for all Klasa Events. See <a href="tutorial-CreatingEvents.html">Creating Events</a> for more information how to use this class
-to build custom events.</div>
+            <div class="class-description">The common interface for all stores</div>
         
     
 </header>
@@ -108,12 +107,131 @@ to build custom events.</div>
         
 <hr>
 <dt>
-    <h4 class="name" id="Event"><span class="type-signature"></span>new Event(client, dir, file [, options])</h4>
+    <h4 class="name" id="Store"><span class="type-signature"></span>new Store()</h4>
     
     
 </dt>
 <dd>
 
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/interfaces/Store.js#L14">lib/structures/interfaces/Store.js#L14</a>	</dd>
+	
+
+	
+
+	
+	<dt class="tag-see method-doc-label method-doc-details-label">See:</dt>
+	<dd class="tag-see">
+		<ul>
+			<li><a href="CommandStore.html">CommandStore</a></li>
+			
+			<li><a href="EventStore.html">EventStore</a></li>
+			
+			<li><a href="ExtendableStore.html">ExtendableStore</a></li>
+			
+			<li><a href="FinalizerStore.html">FinalizerStore</a></li>
+			
+			<li><a href="InhibitorStore.html">InhibitorStore</a></li>
+			
+			<li><a href="MonitorStore.html">MonitorStore</a></li>
+			
+			<li><a href="ProviderStore.html">ProviderStore</a></li>
+			</ul>
+	</dd>
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        <dl>
+            
+<hr>
+<dt>
+    <h4 class="name" id=".applyToClass"><span class="type-signature">&lt;static> </span>applyToClass(structure, skips)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Applies this interface to a class
+    </div>
     
 
     
@@ -135,11 +253,7 @@ to build custom events.</div>
         <th>Type</th>
 
         
-        <th>Argument</th>
-        
 
-        
-        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -151,13 +265,13 @@ to build custom events.</div>
 
         <tr>
             
-                <td class="name"><code>client</code></td>
+                <td class="name"><code>structure</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="KlasaClient.html">KlasaClient</a></span>
+<span class="param-type">Object</span>
 
 
 
@@ -165,24 +279,405 @@ to build custom events.</div>
             </td>
 
             
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
 
             
-                <td class="default">
-                
-                </td>
-            
 
-            <td class="description last">The klasa client</td>
+            <td class="description last">The structure to apply this interface to</td>
         </tr>
 
+    
+
+        <tr>
+            
+                <td class="name"><code>skips</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The methods to skip when applying this interface</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/interfaces/Store.js#L89">lib/structures/interfaces/Store.js#L89</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="delete"><span class="type-signature"></span>delete(name)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Deletes a piece from the store
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Piece.html">Piece</a></span>
+|
+
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The piece object or a string representing the structure this store caches</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/interfaces/Store.js#L21">lib/structures/interfaces/Store.js#L21</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    whether or not the delete was successful.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="init"><span class="type-signature"></span>init()</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Initializes all pieces in this store.
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/interfaces/Store.js#L32">lib/structures/interfaces/Store.js#L32</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;Array></span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="load"><span class="type-signature"></span>load(dir, file)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Loads a piece into Klasa so it can be saved in this store.
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
     
 
         <tr>
@@ -201,22 +696,10 @@ to build custom events.</div>
             </td>
 
             
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
 
             
-                <td class="default">
-                
-                </td>
-            
 
-            <td class="description last">The path to the core or user event pieces folder</td>
+            <td class="description last">The user directory or core directory where this file is saved.</td>
         </tr>
 
     
@@ -237,62 +720,10 @@ to build custom events.</div>
             </td>
 
             
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
 
             
-                <td class="default">
-                
-                </td>
-            
 
-            <td class="description last">The path from the pieces folder to the event file</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>options</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="global.html#EventOptions">EventOptions</a></span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    {}
-                
-                </td>
-            
-
-            <td class="description last">The Event options</td>
+            <td class="description last">A string showing where the file is located.</td>
         </tr>
 
     
@@ -316,13 +747,6 @@ to build custom events.</div>
     
 
     
-    <dt class="implements">Implements:</dt>
-    <dd class="implements"><ul>
-        
-            <li><a href="Piece.html">Piece</a></li>
-        
-    </ul></dd>
-    
 
     
 
@@ -341,16 +765,9 @@ to build custom events.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L23">lib/structures/Event.js#L23</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/interfaces/Store.js#L42">lib/structures/interfaces/Store.js#L42</a>	</dd>
 	
 
-	
-	<dt class="tag-tutorial method-doc-label method-doc-details-label">Tutorials:</dt>
-	<dd class="tag-tutorial">
-		<ul>
-			<li><a href="tutorial-CreatingEvents.html">Creating Events</a></li>
-			</ul>
-	</dd>
 	
 
 	
@@ -370,483 +787,35 @@ to build custom events.</div>
     
 
     
-
+    <h5>Returns:</h5>
     
-</dd>
-
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Properties</h3>
-
-        <dl>
             
-<hr>
-<dt class="name" id="client">
-    <h4 id="client"><span class="type-signature"></span>client<span class="type-signature"> :<a href="KlasaClient.html">KlasaClient</a></span></h4>
 
-    
-</dt>
-<dd>
-    
 
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type"><a href="KlasaClient.html">KlasaClient</a></span>
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Finalizer.html">Finalizer</a></span>
 
 
 
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L27">lib/structures/Event.js#L27</a>	</dd>
-	
-
-	
-
-	
-
-	
+    </dd>
 </dl>
 
+
+        
 
     
 </dd>
 
         
-            
-<hr>
-<dt class="name" id="dir">
-    <h4 id="dir"><span class="type-signature"></span>dir<span class="type-signature"> :string</span></h4>
-
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        The directory to where this event piece is stored
-    </div>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">string</span>
-
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L33">lib/structures/Event.js#L33</a>	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt class="name" id="enabled">
-    <h4 id="enabled"><span class="type-signature"></span>enabled<span class="type-signature"> :boolean</span></h4>
-
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        If the event is enabled or not
-    </div>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">boolean</span>
-
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L57">lib/structures/Event.js#L57</a>	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt class="name" id="file">
-    <h4 id="file"><span class="type-signature"></span>file<span class="type-signature"> :string</span></h4>
-
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        The file location where this event is stored
-    </div>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">string</span>
-
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L39">lib/structures/Event.js#L39</a>	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt class="name" id="name">
-    <h4 id="name"><span class="type-signature"></span>name<span class="type-signature"> :string</span></h4>
-
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        The name of the event
-    </div>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">string</span>
-
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L45">lib/structures/Event.js#L45</a>	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt class="name" id="type">
-    <h4 id="type"><span class="type-signature"></span>type<span class="type-signature"> :string</span></h4>
-
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        The type of Klasa piece this is
-    </div>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">string</span>
-
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L51">lib/structures/Event.js#L51</a>	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
-
-        </dl>
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        <dl>
             
 <hr>
 <dt>
-    <h4 class="name" id="disable"><span class="type-signature"></span>disable()</h4>
+    <h4 class="name" id="loadAll"><span class="type-signature">&lt;async> </span>loadAll()</h4>
     
     
 </dt>
@@ -854,7 +823,7 @@ to build custom events.</div>
 
     
     <div class="description">
-        Disables this piece
+        Loads all of our pieces from both the user and core directories.
     </div>
     
 
@@ -880,13 +849,6 @@ to build custom events.</div>
     
 
     
-    <dt class="implements">Implements:</dt>
-    <dd class="implements"><ul>
-        
-            <li><a href="Piece.html#disable">Piece#disable</a></li>
-        
-    </ul></dd>
-    
 
     
 
@@ -905,7 +867,7 @@ to build custom events.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/interfaces/Piece.js#L34">lib/structures/interfaces/Piece.js#L34</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/interfaces/Store.js#L52">lib/structures/interfaces/Store.js#L52</a>	</dd>
 	
 
 	
@@ -931,7 +893,7 @@ to build custom events.</div>
     
             
 <div class="param-desc">
-    This piece
+    The number of pieces loaded.
 </div>
 
 
@@ -942,7 +904,7 @@ to build custom events.</div>
     </dt>
     <dd>
         
-<span class="param-type"><a href="Piece.html">Piece</a></span>
+<span class="param-type">Promise.&lt;number></span>
 
 
 
@@ -959,7 +921,7 @@ to build custom events.</div>
             
 <hr>
 <dt>
-    <h4 class="name" id="enable"><span class="type-signature"></span>enable()</h4>
+    <h4 class="name" id="resolve"><span class="type-signature"></span>resolve(name)</h4>
     
     
 </dt>
@@ -967,335 +929,7 @@ to build custom events.</div>
 
     
     <div class="description">
-        Enables this piece
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-    <dt class="implements">Implements:</dt>
-    <dd class="implements"><ul>
-        
-            <li><a href="Piece.html#enable">Piece#enable</a></li>
-        
-    </ul></dd>
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/interfaces/Piece.js#L43">lib/structures/interfaces/Piece.js#L43</a>	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    This piece
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="Piece.html">Piece</a></span>
-
-
-
-    </dd>
-</dl>
-
-
-        
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="init"><span class="type-signature">&lt;async, abstract> </span>init()</h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        The init method to be optionaly overwritten in actual events
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L85">lib/structures/Event.js#L85</a>	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;void></span>
-
-
-
-    </dd>
-</dl>
-
-
-        
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="reload"><span class="type-signature">&lt;async> </span>reload()</h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Reloads this piece
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-    <dt class="implements">Implements:</dt>
-    <dd class="implements"><ul>
-        
-            <li><a href="Piece.html#reload">Piece#reload</a></li>
-        
-    </ul></dd>
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/interfaces/Piece.js#L16">lib/structures/interfaces/Piece.js#L16</a>	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    The newly loaded piece
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;<a href="Piece.html">Piece</a>></span>
-
-
-
-    </dd>
-</dl>
-
-
-        
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="run"><span class="type-signature">&lt;abstract> </span>run(param)</h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        The run method to be overwritten in actual event handlers
+        Resolve a string or piece into a piece object.
     </div>
     
 
@@ -1330,13 +964,16 @@ to build custom events.</div>
 
         <tr>
             
-                <td class="name"><code>param</code></td>
+                <td class="name"><code>name</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">any</span>
+<span class="param-type"><a href="Piece.html">Piece</a></span>
+|
+
+<span class="param-type">string</span>
 
 
 
@@ -1347,7 +984,7 @@ to build custom events.</div>
 
             
 
-            <td class="description last">The event parameters emited</td>
+            <td class="description last">The piece object or a string representing a piece's name</td>
         </tr>
 
     
@@ -1389,7 +1026,7 @@ to build custom events.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L76">lib/structures/Event.js#L76</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/interfaces/Store.js#L66">lib/structures/interfaces/Store.js#L66</a>	</dd>
 	
 
 	
@@ -1422,7 +1059,7 @@ to build custom events.</div>
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type"><a href="Piece.html">Piece</a></span>
 
 
 
@@ -1439,7 +1076,7 @@ to build custom events.</div>
             
 <hr>
 <dt>
-    <h4 class="name" id="unload"><span class="type-signature"></span>unload()</h4>
+    <h4 class="name" id="set"><span class="type-signature"></span>set(piece)</h4>
     
     
 </dt>
@@ -1447,7 +1084,7 @@ to build custom events.</div>
 
     
     <div class="description">
-        Unloads this piece
+        Sets up a piece in our store.
     </div>
     
 
@@ -1456,6 +1093,56 @@ to build custom events.</div>
     
 
     
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>piece</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Piece.html">Piece</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The piece object we are setting up.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
     
 
     
@@ -1472,13 +1159,6 @@ to build custom events.</div>
 
     
 
-    
-    <dt class="implements">Implements:</dt>
-    <dd class="implements"><ul>
-        
-            <li><a href="Piece.html#unload">Piece#unload</a></li>
-        
-    </ul></dd>
     
 
     
@@ -1498,7 +1178,7 @@ to build custom events.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/interfaces/Piece.js#L26">lib/structures/interfaces/Piece.js#L26</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/interfaces/Store.js#L76">lib/structures/interfaces/Store.js#L76</a>	</dd>
 	
 
 	
@@ -1531,7 +1211,7 @@ to build custom events.</div>
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type"><a href="Piece.html">Piece</a></span>
 
 
 
