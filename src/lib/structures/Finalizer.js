@@ -1,7 +1,10 @@
+const Piece = require('./interfaces/Piece');
+
 /**
  * Base class for all Klasa Finalizers. See {@tutorial CreatingFinalizers} for more information how to use this class
  * to build custom finalizers.
  * @tutorial CreatingFinalizers
+ * @implements {Piece}
  */
 class Finalizer {
 
@@ -55,42 +58,6 @@ class Finalizer {
 	}
 
 	/**
-	 * Reloads this finalizer
-	 * @returns {Promise<Finalizer>} The newly loaded finalizer
-	 */
-	async reload() {
-		const fin = this.client.finalizers.load(this.dir, this.file);
-		await fin.init();
-		return fin;
-	}
-
-	/**
-	 * Unloads this finalizer
-	 * @returns {void}
-	 */
-	unload() {
-		return this.client.finalizers.delete(this);
-	}
-
-	/**
-	 * Disables this finalizer
-	 * @returns {Finalizer} This finalizer
-	 */
-	disable() {
-		this.enabled = false;
-		return this;
-	}
-
-	/**
-	 * Enables this finalizer
-	 * @returns {Finalizer} This finalizer
-	 */
-	enable() {
-		this.enabled = true;
-		return this;
-	}
-
-	/**
 	 * The run method to be overwritten in actual finalizers
 	 * @param {CommandMessage} msg The command message mapped on top of the message used to trigger this finalizer
 	 * @param {external:Message} mes The bot's response message, if one is returned
@@ -111,6 +78,16 @@ class Finalizer {
 		// Optionally defined in extension Classes
 	}
 
+	// left for documentation
+	/* eslint-disable no-empty-function */
+	async reload() {}
+	unload() {}
+	disable() {}
+	enable() {}
+	/* eslint-enable no-empty-function */
+
 }
+
+Piece.applyToClass(Finalizer);
 
 module.exports = Finalizer;

@@ -1,7 +1,10 @@
+const Piece = require('./interfaces/Piece');
+
 /**
  * Base class for all Klasa Inhibitors. See {@tutorial CreatingInhibitors} for more information how to use this class
  * to build custom inhibitors.
  * @tutorial CreatingInhibitors
+ * @implements {Piece}
  */
 class Inhibitor {
 
@@ -62,42 +65,6 @@ class Inhibitor {
 	}
 
 	/**
-	 * Reloads this inhibitor
-	 * @returns {Promise<Inhibitor>} The newly loaded inhibitor
-	 */
-	async reload() {
-		const inh = this.client.inhibitors.load(this.dir, this.file);
-		await inh.init();
-		return inh;
-	}
-
-	/**
-	 * Unloads this inhibitor
-	 * @returns {void}
-	 */
-	unload() {
-		return this.client.inhibitors.delete(this);
-	}
-
-	/**
-	 * Disables this inhibitor
-	 * @returns {Inhibitor} This inhibitor
-	 */
-	disable() {
-		this.enabled = false;
-		return this;
-	}
-
-	/**
-	 * Enables this inhibitor
-	 * @returns {Inhibitor} This inhibitor
-	 */
-	enable() {
-		this.enabled = true;
-		return this;
-	}
-
-	/**
 	 * The run method to be overwritten in actual inhibitors
 	 * @param {external:Message} msg The message that triggered this inhibitor
 	 * @param {Command} cmd The command to run
@@ -117,6 +84,16 @@ class Inhibitor {
 		// Optionally defined in extension Classes
 	}
 
+	// left for documentation
+	/* eslint-disable no-empty-function */
+	async reload() {}
+	unload() {}
+	disable() {}
+	enable() {}
+	/* eslint-enable no-empty-function */
+
 }
+
+Piece.applyToClass(Inhibitor);
 
 module.exports = Inhibitor;

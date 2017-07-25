@@ -1,7 +1,10 @@
+const Piece = require('./interfaces/Piece');
+
 /**
  * Base class for all Klasa Events. See {@tutorial CreatingEvents} for more information how to use this class
  * to build custom events.
  * @tutorial CreatingEvents
+ * @implements {Piece}
  */
 class Event {
 
@@ -55,42 +58,6 @@ class Event {
 	}
 
 	/**
-	 * Reloads this event
-	 * @returns {Promise<Event>} The newly loaded event
-	 */
-	async reload() {
-		const evt = this.client.events.load(this.dir, this.file);
-		await evt.init();
-		return evt;
-	}
-
-	/**
-	 * Unloads this event
-	 * @returns {void}
-	 */
-	unload() {
-		return this.client.events.delete(this);
-	}
-
-	/**
-	 * Disables this finalizer
-	 * @returns {Finalizer} This finalizer
-	 */
-	disable() {
-		this.enabled = false;
-		return this;
-	}
-
-	/**
-	 * Enables this finalizer
-	 * @returns {Finalizer} This finalizer
-	 */
-	enable() {
-		this.enabled = true;
-		return this;
-	}
-
-	/**
 	 * A wrapper for the run method, to easily disable/enable events
 	 * @param {any} param The event parameters emited
 	 * @private
@@ -119,6 +86,16 @@ class Event {
 		// Optionally defined in extension Classes
 	}
 
+	// left for documentation
+	/* eslint-disable no-empty-function */
+	async reload() {}
+	unload() {}
+	disable() {}
+	enable() {}
+	/* eslint-enable no-empty-function */
+
 }
+
+Piece.applyToClass(Event);
 
 module.exports = Event;

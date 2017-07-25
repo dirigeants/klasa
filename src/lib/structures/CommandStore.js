@@ -1,11 +1,13 @@
 const { resolve, join } = require('path');
 const { Collection } = require('discord.js');
 const fs = require('fs-nextra');
-const Command = require('../structures/Command');
+const Command = require('./Command');
+const Store = require('./interfaces/Store');
 
 /**
  * Stores all the commands usable in Klasa
  * @extends external:Collection
+ * @implements {Store}
  */
 class CommandStore extends Collection {
 
@@ -40,6 +42,12 @@ class CommandStore extends Collection {
 		 * @type {String}
 		 */
 		this.userDir = join(this.client.clientBaseDir, 'commands');
+
+		/**
+		 * The type of structure this store holds
+		 * @type {Command}
+		 */
+		this.holds = Command;
 	}
 
 	/**
@@ -105,24 +113,6 @@ class CommandStore extends Collection {
 	}
 
 	/**
-	 * Initializes all of our commands
-	 * @returns {Promise<Array>}
-	 */
-	init() {
-		return Promise.all(this.map(piece => piece.init()));
-	}
-
-	/**
-	 * Resolve a string or command into a command object.
-	 * @param {Command|string} name The command object or a string representing a command name or alias.
-	 * @returns {Command}
-	 */
-	resolve(name) {
-		if (name instanceof Command) return name;
-		return this.get(name);
-	}
-
-	/**
 	 * Loads a command file into Klasa so it can saved in this store.
 	 * @param {string} dir The user directory or core directory where this file is saved.
 	 * @param {Array} file An array containing information about it's category structure.
@@ -144,6 +134,12 @@ class CommandStore extends Collection {
 		await CommandStore.walk(this, this.userDir);
 		return [this.size, this.aliases.size];
 	}
+
+	// left for documentation
+	/* eslint-disable no-empty-function */
+	init() {}
+	resolve() {}
+	/* eslint-enable no-empty-function */
 
 	/**
 	 * Walks our directory of commands for the user and core directories.
@@ -172,5 +168,7 @@ class CommandStore extends Collection {
 	}
 
 }
+
+Store.applyToClass(CommandStore, ['delete', 'load', 'loadAll', 'set']);
 
 module.exports = CommandStore;

@@ -1,3 +1,5 @@
+const Piece = require('./interfaces/Piece');
+
 /**
  * Base class for all Klasa Monitors. See {@tutorial CreatingMonitors} for more information how to use this class
  * to build custom monitors.
@@ -69,42 +71,6 @@ class Monitor {
 	}
 
 	/**
-	 * Reloads this monitor
-	 * @returns {Promise<Monitor>} The newly loaded monitor
-	 */
-	async reload() {
-		const mon = this.client.monitors.load(this.dir, this.file);
-		await mon.init();
-		return mon;
-	}
-
-	/**
-	 * Unloads this monitor
-	 * @returns {void}
-	 */
-	unload() {
-		return this.client.monitors.delete(this);
-	}
-
-	/**
-	 * Disables this monitor
-	 * @returns {Monitor} This monitor
-	 */
-	disable() {
-		this.enabled = false;
-		return this;
-	}
-
-	/**
-	 * Enables this monitor
-	 * @returns {Monitor} This monitor
-	 */
-	enable() {
-		this.enabled = true;
-		return this;
-	}
-
-	/**
 	 * The run method to be overwritten in actual monitor pieces
 	 * @param {external:Message} msg The discord message
 	 * @abstract
@@ -123,6 +89,16 @@ class Monitor {
 		// Optionally defined in extension Classes
 	}
 
+	// left for documentation
+	/* eslint-disable no-empty-function */
+	async reload() {}
+	unload() {}
+	disable() {}
+	enable() {}
+	/* eslint-enable no-empty-function */
+
 }
+
+Piece.applyToClass(Monitor);
 
 module.exports = Monitor;

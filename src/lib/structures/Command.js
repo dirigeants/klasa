@@ -1,9 +1,11 @@
+const Piece = require('./interfaces/Piece');
 const ParsedUsage = require('../parsers/ParsedUsage');
 
 /**
  * Base class for all Klasa Commands. See {@tutorial CreatingCommands} for more information how to use this class
  * to build custom commands.
  * @tutorial CreatingCommands
+ * @implements {Piece}
  */
 class Command {
 
@@ -158,42 +160,6 @@ class Command {
 	}
 
 	/**
-	 * Reloads this command
-	 * @returns {Promise<Command>} The newly loaded command
-	 */
-	async reload() {
-		const cmd = this.client.commands.load(this.dir, this.file);
-		await cmd.init();
-		return cmd;
-	}
-
-	/**
-	 * Unloads this command
-	 * @returns {void}
-	 */
-	unload() {
-		return this.client.commands.delete(this);
-	}
-
-	/**
-	 * Disables this command
-	 * @returns {Command} This command
-	 */
-	disable() {
-		this.enabled = false;
-		return this;
-	}
-
-	/**
-	 * Enables this command
-	 * @returns {Command} This command
-	 */
-	enable() {
-		this.enabled = true;
-		return this;
-	}
-
-	/**
 	 * The run method to be overwritten in actual commands
 	 * @param {CommandMessage} msg The command message mapped on top of the message used to trigger this command
 	 * @param {Array<any>} params The fully resolved parameters based on your usage / usageDelim
@@ -213,6 +179,16 @@ class Command {
 		// Optionally defined in extension Classes
 	}
 
+	// left for documentation
+	/* eslint-disable no-empty-function */
+	async reload() {}
+	unload() {}
+	disable() {}
+	enable() {}
+	/* eslint-enable no-empty-function */
+
 }
+
+Piece.applyToClass(Command);
 
 module.exports = Command;

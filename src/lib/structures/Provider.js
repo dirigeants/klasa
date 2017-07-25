@@ -1,3 +1,5 @@
+const Piece = require('./interfaces/Piece');
+
 /**
  * Base class for all Klasa Providers. See {@tutorial CreatingProviders} for more information how to use this class
  * to build custom providers.
@@ -69,42 +71,6 @@ class Provider {
 	}
 
 	/**
-	 * Reloads this provider
-	 * @returns {Promise<Provider>} The newly loaded provider
-	 */
-	async reload() {
-		const pro = this.client.providers.load(this.dir, this.file);
-		await pro.init();
-		return pro;
-	}
-
-	/**
-	 * Unloads this provider
-	 * @returns {void}
-	 */
-	unload() {
-		return this.client.providers.delete(this);
-	}
-
-	/**
-	 * Disables this provider
-	 * @returns {Provider} This provider
-	 */
-	disable() {
-		this.enabled = false;
-		return this;
-	}
-
-	/**
-	 * Enables this provider
-	 * @returns {Provider} This provider
-	 */
-	enable() {
-		this.enabled = true;
-		return this;
-	}
-
-	/**
 	 * The init method to be optionaly overwritten in actual provider pieces
 	 * @abstract
 	 * @returns {Promise<void>}
@@ -113,6 +79,16 @@ class Provider {
 		// Optionally defined in extension Classes
 	}
 
+	// left for documentation
+	/* eslint-disable no-empty-function */
+	async reload() {}
+	unload() {}
+	disable() {}
+	enable() {}
+	/* eslint-enable no-empty-function */
+
 }
+
+Piece.applyToClass(Provider);
 
 module.exports = Provider;
