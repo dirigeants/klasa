@@ -51,7 +51,7 @@ class Piece {
 	/**
 	 * Applies this interface to a class
 	 * @param {Object} structure The structure to apply this interface to
-	 * @param {string[]} skips The methods to skip when applying this interface
+	 * @param {string[]} [skips=[]] The methods to skip when applying this interface
 	 */
 	static applyToClass(structure, skips) {
 		applyToClass(Piece, structure, skips);

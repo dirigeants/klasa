@@ -88,7 +88,7 @@ class Util {
 	 * Applies an interface to a class
 	 * @param {Object} base The interface to apply to a structure
 	 * @param {Object} structure The structure to apply the interface to
-	 * @param {string[]} skips The methods to skip when applying this interface
+	 * @param {string[]} [skips=[]] The methods to skip when applying this interface
 	 */
 	static applyToClass(base, structure, skips = []) {
 		for (const method of Object.getOwnPropertyNames(base.prototype)) {
