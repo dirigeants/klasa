@@ -1,5 +1,6 @@
 const { join } = require('path');
 const fs = require('fs-nextra');
+const { applyToClass } = require('../../util/util');
 
 /**
  * The common interface for all stores
@@ -86,10 +87,8 @@ class Store {
 	 * @param {Object} structure The structure to apply this interface to
 	 * @param {string[]} skips The methods to skip when applying this interface
 	 */
-	static applyToClass(structure, skips = []) {
-		for (const method of Object.getOwnPropertyNames(Store.prototype)) {
-			if (!skips.includes(method)) Object.defineProperty(structure.prototype, method, Object.getOwnPropertyDescriptor(this.constructor.prototype, method));
-		}
+	static applyToClass(structure, skips) {
+		applyToClass(Store, structure, skips);
 	}
 
 }

@@ -1,3 +1,5 @@
+const { applyToClass } = require('../../util/util');
+
 /**
  * The common interface for all pieces
  * @see Command
@@ -51,10 +53,8 @@ class Piece {
 	 * @param {Object} structure The structure to apply this interface to
 	 * @param {string[]} skips The methods to skip when applying this interface
 	 */
-	static applyToClass(structure, skips = []) {
-		for (const method of Object.getOwnPropertyNames(Piece.prototype)) {
-			if (!skips.includes(method)) Object.defineProperty(structure.prototype, method, Object.getOwnPropertyDescriptor(this.constructor.prototype, method));
-		}
+	static applyToClass(structure, skips) {
+		applyToClass(Piece, structure, skips);
 	}
 
 }
