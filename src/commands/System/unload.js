@@ -7,7 +7,7 @@ module.exports = class extends Command {
 			aliases: ['u'],
 			permLevel: 10,
 			description: 'Unloads the klasa piece.',
-			usage: '<Inhibitor:inhibitor|Finalizer:finalizer|Monitor:monitor|Provider:provider|Event:event|Command:cmd>'
+			usage: '<Inhibitor:inhibitor|Extendable:extendable|Finalizer:finalizer|Monitor:monitor|Provider:provider|Event:event|Command:cmd>'
 		});
 	}
 
