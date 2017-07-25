@@ -49,6 +49,21 @@ class ArgResolver extends Resolver {
 	}
 
 	/**
+	 * Resolves an extendable
+	 * @param {string} arg This arg
+	 * @param {Object} currentUsage This current usage
+	 * @param {number} possible This possible usage id
+	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @returns {Event}
+	 */
+	async extendable(arg, currentUsage, possible, repeat) {
+		const extendable = this.client.extendables.get(arg);
+		if (extendable) return extendable;
+		if (currentUsage.type === 'optional' && !repeat) return null;
+		throw `${currentUsage.possibles[possible].name} must be a valid extendable name.`;
+	}
+
+	/**
 	 * Resolves a finalizer
 	 * @param {string} arg This arg
 	 * @param {Object} currentUsage This current usage

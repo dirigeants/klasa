@@ -1,9 +1,11 @@
+const Piece = require('./interfaces/Piece');
 const Discord = require('discord.js');
 
 /**
  * Base class for all Klasa Extendables. See {@tutorial CreatingExtendables} for more information how to use this class
  * to build custom extendables.
  * @tutorial CreatingExtendables
+ * @implements {Piece}
  */
 class Extendable {
 
@@ -74,6 +76,14 @@ class Extendable {
 		for (const structure of this.appliesTo) Object.defineProperty(Discord[structure].prototype, this.name, Object.getOwnPropertyDescriptor(this.constructor.prototype, 'extend'));
 	}
 
+	// left for documentation
+	/* eslint-disable no-empty-function */
+	async reload() {}
+	unload() {}
+	/* eslint-enable no-empty-function */
+
 }
+
+Piece.applyToClass(Extendable);
 
 module.exports = Extendable;

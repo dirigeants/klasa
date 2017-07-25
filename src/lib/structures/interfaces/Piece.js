@@ -2,6 +2,7 @@
  * The common interface for all pieces
  * @see Command
  * @see Event
+ * @see Extendable
  * @see Finalizer
  * @see Inhibitor
  * @see Monitor
