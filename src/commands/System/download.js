@@ -101,11 +101,11 @@ module.exports = class extends Command {
 		return true;
 	}
 
-	runChecks(client, type, name) {
+	runChecks(type, name) {
 		if (!name) throw 'I have stopped the load of this piece because it does not have a name value, and I cannot determine the file name without it. Please ask the Developer of this piece to add it.';
 		if (!type) throw 'I have stopped the load of this piece because it does not have a type value, and I cannot determine the type without it. Please ask the Developer of the piece to add it.';
 		if (!types.includes(type)) throw "I have stopped the loading of this piece because its type value doesn't match those we accept. Please ask the Developer of the piece to fix it.";
-		if (client[type].has(name)) throw `That ${type.slice(0, -1)} already exists in your bot. Aborting the load.`;
+		if (this.client[type].has(name)) throw `That ${type.slice(0, -1)} already exists in your bot. Aborting the load.`;
 	}
 
 	async load(msg, type, text, name, category) {
