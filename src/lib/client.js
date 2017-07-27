@@ -6,13 +6,13 @@ const ArgResolver = require('./parsers/argResolver');
 const PermLevels = require('./util/PermLevels');
 const util = require('./util/util');
 const SettingGateway = require('./settings/settingGateway');
-const CommandStore = require('./stores/CommandStore');
-const InhibitorStore = require('./stores/InhibitorStore');
-const FinalizerStore = require('./stores/FinalizerStore');
-const MonitorStore = require('./stores/MonitorStore');
-const ProviderStore = require('./stores/ProviderStore');
-const EventStore = require('./stores/EventStore');
-const ExtendableStore = require('./stores/ExtendableStore');
+const CommandStore = require('./structures/CommandStore');
+const InhibitorStore = require('./structures/InhibitorStore');
+const FinalizerStore = require('./structures/FinalizerStore');
+const MonitorStore = require('./structures/MonitorStore');
+const ProviderStore = require('./structures/ProviderStore');
+const EventStore = require('./structures/EventStore');
+const ExtendableStore = require('./structures/ExtendableStore');
 
 /**
  * The client for handling everything. See {@tutorial GettingStarted} for more information how to get started using this class.
