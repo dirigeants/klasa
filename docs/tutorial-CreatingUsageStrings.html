@@ -189,7 +189,7 @@
 <hr>
 <h1>Using arguments in your command.</h1><p>Now, after we understand how to configurate the command, we'll start writting it:</p>
 <pre class="prettyprint source lang-javascript"><code>async run(msg, [...params]) {
-    // This is where you place the code you want to run for your command
+    // This is where you place the code you want to run when your command is called
 }</code></pre><p><code>[...params]</code> represents a variable number of parameters given when the command is run. The name of the parameters in the array (and their count) is determined by the <code>usage</code> property and its given arguments.</p>
 <blockquote>
 <p>Note that the commands' parameters are an array. This is a trick called <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment">Destructuring assignment</a>.</p>
