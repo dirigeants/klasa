@@ -42,7 +42,7 @@ Now, after we understand how to configurate the command, we'll start writting it
 
 ```javascript
 async run(msg, [...params]) {
-	// This is where you place the code you want to run for your command
+	// This is where you place the code you want to run when your command is called
 }
 ```
 
