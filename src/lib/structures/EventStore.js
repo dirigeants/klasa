@@ -88,6 +88,6 @@ class EventStore extends Collection {
 
 }
 
-Store.applyToClass(EventStore, ['delete', 'set']);
+Store.applyToClass(EventStore);
 
 module.exports = EventStore;

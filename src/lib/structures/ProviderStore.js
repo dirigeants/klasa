@@ -43,14 +43,37 @@ class ProviderStore extends Collection {
 		this.holds = Provider;
 	}
 
+	/**
+	 * Deletes a provider from the store
+	 * @param  {Provider|string} name The provider object or a string representing the structure this store caches
+	 * @return {boolean} whether or not the delete was successful.
+	 */
+	delete(name) {
+		const pro = this.resolve(name);
+		if (!pro) return false;
+		super.delete(pro.name);
+		return true;
+	}
+
+	/**
+	 * Sets up a provider in our store.
+	 * @param {Provider} provider The provider object we are setting up.
+	 * @returns {Provider}
+	 */
+	set(provider) {
+		if (!(provider instanceof this.holds)) return this.client.emit('error', `Only ${this.holds.constructor.name}s may be stored in the Store.`);
+		const existing = this.get(provider.name);
+		if (existing) this.delete(existing);
+		super.set(provider.name, provider);
+		return provider;
+	}
+
 	// left for documentation
 	/* eslint-disable no-empty-function */
-	delete() {}
 	init() {}
 	load() {}
 	async loadAll() {}
 	resolve() {}
-	set() {}
 	/* eslint-enable no-empty-function */
 
 }

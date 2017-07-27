@@ -169,6 +169,6 @@ class CommandStore extends Collection {
 
 }
 
-Store.applyToClass(CommandStore, ['delete', 'load', 'loadAll', 'set']);
+Store.applyToClass(CommandStore, ['load', 'loadAll']);
 
 module.exports = CommandStore;

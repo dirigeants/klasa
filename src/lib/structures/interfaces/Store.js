@@ -15,18 +15,6 @@ const { applyToClass } = require('../../util/util');
 class Store {
 
 	/**
-	 * Deletes a piece from the store
-	 * @param  {Piece|string} name The piece object or a string representing the structure this store caches
-	 * @return {boolean} whether or not the delete was successful.
-	 */
-	delete(name) {
-		const piece = this.resolve(name);
-		if (!piece) return false;
-		super.delete(piece.name);
-		return true;
-	}
-
-	/**
 	 * Initializes all pieces in this store.
 	 * @return {Promise<Array>}
 	 */
@@ -67,19 +55,6 @@ class Store {
 	resolve(name) {
 		if (name instanceof this.holds) return name;
 		return this.get(name);
-	}
-
-	/**
-	 * Sets up a piece in our store.
-	 * @param {Piece} piece The piece object we are setting up.
-	 * @returns {Piece}
-	 */
-	set(piece) {
-		if (!(piece instanceof this.holds)) return this.client.emit('error', `Only ${this.holds.constructor.name}s may be stored in the Store.`);
-		const existing = this.get(piece.name);
-		if (existing) this.delete(existing);
-		super.set(piece.name, piece);
-		return piece;
 	}
 
 	/**

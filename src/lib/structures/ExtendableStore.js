@@ -88,6 +88,6 @@ class ExtendableStore extends Discord.Collection {
 
 }
 
-Store.applyToClass(ExtendableStore, ['set', 'delete']);
+Store.applyToClass(ExtendableStore);
 
 module.exports = ExtendableStore;

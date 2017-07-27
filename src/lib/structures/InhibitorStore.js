@@ -44,6 +44,18 @@ class InhibitorStore extends Collection {
 	}
 
 	/**
+	 * Deletes a inhibitor from the store
+	 * @param  {Inhibitor|string} name The inhibitor object or a string representing the structure this store caches
+	 * @return {boolean} whether or not the delete was successful.
+	 */
+	delete(name) {
+		const inhibitor = this.resolve(name);
+		if (!inhibitor) return false;
+		super.delete(inhibitor.name);
+		return true;
+	}
+
+	/**
 	 * Runs our inhibitors on the command.
 	 * @param  {external:Message} msg The message object from Discord.js
 	 * @param  {Command} cmd The command being ran.
@@ -58,14 +70,25 @@ class InhibitorStore extends Collection {
 		return Promise.all(mps);
 	}
 
+	/**
+	 * Sets up a inhibitor in our store.
+	 * @param {Inhibitor} inhibitor The inhibitor object we are setting up.
+	 * @returns {Inhibitor}
+	 */
+	set(inhibitor) {
+		if (!(inhibitor instanceof this.holds)) return this.client.emit('error', `Only ${this.holds.constructor.name}s may be stored in the Store.`);
+		const existing = this.get(inhibitor.name);
+		if (existing) this.delete(existing);
+		super.set(inhibitor.name, inhibitor);
+		return inhibitor;
+	}
+
 	// left for documentation
 	/* eslint-disable no-empty-function */
-	delete() {}
 	init() {}
 	load() {}
 	async loadAll() {}
 	resolve() {}
-	set() {}
 	/* eslint-enable no-empty-function */
 
 }

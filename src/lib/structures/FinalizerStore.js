@@ -43,6 +43,17 @@ class FinalizerStore extends Collection {
 		this.holds = Finalizer;
 	}
 
+	/**
+	 * Deletes a finalizer from the store
+	 * @param  {Finalizer|string} name The finalizer object or a string representing the structure this store caches
+	 * @return {boolean} whether or not the delete was successful.
+	 */
+	delete(name) {
+		const finalizer = this.resolve(name);
+		if (!finalizer) return false;
+		super.delete(finalizer.name);
+		return true;
+	}
 
 	/**
 	 * Runs all of our finalizers after a command is ran successfully.
@@ -55,14 +66,25 @@ class FinalizerStore extends Collection {
 		});
 	}
 
+	/**
+	 * Sets up a finalizer in our store.
+	 * @param {Finalizer} finalizer The finalizer object we are setting up.
+	 * @returns {Finalizer}
+	 */
+	set(finalizer) {
+		if (!(finalizer instanceof this.holds)) return this.client.emit('error', `Only ${this.holds.constructor.name}s may be stored in the Store.`);
+		const existing = this.get(finalizer.name);
+		if (existing) this.delete(existing);
+		super.set(finalizer.name, finalizer);
+		return finalizer;
+	}
+
 	// left for documentation
 	/* eslint-disable no-empty-function */
-	delete() {}
 	init() {}
 	load() {}
 	async loadAll() {}
 	resolve() {}
-	set() {}
 	/* eslint-enable no-empty-function */
 
 }
