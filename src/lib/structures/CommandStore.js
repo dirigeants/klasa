@@ -158,13 +158,13 @@ class CommandStore extends Collection {
 			subFiles.filter(file => !file.includes('.')).forEach(subfolder => subfolders.push({ folder: folder, subfolder: subfolder }));
 			return subFiles.filter(file => file.endsWith('.js')).map(file => store.load(dir, [folder, file]));
 		});
-		await Promise.all(mps1).catch(err => { throw err; });
+		await Promise.all(mps1);
 		const mps2 = subfolders.map(async (subfolder) => {
 			const subSubFiles = await fs.readdir(resolve(dir, subfolder.folder, subfolder.subfolder));
 			if (!subSubFiles) return true;
 			return subSubFiles.filter(file => file.endsWith('.js')).map(file => store.load(dir, [subfolder.folder, subfolder.subfolder, file]));
 		});
-		return Promise.all(mps2).catch(err => { throw err; });
+		return Promise.all(mps2);
 	}
 
 }
