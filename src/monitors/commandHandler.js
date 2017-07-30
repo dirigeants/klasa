@@ -55,7 +55,7 @@ module.exports = class extends Monitor {
 			})
 			.catch((error) => {
 				if (error.code === 1 && this.client.config.cmdPrompt) {
-					return this.awaitMessage(this.client, msg, start, error.message)
+					return this.awaitMessage(msg, start, error.message)
 						.catch(err => this.handleError(msg, err));
 				}
 				return this.handleError(msg, error);
