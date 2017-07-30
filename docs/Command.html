@@ -33,14 +33,14 @@
 			<li class="dropdown">
 				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="Command.html">Command</a></li><li><a href="CommandStore.html">CommandStore</a></li><li><a href="Event.html">Event</a></li><li><a href="EventStore.html">EventStore</a></li><li><a href="Extendable.html">Extendable</a></li><li><a href="ExtendableStore.html">ExtendableStore</a></li><li><a href="Finalizer.html">Finalizer</a></li><li><a href="FinalizerStore.html">FinalizerStore</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorStore.html">InhibitorStore</a></li><li><a href="KlasaClient.html">KlasaClient</a></li><li><a href="Monitor.html">Monitor</a></li><li><a href="MonitorStore.html">MonitorStore</a></li><li><a href="PermissionLevels.html">PermissionLevels</a></li><li><a href="Provider.html">Provider</a></li><li><a href="ProviderStore.html">ProviderStore</a></li><li><a href="Resolver.html">Resolver</a></li><li><a href="SchemaManager.html">SchemaManager</a></li><li><a href="SettingGateway.html">SettingGateway</a></li><li><a href="SQL.html">SQL</a></li><li><a href="Util.html">Util</a></li>
+					<li><a href="ArgResolver.html">ArgResolver</a></li><li><a href="CacheManager.html">CacheManager</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandMessage.html">CommandMessage</a></li><li><a href="CommandStore.html">CommandStore</a></li><li><a href="Event.html">Event</a></li><li><a href="EventStore.html">EventStore</a></li><li><a href="Extendable.html">Extendable</a></li><li><a href="ExtendableStore.html">ExtendableStore</a></li><li><a href="Finalizer.html">Finalizer</a></li><li><a href="FinalizerStore.html">FinalizerStore</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorStore.html">InhibitorStore</a></li><li><a href="KlasaClient.html">KlasaClient</a></li><li><a href="Monitor.html">Monitor</a></li><li><a href="MonitorStore.html">MonitorStore</a></li><li><a href="ParsedUsage.html">ParsedUsage</a></li><li><a href="PermissionLevels.html">PermissionLevels</a></li><li><a href="Piece.html">Piece</a></li><li><a href="Provider.html">Provider</a></li><li><a href="ProviderStore.html">ProviderStore</a></li><li><a href="Resolver.html">Resolver</a></li><li><a href="SchemaManager.html">SchemaManager</a></li><li><a href="SettingGateway.html">SettingGateway</a></li><li><a href="SettingResolver.html">SettingResolver</a></li><li><a href="SQL.html">SQL</a></li><li><a href="Store.html">Store</a></li><li><a href="Util.html">Util</a></li>
 				</ul>
 			</li>
 			
 			<li class="dropdown">
 				<a href="tutorials.list.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="tutorial-CreatingCommands.html">CreatingCommands</a></li><li><a href="tutorial-CreatingEvents.html">CreatingEvents</a></li><li><a href="tutorial-CreatingExtendables.html">CreatingExtendables</a></li><li><a href="tutorial-CreatingFinalizers.html">CreatingFinalizers</a></li><li><a href="tutorial-CreatingInhibitors.html">CreatingInhibitors</a></li><li><a href="tutorial-CreatingMonitors.html">CreatingMonitors</a></li><li><a href="tutorial-CreatingProviders.html">CreatingProviders</a></li><li><a href="tutorial-CreatingUsageStrings.html">CreatingUsageStrings</a></li><li><a href="tutorial-GettingStarted.html">GettingStarted</a></li>
+					<li><a href="tutorial-CreatingUsageStrings.html">Understanding Usage Strings</a></li><li><a href="tutorial-GettingStarted.html">Getting Started</a></li><li><a href="tutorial-IncludedPieces.html">Included Pieces</a></li>
 				</ul>
 			</li>
 			
@@ -95,7 +95,7 @@
         Command
         </h2>
         
-            <div class="class-description">Base class for all Klasa Commands. See <a href="tutorial-CreatingCommands.html">CreatingCommands</a> for more information how to use this class
+            <div class="class-description">Base class for all Klasa Commands. See <a href="tutorial-CreatingCommands.html">Creating Commands</a> for more information how to use this class
 to build custom commands.</div>
         
     
@@ -108,7 +108,7 @@ to build custom commands.</div>
         
 <hr>
 <dt>
-    <h4 class="name" id="Command"><span class="type-signature"></span>new Command(client, dir, file, name [, options])</h4>
+    <h4 class="name" id="Command"><span class="type-signature"></span>new Command(client, dir, file [, options])</h4>
     
     
 </dt>
@@ -259,42 +259,6 @@ to build custom commands.</div>
 
         <tr>
             
-                <td class="name"><code>name</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">The name of the command</td>
-        </tr>
-
-    
-
-        <tr>
-            
                 <td class="name"><code>options</code></td>
             
 
@@ -352,6 +316,13 @@ to build custom commands.</div>
     
 
     
+    <dt class="implements">Implements:</dt>
+    <dd class="implements"><ul>
+        
+            <li><a href="Piece.html">Piece</a></li>
+        
+    </ul></dd>
+    
 
     
 
@@ -370,14 +341,14 @@ to build custom commands.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L32">lib/structures/Command.js#L32</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L34">lib/structures/Command.js#L34</a>	</dd>
 	
 
 	
 	<dt class="tag-tutorial method-doc-label method-doc-details-label">Tutorials:</dt>
 	<dd class="tag-tutorial">
 		<ul>
-			<li><a href="tutorial-CreatingCommands.html">CreatingCommands</a></li>
+			<li><a href="tutorial-CreatingCommands.html">Creating Commands</a></li>
 			</ul>
 	</dd>
 	
@@ -417,7 +388,7 @@ to build custom commands.</div>
     
 
     
-        <h3 class="subsection-title">Members</h3>
+        <h3 class="subsection-title">Properties</h3>
 
         <dl>
             
@@ -480,7 +451,7 @@ to build custom commands.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L66">lib/structures/Command.js#L66</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L68">lib/structures/Command.js#L68</a>	</dd>
 	
 
 	
@@ -555,7 +526,7 @@ to build custom commands.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L78">lib/structures/Command.js#L78</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L80">lib/structures/Command.js#L80</a>	</dd>
 	
 
 	
@@ -630,7 +601,7 @@ to build custom commands.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L126">lib/structures/Command.js#L126</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L128">lib/structures/Command.js#L128</a>	</dd>
 	
 
 	
@@ -701,7 +672,7 @@ to build custom commands.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L36">lib/structures/Command.js#L36</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L38">lib/structures/Command.js#L38</a>	</dd>
 	
 
 	
@@ -776,7 +747,7 @@ to build custom commands.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L60">lib/structures/Command.js#L60</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L62">lib/structures/Command.js#L62</a>	</dd>
 	
 
 	
@@ -851,7 +822,7 @@ to build custom commands.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L96">lib/structures/Command.js#L96</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L98">lib/structures/Command.js#L98</a>	</dd>
 	
 
 	
@@ -926,7 +897,7 @@ to build custom commands.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L157">lib/structures/Command.js#L157</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L159">lib/structures/Command.js#L159</a>	</dd>
 	
 
 	
@@ -1001,7 +972,7 @@ to build custom commands.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L48">lib/structures/Command.js#L48</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L50">lib/structures/Command.js#L50</a>	</dd>
 	
 
 	
@@ -1076,7 +1047,7 @@ to build custom commands.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L102">lib/structures/Command.js#L102</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L104">lib/structures/Command.js#L104</a>	</dd>
 	
 
 	
@@ -1151,7 +1122,7 @@ to build custom commands.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L151">lib/structures/Command.js#L151</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L153">lib/structures/Command.js#L153</a>	</dd>
 	
 
 	
@@ -1226,7 +1197,7 @@ to build custom commands.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L120">lib/structures/Command.js#L120</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L122">lib/structures/Command.js#L122</a>	</dd>
 	
 
 	
@@ -1301,7 +1272,7 @@ to build custom commands.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L90">lib/structures/Command.js#L90</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L92">lib/structures/Command.js#L92</a>	</dd>
 	
 
 	
@@ -1376,7 +1347,7 @@ to build custom commands.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L72">lib/structures/Command.js#L72</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L74">lib/structures/Command.js#L74</a>	</dd>
 	
 
 	
@@ -1451,7 +1422,7 @@ to build custom commands.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L84">lib/structures/Command.js#L84</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L86">lib/structures/Command.js#L86</a>	</dd>
 	
 
 	
@@ -1526,7 +1497,7 @@ to build custom commands.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L54">lib/structures/Command.js#L54</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L56">lib/structures/Command.js#L56</a>	</dd>
 	
 
 	
@@ -1601,7 +1572,7 @@ to build custom commands.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L132">lib/structures/Command.js#L132</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L134">lib/structures/Command.js#L134</a>	</dd>
 	
 
 	
@@ -1676,7 +1647,7 @@ to build custom commands.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L42">lib/structures/Command.js#L42</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L44">lib/structures/Command.js#L44</a>	</dd>
 	
 
 	
@@ -1694,7 +1665,7 @@ to build custom commands.</div>
             
 <hr>
 <dt class="name" id="usage">
-    <h4 id="usage"><span class="type-signature"></span>usage<span class="type-signature"> :ParsedUsage</span></h4>
+    <h4 id="usage"><span class="type-signature"></span>usage<span class="type-signature"> :<a href="ParsedUsage.html">ParsedUsage</a></span></h4>
 
     
 </dt>
@@ -1710,7 +1681,7 @@ to build custom commands.</div>
         <ul>
             <li>
                 
-<span class="param-type">ParsedUsage</span>
+<span class="param-type"><a href="ParsedUsage.html">ParsedUsage</a></span>
 
 
 
@@ -1751,7 +1722,7 @@ to build custom commands.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L138">lib/structures/Command.js#L138</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L140">lib/structures/Command.js#L140</a>	</dd>
 	
 
 	
@@ -1826,7 +1797,7 @@ to build custom commands.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L114">lib/structures/Command.js#L114</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L116">lib/structures/Command.js#L116</a>	</dd>
 	
 
 	
@@ -1901,7 +1872,7 @@ to build custom commands.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L108">lib/structures/Command.js#L108</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L110">lib/structures/Command.js#L110</a>	</dd>
 	
 
 	
@@ -1933,7 +1904,7 @@ to build custom commands.</div>
 
     
     <div class="description">
-        Disables this command
+        Disables this piece
     </div>
     
 
@@ -1959,6 +1930,13 @@ to build custom commands.</div>
     
 
     
+    <dt class="implements">Implements:</dt>
+    <dd class="implements"><ul>
+        
+            <li><a href="Piece.html#disable">Piece#disable</a></li>
+        
+    </ul></dd>
+    
 
     
 
@@ -1977,7 +1955,7 @@ to build custom commands.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L182">lib/structures/Command.js#L182</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/interfaces/Piece.js#L37">lib/structures/interfaces/Piece.js#L37</a>	</dd>
 	
 
 	
@@ -2003,7 +1981,7 @@ to build custom commands.</div>
     
             
 <div class="param-desc">
-    This command
+    This piece
 </div>
 
 
@@ -2014,7 +1992,7 @@ to build custom commands.</div>
     </dt>
     <dd>
         
-<span class="param-type"><a href="Command.html">Command</a></span>
+<span class="param-type"><a href="Piece.html">Piece</a></span>
 
 
 
@@ -2039,7 +2017,7 @@ to build custom commands.</div>
 
     
     <div class="description">
-        Enables this command
+        Enables this piece
     </div>
     
 
@@ -2065,6 +2043,13 @@ to build custom commands.</div>
     
 
     
+    <dt class="implements">Implements:</dt>
+    <dd class="implements"><ul>
+        
+            <li><a href="Piece.html#enable">Piece#enable</a></li>
+        
+    </ul></dd>
+    
 
     
 
@@ -2083,7 +2068,7 @@ to build custom commands.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L191">lib/structures/Command.js#L191</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/interfaces/Piece.js#L46">lib/structures/interfaces/Piece.js#L46</a>	</dd>
 	
 
 	
@@ -2109,7 +2094,7 @@ to build custom commands.</div>
     
             
 <div class="param-desc">
-    This command
+    This piece
 </div>
 
 
@@ -2120,7 +2105,7 @@ to build custom commands.</div>
     </dt>
     <dd>
         
-<span class="param-type"><a href="Command.html">Command</a></span>
+<span class="param-type"><a href="Piece.html">Piece</a></span>
 
 
 
@@ -2189,7 +2174,7 @@ to build custom commands.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L212">lib/structures/Command.js#L212</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L178">lib/structures/Command.js#L178</a>	</dd>
 	
 
 	
@@ -2247,7 +2232,7 @@ to build custom commands.</div>
 
     
     <div class="description">
-        Reloads this command
+        Reloads this piece
     </div>
     
 
@@ -2273,6 +2258,13 @@ to build custom commands.</div>
     
 
     
+    <dt class="implements">Implements:</dt>
+    <dd class="implements"><ul>
+        
+            <li><a href="Piece.html#reload">Piece#reload</a></li>
+        
+    </ul></dd>
+    
 
     
 
@@ -2291,7 +2283,7 @@ to build custom commands.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L164">lib/structures/Command.js#L164</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/interfaces/Piece.js#L19">lib/structures/interfaces/Piece.js#L19</a>	</dd>
 	
 
 	
@@ -2317,7 +2309,7 @@ to build custom commands.</div>
     
             
 <div class="param-desc">
-    The newly loaded command
+    The newly loaded piece
 </div>
 
 
@@ -2328,7 +2320,7 @@ to build custom commands.</div>
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;<a href="Command.html">Command</a>></span>
+<span class="param-type">Promise.&lt;<a href="Piece.html">Piece</a>></span>
 
 
 
@@ -2394,7 +2386,7 @@ to build custom commands.</div>
             <td class="type">
             
                 
-<span class="param-type">CommandMessage</span>
+<span class="param-type"><a href="CommandMessage.html">CommandMessage</a></span>
 
 
 
@@ -2471,7 +2463,7 @@ to build custom commands.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L203">lib/structures/Command.js#L203</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L169">lib/structures/Command.js#L169</a>	</dd>
 	
 
 	
@@ -2533,7 +2525,7 @@ to build custom commands.</div>
 
     
     <div class="description">
-        Unloads this command
+        Unloads this piece
     </div>
     
 
@@ -2559,6 +2551,13 @@ to build custom commands.</div>
     
 
     
+    <dt class="implements">Implements:</dt>
+    <dd class="implements"><ul>
+        
+            <li><a href="Piece.html#unload">Piece#unload</a></li>
+        
+    </ul></dd>
+    
 
     
 
@@ -2577,7 +2576,7 @@ to build custom commands.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Command.js#L174">lib/structures/Command.js#L174</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/interfaces/Piece.js#L29">lib/structures/interfaces/Piece.js#L29</a>	</dd>
 	
 
 	

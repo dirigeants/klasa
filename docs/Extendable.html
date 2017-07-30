@@ -33,14 +33,14 @@
 			<li class="dropdown">
 				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="Command.html">Command</a></li><li><a href="CommandStore.html">CommandStore</a></li><li><a href="Event.html">Event</a></li><li><a href="EventStore.html">EventStore</a></li><li><a href="Extendable.html">Extendable</a></li><li><a href="ExtendableStore.html">ExtendableStore</a></li><li><a href="Finalizer.html">Finalizer</a></li><li><a href="FinalizerStore.html">FinalizerStore</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorStore.html">InhibitorStore</a></li><li><a href="KlasaClient.html">KlasaClient</a></li><li><a href="Monitor.html">Monitor</a></li><li><a href="MonitorStore.html">MonitorStore</a></li><li><a href="PermissionLevels.html">PermissionLevels</a></li><li><a href="Provider.html">Provider</a></li><li><a href="ProviderStore.html">ProviderStore</a></li><li><a href="Resolver.html">Resolver</a></li><li><a href="SchemaManager.html">SchemaManager</a></li><li><a href="SettingGateway.html">SettingGateway</a></li><li><a href="SQL.html">SQL</a></li><li><a href="Util.html">Util</a></li>
+					<li><a href="ArgResolver.html">ArgResolver</a></li><li><a href="CacheManager.html">CacheManager</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandMessage.html">CommandMessage</a></li><li><a href="CommandStore.html">CommandStore</a></li><li><a href="Event.html">Event</a></li><li><a href="EventStore.html">EventStore</a></li><li><a href="Extendable.html">Extendable</a></li><li><a href="ExtendableStore.html">ExtendableStore</a></li><li><a href="Finalizer.html">Finalizer</a></li><li><a href="FinalizerStore.html">FinalizerStore</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorStore.html">InhibitorStore</a></li><li><a href="KlasaClient.html">KlasaClient</a></li><li><a href="Monitor.html">Monitor</a></li><li><a href="MonitorStore.html">MonitorStore</a></li><li><a href="ParsedUsage.html">ParsedUsage</a></li><li><a href="PermissionLevels.html">PermissionLevels</a></li><li><a href="Piece.html">Piece</a></li><li><a href="Provider.html">Provider</a></li><li><a href="ProviderStore.html">ProviderStore</a></li><li><a href="Resolver.html">Resolver</a></li><li><a href="SchemaManager.html">SchemaManager</a></li><li><a href="SettingGateway.html">SettingGateway</a></li><li><a href="SettingResolver.html">SettingResolver</a></li><li><a href="SQL.html">SQL</a></li><li><a href="Store.html">Store</a></li><li><a href="Util.html">Util</a></li>
 				</ul>
 			</li>
 			
 			<li class="dropdown">
 				<a href="tutorials.list.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="tutorial-CreatingCommands.html">CreatingCommands</a></li><li><a href="tutorial-CreatingEvents.html">CreatingEvents</a></li><li><a href="tutorial-CreatingExtendables.html">CreatingExtendables</a></li><li><a href="tutorial-CreatingFinalizers.html">CreatingFinalizers</a></li><li><a href="tutorial-CreatingInhibitors.html">CreatingInhibitors</a></li><li><a href="tutorial-CreatingMonitors.html">CreatingMonitors</a></li><li><a href="tutorial-CreatingProviders.html">CreatingProviders</a></li><li><a href="tutorial-CreatingUsageStrings.html">CreatingUsageStrings</a></li><li><a href="tutorial-GettingStarted.html">GettingStarted</a></li>
+					<li><a href="tutorial-CreatingUsageStrings.html">Understanding Usage Strings</a></li><li><a href="tutorial-GettingStarted.html">Getting Started</a></li><li><a href="tutorial-IncludedPieces.html">Included Pieces</a></li>
 				</ul>
 			</li>
 			
@@ -95,7 +95,7 @@
         Extendable
         </h2>
         
-            <div class="class-description">Base class for all Klasa Extendables. See <a href="tutorial-CreatingExtendables.html">CreatingExtendables</a> for more information how to use this class
+            <div class="class-description">Base class for all Klasa Extendables. See <a href="tutorial-CreatingExtendables.html">Creating Extendables</a> for more information how to use this class
 to build custom extendables.</div>
         
     
@@ -108,7 +108,7 @@ to build custom extendables.</div>
         
 <hr>
 <dt>
-    <h4 class="name" id="Extendable"><span class="type-signature"></span>new Extendable(client, dir, file, name, appliesTo)</h4>
+    <h4 class="name" id="Extendable"><span class="type-signature"></span>new Extendable(client, dir, file, appliesTo, options)</h4>
     
     
 </dt>
@@ -219,30 +219,6 @@ to build custom extendables.</div>
 
         <tr>
             
-                <td class="name"><code>name</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The name of the extendable</td>
-        </tr>
-
-    
-
-        <tr>
-            
                 <td class="name"><code>appliesTo</code></td>
             
 
@@ -261,6 +237,30 @@ to build custom extendables.</div>
             
 
             <td class="description last">The discord classes this extendable applies to</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#ExtendableOptions">ExtendableOptions</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The options for this extendable</td>
         </tr>
 
     
@@ -284,6 +284,13 @@ to build custom extendables.</div>
     
 
     
+    <dt class="implements">Implements:</dt>
+    <dd class="implements"><ul>
+        
+            <li><a href="Piece.html">Piece</a></li>
+        
+    </ul></dd>
+    
 
     
 
@@ -302,14 +309,14 @@ to build custom extendables.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Extendable.js#L17">lib/structures/Extendable.js#L17</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Extendable.js#L24">lib/structures/Extendable.js#L24</a>	</dd>
 	
 
 	
 	<dt class="tag-tutorial method-doc-label method-doc-details-label">Tutorials:</dt>
 	<dd class="tag-tutorial">
 		<ul>
-			<li><a href="tutorial-CreatingExtendables.html">CreatingExtendables</a></li>
+			<li><a href="tutorial-CreatingExtendables.html">Creating Extendables</a></li>
 			</ul>
 	</dd>
 	
@@ -349,7 +356,7 @@ to build custom extendables.</div>
     
 
     
-        <h3 class="subsection-title">Members</h3>
+        <h3 class="subsection-title">Properties</h3>
 
         <dl>
             
@@ -401,7 +408,7 @@ to build custom extendables.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Extendable.js#L51">lib/structures/Extendable.js#L51</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Extendable.js#L58">lib/structures/Extendable.js#L58</a>	</dd>
 	
 
 	
@@ -472,7 +479,7 @@ to build custom extendables.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Extendable.js#L21">lib/structures/Extendable.js#L21</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Extendable.js#L28">lib/structures/Extendable.js#L28</a>	</dd>
 	
 
 	
@@ -547,7 +554,7 @@ to build custom extendables.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Extendable.js#L27">lib/structures/Extendable.js#L27</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Extendable.js#L34">lib/structures/Extendable.js#L34</a>	</dd>
 	
 
 	
@@ -622,7 +629,7 @@ to build custom extendables.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Extendable.js#L33">lib/structures/Extendable.js#L33</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Extendable.js#L40">lib/structures/Extendable.js#L40</a>	</dd>
 	
 
 	
@@ -697,7 +704,7 @@ to build custom extendables.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Extendable.js#L39">lib/structures/Extendable.js#L39</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Extendable.js#L46">lib/structures/Extendable.js#L46</a>	</dd>
 	
 
 	
@@ -772,7 +779,7 @@ to build custom extendables.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Extendable.js#L45">lib/structures/Extendable.js#L45</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Extendable.js#L52">lib/structures/Extendable.js#L52</a>	</dd>
 	
 
 	
@@ -898,7 +905,7 @@ to build custom extendables.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Extendable.js#L60">lib/structures/Extendable.js#L60</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Extendable.js#L67">lib/structures/Extendable.js#L67</a>	</dd>
 	
 
 	
@@ -932,6 +939,228 @@ to build custom extendables.</div>
     <dd>
         
 <span class="param-type">any</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="reload"><span class="type-signature">&lt;async> </span>reload()</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Reloads this piece
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+    <dt class="implements">Implements:</dt>
+    <dd class="implements"><ul>
+        
+            <li><a href="Piece.html#reload">Piece#reload</a></li>
+        
+    </ul></dd>
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/interfaces/Piece.js#L19">lib/structures/interfaces/Piece.js#L19</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    The newly loaded piece
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;<a href="Piece.html">Piece</a>></span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="unload"><span class="type-signature"></span>unload()</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Unloads this piece
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+    <dt class="implements">Implements:</dt>
+    <dd class="implements"><ul>
+        
+            <li><a href="Piece.html#unload">Piece#unload</a></li>
+        
+    </ul></dd>
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/interfaces/Piece.js#L29">lib/structures/interfaces/Piece.js#L29</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
 
 
 

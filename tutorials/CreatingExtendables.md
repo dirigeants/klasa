@@ -1,5 +1,3 @@
-# Creating Extendables
-
 Extendables are functions that extend current Discord.js classes by adding methods or properties.
 
 Extendables have the following syntax:
@@ -65,7 +63,7 @@ const { Extendable } = require('klasa');
 module.exports = class extends Extendable {
 
 	constructor(...args) {
-		super(...args, 'prompt', ['Message']);
+		super(...args, ['Message'], { name: 'prompt' });
 	}
 
 	extend() {
@@ -76,3 +74,12 @@ module.exports = class extends Extendable {
 ```
 
 Where `prompt()` is your prompt function.
+
+
+## Further Reading:
+- {@tutorial CreatingCommands}
+- {@tutorial CreatingEvents}
+- {@tutorial CreatingFinalizers}
+- {@tutorial CreatingInhibitors}
+- {@tutorial CreatingMonitors}
+- {@tutorial CreatingProviders}

@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Klasa Tutorial: CreatingEvents</title>
+	<title>Klasa Tutorial: Creating Events</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -33,14 +33,14 @@
 			<li class="dropdown">
 				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="Command.html">Command</a></li><li><a href="CommandStore.html">CommandStore</a></li><li><a href="Event.html">Event</a></li><li><a href="EventStore.html">EventStore</a></li><li><a href="Extendable.html">Extendable</a></li><li><a href="ExtendableStore.html">ExtendableStore</a></li><li><a href="Finalizer.html">Finalizer</a></li><li><a href="FinalizerStore.html">FinalizerStore</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorStore.html">InhibitorStore</a></li><li><a href="KlasaClient.html">KlasaClient</a></li><li><a href="Monitor.html">Monitor</a></li><li><a href="MonitorStore.html">MonitorStore</a></li><li><a href="PermissionLevels.html">PermissionLevels</a></li><li><a href="Provider.html">Provider</a></li><li><a href="ProviderStore.html">ProviderStore</a></li><li><a href="Resolver.html">Resolver</a></li><li><a href="SchemaManager.html">SchemaManager</a></li><li><a href="SettingGateway.html">SettingGateway</a></li><li><a href="SQL.html">SQL</a></li><li><a href="Util.html">Util</a></li>
+					<li><a href="ArgResolver.html">ArgResolver</a></li><li><a href="CacheManager.html">CacheManager</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandMessage.html">CommandMessage</a></li><li><a href="CommandStore.html">CommandStore</a></li><li><a href="Event.html">Event</a></li><li><a href="EventStore.html">EventStore</a></li><li><a href="Extendable.html">Extendable</a></li><li><a href="ExtendableStore.html">ExtendableStore</a></li><li><a href="Finalizer.html">Finalizer</a></li><li><a href="FinalizerStore.html">FinalizerStore</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorStore.html">InhibitorStore</a></li><li><a href="KlasaClient.html">KlasaClient</a></li><li><a href="Monitor.html">Monitor</a></li><li><a href="MonitorStore.html">MonitorStore</a></li><li><a href="ParsedUsage.html">ParsedUsage</a></li><li><a href="PermissionLevels.html">PermissionLevels</a></li><li><a href="Piece.html">Piece</a></li><li><a href="Provider.html">Provider</a></li><li><a href="ProviderStore.html">ProviderStore</a></li><li><a href="Resolver.html">Resolver</a></li><li><a href="SchemaManager.html">SchemaManager</a></li><li><a href="SettingGateway.html">SettingGateway</a></li><li><a href="SettingResolver.html">SettingResolver</a></li><li><a href="SQL.html">SQL</a></li><li><a href="Store.html">Store</a></li><li><a href="Util.html">Util</a></li>
 				</ul>
 			</li>
 			
 			<li class="dropdown">
 				<a href="tutorials.list.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="tutorial-CreatingCommands.html">CreatingCommands</a></li><li><a href="tutorial-CreatingEvents.html">CreatingEvents</a></li><li><a href="tutorial-CreatingExtendables.html">CreatingExtendables</a></li><li><a href="tutorial-CreatingFinalizers.html">CreatingFinalizers</a></li><li><a href="tutorial-CreatingInhibitors.html">CreatingInhibitors</a></li><li><a href="tutorial-CreatingMonitors.html">CreatingMonitors</a></li><li><a href="tutorial-CreatingProviders.html">CreatingProviders</a></li><li><a href="tutorial-CreatingUsageStrings.html">CreatingUsageStrings</a></li><li><a href="tutorial-GettingStarted.html">GettingStarted</a></li>
+					<li><a href="tutorial-CreatingUsageStrings.html">Understanding Usage Strings</a></li><li><a href="tutorial-GettingStarted.html">Getting Started</a></li><li><a href="tutorial-IncludedPieces.html">Included Pieces</a></li>
 				</ul>
 			</li>
 			
@@ -87,20 +87,18 @@
 			<section class="tutorial-section">
 
 <header>
-    
-
-    <h2>CreatingEvents</h2>
+    <h1>Creating Events</h1>
 </header>
 
 <article>
-    <h1>Creating Event Handlers</h1><p>Events are placed in <code>./events/</code>. If a conflicting event is present in both the core and your client, <em>only your client version</em> is loaded and will run when that event is triggered.</p>
+    <p>Events are placed in <code>./events/</code>. If a conflicting event is present in both the core and your client, <em>only your client version</em> is loaded and will run when that event is triggered.</p>
 <p>Their structure is the following:</p>
 <pre class="prettyprint source lang-javascript"><code>const { Event } = require('klasa');
 
 module.exports = class extends Event {
 
     constructor(...args) {
-        super(...args, 'yourEventName');
+        super(...args, { name:'yourEventName' });
     }
 
     run(...params) {
@@ -112,7 +110,17 @@ module.exports = class extends Event {
     }
 
 };</code></pre><p>Where <code>...params</code> are arguments you would <em>normally</em> get from those events. For example, while the <code>ready</code> event would only have none, the <code>guildMemberAdd</code> event would be <code>member</code>.</p>
+<h2>Further Reading:</h2><ul>
+<li><a href="tutorial-CreatingCommands.html">Creating Commands</a></li>
+<li><a href="tutorial-CreatingExtendables.html">Creating Extendables</a></li>
+<li><a href="tutorial-CreatingFinalizers.html">Creating Finalizers</a></li>
+<li><a href="tutorial-CreatingInhibitors.html">Creating Inhibitors</a></li>
+<li><a href="tutorial-CreatingMonitors.html">Creating Monitors</a></li>
+<li><a href="tutorial-CreatingProviders.html">Creating Providers</a></li>
+</ul>
 </article>
+
+
 
 </section>
 

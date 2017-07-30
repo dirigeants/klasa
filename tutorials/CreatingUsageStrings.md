@@ -26,8 +26,8 @@
 |           `user` , `mention` | A [User](https://discord.js.org/#/docs/main/master/class/User) instance returned from the user ID or mention.
 |                     `member` | A [GuildMember](https://discord.js.org/#/docs/main/master/class/GuildMember) instance returned from the member ID or mention.
 |            `cmd` , `command` | A {@link Command} instance returned from the command name or alias.
-|                      `event` | A {@link Event} instance returned from the event name.
-|                  `inhibitor` | A {@link Inhibitor} instance returned from the inhibitor name.
+|                      `event` | An {@link Event} instance returned from the event name.
+|                  `inhibitor` | An {@link Inhibitor} instance returned from the inhibitor name.
 |                  `finalizer` | A {@link Finalizer} instance returned from the finalizer name.
 |                    `monitor` | A {@link Monitor} instance returned from the monitor name.
 |                   `provider` | A {@link Provider} instance returned from the provider name.
@@ -42,7 +42,7 @@ Now, after we understand how to configurate the command, we'll start writting it
 
 ```javascript
 async run(msg, [...params]) {
-	// This is where you place the code you want to run for your command
+	// This is where you place the code you want to run when your command is called
 }
 ```
 
@@ -66,6 +66,6 @@ Keep in mind that arguments are delimited by the character or combination of cha
 
 `+messager 293107496191655936|delete`
 
-The line above will execute the command with the name `messager` (or a command with `messager` as an alias), it'll use [Channel.fetchMessages](https://discord.js.org/#/docs/main/stable/class/TextChannel?scrollTo=fetchMessage) (or [Channel.fetchMessages](https://discord.js.org/#/docs/main/stable/class/TextChannel?scrollTo=fetchMessages) if the bot is a userbot). If the message is not found (you mistyped it or the message is in another channel) it'll warn you that the message hasn't been found. The next argument is a literal, in which must be either `delete` or `edit`.
+The line above will execute the command with the name `messager` (or a command with `messager` as an alias), it'll use [Channel.fetchMessages](https://discord.js.org/#/docs/main/stable/class/TextChannel?scrollTo=fetchMessage). If the message is not found (you mistyped it or the message is in another channel) it'll warn you that the message hasn't been found. The next argument is a literal, in which must be either `delete` or `edit`.
 
 > If you need something created before the command is ever ran, you can specify `init() {...}` to make Klasa run that portion of code beforehand.

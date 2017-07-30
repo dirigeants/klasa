@@ -1,12 +1,16 @@
+const Piece = require('./interfaces/Piece');
+
 /**
  * Base class for all Klasa Finalizers. See {@tutorial CreatingFinalizers} for more information how to use this class
  * to build custom finalizers.
  * @tutorial CreatingFinalizers
+ * @implements {Piece}
  */
 class Finalizer {
 
 	/**
 	 * @typedef {Object} FinalizerOptions
+	 * @property {string} [name = theFileName] The name of the finalizer
 	 * @property {boolean} [enabled=true] Whether the finalizer is enabled or not
 	 */
 
@@ -14,10 +18,9 @@ class Finalizer {
 	 * @param {KlasaClient} client The Klasa Client
 	 * @param {string} dir The path to the core or user finalizer pieces folder
 	 * @param {Array} file The path from the pieces folder to the finalizer file
-	 * @param {string} name The name of the finalizer
 	 * @param {FinalizerOptions} [options = {}] Optional Finalizer settings
 	 */
-	constructor(client, dir, file, name, options = {}) {
+	constructor(client, dir, file, options = {}) {
 		/**
 		 * @type {KlasaClient}
 		 */
@@ -39,7 +42,7 @@ class Finalizer {
 		 * The name of the finalizer
 		 * @type {string}
 		 */
-		this.name = name;
+		this.name = options.name || file.slice(0, -3);
 
 		/**
 		 * The type of Klasa piece this is
@@ -51,43 +54,7 @@ class Finalizer {
 		 * If the finalizer is enabled or not
 		 * @type {boolean}
 		 */
-		this.enabled = options.enabled || true;
-	}
-
-	/**
-	 * Reloads this finalizer
-	 * @returns {Promise<Finalizer>} The newly loaded finalizer
-	 */
-	async reload() {
-		const fin = this.client.finalizers.load(this.dir, this.file);
-		await fin.init();
-		return fin;
-	}
-
-	/**
-	 * Unloads this finalizer
-	 * @returns {void}
-	 */
-	unload() {
-		return this.client.finalizers.delete(this);
-	}
-
-	/**
-	 * Disables this finalizer
-	 * @returns {Finalizer} This finalizer
-	 */
-	disable() {
-		this.enabled = false;
-		return this;
-	}
-
-	/**
-	 * Enables this finalizer
-	 * @returns {Finalizer} This finalizer
-	 */
-	enable() {
-		this.enabled = true;
-		return this;
+		this.enabled = 'enabled' in options ? options.enabled : true;
 	}
 
 	/**
@@ -111,6 +78,16 @@ class Finalizer {
 		// Optionally defined in extension Classes
 	}
 
+	// left for documentation
+	/* eslint-disable no-empty-function */
+	async reload() {}
+	unload() {}
+	disable() {}
+	enable() {}
+	/* eslint-enable no-empty-function */
+
 }
+
+Piece.applyToClass(Finalizer);
 
 module.exports = Finalizer;

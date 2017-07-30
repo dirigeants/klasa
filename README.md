@@ -5,6 +5,7 @@
 [![npm](https://img.shields.io/npm/dt/klasa.svg?maxAge=3600)](https://www.npmjs.com/package/klasa)
 [![Build Status](https://travis-ci.org/dirigeants/klasa.svg?branch=master)](https://travis-ci.org/dirigeants/klasa)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/e7b37b1f57134a5b9e1f43127df64388)](https://www.codacy.com/app/dirigeants/klasa?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=dirigeants/klasa&amp;utm_campaign=Badge_Grade)
+[![Greenkeeper badge](https://badges.greenkeeper.io/dirigeants/klasa.svg)](https://greenkeeper.io/)
 [![David](https://img.shields.io/david/dirigeants/klasa.svg?maxAge=3600)](https://david-dm.org/dirigeants/klasa)
 
 Klasa is a class remix on the Komada Bot Framework, built on top of [Discord.js](https://github.com/hydrabolt/dicord.js). It offers an extremely easy installation, downloadable commands, and a framework to build your own commands, modules, and functions.
@@ -20,6 +21,7 @@ Klasa offers a different interface than Komada, namly all pieces extend base cla
 ## What is different from Komada?
 
 There are a number of differences currently:
+- Client isn't passed to the `run` of pieces, it is built into the base pieces object and is accessable as `this.client`
 - Inhibitors are async in klasa, requiring rejection of undefined or a message if you want to inhibit the command
 - The piece stores (caches) aren't just Discord.Collections like in komada, they are extensions of collections which includes all loading, getting, setting, deleting, ect built right in and abstracted away. `<EventStore>.delete(eventName)` not only removes the event from the collection, but unregisters the event as a listener. `<CommandStore>.get(name)` not only gets the command if it's the command name, but if it's a command alias as well. ect.
 - No `<Client>.funcs`. All functions have been abstracted away into OOP paradigms, or moved to the util class (only functions which have no reason to ever change, such as `util.toTitleCase()` or `util.codeBlock()`). If you would like to add functions that are shared among multiple things, you can do so in the standard node.js way via `module.exports` and `require()`

@@ -4,7 +4,7 @@ const { inspect } = require('util');
 module.exports = class extends Command {
 
 	constructor(...args) {
-		super(...args, 'eval', {
+		super(...args, {
 			aliases: ['ev'],
 			permLevel: 10,
 			description: 'Evaluates arbitrary Javascript. Reserved for bot owner.',

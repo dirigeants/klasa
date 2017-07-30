@@ -1,10 +1,10 @@
-const { Inhibitor } = require('klasa');
+const { Inhibitor, util } = require('klasa');
 const { Permissions } = require('discord.js');
 
 module.exports = class extends Inhibitor {
 
 	constructor(...args) {
-		super(...args, 'missingBotPermissions');
+		super(...args);
 		this.impliedPermissions = new Permissions([
 			'READ_MESSAGES',
 			'SEND_MESSAGES',
@@ -20,7 +20,7 @@ module.exports = class extends Inhibitor {
 
 	async run(msg, cmd) {
 		const missing = msg.channel.type === 'text' ? msg.channel.permissionsFor(this.client.user).missing(cmd.botPerms) : this.impliedPermissions.missing(cmd.botPerms);
-		if (missing.length > 0) throw `Insufficient permissions, missing: **${Inhibitor.toTitleCase(missing.join(', ').split('_').join(' '))}**`;
+		if (missing.length > 0) throw `Insufficient permissions, missing: **${util.toTitleCase(missing.join(', ').split('_').join(' '))}**`;
 		return;
 	}
 

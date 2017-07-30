@@ -3,7 +3,7 @@ const { Extendable } = require('klasa');
 module.exports = class extends Extendable {
 
 	constructor(...args) {
-		super(...args, 'hasAtleastPermissionLevel', ['Message']);
+		super(...args, ['Message']);
 	}
 
 	extend(min) {

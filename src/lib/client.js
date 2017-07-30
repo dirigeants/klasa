@@ -6,13 +6,13 @@ const ArgResolver = require('./parsers/argResolver');
 const PermLevels = require('./util/PermLevels');
 const util = require('./util/util');
 const SettingGateway = require('./settings/settingGateway');
-const CommandStore = require('./stores/CommandStore');
-const InhibitorStore = require('./stores/InhibitorStore');
-const FinalizerStore = require('./stores/FinalizerStore');
-const MonitorStore = require('./stores/MonitorStore');
-const ProviderStore = require('./stores/ProviderStore');
-const EventStore = require('./stores/EventStore');
-const ExtendableStore = require('./stores/ExtendableStore');
+const CommandStore = require('./structures/CommandStore');
+const InhibitorStore = require('./structures/InhibitorStore');
+const FinalizerStore = require('./structures/FinalizerStore');
+const MonitorStore = require('./structures/MonitorStore');
+const ProviderStore = require('./structures/ProviderStore');
+const EventStore = require('./structures/EventStore');
+const ExtendableStore = require('./structures/ExtendableStore');
 
 /**
  * The client for handling everything. See {@tutorial GettingStarted} for more information how to get started using this class.
@@ -25,6 +25,7 @@ class KlasaClient extends Discord.Client {
 	 * @typedef {Object} KlasaClientConfig
 	 * @property {DiscordJSConfig} clientOptions The options to pass to D.JS
 	 * @property {string} prefix The default prefix the bot should respond to
+	 * @property {string} [clientBaseDir=process.cwd()] The directory where all piece folders can be found
 	 * @property {number} [commandMessageLifetime=1800] The threshold for how old command messages can be before sweeping since the last edit in seconds
 	 * @property {number} [commandMessageSweep=900] The interval duration for which command messages should be sweept in seconds
 	 * @property {object} [provider] The provider to use in Klasa
@@ -62,7 +63,7 @@ class KlasaClient extends Discord.Client {
 		 * The directory where the user files are at
 		 * @type {string}
 		 */
-		this.clientBaseDir = process.cwd();
+		this.clientBaseDir = config.clientBaseDir || process.cwd();
 
 		/**
 		 * The argument resolver
@@ -209,9 +210,9 @@ class KlasaClient extends Discord.Client {
 				const adminRole = msg.guild.roles.get(msg.guild.settings.adminRole);
 				return adminRole && msg.member.roles.has(adminRole.id);
 			})
-			.addLevel(4, false, (client, msg) => msg.guild && msg.author.id === msg.guild.owner.id)
-			.addLevel(9, true, (client, msg) => msg.author.id === client.config.ownerID)
-			.addLevel(10, false, (client, msg) => msg.author.id === client.config.ownerID);
+			.addLevel(4, false, (client, msg) => msg.guild && msg.author === msg.guild.owner)
+			.addLevel(9, true, (client, msg) => msg.author === client.owner)
+			.addLevel(10, false, (client, msg) => msg.author === client.owner);
 
 		const structure = this.config.permStructure instanceof PermLevels ? this.config.permStructure.structure : null;
 		const permStructure = structure || this.config.permStructure || defaultPermStructure.structure;
@@ -255,6 +256,15 @@ class KlasaClient extends Discord.Client {
 	}
 
 	/**
+	 * The owner for this bot
+	 * @readonly
+	 * @type {external:User}
+	 */
+	get owner() {
+		return this.users.get(this.config.ownerID);
+	}
+
+	/**
 	 * The schema manager for this bot
 	 * @readonly
 	 * @type {SchemaManager}
@@ -269,6 +279,8 @@ class KlasaClient extends Discord.Client {
 	 */
 	async _ready() {
 		this.config.prefixMention = new RegExp(`^<@!?${this.user.id}>`);
+		if (this.config.ignoreBots === undefined) this.config.ignoreBots = true;
+		if (this.config.ignoreSelf === undefined) this.config.ignoreSelf = this.user.bot;
 		if (this.user.bot) this.application = await super.fetchApplication();
 		if (!this.config.ownerID) this.config.ownerID = this.user.bot ? this.application.owner.id : this.user.id;
 		await this.providers.init();
@@ -278,7 +290,7 @@ class KlasaClient extends Discord.Client {
 		await this.finalizers.init();
 		await this.monitors.init();
 		util.initClean(this);
-		this.setInterval(this.sweepCommandMessages.bind(this), this.commandMessageLifetime);
+		this.setInterval(this.sweepCommandMessages.bind(this), this.commandMessageSweep * 1000);
 		this.ready = true;
 		this.emit('log', this.config.readyMessage || `Successfully initialized. Ready to serve ${this.guilds.size} guilds.`);
 	}

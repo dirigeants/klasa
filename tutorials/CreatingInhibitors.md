@@ -1,5 +1,3 @@
-# Creating Inhibitors
-
 Inhibitors are only ran on commands. They are used to check a variety of conditions
 before a command is ever ran, such as checking if a user has the right amount of permissions
 to use a command. Inhibitors are loaded as core first, and if your code contains a inhibitor
@@ -16,7 +14,8 @@ const { Inhibitor } = require('klasa');
 module.exports = class extends Inhibitor {
 
 	constructor(...args) {
-		super(...args, 'myInhibitorName', {
+		super(...args, {
+			name: 'myInhibitorName',
             enabled: true,
             spamProtection: false
         });
@@ -39,3 +38,12 @@ module.exports = class extends Inhibitor {
 a boolean. Set to false to completely disable this inhibitor, it cannot be forcefully enabled.
 - **spamProtection**: Represents if the inhibitor is meant to prevent bot/command spam. Setting
 spamProtection to true will prevent the inhibitor to run while doing tasks such as generating help.
+
+
+## Further Reading:
+- {@tutorial CreatingCommands}
+- {@tutorial CreatingEvents}
+- {@tutorial CreatingExtendables}
+- {@tutorial CreatingFinalizers}
+- {@tutorial CreatingMonitors}
+- {@tutorial CreatingProviders}

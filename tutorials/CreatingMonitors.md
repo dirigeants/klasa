@@ -1,5 +1,3 @@
-# Creating Monitors
-
 Monitors are special in that they will always run on any message. This is particularly
 useful when you need to do checking on the message, such as checking if a message
 contains a vulgar word (profanity filter). They are almost completely identical to
@@ -16,7 +14,8 @@ const { Monitor } = require('klasa');
 module.exports = class extends Monitor {
 
 	constructor(...args) {
-		super(...args, 'yourMonitorName', {
+		super(...args, {
+			name: 'yourMonitorName',
 			enabled: true,
 			ignoreBots: true,
 			ignoreSelf: true
@@ -40,3 +39,12 @@ module.exports = class extends Monitor {
 - **ignoreSelf**: Set this to true if you want the monitor to ignore the client user (the bot account, yourself if it's a selfbot).
 
 >As with all other pieces, you can omit any optional Configuration that match the default values.
+
+
+## Further Reading:
+- {@tutorial CreatingCommands}
+- {@tutorial CreatingEvents}
+- {@tutorial CreatingExtendables}
+- {@tutorial CreatingFinalizers}
+- {@tutorial CreatingInhibitors}
+- {@tutorial CreatingProviders}

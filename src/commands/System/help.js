@@ -3,7 +3,7 @@ const { Command } = require('klasa');
 module.exports = class extends Command {
 
 	constructor(...args) {
-		super(...args, 'help', {
+		super(...args, {
 			aliases: ['commands'],
 			description: 'Display help for a command.',
 			usage: '[Command:cmd]'

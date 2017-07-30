@@ -1,12 +1,16 @@
+const Piece = require('./interfaces/Piece');
+
 /**
  * Base class for all Klasa Events. See {@tutorial CreatingEvents} for more information how to use this class
  * to build custom events.
  * @tutorial CreatingEvents
+ * @implements {Piece}
  */
 class Event {
 
 	/**
 	 * @typedef {Object} EventOptions
+	 * @property {string} [name = theFileName] The name of the event
 	 * @property {boolean} [enabled=true] Whether the event is enabled or not
 	 */
 
@@ -14,10 +18,9 @@ class Event {
 	 * @param {KlasaClient} client The klasa client
 	 * @param {string} dir The path to the core or user event pieces folder
 	 * @param {string} file The path from the pieces folder to the event file
-	 * @param {string} name The name of the event
 	 * @param {EventOptions} [options={}] The Event options
 	 */
-	constructor(client, dir, file, name, options = {}) {
+	constructor(client, dir, file, options = {}) {
 		/**
 		 * @type {KlasaClient}
 		 */
@@ -39,7 +42,7 @@ class Event {
 		 * The name of the event
 		 * @type {string}
 		 */
-		this.name = name;
+		this.name = options.name || file.slice(0, -3);
 
 		/**
 		 * The type of Klasa piece this is
@@ -51,43 +54,7 @@ class Event {
 		 * If the event is enabled or not
 		 * @type {boolean}
 		 */
-		this.enabled = options.enabled || true;
-	}
-
-	/**
-	 * Reloads this event
-	 * @returns {Promise<Event>} The newly loaded event
-	 */
-	async reload() {
-		const evt = this.client.events.load(this.dir, this.file);
-		await evt.init();
-		return evt;
-	}
-
-	/**
-	 * Unloads this event
-	 * @returns {void}
-	 */
-	unload() {
-		return this.client.events.delete(this);
-	}
-
-	/**
-	 * Disables this finalizer
-	 * @returns {Finalizer} This finalizer
-	 */
-	disable() {
-		this.enabled = false;
-		return this;
-	}
-
-	/**
-	 * Enables this finalizer
-	 * @returns {Finalizer} This finalizer
-	 */
-	enable() {
-		this.enabled = true;
-		return this;
+		this.enabled = 'enabled' in options ? options.enabled : true;
 	}
 
 	/**
@@ -119,6 +86,16 @@ class Event {
 		// Optionally defined in extension Classes
 	}
 
+	// left for documentation
+	/* eslint-disable no-empty-function */
+	async reload() {}
+	unload() {}
+	disable() {}
+	enable() {}
+	/* eslint-enable no-empty-function */
+
 }
+
+Piece.applyToClass(Event);
 
 module.exports = Event;

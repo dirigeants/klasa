@@ -3,7 +3,7 @@ const { Command } = require('klasa');
 module.exports = class extends Command {
 
 	constructor(...args) {
-		super(...args, 'ping', { description: 'Ping/Pong command. I wonder what this does? /sarcasm' });
+		super(...args, { description: 'Ping/Pong command. I wonder what this does? /sarcasm' });
 	}
 
 	async run(msg) {

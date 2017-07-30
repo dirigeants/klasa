@@ -1,12 +1,16 @@
+const Piece = require('./interfaces/Piece');
+
 /**
  * Base class for all Klasa Inhibitors. See {@tutorial CreatingInhibitors} for more information how to use this class
  * to build custom inhibitors.
  * @tutorial CreatingInhibitors
+ * @implements {Piece}
  */
 class Inhibitor {
 
 	/**
 	 * @typedef {Object} InhibitorOptions
+	 * @property {string} [name = theFileName] The name of the inhibitor
 	 * @property {boolean} [enabled=true] Whether the inhibitor is enabled
 	 * @property {boolean} [spamProtection=false] If this inhibitor is meant for spamProtection (disables the inhibitor while generating help)
 	 */
@@ -15,10 +19,9 @@ class Inhibitor {
 	 * @param {KlasaClient} client The Klasa client
 	 * @param {string} dir The path to the core or user inhibitor pieces folder
 	 * @param {string} file The path from the pieces folder to the inhibitor file
-	 * @param {string} name The name of the inhibitor
 	 * @param {InhibitorOptions} [options = {}] Optional Inhibitor settings
 	 */
-	constructor(client, dir, file, name, options = {}) {
+	constructor(client, dir, file, options = {}) {
 		/**
 		 * @type {KlasaClient}
 		 */
@@ -40,7 +43,7 @@ class Inhibitor {
 		 * The name of the inhibitor
 		 * @type {string}
 		 */
-		this.name = name;
+		this.name = options.name || file.slice(0, -3);
 
 		/**
 		 * The type of Klasa piece this is
@@ -52,49 +55,13 @@ class Inhibitor {
 		 * If the inhibitor is enabled or not
 		 * @type {boolean}
 		 */
-		this.enabled = options.enabled || true;
+		this.enabled = 'enabled' in options ? options.enabled : true;
 
 		/**
 		 * If this inhibitor is meant for spamProtection (disables the inhibitor while generating help)
 		 * @type {boolean}
 		 */
 		this.spamProtection = options.spamProtection || false;
-	}
-
-	/**
-	 * Reloads this inhibitor
-	 * @returns {Promise<Inhibitor>} The newly loaded inhibitor
-	 */
-	async reload() {
-		const inh = this.client.inhibitors.load(this.dir, this.file);
-		await inh.init();
-		return inh;
-	}
-
-	/**
-	 * Unloads this inhibitor
-	 * @returns {void}
-	 */
-	unload() {
-		return this.client.inhibitors.delete(this);
-	}
-
-	/**
-	 * Disables this inhibitor
-	 * @returns {Inhibitor} This inhibitor
-	 */
-	disable() {
-		this.enabled = false;
-		return this;
-	}
-
-	/**
-	 * Enables this inhibitor
-	 * @returns {Inhibitor} This inhibitor
-	 */
-	enable() {
-		this.enabled = true;
-		return this;
 	}
 
 	/**
@@ -117,6 +84,16 @@ class Inhibitor {
 		// Optionally defined in extension Classes
 	}
 
+	// left for documentation
+	/* eslint-disable no-empty-function */
+	async reload() {}
+	unload() {}
+	disable() {}
+	enable() {}
+	/* eslint-enable no-empty-function */
+
 }
+
+Piece.applyToClass(Inhibitor);
 
 module.exports = Inhibitor;

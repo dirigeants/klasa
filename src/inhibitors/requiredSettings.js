@@ -2,10 +2,6 @@ const { Inhibitor } = require('klasa');
 
 module.exports = class extends Inhibitor {
 
-	constructor(...args) {
-		super(...args, 'requiredSettings');
-	}
-
 	async run(msg, cmd) {
 		if (cmd.requiredSettings.length === 0) return;
 		const settings = cmd.requiredSettings.filter(setting => !msg.guildSettings[setting]);

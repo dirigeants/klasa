@@ -1,3 +1,5 @@
+const Piece = require('./interfaces/Piece');
+
 /**
  * Base class for all Klasa Monitors. See {@tutorial CreatingMonitors} for more information how to use this class
  * to build custom monitors.
@@ -7,6 +9,7 @@ class Monitor {
 
 	/**
 	 * @typedef {Object} MonitorOptions
+	 * @property {string} [name = theFileName] The name of the monitor
 	 * @property {boolean} [enabled=true] Whether the monitor is enabled
 	 * @property {boolean} [ignoreBots=true] Whether the monitor ignores bots or not
 	 * @property {boolean} [ignoreSelf=true] Whether the monitor ignores itself or not
@@ -16,10 +19,9 @@ class Monitor {
 	 * @param {KlasaClient} client The Klasa client
 	 * @param {string} dir The path to the core or user monitor pieces folder
 	 * @param {string} file The path from the pieces folder to the monitor file
-	 * @param {string} name The name of the monitor
 	 * @param {MonitorOptions} [options = {}] Optional Monitor settings
 	 */
-	constructor(client, dir, file, name, options = {}) {
+	constructor(client, dir, file, options = {}) {
 		/**
 		 * @type {KlasaClient}
 		 */
@@ -41,7 +43,7 @@ class Monitor {
 		 * The name of the monitor
 		 * @type {string}
 		 */
-		this.name = name;
+		this.name = options.name || file.slice(0, -3);
 
 		/**
 		 * The type of Klasa piece this is
@@ -53,55 +55,19 @@ class Monitor {
 		 * If the monitor is enabled or not
 		 * @type {boolean}
 		 */
-		this.enabled = options.enabled || true;
+		this.enabled = 'enabled' in options ? options.enabled : true;
 
 		/**
 		 * Whether the monitor ignores bots or not
 		 * @type {boolean}
 		 */
-		this.ignoreBots = options.ignoreBots || true;
+		this.ignoreBots = 'ignoreBots' in options ? options.ignoreBots : true;
 
 		/**
 		 * Whether the monitor ignores itself or not
 		 * @type {boolean}
 		 */
-		this.ignoreSelf = options.ignoreSelf || true;
-	}
-
-	/**
-	 * Reloads this monitor
-	 * @returns {Promise<Monitor>} The newly loaded monitor
-	 */
-	async reload() {
-		const mon = this.client.monitors.load(this.dir, this.file);
-		await mon.init();
-		return mon;
-	}
-
-	/**
-	 * Unloads this monitor
-	 * @returns {void}
-	 */
-	unload() {
-		return this.client.monitors.delete(this);
-	}
-
-	/**
-	 * Disables this monitor
-	 * @returns {Monitor} This monitor
-	 */
-	disable() {
-		this.enabled = false;
-		return this;
-	}
-
-	/**
-	 * Enables this monitor
-	 * @returns {Monitor} This monitor
-	 */
-	enable() {
-		this.enabled = true;
-		return this;
+		this.ignoreSelf = 'ignoreSelf' in options ? options.ignoreSelf : true;
 	}
 
 	/**
@@ -123,6 +89,16 @@ class Monitor {
 		// Optionally defined in extension Classes
 	}
 
+	// left for documentation
+	/* eslint-disable no-empty-function */
+	async reload() {}
+	unload() {}
+	disable() {}
+	enable() {}
+	/* eslint-enable no-empty-function */
+
 }
+
+Piece.applyToClass(Monitor);
 
 module.exports = Monitor;

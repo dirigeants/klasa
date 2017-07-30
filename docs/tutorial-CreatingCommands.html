@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Klasa Tutorial: CreatingCommands</title>
+	<title>Klasa Tutorial: Creating Commands</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -33,14 +33,14 @@
 			<li class="dropdown">
 				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="Command.html">Command</a></li><li><a href="CommandStore.html">CommandStore</a></li><li><a href="Event.html">Event</a></li><li><a href="EventStore.html">EventStore</a></li><li><a href="Extendable.html">Extendable</a></li><li><a href="ExtendableStore.html">ExtendableStore</a></li><li><a href="Finalizer.html">Finalizer</a></li><li><a href="FinalizerStore.html">FinalizerStore</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorStore.html">InhibitorStore</a></li><li><a href="KlasaClient.html">KlasaClient</a></li><li><a href="Monitor.html">Monitor</a></li><li><a href="MonitorStore.html">MonitorStore</a></li><li><a href="PermissionLevels.html">PermissionLevels</a></li><li><a href="Provider.html">Provider</a></li><li><a href="ProviderStore.html">ProviderStore</a></li><li><a href="Resolver.html">Resolver</a></li><li><a href="SchemaManager.html">SchemaManager</a></li><li><a href="SettingGateway.html">SettingGateway</a></li><li><a href="SQL.html">SQL</a></li><li><a href="Util.html">Util</a></li>
+					<li><a href="ArgResolver.html">ArgResolver</a></li><li><a href="CacheManager.html">CacheManager</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandMessage.html">CommandMessage</a></li><li><a href="CommandStore.html">CommandStore</a></li><li><a href="Event.html">Event</a></li><li><a href="EventStore.html">EventStore</a></li><li><a href="Extendable.html">Extendable</a></li><li><a href="ExtendableStore.html">ExtendableStore</a></li><li><a href="Finalizer.html">Finalizer</a></li><li><a href="FinalizerStore.html">FinalizerStore</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorStore.html">InhibitorStore</a></li><li><a href="KlasaClient.html">KlasaClient</a></li><li><a href="Monitor.html">Monitor</a></li><li><a href="MonitorStore.html">MonitorStore</a></li><li><a href="ParsedUsage.html">ParsedUsage</a></li><li><a href="PermissionLevels.html">PermissionLevels</a></li><li><a href="Piece.html">Piece</a></li><li><a href="Provider.html">Provider</a></li><li><a href="ProviderStore.html">ProviderStore</a></li><li><a href="Resolver.html">Resolver</a></li><li><a href="SchemaManager.html">SchemaManager</a></li><li><a href="SettingGateway.html">SettingGateway</a></li><li><a href="SettingResolver.html">SettingResolver</a></li><li><a href="SQL.html">SQL</a></li><li><a href="Store.html">Store</a></li><li><a href="Util.html">Util</a></li>
 				</ul>
 			</li>
 			
 			<li class="dropdown">
 				<a href="tutorials.list.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="tutorial-CreatingCommands.html">CreatingCommands</a></li><li><a href="tutorial-CreatingEvents.html">CreatingEvents</a></li><li><a href="tutorial-CreatingExtendables.html">CreatingExtendables</a></li><li><a href="tutorial-CreatingFinalizers.html">CreatingFinalizers</a></li><li><a href="tutorial-CreatingInhibitors.html">CreatingInhibitors</a></li><li><a href="tutorial-CreatingMonitors.html">CreatingMonitors</a></li><li><a href="tutorial-CreatingProviders.html">CreatingProviders</a></li><li><a href="tutorial-CreatingUsageStrings.html">CreatingUsageStrings</a></li><li><a href="tutorial-GettingStarted.html">GettingStarted</a></li>
+					<li><a href="tutorial-CreatingUsageStrings.html">Understanding Usage Strings</a></li><li><a href="tutorial-GettingStarted.html">Getting Started</a></li><li><a href="tutorial-IncludedPieces.html">Included Pieces</a></li>
 				</ul>
 			</li>
 			
@@ -87,19 +87,18 @@
 			<section class="tutorial-section">
 
 <header>
-    
-
-    <h2>CreatingCommands</h2>
+    <h1>Creating Commands</h1>
 </header>
 
 <article>
-    <h1>Creating your own Commands</h1><p>New commands are created in the <code>./commands/</code> folder, where subfolders are the categories offered in the help command. For instance adding <code>./commands/Misc/test.js</code> will create a command named <code>test</code> in the <code>Misc</code> category. Subcategories can also be created by adding a second folder level.</p>
+    <p>New commands are created in the <code>./commands/</code> folder, where subfolders are the categories offered in the help command. For instance adding <code>./commands/Misc/test.js</code> will create a command named <code>test</code> in the <code>Misc</code> category. Subcategories can also be created by adding a second folder level.</p>
 <pre class="prettyprint source lang-javascript"><code>const { Command } = require('klasa');
 
 module.exports = class extends Command {
 
     constructor(...args) {
-        super(...args, 'yourCommandName', {
+        super(...args, {
+            name: 'yourCommandName',
             enabled: true,
             runIn: ['text', 'dm', 'group'],
             cooldown: 0,
@@ -131,7 +130,7 @@ a boolean. Set to false to completely disable this inhibitor, it cannot be force
 <li><strong>permLevel</strong>: The permission level required to run this command. From 0 as everyone, to 10 as bot owner only with default permlevels.</li>
 <li><strong>requiredSettings</strong>: Any required guild settings, that must be set before you can use this command.</li>
 <li><strong>description</strong>: The command description.</li>
-<li><strong>usage</strong>: The expected arguments for this command. See <a href="tutorial-CreatingUsageStrings.html">CreatingUsageStrings</a> for information on how to use this.</li>
+<li><strong>usage</strong>: The expected arguments for this command. See <a href="tutorial-CreatingUsageStrings.html">Understanding Usage Strings</a> for information on how to use this.</li>
 <li><strong>usageDelim</strong>: The deliminator for how the usage will be deliminated. Popular ones are <code>' '</code> (a space), and <code>', '</code> (a comma space).</li>
 <li><strong>extendedHelp</strong>: A more in depth help string if you would like to define it.</li>
 </ul>
@@ -140,7 +139,17 @@ a boolean. Set to false to completely disable this inhibitor, it cannot be force
 <p>All <a href="global.html#CommandOptions"><code>command options</code></a> are optional, the code above shows all default values. You can delete any line with an optional value that matches the default value.</p>
 <p><code>[...params]</code> represents a variable number of arguments give when the command is run. The name of the arguments in the array (and their count) is determined by the <code>usage</code> property and its given arguments.</p>
 </blockquote>
+<h2>Further Reading:</h2><ul>
+<li><a href="tutorial-CreatingEvents.html">Creating Events</a></li>
+<li><a href="tutorial-CreatingExtendables.html">Creating Extendables</a></li>
+<li><a href="tutorial-CreatingFinalizers.html">Creating Finalizers</a></li>
+<li><a href="tutorial-CreatingInhibitors.html">Creating Inhibitors</a></li>
+<li><a href="tutorial-CreatingMonitors.html">Creating Monitors</a></li>
+<li><a href="tutorial-CreatingProviders.html">Creating Providers</a></li>
+</ul>
 </article>
+
+
 
 </section>
 

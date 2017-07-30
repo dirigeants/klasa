@@ -3,7 +3,7 @@ const { Extendable } = require('klasa');
 module.exports = class extends Extendable {
 
 	constructor(...args) {
-		super(...args, 'sendFiles', ['TextChannel', 'DMChannel', 'GroupDMChannel']);
+		super(...args, ['TextChannel', 'DMChannel', 'GroupDMChannel']);
 	}
 
 	extend(files, content, options = {}) {

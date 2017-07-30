@@ -1,14 +1,17 @@
+const Piece = require('./interfaces/Piece');
 const ParsedUsage = require('../parsers/ParsedUsage');
 
 /**
  * Base class for all Klasa Commands. See {@tutorial CreatingCommands} for more information how to use this class
  * to build custom commands.
  * @tutorial CreatingCommands
+ * @implements {Piece}
  */
 class Command {
 
 	/**
 	 * @typedef {Object} CommandOptions
+	 * @property {string} [name = theFileName] The name of the command
 	 * @property {boolean} [enabled=true] Whether the command is enabled or not
 	 * @property {Array<string>} [runIn=['text','dm','group']] What channel types the command should run in
 	 * @property {number} [cooldown=0] The amount of time before the user can run the command again in seconds
@@ -26,10 +29,9 @@ class Command {
 	 * @param {KlasaClient} client The Klasa Client
 	 * @param {string} dir The path to the core or user command pieces folder
 	 * @param {Array} file The path from the pieces folder to the command file
-	 * @param {string} name The name of the command
 	 * @param {CommandOptions} [options = {}] Optional Command settings
 	 */
-	constructor(client, dir, file, name, options = {}) {
+	constructor(client, dir, file, options = {}) {
 		/**
 		 * @type {KlasaClient}
 		 */
@@ -45,7 +47,7 @@ class Command {
 		 * If the command is enabled or not
 		 * @type {boolean}
 		 */
-		this.enabled = options.enabled || true;
+		this.enabled = 'enabled' in options ? options.enabled : true;
 
 		/**
 		 * What channels the command should run in
@@ -87,7 +89,7 @@ class Command {
 		 * The name of the command
 		 * @type {string}
 		 */
-		this.name = name;
+		this.name = options.name || file[file.length - 1].slice(0, -3);
 
 		/**
 		 * The description of the command
@@ -117,19 +119,19 @@ class Command {
 		 * The full category for the command
 		 * @type {Array<string>}
 		 */
-		this.fullCategory = file;
+		this.fullCategory = file.slice(0, -1);
 
 		/**
 		 * The main category for the command
 		 * @type {string}
 		 */
-		this.category = file[0] || 'General';
+		this.category = this.fullCategory[0] || 'General';
 
 		/**
 		 * The sub category for the command
 		 * @type {string}
 		 */
-		this.subCategory = file[1] || 'General';
+		this.subCategory = this.fullCategory[1] || 'General';
 
 		/**
 		 * The parsed usage for the command
@@ -158,42 +160,6 @@ class Command {
 	}
 
 	/**
-	 * Reloads this command
-	 * @returns {Promise<Command>} The newly loaded command
-	 */
-	async reload() {
-		const cmd = this.client.commands.load(this.dir, this.file);
-		await cmd.init();
-		return cmd;
-	}
-
-	/**
-	 * Unloads this command
-	 * @returns {void}
-	 */
-	unload() {
-		return this.client.commands.delete(this);
-	}
-
-	/**
-	 * Disables this command
-	 * @returns {Command} This command
-	 */
-	disable() {
-		this.enabled = false;
-		return this;
-	}
-
-	/**
-	 * Enables this command
-	 * @returns {Command} This command
-	 */
-	enable() {
-		this.enabled = true;
-		return this;
-	}
-
-	/**
 	 * The run method to be overwritten in actual commands
 	 * @param {CommandMessage} msg The command message mapped on top of the message used to trigger this command
 	 * @param {Array<any>} params The fully resolved parameters based on your usage / usageDelim
@@ -213,6 +179,16 @@ class Command {
 		// Optionally defined in extension Classes
 	}
 
+	// left for documentation
+	/* eslint-disable no-empty-function */
+	async reload() {}
+	unload() {}
+	disable() {}
+	enable() {}
+	/* eslint-enable no-empty-function */
+
 }
+
+Piece.applyToClass(Command);
 
 module.exports = Command;

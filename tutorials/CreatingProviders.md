@@ -1,5 +1,3 @@
-# Creating Data Providers
-
 Data Providers are special classes designed to make your life easier when you're
 using a **database**, there's **no** rule to make them. By default, Klasa uses
 JSON to store per-guild configuration.
@@ -14,7 +12,10 @@ const fs = require('fs-nextra');
 module.exports = class extends Provider {
 
 	constructor(...args) {
-		super(...args, 'json', { description: 'Allows you to use JSON functionality throught Klasa' });
+		super(...args, {
+			name: 'json',
+			description: 'Allows you to use JSON functionality throught Klasa'
+		});
 		this.baseDir = resolve(this.client.clientBaseDir, 'bwd', 'provider', 'json');
 	}
 
@@ -157,3 +158,12 @@ The example above is the JSON provider used in klasa, and interfacing with the s
 Providers are stored in the main `client` object, in the `providers` property. This has an entry
 for each provider added, based on its `name`. So for example if you have it set as
 `sqlite` , you can access it through `client.providers.get("sqlite");`.
+
+
+## Further Reading:
+- {@tutorial CreatingCommands}
+- {@tutorial CreatingEvents}
+- {@tutorial CreatingExtendables}
+- {@tutorial CreatingFinalizers}
+- {@tutorial CreatingInhibitors}
+- {@tutorial CreatingMonitors}

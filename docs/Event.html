@@ -33,14 +33,14 @@
 			<li class="dropdown">
 				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="Command.html">Command</a></li><li><a href="CommandStore.html">CommandStore</a></li><li><a href="Event.html">Event</a></li><li><a href="EventStore.html">EventStore</a></li><li><a href="Extendable.html">Extendable</a></li><li><a href="ExtendableStore.html">ExtendableStore</a></li><li><a href="Finalizer.html">Finalizer</a></li><li><a href="FinalizerStore.html">FinalizerStore</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorStore.html">InhibitorStore</a></li><li><a href="KlasaClient.html">KlasaClient</a></li><li><a href="Monitor.html">Monitor</a></li><li><a href="MonitorStore.html">MonitorStore</a></li><li><a href="PermissionLevels.html">PermissionLevels</a></li><li><a href="Provider.html">Provider</a></li><li><a href="ProviderStore.html">ProviderStore</a></li><li><a href="Resolver.html">Resolver</a></li><li><a href="SchemaManager.html">SchemaManager</a></li><li><a href="SettingGateway.html">SettingGateway</a></li><li><a href="SQL.html">SQL</a></li><li><a href="Util.html">Util</a></li>
+					<li><a href="ArgResolver.html">ArgResolver</a></li><li><a href="CacheManager.html">CacheManager</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandMessage.html">CommandMessage</a></li><li><a href="CommandStore.html">CommandStore</a></li><li><a href="Event.html">Event</a></li><li><a href="EventStore.html">EventStore</a></li><li><a href="Extendable.html">Extendable</a></li><li><a href="ExtendableStore.html">ExtendableStore</a></li><li><a href="Finalizer.html">Finalizer</a></li><li><a href="FinalizerStore.html">FinalizerStore</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorStore.html">InhibitorStore</a></li><li><a href="KlasaClient.html">KlasaClient</a></li><li><a href="Monitor.html">Monitor</a></li><li><a href="MonitorStore.html">MonitorStore</a></li><li><a href="ParsedUsage.html">ParsedUsage</a></li><li><a href="PermissionLevels.html">PermissionLevels</a></li><li><a href="Piece.html">Piece</a></li><li><a href="Provider.html">Provider</a></li><li><a href="ProviderStore.html">ProviderStore</a></li><li><a href="Resolver.html">Resolver</a></li><li><a href="SchemaManager.html">SchemaManager</a></li><li><a href="SettingGateway.html">SettingGateway</a></li><li><a href="SettingResolver.html">SettingResolver</a></li><li><a href="SQL.html">SQL</a></li><li><a href="Store.html">Store</a></li><li><a href="Util.html">Util</a></li>
 				</ul>
 			</li>
 			
 			<li class="dropdown">
 				<a href="tutorials.list.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="tutorial-CreatingCommands.html">CreatingCommands</a></li><li><a href="tutorial-CreatingEvents.html">CreatingEvents</a></li><li><a href="tutorial-CreatingExtendables.html">CreatingExtendables</a></li><li><a href="tutorial-CreatingFinalizers.html">CreatingFinalizers</a></li><li><a href="tutorial-CreatingInhibitors.html">CreatingInhibitors</a></li><li><a href="tutorial-CreatingMonitors.html">CreatingMonitors</a></li><li><a href="tutorial-CreatingProviders.html">CreatingProviders</a></li><li><a href="tutorial-CreatingUsageStrings.html">CreatingUsageStrings</a></li><li><a href="tutorial-GettingStarted.html">GettingStarted</a></li>
+					<li><a href="tutorial-CreatingUsageStrings.html">Understanding Usage Strings</a></li><li><a href="tutorial-GettingStarted.html">Getting Started</a></li><li><a href="tutorial-IncludedPieces.html">Included Pieces</a></li>
 				</ul>
 			</li>
 			
@@ -95,7 +95,7 @@
         Event
         </h2>
         
-            <div class="class-description">Base class for all Klasa Events. See <a href="tutorial-CreatingEvents.html">CreatingEvents</a> for more information how to use this class
+            <div class="class-description">Base class for all Klasa Events. See <a href="tutorial-CreatingEvents.html">Creating Events</a> for more information how to use this class
 to build custom events.</div>
         
     
@@ -108,7 +108,7 @@ to build custom events.</div>
         
 <hr>
 <dt>
-    <h4 class="name" id="Event"><span class="type-signature"></span>new Event(client, dir, file, name [, options])</h4>
+    <h4 class="name" id="Event"><span class="type-signature"></span>new Event(client, dir, file [, options])</h4>
     
     
 </dt>
@@ -259,42 +259,6 @@ to build custom events.</div>
 
         <tr>
             
-                <td class="name"><code>name</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">The name of the event</td>
-        </tr>
-
-    
-
-        <tr>
-            
                 <td class="name"><code>options</code></td>
             
 
@@ -352,6 +316,13 @@ to build custom events.</div>
     
 
     
+    <dt class="implements">Implements:</dt>
+    <dd class="implements"><ul>
+        
+            <li><a href="Piece.html">Piece</a></li>
+        
+    </ul></dd>
+    
 
     
 
@@ -370,14 +341,14 @@ to build custom events.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L20">lib/structures/Event.js#L20</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L23">lib/structures/Event.js#L23</a>	</dd>
 	
 
 	
 	<dt class="tag-tutorial method-doc-label method-doc-details-label">Tutorials:</dt>
 	<dd class="tag-tutorial">
 		<ul>
-			<li><a href="tutorial-CreatingEvents.html">CreatingEvents</a></li>
+			<li><a href="tutorial-CreatingEvents.html">Creating Events</a></li>
 			</ul>
 	</dd>
 	
@@ -417,7 +388,7 @@ to build custom events.</div>
     
 
     
-        <h3 class="subsection-title">Members</h3>
+        <h3 class="subsection-title">Properties</h3>
 
         <dl>
             
@@ -476,7 +447,7 @@ to build custom events.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L24">lib/structures/Event.js#L24</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L27">lib/structures/Event.js#L27</a>	</dd>
 	
 
 	
@@ -551,7 +522,7 @@ to build custom events.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L30">lib/structures/Event.js#L30</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L33">lib/structures/Event.js#L33</a>	</dd>
 	
 
 	
@@ -626,7 +597,7 @@ to build custom events.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L54">lib/structures/Event.js#L54</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L57">lib/structures/Event.js#L57</a>	</dd>
 	
 
 	
@@ -701,7 +672,7 @@ to build custom events.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L36">lib/structures/Event.js#L36</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L39">lib/structures/Event.js#L39</a>	</dd>
 	
 
 	
@@ -776,7 +747,7 @@ to build custom events.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L42">lib/structures/Event.js#L42</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L45">lib/structures/Event.js#L45</a>	</dd>
 	
 
 	
@@ -851,7 +822,7 @@ to build custom events.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L48">lib/structures/Event.js#L48</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L51">lib/structures/Event.js#L51</a>	</dd>
 	
 
 	
@@ -883,7 +854,7 @@ to build custom events.</div>
 
     
     <div class="description">
-        Disables this finalizer
+        Disables this piece
     </div>
     
 
@@ -909,6 +880,13 @@ to build custom events.</div>
     
 
     
+    <dt class="implements">Implements:</dt>
+    <dd class="implements"><ul>
+        
+            <li><a href="Piece.html#disable">Piece#disable</a></li>
+        
+    </ul></dd>
+    
 
     
 
@@ -927,7 +905,7 @@ to build custom events.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L79">lib/structures/Event.js#L79</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/interfaces/Piece.js#L37">lib/structures/interfaces/Piece.js#L37</a>	</dd>
 	
 
 	
@@ -953,7 +931,7 @@ to build custom events.</div>
     
             
 <div class="param-desc">
-    This finalizer
+    This piece
 </div>
 
 
@@ -964,7 +942,7 @@ to build custom events.</div>
     </dt>
     <dd>
         
-<span class="param-type"><a href="Finalizer.html">Finalizer</a></span>
+<span class="param-type"><a href="Piece.html">Piece</a></span>
 
 
 
@@ -989,7 +967,7 @@ to build custom events.</div>
 
     
     <div class="description">
-        Enables this finalizer
+        Enables this piece
     </div>
     
 
@@ -1015,6 +993,13 @@ to build custom events.</div>
     
 
     
+    <dt class="implements">Implements:</dt>
+    <dd class="implements"><ul>
+        
+            <li><a href="Piece.html#enable">Piece#enable</a></li>
+        
+    </ul></dd>
+    
 
     
 
@@ -1033,7 +1018,7 @@ to build custom events.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L88">lib/structures/Event.js#L88</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/interfaces/Piece.js#L46">lib/structures/interfaces/Piece.js#L46</a>	</dd>
 	
 
 	
@@ -1059,7 +1044,7 @@ to build custom events.</div>
     
             
 <div class="param-desc">
-    This finalizer
+    This piece
 </div>
 
 
@@ -1070,7 +1055,7 @@ to build custom events.</div>
     </dt>
     <dd>
         
-<span class="param-type"><a href="Finalizer.html">Finalizer</a></span>
+<span class="param-type"><a href="Piece.html">Piece</a></span>
 
 
 
@@ -1139,7 +1124,7 @@ to build custom events.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L118">lib/structures/Event.js#L118</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L85">lib/structures/Event.js#L85</a>	</dd>
 	
 
 	
@@ -1197,7 +1182,7 @@ to build custom events.</div>
 
     
     <div class="description">
-        Reloads this event
+        Reloads this piece
     </div>
     
 
@@ -1223,6 +1208,13 @@ to build custom events.</div>
     
 
     
+    <dt class="implements">Implements:</dt>
+    <dd class="implements"><ul>
+        
+            <li><a href="Piece.html#reload">Piece#reload</a></li>
+        
+    </ul></dd>
+    
 
     
 
@@ -1241,7 +1233,7 @@ to build custom events.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L61">lib/structures/Event.js#L61</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/interfaces/Piece.js#L19">lib/structures/interfaces/Piece.js#L19</a>	</dd>
 	
 
 	
@@ -1267,7 +1259,7 @@ to build custom events.</div>
     
             
 <div class="param-desc">
-    The newly loaded event
+    The newly loaded piece
 </div>
 
 
@@ -1278,7 +1270,7 @@ to build custom events.</div>
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;<a href="Event.html">Event</a>></span>
+<span class="param-type">Promise.&lt;<a href="Piece.html">Piece</a>></span>
 
 
 
@@ -1397,7 +1389,7 @@ to build custom events.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L109">lib/structures/Event.js#L109</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L76">lib/structures/Event.js#L76</a>	</dd>
 	
 
 	
@@ -1455,7 +1447,7 @@ to build custom events.</div>
 
     
     <div class="description">
-        Unloads this event
+        Unloads this piece
     </div>
     
 
@@ -1481,6 +1473,13 @@ to build custom events.</div>
     
 
     
+    <dt class="implements">Implements:</dt>
+    <dd class="implements"><ul>
+        
+            <li><a href="Piece.html#unload">Piece#unload</a></li>
+        
+    </ul></dd>
+    
 
     
 
@@ -1499,7 +1498,7 @@ to build custom events.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Event.js#L71">lib/structures/Event.js#L71</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/interfaces/Piece.js#L29">lib/structures/interfaces/Piece.js#L29</a>	</dd>
 	
 
 	

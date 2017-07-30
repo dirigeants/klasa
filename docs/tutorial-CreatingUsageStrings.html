@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Klasa Tutorial: CreatingUsageStrings</title>
+	<title>Klasa Tutorial: Understanding Usage Strings</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -33,14 +33,14 @@
 			<li class="dropdown">
 				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="Command.html">Command</a></li><li><a href="CommandStore.html">CommandStore</a></li><li><a href="Event.html">Event</a></li><li><a href="EventStore.html">EventStore</a></li><li><a href="Extendable.html">Extendable</a></li><li><a href="ExtendableStore.html">ExtendableStore</a></li><li><a href="Finalizer.html">Finalizer</a></li><li><a href="FinalizerStore.html">FinalizerStore</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorStore.html">InhibitorStore</a></li><li><a href="KlasaClient.html">KlasaClient</a></li><li><a href="Monitor.html">Monitor</a></li><li><a href="MonitorStore.html">MonitorStore</a></li><li><a href="PermissionLevels.html">PermissionLevels</a></li><li><a href="Provider.html">Provider</a></li><li><a href="ProviderStore.html">ProviderStore</a></li><li><a href="Resolver.html">Resolver</a></li><li><a href="SchemaManager.html">SchemaManager</a></li><li><a href="SettingGateway.html">SettingGateway</a></li><li><a href="SQL.html">SQL</a></li><li><a href="Util.html">Util</a></li>
+					<li><a href="ArgResolver.html">ArgResolver</a></li><li><a href="CacheManager.html">CacheManager</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandMessage.html">CommandMessage</a></li><li><a href="CommandStore.html">CommandStore</a></li><li><a href="Event.html">Event</a></li><li><a href="EventStore.html">EventStore</a></li><li><a href="Extendable.html">Extendable</a></li><li><a href="ExtendableStore.html">ExtendableStore</a></li><li><a href="Finalizer.html">Finalizer</a></li><li><a href="FinalizerStore.html">FinalizerStore</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorStore.html">InhibitorStore</a></li><li><a href="KlasaClient.html">KlasaClient</a></li><li><a href="Monitor.html">Monitor</a></li><li><a href="MonitorStore.html">MonitorStore</a></li><li><a href="ParsedUsage.html">ParsedUsage</a></li><li><a href="PermissionLevels.html">PermissionLevels</a></li><li><a href="Piece.html">Piece</a></li><li><a href="Provider.html">Provider</a></li><li><a href="ProviderStore.html">ProviderStore</a></li><li><a href="Resolver.html">Resolver</a></li><li><a href="SchemaManager.html">SchemaManager</a></li><li><a href="SettingGateway.html">SettingGateway</a></li><li><a href="SettingResolver.html">SettingResolver</a></li><li><a href="SQL.html">SQL</a></li><li><a href="Store.html">Store</a></li><li><a href="Util.html">Util</a></li>
 				</ul>
 			</li>
 			
 			<li class="dropdown">
 				<a href="tutorials.list.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="tutorial-CreatingCommands.html">CreatingCommands</a></li><li><a href="tutorial-CreatingEvents.html">CreatingEvents</a></li><li><a href="tutorial-CreatingExtendables.html">CreatingExtendables</a></li><li><a href="tutorial-CreatingFinalizers.html">CreatingFinalizers</a></li><li><a href="tutorial-CreatingInhibitors.html">CreatingInhibitors</a></li><li><a href="tutorial-CreatingMonitors.html">CreatingMonitors</a></li><li><a href="tutorial-CreatingProviders.html">CreatingProviders</a></li><li><a href="tutorial-CreatingUsageStrings.html">CreatingUsageStrings</a></li><li><a href="tutorial-GettingStarted.html">GettingStarted</a></li>
+					<li><a href="tutorial-CreatingUsageStrings.html">Understanding Usage Strings</a></li><li><a href="tutorial-GettingStarted.html">Getting Started</a></li><li><a href="tutorial-IncludedPieces.html">Included Pieces</a></li>
 				</ul>
 			</li>
 			
@@ -87,9 +87,7 @@
 			<section class="tutorial-section">
 
 <header>
-    
-
-    <h2>CreatingUsageStrings</h2>
+    <h1>Understanding Usage Strings</h1>
 </header>
 
 <article>
@@ -165,11 +163,11 @@
 </tr>
 <tr>
 <td style="text-align:right"><code>event</code></td>
-<td>A <a href="Event.html"><code>Event</code></a> instance returned from the event name.</td>
+<td>An <a href="Event.html"><code>Event</code></a> instance returned from the event name.</td>
 </tr>
 <tr>
 <td style="text-align:right"><code>inhibitor</code></td>
-<td>A <a href="Inhibitor.html"><code>Inhibitor</code></a> instance returned from the inhibitor name.</td>
+<td>An <a href="Inhibitor.html"><code>Inhibitor</code></a> instance returned from the inhibitor name.</td>
 </tr>
 <tr>
 <td style="text-align:right"><code>finalizer</code></td>
@@ -191,7 +189,7 @@
 <hr>
 <h1>Using arguments in your command.</h1><p>Now, after we understand how to configurate the command, we'll start writting it:</p>
 <pre class="prettyprint source lang-javascript"><code>async run(msg, [...params]) {
-    // This is where you place the code you want to run for your command
+    // This is where you place the code you want to run when your command is called
 }</code></pre><p><code>[...params]</code> represents a variable number of parameters given when the command is run. The name of the parameters in the array (and their count) is determined by the <code>usage</code> property and its given arguments.</p>
 <blockquote>
 <p>Note that the commands' parameters are an array. This is a trick called <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment">Destructuring assignment</a>.</p>
@@ -205,11 +203,13 @@
 </blockquote>
 <p>Keep in mind that arguments are delimited by the character or combination of characters written in <em>usageDelim</em>. In this case, we have assigned the character <code>|</code> for it. How do we use this command? Easy:</p>
 <p><code>+messager 293107496191655936|delete</code></p>
-<p>The line above will execute the command with the name <code>messager</code> (or a command with <code>messager</code> as an alias), it'll use <a href="https://discord.js.org/#/docs/main/stable/class/TextChannel?scrollTo=fetchMessage">Channel.fetchMessages</a> (or <a href="https://discord.js.org/#/docs/main/stable/class/TextChannel?scrollTo=fetchMessages">Channel.fetchMessages</a> if the bot is a userbot). If the message is not found (you mistyped it or the message is in another channel) it'll warn you that the message hasn't been found. The next argument is a literal, in which must be either <code>delete</code> or <code>edit</code>.</p>
+<p>The line above will execute the command with the name <code>messager</code> (or a command with <code>messager</code> as an alias), it'll use <a href="https://discord.js.org/#/docs/main/stable/class/TextChannel?scrollTo=fetchMessage">Channel.fetchMessages</a>. If the message is not found (you mistyped it or the message is in another channel) it'll warn you that the message hasn't been found. The next argument is a literal, in which must be either <code>delete</code> or <code>edit</code>.</p>
 <blockquote>
 <p>If you need something created before the command is ever ran, you can specify <code>init() {...}</code> to make Klasa run that portion of code beforehand.</p>
 </blockquote>
 </article>
+
+
 
 </section>
 

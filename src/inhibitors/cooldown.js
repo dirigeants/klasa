@@ -3,7 +3,7 @@ const { Inhibitor } = require('klasa');
 module.exports = class extends Inhibitor {
 
 	constructor(...args) {
-		super(...args, 'cooldown', { spamProtection: true });
+		super(...args, { spamProtection: true });
 	}
 
 	async run(msg, cmd) {

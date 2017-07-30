@@ -5,7 +5,7 @@ const { resolve, join } = require('path');
 module.exports = class extends Command {
 
 	constructor(...args) {
-		super(...args, 'transfer', {
+		super(...args, {
 			permLevel: 10,
 			description: 'Transfers a core piece to its respective folder',
 			usage: '<Command:cmd|Inhibitor:inhibitor|Event:event|Monitor:monitor|Finalizer:finalizer>'

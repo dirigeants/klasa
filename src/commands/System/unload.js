@@ -3,11 +3,11 @@ const { Command } = require('klasa');
 module.exports = class extends Command {
 
 	constructor(...args) {
-		super(...args, 'unload', {
+		super(...args, {
 			aliases: ['u'],
 			permLevel: 10,
 			description: 'Unloads the klasa piece.',
-			usage: '<Inhibitor:inhibitor|Finalizer:finalizer|Monitor:monitor|Provider:provider|Event:event|Command:cmd>'
+			usage: '<Inhibitor:inhibitor|Extendable:extendable|Finalizer:finalizer|Monitor:monitor|Provider:provider|Event:event|Command:cmd>'
 		});
 	}
 

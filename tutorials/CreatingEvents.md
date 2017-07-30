@@ -1,5 +1,3 @@
-# Creating Event Handlers
-
 Events are placed in `./events/`. If a conflicting event is present in both the core and your client, *only your client version* is loaded and will run when that event is triggered.
 
 Their structure is the following:
@@ -10,7 +8,7 @@ const { Event } = require('klasa');
 module.exports = class extends Event {
 
 	constructor(...args) {
-		super(...args, 'yourEventName');
+		super(...args, { name:'yourEventName' });
 	}
 
 	run(...params) {
@@ -25,3 +23,12 @@ module.exports = class extends Event {
 ```
 
 Where `...params` are arguments you would *normally* get from those events. For example, while the `ready` event would only have none, the `guildMemberAdd` event would be `member`.
+
+
+## Further Reading:
+- {@tutorial CreatingCommands}
+- {@tutorial CreatingExtendables}
+- {@tutorial CreatingFinalizers}
+- {@tutorial CreatingInhibitors}
+- {@tutorial CreatingMonitors}
+- {@tutorial CreatingProviders}

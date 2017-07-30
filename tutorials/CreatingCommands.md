@@ -1,5 +1,3 @@
-# Creating your own Commands
-
 New commands are created in the `./commands/` folder, where subfolders are the categories offered in the help command. For instance adding `./commands/Misc/test.js` will create a command named `test` in the `Misc` category. Subcategories can also be created by adding a second folder level.
 
 ```javascript
@@ -8,7 +6,8 @@ const { Command } = require('klasa');
 module.exports = class extends Command {
 
 	constructor(...args) {
-		super(...args, 'yourCommandName', {
+		super(...args, {
+			name: 'yourCommandName',
             enabled: true,
             runIn: ['text', 'dm', 'group'],
             cooldown: 0,
@@ -52,3 +51,12 @@ a boolean. Set to false to completely disable this inhibitor, it cannot be force
 > All [command options]{@link CommandOptions} are optional, the code above shows all default values. You can delete any line with an optional value that matches the default value.
 
 >`[...params]` represents a variable number of arguments give when the command is run. The name of the arguments in the array (and their count) is determined by the `usage` property and its given arguments.
+
+
+## Further Reading:
+- {@tutorial CreatingEvents}
+- {@tutorial CreatingExtendables}
+- {@tutorial CreatingFinalizers}
+- {@tutorial CreatingInhibitors}
+- {@tutorial CreatingMonitors}
+- {@tutorial CreatingProviders}

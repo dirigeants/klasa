@@ -1,18 +1,85 @@
+/**
+ * The internal class that turns command arguments into command parameters
+ */
 class CommandMessage {
 
+	/**
+	 * @param {external:Message} msg The message this command message is for
+	 * @param {Command} cmd The command being run
+	 * @param {string} prefix The prefix the user used to run the command
+	 * @param {number} prefixLength The length of the prefix the user used to run the command
+	 */
 	constructor(msg, cmd, prefix, prefixLength) {
+		/**
+		 * The client this CommandMessage was created with.
+		 * @name CommandMessage#client
+		 * @type {KlasaClient}
+		 * @readonly
+		 */
 		Object.defineProperty(this, 'client', { value: msg.client });
+
+		/**
+		 * The message this command message is for
+		 * @type {external:Message}
+		 */
 		this.msg = msg;
+
+		/**
+		 * The command being run
+		 * @type {Command}
+		 */
 		this.cmd = cmd;
+
+		/**
+		 * The prefix used
+		 * @type {string}
+		 */
 		this.prefix = prefix;
+
+		/**
+		 * The length of the prefix used
+		 * @type {number}
+		 */
 		this.prefixLength = prefixLength;
+
+		/**
+		 * The string arguments derived from the usageDelim of the command
+		 * @type {string[]}
+		 */
 		this.args = this.constructor.getArgs(this);
+
+		/**
+		 * The parameters resolved by this class
+		 * @type {any[]}
+		 */
 		this.params = [];
+
+		/**
+		 * If the command reprompted for missing args
+		 * @type {boolean}
+		 */
 		this.reprompted = false;
+
+		/**
+		 * A cache of the current usage while validating
+		 * @private
+		 * @type {Object}
+		 */
 		this._currentUsage = {};
+
+		/**
+		 * Whether the current usage is a repeating arg
+		 * @private
+		 * @type {boolean}
+		 */
 		this._repeat = false;
 	}
 
+	/**
+	 * Validates and resolves args into parameters
+	 * @private
+	 * @returns {any[]} The resolved parameters
+	 */
 	async validateArgs() {
 		if (this.params.length >= this.cmd.usage.parsedUsage.length && this.params.length >= this.args.length) {
 			return this.params;
@@ -63,6 +130,13 @@ class CommandMessage {
 		}
 	}
 
+	/**
+	 * Validates and resolves args into parameters, when multiple types of usage is defined
+	 * @param {number} possible The id of the possible usage currently being checked
+	 * @param {boolean} validated Escapes the recursive function if the previous iteration validated the arg into a parameter
+	 * @private
+	 * @returns {any[]} The resolved parameters
+	 */
 	async multiPossibles(possible, validated) {
 		if (validated) {
 			return this.validateArgs();
@@ -90,7 +164,12 @@ class CommandMessage {
 		}
 	}
 
-
+	/**
+	 * Parses a message into string args
+	 * @param {CommandMessage} cmdMsg this command message
+	 * @private
+	 * @returns {string[]}
+	 */
 	static getArgs(cmdMsg) {
 		const args = cmdMsg.msg.content.slice(cmdMsg.prefixLength).trim().split(' ').slice(1).join(' ').split(cmdMsg.cmd.usageDelim !== '' ? cmdMsg.cmd.usageDelim : undefined);
 		if (args[0] === '') return [];
