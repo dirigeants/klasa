@@ -244,7 +244,7 @@ class KlasaClient extends Discord.Client {
 			this.finalizers.loadAll(),
 			this.events.loadAll(),
 			this.monitors.loadAll(),
-			this.monitors.loadAll(),
+			this.languages.loadAll(),
 			this.providers.loadAll(),
 			this.extendables.loadAll()
 		]).catch((err) => {
