@@ -33,7 +33,7 @@
 			<li class="dropdown">
 				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="ArgResolver.html">ArgResolver</a></li><li><a href="CacheManager.html">CacheManager</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandMessage.html">CommandMessage</a></li><li><a href="CommandStore.html">CommandStore</a></li><li><a href="Event.html">Event</a></li><li><a href="EventStore.html">EventStore</a></li><li><a href="Extendable.html">Extendable</a></li><li><a href="ExtendableStore.html">ExtendableStore</a></li><li><a href="Finalizer.html">Finalizer</a></li><li><a href="FinalizerStore.html">FinalizerStore</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorStore.html">InhibitorStore</a></li><li><a href="KlasaClient.html">KlasaClient</a></li><li><a href="Monitor.html">Monitor</a></li><li><a href="MonitorStore.html">MonitorStore</a></li><li><a href="ParsedUsage.html">ParsedUsage</a></li><li><a href="PermissionLevels.html">PermissionLevels</a></li><li><a href="Piece.html">Piece</a></li><li><a href="Provider.html">Provider</a></li><li><a href="ProviderStore.html">ProviderStore</a></li><li><a href="Resolver.html">Resolver</a></li><li><a href="SchemaManager.html">SchemaManager</a></li><li><a href="SettingGateway.html">SettingGateway</a></li><li><a href="SettingResolver.html">SettingResolver</a></li><li><a href="SQL.html">SQL</a></li><li><a href="Store.html">Store</a></li><li><a href="Util.html">Util</a></li>
+					<li><a href="ArgResolver.html">ArgResolver</a></li><li><a href="CacheManager.html">CacheManager</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandMessage.html">CommandMessage</a></li><li><a href="CommandStore.html">CommandStore</a></li><li><a href="Event.html">Event</a></li><li><a href="EventStore.html">EventStore</a></li><li><a href="Extendable.html">Extendable</a></li><li><a href="ExtendableStore.html">ExtendableStore</a></li><li><a href="Finalizer.html">Finalizer</a></li><li><a href="FinalizerStore.html">FinalizerStore</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorStore.html">InhibitorStore</a></li><li><a href="KlasaClient.html">KlasaClient</a></li><li><a href="Language.html">Language</a></li><li><a href="LanguageStore.html">LanguageStore</a></li><li><a href="Monitor.html">Monitor</a></li><li><a href="MonitorStore.html">MonitorStore</a></li><li><a href="ParsedUsage.html">ParsedUsage</a></li><li><a href="PermissionLevels.html">PermissionLevels</a></li><li><a href="Piece.html">Piece</a></li><li><a href="Provider.html">Provider</a></li><li><a href="ProviderStore.html">ProviderStore</a></li><li><a href="Resolver.html">Resolver</a></li><li><a href="SchemaManager.html">SchemaManager</a></li><li><a href="SettingGateway.html">SettingGateway</a></li><li><a href="SettingResolver.html">SettingResolver</a></li><li><a href="SQL.html">SQL</a></li><li><a href="Store.html">Store</a></li><li><a href="Util.html">Util</a></li>
 				</ul>
 			</li>
 			
@@ -214,7 +214,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id=".maxOrMin"><span class="type-signature">&lt;async, static> </span>maxOrMin(value, min, max)</h4>
+    <h4 class="name" id=".maxOrMin"><span class="type-signature">&lt;async, static> </span>maxOrMin(guild, value, min, max)</h4>
     
     
 </dt>
@@ -255,6 +255,38 @@
     </thead>
 
     <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>guild</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="external-Guild.html">external:Guild</a></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The guild to resolve for</td>
+        </tr>
+
     
 
         <tr>
@@ -394,7 +426,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L142">lib/parsers/settingResolver.js#L142</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L149">lib/parsers/settingResolver.js#L149</a>	</dd>
 	
 
 	
@@ -444,7 +476,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="boolean"><span class="type-signature">&lt;async> </span>boolean(data)</h4>
+    <h4 class="name" id="boolean"><span class="type-signature">&lt;async> </span>boolean(data, guild)</h4>
     
     
 </dt>
@@ -508,6 +540,30 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>guild</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="external-Guild.html">external:Guild</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The guild to resolve for</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -551,7 +607,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L59">lib/parsers/settingResolver.js#L59</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L63">lib/parsers/settingResolver.js#L63</a>	</dd>
 	
 
 	
@@ -601,7 +657,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="channel"><span class="type-signature">&lt;async> </span>channel(data)</h4>
+    <h4 class="name" id="channel"><span class="type-signature">&lt;async> </span>channel(data, guild)</h4>
     
     
 </dt>
@@ -665,6 +721,30 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>guild</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="external-Guild.html">external:Guild</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The guild to resolve for</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -708,7 +788,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L25">lib/parsers/settingResolver.js#L25</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L27">lib/parsers/settingResolver.js#L27</a>	</dd>
 	
 
 	
@@ -758,7 +838,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="command"><span class="type-signature">&lt;async> </span>command(data)</h4>
+    <h4 class="name" id="command"><span class="type-signature">&lt;async> </span>command(data, guild)</h4>
     
     
 </dt>
@@ -822,6 +902,30 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>guild</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="external-Guild.html">external:Guild</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The guild to resolve for</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -860,7 +964,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L128">lib/parsers/settingResolver.js#L128</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L134">lib/parsers/settingResolver.js#L134</a>	</dd>
 	
 
 	
@@ -994,7 +1098,7 @@
 
             
 
-            <td class="description last">The guild this setting is for</td>
+            <td class="description last">The guild to resolve for</td>
         </tr>
 
     
@@ -1161,7 +1265,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L105">lib/parsers/settingResolver.js#L105</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L109">lib/parsers/settingResolver.js#L109</a>	</dd>
 	
 
 	
@@ -1211,7 +1315,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="guild"><span class="type-signature">&lt;async> </span>guild(data)</h4>
+    <h4 class="name" id="guild"><span class="type-signature">&lt;async> </span>guild(data, guild)</h4>
     
     
 </dt>
@@ -1275,6 +1379,30 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>guild</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="external-Guild.html">external:Guild</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The guild to resolve for</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -1318,7 +1446,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L36">lib/parsers/settingResolver.js#L36</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L39">lib/parsers/settingResolver.js#L39</a>	</dd>
 	
 
 	
@@ -1452,7 +1580,7 @@
 
             
 
-            <td class="description last">The guild this setting is for</td>
+            <td class="description last">The guild to resolve for</td>
         </tr>
 
     
@@ -1619,7 +1747,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L89">lib/parsers/settingResolver.js#L89</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L93">lib/parsers/settingResolver.js#L93</a>	</dd>
 	
 
 	
@@ -2129,7 +2257,7 @@
 
             
 
-            <td class="description last">The guild this setting is for</td>
+            <td class="description last">The guild to resolve for</td>
         </tr>
 
     
@@ -2176,7 +2304,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L48">lib/parsers/settingResolver.js#L48</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L51">lib/parsers/settingResolver.js#L51</a>	</dd>
 	
 
 	
@@ -2310,7 +2438,7 @@
 
             
 
-            <td class="description last">The guild this setting is for</td>
+            <td class="description last">The guild to resolve for</td>
         </tr>
 
     
@@ -2477,7 +2605,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L74">lib/parsers/settingResolver.js#L74</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L78">lib/parsers/settingResolver.js#L78</a>	</dd>
 	
 
 	
@@ -2527,7 +2655,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="url"><span class="type-signature">&lt;async> </span>url(data)</h4>
+    <h4 class="name" id="url"><span class="type-signature">&lt;async> </span>url(data, guild)</h4>
     
     
 </dt>
@@ -2591,6 +2719,30 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>guild</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="external-Guild.html">external:Guild</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The guild to resolve for</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -2634,7 +2786,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L117">lib/parsers/settingResolver.js#L117</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L122">lib/parsers/settingResolver.js#L122</a>	</dd>
 	
 
 	
@@ -2684,7 +2836,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="user"><span class="type-signature">&lt;async> </span>user(data)</h4>
+    <h4 class="name" id="user"><span class="type-signature">&lt;async> </span>user(data, guild)</h4>
     
     
 </dt>
@@ -2748,6 +2900,30 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>guild</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="external-Guild.html">external:Guild</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The guild to resolve for</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -2791,7 +2967,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L14">lib/parsers/settingResolver.js#L14</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L15">lib/parsers/settingResolver.js#L15</a>	</dd>
 	
 
 	
