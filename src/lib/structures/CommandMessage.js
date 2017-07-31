@@ -105,7 +105,7 @@ class CommandMessage {
 			this.args.splice(this.params.length, 1, null);
 			throw this.client.methods.util.newError(this._currentUsage.possibles.length === 1 ?
 				this.msg.language.get('COMMANDMESSAGE_MISSING_REQUIRED', this._currentUsage.possibles[0].name) :
-				this.msg.language.get('COMMANDMESSAGE_MISSING_OPTION', this._currentUsage.possibles.map(poss => poss.name).join(', ')), 1);
+				this.msg.language.get('COMMANDMESSAGE_MISSING_OPTIONALS', this._currentUsage.possibles.map(poss => poss.name).join(', ')), 1);
 		} else if (this._currentUsage.possibles.length === 1) {
 			if (this.client.argResolver[this._currentUsage.possibles[0].type]) {
 				return this.client.argResolver[this._currentUsage.possibles[0].type](this.args[this.params.length], this._currentUsage, 0, this._repeat, this.msg)
