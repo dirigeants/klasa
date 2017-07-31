@@ -238,11 +238,12 @@ class KlasaClient extends Discord.Client {
 	 */
 	async login(token) {
 		const start = now();
-		const [[commands, aliases], inhibitors, finalizers, events, monitors, providers, extendables] = await Promise.all([
+		const [[commands, aliases], inhibitors, finalizers, events, monitors, languages, providers, extendables] = await Promise.all([
 			this.commands.loadAll(),
 			this.inhibitors.loadAll(),
 			this.finalizers.loadAll(),
 			this.events.loadAll(),
+			this.monitors.loadAll(),
 			this.monitors.loadAll(),
 			this.providers.loadAll(),
 			this.extendables.loadAll()
@@ -255,6 +256,7 @@ class KlasaClient extends Discord.Client {
 			`Loaded ${inhibitors} command inhibitors.`,
 			`Loaded ${finalizers} command finalizers.`,
 			`Loaded ${monitors} message monitors.`,
+			`Loaded ${languages} languages.`,
 			`Loaded ${providers} providers.`,
 			`Loaded ${events} events.`,
 			`Loaded ${extendables} extendables.`
