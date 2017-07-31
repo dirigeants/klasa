@@ -125,8 +125,8 @@ class ArgResolver extends Resolver {
 	 * @returns {Language}
 	 */
 	async language(arg, currentUsage, possible, repeat, msg) {
-		const monitor = this.client.monitors.get(arg);
-		if (monitor) return monitor;
+		const language = this.client.languages.get(arg);
+		if (language) return language;
 		if (currentUsage.type === 'optional' && !repeat) return null;
 		throw msg.language.get('ARG_RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, 'language');
 	}
