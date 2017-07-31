@@ -30,7 +30,6 @@ class SettingGateway extends CacheManager {
 	 * @returns {void}
 	 */
 	async init() {
-		this.provider = this.client.providers.get(this.engine);
 		if (!this.provider) throw `This provider (${this.engine}) does not exist in your system.`;
 		await this.schemaManager.init();
 		this.sql = this.provider.sql ? new SQL(this.client, this.provider) : false;
@@ -44,6 +43,15 @@ class SettingGateway extends CacheManager {
 			for (let i = 0; i < data.length; i++) this.sql.deserializer(data[i]);
 		}
 		if (data[0]) for (const key of data) super.set(key.id, key);
+	}
+
+	/**
+	 * Get the current provider.
+	 * @readonly
+	 * @returns {Provider}
+	 */
+	get provider() {
+		return this.client.providers.get(this.engine);
 	}
 
 	/**
