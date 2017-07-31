@@ -10,6 +10,7 @@ const CommandStore = require('./structures/CommandStore');
 const InhibitorStore = require('./structures/InhibitorStore');
 const FinalizerStore = require('./structures/FinalizerStore');
 const MonitorStore = require('./structures/MonitorStore');
+const LanguageStore = require('./structures/LanguageStore');
 const ProviderStore = require('./structures/ProviderStore');
 const EventStore = require('./structures/EventStore');
 const ExtendableStore = require('./structures/ExtendableStore');
@@ -52,6 +53,7 @@ class KlasaClient extends Discord.Client {
 		 */
 		this.config = config;
 		this.config.provider = config.provider || {};
+		this.config.language = config.language || 'en-US';
 
 		/**
 		 * The directory to the node_modules folder where Klasa exists
@@ -94,6 +96,12 @@ class KlasaClient extends Discord.Client {
 		 * @type {MonitorStore}
 		 */
 		this.monitors = new MonitorStore(this);
+
+		/**
+		 * The cache where languages are stored
+		 * @type {LanguageStore}
+		 */
+		this.languages = new LanguageStore(this);
 
 		/**
 		 * The cache where providers are stored

@@ -69,11 +69,11 @@ module.exports = class extends Monitor {
 	}
 
 	async awaitMessage(msg, start, error) {
-		const message = await msg.channel.send(`<@!${msg.author.id}> | **${error}** | You have **30** seconds to respond to this prompt with a valid argument. Type **"ABORT"** to abort this prompt.`)
+		const message = await msg.channel.send(msg.language.get('MONITOR_COMMAND_HANDLER_REPROMPT', `<@!${msg.author.id}>`, error))
 			.catch((err) => { throw newError(err); });
 
 		const param = await msg.channel.awaitMessages(response => response.author.id === msg.author.id && response.id !== message.id, { max: 1, time: 30000, errors: ['time'] });
-		if (param.first().content.toLowerCase() === 'abort') throw 'Aborted';
+		if (param.first().content.toLowerCase() === 'abort') throw msg.language.get('MONITOR_COMMAND_HANDLER_ABORTED');
 		msg.args[msg.args.lastIndexOf(null)] = param.first().content;
 		msg.reprompted = true;
 

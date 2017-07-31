@@ -15,8 +15,8 @@ module.exports = class extends Command {
 
 	async run(msg, [action, key, ...value]) {
 		const configs = msg.guild.settings;
-		if (action !== 'list' && !key) return msg.sendMessage('You must provide a key');
-		if (['set', 'remove'].includes(action) && !value[0]) return msg.sendMessage('You must provide a value');
+		if (action !== 'list' && !key) return msg.sendMessage(msg.language.get('COMMAND_CONF_NOKEY'));
+		if (['set', 'remove'].includes(action) && !value[0]) return msg.sendMessage(msg.language.get('COMMAND_CONF_NOVALUE'));
 		if (['set', 'remove', 'reset'].includes(action) && !configs.id) await this.client.settingGateway.create(msg.guild);
 		this[action](msg, configs, key, value);
 
@@ -26,27 +26,27 @@ module.exports = class extends Command {
 	async set(msg, configs, key, value) {
 		if (this.client.settingGateway.schemaManager.schema[key].array) {
 			await this.client.settingGateway.updateArray(msg.guild, 'add', key, value.join(' '));
-			return msg.sendMessage(`Successfully added the value \`${value.join(' ')}\` to the key: **${key}**`);
+			return msg.sendMessage(msg.language.get('COMMAND_CONF_ADDED', value.join(' '), key));
 		}
 		const response = await this.client.settingGateway.update(msg.guild, key, value.join(' '));
-		return msg.sendMessage(`Successfully updated the key **${key}**: \`${response}\``);
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_ADDED', key, response));
 	}
 
 	async remove(msg, configs, key, value) {
-		if (!this.client.settingGateway.schema[key].array) return msg.sendMessage("This key is not array type. Use the action 'reset' instead.");
+		if (!this.client.settingGateway.schema[key].array) return msg.sendMessage(msg.language.get('COMMAND_CONF_KEY_NOT_ARRAY'));
 		return this.client.settingGateway.updateArray(msg.guild, 'remove', key, value.join(' '))
-			.then(() => msg.sendMessage(`Successfully removed the value \`${value.join(' ')}\` from the key: **${key}**`))
+			.then(() => msg.sendMessage(msg.language.get('COMMAND_CONF_REMOVE', value.join(' '), key)))
 			.catch(err => msg.sendMessage(err));
 	}
 
 	async get(msg, configs, key) {
-		if (!(key in configs)) return msg.sendMessage(`The key **${key}** does not seem to exist.`);
-		return msg.sendMessage(`The value for the key **${key}** is: \`${inspect(configs[key])}\``);
+		if (!(key in configs)) return msg.sendMessage(msg.language.get('COMMAND_CONF_GET_NOEXT', key));
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_GET', key, inspect(configs[key])));
 	}
 
 	async reset(msg, configs, key) {
 		const response = await this.client.settingGateway.reset(msg.guild, key);
-		return msg.sendMessage(`The key **${key}** has been reset to: \`${response}\``);
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_RESET', key, response));
 	}
 
 	async list(msg, configs) {

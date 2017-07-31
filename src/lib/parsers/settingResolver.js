@@ -9,63 +9,67 @@ class SettingResolver extends Resolver {
 	/**
 	 * Resolves a user
 	 * @param {any} data The data to resolve
+	 * @param {external:Guild} guild The guild to resolve for
 	 * @returns {external:User}
 	 */
-	async user(data) {
+	async user(data, guild) {
 		const result = await super.user(data);
-		if (!result) throw 'This key expects a User Object or ID.';
+		if (!result) throw guild.language.get('SETTING_RESOLVER_INVALID_USER');
 		return result;
 	}
 
 	/**
 	 * Resolves a channel
 	 * @param {any} data The data to resolve
+	 * @param {external:Guild} guild The guild to resolve for
 	 * @returns {external:Channel}
 	 */
-	async channel(data) {
+	async channel(data, guild) {
 		const result = await super.channel(data);
-		if (!result) throw 'This key expects a Channel Object or ID.';
+		if (!result) throw guild.language.get('SETTING_RESOLVER_INVALID_CHANNEL');
 		return result;
 	}
 
 	/**
 	 * Resolves a guild
 	 * @param {any} data The data to resolve
+	 * @param {external:Guild} guild The guild to resolve for
 	 * @returns {external:Guild}
 	 */
-	async guild(data) {
+	async guild(data, guild) {
 		const result = await super.guild(data);
-		if (!result) throw 'This key expects a Guild ID.';
+		if (!result) throw guild.language.get('SETTING_RESOLVER_INVALID_GUILD');
 		return result;
 	}
 
 	/**
 	 * Resolves a role
 	 * @param {any} data The data to resolve
-	 * @param {external:Guild} guild The guild this setting is for
+	 * @param {external:Guild} guild The guild to resolve for
 	 * @returns {external:Role}
 	 */
 	async role(data, guild) {
 		const result = await super.role(data, guild) || guild.roles.find('name', data);
-		if (!result) throw 'This key expects a Role Object or ID.';
+		if (!result) throw guild.language.get('SETTING_RESOLVER_INVALID_ROLE');
 		return result;
 	}
 
 	/**
 	 * Resolves a boolean
 	 * @param {any} data The data to resolve
+	 * @param {external:Guild} guild The guild to resolve for
 	 * @returns {boolean}
 	 */
-	async boolean(data) {
+	async boolean(data, guild) {
 		const result = await super.boolean(data);
-		if (!result) throw 'This key expects a Boolean.';
+		if (!result) throw guild.language.get('SETTING_RESOLVER_INVALID_BOOLEAN');
 		return result;
 	}
 
 	/**
 	 * Resolves a string
 	 * @param {any} data The data to resolve
-	 * @param {external:Guild} guild The guild this setting is for
+	 * @param {external:Guild} guild The guild to resolve for
 	 * @param {Object} minMax The minimum and maximum
 	 * @param {?number} minMax.min The minumum value
 	 * @param {?number} minMax.max The maximum value
@@ -73,14 +77,14 @@ class SettingResolver extends Resolver {
 	 */
 	async string(data, guild, { min, max }) {
 		const result = await super.string(data);
-		SettingResolver.maxOrMin(result.length, min, max).catch((err) => { throw `The string length must be ${err} characters.`; });
+		SettingResolver.maxOrMin(guild, result.length, min, max).catch((err) => { throw guild.language.get('SETTING_RESOLVER_STRING_MAXMIN', err); });
 		return result;
 	}
 
 	/**
 	 * Resolves a integer
 	 * @param {any} data The data to resolve
-	 * @param {external:Guild} guild The guild this setting is for
+	 * @param {external:Guild} guild The guild to resolve for
 	 * @param {Object} minMax The minimum and maximum
 	 * @param {?number} minMax.min The minumum value
 	 * @param {?number} minMax.max The maximum value
@@ -88,15 +92,15 @@ class SettingResolver extends Resolver {
 	 */
 	async integer(data, guild, { min, max }) {
 		const result = await super.integer(data);
-		if (!result) throw 'This key expects an Integer value.';
-		SettingResolver.maxOrMin(result, min, max).catch((err) => { throw `The integer value must be ${err}.`; });
+		if (!result) throw guild.language.get('SETTING_RESOLVER_INVALID_INTEGER');
+		SettingResolver.maxOrMin(guild, result, min, max).catch((err) => { throw guild.language.get('SETTING_RESOLVER_INTEGER_MAXMIN', err); });
 		return result;
 	}
 
 	/**
 	 * Resolves a float
 	 * @param {any} data The data to resolve
-	 * @param {external:Guild} guild The guild this setting is for
+	 * @param {external:Guild} guild The guild to resolve for
 	 * @param {Object} minMax The minimum and maximum
 	 * @param {?number} minMax.min The minumum value
 	 * @param {?number} minMax.max The maximum value
@@ -104,52 +108,55 @@ class SettingResolver extends Resolver {
 	 */
 	async float(data, guild, { min, max }) {
 		const result = await super.float(data);
-		if (!result) throw 'This key expects a Float value.';
-		SettingResolver.maxOrMin(result, min, max).catch((err) => { throw `The float value must be ${err}.`; });
+		if (!result) throw guild.language.get('SETTING_RESOLVER_INVALID_FLOAT');
+		SettingResolver.maxOrMin(guild, result, min, max).catch((err) => { throw guild.language.get('SETTING_RESOLVER_FLOAT_MAXMIN', err); });
 		return result;
 	}
 
 	/**
 	 * Resolves a hyperlink
 	 * @param {any} data The data to resolve
+	 * @param {external:Guild} guild The guild to resolve for
 	 * @returns {string}
 	 */
-	async url(data) {
+	async url(data, guild) {
 		const result = await super.url(data);
-		if (!result) throw 'This key expects an URL (Uniform Resource Locator).';
+		if (!result) throw guild.language.get('SETTING_RESOLVER_INVALID_URL');
 		return result;
 	}
 
 	/**
 	 * Resolves a command
 	 * @param {any} data The data to resolve
+	 * @param {external:Guild} guild The guild to resolve for
 	 * @returns {Command}
 	 */
-	async command(data) {
+	async command(data, guild) {
 		const command = this.client.commands.get(data.toLowerCase());
-		if (!command) throw 'This key expects a Command.';
+		if (!command) throw guild.language.get('SETTING_RESOLVER_INVALID_COMMAND');
 		return command.name;
 	}
 
 	/**
 	 * Check if the input is valid with min and/or max values.
 	 * @static
+	 * @param {external:Guild} guild The guild to resolve for
 	 * @param {number} value The value to check.
 	 * @param {?number} min Min value.
 	 * @param {?number} max Max value.
 	 * @returns {?boolean}
 	 */
-	static async maxOrMin(value, min, max) {
+	static async maxOrMin(guild, value, min, max) {
 		if (min && max) {
 			if (value >= min && value <= max) return true;
-			if (min === max) throw `exactly ${min}`;
-			throw `between ${min} and ${max}`;
+			if (min === max) throw guild.language.get('SETTING_RESOLVER_MINMAX_EXACTLY', min);
+			throw guild.language.get('SETTING_RESOLVER_MINMAX_BOTH', min, max);
 		} else if (min) {
 			if (value >= min) return true;
-			throw `longer than ${min}`;
+			throw guild.language.get('SETTING_RESOLVER_MINMAX_MIN', min);
 		} else if (max) {
 			if (value <= max) return true;
-			throw `shorter than ${max}`;
+			throw guild.language.get('SETTING_RESOLVER_MINMAX_MAX', max);
 		}
 		return null;
 	}

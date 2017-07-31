@@ -12,9 +12,9 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [piece]) {
-		if (typeof piece === 'string') return this.client[piece].loadAll().then(() => msg.sendMessage(`✅ Reloaded all ${piece}.`));
+		if (typeof piece === 'string') return this.client[piece].loadAll().then(() => msg.sendMessage(msg.language.get('COMMAND_RELOAD_ALL', piece)));
 		return piece.reload()
-			.then(itm => msg.sendMessage(`✅ Reloaded ${itm.type}: ${itm.name}`))
+			.then(itm => msg.sendMessage(msg.language.get('RELOAD', itm.type, itm.name)))
 			.catch(err => {
 				this.client[`${piece.type}s`].set(piece);
 				msg.sendMessage(`❌ ${err}`);

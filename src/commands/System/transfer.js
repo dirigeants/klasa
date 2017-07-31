@@ -15,15 +15,15 @@ module.exports = class extends Command {
 	async run(msg, [piece]) {
 		const file = piece.type === 'command' ? join(...piece.file) : piece.file;
 		const fileLocation = resolve(this.client.coreBaseDir, `${piece.type}s`, file);
-		await fs.access(fileLocation).catch(() => { throw '❌ That file has been transfered already or never existed.'; });
+		await fs.access(fileLocation).catch(() => { throw msg.language.get('COMMAND_TRANSFER_ERROR'); });
 		return fs.copy(fileLocation, resolve(this.client.clientBaseDir, `${piece.type}s`, file))
 			.then(() => {
 				this.client[`${piece.type}s`].load(resolve(this.client.clientBaseDir, `${piece.type}s`), piece.file);
-				return msg.sendMessage(`✅ Successfully Transferred ${piece.type}: ${piece.name}`);
+				return msg.sendMessage(msg.language.get('COMMAND_TRANSFER_SUCCESS', piece.type, piece.name));
 			})
 			.catch((err) => {
 				this.client.emit('error', err.stack);
-				return msg.sendMessage(`Transfer of ${piece.type}: ${piece.name} to Client has failed. Please check your Console.`);
+				return msg.sendMessage(msg.language.get('COMMAND_TRANSFER_FAILURE', piece.type, piece.name));
 			});
 	}
 

@@ -136,7 +136,7 @@ class SettingGateway extends CacheManager {
 	 */
 	async reset(guild, key) {
 		const target = await this.validateGuild(guild);
-		if (!(key in this.schema)) throw `The key ${key} does not exist in the current data schema.`;
+		if (!(key in this.schema)) throw guild.language.get('SETTING_GATEWAY_KEY_NOEXT', key);
 		const defaultKey = this.schema[key].default;
 		await this.provider.update('guilds', target.id, { [key]: defaultKey });
 		this.sync(target.id);
@@ -151,7 +151,7 @@ class SettingGateway extends CacheManager {
 	 * @returns {any}
 	 */
 	async update(guild, key, data) {
-		if (!(key in this.schema)) throw `The key ${key} does not exist in the current data schema.`;
+		if (!(key in this.schema)) throw guild.language.get('SETTING_GATEWAY_KEY_NOEXT', key);
 		const target = await this.validateGuild(guild);
 		let result = await this.resolver[this.schema[key].type.toLowerCase()](data, target, this.schema[key]);
 		if (result.id) result = result.id;
@@ -169,22 +169,22 @@ class SettingGateway extends CacheManager {
 	 * @returns {boolean}
 	 */
 	async updateArray(guild, type, key, data) {
-		if (!['add', 'remove'].includes(type)) throw 'The type parameter must be either add or remove.';
-		if (!(key in this.schema)) throw `The key ${key} does not exist in the current data schema.`;
-		if (!this.schema[key].array) throw `The key ${key} is not an Array.`;
-		if (data === undefined) throw 'You must specify the value to add or filter.';
+		if (!['add', 'remove'].includes(type)) throw guild.language.get('SETTING_GATEWAY_INVALID_TYPE');
+		if (!(key in this.schema)) throw guild.language.get('SETTING_GATEWAY_KEY_NOEXT', key);
+		if (!this.schema[key].array) throw guild.language.get('SETTING_GATEWAY_KEY_NOT_ARRAY', key);
+		if (data === undefined) throw guild.language.get('SETTING_GATEWAY_SPECIFY_VALUE');
 		const target = await this.validateGuild(guild);
 		let result = await this.resolver[this.schema[key].type.toLowerCase()](data, target, this.schema[key]);
 		if (result.id) result = result.id;
 		const cache = this.get(target.id);
 		if (type === 'add') {
-			if (cache[key].includes(result)) throw `The value ${data} for the key ${key} already exists.`;
+			if (cache[key].includes(result)) throw guild.language.get('SETTING_GATEWAY_VALUE_FOR_KEY_ALREXT', data, key);
 			cache[key].push(result);
 			await this.provider.update('guilds', target.id, { [key]: cache[key] });
 			await this.sync(target.id);
 			return result;
 		}
-		if (!cache[key].includes(result)) throw `The value ${data} for the key ${key} does not exist.`;
+		if (!cache[key].includes(result)) throw guild.language.get('SETTING_GATEWAY_VALUE_FOR_KEY_NOEXT', data, key);
 		cache[key] = cache[key].filter(value => value !== result);
 		await this.provider.update('guilds', target.id, { [key]: cache[key] });
 		await this.sync(target.id);
@@ -198,7 +198,7 @@ class SettingGateway extends CacheManager {
 	 */
 	async validateGuild(guild) {
 		const result = await this.resolver.guild(guild);
-		if (!result) throw 'The parameter <Guild> expects either a Guild or a Guild Object.';
+		if (!result) throw guild.language.get('SETTING_GATEWAY_EXPECTS_GUILD');
 		return result;
 	}
 

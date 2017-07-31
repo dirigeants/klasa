@@ -12,10 +12,10 @@ module.exports = class extends Command {
 
 	async run(msg, [piece]) {
 		if ((piece.type === 'event' && piece.name === 'Message') || (piece.type === 'monitor' && piece.name === 'commandHandler')) {
-			return msg.sendMessage('You probably don\'t want to disable that, since you wouldn\'t be able to run any command to enable it again');
+			return msg.sendMessage(msg.language.get('COMMAND_DISABLE_WARN'));
 		}
 		piece.disable();
-		return msg.sendCode('diff', `+ Successfully disabled ${piece.type}: ${piece.name}`);
+		return msg.sendCode('diff', msg.language.get('COMMAND_DISABLE', piece.type, piece.name));
 	}
 
 };

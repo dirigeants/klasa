@@ -57,6 +57,13 @@ class SchemaManager {
 				default: this.client.config.prefix
 			};
 		}
+		if (!('language' in schema)) {
+			this.client.emit('log', "The key 'language' is obligatory", 'error');
+			schema.prefix = {
+				type: 'String',
+				default: this.client.config.language
+			};
+		}
 		for (const [key, value] of Object.entries(schema)) { // eslint-disable-line no-restricted-syntax
 			if (value instanceof Object && 'type' in value && 'default' in value) {
 				if (value.array && !(value.default instanceof Array)) {
@@ -112,6 +119,7 @@ class SchemaManager {
 	 */
 	async remove(key, force = false) {
 		if (key === 'prefix') throw "You can't remove the prefix key.";
+		if (key === 'language') throw "You can't remove the language key.";
 		delete this.schema[key];
 		if (force) await this.force('delete', key);
 		return fs.outputJSONAtomic(this.filePath, this.schema);
@@ -161,6 +169,12 @@ class SchemaManager {
 				default: this.client.config.prefix,
 				array: false,
 				sql: `TEXT NOT NULL DEFAULT '${this.client.config.prefix}'`
+			},
+			language: {
+				type: 'String',
+				default: this.client.config.language,
+				array: false,
+				sql: `TEXT NOT NULL DEFAULT '${this.client.config.language}'`
 			},
 			modRole: {
 				type: 'Role',

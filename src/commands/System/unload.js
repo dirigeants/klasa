@@ -13,7 +13,7 @@ module.exports = class extends Command {
 
 	async run(msg, [piece]) {
 		piece.unload();
-		return msg.sendMessage(`✅ Unloaded ${piece.type}: ${piece.name}`);
+		return msg.sendMessage(msg.language.get('COMMAND_UNLOAD', piece.type, piece.name));
 	}
 
 };
