@@ -74,14 +74,14 @@ module.exports = class extends Language {
 				client.invite,
 				util.codeBlock('', [
 					'The above link is generated requesting the minimum permissions required to use every command currently.',
-					"I know not all permissions are right for every server, so don't be afraid to uncheck any of the boxes.",
+					'I know not all permissions are right for every server, so don\'t be afraid to uncheck any of the boxes.',
 					'If you try to use a command that requires more permissions than the bot is granted, it will let you know.'
 				].join(' ')),
 				'Please file an issue at <https://github.com/dirigeants/klasa> if you find any bugs.'
 			],
 			COMMAND_INFO: [
 				"Klasa is a 'plug-and-play' framework built on top of the Discord.js library.",
-				'Most of the code is modularized, which allows developers to edit Komada to suit their needs.',
+				'Most of the code is modularized, which allows developers to edit Klasa to suit their needs.',
 				'',
 				'Some features of Klasa include:',
 				'• Fast Loading times with ES7 Support (Async/Await)',
@@ -89,7 +89,7 @@ module.exports = class extends Language {
 				'• Customizable Command system with automated usage parsing and easy to use reloading and downloading modules',
 				'• "Monitors" which can watch messages and act on them, like a normal message event (Swear Filters, Spam Protection, etc)',
 				'• "Inhibitors" which can prevent commands from running based on a set of parameters (Permissions, Blacklists, etc)',
-				'• "Providers" which allow you to connect with an outside database of your choosing. Not yet documented.',
+				'• "Providers" which allow you to connect with an outside database of your choosing.',
 				'• "Finalizers" which run on messages after a successful command.',
 				'• "Extendables", code that acts passively. They add properties or methods to existing Discord.js classes.',
 				'• "Languages", which allow you to localize your bot.',
@@ -98,7 +98,7 @@ module.exports = class extends Language {
 				"If you're interested in us, check us out at https://klasa.js.org"
 			],
 			COMMAND_HELP_DM: '📥 | Commands have been sent to your DMs.',
-			COMMAND_HELP_NODM: "❌ | You have DMs disabled, I couldn't send you the commands in DMs.",
+			COMMAND_HELP_NODM: '❌ | You have DMs disabled, I couldn\'t send you the commands in DMs.',
 			COMMAND_ENABLE: (type, name) => `+ Successfully enabled ${type}: ${name}`,
 			COMMAND_DISABLE: (type, name) => `+ Successfully disabled ${type}: ${name}`,
 			COMMAND_DISABLE_WARN: 'You probably don\'t want to disable that, since you wouldn\'t be able to run any command to enable it again',
@@ -106,7 +106,7 @@ module.exports = class extends Language {
 			COMMAND_CONF_NOVALUE: 'You must provide a value',
 			COMMAND_CONF_ADDED: (value, key) => `Successfully added the value \`${value}\` to the key: **${key}**`,
 			COMMAND_CONF_UPDATED: (key, response) => `Successfully updated the key **${key}**: \`${response}\``,
-			COMMAND_CONF_KEY_NOT_ARRAY: "This key is not array type. Use the action 'reset' instead.",
+			COMMAND_CONF_KEY_NOT_ARRAY: 'This key is not array type. Use the action \'reset\' instead.',
 			COMMAND_CONF_REMOVE: (value, key) => `Successfully removed the value \`${value}\` from the key: **${key}**`,
 			COMMAND_CONF_GET_NOEXT: (key) => `The key **${key}** does not seem to exist.`,
 			COMMAND_CONF_GET: (key, value) => `The value for the key **${key}** is: \`${value}\``,
