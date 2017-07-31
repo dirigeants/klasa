@@ -50,6 +50,7 @@ module.exports = class extends Language {
 			COMMANDMESSAGE_MISSING_REQUIRED: (name) => `${name} es un argumento requerido.`,
 			COMMANDMESSAGE_MISSING_OPTIONALS: (possibles) => `Falta una opción requerida: (${possibles})`,
 			COMMANDMESSAGE_NOMATCH: (possibles) => `Su opción no coincide con ninguna de las posibilidades: (${possibles})`,
+			// eslint-disable-next-line max-len
 			MONITOR_COMMAND_HANDLER_REPROMPT: (tag, error) => `${tag} | **${error}** | Usted tiene **30** segundos para responder este mensage emergente con un argumento válido. Escribe **"ABORT"** para abortar el mensaje emergente.`,
 			MONITOR_COMMAND_HANDLER_ABORTED: 'Abortado.',
 			INHIBITOR_COOLDOWN: (remaining) => `Acabas de usar este comando. Puedes usarlo de nuevo en ${remaining} segundos.`,
@@ -98,7 +99,7 @@ module.exports = class extends Language {
 				'Si estás interesado en nosotros, revísanos en https://klasa.js.org'
 			],
 			COMMAND_HELP_DM: '📥 | La lista de comandos ha sido enviado a tus mensajes privados.',
-			COMMAND_HELP_NODM: "❌ | Parece que tienes tus mensajes privados desactivados, no pude enviarte la lista de comandos.",
+			COMMAND_HELP_NODM: '❌ | Parece que tienes tus mensajes privados desactivados, no pude enviarte la lista de comandos.',
 			COMMAND_ENABLE: (type, name) => `+ Activado con éxito la pieza tipo ${type}: ${name}`,
 			COMMAND_DISABLE: (type, name) => `+ Desactivado con éxito la pieza ${type}: ${name}`,
 			COMMAND_DISABLE_WARN: 'Probablemente no quieras desactivar eso, ya que no podrías ejecutar un comando para reactivarlo.',
