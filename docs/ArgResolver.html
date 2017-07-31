@@ -33,7 +33,7 @@
 			<li class="dropdown">
 				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="ArgResolver.html">ArgResolver</a></li><li><a href="CacheManager.html">CacheManager</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandMessage.html">CommandMessage</a></li><li><a href="CommandStore.html">CommandStore</a></li><li><a href="Event.html">Event</a></li><li><a href="EventStore.html">EventStore</a></li><li><a href="Extendable.html">Extendable</a></li><li><a href="ExtendableStore.html">ExtendableStore</a></li><li><a href="Finalizer.html">Finalizer</a></li><li><a href="FinalizerStore.html">FinalizerStore</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorStore.html">InhibitorStore</a></li><li><a href="KlasaClient.html">KlasaClient</a></li><li><a href="Monitor.html">Monitor</a></li><li><a href="MonitorStore.html">MonitorStore</a></li><li><a href="ParsedUsage.html">ParsedUsage</a></li><li><a href="PermissionLevels.html">PermissionLevels</a></li><li><a href="Piece.html">Piece</a></li><li><a href="Provider.html">Provider</a></li><li><a href="ProviderStore.html">ProviderStore</a></li><li><a href="Resolver.html">Resolver</a></li><li><a href="SchemaManager.html">SchemaManager</a></li><li><a href="SettingGateway.html">SettingGateway</a></li><li><a href="SettingResolver.html">SettingResolver</a></li><li><a href="SQL.html">SQL</a></li><li><a href="Store.html">Store</a></li><li><a href="Util.html">Util</a></li>
+					<li><a href="ArgResolver.html">ArgResolver</a></li><li><a href="CacheManager.html">CacheManager</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandMessage.html">CommandMessage</a></li><li><a href="CommandStore.html">CommandStore</a></li><li><a href="Event.html">Event</a></li><li><a href="EventStore.html">EventStore</a></li><li><a href="Extendable.html">Extendable</a></li><li><a href="ExtendableStore.html">ExtendableStore</a></li><li><a href="Finalizer.html">Finalizer</a></li><li><a href="FinalizerStore.html">FinalizerStore</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorStore.html">InhibitorStore</a></li><li><a href="KlasaClient.html">KlasaClient</a></li><li><a href="Language.html">Language</a></li><li><a href="LanguageStore.html">LanguageStore</a></li><li><a href="Monitor.html">Monitor</a></li><li><a href="MonitorStore.html">MonitorStore</a></li><li><a href="ParsedUsage.html">ParsedUsage</a></li><li><a href="PermissionLevels.html">PermissionLevels</a></li><li><a href="Piece.html">Piece</a></li><li><a href="Provider.html">Provider</a></li><li><a href="ProviderStore.html">ProviderStore</a></li><li><a href="Resolver.html">Resolver</a></li><li><a href="SchemaManager.html">SchemaManager</a></li><li><a href="SettingGateway.html">SettingGateway</a></li><li><a href="SettingResolver.html">SettingResolver</a></li><li><a href="SQL.html">SQL</a></li><li><a href="Store.html">Store</a></li><li><a href="Util.html">Util</a></li>
 				</ul>
 			</li>
 			
@@ -214,7 +214,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id=".minOrMax"><span class="type-signature">&lt;static> </span>minOrMax(value, min, max, currentUsage, possible, repeat, suffix)</h4>
+    <h4 class="name" id=".minOrMax"><span class="type-signature">&lt;static> </span>minOrMax(value, min, max, currentUsage, possible, repeat, msg, suffix)</h4>
     
     
 </dt>
@@ -455,6 +455,38 @@
 
         <tr>
             
+                <td class="name"><code>msg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="external-Message.html">external:Message</a></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">The message that triggered the command</td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>suffix</code></td>
             
 
@@ -522,7 +554,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L414">lib/parsers/argResolver.js#L414</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L450">lib/parsers/argResolver.js#L450</a>	</dd>
 	
 
 	
@@ -572,7 +604,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="bool"><span class="type-signature">&lt;async> </span>bool(arg, currentUsage, possible, repeat)</h4>
+    <h4 class="name" id="bool"><span class="type-signature">&lt;async> </span>bool(arg, currentUsage, possible, repeat, msg)</h4>
     
     
 </dt>
@@ -705,6 +737,30 @@
             
 
             <td class="description last">If it is a looping/repeating arg</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>msg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="external-Message.html">external:Message</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The message that triggered the command</td>
         </tr>
 
     
@@ -746,7 +802,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L281">lib/parsers/argResolver.js#L281</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L308">lib/parsers/argResolver.js#L308</a>	</dd>
 	
 
 	
@@ -796,7 +852,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="boolean"><span class="type-signature"></span>boolean(arg, currentUsage, possible, repeat)</h4>
+    <h4 class="name" id="boolean"><span class="type-signature"></span>boolean(arg, currentUsage, possible, repeat, msg)</h4>
     
     
 </dt>
@@ -929,6 +985,30 @@
             
 
             <td class="description last">If it is a looping/repeating arg</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>msg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="external-Message.html">external:Message</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The message that triggered the command</td>
         </tr>
 
     
@@ -975,7 +1055,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L269">lib/parsers/argResolver.js#L269</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L295">lib/parsers/argResolver.js#L295</a>	</dd>
 	
 
 	
@@ -1025,7 +1105,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="channel"><span class="type-signature">&lt;async> </span>channel(arg, currentUsage, possible, repeat)</h4>
+    <h4 class="name" id="channel"><span class="type-signature">&lt;async> </span>channel(arg, currentUsage, possible, repeat, msg)</h4>
     
     
 </dt>
@@ -1161,6 +1241,30 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>msg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="external-Message.html">external:Message</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The message that triggered the command</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -1204,7 +1308,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L206">lib/parsers/argResolver.js#L206</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L232">lib/parsers/argResolver.js#L232</a>	</dd>
 	
 
 	
@@ -1254,7 +1358,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="cmd"><span class="type-signature">&lt;async> </span>cmd(arg, currentUsage, possible, repeat)</h4>
+    <h4 class="name" id="cmd"><span class="type-signature">&lt;async> </span>cmd(arg, currentUsage, possible, repeat, msg)</h4>
     
     
 </dt>
@@ -1390,6 +1494,30 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>msg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="external-Message.html">external:Message</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The message that triggered the command</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -1428,7 +1556,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L29">lib/parsers/argResolver.js#L29</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L31">lib/parsers/argResolver.js#L31</a>	</dd>
 	
 
 	
@@ -1478,7 +1606,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="command"><span class="type-signature">&lt;async> </span>command(arg, currentUsage, possible, repeat)</h4>
+    <h4 class="name" id="command"><span class="type-signature">&lt;async> </span>command(arg, currentUsage, possible, repeat, msg)</h4>
     
     
 </dt>
@@ -1614,6 +1742,30 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>msg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="external-Message.html">external:Message</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The message that triggered the command</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -1652,7 +1804,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L17">lib/parsers/argResolver.js#L17</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L18">lib/parsers/argResolver.js#L18</a>	</dd>
 	
 
 	
@@ -1702,7 +1854,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="event"><span class="type-signature">&lt;async> </span>event(arg, currentUsage, possible, repeat)</h4>
+    <h4 class="name" id="event"><span class="type-signature">&lt;async> </span>event(arg, currentUsage, possible, repeat, msg)</h4>
     
     
 </dt>
@@ -1838,6 +1990,30 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>msg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="external-Message.html">external:Message</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The message that triggered the command</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -1876,7 +2052,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L44">lib/parsers/argResolver.js#L44</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L47">lib/parsers/argResolver.js#L47</a>	</dd>
 	
 
 	
@@ -1926,7 +2102,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="extendable"><span class="type-signature">&lt;async> </span>extendable(arg, currentUsage, possible, repeat)</h4>
+    <h4 class="name" id="extendable"><span class="type-signature">&lt;async> </span>extendable(arg, currentUsage, possible, repeat, msg)</h4>
     
     
 </dt>
@@ -2062,6 +2238,30 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>msg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="external-Message.html">external:Message</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The message that triggered the command</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -2100,7 +2300,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L59">lib/parsers/argResolver.js#L59</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L63">lib/parsers/argResolver.js#L63</a>	</dd>
 	
 
 	
@@ -2150,7 +2350,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="finalizer"><span class="type-signature">&lt;async> </span>finalizer(arg, currentUsage, possible, repeat)</h4>
+    <h4 class="name" id="finalizer"><span class="type-signature">&lt;async> </span>finalizer(arg, currentUsage, possible, repeat, msg)</h4>
     
     
 </dt>
@@ -2286,6 +2486,30 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>msg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="external-Message.html">external:Message</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The message that triggered the command</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -2324,7 +2548,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L74">lib/parsers/argResolver.js#L74</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L79">lib/parsers/argResolver.js#L79</a>	</dd>
 	
 
 	
@@ -2374,7 +2598,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="float"><span class="type-signature">&lt;async> </span>float(arg, currentUsage, possible, repeat)</h4>
+    <h4 class="name" id="float"><span class="type-signature">&lt;async> </span>float(arg, currentUsage, possible, repeat, msg)</h4>
     
     
 </dt>
@@ -2510,6 +2734,30 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>msg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="external-Message.html">external:Message</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The message that triggered the command</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -2553,7 +2801,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L377">lib/parsers/argResolver.js#L377</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L411">lib/parsers/argResolver.js#L411</a>	</dd>
 	
 
 	
@@ -2603,7 +2851,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="guild"><span class="type-signature">&lt;async> </span>guild(arg, currentUsage, possible, repeat)</h4>
+    <h4 class="name" id="guild"><span class="type-signature">&lt;async> </span>guild(arg, currentUsage, possible, repeat, msg)</h4>
     
     
 </dt>
@@ -2739,6 +2987,30 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>msg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="external-Message.html">external:Message</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The message that triggered the command</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -2782,7 +3054,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L221">lib/parsers/argResolver.js#L221</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L248">lib/parsers/argResolver.js#L248</a>	</dd>
 	
 
 	
@@ -2832,7 +3104,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="inhibitor"><span class="type-signature">&lt;async> </span>inhibitor(arg, currentUsage, possible, repeat)</h4>
+    <h4 class="name" id="inhibitor"><span class="type-signature">&lt;async> </span>inhibitor(arg, currentUsage, possible, repeat, msg)</h4>
     
     
 </dt>
@@ -2968,6 +3240,30 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>msg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="external-Message.html">external:Message</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The message that triggered the command</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -3006,7 +3302,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L89">lib/parsers/argResolver.js#L89</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L95">lib/parsers/argResolver.js#L95</a>	</dd>
 	
 
 	
@@ -3056,7 +3352,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="int"><span class="type-signature">&lt;async> </span>int(arg, currentUsage, possible, repeat)</h4>
+    <h4 class="name" id="int"><span class="type-signature">&lt;async> </span>int(arg, currentUsage, possible, repeat, msg)</h4>
     
     
 </dt>
@@ -3192,6 +3488,30 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>msg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="external-Message.html">external:Message</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The message that triggered the command</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -3230,7 +3550,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L334">lib/parsers/argResolver.js#L334</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L365">lib/parsers/argResolver.js#L365</a>	</dd>
 	
 
 	
@@ -3280,7 +3600,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="integer"><span class="type-signature"></span>integer(arg, currentUsage, possible, repeat)</h4>
+    <h4 class="name" id="integer"><span class="type-signature"></span>integer(arg, currentUsage, possible, repeat, msg)</h4>
     
     
 </dt>
@@ -3413,6 +3733,30 @@
             
 
             <td class="description last">If it is a looping/repeating arg</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>msg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="external-Message.html">external:Message</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The message that triggered the command</td>
         </tr>
 
     
@@ -3459,7 +3803,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L322">lib/parsers/argResolver.js#L322</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L352">lib/parsers/argResolver.js#L352</a>	</dd>
 	
 
 	
@@ -3509,7 +3853,255 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="literal"><span class="type-signature">&lt;async> </span>literal(arg, currentUsage, possible, repeat)</h4>
+    <h4 class="name" id="language"><span class="type-signature">&lt;async> </span>language(arg, currentUsage, possible, repeat, msg)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Resolves a language
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>arg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">This arg</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>currentUsage</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">This current usage</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>possible</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">This possible usage id</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>repeat</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">If it is a looping/repeating arg</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>msg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="external-Message.html">external:Message</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The message that triggered the command</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L127">lib/parsers/argResolver.js#L127</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Language.html">Language</a></span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="literal"><span class="type-signature">&lt;async> </span>literal(arg, currentUsage, possible, repeat, msg)</h4>
     
     
 </dt>
@@ -3645,6 +4237,30 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>msg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="external-Message.html">external:Message</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The message that triggered the command</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -3683,7 +4299,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L252">lib/parsers/argResolver.js#L252</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L280">lib/parsers/argResolver.js#L280</a>	</dd>
 	
 
 	
@@ -3878,7 +4494,7 @@
             <td class="type">
             
                 
-<span class="param-type">Message</span>
+<span class="param-type"><a href="external-Message.html">external:Message</a></span>
 
 
 
@@ -3936,7 +4552,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L191">lib/parsers/argResolver.js#L191</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L216">lib/parsers/argResolver.js#L216</a>	</dd>
 	
 
 	
@@ -3986,7 +4602,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="mention"><span class="type-signature"></span>mention(arg, currentUsage, possible, repeat)</h4>
+    <h4 class="name" id="mention"><span class="type-signature"></span>mention(arg, currentUsage, possible, repeat, msg)</h4>
     
     
 </dt>
@@ -4122,6 +4738,30 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>msg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="external-Message.html">external:Message</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The message that triggered the command</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -4160,7 +4800,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L163">lib/parsers/argResolver.js#L163</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L187">lib/parsers/argResolver.js#L187</a>	</dd>
 	
 
 	
@@ -4355,7 +4995,7 @@
             <td class="type">
             
                 
-<span class="param-type">Message</span>
+<span class="param-type"><a href="external-Message.html">external:Message</a></span>
 
 
 
@@ -4408,7 +5048,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L135">lib/parsers/argResolver.js#L135</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L158">lib/parsers/argResolver.js#L158</a>	</dd>
 	
 
 	
@@ -4458,7 +5098,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="monitor"><span class="type-signature">&lt;async> </span>monitor(arg, currentUsage, possible, repeat)</h4>
+    <h4 class="name" id="monitor"><span class="type-signature">&lt;async> </span>monitor(arg, currentUsage, possible, repeat, msg)</h4>
     
     
 </dt>
@@ -4594,6 +5234,30 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>msg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="external-Message.html">external:Message</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The message that triggered the command</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -4632,7 +5296,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L104">lib/parsers/argResolver.js#L104</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L111">lib/parsers/argResolver.js#L111</a>	</dd>
 	
 
 	
@@ -4827,7 +5491,7 @@
             <td class="type">
             
                 
-<span class="param-type">Message</span>
+<span class="param-type"><a href="external-Message.html">external:Message</a></span>
 
 
 
@@ -4885,7 +5549,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L148">lib/parsers/argResolver.js#L148</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L171">lib/parsers/argResolver.js#L171</a>	</dd>
 	
 
 	
@@ -4935,7 +5599,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="num"><span class="type-signature"></span>num(arg, currentUsage, possible, repeat)</h4>
+    <h4 class="name" id="num"><span class="type-signature"></span>num(arg, currentUsage, possible, repeat, msg)</h4>
     
     
 </dt>
@@ -5071,6 +5735,30 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>msg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="external-Message.html">external:Message</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The message that triggered the command</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -5109,7 +5797,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L353">lib/parsers/argResolver.js#L353</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L385">lib/parsers/argResolver.js#L385</a>	</dd>
 	
 
 	
@@ -5159,7 +5847,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="number"><span class="type-signature"></span>number(arg, currentUsage, possible, repeat)</h4>
+    <h4 class="name" id="number"><span class="type-signature"></span>number(arg, currentUsage, possible, repeat, msg)</h4>
     
     
 </dt>
@@ -5295,6 +5983,30 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>msg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="external-Message.html">external:Message</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The message that triggered the command</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -5333,7 +6045,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L365">lib/parsers/argResolver.js#L365</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L398">lib/parsers/argResolver.js#L398</a>	</dd>
 	
 
 	
@@ -5383,7 +6095,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="provider"><span class="type-signature">&lt;async> </span>provider(arg, currentUsage, possible, repeat)</h4>
+    <h4 class="name" id="provider"><span class="type-signature">&lt;async> </span>provider(arg, currentUsage, possible, repeat, msg)</h4>
     
     
 </dt>
@@ -5519,6 +6231,30 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>msg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="external-Message.html">external:Message</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The message that triggered the command</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -5557,7 +6293,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L119">lib/parsers/argResolver.js#L119</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L142">lib/parsers/argResolver.js#L142</a>	</dd>
 	
 
 	
@@ -5752,7 +6488,7 @@
             <td class="type">
             
                 
-<span class="param-type">Message</span>
+<span class="param-type"><a href="external-Message.html">external:Message</a></span>
 
 
 
@@ -5810,7 +6546,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L237">lib/parsers/argResolver.js#L237</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L264">lib/parsers/argResolver.js#L264</a>	</dd>
 	
 
 	
@@ -5860,7 +6596,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="str"><span class="type-signature">&lt;async> </span>str(arg, currentUsage, possible, repeat)</h4>
+    <h4 class="name" id="str"><span class="type-signature">&lt;async> </span>str(arg, currentUsage, possible, repeat, msg)</h4>
     
     
 </dt>
@@ -5996,6 +6732,30 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>msg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="external-Message.html">external:Message</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The message that triggered the command</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -6034,7 +6794,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L308">lib/parsers/argResolver.js#L308</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L337">lib/parsers/argResolver.js#L337</a>	</dd>
 	
 
 	
@@ -6084,7 +6844,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="string"><span class="type-signature"></span>string(arg, currentUsage, possible, repeat)</h4>
+    <h4 class="name" id="string"><span class="type-signature"></span>string(arg, currentUsage, possible, repeat, msg)</h4>
     
     
 </dt>
@@ -6217,6 +6977,30 @@
             
 
             <td class="description last">If it is a looping/repeating arg</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>msg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="external-Message.html">external:Message</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The message that triggered the command</td>
         </tr>
 
     
@@ -6263,7 +7047,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L296">lib/parsers/argResolver.js#L296</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L324">lib/parsers/argResolver.js#L324</a>	</dd>
 	
 
 	
@@ -6313,7 +7097,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="url"><span class="type-signature">&lt;async> </span>url(arg, currentUsage, possible, repeat)</h4>
+    <h4 class="name" id="url"><span class="type-signature">&lt;async> </span>url(arg, currentUsage, possible, repeat, msg)</h4>
     
     
 </dt>
@@ -6449,6 +7233,30 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>msg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="external-Message.html">external:Message</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The message that triggered the command</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -6492,7 +7300,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L396">lib/parsers/argResolver.js#L396</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L431">lib/parsers/argResolver.js#L431</a>	</dd>
 	
 
 	
@@ -6542,7 +7350,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="user"><span class="type-signature">&lt;async> </span>user(arg, currentUsage, possible, repeat)</h4>
+    <h4 class="name" id="user"><span class="type-signature">&lt;async> </span>user(arg, currentUsage, possible, repeat, msg)</h4>
     
     
 </dt>
@@ -6678,6 +7486,30 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>msg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="external-Message.html">external:Message</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The message that triggered the command</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -6721,7 +7553,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L175">lib/parsers/argResolver.js#L175</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/argResolver.js#L200">lib/parsers/argResolver.js#L200</a>	</dd>
 	
 
 	
