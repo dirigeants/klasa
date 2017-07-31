@@ -29,7 +29,7 @@ module.exports = class extends Command {
 			return msg.sendMessage(msg.language.get('COMMAND_CONF_ADDED', value.join(' '), key));
 		}
 		const response = await this.client.settingGateway.update(msg.guild, key, value.join(' '));
-		return msg.sendMessage(msg.language.get('COMMAND_CONF_ADDED', key, response));
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', key, response));
 	}
 
 	async remove(msg, configs, key, value) {
