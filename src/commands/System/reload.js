@@ -7,7 +7,8 @@ module.exports = class extends Command {
 			aliases: ['r'],
 			permLevel: 10,
 			description: "Reloads the klasa piece, if it's been updated or modified.",
-			usage: '<inhibitors|finalizers|monitors|providers|events|commands|Inhibitor:inhibitor|Extendable:extendable|Finalizer:finalizer|Monitor:monitor|Provider:provider|Event:event|Command:cmd>'
+			// eslint-disable-next-line max-len
+			usage: '<inhibitors|finalizers|monitors|languages|providers|events|commands|Inhibitor:inhibitor|Extendable:extendable|Finalizer:finalizer|Monitor:monitor|Language:language|Provider:provider|Event:event|Command:cmd>'
 		});
 	}
 
