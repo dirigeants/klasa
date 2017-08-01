@@ -55,7 +55,7 @@ module.exports = class extends Language {
 			INHIBITOR_COOLDOWN: (remaining) => `You have just used this command. You can use this command again in ${remaining} seconds.`,
 			INHIBITOR_DISABLED: 'This command is currently disabled',
 			INHIBITOR_MISSING_BOT_PERMS: (missing) => `Insufficient permissions, missing: **${missing}**`,
-			INHIBITOR_PERMISSINS: 'You do not have permission to use this command',
+			INHIBITOR_PERMISSIONS: 'You do not have permission to use this command',
 			INHIBITOR_REQUIRED_SETTINGS: (settings) => `The guild is missing the **${settings.join(', ')}** guild setting${settings.length > 1 ? 's' : ''} and cannot run.`,
 			INHIBITOR_RUNIN: (types) => `This command is only available in ${types} channels`,
 			INHIBITOR_RUNIN_NONE: (name) => `The ${name} command is not configured to run in any channel.`,

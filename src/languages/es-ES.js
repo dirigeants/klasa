@@ -56,7 +56,7 @@ module.exports = class extends Language {
 			INHIBITOR_COOLDOWN: (remaining) => `Acabas de usar este comando. Puedes usarlo de nuevo en ${remaining} segundos.`,
 			INHIBITOR_DISABLED: 'Este comando está desactivado.',
 			INHIBITOR_MISSING_BOT_PERMS: (missing) => `Permisos insuficientes, necesito: **${missing}**`,
-			INHIBITOR_PERMISSINS: 'Usted no tiene permiso para usar este comando.',
+			INHIBITOR_PERMISSIONS: 'Usted no tiene permiso para usar este comando.',
 			INHIBITOR_REQUIRED_SETTINGS: (settings) => `El servidor no tiene las siguientes clave${settings.length > 1 ? 's' : ''}: **${settings.join(', ')}** y no puede ser ejecutado.`,
 			INHIBITOR_RUNIN: (types) => `Este comando sólo está disponible en los canales de tipo: ${types}.`,
 			INHIBITOR_RUNIN_NONE: (name) => `El comando ${name} no está configurado para ser ejecutado en cualquier canal.`,

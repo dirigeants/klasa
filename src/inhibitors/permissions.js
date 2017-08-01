@@ -15,7 +15,7 @@ module.exports = class extends Inhibitor {
 		}
 		const responses = await Promise.all(mps);
 		if (responses.includes(true)) return;
-		throw broke ? msg.language.get('INHIBITOR_PERMISSINS') : true;
+		throw broke ? msg.language.get('INHIBITOR_PERMISSIONS') : true;
 	}
 
 };
