@@ -214,7 +214,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id=".maxOrMin"><span class="type-signature">&lt;async, static> </span>maxOrMin(guild, value, min, max)</h4>
+    <h4 class="name" id=".maxOrMin"><span class="type-signature">&lt;async, static> </span>maxOrMin(guild, value, min, max, name [, suffix])</h4>
     
     
 </dt>
@@ -248,6 +248,8 @@
         <th>Argument</th>
         
 
+        
+        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -283,6 +285,10 @@
             
 
             
+                <td class="default">
+                
+                </td>
+            
 
             <td class="description last">The guild to resolve for</td>
         </tr>
@@ -314,6 +320,10 @@
                 </td>
             
 
+            
+                <td class="default">
+                
+                </td>
             
 
             <td class="description last">The value to check.</td>
@@ -349,6 +359,10 @@
             
 
             
+                <td class="default">
+                
+                </td>
+            
 
             <td class="description last">Min value.</td>
         </tr>
@@ -383,8 +397,88 @@
             
 
             
+                <td class="default">
+                
+                </td>
+            
 
             <td class="description last">Max value.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The name of the key being resolved</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>suffix</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    ''
+                
+                </td>
+            
+
+            <td class="description last">The suffix to apply to the error messages</td>
         </tr>
 
     
@@ -426,7 +520,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L149">lib/parsers/settingResolver.js#L149</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L174">lib/parsers/settingResolver.js#L174</a>	</dd>
 	
 
 	
@@ -476,7 +570,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="boolean"><span class="type-signature">&lt;async> </span>boolean(data, guild)</h4>
+    <h4 class="name" id="boolean"><span class="type-signature">&lt;async> </span>boolean(data, guild, name)</h4>
     
     
 </dt>
@@ -564,6 +658,30 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of the key being resolved</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -607,7 +725,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L63">lib/parsers/settingResolver.js#L63</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L68">lib/parsers/settingResolver.js#L68</a>	</dd>
 	
 
 	
@@ -657,7 +775,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="channel"><span class="type-signature">&lt;async> </span>channel(data, guild)</h4>
+    <h4 class="name" id="channel"><span class="type-signature">&lt;async> </span>channel(data, guild, name)</h4>
     
     
 </dt>
@@ -745,6 +863,30 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of the key being resolved</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -788,7 +930,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L27">lib/parsers/settingResolver.js#L27</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L29">lib/parsers/settingResolver.js#L29</a>	</dd>
 	
 
 	
@@ -838,7 +980,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="command"><span class="type-signature">&lt;async> </span>command(data, guild)</h4>
+    <h4 class="name" id="command"><span class="type-signature">&lt;async> </span>command(data, guild, name)</h4>
     
     
 </dt>
@@ -926,6 +1068,30 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of the key being resolved</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -964,7 +1130,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L134">lib/parsers/settingResolver.js#L134</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L144">lib/parsers/settingResolver.js#L144</a>	</dd>
 	
 
 	
@@ -1014,7 +1180,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="float"><span class="type-signature">&lt;async> </span>float(data, guild, minMax)</h4>
+    <h4 class="name" id="float"><span class="type-signature">&lt;async> </span>float(data, guild, name, minMax)</h4>
     
     
 </dt>
@@ -1099,6 +1265,30 @@
             
 
             <td class="description last">The guild to resolve for</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of the key being resolved</td>
         </tr>
 
     
@@ -1265,7 +1455,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L109">lib/parsers/settingResolver.js#L109</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L117">lib/parsers/settingResolver.js#L117</a>	</dd>
 	
 
 	
@@ -1315,7 +1505,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="guild"><span class="type-signature">&lt;async> </span>guild(data, guild)</h4>
+    <h4 class="name" id="guild"><span class="type-signature">&lt;async> </span>guild(data, guild, name)</h4>
     
     
 </dt>
@@ -1403,6 +1593,30 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of the key being resolved</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -1446,7 +1660,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L39">lib/parsers/settingResolver.js#L39</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L42">lib/parsers/settingResolver.js#L42</a>	</dd>
 	
 
 	
@@ -1496,7 +1710,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="integer"><span class="type-signature">&lt;async> </span>integer(data, guild, minMax)</h4>
+    <h4 class="name" id="integer"><span class="type-signature">&lt;async> </span>integer(data, guild, name, minMax)</h4>
     
     
 </dt>
@@ -1581,6 +1795,30 @@
             
 
             <td class="description last">The guild to resolve for</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of the key being resolved</td>
         </tr>
 
     
@@ -1747,7 +1985,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L93">lib/parsers/settingResolver.js#L93</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L100">lib/parsers/settingResolver.js#L100</a>	</dd>
 	
 
 	
@@ -1781,6 +2019,206 @@
     <dd>
         
 <span class="param-type">number</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="language"><span class="type-signature">&lt;async> </span>language(data, guild, name)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Resolves a command
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">any</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The data to resolve</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>guild</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="external-Guild.html">external:Guild</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The guild to resolve for</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of the key being resolved</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L157">lib/parsers/settingResolver.js#L157</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Command.html">Command</a></span>
 
 
 
@@ -2173,7 +2611,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="role"><span class="type-signature">&lt;async> </span>role(data, guild)</h4>
+    <h4 class="name" id="role"><span class="type-signature">&lt;async> </span>role(data, guild, name)</h4>
     
     
 </dt>
@@ -2261,6 +2699,30 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of the key being resolved</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -2304,7 +2766,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L51">lib/parsers/settingResolver.js#L51</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L55">lib/parsers/settingResolver.js#L55</a>	</dd>
 	
 
 	
@@ -2354,7 +2816,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="string"><span class="type-signature">&lt;async> </span>string(data, guild, minMax)</h4>
+    <h4 class="name" id="string"><span class="type-signature">&lt;async> </span>string(data, guild, name, minMax)</h4>
     
     
 </dt>
@@ -2439,6 +2901,30 @@
             
 
             <td class="description last">The guild to resolve for</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of the key being resolved</td>
         </tr>
 
     
@@ -2605,7 +3091,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L78">lib/parsers/settingResolver.js#L78</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L84">lib/parsers/settingResolver.js#L84</a>	</dd>
 	
 
 	
@@ -2655,7 +3141,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="url"><span class="type-signature">&lt;async> </span>url(data, guild)</h4>
+    <h4 class="name" id="url"><span class="type-signature">&lt;async> </span>url(data, guild, name)</h4>
     
     
 </dt>
@@ -2743,6 +3229,30 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of the key being resolved</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -2786,7 +3296,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L122">lib/parsers/settingResolver.js#L122</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L131">lib/parsers/settingResolver.js#L131</a>	</dd>
 	
 
 	
@@ -2836,7 +3346,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="user"><span class="type-signature">&lt;async> </span>user(data, guild)</h4>
+    <h4 class="name" id="user"><span class="type-signature">&lt;async> </span>user(data, guild, name)</h4>
     
     
 </dt>
@@ -2924,6 +3434,30 @@
         </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of the key being resolved</td>
+        </tr>
+
+    
     </tbody>
 </table>
 
@@ -2967,7 +3501,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L15">lib/parsers/settingResolver.js#L15</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/settingResolver.js#L16">lib/parsers/settingResolver.js#L16</a>	</dd>
 	
 
 	
