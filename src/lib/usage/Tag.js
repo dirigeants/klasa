@@ -33,7 +33,8 @@ class Tag {
 	static parseMembers(members, count) {
 		const literals = [];
 		const types = [];
-		return members.split('|').map((member, i) => {
+		members = members.split('|');
+		return members.map((member, i) => {
 			const current = `${members}: at tag #${count} at bound #${i + 1}`;
 			let possible;
 			try {
@@ -46,7 +47,7 @@ class Tag {
 				if (literals.includes(possible.name)) throw `${current}: there can't be two literals with the same text.`;
 				literals.push(possible.name);
 			} else if (members.length > 1) {
-				if (possible.type === 'string' && members.length - 1 !== i) throw `${current}: the String type is vague, you must specify it at the last bound`;
+				if (['str', 'string'].includes(possible.type) && members.length - 1 !== i) throw `${current}: the String type is vague, you must specify it at the last bound`;
 				if (types.includes(possible.type)) throw `${current}: there can't be two bounds with the same type (${possible.type})`;
 				types.push(possible.type);
 			}
