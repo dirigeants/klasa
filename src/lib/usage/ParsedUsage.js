@@ -46,7 +46,7 @@ class ParsedUsage {
 		 * The usage object to compare against later
 		 * @type {Tag[]}
 		 */
-		this.parsedUsage = this.constructor.parseUsage();
+		this.parsedUsage = this.constructor.parseUsage(this.usageString);
 
 		/**
 		 * The concatenated string of this.commands and this.deliminatedUsage
