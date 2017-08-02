@@ -46,9 +46,9 @@ module.exports = class extends Language {
 			ARG_RESOLVER_MINMAX_BOTH: (name, min, max, suffix) => `${name} doit être entre ${min} et ${max}${suffix}.`,
 			ARG_RESOLVER_MINMAX_MIN: (name, min, suffix) => `${name} doit être plus grand que ${min}${suffix}.`,
 			ARG_RESOLVER_MINMAX_MAX: (name, max, suffix) => `${name} doit être plus petit que ${max}${suffix}.`,
-			COMMANDMESSAGE_MISSING: 'Il manque un ou plus argument à la fin de l\'entrée.',
+			COMMANDMESSAGE_MISSING: 'Il manque au moins un argument à la fin de l\'entrée.',
 			COMMANDMESSAGE_MISSING_REQUIRED: (name) => `${name} est un argument requis.`,
-			COMMANDMESSAGE_MISSING_OPTIONALS: (possibles) => `Il manque une option requise: (${possibles})`,
+			COMMANDMESSAGE_MISSING_OPTIONALS: (possibles) => `Il manque une option requise : (${possibles})`,
 			COMMANDMESSAGE_NOMATCH: (possibles) => `Votre option ne correspond à aucune des possibilités : (${possibles})`,
 			// eslint-disable-next-line max-len
 			MONITOR_COMMAND_HANDLER_REPROMPT: (tag, error) => `${tag} | **${error}** | Vous avez **30** secondes pour répondre à ce message avec un argument valide. Tapez **"ABORT"** pour annuler ce message.`,
