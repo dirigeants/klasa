@@ -91,9 +91,9 @@ class ParsedUsage {
 
 			if (usage.last && char !== ' ') throw `${usage.at}: there can't be anything else after the repeat tag.`;
 
-			if (['<', '['].includes(char)) usage = this.constructor.tagOpen(usage, char);
-			else if (['>', ']'].includes(char)) usage = this.constructor.tagClose(usage, char);
-			else if ([' ', '\n'].includes(char)) usage = this.constructor.tagSpace(usage, char);
+			if (['<', '['].includes(char)) usage = ParsedUsage.tagOpen(usage, char);
+			else if (['>', ']'].includes(char)) usage = ParsedUsage.tagClose(usage, char);
+			else if ([' ', '\n'].includes(char)) usage = ParsedUsage.tagSpace(usage, char);
 			else usage.current += char;
 		});
 
