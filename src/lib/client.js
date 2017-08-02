@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const path = require('path');
 const now = require('performance-now');
 const CommandMessage = require('./structures/commandMessage');
-const ArgResolver = require('./parsers/argResolver');
+const ArgResolver = require('./parsers/ArgResolver');
 const PermLevels = require('./util/PermLevels');
 const util = require('./util/util');
 const SettingGateway = require('./settings/settingGateway');
@@ -24,8 +24,10 @@ class KlasaClient extends Discord.Client {
 
 	/**
 	 * @typedef {Object} KlasaClientConfig
+	 * @memberof KlasaClient
 	 * @property {DiscordJSConfig} clientOptions The options to pass to D.JS
 	 * @property {string} prefix The default prefix the bot should respond to
+	 * @property {PermissionLevels} permLevels The permission levels to use with this bot
 	 * @property {string} [clientBaseDir=process.cwd()] The directory where all piece folders can be found
 	 * @property {number} [commandMessageLifetime=1800] The threshold for how old command messages can be before sweeping since the last edit in seconds
 	 * @property {number} [commandMessageSweep=900] The interval duration for which command messages should be sweept in seconds
@@ -206,24 +208,8 @@ class KlasaClient extends Discord.Client {
 	 * @returns {validPermStructure}
 	 */
 	validatePermStructure() {
-		const defaultPermStructure = new PermLevels()
-			.addLevel(0, false, () => true)
-			.addLevel(2, false, (client, msg) => {
-				if (!msg.guild || !msg.guild.settings.modRole) return false;
-				const modRole = msg.guild.roles.get(msg.guild.settings.modRole);
-				return modRole && msg.member.roles.has(modRole.id);
-			})
-			.addLevel(3, false, (client, msg) => {
-				if (!msg.guild || !msg.guild.settings.adminRole) return false;
-				const adminRole = msg.guild.roles.get(msg.guild.settings.adminRole);
-				return adminRole && msg.member.roles.has(adminRole.id);
-			})
-			.addLevel(4, false, (client, msg) => msg.guild && msg.author === msg.guild.owner)
-			.addLevel(9, true, (client, msg) => msg.author === client.owner)
-			.addLevel(10, false, (client, msg) => msg.author === client.owner);
-
 		const structure = this.config.permStructure instanceof PermLevels ? this.config.permStructure.structure : null;
-		const permStructure = structure || this.config.permStructure || defaultPermStructure.structure;
+		const permStructure = structure || this.config.permStructure || KlasaClient.defaultPermStructure.structure;
 		if (!Array.isArray(permStructure)) throw 'PermStructure must be an array.';
 		if (permStructure.some(perm => typeof perm !== 'object' || typeof perm.check !== 'function' || typeof perm.break !== 'boolean')) {
 			throw 'Perms must be an object with a check function and a break boolean.';
@@ -330,6 +316,26 @@ class KlasaClient extends Discord.Client {
 	}
 
 }
+
+/**
+ * The default PermLevels
+ * @type {PermissionLevels}
+ */
+KlasaClient.defaultPermStructure = new PermLevels()
+	.addLevel(0, false, () => true)
+	.addLevel(2, false, (client, msg) => {
+		if (!msg.guild || !msg.guild.settings.modRole) return false;
+		const modRole = msg.guild.roles.get(msg.guild.settings.modRole);
+		return modRole && msg.member.roles.has(modRole.id);
+	})
+	.addLevel(3, false, (client, msg) => {
+		if (!msg.guild || !msg.guild.settings.adminRole) return false;
+		const adminRole = msg.guild.roles.get(msg.guild.settings.adminRole);
+		return adminRole && msg.member.roles.has(adminRole.id);
+	})
+	.addLevel(4, false, (client, msg) => msg.guild && msg.author === msg.guild.owner)
+	.addLevel(9, true, (client, msg) => msg.author === client.owner)
+	.addLevel(10, false, (client, msg) => msg.author === client.owner);
 
 process.on('unhandledRejection', (err) => {
 	if (!err) return;

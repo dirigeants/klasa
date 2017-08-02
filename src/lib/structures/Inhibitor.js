@@ -10,6 +10,7 @@ class Inhibitor {
 
 	/**
 	 * @typedef {Object} InhibitorOptions
+	 * @memberof Inhibitor
 	 * @property {string} [name = theFileName] The name of the inhibitor
 	 * @property {boolean} [enabled=true] Whether the inhibitor is enabled
 	 * @property {boolean} [spamProtection=false] If this inhibitor is meant for spamProtection (disables the inhibitor while generating help)

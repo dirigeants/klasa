@@ -9,6 +9,7 @@ class Provider {
 
 	/**
 	 * @typedef {Object} ProviderOptions
+	 * @memberof Provider
 	 * @property {string} [name=theFileName] The name of the command
 	 * @property {boolean} [enabled=true] Whether the provider is enabled or not
 	 * @property {string} [description=''] The provider description

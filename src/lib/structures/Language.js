@@ -10,6 +10,7 @@ class Language {
 
 	/**
 	 * @typedef {Object} LanguageOptions
+	 * @memberof Language
 	 * @property {string} [name = theFileName] The name of the finalizer
 	 * @property {boolean} [enabled=true] Whether the finalizer is enabled or not
 	 */
@@ -51,7 +52,7 @@ class Language {
 		this.type = 'language';
 
 		/**
-		 * If the finalizer is enabled or not
+		 * If the language is enabled or not
 		 * @type {boolean}
 		 */
 		this.enabled = 'enabled' in options ? options.enabled : true;

@@ -11,6 +11,7 @@ class Extendable {
 
 	/**
 	 * @typedef {object} ExtendableOptions
+	 * @memberof Extendable
 	 * @property {string} [name = theFileName] The name of the extendable
 	 */
 

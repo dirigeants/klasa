@@ -1,3 +1,4 @@
+const { Guild } = require('discord.js');
 const SettingResolver = require('../parsers/SettingResolver');
 const CacheManager = require('./CacheManager');
 const SchemaManager = require('./SchemaManager');
@@ -112,8 +113,8 @@ class SettingGateway extends CacheManager {
 		guild = await this.validateGuild(guild);
 		const settings = this.get(guild.id);
 		const resolved = await Promise.all(Object.entries(settings).map(([key, data]) => {
-			if (this.schema[key] && this.schema[key].array) return { [key]: Promise.all(data.map(entry => this.resolver[this.schema[key].type.toLowerCase()](entry, guild, this.schema[key]))) };
-			return { [key]: this.schema[key] && data ? this.resolver[this.schema[key].type.toLowerCase()](data, guild, this.schema[key]) : data };
+			if (this.schema[key] && this.schema[key].array) return { [key]: Promise.all(data.map(entry => this.resolver[this.schema[key].type.toLowerCase()](entry, guild, key, this.schema[key]))) };
+			return { [key]: this.schema[key] && data ? this.resolver[this.schema[key].type.toLowerCase()](data, guild, key, this.schema[key]) : data };
 		}));
 		return Object.assign({}, ...resolved);
 	}
@@ -161,7 +162,7 @@ class SettingGateway extends CacheManager {
 	async update(guild, key, data) {
 		if (!(key in this.schema)) throw guild.language.get('SETTING_GATEWAY_KEY_NOEXT', key);
 		const target = await this.validateGuild(guild);
-		let result = await this.resolver[this.schema[key].type.toLowerCase()](data, target, this.schema[key]);
+		let result = await this.resolver[this.schema[key].type.toLowerCase()](data, target, key, this.schema[key]);
 		if (result.id) result = result.id;
 		await this.provider.update('guilds', target.id, { [key]: result });
 		await this.sync(target.id);
@@ -182,7 +183,7 @@ class SettingGateway extends CacheManager {
 		if (!this.schema[key].array) throw guild.language.get('SETTING_GATEWAY_KEY_NOT_ARRAY', key);
 		if (data === undefined) throw guild.language.get('SETTING_GATEWAY_SPECIFY_VALUE');
 		const target = await this.validateGuild(guild);
-		let result = await this.resolver[this.schema[key].type.toLowerCase()](data, target, this.schema[key]);
+		let result = await this.resolver[this.schema[key].type.toLowerCase()](data, target, key, this.schema[key]);
 		if (result.id) result = result.id;
 		const cache = this.get(target.id);
 		if (type === 'add') {
@@ -205,9 +206,10 @@ class SettingGateway extends CacheManager {
 	 * @returns {Guild}
 	 */
 	async validateGuild(guild) {
-		const result = await this.resolver.guild(guild);
-		if (!result) throw guild.language.get('SETTING_GATEWAY_EXPECTS_GUILD');
-		return result;
+		if (guild instanceof Guild) return guild;
+		if (typeof guild === 'string' && /^(\d{17,19})$/.test(guild)) guild = this.client.guilds.get(guild);
+		if (!guild) throw guild.language.get('SETTING_GATEWAY_EXPECTS_GUILD');
+		return guild;
 	}
 
 }

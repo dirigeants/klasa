@@ -15,10 +15,11 @@ module.exports = class extends Command {
 
 	async run(msg, [action, key, ...value]) {
 		const configs = msg.guild.settings;
-		if (action !== 'list' && !key) return msg.sendMessage(msg.language.get('COMMAND_CONF_NOKEY'));
-		if (['set', 'remove'].includes(action) && !value[0]) return msg.sendMessage(msg.language.get('COMMAND_CONF_NOVALUE'));
+		if (action !== 'list' && !key) throw msg.language.get('COMMAND_CONF_NOKEY');
+		if (['set', 'remove'].includes(action) && !value[0]) throw msg.language.get('COMMAND_CONF_NOVALUE');
 		if (['set', 'remove', 'reset'].includes(action) && !configs.id) await this.client.settingGateway.create(msg.guild);
-		this[action](msg, configs, key, value);
+		if (['set', 'remove', 'get', 'reset'].includes(action) && !(key in configs)) throw msg.language.get('COMMAND_CONF_GET_NOEXT', key);
+		await this[action](msg, configs, key, value);
 
 		return null;
 	}
@@ -40,7 +41,6 @@ module.exports = class extends Command {
 	}
 
 	async get(msg, configs, key) {
-		if (!(key in configs)) return msg.sendMessage(msg.language.get('COMMAND_CONF_GET_NOEXT', key));
 		return msg.sendMessage(msg.language.get('COMMAND_CONF_GET', key, inspect(configs[key])));
 	}
 

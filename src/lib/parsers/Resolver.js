@@ -2,10 +2,10 @@ const url = require('url');
 const { Message, User, GuildMember, Role, Guild, Channel } = require('discord.js');
 
 const regex = {
-	userOrMember: new RegExp('^(?:<@!?)?(\\d{17,21})>?$'),
-	channel: new RegExp('^(?:<#)?(\\d{17,21})>?$'),
-	role: new RegExp('^(?:<@&)?(\\d{17,21})>?$'),
-	snowflake: new RegExp('^(\\d{17,21})$')
+	userOrMember: new RegExp('^(?:<@!?)?(\\d{17,19})>?$'),
+	channel: new RegExp('^(?:<#)?(\\d{17,19})>?$'),
+	role: new RegExp('^(?:<@&)?(\\d{17,19})>?$'),
+	snowflake: new RegExp('^(\\d{17,19})$')
 };
 
 /**
