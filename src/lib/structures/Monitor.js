@@ -9,6 +9,7 @@ class Monitor {
 
 	/**
 	 * @typedef {Object} MonitorOptions
+	 * @memberof Monitor
 	 * @property {string} [name = theFileName] The name of the monitor
 	 * @property {boolean} [enabled=true] Whether the monitor is enabled
 	 * @property {boolean} [ignoreBots=true] Whether the monitor ignores bots or not

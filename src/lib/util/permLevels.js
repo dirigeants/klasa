@@ -5,7 +5,7 @@ class PermissionLevels {
 
 	/**
 	 * Permission levels indexed from 0-11, based on the level number
-	 * @typedef {Array<permLevel>} validPermStructure
+	 * @typedef {permLevel[]} validPermStructure
 	 */
 
 	/**

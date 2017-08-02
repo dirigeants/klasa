@@ -1,5 +1,5 @@
 const Piece = require('./interfaces/Piece');
-const ParsedUsage = require('../parsers/ParsedUsage');
+const ParsedUsage = require('../usage/ParsedUsage');
 
 /**
  * Base class for all Klasa Commands. See {@tutorial CreatingCommands} for more information how to use this class
@@ -11,6 +11,7 @@ class Command {
 
 	/**
 	 * @typedef {Object} CommandOptions
+	 * @memberof Command
 	 * @property {string} [name = theFileName] The name of the command
 	 * @property {boolean} [enabled=true] Whether the command is enabled or not
 	 * @property {Array<string>} [runIn=['text','dm','group']] What channel types the command should run in

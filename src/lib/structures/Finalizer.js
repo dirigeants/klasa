@@ -10,6 +10,7 @@ class Finalizer {
 
 	/**
 	 * @typedef {Object} FinalizerOptions
+	 * @memberof Finalizer
 	 * @property {string} [name = theFileName] The name of the finalizer
 	 * @property {boolean} [enabled=true] Whether the finalizer is enabled or not
 	 */

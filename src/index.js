@@ -25,10 +25,12 @@ module.exports = {
 	SchemaManager: require('./lib/settings/schemaManager'),
 	SettingGateway: require('./lib/settings/settingGateway'),
 	SQL: require('./lib/settings/SQL'),
-	ArgResolver: require('./lib/parsers/argResolver'),
-	parsedUsage: require('./lib/parsers/parsedUsage'),
+	ArgResolver: require('./lib/parsers/ArgResolver'),
 	Resolver: require('./lib/parsers/Resolver'),
-	settingResolver: require('./lib/parsers/settingResolver'),
+	SettingResolver: require('./lib/parsers/SettingResolver'),
+	ParsedUsage: require('./lib/usage/ParsedUsage'),
+	Possible: require('./lib/usage/Possible'),
+	Tag: require('./lib/usage/Tag'),
 	version: require('../package').version
 };
 
