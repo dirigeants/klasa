@@ -46,7 +46,7 @@ class ParsedUsage {
 		 * The usage object to compare against later
 		 * @type {Tag[]}
 		 */
-		this.parsedUsage = this.parseUsage();
+		this.parsedUsage = this.constructor.parseUsage();
 
 		/**
 		 * The concatenated string of this.commands and this.deliminatedUsage
@@ -91,9 +91,9 @@ class ParsedUsage {
 
 			if (usage.last && char !== ' ') throw `${usage.at}: there can't be anything else after the repeat tag.`;
 
-			if (['<', '['].includes(char)) usage = ParsedUsage.tagOpen(usage, char);
-			else if (['>', ']'].includes(char)) usage = ParsedUsage.tagClose(usage, char);
-			else if ([' ', '\n'].includes(char)) usage = ParsedUsage.tagSpace(usage, char);
+			if (['<', '['].includes(char)) usage = this.constructor.tagOpen(usage, char);
+			else if (['>', ']'].includes(char)) usage = this.constructor.tagClose(usage, char);
+			else if ([' ', '\n'].includes(char)) usage = this.constructor.tagSpace(usage, char);
 			else usage.current += char;
 		});
 

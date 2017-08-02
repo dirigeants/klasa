@@ -52,7 +52,7 @@ class Language {
 		this.type = 'language';
 
 		/**
-		 * If the finalizer is enabled or not
+		 * If the language is enabled or not
 		 * @type {boolean}
 		 */
 		this.enabled = 'enabled' in options ? options.enabled : true;
