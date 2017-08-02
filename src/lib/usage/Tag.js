@@ -34,7 +34,7 @@ class Tag {
 		const literals = [];
 		const types = [];
 		return members.split('|').map((member, i) => {
-			const current = `at tag #${count} at bound #${i + 1}`;
+			const current = `${members}: at tag #${count} at bound #${i + 1}`;
 			let possible;
 			try {
 				possible = new Possible(/^([^:]+)(?::([^{}]+))?(?:{([^,]+)?(?:,(.+))?})?$/i.exec(member));
