@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Klasa Class: LanguageStore</title>
+	<title>Klasa Class: Possible</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -86,16 +86,16 @@
 		<div id="main">
 			
 
-	<h1 class="page-title">Class: LanguageStore</h1>
+	<h1 class="page-title">Class: Possible</h1>
 <section>
 
 <header>
     
         <h2>
-        LanguageStore
+        Possible
         </h2>
         
-            <div class="class-description">Stores all languages for use in Klasa</div>
+            <div class="class-description">Represents a possibility in a usage Tag</div>
         
     
 </header>
@@ -107,16 +107,12 @@
         
 <hr>
 <dt>
-    <h4 class="name" id="LanguageStore"><span class="type-signature"></span>new LanguageStore(client)</h4>
+    <h4 class="name" id="Possible"><span class="type-signature"></span>new Possible(regexResults)</h4>
     
     
 </dt>
 <dd>
 
-    
-    <div class="description">
-        Constructs our LanguageStore for use in Klasa
-    </div>
     
 
     
@@ -150,13 +146,13 @@
 
         <tr>
             
-                <td class="name"><code>client</code></td>
+                <td class="name"><code>regexResults</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="KlasaClient.html">KlasaClient</a></span>
+<span class="param-type">Array.&lt;string></span>
 
 
 
@@ -167,7 +163,7 @@
 
             
 
-            <td class="description last">The Klasa client</td>
+            <td class="description last">The regex results from parsing the tag member</td>
         </tr>
 
     
@@ -191,13 +187,6 @@
     
 
     
-    <dt class="implements">Implements:</dt>
-    <dd class="implements"><ul>
-        
-            <li><a href="Store.html">Store</a></li>
-        
-    </ul></dd>
-    
 
     
 
@@ -216,7 +205,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/LanguageStore.js#L17">lib/structures/LanguageStore.js#L17</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/usage/Possible.js#L11">lib/usage/Possible.js#L11</a>	</dd>
 	
 
 	
@@ -244,17 +233,6 @@
 
     
     </div>
-
-    
-        <h3 class="subsection-title">Extends</h3>
-
-        
-
-
-    <ul>
-        <li><a href="external-Collection.html">external:Collection</a></li>
-    </ul>
-
 
     
 
@@ -272,15 +250,15 @@
         <dl>
             
 <hr>
-<dt class="name" id="client">
-    <h4 id="client"><span class="type-signature">&lt;readonly> </span>client<span class="type-signature"> :<a href="KlasaClient.html">KlasaClient</a></span></h4>
+<dt class="name" id="max">
+    <h4 id="max"><span class="type-signature">&lt;nullable> </span>max<span class="type-signature"> :number</span></h4>
 
     
 </dt>
 <dd>
     
     <div class="description">
-        The client this LanguageStore was created with.
+        The max of this possible
     </div>
     
 
@@ -289,7 +267,7 @@
         <ul>
             <li>
                 
-<span class="param-type"><a href="KlasaClient.html">KlasaClient</a></span>
+<span class="param-type">number</span>
 
 
 
@@ -330,7 +308,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/LanguageStore.js#L19">lib/structures/LanguageStore.js#L19</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/usage/Possible.js#L34">lib/usage/Possible.js#L34</a>	</dd>
 	
 
 	
@@ -347,15 +325,15 @@
         
             
 <hr>
-<dt class="name" id="coreDir">
-    <h4 id="coreDir"><span class="type-signature"></span>coreDir<span class="type-signature"> :String</span></h4>
+<dt class="name" id="min">
+    <h4 id="min"><span class="type-signature">&lt;nullable> </span>min<span class="type-signature"> :number</span></h4>
 
     
 </dt>
 <dd>
     
     <div class="description">
-        The directory of languages in Klasa relative to where its installed.
+        The min of this possible
     </div>
     
 
@@ -364,7 +342,7 @@
         <ul>
             <li>
                 
-<span class="param-type">String</span>
+<span class="param-type">number</span>
 
 
 
@@ -405,7 +383,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/LanguageStore.js#L31">lib/structures/LanguageStore.js#L31</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/usage/Possible.js#L28">lib/usage/Possible.js#L28</a>	</dd>
 	
 
 	
@@ -422,15 +400,15 @@
         
             
 <hr>
-<dt class="name" id="holds">
-    <h4 id="holds"><span class="type-signature"></span>holds<span class="type-signature"> :<a href="Language.html">Language</a></span></h4>
+<dt class="name" id="name">
+    <h4 id="name"><span class="type-signature"></span>name<span class="type-signature"> :string</span></h4>
 
     
 </dt>
 <dd>
     
     <div class="description">
-        The type of structure this store holds
+        The name of this possible
     </div>
     
 
@@ -439,7 +417,7 @@
         <ul>
             <li>
                 
-<span class="param-type"><a href="Language.html">Language</a></span>
+<span class="param-type">string</span>
 
 
 
@@ -480,7 +458,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/LanguageStore.js#L43">lib/structures/LanguageStore.js#L43</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/usage/Possible.js#L16">lib/usage/Possible.js#L16</a>	</dd>
 	
 
 	
@@ -497,15 +475,15 @@
         
             
 <hr>
-<dt class="name" id="userDir">
-    <h4 id="userDir"><span class="type-signature"></span>userDir<span class="type-signature"> :String</span></h4>
+<dt class="name" id="type">
+    <h4 id="type"><span class="type-signature"></span>type<span class="type-signature"> :string</span></h4>
 
     
 </dt>
 <dd>
     
     <div class="description">
-        The directory of local languages relative to where you run Klasa from.
+        The type of this possible
     </div>
     
 
@@ -514,7 +492,7 @@
         <ul>
             <li>
                 
-<span class="param-type">String</span>
+<span class="param-type">string</span>
 
 
 
@@ -555,7 +533,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/LanguageStore.js#L37">lib/structures/LanguageStore.js#L37</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/usage/Possible.js#L22">lib/usage/Possible.js#L22</a>	</dd>
 	
 
 	
@@ -579,7 +557,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="delete"><span class="type-signature"></span>delete(name)</h4>
+    <h4 class="name" id=".resolveLimit"><span class="type-signature">&lt;static> </span>resolveLimit(limit, type)</h4>
     
     
 </dt>
@@ -587,7 +565,7 @@
 
     
     <div class="description">
-        Deletes a language from the store
+        Resolves a limit
     </div>
     
 
@@ -622,15 +600,12 @@
 
         <tr>
             
-                <td class="name"><code>name</code></td>
+                <td class="name"><code>limit</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="Finalizer.html">Finalizer</a></span>
-|
-
 <span class="param-type">string</span>
 
 
@@ -642,7 +617,31 @@
 
             
 
-            <td class="description last">The language object or a string representing the structure this store caches</td>
+            <td class="description last">The limit to evaluate</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The type of limit</td>
         </tr>
 
     
@@ -684,120 +683,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/LanguageStore.js#L51">lib/structures/LanguageStore.js#L51</a>	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    whether or not the delete was successful.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">boolean</span>
-
-
-
-    </dd>
-</dl>
-
-
-        
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="init"><span class="type-signature"></span>init()</h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Initializes all pieces in this store.
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-    <dt class="implements">Implements:</dt>
-    <dd class="implements"><ul>
-        
-            <li><a href="Store.html#init">Store#init</a></li>
-        
-    </ul></dd>
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/interfaces/Store.js#L21">lib/structures/interfaces/Store.js#L21</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/usage/Possible.js#L43">lib/usage/Possible.js#L43</a>	</dd>
 	
 
 	
@@ -830,617 +716,7 @@
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;Array></span>
-
-
-
-    </dd>
-</dl>
-
-
-        
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="load"><span class="type-signature"></span>load(dir, file)</h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Loads a piece into Klasa so it can be saved in this store.
-    </div>
-    
-
-    
-
-    
-
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>dir</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The user directory or core directory where this file is saved.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>file</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">A string showing where the file is located.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-    <dt class="implements">Implements:</dt>
-    <dd class="implements"><ul>
-        
-            <li><a href="Store.html#load">Store#load</a></li>
-        
-    </ul></dd>
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/interfaces/Store.js#L31">lib/structures/interfaces/Store.js#L31</a>	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="Finalizer.html">Finalizer</a></span>
-
-
-
-    </dd>
-</dl>
-
-
-        
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="loadAll"><span class="type-signature">&lt;async> </span>loadAll()</h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Loads all of our pieces from both the user and core directories.
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-    <dt class="implements">Implements:</dt>
-    <dd class="implements"><ul>
-        
-            <li><a href="Store.html#loadAll">Store#loadAll</a></li>
-        
-    </ul></dd>
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/interfaces/Store.js#L41">lib/structures/interfaces/Store.js#L41</a>	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    The number of pieces loaded.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Promise.&lt;number></span>
-
-
-
-    </dd>
-</dl>
-
-
-        
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="resolve"><span class="type-signature"></span>resolve(name)</h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Resolve a string or piece into a piece object.
-    </div>
-    
-
-    
-
-    
-
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>name</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Piece.html">Piece</a></span>
-|
-
-<span class="param-type">string</span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The piece object or a string representing a piece's name</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-    <dt class="implements">Implements:</dt>
-    <dd class="implements"><ul>
-        
-            <li><a href="Store.html#resolve">Store#resolve</a></li>
-        
-    </ul></dd>
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/interfaces/Store.js#L55">lib/structures/interfaces/Store.js#L55</a>	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="Piece.html">Piece</a></span>
-
-
-
-    </dd>
-</dl>
-
-
-        
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="set"><span class="type-signature"></span>set(language)</h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Sets up a language in our store.
-    </div>
-    
-
-    
-
-    
-
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params table table-striped">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>language</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Language.html">Language</a></span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The finalizer object we are setting up.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/LanguageStore.js#L63">lib/structures/LanguageStore.js#L63</a>	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="Language.html">Language</a></span>
+<span class="param-type">number</span>
 
 
 
