@@ -66,7 +66,7 @@ module.exports = class extends Language {
 				'Veuillez soumettre un problème à <https://github.com/dirigeants/klasa> si vous trouvez un bug.'
 			],
 			COMMAND_INFO: [
-				"Klasa est un framework 'plug-and-play' étend la librairie Discord.js.",
+				"Klasa est un framework 'plug-and-play' qui étend la librairie Discord.js.",
 				'Une grande partie du code est modularisée, ce qui permet aux développeurs de modifier Klasa pour répondre à leurs besoins.',
 				'',
 				'Les fonctionnalités de Klasa comprennent :',
