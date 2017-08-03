@@ -66,7 +66,7 @@ class Language {
 	 */
 	get(term, ...args) {
 		// eslint-disable-next-line new-cap
-		if (!this.language[term]) return `${this.language.DEFAULT(term)}\n\n**${this.language.DEFAULT_Language}:**\n${this.client.languages.default.get(term, ...args)}`;
+		if (!this.language[term]) return `${this.language.DEFAULT(term)}\n\n**${this.language.DEFAULT_LANGUAGE}:**\n${this.client.languages.default.get(term, ...args)}`;
 		return args.length > 0 ? this.language[term](...args) : this.language[term];
 	}
 
