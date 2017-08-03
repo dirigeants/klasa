@@ -1,13 +1,6 @@
 const url = require('url');
 const { Message, User, GuildMember, Role, Guild, Channel } = require('discord.js');
 
-const regex = {
-	userOrMember: new RegExp('^(?:<@!?)?(\\d{17,19})>?$'),
-	channel: new RegExp('^(?:<#)?(\\d{17,19})>?$'),
-	role: new RegExp('^(?:<@&)?(\\d{17,19})>?$'),
-	snowflake: new RegExp('^(\\d{17,19})$')
-};
-
 /**
  * The base resolver class
  */
@@ -32,7 +25,7 @@ class Resolver {
 	 */
 	async msg(message, channel) {
 		if (message instanceof Message) return message;
-		return regex.snowflake.test(message) ? channel.fetchMessage(message).catch(() => null) : undefined;
+		return this.constructor.regex.snowflake.test(message) ? channel.fetchMessage(message).catch(() => null) : undefined;
 	}
 
 	/**
@@ -43,8 +36,10 @@ class Resolver {
 	async user(user) {
 		if (user instanceof User) return user;
 		if (user instanceof GuildMember) return user.user;
-		if (typeof user === 'string' && regex.userOrMember.test(user)) {
-			return this.client.user.bot ? this.client.fetchUser(regex.userOrMember.exec(user)[1]).catch(() => null) : this.client.users.get(regex.userOrMember.exec(user)[1]);
+		if (typeof user === 'string' && this.constructor.regex.userOrMember.test(user)) {
+			return this.client.user.bot ?
+				this.client.fetchUser(this.constructor.regex.userOrMember.exec(user)[1]).catch(() => null) :
+				this.client.users.get(this.constructor.regex.userOrMember.exec(user)[1]);
 		}
 		return null;
 	}
@@ -58,8 +53,10 @@ class Resolver {
 	async member(member, guild) {
 		if (member instanceof GuildMember) return member;
 		if (member instanceof User) return guild.fetchMember(member);
-		if (typeof member === 'string' && regex.userOrMember.test(member)) {
-			const user = this.client.user.bot ? await this.client.fetchUser(regex.userOrMember.exec(member)[1]).catch(() => null) : this.client.users.get(regex.userOrMember.exec(member)[1]);
+		if (typeof member === 'string' && this.constructor.regex.userOrMember.test(member)) {
+			const user = this.client.user.bot ?
+				await this.client.fetchUser(this.constructor.regex.userOrMember.exec(member)[1]).catch(() => null) :
+				this.client.users.get(this.constructor.regex.userOrMember.exec(member)[1]);
 			if (user) return guild.fetchMember(user).catch(() => null);
 		}
 		return null;
@@ -72,7 +69,7 @@ class Resolver {
 	 */
 	async channel(channel) {
 		if (channel instanceof Channel) return channel;
-		if (typeof channel === 'string' && regex.channel.test(channel)) return this.client.channels.get(regex.channel.exec(channel)[1]);
+		if (typeof channel === 'string' && this.constructor.regex.channel.test(channel)) return this.client.channels.get(this.constructor.regex.channel.exec(channel)[1]);
 		return null;
 	}
 
@@ -83,7 +80,7 @@ class Resolver {
 	 */
 	async guild(guild) {
 		if (guild instanceof Guild) return guild;
-		if (typeof guild === 'string' && regex.snowflake.test(guild)) return this.client.guilds.get(guild);
+		if (typeof guild === 'string' && this.constructor.regex.snowflake.test(guild)) return this.client.guilds.get(guild);
 		return null;
 	}
 
@@ -95,7 +92,7 @@ class Resolver {
 	 */
 	async role(role, guild) {
 		if (role instanceof Role) return role;
-		if (typeof role === 'string' && regex.role.test(role)) return guild.roles.get(regex.role.exec(role)[1]);
+		if (typeof role === 'string' && this.constructor.regex.role.test(role)) return guild.roles.get(this.constructor.regex.role.exec(role)[1]);
 		return null;
 	}
 
@@ -154,5 +151,20 @@ class Resolver {
 	}
 
 }
+
+/**
+ * Standard regular expressions for matching mentions and snowflake ids
+ * @type {Object}
+ * @property {RegExp} userOrMember Regex for users or members
+ * @property {RegExp} channel Regex for channels
+ * @property {RegExp} role Regex for roles
+ * @property {RegExp} snowflake Regex for simple snowflake ids
+ */
+Resolver.regex = {
+	userOrMember: new RegExp('^(?:<@!?)?(\\d{17,19})>?$'),
+	channel: new RegExp('^(?:<#)?(\\d{17,19})>?$'),
+	role: new RegExp('^(?:<@&)?(\\d{17,19})>?$'),
+	snowflake: new RegExp('^(\\d{17,19})$')
+};
 
 module.exports = Resolver;
