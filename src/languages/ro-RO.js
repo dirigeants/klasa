@@ -6,6 +6,7 @@ module.exports = class extends Language {
 		super(...args);
 		this.language = {
 			DEFAULT: (key) => `${key} nu a fost încă localizată în ro-RO.`,
+			DEFAULT_LANGUAGE: 'Limba implicită',
 			SETTING_GATEWAY_EXPECTS_GUILD: 'Paramentrul <Guild> așteaptă un obiect de tip Guild sau un Guild.',
 			SETTING_GATEWAY_VALUE_FOR_KEY_NOEXT: (data, key) => `Valorarea ${data} pentru cheia ${key} nu există.`,
 			SETTING_GATEWAY_VALUE_FOR_KEY_ALREXT: (data, key) => `Valorarea ${data} pentru cheia ${key} deja există.`,

@@ -44,6 +44,15 @@ class LanguageStore extends Collection {
 	}
 
 	/**
+	 * The default language
+	 * @readonly
+	 * @return {Language} The default language set in KlasaClient.config
+	 */
+	get default() {
+		return this.get(this.client.config.language);
+	}
+
+	/**
 	 * Deletes a language from the store
 	 * @param  {Finalizer|string} name The language object or a string representing the structure this store caches
 	 * @return {boolean} whether or not the delete was successful.

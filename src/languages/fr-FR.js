@@ -6,6 +6,7 @@ module.exports = class extends Language {
 		super(...args);
 		this.language = {
 			DEFAULT: (key) => `${key} n'a pas encore été traduit en 'fr-FR'.`,
+			DEFAULT_LANGUAGE: 'Langue par défaut',
 			SETTING_GATEWAY_EXPECTS_GUILD: 'Le paramètre <Guild> attend soit un identifiant soit une instance de serveur.',
 			SETTING_GATEWAY_VALUE_FOR_KEY_NOEXT: (data, key) => `La valeur '${data}' pour la clef '${key}' n'existe pas.`,
 			SETTING_GATEWAY_VALUE_FOR_KEY_ALREXT: (data, key) => `La valeur '${data}' pour la clef '${key}' existe déjà.`,

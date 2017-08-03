@@ -6,6 +6,7 @@ module.exports = class extends Language {
 		super(...args);
 		this.language = {
 			DEFAULT: (key) => `${key} has not been localized for en-US yet.`,
+			DEFAULT_LANGUAGE: 'Default Language',
 			SETTING_GATEWAY_EXPECTS_GUILD: 'The parameter <Guild> expects either a Guild or a Guild Object.',
 			SETTING_GATEWAY_VALUE_FOR_KEY_NOEXT: (data, key) => `The value ${data} for the key ${key} does not exist.`,
 			SETTING_GATEWAY_VALUE_FOR_KEY_ALREXT: (data, key) => `The value ${data} for the key ${key} already exists.`,

@@ -6,6 +6,7 @@ module.exports = class extends Language {
 		super(...args);
 		this.language = {
 			DEFAULT: (key) => `La clave '${key}' no ha sido traducido para 'es-ES' todavía.`,
+			DEFAULT_LANGUAGE: 'Idioma predeterminado',
 			SETTING_GATEWAY_EXPECTS_GUILD: 'El parámetro <Guild> require o una ID o una instancia de Guild.',
 			SETTING_GATEWAY_VALUE_FOR_KEY_NOEXT: (data, key) => `El valor '${data}' para la clave '${key}' no existe.`,
 			SETTING_GATEWAY_VALUE_FOR_KEY_ALREXT: (data, key) => `El valor '${data}' para la clave '${key}' ya existe.`,
