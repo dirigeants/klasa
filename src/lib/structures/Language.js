@@ -67,6 +67,7 @@ class Language {
 	get(term, ...args) {
 		/* eslint-disable new-cap */
 		if (!this.language[term]) {
+			if (this === this.client.languages.default) return this.language.DEFAULT(term);
 			return [
 				`${this.language.DEFAULT(term)}`,
 				'',
