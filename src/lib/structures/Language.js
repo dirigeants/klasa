@@ -68,9 +68,9 @@ class Language {
 		/* eslint-disable new-cap */
 		if (!this.language[term]) {
 			return [
-				`${this.language.DEFAULT(term)}',
+				`${this.language.DEFAULT(term)}`,
 				'',
-				'**${this.language.DEFAULT_LANGUAGE}:**`,
+				`**${this.language.DEFAULT_LANGUAGE}:**`,
 				`${args.length > 0 ? this.client.languages.default[term](...args) : this.client.languages.default[term]}`
 			].join('\n');
 		}
