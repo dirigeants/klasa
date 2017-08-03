@@ -71,7 +71,7 @@ class Language {
 				`${this.language.DEFAULT(term)}`,
 				'',
 				`${this.language.DEFAULT_LANGUAGE}:`,
-				`${args.length > 0 ? this.client.languages.default[term](...args) : this.client.languages.default[term]}`
+				`${(args.length > 0 ? this.client.languages.default[term](...args) : this.client.languages.default[term]) || this.client.languages.default.DEFAULT(term)}`
 			].join('\n');
 		}
 		/* eslint-enable new-cap */
