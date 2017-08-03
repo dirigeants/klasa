@@ -65,8 +65,16 @@ class Language {
 	 * @returns {string|Function}
 	 */
 	get(term, ...args) {
-		// eslint-disable-next-line new-cap
-		if (!this.language[term]) return `${this.language.DEFAULT(term)}\n\n**${this.language.DEFAULT_LANGUAGE}:**\n${this.client.languages.default.get(term, ...args)}`;
+		/* eslint-disable new-cap */
+		if (!this.language[term]) {
+			return [
+				`${this.language.DEFAULT(term)}',
+				'',
+				'**${this.language.DEFAULT_LANGUAGE}:**`,
+				`${args.length > 0 ? this.client.languages.default[term](...args) : this.client.languages.default[term]}`
+			].join('\n');
+		}
+		/* eslint-enable new-cap */
 		return args.length > 0 ? this.language[term](...args) : this.language[term];
 	}
 
