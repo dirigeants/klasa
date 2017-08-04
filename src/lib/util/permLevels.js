@@ -1,12 +1,8 @@
 /**
- * A helper class to building valid permission structures
+ * Permission levels
+ * @extends Map
  */
-class PermissionLevels {
-
-	/**
-	 * Permission levels indexed from 0-11, based on the level number
-	 * @typedef {permLevel[]} validPermStructure
-	 */
+class PermissionLevels extends Map {
 
 	/**
 	 * @typedef {object} permLevel
@@ -15,14 +11,28 @@ class PermissionLevels {
 	 */
 
 	/**
-	 * Creates a new PermissionLevels
+	 * The default amount of permission levels
 	 */
-	constructor() {
+	static get defaultRequiredLevels() {
+		return 11;
+	}
+
+	/**
+	 * Creates a new PermissionLevels
+	 * @param {number} levels How many permission levels there should be
+	 */
+	constructor(levels = PermissionLevels.defaultRequiredLevels) {
+		super();
+
 		/**
-		 * A cache of levels submitted with addLevel
-		 * @type {Map}
+		 * The amount of permission levels
+		 * @type {number}
 		 */
-		this.levels = new Map();
+		this.requiredLevels = levels;
+
+		for (let i = 0; i < this.requiredLevels; i++) {
+			this.set(i, { break: false, check: () => false });
+		}
 	}
 
 	/**
@@ -33,26 +43,28 @@ class PermissionLevels {
 	 * @returns {PermissionLevels} This permission levels
 	 */
 	addLevel(level, brk, check) {
-		if (this.levels.has(level)) throw new Error(`Level ${level} is already defined`);
-		this.levels.set(level, { break: brk, check: check });
-		return this;
+		return this.set(level, { break: brk, check });
 	}
 
 	/**
-	 * The current valid permissions structure
-	 * @readonly
-	 * @type {validPermStructure}
+	 * Checks if all permission levels are valid
+	 * @return {boolean}
 	 */
-	get structure() {
-		const structure = [];
-		for (let i = 0; i < 11; i++) {
-			const myLevel = this.levels.get(i);
-			if (myLevel) structure.push(myLevel);
-			else structure.push({ break: false, check: () => false });
-		}
-		return structure;
+	isValid() {
+		/* eslint-disable no-multi-spaces, arrow-body-style, operator-linebreak, indent, no-mixed-spaces-and-tabs */
+		return every(this)((level, index) => {
+			// Trick to replace a switch case or if else. Condition on the left, what's executed on the right. Last one is default.
+			return   typeof level !== 'object'   ? throwE(`Permission level ${index} must be an object`) :
+				typeof level.break !== 'boolean'  ? throwE(`"break" in permission level ${index} must be a boolean`) :
+				typeof level.check !== 'function' ? throwE(`"check" in permission level ${index} must be a function`)
+				                                  : true;
+		});
+		/* eslint-enable no-multi-spaces, arrow-body-style, operator-linebreak, indent, no-mixed-spaces-and-tabs */
 	}
 
 }
+
+const throwE = msg => { throw new Error(msg); };
+const every = iterable => func => Array.prototype.every.call(iterable, func);
 
 module.exports = PermissionLevels;

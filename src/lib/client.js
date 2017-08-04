@@ -131,9 +131,9 @@ class KlasaClient extends Discord.Client {
 
 		/**
 		 * The permissions structure for this bot
-		 * @type {validPermStructure}
+		 * @type {PermissionLevels}
 		 */
-		this.permStructure = this.validatePermStructure();
+		this.permLevels = this.validatePermLevels();
 
 		/**
 		 * The threshold for how old command messages can be before sweeping since the last edit in seconds
@@ -205,17 +205,13 @@ class KlasaClient extends Discord.Client {
 	/**
 	 * Validates the permission structure passed to the client
 	 * @private
-	 * @returns {validPermStructure}
+	 * @returns {PermissionLevels}
 	 */
-	validatePermStructure() {
-		const structure = this.config.permStructure instanceof PermLevels ? this.config.permStructure.structure : null;
-		const permStructure = structure || this.config.permStructure || KlasaClient.defaultPermStructure.structure;
-		if (!Array.isArray(permStructure)) throw 'PermStructure must be an array.';
-		if (permStructure.some(perm => typeof perm !== 'object' || typeof perm.check !== 'function' || typeof perm.break !== 'boolean')) {
-			throw 'Perms must be an object with a check function and a break boolean.';
-		}
-		if (permStructure.length !== 11) throw 'Permissions 0-10 must all be defined.';
-		return permStructure;
+	validatePermLevels() {
+		const permLevels = this.config.permsLevels || KlasaClient.defaultPermLevels;
+		if (!(permLevels instanceof PermLevels)) throw new Error('permLevels must be an instance of the PermissionLevels class');
+		if (permLevels.isValid()) return permLevels;
+		throw new Error('Unexpected catastrophic failure at permission level validation!');
 	}
 
 	/**
@@ -321,7 +317,7 @@ class KlasaClient extends Discord.Client {
  * The default PermLevels
  * @type {PermissionLevels}
  */
-KlasaClient.defaultPermStructure = new PermLevels()
+KlasaClient.defaultPermLevels = new PermLevels()
 	.addLevel(0, false, () => true)
 	.addLevel(2, false, (client, msg) => {
 		if (!msg.guild || !msg.guild.settings.modRole) return false;
