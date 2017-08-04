@@ -6,7 +6,7 @@ module.exports = class extends Command {
 		super(...args, {
 			permLevel: 10,
 			description: 'Re-enables or temporarily enables a command/inhibitor/monitor/finalizer. Default state restored on reboot.',
-			usage: '<Command:cmd|Inhibitor:inhibitor|Monitor:monitor|Finalizer:finalizer|Event:event|Extendable:extendable>'
+			usage: '<Command:cmd|Inhibitor:inhibitor|Monitor:monitor|Finalizer:finalizer|Event:event|Extendable:extendable|Language:language>'
 		});
 	}
 
