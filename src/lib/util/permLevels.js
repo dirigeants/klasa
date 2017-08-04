@@ -11,17 +11,10 @@ class PermissionLevels extends Map {
 	 */
 
 	/**
-	 * The default amount of permission levels
-	 */
-	static get defaultRequiredLevels() {
-		return 11;
-	}
-
-	/**
 	 * Creates a new PermissionLevels
 	 * @param {number} levels How many permission levels there should be
 	 */
-	constructor(levels = PermissionLevels.defaultRequiredLevels) {
+	constructor(levels = 11) {
 		super();
 
 		/**
@@ -51,20 +44,49 @@ class PermissionLevels extends Map {
 	 * @return {boolean}
 	 */
 	isValid() {
-		/* eslint-disable no-multi-spaces, arrow-body-style, operator-linebreak, indent, no-mixed-spaces-and-tabs */
-		return every(this)((level, index) => {
-			// Trick to replace a switch case or if else. Condition on the left, what's executed on the right. Last one is default.
-			return   typeof level !== 'object'   ? throwE(`Permission level ${index} must be an object`) :
-				typeof level.break !== 'boolean'  ? throwE(`"break" in permission level ${index} must be a boolean`) :
-				typeof level.check !== 'function' ? throwE(`"check" in permission level ${index} must be a function`)
-				                                  : true;
+		return this.every(level => {
+			if (typeof level !== 'object') return false;
+			if (typeof level.break !== 'boolean') return false;
+			if (typeof level.check !== 'function') return false;
+			return true;
 		});
-		/* eslint-enable no-multi-spaces, arrow-body-style, operator-linebreak, indent, no-mixed-spaces-and-tabs */
+	}
+
+	/**
+	 * Checks if all permission levels are valid
+	 * @return {string} Error message(s)
+	 */
+	debug() {
+		const errors = [];
+		this.forEach((level, index) => {
+			if (typeof level !== 'object') {
+				errors.push(`Permission level ${index} must be an object`);
+			}
+			if (typeof level.break !== 'boolean') {
+				errors.push(`"break" in permission level ${index} must be a boolean`);
+			}
+			if (typeof level.check !== 'function') {
+				errors.push(`"check" in permission level ${index} must be a function`);
+			}
+		});
+		return errors.join('\n');
+	}
+
+	/**
+	* Identical to
+	* [Array.every()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every).
+	* @param {Function} fn Function used to test (should return a boolean)
+	* @param {Object} [thisArg] Value to use as `this` when executing function
+	* @returns {boolean}
+	*/
+	every(fn, thisArg) {
+		if (thisArg) fn = fn.bind(thisArg);
+		for (const [key, val] of this) {
+			if (!fn(val, key, this)) return false;
+		}
+		return true;
 	}
 
 }
-
-const throwE = msg => { throw new Error(msg); };
-const every = iterable => func => Array.prototype.every.call(iterable, func);
 
 module.exports = PermissionLevels;

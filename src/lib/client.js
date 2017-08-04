@@ -211,7 +211,7 @@ class KlasaClient extends Discord.Client {
 		const permLevels = this.config.permsLevels || KlasaClient.defaultPermLevels;
 		if (!(permLevels instanceof PermLevels)) throw new Error('permLevels must be an instance of the PermissionLevels class');
 		if (permLevels.isValid()) return permLevels;
-		throw new Error('Unexpected catastrophic failure at permission level validation!');
+		throw new Error(permLevels.debug());
 	}
 
 	/**
