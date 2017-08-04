@@ -80,9 +80,9 @@ class PermissionLevels extends Collection {
 	async run(msg, min) {
 		const mps = [];
 		let broke = false;
-		for (let i = min; i < this.client.permLevels.size; i++) {
-			mps.push(this.client.permLevels.get(i).check(this.client, msg));
-			if (this.client.permLevels.get(i).break) {
+		for (let i = min; i < this.size; i++) {
+			mps.push(this.get(i).check(msg.client, msg));
+			if (this.get(i).break) {
 				broke = true;
 				break;
 			}
