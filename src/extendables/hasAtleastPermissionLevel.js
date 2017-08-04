@@ -7,7 +7,7 @@ module.exports = class extends Extendable {
 	}
 
 	extend(min) {
-		return this.client.permLevels.run(this, min).then(({ permission }) => permission);
+		return this.client.permissionLevels.run(this, min).then(({ permission }) => permission);
 	}
 
 };

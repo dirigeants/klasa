@@ -27,7 +27,7 @@ class KlasaClient extends Discord.Client {
 	 * @memberof KlasaClient
 	 * @property {DiscordJSConfig} clientOptions The options to pass to D.JS
 	 * @property {string} prefix The default prefix the bot should respond to
-	 * @property {PermissionLevels} permLevels The permission levels to use with this bot
+	 * @property {PermissionLevels} [permissionLevels=KlasaClient.defaultPermissionLevels] The permission levels to use with this bot
 	 * @property {string} [clientBaseDir=process.cwd()] The directory where all piece folders can be found
 	 * @property {number} [commandMessageLifetime=1800] The threshold for how old command messages can be before sweeping since the last edit in seconds
 	 * @property {number} [commandMessageSweep=900] The interval duration for which command messages should be sweept in seconds
@@ -133,7 +133,7 @@ class KlasaClient extends Discord.Client {
 		 * The permissions structure for this bot
 		 * @type {PermissionLevels}
 		 */
-		this.permLevels = this.validatePermLevels();
+		this.permissionLevels = this.validatePermLevels();
 
 		/**
 		 * The threshold for how old command messages can be before sweeping since the last edit in seconds
@@ -207,9 +207,9 @@ class KlasaClient extends Discord.Client {
 	 * @private
 	 * @returns {PermissionLevels}
 	 */
-	validatePermLevels() {
-		const permLevels = this.config.permsLevels || KlasaClient.defaultPermLevels;
-		if (!(permLevels instanceof PermLevels)) throw new Error('permLevels must be an instance of the PermissionLevels class');
+	validatePermissionLevels() {
+		const permLevels = this.config.permissionLevels || KlasaClient.defaultPermissionLevels;
+		if (!(permLevels instanceof PermLevels)) throw new Error('permissionLevels must be an instance of the PermissionLevels class');
 		if (permLevels.isValid()) return permLevels;
 		throw new Error(permLevels.debug());
 	}
@@ -314,10 +314,10 @@ class KlasaClient extends Discord.Client {
 }
 
 /**
- * The default PermLevels
+ * The default PermissionLevels
  * @type {PermissionLevels}
  */
-KlasaClient.defaultPermLevels = new PermLevels()
+KlasaClient.defaultPermissionLevels = new PermLevels()
 	.addLevel(0, false, () => true)
 	.addLevel(2, false, (client, msg) => {
 		if (!msg.guild || !msg.guild.settings.modRole) return false;
