@@ -39,36 +39,31 @@ class PermissionLevels extends Map {
 		return this.set(level, { break: brk, check });
 	}
 
+	set(level, obj) {
+		if (level < 0) throw new Error(`Cannot set permission level ${level}. Permission levels start at 0.`);
+		else if (level > (this.requiredLevels - 1)) throw new Error(`Cannot set permission level ${level}. Permission levels stop at ${this.requiredLevels - 1}.`);
+		else return super.set(level, obj);
+	}
+
 	/**
 	 * Checks if all permission levels are valid
 	 * @return {boolean}
 	 */
 	isValid() {
-		return this.every(level => {
-			if (typeof level !== 'object') return false;
-			if (typeof level.break !== 'boolean') return false;
-			if (typeof level.check !== 'function') return false;
-			return true;
-		});
+		return this.every(level => typeof level === 'object' && typeof level.break === 'boolean' && typeof level.check === 'function');
 	}
 
 	/**
-	 * Checks if all permission levels are valid
+	 * Returns any errors in the perm levels
 	 * @return {string} Error message(s)
 	 */
 	debug() {
 		const errors = [];
-		this.forEach((level, index) => {
-			if (typeof level !== 'object') {
-				errors.push(`Permission level ${index} must be an object`);
-			}
-			if (typeof level.break !== 'boolean') {
-				errors.push(`"break" in permission level ${index} must be a boolean`);
-			}
-			if (typeof level.check !== 'function') {
-				errors.push(`"check" in permission level ${index} must be a function`);
-			}
-		});
+		for (const [level, index] of this) {
+			if (typeof level !== 'object') errors.push(`Permission level ${index} must be an object`);
+			if (typeof level.break !== 'boolean') errors.push(`"break" in permission level ${index} must be a boolean`);
+			if (typeof level.check !== 'function') errors.push(`"check" in permission level ${index} must be a function`);
+		}
 		return errors.join('\n');
 	}
 
