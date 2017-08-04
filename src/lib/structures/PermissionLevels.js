@@ -7,9 +7,10 @@ const { Collection } = require('discord.js');
 class PermissionLevels extends Collection {
 
 	/**
-	 * @typedef {object} permLevel
-	 * @property {boolean} break Whether the level should break (stop processing higher levels, and inhibit a no permission error)
-	 * @property {Function} check The permission checking function
+	 * @typedef {Object} permissionLevelResponse
+	 * @memberof PermissionLevels
+	 * @property {boolean} broke Whether the loop broke execution of higher levels
+	 * @property {boolean} permission Whether the permission level check passed or not
 	 */
 
 	/**
@@ -73,9 +74,7 @@ class PermissionLevels extends Collection {
 	* Runs the defined permLevels
 	* @param {external:Message} msg The message to pass to perm level functions
 	* @param {number} min The minimum permissionLevel ok to pass
-	* @returns {Object}
-	* @property {boolean} broke Whether the loop broke execution of higher levels
-	* @property {boolean} permission Whether the perm level check passed or not
+	* @returns {permissionLevelResponse}
 	*/
 	async run(msg, min) {
 		const mps = [];
