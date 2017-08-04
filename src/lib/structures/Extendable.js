@@ -13,6 +13,7 @@ class Extendable {
 	 * @typedef {object} ExtendableOptions
 	 * @memberof Extendable
 	 * @property {string} [name = theFileName] The name of the extendable
+	 * @property {boolean} [enabled = true] If the extendable is enabled or not
 	 */
 
 	/**
@@ -57,6 +58,12 @@ class Extendable {
 		 * @type{string[]}
 		 */
 		this.appliesTo = appliesTo;
+
+		/**
+		 * If the language is enabled or not
+		 * @type {boolean}
+		 */
+		this.enabled = 'enabled' in options ? options.enabled : true;
 	}
 
 	/**
@@ -74,7 +81,25 @@ class Extendable {
 	 * @private
 	 */
 	async init() {
+		if (this.enabled) this.enable();
+	}
+
+	/**
+	 * Disables this piece
+	 * @returns {Piece} This piece
+	 */
+	disable() {
+		for (const structure of this.appliesTo) delete Discord[structure].prototype[this.name];
+		return this;
+	}
+
+	/**
+	 * Enables this piece
+	 * @returns {Piece} This piece
+	 */
+	enable() {
 		for (const structure of this.appliesTo) Object.defineProperty(Discord[structure].prototype, this.name, Object.getOwnPropertyDescriptor(this.constructor.prototype, 'extend'));
+		return this;
 	}
 
 	// left for documentation
@@ -85,6 +110,6 @@ class Extendable {
 
 }
 
-Piece.applyToClass(Extendable);
+Piece.applyToClass(Extendable, ['disable', 'enable']);
 
 module.exports = Extendable;
