@@ -1,8 +1,10 @@
+const { Collection } = require('discord.js');
+
 /**
  * Permission levels
- * @extends Map
+ * @extends external:Collection
  */
-class PermissionLevels extends Map {
+class PermissionLevels extends Collection {
 
 	/**
 	 * @typedef {object} permLevel
@@ -68,18 +70,26 @@ class PermissionLevels extends Map {
 	}
 
 	/**
-	* Identical to
-	* [Array.every()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every).
-	* @param {Function} fn Function used to test (should return a boolean)
-	* @param {Object} [thisArg] Value to use as `this` when executing function
-	* @returns {boolean}
+	* Runs the defined permLevels
+	* @param {external:Message} msg The message to pass to perm level functions
+	* @param {number} min The minimum permissionLevel ok to pass
+	* @returns {Object}
+	* @property {boolean} broke Whether the loop broke execution of higher levels
+	* @property {boolean} permission Whether the perm level check passed or not
 	*/
-	every(fn, thisArg) {
-		if (thisArg) fn = fn.bind(thisArg);
-		for (const [key, val] of this) {
-			if (!fn(val, key, this)) return false;
+	async run(msg, min) {
+		const mps = [];
+		let broke = false;
+		for (let i = min; i < this.client.permLevels.size; i++) {
+			mps.push(this.client.permLevels.get(i).check(this.client, msg));
+			if (this.client.permLevels.get(i).break) {
+				broke = true;
+				break;
+			}
 		}
-		return true;
+		const responses = await Promise.all(mps);
+		const permission = responses.includes(true);
+		return { broke, permission };
 	}
 
 }

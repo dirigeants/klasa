@@ -1,6 +1,5 @@
 module.exports = {
 	Client: require('./lib/client'),
-	PermLevels: require('./lib/util/PermLevels'),
 	util: require('./lib/util/util'),
 	Command: require('./lib/structures/Command'),
 	CommandMessage: require('./lib/structures/CommandMessage'),
@@ -10,6 +9,7 @@ module.exports = {
 	Inhibitor: require('./lib/structures/Inhibitor'),
 	Language: require('./lib/structures/Language'),
 	Monitor: require('./lib/structures/Monitor'),
+	PermissionLevels: require('./lib/structures/PermissionLevels'),
 	Provider: require('./lib/structures/Provider'),
 	CommandStore: require('./lib/structures/CommandStore'),
 	EventStore: require('./lib/structures/EventStore'),

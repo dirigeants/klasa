@@ -80,6 +80,15 @@ class Language {
 		return args.length > 0 ? this.language[term](...args) : this.language[term];
 	}
 
+	/**
+	 * The init method to be optionaly overwritten in actual languages
+	 * @abstract
+	 * @returns {Promise<void>}
+	 */
+	async init() {
+		// Optionally defined in extension Classes
+	}
+
 	// left for documentation
 	/* eslint-disable no-empty-function */
 	async reload() {}
