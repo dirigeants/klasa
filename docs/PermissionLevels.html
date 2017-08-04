@@ -95,7 +95,7 @@
         PermissionLevels
         </h2>
         
-            <div class="class-description">A helper class to building valid permission structures</div>
+            <div class="class-description">Permission levels</div>
         
     
 </header>
@@ -107,7 +107,7 @@
         
 <hr>
 <dt>
-    <h4 class="name" id="PermissionLevels"><span class="type-signature"></span>new PermissionLevels()</h4>
+    <h4 class="name" id="PermissionLevels"><span class="type-signature"></span>new PermissionLevels(levels)</h4>
     
     
 </dt>
@@ -125,6 +125,64 @@
 
     
     
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>levels</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                    11
+                
+                </td>
+            
+
+            <td class="description last">How many permission levels there should be</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
 
     
 <dl class="details">
@@ -159,7 +217,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/util/permLevels.js#L20">lib/util/permLevels.js#L20</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/util/permLevels.js#L17">lib/util/permLevels.js#L17</a>	</dd>
 	
 
 	
@@ -187,6 +245,17 @@
 
     
     </div>
+
+    
+        <h3 class="subsection-title">Extends</h3>
+
+        
+
+
+    <ul>
+        <li>Map</li>
+    </ul>
+
 
     
 
@@ -204,15 +273,15 @@
         <dl>
             
 <hr>
-<dt class="name" id="levels">
-    <h4 id="levels"><span class="type-signature"></span>levels<span class="type-signature"> :Map</span></h4>
+<dt class="name" id="requiredLevels">
+    <h4 id="requiredLevels"><span class="type-signature"></span>requiredLevels<span class="type-signature"> :number</span></h4>
 
     
 </dt>
 <dd>
     
     <div class="description">
-        A cache of levels submitted with addLevel
+        The amount of permission levels
     </div>
     
 
@@ -221,7 +290,7 @@
         <ul>
             <li>
                 
-<span class="param-type">Map</span>
+<span class="param-type">number</span>
 
 
 
@@ -262,82 +331,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/util/permLevels.js#L25">lib/util/permLevels.js#L25</a>	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt class="name" id="structure">
-    <h4 id="structure"><span class="type-signature">&lt;readonly> </span>structure<span class="type-signature"> :<a href="global.html#validPermStructure">validPermStructure</a></span></h4>
-
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        The current valid permissions structure
-    </div>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type"><a href="global.html#validPermStructure">validPermStructure</a></span>
-
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/util/permLevels.js#L46">lib/util/permLevels.js#L46</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/util/permLevels.js#L24">lib/util/permLevels.js#L24</a>	</dd>
 	
 
 	
@@ -511,7 +505,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/util/permLevels.js#L35">lib/util/permLevels.js#L35</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/util/permLevels.js#L38">lib/util/permLevels.js#L38</a>	</dd>
 	
 
 	
@@ -549,6 +543,411 @@
     <dd>
         
 <span class="param-type"><a href="PermissionLevels.html">PermissionLevels</a></span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="debug"><span class="type-signature"></span>debug()</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Returns any errors in the perm levels
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/util/permLevels.js#L60">lib/util/permLevels.js#L60</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    Error message(s)
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="every"><span class="type-signature"></span>every(fn [, thisArg])</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Identical to
+[Array.every()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every).
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Argument</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>fn</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Function used to test (should return a boolean)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>thisArg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Value to use as `this` when executing function</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/util/permLevels.js#L77">lib/util/permLevels.js#L77</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="isValid"><span class="type-signature"></span>isValid()</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Checks if all permission levels are valid
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/util/permLevels.js#L52">lib/util/permLevels.js#L52</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">boolean</span>
 
 
 
