@@ -133,7 +133,7 @@ class KlasaClient extends Discord.Client {
 		 * The permissions structure for this bot
 		 * @type {PermissionLevels}
 		 */
-		this.permissionLevels = this.validatePermLevels();
+		this.permissionLevels = this.validatePermissionLevels();
 
 		/**
 		 * The threshold for how old command messages can be before sweeping since the last edit in seconds
