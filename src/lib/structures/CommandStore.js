@@ -86,7 +86,7 @@ class CommandStore extends Collection {
 		const existing = this.get(command.name);
 		if (existing) this.delete(existing);
 		super.set(command.name, command);
-		command.aliases.forEach(alias => this.aliases.set(alias, command));
+		for (const alias of command.aliases) this.aliases.set(alias, command);
 		return command;
 	}
 
@@ -99,7 +99,7 @@ class CommandStore extends Collection {
 		const command = this.resolve(name);
 		if (!command) return false;
 		super.delete(command.name);
-		command.aliases.forEach(alias => this.aliases.delete(alias));
+		for (const alias of command.aliases) this.aliases.delete(alias);
 		return true;
 	}
 
@@ -151,11 +151,11 @@ class CommandStore extends Collection {
 		const files = await fs.readdir(dir).catch(() => { fs.ensureDir(dir).catch(err => store.client.emit('errorlog', err)); });
 		if (!files) return false;
 		files.filter(file => file.endsWith('.js')).map(file => store.load(dir, [file]));
-		const subfolders = [];
+		let subfolders = [];
 		const mps1 = files.filter(file => !file.includes('.')).map(async (folder) => {
 			const subFiles = await fs.readdir(resolve(dir, folder));
 			if (!subFiles) return true;
-			subFiles.filter(file => !file.includes('.')).forEach(subfolder => subfolders.push({ folder: folder, subfolder: subfolder }));
+			subfolders = subFiles.filter(file => !file.includes('.')).map(subfolder => ({ folder: folder, subfolder: subfolder }));
 			return subFiles.filter(file => file.endsWith('.js')).map(file => store.load(dir, [folder, file]));
 		});
 		await Promise.all(mps1);

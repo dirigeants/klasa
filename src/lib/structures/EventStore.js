@@ -48,7 +48,7 @@ class EventStore extends Collection {
 	 * @return {void}
 	 */
 	clear() {
-		this.forEach((val, key) => this.delete(key));
+		for (const event of this.keys()) this.delete(event);
 	}
 
 	/**

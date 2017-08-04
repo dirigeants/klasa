@@ -64,9 +64,7 @@ class InhibitorStore extends Collection {
 	 */
 	async run(msg, cmd, selective = false) {
 		const mps = [];
-		this.forEach(mProc => {
-			if (!mProc.spamProtection && !selective) mps.push(mProc.run(msg, cmd).catch(err => err));
-		});
+		for (const mProc of this.values()) if (!mProc.spamProtection && !selective) mps.push(mProc.run(msg, cmd).catch(err => err));
 		const results = (await Promise.all(mps)).filter(res => res);
 		if (results.includes(true)) throw undefined;
 		if (results.length > 0) throw results.join('\n');

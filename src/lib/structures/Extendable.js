@@ -89,6 +89,7 @@ class Extendable {
 	 * @returns {Piece} This piece
 	 */
 	disable() {
+		this.enabled = false;
 		for (const structure of this.appliesTo) delete Discord[structure].prototype[this.name];
 		return this;
 	}
@@ -98,6 +99,7 @@ class Extendable {
 	 * @returns {Piece} This piece
 	 */
 	enable() {
+		this.enabled = true;
 		for (const structure of this.appliesTo) Object.defineProperty(Discord[structure].prototype, this.name, Object.getOwnPropertyDescriptor(this.constructor.prototype, 'extend'));
 		return this;
 	}

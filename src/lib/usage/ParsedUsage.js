@@ -83,7 +83,8 @@ class ParsedUsage {
 			fromto: ''
 		};
 
-		usageString.split('').forEach((char, i) => {
+		for (let i = 0; i < usageString.length; i++) {
+			const char = usageString[i];
 			usage.char = i + 1;
 			usage.from = usage.char - usage.current.length;
 			usage.at = `at char #${usage.char} '${char}'`;
@@ -95,7 +96,7 @@ class ParsedUsage {
 			else if (['>', ']'].includes(char)) usage = ParsedUsage.tagClose(usage, char);
 			else if ([' ', '\n'].includes(char)) usage = ParsedUsage.tagSpace(usage, char);
 			else usage.current += char;
-		});
+		}
 
 		if (usage.opened) throw `from char #${usageString.length - usage.current.length} '${usageString.substr(-usage.current.length - 1)}' to end: a tag was left open`;
 		if (usage.current) throw `from char #${(usageString.length + 1) - usage.current.length} to end '${usage.current}' a literal was found outside a tag.`;

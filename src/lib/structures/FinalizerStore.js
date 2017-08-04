@@ -61,9 +61,7 @@ class FinalizerStore extends Collection {
 	 * @return {void}
 	 */
 	run(...args) {
-		this.forEach(finalizer => {
-			if (finalizer.enabled) finalizer.run(...args);
-		});
+		for (const finalizer of this.values()) if (finalizer.enabled) finalizer.run(...args);
 	}
 
 	/**

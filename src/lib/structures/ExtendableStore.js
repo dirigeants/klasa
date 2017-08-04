@@ -51,10 +51,8 @@ class ExtendableStore extends Discord.Collection {
 	delete(name) {
 		const extendable = this.resolve(name);
 		if (!extendable) return false;
+		for (const structure of extendable.appliesTo) delete Discord[structure].prototype[this.name];
 		super.delete(extendable.name);
-		extendable.appliesTo.forEach(structure => {
-			delete Discord[structure].prototype[extendable.name];
-		});
 		return true;
 	}
 
@@ -63,7 +61,7 @@ class ExtendableStore extends Discord.Collection {
 	 * @return {void}
 	 */
 	clear() {
-		this.forEach((val, key) => this.delete(key));
+		for (const extendable of this.keys()) this.delete(extendable);
 	}
 
 	/**
