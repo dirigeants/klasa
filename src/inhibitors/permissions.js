@@ -6,9 +6,9 @@ module.exports = class extends Inhibitor {
 		const min = typeof cmd === 'number' ? cmd : cmd.permLevel;
 		const mps = [];
 		let broke = false;
-		for (let i = min; i < 11; i++) {
-			mps.push(this.client.permStructure[i].check(this.client, msg));
-			if (this.client.permStructure[i].break) {
+		for (let i = min; i < this.client.permLevels.size; i++) {
+			mps.push(this.client.permLevels.get(i).check(this.client, msg));
+			if (this.client.permLevels.get(i).break) {
 				broke = true;
 				break;
 			}

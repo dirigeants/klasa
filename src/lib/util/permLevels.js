@@ -1,12 +1,8 @@
 /**
- * A helper class to building valid permission structures
+ * Permission levels
+ * @extends Map
  */
-class PermissionLevels {
-
-	/**
-	 * Permission levels indexed from 0-11, based on the level number
-	 * @typedef {permLevel[]} validPermStructure
-	 */
+class PermissionLevels extends Map {
 
 	/**
 	 * @typedef {object} permLevel
@@ -16,13 +12,20 @@ class PermissionLevels {
 
 	/**
 	 * Creates a new PermissionLevels
+	 * @param {number} levels How many permission levels there should be
 	 */
-	constructor() {
+	constructor(levels = 11) {
+		super();
+
 		/**
-		 * A cache of levels submitted with addLevel
-		 * @type {Map}
+		 * The amount of permission levels
+		 * @type {number}
 		 */
-		this.levels = new Map();
+		this.requiredLevels = levels;
+
+		for (let i = 0; i < this.requiredLevels; i++) {
+			this.set(i, { break: false, check: () => false });
+		}
 	}
 
 	/**
@@ -33,24 +36,50 @@ class PermissionLevels {
 	 * @returns {PermissionLevels} This permission levels
 	 */
 	addLevel(level, brk, check) {
-		if (this.levels.has(level)) throw new Error(`Level ${level} is already defined`);
-		this.levels.set(level, { break: brk, check: check });
-		return this;
+		return this.set(level, { break: brk, check });
+	}
+
+	set(level, obj) {
+		if (level < 0) throw new Error(`Cannot set permission level ${level}. Permission levels start at 0.`);
+		if (level > (this.requiredLevels - 1)) throw new Error(`Cannot set permission level ${level}. Permission levels stop at ${this.requiredLevels - 1}.`);
+		return super.set(level, obj);
 	}
 
 	/**
-	 * The current valid permissions structure
-	 * @readonly
-	 * @type {validPermStructure}
+	 * Checks if all permission levels are valid
+	 * @return {boolean}
 	 */
-	get structure() {
-		const structure = [];
-		for (let i = 0; i < 11; i++) {
-			const myLevel = this.levels.get(i);
-			if (myLevel) structure.push(myLevel);
-			else structure.push({ break: false, check: () => false });
+	isValid() {
+		return this.every(level => typeof level === 'object' && typeof level.break === 'boolean' && typeof level.check === 'function');
+	}
+
+	/**
+	 * Returns any errors in the perm levels
+	 * @return {string} Error message(s)
+	 */
+	debug() {
+		const errors = [];
+		for (const [level, index] of this) {
+			if (typeof level !== 'object') errors.push(`Permission level ${index} must be an object`);
+			if (typeof level.break !== 'boolean') errors.push(`"break" in permission level ${index} must be a boolean`);
+			if (typeof level.check !== 'function') errors.push(`"check" in permission level ${index} must be a function`);
 		}
-		return structure;
+		return errors.join('\n');
+	}
+
+	/**
+	* Identical to
+	* [Array.every()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/every).
+	* @param {Function} fn Function used to test (should return a boolean)
+	* @param {Object} [thisArg] Value to use as `this` when executing function
+	* @returns {boolean}
+	*/
+	every(fn, thisArg) {
+		if (thisArg) fn = fn.bind(thisArg);
+		for (const [key, val] of this) {
+			if (!fn(val, key, this)) return false;
+		}
+		return true;
 	}
 
 }
