@@ -155,7 +155,7 @@ class SettingResolver extends Resolver {
 	 * @returns {Command}
 	 */
 	async language(data, guild, name) {
-		const language = this.client.languages.get(data.toLowerCase());
+		const language = this.client.languages.get(data);
 		if (!language) throw guild.language.get('RESOLVER_INVALID_PIECE', name, 'language');
 		return language.name;
 	}
