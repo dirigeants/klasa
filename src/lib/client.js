@@ -210,7 +210,7 @@ class KlasaClient extends Discord.Client {
 				const adminRole = msg.guild.roles.get(msg.guild.settings.adminRole);
 				return adminRole && msg.member.roles.has(adminRole.id);
 			})
-			.addLevel(4, false, (client, msg) => msg.guild && msg.author === msg.guild.owner)
+			.addLevel(4, false, (client, msg) => msg.guild && msg.member === msg.guild.owner)
 			.addLevel(9, true, (client, msg) => msg.author === client.owner)
 			.addLevel(10, false, (client, msg) => msg.author === client.owner);
 
