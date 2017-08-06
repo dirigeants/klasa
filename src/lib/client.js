@@ -281,6 +281,7 @@ class KlasaClient extends Discord.Client {
 		await this.inhibitors.init();
 		await this.finalizers.init();
 		await this.monitors.init();
+		await this.languages.init();
 		util.initClean(this);
 		this.setInterval(this.sweepCommandMessages.bind(this), this.commandMessageSweep * 1000);
 		this.ready = true;
