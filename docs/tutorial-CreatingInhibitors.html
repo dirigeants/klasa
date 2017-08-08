@@ -96,29 +96,34 @@ An inhibitor blocks a command by rejecting the promise, either with a string or 
 
 module.exports = class extends Inhibitor {
 
-    constructor(...args) {
-        super(...args, {
-            name: 'myInhibitorName',
+	constructor(...args) {
+		super(...args, {
+			name: 'myInhibitorName',
             enabled: true,
             spamProtection: false
         });
-    }
+	}
 
-    async run(msg, cmd) {
-        // This is where you place the code you want to run for your inhibitor
-    }
+	async run(msg, cmd) {
+		// This is where you place the code you want to run for your inhibitor
+	}
 
-    async init() {
-        // You can optionally define this method which will be run when the bot starts (after login, so discord data is available via this.client)
-    }
+	async init() {
+		// You can optionally define this method which will be run when the bot starts (after login, so discord data is available via this.client)
+	}
 
-};</code></pre><h2>Configuration</h2><ul>
+};
+
+</code></pre>
+<h2>Configuration</h2>
+<ul>
 <li><strong>enabled</strong>: Represents if the inhibitor should be enabled or disabled, it must be
 a boolean. Set to false to completely disable this inhibitor, it cannot be forcefully enabled.</li>
 <li><strong>spamProtection</strong>: Represents if the inhibitor is meant to prevent bot/command spam. Setting
 spamProtection to true will prevent the inhibitor to run while doing tasks such as generating help.</li>
 </ul>
-<h2>Further Reading:</h2><ul>
+<h2>Further Reading:</h2>
+<ul>
 <li><a href="tutorial-CreatingCommands.html">Creating Commands</a></li>
 <li><a href="tutorial-CreatingEvents.html">Creating Events</a></li>
 <li><a href="tutorial-CreatingExtendables.html">Creating Extendables</a></li>

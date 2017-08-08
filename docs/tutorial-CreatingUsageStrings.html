@@ -84,7 +84,8 @@
 </header>
 
 <article>
-    <h2>Usage Structure</h2><p><code>&lt;&gt;</code> required argument, <code>[]</code> optional argument <code>&lt;Name:Type{min,max}&gt;</code></p>
+    <h2>Usage Structure</h2>
+<p><code>&lt;&gt;</code> required argument, <code>[]</code> optional argument <code>&lt;Name:Type{min,max}&gt;</code></p>
 <ul>
 <li><strong>Name</strong> Mostly used for debugging message, unless the type is Literal in which it compares the argument to the name.</li>
 <li><strong>Type</strong> The type of variable you are expecting.</li>
@@ -94,7 +95,8 @@
 <blockquote>
 <p>Note: You can set multiple options in an argument by writting <code>|</code>. For example: <code>&lt;Message:msg|Content:string{4,16}&gt;</code> will work when you provide a message ID or a string with a length between 4 and 16 (including both limits).</p>
 </blockquote>
-<h3>Usage Types</h3><table>
+<h3>Usage Types</h3>
+<table>
 <thead>
 <tr>
 <th style="text-align:right">Type</th>
@@ -180,17 +182,22 @@
 <p>Note: <code>Literal</code> is very useful in arguments with multiple options.</p>
 </blockquote>
 <hr>
-<h1>Using arguments in your command.</h1><p>Now, after we understand how to configurate the command, we'll start writting it:</p>
+<h1>Using arguments in your command.</h1>
+<p>Now, after we understand how to configurate the command, we'll start writting it:</p>
 <pre class="prettyprint source lang-javascript"><code>async run(msg, [...params]) {
-    // This is where you place the code you want to run when your command is called
-}</code></pre><p><code>[...params]</code> represents a variable number of parameters given when the command is run. The name of the parameters in the array (and their count) is determined by the <code>usage</code> property and its given arguments.</p>
+	// This is where you place the code you want to run when your command is called
+}
+</code></pre>
+<p><code>[...params]</code> represents a variable number of parameters given when the command is run. The name of the parameters in the array (and their count) is determined by the <code>usage</code> property and its given arguments.</p>
 <blockquote>
 <p>Note that the commands' parameters are an array. This is a trick called <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment">Destructuring assignment</a>.</p>
 </blockquote>
 <p>For example, when you have: <code>&quot;&lt;Message:msg&gt; &lt;delete|edit&gt; [newContent:string]&quot;</code> as your usage, and <code>&quot;|&quot;</code> as your usageDelim, then the following code block is an example of how it would look like, and how we would work with them.</p>
 <pre class="prettyprint source lang-javascript"><code>async run(msg, [message, action, newContent]) {
   // code
-};</code></pre><p>In which <code>message</code> is the argument assigned to the message object as provided in <code>&lt;Message:msg&gt;</code> argument from usage. Same does <code>action</code> for <code>&lt;delete|edit&gt;</code> and respectively.</p>
+};
+</code></pre>
+<p>In which <code>message</code> is the argument assigned to the message object as provided in <code>&lt;Message:msg&gt;</code> argument from usage. Same does <code>action</code> for <code>&lt;delete|edit&gt;</code> and respectively.</p>
 <blockquote>
 <p>Keep in mind that we declared <code>newContent</code> as an optional argument, if it's not provided, it'll return undefined.</p>
 </blockquote>
