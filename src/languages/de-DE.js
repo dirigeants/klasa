@@ -63,7 +63,7 @@ module.exports = class extends Language {
 					'allen recht machen, deswegen steht es auch jedem offen jede einzelne Berechtigungsvergabe entsprechend zu deaktivieren.',
 					'',
 					'Falls Sie einen Befehl verwenden wollen, für dessen Ausführung der Bot zusätzliche Berechtigungen benötigt, welche',
-					'von Ihnen nicht vergeben wurden, werden Sie bei dem Versuch den Befehl auszuführen eine Benachrichtigung erhalten.',
+					'von Ihnen nicht vergeben wurden, werden Sie bei dem Versuch den Befehl auszuführen eine Benachrichtigung erhalten.'
 				].join(' ')),
 				"Falls Sie einen Fehler finden, würde ich Sie bitten einen 'Issue' auf <https://github.com/dirigeants/klasa> zu erstellen."
 			],
@@ -86,7 +86,7 @@ module.exports = class extends Language {
 				'',
 				'Wir versuchen ein zu 100% anpassbares Framework zu sein, welches es schafft den unterschiedlichen Ansprüchen gerecht zu werden.',
 				'Ebenso veröffentlichen wir regelmässig Aktualisierungen und Fehlerbehebungen.',
-				'Falls wir Ihr Interesse für das Klasa Framework wecken konnten, besuchen Sie bitte https://klasa.js.org für weiterführende Informationen.',
+				'Falls wir Ihr Interesse für das Klasa Framework wecken konnten, besuchen Sie bitte https://klasa.js.org für weiterführende Informationen.'
 			],
 			COMMAND_HELP_DM: '📥 | Alle für Sie verfügbaren Befehle wurden Ihnen per Direktnachricht zugeschickt.',
 			COMMAND_HELP_NODM: '❌ | Ich konnte Ihnen keine Direktnachricht schicken, da Sie den Erhalt von Direktnachrichten deaktiviert haben.',
@@ -104,4 +104,5 @@ module.exports = class extends Language {
 			COMMAND_CONF_RESET: (key, response) => `Das Attribut **${key}** wurde zurückgesesetzt auf: \`${response}\``
 		};
 	}
+	
 };
