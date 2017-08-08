@@ -32,7 +32,7 @@ module.exports = class extends Language {
 			RESOLVER_MINMAX_MIN: (name, min, suffix) => `${name} muss größer als ${min}${suffix} sein.`,
 			RESOLVER_MINMAX_MAX: (name, max, suffix) => `${name} muss kleiner als ${max}${suffix} sein.`,
 			COMMANDMESSAGE_MISSING: 'Es fehlen ein oder mehrere Argumente am Ende der Eingabe.',
-			COMMANDMESSAGE_MISSING_REQUIRED: (name) => `${name} ist ein ist ein erforderliches Argument.`,
+			COMMANDMESSAGE_MISSING_REQUIRED: (name) => `${name} ist ein erforderliches Argument.`,
 			COMMANDMESSAGE_MISSING_OPTIONALS: (possibles) => `Fehlende notwendige Auswahl: (${possibles})`,
 			COMMANDMESSAGE_NOMATCH: (possibles) => `Deine Auswahl trifft auf keine der folgenden Möglichkeiten zu: (${possibles})`,
 			MONITOR_COMMAND_HANDLER_REPROMPT: (tag, error) => `${tag} | **${error}** | Sie haben **30** Sekunden, um einen gültigen Wert einzugeben. Mit "ABORT" brechen Sie den Vorgang ab.`,
