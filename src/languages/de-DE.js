@@ -104,5 +104,4 @@ module.exports = class extends Language {
 			COMMAND_CONF_RESET: (key, response) => `Das Attribut **${key}** wurde zurückgesesetzt auf: \`${response}\``
 		};
 	}
-	
 };
