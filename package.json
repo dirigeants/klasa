@@ -19,7 +19,7 @@
     "docs": "npx jsdoc -c ./.docstrap.json -R README.md"
   },
   "dependencies": {
-    "chalk": "^2.0.1",
+    "chalk": "^2.1.0",
     "discord.js": "github:hydrabolt/discord.js#master",
     "fs-nextra": "^0.2.0",
     "moment": "^2.18.1",
@@ -27,7 +27,7 @@
     "performance-now": "^2.1.0"
   },
   "devDependencies": {
-    "eslint": "^4.3.0",
+    "eslint": "^4.4.1",
     "ink-docstrap": "github:bdistin/docstrap#klasa",
     "jsdoc": "github:jsdoc3/jsdoc"
   },
