@@ -176,18 +176,6 @@ class SchemaManager {
 				array: false,
 				sql: `TEXT NOT NULL DEFAULT '${this.client.config.language}'`
 			},
-			modRole: {
-				type: 'Role',
-				default: null,
-				array: false,
-				sql: 'TEXT'
-			},
-			adminRole: {
-				type: 'Role',
-				default: null,
-				array: false,
-				sql: 'TEXT'
-			},
 			disabledCommands: {
 				type: 'Command',
 				default: [],
