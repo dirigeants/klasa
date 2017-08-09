@@ -1,6 +1,7 @@
 const { Event } = require('klasa');
 const moment = require('moment');
 const chalk = require('chalk');
+const { inspect } = require('util');
 
 const clk = new chalk.constructor({ enabled: true });
 
@@ -11,8 +12,8 @@ module.exports = class extends Event {
 		type = type.toLowerCase();
 
 		data = data.stack || data.message || data;
-		if (typeof data === 'object' && typeof data !== 'string' && !Array.isArray(data)) data = require('util').inspect(data, { depth: 0, colors: true });
-		if (Array.isArray(data)) data = data.join['\n'];
+		if (typeof data === 'object' && typeof data !== 'string' && !Array.isArray(data)) data = inspect(data, { depth: 0, colors: true });
+		if (Array.isArray(data)) data = data.join('\n');
 
 		let timestamp = '';
 		if (!this.client.config.disableLogTimestamps) {
