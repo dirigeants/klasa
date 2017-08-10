@@ -40,7 +40,7 @@
 			<li class="dropdown">
 				<a href="tutorials.list.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="tutorial-CreatingUsageStrings.html">Understanding Usage Strings</a></li><li><a href="tutorial-GettingStarted.html">Getting Started</a></li><li><a href="tutorial-IncludedPieces.html">Included Pieces</a></li><li><a href="tutorial-UnderstandingPermissionLevels.html">Understanding Permission Levels</a></li>
+					<li><a href="tutorial-GettingStarted.html">Getting Started</a></li><li><a href="tutorial-IncludedPieces.html">Included Pieces</a></li><li><a href="tutorial-UnderstandingPermissionLevels.html">Understanding Permission Levels</a></li><li><a href="tutorial-UnderstandingUsageStrings.html">Understanding Usage Strings</a></li>
 				</ul>
 			</li>
 			
@@ -87,10 +87,16 @@
     <p>Permission Levels are what defines who has permission to use what command. They cascade up to a permission level break, so guild owners can do everything the lower levels can do, and so on.</p>
 <p>For instace the conf command requires level 6 to run, by default this is how it works:</p>
 <blockquote>
-<p>level 6 requires 'MANAGE_GUILD' Permission: true/false
-level 7 is the bot Owner: true/false
-level 8 is not defined, and always returns false
-level 9 is the bot owner, and has break so we will stop checking higher rules: true/false</p>
+<p>level 6 requires 'MANAGE_GUILD' Permission: true/false</p>
+</blockquote>
+<blockquote>
+<p>level 7 is the bot Owner: true/false</p>
+</blockquote>
+<blockquote>
+<p>level 8 is not defined, and always returns false</p>
+</blockquote>
+<blockquote>
+<p>level 9 is the bot owner, and has break so we will stop checking higher rules: true/false</p>
 </blockquote>
 <p>If any check from 6-9 returns true, the user will be able to run that command. Also, if no break is encountered, the command will silently fail, instead of telling the user &quot;they don't have permission to use x command&quot;...</p>
 <h2>Creating Completely Custom PermissionLevels</h2>

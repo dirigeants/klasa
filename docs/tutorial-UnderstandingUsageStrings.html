@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Klasa Tutorial: Creating Providers</title>
+	<title>Klasa Tutorial: Understanding Usage Strings</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -80,174 +80,133 @@
 			<section class="tutorial-section">
 
 <header>
-    <h1>Creating Providers</h1>
+    <h1>Understanding Usage Strings</h1>
 </header>
 
 <article>
-    <p>Data Providers are special classes designed to make your life easier when you're
-using a <strong>database</strong>, there's <strong>no</strong> rule to make them. By default, Klasa uses
-JSON to store per-guild configuration.</p>
-<p>When you create a data provider, you can access to them by: <code>client.providers.get(ProviderName)</code>.</p>
-<pre class="prettyprint source lang-javascript"><code>const { Provider } = require('klasa');
-const { resolve } = require('path');
-const fs = require('fs-nextra');
-
-module.exports = class extends Provider {
-
-	constructor(...args) {
-		super(...args, {
-			name: 'json',
-			description: 'Allows you to use JSON functionality throught Klasa'
-		});
-		this.baseDir = resolve(this.client.clientBaseDir, 'bwd', 'provider', 'json');
-	}
-
-	init() {
-		return fs.ensureDir(this.baseDir).catch(err => this.client.emit('log', err, 'error'));
-	}
-
-	/* Table methods */
-
-	/**
-	 * Checks if a directory exists.
-	 * @param {string} table The name of the table you want to check.
-	 * @returns {Promise&lt;boolean>}
-	 */
-	hasTable(table) {
-		return fs.pathExists(resolve(this.baseDir, table));
-	}
-
-	/**
-	 * Creates a new directory.
-	 * @param {string} table The name for the new directory.
-	 * @returns {Promise&lt;Void>}
-	 */
-	createTable(table) {
-		return fs.mkdir(resolve(this.baseDir, table));
-	}
-
-	/**
-	 * Recursively deletes a directory.
-	 * @param {string} table The directory's name to delete.
-	 * @returns {Promise&lt;Void>}
-	 */
-	deleteTable(table) {
-		return this.hasTable(table)
-			.then(exists => exists ? fs.emptyDir(resolve(this.baseDir, table)).then(() => fs.remove(resolve(this.baseDir, table))) : null);
-	}
-
-	/* Document methods */
-
-	/**
-	 * Get all documents from a directory.
-	 * @param {string} table The name of the directory to fetch from.
-	 * @returns {Promise&lt;Object[]>}
-	 */
-	getAll(table) {
-		const dir = resolve(this.baseDir, table);
-		return fs.readdir(dir)
-			.then(files => Promise.all(files.map(file => fs.readJSON(resolve(dir, file)))));
-	}
-
-	/**
-	 * Get a document from a directory.
-	 * @param {string} table The name of the directory.
-	 * @param {string} document The document name.
-	 * @returns {Promise&lt;?Object>}
-	 */
-	get(table, document) {
-		return fs.readJSON(resolve(this.baseDir, table, `${document}.json`)).catch(() => null);
-	}
-
-	/**
-	 * Check if the document exists.
-	 * @param {string} table The name of the directory.
-	 * @param {string} document The document name.
-	 * @returns {Promise&lt;boolean>}
-	 */
-	has(table, document) {
-		return fs.pathExists(resolve(this.baseDir, table, `${document}.json`));
-	}
-
-	/**
-	 * Get a random document from a directory.
-	 * @param {string} table The name of the directory.
-	 * @returns {Promise&lt;Object>}
-	 */
-	getRandom(table) {
-		return this.getAll(table).then(data => data[Math.floor(Math.random() * data.length)]);
-	}
-
-	/**
-	 * Insert a new document into a directory.
-	 * @param {string} table The name of the directory.
-	 * @param {string} document The document name.
-	 * @param {Object} data The object with all properties you want to insert into the document.
-	 * @returns {Promise&lt;Void>}
-	 */
-	create(table, document, data) {
-		return fs.outputJSONAtomic(resolve(this.baseDir, table, `${document}.json`), Object.assign(data, { id: document }));
-	}
-
-	set(...args) {
-		return this.create(...args);
-	}
-
-	insert(...args) {
-		return this.create(...args);
-	}
-
-	/**
-	 * Update a document from a directory.
-	 * @param {string} table The name of the directory.
-	 * @param {string} document The document name.
-	 * @param {Object} data The object with all the properties you want to update.
-	 * @returns {Promise&lt;Void>}
-	 */
-	update(table, document, data) {
-		return this.get(table, document)
-			.then(current => fs.outputJSONAtomic(resolve(this.baseDir, table, `${document}.json`), Object.assign(current, data)));
-	}
-
-	/**
-	 * Replace all the data from a document.
-	 * @param {string} table The name of the directory.
-	 * @param {string} document The document name.
-	 * @param {Object} data The new data for the document.
-	 * @returns {Promise&lt;Void>}
-	 */
-	replace(table, document, data) {
-		return fs.outputJSONAtomic(resolve(this.baseDir, table, `${document}.json`), data);
-	}
-
-	/**
-	 * Delete a document from the table.
-	 * @param {string} table The name of the directory.
-	 * @param {string} document The document name.
-	 * @returns {Promise&lt;Void>}
-	 */
-	delete(table, document) {
-		return fs.unlink(resolve(this.baseDir, table, `${document}.json`));
-	}
-
-};
-
-</code></pre>
-<p>The example above is the JSON provider used in klasa, and interfacing with the settingGateway.</p>
-<h2>Accessing Providers</h2>
-<p>Providers are stored in the main <code>client</code> object, in the <code>providers</code> property. This has an entry
-for each provider added, based on its <code>name</code>. So for example if you have it set as
-<code>sqlite</code> , you can access it through <code>client.providers.get(&quot;sqlite&quot;);</code>.</p>
-<h2>Further Reading:</h2>
+    <h2>Usage Structure</h2>
+<p><code>&lt;&gt;</code> required argument, <code>[]</code> optional argument <code>&lt;Name:Type{min,max}&gt;</code></p>
 <ul>
-<li><a href="tutorial-CreatingCommands.html">Creating Commands</a></li>
-<li><a href="tutorial-CreatingEvents.html">Creating Events</a></li>
-<li><a href="tutorial-CreatingExtendables.html">Creating Extendables</a></li>
-<li><a href="tutorial-CreatingFinalizers.html">Creating Finalizers</a></li>
-<li><a href="tutorial-CreatingInhibitors.html">Creating Inhibitors</a></li>
-<li><a href="tutorial-CreatingLanguages.html">Creating Languages</a></li>
-<li><a href="tutorial-CreatingMonitors.html">Creating Monitors</a></li>
+<li><strong>Name</strong> Mostly used for debugging message, unless the type is Literal in which it compares the argument to the name.</li>
+<li><strong>Type</strong> The type of variable you are expecting.</li>
+<li><strong>Min, Max</strong> Minimum or Maximum for a giving variable (works on strings in terms of length, and on all types of numbers in terms of value) You are allowed to define any combination of min and max. Omit for none, <code>{min}</code> for min, <code>{,max}</code> for max. If you set <code>min</code> and <code>max</code> with the same integer, then the provided string must have equal length.</li>
+<li><strong>Special Repeat Tag</strong> <code>[...]</code> will repeat the last usage optionally until you run out of arguments. Useful for doing something like <code>&lt;SearchTerm:str&gt; [...]</code> which will allow you to take as many search terms as you want, per your Usage Delimiter.</li>
 </ul>
+<blockquote>
+<p>Note: You can set multiple options in an argument by writting <code>|</code>. For example: <code>&lt;Message:msg|Content:string{4,16}&gt;</code> will work when you provide a message ID or a string with a length between 4 and 16 (including both limits).</p>
+</blockquote>
+<h3>Usage Types</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right"><code>literal</code></td>
+<td>Literally equal to the Name. This is the default type if none is defined.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>str</code> , <code>string</code></td>
+<td>A <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>int</code> , <code>integer</code></td>
+<td>An <a href="https://en.wikipedia.org/wiki/Integer">Integer</a>.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>num</code> , <code>number</code> , <code>float</code></td>
+<td>A <a href="https://en.wikipedia.org/wiki/Floating-point_arithmetic">Floating Point Number</a>.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>boolean</code></td>
+<td>A <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a>.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>url</code></td>
+<td>A <a href="https://en.wikipedia.org/wiki/URL">URL</a>.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>msg</code> , <code>message</code></td>
+<td>A <a href="https://discord.js.org/#/docs/main/master/class/Message">Message</a> instance returned from the message ID.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>role</code></td>
+<td>A <a href="https://discord.js.org/#/docs/main/master/class/Role">Role</a> instance returned from the role ID or mention.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>channel</code></td>
+<td>A <a href="https://discord.js.org/#/docs/main/master/class/TextChannel">TextChannel</a> instance returned from the channel ID or channel tag.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>guild</code></td>
+<td>A <a href="https://discord.js.org/#/docs/main/master/class/Guild">Guild</a> instance returned from the guild ID.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>user</code> , <code>mention</code></td>
+<td>A <a href="https://discord.js.org/#/docs/main/master/class/User">User</a> instance returned from the user ID or mention.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>member</code></td>
+<td>A <a href="https://discord.js.org/#/docs/main/master/class/GuildMember">GuildMember</a> instance returned from the member ID or mention.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>cmd</code> , <code>command</code></td>
+<td>A <a href="Command.html"><code>Command</code></a> instance returned from the command name or alias.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>event</code></td>
+<td>An <a href="Event.html"><code>Event</code></a> instance returned from the event name.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>inhibitor</code></td>
+<td>An <a href="Inhibitor.html"><code>Inhibitor</code></a> instance returned from the inhibitor name.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>finalizer</code></td>
+<td>A <a href="Finalizer.html"><code>Finalizer</code></a> instance returned from the finalizer name.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>monitor</code></td>
+<td>A <a href="Monitor.html"><code>Monitor</code></a> instance returned from the monitor name.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>provider</code></td>
+<td>A <a href="Provider.html"><code>Provider</code></a> instance returned from the provider name.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Note: <code>Literal</code> is very useful in arguments with multiple options.</p>
+</blockquote>
+<hr>
+<h1>Using arguments in your command.</h1>
+<p>Now, after we understand how to configurate the command, we'll start writting it:</p>
+<pre class="prettyprint source lang-javascript"><code>async run(msg, [...params]) {
+	// This is where you place the code you want to run when your command is called
+}
+</code></pre>
+<p><code>[...params]</code> represents a variable number of parameters given when the command is run. The name of the parameters in the array (and their count) is determined by the <code>usage</code> property and its given arguments.</p>
+<blockquote>
+<p>Note that the commands' parameters are an array. This is a trick called <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment">Destructuring assignment</a>.</p>
+</blockquote>
+<p>For example, when you have: <code>&quot;&lt;Message:msg&gt; &lt;delete|edit&gt; [newContent:string]&quot;</code> as your usage, and <code>&quot;|&quot;</code> as your usageDelim, then the following code block is an example of how it would look like, and how we would work with them.</p>
+<pre class="prettyprint source lang-javascript"><code>async run(msg, [message, action, newContent]) {
+  // code
+};
+</code></pre>
+<p>In which <code>message</code> is the argument assigned to the message object as provided in <code>&lt;Message:msg&gt;</code> argument from usage. Same does <code>action</code> for <code>&lt;delete|edit&gt;</code> and respectively.</p>
+<blockquote>
+<p>Keep in mind that we declared <code>newContent</code> as an optional argument, if it's not provided, it'll return undefined.</p>
+</blockquote>
+<p>Keep in mind that arguments are delimited by the character or combination of characters written in <em>usageDelim</em>. In this case, we have assigned the character <code>|</code> for it. How do we use this command? Easy:</p>
+<p><code>+messager 293107496191655936|delete</code></p>
+<p>The line above will execute the command with the name <code>messager</code> (or a command with <code>messager</code> as an alias), it'll use <a href="https://discord.js.org/#/docs/main/stable/class/TextChannel?scrollTo=fetchMessage">Channel.fetchMessages</a>. If the message is not found (you mistyped it or the message is in another channel) it'll warn you that the message hasn't been found. The next argument is a literal, in which must be either <code>delete</code> or <code>edit</code>.</p>
+<blockquote>
+<p>If you need something created before the command is ever ran, you can specify <code>init() {...}</code> to make Klasa run that portion of code beforehand.</p>
+</blockquote>
 </article>
 
 
