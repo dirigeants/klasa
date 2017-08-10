@@ -445,7 +445,7 @@ class ArgResolver extends Resolver {
 	 * @returns {string}
 	 */
 	regex(...args) {
-		return this.float(...args);
+		return this.reg(...args);
 	}
 
 	/**
@@ -458,7 +458,7 @@ class ArgResolver extends Resolver {
 	 * @returns {string}
 	 */
 	regexp(...args) {
-		return this.float(...args);
+		return this.reg(...args);
 	}
 
 	/**
