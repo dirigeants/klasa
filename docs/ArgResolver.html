@@ -547,7 +547,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/ArgResolver.js#L450">lib/parsers/ArgResolver.js#L450</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/ArgResolver.js#L492">lib/parsers/ArgResolver.js#L492</a>	</dd>
 	
 
 	
@@ -6336,6 +6336,750 @@
             
 <hr>
 <dt>
+    <h4 class="name" id="reg"><span class="type-signature">&lt;async> </span>reg(arg, currentUsage, possible, repeat, msg)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Resolves an argument based on a regular expression
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>arg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">This arg</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>currentUsage</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">This current usage</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>possible</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">This possible usage id</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>repeat</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">If it is a looping/repeating arg</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>msg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="external-Message.html">external:Message</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The message that triggered the command</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/ArgResolver.js#L431">lib/parsers/ArgResolver.js#L431</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="regex"><span class="type-signature"></span>regex(arg, currentUsage, possible, repeat, msg)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Resolves an argument based on a regular expression
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>arg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">This arg</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>currentUsage</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">This current usage</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>possible</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">This possible usage id</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>repeat</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">If it is a looping/repeating arg</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>msg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="external-Message.html">external:Message</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The message that triggered the command</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/ArgResolver.js#L447">lib/parsers/ArgResolver.js#L447</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="regexp"><span class="type-signature"></span>regexp(arg, currentUsage, possible, repeat, msg)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Resolves an argument based on a regular expression
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>arg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">This arg</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>currentUsage</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">This current usage</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>possible</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">This possible usage id</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>repeat</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">If it is a looping/repeating arg</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>msg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="external-Message.html">external:Message</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The message that triggered the command</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/ArgResolver.js#L460">lib/parsers/ArgResolver.js#L460</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
     <h4 class="name" id="role"><span class="type-signature">&lt;async> </span>role(arg, currentUsage, possible, repeat, msg)</h4>
     
     
@@ -7293,7 +8037,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/ArgResolver.js#L431">lib/parsers/ArgResolver.js#L431</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/parsers/ArgResolver.js#L473">lib/parsers/ArgResolver.js#L473</a>	</dd>
 	
 
 	
