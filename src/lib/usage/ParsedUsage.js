@@ -93,7 +93,7 @@ class ParsedUsage {
 
 			if (usage.last && char !== ' ') throw `${usage.at}: there can't be anything else after the repeat tag.`;
 
-			if (char === '/') usage.openRegex = !usage.openRegex;
+			if (char === '/' && usage.current[usage.current.length - 1] !== '\\') usage.openRegex = !usage.openRegex;
 
 			if (usage.openRegex) {
 				usage.current += char;

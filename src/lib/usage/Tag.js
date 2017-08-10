@@ -38,7 +38,7 @@ class Tag {
 			const current = `${members}: at tag #${count} at bound #${i + 1}`;
 			let possible;
 			try {
-				possible = new Possible(/^([^:]+)(?::([^{}/]+))?(?:{([^,]+)?(?:,(.+))?})?(?:\/([^/]+)\/(\w+)?)?$/i.exec(member));
+				possible = new Possible(/^([^:]+)(?::([^{}/]+))?(?:{([^,]+)?(?:,(.+))?})?(?:\/(.+)\/(\w+)?)?$/i.exec(member));
 			} catch (err) {
 				if (typeof err === 'string') throw `${current}: ${err}`;
 				throw `${current}: invalid syntax, non specific`;
