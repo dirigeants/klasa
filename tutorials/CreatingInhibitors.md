@@ -45,5 +45,6 @@ spamProtection to true will prevent the inhibitor to run while doing tasks such 
 - {@tutorial CreatingEvents}
 - {@tutorial CreatingExtendables}
 - {@tutorial CreatingFinalizers}
+- {@tutorial CreatingLanguages}
 - {@tutorial CreatingMonitors}
 - {@tutorial CreatingProviders}

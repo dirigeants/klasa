@@ -17,6 +17,9 @@
             "CreatingInhibitors": {
                 "title": "Creating Inhibitors"
             },
+            "CreatingLanguages": {
+                "title": "Creating Languages"
+			},
             "CreatingMonitors": {
                 "title": "Creating Monitors"
             },
@@ -27,6 +30,9 @@
     },
     "CreatingUsageStrings": {
         "title": "Understanding Usage Strings"
+	},
+    "UnderstandingPermissionLevels": {
+        "title": "Understanding Permission Levels"
 	},
 	"IncludedPieces": {
 		"title": "Included Pieces",
@@ -46,6 +52,9 @@
             "IncludedInhibitors": {
                 "title": "Included Inhibitors"
             },
+            "IncludedLanguages": {
+                "title": "Included Languages"
+			},
             "IncludedMonitors": {
                 "title": "Included Monitors"
             },

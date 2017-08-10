@@ -1,8 +1,10 @@
 const { Collection } = require('discord.js');
 
 /**
- * Permission levels
+ * Permission levels. See {@tutorial UnderstandingPermissionLevels} for more information how to use this class
+ * to define custom permissions.
  * @extends external:Collection
+ * @tutorial UnderstandingPermissionLevels
  */
 class PermissionLevels extends Collection {
 

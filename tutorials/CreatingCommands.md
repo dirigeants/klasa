@@ -58,5 +58,6 @@ a boolean. Set to false to completely disable this inhibitor, it cannot be force
 - {@tutorial CreatingExtendables}
 - {@tutorial CreatingFinalizers}
 - {@tutorial CreatingInhibitors}
+- {@tutorial CreatingLanguages}
 - {@tutorial CreatingMonitors}
 - {@tutorial CreatingProviders}

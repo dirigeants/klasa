@@ -81,5 +81,6 @@ Where `prompt()` is your prompt function.
 - {@tutorial CreatingEvents}
 - {@tutorial CreatingFinalizers}
 - {@tutorial CreatingInhibitors}
+- {@tutorial CreatingLanguages}
 - {@tutorial CreatingMonitors}
 - {@tutorial CreatingProviders}
