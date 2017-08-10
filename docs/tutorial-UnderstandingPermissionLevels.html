@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Klasa Tutorial: Creating Commands</title>
+	<title>Klasa Tutorial: Understanding Permission Levels</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -80,75 +80,104 @@
 			<section class="tutorial-section">
 
 <header>
-    <h1>Creating Commands</h1>
+    <h1>Understanding Permission Levels</h1>
 </header>
 
 <article>
-    <p>New commands are created in the <code>./commands/</code> folder, where subfolders are the categories offered in the help command. For instance adding <code>./commands/Misc/test.js</code> will create a command named <code>test</code> in the <code>Misc</code> category. Subcategories can also be created by adding a second folder level.</p>
-<pre class="prettyprint source lang-javascript"><code>const { Command } = require('klasa');
+    <p>Permission Levels are what defines who has permission to use what command. They cascade up to a permission level break, so guild owners can do everything the lower levels can do, and so on.</p>
+<p>For instace the conf command requires level 6 to run, by default this is how it works:</p>
+<blockquote>
+<p>level 6 requires 'MANAGE_GUILD' Permission: true/false
+level 7 is the bot Owner: true/false
+level 8 is not defined, and always returns false
+level 9 is the bot owner, and has break so we will stop checking higher rules: true/false</p>
+</blockquote>
+<p>If any check from 6-9 returns true, the user will be able to run that command. Also, if no break is encountered, the command will silently fail, instead of telling the user &quot;they don't have permission to use x command&quot;...</p>
+<h2>Creating Completely Custom PermissionLevels</h2>
+<p>Each level consists of a number (the level), a boolean (whether the level is a break or not), and a function (the check function that returns true or false). {@see PermissionLevels.addLevel}</p>
+<pre class="prettyprint source lang-javascript"><code>const { Client, PermissionLevels } = require('klasa');
+const config = require('./config.json');
 
-module.exports = class extends Command {
+const permissionLevels = new PermissionLevels()
+//Optionally you can pass a number to set a custom number of permission levels. It is not advised however, as internal commands expect 10 to be the highest permission level. Modifying away from 10 without further modification of all core commands, could put your server at risk of malicious users using the core eval command.
+	.addLevel(0, false, () => true)
+	// everyone can use these commands
+	.addLevel(6, false, (client, msg) => msg.guild && msg.member.permissions.has('MANAGE_GUILD'))
+	// Members of guilds must have 'MANAGE_GUILD' permission
+	.addLevel(7, false, (client, msg) => msg.guild && msg.member === msg.guild.owner)
+	// The member using this command must be the guild owner
+	.addLevel(9, true, (client, msg) => msg.author === client.owner)
+	// Allows the Bot Owner to use any lower commands, and causes any command with a permission level 9 or lower to return an error if no check passes.
+	.addLevel(10, false, (client, msg) => msg.author === client.owner);
+	// Allows the bot owner to use Bot Owner only commands, which silently fail for other users.
 
-	constructor(...args) {
-		super(...args, {
-			name: 'yourCommandName',
-            enabled: true,
-            runIn: ['text', 'dm', 'group'],
-            cooldown: 0,
-            aliases: [],
-            permLevel: 0,
-            botPerms: [],
-            requiredSettings: [],
-            description: '',
-            usage: '',
-            usageDelim: undefined,
-            extendedHelp: 'No extended help available.'
-		});
-	}
-
-	async run(msg, [...params]) {
-		// This is where you place the code you want to run for your command
-	}
-
-	async init() {
-		// You can optionally define this method which will be run when the bot starts (after login, so discord data is available via this.client)
-	}
-
-};
+new Client(Object.assign(config, { permissionLevels }).login(config.token);
 </code></pre>
-<h2>Configuration</h2>
-<ul>
-<li><strong>enabled</strong>: Represents if the inhibitor should be enabled or disabled, it must be
-a boolean. Set to false to completely disable this inhibitor, it cannot be forcefully enabled.</li>
-<li><strong>runIn</strong>: The channels types this command is allowed to run in.</li>
-<li><strong>cooldown</strong>: The time in seconds before a user can use this command again. (Does not apply to bot owners)</li>
-<li><strong>aliases</strong>: Other names this command will respond to.</li>
-<li><strong>permLevel</strong>: The permission level required to run this command. From 0 as everyone, to 10 as bot owner only with default permlevels.</li>
-<li><strong>requiredSettings</strong>: Any required guild settings, that must be set before you can use this command.</li>
-<li><strong>description</strong>: The command description.</li>
-<li><strong>usage</strong>: The expected arguments for this command. See <a href="tutorial-CreatingUsageStrings.html">Understanding Usage Strings</a> for information on how to use this.</li>
-<li><strong>usageDelim</strong>: The deliminator for how the usage will be deliminated. Popular ones are <code>' '</code> (a space), and <code>', '</code> (a comma space).</li>
-<li><strong>extendedHelp</strong>: A more in depth help string if you would like to define it.</li>
-</ul>
+<h2>What's different from Komada?</h2>
+<p>Permission levels are fairly close to the same as Komada Permission levels, with a few exceptions.</p>
+<h3>The defualt permission level structure is different: {@see KlasaClient.defaultPermissionLevels}</h3>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Break</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>false</td>
+<td>Everyone can use these commands</td>
+</tr>
+<tr>
+<td>6</td>
+<td>false</td>
+<td>Members of guilds must have 'MANAGE_GUILD' permission</td>
+</tr>
+<tr>
+<td>7</td>
+<td>false</td>
+<td>Guild Owner</td>
+</tr>
+<tr>
+<td>9</td>
+<td>true</td>
+<td>Bot Owner</td>
+</tr>
+<tr>
+<td>10</td>
+<td>false</td>
+<td>Bot Owner (silent)</td>
+</tr>
+</tbody>
+</table>
 <blockquote>
-<p>All commands are required to return an <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise">Object Promise</a> you can do that by adding the <code>async</code> keyword to the function, there's no need to change anything else.</p>
+<p>This gives the bot creator a more blank slate to work with when first creating a bot. (Not all bots are mod bots, so mod/admin roles were largly unneed. Also there is infinitly more that you would want to put between 0 and administrative users, than between Guild Owner and Bot Owner). This helps keep bot creators from having to completely &quot;remake the wheel&quot; of permissions in almost all cases, without preventing that if wanted. (This fixes most cases of those who perpetually had to transfer/modify core commands to match their custom permissionLevels.)</p>
 </blockquote>
-<blockquote>
-<p>All <code>command options</code> are optional, the code above shows all default values. You can delete any line with an optional value that matches the default value.</p>
-</blockquote>
-<blockquote>
-<p><code>[...params]</code> represents a variable number of arguments give when the command is run. The name of the arguments in the array (and their count) is determined by the <code>usage</code> property and its given arguments.</p>
-</blockquote>
-<h2>Further Reading:</h2>
-<ul>
-<li><a href="tutorial-CreatingEvents.html">Creating Events</a></li>
-<li><a href="tutorial-CreatingExtendables.html">Creating Extendables</a></li>
-<li><a href="tutorial-CreatingFinalizers.html">Creating Finalizers</a></li>
-<li><a href="tutorial-CreatingInhibitors.html">Creating Inhibitors</a></li>
-<li><a href="tutorial-CreatingLanguages.html">Creating Languages</a></li>
-<li><a href="tutorial-CreatingMonitors.html">Creating Monitors</a></li>
-<li><a href="tutorial-CreatingProviders.html">Creating Providers</a></li>
-</ul>
+<p>Example:</p>
+<pre class="prettyprint source lang-javascript"><code>const { Client } = require('klasa');
+const config = require('./config.json');
+
+Client.defaultPermissionLevels
+    .addLevel(3, false, ...)
+	// let some group of people who solved some easteregg clues use a special command/some custom non-admin role
+    .addLevel(6, false, (client, msg) => msg.guild && msg.member.permissions.has('ADMINISTRATOR'))
+	// Make the requirements to use the conf command stricter than just who can add the bot to the guild
+    .addLevel(8, false, (client, msg) => client.config.botSupportTeam.includes(msg.author.id);
+	// add a role above guild owners that let your support team help setup/troubleshoot on other guilds.
+
+new Client(config).login(config.token);
+</code></pre>
+<h3>Since inhibitors are async in Klasa, check functions may be async</h3>
+<p>So you can have:</p>
+<pre class="prettyprint source lang-javascript"><code>    .addLevel(3, false, async(client, msg) => {
+		const value = await someAsyncFunction();
+		return value === someOtherValue;
+	});
+</code></pre>
+<h3>Levels may be Overwritten/You can have any number of levels</h3>
+<p>Currently in Komada, if you try to overwrite a level, it will throw an error. And PermissionLevels must be from 0-10 on komada. <em>(This may change in the future)</em></p>
 </article>
 
 

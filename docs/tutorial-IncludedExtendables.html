@@ -40,7 +40,7 @@
 			<li class="dropdown">
 				<a href="tutorials.list.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="tutorial-CreatingUsageStrings.html">Understanding Usage Strings</a></li><li><a href="tutorial-GettingStarted.html">Getting Started</a></li><li><a href="tutorial-IncludedPieces.html">Included Pieces</a></li>
+					<li><a href="tutorial-CreatingUsageStrings.html">Understanding Usage Strings</a></li><li><a href="tutorial-GettingStarted.html">Getting Started</a></li><li><a href="tutorial-IncludedPieces.html">Included Pieces</a></li><li><a href="tutorial-UnderstandingPermissionLevels.html">Understanding Permission Levels</a></li>
 				</ul>
 			</li>
 			
@@ -93,7 +93,7 @@
 <li><a href="external-TextChannel.html"><code>external:TextChannel</code></a></li>
 </ul>
 <p><strong>Source:</strong></p>
-<p><a href="https://github.com/dirigeants/klasa/blob/master/src/extendables/get_attachable.js">extendables/get_attachable.js</a></p>
+<p><a href="https://github.com/dirigeants/klasa/blob/master/src/extendables/attachable.js">extendables/attachable.js</a></p>
 <h2>get embedable</h2>
 <p>A getter to check and see if you can embed links in the channel.</p>
 <p><strong>Applies to:</strong></p>
@@ -103,7 +103,7 @@
 <li><a href="external-TextChannel.html"><code>external:TextChannel</code></a></li>
 </ul>
 <p><strong>Source:</strong></p>
-<p><a href="https://github.com/dirigeants/klasa/blob/master/src/extendables/get_embedable.js">extendables/get_embedable.js</a></p>
+<p><a href="https://github.com/dirigeants/klasa/blob/master/src/extendables/embedable.js">extendables/embedable.js</a></p>
 <h2>get guildSettings</h2>
 <p>A getter to check get either the guild settings if in a guild, or the default bot settings in dm/group dm.</p>
 <p><strong>Applies to:</strong></p>
@@ -111,7 +111,7 @@
 <li><a href="external-Message.html"><code>external:Message</code></a></li>
 </ul>
 <p><strong>Source:</strong></p>
-<p><a href="https://github.com/dirigeants/klasa/blob/master/src/extendables/get_guildSettings.js">extendables/get_guildSettings.js</a></p>
+<p><a href="https://github.com/dirigeants/klasa/blob/master/src/extendables/guildSettings.js">extendables/guildSettings.js</a></p>
 <h2>get postable</h2>
 <p>A getter to check and see if you can send messages in the channel.</p>
 <p><strong>Applies to:</strong></p>
@@ -121,7 +121,16 @@
 <li><a href="external-TextChannel.html"><code>external:TextChannel</code></a></li>
 </ul>
 <p><strong>Source:</strong></p>
-<p><a href="https://github.com/dirigeants/klasa/blob/master/src/extendables/get_postable.js">extendables/get_postable.js</a></p>
+<p><a href="https://github.com/dirigeants/klasa/blob/master/src/extendables/postable.js">extendables/postable.js</a></p>
+<h2>get language</h2>
+<p>A getter to get the configured language.</p>
+<p><strong>Applies to:</strong></p>
+<ul>
+<li><a href="external-Guild.html"><code>external:Guild</code></a></li>
+<li><a href="external-Message.html"><code>external:Message</code></a></li>
+</ul>
+<p><strong>Source:</strong></p>
+<p><a href="https://github.com/dirigeants/klasa/blob/master/src/extendables/language.js">extendables/language.js</a></p>
 <h2>get reactable</h2>
 <p>A getter to check and see if you can react in the channel.</p>
 <p><strong>Applies to:</strong></p>
@@ -131,7 +140,7 @@
 <li><a href="external-TextChannel.html"><code>external:TextChannel</code></a></li>
 </ul>
 <p><strong>Source:</strong></p>
-<p><a href="https://github.com/dirigeants/klasa/blob/master/src/extendables/get_reactable.js">extendables/get_reactable.js</a></p>
+<p><a href="https://github.com/dirigeants/klasa/blob/master/src/extendables/reactable.js">extendables/reactable.js</a></p>
 <h2>get readable</h2>
 <p>A getter to check and see if you can read in the channel.</p>
 <p><strong>Applies to:</strong></p>
@@ -141,7 +150,7 @@
 <li><a href="external-TextChannel.html"><code>external:TextChannel</code></a></li>
 </ul>
 <p><strong>Source:</strong></p>
-<p><a href="https://github.com/dirigeants/klasa/blob/master/src/extendables/get_readable.js">extendables/get_readable.js</a></p>
+<p><a href="https://github.com/dirigeants/klasa/blob/master/src/extendables/readable.js">extendables/readable.js</a></p>
 <h2>get settings</h2>
 <p>A getter to get the settings in a guild.</p>
 <p><strong>Applies to:</strong></p>
@@ -149,7 +158,7 @@
 <li><a href="external-Guild.html"><code>external:Guild</code></a></li>
 </ul>
 <p><strong>Source:</strong></p>
-<p><a href="https://github.com/dirigeants/klasa/blob/master/src/extendables/get_settings.js">extendables/get_settings.js</a></p>
+<p><a href="https://github.com/dirigeants/klasa/blob/master/src/extendables/settings.js">extendables/settings.js</a></p>
 <h2>get usableCommands</h2>
 <p>A getter to return a collection of usable commands by the message author/member.</p>
 <p><strong>Applies to:</strong></p>
@@ -157,7 +166,7 @@
 <li><a href="external-Message.html"><code>external:Message</code></a></li>
 </ul>
 <p><strong>Source:</strong></p>
-<p><a href="https://github.com/dirigeants/klasa/blob/master/src/extendables/get_usableCommands.js">extendables/get_usableCommands.js</a></p>
+<p><a href="https://github.com/dirigeants/klasa/blob/master/src/extendables/usableCommands.js">extendables/usableCommands.js</a></p>
 <h2>hasAtleastPermissionLevel(permission:number)</h2>
 <p>Checks to see if the author/member has atleast the Permission level passed.</p>
 <p><strong>Applies to:</strong></p>
@@ -165,7 +174,7 @@
 <li><a href="external-Message.html"><code>external:Message</code></a></li>
 </ul>
 <p><strong>Source:</strong></p>
-<p><a href="https://github.com/dirigeants/klasa/blob/master/src/extendables/hasAtleastPermissionLevel.js">extendables/hasAtleastPermissionLevel.js</a></p>
+<p><a href="https://github.com/dirigeants/klasa/blob/master/src/extendables/hasAtLeastPermissionLevel.js">extendables/hasAtleastPermissionLevel.js</a></p>
 <h2>send(content:string, options:Object)</h2>
 <p>A shortcut to channel.send, but also makes the response an editable command.</p>
 <p><strong>Applies to:</strong></p>
