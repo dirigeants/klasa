@@ -420,6 +420,48 @@ class ArgResolver extends Resolver {
 	}
 
 	/**
+	 * Resolves an argument based on a regular expression
+	 * @param {string} arg This arg
+	 * @param {Object} currentUsage This current usage
+	 * @param {number} possible This possible usage id
+	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {external:Message} msg The message that triggered the command
+	 * @returns {string}
+	 */
+	async reg(arg, currentUsage, possible, repeat, msg) {
+		const results = currentUsage.possible.regex.exec(arg);
+		if (results !== null) return results;
+		if (currentUsage.type === 'optional' && !repeat) return null;
+		throw msg.language.get('RESOLVER_INVALID_REGEX_MATCH', currentUsage.possibles[possible].name, currentUsage.possibles[possible].regex.toString());
+	}
+
+	/**
+	 * Resolves an argument based on a regular expression
+	 * @param {string} arg This arg
+	 * @param {Object} currentUsage This current usage
+	 * @param {number} possible This possible usage id
+	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {external:Message} msg The message that triggered the command
+	 * @returns {string}
+	 */
+	regex(...args) {
+		return this.float(...args);
+	}
+
+	/**
+	 * Resolves an argument based on a regular expression
+	 * @param {string} arg This arg
+	 * @param {Object} currentUsage This current usage
+	 * @param {number} possible This possible usage id
+	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {external:Message} msg The message that triggered the command
+	 * @returns {string}
+	 */
+	regexp(...args) {
+		return this.float(...args);
+	}
+
+	/**
 	 * Resolves a hyperlink
 	 * @param {string} arg This arg
 	 * @param {Object} currentUsage This current usage

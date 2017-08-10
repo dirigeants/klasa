@@ -25,6 +25,7 @@ module.exports = class extends Language {
 			RESOLVER_INVALID_BOOL: (name) => `${name} must be true or false.`,
 			RESOLVER_INVALID_INT: (name) => `${name} must be an integer.`,
 			RESOLVER_INVALID_FLOAT: (name) => `${name} must be a valid number.`,
+			RESOLVER_INVALID_REGEX_MATCH: (name, pattern) => `${name} must follow this regex pattern \`${pattern}\`.`,
 			RESOLVER_INVALID_URL: (name) => `${name} must be a valid url.`,
 			RESOLVER_STRING_SUFFIX: ' characters',
 			RESOLVER_MINMAX_EXACTLY: (name, min, suffix) => `${name} must be exactly ${min}${suffix}.`,

@@ -33,12 +33,12 @@ class Tag {
 	static parseMembers(members, count) {
 		const literals = [];
 		const types = [];
-		members = members.split('|');
+		members = Tag.parseTrueMembers(members);
 		return members.map((member, i) => {
 			const current = `${members}: at tag #${count} at bound #${i + 1}`;
 			let possible;
 			try {
-				possible = new Possible(/^([^:]+)(?::([^{}]+))?(?:{([^,]+)?(?:,(.+))?})?$/i.exec(member));
+				possible = new Possible(/^([^:]+)(?::([^{}/]+))?(?:{([^,]+)?(?:,(.+))?})?(?:\/([^/]+)\/(\w+)?)?$/i.exec(member));
 			} catch (err) {
 				if (typeof err === 'string') throw `${current}: ${err}`;
 				throw `${current}: invalid syntax, non specific`;
@@ -53,6 +53,28 @@ class Tag {
 			}
 			return possible;
 		});
+	}
+
+	/**
+	 * Parses raw members true members
+	 * @param {string} members The tag contents to parse
+	 * @returns {string[]}
+	 */
+	static parseTrueMembers(members) {
+		const trueMembers = [];
+		let regex = false;
+		let current = '';
+		for (const char of members) {
+			if (char === '/') regex = !regex;
+			if (char !== '|' || regex) {
+				current += char;
+			} else {
+				trueMembers.push(current);
+				current = '';
+			}
+		}
+		trueMembers.push(current);
+		return trueMembers;
 	}
 
 }

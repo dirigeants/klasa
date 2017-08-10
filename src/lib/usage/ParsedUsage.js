@@ -75,6 +75,7 @@ class ParsedUsage {
 			tags: [],
 			opened: 0,
 			current: '',
+			openRegex: false,
 			openReq: false,
 			last: false,
 			char: 0,
@@ -91,6 +92,13 @@ class ParsedUsage {
 			usage.fromto = `from char #${usage.from} to #${usage.char} '${usage.current}'`;
 
 			if (usage.last && char !== ' ') throw `${usage.at}: there can't be anything else after the repeat tag.`;
+
+			if (char === '/') usage.openRegex = !usage.openRegex;
+
+			if (usage.openRegex) {
+				usage.current += char;
+				continue;
+			}
 
 			if (['<', '['].includes(char)) usage = ParsedUsage.tagOpen(usage, char);
 			else if (['>', ']'].includes(char)) usage = ParsedUsage.tagClose(usage, char);

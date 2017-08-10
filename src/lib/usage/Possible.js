@@ -1,4 +1,5 @@
 const minMaxTypes = ['str', 'string', 'num', 'number', 'float', 'int', 'integer'];
+const regexTypes = ['reg', 'regex', 'regexp'];
 
 /**
  * Represents a possibility in a usage Tag
@@ -8,7 +9,7 @@ class Possible {
 	/**
 	 * @param {string[]} regexResults The regex results from parsing the tag member
 	 */
-	constructor([, name, type = 'literal', min, max]) {
+	constructor([, name, type = 'literal', min, max, regex, flags]) {
 		/**
 		 * The name of this possible
 		 * @type {string}
@@ -32,6 +33,14 @@ class Possible {
 		 * @type {?number}
 		 */
 		this.max = minMaxTypes.includes(this.type) && max ? Possible.resolveLimit(max, 'max') : null;
+
+		/**
+		 * The regex of this possible
+		 * @type {?RegExp}
+		 */
+		this.regex = regexTypes.includes(this.type) && regex ? new RegExp(regex, flags) : null;
+
+		if (regexTypes.includes(this.type) && !this.regex) throw 'Regex types must include a regular expression';
 	}
 
 	/**
