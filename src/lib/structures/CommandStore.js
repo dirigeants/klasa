@@ -148,7 +148,7 @@ class CommandStore extends Collection {
 	 * @returns {void}
 	 */
 	static async walk(store, dir) {
-		const files = await fs.readdir(dir).catch(() => { fs.ensureDir(dir).catch(err => store.client.emit('errorlog', err)); });
+		const files = await fs.readdir(dir).catch(() => { fs.ensureDir(dir).catch(err => store.client.emit('log', err, 'error')); });
 		if (!files) return false;
 		files.filter(file => file.endsWith('.js')).map(file => store.load(dir, [file]));
 		let subfolders = [];

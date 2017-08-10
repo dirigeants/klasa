@@ -40,9 +40,9 @@ class Store {
 	 */
 	async loadAll() {
 		this.clear();
-		const coreFiles = await fs.readdir(this.coreDir).catch(() => { fs.ensureDir(this.coreDir).catch(err => this.client.emit('errorlog', err)); });
+		const coreFiles = await fs.readdir(this.coreDir).catch(() => { fs.ensureDir(this.coreDir).catch(err => this.client.emit('log', err, 'error')); });
 		if (coreFiles) await Promise.all(coreFiles.map(this.load.bind(this, this.coreDir)));
-		const userFiles = await fs.readdir(this.userDir).catch(() => { fs.ensureDir(this.userDir).catch(err => this.client.emit('errorlog', err)); });
+		const userFiles = await fs.readdir(this.userDir).catch(() => { fs.ensureDir(this.userDir).catch(err => this.client.emit('log', err, 'error')); });
 		if (userFiles) await Promise.all(userFiles.map(this.load.bind(this, this.userDir)));
 		return this.size;
 	}
