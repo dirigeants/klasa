@@ -3,8 +3,11 @@ Permission Levels are what defines who has permission to use what command. They 
 For instace the conf command requires level 6 to run, by default this is how it works:
 
 >level 6 requires 'MANAGE_GUILD' Permission: true/false
+
 >level 7 is the bot Owner: true/false
+
 >level 8 is not defined, and always returns false
+
 >level 9 is the bot owner, and has break so we will stop checking higher rules: true/false
 
 If any check from 6-9 returns true, the user will be able to run that command. Also, if no break is encountered, the command will silently fail, instead of telling the user "they don't have permission to use x command"...
