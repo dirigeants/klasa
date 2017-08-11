@@ -452,7 +452,7 @@ class ArgResolver extends Resolver {
 	 * @returns {string}
 	 */
 	async reg(arg, currentUsage, possible, repeat, msg) {
-		const results = currentUsage.possible.regex.exec(arg);
+		const results = currentUsage.possibles[possible].regex.exec(arg);
 		if (results !== null) return results;
 		if (currentUsage.type === 'optional' && !repeat) return null;
 		throw msg.language.get('RESOLVER_INVALID_REGEX_MATCH', currentUsage.possibles[possible].name, currentUsage.possibles[possible].regex.toString());
