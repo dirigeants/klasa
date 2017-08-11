@@ -100,8 +100,34 @@ class Util {
 
 }
 
+/**
+ * @typedef {Object} execOptions
+ * @memberof {Util}
+ * @property {string} [cwd=process.cwd()] Current working directory of the child process
+ * @property {Object} [env={}] Environment key-value pairs
+ * @property {string} [encoding='utf8'] encoding to use
+ * @property {string} [shell=os === unix ? '/bin/sh' : process.env.ComSpec] Shell to execute the command with
+ * @property {number} [timeout=0] 
+ * @property {number} [maxBuffer=200*1024] Largest amount of data in bytes allowed on stdout or stderr. If exceeded, the child process is terminated.
+ * @property {string|number} [killSignal='SIGTERM'] <string> | <integer> (Default: 'SIGTERM')
+ * @property {number} [uid] Sets the user identity of the process.
+ * @property {number} [gid] Sets the group identity of the process.
+ */
+
+/**
+ * Promisified version of child_process.exec for use with await
+ * @param {string} command The command to run
+ * @param {execOptions} options The options to pass to exec
+ * @returns {string}
+ */
 Util.exec = promisify(exec);
 
-Util.wait = promisify(setTimeout);
+/**
+ * Promisified version of setTimeout for use with await
+ * @param {number} delay The amount of time in ms to delay
+ * @param {any} args Any args to pass to the .then (mostly pointless in this form)
+ * @returns {Promise<any>} The args value passed in
+ */
+Util.sleep = promisify(setTimeout);
 
 module.exports = Util;
