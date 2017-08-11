@@ -85,11 +85,12 @@
 
 <article>
     <h2>Usage Structure</h2>
-<p><code>&lt;&gt;</code> required argument, <code>[]</code> optional argument <code>&lt;Name:Type{min,max}&gt;</code></p>
+<p><code>&lt;&gt;</code> required argument, <code>[]</code> optional argument <code>&lt;Name:Type{Min,Max}/Regex/Flags&gt;</code></p>
 <ul>
 <li><strong>Name</strong> Mostly used for debugging message, unless the type is Literal in which it compares the argument to the name.</li>
 <li><strong>Type</strong> The type of variable you are expecting.</li>
 <li><strong>Min, Max</strong> Minimum or Maximum for a giving variable (works on strings in terms of length, and on all types of numbers in terms of value) You are allowed to define any combination of min and max. Omit for none, <code>{min}</code> for min, <code>{,max}</code> for max. If you set <code>min</code> and <code>max</code> with the same integer, then the provided string must have equal length.</li>
+<li><strong>Regex, Flags</strong> A regular expression with double escaped <code>\</code> to match against the argument. It is only valid for regex types of arguments, but gives you great flexibility on custom argument parsing. Flags are regex flags to apply to the regex pattern.</li>
 <li><strong>Special Repeat Tag</strong> <code>[...]</code> will repeat the last usage optionally until you run out of arguments. Useful for doing something like <code>&lt;SearchTerm:str&gt; [...]</code> which will allow you to take as many search terms as you want, per your Usage Delimiter.</li>
 </ul>
 <blockquote>
@@ -109,32 +110,28 @@
 <td>Literally equal to the Name. This is the default type if none is defined.</td>
 </tr>
 <tr>
-<td style="text-align:right"><code>str</code> , <code>string</code></td>
-<td>A <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>.</td>
+<td style="text-align:right"><code>boolean</code></td>
+<td>A <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a>.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>float</code> , <code>num</code> , <code>number</code></td>
+<td>A <a href="https://en.wikipedia.org/wiki/Floating-point_arithmetic">Floating Point Number</a>.</td>
 </tr>
 <tr>
 <td style="text-align:right"><code>int</code> , <code>integer</code></td>
 <td>An <a href="https://en.wikipedia.org/wiki/Integer">Integer</a>.</td>
 </tr>
 <tr>
-<td style="text-align:right"><code>num</code> , <code>number</code> , <code>float</code></td>
-<td>A <a href="https://en.wikipedia.org/wiki/Floating-point_arithmetic">Floating Point Number</a>.</td>
+<td style="text-align:right"><code>reg</code> , <code>regex</code> , <code>regexp</code></td>
+<td>A <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp">Regular Expression</a>.</td>
 </tr>
 <tr>
-<td style="text-align:right"><code>boolean</code></td>
-<td>A <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a>.</td>
+<td style="text-align:right"><code>str</code> , <code>string</code></td>
+<td>A <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>.</td>
 </tr>
 <tr>
 <td style="text-align:right"><code>url</code></td>
 <td>A <a href="https://en.wikipedia.org/wiki/URL">URL</a>.</td>
-</tr>
-<tr>
-<td style="text-align:right"><code>msg</code> , <code>message</code></td>
-<td>A <a href="https://discord.js.org/#/docs/main/master/class/Message">Message</a> instance returned from the message ID.</td>
-</tr>
-<tr>
-<td style="text-align:right"><code>role</code></td>
-<td>A <a href="https://discord.js.org/#/docs/main/master/class/Role">Role</a> instance returned from the role ID or mention.</td>
 </tr>
 <tr>
 <td style="text-align:right"><code>channel</code></td>
@@ -145,12 +142,24 @@
 <td>A <a href="https://discord.js.org/#/docs/main/master/class/Guild">Guild</a> instance returned from the guild ID.</td>
 </tr>
 <tr>
+<td style="text-align:right"><code>member</code></td>
+<td>A <a href="https://discord.js.org/#/docs/main/master/class/GuildMember">GuildMember</a> instance returned from the member ID or mention.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>msg</code> , <code>message</code></td>
+<td>A <a href="https://discord.js.org/#/docs/main/master/class/Message">Message</a> instance returned from the message ID.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>role</code></td>
+<td>A <a href="https://discord.js.org/#/docs/main/master/class/Role">Role</a> instance returned from the role ID or mention.</td>
+</tr>
+<tr>
 <td style="text-align:right"><code>user</code> , <code>mention</code></td>
 <td>A <a href="https://discord.js.org/#/docs/main/master/class/User">User</a> instance returned from the user ID or mention.</td>
 </tr>
 <tr>
-<td style="text-align:right"><code>member</code></td>
-<td>A <a href="https://discord.js.org/#/docs/main/master/class/GuildMember">GuildMember</a> instance returned from the member ID or mention.</td>
+<td style="text-align:right"><code>piece</code></td>
+<td>Any piece, whichever resolves first in order of piece types alphabetically.</td>
 </tr>
 <tr>
 <td style="text-align:right"><code>cmd</code> , <code>command</code></td>
@@ -167,6 +176,10 @@
 <tr>
 <td style="text-align:right"><code>finalizer</code></td>
 <td>A <a href="Finalizer.html"><code>Finalizer</code></a> instance returned from the finalizer name.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>language</code></td>
+<td>A <a href="Language.html"><code>Language</code></a> instance returned from the language name.</td>
 </tr>
 <tr>
 <td style="text-align:right"><code>monitor</code></td>
@@ -204,9 +217,14 @@
 <p>Keep in mind that arguments are delimited by the character or combination of characters written in <em>usageDelim</em>. In this case, we have assigned the character <code>|</code> for it. How do we use this command? Easy:</p>
 <p><code>+messager 293107496191655936|delete</code></p>
 <p>The line above will execute the command with the name <code>messager</code> (or a command with <code>messager</code> as an alias), it'll use <a href="https://discord.js.org/#/docs/main/stable/class/TextChannel?scrollTo=fetchMessage">Channel.fetchMessages</a>. If the message is not found (you mistyped it or the message is in another channel) it'll warn you that the message hasn't been found. The next argument is a literal, in which must be either <code>delete</code> or <code>edit</code>.</p>
-<blockquote>
-<p>If you need something created before the command is ever ran, you can specify <code>init() {...}</code> to make Klasa run that portion of code beforehand.</p>
-</blockquote>
+<h1>Using regex arguments in your command.</h1>
+<p>Regex arguments give you even more flexibility to define custom matching. Regex in usage needs to be double escaped like the following: <code>&lt;hexColor:regex/#?([\\da-f]{6})/i&gt;</code>. That regex will resolve into: <code>/#?([\da-f]{6})/i</code> which should match any hexcolor string. When you use a regex argument, the result of <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/exec">RegExp.prototype.exec</a> will be passed into the command.</p>
+<p>So we can do the following destructuring to get the first matching group of the hexColor arg:</p>
+<pre class="prettyprint source lang-javascript"><code>async run(msg, [[, hexColor]]) {
+  // code
+};
+</code></pre>
+<p>So the command <code>+getrgb #ab24ff</code> would make hexColor: 'ab24ff'.</p>
 </article>
 
 
