@@ -5,7 +5,7 @@ const CommandMessage = require('./structures/CommandMessage');
 const ArgResolver = require('./parsers/ArgResolver');
 const PermLevels = require('./structures/PermissionLevels');
 const util = require('./util/util');
-const SettingGateway = require('./settings/SettingGateway');
+const Settings = require("./settings/SettingsCache");
 const CommandStore = require('./structures/CommandStore');
 const InhibitorStore = require('./structures/InhibitorStore');
 const FinalizerStore = require('./structures/FinalizerStore');
@@ -179,10 +179,10 @@ class KlasaClient extends Discord.Client {
 		};
 
 		/**
-		 * The settings gateway instance
-		 * @type {SettingGateway}
+		 * The object where the gateways are stored settings
+		 * @type {Object}
 		 */
-		this.settingGateway = new SettingGateway(this);
+		this.settings = null;
 
 		/**
 		 * The application info cached from the discord api
@@ -245,6 +245,7 @@ class KlasaClient extends Discord.Client {
 			`Loaded ${events} events.`,
 			`Loaded ${extendables} extendables.`
 		].join('\n'));
+		this.settings = new Settings(this);
 		this.emit('log', `Loaded in ${(now() - start).toFixed(2)}ms.`);
 		super.login(token);
 	}
@@ -259,15 +260,6 @@ class KlasaClient extends Discord.Client {
 	}
 
 	/**
-	 * The schema manager for this bot
-	 * @readonly
-	 * @type {SchemaManager}
-	 */
-	get schemaManager() {
-		return this.settingGateway.schemaManager;
-	}
-
-	/**
 	 * The once ready function for the client to init all pieces
 	 * @private
 	 */
@@ -278,7 +270,7 @@ class KlasaClient extends Discord.Client {
 		if (this.user.bot) this.application = await super.fetchApplication();
 		if (!this.config.ownerID) this.config.ownerID = this.user.bot ? this.application.owner.id : this.user.id;
 		await this.providers.init();
-		await this.settingGateway.init();
+		await this.settings.guilds.init();
 		await this.commands.init();
 		await this.inhibitors.init();
 		await this.finalizers.init();
