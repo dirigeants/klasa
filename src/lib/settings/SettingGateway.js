@@ -7,9 +7,6 @@ const SQL = require('./SQL');
  */
 class SettingGateway extends SchemaManager {
 
-	/**
-	 * @param {KlasaClient} client The Klasa Client
-	 */
 	constructor(store, type, validateFunction, schema) {
 		super(store.client);
 
@@ -65,7 +62,8 @@ class SettingGateway extends SchemaManager {
 	 */
 	async init() {
 		await this.initSchema();
-		if (!(await this.provider.hasTable(this.type))) {
+		const hasTable = await this.provider.hasTable(this.type);
+		if (!hasTable) {
 			const SQLCreate = this.sql ? this.sql.buildSQLSchema(this.schema) : undefined;
 			await this.provider.createTable(this.type, SQLCreate);
 		}
@@ -83,7 +81,7 @@ class SettingGateway extends SchemaManager {
 	 * @returns {void}
 	 */
 	async create(input) {
-		const target = await this.validate(input).then(output => (output.id || output));
+		const target = await this.validate(input).then(output => output.id || output);
 		await this.provider.create(this.type, target, this.defaults);
 		super.set(target, this.defaults);
 	}
@@ -140,7 +138,7 @@ class SettingGateway extends SchemaManager {
 			for (const key of data) super.set(key.id, key);
 			return;
 		}
-		const target = await this.validate(input).then(output => (output.id || output));
+		const target = await this.validate(input).then(output => output.id || output);
 		const data = await this.provider.get(this.type, target);
 		if (this.sql) this.sql.deserializer(data);
 		await super.set(target, data);
@@ -153,7 +151,7 @@ class SettingGateway extends SchemaManager {
 	 * @returns {any}
 	 */
 	async reset(input, key) {
-		const target = await this.validate(input).then(output => (output.id || output));
+		const target = await this.validate(input).then(output => output.id || output);
 		if (!(key in this.schema)) throw `The key ${key} does not exist in the current data schema.`;
 		const defaultKey = this.schema[key].default;
 		await this.provider.update(this.type, target, { [key]: defaultKey });
@@ -188,7 +186,7 @@ class SettingGateway extends SchemaManager {
 	
 	/**
 	 * Creates the settings if it did not exist previously.
-	 * @param {Object|string} target An object or string that can be parsed by this instance's resolver.
+	 * @param {(Object|string)} target An object or string that can be parsed by this instance's resolver.
 	 * @returns {true}
 	 */
 	async ensureCreate(target) {
@@ -208,24 +206,24 @@ class SettingGateway extends SchemaManager {
 	 * @returns {boolean}
 	 */
 	async updateArray(input, type, key, data) {
-		if (!['add', 'remove'].includes(type)) throw guild.language.get('SETTING_GATEWAY_INVALID_TYPE');
-		if (!(key in this.schema)) throw guild.language.get('SETTING_GATEWAY_KEY_NOEXT', key);
-		if (!this.schema[key].array) throw guild.language.get('SETTING_GATEWAY_KEY_NOT_ARRAY', key);
-		if (data === undefined) throw guild.language.get('SETTING_GATEWAY_SPECIFY_VALUE');
-		const target = await this.validate(input).then(output => (output.id || output));
+		if (!["add", "remove"].includes(type)) throw 'The type parameter must be either add or remove.';
+		if (!(key in this.schema)) throw `The key ${key} does not exist in the current data schema.`;
+		if (!this.schema[key].array) throw `The key ${key} is not an Array.`;
+		if (data === undefined) throw "You must specify the value to add or filter.";
+		const target = await this.validate(input).then(output => output.id || output);
 		let result = await this.resolver[this.schema[key].type.toLowerCase()](data, this.client.guilds.get(target), this.schema[key]);
 		if (result.id) result = result.id;
 		let cache = this.get(target);
 		if (cache instanceof Promise) cache = await cache;
 		if (type === 'add') {
-			if (cache[key].includes(result)) throw guild.language.get('SETTING_GATEWAY_VALUE_FOR_KEY_ALREXT', data, key);
+			if (cache[key].includes(result)) throw `The value ${data} for the key ${key} already exists.`;
 			cache[key].push(result);
 			await this.provider.update(this.type, target, { [key]: cache[key] });
 			await this.sync(target);
 			return result;
 		}
-		if (!cache[key].includes(result)) throw guild.language.get('SETTING_GATEWAY_VALUE_FOR_KEY_NOEXT', data, key);
-		cache[key] = cache[key].filter(v => v !== result);
+		if (!cache[key].includes(result)) throw `The value ${data} for the key ${key} does not exist.`;
+		cache[key] = cache[key].filter(ent => ent !== result);
 
 		await this.ensureCreate(target);
 		await this.provider.update(this.type, target, { [key]: cache[key] });
