@@ -183,7 +183,7 @@ class SettingGateway extends SchemaManager {
 		await this.sync(target);
 		return result;
 	}
-	
+
 	/**
 	 * Creates the settings if it did not exist previously.
 	 * @param {(Object|string)} target An object or string that can be parsed by this instance's resolver.
@@ -206,10 +206,10 @@ class SettingGateway extends SchemaManager {
 	 * @returns {boolean}
 	 */
 	async updateArray(input, type, key, data) {
-		if (!["add", "remove"].includes(type)) throw 'The type parameter must be either add or remove.';
+		if (!['add', 'remove'].includes(type)) throw 'The type parameter must be either add or remove.';
 		if (!(key in this.schema)) throw `The key ${key} does not exist in the current data schema.`;
 		if (!this.schema[key].array) throw `The key ${key} is not an Array.`;
-		if (data === undefined) throw "You must specify the value to add or filter.";
+		if (data === undefined) throw 'You must specify the value to add or filter.';
 		const target = await this.validate(input).then(output => output.id || output);
 		let result = await this.resolver[this.schema[key].type.toLowerCase()](data, this.client.guilds.get(target), this.schema[key]);
 		if (result.id) result = result.id;
