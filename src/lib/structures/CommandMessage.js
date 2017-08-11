@@ -46,7 +46,7 @@ class CommandMessage {
 		 * The string arguments derived from the usageDelim of the command
 		 * @type {string[]}
 		 */
-		this.args = this.constructor.getArgs(this);
+		this.args = this.cmd.quotedStringSupport ? this.constructor.getQuotedStringArgs(this) : this.constructor.getArgs(this);
 
 		/**
 		 * The parameters resolved by this class
@@ -174,6 +174,40 @@ class CommandMessage {
 		const args = cmdMsg.msg.content.slice(cmdMsg.prefixLength).trim().split(' ').slice(1).join(' ').split(cmdMsg.cmd.usageDelim !== '' ? cmdMsg.cmd.usageDelim : undefined);
 		if (args[0] === '') return [];
 		return args;
+	}
+
+	/**
+	 * Parses a message into string args taking into account quoted strings
+	 * @param {CommandMessage} cmdMsg this command message
+	 * @private
+	 * @returns {string[]}
+	 */
+	static getQuotedStringArgs(cmdMsg) {
+		const content = cmdMsg.msg.content.slice(cmdMsg.prefixLength).trim().split(' ').slice(1).join(' ');
+
+		if (!cmdMsg.cmd.usageDelim || cmdMsg.cmd.usageDelim === '') return [content];
+
+		const args = [];
+		let current = '';
+		let openQuote = false;
+
+		for (let i = 0; i < content.length; i++) {
+			if (!openQuote && content.slice(i, i + cmdMsg.cmd.usageDelim.length) === cmdMsg.cmd.usageDelim) {
+				if (current !== '') args.push(current);
+				current = '';
+				continue;
+			}
+			if (content[i] === '"' && content[i - 1] !== '\\') {
+				openQuote = !openQuote;
+				if (current !== '') args.push(current);
+				current = '';
+				continue;
+			}
+			current += content[i];
+		}
+		if (current !== '') args.push(current);
+
+		return args.length === 1 && args[0] === '' ? [] : args;
 	}
 
 }
