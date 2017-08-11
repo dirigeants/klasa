@@ -12,12 +12,12 @@ class CacheManager {
 		 * @type {string}
 		 * @readonly
 		 */
-		Object.defineProperty(this, "cacheEngine", { value: client.config.provider.cache || "js" });
+		Object.defineProperty(this, 'cacheEngine', { value: client.config.provider.cache || 'js' });
 
 		/**
 		 * The data stored for this SettingGateway instance.
 		 */
-		this.data = this.cacheEngine === "js" ? new client.methods.Collection() : client.providers.get(this.cacheEngine);
+		this.data = this.cacheEngine === 'js' ? new client.methods.Collection() : client.providers.get(this.cacheEngine);
 	}
 
 	/**
@@ -26,7 +26,7 @@ class CacheManager {
 	 * @returns {Object}
 	 */
 	get(key) {
-		if (this.cacheEngine === "js") return this.data.get(key);
+		if (this.cacheEngine === 'js') return this.data.get(key);
 		return this.data.get(this.type, key);
 	}
 
@@ -35,7 +35,7 @@ class CacheManager {
 	 * @returns {Object[]}
 	 */
 	getAll() {
-		if (this.cacheEngine === "js") return this.data;
+		if (this.cacheEngine === 'js') return this.data;
 		return this.data.getAll(this.type);
 	}
 
@@ -46,7 +46,7 @@ class CacheManager {
 	 * @returns {any}
 	 */
 	set(key, value) {
-		if (this.cacheEngine === "js") return this.data.set(key, value);
+		if (this.cacheEngine === 'js') return this.data.set(key, value);
 		return this.data.set(this.type, key, value);
 	}
 
@@ -56,7 +56,7 @@ class CacheManager {
 	 * @returns {any}
 	 */
 	delete(key) {
-		if (this.cacheEngine === "js") return this.data.delete(key);
+		if (this.cacheEngine === 'js') return this.data.delete(key);
 		return this.data.delete(this.type, key);
 	}
 
