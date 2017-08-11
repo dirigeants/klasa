@@ -21,8 +21,8 @@ class ArgResolver extends Resolver {
 			this.client.extendables.get(arg) ||
 			this.client.finalizers.get(arg) ||
 			this.client.inhibitors.get(arg) ||
-			this.client.monitors.get(arg) ||
 			this.client.languages.get(arg) ||
+			this.client.monitors.get(arg) ||
 			this.client.providers.get(arg);
 		if (piece) return piece;
 		if (currentUsage.type === 'optional' && !repeat) return null;
