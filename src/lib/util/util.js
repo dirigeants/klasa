@@ -1,3 +1,5 @@
+const { promisify } = require('util');
+const { exec } = require('child_process');
 const zws = String.fromCharCode(8203);
 let sensitivePattern;
 
@@ -97,5 +99,9 @@ class Util {
 	}
 
 }
+
+Util.exec = promisify(exec);
+
+Util.wait = promisify(setTimeout);
 
 module.exports = Util;
