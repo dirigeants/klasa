@@ -11,6 +11,7 @@ module.exports = class extends Monitor {
 		const validCommand = this.client.commands.get(command);
 		if (!validCommand) return;
 		const start = now();
+		if (this.client.config.typing) msg.channel.startTyping();
 		this.client.inhibitors.run(msg, validCommand)
 			.then(() => this.runCommand(this.makeProxy(msg, new CommandMessage(msg, validCommand, prefix, prefixLength)), start))
 			.catch((response) => {
@@ -48,12 +49,14 @@ module.exports = class extends Monitor {
 
 	runCommand(msg, start) {
 		msg.validateArgs()
-			.then((params) => {
-				msg.cmd.run(msg, params)
+			.then(async (params) => {
+				await msg.cmd.run(msg, params)
 					.then(mes => this.client.finalizers.run(msg, mes, start))
 					.catch(error => this.handleError(msg, error));
+				if (this.client.config.typing) msg.channel.stopTyping();
 			})
 			.catch((error) => {
+				if (this.client.config.typing) msg.channel.stopTyping();
 				if (error.code === 1 && this.client.config.cmdPrompt) {
 					return this.awaitMessage(msg, start, error.message)
 						.catch(err => this.handleError(msg, err));
@@ -78,7 +81,7 @@ module.exports = class extends Monitor {
 		msg.reprompted = true;
 
 		if (message.deletable) message.delete();
-
+		if (this.client.config.typing) msg.channel.startTyping();
 		return this.runCommand(msg, start);
 	}
 
