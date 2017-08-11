@@ -1,44 +1,75 @@
-const { Guild } = require('discord.js');
-const SettingResolver = require('../parsers/SettingResolver');
-const CacheManager = require('./CacheManager');
-const SchemaManager = require('./SchemaManager');
-const SQL = require('./SQL');
+const SchemaManager = require("./schemaManager");
+const SQL = require("./sql");
 
 /**
  * The gateway to all settings
- * @extends {CacheManager}
+ * @extends {SchemaManager}
  */
-class SettingGateway extends CacheManager {
+class SettingGateway extends SchemaManager {
 
 	/**
 	 * @param {KlasaClient} client The Klasa Client
 	 */
-	constructor(client) {
-		super(client);
+	constructor(store, type, validateFunction, schema) {
+		super(store.client);
 
-		/** @type {Client} */
-		this.client = client;
+		/**
+		 * The SettingCache instance which initiated this SettingGateway.
+		 * @name SettingGateway#store
+		 * @type {SettingCache}
+		 * @readonly
+		 */
+		Object.defineProperty(this, "store", { value: store });
 
-		/** @type {string} */
-		this.engine = client.config.provider.engine || 'json';
+		/**
+		 * The name of this instance of SettingGateway. The schema will be saved under 'name_Schema.json'.
+		 * @name SettingGateway#type
+		 * @type {string}
+		 */
+		this.type = type;
 
-		this.resolver = new SettingResolver(client);
-		this.schemaManager = new SchemaManager(this.client);
+		/**
+		 * The provider engine this instance of SettingGateway should use to handle your settings.
+		 * @name SettingGateway#engine
+		 * @type {string}
+		 */
+		this.engine = this.client.config.provider.engine || "json";
+
+		if (!this.provider) throw `This provider (${this.engine}) does not exist in your system.`;
+
+		/**
+		 * If the provider is SQL, this property is on charge to serialize/deserialize.
+		 * @name SettingGateway#sql
+		 * @type {?SQL}
+		 */
+		this.sql = this.provider.conf.sql ? new SQL(this.client, this) : null;
+
+		/**
+		 * The function validator for this instance of SettingGateway.
+		 * @name SettingGateway#validate
+		 * @type {function}
+		 */
+		this.validate = validateFunction;
+
+		/**
+		 * The schema for this instance of SettingGateway.
+		 * @name SettingGateway#defaultDataSchema
+		 * @type {object}
+		 */
+		this.defaultDataSchema = schema;
 	}
 
 	/**
-	 * Initialize the configuration for all Guilds.
+	 * Initialize the configuration for this gateway.
 	 * @returns {void}
 	 */
 	async init() {
-		if (!this.provider) throw `This provider (${this.engine}) does not exist in your system.`;
-		await this.schemaManager.init();
-		this.sql = this.provider.sql ? new SQL(this.client, this.provider) : false;
-		if (!await this.provider.hasTable('guilds')) {
+		await this.initSchema();
+		if (!(await this.provider.hasTable(this.type))) {
 			const SQLCreate = this.sql ? this.sql.buildSQLSchema(this.schema) : undefined;
-			await this.provider.createTable('guilds', SQLCreate);
+			await this.provider.createTable(this.type, SQLCreate);
 		}
-		const data = await this.provider.getAll('guilds');
+		const data = await this.provider.getAll(this.type);
 		if (this.sql) {
 			this.sql.initDeserialize();
 			for (let i = 0; i < data.length; i++) this.sql.deserializer(data[i]);
@@ -47,169 +78,186 @@ class SettingGateway extends CacheManager {
 	}
 
 	/**
-	 * Get the current provider.
-	 * @readonly
-	 * @returns {Provider}
-	 */
-	get provider() {
-		return this.client.providers.get(this.engine);
-	}
-
-	/**
-	 * Get the current DataSchema.
-	 * @readonly
-	 * @returns {Object}
-	 */
-	get schema() {
-		return this.schemaManager.schema;
-	}
-
-	/**
-	 * Get the default values from the current DataSchema.
-	 * @readonly
-	 * @returns {Object}
-	 */
-	get defaults() {
-		return this.schemaManager.defaults;
-	}
-
-	/**
-	 * Create a new Guild entry for the configuration.
-	 * @param {Guild|Snowflake} guild The Guild object or snowflake.
+	 * Create a new entry in the configuration.
+	 * @param {Object|string} input An object containing a id property, like discord.js objects, or a string.
 	 * @returns {void}
 	 */
-	async create(guild) {
-		const target = await this.validateGuild(guild);
-		await this.provider.create('guilds', target.id, this.schemaManager.defaults);
-		super.set(target.id, this.schemaManager.defaults);
+	async create(input) {
+		const target = await this.validate(input).then(output => (output.id || output));
+		await this.provider.create(this.type, target, this.defaults);
+		super.set(target, this.defaults);
 	}
 
 	/**
-	 * Remove a Guild entry from the configuration.
-	 * @param {Snowflake} guild The Guild object or snowflake.
+	 * Remove an entry from the configuration.
+	 * @param {string} input A key to delete from the cache.
 	 * @returns {void}
 	 */
-	async destroy(guild) {
-		await this.provider.delete('guilds', guild);
-		super.delete('guilds', guild);
+	async destroy(input) {
+		await this.provider.delete(this.type, input);
+		super.delete(this.type, input);
 	}
 
 	/**
-	 * Get a Guild entry from the configuration.
-	 * @param {(Guild|Snowflake)} guild The Guild object or snowflake.
+	 * Get an entry from the cache.
+	 * @param {string} input A key to get the value for.
 	 * @returns {Object}
 	 */
-	get(guild) {
-		if (guild === 'default') return this.schemaManager.defaults;
-		return super.get(guild) || this.schemaManager.defaults;
+	get(input) {
+		if (input === "default") return this.defaults;
+		return super.get(input) || this.defaults;
 	}
 
 	/**
-	 * Get a Resolved Guild entry from the configuration.
-	 * @param {(Guild|Snowflake)} guild The Guild object or snowflake.
+	 * Updates an entry.
+	 * @param {(Object|string)} input An object containing a id property, like Discord.js objects, or a string.
+	 * @param {(Object|string)} [guild=null] A Guild resolvable, useful for when the instance of SG doesn't aim for Guild settings.
 	 * @returns {Object}
 	 */
-	async getResolved(guild) {
-		guild = await this.validateGuild(guild);
-		const settings = this.get(guild.id);
+	async getResolved(input, guild = null) {
+		const target = await this.validate(input).then(output => output.id || output);
+		guild = await this.resolver.guild(guild || target);
+
+		let settings = this.get(target);
+		if (settings instanceof Promise) settings = await settings;
 		const resolved = await Promise.all(Object.entries(settings).map(([key, data]) => {
-			if (this.schema[key] && this.schema[key].array) return { [key]: Promise.all(data.map(entry => this.resolver[this.schema[key].type.toLowerCase()](entry, guild, key, this.schema[key]))) };
-			return { [key]: this.schema[key] && data ? this.resolver[this.schema[key].type.toLowerCase()](data, guild, key, this.schema[key]) : data };
+			if (this.schema[key] && this.schema[key].array) return { [key]: Promise.all(data.map(entry => this.resolver[this.schema[key].type.toLowerCase()](entry, guild, this.schema[key]))) };
+			return { [key]: this.schema[key] && data ? this.resolver[this.schema[key].type.toLowerCase()](data, guild, this.schema[key]) : data };
 		}));
 		return Object.assign({}, ...resolved);
 	}
 
 	/**
-	 * Sync either all Guild entries from the configuration, or a single one.
-	 * @param {(Guild|Snowflake)} [guild=null] The configuration for the selected Guild, if specified.
+	 * Sync either all entries from the configuration, or a single one.
+	 * @name SettingGateway#sync
+	 * @param {(Object|string)} [input=null] An object containing a id property, like discord.js objects, or a string.
 	 * @returns {void}
 	 */
-	async sync(guild = null) {
-		if (!guild) {
-			const data = await this.provider.getAll('guilds');
+	async sync(input = null) {
+		if (!input) {
+			const data = await this.provider.getAll(this.type);
 			if (this.sql) for (let i = 0; i < data.length; i++) this.sql.deserializer(data[i]);
 			for (const key of data) super.set(key.id, key);
 			return;
 		}
-		const target = await this.validateGuild(guild);
-		const data = await this.provider.get('guilds', target.id);
+		const target = await this.validate(input).then(output => (output.id || output));
+		const data = await this.provider.get(this.type, target);
 		if (this.sql) this.sql.deserializer(data);
-		await super.set(target.id, data);
+		await super.set(target, data);
 	}
 
 	/**
-	 * Reset a key's value to default from a Guild configuration.
-	 * @param {(Guild|Snowflake)} guild The Guild object or snowflake.
+	 * Reset a key's value to default from a entry.
+	 * @param {(Object|string)} input An object containing a id property, like Discord.js objects, or a string.
 	 * @param {string} key The key to reset.
-	 * @returns {*}
+	 * @returns {any}
 	 */
-	async reset(guild, key) {
-		const target = await this.validateGuild(guild);
-		if (!(key in this.schema)) throw guild.language.get('SETTING_GATEWAY_KEY_NOEXT', key);
+	async reset(input, key) {
+		const target = await this.validate(input).then(output => (output.id || output));
+		if (!(key in this.schema)) throw `The key ${key} does not exist in the current data schema.`;
 		const defaultKey = this.schema[key].default;
-		await this.provider.update('guilds', target.id, { [key]: defaultKey });
-		this.sync(target.id);
+		await this.provider.update(this.type, target, { [key]: defaultKey });
+		await this.sync(target);
 		return defaultKey;
 	}
 
 	/**
-	 * Update a Guild's configuration.
-	 * @param {(Guild|Snowflake)} guild The Guild object or snowflake.
-	 * @param {string} key The key to update.
-	 * @param {any} data The new value for the key.
-	 * @returns {any}
+	 * Updates an entry.
+	 * @param {(Object|string)} input An object or string that can be parsed by this instance's resolver.
+	 * @param {Object} object An object with pairs of key/value to update.
+	 * @param {(Object|string)} [guild=null] A Guild resolvable, useful for when the instance of SG doesn't aim for Guild settings.
+	 * @returns {Object}
 	 */
-	async update(guild, key, data) {
-		if (!(key in this.schema)) throw guild.language.get('SETTING_GATEWAY_KEY_NOEXT', key);
-		const target = await this.validateGuild(guild);
-		let result = await this.resolver[this.schema[key].type.toLowerCase()](data, target, key, this.schema[key]);
-		if (result.id) result = result.id;
-		await this.provider.update('guilds', target.id, { [key]: result });
-		await this.sync(target.id);
+	async update(input, object, guild = null) {
+		const target = await this.validate(input).then(output => output.id || output);
+		guild = await this.resolver.guild(guild || target);
+
+		const resolved = await Promise.all(Object.entries(object).map(async ([key, value]) => {
+			if (!(key in this.schema)) throw `The key ${key} does not exist in the current data schema.`;
+			return this.resolver[this.schema[key].type.toLowerCase()](value, guild, this.schema[key])
+				.then(res => ({ [key]: res.id || res }));
+		}));
+
+		const result = Object.assign({}, ...resolved);
+
+		await this.ensureCreate(target);
+		await this.provider.update(this.type, target, result);
+		await this.sync(target);
 		return result;
 	}
-
+	
 	/**
-	 * Update an array from the a Guild's configuration.
-	 * @param {(Guild|Snowflake)} guild The Guild object or snowflake.
-	 * @param {string} type Either 'add' or 'remove'.
-	 * @param {string} key The key from the Schema.
-	 * @param {any} data The value to be added or removed.
-	 * @returns {boolean}
+	 * Creates the settings if it did not exist previously.
+	 * @param {Object|string} target An object or string that can be parsed by this instance's resolver.
+	 * @returns {true}
 	 */
-	async updateArray(guild, type, key, data) {
-		if (!['add', 'remove'].includes(type)) throw guild.language.get('SETTING_GATEWAY_INVALID_TYPE');
-		if (!(key in this.schema)) throw guild.language.get('SETTING_GATEWAY_KEY_NOEXT', key);
-		if (!this.schema[key].array) throw guild.language.get('SETTING_GATEWAY_KEY_NOT_ARRAY', key);
-		if (data === undefined) throw guild.language.get('SETTING_GATEWAY_SPECIFY_VALUE');
-		const target = await this.validateGuild(guild);
-		let result = await this.resolver[this.schema[key].type.toLowerCase()](data, target, key, this.schema[key]);
-		if (result.id) result = result.id;
-		const cache = this.get(target.id);
-		if (type === 'add') {
-			if (cache[key].includes(result)) throw guild.language.get('SETTING_GATEWAY_VALUE_FOR_KEY_ALREXT', data, key);
-			cache[key].push(result);
-			await this.provider.update('guilds', target.id, { [key]: cache[key] });
-			await this.sync(target.id);
-			return result;
-		}
-		if (!cache[key].includes(result)) throw guild.language.get('SETTING_GATEWAY_VALUE_FOR_KEY_NOEXT', data, key);
-		cache[key] = cache[key].filter(value => value !== result);
-		await this.provider.update('guilds', target.id, { [key]: cache[key] });
-		await this.sync(target.id);
+	async ensureCreate(target) {
+		if (typeof target !== "string") throw `Expected input type string, got ${typeof target}`;
+		let cache = this.get(target);
+		if (cache instanceof Promise) cache = await cache;
+		if (!("id" in cache)) return this.create(target);
 		return true;
 	}
 
 	/**
-	 * Checks if a Guild is valid.
-	 * @param {(Guild|Snowflake)} guild The Guild object or snowflake.
-	 * @returns {Guild}
+	 * Update an array from the configuration.
+	 * @param {Object|string} input An object containing a id property, like discord.js objects, or a string.
+	 * @param {('add'|'remove')} type Either 'add' or 'remove'.
+	 * @param {string} key The key from the Schema.
+	 * @param {any} data The value to be added or removed.
+	 * @returns {boolean}
 	 */
-	async validateGuild(guild) {
-		if (guild instanceof Guild) return guild;
-		if (typeof guild === 'string' && /^(\d{17,19})$/.test(guild)) guild = this.client.guilds.get(guild);
-		if (!guild) throw guild.language.get('SETTING_GATEWAY_EXPECTS_GUILD');
-		return guild;
+	async updateArray(input, type, key, data) {
+		if (!['add', 'remove'].includes(type)) throw guild.language.get('SETTING_GATEWAY_INVALID_TYPE');
+		if (!(key in this.schema)) throw guild.language.get('SETTING_GATEWAY_KEY_NOEXT', key);
+		if (!this.schema[key].array) throw guild.language.get('SETTING_GATEWAY_KEY_NOT_ARRAY', key);
+		if (data === undefined) throw guild.language.get('SETTING_GATEWAY_SPECIFY_VALUE');
+		const target = await this.validate(input).then(output => (output.id || output));
+		let result = await this.resolver[this.schema[key].type.toLowerCase()](data, this.client.guilds.get(target), this.schema[key]);
+		if (result.id) result = result.id;
+		let cache = this.get(target);
+		if (cache instanceof Promise) cache = await cache;
+		if (type === "add") {
+			if (cache[key].includes(result)) throw guild.language.get('SETTING_GATEWAY_VALUE_FOR_KEY_ALREXT', data, key);
+			cache[key].push(result);
+			await this.provider.update(this.type, target, { [key]: cache[key] });
+			await this.sync(target);
+			return result;
+		}
+		if (!cache[key].includes(result)) throw guild.language.get('SETTING_GATEWAY_VALUE_FOR_KEY_NOEXT', data, key);
+		cache[key] = cache[key].filter(v => v !== result);
+
+		await this.ensureCreate(target);
+		await this.provider.update(this.type, target, { [key]: cache[key] });
+		await this.sync(target);
+		return true;
+	}
+
+	/**
+	 * The client this SettingGateway was created with.
+	 * @type {KlasaClient}
+	 * @readonly
+	 */
+	get client() {
+		return this.store.client;
+	}
+
+	/**
+	 * The resolver instance this SettingGateway uses to parse the data.
+	 * @type {Resolver}
+	 * @readonly
+	 */
+	get resolver() {
+		return this.store.resolver;
+	}
+
+	/**
+	 * The provider this SettingGateway instance uses for the persistent data operations.
+	 * @type {Provider}
+	 * @readonly
+	 */
+	get provider() {
+		return this.client.providers.get(this.engine);
 	}
 
 }
