@@ -1,5 +1,5 @@
-const SchemaManager = require("./schemaManager");
-const SQL = require("./sql");
+const SchemaManager = require('./SchemaManager');
+const SQL = require('./SQL');
 
 /**
  * The gateway to all settings
@@ -19,7 +19,7 @@ class SettingGateway extends SchemaManager {
 		 * @type {SettingCache}
 		 * @readonly
 		 */
-		Object.defineProperty(this, "store", { value: store });
+		Object.defineProperty(this, 'store', { value: store });
 
 		/**
 		 * The name of this instance of SettingGateway. The schema will be saved under 'name_Schema.json'.
@@ -33,7 +33,7 @@ class SettingGateway extends SchemaManager {
 		 * @name SettingGateway#engine
 		 * @type {string}
 		 */
-		this.engine = this.client.config.provider.engine || "json";
+		this.engine = this.client.config.provider.engine || 'json';
 
 		if (!this.provider) throw `This provider (${this.engine}) does not exist in your system.`;
 
@@ -104,7 +104,7 @@ class SettingGateway extends SchemaManager {
 	 * @returns {Object}
 	 */
 	get(input) {
-		if (input === "default") return this.defaults;
+		if (input === 'default') return this.defaults;
 		return super.get(input) || this.defaults;
 	}
 
@@ -192,10 +192,10 @@ class SettingGateway extends SchemaManager {
 	 * @returns {true}
 	 */
 	async ensureCreate(target) {
-		if (typeof target !== "string") throw `Expected input type string, got ${typeof target}`;
+		if (typeof target !== 'string') throw `Expected input type string, got ${typeof target}`;
 		let cache = this.get(target);
 		if (cache instanceof Promise) cache = await cache;
-		if (!("id" in cache)) return this.create(target);
+		if (!('id' in cache)) return this.create(target);
 		return true;
 	}
 
@@ -217,7 +217,7 @@ class SettingGateway extends SchemaManager {
 		if (result.id) result = result.id;
 		let cache = this.get(target);
 		if (cache instanceof Promise) cache = await cache;
-		if (type === "add") {
+		if (type === 'add') {
 			if (cache[key].includes(result)) throw guild.language.get('SETTING_GATEWAY_VALUE_FOR_KEY_ALREXT', data, key);
 			cache[key].push(result);
 			await this.provider.update(this.type, target, { [key]: cache[key] });
