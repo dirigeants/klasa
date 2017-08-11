@@ -88,26 +88,26 @@ class SettingsCache {
 				type: 'String',
 				default: this.client.config.prefix,
 				array: this.client.config.prefix.constructor.name === 'Array',
-				sql: `TEXT NOT NULL DEFAULT '${this.client.config.prefix.constructor.name === 'Array' ? JSON.stringify(this.client.config.prefix) : this.client.config.prefix}'`,
+				sql: `TEXT NOT NULL DEFAULT '${this.client.config.prefix.constructor.name === 'Array' ? JSON.stringify(this.client.config.prefix) : this.client.config.prefix}'`
 			},
 			modRole: {
 				type: 'Role',
 				default: null,
 				array: false,
-				sql: 'TEXT',
+				sql: 'TEXT'
 			},
 			adminRole: {
 				type: 'Role',
 				default: null,
 				array: false,
-				sql: 'TEXT',
+				sql: 'TEXT'
 			},
 			disabledCommands: {
 				type: 'Command',
 				default: [],
 				array: true,
-				sql: 'TEXT DEFAULT \'[]\'',
-			},
+				sql: 'TEXT DEFAULT \'[]\''
+			}
 		};
 	}
 
