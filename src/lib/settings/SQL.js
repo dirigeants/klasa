@@ -92,7 +92,7 @@ class SQL {
 		const newSQLSchema = this.buildSQLSchema(schema).map(tuplify);
 		const keys = Object.keys(defaults);
 		if (!keys.includes('id')) keys.push('id');
-		const columns = keys.filter(k => k !== key);
+		const columns = keys.filter(ent => ent !== key);
 		await this.provider.updateColumns(this.gateway.type, columns, newSQLSchema);
 		this.initDeserialize();
 
