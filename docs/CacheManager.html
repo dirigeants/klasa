@@ -33,7 +33,7 @@
 			<li class="dropdown">
 				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="ArgResolver.html">ArgResolver</a></li><li><a href="CacheManager.html">CacheManager</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandMessage.html">CommandMessage</a></li><li><a href="CommandStore.html">CommandStore</a></li><li><a href="Event.html">Event</a></li><li><a href="EventStore.html">EventStore</a></li><li><a href="Extendable.html">Extendable</a></li><li><a href="ExtendableStore.html">ExtendableStore</a></li><li><a href="Finalizer.html">Finalizer</a></li><li><a href="FinalizerStore.html">FinalizerStore</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorStore.html">InhibitorStore</a></li><li><a href="KlasaClient.html">KlasaClient</a></li><li><a href="Language.html">Language</a></li><li><a href="LanguageStore.html">LanguageStore</a></li><li><a href="Monitor.html">Monitor</a></li><li><a href="MonitorStore.html">MonitorStore</a></li><li><a href="ParsedUsage.html">ParsedUsage</a></li><li><a href="PermissionLevels.html">PermissionLevels</a></li><li><a href="Piece.html">Piece</a></li><li><a href="Possible.html">Possible</a></li><li><a href="Provider.html">Provider</a></li><li><a href="ProviderStore.html">ProviderStore</a></li><li><a href="Resolver.html">Resolver</a></li><li><a href="SchemaManager.html">SchemaManager</a></li><li><a href="SettingGateway.html">SettingGateway</a></li><li><a href="SettingResolver.html">SettingResolver</a></li><li><a href="SQL.html">SQL</a></li><li><a href="Store.html">Store</a></li><li><a href="Tag.html">Tag</a></li><li><a href="Util.html">Util</a></li>
+					<li><a href="ArgResolver.html">ArgResolver</a></li><li><a href="CacheManager.html">CacheManager</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandMessage.html">CommandMessage</a></li><li><a href="CommandStore.html">CommandStore</a></li><li><a href="Event.html">Event</a></li><li><a href="EventStore.html">EventStore</a></li><li><a href="Extendable.html">Extendable</a></li><li><a href="ExtendableStore.html">ExtendableStore</a></li><li><a href="Finalizer.html">Finalizer</a></li><li><a href="FinalizerStore.html">FinalizerStore</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorStore.html">InhibitorStore</a></li><li><a href="KlasaClient.html">KlasaClient</a></li><li><a href="Language.html">Language</a></li><li><a href="LanguageStore.html">LanguageStore</a></li><li><a href="Monitor.html">Monitor</a></li><li><a href="MonitorStore.html">MonitorStore</a></li><li><a href="ParsedUsage.html">ParsedUsage</a></li><li><a href="PermissionLevels.html">PermissionLevels</a></li><li><a href="Piece.html">Piece</a></li><li><a href="Possible.html">Possible</a></li><li><a href="Provider.html">Provider</a></li><li><a href="ProviderStore.html">ProviderStore</a></li><li><a href="Resolver.html">Resolver</a></li><li><a href="SchemaManager.html">SchemaManager</a></li><li><a href="SettingResolver.html">SettingResolver</a></li><li><a href="SettingsCache.html">SettingsCache</a></li><li><a href="SQL.html">SQL</a></li><li><a href="Store.html">Store</a></li><li><a href="Tag.html">Tag</a></li><li><a href="Util.html">Util</a></li>
 				</ul>
 			</li>
 			
@@ -238,6 +238,74 @@
     
 
     
+        <h3 class="subsection-title">Properties</h3>
+
+        <dl>
+            
+<hr>
+<dt class="name" id="data">
+    <h4 id="data"><span class="type-signature"></span>data<span class="type-signature"></span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        The data stored for this SettingGateway instance.
+    </div>
+    
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/settings/CacheManager.js#L20">lib/settings/CacheManager.js#L20</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        </dl>
+    
 
     
         <h3 class="subsection-title">Methods</h3>
@@ -246,7 +314,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="delete"><span class="type-signature"></span>delete(guild)</h4>
+    <h4 class="name" id="delete"><span class="type-signature"></span>delete(key)</h4>
     
     
 </dt>
@@ -254,7 +322,7 @@
 
     
     <div class="description">
-        Deletes a guild from cache
+        Delete the selected data from the cache by its ID.
     </div>
     
 
@@ -289,7 +357,7 @@
 
         <tr>
             
-                <td class="name"><code>guild</code></td>
+                <td class="name"><code>key</code></td>
             
 
             <td class="type">
@@ -306,7 +374,7 @@
 
             
 
-            <td class="description last">The guild id</td>
+            <td class="description last">The data's key.</td>
         </tr>
 
     
@@ -348,7 +416,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/settings/CacheManager.js#L49">lib/settings/CacheManager.js#L49</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/settings/CacheManager.js#L58">lib/settings/CacheManager.js#L58</a>	</dd>
 	
 
 	
@@ -381,7 +449,7 @@
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">any</span>
 
 
 
@@ -398,7 +466,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="get"><span class="type-signature"></span>get(guild)</h4>
+    <h4 class="name" id="get"><span class="type-signature"></span>get(key)</h4>
     
     
 </dt>
@@ -406,7 +474,7 @@
 
     
     <div class="description">
-        Gets a guild from cache
+        Get the data from the cache by its ID.
     </div>
     
 
@@ -441,7 +509,7 @@
 
         <tr>
             
-                <td class="name"><code>guild</code></td>
+                <td class="name"><code>key</code></td>
             
 
             <td class="type">
@@ -458,119 +526,13 @@
 
             
 
-            <td class="description last">The guild id</td>
+            <td class="description last">The key to search for.</td>
         </tr>
 
     
     </tbody>
 </table>
 
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/settings/CacheManager.js#L19">lib/settings/CacheManager.js#L19</a>	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    The guild setting object
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Object</span>
-
-
-
-    </dd>
-</dl>
-
-
-        
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="getAll"><span class="type-signature"></span>getAll()</h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Gets all guilds from cache
-    </div>
-    
-
-    
-
-    
-
-    
     
 
     
@@ -631,10 +593,108 @@
     <h5>Returns:</h5>
     
             
-<div class="param-desc">
-    All guild setting objects
-</div>
 
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="getAll"><span class="type-signature"></span>getAll()</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Get all the data from the cache as an array of objects.
+    </div>
+    
+
+    
+
+    
+
+    
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/settings/CacheManager.js#L37">lib/settings/CacheManager.js#L37</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
 
 
 <dl>
@@ -660,7 +720,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="set"><span class="type-signature"></span>set(guild, data)</h4>
+    <h4 class="name" id="set"><span class="type-signature"></span>set(key, value)</h4>
     
     
 </dt>
@@ -668,7 +728,7 @@
 
     
     <div class="description">
-        Sets a guild setting object to cache
+        Save a new data to the cache.
     </div>
     
 
@@ -703,7 +763,7 @@
 
         <tr>
             
-                <td class="name"><code>guild</code></td>
+                <td class="name"><code>key</code></td>
             
 
             <td class="type">
@@ -720,14 +780,14 @@
 
             
 
-            <td class="description last">The guild id</td>
+            <td class="description last">The data's key.</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>data</code></td>
+                <td class="name"><code>value</code></td>
             
 
             <td class="type">
@@ -744,7 +804,7 @@
 
             
 
-            <td class="description last">The guild setting object</td>
+            <td class="description last">The data's value.</td>
         </tr>
 
     
@@ -786,7 +846,7 @@
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/settings/CacheManager.js#L39">lib/settings/CacheManager.js#L39</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/settings/CacheManager.js#L48">lib/settings/CacheManager.js#L48</a>	</dd>
 	
 
 	
@@ -819,7 +879,7 @@
     </dt>
     <dd>
         
-<span class="param-type">void</span>
+<span class="param-type">any</span>
 
 
 
