@@ -114,13 +114,14 @@ class SettingGateway extends SchemaManager {
 	 */
 	async getResolved(input, guild = null) {
 		const target = await this.validate(input).then(output => output.id || output);
-		guild = await this.resolver.guild(guild || target);
+		guild = await this._resolveGuild(guild || target);
 
 		let settings = this.get(target);
 		if (settings instanceof Promise) settings = await settings;
 		const resolved = await Promise.all(Object.entries(settings).map(([key, data]) => {
-			if (this.schema[key] && this.schema[key].array) return { [key]: Promise.all(data.map(entry => this.resolver[this.schema[key].type.toLowerCase()](entry, guild, this.schema[key]))) };
-			return { [key]: this.schema[key] && data ? this.resolver[this.schema[key].type.toLowerCase()](data, guild, this.schema[key]) : data };
+			const { min, max, type } = this.schema[key] || {};
+			if (this.schema[key] && this.schema[key].array) return { [key]: Promise.all(data.map(entry => this.resolver[type.toLowerCase()](entry, guild, key, { min, max }))) };
+			return { [key]: this.schema[key] && data ? this.resolver[type.toLowerCase()](data, guild, this.schema[key], { min, max }) : data };
 		}));
 		return Object.assign({}, ...resolved);
 	}
@@ -168,11 +169,12 @@ class SettingGateway extends SchemaManager {
 	 */
 	async update(input, object, guild = null) {
 		const target = await this.validate(input).then(output => output.id || output);
-		guild = await this.resolver.guild(guild || target);
+		guild = await this._resolveGuild(guild || target);
 
 		const resolved = await Promise.all(Object.entries(object).map(async ([key, value]) => {
 			if (!(key in this.schema)) throw `The key ${key} does not exist in the current data schema.`;
-			return this.resolver[this.schema[key].type.toLowerCase()](value, guild, this.schema[key])
+			const { min, max, type } = this.schema[key];
+			return this.resolver[type.toLowerCase()](value, guild, key, { min, max })
 				.then(res => ({ [key]: res.id || res }));
 		}));
 
@@ -200,22 +202,23 @@ class SettingGateway extends SchemaManager {
 	/**
 	 * Update an array from the configuration.
 	 * @param {Object|string} input An object containing a id property, like discord.js objects, or a string.
-	 * @param {('add'|'remove')} type Either 'add' or 'remove'.
+	 * @param {('add'|'remove')} action Either 'add' or 'remove'.
 	 * @param {string} key The key from the Schema.
 	 * @param {any} data The value to be added or removed.
 	 * @returns {boolean}
 	 */
-	async updateArray(input, type, key, data) {
-		if (!['add', 'remove'].includes(type)) throw 'The type parameter must be either add or remove.';
+	async updateArray(input, action, key, data) {
+		if (!['add', 'remove'].includes(action)) throw 'The type parameter must be either add or remove.';
 		if (!(key in this.schema)) throw `The key ${key} does not exist in the current data schema.`;
 		if (!this.schema[key].array) throw `The key ${key} is not an Array.`;
 		if (data === undefined) throw 'You must specify the value to add or filter.';
 		const target = await this.validate(input).then(output => output.id || output);
-		let result = await this.resolver[this.schema[key].type.toLowerCase()](data, this.client.guilds.get(target), this.schema[key]);
+		const { min, max, type } = this.schema[key];
+		let result = await this.resolver[type.toLowerCase()](data, this.client.guilds.get(target), key, { min, max });
 		if (result.id) result = result.id;
 		let cache = this.get(target);
 		if (cache instanceof Promise) cache = await cache;
-		if (type === 'add') {
+		if (action === 'add') {
 			if (cache[key].includes(result)) throw `The value ${data} for the key ${key} already exists.`;
 			cache[key].push(result);
 			await this.provider.update(this.type, target, { [key]: cache[key] });
@@ -229,6 +232,14 @@ class SettingGateway extends SchemaManager {
 		await this.provider.update(this.type, target, { [key]: cache[key] });
 		await this.sync(target);
 		return true;
+	}
+
+	_resolveGuild(guild) {
+		const constName = guild.constructor.name;
+		if (constName === 'Guild') return guild;
+		if (constName === 'TextChannel' || constName === 'VoiceChannel' || constName === 'Message' || constName === 'Role') return guild.guild;
+		if (typeof guild === 'string' && /^\d{17,19}$/.test(guild)) return this.client.guilds.get(guild);
+		return null;
 	}
 
 	/**

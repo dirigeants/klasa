@@ -81,7 +81,7 @@ class SettingResolver extends Resolver {
 	 * @param {?number} minMax.max The maximum value
 	 * @returns {string}
 	 */
-	async string(data, guild, name, { min, max }) {
+	async string(data, guild, name, { min, max } = {}) {
 		const result = await super.string(data);
 		if (SettingResolver.maxOrMin(guild, result, min, max, name, guild.language.get('RESOLVER_STRING_SUFFIX'))) return result;
 		return null;
@@ -97,7 +97,7 @@ class SettingResolver extends Resolver {
 	 * @param {?number} minMax.max The maximum value
 	 * @returns {number}
 	 */
-	async integer(data, guild, name, { min, max }) {
+	async integer(data, guild, name, { min, max } = {}) {
 		const result = await super.integer(data);
 		if (!result) throw guild.language.get('SETTING_RESOLVER_INVALID_INTEGER');
 		if (SettingResolver.maxOrMin(guild, result, min, max, name)) return result;
@@ -114,7 +114,7 @@ class SettingResolver extends Resolver {
 	 * @param {?number} minMax.max The maximum value
 	 * @returns {number}
 	 */
-	async float(data, guild, name, { min, max }) {
+	async float(data, guild, name, { min, max } = {}) {
 		const result = await super.float(data);
 		if (!result) throw guild.language.get('RESOLVER_INVALID_FLOAT', name);
 		if (SettingResolver.maxOrMin(guild, result, min, max, name)) return result;
