@@ -25,7 +25,7 @@ module.exports = class extends Command {
 	}
 
 	async set(msg, configs, key, value) {
-		if (this.client.settings.guilds.schemaManager.schema[key].array) {
+		if (this.client.settings.guilds.schema[key].array) {
 			await this.client.settings.guilds.updateArray(msg.guild, 'add', key, value.join(' '));
 			return msg.sendMessage(msg.language.get('COMMAND_CONF_ADDED', value.join(' '), key));
 		}
