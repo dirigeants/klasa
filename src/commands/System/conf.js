@@ -17,7 +17,7 @@ module.exports = class extends Command {
 		const configs = msg.guild.settings;
 		if (action !== 'list' && !key) throw msg.language.get('COMMAND_CONF_NOKEY');
 		if (['set', 'remove'].includes(action) && !value[0]) throw msg.language.get('COMMAND_CONF_NOVALUE');
-		if (['set', 'remove', 'reset'].includes(action) && !configs.id) await this.client.settingGateway.create(msg.guild);
+		if (['set', 'remove', 'reset'].includes(action) && !configs.id) await this.client.settings.guilds.create(msg.guild);
 		if (['set', 'remove', 'get', 'reset'].includes(action) && !(key in configs)) throw msg.language.get('COMMAND_CONF_GET_NOEXT', key);
 		await this[action](msg, configs, key, value);
 
@@ -25,17 +25,17 @@ module.exports = class extends Command {
 	}
 
 	async set(msg, configs, key, value) {
-		if (this.client.settingGateway.schemaManager.schema[key].array) {
-			await this.client.settingGateway.updateArray(msg.guild, 'add', key, value.join(' '));
+		if (this.client.settings.guilds.schema[key].array) {
+			await this.client.settings.guilds.updateArray(msg.guild, 'add', key, value.join(' '));
 			return msg.sendMessage(msg.language.get('COMMAND_CONF_ADDED', value.join(' '), key));
 		}
-		const response = await this.client.settingGateway.update(msg.guild, key, value.join(' '));
-		return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', key, response));
+		const response = await this.client.settings.guilds.update(msg.guild, { [key]: value.join(' ') });
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', key, response[key]));
 	}
 
 	async remove(msg, configs, key, value) {
-		if (!this.client.settingGateway.schema[key].array) return msg.sendMessage(msg.language.get('COMMAND_CONF_KEY_NOT_ARRAY'));
-		return this.client.settingGateway.updateArray(msg.guild, 'remove', key, value.join(' '))
+		if (!this.client.settings.guilds.schema[key].array) return msg.sendMessage(msg.language.get('COMMAND_CONF_KEY_NOT_ARRAY'));
+		return this.client.settings.guilds.updateArray(msg.guild, 'remove', key, value.join(' '))
 			.then(() => msg.sendMessage(msg.language.get('COMMAND_CONF_REMOVE', value.join(' '), key)))
 			.catch(err => msg.sendMessage(err));
 	}
@@ -45,7 +45,7 @@ module.exports = class extends Command {
 	}
 
 	async reset(msg, configs, key) {
-		const response = await this.client.settingGateway.reset(msg.guild, key);
+		const response = await this.client.settings.guilds.reset(msg.guild, key);
 		return msg.sendMessage(msg.language.get('COMMAND_CONF_RESET', key, response));
 	}
 

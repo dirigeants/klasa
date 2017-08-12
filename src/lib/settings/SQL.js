@@ -14,21 +14,24 @@ const DefaultDataTypes = {
 class SQL {
 
 	/**
-	 * @param {KlasaClient} client The Klasa Client
-	 * @param {Provider} provider The sql prividor to use with this instance
+	 * Creates an instance of SQL.
+	 * @param {KlasaClient}	   client  The Klasa Client.
+	 * @param {SettingGateway} gateway The SettingGateway instance which initialized this instance.
 	 */
-	constructor(client, provider) {
+	constructor(client, gateway) {
 		/**
-		 * The Client
+		 * The client this SettingsCache was created with.
 		 * @type {KlasaClient}
+		 * @readonly
 		 */
-		this.client = client;
+		Object.defineProperty(this, 'client', { value: client });
 
 		/**
-		 * The Provider
-		 * @type {Provider}
+		 * The gateway which initiated this instance.
+		 * @type {SettingGateway}
+		 * @readonly
 		 */
-		this.provider = provider;
+		Object.defineProperty(this, 'gateway', { value: gateway });
 	}
 
 	/**
@@ -37,18 +40,8 @@ class SQL {
 	 * @returns {string}
 	 */
 	buildSingleSQLSchema(value) {
-		let constants = this.provider.CONSTANTS;
-		if (!constants) {
-			this.client.emit('log', 'This SQL Provider does not seem to have a CONSTANTS exports. Using built-in schema.', 'error');
-			constants = DefaultDataTypes;
-		}
-		const selectType = schemaKey => constants[schemaKey] || 'TEXT';
-		let { sanitize } = this.provider;
-		if (!sanitize) {
-			this.client.emit('log', 'This SQL Provider does not seem to have a sanitize exports. It might corrupt.', 'error');
-			sanitize = schemaKey => `'${schemaKey}'`;
-		}
-		const type = value.sql || value.default ? ` DEFAULT ${sanitize(value.default)}` : '';
+		const selectType = schemaKey => this.constants[schemaKey] || 'TEXT';
+		const type = value.sql || value.default ? ` DEFAULT ${this.sanitizer(value.default)}` : '';
 		return `${selectType(value.type)}${type}`;
 	}
 
@@ -67,8 +60,6 @@ class SQL {
 
 	/**
 	 * Init the deserialization keys for SQL providers.
-	 * @param {Object} schema The schema object.
-	 * @returns {void}
 	 */
 	initDeserialize() {
 		this.deserializeKeys = [];
@@ -79,8 +70,7 @@ class SQL {
 
 	/**
 	 * Deserialize stringified objects.
-	 * @param {Object} data The GuildSettings object.
-	 * @return {void}
+	 * @param {Object} data The Settings object.
 	 */
 	deserializer(data) {
 		const deserialize = this.deserializeKeys;
@@ -89,10 +79,10 @@ class SQL {
 
 	/**
 	 * Create/Remove columns from a SQL database, by the current Schema.
-	 * @param {Object} schema The Schema object.
+	 * @param {Object} schema   The Schema object.
 	 * @param {Object} defaults The Schema<Defaults> object.
-	 * @param {string} key The key which is updated.
-	 * @returns {boolean}
+	 * @param {string} key	    The key which is updated.
+	 * @returns {Promise<boolean>}
 	 */
 	async updateColumns(schema, defaults, key) {
 		if (!this.provider.updateColumns) {
@@ -102,27 +92,56 @@ class SQL {
 		const newSQLSchema = this.buildSQLSchema(schema).map(tuplify);
 		const keys = Object.keys(defaults);
 		if (!keys.includes('id')) keys.push('id');
-		const columns = keys.filter(ky => ky !== key);
-		await this.provider.updateColumns('guilds', columns, newSQLSchema);
+		const columns = keys.filter(ent => ent !== key);
+		await this.provider.updateColumns(this.gateway.type, columns, newSQLSchema);
 		this.initDeserialize();
 
 		return true;
 	}
 
 	/**
+	 * The constants this instance will use to build the SQL schemas.
+	 * @type {Object}
+	 * @readonly
+	 */
+	get constants() {
+		return this.provider.CONSTANTS || DefaultDataTypes;
+	}
+
+	/**
+	 * Sanitize and prepare the strings for SQL input.
+	 * @type {Function}
+	 * @readonly
+	 */
+	get sanitizer() {
+		return this.provider.sanitize || (value => `'${value}'`);
+	}
+
+	/**
 	 * Shortcut for Schema.
+	 * @type {Object}
 	 * @readonly
 	 */
 	get schema() {
-		return this.client.schemaManager.schema;
+		return this.gateway.schema;
 	}
 
 	/**
 	 * Shortcut for Schema<Defaults>
+	 * @type {Object}
 	 * @readonly
 	 */
 	get defaults() {
-		return this.client.schemaManager.defaults;
+		return this.gateway.defaults;
+	}
+
+	/**
+	 * The provider this SettingGateway instance uses for the persistent data operations.
+	 * @type {Provider}
+	 * @readonly
+	 */
+	get provider() {
+		return this.gateway.provider;
 	}
 
 }
