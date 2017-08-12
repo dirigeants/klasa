@@ -90,18 +90,12 @@ class SettingsCache {
 				array: this.client.config.prefix.constructor.name === 'Array',
 				sql: `TEXT NOT NULL DEFAULT '${this.client.config.prefix.constructor.name === 'Array' ? JSON.stringify(this.client.config.prefix) : this.client.config.prefix}'`
 			},
-			modRole: {
-				type: 'Role',
-				default: null,
-				array: false,
-				sql: 'TEXT'
-			},
-			adminRole: {
-				type: 'Role',
-				default: null,
-				array: false,
-				sql: 'TEXT'
-			},
+			language: {
+ 				type: 'String',
+ 				default: this.client.config.language,
+ 				array: false,
+ 				sql: `TEXT NOT NULL DEFAULT '${this.client.config.language}'`
+ 			},
 			disabledCommands: {
 				type: 'Command',
 				default: [],
