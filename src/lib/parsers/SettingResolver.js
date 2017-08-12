@@ -33,6 +33,32 @@ class SettingResolver extends Resolver {
 	}
 
 	/**
+	 * Resolves a TextChannel
+	 * @param {any} data The data to resolve
+	 * @param {external:Guild} guild The guild to resolve for
+	 * @param {string} name The name of the key being resolved
+	 * @returns {external:Channel}
+	 */
+	async textchannel(data, guild, name) {
+		const result = await super.channel(data);
+		if (!result || result.type !== 'text') throw guild.language.get('RESOLVER_INVALID_CHANNEL', name);
+		return result;
+	}
+
+	/**
+	 * Resolves a VoiceChannel
+	 * @param {any} data The data to resolve
+	 * @param {external:Guild} guild The guild to resolve for
+	 * @param {string} name The name of the key being resolved
+	 * @returns {external:Channel}
+	 */
+	async voicechannel(data, guild, name) {
+		const result = await super.channel(data);
+		if (!result || result.type !== 'voice') throw guild.language.get('RESOLVER_INVALID_CHANNEL', name);
+		return result;
+	}
+
+	/**
 	 * Resolves a guild
 	 * @param {any} data The data to resolve
 	 * @param {external:Guild} guild The guild to resolve for
