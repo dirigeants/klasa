@@ -7,7 +7,7 @@ module.exports = class extends Extendable {
 	}
 
 	get extend() {
-		return this.client.client.settings.get(this.id);
+		return this.client.settings.guilds.get(this.id);
 	}
 
 };
