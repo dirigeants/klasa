@@ -62,7 +62,7 @@ class Inhibitor {
 		 * If this inhibitor is meant for spamProtection (disables the inhibitor while generating help)
 		 * @type {boolean}
 		 */
-		this.spamProtection = options.spamProtection || false;
+		this.spamProtection = 'spamProtection' in options ? options.spamProtection : false;
 	}
 
 	/**
