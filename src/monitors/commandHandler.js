@@ -15,6 +15,7 @@ module.exports = class extends Monitor {
 		this.client.inhibitors.run(msg, validCommand)
 			.then(() => this.runCommand(this.makeProxy(msg, new CommandMessage(msg, validCommand, prefix, prefixLength)), start))
 			.catch((response) => {
+				if (this.client.config.typing) msg.channel.stopTyping();
 				if (response) msg.reply(response);
 			});
 	}
