@@ -44,7 +44,7 @@ module.exports = class extends Command {
 		const longest = commandNames.reduce((long, str) => Math.max(long, str.length), 0);
 
 		await Promise.all(this.client.commands.map((command) =>
-			this.client.inhibitors.run(this.msg, command, true)
+			this.client.inhibitors.run(msg, command, true)
 				.then(() => {
 					if (!help.hasOwnProperty(command.category)) help[command.category] = {};
 					if (!help[command.category].hasOwnProperty(command.subCategory)) help[command.category][command.subCategory] = [];
