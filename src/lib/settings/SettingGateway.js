@@ -155,6 +155,8 @@ class SettingGateway extends SchemaManager {
 		const target = await this.validate(input).then(output => output.id || output);
 		if (!(key in this.schema)) throw `The key ${key} does not exist in the current data schema.`;
 		const defaultKey = this.schema[key].default;
+		const clone = Object.assign({}, this.get(target));
+		this.client.emit('settingUpdate', this, target, { [key]: clone[key] }, { [key]: defaultKey });
 		await this.provider.update(this.type, target, { [key]: defaultKey });
 		await this.sync(target);
 		return defaultKey;
@@ -181,6 +183,8 @@ class SettingGateway extends SchemaManager {
 		const result = Object.assign({}, ...resolved);
 
 		await this.ensureCreate(target);
+		const clone = Object.assign({}, this.get(target));
+		this.client.emit('settingUpdate', this, target, Object.assign({}, ...Object.keys(result).map(key => ({ [key]: clone[key] }))), result);
 		await this.provider.update(this.type, target, result);
 		await this.sync(target);
 		return result;
@@ -229,6 +233,8 @@ class SettingGateway extends SchemaManager {
 		cache[key] = cache[key].filter(ent => ent !== result);
 
 		await this.ensureCreate(target);
+		const clone = Object.assign({}, this.get(target));
+		this.client.emit('settingUpdate', this, target, { [key]: clone[key] }, { [key]: cache[key] });
 		await this.provider.update(this.type, target, { [key]: cache[key] });
 		await this.sync(target);
 		return true;

@@ -280,6 +280,7 @@ class KlasaClient extends Discord.Client {
 		this.setInterval(this.sweepCommandMessages.bind(this), this.commandMessageSweep * 1000);
 		this.ready = true;
 		this.emit('log', this.config.readyMessage || `Successfully initialized. Ready to serve ${this.guilds.size} guilds.`);
+		this.emit('klasaReady');
 	}
 
 	/**
@@ -305,6 +306,53 @@ class KlasaClient extends Discord.Client {
 		this.emit('debug', `Swept ${messages - this.commandMessages.size} commandMessages older than ${lifetime} seconds.`);
 		return messages - this.commandMessages.size;
 	}
+
+	/**
+	 * Emitted when klasa is fully ready and initialized.
+	 * @event KlasaClient#klasaReady
+	 */
+
+	/**
+	 * A central logging event for klasa.
+	 * @event KlasaClient#log
+	 * @param {(string|Object)} data The data to log
+	 * @param {string} [type='log'] The type of log: 'log', 'debug', 'warn', or 'error'.
+	 */
+
+	/**
+	 * Emitted when a command has been inhibited.
+	 * @event KlasaClient#commandInhibited
+	 * @param {external:Message} message The message that triggered the command
+	 * @param {Command} command The command triggered
+	 * @param {?string} response The reason why it was inhibited if not silent
+	 */
+
+	/**
+	 * Emitted when a command has been run.
+	 * @event KlasaClient#commandRun
+	 * @param {CommandMessageProxy} message The message that triggered the command
+	 * @param {Command} command The command run
+	 * @param {any[]} params The resolved parameters of the command
+	 * @param {?any} response Usually a response message, but whatever the command returned.
+	 */
+
+	/**
+	 * Emitted when a command has errored.
+	 * @event KlasaClient#commandError
+	 * @param {CommandMessageProxy} message The message that triggered the command
+	 * @param {Command} command The command run
+	 * @param {any[]} params The resolved parameters of the command
+	 * @param {(string|Object)} error The command error
+	 */
+
+	/**
+	 * Emitted when {@link SettingGateway.update}, {@link SettingGateway.updateArray} or {@link SettingGateway.reset} is run.
+	 * @event KlasaClient#settingUpdate
+	 * @param {SettingGateway} gateway The setting gateway with the updated setting
+	 * @param {string} id The identifier of the gateway that was updated
+	 * @param {Object} oldEntries The old settings entries
+	 * @param {Object} newEntries The new settings entries
+	 */
 
 }
 

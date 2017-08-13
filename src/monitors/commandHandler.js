@@ -16,7 +16,7 @@ module.exports = class extends Monitor {
 			.then(() => this.runCommand(this.makeProxy(msg, new CommandMessage(msg, validCommand, prefix, prefixLength)), start))
 			.catch((response) => {
 				if (this.client.config.typing) msg.channel.stopTyping();
-				if (response) msg.reply(response);
+				this.client.emit('commandInhibited', msg, validCommand, response);
 			});
 	}
 
@@ -56,24 +56,21 @@ module.exports = class extends Monitor {
 		msg.validateArgs()
 			.then(async (params) => {
 				await msg.cmd.run(msg, params)
-					.then(mes => this.client.finalizers.run(msg, mes, start))
-					.catch(error => this.handleError(msg, error));
+					.then(mes => {
+						this.client.emit('commandRun', msg, msg.cmd, params, mes);
+						return this.client.finalizers.run(msg, mes, start);
+					})
+					.catch(error => this.client.emit('commandError', msg, msg.cmd, msg.params, error));
 				if (this.client.config.typing) msg.channel.stopTyping();
 			})
 			.catch((error) => {
 				if (this.client.config.typing) msg.channel.stopTyping();
 				if (error.code === 1 && this.client.config.cmdPrompt) {
 					return this.awaitMessage(msg, start, error.message)
-						.catch(err => this.handleError(msg, err));
+						.catch(err => this.client.emit('commandError', msg, msg.cmd, msg.params, err));
 				}
-				return this.handleError(msg, error);
+				return this.client.emit('commandError', msg, msg.cmd, msg.params, error);
 			});
-	}
-
-	handleError(msg, error) {
-		if (error.stack) this.client.emit('error', error.stack);
-		else if (error.message) msg.sendCode('JSON', error.message).catch(err => this.client.emit('error', err));
-		else msg.sendMessage(error).catch(err => this.client.emit('error', err));
 	}
 
 	async awaitMessage(msg, start, error) {
