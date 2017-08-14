@@ -42,7 +42,7 @@ a boolean. Set to false to completely disable this inhibitor, it cannot be force
 - **permLevel**: The permission level required to run this command. From 0 as everyone, to 10 as bot owner only with default permlevels.
 - **requiredSettings**: Any required guild settings, that must be set before you can use this command.
 - **description**: The command description.
-- **usage**: The expected arguments for this command. See {@tutorial CreatingUsageStrings} for information on how to use this.
+- **usage**: The expected arguments for this command. See {@tutorial UnderstandingUsageStrings} for information on how to use this.
 - **usageDelim**: The deliminator for how the usage will be deliminated. Popular ones are `' '` (a space), and `', '` (a comma space).
 - **extendedHelp**: A more in depth help string if you would like to define it.
 
