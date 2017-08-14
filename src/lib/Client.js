@@ -25,8 +25,8 @@ class KlasaClient extends Discord.Client {
 	/**
 	 * @typedef {Object} KlasaClientConfig
 	 * @memberof KlasaClient
-	 * @property {DiscordJSConfig} clientOptions The options to pass to D.JS
 	 * @property {string} prefix The default prefix the bot should respond to
+	 * @property {DiscordJSConfig} [clientOptions={}] The options to pass to D.JS
 	 * @property {PermissionLevels} [permissionLevels=KlasaClient.defaultPermissionLevels] The permission levels to use with this bot
 	 * @property {string} [clientBaseDir=process.cwd()] The directory where all piece folders can be found
 	 * @property {number} [commandMessageLifetime=1800] The threshold for how old command messages can be before sweeping since the last edit in seconds
