@@ -27,7 +27,7 @@ client.login("your-bot-token")
 
 ### Configuration Options
 
-Out of date: see [KlasaClientConfig]{@link KlasaClient.KlasaClientConfig} for the current config options.
+>*Out of date*: see [KlasaClientConfig]{@link KlasaClient.KlasaClientConfig} for the current config options.
 
 - **prefix**: The default prefix(es) when the bot first boots up. This option becomes useless after first boot, since the prefix is written to the default configuration system. Pass an array to accept multiple prefixes.
 - **clientOptions**: These are passed directly to the discord.js library. They are optional. For more information on which options are available, see [ClientOptions in the discord.js docs](https://discord.js.org/#/docs/main/stable/typedef/ClientOptions).
