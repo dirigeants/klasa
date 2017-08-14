@@ -8,7 +8,11 @@ const { Extendable } = require('klasa');
 module.exports = class extends Extendable {
 
 	constructor(...args) {
-		super(...args, 'myExtendableName', ['Message']);
+		super(...args, ['Message'], {
+			name: 'nameOfExtendable', // default the file name
+			enabled: true, // default true
+			klasa: false // If the extendable is for klasa instead of discord.js
+		});
 	}
 
 // Getters
