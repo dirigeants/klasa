@@ -1,6 +1,5 @@
 const Piece = require('./interfaces/Piece');
 const Discord = require('discord.js');
-const Klasa = require('klasa');
 
 /**
  * Base class for all Klasa Extendables. See {@tutorial CreatingExtendables} for more information how to use this class
@@ -71,7 +70,7 @@ class Extendable {
 		 * The target library to apply this extendable to
 		 * @type {boolean}
 		 */
-		this.target = options.klasa ? Klasa : Discord;
+		this.target = options.klasa ? require('klasa') : Discord;
 	}
 
 	/**
