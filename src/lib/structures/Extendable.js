@@ -1,5 +1,6 @@
 const Piece = require('./interfaces/Piece');
 const Discord = require('discord.js');
+const Klasa = require('klasa');
 
 /**
  * Base class for all Klasa Extendables. See {@tutorial CreatingExtendables} for more information how to use this class
@@ -14,6 +15,7 @@ class Extendable {
 	 * @memberof Extendable
 	 * @property {string} [name = theFileName] The name of the extendable
 	 * @property {boolean} [enabled = true] If the extendable is enabled or not
+	 * @property {boolean} [klasa = false] If the extendable is for Klasa instead of Discord.js
 	 */
 
 	/**
@@ -64,6 +66,12 @@ class Extendable {
 		 * @type {boolean}
 		 */
 		this.enabled = 'enabled' in options ? options.enabled : true;
+
+		/**
+		 * The target library to apply this extendable to
+		 * @type {boolean}
+		 */
+		this.target = options.klasa ? Klasa : Discord;
 	}
 
 	/**
@@ -90,7 +98,7 @@ class Extendable {
 	 */
 	disable() {
 		this.enabled = false;
-		for (const structure of this.appliesTo) delete Discord[structure].prototype[this.name];
+		for (const structure of this.appliesTo) delete this.target[structure].prototype[this.name];
 		return this;
 	}
 
@@ -100,7 +108,7 @@ class Extendable {
 	 */
 	enable() {
 		this.enabled = true;
-		for (const structure of this.appliesTo) Object.defineProperty(Discord[structure].prototype, this.name, Object.getOwnPropertyDescriptor(this.constructor.prototype, 'extend'));
+		for (const structure of this.appliesTo) Object.defineProperty(this.target[structure].prototype, this.name, Object.getOwnPropertyDescriptor(this.constructor.prototype, 'extend'));
 		return this;
 	}
 
