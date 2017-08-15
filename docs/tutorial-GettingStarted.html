@@ -98,27 +98,31 @@
 </blockquote>
 <pre class="prettyprint source"><code>npm install --save klasa
 </code></pre>
+<p>optionally if you want to use the bleading edge development version (not guaranteed to be stable):</p>
+<pre class="prettyprint source"><code>npm install --save dirigeants/klasa
+</code></pre>
+<h3>Using Klasa</h3>
 <p>Create a file called <code>app.js</code> (or whatever you prefer) which will initiate and configure Klasa.</p>
-<pre class="prettyprint source lang-javascript"><code>const klasa = require(&quot;klasa&quot;);
+<pre class="prettyprint source lang-javascript"><code>const klasa = require('klasa');
 
 const client = new klasa.Client({
     clientOptions: {
-        fetchAllMembers: false,
+        fetchAllMembers: false
     },
-    prefix: &quot;+&quot;,
+    prefix: '+',
     cmdPrompt: true,
     cmdEditing: true
 });
 
-client.login(&quot;your-bot-token&quot;)
+client.login('your-bot-token')
 </code></pre>
 <h3>Configuration Options</h3>
 <blockquote>
 <p><em>Out of date</em>: see <a href="KlasaClient.html#.KlasaClientConfig"><code>KlasaClientConfig</code></a> for the current config options.</p>
 </blockquote>
 <ul>
-<li><strong>prefix</strong>: The default prefix(es) when the bot first boots up. This option becomes useless after first boot, since the prefix is written to the default configuration system. Pass an array to accept multiple prefixes.</li>
 <li><strong>clientOptions</strong>: These are passed directly to the discord.js library. They are optional. For more information on which options are available, see <a href="https://discord.js.org/#/docs/main/stable/typedef/ClientOptions">ClientOptions in the discord.js docs</a>.</li>
+<li><strong>prefix</strong>: The default prefix(es) when the bot first boots up. This option becomes useless after first boot, since the prefix is written to the default configuration system. Pass an array to accept multiple prefixes.</li>
 </ul>
 <h2>Running the bot</h2>
 <p>Then, run the following in your folder:</p>
