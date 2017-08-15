@@ -51,6 +51,7 @@ class ProviderStore extends Collection {
 	delete(name) {
 		const pro = this.resolve(name);
 		if (!pro) return false;
+		pro.shutdown();
 		super.delete(pro.name);
 		return true;
 	}

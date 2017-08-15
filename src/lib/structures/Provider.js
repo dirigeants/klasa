@@ -80,6 +80,15 @@ class Provider {
 		// Optionally defined in extension Classes
 	}
 
+	/**
+	 * The shutdown method to be optionaly overwritten in actual provider pieces
+	 * @abstract
+	 * @returns {Promise<void>}
+	 */
+	async shutdown() {
+		// Optionally defined in extension Classes
+	}
+
 	// left for documentation
 	/* eslint-disable no-empty-function */
 	async reload() {}
