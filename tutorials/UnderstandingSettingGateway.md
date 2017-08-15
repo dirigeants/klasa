@@ -9,12 +9,12 @@ However, as Klasa works on a [NoSQL](https://en.wikipedia.org/wiki/NoSQL) enviro
 ## Change the *provider's engine*.
 
 For example, let's say I have downloaded the *levelup* provider and I want to work with it, then we go to your main script file (`app.js`, `bot.js`..., wherever you declare the new Klasa.Client), and write the following code:
-```js
+```javascript
 provider: { engine: "levelup" }
 ```
 
 Your Klasa's configuration will look something like this:
-```js
+```javascript
 const client = new Klasa.Client({
   ownerID: "",
   prefix: "k!",
@@ -32,7 +32,7 @@ What happens when I use an engine that does not exist as a provider? Simply, Set
 
 As {@link SettingGateway} extends {@link SchemaManager}, you can easily add new keys to your schema by simply calling `SettingGateway#add` (inherited from {@link SchemaManager.add}) by running this:
 
-```js
+```javascript
 client.settings.guilds.add(key, options, force?);
 ```
 
@@ -43,7 +43,7 @@ Where:
 
 For example, let's say I want to add a new settings key, called `modlogs`, which takes a channel.
 
-```js
+```javascript
 client.settings.guilds.add("modlogs", { type: "TextChannel" });
 ```
 
@@ -53,7 +53,7 @@ This will create a new settings key, called `modlogs`, and will take a `TextChan
 
 But now, I want to add another key, with name of `users`, *so I can set a list of blacklisted users who won't be able to use commands*, which will take an array of Users.
 
-```js
+```javascript
 client.settings.guilds.add("users", { type: "User", array: true });
 ```
 
@@ -63,7 +63,7 @@ client.settings.guilds.add("users", { type: "User", array: true });
 
 Now that I have a new key called `modlogs`, I want to configure it outside the `conf` command, how can we do this?
 
-```js
+```javascript
 client.settings.guilds.update(msg.guild, { modlogs: "267727088465739778" });
 ```
 
@@ -73,13 +73,13 @@ Check: {@link SettingGateway.update}
 
 Now, I want to **add** a new user user to the `users` key, which takes an array.
 
-```js
+```javascript
 client.settings.guilds.updateArray(msg.guild, "add", "users", "146048938242211840");
 ```
 
 That will add the user `"146048938242211840"` to the `users` array. To remove it:
 
-```js
+```javascript
 client.settings.guilds.updateArray(msg.guild, "remove", "users", "146048938242211840");
 ```
 
@@ -89,7 +89,7 @@ Check: {@link SettingGateway.updateArray}
 
 I have a key which is useless for me, so I *want* to remove it from the schema.
 
-```js
+```javascript
 client.settings.guilds.remove("users");
 ```
 
@@ -99,7 +99,7 @@ client.settings.guilds.remove("users");
 
 In [Klasa-Pieces](https://github.com/dirigeants/klasa-pieces/), specially, some pieces require a key from the settings to work, however, the creator of the pieces does not know if the user who downloads the piece has it, so this function becomes is useful in this case.
 
-```js
+```javascript
 async function() {
   if (!client.settings.guilds.schema.modlog) {
     await client.settings.guilds.add("modlog", { type: "TextChannel" });
@@ -113,7 +113,7 @@ async function() {
 
 Let's say I want to add a new SettingGateway instance, called `users`, which input takes users, and stores a quote which is a string between 2 and 140 characters.
 
-```js
+```javascript
 async function validate(resolver, user) {
   const result = await resolver.user(user);
   if (!result) throw "The parameter <User> expects either a User ID or a User Object.";
@@ -139,7 +139,7 @@ client.settings.add("users", validate, schema);
 
 And then, you can access to it by:
 
-```js
+```javascript
 client.settings.users;
 ``` 
 
