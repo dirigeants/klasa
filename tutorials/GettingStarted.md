@@ -8,29 +8,37 @@ Time to take the plunge! Klasa is on NPM and can be easily installed.
 npm install --save klasa
 ```
 
+optionally if you want to use the bleading edge development version (not guaranteed to be stable):
+
+```
+npm install --save dirigeants/klasa
+```
+
+### Using Klasa
+
 Create a file called `app.js` (or whatever you prefer) which will initiate and configure Klasa.
 
 ```javascript
-const klasa = require("klasa");
+const klasa = require('klasa');
 
 const client = new klasa.Client({
     clientOptions: {
-        fetchAllMembers: false,
+        fetchAllMembers: false
     },
-    prefix: "+",
+    prefix: '+',
     cmdPrompt: true,
     cmdEditing: true
 });
 
-client.login("your-bot-token")
+client.login('your-bot-token')
 ```
 
 ### Configuration Options
 
 >*Out of date*: see [KlasaClientConfig]{@link KlasaClient.KlasaClientConfig} for the current config options.
 
-- **prefix**: The default prefix(es) when the bot first boots up. This option becomes useless after first boot, since the prefix is written to the default configuration system. Pass an array to accept multiple prefixes.
 - **clientOptions**: These are passed directly to the discord.js library. They are optional. For more information on which options are available, see [ClientOptions in the discord.js docs](https://discord.js.org/#/docs/main/stable/typedef/ClientOptions).
+- **prefix**: The default prefix(es) when the bot first boots up. This option becomes useless after first boot, since the prefix is written to the default configuration system. Pass an array to accept multiple prefixes.
 
 ## Running the bot
 
