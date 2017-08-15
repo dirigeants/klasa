@@ -93,21 +93,16 @@
 <article>
     <p>Permission Levels are what defines who has permission to use what command. They cascade up to a permission level break, so guild owners can do everything the lower levels can do, and so on.</p>
 <p>For instace the conf command requires level 6 to run, by default this is how it works:</p>
-<blockquote>
-<p>level 6 requires 'MANAGE_GUILD' Permission: true/false</p>
-</blockquote>
-<blockquote>
-<p>level 7 is the guild Owner: true/false</p>
-</blockquote>
-<blockquote>
-<p>level 8 is not defined, and always returns false</p>
-</blockquote>
-<blockquote>
-<p>level 9 is the bot owner, and has break so we will stop checking higher rules: true/false</p>
-</blockquote>
+<ul>
+<li>level 6 requires 'MANAGE_GUILD' Permission: true/false</li>
+<li>level 7 is the guild Owner: true/false</li>
+<li>level 8 is not defined, and always returns false</li>
+<li>level 9 is the bot owner, and has break so we will stop checking higher rules: true/false</li>
+</ul>
 <p>If any check from 6-9 returns true, the user will be able to run that command. Also, if no break is encountered, the command will silently fail, instead of telling the user &quot;they don't have permission to use x command&quot;...</p>
 <h2>Creating Completely Custom PermissionLevels</h2>
-<p>Each level consists of a number (the level), a boolean (whether the level is a break or not), and a function (the check function that returns true or false). {@see PermissionLevels.addLevel}</p>
+<p>Each level consists of a number (the level), a boolean (whether the level is a break or not), and a function (the check function that returns true or false). <code>PermissionLevels.addLevel</code></p>
+<p>Example:</p>
 <pre class="prettyprint source lang-javascript"><code>const { Client, PermissionLevels } = require('klasa');
 const config = require('./config.json');
 
@@ -123,6 +118,22 @@ config.permissionLevels = new PermissionLevels()
 	// Allows the Bot Owner to use any lower commands, and causes any command with a permission level 9 or lower to return an error if no check passes.
 	.addLevel(10, false, (client, msg) => msg.author === client.owner);
 	// Allows the bot owner to use Bot Owner only commands, which silently fail for other users.
+
+new Client(config).login(config.token);
+</code></pre>
+<h2>Customizing the default PermissionLevels</h2>
+<p>Another way you can customize permission levels is simply modifying the defaultPermissionLevels:</p>
+<p>Example:</p>
+<pre class="prettyprint source lang-javascript"><code>const { Client } = require('klasa');
+const config = require('./config.json');
+
+Client.defaultPermissionLevels
+    .addLevel(3, false, ...)
+	// let some group of people who solved some easteregg clues use a special command/some custom non-admin role
+    .addLevel(6, false, (client, msg) => msg.guild && msg.member.permissions.has('ADMINISTRATOR'))
+	// Make the requirements to use the conf command stricter than just who can add the bot to the guild
+    .addLevel(8, false, (client, msg) => client.config.botSupportTeam.includes(msg.author.id);
+	// add a role above guild owners that let your support team help setup/troubleshoot on other guilds.
 
 new Client(config).login(config.token);
 </code></pre>
@@ -168,20 +179,6 @@ new Client(config).login(config.token);
 <blockquote>
 <p>This gives the bot creator a more blank slate to work with when first creating a bot. (Not all bots are mod bots, so mod/admin roles were largly unneed. Also there is infinitly more that you would want to put between 0 and administrative users, than between Guild Owner and Bot Owner). This helps keep bot creators from having to completely &quot;remake the wheel&quot; of permissions in almost all cases, without preventing that if wanted. (This fixes most cases of those who perpetually had to transfer/modify core commands to match their custom permissionLevels.)</p>
 </blockquote>
-<p>Example:</p>
-<pre class="prettyprint source lang-javascript"><code>const { Client } = require('klasa');
-const config = require('./config.json');
-
-Client.defaultPermissionLevels
-    .addLevel(3, false, ...)
-	// let some group of people who solved some easteregg clues use a special command/some custom non-admin role
-    .addLevel(6, false, (client, msg) => msg.guild && msg.member.permissions.has('ADMINISTRATOR'))
-	// Make the requirements to use the conf command stricter than just who can add the bot to the guild
-    .addLevel(8, false, (client, msg) => client.config.botSupportTeam.includes(msg.author.id);
-	// add a role above guild owners that let your support team help setup/troubleshoot on other guilds.
-
-new Client(config).login(config.token);
-</code></pre>
 <h3>Since inhibitors are async in Klasa, check functions may be async</h3>
 <p>So you can have:</p>
 <pre class="prettyprint source lang-javascript"><code>    .addLevel(3, false, async(client, msg) => {
