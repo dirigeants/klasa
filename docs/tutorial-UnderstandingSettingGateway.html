@@ -90,10 +90,10 @@
 <p>However, as Klasa works on a <a href="https://en.wikipedia.org/wiki/NoSQL">NoSQL</a> environment, SQL databases cannot be used directly, for that, you need a special set of methods and properties to make the provider <a href="SQL.html"><code>SQL</code></a> compatible.</p>
 <h2>Change the <em>provider's engine</em>.</h2>
 <p>For example, let's say I have downloaded the <em>levelup</em> provider and I want to work with it, then we go to your main script file (<code>app.js</code>, <code>bot.js</code>..., wherever you declare the new Klasa.Client), and write the following code:</p>
-<pre class="prettyprint source lang-js"><code>provider: { engine: &quot;levelup&quot; }
+<pre class="prettyprint source lang-javascript"><code>provider: { engine: &quot;levelup&quot; }
 </code></pre>
 <p>Your Klasa's configuration will look something like this:</p>
-<pre class="prettyprint source lang-js"><code>const client = new Klasa.Client({
+<pre class="prettyprint source lang-javascript"><code>const client = new Klasa.Client({
   ownerID: &quot;&quot;,
   prefix: &quot;k!&quot;,
   clientOptions: {},
@@ -106,7 +106,7 @@ client.login(&quot;...&quot;);
 <p>What happens when I use an engine that does not exist as a provider? Simply, SettingGateway will throw an error, it is enough user-friendly and readable, if that happens, make sure you wrote the provider's name correctly.</p>
 <h2>Add new 'keys' to the guild settings.</h2>
 <p>As <a href="SettingGateway.html"><code>SettingGateway</code></a> extends <a href="SchemaManager.html"><code>SchemaManager</code></a>, you can easily add new keys to your schema by simply calling <code>SettingGateway#add</code> (inherited from <code>SchemaManager.add</code>) by running this:</p>
-<pre class="prettyprint source lang-js"><code>client.settings.guilds.add(key, options, force?);
+<pre class="prettyprint source lang-javascript"><code>client.settings.guilds.add(key, options, force?);
 </code></pre>
 <p>Where:</p>
 <ul>
@@ -115,43 +115,43 @@ client.login(&quot;...&quot;);
 <li><code>force</code> (defaults to <code>true</code>) is whether SchemaManager should update all documents/rows to match the new schema, using the <code>options.default</code> value.</li>
 </ul>
 <p>For example, let's say I want to add a new settings key, called <code>modlogs</code>, which takes a channel.</p>
-<pre class="prettyprint source lang-js"><code>client.settings.guilds.add(&quot;modlogs&quot;, { type: &quot;TextChannel&quot; });
+<pre class="prettyprint source lang-javascript"><code>client.settings.guilds.add(&quot;modlogs&quot;, { type: &quot;TextChannel&quot; });
 </code></pre>
 <p>This will create a new settings key, called <code>modlogs</code>, and will take a <code>TextChannel</code> type.</p>
 <blockquote>
 <p>The force parameter defaults to <code>true</code> instead to <code>false</code>. It is also recommended to use it as it can avoid certain unwanted actions.</p>
 </blockquote>
 <p>But now, I want to add another key, with name of <code>users</code>, <em>so I can set a list of blacklisted users who won't be able to use commands</em>, which will take an array of Users.</p>
-<pre class="prettyprint source lang-js"><code>client.settings.guilds.add(&quot;users&quot;, { type: &quot;User&quot;, array: true });
+<pre class="prettyprint source lang-javascript"><code>client.settings.guilds.add(&quot;users&quot;, { type: &quot;User&quot;, array: true });
 </code></pre>
 <blockquote>
 <p><code>options.array</code> defaults to <code>false</code>, and when <code>options.default</code> is not specified, it defaults to <code>null</code>, however, when <code>options.array</code> is <code>true</code>, <code>options.default</code> defaults to <code>[]</code> (empty array).</p>
 </blockquote>
 <h2>Editing keys from the guild settings.</h2>
 <p>Now that I have a new key called <code>modlogs</code>, I want to configure it outside the <code>conf</code> command, how can we do this?</p>
-<pre class="prettyprint source lang-js"><code>client.settings.guilds.update(msg.guild, { modlogs: &quot;267727088465739778&quot; });
+<pre class="prettyprint source lang-javascript"><code>client.settings.guilds.update(msg.guild, { modlogs: &quot;267727088465739778&quot; });
 </code></pre>
 <p>Check: <code>SettingGateway.update</code></p>
 <blockquote>
 <p>You can use a Channel instance, <a href="SettingResolver.html"><code>SettingResolver</code></a> will make sure the input is valid and the database gets an <strong>ID</strong> and not an object.</p>
 </blockquote>
 <p>Now, I want to <strong>add</strong> a new user user to the <code>users</code> key, which takes an array.</p>
-<pre class="prettyprint source lang-js"><code>client.settings.guilds.updateArray(msg.guild, &quot;add&quot;, &quot;users&quot;, &quot;146048938242211840&quot;);
+<pre class="prettyprint source lang-javascript"><code>client.settings.guilds.updateArray(msg.guild, &quot;add&quot;, &quot;users&quot;, &quot;146048938242211840&quot;);
 </code></pre>
 <p>That will add the user <code>&quot;146048938242211840&quot;</code> to the <code>users</code> array. To remove it:</p>
-<pre class="prettyprint source lang-js"><code>client.settings.guilds.updateArray(msg.guild, &quot;remove&quot;, &quot;users&quot;, &quot;146048938242211840&quot;);
+<pre class="prettyprint source lang-javascript"><code>client.settings.guilds.updateArray(msg.guild, &quot;remove&quot;, &quot;users&quot;, &quot;146048938242211840&quot;);
 </code></pre>
 <p>Check: <code>SettingGateway.updateArray</code></p>
 <h2>Removing a key from the guild settings.</h2>
 <p>I have a key which is useless for me, so I <em>want</em> to remove it from the schema.</p>
-<pre class="prettyprint source lang-js"><code>client.settings.guilds.remove(&quot;users&quot;);
+<pre class="prettyprint source lang-javascript"><code>client.settings.guilds.remove(&quot;users&quot;);
 </code></pre>
 <blockquote>
 <p>Do not confuse <code>SchemaManager#remove</code> and <code>SchemaManager#delete</code>, the first one deletes an entry from the schema, whereas the second deletes an entry for the selected key from the database.</p>
 </blockquote>
 <h2>Add a key to the guild settings if it doesn't exist.</h2>
 <p>In <a href="https://github.com/dirigeants/klasa-pieces/">Klasa-Pieces</a>, specially, some pieces require a key from the settings to work, however, the creator of the pieces does not know if the user who downloads the piece has it, so this function becomes is useful in this case.</p>
-<pre class="prettyprint source lang-js"><code>async function() {
+<pre class="prettyprint source lang-javascript"><code>async function() {
   if (!client.settings.guilds.schema.modlog) {
     await client.settings.guilds.add(&quot;modlog&quot;, { type: &quot;TextChannel&quot; });
   }
@@ -160,7 +160,7 @@ client.login(&quot;...&quot;);
 <h2>How can I create new SettingGateway instances?</h2>
 <p><strong>1.</strong> By using <a href="SettingsCache.html"><code>SettingsCache</code></a>, (available from <code>client.settings</code>).</p>
 <p>Let's say I want to add a new SettingGateway instance, called <code>users</code>, which input takes users, and stores a quote which is a string between 2 and 140 characters.</p>
-<pre class="prettyprint source lang-js"><code>async function validate(resolver, user) {
+<pre class="prettyprint source lang-javascript"><code>async function validate(resolver, user) {
   const result = await resolver.user(user);
   if (!result) throw &quot;The parameter &lt;User> expects either a User ID or a User Object.&quot;;
   return result;
@@ -185,7 +185,7 @@ client.settings.add(&quot;users&quot;, validate, schema);
 <p>If the <code>validate</code> function does not resolve <strong>Guild</strong> type, you might want to use the third argument of <code>SettingGateway#update</code>, which takes a Guild resolvable.</p>
 </blockquote>
 <p>And then, you can access to it by:</p>
-<pre class="prettyprint source lang-js"><code>client.settings.users;
+<pre class="prettyprint source lang-javascript"><code>client.settings.users;
 </code></pre>
 <p><strong>2.</strong> By extending SettingGateway (you can use it in <code>require(&quot;klasa&quot;).SettingGateway</code>), which is a bit hacky but gives you total freedom and customization, this method may not completely work and needs some knowledge, however, as this practise is not completely supported, nothing stops you from doing this.</p>
 </article>
