@@ -126,7 +126,7 @@ class CommandStore extends Collection {
 
 	/**
 	 * Loads all of our commands from both the user and core directories.
-	 * @returns {Promise<number[]>} The number of commands and aliases loaded.
+	 * @returns {number[]} The number of commands and aliases loaded.
 	 */
 	async loadAll() {
 		this.clear();

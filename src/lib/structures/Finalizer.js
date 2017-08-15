@@ -73,7 +73,7 @@ class Finalizer {
 	/**
 	 * The init method to be optionaly overwritten in actual finalizers
 	 * @abstract
-	 * @returns {Promise<void>}
+	 * @returns {void}
 	 */
 	async init() {
 		// Optionally defined in extension Classes

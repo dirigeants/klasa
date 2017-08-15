@@ -16,7 +16,7 @@ class Store {
 
 	/**
 	 * Initializes all pieces in this store.
-	 * @return {Promise<Array>}
+	 * @return {Array}
 	 */
 	init() {
 		return Promise.all(this.map(piece => piece.init()));
@@ -36,7 +36,7 @@ class Store {
 
 	/**
 	 * Loads all of our pieces from both the user and core directories.
-	 * @return {Promise<number>} The number of pieces loaded.
+	 * @return {number} The number of pieces loaded.
 	 */
 	async loadAll() {
 		this.clear();

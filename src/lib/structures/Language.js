@@ -83,7 +83,7 @@ class Language {
 	/**
 	 * The init method to be optionaly overwritten in actual languages
 	 * @abstract
-	 * @returns {Promise<void>}
+	 * @returns {void}
 	 */
 	async init() {
 		// Optionally defined in extension Classes

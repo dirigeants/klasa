@@ -84,7 +84,7 @@ class Monitor {
 	/**
 	 * The init method to be optionaly overwritten in actual monitor pieces
 	 * @abstract
-	 * @returns {Promise<void>}
+	 * @returns {void}
 	 */
 	async init() {
 		// Optionally defined in extension Classes

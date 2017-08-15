@@ -172,7 +172,7 @@ class Command {
 	 * @param {CommandMessage} msg The command message mapped on top of the message used to trigger this command
 	 * @param {Array<any>} params The fully resolved parameters based on your usage / usageDelim
 	 * @abstract
-	 * @returns {Promise<external:Message>} You should return the response message whenever possible
+	 * @returns {external:Message} You should return the response message whenever possible
 	 */
 	async run() {
 		// Defined in extension Classes
@@ -181,7 +181,7 @@ class Command {
 	/**
 	 * The init method to be optionaly overwritten in actual commands
 	 * @abstract
-	 * @returns {Promise<void>}
+	 * @returns {void}
 	 */
 	async init() {
 		// Optionally defined in extension Classes

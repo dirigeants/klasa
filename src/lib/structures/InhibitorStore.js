@@ -60,7 +60,7 @@ class InhibitorStore extends Collection {
 	 * @param  {external:Message} msg The message object from Discord.js
 	 * @param  {Command} cmd The command being ran.
 	 * @param  {boolean} [selective=false] Whether or not we should ignore certain inhibitors to prevent spam.
-	 * @returns {Promise<void>}
+	 * @returns {void}
 	 */
 	async run(msg, cmd, selective = false) {
 		const mps = [];

@@ -29,7 +29,7 @@ class SchemaManager extends CacheManager {
 
 	/**
 	 * Initialize the SchemaManager.
-	 * @returns {Promise<void>}
+	 * @returns {void}
 	 */
 	async initSchema() {
 		const baseDir = resolve(this.client.clientBaseDir, 'bwd');
@@ -75,7 +75,7 @@ class SchemaManager extends CacheManager {
 	 * @param {string} key The key to add.
 	 * @param {AddOptions} options Options for the key.
 	 * @param {boolean} [force=true] Whether this change should modify all configurations or not.
-	 * @returns {Promise<void>}
+	 * @returns {void}
 	 * @example
 	 * // Add a key called 'modlog', being a TextChannel.
 	 * SchemaManager.add('modlog', { type: 'TextChannel' });
@@ -108,7 +108,7 @@ class SchemaManager extends CacheManager {
 	 * Remove a key from the schema.
 	 * @param {string} key The key to remove.
 	 * @param {boolean} [force=false] Whether this change should modify all configurations or not.
-	 * @returns {Promise<void>}
+	 * @returns {void}
 	 * @example
 	 * // Remove a key called 'modlog'.
 	 * SchemaManager.remove('modlog');
@@ -123,7 +123,7 @@ class SchemaManager extends CacheManager {
 	 * Modify all configurations. Do NOT use this directly.
 	 * @param {string} action Whether reset, add, or delete.
 	 * @param {string} key The key to update.
-	 * @returns {Promise<void>}
+	 * @returns {void}
 	 */
 	async force(action, key) {
 		if (this.sql) {

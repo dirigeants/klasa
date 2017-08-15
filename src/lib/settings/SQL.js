@@ -82,7 +82,7 @@ class SQL {
 	 * @param {Object} schema   The Schema object.
 	 * @param {Object} defaults The Schema<Defaults> object.
 	 * @param {string} key	    The key which is updated.
-	 * @returns {Promise<boolean>}
+	 * @returns {boolean}
 	 */
 	async updateColumns(schema, defaults, key) {
 		if (!this.provider.updateColumns) {

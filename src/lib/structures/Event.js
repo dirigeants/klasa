@@ -81,7 +81,7 @@ class Event {
 	/**
 	 * The init method to be optionaly overwritten in actual events
 	 * @abstract
-	 * @returns {Promise<void>}
+	 * @returns {void}
 	 */
 	async init() {
 		// Optionally defined in extension Classes

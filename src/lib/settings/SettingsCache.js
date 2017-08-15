@@ -69,7 +69,7 @@ class SettingsCache {
 	 * The validator function Klasa uses for guild settings.
 	 * @param {SettingResolver} resolver The resolver instance this SettingGateway uses to parse the data.
 	 * @param {(Object|string)} guild The data to validate.
-	 * @returns {Promise<any>}
+	 * @returns {any}
 	 */
 	async validate(resolver, guild) { // eslint-disable-line class-methods-use-this
 		const result = await resolver.guild(guild);

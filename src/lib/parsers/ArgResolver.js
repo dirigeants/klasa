@@ -49,7 +49,7 @@ class ArgResolver extends Resolver {
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {external:Message} msg The message that triggered the command
-	 * @returns {Command}
+	 * @returns {?Command}
 	 */
 	async cmd(arg, currentUsage, possible, repeat, msg) {
 		const command = this.client.commands.get(arg);
@@ -65,7 +65,7 @@ class ArgResolver extends Resolver {
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {external:Message} msg The message that triggered the command
-	 * @returns {Event}
+	 * @returns {?Event}
 	 */
 	async event(arg, currentUsage, possible, repeat, msg) {
 		const event = this.client.events.get(arg);
@@ -81,7 +81,7 @@ class ArgResolver extends Resolver {
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {external:Message} msg The message that triggered the command
-	 * @returns {Event}
+	 * @returns {?Event}
 	 */
 	async extendable(arg, currentUsage, possible, repeat, msg) {
 		const extendable = this.client.extendables.get(arg);
@@ -97,7 +97,7 @@ class ArgResolver extends Resolver {
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {external:Message} msg The message that triggered the command
-	 * @returns {Finalizer}
+	 * @returns {?Finalizer}
 	 */
 	async finalizer(arg, currentUsage, possible, repeat, msg) {
 		const finalizer = this.client.finalizers.get(arg);
@@ -113,7 +113,7 @@ class ArgResolver extends Resolver {
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {external:Message} msg The message that triggered the command
-	 * @returns {Inhibitor}
+	 * @returns {?Inhibitor}
 	 */
 	async inhibitor(arg, currentUsage, possible, repeat, msg) {
 		const inhibitor = this.client.inhibitors.get(arg);
@@ -129,7 +129,7 @@ class ArgResolver extends Resolver {
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {external:Message} msg The message that triggered the command
-	 * @returns {Monitor}
+	 * @returns {?Monitor}
 	 */
 	async monitor(arg, currentUsage, possible, repeat, msg) {
 		const monitor = this.client.monitors.get(arg);
@@ -145,7 +145,7 @@ class ArgResolver extends Resolver {
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {external:Message} msg The message that triggered the command
-	 * @returns {Language}
+	 * @returns {?Language}
 	 */
 	async language(arg, currentUsage, possible, repeat, msg) {
 		const language = this.client.languages.get(arg);
@@ -160,7 +160,7 @@ class ArgResolver extends Resolver {
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {external:Message} msg The message that triggered the command
-	 * @returns {Provider}
+	 * @returns {?Provider}
 	 */
 	async provider(arg, currentUsage, possible, repeat, msg) {
 		const provider = this.client.providers.get(arg);
@@ -176,7 +176,7 @@ class ArgResolver extends Resolver {
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {external:Message} msg The message that triggered the command
-	 * @returns {external:Message}
+	 * @returns {?external:Message}
 	 */
 	message(...args) {
 		return this.msg(...args);
@@ -189,7 +189,7 @@ class ArgResolver extends Resolver {
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {external:Message} msg The message that triggered the command
-	 * @returns {external:Message}
+	 * @returns {?external:Message}
 	 */
 	async msg(arg, currentUsage, possible, repeat, msg) {
 		const message = await super.msg(arg, msg.channel);
@@ -205,7 +205,7 @@ class ArgResolver extends Resolver {
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {external:Message} msg The message that triggered the command
-	 * @returns {external:User}
+	 * @returns {?external:User}
 	 */
 	mention(...args) {
 		return this.user(...args);
@@ -218,7 +218,7 @@ class ArgResolver extends Resolver {
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {external:Message} msg The message that triggered the command
-	 * @returns {external:User}
+	 * @returns {?external:User}
 	 */
 	async user(arg, currentUsage, possible, repeat, msg) {
 		const user = await super.user(arg);
@@ -234,7 +234,7 @@ class ArgResolver extends Resolver {
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {external:Message} msg The message that triggered the command
-	 * @returns {external:GuildMember}
+	 * @returns {?external:GuildMember}
 	 */
 	async member(arg, currentUsage, possible, repeat, msg) {
 		const member = await super.member(arg, msg.guild);
@@ -250,7 +250,7 @@ class ArgResolver extends Resolver {
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {external:Message} msg The message that triggered the command
-	 * @returns {external:Channel}
+	 * @returns {?external:Channel}
 	 */
 	async channel(arg, currentUsage, possible, repeat, msg) {
 		const channel = await super.channel(arg);
@@ -266,7 +266,7 @@ class ArgResolver extends Resolver {
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {external:Message} msg The message that triggered the command
-	 * @returns {external:Guild}
+	 * @returns {?external:Guild}
 	 */
 	async guild(arg, currentUsage, possible, repeat, msg) {
 		const guild = await super.guild(arg);
@@ -282,7 +282,7 @@ class ArgResolver extends Resolver {
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {external:Message} msg The message that triggered the command
-	 * @returns {external:Role}
+	 * @returns {?external:Role}
 	 */
 	async role(arg, currentUsage, possible, repeat, msg) {
 		const role = await super.role(arg, msg.guild);
@@ -298,7 +298,7 @@ class ArgResolver extends Resolver {
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {external:Message} msg The message that triggered the command
-	 * @returns {string}
+	 * @returns {?string}
 	 */
 	async literal(arg, currentUsage, possible, repeat, msg) {
 		if (arg.toLowerCase() === currentUsage.possibles[possible].name.toLowerCase()) return arg.toLowerCase();
@@ -313,7 +313,7 @@ class ArgResolver extends Resolver {
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {external:Message} msg The message that triggered the command
-	 * @returns {boolean}
+	 * @returns {?boolean}
 	 */
 	boolean(...args) {
 		return this.bool(...args);
@@ -326,7 +326,7 @@ class ArgResolver extends Resolver {
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {external:Message} msg The message that triggered the command
-	 * @returns {boolean}
+	 * @returns {?boolean}
 	 */
 	async bool(arg, currentUsage, possible, repeat, msg) {
 		const boolean = await super.boolean(arg);
@@ -342,7 +342,7 @@ class ArgResolver extends Resolver {
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {external:Message} msg The message that triggered the command
-	 * @returns {string}
+	 * @returns {?string}
 	 */
 	string(...args) {
 		return this.str(...args);
@@ -355,7 +355,7 @@ class ArgResolver extends Resolver {
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {external:Message} msg The message that triggered the command
-	 * @returns {string}
+	 * @returns {?string}
 	 */
 	async str(arg, currentUsage, possible, repeat, msg) {
 		const { min, max } = currentUsage.possibles[possible];
@@ -370,7 +370,7 @@ class ArgResolver extends Resolver {
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {external:Message} msg The message that triggered the command
-	 * @returns {number}
+	 * @returns {?number}
 	 */
 	integer(...args) {
 		return this.int(...args);
@@ -383,7 +383,7 @@ class ArgResolver extends Resolver {
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {external:Message} msg The message that triggered the command
-	 * @returns {number}
+	 * @returns {?number}
 	 */
 	async int(arg, currentUsage, possible, repeat, msg) {
 		const { min, max } = currentUsage.possibles[possible];
@@ -403,7 +403,7 @@ class ArgResolver extends Resolver {
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {external:Message} msg The message that triggered the command
-	 * @returns {number}
+	 * @returns {?number}
 	 */
 	num(...args) {
 		return this.float(...args);
@@ -416,7 +416,7 @@ class ArgResolver extends Resolver {
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {external:Message} msg The message that triggered the command
-	 * @returns {number}
+	 * @returns {?number}
 	 */
 	number(...args) {
 		return this.float(...args);
@@ -429,7 +429,7 @@ class ArgResolver extends Resolver {
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {external:Message} msg The message that triggered the command
-	 * @returns {number}
+	 * @returns {?number}
 	 */
 	async float(arg, currentUsage, possible, repeat, msg) {
 		const { min, max } = currentUsage.possibles[possible];
@@ -449,7 +449,7 @@ class ArgResolver extends Resolver {
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {external:Message} msg The message that triggered the command
-	 * @returns {string}
+	 * @returns {?string}
 	 */
 	async reg(arg, currentUsage, possible, repeat, msg) {
 		const results = currentUsage.possibles[possible].regex.exec(arg);
@@ -465,7 +465,7 @@ class ArgResolver extends Resolver {
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {external:Message} msg The message that triggered the command
-	 * @returns {string}
+	 * @returns {?string}
 	 */
 	regex(...args) {
 		return this.reg(...args);
@@ -478,7 +478,7 @@ class ArgResolver extends Resolver {
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {external:Message} msg The message that triggered the command
-	 * @returns {string}
+	 * @returns {?string}
 	 */
 	regexp(...args) {
 		return this.reg(...args);
@@ -491,7 +491,7 @@ class ArgResolver extends Resolver {
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {external:Message} msg The message that triggered the command
-	 * @returns {string}
+	 * @returns {?string}
 	 */
 	async url(arg, currentUsage, possible, repeat, msg) {
 		const hyperlink = await super.url(arg);

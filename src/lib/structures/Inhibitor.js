@@ -70,7 +70,7 @@ class Inhibitor {
 	 * @param {external:Message} msg The message that triggered this inhibitor
 	 * @param {Command} cmd The command to run
 	 * @abstract
-	 * @returns {Promise<void|string>}
+	 * @returns {(void|string)}
 	 */
 	run() {
 		// Defined in extension Classes
@@ -79,7 +79,7 @@ class Inhibitor {
 	/**
 	 * The init method to be optionaly overwritten in actual inhibitors
 	 * @abstract
-	 * @returns {Promise<void>}
+	 * @returns {void}
 	 */
 	async init() {
 		// Optionally defined in extension Classes

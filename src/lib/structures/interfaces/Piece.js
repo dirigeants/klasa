@@ -15,7 +15,7 @@ class Piece {
 
 	/**
 	 * Reloads this piece
-	 * @returns {Promise<Piece>} The newly loaded piece
+	 * @returns {Piece} The newly loaded piece
 	 */
 	async reload() {
 		const piece = this.client[`${this.type}s`].load(this.dir, this.file);

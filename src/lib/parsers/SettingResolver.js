@@ -195,7 +195,7 @@ class SettingResolver extends Resolver {
 	 * @param {?number} max Max value.
 	 * @param {string} name The name of the key being resolved
 	 * @param {string} [suffix=''] The suffix to apply to the error messages
-	 * @returns {?boolean}
+	 * @returns {boolean}
 	 */
 	static async maxOrMin(guild, value, min, max, name, suffix = '') {
 		if (min && max) {

@@ -21,7 +21,7 @@ class Resolver {
 	 * Fetch a Message object by its Snowflake or instanceof Message.
 	 * @param {Snowflake} message The message snowflake to validate.
 	 * @param {Channel} channel The Channel object in which the message can be found.
-	 * @returns {Promise<?Message>}
+	 * @returns {?external:Message}
 	 */
 	async msg(message, channel) {
 		if (message instanceof Message) return message;
@@ -31,7 +31,7 @@ class Resolver {
 	/**
 	 * Resolve a User object by its instance of User, GuildMember, or by its Snowflake.
 	 * @param {User} user The user to validate.
-	 * @returns {Promise<?User>}
+	 * @returns {?external:User}
 	 */
 	async user(user) {
 		if (user instanceof User) return user;
@@ -48,7 +48,7 @@ class Resolver {
 	 * Resolve a GuildMember object by its instance of GuildMember, User, or by its Snowflake.
 	 * @param {(GuildMember|User|Snowflake)} member The number to validate.
 	 * @param {Guild} guild The Guild object in which the member can be found.
-	 * @returns {Promise<?GuildMember>}
+	 * @returns {?external:GuildMember}
 	 */
 	async member(member, guild) {
 		if (member instanceof GuildMember) return member;
@@ -65,7 +65,7 @@ class Resolver {
 	/**
 	 * Resolve a Channel object by its instance of Channel, or by its Snowflake.
 	 * @param {(Channel|Snowflake)} channel The channel to validate.
-	 * @returns {Promise<?Channel>}
+	 * @returns {?external:Channel}
 	 */
 	async channel(channel) {
 		if (channel instanceof Channel) return channel;
@@ -76,7 +76,7 @@ class Resolver {
 	/**
 	 * Resolve a Guild object by its instance of Guild, or by its Snowflake.
 	 * @param {(Guild|Snowflake)} guild The guild to validate/find.
-	 * @returns {Promise<?Guild>}
+	 * @returns {?external:Guild}
 	 */
 	async guild(guild) {
 		if (guild instanceof Guild) return guild;
@@ -88,7 +88,7 @@ class Resolver {
 	 * Resolve a Role object by its instance of Role, or by its Snowflake.
 	 * @param {(Role|Snowflake)} role The role to validate/find.
 	 * @param {Guild} guild The Guild object in which the role can be found.
-	 * @returns {Promise<?Role>}
+	 * @returns {?external:Role}
 	 */
 	async role(role, guild) {
 		if (role instanceof Role) return role;
@@ -99,7 +99,7 @@ class Resolver {
 	/**
 	 * Resolve a Boolean instance.
 	 * @param {(boolean|string)} bool The boolean to validate.
-	 * @returns {Promise<?boolean>}
+	 * @returns {?boolean}
 	 */
 	async boolean(bool) {
 		if (bool instanceof Boolean) return bool;
@@ -111,7 +111,7 @@ class Resolver {
 	/**
 	 * Resolve a String instance.
 	 * @param {string} string The string to validate.
-	 * @returns {Promise<?string>}
+	 * @returns {?string}
 	 */
 	async string(string) {
 		return String(string);
@@ -120,7 +120,7 @@ class Resolver {
 	/**
 	 * Resolve an Integer.
 	 * @param {(string|number)} integer The integer to validate.
-	 * @returns {Promise<?number>}
+	 * @returns {?number}
 	 */
 	async integer(integer) {
 		integer = parseInt(integer);
@@ -131,7 +131,7 @@ class Resolver {
 	/**
 	 * Resolve a Float.
 	 * @param {(string|number)} number The float to validate.
-	 * @returns {Promise<?number>}
+	 * @returns {?number}
 	 */
 	async float(number) {
 		number = parseFloat(number);
@@ -142,7 +142,7 @@ class Resolver {
 	/**
 	 * Resolve a hyperlink.
 	 * @param {string} hyperlink The hyperlink to validate.
-	 * @returns {Promise<?string>}
+	 * @returns {?string}
 	 */
 	async url(hyperlink) {
 		const res = url.parse(hyperlink);

@@ -74,7 +74,7 @@ class Provider {
 	/**
 	 * The init method to be optionaly overwritten in actual provider pieces
 	 * @abstract
-	 * @returns {Promise<void>}
+	 * @returns {void}
 	 */
 	async init() {
 		// Optionally defined in extension Classes
@@ -83,7 +83,7 @@ class Provider {
 	/**
 	 * The shutdown method to be optionaly overwritten in actual provider pieces
 	 * @abstract
-	 * @returns {Promise<void>}
+	 * @returns {void}
 	 */
 	async shutdown() {
 		// Optionally defined in extension Classes

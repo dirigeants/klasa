@@ -7,6 +7,12 @@ const SQL = require('./SQL');
  */
 class SettingGateway extends SchemaManager {
 
+	/**
+	 * @param {SettingCache} store The SettingCache instance which initiated this SettingGateway
+	 * @param {string} type The name of this instance of SettingGateway.
+	 * @param {Function} validateFunction The function validator for this instance of SettingGateway
+	 * @param {Object} schema The schema for this instance of SettingGateway
+	 */
 	constructor(store, type, validateFunction, schema) {
 		super(store.client);
 
