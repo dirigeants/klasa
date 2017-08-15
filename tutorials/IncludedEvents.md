@@ -1,3 +1,19 @@
+## commandError
+
+Handles command errors.
+
+**Source:**
+
+[events/commandError.js](https://github.com/dirigeants/klasa/blob/master/src/events/commandError.js)
+
+## commandInhibited
+
+Replies the reason why the command was inhibited.
+
+**Source:**
+
+[events/commandInhibited.js](https://github.com/dirigeants/klasa/blob/master/src/events/commandInhibited.js)
+
 ## debug
 
 Re-emits the Discord.js debug event as log event, if enabled. (disabled by default)
