@@ -99,9 +99,9 @@ module.exports = class extends Extendable {
 
 	constructor(...args) {
 		super(...args, ['Message'], {
-			name: 'nameOfExtendable', // default the file name
-			enabled: true, // default true
-			klasa: false // If the extendable is for klasa instead of discord.js
+			name: 'nameOfExtendable',
+			enabled: true,
+			klasa: false
 		});
 
 		// Properties
@@ -130,12 +130,18 @@ module.exports = class extends Extendable {
 </code></pre>
 <h2>Understanding extendable settings</h2>
 <pre class="prettyprint source lang-js"><code>constructor(...args) {
-    super(...args, name, appliesTo);
+    super(...args, appliesTo, {
+		name: 'nameOfExtendable', // default the file name
+		enabled: true, // default true
+		klasa: false // default false	
+	);
 }
 </code></pre>
 <ul>
-<li><strong>name</strong>: The name of the method/property.</li>
-<li><strong>appliesTo</strong>: An array of affected properties from Discord.js. You can get a list <a href="https://github.com/hydrabolt/discord.js/blob/master/src/index.js">here</a>.</li>
+<li><strong>appliesTo</strong>: An array of affected properties from Discord.js or Klasa. You can find all extendable classes for <a href="https://github.com/hydrabolt/discord.js/blob/master/src/index.js">Discord.js</a> and <a href="https://github.com/dirigeants/klasa/blob/master/src/index.js">Klasa</a> in those respective links.</li>
+<li><strong>options.name</strong>: The name of the method/property.</li>
+<li><strong>options.enabled</strong>: If the extendable should be enabled on start, can be toggled with enable/disable commands.</li>
+<li><strong>options.klasa</strong>: If the extendable should target Klasa's classes instead of Discord.js's.</li>
 </ul>
 <h2>Understanding extend</h2>
 <p>The extend method can only be a property, setter, getter, or method. You cannot define multiple in one file as the above example may imply.</p>
