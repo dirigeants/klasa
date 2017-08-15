@@ -103,6 +103,9 @@ module.exports = class extends Extendable {
 			enabled: true, // default true
 			klasa: false // If the extendable is for klasa instead of discord.js
 		});
+
+		// Properties
+		this.extend = ''; // Define a property
 	}
 
 // Getters
@@ -135,7 +138,7 @@ module.exports = class extends Extendable {
 <li><strong>appliesTo</strong>: An array of affected properties from Discord.js. You can get a list <a href="https://github.com/hydrabolt/discord.js/blob/master/src/index.js">here</a>.</li>
 </ul>
 <h2>Understanding extend</h2>
-<p>The extend method can only be a setter, getter, or method. You cannot define multiple in one file as the above example may imply.</p>
+<p>The extend method can only be a property, setter, getter, or method. You cannot define multiple in one file as the above example may imply.</p>
 <h2>Examples</h2>
 <p>Imagine we want to extend the <a href="https://discord.js.org/#/docs/main/master/class/Message">Message</a> class
 so it has a method called <code>prompt</code> so you can do <code>Message#prompt(&quot;Are you sure you want to continue?&quot;)</code>
