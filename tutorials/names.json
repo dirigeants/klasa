@@ -34,6 +34,9 @@
     "UnderstandingPermissionLevels": {
         "title": "Understanding Permission Levels"
 	},
+    "UnderstandingSettingGateway": {
+        "title": "Understanding Setting Gateway"
+	},
 	"IncludedPieces": {
 		"title": "Included Pieces",
 		"children": {
