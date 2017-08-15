@@ -13,6 +13,9 @@ module.exports = class extends Extendable {
 			enabled: true, // default true
 			klasa: false // If the extendable is for klasa instead of discord.js
 		});
+
+		// Properties
+		this.extend = ''; // Define a property
 	}
 
 // Getters
@@ -49,7 +52,7 @@ constructor(...args) {
 
 ## Understanding extend
 
-The extend method can only be a setter, getter, or method. You cannot define multiple in one file as the above example may imply.
+The extend method can only be a property, setter, getter, or method. You cannot define multiple in one file as the above example may imply.
 
 ## Examples
 

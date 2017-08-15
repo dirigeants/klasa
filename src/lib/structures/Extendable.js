@@ -107,7 +107,13 @@ class Extendable {
 	 */
 	enable() {
 		this.enabled = true;
-		for (const structure of this.appliesTo) Object.defineProperty(this.target[structure].prototype, this.name, Object.getOwnPropertyDescriptor(this.constructor.prototype, 'extend'));
+		for (const structure of this.appliesTo) {
+			Object.defineProperty(
+				this.target[structure].prototype,
+				this.name,
+				Object.getOwnPropertyDescriptor(this.constructor.prototype, 'extend') || { value: this.extend, configurable: true, enumerable: true, writable: true }
+			);
+		}
 		return this;
 	}
 
