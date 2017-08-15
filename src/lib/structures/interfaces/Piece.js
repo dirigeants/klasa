@@ -7,6 +7,7 @@ const { applyToClass } = require('../../util/util');
  * @see Extendable
  * @see Finalizer
  * @see Inhibitor
+ * @see Language
  * @see Monitor
  * @see Provider
  */

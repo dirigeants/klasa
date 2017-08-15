@@ -4,7 +4,7 @@ For instace the conf command requires level 6 to run, by default this is how it 
 
 >level 6 requires 'MANAGE_GUILD' Permission: true/false
 
->level 7 is the bot Owner: true/false
+>level 7 is the guild Owner: true/false
 
 >level 8 is not defined, and always returns false
 
@@ -20,7 +20,7 @@ Each level consists of a number (the level), a boolean (whether the level is a b
 const { Client, PermissionLevels } = require('klasa');
 const config = require('./config.json');
 
-const permissionLevels = new PermissionLevels()
+config.permissionLevels = new PermissionLevels()
 //Optionally you can pass a number to set a custom number of permission levels. It is not advised however, as internal commands expect 10 to be the highest permission level. Modifying away from 10 without further modification of all core commands, could put your server at risk of malicious users using the core eval command.
 	.addLevel(0, false, () => true)
 	// everyone can use these commands
@@ -33,7 +33,7 @@ const permissionLevels = new PermissionLevels()
 	.addLevel(10, false, (client, msg) => msg.author === client.owner);
 	// Allows the bot owner to use Bot Owner only commands, which silently fail for other users.
 
-new Client(Object.assign(config, { permissionLevels }).login(config.token);
+new Client(config).login(config.token);
 ```
 
 ## What's different from Komada?
