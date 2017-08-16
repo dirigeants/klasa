@@ -23,7 +23,7 @@ module.exports = class extends Command {
 			})
 			.catch((err) => {
 				this.client.emit('error', err.stack);
-				return msg.sendMessage(msg.language.get('COMMAND_TRANSFER_FAILURE', piece.type, piece.name));
+				return msg.sendMessage(msg.language.get('COMMAND_TRANSFER_FAILED', piece.type, piece.name));
 			});
 	}
 
