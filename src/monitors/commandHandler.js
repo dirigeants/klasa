@@ -6,6 +6,7 @@ module.exports = class extends Monitor {
 	async run(msg) {
 		// Ignore other users if selfbot
 		if (!this.client.user.bot && msg.author.id !== this.client.user.id) return;
+		if (!msg.channel.permissionsFor(msg.author).has('SEND_MESSAGES')) return;
 		const { command, prefix, prefixLength } = this.parseCommand(msg);
 		if (!command) return;
 		const validCommand = this.client.commands.get(command);
