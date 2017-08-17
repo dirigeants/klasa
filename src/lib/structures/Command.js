@@ -118,7 +118,7 @@ class Command {
 		this.usageDelim = options.usageDelim || undefined;
 
 		/**
-		 * The usage deliminator for the command input
+		 * Whether to use quoted string support for this command or not
 		 * @type {boolean}
 		 */
 		this.quotedStringSupport = 'quotedStringSupport' in options ? options.quotedStringSupport : this.client.config.quotedStringSupport;
