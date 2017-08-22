@@ -65,5 +65,8 @@
                 "title": "Included Providers"
             }
         }
+	},
+	"PieceStores": {
+		"title": "Custom Pieces and Stores"
 	}
 }

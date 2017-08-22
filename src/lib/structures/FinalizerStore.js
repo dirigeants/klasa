@@ -76,7 +76,7 @@ class FinalizerStore extends Collection {
 	 * @returns {Finalizer}
 	 */
 	set(finalizer) {
-		if (!(finalizer instanceof this.holds)) return this.client.emit('error', `Only ${this.holds.constructor.name}s may be stored in the Store.`);
+		if (!(finalizer instanceof this.holds)) return this.client.emit('error', `Only ${this.name} may be stored in the Store.`);
 		const existing = this.get(finalizer.name);
 		if (existing) this.delete(existing);
 		super.set(finalizer.name, finalizer);
