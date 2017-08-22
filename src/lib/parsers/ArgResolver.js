@@ -7,6 +7,27 @@ const Resolver = require('./Resolver');
 class ArgResolver extends Resolver {
 
 	/**
+	 * @param {KlasaClient} client The Klasa Client
+	 */
+	constructor(client) {
+		super(client);
+
+		/**
+		 * The set of stores to check for piece type arguments.
+		 * @type {Set} 
+		 */
+		this.pieceStores = new Set([
+			this.client.commands,
+			this.client.events,
+			this.client.finalizers,
+			this.client.inhibitors,
+			this.client.languages,
+			this.client.monitors,
+			this.client.providers
+		]);
+	}
+
+	/**
 	 * Resolves a piece
 	 * @param {string} arg This arg
 	 * @param {Object} currentUsage This current usage
@@ -16,15 +37,10 @@ class ArgResolver extends Resolver {
 	 * @returns {Command}
 	 */
 	async piece(arg, currentUsage, possible, repeat, msg) {
-		const piece = this.client.commands.get(arg) ||
-			this.client.events.get(arg) ||
-			this.client.extendables.get(arg) ||
-			this.client.finalizers.get(arg) ||
-			this.client.inhibitors.get(arg) ||
-			this.client.languages.get(arg) ||
-			this.client.monitors.get(arg) ||
-			this.client.providers.get(arg);
-		if (piece) return piece;
+		for (const store of this.pieceStores) {
+			const piece = store.get(arg);
+			if (piece) return piece;
+		}
 		if (currentUsage.type === 'optional' && !repeat) return null;
 		throw msg.language.get('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, 'piece');
 	}

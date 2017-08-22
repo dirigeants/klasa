@@ -217,6 +217,36 @@ class KlasaClient extends Discord.Client {
 	}
 
 	/**
+	 * Registers a custom piece / store to the client
+	 * @param {string} pieceName The name of the piece
+	 * @param {Store} store The store that pieces will be stored in.
+	 * @returns {KlasaClient} this client
+	 */
+	registerPieceStore(pieceName, store) {
+		this.argResolver.pieceStores.add(store);
+		// eslint-disable-next-line func-names
+		this.argResolver.prototype[pieceName] = async function (arg, currentUsage, possible, repeat, msg) {
+			const piece = store.get(arg);
+			if (piece) return piece;
+			if (currentUsage.type === 'optional' && !repeat) return null;
+			throw msg.language.get('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, pieceName);
+		};
+		return this;
+	}
+
+	/**
+	 * Unregisters a custom piece / store to the client
+	 * @param {string} pieceName The name of the piece
+	 * @param {Store} store The store that pieces will be stored in.
+	 * @returns {KlasaClient} this client
+	 */
+	unregisterPieceStore(pieceName, store) {
+		this.argResolver.pieceStores.delete(store);
+		delete this.argResolver.prototype[pieceName];
+		return this;
+	}
+
+	/**
 	 * Use this to login to Discord with your bot
 	 * @param {string} token Your bot token
 	 */
