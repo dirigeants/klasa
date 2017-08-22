@@ -41,6 +41,12 @@ class EventStore extends Collection {
 		 * @type {Event}
 		 */
 		this.holds = Event;
+
+		/**
+		 * The name of what this holds
+		 * @type {String}
+		 */
+		this.name = 'events';
 	}
 
 	/**

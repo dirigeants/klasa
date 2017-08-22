@@ -41,6 +41,12 @@ class FinalizerStore extends Collection {
 		 * @type {Finalizer}
 		 */
 		this.holds = Finalizer;
+
+		/**
+		 * The name of what this holds
+		 * @type {String}
+		 */
+		this.name = 'finalizers';
 	}
 
 	/**

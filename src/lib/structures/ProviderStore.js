@@ -41,6 +41,12 @@ class ProviderStore extends Collection {
 		 * @type {Provider}
 		 */
 		this.holds = Provider;
+
+		/**
+		 * The name of what this holds
+		 * @type {String}
+		 */
+		this.name = 'providers';
 	}
 
 	/**

@@ -7,27 +7,6 @@ const Resolver = require('./Resolver');
 class ArgResolver extends Resolver {
 
 	/**
-	 * @param {KlasaClient} client The Klasa Client
-	 */
-	constructor(client) {
-		super(client);
-
-		/**
-		 * The set of stores to check for piece type arguments.
-		 * @type {Set} 
-		 */
-		this.pieceStores = new Set([
-			this.client.commands,
-			this.client.events,
-			this.client.finalizers,
-			this.client.inhibitors,
-			this.client.languages,
-			this.client.monitors,
-			this.client.providers
-		]);
-	}
-
-	/**
 	 * Resolves a piece
 	 * @param {string} arg This arg
 	 * @param {Object} currentUsage This current usage
@@ -37,12 +16,28 @@ class ArgResolver extends Resolver {
 	 * @returns {Command}
 	 */
 	async piece(arg, currentUsage, possible, repeat, msg) {
-		for (const store of this.pieceStores) {
+		for (const store of this.client.pieceStores.array()) {
 			const piece = store.get(arg);
 			if (piece) return piece;
 		}
 		if (currentUsage.type === 'optional' && !repeat) return null;
 		throw msg.language.get('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, 'piece');
+	}
+
+	/**
+	 * Resolves a store
+	 * @param {string} arg This arg
+	 * @param {Object} currentUsage This current usage
+	 * @param {number} possible This possible usage id
+	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {external:Message} msg The message that triggered the command
+	 * @returns {Command}
+	 */
+	async store(arg, currentUsage, possible, repeat, msg) {
+		const store = this.client.pieceStores.get(arg);
+		if (store) return store;
+		if (currentUsage.type === 'optional' && !repeat) return null;
+		throw msg.language.get('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, 'store');
 	}
 
 	/**

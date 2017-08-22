@@ -41,6 +41,12 @@ class LanguageStore extends Collection {
 		 * @type {Language}
 		 */
 		this.holds = Language;
+
+		/**
+		 * The name of what this holds
+		 * @type {String}
+		 */
+		this.name = 'languages';
 	}
 
 	/**

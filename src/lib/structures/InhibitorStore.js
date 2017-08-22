@@ -41,6 +41,12 @@ class InhibitorStore extends Collection {
 		 * @type {Inhibitor}
 		 */
 		this.holds = Inhibitor;
+
+		/**
+		 * The name of what this holds
+		 * @type {String}
+		 */
+		this.name = 'inhibitors';
 	}
 
 	/**

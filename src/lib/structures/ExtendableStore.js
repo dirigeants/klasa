@@ -41,6 +41,12 @@ class ExtendableStore extends Collection {
 		 * @type {Extendable}
 		 */
 		this.holds = Extendable;
+
+		/**
+		 * The name of what this holds
+		 * @type {String}
+		 */
+		this.name = 'extendables';
 	}
 
 	/**

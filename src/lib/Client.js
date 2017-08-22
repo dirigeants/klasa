@@ -126,6 +126,12 @@ class KlasaClient extends Discord.Client {
 		this.extendables = new ExtendableStore(this);
 
 		/**
+		 * A Store registry
+		 * @type {external:Collection}
+		 */
+		this.pieceStores = new Discord.Collection();
+
+		/**
 		 * The cache of command messages and responses to be used for command editing
 		 * @type {external:Collection}
 		 */
@@ -190,6 +196,16 @@ class KlasaClient extends Discord.Client {
 		 */
 		this.application = null;
 
+		this.registerStore(this.commands)
+			.registerStore(this.inhibitors)
+			.registerStore(this.finalizers)
+			.registerStore(this.monitors)
+			.registerStore(this.languages)
+			.registerStore(this.providers)
+			.registerStore(this.events)
+			.registerStore(this.extendables);
+		// Core pieces already have argresolver entries for the purposes of documentation.
+
 		this.once('ready', this._ready.bind(this));
 	}
 
@@ -217,13 +233,32 @@ class KlasaClient extends Discord.Client {
 	}
 
 	/**
-	 * Registers a custom piece / store to the client
-	 * @param {string} pieceName The name of the piece
+	 * Registers a custom store to the client
 	 * @param {Store} store The store that pieces will be stored in.
 	 * @returns {KlasaClient} this client
 	 */
-	registerPieceStore(pieceName, store) {
-		this.argResolver.pieceStores.add(store);
+	registerStore(store) {
+		this.pieceStores.set(store.name, store);
+		return this;
+	}
+
+	/**
+	 * Unregisters a custom store from the client
+	 * @param {Store} storeName The store that pieces will be stored in.
+	 * @returns {KlasaClient} this client
+	 */
+	unregisterStore(storeName) {
+		this.pieceStores.delete(storeName);
+		return this;
+	}
+
+	/**
+	 * Registers a custom piece to the client
+	 * @param {string} pieceName The name of the piece, if you want to register an arg resolver for this piece
+	 * @param {Store} store The store that pieces will be stored in.
+	 * @returns {KlasaClient} this client
+	 */
+	registerPiece(pieceName, store) {
 		// eslint-disable-next-line func-names
 		this.argResolver.prototype[pieceName] = async function (arg, currentUsage, possible, repeat, msg) {
 			const piece = store.get(arg);
@@ -235,13 +270,11 @@ class KlasaClient extends Discord.Client {
 	}
 
 	/**
-	 * Unregisters a custom piece / store to the client
+	 * Unregisters a custom piece from the client
 	 * @param {string} pieceName The name of the piece
-	 * @param {Store} store The store that pieces will be stored in.
 	 * @returns {KlasaClient} this client
 	 */
-	unregisterPieceStore(pieceName, store) {
-		this.argResolver.pieceStores.delete(store);
+	unregisterPiece(pieceName) {
 		delete this.argResolver.prototype[pieceName];
 		return this;
 	}
@@ -252,29 +285,12 @@ class KlasaClient extends Discord.Client {
 	 */
 	async login(token) {
 		const start = now();
-		const [[commands, aliases], inhibitors, finalizers, events, monitors, languages, providers, extendables] = await Promise.all([
-			this.commands.loadAll(),
-			this.inhibitors.loadAll(),
-			this.finalizers.loadAll(),
-			this.events.loadAll(),
-			this.monitors.loadAll(),
-			this.languages.loadAll(),
-			this.providers.loadAll(),
-			this.extendables.loadAll()
-		]).catch((err) => {
-			console.error(err);
-			process.exit();
-		});
-		this.emit('log', [
-			`Loaded ${commands} commands, with ${aliases} aliases.`,
-			`Loaded ${inhibitors} command inhibitors.`,
-			`Loaded ${finalizers} command finalizers.`,
-			`Loaded ${monitors} message monitors.`,
-			`Loaded ${languages} languages.`,
-			`Loaded ${providers} providers.`,
-			`Loaded ${events} events.`,
-			`Loaded ${extendables} extendables.`
-		].join('\n'));
+		const loaded = await Promise.all(this.pieceStores.map(store => `Loaded ${store.loadAll()} ${store.name}.`))
+			.catch((err) => {
+				console.error(err);
+				process.exit();
+			});
+		this.emit('log', loaded.join('\n'));
 		this.settings = new Settings(this);
 		this.emit('log', `Loaded in ${(now() - start).toFixed(2)}ms.`);
 		super.login(token);
@@ -301,11 +317,8 @@ class KlasaClient extends Discord.Client {
 		if (!this.config.ownerID) this.config.ownerID = this.user.bot ? this.application.owner.id : this.user.id;
 		await this.providers.init();
 		await this.settings.guilds.init();
-		await this.commands.init();
-		await this.inhibitors.init();
-		await this.finalizers.init();
-		await this.monitors.init();
-		await this.languages.init();
+		// Providers must be init before settings, and those before all other stores.
+		await Promise.all(this.pieceStores.filter(store => store.name !== 'providers').map(store => store.init()));
 		util.initClean(this);
 		this.setInterval(this.sweepCommandMessages.bind(this), this.commandMessageSweep * 1000);
 		this.ready = true;

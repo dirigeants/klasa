@@ -41,6 +41,12 @@ class MonitorStore extends Collection {
 		 * @type {Inhibitor}
 		 */
 		this.holds = Monitor;
+
+		/**
+		 * The name of what this holds
+		 * @type {String}
+		 */
+		this.name = 'monitors';
 	}
 
 	/**

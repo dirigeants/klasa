@@ -48,6 +48,12 @@ class CommandStore extends Collection {
 		 * @type {Command}
 		 */
 		this.holds = Command;
+
+		/**
+		 * The name of what this holds
+		 * @type {String}
+		 */
+		this.name = 'commands';
 	}
 
 	/**
@@ -132,7 +138,7 @@ class CommandStore extends Collection {
 		this.clear();
 		await CommandStore.walk(this, this.coreDir);
 		await CommandStore.walk(this, this.userDir);
-		return [this.size, this.aliases.size];
+		return this.size;
 	}
 
 	// left for documentation
