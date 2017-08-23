@@ -16,7 +16,7 @@ class ArgResolver extends Resolver {
 	 * @returns {Command}
 	 */
 	async piece(arg, currentUsage, possible, repeat, msg) {
-		for (const store of this.client.pieceStores.array()) {
+		for (const store of this.client.pieceStores.values()) {
 			const piece = store.get(arg);
 			if (piece) return piece;
 		}
