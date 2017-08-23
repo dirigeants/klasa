@@ -285,7 +285,7 @@ class KlasaClient extends Discord.Client {
 	 */
 	async login(token) {
 		const start = now();
-		const loaded = await Promise.all(this.pieceStores.map(store => `Loaded ${store.loadAll()} ${store.name}.`))
+		const loaded = await Promise.all(this.pieceStores.map(async store => `Loaded ${await store.loadAll()} ${store.name}.`))
 			.catch((err) => {
 				console.error(err);
 				process.exit();
