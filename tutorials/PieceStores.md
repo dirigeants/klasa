@@ -137,7 +137,7 @@ module.exports = GenreStore;
 Tbh, not that different than a simple store. Although be sure to take a look at all of the core stores. Sometimes, like in the case of Providers, we want to run a shutdown method before we delete the collection entry. In that case we also want to overwrite the clear method, and loop over the collection doing this.delete() so that all entries are shutdown properly.
 
 ```javascript
-const { Piece } = require('klasa');
+const { Piece, util } = require('klasa');
 const getInfoAsync = require("util").promisify(require("ytdl-core").getInfo);
 
 class Genre {
@@ -159,11 +159,11 @@ class Genre {
 	async getNext(player) {
 		// Let's define a default behavior here
 		// If we aren't playing anything yet, get a link from this.seeds (which is defined in each extension piece)
-		if (!player.playingURL) return this.wrapLink(this.seeds[Math.floor(Math.random()*this.seeds.length)]);
+		if (!player.playingURL) return this.wrapLink(this.seeds[Math.floor(Math.random() * this.seeds.length)]);
 		// If we do have a link, lets get youtube info about that link
 		const info = await getInfoAsync(player.playingURL).catch((err) => {
         	this.client.emit("log", err, "error");
-        	throw `something happened with YouTube URL: ${url}\n${"```"}${err}${"```"}`;
+        	throw `something happened with YouTube URL: ${url}\n${util.codeBlock('', err)}`;
     	});
 		// Find the first video that we haven't recenly played on our player
 		const next = info.related_videos.find(vid => vid.id && !player.recentlyPlayed.includes(this.wrapLink(vid.id)));
@@ -204,7 +204,7 @@ Piece.applyToClass(Genre);
 module.exports = Genre;
 ```
 
-Here we see some heavy customization. But that makes our piece very easy to actually make now:
+Here we see some heavy customization. Additionally, there is a second argument to applyToClass, which is skips an array of methods to skip applying. Such as if you need to define special enable/disable behavior. But that makes our piece very easy to actually make now:
 
 ```javascript
 const Genre = require('../Genre');
@@ -241,8 +241,12 @@ class MySwankyMusicBot extends Client {
 		super(...args);
 		// make a new GenreStore
 		this.genres = new GenreStore();
-		// Regester the GenreStore to be init, and available to be used as an arg to be looked up in commands, and for genres themselves to be able to be used as an arg to be looked up in commands for reload/enable/disable ect. Wew...
-		this.registerStore(this.genres).registerPiece('genre', this.genres);
+		// Regester the GenreStore to be loaded, init, and available to be used as an arg to be looked up in commands
+		this.registerStore(this.genres)
+		// Registers genres themselves to be able to be used as an arg to be looked up in commands for reload/enable/disable ect.
+		this.registerPiece('genre', this.genres);
+		// optionally we can add more aliases for the piece
+		this.registerPiece('musicgenre', this.genres);
 	}
 
 }
