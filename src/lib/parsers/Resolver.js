@@ -25,7 +25,7 @@ class Resolver {
 	 */
 	async msg(message, channel) {
 		if (message instanceof Message) return message;
-		return this.constructor.regex.snowflake.test(message) ? channel.fetchMessage(message).catch(() => null) : undefined;
+		return this.constructor.regex.snowflake.test(message) ? channel.messages.fetch(message).catch(() => null) : undefined;
 	}
 
 	/**
@@ -38,7 +38,7 @@ class Resolver {
 		if (user instanceof GuildMember) return user.user;
 		if (typeof user === 'string' && this.constructor.regex.userOrMember.test(user)) {
 			return this.client.user.bot ?
-				this.client.fetchUser(this.constructor.regex.userOrMember.exec(user)[1]).catch(() => null) :
+				this.client.users.fetch(this.constructor.regex.userOrMember.exec(user)[1]).catch(() => null) :
 				this.client.users.get(this.constructor.regex.userOrMember.exec(user)[1]);
 		}
 		return null;
@@ -52,12 +52,12 @@ class Resolver {
 	 */
 	async member(member, guild) {
 		if (member instanceof GuildMember) return member;
-		if (member instanceof User) return guild.fetchMember(member);
+		if (member instanceof User) return guild.members.fetch(member);
 		if (typeof member === 'string' && this.constructor.regex.userOrMember.test(member)) {
 			const user = this.client.user.bot ?
-				await this.client.fetchUser(this.constructor.regex.userOrMember.exec(member)[1]).catch(() => null) :
+				await this.client.users.fetch(this.constructor.regex.userOrMember.exec(member)[1]).catch(() => null) :
 				this.client.users.get(this.constructor.regex.userOrMember.exec(member)[1]);
-			if (user) return guild.fetchMember(user).catch(() => null);
+			if (user) return guild.members.fetch(user).catch(() => null);
 		}
 		return null;
 	}
