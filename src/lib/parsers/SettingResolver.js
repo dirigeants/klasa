@@ -109,7 +109,7 @@ class SettingResolver extends Resolver {
 	 */
 	async string(data, guild, name, { min, max } = {}) {
 		const result = await super.string(data);
-		if (SettingResolver.maxOrMin(guild, result, min, max, name, guild.language.get('RESOLVER_STRING_SUFFIX'))) return result;
+		if (SettingResolver.maxOrMin(guild, result.length, min, max, name, guild.language.get('RESOLVER_STRING_SUFFIX'))) return result;
 		return null;
 	}
 
