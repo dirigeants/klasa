@@ -15,7 +15,7 @@ module.exports = class extends Finalizer {
 			this[msg.channel.type](msg)
 		].join(' '), 'log');
 	}
-	
+
 	init() {
 		clk.enabled = !this.client.config.disableLogColor;
 	}
