@@ -18,6 +18,7 @@ module.exports = class extends Inhibitor {
 		]);
 		this.friendlyPerms = Object.keys(Permissions.FLAGS).reduce((obj, key) => {
 			obj[key] = util.toTitleCase(key.split('_').join(' '));
+			return obj;
 		}, {});
 	}
 
