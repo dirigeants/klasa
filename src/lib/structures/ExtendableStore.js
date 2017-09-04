@@ -1,5 +1,5 @@
 const { join } = require('path');
-const Discord = require('discord.js');
+const { Collection } = require('discord.js');
 const Extendable = require('./Extendable');
 const Store = require('./interfaces/Store');
 
@@ -8,7 +8,7 @@ const Store = require('./interfaces/Store');
  * @extends external:Collection
  * @implements {Store}
  */
-class ExtendableStore extends Discord.Collection {
+class ExtendableStore extends Collection {
 
 	/**
 	 * Constructs our ExtendableStore for use in Klasa
@@ -41,6 +41,12 @@ class ExtendableStore extends Discord.Collection {
 		 * @type {Extendable}
 		 */
 		this.holds = Extendable;
+
+		/**
+		 * The name of what this holds
+		 * @type {String}
+		 */
+		this.name = 'extendables';
 	}
 
 	/**
@@ -51,10 +57,8 @@ class ExtendableStore extends Discord.Collection {
 	delete(name) {
 		const extendable = this.resolve(name);
 		if (!extendable) return false;
+		for (const structure of extendable.appliesTo) delete extendable.target[structure].prototype[this.name];
 		super.delete(extendable.name);
-		extendable.appliesTo.forEach(structure => {
-			delete Discord[structure].prototype[extendable.name];
-		});
 		return true;
 	}
 
@@ -63,7 +67,7 @@ class ExtendableStore extends Discord.Collection {
 	 * @return {void}
 	 */
 	clear() {
-		this.forEach((val, key) => this.delete(key));
+		for (const extendable of this.keys()) this.delete(extendable);
 	}
 
 	/**

@@ -7,7 +7,7 @@ module.exports = class extends Extendable {
 	}
 
 	extend(min) {
-		return this.client.inhibitors.get('permissions').run(this, min).then(() => true).catch(() => false);
+		return this.client.permissionLevels.run(this, min).then(({ permission }) => permission);
 	}
 
 };

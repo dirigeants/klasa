@@ -11,7 +11,10 @@ class Extendable {
 
 	/**
 	 * @typedef {object} ExtendableOptions
+	 * @memberof Extendable
 	 * @property {string} [name = theFileName] The name of the extendable
+	 * @property {boolean} [enabled = true] If the extendable is enabled or not
+	 * @property {boolean} [klasa = false] If the extendable is for Klasa instead of Discord.js
 	 */
 
 	/**
@@ -56,6 +59,18 @@ class Extendable {
 		 * @type{string[]}
 		 */
 		this.appliesTo = appliesTo;
+
+		/**
+		 * If the language is enabled or not
+		 * @type {boolean}
+		 */
+		this.enabled = 'enabled' in options ? options.enabled : true;
+
+		/**
+		 * The target library to apply this extendable to
+		 * @type {boolean}
+		 */
+		this.target = options.klasa ? require('klasa') : Discord;
 	}
 
 	/**
@@ -73,7 +88,27 @@ class Extendable {
 	 * @private
 	 */
 	async init() {
-		for (const structure of this.appliesTo) Object.defineProperty(Discord[structure].prototype, this.name, Object.getOwnPropertyDescriptor(this.constructor.prototype, 'extend'));
+		if (this.enabled) this.enable();
+	}
+
+	/**
+	 * Disables this piece
+	 * @returns {Piece} This piece
+	 */
+	disable() {
+		this.enabled = false;
+		for (const structure of this.appliesTo) delete this.target[structure].prototype[this.name];
+		return this;
+	}
+
+	/**
+	 * Enables this piece
+	 * @returns {Piece} This piece
+	 */
+	enable() {
+		this.enabled = true;
+		for (const structure of this.appliesTo) Object.defineProperty(this.target[structure].prototype, this.name, Object.getOwnPropertyDescriptor(this.constructor.prototype, 'extend'));
+		return this;
 	}
 
 	// left for documentation
@@ -84,6 +119,6 @@ class Extendable {
 
 }
 
-Piece.applyToClass(Extendable);
+Piece.applyToClass(Extendable, ['disable', 'enable']);
 
 module.exports = Extendable;

@@ -21,7 +21,7 @@ module.exports = class extends Inhibitor {
 			return;
 		}
 
-		throw `You have just used this command. You can use this command again in ${Math.ceil(remaining)} seconds.`;
+		throw msg.language.get('INHIBITOR_COOLDOWN', Math.ceil(remaining));
 	}
 
 };

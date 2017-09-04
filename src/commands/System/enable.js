@@ -6,13 +6,13 @@ module.exports = class extends Command {
 		super(...args, {
 			permLevel: 10,
 			description: 'Re-enables or temporarily enables a command/inhibitor/monitor/finalizer. Default state restored on reboot.',
-			usage: '<Command:cmd|Inhibitor:inhibitor|Monitor:monitor|Finalizer:finalizer|Event:event>'
+			usage: '<Piece:piece>'
 		});
 	}
 
 	async run(msg, [piece]) {
 		piece.enable();
-		return msg.sendCode('diff', `+ Successfully enabled ${piece.type}: ${piece.name}`);
+		return msg.sendCode('diff', msg.language.get('COMMAND_ENABLE', piece.type, piece.name));
 	}
 
 };

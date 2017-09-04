@@ -166,4 +166,5 @@ for each provider added, based on its `name`. So for example if you have it set 
 - {@tutorial CreatingExtendables}
 - {@tutorial CreatingFinalizers}
 - {@tutorial CreatingInhibitors}
+- {@tutorial CreatingLanguages}
 - {@tutorial CreatingMonitors}

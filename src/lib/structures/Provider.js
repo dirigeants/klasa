@@ -9,6 +9,7 @@ class Provider {
 
 	/**
 	 * @typedef {Object} ProviderOptions
+	 * @memberof Provider
 	 * @property {string} [name=theFileName] The name of the command
 	 * @property {boolean} [enabled=true] Whether the provider is enabled or not
 	 * @property {string} [description=''] The provider description
@@ -73,9 +74,18 @@ class Provider {
 	/**
 	 * The init method to be optionaly overwritten in actual provider pieces
 	 * @abstract
-	 * @returns {Promise<void>}
+	 * @returns {void}
 	 */
 	async init() {
+		// Optionally defined in extension Classes
+	}
+
+	/**
+	 * The shutdown method to be optionaly overwritten in actual provider pieces
+	 * @abstract
+	 * @returns {void}
+	 */
+	async shutdown() {
 		// Optionally defined in extension Classes
 	}
 

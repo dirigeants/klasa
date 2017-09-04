@@ -1,5 +1,5 @@
 const Piece = require('./interfaces/Piece');
-const ParsedUsage = require('../parsers/ParsedUsage');
+const ParsedUsage = require('../usage/ParsedUsage');
 
 /**
  * Base class for all Klasa Commands. See {@tutorial CreatingCommands} for more information how to use this class
@@ -11,7 +11,8 @@ class Command {
 
 	/**
 	 * @typedef {Object} CommandOptions
-	 * @property {string} [name = theFileName] The name of the command
+	 * @memberof Command
+	 * @property {string} [name=theFileName] The name of the command
 	 * @property {boolean} [enabled=true] Whether the command is enabled or not
 	 * @property {Array<string>} [runIn=['text','dm','group']] What channel types the command should run in
 	 * @property {number} [cooldown=0] The amount of time before the user can run the command again in seconds
@@ -22,6 +23,7 @@ class Command {
 	 * @property {string} [description=''] The help description for the command
 	 * @property {string} [usage=''] The usage string for the command
 	 * @property {?string} [usageDelim=undefined] The string to deliminate the command input for usage
+	 * @property {boolean} [quotedStringSupport=this.client.config.quotedStringSupport] Wheter args for this command should not deliminated inside quotes
 	 * @property {string} [extendedHelp='No extended help available.'] Extended help strings
 	 */
 
@@ -116,6 +118,12 @@ class Command {
 		this.usageDelim = options.usageDelim || undefined;
 
 		/**
+		 * Whether to use quoted string support for this command or not
+		 * @type {boolean}
+		 */
+		this.quotedStringSupport = 'quotedStringSupport' in options ? options.quotedStringSupport : this.client.config.quotedStringSupport;
+
+		/**
 		 * The full category for the command
 		 * @type {Array<string>}
 		 */
@@ -164,7 +172,7 @@ class Command {
 	 * @param {CommandMessage} msg The command message mapped on top of the message used to trigger this command
 	 * @param {Array<any>} params The fully resolved parameters based on your usage / usageDelim
 	 * @abstract
-	 * @returns {Promise<external:Message>} You should return the response message whenever possible
+	 * @returns {external:Message} You should return the response message whenever possible
 	 */
 	async run() {
 		// Defined in extension Classes
@@ -173,7 +181,7 @@ class Command {
 	/**
 	 * The init method to be optionaly overwritten in actual commands
 	 * @abstract
-	 * @returns {Promise<void>}
+	 * @returns {void}
 	 */
 	async init() {
 		// Optionally defined in extension Classes

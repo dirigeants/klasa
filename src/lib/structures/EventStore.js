@@ -41,6 +41,12 @@ class EventStore extends Collection {
 		 * @type {Event}
 		 */
 		this.holds = Event;
+
+		/**
+		 * The name of what this holds
+		 * @type {String}
+		 */
+		this.name = 'events';
 	}
 
 	/**
@@ -48,7 +54,7 @@ class EventStore extends Collection {
 	 * @return {void}
 	 */
 	clear() {
-		this.forEach((val, key) => this.delete(key));
+		for (const event of this.keys()) this.delete(event);
 	}
 
 	/**

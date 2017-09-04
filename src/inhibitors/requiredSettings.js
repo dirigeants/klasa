@@ -5,7 +5,7 @@ module.exports = class extends Inhibitor {
 	async run(msg, cmd) {
 		if (cmd.requiredSettings.length === 0) return;
 		const settings = cmd.requiredSettings.filter(setting => !msg.guildSettings[setting]);
-		if (settings.length > 0) throw `The guild is missing the **${settings.join(', ')}** guild setting${settings.length > 1 ? 's' : ''} and cannot run.`;
+		if (settings.length > 0) throw msg.language.get('INHIBITOR_REQUIRED_SETTINGS', settings);
 		return;
 	}
 

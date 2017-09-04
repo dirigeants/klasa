@@ -41,6 +41,12 @@ class FinalizerStore extends Collection {
 		 * @type {Finalizer}
 		 */
 		this.holds = Finalizer;
+
+		/**
+		 * The name of what this holds
+		 * @type {String}
+		 */
+		this.name = 'finalizers';
 	}
 
 	/**
@@ -61,9 +67,7 @@ class FinalizerStore extends Collection {
 	 * @return {void}
 	 */
 	run(...args) {
-		this.forEach(finalizer => {
-			if (finalizer.enabled) finalizer.run(...args);
-		});
+		for (const finalizer of this.values()) if (finalizer.enabled) finalizer.run(...args);
 	}
 
 	/**
@@ -72,7 +76,7 @@ class FinalizerStore extends Collection {
 	 * @returns {Finalizer}
 	 */
 	set(finalizer) {
-		if (!(finalizer instanceof this.holds)) return this.client.emit('error', `Only ${this.holds.constructor.name}s may be stored in the Store.`);
+		if (!(finalizer instanceof this.holds)) return this.client.emit('error', `Only ${this.name} may be stored in the Store.`);
 		const existing = this.get(finalizer.name);
 		if (existing) this.delete(existing);
 		super.set(finalizer.name, finalizer);

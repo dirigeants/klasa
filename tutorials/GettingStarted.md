@@ -8,28 +8,50 @@ Time to take the plunge! Klasa is on NPM and can be easily installed.
 npm install --save klasa
 ```
 
+optionally if you want to use the bleading edge development version (not guaranteed to be stable):
+
+```
+npm install --save dirigeants/klasa
+```
+
+### Using Klasa
+
 Create a file called `app.js` (or whatever you prefer) which will initiate and configure Klasa.
 
 ```javascript
-const klasa = require("klasa");
+const klasa = require('klasa');
 
 const client = new klasa.Client({
     clientOptions: {
-        fetchAllMembers: false,
+        fetchAllMembers: false
     },
-    prefix: "+",
-    cmdPrompt: true,
-    cmdEditing: true
+    prefix: '+',
+    cmdEditing: true,
+    typing: true
 });
 
-client.login("your-bot-token")
+client.login('your-bot-token');
 ```
 
-### Configuration Options
+### Configuration Options: [KlasaClientConfig]{@link KlasaClient.KlasaClientConfig}
 
-- **botToken**: The MFA token for your bot. To get this, please see [This discord.js Getting Started Guide](https://anidiotsguide.gitbooks.io/discord-js-bot-guide/getting-started/the-long-version.html), which explains how to create the bot and get the token.
-- **prefix**: The default prefix(es) when the bot first boots up. This option becomes useless after first boot, since the prefix is written to the default configuration system. Pass an array to accept multiple prefixes.
 - **clientOptions**: These are passed directly to the discord.js library. They are optional. For more information on which options are available, see [ClientOptions in the discord.js docs](https://discord.js.org/#/docs/main/stable/typedef/ClientOptions).
+- **prefix**: The default prefix(es) when the bot first boots up. This option becomes useless after first boot, since the prefix is written to the default configuration system. Pass an array to accept multiple prefixes.
+- **permissionLevels**: `default: KlasaClient.defaultPermissionLevels` The permission levels to use with this bot
+- **clientBaseDir**: `default: process.cwd()` The directory where all piece folders can be found
+- **commandMessageLifetime**: `default: 1800` The threshold for how old command messages can be before sweeping since the last edit in seconds
+- **commandMessageSweep**: `default: 900` The interval duration for which command messages should be sweept in seconds
+- **provider**: `default: the included json provider` The provider to use in Klasa
+- **disableLogTimestamps**: `default: false` Whether or not to disable the log timestamps
+- **disableLogColor**: `default: false` Whether or not to disable the log colors
+- **ignoreBots**: `default: true` Whether or not this bot should ignore other bots
+- **ignoreSelf**: `default: client.user.bot` Whether or not this bot should ignore itself (true for bots, false for selfbots)
+- **cmdPrompt**: `default: false` Whether the bot should prompt missing parameters
+- **cmdEditing**: `default: false` Whether the bot should update responses if the command is edited
+- **typing**: `default: false` Whether the bot should type while processing commands.
+- **quotedStringSupport**: `default: false` Whether the bot should default to using quoted string support in arg parsing, or not (overridable per command)
+- **ownerID**: The discord user id for the user the bot should respect as the owner (gotten from Discord api if not provided)
+
 
 ## Running the bot
 

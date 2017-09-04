@@ -6,15 +6,15 @@ module.exports = class extends Command {
 		super(...args, {
 			aliases: ['r'],
 			permLevel: 10,
-			description: "Reloads the klasa piece, if it's been updated or modified.",
-			usage: '<inhibitors|finalizers|monitors|providers|events|commands|Inhibitor:inhibitor|Extendable:extendable|Finalizer:finalizer|Monitor:monitor|Provider:provider|Event:event|Command:cmd>'
+			description: 'Reloads a klasa piece, or all pieces of a klasa store.',
+			usage: '<Store:store|Piece:piece>'
 		});
 	}
 
 	async run(msg, [piece]) {
-		if (typeof piece === 'string') return this.client[piece].loadAll().then(() => msg.sendMessage(`✅ Reloaded all ${piece}.`));
+		if (piece instanceof this.client.methods.Collection) return piece.loadAll().then(() => msg.sendMessage(msg.language.get('COMMAND_RELOAD_ALL', msg.args[0].toLowerCase())));
 		return piece.reload()
-			.then(itm => msg.sendMessage(`✅ Reloaded ${itm.type}: ${itm.name}`))
+			.then(itm => msg.sendMessage(msg.language.get('COMMAND_RELOAD', itm.type, itm.name)))
 			.catch(err => {
 				this.client[`${piece.type}s`].set(piece);
 				msg.sendMessage(`❌ ${err}`);

@@ -16,10 +16,10 @@ class Store {
 
 	/**
 	 * Initializes all pieces in this store.
-	 * @return {Promise<Array>}
+	 * @return {Array}
 	 */
 	init() {
-		return Promise.all(this.map(piece => piece.init()));
+		return Promise.all(this.map(piece => piece.enabled ? piece.init() : true));
 	}
 
 	/**
@@ -36,13 +36,15 @@ class Store {
 
 	/**
 	 * Loads all of our pieces from both the user and core directories.
-	 * @return {Promise<number>} The number of pieces loaded.
+	 * @return {number} The number of pieces loaded.
 	 */
 	async loadAll() {
 		this.clear();
-		const coreFiles = await fs.readdir(this.coreDir).catch(() => { fs.ensureDir(this.coreDir).catch(err => this.client.emit('errorlog', err)); });
-		if (coreFiles) await Promise.all(coreFiles.map(this.load.bind(this, this.coreDir)));
-		const userFiles = await fs.readdir(this.userDir).catch(() => { fs.ensureDir(this.userDir).catch(err => this.client.emit('errorlog', err)); });
+		if (this.coreDir) {
+			const coreFiles = await fs.readdir(this.coreDir).catch(() => { fs.ensureDir(this.coreDir).catch(err => this.client.emit('log', err, 'error')); });
+			if (coreFiles) await Promise.all(coreFiles.map(this.load.bind(this, this.coreDir)));
+		}
+		const userFiles = await fs.readdir(this.userDir).catch(() => { fs.ensureDir(this.userDir).catch(err => this.client.emit('log', err, 'error')); });
 		if (userFiles) await Promise.all(userFiles.map(this.load.bind(this, this.userDir)));
 		return this.size;
 	}

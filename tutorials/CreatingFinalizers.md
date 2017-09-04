@@ -53,5 +53,6 @@ the user who ran it, and the time it took to process the command.
 - {@tutorial CreatingEvents}
 - {@tutorial CreatingExtendables}
 - {@tutorial CreatingInhibitors}
+- {@tutorial CreatingLanguages}
 - {@tutorial CreatingMonitors}
 - {@tutorial CreatingProviders}

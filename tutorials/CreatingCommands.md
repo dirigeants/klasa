@@ -40,9 +40,10 @@ a boolean. Set to false to completely disable this inhibitor, it cannot be force
 - **cooldown**: The time in seconds before a user can use this command again. (Does not apply to bot owners)
 - **aliases**: Other names this command will respond to.
 - **permLevel**: The permission level required to run this command. From 0 as everyone, to 10 as bot owner only with default permlevels.
+- **botPerms**: the permissions needed to run the command, based on Permissions in discord.js.
 - **requiredSettings**: Any required guild settings, that must be set before you can use this command.
 - **description**: The command description.
-- **usage**: The expected arguments for this command. See {@tutorial CreatingUsageStrings} for information on how to use this.
+- **usage**: The expected arguments for this command. See {@tutorial UnderstandingUsageStrings} for information on how to use this.
 - **usageDelim**: The deliminator for how the usage will be deliminated. Popular ones are `' '` (a space), and `', '` (a comma space).
 - **extendedHelp**: A more in depth help string if you would like to define it.
 
@@ -58,5 +59,6 @@ a boolean. Set to false to completely disable this inhibitor, it cannot be force
 - {@tutorial CreatingExtendables}
 - {@tutorial CreatingFinalizers}
 - {@tutorial CreatingInhibitors}
+- {@tutorial CreatingLanguages}
 - {@tutorial CreatingMonitors}
 - {@tutorial CreatingProviders}

@@ -41,6 +41,12 @@ class MonitorStore extends Collection {
 		 * @type {Inhibitor}
 		 */
 		this.holds = Monitor;
+
+		/**
+		 * The name of what this holds
+		 * @type {String}
+		 */
+		this.name = 'monitors';
 	}
 
 	/**
@@ -60,9 +66,7 @@ class MonitorStore extends Collection {
 	 * @param  {external:Message} msg The message object from Discord.js
 	 */
 	run(msg) {
-		this.forEach(monit => {
-			if (monit.enabled && !(monit.ignoreBots && msg.author.bot) && !(monit.ignoreSelf && this.client.user === msg.author)) monit.run(msg);
-		});
+		for (const monit of this.values()) if (monit.enabled && !(monit.ignoreBots && msg.author.bot) && !(monit.ignoreSelf && this.client.user === msg.author)) monit.run(msg);
 	}
 
 	/**
@@ -71,7 +75,7 @@ class MonitorStore extends Collection {
 	 * @returns {Monitor}
 	 */
 	set(monitor) {
-		if (!(monitor instanceof this.holds)) return this.client.emit('error', `Only ${this.holds.constructor.name}s may be stored in the Store.`);
+		if (!(monitor instanceof this.holds)) return this.client.emit('error', `Only ${this.name} may be stored in the Store.`);
 		const existing = this.get(monitor.name);
 		if (existing) this.delete(existing);
 		super.set(monitor.name, monitor);

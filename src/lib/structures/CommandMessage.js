@@ -46,7 +46,7 @@ class CommandMessage {
 		 * The string arguments derived from the usageDelim of the command
 		 * @type {string[]}
 		 */
-		this.args = this.constructor.getArgs(this);
+		this.args = this.cmd.quotedStringSupport ? this.constructor.getQuotedStringArgs(this) : this.constructor.getArgs(this);
 
 		/**
 		 * The parameters resolved by this class
@@ -97,15 +97,15 @@ class CommandMessage {
 			if (this.cmd.usage.parsedUsage.slice(this.params.length).some(usage => usage.type === 'required')) {
 				this.args.splice(this.params.length, 0, undefined);
 				this.args.splice(this.params.length, 1, null);
-				throw this.client.methods.util.newError('Missing one or more required arguments after end of input.', 1);
+				throw this.client.methods.util.newError(this.msg.language.get('COMMANDMESSAGE_MISSING'), 1);
 			} else {
 				return this.params;
 			}
 		} else if (this._currentUsage.type === 'required' && this.args[this.params.length] === undefined) {
 			this.args.splice(this.params.length, 1, null);
 			throw this.client.methods.util.newError(this._currentUsage.possibles.length === 1 ?
-				`${this._currentUsage.possibles[0].name} is a required argument.` :
-				`Missing a required option: (${this._currentUsage.possibles.map(poss => poss.name).join(', ')})`, 1);
+				this.msg.language.get('COMMANDMESSAGE_MISSING_REQUIRED', this._currentUsage.possibles[0].name) :
+				this.msg.language.get('COMMANDMESSAGE_MISSING_OPTIONALS', this._currentUsage.possibles.map(poss => poss.name).join(', ')), 1);
 		} else if (this._currentUsage.possibles.length === 1) {
 			if (this.client.argResolver[this._currentUsage.possibles[0].type]) {
 				return this.client.argResolver[this._currentUsage.possibles[0].type](this.args[this.params.length], this._currentUsage, 0, this._repeat, this.msg)
@@ -147,7 +147,7 @@ class CommandMessage {
 				return this.validateArgs();
 			}
 			this.args.splice(this.params.length, 1, null);
-			throw this.client.methods.util.newError(`Your option didn't match any of the possibilities: (${this._currentUsage.possibles.map(poss => poss.name).join(', ')})`, 1);
+			throw this.client.methods.util.newError(this.msg.language.get('COMMANDMESSAGE_NOMATCH', this._currentUsage.possibles.map(poss => poss.name).join(', ')), 1);
 		} else if (this.client.argResolver[this._currentUsage.possibles[possible].type]) {
 			return this.client.argResolver[this._currentUsage.possibles[possible].type](this.args[this.params.length], this._currentUsage, possible, this._repeat, this.msg)
 				.then((res) => {
@@ -171,9 +171,43 @@ class CommandMessage {
 	 * @returns {string[]}
 	 */
 	static getArgs(cmdMsg) {
-		const args = cmdMsg.msg.content.slice(cmdMsg.prefixLength).trim().split(' ').slice(1).join(' ').split(cmdMsg.cmd.usageDelim !== '' ? cmdMsg.cmd.usageDelim : undefined);
-		if (args[0] === '') return [];
-		return args;
+		// eslint-disable-next-line newline-per-chained-call
+		const args = cmdMsg.msg.content.slice(cmdMsg.prefixLength).trim().split(' ').slice(1).join(' ').trim().split(cmdMsg.cmd.usageDelim !== '' ? cmdMsg.cmd.usageDelim : undefined);
+		return args.length === 1 && args[0] === '' ? [] : args;
+	}
+
+	/**
+	 * Parses a message into string args taking into account quoted strings
+	 * @param {CommandMessage} cmdMsg this command message
+	 * @private
+	 * @returns {string[]}
+	 */
+	static getQuotedStringArgs(cmdMsg) {
+		const content = cmdMsg.msg.content.slice(cmdMsg.prefixLength).trim().split(' ').slice(1).join(' ').trim();
+
+		if (!cmdMsg.cmd.usageDelim || cmdMsg.cmd.usageDelim === '') return [content];
+
+		const args = [];
+		let current = '';
+		let openQuote = false;
+
+		for (let i = 0; i < content.length; i++) {
+			if (!openQuote && content.slice(i, i + cmdMsg.cmd.usageDelim.length) === cmdMsg.cmd.usageDelim) {
+				if (current !== '') args.push(current);
+				current = '';
+				continue;
+			}
+			if (content[i] === '"' && content[i - 1] !== '\\') {
+				openQuote = !openQuote;
+				if (current !== '') args.push(current);
+				current = '';
+				continue;
+			}
+			current += content[i];
+		}
+		if (current !== '') args.push(current);
+
+		return args.length === 1 && args[0] === '' ? [] : args;
 	}
 
 }

@@ -10,6 +10,7 @@ class Event {
 
 	/**
 	 * @typedef {Object} EventOptions
+	 * @memberof Event
 	 * @property {string} [name = theFileName] The name of the event
 	 * @property {boolean} [enabled=true] Whether the event is enabled or not
 	 */
@@ -80,7 +81,7 @@ class Event {
 	/**
 	 * The init method to be optionaly overwritten in actual events
 	 * @abstract
-	 * @returns {Promise<void>}
+	 * @returns {void}
 	 */
 	async init() {
 		// Optionally defined in extension Classes

@@ -7,13 +7,13 @@ module.exports = class extends Command {
 			aliases: ['u'],
 			permLevel: 10,
 			description: 'Unloads the klasa piece.',
-			usage: '<Inhibitor:inhibitor|Extendable:extendable|Finalizer:finalizer|Monitor:monitor|Provider:provider|Event:event|Command:cmd>'
+			usage: '<Piece:piece>'
 		});
 	}
 
 	async run(msg, [piece]) {
 		piece.unload();
-		return msg.sendMessage(`✅ Unloaded ${piece.type}: ${piece.name}`);
+		return msg.sendMessage(msg.language.get('COMMAND_UNLOAD', piece.type, piece.name));
 	}
 
 };

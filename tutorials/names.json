@@ -17,6 +17,9 @@
             "CreatingInhibitors": {
                 "title": "Creating Inhibitors"
             },
+            "CreatingLanguages": {
+                "title": "Creating Languages"
+			},
             "CreatingMonitors": {
                 "title": "Creating Monitors"
             },
@@ -25,8 +28,14 @@
             }
         }
     },
-    "CreatingUsageStrings": {
+    "UnderstandingUsageStrings": {
         "title": "Understanding Usage Strings"
+	},
+    "UnderstandingPermissionLevels": {
+        "title": "Understanding Permission Levels"
+	},
+    "UnderstandingSettingGateway": {
+        "title": "Understanding Setting Gateway"
 	},
 	"IncludedPieces": {
 		"title": "Included Pieces",
@@ -46,6 +55,9 @@
             "IncludedInhibitors": {
                 "title": "Included Inhibitors"
             },
+            "IncludedLanguages": {
+                "title": "Included Languages"
+			},
             "IncludedMonitors": {
                 "title": "Included Monitors"
             },
@@ -53,5 +65,8 @@
                 "title": "Included Providers"
             }
         }
+	},
+	"PieceStores": {
+		"title": "Custom Pieces and Stores"
 	}
 }

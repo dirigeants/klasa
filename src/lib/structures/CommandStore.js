@@ -1,4 +1,4 @@
-const { resolve, join } = require('path');
+const { join } = require('path');
 const { Collection } = require('discord.js');
 const fs = require('fs-nextra');
 const Command = require('./Command');
@@ -48,6 +48,12 @@ class CommandStore extends Collection {
 		 * @type {Command}
 		 */
 		this.holds = Command;
+
+		/**
+		 * The name of what this holds
+		 * @type {String}
+		 */
+		this.name = 'commands';
 	}
 
 	/**
@@ -86,7 +92,7 @@ class CommandStore extends Collection {
 		const existing = this.get(command.name);
 		if (existing) this.delete(existing);
 		super.set(command.name, command);
-		command.aliases.forEach(alias => this.aliases.set(alias, command));
+		for (const alias of command.aliases) this.aliases.set(alias, command);
 		return command;
 	}
 
@@ -99,7 +105,7 @@ class CommandStore extends Collection {
 		const command = this.resolve(name);
 		if (!command) return false;
 		super.delete(command.name);
-		command.aliases.forEach(alias => this.aliases.delete(alias));
+		for (const alias of command.aliases) this.aliases.delete(alias);
 		return true;
 	}
 
@@ -126,13 +132,13 @@ class CommandStore extends Collection {
 
 	/**
 	 * Loads all of our commands from both the user and core directories.
-	 * @returns {Promise<number[]>} The number of commands and aliases loaded.
+	 * @returns {number[]} The number of commands and aliases loaded.
 	 */
 	async loadAll() {
 		this.clear();
 		await CommandStore.walk(this, this.coreDir);
 		await CommandStore.walk(this, this.userDir);
-		return [this.size, this.aliases.size];
+		return this.size;
 	}
 
 	// left for documentation
@@ -142,29 +148,19 @@ class CommandStore extends Collection {
 	/* eslint-enable no-empty-function */
 
 	/**
-	 * Walks our directory of commands for the user and core directories.
-	 * @param {CommandStore} store The command store we're loading into.
-	 * @param {string} dir The directory of commands we're using to load commands from.
-	 * @returns {void}
-	 */
-	static async walk(store, dir) {
-		const files = await fs.readdir(dir).catch(() => { fs.ensureDir(dir).catch(err => store.client.emit('errorlog', err)); });
-		if (!files) return false;
-		files.filter(file => file.endsWith('.js')).map(file => store.load(dir, [file]));
-		const subfolders = [];
-		const mps1 = files.filter(file => !file.includes('.')).map(async (folder) => {
-			const subFiles = await fs.readdir(resolve(dir, folder));
-			if (!subFiles) return true;
-			subFiles.filter(file => !file.includes('.')).forEach(subfolder => subfolders.push({ folder: folder, subfolder: subfolder }));
-			return subFiles.filter(file => file.endsWith('.js')).map(file => store.load(dir, [folder, file]));
-		});
-		await Promise.all(mps1);
-		const mps2 = subfolders.map(async (subfolder) => {
-			const subSubFiles = await fs.readdir(resolve(dir, subfolder.folder, subfolder.subfolder));
-			if (!subSubFiles) return true;
-			return subSubFiles.filter(file => file.endsWith('.js')).map(file => store.load(dir, [subfolder.folder, subfolder.subfolder, file]));
-		});
-		return Promise.all(mps2);
+     * Walks our directory of commands for the user and core directories.
+     * @param {CommandStore} store The command store we're loading into.
+     * @param {string} dir The directory of commands we're using to load commands from.
+     * @param {string[]} subs Subfolders for recursion.
+     * @returns {void}
+     */
+	static async walk(store, dir, subs = []) {
+		const files = await fs.readdir(join(dir, ...subs)).catch(() => { fs.ensureDir(dir).catch(err => store.client.emit('log', err, 'error')); });
+		if (!files) return true;
+		return Promise.all(files.map(async file => {
+			if (file.endsWith('.js')) return store.load(dir, [...subs, file]);
+			return CommandStore.walk(store, dir, [...subs, file]);
+		}));
 	}
 
 }

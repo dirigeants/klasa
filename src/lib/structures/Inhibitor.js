@@ -10,6 +10,7 @@ class Inhibitor {
 
 	/**
 	 * @typedef {Object} InhibitorOptions
+	 * @memberof Inhibitor
 	 * @property {string} [name = theFileName] The name of the inhibitor
 	 * @property {boolean} [enabled=true] Whether the inhibitor is enabled
 	 * @property {boolean} [spamProtection=false] If this inhibitor is meant for spamProtection (disables the inhibitor while generating help)
@@ -61,7 +62,7 @@ class Inhibitor {
 		 * If this inhibitor is meant for spamProtection (disables the inhibitor while generating help)
 		 * @type {boolean}
 		 */
-		this.spamProtection = options.spamProtection || false;
+		this.spamProtection = 'spamProtection' in options ? options.spamProtection : false;
 	}
 
 	/**
@@ -69,7 +70,7 @@ class Inhibitor {
 	 * @param {external:Message} msg The message that triggered this inhibitor
 	 * @param {Command} cmd The command to run
 	 * @abstract
-	 * @returns {Promise<void|string>}
+	 * @returns {(void|string)}
 	 */
 	run() {
 		// Defined in extension Classes
@@ -78,7 +79,7 @@ class Inhibitor {
 	/**
 	 * The init method to be optionaly overwritten in actual inhibitors
 	 * @abstract
-	 * @returns {Promise<void>}
+	 * @returns {void}
 	 */
 	async init() {
 		// Optionally defined in extension Classes

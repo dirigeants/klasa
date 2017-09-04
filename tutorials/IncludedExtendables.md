@@ -9,7 +9,7 @@ A getter to check and see if you can attach files in the channel.
 
 **Source:**
 
-[extendables/get_attachable.js](https://github.com/dirigeants/klasa/blob/master/src/extendables/get_attachable.js)
+[extendables/attachable.js](https://github.com/dirigeants/klasa/blob/master/src/extendables/attachable.js)
 
 ## get embedable
 
@@ -22,7 +22,7 @@ A getter to check and see if you can embed links in the channel.
 
 **Source:**
 
-[extendables/get_embedable.js](https://github.com/dirigeants/klasa/blob/master/src/extendables/get_embedable.js)
+[extendables/embedable.js](https://github.com/dirigeants/klasa/blob/master/src/extendables/embedable.js)
 
 ## get guildSettings
 
@@ -33,7 +33,7 @@ A getter to check get either the guild settings if in a guild, or the default bo
 
 **Source:**
 
-[extendables/get_guildSettings.js](https://github.com/dirigeants/klasa/blob/master/src/extendables/get_guildSettings.js)
+[extendables/guildSettings.js](https://github.com/dirigeants/klasa/blob/master/src/extendables/guildSettings.js)
 
 ## get postable
 
@@ -46,7 +46,19 @@ A getter to check and see if you can send messages in the channel.
 
 **Source:**
 
-[extendables/get_postable.js](https://github.com/dirigeants/klasa/blob/master/src/extendables/get_postable.js)
+[extendables/postable.js](https://github.com/dirigeants/klasa/blob/master/src/extendables/postable.js)
+
+## get language
+
+A getter to get the configured language.
+
+**Applies to:**
+- {@link external:Guild}
+- {@link external:Message}
+
+**Source:**
+
+[extendables/language.js](https://github.com/dirigeants/klasa/blob/master/src/extendables/language.js)
 
 ## get reactable
 
@@ -59,7 +71,7 @@ A getter to check and see if you can react in the channel.
 
 **Source:**
 
-[extendables/get_reactable.js](https://github.com/dirigeants/klasa/blob/master/src/extendables/get_reactable.js)
+[extendables/reactable.js](https://github.com/dirigeants/klasa/blob/master/src/extendables/reactable.js)
 
 ## get readable
 
@@ -72,7 +84,7 @@ A getter to check and see if you can read in the channel.
 
 **Source:**
 
-[extendables/get_readable.js](https://github.com/dirigeants/klasa/blob/master/src/extendables/get_readable.js)
+[extendables/readable.js](https://github.com/dirigeants/klasa/blob/master/src/extendables/readable.js)
 
 ## get settings
 
@@ -83,7 +95,7 @@ A getter to get the settings in a guild.
 
 **Source:**
 
-[extendables/get_settings.js](https://github.com/dirigeants/klasa/blob/master/src/extendables/get_settings.js)
+[extendables/settings.js](https://github.com/dirigeants/klasa/blob/master/src/extendables/settings.js)
 
 ## get usableCommands
 
@@ -94,7 +106,7 @@ A getter to return a collection of usable commands by the message author/member.
 
 **Source:**
 
-[extendables/get_usableCommands.js](https://github.com/dirigeants/klasa/blob/master/src/extendables/get_usableCommands.js)
+[extendables/usableCommands.js](https://github.com/dirigeants/klasa/blob/master/src/extendables/usableCommands.js)
 
 ## hasAtleastPermissionLevel(permission:number)
 
@@ -105,7 +117,7 @@ Checks to see if the author/member has atleast the Permission level passed.
 
 **Source:**
 
-[extendables/hasAtleastPermissionLevel.js](https://github.com/dirigeants/klasa/blob/master/src/extendables/hasAtleastPermissionLevel.js)
+[extendables/hasAtleastPermissionLevel.js](https://github.com/dirigeants/klasa/blob/master/src/extendables/hasAtLeastPermissionLevel.js)
 
 ## send(content:string, options:Object)
 

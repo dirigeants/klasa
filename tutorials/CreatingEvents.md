@@ -30,5 +30,6 @@ Where `...params` are arguments you would *normally* get from those events. For 
 - {@tutorial CreatingExtendables}
 - {@tutorial CreatingFinalizers}
 - {@tutorial CreatingInhibitors}
+- {@tutorial CreatingLanguages}
 - {@tutorial CreatingMonitors}
 - {@tutorial CreatingProviders}

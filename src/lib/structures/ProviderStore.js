@@ -41,6 +41,12 @@ class ProviderStore extends Collection {
 		 * @type {Provider}
 		 */
 		this.holds = Provider;
+
+		/**
+		 * The name of what this holds
+		 * @type {String}
+		 */
+		this.name = 'providers';
 	}
 
 	/**
@@ -51,6 +57,7 @@ class ProviderStore extends Collection {
 	delete(name) {
 		const pro = this.resolve(name);
 		if (!pro) return false;
+		pro.shutdown();
 		super.delete(pro.name);
 		return true;
 	}
@@ -61,7 +68,7 @@ class ProviderStore extends Collection {
 	 * @returns {Provider}
 	 */
 	set(provider) {
-		if (!(provider instanceof this.holds)) return this.client.emit('error', `Only ${this.holds.constructor.name}s may be stored in the Store.`);
+		if (!(provider instanceof this.holds)) return this.client.emit('error', `Only ${this.name} may be stored in the Store.`);
 		const existing = this.get(provider.name);
 		if (existing) this.delete(existing);
 		super.set(provider.name, provider);

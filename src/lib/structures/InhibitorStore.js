@@ -41,12 +41,18 @@ class InhibitorStore extends Collection {
 		 * @type {Inhibitor}
 		 */
 		this.holds = Inhibitor;
+
+		/**
+		 * The name of what this holds
+		 * @type {String}
+		 */
+		this.name = 'inhibitors';
 	}
 
 	/**
 	 * Deletes a inhibitor from the store
 	 * @param  {Inhibitor|string} name The inhibitor object or a string representing the structure this store caches
-	 * @return {boolean} whether or not the delete was successful.
+	 * @returns {boolean} whether or not the delete was successful.
 	 */
 	delete(name) {
 		const inhibitor = this.resolve(name);
@@ -60,14 +66,15 @@ class InhibitorStore extends Collection {
 	 * @param  {external:Message} msg The message object from Discord.js
 	 * @param  {Command} cmd The command being ran.
 	 * @param  {boolean} [selective=false] Whether or not we should ignore certain inhibitors to prevent spam.
-	 * @return {Promise<number>}
+	 * @returns {void}
 	 */
 	async run(msg, cmd, selective = false) {
-		const mps = [true];
-		this.forEach(mProc => {
-			if (!mProc.spamProtection && !selective) mps.push(mProc.run(msg, cmd));
-		});
-		return Promise.all(mps);
+		const mps = [];
+		for (const inhibitor of this.values()) if (!selective || !inhibitor.spamProtection) mps.push(inhibitor.run(msg, cmd).catch(err => err));
+		const results = (await Promise.all(mps)).filter(res => res);
+		if (results.includes(true)) throw undefined;
+		if (results.length > 0) throw results.join('\n');
+		return undefined;
 	}
 
 	/**
@@ -76,7 +83,7 @@ class InhibitorStore extends Collection {
 	 * @returns {Inhibitor}
 	 */
 	set(inhibitor) {
-		if (!(inhibitor instanceof this.holds)) return this.client.emit('error', `Only ${this.holds.constructor.name}s may be stored in the Store.`);
+		if (!(inhibitor instanceof this.holds)) return this.client.emit('error', `Only ${this.name} may be stored in the Store.`);
 		const existing = this.get(inhibitor.name);
 		if (existing) this.delete(existing);
 		super.set(inhibitor.name, inhibitor);

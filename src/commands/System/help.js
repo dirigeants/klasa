@@ -33,8 +33,8 @@ module.exports = class extends Command {
 		}
 
 		return msg[method].send(helpMessage, { split: { char: '\u200b' } })
-			.then(() => { if (msg.channel.type !== 'dm' && this.client.user.bot) msg.sendMessage('📥 | Commands have been sent to your DMs.'); })
-			.catch(() => { if (msg.channel.type !== 'dm' && this.client.user.bot) msg.sendMessage("❌ | You have DMs disabled, I couldn't send you the commands in DMs."); });
+			.then(() => { if (msg.channel.type !== 'dm' && this.client.user.bot) msg.sendMessage(msg.language.get('COMMAND_HELP_DM')); })
+			.catch(() => { if (msg.channel.type !== 'dm' && this.client.user.bot) msg.sendMessage(msg.language.get('COMMAND_HELP_NODM')); });
 	}
 
 	async buildHelp(msg) {
@@ -44,7 +44,7 @@ module.exports = class extends Command {
 		const longest = commandNames.reduce((long, str) => Math.max(long, str.length), 0);
 
 		await Promise.all(this.client.commands.map((command) =>
-			this.client.inhibitors.run(this.msg, command, true)
+			this.client.inhibitors.run(msg, command, true)
 				.then(() => {
 					if (!help.hasOwnProperty(command.category)) help[command.category] = {};
 					if (!help[command.category].hasOwnProperty(command.subCategory)) help[command.category][command.subCategory] = [];

@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Klasa Class: SettingsCache</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.dark.css">
+
+	<link type="text/css" rel="stylesheet" href="styles/site.cosmo.css">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top navbar-inverse">
+<div class="container">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="index.html">Klasa</a>
+		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+        </button>
+	</div>
+	<div class="navbar-collapse collapse" id="topNavigation">
+		<ul class="nav navbar-nav">
+			
+			<li class="dropdown">
+				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="ArgResolver.html">ArgResolver</a></li><li><a href="CacheManager.html">CacheManager</a></li><li><a href="Command.html">Command</a></li><li><a href="CommandMessage.html">CommandMessage</a></li><li><a href="CommandStore.html">CommandStore</a></li><li><a href="Event.html">Event</a></li><li><a href="EventStore.html">EventStore</a></li><li><a href="Extendable.html">Extendable</a></li><li><a href="ExtendableStore.html">ExtendableStore</a></li><li><a href="Finalizer.html">Finalizer</a></li><li><a href="FinalizerStore.html">FinalizerStore</a></li><li><a href="Inhibitor.html">Inhibitor</a></li><li><a href="InhibitorStore.html">InhibitorStore</a></li><li><a href="KlasaClient.html">KlasaClient</a></li><li><a href="Language.html">Language</a></li><li><a href="LanguageStore.html">LanguageStore</a></li><li><a href="Monitor.html">Monitor</a></li><li><a href="MonitorStore.html">MonitorStore</a></li><li><a href="ParsedUsage.html">ParsedUsage</a></li><li><a href="PermissionLevels.html">PermissionLevels</a></li><li><a href="Piece.html">Piece</a></li><li><a href="Possible.html">Possible</a></li><li><a href="Provider.html">Provider</a></li><li><a href="ProviderStore.html">ProviderStore</a></li><li><a href="Resolver.html">Resolver</a></li><li><a href="SchemaManager.html">SchemaManager</a></li><li><a href="SettingGateway.html">SettingGateway</a></li><li><a href="SettingResolver.html">SettingResolver</a></li><li><a href="SettingsCache.html">SettingsCache</a></li><li><a href="SQL.html">SQL</a></li><li><a href="Store.html">Store</a></li><li><a href="Tag.html">Tag</a></li><li><a href="Util.html">Util</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="tutorials.list.html" class="dropdown-toggle" data-toggle="dropdown">Tutorials<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="tutorial-GettingStarted.html">Getting Started</a></li><li><a href="tutorial-IncludedPieces.html">Included Pieces</a></li><li><a href="tutorial-PieceStores.html">Custom Pieces and Stores</a></li><li><a href="tutorial-UnderstandingPermissionLevels.html">Understanding Permission Levels</a></li><li><a href="tutorial-UnderstandingSettingGateway.html">Understanding Setting Gateway</a></li><li><a href="tutorial-UnderstandingUsageStrings.html">Understanding Usage Strings</a></li>
+				</ul>
+			</li>
+			
+		</ul>
+        
+            <div class="col-sm-3 col-md-3">
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search" name="q" id="search-input">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" id="search-submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        
+	</div>
+
+</div>
+</div>
+
+
+<div class="container" id="toc-content">
+<div class="row">
+
+	
+	<div class="col-md-8">
+	
+		<div id="main">
+			
+
+	<h1 class="page-title">Class: SettingsCache</h1>
+<section>
+
+<header>
+    
+        <h2>
+        SettingsCache
+        </h2>
+        
+            <div class="class-description">SettingGateway's driver to make new instances of it, with the purpose to handle different databases simultaneously.</div>
+        
+    
+</header>
+
+
+<article>
+    <div class="container-overview">
+    
+        
+<hr>
+<dt>
+    <h4 class="name" id="SettingsCache"><span class="type-signature"></span>new SettingsCache(client)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>client</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="KlasaClient.html">KlasaClient</a>
+</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The Klasa client</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/settings/SettingsCache.js#L12">lib/settings/SettingsCache.js#L12</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Properties</h3>
+
+        <dl>
+            
+<hr>
+<dt class="name" id="defaultDataSchema">
+
+    <h4 id="defaultDataSchema"><span class="type-signature">&lt;readonly> </span>defaultDataSchema<span class="type-signature"></span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        The data schema Klasa uses for guild settings.
+    </div>
+    
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/settings/SettingsCache.js#L85">lib/settings/SettingsCache.js#L85</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt class="name" id="guilds">
+
+    <h4 id="guilds"><span class="type-signature"></span>guilds<span class="type-signature"> :<a href="SettingGateway.html">SettingGateway</a></span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        The SettingGateway instance created to handle guild settings.
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type"><a href="SettingGateway.html">SettingGateway</a>
+</span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/settings/SettingsCache.js#L30">lib/settings/SettingsCache.js#L30</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt class="name" id="resolver">
+
+    <h4 id="resolver"><span class="type-signature"></span>resolver<span class="type-signature"> :<a href="SettingResolver.html">SettingResolver</a></span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        The resolver instance this SettingGateway uses to parse the data.
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type"><a href="SettingResolver.html">SettingResolver</a>
+</span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/settings/SettingsCache.js#L24">lib/settings/SettingsCache.js#L24</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        </dl>
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        <dl>
+            
+<hr>
+<dt>
+    <h4 class="name" id="add"><span class="type-signature">&lt;async> </span>add(name, validateFunction [, schema])</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Add a new instance of SettingGateway, with its own validateFunction and schema.
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Argument</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string
+</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The name for the new instance.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>validateFunction</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function
+</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The function that validates the input.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>schema</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object
+</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    {}
+                
+                </td>
+            
+
+            <td class="description last">The schema.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/settings/SettingsCache.js#L57">lib/settings/SettingsCache.js#L57</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="SettingGateway.html">SettingGateway</a>
+</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+        <h5>Example</h5>
+        
+    <pre class="sunlight-highlight-javascript">// Add a new SettingGateway instance, called &#x27;users&#x27;, which input takes users, and stores a quote which is a string between 2 and 140 characters.
+const validate = async function(resolver, user) {
+	 const result = await resolver.user(user);
+	 if (!result) throw &#x27;The parameter &lt;User&gt; expects either a User ID or a User Object.&#x27;;
+	 return result;
+};
+const schema = {
+	 quote: {
+		 type: &#x27;String&#x27;,
+		 default: null,
+		 array: false,
+		 min: 2,
+		 max: 140,
+	 },
+};
+SettingsCache.add(&#x27;users&#x27;, validate, schema);</pre>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="validate"><span class="type-signature">&lt;async> </span>validate(resolver, guild)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        The validator function Klasa uses for guild settings.
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>resolver</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="SettingResolver.html">SettingResolver</a>
+</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The resolver instance this SettingGateway uses to parse the data.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>guild</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object
+</span>
+|
+
+<span class="param-type">string
+</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The data to validate.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/settings/SettingsCache.js#L74">lib/settings/SettingsCache.js#L74</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">any
+</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        </dl>
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+		</div>
+	</div>
+
+	<div class="clearfix"></div>
+
+	
+		<div class="col-md-3">
+			<div id="toc" class="col-md-3 hidden-xs hidden-sm hidden-md"></div>
+		</div>
+	
+
+</div>
+</div>
+
+
+    <div class="modal fade" id="searchResults">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Search results</h4>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div>
+
+
+<footer>
+
+	<a href="https://github.com/dirigeants/klasa">Fork me on Github</a>
+
+
+	<!-- <span class="copyright">
+		<a href="https://github.com/dirigeants/klasa">Fork me on Github</a>
+	</span> -->
+
+<!-- <span class="jsdoc-message">
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.0-dev</a>
+	
+	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
+</span> -->
+</footer>
+
+<script src="scripts/docstrap.lib.js"></script>
+<script src="scripts/toc.js"></script>
+
+    <script type="text/javascript" src="scripts/fulltext-search-ui.js"></script>
+
+
+<script>
+$( function () {
+	$( "[id*='$']" ).each( function () {
+		var $this = $( this );
+
+		$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+	} );
+
+	$( ".tutorial-section pre, .readme-section pre, pre.prettyprint.source" ).each( function () {
+		var $this = $( this );
+
+		var example = $this.find( "code" );
+		exampleText = example.html();
+		var lang = /{@lang (.*?)}/.exec( exampleText );
+		if ( lang && lang[1] ) {
+			exampleText = exampleText.replace( lang[0], "" );
+			example.html( exampleText );
+			lang = lang[1];
+		} else {
+			var langClassMatch = example.parent()[0].className.match(/lang\-(\S+)/);
+			lang = langClassMatch ? langClassMatch[1] : "javascript";
+		}
+
+		if ( lang ) {
+
+			$this
+			.addClass( "sunlight-highlight-" + lang )
+			.addClass( "linenums" )
+			.html( example.html() );
+
+		}
+	} );
+
+	Sunlight.highlightAll( {
+		lineNumbers : true,
+		showMenu : true,
+		enableDoclinks : true
+	} );
+
+	$.catchAnchorLinks( {
+        navbarOffset: 10
+	} );
+	$( "#toc" ).toc( {
+		anchorName  : function ( i, heading, prefix ) {
+			return $( heading ).attr( "id" ) || ( prefix + i );
+		},
+		selectors   : "#toc-content h1,#toc-content h2,#toc-content h3,#toc-content h4",
+		showAndHide : false,
+		smoothScrolling: true
+	} );
+
+	$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+	$( '.dropdown-toggle' ).dropdown();
+
+    $( "table" ).each( function () {
+      var $this = $( this );
+      $this.addClass('table');
+    } );
+
+} );
+</script>
+
+
+
+<!--Navigation and Symbol Display-->
+
+
+<!--Google Analytics-->
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            SearcherDisplay.init();
+        });
+    </script>
+
+
+</body>
+</html>

@@ -10,6 +10,7 @@ class Finalizer {
 
 	/**
 	 * @typedef {Object} FinalizerOptions
+	 * @memberof Finalizer
 	 * @property {string} [name = theFileName] The name of the finalizer
 	 * @property {boolean} [enabled=true] Whether the finalizer is enabled or not
 	 */
@@ -72,7 +73,7 @@ class Finalizer {
 	/**
 	 * The init method to be optionaly overwritten in actual finalizers
 	 * @abstract
-	 * @returns {Promise<void>}
+	 * @returns {void}
 	 */
 	async init() {
 		// Optionally defined in extension Classes
