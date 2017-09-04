@@ -7,7 +7,6 @@ const clk = new chalk.constructor({ enabled: true });
 module.exports = class extends Finalizer {
 
 	run(msg, mes, start) {
-		if (this.client.config.cmdLogging !== true) return;
 		this.client.emit('log', [
 			`${msg.cmd.name}(${msg.args.join(', ')})`,
 			msg.reprompted ? `${clk.bgRed(`[${(now() - start).toFixed(2)}ms]`)}` : `${clk.bgBlue(`[${(now() - start).toFixed(2)}ms]`)}`,
@@ -17,6 +16,7 @@ module.exports = class extends Finalizer {
 	}
 
 	init() {
+		this.enabled = this.client.config.cmdLogging;
 		clk.enabled = !this.client.config.disableLogColor;
 	}
 
