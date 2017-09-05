@@ -27,7 +27,8 @@ const client = new klasa.Client({
     },
     prefix: '+',
     cmdEditing: true,
-    typing: true
+    typing: true,
+    readyMessage: (client) => `${client.user.tag}, Ready to serve ${client.guilds.size} guilds and ${client.users.size} users`
 });
 
 client.login('your-bot-token');
@@ -50,6 +51,7 @@ client.login('your-bot-token');
 - **cmdEditing**: `default: false` Whether the bot should update responses if the command is edited
 - **typing**: `default: false` Whether the bot should type while processing commands.
 - **quotedStringSupport**: `default: false` Whether the bot should default to using quoted string support in arg parsing, or not (overridable per command)
+- **readyMessage** `default: \`Successfully initialized. Ready to serve ${client.guilds.size} guilds.\` readyMessage to be passed thru Klasa's ready event.
 - **ownerID**: The discord user id for the user the bot should respect as the owner (gotten from Discord api if not provided)
 
 
