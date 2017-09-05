@@ -35,7 +35,7 @@ client.login('your-bot-token');
 
 ### Configuration Options: [KlasaClientConfig]{@link KlasaClient.KlasaClientConfig}
 
-- **clientOptions**: These are passed directly to the discord.js library. They are optional. For more information on which options are available, see [ClientOptions in the discord.js docs](https://discord.js.org/#/docs/main/stable/typedef/ClientOptions).
+- **clientOptions**: These are passed directly to the discord.js library. They are optional. For more information on which options are available, see [ClientOptions in the discord.js docs](https://discord.js.org/#/docs/main/master/typedef/ClientOptions).
 - **prefix**: The default prefix(es) when the bot first boots up. This option becomes useless after first boot, since the prefix is written to the default configuration system. Pass an array to accept multiple prefixes.
 - **permissionLevels**: `default: KlasaClient.defaultPermissionLevels` The permission levels to use with this bot
 - **clientBaseDir**: `default: process.cwd()` The directory where all piece folders can be found
