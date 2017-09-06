@@ -39,9 +39,9 @@ class KlasaClient extends Discord.Client {
 	 * @property {RegExp} [prefixMention] The prefix mention for your bot (Automatically Generated)
 	 * @property {boolean} [cmdPrompt=false] Whether the bot should prompt missing parameters
 	 * @property {boolean} [cmdEditing=false] Whether the bot should update responses if the command is edited
-	 * @property {boolean} [cmdLogging=false] Whether the bot should log commands to the console or not
 	 * @property {boolean} [typing=false] Whether the bot should type while processing commands.
 	 * @property {boolean} [quotedStringSupport=false] Whether the bot should default to using quoted string support in arg parsing, or not (overridable per command)
+	 * @property {?(string|Function)} [readyMessage=`Successfully initialized. Ready to serve ${this.guilds.size} guilds.`] readyMessage to be passed thru Klasa's ready event
 	 * @property {string} [ownerID] The discord user id for the user the bot should respect as the owner (gotten from Discord api if not provided)
 	 */
 
@@ -323,7 +323,8 @@ class KlasaClient extends Discord.Client {
 		util.initClean(this);
 		this.setInterval(this.sweepCommandMessages.bind(this), this.commandMessageSweep * 1000);
 		this.ready = true;
-		this.emit('log', this.config.readyMessage || `Successfully initialized. Ready to serve ${this.guilds.size} guilds.`);
+		if (this.config.readyMessage === undefined) this.emit('log', `Successfully initialized. Ready to serve ${this.guilds.size} guilds.`);
+		else if (this.config.readyMessage !== null) this.emit('log', typeof this.config.readyMessage === 'function' ? this.config.readyMessage(this) : this.config.readyMessage);
 		this.emit('klasaReady');
 	}
 
