@@ -315,7 +315,6 @@ class KlasaClient extends Discord.Client {
 		if (this.config.ignoreBots === undefined) this.config.ignoreBots = true;
 		if (this.config.ignoreSelf === undefined) this.config.ignoreSelf = this.user.bot;
 		if (this.user.bot) this.application = await super.fetchApplication();
-		const readyMessage = this.config.readyMessage && typeof this.config.readyMessage === 'function' ? this.config.readyMessage(this) : this.config.readyMessage;
 		if (!this.config.ownerID) this.config.ownerID = this.user.bot ? this.application.owner.id : this.user.id;
 		await this.providers.init();
 		await this.settings.guilds.init();
@@ -324,7 +323,8 @@ class KlasaClient extends Discord.Client {
 		util.initClean(this);
 		this.setInterval(this.sweepCommandMessages.bind(this), this.commandMessageSweep * 1000);
 		this.ready = true;
-		this.config.readyMessage ? this.emit('log', readyMessage) : this.emit('log', `Successfully initialized. Ready to serve ${this.guilds.size} guilds.`);
+		if (this.config.readyMessage === undefined) this.emit('log', `Successfully initialized. Ready to serve ${this.guilds.size} guilds.`)
+		else if (this.config.readyMessage !== null) this.emit('log', typeof this.config.readyMessage === "function" ? this.config.readyMessage(this) : this.config.readyMessage);
 		this.emit('klasaReady');
 	}
 
