@@ -29,7 +29,7 @@ module.exports = class extends Event {
 
 		const format = this.formats[type || 'log'];
 		let timestamp = this.client.config.disableLogTimestamps ? '' : `[${moment().format('YYYY-MM-DD HH:mm:ss')}]`;
-		if ('time' in format) timestamp = format.type(timestamp);
+		if ('time' in format) timestamp = format.time(timestamp);
 		// eslint-disable-next-line no-console
 		console[format.logger || 'log'](data.split('\n').map(str => `${timestamp}${format.msg ? format.msg(timestamp ? ` ${str}` : str) : timestamp ? ` ${str}` : str}`).join('\n'));
 	}
