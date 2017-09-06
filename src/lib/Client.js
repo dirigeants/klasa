@@ -323,8 +323,8 @@ class KlasaClient extends Discord.Client {
 		util.initClean(this);
 		this.setInterval(this.sweepCommandMessages.bind(this), this.commandMessageSweep * 1000);
 		this.ready = true;
-		if (this.config.readyMessage === undefined) this.emit('log', `Successfully initialized. Ready to serve ${this.guilds.size} guilds.`)
-		else if (this.config.readyMessage !== null) this.emit('log', typeof this.config.readyMessage === "function" ? this.config.readyMessage(this) : this.config.readyMessage);
+		if (this.config.readyMessage === undefined) this.emit('log', `Successfully initialized. Ready to serve ${this.guilds.size} guilds.`);
+		else if (this.config.readyMessage !== null) this.emit('log', typeof this.config.readyMessage === 'function' ? this.config.readyMessage(this) : this.config.readyMessage);
 		this.emit('klasaReady');
 	}
 
