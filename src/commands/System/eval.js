@@ -19,7 +19,7 @@ module.exports = class extends Command {
 			if (typeof evaled !== 'string') evaled = inspect(evaled, { depth: 0 });
 			msg.sendCode('js', this.client.methods.util.clean(evaled));
 		} catch (err) {
-			msg.sendMessage(`\`ERROR\`${this.client.methods.util.codeBlock('js', this.client.methods.util.clean(err))}`);
+			msg.send(` \`ERROR\`\n${this.client.methods.util.codeBlock('js', this.client.methods.util.clean(err))}`);
 			if (err.stack) this.client.emit('error', err.stack);
 		}
 	}
