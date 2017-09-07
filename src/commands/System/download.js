@@ -15,6 +15,7 @@ module.exports = class extends Command {
 		super(...args, {
 			enable: false,
 			permLevel: 10,
+			botPerms: ["SEND_MESSAGES"],
 			description: 'Downloads a piece, either from a link or our Pieces Repository, and installs it.',
 			usage: '<commands|monitors|inhibitors|providers|finalizers|extendables|url:url> [location:str] [folder:str]',
 			usageDelim: ' '
