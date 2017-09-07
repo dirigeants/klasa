@@ -4,6 +4,7 @@ module.exports = class extends Command {
 
 	constructor(...args) {
 		super(...args, {
+			botPerms: ["SEND_MESSAGES"],
 			aliases: ['commands'],
 			description: 'Display help for a command.',
 			usage: '[Command:cmd]'
