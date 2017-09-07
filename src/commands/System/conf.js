@@ -7,6 +7,7 @@ module.exports = class extends Command {
 		super(...args, {
 			runIn: ['text'],
 			permLevel: 6,
+			botPerms: ["SEND_MESSAGES"],
 			description: 'Define per-server configuration.',
 			usage: '<set|get|reset|list|remove> [key:string] [value:string]',
 			usageDelim: ' '
