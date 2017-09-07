@@ -4,6 +4,7 @@ module.exports = class extends Command {
 
 	constructor(...args) {
 		super(...args, {
+			botPerms: ["SEND_MESSAGES"],
 			aliases: ['details', 'what'],
 			description: 'Provides some information about this bot.'
 		});
