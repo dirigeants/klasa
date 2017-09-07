@@ -8,7 +8,7 @@ const { Event } = require('klasa');
 module.exports = class extends Event {
 
 	constructor(...args) {
-		super(...args, { name:'yourEventName' });
+		super(...args, { name:'yourEventName', enabled: true });
 	}
 
 	run(...params) {
