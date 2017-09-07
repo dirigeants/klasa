@@ -7,6 +7,7 @@ module.exports = class extends Command {
 		super(...args, {
 			aliases: ['ev'],
 			permLevel: 10,
+			botPerms: ["SEND_MESSAGES"],
 			description: 'Evaluates arbitrary Javascript. Reserved for bot owner.',
 			usage: '<expression:str>'
 		});
