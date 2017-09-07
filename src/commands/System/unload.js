@@ -6,6 +6,7 @@ module.exports = class extends Command {
 		super(...args, {
 			aliases: ['u'],
 			permLevel: 10,
+			botPerms: ["SEND_MESSAGES"],
 			description: 'Unloads the klasa piece.',
 			usage: '<Piece:piece>'
 		});
