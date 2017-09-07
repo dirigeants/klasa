@@ -5,7 +5,6 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			permLevel: 10,
-			botPerms: ["SEND_MESSAGES"],
 			description: 'Reboots the bot.'
 		});
 	}

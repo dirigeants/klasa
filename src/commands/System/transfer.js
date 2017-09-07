@@ -7,7 +7,6 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			permLevel: 10,
-			botPerms: ["SEND_MESSAGES"],
 			description: 'Transfers a core piece to its respective folder',
 			usage: '<Command:cmd|Inhibitor:inhibitor|Event:event|Monitor:monitor|Language:language|Finalizer:finalizer>'
 		});

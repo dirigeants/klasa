@@ -6,7 +6,7 @@ require('moment-duration-format');
 module.exports = class extends Command {
 
 	constructor(...args) {
-		super(...args, { description: 'Provides some details about the bot and stats.', botPerms: ["SEND_MESSAGES"] });
+		super(...args, { description: 'Provides some details about the bot and stats.' });
 	}
 
 	async run(msg) {
