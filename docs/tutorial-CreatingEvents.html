@@ -84,7 +84,7 @@
 module.exports = class extends Event {
 
 	constructor(...args) {
-		super(...args, { name:'yourEventName' });
+		super(...args, { name:'yourEventName', enabled: true });
 	}
 
 	run(...params) {
@@ -98,6 +98,11 @@ module.exports = class extends Event {
 };
 </code></pre>
 <p>Where <code>...params</code> are arguments you would <em>normally</em> get from those events. For example, while the <code>ready</code> event would only have none, the <code>guildMemberAdd</code> event would be <code>member</code>.</p>
+<h2>Configuration</h2>
+<ul>
+<li><strong>name</strong>: <code>default: TheFileName</code> <code>type: string</code> the name of the event.</li>
+<li><strong>enabled</strong>: <code>default: true</code> <code>type: boolean</code>  whether the event is enabled or not.</li>
+</ul>
 <h2>Further Reading:</h2>
 <ul>
 <li><a href="tutorial-CreatingCommands.html">Creating Commands</a></li>
