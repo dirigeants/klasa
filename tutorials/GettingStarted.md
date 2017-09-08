@@ -8,7 +8,7 @@ Time to take the plunge! Klasa is on NPM and can be easily installed.
 npm install --save klasa
 ```
 
-optionally if you want to use the bleading edge development version (not guaranteed to be stable):
+optionally if you want to use the bleeding edge development version (not guaranteed to be stable):
 
 ```
 npm install --save dirigeants/klasa
