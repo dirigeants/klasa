@@ -7,7 +7,7 @@ module.exports = class extends Command {
 		super(...args, {
 			aliases: ['r'],
 			permLevel: 10,
-			description: "Reloads the klasa piece, if it's been updated or modified.",
+			description: 'Reloads a klasa piece, or all pieces of a klasa store.',
 			usage: '<Store:store|Piece:piece>'
 		});
 	}
