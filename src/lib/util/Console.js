@@ -14,6 +14,7 @@ class KlasaConsole extends Console {
      */
 	constructor({ stdout = process.stdout, stderr = process.stderr, useColor = true, colors = {}, timestamps = true }) {
 		super(stdout, stderr);
+
 		/**
          * The standard output stream for this console, defaulted to process.stderr.
          * @name KlasaConsole#stdout
@@ -166,23 +167,23 @@ class KlasaConsole extends Console {
      */
 
 	/**
-     * @memberof KlasaConsole
-     * @typedef {*} StyleTypes
-     * @property {string} normal
-     * @property {string} bold
-     * @property {string} dim
-     * @property {string} italic
-     * @property {string} underline
-     * @property {string} inverse
-     * @property {string} hidden
-     * @property {string} strikethrough
-     */
+	 * @memberof KlasaConsole
+	 * @typedef {*} StyleTypes
+	 * @property {string} normal
+	 * @property {string} bold
+	 * @property {string} dim
+	 * @property {string} italic
+	 * @property {string} underline
+	 * @property {string} inverse
+	 * @property {string} hidden
+	 * @property {string} strikethrough
+	 */
 
 	/**
-     * Logs everything to the console/writable stream.
-     * @param  {*} stuff The stuff we want to print.
-     * @param  {string} [type="log"] The type of log, particularly useful for coloring.
-     */
+	 * Logs everything to the console/writable stream.
+	 * @param  {*} stuff The stuff we want to print.
+	 * @param  {string} [type="log"] The type of log, particularly useful for coloring.
+	 */
 	write(stuff, type = 'log') {
 		stuff = KlasaConsole.flatten(stuff, this.useColors);
 		const color = this.colors[type.toLowerCase()] || {};
@@ -193,87 +194,87 @@ class KlasaConsole extends Console {
 	}
 
 	/**
-     * Calls a log write with everything to the console/writable stream.
-     * @param {...*} stuff The stuff we want to print.
-     * @returns {undefined}
-     */
+	 * Calls a log write with everything to the console/writable stream.
+	 * @param {...*} stuff The stuff we want to print.
+	 * @returns {undefined}
+	 */
 	log(...stuff) {
 		this.write(stuff, 'log');
 	}
 
 	/**
-     * Calls a warn write with everything to the console/writable stream.
-     * @param {...*} stuff The stuff we want to print.
-     * @returns {undefined}
-     */
+	 * Calls a warn write with everything to the console/writable stream.
+	 * @param {...*} stuff The stuff we want to print.
+	 * @returns {undefined}
+	 */
 	warn(...stuff) {
 		this.write(stuff, 'warn');
 	}
 
 	/**
-     * Calls an error write with everything to the console/writable stream.
-     * @param {...*} stuff The stuff we want to print.
-     * @returns {undefined}
-     */
+	 * Calls an error write with everything to the console/writable stream.
+	 * @param {...*} stuff The stuff we want to print.
+	 * @returns {undefined}
+	 */
 	error(...stuff) {
 		this.write(stuff, 'error');
 	}
 
 	/**
-     * Calls a debug write with everything to the console/writable stream.
-     * @param {...*} stuff The stuff we want to print.
-     * @returns {undefined}
-     */
+	 * Calls a debug write with everything to the console/writable stream.
+	 * @param {...*} stuff The stuff we want to print.
+	 * @returns {undefined}
+	 */
 	debug(...stuff) {
 		this.write(stuff, 'debug');
 	}
 
 	/**
-     * Calls a verbose write with everything to the console/writable stream.
-     * @param {...*} stuff The stuff we want to print.
-     * @returns {undefined}
-     */
+	 * Calls a verbose write with everything to the console/writable stream.
+	 * @param {...*} stuff The stuff we want to print.
+	 * @returns {undefined}
+	 */
 	verbose(...stuff) {
 		this.write(stuff, 'verbose');
 	}
 
 	/**
-     * Calls a wtf (what a terrible failure) write with everything to the console/writable stream.
-     * @param {...*} stuff The stuff we want to print.
-     * @returns {undefined}
-     */
+	 * Calls a wtf (what a terrible failure) write with everything to the console/writable stream.
+	 * @param {...*} stuff The stuff we want to print.
+	 * @returns {undefined}
+	 */
 	wtf(...stuff) {
 		this.write(stuff, 'wtf');
 	}
 
 	/**
-     * Logs everything to the console/writable stream.
-     * @param {Date} timestamp The timestamp to maybe format
-     * @param {string} time The time format used for coloring
-     * @returns {string} 
-     */
+	 * Logs everything to the console/writable stream.
+	 * @param {Date} timestamp The timestamp to maybe format
+	 * @param {string} time The time format used for coloring
+	 * @returns {string} 
+	 */
 	timestamp(timestamp, time) {
 		if (!this.useColors) return timestamp;
 		return Colors.format(timestamp, time);
 	}
 
 	/**
-     * Logs everything to the console/writable stream.
-     * @param {string} string The stuff we want to print.
-     * @param {string} message The message format used for coloring
-     * @returns {string}
-     */
+	 * Logs everything to the console/writable stream.
+	 * @param {string} string The stuff we want to print.
+	 * @param {string} message The message format used for coloring
+	 * @returns {string}
+	 */
 	messages(string, message) {
 		if (!this.useColors) return string;
 		return Colors.format(string, message);
 	}
 
 	/**
-     * Flattens our data into a readable string.
-     * @param  {*} data Some data to flatten
-     * @param {boolean} useColors Whether or not the inspection should color the output
-     * @return {string}
-     */
+	 * Flattens our data into a readable string.
+	 * @param  {*} data Some data to flatten
+	 * @param {boolean} useColors Whether or not the inspection should color the output
+	 * @return {string}
+	 */
 	static flatten(data, useColors) {
 		data = data.stack || data.message || data;
 		if (typeof data === 'object' && typeof data !== 'string' && !Array.isArray(data)) data = inspect(data, { depth: 0, colors: useColors });
