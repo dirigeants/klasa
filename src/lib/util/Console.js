@@ -185,11 +185,11 @@ class KlasaConsole extends Console {
      */
 	write(stuff, type = 'log') {
 		stuff = KlasaConsole.flatten(stuff, this.useColors);
-		const color = this.colors[type.toLowerCase()] || { type: type.toLowerCase() };
+		const color = this.colors[type.toLowerCase()] || {};
 		const message = color.message || {};
 		const time = color.time || {};
 		const timestamp = this.timestamps ? `${this.timestamp(`[${moment().format(this.timestamps)}]`, time)} ` : '';
-		super[color.type](stuff.split('\n').map(str => `${timestamp}${this.messages(str, message)}`).join('\n'));
+		super[color.type || 'log'](stuff.split('\n').map(str => `${timestamp}${this.messages(str, message)}`).join('\n'));
 	}
 
 	/**
