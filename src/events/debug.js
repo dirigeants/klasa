@@ -7,7 +7,7 @@ module.exports = class extends Event {
 	}
 
 	run(warning) {
-		this.client.emit('log', warning, 'debug');
+		this.client.console.debug(warning);
 	}
 
 };

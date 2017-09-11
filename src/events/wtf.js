@@ -7,7 +7,7 @@ module.exports = class extends Event {
 	}
 
 	run(failure) {
-		this.client.emit('log', failure, 'wtf');
+		this.client.console.wtf(failure);
 	}
 
 };

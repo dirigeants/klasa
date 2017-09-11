@@ -19,7 +19,6 @@
     "docs": "npx jsdoc -c ./.docstrap.json -R README.md"
   },
   "dependencies": {
-    "chalk": "^2.1.0",
     "fs-nextra": "^0.2.1",
     "moment": "^2.18.1",
     "moment-duration-format": "^1.3.0",

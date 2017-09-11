@@ -5,6 +5,7 @@ const CommandMessage = require('./structures/CommandMessage');
 const ArgResolver = require('./parsers/ArgResolver');
 const PermLevels = require('./structures/PermissionLevels');
 const util = require('./util/util');
+const Console = require('./util/Console');
 const Settings = require('./settings/SettingsCache');
 const CommandStore = require('./structures/CommandStore');
 const InhibitorStore = require('./structures/InhibitorStore');
@@ -32,8 +33,7 @@ class KlasaClient extends Discord.Client {
 	 * @property {number} [commandMessageLifetime=1800] The threshold for how old command messages can be before sweeping since the last edit in seconds
 	 * @property {number} [commandMessageSweep=900] The interval duration for which command messages should be sweept in seconds
 	 * @property {object} [provider] The provider to use in Klasa
-	 * @property {boolean} [disableLogTimestamps=false] Whether or not to disable the log timestamps
-	 * @property {boolean} [disableLogColor=false] Whether or not to disable the log colors
+	 * @property {KlasaConsoleConfig} [console={}] Config options to pass to the client console
 	 * @property {boolean} [ignoreBots=true] Whether or not this bot should ignore other bots
 	 * @property {boolean} [ignoreSelf=true] Whether or not this bot should ignore itself
 	 * @property {RegExp} [prefixMention] The prefix mention for your bot (Automatically Generated)
@@ -43,6 +43,16 @@ class KlasaClient extends Discord.Client {
 	 * @property {boolean} [quotedStringSupport=false] Whether the bot should default to using quoted string support in arg parsing, or not (overridable per command)
 	 * @property {?(string|Function)} [readyMessage=`Successfully initialized. Ready to serve ${this.guilds.size} guilds.`] readyMessage to be passed thru Klasa's ready event
 	 * @property {string} [ownerID] The discord user id for the user the bot should respect as the owner (gotten from Discord api if not provided)
+	 */
+
+	/**
+	 * @typedef {Object} KlasaConsoleConfig
+	 * @memberof {KlasaClient}
+	 * @property {WriteableStream} [stdout=process.stdout] Output stream
+	 * @property {WriteableStream} [stderr=process.stderr] Error stream
+	 * @property {boolean} [useColor=true] Whether the client console should use colors
+	 * @property {Colors} [colors] Color formats to use
+	 * @property {(boolean|string)} [timestamps=true] Whether to use timestamps or not, or the moment format of the timestamp you want to use
 	 */
 
 	/**
@@ -58,6 +68,7 @@ class KlasaClient extends Discord.Client {
 		 */
 		this.config = config;
 		this.config.provider = config.provider || {};
+		this.config.console = config.console || {};
 		this.config.language = config.language || 'en-US';
 
 		/**
@@ -70,7 +81,19 @@ class KlasaClient extends Discord.Client {
 		 * The directory where the user files are at
 		 * @type {string}
 		 */
-		this.clientBaseDir = config.clientBaseDir || path.dirname(require.main.filename);
+		this.clientBaseDir = config.clientBaseDir ? path.resolve(config.clientBaseDir) : path.dirname(require.main.filename);
+
+		/**
+		 * The console for this instance of Komada. You can disable timestmaps, colors, and add writable streams as config options to configure this.
+		 * @type {KomadaConsole}
+		 */
+		this.console = new Console({
+			stdout: this.config.console.stdout,
+			stderr: this.config.console.stderr,
+			useColor: this.config.console.useColor,
+			colors: this.config.console.colors,
+			timestamps: this.config.console.timestamps
+		});
 
 		/**
 		 * The argument resolver

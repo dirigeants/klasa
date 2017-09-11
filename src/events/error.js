@@ -3,7 +3,7 @@ const { Event } = require('klasa');
 module.exports = class extends Event {
 
 	run(err) {
-		this.client.emit('log', err, 'error');
+		this.client.console.error(err);
 	}
 
 };
