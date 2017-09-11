@@ -12,7 +12,7 @@ class KlasaConsole extends Console {
 	 * Constructs our KlasaConsole instance
 	 * @param  {KlasaConsoleConfig} [options] The options for the klasa console.
 	 */
-	constructor({ stdout = process.stdout, stderr = process.stderr, useColor = true, colors = {}, timestamps = true }) {
+	constructor({ stdout = process.stdout, stderr = process.stderr, useColor, colors = {}, timestamps = true }) {
 		super(stdout, stderr);
 
 		/**
@@ -39,7 +39,7 @@ class KlasaConsole extends Console {
 		 * Whether or not this console should use colors.
 		 * @type {boolean}
 		 */
-		this.useColors = useColor || this.stdout.isTTY || false;
+		this.useColors = typeof useColor === 'undefined' ? this.stdout.isTTY || false : useColor;
 
 		/**
 		 * The colors for this console.
