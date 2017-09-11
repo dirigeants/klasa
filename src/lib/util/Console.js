@@ -165,9 +165,9 @@ class KlasaConsole extends Console {
 		const time = this.colors ? this.colors[type.toLowerCase()].time : {};
 		const timestamp = this.timestamps ? `${this.timestamp(`[${moment().format(this.timestamps)}]`, time)} ` : '';
 		if (super[type]) {
-			super[type](stuff.split('\n').map(str => `${timestamp}${this.messages(str, message)}`));
+			super[type](stuff.split('\n').map(str => `${timestamp}${this.messages(str, message)}`).join('\n'));
 		} else {
-			super.log(stuff.split('\n').map(str => `${timestamp}${this.messages(str, message)}`));
+			super.log(stuff.split('\n').map(str => `${timestamp}${this.messages(str, message)}`).join('\n'));
 		}
 	}
 
