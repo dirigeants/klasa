@@ -49,7 +49,7 @@ class KlasaConsole extends Console {
 			debug: colors.debug || {
 				type: 'log',
 				message: { background: null, text: null, style: null },
-				time: { background: null, text: 'magenta', style: null }
+				time: { background: 'magenta', text: null, style: null }
 			},
 			error: colors.error || {
 				type: 'error',
@@ -59,7 +59,7 @@ class KlasaConsole extends Console {
 			log: colors.log || {
 				type: 'log',
 				message: { background: null, text: null, style: null },
-				time: { background: null, text: 'lightblue', style: null }
+				time: { background: 'blue', text: null, style: null }
 			},
 			verbose: colors.verbose || {
 				type: 'log',
@@ -69,7 +69,7 @@ class KlasaConsole extends Console {
 			warn: colors.warn || {
 				type: 'warn',
 				message: { background: null, text: null, style: null },
-				time: { background: null, text: 'lightyellow', style: null }
+				time: { background: 'yellow', text: null, style: null }
 			},
 			wtf: colors.wtf || {
 				type: 'error',
