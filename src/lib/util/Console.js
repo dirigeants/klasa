@@ -9,43 +9,43 @@ const { inspect } = require('util');
 class KlasaConsole extends Console {
 
 	/**
-     * Constructs our KlasaConsole instance
-     * @param  {KlasaConsoleConfig} [options] The options for the klasa console.
-     */
+	 * Constructs our KlasaConsole instance
+	 * @param  {KlasaConsoleConfig} [options] The options for the klasa console.
+	 */
 	constructor({ stdout = process.stdout, stderr = process.stderr, useColor = true, colors = {}, timestamps = true }) {
 		super(stdout, stderr);
 
 		/**
-         * The standard output stream for this console, defaulted to process.stderr.
-         * @name KlasaConsole#stdout
-         * @type {WritableStream}
-         */
+		 * The standard output stream for this console, defaulted to process.stderr.
+		 * @name KlasaConsole#stdout
+		 * @type {WritableStream}
+		 */
 		Object.defineProperty(this, 'stdout', { value: stdout });
 
 		/**
-         * The standard error output stream for this console, defaulted to process.stderr.
-         * @name KlasaConsole#stderr
-         * @type {WritableStream}
-         */
+		 * The standard error output stream for this console, defaulted to process.stderr.
+		 * @name KlasaConsole#stderr
+		 * @type {WritableStream}
+		 */
 		Object.defineProperty(this, 'stderr', { value: stderr });
 
 		/**
-         * Whether or not timestamps should be enabled for this console.
-         * @type {(boolean|string)}
-         */
+		 * Whether or not timestamps should be enabled for this console.
+		 * @type {(boolean|string)}
+		 */
 		this.timestamps = timestamps === true ? 'YYYY-MM-DD HH:mm:ss' : timestamps;
 
 		/**
-         * Whether or not this console should use colors.
-         * @type {boolean}
-         */
+		 * Whether or not this console should use colors.
+		 * @type {boolean}
+		 */
 		this.useColors = useColor || this.stdout.isTTY || false;
 
 		/**
-         * The colors for this console.
-         * @name KlasaConsole#colors
-         * @type  {boolean|Colors}
-         */
+		 * The colors for this console.
+		 * @name KlasaConsole#colors
+		 * @type  {boolean|Colors}
+		 */
 		this.colors = {
 			debug: colors.debug || {
 				type: 'log',
@@ -81,90 +81,90 @@ class KlasaConsole extends Console {
 	}
 
 	/**
-     * @memberof KlasaConsole
-     * @typedef {object} Colors - Time is for the timestamp of the log, message is for the actual output.
-     * @property {ColorObjects} debug An object containing a message and time color object.
-     * @property {ColorObjects} error An object containing a message and time color object.
-     * @property {ColorObjects} log An object containing a message and time color object.
-     * @property {ColorObjects} verbose An object containing a message and time color object.
-     * @property {ColorObjects} warn An object containing a message and time color object.
-     * @property {ColorObjects} wtf An object containing a message and time Color Object.
-     */
+	 * @memberof KlasaConsole
+	 * @typedef {object} Colors - Time is for the timestamp of the log, message is for the actual output.
+	 * @property {ColorObjects} debug An object containing a message and time color object.
+	 * @property {ColorObjects} error An object containing a message and time color object.
+	 * @property {ColorObjects} log An object containing a message and time color object.
+	 * @property {ColorObjects} verbose An object containing a message and time color object.
+	 * @property {ColorObjects} warn An object containing a message and time color object.
+	 * @property {ColorObjects} wtf An object containing a message and time Color Object.
+	 */
 
 	/**
-     * @memberof KlasaConsole
-     * @typedef {object} ColorObjects
-     * @property {MessageObject} message A message object containing colors and styles.
-     * @property {TimeObject} time A time object containing colors and styles.
-     */
+	 * @memberof KlasaConsole
+	 * @typedef {object} ColorObjects
+	 * @property {MessageObject} message A message object containing colors and styles.
+	 * @property {TimeObject} time A time object containing colors and styles.
+	 */
 
 	/**
-     * @memberof KlasaConsole
-     * @typedef {object} MessageObject
-     * @property {BackgroundColorTypes} background The background color. Can be a basic string like "red", a hex string, or a RGB array.
-     * @property {TextColorTypes} text The text color. Can be a basic string like "red", a hex string, or a RGB array.
-     * @property {StyleTypes} style A style string from StyleTypes.
-     */
+	 * @memberof KlasaConsole
+	 * @typedef {object} MessageObject
+	 * @property {BackgroundColorTypes} background The background color. Can be a basic string like "red", a hex string, or a RGB array.
+	 * @property {TextColorTypes} text The text color. Can be a basic string like "red", a hex string, or a RGB array.
+	 * @property {StyleTypes} style A style string from StyleTypes.
+	 */
 
 	/**
-     * @memberof KlasaConsole
-     * @typedef {object} TimeObject
-     * @property {BackgroundColorTypes} background The background color. Can be a basic string like "red", a hex string, or a RGB array.
-     * @property {TextColorTypes} text The text color. Can be a basic string like "red", a hex string, a RGB array, or HSL array.
-     * @property {StyleTypes} style A style string from StyleTypes.
-     */
+	 * @memberof KlasaConsole
+	 * @typedef {object} TimeObject
+	 * @property {BackgroundColorTypes} background The background color. Can be a basic string like "red", a hex string, or a RGB array.
+	 * @property {TextColorTypes} text The text color. Can be a basic string like "red", a hex string, a RGB array, or HSL array.
+	 * @property {StyleTypes} style A style string from StyleTypes.
+	 */
 
 	/**
-     * @memberof KlasaConsole
-     * @typedef {*} TextColorTypes - All the valid color types.
-     * @property {string} black
-     * @property {string} red
-     * @property {string} green
-     * @property {string} yellow
-     * @property {string} blue
-     * @property {string} magenta
-     * @property {string} cyan
-     * @property {string} gray
-     * @property {string} grey
-     * @property {string} lightgray
-     * @property {string} lightgrey
-     * @property {string} lightred
-     * @property {string} lightgreen
-     * @property {string} lightyellow
-     * @property {string} lightblue
-     * @property {string} lightmagenta
-     * @property {string} lightcyan
-     * @property {string} white
-     * @property {string} #008000 green
-     * @property {string} #008000 green
-     * @property {Array} [255,0,0] red
-     * @property {Array} [229,50%,50%] blue
-     */
+	 * @memberof KlasaConsole
+	 * @typedef {*} TextColorTypes - All the valid color types.
+	 * @property {string} black
+	 * @property {string} red
+	 * @property {string} green
+	 * @property {string} yellow
+	 * @property {string} blue
+	 * @property {string} magenta
+	 * @property {string} cyan
+	 * @property {string} gray
+	 * @property {string} grey
+	 * @property {string} lightgray
+	 * @property {string} lightgrey
+	 * @property {string} lightred
+	 * @property {string} lightgreen
+	 * @property {string} lightyellow
+	 * @property {string} lightblue
+	 * @property {string} lightmagenta
+	 * @property {string} lightcyan
+	 * @property {string} white
+	 * @property {string} #008000 green
+	 * @property {string} #008000 green
+	 * @property {Array} [255,0,0] red
+	 * @property {Array} [229,50%,50%] blue
+	 */
 
 	/**
-     * @memberof KlasaConsole
-     * @typedef {*} BackgroundColorTypes - One of these strings, HexStrings, RGB, or HSL are valid types.
-     * @property {string} black
-     * @property {string} red
-     * @property {string} green
-     * @property {string} blue
-     * @property {string} magenta
-     * @property {string} cyan
-     * @property {string} gray
-     * @property {string} grey
-     * @property {string} lightgray
-     * @property {string} lightgrey
-     * @property {string} lightred
-     * @property {string} lightgreen
-     * @property {string} lightyellow
-     * @property {string} lightblue
-     * @property {string} lightmagenta
-     * @property {string} lightcyan
-     * @property {string} white
-     * @property {string} #008000 green
-     * @property {Array} [255,0,0] red
-     * @property {Array} [229,50%,50%] blue
-     */
+	 * @memberof KlasaConsole
+	 * @typedef {*} BackgroundColorTypes - One of these strings, HexStrings, RGB, or HSL are valid types.
+	 * @property {string} black
+	 * @property {string} red
+	 * @property {string} green
+	 * @property {string} blue
+	 * @property {string} magenta
+	 * @property {string} cyan
+	 * @property {string} gray
+	 * @property {string} grey
+	 * @property {string} lightgray
+	 * @property {string} lightgrey
+	 * @property {string} lightred
+	 * @property {string} lightgreen
+	 * @property {string} lightyellow
+	 * @property {string} lightblue
+	 * @property {string} lightmagenta
+	 * @property {string} lightcyan
+	 * @property {string} white
+	 * @property {string} #008000 green
+	 * @property {Array} [255,0,0] red
+	 * @property {Array} [229,50%,50%] blue
+	 */
 
 	/**
 	 * @memberof KlasaConsole
