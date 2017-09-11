@@ -98,7 +98,7 @@ class KlasaClient extends Discord.Client {
 
 		/**
 		 * The console for this instance of Komada. You can disable timestmaps, colors, and add writable streams as config options to configure this.
-		 * @type {KomadaConsole}
+		 * @type {KlasaConsole}
 		 */
 		this.console = new Console({
 			stdout: this.config.console.stdout,
