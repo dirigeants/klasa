@@ -10,7 +10,7 @@ module.exports = class extends Provider {
 	}
 
 	init() {
-		return fs.ensureDir(this.baseDir).catch(err => this.client.emit('log', err, 'error'));
+		return fs.ensureDir(this.baseDir).catch(err => this.client.emit('error', err));
 	}
 
 	/* Table methods */

@@ -123,7 +123,7 @@ class CommandMessage {
 						return this.validateArgs();
 					});
 			}
-			this.client.emit('log', 'Unknown Argument Type encountered', 'warn');
+			this.client.emit('warn', 'Unknown Argument Type encountered');
 			return this.validateArgs();
 		} else {
 			return this.multiPossibles(0, false);
@@ -159,7 +159,7 @@ class CommandMessage {
 				})
 				.catch(() => this.multiPossibles(++possible, validated));
 		} else {
-			this.client.emit('log', 'Unknown Argument Type encountered', 'warn');
+			this.client.emit('warn', 'Unknown Argument Type encountered');
 			return this.multiPossibles(++possible, validated);
 		}
 	}

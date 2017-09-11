@@ -155,7 +155,7 @@ class CommandStore extends Collection {
      * @returns {void}
      */
 	static async walk(store, dir, subs = []) {
-		const files = await fs.readdir(join(dir, ...subs)).catch(() => { fs.ensureDir(dir).catch(err => store.client.emit('log', err, 'error')); });
+		const files = await fs.readdir(join(dir, ...subs)).catch(() => { fs.ensureDir(dir).catch(err => store.client.emit('error', err)); });
 		if (!files) return true;
 		return Promise.all(files.map(async file => {
 			if (file.endsWith('.js')) return store.load(dir, [...subs, file]);
