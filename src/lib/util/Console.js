@@ -10,10 +10,7 @@ class KlasaConsole extends Console {
 
 	/**
      * Constructs our KlasaConsole instance
-     * @param  {boolean}  [stdout=process.stdout] The location of standard output. Must be a writable stream.
-     * @param  {boolean}  [stderr=process.stderr] The location of standrad error outputt. Must be a writable stream.
-     * @param  {boolean} [colors={}] The colors for this console instance.
-     * @param  {(boolean|string)}  [timestamps=true] Whether or not Timestamps should be enabled.
+     * @param  {KlasaConsoleConfig} [options] The options for the klasa console.
      */
 	constructor({ stdout = process.stdout, stderr = process.stderr, useColor = true, colors = {}, timestamps = true }) {
 		super(stdout, stderr);
