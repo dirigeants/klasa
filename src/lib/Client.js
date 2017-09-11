@@ -48,7 +48,7 @@ class KlasaClient extends Discord.Client {
 
 	/**
 	 * @typedef {Object} KlasaConsoleConfig
-	 * @memberof {KlasaClient}
+	 * @memberof KlasaClient
 	 * @property {WriteableStream} [stdout=process.stdout] Output stream
 	 * @property {WriteableStream} [stderr=process.stderr] Error stream
 	 * @property {boolean} [useColor=true] Whether the client console should use colors
@@ -58,7 +58,7 @@ class KlasaClient extends Discord.Client {
 
 	/**
 	 * @typedef {Object} KlasaConsoleEvents
-	 * @memberof {KlasaClient}
+	 * @memberof KlasaClient
 	 * @property {boolean} [log=true] If the log event should be enabled by default
 	 * @property {boolean} [warn=true] If the warn event should be enabled by default
 	 * @property {boolean} [error=true] If the error event should be enabled by default
