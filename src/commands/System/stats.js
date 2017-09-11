@@ -9,7 +9,6 @@ module.exports = class extends Command {
 	}
 
 	async run(msg) {
-		const duration = moment.duration(this.client.uptime).format(' D [days], H [hrs], m [mins], s [secs]');
 		return msg.sendCode('asciidoc', [
 			'= STATISTICS =',
 			'',
