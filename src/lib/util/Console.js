@@ -69,7 +69,7 @@ class KlasaConsole extends Console {
 			warn: colors.warn || {
 				type: 'warn',
 				message: { background: null, text: null, style: null },
-				time: { background: 'yellow', text: null, style: null }
+				time: { background: 'lightyellow', text: 'black', style: null }
 			},
 			wtf: colors.wtf || {
 				type: 'error',
