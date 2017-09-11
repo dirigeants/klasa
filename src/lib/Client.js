@@ -463,7 +463,7 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
 
 process.on('unhandledRejection', (err) => {
 	if (!err) return;
-	console.error(`Uncaught Promise Error: \n${err.stack || err}`);
+	this.emit('log', `Uncaught Promise Error: \n${err.stack || err}`, 'error');
 });
 
 module.exports = KlasaClient;
