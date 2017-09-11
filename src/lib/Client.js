@@ -34,6 +34,7 @@ class KlasaClient extends Discord.Client {
 	 * @property {number} [commandMessageSweep=900] The interval duration for which command messages should be sweept in seconds
 	 * @property {object} [provider] The provider to use in Klasa
 	 * @property {KlasaConsoleConfig} [console={}] Config options to pass to the client console
+	 * @property {KlasaConsoleEvents} [consoleEvents={}] Config options to pass to the client console
 	 * @property {boolean} [ignoreBots=true] Whether or not this bot should ignore other bots
 	 * @property {boolean} [ignoreSelf=true] Whether or not this bot should ignore itself
 	 * @property {RegExp} [prefixMention] The prefix mention for your bot (Automatically Generated)
@@ -56,6 +57,17 @@ class KlasaClient extends Discord.Client {
 	 */
 
 	/**
+	 * @typedef {Object} KlasaConsoleEvents
+	 * @memberof {KlasaClient}
+	 * @property {boolean} [log=true] If the log event should be enabled by default
+	 * @property {boolean} [warn=true] If the warn event should be enabled by default
+	 * @property {boolean} [error=true] If the error event should be enabled by default
+	 * @property {boolean} [debug=false] If the debug event should be enabled by default
+	 * @property {boolean} [verbose=true] If the verbose event should be enabled by default
+	 * @property {boolean} [wtf=true] If the wtf event should be enabled by default
+	 */
+
+	/**
 	 * @param {KlasaClientConfig} config The config to pass to the new client
 	 */
 	constructor(config = {}) {
@@ -69,6 +81,7 @@ class KlasaClient extends Discord.Client {
 		this.config = config;
 		this.config.provider = config.provider || {};
 		this.config.console = config.console || {};
+		this.config.consoleEvents = config.consoleEvents || {};
 		this.config.language = config.language || 'en-US';
 
 		/**

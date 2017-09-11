@@ -6,4 +6,8 @@ module.exports = class extends Event {
 		this.client.console.write(data, type);
 	}
 
+	init() {
+		this.enabled = 'debug' in this.client.config.consoleEvents.debug ? !!this.client.config.consoleEvents.debug : true;
+	}
+
 };
