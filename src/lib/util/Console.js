@@ -15,7 +15,7 @@ class KlasaConsole extends Console {
      * @param  {boolean} [colors={}] The colors for this console instance.
      * @param  {(boolean|string)}  [timestamps=true] Whether or not Timestamps should be enabled.
      */
-	constructor({ stdout, stderr, useColor = true, colors = {}, timestamps = true }) {
+	constructor({ stdout = process.stdout, stderr = process.stderr, useColor = true, colors = {}, timestamps = true }) {
 		super(stdout, stderr);
 		/**
          * The standard output stream for this console, defaulted to process.stderr.
