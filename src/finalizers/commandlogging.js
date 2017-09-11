@@ -10,7 +10,7 @@ module.exports = class extends Finalizer {
 			notprompted: { message: { background: 'blue' } },
 			user: { message: { background: 'yellow', text: 'black' } },
 			channel: {
-				text: { message: { background: 'green' } },
+				text: { message: { background: 'green', text: 'black' } },
 				dm: { message: { background: 'magenta' } },
 				group: { message: { background: 'cyan' } }
 			}
