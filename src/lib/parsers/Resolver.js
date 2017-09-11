@@ -36,6 +36,7 @@ class Resolver {
 	async user(user) {
 		if (user instanceof User) return user;
 		if (user instanceof GuildMember) return user.user;
+		if (user instanceof Message) return user.author;
 		if (typeof user === 'string' && this.constructor.regex.userOrMember.test(user)) {
 			return this.client.user.bot ?
 				this.client.users.fetch(this.constructor.regex.userOrMember.exec(user)[1]).catch(() => null) :

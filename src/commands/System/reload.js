@@ -1,4 +1,5 @@
 const { Command } = require('klasa');
+const now = require('performance-now');
 
 module.exports = class extends Command {
 
@@ -12,7 +13,11 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [piece]) {
-		if (piece instanceof this.client.methods.Collection) return piece.loadAll().then(() => msg.sendMessage(msg.language.get('COMMAND_RELOAD_ALL', msg.args[0].toLowerCase())));
+		if (piece instanceof this.client.methods.Collection) {
+			const start = now();
+			await this.client[piece].loadAll();
+			return msg.sendMessage(`${msg.language.get('COMMAND_RELOAD_ALL', piece)} (Took: ${(now() - start).toFixed(2)}ms.)`);
+		}
 		return piece.reload()
 			.then(itm => msg.sendMessage(msg.language.get('COMMAND_RELOAD', itm.type, itm.name)))
 			.catch(err => {

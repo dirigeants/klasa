@@ -49,13 +49,13 @@ class SchemaManager extends CacheManager {
 		for (const [key, value] of Object.entries(schema)) { // eslint-disable-line no-restricted-syntax
 			if (value instanceof Object && 'type' in value && 'default' in value) {
 				if (value.array && !(value.default instanceof Array)) {
-					this.client.emit('log', `The default value for ${key} must be an array.`, 'error');
+					this.client.emit('error', `The default value for ${key} must be an array.`);
 					continue;
 				}
 				this.schema[key] = value;
 				this.defaults[key] = value.default;
 			} else {
-				this.client.emit('log', `The type value for ${key} is not supported. It must be an object with type and default properties.`, 'error');
+				this.client.emit('error', `The type value for ${key} is not supported. It must be an object with type and default properties.`);
 			}
 		}
 	}

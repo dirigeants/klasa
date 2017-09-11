@@ -86,7 +86,7 @@ class SQL {
 	 */
 	async updateColumns(schema, defaults, key) {
 		if (!this.provider.updateColumns) {
-			this.client.emit('log', 'This SQL Provider does not seem to have a updateColumns exports. Force action cancelled.', 'error');
+			this.client.emit('error', 'This SQL Provider does not seem to have a updateColumns exports. Force action cancelled.');
 			return false;
 		}
 		const newSQLSchema = this.buildSQLSchema(schema).map(tuplify);
