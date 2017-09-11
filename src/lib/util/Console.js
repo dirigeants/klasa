@@ -46,12 +46,36 @@ class KlasaConsole extends Console {
          * @type  {boolean|Colors}
          */
 		this.colors = {
-			debug: colors.debug || { message: { background: null, text: null, style: null }, time: { background: null, text: 'magenta', style: null } },
-			error: colors.error || { message: { background: null, text: null, style: null }, time: { background: 'red', text: null, style: null } },
-			log: colors.log || { message: { background: null, text: null, style: null }, time: { background: null, text: 'blue', style: null } },
-			verbose: colors.verbose || { message: { background: null, text: 'gray', style: null }, time: { background: null, text: 'gray', style: null } },
-			warn: colors.warn || { message: { background: null, text: null, style: null }, time: { background: 'lightyellow', text: 'black', style: null } },
-			wtf: colors.wtf || { message: { background: 'red', text: null, style: ['bold', 'underline'] }, time: { background: 'red', text: null, style: ['bold', 'underline'] } }
+			debug: colors.debug || {
+				type: 'log',
+				message: { background: null, text: null, style: null },
+				time: { background: null, text: 'magenta', style: null }
+			},
+			error: colors.error || {
+				type: 'error',
+				message: { background: null, text: null, style: null },
+				time: { background: 'red', text: null, style: null }
+			},
+			log: colors.log || {
+				type: 'log',
+				message: { background: null, text: null, style: null },
+				time: { background: null, text: 'lightblue', style: null }
+			},
+			verbose: colors.verbose || {
+				type: 'log',
+				message: { background: null, text: 'gray', style: null },
+				time: { background: null, text: 'gray', style: null }
+			},
+			warn: colors.warn || {
+				type: 'warn',
+				message: { background: null, text: null, style: null },
+				time: { background: null, text: 'lightyellow', style: null }
+			},
+			wtf: colors.wtf || {
+				type: 'error',
+				message: { background: null, text: 'red', style: null },
+				time: { background: 'red', text: null, style: null }
+			}
 		};
 	}
 
@@ -161,14 +185,11 @@ class KlasaConsole extends Console {
      */
 	write(stuff, type = 'log') {
 		stuff = KlasaConsole.flatten(stuff, this.useColors);
-		const message = this.colors ? this.colors[type.toLowerCase()].message : {};
-		const time = this.colors ? this.colors[type.toLowerCase()].time : {};
+		const color = this.colors[type.toLowerCase()] || { type: type.toLowerCase() };
+		const message = color.message || {};
+		const time = color.time || {};
 		const timestamp = this.timestamps ? `${this.timestamp(`[${moment().format(this.timestamps)}]`, time)} ` : '';
-		if (super[type]) {
-			super[type](stuff.split('\n').map(str => `${timestamp}${this.messages(str, message)}`).join('\n'));
-		} else {
-			super.log(stuff.split('\n').map(str => `${timestamp}${this.messages(str, message)}`).join('\n'));
-		}
+		super[color.type](stuff.split('\n').map(str => `${timestamp}${this.messages(str, message)}`).join('\n'));
 	}
 
 	/**
