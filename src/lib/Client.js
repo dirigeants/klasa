@@ -402,6 +402,18 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  */
 
 /**
+ * An event for handling verbose logs
+ * @event KlasaClient#verbose
+ * @param {(string|Object)} data The data to log
+ */
+
+/**
+ * An event for handling wtf logs (what a terrible failure)
+ * @event KlasaClient#wtf
+ * @param {(string|Object)} data The data to log
+ */
+
+/**
  * Emitted when a command has been inhibited.
  * @event KlasaClient#commandInhibited
  * @param {external:Message} message The message that triggered the command
