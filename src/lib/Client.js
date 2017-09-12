@@ -97,7 +97,7 @@ class KlasaClient extends Discord.Client {
 		this.clientBaseDir = config.clientBaseDir ? path.resolve(config.clientBaseDir) : path.dirname(require.main.filename);
 
 		/**
-		 * The console for this instance of Komada. You can disable timestmaps, colors, and add writable streams as config options to configure this.
+		 * The console for this instance of klasa. You can disable timestmaps, colors, and add writable streams as config options to configure this.
 		 * @type {KlasaConsole}
 		 */
 		this.console = new Console({
