@@ -52,7 +52,7 @@ class KlasaClient extends Discord.Client {
 	 * @memberof KlasaClient
 	 * @property {WriteableStream} [stdout=process.stdout] Output stream
 	 * @property {WriteableStream} [stderr=process.stderr] Error stream
-	 * @property {boolean} [useColor=true] Whether the client console should use colors
+	 * @property {boolean} [useColor=false] Whether the client console should use colors
 	 * @property {Colors} [colors] Color formats to use
 	 * @property {(boolean|string)} [timestamps=true] Whether to use timestamps or not, or the moment format of the timestamp you want to use
 	 */
