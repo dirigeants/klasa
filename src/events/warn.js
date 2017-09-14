@@ -2,12 +2,12 @@ const { Event } = require('klasa');
 
 module.exports = class extends Event {
 
-	run(warning) {
-		this.client.console.warn(warning);
+	constructor(client, dir, file) {
+		super(client, dir, file, { enabled: 'warn' in client.config.consoleEvents ? !!client.config.consoleEvents.warn : true });
 	}
 
-	init() {
-		this.enabled = 'warn' in this.client.config.consoleEvents ? !!this.client.config.consoleEvents.warn : true;
+	run(warning) {
+		this.client.console.warn(warning);
 	}
 
 };

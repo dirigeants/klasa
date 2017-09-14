@@ -63,7 +63,7 @@ class KlasaClient extends Discord.Client {
 	 * @property {boolean} [warn=true] If the warn event should be enabled by default
 	 * @property {boolean} [error=true] If the error event should be enabled by default
 	 * @property {boolean} [debug=false] If the debug event should be enabled by default
-	 * @property {boolean} [verbose=true] If the verbose event should be enabled by default
+	 * @property {boolean} [verbose=false] If the verbose event should be enabled by default
 	 * @property {boolean} [wtf=true] If the wtf event should be enabled by default
 	 */
 

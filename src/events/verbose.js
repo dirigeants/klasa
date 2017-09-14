@@ -2,12 +2,12 @@ const { Event } = require('klasa');
 
 module.exports = class extends Event {
 
-	run(log) {
-		this.client.console.verbose(log);
+	constructor(client, dir, file) {
+		super(client, dir, file, { enabled: 'verbose' in client.config.consoleEvents ? !!client.config.consoleEvents.verbose : false });
 	}
 
-	init() {
-		this.enabled = 'verbose' in this.client.config.consoleEvents ? !!this.client.config.consoleEvents.verbose : true;
+	run(log) {
+		this.client.console.verbose(log);
 	}
 
 };
