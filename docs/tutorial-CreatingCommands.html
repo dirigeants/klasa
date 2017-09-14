@@ -92,7 +92,8 @@ module.exports = class extends Command {
             permLevel: 0,
             botPerms: [],
             requiredSettings: [],
-            description: '',
+			description: '',
+			quotedStringSupport: this.client.config.quotedStringSupport,
             usage: '',
             usageDelim: undefined,
             extendedHelp: 'No extended help available.'
@@ -120,6 +121,7 @@ a boolean. Set to false to completely disable this inhibitor, it cannot be force
 <li><strong>botPerms</strong>: the permissions needed to run the command, based on Permissions in discord.js.</li>
 <li><strong>requiredSettings</strong>: Any required guild settings, that must be set before you can use this command.</li>
 <li><strong>description</strong>: The command description.</li>
+<li><strong>quotedStringSupport</strong>: Whether args for this command should not be deliminated inside quotes</li>
 <li><strong>usage</strong>: The expected arguments for this command. See <a href="tutorial-UnderstandingUsageStrings.html">Understanding Usage Strings</a> for information on how to use this.</li>
 <li><strong>usageDelim</strong>: The deliminator for how the usage will be deliminated. Popular ones are <code>' '</code> (a space), and <code>', '</code> (a comma space).</li>
 <li><strong>extendedHelp</strong>: A more in depth help string if you would like to define it.</li>
