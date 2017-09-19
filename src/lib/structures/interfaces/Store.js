@@ -29,8 +29,14 @@ class Store {
 	 * @returns {Finalizer}
 	 */
 	load(dir, file) {
-		const piece = this.set(new (require(join(dir, file)))(this.client, dir, file));
-		delete require.cache[join(dir, file)];
+		const loc = join(dir, file);
+		let piece = null;
+		try {
+			piece = this.set(new (require(loc))(this.client, dir, file));
+		} catch (error) {
+			this.client.emit('wtf', new Error(`Non-Class Export: ${loc}`));
+		}
+		delete require.cache[loc];
 		return piece;
 	}
 
