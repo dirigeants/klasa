@@ -178,7 +178,7 @@ class SettingResolver extends Resolver {
 	 * @param {any} data The data to resolve
 	 * @param {external:Guild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
-	 * @returns {Command}
+	 * @returns {Language}
 	 */
 	async language(data, guild, name) {
 		const language = this.client.languages.get(data);
@@ -197,7 +197,7 @@ class SettingResolver extends Resolver {
 	 * @param {string} [suffix=''] The suffix to apply to the error messages
 	 * @returns {boolean}
 	 */
-	static async maxOrMin(guild, value, min, max, name, suffix = '') {
+	static maxOrMin(guild, value, min, max, name, suffix = '') {
 		if (min && max) {
 			if (value >= min && value <= max) return true;
 			if (min === max) throw guild.language.get('RESOLVER_MINMAX_EXACTLY', name, min, suffix);
