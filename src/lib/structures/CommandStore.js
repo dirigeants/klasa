@@ -119,24 +119,6 @@ class CommandStore extends Collection {
 	}
 
 	/**
-	 * Loads a command file into Klasa so it can saved in this store.
-	 * @param {string} dir The user directory or core directory where this file is saved.
-	 * @param {Array} file An array containing information about it's category structure.
-	 * @returns {Command}
-	 */
-	load(dir, file) {
-		const loc = join(dir, ...file);
-		let cmd = null;
-		try {
-			cmd = this.set(new (require(loc))(this.client, dir, file));
-		} catch (error) {
-			this.client.emit('wtf', new Error(`Non-Class Export: ${loc}`);
-		}
-		delete require.cache[loc];
-		return cmd;
-	}
-
-	/**
 	 * Loads all of our commands from both the user and core directories.
 	 * @returns {number[]} The number of commands and aliases loaded.
 	 */
@@ -154,12 +136,12 @@ class CommandStore extends Collection {
 	/* eslint-enable no-empty-function */
 
 	/**
-     * Walks our directory of commands for the user and core directories.
-     * @param {CommandStore} store The command store we're loading into.
-     * @param {string} dir The directory of commands we're using to load commands from.
-     * @param {string[]} subs Subfolders for recursion.
-     * @returns {void}
-     */
+	 * Walks our directory of commands for the user and core directories.
+	 * @param {CommandStore} store The command store we're loading into.
+	 * @param {string} dir The directory of commands we're using to load commands from.
+	 * @param {string[]} subs Subfolders for recursion.
+	 * @returns {void}
+	 */
 	static async walk(store, dir, subs = []) {
 		const files = await fs.readdir(join(dir, ...subs)).catch(() => { fs.ensureDir(dir).catch(err => store.client.emit('error', err)); });
 		if (!files) return true;
@@ -171,6 +153,6 @@ class CommandStore extends Collection {
 
 }
 
-Store.applyToClass(CommandStore, ['load', 'loadAll']);
+Store.applyToClass(CommandStore, ['loadAll']);
 
 module.exports = CommandStore;
