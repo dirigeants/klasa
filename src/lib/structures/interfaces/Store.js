@@ -33,8 +33,8 @@ class Store {
 		let piece = null;
 		try {
 			piece = this.set(new (require(loc))(this.client, dir, file));
-		} catch (error) {
-			if (error.message.endsWith('not a constructor')) error = new TypeError(`Non-Class Export: ${loc}`);
+		} catch (err) {
+			const error = err.message.endsWith('not a constructor') ? new TypeError(`Non-Class Export: ${loc}`) : err;
 			this.client.emit('wtf', error);
 		}
 		delete require.cache[loc];
