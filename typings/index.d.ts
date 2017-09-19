@@ -80,7 +80,7 @@ declare module 'klasa' {
         public string(string: string): Promise<string>;
         public integer(integer: string|number): Promise<number>;
         public float(number: string|number): Promise<number>;
-        public url(hyperlink: string): Promise<number>;
+        public url(hyperlink: string): Promise<string>;
 
         static readonly regex: {
             userOrMember: RegExp,
@@ -104,46 +104,95 @@ declare module 'klasa' {
         public language(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: Message): Promise<Language>;
         public provider(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: Message): Promise<Provider>;
 
+        public msg(message: string|Message, channel: Channel): Promise<Message>;
         public msg(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: Message): Promise<Message>;
+        public message(message: string|Message, channel: Channel): Promise<Message>;
         public message(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: Message): Promise<Message>;
+
+        public user(user: User|GuildMember|Message|Snowflake): Promise<User>;
         public user(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: Message): Promise<User>;
+        public mention(user: User|GuildMember|Message|Snowflake): Promise<User>;
         public mention(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: Message): Promise<User>;
+
+        public member(member: User|GuildMember|Snowflake, guild: Guild): Promise<GuildMember>;
         public member(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: Message): Promise<GuildMember>;
+
+        public channel(channel: Channel|Snowflake): Promise<Channel>;
         public channel(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: Message): Promise<Channel>;
+
+        public guild(guild: Guild|Snowflake): Promise<Guild>;
         public guild(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: Message): Promise<Guild>;
+
+        public role(role: Role|Snowflake, guild: Guild): Promise<Role>;
         public role(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: Message): Promise<Role>;
+
         public literal(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: Message): Promise<string>;
+
+        public bool(bool: boolean|string): Promise<boolean>;
         public bool(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: Message): Promise<boolean>;
+        public boolean(bool: boolean|string): Promise<boolean>;
         public boolean(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: Message): Promise<boolean>;
+
+        public str(string: string): Promise<string>;
         public str(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: Message): Promise<string>;
+        public string(string: string): Promise<string>;
         public string(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: Message): Promise<string>;
+
+        public int(integer: string|number): Promise<number>;
         public int(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: Message): Promise<number>;
+        public integer(integer: string|number): Promise<number>;
         public integer(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: Message): Promise<number>;
+
+        public num(number: string|number): Promise<number>;
         public num(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: Message): Promise<number>;
+        public number(number: string|number): Promise<number>;
         public number(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: Message): Promise<number>;
+        public float(number: string|number): Promise<number>;
         public float(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: Message): Promise<number>;
+
         public reg(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: Message): Promise<string>;
         public regex(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: Message): Promise<string>;
         public regexp(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: Message): Promise<string>;
+
+        public url(hyperlink: string): Promise<string>;
         public url(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: Message): Promise<string>;
 
         static minOrMax(value: number, min: number, max: number, currentUsage: Object, possible: number, repeat: boolean, msg: Message, suffix: string): boolean;
     }
 
     class SettingResolver extends Resolver {
-        public user(data: any, guild: Guild, name: string): Promise<User>;
-        public channel(data: any, guild: Guild, name: string): Promise<Channel>;
-        public textchannel(data: any, guild: Guild, name: string): Promise<TextChannel>;
-        public voicechannel(data: any, guild: Guild, name: string): Promise<VoiceChannel>;
-        public guild(data: any, guild: Guild, name: string): Promise<Guild>;
-        public role(data: any, guild: Guild, name: string): Promise<Role>;
-        public boolean(data: any, guild: Guild, name: string): Promise<boolean>;
-        public string(data: any, guild: Guild, name: string, minMax: { min: number, max: number }): Promise<string>;
-        public integer(data: any, guild: Guild, name: string, minMax: { min: number, max: number }): Promise<number>;
-        public float(data: any, guild: Guild, name: string, minMax: { min: number, max: number }): Promise<number>;
-        public url(data: any, guild: Guild, name: string): Promise<string>;
         public command(data: any, guild: Guild, name: string): Promise<Command>;
         public language(data: any, guild: Guild, name: string): Promise<Language>;
+
+        public user(user: User|GuildMember|Message|Snowflake): Promise<User>;
+        public user(data: any, guild: Guild, name: string): Promise<User>;
+
+        public channel(channel: Channel|Snowflake): Promise<Channel>;
+        public channel(data: any, guild: Guild, name: string): Promise<Channel>;
+
+        public textchannel(data: any, guild: Guild, name: string): Promise<TextChannel>;
+        public voicechannel(data: any, guild: Guild, name: string): Promise<VoiceChannel>;
+
+        public guild(guild: Guild|Snowflake): Promise<Guild>;
+        public guild(data: any, guild: Guild, name: string): Promise<Guild>;
+
+        public role(role: Role|Snowflake, guild: Guild): Promise<Role>;
+        public role(data: any, guild: Guild, name: string): Promise<Role>;
+
+        public boolean(bool: boolean|string): Promise<boolean>;
+        public boolean(data: any, guild: Guild, name: string): Promise<boolean>;
+
+        public string(string: string): Promise<string>;
+        public string(data: any, guild: Guild, name: string, minMax: { min: number, max: number }): Promise<string>;
+
+        public integer(integer: string|number): Promise<number>;
+        public integer(data: any, guild: Guild, name: string, minMax: { min: number, max: number }): Promise<number>;
+
+        public float(number: string|number): Promise<number>;
+        public float(data: any, guild: Guild, name: string, minMax: { min: number, max: number }): Promise<number>;
+
+        public url(hyperlink: string): Promise<string>;
+        public url(data: any, guild: Guild, name: string): Promise<string>;
 
         static maxOrMin(guild: Guild, value: number, min: number, max: number, name: string, suffix: string): boolean;
     }
@@ -446,7 +495,7 @@ declare module 'klasa' {
 
     class Store {
         init(): Promise<any[]>;
-        load(dir: string, file: string): Piece;
+        load(dir: string, file: string|string[]): Piece;
         loadAll(): Promise<number>;
         resolve(name: Piece|string): Piece;
 
@@ -464,11 +513,12 @@ declare module 'klasa' {
 
         public get(name: string): Command;
         public has(name: string): boolean;
+        public set(key: string, value: Command): this;
         public set(command: Command): Command;
         public delete(name: Command|string): boolean;
         public clear(): void;
         public load(dir: string, file: string[]): Command;
-        public loadAll(): Promise<number[]>;
+        public loadAll(): Promise<number>;
 
         public init(): any;
         public resolve(): any;
@@ -476,7 +526,7 @@ declare module 'klasa' {
         static walk(store: CommandStore, dir: string, subs: string[]): Promise<void>;
     }
 
-    class EventStore extends Collection<string, Command> implements Store {
+    class EventStore extends Collection<string, Event> implements Store {
         public constructor(client: KlasaClient);
         public client: KlasaClient;
         public coreDir: string;
@@ -486,6 +536,7 @@ declare module 'klasa' {
 
         public clear(): void;
         public delete(name: Event|string): boolean;
+        public set(key: string, value: Event): this;
         public set(event: Event): Event;
 
         public init(): any;
@@ -504,6 +555,7 @@ declare module 'klasa' {
 
         public delete(name: Extendable|string): boolean;
         public clear(): void;
+        public set(key: string, value: Extendable): this;
         public set(extendable: Extendable): Extendable;
 
         public init(): any;
@@ -522,6 +574,7 @@ declare module 'klasa' {
 
         public delete(name: Finalizer|string): boolean;
         public run(msg: CommandMessage, mes: Message, start: Now): void;
+        public set(key: string, value: Finalizer): this;
         public set(finalizer: Finalizer): Finalizer;
 
         public init(): any;
@@ -540,6 +593,7 @@ declare module 'klasa' {
 
         public delete(name: Inhibitor|string): boolean;
         public run(msg: Message, cmd: Command, selective: boolean): void;
+        public set(key: string, value: Inhibitor): this;
         public set(inhibitor: Inhibitor): Inhibitor;
 
         public init(): any;
@@ -558,6 +612,7 @@ declare module 'klasa' {
 
         public readonly default: Language;
         public delete(name: Language|string): boolean;
+        public set(key: string, value: Language): this;
         public set(language: Language): Language;
 
         public init(): any;
@@ -576,6 +631,7 @@ declare module 'klasa' {
 
         public delete(name: Monitor|string): boolean;
         public run(msg: Message): void;
+        public set(key: string, value: Monitor): this;
         public set(monitor: Monitor): Monitor;
 
         public init(): any;
@@ -593,6 +649,7 @@ declare module 'klasa' {
         public name: 'providers';
 
         public delete(name: Provider|string): boolean;
+        public set(key: string, value: Provider): this;
         public set(provider: Provider): Provider;
 
         public init(): any;
