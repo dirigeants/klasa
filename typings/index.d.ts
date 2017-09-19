@@ -77,7 +77,7 @@ declare module 'klasa' {
         public guild(guild: Guild|Snowflake): Promise<Guild>;
         public role(role: Role|Snowflake, guild: Guild): Promise<Role>;
         public boolean(bool: boolean|string): Promise<boolean>;
-        public string(string: string): Promise<String>;
+        public string(string: string): Promise<string>;
         public integer(integer: string|number): Promise<number>;
         public float(number: string|number): Promise<number>;
         public url(hyperlink: string): Promise<number>;
@@ -160,29 +160,101 @@ declare module 'klasa' {
         public run(msg: Message, min: number): permissionLevelResponse;
     }
 
-    class CommandStore extends Collection<string, Command> {
-        public constructor(client: KlasaClient);
-        public client: KlasaClient;
-        public aliases: Collection<string, Command>;
-        public coreDir: string;
-        public userDir: string;
-        public holds: Command;
-        public name: 'commands';
+    // Usage
+    class ParsedUsage {
+        public constructor(client: KlasaClient, command: Command);
+        public readonly client: KlasaClient;
+        public names: string[];
+        public commands: string;
+        public deliminatedUsage: string;
+        public usageString: string;
+        public parsedUsage: Tag[];
+        public nearlyFullUsage: string;
 
-        public readonly help: Object[];
-        public get(name: string): Command;
-        public has(name: string): boolean;
-        public set(command: Command): Command;
-        public delete(name: Command|string): boolean;
-        public clear(): void;
+        public fullUsage(msg: Message): string;
+        static parseUsage(usageString: string): Tag[];
+        static tagOpen(usage: Object, char: string): Object;
+        static tagClose(usage: Object, char: string): Object;
+        static tagSpace(usage: Object, char: string): Object;
+    }
 
-        public load(dir: string, file: string[]): Command;
-        public loadAll(): Promise<number[]>;
+    class Possible {
+        public constructor(regexResults: string[]);
+        public name: string;
+        public type: string;
+        public min: number;
+        public max: number;
+        public regex: RegExp;
 
-        public init(): any;
-        public resolve(): any;
+        static resolveLimit(limit: string, type: string): number;
+    }
 
-        static walk(store: CommandStore, dir: string, subs: string[]): Promise<void>;
+    class Tag {
+        public constructor(members: string, count: number, required: boolean);
+        public type: string;
+        public possibles: Possible[];
+
+        static parseMembers(members: string, count: number): Possible[];
+        static parseTrueMembers(members: string): string[];
+    }
+
+    // Util
+    class Colors {
+        public constructor();
+        public CLOSE: ColorsClose;
+        public STYLES: ColorsStyles;
+        public TEXTS: ColorsTexts;
+        public BACKGROUNDS: ColorsBackgrounds;
+
+        static hexToRGB(hex: string): number[];
+        static hslToRGB(hsl: number[]): number[];
+        static hueToRGB(p: number, q: number, t: number): number;
+        static formatArray(array: string[]): string|number[];
+
+        public format(string: string, type: { style: string|string[], background: string|number|string[], text: string|number|string[] }): string;
+    }
+
+    class KlasaConsole extends Console {
+        public constructor(options: KlasaConsoleConfig);
+        public readonly stdout: NodeJS.WritableStream;
+        public readonly stderr: NodeJS.WritableStream;
+        public timestaamps: boolean|string;
+        public useColors: boolean;
+        public colors: boolean|KlasaConsoleColors;
+
+        public write(data: any, type: string): void;
+        public log(...data: any[]): void;
+        public warn(...data: any[]): void;
+        public error(...data: any[]): void;
+        public debug(...data: any[]): void;
+        public verbose(...data: any[]): void;
+        public wtf(...data: any[]): void;
+
+        public timestamp(timestamp: Date, time: string): string;
+        public messages(string: string, message: string): string;
+
+        static flatten(data: any, useColors: boolean): string;
+    }
+
+    // Structures
+    class CommandMessage {
+        public constructor(msg: Message, cmd: Command, prefix: string, prefixLength: number);
+        public readonly client: KlasaClient;
+        public msg: Message;
+        public cmd: Command;
+        public prefix: string;
+        public prefixLength: number;
+        public args: string[];
+        public params: any[];
+        public reprompted: false;
+        private _currentUsage: Object;
+        private _repeat: boolean;
+
+        private validateArgs(): Promise<any[]>;
+        private multiPossibles(possible: number, validated: boolean): Promise<any[]>;
+
+        static getArgs(cmdMsg: CommandMessage): string[];
+        static getQuotedStringArgs(cmdMsg: CommandMessage): string[];
     }
 
     class Piece {
@@ -194,7 +266,7 @@ declare module 'klasa' {
         static applyToClass(structure: Object, skips: string[]): void;
     }
 
-    abstract class Command {
+    abstract class Command implements Piece {
         public constructor(client: KlasaClient, dir: string, file: string[], options: CommandOptions);
         public client: KlasaClient;
         public type: 'command';
@@ -221,13 +293,13 @@ declare module 'klasa' {
         public abstract run(msg: CommandMessage, params: any[]): Promise<Message>;
         public abstract init(): any;
 
-        public abstract reload(): any;
+        public abstract enable(): Piece;
+        public abstract disable(): Piece;
+        public abstract reload(): Promise<any>;
         public abstract unload(): any;
-        public abstract enable(): any;
-        public abstract disable(): any;
     }
 
-    abstract class Event {
+    abstract class Event implements Piece  {
         public constructor(client: KlasaClient, dir: string, file: string[], options: EventOptions);
         public client: KlasaClient;
         public type: 'event';
@@ -242,13 +314,13 @@ declare module 'klasa' {
         public abstract run(...params: any[]): void;
         public abstract init(): any;
 
-        public abstract reload(): any;
+        public abstract enable(): Piece;
+        public abstract disable(): Piece;
+        public abstract reload(): Promise<any>;
         public abstract unload(): any;
-        public abstract enable(): any;
-        public abstract disable(): any;
     }
 
-    abstract class Extendable {
+    abstract class Extendable implements Piece {
         public constructor(client: KlasaClient, dir: string, file: string[], options: ExtendableOptions);
         public client: KlasaClient;
         public type: 'extendable';
@@ -262,11 +334,113 @@ declare module 'klasa' {
         public target: boolean;
 
         public abstract extend(...params: any[]): any;
-        private init(): any;
+        public abstract init(): any;
 
-        public enable(): Piece;
-        public disable(): Piece;
-        public abstract reload(): any;
+        public abstract enable(): Piece;
+        public abstract disable(): Piece;
+        public abstract reload(): Promise<any>;
+        public abstract unload(): any;
+    }
+
+    abstract class Finalizer implements Piece {
+        public constructor(client: KlasaClient, dir: string, file: string[], options: FinalizerOptions);
+        public client: KlasaClient;
+        public type: 'finalizer';
+
+        public enabled: boolean;
+        public name: string;
+        public dir: string;
+        public file: string;
+
+        public abstract run(msg: CommandMessage, mes: Message, start: Now): void;
+        public abstract init(): any;
+
+        public abstract enable(): Piece;
+        public abstract disable(): Piece;
+        public abstract reload(): Promise<any>;
+        public abstract unload(): any;
+    }
+
+    abstract class Inhibitor implements Piece {
+        public constructor(client: KlasaClient, dir: string, file: string[], options: InhibitorOptions);
+        public client: KlasaClient;
+        public type: 'inhibitor';
+
+        public enabled: boolean;
+        public name: string;
+        public dir: string;
+        public file: string;
+
+        public abstract run(msg: Message, cmd: Command): Promise<void|string>;
+        public abstract init(): any;
+
+        public abstract enable(): Piece;
+        public abstract disable(): Piece;
+        public abstract reload(): Promise<any>;
+        public abstract unload(): any;
+    }
+
+    abstract class Language implements Piece {
+        public constructor(client: KlasaClient, dir: string, file: string[], options: LanguageOptions);
+        public client: KlasaClient;
+        public type: 'language';
+
+        public enabled: boolean;
+        public name: string;
+        public dir: string;
+        public file: string;
+
+        public get(term: string, ...args: any[]): string|Function;
+        public abstract init(): any;
+
+        public abstract enable(): Piece;
+        public abstract disable(): Piece;
+        public abstract reload(): Promise<any>;
+        public abstract unload(): any;
+    }
+
+    abstract class Monitor implements Piece {
+        public constructor(client: KlasaClient, dir: string, file: string[], options: MonitorOptions);
+        public client: KlasaClient;
+        public type: 'monitor';
+
+        public enabled: boolean;
+        public name: string;
+        public dir: string;
+        public file: string;
+
+        public ignoreBots: boolean;
+        public ignoreSelf: boolean;
+
+        public abstract run(msg: Message): void;
+        public abstract init(): any;
+
+        public abstract enable(): Piece;
+        public abstract disable(): Piece;
+        public abstract reload(): Promise<any>;
+        public abstract unload(): any;
+    }
+
+    abstract class Provider implements Piece {
+        public constructor(client: KlasaClient, dir: string, file: string[], options: ProviderOptions);
+        public client: KlasaClient;
+        public type: 'monitor';
+
+        public enabled: boolean;
+        public name: string;
+        public dir: string;
+        public file: string;
+
+        public description: string;
+        public sql: boolean;
+
+        public abstract run(msg: Message): void;
+        public abstract init(): any;
+        public abstract shutdown(): Promise<void>;
+
+        public abstract enable(): Piece;
+        public abstract disable(): Piece;
+        public abstract reload(): Promise<any>;
         public abstract unload(): any;
     }
 
@@ -277,6 +451,154 @@ declare module 'klasa' {
         resolve(name: Piece|string): Piece;
 
         static applyToClass(structure: Object, skips: string[]): void;
+    }
+
+    class CommandStore extends Collection<string, Command> implements Store {
+        public constructor(client: KlasaClient);
+        public client: KlasaClient;
+        public aliases: Collection<string, Command>;
+        public coreDir: string;
+        public userDir: string;
+        public holds: Command;
+        public name: 'commands';
+
+        public get(name: string): Command;
+        public has(name: string): boolean;
+        public set(command: Command): Command;
+        public delete(name: Command|string): boolean;
+        public clear(): void;
+        public load(dir: string, file: string[]): Command;
+        public loadAll(): Promise<number[]>;
+
+        public init(): any;
+        public resolve(): any;
+
+        static walk(store: CommandStore, dir: string, subs: string[]): Promise<void>;
+    }
+
+    class EventStore extends Collection<string, Command> implements Store {
+        public constructor(client: KlasaClient);
+        public client: KlasaClient;
+        public coreDir: string;
+        public userDir: string;
+        public holds: Event;
+        public name: 'events';
+
+        public clear(): void;
+        public delete(name: Event|string): boolean;
+        public set(event: Event): Event;
+
+        public init(): any;
+        public load(): any;
+        public loadAll(): Promise<any>;
+        public resolve(): any;
+    }
+
+    class ExtendableStore extends Collection<string, Extendable> implements Store {
+        public constructor(client: KlasaClient);
+        public client: KlasaClient;
+        public coreDir: string;
+        public userDir: string;
+        public holds: Extendable;
+        public name: 'extendables';
+
+        public delete(name: Extendable|string): boolean;
+        public clear(): void;
+        public set(extendable: Extendable): Extendable;
+
+        public init(): any;
+        public load(): any;
+        public loadAll(): Promise<any>;
+        public resolve(): any;
+    }
+
+    class FinalizerStore extends Collection<string, Finalizer> implements Store {
+        public constructor(client: KlasaClient);
+        public client: KlasaClient;
+        public coreDir: string;
+        public userDir: string;
+        public holds: Finalizer;
+        public name: 'finalizers';
+
+        public delete(name: Finalizer|string): boolean;
+        public run(msg: CommandMessage, mes: Message, start: Now): void;
+        public set(finalizer: Finalizer): Finalizer;
+
+        public init(): any;
+        public load(): any;
+        public loadAll(): Promise<any>;
+        public resolve(): any;
+    }
+
+    class InhibitorStore extends Collection<string, Inhibitor> implements Store {
+        public constructor(client: KlasaClient);
+        public client: KlasaClient;
+        public coreDir: string;
+        public userDir: string;
+        public holds: Inhibitor;
+        public name: 'inhibitors';
+
+        public delete(name: Inhibitor|string): boolean;
+        public run(msg: Message, cmd: Command, selective: boolean): void;
+        public set(inhibitor: Inhibitor): Inhibitor;
+
+        public init(): any;
+        public load(): any;
+        public loadAll(): Promise<any>;
+        public resolve(): any;
+    }
+
+    class LanguageStore extends Collection<string, Language> implements Store {
+        public constructor(client: KlasaClient);
+        public client: KlasaClient;
+        public coreDir: string;
+        public userDir: string;
+        public holds: Language;
+        public name: 'languages';
+
+        public readonly default: Language;
+        public delete(name: Language|string): boolean;
+        public set(language: Language): Language;
+
+        public init(): any;
+        public load(): any;
+        public loadAll(): Promise<any>;
+        public resolve(): any;
+    }
+
+    class MonitorStore extends Collection<string, Monitor> implements Store {
+        public constructor(client: KlasaClient);
+        public client: KlasaClient;
+        public coreDir: string;
+        public userDir: string;
+        public holds: Monitor;
+        public name: 'monitors';
+
+        public delete(name: Monitor|string): boolean;
+        public run(msg: Message): void;
+        public set(monitor: Monitor): Monitor;
+
+        public init(): any;
+        public load(): any;
+        public loadAll(): Promise<any>;
+        public resolve(): any;
+    }
+
+    class ProviderStore extends Collection<string, Provider> implements Store {
+        public constructor(client: KlasaClient);
+        public client: KlasaClient;
+        public coreDir: string;
+        public userDir: string;
+        public holds: Provider;
+        public name: 'providers';
+
+        public delete(name: Provider|string): boolean;
+        public set(provider: Provider): Provider;
+
+        public init(): any;
+        public load(): any;
+        public loadAll(): Promise<any>;
+        public resolve(): any;
     }
 
     type KlasaClientConfig = {
@@ -320,12 +642,12 @@ declare module 'klasa' {
     type PermissionLevel = {
         break: boolean;
         check: Function;
-    }
+    };
 
     type permissionLevelResponse = {
         broke: boolean;
         permission: boolean;
-    }
+    };
 
     type CommandOptions = {
         enabled: boolean;
@@ -341,16 +663,194 @@ declare module 'klasa' {
         usageDelim: string;
         extendedHelp: string;
         quotedStringSupport: boolean;
-    }
+    };
 
     type EventOptions = {
         enabled: boolean;
         name: string;
-    }
+    };
 
     type ExtendableOptions = {
         enabled: boolean;
         name: string;
         klasa: boolean;
+    };
+
+    type FinalizerOptions = {
+        enabled: boolean;
+        name: string;
+    };
+
+    type InhibitorOptions = {
+        enabled: boolean;
+        name: string;
+        spamProtection: boolean;
+    };
+
+    type LanguageOptions = {
+        enabled: boolean;
+        name: string;
+    };
+
+    type MonitorOptions = {
+        enabled: boolean;
+        name: string;
+        ignoreBots: boolean;
+        ignoreSelf: boolean;
+    };
+
+    type ProviderOptions = {
+        enabled: boolean;
+        name: string;
+        description: string;
+        sql: boolean;
+    };
+
+    type ColorsClose = {
+        normal: 0;
+        bold: 22;
+        dim: 22;
+        italic: 23;
+        underline: 24;
+        inverse: 27;
+        hidden: 28;
+        strikethrough: 29;
+        text: 39;
+        background: 49;
+    };
+
+    type ColorsStyles = {
+        normal: 0;
+        bold: 1;
+        dim: 2;
+        italic: 3;
+        underline: 4;
+        inverse: 7;
+        hidden: 8;
+        strikethrough: 9;
+    };
+
+    type ColorsTexts = {
+        black: 30;
+        red: 31;
+        green: 32;
+        yellow: 33;
+        blue: 34;
+        magenta: 35;
+        cyan: 36;
+        lightgray: 37;
+        lightgrey: 37;
+        gray: 90;
+        grey: 90;
+        lightred: 91;
+        lightgreen: 92;
+        lightyellow: 93;
+        lightblue: 94;
+        lightmagenta: 95;
+        lightcyan: 96;
+        white: 97;
+    };
+
+    type ColorsBackgrounds = {
+        black: 40;
+        red: 41;
+        green: 42;
+        yellow: 43;
+        blue: 44;
+        magenta: 45;
+        cyan: 46;
+        gray: 47;
+        grey: 47;
+        lightgray: 100;
+        lightgrey: 100;
+        lightred: 101;
+        lightgreen: 102;
+        lightyellow: 103;
+        lightblue: 104;
+        lightmagenta: 105;
+        lightcyan: 106;
+        white: 107;
+    };
+
+    type KlasaConsoleColors = {
+        debug: KlasaConsoleColorObjects;
+        error: KlasaConsoleColorObjects;
+        log: KlasaConsoleColorObjects;
+        verbose: KlasaConsoleColorObjects;
+        warn: KlasaConsoleColorObjects;
+        wtf: KlasaConsoleColorObjects;
+    };
+
+    type KlasaConsoleColorObjects = {
+        log: string;
+        message: KlasaConsoleMessageObject;
+        time: KlasaConsoleTimeObject;
     }
+
+    type KlasaConsoleMessageObject = {
+        background: BackgroundColorTypes;
+        text: TextColorTypes;
+        style: StyleTypes;
+    }
+
+    type KlasaConsoleTimeObject = {
+        background: BackgroundColorTypes;
+        text: TextColorTypes;
+        style: StyleTypes;
+    }
+
+    type TextColorTypes = {
+        black: string;
+        red: string;
+        green: string;
+        yellow: string;
+        blue: string;
+        magenta: string;
+        cyan: string;
+        gray: string;
+        grey: string;
+        lightgray: string;
+        lightgrey: string;
+        lightred: string;
+        lightgreen: string;
+        lightyellow: string;
+        lightblue: string;
+        lightmagenta: string;
+        lightcyan: string;
+        white: string;
+    } | number[] | string[];
+
+    type BackgroundColorTypes = {
+        black: string;
+        red: string;
+        green: string;
+        blue: string;
+        magenta: string;
+        cyan: string;
+        gray: string;
+        grey: string;
+        lightgray: string;
+        lightgrey: string;
+        lightred: string;
+        lightgreen: string;
+        lightyellow: string;
+        lightblue: string;
+        lightmagenta: string;
+        lightcyan: string;
+        white: string;
+    } | number[] | string[];
+
+    type StyleTypes = {
+        normal: string;
+        bold: string;
+        dim: string;
+        italic: string;
+        underline: string;
+        inverse: string;
+        hidden: string;
+        strikethrough: string;
+    }
+
+    // Simulates what performance-now's now() does.
+    type Now = () => number;
 }

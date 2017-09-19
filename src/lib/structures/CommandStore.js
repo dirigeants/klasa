@@ -57,15 +57,6 @@ class CommandStore extends Collection {
 	}
 
 	/**
-	 * The specific command information needed to make our help command.
-	 * @type {Array<Object>}
-	 * @readonly
-	 */
-	get help() {
-		return this.map(command => ({ name: command.name, usage: command.parsedUsage.fullUsage, description: command.description }));
-	}
-
-	/**
 	 * Returns a command in the store if it exists by its name or by an alias.
 	 * @param {string} name A command or alias name.
 	 * @returns {Command}
