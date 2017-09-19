@@ -125,8 +125,14 @@ class CommandStore extends Collection {
 	 * @returns {Command}
 	 */
 	load(dir, file) {
-		const cmd = this.set(new (require(join(dir, ...file)))(this.client, dir, file));
-		delete require.cache[join(dir, ...file)];
+		const loc = join(dir, ...file);
+		let cmd = null;
+		try {
+			cmd = this.set(new (require(loc))(this.client, dir, file));
+		} catch (error) {
+			this.client.emit('wtf', new Error(`Non-Class Export: ${loc}`);
+		}
+		delete require.cache[loc];
 		return cmd;
 	}
 
