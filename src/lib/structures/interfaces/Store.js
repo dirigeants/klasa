@@ -26,10 +26,10 @@ class Store {
 	 * Loads a piece into Klasa so it can be saved in this store.
 	 * @param {string} dir The user directory or core directory where this file is saved.
 	 * @param  {string} file A string showing where the file is located.
-	 * @returns {Finalizer}
+	 * @returns {?Piece}
 	 */
 	load(dir, file) {
-		const loc = join(dir, file);
+		const loc = Array.isArray(file) ? join(dir, ...file) : join(dir, file);
 		let piece = null;
 		try {
 			piece = this.set(new (require(loc))(this.client, dir, file));
