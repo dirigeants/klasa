@@ -13,7 +13,7 @@ class ArgResolver extends Resolver {
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {external:Message} msg The message that triggered the command
-	 * @returns {Command}
+	 * @returns {Piece}
 	 */
 	async piece(arg, currentUsage, possible, repeat, msg) {
 		for (const store of this.client.pieceStores.values()) {
@@ -31,7 +31,7 @@ class ArgResolver extends Resolver {
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {external:Message} msg The message that triggered the command
-	 * @returns {Command}
+	 * @returns {Store}
 	 */
 	async store(arg, currentUsage, possible, repeat, msg) {
 		const store = this.client.pieceStores.get(arg);
@@ -92,7 +92,7 @@ class ArgResolver extends Resolver {
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {external:Message} msg The message that triggered the command
-	 * @returns {?Event}
+	 * @returns {?Extendable}
 	 */
 	async extendable(arg, currentUsage, possible, repeat, msg) {
 		const extendable = this.client.extendables.get(arg);

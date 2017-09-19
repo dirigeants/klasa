@@ -121,7 +121,7 @@ class CommandStore extends Collection {
 	/**
 	 * Loads a command file into Klasa so it can saved in this store.
 	 * @param {string} dir The user directory or core directory where this file is saved.
-	 * @param {Array} file An array containing information about it's category structure.
+	 * @param {string[]} file An array containing information about it's category structure.
 	 * @returns {Command}
 	 */
 	load(dir, file) {

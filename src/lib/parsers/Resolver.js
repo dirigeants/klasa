@@ -19,7 +19,7 @@ class Resolver {
 
 	/**
 	 * Fetch a Message object by its Snowflake or instanceof Message.
-	 * @param {Snowflake} message The message snowflake to validate.
+	 * @param {Message|Snowflake} message The message snowflake to validate.
 	 * @param {Channel} channel The Channel object in which the message can be found.
 	 * @returns {?external:Message}
 	 */
@@ -30,7 +30,7 @@ class Resolver {
 
 	/**
 	 * Resolve a User object by its instance of User, GuildMember, or by its Snowflake.
-	 * @param {User} user The user to validate.
+	 * @param {(User|GuildMember|Message|Snowflake)} user The user to validate.
 	 * @returns {?external:User}
 	 */
 	async user(user) {
