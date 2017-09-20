@@ -8,19 +8,21 @@ declare module 'klasa' {
         MessageEmbed,
         MessageCollector,
         WebhookClient,
-        User,
-        Message,
+        User as DiscordUser,
+        Message as DiscordMessage,
         GuildMember,
-        Guild,
+        Guild as DiscordGuild,
         Role,
         Channel,
-        TextChannel,
-        VoiceChannel
+        TextChannel as DiscordTextChannel,
+        VoiceChannel,
+        DMChannel as DiscordDMChannel,
+        GroupDMChannel as DiscordGroupDMChannel
     } from 'discord.js';
 
     export const version: string;
 
-    export class KlasaClient extends Client {
+    class KlasaClient extends Client {
         constructor(options?: KlasaClientConfig);
         config: KlasaClientConfig;
         coreBaseDir: string;
@@ -67,6 +69,8 @@ declare module 'klasa' {
         public sweepCommandMessages(lifetime: number): number;
         public defaultPermissionLevels: PermissionLevels;
     }
+
+    export { KlasaClient as Client }
 
     export class util {
         public static codeBlock(lang: string, expression: string): string;
@@ -978,6 +982,71 @@ declare module 'klasa' {
     type BackgroundColorTypes = 'black'|'red'|'green'|'blue'|'magenta'|'cyan'|'gray'|'grey'|'lightgray'|'lightgrey'|'lightred'|'lightgreen'|'lightyellow'|'lightblue'|'lightmagenta'|'lightcyan'|'white'|number[]|string[];
 
     type StyleTypes = 'normal'|'bold'|'dim'|'italic'|'underline'|'inverse'|'hidden'|'strikethrough';
+
+    // Extended classes
+    export type Message = {
+        guild: Guild;
+        guildSettings: object;
+        hasAtLeastPermissionLevel: Promise<Boolean>;
+        language: Language;
+        reactable: Boolean;
+        send: Promise<Message>;
+        sendCode: Promise<Message>;
+        sendEmbed: Promise<Message>;
+        sendMessage: Promise<Message>;
+        sendFile: Promise<Message>;
+        sendFiles: Promise<Message>;
+        usableCommands: Promise<Collection<String, Command>>
+    } & DiscordMessage;
+
+    export type Guild = {
+        language: Language;
+        settings: object;
+    } & DiscordGuild;
+
+    export type User = {
+        sendCode: Promise<Message>;
+        sendEmbed: Promise<Message>;
+        sendMessage: Promise<Message>;
+        sendFile: Promise<Message>;
+        sendFiles: Promise<Message>;
+    } & DiscordUser;
+
+    export type TextChannel = {
+        attachable: boolean;
+        embedable: boolean;
+        postable: boolean;
+        language: Language;
+        sendCode: Promise<Message>;
+        sendEmbed: Promise<Message>;
+        sendMessage: Promise<Message>;
+        sendFile: Promise<Message>;
+        sendFiles: Promise<Message>;
+    } & DiscordTextChannel;
+
+    export type DMChannel = {
+        attachable: boolean;
+        embedable: boolean;
+        postable: boolean;
+        language: Language;
+        sendCode: Promise<Message>;
+        sendEmbed: Promise<Message>;
+        sendMessage: Promise<Message>;
+        sendFile: Promise<Message>;
+        sendFiles: Promise<Message>;
+    } & DiscordDMChannel;
+
+    export type GroupDMChannel = {
+        attachable: boolean;
+        embedable: boolean;
+        postable: boolean;
+        language: Language;
+        sendCode: Promise<Message>;
+        sendEmbed: Promise<Message>;
+        sendMessage: Promise<Message>;
+        sendFile: Promise<Message>;
+        sendFiles: Promise<Message>;
+    } & DiscordGroupDMChannel;
 
     // Simulates what performance-now's now() does.
     type Now = () => number;
