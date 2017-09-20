@@ -500,7 +500,7 @@ declare module 'klasa' {
         public dir: string;
         public file: string;
 
-        public abstract run(msg: CommandMessage, mes: Message, start: Now): void;
+        public abstract run(msg: CommandMessage, mes: Message, start: number): void;
         public abstract init(): any;
 
         public abstract enable(): Piece;
@@ -672,7 +672,7 @@ declare module 'klasa' {
         public name: 'finalizers';
 
         public delete(name: Finalizer|string): boolean;
-        public run(msg: CommandMessage, mes: Message, start: Now): void;
+        public run(msg: CommandMessage, mes: Message, start: number): void;
         public set(key: string, value: Finalizer): this;
         public set(finalizer: Finalizer): Finalizer;
 
@@ -1048,6 +1048,4 @@ declare module 'klasa' {
         sendFiles: Promise<Message>;
     } & DiscordGroupDMChannel;
 
-    // Simulates what performance-now's now() does.
-    type Now = () => number;
 }
