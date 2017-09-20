@@ -25,12 +25,19 @@ class Store {
 	/**
 	 * Loads a piece into Klasa so it can be saved in this store.
 	 * @param {string} dir The user directory or core directory where this file is saved.
-	 * @param  {string} file A string showing where the file is located.
-	 * @returns {Piece}
+	 * @param  {string|string[]} file A string or array of strings showing where the file is located.
+	 * @returns {?Piece}
 	 */
 	load(dir, file) {
-		const piece = this.set(new (require(join(dir, file)))(this.client, dir, file));
-		delete require.cache[join(dir, file)];
+		const loc = Array.isArray(file) ? join(dir, ...file) : join(dir, file);
+		let piece = null;
+		try {
+			piece = this.set(new (require(loc))(this.client, dir, file));
+		} catch (err) {
+			const error = err.message.endsWith('not a constructor') ? new TypeError(`Non-Class Export: ${loc}`) : err;
+			this.client.emit('wtf', error);
+		}
+		delete require.cache[loc];
 		return piece;
 	}
 
