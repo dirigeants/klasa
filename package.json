@@ -9,12 +9,13 @@
   "license": "MIT",
   "author": "BDistin",
   "main": "src/index.js",
+  "types": "typings/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/dirigeants/klasa.git"
   },
   "scripts": {
-    "lint": "npx eslint src --fix && npx tslint --fix 'typings/*.ts'",
+    "lint": "npx eslint --fix src && npx tslint --fix 'typings/*.ts'",
     "test": "npx eslint src && npx tslint 'typings/*.ts'",
     "docs": "npx jsdoc -c ./.docstrap.json -R README.md"
   },
