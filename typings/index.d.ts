@@ -28,27 +28,27 @@ declare module 'klasa' {
 	export const version: string;
 
 	class KlasaClient extends Client {
-		constructor(options?: KlasaClientConfig);
-		config: KlasaClientConfig;
-		coreBaseDir: string;
-		clientBaseDir: string;
-		console: Console;
-		argResolver: ArgResolver;
-		commands: CommandStore;
-		inhibitors: InhibitorStore;
-		finalizers: FinalizerStore;
-		monitors: MonitorStore;
-		languages: LanguageStore;
-		providers: ProviderStore;
-		events: EventStore;
-		extendables: ExtendableStore;
-		pieceStores: Collection<any, any>;
-		commandMessages: Collection<Snowflake, Message>;
-		permissionLevels: PermissionLevels;
-		commandMessageLifetime: number;
-		commandMessageSweep: number;
-		ready: false;
-		methods: {
+		public constructor(options?: KlasaClientConfig);
+		public config: KlasaClientConfig;
+		public coreBaseDir: string;
+		public clientBaseDir: string;
+		public console: Console;
+		public argResolver: ArgResolver;
+		public commands: CommandStore;
+		public inhibitors: InhibitorStore;
+		public finalizers: FinalizerStore;
+		public monitors: MonitorStore;
+		public languages: LanguageStore;
+		public providers: ProviderStore;
+		public events: EventStore;
+		public extendables: ExtendableStore;
+		public pieceStores: Collection<any, any>;
+		public commandMessages: Collection<Snowflake, Message>;
+		public permissionLevels: PermissionLevels;
+		public commandMessageLifetime: number;
+		public commandMessageSweep: number;
+		public ready: false;
+		public methods: {
 			Collection: typeof Collection;
 			Embed: typeof MessageEmbed;
 			MessageCollector: typeof MessageCollector;
@@ -56,8 +56,8 @@ declare module 'klasa' {
 			CommandMessage: typeof CommandMessage;
 			util: object;
 		};
-		settings: StringMappedType<SettingGateway<string>>;
-		application: object;
+		public settings: StringMappedType<SettingGateway<string>>;
+		public application: object;
 
 		public static readonly invite: string;
 		public static readonly owner: User;
@@ -158,7 +158,7 @@ declare module 'klasa' {
 
 	export { KlasaClient as Client };
 
-	export class util {
+	export class Util {
 		public static codeBlock(lang: string, expression: string): string;
 		public static clean(text: string): string;
 		private static initClean(client: KlasaClient): void;
@@ -172,17 +172,17 @@ declare module 'klasa' {
 		public constructor(client: KlasaClient);
 		public client: KlasaClient;
 
-		public msg(message: Message|Snowflake, channel: Channel): Promise<Message>;
-		public user(user: User|GuildMember|Message|Snowflake): Promise<User>;
-		public member(member: User|GuildMember|Snowflake, guild: Guild): Promise<GuildMember>;
-		public channel(channel: Channel|Snowflake): Promise<Channel>;
-		public guild(guild: Guild|Snowflake): Promise<Guild>;
-		public role(role: Role|Snowflake, guild: Guild): Promise<Role>;
-		public boolean(bool: boolean|string): Promise<boolean>;
-		public string(string: string): Promise<string>;
-		public integer(integer: string|number): Promise<number>;
-		public float(number: string|number): Promise<number>;
-		public url(hyperlink: string): Promise<string>;
+		public msg(input: Message|Snowflake, channel: Channel): Promise<Message>;
+		public user(input: User|GuildMember|Message|Snowflake): Promise<User>;
+		public member(input: User|GuildMember|Snowflake, guild: Guild): Promise<GuildMember>;
+		public channel(input: Channel|Snowflake): Promise<Channel>;
+		public guild(input: Guild|Snowflake): Promise<Guild>;
+		public role(input: Role|Snowflake, guild: Guild): Promise<Role>;
+		public boolean(input: boolean|string): Promise<boolean>;
+		public string(input: string): Promise<string>;
+		public integer(input: string|number): Promise<number>;
+		public float(input: string|number): Promise<number>;
+		public url(input: string): Promise<string>;
 
 		public static readonly regex: {
 			userOrMember: RegExp,
@@ -206,57 +206,57 @@ declare module 'klasa' {
 		public language(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: Message): Promise<Language>;
 		public provider(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: Message): Promise<Provider>;
 
-		public msg(message: string|Message, channel: Channel): Promise<Message>;
+		public msg(input: string|Message, channel: Channel): Promise<Message>;
 		public msg(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: Message): Promise<Message>;
-		public message(message: string|Message, channel: Channel): Promise<Message>;
+		public message(input: string|Message, channel: Channel): Promise<Message>;
 		public message(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: Message): Promise<Message>;
 
-		public user(user: User|GuildMember|Message|Snowflake): Promise<User>;
+		public user(input: User|GuildMember|Message|Snowflake): Promise<User>;
 		public user(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: Message): Promise<User>;
-		public mention(user: User|GuildMember|Message|Snowflake): Promise<User>;
+		public mention(input: User|GuildMember|Message|Snowflake): Promise<User>;
 		public mention(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: Message): Promise<User>;
 
-		public member(member: User|GuildMember|Snowflake, guild: Guild): Promise<GuildMember>;
+		public member(input: User|GuildMember|Snowflake, guild: Guild): Promise<GuildMember>;
 		public member(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: Message): Promise<GuildMember>;
 
-		public channel(channel: Channel|Snowflake): Promise<Channel>;
+		public channel(input: Channel|Snowflake): Promise<Channel>;
 		public channel(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: Message): Promise<Channel>;
 
-		public guild(guild: Guild|Snowflake): Promise<Guild>;
+		public guild(input: Guild|Snowflake): Promise<Guild>;
 		public guild(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: Message): Promise<Guild>;
 
-		public role(role: Role|Snowflake, guild: Guild): Promise<Role>;
+		public role(input: Role|Snowflake, guild: Guild): Promise<Role>;
 		public role(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: Message): Promise<Role>;
 
 		public literal(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: Message): Promise<string>;
 
-		public bool(bool: boolean|string): Promise<boolean>;
+		public bool(input: boolean|string): Promise<boolean>;
 		public bool(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: Message): Promise<boolean>;
-		public boolean(bool: boolean|string): Promise<boolean>;
+		public boolean(input: boolean|string): Promise<boolean>;
 		public boolean(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: Message): Promise<boolean>;
 
-		public str(string: string): Promise<string>;
+		public str(input: string): Promise<string>;
 		public str(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: Message): Promise<string>;
-		public string(string: string): Promise<string>;
+		public string(input: string): Promise<string>;
 		public string(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: Message): Promise<string>;
 
-		public int(integer: string|number): Promise<number>;
+		public int(input: string|number): Promise<number>;
 		public int(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: Message): Promise<number>;
-		public integer(integer: string|number): Promise<number>;
+		public integer(input: string|number): Promise<number>;
 		public integer(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: Message): Promise<number>;
 
-		public num(number: string|number): Promise<number>;
+		public num(input: string|number): Promise<number>;
 		public num(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: Message): Promise<number>;
-		public number(number: string|number): Promise<number>;
+		public number(input: string|number): Promise<number>;
 		public number(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: Message): Promise<number>;
-		public float(number: string|number): Promise<number>;
+		public float(input: string|number): Promise<number>;
 		public float(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: Message): Promise<number>;
 
 		public reg(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: Message): Promise<string>;
 		public regex(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: Message): Promise<string>;
 		public regexp(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: Message): Promise<string>;
 
-		public url(hyperlink: string): Promise<string>;
+		public url(input: string): Promise<string>;
 		public url(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: Message): Promise<string>;
 
 		public static minOrMax(value: number, min: number, max: number, currentUsage: object, possible: number, repeat: boolean, msg: Message, suffix: string): boolean;
@@ -266,34 +266,34 @@ declare module 'klasa' {
 		public command(data: any, guild: Guild, name: string): Promise<Command>;
 		public language(data: any, guild: Guild, name: string): Promise<Language>;
 
-		public user(user: User|GuildMember|Message|Snowflake): Promise<User>;
+		public user(input: User|GuildMember|Message|Snowflake): Promise<User>;
 		public user(data: any, guild: Guild, name: string): Promise<User>;
 
-		public channel(channel: Channel|Snowflake): Promise<Channel>;
+		public channel(input: Channel|Snowflake): Promise<Channel>;
 		public channel(data: any, guild: Guild, name: string): Promise<Channel>;
 
 		public textchannel(data: any, guild: Guild, name: string): Promise<TextChannel>;
 		public voicechannel(data: any, guild: Guild, name: string): Promise<VoiceChannel>;
 
-		public guild(guild: Guild|Snowflake): Promise<Guild>;
+		public guild(input: Guild|Snowflake): Promise<Guild>;
 		public guild(data: any, guild: Guild, name: string): Promise<Guild>;
 
-		public role(role: Role|Snowflake, guild: Guild): Promise<Role>;
+		public role(input: Role|Snowflake, guild: Guild): Promise<Role>;
 		public role(data: any, guild: Guild, name: string): Promise<Role>;
 
-		public boolean(bool: boolean|string): Promise<boolean>;
+		public boolean(input: boolean|string): Promise<boolean>;
 		public boolean(data: any, guild: Guild, name: string): Promise<boolean>;
 
-		public string(string: string): Promise<string>;
+		public string(input: string): Promise<string>;
 		public string(data: any, guild: Guild, name: string, minMax: { min: number, max: number }): Promise<string>;
 
-		public integer(integer: string|number): Promise<number>;
+		public integer(input: string|number): Promise<number>;
 		public integer(data: any, guild: Guild, name: string, minMax: { min: number, max: number }): Promise<number>;
 
-		public float(number: string|number): Promise<number>;
+		public float(input: string|number): Promise<number>;
 		public float(data: any, guild: Guild, name: string, minMax: { min: number, max: number }): Promise<number>;
 
-		public url(hyperlink: string): Promise<string>;
+		public url(input: string): Promise<string>;
 		public url(data: any, guild: Guild, name: string): Promise<string>;
 
 		public static maxOrMin(guild: Guild, value: number, min: number, max: number, name: string, suffix: string): boolean;
@@ -374,7 +374,7 @@ declare module 'klasa' {
 	}
 
 	export class SettingGateway<T> extends SchemaManager {
-		constructor(store: SettingCache, type: T, validateFunction: Function, schema: object);
+		public constructor(store: SettingCache, type: T, validateFunction: Function, schema: object);
 		public readonly store: SettingCache;
 		public type: T;
 		public engine: string;
@@ -400,7 +400,7 @@ declare module 'klasa' {
 	}
 
 	export class SettingCache {
-		constructor(client: KlasaClient);
+		public constructor(client: KlasaClient);
 		public client: KlasaClient;
 		public resolver: SettingResolver;
 		public guilds: SettingGateway<'guilds'>;
@@ -412,7 +412,7 @@ declare module 'klasa' {
 	}
 
 	export class SQL {
-		constructor(client: KlasaClient, gateway: SettingGateway<string>);
+		public constructor(client: KlasaClient, gateway: SettingGateway<string>);
 		public readonly client: KlasaClient;
 		public readonly gateway: SettingGateway<string>;
 
@@ -443,7 +443,7 @@ declare module 'klasa' {
 		public static hueToRGB(p: number, q: number, t: number): number;
 		public static formatArray(array: string[]): string|number[];
 
-		public format(string: string, type: { style: string|string[], background: string|number|string[], text: string|number|string[] }): string;
+		public format(input: string, type: { style: string|string[], background: string|number|string[], text: string|number|string[] }): string;
 	}
 
 	class KlasaConsole extends Console {
@@ -463,7 +463,7 @@ declare module 'klasa' {
 		public wtf(...data: any[]): void;
 
 		public timestamp(timestamp: Date, time: string): string;
-		public messages(string: string, message: string): string;
+		public messages(input: string, message: string): string;
 
 		public static flatten(data: any, useColors: boolean): string;
 	}
@@ -679,10 +679,10 @@ declare module 'klasa' {
 	}
 
 	export class Store {
-		init(): Promise<any[]>;
-		load(dir: string, file: string|string[]): Piece;
-		loadAll(): Promise<number>;
-		resolve(name: Piece|string): Piece;
+		public init(): Promise<any[]>;
+		public load(dir: string, file: string|string[]): Piece;
+		public loadAll(): Promise<number>;
+		public resolve(name: Piece|string): Piece;
 
 		public static applyToClass(structure: object, skips: string[]): void;
 	}
