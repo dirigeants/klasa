@@ -22,7 +22,8 @@ declare module 'klasa' {
 		TextChannel as DiscordTextChannel,
 		VoiceChannel,
 		DMChannel as DiscordDMChannel,
-		GroupDMChannel as DiscordGroupDMChannel
+		GroupDMChannel as DiscordGroupDMChannel,
+		OAuth2Application
 	} from 'discord.js';
 
 	export const version: string;
@@ -42,25 +43,25 @@ declare module 'klasa' {
 		public providers: ProviderStore;
 		public events: EventStore;
 		public extendables: ExtendableStore;
-		public pieceStores: Collection<any, any>;
+		public pieceStores: Collection<string, any>;
 		public commandMessages: Collection<Snowflake, Message>;
 		public permissionLevels: PermissionLevels;
 		public commandMessageLifetime: number;
 		public commandMessageSweep: number;
-		public ready: false;
+		public ready: boolean;
 		public methods: {
 			Collection: typeof Collection;
 			Embed: typeof MessageEmbed;
 			MessageCollector: typeof MessageCollector;
 			Webhook: typeof WebhookClient;
 			CommandMessage: typeof CommandMessage;
-			util: object;
+			util: Util;
 		};
 		public settings: StringMappedType<SettingGateway<string>>;
-		public application: object;
+		public application: OAuth2Application;
 
-		public static readonly invite: string;
-		public static readonly owner: User;
+		public readonly invite: string;
+		public readonly owner: User;
 		public validatePermissionLevels(): PermissionLevels;
 		public registerStore(store: Store): KlasaClient;
 		public unregisterStore(store: Store): KlasaClient;
@@ -71,7 +72,7 @@ declare module 'klasa' {
 		public login(token: string): Promise<string>;
 		private _ready(): void;
 
-		public sweepCommandMessages(lifetime: number): number;
+		public sweepCommandMessages(lifetime?: number): number;
 		public defaultPermissionLevels: PermissionLevels;
 
 		// Discord.js events
@@ -165,7 +166,7 @@ declare module 'klasa' {
 		public static toTitleCase(str: string): string;
 		public static newError(error: Error, code: number): Error;
 		public static regExpEsc(str: string): string;
-		public static applyToClass(base: object, structure: object, skips: string[]): void;
+		public static applyToClass(base: object, structure: object, skips?: string[]): void;
 	}
 
 	export class Resolver {
@@ -300,7 +301,7 @@ declare module 'klasa' {
 	}
 
 	export class PermissionLevels extends Collection<number, PermissionLevel> {
-		public constructor(levels: number);
+		public constructor(levels?: number);
 		public requiredLevels: number;
 
 		public addLevel(level: number, brk: boolean, check: Function);
@@ -368,8 +369,8 @@ declare module 'klasa' {
 
 		public initSchema(): Promise<void>;
 		public validateSchema(schema: object): void;
-		public add(key: string, options: AddOptions, force: boolean): Promise<void>;
-		public remove(key: string, force: boolean): Promise<void>;
+		public add(key: string, options: AddOptions, force?: boolean): Promise<void>;
+		public remove(key: string, force?: boolean): Promise<void>;
 		private force(action: string, key: string): Promise<void>;
 	}
 
@@ -378,7 +379,7 @@ declare module 'klasa' {
 		public readonly store: SettingCache;
 		public type: T;
 		public engine: string;
-		public sql: SQL;
+		public sql?: SQL;
 		public validate: Function;
 		public defaultDataSchema: object;
 
@@ -386,10 +387,10 @@ declare module 'klasa' {
 		public create(input: object|string): Promise<void>;
 		public destroy(input: string): Promise<void>;
 		public get(input: string): object;
-		public getResolved(input: object|string, guild: SettingGatewayGuildResolvable): Promise<object>;
-		public sync(input: object|string): Promise<void>;
+		public getResolved(input: object|string, guild?: SettingGatewayGuildResolvable): Promise<object>;
+		public sync(input?: object|string): Promise<void>;
 		public reset(input: object|string, key: string): Promise<any>;
-		public update(input: object|string, object: object, guild: SettingGatewayGuildResolvable): object;
+		public update(input: object|string, object: object, guild?: SettingGatewayGuildResolvable): object;
 		public ensureCreate(target: object|string): true;
 		public updateArray(input: object|string, action: 'add'|'remove', key: string, data: any): Promise<boolean>;
 		private _resolveGuild(guild: Guild|TextChannel|VoiceChannel|Snowflake): Guild;
@@ -405,10 +406,14 @@ declare module 'klasa' {
 		public resolver: SettingResolver;
 		public guilds: SettingGateway<'guilds'>;
 
-		public add<T>(name: T, validateFunction: Function, schema: object): Promise<SettingGateway<T>>;
+		public add<T>(name: T, validateFunction: Function, schema?: object): Promise<SettingGateway<T>>;
 		public validate(resolver: SettingResolver, guild: object|string);
 
-		public readonly defaultDataSchema: { prefix: SchemaPiece, language: SchemaPiece, disabledCommands: SchemaPiece };
+		public readonly defaultDataSchema: {
+			prefix: SchemaPiece,
+			language: SchemaPiece,
+			disabledCommands: SchemaPiece
+		};
 	}
 
 	export class SQL {
@@ -443,7 +448,7 @@ declare module 'klasa' {
 		public static hueToRGB(p: number, q: number, t: number): number;
 		public static formatArray(array: string[]): string|number[];
 
-		public format(input: string, type: { style: string|string[], background: string|number|string[], text: string|number|string[] }): string;
+		public format(input: string, type?: { style: string|string[], background: string|number|string[], text: string|number|string[] }): string;
 	}
 
 	class KlasaConsole extends Console {
@@ -454,7 +459,7 @@ declare module 'klasa' {
 		public useColors: boolean;
 		public colors: boolean|KlasaConsoleColors;
 
-		public write(data: any, type: string): void;
+		public write(data: any, type?: string): void;
 		public log(...data: any[]): void;
 		public warn(...data: any[]): void;
 		public error(...data: any[]): void;
@@ -497,7 +502,7 @@ declare module 'klasa' {
 		public enable(): Piece;
 		public disable(): Piece;
 
-		public static applyToClass(structure: object, skips: string[]): void;
+		public static applyToClass(structure: object, skips?: string[]): void;
 	}
 
 	export abstract class Command implements Piece {
@@ -684,7 +689,7 @@ declare module 'klasa' {
 		public loadAll(): Promise<number>;
 		public resolve(name: Piece|string): Piece;
 
-		public static applyToClass(structure: object, skips: string[]): void;
+		public static applyToClass(structure: object, skips?: string[]): void;
 	}
 
 	export class CommandStore extends Collection<string, Command> implements Store {
@@ -708,7 +713,7 @@ declare module 'klasa' {
 		public init(): any;
 		public resolve(): any;
 
-		public static walk(store: CommandStore, dir: string, subs: string[]): Promise<void>;
+		public static walk(store: CommandStore, dir: string, subs?: string[]): Promise<void>;
 	}
 
 	export class EventStore extends Collection<string, Event> implements Store {
@@ -844,41 +849,41 @@ declare module 'klasa' {
 	}
 
 	type KlasaClientConfig = {
-		prefix: string;
-		permissionLevels: PermissionLevels;
-		clientBaseDir: string;
-		commandMessageLifetime: number;
-		commandMessageSweep: number;
-		provider: object;
-		console: KlasaConsoleConfig;
-		consoleEvents: KlasaConsoleEvents;
-		ignoreBots: boolean;
-		ignoreSelf: boolean;
-		prefixMention: RegExp;
-		cmdPrompt: boolean;
-		cmdEditing: boolean;
-		cmdLogging: boolean;
-		typing: boolean;
-		quotedStringSupport: boolean;
-		readyMessage: string|Function;
-		string: string;
+		prefix?: string;
+		permissionLevels?: PermissionLevels;
+		clientBaseDir?: string;
+		commandMessageLifetime?: number;
+		commandMessageSweep?: number;
+		provider?: { engine: string, cache: string };
+		console?: KlasaConsoleConfig;
+		consoleEvents?: KlasaConsoleEvents;
+		ignoreBots?: boolean;
+		ignoreSelf?: boolean;
+		prefixMention?: RegExp;
+		cmdPrompt?: boolean;
+		cmdEditing?: boolean;
+		cmdLogging?: boolean;
+		typing?: boolean;
+		quotedStringSupport?: boolean;
+		readyMessage?: string|Function;
+		ownerID?: string;
 	} & ClientOptions;
 
 	type KlasaConsoleConfig = {
-		stdout: NodeJS.WritableStream;
-		stderr: NodeJS.WritableStream;
-		useColor: boolean;
-		colors: Colors;
-		timestamps: boolean|string;
+		stdout?: NodeJS.WritableStream;
+		stderr?: NodeJS.WritableStream;
+		useColor?: boolean;
+		colors?: Colors;
+		timestamps?: boolean|string;
 	};
 
 	type KlasaConsoleEvents = {
-		log: boolean;
-		warn: boolean;
-		error: boolean;
-		debug: boolean;
-		verbose: boolean;
-		wtf: boolean;
+		log?: boolean;
+		warn?: boolean;
+		error?: boolean;
+		debug?: boolean;
+		verbose?: boolean;
+		wtf?: boolean;
 	};
 
 	type PermissionLevel = {
@@ -894,69 +899,69 @@ declare module 'klasa' {
 	type ProxyCommand = CommandMessage & Message;
 
 	type CommandOptions = {
-		enabled: boolean;
-		name: string;
-		aliases: string[];
-		runIn: string[];
-		botPerms: string[];
-		requiredSettings: string[];
-		cooldown: number;
-		permLevel: number;
-		description: string;
-		usage: string;
-		usageDelim: string;
-		extendedHelp: string;
-		quotedStringSupport: boolean;
+		enabled?: boolean;
+		name?: string;
+		aliases?: string[];
+		runIn?: string[];
+		botPerms?: string[];
+		requiredSettings?: string[];
+		cooldown?: number;
+		permLevel?: number;
+		description?: string;
+		usage?: string;
+		usageDelim?: string;
+		extendedHelp?: string;
+		quotedStringSupport?: boolean;
 	};
 
 	type EventOptions = {
-		enabled: boolean;
-		name: string;
+		enabled?: boolean;
+		name?: string;
 	};
 
 	type ExtendableOptions = {
-		enabled: boolean;
-		name: string;
-		klasa: boolean;
+		enabled?: boolean;
+		name?: string;
+		klasa?: boolean;
 	};
 
 	type FinalizerOptions = {
-		enabled: boolean;
-		name: string;
+		enabled?: boolean;
+		name?: string;
 	};
 
 	type InhibitorOptions = {
-		enabled: boolean;
-		name: string;
-		spamProtection: boolean;
+		enabled?: boolean;
+		name?: string;
+		spamProtection?: boolean;
 	};
 
 	type LanguageOptions = {
-		enabled: boolean;
-		name: string;
+		enabled?: boolean;
+		name?: string;
 	};
 
 	type MonitorOptions = {
-		enabled: boolean;
-		name: string;
-		ignoreBots: boolean;
-		ignoreSelf: boolean;
+		enabled?: boolean;
+		name?: string;
+		ignoreBots?: boolean;
+		ignoreSelf?: boolean;
 	};
 
 	type ProviderOptions = {
-		enabled: boolean;
-		name: string;
-		description: string;
-		sql: boolean;
+		enabled?: boolean;
+		name?: string;
+		description?: string;
+		sql?: boolean;
 	};
 
 	type AddOptions = {
 		type: string;
-		default: any;
-		min: number;
-		max: number;
-		array: boolean;
-		sql: string;
+		default?: any;
+		min?: number;
+		max?: number;
+		array?: boolean;
+		sql?: string;
 	};
 
 	type SchemaPiece = {
@@ -1076,7 +1081,7 @@ declare module 'klasa' {
 	type SchemaDefaults = StringMappedType<any>;
 
 	// Extended classes
-	type Message = {
+	export type Message = {
 		guild: Guild;
 		guildSettings: GuildSettings;
 		hasAtLeastPermissionLevel: Promise<Boolean>;
@@ -1091,12 +1096,12 @@ declare module 'klasa' {
 		usableCommands: Promise<Collection<String, Command>>;
 	} & DiscordMessage;
 
-	type Guild = {
+	export type Guild = {
 		language: Language;
 		settings: GuildSettings;
 	} & DiscordGuild;
 
-	type User = {
+	export type User = {
 		sendCode: Promise<Message>;
 		sendEmbed: Promise<Message>;
 		sendMessage: Promise<Message>;
@@ -1104,7 +1109,7 @@ declare module 'klasa' {
 		sendFiles: Promise<Message>;
 	} & DiscordUser;
 
-	type TextChannel = {
+	export type TextChannel = {
 		attachable: boolean;
 		embedable: boolean;
 		postable: boolean;
@@ -1116,7 +1121,7 @@ declare module 'klasa' {
 		sendFiles: Promise<Message>;
 	} & DiscordTextChannel;
 
-	type DMChannel = {
+	export type DMChannel = {
 		attachable: boolean;
 		embedable: boolean;
 		postable: boolean;
@@ -1128,7 +1133,7 @@ declare module 'klasa' {
 		sendFiles: Promise<Message>;
 	} & DiscordDMChannel;
 
-	type GroupDMChannel = {
+	export type GroupDMChannel = {
 		attachable: boolean;
 		embedable: boolean;
 		postable: boolean;
