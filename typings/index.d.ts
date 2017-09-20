@@ -984,7 +984,7 @@ declare module 'klasa' {
     type StyleTypes = 'normal'|'bold'|'dim'|'italic'|'underline'|'inverse'|'hidden'|'strikethrough';
 
     // Extended classes
-    export type Message = {
+    type Message = {
         guild: Guild;
         guildSettings: object;
         hasAtLeastPermissionLevel: Promise<Boolean>;
@@ -999,12 +999,12 @@ declare module 'klasa' {
         usableCommands: Promise<Collection<String, Command>>
     } & DiscordMessage;
 
-    export type Guild = {
+    type Guild = {
         language: Language;
         settings: object;
     } & DiscordGuild;
 
-    export type User = {
+    type User = {
         sendCode: Promise<Message>;
         sendEmbed: Promise<Message>;
         sendMessage: Promise<Message>;
@@ -1012,7 +1012,7 @@ declare module 'klasa' {
         sendFiles: Promise<Message>;
     } & DiscordUser;
 
-    export type TextChannel = {
+    type TextChannel = {
         attachable: boolean;
         embedable: boolean;
         postable: boolean;
@@ -1024,7 +1024,7 @@ declare module 'klasa' {
         sendFiles: Promise<Message>;
     } & DiscordTextChannel;
 
-    export type DMChannel = {
+    type DMChannel = {
         attachable: boolean;
         embedable: boolean;
         postable: boolean;
@@ -1036,7 +1036,7 @@ declare module 'klasa' {
         sendFiles: Promise<Message>;
     } & DiscordDMChannel;
 
-    export type GroupDMChannel = {
+    type GroupDMChannel = {
         attachable: boolean;
         embedable: boolean;
         postable: boolean;
