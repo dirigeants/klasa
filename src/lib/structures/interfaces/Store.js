@@ -34,8 +34,8 @@ class Store {
 		try {
 			piece = this.set(new (require(loc))(this.client, dir, file));
 		} catch (err) {
-			const error = err.message.endsWith('not a constructor') ? new TypeError(`Non-Class Export: ${loc}`) : err;
-			this.client.emit('wtf', error);
+			const error = err.message.endsWith('not a constructor') ? new TypeError(`Exported Structure Not A Class`) : err;
+			this.client.emit('wtf', `${error}\n${loc}`);
 		}
 		delete require.cache[loc];
 		return piece;
