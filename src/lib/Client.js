@@ -320,6 +320,7 @@ class KlasaClient extends Discord.Client {
 	/**
 	 * Use this to login to Discord with your bot
 	 * @param {string} token Your bot token
+	 * @returns {Promise<string>}
 	 */
 	async login(token) {
 		const start = now();
@@ -331,7 +332,7 @@ class KlasaClient extends Discord.Client {
 		this.emit('log', loaded.join('\n'));
 		this.settings = new Settings(this);
 		this.emit('log', `Loaded in ${(now() - start).toFixed(2)}ms.`);
-		super.login(token);
+		return super.login(token);
 	}
 
 	/**

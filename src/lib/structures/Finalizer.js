@@ -18,7 +18,7 @@ class Finalizer {
 	/**
 	 * @param {KlasaClient} client The Klasa Client
 	 * @param {string} dir The path to the core or user finalizer pieces folder
-	 * @param {Array} file The path from the pieces folder to the finalizer file
+	 * @param {string} file The path from the pieces folder to the finalizer file
 	 * @param {FinalizerOptions} [options = {}] Optional Finalizer settings
 	 */
 	constructor(client, dir, file, options = {}) {
@@ -62,7 +62,7 @@ class Finalizer {
 	 * The run method to be overwritten in actual finalizers
 	 * @param {CommandMessage} msg The command message mapped on top of the message used to trigger this finalizer
 	 * @param {external:Message} mes The bot's response message, if one is returned
-	 * @param {external:Now} start The performance now start time including all command overhead
+	 * @param {number} start The performance now start time including all command overhead
 	 * @abstract
 	 * @returns {void}
 	 */

@@ -115,7 +115,7 @@ class SettingGateway extends SchemaManager {
 	/**
 	 * Updates an entry.
 	 * @param {(Object|string)} input An object containing a id property, like Discord.js objects, or a string.
-	 * @param {(Object|string)} [guild=null] A Guild resolvable, useful for when the instance of SG doesn't aim for Guild settings.
+	 * @param {external:Guild} [guild=null] A Guild resolvable, useful for when the instance of SG doesn't aim for Guild settings.
 	 * @returns {Object}
 	 */
 	async getResolved(input, guild = null) {

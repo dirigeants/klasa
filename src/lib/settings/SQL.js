@@ -53,7 +53,7 @@ class SQL {
 	buildSQLSchema(schema) {
 		const output = ['id TEXT NOT NULL UNIQUE'];
 		for (const [key, value] of Object.entries(schema)) {
-			output.push(`${key} ${this.buildSingleSQLSchema(key, value)}`);
+			output.push(`${key} ${this.buildSingleSQLSchema(value)}`);
 		}
 		return output;
 	}
@@ -74,7 +74,11 @@ class SQL {
 	 */
 	deserializer(data) {
 		const deserialize = this.deserializeKeys;
-		for (let i = 0; i < deserialize.length; i++) data[deserialize[i]] = JSON.parse(data[deserialize[i]]);
+		for (let i = 0; i < deserialize.length; i++) {
+			if (typeof data[deserialize[i]] !== 'undefined') {
+				data[deserialize[i]] = JSON.parse(data[deserialize[i]]);
+			}
+		}
 	}
 
 	/**
