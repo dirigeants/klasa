@@ -9,6 +9,7 @@
   "license": "MIT",
   "author": "BDistin",
   "main": "src/index.js",
+  "types": "typings/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/dirigeants/klasa.git"
