@@ -457,7 +457,7 @@ declare module 'klasa' {
 		public readonly stderr: NodeJS.WritableStream;
 		public timestaamps: boolean|string;
 		public useColors: boolean;
-		public colors: boolean|KlasaConsoleColors;
+		public colors: KlasaConsoleColorsOption;
 
 		public write(data: any, type?: string): void;
 		public log(...data: any[]): void;
@@ -848,7 +848,7 @@ declare module 'klasa' {
 		public resolve(): any;
 	}
 
-	type KlasaClientConfig = {
+	export type KlasaClientConfig = {
 		prefix?: string;
 		permissionLevels?: PermissionLevels;
 		clientBaseDir?: string;
@@ -869,7 +869,7 @@ declare module 'klasa' {
 		ownerID?: string;
 	} & ClientOptions;
 
-	type KlasaConsoleConfig = {
+	export type KlasaConsoleConfig = {
 		stdout?: NodeJS.WritableStream;
 		stderr?: NodeJS.WritableStream;
 		useColor?: boolean;
@@ -877,7 +877,7 @@ declare module 'klasa' {
 		timestamps?: boolean|string;
 	};
 
-	type KlasaConsoleEvents = {
+	export type KlasaConsoleEvents = {
 		log?: boolean;
 		warn?: boolean;
 		error?: boolean;
@@ -886,19 +886,19 @@ declare module 'klasa' {
 		wtf?: boolean;
 	};
 
-	type PermissionLevel = {
+	export type PermissionLevel = {
 		break: boolean;
 		check: Function;
 	};
 
-	type permissionLevelResponse = {
+	export type permissionLevelResponse = {
 		broke: boolean;
 		permission: boolean;
 	};
 
-	type ProxyCommand = CommandMessage & Message;
+	export type ProxyCommand = CommandMessage & Message;
 
-	type CommandOptions = {
+	export type CommandOptions = {
 		enabled?: boolean;
 		name?: string;
 		aliases?: string[];
@@ -914,48 +914,48 @@ declare module 'klasa' {
 		quotedStringSupport?: boolean;
 	};
 
-	type EventOptions = {
+	export type EventOptions = {
 		enabled?: boolean;
 		name?: string;
 	};
 
-	type ExtendableOptions = {
+	export type ExtendableOptions = {
 		enabled?: boolean;
 		name?: string;
 		klasa?: boolean;
 	};
 
-	type FinalizerOptions = {
+	export type FinalizerOptions = {
 		enabled?: boolean;
 		name?: string;
 	};
 
-	type InhibitorOptions = {
+	export type InhibitorOptions = {
 		enabled?: boolean;
 		name?: string;
 		spamProtection?: boolean;
 	};
 
-	type LanguageOptions = {
+	export type LanguageOptions = {
 		enabled?: boolean;
 		name?: string;
 	};
 
-	type MonitorOptions = {
+	export type MonitorOptions = {
 		enabled?: boolean;
 		name?: string;
 		ignoreBots?: boolean;
 		ignoreSelf?: boolean;
 	};
 
-	type ProviderOptions = {
+	export type ProviderOptions = {
 		enabled?: boolean;
 		name?: string;
 		description?: string;
 		sql?: boolean;
 	};
 
-	type AddOptions = {
+	export type AddOptions = {
 		type: string;
 		default?: any;
 		min?: number;
@@ -964,7 +964,7 @@ declare module 'klasa' {
 		sql?: string;
 	};
 
-	type SchemaPiece = {
+	export type SchemaPiece = {
 		type: string;
 		default: any;
 		min: number;
@@ -973,9 +973,9 @@ declare module 'klasa' {
 		sql: string;
 	};
 
-	type SettingGatewayGuildResolvable = Guild|Channel|Message|Role|Snowflake;
+	export type SettingGatewayGuildResolvable = Guild|Channel|Message|Role|Snowflake;
 
-	type ColorsClose = {
+	export type ColorsClose = {
 		normal: 0;
 		bold: 22;
 		dim: 22;
@@ -988,7 +988,7 @@ declare module 'klasa' {
 		background: 49;
 	};
 
-	type ColorsStyles = {
+	export type ColorsStyles = {
 		normal: 0;
 		bold: 1;
 		dim: 2;
@@ -999,7 +999,7 @@ declare module 'klasa' {
 		strikethrough: 9;
 	};
 
-	type ColorsTexts = {
+	export type ColorsTexts = {
 		black: 30;
 		red: 31;
 		green: 32;
@@ -1020,7 +1020,7 @@ declare module 'klasa' {
 		white: 97;
 	};
 
-	type ColorsBackgrounds = {
+	export type ColorsBackgrounds = {
 		black: 40;
 		red: 41;
 		green: 42;
@@ -1041,7 +1041,9 @@ declare module 'klasa' {
 		white: 107;
 	};
 
-	type KlasaConsoleColors = {
+	export type KlasaConsoleColorsOption = boolean | StringMappedType<KlasaConsoleColorObjects> | KlasaConsoleColors;
+
+	export type KlasaConsoleColors = {
 		debug: KlasaConsoleColorObjects;
 		error: KlasaConsoleColorObjects;
 		log: KlasaConsoleColorObjects;
@@ -1050,39 +1052,39 @@ declare module 'klasa' {
 		wtf: KlasaConsoleColorObjects;
 	};
 
-	type KlasaConsoleColorObjects = {
-		log: string;
-		message: KlasaConsoleMessageObject;
-		time: KlasaConsoleTimeObject;
+	export type KlasaConsoleColorObjects = {
+		log?: string;
+		message?: KlasaConsoleMessageObject;
+		time?: KlasaConsoleTimeObject;
 	};
 
-	type KlasaConsoleMessageObject = {
-		background: BackgroundColorTypes;
-		text: TextColorTypes;
-		style: StyleTypes;
+	export type KlasaConsoleMessageObject = {
+		background?: BackgroundColorTypes;
+		text?: TextColorTypes;
+		style?: StyleTypes;
 	};
 
-	type KlasaConsoleTimeObject = {
-		background: BackgroundColorTypes;
-		text: TextColorTypes;
-		style: StyleTypes;
+	export type KlasaConsoleTimeObject = {
+		background?: BackgroundColorTypes;
+		text?: TextColorTypes;
+		style?: StyleTypes;
 	};
 
-	type TextColorTypes = 'black'|'red'|'green'|'yellow'|'blue'|'magenta'|'cyan'|'gray'|'grey'|'lightgray'|'lightgrey'|'lightred'|'lightgreen'|'lightyellow'|'lightblue'|'lightmagenta'|'lightcyan'|'white'|number[]|string[];
+	export type TextColorTypes = 'black'|'red'|'green'|'yellow'|'blue'|'magenta'|'cyan'|'gray'|'grey'|'lightgray'|'lightgrey'|'lightred'|'lightgreen'|'lightyellow'|'lightblue'|'lightmagenta'|'lightcyan'|'white'|number[]|string[];
 
-	type BackgroundColorTypes = 'black'|'red'|'green'|'blue'|'magenta'|'cyan'|'gray'|'grey'|'lightgray'|'lightgrey'|'lightred'|'lightgreen'|'lightyellow'|'lightblue'|'lightmagenta'|'lightcyan'|'white'|number[]|string[];
+	export type BackgroundColorTypes = 'black'|'red'|'green'|'blue'|'magenta'|'cyan'|'gray'|'grey'|'lightgray'|'lightgrey'|'lightred'|'lightgreen'|'lightyellow'|'lightblue'|'lightmagenta'|'lightcyan'|'white'|number[]|string[];
 
-	type StyleTypes = 'normal'|'bold'|'dim'|'italic'|'underline'|'inverse'|'hidden'|'strikethrough';
+	export type StyleTypes = 'normal'|'bold'|'dim'|'italic'|'underline'|'inverse'|'hidden'|'strikethrough';
 
 	type StringMappedType<T> = { [key: string]: T };
 
-	type GuildSettings = StringMappedType<any>;
-	type SchemaObject = StringMappedType<SchemaPiece>;
-	type SchemaDefaults = StringMappedType<any>;
+	export type GuildSettings = StringMappedType<any>;
+	export type SchemaObject = StringMappedType<SchemaPiece>;
+	export type SchemaDefaults = StringMappedType<any>;
 
 	// Extended classes
 	export type Message = {
-		guild: Guild;
+		guild?: Guild;
 		guildSettings: GuildSettings;
 		hasAtLeastPermissionLevel: Promise<Boolean>;
 		language: Language;
