@@ -156,7 +156,7 @@ declare module 'klasa' {
 
 	}
 
-	export { KlasaClient as Client }
+	export { KlasaClient as Client };
 
 	export class util {
 		public static codeBlock(lang: string, expression: string): string;
@@ -189,7 +189,7 @@ declare module 'klasa' {
 			channel: RegExp,
 			role: RegExp,
 			snowflake: RegExp,
-		}
+		};
 	}
 
 	export class ArgResolver extends Resolver {
@@ -468,7 +468,7 @@ declare module 'klasa' {
 		public static flatten(data: any, useColors: boolean): string;
 	}
 
-	export { KlasaConsole as Console }
+	export { KlasaConsole as Console };
 
 	// Structures
 	export class CommandMessage {
@@ -957,7 +957,7 @@ declare module 'klasa' {
 		max: number;
 		array: boolean;
 		sql: string;
-	}
+	};
 
 	type SchemaPiece = {
 		type: string;
@@ -966,7 +966,7 @@ declare module 'klasa' {
 		max: number;
 		array: boolean;
 		sql: string;
-	}
+	};
 
 	type SettingGatewayGuildResolvable = Guild|Channel|Message|Role|Snowflake;
 
@@ -1049,19 +1049,19 @@ declare module 'klasa' {
 		log: string;
 		message: KlasaConsoleMessageObject;
 		time: KlasaConsoleTimeObject;
-	}
+	};
 
 	type KlasaConsoleMessageObject = {
 		background: BackgroundColorTypes;
 		text: TextColorTypes;
 		style: StyleTypes;
-	}
+	};
 
 	type KlasaConsoleTimeObject = {
 		background: BackgroundColorTypes;
 		text: TextColorTypes;
 		style: StyleTypes;
-	}
+	};
 
 	type TextColorTypes = 'black'|'red'|'green'|'yellow'|'blue'|'magenta'|'cyan'|'gray'|'grey'|'lightgray'|'lightgrey'|'lightred'|'lightgreen'|'lightyellow'|'lightblue'|'lightmagenta'|'lightcyan'|'white'|number[]|string[];
 
@@ -1088,7 +1088,7 @@ declare module 'klasa' {
 		sendMessage: Promise<Message>;
 		sendFile: Promise<Message>;
 		sendFiles: Promise<Message>;
-		usableCommands: Promise<Collection<String, Command>>
+		usableCommands: Promise<Collection<String, Command>>;
 	} & DiscordMessage;
 
 	type Guild = {
