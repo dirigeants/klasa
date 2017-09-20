@@ -63,7 +63,7 @@ class SchemaManager extends CacheManager {
 	/**
 	 * @typedef {Object} AddOptions
 	 * @property {string} type The type for the key.
-	 * @property {string} default The default value for the key.
+	 * @property {any} default The default value for the key.
 	 * @property {number} min The min value for the key (String.length for String, value for number).
 	 * @property {number} max The max value for the key (String.length for String, value for number).
 	 * @property {boolean} array Whether the key should be stored as Array or not.
@@ -123,6 +123,7 @@ class SchemaManager extends CacheManager {
 	 * Modify all configurations. Do NOT use this directly.
 	 * @param {string} action Whether reset, add, or delete.
 	 * @param {string} key The key to update.
+	 * @private
 	 * @returns {void}
 	 */
 	async force(action, key) {

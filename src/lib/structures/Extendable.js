@@ -85,7 +85,6 @@ class Extendable {
 
 	/**
 	 * The init method to apply the extend method to the Discord.js Class
-	 * @private
 	 */
 	async init() {
 		if (this.enabled) this.enable();

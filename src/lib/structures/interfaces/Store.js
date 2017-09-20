@@ -25,7 +25,7 @@ class Store {
 	/**
 	 * Loads a piece into Klasa so it can be saved in this store.
 	 * @param {string} dir The user directory or core directory where this file is saved.
-	 * @param  {string|string[]} file A string showing where the file is located.
+	 * @param  {string|string[]} file A string or array of strings showing where the file is located.
 	 * @returns {?Piece}
 	 */
 	load(dir, file) {

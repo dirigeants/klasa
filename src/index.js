@@ -1,8 +1,8 @@
 module.exports = {
 	Client: require('./lib/Client'),
 	util: require('./lib/util/util'),
-	colors: require('./lib/util/util'),
-	console: require('./lib/util/util'),
+	Colors: require('./lib/util/Colors'),
+	Console: require('./lib/util/Console'),
 	Command: require('./lib/structures/Command'),
 	CommandMessage: require('./lib/structures/CommandMessage'),
 	Event: require('./lib/structures/Event'),
