@@ -529,7 +529,7 @@ declare module 'klasa' {
 		public usage: ParsedUsage;
 		private cooldowns: Map<Snowflake, number>;
 
-		public abstract run(msg: ProxyCommand, params: any[]): Promise<Message>;
+		public abstract run(msg: ProxyCommand, params: any[]): Promise<DiscordMessage>;
 		public abstract init(): any;
 
 		public abstract enable(): Piece;
