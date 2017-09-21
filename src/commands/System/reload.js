@@ -16,6 +16,7 @@ module.exports = class extends Command {
 		if (piece instanceof this.client.methods.Collection) {
 			const start = now();
 			await this.client[piece].loadAll();
+			await this.client[piece].init();
 			return msg.sendMessage(`${msg.language.get('COMMAND_RELOAD_ALL', piece)} (Took: ${(now() - start).toFixed(2)}ms.)`);
 		}
 		return piece.reload()
