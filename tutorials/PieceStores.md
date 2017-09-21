@@ -212,7 +212,7 @@ const Genre = require('../Genre');
 module.exports = class extends Genre {
 
 	constructor(...args) {
-		super({
+		super(...args, {
 			description: 'Electronic Dance Music',
 			examples: [
 				'Skrillex',
