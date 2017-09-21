@@ -298,7 +298,7 @@ class KlasaClient extends Discord.Client {
 	 */
 	registerPiece(pieceName, store) {
 		// eslint-disable-next-line func-names
-		this.argResolver.prototype[pieceName] = async function (arg, currentUsage, possible, repeat, msg) {
+		this.argResolver[pieceName] = async function (arg, currentUsage, possible, repeat, msg) {
 			const piece = store.get(arg);
 			if (piece) return piece;
 			if (currentUsage.type === 'optional' && !repeat) return null;
