@@ -1095,7 +1095,8 @@ declare module 'klasa' {
 		hasAtLeastPermissionLevel: Promise<boolean>;
 		language: Language;
 		reactable: boolean;
-		send(content?: StringResolvable, options?: MessageOptions | RichEmbed | Attachment): Promise<SentMessage>;
+		send(content?: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
+		send(options: MessageOptions): Promise<SentMessage>;
 		sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
 		sendEmbed(embed: RichEmbed | RichEmbedOptions, content?: string, options?: MessageOptions): Promise<SentMessage>;
 		sendMessage(content?: string, options?: MessageOptions): Promise<SentMessage>;
@@ -1107,12 +1108,15 @@ declare module 'klasa' {
 	} & DiscordGuild;
 
 	export type ExtendedUser = {
-		send(content?: StringResolvable, options?: MessageOptions | RichEmbed | Attachment): Promise<SentMessage>;
+		send(content?: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
+		send(options: MessageOptions): Promise<SentMessage>;
 		sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
 		sendEmbed(embed: RichEmbed | RichEmbedOptions, content?: string, options?: MessageOptions): Promise<SentMessage>;
+		sendEmbed(embed: RichEmbed | RichEmbedOptions, options?: MessageOptions): Promise<ExtendedMessage>;
 		sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
 		sendFiles(attachments: Attachment[], content: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
 		sendMessage(content?: string, options?: MessageOptions): Promise<SentMessage>;
+		sendMessage(options: MessageOptions): Promise<SentMessage>;
 	} & DiscordUser;
 
 	export type ExtendedTextChannel = {
@@ -1120,12 +1124,15 @@ declare module 'klasa' {
 		embedable: boolean;
 		postable: boolean;
 		guild: ExtendedGuild;
-		send(content?: StringResolvable, options?: MessageOptions | RichEmbed | Attachment): Promise<SentMessage>;
+		send(content?: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
+		send(options: MessageOptions): Promise<SentMessage>;
 		sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
 		sendEmbed(embed: RichEmbed | RichEmbedOptions, content?: string, options?: MessageOptions): Promise<SentMessage>;
+		sendEmbed(embed: RichEmbed | RichEmbedOptions, options?: MessageOptions): Promise<ExtendedMessage>;
 		sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
 		sendFiles(attachments: Attachment[], content: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
 		sendMessage(content?: string, options?: MessageOptions): Promise<SentMessage>;
+		sendMessage(options: MessageOptions): Promise<SentMessage>;
 	} & DiscordTextChannel;
 
 	export type ExtendedVoiceChannel = {
@@ -1136,24 +1143,30 @@ declare module 'klasa' {
 		attachable: boolean;
 		embedable: boolean;
 		postable: boolean;
-		send(content?: StringResolvable, options?: MessageOptions | RichEmbed | Attachment): Promise<SentMessage>;
+		send(content?: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
+		send(options: MessageOptions): Promise<SentMessage>;
 		sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
 		sendEmbed(embed: RichEmbed | RichEmbedOptions, content?: string, options?: MessageOptions): Promise<SentMessage>;
+		sendEmbed(embed: RichEmbed | RichEmbedOptions, options?: MessageOptions): Promise<ExtendedMessage>;
 		sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
 		sendFiles(attachments: Attachment[], content: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
 		sendMessage(content?: string, options?: MessageOptions): Promise<SentMessage>;
+		sendMessage(options: MessageOptions): Promise<SentMessage>;
 	} & DiscordDMChannel;
 
 	export type ExtendedGroupDMChannel = {
 		attachable: boolean;
 		embedable: boolean;
 		postable: boolean;
-		send(content?: StringResolvable, options?: MessageOptions | RichEmbed | Attachment): Promise<SentMessage>;
+		send(content?: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
+		send(options: MessageOptions): Promise<SentMessage>;
 		sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
 		sendEmbed(embed: RichEmbed | RichEmbedOptions, content?: string, options?: MessageOptions): Promise<SentMessage>;
+		sendEmbed(embed: RichEmbed | RichEmbedOptions, options?: MessageOptions): Promise<ExtendedMessage>;
 		sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
 		sendFiles(attachments: Attachment[], content: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
 		sendMessage(content?: string, options?: MessageOptions): Promise<SentMessage>;
+		sendMessage(options: MessageOptions): Promise<SentMessage>;
 	} & DiscordGroupDMChannel;
 
 	export type SentMessage = ExtendedMessage | ExtendedMessage[];
