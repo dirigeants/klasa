@@ -20,7 +20,7 @@
     "docs": "npx jsdoc -c ./.docstrap.json -R README.md"
   },
   "dependencies": {
-    "fs-nextra": "^0.2.1",
+    "fs-nextra": "^0.3.0",
     "moment": "^2.18.1",
     "performance-now": "^2.1.0"
   },
@@ -35,6 +35,6 @@
     "typescript": "^2.5.2"
   },
   "engines": {
-    "node": ">=8.1.0"
+    "node": ">=8.5.0"
   }
 }
