@@ -53,7 +53,7 @@ class RichDisplay {
 				lastPage = currentPage;
 				currentPage--;
 				message.edit(this.pages[currentPage].setFooter(`Page ${currentPage + 1} of ${this.pages.length}, last page: ${lastPage + 1}`));
-			} else if (emoji === '▶' && currentPage < this.pages.length) {
+			} else if (emoji === '▶' && currentPage < this.pages.length - 1) {
 				lastPage = currentPage;
 				currentPage++;
 				message.edit(this.pages[currentPage].setFooter(`Page ${currentPage + 1} of ${this.pages.length}, last page: ${lastPage + 1}`));
@@ -66,10 +66,11 @@ class RichDisplay {
 				const collected = await message.channel.awaitMessages(mess => mess.author === user, { max: 1 });
 				await mes.delete();
 				const newPage = parseInt(collected.first().content);
-				if (newPage && newPage > 0 && newPage < this.pages.length) {
+				collected.first().delete();
+				if (newPage && newPage > 0 && newPage <= this.pages.length) {
 					lastPage = currentPage;
-					currentPage = newPage;
-					message.edit(this.infoPage.setFooter(`Information Page, last page: ${lastPage + 1}`));
+					currentPage = newPage - 1;
+					message.edit(this.pages[currentPage].setFooter(`Page ${currentPage + 1} of ${this.pages.length}, last page: ${lastPage + 1}`));
 				}
 			} else if (emoji === infoEmoji) {
 				lastPage = currentPage;
