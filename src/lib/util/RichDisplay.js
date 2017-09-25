@@ -29,7 +29,7 @@ class RichDisplay {
 	async run(msg, { startPage = 0, stop = true, filter = () => true, collectorOptions = {}, pageFooters = true, prompt = 'Which page would you like to jump to?' } = {}) {
 		if (pageFooters) {
 			for (let i = 1; i <= this.pages.length; i++) this.pages[i - 1].setFooter(`${i}/${this.pages.length}`);
-			this.infoPage.setFooter('ℹ');
+			if (this.infoPage) this.infoPage.setFooter('ℹ');
 		}
 		const emojis = pagination.slice(0);
 		if (this.infoPage) emojis.push(infoEmoji);
