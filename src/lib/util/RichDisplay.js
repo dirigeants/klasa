@@ -59,8 +59,8 @@ class RichDisplay {
 				message.edit(this.pages[currentPage]);
 			} else if (emoji === '🔢') {
 				if (awaiting) return;
-				const mes = await message.channel.send(prompt);
 				awaiting = true;
+				const mes = await message.channel.send(prompt);
 				const collected = await message.channel.awaitMessages(mess => mess.author === user, { max: 1, time: 30000 });
 				awaiting = false;
 				await mes.delete();
