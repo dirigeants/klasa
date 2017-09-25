@@ -31,6 +31,7 @@ class RichDisplay {
 			for (let i = 1; i <= this.pages.length; i++) this.pages[i - 1].setFooter(`${i}/${this.pages.length}`);
 			if (this.infoPage) this.infoPage.setFooter('ℹ');
 		}
+		let awaiting = false;
 		const emojis = pagination.slice(0);
 		if (this.infoPage) emojis.push(infoEmoji);
 		if (stop) emojis.push(stopEmoji);
@@ -57,8 +58,11 @@ class RichDisplay {
 				currentPage = this.pages.length - 1;
 				message.edit(this.pages[currentPage]);
 			} else if (emoji === '🔢') {
+				if (awaiting) return;
 				const mes = await message.channel.send(prompt);
+				awaiting = true;
 				const collected = await message.channel.awaitMessages(mess => mess.author === user, { max: 1, time: 30000 });
+				awaiting = false;
 				await mes.delete();
 				if (!collected.size) return;
 				const newPage = parseInt(collected.first().content);
