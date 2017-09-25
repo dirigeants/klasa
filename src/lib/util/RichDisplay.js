@@ -77,9 +77,7 @@ class RichDisplay {
 				collector.stop();
 			}
 		});
-		collector.on('end', () => {
-			message.clearReactions();
-		});
+		collector.on('end', () => message.clearReactions());
 		return collector;
 	}
 
