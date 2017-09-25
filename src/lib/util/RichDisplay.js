@@ -60,6 +60,7 @@ class RichDisplay {
 				const mes = await message.channel.send(prompt);
 				const collected = await message.channel.awaitMessages(mess => mess.author === user, { max: 1, time: 30000 });
 				await mes.delete();
+				if (!collected.size) return;
 				const newPage = parseInt(collected.first().content);
 				collected.first().delete();
 				if (newPage && newPage > 0 && newPage <= this.pages.length) {
