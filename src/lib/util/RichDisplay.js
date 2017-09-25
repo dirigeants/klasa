@@ -36,13 +36,13 @@ class RichDisplay {
 		const message = await msg.channel.send(
 			this.pages[currentPage].setFooter(`Page ${currentPage + 1} of ${this.pages.length}, last page: ${lastPage + 1}`)
 		);
-		await this._queueEmojiReactions(message, emojis);
+		await this._queueEmojiReactions(message, emojis.slice(0));
 		const collector = message.createReactionCollector(
-			(reaction, user) => emojis.includes(reaction.emoji.name) && filter(reaction, user),
+			(reaction, user) => emojis.includes(reaction.emoji.name) && user !== msg.client.user && filter(reaction, user),
 			collectorOptions
 		);
 		this.collectors.set(message.id, collector);
-		collector.on('collect', async (reaction, user) => {
+		collector.on('collect', async (reaction, reactionAgain, user) => {
 			const emoji = reaction.emoji.name;
 			reaction.remove(user);
 			if (emoji === '⏮') {
@@ -57,7 +57,7 @@ class RichDisplay {
 				lastPage = currentPage;
 				currentPage++;
 				message.edit(this.pages[currentPage].setFooter(`Page ${currentPage + 1} of ${this.pages.length}, last page: ${lastPage + 1}`));
-			} else if (emoji === '⏮') {
+			} else if (emoji === '⏭') {
 				lastPage = currentPage;
 				currentPage = this.pages.length - 1;
 				message.edit(this.pages[currentPage].setFooter(`Page ${currentPage + 1} of ${this.pages.length}, last page: ${lastPage + 1}`));
