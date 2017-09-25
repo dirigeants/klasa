@@ -28,7 +28,7 @@ class RichDisplay {
 	}
 
 	async run(msg, { startPage = 0, stop = true, filter = () => true, collectorOptions = {} } = {}) {
-		const emojis = pagination;
+		const emojis = pagination.slice(0);
 		if (this.infoPage) emojis.push(infoEmoji);
 		if (stop) emojis.push(stopEmoji);
 		let currentPage = startPage;
