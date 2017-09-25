@@ -75,7 +75,6 @@ class RichDisplay {
 		});
 		collector.on('end', () => {
 			message.clearReactions();
-			this.collectors.delete(message.id);
 		});
 		return collector;
 	}
