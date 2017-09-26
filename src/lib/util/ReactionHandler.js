@@ -68,51 +68,61 @@ class ReactionHandler extends ReactionCollector {
 	}
 
 	zero() {
+		if (this.display.options.length - 1 < 0 + (this.currentPage * 10)) return;
 		this.resolve(0 + (this.currentPage * 10));
 		this.stop();
 	}
 
 	one() {
+		if (this.display.options.length - 1 < 1 + (this.currentPage * 10)) return;
 		this.resolve(1 + (this.currentPage * 10));
 		this.stop();
 	}
 
 	two() {
+		if (this.display.options.length - 1 < 2 + (this.currentPage * 10)) return;
 		this.resolve(2 + (this.currentPage * 10));
 		this.stop();
 	}
 
 	three() {
+		if (this.display.options.length - 1 < 3 + (this.currentPage * 10)) return;
 		this.resolve(3 + (this.currentPage * 10));
 		this.stop();
 	}
 
 	four() {
+		if (this.display.options.length - 1 < 4 + (this.currentPage * 10)) return;
 		this.resolve(4 + (this.currentPage * 10));
 		this.stop();
 	}
 
 	five() {
+		if (this.display.options.length - 1 < 5 + (this.currentPage * 10)) return;
 		this.resolve(5 + (this.currentPage * 10));
 		this.stop();
 	}
 
 	six() {
+		if (this.display.options.length - 1 < 6 + (this.currentPage * 10)) return;
 		this.resolve(6 + (this.currentPage * 10));
 		this.stop();
 	}
 
 	seven() {
+		if (this.display.options.length - 1 < 7 + (this.currentPage * 10)) return;
 		this.resolve(7 + (this.currentPage * 10));
 		this.stop();
 	}
 
 	eight() {
+		if (this.display.options.length - 1 < 8 + (this.currentPage * 10)) return;
 		this.resolve(8 + (this.currentPage * 10));
 		this.stop();
 	}
 
 	nine() {
+		if (this.display.options.length - 1 < 9 + (this.currentPage * 10)) return;
 		this.resolve(9 + (this.currentPage * 10));
 		this.stop();
 	}
