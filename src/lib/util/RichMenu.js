@@ -36,7 +36,7 @@ class RichMenu extends RichDisplay {
 
 	_determineEmojis(emojis, stop) {
 		emojis.push(this.emojis.zero, this.emojis.one, this.emojis.two, this.emojis.three, this.emojis.four, this.emojis.five, this.emojis.six, this.emojis.seven, this.emojis.eight, this.emojis.nine);
-		if (this.options.length < 10) emojis = emojis.slice(this.options.length);
+		if (this.options.length < 10) emojis = emojis.slice(0, this.options.length);
 		return super._determineEmojis(emojis, stop);
 	}
 
