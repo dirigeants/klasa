@@ -52,7 +52,7 @@ class ReactionHandler extends ReactionCollector {
 		if (!collected.size) return;
 		const newPage = parseInt(collected.first().content);
 		collected.first().delete();
-		if (newPage && newPage > 0 && newPage <= this.pages.length) {
+		if (newPage && newPage > 0 && newPage <= this.display.pages.length) {
 			this.currentPage = newPage - 1;
 			this.update();
 		}
