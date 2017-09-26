@@ -43,7 +43,6 @@ class RichDisplay {
 		if (!options.filter) options.filter = () => true;
 		const emojis = this._determineEmojis([], !('stop' in options) || ('stop' in options && options.stop));
 		msg.edit(this.pages[options.startPage || 0]);
-		this._queueEmojiReactions(msg, emojis);
 		return new ReactionHandler(
 			msg,
 			(reaction, user) => emojis.includes(reaction.emoji.name) && user !== msg.client.user && options.filter(reaction, user),
@@ -62,10 +61,6 @@ class RichDisplay {
 		if (this.infoPage) emojis.push(this.emojis.info);
 		if (stop) emojis.push(this.emojis.stop);
 		return emojis;
-	}
-
-	async _queueEmojiReactions(message, emojis) {
-		for (const emoji of emojis) await message.react(emoji);
 	}
 
 	_handlePageGeneration(cb) {

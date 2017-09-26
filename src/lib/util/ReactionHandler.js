@@ -13,6 +13,7 @@ class ReactionHandler extends ReactionCollector {
 			this.reject = reject;
 			this.resolve = resolve;
 		}) : Promise.resolve(null);
+		this._queueEmojiReactions(this.display.emojis.slice(0));
 		this.on('collect', (reaction, reactionAgain, user) => {
 			reaction.remove(user);
 			this[this.methodMap.get(reaction.emoji.name)](reaction, user);
@@ -129,6 +130,13 @@ class ReactionHandler extends ReactionCollector {
 
 	update() {
 		this.message.edit(this.display.pages[this.currentPage]);
+	}
+
+	async _queueEmojiReactions(emojis) {
+		if (this.ended) return null;
+		await this.message.react(emojis.shift());
+		if (emojis.length) return this._queueEmojiReactions();
+		return null;
 	}
 
 }
