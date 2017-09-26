@@ -16,7 +16,7 @@ class RichMenu extends RichDisplay {
 			eight: '8⃣',
 			nine: '9⃣'
 		});
-		this.pageinated = false;
+		this.paginated = false;
 		this.options = [];
 	}
 
@@ -31,7 +31,7 @@ class RichMenu extends RichDisplay {
 
 	run(msg, { startPage = 0, stop = true, filter = () => true, collectorOptions = {}, pageFooters = true, prompt = 'Which page would you like to jump to?' } = {}) {
 		return new Promise(async resolve => {
-			if (!this.pageinated) this._paginate();
+			if (!this.paginated) this._paginate();
 			if (pageFooters) {
 				for (let i = 1; i <= this.pages.length; i++) this.pages[i - 1].setFooter(`${i}/${this.pages.length}`);
 				if (this.infoPage) this.infoPage.setFooter('ℹ');
@@ -133,9 +133,9 @@ class RichMenu extends RichDisplay {
 		});
 	}
 
-	_pageinate(page = 0) {
-		if (this.pageinated) return null;
-		this.pageinated = true;
+	_paginate(page = 0) {
+		if (this.paginated) return null;
+		this.paginated = true;
 		super.addPage(embed => {
 			for (let i = 0, option = this.options[i + (page * 10)]; i + (page * 10) < this.options.length && i < 10; i++, option = this.options[i + (page * 10)]) {
 				embed.addField(`${i}. ${option.name}`, option.body, option.inline);
@@ -143,7 +143,7 @@ class RichMenu extends RichDisplay {
 			page++;
 			return embed;
 		});
-		if (this.options.length > page * 10) return this._pageinate(page);
+		if (this.options.length > page * 10) return this._paginate(page);
 		return null;
 	}
 
