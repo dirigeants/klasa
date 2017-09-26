@@ -37,23 +37,9 @@ class RichMenu extends RichDisplay {
 				if (this.infoPage) this.infoPage.setFooter('ℹ');
 			}
 			let awaiting = false;
-			const emojis = [
-				this.emojis.first,
-				this.emojis.prev,
-				this.emojis.next,
-				this.emojis.last,
-				this.emojis.jump,
-				this.emojis.zero,
-				this.emojis.one,
-				this.emojis.two,
-				this.emojis.three,
-				this.emojis.four,
-				this.emojis.five,
-				this.emojis.six,
-				this.emojis.seven,
-				this.emojis.eight,
-				this.emojis.nine
-			];
+			const emojis = [];
+			if (this.pages.length > 1 || this.infoPage) emojis.push(this.emojis.first, this.emojis.prev, this.emojis.next, this.emojis.last, this.emojis.jump);
+			emojis.push(this.emojis.zero, this.emojis.one, this.emojis.two, this.emojis.three, this.emojis.four, this.emojis.five, this.emojis.six, this.emojis.seven, this.emojis.eight, this.emojis.nine);
 			if (this.infoPage) emojis.push(this.emojis.info);
 			if (stop) emojis.push(this.emojis.stop);
 			let currentPage = startPage;
