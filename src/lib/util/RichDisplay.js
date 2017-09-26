@@ -42,10 +42,10 @@ class RichDisplay {
 		if (!this.footered) this._footer();
 		if (!options.filter) options.filter = () => true;
 		const emojis = this._determineEmojis([], !('stop' in options) || ('stop' in options && options.stop));
-		const message = await msg.channel.send(this.pages[options.startPage || 0]);
-		this._queueEmojiReactions(message, emojis);
+		msg.edit(this.pages[options.startPage || 0]);
+		this._queueEmojiReactions(msg, emojis);
 		return new ReactionHandler(
-			message,
+			msg,
 			(reaction, user) => emojis.includes(reaction.emoji.name) && user !== msg.client.user && options.filter(reaction, user),
 			options,
 			this
