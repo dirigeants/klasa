@@ -69,42 +69,52 @@ class ReactionHandler extends ReactionCollector {
 
 	zero() {
 		this.resolve(0 + (this.currentPage * 10));
+		this.stop();
 	}
 
 	one() {
 		this.resolve(1 + (this.currentPage * 10));
+		this.stop();
 	}
 
 	two() {
 		this.resolve(2 + (this.currentPage * 10));
+		this.stop();
 	}
 
 	three() {
 		this.resolve(3 + (this.currentPage * 10));
+		this.stop();
 	}
 
 	four() {
 		this.resolve(4 + (this.currentPage * 10));
+		this.stop();
 	}
 
 	five() {
 		this.resolve(5 + (this.currentPage * 10));
+		this.stop();
 	}
 
 	six() {
 		this.resolve(6 + (this.currentPage * 10));
+		this.stop();
 	}
 
 	seven() {
 		this.resolve(7 + (this.currentPage * 10));
+		this.stop();
 	}
 
 	eight() {
 		this.resolve(8 + (this.currentPage * 10));
+		this.stop();
 	}
 
 	nine() {
 		this.resolve(9 + (this.currentPage * 10));
+		this.stop();
 	}
 
 	update() {
