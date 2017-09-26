@@ -2,7 +2,7 @@ const { ReactionCollector } = require('discord.js');
 
 class ReactionHandler extends ReactionCollector {
 
-	constructor(msg, filter, options, display) {
+	constructor(msg, filter, options, display, emojis) {
 		super(msg, filter, options);
 		this.display = display;
 		this.methodMap = new Map(Object.entries(this.display.emojis).map(([key, value]) => [value, key]));
@@ -13,7 +13,7 @@ class ReactionHandler extends ReactionCollector {
 			this.reject = reject;
 			this.resolve = resolve;
 		}) : Promise.resolve(null);
-		this._queueEmojiReactions(this.display.emojis.slice(0));
+		this._queueEmojiReactions(emojis.slice(0));
 		this.on('collect', (reaction, reactionAgain, user) => {
 			reaction.remove(user);
 			this[this.methodMap.get(reaction.emoji.name)](reaction, user);
