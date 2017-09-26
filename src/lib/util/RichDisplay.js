@@ -1,19 +1,29 @@
 const { MessageEmbed: Embed } = require('discord.js');
 
-const pagination = ['⏮', '◀', '▶', '⏭', '🔢'];
-const infoEmoji = 'ℹ';
-const stopEmoji = '⏹';
-
 class RichDisplay {
 
 	constructor(embed = new Embed()) {
 		this.embedTemplate = embed;
 		this.pages = [];
 		this.infoPage = null;
+		this.emojis = {
+			first: '⏮',
+			prev: '◀',
+			next: '▶',
+			last: '⏭',
+			jump: '🔢',
+			info: 'ℹ',
+			stop: '⏹'
+		};
 	}
 
 	get template() {
 		return new Embed(this.embedTemplate);
+	}
+
+	setEmojis(emojis) {
+		Object.assign(this.emojis, emojis);
+		return this;
 	}
 
 	addPage(embed) {
@@ -32,9 +42,9 @@ class RichDisplay {
 			if (this.infoPage) this.infoPage.setFooter('ℹ');
 		}
 		let awaiting = false;
-		const emojis = pagination.slice(0);
-		if (this.infoPage) emojis.push(infoEmoji);
-		if (stop) emojis.push(stopEmoji);
+		const emojis = [this.emojis.first, this.emojis.prev, this.emojis.next, this.emojis.last, this.emojis.jump];
+		if (this.infoPage) emojis.push(this.emojis.info);
+		if (stop) emojis.push(this.emojis.stop);
 		let currentPage = startPage;
 		const message = await msg.channel.send(this.pages[currentPage]);
 		this._queueEmojiReactions(message, emojis.slice(0));
@@ -45,19 +55,19 @@ class RichDisplay {
 		collector.on('collect', async (reaction, reactionAgain, user) => {
 			const emoji = reaction.emoji.name;
 			reaction.remove(user);
-			if (emoji === '⏮') {
+			if (emoji === this.emojis.first) {
 				currentPage = 0;
 				message.edit(this.pages[currentPage]);
-			} else if (emoji === '◀' && currentPage > 0) {
+			} else if (emoji === this.emojis.prev && currentPage > 0) {
 				currentPage--;
 				message.edit(this.pages[currentPage]);
-			} else if (emoji === '▶' && currentPage < this.pages.length - 1) {
+			} else if (emoji === this.emojis.next && currentPage < this.pages.length - 1) {
 				currentPage++;
 				message.edit(this.pages[currentPage]);
-			} else if (emoji === '⏭') {
+			} else if (emoji === this.emojis.last) {
 				currentPage = this.pages.length - 1;
 				message.edit(this.pages[currentPage]);
-			} else if (emoji === '🔢') {
+			} else if (emoji === this.emojis.jump) {
 				if (awaiting) return;
 				awaiting = true;
 				const mes = await message.channel.send(prompt);
@@ -71,9 +81,9 @@ class RichDisplay {
 					currentPage = newPage - 1;
 					message.edit(this.pages[currentPage]);
 				}
-			} else if (emoji === infoEmoji) {
+			} else if (emoji === this.emojis.info) {
 				message.edit(this.infoPage);
-			} else if (emoji === stopEmoji) {
+			} else if (emoji === this.emojis.stop) {
 				collector.stop();
 			}
 		});
