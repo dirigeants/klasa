@@ -135,7 +135,6 @@ class RichMenu extends RichDisplay {
 
 	_paginate(page = 0) {
 		if (this.paginated) return null;
-		this.paginated = true;
 		super.addPage(embed => {
 			for (let i = 0, option = this.options[i + (page * 10)]; i + (page * 10) < this.options.length && i < 10; i++, option = this.options[i + (page * 10)]) {
 				embed.addField(`${i}. ${option.name}`, option.body, option.inline);
@@ -144,6 +143,7 @@ class RichMenu extends RichDisplay {
 			return embed;
 		});
 		if (this.options.length > page * 10) return this._paginate(page);
+		this.paginated = true;
 		return null;
 	}
 
