@@ -24,6 +24,11 @@ class RichMenu extends RichDisplay {
 		throw new Error('You cannot directly add pages in a RichMenu');
 	}
 
+	addOption(name, body, inline = false) {
+		this.options.push({ name, body, inline });
+		return this;
+	}
+
 	run(msg, { startPage = 0, stop = true, filter = () => true, collectorOptions = {}, pageFooters = true, prompt = 'Which page would you like to jump to?' } = {}) {
 		return new Promise(async resolve => {
 			if (!this.pageinated) this._paginate();
