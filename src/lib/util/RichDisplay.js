@@ -48,8 +48,7 @@ class RichDisplay {
 			message,
 			(reaction, user) => emojis.includes(reaction.emoji.name) && user !== msg.client.user && options.filter(reaction, user),
 			options,
-			this,
-			emojis
+			this
 		);
 	}
 

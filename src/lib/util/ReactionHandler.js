@@ -2,14 +2,14 @@ const { ReactionCollector } = require('discord.js');
 
 class ReactionHandler extends ReactionCollector {
 
-	constructor(msg, filter, options, display, emojis) {
+	constructor(msg, filter, options, display) {
 		super(msg, filter, options);
 		this.display = display;
-		this.methodMap = new Map(Object.entries(emojis).map((key, value) => [value, key]));
+		this.methodMap = new Map(Object.entries(this.display.emojis).map(([key, value]) => [value, key]));
 		this.currentPage = this.options.startPage || 0;
 		this.prompt = this.options.prompt || 'Which page would you like to jump to?';
 		this.awaiting = false;
-		this.selection = emojis.zero ? new Promise((resolve, reject) => {
+		this.selection = this.display.emojis.zero ? new Promise((resolve, reject) => {
 			this.reject = reject;
 			this.resolve = resolve;
 		}) : Promise.resolve(null);
