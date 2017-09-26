@@ -135,7 +135,7 @@ class ReactionHandler extends ReactionCollector {
 	async _queueEmojiReactions(emojis) {
 		if (this.ended) return null;
 		await this.message.react(emojis.shift());
-		if (emojis.length) return this._queueEmojiReactions();
+		if (emojis.length) return this._queueEmojiReactions(emojis);
 		return null;
 	}
 
