@@ -18,7 +18,10 @@ class ReactionHandler extends ReactionCollector {
 			reaction.remove(user);
 			this[this.methodMap.get(reaction.emoji.name)](reaction, user);
 		});
-		this.on('end', () => this.message.clearReactions());
+		this.on('end', () => {
+			// Attempt to solve ratelimit queue race condition
+			setTimeout(() => this.message.clearReactions(), 100);
+		});
 	}
 
 	first() {
