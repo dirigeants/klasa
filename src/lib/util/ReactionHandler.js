@@ -13,14 +13,14 @@ class ReactionHandler extends ReactionCollector {
 			this.reject = reject;
 			this.resolve = resolve;
 		}) : Promise.resolve(null);
+		this.reactionsDone = false;
 		this._queueEmojiReactions(emojis.slice(0));
 		this.on('collect', (reaction, reactionAgain, user) => {
 			reaction.remove(user);
 			this[this.methodMap.get(reaction.emoji.name)](reaction, user);
 		});
 		this.on('end', () => {
-			// Attempt to solve ratelimit queue race condition
-			setTimeout(() => this.message.clearReactions(), 1000);
+			if (this.reactionsDone) this.message.clearReactions();
 		});
 	}
 
@@ -136,9 +136,10 @@ class ReactionHandler extends ReactionCollector {
 	}
 
 	async _queueEmojiReactions(emojis) {
-		if (this.ended) return null;
+		if (this.ended) return this.message.clearReactions();
 		await this.message.react(emojis.shift());
 		if (emojis.length) return this._queueEmojiReactions(emojis);
+		this.reactionsDone = true;
 		return null;
 	}
 
