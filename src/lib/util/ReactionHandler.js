@@ -20,7 +20,7 @@ class ReactionHandler extends ReactionCollector {
 		});
 		this.on('end', () => {
 			// Attempt to solve ratelimit queue race condition
-			setTimeout(() => this.message.clearReactions(), 100);
+			setTimeout(() => this.message.clearReactions(), 1000);
 		});
 	}
 
