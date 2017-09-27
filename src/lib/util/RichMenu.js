@@ -142,7 +142,7 @@ class RichMenu extends RichDisplay {
 	 * @private
 	 */
 	_paginate() {
-		const page = this.pages.length - 1;
+		const page = this.pages.length;
 		if (this.paginated) return null;
 		super.addPage(embed => {
 			for (let i = 0, option = this.options[i + (page * 10)]; i + (page * 10) < this.options.length && i < 10; i++, option = this.options[i + (page * 10)]) {
