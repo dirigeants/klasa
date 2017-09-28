@@ -1,5 +1,6 @@
 const { Command, version: klasaVersion } = require('klasa');
 const { version: discordVersion } = require('discord.js');
+const os = require('os');
 const moment = require('moment');
 
 module.exports = class extends Command {
@@ -18,7 +19,9 @@ module.exports = class extends Command {
 			`• Servers    :: ${this.client.guilds.size.toLocaleString()}`,
 			`• Channels   :: ${this.client.channels.size.toLocaleString()}`,
 			`• Klasa      :: v${klasaVersion}`,
-			`• Discord.js :: v${discordVersion}`
+			`• Discord.js :: v${discordVersion}`,
+			`• Node.js    :: ${process.version}`,
+			`• OS         :: ${os.platform()} v${os.release()}`
 		]);
 	}
 
