@@ -69,7 +69,7 @@ class ReactionHandler extends ReactionCollector {
 
 		/**
 		 * The selection of a RichMenu (useless in a RichDisplay scenario)
-		 * @type {Promise<?number>}
+		 * @type {Promise<number?>}
 		 */
 		this.selection = this.display.emojis.zero ? new Promise((resolve, reject) => {
 			/**
@@ -291,6 +291,7 @@ class ReactionHandler extends ReactionCollector {
 	 * The action to take when the "first" emoji is reacted
 	 * @param {emoji[]} emojis The remaining emojis to react
 	 * @returns {null}
+	 * @private
 	 */
 	async _queueEmojiReactions(emojis) {
 		if (this.ended) return this.message.clearReactions();

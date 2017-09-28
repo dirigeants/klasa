@@ -13,7 +13,7 @@ class RichDisplay {
 	 */
 
 	/**
-	 * @typedef {object} emojisObject
+	 * @typedef {object} RichDisplayEmojisObject
 	 * @memberof RichDisplay
 	 * @property {emoji} first
 	 * @property {emoji} back
@@ -62,7 +62,7 @@ class RichDisplay {
 
 		/**
 		 * The default emojis to use for this display
-		 * @type {emojisObject}
+		 * @type {RichDisplayEmojisObject}
 		 */
 		this.emojis = {
 			first: '⏮',
@@ -91,7 +91,7 @@ class RichDisplay {
 
 	/**
 	 * Sets emojis to a new set of emojis
-	 * @param {emojisObject} emojis An object containing replacement emojis to use instead
+	 * @param {RichDisplayEmojisObject} emojis An object containing replacement emojis to use instead
 	 * @returns {RichDisplay} this RichDisplay
 	 */
 	setEmojis(emojis) {

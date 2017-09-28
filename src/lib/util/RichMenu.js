@@ -13,7 +13,7 @@ class RichMenu extends RichDisplay {
 	 */
 
 	/**
-	 * @typedef {object} emojisObject
+	 * @typedef {object} RichMenuEmojisObject
 	 * @memberof RichMenu
 	 * @property {emoji} first
 	 * @property {emoji} back
@@ -65,7 +65,7 @@ class RichMenu extends RichDisplay {
 		/**
 		 * The default emojis to use for this menu
 		 * @name RichMenu#emojis
-		 * @type {emojisObject}
+		 * @type {RichMenuEmojisObject}
 		 */
 		Object.assign(this.emojis, {
 			zero: '0⃣',
