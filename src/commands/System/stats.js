@@ -1,6 +1,5 @@
 const { Command, version: klasaVersion } = require('klasa');
 const { version: discordVersion } = require('discord.js');
-const os = require('os');
 const moment = require('moment');
 
 module.exports = class extends Command {
