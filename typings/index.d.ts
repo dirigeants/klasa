@@ -25,6 +25,7 @@ declare module 'klasa' {
 		GroupDMChannel as DiscordGroupDMChannel,
 		OAuth2Application,
 		MessageOptions,
+		ReactionCollector,
 
 		StringResolvable,
 		Attachment,
@@ -165,6 +166,68 @@ declare module 'klasa' {
 	}
 
 	export { KlasaClient as Client };
+
+	export class ReactionHandler extends ReactionCollector {
+		public constructor(msg: ExtendedMessage, filter: Function, options: ReactionHandlerOptions, display: RichDisplay|RichMenu, emojis: emoji[]);
+		public display: RichDisplay|RichMenu;
+		public methodMap: Map<string, emoji>;
+		public currentPage: number;
+		public prompt: string;
+		public awaiting: boolean;
+		public selection: Promise<number?>;
+		public reactionsDone: boolean;
+
+		public first(): void;
+		public back(): void;
+		public forward(): void;
+		public last(): void;
+		public jump(): Promise<void>;
+		public info(): void;
+		public stop(): void;
+		public zero(): void;
+		public one(): void;
+		public two(): void;
+		public three(): void;
+		public four(): void;
+		public five(): void;
+		public six(): void;
+		public seven(): void;
+		public eight(): void;
+		public nine(): void;
+		public update(): void;
+
+		private _queueEmojiReactions(emojis: emoji[]): Promise<null>;
+	}
+
+	export class RichDisplay {
+		public constructor(embed: RichEmbed);
+		public embedTemplate: RichEmbed;
+		public pages: RichEmbed[];
+		public infoPage?: MessageEmbed;
+		public emojis: RichDisplayEmojisObject;
+		public footered: boolean;
+
+		public readonly template: MessageEmbed;
+		public setEmojis(emojis: RichDisplayEmojisObject): RichDisplay;
+		public setInfoPage(embed: MessageEmbed): RichDisplay;
+		public run(msg: ExtendedMessage, options?: RichDisplayRunOptions): Promise<ReactionHandler>;
+		private _footer(): void;
+		private _determineEmojis(emojis: emoji[], stop: boolean): emoji[];
+		private _handlePageGeneration(cb: Function|RichEmbed): RichEmbed;
+	}
+
+	export class RichMenu extends RichDisplay {
+		public constructor(embed: RichEmbed);
+		public emojis: RichMenuEmojisObject;
+		public paginated: boolean;
+		public options: MenuOption[];
+
+		public addOption(name: string, body: string, inline?: boolean): RichMenu;
+		public run(msg: ExtendedMessage, options?: RichMenuRunOptions): ReactionHandler;
+
+		private _determineEmojis(emojis: emoji[], stop: boolean): emoji[];
+		private _paginate(): void;
+	}
 
 	export class Util {
 		public static codeBlock(lang: string, expression: string): string;
@@ -980,6 +1043,70 @@ declare module 'klasa' {
 	};
 
 	export type SettingGatewayGuildResolvable = ExtendedGuild|Channel|ExtendedMessage|Role|Snowflake;
+
+	export type emoji = string;
+
+	export type RichDisplayEmojisObject = {
+		first: emoji;
+		back: emoji;
+		forward: emoji;
+		last: emoji;
+		jump: emoji;
+		info: emoji;
+		stop: emoji;
+	};
+
+	export type RichMenuEmojisObject = {
+		zero: emoji;
+		one: emoji;
+		two: emoji;
+		three: emoji;
+		four: emoji;
+		five: emoji;
+		six: emoji;
+		seven: emoji;
+		eight: emoji;
+		nine: emoji;
+	} & RichDisplayEmojisObject;
+
+	export type RichDisplayRunOptions = {
+		filter?: Function;
+		stop?: boolean;
+		prompt?: string;
+		startPage?: number;
+		max?: number;
+		maxEmojis?: number;
+		maxUsers?: number;
+		time?: number;
+	};
+
+	export type MenuOption = {
+		name: string;
+		description: string;
+		inline?: boolean;
+	};
+
+	export type RichMenuRunOptions = {
+		filter?: Function;
+		stop?: boolean;
+		prompt?: string;
+		startPage?: number;
+		max?: number;
+		maxEmojis?: number;
+		maxUsers?: number;
+		time?: number;
+	};
+
+	export type ReactionHandlerOptions = {
+		filter?: Function;
+		stop?: boolean;
+		prompt?: string;
+		startPage?: number;
+		max?: number;
+		maxEmojis?: number;
+		maxUsers?: number;
+		time?: number;
+	};
 
 	export type ColorsClose = {
 		normal: 0;
