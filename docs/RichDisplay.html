@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Klasa Class: Inhibitor</title>
+	<title>Klasa Class: RichDisplay</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -72,17 +72,16 @@
 		<div id="main">
 			
 
-	<h1 class="page-title">Class: Inhibitor</h1>
+	<h1 class="page-title">Class: RichDisplay</h1>
 <section>
 
 <header>
     
         <h2>
-        Inhibitor
+        RichDisplay
         </h2>
         
-            <div class="class-description">Base class for all Klasa Inhibitors. See <a href="tutorial-CreatingInhibitors.html">Creating Inhibitors</a> for more information how to use this class
-to build custom inhibitors.</div>
+            <div class="class-description">Klasa's RichDisplay, for helping paginated embeds with reaction buttons</div>
         
     
 </header>
@@ -94,12 +93,16 @@ to build custom inhibitors.</div>
         
 <hr>
 <dt>
-    <h4 class="name" id="Inhibitor"><span class="type-signature"></span>new Inhibitor(client, dir, file [, options])</h4>
+    <h4 class="name" id="RichDisplay"><span class="type-signature"></span>new RichDisplay( [embed])</h4>
     
     
 </dt>
 <dd>
 
+    
+    <div class="description">
+        Constructs our RichDisplay instance
+    </div>
     
 
     
@@ -137,125 +140,13 @@ to build custom inhibitors.</div>
 
         <tr>
             
-                <td class="name"><code>client</code></td>
+                <td class="name"><code>embed</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="KlasaClient.html">KlasaClient</a>
-</span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">The Klasa client</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>dir</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string
-</span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">The path to the core or user inhibitor pieces folder</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>file</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string
-</span>
-
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">The path from the pieces folder to the inhibitor file</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>options</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">InhibitorOptions
-</span>
+<span class="param-type"><a href="https://discord.js.org/#/docs/main/master/class/MessageEmbed">external:MessageEmbed</a></span>
 
 
 
@@ -277,12 +168,12 @@ to build custom inhibitors.</div>
             
                 <td class="default">
                 
-                    {}
+                    new MessageEmbed()
                 
                 </td>
             
 
-            <td class="description last">Optional Inhibitor settings</td>
+            <td class="description last">A Template embed to apply to all pages</td>
         </tr>
 
     
@@ -306,13 +197,6 @@ to build custom inhibitors.</div>
     
 
     
-    <dt class="implements">Implements:</dt>
-    <dd class="implements"><ul>
-        
-            <li><a href="Piece.html">Piece</a></li>
-        
-    </ul></dd>
-    
 
     
 
@@ -331,16 +215,9 @@ to build custom inhibitors.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Inhibitor.js#L25">lib/structures/Inhibitor.js#L25</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/util/RichDisplay.js#L44">lib/util/RichDisplay.js#L44</a>	</dd>
 	
 
-	
-	<dt class="tag-tutorial method-doc-label method-doc-details-label">Tutorials:</dt>
-	<dd class="tag-tutorial">
-		<ul>
-			<li><a href="tutorial-CreatingInhibitors.html">Creating Inhibitors</a></li>
-			</ul>
-	</dd>
 	
 
 	
@@ -383,89 +260,16 @@ to build custom inhibitors.</div>
         <dl>
             
 <hr>
-<dt class="name" id="client">
+<dt class="name" id="embedTemplate">
 
-    <h4 id="client"><span class="type-signature"></span>client<span class="type-signature"> :<a href="KlasaClient.html">KlasaClient</a></span></h4>
-
-    
-</dt>
-<dd>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type"><a href="KlasaClient.html">KlasaClient</a>
-</span>
-
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Inhibitor.js#L29">lib/structures/Inhibitor.js#L29</a>	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt class="name" id="dir">
-
-    <h4 id="dir"><span class="type-signature"></span>dir<span class="type-signature"> :string</span></h4>
+    <h4 id="embedTemplate"><span class="type-signature"></span>embedTemplate<span class="type-signature"> :<a href="https://discord.js.org/#/docs/main/master/class/MessageEmbed">external:MessageEmbed</a></span></h4>
 
     
 </dt>
 <dd>
     
     <div class="description">
-        The directory to where this inhibitor piece is stored
+        The embed template
     </div>
     
 
@@ -474,8 +278,7 @@ to build custom inhibitors.</div>
         <ul>
             <li>
                 
-<span class="param-type">string
-</span>
+<span class="param-type"><a href="https://discord.js.org/#/docs/main/master/class/MessageEmbed">external:MessageEmbed</a></span>
 
 
 
@@ -516,7 +319,7 @@ to build custom inhibitors.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Inhibitor.js#L35">lib/structures/Inhibitor.js#L35</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/util/RichDisplay.js#L49">lib/util/RichDisplay.js#L49</a>	</dd>
 	
 
 	
@@ -533,16 +336,16 @@ to build custom inhibitors.</div>
         
             
 <hr>
-<dt class="name" id="enabled">
+<dt class="name" id="emojis">
 
-    <h4 id="enabled"><span class="type-signature"></span>enabled<span class="type-signature"> :boolean</span></h4>
+    <h4 id="emojis"><span class="type-signature"></span>emojis<span class="type-signature"> :RichDisplayEmojisObject</span></h4>
 
     
 </dt>
 <dd>
     
     <div class="description">
-        If the inhibitor is enabled or not
+        The default emojis to use for this display
     </div>
     
 
@@ -551,7 +354,7 @@ to build custom inhibitors.</div>
         <ul>
             <li>
                 
-<span class="param-type">boolean
+<span class="param-type">RichDisplayEmojisObject
 </span>
 
 
@@ -593,7 +396,7 @@ to build custom inhibitors.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Inhibitor.js#L59">lib/structures/Inhibitor.js#L59</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/util/RichDisplay.js#L67">lib/util/RichDisplay.js#L67</a>	</dd>
 	
 
 	
@@ -610,170 +413,16 @@ to build custom inhibitors.</div>
         
             
 <hr>
-<dt class="name" id="file">
+<dt class="name" id="footered">
 
-    <h4 id="file"><span class="type-signature"></span>file<span class="type-signature"> :string</span></h4>
-
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        The file location where this inhibitor is stored
-    </div>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">string
-</span>
-
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Inhibitor.js#L41">lib/structures/Inhibitor.js#L41</a>	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt class="name" id="name">
-
-    <h4 id="name"><span class="type-signature"></span>name<span class="type-signature"> :string</span></h4>
+    <h4 id="footered"><span class="type-signature"></span>footered<span class="type-signature"> :boolean</span></h4>
 
     
 </dt>
 <dd>
     
     <div class="description">
-        The name of the inhibitor
-    </div>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">string
-</span>
-
-
-
-            </li>
-        </ul>
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Inhibitor.js#L47">lib/structures/Inhibitor.js#L47</a>	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt class="name" id="spamProtection">
-
-    <h4 id="spamProtection"><span class="type-signature"></span>spamProtection<span class="type-signature"> :boolean</span></h4>
-
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        If this inhibitor is meant for spamProtection (disables the inhibitor while generating help)
+        If footers have been applied to all pages
     </div>
     
 
@@ -824,7 +473,7 @@ to build custom inhibitors.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Inhibitor.js#L65">lib/structures/Inhibitor.js#L65</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/util/RichDisplay.js#L81">lib/util/RichDisplay.js#L81</a>	</dd>
 	
 
 	
@@ -841,16 +490,16 @@ to build custom inhibitors.</div>
         
             
 <hr>
-<dt class="name" id="type">
+<dt class="name" id="infoPage">
 
-    <h4 id="type"><span class="type-signature"></span>type<span class="type-signature"> :string</span></h4>
+    <h4 id="infoPage"><span class="type-signature">&lt;nullable> </span>infoPage<span class="type-signature"> :<a href="https://discord.js.org/#/docs/main/master/class/MessageEmbed">external:MessageEmbed</a></span></h4>
 
     
 </dt>
 <dd>
     
     <div class="description">
-        The type of Klasa piece this is
+        An optional Info page/embed
     </div>
     
 
@@ -859,8 +508,7 @@ to build custom inhibitors.</div>
         <ul>
             <li>
                 
-<span class="param-type">string
-</span>
+<span class="param-type"><a href="https://discord.js.org/#/docs/main/master/class/MessageEmbed">external:MessageEmbed</a></span>
 
 
 
@@ -901,7 +549,159 @@ to build custom inhibitors.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Inhibitor.js#L53">lib/structures/Inhibitor.js#L53</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/util/RichDisplay.js#L61">lib/util/RichDisplay.js#L61</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt class="name" id="pages">
+
+    <h4 id="pages"><span class="type-signature"></span>pages<span class="type-signature"> :<a href="https://discord.js.org/#/docs/main/master/class/MessageEmbed">external:MessageEmbed</a></span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        The stored pages of the display
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type"><a href="https://discord.js.org/#/docs/main/master/class/MessageEmbed">Array.<external:MessageEmbed></a></span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/util/RichDisplay.js#L55">lib/util/RichDisplay.js#L55</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt class="name" id="template">
+
+    <h4 id="template"><span class="type-signature"></span>template<span class="type-signature"> :<a href="https://discord.js.org/#/docs/main/master/class/MessageEmbed">external:MessageEmbed</a></span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        A new instance of the template embed
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type"><a href="https://discord.js.org/#/docs/main/master/class/MessageEmbed">external:MessageEmbed</a></span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/util/RichDisplay.js#L88">lib/util/RichDisplay.js#L88</a>	</dd>
 	
 
 	
@@ -925,7 +725,7 @@ to build custom inhibitors.</div>
             
 <hr>
 <dt>
-    <h4 class="name" id="disable"><span class="type-signature"></span>disable()</h4>
+    <h4 class="name" id="addPage"><span class="type-signature"></span>addPage(embed)</h4>
     
     
 </dt>
@@ -933,452 +733,7 @@ to build custom inhibitors.</div>
 
     
     <div class="description">
-        Disables this piece
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-    <dt class="implements">Implements:</dt>
-    <dd class="implements"><ul>
-        
-            <li><a href="Piece.html#disable">Piece#disable</a></li>
-        
-    </ul></dd>
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/interfaces/Piece.js#L38">lib/structures/interfaces/Piece.js#L38</a>	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    This piece
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="Piece.html">Piece</a>
-</span>
-
-
-
-    </dd>
-</dl>
-
-
-        
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="enable"><span class="type-signature"></span>enable()</h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Enables this piece
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-    <dt class="implements">Implements:</dt>
-    <dd class="implements"><ul>
-        
-            <li><a href="Piece.html#enable">Piece#enable</a></li>
-        
-    </ul></dd>
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/interfaces/Piece.js#L47">lib/structures/interfaces/Piece.js#L47</a>	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    This piece
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="Piece.html">Piece</a>
-</span>
-
-
-
-    </dd>
-</dl>
-
-
-        
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="init"><span class="type-signature">&lt;async, abstract> </span>init()</h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        The init method to be optionaly overwritten in actual inhibitors
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Inhibitor.js#L84">lib/structures/Inhibitor.js#L84</a>	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">void
-</span>
-
-
-
-    </dd>
-</dl>
-
-
-        
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="reload"><span class="type-signature">&lt;async> </span>reload()</h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Reloads this piece
-    </div>
-    
-
-    
-
-    
-
-    
-    
-
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-    <dt class="implements">Implements:</dt>
-    <dd class="implements"><ul>
-        
-            <li><a href="Piece.html#reload">Piece#reload</a></li>
-        
-    </ul></dd>
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
-	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/interfaces/Piece.js#L20">lib/structures/interfaces/Piece.js#L20</a>	</dd>
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    The newly loaded piece
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type"><a href="Piece.html">Piece</a>
-</span>
-
-
-
-    </dd>
-</dl>
-
-
-        
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt>
-    <h4 class="name" id="run"><span class="type-signature">&lt;abstract> </span>run(msg, cmd)</h4>
-    
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        The run method to be overwritten in actual inhibitors
+        Adds a page to the RichDisplay
     </div>
     
 
@@ -1413,38 +768,17 @@ to build custom inhibitors.</div>
 
         <tr>
             
-                <td class="name"><code>msg</code></td>
+                <td class="name"><code>embed</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="https://discord.js.org/#/docs/main/master/class/Message">external:Message</a></span>
-
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The message that triggered this inhibitor</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>cmd</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Command.html">Command</a>
+<span class="param-type">function
 </span>
+|
+
+<span class="param-type"><a href="https://discord.js.org/#/docs/main/master/class/MessageEmbed">external:MessageEmbed</a></span>
 
 
 
@@ -1455,7 +789,7 @@ to build custom inhibitors.</div>
 
             
 
-            <td class="description last">The command to run</td>
+            <td class="description last">A callback with the embed template passed and the embed returned, or an embed.</td>
         </tr>
 
     
@@ -1497,7 +831,7 @@ to build custom inhibitors.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Inhibitor.js#L75">lib/structures/Inhibitor.js#L75</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/util/RichDisplay.js#L107">lib/util/RichDisplay.js#L107</a>	</dd>
 	
 
 	
@@ -1522,6 +856,10 @@ to build custom inhibitors.</div>
     <h5>Returns:</h5>
     
             
+<div class="param-desc">
+    this RichDisplay
+</div>
+
 
 
 <dl>
@@ -1530,11 +868,7 @@ to build custom inhibitors.</div>
     </dt>
     <dd>
         
-<span class="param-type">void
-</span>
-|
-
-<span class="param-type">string
+<span class="param-type"><a href="RichDisplay.html">RichDisplay</a>
 </span>
 
 
@@ -1552,7 +886,7 @@ to build custom inhibitors.</div>
             
 <hr>
 <dt>
-    <h4 class="name" id="unload"><span class="type-signature"></span>unload()</h4>
+    <h4 class="name" id="run"><span class="type-signature">&lt;async> </span>run(msg [, options])</h4>
     
     
 </dt>
@@ -1560,7 +894,7 @@ to build custom inhibitors.</div>
 
     
     <div class="description">
-        Unloads this piece
+        Runs the RichDisplay
     </div>
     
 
@@ -1569,6 +903,113 @@ to build custom inhibitors.</div>
     
 
     
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Argument</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>msg</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="https://discord.js.org/#/docs/main/master/class/Message">external:Message</a></span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">A message to either edit, or use to send a new message for this RichDisplay</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">RichDisplayRunOptions
+</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    {}
+                
+                </td>
+            
+
+            <td class="description last">The options to use while running this RichDisplay</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
     
 
     
@@ -1585,13 +1026,6 @@ to build custom inhibitors.</div>
 
     
 
-    
-    <dt class="implements">Implements:</dt>
-    <dd class="implements"><ul>
-        
-            <li><a href="Piece.html#unload">Piece#unload</a></li>
-        
-    </ul></dd>
     
 
     
@@ -1611,7 +1045,7 @@ to build custom inhibitors.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/interfaces/Piece.js#L30">lib/structures/interfaces/Piece.js#L30</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/util/RichDisplay.js#L128">lib/util/RichDisplay.js#L128</a>	</dd>
 	
 
 	
@@ -1644,7 +1078,326 @@ to build custom inhibitors.</div>
     </dt>
     <dd>
         
-<span class="param-type">void
+<span class="param-type"><a href="ReactionHandler.html">ReactionHandler</a>
+</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="setEmojis"><span class="type-signature"></span>setEmojis(emojis)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Sets emojis to a new set of emojis
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>emojis</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">RichDisplayEmojisObject
+</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">An object containing replacement emojis to use instead</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/util/RichDisplay.js#L97">lib/util/RichDisplay.js#L97</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    this RichDisplay
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="RichDisplay.html">RichDisplay</a>
+</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="setInfoPage"><span class="type-signature"></span>setInfoPage(embed)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Adds an info page to the RichDisplay
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>embed</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function
+</span>
+|
+
+<span class="param-type"><a href="https://discord.js.org/#/docs/main/master/class/MessageEmbed">external:MessageEmbed</a></span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">A callback with the embed template passed and the embed returned, or an embed.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/util/RichDisplay.js#L117">lib/util/RichDisplay.js#L117</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    this RichDisplay
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="RichDisplay.html">RichDisplay</a>
 </span>
 
 
@@ -1667,9 +1420,86 @@ to build custom inhibitors.</div>
         <dl>
                 
 <hr>
-<dt class="name" id=".InhibitorOptions">
+<dt class="name" id=".emoji">
 
-    <h4 id=".InhibitorOptions">InhibitorOptions</h4>
+    <h4 id=".emoji">emoji</h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        A single unicode character
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">string
+</span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/util/RichDisplay.js#L9">lib/util/RichDisplay.js#L9</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+            
+                
+<hr>
+<dt class="name" id=".RichDisplayEmojisObject">
+
+    <h4 id=".RichDisplayEmojisObject">RichDisplayEmojisObject</h4>
 
     
 </dt>
@@ -1681,7 +1511,284 @@ to build custom inhibitors.</div>
         <ul>
             <li>
                 
-<span class="param-type">Object
+<span class="param-type">object
+</span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    <dl>
+
+<table class="props table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>first</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">emoji
+</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>back</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">emoji
+</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>forward</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">emoji
+</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>last</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">emoji
+</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>jump</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">emoji
+</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>info</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">emoji
+</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>stop</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">emoji
+</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+</dl>
+
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
+	<dd class="tag-source">
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/util/RichDisplay.js#L15">lib/util/RichDisplay.js#L15</a>	</dd>
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+            
+                
+<hr>
+<dt class="name" id=".RichDisplayRunOptions">
+
+    <h4 id=".RichDisplayRunOptions">RichDisplayRunOptions</h4>
+
+    
+</dt>
+<dd>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">object
 </span>
 
 
@@ -1724,13 +1831,13 @@ to build custom inhibitors.</div>
 
         <tr>
             
-                <td class="name"><code>name</code></td>
+                <td class="name"><code>filter</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string
+<span class="param-type">function
 </span>
 
 
@@ -1751,19 +1858,17 @@ to build custom inhibitors.</div>
             
                 <td class="default">
                 
-                    theFileName
-                
                 </td>
             
 
-            <td class="description last">The name of the inhibitor</td>
+            <td class="description last">A filter function to add to the ReactionHandler</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>enabled</code></td>
+                <td class="name"><code>stop</code></td>
             
 
             <td class="type">
@@ -1795,20 +1900,20 @@ to build custom inhibitors.</div>
                 </td>
             
 
-            <td class="description last">Whether the inhibitor is enabled</td>
+            <td class="description last">If a stop reaction should be included</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>spamProtection</code></td>
+                <td class="name"><code>prompt</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">boolean
+<span class="param-type">string
 </span>
 
 
@@ -1829,12 +1934,199 @@ to build custom inhibitors.</div>
             
                 <td class="default">
                 
-                    false
+                    'Which page would you like to jump to?'
                 
                 </td>
             
 
-            <td class="description last">If this inhibitor is meant for spamProtection (disables the inhibitor while generating help)</td>
+            <td class="description last">The prompt to be used when awaiting user input on a page to jump to</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>startPage</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number
+</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    0
+                
+                </td>
+            
+
+            <td class="description last">The page to start the RichDisplay on</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>max</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number
+</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The maximum total amount of reactions to collect</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>maxEmojis</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number
+</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The maximum number of emojis to collect</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>maxUsers</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number
+</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The maximum number of users to react</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>time</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number
+</span>
+
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The maximum amount of time before this RichDisplay should expire</td>
         </tr>
 
     
@@ -1873,7 +2165,7 @@ to build custom inhibitors.</div>
 	
 	<dt class="tag-source method-doc-label method-doc-details-label">Source:</dt>
 	<dd class="tag-source">
-		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/structures/Inhibitor.js#L11">lib/structures/Inhibitor.js#L11</a>	</dd>
+		<a href="https://github.com/dirigeants/klasa/blob/master/src/lib/util/RichDisplay.js#L27">lib/util/RichDisplay.js#L27</a>	</dd>
 	
 
 	
