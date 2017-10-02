@@ -91,7 +91,7 @@ class RichDisplay {
 
 	/**
 	 * Sets emojis to a new set of emojis
-	 * @param {RichDisplayEmojisObject} emojis An object containing replacement emojis to use instead with the option to remove options that are not wanted
+	 * @param {RichDisplayEmojisObject} emojis An object containing replacement emojis to use instead.
 	 * @returns {RichDisplay} this RichDisplay
 	 */
 	setEmojis(emojis) {
