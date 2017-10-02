@@ -94,7 +94,7 @@ class RichDisplay {
 	 * @param {RichDisplayEmojisObject} emojis An object containing replacement emojis to use instead with the option to remove options that are not wanted
 	 * @returns {RichDisplay} this RichDisplay
 	 */
-	static setEmojis(emojis) {
+	setEmojis(emojis) {
 		this.emojis = emojis;
 		return this;
 	}
