@@ -91,7 +91,7 @@ class SettingsCache {
 				sql: `TEXT NOT NULL DEFAULT '${this.client.config.prefix.constructor.name === 'Array' ? JSON.stringify(this.client.config.prefix) : this.client.config.prefix}'`
 			},
 			language: {
-				type: 'String',
+				type: 'Language',
 				default: this.client.config.language,
 				array: false,
 				sql: `TEXT NOT NULL DEFAULT '${this.client.config.language}'`
