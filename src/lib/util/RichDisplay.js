@@ -91,11 +91,11 @@ class RichDisplay {
 
 	/**
 	 * Sets emojis to a new set of emojis
-	 * @param {RichDisplayEmojisObject} emojis An object containing replacement emojis to use instead
+	 * @param {RichDisplayEmojisObject} emojis An object containing replacement emojis to use instead with the option to remove options that are not wanted
 	 * @returns {RichDisplay} this RichDisplay
 	 */
-	setEmojis(emojis) {
-		Object.assign(this.emojis, emojis);
+	static setEmojis(emojis) {
+		this.emojis = emojis;
 		return this;
 	}
 
@@ -157,7 +157,14 @@ class RichDisplay {
 	 * @private
 	 */
 	_determineEmojis(emojis, stop) {
-		if (this.pages.length > 1 || this.infoPage) emojis.push(this.emojis.first, this.emojis.back, this.emojis.forward, this.emojis.last, this.emojis.jump);
+		if (this.pages.length > 1 || this.infoPage) {
+			for (const prop in this.emojis) {
+				if (this.emojis.hasOwnProperty(prop)) {
+					if (['stop', 'info'].includes(prop)) continue;
+					emojis.push(this.emojis[prop]);
+				}
+			}
+		}
 		if (this.infoPage) emojis.push(this.emojis.info);
 		if (stop) emojis.push(this.emojis.stop);
 		return emojis;
