@@ -18,7 +18,8 @@ module.exports = class extends Command {
 			`• Servers    :: ${this.client.guilds.size.toLocaleString()}`,
 			`• Channels   :: ${this.client.channels.size.toLocaleString()}`,
 			`• Klasa      :: v${klasaVersion}`,
-			`• Discord.js :: v${discordVersion}`
+			`• Discord.js :: v${discordVersion}`,
+			`• Node.js    :: ${process.version}`
 		]);
 	}
 
