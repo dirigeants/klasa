@@ -1072,6 +1072,8 @@ declare module 'klasa' {
 	export type RichDisplayRunOptions = {
 		filter?: Function;
 		stop?: boolean;
+		jump?: boolean;
+		firstLast?: boolean;
 		prompt?: string;
 		startPage?: number;
 		max?: number;
