@@ -64,7 +64,9 @@ class SettingsCache {
 		if (schema.constructor.name !== 'Object') throw 'Schema must be a valid object or left undefined for an empty object.';
 
 		options.provider = this._checkProvider(options.provider || this.client.config.provider.engine || 'json');
+		if (options.provider.cache) throw `The provider ${options.provider.name} is designed for caching, not persistent data. Please try again with another.`;
 		options.cache = this._checkProvider(options.cache || this.client.config.provider.cache || 'collection');
+		if (options.cache.cache) throw `The provider ${options.cache.name} is designed for persistent data, not cache. Please try again with another.`;
 
 		if (options.provider.sql) this[name] = new GatewaySQL(this, name, validateFunction, schema, options);
 		else this[name] = new Gateway(this, name, validateFunction, schema, options);
