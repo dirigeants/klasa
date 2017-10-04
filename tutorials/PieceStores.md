@@ -233,7 +233,7 @@ module.exports = class extends Genre {
 This is great and all, but we need to register these pieces/store:
 ```javascript
 const { Client } = require('klasa');
-const { GenreStore } = require('./GenreStore');
+const GenreStore = require('./GenreStore');
 
 class MySwankyMusicBot extends Client {
 
