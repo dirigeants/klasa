@@ -299,7 +299,7 @@ module.exports = class extends Genre {
 </code></pre>
 <p>This is great and all, but we need to register these pieces/store:</p>
 <pre class="prettyprint source lang-javascript"><code>const { Client } = require('klasa');
-const { GenreStore } = require('./GenreStore');
+const GenreStore = require('./GenreStore');
 
 class MySwankyMusicBot extends Client {
 
