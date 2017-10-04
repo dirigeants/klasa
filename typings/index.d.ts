@@ -225,7 +225,7 @@ declare module 'klasa' {
 		public addOption(name: string, body: string, inline?: boolean): RichMenu;
 		public run(msg: ExtendedMessage, options?: RichMenuRunOptions): ReactionHandler;
 
-		private _determineEmojis(emojis: emoji[], stop: boolean): emoji[];
+		private _determineEmojis(emojis: emoji[], stop: boolean, jump: boolean, firstLast: boolean): emoji[];
 		private _paginate(): void;
 	}
 
