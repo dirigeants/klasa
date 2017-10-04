@@ -14,39 +14,41 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [action, key, ...value]) {
-		const configs = msg.guild.settings;
+		const configs = await msg.guild.fetchSettings();
 		if (action !== 'list' && !key) throw msg.language.get('COMMAND_CONF_NOKEY');
 		if (['set', 'remove'].includes(action) && !value[0]) throw msg.language.get('COMMAND_CONF_NOVALUE');
-		if (['set', 'remove', 'reset'].includes(action) && !configs.id) await this.client.settings.guilds.create(msg.guild);
 		if (['set', 'remove', 'get', 'reset'].includes(action) && !(key in configs)) throw msg.language.get('COMMAND_CONF_GET_NOEXT', key);
 		await this[action](msg, configs, key, value);
 
 		return null;
 	}
 
-	async set(msg, configs, key, value) {
+	async set(msg, configs, key, valueToSet) {
 		if (this.client.settings.guilds.schema[key].array) {
-			await this.client.settings.guilds.updateArray(msg.guild, 'add', key, value.join(' '));
-			return msg.sendMessage(msg.language.get('COMMAND_CONF_ADDED', value.join(' '), key));
+			const { path, value } = await this.client.settings.guilds.updateArray(msg.guild, 'add', key, valueToSet.join(' '));
+			return msg.sendMessage(msg.language.get('COMMAND_CONF_ADDED', path.toString(value), path.path));
 		}
-		const response = await this.client.settings.guilds.updateOne(msg.guild, key, value.join(' '), msg.guild);
-		return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', key, response[key]));
+		const { path, value } = await this.client.settings.guilds.updateOne(msg.guild, key, valueToSet.join(' '), msg.guild);
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', path.path, path.toString(value)));
 	}
 
-	async remove(msg, configs, key, value) {
+	async remove(msg, configs, key, valueToRemove) {
 		if (!this.client.settings.guilds.schema[key].array) return msg.sendMessage(msg.language.get('COMMAND_CONF_KEY_NOT_ARRAY'));
-		return this.client.settings.guilds.updateArray(msg.guild, 'remove', key, value.join(' '))
-			.then(() => msg.sendMessage(msg.language.get('COMMAND_CONF_REMOVE', value.join(' '), key)))
-			.catch(err => msg.sendMessage(err));
+		const { path, value } = await this.client.settings.guilds.updateArray(msg.guild, 'remove', key, valueToRemove.join(' '));
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_REMOVE', path.toString(value), path.path));
 	}
 
 	async get(msg, configs, key) {
-		return msg.sendMessage(msg.language.get('COMMAND_CONF_GET', key, inspect(configs[key])));
+		const { path } = this.client.settings.guilds.getPath(key);
+		const settingPath = key.split('.');
+		let value = configs;
+		for (let i = 0; i < settingPath.length; i++) value = value[settingPath[i]];
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_GET', path.path, path.toString(value)));
 	}
 
 	async reset(msg, configs, key) {
-		const response = await this.client.settings.guilds.reset(msg.guild, key);
-		return msg.sendMessage(msg.language.get('COMMAND_CONF_RESET', key, response));
+		const { path, value } = await this.client.settings.guilds.reset(msg.guild, key);
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_RESET', path.path, path.toString(value)));
 	}
 
 	async list(msg, configs) {

@@ -10,13 +10,14 @@ class Gateway {
 		this.options = options;
 
 		this.validate = validateFunction;
-		this.schema = new Schema(this.client, this, schema, '');
+		this.defaultSchema = schema;
+		this.schema = null;
 		this.sql = false;
 	}
 
-	async init() {
+	init() {
 		return Promise.all([
-			this.initSchema(),
+			this.initSchema().then(schema => { this.schema = new Schema(this.client, this, schema, ''); }),
 			this.initTable()
 		]);
 	}
@@ -34,7 +35,7 @@ class Gateway {
 		await fs.ensureDir(baseDir);
 		this.filePath = resolve(baseDir, `${this.type}_Schema.json`);
 		return fs.readJSON(this.filePath)
-			.catch(() => fs.outputJSONAtomic(this.filePath, this.schema.toJSON()));
+			.catch(() => fs.outputJSONAtomic(this.filePath, this.defaultSchema).then(() => this.defaultSchema));
 	}
 
 	getEntry(input) {
@@ -67,17 +68,17 @@ class Gateway {
 		}
 		const target = await this.validate(target).then(output => output && output.id ? output.id : output);
 		const data = await this.provider.get(this.type, target);
-		await super.set(target, data);
+		await this.cache.set(target, data);
 	}
 
 	async reset(target, key, guild = null) {
 		guild = this._resolveGuild(guild || target);
 		target = await this.validate(target).then(output => output && output.id ? output.id : output);
-		const { path, route } = this._getPath(key);
+		const { path, route } = this.getPath(key);
 		const parsed = await path.parse(path.default, guild);
 		const { result } = await this._reset(target, route, parsed);
 		await this.provider.update(this.type, target, result);
-		return parsed;
+		return { value: parsed.data, path };
 	}
 
 	async _reset(target, route, parsed) {
@@ -95,13 +96,13 @@ class Gateway {
 	async updateOne(target, key, value, guild = null) {
 		guild = this._resolveGuild(guild || target);
 		target = await this.validate(target).then(output => output && output.id ? output.id : output);
-		const { parsed, settings } = await this._updateOne(target, key, value, guild);
+		const { parsed, settings, path } = await this._updateOne(target, key, value, guild);
 		await this.provider.update(this.type, target, settings);
-		return parsed.data;
+		return { value: parsed.data, path };
 	}
 
 	async _updateOne(target, key, value, guild) {
-		const { path, route } = this._getPath(key);
+		const { path, route } = this.getPath(key);
 		if (path.array === true) throw `Use Gateway#updateArray instead for this key.`;
 
 		const parsed = await path.parse(value, guild);
@@ -127,13 +128,13 @@ class Gateway {
 		guild = this._resolveGuild(guild || target);
 		if (action !== 'add' || action !== 'remove') throw 'The argument \'action\' for Gateway#updateArray only accepts the strings \'add\' and \'remove\'.';
 		target = await this.validate(target).then(output => output && output.id ? output.id : output);
-		const { parsed, settings } = await this._updateArray(target, action, key, value, guild);
+		const { parsed, settings, path } = await this._updateArray(target, action, key, value, guild);
 		await this.provider.update(this.type, target, settings);
-		return parsed.data;
+		return { value: parsed.data, path };
 	}
 
 	async _updateArray(target, action, key, value, guild) {
-		const { path, route } = this._getPath(key);
+		const { path, route } = this.getPath(key);
 		if (path.array === false) throw `Use Gateway#updateOne instead for this key.`;
 
 		const parsed = await path.parse(value, guild);
@@ -154,7 +155,7 @@ class Gateway {
 			cache.push(parsedID);
 		} else {
 			const index = cache.indexOf(parsedID);
-			if (index === -1) throw `The value ${parsedID} for the key ${key} does not exist.`;
+			if (index === -1) throw `The value ${parsedID} for the key ${path.path} does not exist.`;
 			cache.splice(index, 1);
 		}
 
@@ -163,7 +164,7 @@ class Gateway {
 		return { route, path, result: cache, parsedID, parsed, settings: fullObject };
 	}
 
-	_getPath(key) {
+	getPath(key) {
 		const route = key.split('.');
 		let path = this.schema;
 

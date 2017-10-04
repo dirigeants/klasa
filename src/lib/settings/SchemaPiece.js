@@ -7,8 +7,8 @@ class SchemaPiece {
 		Object.defineProperty(this, 'key', { value: key, enumerable: false });
 
 		this.type = options.type.toLowerCase();
-		this.array = options.array;
-		this.default = options.default;
+		this.array = typeof options.array !== 'undefined' ? options.array : false;
+		this.default = typeof options.default !== 'undefined' ? options.default : this.type === 'boolean' ? false : null;
 		this.min = typeof options.min !== 'undefined' && isNaN(options.min) === false ? options.min : null;
 		this.max = typeof options.max !== 'undefined' && isNaN(options.max) === false ? options.max : null;
 

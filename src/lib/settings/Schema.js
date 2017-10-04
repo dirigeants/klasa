@@ -116,7 +116,7 @@ class Schema {
 		for (const key of Object.keys(object)) {
 			if (typeof object[key] !== 'object') continue;
 			if (object[key].type === 'Folder') {
-				const folder = new Schema(this.client, object[key], `${this.path === '' ? '' : `${this.path}.`}${key}`);
+				const folder = new Schema(this.client, this.manager, object[key], `${this.path === '' ? '' : `${this.path}.`}${key}`);
 				this[key] = folder;
 				this.defaults[key] = folder.defaults;
 			} else {
