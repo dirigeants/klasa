@@ -23,12 +23,6 @@ class SettingsCache {
 		 * @type {SettingResolver}
 		 */
 		this.resolver = new SettingResolver(client);
-
-		/**
-		 * The SettingGateway instance created to handle guild settings.
-		 * @type {Gateway}
-		 */
-		this.guilds = new Gateway(this, 'guilds', this.validate.bind(null, this.resolver), this.defaultDataSchema);
 	}
 
 	/**
@@ -66,7 +60,7 @@ class SettingsCache {
 		options.provider = this._checkProvider(options.provider || this.client.config.provider.engine || 'json');
 		if (options.provider.cache) throw `The provider ${options.provider.name} is designed for caching, not persistent data. Please try again with another.`;
 		options.cache = this._checkProvider(options.cache || this.client.config.provider.cache || 'collection');
-		if (options.cache.cache) throw `The provider ${options.cache.name} is designed for persistent data, not cache. Please try again with another.`;
+		if (options.cache.cache === false) throw `The provider ${options.cache.name} is designed for persistent data, not cache. Please try again with another.`;
 
 		if (options.provider.sql) this[name] = new GatewaySQL(this, name, validateFunction, schema, options);
 		else this[name] = new Gateway(this, name, validateFunction, schema, options);

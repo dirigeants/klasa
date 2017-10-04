@@ -46,6 +46,13 @@ class Gateway {
 		return this.cache.get(input) || this.defaults;
 	}
 
+	async createEntry(input, data = this.defaults) {
+		const target = await this.validate(target).then(output => output && output.id ? output.id : output);
+		await this.provider.create(this.type, target, data);
+		await this.cache.set(target, data);
+		return true;
+	}
+
 	async deleteEntry(input) {
 		await this.provider.delete(this.type, input);
 		this.cache.delete(this.type, input);

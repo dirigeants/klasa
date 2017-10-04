@@ -8,9 +8,10 @@ class Schema {
 		Object.defineProperty(this, 'path', { value: path, enumerable: false });
 		Object.defineProperty(this, 'type', { value: 'Folder', enumerable: false });
 
-		this._patch(object);
 		this.defaults = {};
 		this.keys = new Set();
+
+		this._patch(object);
 	}
 
 	has(key) {
