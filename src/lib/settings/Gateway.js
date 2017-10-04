@@ -104,11 +104,18 @@ class Gateway {
 		const parsed = await path.parse(value, guild);
 		const parsedID = parsed.data && parsed.data.id ? parsed.data.id : parsed.data;
 		let cache = await this.fetchEntry(target);
+		if (cache.default === true) {
+			cache = JSON.parse(JSON.stringify(cache));
+			delete cache.default;
+		}
+		const fullObject = cache;
+
 		for (let i = 0; i < route.length; i++) {
 			if (typeof cache[route[i]] === 'undefined') cache[route[i]] = {};
 			if (i === route.length - 1) cache[route[i]] = parsedID;
 			else cache = cache[route[i]];
 		}
+		await this.cache.set(target, fullObject);
 
 		return { route, path, result: cache, parsedID, parsed };
 	}
@@ -127,7 +134,7 @@ class Gateway {
 	}
 
 	get cache() {
-		return this.options.cache;
+		return this.options.cache.getTable(this.type);
 	}
 
 	get provider() {
@@ -135,7 +142,7 @@ class Gateway {
 	}
 
 	get defaults() {
-		return this.schema.defaults;
+		return Object.assign(this.schema.defaults, { default: true });
 	}
 
 	/**

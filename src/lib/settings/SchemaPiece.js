@@ -17,13 +17,15 @@ class SchemaPiece {
 
 	sql(value = null) {
 		if (typeof value.id !== 'undefined') value = value.id;
+		return `'${this.path}' = ${this._parseSQLValue(value)}`;
+	}
+
+	_parseSQLValue(value) {
 		const type = typeof value;
-
-		if (type === 'boolean' || type === 'number' || value === null) return `'${this.path}' = ${value}`;
-		if (type === 'string') return `'${this.path}' = '${value.replace(/'/g, "''")}'`;
-		if (type === 'object') return `'${this.path}' = '${JSON.stringify(value).replace(/'/g, "''")}'`;
-
-		throw 'Unsupported type';
+		if (type === 'boolean' || type === 'number' || value === null) return String(value);
+		if (type === 'string') return `'${value.replace(/'/g, "''")}'`;
+		if (type === 'object') return `'${JSON.stringify(value).replace(/'/g, "''")}'`;
+		return '';
 	}
 
 	async parse(value, guild) {
@@ -52,8 +54,8 @@ class SchemaPiece {
 		if (this.max !== null && typeof this.max !== 'number') throw new TypeError(`[KEY] ${this.path} - Parameter max must be a number or null.`);
 		if (this.min !== null && this.max !== null && this.min > this.max) throw new TypeError(`[KEY] ${this.path} - Parameter min must contain a value lower than the parameter max.`);
 
-		const value = (this.type === 'integer' || this.type === 'float' ? 'INTEGER' : 'TEXT') +
-			(this.default !== null ? ` DEFAULT ${this.sql(this.default)}` : '');
+		const value = [this.key, (this.type === 'integer' || this.type === 'float' ? 'INTEGER' : 'TEXT') +
+				(this.default !== null ? ` DEFAULT ${this._parseSQLValue(this.default)}` : '')];
 
 		Object.defineProperty(this, 'sqlSchema', { value, enumerable: false });
 	}

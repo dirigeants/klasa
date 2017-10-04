@@ -113,7 +113,7 @@ module.exports = class extends Provider {
 	 */
 	async update(table, document, data) {
 		const existent = await this.get(table, document);
-		return fs.outputJSONAtomic(resolve(this.baseDir, table, `${document}.json`), Object.assign(existent || {}, data));
+		return fs.outputJSONAtomic(resolve(this.baseDir, table, `${document}.json`), Object.assign(existent || { id: document }, data));
 	}
 
 	/**

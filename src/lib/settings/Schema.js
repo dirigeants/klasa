@@ -1,4 +1,5 @@
 const SchemaPiece = require('./SchemaPiece');
+const fs = require('fs-nextra');
 
 class Schema {
 
@@ -7,15 +8,14 @@ class Schema {
 		Object.defineProperty(this, 'manager', { value: manager, enumerable: false });
 		Object.defineProperty(this, 'path', { value: path, enumerable: false });
 		Object.defineProperty(this, 'type', { value: 'Folder', enumerable: false });
-
-		this.defaults = {};
-		this.keys = new Set();
+		Object.defineProperty(this, 'defaults', { value: {}, enumerable: false, writable: true });
+		Object.defineProperty(this, 'keys', { value: new Set(), enumerable: false, writable: true });
 
 		this._patch(object);
 	}
 
 	has(key) {
-		return typeof this[key] !== 'undefined';
+		return this.keys.has(key);
 	}
 
 	async addKey(key, options = null, force = true) {
@@ -36,46 +36,46 @@ class Schema {
 			options.array = false;
 		}
 		this._addKey(key, options);
+		await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
 
 		if (force) await this.force('add', key);
 		return this.manager.schema;
 	}
 
 	_addKey(key, options) {
+		this.keys.add(key);
 		this[key] = new SchemaPiece(this.client, this.manager, options, `${this.path}.${key}`, key);
 		this.defaults[key] = options.default;
-
-		if (this.manager.sql) this.manager.sql.addKey(key, options);
 	}
 
 	async removeKey(key, force = true) {
 		if (this.keys.has(key) === false) throw `The key ${key} does not exist in the current schema.`;
 		this._removeKey(key);
+		await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
 
 		if (force) await this.force('delete', key);
 		return this.manager.schema;
 	}
 
 	_removeKey(key) {
+		this.keys.delete(key);
 		delete this[key];
 		delete this.defaults[key];
-
-		if (this.manager.sql) this.manager.sql.removeKey(key);
 	}
 
 	async force(action, key) {
 		if (this.manager.sql) await this.manager.updateColumns(key);
-		const data = await this.manager.cache.getAll(this.type);
+		const data = await this.manager.provider.getAll(this.manager.type);
 		const value = action === 'add' ? this.defaults[key] : null;
 		const path = this.path.split('.');
 
 		return Promise.all(data.map(async (obj) => {
 			let object = obj;
-			for (let i = 0; i < path.length; i++) object = object[path[i]];
+			for (let i = 0; i < path.length - 1; i++) object = object[path[i]];
 			if (action === 'delete') delete object[key];
 			else object[key] = value;
 
-			if (obj.id) return this.manager.provider.replace(this.type, obj.id, obj);
+			if (obj.id) return this.manager.provider.replace(this.manager.type, obj.id, obj);
 			return true;
 		}));
 	}
@@ -96,11 +96,11 @@ class Schema {
 		for (const key of Object.keys(object)) {
 			if (typeof object[key] !== 'object') continue;
 			if (object[key].type === 'Folder') {
-				const folder = new Schema(this.client, object[key], `${this.path}.${key}`);
+				const folder = new Schema(this.client, object[key], `${this.path === '' ? '' : `${this.path}.`}${key}`);
 				this[key] = folder;
 				this.defaults[key] = folder.defaults;
 			} else {
-				const piece = new SchemaPiece(this.client, this.manager, object[key], `${this.path}.${key}`, key);
+				const piece = new SchemaPiece(this.client, this.manager, object[key], `${this.path === '' ? '' : `${this.path}.`}${key}`, key);
 				this[key] = piece;
 				this.defaults[key] = piece.default;
 			}
