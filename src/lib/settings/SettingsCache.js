@@ -23,6 +23,8 @@ class SettingsCache {
 		 * @type {SettingResolver}
 		 */
 		this.resolver = new SettingResolver(client);
+
+		this.types = Object.getOwnPropertyNames(SettingResolver.prototype).slice(1);
 	}
 
 	/**
