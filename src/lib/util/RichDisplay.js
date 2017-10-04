@@ -91,7 +91,7 @@ class RichDisplay {
 
 	/**
 	 * Sets emojis to a new set of emojis
-	 * @param {RichDisplayEmojisObject} emojis An object containing replacement emojis to use instead
+	 * @param {RichDisplayEmojisObject} emojis An object containing replacement emojis to use instead.
 	 * @returns {RichDisplay} this RichDisplay
 	 */
 	setEmojis(emojis) {
@@ -128,7 +128,12 @@ class RichDisplay {
 	async run(msg, options = {}) {
 		if (!this.footered) this._footer();
 		if (!options.filter) options.filter = () => true;
-		const emojis = this._determineEmojis([], !('stop' in options) || ('stop' in options && options.stop));
+		const emojis = this._determineEmojis(
+			[],
+			!('stop' in options) || ('stop' in options && options.stop),
+			!('jump' in options) || ('jump' in options && options.jump),
+			!('firstLast' in options) || ('firstLast' in options && options.firstLast),
+		);
 		const message = msg.editable ? await msg.edit(this.pages[options.startPage || 0]) : await msg.channel.send(this.pages[options.startPage || 0]);
 		return new ReactionHandler(
 			message,
@@ -153,13 +158,19 @@ class RichDisplay {
 	 * Determins the emojis to use in this display
 	 * @param {emoji[]} emojis An array of emojis to use
 	 * @param {boolean} stop Whether the stop emoji should be included
+	 * @param {boolean} jump Whether the jump emoji should be included
+	 * @param {boolean} firstLast Whether the first & last emojis should be included
 	 * @returns {emoji[]}
 	 * @private
 	 */
-	_determineEmojis(emojis, stop) {
-		if (this.pages.length > 1 || this.infoPage) emojis.push(this.emojis.first, this.emojis.back, this.emojis.forward, this.emojis.last, this.emojis.jump);
+	_determineEmojis(emojis, stop, jump, firstLast) {
+		if (this.pages.length > 1 || this.infoPage) {
+			if (firstLast) emojis.push(this.emojis.first, this.emojis.back, this.emojis.forward, this.emojis.last);
+			else emojis.push(this.emojis.back, this.emojis.forward);
+		}
 		if (this.infoPage) emojis.push(this.emojis.info);
 		if (stop) emojis.push(this.emojis.stop);
+		if (jump) emojis.push(this.emojis.jump);
 		return emojis;
 	}
 
