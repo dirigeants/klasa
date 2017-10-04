@@ -28,7 +28,7 @@ class SchemaPiece {
 
 	async parse(value, guild) {
 		const data = await this.manager.resolver[this.type](value, guild, this.key, { min: this.min, max: this.max });
-		return { data, sql: this.manager.sql ? this.sql(data) : null };
+		return { data, sql: this.manager.sql ? this.sql(data && data.id ? data.id : data) : null };
 	}
 
 	getDefault() {

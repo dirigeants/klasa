@@ -23,15 +23,15 @@ class GatewaySQL extends Gateway {
 		target = await this.validate(target).then(output => output && output.id ? output.id : output);
 		const { path, route } = this._getPath(key);
 		const parsed = await path.parse(path.default, guild);
-		const { parsedID } = await this._reset(target, route, parsed);
-		await this.provider.updateOne(this.type, path.sql(parsedID), target);
+		await this._reset(target, route, parsed);
+		await this.provider.updateOne(this.type, parsed.sql, target);
 		return parsed;
 	}
 
 	async updateOne(target, key, value, guild) {
 		target = await this.validate(target).then(output => output && output.id ? output.id : output);
-		const { path, entryID, parsed, parsedID } = await this._updateOne(target, key, value, guild);
-		await this.provider.updateOne(this.type, path.sql(parsedID), entryID);
+		const { entryID, parsed } = await this._updateOne(target, key, value, guild);
+		await this.provider.updateOne(this.type, parsed.sql, entryID);
 		return parsed;
 	}
 

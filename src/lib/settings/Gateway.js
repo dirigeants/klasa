@@ -95,14 +95,14 @@ class Gateway {
 		target = await this.validate(target).then(output => output && output.id ? output.id : output);
 		const { parsed, result } = await this._updateOne(target, key, value, guild);
 		await this.provider.update(this.type, target, result);
-		return parsed;
+		return parsed.data;
 	}
 
 	async _updateOne(target, key, value, guild) {
 		const { path, route } = this._getPath(key);
 
 		const parsed = await path.parse(value, guild);
-		const parsedID = parsed && parsed.id ? parsed.id : parsed;
+		const parsedID = parsed.data && parsed.data.id ? parsed.data.id : parsed.data;
 		let cache = await this.fetchEntry(target);
 		for (let i = 0; i < route.length; i++) {
 			if (typeof cache[route[i]] === 'undefined') cache[route[i]] = {};
@@ -118,7 +118,7 @@ class Gateway {
 		let path = this.schema;
 
 		for (let i = 0; i < route.length; i++) {
-			if (path.keys.has(path[route[i]]) === false) throw `The key ${route.slice(0, i).join('.')} does not exist in the current schema.`;
+			if (path.keys.has(route[i]) === false) throw `The key ${route.slice(0, i).join('.')} does not exist in the current schema.`;
 			path = path[route[i]];
 		}
 

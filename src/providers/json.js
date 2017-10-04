@@ -111,9 +111,9 @@ module.exports = class extends Provider {
 	 * @param {Object} data The object with all the properties you want to update.
 	 * @returns {Promise<Void>}
 	 */
-	update(table, document, data) {
-		return this.get(table, document)
-			.then(current => fs.outputJSONAtomic(resolve(this.baseDir, table, `${document}.json`), Object.assign(current, data)));
+	async update(table, document, data) {
+		const existent = await this.get(table, document);
+		return fs.outputJSONAtomic(resolve(this.baseDir, table, `${document}.json`), Object.assign(existent || {}, data));
 	}
 
 	/**

@@ -29,7 +29,7 @@ module.exports = class extends Command {
 			await this.client.settings.guilds.updateArray(msg.guild, 'add', key, value.join(' '));
 			return msg.sendMessage(msg.language.get('COMMAND_CONF_ADDED', value.join(' '), key));
 		}
-		const response = await this.client.settings.guilds.update(msg.guild, { [key]: value.join(' ') });
+		const response = await this.client.settings.guilds.updateOne(msg.guild, key, value.join(' '), msg.guild);
 		return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', key, response[key]));
 	}
 
