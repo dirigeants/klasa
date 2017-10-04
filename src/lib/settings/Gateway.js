@@ -70,7 +70,8 @@ class Gateway {
 		await super.set(target, data);
 	}
 
-	async reset(target, key, guild) {
+	async reset(target, key, guild = null) {
+		guild = this._resolveGuild(guild || target);
 		target = await this.validate(target).then(output => output && output.id ? output.id : output);
 		const { path, route } = this._getPath(key);
 		const parsed = await path.parse(path.default, guild);
@@ -91,15 +92,17 @@ class Gateway {
 		return { result: cache, parsedID };
 	}
 
-	async updateOne(target, key, value, guild) {
+	async updateOne(target, key, value, guild = null) {
+		guild = this._resolveGuild(guild || target);
 		target = await this.validate(target).then(output => output && output.id ? output.id : output);
-		const { parsed, result } = await this._updateOne(target, key, value, guild);
-		await this.provider.update(this.type, target, result);
+		const { parsed, settings } = await this._updateOne(target, key, value, guild);
+		await this.provider.update(this.type, target, settings);
 		return parsed.data;
 	}
 
 	async _updateOne(target, key, value, guild) {
 		const { path, route } = this._getPath(key);
+		if (path.array === true) throw `Use Gateway#updateArray instead for this key.`;
 
 		const parsed = await path.parse(value, guild);
 		const parsedID = parsed.data && parsed.data.id ? parsed.data.id : parsed.data;
@@ -110,14 +113,54 @@ class Gateway {
 		}
 		const fullObject = cache;
 
-		for (let i = 0; i < route.length; i++) {
+		for (let i = 0; i < route.length - 1; i++) {
 			if (typeof cache[route[i]] === 'undefined') cache[route[i]] = {};
-			if (i === route.length - 1) cache[route[i]] = parsedID;
+			if (i === route.length) cache[route[i]] = parsedID;
 			else cache = cache[route[i]];
 		}
 		await this.cache.set(target, fullObject);
 
-		return { route, path, result: cache, parsedID, parsed };
+		return { route, path, result: cache, parsedID, parsed, settings: fullObject };
+	}
+
+	async updateArray(target, action, key, value, guild = null) {
+		guild = this._resolveGuild(guild || target);
+		if (action !== 'add' || action !== 'remove') throw 'The argument \'action\' for Gateway#updateArray only accepts the strings \'add\' and \'remove\'.';
+		target = await this.validate(target).then(output => output && output.id ? output.id : output);
+		const { parsed, settings } = await this._updateArray(target, action, key, value, guild);
+		await this.provider.update(this.type, target, settings);
+		return parsed.data;
+	}
+
+	async _updateArray(target, action, key, value, guild) {
+		const { path, route } = this._getPath(key);
+		if (path.array === false) throw `Use Gateway#updateOne instead for this key.`;
+
+		const parsed = await path.parse(value, guild);
+		const parsedID = parsed.data && parsed.data.id ? parsed.data.id : parsed.data;
+		let cache = await this.fetchEntry(target);
+		if (cache.default === true) {
+			cache = JSON.parse(JSON.stringify(cache));
+			delete cache.default;
+		}
+		const fullObject = cache;
+
+		for (let i = 0; i < route.length - 1; i++) {
+			if (typeof cache[route[i]] === 'undefined') cache[route[i]] = {};
+			cache = cache[route[i]];
+		}
+		if (action === 'add') {
+			if (cache.includes(parsedID)) throw `The value ${parsedID} for the key ${path.path} already exists.`;
+			cache.push(parsedID);
+		} else {
+			const index = cache.indexOf(parsedID);
+			if (index === -1) throw `The value ${parsedID} for the key ${key} does not exist.`;
+			cache.splice(index, 1);
+		}
+
+		await this.cache.set(target, fullObject);
+
+		return { route, path, result: cache, parsedID, parsed, settings: fullObject };
 	}
 
 	_getPath(key) {
@@ -131,6 +174,14 @@ class Gateway {
 
 		if (path.type === 'Folder') throw `Please, choose one of the following keys: '${Object.keys(path).join('\', \'')}'`;
 		return { path, route };
+	}
+
+	_resolveGuild(guild) {
+		const constName = guild.constructor.name;
+		if (constName === 'Guild') return guild;
+		if (constName === 'TextChannel' || constName === 'VoiceChannel' || constName === 'Message' || constName === 'Role') return guild.guild;
+		if (typeof guild === 'string' && /^\d{17,19}$/.test(guild)) return this.client.guilds.get(guild);
+		return null;
 	}
 
 	get cache() {

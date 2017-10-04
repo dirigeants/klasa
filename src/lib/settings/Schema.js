@@ -14,6 +14,26 @@ class Schema {
 		this._patch(object);
 	}
 
+	async addFolder(key, object = {}, force = true) {
+		if (typeof this[key] !== 'undefined') throw `The key ${key} already exists in the current schema.`;
+		this.keys.add(key);
+		this[key] = new Schema(this.client, this.manager, object, `${this.path === '' ? '' : `${this.path}.`}${key}`);
+		this.defaults[key] = this[key].defaults;
+		await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
+
+		if (force) await this.force('add', key);
+		return this.manager.schema;
+	}
+
+	async removeFolder(key, force = true) {
+		if (this.keys.has(key) === false) throw `The key ${key} does not exist in the current schema.`;
+		this._removeKey(key);
+		await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
+
+		if (force) await this.force('delete', key);
+		return this.manager.schema;
+	}
+
 	has(key) {
 		return this.keys.has(key);
 	}
@@ -44,7 +64,7 @@ class Schema {
 
 	_addKey(key, options) {
 		this.keys.add(key);
-		this[key] = new SchemaPiece(this.client, this.manager, options, `${this.path}.${key}`, key);
+		this[key] = new SchemaPiece(this.client, this.manager, options, `${this.path === '' ? '' : `${this.path}.`}${key}`, key);
 		this.defaults[key] = options.default;
 	}
 
@@ -81,7 +101,7 @@ class Schema {
 	}
 
 	toJSON() {
-		return Object.assign({}, ...Array.from(this.keys).map(key => ({ [key]: this[key].toJSON() })));
+		return Object.assign({ type: 'Folder' }, ...Array.from(this.keys).map(key => ({ [key]: this[key].toJSON() })));
 	}
 
 	getSQL(array = []) {

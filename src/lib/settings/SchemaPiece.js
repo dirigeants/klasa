@@ -68,6 +68,21 @@ class SchemaPiece {
 		return array === null ? this.path : array.push(this.path);
 	}
 
+	toString(value = null) {
+		if (value === null) return 'SchemaPiece';
+		switch (this.type) {
+			case 'user': return `@${value.username}`;
+			case 'textchannel':
+			case 'voicechannel':
+			case 'channel': return `#${value.name}`;
+			case 'role': return `@${value.name}`;
+			case 'guild':
+			case 'command':
+			case 'language': return value.name;
+			default: return String(value);
+		}
+	}
+
 }
 
 module.exports = SchemaPiece;
