@@ -68,8 +68,9 @@ class SchemaPiece {
 		return array === null ? this.path : array.push(this.path);
 	}
 
-	toString(value = null) {
-		if (value === null) return 'SchemaPiece';
+	toString(value) {
+		if (typeof value === 'undefined') return 'SchemaPiece';
+		if (value === null) return 'Not set';
 		switch (this.type) {
 			case 'user': return `@${value.username}`;
 			case 'textchannel':

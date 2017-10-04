@@ -128,6 +128,10 @@ class Schema {
 		}
 	}
 
+	toString() {
+		return '[ Folder';
+	}
+
 }
 
 module.exports = Schema;

@@ -164,9 +164,10 @@ class Gateway {
 		return { route, path, result: cache, parsedID, parsed, settings: fullObject };
 	}
 
-	getPath(key) {
+	getPath(key = null) {
 		const route = key.split('.');
 		let path = this.schema;
+		if (key === null) return { path, route };
 
 		for (let i = 0; i < route.length; i++) {
 			if (path.keys.has(route[i]) === false) throw `The key ${route.slice(0, i).join('.')} does not exist in the current schema.`;

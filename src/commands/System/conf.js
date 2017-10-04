@@ -16,8 +16,7 @@ module.exports = class extends Command {
 	async run(msg, [action, key, ...value]) {
 		const configs = await msg.guild.fetchSettings();
 		if (action !== 'list' && !key) throw msg.language.get('COMMAND_CONF_NOKEY');
-		if (['set', 'remove'].includes(action) && !value[0]) throw msg.language.get('COMMAND_CONF_NOVALUE');
-		if (['set', 'remove', 'get', 'reset'].includes(action) && !(key in configs)) throw msg.language.get('COMMAND_CONF_GET_NOEXT', key);
+		if (['set', 'remove'].includes(action) && value.length === 0) throw msg.language.get('COMMAND_CONF_NOVALUE');
 		await this[action](msg, configs, key, value);
 
 		return null;
@@ -67,6 +66,31 @@ module.exports = class extends Command {
 		if (value === null) return 'Not set';
 		if (value instanceof Array) return value[0] ? `[ ${value.join(' | ')} ]` : 'None';
 		return value;
+	}
+
+	// Pending to implement tomorrow.
+	resolveString(msg, output, path, value) {
+		if (path.configurable === false) return;
+		let resolver = (val) => val;
+		switch (path.type) {
+			case 'Folder': resolver = () => '[ Folder';
+				break;
+			case 'user': resolver = (val) => (this.client.users.get(val) || { username: val }).username;
+				break;
+			case 'textchannel':
+			case 'voicechannel':
+			case 'channel': resolver = (val) => `#${(msg.guild.channels.get(val) || { name: val }).name}`;
+				break;
+			case 'role': resolver = (val) => `@${(msg.guild.roles.get(val) || { name: val }).name}`;
+				break;
+			case 'guild':
+			case 'command':
+			case 'language': resolver = (val) => val.name;
+				break;
+			// no default
+		}
+
+		output.push(path.array ? value.length > 0 ? `[ ${value.map(resolver).join(' | ')} ]` : 'None' : value === null ? 'Not set' : resolver(value));
 	}
 
 };
