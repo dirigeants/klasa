@@ -22,6 +22,7 @@ class Schema {
 		if (typeof this[key] !== 'undefined') throw `The key ${key} already exists in the current schema.`;
 		if (options === null) throw 'You must pass an options argument to this method.';
 		if (typeof options.type !== 'string') throw 'The option type is required and must be a string.';
+		options.type = options.type.toLowerCase();
 		if (this.client.settings.types.includes(options.type) === false) throw `The type ${options.type} is not supported.`;
 		if (typeof options.min !== 'undefined' && isNaN(options.min)) throw 'The option min must be a number.';
 		if (typeof options.max !== 'undefined' && isNaN(options.max)) throw 'The option max must be a number.';
