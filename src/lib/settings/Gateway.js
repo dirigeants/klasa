@@ -37,8 +37,12 @@ class Gateway {
 			.catch(() => fs.outputJSONAtomic(this.filePath, this.schema.toJSON()));
 	}
 
-	async getEntry(input) {
+	getEntry(input) {
 		if (input === 'default') return this.defaults;
+		return this.cache.get(input) || this.defaults;
+	}
+
+	async fetchEntry(input) {
 		return this.cache.get(input) || this.defaults;
 	}
 
@@ -69,7 +73,7 @@ class Gateway {
 	}
 
 	async _reset(target, route, parsed) {
-		let cache = await this.getEntry(target);
+		let cache = await this.fetchEntry(target);
 		const parsedID = parsed && parsed.id ? parsed.id : parsed;
 		for (let i = 0; i < route.length; i++) {
 			if (typeof cache[route[i]] === 'undefined') cache[route[i]] = {};
@@ -92,7 +96,7 @@ class Gateway {
 
 		const parsed = await path.parse(value, guild);
 		const parsedID = parsed && parsed.id ? parsed.id : parsed;
-		let cache = await this.getEntry(target);
+		let cache = await this.fetchEntry(target);
 		for (let i = 0; i < route.length; i++) {
 			if (typeof cache[route[i]] === 'undefined') cache[route[i]] = {};
 			if (i === route.length - 1) cache[route[i]] = parsedID;
