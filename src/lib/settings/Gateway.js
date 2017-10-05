@@ -5,16 +5,46 @@ const fs = require('fs-nextra');
 class Gateway {
 
 	constructor(store, type, validateFunction, schema, options) {
+		/**
+		 * @type {SettingsCache}
+		 */
 		this.store = store;
+
+		/**
+		 * @type {string}
+		 */
 		this.type = type;
+
+		/**
+		 * @type {GatewayOptions}
+		 */
 		this.options = options;
 
+		/**
+		 * @type {Function}
+		 */
 		this.validate = validateFunction;
+
+		/**
+		 * @type {Object}
+		 */
 		this.defaultSchema = schema;
+
+		/**
+		 * @type {Schema}
+		 */
 		this.schema = null;
+
+		/**
+		 * @type {boolean}
+		 */
 		this.sql = false;
 	}
 
+	/**
+	 * Inits the table and the schema for its use in this gateway.
+	 * @returns {Promise<void[]>}
+	 */
 	init() {
 		return Promise.all([
 			this.initSchema().then(schema => { this.schema = new Schema(this.client, this, schema, ''); }),
@@ -22,6 +52,9 @@ class Gateway {
 		]);
 	}
 
+	/**
+	 * Inits the table for its use in this gateway.
+	 */
 	async initTable() {
 		const hasTable = await this.provider.hasTable(this.type);
 		if (!hasTable) await this.provider.createTable(this.type);
@@ -35,6 +68,10 @@ class Gateway {
 		}
 	}
 
+	/**
+	 * Inits the schema, creating a file if it does not exist, and returning the current schema or the default.
+	 * @returns {Promise<Object>}
+	 */
 	async initSchema() {
 		const baseDir = resolve(this.client.clientBaseDir, 'bwd');
 		await fs.ensureDir(baseDir);
@@ -43,28 +80,54 @@ class Gateway {
 			.catch(() => fs.outputJSONAtomic(this.filePath, this.defaultSchema).then(() => this.defaultSchema));
 	}
 
+	/**
+	 * Get an entry from the cache.
+	 * @param {('default'|string)} input The key to get from the cache.
+	 * @returns {Object}
+	 */
 	getEntry(input) {
 		if (input === 'default') return this.defaults;
 		return this.cache.get(this.type, input) || this.defaults;
 	}
 
+	/**
+	 * Fetch an entry from the cache. Use this method when using async cacheproviders.
+	 * @param {string} input The key to fetch from the cache.
+	 * @returns {Promise<Object>}
+	 */
 	async fetchEntry(input) {
 		return this.cache.get(this.type, input) || this.defaults;
 	}
 
+	/**
+	 * Create a new entry into the database with an optional content (defaults to this Gateway's defaults).
+	 * @param {string} input The name of the key to create.
+	 * @param {Object} [data={}] The initial data to insert.
+	 * @returns {Promise<true>}
+	 */
 	async createEntry(input, data = this.defaults) {
 		const target = await this.validate(input).then(output => output && output.id ? output.id : output);
 		await this.provider.create(this.type, target, data);
-		await this.cache.set(this.type, target, data);
+		await this.cache.create(this.type, target, data);
 		return true;
 	}
 
+	/**
+	 * Delete an entry from the database and cache.
+	 * @param {string} input The name of the key to fetch and delete.
+	 * @returns {Promise<true>}
+	 */
 	async deleteEntry(input) {
 		await this.provider.delete(this.type, input);
-		this.cache.delete(this.type, input);
+		await this.cache.delete(this.type, input);
 		return true;
 	}
 
+	/**
+	 * Sync either all entries from the configuration, or a single one.
+	 * @param {(Object|string)} [input=null] An object containing a id property, like discord.js objects, or a string.
+	 * @returns {void}
+	 */
 	async sync(input = null) {
 		if (input === null) {
 			const data = await this.provider.getAll(this.type);
@@ -77,8 +140,15 @@ class Gateway {
 		return true;
 	}
 
+	/**
+	 * Reset a value from an entry.
+	 * @param {string} target The entry target.
+	 * @param {string} key The key to reset.
+	 * @param {(Guild|string)} guild A guild resolvable.
+	 * @returns {{ value: any, path: SchemaPiece }}
+	 */
 	async reset(target, key, guild = null) {
-		if (typeof key !== 'string') throw 'The argument \'key\' for Gateway#reset only accepts strings.';
+		if (typeof key !== 'string') throw new TypeError('The argument \'key\' for Gateway#reset only accepts strings.');
 		guild = this._resolveGuild(guild || target);
 		target = await this.validate(target).then(output => output && output.id ? output.id : output);
 		const { path, route } = this.getPath(key);
@@ -100,8 +170,16 @@ class Gateway {
 		return { result: cache, parsedID };
 	}
 
+	/**
+	 * Update a value from an entry.
+	 * @param {string} target The entry target.
+	 * @param {string} key The key to modify.
+	 * @param {string} value The value to parse and save.
+	 * @param {(Guild|string)} guild A guild resolvable.
+	 * @returns {{ value: any, path: SchemaPiece }}
+	 */
 	async updateOne(target, key, value, guild = null) {
-		if (typeof key !== 'string') throw 'The argument \'key\' for Gateway#updateOne only accepts strings.';
+		if (typeof key !== 'string') throw new TypeError('The argument \'key\' for Gateway#updateOne only accepts strings.');
 		guild = this._resolveGuild(guild || target);
 		target = await this.validate(target).then(output => output && output.id ? output.id : output);
 		const { parsed, settings, path } = await this._updateOne(target, key, value, guild);
@@ -132,10 +210,19 @@ class Gateway {
 		return { route, path, result: cache, parsedID, parsed, settings: fullObject };
 	}
 
+	/**
+	 * Update an array from an entry.
+	 * @param {string} target The entry target.
+	 * @param {('add'|'remove')} action Whether the value should be added or removed to the array.
+	 * @param {string} key The key to modify.
+	 * @param {string} value The value to parse and save or remove.
+	 * @param {(Guild|string)} guild A guild resolvable.
+	 * @returns {{ value: any, path: SchemaPiece }}
+	 */
 	async updateArray(target, action, key, value, guild = null) {
-		if (typeof key !== 'string') throw 'The argument \'key\' for Gateway#updateArray only accepts strings.';
+		if (typeof key !== 'string') throw new TypeError('The argument \'key\' for Gateway#updateArray only accepts strings.');
 		guild = this._resolveGuild(guild || target);
-		if (action !== 'add' || action !== 'remove') throw 'The argument \'action\' for Gateway#updateArray only accepts the strings \'add\' and \'remove\'.';
+		if (action !== 'add' || action !== 'remove') throw new TypeError('The argument \'action\' for Gateway#updateArray only accepts the strings \'add\' and \'remove\'.');
 		target = await this.validate(target).then(output => output && output.id ? output.id : output);
 		const { parsed, settings, path } = await this._updateArray(target, action, key, value, guild);
 		await this.provider.update(this.type, target, settings);
@@ -144,7 +231,7 @@ class Gateway {
 
 	async _updateArray(target, action, key, value, guild) {
 		const { path, route } = this.getPath(key);
-		if (path.array === false) throw `Use Gateway#updateOne instead for this key.`;
+		if (path.array === false) throw new TypeError(`Use Gateway#updateOne instead for this key.`);
 
 		const parsed = await path.parse(value, guild);
 		const parsedID = parsed.data && parsed.data.id ? parsed.data.id : parsed.data;
@@ -173,10 +260,16 @@ class Gateway {
 		return { route, path, result: cache, parsedID, parsed, settings: fullObject };
 	}
 
+	/**
+	 * Resolve a path from a string.
+	 * @param {string} [key=null] A string to resolve.
+	 * @returns {{ path: SchemaPiece, route: string[] }}
+	 */
 	getPath(key = null) {
+		if (key === null) return { path, route: [] };
+		if (typeof key !== 'string') throw new TypeError('The value for the argument \'key\' must be a string.');
 		const route = key.split('.');
 		let path = this.schema;
-		if (key === null) return { path, route };
 
 		for (let i = 0; i < route.length; i++) {
 			if (path.keys.has(route[i]) === false) throw `The key ${route.slice(0, i).join('.')} does not exist in the current schema.`;
@@ -195,14 +288,29 @@ class Gateway {
 		return null;
 	}
 
+	/**
+	 * Get the cache-provider that manages the cache data.
+	 * @type {CacheProvider}
+	 * @readonly
+	 */
 	get cache() {
 		return this.options.cache;
 	}
 
+	/**
+	 * Get the provider that manages the persistent data.
+	 * @type {Provider}
+	 * @readonly
+	 */
 	get provider() {
 		return this.options.provider;
 	}
 
+	/**
+	 * Get this gateway's defaults.
+	 * @type {Object}
+	 * @readonly
+	 */
 	get defaults() {
 		return Object.assign(this.schema.defaults, { default: true });
 	}

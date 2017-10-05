@@ -24,6 +24,10 @@ class SettingsCache {
 		 */
 		this.resolver = new SettingResolver(client);
 
+		/**
+		 * All the types accepted for the Gateway.
+		 * @type {string[]}
+		 */
 		this.types = Object.getOwnPropertyNames(SettingResolver.prototype).slice(1);
 	}
 

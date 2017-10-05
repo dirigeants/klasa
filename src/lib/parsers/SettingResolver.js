@@ -187,6 +187,15 @@ class SettingResolver extends Resolver {
 	}
 
 	/**
+	 * Resolves anything, even objects.
+	 * @param {any} data Raw content to pass.
+	 * @returns {Promise<any>}
+	 */
+	any(data) {
+		return Promise.resolve(data);
+	}
+
+	/**
 	 * Check if the input is valid with min and/or max values.
 	 * @static
 	 * @param {external:Guild} guild The guild to resolve for

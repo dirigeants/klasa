@@ -93,7 +93,7 @@ module.exports = class extends Provider {
 	 * @returns {Promise<Void>}
 	 */
 	create(table, document, data) {
-		return fs.outputJSONAtomic(resolve(this.baseDir, table, `${document}.json`), Object.assign(data, { id: document }));
+		return fs.outputJSONAtomic(resolve(this.baseDir, table, `${document}.json`), Object.assign({ id: document }, data));
 	}
 
 	set(...args) {
