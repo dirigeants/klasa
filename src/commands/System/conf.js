@@ -1,5 +1,4 @@
 const { Command } = require('klasa');
-const { inspect } = require('util');
 
 module.exports = class extends Command {
 

@@ -26,8 +26,13 @@ class Gateway {
 		const hasTable = await this.provider.hasTable(this.type);
 		if (!hasTable) await this.provider.createTable(this.type);
 
+		const hasCacheTable = await this.cache.hasTable(this.type);
+		if (!hasCacheTable) await this.cache.createTable(this.type);
+
 		const data = await this.provider.getAll(this.type);
-		if (data.length > 0) for (const key of data) this.cache.set(key.id, key);
+		if (data.length > 0) {
+			for (let i = 0; i < data.length; i++) this.cache.set(this.type, data[i].id, data[i]);
+		}
 	}
 
 	async initSchema() {
@@ -40,17 +45,17 @@ class Gateway {
 
 	getEntry(input) {
 		if (input === 'default') return this.defaults;
-		return this.cache.get(input) || this.defaults;
+		return this.cache.get(this.type, input) || this.defaults;
 	}
 
 	async fetchEntry(input) {
-		return this.cache.get(input) || this.defaults;
+		return this.cache.get(this.type, input) || this.defaults;
 	}
 
 	async createEntry(input, data = this.defaults) {
 		const target = await this.validate(target).then(output => output && output.id ? output.id : output);
 		await this.provider.create(this.type, target, data);
-		await this.cache.set(target, data);
+		await this.cache.set(this.type, target, data);
 		return true;
 	}
 
@@ -61,17 +66,19 @@ class Gateway {
 	}
 
 	async sync(input = null) {
-		if (!input) {
+		if (input === null) {
 			const data = await this.provider.getAll(this.type);
-			if (data.length > 0) for (const key of data) this.cache.set(key.id, key);
-			return;
+			if (data.length > 0) for (let i = 0; i < data.length; i++) this.cache.set(this.type, data[i].id, data[i]);
+			return true;
 		}
 		const target = await this.validate(target).then(output => output && output.id ? output.id : output);
 		const data = await this.provider.get(this.type, target);
-		await this.cache.set(target, data);
+		await this.cache.set(this.type, target, data);
+		return true;
 	}
 
 	async reset(target, key, guild = null) {
+		if (typeof key !== 'string') throw 'The argument \'key\' for Gateway#reset only accepts strings.';
 		guild = this._resolveGuild(guild || target);
 		target = await this.validate(target).then(output => output && output.id ? output.id : output);
 		const { path, route } = this.getPath(key);
@@ -94,6 +101,7 @@ class Gateway {
 	}
 
 	async updateOne(target, key, value, guild = null) {
+		if (typeof key !== 'string') throw 'The argument \'key\' for Gateway#updateOne only accepts strings.';
 		guild = this._resolveGuild(guild || target);
 		target = await this.validate(target).then(output => output && output.id ? output.id : output);
 		const { parsed, settings, path } = await this._updateOne(target, key, value, guild);
@@ -103,7 +111,7 @@ class Gateway {
 
 	async _updateOne(target, key, value, guild) {
 		const { path, route } = this.getPath(key);
-		if (path.array === true) throw `Use Gateway#updateArray instead for this key.`;
+		if (path.array === true) throw 'Use Gateway#updateArray instead for this key.';
 
 		const parsed = await path.parse(value, guild);
 		const parsedID = parsed.data && parsed.data.id ? parsed.data.id : parsed.data;
@@ -119,12 +127,13 @@ class Gateway {
 			if (i === route.length) cache[route[i]] = parsedID;
 			else cache = cache[route[i]];
 		}
-		await this.cache.set(target, fullObject);
+		await this.cache.set(this.type, target, fullObject);
 
 		return { route, path, result: cache, parsedID, parsed, settings: fullObject };
 	}
 
 	async updateArray(target, action, key, value, guild = null) {
+		if (typeof key !== 'string') throw 'The argument \'key\' for Gateway#updateArray only accepts strings.';
 		guild = this._resolveGuild(guild || target);
 		if (action !== 'add' || action !== 'remove') throw 'The argument \'action\' for Gateway#updateArray only accepts the strings \'add\' and \'remove\'.';
 		target = await this.validate(target).then(output => output && output.id ? output.id : output);
@@ -159,7 +168,7 @@ class Gateway {
 			cache.splice(index, 1);
 		}
 
-		await this.cache.set(target, fullObject);
+		await this.cache.set(this.type, target, fullObject);
 
 		return { route, path, result: cache, parsedID, parsed, settings: fullObject };
 	}
@@ -187,7 +196,7 @@ class Gateway {
 	}
 
 	get cache() {
-		return this.options.cache.getTable(this.type);
+		return this.options.cache;
 	}
 
 	get provider() {

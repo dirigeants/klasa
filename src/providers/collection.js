@@ -52,12 +52,21 @@ module.exports = class extends Provider {
 	/* Entry methods */
 
 	/**
-	 * Get all documents from a table.
+	 * Get all the values from a table.
 	 * @param {string} table The name of the table to fetch from.
 	 * @returns {Object[]}
 	 */
 	getAll(table) {
 		return Array.from(this.getTable(table).values());
+	}
+
+	/**
+	 * Get all the keys from a table.
+	 * @param {string} table The name of the table to fetch the keys from.
+	 * @returns {string[]}
+	 */
+	getKeys(table) {
+		return Array.from(this.getTable(table).keys());
 	}
 
 	/**

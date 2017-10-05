@@ -6,6 +6,7 @@ class SchemaPiece {
 		Object.defineProperty(this, 'path', { value: path, enumerable: false });
 		Object.defineProperty(this, 'key', { value: key, enumerable: false });
 
+		this.configurable = typeof options.configurable !== 'undefined' ? options.configurable : true;
 		this.type = options.type.toLowerCase();
 		this.array = typeof options.array !== 'undefined' ? options.array : false;
 		this.default = typeof options.default !== 'undefined' ? options.default : this.type === 'boolean' ? false : null;
