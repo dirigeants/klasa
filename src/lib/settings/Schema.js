@@ -4,16 +4,52 @@ const fs = require('fs-nextra');
 class Schema {
 
 	constructor(client, manager, object, path) {
+		/**
+		 * The Klasa client.
+		 * @type {KlasaClient}
+		 */
 		Object.defineProperty(this, 'client', { value: client, enumerable: false });
+
+		/**
+		 * The Gateway that manages this schema instance.
+		 * @type {(Gateway|GatewaySQL)}
+		 */
 		Object.defineProperty(this, 'manager', { value: manager, enumerable: false });
+
+		/**
+		 * The path of this schema instance.
+		 * @type {string}
+		 */
 		Object.defineProperty(this, 'path', { value: path, enumerable: false });
+
+		/**
+		 * The type of this schema instance.
+		 * @type {'Folder'}
+		 */
 		Object.defineProperty(this, 'type', { value: 'Folder', enumerable: false });
+
+		/**
+		 * The default values for this schema instance and children.
+		 * @type {Object}
+		 */
 		Object.defineProperty(this, 'defaults', { value: {}, enumerable: false, writable: true });
+
+		/**
+		 * A Set containing all keys' names which value is either a Schema or a SchemaPiece instance.
+		 * @type {Set<string>}
+		 */
 		Object.defineProperty(this, 'keys', { value: new Set(), enumerable: false, writable: true });
 
 		this._patch(object);
 	}
 
+	/**
+	 * Create a new nested folder.
+	 * @param {string} key The name's key for the folder.
+	 * @param {Object} [object={}] An object containing all the Schema/SchemaPieces literals for this folder.
+	 * @param {boolean} [force=true] Whether this function call should modify all entries from the database.
+	 * @returns {Schema}
+	 */
 	async addFolder(key, object = {}, force = true) {
 		if (typeof this[key] !== 'undefined') throw `The key ${key} already exists in the current schema.`;
 		this.keys.add(key);
@@ -25,8 +61,15 @@ class Schema {
 		return this.manager.schema;
 	}
 
+	/**
+	 * Remove a nested folder.
+	 * @param {string} key The folder's name to remove.
+	 * @param {boolean} [force=true] Whether this function call should modify all entries from the database.
+	 * @returns {Schema}
+	 */
 	async removeFolder(key, force = true) {
-		if (this.keys.has(key) === false) throw `The key ${key} does not exist in the current schema.`;
+		if (this.keys.has(key) === false) throw new Error(`The key ${key} does not exist in the current schema.`);
+		if (this[key].type !== 'Folder') throw new Error(`The key ${key} is not Folder type.`);
 		this._removeKey(key);
 		await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
 

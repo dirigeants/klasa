@@ -6,12 +6,12 @@ class SchemaPiece {
 		Object.defineProperty(this, 'path', { value: path, enumerable: false });
 		Object.defineProperty(this, 'key', { value: key, enumerable: false });
 
-		this.configurable = typeof options.configurable !== 'undefined' ? options.configurable : true;
 		this.type = options.type.toLowerCase();
 		this.array = typeof options.array !== 'undefined' ? options.array : false;
 		this.default = typeof options.default !== 'undefined' ? options.default : this.type === 'boolean' ? false : null;
 		this.min = typeof options.min !== 'undefined' && isNaN(options.min) === false ? options.min : null;
 		this.max = typeof options.max !== 'undefined' && isNaN(options.max) === false ? options.max : null;
+		this.configurable = typeof options.configurable !== 'undefined' ? options.configurable : this.type !== 'any';
 
 		this.init();
 	}

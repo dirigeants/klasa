@@ -4,6 +4,20 @@ const fs = require('fs-nextra');
 
 class Gateway {
 
+	/**
+	 * @typedef  {Object} GatewayOptions
+	 * @property {Provider} provider
+	 * @property {CacheProvider} cache
+	 * @memberof Gateway
+	 */
+
+	/**
+	 * @param {SettingsCache} store The SettingsCache instance which initiated this instance.
+	 * @param {string} type The name of this Gateway.
+	 * @param {Function} validateFunction The function that validates the entries' values.
+	 * @param {Object} schema The initial schema for this instance.
+	 * @param {GatewayOptions} options The options for this schema.
+	 */
 	constructor(store, type, validateFunction, schema, options) {
 		/**
 		 * @type {SettingsCache}
@@ -145,13 +159,14 @@ class Gateway {
 	 * @param {string} target The entry target.
 	 * @param {string} key The key to reset.
 	 * @param {(Guild|string)} guild A guild resolvable.
+	 * @param {boolean} [avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key.
 	 * @returns {{ value: any, path: SchemaPiece }}
 	 */
-	async reset(target, key, guild = null) {
+	async reset(target, key, guild = null, avoidUnconfigurable = false) {
 		if (typeof key !== 'string') throw new TypeError('The argument \'key\' for Gateway#reset only accepts strings.');
 		guild = this._resolveGuild(guild || target);
 		target = await this.validate(target).then(output => output && output.id ? output.id : output);
-		const { path, route } = this.getPath(key);
+		const { path, route } = this.getPath(key, avoidUnconfigurable);
 		const parsed = await path.parse(path.default, guild);
 		const { result } = await this._reset(target, route, parsed);
 		await this.provider.update(this.type, target, result);
@@ -176,20 +191,21 @@ class Gateway {
 	 * @param {string} key The key to modify.
 	 * @param {string} value The value to parse and save.
 	 * @param {(Guild|string)} guild A guild resolvable.
+	 * @param {boolean} [avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key.
 	 * @returns {{ value: any, path: SchemaPiece }}
 	 */
-	async updateOne(target, key, value, guild = null) {
+	async updateOne(target, key, value, guild = null, avoidUnconfigurable = false) {
 		if (typeof key !== 'string') throw new TypeError('The argument \'key\' for Gateway#updateOne only accepts strings.');
 		guild = this._resolveGuild(guild || target);
 		target = await this.validate(target).then(output => output && output.id ? output.id : output);
-		const { parsed, settings, path } = await this._updateOne(target, key, value, guild);
+		const { parsed, settings, path } = await this._updateOne(target, key, value, guild, avoidUnconfigurable);
 		await this.provider.update(this.type, target, settings);
 		return { value: parsed.data, path };
 	}
 
-	async _updateOne(target, key, value, guild) {
-		const { path, route } = this.getPath(key);
-		if (path.array === true) throw 'Use Gateway#updateArray instead for this key.';
+	async _updateOne(target, key, value, guild, avoidUnconfigurable) {
+		const { path, route } = this.getPath(key, avoidUnconfigurable);
+		if (path.array === true) return this.updateArray(target, 'add', key, value, guild, avoidUnconfigurable);
 
 		const parsed = await path.parse(value, guild);
 		const parsedID = parsed.data && parsed.data.id ? parsed.data.id : parsed.data;
@@ -217,21 +233,22 @@ class Gateway {
 	 * @param {string} key The key to modify.
 	 * @param {string} value The value to parse and save or remove.
 	 * @param {(Guild|string)} guild A guild resolvable.
+	 * @param {boolean} [avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key.
 	 * @returns {{ value: any, path: SchemaPiece }}
 	 */
-	async updateArray(target, action, key, value, guild = null) {
+	async updateArray(target, action, key, value, guild = null, avoidUnconfigurable = false) {
 		if (typeof key !== 'string') throw new TypeError('The argument \'key\' for Gateway#updateArray only accepts strings.');
 		guild = this._resolveGuild(guild || target);
 		if (action !== 'add' || action !== 'remove') throw new TypeError('The argument \'action\' for Gateway#updateArray only accepts the strings \'add\' and \'remove\'.');
 		target = await this.validate(target).then(output => output && output.id ? output.id : output);
-		const { parsed, settings, path } = await this._updateArray(target, action, key, value, guild);
+		const { parsed, settings, path } = await this._updateArray(target, action, key, value, guild, avoidUnconfigurable);
 		await this.provider.update(this.type, target, settings);
 		return { value: parsed.data, path };
 	}
 
-	async _updateArray(target, action, key, value, guild) {
-		const { path, route } = this.getPath(key);
-		if (path.array === false) throw new TypeError(`Use Gateway#updateOne instead for this key.`);
+	async _updateArray(target, action, key, value, guild, avoidUnconfigurable) {
+		const { path, route } = this.getPath(key, avoidUnconfigurable);
+		if (path.array === false) throw guild.language.get('COMMAND_CONF_KEY_NOT_ARRAY');
 
 		const parsed = await path.parse(value, guild);
 		const parsedID = parsed.data && parsed.data.id ? parsed.data.id : parsed.data;
@@ -263,9 +280,10 @@ class Gateway {
 	/**
 	 * Resolve a path from a string.
 	 * @param {string} [key=null] A string to resolve.
+	 * @param {boolean} [avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key.
 	 * @returns {{ path: SchemaPiece, route: string[] }}
 	 */
-	getPath(key = null) {
+	getPath(key = null, avoidUnconfigurable = false) {
 		if (key === null) return { path, route: [] };
 		if (typeof key !== 'string') throw new TypeError('The value for the argument \'key\' must be a string.');
 		const route = key.split('.');
@@ -277,6 +295,7 @@ class Gateway {
 		}
 
 		if (path.type === 'Folder') throw `Please, choose one of the following keys: '${Object.keys(path).join('\', \'')}'`;
+		if (avoidUnconfigurable === true && path.configurable === false) throw `The key ${path.path} is not configureable in the current schema.`;
 		return { path, route };
 	}
 

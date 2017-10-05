@@ -22,22 +22,18 @@ module.exports = class extends Command {
 	}
 
 	async set(msg, configs, key, valueToSet) {
-		if (this.client.settings.guilds.schema[key].array) {
-			const { path, value } = await this.client.settings.guilds.updateArray(msg.guild, 'add', key, valueToSet.join(' '));
-			return msg.sendMessage(msg.language.get('COMMAND_CONF_ADDED', path.toString(value), path.path));
-		}
-		const { path, value } = await this.client.settings.guilds.updateOne(msg.guild, key, valueToSet.join(' '), msg.guild);
-		return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', path.path, path.toString(value)));
+		const { path, value } = await this.client.settings.guilds.updateOne(msg.guild, key, valueToSet.join(' '), msg.guild, true);
+		if (path.array) return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', path.path, path.toString(value)));
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_ADDED', path.toString(value), path.path));
 	}
 
 	async remove(msg, configs, key, valueToRemove) {
-		if (!this.client.settings.guilds.schema[key].array) return msg.sendMessage(msg.language.get('COMMAND_CONF_KEY_NOT_ARRAY'));
-		const { path, value } = await this.client.settings.guilds.updateArray(msg.guild, 'remove', key, valueToRemove.join(' '));
+		const { path, value } = await this.client.settings.guilds.updateArray(msg.guild, 'remove', key, valueToRemove.join(' '), msg.guild, true);
 		return msg.sendMessage(msg.language.get('COMMAND_CONF_REMOVE', path.toString(value), path.path));
 	}
 
 	async get(msg, configs, key) {
-		const { path } = this.client.settings.guilds.getPath(key);
+		const { path } = this.client.settings.guilds.getPath(key, true);
 		const settingPath = key.split('.');
 		let value = configs;
 		for (let i = 0; i < settingPath.length; i++) value = value[settingPath[i]];
@@ -45,7 +41,7 @@ module.exports = class extends Command {
 	}
 
 	async reset(msg, configs, key) {
-		const { path, value } = await this.client.settings.guilds.reset(msg.guild, key);
+		const { path, value } = await this.client.settings.guilds.reset(msg.guild, key, msg.guild, true);
 		return msg.sendMessage(msg.language.get('COMMAND_CONF_RESET', path.path, path.toString(value)));
 	}
 
