@@ -14,12 +14,12 @@ echo -e "Building for a master branch push - building and deploying."
 REPO=$(git config remote.origin.url)
 SHA=$(git rev-parse --verify HEAD)
 
-TARGET_BRANCH="master"
+TARGET_BRANCH="gh-pages"
 git clone $REPO dist -b $TARGET_BRANCH
 
 npm run docs
 
-rsync -vau docs/ dist/docs/
+rsync -vau docs/ dist/
 
 cd dist
 git add --all .

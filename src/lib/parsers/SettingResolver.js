@@ -174,7 +174,7 @@ class SettingResolver extends Resolver {
 	}
 
 	/**
-	 * Resolves a command
+	 * Resolves a language
 	 * @param {any} data The data to resolve
 	 * @param {external:Guild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved

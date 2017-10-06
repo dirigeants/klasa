@@ -233,7 +233,7 @@ module.exports = class extends Genre {
 This is great and all, but we need to register these pieces/store:
 ```javascript
 const { Client } = require('klasa');
-const { GenreStore } = require('./GenreStore');
+const GenreStore = require('./GenreStore');
 
 class MySwankyMusicBot extends Client {
 
@@ -257,7 +257,7 @@ Then we use it in our player class I completely made up earlier like so:
 ```javascript
 ...
 	// without going over setting up guild settings, or actually writing a player class
-	const nextSong = this.client.genres.get(this.guild.settings.genre).getNext(this);
-	// nextSong should now be a psudo random song based on the genre seeds and what has recently played
+	const nextSong = await this.client.genres.get(this.guild.settings.genre).getNext(this);
+	// nextSong should now be a pseudo random song based on the genre seeds and what has recently played
 ...
 ```
