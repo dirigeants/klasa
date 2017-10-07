@@ -7,8 +7,9 @@ module.exports = class extends Command {
 	}
 
 	async run(msg) {
-		const message = await msg.sendMessage(msg.language.get('COMMAND_PING'));
-		return msg.sendMessage(msg.language.get('COMMAND_PINGPONG', message.createdTimestamp - msg.createdTimestamp, Math.round(this.client.ping)));
+		const language = msg.fetchLanguage();
+		const message = await msg.sendMessage(language.get('COMMAND_PING'));
+		return msg.sendMessage(language.get('COMMAND_PINGPONG', message.createdTimestamp - msg.createdTimestamp, Math.round(this.client.ping)));
 	}
 
 };

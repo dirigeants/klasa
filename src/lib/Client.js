@@ -302,7 +302,7 @@ class KlasaClient extends Discord.Client {
 			const piece = store.get(arg);
 			if (piece) return piece;
 			if (currentUsage.type === 'optional' && !repeat) return null;
-			throw msg.language.get('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, pieceName);
+			throw msg.fetchLanguageCode('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, pieceName);
 		};
 		return this;
 	}

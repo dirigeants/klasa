@@ -14,8 +14,8 @@ module.exports = class extends Command {
 
 	async run(msg, [action, key, ...value]) {
 		const configs = await msg.guild.fetchSettings();
-		if (action !== 'list' && !key) throw msg.language.get('COMMAND_CONF_NOKEY');
-		if (['set', 'remove'].includes(action) && value.length === 0) throw msg.language.get('COMMAND_CONF_NOVALUE');
+		if (action !== 'list' && !key) throw msg.fetchLanguageCode('COMMAND_CONF_NOKEY');
+		if (['set', 'remove'].includes(action) && value.length === 0) throw msg.fetchLanguageCode('COMMAND_CONF_NOVALUE');
 		await this[action](msg, configs, key, value);
 
 		return null;
@@ -23,13 +23,13 @@ module.exports = class extends Command {
 
 	async set(msg, configs, key, valueToSet) {
 		const { path, value } = await this.client.settings.guilds.updateOne(msg.guild, key, valueToSet.join(' '), msg.guild, true);
-		if (path.array) return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', path.path, path.toString(value)));
-		return msg.sendMessage(msg.language.get('COMMAND_CONF_ADDED', path.toString(value), path.path));
+		if (path.array) return msg.sendMessage(await msg.fetchLanguageCode('COMMAND_CONF_UPDATED', path.path, path.toString(value)));
+		return msg.sendMessage(await msg.fetchLanguageCode('COMMAND_CONF_ADDED', path.toString(value), path.path));
 	}
 
 	async remove(msg, configs, key, valueToRemove) {
 		const { path, value } = await this.client.settings.guilds.updateArray(msg.guild, 'remove', key, valueToRemove.join(' '), msg.guild, true);
-		return msg.sendMessage(msg.language.get('COMMAND_CONF_REMOVE', path.toString(value), path.path));
+		return msg.sendMessage(await msg.fetchLanguageCode('COMMAND_CONF_REMOVE', path.toString(value), path.path));
 	}
 
 	async get(msg, configs, key) {
@@ -37,12 +37,12 @@ module.exports = class extends Command {
 		const settingPath = key.split('.');
 		let value = configs;
 		for (let i = 0; i < settingPath.length; i++) value = value[settingPath[i]];
-		return msg.sendMessage(msg.language.get('COMMAND_CONF_GET', path.path, path.toString(value)));
+		return msg.sendMessage(await msg.fetchLanguageCode('COMMAND_CONF_GET', path.path, path.toString(value)));
 	}
 
 	async reset(msg, configs, key) {
 		const { path, value } = await this.client.settings.guilds.reset(msg.guild, key, msg.guild, true);
-		return msg.sendMessage(msg.language.get('COMMAND_CONF_RESET', path.path, path.toString(value)));
+		return msg.sendMessage(await msg.fetchLanguageCode('COMMAND_CONF_RESET', path.path, path.toString(value)));
 	}
 
 	async list(msg, configs) {

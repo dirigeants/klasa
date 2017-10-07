@@ -57,11 +57,10 @@ class ParsedUsage {
 
 	/**
 	 * Creates a full usage string including prefix and commands/aliases for documentation/help purposes
-	 * @param {external:Message} msg a message to check to get the current prefix
+	 * @param {string} prefix The prefix.
 	 * @returns {string}
 	 */
-	fullUsage(msg) {
-		const { prefix } = msg.guildSettings;
+	fullUsage(prefix) {
 		return `${prefix.length !== 1 ? `${prefix} ` : prefix}${this.nearlyFullUsage}`;
 	}
 

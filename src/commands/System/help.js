@@ -6,17 +6,21 @@ module.exports = class extends Command {
 		super(...args, {
 			aliases: ['commands'],
 			description: 'Display help for a command.',
-			usage: '[Command:cmd]'
+			usage: '[Command:string]'
 		});
 	}
 
 	async run(msg, [cmd]) {
 		const method = this.client.user.bot ? 'author' : 'channel';
 		if (cmd) {
+			cmd = this.client.commands.get(cmd);
+			if (!cmd) return msg.sendMessage(await msg.fetchLanguageCode('COMMAND_HELP_COMMAND_NOT_FOUND'));
+			await this.client.inhibitors.run(msg, cmd, true);
+			const settings = await msg.fetchGuildSettings();
 			const info = [
 				`= ${cmd.name} = `,
 				cmd.description,
-				`usage :: ${cmd.usage.fullUsage(msg)}`,
+				`usage :: ${cmd.usage.fullUsage(settings.prefix || this.client.config.prefix)}`,
 				'Extended Help ::',
 				cmd.extendedHelp
 			].join('\n');
@@ -33,8 +37,8 @@ module.exports = class extends Command {
 		}
 
 		return msg[method].send(helpMessage, { split: { char: '\u200b' } })
-			.then(() => { if (msg.channel.type !== 'dm' && this.client.user.bot) msg.sendMessage(msg.language.get('COMMAND_HELP_DM')); })
-			.catch(() => { if (msg.channel.type !== 'dm' && this.client.user.bot) msg.sendMessage(msg.language.get('COMMAND_HELP_NODM')); });
+			.then(async () => { if (msg.channel.type !== 'dm' && this.client.user.bot) msg.sendMessage(await msg.fetchLanguageCode('COMMAND_HELP_DM')); })
+			.catch(async () => { if (msg.channel.type !== 'dm' && this.client.user.bot) msg.sendMessage(await msg.fetchLanguageCode('COMMAND_HELP_NODM')); });
 	}
 
 	async buildHelp(msg) {

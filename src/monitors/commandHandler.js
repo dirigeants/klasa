@@ -8,7 +8,7 @@ module.exports = class extends Monitor {
 		if (!this.client.user.bot && msg.author.id !== this.client.user.id) return;
 		if (this.client.user.bot && msg.guild && !msg.guild.me) await msg.guild.members.fetch(this.client.user);
 		if (msg.guild && !msg.channel.permissionsFor(msg.guild.me).has('SEND_MESSAGES')) return;
-		const { command, prefix, prefixLength } = this.parseCommand(msg);
+		const { command, prefix, prefixLength } = await this.parseCommand(msg);
 		if (!command) return;
 		const validCommand = this.client.commands.get(command);
 		if (!validCommand) return;
@@ -22,8 +22,8 @@ module.exports = class extends Monitor {
 			});
 	}
 
-	parseCommand(msg) {
-		const prefix = this.getPrefix(msg);
+	async parseCommand(msg) {
+		const prefix = await this.getPrefix(msg);
 		if (!prefix) return { command: false };
 		const prefixLength = prefix.exec(msg.content)[0].length;
 		return {
@@ -33,9 +33,10 @@ module.exports = class extends Monitor {
 		};
 	}
 
-	getPrefix(msg) {
+	async getPrefix(msg) {
 		if (this.client.config.prefixMention.test(msg.content)) return this.client.config.prefixMention;
-		const prefix = msg.guildSettings.prefix || this.client.config.prefix;
+		const settings = await msg.fetchGuildSettings();
+		const prefix = settings.prefix || this.client.config.prefix;
 		if (prefix instanceof Array) {
 			for (let i = prefix.length - 1; i >= 0; i--) {
 				if (msg.content.startsWith(prefix[i])) return new RegExp(`^${regExpEsc(prefix[i])}`);
@@ -76,11 +77,11 @@ module.exports = class extends Monitor {
 	}
 
 	async awaitMessage(msg, start, error) {
-		const message = await msg.channel.send(msg.language.get('MONITOR_COMMAND_HANDLER_REPROMPT', `<@!${msg.author.id}>`, error))
+		const message = await msg.channel.send(await msg.fetchLanguageCode('MONITOR_COMMAND_HANDLER_REPROMPT', `<@!${msg.author.id}>`, error))
 			.catch((err) => { throw newError(err); });
 
 		const param = await msg.channel.awaitMessages(response => response.author.id === msg.author.id && response.id !== message.id, { max: 1, time: 30000, errors: ['time'] });
-		if (param.first().content.toLowerCase() === 'abort') throw msg.language.get('MONITOR_COMMAND_HANDLER_ABORTED');
+		if (param.first().content.toLowerCase() === 'abort') throw msg.fetchLanguageCode('MONITOR_COMMAND_HANDLER_ABORTED');
 		msg.args[msg.args.lastIndexOf(null)] = param.first().content;
 		msg.reprompted = true;
 

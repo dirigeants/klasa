@@ -10,7 +10,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg) {
-		return msg.sendMessage(msg.language.get('COMMAND_INFO'));
+		return msg.sendMessage(await msg.fetchLanguageCode('COMMAND_INFO'));
 	}
 
 };

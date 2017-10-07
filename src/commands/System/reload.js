@@ -17,10 +17,10 @@ module.exports = class extends Command {
 			const start = now();
 			await this.client[piece].loadAll();
 			await this.client[piece].init();
-			return msg.sendMessage(`${msg.language.get('COMMAND_RELOAD_ALL', piece)} (Took: ${(now() - start).toFixed(2)}ms.)`);
+			return msg.sendMessage(`${await msg.fetchLanguageCode('COMMAND_RELOAD_ALL', piece)} (Took: ${(now() - start).toFixed(2)}ms.)`);
 		}
 		return piece.reload()
-			.then(itm => msg.sendMessage(msg.language.get('COMMAND_RELOAD', itm.type, itm.name)))
+			.then(async itm => msg.sendMessage(await msg.fetchLanguageCode('COMMAND_RELOAD', itm.type, itm.name)))
 			.catch(err => {
 				this.client[`${piece.type}s`].set(piece);
 				msg.sendMessage(`❌ ${err}`);

@@ -14,13 +14,12 @@ module.exports = class extends Command {
 
 	async run(msg, [code]) {
 		try {
-			let evaled = eval(code);
-			if (evaled instanceof Promise) evaled = await evaled;
+			let evaled = await eval(code);
 			if (typeof evaled !== 'string') evaled = inspect(evaled, { depth: 0 });
-			msg.sendCode('js', this.client.methods.util.clean(evaled));
+			return msg.sendMessage(this.client.methods.util.clean(evaled), { code: 'js' });
 		} catch (err) {
-			msg.send(` \`ERROR\`\n${this.client.methods.util.codeBlock('js', this.client.methods.util.clean(err))}`);
 			if (err.stack) this.client.emit('error', err.stack);
+			return msg.sendMessage(` \`ERROR\`\n${this.client.methods.util.codeBlock('js', this.client.methods.util.clean(err))}`);
 		}
 	}
 

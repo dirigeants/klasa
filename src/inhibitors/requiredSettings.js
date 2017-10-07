@@ -6,7 +6,7 @@ module.exports = class extends Inhibitor {
 		if (cmd.requiredSettings.length === 0) return;
 		const settings = await msg.fetchGuildSettings();
 		const requiredSettings = cmd.requiredSettings.filter(setting => !settings[setting]);
-		if (requiredSettings.length > 0) throw msg.language.get('INHIBITOR_REQUIRED_SETTINGS', requiredSettings);
+		if (requiredSettings.length > 0) throw msg.fetchLanguageCode('INHIBITOR_REQUIRED_SETTINGS', requiredSettings);
 		return;
 	}
 
