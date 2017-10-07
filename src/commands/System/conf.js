@@ -63,29 +63,4 @@ module.exports = class extends Command {
 		return value;
 	}
 
-	// Pending to implement tomorrow.
-	resolveString(msg, output, path, value) {
-		if (path.configurable === false) return;
-		let resolver = (val) => val;
-		switch (path.type) {
-			case 'Folder': resolver = () => '[ Folder';
-				break;
-			case 'user': resolver = (val) => (this.client.users.get(val) || { username: val }).username;
-				break;
-			case 'textchannel':
-			case 'voicechannel':
-			case 'channel': resolver = (val) => `#${(msg.guild.channels.get(val) || { name: val }).name}`;
-				break;
-			case 'role': resolver = (val) => `@${(msg.guild.roles.get(val) || { name: val }).name}`;
-				break;
-			case 'guild':
-			case 'command':
-			case 'language': resolver = (val) => val.name;
-				break;
-			// no default
-		}
-
-		output.push(path.array ? value.length > 0 ? `[ ${value.map(resolver).join(' | ')} ]` : 'None' : value === null ? 'Not set' : resolver(value));
-	}
-
 };

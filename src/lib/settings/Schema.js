@@ -205,6 +205,51 @@ class Schema {
 		return Array.from(this.keys).map(key => this[key].getKeys(array));
 	}
 
+	/**
+	 * Get a list.
+	 * @param {external:Message} msg The Message instance.
+	 * @param {Object} object The settings to parse.
+	 * @returns {string}
+	 */
+	getList(msg, object) {
+		const array = [];
+		const keys = Array.from(this.keys).filter(key => this[key].type === 'Folder' || this[key].configurable).sort();
+		const longest = keys.sort((a, b) => a.length < b.length)[0].length;
+		for (let i = 0; i < keys.length; i++) {
+			array.push(`${keys[i].padEnd(longest)} :: ${Schema.resolveString(msg, this[keys[i]], object[keys[i]])}`);
+		}
+
+		return array.join('\n');
+	}
+
+	/**
+	 * Resolve a string.
+	 * @param {external:Message} msg The Message to use.
+	 * @param {SchemaPiece} path The SchemaPiece instance.
+	 * @param {any} value The current value of the key.
+	 * @returns {string}
+	 */
+	static resolveString(msg, path, value) {
+		let resolver = (val) => val;
+		switch (path.type) {
+			case 'Folder': resolver = () => '[ Folder';
+				break;
+			case 'user': resolver = (val) => (this.client.users.get(val) || { username: val }).username;
+				break;
+			case 'textchannel':
+			case 'voicechannel':
+			case 'channel': resolver = (val) => `#${(msg.guild.channels.get(val) || { name: val }).name}`;
+				break;
+			case 'role': resolver = (val) => `@${(msg.guild.roles.get(val) || { name: val }).name}`;
+				break;
+			case 'guild': resolver = (val) => val.name;
+				break;
+			// no default
+		}
+
+		return path.array ? value.length > 0 ? `[ ${value.map(resolver).join(' | ')} ]` : 'None' : value === null ? 'Not set' : resolver(value);
+	}
+
 	_patch(object) {
 		for (const key of Object.keys(object)) {
 			if (typeof object[key] !== 'object') continue;

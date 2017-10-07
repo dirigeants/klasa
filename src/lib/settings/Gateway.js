@@ -158,31 +158,36 @@ class Gateway {
 	 * Reset a value from an entry.
 	 * @param {string} target The entry target.
 	 * @param {string} key The key to reset.
-	 * @param {(Guild|string)} guild A guild resolvable.
+	 * @param {(Guild|string)} [guild=null] A guild resolvable.
 	 * @param {boolean} [avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key.
 	 * @returns {Promise<{ value: any, path: SchemaPiece }>}
 	 */
 	async reset(target, key, guild = null, avoidUnconfigurable = false) {
-		if (typeof key !== 'string') throw new TypeError('The argument \'key\' for Gateway#reset only accepts strings.');
-		guild = this._resolveGuild(guild || target);
-		target = await this.validate(target).then(output => output && output.id ? output.id : output);
-		const { path, route } = this.getPath(key, avoidUnconfigurable);
-		const parsed = await path.parse(path.default, guild);
-		const { result } = await this._reset(target, route, parsed);
-		await this.provider.update(this.type, target, result);
+		const path = await this._prepareData(target, guild, key, avoidUnconfigurable);
+		const { parsed, settings } = await this._reset(target, key, guild, path);
+
+		await this.provider.update(this.type, target, settings);
 		return { value: parsed.data, path };
 	}
 
-	async _reset(target, route, parsed) {
+	async _reset(target, key, guild, { path, route }) {
+		const parsedID = path.default;
+
 		let cache = await this.fetchEntry(target);
-		const parsedID = parsed && parsed.id ? parsed.id : parsed;
-		for (let i = 0; i < route.length; i++) {
+		if (cache.default === true) {
+			cache = JSON.parse(JSON.stringify(cache));
+			delete cache.default;
+		}
+		const fullObject = cache;
+
+		for (let i = 0; i < route.length - 1; i++) {
 			if (typeof cache[route[i]] === 'undefined') cache[route[i]] = {};
-			if (i === route.length - 1) cache[route[i]] = parsedID;
 			else cache = cache[route[i]];
 		}
+		cache[route[route.length - 1]] = parsedID;
+		await this.cache.set(this.type, target, fullObject);
 
-		return { result: cache, parsedID };
+		return { parsed: parsedID, settings: fullObject };
 	}
 
 	/**
@@ -190,22 +195,22 @@ class Gateway {
 	 * @param {string} target The entry target.
 	 * @param {string} key The key to modify.
 	 * @param {string} value The value to parse and save.
-	 * @param {(Guild|string)} guild A guild resolvable.
+	 * @param {(Guild|string)} [guild=null] A guild resolvable.
 	 * @param {boolean} [avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key.
 	 * @returns {Promise<{ value: any, path: SchemaPiece }>}
 	 */
 	async updateOne(target, key, value, guild = null, avoidUnconfigurable = false) {
-		if (typeof key !== 'string') throw new TypeError('The argument \'key\' for Gateway#updateOne only accepts strings.');
-		guild = this._resolveGuild(guild || target);
-		target = await this.validate(target).then(output => output && output.id ? output.id : output);
-		const { parsed, settings, path } = await this._updateOne(target, key, value, guild, avoidUnconfigurable);
+		const path = await this._prepareData(target, guild, key, avoidUnconfigurable);
+		const { parsed, settings } = path.path.array === true ?
+			await this._updateArray(target, 'add', key, value, guild, path) :
+			await this._updateOne(target, key, value, guild, path);
+
 		await this.provider.update(this.type, target, settings);
 		return { value: parsed.data, path };
 	}
 
-	async _updateOne(target, key, value, guild, avoidUnconfigurable) {
-		const { path, route } = this.getPath(key, avoidUnconfigurable);
-		if (path.array === true) return this._updateArray(target, 'add', key, value, guild, avoidUnconfigurable);
+	async _updateOne(target, key, value, guild, { path, route }) {
+		if (path.array === true) throw 'This key is array type.';
 
 		const parsed = await path.parse(value, guild);
 		const parsedID = parsed.data && parsed.data.id ? parsed.data.id : parsed.data;
@@ -223,7 +228,7 @@ class Gateway {
 		cache[route[route.length - 1]] = parsedID;
 		await this.cache.set(this.type, target, fullObject);
 
-		return { route, path, result: cache, parsedID, parsed, settings: fullObject };
+		return { parsed, settings: fullObject };
 	}
 
 	/**
@@ -232,22 +237,22 @@ class Gateway {
 	 * @param {('add'|'remove')} action Whether the value should be added or removed to the array.
 	 * @param {string} key The key to modify.
 	 * @param {string} value The value to parse and save or remove.
-	 * @param {(Guild|string)} guild A guild resolvable.
+	 * @param {(Guild|string)} [guild=null] A guild resolvable.
 	 * @param {boolean} [avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key.
 	 * @returns {Promise<{ value: any, path: SchemaPiece }>}
 	 */
 	async updateArray(target, action, key, value, guild = null, avoidUnconfigurable = false) {
-		if (typeof key !== 'string') throw new TypeError('The argument \'key\' for Gateway#updateArray only accepts strings.');
-		guild = this._resolveGuild(guild || target);
 		if (action !== 'add' && action !== 'remove') throw new TypeError('The argument \'action\' for Gateway#updateArray only accepts the strings \'add\' and \'remove\'.');
-		target = await this.validate(target).then(output => output && output.id ? output.id : output);
-		const { parsed, settings, path } = await this._updateArray(target, action, key, value, guild, avoidUnconfigurable);
+		const path = await this._prepareData(target, guild, key, avoidUnconfigurable);
+		const { parsed, settings } = path.path.array === true ?
+			await this._updateArray(target, action, key, value, guild, path) :
+			await this._updateOne(target, key, value, guild, path);
+
 		await this.provider.update(this.type, target, settings);
 		return { value: parsed.data, path };
 	}
 
-	async _updateArray(target, action, key, value, guild, avoidUnconfigurable) {
-		const { path, route } = this.getPath(key, avoidUnconfigurable);
+	async _updateArray(target, action, key, value, guild, { path, route }) {
 		if (path.array === false) throw guild.language.get('COMMAND_CONF_KEY_NOT_ARRAY');
 
 		const parsed = await path.parse(value, guild);
@@ -259,7 +264,7 @@ class Gateway {
 		}
 		const fullObject = cache;
 
-		for (let i = 0; i < route.length - 1; i++) {
+		for (let i = 0; i < route.length; i++) {
 			if (typeof cache[route[i]] === 'undefined') cache[route[i]] = {};
 			cache = cache[route[i]];
 		}
@@ -274,7 +279,16 @@ class Gateway {
 
 		await this.cache.set(this.type, target, fullObject);
 
-		return { route, path, result: cache, parsedID, parsed, settings: fullObject };
+		return { parsed, settings: fullObject };
+	}
+
+	async _prepareData(target, guild, key, avoidUnconfigurable) {
+		if (typeof key !== 'string') throw new TypeError(`The argument key must be a string. Received: ${typeof key}`);
+		guild = this._resolveGuild(guild || target);
+		target = await this.validate(target).then(output => output && output.id ? output.id : output);
+		const path = this.getPath(key, avoidUnconfigurable);
+
+		return path;
 	}
 
 	/**

@@ -447,15 +447,19 @@ declare module 'klasa' {
 		public deleteEntry(input: string): Promise<true>;
 
 		public sync(input?: Object|string): Promise<void>;
+
 		public reset(target: string, key: string, guild: ExtendedGuild|string, avoidUnconfigurable?: boolean): Promise<GatewayResult>;
-		private _reset(target: string, route: string[], parsed: any): Promise<GatewayInternalResult>;
+		private _reset(target: string, key: string, guild: ExtendedGuild, path: { path: SchemaPiece, route: string[] }): Promise<GatewayInternalResult>;
+
 		public updateOne(target: string, key: string, value: string, guild?: ExtendedGuild|string, avoidUnconfigurable?: boolean): Promise<GatewayResult>;
-		private _updateOne(target: string, key: string, value: string, guild: ExtendedGuild, avoidUnconfigurable: boolean): Promise<GatewayInternalResult>;
+		private _updateOne(target: string, key: string, value: string, guild: ExtendedGuild, path: { path: SchemaPiece, route: string[] }): Promise<GatewayInternalResult>;
+
 		public updateArray(target: string, action: 'add'|'remove', key: string, value: string, guild?: ExtendedGuild|string, avoidUnconfigurable?: boolean): Promise<GatewayResult>;
-		private _updateArray(target: string, action: 'add'|'remove', key: string, value: string, guild: ExtendedGuild, avoidUnconfigurable: boolean): Promise<GatewayInternalResult>;
+		private _updateArray(target: string, action: 'add'|'remove', key: string, value: string, guild: ExtendedGuild, path: { path: SchemaPiece, route: string[] }): Promise<GatewayInternalResult>;
 
 		public getPath(key?: string, avoidUnconfigurable?: boolean): GatewayPathResult;
 		private _resolveGuild(guild: ExtendedGuild|ExtendedTextChannel|ExtendedVoiceChannel|ExtendedMessage|Role|string): ExtendedGuild;
+		private _prepareData(target: string, guild: ExtendedGuild|ExtendedTextChannel|ExtendedVoiceChannel|ExtendedMessage|Role|string, key: string, avoidUnconfigurable: boolean): Promise<{ path: SchemaPiece, route: string[] }>;
 
 		public readonly cache: Provider;
 		public readonly provider: Provider;
@@ -492,6 +496,8 @@ declare module 'klasa' {
 		public toJSON(): Object;
 		public getSQL(array?: string[]): string[];
 		public getKeys(array?: string[]): string[];
+		public getList(object: Object): string;
+		public static resolveString(msg: ExtendedMessage, path: SchemaPiece, value: any): string;
 
 		private _patch(object: Object): void;
 		public toString(): string;
@@ -990,10 +996,6 @@ declare module 'klasa' {
 	};
 
 	export type GatewayInternalResult = {
-		route: string[];
-		path: SchemaPiece;
-		result: string;
-		parsedID: string;
 		parsed: any;
 		settings: Object;
 	};
