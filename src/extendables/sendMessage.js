@@ -7,7 +7,7 @@ module.exports = class extends Extendable {
 	}
 
 	extend(content = '', options = {}) {
-		options.embed = options.embed || null;
+		options.embed |= null;
 		if (!this.channel) return this.send(content, options);
 		const commandMessage = this.client.commandMessages.get(this.id);
 		if (commandMessage && (!options || !('files' in options))) return commandMessage.response.edit(content, options);
