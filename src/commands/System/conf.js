@@ -12,9 +12,9 @@ module.exports = class extends Command {
 		});
 	}
 
-	async run(msg, [action, key, ...value]) {
+	async run(msg, [action, key = '', ...value]) {
 		const configs = await msg.guild.fetchSettings();
-		if (action !== 'list' && !key) throw await msg.fetchLanguageCode('COMMAND_CONF_NOKEY');
+		if (['set', 'reset', 'remove'].includes(action) && key === '') throw await msg.fetchLanguageCode('COMMAND_CONF_NOKEY');
 		if (['set', 'remove'].includes(action) && value.length === 0) throw await msg.fetchLanguageCode('COMMAND_CONF_NOVALUE');
 		await this[action](msg, configs, key, value);
 
@@ -33,7 +33,7 @@ module.exports = class extends Command {
 	}
 
 	async get(msg, configs, key) {
-		const { path } = this.client.settings.guilds.getPath(key, true);
+		const { path } = this.client.settings.guilds.getPath(key, { avoidUnconfigurable: true });
 		const settingPath = key.split('.');
 		let value = configs;
 		for (let i = 0; i < settingPath.length; i++) value = value[settingPath[i]];
@@ -45,15 +45,14 @@ module.exports = class extends Command {
 		return msg.sendMessage(await msg.fetchLanguageCode('COMMAND_CONF_RESET', path.path, path.toString(value)));
 	}
 
-	async list(msg, configs) {
-		const longest = Object.keys(configs).sort((a, b) => a.length < b.length)[0].length;
-		const output = ['= Guild Settings ='];
-		const entries = Object.entries(configs);
-		for (let i = 0; i < entries.length; i++) {
-			if (entries[i][0] === 'id') continue;
-			output.push(`${entries[i][0].padEnd(longest)} :: ${this.handle(entries[i][1])}`);
+	async list(msg, configs, key) {
+		const { path, route } = this.client.settings.guilds.getPath(key, { avoidUnconfigurable: true });
+		let object = await msg.fetchGuildSettings();
+		if (route.length > 1) {
+			for (let i = 0; i < route.length - 1; i++) object = object[route[i]];
 		}
-		return msg.sendCode('asciidoc', output);
+		const message = path.getList(msg, object);
+		return msg.send(`= Server Settings =\n${message}`);
 	}
 
 	handle(value) {

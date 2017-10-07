@@ -457,7 +457,7 @@ declare module 'klasa' {
 		public updateArray(target: string, action: 'add'|'remove', key: string, value: string, guild?: ExtendedGuild|string, avoidUnconfigurable?: boolean): Promise<GatewayResult>;
 		private _updateArray(target: string, action: 'add'|'remove', key: string, value: string, guild: ExtendedGuild, path: { path: SchemaPiece, route: string[] }): Promise<GatewayInternalResult>;
 
-		public getPath(key?: string, avoidUnconfigurable?: boolean): GatewayPathResult;
+		public getPath(key?: string, options?: { avoidUnconfigurable?: boolean, piece?: boolean }): GatewayPathResult;
 		private _resolveGuild(guild: ExtendedGuild|ExtendedTextChannel|ExtendedVoiceChannel|ExtendedMessage|Role|string): ExtendedGuild;
 		private _prepareData(target: string, guild: ExtendedGuild|ExtendedTextChannel|ExtendedVoiceChannel|ExtendedMessage|Role|string, key: string, avoidUnconfigurable: boolean): Promise<{ path: SchemaPiece, route: string[] }>;
 

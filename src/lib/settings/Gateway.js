@@ -286,7 +286,7 @@ class Gateway {
 		if (typeof key !== 'string') throw new TypeError(`The argument key must be a string. Received: ${typeof key}`);
 		guild = this._resolveGuild(guild || target);
 		target = await this.validate(target).then(output => output && output.id ? output.id : output);
-		const path = this.getPath(key, avoidUnconfigurable);
+		const path = this.getPath(key, { avoidUnconfigurable, piece: true });
 
 		return path;
 	}
@@ -294,10 +294,10 @@ class Gateway {
 	/**
 	 * Resolve a path from a string.
 	 * @param {string} [key=null] A string to resolve.
-	 * @param {boolean} [avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key.
+	 * @param {Object} [options={}] Whether the Gateway should avoid configuring the selected key.
 	 * @returns {{ path: SchemaPiece, route: string[] }}
 	 */
-	getPath(key = '', avoidUnconfigurable = false) {
+	getPath(key = '', { avoidUnconfigurable = false, piece = true } = {}) {
 		if (key === '') return { path: this.schema, route: [] };
 		if (typeof key !== 'string') throw new TypeError('The value for the argument \'key\' must be a string.');
 		const route = key.split('.');
@@ -308,8 +308,16 @@ class Gateway {
 			path = path[route[i]];
 		}
 
-		if (path.type === 'Folder') throw `Please, choose one of the following keys: '${Object.keys(path).join('\', \'')}'`;
-		if (avoidUnconfigurable === true && path.configurable === false) throw `The key ${path.path} is not configureable in the current schema.`;
+		if (piece === true) {
+			if (path.type === 'Folder') throw `Please, choose one of the following keys: '${Object.keys(path).join('\', \'')}'`;
+			if (avoidUnconfigurable === true && path.configurable === false) throw `The key ${path.path} is not configureable in the current schema.`;
+		} else
+		if (path.type !== 'Folder') {
+			const temp = path.split('.');
+			temp.pop();
+			path = temp.join('.');
+		}
+
 		return { path, route };
 	}
 
