@@ -316,6 +316,7 @@ class Gateway {
 			const temp = path.split('.');
 			temp.pop();
 			path = temp.join('.');
+			route.pop();
 		}
 
 		return { path, route };
