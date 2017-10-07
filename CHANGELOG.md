@@ -52,5 +52,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] Removed `SQLProvider#serialize`, `SQLProvider#sanitize`, `SQLProvider#CONSTANTS`.
 
 ### Fixed
+- [[#43](https://github.com/dirigeants/klasa/pull/43)] The eval command being unable to catch certain errors.
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] Fixed the JSON provider throwing errors.
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] Fixed multiple minor issues.

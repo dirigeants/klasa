@@ -17,9 +17,9 @@ module.exports = class extends Command {
 			let evaled = await eval(code);
 			if (typeof evaled !== 'string') evaled = inspect(evaled, { depth: 0 });
 			return msg.sendMessage(this.client.methods.util.clean(evaled), { code: 'js' });
-		} catch (err) {
-			if (err.stack) this.client.emit('error', err.stack);
-			return msg.sendMessage(` \`ERROR\`\n${this.client.methods.util.codeBlock('js', this.client.methods.util.clean(err))}`);
+		} catch (error) {
+			if (error && error.stack) this.client.emit('error', error.stack);
+			return msg.sendMessage(` \`ERROR\`\n${this.client.methods.util.codeBlock('js', this.client.methods.util.clean(error))}`);
 		}
 	}
 
