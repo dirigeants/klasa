@@ -297,8 +297,8 @@ class Gateway {
 	 * @param {boolean} [avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key.
 	 * @returns {{ path: SchemaPiece, route: string[] }}
 	 */
-	getPath(key = null, avoidUnconfigurable = false) {
-		if (key === null) return { path, route: [] };
+	getPath(key = '', avoidUnconfigurable = false) {
+		if (key === '') return { path: this.schema, route: [] };
 		if (typeof key !== 'string') throw new TypeError('The value for the argument \'key\' must be a string.');
 		const route = key.split('.');
 		let path = this.schema;
