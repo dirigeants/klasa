@@ -405,12 +405,12 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
 
 
 /**
- * Emitted when klasa is fully ready and initialized.
+ * Emitted when Klasa is fully ready and initialized.
  * @event KlasaClient#klasaReady
  */
 
 /**
- * A central logging event for klasa.
+ * A central logging event for Klasa.
  * @event KlasaClient#log
  * @param {(string|Object)} data The data to log
  * @param {string} [type='log'] The type of log: 'log', 'debug', 'warn', or 'error'.

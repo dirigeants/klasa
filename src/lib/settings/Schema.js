@@ -48,7 +48,7 @@ class Schema {
 	 * @param {string} key The name's key for the folder.
 	 * @param {Object} [object={}] An object containing all the Schema/SchemaPieces literals for this folder.
 	 * @param {boolean} [force=true] Whether this function call should modify all entries from the database.
-	 * @returns {Schema}
+	 * @returns {Promise<Schema>}
 	 */
 	async addFolder(key, object = {}, force = true) {
 		if (typeof this[key] !== 'undefined') throw `The key ${key} already exists in the current schema.`;
@@ -65,7 +65,7 @@ class Schema {
 	 * Remove a nested folder.
 	 * @param {string} key The folder's name to remove.
 	 * @param {boolean} [force=true] Whether this function call should modify all entries from the database.
-	 * @returns {Schema}
+	 * @returns {Promise<Schema>}
 	 */
 	async removeFolder(key, force = true) {
 		if (this.keys.has(key) === false) throw new Error(`The key ${key} does not exist in the current schema.`);
@@ -221,6 +221,9 @@ class Schema {
 		}
 	}
 
+	/**
+	 * @returns {string}
+	 */
 	toString() {
 		return '[ Folder';
 	}

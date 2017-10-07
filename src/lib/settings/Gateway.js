@@ -96,7 +96,7 @@ class Gateway {
 
 	/**
 	 * Get an entry from the cache.
-	 * @param {('default'|string)} input The key to get from the cache.
+	 * @param {string} input The key to get from the cache.
 	 * @returns {Object}
 	 */
 	getEntry(input) {
@@ -138,9 +138,9 @@ class Gateway {
 	}
 
 	/**
-	 * Sync either all entries from the configuration, or a single one.
+	 * Sync either all entries from the cache with the persistent database, or a single one.
 	 * @param {(Object|string)} [input=null] An object containing a id property, like discord.js objects, or a string.
-	 * @returns {void}
+	 * @returns {Promise<void>}
 	 */
 	async sync(input = null) {
 		if (input === null) {
@@ -160,7 +160,7 @@ class Gateway {
 	 * @param {string} key The key to reset.
 	 * @param {(Guild|string)} guild A guild resolvable.
 	 * @param {boolean} [avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key.
-	 * @returns {{ value: any, path: SchemaPiece }}
+	 * @returns {Promise<{ value: any, path: SchemaPiece }>}
 	 */
 	async reset(target, key, guild = null, avoidUnconfigurable = false) {
 		if (typeof key !== 'string') throw new TypeError('The argument \'key\' for Gateway#reset only accepts strings.');
@@ -192,7 +192,7 @@ class Gateway {
 	 * @param {string} value The value to parse and save.
 	 * @param {(Guild|string)} guild A guild resolvable.
 	 * @param {boolean} [avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key.
-	 * @returns {{ value: any, path: SchemaPiece }}
+	 * @returns {Promise<{ value: any, path: SchemaPiece }>}
 	 */
 	async updateOne(target, key, value, guild = null, avoidUnconfigurable = false) {
 		if (typeof key !== 'string') throw new TypeError('The argument \'key\' for Gateway#updateOne only accepts strings.');
@@ -234,7 +234,7 @@ class Gateway {
 	 * @param {string} value The value to parse and save or remove.
 	 * @param {(Guild|string)} guild A guild resolvable.
 	 * @param {boolean} [avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key.
-	 * @returns {{ value: any, path: SchemaPiece }}
+	 * @returns {Promise<{ value: any, path: SchemaPiece }>}
 	 */
 	async updateArray(target, action, key, value, guild = null, avoidUnconfigurable = false) {
 		if (typeof key !== 'string') throw new TypeError('The argument \'key\' for Gateway#updateArray only accepts strings.');

@@ -37,8 +37,8 @@ class GatewaySQL extends Gateway {
 
 	/**
 	 * Create/Remove columns from a SQL database, by the current Schema.
-	 * @param {string} key	    The key which is updated.
-	 * @returns {boolean}
+	 * @param {string} key The key which is updated.
+	 * @returns {Promise<boolean>}
 	 */
 	async updateColumns(key) {
 		if (!this.provider.updateColumns) {
@@ -53,8 +53,10 @@ class GatewaySQL extends Gateway {
 		return true;
 	}
 
-	get SQLSchema() {
-		return this.schema.getSQL(['id TEXT NOT NULL UNIQUE']);
+	get sqlSchema() {
+		const schema = ['id TEXT NOT NULL UNIQUE'];
+		this.schema.getSQL(schema);
+		return schema;
 	}
 
 }

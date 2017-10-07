@@ -65,7 +65,7 @@ declare module 'klasa' {
 			CommandMessage: typeof CommandMessage;
 			util: Util;
 		};
-		public settings: StringMappedType<SettingGateway<string>>;
+		public settings: StringMappedType<Gateway>;
 		public application: OAuth2Application;
 
 		public readonly invite: string;
@@ -174,7 +174,7 @@ declare module 'klasa' {
 		public currentPage: number;
 		public prompt: string;
 		public awaiting: boolean;
-		public selection: Promise<number?>;
+		public selection: Promise<number>;
 		public reactionsDone: boolean;
 
 		public first(): void;
@@ -223,6 +223,7 @@ declare module 'klasa' {
 		public options: MenuOption[];
 
 		public addOption(name: string, body: string, inline?: boolean): RichMenu;
+		public run(msg: ExtendedMessage, options?: RichDisplayRunOptions): Promise<ReactionHandler>;
 		public run(msg: ExtendedMessage, options?: RichMenuRunOptions): ReactionHandler;
 
 		private _determineEmojis(emojis: emoji[], stop: boolean, jump: boolean, firstLast: boolean): emoji[];
@@ -236,7 +237,10 @@ declare module 'klasa' {
 		public static toTitleCase(str: string): string;
 		public static newError(error: Error, code: number): Error;
 		public static regExpEsc(str: string): string;
-		public static applyToClass(base: object, structure: object, skips?: string[]): void;
+		public static parseDottedObject(rawObject: StringMappedType<string>);
+		public static applyToClass(base: Object, structure: Object, skips?: string[]): void;
+		public static exec(exec: string, options?: ExecOptions): Promise<{ stdout: string, stderr: string }>;
+		public static sleep(delay: number, args?: any): Promise<any>;
 	}
 
 	export class Resolver {
@@ -264,73 +268,73 @@ declare module 'klasa' {
 	}
 
 	export class ArgResolver extends Resolver {
-		public piece(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: CommandMessage): Promise<Piece>;
-		public store(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: CommandMessage): Promise<Store>;
+		public piece(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: CommandMessage): Promise<Piece>;
+		public store(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: CommandMessage): Promise<Store>;
 
-		public cmd(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: CommandMessage): Promise<Command>;
-		public command(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: CommandMessage): Promise<Command>;
-		public event(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: CommandMessage): Promise<Event>;
-		public extendable(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: CommandMessage): Promise<Extendable>;
-		public finalizer(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: CommandMessage): Promise<Finalizer>;
-		public inhibitor(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: CommandMessage): Promise<Inhibitor>;
-		public monitor(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: CommandMessage): Promise<Monitor>;
-		public language(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: CommandMessage): Promise<Language>;
-		public provider(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: CommandMessage): Promise<Provider>;
+		public cmd(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: CommandMessage): Promise<Command>;
+		public command(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: CommandMessage): Promise<Command>;
+		public event(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: CommandMessage): Promise<Event>;
+		public extendable(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: CommandMessage): Promise<Extendable>;
+		public finalizer(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: CommandMessage): Promise<Finalizer>;
+		public inhibitor(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: CommandMessage): Promise<Inhibitor>;
+		public monitor(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: CommandMessage): Promise<Monitor>;
+		public language(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: CommandMessage): Promise<Language>;
+		public provider(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: CommandMessage): Promise<Provider>;
 
 		public msg(input: string|CommandMessage, channel: Channel): Promise<CommandMessage>;
-		public msg(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: CommandMessage): Promise<CommandMessage>;
+		public msg(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: CommandMessage): Promise<CommandMessage>;
 		public message(input: string|CommandMessage, channel: Channel): Promise<CommandMessage>;
-		public message(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: CommandMessage): Promise<CommandMessage>;
+		public message(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: CommandMessage): Promise<CommandMessage>;
 
 		public user(input: ExtendedUser|GuildMember|CommandMessage|Snowflake): Promise<ExtendedUser>;
-		public user(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: CommandMessage): Promise<ExtendedUser>;
+		public user(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: CommandMessage): Promise<ExtendedUser>;
 		public mention(input: ExtendedUser|GuildMember|CommandMessage|Snowflake): Promise<ExtendedUser>;
-		public mention(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: CommandMessage): Promise<ExtendedUser>;
+		public mention(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: CommandMessage): Promise<ExtendedUser>;
 
 		public member(input: ExtendedUser|GuildMember|Snowflake, guild: ExtendedGuild): Promise<GuildMember>;
-		public member(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: CommandMessage): Promise<GuildMember>;
+		public member(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: CommandMessage): Promise<GuildMember>;
 
 		public channel(input: Channel|Snowflake): Promise<Channel>;
-		public channel(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: CommandMessage): Promise<Channel>;
+		public channel(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: CommandMessage): Promise<Channel>;
 
 		public guild(input: ExtendedGuild|Snowflake): Promise<ExtendedGuild>;
-		public guild(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: CommandMessage): Promise<ExtendedGuild>;
+		public guild(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: CommandMessage): Promise<ExtendedGuild>;
 
 		public role(input: Role|Snowflake, guild: ExtendedGuild): Promise<Role>;
-		public role(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: CommandMessage): Promise<Role>;
+		public role(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: CommandMessage): Promise<Role>;
 
-		public literal(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: CommandMessage): Promise<string>;
+		public literal(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: CommandMessage): Promise<string>;
 
 		public bool(input: boolean|string): Promise<boolean>;
-		public bool(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: CommandMessage): Promise<boolean>;
+		public bool(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: CommandMessage): Promise<boolean>;
 		public boolean(input: boolean|string): Promise<boolean>;
-		public boolean(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: CommandMessage): Promise<boolean>;
+		public boolean(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: CommandMessage): Promise<boolean>;
 
 		public str(input: string): Promise<string>;
-		public str(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: CommandMessage): Promise<string>;
+		public str(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: CommandMessage): Promise<string>;
 		public string(input: string): Promise<string>;
-		public string(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: CommandMessage): Promise<string>;
+		public string(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: CommandMessage): Promise<string>;
 
 		public int(input: string|number): Promise<number>;
-		public int(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: CommandMessage): Promise<number>;
+		public int(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: CommandMessage): Promise<number>;
 		public integer(input: string|number): Promise<number>;
-		public integer(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: CommandMessage): Promise<number>;
+		public integer(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: CommandMessage): Promise<number>;
 
 		public num(input: string|number): Promise<number>;
-		public num(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: CommandMessage): Promise<number>;
+		public num(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: CommandMessage): Promise<number>;
 		public number(input: string|number): Promise<number>;
-		public number(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: CommandMessage): Promise<number>;
+		public number(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: CommandMessage): Promise<number>;
 		public float(input: string|number): Promise<number>;
-		public float(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: CommandMessage): Promise<number>;
+		public float(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: CommandMessage): Promise<number>;
 
-		public reg(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: CommandMessage): Promise<string>;
-		public regex(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: CommandMessage): Promise<string>;
-		public regexp(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: CommandMessage): Promise<string>;
+		public reg(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: CommandMessage): Promise<string>;
+		public regex(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: CommandMessage): Promise<string>;
+		public regexp(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: CommandMessage): Promise<string>;
 
 		public url(input: string): Promise<string>;
-		public url(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: CommandMessage): Promise<string>;
+		public url(arg: string, currentUsage: Object, possible: number, repeat: boolean, msg: CommandMessage): Promise<string>;
 
-		public static minOrMax(value: number, min: number, max: number, currentUsage: object, possible: number, repeat: boolean, msg: CommandMessage, suffix: string): boolean;
+		public static minOrMax(value: number, min: number, max: number, currentUsage: Object, possible: number, repeat: boolean, msg: CommandMessage, suffix: string): Promise<boolean>;
 	}
 
 	export class SettingResolver extends Resolver {
@@ -367,6 +371,8 @@ declare module 'klasa' {
 		public url(input: string): Promise<string>;
 		public url(data: any, guild: ExtendedGuild, name: string): Promise<string>;
 
+		public any(data: any): Promise<any>;
+
 		public static maxOrMin(guild: ExtendedGuild, value: number, min: number, max: number, name: string, suffix: string): boolean;
 	}
 
@@ -395,9 +401,9 @@ declare module 'klasa' {
 
 		public fullUsage(msg: CommandMessage): string;
 		public static parseUsage(usageString: string): Tag[];
-		public static tagOpen(usage: object, char: string): object;
-		public static tagClose(usage: object, char: string): object;
-		public static tagSpace(usage: object, char: string): object;
+		public static tagOpen(usage: Object, char: string): Object;
+		public static tagClose(usage: Object, char: string): Object;
+		public static tagSpace(usage: Object, char: string): Object;
 	}
 
 	export class Possible {
@@ -421,88 +427,116 @@ declare module 'klasa' {
 	}
 
 	// Settings
-	export class CacheManager {
-		public constructor(client: KlasaClient);
-		public readonly cacheEngine: string;
-		public data: Collection<string, any>|Provider;
-
-		public get(key: string): object;
-		public getAll(): object[];
-		public set(key: string, value: object): any;
-		public delete(key: string): any;
-	}
-
-	export class SchemaManager extends CacheManager {
-		public constructor(client: KlasaClient);
-		public schema: object;
-		public defaults: object;
-
-		public initSchema(): Promise<void>;
-		public validateSchema(schema: object): void;
-		public add(key: string, options: AddOptions, force?: boolean): Promise<void>;
-		public remove(key: string, force?: boolean): Promise<void>;
-		private force(action: string, key: string): Promise<void>;
-	}
-
-	export class SettingGateway<T> extends SchemaManager {
-		public constructor(store: SettingCache, type: T, validateFunction: Function, schema: object);
-		public readonly store: SettingCache;
-		public type: T;
-		public engine: string;
-		public sql?: SQL;
+	export class Gateway {
+		public constructor(store: SettingCache, type: string, validateFunction: Function, schema: Object, options: GatewayOptions);
+		public store: SettingCache;
+		public type: string;
+		public options: GatewayOptions;
 		public validate: Function;
-		public defaultDataSchema: object;
+		public defaultSchema: Object;
+		public schema: Schema;
+		public sql: boolean;
 
-		public initSchema(): Promise<void>;
-		public create(input: object|string): Promise<void>;
-		public destroy(input: string): Promise<void>;
-		public get(input: string): object;
-		public getResolved(input: object|string, guild?: SettingGatewayGuildResolvable): Promise<object>;
-		public sync(input?: object|string): Promise<void>;
-		public reset(input: object|string, key: string): Promise<any>;
-		public update(input: object|string, object: object, guild?: SettingGatewayGuildResolvable): object;
-		public ensureCreate(target: object|string): true;
-		public updateArray(input: object|string, action: 'add'|'remove', key: string, data: any): Promise<boolean>;
-		private _resolveGuild(guild: ExtendedGuild|ExtendedTextChannel|ExtendedVoiceChannel|Snowflake): ExtendedGuild;
+		public init(): Promise<void[]>;
+		public initTable(): Promise<void>;
+		public initSchema(): Promise<Object>;
 
+		public getEntry(input: string): Object;
+		public fetchEntry(input: string): Promise<Object>;
+		public createEntry(input: string, data?: Object): Promise<true>;
+		public deleteEntry(input: string): Promise<true>;
+
+		public sync(input?: Object|string): Promise<void>;
+		public reset(target: string, key: string, guild: ExtendedGuild|string, avoidUnconfigurable?: boolean): Promise<GatewayResult>;
+		private _reset(target: string, route: string[], parsed: any): Promise<GatewayInternalResult>;
+		public updateOne(target: string, key: string, value: string, guild?: ExtendedGuild|string, avoidUnconfigurable?: boolean): Promise<GatewayResult>;
+		private _updateOne(target: string, key: string, value: string, guild: ExtendedGuild, avoidUnconfigurable: boolean): Promise<GatewayInternalResult>;
+		public updateArray(target: string, action: 'add'|'remove', key: string, value: string, guild?: ExtendedGuild|string, avoidUnconfigurable?: boolean): Promise<GatewayResult>;
+		private _updateArray(target: string, action: 'add'|'remove', key: string, value: string, guild: ExtendedGuild, avoidUnconfigurable: boolean): Promise<GatewayInternalResult>;
+
+		public getPath(key?: string, avoidUnconfigurable?: boolean): GatewayPathResult;
+		private _resolveGuild(guild: ExtendedGuild|ExtendedTextChannel|ExtendedVoiceChannel|ExtendedMessage|Role|string): ExtendedGuild;
+
+		public readonly cache: Provider;
+		public readonly provider: Provider;
+		public readonly defaults: Object;
 		public readonly client: KlasaClient;
 		public readonly resolver: Resolver;
-		public readonly provider: Provider;
+	}
+
+	export class GatewaySQL extends Gateway {
+		public sql: boolean;
+
+		public updateColumns(key: string): Promise<boolean>;
+		public readonly sqlSchema: string[];
+	}
+
+	export class Schema {
+		public constructor(client: KlasaClient, manager: Gateway|GatewaySQL, object: Object, path: string);
+		public readonly client: KlasaClient;
+		public readonly manager: Gateway|GatewaySQL;
+		public readonly path: string;
+		public readonly type: 'Folder';
+		public readonly defaults: Object;
+		public readonly keys: Set<string>;
+
+		public addFolder(key: string, object?: Object, force?: boolean): Promise<Schema>;
+		public removeFolder(key: string, force?: boolean): Promise<Schema>;
+		public has(key: string): boolean;
+		public addKey(key: string, options?: AddOptions, force?: boolean): Promise<Schema>;
+		private _addKey(key: string, options: Object): void;
+		public removeKey(key: string, force?: boolean): Promise<Schema>;
+		private _removeKey(key: string): void;
+
+		public force(action: 'add'|'delete', key: string): Promise<boolean[]>;
+		public toJSON(): Object;
+		public getSQL(array?: string[]): string[];
+		public getKeys(array?: string[]): string[];
+
+		private _patch(object: Object): void;
+		public toString(): string;
+	}
+
+	export class SchemaPiece {
+		public constructor(client: KlasaClient, manager: Gateway|GatewaySQL, options: AddOptions, path: string, key: string);
+		public readonly client: KlasaClient;
+		public readonly manager: Gateway|GatewaySQL;
+		public readonly path: string;
+		public readonly key: string;
+		public type: string;
+		public array: boolean;
+		public default: any;
+		public min?: number;
+		public max?: number;
+		public configurable: boolean;
+		public readonly sqlSchema?: string;
+
+		public sql(value?: string): string;
+		private _parseSQLValue(value: any): string;
+		public parse(value: string, guild: ExtendedGuild): Promise<ParsingResult>;
+		public getDefault(): ParsingResult;
+		public toJSON(): SchemaPieceJSON;
+		public init(): void;
+		public getSQL(array?: string[]): string;
+		public getKeys(array?: string[]): string;
+		public toString(value?: any): string;
 	}
 
 	export class SettingCache {
 		public constructor(client: KlasaClient);
-		public client: KlasaClient;
+		public readonly client: KlasaClient;
 		public resolver: SettingResolver;
-		public guilds: SettingGateway<'guilds'>;
+		public guilds: Gateway|GatewaySQL;
 
-		public add<T>(name: T, validateFunction: Function, schema?: object): Promise<SettingGateway<T>>;
-		public validate(resolver: SettingResolver, guild: object|string);
+		public add(name: string, validateFunction: Function, schema?: Object, options?: Object): Promise<Gateway|GatewaySQL>;
+		private _checkProvider(engine: string): Provider;
+		public validate(resolver: SettingResolver, guild: Object|string);
 
 		public readonly defaultDataSchema: {
 			prefix: SchemaPiece,
 			language: SchemaPiece,
 			disabledCommands: SchemaPiece
 		};
-	}
-
-	export class SQL {
-		public constructor(client: KlasaClient, gateway: SettingGateway<string>);
-		public readonly client: KlasaClient;
-		public readonly gateway: SettingGateway<string>;
-
-		public buildSingleSQLSchema(value: SchemaPiece): string;
-		public buildSQLSchema(schema: object): string[];
-
-		public initDeserialize(): void;
-		public deserializer(data: SchemaPiece): void;
-		public updateColumns(schema: object, defaults: object, key: string): Promise<boolean>;
-
-		public readonly constants: object;
-		public readonly sanitizer: Function;
-		public readonly schema: object;
-		public readonly defaults: object;
-		public readonly provider: Provider;
 	}
 
 	// Util
@@ -556,7 +590,7 @@ declare module 'klasa' {
 		public args: string[];
 		public params: any[];
 		public reprompted: false;
-		private _currentUsage: object;
+		private _currentUsage: Object;
 		private _repeat: boolean;
 
 		private validateArgs(): Promise<any[]>;
@@ -572,7 +606,7 @@ declare module 'klasa' {
 		public enable(): Piece;
 		public disable(): Piece;
 
-		public static applyToClass(structure: object, skips?: string[]): void;
+		public static applyToClass(structure: Object, skips?: string[]): void;
 	}
 
 	export abstract class Command implements Piece {
@@ -758,7 +792,7 @@ declare module 'klasa' {
 		public loadAll(): Promise<number>;
 		public resolve(name: Piece|string): Piece;
 
-		public static applyToClass(structure: object, skips?: string[]): void;
+		public static applyToClass(structure: Object, skips?: string[]): void;
 	}
 
 	export class CommandStore extends Collection<string, Command> implements Store {
@@ -938,6 +972,56 @@ declare module 'klasa' {
 		ownerID?: string;
 	} & ClientOptions;
 
+	export type ExecOptions = {
+		cwd?: string;
+		env?: StringMappedType<string>;
+		encoding?: string;
+		shell?: string;
+		timeout?: number;
+		maxBuffer?: number;
+		killSignal?: string|number;
+		uid?: number;
+		gid?: number;
+	};
+
+	export type GatewayOptions = {
+		provider: Provider;
+		cache: Provider;
+	};
+
+	export type GatewayInternalResult = {
+		route: string[];
+		path: SchemaPiece;
+		result: string;
+		parsedID: string;
+		parsed: any;
+		settings: Object;
+	};
+
+	export type GatewayResult = {
+		value: any,
+		path: SchemaPiece
+	};
+
+	export type GatewayPathResult = {
+		path: SchemaPiece;
+		route: string[];
+	};
+
+	export type ParsingResult = {
+		data: any;
+		sql?: string;
+	};
+
+	export type SchemaPieceJSON = {
+		type: string;
+		array: boolean;
+		default: any;
+		min?: number;
+		max?: number;
+		configurable: boolean;
+	};
+
 	export type KlasaConsoleConfig = {
 		stdout?: NodeJS.WritableStream;
 		stderr?: NodeJS.WritableStream;
@@ -1031,15 +1115,6 @@ declare module 'klasa' {
 		max?: number;
 		array?: boolean;
 		sql?: string;
-	};
-
-	export type SchemaPiece = {
-		type: string;
-		default: any;
-		min: number;
-		max: number;
-		array: boolean;
-		sql: string;
 	};
 
 	export type SettingGatewayGuildResolvable = ExtendedGuild|Channel|ExtendedMessage|Role|Snowflake;

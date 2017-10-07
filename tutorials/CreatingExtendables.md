@@ -43,7 +43,7 @@ constructor(...args) {
     super(...args, appliesTo, {
 		name: 'nameOfExtendable', // default the file name
 		enabled: true, // default true
-		klasa: false // default false	
+		klasa: false // default false
 	);
 }
 ```
@@ -52,6 +52,7 @@ constructor(...args) {
 - **options.name**: The name of the method/property.
 - **options.enabled**: If the extendable should be enabled on start, can be toggled with enable/disable commands.
 - **options.klasa**: If the extendable should target Klasa's classes instead of Discord.js's.
+- **options.deprecated**: If the extendable should be deprecated or not. It accepts an string with the reason of said deprecation.
 
 ## Understanding extend
 
