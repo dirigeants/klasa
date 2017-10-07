@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Dev] - 0.4.0
 ### Added
+- [[#43](https://github.com/dirigeants/klasa/pull/43)] Added deprecatable extendables.
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] `Message/Guild#fetchLanguage(string?);` and `Message/Guild#fetchLanguageCode(...string);` for usage when the CacheProvider that manages the cache for the Guild settings returns Promises.
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] `Message#fetchGuildSettings();` and `Guild#fetchSettings();`, similar to `Message#guildSettings;` and `Guild#settings;` respectively, but supporting asynchronous operations.
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] `Schema` and `SchemaPiece` classes, with helper methods that allow the gateway parse and retrieve data much faster, as well as following the OOP paradigm when it comes to modifying the schema and much friendlier to use.

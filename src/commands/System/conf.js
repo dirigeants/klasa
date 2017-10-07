@@ -14,8 +14,8 @@ module.exports = class extends Command {
 
 	async run(msg, [action, key, ...value]) {
 		const configs = await msg.guild.fetchSettings();
-		if (action !== 'list' && !key) throw msg.fetchLanguageCode('COMMAND_CONF_NOKEY');
-		if (['set', 'remove'].includes(action) && value.length === 0) throw msg.fetchLanguageCode('COMMAND_CONF_NOVALUE');
+		if (action !== 'list' && !key) throw await msg.fetchLanguageCode('COMMAND_CONF_NOKEY');
+		if (['set', 'remove'].includes(action) && value.length === 0) throw await msg.fetchLanguageCode('COMMAND_CONF_NOVALUE');
 		await this[action](msg, configs, key, value);
 
 		return null;

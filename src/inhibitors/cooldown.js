@@ -21,7 +21,7 @@ module.exports = class extends Inhibitor {
 			return;
 		}
 
-		throw msg.fetchLanguageCode('INHIBITOR_COOLDOWN', Math.ceil(remaining));
+		throw await msg.fetchLanguageCode('INHIBITOR_COOLDOWN', Math.ceil(remaining));
 	}
 
 };

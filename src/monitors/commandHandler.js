@@ -81,7 +81,7 @@ module.exports = class extends Monitor {
 			.catch((err) => { throw newError(err); });
 
 		const param = await msg.channel.awaitMessages(response => response.author.id === msg.author.id && response.id !== message.id, { max: 1, time: 30000, errors: ['time'] });
-		if (param.first().content.toLowerCase() === 'abort') throw msg.fetchLanguageCode('MONITOR_COMMAND_HANDLER_ABORTED');
+		if (param.first().content.toLowerCase() === 'abort') throw await msg.fetchLanguageCode('MONITOR_COMMAND_HANDLER_ABORTED');
 		msg.args[msg.args.lastIndexOf(null)] = param.first().content;
 		msg.reprompted = true;
 
