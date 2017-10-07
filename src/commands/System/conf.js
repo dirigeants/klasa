@@ -46,13 +46,13 @@ module.exports = class extends Command {
 	}
 
 	async list(msg, configs, key) {
-		const { path, route } = this.client.settings.guilds.getPath(key, { avoidUnconfigurable: true });
+		const { path, route } = this.client.settings.guilds.getPath(key, { avoidUnconfigurable: true, piece: false });
 		let object = await msg.fetchGuildSettings();
-		if (route.length > 1) {
-			for (let i = 0; i < route.length - 1; i++) object = object[route[i]];
+		if (route.length >= 1) {
+			for (let i = 0; i < route.length; i++) object = object[route[i]];
 		}
 		const message = path.getList(msg, object);
-		return msg.send(`= Server Settings =\n${message}`);
+		return msg.send(`= Server Settings =\n${message}`, { code: 'asciidoc' });
 	}
 
 	handle(value) {

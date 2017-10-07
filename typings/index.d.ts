@@ -459,7 +459,6 @@ declare module 'klasa' {
 
 		public getPath(key?: string, options?: { avoidUnconfigurable?: boolean, piece?: boolean }): GatewayPathResult;
 		private _resolveGuild(guild: ExtendedGuild|ExtendedTextChannel|ExtendedVoiceChannel|ExtendedMessage|Role|string): ExtendedGuild;
-		private _prepareData(target: string, guild: ExtendedGuild|ExtendedTextChannel|ExtendedVoiceChannel|ExtendedMessage|Role|string, key: string, avoidUnconfigurable: boolean): Promise<{ path: SchemaPiece, route: string[] }>;
 
 		public readonly cache: Provider;
 		public readonly provider: Provider;

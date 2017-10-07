@@ -163,16 +163,19 @@ class Gateway {
 	 * @returns {Promise<{ value: any, path: SchemaPiece }>}
 	 */
 	async reset(target, key, guild = null, avoidUnconfigurable = false) {
-		const path = await this._prepareData(target, guild, key, avoidUnconfigurable);
-		const { parsed, settings } = await this._reset(target, key, guild, path);
+		if (typeof key !== 'string') throw new TypeError(`The argument key must be a string. Received: ${typeof key}`);
+		guild = this._resolveGuild(guild || target);
+		target = await this.validate(target).then(output => output && output.id ? output.id : output);
+		const { path, route } = this.getPath(key, { avoidUnconfigurable, piece: true });
+
+		const { parsed, settings } = await this._reset(target, key, guild, { path, route });
 
 		await this.provider.update(this.type, target, settings);
-		return { value: parsed.data, path };
+		return { value: parsed, path };
 	}
 
 	async _reset(target, key, guild, { path, route }) {
 		const parsedID = path.default;
-
 		let cache = await this.fetchEntry(target);
 		if (cache.default === true) {
 			cache = JSON.parse(JSON.stringify(cache));
@@ -200,10 +203,14 @@ class Gateway {
 	 * @returns {Promise<{ value: any, path: SchemaPiece }>}
 	 */
 	async updateOne(target, key, value, guild = null, avoidUnconfigurable = false) {
-		const path = await this._prepareData(target, guild, key, avoidUnconfigurable);
-		const { parsed, settings } = path.path.array === true ?
-			await this._updateArray(target, 'add', key, value, guild, path) :
-			await this._updateOne(target, key, value, guild, path);
+		if (typeof key !== 'string') throw new TypeError(`The argument key must be a string. Received: ${typeof key}`);
+		guild = this._resolveGuild(guild || target);
+		target = await this.validate(target).then(output => output && output.id ? output.id : output);
+		const { path, route } = this.getPath(key, { avoidUnconfigurable, piece: true });
+
+		const { parsed, settings } = path.array === true ?
+			await this._updateArray(target, 'add', key, value, guild, { path, route }) :
+			await this._updateOne(target, key, value, guild, { path, route });
 
 		await this.provider.update(this.type, target, settings);
 		return { value: parsed.data, path };
@@ -243,10 +250,14 @@ class Gateway {
 	 */
 	async updateArray(target, action, key, value, guild = null, avoidUnconfigurable = false) {
 		if (action !== 'add' && action !== 'remove') throw new TypeError('The argument \'action\' for Gateway#updateArray only accepts the strings \'add\' and \'remove\'.');
-		const path = await this._prepareData(target, guild, key, avoidUnconfigurable);
-		const { parsed, settings } = path.path.array === true ?
-			await this._updateArray(target, action, key, value, guild, path) :
-			await this._updateOne(target, key, value, guild, path);
+		if (typeof key !== 'string') throw new TypeError(`The argument key must be a string. Received: ${typeof key}`);
+		guild = this._resolveGuild(guild || target);
+		target = await this.validate(target).then(output => output && output.id ? output.id : output);
+		const { path, route } = this.getPath(key, { avoidUnconfigurable, piece: true });
+
+		const { parsed, settings } = path.array === true ?
+			await this._updateArray(target, action, key, value, guild, { path, route }) :
+			await this._updateOne(target, key, value, guild, { path, route });
 
 		await this.provider.update(this.type, target, settings);
 		return { value: parsed.data, path };
@@ -282,15 +293,6 @@ class Gateway {
 		return { parsed, settings: fullObject };
 	}
 
-	async _prepareData(target, guild, key, avoidUnconfigurable) {
-		if (typeof key !== 'string') throw new TypeError(`The argument key must be a string. Received: ${typeof key}`);
-		guild = this._resolveGuild(guild || target);
-		target = await this.validate(target).then(output => output && output.id ? output.id : output);
-		const path = this.getPath(key, { avoidUnconfigurable, piece: true });
-
-		return path;
-	}
-
 	/**
 	 * Resolve a path from a string.
 	 * @param {string} [key=null] A string to resolve.
@@ -305,18 +307,18 @@ class Gateway {
 
 		for (let i = 0; i < route.length; i++) {
 			if (path.keys.has(route[i]) === false) throw `The key ${route.slice(0, i).join('.')} does not exist in the current schema.`;
-			path = path[route[i]];
-		}
-
-		if (piece === true) {
-			if (path.type === 'Folder') throw `Please, choose one of the following keys: '${Object.keys(path).join('\', \'')}'`;
-			if (avoidUnconfigurable === true && path.configurable === false) throw `The key ${path.path} is not configureable in the current schema.`;
-		} else
-		if (path.type !== 'Folder') {
-			const temp = path.split('.');
-			temp.pop();
-			path = temp.join('.');
-			route.pop();
+			if (i < route.length - 1) {
+				path = path[route[i]];
+				continue;
+			}
+			if (piece === true) {
+				if (path[route[i]].type === 'Folder') throw `Please, choose one of the following keys: '${Object.keys(path).join('\', \'')}'`;
+				if (avoidUnconfigurable === true && path[route[i]].configurable === false) throw `The key ${path.path} is not configureable in the current schema.`;
+				path = path[route[i]];
+			} else
+			if (path[route[i]].type === 'Folder') {
+				path = path[route[i]];
+			}
 		}
 
 		return { path, route };
