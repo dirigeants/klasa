@@ -169,9 +169,9 @@ class SchemaPiece {
 			case 'voicechannel':
 			case 'channel': return `#${value.name}`;
 			case 'role': return `@${value.name}`;
-			case 'guild':
+			case 'guild': return value.name;
 			case 'command':
-			case 'language': return value.name;
+			case 'language': return value;
 			default: return String(value);
 		}
 	}

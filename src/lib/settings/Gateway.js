@@ -205,7 +205,7 @@ class Gateway {
 
 	async _updateOne(target, key, value, guild, avoidUnconfigurable) {
 		const { path, route } = this.getPath(key, avoidUnconfigurable);
-		if (path.array === true) return this.updateArray(target, 'add', key, value, guild, avoidUnconfigurable);
+		if (path.array === true) return this._updateArray(target, 'add', key, value, guild, avoidUnconfigurable);
 
 		const parsed = await path.parse(value, guild);
 		const parsedID = parsed.data && parsed.data.id ? parsed.data.id : parsed.data;
@@ -218,9 +218,9 @@ class Gateway {
 
 		for (let i = 0; i < route.length - 1; i++) {
 			if (typeof cache[route[i]] === 'undefined') cache[route[i]] = {};
-			if (i === route.length) cache[route[i]] = parsedID;
 			else cache = cache[route[i]];
 		}
+		cache[route[route.length - 1]] = parsedID;
 		await this.cache.set(this.type, target, fullObject);
 
 		return { route, path, result: cache, parsedID, parsed, settings: fullObject };
@@ -239,7 +239,7 @@ class Gateway {
 	async updateArray(target, action, key, value, guild = null, avoidUnconfigurable = false) {
 		if (typeof key !== 'string') throw new TypeError('The argument \'key\' for Gateway#updateArray only accepts strings.');
 		guild = this._resolveGuild(guild || target);
-		if (action !== 'add' || action !== 'remove') throw new TypeError('The argument \'action\' for Gateway#updateArray only accepts the strings \'add\' and \'remove\'.');
+		if (action !== 'add' && action !== 'remove') throw new TypeError('The argument \'action\' for Gateway#updateArray only accepts the strings \'add\' and \'remove\'.');
 		target = await this.validate(target).then(output => output && output.id ? output.id : output);
 		const { parsed, settings, path } = await this._updateArray(target, action, key, value, guild, avoidUnconfigurable);
 		await this.provider.update(this.type, target, settings);
