@@ -77,10 +77,33 @@ class Schema {
 		return this.manager.schema;
 	}
 
+	/**
+	 * Check if the table exists in this folder.
+	 * @param {string} key The key to check.
+	 * @returns {boolean}
+	 */
 	has(key) {
 		return this.keys.has(key);
 	}
 
+	/**
+	 * @typedef  {Object} AddOptions
+	 * @property {string}  type The type for the key.
+	 * @property {any}     [default] The default value for the key.
+	 * @property {number}  [min] The min value for the key (String.length for String, value for number).
+	 * @property {number}  [max] The max value for the key (String.length for String, value for number).
+	 * @property {boolean} [array] Whether the key should be stored as Array or not.
+	 * @property {boolean} [configurable] Whether the key should be configurable by the config command or not.
+	 * @memberof Schema
+	 */
+
+	/**
+	 * Add a new key to this folder.
+	 * @param {string} key The name for the key.
+	 * @param {AddOptions} [options=null] The key's options to apply.
+	 * @param {boolean} [force=true] Whether this function call should modify all entries from the database.
+	 * @returns {Promise<Schema>}
+	 */
 	async addKey(key, options = null, force = true) {
 		if (typeof this[key] !== 'undefined') throw `The key ${key} already exists in the current schema.`;
 		if (options === null) throw 'You must pass an options argument to this method.';
@@ -90,6 +113,7 @@ class Schema {
 		if (typeof options.min !== 'undefined' && isNaN(options.min)) throw 'The option min must be a number.';
 		if (typeof options.max !== 'undefined' && isNaN(options.max)) throw 'The option max must be a number.';
 		if (typeof options.array !== 'undefined' && typeof options.array !== 'boolean') throw 'The option array must be a boolean.';
+		if (typeof options.configurable !== 'undefined' && typeof options.configurable !== 'boolean') throw 'The option configurable must be a boolean.';
 
 		if (options.array === true) {
 			if (typeof options.default === 'undefined') options.default = [];
@@ -111,6 +135,12 @@ class Schema {
 		this.defaults[key] = options.default;
 	}
 
+	/**
+	 * Remove a key from this folder.
+	 * @param {string} key The key's name to remove.
+	 * @param {boolean} [force=true] Whether this function call should modify all entries from the database.
+	 * @returns {Promise<Schema>}
+	 */
 	async removeKey(key, force = true) {
 		if (this.keys.has(key) === false) throw `The key ${key} does not exist in the current schema.`;
 		this._removeKey(key);
@@ -126,6 +156,12 @@ class Schema {
 		delete this.defaults[key];
 	}
 
+	/**
+	 * Modifies all entries from the database. Do NOT call without knowledge.
+	 * @param {('add'|'delete')} action The action to perform.
+	 * @param {string} key The key to handle.
+	 * @returns {Promise<boolean[]>}
+	 */
 	async force(action, key) {
 		if (this.manager.sql) await this.manager.updateColumns(key);
 		const data = await this.manager.provider.getAll(this.manager.type);
@@ -143,14 +179,28 @@ class Schema {
 		}));
 	}
 
+	/**
+	 * Get a JSON object containing all the objects from this schema's children.
+	 * @returns {Object}
+	 */
 	toJSON() {
 		return Object.assign({ type: 'Folder' }, ...Array.from(this.keys).map(key => ({ [key]: this[key].toJSON() })));
 	}
 
+	/**
+	 * Get all the SQL schemas from this schema's children
+	 * @param {string[]} [array=[]] The array to push.
+	 * @returns {string[]}
+	 */
 	getSQL(array = []) {
 		return Array.from(this.keys).map(key => this[key].getSQL(array));
 	}
 
+	/**
+	 * Get all the pathes from this schema's children.
+	 * @param {string[]} [array=[]] The array to push.
+	 * @returns {string[]}
+	 */
 	getKeys(array = []) {
 		return Array.from(this.keys).map(key => this[key].getKeys(array));
 	}

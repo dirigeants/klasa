@@ -350,8 +350,8 @@ class KlasaClient extends Discord.Client {
 	 */
 	async _ready() {
 		this.config.prefixMention = new RegExp(`^<@!?${this.user.id}>`);
-		if (this.config.ignoreBots === undefined) this.config.ignoreBots = true;
-		if (this.config.ignoreSelf === undefined) this.config.ignoreSelf = this.user.bot;
+		if (typeof this.config.ignoreBots === 'undefined') this.config.ignoreBots = true;
+		if (typeof this.config.ignoreSelf === 'undefined') this.config.ignoreSelf = this.user.bot;
 		if (this.user.bot) this.application = await super.fetchApplication();
 		if (!this.config.ownerID) this.config.ownerID = this.user.bot ? this.application.owner.id : this.user.id;
 		await this.providers.init();
@@ -361,7 +361,7 @@ class KlasaClient extends Discord.Client {
 		util.initClean(this);
 		this.setInterval(this.sweepCommandMessages.bind(this), this.commandMessageSweep * 1000);
 		this.ready = true;
-		if (this.config.readyMessage === undefined) this.emit('log', `Successfully initialized. Ready to serve ${this.guilds.size} guilds.`);
+		if (typeof this.config.readyMessage === 'undefined') this.emit('log', `Successfully initialized. Ready to serve ${this.guilds.size} guilds.`);
 		else if (this.config.readyMessage !== null) this.emit('log', typeof this.config.readyMessage === 'function' ? this.config.readyMessage(this) : this.config.readyMessage);
 		this.emit('klasaReady');
 	}

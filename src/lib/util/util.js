@@ -87,6 +87,46 @@ class Util {
 	}
 
 	/**
+	 * Given a dotted object, parse it, generating a new object with all the keys parsed.
+	 * @param {Object} rawObject The dotted object to parse.
+	 * @returns {Object}
+	 * @example
+	 * // Input
+	 * genObject({
+	 *     "prefix": "s!",
+	 *     "roles.administrator": null,
+	 *     "roles.moderator": null,
+	 *     "channels.modlog": "340713281972862976",
+	 *     "channels.default": "339944237305036812"
+	 * });
+	 * // Output
+	 * {
+	 *     "prefix": "s!",
+	 *     "roles": {
+	 *         "administrator": null,
+	 *         "moderator": null
+	 *     },
+	 *     "channels": {
+	 *         "modlog": "340713281972862976",
+	 *         "default": "339944237305036812"
+	 *     }
+	 * }
+	 */
+	static parseDottedObject(rawObject) {
+		const object = {};
+		for (const key of Object.keys(rawObject)) {
+			const path = key.split('.');
+			let tempPath = object;
+			for (let i = 0; i < path.length - 1; i++) {
+				if (typeof tempPath[path[i]] === 'undefined') tempPath[path[i]] = {};
+				tempPath = tempPath[path[i]];
+			}
+			tempPath[path[path.length - 1]] = rawObject[key];
+		}
+		return object;
+	}
+
+	/**
 	 * Applies an interface to a class
 	 * @param {Object} base The interface to apply to a structure
 	 * @param {Object} structure The structure to apply the interface to
@@ -107,7 +147,7 @@ class Util {
  * @property {Object} [env={}] Environment key-value pairs
  * @property {string} [encoding='utf8'] encoding to use
  * @property {string} [shell=os === unix ? '/bin/sh' : process.env.ComSpec] Shell to execute the command with
- * @property {number} [timeout=0] 
+ * @property {number} [timeout=0]
  * @property {number} [maxBuffer=200*1024] Largest amount of data in bytes allowed on stdout or stderr. If exceeded, the child process is terminated.
  * @property {string|number} [killSignal='SIGTERM'] <string> | <integer> (Default: 'SIGTERM')
  * @property {number} [uid] Sets the user identity of the process.

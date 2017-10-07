@@ -42,13 +42,14 @@ module.exports = class extends Command {
 
 		const commandNames = Array.from(this.client.commands.keys());
 		const longest = commandNames.reduce((long, str) => Math.max(long, str.length), 0);
+		const { prefix } = await msg.fetchGuildSettings();
 
 		await Promise.all(this.client.commands.map((command) =>
 			this.client.inhibitors.run(msg, command, true)
 				.then(() => {
 					if (!help.hasOwnProperty(command.category)) help[command.category] = {};
 					if (!help[command.category].hasOwnProperty(command.subCategory)) help[command.category][command.subCategory] = [];
-					help[command.category][command.subCategory].push(`${msg.guildSettings.prefix}${command.name.padEnd(longest)} :: ${command.description}`);
+					help[command.category][command.subCategory].push(`${prefix}${command.name.padEnd(longest)} :: ${command.description}`);
 					return;
 				})
 				.catch(() => {
