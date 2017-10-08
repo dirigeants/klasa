@@ -148,7 +148,7 @@ class Gateway {
 			if (data.length > 0) for (let i = 0; i < data.length; i++) this.cache.set(this.type, data[i].id, data[i]);
 			return true;
 		}
-		const target = await this.validate(target).then(output => output && output.id ? output.id : output);
+		const target = await this.validate(input).then(output => output && output.id ? output.id : output);
 		const data = await this.provider.get(this.type, target);
 		await this.cache.set(this.type, target, data);
 		return true;

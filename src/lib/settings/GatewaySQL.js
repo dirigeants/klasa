@@ -108,7 +108,7 @@ class GatewaySQL extends Gateway {
 			return false;
 		}
 		const newSchema = this.sqlSchema;
-		const oldSchema = action === 'delete' ? newSchema.filter(tuple => tuple[0] !== key) : newSchema;
+		const oldSchema = action === 'delete' || action === 'add' ? newSchema.filter(tuple => tuple[0] !== key) : newSchema;
 		await this.provider.updateColumns(this.type, oldSchema, newSchema);
 		return true;
 	}
