@@ -571,6 +571,7 @@ declare module 'klasa' {
 		public unload(): void;
 		public enable(): Piece;
 		public disable(): Piece;
+		public toString(): string;
 
 		public static applyToClass(structure: object, skips?: string[]): void;
 	}
@@ -606,6 +607,7 @@ declare module 'klasa' {
 		public abstract disable(): Piece;
 		public abstract reload(): Promise<any>;
 		public abstract unload(): any;
+		public abstract toString(): string;
 	}
 
 	export abstract class Event implements Piece  {
@@ -627,6 +629,7 @@ declare module 'klasa' {
 		public abstract disable(): Piece;
 		public abstract reload(): Promise<any>;
 		public abstract unload(): any;
+		public abstract toString(): string;
 	}
 
 	export abstract class Extendable implements Piece {
@@ -649,6 +652,7 @@ declare module 'klasa' {
 		public abstract disable(): Piece;
 		public abstract reload(): Promise<any>;
 		public abstract unload(): any;
+		public abstract toString(): string;
 	}
 
 	export abstract class Finalizer implements Piece {
@@ -668,6 +672,7 @@ declare module 'klasa' {
 		public abstract disable(): Piece;
 		public abstract reload(): Promise<any>;
 		public abstract unload(): any;
+		public abstract toString(): string;
 	}
 
 	export abstract class Inhibitor implements Piece {
@@ -687,6 +692,7 @@ declare module 'klasa' {
 		public abstract disable(): Piece;
 		public abstract reload(): Promise<any>;
 		public abstract unload(): any;
+		public abstract toString(): string;
 	}
 
 	export abstract class Language implements Piece {
@@ -706,6 +712,7 @@ declare module 'klasa' {
 		public abstract disable(): Piece;
 		public abstract reload(): Promise<any>;
 		public abstract unload(): any;
+		public abstract toString(): string;
 	}
 
 	export abstract class Monitor implements Piece {
@@ -728,6 +735,7 @@ declare module 'klasa' {
 		public abstract disable(): Piece;
 		public abstract reload(): Promise<any>;
 		public abstract unload(): any;
+		public abstract toString(): string;
 	}
 
 	export abstract class Provider implements Piece {
@@ -750,6 +758,7 @@ declare module 'klasa' {
 		public abstract disable(): Piece;
 		public abstract reload(): Promise<any>;
 		public abstract unload(): any;
+		public abstract toString(): string;
 	}
 
 	export class Store {
@@ -757,6 +766,7 @@ declare module 'klasa' {
 		public load(dir: string, file: string|string[]): Piece;
 		public loadAll(): Promise<number>;
 		public resolve(name: Piece|string): Piece;
+		public toString(): string;
 
 		public static applyToClass(structure: object, skips?: string[]): void;
 	}
@@ -778,6 +788,7 @@ declare module 'klasa' {
 		public clear(): void;
 		public load(dir: string, file: string[]): Command;
 		public loadAll(): Promise<number>;
+		public toString(): string;
 
 		public init(): any;
 		public resolve(): any;
@@ -802,6 +813,7 @@ declare module 'klasa' {
 		public load(): any;
 		public loadAll(): Promise<any>;
 		public resolve(): any;
+		public toString(): string;
 	}
 
 	export class ExtendableStore extends Collection<string, Extendable> implements Store {
@@ -821,6 +833,7 @@ declare module 'klasa' {
 		public load(): any;
 		public loadAll(): Promise<any>;
 		public resolve(): any;
+		public toString(): string;
 	}
 
 	export class FinalizerStore extends Collection<string, Finalizer> implements Store {
@@ -840,6 +853,7 @@ declare module 'klasa' {
 		public load(): any;
 		public loadAll(): Promise<any>;
 		public resolve(): any;
+		public toString(): string;
 	}
 
 	export class InhibitorStore extends Collection<string, Inhibitor> implements Store {
@@ -859,6 +873,7 @@ declare module 'klasa' {
 		public load(): any;
 		public loadAll(): Promise<any>;
 		public resolve(): any;
+		public toString(): string;
 	}
 
 	export class LanguageStore extends Collection<string, Language> implements Store {
@@ -878,6 +893,7 @@ declare module 'klasa' {
 		public load(): any;
 		public loadAll(): Promise<any>;
 		public resolve(): any;
+		public toString(): string;
 	}
 
 	export class MonitorStore extends Collection<string, Monitor> implements Store {
@@ -897,6 +913,7 @@ declare module 'klasa' {
 		public load(): any;
 		public loadAll(): Promise<any>;
 		public resolve(): any;
+		public toString(): string;
 	}
 
 	export class ProviderStore extends Collection<string, Provider> implements Store {
@@ -915,6 +932,7 @@ declare module 'klasa' {
 		public load(): any;
 		public loadAll(): Promise<any>;
 		public resolve(): any;
+		public toString(): string;
 	}
 
 	export type KlasaClientConfig = {

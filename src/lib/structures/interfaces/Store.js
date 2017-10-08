@@ -67,6 +67,14 @@ class Store {
 	}
 
 	/**
+	 * Defines toString behavior for stores
+	 * @returns {string} This store name
+	 */
+	toString() {
+		return this.name;
+	}
+
+	/**
 	 * Applies this interface to a class
 	 * @param {Object} structure The structure to apply this interface to
 	 * @param {string[]} [skips=[]] The methods to skip when applying this interface

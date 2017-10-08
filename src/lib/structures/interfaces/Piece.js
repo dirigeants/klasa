@@ -50,6 +50,14 @@ class Piece {
 	}
 
 	/**
+	 * Defines toString behavior for pieces
+	 * @returns {string} This piece name
+	 */
+	toString() {
+		return this.name;
+	}
+
+	/**
 	 * Applies this interface to a class
 	 * @param {Object} structure The structure to apply this interface to
 	 * @param {string[]} [skips=[]] The methods to skip when applying this interface
