@@ -122,7 +122,7 @@ class Gateway {
 	async createEntry(input, data = this.defaults) {
 		const target = await this.validate(input).then(output => output && output.id ? output.id : output);
 		await this.provider.create(this.type, target, data);
-		await this.cache.create(this.type, target, data);
+		await this.cache.create(this.type, target, Object.assign({ id: target }, data));
 		return true;
 	}
 
