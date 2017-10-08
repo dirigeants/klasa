@@ -15,7 +15,7 @@ module.exports = class extends Command {
 	async run(msg, [piece]) {
 		const file = piece.type === 'command' ? join(...piece.file) : piece.file;
 		const fileLocation = resolve(this.client.coreBaseDir, `${piece.type}s`, file);
-		const language = msg.fetchLanguage();
+		const language = await msg.fetchLanguage();
 		await fs.access(fileLocation).catch(() => { throw language.get('COMMAND_TRANSFER_ERROR'); });
 		return fs.copy(fileLocation, resolve(this.client.clientBaseDir, `${piece.type}s`, file))
 			.then(() => {
