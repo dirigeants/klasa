@@ -1,10 +1,6 @@
 const Gateway = require('./Gateway');
 const Schema = require('./Schema');
 const { parseDottedObject } = require('../util/util');
-const tuplify = (string) => {
-	const key = string.substring(0, string.indexOf(' '));
-	return [key, string.slice(key.length + 1)];
-};
 
 class GatewaySQL extends Gateway {
 
@@ -102,19 +98,14 @@ class GatewaySQL extends Gateway {
 
 	/**
 	 * Create/Remove columns from a SQL database, by the current Schema.
-	 * @param {string} key The key which is updated.
 	 * @returns {Promise<boolean>}
 	 */
-	async updateColumns(key) {
+	async updateColumns() {
 		if (!this.provider.updateColumns) {
 			this.client.emit('error', 'This SQL Provider does not seem to have a updateColumns exports. Force action cancelled.');
 			return false;
 		}
-		const newSQLSchema = this.sqlSchema.map(tuplify);
-		const keys = this.schema.getKeys(['id']);
-		const columns = keys.filter(ent => ent !== key);
-		await this.provider.updateColumns(this.type, columns, newSQLSchema);
-
+		await this.provider.updateColumns(this.type, this.sqlSchema);
 		return true;
 	}
 

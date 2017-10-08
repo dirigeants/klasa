@@ -137,14 +137,16 @@ class SchemaPiece {
 			default: this.default,
 			min: this.min,
 			max: this.max,
+			sql: this.sqlSchema[1],
 			configurable: this.configurable
 		};
 	}
 
 	/**
 	 * Check if the key is properly configured.
+	 * @param {Object} options The options to parse.
 	 */
-	init() {
+	init(options) {
 		if (typeof this.type !== 'string') throw new TypeError(`[KEY] ${this.path} - Parameter type must be a string.`);
 		if (typeof this.array !== 'boolean') throw new TypeError(`[KEY] ${this.path} - Parameter array must be a boolean.`);
 		if (this.min !== null && typeof this.min !== 'number') throw new TypeError(`[KEY] ${this.path} - Parameter min must be a number or null.`);
@@ -152,7 +154,7 @@ class SchemaPiece {
 		if (this.min !== null && this.max !== null && this.min > this.max) throw new TypeError(`[KEY] ${this.path} - Parameter min must contain a value lower than the parameter max.`);
 		if (typeof this.configurable !== 'boolean') throw new TypeError(`[KEY] ${this.path} - Parameter configurable must be a boolean.`);
 
-		const value = [this.key, (this.type === 'integer' || this.type === 'float' ? 'INTEGER' : 'TEXT') +
+		const value = [this.path, options.sql || (this.type === 'integer' || this.type === 'float' ? 'INTEGER' : 'TEXT') +
 				(this.default !== null ? ` DEFAULT ${this._parseSQLValue(this.default)}` : '')];
 
 		Object.defineProperty(this, 'sqlSchema', { value, enumerable: false });
