@@ -122,9 +122,18 @@ class Util {
 				if (typeof tempPath[path[i]] === 'undefined') tempPath[path[i]] = {};
 				tempPath = tempPath[path[i]];
 			}
-			tempPath[path[path.length - 1]] = rawObject[key];
+			if (typeof rawObject[key] === 'string' && Util.stringIsObject(rawObject[key])) {
+				tempPath[path[path.length - 1]] = JSON.parse(rawObject[key]);
+			} else {
+				tempPath[path[path.length - 1]] = rawObject[key];
+			}
 		}
 		return object;
+	}
+
+	static stringIsObject(string) {
+		return (string[0] === '[' && string[string.length - 1] === ']') ||
+			(string[0] === '{' && string[string.length - 1] === '}');
 	}
 
 	/**

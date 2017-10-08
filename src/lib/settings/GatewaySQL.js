@@ -67,11 +67,11 @@ class GatewaySQL extends Gateway {
 		target = await this.validate(target).then(output => output && output.id ? output.id : output);
 		const { path, route } = this.getPath(key, { avoidUnconfigurable, piece: true });
 
-		const { parsed } = path.array === true ?
+		const { parsed, array } = path.array === true ?
 			await this._updateArray(target, 'add', key, value, guild, { path, route }) :
 			await this._updateOne(target, key, value, guild, { path, route });
 
-		await this.provider.update(this.type, target, parsed.sql);
+		await this.provider.update(this.type, target, array !== null ? path.sql(array) : parsed.sql);
 		return { value: parsed.data, path };
 	}
 
@@ -96,7 +96,7 @@ class GatewaySQL extends Gateway {
 			await this._updateArray(target, action, key, value, guild, { path, route }) :
 			await this._updateOne(target, key, value, guild, { path, route });
 
-		if (array !== null) await this.provider.update(this.type, target, array !== null ? path.sql(array) : parsed.sql);
+		await this.provider.update(this.type, target, array !== null ? path.sql(array) : parsed.sql);
 		return { value: parsed.data, path };
 	}
 
