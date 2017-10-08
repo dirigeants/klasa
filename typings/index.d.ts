@@ -498,6 +498,7 @@ declare module 'klasa' {
 		public toJSON(): Object;
 		public getSQL(array?: string[]): string[];
 		public getKeys(array?: string[]): string[];
+		public getDefaults(): Object;
 		public getList(object: Object): string;
 		public static resolveString(msg: ExtendedMessage, path: SchemaPiece, value: any): string;
 
@@ -527,6 +528,7 @@ declare module 'klasa' {
 		public init(): void;
 		public getSQL(array?: string[]): string;
 		public getKeys(array?: string[]): string;
+		public getDefaults(): Object;
 		public toString(value?: any): string;
 	}
 
