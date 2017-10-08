@@ -98,14 +98,18 @@ class GatewaySQL extends Gateway {
 
 	/**
 	 * Create/Remove columns from a SQL database, by the current Schema.
+	 * @param {('add'|'remove'|'update')} action The action to perform.
+	 * @param {string} key The key to remove or update.
 	 * @returns {Promise<boolean>}
 	 */
-	async updateColumns() {
+	async updateColumns(action, key) {
 		if (!this.provider.updateColumns) {
 			this.client.emit('error', 'This SQL Provider does not seem to have a updateColumns exports. Force action cancelled.');
 			return false;
 		}
-		await this.provider.updateColumns(this.type, this.sqlSchema);
+		const newSchema = this.sqlSchema;
+		const oldSchema = action === 'delete' ? newSchema.filter(tuple => tuple[0] !== key) : newSchema;
+		await this.provider.updateColumns(this.type, oldSchema, newSchema);
 		return true;
 	}
 
