@@ -15,7 +15,7 @@ class GatewaySQL extends Gateway {
 
 	async initTable() {
 		const hasTable = await this.provider.hasTable(this.type);
-		if (hasTable === false) await this.provider.createTable(this.type, this.SQLSchema);
+		if (hasTable === false) await this.provider.createTable(this.type, this.sqlSchema);
 
 		const data = await this.provider.getAll(this.type);
 		if (data.length > 0) for (let i = 0; i < data.length; i++) this.cache.set(this.type, data[i].id, this.parseEntry(data[i]));
@@ -99,7 +99,7 @@ class GatewaySQL extends Gateway {
 			this.client.emit('error', 'This SQL Provider does not seem to have a updateColumns exports. Force action cancelled.');
 			return false;
 		}
-		const newSQLSchema = this.SQLSchema.map(tuplify);
+		const newSQLSchema = this.sqlSchema.map(tuplify);
 		const keys = this.schema.getKeys(['id']);
 		const columns = keys.filter(ent => ent !== key);
 		await this.provider.updateColumns(this.type, columns, newSQLSchema);
