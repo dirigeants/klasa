@@ -1,4 +1,5 @@
 const Gateway = require('./Gateway');
+const Schema = require('./Schema');
 const { parseDottedObject } = require('../util/util');
 const tuplify = (string) => {
 	const key = string.substring(0, string.indexOf(' '));
@@ -11,6 +12,16 @@ class GatewaySQL extends Gateway {
 		super(store, type, validateFunction, schema, options);
 		this.parseDottedObjects = typeof options.parseDottedObjects === 'boolean' ? options.parseDottedObjects : true;
 		this.sql = true;
+	}
+
+	/**
+	 * Inits the table and the schema for its use in this gateway.
+	 * @returns {Promise<void[]>}
+	 */
+	async init() {
+		await this.initSchema().then(schema => { this.schema = new Schema(this.client, this, schema, ''); });
+		await this.initTable();
+		return [];
 	}
 
 	async initTable() {
@@ -113,7 +124,7 @@ class GatewaySQL extends Gateway {
 	}
 
 	get sqlSchema() {
-		const schema = ['id TEXT NOT NULL UNIQUE'];
+		const schema = [['id', 'TEXT NOT NULL UNIQUE']];
 		this.schema.getSQL(schema);
 		return schema;
 	}
