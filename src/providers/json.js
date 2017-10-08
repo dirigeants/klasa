@@ -53,7 +53,7 @@ module.exports = class extends Provider {
 	getAll(table) {
 		const dir = resolve(this.baseDir, table);
 		return fs.readdir(dir)
-			.then(files => Promise.all(files.map(file => fs.readJSON(resolve(dir, file)))));
+			.then(files => Promise.all(files.filter(file => file.endsWith('.json')).map(file => fs.readJSON(resolve(dir, file)))));
 	}
 
 	/**

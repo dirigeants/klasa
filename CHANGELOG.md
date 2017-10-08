@@ -55,3 +55,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] The eval command being unable to catch certain errors.
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] Fixed the JSON provider throwing errors.
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] Fixed multiple minor issues.
+- [[#43](https://github.com/dirigeants/klasa/pull/43)] Store loader not showing error stack.
+- [[#43](https://github.com/dirigeants/klasa/pull/43)] JSON provider loading files that are not JSON.
