@@ -115,6 +115,7 @@ class Util {
 	static parseDottedObject(rawObject) {
 		const object = {};
 		for (const key of Object.keys(rawObject)) {
+			if (key.indexOf('.') === -1) object[key] = rawObject[key];
 			const path = key.split('.');
 			let tempPath = object;
 			for (let i = 0; i < path.length - 1; i++) {

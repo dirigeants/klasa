@@ -187,7 +187,7 @@ class Gateway {
 		cache[route[route.length - 1]] = parsedID;
 		await this.cache.set(this.type, target, fullObject);
 
-		return { parsed: parsedID, settings: fullObject };
+		return { parsed: parsedID, settings: fullObject, array: null };
 	}
 
 	/**
@@ -229,7 +229,7 @@ class Gateway {
 		cache[route[route.length - 1]] = parsedID;
 		await this.cache.set(this.type, target, fullObject);
 
-		return { parsed, settings: fullObject };
+		return { parsed, settings: fullObject, array: null };
 	}
 
 	/**
@@ -319,7 +319,7 @@ class Gateway {
 
 		await this.cache.set(this.type, target, fullObject);
 
-		return { parsed, settings: fullObject };
+		return { parsed, settings: fullObject, array: cache };
 	}
 
 	/**
