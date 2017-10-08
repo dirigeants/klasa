@@ -180,7 +180,7 @@ class Gateway {
 		let create = false;
 		if (cache.default === true) {
 			create = true;
-			cache = this.schema.getDefaults();
+			cache = Object.assign(this.schema.getDefaults(), { id: target });
 		}
 		const fullObject = cache;
 
@@ -227,7 +227,7 @@ class Gateway {
 		let create = false;
 		if (cache.default === true) {
 			create = true;
-			cache = this.schema.getDefaults();
+			cache = Object.assign(this.schema.getDefaults(), { id: target });
 		}
 		const fullObject = cache;
 
@@ -257,7 +257,7 @@ class Gateway {
 		let create = false;
 		if (cache.default === true) {
 			create = true;
-			cache = this.schema.getDefaults();
+			cache = Object.assign(this.schema.getDefaults(), { id: target });
 		}
 		const settings = cache;
 		this._updateMany(cache, object, this.schema, guild, list);
@@ -318,7 +318,7 @@ class Gateway {
 		let create = false;
 		if (cache.default === true) {
 			create = true;
-			cache = this.schema.getDefaults();
+			cache = Object.assign(this.schema.getDefaults(), { id: target });
 		}
 		const fullObject = cache;
 
