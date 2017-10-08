@@ -40,6 +40,12 @@ class Schema {
 		 */
 		Object.defineProperty(this, 'keys', { value: new Set(), enumerable: false, writable: true });
 
+		/**
+		 * A pre-processed array with all keys' names.
+		 * @type {string[]}
+		 */
+		Object.defineProperty(this, '_keys', { value: [], enumerable: false, writable: true });
+
 		this._patch(object);
 	}
 
@@ -53,6 +59,7 @@ class Schema {
 	async addFolder(key, object = {}, force = true) {
 		if (typeof this[key] !== 'undefined') throw `The key ${key} already exists in the current schema.`;
 		this.keys.add(key);
+		this._keys.push(key);
 		this[key] = new Schema(this.client, this.manager, object, `${this.path === '' ? '' : `${this.path}.`}${key}`);
 		this.defaults[key] = this[key].defaults;
 		await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
@@ -131,6 +138,7 @@ class Schema {
 
 	_addKey(key, options) {
 		this.keys.add(key);
+		this._keys.push(key);
 		this[key] = new SchemaPiece(this.client, this.manager, options, `${this.path === '' ? '' : `${this.path}.`}${key}`, key);
 		this.defaults[key] = options.default;
 	}
@@ -151,7 +159,10 @@ class Schema {
 	}
 
 	_removeKey(key) {
+		const index = this._keys.indexOf(key);
+
 		this.keys.delete(key);
+		this._keys.splice(index, 1);
 		delete this[key];
 		delete this.defaults[key];
 	}
@@ -184,7 +195,17 @@ class Schema {
 	 * @returns {Object}
 	 */
 	toJSON() {
-		return Object.assign({ type: 'Folder' }, ...Array.from(this.keys).map(key => ({ [key]: this[key].toJSON() })));
+		return Object.assign({ type: 'Folder' }, ...this._keys.map(key => ({ [key]: this[key].toJSON() })));
+	}
+
+	/**
+	 * Get a JSON object with all the default values.
+	 * @returns {Object}
+	 */
+	getDefaults() {
+		const object = {};
+		for (let i = 0; i < this._keys.length; i++) object[this._keys[i]] = this[this._keys[i]].getDefaults();
+		return object;
 	}
 
 	/**
@@ -193,7 +214,7 @@ class Schema {
 	 * @returns {string[]}
 	 */
 	getSQL(array = []) {
-		return Array.from(this.keys).map(key => this[key].getSQL(array));
+		return this._keys.map(key => this[key].getSQL(array));
 	}
 
 	/**
@@ -202,7 +223,7 @@ class Schema {
 	 * @returns {string[]}
 	 */
 	getKeys(array = []) {
-		return Array.from(this.keys).map(key => this[key].getKeys(array));
+		return this._keys.map(key => this[key].getKeys(array));
 	}
 
 	/**
@@ -213,7 +234,7 @@ class Schema {
 	 */
 	getList(msg, object) {
 		const array = [];
-		const keys = Array.from(this.keys).filter(key => this[key].type === 'Folder' || this[key].configurable).sort();
+		const keys = this._keys.filter(key => this[key].type === 'Folder' || this[key].configurable).sort();
 		const longest = keys.sort((a, b) => a.length < b.length)[0].length;
 		for (let i = 0; i < keys.length; i++) {
 			array.push(`${keys[i].padEnd(longest)} :: ${Schema.resolveString(msg, this[keys[i]], object[keys[i]])}`);
@@ -263,6 +284,7 @@ class Schema {
 				this.defaults[key] = piece.default;
 			}
 			this.keys.add(key);
+			this._keys.push(key);
 		}
 	}
 

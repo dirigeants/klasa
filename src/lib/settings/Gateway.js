@@ -177,10 +177,7 @@ class Gateway {
 	async _reset(target, key, guild, { path, route }) {
 		const parsedID = path.default;
 		let cache = await this.fetchEntry(target);
-		if (cache.default === true) {
-			cache = JSON.parse(JSON.stringify(cache));
-			delete cache.default;
-		}
+		if (cache.default === true) cache = this.schema.getDefaults();
 		const fullObject = cache;
 
 		for (let i = 0; i < route.length - 1; i++) {
@@ -222,10 +219,7 @@ class Gateway {
 		const parsed = await path.parse(value, guild);
 		const parsedID = parsed.data && parsed.data.id ? parsed.data.id : parsed.data;
 		let cache = await this.fetchEntry(target);
-		if (cache.default === true) {
-			cache = JSON.parse(JSON.stringify(cache));
-			delete cache.default;
-		}
+		if (cache.default === true) cache = this.schema.getDefaults();
 		const fullObject = cache;
 
 		for (let i = 0; i < route.length - 1; i++) {
@@ -250,10 +244,7 @@ class Gateway {
 		target = await this.validate(target).then(output => output && output.id ? output.id : output);
 		const list = { errors: [], promises: [] };
 		let cache = await this.fetchEntry(target);
-		if (cache.default === true) {
-			cache = JSON.parse(JSON.stringify(cache));
-			delete cache.default;
-		}
+		if (cache.default === true) cache = this.schema.getDefaults();
 		const settings = cache;
 		this._updateMany(cache, object, this.schema, guild, list);
 		await Promise.all(list.promises);
@@ -310,10 +301,7 @@ class Gateway {
 		const parsed = await path.parse(value, guild);
 		const parsedID = parsed.data && parsed.data.id ? parsed.data.id : parsed.data;
 		let cache = await this.fetchEntry(target);
-		if (cache.default === true) {
-			cache = JSON.parse(JSON.stringify(cache));
-			delete cache.default;
-		}
+		if (cache.default === true) cache = this.schema.getDefaults();
 		const fullObject = cache;
 
 		for (let i = 0; i < route.length; i++) {

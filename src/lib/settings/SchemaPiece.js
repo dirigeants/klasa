@@ -109,6 +109,14 @@ class SchemaPiece {
 	}
 
 	/**
+	 * Get a JSON object with all the default values.
+	 * @returns {any}
+	 */
+	getDefaults() {
+		return this.default;
+	}
+
+	/**
 	 * @typedef  {Object} SchemaPieceJSON
 	 * @property {string}  type The type for the key.
 	 * @property {any}     default The default value for the key.
