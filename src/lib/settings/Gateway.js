@@ -239,6 +239,47 @@ class Gateway {
 	}
 
 	/**
+	 * Update multiple keys given a JSON object.
+	 * @param {string} target The entry target.
+	 * @param {Object} object A JSON object to iterate and parse.
+	 * @param {(Guild|string)} [guild=null] A guild resolvable.
+	 * @returns {Promise<{ settings: Object, errors: string[] }>}
+	 */
+	async updateMany(target, object, guild = null) {
+		guild = this._resolveGuild(guild || target);
+		target = await this.validate(target).then(output => output && output.id ? output.id : output);
+		const list = { errors: [], promises: [] };
+		let cache = await this.fetchEntry(target);
+		if (cache.default === true) {
+			cache = JSON.parse(JSON.stringify(cache));
+			delete cache.default;
+		}
+		const settings = cache;
+		this._updateMany(cache, object, this.schema, guild, list);
+		await Promise.all(list.promises);
+
+		await Promise.all([
+			this.cache.set(this.type, target, settings),
+			this.provider.update(this.type, target, settings)
+		]);
+		return { settings, errors: list.errors };
+	}
+
+	_updateMany(cache, object, schema, guild, list) {
+		const keys = Object.keys(object);
+		for (let i = 0; i < keys.length; i++) {
+			if (schema.has(keys[i]) === false) continue;
+			if (schema[keys[i]].type === 'Folder') {
+				this._updateMany(cache[keys[i]], object[keys[i]], schema[keys[i]], guild, list);
+				continue;
+			}
+			list.promises.push(schema[keys[i]].parse(object[keys[i]], guild)
+				.then(result => { cache[keys[i]] = result && result.data && result.data.id ? result.data.id : result.data; })
+				.catch(error => list.errors.push([schema[keys[i]].path, error])));
+		}
+	}
+
+	/**
 	 * Update an array from an entry.
 	 * @param {string} target The entry target.
 	 * @param {('add'|'remove')} action Whether the value should be added or removed to the array.

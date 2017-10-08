@@ -454,6 +454,9 @@ declare module 'klasa' {
 		public updateOne(target: string, key: string, value: string, guild?: ExtendedGuild|string, avoidUnconfigurable?: boolean): Promise<GatewayResult>;
 		private _updateOne(target: string, key: string, value: string, guild: ExtendedGuild, path: { path: SchemaPiece, route: string[] }): Promise<GatewayInternalResult>;
 
+		public updateMany(target: string, object: Object, guild?: ExtendedGuild|string): Promise<{ settings: Object, errors: string[] }>;
+		private _updateMany(cache: Object, object: Object, schema: Schema, guild: ExtendedGuild, list: { errors: string[], promises: Promise<any>[] }): void;
+
 		public updateArray(target: string, action: 'add'|'remove', key: string, value: string, guild?: ExtendedGuild|string, avoidUnconfigurable?: boolean): Promise<GatewayResult>;
 		private _updateArray(target: string, action: 'add'|'remove', key: string, value: string, guild: ExtendedGuild, path: { path: SchemaPiece, route: string[] }): Promise<GatewayInternalResult>;
 
