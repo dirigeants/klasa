@@ -123,9 +123,13 @@ module.exports = class extends Command {
 	}
 
 	getNiceDuration(time) {
-		if (time >= 1000) return `${(time / 1000).toFixed(3)}s`;
-		if (time < 1) return `${(time * 1000).toFixed(3)}μs`;
-		return `${time.toFixed(3)}ms`;
+		if (time >= 1000) return `${this.roundTo3(time / 1000)}s`;
+		if (time < 1) return `${this.roundTo3(time * 1000)}μs`;
+		return `${this.roundTo3(time)}ms`;
+	}
+
+	roundTo3(num) {
+		return Math.round(num * 1000) / 1000;
 	}
 
 	async sendTooLongQuery(cmdMsg, topLine, evaled, question, options) {
