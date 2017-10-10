@@ -84,6 +84,7 @@ class RichDisplay {
 	/**
 	 * A new instance of the template embed
 	 * @type {external:MessageEmbed}
+	 * @readonly
 	 */
 	get template() {
 		return new Embed(this.embedTemplate);
