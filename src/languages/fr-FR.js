@@ -86,6 +86,7 @@ module.exports = class extends Language {
 			],
 			COMMAND_HELP_DM: '📥 | Les commandes ont été envoyées dans vos MPs.',
 			COMMAND_HELP_NODM: '❌ | Vous avez désactivé vos MPs, je ne peux pas vous envoyer les commandes.',
+			COMMAND_HELP_COMMAND_NOT_FOUND: '❌ | Commande inconnue, veuillez exécuter la commande help sans argument pour avoir toute la liste.',
 			COMMAND_ENABLE: (type, name) => `+ ${type} activé avec succès : ${name}`,
 			COMMAND_DISABLE: (type, name) => `+ ${type} désactivé avec succès : ${name}`,
 			COMMAND_DISABLE_WARN: 'Vous ne voulez probablement pas désactiver cela, car vous ne serez plus capable d\'exécuter une commande pour le réactiver',
