@@ -166,6 +166,7 @@ class Util {
 
 /**
  * Promisified version of child_process.exec for use with await
+ * @method
  * @param {string} command The command to run
  * @param {ExecOptions} [options] The options to pass to exec
  * @returns {Promise<{ stdout: string, stderr: string }>}
@@ -174,6 +175,7 @@ Util.exec = promisify(exec);
 
 /**
  * Promisified version of setTimeout for use with await
+ * @method
  * @param {number} delay The amount of time in ms to delay
  * @param {any} [args] Any args to pass to the .then (mostly pointless in this form)
  * @returns {Promise<any>} The args value passed in
