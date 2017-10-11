@@ -26,8 +26,8 @@ const display = new RichDisplay(new this.client.methods.Embed()
 	.setDescription('Scroll between the images using the provided reaction emotes.')
 );
 
-for(const i = 0; i < 10; i++)
-	display.addPage(template => template.setImage('http://lorempixel.com/400/200/'));
+for (const i = 0; i < 10; i++)
+	display.addPage(template => template.setImage('https://lorempixel.com/400/200/'));
 
 return display.run(await msg.send('Loading slideshow...'));
 ```
@@ -36,7 +36,7 @@ return display.run(await msg.send('Loading slideshow...'));
 
 ## Code Analysis
 
-First we create a new [`RichDisplay`](https://klasa.js.org/RichDisplay.html) instance, but this time we pass in an [`Embed`](https://discord.js.org/#/docs/main/master/class/MessageEmbed) object, wich will represent our template, from which we will be able to extend upon to create our pages later on:
+First we create a new [`RichDisplay`](https://klasa.js.org/RichDisplay.html) instance, but this time we pass in an [`MessageEmbed`](https://discord.js.org/#/docs/main/master/class/MessageEmbed) instance, wich will represent our template, from which we will be able to extend upon to create our pages later on:
 
 ```javascript
 const display = new RichDisplay(new this.client.methods.Embed()
@@ -47,7 +47,7 @@ const display = new RichDisplay(new this.client.methods.Embed()
 This [`MessageEmbed`](https://discord.js.org/#/docs/main/master/class/MessageEmbed) instance will then be then accessible to us by either calling the [`template`](https://klasa.js.org/RichDisplay.html#template__anchor) of the display object, in a cloned manner, or directly through the [`addPage`](https://klasa.js.org/RichDisplay.html#addPage__anchor) method, if we pass in an arrow function or a callback.
 
 ```javascript
-for(/* ... */)
+for (/* ... */)
 	display.addPage(template => /* ... */);
 ```
 
@@ -56,7 +56,7 @@ From here we will be able to add content or edit properties of the template and 
 ```javascript
 /* ... */
 	display.addPage(template => {
-		template.setImage('http://lorempixel.com/400/200/')
+		template.setImage('https://lorempixel.com/400/200/')
 			.setColor(0xF44336) // You can change everything of the template
 	);
 ```
