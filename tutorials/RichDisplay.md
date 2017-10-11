@@ -6,6 +6,7 @@ The most simple working example can achieved by this code:
 const { Command, RichDisplay } = require('klasa');
 
 module.exports = class extends Command {
+
 	constructor(...args) {
 		super(...args, { description: 'Test RichDisplay' });
 	}
