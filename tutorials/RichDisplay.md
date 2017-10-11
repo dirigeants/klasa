@@ -21,7 +21,7 @@ A more complex example with an actual usage is this:
 ```javascript
 const display = new RichDisplay(new this.client.methods.Embed()
 	.setColor(0x673AB7)
-	.setAuthor(this.client.user.name, this.client.user.avatarURL)
+	.setAuthor(this.client.user.name, this.client.user.avatarURL())
 	.setTitle('Random Image Slideshow')
 	.setDescription('Scroll between the images using the provided reaction emotes.')
 );
