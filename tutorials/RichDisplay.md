@@ -1,4 +1,4 @@
-RichDisplay allows you to create a paginated menu that users of your bot will be able to browse by using reaction-based navigation.
+[`RichDisplay`](https://klasa.js.org/RichDisplay.html) allows you to create a paginated menu that users of your bot will be able to browse by using reaction-based navigation.
 
 The most simple working example can achieved by this code:
 
@@ -36,7 +36,7 @@ return display.run(await msg.send("Loading slideshow..."))
 
 ## Code Analysis
 
-First we create a new `RichDisplay` instance, but this time we pass in an `Embed` object, wich will represent our template, from which we will be able to extend upon to create our pages later on:
+First we create a new [`RichDisplay`](https://klasa.js.org/RichDisplay.html) instance, but this time we pass in an [`Embed`](https://discord.js.org/#/docs/main/master/class/MessageEmbed) object, wich will represent our template, from which we will be able to extend upon to create our pages later on:
 
 ```javascript
 const display = new RichDisplay(new this.client.methods.Embed()
@@ -44,14 +44,14 @@ const display = new RichDisplay(new this.client.methods.Embed()
 );
 ```
 
-This `Embed` object will then be then accessible to us by either calling `display.template`, in a cloned manner, or directly through the `addPage` method, if we pass in an arrow function or a callback.
+This [`Embed`](https://discord.js.org/#/docs/main/master/class/MessageEmbed) object will then be then accessible to us by either calling the [`template`](https://klasa.js.org/RichDisplay.html#template__anchor) of the display object, in a cloned manner, or directly through the [`addPage`](https://klasa.js.org/RichDisplay.html#addPage__anchor) method, if we pass in an arrow function or a callback.
 
 ```javascript
 for(/* ... */)
 	display.addPage(template => /* ... */);
 ```
 
-From here we will be able to add content or edit properties of the template and then return the final embed to the `addPage` method to be processed into a `RichDisplay` page.
+From here we will be able to add content or edit properties of the template and then return the final embed to the [`addPage`](https://klasa.js.org/RichDisplay.html#addPage__anchor) method to be processed into a [`RichDisplay`](https://klasa.js.org/RichDisplay.html) page.
 
 ```javascript
 /* ... */
@@ -61,7 +61,7 @@ From here we will be able to add content or edit properties of the template and 
 	);
 ```
 
-Then, after the `RichDisplay` is setup, we return, executing it on a new message.
+Then, after the [`RichDisplay`](https://klasa.js.org/RichDisplay.html) is setup, we return, executing it on a new message.
 
 ```javascript
 return display.run(await msg.send("Loading slideshow..."))
@@ -70,15 +70,15 @@ return display.run(await msg.send("Loading slideshow..."))
 ## Info Page
 
 We can also define an Info page, which will be available through the appropriate reaction emote.
-All we have to do is simply call the `setInfoPage` instead than `addPage`. The template will be available to us in the same ways as before.
+All we have to do is simply call the [`setInfoPage`](https://klasa.js.org/RichDisplay.html#setInfoPage__anchor) instead than [`addPage`](https://klasa.js.org/RichDisplay.html#addPage__anchor). The template will be available to us in the same ways as before.
 
 > Note: only one info page can be set at once. Setting the info page more than once will override the previously defined info page.
 
 ## Personalization
 
-Behavior managing can be handled through the second (optional) argument of the `run` method.
+Behavior managing can be handled through the second (optional) argument of the [`run`](https://klasa.js.org/RichDisplay.html#run__anchor) method.
 The configuration must be defined as an object literal.
-Please refer to the `RichDisplay` documentation page for information about each specific option.
+Please refer to the [`RichDisplay.run` arguments](https://klasa.js.org/RichDisplay.html#.RichDisplayEmojisObject__anchor) documentation page for information about each specific option.
 
 ### Custom Behavior Handling
 
