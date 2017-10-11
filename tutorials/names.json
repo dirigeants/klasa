@@ -1,75 +1,75 @@
 {
-    "GettingStarted": {
-        "title": "Getting Started",
-        "children": {
-            "CreatingCommands": {
-                "title": "Creating Commands"
-            },
-            "CreatingEvents": {
-                "title": "Creating Events"
-            },
-            "CreatingExtendables": {
-                "title": "Creating Extendables"
-            },
-            "CreatingFinalizers": {
-                "title": "Creating Finalizers"
-            },
-            "CreatingInhibitors": {
-                "title": "Creating Inhibitors"
-            },
-            "CreatingLanguages": {
-                "title": "Creating Languages"
+	"GettingStarted": {
+		"title": "Getting Started",
+		"children": {
+			"CreatingCommands": {
+				"title": "Creating Commands"
 			},
-            "CreatingMonitors": {
-                "title": "Creating Monitors"
-            },
-            "CreatingProviders": {
-                "title": "Creating Providers"
-            }
-        }
-    },
-    "UnderstandingUsageStrings": {
-        "title": "Understanding Usage Strings"
+			"CreatingEvents": {
+				"title": "Creating Events"
+			},
+			"CreatingExtendables": {
+				"title": "Creating Extendables"
+			},
+			"CreatingFinalizers": {
+				"title": "Creating Finalizers"
+			},
+			"CreatingInhibitors": {
+				"title": "Creating Inhibitors"
+			},
+			"CreatingLanguages": {
+				"title": "Creating Languages"
+			},
+			"CreatingMonitors": {
+				"title": "Creating Monitors"
+			},
+			"CreatingProviders": {
+				"title": "Creating Providers"
+			}
+		}
 	},
-    "UnderstandingPermissionLevels": {
-        "title": "Understanding Permission Levels"
+	"UnderstandingUsageStrings": {
+		"title": "Understanding Usage Strings"
 	},
-    "UnderstandingSettingGateway": {
-        "title": "Understanding Setting Gateway"
+	"UnderstandingPermissionLevels": {
+		"title": "Understanding Permission Levels"
+	},
+	"UnderstandingSettingGateway": {
+		"title": "Understanding Setting Gateway"
 	},
 	"IncludedPieces": {
 		"title": "Included Pieces",
 		"children": {
-            "IncludedCommands": {
-                "title": "Included Commands"
-            },
-            "IncludedEvents": {
-                "title": "Included Events"
-            },
-            "IncludedExtendables": {
-                "title": "Included Extendables"
-            },
-            "IncludedFinalizers": {
-                "title": "Included Finalizers"
-            },
-            "IncludedInhibitors": {
-                "title": "Included Inhibitors"
-            },
-            "IncludedLanguages": {
-                "title": "Included Languages"
+			"IncludedCommands": {
+				"title": "Included Commands"
 			},
-            "IncludedMonitors": {
-                "title": "Included Monitors"
-            },
-            "IncludedProviders": {
-                "title": "Included Providers"
-            }
-        }
+			"IncludedEvents": {
+				"title": "Included Events"
+			},
+			"IncludedExtendables": {
+				"title": "Included Extendables"
+			},
+			"IncludedFinalizers": {
+				"title": "Included Finalizers"
+			},
+			"IncludedInhibitors": {
+				"title": "Included Inhibitors"
+			},
+			"IncludedLanguages": {
+				"title": "Included Languages"
+			},
+			"IncludedMonitors": {
+				"title": "Included Monitors"
+			},
+			"IncludedProviders": {
+				"title": "Included Providers"
+			}
+		}
 	},
 	"PieceStores": {
 		"title": "Custom Pieces and Stores"
-    },
-    "RichDisplay": {
-        "title": "Using RichDisplay for paginated embeds"
-    }
+	},
+	"RichDisplay": {
+		"title": "Using RichDisplay for paginated embeds"
+	}
 }

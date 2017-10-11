@@ -16,6 +16,7 @@ module.exports = class extends Command {
 			.addPage(new Embed())
 			.run(await msg.send('Loading...'));
 	}
+
 };
 ```
 
