@@ -3,17 +3,17 @@
 The most simple working example can achieved by this code:
 
 ```javascript
-const {Command, RichDisplay} = require("klasa");
+const { Command, RichDisplay } = require('klasa');
 
 module.exports = class extends Command {
-	constructor(...args) { super(...args, {description: "Test RichDisplay"}); }
+	constructor(...args) { super(...args, { description: 'Test RichDisplay' }); }
 
 	async run(msg) {
 		return new RichDisplay()
 			.addPage(new Embed())
-			.run(await msg.send("Loading..."));
+			.run(await msg.send('Loading...'));
 	}
-}
+};
 ```
 
 A more complex example with an actual usage is this:
@@ -22,14 +22,14 @@ A more complex example with an actual usage is this:
 const display = new RichDisplay(new this.client.methods.Embed()
 	.setColor(0x673AB7)
 	.setAuthor(this.client.user.name, this.client.user.avatarURL)
-	.setTitle("Random Image Slideshow")
-	.setDescription("Scroll between the images using the provided reaction emotes.")
+	.setTitle('Random Image Slideshow')
+	.setDescription('Scroll between the images using the provided reaction emotes.')
 );
 
-for(var i = 0; i < 10; i++)
-	display.addPage(template => template.setImage("http://lorempixel.com/400/200/"));
+for(const i = 0; i < 10; i++)
+	display.addPage(template => template.setImage('http://lorempixel.com/400/200/'));
 
-return display.run(await msg.send("Loading slideshow..."))
+return display.run(await msg.send('Loading slideshow...'));
 ```
 
 > The code is contained in the block of the aforementioned command, inside the `async run(msg)` method.
@@ -44,7 +44,7 @@ const display = new RichDisplay(new this.client.methods.Embed()
 );
 ```
 
-This [`Embed`](https://discord.js.org/#/docs/main/master/class/MessageEmbed) object will then be then accessible to us by either calling the [`template`](https://klasa.js.org/RichDisplay.html#template__anchor) of the display object, in a cloned manner, or directly through the [`addPage`](https://klasa.js.org/RichDisplay.html#addPage__anchor) method, if we pass in an arrow function or a callback.
+This [`MessageEmbed`](https://discord.js.org/#/docs/main/master/class/MessageEmbed) instance will then be then accessible to us by either calling the [`template`](https://klasa.js.org/RichDisplay.html#template__anchor) of the display object, in a cloned manner, or directly through the [`addPage`](https://klasa.js.org/RichDisplay.html#addPage__anchor) method, if we pass in an arrow function or a callback.
 
 ```javascript
 for(/* ... */)
@@ -56,7 +56,7 @@ From here we will be able to add content or edit properties of the template and 
 ```javascript
 /* ... */
 	display.addPage(template => {
-		template.setImage("http://lorempixel.com/400/200/")
+		template.setImage('http://lorempixel.com/400/200/')
 			.setColor(0xF44336) // You can change everything of the template
 	);
 ```
@@ -64,7 +64,7 @@ From here we will be able to add content or edit properties of the template and 
 Then, after the [`RichDisplay`](https://klasa.js.org/RichDisplay.html) is setup, we return, executing it on a new message.
 
 ```javascript
-return display.run(await msg.send("Loading slideshow..."))
+return display.run(await msg.send('Loading slideshow...'));
 ```
 
 ## Info Page
@@ -82,6 +82,6 @@ Please refer to the [`RichDisplay.run` arguments](https://klasa.js.org/RichDispl
 
 ### Custom Behavior Handling
 
-To handle wether or not certain pages should be shown or skipped when browsing you can define the `filter` option with a function that returns `true` only when the page should be shown.
+To handle whether or not certain pages should be shown or skipped when browsing you can define the `filter` option with a function that returns `true` only when the page should be shown.
 
 This method will be called every time a user is about to visit a new page.
