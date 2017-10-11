@@ -68,5 +68,8 @@
 	},
 	"PieceStores": {
 		"title": "Custom Pieces and Stores"
-	}
+    },
+    "RichDisplay": {
+        "title": "Using RichDisplay for paginated embeds"
+    }
 }
