@@ -94,5 +94,5 @@ To handle whether or not a user should trigger an action when interacting with t
 A simple example for this would be a filter that only allows the user who executes the command to interact with it:
 
 ```javascript
-display.run(msg.send('Loading slideshow...'), { filter: (reaction, user) => user === msg.author });
+display.run(await msg.send('Loading slideshow...'), { filter: (reaction, user) => user === msg.author });
 ```
