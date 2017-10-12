@@ -132,7 +132,7 @@ class Schema {
 		this._addKey(key, options);
 		await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
 
-		if (force) await this.force('add', key);
+		if (force) await this.force('add', key, this[key]);
 		return this.manager.schema;
 	}
 
