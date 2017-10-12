@@ -49,14 +49,25 @@ class GatewaySQL extends Gateway {
 		const object = {};
 		for (let i = 0; i < this.sqlEntryParser.length; i++) {
 			const [path, def, fn] = this.sqlEntryParser[i];
-			if (typeof entry[path] === 'undefined') {
-				object[path] = def;
+			if (path.indexOf('.') === -1) {
+				if (typeof entry[path] === 'undefined') {
+					object[path] = def;
+					continue;
+				}
+				object[path] = fn(entry[path]);
 				continue;
 			}
-			object[path] = fn(entry[path]);
+
+			const pathes = path.split('.');
+			let tempPath = object;
+			for (let a = 0; a < pathes.length - 1; a++) {
+				if (typeof tempPath[pathes[a]] === 'undefined') tempPath[pathes[a]] = {};
+				tempPath = tempPath[pathes[a]];
+			}
+			tempPath[pathes[pathes.length - 1]] = fn(entry[path]);
 		}
 
-		return entry;
+		return object;
 	}
 
 	/**

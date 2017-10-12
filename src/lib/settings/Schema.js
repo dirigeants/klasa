@@ -236,7 +236,7 @@ class Schema {
 	 * @returns {string[]}
 	 */
 	getValues(array = []) {
-		return this._keys.map(key => this[key].getKeys(array));
+		return this._keys.map(key => this[key].getValues(array));
 	}
 
 	/**
