@@ -175,7 +175,10 @@ class Schema {
 	 * @returns {Promise<boolean[]>}
 	 */
 	async force(action, key, schemaPiece) {
-		if (this.manager.sql) return this.manager.updateColumns(action, key, schemaPiece.sqlSchema[1]);
+		if (this.manager.sql) {
+			await this.manager.updateColumns(action, key, schemaPiece.sqlSchema[1]);
+			return this.manager.sync();
+		}
 		const data = await this.manager.provider.getAll(this.manager.type);
 		const value = action === 'add' ? this.defaults[key] : null;
 		const path = this.path.split('.');
