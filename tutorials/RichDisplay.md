@@ -1,6 +1,6 @@
-{@link RichDisplay} allows you to create a paginated menu that users of your bot will be able to browse by using reaction-based navigation.
+{@link RichDisplay} allows you to create a paginated embed that users of your bot will be able to browse by using reaction-based navigation.
 
-The most simple working example can achieved by this code:
+An extremely simple working example can achieved by this code:
 
 ```javascript
 const { Command, RichDisplay } = require('klasa');
@@ -13,7 +13,8 @@ module.exports = class extends Command {
 
 	async run(msg) {
 		return new RichDisplay()
-			.addPage(new Embed())
+			.addPage(new Embed().setDescription('First page'))
+			.addPage(new Embed().setDescription('Second page'))
 			.run(await msg.send('Loading...'));
 	}
 
@@ -89,3 +90,9 @@ Please refer to the {@link RichDisplay.RichDisplayRunOptions} documentation page
 ### Custom Behavior Handling
 
 To handle whether or not a user should trigger an action when interacting with the reactions applied to the embed you can provide a `filter` function, which will be called every time a user reacts to the embed.
+
+A simple example for this would be a filter that only allows the user who executes the command to interact with it:
+
+```javascript
+display.run(msg.send('Loading slideshow...', { filter: (reaction, user) => user === msg.author });
+```
