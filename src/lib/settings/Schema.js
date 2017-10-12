@@ -154,7 +154,7 @@ class Schema {
 		this._removeKey(key);
 		await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
 
-		if (force) await this.force('delete', key);
+		if (force) await this.force('delete', key, this[key]);
 		return this.manager.schema;
 	}
 
@@ -171,10 +171,11 @@ class Schema {
 	 * Modifies all entries from the database. Do NOT call without knowledge.
 	 * @param {('add'|'delete')} action The action to perform.
 	 * @param {string} key The key to handle.
+	 * @param {SchemaPiece} schemaPiece The SchemaPiece instance to handle.
 	 * @returns {Promise<boolean[]>}
 	 */
-	async force(action, key) {
-		if (this.manager.sql) await this.manager.updateColumns(action, key);
+	async force(action, key, schemaPiece) {
+		if (this.manager.sql) return this.manager.updateColumns(action, key, schemaPiece.sqlSchema[1]);
 		const data = await this.manager.provider.getAll(this.manager.type);
 		const value = action === 'add' ? this.defaults[key] : null;
 		const path = this.path.split('.');

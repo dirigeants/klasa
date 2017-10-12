@@ -100,17 +100,22 @@ class GatewaySQL extends Gateway {
 	 * Create/Remove columns from a SQL database, by the current Schema.
 	 * @param {('add'|'remove'|'update')} action The action to perform.
 	 * @param {string} key The key to remove or update.
-	 * @returns {Promise<boolean>}
+	 * @param {string} [dataType] The column's datatype.
+	 * @returns {Promise<any>}
 	 */
-	async updateColumns(action, key) {
-		if (!this.provider.updateColumns) {
-			this.client.emit('error', 'This SQL Provider does not seem to have a updateColumns exports. Force action cancelled.');
-			return false;
+	async updateColumns(action, key, dataType = null) {
+		if (typeof action !== 'string') throw new TypeError('The parameter \'action\' for GatewaySQL#updateColumns must be a string.');
+		if (typeof key !== 'string') throw new TypeError('The parameter \'key\' for GatewaySQL#updateColumns must be a string.');
+		if ((action === 'add' || action === 'update') && (dataType === null || typeof dataType !== 'string' || dataType.length === 0)) {
+			throw new Error(`The parameter 'dataType' for GatewaySQL#updateColumns must be a valid string when 'action' is '${action}'.`);
 		}
-		const newSchema = this.sqlSchema;
-		const oldSchema = action === 'delete' || action === 'add' ? newSchema.filter(tuple => tuple[0] !== key) : newSchema;
-		await this.provider.updateColumns(this.type, oldSchema, newSchema);
-		return true;
+
+		switch (action) {
+			case 'add': return this.provider.addColumn(action, key, dataType);
+			case 'remove': return this.provider.removeColumn(action, key);
+			case 'update': return this.provider.updateColumn(action, key, dataType);
+			default: throw new TypeError('GatewaySQL#updateColumns only accept \'add\', \'remove\' or \'update\' as a value.');
+		}
 	}
 
 	parseEntry(object) {
