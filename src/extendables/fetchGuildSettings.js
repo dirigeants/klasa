@@ -7,7 +7,7 @@ module.exports = class extends Extendable {
 	}
 
 	extend() {
-		return this.guild ? this.client.settings.guilds.fetchEntry(this.guild.id) : this.client.settings.guilds.defaults;
+		return this.guild ? this.client.settings.guilds.fetchEntry(this.guild.id) : Promise.resolve(this.client.settings.guilds.defaults);
 	}
 
 };
