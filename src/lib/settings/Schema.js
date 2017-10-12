@@ -231,6 +231,15 @@ class Schema {
 	}
 
 	/**
+	 * Get all the SchemaPieces instances from this schema's children.
+	 * @param {string[]} [array=[]] The array to push.
+	 * @returns {string[]}
+	 */
+	getValues(array = []) {
+		return this._keys.map(key => this[key].getKeys(array));
+	}
+
+	/**
 	 * Get a list.
 	 * @param {external:Message} msg The Message instance.
 	 * @param {Object} object The settings to parse.

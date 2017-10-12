@@ -122,7 +122,7 @@ class Util {
 				if (typeof tempPath[path[i]] === 'undefined') tempPath[path[i]] = {};
 				tempPath = tempPath[path[i]];
 			}
-			if (typeof rawObject[key] === 'string' && Util.stringIsObject(rawObject[key])) {
+			if (Util.stringIsObject(rawObject[key])) {
 				tempPath[path[path.length - 1]] = JSON.parse(rawObject[key]);
 			} else {
 				tempPath[path[path.length - 1]] = rawObject[key];
@@ -132,6 +132,7 @@ class Util {
 	}
 
 	static stringIsObject(string) {
+		if (typeof string !== 'string') return false;
 		return (string[0] === '[' && string[string.length - 1] === ']') ||
 			(string[0] === '{' && string[string.length - 1] === '}');
 	}

@@ -1,6 +1,6 @@
 const Gateway = require('./Gateway');
 const Schema = require('./Schema');
-const { parseDottedObject } = require('../util/util');
+const { stringIsObject } = require('../util/util');
 
 class GatewaySQL extends Gateway {
 
@@ -8,6 +8,7 @@ class GatewaySQL extends Gateway {
 		super(store, type, validateFunction, schema, options);
 		this.parseDottedObjects = typeof options.parseDottedObjects === 'boolean' ? options.parseDottedObjects : true;
 		this.sql = true;
+		this.sqlEntryParser = [];
 	}
 
 	/**
@@ -17,15 +18,62 @@ class GatewaySQL extends Gateway {
 	async init() {
 		await this.initSchema().then(schema => { this.schema = new Schema(this.client, this, schema, ''); });
 		await this.initTable();
+		this.initEntryParser();
+		await this.sync();
 		return [];
 	}
 
 	async initTable() {
 		const hasTable = await this.provider.hasTable(this.type);
 		if (hasTable === false) await this.provider.createTable(this.type, this.sqlSchema);
+	}
 
-		const data = await this.provider.getAll(this.type);
-		if (data.length > 0) for (let i = 0; i < data.length; i++) this.cache.set(this.type, data[i].id, this.parseEntry(data[i]));
+	initEntryParser() {
+		const values = [];
+		this.schema.getValues(values);
+
+		for (let i = 0; i < values.length; i++) {
+			this.sqlEntryParser.push([
+				values[i].path,
+				values[i].default,
+				values[i].array ?
+					(value) => stringIsObject(value) ? JSON.parse(value) : value :
+					(value) => value
+			]);
+		}
+	}
+
+	parseEntry(entry) {
+		if (this.parseDottedObjects === false) return entry;
+
+		const object = {};
+		for (let i = 0; i < this.sqlEntryParser.length; i++) {
+			const [path, def, fn] = this.sqlEntryParser[i];
+			if (typeof entry[path] === 'undefined') {
+				object[path] = def;
+				continue;
+			}
+			object[path] = fn(entry[path]);
+		}
+
+		return entry;
+	}
+
+	/**
+	 * Sync either all entries from the cache with the persistent SQL database, or a single one.
+	 * @param {(Object|string)} [input=null] An object containing a id property, like discord.js objects, or a string.
+	 * @returns {Promise<void>}
+	 */
+	async sync(input = null) {
+		if (input === null) {
+			const data = await this.provider.getAll(this.type);
+			if (data.length > 0) for (let i = 0; i < data.length; i++) this.cache.set(this.type, data[i].id, this.parseEntry(data[i]));
+			return true;
+		}
+		const target = await this.validate(input).then(output => output && output.id ? output.id : output);
+		const data = await this.provider.get(this.type, target);
+		await this.cache.set(this.type, target, this.parseEntry(data));
+		return true;
 	}
 
 	/**
@@ -116,11 +164,6 @@ class GatewaySQL extends Gateway {
 			case 'update': return this.provider.updateColumn(action, key, dataType);
 			default: throw new TypeError('GatewaySQL#updateColumns only accept \'add\', \'remove\' or \'update\' as a value.');
 		}
-	}
-
-	parseEntry(object) {
-		if (this.parseDottedObjects === false) return object;
-		return parseDottedObject(object);
 	}
 
 	get sqlSchema() {

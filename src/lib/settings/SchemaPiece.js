@@ -170,6 +170,11 @@ class SchemaPiece {
 		return this.path;
 	}
 
+	getValues(array = null) {
+		if (array !== null) array.push(this);
+		return this;
+	}
+
 	toString(value) {
 		if (typeof value === 'undefined') return `{SchemaPiece:${this.type}}`;
 		if (value === null) return 'Not set';
