@@ -49,6 +49,7 @@ module.exports = class extends Language {
 			COMMAND_TRANSFER_ERROR: '❌ That file has been transfered already or never existed.',
 			COMMAND_TRANSFER_SUCCESS: (type, name) => `✅ Successfully transferred ${type}: ${name}`,
 			COMMAND_TRANSFER_FAILED: (type, name) => `Transfer of ${type}: ${name} to Client has failed. Please check your Console.`,
+			COMMAND_UNLOAD: (type, name) => `✅ Unloaded ${type}: ${name}`,
 			COMMAND_RELOAD: (type, name) => `✅ Reloaded ${type}: ${name}`,
 			COMMAND_RELOAD_ALL: (type) => `✅ Reloaded all ${type}.`,
 			COMMAND_REBOOT: 'Rebooting...',
