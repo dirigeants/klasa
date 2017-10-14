@@ -114,6 +114,10 @@ As you can see we can access the message instance in which our {@link RichMenu} 
 
 ## Personalization
 
+Behavior managing can be handled through the second (optional) argument of the {@link RichMenu.run} method.
+The configuration must be defined as an [object literal](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer).
+Please refer to the {@link RichMenu.RichMenuRunOptions} documentation page for information about each specific option.
+
 ### Info Page
 
 You can also set a page dedicated to showing information about your menu and its content through {@link RichDisplay.setInfoPage}.
