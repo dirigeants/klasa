@@ -62,6 +62,12 @@ class ReactionHandler extends ReactionCollector {
 		this.prompt = this.options.prompt || 'Which page would you like to jump to?';
 
 		/**
+		 * The time until the reaction collector closes automatically
+		 * @type {number}
+		 */
+		this.time = this.options.time || 30000;
+
+		/**
 		 * Whether the menu is awaiting a response of a prompt, to block all other jump reactions
 		 * @type {boolean}
 		 */
@@ -150,7 +156,7 @@ class ReactionHandler extends ReactionCollector {
 		if (this.awaiting) return;
 		this.awaiting = true;
 		const mes = await this.message.channel.send(this.prompt);
-		const collected = await this.message.channel.awaitMessages(mess => mess.author === user, { max: 1, time: 30000 });
+		const collected = await this.message.channel.awaitMessages(mess => mess.author === user, { max: 1, time: this.time });
 		this.awaiting = false;
 		await mes.delete();
 		if (!collected.size) return;
