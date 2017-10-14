@@ -71,5 +71,8 @@
 	},
 	"RichDisplay": {
 		"title": "Using RichDisplay for Paginated Embeds"
+	},
+	"RichMenu": {
+		"title": "Using RichMenu for Paginated Menus"
 	}
 }
