@@ -150,7 +150,7 @@ class RichMenu extends RichDisplay {
 			}
 			return embed;
 		});
-		if (this.options.length > page * 10) return this._paginate();
+		if (this.options.length > (page + 1) * 10) return this._paginate();
 		this.paginated = true;
 		return null;
 	}
