@@ -7,7 +7,7 @@ module.exports = class extends Extendable {
 	}
 
 	async extend() {
-		return this.client.commands.filter(async command => await !this.client.commandInhibitors.some(async inhibitor => {
+		return this.client.commands.filter(async command => await !this.client.inhibitors.some(async inhibitor => {
 			if (inhibitor.enabled && !inhibitor.spamProtection) return await inhibitor.run(this.client, this, command).catch(() => true);
 			return false;
 		}));
