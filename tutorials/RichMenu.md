@@ -12,7 +12,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg) {
-		const menu = await new RichMenu()
+		const menu = new RichMenu()
 			.addOption('First Option', 'This is an example.')
 			.addOption('Another Option', 'This is another option.');
 
