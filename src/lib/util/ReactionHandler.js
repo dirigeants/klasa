@@ -65,7 +65,7 @@ class ReactionHandler extends ReactionCollector {
 		 * The time until the reaction collector closes automatically
 		 * @type {number}
 		 */
-		this.time = this.options.time || 30000;
+		this.time = typeof this.options.time === 'number' ? this.options.time : 30000;
 
 		/**
 		 * Whether the menu is awaiting a response of a prompt, to block all other jump reactions
