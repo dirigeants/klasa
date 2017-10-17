@@ -1,37 +1,10 @@
-{@link RichMenu} allows you to create a list of options organized in a paginated embed that users of your bot will be able to browse through reaction-based navigation.
+While {@tutorial RichDisplay} allows you to create fully configurable paginated embeds, {@link RichMenu} allows you to define menus using a similar interface.
 
-A really simple example of a working {@link RichMenu} can be coded as follows:
+Unlike {@tutorial RichDisplay}, {@link RichMenu} doesn't allow to define how pages will look and instead of calling {@link RichDisplay.addPage} that allows to customize the template (if provided), the user is presented with the {@link RichMenu.addOption} method, which only requires a `name` and a `body` and handles the organization of the options automatically.
 
-```javascript
-const { Command, RichMenu } = require('klasa');
+Like {@tutorial RichDisplay} there is the option to define a template [`MessageEmbed`](https://discord.js.org/#/docs/main/master/class/MessageEmbed) in its constructor, but it will be applied automatically to each page of the menu.
 
-module.exports = class extends Command {
-
-	constructor(...args) {
-		super(...args, { description: 'Test RichDisplay' });
-	}
-
-	async run(msg) {
-		const menu = new RichMenu()
-			.addOption('First Option', 'This is an example.')
-			.addOption('Another Option', 'This is another option.');
-
-		const collector = await menu.run(await msg.send('Loading...'));
-
-		const choice = await collector.selection;
-		if (choice === null) {
-			return collector.message.delete();
-		}
-
-		return collector.message.edit(new this.client.methods.Embed()
-			.setTitle(menu.options[choice].name)
-		);
-	}
-
-};
-```
-
-A more complete example could be done by listing all the commands and their descriptions, like this:
+An example of how {@link RichMenu} could be used is in a `help`-like command, this is a simple demo of how it would work:
 
 ```javascript
 const menu = new RichMenu(new this.client.methods.Embed()
@@ -59,21 +32,13 @@ return collector.message.edit(new this.client.methods.Embed()
 );
 ```
 
-> The code is contained in the block of the aforementioned command, inside the `async run(msg)` method but the menu or its options can easily be initialized within the constructor method or the {@link Command.init} method of the command.
+> The code is designed to be placed in a command, inside the `async run(msg)` method but the menu or its options can easily be initialized within the constructor method or the {@link Command.init} method of the command.
 
 ## Code Analysis
 
-We begin by creating a new {@link RichMenu} instance. We define a new [`MessageEmbed`](https://discord.js.org/#/docs/main/master/class/MessageEmbed) instance in it, which will be used as a template applied to each page of the menu.
+The creation of the {@link RichMenu} is the same as the one displayed in {@tutorial RichDisplay}, like most of the code and personalization options. Please refer to the {@tutorial RichDisplay} tutorial.
 
-```javascript
-const menu = new RichMenu(new this.client.methods.Embed()
-	/* ... */
-);
-```
-
-Unlike {@tutorial RichDisplay} we won't be able to access the template or to define custom pages, we will instead be able to call {@link RichMenu.addOption} to define the options that will be shown in our menu.
-
-Each option takes a title and a description that will be provided through the usage of this method:
+We begin by adding the options, which will be listed in the same order we defined.
 
 ```javascript
 for (const command of /* ... */) {
@@ -100,37 +65,14 @@ After obtaining the index of the selected option we can access the option's name
 const command = /* ... */(menu.options[choice].name);
 ```
 
-In the example we use it to retrieve a {@link Command} piece from the {@link KlasaClient}.
+Finally, we show the user the selected command by editing the original [`MessageEmbed`](https://discord.js.org/#/docs/main/master/class/MessageEmbed):
 
 ```javascript
-const command = this.client.commands.get(menu.options[choice].name);
-
 return collector.message.edit(new this.client.methods.Embed()
 	.setDescription(`The chosen command is \`${command.name}\`.`)
 );
 ```
 
-As you can see we can access the message instance in which our {@link RichMenu} is rendered. In the example we use it to edit the embed and replace the menu with the selected option's command name.
-
 ## Personalization
 
-Behavior managing can be handled through the second (optional) argument of the {@link RichMenu.run} method.
-The configuration must be defined as an [object literal](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer).
-Please refer to the {@link RichMenu.RichMenuRunOptions} documentation page for information about each specific option.
-
-### Info Page
-
-You can also set a page dedicated to showing information about your menu and its content through {@link RichDisplay.setInfoPage}.
-This will allow you to access and edit a clone of your template if you defined one in the constructor of your {@link RichMenu}.
-
-The page will be accessible to the user through its own "i" reaction.
-
-### Custom Behavior Handling
-
-To handle whether or not a user should trigger an action when interacting with the reactions applied to the embed you can provide a `filter` function, which will be called every time a user reacts with the embed.
-
-A simple example for this would be a filter that only allows the user who executes the command to interact with it:
-
-```javascript
-menu.run(await msg.send('Loading commands...'), { filter: (reaction, user) => user === msg.author });
-```
+Personalization is the same offered by {@tutorial RichDisplay}. You can define an Info Page through {@link RichDisplay.setInfoPage} and you can define custom behavior handling by defining a function in the `filter` argument of {@link RichMenu.RichMenuRunOptions}
