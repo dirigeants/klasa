@@ -82,7 +82,21 @@ module.exports = class extends Language {
 				'',
 				'Speriamo di essere un framework 100% personalizzabile che possa servire qualsiasi audience. Rilasciamo aggiornamenti e correzioni di bug frequentemente.',
 				'Se sei interessato, dai una occhiata a https://klasa.js.org'
-			]
+			],
+			COMMAND_HELP_DM: '📥 | La lista di comandi a cui hai accesso è stata inviata nei tuoi messaggi privati.',
+			COMMAND_HELP_NODM: '❌ | I tuoi messaggi privati sono disabilitati, non ho potuto inviare la lista dei comandi nei tuoi messaggi privati.',
+			COMMAND_ENABLE: (type, name) => `+ Abilitato con successo il ${type}: ${name}`,
+			COMMAND_DISABLE: (type, name) => `+ Disabilitato con successo il ${type}: ${name}`,
+			COMMAND_DISABLE_WARN: 'Probabilmente non vuoi disabilitare questo, dato che non saresti più in grado di eseguire un comando per riabilitarlo',
+			COMMAND_CONF_NOKEY: 'Devi definire una chiave',
+			COMMAND_CONF_NOVALUE: 'Devi definire un valore',
+			COMMAND_CONF_ADDED: (value, key) => `Aggiunto con successo il valore \`${value}\` alla chiave: **${key}**`,
+			COMMAND_CONF_UPDATED: (key, response) => `Aggiornata con successo la chiave **${key}**: \`${response}\``,
+			COMMAND_CONF_KEY_NOT_ARRAY: 'Questa chiave non è una lista. Usa l\'azione \'reset\'.',
+			COMMAND_CONF_REMOVE: (value, key) => `Rimosso con successo il valore \`${value}\` dalla chiave: **${key}**`,
+			COMMAND_CONF_GET_NOEXT: (key) => `La chiave **${key}** non sembra esistere.`,
+			COMMAND_CONF_GET: (key, value) => `Il valore per la chiave **${key}** è: \`${value}\``,
+			COMMAND_CONF_RESET: (key, response) => `La chiave **${key}** è stata ripristinata a: \`${response}\``
 		};
 	}
 
