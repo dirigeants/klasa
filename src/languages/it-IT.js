@@ -64,6 +64,24 @@ module.exports = class extends Language {
 					'Se proverai ad usare un comando che richieda più permessi di quelli garantiti, il bot te lo farà sapere.'
 				].join(' ')),
 				'Apri un problema su <https://github.com/dirigeants/klasa> se trovi qualsiasi bug.'
+			],
+			COMMAND_INFO: [
+				'Klasa è un framework \'plug-and-play\' basato sulla libreria Discord.js.',
+				'La maggiorparte del codice è modularizzato, questo permette agli sviluppatori di modificare Klasa per adattarlo alle proprie richieste.',
+				'',
+				'Alcune funzionalità che Klasa include:',
+				'• Tempi di caricamento ridotti grazie al support di ES7 (Async/Await).',
+				'• Configurazioen per-server che può essere estesa dal tuo codice.',
+				'• Sistema di comandi personalizzabili con analisi dell\'utilizzo automatizzato e moduli di facile utilizzo per il ricaricamento e scaricamento.',
+				'• "Monitor" che possono controllare e reagire ai messaggi, come un evento di un messaggio normale (Filtri per palore volgari, Protezione da Spam, ecc).',
+				'• "Inibitori" che possono prevenire l\'esecuzione di comandi in base a un set di parametri (Permessi, Blacklist, ecc).',
+				'• "Provider" che permettono di connetterti a database esterni in base alle tue preferenze.',
+				'• "Finalizzatori" che vengono eseguiti sul messaggio di risposta dopo aver eseguito un comando.',
+				'• "Estensibili", codice passivo. Aggiungono proprietà o metodi a classi già esistenti in Discord.js.',
+				'• "Linguaggi", che permettono di tradurre il tuo bot.',
+				'',
+				'Speriamo di essere un framework 100% personalizzabile che possa servire qualsiasi audience. Rilasciamo aggiornamenti e correzioni di bug frequentemente.',
+				'Se sei interessato, dai una occhiata a https://klasa.js.org'
 			]
 		};
 	}
