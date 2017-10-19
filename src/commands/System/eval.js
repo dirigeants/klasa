@@ -220,8 +220,8 @@ module.exports = class extends Command {
 			if (i < this.typeRecursionLimit) {
 				if (nestedType.basicType === 'object') {
 					if (Array.isArray(value)) nestedTypeStr = this.getArrayType(value, i + 1);
-					if (value instanceof Map) nestedTypeStr = this.getMapType(value, i + 1);
-					if (value instanceof Set) nestedTypeStr = this.getSetType(value, i + 1);
+					else if (value instanceof Map) nestedTypeStr = this.getMapType(value, i + 1);
+					else if (value instanceof Set) nestedTypeStr = this.getSetType(value, i + 1);
 					else nestedTypeStr = this.getObjectType(value, i + 1);
 				} else if (nestedType.basicType === 'function') { nestedTypeStr = this.getFunctionType(value); }
 			}
