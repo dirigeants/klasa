@@ -38,9 +38,9 @@ module.exports = class extends Command {
 	}
 
 	/**
-	 * Eval the code and get info on the type of the result.
-	 * @param {string} code The code obvs.
-	 * @param {DiscordMessage} msg The message, so it's available to the eval.
+	 * Eval the code and get info on the type of the result
+	 * @param {string} code The code obvs
+	 * @param {DiscordMessage} msg The message, so it's available to the eval
 	 * @returns {Array<string>}
 	 */
 	async handleEval(code, msg) { // eslint-disable-line no-unused-vars
@@ -73,9 +73,9 @@ module.exports = class extends Command {
 	}
 
 	/**
-   * Checks if the output will be more than 2,000 characters.
-   * @param {string} evaled The evaled output (as a string).
-   * @param {string} topLine The line with the type and time info.
+   * Checks if the output will be more than 2,000 characters
+   * @param {string} evaled The evaled output (as a string)
+   * @param {string} topLine The line with the type and time info
    * @returns {boolean}
    */
 	isTooLong(evaled, topLine) {
@@ -84,12 +84,12 @@ module.exports = class extends Command {
 	}
 
 	/**
-	 * Get the type string of the evaled result.
-	 * @param {*} value The value to get the type string for.
-	 * @param {?Promise} [awaitedPromise] The promise that was already `await`ed earlier. This also acts
+	 * Get the type string of the evaled result
+	 * @param {*} value The value to get the type string for
+	 * @param {?Promise} [awaitedPromise] The promise that was already `await`ed earlier; this also acts
    *  as a surrogate, so that if the original promise was wrapped in a timeout promise, the original
-   *  promise can be examined, while the already-awaited surrogate is awaited.
-   * @param {number} [i=0] Just an iteration count to prevent infinite loops.
+   *  promise can be examined, while the already-awaited surrogate is awaited
+   * @param {number} [i=0] Just an iteration count to prevent infinite loops
 	 * @returns {string}
 	 */
 	async getTypeStr(value, awaitedPromise = null, i = 0) {
@@ -113,8 +113,10 @@ module.exports = class extends Command {
 	}
 
 	/**
-   * Get the type of value. A better version of the `typeof` operator, basically.
-   * @param {*} value The object or primitive whose type is to be returned.
+   * Get the type of value
+	 * 
+	 * A better version of the `typeof` operator, basically.
+   * @param {*} value The object or primitive whose type is to be returned
    * @returns {string}
    */
 	getType(value) {
@@ -122,8 +124,8 @@ module.exports = class extends Command {
 		return typeof value;
 	}
 	/**
-   * Get the class (constructor) name of value.
-   * @param {*} value The object whose class name is to be returned.
+   * Get the class (constructor) name of value
+   * @param {*} value The object whose class name is to be returned
    * @returns {string}
    */
 	getClass(value) {
@@ -132,8 +134,8 @@ module.exports = class extends Command {
 			{}.toString.call(value).match(/\[object (\w+)\]/)[1];
 	}
 	/**
-   * Get the type info for value.
-   * @param {*} value The object or primitive whose complex type is to be returned.
+   * Get the type info for value
+   * @param {*} value The object or primitive whose complex type is to be returned
    * @returns {{basicType: string, type: string}}
    */
 	getComplexType(value) {
@@ -143,26 +145,26 @@ module.exports = class extends Command {
 	}
 
 	/**
-   * Get the arity of fn.
-   * @param {Function} fn The function whose arity is to be returned.
+   * Get the arity of fn
+   * @param {Function} fn The function whose arity is to be returned
    * @returns {string}
    */
 	getFunctionType(fn) {
 		return `(${fn.length}-arity)`;
 	}
 	/**
-   * Get the type of array's elements.
-   * @param {Array} array The array whose element type is to be returned.
-   * @param {number} [i=0] Just an iteration count to prevent infinite loops.
+   * Get the type of array's elements
+   * @param {Array} array The array whose element type is to be returned
+   * @param {number} [i=0] Just an iteration count to prevent infinite loops
    * @returns {string}
    */
 	getArrayType(array, i = 0) {
 		return `<${this._getObjType(array, i)}>`;
 	}
 	/**
-   * Get the type of obj's elements.
-   * @param {Object} obj The object whose element type is to be returned.
-   * @param {number} [i=0] Just an iteration count to prevent infinite loops.
+   * Get the type of obj's elements
+   * @param {Object} obj The object whose element type is to be returned
+   * @param {number} [i=0] Just an iteration count to prevent infinite loops
    * @returns {string}
    */
 	getObjectType(obj, i = 0) {
@@ -170,9 +172,9 @@ module.exports = class extends Command {
 		return type.length > 0 ? `<${this.getComplexType('').type}, ${type}>` : '<>';
 	}
 	/**
-   * Get the type of map's values.
-   * @param {Map} map The map whose value type is to be returned.
-   * @param {number} [i=0] Just an iteration count to prevent infinite loops.
+   * Get the type of map's values
+   * @param {Map} map The map whose value type is to be returned
+   * @param {number} [i=0] Just an iteration count to prevent infinite loops
    * @returns {string}
    */
 	getMapType(map, i = 0) {
@@ -181,18 +183,18 @@ module.exports = class extends Command {
 		return valueType.length > 0 ? `<${keyType}, ${valueType}>` : '<>';
 	}
 	/**
-   * Get the type of set's values.
-   * @param {Set} set The set whose value type is to be returned.
-   * @param {number} [i=0] Just an iteration count to prevent infinite loops.
+   * Get the type of set's values
+   * @param {Set} set The set whose value type is to be returned
+   * @param {number} [i=0] Just an iteration count to prevent infinite loops
    * @returns {string}
    */
 	getSetType(set, i = 0) {
 		return `<${this._getObjType(Array.from(set.values()), i)}>`;
 	}
 	/**
-   * Get the type of values's elements.
-   * @param {Array} values The array whose element type is to be returned.
-   * @param {number} i Just an iteration count to prevent infinite loops.
+   * Get the type of values's elements
+   * @param {Array} values The array whose element type is to be returned
+   * @param {number} i Just an iteration count to prevent infinite loops
    * @returns {string}
    */
 	_getObjType(values, i) {
@@ -236,8 +238,8 @@ module.exports = class extends Command {
 	}
 
 	/**
-   * Present time duration in a nice way.
-   * @param {number} time A duration in milliseconds.
+   * Present time duration in a nice way
+   * @param {number} time A duration in milliseconds
    * @returns {string}
    */
 	getNiceDuration(time) {
@@ -247,8 +249,8 @@ module.exports = class extends Command {
 	}
 
 	/**
-   * Determines whether the passed value is an Array.
-   * @param {*} value The value to be checked.
+   * Determines whether the passed value is an Array
+   * @param {*} value The value to be checked
    * @returns {boolean}
    */
 	isThenable(value) {
@@ -256,12 +258,12 @@ module.exports = class extends Command {
 	}
 
 	/**
-   * Wrap a promise in a promise that will timeout in a certain amount of time.
+   * Wrap a promise in a promise that will timeout in a certain amount of time
    * 
    * Whichever promise (the inputted one or the timeout one) resolves first will have its value be
    * the resolved value of the returned promise.
-   * @param {Promise} promise The promise to wrap.
-   * @param {number} timeout How long the new promise should wait before timing out.
+   * @param {Promise} promise The promise to wrap
+   * @param {number} timeout How long the new promise should wait before timing out
    * @returns {Promise}
    */
 	timeoutPromise(promise, timeout) {
