@@ -139,6 +139,7 @@ class Schema {
 	_addKey(key, options) {
 		this.keys.add(key);
 		this._keys.push(key);
+		this._keys.sort((a, b) => a.localeCompare(b));
 		this[key] = new SchemaPiece(this.client, this.manager, options, `${this.path === '' ? '' : `${this.path}.`}${key}`, key);
 		this.defaults[key] = options.default;
 	}
@@ -185,7 +186,7 @@ class Schema {
 
 		return Promise.all(data.map(async (obj) => {
 			let object = obj;
-			for (let i = 0; i < path.length - 1; i++) object = object[path[i]];
+			for (let i = 0; i < path.length; i++) object = object[path[i]];
 			if (action === 'delete') delete object[key];
 			else object[key] = value;
 
@@ -247,8 +248,9 @@ class Schema {
 	 */
 	getList(msg, object) {
 		const array = [];
+		if (this._keys.length === 0) return '';
 		const keys = this._keys.filter(key => this[key].type === 'Folder' || this[key].configurable).sort();
-		const longest = keys.sort((a, b) => a.length < b.length)[0].length;
+		const longest = keys.reduce((a, b) => a.length > b.length ? a : b).length;
 		for (let i = 0; i < keys.length; i++) {
 			array.push(`${keys[i].padEnd(longest)} :: ${Schema.resolveString(msg, this[keys[i]], object[keys[i]])}`);
 		}
@@ -277,6 +279,8 @@ class Schema {
 			case 'role': resolver = (val) => `@${(msg.guild.roles.get(val) || { name: val }).name}`;
 				break;
 			case 'guild': resolver = (val) => val.name;
+				break;
+			case 'boolean': resolver = (val) => val === true ? 'Active' : 'Inactive';
 				break;
 			// no default
 		}

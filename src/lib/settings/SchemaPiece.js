@@ -187,6 +187,7 @@ class SchemaPiece {
 			case 'guild': return value.name;
 			case 'command':
 			case 'language': return value;
+			case 'boolean': return value === true ? 'Active' : 'Inactive';
 			default: return String(value);
 		}
 	}
