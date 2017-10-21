@@ -234,6 +234,7 @@ class Schema {
 	 */
 	getList(msg, object) {
 		const array = [];
+		if (this._keys.length === 0) return '';
 		const keys = this._keys.filter(key => this[key].type === 'Folder' || this[key].configurable).sort();
 		const longest = keys.sort((a, b) => a.length < b.length)[0].length;
 		for (let i = 0; i < keys.length; i++) {
