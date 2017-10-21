@@ -139,6 +139,7 @@ class Schema {
 	_addKey(key, options) {
 		this.keys.add(key);
 		this._keys.push(key);
+		this._keys.sort((a, b) => a.localeCompare(b));
 		this[key] = new SchemaPiece(this.client, this.manager, options, `${this.path === '' ? '' : `${this.path}.`}${key}`, key);
 		this.defaults[key] = options.default;
 	}
@@ -265,6 +266,8 @@ class Schema {
 			case 'role': resolver = (val) => `@${(msg.guild.roles.get(val) || { name: val }).name}`;
 				break;
 			case 'guild': resolver = (val) => val.name;
+				break;
+			case 'boolean': resolver = (val) => val === true ? 'Active' : 'Inactive';
 				break;
 			// no default
 		}
