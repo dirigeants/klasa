@@ -181,7 +181,7 @@ class Schema {
 
 		return Promise.all(data.map(async (obj) => {
 			let object = obj;
-			for (let i = 0; i < path.length - 1; i++) object = object[path[i]];
+			for (let i = 0; i < path.length; i++) object = object[path[i]];
 			if (action === 'delete') delete object[key];
 			else object[key] = value;
 
