@@ -80,7 +80,7 @@ class Colors {
 
 	static hslToRGB([h, s, l]) {
 		if (s === '0%' && typeof l === 'number') return [l, l, l];
-		if (typeof h !== 'number' && typeof s !== 'number' && typeof l !== 'number') {
+		if (typeof h !== 'number' || typeof s !== 'number' || typeof l !== 'number') {
 			throw new TypeError(`The input for Colors.hslToRGB must be number[], received: [${typeof h}, ${typeof s}, ${typeof l}]`);
 		}
 
