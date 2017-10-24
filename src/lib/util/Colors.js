@@ -79,8 +79,9 @@ class Colors {
 	}
 
 	static hslToRGB([h, s, l]) {
-		if (s === '0%') return [l, l, l];
-		const q = l < 0.5 ? l * (1 + s) : l + s - (l * s);
+		if (typeof s === 'string') return [l, l, l];
+
+		const q = l < 0.5 ? l * (1 + s) : (l + s) - (l * s);
 		const p = (2 * l) - q;
 		return [Colors.hueToRGB(p, q, h + (1 / 3)), Colors.hueToRGB(p, q, h), Colors.hueToRGB(p, q, h - (1 / 3))];
 	}
@@ -94,41 +95,61 @@ class Colors {
 		return p;
 	}
 
-	static formatArray(array) {
-		if (array[2].endsWith('%') && array[3].endsWith('%')) {
-			return Colors.hslToRGB(array);
+	static formatArray([pos1, pos2, pos3]) {
+		if (typeof pos1 === 'string' && typeof pos2 === 'string' && pos3 === 'string') {
+			const exec1 = /(\d{1,3})%?/.exec(pos1);
+			if (exec1 === null) throw new TypeError('Invalid argument parsed at first position. Expected a parsable numeric value.');
+			const exec2 = /(\d{1,3})%?/.exec(pos2);
+			if (exec2 === null) throw new TypeError('Invalid argument parsed at second position. Expected a parsable numeric value.');
+			const exec3 = /(\d{1,3})%?/.exec(pos3);
+			if (exec3 === null) throw new TypeError('Invalid argument parsed at third position. Expected a parsable numeric value.');
+
+			return Colors.hslToRGB([parseInt(exec1[1]), parseInt(exec2[1]), parseInt(exec3[1])]);
 		}
-		return `38;2;${array[0]};${array[1]};${array[2]}`;
+		return `38;2;${pos1};${pos2};${pos3}`;
 	}
 
+	/**
+	 * @typedef  {object} ColorsFormatOptions
+	 * @property {(string | string[])} style
+	 * @property {(number | string | number[] | string[])} background
+	 * @property {(number | string | number[] | string[])} text
+	 * @memberof Colors
+	 */
 
+	/**
+	 * Format a string.
+	 * @param {string} string The string to format.
+	 * @param {ColorsFormatOptions} formatOptions The format options.
+	 * @returns {string}
+	 */
 	format(string, { style, background, text } = {}) {
 		const opening = [];
 		const closing = [];
-		const backgroundMatch = background ? background.toString(16).match(/[a-f0-9]{6}|[a-f0-9]{3}/i) : null;
-		const textMatch = text ? text.toString(16).match(/[a-f0-9]{6}|[a-f0-9]{3}/i) : null;
-		if (backgroundMatch) background = Colors.hexToRGB(backgroundMatch);
-		if (textMatch) text = Colors.hexToRGB(textMatch);
 		if (style) {
 			if (Array.isArray(style)) {
-				for (const sty of style) {
-					if (sty in this.STYLES) {
-						opening.push(`${this.STYLES[sty.toLowerCase()]}`);
-						closing.push(`${this.CLOSE[sty.toLowerCase()]}`);
-					}
-				}
+				style.forEach(sty => sty in this.STYLES ?
+					opening.push(`${this.STYLES[sty.toLowerCase()]}`) && closing.push(`${this.CLOSE[sty.toLowerCase()]}`) :
+					null);
 			} else if (style in this.STYLES) {
 				opening.push(`${this.STYLES[style.toLowerCase()]}`);
 				closing.push(`${this.CLOSE[style.toLowerCase()]}`);
 			}
 		}
 		if (background) {
-			if (Number.isInteger(background)) {
-				opening.push(`48;5;${background}`);
-				closing.push(`${this.CLOSE.background}`);
-			}
-			if (Array.isArray(background)) {
-				opening.push(Colors.formatArray(background));
+			if (typeof background === 'number') {
+				if (Number.isInteger(background) === false) background = Math.round(background);
+
+				const number = (background >= 0x100 && background <= 0xFFF) || (background >= 0x100000 && background <= 0xFFFFFF) ?
+					background.toString(16) :
+					null;
+
+				if (number !== null) {
+					opening.push(`48;5;${background}`);
+					closing.push(`${this.CLOSE.background}`);
+				}
+			} else if (Array.isArray(background)) {
+				opening.push(Colors.formatArray([background[0], background[1], background[2]]));
 				closing.push(`\u001B[${this.CLOSE.background}`);
 			} else if (background.toString().toLowerCase() in this.BACKGROUNDS) {
 				opening.push(`${this.BACKGROUNDS[background.toLowerCase()]}`);
@@ -136,12 +157,12 @@ class Colors {
 			}
 		}
 		if (text) {
-			if (Number.isInteger(text)) {
+			if (typeof text === 'number') {
+				if (Number.isInteger(text) === false) text = Math.round(text);
 				opening.push(`38;5;${text}`);
 				closing.push(`${this.CLOSE.text}`);
-			}
-			if (Array.isArray(text)) {
-				opening.push(Colors.formatArray(text));
+			} else if (Array.isArray(text)) {
+				opening.push(Colors.formatArray([text[0], text[1], text[2]]));
 				closing.push(`${this.CLOSE.text}`);
 			} else if (text.toString().toLowerCase() in this.TEXTS) {
 				opening.push(`${this.TEXTS[text.toLowerCase()]}`);
