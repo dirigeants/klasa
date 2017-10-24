@@ -70,14 +70,39 @@ class Colors {
 		};
 	}
 
+	/**
+	 * Convert hex to RGB
+	 * @param {string} hex The hexadecimal value to parse.
+	 * @returns {number[]}
+	 */
 	static hexToRGB(hex) {
-		let string = hex[0];
-		if (string.length === 3) string = string.split('').map(char => char + char).join('');
-		const integer = parseInt(string, 16);
+		if (hex.length === 3) hex = hex.split('').map(char => char + char).join('');
+		const integer = parseInt(hex, 16);
 		// eslint-disable-next-line no-bitwise
 		return [(integer >> 16) & 0xFF, (integer >> 8) & 0xFF, integer & 0xFF];
 	}
 
+	/**
+	 * Convert hue to RGB
+	 * @param {number} p Value number one.
+	 * @param {number} q Value number two.
+	 * @param {number} t Value number three.
+	 * @returns {number}
+	 */
+	static hueToRGB(p, q, t) {
+		if (t < 0) t += 1;
+		if (t > 1) t -= 1;
+		if (t < 1 / 6) return p + ((q - p) * 6 * t);
+		if (t < 1 / 2) return q;
+		if (t < 2 / 3) return p + ((q - p) * ((2 / 3) - t) * 6);
+		return p;
+	}
+
+	/**
+	 * Format HSL to RGB
+	 * @param {(number[]|string[])} formatArray The array to format.
+	 * @returns {number[]}
+	 */
 	static hslToRGB([h, s, l]) {
 		if (s === '0%' && typeof l === 'number') return [l, l, l];
 		if (typeof h !== 'number' || typeof s !== 'number' || typeof l !== 'number') {
@@ -89,15 +114,11 @@ class Colors {
 		return [Colors.hueToRGB(p, q, h + (1 / 3)), Colors.hueToRGB(p, q, h), Colors.hueToRGB(p, q, h - (1 / 3))];
 	}
 
-	static hueToRGB(p, q, t) {
-		if (t < 0) t += 1;
-		if (t > 1) t -= 1;
-		if (t < 1 / 6) return p + ((q - p) * 6 * t);
-		if (t < 1 / 2) return q;
-		if (t < 2 / 3) return p + ((q - p) * ((2 / 3) - t) * 6);
-		return p;
-	}
-
+	/**
+	 * Format an array into a string
+	 * @param {(number[]|string[])} formatArray The array to format.
+	 * @returns {string}
+	 */
 	static formatArray([pos1, pos2, pos3]) {
 		if (typeof pos1 === 'string' && typeof pos2 === 'string' && pos3 === 'string') {
 			const exec1 = /(\d{1,3})%?/.exec(pos1);
@@ -107,7 +128,7 @@ class Colors {
 			const exec3 = /(\d{1,3})%?/.exec(pos3);
 			if (exec3 === null) throw new TypeError('Invalid argument parsed at third position. Expected a parsable numeric value.');
 
-			return Colors.hslToRGB([parseInt(exec1[1]), parseInt(exec2[1]), parseInt(exec3[1])]);
+			return `38;2;${Colors.hslToRGB([parseInt(exec1[1]), parseInt(exec2[1]), parseInt(exec3[1])]).join(';')}`;
 		}
 		return `38;2;${pos1};${pos2};${pos3}`;
 	}
@@ -121,7 +142,7 @@ class Colors {
 	 */
 
 	/**
-	 * Format a string.
+	 * Format a string
 	 * @param {string} string The string to format.
 	 * @param {ColorsFormatOptions} formatOptions The format options.
 	 * @returns {string}
