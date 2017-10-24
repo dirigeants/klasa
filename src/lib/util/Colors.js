@@ -79,7 +79,10 @@ class Colors {
 	}
 
 	static hslToRGB([h, s, l]) {
-		if (typeof s === 'string') return [l, l, l];
+		if (s === '0%' && typeof l === 'number') return [l, l, l];
+		if (typeof h !== 'number' && typeof s !== 'number' && typeof l !== 'number') {
+			throw new TypeError(`The input for Colors.hslToRGB must be number[], received: [${typeof h}, ${typeof s}, ${typeof l}]`);
+		}
 
 		const q = l < 0.5 ? l * (1 + s) : (l + s) - (l * s);
 		const p = (2 * l) - q;
@@ -128,10 +131,11 @@ class Colors {
 		const closing = [];
 		if (style) {
 			if (Array.isArray(style)) {
-				style.forEach(sty => sty in this.STYLES ?
-					opening.push(`${this.STYLES[sty.toLowerCase()]}`) && closing.push(`${this.CLOSE[sty.toLowerCase()]}`) :
-					null);
-			} else if (style in this.STYLES) {
+				for (let i = 0; i < style.length; i++) {
+					opening.push(`${this.STYLES[style[i].toLowerCase()]}`);
+					closing.push(`${this.CLOSE[style[i].toLowerCase()]}`);
+				}
+			} else if (typeof style === 'string' && style.toLowerCase() in this.STYLES) {
 				opening.push(`${this.STYLES[style.toLowerCase()]}`);
 				closing.push(`${this.CLOSE[style.toLowerCase()]}`);
 			}
@@ -151,7 +155,7 @@ class Colors {
 			} else if (Array.isArray(background)) {
 				opening.push(Colors.formatArray([background[0], background[1], background[2]]));
 				closing.push(`\u001B[${this.CLOSE.background}`);
-			} else if (background.toString().toLowerCase() in this.BACKGROUNDS) {
+			} else if (typeof background === 'string' && background.toLowerCase() in this.BACKGROUNDS) {
 				opening.push(`${this.BACKGROUNDS[background.toLowerCase()]}`);
 				closing.push(`${this.CLOSE.background}`);
 			}
@@ -164,7 +168,7 @@ class Colors {
 			} else if (Array.isArray(text)) {
 				opening.push(Colors.formatArray([text[0], text[1], text[2]]));
 				closing.push(`${this.CLOSE.text}`);
-			} else if (text.toString().toLowerCase() in this.TEXTS) {
+			} else if (typeof text === 'string' && text.toLowerCase() in this.TEXTS) {
 				opening.push(`${this.TEXTS[text.toLowerCase()]}`);
 				closing.push(`${this.CLOSE.text}`);
 			}
