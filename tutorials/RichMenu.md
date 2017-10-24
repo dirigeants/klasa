@@ -1,6 +1,6 @@
 While {@tutorial RichDisplay} allows you to create fully configurable paginated embeds, {@link RichMenu} allows you to define menus using a similar interface.
 
-Unlike {@tutorial RichDisplay}, {@link RichMenu} doesn't allow to define how pages will look and instead of calling {@link RichDisplay.addPage} that allows to customize the template (if provided), the user is presented with the {@link RichMenu.addOption} method, which only requires a `name` and a `body` and handles the organization of the options automatically.
+Unlike {@tutorial RichDisplay}, {@link RichMenu} manages a page's content and layout automatically and instead of calling {@link RichDisplay.addPage} that allows to customize the template (if provided), the user is presented with the {@link RichMenu.addOption} method, which only requires a `name` and a `body` and handles the organization of the options automatically.
 
 Like {@tutorial RichDisplay} there is the option to define a template [`MessageEmbed`](https://discord.js.org/#/docs/main/master/class/MessageEmbed) in its constructor, but it will be applied automatically to each page of the menu.
 
