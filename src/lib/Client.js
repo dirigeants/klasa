@@ -1,10 +1,10 @@
 const Discord = require('discord.js');
 const path = require('path');
-const now = require('performance-now');
 const CommandMessage = require('./structures/CommandMessage');
 const ArgResolver = require('./parsers/ArgResolver');
 const PermLevels = require('./structures/PermissionLevels');
 const util = require('./util/util');
+const Stopwatch = require('./util/Stopwatch');
 const Console = require('./util/Console');
 const Settings = require('./settings/SettingsCache');
 const CommandStore = require('./structures/CommandStore');
@@ -323,7 +323,7 @@ class KlasaClient extends Discord.Client {
 	 * @returns {Promise<string>}
 	 */
 	async login(token) {
-		const start = now();
+		const timer = new Stopwatch();
 		const loaded = await Promise.all(this.pieceStores.map(async store => `Loaded ${await store.loadAll()} ${store.name}.`))
 			.catch((err) => {
 				console.error(err);
@@ -331,7 +331,7 @@ class KlasaClient extends Discord.Client {
 			});
 		this.emit('log', loaded.join('\n'));
 		this.settings = new Settings(this);
-		this.emit('log', `Loaded in ${(now() - start).toFixed(2)}ms.`);
+		this.emit('log', `Loaded in ${timer.stop()}.`);
 		return super.login(token);
 	}
 

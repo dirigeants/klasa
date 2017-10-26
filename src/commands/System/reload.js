@@ -1,5 +1,4 @@
-const { Command } = require('klasa');
-const now = require('performance-now');
+const { Command, Stopwatch } = require('klasa');
 
 module.exports = class extends Command {
 
@@ -14,10 +13,10 @@ module.exports = class extends Command {
 
 	async run(msg, [piece]) {
 		if (piece instanceof this.client.methods.Collection) {
-			const start = now();
+			const timer = new Stopwatch();
 			await piece.loadAll();
 			await piece.init();
-			return msg.sendMessage(`${msg.language.get('COMMAND_RELOAD_ALL', piece)} (Took: ${(now() - start).toFixed(2)}ms.)`);
+			return msg.sendMessage(`${msg.language.get('COMMAND_RELOAD_ALL', piece)} (Took: ${timer.stop()})`);
 		}
 		return piece.reload()
 			.then(itm => msg.sendMessage(msg.language.get('COMMAND_RELOAD', itm.type, itm.name)))
