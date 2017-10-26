@@ -20,7 +20,7 @@
     "docs": "npx jsdoc -c ./.docstrap.json -R README.md"
   },
   "dependencies": {
-    "fs-nextra": "^0.3.0",
+    "fs-nextra": "^0.3.2",
     "moment": "^2.18.1"
   },
   "peerDependencies": {
