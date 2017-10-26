@@ -515,11 +515,11 @@ declare module 'klasa' {
 		public BACKGROUNDS: ColorsBackgrounds;
 
 		public static hexToRGB(hex: string): number[];
-		public static hslToRGB(hsl: number[]): number[];
 		public static hueToRGB(p: number, q: number, t: number): number;
-		public static formatArray(array: string[]): string|number[];
+		public static hslToRGB([h, s, l]: [number|string, number|string, number|string]): number[];
+		public static formatArray([pos1, pos2, pos3]: [number|string, number|string, number|string]): string;
 
-		public format(input: string, type?: { style: string|string[], background: string|number|string[], text: string|number|string[] }): string;
+		public format(input: string, type?: ColorsFormatOptions): string;
 	}
 
 	class KlasaConsole extends Console {
@@ -1205,6 +1205,12 @@ declare module 'klasa' {
 		lightmagenta: 105;
 		lightcyan: 106;
 		white: 107;
+	};
+
+	export type ColorsFormatOptions = {
+		style: string|string[];
+		background: string|number|string[];
+		text: string|number|string[]
 	};
 
 	export type KlasaConsoleColorsOption = boolean | StringMappedType<KlasaConsoleColorObjects> | KlasaConsoleColors;

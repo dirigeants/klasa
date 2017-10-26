@@ -272,15 +272,18 @@ class KlasaConsole extends Console {
 
 	/**
 	 * Flattens our data into a readable string.
-	 * @param  {*} data Some data to flatten
+	 * @param {*} data Some data to flatten
 	 * @param {boolean} useColors Whether or not the inspection should color the output
 	 * @return {string}
 	 */
 	static flatten(data, useColors) {
-		data = data.stack || data.message || data;
-		if (typeof data === 'object' && typeof data !== 'string' && !Array.isArray(data)) data = inspect(data, { depth: 0, colors: useColors });
-		if (Array.isArray(data)) data = data.join('\n');
-		return data;
+		if (typeof data === 'undefined' || typeof data === 'number' || data === null) return String(data);
+		if (typeof data === 'string') return data;
+		if (typeof data === 'object') {
+			if (Array.isArray(data)) return data.join('\n');
+			return data.stack || data.message || inspect(data, { depth: 0, colors: useColors });
+		}
+		return String(data);
 	}
 
 }
