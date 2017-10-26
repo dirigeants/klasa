@@ -543,7 +543,7 @@ declare module 'klasa' {
 		public static flatten(data: any, useColors: boolean): string;
 	}
 
-	class Stopwatch {
+	export class Stopwatch {
 		public constructor(digits?: number);
 		public start: number;
 		public end?: number;
