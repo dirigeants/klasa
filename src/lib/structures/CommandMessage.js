@@ -172,7 +172,7 @@ class CommandMessage {
 	 */
 	static getArgs(cmdMsg) {
 		// eslint-disable-next-line newline-per-chained-call
-		const args = cmdMsg.msg.content.slice(cmdMsg.prefixLength).trim().split(' ').slice(1).join(' ').trim().split(cmdMsg.cmd.usageDelim !== '' ? cmdMsg.cmd.usageDelim : undefined);
+		const args = cmdMsg.msg.content.slice(cmdMsg.prefixLength).trim().split(/\s+/g).slice(1).join(' ').trim().split(cmdMsg.cmd.usageDelim !== '' ? cmdMsg.cmd.usageDelim : undefined);
 		return args.length === 1 && args[0] === '' ? [] : args;
 	}
 
@@ -183,7 +183,7 @@ class CommandMessage {
 	 * @returns {string[]}
 	 */
 	static getQuotedStringArgs(cmdMsg) {
-		const content = cmdMsg.msg.content.slice(cmdMsg.prefixLength).trim().split(' ').slice(1).join(' ').trim();
+		const content = cmdMsg.msg.content.slice(cmdMsg.prefixLength).trim().split(/\s+/g).slice(1).join(' ').trim();
 
 		if (!cmdMsg.cmd.usageDelim || cmdMsg.cmd.usageDelim === '') return [content];
 
