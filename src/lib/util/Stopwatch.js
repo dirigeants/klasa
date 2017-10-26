@@ -31,6 +31,7 @@ class Stopwatch {
 
 	/**
 	 * The duration of this stopwatch since start or start to end if this stopwatch has stopped.
+	 * @readonly
 	 * @type {number}
 	 */
 	get duration() {
@@ -39,6 +40,7 @@ class Stopwatch {
 
 	/**
 	 * The duration formatted in a friendly string
+	 * @readonly
 	 * @type {string}
 	 */
 	get friendlyDuration() {
