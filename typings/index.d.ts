@@ -173,6 +173,7 @@ declare module 'klasa' {
 		public methodMap: Map<string, emoji>;
 		public currentPage: number;
 		public prompt: string;
+		public time: number;
 		public awaiting: boolean;
 		public selection: Promise<number?>;
 		public reactionsDone: boolean;
