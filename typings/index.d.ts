@@ -543,6 +543,18 @@ declare module 'klasa' {
 		public static flatten(data: any, useColors: boolean): string;
 	}
 
+	class Stopwatch {
+		public constructor(digits?: number);
+		public start: number;
+		public end?: number;
+		public digits: number;
+
+		public readonly duration: number;
+		public readonly friendlyDuration: string;
+		public stop(): this;
+		public toString(): string;
+	}
+
 	export { KlasaConsole as Console };
 
 	// Structures
@@ -665,7 +677,7 @@ declare module 'klasa' {
 		public dir: string;
 		public file: string;
 
-		public abstract run(msg: CommandMessage, mes: ExtendedMessage, start: number): void;
+		public abstract run(msg: CommandMessage, mes: ExtendedMessage, start: Stopwatch): void;
 		public abstract init(): any;
 
 		public abstract enable(): Piece;
