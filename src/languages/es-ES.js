@@ -45,7 +45,7 @@ module.exports = class extends Language {
 			INHIBITOR_REQUIRED_SETTINGS: (settings) => `El servidor no tiene las siguientes clave${settings.length > 1 ? 's' : ''}: **${settings.join(', ')}** y no puede ser ejecutado.`,
 			INHIBITOR_RUNIN: (types) => `Este comando sólo está disponible en los canales de tipo: ${types}.`,
 			INHIBITOR_RUNIN_NONE: (name) => `El comando ${name} no está configurado para ser ejecutado en cualquier canal.`,
-			COMMAD_UNLOAD: (type, name) => `✅ Descargado la pieza tipo ${type}: ${name}`,
+			COMMAND_UNLOAD: (type, name) => `✅ Descargado la pieza tipo ${type}: ${name}`,
 			COMMAND_TRANSFER_ERROR: '❌ El archivo ha sido transferido o nunca existió.',
 			COMMAND_TRANSFER_SUCCESS: (type, name) => `✅ Transferido la pieza tipo ${type}: ${name} con éxito.`,
 			COMMAND_TRANSFER_FAILED: (type, name) => `La transferencia de la pieza tipo ${type}: ${name} al Cliente ha fallado. Por favor, revisa su consola.`,

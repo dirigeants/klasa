@@ -47,7 +47,7 @@ module.exports = class extends Language {
 			INHIBITOR_REQUIRED_SETTINGS: (settings) => `Votre serveur n'a pas le${settings.length > 1 ? 's' : ''} paramètre${settings.length > 1 ? 's' : ''} **${settings.join(', ')}** et ne peux pas s'exécuter.`,
 			INHIBITOR_RUNIN: (types) => `Cette commande est uniquement disponible dans les salons ${types}`,
 			INHIBITOR_RUNIN_NONE: (name) => `La commande ${name} n'est pas configurée pour s'exécuter dans un salon.`,
-			COMMAD_UNLOAD: (type, name) => `✅ ${type} déchargé : ${name}`,
+			COMMAND_UNLOAD: (type, name) => `✅ ${type} déchargé : ${name}`,
 			COMMAND_TRANSFER_ERROR: '❌ Ce fichier a déjà été transféré ou n\'a jamais existé.',
 			COMMAND_TRANSFER_SUCCESS: (type, name) => `✅ ${type} transféré avec succès : ${name}`,
 			COMMAND_TRANSFER_FAILED: (type, name) => `Le transfert de ${type} : ${name} au Client a échoué. Veuillez vérifier votre Console.`,

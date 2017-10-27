@@ -44,7 +44,7 @@ module.exports = class extends Language {
 			INHIBITOR_REQUIRED_SETTINGS: (settings) => `Aufgrund der fehlenden Einstellung **${settings.join(', ')}** kann dieser Befehl nicht ausgeführt werden.`,
 			INHIBITOR_RUNIN: (types) => `Dieser Befehl kann nur in ${types} Kanälen ausgeführt werden`,
 			INHIBITOR_RUNIN_NONE: (name) => `Der ${name} Befehl wurde nicht für die Benutzung in mindestens einem Kanal aktiviert.`,
-			COMMAD_UNLOAD: (type, name) => `✅ Deaktiviert ${type}: ${name}`,
+			COMMAND_UNLOAD: (type, name) => `✅ Deaktiviert ${type}: ${name}`,
 			COMMAND_TRANSFER_ERROR: '❌ Diese Datei wurde bereits übertragen oder hat nie existiert.',
 			COMMAND_TRANSFER_SUCCESS: (type, name) => `✅ Erfolgreich übertragen ${type}: ${name}`,
 			COMMAND_TRANSFER_FAILED: (type, name) => `Übertrag von ${type}: ${name} zum Client fehlgeschlagen. Bitte überprüfe deine Konsole.`,

@@ -44,7 +44,7 @@ module.exports = class extends Language {
 			INHIBITOR_REQUIRED_SETTINGS: (settings) => `Guildul lipsește set${settings.length > 1 ? 'ările' : 'area'} **${settings.join(', ')}** și nu poate rula.`,
 			INHIBITOR_RUNIN: (types) => `Această comandă este valabilă doar in canalele de tipul ${types}`,
 			INHIBITOR_RUNIN_NONE: (name) => `Comanda ${name} nu este configurată să ruleze în orice canal.`,
-			COMMAD_UNLOAD: (type, name) => `✅ Descărcat ${type}: ${name}`,
+			COMMAND_UNLOAD: (type, name) => `✅ Descărcat ${type}: ${name}`,
 			COMMAND_TRANSFER_ERROR: '❌ Acest fișier a fost transferat deja sau nu este existent.',
 			COMMAND_TRANSFER_SUCCESS: (type, name) => `✅ Transferat cu succes ${type}: ${name}`,
 			COMMAND_TRANSFER_FAILED: (type, name) => `Transferul ${type}: ${name} la Client a eșuat. Verificați consola.`,
