@@ -2,6 +2,14 @@
 
 class Colors {
 
+	/**
+	 * @typedef  {object} ColorsFormatOptions
+	 * @property {(string | string[])} style
+	 * @property {(number | string | number[] | string[])} background
+	 * @property {(number | string | number[] | string[])} text
+	 * @memberof Colors
+	 */
+
 	constructor() {
 		this.CLOSE = {
 			normal: 0,
@@ -72,6 +80,7 @@ class Colors {
 
 	/**
 	 * Convert hex to RGB
+	 * @since 0.4.0
 	 * @param {string} hex The hexadecimal value to parse.
 	 * @returns {number[]}
 	 */
@@ -84,6 +93,7 @@ class Colors {
 
 	/**
 	 * Convert hue to RGB
+	 * @since 0.4.0
 	 * @param {number} p Value number one.
 	 * @param {number} q Value number two.
 	 * @param {number} t Value number three.
@@ -100,6 +110,7 @@ class Colors {
 
 	/**
 	 * Format HSL to RGB
+	 * @since 0.4.0
 	 * @param {(number[]|string[])} formatArray The array to format.
 	 * @returns {number[]}
 	 */
@@ -116,6 +127,7 @@ class Colors {
 
 	/**
 	 * Format an array into a string
+	 * @since 0.4.0
 	 * @param {(number[]|string[])} formatArray The array to format.
 	 * @returns {string}
 	 */
@@ -133,16 +145,10 @@ class Colors {
 		return `38;2;${pos1};${pos2};${pos3}`;
 	}
 
-	/**
-	 * @typedef  {object} ColorsFormatOptions
-	 * @property {(string | string[])} style
-	 * @property {(number | string | number[] | string[])} background
-	 * @property {(number | string | number[] | string[])} text
-	 * @memberof Colors
-	 */
 
 	/**
 	 * Format a string
+	 * @since 0.4.0
 	 * @param {string} string The string to format.
 	 * @param {ColorsFormatOptions} formatOptions The format options.
 	 * @returns {string}
