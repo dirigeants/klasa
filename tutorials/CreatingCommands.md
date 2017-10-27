@@ -16,7 +16,7 @@ module.exports = class extends Command {
             botPerms: [],
             requiredSettings: [],
             description: '',
-            quotedStringSupport: this.client.config.quotedStringSupport,
+            quotedStringSupport: false,
             usage: '',
             usageDelim: undefined,
             extendedHelp: 'No extended help available.'
