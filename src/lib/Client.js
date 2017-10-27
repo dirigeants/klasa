@@ -431,6 +431,7 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
 /**
  * Emitted when a command has been inhibited.
  * @event KlasaClient#commandInhibited
+ * @since 0.3.0
  * @param {external:Message} message The message that triggered the command
  * @param {Command} command The command triggered
  * @param {?string} response The reason why it was inhibited if not silent
@@ -439,6 +440,7 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
 /**
  * Emitted when a command has been run.
  * @event KlasaClient#commandRun
+ * @since 0.3.0
  * @param {CommandMessageProxy} message The message that triggered the command
  * @param {Command} command The command run
  * @param {any[]} params The resolved parameters of the command
@@ -448,6 +450,7 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
 /**
  * Emitted when a command has errored.
  * @event KlasaClient#commandError
+ * @since 0.3.0
  * @param {CommandMessageProxy} message The message that triggered the command
  * @param {Command} command The command run
  * @param {any[]} params The resolved parameters of the command
@@ -457,6 +460,7 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
 /**
  * Emitted when {@link SettingGateway.update}, {@link SettingGateway.updateArray} or {@link SettingGateway.reset} is run.
  * @event KlasaClient#settingUpdate
+ * @since 0.3.0
  * @param {SettingGateway} gateway The setting gateway with the updated setting
  * @param {string} id The identifier of the gateway that was updated
  * @param {Object} oldEntries The old settings entries
