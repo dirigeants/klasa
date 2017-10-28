@@ -6,7 +6,7 @@ module.exports = class extends Extendable {
 		super(...args, ['Message']);
 	}
 
-	extend(content, options) {
+	extend(content = '', options = {}) {
 		return this.sendMessage(content, options);
 	}
 
