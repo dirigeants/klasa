@@ -2,6 +2,7 @@ const { ReactionCollector } = require('discord.js');
 
 /**
  * Klasa's ReactionHandler, for handling RichDisplay and RichMenu reaction input
+ * @since 0.4.0
  * @extends ReactionCollector
  */
 class ReactionHandler extends ReactionCollector {
@@ -28,6 +29,7 @@ class ReactionHandler extends ReactionCollector {
 
 	/**
 	 * Constructs our ReactionHandler instance
+	 * @since 0.4.0
 	 * @param  {external:Message} msg A message this ReactionHandler should handle reactions
 	 * @param  {Function} filter A filter function to determine which emoji reactions should be handled
 	 * @param  {ReactionHandlerOptions} options The options for this ReactionHandler
@@ -39,41 +41,55 @@ class ReactionHandler extends ReactionCollector {
 
 		/**
 		 * The RichDisplay/RichMenu this Handler is for
+		 * @since 0.4.0
 		 * @type {(RichDisplay|RichMenu)}
 		 */
 		this.display = display;
 
 		/**
 		 * An emoji to method map, to map custom emojis to static method names
+		 * @since 0.4.0
 		 * @type {Map<string,emoji>}
 		 */
 		this.methodMap = new Map(Object.entries(this.display.emojis).map(([key, value]) => [value, key]));
 
 		/**
 		 * The current page the display is on
+		 * @since 0.4.0
 		 * @type {number}
 		 */
 		this.currentPage = this.options.startPage || 0;
 
 		/**
 		 * The prompt to use when jumping pages
+		 * @since 0.4.0
 		 * @type {string}
 		 */
 		this.prompt = this.options.prompt || 'Which page would you like to jump to?';
 
 		/**
+		 * The time until the reaction collector closes automatically
+		 * @since 0.4.0
+		 * @type {number}
+		 */
+		this.time = typeof this.options.time === 'number' ? this.options.time : 30000;
+
+		/**
 		 * Whether the menu is awaiting a response of a prompt, to block all other jump reactions
+		 * @since 0.4.0
 		 * @type {boolean}
 		 */
 		this.awaiting = false;
 
 		/**
 		 * The selection of a RichMenu (useless in a RichDisplay scenario)
+		 * @since 0.4.0
 		 * @type {Promise<number?>}
 		 */
 		this.selection = this.display.emojis.zero ? new Promise((resolve, reject) => {
 			/**
 			 * Causes this.selection to resolve
+			 * @since 0.4.0
 			 * @type {Function}
 			 * @private
 			 */
@@ -81,6 +97,7 @@ class ReactionHandler extends ReactionCollector {
 
 			/**
 			 * Causes this.selection to reject
+			 * @since 0.4.0
 			 * @type {Function}
 			 * @private
 			 */
@@ -89,6 +106,7 @@ class ReactionHandler extends ReactionCollector {
 
 		/**
 		 * Whether reactions have finished queuing (used to handle clearing reactions on early menu selections)
+		 * @since 0.4.0
 		 * @type {boolean}
 		 */
 		this.reactionsDone = false;
@@ -105,6 +123,7 @@ class ReactionHandler extends ReactionCollector {
 
 	/**
 	 * The action to take when the "first" emoji is reacted
+	 * @since 0.4.0
 	 * @returns {void}
 	 */
 	first() {
@@ -114,6 +133,7 @@ class ReactionHandler extends ReactionCollector {
 
 	/**
 	 * The action to take when the "back" emoji is reacted
+	 * @since 0.4.0
 	 * @returns {void}
 	 */
 	back() {
@@ -124,6 +144,7 @@ class ReactionHandler extends ReactionCollector {
 
 	/**
 	 * The action to take when the "forward" emoji is reacted
+	 * @since 0.4.0
 	 * @returns {void}
 	 */
 	forward() {
@@ -134,6 +155,7 @@ class ReactionHandler extends ReactionCollector {
 
 	/**
 	 * The action to take when the "last" emoji is reacted
+	 * @since 0.4.0
 	 * @returns {void}
 	 */
 	last() {
@@ -143,6 +165,7 @@ class ReactionHandler extends ReactionCollector {
 
 	/**
 	 * The action to take when the "jump" emoji is reacted
+	 * @since 0.4.0
 	 * @param {external:User} user The user to lock the awaitMessages to
 	 * @returns {void}
 	 */
@@ -150,7 +173,7 @@ class ReactionHandler extends ReactionCollector {
 		if (this.awaiting) return;
 		this.awaiting = true;
 		const mes = await this.message.channel.send(this.prompt);
-		const collected = await this.message.channel.awaitMessages(mess => mess.author === user, { max: 1, time: 30000 });
+		const collected = await this.message.channel.awaitMessages(mess => mess.author === user, { max: 1, time: this.time });
 		this.awaiting = false;
 		await mes.delete();
 		if (!collected.size) return;
@@ -164,6 +187,7 @@ class ReactionHandler extends ReactionCollector {
 
 	/**
 	 * The action to take when the "info" emoji is reacted
+	 * @since 0.4.0
 	 * @returns {void}
 	 */
 	info() {
@@ -172,6 +196,7 @@ class ReactionHandler extends ReactionCollector {
 
 	/**
 	 * The action to take when the "stop" emoji is reacted
+	 * @since 0.4.0
 	 * @returns {void}
 	 */
 	stop() {
@@ -181,6 +206,7 @@ class ReactionHandler extends ReactionCollector {
 
 	/**
 	 * The action to take when the "zero" emoji is reacted
+	 * @since 0.4.0
 	 * @returns {void}
 	 */
 	zero() {
@@ -191,6 +217,7 @@ class ReactionHandler extends ReactionCollector {
 
 	/**
 	 * The action to take when the "one" emoji is reacted
+	 * @since 0.4.0
 	 * @returns {void}
 	 */
 	one() {
@@ -201,6 +228,7 @@ class ReactionHandler extends ReactionCollector {
 
 	/**
 	 * The action to take when the "two" emoji is reacted
+	 * @since 0.4.0
 	 * @returns {void}
 	 */
 	two() {
@@ -211,6 +239,7 @@ class ReactionHandler extends ReactionCollector {
 
 	/**
 	 * The action to take when the "three" emoji is reacted
+	 * @since 0.4.0
 	 * @returns {void}
 	 */
 	three() {
@@ -221,6 +250,7 @@ class ReactionHandler extends ReactionCollector {
 
 	/**
 	 * The action to take when the "four" emoji is reacted
+	 * @since 0.4.0
 	 * @returns {void}
 	 */
 	four() {
@@ -231,6 +261,7 @@ class ReactionHandler extends ReactionCollector {
 
 	/**
 	 * The action to take when the "five" emoji is reacted
+	 * @since 0.4.0
 	 * @returns {void}
 	 */
 	five() {
@@ -241,6 +272,7 @@ class ReactionHandler extends ReactionCollector {
 
 	/**
 	 * The action to take when the "six" emoji is reacted
+	 * @since 0.4.0
 	 * @returns {void}
 	 */
 	six() {
@@ -251,6 +283,7 @@ class ReactionHandler extends ReactionCollector {
 
 	/**
 	 * The action to take when the "seven" emoji is reacted
+	 * @since 0.4.0
 	 * @returns {void}
 	 */
 	seven() {
@@ -261,6 +294,7 @@ class ReactionHandler extends ReactionCollector {
 
 	/**
 	 * The action to take when the "eight" emoji is reacted
+	 * @since 0.4.0
 	 * @returns {void}
 	 */
 	eight() {
@@ -271,6 +305,7 @@ class ReactionHandler extends ReactionCollector {
 
 	/**
 	 * The action to take when the "nine" emoji is reacted
+	 * @since 0.4.0
 	 * @returns {void}
 	 */
 	nine() {
@@ -281,6 +316,7 @@ class ReactionHandler extends ReactionCollector {
 
 	/**
 	 * Updates the display page
+	 * @since 0.4.0
 	 * @returns {void}
 	 */
 	update() {
@@ -289,6 +325,7 @@ class ReactionHandler extends ReactionCollector {
 
 	/**
 	 * The action to take when the "first" emoji is reacted
+	 * @since 0.4.0
 	 * @param {emoji[]} emojis The remaining emojis to react
 	 * @returns {null}
 	 * @private

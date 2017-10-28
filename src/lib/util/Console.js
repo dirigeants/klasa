@@ -5,80 +5,9 @@ const { inspect } = require('util');
 
 /**
  * Klasa's console class, extends NodeJS Console class.
+ * @since 0.4.0
  */
 class KlasaConsole extends Console {
-
-	/**
-	 * Constructs our KlasaConsole instance
-	 * @param  {KlasaConsoleConfig} [options] The options for the klasa console.
-	 */
-	constructor({ stdout = process.stdout, stderr = process.stderr, useColor, colors = {}, timestamps = true }) {
-		super(stdout, stderr);
-
-		/**
-		 * The standard output stream for this console, defaulted to process.stderr.
-		 * @name KlasaConsole#stdout
-		 * @type {WritableStream}
-		 */
-		Object.defineProperty(this, 'stdout', { value: stdout });
-
-		/**
-		 * The standard error output stream for this console, defaulted to process.stderr.
-		 * @name KlasaConsole#stderr
-		 * @type {WritableStream}
-		 */
-		Object.defineProperty(this, 'stderr', { value: stderr });
-
-		/**
-		 * Whether or not timestamps should be enabled for this console.
-		 * @type {(boolean|string)}
-		 */
-		this.timestamps = timestamps === true ? 'YYYY-MM-DD HH:mm:ss' : timestamps;
-
-		/**
-		 * Whether or not this console should use colors.
-		 * @type {boolean}
-		 */
-		this.useColors = typeof useColor === 'undefined' ? this.stdout.isTTY || false : useColor;
-
-		/**
-		 * The colors for this console.
-		 * @name KlasaConsole#colors
-		 * @type  {boolean|Colors}
-		 */
-		this.colors = {
-			debug: colors.debug || {
-				type: 'log',
-				message: { background: null, text: null, style: null },
-				time: { background: 'magenta', text: null, style: null }
-			},
-			error: colors.error || {
-				type: 'error',
-				message: { background: null, text: null, style: null },
-				time: { background: 'red', text: null, style: null }
-			},
-			log: colors.log || {
-				type: 'log',
-				message: { background: null, text: null, style: null },
-				time: { background: 'blue', text: null, style: null }
-			},
-			verbose: colors.verbose || {
-				type: 'log',
-				message: { background: null, text: 'gray', style: null },
-				time: { background: null, text: 'gray', style: null }
-			},
-			warn: colors.warn || {
-				type: 'warn',
-				message: { background: null, text: null, style: null },
-				time: { background: 'lightyellow', text: 'black', style: null }
-			},
-			wtf: colors.wtf || {
-				type: 'error',
-				message: { background: null, text: 'red', style: null },
-				time: { background: 'red', text: null, style: null }
-			}
-		};
-	}
 
 	/**
 	 * @memberof KlasaConsole
@@ -181,7 +110,87 @@ class KlasaConsole extends Console {
 	 */
 
 	/**
+	 * Constructs our KlasaConsole instance
+	 * @since 0.4.0
+	 * @param  {KlasaConsoleConfig} [options] The options for the klasa console.
+	 */
+	constructor({ stdout = process.stdout, stderr = process.stderr, useColor, colors = {}, timestamps = true }) {
+		super(stdout, stderr);
+
+		/**
+		 * The standard output stream for this console, defaulted to process.stderr.
+		 * @since 0.4.0
+		 * @name KlasaConsole#stdout
+		 * @type {WritableStream}
+		 */
+		Object.defineProperty(this, 'stdout', { value: stdout });
+
+		/**
+		 * The standard error output stream for this console, defaulted to process.stderr.
+		 * @since 0.4.0
+		 * @name KlasaConsole#stderr
+		 * @type {WritableStream}
+		 */
+		Object.defineProperty(this, 'stderr', { value: stderr });
+
+		/**
+		 * Whether or not timestamps should be enabled for this console.
+		 * @since 0.4.0
+		 * @type {(boolean|string)}
+		 */
+		this.timestamps = timestamps === true ? 'YYYY-MM-DD HH:mm:ss' : timestamps;
+
+		/**
+		 * Whether or not this console should use colors.
+		 * @since 0.4.0
+		 * @type {boolean}
+		 */
+		this.useColors = typeof useColor === 'undefined' ? this.stdout.isTTY || false : useColor;
+
+		/**
+		 * The colors for this console.
+		 * @since 0.4.0
+		 * @name KlasaConsole#colors
+		 * @type  {boolean|Colors}
+		 */
+		this.colors = {
+			debug: colors.debug || {
+				type: 'log',
+				message: { background: null, text: null, style: null },
+				time: { background: 'magenta', text: null, style: null }
+			},
+			error: colors.error || {
+				type: 'error',
+				message: { background: null, text: null, style: null },
+				time: { background: 'red', text: null, style: null }
+			},
+			log: colors.log || {
+				type: 'log',
+				message: { background: null, text: null, style: null },
+				time: { background: 'blue', text: null, style: null }
+			},
+			verbose: colors.verbose || {
+				type: 'log',
+				message: { background: null, text: 'gray', style: null },
+				time: { background: null, text: 'gray', style: null }
+			},
+			warn: colors.warn || {
+				type: 'warn',
+				message: { background: null, text: null, style: null },
+				time: { background: 'lightyellow', text: 'black', style: null }
+			},
+			wtf: colors.wtf || {
+				type: 'error',
+				message: { background: null, text: 'red', style: null },
+				time: { background: 'red', text: null, style: null }
+			}
+		};
+	}
+
+
+	/**
 	 * Logs everything to the console/writable stream.
+	 * @since 0.4.0
 	 * @param  {*} data The data we want to print.
 	 * @param  {string} [type="log"] The type of log, particularly useful for coloring.
 	 */
@@ -196,6 +205,7 @@ class KlasaConsole extends Console {
 
 	/**
 	 * Calls a log write with everything to the console/writable stream.
+	 * @since 0.4.0
 	 * @param {...*} data The data we want to print.
 	 * @returns {void}
 	 */
@@ -205,6 +215,7 @@ class KlasaConsole extends Console {
 
 	/**
 	 * Calls a warn write with everything to the console/writable stream.
+	 * @since 0.4.0
 	 * @param {...*} data The data we want to print.
 	 * @returns {void}
 	 */
@@ -214,6 +225,7 @@ class KlasaConsole extends Console {
 
 	/**
 	 * Calls an error write with everything to the console/writable stream.
+	 * @since 0.4.0
 	 * @param {...*} data The data we want to print.
 	 * @returns {void}
 	 */
@@ -223,6 +235,7 @@ class KlasaConsole extends Console {
 
 	/**
 	 * Calls a debug write with everything to the console/writable stream.
+	 * @since 0.4.0
 	 * @param {...*} data The data we want to print.
 	 * @returns {void}
 	 */
@@ -232,6 +245,7 @@ class KlasaConsole extends Console {
 
 	/**
 	 * Calls a verbose write with everything to the console/writable stream.
+	 * @since 0.4.0
 	 * @param {...*} data The data we want to print.
 	 * @returns {void}
 	 */
@@ -241,6 +255,7 @@ class KlasaConsole extends Console {
 
 	/**
 	 * Calls a wtf (what a terrible failure) write with everything to the console/writable stream.
+	 * @since 0.4.0
 	 * @param {...*} data The data we want to print.
 	 * @returns {void}
 	 */
@@ -250,6 +265,7 @@ class KlasaConsole extends Console {
 
 	/**
 	 * Logs everything to the console/writable stream.
+	 * @since 0.4.0
 	 * @param {Date} timestamp The timestamp to maybe format
 	 * @param {string} time The time format used for coloring
 	 * @returns {string}
@@ -261,6 +277,7 @@ class KlasaConsole extends Console {
 
 	/**
 	 * Logs everything to the console/writable stream.
+	 * @since 0.4.0
 	 * @param {string} string The data we want to print.
 	 * @param {string} message The message format used for coloring
 	 * @returns {string}
@@ -272,15 +289,19 @@ class KlasaConsole extends Console {
 
 	/**
 	 * Flattens our data into a readable string.
-	 * @param  {*} data Some data to flatten
+	 * @since 0.4.0
+	 * @param {*} data Some data to flatten
 	 * @param {boolean} useColors Whether or not the inspection should color the output
 	 * @return {string}
 	 */
 	static flatten(data, useColors) {
-		data = data.stack || data.message || data;
-		if (typeof data === 'object' && typeof data !== 'string' && !Array.isArray(data)) data = inspect(data, { depth: 0, colors: useColors });
-		if (Array.isArray(data)) data = data.join('\n');
-		return data;
+		if (typeof data === 'undefined' || typeof data === 'number' || data === null) return String(data);
+		if (typeof data === 'string') return data;
+		if (typeof data === 'object') {
+			if (Array.isArray(data)) return data.join('\n');
+			return data.stack || data.message || inspect(data, { depth: 0, colors: useColors });
+		}
+		return String(data);
 	}
 
 }

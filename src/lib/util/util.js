@@ -5,11 +5,13 @@ let sensitivePattern;
 
 /**
  * Contains static methods to be used throughout klasa
+ * @since 0.0.1
  */
 class Util {
 
 	/**
 	 * This class may not be initiated with new
+	 * @since 0.0.1
 	 */
 	constructor() {
 		throw new Error('This class may not be initiated with new');
@@ -17,6 +19,7 @@ class Util {
 
 	/**
 	 * Makes a codeblock markup string
+	 * @since 0.0.1
 	 * @param {string} lang The codeblock language
 	 * @param {string} expression The expression to be wrapped in the codeblock
 	 * @returns {string}
@@ -27,6 +30,7 @@ class Util {
 
 	/**
 	 * Cleans sensitive info from strings
+	 * @since 0.0.1
 	 * @param {string} text The text to clean
 	 * @returns {string}
 	 */
@@ -37,6 +41,7 @@ class Util {
 
 	/**
 	 * Initializes the sensitive patterns for clean()
+	 * @since 0.0.1
 	 * @private
 	 * @param {KlasaClient} client The Klasa client
 	 */
@@ -50,6 +55,7 @@ class Util {
 
 	/**
 	 * Converts a string to Title Case
+	 * @since 0.0.1
 	 * @param {string} str The string to titlecaseify
 	 * @returns {string}
 	 */
@@ -59,6 +65,7 @@ class Util {
 
 	/**
 	 * Generates an error object used for argument reprompting
+	 * @since 0.0.1
 	 * @param {Error} error An error object
 	 * @param {number} code The status code to assign to the error
 	 * @returns {Error}
@@ -79,6 +86,7 @@ class Util {
 
 	/**
 	 * Cleans a string from regex injection
+	 * @since 0.0.1
 	 * @param {string} str The string to clean
 	 * @returns {string}
 	 */
@@ -87,7 +95,8 @@ class Util {
 	}
 
 	/**
-	 * Applies an interface to a class
+	 * Applies an interface to a class|
+	 * @since 0.1.1
 	 * @param {Object} base The interface to apply to a structure
 	 * @param {Object} structure The structure to apply the interface to
 	 * @param {string[]} [skips=[]] The methods to skip when applying this interface
@@ -107,7 +116,7 @@ class Util {
  * @property {Object} [env={}] Environment key-value pairs
  * @property {string} [encoding='utf8'] encoding to use
  * @property {string} [shell=os === unix ? '/bin/sh' : process.env.ComSpec] Shell to execute the command with
- * @property {number} [timeout=0] 
+ * @property {number} [timeout=0]
  * @property {number} [maxBuffer=200*1024] Largest amount of data in bytes allowed on stdout or stderr. If exceeded, the child process is terminated.
  * @property {string|number} [killSignal='SIGTERM'] <string> | <integer> (Default: 'SIGTERM')
  * @property {number} [uid] Sets the user identity of the process.
@@ -117,6 +126,7 @@ class Util {
 /**
  * Promisified version of child_process.exec for use with await
  * @method
+ * @since 0.3.0
  * @param {string} command The command to run
  * @param {execOptions} options The options to pass to exec
  * @returns {string}
@@ -126,6 +136,7 @@ Util.exec = promisify(exec);
 /**
  * Promisified version of setTimeout for use with await
  * @method
+ * @since 0.3.0
  * @param {number} delay The amount of time in ms to delay
  * @param {any} args Any args to pass to the .then (mostly pointless in this form)
  * @returns {Promise<any>} The args value passed in
