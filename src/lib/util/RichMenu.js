@@ -39,7 +39,7 @@ class RichMenu extends RichDisplay {
 	 * @typedef {object} MenuOption
 	 * @memberof RichMenu
 	 * @property {string} name The name of the option
-	 * @property {string} description The description of the option
+	 * @property {string} body The description of the option
 	 * @property {boolean} [inline = false] Whether the option should be inline
 	 */
 
@@ -160,7 +160,7 @@ class RichMenu extends RichDisplay {
 			}
 			return embed;
 		});
-		if (this.options.length > page * 10) return this._paginate();
+		if (this.options.length > (page + 1) * 10) return this._paginate();
 		this.paginated = true;
 		return null;
 	}

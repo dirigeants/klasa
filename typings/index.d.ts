@@ -1115,7 +1115,7 @@ declare module 'klasa' {
 
 	export type MenuOption = {
 		name: string;
-		description: string;
+		body: string;
 		inline?: boolean;
 	};
 
