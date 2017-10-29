@@ -1,6 +1,5 @@
 /**
  * The internal class that turns command arguments into command parameters
- * @since 0.0.1
  */
 class CommandMessage {
 

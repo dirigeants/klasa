@@ -2,7 +2,6 @@ const Resolver = require('./Resolver');
 
 /**
  * The setting resolver
- * @since 0.0.1
  * @extends Resolver
  */
 class SettingResolver extends Resolver {

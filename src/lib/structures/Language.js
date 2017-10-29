@@ -3,7 +3,6 @@ const Piece = require('./interfaces/Piece');
 /**
  * Base class for all Klasa Languages. See {@tutorial CreatingLanguages} for more information how to use this class
  * to build custom languages.
- * @since 0.2.1
  * @tutorial CreatingLanguages
  * @implements {Piece}
  */

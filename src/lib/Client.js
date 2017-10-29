@@ -18,7 +18,6 @@ const ExtendableStore = require('./structures/ExtendableStore');
 
 /**
  * The client for handling everything. See {@tutorial GettingStarted} for more information how to get started using this class.
- * @since 0.0.1
  * @extends external:Client
  * @tutorial GettingStarted
  */
@@ -26,7 +25,6 @@ class KlasaClient extends Discord.Client {
 
 	/**
 	 * @typedef {Object} KlasaClientConfig
-	 * @since 0.0.1
 	 * @memberof KlasaClient
 	 * @property {string} prefix The default prefix the bot should respond to
 	 * @property {DiscordJSConfig} [clientOptions={}] The options to pass to D.JS
@@ -51,7 +49,6 @@ class KlasaClient extends Discord.Client {
 
 	/**
 	 * @typedef {Object} KlasaConsoleConfig
-	 * @since 0.4.0
 	 * @memberof KlasaClient
 	 * @property {WriteableStream} [stdout=process.stdout] Output stream
 	 * @property {WriteableStream} [stderr=process.stderr] Error stream
@@ -62,7 +59,6 @@ class KlasaClient extends Discord.Client {
 
 	/**
 	 * @typedef {Object} KlasaConsoleEvents
-	 * @since 0.4.0
 	 * @memberof KlasaClient
 	 * @property {boolean} [log=true] If the log event should be enabled by default
 	 * @property {boolean} [warn=true] If the warn event should be enabled by default

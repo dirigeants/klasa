@@ -3,7 +3,6 @@ const Piece = require('./interfaces/Piece');
 /**
  * Base class for all Klasa Events. See {@tutorial CreatingEvents} for more information how to use this class
  * to build custom events.
- * @since 0.0.1
  * @tutorial CreatingEvents
  * @implements {Piece}
  */

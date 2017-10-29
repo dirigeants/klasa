@@ -2,7 +2,6 @@ const { ReactionCollector } = require('discord.js');
 
 /**
  * Klasa's ReactionHandler, for handling RichDisplay and RichMenu reaction input
- * @since 0.4.0
  * @extends ReactionCollector
  */
 class ReactionHandler extends ReactionCollector {

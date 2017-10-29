@@ -17,6 +17,7 @@ class PermissionLevels extends Collection {
 
 	/**
 	 * Creates a new PermissionLevels
+	 * @since 0.2.1
 	 * @param {number} levels How many permission levels there should be
 	 */
 	constructor(levels = 11) {
@@ -24,6 +25,7 @@ class PermissionLevels extends Collection {
 
 		/**
 		 * The amount of permission levels
+		 * @since 0.2.1
 		 * @type {number}
 		 */
 		this.requiredLevels = levels;
@@ -35,6 +37,7 @@ class PermissionLevels extends Collection {
 
 	/**
 	 * Adds levels to the levels cache to be converted to valid permission structure
+	 * @since 0.2.1
 	 * @param {number} level The permission number for the level you are defining
 	 * @param {boolean} brk Whether the level should break (stop processing higher levels, and inhibit a no permission error)
 	 * @param {Function} check The permission checking function
@@ -44,6 +47,14 @@ class PermissionLevels extends Collection {
 		return this.set(level, { break: brk, check });
 	}
 
+	/**
+	 * Adds levels to the levels cache to be converted to valid permission structure
+	 * @since 0.2.1
+	 * @private
+	 * @param {number} level The permission number for the level you are defining
+	 * @param {permissionLevelResponse} obj Whether the level should break (stop processing higher levels, and inhibit a no permission error)
+	 * @returns {PermissionLevels} This permission levels
+	 */
 	set(level, obj) {
 		if (level < 0) throw new Error(`Cannot set permission level ${level}. Permission levels start at 0.`);
 		if (level > (this.requiredLevels - 1)) throw new Error(`Cannot set permission level ${level}. Permission levels stop at ${this.requiredLevels - 1}.`);
@@ -52,6 +63,7 @@ class PermissionLevels extends Collection {
 
 	/**
 	 * Checks if all permission levels are valid
+	 * @since 0.2.1
 	 * @return {boolean}
 	 */
 	isValid() {
@@ -60,6 +72,7 @@ class PermissionLevels extends Collection {
 
 	/**
 	 * Returns any errors in the perm levels
+	 * @since 0.2.1
 	 * @return {string} Error message(s)
 	 */
 	debug() {
@@ -73,11 +86,12 @@ class PermissionLevels extends Collection {
 	}
 
 	/**
-	* Runs the defined permLevels
-	* @param {external:Message} msg The message to pass to perm level functions
-	* @param {number} min The minimum permissionLevel ok to pass
-	* @returns {permissionLevelResponse}
-	*/
+	 * Runs the defined permLevels
+	 * @since 0.2.1
+	 * @param {external:Message} msg The message to pass to perm level functions
+	 * @param {number} min The minimum permissionLevel ok to pass
+	 * @returns {permissionLevelResponse}
+	 */
 	async run(msg, min) {
 		const mps = [];
 		let broke = false;

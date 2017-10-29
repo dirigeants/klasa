@@ -3,7 +3,6 @@ const { Message, User, GuildMember, Role, Guild, Channel } = require('discord.js
 
 /**
  * The base resolver class
- * @since 0.0.1
  */
 class Resolver {
 

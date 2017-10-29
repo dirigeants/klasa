@@ -3,7 +3,6 @@ const ReactionHandler = require('./ReactionHandler');
 
 /**
  * Klasa's RichDisplay, for helping paginated embeds with reaction buttons
- * @since 0.4.0
  */
 class RichDisplay {
 

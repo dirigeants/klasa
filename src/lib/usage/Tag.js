@@ -2,7 +2,6 @@ const Possible = require('./Possible');
 
 /**
  * Represents a usage Tag
- * @since 0.2.1
  */
 class Tag {
 

@@ -5,7 +5,6 @@ const Store = require('./interfaces/Store');
 
 /**
  * Stores all languages for use in Klasa
- * @since 0.2.1
  * @extends external:Collection
  * @implements {Store}
  */

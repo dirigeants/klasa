@@ -2,7 +2,6 @@ const Tag = require('./Tag');
 
 /**
  * Converts usage strings into objects to compare against later
- * @since 0.0.1
  */
 class ParsedUsage {
 

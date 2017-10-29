@@ -5,7 +5,6 @@ const Store = require('./interfaces/Store');
 
 /**
  * Stores all providers for use in Klasa
- * @since 0.0.1
  * @extends external:Collection
  * @implements {Store}
  */

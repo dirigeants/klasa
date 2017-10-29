@@ -5,7 +5,6 @@ const Store = require('./interfaces/Store');
 
 /**
  * Stores all of our extendables that extend Discord.js
- * @since 0.0.1
  * @extends external:Collection
  * @implements {Store}
  */

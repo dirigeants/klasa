@@ -3,7 +3,6 @@ const Piece = require('./interfaces/Piece');
 /**
  * Base class for all Klasa Finalizers. See {@tutorial CreatingFinalizers} for more information how to use this class
  * to build custom finalizers.
- * @since 0.0.1
  * @tutorial CreatingFinalizers
  * @implements {Piece}
  */

@@ -5,7 +5,6 @@ let sensitivePattern;
 
 /**
  * Contains static methods to be used throughout klasa
- * @since 0.0.1
  */
 class Util {
 
