@@ -14,9 +14,9 @@ module.exports = class extends Command {
 		const method = this.client.user.bot ? 'author' : 'channel';
 		if (cmd) {
 			cmd = this.client.commands.get(cmd);
-			if (!cmd) return msg.sendMessage(await msg.fetchLanguageCode('COMMAND_HELP_COMMAND_NOT_FOUND'));
+			if (!cmd) return msg.sendMessage(msg.language.get('COMMAND_HELP_COMMAND_NOT_FOUND'));
 			await this.client.inhibitors.run(msg, cmd, true);
-			const settings = await msg.fetchGuildSettings();
+			const settings = msg.guildSettings;
 			const info = [
 				`= ${cmd.name} = `,
 				cmd.description,
@@ -37,8 +37,8 @@ module.exports = class extends Command {
 		}
 
 		return msg[method].send(helpMessage, { split: { char: '\u200b' } })
-			.then(async () => { if (msg.channel.type !== 'dm' && this.client.user.bot) msg.sendMessage(await msg.fetchLanguageCode('COMMAND_HELP_DM')); })
-			.catch(async () => { if (msg.channel.type !== 'dm' && this.client.user.bot) msg.sendMessage(await msg.fetchLanguageCode('COMMAND_HELP_NODM')); });
+			.then(async () => { if (msg.channel.type !== 'dm' && this.client.user.bot) msg.sendMessage(msg.language.get('COMMAND_HELP_DM')); })
+			.catch(async () => { if (msg.channel.type !== 'dm' && this.client.user.bot) msg.sendMessage(msg.language.get('COMMAND_HELP_NODM')); });
 	}
 
 	async buildHelp(msg) {
@@ -46,7 +46,7 @@ module.exports = class extends Command {
 
 		const commandNames = Array.from(this.client.commands.keys());
 		const longest = commandNames.reduce((long, str) => Math.max(long, str.length), 0);
-		const { prefix } = await msg.fetchGuildSettings();
+		const { prefix } = msg.guildSettings;
 
 		await Promise.all(this.client.commands.map((command) =>
 			this.client.inhibitors.run(msg, command, true)

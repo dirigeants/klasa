@@ -32,34 +32,27 @@ module.exports = class extends Language {
 
 ## Using Languages:
 
-There are some extendables to help use languages. msg.fetchLanguage is a method that gets a language instance depending on the settings, it accepts an optional argument with type of string (the language name) that helps skipping extra work, allowing you to fetch the settings only once. At the same time, `msg.fetchLanguageCode` fetches the language and does `language.get` internally. The language is either default (if dms) or the guild's configured language. All languages have a get method, which is used for key lookup and function arg passing.
+There are some extendables to help use languages. msg.language is a read-only property that gets a language instance depending on the settings. At the same time. The method `msg.language.get` is used to get an value from the language package, if it exists, that can accept one or more parameters, being the first one always the key's name, followed by parameters that are used by keys that may have variables. If a key is constant, they're optional.
 
 ```javascript
-await msg.fetchLanguage(); // Will fetch the settings for the guild if it's in a guild or the default if it's in DMs.
-await msg.fetchLanguage('en-US'); // Will skip the settings fetch and return the language which name is that one.
+msg.language; // Will fetch the settings for the guild if it's in a guild or the default if it's in DMs.
+client.languages.get('en-US'); // Will skip the settings fetch and return the language which name is that one.
 
-await msg.fetchLanguageCode('DEFAULT_LANGUAGE'); // returns 'Default Language' in this example, but if the guild has fr-FR as the configured language it would respond 'Langue par défaut'
-await msg.fetchLanguageCode('COMMAND_CONF_RESET', 'prefix', '%') // returns 'The key **prefix** has been reset to: \`%\`' in this example, but if the guild has fr-FR as the configured language it would respond 'La clef **prefix** a été réinitialisée à : \`%\`'
-```
-
-Previously, they were sync:
-
-```javascript
-msg.language; // Exactly the same as msg.fetchLanguage(); but sync.
-msg.language.get('DEFAULT_LANGUAGE'); // Returns 'Default Language' in this example. Same as msg.fetchLanguageCode(); but sync.
+msg.language.get('DEFAULT_LANGUAGE'); // returns 'Default Language' in this example, but if the guild has fr-FR as the configured language it would respond 'Langue par défaut'
+msg.language.get('COMMAND_CONF_RESET', 'prefix', '%') // returns 'The key **prefix** has been reset to: \`%\`' in this example, but if the guild has fr-FR as the configured language it would respond 'La clef **prefix** a été réinitialisée à : \`%\`'
 ```
 
 Additionally, if one language is lagging behind another, the bot will let the user know, and provide the string in the bot's default language as follows:
 
 ```javascript
-await msg.fetchLanguageCode('SomeKeyThatExistsOnlyInEnlgish');
+msg.language.get('SomeKeyThatExistsOnlyInEnglish');
 
 // Assuming the bot is configured for fr-FR, the response would be:
 /*
- *`SomeKeyThatExistsOnlyInEnlgish n'a pas encore été traduit en 'fr-FR'.
+ * `SomeKeyThatExistsOnlyInEnglish n'a pas encore été traduit en 'fr-FR'.
  *
- *Langue par défaut:
- *Whatever that key would respond to normally in english.`
+ * Langue par défaut:
+ * Whatever that key would respond to normally in english.`
  */
 ```
 

@@ -34,7 +34,7 @@ module.exports = class extends Monitor {
 
 	async getPrefix(msg) {
 		if (this.client.config.prefixMention.test(msg.content)) return this.client.config.prefixMention;
-		const settings = await msg.fetchGuildSettings();
+		const settings = msg.guildSettings;
 		const prefix = settings.prefix || this.client.config.prefix;
 		if (prefix instanceof Array) {
 			for (let i = prefix.length - 1; i >= 0; i--) {
@@ -80,7 +80,7 @@ module.exports = class extends Monitor {
 			.catch((err) => { throw newError(err); });
 
 		const param = await msg.channel.awaitMessages(response => response.author.id === msg.author.id && response.id !== message.id, { max: 1, time: 30000, errors: ['time'] });
-		if (param.first().content.toLowerCase() === 'abort') throw await msg.fetchLanguageCode('MONITOR_COMMAND_HANDLER_ABORTED');
+		if (param.first().content.toLowerCase() === 'abort') throw msg.language.get('MONITOR_COMMAND_HANDLER_ABORTED');
 		msg.args[msg.args.lastIndexOf(null)] = param.first().content;
 		msg.reprompted = true;
 

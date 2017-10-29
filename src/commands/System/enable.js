@@ -12,7 +12,7 @@ module.exports = class extends Command {
 
 	async run(msg, [piece]) {
 		piece.enable();
-		return msg.sendCode('diff', await msg.fetchLanguageCode('COMMAND_ENABLE', piece.type, piece.name));
+		return msg.sendCode('diff', msg.language.get('COMMAND_ENABLE', piece.type, piece.name));
 	}
 
 };

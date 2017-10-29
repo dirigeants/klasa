@@ -251,7 +251,7 @@ class KlasaClient extends Discord.Client {
 		/**
 		 * The object where the gateways are stored settings
 		 * @since 0.3.0
-		 * @type {Object}
+		 * @type {Settings}
 		 */
 		this.settings = null;
 
@@ -335,7 +335,7 @@ class KlasaClient extends Discord.Client {
 			const piece = store.get(arg);
 			if (piece) return piece;
 			if (currentUsage.type === 'optional' && !repeat) return null;
-			throw await msg.fetchLanguageCode('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, pieceName);
+			throw msg.language.get('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, pieceName);
 		};
 		return this;
 	}
@@ -392,7 +392,7 @@ class KlasaClient extends Discord.Client {
 		if (this.user.bot) this.application = await super.fetchApplication();
 		if (!this.config.ownerID) this.config.ownerID = this.user.bot ? this.application.owner.id : this.user.id;
 		await this.providers.init();
-		await this.settings.add('guilds', this.settings.validate, this.settings.defaultDataSchema);
+		await this.settings.add('guilds', this.settings.validate, this.settings.defaultDataSchema, { cache: 'collection' });
 		// Providers must be init before settings, and those before all other stores.
 		await Promise.all(this.pieceStores.filter(store => store.name !== 'providers').map(store => store.init()));
 		util.initClean(this);

@@ -32,11 +32,17 @@ class SettingsCache {
 	}
 
 	/**
+	 * @typedef  {Object} SettingsOptions
+	 * @property {string} provider
+	 * @property {string} cache
+	 */
+
+	/**
 	 * Add a new instance of SettingGateway, with its own validateFunction and schema.
 	 * @param {string} name The name for the new instance.
 	 * @param {Function} validateFunction The function that validates the input.
 	 * @param {Object} [schema={}] The schema.
-	 * @param {string} [options={}] A provider to use. If not specified it'll use the one in the client.
+	 * @param {SettingsOptions} [options={}] A provider to use. If not specified it'll use the one in the client.
 	 * @returns {Gateway}
 	 * @example
 	 * // Add a new SettingGateway instance, called 'users', which input takes users, and stores a quote which is a string between 2 and 140 characters.
