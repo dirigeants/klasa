@@ -3,7 +3,6 @@ const Piece = require('./interfaces/Piece');
 /**
  * Base class for all Klasa Inhibitors. See {@tutorial CreatingInhibitors} for more information how to use this class
  * to build custom inhibitors.
- * @since 0.0.1
  * @tutorial CreatingInhibitors
  * @implements {Piece}
  */

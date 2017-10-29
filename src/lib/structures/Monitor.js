@@ -3,7 +3,6 @@ const Piece = require('./interfaces/Piece');
 /**
  * Base class for all Klasa Monitors. See {@tutorial CreatingMonitors} for more information how to use this class
  * to build custom monitors.
- * @since 0.0.1
  * @tutorial CreatingMonitors
  * @implements {Piece}
  */

@@ -3,7 +3,6 @@ const regexTypes = ['reg', 'regex', 'regexp'];
 
 /**
  * Represents a possibility in a usage Tag
- * @since 0.2.1
  */
 class Possible {
 

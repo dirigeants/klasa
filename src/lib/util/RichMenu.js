@@ -2,7 +2,6 @@ const RichDisplay = require('./RichDisplay');
 
 /**
  * Klasa's RichMenu, for helping paginated embeds with reaction buttons
- * @since 0.4.0
  * @extends RichDisplay
  */
 class RichMenu extends RichDisplay {

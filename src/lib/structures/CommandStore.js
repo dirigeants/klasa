@@ -6,7 +6,6 @@ const Store = require('./interfaces/Store');
 
 /**
  * Stores all the commands usable in Klasa
- * @since 0.0.1
  * @extends external:Collection
  * @implements {Store}
  */

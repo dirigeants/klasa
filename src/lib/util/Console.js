@@ -5,7 +5,6 @@ const { inspect } = require('util');
 
 /**
  * Klasa's console class, extends NodeJS Console class.
- * @since 0.4.0
  */
 class KlasaConsole extends Console {
 

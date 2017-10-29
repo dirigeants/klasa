@@ -3,7 +3,6 @@ const Piece = require('./interfaces/Piece');
 /**
  * Base class for all Klasa Providers. See {@tutorial CreatingProviders} for more information how to use this class
  * to build custom providers.
- * @since 0.0.1
  * @tutorial CreatingProviders
  * @implements {Piece}
  */

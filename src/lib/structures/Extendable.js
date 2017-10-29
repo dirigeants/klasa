@@ -5,7 +5,6 @@ const util = require('util');
 /**
  * Base class for all Klasa Extendables. See {@tutorial CreatingExtendables} for more information how to use this class
  * to build custom extendables.
- * @since 0.0.1
  * @tutorial CreatingExtendables
  * @implements {Piece}
  */

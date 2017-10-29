@@ -4,7 +4,6 @@ const ParsedUsage = require('../usage/ParsedUsage');
 /**
  * Base class for all Klasa Commands. See {@tutorial CreatingCommands} for more information how to use this class
  * to build custom commands.
- * @since 0.0.1
  * @tutorial CreatingCommands
  * @implements {Piece}
  */

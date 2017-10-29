@@ -4,7 +4,6 @@ const { applyToClass } = require('../../util/util');
 
 /**
  * The common interface for all stores
- * @since 0.1.1
  * @see CommandStore
  * @see EventStore
  * @see ExtendableStore

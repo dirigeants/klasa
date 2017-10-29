@@ -5,7 +5,6 @@ const Store = require('./interfaces/Store');
 
 /**
  * Stores all the events that a part of Klasa
- * @since 0.0.1
  * @extends external:Collection
  * @implements {Store}
  */
