@@ -2,6 +2,7 @@ const Resolver = require('./Resolver');
 
 /**
  * The command argument resolver
+ * @since 0.0.1
  * @extends Resolver
  */
 class ArgResolver extends Resolver {

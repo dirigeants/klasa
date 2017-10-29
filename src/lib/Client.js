@@ -1,10 +1,10 @@
 const Discord = require('discord.js');
 const path = require('path');
-const now = require('performance-now');
 const CommandMessage = require('./structures/CommandMessage');
 const ArgResolver = require('./parsers/ArgResolver');
 const PermLevels = require('./structures/PermissionLevels');
 const util = require('./util/util');
+const Stopwatch = require('./util/Stopwatch');
 const Console = require('./util/Console');
 const Settings = require('./settings/SettingsCache');
 const CommandStore = require('./structures/CommandStore');
@@ -18,6 +18,7 @@ const ExtendableStore = require('./structures/ExtendableStore');
 
 /**
  * The client for handling everything. See {@tutorial GettingStarted} for more information how to get started using this class.
+ * @since 0.0.1
  * @extends external:Client
  * @tutorial GettingStarted
  */
@@ -25,6 +26,7 @@ class KlasaClient extends Discord.Client {
 
 	/**
 	 * @typedef {Object} KlasaClientConfig
+	 * @since 0.0.1
 	 * @memberof KlasaClient
 	 * @property {string} prefix The default prefix the bot should respond to
 	 * @property {DiscordJSConfig} [clientOptions={}] The options to pass to D.JS
@@ -49,6 +51,7 @@ class KlasaClient extends Discord.Client {
 
 	/**
 	 * @typedef {Object} KlasaConsoleConfig
+	 * @since 0.4.0
 	 * @memberof KlasaClient
 	 * @property {WriteableStream} [stdout=process.stdout] Output stream
 	 * @property {WriteableStream} [stderr=process.stderr] Error stream
@@ -59,6 +62,7 @@ class KlasaClient extends Discord.Client {
 
 	/**
 	 * @typedef {Object} KlasaConsoleEvents
+	 * @since 0.4.0
 	 * @memberof KlasaClient
 	 * @property {boolean} [log=true] If the log event should be enabled by default
 	 * @property {boolean} [warn=true] If the warn event should be enabled by default
@@ -69,6 +73,8 @@ class KlasaClient extends Discord.Client {
 	 */
 
 	/**
+	 * Constructs the klasa client
+	 * @since 0.0.1
 	 * @param {KlasaClientConfig} config The config to pass to the new client
 	 */
 	constructor(config = {}) {
@@ -77,6 +83,7 @@ class KlasaClient extends Discord.Client {
 
 		/**
 		 * The config passed to the new Klasa.Client
+		 * @since 0.0.1
 		 * @type {KlasaClientConfig}
 		 */
 		this.config = config;
@@ -87,18 +94,21 @@ class KlasaClient extends Discord.Client {
 
 		/**
 		 * The directory to the node_modules folder where Klasa exists
+		 * @since 0.0.1
 		 * @type {string}
 		 */
 		this.coreBaseDir = path.join(__dirname, '../');
 
 		/**
 		 * The directory where the user files are at
+		 * @since 0.0.1
 		 * @type {string}
 		 */
 		this.clientBaseDir = config.clientBaseDir ? path.resolve(config.clientBaseDir) : path.dirname(require.main.filename);
 
 		/**
 		 * The console for this instance of klasa. You can disable timestmaps, colors, and add writable streams as config options to configure this.
+		 * @since 0.4.0
 		 * @type {KlasaConsole}
 		 */
 		this.console = new Console({
@@ -111,96 +121,112 @@ class KlasaClient extends Discord.Client {
 
 		/**
 		 * The argument resolver
+		 * @since 0.0.1
 		 * @type {ArgResolver}
 		 */
 		this.argResolver = new ArgResolver(this);
 
 		/**
 		 * The cache where commands are stored
+		 * @since 0.0.1
 		 * @type {CommandStore}
 		 */
 		this.commands = new CommandStore(this);
 
 		/**
 		 * The cache where inhibitors are stored
+		 * @since 0.0.1
 		 * @type {InhibitorStore}
 		 */
 		this.inhibitors = new InhibitorStore(this);
 
 		/**
 		 * The cache where finalizers are stored
+		 * @since 0.0.1
 		 * @type {FinalizerStore}
 		 */
 		this.finalizers = new FinalizerStore(this);
 
 		/**
 		 * The cache where monitors are stored
+		 * @since 0.0.1
 		 * @type {MonitorStore}
 		 */
 		this.monitors = new MonitorStore(this);
 
 		/**
 		 * The cache where languages are stored
+		 * @since 0.2.1
 		 * @type {LanguageStore}
 		 */
 		this.languages = new LanguageStore(this);
 
 		/**
 		 * The cache where providers are stored
+		 * @since 0.0.1
 		 * @type {ProviderStore}
 		 */
 		this.providers = new ProviderStore(this);
 
 		/**
 		 * The cache where events are stored
+		 * @since 0.0.1
 		 * @type {EventStore}
 		 */
 		this.events = new EventStore(this);
 
 		/**
 		 * The cache where extendables are stored
+		 * @since 0.0.1
 		 * @type {ExtendableStore}
 		 */
 		this.extendables = new ExtendableStore(this);
 
 		/**
 		 * A Store registry
+		 * @since 0.3.0
 		 * @type {external:Collection}
 		 */
 		this.pieceStores = new Discord.Collection();
 
 		/**
 		 * The cache of command messages and responses to be used for command editing
+		 * @since 0.0.1
 		 * @type {external:Collection}
 		 */
 		this.commandMessages = new Discord.Collection();
 
 		/**
 		 * The permissions structure for this bot
+		 * @since 0.0.1
 		 * @type {PermissionLevels}
 		 */
 		this.permissionLevels = this.validatePermissionLevels();
 
 		/**
 		 * The threshold for how old command messages can be before sweeping since the last edit in seconds
+		 * @since 0.0.1
 		 * @type {number}
 		 */
 		this.commandMessageLifetime = config.commandMessageLifetime || 1800;
 
 		/**
 		 * The interval duration for which command messages should be sweept in seconds
+		 * @since 0.0.1
 		 * @type {number}
 		 */
 		this.commandMessageSweep = config.commandMessageSweep || 900;
 
 		/**
 		 * Whether the client is truely ready or not
+		 * @since 0.0.1
 		 * @type {boolean}
 		 */
 		this.ready = false;
 
 		/**
 		 * Additional methods to be used elsewhere in the bot
+		 * @since 0.0.1
 		 * @type {object}
 		 * @property {class} Collection A discord.js collection
 		 * @property {class} Embed A discord.js Message Embed
@@ -224,12 +250,14 @@ class KlasaClient extends Discord.Client {
 
 		/**
 		 * The object where the gateways are stored settings
+		 * @since 0.3.0
 		 * @type {Object}
 		 */
 		this.settings = null;
 
 		/**
 		 * The application info cached from the discord api
+		 * @since 0.0.1
 		 * @type {object}
 		 */
 		this.application = null;
@@ -249,6 +277,7 @@ class KlasaClient extends Discord.Client {
 
 	/**
 	 * The invite link for the bot
+	 * @since 0.0.1
 	 * @readonly
 	 * @returns {string}
 	 */
@@ -260,6 +289,7 @@ class KlasaClient extends Discord.Client {
 
 	/**
 	 * Validates the permission structure passed to the client
+	 * @since 0.0.1
 	 * @private
 	 * @returns {PermissionLevels}
 	 */
@@ -272,6 +302,7 @@ class KlasaClient extends Discord.Client {
 
 	/**
 	 * Registers a custom store to the client
+	 * @since 0.3.0
 	 * @param {Store} store The store that pieces will be stored in.
 	 * @returns {KlasaClient} this client
 	 */
@@ -282,6 +313,7 @@ class KlasaClient extends Discord.Client {
 
 	/**
 	 * Unregisters a custom store from the client
+	 * @since 0.3.0
 	 * @param {Store} storeName The store that pieces will be stored in.
 	 * @returns {KlasaClient} this client
 	 */
@@ -292,6 +324,7 @@ class KlasaClient extends Discord.Client {
 
 	/**
 	 * Registers a custom piece to the client
+	 * @since 0.3.0
 	 * @param {string} pieceName The name of the piece, if you want to register an arg resolver for this piece
 	 * @param {Store} store The store that pieces will be stored in.
 	 * @returns {KlasaClient} this client
@@ -309,6 +342,7 @@ class KlasaClient extends Discord.Client {
 
 	/**
 	 * Unregisters a custom piece from the client
+	 * @since 0.3.0
 	 * @param {string} pieceName The name of the piece
 	 * @returns {KlasaClient} this client
 	 */
@@ -319,11 +353,12 @@ class KlasaClient extends Discord.Client {
 
 	/**
 	 * Use this to login to Discord with your bot
+	 * @since 0.0.1
 	 * @param {string} token Your bot token
 	 * @returns {Promise<string>}
 	 */
 	async login(token) {
-		const start = now();
+		const timer = new Stopwatch();
 		const loaded = await Promise.all(this.pieceStores.map(async store => `Loaded ${await store.loadAll()} ${store.name}.`))
 			.catch((err) => {
 				console.error(err);
@@ -331,12 +366,13 @@ class KlasaClient extends Discord.Client {
 			});
 		this.emit('log', loaded.join('\n'));
 		this.settings = new Settings(this);
-		this.emit('log', `Loaded in ${(now() - start).toFixed(2)}ms.`);
+		this.emit('log', `Loaded in ${timer.stop()}.`);
 		return super.login(token);
 	}
 
 	/**
 	 * The owner for this bot
+	 * @since 0.1.1
 	 * @readonly
 	 * @type {external:User}
 	 */
@@ -346,6 +382,7 @@ class KlasaClient extends Discord.Client {
 
 	/**
 	 * The once ready function for the client to init all pieces
+	 * @since 0.0.1
 	 * @private
 	 */
 	async _ready() {
@@ -368,6 +405,7 @@ class KlasaClient extends Discord.Client {
 
 	/**
 	 * Sweeps command messages based on the lifetime parameter
+	 * @since 0.0.1
 	 * @param {number} lifetime The threshold for how old command messages can be before sweeping since the last edit in seconds
 	 * @returns {number} The amount of messages swept
 	 */
@@ -394,6 +432,7 @@ class KlasaClient extends Discord.Client {
 
 /**
  * The default PermissionLevels
+ * @since 0.2.1
  * @type {PermissionLevels}
  */
 KlasaClient.defaultPermissionLevels = new PermLevels()
@@ -407,11 +446,13 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
 /**
  * Emitted when Klasa is fully ready and initialized.
  * @event KlasaClient#klasaReady
+ * @since 0.3.0
  */
 
 /**
  * A central logging event for Klasa.
  * @event KlasaClient#log
+ * @since 0.3.0
  * @param {(string|Object)} data The data to log
  * @param {string} [type='log'] The type of log: 'log', 'debug', 'warn', or 'error'.
  */
@@ -419,18 +460,21 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
 /**
  * An event for handling verbose logs
  * @event KlasaClient#verbose
+ * @since 0.4.0
  * @param {(string|Object)} data The data to log
  */
 
 /**
  * An event for handling wtf logs (what a terrible failure)
  * @event KlasaClient#wtf
+ * @since 0.4.0
  * @param {(string|Object)} data The data to log
  */
 
 /**
  * Emitted when a command has been inhibited.
  * @event KlasaClient#commandInhibited
+ * @since 0.3.0
  * @param {external:Message} message The message that triggered the command
  * @param {Command} command The command triggered
  * @param {?string} response The reason why it was inhibited if not silent
@@ -439,6 +483,7 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
 /**
  * Emitted when a command has been run.
  * @event KlasaClient#commandRun
+ * @since 0.3.0
  * @param {CommandMessageProxy} message The message that triggered the command
  * @param {Command} command The command run
  * @param {any[]} params The resolved parameters of the command
@@ -448,6 +493,7 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
 /**
  * Emitted when a command has errored.
  * @event KlasaClient#commandError
+ * @since 0.3.0
  * @param {CommandMessageProxy} message The message that triggered the command
  * @param {Command} command The command run
  * @param {any[]} params The resolved parameters of the command
@@ -457,6 +503,7 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
 /**
  * Emitted when {@link SettingGateway.update}, {@link SettingGateway.updateArray} or {@link SettingGateway.reset} is run.
  * @event KlasaClient#settingUpdate
+ * @since 0.3.0
  * @param {SettingGateway} gateway The setting gateway with the updated setting
  * @param {string} id The identifier of the gateway that was updated
  * @param {Object} oldEntries The old settings entries

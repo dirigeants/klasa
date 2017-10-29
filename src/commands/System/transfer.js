@@ -8,7 +8,7 @@ module.exports = class extends Command {
 		super(...args, {
 			permLevel: 10,
 			description: 'Transfers a core piece to its respective folder',
-			usage: '<Command:cmd|Inhibitor:inhibitor|Event:event|Monitor:monitor|Language:language|Finalizer:finalizer>'
+			usage: '<Piece:piece>'
 		});
 	}
 
