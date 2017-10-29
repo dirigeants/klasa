@@ -1,56 +1,85 @@
 const SchemaPiece = require('./SchemaPiece');
 const fs = require('fs-nextra');
 
+/**
+ * The schema class that stores (nested) folders and keys for SettingGateway usage. This class also implements multiple helpers.
+ */
 class Schema {
 
+	/**
+	 * @typedef  {Object} AddOptions
+	 * @property {string}  type The type for the key.
+	 * @property {any}     [default] The default value for the key.
+	 * @property {number}  [min] The min value for the key (String.length for String, value for number).
+	 * @property {number}  [max] The max value for the key (String.length for String, value for number).
+	 * @property {boolean} [array] Whether the key should be stored as Array or not.
+	 * @property {boolean} [configurable] Whether the key should be configurable by the config command or not.
+	 * @memberof Schema
+	 */
+
+	/**
+	 * @since 0.4.0
+	 * @param {KlasaClient} client The client which initialized this instance.
+	 * @param {(Gateway|GatewaySQL)} manager The Gateway that manages this schema instance.
+	 * @param {AddOptions} object The object containing the properties for this schema instance.
+	 * @param {string} path The path for this schema instance.
+	 */
 	constructor(client, manager, object, path) {
 		/**
 		 * The Klasa client.
+		 * @since 0.4.0
 		 * @type {KlasaClient}
 		 */
-		Object.defineProperty(this, 'client', { value: client, enumerable: false });
+		Object.defineProperty(this, 'client', { value: client });
 
 		/**
 		 * The Gateway that manages this schema instance.
+		 * @since 0.4.0
 		 * @type {(Gateway|GatewaySQL)}
 		 */
-		Object.defineProperty(this, 'manager', { value: manager, enumerable: false });
+		Object.defineProperty(this, 'manager', { value: manager });
 
 		/**
 		 * The path of this schema instance.
+		 * @since 0.4.0
 		 * @type {string}
 		 */
-		Object.defineProperty(this, 'path', { value: path, enumerable: false });
+		Object.defineProperty(this, 'path', { value: path });
 
 		/**
 		 * The type of this schema instance.
+		 * @since 0.4.0
 		 * @type {'Folder'}
 		 */
-		Object.defineProperty(this, 'type', { value: 'Folder', enumerable: false });
+		Object.defineProperty(this, 'type', { value: 'Folder' });
 
 		/**
 		 * The default values for this schema instance and children.
+		 * @since 0.4.0
 		 * @type {Object}
 		 */
-		Object.defineProperty(this, 'defaults', { value: {}, enumerable: false, writable: true });
+		Object.defineProperty(this, 'defaults', { value: {}, writable: true });
 
 		/**
 		 * A Set containing all keys' names which value is either a Schema or a SchemaPiece instance.
+		 * @since 0.4.0
 		 * @type {Set<string>}
 		 */
-		Object.defineProperty(this, 'keys', { value: new Set(), enumerable: false, writable: true });
+		Object.defineProperty(this, 'keys', { value: new Set(), writable: true });
 
 		/**
 		 * A pre-processed array with all keys' names.
+		 * @since 0.4.0
 		 * @type {string[]}
 		 */
-		Object.defineProperty(this, '_keys', { value: [], enumerable: false, writable: true });
+		Object.defineProperty(this, '_keys', { value: [], writable: true });
 
 		this._patch(object);
 	}
 
 	/**
 	 * Create a new nested folder.
+	 * @since 0.4.0
 	 * @param {string} key The name's key for the folder.
 	 * @param {Object} [object={}] An object containing all the Schema/SchemaPieces literals for this folder.
 	 * @param {boolean} [force=true] Whether this function call should modify all entries from the database.
@@ -70,6 +99,7 @@ class Schema {
 
 	/**
 	 * Remove a nested folder.
+	 * @since 0.4.0
 	 * @param {string} key The folder's name to remove.
 	 * @param {boolean} [force=true] Whether this function call should modify all entries from the database.
 	 * @returns {Promise<Schema>}
@@ -86,6 +116,7 @@ class Schema {
 
 	/**
 	 * Check if the table exists in this folder.
+	 * @since 0.4.0
 	 * @param {string} key The key to check.
 	 * @returns {boolean}
 	 */
@@ -94,18 +125,8 @@ class Schema {
 	}
 
 	/**
-	 * @typedef  {Object} AddOptions
-	 * @property {string}  type The type for the key.
-	 * @property {any}     [default] The default value for the key.
-	 * @property {number}  [min] The min value for the key (String.length for String, value for number).
-	 * @property {number}  [max] The max value for the key (String.length for String, value for number).
-	 * @property {boolean} [array] Whether the key should be stored as Array or not.
-	 * @property {boolean} [configurable] Whether the key should be configurable by the config command or not.
-	 * @memberof Schema
-	 */
-
-	/**
 	 * Add a new key to this folder.
+	 * @since 0.4.0
 	 * @param {string} key The name for the key.
 	 * @param {AddOptions} [options=null] The key's options to apply.
 	 * @param {boolean} [force=true] Whether this function call should modify all entries from the database.
@@ -136,6 +157,13 @@ class Schema {
 		return this.manager.schema;
 	}
 
+	/**
+	 * Add a key to the instance.
+	 * @since 0.4.0
+	 * @param {string} key The name of the key.
+	 * @param {AddOptions} options The options of the key.
+	 * @private
+	 */
 	_addKey(key, options) {
 		this.keys.add(key);
 		this._keys.push(key);
@@ -146,6 +174,7 @@ class Schema {
 
 	/**
 	 * Remove a key from this folder.
+	 * @since 0.4.0
 	 * @param {string} key The key's name to remove.
 	 * @param {boolean} [force=true] Whether this function call should modify all entries from the database.
 	 * @returns {Promise<Schema>}
@@ -159,6 +188,12 @@ class Schema {
 		return this.manager.schema;
 	}
 
+	/**
+	 * Remove a key from the instance.
+	 * @since 0.4.0
+	 * @param {string} key The name of the key.
+	 * @private
+	 */
 	_removeKey(key) {
 		const index = this._keys.indexOf(key);
 
@@ -170,6 +205,7 @@ class Schema {
 
 	/**
 	 * Modifies all entries from the database. Do NOT call without knowledge.
+	 * @since 0.4.0
 	 * @param {('add'|'delete')} action The action to perform.
 	 * @param {string} key The key to handle.
 	 * @param {SchemaPiece} schemaPiece The SchemaPiece instance to handle.
@@ -197,6 +233,7 @@ class Schema {
 
 	/**
 	 * Get a JSON object containing all the objects from this schema's children.
+	 * @since 0.4.0
 	 * @returns {Object}
 	 */
 	toJSON() {
@@ -205,6 +242,7 @@ class Schema {
 
 	/**
 	 * Get a JSON object with all the default values.
+	 * @since 0.4.0
 	 * @returns {Object}
 	 */
 	getDefaults() {
@@ -214,7 +252,8 @@ class Schema {
 	}
 
 	/**
-	 * Get all the SQL schemas from this schema's children
+	 * Get all the SQL schemas from this schema's children.
+	 * @since 0.4.0
 	 * @param {string[]} [array=[]] The array to push.
 	 * @returns {string[]}
 	 */
@@ -224,6 +263,7 @@ class Schema {
 
 	/**
 	 * Get all the pathes from this schema's children.
+	 * @since 0.4.0
 	 * @param {string[]} [array=[]] The array to push.
 	 * @returns {string[]}
 	 */
@@ -233,6 +273,7 @@ class Schema {
 
 	/**
 	 * Get all the SchemaPieces instances from this schema's children.
+	 * @since 0.4.0
 	 * @param {string[]} [array=[]] The array to push.
 	 * @returns {string[]}
 	 */
@@ -242,6 +283,7 @@ class Schema {
 
 	/**
 	 * Get a list.
+	 * @since 0.4.0
 	 * @param {external:Message} msg The Message instance.
 	 * @param {Object} object The settings to parse.
 	 * @returns {string}
@@ -250,6 +292,8 @@ class Schema {
 		const array = [];
 		if (this._keys.length === 0) return '';
 		const keys = this._keys.filter(key => this[key].type === 'Folder' || this[key].configurable).sort();
+		if (keys.length === 0) return '';
+
 		const longest = keys.reduce((a, b) => a.length > b.length ? a : b).length;
 		for (let i = 0; i < keys.length; i++) {
 			array.push(`${keys[i].padEnd(longest)} :: ${Schema.resolveString(msg, this[keys[i]], object[keys[i]])}`);
@@ -260,9 +304,11 @@ class Schema {
 
 	/**
 	 * Resolve a string.
+	 * @since 0.4.0
 	 * @param {external:Message} msg The Message to use.
 	 * @param {SchemaPiece} path The SchemaPiece instance.
 	 * @param {any} value The current value of the key.
+	 * @static
 	 * @returns {string}
 	 */
 	static resolveString(msg, path, value) {
@@ -288,6 +334,12 @@ class Schema {
 		return path.array ? value.length > 0 ? `[ ${value.map(resolver).join(' | ')} ]` : 'None' : value === null ? 'Not set' : resolver(value);
 	}
 
+	/**
+	 * Method called in initialization to populate the instance with the keys from the schema.
+	 * @since 0.4.0
+	 * @param {Object} object The object to parse. Only called once per initialization.
+	 * @private
+	 */
 	_patch(object) {
 		for (const key of Object.keys(object)) {
 			if (typeof object[key] !== 'object') continue;
@@ -306,10 +358,11 @@ class Schema {
 	}
 
 	/**
+	 * @since 0.4.0
 	 * @returns {string}
 	 */
 	toString() {
-		return '[ Folder';
+		return this._keys.length > 0 && this._keys.filter(key => this[key].configurable !== false).length > 0 ? '[ Folder' : '[ Empty Folder';
 	}
 
 }

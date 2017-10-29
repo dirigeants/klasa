@@ -1,86 +1,7 @@
+/**
+ * The SchemaPiece class that contains the data for a key and several helpers.
+ */
 class SchemaPiece {
-
-	constructor(client, manager, options, path, key) {
-		/**
-		 * The Klasa client.
-		 * @type {KlasaClient}
-		 */
-		Object.defineProperty(this, 'client', { value: client, enumerable: false });
-
-		/**
-		 * The Gateway that manages this SchemaPiece instance.
-		 * @type {(Gateway|GatewaySQL)}
-		 */
-		Object.defineProperty(this, 'manager', { value: manager, enumerable: false });
-
-		/**
-		 * The path of this SchemaPiece instance.
-		 * @type {string}
-		 */
-		Object.defineProperty(this, 'path', { value: path, enumerable: false });
-
-		/**
-		 * This keys' name.
-		 * @type {string}
-		 */
-		Object.defineProperty(this, 'key', { value: key, enumerable: false });
-
-		/**
-		 * The type of this key.
-		 * @type {string}
-		 */
-		this.type = options.type.toLowerCase();
-
-		/**
-		 * Whether this key should store multiple or a single value.
-		 * @type {boolean}
-		 */
-		this.array = typeof options.array !== 'undefined' ? options.array : false;
-
-		/**
-		 * What this key should provide by default.
-		 * @type {any}
-		 */
-		this.default = typeof options.default !== 'undefined' ? options.default : this.type === 'boolean' ? false : null;
-
-		/**
-		 * The minimum value for this key.
-		 * @type {?number}
-		 */
-		this.min = typeof options.min !== 'undefined' && isNaN(options.min) === false ? options.min : null;
-
-		/**
-		 * The maximum value for this key.
-		 * @type {?number}
-		 */
-		this.max = typeof options.max !== 'undefined' && isNaN(options.max) === false ? options.max : null;
-
-		/**
-		 * Whether this key should be configureable by the config command. When type is any, this key defaults to false.
-		 * @type {boolean}
-		 */
-		this.configurable = typeof options.configurable !== 'undefined' ? options.configurable : this.type !== 'any';
-
-		this.init(options);
-	}
-
-	/**
-	 * Parse a SQL query.
-	 * @param {string} value The value to parse.
-	 * @returns {string}
-	 */
-	sql(value = null) {
-		if (value && value.id) value = value.id;
-		return `'${this.path}' = ${this._parseSQLValue(value)}`;
-	}
-
-	_parseSQLValue(value) {
-		const type = typeof value;
-		if (type === 'boolean' || type === 'number' || value === null) return String(value);
-		if (type === 'string') return `'${value.replace(/'/g, "''")}'`;
-		if (type === 'object') return `'${JSON.stringify(value).replace(/'/g, "''")}'`;
-		return '';
-	}
 
 	/**
 	 * @typedef  {Object} ParsingResult
@@ -88,33 +9,6 @@ class SchemaPiece {
 	 * @property {?string} sql The SQL-ready query for the SQL Gateway.
 	 * @memberof SchemaPiece
 	 */
-
-	/**
-	 * Parse a value in this key's resolver.
-	 * @param {string} value The value to parse.
-	 * @param {external:Guild} guild A Guild instance required for the resolver to work.
-	 * @returns {Promise<ParsingResult>}
-	 */
-	async parse(value, guild) {
-		const data = await this.manager.resolver[this.type](value, guild, this.key, { min: this.min, max: this.max });
-		return { data, sql: this.manager.sql ? this.sql(data && data.id ? data.id : data) : null };
-	}
-
-	/**
-	 * Get the defaults values for this key.
-	 * @returns {ParsingResult}
-	 */
-	getDefault() {
-		return { data: this.default, sql: this.manager.sql ? this.sql(this.default) : null };
-	}
-
-	/**
-	 * Get a JSON object with all the default values.
-	 * @returns {any}
-	 */
-	getDefaults() {
-		return this.default;
-	}
 
 	/**
 	 * @typedef  {Object} SchemaPieceJSON
@@ -127,7 +21,149 @@ class SchemaPiece {
 	 */
 
 	/**
+	 * @since 0.4.0
+	 * @param {KlasaClient} client The client which initialized this instance.
+	 * @param {(Gateway|GatewaySQL)} manager The Gateway that manages this schema instance.
+	 * @param {AddOptions} options The object containing the properties for this schema instance.
+	 * @param {string} path The path for this schema instance.
+	 * @param {string} key The name of the key.
+	 */
+	constructor(client, manager, options, path, key) {
+		/**
+		 * The Klasa client.
+		 * @since 0.4.0
+		 * @type {KlasaClient}
+		 * @readonly
+		 */
+		Object.defineProperty(this, 'client', { value: client });
+
+		/**
+		 * The Gateway that manages this SchemaPiece instance.
+		 * @since 0.4.0
+		 * @type {(Gateway|GatewaySQL)}
+		 * @readonly
+		 */
+		Object.defineProperty(this, 'manager', { value: manager });
+
+		/**
+		 * The path of this SchemaPiece instance.
+		 * @since 0.4.0
+		 * @type {string}
+		 * @readonly
+		 */
+		Object.defineProperty(this, 'path', { value: path });
+
+		/**
+		 * This keys' name.
+		 * @since 0.4.0
+		 * @type {string}
+		 * @readonly
+		 */
+		Object.defineProperty(this, 'key', { value: key });
+
+		/**
+		 * The type of this key.
+		 * @since 0.4.0
+		 * @type {string}
+		 */
+		this.type = options.type.toLowerCase();
+
+		/**
+		 * Whether this key should store multiple or a single value.
+		 * @since 0.4.0
+		 * @type {boolean}
+		 */
+		this.array = typeof options.array !== 'undefined' ? options.array : false;
+
+		/**
+		 * What this key should provide by default.
+		 * @since 0.4.0
+		 * @type {any}
+		 */
+		this.default = typeof options.default !== 'undefined' ? options.default : this.type === 'boolean' ? false : null;
+
+		/**
+		 * The minimum value for this key.
+		 * @since 0.4.0
+		 * @type {?number}
+		 */
+		this.min = typeof options.min !== 'undefined' && isNaN(options.min) === false ? options.min : null;
+
+		/**
+		 * The maximum value for this key.
+		 * @since 0.4.0
+		 * @type {?number}
+		 */
+		this.max = typeof options.max !== 'undefined' && isNaN(options.max) === false ? options.max : null;
+
+		/**
+		 * Whether this key should be configureable by the config command. When type is any, this key defaults to false.
+		 * @since 0.4.0
+		 * @type {boolean}
+		 */
+		this.configurable = typeof options.configurable !== 'undefined' ? options.configurable : this.type !== 'any';
+
+		this.init(options);
+	}
+
+	/**
+	 * Parse a SQL query.
+	 * @since 0.4.0
+	 * @param {string} value The value to parse.
+	 * @returns {string}
+	 */
+	sql(value = null) {
+		if (value && value.id) value = value.id;
+		return `'${this.path}' = ${this._parseSQLValue(value)}`;
+	}
+
+	/**
+	 * Parses a value to a valid string that can be used for SQL input.
+	 * @since 0.4.0
+	 * @param {any} value The value to parse.
+	 * @returns {string}
+	 */
+	_parseSQLValue(value) {
+		const type = typeof value;
+		if (type === 'boolean' || type === 'number' || value === null) return String(value);
+		if (type === 'string') return `'${value.replace(/'/g, "''")}'`;
+		if (type === 'object') return `'${JSON.stringify(value).replace(/'/g, "''")}'`;
+		return '';
+	}
+
+	/**
+	 * Parse a value in this key's resolver.
+	 * @since 0.4.0
+	 * @param {string} value The value to parse.
+	 * @param {external:Guild} guild A Guild instance required for the resolver to work.
+	 * @returns {Promise<ParsingResult>}
+	 */
+	async parse(value, guild) {
+		const data = await this.manager.resolver[this.type](value, guild, this.key, { min: this.min, max: this.max });
+		return { data, sql: this.manager.sql ? this.sql(data && data.id ? data.id : data) : null };
+	}
+
+	/**
+	 * Get the defaults values for this key.
+	 * @since 0.4.0
+	 * @returns {ParsingResult}
+	 */
+	getDefault() {
+		return { data: this.default, sql: this.manager.sql ? this.sql(this.default) : null };
+	}
+
+	/**
+	 * Get a JSON object with all the default values.
+	 * @since 0.4.0
+	 * @returns {any}
+	 */
+	getDefaults() {
+		return this.default;
+	}
+
+	/**
 	 * Get this key's raw data in JSON.
+	 * @since 0.4.0
 	 * @returns {SchemaPieceJSON}
 	 */
 	toJSON() {
@@ -144,6 +180,7 @@ class SchemaPiece {
 
 	/**
 	 * Check if the key is properly configured.
+	 * @since 0.4.0
 	 * @param {Object} options The options to parse.
 	 */
 	init(options = {}) {
@@ -157,24 +194,48 @@ class SchemaPiece {
 		const value = [this.path, options.sql || (this.type === 'integer' || this.type === 'float' ? 'INTEGER' : 'TEXT') +
 				(this.default !== null ? ` DEFAULT ${this._parseSQLValue(this.default)}` : '')];
 
-		Object.defineProperty(this, 'sqlSchema', { value, enumerable: false });
+		Object.defineProperty(this, 'sqlSchema', { value });
 	}
 
-	getSQL(array = null) {
-		if (array !== null) array.push(this.sqlSchema);
+	/**
+	 * Get the SQL key and datatype.
+	 * @since 0.4.0
+	 * @param {Array<string[]>} [array] An array to push.
+	 * @returns {string[]}
+	 */
+	getSQL(array) {
+		if (typeof array !== 'undefined') array.push(this.sqlSchema);
 		return this.sqlSchema;
 	}
 
-	getKeys(array = null) {
-		if (array !== null) array.push(this.path);
+	/**
+	 * Get the current key.
+	 * @since 0.4.0
+	 * @param {string[]} [array] An array to push.
+	 * @returns {string}
+	 */
+	getKeys(array) {
+		if (typeof array !== 'undefined') array.push(this.path);
 		return this.path;
 	}
 
-	getValues(array = null) {
-		if (array !== null) array.push(this);
+	/**
+	 * Passes the instance to an array
+	 * @since 0.4.0
+	 * @param {SchemaPiece[]} [array] An array to push.
+	 * @returns {this}
+	 */
+	getValues(array) {
+		if (typeof array !== 'undefined') array.push(this);
 		return this;
 	}
 
+	/**
+	 * Stringify a value or the instance itself.
+	 * @since 0.4.0
+	 * @param {string} [value] A value to stringify.
+	 * @returns {string}
+	 */
 	toString(value) {
 		if (typeof value === 'undefined') return `{SchemaPiece:${this.type}}`;
 		if (value === null) return 'Not set';

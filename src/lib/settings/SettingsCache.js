@@ -8,6 +8,12 @@ const SettingResolver = require('../parsers/SettingResolver');
 class SettingsCache {
 
 	/**
+	 * @typedef  {Object} SettingsOptions
+	 * @property {string} provider
+	 */
+
+	/**
+	 * @since 0.3.0
 	 * @param {KlasaClient} client The Klasa client
 	 */
 	constructor(client) {
@@ -30,11 +36,6 @@ class SettingsCache {
 		 */
 		this.types = Object.getOwnPropertyNames(SettingResolver.prototype).slice(1);
 	}
-
-	/**
-	 * @typedef  {Object} SettingsOptions
-	 * @property {string} provider
-	 */
 
 	/**
 	 * Add a new instance of SettingGateway, with its own validateFunction and schema.
@@ -80,6 +81,12 @@ class SettingsCache {
 		return this[name];
 	}
 
+	/**
+	 * Check if a provider exists.
+	 * @param {string} engine Check if a provider exists.
+	 * @private
+	 * @returns {Provider}
+	 */
 	_checkProvider(engine) {
 		const provider = this.client.providers.get(engine);
 		if (!provider) throw `This provider (${engine}) does not exist in your system.`;

@@ -5,7 +5,6 @@ const { stringIsObject } = require('../util/util');
 /**
  * An extended Gateway that overrides several methods for SQL parsing.
  * @extends Gateway
- * @since 0.4.0
  */
 class GatewaySQL extends Gateway {
 
@@ -27,6 +26,7 @@ class GatewaySQL extends Gateway {
 	 */
 
 	/**
+	 * @since 0.4.0
 	 * @param {SettingsCache} store The SettingsCache instance which initiated this instance.
 	 * @param {string} type The name of this Gateway.
 	 * @param {Function} validateFunction The function that validates the entries' values.
@@ -37,16 +37,19 @@ class GatewaySQL extends Gateway {
 		super(store, type, validateFunction, schema, options);
 
 		/**
+		 * @since 0.4.0
 		 * @type {boolean}
 		 */
 		this.parseDottedObjects = typeof options.parseDottedObjects === 'boolean' ? options.parseDottedObjects : true;
 
 		/**
+		 * @since 0.0.1
 		 * @type {boolean}
 		 */
 		this.sql = true;
 
 		/**
+		 * @since 0.4.0
 		 * @type {EntryParser[]}
 		 */
 		this.sqlEntryParser = [];

@@ -4,7 +4,6 @@ const fs = require('fs-nextra');
 
 /**
  * The Gateway class that manages the data input, parsing, and output, of an entire database, while keeping a cache system sync with the changes.
- * @since 0.0.1
  */
 class Gateway {
 
@@ -71,6 +70,7 @@ class Gateway {
 	 */
 
 	/**
+	 * @since 0.0.1
 	 * @param {SettingsCache} store The SettingsCache instance which initiated this instance.
 	 * @param {string} type The name of this Gateway.
 	 * @param {Function} validateFunction The function that validates the entries' values.
@@ -79,36 +79,43 @@ class Gateway {
 	 */
 	constructor(store, type, validateFunction, schema, options) {
 		/**
+		 * @since 0.0.1
 		 * @type {SettingsCache}
 		 */
 		this.store = store;
 
 		/**
+		 * @since 0.3.0
 		 * @type {string}
 		 */
 		this.type = type;
 
 		/**
+		 * @since 0.4.0
 		 * @type {GatewayOptions}
 		 */
 		this.options = options;
 
 		/**
+		 * @since 0.3.0
 		 * @type {Function}
 		 */
 		this.validate = validateFunction;
 
 		/**
+		 * @since 0.3.0
 		 * @type {Object}
 		 */
 		this.defaultSchema = schema;
 
 		/**
+		 * @since 0.0.1
 		 * @type {Schema}
 		 */
 		this.schema = null;
 
 		/**
+		 * @since 0.0.1
 		 * @type {boolean}
 		 */
 		this.sql = false;
