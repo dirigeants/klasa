@@ -68,7 +68,9 @@ module.exports = class extends Monitor {
 				if (this.client.config.typing) msg.channel.stopTyping();
 				if (error.code === 1 && this.client.config.cmdPrompt) {
 					return this.awaitMessage(msg, timer, error.message)
-						.catch(err => this.client.emit('commandError', msg, msg.cmd, msg.params, err));
+						.catch(err => {
+							if (err) this.client.emit('commandError', msg, msg.cmd, msg.params, err);
+						});
 				}
 				return this.client.emit('commandError', msg, msg.cmd, msg.params, error);
 			});
