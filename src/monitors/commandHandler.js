@@ -88,7 +88,7 @@ module.exports = class extends Monitor {
 		msg.args[msg.args.lastIndexOf(null)] = param.first().content;
 		msg.reprompted = true;
 
-		if (message.deletable) message.delete();
+		message.delete();
 		if (this.client.config.typing) msg.channel.startTyping();
 		return this.runCommand(msg, timer);
 	}
