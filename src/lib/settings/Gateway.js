@@ -105,15 +105,6 @@ class Gateway {
 	}
 
 	/**
-	 * Fetch an entry from the cache. Use this method when using async cacheproviders.
-	 * @param {string} input The key to fetch from the cache.
-	 * @returns {Promise<Object>}
-	 */
-	async fetchEntry(input) {
-		return this.cache.get(this.type, input) || this.defaults;
-	}
-
-	/**
 	 * Create a new entry into the database with an optional content (defaults to this Gateway's defaults).
 	 * @param {string} input The name of the key to create.
 	 * @param {Object} [data={}] The initial data to insert.
@@ -176,7 +167,7 @@ class Gateway {
 
 	async _reset(target, key, guild, { path, route }) {
 		const parsedID = path.default;
-		let cache = await this.fetchEntry(target);
+		let cache = this.getEntry(target);
 		let create = false;
 		if (cache.default === true) {
 			create = true;
@@ -223,7 +214,7 @@ class Gateway {
 
 		const parsed = await path.parse(value, guild);
 		const parsedID = parsed.data && parsed.data.id ? parsed.data.id : parsed.data;
-		let cache = await this.fetchEntry(target);
+		let cache = this.getEntry(target);
 		let create = false;
 		if (cache.default === true) {
 			create = true;
@@ -253,7 +244,7 @@ class Gateway {
 		guild = this._resolveGuild(guild || target);
 		target = await this.validate(target).then(output => output && output.id ? output.id : output);
 		const list = { errors: [], promises: [] };
-		let cache = await this.fetchEntry(target);
+		let cache = this.getEntry(target);
 		let create = false;
 		if (cache.default === true) {
 			create = true;
@@ -314,7 +305,7 @@ class Gateway {
 
 		const parsed = await path.parse(value, guild);
 		const parsedID = parsed.data && parsed.data.id ? parsed.data.id : parsed.data;
-		let cache = await this.fetchEntry(target);
+		let cache = this.getEntry(target);
 		let create = false;
 		if (cache.default === true) {
 			create = true;

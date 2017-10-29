@@ -443,7 +443,6 @@ declare module 'klasa' {
 		public initSchema(): Promise<Object>;
 
 		public getEntry(input: string): Object;
-		public fetchEntry(input: string): Promise<Object>;
 		public createEntry(input: string, data?: Object): Promise<true>;
 		public deleteEntry(input: string): Promise<true>;
 

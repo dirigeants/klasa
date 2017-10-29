@@ -34,7 +34,6 @@ class SettingsCache {
 	/**
 	 * @typedef  {Object} SettingsOptions
 	 * @property {string} provider
-	 * @property {string} cache
 	 */
 
 	/**
@@ -71,7 +70,7 @@ class SettingsCache {
 
 		options.provider = this._checkProvider(options.provider || this.client.config.provider.engine || 'json');
 		if (options.provider.cache) throw `The provider ${options.provider.name} is designed for caching, not persistent data. Please try again with another.`;
-		options.cache = this._checkProvider(options.cache || this.client.config.provider.cache || 'collection');
+		options.cache = this._checkProvider('collection');
 		if (options.cache.cache === false) throw `The provider ${options.cache.name} is designed for persistent data, not cache. Please try again with another.`;
 
 		if (options.provider.sql) this[name] = new GatewaySQL(this, name, validateFunction, schema, options);

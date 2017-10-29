@@ -392,7 +392,7 @@ class KlasaClient extends Discord.Client {
 		if (this.user.bot) this.application = await super.fetchApplication();
 		if (!this.config.ownerID) this.config.ownerID = this.user.bot ? this.application.owner.id : this.user.id;
 		await this.providers.init();
-		await this.settings.add('guilds', this.settings.validate, this.settings.defaultDataSchema, { cache: 'collection' });
+		await this.settings.add('guilds', this.settings.validate, this.settings.defaultDataSchema);
 		// Providers must be init before settings, and those before all other stores.
 		await Promise.all(this.pieceStores.filter(store => store.name !== 'providers').map(store => store.init()));
 		util.initClean(this);

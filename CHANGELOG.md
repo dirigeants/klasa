@@ -21,7 +21,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] Added GatewaySQL (extends Gateway, overriding the methods for better SQL parsing).
 
 ### Changed
-- [[#43](https://github.com/dirigeants/klasa/pull/43)] **[BREAKING]** `Gateway#get` -> `Gateway#getEntry` (sync) and `Gateway#fetchEntry` (async).
+- [[#43](https://github.com/dirigeants/klasa/pull/43)] **[BREAKING]** `Gateway#get` -> `Gateway#getEntry`.
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] QoL fix in the help command. Tell you when a command is not found and prevent users from checking it when they don't have permissions.
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] All pieces to support asynchronous CacheProviders.
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] **[BREAKING]** `Gateway#update` -> `Gateway#updateOne`, which does not accept an object (use `Gateway#updateMany` instead).
