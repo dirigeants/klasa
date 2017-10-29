@@ -4,6 +4,7 @@ const { applyToClass } = require('../../util/util');
 
 /**
  * The common interface for all stores
+ * @since 0.1.1
  * @see CommandStore
  * @see EventStore
  * @see ExtendableStore
@@ -16,6 +17,7 @@ class Store {
 
 	/**
 	 * Initializes all pieces in this store.
+	 * @since 0.0.1
 	 * @return {Array}
 	 */
 	init() {
@@ -24,6 +26,7 @@ class Store {
 
 	/**
 	 * Loads a piece into Klasa so it can be saved in this store.
+	 * @since 0.0.1
 	 * @param {string} dir The user directory or core directory where this file is saved.
 	 * @param  {string|string[]} file A string or array of strings showing where the file is located.
 	 * @returns {?Piece}
@@ -43,6 +46,7 @@ class Store {
 
 	/**
 	 * Loads all of our pieces from both the user and core directories.
+	 * @since 0.0.1
 	 * @return {number} The number of pieces loaded.
 	 */
 	async loadAll() {
@@ -58,6 +62,7 @@ class Store {
 
 	/**
 	 * Resolve a string or piece into a piece object.
+	 * @since 0.0.1
 	 * @param  {Piece|string} name The piece object or a string representing a piece's name
 	 * @return {Piece}
 	 */
@@ -68,6 +73,7 @@ class Store {
 
 	/**
 	 * Defines toString behavior for stores
+	 * @since 0.3.0
 	 * @returns {string} This store name
 	 */
 	toString() {
@@ -76,6 +82,7 @@ class Store {
 
 	/**
 	 * Applies this interface to a class
+	 * @since 0.1.1
 	 * @param {Object} structure The structure to apply this interface to
 	 * @param {string[]} [skips=[]] The methods to skip when applying this interface
 	 */

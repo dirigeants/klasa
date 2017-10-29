@@ -3,6 +3,7 @@ const Piece = require('./interfaces/Piece');
 /**
  * Base class for all Klasa Languages. See {@tutorial CreatingLanguages} for more information how to use this class
  * to build custom languages.
+ * @since 0.2.1
  * @tutorial CreatingLanguages
  * @implements {Piece}
  */
@@ -16,6 +17,7 @@ class Language {
 	 */
 
 	/**
+	 * @since 0.2.1
 	 * @param {KlasaClient} client The Klasa Client
 	 * @param {string} dir The path to the core or user language pieces folder
 	 * @param {Array} file The path from the pieces folder to the finalizer file
@@ -23,36 +25,42 @@ class Language {
 	 */
 	constructor(client, dir, file, options = {}) {
 		/**
+		 * @since 0.2.1
 		 * @type {KlasaClient}
 		 */
 		this.client = client;
 
 		/**
 		 * The directory to where this language piece is stored
+		 * @since 0.2.1
 		 * @type {string}
 		 */
 		this.dir = dir;
 
 		/**
 		 * The file location where this language is stored
+		 * @since 0.2.1
 		 * @type {string}
 		 */
 		this.file = file;
 
 		/**
 		 * The name of the finalizer
+		 * @since 0.2.1
 		 * @type {string}
 		 */
 		this.name = options.name || file.slice(0, -3);
 
 		/**
 		 * The type of Klasa piece this is
+		 * @since 0.3.0
 		 * @type {string}
 		 */
 		this.type = 'language';
 
 		/**
 		 * If the language is enabled or not
+		 * @since 0.2.1
 		 * @type {boolean}
 		 */
 		this.enabled = 'enabled' in options ? options.enabled : true;
@@ -60,6 +68,7 @@ class Language {
 
 	/**
 	 * The method to get language strings
+	 * @since 0.2.1
 	 * @param {string} term The string or function to look up
 	 * @param {...any} args Any arguments to pass to the lookup
 	 * @returns {string|Function}
@@ -82,6 +91,7 @@ class Language {
 
 	/**
 	 * The init method to be optionaly overwritten in actual languages
+	 * @since 0.2.1
 	 * @abstract
 	 * @returns {void}
 	 */
