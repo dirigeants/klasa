@@ -2,12 +2,71 @@ const Schema = require('./Schema');
 const { resolve } = require('path');
 const fs = require('fs-nextra');
 
+/**
+ * The Gateway class that manages the data input, parsing, and output, of an entire database, while keeping a cache system sync with the changes.
+ * @since 0.0.1
+ */
 class Gateway {
 
 	/**
 	 * @typedef  {Object} GatewayOptions
 	 * @property {Provider} provider
 	 * @property {CacheProvider} cache
+	 * @memberof Gateway
+	 */
+
+	/**
+	 * @typedef  {Object} GatewayUpdateResult
+	 * @property {any} value
+	 * @property {SchemaPiece} path
+	 */
+
+	/**
+	 * @typedef  {Object} GatewayParseOptions
+	 * @property {string}   path
+	 * @property {string[]} route
+	 * @memberof Gateway
+	 */
+
+	/**
+	 * @typedef  {Object} GatewayParseResult
+	 * @property {any}    parsed
+	 * @property {object} settings
+	 * @property {null}   array
+	 * @memberof Gateway
+	 */
+
+	/**
+	 * @typedef  {Object} GatewayParseResultArray
+	 * @property {any}    parsed
+	 * @property {object} settings
+	 * @property {any[]}  array
+	 * @memberof Gateway
+	 */
+
+	/**
+	 * @typedef  {Object} GatewayUpdateManyList
+	 * @property {Array<Promise<any>>} promises
+	 * @property {string[]} errors
+	 * @memberof Gateway
+	 */
+
+	/**
+	 * @typedef {(Guild|TextChannel|VoiceChannel|Message|Role)} GatewayGuildResolvable
+	 * @memberof Gateway
+	 */
+
+	/**
+	 * @typedef  {Object} GatewayPathOptions
+	 * @property {boolean} [avoidUnconfigurable=false]
+	 * @property {boolean} [piece=true]
+	 * @memberof Gateway
+	 */
+
+	/**
+	 * @typedef  {Object} GatewayPathResult
+	 * @property {SchemaPiece} path
+	 * @property {string[]} route
 	 * @memberof Gateway
 	 */
 
@@ -57,6 +116,7 @@ class Gateway {
 
 	/**
 	 * Inits the table and the schema for its use in this gateway.
+	 * @since 0.0.1
 	 * @returns {Promise<void[]>}
 	 */
 	init() {
@@ -68,6 +128,7 @@ class Gateway {
 
 	/**
 	 * Inits the table for its use in this gateway.
+	 * @since 0.4.0
 	 */
 	async initTable() {
 		const hasTable = await this.provider.hasTable(this.type);
@@ -84,6 +145,7 @@ class Gateway {
 
 	/**
 	 * Inits the schema, creating a file if it does not exist, and returning the current schema or the default.
+	 * @since 0.4.0
 	 * @returns {Promise<Object>}
 	 */
 	async initSchema() {
@@ -96,6 +158,7 @@ class Gateway {
 
 	/**
 	 * Get an entry from the cache.
+	 * @since 0.4.0
 	 * @param {string} input The key to get from the cache.
 	 * @returns {Object}
 	 */
@@ -106,6 +169,7 @@ class Gateway {
 
 	/**
 	 * Create a new entry into the database with an optional content (defaults to this Gateway's defaults).
+	 * @since 0.4.0
 	 * @param {string} input The name of the key to create.
 	 * @param {Object} [data={}] The initial data to insert.
 	 * @returns {Promise<true>}
@@ -119,6 +183,7 @@ class Gateway {
 
 	/**
 	 * Delete an entry from the database and cache.
+	 * @since 0.4.0
 	 * @param {string} input The name of the key to fetch and delete.
 	 * @returns {Promise<true>}
 	 */
@@ -130,6 +195,7 @@ class Gateway {
 
 	/**
 	 * Sync either all entries from the cache with the persistent database, or a single one.
+	 * @since 0.0.1
 	 * @param {(Object|string)} [input=null] An object containing a id property, like discord.js objects, or a string.
 	 * @returns {Promise<void>}
 	 */
@@ -147,11 +213,12 @@ class Gateway {
 
 	/**
 	 * Reset a value from an entry.
+	 * @since 0.0.1
 	 * @param {string} target The entry target.
 	 * @param {string} key The key to reset.
 	 * @param {(Guild|string)} [guild=null] A guild resolvable.
 	 * @param {boolean} [avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key.
-	 * @returns {Promise<{ value: any, path: SchemaPiece }>}
+	 * @returns {Promise<GatewayUpdateResult>}
 	 */
 	async reset(target, key, guild = null, avoidUnconfigurable = false) {
 		if (typeof key !== 'string') throw new TypeError(`The argument key must be a string. Received: ${typeof key}`);
@@ -165,6 +232,15 @@ class Gateway {
 		return { value: parsed, path };
 	}
 
+	/**
+	 *
+	 * @param {string} target The key target.
+	 * @param {string} key The key to edit.
+	 * @param {external:Guild} guild The guild to take.
+	 * @param {GatewayParseOptions} options The options.
+	 * @private
+	 * @returns {Promise<GatewayParseResult>}
+	 */
 	async _reset(target, key, guild, { path, route }) {
 		const parsedID = path.default;
 		let cache = this.getEntry(target);
@@ -188,12 +264,13 @@ class Gateway {
 
 	/**
 	 * Update a value from an entry.
+	 * @since 0.4.0
 	 * @param {string} target The entry target.
 	 * @param {string} key The key to modify.
 	 * @param {string} value The value to parse and save.
 	 * @param {(Guild|string)} [guild=null] A guild resolvable.
 	 * @param {boolean} [avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key.
-	 * @returns {Promise<{ value: any, path: SchemaPiece }>}
+	 * @returns {Promise<GatewayUpdateResult>}
 	 */
 	async updateOne(target, key, value, guild = null, avoidUnconfigurable = false) {
 		if (typeof key !== 'string') throw new TypeError(`The argument key must be a string. Received: ${typeof key}`);
@@ -209,6 +286,17 @@ class Gateway {
 		return { value: parsed.data, path };
 	}
 
+	/**
+	 * Update a single key
+	 * @since 0.4.0
+	 * @param {string} target The key target.
+	 * @param {string} key The key to edit.
+	 * @param {any}    value The new value.
+	 * @param {external:Guild} guild The guild to take.
+	 * @param {GatewayParseOptions} options The options.
+	 * @private
+	 * @returns {Promise<GatewayParseResult>}
+	 */
 	async _updateOne(target, key, value, guild, { path, route }) {
 		if (path.array === true) throw 'This key is array type.';
 
@@ -235,10 +323,11 @@ class Gateway {
 
 	/**
 	 * Update multiple keys given a JSON object.
+	 * @since 0.4.0
 	 * @param {string} target The entry target.
 	 * @param {Object} object A JSON object to iterate and parse.
 	 * @param {(Guild|string)} [guild=null] A guild resolvable.
-	 * @returns {Promise<{ settings: Object, errors: string[] }>}
+	 * @returns {Promise<GatewayUpdateResult>}
 	 */
 	async updateMany(target, object, guild = null) {
 		guild = this._resolveGuild(guild || target);
@@ -261,6 +350,16 @@ class Gateway {
 		return { settings, errors: list.errors };
 	}
 
+	/**
+	 * Update many keys in a single query.
+	 * @since 0.4.0
+	 * @param {Object} cache The key target.
+	 * @param {Object} object The key to edit.
+	 * @param {Schema} schema The new value.
+	 * @param {external:Guild} guild The guild to take.
+	 * @param {GatewayUpdateManyList} list The options.
+	 * @private
+	 */
 	_updateMany(cache, object, schema, guild, list) {
 		const keys = Object.keys(object);
 		for (let i = 0; i < keys.length; i++) {
@@ -277,13 +376,14 @@ class Gateway {
 
 	/**
 	 * Update an array from an entry.
+	 * @since 0.0.1
 	 * @param {string} target The entry target.
 	 * @param {('add'|'remove')} action Whether the value should be added or removed to the array.
 	 * @param {string} key The key to modify.
 	 * @param {string} value The value to parse and save or remove.
 	 * @param {(Guild|string)} [guild=null] A guild resolvable.
 	 * @param {boolean} [avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key.
-	 * @returns {Promise<{ value: any, path: SchemaPiece }>}
+	 * @returns {Promise<GatewayUpdateResult>}
 	 */
 	async updateArray(target, action, key, value, guild = null, avoidUnconfigurable = false) {
 		if (action !== 'add' && action !== 'remove') throw new TypeError('The argument \'action\' for Gateway#updateArray only accepts the strings \'add\' and \'remove\'.');
@@ -300,6 +400,18 @@ class Gateway {
 		return { value: parsed.data, path };
 	}
 
+	/**
+	 * Update an array
+	 * @since 0.4.0
+	 * @param {string} target The key target.
+	 * @param {('add'|'remove')} action Whether the value should be added or removed to the array.
+	 * @param {string} key The key to edit.
+	 * @param {any}    value The new value.
+	 * @param {external:Guild} guild The guild to take.
+	 * @param {GatewayParseOptions} options The options.
+	 * @private
+	 * @returns {Promise<GatewayParseResultArray>}
+	 */
 	async _updateArray(target, action, key, value, guild, { path, route }) {
 		if (path.array === false) throw guild.language.get('COMMAND_CONF_KEY_NOT_ARRAY');
 
@@ -334,9 +446,10 @@ class Gateway {
 
 	/**
 	 * Resolve a path from a string.
+	 * @since 0.4.0
 	 * @param {string} [key=null] A string to resolve.
-	 * @param {Object} [options={}] Whether the Gateway should avoid configuring the selected key.
-	 * @returns {{ path: SchemaPiece, route: string[] }}
+	 * @param {GatewayPathOptions} [options={}] Whether the Gateway should avoid configuring the selected key.
+	 * @returns {GatewayPathResult}
 	 */
 	getPath(key = '', { avoidUnconfigurable = false, piece = true } = {}) {
 		if (key === '') return { path: this.schema, route: [] };
@@ -363,6 +476,13 @@ class Gateway {
 		return { path, route };
 	}
 
+	/**
+	 * Resolves a guild
+	 * @since 0.4.0
+	 * @param {GatewayGuildResolvable} guild A guild resolvable
+	 * @private
+	 * @returns {?Guild}
+	 */
 	_resolveGuild(guild) {
 		const constName = guild.constructor.name;
 		if (constName === 'Guild') return guild;
@@ -373,6 +493,7 @@ class Gateway {
 
 	/**
 	 * Get the cache-provider that manages the cache data.
+	 * @since 0.0.1
 	 * @type {CacheProvider}
 	 * @readonly
 	 */
@@ -382,6 +503,7 @@ class Gateway {
 
 	/**
 	 * Get the provider that manages the persistent data.
+	 * @since 0.0.1
 	 * @type {Provider}
 	 * @readonly
 	 */
@@ -391,6 +513,7 @@ class Gateway {
 
 	/**
 	 * Get this gateway's defaults.
+	 * @since 0.4.0
 	 * @type {Object}
 	 * @readonly
 	 */
@@ -400,6 +523,7 @@ class Gateway {
 
 	/**
 	 * The client this SettingGateway was created with.
+	 * @since 0.0.1
 	 * @type {KlasaClient}
 	 * @readonly
 	 */
@@ -409,6 +533,7 @@ class Gateway {
 
 	/**
 	 * The resolver instance this SettingGateway uses to parse the data.
+	 * @since 0.0.1
 	 * @type {Resolver}
 	 * @readonly
 	 */
