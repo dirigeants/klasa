@@ -6,7 +6,13 @@ module.exports = class extends Extendable {
 		super(...args, ['Message', 'TextChannel', 'DMChannel', 'GroupDMChannel', 'User']);
 	}
 
-	extend(content = '', options = {}) {
+	extend(content, options) {
+		if (!options && typeof content === 'object' && !Array.isArray(content)) {
+			options = content;
+			content = '';
+		} else if (!options) {
+			options = {};
+		}
 		options.embed = options.embed || null;
 		if (!this.channel) return this.send(content, options);
 		const commandMessage = this.client.commandMessages.get(this.id);
