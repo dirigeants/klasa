@@ -13,6 +13,7 @@ module.exports = class extends Monitor {
 		if (!validCommand) return;
 		const timer = new Stopwatch();
 		if (this.client.config.typing) msg.channel.startTyping();
+
 		this.client.inhibitors.run(msg, validCommand)
 			.then(() => this.runCommand(this.makeProxy(msg, new CommandMessage(msg, validCommand, prefix, prefixLength)), timer))
 			.catch((response) => {
@@ -56,13 +57,13 @@ module.exports = class extends Monitor {
 	runCommand(msg, timer) {
 		msg.validateArgs()
 			.then(async (params) => {
+				if (this.client.config.typing) msg.channel.stopTyping();
 				await msg.cmd.run(msg, params)
 					.then(mes => {
 						this.client.emit('commandRun', msg, msg.cmd, params, mes);
 						return this.client.finalizers.run(msg, mes, timer);
 					})
 					.catch(error => this.client.emit('commandError', msg, msg.cmd, msg.params, error));
-				if (this.client.config.typing) msg.channel.stopTyping();
 			})
 			.catch((error) => {
 				if (this.client.config.typing) msg.channel.stopTyping();
