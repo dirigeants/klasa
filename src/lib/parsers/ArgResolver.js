@@ -9,6 +9,7 @@ class ArgResolver extends Resolver {
 
 	/**
 	 * Resolves a piece
+	 * @since 0.3.0
 	 * @param {string} arg This arg
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
@@ -27,6 +28,7 @@ class ArgResolver extends Resolver {
 
 	/**
 	 * Resolves a store
+	 * @since 0.3.0
 	 * @param {string} arg This arg
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
@@ -43,6 +45,7 @@ class ArgResolver extends Resolver {
 
 	/**
 	 * Resolves a command
+	 * @since 0.0.1
 	 * @param {string} arg This arg
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
@@ -56,6 +59,7 @@ class ArgResolver extends Resolver {
 
 	/**
 	 * Resolves a command
+	 * @since 0.0.1
 	 * @param {string} arg This arg
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
@@ -72,6 +76,7 @@ class ArgResolver extends Resolver {
 
 	/**
 	 * Resolves an event
+	 * @since 0.0.1
 	 * @param {string} arg This arg
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
@@ -88,6 +93,7 @@ class ArgResolver extends Resolver {
 
 	/**
 	 * Resolves an extendable
+	 * @since 0.0.1
 	 * @param {string} arg This arg
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
@@ -104,6 +110,7 @@ class ArgResolver extends Resolver {
 
 	/**
 	 * Resolves a finalizer
+	 * @since 0.0.1
 	 * @param {string} arg This arg
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
@@ -120,6 +127,7 @@ class ArgResolver extends Resolver {
 
 	/**
 	 * Resolves a inhibitor
+	 * @since 0.0.1
 	 * @param {string} arg This arg
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
@@ -136,6 +144,7 @@ class ArgResolver extends Resolver {
 
 	/**
 	 * Resolves a monitor
+	 * @since 0.0.1
 	 * @param {string} arg This arg
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
@@ -152,6 +161,7 @@ class ArgResolver extends Resolver {
 
 	/**
 	 * Resolves a language
+	 * @since 0.2.1
 	 * @param {string} arg This arg
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
@@ -167,6 +177,7 @@ class ArgResolver extends Resolver {
 	}
 	/**
 	 * Resolves a provider
+	 * @since 0.0.1
 	 * @param {string} arg This arg
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
@@ -183,6 +194,7 @@ class ArgResolver extends Resolver {
 
 	/**
 	 * Resolves a message
+	 * @since 0.0.1
 	 * @param {string} arg This arg
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
@@ -196,6 +208,7 @@ class ArgResolver extends Resolver {
 
 	/**
 	 * Resolves a message
+	 * @since 0.0.1
 	 * @param {string} arg This arg
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
@@ -212,6 +225,7 @@ class ArgResolver extends Resolver {
 
 	/**
 	 * Resolves a user
+	 * @since 0.0.1
 	 * @param {string} arg This arg
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
@@ -225,6 +239,7 @@ class ArgResolver extends Resolver {
 
 	/**
 	 * Resolves a user
+	 * @since 0.0.1
 	 * @param {string} arg This arg
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
@@ -241,6 +256,7 @@ class ArgResolver extends Resolver {
 
 	/**
 	 * Resolves a member
+	 * @since 0.0.1
 	 * @param {string} arg This arg
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
@@ -257,6 +273,7 @@ class ArgResolver extends Resolver {
 
 	/**
 	 * Resolves a channel
+	 * @since 0.0.1
 	 * @param {string} arg This arg
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
@@ -273,6 +290,7 @@ class ArgResolver extends Resolver {
 
 	/**
 	 * Resolves a guild
+	 * @since 0.0.1
 	 * @param {string} arg This arg
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
@@ -289,6 +307,7 @@ class ArgResolver extends Resolver {
 
 	/**
 	 * Resolves a role
+	 * @since 0.0.1
 	 * @param {string} arg This arg
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
@@ -305,6 +324,7 @@ class ArgResolver extends Resolver {
 
 	/**
 	 * Resolves a literal
+	 * @since 0.0.1
 	 * @param {string} arg This arg
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
@@ -320,6 +340,7 @@ class ArgResolver extends Resolver {
 
 	/**
 	 * Resolves a boolean
+	 * @since 0.0.1
 	 * @param {string} arg This arg
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
@@ -333,6 +354,7 @@ class ArgResolver extends Resolver {
 
 	/**
 	 * Resolves a boolean
+	 * @since 0.0.1
 	 * @param {string} arg This arg
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
@@ -349,6 +371,7 @@ class ArgResolver extends Resolver {
 
 	/**
 	 * Resolves a string
+	 * @since 0.0.1
 	 * @param {string} arg This arg
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
@@ -362,6 +385,7 @@ class ArgResolver extends Resolver {
 
 	/**
 	 * Resolves a string
+	 * @since 0.0.1
 	 * @param {string} arg This arg
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
@@ -377,6 +401,7 @@ class ArgResolver extends Resolver {
 
 	/**
 	 * Resolves a integer
+	 * @since 0.0.1
 	 * @param {string} arg This arg
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
@@ -390,6 +415,7 @@ class ArgResolver extends Resolver {
 
 	/**
 	 * Resolves a integer
+	 * @since 0.0.1
 	 * @param {string} arg This arg
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
@@ -410,6 +436,7 @@ class ArgResolver extends Resolver {
 
 	/**
 	 * Resolves a number
+	 * @since 0.0.1
 	 * @param {string} arg This arg
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
@@ -423,6 +450,7 @@ class ArgResolver extends Resolver {
 
 	/**
 	 * Resolves a number
+	 * @since 0.0.1
 	 * @param {string} arg This arg
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
@@ -436,6 +464,7 @@ class ArgResolver extends Resolver {
 
 	/**
 	 * Resolves a number
+	 * @since 0.0.1
 	 * @param {string} arg This arg
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
@@ -456,6 +485,7 @@ class ArgResolver extends Resolver {
 
 	/**
 	 * Resolves an argument based on a regular expression
+	 * @since 0.3.0
 	 * @param {string} arg This arg
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
@@ -472,6 +502,7 @@ class ArgResolver extends Resolver {
 
 	/**
 	 * Resolves an argument based on a regular expression
+	 * @since 0.3.0
 	 * @param {string} arg This arg
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
@@ -485,6 +516,7 @@ class ArgResolver extends Resolver {
 
 	/**
 	 * Resolves an argument based on a regular expression
+	 * @since 0.3.0
 	 * @param {string} arg This arg
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
@@ -498,6 +530,7 @@ class ArgResolver extends Resolver {
 
 	/**
 	 * Resolves a hyperlink
+	 * @since 0.0.1
 	 * @param {string} arg This arg
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
@@ -514,6 +547,7 @@ class ArgResolver extends Resolver {
 
 	/**
 	 * Checks min and max values
+	 * @since 0.0.1
 	 * @param {number} value The value to check against
 	 * @param {?number} min The minimum value
 	 * @param {?number} max The maxiumum value

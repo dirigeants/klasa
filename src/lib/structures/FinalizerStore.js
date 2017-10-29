@@ -4,7 +4,8 @@ const Finalizer = require('./Finalizer');
 const Store = require('./interfaces/Store');
 
 /**
- * Stores all finalizers for use in Klasa
+ * Stores all finalizers for use in Klasa.
+ * @since 0.0.1
  * @extends external:Collection
  * @implements {Store}
  */
@@ -12,12 +13,15 @@ class FinalizerStore extends Collection {
 
 	/**
 	 * Constructs our FinalizerStore for use in Klasa
+	 * @since 0.0.1
 	 * @param  {KlasaClient} client The Klasa client
 	 */
 	constructor(client) {
 		super();
+
 		/**
 		 * The client this FinalizerStore was created with.
+		 * @since 0.0.1
 		 * @name FinalizerStore#client
 		 * @type {KlasaClient}
 		 * @readonly
@@ -26,24 +30,28 @@ class FinalizerStore extends Collection {
 
 		/**
 		 * The directory of finalizers in Klasa relative to where its installed.
+		 * @since 0.0.1
 		 * @type {String}
 		 */
 		this.coreDir = join(this.client.coreBaseDir, 'finalizers');
 
 		/**
 		 * The directory of local finalizers relative to where you run Klasa from.
+		 * @since 0.0.1
 		 * @type {String}
 		 */
 		this.userDir = join(this.client.clientBaseDir, 'finalizers');
 
 		/**
 		 * The type of structure this store holds
+		 * @since 0.1.1
 		 * @type {Finalizer}
 		 */
 		this.holds = Finalizer;
 
 		/**
 		 * The name of what this holds
+		 * @since 0.3.0
 		 * @type {String}
 		 */
 		this.name = 'finalizers';
@@ -51,6 +59,7 @@ class FinalizerStore extends Collection {
 
 	/**
 	 * Deletes a finalizer from the store
+	 * @since 0.0.1
 	 * @param  {Finalizer|string} name The finalizer object or a string representing the structure this store caches
 	 * @return {boolean} whether or not the delete was successful.
 	 */
@@ -63,6 +72,7 @@ class FinalizerStore extends Collection {
 
 	/**
 	 * Runs all of our finalizers after a command is ran successfully.
+	 * @since 0.0.1
 	 * @param  {Array} args An array of arguments passed down from the command
 	 * @return {void}
 	 */
@@ -72,6 +82,7 @@ class FinalizerStore extends Collection {
 
 	/**
 	 * Sets up a finalizer in our store.
+	 * @since 0.0.1
 	 * @param {Finalizer} finalizer The finalizer object we are setting up.
 	 * @returns {Finalizer}
 	 */

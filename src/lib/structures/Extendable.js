@@ -4,6 +4,7 @@ const Discord = require('discord.js');
 /**
  * Base class for all Klasa Extendables. See {@tutorial CreatingExtendables} for more information how to use this class
  * to build custom extendables.
+ * @since 0.0.1
  * @tutorial CreatingExtendables
  * @implements {Piece}
  */
@@ -18,6 +19,7 @@ class Extendable {
 	 */
 
 	/**
+	 * @since 0.0.1
 	 * @param {KlasaClient} client The klasa client
 	 * @param {string} dir The path to the core or user extendable pieces folder
 	 * @param {string} file The path from the pieces folder to the extendable file
@@ -26,48 +28,56 @@ class Extendable {
 	 */
 	constructor(client, dir, file, appliesTo = [], options = {}) {
 		/**
+		 * @since 0.0.1
 		 * @type {KlasaClient}
 		 */
 		this.client = client;
 
 		/**
 		 * The directory to where this extendable piece is stored
+		 * @since 0.0.1
 		 * @type {string}
 		 */
 		this.dir = dir;
 
 		/**
 		 * The file location where this extendable is stored
+		 * @since 0.0.1
 		 * @type {string}
 		 */
 		this.file = file;
 
 		/**
 		 * The name of the extendable
+		 * @since 0.0.1
 		 * @type {string}
 		 */
 		this.name = options.name || file.slice(0, -3);
 
 		/**
 		 * The type of Klasa piece this is
+		 * @since 0.0.1
 		 * @type {string}
 		 */
 		this.type = 'extendable';
 
 		/**
 		 * The discord classes this extendable applies to
+		 * @since 0.0.1
 		 * @type{string[]}
 		 */
 		this.appliesTo = appliesTo;
 
 		/**
 		 * If the language is enabled or not
+		 * @since 0.0.1
 		 * @type {boolean}
 		 */
 		this.enabled = 'enabled' in options ? options.enabled : true;
 
 		/**
 		 * The target library to apply this extendable to
+		 * @since 0.0.1
 		 * @type {boolean}
 		 */
 		this.target = options.klasa ? require('klasa') : Discord;
@@ -75,6 +85,7 @@ class Extendable {
 
 	/**
 	 * The extend method to be overwritten in actual extend pieces
+	 * @since 0.0.1
 	 * @param {any} params Any parameters you want
 	 * @abstract
 	 * @returns {any}
@@ -85,6 +96,8 @@ class Extendable {
 
 	/**
 	 * The init method to apply the extend method to the Discord.js Class
+	 * @since 0.0.1
+	 * @returns {void}
 	 */
 	async init() {
 		if (this.enabled) this.enable();
@@ -92,6 +105,7 @@ class Extendable {
 
 	/**
 	 * Disables this piece
+	 * @since 0.0.1
 	 * @returns {Piece} This piece
 	 */
 	disable() {
@@ -102,6 +116,7 @@ class Extendable {
 
 	/**
 	 * Enables this piece
+	 * @since 0.0.1
 	 * @returns {Piece} This piece
 	 */
 	enable() {
