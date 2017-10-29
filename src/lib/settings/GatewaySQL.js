@@ -23,7 +23,7 @@ class GatewaySQL extends Gateway {
 	 */
 
 	/**
-	 * @typedef {[string, any, Function]} EntryParser
+	 * @typedef {([string, any, Function])} EntryParser
 	 */
 
 	/**
