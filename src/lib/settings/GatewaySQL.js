@@ -23,7 +23,7 @@ class GatewaySQL extends Gateway {
 	 */
 
 	/**
-	 * @typedef {Array<[string, any, Function]>} EntryParser
+	 * @typedef {any[]} EntryParser
 	 */
 
 	/**
@@ -243,7 +243,7 @@ class GatewaySQL extends Gateway {
 	/**
 	 * Get this gateway's SQL schema.
 	 * @since 0.0.1
-	 * @type {Array<[string, string]>}
+	 * @type {Array<string[]>}
 	 * @readonly
 	 */
 	get sqlSchema() {
