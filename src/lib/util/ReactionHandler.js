@@ -319,7 +319,7 @@ class ReactionHandler extends ReactionCollector {
 	 * @returns {void}
 	 */
 	update() {
-		this.message.edit(this.display.pages[this.currentPage]);
+		this.message.edit('', { embed: this.display.pages[this.currentPage] });
 	}
 
 	/**
