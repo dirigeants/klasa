@@ -54,27 +54,29 @@ module.exports = class extends Monitor {
 		});
 	}
 
-	runCommand(msg, timer) {
-		msg.validateArgs()
-			.then(async (params) => {
-				if (this.client.config.typing) msg.channel.stopTyping();
-				await msg.cmd.run(msg, params)
-					.then(mes => {
-						this.client.emit('commandRun', msg, msg.cmd, params, mes);
-						return this.client.finalizers.run(msg, mes, timer);
-					})
-					.catch(error => this.client.emit('commandError', msg, msg.cmd, msg.params, error));
+	async runCommand(msg, timer) {
+		try {
+			await msg.validateArgs();
+		} catch (error) {
+			if (this.client.config.typing) msg.channel.stopTyping();
+			if (error.code === 1 && this.client.config.cmdPrompt) {
+				return this.awaitMessage(msg, timer, error.message)
+					.catch(err => this.client.emit('commandError', msg, msg.cmd, msg.params, err));
+			}
+			return this.client.emit('commandError', msg, msg.cmd, msg.params, error);
+		}
+
+		const commandRun = msg.cmd.run(msg, msg.params);
+
+		if (this.client.config.typing) msg.channel.stopTyping();
+		timer.stop();
+
+		return commandRun
+			.then(mes => {
+				this.client.finalizers.run(msg, mes, timer);
+				this.client.emit('commandRun', msg, msg.cmd, msg.params, mes);
 			})
-			.catch((error) => {
-				if (this.client.config.typing) msg.channel.stopTyping();
-				if (error.code === 1 && this.client.config.cmdPrompt) {
-					return this.awaitMessage(msg, timer, error.message)
-						.catch(err => {
-							if (err) this.client.emit('commandError', msg, msg.cmd, msg.params, err);
-						});
-				}
-				return this.client.emit('commandError', msg, msg.cmd, msg.params, error);
-			});
+			.catch(error => this.client.emit('commandError', msg, msg.cmd, msg.params, error));
 	}
 
 	async awaitMessage(msg, timer, error) {
