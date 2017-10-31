@@ -40,7 +40,7 @@ Re-emits the Discord.js debug event as log event, if enabled.
 
 ## guildCreate
 
-Creates neccisary SettingGateway entries for the new guild.
+Creates necessary SettingGateway entries for the new guild.
 
 **Source:**
 
@@ -70,13 +70,13 @@ Runs monitors.
 
 [events/message.js](https://github.com/dirigeants/klasa/blob/master/src/events/message.js)
 
-## messageBulkDelete
+## messageDeleteBulk
 
 Re-emits each message as a messageDelete, so that any deleted messages which are also cached CommandMessages, will be uncached.
 
 **Source:**
 
-[events/messageBulkDelete.js](https://github.com/dirigeants/klasa/blob/master/src/events/messageBulkDelete.js)
+[events/messageDeleteBulk.js](https://github.com/dirigeants/klasa/blob/master/src/events/messageDeleteBulk.js)
 
 ## messageUpdate
 

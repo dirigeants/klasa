@@ -13,6 +13,7 @@ module.exports = class extends Monitor {
 		if (!validCommand) return;
 		const timer = new Stopwatch();
 		if (this.client.config.typing) msg.channel.startTyping();
+
 		this.client.inhibitors.run(msg, validCommand)
 			.then(() => this.runCommand(this.makeProxy(msg, new CommandMessage(msg, validCommand, prefix, prefixLength)), timer))
 			.catch((response) => {
@@ -54,37 +55,46 @@ module.exports = class extends Monitor {
 		});
 	}
 
-	runCommand(msg, timer) {
-		msg.validateArgs()
-			.then(async (params) => {
-				await msg.cmd.run(msg, params)
-					.then(mes => {
-						this.client.emit('commandRun', msg, msg.cmd, params, mes);
-						return this.client.finalizers.run(msg, mes, timer);
-					})
-					.catch(error => this.client.emit('commandError', msg, msg.cmd, msg.params, error));
-				if (this.client.config.typing) msg.channel.stopTyping();
+	async runCommand(msg, timer) {
+		try {
+			await msg.validateArgs();
+		} catch (error) {
+			if (this.client.config.typing) msg.channel.stopTyping();
+			if (error.code === 1 && this.client.config.cmdPrompt) {
+				return this.awaitMessage(msg, timer, error.message)
+					.catch(err => this.client.emit('commandError', msg, msg.cmd, msg.params, err));
+			}
+			return this.client.emit('commandError', msg, msg.cmd, msg.params, error);
+		}
+
+		const commandRun = msg.cmd.run(msg, msg.params);
+
+		if (this.client.config.typing) msg.channel.stopTyping();
+		timer.stop();
+
+		return commandRun
+			.then(mes => {
+				this.client.finalizers.run(msg, mes, timer);
+				this.client.emit('commandRun', msg, msg.cmd, msg.params, mes);
 			})
-			.catch((error) => {
-				if (this.client.config.typing) msg.channel.stopTyping();
-				if (error.code === 1 && this.client.config.cmdPrompt) {
-					return this.awaitMessage(msg, timer, error.message)
-						.catch(err => this.client.emit('commandError', msg, msg.cmd, msg.params, err));
-				}
-				return this.client.emit('commandError', msg, msg.cmd, msg.params, error);
-			});
+			.catch(error => this.client.emit('commandError', msg, msg.cmd, msg.params, error));
 	}
 
 	async awaitMessage(msg, timer, error) {
 		const message = await msg.channel.send(msg.language.get('MONITOR_COMMAND_HANDLER_REPROMPT', `<@!${msg.author.id}>`, error))
 			.catch((err) => { throw newError(err); });
 
-		const param = await msg.channel.awaitMessages(response => response.author.id === msg.author.id && response.id !== message.id, { max: 1, time: 30000, errors: ['time'] });
+		const param = await msg.channel.awaitMessages(response => response.author.id === msg.author.id && response.id !== message.id, { max: 1, time: 30000, errors: ['time'] })
+			.catch(() => {
+				message.delete();
+				throw undefined;
+			});
+
 		if (param.first().content.toLowerCase() === 'abort') throw msg.language.get('MONITOR_COMMAND_HANDLER_ABORTED');
 		msg.args[msg.args.lastIndexOf(null)] = param.first().content;
 		msg.reprompted = true;
 
-		if (message.deletable) message.delete();
+		message.delete();
 		if (this.client.config.typing) msg.channel.startTyping();
 		return this.runCommand(msg, timer);
 	}
