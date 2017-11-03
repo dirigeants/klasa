@@ -34,4 +34,8 @@ There are a number of differences currently:
 
 See the following [tutorial](https://klasa.js.org/tutorial-GettingStarted.html) on how to get started using Klasa.
 
->Documentation for klasa can be found at: [https://klasa.js.org/](https://klasa.js.org/)
+## See also:
+
+- [Documentation for klasa: https://klasa.js.org/](https://klasa.js.org/)
+- [Example premade pieces: https://github.com/dirigeants/klasa-pieces](https://github.com/dirigeants/klasa-pieces)
+- [VS Code extension for rapid development (available on the marketplace)](https://marketplace.visualstudio.com/items?itemName=bdistin.klasa-vscode)
