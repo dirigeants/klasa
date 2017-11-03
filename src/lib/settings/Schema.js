@@ -271,6 +271,10 @@ class Schema {
 		return this._keys.map(key => this[key].getKeys(array));
 	}
 
+	get configurableKeys() {
+		return this._keys.filter(key => this[key].type === 'Folder' || this[key].configurable);
+	}
+
 	/**
 	 * Get all the SchemaPieces instances from this schema's children.
 	 * @since 0.4.0
@@ -291,47 +295,15 @@ class Schema {
 	getList(msg, object) {
 		const array = [];
 		if (this._keys.length === 0) return '';
-		const keys = this._keys.filter(key => this[key].type === 'Folder' || this[key].configurable).sort();
+		const keys = this.configurableKeys.sort();
 		if (keys.length === 0) return '';
 
 		const longest = keys.reduce((a, b) => a.length > b.length ? a : b).length;
 		for (let i = 0; i < keys.length; i++) {
-			array.push(`${keys[i].padEnd(longest)} :: ${Schema.resolveString(msg, this[keys[i]], object[keys[i]])}`);
+			array.push(`${keys[i].padEnd(longest)} :: ${this[keys[i]].resolveString(msg, object[keys[i]])}`);
 		}
 
 		return array.join('\n');
-	}
-
-	/**
-	 * Resolve a string.
-	 * @since 0.4.0
-	 * @param {external:Message} msg The Message to use.
-	 * @param {SchemaPiece} path The SchemaPiece instance.
-	 * @param {any} value The current value of the key.
-	 * @static
-	 * @returns {string}
-	 */
-	static resolveString(msg, path, value) {
-		let resolver = (val) => val;
-		switch (path.type) {
-			case 'Folder': resolver = () => '[ Folder';
-				break;
-			case 'user': resolver = (val) => (this.client.users.get(val) || { username: val }).username;
-				break;
-			case 'textchannel':
-			case 'voicechannel':
-			case 'channel': resolver = (val) => `#${(msg.guild.channels.get(val) || { name: val }).name}`;
-				break;
-			case 'role': resolver = (val) => `@${(msg.guild.roles.get(val) || { name: val }).name}`;
-				break;
-			case 'guild': resolver = (val) => val.name;
-				break;
-			case 'boolean': resolver = (val) => val === true ? 'Active' : 'Inactive';
-				break;
-			// no default
-		}
-
-		return path.array ? value.length > 0 ? `[ ${value.map(resolver).join(' | ')} ]` : 'None' : value === null ? 'Not set' : resolver(value);
 	}
 
 	/**
@@ -355,6 +327,14 @@ class Schema {
 			this.keys.add(key);
 			this._keys.push(key);
 		}
+	}
+
+	/**
+	 * @since 0.4.0
+	 * @returns {string}
+	 */
+	resolveString() {
+		return this.toString();
 	}
 
 	/**

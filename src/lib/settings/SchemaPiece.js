@@ -192,7 +192,7 @@ class SchemaPiece {
 		if (typeof this.configurable !== 'boolean') throw new TypeError(`[KEY] ${this.path} - Parameter configurable must be a boolean.`);
 
 		const value = [this.path, options.sql || (this.type === 'integer' || this.type === 'float' ? 'INTEGER' : 'TEXT') +
-				(this.default !== null ? ` DEFAULT ${this._parseSQLValue(this.default)}` : '')];
+			(this.default !== null ? ` DEFAULT ${this._parseSQLValue(this.default)}` : '')];
 
 		Object.defineProperty(this, 'sqlSchema', { value });
 	}
@@ -231,26 +231,44 @@ class SchemaPiece {
 	}
 
 	/**
-	 * Stringify a value or the instance itself.
+	 * Resolve a string.
 	 * @since 0.4.0
-	 * @param {string} [value] A value to stringify.
+	 * @param {external:Message} msg The Message to use.
+	 * @param {any} value The current value of the key.
+	 * @static
 	 * @returns {string}
 	 */
-	toString(value) {
-		if (typeof value === 'undefined') return `{SchemaPiece:${this.type}}`;
-		if (value === null) return 'Not set';
+	resolveString(msg, value) {
+		let resolver = (val) => val;
 		switch (this.type) {
-			case 'user': return `@${value.username}`;
+			case 'Folder': resolver = () => '[ Folder';
+				break;
+			case 'user': resolver = (val) => (this.client.users.get(val) || { username: val }).username;
+				break;
 			case 'textchannel':
 			case 'voicechannel':
-			case 'channel': return `#${value.name}`;
-			case 'role': return `@${value.name}`;
-			case 'guild': return value.name;
-			case 'command':
-			case 'language': return value;
-			case 'boolean': return value === true ? 'Active' : 'Inactive';
-			default: return String(value);
+			case 'channel': resolver = (val) => `#${(msg.guild.channels.get(val) || { name: val }).name}`;
+				break;
+			case 'role': resolver = (val) => `@${(msg.guild.roles.get(val) || { name: val }).name}`;
+				break;
+			case 'guild': resolver = (val) => val.name;
+				break;
+			case 'boolean': resolver = (val) => val === true ? 'Active' : 'Inactive';
+				break;
+					// no default
 		}
+
+		if (this.array) return value.length > 0 ? `[ ${value.map(resolver).join(' | ')} ]` : 'None';
+		return value === null ? 'Not set' : resolver(value);
+	}
+
+	/**
+	 * Stringify a value or the instance itself.
+	 * @since 0.4.0
+	 * @returns {string}
+	 */
+	toString() {
+		return `{SchemaPiece:${this.type}}`;
 	}
 
 }

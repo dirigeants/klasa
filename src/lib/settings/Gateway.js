@@ -465,15 +465,19 @@ class Gateway {
 		let path = this.schema;
 
 		for (let i = 0; i < route.length; i++) {
-			if (path.keys.has(route[i]) === false) throw `The key ${route.slice(0, i).join('.')} does not exist in the current schema.`;
+			if (path.keys.has(route[i]) === false) throw `The key ${route.slice(0, i + 1).join('.')} does not exist in the current schema.`;
 			if (i < route.length - 1) {
 				path = path[route[i]];
 				continue;
 			}
 			if (piece === true) {
-				if (path[route[i]].type === 'Folder') throw `Please, choose one of the following keys: '${Object.keys(path).join('\', \'')}'`;
-				if (avoidUnconfigurable === true && path[route[i]].configurable === false) throw `The key ${path.path} is not configureable in the current schema.`;
 				path = path[route[i]];
+				if (path.type === 'Folder') {
+					const keys = path.configurableKeys;
+					if (keys.length === 0) throw `This group is not configureable.`;
+					throw `Please, choose one of the following keys: '${keys.join('\', \'')}'`;
+				}
+				if (avoidUnconfigurable === true && path.configurable === false) throw `The key ${path.path} is not configureable in the current schema.`;
 			} else
 			if (path[route[i]].type === 'Folder') {
 				path = path[route[i]];

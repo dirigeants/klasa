@@ -20,26 +20,26 @@ module.exports = class extends Command {
 
 	async set(msg, key, valueToSet) {
 		const { path, value } = await this.client.settings.guilds.updateOne(msg.guild, key, valueToSet.join(' '), msg.guild, true);
-		if (path.array) return msg.sendMessage(msg.language.get('COMMAND_CONF_ADDED', path.toString(value), path.path));
-		return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', path.path, path.toString(value)));
+		if (path.array) return msg.sendMessage(msg.language.get('COMMAND_CONF_ADDED', path.resolveString(msg, value), path.path));
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', path.path, path.resolveString(msg, value)));
 	}
 
 	async remove(msg, key, valueToRemove) {
 		const { path, value } = await this.client.settings.guilds.updateArray(msg.guild, 'remove', key, valueToRemove.join(' '), msg.guild, true);
-		return msg.sendMessage(msg.language.get('COMMAND_CONF_REMOVE', path.toString(value), path.path));
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_REMOVE', path.resolveString(msg, value), path.path));
 	}
 
 	async get(msg, key) {
-		const { path } = this.client.settings.guilds.getPath(key, { avoidUnconfigurable: true });
-		const settingPath = key.split('.');
-		let value = msg.guild.settings;
-		for (let i = 0; i < settingPath.length; i++) value = value[settingPath[i]];
-		return msg.sendMessage(msg.language.get('COMMAND_CONF_GET', path.path, path.toString(value)));
+		const { path, route } = this.client.settings.guilds.getPath(key, { avoidUnconfigurable: true, piece: true });
+		let object = msg.guild.settings;
+		if (route.length > 0) for (let i = 0; i < route.length; i++) object = object[route[i]];
+		const value = path.resolveString(msg, object);
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_GET', path.path, value));
 	}
 
 	async reset(msg, key) {
 		const { path, value } = await this.client.settings.guilds.reset(msg.guild, key, msg.guild, true);
-		return msg.sendMessage(msg.language.get('COMMAND_CONF_RESET', path.path, path.toString(value)));
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_RESET', path.path, path.resolveString(msg, value)));
 	}
 
 	async list(msg, key) {
