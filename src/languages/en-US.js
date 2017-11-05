@@ -72,7 +72,7 @@ module.exports = class extends Language {
 				'Some features of Klasa include:',
 				'• 🐇💨 Fast loading times with ES8 support (`async`/`await`)',
 				'• 🎚🎛 Per-server settings that can be extended with your own fields',
-				'• 💬 Customizable command system with automated usage parsing and the ability to hot load/reload commands',
+				'• 💬 Customizable command system with automated usage parsing and the ability to load/reload commands on-the-fly',
 				'• 👀 "Monitors", which can watch messages and act on them, like a normal message event (for swear filters, spam protection, etc.)',
 				'• ⛔ "Inhibitors", which can prevent commands from running based on a set of parameters (for permissions, blacklists, etc.)',
 				'• 🗄 "Providers", which standardize and simplify usage of outside databases of your choosing',
