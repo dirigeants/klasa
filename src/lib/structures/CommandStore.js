@@ -91,10 +91,10 @@ class CommandStore extends Collection {
 	 */
 	set(command) {
 		if (!(command instanceof Command)) return this.client.emit('error', 'Only commands may be stored in the CommandStore.');
-		const existing = this.get(command.name);
+		const existing = this.get(command.name.toLowerCase());
 		if (existing) this.delete(existing);
-		super.set(command.name, command);
-		for (const alias of command.aliases) this.aliases.set(alias, command);
+		super.set(command.name.toLowerCase(), command);
+		for (const alias of command.aliases) this.aliases.set(alias.toLowerCase(), command);
 		return command;
 	}
 
