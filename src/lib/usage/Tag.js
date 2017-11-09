@@ -6,6 +6,7 @@ const Possible = require('./Possible');
 class Tag {
 
 	/**
+	 * @since 0.2.1
 	 * @param {string} members The tag contents to parse
 	 * @param {number} count The position of the tag in the usage string
 	 * @param {boolean} required The type of tag (required or optional)
@@ -13,12 +14,14 @@ class Tag {
 	constructor(members, count, required) {
 		/**
 		 * The type of this tag
+		 * @since 0.2.1
 		 * @type {string}
 		 */
 		this.type = required ? 'required' : 'optional';
 
 		/**
 		 * The possibilities of this tag
+		 * @since 0.2.1
 		 * @type {Possible[]}
 		 */
 		this.possibles = Tag.parseMembers(members, count);
@@ -26,6 +29,7 @@ class Tag {
 
 	/**
 	 * Parses members into usable possibles
+	 * @since 0.2.1
 	 * @param {string} members The tag contents to parse
 	 * @param {number} count The position of the tag in the usage string
 	 * @returns {Possible[]}
@@ -57,6 +61,7 @@ class Tag {
 
 	/**
 	 * Parses raw members true members
+	 * @since 0.2.1
 	 * @param {string} members The tag contents to parse
 	 * @returns {string[]}
 	 */

@@ -1,5 +1,4 @@
 const { Finalizer } = require('klasa');
-const now = require('performance-now');
 
 module.exports = class extends Finalizer {
 
@@ -17,12 +16,12 @@ module.exports = class extends Finalizer {
 		};
 	}
 
-	run(msg, mes, start) {
+	run(msg, mes, timer) {
 		this.client.emit('log', [
 			`${msg.cmd.name}(${msg.args.join(', ')})`,
 			msg.reprompted ?
-				this.client.console.messages(`[${(now() - start).toFixed(2)}ms]`, this.colors.prompted.message) :
-				this.client.console.messages(`[${(now() - start).toFixed(2)}ms]`, this.colors.notprompted.message),
+				this.client.console.messages(`[${timer.stop()}]`, this.colors.prompted.message) :
+				this.client.console.messages(`[${timer.stop()}]`, this.colors.notprompted.message),
 			this.client.console.messages(`${msg.author.username}[${msg.author.id}]`, this.colors.user.message),
 			this[msg.channel.type](msg)
 		].join(' '), 'log');

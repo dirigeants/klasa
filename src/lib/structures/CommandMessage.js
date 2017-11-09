@@ -4,6 +4,7 @@
 class CommandMessage {
 
 	/**
+	 * @since 0.0.1
 	 * @param {external:Message} msg The message this command message is for
 	 * @param {Command} cmd The command being run
 	 * @param {string} prefix The prefix the user used to run the command
@@ -12,6 +13,7 @@ class CommandMessage {
 	constructor(msg, cmd, prefix, prefixLength) {
 		/**
 		 * The client this CommandMessage was created with.
+		 * @since 0.0.1
 		 * @name CommandMessage#client
 		 * @type {KlasaClient}
 		 * @readonly
@@ -20,48 +22,56 @@ class CommandMessage {
 
 		/**
 		 * The message this command message is for
+		 * @since 0.0.1
 		 * @type {external:Message}
 		 */
 		this.msg = msg;
 
 		/**
 		 * The command being run
+		 * @since 0.0.1
 		 * @type {Command}
 		 */
 		this.cmd = cmd;
 
 		/**
 		 * The prefix used
+		 * @since 0.0.1
 		 * @type {string}
 		 */
 		this.prefix = prefix;
 
 		/**
 		 * The length of the prefix used
+		 * @since 0.0.1
 		 * @type {number}
 		 */
 		this.prefixLength = prefixLength;
 
 		/**
 		 * The string arguments derived from the usageDelim of the command
+		 * @since 0.0.1
 		 * @type {string[]}
 		 */
 		this.args = this.cmd.quotedStringSupport ? this.constructor.getQuotedStringArgs(this) : this.constructor.getArgs(this);
 
 		/**
 		 * The parameters resolved by this class
+		 * @since 0.0.1
 		 * @type {any[]}
 		 */
 		this.params = [];
 
 		/**
 		 * If the command reprompted for missing args
+		 * @since 0.0.1
 		 * @type {boolean}
 		 */
 		this.reprompted = false;
 
 		/**
 		 * A cache of the current usage while validating
+		 * @since 0.0.1
 		 * @private
 		 * @type {Object}
 		 */
@@ -69,6 +79,7 @@ class CommandMessage {
 
 		/**
 		 * Whether the current usage is a repeating arg
+		 * @since 0.0.1
 		 * @private
 		 * @type {boolean}
 		 */
@@ -77,6 +88,7 @@ class CommandMessage {
 
 	/**
 	 * Validates and resolves args into parameters
+	 * @since 0.0.1
 	 * @private
 	 * @returns {any[]} The resolved parameters
 	 */
@@ -132,6 +144,7 @@ class CommandMessage {
 
 	/**
 	 * Validates and resolves args into parameters, when multiple types of usage is defined
+	 * @since 0.0.1
 	 * @param {number} possible The id of the possible usage currently being checked
 	 * @param {boolean} validated Escapes the recursive function if the previous iteration validated the arg into a parameter
 	 * @private
@@ -166,6 +179,7 @@ class CommandMessage {
 
 	/**
 	 * Parses a message into string args
+	 * @since 0.0.1
 	 * @param {CommandMessage} cmdMsg this command message
 	 * @private
 	 * @returns {string[]}
@@ -178,6 +192,7 @@ class CommandMessage {
 
 	/**
 	 * Parses a message into string args taking into account quoted strings
+	 * @since 0.0.1
 	 * @param {CommandMessage} cmdMsg this command message
 	 * @private
 	 * @returns {string[]}

@@ -13,12 +13,15 @@ class CommandStore extends Collection {
 
 	/**
 	 * Constructs our CommandStore for use in Klasa
+	 * @since 0.0.1
 	 * @param {KlasaClient} client The Klasa Client
 	 */
 	constructor(client) {
 		super();
+
 		/**
 		 * The client this CommandStore was created with.
+		 * @since 0.0.1
 		 * @name CommandStore#client
 		 * @type {KlasaClient}
 		 * @readonly
@@ -27,30 +30,35 @@ class CommandStore extends Collection {
 
 		/**
 		 * The different aliases that represent the commands in this store.
+		 * @since 0.0.1
 		 * @type external:Collection
 		 */
 		this.aliases = new Collection();
 
 		/**
 		 * The directory of commands in Klasa relative to where its installed.
+		 * @since 0.0.1
 		 * @type {String}
 		 */
 		this.coreDir = join(this.client.coreBaseDir, 'commands');
 
 		/**
 		 * The directory of local commands relative to where you run Klasa from.
+		 * @since 0.0.1
 		 * @type {String}
 		 */
 		this.userDir = join(this.client.clientBaseDir, 'commands');
 
 		/**
 		 * The type of structure this store holds
+		 * @since 0.1.1
 		 * @type {Command}
 		 */
 		this.holds = Command;
 
 		/**
 		 * The name of what this holds
+		 * @since 0.3.0
 		 * @type {String}
 		 */
 		this.name = 'commands';
@@ -58,6 +66,7 @@ class CommandStore extends Collection {
 
 	/**
 	 * Returns a command in the store if it exists by its name or by an alias.
+	 * @since 0.0.1
 	 * @param {string} name A command or alias name.
 	 * @returns {Command}
 	 */
@@ -66,6 +75,7 @@ class CommandStore extends Collection {
 	}
 
 	/** Returns a boolean if the command or alias is found within the store.
+	 * @since 0.0.1
 	 * @param {string} name A command or alias name
 	 * @returns {boolean}
 	 */
@@ -75,6 +85,7 @@ class CommandStore extends Collection {
 
 	/**
 	 * Sets up a command in our store.
+	 * @since 0.0.1
 	 * @param {Command} command The command object we are setting up.
 	 * @returns {Command}
 	 */
@@ -89,6 +100,7 @@ class CommandStore extends Collection {
 
 	/**
 	 * Deletes a command from the store.
+	 * @since 0.0.1
 	 * @param {Command|string} name A command object or a string representing a command or alias name.
 	 * @returns {boolean} whether or not the delete was successful.
 	 */
@@ -102,6 +114,7 @@ class CommandStore extends Collection {
 
 	/**
 	 * Clears the commands and aliases from this store
+	 * @since 0.0.1
 	 * @returns {void}
 	 */
 	clear() {
@@ -111,6 +124,7 @@ class CommandStore extends Collection {
 
 	/**
 	 * Loads all of our commands from both the user and core directories.
+	 * @since 0.0.1
 	 * @returns {number} The number of commands and aliases loaded.
 	 */
 	async loadAll() {
@@ -128,6 +142,7 @@ class CommandStore extends Collection {
 
 	/**
 	 * Walks our directory of commands for the user and core directories.
+	 * @since 0.0.1
 	 * @param {CommandStore} store The command store we're loading into.
 	 * @param {string} dir The directory of commands we're using to load commands from.
 	 * @param {string[]} subs Subfolders for recursion.
