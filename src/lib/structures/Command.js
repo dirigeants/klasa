@@ -102,7 +102,7 @@ class Command {
 		 * @since 0.0.1
 		 * @type {string}
 		 */
-		this.name = (options.name || file[file.length - 1].slice(0, -3)).toLowerCase();
+		this.name = options.name || file[file.length - 1].slice(0, -3);
 
 		/**
 		 * The description of the command
