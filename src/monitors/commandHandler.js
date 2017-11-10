@@ -7,7 +7,6 @@ module.exports = class extends Monitor {
 		this.prefixes = new Map();
 		this.prefixMention = null;
 		this.prefixMentionLength = null;
-		this.nickPrefixMenthionLength = null;
 		this.nick = new RegExp('^<@!');
 	}
 
@@ -42,7 +41,7 @@ module.exports = class extends Monitor {
 	}
 
 	getPrefix(msg) {
-		if (this.prefixMention.test(msg.content)) return { length: this.nick.test(msg.content) ? this.nickPrefixMenthionLength : this.prefixMentionLength, regex: this.prefixMention };
+		if (this.prefixMention.test(msg.content)) return { length: this.nick.test(msg.content) ? this.prefixMentionLength + 1 : this.prefixMentionLength, regex: this.prefixMention };
 		const prefix = msg.guildSettings.prefix || this.client.config.prefix;
 		if (prefix instanceof Array) {
 			for (let i = prefix.length - 1; i >= 0; i--) {
@@ -117,8 +116,7 @@ module.exports = class extends Monitor {
 	init() {
 		this.ignoreSelf = this.client.user.bot;
 		this.prefixMention = new RegExp(`^<@!?${this.client.user.id}>`);
-		this.prefixMentionLength = 3 + this.client.user.id.length;
-		this.nickPrefixMenthionLength = 4 + this.client.user.id.length;
+		this.prefixMentionLength = this.client.user.id.length + 3;
 	}
 
 };
