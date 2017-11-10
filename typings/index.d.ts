@@ -959,7 +959,6 @@ declare module 'klasa' {
 		consoleEvents?: KlasaConsoleEvents;
 		ignoreBots?: boolean;
 		ignoreSelf?: boolean;
-		prefixMention?: RegExp;
 		cmdPrompt?: boolean;
 		cmdEditing?: boolean;
 		cmdLogging?: boolean;
