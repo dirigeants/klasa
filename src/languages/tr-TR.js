@@ -81,7 +81,7 @@ module.exports = class extends Language {
 				'• Botunuzu yerelleştirmek için kullanabileceğiniz "Diller".',
 				'',
 				'Herkese hitap eden ve %100 düzenlenebilir bir framework yaptığımızı umuyoruz. Sıklıkla güncelliyoruz ve bugları kapatmaya çalışıyoruz.',
-				"Eğer ilgilendiyseniz bize https://klasa.js.org adresinden ulaşabilirsiniz"
+				'Eğer ilgilendiyseniz bize https://klasa.js.org adresinden ulaşabilirsiniz'
 			],
 			COMMAND_HELP_DM: '📥 | Kullanabileceğiniz komutların listesi DM olarak gönderildi.',
 			COMMAND_HELP_NODM: '❌ | DM alımınız bu sunucu için kapalı, bu yüzden DM olarak gönderemedim.',
