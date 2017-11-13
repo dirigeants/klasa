@@ -24,7 +24,7 @@ module.exports = class extends Command {
 
 	async run(msg, [code]) {
 		try {
-			const { evaled, topLine } = await this.handleEval(code, msg);
+			const { evaled, topLine } = await this.eval(code, msg);
 
 			if (this.isTooLong(evaled, topLine)) {
 				// Upload as a file attachment and send to channel
@@ -38,7 +38,7 @@ module.exports = class extends Command {
 		}
 	}
 
-	async handleEval(code, msg) { // eslint-disable-line no-unused-vars
+	async eval(code, msg) { // eslint-disable-line no-unused-vars
 		const start = now();
 		const evaledOriginal = eval(code); // eslint-disable-line no-eval
 		const syncEnd = now();
@@ -72,24 +72,12 @@ module.exports = class extends Command {
 		return evaled.length > 1988 - topLine.length;
 	}
 
-	async getTypeStr(value, awaitedPromise = null, i = 0) {
-		if (value instanceof util.TimeoutError) return '?';
-
-		const { basicType, type } = util.getComplexType(value);
-		if (basicType === 'object') {
-			if (util.isThenable(value)) {
-				return i <= this.typeDepth ?
-				// But we're gonna await the already-awaited promise, for efficiency
-					`${type}<${await this.getTypeStr(await awaitedPromise, null, i + 1)}>` :
-					`${type}<?>`;
-			}
-			if (Array.isArray(value)) return `${type}${util.getArrayType(value, this.typeDepth)}`;
-			if (value instanceof Map) return `${type}${util.getMapType(value, this.typeDepth)}`;
-			if (value instanceof Set) return `${type}${util.getSetType(value, this.typeDepth)}`;
-			return `${type}${util.getObjectType(value, this.typeDepth)}`;
-		}
-		if (basicType === 'function') return `${type}${util.getFunctionType(value, this.typeDepth)}`;
-		return type;
+	async getTypeStr(value, awaitedPromise = null) {
+		return util.getJSDocString(value, {
+			depth: this.typeDepth,
+			wait: this.wait,
+			surrogatePromise: awaitedPromise
+		});
 	}
 
 };
