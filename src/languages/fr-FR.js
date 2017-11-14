@@ -104,7 +104,7 @@ module.exports = class extends Language {
 	}
 
 	isFeminine(type) {
-		return ['command', 'commands'].indexOf(type) !== 1;
+		return ['command', 'commands'].indexOf(type) !== -1;
 	}
 
 	piece(type) {
