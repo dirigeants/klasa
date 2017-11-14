@@ -1,6 +1,5 @@
-const now = require('performance-now');
 const { MessageAttachment } = require('discord.js');
-const { Command, util } = require('klasa');
+const { Command, util, Stopwatch } = require('klasa');
 const { inspect } = require('util');
 
 module.exports = class extends Command {
@@ -14,12 +13,10 @@ module.exports = class extends Command {
 			extendedHelp: `See the Klasa Pieces repo if you'd like an eval with more features.`
 		});
 
-		// The depth to inspect the evaled output to, if it's not a string
-		this.inspectionDepth = 0;
+		// The depth to inspect the evaled output to
+		this.depth = 0;
 		// How long to wait for promises to resolve
 		this.wait = 10000;
-		// The depth to get the types of nested data structures, recursively
-		this.typeDepth = 2;
 	}
 
 	async run(msg, [code]) {
@@ -39,30 +36,34 @@ module.exports = class extends Command {
 	}
 
 	async eval(code, msg) { // eslint-disable-line no-unused-vars
-		const start = now();
+		const stopwatchSync = new Stopwatch();
 		const evaledOriginal = eval(code); // eslint-disable-line no-eval
-		const syncEnd = now();
+		stopwatchSync.stop();
+
+		const stopwatchAsync = new Stopwatch();
 		const evaledTimeout = util.timeoutPromise(evaledOriginal, this.wait);
 		// Awaiting a non-promise returns the non-promise
 		let evaledValue = await evaledTimeout;
-		const asyncEnd = now();
+		stopwatchAsync.stop();
 
 		const evaledIsThenable = util.isThenable(evaledOriginal);
 
-		// We're doing this checking here so it's not counted in the performance-now timeing
+		// We're doing this checking here so it's not counted in the stopwatch timing
 		// And if the promise timed out, just show the promise
 		if (!evaledIsThenable || evaledValue instanceof util.TimeoutError) evaledValue = evaledOriginal;
 
-		const time = evaledIsThenable ?
-			`⏱${util.getNiceDuration(syncEnd - start)}<${util.getNiceDuration(asyncEnd - syncEnd)}>` :
-			`⏱${util.getNiceDuration(syncEnd - start)}`;
+		const timeStr = evaledIsThenable ?
+			`⏱${stopwatchSync}<${stopwatchAsync}>` :
+			`⏱${stopwatchSync}`;
 
-		const topLine = `${await this.getTypeStr(
-			evaledOriginal,
-			evaledIsThenable ? evaledTimeout : null
-		)} ${time}`;
+		const topLine = `${await util.getJSDocString(evaledOriginal, {
+			depth: this.depth + 1,
+			wait: this.wait,
+			surrogatePromise: evaledIsThenable ? evaledTimeout : null
+		})} ${timeStr}`;
 
-		if (typeof evaledValue !== 'string') evaledValue = inspect(evaledValue, { depth: this.inspectionDepth });
+		/** @todo Add more logic for string conversion / inspection, depending on type; see <#261102185759244289> */
+		if (typeof evaledValue !== 'string') evaledValue = inspect(evaledValue, { depth: this.depth });
 
 		return { evaled: evaledValue, topLine };
 	}
@@ -70,14 +71,6 @@ module.exports = class extends Command {
 	isTooLong(evaled, topLine) {
 		// 1988 is 2000 - 12 (the chars that are added, "`...`\n```js\n...```")
 		return evaled.length > 1988 - topLine.length;
-	}
-
-	async getTypeStr(value, awaitedPromise = null) {
-		return util.getJSDocString(value, {
-			depth: this.typeDepth,
-			wait: this.wait,
-			surrogatePromise: awaitedPromise
-		});
 	}
 
 };

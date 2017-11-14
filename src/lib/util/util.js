@@ -134,6 +134,16 @@ class Util {
 	}
 
 	/**
+	 * Determines whether the passed value is a promise
+	 * @since 0.4.0
+	 * @param {*} value The value to be checked.
+	 * @returns {boolean}
+	 */
+	static isThenable(value) {
+		return value && typeof value.then === 'function';
+	}
+
+	/**
 	 * @typedef deepTypeOptions
 	 * @property {number} depth The depth limit
 	 * @property {number} wait How long to await promises (0 for no awaiting)
@@ -340,18 +350,8 @@ class Util {
 	}
 
 	/**
-	 * Determines whether the passed value is a promise.
-	 * @since 0.4.0
-	 * @param {*} value The value to be checked.
-	 * @returns {boolean}
-	 */
-	static isThenable(value) {
-		return value && typeof value.then === 'function';
-	}
-
-	/**
 	 * Wrap a promise in a promise that will timeout in a certain amount of time.
-	 * 
+	 *
 	 * Whichever promise (the inputted one or the timeout one) resolves first will have its value be
 	 * the resolved value of the returned promise.
 	 * @since 0.4.0
