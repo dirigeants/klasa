@@ -14,16 +14,18 @@ class Stopwatch {
 		/**
 		 * The start time of this stopwatch
 		 * @since 0.4.0
+		 * @private
 		 * @type {number}
 		 */
-		this.start = performance.now();
+		this._start = performance.now();
 
 		/**
 		 * The end time of this stopwatch
 		 * @since 0.4.0
+		 * @private
 		 * @type {?number}
 		 */
-		this.end = null;
+		this._end = null;
 
 		/**
 		 * The number of digits to appear after the decimal point when returning the friendly duration.
@@ -40,7 +42,7 @@ class Stopwatch {
 	 * @type {number}
 	 */
 	get duration() {
-		return this.end ? this.end - this.start : performance.now() - this.start;
+		return this._end ? this._end - this._start : performance.now() - this._start;
 	}
 
 	/**
@@ -57,12 +59,57 @@ class Stopwatch {
 	}
 
 	/**
+	 * If the stopwatch is running or not
+	 * @since 0.4.0
+	 * @readonly
+	 * @type {boolean}
+	 */
+	get running() {
+		return Boolean(!this._end);
+	}
+
+	/**
+	 * Restarts the Stopwatch (Returns a running state)
+	 * @since 0.4.0
+	 * @returns {Stopwatch}
+	 */
+	restart() {
+		this._start = performance.now();
+		this._end = null;
+		return this;
+	}
+
+	/**
+	 * Resets the Stopwatch to 0 duration (Returns a stopped state)
+	 * @since 0.4.0
+	 * @returns {Stopwatch}
+	 */
+	reset() {
+		this._start = performance.now();
+		this._end = this._start;
+		return this;
+	}
+
+	/**
+	 * Starts the Stopwatch
+	 * @since 0.4.0
+	 * @returns {Stopwatch}
+	 */
+	start() {
+		if (!this.running) {
+			this._start = performance.now() - this.duration;
+			this._end = null;
+		}
+		return this;
+	}
+
+	/**
 	 * Stops the Stopwatch, freezing the duration
 	 * @since 0.4.0
 	 * @returns {Stopwatch}
 	 */
 	stop() {
-		if (!this.end) this.end = performance.now();
+		if (this.running) this._end = performance.now();
 		return this;
 	}
 
