@@ -17,6 +17,7 @@ class Inhibitor {
 	 */
 
 	/**
+	 * @since 0.0.1
 	 * @param {KlasaClient} client The Klasa client
 	 * @param {string} dir The path to the core or user inhibitor pieces folder
 	 * @param {string} file The path from the pieces folder to the inhibitor file
@@ -24,42 +25,49 @@ class Inhibitor {
 	 */
 	constructor(client, dir, file, options = {}) {
 		/**
+		 * @since 0.0.1
 		 * @type {KlasaClient}
 		 */
 		this.client = client;
 
 		/**
 		 * The directory to where this inhibitor piece is stored
+		 * @since 0.0.1
 		 * @type {string}
 		 */
 		this.dir = dir;
 
 		/**
 		 * The file location where this inhibitor is stored
+		 * @since 0.0.1
 		 * @type {string}
 		 */
 		this.file = file;
 
 		/**
 		 * The name of the inhibitor
+		 * @since 0.0.1
 		 * @type {string}
 		 */
 		this.name = options.name || file.slice(0, -3);
 
 		/**
 		 * The type of Klasa piece this is
+		 * @since 0.0.1
 		 * @type {string}
 		 */
 		this.type = 'inhibitor';
 
 		/**
 		 * If the inhibitor is enabled or not
+		 * @since 0.0.1
 		 * @type {boolean}
 		 */
 		this.enabled = 'enabled' in options ? options.enabled : true;
 
 		/**
 		 * If this inhibitor is meant for spamProtection (disables the inhibitor while generating help)
+		 * @since 0.0.1
 		 * @type {boolean}
 		 */
 		this.spamProtection = 'spamProtection' in options ? options.spamProtection : false;
@@ -67,6 +75,7 @@ class Inhibitor {
 
 	/**
 	 * The run method to be overwritten in actual inhibitors
+	 * @since 0.0.1
 	 * @param {external:Message} msg The message that triggered this inhibitor
 	 * @param {Command} cmd The command to run
 	 * @abstract
@@ -78,6 +87,7 @@ class Inhibitor {
 
 	/**
 	 * The init method to be optionaly overwritten in actual inhibitors
+	 * @since 0.0.1
 	 * @abstract
 	 * @returns {void}
 	 */

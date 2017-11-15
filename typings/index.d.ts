@@ -173,6 +173,7 @@ declare module 'klasa' {
 		public methodMap: Map<string, emoji>;
 		public currentPage: number;
 		public prompt: string;
+		public time: number;
 		public awaiting: boolean;
 		public selection: Promise<number?>;
 		public reactionsDone: boolean;
@@ -514,11 +515,11 @@ declare module 'klasa' {
 		public BACKGROUNDS: ColorsBackgrounds;
 
 		public static hexToRGB(hex: string): number[];
-		public static hslToRGB(hsl: number[]): number[];
 		public static hueToRGB(p: number, q: number, t: number): number;
-		public static formatArray(array: string[]): string|number[];
+		public static hslToRGB([h, s, l]: [number|string, number|string, number|string]): number[];
+		public static formatArray([pos1, pos2, pos3]: [number|string, number|string, number|string]): string;
 
-		public format(input: string, type?: { style: string|string[], background: string|number|string[], text: string|number|string[] }): string;
+		public format(input: string, type?: ColorsFormatOptions): string;
 	}
 
 	class KlasaConsole extends Console {
@@ -541,6 +542,18 @@ declare module 'klasa' {
 		public messages(input: string, message: string): string;
 
 		public static flatten(data: any, useColors: boolean): string;
+	}
+
+	export class Stopwatch {
+		public constructor(digits?: number);
+		public start: number;
+		public end?: number;
+		public digits: number;
+
+		public readonly duration: number;
+		public readonly friendlyDuration: string;
+		public stop(): this;
+		public toString(): string;
 	}
 
 	export { KlasaConsole as Console };
@@ -665,7 +678,7 @@ declare module 'klasa' {
 		public dir: string;
 		public file: string;
 
-		public abstract run(msg: CommandMessage, mes: ExtendedMessage, start: number): void;
+		public abstract run(msg: CommandMessage, mes: ExtendedMessage, start: Stopwatch): void;
 		public abstract init(): any;
 
 		public abstract enable(): Piece;
@@ -946,7 +959,6 @@ declare module 'klasa' {
 		consoleEvents?: KlasaConsoleEvents;
 		ignoreBots?: boolean;
 		ignoreSelf?: boolean;
-		prefixMention?: RegExp;
 		cmdPrompt?: boolean;
 		cmdEditing?: boolean;
 		cmdLogging?: boolean;
@@ -1102,7 +1114,7 @@ declare module 'klasa' {
 
 	export type MenuOption = {
 		name: string;
-		description: string;
+		body: string;
 		inline?: boolean;
 	};
 
@@ -1192,6 +1204,12 @@ declare module 'klasa' {
 		lightmagenta: 105;
 		lightcyan: 106;
 		white: 107;
+	};
+
+	export type ColorsFormatOptions = {
+		style: string|string[];
+		background: string|number|string[];
+		text: string|number|string[]
 	};
 
 	export type KlasaConsoleColorsOption = boolean | StringMappedType<KlasaConsoleColorObjects> | KlasaConsoleColors;

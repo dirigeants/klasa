@@ -108,7 +108,7 @@ A getter to return a collection of usable commands by the message author/member.
 
 [extendables/usableCommands.js](https://github.com/dirigeants/klasa/blob/master/src/extendables/usableCommands.js)
 
-## hasAtleastPermissionLevel(permission:number)
+## hasAtLeastPermissionLevel(permission:number)
 
 Checks to see if the author/member has atleast the Permission level passed.
 
@@ -117,7 +117,7 @@ Checks to see if the author/member has atleast the Permission level passed.
 
 **Source:**
 
-[extendables/hasAtleastPermissionLevel.js](https://github.com/dirigeants/klasa/blob/master/src/extendables/hasAtLeastPermissionLevel.js)
+[extendables/hasAtLeastPermissionLevel.js](https://github.com/dirigeants/klasa/blob/master/src/extendables/hasAtLeastPermissionLevel.js)
 
 ## send(content:string, options:Object)
 

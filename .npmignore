@@ -15,6 +15,7 @@ jspm_packages
 
 .docstrap.json
 .eslintrc.json
+tslint.json
 .travis-deploy.sh
 .travis.yml
 package-lock.json

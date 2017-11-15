@@ -20,18 +20,18 @@
     "docs": "npx jsdoc -c ./.docstrap.json -R README.md"
   },
   "dependencies": {
-    "fs-nextra": "^0.3.0",
-    "moment": "^2.18.1"
+    "fs-nextra": "^0.3.2",
+    "moment": "^2.19.1"
   },
   "peerDependencies": {
     "discord.js": "github:hydrabolt/discord.js#master"
   },
   "devDependencies": {
-    "eslint": "^4.6.1",
+    "eslint": "^4.10.0",
     "ink-docstrap": "github:bdistin/docstrap#klasa",
     "jsdoc": "github:jsdoc3/jsdoc",
-    "tslint": "^5.7.0",
-    "typescript": "^2.5.2"
+    "tslint": "^5.8.0",
+    "typescript": "^2.5.3"
   },
   "engines": {
     "node": ">=8.5.0"
