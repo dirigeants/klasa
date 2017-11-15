@@ -65,7 +65,7 @@ class Stopwatch {
 	 * @type {boolean}
 	 */
 	get running() {
-		return Boolean(this._end);
+		return Boolean(!this._end);
 	}
 
 	/**
@@ -96,7 +96,7 @@ class Stopwatch {
 	 * @returns {Stopwatch}
 	 */
 	start() {
-		if (this._end) {
+		if (!this.running) {
 			this._start = performance.now() - this.duration;
 			this._end = null;
 		}
@@ -109,7 +109,7 @@ class Stopwatch {
 	 * @returns {Stopwatch}
 	 */
 	stop() {
-		if (!this._end) this._end = performance.now();
+		if (this.running) this._end = performance.now();
 		return this;
 	}
 
