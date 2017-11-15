@@ -14,6 +14,7 @@ class Stopwatch {
 		/**
 		 * The start time of this stopwatch
 		 * @since 0.4.0
+		 * @private
 		 * @type {number}
 		 */
 		this._start = performance.now();
@@ -21,6 +22,7 @@ class Stopwatch {
 		/**
 		 * The end time of this stopwatch
 		 * @since 0.4.0
+		 * @private
 		 * @type {?number}
 		 */
 		this._end = null;
