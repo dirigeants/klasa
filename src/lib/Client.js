@@ -37,7 +37,6 @@ class KlasaClient extends Discord.Client {
 	 * @property {KlasaConsoleEvents} [consoleEvents={}] Config options to pass to the client console
 	 * @property {boolean} [ignoreBots=true] Whether or not this bot should ignore other bots
 	 * @property {boolean} [ignoreSelf=true] Whether or not this bot should ignore itself
-	 * @property {RegExp} [prefixMention] The prefix mention for your bot (Automatically Generated)
 	 * @property {boolean} [cmdPrompt=false] Whether the bot should prompt missing parameters
 	 * @property {boolean} [cmdEditing=false] Whether the bot should update responses if the command is edited
 	 * @property {boolean} [cmdLogging=false] Whether the bot should log command usage
@@ -382,7 +381,6 @@ class KlasaClient extends Discord.Client {
 	 * @private
 	 */
 	async _ready() {
-		this.config.prefixMention = new RegExp(`^<@!?${this.user.id}>`);
 		if (typeof this.config.ignoreBots === 'undefined') this.config.ignoreBots = true;
 		if (typeof this.config.ignoreSelf === 'undefined') this.config.ignoreSelf = this.user.bot;
 		if (this.user.bot) this.application = await super.fetchApplication();
