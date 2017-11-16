@@ -540,7 +540,7 @@ declare module 'klasa' {
 
 		public timestamp(timestamp: Date, time: string): string;
 		public messages(input: string, message: string): string;
- 
+
 		public static flatten(data: any, useColors: boolean): string;
 	}
 
