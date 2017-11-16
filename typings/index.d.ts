@@ -546,12 +546,16 @@ declare module 'klasa' {
 
 	export class Stopwatch {
 		public constructor(digits?: number);
-		public start: number;
-		public end?: number;
+		private _start: number;
+		private _end?: number;
 		public digits: number;
 
 		public readonly duration: number;
 		public readonly friendlyDuration: string;
+		public readonly running: boolean;
+		public restart(): this;
+		public reset(): this;
+		public start(): this;
 		public stop(): this;
 		public toString(): string;
 	}
