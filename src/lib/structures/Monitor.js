@@ -15,6 +15,7 @@ class Monitor {
 	 * @property {boolean} [enabled=true] Whether the monitor is enabled
 	 * @property {boolean} [ignoreBots=true] Whether the monitor ignores bots or not
 	 * @property {boolean} [ignoreSelf=true] Whether the monitor ignores itself or not
+	 * @property {boolean} [ignoreOthers=true] Whether the monitor ignores others or not
 	 */
 
 	/**
@@ -79,6 +80,13 @@ class Monitor {
 		 * @type {boolean}
 		 */
 		this.ignoreSelf = 'ignoreSelf' in options ? options.ignoreSelf : true;
+
+		/**
+		 * Whether the monitor ignores others or not
+		 * @since 0.4.0
+		 * @type {boolean}
+		 */
+		this.ignoreOthers = 'ignoreOthers' in options ? options.ignoreOthers : true;
 	}
 
 	/**
