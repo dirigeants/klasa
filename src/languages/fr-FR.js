@@ -108,7 +108,7 @@ module.exports = class extends Language {
 	}
 
 	piece(type) {
-		const [, capital, plural] = /^([A-Z]).*?(s)?$/.exec(type);
+		const [, capital, plural] = /^([A-Z])?.*?(s)?$/.exec(type);
 		const tp = {
 			command: 'commande',
 			event: 'événement',
