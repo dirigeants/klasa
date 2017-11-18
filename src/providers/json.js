@@ -57,6 +57,22 @@ module.exports = class extends Provider {
 	}
 
 	/**
+	 * Get all document names from a directory, filter by json.
+	 * @param {string} table The name of the directory to fetch from.
+	 * @returns {Promise<string[]>}
+	 */
+	async getAllKeys(table) {
+		const dir = resolve(this.baseDir, table);
+		const filenames = await fs.readdir(dir);
+		const files = [];
+		for (let i = 0; i < filenames.length; i++) {
+			const filename = filenames[i];
+			if (filename.endsWith('.json')) files.push(filename.slice(0, filename.length - 5));
+		}
+		return files;
+	}
+
+	/**
 	 * Get a document from a directory.
 	 * @param {string} table The name of the directory.
 	 * @param {string} document The document name.
@@ -95,8 +111,15 @@ module.exports = class extends Provider {
 	async updateValue(table, path, newValue, nice = false) {
 		const values = await this.getAll(table);
 		const route = path.split('.');
-		if (nice) for (let i = 0; i < values.length; i++) await this._updateValue(table, route, values[i], newValue);
-		else await Promise.all(values.map(object => this._updateValue(table, route, object, newValue)));
+		if (nice) {
+			const files = await this.getAllKeys(table);
+			for (let i = 0; i < values.length; i++) {
+				const object = await this.get(files[i]);
+				await this._updateValue(table, route, object, newValue);
+			}
+		} else {
+			await Promise.all(values.map(object => this._updateValue(table, route, object, newValue)));
+		}
 	}
 
 	/**
@@ -124,8 +147,15 @@ module.exports = class extends Provider {
 	async removeValue(table, path, nice = false) {
 		const values = await this.getAll(table);
 		const route = path.split('.');
-		if (nice) for (let i = 0; i < values.length; i++) await this._removeValue(table, route, values[i]);
-		else await Promise.all(values.map(object => this._removeValue(table, route, object)));
+		if (nice) {
+			const files = await this.getAllKeys(table);
+			for (let i = 0; i < values.length; i++) {
+				const object = await this.get(files[i]);
+				await this._removeValue(table, route, object);
+			}
+		} else {
+			await Promise.all(values.map(object => this._removeValue(table, route, object)));
+		}
 	}
 
 	/**
