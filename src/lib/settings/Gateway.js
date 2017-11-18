@@ -9,8 +9,9 @@ class Gateway {
 
 	/**
 	 * @typedef  {Object} GatewayOptions
-	 * @property {Provider} provider
-	 * @property {CacheProvider} cache
+	 * @property {Provider} [provider]
+	 * @property {CacheProvider} [cache]
+	 * @property {boolean} [nice=false]
 	 * @memberof Gateway
 	 */
 
@@ -51,7 +52,7 @@ class Gateway {
 	 */
 
 	/**
-	 * @typedef {(Guild|TextChannel|VoiceChannel|Message|Role)} GatewayGuildResolvable
+	 * @typedef {(external:Guild|external:TextChannel|external:VoiceChannel|external:Message|external:Role)} GatewayGuildResolvable
 	 * @memberof Gateway
 	 */
 
@@ -179,13 +180,15 @@ class Gateway {
 	 * @since 0.4.0
 	 * @param {string} input The name of the key to create.
 	 * @param {Object} [data={}] The initial data to insert.
-	 * @returns {Promise<true>}
+	 * @returns {Promise<Object>}
 	 */
-	async createEntry(input, data = this.defaults) {
+	async createEntry(input) {
 		const target = await this.validate(input).then(output => output && output.id ? output.id : output);
+		const data = this.schema.getDefaults();
 		await this.provider.create(this.type, target, data);
-		await this.cache.create(this.type, target, Object.assign({ id: target }, data));
-		return true;
+		data.id = target;
+		this.cache.create(this.type, target, data);
+		return data;
 	}
 
 	/**
@@ -223,16 +226,15 @@ class Gateway {
 	 * @since 0.0.1
 	 * @param {string} target The entry target.
 	 * @param {string} key The key to reset.
-	 * @param {(Guild|string)} [guild=null] A guild resolvable.
+	 * @param {(Guild|string)} [guild] A guild resolvable.
 	 * @param {boolean} [avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key.
 	 * @returns {Promise<GatewayUpdateResult>}
 	 */
-	async reset(target, key, guild = null, avoidUnconfigurable = false) {
+	async reset(target, key, guild, avoidUnconfigurable = false) {
 		if (typeof key !== 'string') throw new TypeError(`The argument key must be a string. Received: ${typeof key}`);
 		guild = this._resolveGuild(guild || target);
 		target = await this.validate(target).then(output => output && output.id ? output.id : output);
 		const { path, route } = this.getPath(key, { avoidUnconfigurable, piece: true });
-
 		const { parsed, settings } = await this._reset(target, key, guild, { path, route });
 
 		await this.provider.update(this.type, target, settings);
@@ -250,23 +252,17 @@ class Gateway {
 	 */
 	async _reset(target, key, guild, { path, route }) {
 		const parsedID = path.default;
-		let cache = this.getEntry(target);
-		let create = false;
-		if (cache.default === true) {
-			create = true;
-			cache = Object.assign(this.schema.getDefaults(), { id: target });
-		}
-		const fullObject = cache;
+		let cache = this.cache.get(this.type, target);
 
-		for (let i = 0; i < route.length - 1; i++) {
-			if (typeof cache[route[i]] === 'undefined') cache[route[i]] = {};
-			else cache = cache[route[i]];
-		}
+		// Handle entry creation if it does not exist.
+		if (!cache) cache = await this.createEntry(target);
+		const settings = cache;
+
+		for (let i = 0; i < route.length - 1; i++) cache = cache[route[i]] || {};
 		cache[route[route.length - 1]] = parsedID;
-		if (create) await this.createEntry(target, fullObject);
-		else await this.cache.set(this.type, target, fullObject);
 
-		return { parsed: parsedID, settings: fullObject, array: null };
+		await this.provider.update(this.type, target, settings);
+		return { parsed: parsedID, settings, array: null };
 	}
 
 	/**
@@ -275,16 +271,15 @@ class Gateway {
 	 * @param {string} target The entry target.
 	 * @param {string} key The key to modify.
 	 * @param {string} value The value to parse and save.
-	 * @param {(Guild|string)} [guild=null] A guild resolvable.
+	 * @param {(Guild|string)} [guild] A guild resolvable.
 	 * @param {boolean} [avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key.
 	 * @returns {Promise<GatewayUpdateResult>}
 	 */
-	async updateOne(target, key, value, guild = null, avoidUnconfigurable = false) {
+	async updateOne(target, key, value, guild, avoidUnconfigurable = false) {
 		if (typeof key !== 'string') throw new TypeError(`The argument key must be a string. Received: ${typeof key}`);
 		guild = this._resolveGuild(guild || target);
 		target = await this.validate(target).then(output => output && output.id ? output.id : output);
 		const { path, route } = this.getPath(key, { avoidUnconfigurable, piece: true });
-
 		const { parsed, settings } = path.array === true ?
 			await this._updateArray(target, 'add', key, value, guild, { path, route }) :
 			await this._updateOne(target, key, value, guild, { path, route });
@@ -309,23 +304,17 @@ class Gateway {
 
 		const parsed = await path.parse(value, guild);
 		const parsedID = parsed.data && parsed.data.id ? parsed.data.id : parsed.data;
-		let cache = this.getEntry(target);
-		let create = false;
-		if (cache.default === true) {
-			create = true;
-			cache = Object.assign(this.schema.getDefaults(), { id: target });
-		}
-		const fullObject = cache;
+		let cache = this.cache.get(this.type, target);
 
-		for (let i = 0; i < route.length - 1; i++) {
-			if (typeof cache[route[i]] === 'undefined') cache[route[i]] = {};
-			else cache = cache[route[i]];
-		}
+		// Handle entry creation if it does not exist.
+		if (!cache) cache = await this.createEntry(target);
+		const settings = cache;
+
+		for (let i = 0; i < route.length - 1; i++) cache = cache[route[i]] || {};
 		cache[route[route.length - 1]] = parsedID;
-		if (create) await this.createEntry(target, fullObject);
-		else await this.cache.set(this.type, target, fullObject);
 
-		return { parsed, settings: fullObject, array: null };
+		await this.provider.update(this.type, target, settings);
+		return { parsed, settings, array: null };
 	}
 
 	/**
@@ -333,27 +322,22 @@ class Gateway {
 	 * @since 0.4.0
 	 * @param {string} target The entry target.
 	 * @param {Object} object A JSON object to iterate and parse.
-	 * @param {(Guild|string)} [guild=null] A guild resolvable.
+	 * @param {(Guild|string)} [guild] A guild resolvable.
 	 * @returns {Promise<GatewayUpdateResult>}
 	 */
-	async updateMany(target, object, guild = null) {
+	async updateMany(target, object, guild) {
 		guild = this._resolveGuild(guild || target);
 		target = await this.validate(target).then(output => output && output.id ? output.id : output);
 		const list = { errors: [], promises: [] };
-		let cache = this.getEntry(target);
-		let create = false;
-		if (cache.default === true) {
-			create = true;
-			cache = Object.assign(this.schema.getDefaults(), { id: target });
-		}
+		let cache = this.cache.get(this.type, target);
+
+		// Handle entry creation if it does not exist.
+		if (!cache) cache = await this.createEntry(target);
 		const settings = cache;
 		this._updateMany(cache, object, this.schema, guild, list);
 		await Promise.all(list.promises);
 
-		await Promise.all([
-			this.cache.set(this.type, target, settings),
-			create ? this.createEntry(target, settings) : this.provider.update(this.type, target, settings)
-		]);
+		await this.provider.update(this.type, target, settings);
 		return { settings, errors: list.errors };
 	}
 
@@ -370,7 +354,7 @@ class Gateway {
 	_updateMany(cache, object, schema, guild, list) {
 		const keys = Object.keys(object);
 		for (let i = 0; i < keys.length; i++) {
-			if (schema.has(keys[i]) === false) continue;
+			if (schema.hasKey(keys[i]) === false) continue;
 			if (schema[keys[i]].type === 'Folder') {
 				this._updateMany(cache[keys[i]], object[keys[i]], schema[keys[i]], guild, list);
 				continue;
@@ -424,12 +408,10 @@ class Gateway {
 
 		const parsed = await path.parse(value, guild);
 		const parsedID = parsed.data && parsed.data.id ? parsed.data.id : parsed.data;
-		let cache = this.getEntry(target);
-		let create = false;
-		if (cache.default === true) {
-			create = true;
-			cache = Object.assign(this.schema.getDefaults(), { id: target });
-		}
+		let cache = this.cache.get(this.type, target);
+
+		// Handle entry creation if it does not exist.
+		if (!cache) cache = await this.createEntry(target);
 		const fullObject = cache;
 
 		for (let i = 0; i < route.length; i++) {
@@ -444,9 +426,6 @@ class Gateway {
 			if (index === -1) throw `The value ${parsedID} for the key ${path.path} does not exist.`;
 			cache.splice(index, 1);
 		}
-
-		if (create) await this.createEntry(target, fullObject);
-		else await this.cache.set(this.type, target, fullObject);
 
 		return { parsed, settings: fullObject, array: cache };
 	}
@@ -464,24 +443,21 @@ class Gateway {
 		const route = key.split('.');
 		let path = this.schema;
 
-		for (let i = 0; i < route.length; i++) {
-			if (path.keys.has(route[i]) === false) throw `The key ${route.slice(0, i + 1).join('.')} does not exist in the current schema.`;
-			if (i < route.length - 1) {
-				path = path[route[i]];
-				continue;
+		for (let i = 0; i < route.length - 1; i++) {
+			if (path.hasKey(route[i]) === false) throw `The key ${route.slice(0, i + 1).join('.')} does not exist in the current schema.`;
+			path = path[route[i]];
+		}
+
+		if (piece === true) {
+			path = path[route[route.length - 1]];
+			if (path.type === 'Folder') {
+				const keys = path.configurableKeys;
+				if (keys.length === 0) throw `This group is not configureable.`;
+				throw `Please, choose one of the following keys: '${keys.join('\', \'')}'`;
 			}
-			if (piece === true) {
-				path = path[route[i]];
-				if (path.type === 'Folder') {
-					const keys = path.configurableKeys;
-					if (keys.length === 0) throw `This group is not configureable.`;
-					throw `Please, choose one of the following keys: '${keys.join('\', \'')}'`;
-				}
-				if (avoidUnconfigurable === true && path.configurable === false) throw `The key ${path.path} is not configureable in the current schema.`;
-			} else
-			if (path[route[i]].type === 'Folder') {
-				path = path[route[i]];
-			}
+			if (avoidUnconfigurable === true && path.configurable === false) throw `The key ${path.path} is not configureable in the current schema.`;
+		} else if (path[route[route.length - 1]].type === 'Folder') {
+			path = path[route[route.length - 1]];
 		}
 
 		return { path, route };

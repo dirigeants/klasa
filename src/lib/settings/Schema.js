@@ -100,14 +100,15 @@ class Schema {
 	 * @returns {Promise<Schema>}
 	 */
 	async addFolder(key, object = {}, force = true) {
-		if (typeof this[key] !== 'undefined') throw `The key ${key} already exists in the current schema.`;
+		if (this.hasKey(key)) throw `The key ${key} already exists in the current schema.`;
+		if (typeof this[key] !== 'undefined') throw `The key ${key} conflicts with a property of Schema.`;
 		this.keys.add(key);
 		this.keyArray.push(key);
 		this[key] = new Schema(this.client, this.manager, object, `${this.path === '' ? '' : `${this.path}.`}${key}`);
 		this.defaults[key] = this[key].defaults;
 		await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
 
-		if (force) await this.force('add', key);
+		if (force) await this.forceMany('add', this[key]);
 		return this.manager.schema;
 	}
 
@@ -119,12 +120,13 @@ class Schema {
 	 * @returns {Promise<Schema>}
 	 */
 	async removeFolder(key, force = true) {
-		if (this.keys.has(key) === false) throw new Error(`The key ${key} does not exist in the current schema.`);
+		if (this.hasKey(key) === false) throw new Error(`The key ${key} does not exist in the current schema.`);
 		if (this[key].type !== 'Folder') throw new Error(`The key ${key} is not Folder type.`);
+		const folder = this[key];
 		this._removeKey(key);
 		await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
 
-		if (force) await this.force('delete', key);
+		if (force) await this.forceMany('delete', folder);
 		return this.manager.schema;
 	}
 
@@ -147,7 +149,8 @@ class Schema {
 	 * @returns {Promise<Schema>}
 	 */
 	async addKey(key, options = null, force = true) {
-		if (typeof this[key] !== 'undefined') throw `The key ${key} already exists in the current schema.`;
+		if (this.hasKey(key)) throw `The key ${key} already exists in the current schema.`;
+		if (typeof this[key] !== 'undefined') throw `The key ${key} conflicts with a property of Schema.`;
 		if (options === null) throw 'You must pass an options argument to this method.';
 		if (typeof options.type !== 'string') throw 'The option type is required and must be a string.';
 		options.type = options.type.toLowerCase();
@@ -179,6 +182,7 @@ class Schema {
 	 * @private
 	 */
 	_addKey(key, options) {
+		if (this.hasKey(key)) throw new Error(`The key '${key}' already exists.`);
 		this.keys.add(key);
 		this.keyArray.push(key);
 		this.keyArray.sort((a, b) => a.localeCompare(b));
@@ -219,86 +223,53 @@ class Schema {
 	}
 
 	/**
-	 * Modifies all entries from the database. Do NOT call without knowledge.
+	 * Modifies all entries from the database.
 	 * @since 0.4.0
-	 * @param {('add'|'delete')} action The action to perform.
-	 * @param {string} key The key to handle.
+	 * @param {('add'|'edit'|'delete')} action The action to perform.
 	 * @param {SchemaPiece} schemaPiece The SchemaPiece instance to handle.
-	 * @returns {Promise<boolean[]>}
+	 * @returns {Promise<void>}
+	 * @private
 	 */
-	async force(action, key, schemaPiece) {
-		if (this.manager.sql) {
-			await this.manager.updateColumns(action, key, schemaPiece.sqlSchema[1]);
-			return this.manager.sync();
+	force(action, schemaPiece) {
+		if (!(schemaPiece instanceof SchemaPiece)) {
+			throw new TypeError(`'schemaPiece' must be an instance of 'SchemaPiece'.`);
 		}
-		const data = await this.manager.provider.getAll(this.manager.type);
-		const value = action === 'add' ? this.defaults[key] : null;
-		const path = this.path.split('.');
 
-		return Promise.all(data.map(async (obj) => {
-			let object = obj;
-			for (let i = 0; i < path.length; i++) object = object[path[i]];
-			if (action === 'delete') delete object[key];
-			else object[key] = value;
+		const values = this.manager.cache.getValues(this.manager.type);
+		const path = schemaPiece.path.split('.');
 
-			if (obj.id) return this.manager.provider.replace(this.manager.type, obj.id, obj);
-			return true;
-		}));
+		if (action === 'add' || action === 'edit') {
+			const defValue = this.defaults[schemaPiece.key];
+			for (let i = 0; i < values.length; i++) {
+				let value = values[i];
+				for (let j = 0; j < path.length - 1; j++) value = value[path[j]];
+				value[path[path.length - 1]] = defValue;
+			}
+			return this.manager.provider.updateValue(this.manager.type, schemaPiece.path, defValue, this.manager.options.nice);
+		}
+
+		if (action === 'delete') {
+			for (let i = 0; i < values.length; i++) {
+				let value = values[i];
+				for (let j = 0; j < path.length - 1; j++) value = value[path[j]];
+				delete value[path[path.length - 1]];
+			}
+			return this.manager.provider.removeValue(this.manager.type, schemaPiece.path, this.manager.options.nice);
+		}
+		throw new TypeError(`Action must be either 'add' or 'delete'. Got: ${action}`);
 	}
 
 	/**
-	 * Get a JSON object containing all the objects from this schema's children.
-	 * @since 0.4.0
-	 * @returns {Object}
+	 * Modifies all entries from the database with multiple keys.
+	 * @param {('add'|'delete')} action The action to perform.
+	 * @param {Schema} folder The key to update.
+	 * @private
 	 */
-	toJSON() {
-		return Object.assign({ type: 'Folder' }, ...this.keyArray.map(key => ({ [key]: this[key].toJSON() })));
-	}
-
-	/**
-	 * Get a JSON object with all the default values.
-	 * @since 0.4.0
-	 * @returns {Object}
-	 */
-	getDefaults() {
-		const object = {};
-		for (let i = 0; i < this.keyArray.length; i++) object[this.keyArray[i]] = this[this.keyArray[i]].getDefaults();
-		return object;
-	}
-
-	/**
-	 * Get all the SQL schemas from this schema's children.
-	 * @since 0.4.0
-	 * @param {string[]} [array=[]] The array to push.
-	 * @returns {string[]}
-	 */
-	getSQL(array = []) {
-		return this.keyArray.map(key => this[key].getSQL(array));
-	}
-
-	/**
-	 * Get all the pathes from this schema's children.
-	 * @since 0.4.0
-	 * @param {string[]} [array=[]] The array to push.
-	 * @returns {string[]}
-	 */
-	getKeys(array = []) {
-		return this.keyArray.map(key => this[key].getKeys(array));
-	}
-
-	get configurableKeys() {
-		if (this.keyArray.length === 0) return [];
-		return this.keyArray.filter(key => this[key].type === 'Folder' || this[key].configurable);
-	}
-
-	/**
-	 * Get all the SchemaPieces instances from this schema's children.
-	 * @since 0.4.0
-	 * @param {string[]} [array=[]] The array to push.
-	 * @returns {string[]}
-	 */
-	getValues(array = []) {
-		return this.keyArray.map(key => this[key].getValues(array));
+	forceMany(action, folder) {
+		if (!(folder instanceof Schema)) {
+			throw new TypeError(`'folder' must be an instance of 'Schema'.`);
+		}
+		throw new Error('UNIMPLEMENTED');
 	}
 
 	/**
@@ -310,8 +281,7 @@ class Schema {
 	 */
 	getList(msg, object) {
 		const array = [];
-		if (this.keyArray.length === 0) return '';
-		const keys = this.configurableKeys.sort();
+		const keys = this.configurableKeys;
 		if (keys.length === 0) return '';
 
 		const longest = keys.reduce((a, b) => a.length > b.length ? a : b).length;
@@ -354,6 +324,70 @@ class Schema {
 	 */
 	resolveString() {
 		return this.toString();
+	}
+
+	/**
+	 * Get a JSON object with all the default values.
+	 * @since 0.4.0
+	 * @returns {Object}
+	 */
+	getDefaults() {
+		const object = {};
+		for (let i = 0; i < this.keyArray.length; i++) object[this.keyArray[i]] = this[this.keyArray[i]].getDefaults();
+		return object;
+	}
+
+	/**
+	 * Get all the SQL schemas from this schema's children.
+	 * @since 0.4.0
+	 * @param {string[]} [array=[]] The array to push.
+	 * @returns {string[]}
+	 */
+	getSQL(array = []) {
+		for (let i = 0; i < this.keyArray.length; i++) this[this.keyArray[i]].getSQL(array);
+		return array;
+	}
+
+	/**
+	 * Get all the pathes from this schema's children.
+	 * @since 0.4.0
+	 * @param {string[]} [array=[]] The array to push.
+	 * @returns {string[]}
+	 */
+	getKeys(array = []) {
+		for (let i = 0; i < this.keyArray.length; i++) this[this.keyArray[i]].getKeys(array);
+		return array;
+	}
+
+	/**
+	 * Get all the SchemaPieces instances from this schema's children. Used for GatewaySQL.
+	 * @since 0.4.0
+	 * @param {string[]} [array=[]] The array to push.
+	 * @returns {string[]}
+	 */
+	getValues(array = []) {
+		for (let i = 0; i < this.keyArray.length; i++) this[this.keyArray[i]].getValues(array);
+		return array;
+	}
+
+	/**
+	 * Get all configureable keys from this schema.
+	 * @since 0.4.0
+	 * @readonly
+	 * @returns {string[]}
+	 */
+	get configurableKeys() {
+		if (this.keyArray.length === 0) return [];
+		return this.keyArray.filter(key => this[key].type === 'Folder' || this[key].configurable);
+	}
+
+	/**
+	 * Get a JSON object containing all the objects from this schema's children.
+	 * @since 0.4.0
+	 * @returns {Object}
+	 */
+	toJSON() {
+		return Object.assign({ type: 'Folder' }, ...this.keyArray.map(key => ({ [key]: this[key].toJSON() })));
 	}
 
 	/**

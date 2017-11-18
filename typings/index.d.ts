@@ -1031,8 +1031,9 @@ declare module 'klasa' {
 	};
 
 	export type GatewayOptions = {
-		provider: Provider;
-		cache: Provider;
+		provider?: Provider;
+		cache?: Provider;
+		nice?: boolean;
 	};
 
 	export type GatewayInternalResult = {

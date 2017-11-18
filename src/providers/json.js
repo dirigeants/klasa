@@ -86,6 +86,64 @@ module.exports = class extends Provider {
 	}
 
 	/**
+	 * Update or insert a new value to all entries.
+	 * @param {string} table The name of the directory.
+	 * @param {string} path The key's path to update.
+	 * @param {any} newValue The new value for the key.
+	 * @param {boolean} [nice=false] Whether the provider should update all entries at the same time or politely update them secuentially.
+	 */
+	async updateValue(table, path, newValue, nice = false) {
+		const values = await this.getAll(table);
+		const route = path.split('.');
+		if (nice) for (let i = 0; i < values.length; i++) await this._updateValue(table, route, values[i], newValue);
+		else await Promise.all(values.map(object => this._updateValue(table, route, object, newValue)));
+	}
+
+	/**
+	 * Update or insert a new value to a specified entry.
+	 * @param {string} table The name of the directory.
+	 * @param {string[]} route An array with the path to update.
+	 * @param {Object} object The entry to update.
+	 * @param {any} newValue The new value for the key.
+	 * @returns {Promise<void>}
+	 * @private
+	 */
+	_updateValue(table, route, object, newValue) {
+		let value = object;
+		for (let j = 0; j < route.length - 1; j++) value = value[route[j]] || {};
+		value[route[route.length - 1]] = newValue;
+		return this.update(table, object.id, object);
+	}
+
+	/**
+	 * Update or insert a new value to all entries.
+	 * @param {string} table The name of the directory.
+	 * @param {string} [path=false] The key's path to update.
+	 * @param {boolean} nice Whether the provider should update all entries at the same time or politely update them secuentially.
+	 */
+	async removeValue(table, path, nice = false) {
+		const values = await this.getAll(table);
+		const route = path.split('.');
+		if (nice) for (let i = 0; i < values.length; i++) await this._removeValue(table, route, values[i]);
+		else await Promise.all(values.map(object => this._removeValue(table, route, object)));
+	}
+
+	/**
+	 * Remove a value from a specified entry.
+	 * @param {string} table The name of the directory.
+	 * @param {string[]} route An array with the path to update.
+	 * @param {Object} object The entry to update.
+	 * @returns {Promise<void>}
+	 * @private
+	 */
+	_removeValue(table, route, object) {
+		let value = object;
+		for (let j = 0; j < route.length - 1; j++) value = value[route[j]] || {};
+		delete value[route[route.length - 1]];
+		return this.update(table, object.id, object);
+	}
+
+	/**
 	 * Insert a new document into a directory.
 	 * @param {string} table The name of the directory.
 	 * @param {string} document The document name.

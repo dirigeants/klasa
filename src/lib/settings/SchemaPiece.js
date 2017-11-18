@@ -265,7 +265,7 @@ class SchemaPiece {
 				break;
 			case 'boolean': resolver = (val) => val === true ? 'Active' : 'Inactive';
 				break;
-					// no default
+			// no default
 		}
 
 		if (this.array) return value.length > 0 ? `[ ${value.map(resolver).join(' | ')} ]` : 'None';
