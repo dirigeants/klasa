@@ -11,8 +11,6 @@ module.exports = class extends Monitor {
 	}
 
 	async run(msg) {
-		// Ignore other users if selfbot
-		if (!this.client.user.bot && msg.author.id !== this.client.user.id) return;
 		if (this.client.user.bot && msg.guild && !msg.guild.me) await msg.guild.members.fetch(this.client.user);
 		if (msg.guild && !msg.channel.permissionsFor(msg.guild.me).has('SEND_MESSAGES')) return;
 		const { command, prefix, prefixLength } = await this.parseCommand(msg);
@@ -115,6 +113,7 @@ module.exports = class extends Monitor {
 
 	init() {
 		this.ignoreSelf = this.client.user.bot;
+		this.ignoreOthers = !this.client.user.bot;
 		this.prefixMention = new RegExp(`^<@!?${this.client.user.id}>`);
 		this.prefixMentionLength = this.client.user.id.length + 3;
 	}

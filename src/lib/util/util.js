@@ -24,7 +24,7 @@ class Util {
 	 * @returns {string}
 	 */
 	static codeBlock(lang, expression) {
-		return `\`\`\`${lang}\n${expression || '\u200b'}\`\`\``;
+		return `\`\`\`${lang}\n${expression || zws}\`\`\``;
 	}
 
 	/**
