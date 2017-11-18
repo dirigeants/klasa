@@ -29,6 +29,8 @@ class Schema {
 		 * The Klasa client.
 		 * @since 0.4.0
 		 * @type {KlasaClient}
+		 * @name Schema#client
+		 * @readonly
 		 */
 		Object.defineProperty(this, 'client', { value: client });
 
@@ -36,6 +38,8 @@ class Schema {
 		 * The Gateway that manages this schema instance.
 		 * @since 0.4.0
 		 * @type {(Gateway|GatewaySQL)}
+		 * @name Schema#manager
+		 * @readonly
 		 */
 		Object.defineProperty(this, 'manager', { value: manager });
 
@@ -43,6 +47,8 @@ class Schema {
 		 * The path of this schema instance.
 		 * @since 0.4.0
 		 * @type {string}
+		 * @name Schema#path
+		 * @readonly
 		 */
 		Object.defineProperty(this, 'path', { value: path });
 
@@ -50,6 +56,8 @@ class Schema {
 		 * The type of this schema instance.
 		 * @since 0.4.0
 		 * @type {'Folder'}
+		 * @name Schema#type
+		 * @readonly
 		 */
 		Object.defineProperty(this, 'type', { value: 'Folder' });
 
@@ -57,6 +65,8 @@ class Schema {
 		 * The default values for this schema instance and children.
 		 * @since 0.4.0
 		 * @type {Object}
+		 * @name Schema#defaults
+		 * @readonly
 		 */
 		Object.defineProperty(this, 'defaults', { value: {}, writable: true });
 
@@ -64,6 +74,8 @@ class Schema {
 		 * A Set containing all keys' names which value is either a Schema or a SchemaPiece instance.
 		 * @since 0.4.0
 		 * @type {Set<string>}
+		 * @name Schema#keys
+		 * @readonly
 		 */
 		Object.defineProperty(this, 'keys', { value: new Set(), writable: true });
 
@@ -71,8 +83,10 @@ class Schema {
 		 * A pre-processed array with all keys' names.
 		 * @since 0.4.0
 		 * @type {string[]}
+		 * @name Schema#keyArray
+		 * @readonly
 		 */
-		Object.defineProperty(this, '_keys', { value: [], writable: true });
+		Object.defineProperty(this, 'keyArray', { value: [], writable: true });
 
 		this._patch(object);
 	}
@@ -88,7 +102,7 @@ class Schema {
 	async addFolder(key, object = {}, force = true) {
 		if (typeof this[key] !== 'undefined') throw `The key ${key} already exists in the current schema.`;
 		this.keys.add(key);
-		this._keys.push(key);
+		this.keyArray.push(key);
 		this[key] = new Schema(this.client, this.manager, object, `${this.path === '' ? '' : `${this.path}.`}${key}`);
 		this.defaults[key] = this[key].defaults;
 		await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
@@ -115,12 +129,12 @@ class Schema {
 	}
 
 	/**
-	 * Check if the table exists in this folder.
+	 * Check if the key exists in this folder.
 	 * @since 0.4.0
 	 * @param {string} key The key to check.
 	 * @returns {boolean}
 	 */
-	has(key) {
+	hasKey(key) {
 		return this.keys.has(key);
 	}
 
@@ -166,8 +180,8 @@ class Schema {
 	 */
 	_addKey(key, options) {
 		this.keys.add(key);
-		this._keys.push(key);
-		this._keys.sort((a, b) => a.localeCompare(b));
+		this.keyArray.push(key);
+		this.keyArray.sort((a, b) => a.localeCompare(b));
 		this[key] = new SchemaPiece(this.client, this.manager, options, `${this.path === '' ? '' : `${this.path}.`}${key}`, key);
 		this.defaults[key] = options.default;
 	}
@@ -180,7 +194,7 @@ class Schema {
 	 * @returns {Promise<Schema>}
 	 */
 	async removeKey(key, force = true) {
-		if (this.keys.has(key) === false) throw `The key ${key} does not exist in the current schema.`;
+		if (this.hasKey(key) === false) throw `The key ${key} does not exist in the current schema.`;
 		this._removeKey(key);
 		await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
 
@@ -195,10 +209,11 @@ class Schema {
 	 * @private
 	 */
 	_removeKey(key) {
-		const index = this._keys.indexOf(key);
+		const index = this.keyArray.indexOf(key);
+		if (index === -1) throw new Error(`The key '${key}' does not exist.`);
 
 		this.keys.delete(key);
-		this._keys.splice(index, 1);
+		this.keyArray.splice(index, 1);
 		delete this[key];
 		delete this.defaults[key];
 	}
@@ -237,7 +252,7 @@ class Schema {
 	 * @returns {Object}
 	 */
 	toJSON() {
-		return Object.assign({ type: 'Folder' }, ...this._keys.map(key => ({ [key]: this[key].toJSON() })));
+		return Object.assign({ type: 'Folder' }, ...this.keyArray.map(key => ({ [key]: this[key].toJSON() })));
 	}
 
 	/**
@@ -247,7 +262,7 @@ class Schema {
 	 */
 	getDefaults() {
 		const object = {};
-		for (let i = 0; i < this._keys.length; i++) object[this._keys[i]] = this[this._keys[i]].getDefaults();
+		for (let i = 0; i < this.keyArray.length; i++) object[this.keyArray[i]] = this[this.keyArray[i]].getDefaults();
 		return object;
 	}
 
@@ -258,7 +273,7 @@ class Schema {
 	 * @returns {string[]}
 	 */
 	getSQL(array = []) {
-		return this._keys.map(key => this[key].getSQL(array));
+		return this.keyArray.map(key => this[key].getSQL(array));
 	}
 
 	/**
@@ -268,11 +283,12 @@ class Schema {
 	 * @returns {string[]}
 	 */
 	getKeys(array = []) {
-		return this._keys.map(key => this[key].getKeys(array));
+		return this.keyArray.map(key => this[key].getKeys(array));
 	}
 
 	get configurableKeys() {
-		return this._keys.filter(key => this[key].type === 'Folder' || this[key].configurable);
+		if (this.keyArray.length === 0) return [];
+		return this.keyArray.filter(key => this[key].type === 'Folder' || this[key].configurable);
 	}
 
 	/**
@@ -282,7 +298,7 @@ class Schema {
 	 * @returns {string[]}
 	 */
 	getValues(array = []) {
-		return this._keys.map(key => this[key].getValues(array));
+		return this.keyArray.map(key => this[key].getValues(array));
 	}
 
 	/**
@@ -294,7 +310,7 @@ class Schema {
 	 */
 	getList(msg, object) {
 		const array = [];
-		if (this._keys.length === 0) return '';
+		if (this.keyArray.length === 0) return '';
 		const keys = this.configurableKeys.sort();
 		if (keys.length === 0) return '';
 
@@ -315,6 +331,8 @@ class Schema {
 	_patch(object) {
 		for (const key of Object.keys(object)) {
 			if (typeof object[key] !== 'object') continue;
+			// Force retrocompatibility with SGv1's schema
+			if (typeof object[key].type === 'undefined') object[key].type = 'Folder';
 			if (object[key].type === 'Folder') {
 				const folder = new Schema(this.client, this.manager, object[key], `${this.path === '' ? '' : `${this.path}.`}${key}`);
 				this[key] = folder;
@@ -325,8 +343,9 @@ class Schema {
 				this.defaults[key] = piece.default;
 			}
 			this.keys.add(key);
-			this._keys.push(key);
+			this.keyArray.push(key);
 		}
+		this.keyArray.sort((a, b) => a.localeCompare(b));
 	}
 
 	/**
@@ -342,7 +361,7 @@ class Schema {
 	 * @returns {string}
 	 */
 	toString() {
-		return this._keys.length > 0 && this._keys.filter(key => this[key].configurable !== false).length > 0 ? '[ Folder' : '[ Empty Folder';
+		return this.configurableKeys.length !== 0 ? '[ Folder' : '[ Empty Folder';
 	}
 
 }

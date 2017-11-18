@@ -33,6 +33,7 @@ class SchemaPiece {
 		 * The Klasa client.
 		 * @since 0.4.0
 		 * @type {KlasaClient}
+		 * @name SchemaPiece#client
 		 * @readonly
 		 */
 		Object.defineProperty(this, 'client', { value: client });
@@ -41,6 +42,7 @@ class SchemaPiece {
 		 * The Gateway that manages this SchemaPiece instance.
 		 * @since 0.4.0
 		 * @type {(Gateway|GatewaySQL)}
+		 * @name SchemaPiece#manager
 		 * @readonly
 		 */
 		Object.defineProperty(this, 'manager', { value: manager });
@@ -49,6 +51,7 @@ class SchemaPiece {
 		 * The path of this SchemaPiece instance.
 		 * @since 0.4.0
 		 * @type {string}
+		 * @name SchemaPiece#path
 		 * @readonly
 		 */
 		Object.defineProperty(this, 'path', { value: path });
@@ -57,6 +60,7 @@ class SchemaPiece {
 		 * This keys' name.
 		 * @since 0.4.0
 		 * @type {string}
+		 * @name SchemaPiece#key
 		 * @readonly
 		 */
 		Object.defineProperty(this, 'key', { value: key });
@@ -65,6 +69,7 @@ class SchemaPiece {
 		 * The type of this key.
 		 * @since 0.4.0
 		 * @type {string}
+		 * @name SchemaPiece#type
 		 */
 		this.type = options.type.toLowerCase();
 
@@ -72,6 +77,7 @@ class SchemaPiece {
 		 * Whether this key should store multiple or a single value.
 		 * @since 0.4.0
 		 * @type {boolean}
+		 * @name SchemaPiece#array
 		 */
 		this.array = typeof options.array !== 'undefined' ? options.array : false;
 
@@ -79,6 +85,7 @@ class SchemaPiece {
 		 * What this key should provide by default.
 		 * @since 0.4.0
 		 * @type {any}
+		 * @name SchemaPiece#default
 		 */
 		this.default = typeof options.default !== 'undefined' ? options.default : this.type === 'boolean' ? false : null;
 
@@ -86,6 +93,7 @@ class SchemaPiece {
 		 * The minimum value for this key.
 		 * @since 0.4.0
 		 * @type {?number}
+		 * @name SchemaPiece#min
 		 */
 		this.min = typeof options.min !== 'undefined' && isNaN(options.min) === false ? options.min : null;
 
@@ -93,6 +101,7 @@ class SchemaPiece {
 		 * The maximum value for this key.
 		 * @since 0.4.0
 		 * @type {?number}
+		 * @name SchemaPiece#max
 		 */
 		this.max = typeof options.max !== 'undefined' && isNaN(options.max) === false ? options.max : null;
 
@@ -100,6 +109,7 @@ class SchemaPiece {
 		 * Whether this key should be configureable by the config command. When type is any, this key defaults to false.
 		 * @since 0.4.0
 		 * @type {boolean}
+		 * @name SchemaPiece#configurable
 		 */
 		this.configurable = typeof options.configurable !== 'undefined' ? options.configurable : this.type !== 'any';
 

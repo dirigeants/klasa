@@ -231,18 +231,21 @@ declare module 'klasa' {
 		private _paginate(): void;
 	}
 
-	export class Util {
+	class Util {
 		public static codeBlock(lang: string, expression: string): string;
 		public static clean(text: string): string;
 		private static initClean(client: KlasaClient): void;
 		public static toTitleCase(str: string): string;
 		public static newError(error: Error, code: number): Error;
 		public static regExpEsc(str: string): string;
-		public static parseDottedObject(rawObject: StringMappedType<string>);
+		public static parseDottedObject(rawObject: StringMappedType<string>): StringMappedType<string>;
+		public static stringIsObject(string: string): boolean;
 		public static applyToClass(base: Object, structure: Object, skips?: string[]): void;
 		public static exec(exec: string, options?: ExecOptions): Promise<{ stdout: string, stderr: string }>;
 		public static sleep(delay: number, args?: any): Promise<any>;
 	}
+
+	export { util as Util };
 
 	export class Resolver {
 		public constructor(client: KlasaClient);

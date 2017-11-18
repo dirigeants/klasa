@@ -95,7 +95,7 @@ class Util {
 
 	/**
 	 * Given a dotted object, parse it, generating a new object with all the keys parsed.
-   * @since 0.4.0
+	 * @since 0.4.0
 	 * @param {Object} rawObject The dotted object to parse.
 	 * @returns {Object}
 	 * @example
@@ -139,6 +139,12 @@ class Util {
 		return object;
 	}
 
+	/**
+	 * Check if an stringified object is actually an object.
+	 * @since 0.4.0
+	 * @param {string} string The string to check.
+	 * @returns {boolean}
+	 */
 	static stringIsObject(string) {
 		if (typeof string !== 'string') return false;
 		return (string[0] === '[' && string[string.length - 1] === ']') ||
