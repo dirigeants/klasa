@@ -104,10 +104,12 @@ module.exports = class extends Language {
 	}
 
 	isFeminine(type) {
+		type = type.toString();
 		return ['command', 'commands'].indexOf(type) !== -1;
 	}
 
 	piece(type) {
+		type = type.toString();
 		const [, capital, plural] = /^([A-Z])?.*?(s)?$/.exec(type);
 		const tp = {
 			command: 'commande',
