@@ -142,13 +142,13 @@ class Util {
 	/**
 	 * Check if an stringified object is actually an object.
 	 * @since 0.4.0
-	 * @param {string} string The string to check.
+	 * @param {string} text The string to check.
 	 * @returns {boolean}
 	 */
-	static stringIsObject(string) {
+	static stringIsObject(text) {
 		if (typeof string !== 'string') return false;
-		return (string[0] === '[' && string[string.length - 1] === ']') ||
-			(string[0] === '{' && string[string.length - 1] === '}');
+		return (text[0] === '[' && text[text.length - 1] === ']') ||
+			(text[0] === '{' && text[text.length - 1] === '}');
 	}
 
 	/**

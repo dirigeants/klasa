@@ -239,7 +239,7 @@ declare module 'klasa' {
 		public static newError(error: Error, code: number): Error;
 		public static regExpEsc(str: string): string;
 		public static parseDottedObject(rawObject: StringMappedType<string>): StringMappedType<string>;
-		public static stringIsObject(string: string): boolean;
+		public static stringIsObject(text: string): boolean;
 		public static applyToClass(base: Object, structure: Object, skips?: string[]): void;
 		public static exec(exec: string, options?: ExecOptions): Promise<{ stdout: string, stderr: string }>;
 		public static sleep(delay: number, args?: any): Promise<any>;
