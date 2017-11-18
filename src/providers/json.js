@@ -48,12 +48,22 @@ module.exports = class extends Provider {
 	/**
 	 * Get all documents from a directory.
 	 * @param {string} table The name of the directory to fetch from.
+	 * @param {boolean} [nice=false] Whether the provider should update all entries at the same time or politely update them secuentially.
 	 * @returns {Promise<Object[]>}
 	 */
-	getAll(table) {
+	async getAll(table, nice = false) {
 		const dir = resolve(this.baseDir, table);
-		return fs.readdir(dir)
-			.then(files => Promise.all(files.filter(file => file.endsWith('.json')).map(file => fs.readJSON(resolve(dir, file)))));
+		const files = await fs.readdir(dir);
+
+		if (nice) {
+			const documents = [];
+			for (let i = 0; i < files.length; i++) {
+				if (files[i].endsWith('.json')) await fs.readJSON(resolve(dir, files[i])).then(documents.push);
+			}
+			return documents;
+		} else {
+			return Promise.all(files.filter(file => file.endsWith('.json')).map(file => fs.readJSON(resolve(dir, file))));
+		}
 	}
 
 	/**
@@ -109,15 +119,12 @@ module.exports = class extends Provider {
 	 * @param {boolean} [nice=false] Whether the provider should update all entries at the same time or politely update them secuentially.
 	 */
 	async updateValue(table, path, newValue, nice = false) {
-		const values = await this.getAll(table);
 		const route = path.split('.');
 		if (nice) {
-			const files = await this.getAllKeys(table);
-			for (let i = 0; i < values.length; i++) {
-				const object = await this.get(files[i]);
-				await this._updateValue(table, route, object, newValue);
-			}
+			const values = await this.getAll(table, true);
+			for (let i = 0; i < values.length; i++) await this._updateValue(table, route, values[i], newValue);
 		} else {
+			const values = await this.getAll(table);
 			await Promise.all(values.map(object => this._updateValue(table, route, object, newValue)));
 		}
 	}
@@ -145,15 +152,12 @@ module.exports = class extends Provider {
 	 * @param {boolean} nice Whether the provider should update all entries at the same time or politely update them secuentially.
 	 */
 	async removeValue(table, path, nice = false) {
-		const values = await this.getAll(table);
 		const route = path.split('.');
 		if (nice) {
-			const files = await this.getAllKeys(table);
-			for (let i = 0; i < values.length; i++) {
-				const object = await this.get(files[i]);
-				await this._removeValue(table, route, object);
-			}
+			const values = await this.getAll(table, true);
+			for (let i = 0; i < values.length; i++) await this._removeValue(table, route, values[i]);
 		} else {
+			const values = await this.getAll(table);
 			await Promise.all(values.map(object => this._removeValue(table, route, object)));
 		}
 	}
