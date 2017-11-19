@@ -234,7 +234,7 @@ class Schema {
 	 * @private
 	 */
 	force(action, key, piece) {
-		if (!(piece instanceof SchemaPiece) || !(piece instanceof Schema)) {
+		if ((piece instanceof SchemaPiece) === false && (piece instanceof Schema) === false) {
 			throw new TypeError(`'schemaPiece' must be an instance of 'SchemaPiece'.`);
 		}
 
