@@ -494,16 +494,6 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  * @param {(string|Object)} error The command error
  */
 
-/**
- * Emitted when {@link SettingGateway.update}, {@link SettingGateway.updateArray} or {@link SettingGateway.reset} is run.
- * @event KlasaClient#settingUpdate
- * @since 0.3.0
- * @param {SettingGateway} gateway The setting gateway with the updated setting
- * @param {string} id The identifier of the gateway that was updated
- * @param {Object} oldEntries The old settings entries
- * @param {Object} newEntries The new settings entries
- */
-
 process.on('unhandledRejection', (err) => {
 	if (!err) return;
 	console.error(`Uncaught Promise Error: \n${err.stack || err}`);

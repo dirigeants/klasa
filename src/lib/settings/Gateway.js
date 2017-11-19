@@ -1,4 +1,5 @@
 const Schema = require('./Schema');
+const Settings = require('../structures/Settings');
 const { resolve } = require('path');
 const fs = require('fs-nextra');
 
@@ -147,7 +148,7 @@ class Gateway {
 
 		const data = await this.provider.getAll(this.type);
 		if (data.length > 0) {
-			for (let i = 0; i < data.length; i++) this.cache.set(this.type, data[i].id, data[i]);
+			for (let i = 0; i < data.length; i++) this.cache.set(this.type, data[i].id, new Settings(this, data[i]));
 		}
 	}
 
@@ -187,8 +188,9 @@ class Gateway {
 		const data = this.schema.getDefaults();
 		await this.provider.create(this.type, target, data);
 		data.id = target;
-		this.cache.create(this.type, target, data);
-		return data;
+		const settings = new Settings(this, data);
+		this.cache.set(this.type, target, settings);
+		return settings;
 	}
 
 	/**
@@ -207,17 +209,19 @@ class Gateway {
 	 * Sync either all entries from the cache with the persistent database, or a single one.
 	 * @since 0.0.1
 	 * @param {(Object|string)} [input=null] An object containing a id property, like discord.js objects, or a string.
-	 * @returns {Promise<void>}
+	 * @returns {Promise<boolean>}
 	 */
 	async sync(input = null) {
 		if (input === null) {
 			const data = await this.provider.getAll(this.type);
-			if (data.length > 0) for (let i = 0; i < data.length; i++) this.cache.set(this.type, data[i].id, data[i]);
+			if (data.length > 0) {
+				for (let i = 0; i < data.length; i++) this.cache.set(this.type, data[i].id, new Settings(this, data[i]));
+			}
 			return true;
 		}
 		const target = await this.validate(input).then(output => output && output.id ? output.id : output);
 		const data = await this.provider.get(this.type, target);
-		await this.cache.set(this.type, target, data);
+		await this.cache.set(this.type, target, new Settings(this, data));
 		return true;
 	}
 
