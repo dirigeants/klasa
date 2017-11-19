@@ -445,8 +445,8 @@ declare module 'klasa' {
 		public initTable(): Promise<void>;
 		public initSchema(): Promise<Object>;
 
-		public getEntry(input: string): Object;
-		public createEntry(input: string, data?: Object): Promise<true>;
+		public getEntry(input: string): Object | Settings;
+		public createEntry(input: string, data?: Object): Promise<Settings>;
 		public deleteEntry(input: string): Promise<true>;
 
 		public sync(input?: Object|string): Promise<void>;
@@ -550,6 +550,22 @@ declare module 'klasa' {
 			language: SchemaPiece,
 			disabledCommands: SchemaPiece
 		};
+	}
+
+	export class Settings {
+		public constructor(manager: Gateway | GatewaySQL, data: { [key: string]: any });
+		public readonly client: KlasaClient;
+		public readonly manager: Gateway | GatewaySQL;
+		public readonly type: string;
+		public readonly id: string;
+
+		public update(obj: { [key: string]: any }): Promise<this>;
+		public update(key: string, value: any): Promise<this>;
+		public sync(): Promise<this>;
+		public destroy(): Promise<true>;
+
+		public toString(): string;
+		private _merge(data: any, folder: Schema | SchemaPiece): any;
 	}
 
 	// Util

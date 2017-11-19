@@ -78,19 +78,21 @@ class Settings {
 	/**
 	 * Sync the data from the database with the cache.
 	 * @since 0.4.0
-	 * @returns {Promise<boolean>}
+	 * @returns {Promise<Settings>}
 	 */
-	sync() {
-		return this.manager.sync(this.id);
+	async sync() {
+		await this.manager.sync(this.id);
+		return this;
 	}
 
 	/**
 	 * Delete this entry from the database and cache.
 	 * @since 0.4.0
-	 * @returns {Promise<true>}
+	 * @returns {Promise<Settings>}
 	 */
-	destroy() {
-		return this.manager.deleteEntry(this.id);
+	async destroy() {
+		await this.manager.deleteEntry(this.id);
+		return this;
 	}
 
 	/**

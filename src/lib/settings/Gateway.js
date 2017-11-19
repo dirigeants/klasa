@@ -169,7 +169,7 @@ class Gateway {
 	 * Get an entry from the cache.
 	 * @since 0.4.0
 	 * @param {string} input The key to get from the cache.
-	 * @returns {Object}
+	 * @returns {(Settings|Object)}
 	 */
 	getEntry(input) {
 		if (input === 'default') return this.defaults;
@@ -181,7 +181,7 @@ class Gateway {
 	 * @since 0.4.0
 	 * @param {string} input The name of the key to create.
 	 * @param {Object} [data={}] The initial data to insert.
-	 * @returns {Promise<Object>}
+	 * @returns {Promise<Settings>}
 	 */
 	async createEntry(input) {
 		const target = await this.validate(input).then(output => output && output.id ? output.id : output);
