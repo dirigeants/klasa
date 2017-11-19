@@ -36,7 +36,7 @@ class Settings {
 		 */
 		Object.defineProperty(this, 'id', { value: data.id });
 
-		const { schema } = this.gateway;
+		const { schema } = this.manager;
 		for (let i = 0; i < schema.keyArray.length; i++) this._merge(data, schema.keyArray[i], schema[schema.keyArray[i]]);
 	}
 
