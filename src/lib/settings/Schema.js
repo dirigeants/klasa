@@ -171,7 +171,7 @@ class Schema {
 		await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
 		this._addKey(key, options);
 
-		if (force) await this.force('add', this[key]);
+		if (force) await this.force('add', key, this[key]);
 		return this.manager.schema;
 	}
 
@@ -204,7 +204,7 @@ class Schema {
 		await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
 		this._removeKey(key);
 
-		if (force) await this.force('delete', schemaPiece);
+		if (force) await this.force('delete', key, schemaPiece);
 		return this.manager.schema;
 	}
 
@@ -235,7 +235,7 @@ class Schema {
 	 */
 	force(action, key, piece) {
 		if ((piece instanceof SchemaPiece) === false && (piece instanceof Schema) === false) {
-			throw new TypeError(`'schemaPiece' must be an instance of 'SchemaPiece'.`);
+			throw new TypeError(`'schemaPiece' must be an instance of 'SchemaPiece' or an instance of 'Schema'.`);
 		}
 
 		const values = this.manager.cache.getValues(this.manager.type);
