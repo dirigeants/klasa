@@ -118,10 +118,15 @@ class Settings {
 	 * @private
 	 */
 	_merge(data, folder) {
-		for (let i = 0; i < folder.keyArray.length; i++) {
-			const key = folder.keyArray[i];
-			if (folder[key].type === 'Folder') data[key] = this._merge(data[key] || {}, folder[key]);
-			else if (typeof data[key] === 'undefined') data[key] = folder[key].default;
+		if (folder.type === 'Folder') {
+			for (let i = 0; i < folder.keyArray.length; i++) {
+				const key = folder.keyArray[i];
+				if (folder[key].type === 'Folder') data[key] = this._merge(data[key] || {}, folder[key]);
+				else if (typeof data[key] === 'undefined') data[key] = folder[key].default;
+			}
+		} else if (typeof data[folder.key] === 'undefined') {
+			// It's a SchemaPiece instance, so it has a property of 'key'.
+			data[folder.key] = folder.default;
 		}
 
 		return data;
