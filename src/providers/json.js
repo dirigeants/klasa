@@ -142,7 +142,7 @@ module.exports = class extends Provider {
 		let value = object;
 		for (let j = 0; j < route.length - 1; j++) value = value[route[j]] || {};
 		value[route[route.length - 1]] = newValue;
-		return this.update(table, object.id, object);
+		return this.replace(table, object.id, object);
 	}
 
 	/**
@@ -174,7 +174,7 @@ module.exports = class extends Provider {
 		let value = object;
 		for (let j = 0; j < route.length - 1; j++) value = value[route[j]] || {};
 		delete value[route[route.length - 1]];
-		return this.update(table, object.id, object);
+		return this.replace(table, object.id, object);
 	}
 
 	/**
