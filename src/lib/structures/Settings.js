@@ -37,7 +37,7 @@ class Settings {
 		Object.defineProperty(this, 'id', { value: data.id });
 
 		const { schema } = this.manager;
-		for (let i = 0; i < schema.keyArray.length; i++) this._merge(data, schema.keyArray[i], schema[schema.keyArray[i]]);
+		for (let i = 0; i < schema.keyArray.length; i++) this[schema.keyArray[i]] = this._merge(data, schema[schema.keyArray[i]]);
 	}
 
 	/**
@@ -113,19 +113,18 @@ class Settings {
 	 * Assign data to the settings.
 	 * @since 0.4.0
 	 * @param {Object} data The data contained in the group.
-	 * @param {string} group The name of the group.
 	 * @param {(Schema|SchemaPiece)} folder A Schema or a SchemaPiece instance.
+	 * @returns {Object}
 	 * @private
 	 */
-	_merge(data, group, folder) {
-		this[group] = {};
-
-		if (typeof data[group] === 'undefined') data[group] = {};
-		for (let i = 0; i < folder._keys.length; i++) {
-			this[group][folder._keys[i]] = typeof data[group][folder._keys[i]] !== 'undefined' ?
-				data[group][folder._keys[i]] :
-				folder[folder._keys[i]].default;
+	_merge(data, folder) {
+		for (let i = 0; i < folder.keyArray.length; i++) {
+			const key = folder.keyArray[i];
+			if (folder[key].type === 'Folder') data[key] = this._merge(data[key] || {}, folder[key]);
+			else if (typeof data[key] === 'undefined') data[key] = folder[key].default;
 		}
+
+		return data;
 	}
 
 }
