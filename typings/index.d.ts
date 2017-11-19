@@ -464,7 +464,7 @@ declare module 'klasa' {
 		private _updateArray(target: string, action: 'add'|'remove', key: string, value: string, guild: ExtendedGuild, path: { path: SchemaPiece, route: string[] }): Promise<GatewayInternalResult>;
 
 		public getPath(key?: string, options?: { avoidUnconfigurable?: boolean, piece?: boolean }): GatewayPathResult;
-		private _resolveGuild(guild: ExtendedGuild|ExtendedTextChannel|ExtendedVoiceChannel|ExtendedMessage|Role|string): ExtendedGuild;
+		private _resolveGuild(guild: SettingGatewayGuildResolvable): ExtendedGuild;
 
 		public readonly cache: Provider;
 		public readonly provider: Provider;
@@ -1160,7 +1160,7 @@ declare module 'klasa' {
 		sql?: string;
 	};
 
-	export type SettingGatewayGuildResolvable = ExtendedGuild|Channel|ExtendedMessage|Role|Snowflake;
+	export type SettingGatewayGuildResolvable = ExtendedGuild | ExtendedTextChannel | ExtendedVoiceChannel | ExtendedMessage | Role | string;
 
 	export type emoji = string;
 

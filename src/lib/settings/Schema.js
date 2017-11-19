@@ -102,11 +102,12 @@ class Schema {
 	async addFolder(key, object = {}, force = true) {
 		if (this.hasKey(key)) throw `The key ${key} already exists in the current schema.`;
 		if (typeof this[key] !== 'undefined') throw `The key ${key} conflicts with a property of Schema.`;
+
+		await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
 		this.keys.add(key);
 		this.keyArray.push(key);
 		this[key] = new Schema(this.client, this.manager, object, `${this.path === '' ? '' : `${this.path}.`}${key}`);
 		this.defaults[key] = this[key].defaults;
-		await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
 
 		if (force) await this.forceMany('add', this[key]);
 		return this.manager.schema;
@@ -123,8 +124,8 @@ class Schema {
 		if (this.hasKey(key) === false) throw new Error(`The key ${key} does not exist in the current schema.`);
 		if (this[key].type !== 'Folder') throw new Error(`The key ${key} is not Folder type.`);
 		const folder = this[key];
-		this._removeKey(key);
 		await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
+		this._removeKey(key);
 
 		if (force) await this.forceMany('delete', folder);
 		return this.manager.schema;
@@ -167,8 +168,8 @@ class Schema {
 			if (typeof options.default === 'undefined') options.default = options.type === 'boolean' ? false : null;
 			options.array = false;
 		}
-		this._addKey(key, options);
 		await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
+		this._addKey(key, options);
 
 		if (force) await this.force('add', this[key]);
 		return this.manager.schema;
@@ -199,10 +200,11 @@ class Schema {
 	 */
 	async removeKey(key, force = true) {
 		if (this.hasKey(key) === false) throw `The key ${key} does not exist in the current schema.`;
-		this._removeKey(key);
+		const schemaPiece = this[key];
 		await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
+		this._removeKey(key);
 
-		if (force) await this.force('delete', this[key]);
+		if (force) await this.force('delete', schemaPiece);
 		return this.manager.schema;
 	}
 
