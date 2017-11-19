@@ -53,10 +53,10 @@ class Settings {
 	 * // Editing a single value
 	 * // You can edit a single value in a very similar way to Gateway#updateOne.
 	 * update('channels.modlogs', '340713281972862976');
-	 * 
+	 *
 	 * // However, you can also update it by passing an object (slower).
 	 * update({ channels: { modlogs: '340713281972862976' } });
-	 * 
+	 *
 	 * // Editing multiple values
 	 * // As Settings#update can also work as an alias of Gateway#updateMany, it also accepts an entire object with multiple values.
 	 * update({ prefix: 'k!', roles: { administrator: '339959033937264641' } });
