@@ -4,7 +4,7 @@ module.exports = class extends Language {
 
 	constructor(...args) {
 		super(...args);
-		const toTitleCase = this.client.methods.util.toTitleCase;
+		const { toTitleCase } = this.client.methods.util;
 		this.language = {
 			DEFAULT: (key) => `${key} n'a pas encore été traduit en 'fr-FR'.`,
 			DEFAULT_LANGUAGE: 'Langue par défaut',
