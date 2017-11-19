@@ -59,7 +59,7 @@ class Util {
 	 * @returns {string}
 	 */
 	static toTitleCase(str) {
-		return str.replace(/[A-zÀ-ÿ]\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+		return str.replace(/[A-Za-zÀ-ÖØ-öø-ÿ]\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
 	}
 
 	/**
