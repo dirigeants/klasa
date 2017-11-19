@@ -170,7 +170,7 @@ class Schema {
 		this._addKey(key, options);
 		await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
 
-		if (force) await this.force('add', key, this[key]);
+		if (force) await this.force('add', this[key]);
 		return this.manager.schema;
 	}
 
@@ -202,7 +202,7 @@ class Schema {
 		this._removeKey(key);
 		await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
 
-		if (force) await this.force('delete', key, this[key]);
+		if (force) await this.force('delete', this[key]);
 		return this.manager.schema;
 	}
 

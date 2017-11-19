@@ -9,7 +9,8 @@ class SettingsCache {
 
 	/**
 	 * @typedef  {Object} SettingsOptions
-	 * @property {string} provider
+	 * @property {string} [provider]
+	 * @property {boolean} [nice]
 	 */
 
 	/**
