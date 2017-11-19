@@ -37,7 +37,10 @@ class Settings {
 		Object.defineProperty(this, 'id', { value: data.id });
 
 		const { schema } = this.manager;
-		for (let i = 0; i < schema.keyArray.length; i++) this[schema.keyArray[i]] = this._merge(data, schema[schema.keyArray[i]]);
+		for (let i = 0; i < schema.keyArray.length; i++) {
+			const key = schema.keyArray[i];
+			this[key] = this._merge(data[key], schema[key]);
+		}
 	}
 
 	/**
@@ -62,9 +65,9 @@ class Settings {
 	 */
 	async update(key, value) {
 		if (typeof value === 'undefined' && typeof key === 'object') {
-			await this.gateway.updateMany(this.id, key);
+			await this.manager.updateMany(this.id, key);
 		} else if (typeof key === 'string' && typeof value !== 'undefined') {
-			await this.gateway.updateOne(this.id, key, value);
+			await this.manager.updateOne(this.id, key, value);
 		} else {
 			throw new Error(`Expected an object as first parameter or a string and a non-undefined value. Got: ${typeof key} and ${typeof value}`);
 		}
@@ -78,7 +81,7 @@ class Settings {
 	 * @returns {Promise<boolean>}
 	 */
 	sync() {
-		return this.gateway.sync(this.id);
+		return this.manager.sync(this.id);
 	}
 
 	/**
@@ -87,7 +90,7 @@ class Settings {
 	 * @returns {Promise<true>}
 	 */
 	destroy() {
-		return this.gateway.deleteEntry(this.id);
+		return this.manager.deleteEntry(this.id);
 	}
 
 	/**
@@ -121,12 +124,12 @@ class Settings {
 		if (folder.type === 'Folder') {
 			for (let i = 0; i < folder.keyArray.length; i++) {
 				const key = folder.keyArray[i];
-				if (folder[key].type === 'Folder') data[key] = this._merge(data[key] || {}, folder[key]);
-				else if (typeof data[key] === 'undefined') data[key] = folder[key].default;
+				if (folder[key].type === 'Folder') data = this._merge(data[key] || {}, folder[key]);
+				else if (typeof data[key] === 'undefined') data = folder[key].default;
 			}
-		} else if (typeof data[folder.key] === 'undefined') {
+		} else if (typeof data === 'undefined') {
 			// It's a SchemaPiece instance, so it has a property of 'key'.
-			data[folder.key] = folder.default;
+			data = folder.default;
 		}
 
 		return data;
