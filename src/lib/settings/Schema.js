@@ -109,7 +109,7 @@ class Schema {
 		this[key] = new Schema(this.client, this.manager, object, `${this.path === '' ? '' : `${this.path}.`}${key}`);
 		this.defaults[key] = this[key].defaults;
 
-		if (force) await this.forceMany('add', this[key]);
+		if (force) await this.force('add', key, this[key]);
 		return this.manager.schema;
 	}
 
@@ -127,7 +127,7 @@ class Schema {
 		await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
 		this._removeKey(key);
 
-		if (force) await this.forceMany('delete', folder);
+		if (force) await this.force('delete', key, folder);
 		return this.manager.schema;
 	}
 
@@ -228,26 +228,27 @@ class Schema {
 	 * Modifies all entries from the database.
 	 * @since 0.4.0
 	 * @param {('add'|'edit'|'delete')} action The action to perform.
-	 * @param {SchemaPiece} schemaPiece The SchemaPiece instance to handle.
+	 * @param {string} key The key.
+	 * @param {(SchemaPiece|Schema)} piece The SchemaPiece instance to handle.
 	 * @returns {Promise<void>}
 	 * @private
 	 */
-	force(action, schemaPiece) {
-		if (!(schemaPiece instanceof SchemaPiece)) {
+	force(action, key, piece) {
+		if (!(piece instanceof SchemaPiece) || !(piece instanceof Schema)) {
 			throw new TypeError(`'schemaPiece' must be an instance of 'SchemaPiece'.`);
 		}
 
 		const values = this.manager.cache.getValues(this.manager.type);
-		const path = schemaPiece.path.split('.');
+		const path = piece.path.split('.');
 
 		if (action === 'add' || action === 'edit') {
-			const defValue = this.defaults[schemaPiece.key];
+			const defValue = this.defaults[key];
 			for (let i = 0; i < values.length; i++) {
 				let value = values[i];
 				for (let j = 0; j < path.length - 1; j++) value = value[path[j]];
 				value[path[path.length - 1]] = defValue;
 			}
-			return this.manager.provider.updateValue(this.manager.type, schemaPiece.path, defValue, this.manager.options.nice);
+			return this.manager.provider.updateValue(this.manager.type, piece.path, defValue, this.manager.options.nice);
 		}
 
 		if (action === 'delete') {
@@ -256,22 +257,10 @@ class Schema {
 				for (let j = 0; j < path.length - 1; j++) value = value[path[j]];
 				delete value[path[path.length - 1]];
 			}
-			return this.manager.provider.removeValue(this.manager.type, schemaPiece.path, this.manager.options.nice);
+			return this.manager.provider.removeValue(this.manager.type, piece.path, this.manager.options.nice);
 		}
-		throw new TypeError(`Action must be either 'add' or 'delete'. Got: ${action}`);
-	}
 
-	/**
-	 * Modifies all entries from the database with multiple keys.
-	 * @param {('add'|'delete')} action The action to perform.
-	 * @param {Schema} folder The key to update.
-	 * @private
-	 */
-	forceMany(action, folder) {
-		if (!(folder instanceof Schema)) {
-			throw new TypeError(`'folder' must be an instance of 'Schema'.`);
-		}
-		throw new Error('UNIMPLEMENTED');
+		throw new TypeError(`Action must be either 'add' or 'delete'. Got: ${action}`);
 	}
 
 	/**
