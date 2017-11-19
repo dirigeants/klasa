@@ -48,7 +48,7 @@ module.exports = class extends Provider {
 	/**
 	 * Get all documents from a directory.
 	 * @param {string} table The name of the directory to fetch from.
-	 * @param {boolean} [nice=false] Whether the provider should update all entries at the same time or politely update them secuentially.
+	 * @param {boolean} [nice=false] Whether the provider should update all entries at the same time or politely update them sequentially.
 	 * @returns {Promise<Object[]>}
 	 */
 	async getAll(table, nice = false) {
@@ -116,7 +116,7 @@ module.exports = class extends Provider {
 	 * @param {string} table The name of the directory.
 	 * @param {string} path The key's path to update.
 	 * @param {any} newValue The new value for the key.
-	 * @param {boolean} [nice=false] Whether the provider should update all entries at the same time or politely update them secuentially.
+	 * @param {boolean} [nice=false] Whether the provider should update all entries at the same time or politely update them sequentially.
 	 */
 	async updateValue(table, path, newValue, nice = false) {
 		const route = path.split('.');
@@ -149,7 +149,7 @@ module.exports = class extends Provider {
 	 * Update or insert a new value to all entries.
 	 * @param {string} table The name of the directory.
 	 * @param {string} [path=false] The key's path to update.
-	 * @param {boolean} nice Whether the provider should update all entries at the same time or politely update them secuentially.
+	 * @param {boolean} nice Whether the provider should update all entries at the same time or politely update them sequentially.
 	 */
 	async removeValue(table, path, nice = false) {
 		const route = path.split('.');
