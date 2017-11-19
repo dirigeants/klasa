@@ -140,7 +140,10 @@ module.exports = class extends Provider {
 	 */
 	_updateValue(table, route, object, newValue) {
 		let value = object;
-		for (let j = 0; j < route.length - 1; j++) value = value[route[j]] || {};
+		for (let j = 0; j < route.length - 1; j++) {
+			if (typeof value[route[j]] === 'undefined') value[route[j]] = { [route[j + 1]]: {} };
+			value = value[route[j]];
+		}
 		value[route[route.length - 1]] = newValue;
 		return this.replace(table, object.id, object);
 	}
