@@ -45,13 +45,13 @@ constructor(...args) {
 		enabled: true, // default true
 		klasa: false // default false	
 	);
-}
+} 
 ```
 
 - **appliesTo**: An array of affected classes from Discord.js or Klasa. You can find all extendable classes for [Discord.js](https://github.com/hydrabolt/discord.js/blob/master/src/index.js) and [Klasa](https://github.com/dirigeants/klasa/blob/master/src/index.js) in those respective links.
-- **options.name**: The name of the method/property.
-- **options.enabled**: If the extendable should be enabled on start, can be toggled with enable/disable commands.
-- **options.klasa**: If the extendable should target Klasa's classes instead of Discord.js's.
+- **options.name**: `default: TheFileName` `type: string` The name of the method/property.
+- **options.enabled**: `default: true` `type: boolean` If the extendable should be enabled on start, can be toggled with enable/disable commands.
+- **options.klasa**: `default: false` `type: boolean` If the extendable should target Klasa's classes instead of Discord.js's.
 
 ## Understanding extend
 
