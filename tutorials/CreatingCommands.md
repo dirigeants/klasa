@@ -53,6 +53,10 @@ a boolean. Set to false to completely disable this inhibitor, it cannot be force
 | --- | --- | --- | --- |
 | **name** | theFileName | string | The name of the command |
 | **enabled** | true | boolean | Whether the command is enabled or not |
+| **runIn** | ['text', 'dm', 'group'] | Array | What channel types the command should run in |
+| **cooldown** | 0 | number | The amount of time before the user can run the command again in seconds |
+| **aliases** | [] | Array | Any comand aliases |
+| **permLevel** | 0 | number | The required permission level to use the command |
 
 
 > All commands are required to return an [Object Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise) you can do that by adding the `async` keyword to the function, there's no need to change anything else.
