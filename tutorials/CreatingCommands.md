@@ -62,8 +62,8 @@ a boolean. Set to false to completely disable this inhibitor, it cannot be force
 | **description** | '' | string | The help description for the command |
 | **usage** | '' | string | The usage string for the command |
 | **usageDelim** | '' | string | The string to deliminate the command input for usage |
-| **quotedStringSupport** | this.client.config.quotedStringSupport | boolean | Wheter args for this command should not deliminated inside quotes |
-| **extendedHelp** | '' | string | Extended help strings |
+| **quotedStringSupport** | KlasaClientConfig | boolean | Wheter args for this command should not deliminated inside quotes |
+| **extendedHelp** | 'No extended help available.' | string | Extended help strings |
 
 
 > All commands are required to return an [Object Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise) you can do that by adding the `async` keyword to the function, there's no need to change anything else.
