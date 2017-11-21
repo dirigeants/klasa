@@ -213,7 +213,7 @@ declare module 'klasa' {
 		public setInfoPage(embed: MessageEmbed): RichDisplay;
 		public run(msg: ExtendedMessage, options?: RichDisplayRunOptions): Promise<ReactionHandler>;
 		private _footer(): void;
-		private _determineEmojis(emojis: emoji[], stop: boolean, jump: boolean, firstLast: boolean): emoji[];
+		protected _determineEmojis(emojis: emoji[], stop: boolean, jump: boolean, firstLast: boolean): emoji[];
 		private _handlePageGeneration(cb: Function|RichEmbed): RichEmbed;
 	}
 
@@ -226,7 +226,7 @@ declare module 'klasa' {
 		public addOption(name: string, body: string, inline?: boolean): RichMenu;
 		public run(msg: ExtendedMessage, options?: RichMenuRunOptions): Promise<ReactionHandler>;
 
-		private _determineEmojis(emojis: emoji[], stop: boolean): emoji[];
+		protected _determineEmojis(emojis: emoji[], stop: boolean): emoji[];
 		private _paginate(): void;
 	}
 
