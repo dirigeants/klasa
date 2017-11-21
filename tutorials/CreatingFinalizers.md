@@ -25,6 +25,9 @@ module.exports = class extends Finalizer {
 
 };
 ```
+## Configuration
+- **name**: `default: TheFileName` `type: string` The name of the finalizer
+- **enabled**: `default: true` `type: boolean` Whether the finalizer is enabled or not
 
 ## Arguments:
 
