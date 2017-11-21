@@ -151,13 +151,13 @@ module.exports = class extends Provider {
 
 ```
 
+The example above is the JSON provider used in klasa, and interfacing with the settingGateway.
+
 ## Configuration
 - **name**: `default: TheFileName` `type: string` The name of the provider
 - **enabled**: `default: true` `type: boolean` Whether the provider is enabled or not
 - **description**: `default: ''` `type: string` The provider description
 - **sql**: `default: false` `type: boolean` if the provider provides to a sql datasource
-
-The example above is the JSON provider used in klasa, and interfacing with the settingGateway.
 
 ## Accessing Providers
 
