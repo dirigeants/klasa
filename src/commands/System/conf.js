@@ -12,9 +12,13 @@ module.exports = class extends Command {
 		});
 	}
 
-	run(msg, [action, key = '', ...value]) {
-		if (['set', 'reset', 'remove'].includes(action) && key === '') Promise.reject(msg.language.get('COMMAND_CONF_NOKEY'));
-		if (['set', 'remove'].includes(action) && value.length === 0) Promise.reject(msg.language.get('COMMAND_CONF_NOVALUE'));
+	run(msg, [action, key, ...value]) {
+		if (['set', 'reset', 'remove'].includes(action) && typeof key === 'undefined') {
+			return Promise.reject(msg.language.get('COMMAND_CONF_NOKEY'));
+		}
+		if (['set', 'remove'].includes(action) && value.length === 0) {
+			return Promise.reject(msg.language.get('COMMAND_CONF_NOVALUE'));
+		}
 		return this[action](msg, key, value);
 	}
 
@@ -49,13 +53,13 @@ module.exports = class extends Command {
 			for (let i = 0; i < route.length; i++) object = object[route[i]];
 		}
 		const message = path.getList(msg, object);
-		return msg.send(`= Server Settings =\n${message}`, { code: 'asciidoc' });
+		return msg.sendCode('asciidoc', `= Server Settings =\n${message}`);
 	}
 
 	handle(value) {
 		if (typeof value !== 'object') return value;
 		if (value === null) return 'Not set';
-		if (value instanceof Array) return value[0] ? `[ ${value.join(' | ')} ]` : 'None';
+		if (Array.isArray(value)) return value[0] ? `[ ${value.join(' | ')} ]` : 'None';
 		return value;
 	}
 

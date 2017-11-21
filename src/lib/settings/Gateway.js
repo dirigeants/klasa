@@ -513,7 +513,7 @@ class Gateway {
 	}
 
 	/**
-	 * The client this SettingGateway was created with.
+	 * The client this Gateway was created with.
 	 * @since 0.0.1
 	 * @type {KlasaClient}
 	 * @readonly
@@ -523,7 +523,7 @@ class Gateway {
 	}
 
 	/**
-	 * The resolver instance this SettingGateway uses to parse the data.
+	 * The resolver instance this Gateway uses to parse the data.
 	 * @since 0.0.1
 	 * @type {Resolver}
 	 * @readonly
