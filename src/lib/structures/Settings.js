@@ -124,6 +124,7 @@ class Settings {
 	 */
 	_merge(data, folder) {
 		if (folder.type === 'Folder') {
+			if (typeof data === 'undefined') data = {};
 			for (let i = 0; i < folder.keyArray.length; i++) {
 				const key = folder.keyArray[i];
 				if (folder[key].type === 'Folder') data = this._merge(data[key] || {}, folder[key]);
