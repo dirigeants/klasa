@@ -49,7 +49,7 @@ module.exports = class extends Command {
 | **description** | '' | string | The help description for the command |
 | **usage** | '' | string | The usage string for the command See {@tutorial UnderstandingUsageStrings} |
 | **usageDelim** | '' | string | The string to deliminate the command input for usage |
-| **quotedStringSupport** | KlasaClientConfig | boolean | Wheter args for this command should not deliminated inside quotes |
+| **quotedStringSupport** | KlasaClientConfig#quotedStringSupport | boolean | Wheter args for this command should not deliminated inside quotes |
 | **extendedHelp** | 'No extended help available.' | string | Extended help strings |
 
 
