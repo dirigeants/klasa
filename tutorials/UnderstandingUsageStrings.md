@@ -70,7 +70,7 @@ Keep in mind that arguments are delimited by the character or combination of cha
 
 `+messager 293107496191655936|delete`
 
-The line above will execute the command with the name `messager` (or a command with `messager` as an alias), it'll use [Channel.fetchMessages](https://discord.js.org/#/docs/main/stable/class/TextChannel?scrollTo=fetchMessage). If the message is not found (you mistyped it or the message is in another channel) it'll warn you that the message hasn't been found. The next argument is a literal, in which must be either `delete` or `edit`.
+The line above will execute the command with the name `messager` (or a command with `messager` as an alias), it'll use [Channel.messages.fetch](https://discord.js.org/#/docs/main/master/class/MessageStore?scrollTo=fetch). If the message is not found (you mistyped it or the message is in another channel) it'll warn you that the message hasn't been found. The next argument is a literal, in which must be either `delete` or `edit`.
 
 # Using regex arguments in your command.
 
