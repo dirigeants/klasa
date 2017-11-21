@@ -253,7 +253,7 @@ class KlasaClient extends Discord.Client {
 		/**
 		 * The application info cached from the discord api
 		 * @since 0.0.1
-		 * @type {object}
+		 * @type {external:ClientApplication}
 		 */
 		this.application = null;
 
