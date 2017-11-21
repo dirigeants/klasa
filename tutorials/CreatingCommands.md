@@ -49,6 +49,12 @@ a boolean. Set to false to completely disable this inhibitor, it cannot be force
 - **usageDelim**: `default: null` `type: string` The deliminator for how the usage will be deliminated. Popular ones are `' '` (a space), and `', '` (a comma space).
 - **extendedHelp**: `default: 'No extended help available.'` `type: string` A more in depth help string if you would like to define it.
 
+| Name | Default | Type | Description |
+| --- | --- | --- | --- |
+| **name** | theFileName | string | The name of the command |
+| **enabled** | true | boolean | Whether the command is enabled or not |
+
+
 > All commands are required to return an [Object Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise) you can do that by adding the `async` keyword to the function, there's no need to change anything else.
 
 > All [command options]{@link CommandOptions} are optional, the code above shows all default values. You can delete any line with an optional value that matches the default value.
