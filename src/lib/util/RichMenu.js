@@ -45,7 +45,7 @@ class RichMenu extends RichDisplay {
 	/**
 	 * @typedef {object} RichMenuRunOptions
 	 * @memberof RichMenu
-	 * @property {Function} [filter] A filter function to add to the ReactionHandler
+	 * @property {Function} [filter] A filter function to add to the ReactionHandler (Recieves: Reaction, User)
 	 * @property {boolean} [stop = true] If a stop reaction should be included
 	 * @property {string} [prompt = 'Which page would you like to jump to?'] The prompt to be used when awaiting user input on a page to jump to
 	 * @property {number} [startPage = 0] The page to start the RichMenu on

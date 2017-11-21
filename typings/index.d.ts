@@ -2,6 +2,7 @@ declare module 'klasa' {
 
 	import {
 		Client,
+		ClientApplication,
 		ClientOptions,
 		Collection,
 		Snowflake,
@@ -23,14 +24,11 @@ declare module 'klasa' {
 		VoiceChannel as DiscordVoiceChannel,
 		DMChannel as DiscordDMChannel,
 		GroupDMChannel as DiscordGroupDMChannel,
-		OAuth2Application,
 		MessageOptions,
 		ReactionCollector,
 
 		StringResolvable,
-		Attachment,
-		RichEmbed,
-		RichEmbedOptions,
+		MessageAttachment,
 		BufferResolvable
 	} from 'discord.js';
 
@@ -66,7 +64,7 @@ declare module 'klasa' {
 			util: Util;
 		};
 		public settings: StringMappedType<Gateway>;
-		public application: OAuth2Application;
+		public application: ClientApplication;
 
 		public readonly invite: string;
 		public readonly owner: ExtendedUser;
@@ -201,9 +199,9 @@ declare module 'klasa' {
 	}
 
 	export class RichDisplay {
-		public constructor(embed: RichEmbed);
-		public embedTemplate: RichEmbed;
-		public pages: RichEmbed[];
+		public constructor(embed: MessageEmbed);
+		public embedTemplate: MessageEmbed;
+		public pages: MessageEmbed[];
 		public infoPage?: MessageEmbed;
 		public emojis: RichDisplayEmojisObject;
 		public footered: boolean;
@@ -213,21 +211,20 @@ declare module 'klasa' {
 		public setInfoPage(embed: MessageEmbed): RichDisplay;
 		public run(msg: ExtendedMessage, options?: RichDisplayRunOptions): Promise<ReactionHandler>;
 		private _footer(): void;
-		private _determineEmojis(emojis: emoji[], stop: boolean): emoji[];
-		private _handlePageGeneration(cb: Function|RichEmbed): RichEmbed;
+		protected _determineEmojis(emojis: emoji[], stop: boolean, jump: boolean, firstLast: boolean): emoji[];
+		private _handlePageGeneration(cb: Function|MessageEmbed): MessageEmbed;
 	}
 
 	export class RichMenu extends RichDisplay {
-		public constructor(embed: RichEmbed);
+		public constructor(embed: MessageEmbed);
 		public emojis: RichMenuEmojisObject;
 		public paginated: boolean;
 		public options: MenuOption[];
 
 		public addOption(name: string, body: string, inline?: boolean): RichMenu;
-		public run(msg: ExtendedMessage, options?: RichDisplayRunOptions): Promise<ReactionHandler>;
-		public run(msg: ExtendedMessage, options?: RichMenuRunOptions): ReactionHandler;
+		public run(msg: ExtendedMessage, options?: RichMenuRunOptions): Promise<ReactionHandler>;
 
-		private _determineEmojis(emojis: emoji[], stop: boolean, jump: boolean, firstLast: boolean): emoji[];
+		protected _determineEmojis(emojis: emoji[], stop: boolean): emoji[];
 		private _paginate(): void;
 	}
 
@@ -1015,6 +1012,7 @@ declare module 'klasa' {
 	}
 
 	export type KlasaClientConfig = {
+		clientOptions?: ClientOptions;
 		prefix?: string;
 		permissionLevels?: PermissionLevels;
 		clientBaseDir?: string;
@@ -1032,7 +1030,7 @@ declare module 'klasa' {
 		quotedStringSupport?: boolean;
 		readyMessage?: string|Function;
 		ownerID?: string;
-	} & ClientOptions;
+	};
 
 	export type ExecOptions = {
 		cwd?: string;
@@ -1367,7 +1365,7 @@ declare module 'klasa' {
 		send(content?: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
 		send(options: MessageOptions): Promise<SentMessage>;
 		sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
-		sendEmbed(embed: RichEmbed | RichEmbedOptions, content?: string, options?: MessageOptions): Promise<SentMessage>;
+		sendEmbed(embed: MessageEmbed, content?: string, options?: MessageOptions): Promise<SentMessage>;
 		sendMessage(content?: string, options?: MessageOptions): Promise<SentMessage>;
 	} & DiscordMessage;
 
@@ -1380,10 +1378,10 @@ declare module 'klasa' {
 		send(content?: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
 		send(options: MessageOptions): Promise<SentMessage>;
 		sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
-		sendEmbed(embed: RichEmbed | RichEmbedOptions, content?: string, options?: MessageOptions): Promise<SentMessage>;
-		sendEmbed(embed: RichEmbed | RichEmbedOptions, options?: MessageOptions): Promise<ExtendedMessage>;
+		sendEmbed(embed: MessageEmbed, content?: string, options?: MessageOptions): Promise<SentMessage>;
+		sendEmbed(embed: MessageEmbed, options?: MessageOptions): Promise<ExtendedMessage>;
 		sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
-		sendFiles(attachments: Attachment[], content: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
+		sendFiles(attachments: MessageAttachment[], content: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
 		sendMessage(content?: string, options?: MessageOptions): Promise<SentMessage>;
 		sendMessage(options: MessageOptions): Promise<SentMessage>;
 	} & DiscordUser;
@@ -1396,10 +1394,10 @@ declare module 'klasa' {
 		send(content?: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
 		send(options: MessageOptions): Promise<SentMessage>;
 		sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
-		sendEmbed(embed: RichEmbed | RichEmbedOptions, content?: string, options?: MessageOptions): Promise<SentMessage>;
-		sendEmbed(embed: RichEmbed | RichEmbedOptions, options?: MessageOptions): Promise<ExtendedMessage>;
+		sendEmbed(embed: MessageEmbed, content?: string, options?: MessageOptions): Promise<SentMessage>;
+		sendEmbed(embed: MessageEmbed, options?: MessageOptions): Promise<ExtendedMessage>;
 		sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
-		sendFiles(attachments: Attachment[], content: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
+		sendFiles(attachments: MessageAttachment[], content: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
 		sendMessage(content?: string, options?: MessageOptions): Promise<SentMessage>;
 		sendMessage(options: MessageOptions): Promise<SentMessage>;
 	} & DiscordTextChannel;
@@ -1415,10 +1413,10 @@ declare module 'klasa' {
 		send(content?: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
 		send(options: MessageOptions): Promise<SentMessage>;
 		sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
-		sendEmbed(embed: RichEmbed | RichEmbedOptions, content?: string, options?: MessageOptions): Promise<SentMessage>;
-		sendEmbed(embed: RichEmbed | RichEmbedOptions, options?: MessageOptions): Promise<ExtendedMessage>;
+		sendEmbed(embed: MessageEmbed, content?: string, options?: MessageOptions): Promise<SentMessage>;
+		sendEmbed(embed: MessageEmbed, options?: MessageOptions): Promise<ExtendedMessage>;
 		sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
-		sendFiles(attachments: Attachment[], content: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
+		sendFiles(attachments: MessageAttachment[], content: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
 		sendMessage(content?: string, options?: MessageOptions): Promise<SentMessage>;
 		sendMessage(options: MessageOptions): Promise<SentMessage>;
 	} & DiscordDMChannel;
@@ -1430,10 +1428,10 @@ declare module 'klasa' {
 		send(content?: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
 		send(options: MessageOptions): Promise<SentMessage>;
 		sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
-		sendEmbed(embed: RichEmbed | RichEmbedOptions, content?: string, options?: MessageOptions): Promise<SentMessage>;
-		sendEmbed(embed: RichEmbed | RichEmbedOptions, options?: MessageOptions): Promise<ExtendedMessage>;
+		sendEmbed(embed: MessageEmbed, content?: string, options?: MessageOptions): Promise<SentMessage>;
+		sendEmbed(embed: MessageEmbed, options?: MessageOptions): Promise<ExtendedMessage>;
 		sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
-		sendFiles(attachments: Attachment[], content: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
+		sendFiles(attachments: MessageAttachment[], content: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
 		sendMessage(content?: string, options?: MessageOptions): Promise<SentMessage>;
 		sendMessage(options: MessageOptions): Promise<SentMessage>;
 	} & DiscordGroupDMChannel;
