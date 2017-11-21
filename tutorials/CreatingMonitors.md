@@ -18,7 +18,8 @@ module.exports = class extends Monitor {
 			name: 'yourMonitorName',
 			enabled: true,
 			ignoreBots: true,
-			ignoreSelf: true
+			ignoreSelf: true,
+			ignoreOthers: true
 		});
 	}
 
@@ -34,9 +35,11 @@ module.exports = class extends Monitor {
 ```
 
 ## Configuration
-- **enabled**: Represents if the inhibitor should be enabled or disabled, it must be a boolean. Set to false to completely disable this monitor.
-- **ignoreBots**: Set this to true if you want the monitor to ignore bots.
-- **ignoreSelf**: Set this to true if you want the monitor to ignore the client user (the bot account, yourself if it's a selfbot).
+- **name**: `default: ` `type: string` The name of the monitor
+- **enabled**: `default: true` `type: boolean` Represents if the inhibitor should be enabled or disabled, it must be a boolean. Set to false to completely disable this monitor.
+- **ignoreBots**: `default: true` `type: boolean` Set this to true if you want the monitor to ignore bots.
+- **ignoreSelf**: `default: true` `type: boolean` Set this to true if you want the monitor to ignore the client user (the bot account, yourself if it's a selfbot).
+- **ignoreOthers**: `default: true` `type: boolean` Whether the monitor ignores others or not
 
 >As with all other pieces, you can omit any optional Configuration that match the default values.
 
