@@ -43,16 +43,15 @@ client.login('your-bot-token');
 - **commandMessageLifetime**: `default: 1800` The threshold for how old command messages can be before sweeping since the last edit in seconds
 - **commandMessageSweep**: `default: 900` The interval duration for which command messages should be sweept in seconds
 - **provider**: `default: the included json provider` The provider to use in Klasa
-- **disableLogTimestamps**: `default: false` Whether or not to disable the log timestamps
-- **disableLogColor**: `default: false` Whether or not to disable the log colors
 - **ignoreBots**: `default: true` Whether or not this bot should ignore other bots
 - **ignoreSelf**: `default: client.user.bot` Whether or not this bot should ignore itself (true for bots, false for selfbots)
 - **cmdPrompt**: `default: false` Whether the bot should prompt missing parameters
 - **cmdEditing**: `default: false` Whether the bot should update responses if the command is edited
+- **cmdLogging**: `default: false` Whether the bot should log command usage
+- **quotedStringSupport**: `default false` Whether the bot should default to using quoted string support in arg parsing, or not (overridable per command)
 - **typing**: `default: false` Whether the bot should type while processing commands.
-- **quotedStringSupport**: `default: false` Whether the bot should default to using quoted string support in arg parsing, or not (overridable per command)
 - **readyMessage** ``default: `Successfully initialized. Ready to serve ${client.guilds.size} guilds.` `` readyMessage to be passed thru Klasa's ready event, ``Types: null for no msg, string for a static message, function accepting client for a dynamic message``
-- **ownerID**: The discord user id for the user the bot should respect as the owner (gotten from Discord api if not provided)
+- **ownerID**: `default: Application owner id` The discord user id for the user the bot should respect as the owner (gotten from Discord api if not provided)
 
 
 ## Running the bot
