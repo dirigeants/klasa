@@ -126,13 +126,10 @@ class Gateway {
 	/**
 	 * Inits the table and the schema for its use in this gateway.
 	 * @since 0.0.1
-	 * @returns {Promise<void[]>}
 	 */
-	init() {
-		return Promise.all([
-			this.initSchema().then(schema => { this.schema = new Schema(this.client, this, schema, ''); }),
-			this.initTable()
-		]);
+	async init() {
+		await this.initSchema().then(schema => { this.schema = new Schema(this.client, this, schema, ''); });
+		await this.initTable();
 	}
 
 	/**
