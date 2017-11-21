@@ -953,6 +953,7 @@ declare module 'klasa' {
 	}
 
 	export type KlasaClientConfig = {
+		clientOptions?: ClientOptions;
 		prefix?: string;
 		permissionLevels?: PermissionLevels;
 		clientBaseDir?: string;
@@ -970,7 +971,7 @@ declare module 'klasa' {
 		quotedStringSupport?: boolean;
 		readyMessage?: string|Function;
 		ownerID?: string;
-	} & ClientOptions;
+	};
 
 	export type KlasaConsoleConfig = {
 		stdout?: NodeJS.WritableStream;
