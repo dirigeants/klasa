@@ -30,6 +30,10 @@ module.exports = class extends Language {
 };
 ```
 
+## Configuration
+- **name**: `default: TheFileName` `type: string` The name of the finalizer
+- **enabled**: `default: true` `type: boolean`  Whether the finalizer is enabled or not
+
 ## Using Languages:
 
 There are some extendables to help use languages. msg.language will return the language that is either default (if dms) or the guild's configured language. All languages have a get method, which is used for key lookup and function arg passing.
