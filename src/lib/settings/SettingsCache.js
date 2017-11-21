@@ -40,6 +40,7 @@ class SettingsCache {
 
 	/**
 	 * Add a new instance of SettingGateway, with its own validateFunction and schema.
+	 * @since 0.3.0
 	 * @param {string} name The name for the new instance.
 	 * @param {Function} validateFunction The function that validates the input.
 	 * @param {Object} [schema={}] The schema.
@@ -84,9 +85,10 @@ class SettingsCache {
 
 	/**
 	 * Check if a provider exists.
+	 * @since 0.4.0
 	 * @param {string} engine Check if a provider exists.
-	 * @private
 	 * @returns {Provider}
+	 * @private
 	 */
 	_checkProvider(engine) {
 		const provider = this.client.providers.get(engine);
@@ -97,6 +99,7 @@ class SettingsCache {
 
 	/**
 	 * The validator function Klasa uses for guild settings.
+	 * @since 0.3.0
 	 * @param {SettingResolver} resolver The resolver instance this Gateway uses to parse the data.
 	 * @param {(Object|string)} guild The data to validate.
 	 * @returns {any}
@@ -110,7 +113,6 @@ class SettingsCache {
 	/**
 	 * The data schema Klasa uses for guild settings.
 	 * @readonly
-	 * @returns {Object}
 	 */
 	get defaultDataSchema() {
 		return {

@@ -27,7 +27,7 @@ module.exports = class extends Provider {
 	/**
 	 * Creates a new directory.
 	 * @param {string} table The name for the new directory.
-	 * @returns {Promise<Void>}
+	 * @returns {Promise<void>}
 	 */
 	createTable(table) {
 		return fs.mkdir(resolve(this.baseDir, table));
@@ -36,7 +36,7 @@ module.exports = class extends Provider {
 	/**
 	 * Recursively deletes a directory.
 	 * @param {string} table The directory's name to delete.
-	 * @returns {Promise<Void>}
+	 * @returns {Promise<void>}
 	 */
 	deleteTable(table) {
 		return this.hasTable(table)
@@ -149,7 +149,7 @@ module.exports = class extends Provider {
 	}
 
 	/**
-	 * Update or insert a new value to all entries.
+	 * Remove a value or object from all entries.
 	 * @param {string} table The name of the directory.
 	 * @param {string} [path=false] The key's path to update.
 	 * @param {boolean} nice Whether the provider should update all entries at the same time or politely update them sequentially.
@@ -185,7 +185,7 @@ module.exports = class extends Provider {
 	 * @param {string} table The name of the directory.
 	 * @param {string} document The document name.
 	 * @param {Object} data The object with all properties you want to insert into the document.
-	 * @returns {Promise<Void>}
+	 * @returns {Promise<void>}
 	 */
 	create(table, document, data) {
 		return fs.outputJSONAtomic(resolve(this.baseDir, table, `${document}.json`), Object.assign({ id: document }, data));
@@ -204,7 +204,7 @@ module.exports = class extends Provider {
 	 * @param {string} table The name of the directory.
 	 * @param {string} document The document name.
 	 * @param {Object} data The object with all the properties you want to update.
-	 * @returns {Promise<Void>}
+	 * @returns {Promise<void>}
 	 */
 	async update(table, document, data) {
 		const existent = await this.get(table, document);
@@ -216,7 +216,7 @@ module.exports = class extends Provider {
 	 * @param {string} table The name of the directory.
 	 * @param {string} document The document name.
 	 * @param {Object} data The new data for the document.
-	 * @returns {Promise<Void>}
+	 * @returns {Promise<void>}
 	 */
 	replace(table, document, data) {
 		return fs.outputJSONAtomic(resolve(this.baseDir, table, `${document}.json`), data);
@@ -226,7 +226,7 @@ module.exports = class extends Provider {
 	 * Delete a document from the table.
 	 * @param {string} table The name of the directory.
 	 * @param {string} document The document name.
-	 * @returns {Promise<Void>}
+	 * @returns {Promise<void>}
 	 */
 	delete(table, document) {
 		return fs.unlink(resolve(this.baseDir, table, `${document}.json`));

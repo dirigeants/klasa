@@ -251,8 +251,8 @@ class Gateway {
 	 * @param {string} key The key to edit.
 	 * @param {external:Guild} guild The guild to take.
 	 * @param {GatewayParseOptions} options The options.
-	 * @private
 	 * @returns {Promise<GatewayParseResult>}
+	 * @private
 	 */
 	async _reset(target, key, guild, { path, route }) {
 		const parsedID = path.default;
@@ -300,8 +300,8 @@ class Gateway {
 	 * @param {any}    value The new value.
 	 * @param {external:Guild} guild The guild to take.
 	 * @param {GatewayParseOptions} options The options.
-	 * @private
 	 * @returns {Promise<GatewayParseResult>}
+	 * @private
 	 */
 	async _updateOne(target, key, value, guild, { path, route }) {
 		if (path.array === true) throw 'This key is array type.';
@@ -404,8 +404,8 @@ class Gateway {
 	 * @param {any}    value The new value.
 	 * @param {external:Guild} guild The guild to take.
 	 * @param {GatewayParseOptions} options The options.
-	 * @private
 	 * @returns {Promise<GatewayParseResultArray>}
+	 * @private
 	 */
 	async _updateArray(target, action, key, value, guild, { path, route }) {
 		if (path.array === false) throw guild.language.get('COMMAND_CONF_KEY_NOT_ARRAY');
@@ -470,9 +470,9 @@ class Gateway {
 	/**
 	 * Resolves a guild
 	 * @since 0.4.0
-	 * @param {GatewayGuildResolvable} guild A guild resolvable
-	 * @private
+	 * @param {GatewayGuildResolvable} guild A guild resolvable.
 	 * @returns {?Guild}
+	 * @private
 	 */
 	_resolveGuild(guild) {
 		const constName = guild.constructor.name;

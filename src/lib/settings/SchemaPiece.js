@@ -245,7 +245,6 @@ class SchemaPiece {
 	 * @since 0.4.0
 	 * @param {external:Message} msg The Message to use.
 	 * @param {any} value The current value of the key.
-	 * @static
 	 * @returns {string}
 	 */
 	resolveString(msg, value) {
