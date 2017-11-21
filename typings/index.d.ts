@@ -224,7 +224,7 @@ declare module 'klasa' {
 		public options: MenuOption[];
 
 		public addOption(name: string, body: string, inline?: boolean): RichMenu;
-		public run(msg: ExtendedMessage, options?: RichMenuRunOptions): ReactionHandler;
+		public run(msg: ExtendedMessage, options?: RichMenuRunOptions): Promise<ReactionHandler>;
 
 		private _determineEmojis(emojis: emoji[], stop: boolean, jump: boolean, firstLast: boolean): emoji[];
 		private _paginate(): void;
