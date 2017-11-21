@@ -24,8 +24,12 @@ module.exports = class extends Event {
 Where `...params` are arguments you would *normally* get from those events. For example, while the `ready` event would only have none, the `guildMemberAdd` event would be `member`.
 
 ## Configuration
-- **name**: `default: TheFileName` `type: string` the name of the event.
-- **enabled**: `default: true` `type: boolean`  whether the event is enabled or not.
+
+| Name | Default | Type | Description |
+| --- | --- | --- | --- |
+| **name** | `theFileName` | string | The name of the event |
+| **enabled** | `true` | boolean | Whether the event is enabled or not |
+
 
 
 
