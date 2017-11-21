@@ -50,7 +50,7 @@ a boolean. Set to false to completely disable this inhibitor, it cannot be force
 - **extendedHelp**: `default: 'No extended help available.'` `type: string` A more in depth help string if you would like to define it.
 
 | Name | Default | Type | Description |
-| --- | --- | --- | --- |
+| :---         |     :---:      |          ---: |
 | **name** | theFileName | string | The name of the command |
 | **enabled** | true | boolean | Whether the command is enabled or not |
 | **runIn** | ['text', 'dm', 'group'] | Array | What channel types the command should run in |
