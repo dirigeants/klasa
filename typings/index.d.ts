@@ -661,6 +661,7 @@ declare module 'klasa' {
 
 		public appliesTo: string[];
 		public target: boolean;
+		public deprecated?: string;
 
 		public abstract extend(...params: any[]): any;
 		public abstract init(): any;
@@ -1027,6 +1028,7 @@ declare module 'klasa' {
 		enabled?: boolean;
 		name?: string;
 		klasa?: boolean;
+		deprecated?: string;
 	};
 
 	export type FinalizerOptions = {
