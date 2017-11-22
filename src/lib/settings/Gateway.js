@@ -140,8 +140,8 @@ class Gateway {
 		const hasTable = await this.provider.hasTable(this.type);
 		if (!hasTable) await this.provider.createTable(this.type);
 
-		const hasCacheTable = await this.cache.hasTable(this.type);
-		if (!hasCacheTable) await this.cache.createTable(this.type);
+		const hasCacheTable = this.cache.hasTable(this.type);
+		if (!hasCacheTable) this.cache.createTable(this.type);
 
 		const data = await this.provider.getAll(this.type);
 		if (data.length > 0) {
@@ -198,7 +198,7 @@ class Gateway {
 	 */
 	async deleteEntry(input) {
 		await this.provider.delete(this.type, input);
-		await this.cache.delete(this.type, input);
+		this.cache.delete(this.type, input);
 		return true;
 	}
 
@@ -218,7 +218,7 @@ class Gateway {
 		}
 		const target = await this.validate(input).then(output => output && output.id ? output.id : output);
 		const data = await this.provider.get(this.type, target);
-		await this.cache.set(this.type, target, new Settings(this, data));
+		this.cache.set(this.type, target, new Settings(this, data));
 		return true;
 	}
 
