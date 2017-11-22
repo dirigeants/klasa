@@ -243,7 +243,6 @@ class Schema {
 
 		const values = this.manager.cache.getValues(this.manager.type);
 		const path = piece.path.split('.');
-		if (piece.type === 'Folder') path.pop();
 
 		if (action === 'add' || action === 'edit') {
 			const defValue = this.defaults[key];
