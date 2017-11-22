@@ -1,6 +1,7 @@
 const Gateway = require('./Gateway');
 const GatewaySQL = require('./GatewaySQL');
 const SettingResolver = require('../parsers/SettingResolver');
+const { Guild } = require('discord.js');
 
 /**
  * Gateway's driver to make new instances of it, with the purpose to handle different databases simultaneously.
@@ -101,13 +102,16 @@ class SettingsCache {
 	 * The validator function Klasa uses for guild settings.
 	 * @since 0.3.0
 	 * @param {SettingResolver} resolver The resolver instance this Gateway uses to parse the data.
-	 * @param {(Object|string)} guild The data to validate.
-	 * @returns {any}
+	 * @param {(Object|string)} guildResolvable The guild to validate.
+	 * @returns {external:Guild}
 	 */
-	async validate(resolver, guild) { // eslint-disable-line class-methods-use-this
-		const result = await resolver.guild(guild);
-		if (!result) throw 'The parameter <Guild> expects either a Guild ID or a Guild Object.';
-		return result;
+	async validate(resolver, guildResolvable) {
+		if (guildResolvable) {
+			if (typeof guildResolvable === 'string' && /^\d{17,19}$/.test(guildResolvable)) return this.client.guilds.get(guildResolvable);
+			if (guildResolvable instanceof Guild) return guildResolvable;
+		}
+
+		throw 'The parameter <Guild> expects either a Guild ID or a Guild Object.';
 	}
 
 	/**

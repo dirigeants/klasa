@@ -373,11 +373,11 @@ class Gateway {
 	 * @param {('add'|'remove')} action Whether the value should be added or removed to the array.
 	 * @param {string} key The key to modify.
 	 * @param {string} value The value to parse and save or remove.
-	 * @param {(Guild|string)} [guild=null] A guild resolvable.
+	 * @param {(Guild|string)} [guild] A guild resolvable.
 	 * @param {boolean} [avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key.
 	 * @returns {Promise<GatewayUpdateResult>}
 	 */
-	async updateArray(target, action, key, value, guild = null, avoidUnconfigurable = false) {
+	async updateArray(target, action, key, value, guild, avoidUnconfigurable = false) {
 		if (action !== 'add' && action !== 'remove') throw new TypeError('The argument \'action\' for Gateway#updateArray only accepts the strings \'add\' and \'remove\'.');
 		if (typeof key !== 'string') throw new TypeError(`The argument key must be a string. Received: ${typeof key}`);
 		guild = this._resolveGuild(guild || target);
@@ -405,7 +405,7 @@ class Gateway {
 	 * @private
 	 */
 	async _updateArray(target, action, key, value, guild, { path, route }) {
-		if (path.array === false) throw guild.language.get('COMMAND_CONF_KEY_NOT_ARRAY');
+		if (path.array === false) throw Gateway.throwError(guild, 'COMMAND_CONF_KEY_NOT_ARRAY', 'The key is not an array.');
 
 		const parsed = await path.parse(value, guild);
 		const parsedID = parsed.data && parsed.data.id ? parsed.data.id : parsed.data;
@@ -531,6 +531,11 @@ class Gateway {
 	 */
 	get resolver() {
 		return this.store.resolver;
+	}
+
+	static throwError(guild, code, error) {
+		if (guild && guild.language && typeof guild.language.get === 'function') return guild.language.get(code);
+		return `ERROR: [${code}]: ${error}`;
 	}
 
 }
