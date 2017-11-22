@@ -2,6 +2,7 @@ const Schema = require('./Schema');
 const Settings = require('../structures/Settings');
 const { resolve } = require('path');
 const fs = require('fs-nextra');
+const discord = require('discord.js');
 
 /**
  * The Gateway class that manages the data input, parsing, and output, of an entire database, while keeping a cache system sync with the changes.
@@ -177,7 +178,6 @@ class Gateway {
 	 * Create a new entry into the database with an optional content (defaults to this Gateway's defaults).
 	 * @since 0.4.0
 	 * @param {string} input The name of the key to create.
-	 * @param {Object} [data={}] The initial data to insert.
 	 * @returns {Promise<Settings>}
 	 */
 	async createEntry(input) {
@@ -476,9 +476,11 @@ class Gateway {
 	 * @private
 	 */
 	_resolveGuild(guild) {
-		const constName = guild.constructor.name;
-		if (constName === 'Guild') return guild;
-		if (constName === 'TextChannel' || constName === 'VoiceChannel' || constName === 'Message' || constName === 'Role') return guild.guild;
+		if (typeof guild === 'object') {
+			if (guild instanceof discord.Guild) return guild;
+			if (guild instanceof discord.Channel ||
+				guild instanceof discord.Message) return guild.guild;
+		}
 		if (typeof guild === 'string' && /^\d{17,19}$/.test(guild)) return this.client.guilds.get(guild);
 		return null;
 	}
