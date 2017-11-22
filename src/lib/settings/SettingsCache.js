@@ -106,8 +106,11 @@ class SettingsCache {
 	 */
 	async validate(guildResolvable) {
 		if (guildResolvable) {
-			if (typeof guildResolvable === 'string' && /^\d{17,19}$/.test(guildResolvable)) return this.client.guilds.get(guildResolvable);
-			if (guildResolvable instanceof Guild) return guildResolvable;
+			let value;
+
+			if (typeof guildResolvable === 'string' && /^\d{17,19}$/.test(guildResolvable)) value = this.client.guilds.get(guildResolvable);
+			if (guildResolvable instanceof Guild) value = guildResolvable;
+			if (value) return value;
 		}
 
 		throw 'The parameter <Guild> expects either a Guild ID or a Guild Object.';
