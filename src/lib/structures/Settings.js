@@ -127,7 +127,7 @@ class Settings {
 		if (schema.type === 'Folder') {
 			if (typeof data === 'undefined') data = {};
 			for (let i = 0; i < schema.keyArray.length; i++) {
-				const key = schema.keyArray.keyArray[i];
+				const key = schema.keyArray[i];
 				data[key] = Settings._merge(data[key], schema[key]);
 			}
 		} else if (typeof data === 'undefined') {
