@@ -31,8 +31,12 @@ module.exports = class extends Language {
 ```
 
 ## Configuration
-- **name**: `default: TheFileName` `type: string` The name of the finalizer
-- **enabled**: `default: true` `type: boolean`  Whether the finalizer is enabled or not
+
+| Name | Default | Type | Description |
+| --- | --- | --- | --- |
+| **name** | `theFileName` | string | The name of the language |
+| **enabled** | `true` | boolean | Whether the language is enabled or not |
+
 
 ## Using Languages:
 

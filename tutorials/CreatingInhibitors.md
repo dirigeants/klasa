@@ -34,11 +34,12 @@ module.exports = class extends Inhibitor {
 ```
 
 ## Configuration
-- **name**: `default: theFileName` `type: string` The name of the inhibitor
-- **enabled**: `default: true` `type: boolean` Represents if the inhibitor should be enabled or disabled, it must be
-a boolean. Set to false to completely disable this inhibitor, it cannot be forcefully enabled.
-- **spamProtection**: `default: false` `type: boolean` Represents if the inhibitor is meant to prevent bot/command spam. Setting
-spamProtection to true will prevent the inhibitor to run while doing tasks such as generating help.
+
+| Name | Default | Type | Description |
+| --- | --- | --- | --- |
+| **name** | `theFileName` | string | The name of the inhibitor |
+| **enabled** | `true` | boolean | Whether the inhibitor is enabled or not |
+| **spamProtection** | `false` | boolean | 	If this inhibitor is meant for spamProtection (disables the inhibitor while generating help) |
 
 
 ## Further Reading:

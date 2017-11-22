@@ -26,8 +26,11 @@ module.exports = class extends Finalizer {
 };
 ```
 ## Configuration
-- **name**: `default: TheFileName` `type: string` The name of the finalizer
-- **enabled**: `default: true` `type: boolean` Whether the finalizer is enabled or not
+
+| Name | Default | Type | Description |
+| --- | --- | --- | --- |
+| **name** | `theFileName` | string | The name of the finalizer |
+| **enabled** | `true` | boolean | Whether the finalizer is enabled or not |
 
 ## Arguments:
 
@@ -37,17 +40,16 @@ module.exports = class extends Finalizer {
 
 ## Existing finalizers
 
-Komada has two preinstalled finalizers: `commandCooldown` and `commandlogging`.
+Klasa has two preinstalled finalizers: `commandCooldown` and `commandlogging`.
 
 ### commandCooldown
 
-This finalizer applies the cooldown from the commands' `exports.conf.cooldown` (if
-exists and its value is above `0`).
+This finalizer applies the cooldown from the commands' `Command.cooldown` (if exists and its value is above `0`).
 
 ### commandlogging
 
 This finalizer, unlike commandCooldown, it's only run if the property `cmdLogging` of
-your Komada's configs is set to `true`. It prints in the cmd prompt the command run, where,
+your Klasa's client configs is set to `true`. It prints in the cmd prompt the command run, where,
 the user who ran it, and the time it took to process the command.
 
 
