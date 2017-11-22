@@ -46,7 +46,7 @@ module.exports = class extends Command {
 		return msg.sendMessage(msg.language.get('COMMAND_CONF_RESET', path.path, path.resolveString(msg, value)));
 	}
 
-	async list(msg, key) {
+	list(msg, key) {
 		const { path, route } = this.client.settings.guilds.getPath(key, { avoidUnconfigurable: true, piece: false });
 		let object = msg.guild.settings;
 		if (route.length >= 1) {

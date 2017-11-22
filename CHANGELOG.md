@@ -6,7 +6,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Dev] - 0.4.0
 ### Added
-- [[#43](https://github.com/dirigeants/klasa/pull/43)] Added deprecatable extendables.
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] `Schema` and `SchemaPiece` classes, with helper methods that allow the gateway parse and retrieve data much faster, as well as following the OOP paradigm when it comes to modifying the schema and much friendlier to use.
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] More options to `SettingsCache#add`, allowing you to set different providers in different gateway instances.
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] Added **Folder** type (nested objects, yay!).

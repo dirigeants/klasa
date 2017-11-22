@@ -39,7 +39,7 @@ class Settings {
 		const { schema } = this.manager;
 		for (let i = 0; i < schema.keyArray.length; i++) {
 			const key = schema.keyArray[i];
-			this[key] = this._merge(data[key], schema[key]);
+			this[key] = Settings._merge(data[key], schema[key]);
 		}
 	}
 
@@ -118,21 +118,21 @@ class Settings {
 	 * Assign data to the settings.
 	 * @since 0.4.0
 	 * @param {Object} data The data contained in the group.
-	 * @param {(Schema|SchemaPiece)} folder A Schema or a SchemaPiece instance.
+	 * @param {(Schema|SchemaPiece)} schema A Schema or a SchemaPiece instance.
 	 * @returns {Object}
 	 * @private
+	 * @static
 	 */
-	_merge(data, folder) {
-		if (folder.type === 'Folder') {
+	static _merge(data, schema) {
+		if (schema.type === 'Folder') {
 			if (typeof data === 'undefined') data = {};
-			for (let i = 0; i < folder.keyArray.length; i++) {
-				const key = folder.keyArray[i];
-				if (folder[key].type === 'Folder') data = this._merge(data[key] || {}, folder[key]);
-				else if (typeof data[key] === 'undefined') data = folder[key].default;
+			for (let i = 0; i < schema.keyArray.length; i++) {
+				const key = schema.keyArray.keyArray[i];
+				data[key] = Settings._merge(data[key], schema[key]);
 			}
 		} else if (typeof data === 'undefined') {
 			// It's a SchemaPiece instance, so it has a property of 'key'.
-			data = folder.default;
+			data = schema.default;
 		}
 
 		return data;

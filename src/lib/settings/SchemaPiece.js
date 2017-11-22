@@ -277,7 +277,7 @@ class SchemaPiece {
 	 * @returns {string}
 	 */
 	toString() {
-		return `{SchemaPiece:${this.type}}`;
+		return `SchemaPiece(${this.manager.type}:${this.path})`;
 	}
 
 }
