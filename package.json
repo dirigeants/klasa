@@ -15,9 +15,9 @@
     "url": "https://github.com/dirigeants/klasa.git"
   },
   "scripts": {
-    "lint": "eslint --fix src && tslint --fix 'typings/*.ts'",
-    "test": "eslint src && tslint 'typings/*.ts'",
-    "docs": "jsdoc -c ./.docstrap.json -R README.md"
+    "lint": "npx eslint --fix src && npx tslint --fix 'typings/*.ts'",
+    "test": "npx eslint src && npx tslint 'typings/*.ts'",
+    "docs": "npx jsdoc -c ./.docstrap.json -R README.md"
   },
   "dependencies": {
     "fs-nextra": "^0.3.2",
