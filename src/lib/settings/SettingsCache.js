@@ -69,7 +69,7 @@ class SettingsCache {
 		if (typeof name !== 'string') throw 'You must pass a name for your new gateway and it must be a string.';
 		if (typeof this[name] !== 'undefined') throw 'There is already a Gateway with that name.';
 		if (typeof validateFunction !== 'function') throw 'You must pass a validate function.';
-		validateFunction = validateFunction.bind(null, this.resolver);
+		validateFunction = validateFunction.bind(this.client, this.resolver);
 		if (schema.constructor.name !== 'Object') throw 'Schema must be a valid object or left undefined for an empty object.';
 
 		options.provider = this._checkProvider(options.provider || this.client.config.provider.engine || 'json');
