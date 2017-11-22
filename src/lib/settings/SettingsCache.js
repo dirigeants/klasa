@@ -69,7 +69,7 @@ class SettingsCache {
 		if (typeof name !== 'string') throw 'You must pass a name for your new gateway and it must be a string.';
 		if (typeof this[name] !== 'undefined') throw 'There is already a Gateway with that name.';
 		if (typeof validateFunction !== 'function') throw 'You must pass a validate function.';
-		validateFunction = validateFunction.bind(this.client, this.resolver);
+		validateFunction = validateFunction.bind(this);
 		if (schema.constructor.name !== 'Object') throw 'Schema must be a valid object or left undefined for an empty object.';
 
 		options.provider = this._checkProvider(options.provider || this.client.config.provider.engine || 'json');
@@ -101,11 +101,10 @@ class SettingsCache {
 	/**
 	 * The validator function Klasa uses for guild settings.
 	 * @since 0.3.0
-	 * @param {SettingResolver} resolver The resolver instance this Gateway uses to parse the data.
 	 * @param {(Object|string)} guildResolvable The guild to validate.
 	 * @returns {external:Guild}
 	 */
-	async validate(resolver, guildResolvable) {
+	async validate(guildResolvable) {
 		if (guildResolvable) {
 			if (typeof guildResolvable === 'string' && /^\d{17,19}$/.test(guildResolvable)) return this.client.guilds.get(guildResolvable);
 			if (guildResolvable instanceof Guild) return guildResolvable;

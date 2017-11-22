@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] Added GatewaySQL (extends Gateway, overriding the methods for better SQL parsing).
 
 ### Changed
+- [[#43](https://github.com/dirigeants/klasa/pull/43)] **[BREAKING]** `SettingsCache#validate` does not longer have an instance of `SettingResolver` as first parameter, but a bound `this` referring to the SettingsCache instance. (With access to KlasaClient and SettingResolver).
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] **[BREAKING]** `Gateway#get` -> `Gateway#getEntry`.
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] QoL fix in the help command. Tell you when a command is not found and prevent users from checking it when they don't have permissions.
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] All pieces to support asynchronous CacheProviders.
@@ -49,6 +50,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] Removed `SQLProvider#serialize`, `SQLProvider#sanitize`, `SQLProvider#CONSTANTS`.
 
 ### Fixed
+- [[#43](https://github.com/dirigeants/klasa/pull/43)] Fixed `SettingsCache#validate` not working properly.
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] The eval command being unable to catch certain errors.
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] Fixed the JSON provider throwing errors.
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] Fixed multiple minor issues.
