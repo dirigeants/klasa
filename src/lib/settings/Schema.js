@@ -103,13 +103,15 @@ class Schema {
 		if (this.hasKey(key)) throw `The key ${key} already exists in the current schema.`;
 		if (typeof this[key] !== 'undefined') throw `The key ${key} conflicts with a property of Schema.`;
 
+		const folder = new Schema(this.client, this.manager, object, `${this.path === '' ? '' : `${this.path}.`}${key}`);
 		await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
+
+		this[key] = folder;
+		this.defaults[key] = this[key].defaults;
 		this.keys.add(key);
 		this.keyArray.push(key);
-		this[key] = new Schema(this.client, this.manager, object, `${this.path === '' ? '' : `${this.path}.`}${key}`);
-		this.defaults[key] = this[key].defaults;
 
-		if (force) await this.force('add', key, this[key]);
+		if (force) await this.force('add', key, folder);
 		return this.manager.schema;
 	}
 
@@ -123,8 +125,9 @@ class Schema {
 	async removeFolder(key, force = true) {
 		if (this.hasKey(key) === false) throw new Error(`The key ${key} does not exist in the current schema.`);
 		if (this[key].type !== 'Folder') throw new Error(`The key ${key} is not Folder type.`);
-		const folder = this[key];
+
 		await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
+		const folder = this[key];
 		this._removeKey(key);
 
 		if (force) await this.force('delete', key, folder);
@@ -240,6 +243,7 @@ class Schema {
 
 		const values = this.manager.cache.getValues(this.manager.type);
 		const path = piece.path.split('.');
+		if (piece.type === 'Folder') path.pop();
 
 		if (action === 'add' || action === 'edit') {
 			const defValue = this.defaults[key];
