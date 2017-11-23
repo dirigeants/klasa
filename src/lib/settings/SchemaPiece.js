@@ -163,15 +163,6 @@ class SchemaPiece {
 	}
 
 	/**
-	 * Get a JSON object with all the default values.
-	 * @since 0.4.0
-	 * @returns {any}
-	 */
-	getDefaults() {
-		return this.default;
-	}
-
-	/**
 	 * Get this key's raw data in JSON.
 	 * @since 0.4.0
 	 * @returns {SchemaPieceJSON}

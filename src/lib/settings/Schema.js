@@ -328,9 +328,10 @@ class Schema {
 	 */
 	getDefaults(object = {}) {
 		for (let i = 0; i < this.keyArray.length; i++) {
-			const key = this.keyArray[i];
-			if (this[key].type === 'Folder') object[key] = this[key].getDefaults(object[key]);
-			else object[key] = this[key].default;
+			const key = this[this.keyArray[i]];
+			if (key.type === 'Folder') object[key] = key.getDefaults(object[key]);
+			else if (key.array && Array.isArray(key.default)) object[key] = key.default.slice(0);
+			else object[key] = key.default;
 		}
 		return object;
 	}
