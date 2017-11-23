@@ -406,7 +406,7 @@ class Gateway {
 		for (let i = 0; i < route.length - 1; i++) cache = cache[route[i]] || {};
 		cache[route[route.length - 1]] = parsedID;
 
-		return { entryID: target, parsed, parsedID, settings, array: null };
+		return { entryID: target, parsed, parsedID, settings, array: null, path, route };
 	}
 
 	/**
@@ -445,7 +445,7 @@ class Gateway {
 			cache.splice(index, 1);
 		}
 
-		return { entryID: target, parsed, parsedID, settings: fullObject, array: cache };
+		return { entryID: target, parsed, parsedID, settings: fullObject, array: cache, path, route };
 	}
 
 	/**
