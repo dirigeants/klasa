@@ -33,6 +33,7 @@ class Gateway {
 	/**
 	 * @typedef  {Object} GatewayParseResult
 	 * @property {any}    parsed
+	 * @property {any}    parsedID
 	 * @property {object} settings
 	 * @property {null}   array
 	 * @memberof Gateway
@@ -41,6 +42,7 @@ class Gateway {
 	/**
 	 * @typedef  {Object} GatewayParseResultArray
 	 * @property {any}    parsed
+	 * @property {any}    parsedID
 	 * @property {object} settings
 	 * @property {any[]}  array
 	 * @memberof Gateway
@@ -120,8 +122,9 @@ class Gateway {
 		/**
 		 * @since 0.0.1
 		 * @type {boolean}
+		 * @readonly
 		 */
-		this.sql = false;
+		Object.defineProperty(this, 'sql', { value: false });
 	}
 
 	/**
@@ -205,11 +208,11 @@ class Gateway {
 	/**
 	 * Sync either all entries from the cache with the persistent database, or a single one.
 	 * @since 0.0.1
-	 * @param {(Object|string)} [input=null] An object containing a id property, like discord.js objects, or a string.
+	 * @param {(Object|string)} [input] An object containing a id property, like discord.js objects, or a string.
 	 * @returns {Promise<boolean>}
 	 */
-	async sync(input = null) {
-		if (input === null) {
+	async sync(input) {
+		if (typeof input === 'undefined') {
 			const data = await this.provider.getAll(this.type);
 			if (data.length > 0) {
 				for (let i = 0; i < data.length; i++) this.cache.set(this.type, data[i].id, new Settings(this, data[i]));
@@ -263,7 +266,7 @@ class Gateway {
 		cache[route[route.length - 1]] = parsedID;
 
 		await this.provider.update(this.type, target, settings);
-		return { parsed: parsedID, settings, array: null };
+		return { parsed: parsedID, parsedID, settings, array: null };
 	}
 
 	/**
@@ -315,7 +318,7 @@ class Gateway {
 		cache[route[route.length - 1]] = parsedID;
 
 		await this.provider.update(this.type, target, settings);
-		return { parsed, settings, array: null };
+		return { parsed, parsedID, settings, array: null };
 	}
 
 	/**
@@ -428,7 +431,7 @@ class Gateway {
 			cache.splice(index, 1);
 		}
 
-		return { parsed, settings: fullObject, array: cache };
+		return { parsed, parsedID, settings: fullObject, array: cache };
 	}
 
 	/**

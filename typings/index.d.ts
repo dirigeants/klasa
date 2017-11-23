@@ -436,7 +436,7 @@ declare module 'klasa' {
 		public validate: Function;
 		public defaultSchema: Object;
 		public schema: Schema;
-		public sql: boolean;
+		public readonly sql: boolean;
 
 		public init(): Promise<void[]>;
 		public initTable(): Promise<void>;
@@ -471,7 +471,8 @@ declare module 'klasa' {
 	}
 
 	export class GatewaySQL extends Gateway {
-		public sql: boolean;
+		public readonly sql: boolean;
+		public sqlEntryParser: EntryParser[];
 
 		public updateColumns(key: string): Promise<boolean>;
 		public readonly sqlSchema: string[];

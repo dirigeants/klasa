@@ -1,5 +1,6 @@
 const Gateway = require('./Gateway');
 const Schema = require('./Schema');
+const Settings = require('../structures/Settings');
 const { stringIsObject } = require('../util/util');
 
 /**
@@ -22,7 +23,10 @@ class GatewaySQL extends Gateway {
 	 */
 
 	/**
-	 * @typedef {any[]} EntryParser
+	 * @typedef {Object} EntryParser
+	 * @property {string} path
+	 * @property {any} default
+	 * @property {Function} fn
 	 */
 
 	/**
@@ -45,8 +49,9 @@ class GatewaySQL extends Gateway {
 		/**
 		 * @since 0.0.1
 		 * @type {boolean}
+		 * @readonly
 		 */
-		this.sql = true;
+		Object.defineProperty(this, 'sql', { value: true });
 
 		/**
 		 * @since 0.4.0
@@ -61,7 +66,9 @@ class GatewaySQL extends Gateway {
 	 * @returns {Promise<void[]>}
 	 */
 	async init() {
-		await this.initSchema().then(schema => { this.schema = new Schema(this.client, this, schema, ''); });
+		const schema = await this.initSchema();
+		this.schema = new Schema(this.client, this, schema, '');
+
 		await this.initTable();
 		this._initEntryParser();
 		await this.sync();
@@ -78,74 +85,20 @@ class GatewaySQL extends Gateway {
 	}
 
 	/**
-	 * Initializes the SQL -> NoSQL sanitizer.
-	 * @since 0.4.0
-	 * @private
-	 */
-	_initEntryParser() {
-		const values = [];
-		this.schema.getValues(values);
-
-		for (let i = 0; i < values.length; i++) {
-			this.sqlEntryParser.push([
-				values[i].path,
-				values[i].default,
-				values[i].array ?
-					(value) => stringIsObject(value) ? JSON.parse(value) : value :
-					(value) => value
-			]);
-		}
-	}
-
-	/**
-	 * Parses an entry
-	 * @since 0.4.0
-	 * @param {Object} entry An entry to parse.
-	 * @private
-	 * @returns {Object}
-	 */
-	_parseEntry(entry) {
-		if (this.parseDottedObjects === false) return entry;
-
-		const object = {};
-		for (let i = 0; i < this.sqlEntryParser.length; i++) {
-			const [path, def, fn] = this.sqlEntryParser[i];
-			if (path.indexOf('.') === -1) {
-				if (typeof entry[path] === 'undefined') {
-					object[path] = def;
-					continue;
-				}
-				object[path] = fn(entry[path]);
-				continue;
-			}
-
-			const pathes = path.split('.');
-			let tempPath = object;
-			for (let a = 0; a < pathes.length - 1; a++) {
-				if (typeof tempPath[pathes[a]] === 'undefined') tempPath[pathes[a]] = {};
-				tempPath = tempPath[pathes[a]];
-			}
-			tempPath[pathes[pathes.length - 1]] = fn(entry[path]);
-		}
-
-		return object;
-	}
-
-	/**
 	 * Sync either all entries from the cache with the persistent SQL database, or a single one.
 	 * @since 0.4.0
-	 * @param {(Object|string)} [input=null] An object containing a id property, like discord.js objects, or a string.
-	 * @returns {Promise<void>}
+	 * @param {(Object|string)} [input] An object containing a id property, like discord.js objects, or a string.
+	 * @returns {Promise<boolean>}
 	 */
-	async sync(input = null) {
-		if (input === null) {
+	async sync(input) {
+		if (typeof input === 'undefined') {
 			const data = await this.provider.getAll(this.type);
-			if (data.length > 0) for (let i = 0; i < data.length; i++) this.cache.set(this.type, data[i].id, this._parseEntry(data[i]));
+			if (data.length > 0) for (let i = 0; i < data.length; i++) this.cache.set(this.type, data[i].id, new Settings(this, this._parseEntry(data[i])));
 			return true;
 		}
 		const target = await this.validate(input).then(output => output && output.id ? output.id : output);
 		const data = await this.provider.get(this.type, target);
-		await this.cache.set(this.type, target, this._parseEntry(data));
+		this.cache.set(this.type, target, new Settings(this, new Settings(this, this._parseEntry(data))));
 		return true;
 	}
 
@@ -163,10 +116,9 @@ class GatewaySQL extends Gateway {
 		guild = this._resolveGuild(guild || target);
 		target = await this.validate(target).then(output => output && output.id ? output.id : output);
 		const { path, route } = this.getPath(key, { avoidUnconfigurable, piece: true });
+		const { parsed, parsedID } = await this._reset(target, key, guild, { path, route });
 
-		const { parsed } = await this._reset(target, key, guild, { path, route });
-
-		await this.provider.update(this.type, target, path.sql(parsed));
+		await this.provider.update(this.type, target, key, parsedID);
 		return { value: parsed, path };
 	}
 
@@ -186,11 +138,11 @@ class GatewaySQL extends Gateway {
 		target = await this.validate(target).then(output => output && output.id ? output.id : output);
 		const { path, route } = this.getPath(key, { avoidUnconfigurable, piece: true });
 
-		const { parsed, array } = path.array === true ?
+		const { parsed, array, parsedID } = path.array === true ?
 			await this._updateArray(target, 'add', key, value, guild, { path, route }) :
 			await this._updateOne(target, key, value, guild, { path, route });
 
-		await this.provider.update(this.type, target, array !== null ? path.sql(array) : parsed.sql);
+		await this.provider.update(this.type, target, key, array === null ? parsedID : array);
 		return { value: parsed.data, path };
 	}
 
@@ -212,35 +164,12 @@ class GatewaySQL extends Gateway {
 		target = await this.validate(target).then(output => output && output.id ? output.id : output);
 		const { path, route } = this.getPath(key, { avoidUnconfigurable, piece: true });
 
-		const { parsed, array } = path.array === true ?
+		const { parsed, array, parsedID } = path.array === true ?
 			await this._updateArray(target, action, key, value, guild, { path, route }) :
 			await this._updateOne(target, key, value, guild, { path, route });
 
-		await this.provider.update(this.type, target, array !== null ? path.sql(array) : parsed.sql);
+		await this.provider.update(this.type, target, key, array === null ? parsedID : array);
 		return { value: parsed.data, path };
-	}
-
-	/**
-	 * Create/Remove columns from a SQL database, by the current Schema.
-	 * @since 0.0.1
-	 * @param {('add'|'remove'|'update')} action The action to perform.
-	 * @param {string} key The key to remove or update.
-	 * @param {string} [dataType] The column's datatype.
-	 * @returns {Promise<any>}
-	 */
-	async updateColumns(action, key, dataType = null) {
-		if (typeof action !== 'string') throw new TypeError('The parameter \'action\' for GatewaySQL#updateColumns must be a string.');
-		if (typeof key !== 'string') throw new TypeError('The parameter \'key\' for GatewaySQL#updateColumns must be a string.');
-		if ((action === 'add' || action === 'update') && (dataType === null || typeof dataType !== 'string' || dataType.length === 0)) {
-			throw new Error(`The parameter 'dataType' for GatewaySQL#updateColumns must be a valid string when 'action' is '${action}'.`);
-		}
-
-		switch (action) {
-			case 'add': return this.provider.addColumn(action, key, dataType);
-			case 'remove': return this.provider.removeColumn(action, key);
-			case 'update': return this.provider.updateColumn(action, key, dataType);
-			default: throw new TypeError('GatewaySQL#updateColumns only accept \'add\', \'remove\' or \'update\' as a value.');
-		}
 	}
 
 	/**
@@ -253,6 +182,61 @@ class GatewaySQL extends Gateway {
 		const schema = [['id', 'TEXT NOT NULL UNIQUE']];
 		this.schema.getSQL(schema);
 		return schema;
+	}
+
+	/**
+	 * Initializes the SQL -> NoSQL sanitizer.
+	 * @since 0.4.0
+	 * @private
+	 */
+	_initEntryParser() {
+		const values = [];
+		this.schema.getValues(values);
+
+		for (let i = 0; i < values.length; i++) {
+			const piece = values[i];
+			this.sqlEntryParser.push({
+				path: piece.path,
+				def: piece.default,
+				fn: piece.array ?
+					(value) => piece.type === 'any' && stringIsObject(value) ? JSON.parse(value) : value :
+					(value) => value
+			});
+		}
+	}
+
+	/**
+	 * Parses an entry
+	 * @since 0.4.0
+	 * @param {Object} entry An entry to parse.
+	 * @private
+	 * @returns {Object}
+	 */
+	_parseEntry(entry) {
+		if (this.parseDottedObjects === false) return entry;
+
+		const object = {};
+		for (let i = 0; i < this.sqlEntryParser.length; i++) {
+			const { path, def, fn } = this.sqlEntryParser[i];
+			if (path.indexOf('.') === -1) {
+				if (typeof entry[path] === 'undefined') {
+					object[path] = def;
+					continue;
+				}
+				object[path] = fn(entry[path]);
+				continue;
+			}
+
+			const pathes = path.split('.');
+			let tempPath = object;
+			for (let a = 0; a < pathes.length - 1; a++) {
+				if (typeof tempPath[pathes[a]] === 'undefined') tempPath[pathes[a]] = {};
+				tempPath = tempPath[pathes[a]];
+			}
+			tempPath[pathes[pathes.length - 1]] = fn(entry[path]);
+		}
+
+		return object;
 	}
 
 }
