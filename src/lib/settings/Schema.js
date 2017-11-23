@@ -322,12 +322,16 @@ class Schema {
 
 	/**
 	 * Get a JSON object with all the default values.
+	 * @param {Object} [object={}] The object to update.
 	 * @since 0.4.0
 	 * @returns {Object}
 	 */
-	getDefaults() {
-		const object = {};
-		for (let i = 0; i < this.keyArray.length; i++) object[this.keyArray[i]] = this[this.keyArray[i]].getDefaults();
+	getDefaults(object = {}) {
+		for (let i = 0; i < this.keyArray.length; i++) {
+			const key = this.keyArray[i];
+			if (this[key].type === 'Folder') object[key] = this[key].getDefaults(object[key]);
+			else object[key] = this[key].default;
+		}
 		return object;
 	}
 

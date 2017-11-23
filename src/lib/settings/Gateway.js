@@ -191,7 +191,8 @@ class Gateway {
 	 */
 	async createEntry(input) {
 		const target = await this.validate(input).then(output => output && output.id ? output.id : output);
-		const data = this.schema.getDefaults();
+		const data = {};
+		this.schema.getDefaults(data);
 		await this.provider.create(this.type, target, data);
 		data.id = target;
 		const settings = new Settings(this, data);
