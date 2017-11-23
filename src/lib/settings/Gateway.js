@@ -31,20 +31,26 @@ class Gateway {
 	 */
 
 	/**
-	 * @typedef  {Object} GatewayParseResult
-	 * @property {any}    parsed
-	 * @property {any}    parsedID
-	 * @property {object} settings
-	 * @property {null}   array
+	 * @typedef  {Object}   GatewayParseResult
+	 * @property {any}      parsed
+	 * @property {any}      parsedID
+	 * @property {object}   settings
+	 * @property {null}     array
+	 * @property {string}   path
+	 * @property {string[]} route
+	 * @property {string}   entryID
 	 * @memberof Gateway
 	 */
 
 	/**
-	 * @typedef  {Object} GatewayParseResultArray
-	 * @property {any}    parsed
-	 * @property {any}    parsedID
-	 * @property {object} settings
-	 * @property {any[]}  array
+	 * @typedef  {Object}   GatewayParseResultArray
+	 * @property {any}      parsed
+	 * @property {any}      parsedID
+	 * @property {object}   settings
+	 * @property {any[]}    array
+	 * @property {string}   path
+	 * @property {string[]} route
+	 * @property {string}   entryID
 	 * @memberof Gateway
 	 */
 
@@ -235,38 +241,9 @@ class Gateway {
 	 * @returns {Promise<GatewayUpdateResult>}
 	 */
 	async reset(target, key, guild, avoidUnconfigurable = false) {
-		if (typeof key !== 'string') throw new TypeError(`The argument key must be a string. Received: ${typeof key}`);
-		guild = this._resolveGuild(guild || target);
-		target = await this.validate(target).then(output => output && output.id ? output.id : output);
-		const { path, route } = this.getPath(key, { avoidUnconfigurable, piece: true });
-		const { parsed, settings } = await this._reset(target, key, guild, { path, route });
-
-		await this.provider.update(this.type, target, settings);
+		const { entryID, settings, parsed, path } = await this._reset(target, key, guild, avoidUnconfigurable);
+		await this.provider.update(this.type, entryID, settings);
 		return { value: parsed, path };
-	}
-
-	/**
-	 *
-	 * @param {string} target The key target.
-	 * @param {string} key The key to edit.
-	 * @param {external:Guild} guild The guild to take.
-	 * @param {GatewayParseOptions} options The options.
-	 * @returns {Promise<GatewayParseResult>}
-	 * @private
-	 */
-	async _reset(target, key, guild, { path, route }) {
-		const parsedID = path.default;
-		let cache = this.cache.get(this.type, target);
-
-		// Handle entry creation if it does not exist.
-		if (!cache) cache = await this.createEntry(target);
-		const settings = cache;
-
-		for (let i = 0; i < route.length - 1; i++) cache = cache[route[i]] || {};
-		cache[route[route.length - 1]] = parsedID;
-
-		await this.provider.update(this.type, target, settings);
-		return { parsed: parsedID, parsedID, settings, array: null };
 	}
 
 	/**
@@ -280,45 +257,26 @@ class Gateway {
 	 * @returns {Promise<GatewayUpdateResult>}
 	 */
 	async updateOne(target, key, value, guild, avoidUnconfigurable = false) {
-		if (typeof key !== 'string') throw new TypeError(`The argument key must be a string. Received: ${typeof key}`);
-		guild = this._resolveGuild(guild || target);
-		target = await this.validate(target).then(output => output && output.id ? output.id : output);
-		const { path, route } = this.getPath(key, { avoidUnconfigurable, piece: true });
-		const { parsed, settings } = path.array === true ?
-			await this._updateArray(target, 'add', key, value, guild, { path, route }) :
-			await this._updateOne(target, key, value, guild, { path, route });
-
-		await this.provider.update(this.type, target, settings);
+		const { entryID, settings, parsed, path } = await this._sharedUpdateSingle(target, 'add', key, value, guild, avoidUnconfigurable);
+		await this.provider.update(this.type, entryID, settings);
 		return { value: parsed.data, path };
 	}
 
 	/**
-	 * Update a single key
-	 * @since 0.4.0
-	 * @param {string} target The key target.
-	 * @param {string} key The key to edit.
-	 * @param {any}    value The new value.
-	 * @param {external:Guild} guild The guild to take.
-	 * @param {GatewayParseOptions} options The options.
-	 * @returns {Promise<GatewayParseResult>}
-	 * @private
+	 * Update an array from an entry.
+	 * @since 0.0.1
+	 * @param {string} target The entry target.
+	 * @param {('add'|'remove')} action Whether the value should be added or removed to the array.
+	 * @param {string} key The key to modify.
+	 * @param {string} value The value to parse and save or remove.
+	 * @param {(Guild|string)} [guild] A guild resolvable.
+	 * @param {boolean} [avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key.
+	 * @returns {Promise<GatewayUpdateResult>}
 	 */
-	async _updateOne(target, key, value, guild, { path, route }) {
-		if (path.array === true) throw 'This key is array type.';
-
-		const parsed = await path.parse(value, guild);
-		const parsedID = parsed.data && parsed.data.id ? parsed.data.id : parsed.data;
-		let cache = this.cache.get(this.type, target);
-
-		// Handle entry creation if it does not exist.
-		if (!cache) cache = await this.createEntry(target);
-		const settings = cache;
-
-		for (let i = 0; i < route.length - 1; i++) cache = cache[route[i]] || {};
-		cache[route[route.length - 1]] = parsedID;
-
-		await this.provider.update(this.type, target, settings);
-		return { parsed, parsedID, settings, array: null };
+	async updateArray(target, action, key, value, guild, avoidUnconfigurable = false) {
+		const { entryID, settings, parsed, path } = await this._sharedUpdateSingle(target, action, key, value, guild, avoidUnconfigurable);
+		await this.provider.update(this.type, entryID, settings);
+		return { value: parsed.data, path };
 	}
 
 	/**
@@ -343,95 +301,6 @@ class Gateway {
 
 		await this.provider.update(this.type, target, settings);
 		return { settings, errors: list.errors };
-	}
-
-	/**
-	 * Update many keys in a single query.
-	 * @since 0.4.0
-	 * @param {Object} cache The key target.
-	 * @param {Object} object The key to edit.
-	 * @param {Schema} schema The new value.
-	 * @param {external:Guild} guild The guild to take.
-	 * @param {GatewayUpdateManyList} list The options.
-	 * @private
-	 */
-	_updateMany(cache, object, schema, guild, list) {
-		const keys = Object.keys(object);
-		for (let i = 0; i < keys.length; i++) {
-			if (schema.hasKey(keys[i]) === false) continue;
-			if (schema[keys[i]].type === 'Folder') {
-				this._updateMany(cache[keys[i]], object[keys[i]], schema[keys[i]], guild, list);
-				continue;
-			}
-			list.promises.push(schema[keys[i]].parse(object[keys[i]], guild)
-				.then(result => { cache[keys[i]] = result && result.data && result.data.id ? result.data.id : result.data; })
-				.catch(error => list.errors.push([schema[keys[i]].path, error])));
-		}
-	}
-
-	/**
-	 * Update an array from an entry.
-	 * @since 0.0.1
-	 * @param {string} target The entry target.
-	 * @param {('add'|'remove')} action Whether the value should be added or removed to the array.
-	 * @param {string} key The key to modify.
-	 * @param {string} value The value to parse and save or remove.
-	 * @param {(Guild|string)} [guild] A guild resolvable.
-	 * @param {boolean} [avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key.
-	 * @returns {Promise<GatewayUpdateResult>}
-	 */
-	async updateArray(target, action, key, value, guild, avoidUnconfigurable = false) {
-		if (action !== 'add' && action !== 'remove') throw new TypeError('The argument \'action\' for Gateway#updateArray only accepts the strings \'add\' and \'remove\'.');
-		if (typeof key !== 'string') throw new TypeError(`The argument key must be a string. Received: ${typeof key}`);
-		guild = this._resolveGuild(guild || target);
-		target = await this.validate(target).then(output => output && output.id ? output.id : output);
-		const { path, route } = this.getPath(key, { avoidUnconfigurable, piece: true });
-
-		const { parsed, settings } = path.array === true ?
-			await this._updateArray(target, action, key, value, guild, { path, route }) :
-			await this._updateOne(target, key, value, guild, { path, route });
-
-		await this.provider.update(this.type, target, settings);
-		return { value: parsed.data, path };
-	}
-
-	/**
-	 * Update an array
-	 * @since 0.4.0
-	 * @param {string} target The key target.
-	 * @param {('add'|'remove')} action Whether the value should be added or removed to the array.
-	 * @param {string} key The key to edit.
-	 * @param {any}    value The new value.
-	 * @param {external:Guild} guild The guild to take.
-	 * @param {GatewayParseOptions} options The options.
-	 * @returns {Promise<GatewayParseResultArray>}
-	 * @private
-	 */
-	async _updateArray(target, action, key, value, guild, { path, route }) {
-		if (path.array === false) throw Gateway.throwError(guild, 'COMMAND_CONF_KEY_NOT_ARRAY', 'The key is not an array.');
-
-		const parsed = await path.parse(value, guild);
-		const parsedID = parsed.data && parsed.data.id ? parsed.data.id : parsed.data;
-		let cache = this.cache.get(this.type, target);
-
-		// Handle entry creation if it does not exist.
-		if (!cache) cache = await this.createEntry(target);
-		const fullObject = cache;
-
-		for (let i = 0; i < route.length; i++) {
-			if (typeof cache[route[i]] === 'undefined') cache[route[i]] = {};
-			cache = cache[route[i]];
-		}
-		if (action === 'add') {
-			if (cache.includes(parsedID)) throw `The value ${parsedID} for the key ${path.path} already exists.`;
-			cache.push(parsedID);
-		} else {
-			const index = cache.indexOf(parsedID);
-			if (index === -1) throw `The value ${parsedID} for the key ${path.path} does not exist.`;
-			cache.splice(index, 1);
-		}
-
-		return { parsed, parsedID, settings: fullObject, array: cache };
 	}
 
 	/**
@@ -469,6 +338,160 @@ class Gateway {
 		}
 
 		return { path, route };
+	}
+
+	/**
+	 * Reset a value from an entry.
+	 * @since 0.0.1
+	 * @param {string} target The entry target.
+	 * @param {string} key The key to reset.
+	 * @param {(Guild|string)} guild A guild resolvable.
+	 * @param {boolean} avoidUnconfigurable Whether the Gateway should avoid configuring the selected key.
+	 * @returns {Promise<GatewayParseResult>}
+	 */
+	async _reset(target, key, guild, avoidUnconfigurable) {
+		if (typeof key !== 'string') throw new TypeError(`The argument key must be a string. Received: ${typeof key}`);
+		guild = this._resolveGuild(guild || target);
+		target = await this.validate(target).then(output => output && output.id ? output.id : output);
+		const pathData = this.getPath(key, { avoidUnconfigurable, piece: true });
+		return this._parseReset(target, key, guild, pathData);
+	}
+
+	/**
+	 * Parse the data for reset.
+	 * @since 0.4.0
+	 * @param {string} target The key target.
+	 * @param {string} key The key to edit.
+	 * @param {external:Guild} guild The guild to take.
+	 * @param {GatewayParseOptions} options The options.
+	 * @returns {Promise<GatewayParseResult>}
+	 * @private
+	 */
+	async _parseReset(target, key, guild, { path, route }) {
+		const parsedID = path.default;
+		let cache = this.cache.get(this.type, target);
+
+		// Handle entry creation if it does not exist.
+		if (!cache) cache = await this.createEntry(target);
+		const settings = cache;
+
+		for (let i = 0; i < route.length - 1; i++) cache = cache[route[i]] || {};
+		cache[route[route.length - 1]] = parsedID;
+
+		return { entryID: target, parsed: parsedID, parsedID, settings, array: null, path, route };
+	}
+
+	/**
+	 * Update a single key
+	 * @since 0.4.0
+	 * @param {string} target The key target.
+	 * @param {string} key The key to edit.
+	 * @param {any} value The new value.
+	 * @param {external:Guild} guild The guild to take.
+	 * @param {GatewayParseOptions} options The options.
+	 * @returns {Promise<GatewayParseResult>}
+	 * @private
+	 */
+	async _parseUpdateOne(target, key, value, guild, { path, route }) {
+		if (path.array === true) throw 'This key is array type.';
+
+		const parsed = await path.parse(value, guild);
+		const parsedID = parsed.data && parsed.data.id ? parsed.data.id : parsed.data;
+		let cache = this.cache.get(this.type, target);
+
+		// Handle entry creation if it does not exist.
+		if (!cache) cache = await this.createEntry(target);
+		const settings = cache;
+
+		for (let i = 0; i < route.length - 1; i++) cache = cache[route[i]] || {};
+		cache[route[route.length - 1]] = parsedID;
+
+		return { entryID: target, parsed, parsedID, settings, array: null };
+	}
+
+	/**
+	 * Update an array
+	 * @since 0.4.0
+	 * @param {string} target The key target.
+	 * @param {('add'|'remove')} action Whether the value should be added or removed to the array.
+	 * @param {string} key The key to edit.
+	 * @param {any} value The new value.
+	 * @param {external:Guild} guild The guild to take.
+	 * @param {GatewayParseOptions} options The options.
+	 * @returns {Promise<GatewayParseResultArray>}
+	 * @private
+	 */
+	async _parseUpdateArray(target, action, key, value, guild, { path, route }) {
+		if (path.array === false) throw Gateway.throwError(guild, 'COMMAND_CONF_KEY_NOT_ARRAY', 'The key is not an array.');
+
+		const parsed = await path.parse(value, guild);
+		const parsedID = parsed.data && parsed.data.id ? parsed.data.id : parsed.data;
+		let cache = this.cache.get(this.type, target);
+
+		// Handle entry creation if it does not exist.
+		if (!cache) cache = await this.createEntry(target);
+		const fullObject = cache;
+
+		for (let i = 0; i < route.length; i++) {
+			if (typeof cache[route[i]] === 'undefined') cache[route[i]] = {};
+			cache = cache[route[i]];
+		}
+		if (action === 'add') {
+			if (cache.includes(parsedID)) throw `The value ${parsedID} for the key ${path.path} already exists.`;
+			cache.push(parsedID);
+		} else {
+			const index = cache.indexOf(parsedID);
+			if (index === -1) throw `The value ${parsedID} for the key ${path.path} does not exist.`;
+			cache.splice(index, 1);
+		}
+
+		return { entryID: target, parsed, parsedID, settings: fullObject, array: cache };
+	}
+
+	/**
+	 * Update an array
+	 * @since 0.4.0
+	 * @param {string} target The key target.
+	 * @param {('add'|'remove')} action Whether the value should be added or removed to the array.
+	 * @param {string} key The key to edit.
+	 * @param {any}    value The new value.
+	 * @param {external:Guild} guild The guild to take.
+	 * @param {boolean} avoidUnconfigurable Whether the Gateway should avoid configuring the selected key.
+	 * @returns {Promise<GatewayParseResultArray>}
+	 * @private
+	 */
+	async _sharedUpdateSingle(target, action, key, value, guild, avoidUnconfigurable) {
+		if (typeof key !== 'string') throw new TypeError(`The argument key must be a string. Received: ${typeof key}`);
+		guild = this._resolveGuild(guild || target);
+		target = await this.validate(target).then(output => output && output.id ? output.id : output);
+		const pathData = this.getPath(key, { avoidUnconfigurable, piece: true });
+		return pathData.path.array === true ?
+			await this._parseUpdateArray(target, action, key, value, guild, pathData) :
+			await this._parseUpdateOne(target, key, value, guild, pathData);
+	}
+
+	/**
+	 * Update many keys in a single query.
+	 * @since 0.4.0
+	 * @param {Object} cache The key target.
+	 * @param {Object} object The key to edit.
+	 * @param {Schema} schema The new value.
+	 * @param {external:Guild} guild The guild to take.
+	 * @param {GatewayUpdateManyList} list The options.
+	 * @private
+	 */
+	_updateMany(cache, object, schema, guild, list) {
+		const keys = Object.keys(object);
+		for (let i = 0; i < keys.length; i++) {
+			if (schema.hasKey(keys[i]) === false) continue;
+			if (schema[keys[i]].type === 'Folder') {
+				this._updateMany(cache[keys[i]], object[keys[i]], schema[keys[i]], guild, list);
+				continue;
+			}
+			list.promises.push(schema[keys[i]].parse(object[keys[i]], guild)
+				.then(result => { cache[keys[i]] = result && result.data && result.data.id ? result.data.id : result.data; })
+				.catch(error => list.errors.push([schema[keys[i]].path, error])));
+		}
 	}
 
 	/**
