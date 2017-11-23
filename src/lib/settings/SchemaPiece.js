@@ -267,7 +267,7 @@ class SchemaPiece {
 			// no default
 		}
 
-		if (this.array) return value.length > 0 ? `[ ${value.map(resolver).join(' | ')} ]` : 'None';
+		if (this.array && Array.isArray(value)) return value.length > 0 ? `[ ${value.map(resolver).join(' | ')} ]` : 'None';
 		return value === null ? 'Not set' : resolver(value);
 	}
 
