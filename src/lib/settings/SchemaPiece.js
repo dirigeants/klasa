@@ -4,13 +4,6 @@
 class SchemaPiece {
 
 	/**
-	 * @typedef  {Object} ParsingResult
-	 * @property {any} data The raw parsed data.
-	 * @property {?string} sql The SQL-ready query for the SQL Gateway.
-	 * @memberof SchemaPiece
-	 */
-
-	/**
 	 * @typedef  {Object} SchemaPieceJSON
 	 * @property {string}  type The type for the key.
 	 * @property {any}     default The default value for the key.
@@ -125,15 +118,6 @@ class SchemaPiece {
 	 */
 	parse(value, guild) {
 		return this.manager.resolver[this.type](value, guild, this.key, { min: this.min, max: this.max });
-	}
-
-	/**
-	 * Get the defaults values for this key.
-	 * @since 0.4.0
-	 * @returns {ParsingResult}
-	 */
-	getDefault() {
-		return this.default;
 	}
 
 	/**
