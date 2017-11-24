@@ -124,13 +124,6 @@ class Gateway {
 		 * @type {Schema}
 		 */
 		this.schema = null;
-
-		/**
-		 * @since 0.0.1
-		 * @type {boolean}
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'sql', { value: false });
 	}
 
 	/**

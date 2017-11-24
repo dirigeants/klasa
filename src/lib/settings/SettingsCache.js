@@ -123,22 +123,23 @@ class SettingsCache {
 	get defaultDataSchema() {
 		return {
 			prefix: {
-				type: 'String',
+				type: 'string',
 				default: this.client.config.prefix,
 				array: this.client.config.prefix.constructor.name === 'Array',
-				sql: `TEXT NOT NULL DEFAULT '${this.client.config.prefix.constructor.name === 'Array' ? JSON.stringify(this.client.config.prefix) : this.client.config.prefix}'`
+				max: 10,
+				sql: `VARCHAR(10) NOT NULL DEFAULT '${this.client.config.prefix.constructor.name === 'Array' ? JSON.stringify(this.client.config.prefix) : this.client.config.prefix}'`
 			},
 			language: {
-				type: 'Language',
+				type: 'language',
 				default: this.client.config.language,
 				array: false,
-				sql: `TEXT NOT NULL DEFAULT '${this.client.config.language}'`
+				sql: `VARCHAR(5) NOT NULL DEFAULT '${this.client.config.language}'`
 			},
 			disabledCommands: {
-				type: 'Command',
+				type: 'command',
 				default: [],
 				array: true,
-				sql: 'TEXT DEFAULT \'[]\''
+				sql: 'TEXT'
 			}
 		};
 	}

@@ -60,7 +60,10 @@ class GatewaySQL extends Gateway {
 	 */
 	async initTable() {
 		const hasTable = await this.provider.hasTable(this.type);
-		if (hasTable === false) await this.provider.createTable(this.type, this.sqlSchema);
+		if (hasTable === false) {
+			const schema = this.sqlSchema.map(([k, v]) => `${k} ${v}`).join(', ');
+			await this.provider.createTable(this.type, schema);
+		}
 	}
 
 	/**
@@ -142,7 +145,7 @@ class GatewaySQL extends Gateway {
 	 * @readonly
 	 */
 	get sqlSchema() {
-		const schema = [['id', 'TEXT NOT NULL UNIQUE']];
+		const schema = [['id', 'VARCHAR(19) NOT NULL UNIQUE']];
 		this.schema.getSQL(schema);
 		return schema;
 	}
@@ -168,7 +171,7 @@ class GatewaySQL extends Gateway {
 			if (!piece.path.includes('.')) {
 				if (typeof entry[piece.path] === 'undefined') object[piece.path] = piece.default;
 				else object[piece.path] = piece.array || piece.type === 'any' ? JSON.parse(entry[piece.path]) : entry[piece.path];
-			// Keys that are contained in a folder.
+				// Keys that are contained in a folder.
 			} else {
 				const path = piece.path.split('.');
 				let refObject = object;
