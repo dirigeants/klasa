@@ -129,7 +129,7 @@ class Gateway {
 		 * @type {boolean}
 		 * @readonly
 		 */
-		this.sql = Object.defineProperty(this, 'sql', { value: this.provider.sql });
+		Object.defineProperty(this, 'sql', { value: this.provider.sql });
 	}
 
 	/**
