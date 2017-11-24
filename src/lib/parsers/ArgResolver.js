@@ -394,8 +394,7 @@ class ArgResolver extends Resolver {
 	 */
 	async str(arg, currentUsage, possible, repeat, msg) {
 		const { min, max } = currentUsage.possibles[possible];
-		const valid = await this.constructor.minOrMax(arg.length, min, max, currentUsage, possible, repeat, msg, msg.language.get('RESOLVER_STRING_SUFFIX'));
-		if (valid) return arg;
+		if (this.constructor.minOrMax(arg.length, min, max, currentUsage, possible, repeat, msg, msg.language.get('RESOLVER_STRING_SUFFIX'))) return arg;
 		return null;
 	}
 
@@ -430,8 +429,7 @@ class ArgResolver extends Resolver {
 			if (currentUsage.type === 'optional' && !repeat) return null;
 			throw msg.language.get('RESOLVER_INVALID_INT', currentUsage.possibles[possible].name);
 		}
-		const valid = await this.constructor.minOrMax(arg, min, max, currentUsage, possible, repeat, msg);
-		if (valid) return arg;
+		if (this.constructor.minOrMax(arg, min, max, currentUsage, possible, repeat, msg)) return arg;
 		return null;
 	}
 
@@ -480,8 +478,7 @@ class ArgResolver extends Resolver {
 			if (currentUsage.type === 'optional' && !repeat) return null;
 			throw msg.language.get('RESOLVER_INVALID_FLOAT', currentUsage.possibles[possible].name);
 		}
-		const valid = await this.constructor.minOrMax(arg, min, max, currentUsage, possible, repeat, msg);
-		if (valid) return arg;
+		if (this.constructor.minOrMax(arg, min, max, currentUsage, possible, repeat, msg)) return arg;
 		return null;
 	}
 
@@ -560,7 +557,7 @@ class ArgResolver extends Resolver {
 	 * @param {string} suffix An error suffix
 	 * @returns {boolean}
 	 */
-	static async minOrMax(value, min, max, currentUsage, possible, repeat, msg, suffix = '') {
+	static minOrMax(value, min, max, currentUsage, possible, repeat, msg, suffix = '') {
 		if (min && max) {
 			if (value >= min && value <= max) return true;
 			if (currentUsage.type === 'optional' && !repeat) return false;

@@ -19,7 +19,7 @@ module.exports = class extends Command {
 			return msg.sendMessage(`${msg.language.get('COMMAND_RELOAD_ALL', piece)} (Took: ${timer.stop()})`);
 		}
 		return piece.reload()
-			.then(async itm => msg.sendMessage(msg.language.get('COMMAND_RELOAD', itm.type, itm.name)))
+			.then(itm => msg.sendMessage(msg.language.get('COMMAND_RELOAD', itm.type, itm.name)))
 			.catch(err => {
 				this.client[`${piece.type}s`].set(piece);
 				msg.sendMessage(`❌ ${err}`);
