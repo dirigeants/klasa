@@ -117,40 +117,14 @@ class SchemaPiece {
 	}
 
 	/**
-	 * Parse a SQL query.
-	 * @since 0.4.0
-	 * @param {string} value The value to parse.
-	 * @returns {string}
-	 */
-	sql(value = null) {
-		if (value && value.id) value = value.id;
-		return `'${this.path}' = ${this._parseSQLValue(value)}`;
-	}
-
-	/**
-	 * Parses a value to a valid string that can be used for SQL input.
-	 * @since 0.4.0
-	 * @param {any} value The value to parse.
-	 * @returns {string}
-	 */
-	_parseSQLValue(value) {
-		const type = typeof value;
-		if (type === 'boolean' || type === 'number' || value === null) return String(value);
-		if (type === 'string') return `'${value.replace(/'/g, "''")}'`;
-		if (type === 'object') return `'${JSON.stringify(value).replace(/'/g, "''")}'`;
-		return '';
-	}
-
-	/**
 	 * Parse a value in this key's resolver.
 	 * @since 0.4.0
 	 * @param {string} value The value to parse.
 	 * @param {external:Guild} guild A Guild instance required for the resolver to work.
-	 * @returns {Promise<ParsingResult>}
+	 * @returns {Promise<any>}
 	 */
-	async parse(value, guild) {
-		const data = await this.manager.resolver[this.type](value, guild, this.key, { min: this.min, max: this.max });
-		return { data, sql: this.manager.sql ? this.sql(data && data.id ? data.id : data) : null };
+	parse(value, guild) {
+		return this.manager.resolver[this.type](value, guild, this.key, { min: this.min, max: this.max });
 	}
 
 	/**
@@ -159,7 +133,7 @@ class SchemaPiece {
 	 * @returns {ParsingResult}
 	 */
 	getDefault() {
-		return { data: this.default, sql: this.manager.sql ? this.sql(this.default) : null };
+		return this.default;
 	}
 
 	/**

@@ -111,7 +111,12 @@ class Schema {
 		this.keys.add(key);
 		this.keyArray.push(key);
 
-		if (force) await this.force('add', key, folder);
+		if (this.manager.sql) {
+			if (typeof this.manager.provider.addColumn === 'function') await this.manager.provider.addColumn(this.manager.type, folder.getSQL());
+			else throw new Error('The method \'addColumn\' in your provider is required in order to add new columns.');
+		} else if (force) {
+			await this.force('add', key, folder);
+		}
 		return this.manager.schema;
 	}
 
@@ -130,7 +135,12 @@ class Schema {
 		const folder = this[key];
 		this._removeKey(key);
 
-		if (force) await this.force('delete', key, folder);
+		if (this.manager.sql) {
+			if (typeof this.manager.provider.removeColumn === 'function') await this.manager.provider.removeColumn(this.manager.type, folder.getKeys());
+			else throw new Error('The method \'removeColumn\' in your provider is required in order to remove columns.');
+		} else if (force) {
+			await this.force('delete', key, folder);
+		}
 		return this.manager.schema;
 	}
 
@@ -174,7 +184,12 @@ class Schema {
 		await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
 		this._addKey(key, options);
 
-		if (force) await this.force('add', key, this[key]);
+		if (this.manager.sql) {
+			if (typeof this.manager.provider.addColumn === 'function') await this.manager.provider.addColumn(this.manager.type, key, this[key].sqlSchema[1]);
+			else throw new Error('The method \'addColumn\' in your provider is required in order to add new columns.');
+		} else if (force) {
+			await this.force('add', key, this[key]);
+		}
 		return this.manager.schema;
 	}
 
@@ -207,7 +222,12 @@ class Schema {
 		await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
 		this._removeKey(key);
 
-		if (force) await this.force('delete', key, schemaPiece);
+		if (this.manager.sql) {
+			if (typeof this.manager.provider.removeColumn === 'function') await this.manager.provider.removeColumn(this.manager.type, key);
+			else throw new Error('The method \'removeColumn\' in your provider is required in order to remove columns.');
+		} else if (force) {
+			await this.force('delete', key, schemaPiece);
+		}
 		return this.manager.schema;
 	}
 
@@ -362,7 +382,7 @@ class Schema {
 	 * Get all the SchemaPieces instances from this schema's children. Used for GatewaySQL.
 	 * @since 0.4.0
 	 * @param {string[]} [array=[]] The array to push.
-	 * @returns {string[]}
+	 * @returns {SchemaPiece[]}
 	 */
 	getValues(array = []) {
 		for (let i = 0; i < this.keyArray.length; i++) this[this.keyArray[i]].getValues(array);
@@ -394,7 +414,7 @@ class Schema {
 	 * @returns {string}
 	 */
 	toString() {
-		return this.configurableKeys.length !== 0 ? '[ Folder' : '[ Empty Folder';
+		return this.configurableKeys.length !== 0 ? '{ Folder }' : '{ Empty Folder }';
 	}
 
 }

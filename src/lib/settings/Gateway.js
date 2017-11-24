@@ -390,7 +390,7 @@ class Gateway {
 		if (path.array === true) throw 'This key is array type.';
 
 		const parsed = await path.parse(value, guild);
-		const parsedID = parsed.data && parsed.data.id ? parsed.data.id : parsed.data;
+		const parsedID = parsed && parsed.id ? parsed.id : parsed;
 		let cache = this.cache.get(this.type, target);
 
 		// Handle entry creation if it does not exist.
@@ -419,7 +419,7 @@ class Gateway {
 		if (path.array === false) throw Gateway.throwError(guild, 'COMMAND_CONF_KEY_NOT_ARRAY', 'The key is not an array.');
 
 		const parsed = await path.parse(value, guild);
-		const parsedID = parsed.data && parsed.data.id ? parsed.data.id : parsed.data;
+		const parsedID = parsed && parsed.id ? parsed.id : parsed;
 		let cache = this.cache.get(this.type, target);
 
 		// Handle entry creation if it does not exist.
@@ -483,7 +483,7 @@ class Gateway {
 				continue;
 			}
 			list.promises.push(schema[keys[i]].parse(object[keys[i]], guild)
-				.then(result => { cache[keys[i]] = result && result.data && result.data.id ? result.data.id : result.data; })
+				.then(result => { cache[keys[i]] = result && result && result.id ? result.id : result; })
 				.catch(error => list.errors.push([schema[keys[i]].path, error])));
 		}
 	}
