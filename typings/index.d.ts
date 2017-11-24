@@ -448,7 +448,7 @@ declare module 'klasa' {
 
 		public reset(target: string, key: string, guild?: GatewayGuildResolvable, avoidUnconfigurable?: boolean): Promise<GatewayUpdateResult>;
 		public updateOne(target: string, key: string, value: any, guild?: GatewayGuildResolvable, avoidUnconfigurable?: boolean): Promise<GatewayUpdateResult>;
-		public updateArray(target: string, action: 'add' | 'remove', key: string, any: string, guild?: GatewayGuildResolvable, avoidUnconfigurable?: boolean): Promise<GatewayUpdateResult>;
+		public updateArray(target: string, action: 'add' | 'remove', key: string, value: any, guild?: GatewayGuildResolvable, avoidUnconfigurable?: boolean): Promise<GatewayUpdateResult>;
 		public updateMany(target: string, object: { [k: string]: any }, guild?: GatewayGuildResolvable): Promise<GatewayUpdateManyResult>;
 		public getPath(key?: string, options?: GatewayPathOptions): GatewayPathResult;
 
@@ -467,7 +467,7 @@ declare module 'klasa' {
 		public readonly client: KlasaClient;
 		public readonly resolver: Resolver;
 
-		static throwError(guild: ExtendedGuild, code: string | number, error: string | Error): string;
+		public static throwError(guild: ExtendedGuild, code: string | number, error: string | Error): string;
 	}
 
 	export class GatewaySQL extends Gateway {
