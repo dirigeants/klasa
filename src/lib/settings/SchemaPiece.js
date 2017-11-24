@@ -152,7 +152,7 @@ class SchemaPiece {
 		if (typeof this.configurable !== 'boolean') throw new TypeError(`[KEY] ${this.path} - Parameter configurable must be a boolean.`);
 
 		const value = [this.path, options.sql || (this.type === 'integer' || this.type === 'float' ? 'INTEGER' : 'TEXT') +
-			(this.default !== null ? ` DEFAULT ${this._parseSQLValue(this.default)}` : '')];
+			(this.default !== null ? ` DEFAULT ${SchemaPiece._parseSQLValue(this.default)}` : '')];
 
 		Object.defineProperty(this, 'sqlSchema', { value });
 	}
@@ -228,6 +228,20 @@ class SchemaPiece {
 	 */
 	toString() {
 		return `SchemaPiece(${this.manager.type}:${this.path})`;
+	}
+
+	/**
+	 * Parses a value to a valid string that can be used for SQL input.
+	 * @since 0.4.0
+	 * @param {any} value The value to parse.
+	 * @returns {string}
+	 */
+	static _parseSQLValue(value) {
+		const type = typeof value;
+		if (type === 'boolean' || type === 'number' || value === null) return String(value);
+		if (type === 'string') return `'${value.replace(/'/g, "''")}'`;
+		if (type === 'object') return `'${JSON.stringify(value).replace(/'/g, "''")}'`;
+		return '';
 	}
 
 }

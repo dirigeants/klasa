@@ -532,6 +532,8 @@ declare module 'klasa' {
 
 		public resolveString(msg: ExtendedMessage, value: any): string;
 		public toString(): string;
+
+		private static _parseSQLValue(value: any): string;
 	}
 
 	export class SettingCache {
