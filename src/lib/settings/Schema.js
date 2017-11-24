@@ -21,7 +21,7 @@ class Schema {
 	 * @since 0.4.0
 	 * @param {KlasaClient} client The client which initialized this instance.
 	 * @param {(Gateway|GatewaySQL)} manager The Gateway that manages this schema instance.
-	 * @param {AddOptions} object The object containing the properties for this schema instance.
+	 * @param {Object} object The object containing the properties for this schema instance.
 	 * @param {string} path The path for this schema instance.
 	 */
 	constructor(client, manager, object, path) {
@@ -158,14 +158,14 @@ class Schema {
 	 * Add a new key to this folder.
 	 * @since 0.4.0
 	 * @param {string} key The name for the key.
-	 * @param {AddOptions} [options=null] The key's options to apply.
+	 * @param {AddOptions} options The key's options to apply.
 	 * @param {boolean} [force=true] Whether this function call should modify all entries from the database.
 	 * @returns {Promise<Schema>}
 	 */
-	async addKey(key, options = null, force = true) {
+	async addKey(key, options, force = true) {
 		if (this.hasKey(key)) throw `The key ${key} already exists in the current schema.`;
 		if (typeof this[key] !== 'undefined') throw `The key ${key} conflicts with a property of Schema.`;
-		if (options === null) throw 'You must pass an options argument to this method.';
+		if (!options) throw 'You must pass an options argument to this method.';
 		if (typeof options.type !== 'string') throw 'The option type is required and must be a string.';
 		options.type = options.type.toLowerCase();
 		if (this.client.settings.types.includes(options.type) === false) throw `The type ${options.type} is not supported.`;
@@ -253,7 +253,7 @@ class Schema {
 	 * @param {('add'|'edit'|'delete')} action The action to perform.
 	 * @param {string} key The key.
 	 * @param {(SchemaPiece|Schema)} piece The SchemaPiece instance to handle.
-	 * @returns {Promise<void>}
+	 * @returns {Promise<any>}
 	 * @private
 	 */
 	force(action, key, piece) {
@@ -307,43 +307,9 @@ class Schema {
 	}
 
 	/**
-	 * Method called in initialization to populate the instance with the keys from the schema.
-	 * @since 0.4.0
-	 * @param {Object} object The object to parse. Only called once per initialization.
-	 * @private
-	 */
-	_patch(object) {
-		for (const key of Object.keys(object)) {
-			if (typeof object[key] !== 'object') continue;
-			// Force retrocompatibility with SGv1's schema
-			if (typeof object[key].type === 'undefined') object[key].type = 'Folder';
-			if (object[key].type === 'Folder') {
-				const folder = new Schema(this.client, this.manager, object[key], `${this.path === '' ? '' : `${this.path}.`}${key}`);
-				this[key] = folder;
-				this.defaults[key] = folder.defaults;
-			} else {
-				const piece = new SchemaPiece(this.client, this.manager, object[key], `${this.path === '' ? '' : `${this.path}.`}${key}`, key);
-				this[key] = piece;
-				this.defaults[key] = piece.default;
-			}
-			this.keys.add(key);
-			this.keyArray.push(key);
-		}
-		this.keyArray.sort((a, b) => a.localeCompare(b));
-	}
-
-	/**
-	 * @since 0.4.0
-	 * @returns {string}
-	 */
-	resolveString() {
-		return this.toString();
-	}
-
-	/**
 	 * Get a JSON object with all the default values.
-	 * @param {Object} [object={}] The object to update.
 	 * @since 0.4.0
+	 * @param {Object} [object={}] The object to update.
 	 * @returns {Object}
 	 */
 	getDefaults(object = {}) {
@@ -390,14 +356,11 @@ class Schema {
 	}
 
 	/**
-	 * Get all configureable keys from this schema.
 	 * @since 0.4.0
-	 * @readonly
-	 * @returns {string[]}
+	 * @returns {string}
 	 */
-	get configurableKeys() {
-		if (this.keyArray.length === 0) return [];
-		return this.keyArray.filter(key => this[key].type === 'Folder' || this[key].configurable);
+	resolveString() {
+		return this.toString();
 	}
 
 	/**
@@ -415,6 +378,43 @@ class Schema {
 	 */
 	toString() {
 		return this.configurableKeys.length !== 0 ? '{ Folder }' : '{ Empty Folder }';
+	}
+
+	/**
+	 * Get all configureable keys from this schema.
+	 * @since 0.4.0
+	 * @readonly
+	 * @returns {string[]}
+	 */
+	get configurableKeys() {
+		if (this.keyArray.length === 0) return [];
+		return this.keyArray.filter(key => this[key].type === 'Folder' || this[key].configurable);
+	}
+
+	/**
+	 * Method called in initialization to populate the instance with the keys from the schema.
+	 * @since 0.4.0
+	 * @param {Object} object The object to parse. Only called once per initialization.
+	 * @private
+	 */
+	_patch(object) {
+		for (const key of Object.keys(object)) {
+			if (typeof object[key] !== 'object') continue;
+			// Force retrocompatibility with SGv1's schema
+			if (typeof object[key].type === 'undefined') object[key].type = 'Folder';
+			if (object[key].type === 'Folder') {
+				const folder = new Schema(this.client, this.manager, object[key], `${this.path === '' ? '' : `${this.path}.`}${key}`);
+				this[key] = folder;
+				this.defaults[key] = folder.defaults;
+			} else {
+				const piece = new SchemaPiece(this.client, this.manager, object[key], `${this.path === '' ? '' : `${this.path}.`}${key}`, key);
+				this[key] = piece;
+				this.defaults[key] = piece.default;
+			}
+			this.keys.add(key);
+			this.keyArray.push(key);
+		}
+		this.keyArray.sort((a, b) => a.localeCompare(b));
 	}
 
 }

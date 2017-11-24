@@ -61,7 +61,7 @@ declare module 'klasa' {
 			MessageCollector: typeof MessageCollector;
 			Webhook: typeof WebhookClient;
 			CommandMessage: typeof CommandMessage;
-			util: Util;
+			util: typeof Util;
 		};
 		public settings: StringMappedType<Gateway>;
 		public application: ClientApplication;
@@ -235,14 +235,12 @@ declare module 'klasa' {
 		public static toTitleCase(str: string): string;
 		public static newError(error: Error, code: number): Error;
 		public static regExpEsc(str: string): string;
-		public static parseDottedObject(rawObject: StringMappedType<string>): StringMappedType<string>;
-		public static stringIsObject(text: string): boolean;
 		public static applyToClass(base: Object, structure: Object, skips?: string[]): void;
 		public static exec(exec: string, options?: ExecOptions): Promise<{ stdout: string, stderr: string }>;
 		public static sleep(delay: number, args?: any): Promise<any>;
 	}
 
-	export { util as Util };
+	export { Util as util };
 
 	export class Resolver {
 		public constructor(client: KlasaClient);
@@ -446,71 +444,74 @@ declare module 'klasa' {
 		public createEntry(input: string, data?: Object): Promise<Settings>;
 		public deleteEntry(input: string): Promise<true>;
 
-		public sync(input?: Object|string): Promise<void>;
+		public sync(input?: Object | string): Promise<boolean>;
 
-		public reset(target: string, key: string, guild: ExtendedGuild|string, avoidUnconfigurable?: boolean): Promise<GatewayResult>;
-		private _reset(target: string, key: string, guild: ExtendedGuild, path: { path: SchemaPiece, route: string[] }): Promise<GatewayInternalResult>;
+		public reset(target: string, key: string, guild?: GatewayGuildResolvable, avoidUnconfigurable?: boolean): Promise<GatewayUpdateResult>;
+		public updateOne(target: string, key: string, value: any, guild?: GatewayGuildResolvable, avoidUnconfigurable?: boolean): Promise<GatewayUpdateResult>;
+		public updateArray(target: string, action: 'add' | 'remove', key: string, any: string, guild?: GatewayGuildResolvable, avoidUnconfigurable?: boolean): Promise<GatewayUpdateResult>;
+		public updateMany(target: string, object: { [k: string]: any }, guild?: GatewayGuildResolvable): Promise<GatewayUpdateManyResult>;
+		public getPath(key?: string, options?: GatewayPathOptions): GatewayPathResult;
 
-		public updateOne(target: string, key: string, value: string, guild?: ExtendedGuild|string, avoidUnconfigurable?: boolean): Promise<GatewayResult>;
-		private _updateOne(target: string, key: string, value: string, guild: ExtendedGuild, path: { path: SchemaPiece, route: string[] }): Promise<GatewayInternalResult>;
+		private _reset(target: string, key: string, guild: GatewayGuildResolvable, path: GatewayParseOptions): Promise<GatewayUpdateResult>;
+		private _parseReset(target: string, key: string, guild: ExtendedGuild, path: GatewayParseOptions): Promise<GatewayParseResult>;
+		private _parseUpdateOne(target: string, key: string, value: any, guild: ExtendedGuild, path: GatewayParseOptions): Promise<GatewayParseResult>;
+		private _parseUpdateArray(target: string, action: 'add' | 'remove', key: string, value: any, guild: ExtendedGuild, path: GatewayPathOptions): Promise<GatewayParseResultArray>;
+		private _sharedUpdateSingle(target: string, action: 'add' | 'remove', key: string, value: any, guild: GatewayGuildResolvable, avoidUnconfigurable: boolean): Promise<GatewayParseResult | GatewayParseResultArray>;
+		private _updateMany(cache: Object, object: Object, schema: Schema, guild: ExtendedGuild, list: GatewayUpdateManyResult): void;
 
-		public updateMany(target: string, object: Object, guild?: ExtendedGuild|string): Promise<{ settings: Object, errors: string[] }>;
-		private _updateMany(cache: Object, object: Object, schema: Schema, guild: ExtendedGuild, list: { errors: string[], promises: Promise<any>[] }): void;
-
-		public updateArray(target: string, action: 'add'|'remove', key: string, value: string, guild?: ExtendedGuild|string, avoidUnconfigurable?: boolean): Promise<GatewayResult>;
-		private _updateArray(target: string, action: 'add'|'remove', key: string, value: string, guild: ExtendedGuild, path: { path: SchemaPiece, route: string[] }): Promise<GatewayInternalResult>;
-
-		public getPath(key?: string, options?: { avoidUnconfigurable?: boolean, piece?: boolean }): GatewayPathResult;
-		private _resolveGuild(guild: SettingGatewayGuildResolvable): ExtendedGuild;
+		private _resolveGuild(guild: GatewayGuildResolvable): ExtendedGuild;
 
 		public readonly cache: Provider;
 		public readonly provider: Provider;
 		public readonly defaults: Object;
 		public readonly client: KlasaClient;
 		public readonly resolver: Resolver;
+
+		static throwError(guild: ExtendedGuild, code: string | number, error: string | Error): string;
 	}
 
 	export class GatewaySQL extends Gateway {
-		public readonly sql: boolean;
-		public sqlEntryParser: EntryParser[];
-
-		public updateColumns(key: string): Promise<boolean>;
 		public readonly sqlSchema: string[];
+		private _parseEntry(entry: { [k: string]: any }, schemaValues: SchemaPiece[]): { [k: string]: any };
 	}
 
 	export class Schema {
-		public constructor(client: KlasaClient, manager: Gateway|GatewaySQL, object: Object, path: string);
+		public constructor(client: KlasaClient, manager: Gateway | GatewaySQL, object: Object, path: string);
 		public readonly client: KlasaClient;
 		public readonly manager: Gateway|GatewaySQL;
 		public readonly path: string;
 		public readonly type: 'Folder';
-		public readonly defaults: Object;
-		public readonly keys: Set<string>;
+		public defaults: Object;
+		public keys: Set<string>;
+		public keyArray: string[];
 
 		public addFolder(key: string, object?: Object, force?: boolean): Promise<Schema>;
 		public removeFolder(key: string, force?: boolean): Promise<Schema>;
-		public has(key: string): boolean;
-		public addKey(key: string, options?: AddOptions, force?: boolean): Promise<Schema>;
-		private _addKey(key: string, options: Object): void;
+		public hasKey(key: string): boolean;
+		public addKey(key: string, options: AddOptions, force?: boolean): Promise<Schema>;
+		private _addKey(key: string, options: AddOptions): void;
 		public removeKey(key: string, force?: boolean): Promise<Schema>;
 		private _removeKey(key: string): void;
 
-		public force(action: 'add'|'delete', key: string): Promise<boolean[]>;
-		public toJSON(): Object;
+		public force(action: 'add' | 'delete', key: string, piece: Schema | SchemaPiece): Promise<any>;
+		public getList(msg: ExtendedMessage, object: Object): string;
+		public getDefaults(object?: Object): Object;
 		public getSQL(array?: string[]): string[];
 		public getKeys(array?: string[]): string[];
-		public getDefaults(): Object;
-		public getList(object: Object): string;
-		public static resolveString(msg: ExtendedMessage, path: SchemaPiece, value: any): string;
+		public getValues(array?: SchemaPiece[]): SchemaPiece[];
+		public resolveString(): string;
+		public toJSON(): { [k: string]: any };
+		public toString(): string;
+
+		public readonly configurableKeys: string[];
 
 		private _patch(object: Object): void;
-		public toString(): string;
 	}
 
 	export class SchemaPiece {
 		public constructor(client: KlasaClient, manager: Gateway|GatewaySQL, options: AddOptions, path: string, key: string);
 		public readonly client: KlasaClient;
-		public readonly manager: Gateway|GatewaySQL;
+		public readonly manager: Gateway | GatewaySQL;
 		public readonly path: string;
 		public readonly key: string;
 		public type: string;
@@ -519,34 +520,35 @@ declare module 'klasa' {
 		public min?: number;
 		public max?: number;
 		public configurable: boolean;
-		public readonly sqlSchema?: string;
+		public readonly sqlSchema: [string, string];
 
-		public sql(value?: string): string;
-		private _parseSQLValue(value: any): string;
-		public parse(value: string, guild: ExtendedGuild): Promise<ParsingResult>;
-		public getDefault(): ParsingResult;
+		public parse(value: any, guild: ExtendedGuild): Promise<any>;
 		public toJSON(): SchemaPieceJSON;
-		public init(): void;
-		public getSQL(array?: string[]): string;
+		public init(options: AddOptions): void;
+
+		public getSQL(array?: string[][]): [string, string];
 		public getKeys(array?: string[]): string;
-		public getDefaults(): Object;
-		public toString(value?: any): string;
+		public getValues(array?: SchemaPiece[]): this;
+
+		public resolveString(msg: ExtendedMessage, value: any): string;
+		public toString(): string;
 	}
 
 	export class SettingCache {
 		public constructor(client: KlasaClient);
 		public readonly client: KlasaClient;
 		public resolver: SettingResolver;
-		public guilds: Gateway|GatewaySQL;
+		public types: string[];
+		public guilds: Gateway | GatewaySQL;
 
-		public add(name: string, validateFunction: Function, schema?: Object, options?: Object): Promise<Gateway|GatewaySQL>;
+		public add(name: string, validateFunction: Function, schema?: Object, options?: SettingsOptions): Promise<Gateway | GatewaySQL>;
 		private _checkProvider(engine: string): Provider;
-		public validate(resolver: SettingResolver, guild: Object|string);
+		public validate(guildResolvable: Object | string);
 
 		public readonly defaultDataSchema: {
-			prefix: SchemaPiece,
-			language: SchemaPiece,
-			disabledCommands: SchemaPiece
+			prefix: SchemaPieceJSON,
+			language: SchemaPieceJSON,
+			disabledCommands: SchemaPieceJSON
 		};
 	}
 
@@ -563,7 +565,7 @@ declare module 'klasa' {
 		public destroy(): Promise<true>;
 
 		public toString(): string;
-		private _merge(data: any, folder: Schema | SchemaPiece): any;
+		private static _merge(data: any, folder: Schema | SchemaPiece): any;
 	}
 
 	// Util
@@ -1051,24 +1053,52 @@ declare module 'klasa' {
 		nice?: boolean;
 	};
 
-	export type GatewayInternalResult = {
-		parsed: any;
-		settings: Object;
+	export type GatewayUpdateResult = {
+		value: any;
+		path: SchemaPiece;
 	};
 
-	export type GatewayResult = {
-		value: any,
-		path: SchemaPiece
+	export type GatewayParseOptions = {
+		path: string;
+		route: string[];
+	};
+
+	export type GatewayParseResult = {
+		parsed: any;
+		parsedID: string | number | object;
+		settings: Settings;
+		array: null;
+		entryID: string;
+	} & GatewayParseOptions;
+
+	export type GatewayParseResultArray = {
+		parsed: any;
+		parsedID: string | number | object;
+		settings: Settings;
+		array: any[];
+		entryID: string;
+	} & GatewayParseOptions;
+
+	export type GatewayUpdateManyResult = {
+		promises: Settings;
+		errors: string[];
+	};
+
+	export type GatewayGuildResolvable = ExtendedGuild
+		| ExtendedTextChannel
+		| ExtendedVoiceChannel
+		| ExtendedMessage
+		| Role
+		| Snowflake;
+
+	export type GatewayPathOptions = {
+		avoidUnconfigurable?: boolean;
+		piece?: boolean;
 	};
 
 	export type GatewayPathResult = {
 		path: SchemaPiece;
 		route: string[];
-	};
-
-	export type ParsingResult = {
-		data: any;
-		sql?: string;
 	};
 
 	export type SchemaPieceJSON = {
@@ -1078,6 +1108,11 @@ declare module 'klasa' {
 		min?: number;
 		max?: number;
 		configurable: boolean;
+	};
+
+	export type SettingsOptions = {
+		provider?: string;
+		nice?: boolean;
 	};
 
 	export type KlasaConsoleConfig = {
@@ -1174,8 +1209,6 @@ declare module 'klasa' {
 		array?: boolean;
 		sql?: string;
 	};
-
-	export type SettingGatewayGuildResolvable = ExtendedGuild | ExtendedTextChannel | ExtendedVoiceChannel | ExtendedMessage | Role | string;
 
 	export type emoji = string;
 

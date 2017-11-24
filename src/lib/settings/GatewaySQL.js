@@ -22,25 +22,6 @@ class GatewaySQL extends Gateway {
 	 */
 
 	/**
-	 * @since 0.4.0
-	 * @param {SettingsCache} store The SettingsCache instance which initiated this instance.
-	 * @param {string} type The name of this Gateway.
-	 * @param {Function} validateFunction The function that validates the entries' values.
-	 * @param {Object} schema The initial schema for this instance.
-	 * @param {GatewayOptions} options The options for this schema.
-	 */
-	constructor(store, type, validateFunction, schema, options) {
-		super(store, type, validateFunction, schema, options);
-
-		/**
-		 * @since 0.0.1
-		 * @type {boolean}
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'sql', { value: true });
-	}
-
-	/**
 	 * Inits the table and the schema for its use in this gateway.
 	 * @since 0.4.0
 	 * @returns {Promise<void[]>}
@@ -110,7 +91,7 @@ class GatewaySQL extends Gateway {
 	 * @since 0.4.0
 	 * @param {string} target The entry target.
 	 * @param {string} key The key to modify.
-	 * @param {string} value The value to parse and save.
+	 * @param {any} value The value to parse and save.
 	 * @param {(Guild|string)} [guild=null] A guild resolvable.
 	 * @param {boolean} [avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key.
 	 * @returns {Promise<GatewayUpdateResult>}
@@ -127,7 +108,7 @@ class GatewaySQL extends Gateway {
 	 * @param {string} target The entry target.
 	 * @param {('add'|'remove')} action Whether the value should be added or removed to the array.
 	 * @param {string} key The key to modify.
-	 * @param {string} value The value to parse and save or remove.
+	 * @param {any} value The value to parse and save or remove.
 	 * @param {(Guild|string)} [guild=null] A guild resolvable.
 	 * @param {boolean} [avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key.
 	 * @returns {Promise<GatewayUpdateResult>}

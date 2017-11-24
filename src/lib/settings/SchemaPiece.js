@@ -140,9 +140,10 @@ class SchemaPiece {
 	/**
 	 * Check if the key is properly configured.
 	 * @since 0.4.0
-	 * @param {Object} options The options to parse.
+	 * @param {AddOptions} options The options to parse.
 	 */
-	init(options = {}) {
+	init(options) {
+		if (typeof options !== 'object') throw new TypeError(`SchemaPiece#init expected an object as first parameter. Got: ${typeof options}`);
 		if (typeof this.type !== 'string') throw new TypeError(`[KEY] ${this.path} - Parameter type must be a string.`);
 		if (typeof this.array !== 'boolean') throw new TypeError(`[KEY] ${this.path} - Parameter array must be a boolean.`);
 		if (this.min !== null && typeof this.min !== 'number') throw new TypeError(`[KEY] ${this.path} - Parameter min must be a number or null.`);

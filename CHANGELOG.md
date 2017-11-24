@@ -13,7 +13,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] Added **any** type to SettingsResolver. Assigning this type to a SchemaPiece will make it set the property configureable to false, it accepts anything you pass to it, even objects. So you must use dedicated commands to configure these keys instead. (For example, you can store an array of objects with a certain number of properties, something not possible in the previous versions as the conf command cannot parse objects correctly).
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] **[PERF]** Much better, accurate and faster SchemaPiece validation and parsing.
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] **[PERF]** Added `Schema.toJSON();`, which converts the classes into a plain JSON object. This method is 27^level times faster than iterating over it with `Object.keys`. (No, it's not recursive, it uses "branch query" and a pre-processed Set to iterate over keys).
-- [[#43](https://github.com/dirigeants/klasa/pull/43)] Added a new util: `parseDottedObject`. Used for `GatewaySQL` (to parse dotted objects). Performance is 797k ops/sec when parsing objects with 6 keys. And it's not recursive. (Recursive resulted to be buggy and 4.18 times slower).
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] Added a **Collection** provider.
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] Added `Provider.cache`.
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] Added full support for asynchronous CacheProviders.

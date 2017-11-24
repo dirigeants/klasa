@@ -94,64 +94,6 @@ class Util {
 	}
 
 	/**
-	 * Given a dotted object, parse it, generating a new object with all the keys parsed.
-	 * @since 0.4.0
-	 * @param {Object} rawObject The dotted object to parse.
-	 * @returns {Object}
-	 * @example
-	 * // Input
-	 * genObject({
-	 *     "prefix": "s!",
-	 *     "roles.administrator": null,
-	 *     "roles.moderator": null,
-	 *     "channels.modlog": "340713281972862976",
-	 *     "channels.default": "339944237305036812"
-	 * });
-	 * // Output
-	 * {
-	 *     "prefix": "s!",
-	 *     "roles": {
-	 *         "administrator": null,
-	 *         "moderator": null
-	 *     },
-	 *     "channels": {
-	 *         "modlog": "340713281972862976",
-	 *         "default": "339944237305036812"
-	 *     }
-	 * }
-	 */
-	static parseDottedObject(rawObject) {
-		const object = {};
-		for (const key of Object.keys(rawObject)) {
-			if (key.indexOf('.') === -1) object[key] = rawObject[key];
-			const path = key.split('.');
-			let tempPath = object;
-			for (let i = 0; i < path.length - 1; i++) {
-				if (typeof tempPath[path[i]] === 'undefined') tempPath[path[i]] = {};
-				tempPath = tempPath[path[i]];
-			}
-			if (Util.stringIsObject(rawObject[key])) {
-				tempPath[path[path.length - 1]] = JSON.parse(rawObject[key]);
-			} else {
-				tempPath[path[path.length - 1]] = rawObject[key];
-			}
-		}
-		return object;
-	}
-
-	/**
-	 * Check if an stringified object is actually an object.
-	 * @since 0.4.0
-	 * @param {string} text The string to check.
-	 * @returns {boolean}
-	 */
-	static stringIsObject(text) {
-		if (typeof string !== 'string') return false;
-		return (text[0] === '[' && text[text.length - 1] === ']') ||
-			(text[0] === '{' && text[text.length - 1] === '}');
-	}
-
-	/**
 	 * Applies an interface to a class|
 	 * @since 0.1.1
 	 * @param {Object} base The interface to apply to a structure
