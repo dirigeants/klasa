@@ -162,8 +162,7 @@ class SchemaPiece {
 		}
 		if (this.array === true && Array.isArray(this.default) === false) {
 			throw new TypeError(`[DEFAULT] ${this} - Default key must be an array if the key stores an array.`);
-		}
-		if (this.type !== 'any' && typeof this.default === 'object' && this.default !== null) {
+		} else if (this.type !== 'any' && typeof this.default === 'object' && this.default !== null) {
 			throw new TypeError(`[DEFAULT] ${this} - Default key must not be type of object unless it is type any or null.`);
 		}
 		// Min and max checking
