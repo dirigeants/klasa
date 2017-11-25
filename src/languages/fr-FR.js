@@ -4,6 +4,7 @@ module.exports = class extends Language {
 
 	constructor(...args) {
 		super(...args);
+		const { toTitleCase } = this.client.methods.util;
 		this.language = {
 			DEFAULT: (key) => `${key} n'a pas encore été traduit en 'fr-FR'.`,
 			DEFAULT_LANGUAGE: 'Langue par défaut',
@@ -47,12 +48,12 @@ module.exports = class extends Language {
 			INHIBITOR_REQUIRED_SETTINGS: (settings) => `Votre serveur n'a pas le${settings.length > 1 ? 's' : ''} paramètre${settings.length > 1 ? 's' : ''} **${settings.join(', ')}** et ne peux pas s'exécuter.`,
 			INHIBITOR_RUNIN: (types) => `Cette commande est uniquement disponible dans les salons ${types}`,
 			INHIBITOR_RUNIN_NONE: (name) => `La commande ${name} n'est pas configurée pour s'exécuter dans un salon.`,
-			COMMAND_UNLOAD: (type, name) => `✅ ${type} déchargé : ${name}`,
+			COMMAND_UNLOAD: (type, name) => `✅ ${toTitleCase(this.piece(type))} déchargé${this.isFeminine(type) ? 'e' : ''} : ${name}`,
 			COMMAND_TRANSFER_ERROR: '❌ Ce fichier a déjà été transféré ou n\'a jamais existé.',
-			COMMAND_TRANSFER_SUCCESS: (type, name) => `✅ ${type} transféré avec succès : ${name}`,
-			COMMAND_TRANSFER_FAILED: (type, name) => `Le transfert de ${type} : ${name} au Client a échoué. Veuillez vérifier votre Console.`,
-			COMMAND_RELOAD: (type, name) => `✅ ${type} rechargé : ${name}`,
-			COMMAND_RELOAD_ALL: (type) => `✅ Tous les ${type} ont été rechargés.`,
+			COMMAND_TRANSFER_SUCCESS: (type, name) => `✅ ${toTitleCase(this.piece(type))} transféré${this.isFeminine(type) ? 'e' : ''} avec succès : ${name}`,
+			COMMAND_TRANSFER_FAILED: (type, name) => `Le transfert de ${this.piece(type)} : ${name} au Client a échoué. Veuillez vérifier votre Console.`,
+			COMMAND_RELOAD: (type, name) => `✅ ${toTitleCase(this.piece(type))} rechargé${this.isFeminine(type) ? 'e' : ''} : ${name}`,
+			COMMAND_RELOAD_ALL: (type) => `✅ Tou${this.isFeminine(type) ? 'te' : ''}s les ${this.piece(type)} ont été rechargé${this.isFeminine(type) ? 'e' : ''}s.`,
 			COMMAND_REBOOT: 'Redémarrage...',
 			COMMAND_PING: 'Ping ?',
 			COMMAND_PINGPONG: (diff, ping) => `Pong ! (L'aller-retour a pris : ${diff}ms. Pulsation : ${ping}ms.)`,
@@ -88,8 +89,8 @@ module.exports = class extends Language {
 			COMMAND_HELP_DM: '📥 | Les commandes ont été envoyées dans vos MPs.',
 			COMMAND_HELP_NODM: '❌ | Vous avez désactivé vos MPs, je ne peux pas vous envoyer les commandes.',
 			COMMAND_HELP_COMMAND_NOT_FOUND: '❌ | Commande inconnue, veuillez exécuter la commande help sans argument pour avoir toute la liste.',
-			COMMAND_ENABLE: (type, name) => `+ ${type} activé avec succès : ${name}`,
-			COMMAND_DISABLE: (type, name) => `+ ${type} désactivé avec succès : ${name}`,
+			COMMAND_ENABLE: (type, name) => `+ ${toTitleCase(this.piece(type))} activé${this.isFeminine(type) ? 'e' : ''} avec succès : ${name}`,
+			COMMAND_DISABLE: (type, name) => `+ ${toTitleCase(this.piece(type))} désactivé${this.isFeminine(type) ? 'e' : ''} avec succès : ${name}`,
 			COMMAND_DISABLE_WARN: 'Vous ne voulez probablement pas désactiver cela, car vous ne serez plus capable d\'exécuter une commande pour le réactiver',
 			COMMAND_CONF_NOKEY: 'Vous devez fournir une clef',
 			COMMAND_CONF_NOVALUE: 'Vous devez fournir une valeur',
@@ -101,6 +102,29 @@ module.exports = class extends Language {
 			COMMAND_CONF_GET: (key, value) => `La valeur pour la clef **${key}** est : \`${value}\``,
 			COMMAND_CONF_RESET: (key, response) => `La clef **${key}** a été réinitialisée à : \`${response}\``
 		};
+	}
+
+	isFeminine(type) {
+		type = type.toString();
+		return ['command', 'commands'].indexOf(type) !== -1;
+	}
+
+	piece(type) {
+		type = type.toString();
+		const plural = type.slice(-1) === 's';
+		const tp = {
+			command: 'commande',
+			event: 'événement',
+			extendable: 'extensible',
+			finalizer: 'finaliseur',
+			inhibitor: 'inhibiteur',
+			language: 'langage',
+			monitor: 'contrôleur',
+			provider: 'fournisseur'
+		}[(plural ? type.slice(0, -1) : type).toLowerCase()];
+		return tp ?
+			`${tp}${plural ? 's' : ''}` :
+			type;
 	}
 
 };
