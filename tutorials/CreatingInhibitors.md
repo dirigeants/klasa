@@ -35,14 +35,14 @@ module.exports = class extends Inhibitor {
 
 ## Configuration
 
-| Name | Default | Type | Description |
-| --- | --- | --- | --- |
-| **name** | `theFileName` | string | The name of the inhibitor |
-| **enabled** | `true` | boolean | Whether the inhibitor is enabled or not |
-| **spamProtection** | `false` | boolean | 	If this inhibitor is meant for spamProtection (disables the inhibitor while generating help) |
-
+| Name               | Default       | Type    | Description                                                                                  |
+| ------------------ | ------------- | ------- | -------------------------------------------------------------------------------------------- |
+| **name**           | `theFileName` | string  | The name of the inhibitor                                                                    |
+| **enabled**        | `true`        | boolean | Whether the inhibitor is enabled or not                                                      |
+| **spamProtection** | `false`       | boolean | If this inhibitor is meant for spamProtection (disables the inhibitor while generating help) |
 
 ## Further Reading:
+
 - {@tutorial CreatingCommands}
 - {@tutorial CreatingEvents}
 - {@tutorial CreatingExtendables}

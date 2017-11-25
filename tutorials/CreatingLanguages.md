@@ -32,11 +32,10 @@ module.exports = class extends Language {
 
 ## Configuration
 
-| Name | Default | Type | Description |
-| --- | --- | --- | --- |
-| **name** | `theFileName` | string | The name of the language |
-| **enabled** | `true` | boolean | Whether the language is enabled or not |
-
+| Name        | Default       | Type    | Description                            |
+| ----------- | ------------- | ------- | -------------------------------------- |
+| **name**    | `theFileName` | string  | The name of the language               |
+| **enabled** | `true`        | boolean | Whether the language is enabled or not |
 
 ## Using Languages:
 
@@ -64,6 +63,7 @@ msg.language.get('SomeKeyThatExistsOnlyInEnlgish');
 Also, if a language is disabled, and a guild has it configured, the default language will be used exclusivly until either that language is no-longer disabled, or the guild configures another enabled language.
 
 ## Further Reading:
+
 - {@tutorial CreatingCommands}
 - {@tutorial CreatingEvents}
 - {@tutorial CreatingExtendables}

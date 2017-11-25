@@ -15,9 +15,11 @@ Emits log to log command use in the console.
 [finalizers/commandLogging.js](https://github.com/dirigeants/klasa/blob/master/src/finalizers/commandLogging.js)
 
 ## Further Reading:
+
 - {@tutorial IncludedCommands}
 - {@tutorial IncludedEvents}
 - {@tutorial IncludedExtendables}
 - {@tutorial IncludedInhibitors}
+- {@tutorial IncludedLanguages}
 - {@tutorial IncludedMonitors}
 - {@tutorial IncludedProviders}

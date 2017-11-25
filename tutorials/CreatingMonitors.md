@@ -35,18 +35,19 @@ module.exports = class extends Monitor {
 ```
 
 ## Configuration
-| Name | Default | Type | Description |
-| --- | --- | --- | --- |
-| **name** | `theFileName` | string | The name of the monitor |
-| **enabled** | `true` | boolean | Whether the monitor is enabled or not |
-| **ignoreBots** | `true` | boolean | Whether the monitor ignores bots or not |
-| **ignoreSelf** | `true` | boolean | Whether the monitor ignores itself or not |
-| **ignoreOthers** | `true` | boolean | Whether the monitor ignores others or not |
+
+| Name             | Default       | Type    | Description                               |
+| ---------------- | ------------- | ------- | ----------------------------------------- |
+| **name**         | `theFileName` | string  | The name of the monitor                   |
+| **enabled**      | `true`        | boolean | Whether the monitor is enabled or not     |
+| **ignoreBots**   | `true`        | boolean | Whether the monitor ignores bots or not   |
+| **ignoreSelf**   | `true`        | boolean | Whether the monitor ignores itself or not |
+| **ignoreOthers** | `true`        | boolean | Whether the monitor ignores others or not |
 
 >As with all other pieces, you can omit any optional Configuration that match the default values.
 
-
 ## Further Reading:
+
 - {@tutorial CreatingCommands}
 - {@tutorial CreatingEvents}
 - {@tutorial CreatingExtendables}

@@ -25,12 +25,13 @@ module.exports = class extends Finalizer {
 
 };
 ```
+
 ## Configuration
 
-| Name | Default | Type | Description |
-| --- | --- | --- | --- |
-| **name** | `theFileName` | string | The name of the finalizer |
-| **enabled** | `true` | boolean | Whether the finalizer is enabled or not |
+| Name        | Default       | Type    | Description                             |
+| ----------- | ------------- | ------- | --------------------------------------- |
+| **name**    | `theFileName` | string  | The name of the finalizer               |
+| **enabled** | `true`        | boolean | Whether the finalizer is enabled or not |
 
 ## Arguments:
 
@@ -52,8 +53,8 @@ This finalizer, unlike commandCooldown, it's only run if the property `cmdLoggin
 your Klasa's client configs is set to `true`. It prints in the cmd prompt the command run, where,
 the user who ran it, and the time it took to process the command.
 
-
 ## Further Reading:
+
 - {@tutorial CreatingCommands}
 - {@tutorial CreatingEvents}
 - {@tutorial CreatingExtendables}

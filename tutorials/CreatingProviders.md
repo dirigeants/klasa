@@ -154,12 +154,13 @@ module.exports = class extends Provider {
 The example above is the JSON provider used in klasa, and interfacing with the settingGateway.
 
 ## Configuration
-| Name | Default | Type | Description |
-| --- | --- | --- | --- |
-| **name** | `theFileName` | string | The name of the provider |
-| **enabled** | `true` | boolean | Whether the provider is enabled or not |
-| **description** | `''` | string | The provider description |
-| **sql** | `false` | boolean | if the provider provides to a sql datasource |
+
+| Name            | Default       | Type    | Description                                  |
+| --------------- | ------------- | ------- | -------------------------------------------- |
+| **name**        | `theFileName` | string  | The name of the provider                     |
+| **enabled**     | `true`        | boolean | Whether the provider is enabled or not       |
+| **description** | `''`          | string  | The provider description                     |
+| **sql**         | `false`       | boolean | if the provider provides to a sql datasource |
 
 ## Accessing Providers
 
@@ -167,8 +168,8 @@ Providers are stored in the main `client` object, in the `providers` property. T
 for each provider added, based on its `name`. So for example if you have it set as
 `sqlite` , you can access it through `client.providers.get("sqlite");`.
 
-
 ## Further Reading:
+
 - {@tutorial CreatingCommands}
 - {@tutorial CreatingEvents}
 - {@tutorial CreatingExtendables}
