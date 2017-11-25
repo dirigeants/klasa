@@ -35,6 +35,8 @@ class KlasaClient extends Discord.Client {
 	 * @property {object} [provider] The provider to use in Klasa
 	 * @property {KlasaConsoleConfig} [console={}] Config options to pass to the client console
 	 * @property {KlasaConsoleEvents} [consoleEvents={}] Config options to pass to the client console
+	 * @property {string}  [language='en-US'] The default language Klasa should opt-in for the commands.
+	 * @property {number}  [promptTime=30000] The amount of time in milliseconds prompts should last.
 	 * @property {boolean} [ignoreBots=true] Whether or not this bot should ignore other bots
 	 * @property {boolean} [ignoreSelf=true] Whether or not this bot should ignore itself
 	 * @property {boolean} [cmdPrompt=false] Whether the bot should prompt missing parameters
@@ -86,6 +88,7 @@ class KlasaClient extends Discord.Client {
 		this.config.console = config.console || {};
 		this.config.consoleEvents = config.consoleEvents || {};
 		this.config.language = config.language || 'en-US';
+		this.config.promptTime = typeof config.promptTime === 'number' && Number.isInteger(config.promptTime) ? config.promptTime : 30000;
 
 		/**
 		 * The directory to the node_modules folder where Klasa exists
