@@ -211,6 +211,7 @@ class CommandMessage {
 			if (!openQuote && content.slice(i, i + cmdMsg.cmd.usageDelim.length) === cmdMsg.cmd.usageDelim) {
 				if (current !== '') args.push(current);
 				current = '';
+				i += cmdMsg.cmd.usageDelim.length - 1;
 				continue;
 			}
 			if (content[i] === '"' && content[i - 1] !== '\\') {
