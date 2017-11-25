@@ -75,7 +75,9 @@ class MonitorStore extends Collection {
 	 * @param  {external:Message} msg The message object from Discord.js
 	 */
 	run(msg) {
-		for (const monit of this.values()) if (monit.enabled && !(monit.ignoreBots && msg.author.bot) && !(monit.ignoreSelf && this.client.user === msg.author)) monit.run(msg);
+		for (const monit of this.values()) {
+			if (monit.enabled && !(monit.ignoreBots && msg.author.bot) && !(monit.ignoreSelf && this.client.user === msg.author) && !(monit.ignoreOthers && this.client.user !== msg.author)) monit.run(msg);
+		}
 	}
 
 	/**
