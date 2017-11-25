@@ -136,6 +136,7 @@ class CommandMessage {
 					});
 			}
 			this.client.emit('warn', 'Unknown Argument Type encountered');
+			this.params.push(undefined);
 			return this.validateArgs();
 		} else {
 			return this.multiPossibles(0, false);
@@ -173,7 +174,6 @@ class CommandMessage {
 				.catch(() => this.multiPossibles(++possible, validated));
 		} else {
 			this.client.emit('warn', 'Unknown Argument Type encountered');
-			this.params.push(undefined);
 			return this.multiPossibles(++possible, validated);
 		}
 	}
