@@ -30,6 +30,13 @@ module.exports = class extends Language {
 };
 ```
 
+## Configuration
+
+| Name        | Default       | Type    | Description                            |
+| ----------- | ------------- | ------- | -------------------------------------- |
+| **name**    | `theFileName` | string  | The name of the language               |
+| **enabled** | `true`        | boolean | Whether the language is enabled or not |
+
 ## Using Languages:
 
 There are some extendables to help use languages. msg.language is a read-only property that gets a language instance depending on the settings. At the same time. The method `msg.language.get` is used to get an value from the language package, if it exists, that can accept one or more parameters, being the first one always the key's name, followed by parameters that are used by keys that may have variables. If a key is constant, they're optional.
@@ -59,6 +66,7 @@ msg.language.get('SomeKeyThatExistsOnlyInEnglish');
 Also, if a language is disabled, and a guild has it configured, the default language will be used exclusivly until either that language is no-longer disabled, or the guild configures another enabled language.
 
 ## Further Reading:
+
 - {@tutorial CreatingCommands}
 - {@tutorial CreatingEvents}
 - {@tutorial CreatingExtendables}

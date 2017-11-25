@@ -95,9 +95,11 @@ Re-emits the Discord.js debug event as log event, if enabled.
 [events/warn.js](https://github.com/dirigeants/klasa/blob/master/src/events/warn.js)
 
 ## Further Reading:
+
 - {@tutorial IncludedCommands}
 - {@tutorial IncludedExtendables}
 - {@tutorial IncludedFinalizers}
 - {@tutorial IncludedInhibitors}
+- {@tutorial IncludedLanguages}
 - {@tutorial IncludedMonitors}
 - {@tutorial IncludedProviders}

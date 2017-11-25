@@ -808,7 +808,7 @@ declare module 'klasa' {
 
 		public ignoreBots: boolean;
 		public ignoreSelf: boolean;
-
+		public ignoreOthers: boolean;
 		public abstract run(msg: ExtendedMessage): void;
 		public abstract init(): any;
 
