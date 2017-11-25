@@ -1,7 +1,7 @@
 {
     "default": true,
     "header-style": { "style": "atx" },
-    "MD007": { "indent": 4 },
+    "ul-indent": { "indent": 4 },
     "line-length": false,
     "no-hard-tabs": false,
     "first-line-h1": false,
