@@ -15,6 +15,7 @@ class Piece {
 
 	/**
 	 * Reloads this piece
+	 * @since 0.0.1
 	 * @returns {Piece} The newly loaded piece
 	 */
 	async reload() {
@@ -25,6 +26,7 @@ class Piece {
 
 	/**
 	 * Unloads this piece
+	 * @since 0.0.1
 	 * @returns {void}
 	 */
 	unload() {
@@ -33,6 +35,7 @@ class Piece {
 
 	/**
 	 * Disables this piece
+	 * @since 0.0.1
 	 * @returns {Piece} This piece
 	 */
 	disable() {
@@ -42,6 +45,7 @@ class Piece {
 
 	/**
 	 * Enables this piece
+	 * @since 0.0.1
 	 * @returns {Piece} This piece
 	 */
 	enable() {
@@ -51,6 +55,7 @@ class Piece {
 
 	/**
 	 * Defines toString behavior for pieces
+	 * @since 0.3.0
 	 * @returns {string} This piece name
 	 */
 	toString() {
@@ -59,6 +64,7 @@ class Piece {
 
 	/**
 	 * Applies this interface to a class
+	 * @since 0.1.1
 	 * @param {Object} structure The structure to apply this interface to
 	 * @param {string[]} [skips=[]] The methods to skip when applying this interface
 	 */

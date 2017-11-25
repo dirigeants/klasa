@@ -8,6 +8,7 @@ class SettingResolver extends Resolver {
 
 	/**
 	 * Resolves a user
+	 * @since 0.0.1
 	 * @param {any} data The data to resolve
 	 * @param {external:Guild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
@@ -21,6 +22,7 @@ class SettingResolver extends Resolver {
 
 	/**
 	 * Resolves a channel
+	 * @since 0.0.1
 	 * @param {any} data The data to resolve
 	 * @param {external:Guild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
@@ -34,6 +36,7 @@ class SettingResolver extends Resolver {
 
 	/**
 	 * Resolves a TextChannel
+	 * @since 0.3.0
 	 * @param {any} data The data to resolve
 	 * @param {external:Guild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
@@ -47,6 +50,7 @@ class SettingResolver extends Resolver {
 
 	/**
 	 * Resolves a VoiceChannel
+	 * @since 0.3.0
 	 * @param {any} data The data to resolve
 	 * @param {external:Guild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
@@ -60,6 +64,7 @@ class SettingResolver extends Resolver {
 
 	/**
 	 * Resolves a guild
+	 * @since 0.0.1
 	 * @param {any} data The data to resolve
 	 * @param {external:Guild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
@@ -73,6 +78,7 @@ class SettingResolver extends Resolver {
 
 	/**
 	 * Resolves a role
+	 * @since 0.0.1
 	 * @param {any} data The data to resolve
 	 * @param {external:Guild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
@@ -86,6 +92,7 @@ class SettingResolver extends Resolver {
 
 	/**
 	 * Resolves a boolean
+	 * @since 0.0.1
 	 * @param {any} data The data to resolve
 	 * @param {external:Guild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
@@ -99,6 +106,7 @@ class SettingResolver extends Resolver {
 
 	/**
 	 * Resolves a string
+	 * @since 0.0.1
 	 * @param {any} data The data to resolve
 	 * @param {external:Guild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
@@ -115,6 +123,7 @@ class SettingResolver extends Resolver {
 
 	/**
 	 * Resolves a integer
+	 * @since 0.0.1
 	 * @param {any} data The data to resolve
 	 * @param {external:Guild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
@@ -132,6 +141,7 @@ class SettingResolver extends Resolver {
 
 	/**
 	 * Resolves a float
+	 * @since 0.0.1
 	 * @param {any} data The data to resolve
 	 * @param {external:Guild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
@@ -149,6 +159,7 @@ class SettingResolver extends Resolver {
 
 	/**
 	 * Resolves a hyperlink
+	 * @since 0.0.1
 	 * @param {any} data The data to resolve
 	 * @param {external:Guild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
@@ -162,6 +173,7 @@ class SettingResolver extends Resolver {
 
 	/**
 	 * Resolves a command
+	 * @since 0.0.1
 	 * @param {any} data The data to resolve
 	 * @param {external:Guild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
@@ -175,6 +187,7 @@ class SettingResolver extends Resolver {
 
 	/**
 	 * Resolves a language
+	 * @since 0.2.1
 	 * @param {any} data The data to resolve
 	 * @param {external:Guild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
@@ -188,6 +201,7 @@ class SettingResolver extends Resolver {
 
 	/**
 	 * Check if the input is valid with min and/or max values.
+	 * @since 0.0.1
 	 * @static
 	 * @param {external:Guild} guild The guild to resolve for
 	 * @param {number} value The value to check.

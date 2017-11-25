@@ -38,14 +38,14 @@ class RichMenu extends RichDisplay {
 	 * @typedef {object} MenuOption
 	 * @memberof RichMenu
 	 * @property {string} name The name of the option
-	 * @property {string} description The description of the option
+	 * @property {string} body The description of the option
 	 * @property {boolean} [inline = false] Whether the option should be inline
 	 */
 
 	/**
 	 * @typedef {object} RichMenuRunOptions
 	 * @memberof RichMenu
-	 * @property {Function} [filter] A filter function to add to the ReactionHandler
+	 * @property {Function} [filter] A filter function to add to the ReactionHandler (Recieves: Reaction, User)
 	 * @property {boolean} [stop = true] If a stop reaction should be included
 	 * @property {string} [prompt = 'Which page would you like to jump to?'] The prompt to be used when awaiting user input on a page to jump to
 	 * @property {number} [startPage = 0] The page to start the RichMenu on
@@ -57,6 +57,7 @@ class RichMenu extends RichDisplay {
 
 	/**
 	 * Constructs our RichMenu instance
+	 * @since 0.4.0
 	 * @param  {external:MessageEmbed} [embed=new MessageEmbed()] A Template embed to apply to all pages
 	 */
 	constructor(embed) {
@@ -64,6 +65,7 @@ class RichMenu extends RichDisplay {
 
 		/**
 		 * The default emojis to use for this menu
+		 * @since 0.4.0
 		 * @name RichMenu#emojis
 		 * @type {RichMenuEmojisObject}
 		 */
@@ -82,18 +84,21 @@ class RichMenu extends RichDisplay {
 
 		/**
 		 * If options have been paginated yet
+		 * @since 0.4.0
 		 * @type {boolean}
 		 */
 		this.paginated = false;
 
 		/**
 		 * The options of this Menu
+		 * @since 0.4.0
 		 * @type {MenuOption[]}
 		 */
 		this.options = [];
 	}
 
 	/**
+	 * @since 0.4.0
 	 * @throws You cannot directly add pages in a RichMenu
 	 */
 	addPage() {
@@ -102,6 +107,7 @@ class RichMenu extends RichDisplay {
 
 	/**
 	 * Adds a MenuOption
+	 * @since 0.4.0
 	 * @param {string} name The name of the option
 	 * @param {string} body The description of the option
 	 * @param {boolean} [inline = false] Whether the option should be inline
@@ -114,6 +120,7 @@ class RichMenu extends RichDisplay {
 
 	/**
 	 * Runs this RichMenu
+	 * @since 0.4.0
 	 * @param {external:Message} msg A message to edit or use to send a new message with
 	 * @param {RichMenuRunOptions} options The options to use with this RichMenu
 	 * @returns {ReactionHandler}
@@ -125,6 +132,7 @@ class RichMenu extends RichDisplay {
 
 	/**
 	 * Determins the emojis to use in this menu
+	 * @since 0.4.0
 	 * @param {emoji[]} emojis An array of emojis to use
 	 * @param {boolean} stop Whether the stop emoji should be included
 	 * @returns {emoji[]}
@@ -138,6 +146,7 @@ class RichMenu extends RichDisplay {
 
 	/**
 	 * Converts MenuOptions into display pages
+	 * @since 0.4.0
 	 * @returns {void}
 	 * @private
 	 */
@@ -150,7 +159,7 @@ class RichMenu extends RichDisplay {
 			}
 			return embed;
 		});
-		if (this.options.length > page * 10) return this._paginate();
+		if (this.options.length > (page + 1) * 10) return this._paginate();
 		this.paginated = true;
 		return null;
 	}

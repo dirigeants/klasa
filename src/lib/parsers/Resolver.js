@@ -8,10 +8,12 @@ class Resolver {
 
 	/**
 	 * @param {KlasaClient} client The Klasa Client
+	 * @since 0.0.1
 	 */
 	constructor(client) {
 		/**
 		 * The Klasa Client
+		 * @since 0.0.1
 		 * @type {KlasaClient}
 		 */
 		Object.defineProperty(this, 'client', { value: client });
@@ -19,6 +21,7 @@ class Resolver {
 
 	/**
 	 * Fetch a Message object by its Snowflake or instanceof Message.
+	 * @since 0.0.1
 	 * @param {Message|Snowflake} message The message snowflake to validate.
 	 * @param {Channel} channel The Channel object in which the message can be found.
 	 * @returns {?external:Message}
@@ -30,6 +33,7 @@ class Resolver {
 
 	/**
 	 * Resolve a User object by its instance of User, GuildMember, or by its Snowflake.
+	 * @since 0.0.1
 	 * @param {(User|GuildMember|Message|Snowflake)} user The user to validate.
 	 * @returns {?external:User}
 	 */
@@ -47,6 +51,7 @@ class Resolver {
 
 	/**
 	 * Resolve a GuildMember object by its instance of GuildMember, User, or by its Snowflake.
+	 * @since 0.0.1
 	 * @param {(GuildMember|User|Snowflake)} member The number to validate.
 	 * @param {Guild} guild The Guild object in which the member can be found.
 	 * @returns {?external:GuildMember}
@@ -65,6 +70,7 @@ class Resolver {
 
 	/**
 	 * Resolve a Channel object by its instance of Channel, or by its Snowflake.
+	 * @since 0.0.1
 	 * @param {(Channel|Snowflake)} channel The channel to validate.
 	 * @returns {?external:Channel}
 	 */
@@ -76,6 +82,7 @@ class Resolver {
 
 	/**
 	 * Resolve a Guild object by its instance of Guild, or by its Snowflake.
+	 * @since 0.0.1
 	 * @param {(Guild|Snowflake)} guild The guild to validate/find.
 	 * @returns {?external:Guild}
 	 */
@@ -87,6 +94,7 @@ class Resolver {
 
 	/**
 	 * Resolve a Role object by its instance of Role, or by its Snowflake.
+	 * @since 0.0.1
 	 * @param {(Role|Snowflake)} role The role to validate/find.
 	 * @param {Guild} guild The Guild object in which the role can be found.
 	 * @returns {?external:Role}
@@ -99,6 +107,7 @@ class Resolver {
 
 	/**
 	 * Resolve a Boolean instance.
+	 * @since 0.0.1
 	 * @param {(boolean|string)} bool The boolean to validate.
 	 * @returns {?boolean}
 	 */
@@ -111,6 +120,7 @@ class Resolver {
 
 	/**
 	 * Resolve a String instance.
+	 * @since 0.0.1
 	 * @param {string} string The string to validate.
 	 * @returns {?string}
 	 */
@@ -120,6 +130,7 @@ class Resolver {
 
 	/**
 	 * Resolve an Integer.
+	 * @since 0.0.1
 	 * @param {(string|number)} integer The integer to validate.
 	 * @returns {?number}
 	 */
@@ -131,6 +142,7 @@ class Resolver {
 
 	/**
 	 * Resolve a Float.
+	 * @since 0.0.1
 	 * @param {(string|number)} number The float to validate.
 	 * @returns {?number}
 	 */
@@ -142,6 +154,7 @@ class Resolver {
 
 	/**
 	 * Resolve a hyperlink.
+	 * @since 0.0.1
 	 * @param {string} hyperlink The hyperlink to validate.
 	 * @returns {?string}
 	 */
@@ -155,6 +168,7 @@ class Resolver {
 
 /**
  * Standard regular expressions for matching mentions and snowflake ids
+ * @since 0.2.1
  * @type {Object}
  * @property {RegExp} userOrMember Regex for users or members
  * @property {RegExp} channel Regex for channels

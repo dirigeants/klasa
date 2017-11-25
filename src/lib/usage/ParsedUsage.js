@@ -6,12 +6,14 @@ const Tag = require('./Tag');
 class ParsedUsage {
 
 	/**
+	 * @since 0.0.1
 	 * @param {KlasaClient} client The klasa client
 	 * @param {Command} command The command this parsed usage is for
 	 */
 	constructor(client, command) {
 		/**
 		 * The client this CommandMessage was created with.
+		 * @since 0.0.1
 		 * @name ParsedUsage#client
 		 * @type {KlasaClient}
 		 * @readonly
@@ -20,36 +22,42 @@ class ParsedUsage {
 
 		/**
 		 * All names and aliases for the command
+		 * @since 0.0.1
 		 * @type {string[]}
 		 */
 		this.names = [command.name, ...command.aliases];
 
 		/**
 		 * The compiled string for all names/aliases in a usage string
+		 * @since 0.0.1
 		 * @type {string}
 		 */
 		this.commands = this.names.length === 1 ? this.names[0] : `(${this.names.join('|')})`;
 
 		/**
 		 * The usage string re-deliminated with the usageDelim
+		 * @since 0.0.1
 		 * @type {string}
 		 */
 		this.deliminatedUsage = command.usageString !== '' ? ` ${command.usageString.split(' ').join(command.usageDelim)}` : '';
 
 		/**
 		 * The usage string
+		 * @since 0.0.1
 		 * @type {string}
 		 */
 		this.usageString = command.usageString;
 
 		/**
 		 * The usage object to compare against later
+		 * @since 0.0.1
 		 * @type {Tag[]}
 		 */
 		this.parsedUsage = this.constructor.parseUsage(this.usageString);
 
 		/**
 		 * The concatenated string of this.commands and this.deliminatedUsage
+		 * @since 0.0.1
 		 * @type {string}
 		 */
 		this.nearlyFullUsage = `${this.commands}${this.deliminatedUsage}`;
@@ -57,6 +65,7 @@ class ParsedUsage {
 
 	/**
 	 * Creates a full usage string including prefix and commands/aliases for documentation/help purposes
+	 * @since 0.0.1
 	 * @param {external:Message} msg a message to check to get the current prefix
 	 * @returns {string}
 	 */
@@ -67,6 +76,7 @@ class ParsedUsage {
 
 	/**
 	 * Method responsible for building the usage object to check against
+	 * @since 0.0.1
 	 * @param {string} usageString The usage string to parse
 	 * @returns {Tag[]}
 	 */
@@ -114,6 +124,7 @@ class ParsedUsage {
 
 	/**
 	 * Method responsible for handling tag opens
+	 * @since 0.0.1
 	 * @param {Object} usage The current usage interum object
 	 * @param {string} char The character that triggered this function
 	 * @returns {Object} The current usage interum object
@@ -128,6 +139,7 @@ class ParsedUsage {
 
 	/**
 	 * Method responsible for handling tag closes
+	 * @since 0.0.1
 	 * @param {Object} usage The current usage interum object
 	 * @param {string} char The character that triggered this function
 	 * @returns {Object} The current usage interum object
@@ -153,6 +165,7 @@ class ParsedUsage {
 
 	/**
 	 * Method responsible for handling tag spacing
+	 * @since 0.0.1
 	 * @param {Object} usage The current usage interum object
 	 * @param {string} char The character that triggered this function
 	 * @returns {Object} The current usage interum object
