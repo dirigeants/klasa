@@ -47,9 +47,11 @@ Checks if the command can be run in the channel type this is. (based on {@link C
 [inhibitors/runIn.js](https://github.com/dirigeants/klasa/blob/master/src/inhibitors/runIn.js)
 
 ## Further Reading:
+
 - {@tutorial IncludedCommands}
 - {@tutorial IncludedEvents}
 - {@tutorial IncludedExtendables}
 - {@tutorial IncludedFinalizers}
+- {@tutorial IncludedLanguages}
 - {@tutorial IncludedMonitors}
 - {@tutorial IncludedProviders}
