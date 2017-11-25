@@ -154,14 +154,12 @@ class SchemaPiece {
 			throw new TypeError(`[KEY] ${this} - Parameter array must be a boolean.`);
 		}
 		// Default value checking
-		if (this.type === 'boolean' && typeof this.default !== 'boolean') {
+		if (this.array === true) {
+			if (!Array.isArray(this.default)) throw new TypeError(`[DEFAULT] ${this} - Default key must be an array if the key stores an array.`);
+		} else if (this.type === 'boolean' && typeof this.default !== 'boolean') {
 			throw new TypeError(`[DEFAULT] ${this} - Default key must be a boolean if the key stores a boolean.`);
-		}
-		if (this.type === 'string' && typeof this.default !== 'string' && this.default !== null) {
+		} else if (this.type === 'string' && typeof this.default !== 'string' && this.default !== null) {
 			throw new TypeError(`[DEFAULT] ${this} - Default key must be either a string or null if the key stores a string.`);
-		}
-		if (this.array === true && Array.isArray(this.default) === false) {
-			throw new TypeError(`[DEFAULT] ${this} - Default key must be an array if the key stores an array.`);
 		} else if (this.type !== 'any' && typeof this.default === 'object' && this.default !== null) {
 			throw new TypeError(`[DEFAULT] ${this} - Default key must not be type of object unless it is type any or null.`);
 		}
