@@ -148,7 +148,7 @@ async function() {
 
 Now, how we do configure it with the built-in conf command? Easy:
 
-```
+```sh
 k!conf set channels.modlogs #modlogs
 ```
 

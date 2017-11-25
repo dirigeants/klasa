@@ -157,7 +157,7 @@ class SchemaPiece {
 		if (this.type === 'boolean' && typeof this.default !== 'boolean') {
 			throw new TypeError(`[DEFAULT] ${this} - Default key must be a boolean if the key stores a boolean.`);
 		}
-		if (this.type === 'string' && (typeof this.default !== 'string' || this.default !== null)) {
+		if (this.type === 'string' && typeof this.default !== 'string' && this.default !== null) {
 			throw new TypeError(`[DEFAULT] ${this} - Default key must be either a string or null if the key stores a string.`);
 		}
 		if (this.array === true && Array.isArray(this.default) === false) {
