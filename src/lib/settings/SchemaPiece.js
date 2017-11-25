@@ -143,13 +143,43 @@ class SchemaPiece {
 	 * @param {AddOptions} options The options to parse.
 	 */
 	init(options) {
-		if (typeof options !== 'object') throw new TypeError(`SchemaPiece#init expected an object as first parameter. Got: ${typeof options}`);
-		if (typeof this.type !== 'string') throw new TypeError(`[KEY] ${this.path} - Parameter type must be a string.`);
-		if (typeof this.array !== 'boolean') throw new TypeError(`[KEY] ${this.path} - Parameter array must be a boolean.`);
-		if (this.min !== null && typeof this.min !== 'number') throw new TypeError(`[KEY] ${this.path} - Parameter min must be a number or null.`);
-		if (this.max !== null && typeof this.max !== 'number') throw new TypeError(`[KEY] ${this.path} - Parameter max must be a number or null.`);
-		if (this.min !== null && this.max !== null && this.min > this.max) throw new TypeError(`[KEY] ${this.path} - Parameter min must contain a value lower than the parameter max.`);
-		if (typeof this.configurable !== 'boolean') throw new TypeError(`[KEY] ${this.path} - Parameter configurable must be a boolean.`);
+		// Check if the 'options' parameter is an object.
+		if (typeof options !== 'object' || Object.prototype.toString.call(options) !== '[object Object]') {
+			throw new TypeError(`SchemaPiece#init expected an object as first parameter. Got: ${typeof options}`);
+		}
+		if (typeof this.type !== 'string') {
+			throw new TypeError(`[KEY] ${this} - Parameter type must be a string.`);
+		}
+		if (typeof this.array !== 'boolean') {
+			throw new TypeError(`[KEY] ${this} - Parameter array must be a boolean.`);
+		}
+		// Default value checking
+		if (this.type === 'boolean' && typeof this.default !== 'boolean') {
+			throw new TypeError(`[DEFAULT] ${this} - Default key must be a boolean if the key stores a boolean.`);
+		}
+		if (this.type === 'string' && (typeof this.default !== 'string' || this.default !== null)) {
+			throw new TypeError(`[DEFAULT] ${this} - Default key must be either a string or null if the key stores a string.`);
+		}
+		if (this.array === true && Array.isArray(this.default) === false) {
+			throw new TypeError(`[DEFAULT] ${this} - Default key must be an array if the key stores an array.`);
+		}
+		if (this.type !== 'any' && typeof this.default === 'object' && this.default !== null) {
+			throw new TypeError(`[DEFAULT] ${this} - Default key must not be type of object unless it is type any or null.`);
+		}
+		// Min and max checking
+		if (this.min !== null && !isNumber(this.min)) {
+			throw new TypeError(`[KEY] ${this} - Parameter min must be a number or null.`);
+		}
+		if (this.max !== null && !isNumber(this.max)) {
+			throw new TypeError(`[KEY] ${this} - Parameter max must be a number or null.`);
+		}
+		if (this.min !== null && this.max !== null && this.min > this.max) {
+			throw new TypeError(`[KEY] ${this} - Parameter min must contain a value lower than the parameter max.`);
+		}
+		// Configurable checking
+		if (typeof this.configurable !== 'boolean') {
+			throw new TypeError(`[KEY] ${this} - Parameter configurable must be a boolean.`);
+		}
 
 		const value = [this.path, options.sql || (this.type === 'integer' || this.type === 'float' ? 'INTEGER' : 'TEXT') +
 			(this.default !== null ? ` DEFAULT ${SchemaPiece._parseSQLValue(this.default)}` : '')];
@@ -244,6 +274,10 @@ class SchemaPiece {
 		return '';
 	}
 
+}
+
+function isNumber(number) {
+	return typeof number === 'number' && !isNaN(number) && Number.isFinite(number);
 }
 
 module.exports = SchemaPiece;
