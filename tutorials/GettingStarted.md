@@ -45,6 +45,8 @@ client.login('your-bot-token');
 | **commandMessageLifetime** | `1800`                    | number             | The threshold for when comand messages should be sweeped in seconds since last edit |
 | **commandMessageSweep**    | `900`                     | number             | The interval duration for which command messages should be sweept in seconds        |
 | **provider**               | `json`                    | string             | The provider to use in Klasa                                                        |
+| **language**               | `en-US`                   | string             | The default language Klasa should opt-in for the commands                           |
+| **promptTime**             | `30000`                   | number             | The amount of time in milliseconds prompts should last                              |
 | **ignoreBots**             | `true`                    | boolean            | Whether or not this bot should ignore other bots                                    |
 | **ignoreSelf**             | `client.user.bot`         | boolean            | Whether or not this bot should ignore itself (true for bots, false for selfbots)    |
 | **cmdPrompt**              | `false`                   | boolean            | Whether the bot should prompt missing parameters                                    |
