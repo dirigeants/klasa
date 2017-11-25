@@ -466,8 +466,8 @@ class Gateway {
 		target = await this.validate(target).then(output => output && output.id ? output.id : output);
 		const pathData = this.getPath(key, { avoidUnconfigurable, piece: true });
 		return pathData.path.array === true ?
-			await this._parseUpdateArray(target, action, key, value, guild, pathData) :
-			await this._parseUpdateOne(target, key, value, guild, pathData);
+			this._parseUpdateArray(target, action, key, value, guild, pathData) :
+			this._parseUpdateOne(target, key, value, guild, pathData);
 	}
 
 	/**

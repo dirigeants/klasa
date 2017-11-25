@@ -104,12 +104,12 @@ class Schema {
 		if (typeof this[key] !== 'undefined') throw `The key ${key} conflicts with a property of Schema.`;
 
 		const folder = new Schema(this.client, this.manager, object, `${this.path === '' ? '' : `${this.path}.`}${key}`);
-		await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
-
 		this[key] = folder;
 		this.defaults[key] = this[key].defaults;
 		this.keys.add(key);
 		this.keyArray.push(key);
+
+		await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
 
 		if (this.manager.sql) {
 			if (typeof this.manager.provider.addColumn === 'function') await this.manager.provider.addColumn(this.manager.type, folder.getSQL());
@@ -131,9 +131,9 @@ class Schema {
 		if (this.hasKey(key) === false) throw new Error(`The key ${key} does not exist in the current schema.`);
 		if (this[key].type !== 'Folder') throw new Error(`The key ${key} is not Folder type.`);
 
-		await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
 		const folder = this[key];
 		this._removeKey(key);
+		await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
 
 		if (this.manager.sql) {
 			if (typeof this.manager.provider.removeColumn === 'function') await this.manager.provider.removeColumn(this.manager.type, folder.getKeys());
@@ -181,8 +181,8 @@ class Schema {
 			if (typeof options.default === 'undefined') options.default = options.type === 'boolean' ? false : null;
 			options.array = false;
 		}
-		await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
 		this._addKey(key, options);
+		await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
 
 		if (this.manager.sql) {
 			if (typeof this.manager.provider.addColumn === 'function') await this.manager.provider.addColumn(this.manager.type, key, this[key].sqlSchema[1]);
@@ -219,8 +219,8 @@ class Schema {
 	async removeKey(key, force = true) {
 		if (this.hasKey(key) === false) throw `The key ${key} does not exist in the current schema.`;
 		const schemaPiece = this[key];
-		await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
 		this._removeKey(key);
+		await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
 
 		if (this.manager.sql) {
 			if (typeof this.manager.provider.removeColumn === 'function') await this.manager.provider.removeColumn(this.manager.type, key);
