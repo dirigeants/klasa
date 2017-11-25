@@ -2,9 +2,15 @@ const { Monitor, CommandMessage, Stopwatch, util: { regExpEsc, newError } } = re
 
 module.exports = class extends Monitor {
 
+	constructor(...args) {
+		super(...args);
+		this.prefixes = new Map();
+		this.prefixMention = null;
+		this.prefixMentionLength = null;
+		this.nick = new RegExp('^<@!');
+	}
+
 	async run(msg) {
-		// Ignore other users if selfbot
-		if (!this.client.user.bot && msg.author.id !== this.client.user.id) return;
 		if (this.client.user.bot && msg.guild && !msg.guild.me) await msg.guild.members.fetch(this.client.user);
 		if (msg.guild && !msg.channel.permissionsFor(msg.guild.me).has('SEND_MESSAGES')) return;
 		const { command, prefix, prefixLength } = this.parseCommand(msg);
@@ -23,9 +29,8 @@ module.exports = class extends Monitor {
 	}
 
 	parseCommand(msg) {
-		const prefix = this.getPrefix(msg);
+		const { regex: prefix, length: prefixLength } = this.getPrefix(msg);
 		if (!prefix) return { command: false };
-		const prefixLength = prefix.exec(msg.content)[0].length;
 		return {
 			command: msg.content.slice(prefixLength).trim().split(' ')[0].toLowerCase(),
 			prefix,
@@ -34,16 +39,24 @@ module.exports = class extends Monitor {
 	}
 
 	getPrefix(msg) {
-		if (this.client.config.prefixMention.test(msg.content)) return this.client.config.prefixMention;
+		if (this.prefixMention.test(msg.content)) return { length: this.nick.test(msg.content) ? this.prefixMentionLength + 1 : this.prefixMentionLength, regex: this.prefixMention };
 		const prefix = msg.guildSettings.prefix || this.client.config.prefix;
 		if (prefix instanceof Array) {
 			for (let i = prefix.length - 1; i >= 0; i--) {
-				if (msg.content.startsWith(prefix[i])) return new RegExp(`^${regExpEsc(prefix[i])}`);
+				const testingPrefix = this.prefixes.get(prefix[i]) || this.generateNewPrefix(prefix[i]);
+				if (testingPrefix.regex.test(msg.content)) return testingPrefix;
 			}
-		} else if (prefix && msg.content.startsWith(prefix)) {
-			return new RegExp(`^${regExpEsc(prefix)}`);
+		} else if (prefix) {
+			const testingPrefix = this.prefixes.get(prefix) || this.generateNewPrefix(prefix);
+			if (testingPrefix.regex.test(msg.content)) return testingPrefix;
 		}
 		return false;
+	}
+
+	generateNewPrefix(prefix) {
+		const prefixObject = { length: prefix.length, regex: new RegExp(`^${regExpEsc(prefix)}`) };
+		this.prefixes.set(prefix, prefixObject);
+		return prefixObject;
 	}
 
 	makeProxy(msg, cmdMsg) {
@@ -100,6 +113,9 @@ module.exports = class extends Monitor {
 
 	init() {
 		this.ignoreSelf = this.client.user.bot;
+		this.ignoreOthers = !this.client.user.bot;
+		this.prefixMention = new RegExp(`^<@!?${this.client.user.id}>`);
+		this.prefixMentionLength = this.client.user.id.length + 3;
 	}
 
 };
