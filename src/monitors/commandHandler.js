@@ -16,7 +16,10 @@ module.exports = class extends Monitor {
 		const { command, prefix, prefixLength } = this.parseCommand(msg);
 		if (!command) return;
 		const validCommand = this.client.commands.get(command);
-		if (!validCommand) return;
+		if (!validCommand) {
+			if (this.client.listenerCount('commandUnknown')) this.client.emit('commandUnknown', msg, command);
+			return;
+		}
 		const timer = new Stopwatch();
 		if (this.client.config.typing) msg.channel.startTyping();
 

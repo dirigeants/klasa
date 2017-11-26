@@ -90,6 +90,7 @@ class MonitorStore extends Collection {
 		if (!(monitor instanceof this.holds)) return this.client.emit('error', `Only ${this.name} may be stored in the Store.`);
 		const existing = this.get(monitor.name);
 		if (existing) this.delete(existing);
+		else if (this.client.listenerCount('pieceLoaded')) this.client.emit('pieceLoaded', monitor);
 		super.set(monitor.name, monitor);
 		return monitor;
 	}
