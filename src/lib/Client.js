@@ -469,6 +469,14 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  */
 
 /**
+ * Emitted when an unknown command is called.
+ * @event KlasaClient#commandUnknown
+ * @since 0.4.0
+ * @param {external:Message} message The message that triggered the command
+ * @param {string} command The command attempted to run
+ */
+
+/**
  * Emitted when a command has been inhibited.
  * @event KlasaClient#commandInhibited
  * @since 0.3.0
@@ -505,6 +513,41 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  * @param {string} id The identifier of the gateway that was updated
  * @param {Object} oldEntries The old settings entries
  * @param {Object} newEntries The new settings entries
+ */
+
+/**
+ * Emitted when a piece is loaded. (This can be spammy on bot startup or anytime you reload all of a piece type.)
+ * @event KlasaClient#pieceLoaded
+ * @since 0.4.0
+ * @param {Piece} piece The piece that was loaded
+ */
+
+/**
+ * Emitted when a piece is unloaded.
+ * @event KlasaClient#pieceUnloaded
+ * @since 0.4.0
+ * @param {Piece} piece The piece that was unloaded
+ */
+
+/**
+ * Emitted when a piece is reloaded.
+ * @event KlasaClient#pieceReloaded
+ * @since 0.4.0
+ * @param {Piece} piece The piece that was reloaded
+ */
+
+/**
+ * Emitted when a piece is enabled.
+ * @event KlasaClient#pieceEnabled
+ * @since 0.4.0
+ * @param {Piece} piece The piece that was enabled
+ */
+
+/**
+ * Emitted when a piece is disabled.
+ * @event KlasaClient#pieceDisabled
+ * @since 0.4.0
+ * @param {Piece} piece The piece that was disabled
  */
 
 process.on('unhandledRejection', (err) => {
