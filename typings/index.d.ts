@@ -960,6 +960,8 @@ declare module 'klasa' {
 		provider?: { engine: string, cache: string };
 		console?: KlasaConsoleConfig;
 		consoleEvents?: KlasaConsoleEvents;
+		language?: string;
+		promptTime?: number;
 		ignoreBots?: boolean;
 		ignoreSelf?: boolean;
 		cmdPrompt?: boolean;

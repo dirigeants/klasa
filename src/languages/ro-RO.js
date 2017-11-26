@@ -35,7 +35,7 @@ module.exports = class extends Language {
 			COMMANDMESSAGE_MISSING_REQUIRED: (name) => `${name} este un argument necesar.`,
 			COMMANDMESSAGE_MISSING_OPTIONALS: (possibles) => `Lipsește o opțiune necesară: (${possibles})`,
 			COMMANDMESSAGE_NOMATCH: (possibles) => `Opțiunea ta nu se potrivește cu una din posibilități: (${possibles})`,
-			MONITOR_COMMAND_HANDLER_REPROMPT: (tag, error) => `${tag} | **${error}** | Ai **30** să raspunzi cu un argument valid. Scrie **"ABORT"** sa anulezi execuția.`,
+			MONITOR_COMMAND_HANDLER_REPROMPT: (tag, error, time) => `${tag} | **${error}** | Ai **${time}** să raspunzi cu un argument valid. Scrie **"ABORT"** sa anulezi execuția.`,
 			MONITOR_COMMAND_HANDLER_ABORTED: 'Anulat',
 			INHIBITOR_COOLDOWN: (remaining) => `Ai folosit această comandă recent. Poți folosi comanda în ${remaining} de secunde.`,
 			INHIBITOR_DISABLED: 'Această comandă este la moment oprită',

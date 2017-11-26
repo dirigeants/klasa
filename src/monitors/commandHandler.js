@@ -93,10 +93,10 @@ module.exports = class extends Monitor {
 	}
 
 	async awaitMessage(msg, timer, error) {
-		const message = await msg.channel.send(msg.language.get('MONITOR_COMMAND_HANDLER_REPROMPT', `<@!${msg.author.id}>`, error))
+		const message = await msg.channel.send(msg.language.get('MONITOR_COMMAND_HANDLER_REPROMPT', `<@!${msg.author.id}>`, error, this.client.config.promptTime / 1000))
 			.catch((err) => { throw newError(err); });
 
-		const param = await msg.channel.awaitMessages(response => response.author.id === msg.author.id && response.id !== message.id, { max: 1, time: 30000, errors: ['time'] })
+		const param = await msg.channel.awaitMessages(response => response.author.id === msg.author.id && response.id !== message.id, { max: 1, time: this.client.config.promptTime, errors: ['time'] })
 			.catch(() => {
 				message.delete();
 				throw undefined;
