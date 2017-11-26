@@ -36,7 +36,7 @@ module.exports = class extends Language {
 			COMMANDMESSAGE_MISSING_REQUIRED: (name) => `${name} zorunlu bir argüman.`,
 			COMMANDMESSAGE_MISSING_OPTIONALS: (possibles) => `Zorunlu argümanlardan birisi eksik: (${possibles})`,
 			COMMANDMESSAGE_NOMATCH: (possibles) => `Seçiminiz olası değerlerden biri değil: (${possibles})`,
-			MONITOR_COMMAND_HANDLER_REPROMPT: (tag, error) => `${tag} | **${error}** | Mesaja geçerli bir argüman ile yanıt vermek için **30** saniyeniz var . iptal etmek için **"ABORT"** yazın.`,
+			MONITOR_COMMAND_HANDLER_REPROMPT: (tag, error, time) => `${tag} | **${error}** | Mesaja geçerli bir argüman ile yanıt vermek için **${time}** saniyeniz var . iptal etmek için **"ABORT"** yazın.`, // eslint-disable-line max-len
 			MONITOR_COMMAND_HANDLER_ABORTED: 'İptal edildi.',
 			INHIBITOR_COOLDOWN: (remaining) => `Komutu daha yeni kullanıdınız. ${remaining} saniye içerisinde tekrar deneyin.`,
 			INHIBITOR_DISABLED: 'Bu komut şu anlık kapatılmış.',
