@@ -116,7 +116,7 @@ declare module 'klasa' {
 		public on(event: 'commandError', listener: (msg: CommandMessage, command: Command, params: any[], error: Error) => void): this;
 		public on(event: 'commandInhibited', listener: (msg: CommandMessage, command: Command, response: string|Error) => void): this;
 		public on(event: 'commandRun', listener: (msg: CommandMessage, command: Command, params: any[], response: any) => void): this;
-		public on(event: 'commandUnknown', listener: (msg: DiscordMessage, command: string) => void): this;
+		public on(event: 'commandUnknown', listener: (msg: ExtendedMessage, command: string) => void): this;
 
 		// Klasa Console Custom Events
 		public on(event: 'log', listener: (data: any, type: string) => void): this;
@@ -165,7 +165,7 @@ declare module 'klasa' {
 		public once(event: 'commandError', listener: (msg: CommandMessage, command: Command, params: any[], error: Error) => void): this;
 		public once(event: 'commandInhibited', listener: (msg: CommandMessage, command: Command, response: string|Error) => void): this;
 		public once(event: 'commandRun', listener: (msg: CommandMessage, command: Command, params: any[], response: any) => void): this;
-		public once(event: 'commandUnknown', listener: (msg: DiscordMessage, command: string) => void): this;
+		public once(event: 'commandUnknown', listener: (msg: ExtendedMessage, command: string) => void): this;
 
 		// Klasa Console Custom Events
 		public once(event: 'log', listener: (data: any, type: string) => void): this;
