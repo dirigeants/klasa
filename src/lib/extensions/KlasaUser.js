@@ -15,7 +15,8 @@ module.exports = Structures.extend('User', User => {
 			 * @since 0.5.0
 			 * @type {SettingsGateway}
 			 */
-			this.configs = this.client.settings.users.get(this.id);
+			this.configs = null;
+			// todo: fix this
 		}
 
 	}
