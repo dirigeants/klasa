@@ -88,6 +88,7 @@ class KlasaClient extends Discord.Client {
 		this.config.consoleEvents = config.consoleEvents || {};
 		this.config.language = config.language || 'en-US';
 		this.config.promptTime = typeof config.promptTime === 'number' && Number.isInteger(config.promptTime) ? config.promptTime : 30000;
+		this.config.commandMessageLifetime = config.commandMessageLifetime || 1800;
 
 		/**
 		 * The directory to the node_modules folder where Klasa exists
@@ -187,32 +188,11 @@ class KlasaClient extends Discord.Client {
 		this.pieceStores = new Discord.Collection();
 
 		/**
-		 * The cache of command messages and responses to be used for command editing
-		 * @since 0.0.1
-		 * @type {external:Collection}
-		 */
-		this.commandMessages = new Discord.Collection();
-
-		/**
 		 * The permissions structure for this bot
 		 * @since 0.0.1
 		 * @type {PermissionLevels}
 		 */
 		this.permissionLevels = this.validatePermissionLevels();
-
-		/**
-		 * The threshold for how old command messages can be before sweeping since the last edit in seconds
-		 * @since 0.0.1
-		 * @type {number}
-		 */
-		this.commandMessageLifetime = config.commandMessageLifetime || 1800;
-
-		/**
-		 * The interval duration for which command messages should be sweept in seconds
-		 * @since 0.0.1
-		 * @type {number}
-		 */
-		this.commandMessageSweep = config.commandMessageSweep || 900;
 
 		/**
 		 * Whether the client is truely ready or not
@@ -389,9 +369,10 @@ class KlasaClient extends Discord.Client {
 		await this.providers.init();
 		await this.settings.guilds.init();
 		// Providers must be init before settings, and those before all other stores.
+		for (const guild of this.guilds.values()) guild._init();
+		// init the guild's settings (short work around until SG can handle this on it's own)
 		await Promise.all(this.pieceStores.filter(store => store.name !== 'providers').map(store => store.init()));
 		util.initClean(this);
-		this.setInterval(this.sweepCommandMessages.bind(this), this.commandMessageSweep * 1000);
 		this.ready = true;
 		if (this.config.readyMessage === undefined) this.emit('log', `Successfully initialized. Ready to serve ${this.guilds.size} guilds.`);
 		else if (this.config.readyMessage !== null) this.emit('log', typeof this.config.readyMessage === 'function' ? this.config.readyMessage(this) : this.config.readyMessage);
@@ -399,28 +380,47 @@ class KlasaClient extends Discord.Client {
 	}
 
 	/**
-	 * Sweeps command messages based on the lifetime parameter
-	 * @since 0.0.1
-	 * @param {number} lifetime The threshold for how old command messages can be before sweeping since the last edit in seconds
-	 * @returns {number} The amount of messages swept
+	 * Sweeps all text-based channels' messages and removes the ones older than the max message or command message lifetime.
+	 * If the message has been edited, the time of the edit is used rather than the time of the original message.
+	 * @since 0.5.0
+	 * @param {number} [lifetime=this.options.messageCacheLifetime] Messages that are older than this (in seconds)
+	 * will be removed from the caches. The default is based on [ClientOptions#messageCacheLifetime]{@link https://discord.js.org/#/docs/main/master/typedef/ClientOptions?scrollTo=messageCacheLifetime}
+	 * @param {number} [commandLifetime=this.config.commandMessageLifetime] Messages that are older than this (in seconds)
+	 * will be removed from the caches. The default is based on {@link KlasaClientConfig#commandMessageLifetime}
+	 * @returns {number} Amount of messages that were removed from the caches,
+	 * or -1 if the message cache lifetime is unlimited
 	 */
-	sweepCommandMessages(lifetime = this.commandMessageLifetime) {
+	sweepMessages(lifetime = this.options.messageCacheLifetime, commandLifetime = this.config.commandMessageLifetime) {
 		if (typeof lifetime !== 'number' || isNaN(lifetime)) throw new TypeError('The lifetime must be a number.');
 		if (lifetime <= 0) {
-			this.emit('debug', "Didn't sweep messages - lifetime is unlimited");
+			this.emit('debug', 'Didn\'t sweep messages - lifetime is unlimited');
 			return -1;
 		}
 
 		const lifetimeMs = lifetime * 1000;
-		const rightNow = Date.now();
-		const messages = this.commandMessages.size;
+		const commandLifetimeMs = commandLifetime * 1000;
+		const now = Date.now();
+		let channels = 0;
+		let messages = 0;
+		let commandMessages = 0;
 
-		for (const [key, message] of this.commandMessages) {
-			if (rightNow - (message.trigger.editedTimestamp || message.trigger.createdTimestamp) > lifetimeMs) this.commandMessages.delete(key);
+		for (const channel of this.channels.values()) {
+			if (!channel.messages) continue;
+			channels++;
+
+			for (const message of channel.messages.values()) {
+				if (message.command && now - (message.editedTimestamp || message.createdTimestamp) > commandLifetimeMs) {
+					channel.messages.delete(message.id);
+					commandMessages++;
+				} else if (!message.command && now - (message.editedTimestamp || message.createdTimestamp) > lifetimeMs) {
+					channel.messages.delete(message.id);
+					messages++;
+				}
+			}
 		}
 
-		this.emit('debug', `Swept ${messages - this.commandMessages.size} commandMessages older than ${lifetime} seconds.`);
-		return messages - this.commandMessages.size;
+		this.emit('debug', `Swept ${messages} messages and ${commandMessages} command messages older than ${lifetime} seconds in ${channels} text-based channels`);
+		return messages;
 	}
 
 }
