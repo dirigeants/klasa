@@ -204,18 +204,18 @@ module.exports = Structures.extend('Message', Message => {
 				if (this.command.usage.parsedUsage.slice(this.params.length).some(usage => usage.type === 'required')) {
 					this.args.splice(this.params.length, 0, undefined);
 					this.args.splice(this.params.length, 1, null);
-					throw this.client.methods.util.newError(this.msg.language.get('COMMANDMESSAGE_MISSING'), 1);
+					throw this.client.methods.util.newError(this.language.get('COMMANDMESSAGE_MISSING'), 1);
 				} else {
 					return this.params;
 				}
 			} else if (this._currentUsage.type === 'required' && this.args[this.params.length] === undefined) {
 				this.args.splice(this.params.length, 1, null);
 				throw this.client.methods.util.newError(this._currentUsage.possibles.length === 1 ?
-					this.msg.language.get('COMMANDMESSAGE_MISSING_REQUIRED', this._currentUsage.possibles[0].name) :
-					this.msg.language.get('COMMANDMESSAGE_MISSING_OPTIONALS', this._currentUsage.possibles.map(poss => poss.name).join(', ')), 1);
+					this.language.get('COMMANDMESSAGE_MISSING_REQUIRED', this._currentUsage.possibles[0].name) :
+					this.language.get('COMMANDMESSAGE_MISSING_OPTIONALS', this._currentUsage.possibles.map(poss => poss.name).join(', ')), 1);
 			} else if (this._currentUsage.possibles.length === 1) {
 				if (this.client.argResolver[this._currentUsage.possibles[0].type]) {
-					return this.client.argResolver[this._currentUsage.possibles[0].type](this.args[this.params.length], this._currentUsage, 0, this._repeat, this.msg)
+					return this.client.argResolver[this._currentUsage.possibles[0].type](this.args[this.params.length], this._currentUsage, 0, this._repeat, this)
 						.catch((err) => {
 							this.args.splice(this.params.length, 1, null);
 							throw this.client.methods.util.newError(err, 1);
@@ -256,9 +256,9 @@ module.exports = Structures.extend('Message', Message => {
 					return this.validateArgs();
 				}
 				this.args.splice(this.params.length, 1, null);
-				throw this.client.methods.util.newError(this.msg.language.get('COMMANDMESSAGE_NOMATCH', this._currentUsage.possibles.map(poss => poss.name).join(', ')), 1);
+				throw this.client.methods.util.newError(this.language.get('COMMANDMESSAGE_NOMATCH', this._currentUsage.possibles.map(poss => poss.name).join(', ')), 1);
 			} else if (this.client.argResolver[this._currentUsage.possibles[possible].type]) {
-				return this.client.argResolver[this._currentUsage.possibles[possible].type](this.args[this.params.length], this._currentUsage, possible, this._repeat, this.msg)
+				return this.client.argResolver[this._currentUsage.possibles[possible].type](this.args[this.params.length], this._currentUsage, possible, this._repeat, this)
 					.then((res) => {
 						if (res !== null) {
 							this.params.push(res);
