@@ -95,6 +95,7 @@ module.exports = Structures.extend('Message', Message => {
 		}
 
 		_registerCommand({ command, prefix, prefixLength }) {
+			this.reprompted = false;
 			this.command = command;
 			this.prefix = prefix;
 			this.prefixLength = prefixLength;
@@ -188,6 +189,7 @@ module.exports = Structures.extend('Message', Message => {
 		 * @returns {any[]} The resolved parameters
 		 */
 		async validateArgs() {
+			if (!this.reprompted) this.params = [];
 			if (this.params.length >= this.command.usage.parsedUsage.length && this.params.length >= this.args.length) {
 				return this.params;
 			} else if (this.command.usage.parsedUsage[this.params.length]) {
