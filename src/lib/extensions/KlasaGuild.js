@@ -13,12 +13,13 @@ module.exports = Structures.extend('Guild', Guild => {
 			/**
 			 * The guild level configs for this context (guild || default)
 			 * @since 0.5.0
-			 * @type {SettingsGateway}
+			 * @type {Settings}
 			 */
 			this.configs = this.client.settings.guilds.get(this.id);
 		}
 
 		_init() {
+			// Only until this.configs becomes a Settings instance that can be patched when sg is init.
 			this.configs = this.client.settings.guilds.get(this.id);
 		}
 
