@@ -22,7 +22,7 @@ module.exports = class extends Monitor {
 		}
 		const timer = new Stopwatch();
 		if (this.client.config.typing) msg.channel.startTyping();
-		msg._registerCommand({ command, prefix, prefixLength });
+		msg._registerCommand({ command: validCommand, prefix, prefixLength });
 		this.client.inhibitors.run(msg, validCommand)
 			.then(() => this.runCommand(msg, timer))
 			.catch((response) => {
