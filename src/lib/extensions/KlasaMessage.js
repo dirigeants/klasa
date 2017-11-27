@@ -7,7 +7,7 @@ module.exports = Structures.extend('Message', Message => {
      */
 	class KlasaMessage extends Message {
 
-		construtor(...args) {
+		constructor(...args) {
 			super(...args);
 
 			/**
