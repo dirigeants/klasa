@@ -90,6 +90,8 @@ module.exports = class extends Language {
 			],
 			COMMAND_HELP_DM: '📥 | Alle für Sie verfügbaren Befehle wurden Ihnen per Direktnachricht zugeschickt.',
 			COMMAND_HELP_NODM: '❌ | Ich konnte Ihnen keine Direktnachricht schicken, da Sie den Erhalt von Direktnachrichten deaktiviert haben.',
+			COMMAND_HELP_USAGE: (usage) => `Nutzung :: ${usage}`,
+			COMMAND_HELP_EXTENDED: 'Erweiterte Hilfe ::',
 			COMMAND_ENABLE: (type, name) => `+ Erfolgreich ${type}: ${name} aktiviert`,
 			COMMAND_DISABLE: (type, name) => `+ Erfolgreich ${type}: ${name} deaktiviert`,
 			COMMAND_DISABLE_WARN: 'Sie sollten diesen Befehl nicht deaktivieren, da Sie danach nicht mehr befähigt wären, irgendeinen Befehl wieder zu aktivieren.',
