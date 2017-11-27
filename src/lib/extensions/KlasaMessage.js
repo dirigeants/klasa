@@ -139,7 +139,7 @@ module.exports = Structures.extend('Message', Message => {
 							else promises.push(this.channel.send(content[i]));
 						}
 						if (this.responses.length > content.length) {
-							for (let i = content.length - 1; i < this.responses.length; i++) this.responses[i].delete();
+							for (let i = content.length; i < this.responses.length; i++) this.responses[i].delete();
 						}
 					} else {
 						promises.push(this.responses.edit(content[0], options));
