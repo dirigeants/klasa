@@ -1,6 +1,5 @@
 const Discord = require('discord.js');
 const path = require('path');
-const CommandMessage = require('./structures/CommandMessage');
 const ArgResolver = require('./parsers/ArgResolver');
 const PermLevels = require('./structures/PermissionLevels');
 const util = require('./util/util');
@@ -242,7 +241,6 @@ class KlasaClient extends Discord.Client {
 			Webhook: Discord.WebhookClient,
 			escapeMarkdown: Discord.escapeMarkdown,
 			splitMessage: Discord.splitMessage,
-			CommandMessage,
 			util
 		};
 
