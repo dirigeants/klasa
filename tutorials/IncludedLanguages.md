@@ -37,3 +37,13 @@ Romainian/Romania
 **Source:**
 
 [languages/ro-RO.js](https://github.com/dirigeants/klasa/blob/master/src/languages/ro-RO.js)
+
+## Further Reading:
+
+- {@tutorial IncludedCommands}
+- {@tutorial IncludedEvents}
+- {@tutorial IncludedExtendables}
+- {@tutorial IncludedFinalizers}
+- {@tutorial IncludedInhibitors}
+- {@tutorial IncludedMonitors}
+- {@tutorial IncludedProviders}

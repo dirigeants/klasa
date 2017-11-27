@@ -21,6 +21,7 @@ class Piece {
 	async reload() {
 		const piece = this.client[`${this.type}s`].load(this.dir, this.file);
 		await piece.init();
+		if (this.client.listenerCount('pieceReloaded')) this.client.emit('pieceReloaded', piece);
 		return piece;
 	}
 
@@ -30,6 +31,7 @@ class Piece {
 	 * @returns {void}
 	 */
 	unload() {
+		if (this.client.listenerCount('pieceUnloaded')) this.client.emit('pieceUnloaded', this);
 		return this.client[`${this.type}s`].delete(this);
 	}
 
@@ -39,6 +41,7 @@ class Piece {
 	 * @returns {Piece} This piece
 	 */
 	disable() {
+		if (this.client.listenerCount('pieceDisabled')) this.client.emit('pieceDisabled', this);
 		this.enabled = false;
 		return this;
 	}
@@ -49,6 +52,7 @@ class Piece {
 	 * @returns {Piece} This piece
 	 */
 	enable() {
+		if (this.client.listenerCount('pieceEnabled')) this.client.emit('pieceEnabled', this);
 		this.enabled = true;
 		return this;
 	}

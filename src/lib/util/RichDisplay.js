@@ -27,7 +27,7 @@ class RichDisplay {
 	/**
 	 * @typedef {object} RichDisplayRunOptions
 	 * @memberof RichDisplay
-	 * @property {Function} [filter] A filter function to add to the ReactionHandler
+	 * @property {Function} [filter] A filter function to add to the ReactionHandler (Recieves: Reaction, User)
 	 * @property {boolean} [stop = true] If a stop reaction should be included
 	 * @property {boolean} [jump = true] If a jump reaction should be included
 	 * @property {boolean} [firstLast = true] If a first and last reaction should be included

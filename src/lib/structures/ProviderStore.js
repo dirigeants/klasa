@@ -80,6 +80,7 @@ class ProviderStore extends Collection {
 		if (!(provider instanceof this.holds)) return this.client.emit('error', `Only ${this.name} may be stored in the Store.`);
 		const existing = this.get(provider.name);
 		if (existing) this.delete(existing);
+		else if (this.client.listenerCount('pieceLoaded')) this.client.emit('pieceLoaded', provider);
 		super.set(provider.name, provider);
 		return provider;
 	}

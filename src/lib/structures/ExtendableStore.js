@@ -88,6 +88,7 @@ class ExtendableStore extends Collection {
 	set(extendable) {
 		if (!(extendable instanceof Extendable)) return this.client.emit('error', 'Only extendables may be stored in the ExtendableStore.');
 		extendable.init();
+		if (!this.has(extendable.name) && this.client.listenerCount('pieceLoaded')) this.client.emit('pieceLoaded', extendable);
 		super.set(extendable.name, extendable);
 		return extendable;
 	}
