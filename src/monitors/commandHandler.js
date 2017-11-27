@@ -1,4 +1,4 @@
-const { Monitor, CommandMessage, Stopwatch, util: { regExpEsc, newError } } = require('klasa');
+const { Monitor, Stopwatch, util: { regExpEsc, newError } } = require('klasa');
 
 module.exports = class extends Monitor {
 
@@ -22,9 +22,9 @@ module.exports = class extends Monitor {
 		}
 		const timer = new Stopwatch();
 		if (this.client.config.typing) msg.channel.startTyping();
-
+		msg._registerCommand({ command, prefix, prefixLength });
 		this.client.inhibitors.run(msg, validCommand)
-			.then(() => this.runCommand(this.makeProxy(msg, new CommandMessage(msg, validCommand, prefix, prefixLength)), timer))
+			.then(() => this.runCommand(msg, timer))
 			.catch((response) => {
 				if (this.client.config.typing) msg.channel.stopTyping();
 				this.client.emit('commandInhibited', msg, validCommand, response);
@@ -62,14 +62,6 @@ module.exports = class extends Monitor {
 		return prefixObject;
 	}
 
-	makeProxy(msg, cmdMsg) {
-		return new Proxy(msg, {
-			get: function handler(target, param) {
-				return param in msg ? msg[param] : cmdMsg[param];
-			}
-		});
-	}
-
 	async runCommand(msg, timer) {
 		try {
 			await msg.validateArgs();
@@ -77,12 +69,12 @@ module.exports = class extends Monitor {
 			if (this.client.config.typing) msg.channel.stopTyping();
 			if (error.code === 1 && this.client.config.cmdPrompt) {
 				return this.awaitMessage(msg, timer, error.message)
-					.catch(err => this.client.emit('commandError', msg, msg.cmd, msg.params, err));
+					.catch(err => this.client.emit('commandError', msg, msg.command, msg.params, err));
 			}
-			return this.client.emit('commandError', msg, msg.cmd, msg.params, error);
+			return this.client.emit('commandError', msg, msg.command, msg.params, error);
 		}
 
-		const commandRun = msg.cmd.run(msg, msg.params);
+		const commandRun = msg.command.run(msg, msg.params);
 
 		if (this.client.config.typing) msg.channel.stopTyping();
 		timer.stop();
@@ -90,7 +82,7 @@ module.exports = class extends Monitor {
 		return commandRun
 			.then(mes => {
 				this.client.finalizers.run(msg, mes, timer);
-				this.client.emit('commandRun', msg, msg.cmd, msg.params, mes);
+				this.client.emit('commandSuccess', msg, msg.command, msg.params, mes);
 			})
 			.catch(error => this.client.emit('commandError', msg, msg.cmd, msg.params, error));
 	}

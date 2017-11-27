@@ -9,6 +9,12 @@ module.exports = Structures.extend('Guild', Guild => {
 
 		constructor(...args) {
 			super(...args);
+
+			/**
+			 * The guild level configs for this context (guild || default)
+			 * @since 0.5.0
+			 * @type {SettingsGateway}
+			 */
 			this.configs = this.client.settings.guilds.get(this.id);
 		}
 

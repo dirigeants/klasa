@@ -1,5 +1,4 @@
-const { Structures } = require('discord.js');
-const nick = new RegExp('^<@!');
+const { Structures, splitMessage } = require('discord.js');
 
 module.exports = Structures.extend('Message', Message => {
 	/**
@@ -10,58 +9,48 @@ module.exports = Structures.extend('Message', Message => {
 
 		construtor(...args) {
 			super(...args);
-			this.guildConfigs = this.guild ? this.guild.configs : this.client.settings.guilds.defaults;
-			this.isCommandUser = !this.author.bot || (this.client.user.bot && this.author === this.client.user) || (!this.client.user.bot && this.author !== this.client.user);
-			this.responses = [];
-		}
-
-		_patch(data) {
-			super._patch(data);
 
 			/**
-			 * The language in this setting
-			 * @since 0.3.0
-			 * @type {Language}
+			 * The guild level configs for this context (guild || default)
+			 * @since 0.5.0
+			 * @type {SettingsGateway}
 			 */
-			this.language = this.guild ? this.guild.language : this.client.config.language;
+			this.guildConfigs = this.guild ? this.guild.configs : this.client.settings.guilds.defaults;
 
-			if (!this.isCommandUser) return;
-
-			const { command, prefix, prefixLength } = this.constructor.parseCommand();
-
-			if (!command) return;
-
-			const validCommand = this.client.commands.get(command);
-
-			if (!validCommand) return;
+			/**
+			 * The previous responses to this message
+			 * @since 0.5.0
+			 * @type {?KlasaMessage|KlasaMessage[]}
+			 */
+			this.responses = null;
 
 			/**
 			 * The command being run
 			 * @since 0.0.1
-			 * @type {Command}
+			 * @type {?Command}
 			 */
-			this.command = validCommand;
+			this.command = null;
 
 			/**
 			 * The prefix used
 			 * @since 0.0.1
-			 * @type {string}
+			 * @type {?RegExp}
 			 */
-			this.prefix = prefix;
+			this.prefix = null;
 
 			/**
 			 * The length of the prefix used
 			 * @since 0.0.1
-			 * @type {number}
+			 * @type {?number}
 			 */
-			this.prefixLength = prefixLength;
+			this.prefixLength = null;
 
 			/**
 			 * The string arguments derived from the usageDelim of the command
 			 * @since 0.0.1
 			 * @type {string[]}
 			 */
-			this.args = this.command.quotedStringSupport ? this.constructor.getQuotedStringArgs(this) : this.constructor.getArgs(this);
+			this.args = [];
 
 			/**
 			 * The parameters resolved by this class
@@ -92,10 +81,26 @@ module.exports = Structures.extend('Message', Message => {
 			 * @type {boolean}
 			 */
 			this._repeat = false;
-
-			this.client.emit('CommandRun', this);
 		}
 
+		_patch(data) {
+			super._patch(data);
+
+			/**
+			 * The language in this setting
+			 * @since 0.3.0
+			 * @type {Language}
+			 */
+			this.language = this.guild ? this.guild.language : this.client.config.language;
+		}
+
+		_registerCommand({ command, prefix, prefixLength }) {
+			this.command = command;
+			this.prefix = prefix;
+			this.prefixLength = prefixLength;
+			this.args = this.command.quotedStringSupport ? this.constructor.getQuotedStringArgs(this) : this.constructor.getArgs(this);
+			this.client.emit('commandRun', this, this.command, this.args);
+		}
 
 		get reactable() {
 			if (!this.guild) return true;
@@ -122,15 +127,37 @@ module.exports = Structures.extend('Message', Message => {
 				options = {};
 			}
 			options.embed = options.embed || null;
-			if (this.responses.length !== 0 && (!options || !('files' in options))) {
-				// todo: multi response editing
-				return commandMessage.response.edit(content, options);
+			if (this.responses && (!options || !('files' in options))) {
+				if (options && options.split) content = splitMessage(content, options.split);
+				if (content instanceof Array) {
+					const promises = [];
+					if (this.responses instanceof Array) {
+						for (let i = 0; i < content.length; i++) {
+							if (this.responses.length > i) promises.push(this.responses[i].edit(content[i], options));
+							else promises.push(this.channel.send(content[i]));
+						}
+						if (this.responses.length > content.length) {
+							for (let i = content.length - 1; i < this.responses.length; i++) this.responses[i].delete();
+						}
+					} else {
+						promises.push(this.responses.edit(content[0], options));
+						for (let i = 1; i < content.length; i++) promises.push(this.channel.send(content[i]));
+					}
+					return Promise.all(promises)
+						.then(mes => {
+							this.responses = mes;
+							return mes;
+						});
+				} else if (this.responses instanceof Array) {
+					for (let i = this.responses.length - 1; i > 0; i--) this.responses[i].delete();
+					[this.responses] = this.responses;
+				}
+				return this.responses.edit(content, options);
 			}
 			return this.channel.send(content, options)
-				.then((mes) => {
+				.then(mes => {
 					if (!options || !('files' in options)) {
-						if (Array.isArray(mes)) this.responses.push(...mes);
-						else this.responses.push(mes);
+						this.responses = mes;
 					}
 					return mes;
 				});
@@ -187,6 +214,7 @@ module.exports = Structures.extend('Message', Message => {
 				if (!openQuote && content.slice(i, i + msg.command.usageDelim.length) === msg.command.usageDelim) {
 					if (current !== '') args.push(current);
 					current = '';
+					i += msg.command.usageDelim.length - 1;
 					continue;
 				}
 				if (content[i] === '"' && content[i - 1] !== '\\') {
@@ -200,31 +228,6 @@ module.exports = Structures.extend('Message', Message => {
 			if (current !== '') args.push(current);
 
 			return args.length === 1 && args[0] === '' ? [] : args;
-		}
-
-		static parseCommand(msg) {
-			const { regex: prefix, length: prefixLength } = msg.constructor.getPrefix();
-			if (!prefix) return { command: false };
-			return {
-				command: this.content.slice(prefixLength).trim().split(' ')[0].toLowerCase(),
-				prefix,
-				prefixLength
-			};
-		}
-
-		static getPrefix(msg) {
-			if (msg.client.prefixMention.test(msg.content)) return { length: nick.test(msg.content) ? msg.client.prefixMentionLength + 1 : msg.client.prefixMentionLength, regex: msg.client.prefixMention };
-			const prefix = msg.guildConfigs.prefix || msg.client.config.prefix;
-			if (prefix instanceof Array) {
-				for (let i = prefix.length - 1; i >= 0; i--) {
-					const testingPrefix = msg.client.prefixCache.get(prefix[i]) || msg.client.generateNewPrefix(prefix[i]);
-					if (testingPrefix.regex.test(msg.content)) return testingPrefix;
-				}
-			} else if (prefix) {
-				const testingPrefix = msg.client.prefixCache.get(prefix) || msg.client.generateNewPrefix(prefix);
-				if (testingPrefix.regex.test(msg.content)) return testingPrefix;
-			}
-			return { regex: false };
 		}
 
 	}
