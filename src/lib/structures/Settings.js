@@ -44,6 +44,27 @@ class Settings {
 	}
 
 	/**
+	 * Get a value from the settings. Admits nested objects separating by comma.
+	 * @param {string} key The key to get from this instance.
+	 * @returns {any}
+	 */
+	get(key) {
+		if (!key.includes('.')) {
+			const value = this[key];
+			if (value) return value;
+			throw `The key ${key} does no exist in the settings.`;
+		}
+		const path = key.split('.');
+		let ref = this; // eslint-disable-line consistent-this
+		for (let i = 0; i < path.length; i++) {
+			const currKey = path[i];
+			if (typeof ref[currKey] === 'undefined') throw `The key ${path.slice(0, i)} does no exist in the settings.`;
+			ref = ref[currKey];
+		}
+		return ref;
+	}
+
+	/**
 	 * Update this entry.
 	 * @since 0.4.0
 	 * @param {(string|Object)} key The key to update.

@@ -175,10 +175,22 @@ class Gateway {
 	 * Get an entry from the cache.
 	 * @since 0.4.0
 	 * @param {string} input The key to get from the cache.
+	 * @param {boolean} [create=false] Whether SG should create a new instance of settings in the background.
 	 * @returns {(Settings|Object)}
 	 */
-	getEntry(input) {
+	getEntry(input, create = false) {
 		if (input === 'default') return this.defaults;
+		if (create) {
+			const entry = this.cache.get(this.type, input);
+			if (!entry) {
+				const settings = new Settings(this, { id: input });
+				this.cache.set(this.type, input, settings);
+				// Silently create a new entry. The new data does not matter as Settings default all the keys.
+				this.provider.create(this.type, input, { id: input })
+					.catch(error => this.client.emit('log', error, 'error'));
+				return settings;
+			}
+		}
 		return this.cache.get(this.type, input) || this.defaults;
 	}
 
