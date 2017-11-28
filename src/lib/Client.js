@@ -342,6 +342,8 @@ class KlasaClient extends Discord.Client {
 			});
 		this.emit('log', loaded.join('\n'));
 		this.emit('log', `Loaded in ${timer.stop()}.`);
+		await this.providers.init();
+		await this.settings.add('guilds', this.settings.validate, this.settings.defaultDataSchema, {}, false);
 		return super.login(token);
 	}
 
@@ -367,8 +369,6 @@ class KlasaClient extends Discord.Client {
 		if (!this.config.ownerID) this.config.ownerID = this.user.bot ? this.application.owner.id : this.user.id;
 
 		// Providers must be init before settings, and those before all other stores.
-		await this.providers.init();
-		await this.settings.add('guilds', this.settings.validate, this.settings.defaultDataSchema, {}, false);
 		const guildSyncPromises = [];
 		for (const guild of this.guilds.values()) guildSyncPromises.push(guild.configs.sync());
 		await Promise.all(guildSyncPromises);
