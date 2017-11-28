@@ -1,5 +1,4 @@
 const Gateway = require('./Gateway');
-const Schema = require('./Schema');
 const Settings = require('../structures/Settings');
 
 /**
