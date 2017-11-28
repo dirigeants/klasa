@@ -1,5 +1,4 @@
 const { Command } = require('klasa');
-const { inspect } = require('util');
 
 module.exports = class extends Command {
 
@@ -14,7 +13,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [action, key, ...value]) {
-		const configs = msg.guild.settings;
+		const { configs } = msg.guild;
 		if (action !== 'list' && !key) throw msg.language.get('COMMAND_CONF_NOKEY');
 		if (['set', 'remove'].includes(action) && !value[0]) throw msg.language.get('COMMAND_CONF_NOVALUE');
 		if (['set', 'remove', 'reset'].includes(action) && !configs.id) await this.client.settings.guilds.create(msg.guild);
@@ -24,46 +23,43 @@ module.exports = class extends Command {
 		return null;
 	}
 
-	async set(msg, configs, key, value) {
-		if (this.client.settings.guilds.schema[key].array) {
-			await this.client.settings.guilds.updateArray(msg.guild, 'add', key, value.join(' '));
-			return msg.sendMessage(msg.language.get('COMMAND_CONF_ADDED', value.join(' '), key));
-		}
-		const response = await this.client.settings.guilds.update(msg.guild, { [key]: value.join(' ') });
-		return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', key, response[key]));
+	async set(msg, configs, key, valueToSet) {
+		const { path, value } = await this.client.settings.guilds.updateOne(msg.guild, key, valueToSet.join(' '), msg.guild, true);
+		if (path.array) return msg.sendMessage(msg.language.get('COMMAND_CONF_ADDED', path.resolveString(msg, value), path.path));
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', path.path, path.resolveString(msg, value)));
 	}
 
-	async remove(msg, configs, key, value) {
-		if (!this.client.settings.guilds.schema[key].array) return msg.sendMessage(msg.language.get('COMMAND_CONF_KEY_NOT_ARRAY'));
-		return this.client.settings.guilds.updateArray(msg.guild, 'remove', key, value.join(' '))
-			.then(() => msg.sendMessage(msg.language.get('COMMAND_CONF_REMOVE', value.join(' '), key)))
-			.catch(err => msg.sendMessage(err));
+	async remove(msg, configs, key, valueToRemove) {
+		const { path, value } = await this.client.settings.guilds.updateArray(msg.guild, 'remove', key, valueToRemove.join(' '), msg.guild, true);
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_REMOVE', path.resolveString(msg, value), path.path));
 	}
 
 	async get(msg, configs, key) {
-		return msg.sendMessage(msg.language.get('COMMAND_CONF_GET', key, inspect(configs[key])));
+		const { path, route } = this.client.settings.guilds.getPath(key, { avoidUnconfigurable: true, piece: true });
+		const result = configs.get(route.join('.'));
+		const value = path.resolveString(msg, result);
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_GET', path.path, value));
 	}
 
 	async reset(msg, configs, key) {
-		const response = await this.client.settings.guilds.reset(msg.guild, key);
-		return msg.sendMessage(msg.language.get('COMMAND_CONF_RESET', key, response));
+		const { path, value } = await this.client.settings.guilds.reset(msg.guild, key, msg.guild, true);
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_RESET', path.path, path.resolveString(msg, value)));
 	}
 
-	async list(msg, configs) {
-		const longest = Object.keys(configs).sort((a, b) => a.length < b.length)[0].length;
-		const output = ['= Guild Settings ='];
-		const entries = Object.entries(configs);
-		for (let i = 0; i < entries.length; i++) {
-			if (entries[i][0] === 'id') continue;
-			output.push(`${entries[i][0].padEnd(longest)} :: ${this.handle(entries[i][1])}`);
+	list(msg, configs, key) {
+		const { path, route } = this.client.settings.guilds.getPath(key, { avoidUnconfigurable: true, piece: false });
+		let object = configs;
+		if (route.length >= 1) {
+			for (let i = 0; i < route.length; i++) object = object[route[i]];
 		}
-		return msg.sendCode('asciidoc', output);
+		const message = path.getList(msg, object);
+		return msg.sendCode('asciidoc', `= Server Settings =\n${message}`);
 	}
 
 	handle(value) {
 		if (typeof value !== 'object') return value;
 		if (value === null) return 'Not set';
-		if (value instanceof Array) return value[0] ? `[ ${value.join(' | ')} ]` : 'None';
+		if (Array.isArray(value)) return value[0] ? `[ ${value.join(' | ')} ]` : 'None';
 		return value;
 	}
 
