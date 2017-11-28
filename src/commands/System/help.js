@@ -6,16 +6,13 @@ module.exports = class extends Command {
 		super(...args, {
 			aliases: ['commands'],
 			description: 'Display help for a command.',
-			usage: '[Command:string]'
+			usage: '[Command:cmd]'
 		});
 	}
 
 	async run(msg, [cmd]) {
 		const method = this.client.user.bot ? 'author' : 'channel';
 		if (cmd) {
-			cmd = this.client.commands.get(cmd);
-			if (!cmd) return msg.sendMessage(msg.language.get('COMMAND_HELP_COMMAND_NOT_FOUND'));
-			await this.client.inhibitors.run(msg, cmd, true);
 			const info = [
 				`= ${cmd.name} = `,
 				cmd.description,
@@ -51,7 +48,7 @@ module.exports = class extends Command {
 				.then(() => {
 					if (!help.hasOwnProperty(command.category)) help[command.category] = {};
 					if (!help[command.category].hasOwnProperty(command.subCategory)) help[command.category][command.subCategory] = [];
-					help[command.category][command.subCategory].push(`${msg.guildConfigs.prefix}${command.name.padEnd(longest)} :: ${command.description}`);
+					help[command.category][command.subCategory].push(`${msg.guildSettings.prefix}${command.name.padEnd(longest)} :: ${command.description}`);
 					return;
 				})
 				.catch(() => {
