@@ -187,9 +187,12 @@ class Gateway {
 				this.cache.set(this.type, input, settings);
 				// Silently create a new entry. The new data does not matter as Settings default all the keys.
 				this.provider.create(this.type, input, { id: input })
+					.then(() => this.client.listenerCount('settingCreateEntry') ? this.client.emit('settingCreateEntry', settings) : null)
 					.catch(error => this.client.emit('log', error, 'error'));
 				return settings;
 			}
+
+			return entry;
 		}
 		return this.cache.get(this.type, input) || this.defaults;
 	}
@@ -205,6 +208,7 @@ class Gateway {
 		await this.provider.create(this.type, target, { id: target });
 		const settings = new Settings(this, { id: target });
 		this.cache.set(this.type, target, settings);
+		if (this.client.listenerCount('settingCreateEntry')) this.client.emit('settingCreateEntry', settings);
 		return settings;
 	}
 
@@ -215,8 +219,12 @@ class Gateway {
 	 * @returns {Promise<true>}
 	 */
 	async deleteEntry(input) {
+		const settings = this.cache.get(this.type, input);
+		if (!settings) return false;
+
 		await this.provider.delete(this.type, input);
 		this.cache.delete(this.type, input);
+		if (this.client.listenerCount('settingDeleteEntry')) this.client.emit('settingDeleteEntry', settings);
 		return true;
 	}
 
@@ -305,9 +313,11 @@ class Gateway {
 		// Handle entry creation if it does not exist.
 		if (!cache) cache = await this.createEntry(target);
 		const settings = cache;
+		const oldClone = this.client.listenerCount('settingUpdateEntry') ? settings.clone() : null;
 		this._updateMany(cache, object, this.schema, guild, list);
 		await Promise.all(list.promises);
 
+		if (oldClone !== null) this.client.emit('settingUpdateEntry', oldClone, settings);
 		await this.provider.update(this.type, target, settings);
 		return { settings, errors: list.errors };
 	}
@@ -384,12 +394,12 @@ class Gateway {
 		// Handle entry creation if it does not exist.
 		if (!cache) cache = await this.createEntry(target);
 		const settings = cache;
-		const oldClone = this.client.listenerCount('settingUpdate') ? settings.clone() : null;
+		const oldClone = this.client.listenerCount('settingUpdateEntry') ? settings.clone() : null;
 
 		for (let i = 0; i < route.length - 1; i++) cache = cache[route[i]] || {};
 		cache[route[route.length - 1]] = parsedID;
 
-		if (oldClone !== null) this.client.emit('settingUpdate', oldClone, settings);
+		if (oldClone !== null) this.client.emit('settingUpdateEntry', oldClone, settings, path.path);
 		return { entryID: target, parsed: parsedID, parsedID, settings, array: null, path, route };
 	}
 
@@ -414,12 +424,12 @@ class Gateway {
 		// Handle entry creation if it does not exist.
 		if (!cache) cache = await this.createEntry(target);
 		const settings = cache;
-		const oldClone = this.client.listenerCount('settingUpdate') ? settings.clone() : null;
+		const oldClone = this.client.listenerCount('settingUpdateEntry') ? settings.clone() : null;
 
 		for (let i = 0; i < route.length - 1; i++) cache = cache[route[i]] || {};
 		cache[route[route.length - 1]] = parsedID;
 
-		if (oldClone !== null) this.client.emit('settingUpdate', oldClone, settings);
+		if (oldClone !== null) this.client.emit('settingUpdateEntry', oldClone, settings, path.path);
 		return { entryID: target, parsed, parsedID, settings, array: null, path, route };
 	}
 
@@ -445,7 +455,7 @@ class Gateway {
 		// Handle entry creation if it does not exist.
 		if (!cache) cache = await this.createEntry(target);
 		const settings = cache;
-		const oldClone = this.client.listenerCount('settingUpdate') ? settings.clone() : null;
+		const oldClone = this.client.listenerCount('settingUpdateEntry') ? settings.clone() : null;
 
 		for (let i = 0; i < route.length; i++) {
 			if (typeof cache[route[i]] === 'undefined') cache[route[i]] = {};
@@ -460,7 +470,7 @@ class Gateway {
 			cache.splice(index, 1);
 		}
 
-		if (oldClone !== null) this.client.emit('settingUpdate', oldClone, settings);
+		if (oldClone !== null) this.client.emit('settingUpdateEntry', oldClone, settings, path.path);
 		return { entryID: target, parsed, parsedID, settings, array: cache, path, route };
 	}
 

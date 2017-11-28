@@ -495,11 +495,28 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  */
 
 /**
- * Emitted when {@link SettingGateway.updateOne}, {@link SettingGateway.updateMany}, {@link SettingGateway.updateArray} or {@link SettingGateway.reset} is run.
- * @event KlasaClient#settingUpdate
- * @since 0.3.0
+ * Emitted when {@link Gateway.updateOne}, {@link Gateway.updateArray} or {@link Gateway.reset}
+ * is run. When {@link Gateway.updateMany} is run, the parameter path will be undefined.
+ * @event KlasaClient#settingUpdateEntry
+ * @since 0.5.0
  * @param {Settings} oldEntry The old settings entries
  * @param {Settings} newEntry The new settings entries
+ * @param {string} [path] The path of the key which changed
+ */
+
+/**
+ * Emitted when {@link Gateway.deleteEntry} is run.
+ * @event KlasaClient#settingDeleteEntry
+ * @since 0.5.0
+ * @param {Settings} entry The entry which got deleted
+ */
+
+/**
+ * Emitted when {@link Gateway.createEntry} is run or when {@link Gateway.getEntry}
+ * with the create parameter set to true creates the entry.
+ * @event KlasaClient#settingCreateEntry
+ * @since 0.5.0
+ * @param {Settings} entry The entry which got created
  */
 
 process.on('unhandledRejection', (err) => {
