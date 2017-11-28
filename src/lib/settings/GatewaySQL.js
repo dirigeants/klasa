@@ -23,7 +23,7 @@ class GatewaySQL extends Gateway {
 
 	/**
 	 * Inits the table and the schema for its use in this gateway.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @returns {Promise<void[]>}
 	 */
 	async init() {
@@ -37,7 +37,7 @@ class GatewaySQL extends Gateway {
 
 	/**
 	 * Inits the table for its use in this gateway.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 */
 	async initTable() {
 		const hasTable = await this.provider.hasTable(this.type);
@@ -49,7 +49,7 @@ class GatewaySQL extends Gateway {
 
 	/**
 	 * Sync either all entries from the cache with the persistent SQL database, or a single one.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {(Object|string)} [input] An object containing a id property, like discord.js objects, or a string.
 	 * @returns {Promise<boolean>}
 	 */
@@ -88,7 +88,7 @@ class GatewaySQL extends Gateway {
 
 	/**
 	 * Update a value from an entry.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {string} target The entry target.
 	 * @param {string} key The key to modify.
 	 * @param {any} value The value to parse and save.
@@ -133,7 +133,7 @@ class GatewaySQL extends Gateway {
 
 	/**
 	 * Parses an entry
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {Object} entry An entry to parse.
 	 * @param {SchemaPiece[]} [schemaValues] An array of SchemaPieces to validate.
 	 * @returns {Object}

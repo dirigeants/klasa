@@ -101,7 +101,7 @@ class Gateway {
 		this.type = type;
 
 		/**
-		 * @since 0.4.0
+		 * @since 0.5.0
 		 * @type {GatewayOptions}
 		 */
 		this.options = options;
@@ -143,7 +143,7 @@ class Gateway {
 
 	/**
 	 * Inits the table for its use in this gateway.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 */
 	async initTable() {
 		const hasTable = await this.provider.hasTable(this.type);
@@ -160,7 +160,7 @@ class Gateway {
 
 	/**
 	 * Inits the schema, creating a file if it does not exist, and returning the current schema or the default.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @returns {Promise<Object>}
 	 */
 	async initSchema() {
@@ -173,7 +173,7 @@ class Gateway {
 
 	/**
 	 * Get an entry from the cache.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {string} input The key to get from the cache.
 	 * @param {boolean} [create=false] Whether SG should create a new instance of settings in the background.
 	 * @returns {(Settings|Object)}
@@ -196,7 +196,7 @@ class Gateway {
 
 	/**
 	 * Create a new entry into the database with an optional content (defaults to this Gateway's defaults).
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {string} input The name of the key to create.
 	 * @returns {Promise<Settings>}
 	 */
@@ -213,7 +213,7 @@ class Gateway {
 
 	/**
 	 * Delete an entry from the database and cache.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {string} input The name of the key to fetch and delete.
 	 * @returns {Promise<true>}
 	 */
@@ -260,7 +260,7 @@ class Gateway {
 
 	/**
 	 * Update a value from an entry.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {string} target The entry target.
 	 * @param {string} key The key to modify.
 	 * @param {any} value The value to parse and save.
@@ -293,7 +293,7 @@ class Gateway {
 
 	/**
 	 * Update multiple keys given a JSON object.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {string} target The entry target.
 	 * @param {Object} object A JSON object to iterate and parse.
 	 * @param {GatewayGuildResolvable} [guild] A guild resolvable.
@@ -317,7 +317,7 @@ class Gateway {
 
 	/**
 	 * Resolve a path from a string.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {string} [key=null] A string to resolve.
 	 * @param {GatewayPathOptions} [options={}] Whether the Gateway should avoid configuring the selected key.
 	 * @returns {GatewayPathResult}
@@ -371,7 +371,7 @@ class Gateway {
 
 	/**
 	 * Parse the data for reset.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {string} target The key target.
 	 * @param {string} key The key to edit.
 	 * @param {external:Guild} guild The guild to take.
@@ -395,7 +395,7 @@ class Gateway {
 
 	/**
 	 * Update a single key
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {string} target The key target.
 	 * @param {string} key The key to edit.
 	 * @param {any} value The new value.
@@ -423,7 +423,7 @@ class Gateway {
 
 	/**
 	 * Update an array
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {string} target The key target.
 	 * @param {('add'|'remove')} action Whether the value should be added or removed to the array.
 	 * @param {string} key The key to edit.
@@ -462,7 +462,7 @@ class Gateway {
 
 	/**
 	 * Update an array
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {string} target The key target.
 	 * @param {('add'|'remove')} action Whether the value should be added or removed to the array.
 	 * @param {string} key The key to edit.
@@ -484,7 +484,7 @@ class Gateway {
 
 	/**
 	 * Update many keys in a single query.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {Object} cache The key target.
 	 * @param {Object} object The key to edit.
 	 * @param {Schema} schema The new value.
@@ -508,7 +508,7 @@ class Gateway {
 
 	/**
 	 * Resolves a guild
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {GatewayGuildResolvable} guild A guild resolvable.
 	 * @returns {?Guild}
 	 * @private
@@ -545,7 +545,7 @@ class Gateway {
 
 	/**
 	 * Get this gateway's defaults.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @type {Object}
 	 * @readonly
 	 */
@@ -575,6 +575,7 @@ class Gateway {
 
 	/**
 	 * Make an error that can or not have a valid Guild.
+	 * @since 0.5.0
 	 * @param {external:Guild} guild The guild to get the language from.
 	 * @param {(string|number)} code The code of the error.
 	 * @param {(string|Error)} error The error.

@@ -201,6 +201,7 @@ class SettingResolver extends Resolver {
 
 	/**
 	 * Resolves anything, even objects.
+	 * @since 0.5.0
 	 * @param {any} data Raw content to pass.
 	 * @returns {Promise<any>}
 	 */

@@ -18,7 +18,7 @@ class Schema {
 	 */
 
 	/**
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {KlasaClient} client The client which initialized this instance.
 	 * @param {(Gateway|GatewaySQL)} manager The Gateway that manages this schema instance.
 	 * @param {Object} object The object containing the properties for this schema instance.
@@ -27,7 +27,7 @@ class Schema {
 	constructor(client, manager, object, path) {
 		/**
 		 * The Klasa client.
-		 * @since 0.4.0
+		 * @since 0.5.0
 		 * @type {KlasaClient}
 		 * @name Schema#client
 		 * @readonly
@@ -36,7 +36,7 @@ class Schema {
 
 		/**
 		 * The Gateway that manages this schema instance.
-		 * @since 0.4.0
+		 * @since 0.5.0
 		 * @type {(Gateway|GatewaySQL)}
 		 * @name Schema#manager
 		 * @readonly
@@ -45,7 +45,7 @@ class Schema {
 
 		/**
 		 * The path of this schema instance.
-		 * @since 0.4.0
+		 * @since 0.5.0
 		 * @type {string}
 		 * @name Schema#path
 		 * @readonly
@@ -54,7 +54,7 @@ class Schema {
 
 		/**
 		 * The type of this schema instance.
-		 * @since 0.4.0
+		 * @since 0.5.0
 		 * @type {'Folder'}
 		 * @name Schema#type
 		 * @readonly
@@ -63,7 +63,7 @@ class Schema {
 
 		/**
 		 * The default values for this schema instance and children.
-		 * @since 0.4.0
+		 * @since 0.5.0
 		 * @type {Object}
 		 * @name Schema#defaults
 		 * @readonly
@@ -72,7 +72,7 @@ class Schema {
 
 		/**
 		 * A Set containing all keys' names which value is either a Schema or a SchemaPiece instance.
-		 * @since 0.4.0
+		 * @since 0.5.0
 		 * @type {Set<string>}
 		 * @name Schema#keys
 		 * @readonly
@@ -81,7 +81,7 @@ class Schema {
 
 		/**
 		 * A pre-processed array with all keys' names.
-		 * @since 0.4.0
+		 * @since 0.5.0
 		 * @type {string[]}
 		 * @name Schema#keyArray
 		 * @readonly
@@ -93,7 +93,7 @@ class Schema {
 
 	/**
 	 * Create a new nested folder.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {string} key The name's key for the folder.
 	 * @param {Object} [object={}] An object containing all the Schema/SchemaPieces literals for this folder.
 	 * @param {boolean} [force=true] Whether this function call should modify all entries from the database.
@@ -122,7 +122,7 @@ class Schema {
 
 	/**
 	 * Remove a nested folder.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {string} key The folder's name to remove.
 	 * @param {boolean} [force=true] Whether this function call should modify all entries from the database.
 	 * @returns {Promise<Schema>}
@@ -146,7 +146,7 @@ class Schema {
 
 	/**
 	 * Check if the key exists in this folder.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {string} key The key to check.
 	 * @returns {boolean}
 	 */
@@ -156,7 +156,7 @@ class Schema {
 
 	/**
 	 * Add a new key to this folder.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {string} key The name for the key.
 	 * @param {AddOptions} options The key's options to apply.
 	 * @param {boolean} [force=true] Whether this function call should modify all entries from the database.
@@ -195,7 +195,7 @@ class Schema {
 
 	/**
 	 * Add a key to the instance.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {string} key The name of the key.
 	 * @param {AddOptions} options The options of the key.
 	 * @private
@@ -211,7 +211,7 @@ class Schema {
 
 	/**
 	 * Remove a key from this folder.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {string} key The key's name to remove.
 	 * @param {boolean} [force=true] Whether this function call should modify all entries from the database.
 	 * @returns {Promise<Schema>}
@@ -233,7 +233,7 @@ class Schema {
 
 	/**
 	 * Remove a key from the instance.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {string} key The name of the key.
 	 * @private
 	 */
@@ -249,7 +249,7 @@ class Schema {
 
 	/**
 	 * Modifies all entries from the database.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {('add'|'edit'|'delete')} action The action to perform.
 	 * @param {string} key The key.
 	 * @param {(SchemaPiece|Schema)} piece The SchemaPiece instance to handle.
@@ -288,7 +288,7 @@ class Schema {
 
 	/**
 	 * Get a list.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {external:Message} msg The Message instance.
 	 * @param {Object} object The settings to parse.
 	 * @returns {string}
@@ -308,7 +308,7 @@ class Schema {
 
 	/**
 	 * Get a JSON object with all the default values.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {Object} [object={}] The object to update.
 	 * @returns {Object}
 	 */
@@ -324,7 +324,7 @@ class Schema {
 
 	/**
 	 * Get all the SQL schemas from this schema's children.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {string[]} [array=[]] The array to push.
 	 * @returns {string[]}
 	 */
@@ -335,7 +335,7 @@ class Schema {
 
 	/**
 	 * Get all the pathes from this schema's children.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {string[]} [array=[]] The array to push.
 	 * @returns {string[]}
 	 */
@@ -346,7 +346,7 @@ class Schema {
 
 	/**
 	 * Get all the SchemaPieces instances from this schema's children. Used for GatewaySQL.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {string[]} [array=[]] The array to push.
 	 * @returns {SchemaPiece[]}
 	 */
@@ -356,7 +356,7 @@ class Schema {
 	}
 
 	/**
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @returns {string}
 	 */
 	resolveString() {
@@ -365,7 +365,7 @@ class Schema {
 
 	/**
 	 * Get a JSON object containing all the objects from this schema's children.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @returns {Object}
 	 */
 	toJSON() {
@@ -373,7 +373,7 @@ class Schema {
 	}
 
 	/**
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @returns {string}
 	 */
 	toString() {
@@ -382,7 +382,7 @@ class Schema {
 
 	/**
 	 * Get all configureable keys from this schema.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @readonly
 	 * @returns {string[]}
 	 */
@@ -393,7 +393,7 @@ class Schema {
 
 	/**
 	 * Method called in initialization to populate the instance with the keys from the schema.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {Object} object The object to parse. Only called once per initialization.
 	 * @private
 	 */

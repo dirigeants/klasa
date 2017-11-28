@@ -4,14 +4,14 @@
 class Settings {
 
 	/**
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {(Gateway|GatewaySQL)} manager The Gateway that manages this settings instance.
 	 * @param {Object} data The data that is cached in this Settings instance.
 	 */
 	constructor(manager, data) {
 		/**
 		 * The Gateway that manages this Settings instance.
-		 * @since 0.4.0
+		 * @since 0.5.0
 		 * @type {(Gateway|GatewaySQL)}
 		 * @name Settings#manager
 		 * @readonly
@@ -20,7 +20,7 @@ class Settings {
 
 		/**
 		 * The type of the Gateway.
-		 * @since 0.4.0
+		 * @since 0.5.0
 		 * @type {string}
 		 * @name Settings#type
 		 * @readonly
@@ -29,7 +29,7 @@ class Settings {
 
 		/**
 		 * The ID that identifies this instance.
-		 * @since 0.4.0
+		 * @since 0.5.0
 		 * @type {string}
 		 * @name Settings#id
 		 * @readonly
@@ -52,21 +52,27 @@ class Settings {
 		if (!key.includes('.')) {
 			const value = this[key];
 			if (value) return value;
-			throw `The key ${key} does no exist in the settings.`;
+			throw `The key ${key} does no exist in the configuration.`;
 		}
 		const path = key.split('.');
-		let ref = this; // eslint-disable-line consistent-this
+		let refSetting = this; // eslint-disable-line consistent-this
+		let refSchema = this.manager.schema;
 		for (let i = 0; i < path.length; i++) {
 			const currKey = path[i];
-			if (typeof ref[currKey] === 'undefined') throw `The key ${path.slice(0, i)} does no exist in the settings.`;
-			ref = ref[currKey];
+			if (!refSchema.hasKey(currKey)) throw `The key ${path.slice(0, i)} does no exist in the configuration.`;
+			refSetting = refSetting[currKey];
+			refSchema = refSchema[currKey];
 		}
-		return ref;
+		return refSetting;
+	}
+
+	clone() {
+		return Settings._clone(this, this.manager.schema);
 	}
 
 	/**
 	 * Update this entry.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {(string|Object)} key The key to update.
 	 * @param {any} value The value for the key.
 	 * @returns {Promise<Settings>}
@@ -98,7 +104,7 @@ class Settings {
 
 	/**
 	 * Sync the data from the database with the cache.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @returns {Promise<Settings>}
 	 */
 	async sync() {
@@ -108,7 +114,7 @@ class Settings {
 
 	/**
 	 * Delete this entry from the database and cache.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @returns {Promise<Settings>}
 	 */
 	async destroy() {
@@ -118,7 +124,7 @@ class Settings {
 
 	/**
 	 * Returns a better string when an instance of this class gets stringified.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @returns {string}
 	 */
 	toString() {
@@ -127,7 +133,7 @@ class Settings {
 
 	/**
 	 * The client this settings was created with.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @type {KlasaClient}
 	 * @readonly
 	 */
@@ -137,7 +143,7 @@ class Settings {
 
 	/**
 	 * Assign data to the settings.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {Object} data The data contained in the group.
 	 * @param {(Schema|SchemaPiece)} schema A Schema or a SchemaPiece instance.
 	 * @returns {Object}
@@ -157,6 +163,30 @@ class Settings {
 		}
 
 		return data;
+	}
+
+	/**
+	 * Clone settings.
+	 * @since 0.5.0
+	 * @param {Object} data The data to clone.
+	 * @param {(Schema|SchemaPiece)} schema A Schema or a SchemaPiece instance.
+	 * @returns {Object}
+	 * @private
+	 * @static
+	 */
+	static _clone(data, schema) {
+		const clone = {};
+
+		for (let i = 0; i < schema.keyArray.length; i++) {
+			const key = schema.keyArray[i];
+			if (schema[key].type === 'Folder') {
+				clone[key] = Settings._clone(data[key], schema[key]);
+			} else {
+				clone[key] = schema[key].array ? data[key].slice(0) : data[key];
+			}
+		}
+
+		return clone;
 	}
 
 }

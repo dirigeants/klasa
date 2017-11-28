@@ -86,7 +86,7 @@ class SettingsCache {
 
 	/**
 	 * Check if a provider exists.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {string} engine Check if a provider exists.
 	 * @returns {Provider}
 	 * @private

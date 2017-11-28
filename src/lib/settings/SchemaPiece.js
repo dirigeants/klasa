@@ -14,7 +14,7 @@ class SchemaPiece {
 	 */
 
 	/**
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {KlasaClient} client The client which initialized this instance.
 	 * @param {(Gateway|GatewaySQL)} manager The Gateway that manages this schema instance.
 	 * @param {AddOptions} options The object containing the properties for this schema instance.
@@ -24,7 +24,7 @@ class SchemaPiece {
 	constructor(client, manager, options, path, key) {
 		/**
 		 * The Klasa client.
-		 * @since 0.4.0
+		 * @since 0.5.0
 		 * @type {KlasaClient}
 		 * @name SchemaPiece#client
 		 * @readonly
@@ -33,7 +33,7 @@ class SchemaPiece {
 
 		/**
 		 * The Gateway that manages this SchemaPiece instance.
-		 * @since 0.4.0
+		 * @since 0.5.0
 		 * @type {(Gateway|GatewaySQL)}
 		 * @name SchemaPiece#manager
 		 * @readonly
@@ -42,7 +42,7 @@ class SchemaPiece {
 
 		/**
 		 * The path of this SchemaPiece instance.
-		 * @since 0.4.0
+		 * @since 0.5.0
 		 * @type {string}
 		 * @name SchemaPiece#path
 		 * @readonly
@@ -51,7 +51,7 @@ class SchemaPiece {
 
 		/**
 		 * This keys' name.
-		 * @since 0.4.0
+		 * @since 0.5.0
 		 * @type {string}
 		 * @name SchemaPiece#key
 		 * @readonly
@@ -60,7 +60,7 @@ class SchemaPiece {
 
 		/**
 		 * The type of this key.
-		 * @since 0.4.0
+		 * @since 0.5.0
 		 * @type {string}
 		 * @name SchemaPiece#type
 		 */
@@ -68,7 +68,7 @@ class SchemaPiece {
 
 		/**
 		 * Whether this key should store multiple or a single value.
-		 * @since 0.4.0
+		 * @since 0.5.0
 		 * @type {boolean}
 		 * @name SchemaPiece#array
 		 */
@@ -76,7 +76,7 @@ class SchemaPiece {
 
 		/**
 		 * What this key should provide by default.
-		 * @since 0.4.0
+		 * @since 0.5.0
 		 * @type {any}
 		 * @name SchemaPiece#default
 		 */
@@ -84,7 +84,7 @@ class SchemaPiece {
 
 		/**
 		 * The minimum value for this key.
-		 * @since 0.4.0
+		 * @since 0.5.0
 		 * @type {?number}
 		 * @name SchemaPiece#min
 		 */
@@ -92,7 +92,7 @@ class SchemaPiece {
 
 		/**
 		 * The maximum value for this key.
-		 * @since 0.4.0
+		 * @since 0.5.0
 		 * @type {?number}
 		 * @name SchemaPiece#max
 		 */
@@ -100,7 +100,7 @@ class SchemaPiece {
 
 		/**
 		 * Whether this key should be configureable by the config command. When type is any, this key defaults to false.
-		 * @since 0.4.0
+		 * @since 0.5.0
 		 * @type {boolean}
 		 * @name SchemaPiece#configurable
 		 */
@@ -111,7 +111,7 @@ class SchemaPiece {
 
 	/**
 	 * Parse a value in this key's resolver.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {string} value The value to parse.
 	 * @param {external:Guild} guild A Guild instance required for the resolver to work.
 	 * @returns {Promise<any>}
@@ -122,7 +122,7 @@ class SchemaPiece {
 
 	/**
 	 * Get this key's raw data in JSON.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @returns {SchemaPieceJSON}
 	 */
 	toJSON() {
@@ -139,7 +139,7 @@ class SchemaPiece {
 
 	/**
 	 * Check if the key is properly configured.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {AddOptions} options The options to parse.
 	 */
 	init(options) {
@@ -186,7 +186,7 @@ class SchemaPiece {
 
 	/**
 	 * Get the SQL key and datatype.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {Array<string[]>} [array] An array to push.
 	 * @returns {string[]}
 	 */
@@ -197,7 +197,7 @@ class SchemaPiece {
 
 	/**
 	 * Get the current key.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {string[]} [array] An array to push.
 	 * @returns {string}
 	 */
@@ -208,7 +208,7 @@ class SchemaPiece {
 
 	/**
 	 * Passes the instance to an array
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {SchemaPiece[]} [array] An array to push.
 	 * @returns {this}
 	 */
@@ -219,7 +219,7 @@ class SchemaPiece {
 
 	/**
 	 * Resolve a string.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {external:Message} msg The Message to use.
 	 * @param {any} value The current value of the key.
 	 * @returns {string}
@@ -250,7 +250,7 @@ class SchemaPiece {
 
 	/**
 	 * Stringify a value or the instance itself.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @returns {string}
 	 */
 	toString() {
@@ -259,7 +259,7 @@ class SchemaPiece {
 
 	/**
 	 * Parses a value to a valid string that can be used for SQL input.
-	 * @since 0.4.0
+	 * @since 0.5.0
 	 * @param {any} value The value to parse.
 	 * @returns {string}
 	 */
