@@ -371,6 +371,7 @@ class KlasaClient extends Discord.Client {
 		// Providers must be init before settings, and those before all other stores.
 		for (const guild of this.guilds.values()) guild._init();
 		// init the guild's settings (short work around until SG can handle this on it's own)
+		// todo: fix SG to create Settings instances on all Guilds and Users, that can be later patched, as opposed to partial Settings partial Object Literal
 		await Promise.all(this.pieceStores.filter(store => store.name !== 'providers').map(store => store.init()));
 		util.initClean(this);
 		this.ready = true;

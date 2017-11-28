@@ -7,6 +7,32 @@ module.exports = Structures.extend('Message', Message => {
      */
 	class KlasaMessage extends Message {
 
+		/**
+		 * Data that can be resolved to give a string. This can be:
+		 * * A string
+		 * * An array (joined with a new line delimiter to give a string)
+		 * * Any value
+		 * @typedef {string|Array|*} StringResolvable
+		 * @memberof KlasaMessage
+		 */
+
+		/**
+		 * Options provided when sending or editing a message.
+		 * @typedef {Object} MessageOptions
+		 * @property {boolean} [tts=false] Whether or not the message should be spoken aloud
+		 * @property {string} [nonce=''] The nonce for the message
+		 * @property {RichEmbed|Object} [embed] An embed for the message
+		 * (see [here]{@link https://discordapp.com/developers/docs/resources/channel#embed-object} for more details)
+		 * @property {boolean} [disableEveryone=this.client.options.disableEveryone] Whether or not @everyone and @here
+		 * should be replaced with plain-text
+		 * @property {FileOptions|BufferResolvable|Attachment} [file] A file to send with the message **(deprecated)**
+		 * @property {FileOptions[]|BufferResolvable[]|Attachment[]} [files] Files to send with the message
+		 * @property {string|boolean} [code] Language for optional codeblock formatting to apply
+		 * @property {boolean|SplitOptions} [split=false] Whether or not the message should be split into multiple messages if
+		 * it exceeds the character limit. If an object is provided, these are the options for splitting the message
+		 * @property {UserResolvable} [reply] User to reply to (prefixes the message with a mention, except in DMs)
+		 */
+
 		constructor(...args) {
 			super(...args);
 
@@ -83,6 +109,11 @@ module.exports = Structures.extend('Message', Message => {
 			this._repeat = false;
 		}
 
+		/**
+		 * Extends the patch method from D.JS to attach and update the language to this instance
+		 * @private
+		 * @param {*} data The data passed from the original constructor
+		 */
 		_patch(data) {
 			super._patch(data);
 
@@ -94,6 +125,14 @@ module.exports = Structures.extend('Message', Message => {
 			this.language = this.guild ? this.guild.language : this.client.config.language;
 		}
 
+		/**
+		 * Register's this message as a Command Message
+		 * @private
+		 * @param {Object} commandInfo The info about the command and prefix used
+		 * @property {Command} command The command run
+		 * @property {RegExp} prefix The prefix used
+		 * @property {number} prefixLength The length of the prefix used
+		 */
 		_registerCommand({ command, prefix, prefixLength }) {
 			this.reprompted = false;
 			this.params = [];
@@ -104,11 +143,20 @@ module.exports = Structures.extend('Message', Message => {
 			this.client.emit('commandRun', this, this.command, this.args);
 		}
 
+		/**
+		 * If this message can be reacted to by the bot
+		 * @readonly
+		 * @type {boolean}
+		 */
 		get reactable() {
 			if (!this.guild) return true;
 			return this.channel.readable && this.permissionsFor(this.guild.me).has('ADD_REACTIONS');
 		}
 
+		/**
+		 * The usable commands by the author in this message's context
+		 * @returns {CommandStore<string, Command>} The filtered CommandStore
+		 */
 		async usableCommands() {
 			return this.client.commands.filter(async command => await !this.client.commandInhibitors.some(async inhibitor => {
 				if (inhibitor.enabled && !inhibitor.spamProtection) return await inhibitor.run(this.client, this, command).catch(() => true);
@@ -116,11 +164,22 @@ module.exports = Structures.extend('Message', Message => {
 			}));
 		}
 
+		/**
+		 * Checks if the author of this message, has applicable permission in this message's context of at least min
+		 * @param {number} min The minimum level required
+		 * @returns {boolean}
+		 */
 		async hasAtLeastPermissionLevel(min) {
 			const { permission } = await this.client.permissionLevels.run(this, min);
 			return permission;
 		}
 
+		/**
+		 * Sends a message that will be editable via command editing (if nothing is attached)
+		 * @param {StringResolvable} [content] The content to send
+		 * @param {MessageOptions|external:MessageAttachment|external:MessageEmbed} [options] The D.JS message options
+		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
+		 */
 		sendMessage(content, options) {
 			if (!options && typeof content === 'object' && !Array.isArray(content)) {
 				options = content;
@@ -165,6 +224,13 @@ module.exports = Structures.extend('Message', Message => {
 				});
 		}
 
+		/**
+		 * Sends an embed message that will be editable via command editing (if nothing is attached)
+		 * @param {external:MessageEmbed} embed The embed to post
+		 * @param {StringResolvable} [content] The content to send
+		 * @param {MessageOptions} [options] The D.JS message options
+		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
+		 */
 		sendEmbed(embed, content, options) {
 			if (!options && typeof content === 'object') {
 				options = content;
@@ -175,10 +241,23 @@ module.exports = Structures.extend('Message', Message => {
 			return this.sendMessage(content, Object.assign(options, { embed }));
 		}
 
+		/**
+		 * Sends a codeblock message that will be editable via command editing (if nothing is attached)
+		 * @param {string} lang The language of the codeblock
+		 * @param {StringResolvable} content The content to send
+		 * @param {MessageOptions} [options] The D.JS message options
+		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
+		 */
 		sendCode(lang, content, options = {}) {
 			return this.sendMessage(content, Object.assign(options, { code: lang }));
 		}
 
+		/**
+		 * Sends a message that will be editable via command editing (if nothing is attached)
+		 * @param {StringResolvable} [content] The content to send
+		 * @param {MessageOptions|external:MessageAttachment|external:MessageEmbed} [options] The D.JS message options
+		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
+		 */
 		send(content, options) {
 			return this.sendMessage(content, options);
 		}
