@@ -342,6 +342,11 @@ class KlasaClient extends Discord.Client {
 				process.exit();
 			});
 		this.emit('log', loaded.join('\n'));
+
+		// Providers must be init before settings, and those before all other stores.
+		await this.providers.init();
+		await this.settings.add('guilds', this.settings.validateGuild, this.settings.defaultDataSchema, undefined, false);
+		await this.settings.add('users', this.settings.validateUser, undefined, undefined, false);
 		this.emit('log', `Loaded in ${timer.stop()}.`);
 		return super.login(token);
 	}
@@ -366,11 +371,6 @@ class KlasaClient extends Discord.Client {
 		if (typeof this.config.ignoreSelf === 'undefined') this.config.ignoreSelf = this.user.bot;
 		if (this.user.bot) this.application = await super.fetchApplication();
 		if (!this.config.ownerID) this.config.ownerID = this.user.bot ? this.application.owner.id : this.user.id;
-
-		// Providers must be init before settings, and those before all other stores.
-		await this.providers.init();
-		await this.settings.add('guilds', this.settings.validateGuild, this.settings.defaultDataSchema, undefined, false);
-		await this.settings.add('users', this.settings.validateUser, undefined, undefined, false);
 
 		const promises = [];
 		const guildKeys = await this.settings.guilds.provider.getKeys('guilds');
