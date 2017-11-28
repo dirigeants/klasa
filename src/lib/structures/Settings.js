@@ -52,14 +52,14 @@ class Settings {
 		if (!key.includes('.')) {
 			const value = this[key];
 			if (value) return value;
-			throw `The key ${key} does no exist in the configuration.`;
+			return undefined;
 		}
 		const path = key.split('.');
 		let refSetting = this; // eslint-disable-line consistent-this
 		let refSchema = this.manager.schema;
 		for (let i = 0; i < path.length; i++) {
 			const currKey = path[i];
-			if (refSchema.type !== 'Folder' || !refSchema.hasKey(currKey)) throw `The key ${path.slice(0, i + 1)} does no exist in the configuration.`;
+			if (refSchema.type !== 'Folder' || !refSchema.hasKey(currKey)) return undefined;
 			refSetting = refSetting[currKey];
 			refSchema = refSchema[currKey];
 		}
