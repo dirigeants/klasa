@@ -46,6 +46,7 @@ class SettingsCache {
 	 * @param {Function} validateFunction The function that validates the input.
 	 * @param {Object} [schema={}] The schema.
 	 * @param {SettingsOptions} [options={}] A provider to use. If not specified it'll use the one in the client.
+	 * @param {boolean} [download=true] Whether this Gateway should download the data from the database at init.
 	 * @returns {Gateway}
 	 * @example
 	 * // Add a new SettingGateway instance, called 'users', which input takes users, and stores a quote which is a string between 2 and 140 characters.
@@ -65,7 +66,7 @@ class SettingsCache {
 	 * };
 	 * SettingsCache.add('users', validate, schema);
 	 */
-	async add(name, validateFunction, schema = {}, options = {}) {
+	async add(name, validateFunction, schema = {}, options = {}, download = true) {
 		if (typeof name !== 'string') throw 'You must pass a name for your new gateway and it must be a string.';
 		if (typeof this[name] !== 'undefined') throw 'There is already a Gateway with that name.';
 		if (typeof validateFunction !== 'function') throw 'You must pass a validate function.';
@@ -80,7 +81,7 @@ class SettingsCache {
 		if (options.provider.sql) this[name] = new GatewaySQL(this, name, validateFunction, schema, options);
 		else this[name] = new Gateway(this, name, validateFunction, schema, options);
 
-		await this[name].init();
+		await this[name].init(download);
 		return this[name];
 	}
 

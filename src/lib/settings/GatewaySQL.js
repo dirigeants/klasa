@@ -22,20 +22,6 @@ class GatewaySQL extends Gateway {
 	 */
 
 	/**
-	 * Inits the table and the schema for its use in this gateway.
-	 * @since 0.5.0
-	 * @returns {Promise<void[]>}
-	 */
-	async init() {
-		const schema = await this.initSchema();
-		this.schema = new Schema(this.client, this, schema, '');
-
-		await this.initTable();
-		await this.sync();
-		return [];
-	}
-
-	/**
 	 * Inits the table for its use in this gateway.
 	 * @since 0.5.0
 	 */

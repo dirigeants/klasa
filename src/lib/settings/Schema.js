@@ -66,7 +66,6 @@ class Schema {
 		 * @since 0.5.0
 		 * @type {Object}
 		 * @name Schema#defaults
-		 * @readonly
 		 */
 		Object.defineProperty(this, 'defaults', { value: {}, writable: true });
 
@@ -75,7 +74,6 @@ class Schema {
 		 * @since 0.5.0
 		 * @type {Set<string>}
 		 * @name Schema#keys
-		 * @readonly
 		 */
 		Object.defineProperty(this, 'keys', { value: new Set(), writable: true });
 
@@ -84,7 +82,6 @@ class Schema {
 		 * @since 0.5.0
 		 * @type {string[]}
 		 * @name Schema#keyArray
-		 * @readonly
 		 */
 		Object.defineProperty(this, 'keyArray', { value: [], writable: true });
 

@@ -135,10 +135,12 @@ class Gateway {
 	/**
 	 * Inits the table and the schema for its use in this gateway.
 	 * @since 0.0.1
+	 * @param {boolean} [download=true] Whether this Gateway should download the data from the database.
 	 */
-	async init() {
+	async init(download = true) {
 		await this.initSchema().then(schema => { this.schema = new Schema(this.client, this, schema, ''); });
 		await this.initTable();
+		if (download) await this.sync();
 	}
 
 	/**
@@ -151,11 +153,6 @@ class Gateway {
 
 		const hasCacheTable = this.cache.hasTable(this.type);
 		if (!hasCacheTable) this.cache.createTable(this.type);
-
-		const data = await this.provider.getAll(this.type);
-		if (data.length > 0) {
-			for (let i = 0; i < data.length; i++) this.cache.set(this.type, data[i].id, new Settings(this, data[i]));
-		}
 	}
 
 	/**
