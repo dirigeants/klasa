@@ -1,5 +1,8 @@
 module.exports = {
 	Client: require('./lib/Client'),
+	KlasaGuild: require('./lib/extensions/KlasaGuild'),
+	KlasaMessage: require('./lib/extensions/KlasaMessage'),
+	KlasaUser: require('./lib/extensions/KlasaUser'),
 	util: require('./lib/util/util'),
 	Colors: require('./lib/util/Colors'),
 	Console: require('./lib/util/Console'),
@@ -8,7 +11,6 @@ module.exports = {
 	ReactionHandler: require('./lib/util/ReactionHandler'),
 	Stopwatch: require('./lib/util/Stopwatch'),
 	Command: require('./lib/structures/Command'),
-	CommandMessage: require('./lib/structures/CommandMessage'),
 	Event: require('./lib/structures/Event'),
 	Extendable: require('./lib/structures/Extendable'),
 	Finalizer: require('./lib/structures/Finalizer'),

@@ -5,7 +5,10 @@ const moment = require('moment');
 module.exports = class extends Command {
 
 	constructor(...args) {
-		super(...args, { description: 'Provides some details about the bot and stats.' });
+		super(...args, {
+			guarded: true,
+			description: 'Provides some details about the bot and stats.'
+		});
 	}
 
 	async run(msg) {

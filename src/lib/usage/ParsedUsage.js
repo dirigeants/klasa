@@ -12,7 +12,7 @@ class ParsedUsage {
 	 */
 	constructor(client, command) {
 		/**
-		 * The client this CommandMessage was created with.
+		 * The client this ParsedUsage was created with
 		 * @since 0.0.1
 		 * @name ParsedUsage#client
 		 * @type {KlasaClient}

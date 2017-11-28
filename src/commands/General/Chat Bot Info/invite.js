@@ -5,6 +5,7 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			runIn: ['text'],
+			guarded: true,
 			description: 'Displays the join server link of the bot.'
 		});
 	}

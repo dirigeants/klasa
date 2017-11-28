@@ -1,6 +1,5 @@
 const Discord = require('discord.js');
 const path = require('path');
-const CommandMessage = require('./structures/CommandMessage');
 const ArgResolver = require('./parsers/ArgResolver');
 const PermLevels = require('./structures/PermissionLevels');
 const util = require('./util/util');
@@ -35,6 +34,8 @@ class KlasaClient extends Discord.Client {
 	 * @property {object} [provider] The provider to use in Klasa
 	 * @property {KlasaConsoleConfig} [console={}] Config options to pass to the client console
 	 * @property {KlasaConsoleEvents} [consoleEvents={}] Config options to pass to the client console
+	 * @property {string}  [language='en-US'] The default language Klasa should opt-in for the commands
+	 * @property {number}  [promptTime=30000] The amount of time in milliseconds prompts should last
 	 * @property {boolean} [ignoreBots=true] Whether or not this bot should ignore other bots
 	 * @property {boolean} [ignoreSelf=true] Whether or not this bot should ignore itself
 	 * @property {boolean} [cmdPrompt=false] Whether the bot should prompt missing parameters
@@ -86,6 +87,8 @@ class KlasaClient extends Discord.Client {
 		this.config.console = config.console || {};
 		this.config.consoleEvents = config.consoleEvents || {};
 		this.config.language = config.language || 'en-US';
+		this.config.promptTime = typeof config.promptTime === 'number' && Number.isInteger(config.promptTime) ? config.promptTime : 30000;
+		this.config.commandMessageLifetime = config.commandMessageLifetime || 1800;
 
 		/**
 		 * The directory to the node_modules folder where Klasa exists
@@ -185,32 +188,11 @@ class KlasaClient extends Discord.Client {
 		this.pieceStores = new Discord.Collection();
 
 		/**
-		 * The cache of command messages and responses to be used for command editing
-		 * @since 0.0.1
-		 * @type {external:Collection}
-		 */
-		this.commandMessages = new Discord.Collection();
-
-		/**
 		 * The permissions structure for this bot
 		 * @since 0.0.1
 		 * @type {PermissionLevels}
 		 */
 		this.permissionLevels = this.validatePermissionLevels();
-
-		/**
-		 * The threshold for how old command messages can be before sweeping since the last edit in seconds
-		 * @since 0.0.1
-		 * @type {number}
-		 */
-		this.commandMessageLifetime = config.commandMessageLifetime || 1800;
-
-		/**
-		 * The interval duration for which command messages should be sweept in seconds
-		 * @since 0.0.1
-		 * @type {number}
-		 */
-		this.commandMessageSweep = config.commandMessageSweep || 900;
 
 		/**
 		 * Whether the client is truely ready or not
@@ -239,7 +221,6 @@ class KlasaClient extends Discord.Client {
 			Webhook: Discord.WebhookClient,
 			escapeMarkdown: Discord.escapeMarkdown,
 			splitMessage: Discord.splitMessage,
-			CommandMessage,
 			util
 		};
 
@@ -388,9 +369,11 @@ class KlasaClient extends Discord.Client {
 		await this.providers.init();
 		await this.settings.add('guilds', this.settings.validate, this.settings.defaultDataSchema);
 		// Providers must be init before settings, and those before all other stores.
+		for (const guild of this.guilds.values()) guild._init();
+		// init the guild's settings (short work around until SG can handle this on it's own)
+		// todo: fix SG to create Settings instances on all Guilds and Users, that can be later patched, as opposed to partial Settings partial Object Literal
 		await Promise.all(this.pieceStores.filter(store => store.name !== 'providers').map(store => store.init()));
 		util.initClean(this);
-		this.setInterval(this.sweepCommandMessages.bind(this), this.commandMessageSweep * 1000);
 		this.ready = true;
 		if (typeof this.config.readyMessage === 'undefined') this.emit('log', `Successfully initialized. Ready to serve ${this.guilds.size} guilds.`);
 		else if (this.config.readyMessage !== null) this.emit('log', typeof this.config.readyMessage === 'function' ? this.config.readyMessage(this) : this.config.readyMessage);
@@ -398,28 +381,47 @@ class KlasaClient extends Discord.Client {
 	}
 
 	/**
-	 * Sweeps command messages based on the lifetime parameter
-	 * @since 0.0.1
-	 * @param {number} lifetime The threshold for how old command messages can be before sweeping since the last edit in seconds
-	 * @returns {number} The amount of messages swept
+	 * Sweeps all text-based channels' messages and removes the ones older than the max message or command message lifetime.
+	 * If the message has been edited, the time of the edit is used rather than the time of the original message.
+	 * @since 0.5.0
+	 * @param {number} [lifetime=this.options.messageCacheLifetime] Messages that are older than this (in seconds)
+	 * will be removed from the caches. The default is based on [ClientOptions#messageCacheLifetime]{@link https://discord.js.org/#/docs/main/master/typedef/ClientOptions?scrollTo=messageCacheLifetime}
+	 * @param {number} [commandLifetime=this.config.commandMessageLifetime] Messages that are older than this (in seconds)
+	 * will be removed from the caches. The default is based on {@link KlasaClientConfig#commandMessageLifetime}
+	 * @returns {number} Amount of messages that were removed from the caches,
+	 * or -1 if the message cache lifetime is unlimited
 	 */
-	sweepCommandMessages(lifetime = this.commandMessageLifetime) {
+	sweepMessages(lifetime = this.options.messageCacheLifetime, commandLifetime = this.config.commandMessageLifetime) {
 		if (typeof lifetime !== 'number' || isNaN(lifetime)) throw new TypeError('The lifetime must be a number.');
 		if (lifetime <= 0) {
-			this.emit('debug', "Didn't sweep messages - lifetime is unlimited");
+			this.emit('debug', 'Didn\'t sweep messages - lifetime is unlimited');
 			return -1;
 		}
 
 		const lifetimeMs = lifetime * 1000;
-		const rightNow = Date.now();
-		const messages = this.commandMessages.size;
+		const commandLifetimeMs = commandLifetime * 1000;
+		const now = Date.now();
+		let channels = 0;
+		let messages = 0;
+		let commandMessages = 0;
 
-		for (const [key, message] of this.commandMessages) {
-			if (rightNow - (message.trigger.editedTimestamp || message.trigger.createdTimestamp) > lifetimeMs) this.commandMessages.delete(key);
+		for (const channel of this.channels.values()) {
+			if (!channel.messages) continue;
+			channels++;
+
+			for (const message of channel.messages.values()) {
+				if (message.command && now - (message.editedTimestamp || message.createdTimestamp) > commandLifetimeMs) {
+					channel.messages.delete(message.id);
+					commandMessages++;
+				} else if (!message.command && now - (message.editedTimestamp || message.createdTimestamp) > lifetimeMs) {
+					channel.messages.delete(message.id);
+					messages++;
+				}
+			}
 		}
 
-		this.emit('debug', `Swept ${messages - this.commandMessages.size} commandMessages older than ${lifetime} seconds.`);
-		return messages - this.commandMessages.size;
+		this.emit('debug', `Swept ${messages} messages and ${commandMessages} command messages older than ${lifetime} seconds in ${channels} text-based channels`);
+		return messages;
 	}
 
 }
@@ -466,10 +468,18 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  */
 
 /**
+ * Emitted when an unknown command is called.
+ * @event KlasaClient#commandUnknown
+ * @since 0.4.0
+ * @param {KlasaMessage} message The message that triggered the command
+ * @param {string} command The command attempted to run
+ */
+
+/**
  * Emitted when a command has been inhibited.
  * @event KlasaClient#commandInhibited
  * @since 0.3.0
- * @param {external:Message} message The message that triggered the command
+ * @param {KlasaMessage} message The message that triggered the command
  * @param {Command} command The command triggered
  * @param {?string} response The reason why it was inhibited if not silent
  */
@@ -478,7 +488,16 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  * Emitted when a command has been run.
  * @event KlasaClient#commandRun
  * @since 0.3.0
- * @param {CommandMessageProxy} message The message that triggered the command
+ * @param {KlasaMessage} message The message that triggered the command
+ * @param {Command} command The command run
+ * @param {string[]} args The raw arguments of the command
+ */
+
+/**
+ * Emitted when a command has been run.
+ * @event KlasaClient#commandSuccess
+ * @since 0.5.0
+ * @param {KlasaMessage} message The message that triggered the command
  * @param {Command} command The command run
  * @param {any[]} params The resolved parameters of the command
  * @param {?any} response Usually a response message, but whatever the command returned.
@@ -488,7 +507,7 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  * Emitted when a command has errored.
  * @event KlasaClient#commandError
  * @since 0.3.0
- * @param {CommandMessageProxy} message The message that triggered the command
+ * @param {KlasaMessage} message The message that triggered the command
  * @param {Command} command The command run
  * @param {any[]} params The resolved parameters of the command
  * @param {(string|Object)} error The command error
@@ -517,6 +536,41 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  * @event KlasaClient#settingCreateEntry
  * @since 0.5.0
  * @param {Settings} entry The entry which got created
+ */
+
+/**
+ * Emitted when a piece is loaded. (This can be spammy on bot startup or anytime you reload all of a piece type.)
+ * @event KlasaClient#pieceLoaded
+ * @since 0.4.0
+ * @param {Piece} piece The piece that was loaded
+ */
+
+/**
+ * Emitted when a piece is unloaded.
+ * @event KlasaClient#pieceUnloaded
+ * @since 0.4.0
+ * @param {Piece} piece The piece that was unloaded
+ */
+
+/**
+ * Emitted when a piece is reloaded.
+ * @event KlasaClient#pieceReloaded
+ * @since 0.4.0
+ * @param {Piece} piece The piece that was reloaded
+ */
+
+/**
+ * Emitted when a piece is enabled.
+ * @event KlasaClient#pieceEnabled
+ * @since 0.4.0
+ * @param {Piece} piece The piece that was enabled
+ */
+
+/**
+ * Emitted when a piece is disabled.
+ * @event KlasaClient#pieceDisabled
+ * @since 0.4.0
+ * @param {Piece} piece The piece that was disabled
  */
 
 process.on('unhandledRejection', (err) => {

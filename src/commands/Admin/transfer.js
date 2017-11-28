@@ -7,6 +7,7 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			permLevel: 10,
+			guarded: true,
 			description: 'Transfers a core piece to its respective folder',
 			usage: '<Piece:piece>'
 		});

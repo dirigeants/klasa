@@ -99,7 +99,7 @@ class Extendable {
 	 * @returns {void}
 	 */
 	async init() {
-		if (this.enabled) this.enable();
+		if (this.enabled) this.enable(true);
 	}
 
 	/**
@@ -108,6 +108,7 @@ class Extendable {
 	 * @returns {Piece} This piece
 	 */
 	disable() {
+		if (this.client.listenerCount('pieceDisabled')) this.client.emit('pieceDisabled', this);
 		this.enabled = false;
 		for (const structure of this.appliesTo) delete this.target[structure].prototype[this.name];
 		return this;
@@ -115,10 +116,12 @@ class Extendable {
 
 	/**
 	 * Enables this piece
+	 * @param {boolean} [init=false] If the piece is being init or not
 	 * @since 0.0.1
 	 * @returns {Piece} This piece
 	 */
-	enable() {
+	enable(init = false) {
+		if (!init && this.client.listenerCount('pieceEnabled')) this.client.emit('pieceEnabled', this);
 		this.enabled = true;
 		for (const structure of this.appliesTo) Object.defineProperty(this.target[structure].prototype, this.name, Object.getOwnPropertyDescriptor(this.constructor.prototype, 'extend'));
 		return this;

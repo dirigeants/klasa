@@ -60,3 +60,5 @@ typings/
 .vscode
 package-lock.json
 docs
+
+\.vscode/
