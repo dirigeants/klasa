@@ -5,7 +5,7 @@ const PermLevels = require('./structures/PermissionLevels');
 const util = require('./util/util');
 const Stopwatch = require('./util/Stopwatch');
 const Console = require('./util/Console');
-const Settings = require('./settings/SettingsCache');
+const SettingsCache = require('./settings/SettingsCache');
 const CommandStore = require('./structures/CommandStore');
 const InhibitorStore = require('./structures/InhibitorStore');
 const FinalizerStore = require('./structures/FinalizerStore');
@@ -14,6 +14,7 @@ const LanguageStore = require('./structures/LanguageStore');
 const ProviderStore = require('./structures/ProviderStore');
 const EventStore = require('./structures/EventStore');
 const ExtendableStore = require('./structures/ExtendableStore');
+const Settings = require('./structures/Settings');
 
 /**
  * The client for handling everything. See {@tutorial GettingStarted} for more information how to get started using this class.
@@ -229,7 +230,7 @@ class KlasaClient extends Discord.Client {
 		 * @since 0.3.0
 		 * @type {Settings}
 		 */
-		this.settings = new Settings(this);
+		this.settings = new SettingsCache(this);
 
 		/**
 		 * The application info cached from the discord api
@@ -370,7 +371,10 @@ class KlasaClient extends Discord.Client {
 
 		// Providers must be init before settings, and those before all other stores.
 		const guildSyncPromises = [];
-		for (const guild of this.guilds.values()) guildSyncPromises.push(guild.configs.sync());
+		for (const guild of this.guilds.values()) {
+			guildSyncPromises.push(this.settings.guilds.provider.get('guilds', guild.id)
+				.then(data => { guild.configs = new Settings(this.settings.guilds, data); }));
+		}
 		await Promise.all(guildSyncPromises);
 
 		// Init all the pieces
