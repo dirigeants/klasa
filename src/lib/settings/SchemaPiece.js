@@ -150,6 +150,9 @@ class SchemaPiece {
 		if (typeof this.type !== 'string') {
 			throw new TypeError(`[KEY] ${this} - Parameter type must be a string.`);
 		}
+		if (!this.manager.store.types.includes(this.type)) {
+			throw new TypeError(`[KEY] ${this} - ${this.type} is not a valid type.`);
+		}
 		if (typeof this.array !== 'boolean') {
 			throw new TypeError(`[KEY] ${this} - Parameter array must be a boolean.`);
 		}
