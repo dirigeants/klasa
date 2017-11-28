@@ -15,7 +15,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [action, key, ...value]) {
-		const configs = msg.guild.settings;
+		const { configs } = msg.guild;
 		if (action !== 'list' && !key) throw msg.language.get('COMMAND_CONF_NOKEY');
 		if (['set', 'remove'].includes(action) && !value[0]) throw msg.language.get('COMMAND_CONF_NOVALUE');
 		if (action === 'set' && key === 'disabledCommands') {
