@@ -19,7 +19,7 @@ module.exports = class extends Command {
 		if (action !== 'list' && !key) throw msg.language.get('COMMAND_CONF_NOKEY');
 		if (['set', 'remove'].includes(action) && !value[0]) throw msg.language.get('COMMAND_CONF_NOVALUE');
 		if (action === 'set' && key === 'disabledCommands') {
-			const command = this.client.commands.get(value);
+			const command = this.client.commands.get(value.join(' '));
 			if (command && command.guarded) throw msg.language.get('COMMAND_CONF_GUARDED', command.name);
 		}
 		if (['set', 'remove', 'reset'].includes(action) && !configs.id) await this.client.settings.guilds.create(msg.guild);
