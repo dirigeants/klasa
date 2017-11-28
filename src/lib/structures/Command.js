@@ -16,7 +16,10 @@ class Command {
 	 * @property {boolean} [enabled=true] Whether the command is enabled or not
 	 * @property {string[]} [runIn=['text','dm','group']] What channel types the command should run in
 	 * @property {number} [cooldown=0] The amount of time before the user can run the command again in seconds
+	 * @property {boolean} [nsfw=false] If the command should only run in nsfw channels
+	 * @property {boolean} [guarded=false] If the command can be disabled on a guild level (does not effect global disable)
 	 * @property {string[]} [aliases=[]] Any comand aliases
+	 * @property {boolean} [autoAliases=true] If automatic aliases should be added (adds aliases of name and aliases without dashes)
 	 * @property {number} [permLevel=0] The required permission level to use the command
 	 * @property {string[]} [botPerms=[]] The required Discord permissions for the bot to use this command
 	 * @property {string[]} [requiredSettings=[]] The required guild settings to use this command
@@ -70,11 +73,30 @@ class Command {
 		this.cooldown = options.cooldown || 0;
 
 		/**
+		 * Whether this command should only run in NSFW channels or not
+		 * @since 0.5.0
+		 * @type {boolean}
+		 */
+		this.nsfw = Boolean(options.nsfw);
+
+
+		/**
+		 * Whether this command shound not be able to be disabled in a guild or not
+		 * @since 0.5.0
+		 * @type {boolean}
+		 */
+		this.guarded = Boolean(options.guarded);
+
+		/**
 		 * The aliases for this command
 		 * @since 0.0.1
 		 * @type {string[]}
 		 */
 		this.aliases = options.aliases || [];
+		if ('autoAliases' in options ? options.autoAliases : true) {
+			if (this.name.includes('-')) this.aliases.push(this.name.replace(/-/g, ''));
+			for (const alias of this.aliases) if (alias.includes('-')) this.aliases.push(alias.replace(/-/g, ''));
+		}
 
 		/**
 		 * The required permLevel to run this command
@@ -130,7 +152,7 @@ class Command {
 		 * @since 0.0.1
 		 * @type {?string}
 		 */
-		this.usageDelim = options.usageDelim || undefined;
+		this.usageDelim = options.usageDelim;
 
 		/**
 		 * Whether to use quoted string support for this command or not

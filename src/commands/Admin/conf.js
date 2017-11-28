@@ -7,6 +7,7 @@ module.exports = class extends Command {
 		super(...args, {
 			runIn: ['text'],
 			permLevel: 6,
+			guarded: true,
 			description: 'Define per-server configuration.',
 			usage: '<set|get|reset|list|remove> [key:string] [value:string]',
 			usageDelim: ' '
@@ -17,6 +18,10 @@ module.exports = class extends Command {
 		const configs = msg.guild.settings;
 		if (action !== 'list' && !key) throw msg.language.get('COMMAND_CONF_NOKEY');
 		if (['set', 'remove'].includes(action) && !value[0]) throw msg.language.get('COMMAND_CONF_NOVALUE');
+		if (action === 'set' && key === 'disabledCommands') {
+			const command = this.client.commands.get(value);
+			if (command && command.guarded) throw msg.language.get('COMMAND_CONF_GUARDED', command.name);
+		}
 		if (['set', 'remove', 'reset'].includes(action) && !configs.id) await this.client.settings.guilds.create(msg.guild);
 		if (['set', 'remove', 'get', 'reset'].includes(action) && !(key in configs)) throw msg.language.get('COMMAND_CONF_GET_NOEXT', key);
 		await this[action](msg, configs, key, value);
