@@ -16,11 +16,10 @@ module.exports = class extends Command {
 			cmd = this.client.commands.get(cmd);
 			if (!cmd) return msg.sendMessage(msg.language.get('COMMAND_HELP_COMMAND_NOT_FOUND'));
 			await this.client.inhibitors.run(msg, cmd, true);
-			const settings = msg.guildSettings;
 			const info = [
 				`= ${cmd.name} = `,
 				cmd.description,
-				`usage :: ${cmd.usage.fullUsage(settings.prefix || this.client.config.prefix)}`,
+				`usage :: ${cmd.usage.fullUsage(msg)}`,
 				'Extended Help ::',
 				cmd.extendedHelp
 			].join('\n');
@@ -46,14 +45,13 @@ module.exports = class extends Command {
 
 		const commandNames = Array.from(this.client.commands.keys());
 		const longest = commandNames.reduce((long, str) => Math.max(long, str.length), 0);
-		const { prefix } = msg.guildSettings;
 
 		await Promise.all(this.client.commands.map((command) =>
 			this.client.inhibitors.run(msg, command, true)
 				.then(() => {
 					if (!help.hasOwnProperty(command.category)) help[command.category] = {};
 					if (!help[command.category].hasOwnProperty(command.subCategory)) help[command.category][command.subCategory] = [];
-					help[command.category][command.subCategory].push(`${prefix}${command.name.padEnd(longest)} :: ${command.description}`);
+					help[command.category][command.subCategory].push(`${msg.guildConfigs.prefix}${command.name.padEnd(longest)} :: ${command.description}`);
 					return;
 				})
 				.catch(() => {
