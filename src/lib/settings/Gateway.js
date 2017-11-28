@@ -186,7 +186,7 @@ class Gateway {
 				const settings = new Settings(this, { id: input });
 				this.cache.set(this.type, input, settings);
 				// Silently create a new entry. The new data does not matter as Settings default all the keys.
-				this.provider.create(this.type, input, { id: input })
+				this.provider.create(this.type, input)
 					.then(() => this.client.listenerCount('settingCreateEntry') ? this.client.emit('settingCreateEntry', settings) : null)
 					.catch(error => this.client.emit('log', error, 'error'));
 				return settings;
@@ -205,7 +205,7 @@ class Gateway {
 	 */
 	async createEntry(input) {
 		const target = await this.validate(input).then(output => output && output.id ? output.id : output);
-		await this.provider.create(this.type, target, { id: target });
+		await this.provider.create(this.type, target);
 		const settings = new Settings(this, { id: target });
 		this.cache.set(this.type, target, settings);
 		if (this.client.listenerCount('settingCreateEntry')) this.client.emit('settingCreateEntry', settings);
