@@ -59,15 +59,20 @@ class Settings {
 		let refSchema = this.manager.schema;
 		for (let i = 0; i < path.length; i++) {
 			const currKey = path[i];
-			if (!refSchema.hasKey(currKey)) throw `The key ${path.slice(0, i)} does no exist in the configuration.`;
+			if (!refSchema.hasKey(currKey)) throw `The key ${path.slice(0, i + 1)} does no exist in the configuration.`;
 			refSetting = refSetting[currKey];
 			refSchema = refSchema[currKey];
 		}
 		return refSetting;
 	}
 
+	/**
+	 * Clone this instance.
+	 * @since 0.5.0
+	 * @returns {Settings}
+	 */
 	clone() {
-		return Settings._clone(this, this.manager.schema);
+		return new Settings(this.manager, Settings._clone(this, this.manager.schema));
 	}
 
 	/**
@@ -120,6 +125,15 @@ class Settings {
 	async destroy() {
 		await this.manager.deleteEntry(this.id);
 		return this;
+	}
+
+	/**
+	 * Returns the JSON-compatible object of this instance.
+	 * @since 0.5.0
+	 * @returns {Object}
+	 */
+	toJSON() {
+		return Settings._clone(this, this.manager.schema);
 	}
 
 	/**
