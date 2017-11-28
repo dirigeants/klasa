@@ -59,17 +59,13 @@ class Settings {
 		let refSchema = this.manager.schema;
 		for (let i = 0; i < path.length; i++) {
 			const currKey = path[i];
-			if (refSchema.type === 'Folder') {
-				if (!refSchema.hasKey(currKey)) throw `The key ${path.slice(0, i + 1)} does no exist in the configuration.`;
-				refSetting = refSetting[currKey];
-				refSchema = refSchema[currKey];
-			} else {
-				return refSetting[currKey];
-			}
+			if (refSchema.type !== 'Folder') break;
+			if (!refSchema.hasKey(currKey)) throw `The key ${path.slice(0, i + 1)} does no exist in the configuration.`;
+			refSetting = refSetting[currKey];
+			refSchema = refSchema[currKey];
 		}
 
-		if (refSchema.type === 'Folder') throw `You must choose between the following keys: ${refSchema.keyArray.join(', ')}`;
-		throw `The key ${key} does no exist in the configuration.`;
+		return refSetting;
 	}
 
 	/**
