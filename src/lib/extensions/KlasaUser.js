@@ -15,8 +15,7 @@ module.exports = Structures.extend('User', User => {
 			 * @since 0.5.0
 			 * @type {Settings}
 			 */
-			this.configs = null;
-			// todo: fix this
+			this.configs = this.client.settings.users.getEntry(this.id, this.client.ready);
 		}
 
 	}

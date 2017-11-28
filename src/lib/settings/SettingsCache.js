@@ -1,7 +1,7 @@
 const Gateway = require('./Gateway');
 const GatewaySQL = require('./GatewaySQL');
 const SettingResolver = require('../parsers/SettingResolver');
-const { Guild } = require('discord.js');
+const { Guild, User } = require('discord.js');
 
 /**
  * Gateway's driver to make new instances of it, with the purpose to handle different databases simultaneously.
@@ -100,21 +100,39 @@ class SettingsCache {
 	}
 
 	/**
-	 * The validator function Klasa uses for guild settings.
-	 * @since 0.3.0
+	 * The validator function Klasa uses for guild configs.
+	 * @since 0.5.0
 	 * @param {(Object|string)} guildResolvable The guild to validate.
 	 * @returns {external:Guild}
 	 */
-	async validate(guildResolvable) {
+	async validateGuild(guildResolvable) {
 		if (guildResolvable) {
 			let value;
 
 			if (typeof guildResolvable === 'string' && /^\d{17,19}$/.test(guildResolvable)) value = this.client.guilds.get(guildResolvable);
-			if (guildResolvable instanceof Guild) value = guildResolvable;
+			else if (guildResolvable instanceof Guild) value = guildResolvable;
 			if (value) return value;
 		}
 
-		throw 'The parameter <Guild> expects either a Guild ID or a Guild Object.';
+		throw 'The parameter <Guild> expects either a Guild ID or a Guild Instance.';
+	}
+
+	/**
+	 * The validator function Klasa uses for user configs.
+	 * @since 0.5.0
+	 * @param {(Object|string)} userResolvable The user to validate.
+	 * @returns {external:User}
+	 */
+	async validateUser(userResolvable) {
+		if (userResolvable) {
+			let value;
+
+			if (typeof guildResolvable === 'string' && /^\d{17,19}$/.test(userResolvable)) value = await this.client.users.fetch(userResolvable);
+			else if (userResolvable instanceof User) value = userResolvable;
+			if (value) return value;
+		}
+
+		throw 'The parameter <User> expects either a User ID or a User Instance.';
 	}
 
 	/**

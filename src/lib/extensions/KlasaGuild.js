@@ -15,7 +15,7 @@ module.exports = Structures.extend('Guild', Guild => {
 			 * @since 0.5.0
 			 * @type {Settings}
 			 */
-			this.configs = this.client.ready ? this.client.settings.guilds.getEntry(this.id, this.client.ready) : null;
+			this.configs = this.client.settings.guilds.getEntry(this.id, this.client.ready);
 		}
 
 		get language() {

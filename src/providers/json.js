@@ -71,7 +71,7 @@ module.exports = class extends Provider {
 	 * @param {string} table The name of the directory to fetch from.
 	 * @returns {Promise<string[]>}
 	 */
-	async getAllKeys(table) {
+	async getKeys(table) {
 		const dir = resolve(this.baseDir, table);
 		const filenames = await fs.readdir(dir);
 		const files = [];

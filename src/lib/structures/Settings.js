@@ -176,7 +176,9 @@ class Settings {
 			}
 		} else if (typeof data === 'undefined') {
 			// It's a SchemaPiece instance, so it has a property of 'key'.
-			data = schema.default;
+			data = schema.array ? schema.default.slice(0) : schema.default;
+		} else if (schema.array && Array.isArray(data)) {
+			data = data === null ? schema.default.slice(0) : typeof data === 'string' ? JSON.stringify(data) : schema.default.slice(0);
 		}
 
 		return data;

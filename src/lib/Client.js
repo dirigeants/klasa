@@ -228,7 +228,7 @@ class KlasaClient extends Discord.Client {
 		/**
 		 * The object where the gateways are stored settings
 		 * @since 0.3.0
-		 * @type {Settings}
+		 * @type {SettingsCache}
 		 */
 		this.settings = new SettingsCache(this);
 
@@ -343,8 +343,6 @@ class KlasaClient extends Discord.Client {
 			});
 		this.emit('log', loaded.join('\n'));
 		this.emit('log', `Loaded in ${timer.stop()}.`);
-		await this.providers.init();
-		await this.settings.add('guilds', this.settings.validate, this.settings.defaultDataSchema, {}, false);
 		return super.login(token);
 	}
 
@@ -370,12 +368,21 @@ class KlasaClient extends Discord.Client {
 		if (!this.config.ownerID) this.config.ownerID = this.user.bot ? this.application.owner.id : this.user.id;
 
 		// Providers must be init before settings, and those before all other stores.
-		const guildSyncPromises = [];
-		for (const guild of this.guilds.values()) {
-			guildSyncPromises.push(this.settings.guilds.provider.get('guilds', guild.id)
-				.then(data => { guild.configs = new Settings(this.settings.guilds, data); }));
+		await this.providers.init();
+		await this.settings.add('guilds', this.settings.validateGuild, this.settings.defaultDataSchema, undefined, false);
+		await this.settings.add('users', this.settings.validateUser, undefined, undefined, false);
+
+		const promises = [];
+		const guildKeys = await this.settings.guilds.provider.getKeys('guilds');
+		for (let i = 0; i < guildKeys.length; i++) {
+			const guild = this.guilds.get(guildKeys[i]);
+			if (guild) promises.push(guild.configs.sync().then(() => this.settings.guilds.cache.set('guilds', guildKeys[i], guild.configs)));
 		}
-		await Promise.all(guildSyncPromises);
+		const userKeys = await this.settings.users.provider.getKeys('users');
+		for (let i = 0; i < userKeys.length; i++) {
+			const user = this.users.get(userKeys[i]);
+			if (user) promises.push(user.configs.sync().then(() => this.settings.users.cache.set('users', userKeys[i], user.configs)));
+		}
 
 		// Init all the pieces
 		await Promise.all(this.pieceStores.filter(store => store.name !== 'providers').map(store => store.init()));
