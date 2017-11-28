@@ -111,6 +111,7 @@ module.exports = Structures.extend('Message', Message => {
 
 		/**
 		 * Extends the patch method from D.JS to attach and update the language to this instance
+		 * @since 0.5.0
 		 * @private
 		 * @param {*} data The data passed from the original constructor
 		 */
@@ -127,6 +128,7 @@ module.exports = Structures.extend('Message', Message => {
 
 		/**
 		 * Register's this message as a Command Message
+		 * @since 0.5.0
 		 * @private
 		 * @param {Object} commandInfo The info about the command and prefix used
 		 * @property {Command} command The command run
@@ -145,6 +147,7 @@ module.exports = Structures.extend('Message', Message => {
 
 		/**
 		 * If this message can be reacted to by the bot
+		 * @since 0.0.1
 		 * @readonly
 		 * @type {boolean}
 		 */
@@ -155,6 +158,7 @@ module.exports = Structures.extend('Message', Message => {
 
 		/**
 		 * The usable commands by the author in this message's context
+		 * @since 0.0.1
 		 * @returns {CommandStore<string, Command>} The filtered CommandStore
 		 */
 		async usableCommands() {
@@ -166,6 +170,7 @@ module.exports = Structures.extend('Message', Message => {
 
 		/**
 		 * Checks if the author of this message, has applicable permission in this message's context of at least min
+		 * @since 0.0.1
 		 * @param {number} min The minimum level required
 		 * @returns {boolean}
 		 */
@@ -176,6 +181,7 @@ module.exports = Structures.extend('Message', Message => {
 
 		/**
 		 * Sends a message that will be editable via command editing (if nothing is attached)
+		 * @since 0.0.1
 		 * @param {StringResolvable} [content] The content to send
 		 * @param {MessageOptions|external:MessageAttachment|external:MessageEmbed} [options] The D.JS message options
 		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
@@ -226,6 +232,7 @@ module.exports = Structures.extend('Message', Message => {
 
 		/**
 		 * Sends an embed message that will be editable via command editing (if nothing is attached)
+		 * @since 0.0.1
 		 * @param {external:MessageEmbed} embed The embed to post
 		 * @param {StringResolvable} [content] The content to send
 		 * @param {MessageOptions} [options] The D.JS message options
@@ -243,6 +250,7 @@ module.exports = Structures.extend('Message', Message => {
 
 		/**
 		 * Sends a codeblock message that will be editable via command editing (if nothing is attached)
+		 * @since 0.0.1
 		 * @param {string} lang The language of the codeblock
 		 * @param {StringResolvable} content The content to send
 		 * @param {MessageOptions} [options] The D.JS message options
@@ -254,6 +262,7 @@ module.exports = Structures.extend('Message', Message => {
 
 		/**
 		 * Sends a message that will be editable via command editing (if nothing is attached)
+		 * @since 0.0.1
 		 * @param {StringResolvable} [content] The content to send
 		 * @param {MessageOptions|external:MessageAttachment|external:MessageEmbed} [options] The D.JS message options
 		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
