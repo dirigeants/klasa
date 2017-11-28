@@ -88,6 +88,13 @@ class Command {
 		this.guarded = Boolean(options.guarded);
 
 		/**
+		 * The name of the command
+		 * @since 0.0.1
+		 * @type {string}
+		 */
+		this.name = options.name || file[file.length - 1].slice(0, -3);
+
+		/**
 		 * The aliases for this command
 		 * @since 0.0.1
 		 * @type {string[]}
@@ -118,13 +125,6 @@ class Command {
 		 * @type {string[]}
 		 */
 		this.requiredSettings = options.requiredSettings || [];
-
-		/**
-		 * The name of the command
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.name = options.name || file[file.length - 1].slice(0, -3);
 
 		/**
 		 * The description of the command
