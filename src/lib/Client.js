@@ -229,7 +229,7 @@ class KlasaClient extends Discord.Client {
 		 * @since 0.3.0
 		 * @type {Settings}
 		 */
-		this.settings = null;
+		this.settings = new Settings(this);
 
 		/**
 		 * The application info cached from the discord api
@@ -341,7 +341,6 @@ class KlasaClient extends Discord.Client {
 				process.exit();
 			});
 		this.emit('log', loaded.join('\n'));
-		this.settings = new Settings(this);
 		this.emit('log', `Loaded in ${timer.stop()}.`);
 		return super.login(token);
 	}

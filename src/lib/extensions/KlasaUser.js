@@ -13,7 +13,7 @@ module.exports = Structures.extend('User', User => {
 			/**
 			 * The guild level configs for this context (guild || default)
 			 * @since 0.5.0
-			 * @type {SettingsGateway}
+			 * @type {Settings}
 			 */
 			this.configs = null;
 			// todo: fix this
