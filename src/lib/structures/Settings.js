@@ -215,7 +215,8 @@ class Settings {
 		for (let i = 0; i < schema.keyArray.length; i++) {
 			const key = schema.keyArray[i];
 			if (typeof data[key] === 'undefined') continue;
-			Settings._patch(this[key], data[key], schema[key]);
+			if (schema[key].type === 'Folder') Settings._patch(this[key], data[key], schema[key]);
+			else this[key] = data[key];
 		}
 	}
 
@@ -223,19 +224,15 @@ class Settings {
 	 * Path an object.
 	 * @param {Object} inst The reference of the Settings instance.
 	 * @param {Object} data The original object.
-	 * @param {(Schema|SchemaPiece)} schema A Schema or a SchemaPiece instance.
+	 * @param {Schema} schema A Schema or a SchemaPiece instance.
 	 */
 	static _patch(inst, data, schema) {
-		if (schema.type === 'Folder') {
-			for (let i = 0; i < schema.keyArray.length; i++) {
-				const key = schema.keyArray[i];
-				if (typeof data[key] === 'undefined') continue;
-				inst[key] = schema[key].type === 'Folder' ?
-					Settings._patch(inst[key], data[key], schema[key]) :
-					data[key];
-			}
-		} else if (data) {
-			inst = data;
+		for (let i = 0; i < schema.keyArray.length; i++) {
+			const key = schema.keyArray[i];
+			if (typeof data[key] === 'undefined') continue;
+			inst[key] = schema[key].type === 'Folder' ?
+				Settings._patch(inst[key], data[key], schema[key]) :
+				data[key];
 		}
 	}
 
