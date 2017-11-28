@@ -45,6 +45,7 @@ class Settings {
 
 	/**
 	 * Get a value from the settings. Admits nested objects separating by comma.
+	 * @since 0.5.0
 	 * @param {string} key The key to get from this instance.
 	 * @returns {any}
 	 */
