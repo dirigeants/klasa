@@ -209,6 +209,12 @@ class Gateway {
 		return settings;
 	}
 
+	insertEntry(id, data = {}) {
+		const settings = new Settings(this, Object.assign(data, { id }));
+		this.cache.set(this.type, id, settings);
+		return settings;
+	}
+
 	/**
 	 * Delete an entry from the database and cache.
 	 * @since 0.5.0
