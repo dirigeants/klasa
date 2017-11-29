@@ -506,6 +506,15 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  */
 
 /**
+ * Emitted when a monitor has errored.
+ * @event KlasaClient#monitorError
+ * @since 0.4.0
+ * @param {external:Message} message The message that triggered the monitor
+ * @param {Monitor} monitor The monitor run
+ * @param {(string|Object)} error The monitor error
+ */
+
+/**
  * Emitted when {@link SettingGateway.update}, {@link SettingGateway.updateArray} or {@link SettingGateway.reset} is run.
  * @event KlasaClient#settingUpdate
  * @since 0.3.0
