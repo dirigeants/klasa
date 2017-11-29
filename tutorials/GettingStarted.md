@@ -54,6 +54,7 @@ new Client({
 | **typing**                 | `false`                   | boolean            | Whether the bot should type while processing commands.                              |
 | **readyMessage**           | see below⁵                | string/function    | readyMessage to be passed through to Klasa's ready event.                           |
 | **ownerID**                | see below⁶                | string             | The discord id for the user the bot should respect as the owner                     |
+| **regexPrefix**            | `null`                    | regex              | The regular expression prefix if one is provided                     |
 
 >1: For more information on which D.JS options are available, see [ClientOptions in the discord.js docs](https://discord.js.org/#/docs/main/master/typedef/ClientOptions).  
 >2: This option becomes useless after first boot, since the prefix is written to the default configuration system. Pass an array to accept multiple prefixes.  
