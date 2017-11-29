@@ -230,6 +230,7 @@ class Gateway {
 	insertEntry(id, data = {}) {
 		const settings = new Settings(this, Object.assign(data, { id }));
 		this.cache.set(this.type, id, settings);
+		if (this.ready) settings.sync();
 		return settings;
 	}
 
