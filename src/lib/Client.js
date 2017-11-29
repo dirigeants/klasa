@@ -46,6 +46,7 @@ class KlasaClient extends Discord.Client {
 	 * @property {boolean} [quotedStringSupport=false] Whether the bot should default to using quoted string support in arg parsing, or not (overridable per command)
 	 * @property {?(string|Function)} [readyMessage=`Successfully initialized. Ready to serve ${this.guilds.size} guilds.`] readyMessage to be passed thru Klasa's ready event
 	 * @property {string} [ownerID] The discord user id for the user the bot should respect as the owner (gotten from Discord api if not provided)
+	 * @property {RegExp} [regexPrefix=null] The regular expression prefix if one is provided
 	 */
 
 	/**
@@ -89,6 +90,7 @@ class KlasaClient extends Discord.Client {
 		this.config.consoleEvents = config.consoleEvents || {};
 		this.config.language = config.language || 'en-US';
 		this.config.promptTime = typeof config.promptTime === 'number' && Number.isInteger(config.promptTime) ? config.promptTime : 30000;
+		this.config.regexPrefix = config.regexPrefix || null;
 
 		/**
 		 * The directory to the node_modules folder where Klasa exists
