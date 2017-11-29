@@ -989,7 +989,6 @@ declare module 'klasa' {
 			quotedStringSupport?: boolean;
 			readyMessage?: string|Function;
 			ownerID?: string;
-			regexPrefix?: RegExp;
 		};
 	
 		export type KlasaConsoleConfig = {
@@ -1361,3 +1360,4 @@ declare module 'klasa' {
 		export type SentMessage = ExtendedMessage | ExtendedMessage[];
 	
 	}
+	
