@@ -36,7 +36,7 @@ new Client({
 
 | Name                       | Default                   | Type               | Description                                                                         |
 | -------------------------- | ------------------------- | ------------------ | ----------------------------------------------------------------------------------- |
-| **clientOptions**          | `{}`                      | Object             | These are passed directly to the discord.js library. They are optional.Â¹            |
+| **clientOptions**          | `{}`                      | Object             | These are passed directly to the discord.js library. They are optional.¹            |
 | **prefix**                 | `undefined`               | string/regex/array | The default prefix(es) when the bot first boots up.Â²                                |
 | **permissionLevels**       | `defaultPermissionLevels` | PermissionLevels   | The permission levels to use with this bot                                          |
 | **clientBaseDir**          | see belowÂ³                | string             | The directory where all piece folders can be found                                  |
