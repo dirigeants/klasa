@@ -6,7 +6,7 @@ const { Guild, User } = require('discord.js');
 /**
  * Gateway's driver to make new instances of it, with the purpose to handle different databases simultaneously.
  */
-class SettingsCache {
+class GatewayDriver {
 
 	/**
 	 * @typedef  {Object} SettingsOptions
@@ -20,7 +20,7 @@ class SettingsCache {
 	 */
 	constructor(client) {
 		/**
-		 * The client this SettingsCache was created with.
+		 * The client this GatewayDriver was created with.
 		 * @type {KlasaClient}
 		 * @readonly
 		 */
@@ -76,7 +76,7 @@ class SettingsCache {
 	 *		 max: 140,
 	 *	 },
 	 * };
-	 * SettingsCache.add('users', validate, schema);
+	 * GatewayDriver.add('users', validate, schema);
 	 */
 	async add(name, validateFunction, schema = {}, options = {}, download = true) {
 		if (typeof name !== 'string') throw 'You must pass a name for your new gateway and it must be a string.';
@@ -101,7 +101,7 @@ class SettingsCache {
 	/**
 	 * Readies up all Gateways and Settings instances
 	 * @since 0.5.0
-	 * @returns {Promise<*>}
+	 * @returns {Promise<Array<Array<external:Collection<string, Settings>>>>}
 	 * @private
 	 */
 	_ready() {
@@ -201,4 +201,4 @@ class SettingsCache {
 
 }
 
-module.exports = SettingsCache;
+module.exports = GatewayDriver;

@@ -5,7 +5,7 @@ const PermLevels = require('./structures/PermissionLevels');
 const util = require('./util/util');
 const Stopwatch = require('./util/Stopwatch');
 const Console = require('./util/Console');
-const SettingsCache = require('./settings/SettingsCache');
+const GatewayDriver = require('./settings/GatewayDriver');
 const CommandStore = require('./structures/CommandStore');
 const InhibitorStore = require('./structures/InhibitorStore');
 const FinalizerStore = require('./structures/FinalizerStore');
@@ -227,11 +227,11 @@ class KlasaClient extends Discord.Client {
 		};
 
 		/**
-		 * The object where the gateways are stored settings
-		 * @since 0.3.0
-		 * @type {SettingsCache}
+		 * The GatewayDriver instance where the gateways are stored
+		 * @since 0.5.0
+		 * @type {GatewayDriver}
 		 */
-		this.settings = new SettingsCache(this);
+		this.gateways = new GatewayDriver(this);
 
 		/**
 		 * The application info cached from the discord api
@@ -346,8 +346,8 @@ class KlasaClient extends Discord.Client {
 
 		// Providers must be init before settings, and those before all other stores.
 		await this.providers.init();
-		await this.settings.add('guilds', this.settings.validateGuild, this.settings.defaultDataSchema, undefined, false);
-		await this.settings.add('users', this.settings.validateUser, undefined, undefined, false);
+		await this.gateways.add('guilds', this.gateways.validateGuild, this.gateways.defaultDataSchema, undefined, false);
+		await this.gateways.add('users', this.gateways.validateUser, undefined, undefined, false);
 		this.emit('log', `Loaded in ${timer.stop()}.`);
 		return super.login(token);
 	}
@@ -368,7 +368,7 @@ class KlasaClient extends Discord.Client {
 	 * @private
 	 */
 	async _ready() {
-		await this.settings._ready();
+		await this.gateways._ready();
 		if (typeof this.config.ignoreBots === 'undefined') this.config.ignoreBots = true;
 		if (typeof this.config.ignoreSelf === 'undefined') this.config.ignoreSelf = this.user.bot;
 		if (this.user.bot) this.application = await super.fetchApplication();

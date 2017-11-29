@@ -34,7 +34,7 @@ module.exports = {
 	GatewaySQL: require('./lib/settings/GatewaySQL'),
 	Schema: require('./lib/settings/Schema'),
 	SchemaPiece: require('./lib/settings/SchemaPiece'),
-	SettingsCache: require('./lib/settings/SettingsCache'),
+	GatewayDriver: require('./lib/settings/GatewayDriver'),
 	ArgResolver: require('./lib/parsers/ArgResolver'),
 	Resolver: require('./lib/parsers/Resolver'),
 	SettingResolver: require('./lib/parsers/SettingResolver'),

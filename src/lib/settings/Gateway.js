@@ -81,7 +81,7 @@ class Gateway {
 
 	/**
 	 * @since 0.0.1
-	 * @param {SettingsCache} store The SettingsCache instance which initiated this instance.
+	 * @param {GatewayDriver} store The GatewayDriver instance which initiated this instance.
 	 * @param {string} type The name of this Gateway.
 	 * @param {Function} validateFunction The function that validates the entries' values.
 	 * @param {Object} schema The initial schema for this instance.
@@ -90,7 +90,7 @@ class Gateway {
 	constructor(store, type, validateFunction, schema, options) {
 		/**
 		 * @since 0.0.1
-		 * @type {SettingsCache}
+		 * @type {GatewayDriver}
 		 */
 		this.store = store;
 
@@ -396,7 +396,7 @@ class Gateway {
 	/**
 	 * Readies up all Settings instances in this gateway
 	 * @since 0.5.0
-	 * @returns {Promise<*>}
+	 * @returns {Promise<Array<external:Collection<string, Settings>>>}
 	 * @private
 	 */
 	async _ready() {

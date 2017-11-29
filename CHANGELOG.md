@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Dev] - 0.4.0
 ### Added
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] `Schema` and `SchemaPiece` classes, with helper methods that allow the gateway parse and retrieve data much faster, as well as following the OOP paradigm when it comes to modifying the schema and much friendlier to use.
-- [[#43](https://github.com/dirigeants/klasa/pull/43)] More options to `SettingsCache#add`, allowing you to set different providers in different gateway instances.
+- [[#43](https://github.com/dirigeants/klasa/pull/43)] More options to `GatewayDriver#add`, allowing you to set different providers in different gateway instances.
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] Added **Folder** type (nested objects, yay!).
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] Added `SchemaPiece.configurable` to avoid certain keys to be processed by the default conf command.
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] Added **any** type to SettingsResolver. Assigning this type to a SchemaPiece will make it set the property configureable to false, it accepts anything you pass to it, even objects. So you must use dedicated commands to configure these keys instead. (For example, you can store an array of objects with a certain number of properties, something not possible in the previous versions as the conf command cannot parse objects correctly).
@@ -19,7 +19,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] Added GatewaySQL (extends Gateway, overriding the methods for better SQL parsing).
 
 ### Changed
-- [[#43](https://github.com/dirigeants/klasa/pull/43)] **[BREAKING]** `SettingsCache#validate` does not longer have an instance of `SettingResolver` as first parameter, but a bound `this` referring to the SettingsCache instance. (With access to KlasaClient and SettingResolver).
+- [[#43](https://github.com/dirigeants/klasa/pull/43)] **[BREAKING]** `GatewayDriver#validate` does not longer have an instance of `SettingResolver` as first parameter, but a bound `this` referring to the GatewayDriver instance. (With access to KlasaClient and SettingResolver).
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] **[BREAKING]** `Gateway#get` -> `Gateway#getEntry`.
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] QoL fix in the help command. Tell you when a command is not found and prevent users from checking it when they don't have permissions.
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] All pieces to support asynchronous CacheProviders.
@@ -37,7 +37,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] Improved SettingGateway startup speed.
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] Renamed the main class from SettingGateway to Gateway.
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] **[BREAKING]** Gateway do not longer extend SchemaManager and CacheManager, but it's a class by itself.
-- [[#43](https://github.com/dirigeants/klasa/pull/43)] Made the types that SettingGateway accepts for the key types dynamic (based on SettingResolver's prototype) and public throught `Client.settings.types;`.
+- [[#43](https://github.com/dirigeants/klasa/pull/43)] Made the types that SettingGateway accepts for the key types dynamic (based on SettingResolver's prototype) and public throught `Client.gateways.types;`.
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] **Pending** Changed some methods from SQLProviders to remove the NoSQL -> SQL middleware.
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] **[BREAKING]** `Command.fullUsage(msg);` to accept a string with the prefix instead of a message and fetch the settings.
 
@@ -49,7 +49,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] Removed `SQLProvider#serialize`, `SQLProvider#sanitize`, `SQLProvider#CONSTANTS`.
 
 ### Fixed
-- [[#43](https://github.com/dirigeants/klasa/pull/43)] Fixed `SettingsCache#validate` not working properly.
+- [[#43](https://github.com/dirigeants/klasa/pull/43)] Fixed `GatewayDriver#validate` not working properly.
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] The eval command being unable to catch certain errors.
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] Fixed the JSON provider throwing errors.
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] Fixed multiple minor issues.

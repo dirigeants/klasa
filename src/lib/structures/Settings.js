@@ -118,6 +118,19 @@ class Settings {
 	}
 
 	/**
+	 * Reset the current settings.
+	 * @since 0.5.0
+	 * @returns {Promise<Settings>}
+	 */
+	async reset() {
+		if (this.existsInDB) await this.manager.provider.delete(this.manager.type, this.id);
+		for (const key of this.manager.schema.keyArray) {
+			this[key] = Settings._merge(undefined, this.manager.schema[key]);
+		}
+		return this;
+	}
+
+	/**
 	 * Sync the data from the database with the cache.
 	 * @since 0.5.0
 	 * @returns {Promise<Settings>}
