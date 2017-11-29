@@ -7,7 +7,6 @@ module.exports = class extends Monitor {
 		this.prefixes = new Map();
 		this.prefixMention = null;
 		this.prefixMentionLength = null;
-		this.regexPrefix = null;
 		this.nick = new RegExp('^<@!');
 	}
 
