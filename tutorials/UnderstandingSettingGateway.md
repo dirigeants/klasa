@@ -169,32 +169,42 @@ async function() {
 
 By using {@link SettingsCache}, (available from `client.settings`).
 
-Let's say I want to add a new Gateway instance, called `users`, which input takes users, and stores a quote which is a string between 2 and 140 characters.
+Let's say I want to add a new Gateway instance, called `channels`, which input takes channels, and stores some data to complement our permissions.
 
 ```javascript
 // Must use the function keyword or be a method of a class.
-async function validate(userResolvable) {
+async function validate(channelResolvable) {
 	// 'this' is referred to the SettingsCache's instance, it has access
 	// to client, resolver...
-	const result = await this.resolver.user(userResolvable);
+	const result = await this.resolver.channel(channelResolvable);
 	if (result) return result;
 
-	throw 'The parameter <User> expects either a User ID or a User Object.';
+	throw 'The parameter <Channel> expects either a Channel ID or a Channel Instance.';
 }
 
 // Define the schema for the new Gateway.
 const schema = {
-	quote: {
-		type: 'String',
-		default: null,
-		array: false,
-		min: 2,
-		max: 140
-  	}
+	disabledCommands: {
+		type: 'Command',
+		default: [],
+		array: true
+	},
+	commandThrottle: {
+		type: 'Integer',
+		default: 5,
+		min: 0,
+		max: 60
+	},
+	commandReset: {
+		type: 'Integer',
+		default: 2,
+		min: 0,
+		max: 30
+	}
 };
 
 // Now, we create it:
-this.client.settings.add('users', validate, schema);
+this.client.settings.add('channels', validate, schema);
 ```
 
 > Since [[#43](https://github.com/dirigeants/klasa/pull/43)], validate only accepts a single argument, instead of being resolver the first one.
@@ -206,15 +216,15 @@ this.client.settings.add('users', validate, schema);
 And then, you can access to it by:
 
 ```javascript
-this.client.settings.users;
+this.client.settings.channels;
 ```
 
 ## Using different providers in different gateways
 
-This is new from the SettingGateway v2 (check [#43](https://github.com/dirigeants/klasa/pull/43)), when creating a new Gateway (check above for how to do it), there's an extra parameter in `client.settings.add` called `options`. It's optional, but it accepts an object with one key: `provider`, being the names of the desired CacheProvider (Collection, Redis...) or/and Provider/SQLProvider (json, leveldb, rethinkdb...). For example:
+This is new from the SettingGateway v2 (check [#43](https://github.com/dirigeants/klasa/pull/43)), when creating a new Gateway (check above for how to do it), there's an extra parameter in `client.settings.add` called `options`. It's optional, but it accepts an object with one key: `provider`, which is the Provider/SQLProvider (json, leveldb, rethinkdb...). For example:
 
 ```javascript
-this.client.settings.add('users', validate, schema, { provider: 'rethinkdb' });
+this.client.settings.add('channels', validate, schema, { provider: 'rethinkdb' });
 ```
 
-The code above will create a new Gateway instance called 'users', which will use RethinkDB to store the persistent data, and Redis to cache it.
+The code above will create a new Gateway instance called 'channels', which will use RethinkDB to store the persistent data.

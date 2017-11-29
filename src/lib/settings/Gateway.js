@@ -215,6 +215,12 @@ class Gateway {
 		return settings;
 	}
 
+	/**
+	 * Generate a new entry and add it to the cache.
+	 * @param {string} id The ID of the entry.
+	 * @param {*} data The data to insert.
+	 * @return {Settings}
+	 */
 	insertEntry(id, data = {}) {
 		const settings = new Settings(this, Object.assign(data, { id }));
 		this.cache.set(this.type, id, settings);
@@ -225,7 +231,7 @@ class Gateway {
 	 * Delete an entry from the database and cache.
 	 * @since 0.5.0
 	 * @param {string} input The name of the key to fetch and delete.
-	 * @returns {Promise<true>}
+	 * @returns {Promise<boolean>}
 	 */
 	async deleteEntry(input) {
 		const settings = this.cache.get(this.type, input);
