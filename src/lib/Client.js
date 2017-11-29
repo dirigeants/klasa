@@ -14,7 +14,6 @@ const LanguageStore = require('./structures/LanguageStore');
 const ProviderStore = require('./structures/ProviderStore');
 const EventStore = require('./structures/EventStore');
 const ExtendableStore = require('./structures/ExtendableStore');
-const Settings = require('./structures/Settings');
 
 /**
  * The client for handling everything. See {@tutorial GettingStarted} for more information how to get started using this class.
