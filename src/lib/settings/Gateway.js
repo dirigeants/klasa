@@ -393,6 +393,12 @@ class Gateway {
 		return { path, route };
 	}
 
+	/**
+	 * Readies up all Settings instances in this gateway
+	 * @since 0.5.0
+	 * @returns {Promise<*>}
+	 * @private
+	 */
 	async _ready() {
 		const promises = [];
 		const keys = await this.provider.getKeys(this.type);

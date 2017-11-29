@@ -98,6 +98,12 @@ class SettingsCache {
 		return this[name];
 	}
 
+	/**
+	 * Readies up all Gateways and Settings instances
+	 * @since 0.5.0
+	 * @returns {Promise<*>}
+	 * @private
+	 */
 	_ready() {
 		if (this.ready) throw 'Settings has already run the ready method.';
 		this.ready = true;
