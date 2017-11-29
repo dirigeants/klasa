@@ -18,6 +18,10 @@ module.exports = Structures.extend('Guild', Guild => {
 			this.configs = this.client.gateways.guilds.cache.get('guilds', this.id) || this.client.gateways.guilds.insertEntry(this.id);
 		}
 
+		/**
+		 * The language configured for this guild
+		 * @returns {Language}
+		 */
 		get language() {
 			return this.client.languages.get(this.configs.language) || this.client.config.language;
 		}

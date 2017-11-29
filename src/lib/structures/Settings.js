@@ -212,7 +212,7 @@ class Settings {
 	 * Clone settings.
 	 * @since 0.5.0
 	 * @param {Object} data The data to clone.
-	 * @param {(Schema|SchemaPiece)} schema A Schema or a SchemaPiece instance.
+	 * @param {Schema} schema A Schema instance.
 	 * @returns {Object}
 	 * @private
 	 * @static
