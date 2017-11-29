@@ -527,6 +527,15 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  */
 
 /**
+ * Emitted when a monitor has errored.
+ * @event KlasaClient#monitorError
+ * @since 0.4.0
+ * @param {KlasaMessage} message The message that triggered the monitor
+ * @param {Monitor} monitor The monitor run
+ * @param {(string|Object)} error The monitor error
+ */
+
+/**
  * Emitted when {@link Gateway.updateOne}, {@link Gateway.updateArray} or {@link Gateway.reset}
  * is run. When {@link Gateway.updateMany} is run, the parameter path will be undefined.
  * @event KlasaClient#settingUpdateEntry
