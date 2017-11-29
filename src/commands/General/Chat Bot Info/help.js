@@ -7,16 +7,13 @@ module.exports = class extends Command {
 			aliases: ['commands'],
 			guarded: true,
 			description: 'Display help for a command.',
-			usage: '[Command:string]'
+			usage: '[Command:cmd]'
 		});
 	}
 
 	async run(msg, [cmd]) {
 		const method = this.client.user.bot ? 'author' : 'channel';
 		if (cmd) {
-			cmd = this.client.commands.get(cmd);
-			if (!cmd) return msg.sendMessage(msg.language.get('COMMAND_HELP_COMMAND_NOT_FOUND'));
-			await this.client.inhibitors.run(msg, cmd, true);
 			const info = [
 				`= ${cmd.name} = `,
 				cmd.description,
