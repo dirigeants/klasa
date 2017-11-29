@@ -17,8 +17,8 @@ module.exports = class extends Command {
 			const info = [
 				`= ${cmd.name} = `,
 				cmd.description,
-				`usage :: ${cmd.usage.fullUsage(msg)}`,
-				'Extended Help ::',
+				msg.language.get('COMMAND_HELP_USAGE', cmd.usage.fullUsage(msg)),
+				msg.language.get('COMMAND_HELP_EXTENDED'),
 				cmd.extendedHelp
 			].join('\n');
 			return msg.sendMessage(info, { code: 'asciidoc' });
