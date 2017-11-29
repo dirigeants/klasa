@@ -44,7 +44,10 @@ module.exports = class extends Monitor {
 
 	getPrefix(msg) {
 		if (this.prefixMention.test(msg.content)) return { length: this.nick.test(msg.content) ? this.prefixMentionLength + 1 : this.prefixMentionLength, regex: this.prefixMention };
-		if (this.regexPrefix && this.regexPrefix.test(msg.content)) return { length: msg.content.match(this.regexPrefix) ? msg.content.match(this.regexPrefix)[0].length : 0, regex: this.regexPrefix };
+		if (this.client.config.regexPrefix) {
+			const results = this.client.config.regexPrefix.exec(msg.content);
+			if (results) return { length: results[0].length, regex: this.client.config.regexPrefix };
+		}
 		const prefix = msg.guildSettings.prefix || this.client.config.prefix;
 		if (prefix instanceof Array) {
 			for (let i = prefix.length - 1; i >= 0; i--) {
@@ -121,7 +124,6 @@ module.exports = class extends Monitor {
 		this.ignoreOthers = !this.client.user.bot;
 		this.prefixMention = new RegExp(`^<@!?${this.client.user.id}>`);
 		this.prefixMentionLength = this.client.user.id.length + 3;
-		this.regexPrefix = this.client.config.regexPrefix;
 	}
 
 };
