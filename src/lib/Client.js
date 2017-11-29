@@ -528,7 +528,7 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
 /**
  * Emitted when {@link Gateway.updateOne}, {@link Gateway.updateArray} or {@link Gateway.reset}
  * is run. When {@link Gateway.updateMany} is run, the parameter path will be undefined.
- * @event KlasaClient#settingUpdateEntry
+ * @event KlasaClient#configUpdateEntry
  * @since 0.5.0
  * @param {Settings} oldEntry The old settings entries
  * @param {Settings} newEntry The new settings entries
@@ -537,7 +537,7 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
 
 /**
  * Emitted when {@link Gateway.deleteEntry} is run.
- * @event KlasaClient#settingDeleteEntry
+ * @event KlasaClient#configDeleteEntry
  * @since 0.5.0
  * @param {Settings} entry The entry which got deleted
  */
@@ -545,7 +545,7 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
 /**
  * Emitted when {@link Gateway.createEntry} is run or when {@link Gateway.getEntry}
  * with the create parameter set to true creates the entry.
- * @event KlasaClient#settingCreateEntry
+ * @event KlasaClient#configCreateEntry
  * @since 0.5.0
  * @param {Settings} entry The entry which got created
  */

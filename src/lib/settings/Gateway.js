@@ -192,7 +192,7 @@ class Gateway {
 				this.provider.create(this.type, input)
 					.then(() => {
 						settings.existsInDB = true;
-						if (this.client.listenerCount('settingCreateEntry')) this.client.emit('settingCreateEntry', settings);
+						if (this.client.listenerCount('configCreateEntry')) this.client.emit('configCreateEntry', settings);
 					})
 					.catch(error => this.client.emit('log', error, 'error'));
 				return settings;
@@ -217,7 +217,7 @@ class Gateway {
 		const settings = cache || new Settings(this, { id: target });
 		settings.existsInDB = true;
 		if (!cache) this.cache.set(this.type, target, settings);
-		if (this.client.listenerCount('settingCreateEntry')) this.client.emit('settingCreateEntry', settings);
+		if (this.client.listenerCount('configCreateEntry')) this.client.emit('configCreateEntry', settings);
 		return settings;
 	}
 
@@ -246,7 +246,7 @@ class Gateway {
 
 		if (settings.existsInDB) {
 			await this.provider.delete(this.type, input);
-			if (this.client.listenerCount('settingDeleteEntry')) this.client.emit('settingDeleteEntry', settings);
+			if (this.client.listenerCount('configDeleteEntry')) this.client.emit('configDeleteEntry', settings);
 		}
 		this.cache.delete(this.type, input);
 
@@ -347,11 +347,11 @@ class Gateway {
 		// Handle entry creation if it does not exist.
 		if (!cache || !cache.existsInDB) cache = await this.createEntry(target);
 		const settings = cache;
-		const oldClone = this.client.listenerCount('settingUpdateEntry') ? settings.clone() : null;
+		const oldClone = this.client.listenerCount('configUpdateEntry') ? settings.clone() : null;
 		this._updateMany(cache, object, this.schema, guild, list);
 		await Promise.all(list.promises);
 
-		if (oldClone !== null) this.client.emit('settingUpdateEntry', oldClone, settings);
+		if (oldClone !== null) this.client.emit('configUpdateEntry', oldClone, settings);
 		await this.provider.update(this.type, target, settings);
 		return { settings, errors: list.errors };
 	}
@@ -444,12 +444,12 @@ class Gateway {
 		// Handle entry creation if it does not exist.
 		if (!cache || !cache.existsInDB) cache = await this.createEntry(target);
 		const settings = cache;
-		const oldClone = this.client.listenerCount('settingUpdateEntry') ? settings.clone() : null;
+		const oldClone = this.client.listenerCount('configUpdateEntry') ? settings.clone() : null;
 
 		for (let i = 0; i < route.length - 1; i++) cache = cache[route[i]] || {};
 		cache[route[route.length - 1]] = parsedID;
 
-		if (oldClone !== null) this.client.emit('settingUpdateEntry', oldClone, settings, path.path);
+		if (oldClone !== null) this.client.emit('configUpdateEntry', oldClone, settings, path.path);
 		return { entryID: target, parsed: parsedID, parsedID, settings, array: null, path, route };
 	}
 
@@ -474,12 +474,12 @@ class Gateway {
 		// Handle entry creation if it does not exist.
 		if (!cache || !cache.existsInDB) cache = await this.createEntry(target);
 		const settings = cache;
-		const oldClone = this.client.listenerCount('settingUpdateEntry') ? settings.clone() : null;
+		const oldClone = this.client.listenerCount('configUpdateEntry') ? settings.clone() : null;
 
 		for (let i = 0; i < route.length - 1; i++) cache = cache[route[i]] || {};
 		cache[route[route.length - 1]] = parsedID;
 
-		if (oldClone !== null) this.client.emit('settingUpdateEntry', oldClone, settings, path.path);
+		if (oldClone !== null) this.client.emit('configUpdateEntry', oldClone, settings, path.path);
 		return { entryID: target, parsed, parsedID, settings, array: null, path, route };
 	}
 
@@ -505,7 +505,7 @@ class Gateway {
 		// Handle entry creation if it does not exist.
 		if (!cache || !cache.existsInDB) cache = await this.createEntry(target);
 		const settings = cache;
-		const oldClone = this.client.listenerCount('settingUpdateEntry') ? settings.clone() : null;
+		const oldClone = this.client.listenerCount('configUpdateEntry') ? settings.clone() : null;
 
 		for (let i = 0; i < route.length; i++) {
 			if (typeof cache[route[i]] === 'undefined') cache[route[i]] = {};
@@ -520,7 +520,7 @@ class Gateway {
 			cache.splice(index, 1);
 		}
 
-		if (oldClone !== null) this.client.emit('settingUpdateEntry', oldClone, settings, path.path);
+		if (oldClone !== null) this.client.emit('configUpdateEntry', oldClone, settings, path.path);
 		return { entryID: target, parsed, parsedID, settings, array: cache, path, route };
 	}
 
