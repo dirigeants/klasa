@@ -366,22 +366,11 @@ class KlasaClient extends Discord.Client {
 	 * @private
 	 */
 	async _ready() {
+		await this.settings._ready();
 		if (typeof this.config.ignoreBots === 'undefined') this.config.ignoreBots = true;
 		if (typeof this.config.ignoreSelf === 'undefined') this.config.ignoreSelf = this.user.bot;
 		if (this.user.bot) this.application = await super.fetchApplication();
 		if (!this.config.ownerID) this.config.ownerID = this.user.bot ? this.application.owner.id : this.user.id;
-
-		const promises = [];
-		const guildKeys = await this.settings.guilds.provider.getKeys('guilds');
-		for (let i = 0; i < guildKeys.length; i++) {
-			const guild = this.guilds.get(guildKeys[i]);
-			if (guild) promises.push(guild.configs.sync().then(() => this.settings.guilds.cache.set('guilds', guildKeys[i], guild.configs)));
-		}
-		const userKeys = await this.settings.users.provider.getKeys('users');
-		for (let i = 0; i < userKeys.length; i++) {
-			const user = this.users.get(userKeys[i]);
-			if (user) promises.push(user.configs.sync().then(() => this.settings.users.cache.set('users', userKeys[i], user.configs)));
-		}
 
 		// Init all the pieces
 		await Promise.all(this.pieceStores.filter(store => store.name !== 'providers').map(store => store.init()));
