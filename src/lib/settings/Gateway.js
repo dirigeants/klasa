@@ -184,7 +184,10 @@ class Gateway {
 				this.cache.set(this.type, input, settings);
 				// Silently create a new entry. The new data does not matter as Settings default all the keys.
 				this.provider.create(this.type, input)
-					.then(() => this.client.listenerCount('settingCreateEntry') ? this.client.emit('settingCreateEntry', settings) : null)
+					.then(() => {
+						settings.existsInDB = true;
+						if (this.client.listenerCount('settingCreateEntry')) this.client.emit('settingCreateEntry', settings);
+					})
 					.catch(error => this.client.emit('log', error, 'error'));
 				return settings;
 			}
@@ -202,9 +205,12 @@ class Gateway {
 	 */
 	async createEntry(input) {
 		const target = await this.validate(input).then(output => output && output.id ? output.id : output);
+		const cache = this.cache.get(this.type, target);
+		if (cache && cache.existsInDB) return settings;
 		await this.provider.create(this.type, target);
-		const settings = new Settings(this, { id: target });
-		this.cache.set(this.type, target, settings);
+		const settings = cache || new Settings(this, { id: target });
+		settings.existsInDB = true;
+		if (!cache) this.cache.set(this.type, target, settings);
 		if (this.client.listenerCount('settingCreateEntry')) this.client.emit('settingCreateEntry', settings);
 		return settings;
 	}
@@ -225,9 +231,12 @@ class Gateway {
 		const settings = this.cache.get(this.type, input);
 		if (!settings) return false;
 
-		await this.provider.delete(this.type, input);
+		if (settings.existsInDB) {
+			await this.provider.delete(this.type, input);
+			if (this.client.listenerCount('settingDeleteEntry')) this.client.emit('settingDeleteEntry', settings);
+		}
 		this.cache.delete(this.type, input);
-		if (this.client.listenerCount('settingDeleteEntry')) this.client.emit('settingDeleteEntry', settings);
+
 		return true;
 	}
 
@@ -241,13 +250,22 @@ class Gateway {
 		if (typeof input === 'undefined') {
 			const data = await this.provider.getAll(this.type);
 			if (data.length > 0) {
-				for (let i = 0; i < data.length; i++) this.cache.set(this.type, data[i].id, new Settings(this, data[i]));
+				for (let i = 0; i < data.length; i++) {
+					const settings = new Settings(this, data[i]);
+					settings.existsInDB = true;
+					this.cache.set(this.type, data[i].id, settings);
+				}
 			}
 			return true;
 		}
 		const target = await this.validate(input).then(output => output && output.id ? output.id : output);
 		const data = await this.provider.get(this.type, target);
-		this.cache.set(this.type, target, new Settings(this, data));
+		if (data) {
+			const settings = new Settings(this, data);
+			settings.existsInDB = true;
+			this.cache.set(this.type, target, settings);
+		}
+
 		return true;
 	}
 
@@ -314,7 +332,7 @@ class Gateway {
 		let cache = this.cache.get(this.type, target);
 
 		// Handle entry creation if it does not exist.
-		if (!cache) cache = await this.createEntry(target);
+		if (!cache || !cache.existsInDB) cache = await this.createEntry(target);
 		const settings = cache;
 		const oldClone = this.client.listenerCount('settingUpdateEntry') ? settings.clone() : null;
 		this._updateMany(cache, object, this.schema, guild, list);
@@ -395,7 +413,7 @@ class Gateway {
 		let cache = this.cache.get(this.type, target);
 
 		// Handle entry creation if it does not exist.
-		if (!cache) cache = await this.createEntry(target);
+		if (!cache || !cache.existsInDB) cache = await this.createEntry(target);
 		const settings = cache;
 		const oldClone = this.client.listenerCount('settingUpdateEntry') ? settings.clone() : null;
 
@@ -425,7 +443,7 @@ class Gateway {
 		let cache = this.cache.get(this.type, target);
 
 		// Handle entry creation if it does not exist.
-		if (!cache) cache = await this.createEntry(target);
+		if (!cache || !cache.existsInDB) cache = await this.createEntry(target);
 		const settings = cache;
 		const oldClone = this.client.listenerCount('settingUpdateEntry') ? settings.clone() : null;
 
@@ -456,7 +474,7 @@ class Gateway {
 		let cache = this.cache.get(this.type, target);
 
 		// Handle entry creation if it does not exist.
-		if (!cache) cache = await this.createEntry(target);
+		if (!cache || !cache.existsInDB) cache = await this.createEntry(target);
 		const settings = cache;
 		const oldClone = this.client.listenerCount('settingUpdateEntry') ? settings.clone() : null;
 

@@ -44,15 +44,20 @@ class GatewaySQL extends Gateway {
 			if (data.length > 0) {
 				const schemaValues = this.schema.getValues();
 				for (let i = 0; i < data.length; i++) {
-					const parsedData = this._parseEntry(data[i], schemaValues);
-					this.cache.set(this.type, data[i].id, new Settings(this, parsedData));
+					const settings = new Settings(this, this._parseEntry(data[i], schemaValues));
+					settings.existsInDB = true;
+					this.cache.set(this.type, data[i].id, settings);
 				}
 			}
 			return true;
 		}
 		const target = await this.validate(input).then(output => output && output.id ? output.id : output);
 		const data = await this.provider.get(this.type, target);
-		this.cache.set(this.type, target, new Settings(this, new Settings(this, this._parseEntry(data))));
+		if (data) {
+			const settings = new Settings(this, this._parseEntry(data));
+			settings.existsInDB = true;
+			this.cache.set(this.type, target, settings);
+		}
 		return true;
 	}
 

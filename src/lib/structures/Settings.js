@@ -36,6 +36,14 @@ class Settings {
 		 */
 		Object.defineProperty(this, 'id', { value: data.id });
 
+		/**
+		 * Whether this entry exists in the DB or not.
+		 * @since 0.5.0
+		 * @type {boolean}
+		 * @name Settings#existsInDB
+		 */
+		Object.defineProperty(this, 'existsInDB', { value: false, writable: true });
+
 		const { schema } = this.manager;
 		for (let i = 0; i < schema.keyArray.length; i++) {
 			const key = schema.keyArray[i];
@@ -116,7 +124,10 @@ class Settings {
 	 */
 	async sync() {
 		const data = await this.manager.provider.get(this.manager.type, this.id);
-		if (data) this._patch(data);
+		if (data) {
+			if (!this.existsInDB) this.existsInDB = true;
+			this._patch(data);
+		}
 		return this;
 	}
 

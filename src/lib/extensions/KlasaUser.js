@@ -15,9 +15,7 @@ module.exports = Structures.extend('User', User => {
 			 * @since 0.5.0
 			 * @type {Settings}
 			 */
-			this.configs = this.client.ready ?
-				this.client.settings.users.cache.get('users', this.id) || this.client.settings.users.insertEntry(this.id) :
-				this.client.settings.users.insertEntry(this.id);
+			this.configs = this.client.settings.users.cache.get('users', this.id) || this.client.settings.users.insertEntry(this.id);
 		}
 
 	}
