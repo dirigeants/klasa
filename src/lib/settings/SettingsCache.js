@@ -37,6 +37,18 @@ class SettingsCache {
 		 * @type {string[]}
 		 */
 		this.types = Object.getOwnPropertyNames(SettingResolver.prototype).slice(1);
+
+		/**
+		 * All the caches added
+		 * @type {string[]}
+		 */
+		this.caches = [];
+
+		/**
+		 * If settings is ready
+		 * @type {string[]}
+		 */
+		this.ready = false;
 	}
 
 	/**
@@ -82,7 +94,25 @@ class SettingsCache {
 		else this[name] = new Gateway(this, name, validateFunction, schema, options);
 
 		await this[name].init(download);
+		this.caches.push(name);
 		return this[name];
+	}
+
+	/**
+	 * Readies up all Gateways and Settings instances
+	 * @since 0.5.0
+	 * @returns {Promise<*>}
+	 * @private
+	 */
+	_ready() {
+		if (this.ready) throw 'Settings has already run the ready method.';
+		this.ready = true;
+		const promises = [];
+		for (const cache of this.caches) {
+			this[cache].ready = true;
+			promises.push(this[cache]._ready());
+		}
+		return Promise.all(promises);
 	}
 
 	/**

@@ -125,6 +125,12 @@ class Gateway {
 		this.schema = null;
 
 		/**
+		 * @since 0.5.0
+		 * @type {boolean}
+		 */
+		this.ready = false;
+
+		/**
 		 * @since 0.0.1
 		 * @type {boolean}
 		 * @readonly
@@ -224,6 +230,7 @@ class Gateway {
 	insertEntry(id, data = {}) {
 		const settings = new Settings(this, Object.assign(data, { id }));
 		this.cache.set(this.type, id, settings);
+		if (this.ready) settings.sync().catch(err => this.client.emit('error', err));
 		return settings;
 	}
 
@@ -384,6 +391,22 @@ class Gateway {
 		}
 
 		return { path, route };
+	}
+
+	/**
+	 * Readies up all Settings instances in this gateway
+	 * @since 0.5.0
+	 * @returns {Promise<*>}
+	 * @private
+	 */
+	async _ready() {
+		const promises = [];
+		const keys = await this.provider.getKeys(this.type);
+		for (let i = 0; i < keys.length; i++) {
+			const structure = this.client[this.type].get(keys[i]);
+			if (structure) promises.push(structure.configs.sync().then(() => this.cache.set(this.type, keys[i], structure.configs)));
+		}
+		return Promise.all(promises);
 	}
 
 	/**

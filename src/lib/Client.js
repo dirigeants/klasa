@@ -42,6 +42,7 @@ class KlasaClient extends Discord.Client {
 	 * @property {boolean} [cmdEditing=false] Whether the bot should update responses if the command is edited
 	 * @property {boolean} [cmdLogging=false] Whether the bot should log command usage
 	 * @property {boolean} [typing=false] Whether the bot should type while processing commands.
+	 * @property {boolean} [preserveConfigs=true] Whetheer the bot should preserve (non-default) configs when removed from a guild.
 	 * @property {boolean} [quotedStringSupport=false] Whether the bot should default to using quoted string support in arg parsing, or not (overridable per command)
 	 * @property {?(string|Function)} [readyMessage=`Successfully initialized. Ready to serve ${this.guilds.size} guilds.`] readyMessage to be passed thru Klasa's ready event
 	 * @property {string} [ownerID] The discord user id for the user the bot should respect as the owner (gotten from Discord api if not provided)
@@ -89,6 +90,7 @@ class KlasaClient extends Discord.Client {
 		this.config.language = config.language || 'en-US';
 		this.config.promptTime = typeof config.promptTime === 'number' && Number.isInteger(config.promptTime) ? config.promptTime : 30000;
 		this.config.commandMessageLifetime = config.commandMessageLifetime || 1800;
+		this.config.preserveConfigs = 'preserverConfigs' in config ? config.preserveConfigs : true;
 
 		/**
 		 * The directory to the node_modules folder where Klasa exists
@@ -366,22 +368,11 @@ class KlasaClient extends Discord.Client {
 	 * @private
 	 */
 	async _ready() {
+		await this.settings._ready();
 		if (typeof this.config.ignoreBots === 'undefined') this.config.ignoreBots = true;
 		if (typeof this.config.ignoreSelf === 'undefined') this.config.ignoreSelf = this.user.bot;
 		if (this.user.bot) this.application = await super.fetchApplication();
 		if (!this.config.ownerID) this.config.ownerID = this.user.bot ? this.application.owner.id : this.user.id;
-
-		const promises = [];
-		const guildKeys = await this.settings.guilds.provider.getKeys('guilds');
-		for (let i = 0; i < guildKeys.length; i++) {
-			const guild = this.guilds.get(guildKeys[i]);
-			if (guild) promises.push(guild.configs.sync().then(() => this.settings.guilds.cache.set('guilds', guildKeys[i], guild.configs)));
-		}
-		const userKeys = await this.settings.users.provider.getKeys('users');
-		for (let i = 0; i < userKeys.length; i++) {
-			const user = this.users.get(userKeys[i]);
-			if (user) promises.push(user.configs.sync().then(() => this.settings.users.cache.set('users', userKeys[i], user.configs)));
-		}
 
 		// Init all the pieces
 		await Promise.all(this.pieceStores.filter(store => store.name !== 'providers').map(store => store.init()));
