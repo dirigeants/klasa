@@ -76,7 +76,9 @@ class MonitorStore extends Collection {
 	 */
 	run(msg) {
 		for (const monit of this.values()) {
-			if (monit.enabled && !(monit.ignoreBots && msg.author.bot) && !(monit.ignoreSelf && this.client.user === msg.author) && !(monit.ignoreOthers && this.client.user !== msg.author)) monit.run(msg);
+			if (monit.enabled && !(monit.ignoreBots && msg.author.bot) && !(monit.ignoreSelf && this.client.user === msg.author) && !(monit.ignoreOthers && this.client.user !== msg.author)) {
+				monit.run(msg).catch(err => this.client.emit('monitorError', msg, monit, err));
+			}
 		}
 	}
 
