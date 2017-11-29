@@ -37,9 +37,9 @@ new Client({
 | Name                       | Default                   | Type               | Description                                                                         |
 | -------------------------- | ------------------------- | ------------------ | ----------------------------------------------------------------------------------- |
 | **clientOptions**          | `{}`                      | Object             | These are passed directly to the discord.js library. They are optional.¹            |
-| **prefix**                 | `undefined`               | string/regex/array | The default prefix(es) when the bot first boots up.Â²                                |
+| **prefix**                 | `undefined`               | string/regex/array | The default prefix(es) when the bot first boots up.²                                |
 | **permissionLevels**       | `defaultPermissionLevels` | PermissionLevels   | The permission levels to use with this bot                                          |
-| **clientBaseDir**          | see belowÂ³                | string             | The directory where all piece folders can be found                                  |
+| **clientBaseDir**          | see below³                | string             | The directory where all piece folders can be found                                  |
 | **commandMessageLifetime** | `1800`                    | number             | The threshold for when comand messages should be sweeped in seconds since last edit |
 | **commandMessageSweep**    | `900`                     | number             | The interval duration for which command messages should be sweept in seconds        |
 | **provider**               | `json`                    | string             | The provider to use in Klasa                                                        |
@@ -50,11 +50,11 @@ new Client({
 | **cmdPrompt**              | `false`                   | boolean            | Whether the bot should prompt missing parameters                                    |
 | **cmdEditing**             | `false`                   | boolean            | Whether the bot should update responses if the command is edited                    |
 | **cmdLogging**             | `false`                   | boolean            | Whether the bot should log command usage                                            |
-| **quotedStringSupport**    | `false`                   | boolean            | Whether the bot should default to using quoted string supportâ´                      |
+| **quotedStringSupport**    | `false`                   | boolean            | Whether the bot should default to using quoted string support⁴                      |
 | **typing**                 | `false`                   | boolean            | Whether the bot should type while processing commands.                              |
-| **readyMessage**           | see belowâµ                | string/function    | readyMessage to be passed through to Klasa's ready event.                           |
-| **ownerID**                | see belowâ¶                | string             | The discord id for the user the bot should respect as the owner                     |
-| **regexPrefix**            | `null`                    | regex              | The regular expression prefix if one is provided                                    |
+| **readyMessage**           | see below⁵                | string/function    | readyMessage to be passed through to Klasa's ready event.                           |
+| **ownerID**                | see below⁶                | string             | The discord id for the user the bot should respect as the owner                     |                  |
+| **regexPrefix**            | `null`                    | regex              | The regular expression prefix if one is provided               |
 
 >1: For more information on which D.JS options are available, see [ClientOptions in the discord.js docs](https://discord.js.org/#/docs/main/master/typedef/ClientOptions).  
 >2: This option becomes useless after first boot, since the prefix is written to the default configuration system. Pass an array to accept multiple prefixes.  
