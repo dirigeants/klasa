@@ -16,16 +16,12 @@ module.exports = class extends Command {
 	async run(msg, [action, key, ...value]) {
 		const { configs } = msg.guild;
 		if (action !== 'list' && !key) throw msg.language.get('COMMAND_CONF_NOKEY');
-		if (['set', 'remove'].includes(action) && !value[0]) throw msg.language.get('COMMAND_CONF_NOVALUE');
+		if (['set', 'remove'].includes(action) && value.length === 0) throw msg.language.get('COMMAND_CONF_NOVALUE');
 		if (action === 'set' && key === 'disabledCommands') {
 			const command = this.client.commands.get(value.join(' '));
 			if (command && command.guarded) throw msg.language.get('COMMAND_CONF_GUARDED', command.name);
 		}
-		if (['set', 'remove', 'reset'].includes(action) && !configs.id) await this.client.gateways.guilds.create(msg.guild);
-		if (['set', 'remove', 'get', 'reset'].includes(action) && !(key in configs)) throw msg.language.get('COMMAND_CONF_GET_NOEXT', key);
-		await this[action](msg, configs, key, value);
-
-		return null;
+		return this[action](msg, configs, key, value);
 	}
 
 	async set(msg, configs, key, valueToSet) {
