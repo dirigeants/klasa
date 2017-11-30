@@ -41,7 +41,6 @@ new Client({
 | **permissionLevels**       | `defaultPermissionLevels` | PermissionLevels   | The permission levels to use with this bot                                          |
 | **clientBaseDir**          | see below³                | string             | The directory where all piece folders can be found                                  |
 | **commandMessageLifetime** | `1800`                    | number             | The threshold for when comand messages should be sweeped in seconds since last edit |
-| **commandMessageSweep**    | `900`                     | number             | The interval duration for which command messages should be sweept in seconds        |
 | **provider**               | `json`                    | string             | The provider to use in Klasa                                                        |
 | **language**               | `en-US`                   | string             | The default language Klasa should opt-in for the commands                           |
 | **promptTime**             | `30000`                   | number             | The amount of time in milliseconds prompts should last                              |
@@ -55,12 +54,12 @@ new Client({
 | **readyMessage**           | see below⁵                | string/function    | readyMessage to be passed through to Klasa's ready event.                           |
 | **ownerID**                | see below⁶                | string             | The discord id for the user the bot should respect as the owner                     |
 
->1: For more information on which D.JS options are available, see [ClientOptions in the discord.js docs](https://discord.js.org/#/docs/main/master/typedef/ClientOptions).  
->2: This option becomes useless after first boot, since the prefix is written to the default configuration system. Pass an array to accept multiple prefixes.  
->3: The directory of the main file. `path.dirname(require.main.filename)`  
->4: quotedStringSupport is overridable per command  
->5: `Successfully initialized. Ready to serve ${client.guilds.size} guilds.`  
->6: ID gotten from teh Discord api if not provided: `client.application.owner.id`  
+>1: For more information on which D.JS options are available, see [ClientOptions in the discord.js docs](https://discord.js.org/#/docs/main/master/typedef/ClientOptions).
+>2: This option becomes useless after first boot, since the prefix is written to the default configuration system. Pass an array to accept multiple prefixes.
+>3: The directory of the main file. `path.dirname(require.main.filename)`
+>4: quotedStringSupport is overridable per command
+>5: `Successfully initialized. Ready to serve ${client.guilds.size} guilds.`
+>6: ID gotten from teh Discord api if not provided: `client.application.owner.id`
 
 ## Running the bot
 

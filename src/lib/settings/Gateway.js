@@ -21,6 +21,7 @@ class Gateway {
 	 * @typedef  {Object} GatewayUpdateResult
 	 * @property {any} value
 	 * @property {SchemaPiece} path
+	 * @memberof Gateway
 	 */
 
 	/**
@@ -58,10 +59,11 @@ class Gateway {
 	 * @typedef  {Object} GatewayUpdateManyResult
 	 * @property {Settings} settings
 	 * @property {Error[]} errors
+	 * @memberof Gateway
 	 */
 
 	/**
-	 * @typedef {(external:Guild|external:TextChannel|external:VoiceChannel|external:Message|external:Role)} GatewayGuildResolvable
+	 * @typedef {(KlasaGuild|external:TextChannel|external:VoiceChannel|KlasaMessage|external:Role)} GatewayGuildResolvable
 	 * @memberof Gateway
 	 */
 

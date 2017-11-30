@@ -11,6 +11,7 @@ class SchemaPiece {
 	 * @property {number}  max The max value for the key (String.length for String, value for number).
 	 * @property {boolean} array Whether the key should be stored as Array or not.
 	 * @property {boolean} configurable Whether the key should be configurable by the config command or not.
+	 * @memberof SchemaPiece
 	 */
 
 	/**

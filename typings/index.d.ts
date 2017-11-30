@@ -468,21 +468,21 @@ declare module 'klasa' {
 		public nearlyFullUsage: string;
 
 		public fullUsage(msg: KlasaMessage): string;
-		public static parseUsage(usageString: string): Tag[];
-		public static tagOpen(usage: Object, char: string): Object;
-		public static tagClose(usage: Object, char: string): Object;
-		public static tagSpace(usage: Object, char: string): Object;
+		private static parseUsage(usageString: string): Tag[];
+		private static tagOpen(usage: Object, char: string): Object;
+		private static tagClose(usage: Object, char: string): Object;
+		private static tagSpace(usage: Object, char: string): Object;
 	}
 
 	export class Possible {
-		public constructor(regexResults: string[]);
+		public constructor([match, name, type, min, max, regex, flags]: [string, string, string?, string?, string?, string?, string?]);
 		public name: string;
 		public type: string;
 		public min: number;
 		public max: number;
 		public regex: RegExp;
 
-		public static resolveLimit(limit: string, type: string): number;
+		private static resolveLimit(limit: string, type: string): number;
 	}
 
 	export class Tag {
@@ -490,8 +490,8 @@ declare module 'klasa' {
 		public type: string;
 		public possibles: Possible[];
 
-		public static parseMembers(members: string, count: number): Possible[];
-		public static parseTrueMembers(members: string): string[];
+		private static parseMembers(members: string, count: number): Possible[];
+		private static parseTrueMembers(members: string): string[];
 	}
 
 	// Settings
@@ -621,8 +621,8 @@ declare module 'klasa' {
 		public add(name: string, validateFunction: Function, schema?: Object, options?: SettingsOptions, download?: boolean): Promise<Gateway | GatewaySQL>;
 		private _ready(): Promise<Array<Array<Collection<string, Settings>>>>;
 		private _checkProvider(engine: string): Provider;
-		public private validateGuild(guildResolvable: Object | string): KlasaGuild;
-		public private validateUser(userResolvable: Object | string): ExtendedUser;
+		private validateGuild(guildResolvable: Object | string): KlasaGuild;
+		private validateUser(userResolvable: Object | string): ExtendedUser;
 
 		public readonly defaultDataSchema: {
 			prefix: SchemaPieceJSON,
@@ -1084,8 +1084,8 @@ declare module 'klasa' {
 	}
 
 	export type KlasaClientConfig = {
-		prefix?: string;
 		clientOptions?: ClientOptions;
+		prefix?: string;
 		permissionLevels?: PermissionLevels;
 		clientBaseDir?: string;
 		commandMessageLifetime?: number;

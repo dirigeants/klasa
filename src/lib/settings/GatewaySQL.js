@@ -8,19 +8,6 @@ const Settings = require('../structures/Settings');
 class GatewaySQL extends Gateway {
 
 	/**
-	 * @typedef  {Object} GatewayOptions
-	 * @property {Provider} provider
-	 * @property {CacheProvider} cache
-	 * @memberof Gateway
-	 */
-
-	/**
-	 * @typedef  {Object} GatewayUpdateResult
-	 * @property {any} value
-	 * @property {SchemaPiece} path
-	 */
-
-	/**
 	 * Inits the table for its use in this gateway.
 	 * @since 0.5.0
 	 */

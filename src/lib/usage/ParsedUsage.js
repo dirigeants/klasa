@@ -78,6 +78,7 @@ class ParsedUsage {
 	 * @since 0.0.1
 	 * @param {string} usageString The usage string to parse
 	 * @returns {Tag[]}
+	 * @private
 	 */
 	static parseUsage(usageString) {
 		let usage = {
@@ -127,6 +128,7 @@ class ParsedUsage {
 	 * @param {Object} usage The current usage interum object
 	 * @param {string} char The character that triggered this function
 	 * @returns {Object} The current usage interum object
+	 * @private
 	 */
 	static tagOpen(usage, char) {
 		if (usage.opened) throw `${usage.at}: you may not open a tag inside another tag.`;
@@ -142,6 +144,7 @@ class ParsedUsage {
 	 * @param {Object} usage The current usage interum object
 	 * @param {string} char The character that triggered this function
 	 * @returns {Object} The current usage interum object
+	 * @private
 	 */
 	static tagClose(usage, char) {
 		const required = char === '>';
@@ -168,6 +171,7 @@ class ParsedUsage {
 	 * @param {Object} usage The current usage interum object
 	 * @param {string} char The character that triggered this function
 	 * @returns {Object} The current usage interum object
+	 * @private
 	 */
 	static tagSpace(usage, char) {
 		if (char === '\n') throw `${usage.at}: there can't be a line break in the usage string`;

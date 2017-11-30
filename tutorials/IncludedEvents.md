@@ -14,6 +14,14 @@ Replies the reason why the command was inhibited.
 
 [events/commandInhibited.js](https://github.com/dirigeants/klasa/blob/master/src/events/commandInhibited.js)
 
+## configUpdateEntry
+
+Synchronices the settings between all shards, if the bot is sharded.
+
+**Source:**
+
+[events/configUpdateEntry.js](https://github.com/dirigeants/klasa/blob/master/src/events/configUpdateEntry.js)
+
 ## debug
 
 Re-emits the Discord.js debug event as log event, if enabled. (disabled by default)
@@ -37,14 +45,6 @@ Re-emits the Discord.js debug event as log event, if enabled.
 **Source:**
 
 [events/error.js](https://github.com/dirigeants/klasa/blob/master/src/events/error.js)
-
-## guildCreate
-
-Creates necessary SettingGateway entries for the new guild.
-
-**Source:**
-
-[events/guildCreate.js](https://github.com/dirigeants/klasa/blob/master/src/events/guildCreate.js)
 
 ## guildDelete
 
@@ -70,14 +70,6 @@ Runs monitors.
 
 [events/message.js](https://github.com/dirigeants/klasa/blob/master/src/events/message.js)
 
-## messageDeleteBulk
-
-Re-emits each message as a messageDelete, so that any deleted messages which are also cached CommandMessages, will be uncached.
-
-**Source:**
-
-[events/messageDeleteBulk.js](https://github.com/dirigeants/klasa/blob/master/src/events/messageDeleteBulk.js)
-
 ## messageUpdate
 
 Re-emits if command editing is enabled, and if the content is not the same, to check and see if the new message is a edited command.
@@ -86,6 +78,14 @@ Re-emits if command editing is enabled, and if the content is not the same, to c
 
 [events/messageUpdate.js](https://github.com/dirigeants/klasa/blob/master/src/events/messageUpdate.js)
 
+## verbose
+
+Logs verbose messages to the console.
+
+**Source:**
+
+[events/verbose](https://github.com/dirigeants/klasa/blob/master/src/events/verbose.js)
+
 ## warn
 
 Re-emits the Discord.js debug event as log event, if enabled.
@@ -93,6 +93,14 @@ Re-emits the Discord.js debug event as log event, if enabled.
 **Source:**
 
 [events/warn.js](https://github.com/dirigeants/klasa/blob/master/src/events/warn.js)
+
+## wtf
+
+Stands for '**W**hat a **T**errible **F**ailure'. Logs fatal errors.
+
+**Source:**
+
+[events/wtf](https://github.com/dirigeants/klasa/blob/master/src/events/wtf.js)
 
 ## Further Reading:
 

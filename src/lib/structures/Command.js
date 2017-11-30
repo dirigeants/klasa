@@ -215,10 +215,10 @@ class Command {
 	/**
 	 * The run method to be overwritten in actual commands
 	 * @since 0.0.1
-	 * @param {CommandMessage} msg The command message mapped on top of the message used to trigger this command
+	 * @param {KlasaMessage} msg The command message mapped on top of the message used to trigger this command
 	 * @param {any[]} params The fully resolved parameters based on your usage / usageDelim
 	 * @abstract
-	 * @returns {external:Message} You should return the response message whenever possible
+	 * @returns {Promise<KlasaMessage|KlasaMessage[]>} You should return the response message whenever possible
 	 */
 	async run() {
 		// Defined in extension Classes
@@ -228,7 +228,7 @@ class Command {
 	 * The init method to be optionaly overwritten in actual commands
 	 * @since 0.0.1
 	 * @abstract
-	 * @returns {void}
+	 * @returns {Promise<*>}
 	 */
 	async init() {
 		// Optionally defined in extension Classes

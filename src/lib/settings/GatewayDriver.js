@@ -12,6 +12,7 @@ class GatewayDriver {
 	 * @typedef  {Object} SettingsOptions
 	 * @property {string} [provider]
 	 * @property {boolean} [nice]
+	 * @memberof GatewayDriver
 	 */
 
 	/**
