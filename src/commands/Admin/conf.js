@@ -36,7 +36,7 @@ module.exports = class extends Command {
 	}
 
 	async get(msg, configs, key) {
-		const { path, route } = configs.getPath(key, { avoidUnconfigurable: true, piece: true });
+		const { path, route } = this.client.gateways.guilds.getPath(key, { avoidUnconfigurable: true, piece: true });
 		const result = configs.get(route.join('.'));
 		const value = path.resolveString(msg, result);
 		return msg.sendMessage(msg.language.get('COMMAND_CONF_GET', path.path, value));
