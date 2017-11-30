@@ -371,28 +371,26 @@ class Gateway {
 		const route = key.split('.');
 		let path = this.schema;
 
-		for (let i = 0; i < route.length - 1; i++) {
-			if (typeof path[route[i]] === 'undefined' ||
-				path.hasKey(route[i]) === false) throw `The key ${route.slice(0, i + 1).join('.')} does not exist in the current schema.`;
-			path = path[route[i]];
-		}
+		for (let i = 0; i < route.length; i++) {
+			const currKey = route[i];
+			if (typeof path[currKey] === 'undefined' ||
+				!path.hasKey(currKey)) throw `The key ${route.slice(0, i + 1).join('.')} does not exist in the current schema.`;
 
-		const lastPath = path[route[route.length - 1]];
-		if (typeof lastPath === 'undefined') throw `The key ${key} does not exist in the current schema.`;
-		if (piece === true) {
-			path = lastPath;
-			if (path.type === 'Folder') {
-				const keys = path.configurableKeys;
-				if (keys.length === 0) throw `This group is not configureable.`;
-				throw `Please, choose one of the following keys: '${keys.join('\', \'')}'`;
+			if (path[currKey].type === 'Folder') {
+				path = path[currKey];
+			} else if (piece) {
+				if (avoidUnconfigurable && !path[currKey].configurable) throw `The key ${path[currKey].path} is not configureable in the current schema.`;
+				return { path: path[currKey], route: path[currKey].path.split('.') };
 			}
-			if (avoidUnconfigurable === true && path.configurable === false) throw `The key ${path.path} is not configureable in the current schema.`;
-			// Requires a folder
-		} else if (lastPath.type === 'Folder') {
-			path = lastPath;
 		}
 
-		return { path, route };
+		if (piece && path.type === 'Folder') {
+			const keys = path.configurableKeys;
+			if (keys.length === 0) throw `This group is not configureable.`;
+			throw `Please, choose one of the following keys: '${keys.join('\', \'')}'`;
+		}
+
+		return { path, route: path.path.split('.') };
 	}
 
 	/**
