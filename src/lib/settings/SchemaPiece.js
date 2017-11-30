@@ -224,7 +224,7 @@ class SchemaPiece {
 	/**
 	 * Resolve a string.
 	 * @since 0.5.0
-	 * @param {external:Message} msg The Message to use.
+	 * @param {KlasaMessage} msg The Message to use.
 	 * @param {any} value The current value of the key.
 	 * @returns {string}
 	 */

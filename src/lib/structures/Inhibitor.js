@@ -76,7 +76,7 @@ class Inhibitor {
 	/**
 	 * The run method to be overwritten in actual inhibitors
 	 * @since 0.0.1
-	 * @param {external:Message} msg The message that triggered this inhibitor
+	 * @param {KlasaMessage} msg The message that triggered this inhibitor
 	 * @param {Command} cmd The command to run
 	 * @abstract
 	 * @returns {(void|string)}

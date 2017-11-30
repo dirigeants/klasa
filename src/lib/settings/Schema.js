@@ -286,7 +286,7 @@ class Schema {
 	/**
 	 * Get a list.
 	 * @since 0.5.0
-	 * @param {external:Message} msg The Message instance.
+	 * @param {KlasaMessage} msg The Message instance.
 	 * @param {Object} object The settings to parse.
 	 * @returns {string}
 	 */

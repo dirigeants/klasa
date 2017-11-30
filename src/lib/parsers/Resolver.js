@@ -24,7 +24,7 @@ class Resolver {
 	 * @since 0.0.1
 	 * @param {Message|Snowflake} message The message snowflake to validate.
 	 * @param {Channel} channel The Channel object in which the message can be found.
-	 * @returns {?external:Message}
+	 * @returns {?KlasaMessage}
 	 */
 	async msg(message, channel) {
 		if (message instanceof Message) return message;

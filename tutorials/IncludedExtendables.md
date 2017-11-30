@@ -56,11 +56,10 @@ A getter to check and see if you can read in the channel.
 
 ## sendCode
 
-A shortcut to channel.send, but also makes the response an editable command.
+A shortcut to channel.send.
 
 **Applies to:**
 
-- {@link external:Message}
 - {@link external:GroupDMChannel}
 - {@link external:DMChannel}
 - {@link external:TextChannel}
@@ -71,11 +70,10 @@ A shortcut to channel.send, but also makes the response an editable command.
 
 ## sendEmbed
 
-A shortcut to channel.send, but also makes the response an editable command.
+A shortcut to channel.send.
 
 **Applies to:**
 
-- {@link external:Message}
 - {@link external:GroupDMChannel}
 - {@link external:DMChannel}
 - {@link external:TextChannel}
@@ -114,11 +112,10 @@ A alias to channel.send({files:...
 
 ## sendMessage
 
-A shortcut to channel.send, but also makes the response an editable command.
+A shortcut to channel.send.
 
 **Applies to:**
 
-- {@link external:Message}
 - {@link external:GroupDMChannel}
 - {@link external:DMChannel}
 - {@link external:TextChannel}

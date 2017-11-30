@@ -72,7 +72,7 @@ class MonitorStore extends Collection {
 	/**
 	 * Runs our monitors on the message.
 	 * @since 0.0.1
-	 * @param  {external:Message} msg The message object from Discord.js
+	 * @param  {KlasaMessage} msg The message object from Discord.js
 	 */
 	run(msg) {
 		for (const monit of this.values()) {

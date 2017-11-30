@@ -13,7 +13,7 @@ class ArgResolver extends Resolver {
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
-	 * @param {external:Message} msg The message that triggered the command
+	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @returns {Piece}
 	 */
 	async piece(arg, currentUsage, possible, repeat, msg) {
@@ -32,7 +32,7 @@ class ArgResolver extends Resolver {
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
-	 * @param {external:Message} msg The message that triggered the command
+	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @returns {Store}
 	 */
 	async store(arg, currentUsage, possible, repeat, msg) {
@@ -49,7 +49,7 @@ class ArgResolver extends Resolver {
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
-	 * @param {external:Message} msg The message that triggered the command
+	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @returns {Command}
 	 */
 	async command(...args) {
@@ -63,7 +63,7 @@ class ArgResolver extends Resolver {
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
-	 * @param {external:Message} msg The message that triggered the command
+	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @returns {?Command}
 	 */
 	async cmd(arg, currentUsage, possible, repeat, msg) {
@@ -80,7 +80,7 @@ class ArgResolver extends Resolver {
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
-	 * @param {external:Message} msg The message that triggered the command
+	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @returns {?Event}
 	 */
 	async event(arg, currentUsage, possible, repeat, msg) {
@@ -97,7 +97,7 @@ class ArgResolver extends Resolver {
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
-	 * @param {external:Message} msg The message that triggered the command
+	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @returns {?Extendable}
 	 */
 	async extendable(arg, currentUsage, possible, repeat, msg) {
@@ -114,7 +114,7 @@ class ArgResolver extends Resolver {
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
-	 * @param {external:Message} msg The message that triggered the command
+	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @returns {?Finalizer}
 	 */
 	async finalizer(arg, currentUsage, possible, repeat, msg) {
@@ -131,7 +131,7 @@ class ArgResolver extends Resolver {
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
-	 * @param {external:Message} msg The message that triggered the command
+	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @returns {?Inhibitor}
 	 */
 	async inhibitor(arg, currentUsage, possible, repeat, msg) {
@@ -148,7 +148,7 @@ class ArgResolver extends Resolver {
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
-	 * @param {external:Message} msg The message that triggered the command
+	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @returns {?Monitor}
 	 */
 	async monitor(arg, currentUsage, possible, repeat, msg) {
@@ -165,7 +165,7 @@ class ArgResolver extends Resolver {
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
-	 * @param {external:Message} msg The message that triggered the command
+	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @returns {?Language}
 	 */
 	async language(arg, currentUsage, possible, repeat, msg) {
@@ -181,7 +181,7 @@ class ArgResolver extends Resolver {
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
-	 * @param {external:Message} msg The message that triggered the command
+	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @returns {?Provider}
 	 */
 	async provider(arg, currentUsage, possible, repeat, msg) {
@@ -198,8 +198,8 @@ class ArgResolver extends Resolver {
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
-	 * @param {external:Message} msg The message that triggered the command
-	 * @returns {?external:Message}
+	 * @param {KlasaMessage} msg The message that triggered the command
+	 * @returns {?KlasaMessage}
 	 */
 	message(...args) {
 		return this.msg(...args);
@@ -212,8 +212,8 @@ class ArgResolver extends Resolver {
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
-	 * @param {external:Message} msg The message that triggered the command
-	 * @returns {?external:Message}
+	 * @param {KlasaMessage} msg The message that triggered the command
+	 * @returns {?KlasaMessage}
 	 */
 	async msg(arg, currentUsage, possible, repeat, msg) {
 		const message = await super.msg(arg, msg.channel);
@@ -229,7 +229,7 @@ class ArgResolver extends Resolver {
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
-	 * @param {external:Message} msg The message that triggered the command
+	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @returns {?external:User}
 	 */
 	mention(...args) {
@@ -243,7 +243,7 @@ class ArgResolver extends Resolver {
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
-	 * @param {external:Message} msg The message that triggered the command
+	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @returns {?external:User}
 	 */
 	async user(arg, currentUsage, possible, repeat, msg) {
@@ -260,7 +260,7 @@ class ArgResolver extends Resolver {
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
-	 * @param {external:Message} msg The message that triggered the command
+	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @returns {?external:GuildMember}
 	 */
 	async member(arg, currentUsage, possible, repeat, msg) {
@@ -277,7 +277,7 @@ class ArgResolver extends Resolver {
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
-	 * @param {external:Message} msg The message that triggered the command
+	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @returns {?external:Channel}
 	 */
 	async channel(arg, currentUsage, possible, repeat, msg) {
@@ -294,7 +294,7 @@ class ArgResolver extends Resolver {
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
-	 * @param {external:Message} msg The message that triggered the command
+	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @returns {?external:Guild}
 	 */
 	async guild(arg, currentUsage, possible, repeat, msg) {
@@ -311,7 +311,7 @@ class ArgResolver extends Resolver {
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
-	 * @param {external:Message} msg The message that triggered the command
+	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @returns {?external:Role}
 	 */
 	async role(arg, currentUsage, possible, repeat, msg) {
@@ -328,7 +328,7 @@ class ArgResolver extends Resolver {
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
-	 * @param {external:Message} msg The message that triggered the command
+	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @returns {?string}
 	 */
 	async literal(arg, currentUsage, possible, repeat, msg) {
@@ -344,7 +344,7 @@ class ArgResolver extends Resolver {
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
-	 * @param {external:Message} msg The message that triggered the command
+	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @returns {?boolean}
 	 */
 	boolean(...args) {
@@ -358,7 +358,7 @@ class ArgResolver extends Resolver {
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
-	 * @param {external:Message} msg The message that triggered the command
+	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @returns {?boolean}
 	 */
 	async bool(arg, currentUsage, possible, repeat, msg) {
@@ -375,7 +375,7 @@ class ArgResolver extends Resolver {
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
-	 * @param {external:Message} msg The message that triggered the command
+	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @returns {?string}
 	 */
 	string(...args) {
@@ -389,7 +389,7 @@ class ArgResolver extends Resolver {
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
-	 * @param {external:Message} msg The message that triggered the command
+	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @returns {?string}
 	 */
 	async str(arg, currentUsage, possible, repeat, msg) {
@@ -405,7 +405,7 @@ class ArgResolver extends Resolver {
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
-	 * @param {external:Message} msg The message that triggered the command
+	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @returns {?number}
 	 */
 	integer(...args) {
@@ -419,7 +419,7 @@ class ArgResolver extends Resolver {
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
-	 * @param {external:Message} msg The message that triggered the command
+	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @returns {?number}
 	 */
 	async int(arg, currentUsage, possible, repeat, msg) {
@@ -440,7 +440,7 @@ class ArgResolver extends Resolver {
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
-	 * @param {external:Message} msg The message that triggered the command
+	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @returns {?number}
 	 */
 	num(...args) {
@@ -454,7 +454,7 @@ class ArgResolver extends Resolver {
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
-	 * @param {external:Message} msg The message that triggered the command
+	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @returns {?number}
 	 */
 	number(...args) {
@@ -468,7 +468,7 @@ class ArgResolver extends Resolver {
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
-	 * @param {external:Message} msg The message that triggered the command
+	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @returns {?number}
 	 */
 	async float(arg, currentUsage, possible, repeat, msg) {
@@ -489,7 +489,7 @@ class ArgResolver extends Resolver {
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
-	 * @param {external:Message} msg The message that triggered the command
+	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @returns {?string}
 	 */
 	async reg(arg, currentUsage, possible, repeat, msg) {
@@ -506,7 +506,7 @@ class ArgResolver extends Resolver {
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
-	 * @param {external:Message} msg The message that triggered the command
+	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @returns {?string}
 	 */
 	regex(...args) {
@@ -520,7 +520,7 @@ class ArgResolver extends Resolver {
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
-	 * @param {external:Message} msg The message that triggered the command
+	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @returns {?string}
 	 */
 	regexp(...args) {
@@ -534,7 +534,7 @@ class ArgResolver extends Resolver {
 	 * @param {Object} currentUsage This current usage
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
-	 * @param {external:Message} msg The message that triggered the command
+	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @returns {?string}
 	 */
 	async url(arg, currentUsage, possible, repeat, msg) {
@@ -553,7 +553,7 @@ class ArgResolver extends Resolver {
 	 * @param {Object} currentUsage The current usage
 	 * @param {number} possible The id of the current possible usage
 	 * @param {boolean} repeat If it is a looping/repeating arg
-	 * @param {external:Message} msg The message that triggered the command
+	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @param {string} suffix An error suffix
 	 * @returns {boolean}
 	 */

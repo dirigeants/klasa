@@ -92,7 +92,7 @@ class Monitor {
 	/**
 	 * The run method to be overwritten in actual monitor pieces
 	 * @since 0.0.1
-	 * @param {external:Message} msg The discord message
+	 * @param {KlasaMessage} msg The discord message
 	 * @abstract
 	 * @returns {void}
 	 */
