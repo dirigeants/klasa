@@ -30,7 +30,6 @@ class KlasaClient extends Discord.Client {
 	 * @property {PermissionLevels} [permissionLevels=KlasaClient.defaultPermissionLevels] The permission levels to use with this bot
 	 * @property {string} [clientBaseDir=path.dirname(require.main.filename)] The directory where all piece folders can be found
 	 * @property {number} [commandMessageLifetime=1800] The threshold for how old command messages can be before sweeping since the last edit in seconds
-	 * @property {number} [commandMessageSweep=900] The interval duration for which command messages should be sweept in seconds
 	 * @property {object} [provider] The provider to use in Klasa
 	 * @property {KlasaConsoleConfig} [console={}] Config options to pass to the client console
 	 * @property {KlasaConsoleEvents} [consoleEvents={}] Config options to pass to the client console
@@ -213,7 +212,6 @@ class KlasaClient extends Discord.Client {
 		 * @property {class} Webhook A discord.js WebhookClient
 		 * @property {function} escapeMarkdown A discord.js escape markdown function
 		 * @property {function} splitMessage A discord.js split message function
-		 * @property {class} CommandMessage A command message
 		 * @property {Util} util A collection of static methods to be used thoughout the bot
 		 */
 		this.methods = {
@@ -423,7 +421,7 @@ class KlasaClient extends Discord.Client {
 			}
 		}
 
-		this.emit('debug', `Swept ${messages} messages and ${commandMessages} command messages older than ${lifetime} seconds in ${channels} text-based channels`);
+		this.emit('debug', `Swept ${messages} messages older than ${lifetime} seconds and ${commandMessages} command messages older than ${commandLifetime} seconds in ${channels} text-based channels`);
 		return messages;
 	}
 
