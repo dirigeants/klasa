@@ -134,6 +134,7 @@ class GatewayDriver {
 	 * @since 0.5.0
 	 * @param {(Object|string)} guildResolvable The guild to validate.
 	 * @returns {external:Guild}
+	 * @private
 	 */
 	async validateGuild(guildResolvable) {
 		if (guildResolvable) {
@@ -152,6 +153,7 @@ class GatewayDriver {
 	 * @since 0.5.0
 	 * @param {(Object|string)} userResolvable The user to validate.
 	 * @returns {external:User}
+	 * @private
 	 */
 	async validateUser(userResolvable) {
 		if (userResolvable) {

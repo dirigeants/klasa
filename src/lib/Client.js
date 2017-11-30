@@ -25,7 +25,7 @@ class KlasaClient extends Discord.Client {
 	/**
 	 * @typedef {Object} KlasaClientConfig
 	 * @memberof KlasaClient
-	 * @property {string} prefix The default prefix the bot should respond to
+	 * @property {string} [prefix] The default prefix the bot should respond to
 	 * @property {DiscordJSConfig} [clientOptions={}] The options to pass to D.JS
 	 * @property {PermissionLevels} [permissionLevels=KlasaClient.defaultPermissionLevels] The permission levels to use with this bot
 	 * @property {string} [clientBaseDir=path.dirname(require.main.filename)] The directory where all piece folders can be found
@@ -264,6 +264,16 @@ class KlasaClient extends Discord.Client {
 	}
 
 	/**
+	 * The owner for this bot
+	 * @since 0.1.1
+	 * @readonly
+	 * @type {external:User}
+	 */
+	get owner() {
+		return this.users.get(this.config.ownerID);
+	}
+
+	/**
 	 * Validates the permission structure passed to the client
 	 * @since 0.0.1
 	 * @private
@@ -348,16 +358,6 @@ class KlasaClient extends Discord.Client {
 		await this.gateways.add('users', this.gateways.validateUser, undefined, undefined, false);
 		this.emit('log', `Loaded in ${timer.stop()}.`);
 		return super.login(token);
-	}
-
-	/**
-	 * The owner for this bot
-	 * @since 0.1.1
-	 * @readonly
-	 * @type {external:User}
-	 */
-	get owner() {
-		return this.users.get(this.config.ownerID);
 	}
 
 	/**
@@ -520,7 +520,7 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  * @since 0.4.0
  * @param {KlasaMessage} message The message that triggered the monitor
  * @param {Monitor} monitor The monitor run
- * @param {(string|Object)} error The monitor error
+ * @param {(Error|string)} error The monitor error
  */
 
 /**
