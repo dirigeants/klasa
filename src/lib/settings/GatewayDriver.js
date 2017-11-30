@@ -46,7 +46,7 @@ class GatewayDriver {
 		this.caches = [];
 
 		/**
-		 * If settings is ready
+		 * If the driver is ready
 		 * @type {string[]}
 		 */
 		this.ready = false;
@@ -100,13 +100,13 @@ class GatewayDriver {
 	}
 
 	/**
-	 * Readies up all Gateways and Settings instances
+	 * Readies up all Gateways and Configuration instances
 	 * @since 0.5.0
-	 * @returns {Promise<Array<Array<external:Collection<string, Settings>>>>}
+	 * @returns {Promise<Array<Array<external:Collection<string, Configuration>>>>}
 	 * @private
 	 */
 	_ready() {
-		if (this.ready) throw 'Settings has already run the ready method.';
+		if (this.ready) throw 'Configuration has already run the ready method.';
 		this.ready = true;
 		const promises = [];
 		for (const cache of this.caches) {
@@ -169,7 +169,7 @@ class GatewayDriver {
 	}
 
 	/**
-	 * The data schema Klasa uses for guild settings.
+	 * The data schema Klasa uses for guild configs.
 	 * @since 0.3.0
 	 * @readonly
 	 */

@@ -22,7 +22,7 @@ class Command {
 	 * @property {boolean} [autoAliases=true] If automatic aliases should be added (adds aliases of name and aliases without dashes)
 	 * @property {number} [permLevel=0] The required permission level to use the command
 	 * @property {string[]} [botPerms=[]] The required Discord permissions for the bot to use this command
-	 * @property {string[]} [requiredConfigs=[]] The required guild settings to use this command
+	 * @property {string[]} [requiredConfigs=[]] The required guild configs to use this command
 	 * @property {string} [description=''] The help description for the command
 	 * @property {string} [usage=''] The usage string for the command
 	 * @property {?string} [usageDelim=undefined] The string to deliminate the command input for usage

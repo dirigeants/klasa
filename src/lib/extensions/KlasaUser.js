@@ -13,7 +13,7 @@ module.exports = Structures.extend('User', User => {
 			/**
 			 * The guild level configs for this context (guild || default)
 			 * @since 0.5.0
-			 * @type {Settings}
+			 * @type {Configuration}
 			 */
 			this.configs = this.client.gateways.users.cache.get('users', this.id) || this.client.gateways.users.insertEntry(this.id);
 		}

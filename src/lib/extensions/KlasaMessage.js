@@ -39,7 +39,7 @@ module.exports = Structures.extend('Message', Message => {
 			/**
 			 * The guild level configs for this context (guild || default)
 			 * @since 0.5.0
-			 * @type {Settings}
+			 * @type {Configuration}
 			 */
 			this.guildConfigs = this.guild ? this.guild.configs : this.client.gateways.guilds.defaults;
 

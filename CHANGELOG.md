@@ -39,7 +39,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] **[BREAKING]** Gateway do not longer extend SchemaManager and CacheManager, but it's a class by itself.
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] Made the types that SettingGateway accepts for the key types dynamic (based on SettingResolver's prototype) and public throught `Client.gateways.types;`.
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] **Pending** Changed some methods from SQLProviders to remove the NoSQL -> SQL middleware.
-- [[#43](https://github.com/dirigeants/klasa/pull/43)] **[BREAKING]** `Command.fullUsage(msg);` to accept a string with the prefix instead of a message and fetch the settings.
+- [[#43](https://github.com/dirigeants/klasa/pull/43)] **[BREAKING]** `Command.fullUsage(msg);` to accept a string with the prefix instead of a message and fetch the configs.
 
 ### Removed
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] Removed the `SQL` class. Replaced by GatewaySQL and Schema/Piece.

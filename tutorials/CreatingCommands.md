@@ -45,7 +45,7 @@ module.exports = class extends Command {
 | **aliases**             | `[]`                                | Array   | Any comand aliases                                                          |
 | **permLevel**           | `0`                                 | number  | The required permission level to use the command                            |
 | **botPerms**            | `[]`                                | Array   | The required Discord permissions for the bot to use this command            |
-| **requiredSettings**    | `[]`                                | Array   | The required guild settings to use this command                             |
+| **requiredConfigs**     | `[]`                                | Array   | The required guild configs to use this command                              |
 | **description**         | `''`                                | string  | The help description for the command                                        |
 | **usage**               | `''`                                | string  | The usage string for the command See. {@tutorial UnderstandingUsageStrings} |
 | **usageDelim**          | `''`                                | string  | The string to deliminate the command input for usage                        |

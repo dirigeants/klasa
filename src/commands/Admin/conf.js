@@ -54,7 +54,7 @@ module.exports = class extends Command {
 			for (let i = 0; i < route.length; i++) object = object[route[i]];
 		}
 		const message = path.getList(msg, object);
-		return msg.sendCode('asciidoc', `= Server Settings =\n${message}`);
+		return msg.sendCode('asciidoc', `= Server Configuration =\n${message}`);
 	}
 
 	handle(value) {

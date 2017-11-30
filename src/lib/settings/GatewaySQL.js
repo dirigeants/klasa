@@ -1,5 +1,5 @@
 const Gateway = require('./Gateway');
-const Settings = require('../structures/Settings');
+const Configuration = require('../structures/Configuration');
 
 /**
  * An extended Gateway that overrides several methods for SQL parsing.
@@ -31,9 +31,9 @@ class GatewaySQL extends Gateway {
 			if (data.length > 0) {
 				const schemaValues = this.schema.getValues();
 				for (let i = 0; i < data.length; i++) {
-					const settings = new Settings(this, this._parseEntry(data[i], schemaValues));
-					settings.existsInDB = true;
-					this.cache.set(this.type, data[i].id, settings);
+					const configs = new Configuration(this, this._parseEntry(data[i], schemaValues));
+					configs.existsInDB = true;
+					this.cache.set(this.type, data[i].id, configs);
 				}
 			}
 			return true;
@@ -41,59 +41,11 @@ class GatewaySQL extends Gateway {
 		const target = await this.validate(input).then(output => output && output.id ? output.id : output);
 		const data = await this.provider.get(this.type, target);
 		if (data) {
-			const settings = new Settings(this, this._parseEntry(data));
-			settings.existsInDB = true;
-			this.cache.set(this.type, target, settings);
+			const configs = new Configuration(this, this._parseEntry(data));
+			configs.existsInDB = true;
+			this.cache.set(this.type, target, configs);
 		}
 		return true;
-	}
-
-	/**
-	 * Reset a value from an entry.
-	 * @since 0.0.1
-	 * @param {string} target The entry target.
-	 * @param {string} key The key to reset.
-	 * @param {(Guild|string)} [guild=null] A guild resolvable.
-	 * @param {boolean} [avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key.
-	 * @returns {Promise<GatewayUpdateResult>}
-	 */
-	async reset(target, key, guild = null, avoidUnconfigurable = false) {
-		const { entryID, parsed, parsedID, path } = await this._reset(target, key, guild, avoidUnconfigurable);
-		await this.provider.update(this.type, entryID, key, parsedID);
-		return { value: parsed, path };
-	}
-
-	/**
-	 * Update a value from an entry.
-	 * @since 0.5.0
-	 * @param {string} target The entry target.
-	 * @param {string} key The key to modify.
-	 * @param {any} value The value to parse and save.
-	 * @param {(Guild|string)} [guild=null] A guild resolvable.
-	 * @param {boolean} [avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key.
-	 * @returns {Promise<GatewayUpdateResult>}
-	 */
-	async updateOne(target, key, value, guild = null, avoidUnconfigurable = false) {
-		const { entryID, parsed, parsedID, path, array } = await this._sharedUpdateSingle(target, 'add', key, value, guild, avoidUnconfigurable);
-		await this.provider.update(this.type, entryID, key, array === null ? parsedID : array);
-		return { value: parsed.data, path };
-	}
-
-	/**
-	 * Update an array from an entry.
-	 * @since 0.0.1
-	 * @param {string} target The entry target.
-	 * @param {('add'|'remove')} action Whether the value should be added or removed to the array.
-	 * @param {string} key The key to modify.
-	 * @param {any} value The value to parse and save or remove.
-	 * @param {(Guild|string)} [guild=null] A guild resolvable.
-	 * @param {boolean} [avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key.
-	 * @returns {Promise<GatewayUpdateResult>}
-	 */
-	async updateArray(target, action, key, value, guild = null, avoidUnconfigurable = false) {
-		const { entryID, parsed, parsedID, path, array } = await this._sharedUpdateSingle(target, action, key, value, guild, avoidUnconfigurable);
-		await this.provider.update(this.type, entryID, key, array === null ? parsedID : array);
-		return { value: parsed.data, path };
 	}
 
 	/**

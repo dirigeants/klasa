@@ -352,7 +352,7 @@ class KlasaClient extends Discord.Client {
 			});
 		this.emit('log', loaded.join('\n'));
 
-		// Providers must be init before settings, and those before all other stores.
+		// Providers must be init before configs, and those before all other stores.
 		await this.providers.init();
 		await this.gateways.add('guilds', this.gateways.validateGuild, this.gateways.defaultDataSchema, undefined, false);
 		await this.gateways.add('users', this.gateways.validateUser, undefined, undefined, false);
@@ -528,8 +528,8 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  * is run. When {@link Gateway.updateMany} is run, the parameter path will be undefined.
  * @event KlasaClient#configUpdateEntry
  * @since 0.5.0
- * @param {Settings} oldEntry The old settings entries
- * @param {Settings} newEntry The new settings entries
+ * @param {Configuration} oldEntry The old configuration entry
+ * @param {Configuration} newEntry The new configuration entry
  * @param {string} [path] The path of the key which changed
  */
 
@@ -537,7 +537,7 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  * Emitted when {@link Gateway.deleteEntry} is run.
  * @event KlasaClient#configDeleteEntry
  * @since 0.5.0
- * @param {Settings} entry The entry which got deleted
+ * @param {Configuration} entry The entry which got deleted
  */
 
 /**
@@ -545,7 +545,7 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  * with the create parameter set to true creates the entry.
  * @event KlasaClient#configCreateEntry
  * @since 0.5.0
- * @param {Settings} entry The entry which got created
+ * @param {Configuration} entry The entry which got created
  */
 
 /**

@@ -17,7 +17,7 @@ module.exports = {
 	Inhibitor: require('./lib/structures/Inhibitor'),
 	Language: require('./lib/structures/Language'),
 	Monitor: require('./lib/structures/Monitor'),
-	Settings: require('./lib/structures/Settings'),
+	Configuration: require('./lib/structures/Configuration'),
 	PermissionLevels: require('./lib/structures/PermissionLevels'),
 	Provider: require('./lib/structures/Provider'),
 	CommandStore: require('./lib/structures/CommandStore'),

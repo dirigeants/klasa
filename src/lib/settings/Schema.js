@@ -287,7 +287,7 @@ class Schema {
 	 * Get a list.
 	 * @since 0.5.0
 	 * @param {KlasaMessage} msg The Message instance.
-	 * @param {Object} object The settings to parse.
+	 * @param {Object} object The configs to parse.
 	 * @returns {string}
 	 */
 	getList(msg, object) {
