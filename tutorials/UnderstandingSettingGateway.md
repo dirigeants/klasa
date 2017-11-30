@@ -70,7 +70,7 @@ What have we done? `client.gateways.guilds.schema` is a **Schema** instance (als
 Now that I have a new key called `modlogs`, I want to configure it outside the `conf` command, how can we do this?
 
 ```javascript
-this.client.gateways.guilds.updateOne(msg.guild, 'modlogs', '267727088465739778');
+msg.guild.configs.updateOne('modlogs', '267727088465739778', msg.guild);
 ```
 
 Check: {@link Gateway.updateOne}
@@ -80,16 +80,16 @@ Check: {@link Gateway.updateOne}
 Now, I want to **add** a new user user to the `users` key, which takes an array.
 
 ```javascript
-this.client.gateways.guilds.updateArray(msg.guild, 'add', 'users', '146048938242211840');
+msg.guild.configs.updateArray(msg.guild, 'add', 'users', '146048938242211840', msg.guild);
 ```
 
 That will add the user `'146048938242211840'` to the `users` array. To remove it:
 
 ```javascript
-this.client.gateways.guilds.updateArray(msg.guild, 'remove', 'users', '146048938242211840');
+msg.guild.configs.updateArray(msg.guild, 'remove', 'users', '146048938242211840', msg.guild);
 ```
 
-Check: {@link Gateway.updateArray}
+Check: {@link Configuration.updateArray}
 
 ## Removing a key from the guild configuration.
 
