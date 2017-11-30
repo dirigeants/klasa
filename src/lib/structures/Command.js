@@ -136,9 +136,11 @@ class Command {
 		/**
 		 * The extended help for the command
 		 * @since 0.0.1
-		 * @type {string}
+		 * @type {string|Function}
+		 * @param {CommandMessage} msg The command message mapped on top of the message used to trigger this command
+		 * @returns {string}
 		 */
-		this.extendedHelp = options.extendedHelp || 'No extended help available.';
+		this.extendedHelp = options.extendedHelp || ((msg) => msg.language.get('COMMAND_HELP_NO_EXTENDED'));
 
 		/**
 		 * The usage string for the command

@@ -6,7 +6,7 @@ module.exports = class extends Command {
 		super(...args, {
 			aliases: ['commands'],
 			guarded: true,
-			description: 'Display help for a command.',
+			description: (msg) => msg.language.get('COMMAND_HELP_DESCRIPTION'),
 			usage: '[Command:cmd]'
 		});
 	}
@@ -16,10 +16,10 @@ module.exports = class extends Command {
 		if (cmd) {
 			const info = [
 				`= ${cmd.name} = `,
-				cmd.description,
+				typeof cmd.description === 'function' ? cmd.description(msg) : cmd.description,
 				msg.language.get('COMMAND_HELP_USAGE', cmd.usage.fullUsage(msg)),
 				msg.language.get('COMMAND_HELP_EXTENDED'),
-				cmd.extendedHelp
+				typeof cmd.extendedHelp === 'function' ? cmd.extendedHelp(msg) : cmd.extendedHelp
 			].join('\n');
 			return msg.sendMessage(info, { code: 'asciidoc' });
 		}
@@ -49,7 +49,8 @@ module.exports = class extends Command {
 				.then(() => {
 					if (!help.hasOwnProperty(command.category)) help[command.category] = {};
 					if (!help[command.category].hasOwnProperty(command.subCategory)) help[command.category][command.subCategory] = [];
-					help[command.category][command.subCategory].push(`${msg.guildSettings.prefix}${command.name.padEnd(longest)} :: ${command.description}`);
+					// eslint-disable-next-line max-len
+					help[command.category][command.subCategory].push(`${msg.guildSettings.prefix}${command.name.padEnd(longest)} :: ${typeof command.description === 'function' ? command.description(msg) : command.description}`);
 					return;
 				})
 				.catch(() => {
