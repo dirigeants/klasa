@@ -49,8 +49,8 @@ module.exports = class extends Command {
 				.then(() => {
 					if (!help.hasOwnProperty(command.category)) help[command.category] = {};
 					if (!help[command.category].hasOwnProperty(command.subCategory)) help[command.category][command.subCategory] = [];
-					// eslint-disable-next-line max-len
-					help[command.category][command.subCategory].push(`${msg.guildSettings.prefix}${command.name.padEnd(longest)} :: ${typeof command.description === 'function' ? command.description(msg) : command.description}`);
+					const description = typeof command.description === 'function' ? command.description(msg) : command.description;
+					help[command.category][command.subCategory].push(`${msg.guildSettings.prefix}${command.name.padEnd(longest)} :: ${description}`);
 					return;
 				})
 				.catch(() => {

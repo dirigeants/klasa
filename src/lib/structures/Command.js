@@ -23,11 +23,11 @@ class Command {
 	 * @property {number} [permLevel=0] The required permission level to use the command
 	 * @property {string[]} [botPerms=[]] The required Discord permissions for the bot to use this command
 	 * @property {string[]} [requiredSettings=[]] The required guild settings to use this command
-	 * @property {string} [description=''] The help description for the command
+	 * @property {(string|Function)} [description=''] The help description for the command
 	 * @property {string} [usage=''] The usage string for the command
 	 * @property {?string} [usageDelim=undefined] The string to deliminate the command input for usage
 	 * @property {boolean} [quotedStringSupport=this.client.config.quotedStringSupport] Wheter args for this command should not deliminated inside quotes
-	 * @property {string} [extendedHelp='No extended help available.'] Extended help strings
+	 * @property {(string|Function)} [extendedHelp=msg.language.get('COMMAND_HELP_NO_EXTENDED')] Extended help strings
 	 */
 
 	/**
@@ -129,18 +129,20 @@ class Command {
 		/**
 		 * The description of the command
 		 * @since 0.0.1
-		 * @type {string}
+		 * @type {(string|Function)}
+		 * @param {KlasaMessage} msg The message used to trigger this command
+		 * @returns {string}
 		 */
 		this.description = options.description || '';
 
 		/**
 		 * The extended help for the command
 		 * @since 0.0.1
-		 * @type {string|Function}
-		 * @param {CommandMessage} msg The command message mapped on top of the message used to trigger this command
+		 * @type {(string|Function)}
+		 * @param {KlasaMessage} msg The message used to trigger this command
 		 * @returns {string}
 		 */
-		this.extendedHelp = options.extendedHelp || ((msg) => msg.language.get('COMMAND_HELP_NO_EXTENDED'));
+		this.extendedHelp = options.extendedHelp || (msg => msg.language.get('COMMAND_HELP_NO_EXTENDED'));
 
 		/**
 		 * The usage string for the command
