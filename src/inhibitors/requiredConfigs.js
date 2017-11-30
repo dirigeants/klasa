@@ -6,7 +6,7 @@ module.exports = class extends Inhibitor {
 		if (cmd.requiredConfigs.length === 0) return;
 		if (msg.channel.type !== 'text') return;
 		const configs = msg.guildConfigs;
-		const requiredConfigs = cmd.requiredConfigs.filter(config => !(config in configs));
+		const requiredConfigs = cmd.requiredConfigs.filter(config => configs.get(config) !== undefined && configs.get(config) !== null);
 		if (requiredConfigs.length > 0) throw msg.language.get('INHIBITOR_REQUIRED_CONFIGS', requiredConfigs);
 		return;
 	}
