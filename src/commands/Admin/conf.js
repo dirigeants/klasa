@@ -8,7 +8,7 @@ module.exports = class extends Command {
 			permLevel: 6,
 			guarded: true,
 			description: 'Define per-server configuration.',
-			usage: '<set|get|reset|list|remove> [key:string] [value:string]',
+			usage: '<set|get|reset|list|remove> [key:string] [value:string] [...]',
 			usageDelim: ' '
 		});
 	}
