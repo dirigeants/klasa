@@ -25,7 +25,7 @@ module.exports = class extends Command {
 
 	async set(msg, key, valueToSet) {
 		const { path } = await msg.guild.configs.updateOne(key, valueToSet.join(' '), msg.guild, true);
-		if (path.array) return msg.sendMessage(msg.language.get('COMMAND_CONF_ADDED', path.resolveString(msg), path.path));
+		if (path.array) return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', path.path, path.resolveString(msg)));
 		return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', path.path, path.resolveString(msg)));
 	}
 
