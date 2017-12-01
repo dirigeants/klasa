@@ -22,6 +22,8 @@ class GatewayDriver {
 	constructor(client) {
 		/**
 		 * The client this GatewayDriver was created with.
+		 * @since 0.3.0
+		 * @name GatewayDriver#client
 		 * @type {KlasaClient}
 		 * @readonly
 		 */

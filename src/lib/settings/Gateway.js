@@ -47,6 +47,8 @@ class Gateway {
 	constructor(store, type, validateFunction, schema, options) {
 		/**
 		 * The client this Gateway was created with.
+		 * @since 0.0.1
+		 * @name Gateway#client
 		 * @type {KlasaClient}
 		 * @readonly
 		 */
