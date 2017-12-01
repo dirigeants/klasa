@@ -14,54 +14,41 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [action, key, ...value]) {
-		const { configs } = msg.guild;
 		if (action !== 'list' && !key) throw msg.language.get('COMMAND_CONF_NOKEY');
 		if (['set', 'remove'].includes(action) && value.length === 0) throw msg.language.get('COMMAND_CONF_NOVALUE');
 		if (action === 'set' && key === 'disabledCommands') {
 			const command = this.client.commands.get(value.join(' '));
 			if (command && command.guarded) throw msg.language.get('COMMAND_CONF_GUARDED', command.name);
 		}
-		return this[action](msg, configs, key, value);
+		return this[action](msg, key, value);
 	}
 
-	async set(msg, configs, key, valueToSet) {
-		const { path, value } = await configs.updateOne(key, valueToSet.join(' '), msg.guild, true);
-		if (path.array) return msg.sendMessage(msg.language.get('COMMAND_CONF_ADDED', path.resolveString(msg, value), path.path));
-		return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', path.path, path.resolveString(msg, value)));
+	async set(msg, key, valueToSet) {
+		const { path } = await msg.guild.configs.updateOne(key, valueToSet.join(' '), msg.guild, true);
+		if (path.array) return msg.sendMessage(msg.language.get('COMMAND_CONF_ADDED', path.resolveString(msg), path.path));
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', path.path, path.resolveString(msg)));
 	}
 
-	async remove(msg, configs, key, valueToRemove) {
-		const { path, value } = await configs.updateArray('remove', key, valueToRemove.join(' '), msg.guild, true);
-		return msg.sendMessage(msg.language.get('COMMAND_CONF_REMOVE', path.resolveString(msg, value), path.path));
+	async remove(msg, key, valueToRemove) {
+		const { path } = await msg.guild.configs.updateArray('remove', key, valueToRemove.join(' '), msg.guild, true);
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_REMOVE', path.resolveString(msg), path.path));
 	}
 
-	async get(msg, configs, key) {
-		const { path, route } = this.client.gateways.guilds.getPath(key, { avoidUnconfigurable: true, piece: true });
-		const result = configs.get(route.join('.'));
-		const value = path.resolveString(msg, result);
+	async get(msg, key) {
+		const { path } = this.client.gateways.guilds.getPath(key, { avoidUnconfigurable: true, piece: true });
+		const value = path.resolveString(msg);
 		return msg.sendMessage(msg.language.get('COMMAND_CONF_GET', path.path, value));
 	}
 
-	async reset(msg, configs, key) {
-		const { path, value } = await configs.reset(key, msg.guild, true);
-		return msg.sendMessage(msg.language.get('COMMAND_CONF_RESET', path.path, path.resolveString(msg, value)));
+	async reset(msg, key) {
+		const { path } = await msg.guild.configs.reset(key, msg.guild, true);
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_RESET', path.path, path.resolveString(msg)));
 	}
 
-	list(msg, configs, key) {
-		const { path, route } = this.client.gateways.guilds.getPath(key, { avoidUnconfigurable: true, piece: false });
-		let object = configs;
-		if (route.length >= 1) {
-			for (let i = 0; i < route.length; i++) object = object[route[i]];
-		}
-		const message = path.getList(msg, object);
+	list(msg, key) {
+		const { path } = this.client.gateways.guilds.getPath(key, { avoidUnconfigurable: true, piece: false });
+		const message = path.getList(msg);
 		return msg.sendCode('asciidoc', `= Server Configuration =\n${message}`);
-	}
-
-	handle(value) {
-		if (typeof value !== 'object') return value;
-		if (value === null) return 'Not set';
-		if (Array.isArray(value)) return value[0] ? `[ ${value.join(' | ')} ]` : 'None';
-		return value;
 	}
 
 };
