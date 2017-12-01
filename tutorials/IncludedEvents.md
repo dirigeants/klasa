@@ -16,7 +16,7 @@ Replies the reason why the command was inhibited.
 
 ## configUpdateEntry
 
-Synchronices the configs between all shards, if the bot is sharded.
+Synchronices the user configs between all shards, if the bot is sharded.
 
 **Source:**
 

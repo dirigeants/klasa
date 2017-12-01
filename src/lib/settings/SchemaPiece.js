@@ -1,3 +1,5 @@
+const { isNumber } = require('../util/util');
+
 /**
  * The SchemaPiece class that contains the data for a key and several helpers.
  */
@@ -275,10 +277,6 @@ class SchemaPiece {
 		return '';
 	}
 
-}
-
-function isNumber(number) {
-	return typeof number === 'number' && !isNaN(number) && Number.isFinite(number);
 }
 
 module.exports = SchemaPiece;
