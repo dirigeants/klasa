@@ -2,9 +2,9 @@ const { Structures } = require('discord.js');
 
 module.exports = Structures.extend('Guild', Guild => {
 	/**
-     * Klasa's Extended Guild
-     * @extends external:Guild
-     */
+	 * Klasa's Extended Guild
+	 * @extends external:Guild
+	 */
 	class KlasaGuild extends Guild {
 
 		constructor(...args) {
