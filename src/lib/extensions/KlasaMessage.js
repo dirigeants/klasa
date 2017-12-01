@@ -2,9 +2,9 @@ const { Structures, splitMessage } = require('discord.js');
 
 module.exports = Structures.extend('Message', Message => {
 	/**
-     * Klasa's Extended Message
-     * @extends external:Message
-     */
+	 * Klasa's Extended Message
+	 * @extends external:Message
+	 */
 	class KlasaMessage extends Message {
 
 		/**
