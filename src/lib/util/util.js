@@ -106,6 +106,15 @@ class Util {
 		}
 	}
 
+	/**
+	 * @since 0.5.0
+	 * @param {Function} func The function to verify.
+	 * @returns {boolean}
+	 */
+	static isFunction(func) {
+		return typeof func === 'function';
+	}
+
 }
 
 /**

@@ -1,4 +1,4 @@
-const { Command } = require('klasa');
+const { Command, util } = require('klasa');
 
 module.exports = class extends Command {
 
@@ -16,10 +16,10 @@ module.exports = class extends Command {
 		if (cmd) {
 			const info = [
 				`= ${cmd.name} = `,
-				typeof cmd.description === 'function' ? cmd.description(msg) : cmd.description,
+				util.isFunction(cmd.description) ? cmd.description(msg) : cmd.description,
 				msg.language.get('COMMAND_HELP_USAGE', cmd.usage.fullUsage(msg)),
 				msg.language.get('COMMAND_HELP_EXTENDED'),
-				typeof cmd.extendedHelp === 'function' ? cmd.extendedHelp(msg) : cmd.extendedHelp
+				util.isFunction(cmd.extendedHelp) ? cmd.extendedHelp(msg) : cmd.extendedHelp
 			].join('\n');
 			return msg.sendMessage(info, { code: 'asciidoc' });
 		}
