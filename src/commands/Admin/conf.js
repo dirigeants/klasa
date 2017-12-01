@@ -31,13 +31,13 @@ module.exports = class extends Command {
 
 	async remove(msg, key, valueToRemove) {
 		const { path } = await msg.guild.configs.updateArray('remove', key, valueToRemove.join(' '), msg.guild, true);
-		return msg.sendMessage(msg.language.get('COMMAND_CONF_REMOVE', path.resolveString(msg), path.path));
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', path.path, path.resolveString(msg)));
 	}
 
 	async get(msg, key) {
 		const { path } = this.client.gateways.guilds.getPath(key, { avoidUnconfigurable: true, piece: true });
 		const value = path.resolveString(msg);
-		return msg.sendMessage(msg.language.get('COMMAND_CONF_GET', path.path, value));
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', path.path, value));
 	}
 
 	async reset(msg, key) {
