@@ -66,10 +66,11 @@ class ParsedUsage {
 	/**
 	 * Creates a full usage string including prefix and commands/aliases for documentation/help purposes
 	 * @since 0.0.1
-	 * @param {string} prefix The prefix
+	 * @param {KlasaMessage} msg The message context for which to generate usage for
 	 * @returns {string}
 	 */
-	fullUsage(prefix) {
+	fullUsage(msg) {
+		const { prefix } = msg.guildConfigs;
 		return `${prefix.length !== 1 ? `${prefix} ` : prefix}${this.nearlyFullUsage}`;
 	}
 
