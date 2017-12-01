@@ -46,6 +46,13 @@ class Gateway {
 	 */
 	constructor(store, type, validateFunction, schema, options) {
 		/**
+		 * The client this Gateway was created with.
+		 * @type {KlasaClient}
+		 * @readonly
+		 */
+		Object.defineProperty(this, 'client', { value: store.client });
+
+		/**
 		 * @since 0.0.1
 		 * @type {GatewayDriver}
 		 */
@@ -93,6 +100,46 @@ class Gateway {
 		 * @readonly
 		 */
 		Object.defineProperty(this, 'sql', { value: this.provider.sql });
+	}
+
+	/**
+	 * Get the cache-provider that manages the cache data.
+	 * @since 0.0.1
+	 * @type {Provider}
+	 * @readonly
+	 */
+	get cache() {
+		return this.options.cache;
+	}
+
+	/**
+	 * Get the provider that manages the persistent data.
+	 * @since 0.0.1
+	 * @type {Provider}
+	 * @readonly
+	 */
+	get provider() {
+		return this.options.provider;
+	}
+
+	/**
+	 * Get this gateway's defaults.
+	 * @since 0.5.0
+	 * @type {Object}
+	 * @readonly
+	 */
+	get defaults() {
+		return Object.assign(this.schema.defaults, { default: true });
+	}
+
+	/**
+	 * The resolver instance this Gateway uses to parse the data.
+	 * @since 0.0.1
+	 * @type {Resolver}
+	 * @readonly
+	 */
+	get resolver() {
+		return this.store.resolver;
 	}
 
 	/**
@@ -308,56 +355,6 @@ class Gateway {
 		}
 		if (typeof guild === 'string' && /^\d{17,19}$/.test(guild)) return this.client.guilds.get(guild);
 		return null;
-	}
-
-	/**
-	 * Get the cache-provider that manages the cache data.
-	 * @since 0.0.1
-	 * @type {Provider}
-	 * @readonly
-	 */
-	get cache() {
-		return this.options.cache;
-	}
-
-	/**
-	 * Get the provider that manages the persistent data.
-	 * @since 0.0.1
-	 * @type {Provider}
-	 * @readonly
-	 */
-	get provider() {
-		return this.options.provider;
-	}
-
-	/**
-	 * Get this gateway's defaults.
-	 * @since 0.5.0
-	 * @type {Object}
-	 * @readonly
-	 */
-	get defaults() {
-		return Object.assign(this.schema.defaults, { default: true });
-	}
-
-	/**
-	 * The client this Gateway was created with.
-	 * @since 0.0.1
-	 * @type {KlasaClient}
-	 * @readonly
-	 */
-	get client() {
-		return this.store.client;
-	}
-
-	/**
-	 * The resolver instance this Gateway uses to parse the data.
-	 * @since 0.0.1
-	 * @type {Resolver}
-	 * @readonly
-	 */
-	get resolver() {
-		return this.store.resolver;
 	}
 
 	/**

@@ -227,10 +227,10 @@ class SchemaPiece {
 	 * Resolve a string.
 	 * @since 0.5.0
 	 * @param {KlasaMessage} msg The Message to use.
-	 * @param {any} value The current value of the key.
 	 * @returns {string}
 	 */
-	resolveString(msg, value) {
+	resolveString(msg) {
+		const value = msg.guildConfigs.get(this.path);
 		let resolver = (val) => val;
 		switch (this.type) {
 			case 'Folder': resolver = () => '[ Folder';

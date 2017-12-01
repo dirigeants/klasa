@@ -53,6 +53,40 @@ class GatewayDriver {
 	}
 
 	/**
+	 * The data schema Klasa uses for guild configs.
+	 * @since 0.3.0
+	 * @readonly
+	 */
+	get defaultDataSchema() {
+		return {
+			prefix: {
+				type: 'string',
+				default: this.client.config.prefix,
+				array: this.client.config.prefix.constructor.name === 'Array',
+				min: null,
+				max: 10,
+				sql: `VARCHAR(10) NOT NULL DEFAULT '${this.client.config.prefix.constructor.name === 'Array' ? JSON.stringify(this.client.config.prefix) : this.client.config.prefix}'`
+			},
+			language: {
+				type: 'language',
+				default: this.client.config.language,
+				min: null,
+				max: null,
+				array: false,
+				sql: `VARCHAR(5) NOT NULL DEFAULT '${this.client.config.language}'`
+			},
+			disabledCommands: {
+				type: 'command',
+				default: [],
+				min: null,
+				max: null,
+				array: true,
+				sql: 'TEXT'
+			}
+		};
+	}
+
+	/**
 	 * Add a new instance of SettingGateway, with its own validateFunction and schema.
 	 * @since 0.3.0
 	 * @param {string} name The name for the new instance.
@@ -166,40 +200,6 @@ class GatewayDriver {
 		}
 
 		throw 'The parameter <User> expects either a User ID or a User Instance.';
-	}
-
-	/**
-	 * The data schema Klasa uses for guild configs.
-	 * @since 0.3.0
-	 * @readonly
-	 */
-	get defaultDataSchema() {
-		return {
-			prefix: {
-				type: 'string',
-				default: this.client.config.prefix,
-				array: this.client.config.prefix.constructor.name === 'Array',
-				min: null,
-				max: 10,
-				sql: `VARCHAR(10) NOT NULL DEFAULT '${this.client.config.prefix.constructor.name === 'Array' ? JSON.stringify(this.client.config.prefix) : this.client.config.prefix}'`
-			},
-			language: {
-				type: 'language',
-				default: this.client.config.language,
-				min: null,
-				max: null,
-				array: false,
-				sql: `VARCHAR(5) NOT NULL DEFAULT '${this.client.config.language}'`
-			},
-			disabledCommands: {
-				type: 'command',
-				default: [],
-				min: null,
-				max: null,
-				array: true,
-				sql: 'TEXT'
-			}
-		};
 	}
 
 }

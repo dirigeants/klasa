@@ -89,6 +89,17 @@ class Schema {
 	}
 
 	/**
+	 * Get all configureable keys from this schema.
+	 * @since 0.5.0
+	 * @readonly
+	 * @returns {string[]}
+	 */
+	get configurableKeys() {
+		if (this.keyArray.length === 0) return [];
+		return this.keyArray.filter(key => this[key].type === 'Folder' || this[key].configurable);
+	}
+
+	/**
 	 * Create a new nested folder.
 	 * @since 0.5.0
 	 * @param {string} key The name's key for the folder.
@@ -287,17 +298,16 @@ class Schema {
 	 * Get a list.
 	 * @since 0.5.0
 	 * @param {KlasaMessage} msg The Message instance.
-	 * @param {Object} object The configs to parse.
 	 * @returns {string}
 	 */
-	getList(msg, object) {
+	getList(msg) {
 		const array = [];
 		const keys = this.configurableKeys;
 		if (keys.length === 0) return '';
 
 		const longest = keys.reduce((a, b) => a.length > b.length ? a : b).length;
 		for (let i = 0; i < keys.length; i++) {
-			array.push(`${keys[i].padEnd(longest)} :: ${this[keys[i]].resolveString(msg, object[keys[i]])}`);
+			array.push(`${keys[i].padEnd(longest)} :: ${this[keys[i]].resolveString(msg)}`);
 		}
 
 		return array.join('\n');
@@ -361,34 +371,6 @@ class Schema {
 	}
 
 	/**
-	 * Get a JSON object containing all the objects from this schema's children.
-	 * @since 0.5.0
-	 * @returns {Object}
-	 */
-	toJSON() {
-		return Object.assign({ type: 'Folder' }, ...this.keyArray.map(key => ({ [key]: this[key].toJSON() })));
-	}
-
-	/**
-	 * @since 0.5.0
-	 * @returns {string}
-	 */
-	toString() {
-		return this.configurableKeys.length !== 0 ? '{ Folder }' : '{ Empty Folder }';
-	}
-
-	/**
-	 * Get all configureable keys from this schema.
-	 * @since 0.5.0
-	 * @readonly
-	 * @returns {string[]}
-	 */
-	get configurableKeys() {
-		if (this.keyArray.length === 0) return [];
-		return this.keyArray.filter(key => this[key].type === 'Folder' || this[key].configurable);
-	}
-
-	/**
 	 * Method called in initialization to populate the instance with the keys from the schema.
 	 * @since 0.5.0
 	 * @param {Object} object The object to parse. Only called once per initialization.
@@ -412,6 +394,23 @@ class Schema {
 			this.keyArray.push(key);
 		}
 		this.keyArray.sort((a, b) => a.localeCompare(b));
+	}
+
+	/**
+	 * Get a JSON object containing all the objects from this schema's children.
+	 * @since 0.5.0
+	 * @returns {Object}
+	 */
+	toJSON() {
+		return Object.assign({ type: 'Folder' }, ...this.keyArray.map(key => ({ [key]: this[key].toJSON() })));
+	}
+
+	/**
+	 * @since 0.5.0
+	 * @returns {string}
+	 */
+	toString() {
+		return this.configurableKeys.length !== 0 ? '{ Folder }' : '{ Empty Folder }';
 	}
 
 }

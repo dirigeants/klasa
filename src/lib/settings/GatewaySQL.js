@@ -8,6 +8,18 @@ const Configuration = require('../structures/Configuration');
 class GatewaySQL extends Gateway {
 
 	/**
+	 * Get this gateway's SQL schema.
+	 * @since 0.0.1
+	 * @type {Array<string[]>}
+	 * @readonly
+	 */
+	get sqlSchema() {
+		const schema = [['id', 'VARCHAR(19) NOT NULL UNIQUE']];
+		this.schema.getSQL(schema);
+		return schema;
+	}
+
+	/**
 	 * Inits the table for its use in this gateway.
 	 * @since 0.5.0
 	 */
@@ -46,18 +58,6 @@ class GatewaySQL extends Gateway {
 			this.cache.set(this.type, target, configs);
 		}
 		return true;
-	}
-
-	/**
-	 * Get this gateway's SQL schema.
-	 * @since 0.0.1
-	 * @type {Array<string[]>}
-	 * @readonly
-	 */
-	get sqlSchema() {
-		const schema = [['id', 'VARCHAR(19) NOT NULL UNIQUE']];
-		this.schema.getSQL(schema);
-		return schema;
 	}
 
 	/**
