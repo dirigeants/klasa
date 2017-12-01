@@ -108,11 +108,11 @@ class Util {
 
 	/**
 	 * @since 0.5.0
-	 * @param {number} number The number to verify.
+	 * @param {number} input The number to verify.
 	 * @returns {boolean}
 	 */
-	static isNumber(number) {
-		return typeof number === 'number' && !isNaN(number) && Number.isFinite(number);
+	static isNumber(input) {
+		return typeof input === 'number' && !isNaN(input) && Number.isFinite(input);
 	}
 
 }

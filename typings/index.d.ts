@@ -307,6 +307,7 @@ declare module 'klasa' {
 		public static applyToClass(base: Object, structure: Object, skips?: string[]): void;
 		public static exec(exec: string, options?: ExecOptions): Promise<{ stdout: string, stderr: string }>;
 		public static sleep(delay: number, args?: any): Promise<any>;
+		public static isNumber(input: number): boolean;
 	}
 
 	export { Util as util };
@@ -506,8 +507,8 @@ declare module 'klasa' {
 		public readonly sql: boolean;
 
 		public init(download?: boolean): Promise<void>;
-		public initTable(): Promise<void>;
-		public initSchema(): Promise<{ [k: string]: any }>;
+		private initTable(): Promise<void>;
+		private initSchema(): Promise<{ [k: string]: any }>;
 
 		public getEntry(input: string, create?: boolean): Object | Configuration;
 		public createEntry(input: string): Promise<Configuration>;

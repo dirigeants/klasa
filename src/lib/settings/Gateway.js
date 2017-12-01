@@ -109,6 +109,7 @@ class Gateway {
 	/**
 	 * Inits the table for its use in this gateway.
 	 * @since 0.5.0
+	 * @private
 	 */
 	async initTable() {
 		const hasTable = await this.provider.hasTable(this.type);
@@ -122,6 +123,7 @@ class Gateway {
 	 * Inits the schema, creating a file if it does not exist, and returning the current schema or the default.
 	 * @since 0.5.0
 	 * @returns {Promise<Object>}
+	 * @private
 	 */
 	async initSchema() {
 		const baseDir = resolve(this.client.clientBaseDir, 'bwd');
@@ -180,6 +182,7 @@ class Gateway {
 
 	/**
 	 * Generate a new entry and add it to the cache.
+	 * @since 0.5.0
 	 * @param {string} id The ID of the entry.
 	 * @param {*} data The data to insert.
 	 * @return {Configuration}
