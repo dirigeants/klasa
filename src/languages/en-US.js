@@ -93,10 +93,8 @@ module.exports = class extends Language {
 			COMMAND_CONF_NOKEY: 'You must provide a key',
 			COMMAND_CONF_NOVALUE: 'You must provide a value',
 			COMMAND_CONF_GUARDED: (name) => `${util.toTitleCase(name)} may not be disabled.`,
-			COMMAND_CONF_ADDED: (value, key) => `Successfully added the value \`${value}\` to the key: **${key}**`,
 			COMMAND_CONF_UPDATED: (key, response) => `Successfully updated the key **${key}**: \`${response}\``,
 			COMMAND_CONF_KEY_NOT_ARRAY: 'This key is not array type. Use the action \'reset\' instead.',
-			COMMAND_CONF_REMOVE: (value, key) => `Successfully removed the value \`${value}\` from the key: **${key}**`,
 			COMMAND_CONF_GET_NOEXT: (key) => `The key **${key}** does not seem to exist.`,
 			COMMAND_CONF_GET: (key, value) => `The value for the key **${key}** is: \`${value}\``,
 			COMMAND_CONF_RESET: (key, response) => `The key **${key}** has been reset to: \`${response}\``
