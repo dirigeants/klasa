@@ -10,7 +10,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] Added `KlasaMessage`, `KlasaGuild`, and `KlasaUser`, extending `DiscordJS.Message`, `DiscordJS.Guild` and `DiscordJS.User`, respectively. Many of the getters have turned properties for performance.
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] Added `User#configs`, which has an empty schema by default. The developer can take advantage of this, expand the schema, and feature a full featured user configs.
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] Added `configUpdateEntry`, `configDeleteEntry` and `configCreateEntry` events.
-- [[#43](https://github.com/dirigeants/klasa/pull/43)] `configUpda`
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] `Configuration` class, which all the new update methods from SettingGateway, featuring full OOP and much easier to use and remember.
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] `Schema` and `SchemaPiece` classes, with helper methods that allow the gateway parse and retrieve data much faster, as well as following the OOP paradigm when it comes to modifying the schema and much friendlier to use.
 - [[#43](https://github.com/dirigeants/klasa/pull/43)] More options to `GatewayDriver#add`, allowing you to set different providers in different gateway instances.
