@@ -330,8 +330,8 @@ class Configuration {
 		const oldClone = this.client.listenerCount('configUpdateEntry') ? this.clone() : null;
 
 		let cache = this; // eslint-disable-line consistent-this
-		for (let i = 0; i < route.length; i++) cache = cache[route[i]] || {};
-		if (!cache) cache = [];
+		for (let i = 0; i < route.length - 1; i++) cache = cache[route[i]] || {};
+		cache = cache[route[route.length - 1]] || [];
 
 		if (action === 'add') {
 			if (cache.includes(parsedID)) throw `The value ${parsedID} for the key ${path.path} already exists.`;
