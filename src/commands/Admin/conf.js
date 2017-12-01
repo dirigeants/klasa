@@ -25,7 +25,6 @@ module.exports = class extends Command {
 
 	async set(msg, key, valueToSet) {
 		const { path } = await msg.guild.configs.updateOne(key, valueToSet.join(' '), msg.guild, true);
-		if (path.array) return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', path.path, path.resolveString(msg)));
 		return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', path.path, path.resolveString(msg)));
 	}
 
@@ -36,8 +35,7 @@ module.exports = class extends Command {
 
 	async get(msg, key) {
 		const { path } = this.client.gateways.guilds.getPath(key, { avoidUnconfigurable: true, piece: true });
-		const value = path.resolveString(msg);
-		return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', path.path, value));
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', path.path, path.resolveString(msg)));
 	}
 
 	async reset(msg, key) {
@@ -47,8 +45,7 @@ module.exports = class extends Command {
 
 	list(msg, key) {
 		const { path } = this.client.gateways.guilds.getPath(key, { avoidUnconfigurable: true, piece: false });
-		const message = path.getList(msg);
-		return msg.sendCode('asciidoc', `= Server Configuration =\n${message}`);
+		return msg.sendCode('asciidoc', `= Server Configuration =\n${path.getList(msg)}`);
 	}
 
 };
