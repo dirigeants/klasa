@@ -4,8 +4,6 @@ module.exports = class extends Command {
 
 	constructor(...args) {
 		super(...args, {
-			permLevel: 0,
-			guarded: true,
 			description: 'Define per-user configuration.',
 			usage: '<set|get|reset|list|remove> [key:string] [value:string] [...]',
 			usageDelim: ' '
@@ -40,7 +38,7 @@ module.exports = class extends Command {
 
 	list(msg, key) {
 		const { path } = this.client.gateways.users.getPath(key, { avoidUnconfigurable: true, piece: false });
-		return msg.sendCode('asciidoc', `= Server Configuration =\n${path.getList(msg)}`);
+		return msg.sendCode('asciidoc', `= User Configuration =\n${path.getList(msg)}`);
 	}
 
 };
