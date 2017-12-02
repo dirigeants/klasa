@@ -131,7 +131,7 @@ class Schema {
 		if (this.hasKey(key)) throw `The key ${key} already exists in the current schema.`;
 		if (typeof this[key] !== 'undefined') throw `The key ${key} conflicts with a property of Schema.`;
 
-		const folder = new Schema(this.client, this.manager, object, `${this.path === '' ? '' : `${this.path}.`}${key}`);
+		const folder = new Schema(this.client, this.manager, object, this, key);
 		this[key] = folder;
 		this.defaults[key] = this[key].defaults;
 		this.keys.add(key);
@@ -233,7 +233,7 @@ class Schema {
 		this.keys.add(key);
 		this.keyArray.push(key);
 		this.keyArray.sort((a, b) => a.localeCompare(b));
-		this[key] = new SchemaPiece(this.client, this.manager, options, `${this.path === '' ? '' : `${this.path}.`}${key}`, key);
+		this[key] = new SchemaPiece(this.client, this.manager, options, this, key);
 		this.defaults[key] = options.default;
 	}
 
