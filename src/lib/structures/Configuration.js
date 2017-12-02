@@ -201,7 +201,7 @@ class Configuration {
 	 * @returns {Promise<ConfigurationUpdateResult>}
 	 */
 	updateOne(key, value, guild, avoidUnconfigurable = false) {
-		return this.updateArray('add', key, value, guild, avoidUnconfigurable);
+		return this._sharedUpdateSingle('add', key, value, guild, avoidUnconfigurable);
 	}
 
 	/**
@@ -215,15 +215,7 @@ class Configuration {
 	 * @returns {Promise<ConfigurationUpdateResult>}
 	 */
 	async updateArray(action, key, value, guild, avoidUnconfigurable = false) {
-		if (typeof guild === 'boolean') {
-			avoidUnconfigurable = guild;
-			guild = undefined;
-		}
-		const { parsedID, parsed, path, array } = await this._sharedUpdateSingle(action, key, value, guild, avoidUnconfigurable);
-		await (this.gateway.sql ?
-			this.gateway.provider.update(this.gateway.type, this.id, key, array === null ? parsedID : array) :
-			this.gateway.provider.update(this.gateway.type, this.id, this.toJSON()));
-		return { value: parsed, path };
+		return this._sharedUpdateSingle(action, key, value, guild, avoidUnconfigurable);
 	}
 
 	/**
@@ -346,15 +338,25 @@ class Configuration {
 	 * @param {*} value The new value.
 	 * @param {ConfigGuildResolvable} guild The guild to take.
 	 * @param {boolean} avoidUnconfigurable Whether the Gateway should avoid configuring the selected key.
-	 * @returns {Promise<(ConfigurationParseResult|ConfigurationParseResultArray)>}
+	 * @returns {Promise<ConfigurationUpdateResult>}
 	 * @private
 	 */
 	async _sharedUpdateSingle(action, key, value, guild, avoidUnconfigurable) {
 		if (typeof key !== 'string') throw new TypeError(`The argument key must be a string. Received: ${typeof key}`);
+		if (typeof guild === 'boolean') {
+			avoidUnconfigurable = guild;
+			guild = undefined;
+		}
+
 		const pathData = this.gateway.getPath(key, { avoidUnconfigurable, piece: true });
-		return pathData.path.array === true ?
+		const { parsedID, array, parsed, path } = await pathData.path.array === true ?
 			this._parseUpdateArray(action, key, value, guild, pathData) :
 			this._parseUpdateOne(key, value, guild, pathData);
+
+		await (this.gateway.sql ?
+			this.gateway.provider.update(this.gateway.type, this.id, key, array === null ? parsedID : array) :
+			this.gateway.provider.update(this.gateway.type, this.id, this.toJSON()));
+		return { value: parsed, path };
 	}
 
 	/**
