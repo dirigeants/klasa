@@ -1,5 +1,5 @@
 const Gateway = require('./Gateway');
-const Configuration = require('../structures/Configuration');
+const { tryParse } = require('../util/util');
 
 /**
  * An extended Gateway that overrides several methods for SQL parsing.
@@ -32,71 +32,63 @@ class GatewaySQL extends Gateway {
 	}
 
 	/**
-	 * Sync either all entries from the cache with the persistent SQL database, or a single one.
-	 * @since 0.5.0
-	 * @param {(Object|string)} [input] An object containing a id property, like discord.js objects, or a string.
-	 * @returns {Promise<boolean>}
-	 */
-	async sync(input) {
-		if (typeof input === 'undefined') {
-			const data = await this.provider.getAll(this.type);
-			if (data.length > 0) {
-				const schemaValues = this.schema.getValues();
-				for (let i = 0; i < data.length; i++) {
-					const configs = new Configuration(this, this._parseEntry(data[i], schemaValues));
-					configs.existsInDB = true;
-					this.cache.set(this.type, data[i].id, configs);
-				}
-			}
-			return true;
-		}
-		const target = await this.validate(input).then(output => output && output.id ? output.id : output);
-		const data = await this.provider.get(this.type, target);
-		if (data) {
-			const configs = new Configuration(this, this._parseEntry(data));
-			configs.existsInDB = true;
-			this.cache.set(this.type, target, configs);
-		}
-		return true;
-	}
-
-	/**
 	 * Parses an entry
 	 * @since 0.5.0
 	 * @param {Object} entry An entry to parse.
-	 * @param {SchemaPiece[]} [schemaValues] An array of SchemaPieces to validate.
 	 * @returns {Object}
 	 * @private
 	 */
-	_parseEntry(entry, schemaValues) {
-		if (typeof schemaValues === 'undefined') schemaValues = this.schema.getValues();
-
+	parseEntry(entry) {
 		const object = {};
-		for (let i = 0; i < schemaValues.length; i++) {
-			const piece = schemaValues[i];
+		for (const piece of this.schema.getValues()) {
 			// If the key does not exist in the schema, ignore it.
 			if (typeof entry[piece.path] === 'undefined') continue;
 
-			// Keys that are not contained in a folder.
-			if (!piece.path.includes('.')) {
-				if (typeof entry[piece.path] === 'undefined') object[piece.path] = piece.default;
-				else object[piece.path] = piece.array || piece.type === 'any' ? JSON.parse(entry[piece.path]) : entry[piece.path];
-				// Keys that are contained in a folder.
-			} else {
+			if (piece.path.includes('.')) {
 				const path = piece.path.split('.');
 				let refObject = object;
 				for (let a = 0; a < path.length - 1; a++) {
 					const key = path[a];
-					if (typeof refObject[key] === 'undefined') refObject[key] = {};
+					if (typeof refObject[key] === 'undefined') refObject[path[a]] = {};
 					refObject = refObject[key];
 				}
-				const lastPath = path[path.length - 1];
-				if (typeof refObject[lastPath] === 'undefined') refObject[lastPath] = piece.default;
-				else refObject[lastPath] = piece.array || piece.type === 'any' ? JSON.parse(refObject[lastPath]) : refObject[lastPath];
+				refObject = GatewaySQL._parseSQLValue(entry[path[path.length - 1]], piece);
+			} else {
+				object[piece.path] = GatewaySQL._parseSQLValue(entry[piece.path], piece);
 			}
 		}
 
 		return object;
+	}
+
+	/**
+	 * Parse SQL values.
+	 * @since 0.5.0
+	 * @param {value} value The value to parse
+	 * @param {SchemaPiece} schemaPiece The SchemaPiece which manages this value
+	 * @returns {any}
+	 * @private
+	 * @static
+	 */
+	static _parseSQLValue(value, schemaPiece) {
+		if (typeof value !== 'undefined') {
+			if (schemaPiece.array) {
+				if (typeof value === 'string') value = tryParse(value);
+				if (Array.isArray(value)) value.map(val => GatewaySQL.parseSQLValue(val, schemaPiece));
+				return value;
+			}
+			if (schemaPiece.type === 'any') {
+				if (typeof value === 'string') return tryParse(value);
+			} else if (schemaPiece.type === 'integer') {
+				if (typeof value === 'string') return parseInt(value);
+				if (typeof value === 'number') return value;
+			} else if (schemaPiece.type === 'boolean') {
+				if (typeof value === 'boolean') return value;
+				if (typeof value === 'number') return value === 1;
+				if (typeof value === 'string') return value === 'true';
+			}
+		}
+		return schemaPiece.array ? schemaPiece.default.slice(0) : schemaPiece.default;
 	}
 
 }

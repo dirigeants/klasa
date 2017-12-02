@@ -321,7 +321,7 @@ class KlasaClient extends Discord.Client {
 			const piece = store.get(arg);
 			if (piece) return piece;
 			if (currentUsage.type === 'optional' && !repeat) return null;
-			throw msg.language.get('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, pieceName);
+			throw (msg ? msg.language : this.language).get('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, pieceName);
 		};
 		return this;
 	}
@@ -351,12 +351,12 @@ class KlasaClient extends Discord.Client {
 				process.exit();
 			});
 		this.emit('log', loaded.join('\n'));
+		this.emit('log', `Loaded pieces in ${timer.stop()}.`);
 
 		// Providers must be init before configs, and those before all other stores.
 		await this.providers.init();
 		await this.gateways.add('guilds', this.gateways.validateGuild, this.gateways.defaultDataSchema, undefined, false);
 		await this.gateways.add('users', this.gateways.validateUser, undefined, undefined, false);
-		this.emit('log', `Loaded in ${timer.stop()}.`);
 		return super.login(token);
 	}
 
@@ -438,7 +438,6 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
 	.addLevel(7, false, (client, msg) => msg.guild && msg.member === msg.guild.owner)
 	.addLevel(9, true, (client, msg) => msg.author === client.owner)
 	.addLevel(10, false, (client, msg) => msg.author === client.owner);
-
 
 /**
  * Emitted when Klasa is fully ready and initialized.
@@ -524,8 +523,8 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  */
 
 /**
- * Emitted when {@link Gateway.updateOne}, {@link Gateway.updateArray} or {@link Gateway.reset}
- * is run. When {@link Gateway.updateMany} is run, the parameter path will be undefined.
+ * Emitted when {@link Configuration.updateOne}, {@link Configuration.updateArray} or {@link Configuration.reset}
+ * is run. When {@link Configuration.updateMany} is run, the parameter path will be undefined.
  * @event KlasaClient#configUpdateEntry
  * @since 0.5.0
  * @param {Configuration} oldEntry The old configuration entry

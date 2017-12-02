@@ -414,6 +414,7 @@ class Configuration {
 	 * @param {Object} data The data to patch.
 	 */
 	_patch(data) {
+		if (this.gateway.sql) data = this.gateway.parseEntry(data);
 		const { schema } = this.gateway;
 		for (let i = 0; i < schema.keyArray.length; i++) {
 			const key = schema.keyArray[i];

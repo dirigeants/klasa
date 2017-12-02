@@ -107,12 +107,26 @@ class Util {
 	}
 
 	/**
+	 * Verify if a number is a finite number.
 	 * @since 0.5.0
 	 * @param {number} input The number to verify.
 	 * @returns {boolean}
 	 */
 	static isNumber(input) {
 		return typeof input === 'number' && !isNaN(input) && Number.isFinite(input);
+	}
+
+	/**
+	 * Try parse a stringified JSON string.
+	 * @param {string} value The value to parse.
+	 * @returns {*}
+	 */
+	static tryParse(value) {
+		try {
+			return JSON.parse(value);
+		} catch (err) {
+			return value;
+		}
 	}
 
 }

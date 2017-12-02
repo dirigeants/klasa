@@ -264,29 +264,32 @@ class Gateway {
 	 * Sync either all entries from the cache with the persistent database, or a single one.
 	 * @since 0.0.1
 	 * @param {(Object|string)} [input] An object containing a id property, like discord.js objects, or a string.
-	 * @returns {Promise<boolean>}
+	 * @param {boolean} [download] Whether the sync should download data from the database.
+	 * @returns {Promise<*>}
 	 */
-	async sync(input) {
+	async sync(input, download) {
 		if (typeof input === 'undefined') {
-			const data = await this.provider.getAll(this.type);
-			if (data.length > 0) {
-				for (let i = 0; i < data.length; i++) {
-					const configs = new Configuration(this, data[i]);
-					configs.existsInDB = true;
-					this.cache.set(this.type, data[i].id, configs);
+			if (!download) return Promise.all(this.cache.getValues(this.type).map(entry => entry.sync()));
+			const entries = await this.provider.getAll(this.type);
+			for (const entry of entries) {
+				const cache = this.cache.get(this.type, entry);
+				if (cache) {
+					if (!cache.existsInDB) cache.existsInDB = true;
+					cache._patch(entry);
+				} else {
+					const newEntry = new Configuration(this, entry);
+					newEntry.existsInDB = true;
+					this.cache.set(this.type, entry.id, newEntry);
 				}
 			}
-			return true;
 		}
 		const target = await this.validate(input).then(output => output && output.id ? output.id : output);
-		const data = await this.provider.get(this.type, target);
-		if (data) {
-			const configs = new Configuration(this, data);
-			configs.existsInDB = true;
-			this.cache.set(this.type, target, configs);
-		}
+		const cache = this.cache.get(this.type, target);
+		if (cache) return cache.sync();
 
-		return true;
+		const configs = new Configuration(this, { id: target });
+		this.cache.set(this.type, target, configs);
+		return configs.sync();
 	}
 
 	/**
