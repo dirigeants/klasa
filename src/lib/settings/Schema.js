@@ -23,9 +23,10 @@ class Schema {
 	 * @param {KlasaClient} client The client which initialized this instance.
 	 * @param {(Gateway|GatewaySQL)} manager The Gateway that manages this schema instance.
 	 * @param {Object} object The object containing the properties for this schema instance.
-	 * @param {string} path The path for this schema instance.
+	 * @param {?Schema} parent The parent which holds this instance.
+	 * @param {string} key The name of this key.
 	 */
-	constructor(client, manager, object, path) {
+	constructor(client, manager, object, parent, key) {
 		/**
 		 * The Klasa client.
 		 * @since 0.5.0
@@ -45,13 +46,31 @@ class Schema {
 		Object.defineProperty(this, 'manager', { value: manager });
 
 		/**
+		 * The Schema instance that is parent of this instance.
+		 * @since 0.5.0
+		 * @type {?Schema}
+		 * @name Schema#parent
+		 * @readonly
+		 */
+		Object.defineProperty(this, 'parent', { value: parent });
+
+		/**
 		 * The path of this schema instance.
 		 * @since 0.5.0
 		 * @type {string}
 		 * @name Schema#path
 		 * @readonly
 		 */
-		Object.defineProperty(this, 'path', { value: path });
+		Object.defineProperty(this, 'path', { value: `${parent && parent.path > 0 ? `${parent.path}.` : ''}${key}` });
+
+		/**
+		 * The name of this schema instance.
+		 * @since 0.5.0
+		 * @type {string}
+		 * @name Schema#key
+		 * @readonly
+		 */
+		Object.defineProperty(this, 'key', { value: key });
 
 		/**
 		 * The type of this schema instance.
@@ -396,11 +415,11 @@ class Schema {
 			// Force retrocompatibility with SGv1's schema
 			if (typeof object[key].type === 'undefined') object[key].type = 'Folder';
 			if (object[key].type === 'Folder') {
-				const folder = new Schema(this.client, this.manager, object[key], `${this.path === '' ? '' : `${this.path}.`}${key}`);
+				const folder = new Schema(this.client, this.manager, object[key], this, key);
 				this[key] = folder;
 				this.defaults[key] = folder.defaults;
 			} else {
-				const piece = new SchemaPiece(this.client, this.manager, object[key], `${this.path === '' ? '' : `${this.path}.`}${key}`, key);
+				const piece = new SchemaPiece(this.client, this.manager, object[key], this, key);
 				this[key] = piece;
 				this.defaults[key] = piece.default;
 			}

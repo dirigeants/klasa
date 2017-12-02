@@ -149,7 +149,7 @@ class Gateway {
 	 * @param {boolean} [download=true] Whether this Gateway should download the data from the database.
 	 */
 	async init(download = true) {
-		await this.initSchema().then(schema => { this.schema = new Schema(this.client, this, schema, ''); });
+		await this.initSchema().then(schema => { this.schema = new Schema(this.client, this, schema, null, ''); });
 		await this.initTable();
 		if (download) await this.sync();
 	}

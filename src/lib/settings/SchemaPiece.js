@@ -21,10 +21,10 @@ class SchemaPiece {
 	 * @param {KlasaClient} client The client which initialized this instance.
 	 * @param {(Gateway|GatewaySQL)} manager The Gateway that manages this schema instance.
 	 * @param {AddOptions} options The object containing the properties for this schema instance.
-	 * @param {string} path The path for this schema instance.
+	 * @param {Schema} parent The parent which holds this instance.
 	 * @param {string} key The name of the key.
 	 */
-	constructor(client, manager, options, path, key) {
+	constructor(client, manager, options, parent, key) {
 		/**
 		 * The Klasa client.
 		 * @since 0.5.0
@@ -44,13 +44,22 @@ class SchemaPiece {
 		Object.defineProperty(this, 'manager', { value: manager });
 
 		/**
+		 * The Schema instance that is parent of this instance.
+		 * @since 0.5.0
+		 * @type {Schema}
+		 * @name SchemaPiece#parent
+		 * @readonly
+		 */
+		Object.defineProperty(this, 'parent', { value: parent });
+
+		/**
 		 * The path of this SchemaPiece instance.
 		 * @since 0.5.0
 		 * @type {string}
 		 * @name SchemaPiece#path
 		 * @readonly
 		 */
-		Object.defineProperty(this, 'path', { value: path });
+		Object.defineProperty(this, 'path', { value: `${parent && parent.path > 0 ? `${parent.path}.` : ''}${key}` });
 
 		/**
 		 * This keys' name.
