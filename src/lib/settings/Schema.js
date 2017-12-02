@@ -319,7 +319,7 @@ class Schema {
 		if (keysTypes.length) {
 			for (const keyType of keysTypes.sort()) {
 				keys[keyType].sort();
-				array.push(`= ${toTitleCase(keyType)} =`);
+				array.push(`= ${toTitleCase(keyType)}s =`);
 				for (let i = 0; i < keys[keyType].length; i++) array.push(`${keys[keyType][i].padEnd(longest)} :: ${this[keys[keyType][i]].resolveString(msg)}`);
 				array.push('');
 			}
