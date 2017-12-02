@@ -196,7 +196,7 @@ class GatewayDriver {
 		if (userResolvable) {
 			let value;
 
-			if (typeof guildResolvable === 'string' && /^\d{17,19}$/.test(userResolvable)) value = await this.client.users.fetch(userResolvable);
+			if (typeof userResolvable === 'string' && /^\d{17,19}$/.test(userResolvable)) value = await this.client.users.fetch(userResolvable);
 			else if (userResolvable instanceof User) value = userResolvable;
 			if (value) return value;
 		}
