@@ -570,7 +570,7 @@ declare module 'klasa' {
 
 		public readonly configurableKeys: string[];
 
-		private _setValue(parsedID: string, path: SchemaPiece, route: string[])
+		private _setValue(parsedID: string, path: SchemaPiece, route: string[]): void;
 		private _patch(object: Object): void;
 	}
 
