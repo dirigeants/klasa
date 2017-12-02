@@ -8,7 +8,7 @@ module.exports = class extends Inhibitor {
 		const configs = msg.guildConfigs;
 		const requiredConfigs = cmd.requiredConfigs.filter(config => {
 			const thisConfig = configs.get(config);
-			return thisConfig !== undefined && thisConfig !== null;
+			return thisConfig === undefined || thisConfig === null;
 		});
 		if (requiredConfigs.length > 0) throw msg.language.get('INHIBITOR_REQUIRED_CONFIGS', requiredConfigs);
 		return;
