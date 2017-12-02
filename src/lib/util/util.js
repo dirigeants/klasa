@@ -118,6 +118,7 @@ class Util {
 
 	/**
 	 * Try parse a stringified JSON string.
+	 * @since 0.5.0
 	 * @param {string} value The value to parse.
 	 * @returns {*}
 	 */
