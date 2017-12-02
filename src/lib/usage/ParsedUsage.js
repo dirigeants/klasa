@@ -70,7 +70,8 @@ class ParsedUsage {
 	 * @returns {string}
 	 */
 	fullUsage(msg) {
-		const { prefix } = msg.guildConfigs;
+		let { prefix } = msg.guildConfigs;
+		if (Array.isArray(prefix)) prefix = prefix.find(pre => msg.prefix.test(pre)) || prefix[0];
 		return `${prefix.length !== 1 ? `${prefix} ` : prefix}${this.nearlyFullUsage}`;
 	}
 
