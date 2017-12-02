@@ -61,7 +61,7 @@ class Schema {
 		 * @name Schema#path
 		 * @readonly
 		 */
-		Object.defineProperty(this, 'path', { value: `${parent && parent.path > 0 ? `${parent.path}.` : ''}${key}` });
+		Object.defineProperty(this, 'path', { value: `${parent && parent.path.length > 0 ? `${parent.path}.` : ''}${key}` });
 
 		/**
 		 * The name of this schema instance.
