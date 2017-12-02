@@ -356,7 +356,7 @@ class KlasaClient extends Discord.Client {
 		await this.providers.init();
 		await this.gateways.add('guilds', this.gateways.validateGuild, this.gateways.defaultDataSchema, undefined, false);
 		await this.gateways.add('users', this.gateways.validateUser, undefined, undefined, false);
-		this.emit('log', `Loaded pieces in ${timer.stop()}.`);
+		this.emit('log', `Loaded in ${timer.stop()}.`);
 		return super.login(token);
 	}
 
