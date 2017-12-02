@@ -349,14 +349,14 @@ class Configuration {
 		}
 
 		const pathData = this.gateway.getPath(key, { avoidUnconfigurable, piece: true });
-		const { parsedID, array, parsed, path } = await pathData.path.array === true ?
-			this._parseUpdateArray(action, key, value, guild, pathData) :
-			this._parseUpdateOne(key, value, guild, pathData);
+		const { parsedID, array, parsed } = pathData.path.array === true ?
+			await this._parseUpdateArray(action, key, value, guild, pathData) :
+			await this._parseUpdateOne(key, value, guild, pathData);
 
-		await (this.gateway.sql ?
-			this.gateway.provider.update(this.gateway.type, this.id, key, array === null ? parsedID : array) :
-			this.gateway.provider.update(this.gateway.type, this.id, this.toJSON()));
-		return { value: parsed, path };
+		if (this.gateway.sql) await this.gateway.provider.update(this.gateway.type, this.id, key, array === null ? parsedID : array);
+		else await this.gateway.provider.update(this.gateway.type, this.id, this.toJSON());
+
+		return { value: parsed, path: pathData.path };
 	}
 
 	/**
