@@ -1,4 +1,5 @@
 const SchemaPiece = require('./SchemaPiece');
+const { toTitleCase } = require('../util/util');
 const fs = require('fs-nextra');
 
 /**
@@ -300,12 +301,29 @@ class Schema {
 	 */
 	getList(msg) {
 		const array = [];
-		const keys = this.configurableKeys;
-		if (keys.length === 0) return '';
-
-		const longest = keys.reduce((a, b) => a.length > b.length ? a : b).length;
-		for (let i = 0; i < keys.length; i++) array.push(`${keys[i].padEnd(longest)} :: ${this[keys[i]].resolveString(msg)}`);
-
+		const folders = [];
+		const keys = {};
+		let longest = 0;
+		for (const key of this.keyArray) {
+			if (this[key].type === 'folder') {
+				folders.push(`// ${key}`);
+			} else if (this[key].configurable) {
+				if (!(this[key].type in keys)) keys[this[key].type] = [];
+				if (key.length > longest) longest = key.length;
+				keys[this[key].type].push(key);
+			}
+		}
+		const keysTypes = Object.keys(keys);
+		if (folders.length === 0 && keysTypes.length === 0) return '';
+		if (folders.length) array.push('= Folders =', ...folders.sort(), '');
+		if (keysTypes.length) {
+			for (const keyType of keysTypes.sort()) {
+				keys[keyType].sort();
+				array.push(`= ${toTitleCase(keyType)} =`);
+				for (let i = 0; i < keys[keyType].length; i++) array.push(`${keys[keyType][i].padEnd(longest)} :: ${this[keys[keyType][i]].resolveString(msg)}`);
+				array.push('');
+			}
+		}
 		return array.join('\n');
 	}
 

@@ -200,15 +200,15 @@ class SchemaPiece {
 		const value = this.manager.type === 'users' ? msg.author.configs.get(this.path) : msg.guildConfigs.get(this.path);
 		let resolver = (val) => val;
 		switch (this.type) {
-			case 'Folder': resolver = () => '[ Folder';
+			case 'Folder': resolver = () => 'Folder';
 				break;
-			case 'user': resolver = (val) => `@${(this.client.users.get(val) || { username: val && val.username ? val.username : val }).username}`;
+			case 'user': resolver = (val) => `${(this.client.users.get(val) || { username: val && val.username ? val.username : val }).username}`;
 				break;
 			case 'textchannel':
 			case 'voicechannel':
-			case 'channel': resolver = (val) => `#${(msg.guild.channels.get(val) || { name: val && val.name ? val.name : val }).name}`;
+			case 'channel': resolver = (val) => `${(msg.guild.channels.get(val) || { name: val && val.name ? val.name : val }).name}`;
 				break;
-			case 'role': resolver = (val) => `&${(msg.guild.roles.get(val) || { name: val && val.name ? val.name : val }).name}`;
+			case 'role': resolver = (val) => `${(msg.guild.roles.get(val) || { name: val && val.name ? val.name : val }).name}`;
 				break;
 			case 'guild': resolver = (val) => val && val.name ? val.name : val;
 				break;

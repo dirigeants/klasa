@@ -1,4 +1,4 @@
-const { Command } = require('klasa');
+const { Command, util: { toTitleCase, codeBlock } } = require('klasa');
 
 module.exports = class extends Command {
 
@@ -45,7 +45,7 @@ module.exports = class extends Command {
 
 	list(msg, key) {
 		const { path } = this.client.gateways.guilds.getPath(key, { avoidUnconfigurable: true, piece: false });
-		return msg.sendCode('asciidoc', `= Server Configuration =\n${path.getList(msg)}`);
+		return msg.sendMessage(`= Server Configuration${key ? `: ${toTitleCase(key)}` : ''} =\n${codeBlock('asciidoc', path.getList(msg))}`);
 	}
 
 };
