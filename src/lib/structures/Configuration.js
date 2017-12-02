@@ -410,6 +410,7 @@ class Configuration {
 
 	/**
 	 * Path this Configuration instance.
+	 * @since 0.5.0
 	 * @param {Object} data The data to patch.
 	 */
 	_patch(data) {
@@ -489,6 +490,7 @@ class Configuration {
 
 	/**
 	 * Path an object.
+	 * @since 0.5.0
 	 * @param {Object} inst The reference of the Configuration instance.
 	 * @param {Object} data The original object.
 	 * @param {Schema} schema A Schema or a SchemaPiece instance.
