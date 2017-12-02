@@ -13,7 +13,7 @@ module.exports = class extends Monitor {
 	async run(msg) {
 		if (this.client.user.bot && msg.guild && !msg.guild.me) await msg.guild.members.fetch(this.client.user);
 		if (msg.guild && !msg.channel.permissionsFor(msg.guild.me).has('SEND_MESSAGES')) return;
-		if (this.prefixMention.test(msg.content) && msg.content.length === (this.nick.test(msg.content) ? this.prefixesMentionLength + 1 : this.prefixesMentionLength)) {
+		if (this.prefixMention.test(msg.content) && msg.content.length === (this.nick.test(msg.content) ? this.prefixMentionLength + 1 : this.prefixMentionLength)) {
 			msg.sendMessage(Array.isArray(msg.guildConfigs.prefix) ? msg.guildConfigs.prefix.map(prefix => `\`${prefix}\``).join(', ') : `\`${prefix}\``);
 			return;
 		}
