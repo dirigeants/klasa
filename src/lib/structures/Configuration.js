@@ -40,10 +40,29 @@ class Configuration {
 	 */
 
 	/**
+	 * @typedef  {Object} ConfigurationUpdateManyList
+	 * @property {Error[]} errors
+	 * @property {Array<Promise<any>>} promises
+	 * @property {string[]} keys
+	 * @property {*[]} values
+	 * @memberof Configuration
+	 */
+
+	/**
+	 * @typedef  {Object} ConfigurationUpdateManyUpdated
+	 * @property {string[]} keys
+	 * @property {*[]} values
+	 * @memberof Configuration
+	 */
+
+	/**
 	 * @typedef  {Object} ConfigurationUpdateManyResult
+	 * @property {ConfigurationUpdateManyUpdated} updated
 	 * @property {Error[]} errors
 	 * @memberof Configuration
 	 */
+
+	// { updated: { keys: list.keys, values: list.values }, errors: list.errors }
 
 	/**
 	 * @typedef {(KlasaGuild|KlasaMessage|external:TextChannel|external:VoiceChannel|external:CategoryChannel|external:Member|external:GuildChannel|external:Role)} GatewayGuildResolvable
@@ -226,7 +245,7 @@ class Configuration {
 	 * @returns {Promise<ConfigurationUpdateManyResult>}
 	 */
 	async updateMany(object, guild) {
-		const list = { errors: [], promises: [] };
+		const list = { errors: [], promises: [], keys: [], values: [] };
 
 		// Handle entry creation if it does not exist.
 		if (!this.existsInDB) await this.gateway.createEntry(this.id);
@@ -235,9 +254,10 @@ class Configuration {
 		this._updateMany(this, object, this.gateway.schema, guild, list);
 		await Promise.all(list.promises);
 
-		if (oldClone !== null) this.client.emit('configUpdateEntry', oldClone, this);
-		await this.gateway.provider.update(this.gateway.type, this.id, this.toJSON());
-		return { errors: list.errors };
+		if (oldClone !== null) this.client.emit('configUpdateEntry', oldClone, this, { type: 'MANY', keys: list.keys, values: list.values });
+		if (this.gateway.sql) await this.gateway.provider.update(this.gateway.type, this.id, list.keys, list.values);
+		else await this.gateway.provider.update(this.gateway.type, this.id, this.toJSON());
+		return { updated: { keys: list.keys, values: list.values }, errors: list.errors };
 	}
 
 	/**
@@ -366,21 +386,27 @@ class Configuration {
 	 * @param {Object} object The key to edit.
 	 * @param {Schema} schema The new value.
 	 * @param {ConfigGuildResolvable} guild The guild to take.
-	 * @param {ConfigurationUpdateManyResult} list The options.
+	 * @param {ConfigurationUpdateManyList} list The options.
 	 * @private
 	 */
 	_updateMany(cache, object, schema, guild, list) {
 		guild = this.gateway._resolveGuild(guild);
 		const keys = Object.keys(object);
 		for (let i = 0; i < keys.length; i++) {
-			if (schema.hasKey(keys[i]) === false) continue;
-			if (schema[keys[i]].type === 'Folder') {
-				this._updateMany(cache[keys[i]], object[keys[i]], schema[keys[i]], guild, list);
+			const key = keys[i];
+			if (schema.hasKey(key) === false) continue;
+			if (schema[key].type === 'Folder') {
+				this._updateMany(cache[key], object[key], schema[key], guild, list);
 				continue;
 			}
-			list.promises.push(schema[keys[i]].parse(object[keys[i]], guild)
-				.then(result => { cache[keys[i]] = result && result && result.id ? result.id : result; })
-				.catch(error => list.errors.push([schema[keys[i]].path, error])));
+			list.promises.push(schema[key].parse(object[key], guild)
+				.then(result => {
+					const parsedID = result && result.id ? result.id : result;
+					cache[key] = parsedID;
+					list.keys.push(schema[key].path);
+					list.values.push(parsedID);
+				})
+				.catch(error => list.errors.push([schema[key].path, error])));
 		}
 	}
 

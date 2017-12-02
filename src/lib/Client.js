@@ -440,6 +440,13 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
 	.addLevel(10, false, (client, msg) => msg.author === client.owner);
 
 /**
+ * @typedef  {Object} ConfigUpdateEntryMany
+ * @property {'MANY'} type
+ * @property {string[]} keys
+ * @property {*[]} values
+ */
+
+/**
  * Emitted when Klasa is fully ready and initialized.
  * @event KlasaClient#klasaReady
  * @since 0.3.0
@@ -524,12 +531,13 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
 
 /**
  * Emitted when {@link Configuration.updateOne}, {@link Configuration.updateArray} or {@link Configuration.reset}
- * is run. When {@link Configuration.updateMany} is run, the parameter path will be undefined.
+ * is run. When {@link Configuration.updateMany} is run, the parameter path will be an object with the following format:
+ * `{ type: 'MANY', keys: string[], values: *[] }`
  * @event KlasaClient#configUpdateEntry
  * @since 0.5.0
  * @param {Configuration} oldEntry The old configuration entry
  * @param {Configuration} newEntry The new configuration entry
- * @param {string} [path] The path of the key which changed
+ * @param {(string|ConfigUpdateEntryMany)} path The path of the key which changed
  */
 
 /**
