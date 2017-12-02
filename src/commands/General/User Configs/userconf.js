@@ -38,7 +38,7 @@ module.exports = class extends Command {
 
 	list(msg, key) {
 		const { path } = this.client.gateways.users.getPath(key, { avoidUnconfigurable: true, piece: false });
-		return msg.sendMessage(`= User Configuration${key ? `: ${toTitleCase(key)}` : ''} =\n${codeBlock('asciidoc', path.getList(msg))}`);
+		return msg.sendMessage(`**User Configuration${key ? `: ${toTitleCase(key)}` : ''}**\n${codeBlock('asciidoc', path.getList(msg))}`);
 	}
 
 };
