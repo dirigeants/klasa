@@ -66,7 +66,7 @@ class GatewaySQL extends Gateway {
 	 * @since 0.5.0
 	 * @param {value} value The value to parse
 	 * @param {SchemaPiece} schemaPiece The SchemaPiece which manages this value
-	 * @returns {any}
+	 * @returns {*}
 	 * @private
 	 * @static
 	 */

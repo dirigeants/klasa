@@ -9,7 +9,7 @@ class SettingResolver extends Resolver {
 	/**
 	 * Resolves a user
 	 * @since 0.0.1
-	 * @param {any} data The data to resolve
+	 * @param {*} data The data to resolve
 	 * @param {KlasaGuild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
 	 * @returns {KlasaUser}
@@ -23,7 +23,7 @@ class SettingResolver extends Resolver {
 	/**
 	 * Resolves a channel
 	 * @since 0.0.1
-	 * @param {any} data The data to resolve
+	 * @param {*} data The data to resolve
 	 * @param {KlasaGuild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
 	 * @returns {external:Channel}
@@ -37,7 +37,7 @@ class SettingResolver extends Resolver {
 	/**
 	 * Resolves a TextChannel
 	 * @since 0.3.0
-	 * @param {any} data The data to resolve
+	 * @param {*} data The data to resolve
 	 * @param {KlasaGuild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
 	 * @returns {external:Channel}
@@ -51,7 +51,7 @@ class SettingResolver extends Resolver {
 	/**
 	 * Resolves a VoiceChannel
 	 * @since 0.3.0
-	 * @param {any} data The data to resolve
+	 * @param {*} data The data to resolve
 	 * @param {KlasaGuild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
 	 * @returns {external:Channel}
@@ -65,7 +65,7 @@ class SettingResolver extends Resolver {
 	/**
 	 * Resolves a guild
 	 * @since 0.0.1
-	 * @param {any} data The data to resolve
+	 * @param {*} data The data to resolve
 	 * @param {KlasaGuild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
 	 * @returns {KlasaGuild}
@@ -79,7 +79,7 @@ class SettingResolver extends Resolver {
 	/**
 	 * Resolves a role
 	 * @since 0.0.1
-	 * @param {any} data The data to resolve
+	 * @param {*} data The data to resolve
 	 * @param {KlasaGuild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
 	 * @returns {external:Role}
@@ -93,7 +93,7 @@ class SettingResolver extends Resolver {
 	/**
 	 * Resolves a boolean
 	 * @since 0.0.1
-	 * @param {any} data The data to resolve
+	 * @param {*} data The data to resolve
 	 * @param {KlasaGuild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
 	 * @returns {boolean}
@@ -107,7 +107,7 @@ class SettingResolver extends Resolver {
 	/**
 	 * Resolves a string
 	 * @since 0.0.1
-	 * @param {any} data The data to resolve
+	 * @param {*} data The data to resolve
 	 * @param {KlasaGuild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
 	 * @param {Object} minMax The minimum and maximum
@@ -124,7 +124,7 @@ class SettingResolver extends Resolver {
 	/**
 	 * Resolves a integer
 	 * @since 0.0.1
-	 * @param {any} data The data to resolve
+	 * @param {*} data The data to resolve
 	 * @param {KlasaGuild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
 	 * @param {Object} minMax The minimum and maximum
@@ -142,7 +142,7 @@ class SettingResolver extends Resolver {
 	/**
 	 * Resolves a float
 	 * @since 0.0.1
-	 * @param {any} data The data to resolve
+	 * @param {*} data The data to resolve
 	 * @param {KlasaGuild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
 	 * @param {Object} minMax The minimum and maximum
@@ -160,7 +160,7 @@ class SettingResolver extends Resolver {
 	/**
 	 * Resolves a hyperlink
 	 * @since 0.0.1
-	 * @param {any} data The data to resolve
+	 * @param {*} data The data to resolve
 	 * @param {KlasaGuild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
 	 * @returns {string}
@@ -174,7 +174,7 @@ class SettingResolver extends Resolver {
 	/**
 	 * Resolves a command
 	 * @since 0.0.1
-	 * @param {any} data The data to resolve
+	 * @param {*} data The data to resolve
 	 * @param {KlasaGuild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
 	 * @returns {Command}
@@ -188,7 +188,7 @@ class SettingResolver extends Resolver {
 	/**
 	 * Resolves a language
 	 * @since 0.2.1
-	 * @param {any} data The data to resolve
+	 * @param {*} data The data to resolve
 	 * @param {KlasaGuild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
 	 * @returns {Language}
@@ -202,8 +202,8 @@ class SettingResolver extends Resolver {
 	/**
 	 * Resolves anything, even objects.
 	 * @since 0.5.0
-	 * @param {any} data Raw content to pass.
-	 * @returns {Promise<any>}
+	 * @param {*} data Raw content to pass.
+	 * @returns {Promise<*>}
 	 */
 	any(data) {
 		return Promise.resolve(data);

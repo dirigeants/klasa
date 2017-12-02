@@ -68,7 +68,7 @@ class Event {
 	/**
 	 * A wrapper for the run method, to easily disable/enable events
 	 * @since 0.0.1
-	 * @param {any} param The event parameters emited
+	 * @param {*} param The event parameters emited
 	 * @private
 	 * @returns {void}
 	 */
@@ -79,7 +79,7 @@ class Event {
 	/**
 	 * The run method to be overwritten in actual event handlers
 	 * @since 0.0.1
-	 * @param {any} param The event parameters emited
+	 * @param {*} param The event parameters emited
 	 * @abstract
 	 * @returns {void}
 	 */

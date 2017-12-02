@@ -7,10 +7,10 @@ class SchemaPiece {
 
 	/**
 	 * @typedef  {Object} SchemaPieceJSON
-	 * @property {string}  type The type for the key.
-	 * @property {any}     default The default value for the key.
-	 * @property {number}  min The min value for the key (String.length for String, value for number).
-	 * @property {number}  max The max value for the key (String.length for String, value for number).
+	 * @property {string} type The type for the key.
+	 * @property {*} default The default value for the key.
+	 * @property {number} min The min value for the key (String.length for String, value for number).
+	 * @property {number} max The max value for the key (String.length for String, value for number).
 	 * @property {boolean} array Whether the key should be stored as Array or not.
 	 * @property {boolean} configurable Whether the key should be configurable by the config command or not.
 	 * @memberof SchemaPiece
@@ -80,7 +80,7 @@ class SchemaPiece {
 		/**
 		 * What this key should provide by default.
 		 * @since 0.5.0
-		 * @type {any}
+		 * @type {*}
 		 * @name SchemaPiece#default
 		 */
 		this.default = typeof options.default !== 'undefined' ? options.default : this.type === 'boolean' ? false : null;
@@ -117,7 +117,7 @@ class SchemaPiece {
 	 * @since 0.5.0
 	 * @param {string} value The value to parse.
 	 * @param {KlasaGuild} guild A Guild instance required for the resolver to work.
-	 * @returns {Promise<any>}
+	 * @returns {Promise<*>}
 	 */
 	parse(value, guild = this.client.guilds.get(this.id)) {
 		return this.manager.resolver[this.type](value, guild, this.key, { min: this.min, max: this.max });
@@ -250,7 +250,7 @@ class SchemaPiece {
 	/**
 	 * Parses a value to a valid string that can be used for SQL input.
 	 * @since 0.5.0
-	 * @param {any} value The value to parse.
+	 * @param {*} value The value to parse.
 	 * @returns {string}
 	 */
 	static _parseSQLValue(value) {

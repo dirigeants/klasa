@@ -161,8 +161,8 @@ Util.exec = promisify(exec);
  * @method
  * @since 0.3.0
  * @param {number} delay The amount of time in ms to delay
- * @param {any} [args] Any args to pass to the .then (mostly pointless in this form)
- * @returns {Promise<any>} The args value passed in
+ * @param {*} [args] Any args to pass to the .then (mostly pointless in this form)
+ * @returns {Promise<*>} The args value passed in
  */
 Util.sleep = promisify(setTimeout);
 

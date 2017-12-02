@@ -8,10 +8,10 @@ class Schema {
 
 	/**
 	 * @typedef  {Object} AddOptions
-	 * @property {string}  type The type for the key.
-	 * @property {any}     [default] The default value for the key.
-	 * @property {number}  [min] The min value for the key (String.length for String, value for number).
-	 * @property {number}  [max] The max value for the key (String.length for String, value for number).
+	 * @property {string} type The type for the key.
+	 * @property {*} [default] The default value for the key.
+	 * @property {number} [min] The min value for the key (String.length for String, value for number).
+	 * @property {number} [max] The max value for the key (String.length for String, value for number).
 	 * @property {boolean} [array] Whether the key should be stored as Array or not.
 	 * @property {boolean} [configurable] Whether the key should be configurable by the config command or not.
 	 * @memberof Schema
@@ -261,7 +261,7 @@ class Schema {
 	 * @param {('add'|'edit'|'delete')} action The action to perform.
 	 * @param {string} key The key.
 	 * @param {(SchemaPiece|Schema)} piece The SchemaPiece instance to handle.
-	 * @returns {Promise<any>}
+	 * @returns {Promise<*>}
 	 * @private
 	 */
 	force(action, key, piece) {

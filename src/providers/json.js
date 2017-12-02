@@ -115,7 +115,7 @@ module.exports = class extends Provider {
 	 * Update or insert a new value to all entries.
 	 * @param {string} table The name of the directory.
 	 * @param {string} path The key's path to update.
-	 * @param {any} newValue The new value for the key.
+	 * @param {*} newValue The new value for the key.
 	 * @param {boolean} [nice=false] Whether the provider should update all entries at the same time or politely update them sequentially.
 	 */
 	async updateValue(table, path, newValue, nice = false) {
@@ -134,7 +134,7 @@ module.exports = class extends Provider {
 	 * @param {string} table The name of the directory.
 	 * @param {string[]} route An array with the path to update.
 	 * @param {Object} object The entry to update.
-	 * @param {any} newValue The new value for the key.
+	 * @param {*} newValue The new value for the key.
 	 * @returns {Promise<void>}
 	 * @private
 	 */

@@ -351,12 +351,12 @@ class KlasaClient extends Discord.Client {
 				process.exit();
 			});
 		this.emit('log', loaded.join('\n'));
-		this.emit('log', `Loaded pieces in ${timer.stop()}.`);
 
 		// Providers must be init before configs, and those before all other stores.
 		await this.providers.init();
 		await this.gateways.add('guilds', this.gateways.validateGuild, this.gateways.defaultDataSchema, undefined, false);
 		await this.gateways.add('users', this.gateways.validateUser, undefined, undefined, false);
+		this.emit('log', `Loaded pieces in ${timer.stop()}.`);
 		return super.login(token);
 	}
 

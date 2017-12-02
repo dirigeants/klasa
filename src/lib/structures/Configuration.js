@@ -5,7 +5,7 @@ class Configuration {
 
 	/**
 	 * @typedef  {Object} ConfigurationUpdateResult
-	 * @property {any} value
+	 * @property {*} value
 	 * @property {SchemaPiece} path
 	 * @memberof Configuration
 	 */
@@ -19,7 +19,7 @@ class Configuration {
 
 	/**
 	 * @typedef  {Object} ConfigurationParseResult
-	 * @property {any} parsed
+	 * @property {*} parsed
 	 * @property {(string|number|object)} parsedID
 	 * @property {null} array
 	 * @property {string} path
@@ -30,8 +30,8 @@ class Configuration {
 
 	/**
 	 * @typedef  {Object} ConfigurationParseResultArray
-	 * @property {any} parsed
-	 * @property {any} parsedID
+	 * @property {*} parsed
+	 * @property {*} parsedID
 	 * @property {any[]} array
 	 * @property {string} path
 	 * @property {string[]} route
@@ -111,7 +111,7 @@ class Configuration {
 	 * Get a value from the configuration. Admits nested objects separating by comma.
 	 * @since 0.5.0
 	 * @param {string} key The key to get from this instance.
-	 * @returns {any}
+	 * @returns {*}
 	 */
 	get(key) {
 		if (!key.includes('.')) {
@@ -195,7 +195,7 @@ class Configuration {
 	 * Update a value from an entry.
 	 * @since 0.5.0
 	 * @param {string} key The key to modify.
-	 * @param {any} value The value to parse and save.
+	 * @param {*} value The value to parse and save.
 	 * @param {ConfigGuildResolvable} [guild] A guild resolvable.
 	 * @param {boolean} [avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key.
 	 * @returns {Promise<ConfigurationUpdateResult>}
@@ -217,7 +217,7 @@ class Configuration {
 	 * @since 0.5.0
 	 * @param {('add'|'remove')} action Whether the value should be added or removed to the array.
 	 * @param {string} key The key to modify.
-	 * @param {any} value The value to parse and save or remove.
+	 * @param {*} value The value to parse and save or remove.
 	 * @param {ConfigGuildResolvable} [guild] A guild resolvable.
 	 * @param {boolean} [avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key.
 	 * @returns {Promise<ConfigurationUpdateResult>}
@@ -297,7 +297,7 @@ class Configuration {
 	 * Update a single key
 	 * @since 0.5.0
 	 * @param {string} key The key to edit.
-	 * @param {any} value The new value.
+	 * @param {*} value The new value.
 	 * @param {ConfigGuildResolvable} guild The guild to take.
 	 * @param {ConfigurationParseOptions} options The options.
 	 * @returns {Promise<ConfigurationParseResult>}
@@ -327,7 +327,7 @@ class Configuration {
 	 * @since 0.5.0
 	 * @param {('add'|'remove')} action Whether the value should be added or removed to the array.
 	 * @param {string} key The key to edit.
-	 * @param {any} value The new value.
+	 * @param {*} value The new value.
 	 * @param {ConfigGuildResolvable} guild The guild to take.
 	 * @param {ConfigurationParseOptions} options The options.
 	 * @returns {Promise<ConfigurationParseResultArray>}
@@ -369,7 +369,7 @@ class Configuration {
 	 * @since 0.5.0
 	 * @param {('add'|'remove')} action Whether the value should be added or removed to the array.
 	 * @param {string} key The key to edit.
-	 * @param {any} value The new value.
+	 * @param {*} value The new value.
 	 * @param {ConfigGuildResolvable} guild The guild to take.
 	 * @param {boolean} avoidUnconfigurable Whether the Gateway should avoid configuring the selected key.
 	 * @returns {Promise<(ConfigurationParseResult|ConfigurationParseResultArray)>}
