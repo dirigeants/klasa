@@ -18,7 +18,7 @@ class Gateway {
 	 */
 
 	/**
-	 * @typedef {(KlasaGuild|KlasaMessage|external:TextChannel|external:VoiceChannel|external:CategoryChannel|external:GuildChannel|external:Role)} GatewayGuildResolvable
+	 * @typedef {(KlasaGuild|KlasaMessage|external:TextChannel|external:VoiceChannel|external:CategoryChannel|external:Member|external:GuildChannel|external:Role)} GatewayGuildResolvable
 	 * @memberof Gateway
 	 */
 
@@ -349,7 +349,7 @@ class Gateway {
 	_resolveGuild(guild) {
 		if (typeof guild === 'object') {
 			if (guild instanceof discord.Guild) return guild;
-			if (guild instanceof discord.GuildChannel || guild instanceof discord.Message || guild instanceof discord.Role) return guild.guild;
+			if (guild instanceof discord.GuildChannel || guild instanceof discord.Message || guild instanceof discord.Role || guild instanceof discord.Member) return guild.guild;
 		}
 		if (typeof guild === 'string' && /^\d{17,19}$/.test(guild)) return this.client.guilds.get(guild);
 		return null;

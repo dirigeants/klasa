@@ -17,6 +17,19 @@ class Resolver {
 		 * @type {KlasaClient}
 		 */
 		Object.defineProperty(this, 'client', { value: client });
+
+		this._language = null;
+	}
+
+	/**
+	 * The default Language of the bot
+	 * @since 0.5.0
+	 * @type {?Language}
+	 */
+	get language() {
+		if (this._language) return this._language;
+		this._language = this.client.languages.get(this.client.config.language);
+		return this._language;
 	}
 
 	/**

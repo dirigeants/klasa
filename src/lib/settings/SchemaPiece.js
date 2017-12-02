@@ -119,7 +119,7 @@ class SchemaPiece {
 	 * @param {KlasaGuild} guild A Guild instance required for the resolver to work.
 	 * @returns {Promise<any>}
 	 */
-	parse(value, guild) {
+	parse(value, guild = this.client.guilds.get(this.id)) {
 		return this.manager.resolver[this.type](value, guild, this.key, { min: this.min, max: this.max });
 	}
 

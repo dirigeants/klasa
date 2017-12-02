@@ -46,7 +46,7 @@ class Configuration {
 	 */
 
 	/**
-	 * @typedef {(KlasaGuild|KlasaMessage|external:TextChannel|external:VoiceChannel|external:CategoryChannel|external:GuildChannel|external:Role)} ConfigGuildResolvable
+	 * @typedef {(KlasaGuild|KlasaMessage|external:TextChannel|external:VoiceChannel|external:CategoryChannel|external:Member|external:GuildChannel|external:Role)} GatewayGuildResolvable
 	 * @memberof Configuration
 	 */
 
@@ -180,12 +180,11 @@ class Configuration {
 	 * Reset a value from an entry.
 	 * @since 0.5.0
 	 * @param {string} key The key to reset.
-	 * @param {ConfigGuildResolvable} [guild] A guild resolvable.
 	 * @param {boolean} [avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key.
 	 * @returns {Promise<ConfigurationUpdateResult>}
 	 */
-	async reset(key, guild, avoidUnconfigurable = false) {
-		const { parsedID, parsed, path } = await this._reset(key, guild, avoidUnconfigurable);
+	async reset(key, avoidUnconfigurable = false) {
+		const { parsedID, parsed, path } = await this._reset(key, avoidUnconfigurable);
 		await (this.gateway.sql ?
 			this.gateway.provider.update(this.gateway.type, this.id, key, parsedID) :
 			this.gateway.provider.update(this.gateway.type, this.id, this.toJSON()));
@@ -202,6 +201,10 @@ class Configuration {
 	 * @returns {Promise<ConfigurationUpdateResult>}
 	 */
 	async updateOne(key, value, guild, avoidUnconfigurable = false) {
+		if (typeof guild === 'boolean') {
+			avoidUnconfigurable = guild;
+			guild = undefined;
+		}
 		const { parsedID, parsed, path, array } = await this._sharedUpdateSingle('add', key, value, guild, avoidUnconfigurable);
 		await (this.gateway.sql ?
 			this.gateway.provider.update(this.gateway.type, this.id, key, array === null ? parsedID : array) :
@@ -220,6 +223,10 @@ class Configuration {
 	 * @returns {Promise<ConfigurationUpdateResult>}
 	 */
 	async updateArray(action, key, value, guild, avoidUnconfigurable = false) {
+		if (typeof guild === 'boolean') {
+			avoidUnconfigurable = guild;
+			guild = undefined;
+		}
 		const { parsedID, parsed, path, array } = await this._sharedUpdateSingle(action, key, value, guild, avoidUnconfigurable);
 		await (this.gateway.sql ?
 			this.gateway.provider.update(this.gateway.type, this.id, key, array === null ? parsedID : array) :
@@ -253,30 +260,26 @@ class Configuration {
 	 * Reset a value from an entry.
 	 * @since 0.5.0
 	 * @param {string} key The key to reset.
-	 * @param {ConfigGuildResolvable} guild A guild resolvable.
 	 * @param {boolean} avoidUnconfigurable Whether the Gateway should avoid configuring the selected key.
 	 * @returns {Promise<ConfigurationParseResult>}
 	 * @private
 	 */
-	async _reset(key, guild, avoidUnconfigurable) {
+	async _reset(key, avoidUnconfigurable) {
 		if (typeof key !== 'string') throw new TypeError(`The argument key must be a string. Received: ${typeof key}`);
-		guild = this.gateway._resolveGuild(guild);
 		const pathData = this.gateway.getPath(key, { avoidUnconfigurable, piece: true });
-		return this._parseReset(key, guild, pathData);
+		return this._parseReset(key, pathData);
 	}
 
 	/**
 	 * Parse the data for reset.
 	 * @since 0.5.0
 	 * @param {string} key The key to edit.
-	 * @param {ConfigGuildResolvable} guild The guild to take.
 	 * @param {ConfigurationParseOptions} options The options.
 	 * @returns {Promise<ConfigurationParseResult>}
 	 * @private
 	 */
-	async _parseReset(key, guild, { path, route }) {
+	async _parseReset(key, { path, route }) {
 		const parsedID = path.default;
-		guild = this.gateway._resolveGuild(guild);
 
 		// Handle entry creation if it does not exist.
 		if (!this.existsInDB) await this.gateway.createEntry(this.id);

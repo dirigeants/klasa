@@ -24,17 +24,17 @@ module.exports = class extends Command {
 	}
 
 	async set(msg, key, valueToSet) {
-		const { path } = await msg.guild.configs.updateOne(key, valueToSet.join(' '), msg.guild, true);
+		const { path } = await msg.guild.configs.updateOne(key, valueToSet.join(' '), true);
 		return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', path.path, path.resolveString(msg)));
 	}
 
 	async remove(msg, key, valueToRemove) {
-		const { path } = await msg.guild.configs.updateArray('remove', key, valueToRemove.join(' '), msg.guild, true);
+		const { path } = await msg.guild.configs.updateArray('remove', key, valueToRemove.join(' '), true);
 		return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', path.path, path.resolveString(msg)));
 	}
 
 	async reset(msg, key) {
-		const { path } = await msg.guild.configs.reset(key, msg.guild, true);
+		const { path } = await msg.guild.configs.reset(key, true);
 		return msg.sendMessage(msg.language.get('COMMAND_CONF_RESET', path.path, path.resolveString(msg)));
 	}
 
