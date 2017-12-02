@@ -197,7 +197,7 @@ class SchemaPiece {
 	 * @returns {string}
 	 */
 	resolveString(msg) {
-		const value = msg.guildConfigs.get(this.path);
+		const value = this.manager.type === 'users' ? msg.author.configs.get(this.path) : msg.guildConfigs.get(this.path);
 		let resolver = (val) => val;
 		switch (this.type) {
 			case 'Folder': resolver = () => '[ Folder';
