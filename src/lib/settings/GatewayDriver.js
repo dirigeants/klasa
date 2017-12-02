@@ -170,7 +170,7 @@ class GatewayDriver {
 	 * The validator function Klasa uses for guild configs.
 	 * @since 0.5.0
 	 * @param {(Object|string)} guildResolvable The guild to validate.
-	 * @returns {external:Guild}
+	 * @returns {KlasaGuild}
 	 * @private
 	 */
 	async validateGuild(guildResolvable) {
@@ -189,7 +189,7 @@ class GatewayDriver {
 	 * The validator function Klasa uses for user configs.
 	 * @since 0.5.0
 	 * @param {(Object|string)} userResolvable The user to validate.
-	 * @returns {external:User}
+	 * @returns {KlasaUser}
 	 * @private
 	 */
 	async validateUser(userResolvable) {

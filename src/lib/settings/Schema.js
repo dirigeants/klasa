@@ -265,9 +265,7 @@ class Schema {
 	 * @private
 	 */
 	force(action, key, piece) {
-		if ((piece instanceof SchemaPiece) === false && (piece instanceof Schema) === false) {
-			throw new TypeError(`'schemaPiece' must be an instance of 'SchemaPiece' or an instance of 'Schema'.`);
-		}
+		if (!(piece instanceof SchemaPiece) && !(piece instanceof Schema)) throw new TypeError(`'schemaPiece' must be an instance of 'SchemaPiece' or an instance of 'Schema'.`);
 
 		const values = this.manager.cache.getValues(this.manager.type);
 		const path = piece.path.split('.');
@@ -306,9 +304,7 @@ class Schema {
 		if (keys.length === 0) return '';
 
 		const longest = keys.reduce((a, b) => a.length > b.length ? a : b).length;
-		for (let i = 0; i < keys.length; i++) {
-			array.push(`${keys[i].padEnd(longest)} :: ${this[keys[i]].resolveString(msg)}`);
-		}
+		for (let i = 0; i < keys.length; i++) array.push(`${keys[i].padEnd(longest)} :: ${this[keys[i]].resolveString(msg)}`);
 
 		return array.join('\n');
 	}

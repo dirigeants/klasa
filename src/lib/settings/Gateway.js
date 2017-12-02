@@ -18,7 +18,7 @@ class Gateway {
 	 */
 
 	/**
-	 * @typedef {(KlasaGuild|external:TextChannel|external:VoiceChannel|KlasaMessage|external:Role)} GatewayGuildResolvable
+	 * @typedef {(KlasaGuild|KlasaMessage|external:TextChannel|external:VoiceChannel|external:CategoryChannel|external:GuildChannel|external:Role)} GatewayGuildResolvable
 	 * @memberof Gateway
 	 */
 
@@ -98,7 +98,16 @@ class Gateway {
 
 		/**
 		 * @since 0.0.1
+		 * @type {SettingResolver}
+		 * @name Gateway#resolver
+		 * @readonly
+		 */
+		Object.defineProperty(this, 'resolver', { value: this.store.resolver });
+
+		/**
+		 * @since 0.0.1
 		 * @type {boolean}
+		 * @name Gateway#sql
 		 * @readonly
 		 */
 		Object.defineProperty(this, 'sql', { value: this.provider.sql });
@@ -132,16 +141,6 @@ class Gateway {
 	 */
 	get defaults() {
 		return Object.assign(this.schema.defaults, { default: true });
-	}
-
-	/**
-	 * The resolver instance this Gateway uses to parse the data.
-	 * @since 0.0.1
-	 * @type {Resolver}
-	 * @readonly
-	 */
-	get resolver() {
-		return this.store.resolver;
 	}
 
 	/**
@@ -205,7 +204,6 @@ class Gateway {
 					.catch(error => this.client.emit('log', error, 'error'));
 				return configs;
 			}
-
 			return entry;
 		}
 		return this.cache.get(this.type, input) || this.defaults;
@@ -306,8 +304,7 @@ class Gateway {
 
 		for (let i = 0; i < route.length; i++) {
 			const currKey = route[i];
-			if (typeof path[currKey] === 'undefined' ||
-				!path.hasKey(currKey)) throw `The key ${route.slice(0, i + 1).join('.')} does not exist in the current schema.`;
+			if (typeof path[currKey] === 'undefined' || !path.hasKey(currKey)) throw `The key ${route.slice(0, i + 1).join('.')} does not exist in the current schema.`;
 
 			if (path[currKey].type === 'Folder') {
 				path = path[currKey];
@@ -352,8 +349,7 @@ class Gateway {
 	_resolveGuild(guild) {
 		if (typeof guild === 'object') {
 			if (guild instanceof discord.Guild) return guild;
-			if (guild instanceof discord.Channel ||
-				guild instanceof discord.Message) return guild.guild;
+			if (guild instanceof discord.GuildChannel || guild instanceof discord.Message || guild instanceof discord.Role) return guild.guild;
 		}
 		if (typeof guild === 'string' && /^\d{17,19}$/.test(guild)) return this.client.guilds.get(guild);
 		return null;
@@ -362,7 +358,7 @@ class Gateway {
 	/**
 	 * Make an error that can or not have a valid Guild.
 	 * @since 0.5.0
-	 * @param {external:Guild} guild The guild to get the language from.
+	 * @param {KlasaGuild} guild The guild to get the language from.
 	 * @param {(string|number)} code The code of the error.
 	 * @param {(string|Error)} error The error.
 	 * @returns {string}

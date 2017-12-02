@@ -35,7 +35,7 @@ class Resolver {
 	 * Resolve a User object by its instance of User, GuildMember, or by its Snowflake.
 	 * @since 0.0.1
 	 * @param {(User|GuildMember|Message|Snowflake)} user The user to validate.
-	 * @returns {?external:User}
+	 * @returns {?KlasaUser}
 	 */
 	async user(user) {
 		if (user instanceof User) return user;
@@ -84,7 +84,7 @@ class Resolver {
 	 * Resolve a Guild object by its instance of Guild, or by its Snowflake.
 	 * @since 0.0.1
 	 * @param {(Guild|Snowflake)} guild The guild to validate/find.
-	 * @returns {?external:Guild}
+	 * @returns {?KlasaGuild}
 	 */
 	async guild(guild) {
 		if (guild instanceof Guild) return guild;

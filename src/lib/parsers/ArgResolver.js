@@ -230,7 +230,7 @@ class ArgResolver extends Resolver {
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?external:User}
+	 * @returns {?KlasaUser}
 	 */
 	mention(...args) {
 		return this.user(...args);
@@ -244,7 +244,7 @@ class ArgResolver extends Resolver {
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?external:User}
+	 * @returns {?KlasaUser}
 	 */
 	async user(arg, currentUsage, possible, repeat, msg) {
 		const user = await super.user(arg);
@@ -295,7 +295,7 @@ class ArgResolver extends Resolver {
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?external:Guild}
+	 * @returns {?KlasaGuild}
 	 */
 	async guild(arg, currentUsage, possible, repeat, msg) {
 		const guild = await super.guild(arg);

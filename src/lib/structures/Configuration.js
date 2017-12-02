@@ -52,6 +52,15 @@ class Configuration {
 	 */
 	constructor(manager, data) {
 		/**
+		 * The client this Configuration was created with.
+		 * @since 0.5.0
+		 * @type {KlasaClient}
+		 * @name Configuration#client
+		 * @readonly
+		 */
+		Object.defineProperty(this, 'client', { value: manager.client });
+
+		/**
 		 * The Gateway that manages this Configuration instance.
 		 * @since 0.5.0
 		 * @type {(Gateway|GatewaySQL)}
@@ -134,9 +143,7 @@ class Configuration {
 	 */
 	async resetConfiguration() {
 		if (this.existsInDB) await this.gateway.provider.delete(this.gateway.type, this.id);
-		for (const key of this.gateway.schema.keyArray) {
-			this[key] = Configuration._merge(undefined, this.gateway.schema[key]);
-		}
+		for (const key of this.gateway.schema.keyArray) this[key] = Configuration._merge(undefined, this.gateway.schema[key]);
 		return this;
 	}
 
@@ -245,6 +252,7 @@ class Configuration {
 	 * @param {(Guild|string)} guild A guild resolvable.
 	 * @param {boolean} avoidUnconfigurable Whether the Gateway should avoid configuring the selected key.
 	 * @returns {Promise<ConfigurationParseResult>}
+	 * @private
 	 */
 	async _reset(key, guild, avoidUnconfigurable) {
 		if (typeof key !== 'string') throw new TypeError(`The argument key must be a string. Received: ${typeof key}`);
@@ -391,6 +399,20 @@ class Configuration {
 	}
 
 	/**
+	 * Path this Configuration instance.
+	 * @param {Object} data The data to patch.
+	 */
+	_patch(data) {
+		const { schema } = this.gateway;
+		for (let i = 0; i < schema.keyArray.length; i++) {
+			const key = schema.keyArray[i];
+			if (typeof data[key] === 'undefined') continue;
+			if (schema[key].type === 'Folder') Configuration._patch(this[key], data[key], schema[key]);
+			else this[key] = data[key];
+		}
+	}
+
+	/**
 	 * Returns the JSON-compatible object of this instance.
 	 * @since 0.5.0
 	 * @returns {Object}
@@ -406,16 +428,6 @@ class Configuration {
 	 */
 	toString() {
 		return `Configuration(${this.gateway.type}:${this.id})`;
-	}
-
-	/**
-	 * The client this Configuration was created with.
-	 * @since 0.5.0
-	 * @type {KlasaClient}
-	 * @readonly
-	 */
-	get client() {
-		return this.gateway.client;
 	}
 
 	/**
@@ -458,28 +470,11 @@ class Configuration {
 
 		for (let i = 0; i < schema.keyArray.length; i++) {
 			const key = schema.keyArray[i];
-			if (schema[key].type === 'Folder') {
-				clone[key] = Configuration._clone(data[key], schema[key]);
-			} else {
-				clone[key] = schema[key].array ? data[key].slice(0) : data[key];
-			}
+			if (schema[key].type === 'Folder') clone[key] = Configuration._clone(data[key], schema[key]);
+			else clone[key] = schema[key].array ? data[key].slice(0) : data[key];
 		}
 
 		return clone;
-	}
-
-	/**
-	 * Path this Configuration instance.
-	 * @param {Object} data The data to patch.
-	 */
-	_patch(data) {
-		const { schema } = this.gateway;
-		for (let i = 0; i < schema.keyArray.length; i++) {
-			const key = schema.keyArray[i];
-			if (typeof data[key] === 'undefined') continue;
-			if (schema[key].type === 'Folder') Configuration._patch(this[key], data[key], schema[key]);
-			else this[key] = data[key];
-		}
 	}
 
 	/**

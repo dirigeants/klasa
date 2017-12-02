@@ -116,28 +116,11 @@ class SchemaPiece {
 	 * Parse a value in this key's resolver.
 	 * @since 0.5.0
 	 * @param {string} value The value to parse.
-	 * @param {external:Guild} guild A Guild instance required for the resolver to work.
+	 * @param {KlasaGuild} guild A Guild instance required for the resolver to work.
 	 * @returns {Promise<any>}
 	 */
 	parse(value, guild) {
 		return this.manager.resolver[this.type](value, guild, this.key, { min: this.min, max: this.max });
-	}
-
-	/**
-	 * Get this key's raw data in JSON.
-	 * @since 0.5.0
-	 * @returns {SchemaPieceJSON}
-	 */
-	toJSON() {
-		return {
-			type: this.type,
-			array: this.array,
-			default: this.default,
-			min: this.min,
-			max: this.max,
-			sql: this.sqlSchema[1],
-			configurable: this.configurable
-		};
 	}
 
 	/**
@@ -147,18 +130,10 @@ class SchemaPiece {
 	 */
 	init(options) {
 		// Check if the 'options' parameter is an object.
-		if (typeof options !== 'object' || Object.prototype.toString.call(options) !== '[object Object]') {
-			throw new TypeError(`SchemaPiece#init expected an object as first parameter. Got: ${typeof options}`);
-		}
-		if (typeof this.type !== 'string') {
-			throw new TypeError(`[KEY] ${this} - Parameter type must be a string.`);
-		}
-		if (!this.manager.store.types.includes(this.type)) {
-			throw new TypeError(`[KEY] ${this} - ${this.type} is not a valid type.`);
-		}
-		if (typeof this.array !== 'boolean') {
-			throw new TypeError(`[KEY] ${this} - Parameter array must be a boolean.`);
-		}
+		if (!options || Object.prototype.toString.call(options) !== '[object Object]') throw new TypeError(`SchemaPiece#init expected an object as first parameter. Got: ${typeof options}`);
+		if (typeof this.type !== 'string') throw new TypeError(`[KEY] ${this} - Parameter type must be a string.`);
+		if (!this.manager.store.types.includes(this.type)) throw new TypeError(`[KEY] ${this} - ${this.type} is not a valid type.`);
+		if (typeof this.array !== 'boolean') throw new TypeError(`[KEY] ${this} - Parameter array must be a boolean.`);
 		// Default value checking
 		if (this.array === true) {
 			if (!Array.isArray(this.default)) throw new TypeError(`[DEFAULT] ${this} - Default key must be an array if the key stores an array.`);
@@ -170,19 +145,11 @@ class SchemaPiece {
 			throw new TypeError(`[DEFAULT] ${this} - Default key must not be type of object unless it is type any or null.`);
 		}
 		// Min and max checking
-		if (this.min !== null && !isNumber(this.min)) {
-			throw new TypeError(`[KEY] ${this} - Parameter min must be a number or null.`);
-		}
-		if (this.max !== null && !isNumber(this.max)) {
-			throw new TypeError(`[KEY] ${this} - Parameter max must be a number or null.`);
-		}
-		if (this.min !== null && this.max !== null && this.min > this.max) {
-			throw new TypeError(`[KEY] ${this} - Parameter min must contain a value lower than the parameter max.`);
-		}
+		if (this.min !== null && !isNumber(this.min)) throw new TypeError(`[KEY] ${this} - Parameter min must be a number or null.`);
+		if (this.max !== null && !isNumber(this.max)) throw new TypeError(`[KEY] ${this} - Parameter max must be a number or null.`);
+		if (this.min !== null && this.max !== null && this.min > this.max) throw new TypeError(`[KEY] ${this} - Parameter min must contain a value lower than the parameter max.`);
 		// Configurable checking
-		if (typeof this.configurable !== 'boolean') {
-			throw new TypeError(`[KEY] ${this} - Parameter configurable must be a boolean.`);
-		}
+		if (typeof this.configurable !== 'boolean') throw new TypeError(`[KEY] ${this} - Parameter configurable must be a boolean.`);
 
 		const value = [this.path, options.sql || (this.type === 'integer' || this.type === 'float' ? 'INTEGER' : 'TEXT') +
 			(this.default !== null ? ` DEFAULT ${SchemaPiece._parseSQLValue(this.default)}` : '')];
@@ -261,6 +228,23 @@ class SchemaPiece {
 	 */
 	toString() {
 		return `SchemaPiece(${this.manager.type}:${this.path})`;
+	}
+
+	/**
+	 * Get this key's raw data in JSON.
+	 * @since 0.5.0
+	 * @returns {SchemaPieceJSON}
+	 */
+	toJSON() {
+		return {
+			type: this.type,
+			array: this.array,
+			default: this.default,
+			min: this.min,
+			max: this.max,
+			sql: this.sqlSchema[1],
+			configurable: this.configurable
+		};
 	}
 
 	/**

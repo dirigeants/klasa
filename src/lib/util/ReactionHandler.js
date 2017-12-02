@@ -165,7 +165,7 @@ class ReactionHandler extends ReactionCollector {
 	/**
 	 * The action to take when the "jump" emoji is reacted
 	 * @since 0.4.0
-	 * @param {external:User} user The user to lock the awaitMessages to
+	 * @param {KlasaUser} user The user to lock the awaitMessages to
 	 * @returns {void}
 	 */
 	async jump(user) {

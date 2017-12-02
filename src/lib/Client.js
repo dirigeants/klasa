@@ -267,7 +267,7 @@ class KlasaClient extends Discord.Client {
 	 * The owner for this bot
 	 * @since 0.1.1
 	 * @readonly
-	 * @type {external:User}
+	 * @type {KlasaUser}
 	 */
 	get owner() {
 		return this.users.get(this.config.ownerID);
