@@ -537,10 +537,12 @@ declare module 'klasa' {
 	}
 
 	export class Schema {
-		public constructor(client: KlasaClient, manager: Gateway | GatewaySQL, object: Object, path: string);
+		public constructor(client: KlasaClient, manager: Gateway | GatewaySQL, object: Object, parent: Schema, key: string);
 		public readonly client: KlasaClient;
 		public readonly manager: Gateway | GatewaySQL;
+		public readonly parent?: Schema;
 		public readonly path: string;
+		public readonly key: string;
 		public readonly type: 'Folder';
 		public defaults: Object;
 		public keys: Set<string>;
@@ -570,9 +572,10 @@ declare module 'klasa' {
 	}
 
 	export class SchemaPiece {
-		public constructor(client: KlasaClient, manager: Gateway | GatewaySQL, options: AddOptions, path: string, key: string);
+		public constructor(client: KlasaClient, manager: Gateway | GatewaySQL, options: AddOptions, parent: Schema, key: string);
 		public readonly client: KlasaClient;
 		public readonly manager: Gateway | GatewaySQL;
+		public readonly parent: Schema;
 		public readonly path: string;
 		public readonly key: string;
 		public type: string;
