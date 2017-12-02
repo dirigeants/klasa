@@ -305,7 +305,7 @@ class Schema {
 		const keys = {};
 		let longest = 0;
 		for (const key of this.keyArray) {
-			if (this[key].type === 'folder') {
+			if (this[key].type === 'Folder') {
 				folders.push(`// ${key}`);
 			} else if (this[key].configurable) {
 				if (!(this[key].type in keys)) keys[this[key].type] = [];
