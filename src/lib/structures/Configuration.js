@@ -200,16 +200,8 @@ class Configuration {
 	 * @param {boolean} [avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key.
 	 * @returns {Promise<ConfigurationUpdateResult>}
 	 */
-	async updateOne(key, value, guild, avoidUnconfigurable = false) {
-		if (typeof guild === 'boolean') {
-			avoidUnconfigurable = guild;
-			guild = undefined;
-		}
-		const { parsedID, parsed, path, array } = await this._sharedUpdateSingle('add', key, value, guild, avoidUnconfigurable);
-		await (this.gateway.sql ?
-			this.gateway.provider.update(this.gateway.type, this.id, key, array === null ? parsedID : array) :
-			this.gateway.provider.update(this.gateway.type, this.id, this.toJSON()));
-		return { value: parsed, path };
+	updateOne(key, value, guild, avoidUnconfigurable = false) {
+		return this.updateArray('add', key, value, guild, avoidUnconfigurable);
 	}
 
 	/**
@@ -280,16 +272,7 @@ class Configuration {
 	 */
 	async _parseReset(key, { path, route }) {
 		const parsedID = path.default;
-
-		// Handle entry creation if it does not exist.
-		if (!this.existsInDB) await this.gateway.createEntry(this.id);
-		const oldClone = this.client.listenerCount('configUpdateEntry') ? this.clone() : null;
-
-		let cache = this; // eslint-disable-line consistent-this
-		for (let i = 0; i < route.length - 1; i++) cache = cache[route[i]] || {};
-		cache[route[route.length - 1]] = parsedID;
-
-		if (oldClone !== null) this.client.emit('configUpdateEntry', oldClone, this, path.path);
+		await this._setValue(parsedID, path, route);
 		return { parsed: parsedID, parsedID, array: null, path, route };
 	}
 
@@ -309,16 +292,7 @@ class Configuration {
 
 		const parsed = await path.parse(value, guild);
 		const parsedID = parsed && parsed.id ? parsed.id : parsed;
-
-		// Handle entry creation if it does not exist.
-		if (!this.existsInDB) await this.gateway.createEntry(this.id);
-		const oldClone = this.client.listenerCount('configUpdateEntry') ? this.clone() : null;
-
-		let cache = this; // eslint-disable-line consistent-this
-		for (let i = 0; i < route.length - 1; i++) cache = cache[route[i]] || {};
-		cache[route[route.length - 1]] = parsedID;
-
-		if (oldClone !== null) this.client.emit('configUpdateEntry', oldClone, this, path.path);
+		await this._setValue(parsedID, path, route);
 		return { parsed, parsedID, array: null, path, route };
 	}
 
@@ -406,6 +380,26 @@ class Configuration {
 				.then(result => { cache[keys[i]] = result && result && result.id ? result.id : result; })
 				.catch(error => list.errors.push([schema[keys[i]].path, error])));
 		}
+	}
+
+	/**
+	 * Set a value at a certain path
+	 * @since 0.5.0
+	 * @param {string} parsedID The parsed ID or result
+	 * @param {SchemaPiece} path The SchemaPiece which handles the key to modify
+	 * @param {string[]} route The route of the key to modify
+	 * @private
+	 */
+	async _setValue(parsedID, path, route) {
+		// Handle entry creation if it does not exist.
+		if (!this.existsInDB) await this.gateway.createEntry(this.id);
+		const oldClone = this.client.listenerCount('configUpdateEntry') ? this.clone() : null;
+
+		let cache = this; // eslint-disable-line consistent-this
+		for (let i = 0; i < route.length - 1; i++) cache = cache[route[i]] || {};
+		cache[route[route.length - 1]] = parsedID;
+
+		if (oldClone !== null) this.client.emit('configUpdateEntry', oldClone, this, path.path);
 	}
 
 	/**
