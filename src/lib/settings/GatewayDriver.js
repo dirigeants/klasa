@@ -182,7 +182,7 @@ class GatewayDriver {
 			if (value) return value;
 		}
 
-		throw 'The parameter <Guild> expects either a Guild ID or a Guild Instance.';
+		throw new Error('The parameter <Guild> expects either a Guild ID or a Guild Instance.');
 	}
 
 	/**
@@ -201,7 +201,7 @@ class GatewayDriver {
 			if (value) return value;
 		}
 
-		throw 'The parameter <User> expects either a User ID or a User Instance.';
+		throw new Error('The parameter <User> expects either a User ID or a User Instance.');
 	}
 
 }
