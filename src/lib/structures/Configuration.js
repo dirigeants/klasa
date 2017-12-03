@@ -44,14 +44,14 @@ class Configuration {
 	 * @property {Error[]} errors
 	 * @property {Array<Promise<any>>} promises
 	 * @property {string[]} keys
-	 * @property {*[]} values
+	 * @property {Array<*>} values
 	 * @memberof Configuration
 	 */
 
 	/**
 	 * @typedef  {Object} ConfigurationUpdateManyUpdated
 	 * @property {string[]} keys
-	 * @property {*[]} values
+	 * @property {Array<*>} values
 	 * @memberof Configuration
 	 */
 

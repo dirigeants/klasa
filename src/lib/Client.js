@@ -443,7 +443,7 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  * @typedef  {Object} ConfigUpdateEntryMany
  * @property {'MANY'} type
  * @property {string[]} keys
- * @property {*[]} values
+ * @property {Array<*>} values
  */
 
 /**
@@ -532,7 +532,7 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
 /**
  * Emitted when {@link Configuration.updateOne}, {@link Configuration.updateArray} or {@link Configuration.reset}
  * is run. When {@link Configuration.updateMany} is run, the parameter path will be an object with the following format:
- * `{ type: 'MANY', keys: string[], values: *[] }`
+ * `{ type: 'MANY', keys: string[], values: Array<*> }`
  * @event KlasaClient#configUpdateEntry
  * @since 0.5.0
  * @param {Configuration} oldEntry The old configuration entry
