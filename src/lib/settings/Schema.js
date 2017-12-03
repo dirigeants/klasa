@@ -132,17 +132,14 @@ class Schema {
 		if (this.hasKey(key)) throw `The key ${key} already exists in the current schema.`;
 		if (typeof this[key] !== 'undefined') throw `The key ${key} conflicts with a property of Schema.`;
 
-		const folder = new Schema(this.client, this.manager, object, this, key);
-		this[key] = folder;
-		this.defaults[key] = this[key].defaults;
-		this.keys.add(key);
-		this.keyArray.push(key);
-
+		const folder = this._addKey(key, object, Schema);
 		await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
 
 		if (this.manager.sql) {
-			if (typeof this.manager.provider.addColumn === 'function') await this.manager.provider.addColumn(this.manager.type, folder.getSQL());
-			else throw new Error('The method \'addColumn\' in your provider is required in order to add new columns.');
+			if (folder.keyArray.length > 0) {
+				if (typeof this.manager.provider.addColumn === 'function') await this.manager.provider.addColumn(this.manager.type, folder.getSQL());
+				else throw new Error('The method \'addColumn\' in your provider is required in order to add new columns.');
+			}
 		} else if (force) {
 			await this.force('add', key, folder);
 		}
@@ -165,8 +162,10 @@ class Schema {
 		await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
 
 		if (this.manager.sql) {
-			if (typeof this.manager.provider.removeColumn === 'function') await this.manager.provider.removeColumn(this.manager.type, folder.getKeys());
-			else throw new Error('The method \'removeColumn\' in your provider is required in order to remove columns.');
+			if (folder.keyArray.length > 0) {
+				if (typeof this.manager.provider.removeColumn === 'function') await this.manager.provider.removeColumn(this.manager.type, folder.getKeys());
+				else throw new Error('The method \'removeColumn\' in your provider is required in order to remove columns.');
+			}
 		} else if (force) {
 			await this.force('delete', key, folder);
 		}
@@ -210,7 +209,7 @@ class Schema {
 			if (typeof options.default === 'undefined') options.default = options.type === 'boolean' ? false : null;
 			options.array = false;
 		}
-		this._addKey(key, options);
+		this._addKey(key, options, SchemaPiece);
 		await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
 
 		if (this.manager.sql) {
@@ -227,15 +226,21 @@ class Schema {
 	 * @since 0.5.0
 	 * @param {string} key The name of the key.
 	 * @param {AddOptions} options The options of the key.
+	 * @param {(Schema|SchemaPiece)} Piece The class to create.
+	 * @returns {(Schema|SchemaPiece)}
 	 * @private
 	 */
-	_addKey(key, options) {
+	_addKey(key, options, Piece) {
 		if (this.hasKey(key)) throw new Error(`The key '${key}' already exists.`);
+		const piece = new Piece(this.client, this.manager, options, this, key);
+		this[key] = piece;
+		this.defaults[key] = piece.type === 'Folder' ? piece.defaults : options.default;
+
 		this.keys.add(key);
 		this.keyArray.push(key);
 		this.keyArray.sort((a, b) => a.localeCompare(b));
-		this[key] = new SchemaPiece(this.client, this.manager, options, this, key);
-		this.defaults[key] = options.default;
+
+		return piece;
 	}
 
 	/**
