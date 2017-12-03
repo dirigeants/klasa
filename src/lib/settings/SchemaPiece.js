@@ -11,6 +11,7 @@ class SchemaPiece {
 	 * @property {*} default The default value for the key.
 	 * @property {number} min The min value for the key (String.length for String, value for number).
 	 * @property {number} max The max value for the key (String.length for String, value for number).
+	 * @property {string[]} sql A tuple containing the name of the column and its data type.
 	 * @property {boolean} array Whether the key should be stored as Array or not.
 	 * @property {boolean} configurable Whether the key should be configurable by the config command or not.
 	 * @memberof SchemaPiece
@@ -111,6 +112,14 @@ class SchemaPiece {
 		this.max = typeof options.max !== 'undefined' && isNaN(options.max) === false ? options.max : null;
 
 		/**
+		 * A tuple of strings containing the path and the datatype.
+		 * @since 0.5.0
+		 * @type {string[]}
+		 * @name SchemaPiece#sql
+		 */
+		this.sql = [this.path];
+
+		/**
 		 * Whether this key should be configureable by the config command. When type is any, this key defaults to false.
 		 * @since 0.5.0
 		 * @type {boolean}
@@ -136,6 +145,7 @@ class SchemaPiece {
 	 * Check if the key is properly configured.
 	 * @since 0.5.0
 	 * @param {AddOptions} options The options to parse.
+	 * @private
 	 */
 	init(options) {
 		// Check if the 'options' parameter is an object.
@@ -160,43 +170,8 @@ class SchemaPiece {
 		// Configurable checking
 		if (typeof this.configurable !== 'boolean') throw new TypeError(`[KEY] ${this} - Parameter configurable must be a boolean.`);
 
-		const value = [this.path, options.sql || (this.type === 'integer' || this.type === 'float' ? 'INTEGER' : 'TEXT') +
-			(this.default !== null ? ` DEFAULT ${SchemaPiece._parseSQLValue(this.default)}` : '')];
-
-		Object.defineProperty(this, 'sqlSchema', { value });
-	}
-
-	/**
-	 * Get the SQL key and datatype.
-	 * @since 0.5.0
-	 * @param {Array<string[]>} [array] An array to push.
-	 * @returns {string[]}
-	 */
-	getSQL(array) {
-		if (typeof array !== 'undefined') array.push(this.sqlSchema);
-		return this.sqlSchema;
-	}
-
-	/**
-	 * Get the current key.
-	 * @since 0.5.0
-	 * @param {string[]} [array] An array to push.
-	 * @returns {string}
-	 */
-	getKeys(array) {
-		if (typeof array !== 'undefined') array.push(this.path);
-		return this.path;
-	}
-
-	/**
-	 * Passes the instance to an array
-	 * @since 0.5.0
-	 * @param {SchemaPiece[]} [array] An array to push.
-	 * @returns {this}
-	 */
-	getValues(array) {
-		if (typeof array !== 'undefined') array.push(this);
-		return this;
+		this.sql.push(options.sql || ((this.type === 'integer' || this.type === 'float' ? 'INTEGER' :
+			this.max !== null ? `VARCHAR(${this.max})` : 'TEXT') + (this.default !== null ? ` DEFAULT ${SchemaPiece._parseSQLValue(this.default)}` : '')));
 	}
 
 	/**
@@ -253,7 +228,7 @@ class SchemaPiece {
 			default: this.default,
 			min: this.min,
 			max: this.max,
-			sql: this.sqlSchema[1],
+			sql: this.sql[1],
 			configurable: this.configurable
 		};
 	}

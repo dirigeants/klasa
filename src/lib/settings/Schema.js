@@ -14,6 +14,7 @@ class Schema {
 	 * @property {number} [min] The min value for the key (String.length for String, value for number).
 	 * @property {number} [max] The max value for the key (String.length for String, value for number).
 	 * @property {boolean} [array] Whether the key should be stored as Array or not.
+	 * @property {string} [sql] The datatype of the key.
 	 * @property {boolean} [configurable] Whether the key should be configurable by the config command or not.
 	 * @memberof Schema
 	 */
@@ -213,7 +214,7 @@ class Schema {
 		await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
 
 		if (this.manager.sql) {
-			if (typeof this.manager.provider.addColumn === 'function') await this.manager.provider.addColumn(this.manager.type, key, this[key].sqlSchema[1]);
+			if (typeof this.manager.provider.addColumn === 'function') await this.manager.provider.addColumn(this.manager.type, key, this[key].sql[1]);
 			else throw new Error('The method \'addColumn\' in your provider is required in order to add new columns.');
 		} else if (force) {
 			await this.force('add', key, this[key]);
@@ -369,7 +370,10 @@ class Schema {
 	 * @returns {string[]}
 	 */
 	getSQL(array = []) {
-		for (let i = 0; i < this.keyArray.length; i++) this[this.keyArray[i]].getSQL(array);
+		for (const key of this.keyArray) {
+			if (this[key].type === 'Folder') this[key].getSQL(array);
+			else array.push(this[key].sql);
+		}
 		return array;
 	}
 
@@ -380,7 +384,10 @@ class Schema {
 	 * @returns {string[]}
 	 */
 	getKeys(array = []) {
-		for (let i = 0; i < this.keyArray.length; i++) this[this.keyArray[i]].getKeys(array);
+		for (const key of this.keyArray) {
+			if (this[key].type === 'Folder') this[key].getKeys(array);
+			else array.push(this[key].path);
+		}
 		return array;
 	}
 
@@ -391,7 +398,10 @@ class Schema {
 	 * @returns {SchemaPiece[]}
 	 */
 	getValues(array = []) {
-		for (let i = 0; i < this.keyArray.length; i++) this[this.keyArray[i]].getValues(array);
+		for (const key of this.keyArray) {
+			if (this[key].type === 'Folder') this[key].getValues(array);
+			else array.push(this[key]);
+		}
 		return array;
 	}
 

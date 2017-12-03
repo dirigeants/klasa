@@ -586,18 +586,15 @@ declare module 'klasa' {
 		public default: any;
 		public min?: number;
 		public max?: number;
+		public sql: [string, string];
 		public configurable: boolean;
-		public readonly sqlSchema: [string, string];
 
 		public parse(value: any, guild: KlasaGuild): Promise<any>;
-		public toJSON(): SchemaPieceJSON;
-		public init(options: AddOptions): void;
-
-		public getSQL(array?: string[][]): [string, string];
-		public getKeys(array?: string[]): string;
-		public getValues(array?: SchemaPiece[]): this;
+		private init(options: AddOptions): void;
 
 		public resolveString(msg: KlasaMessage, value: any): string;
+
+		public toJSON(): SchemaPieceJSON;
 		public toString(): string;
 
 		private static _parseSQLValue(value: any): string;
@@ -1203,6 +1200,7 @@ declare module 'klasa' {
 		default: any;
 		min?: number;
 		max?: number;
+		sql: [string, string];
 		configurable: boolean;
 	};
 
@@ -1302,6 +1300,7 @@ declare module 'klasa' {
 		max?: number;
 		array?: boolean;
 		sql?: string;
+		configurable?: boolean;
 	};
 
 	export type emoji = string;
