@@ -133,11 +133,8 @@ class Configuration {
 	 * @returns {*}
 	 */
 	get(key) {
-		if (!key.includes('.')) {
-			const value = this[key];
-			if (value) return value;
-			return undefined;
-		}
+		if (!key.includes('.')) return this[key];
+
 		const path = key.split('.');
 		let refSetting = this; // eslint-disable-line consistent-this
 		let refSchema = this.gateway.schema;
