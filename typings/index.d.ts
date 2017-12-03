@@ -110,11 +110,11 @@ declare module 'klasa' {
 		public on(event: 'userUpdate', listener: (oldUser: ExtendedUser, newUser: ExtendedUser) => void): this;
 
 		// Klasa Command Events
-		public on(event: 'commandError', listener: (msg: KlasaMessage, command: Command, params: *[], error: Error) => void): this;
+		public on(event: 'commandError', listener: (msg: KlasaMessage, command: Command, params: any[], error: Error) => void): this;
 		public on(event: 'commandInhibited', listener: (msg: KlasaMessage, command: Command, response: string | Error) => void): this;
-		public on(event: 'commandRun', listener: (msg: KlasaMessage, command: Command, params: *[], response: any) => void): this;
+		public on(event: 'commandRun', listener: (msg: KlasaMessage, command: Command, params: any[], response: any) => void): this;
 		public on(event: 'commandUnknown', listener: (msg: KlasaMessage, command: string) => void): this;
-		public on(event: 'commandSuccess', listener: (msg: KlasaMessage, command: Command, params: *[], response: any) => void): this;
+		public on(event: 'commandSuccess', listener: (msg: KlasaMessage, command: Command, params: any[], response: any) => void): this;
 
 		public on(event: 'monitorError', listener: (msg: KlasaMessage, monitor: Monitor, error: Error | string) => void): this;
 
@@ -167,11 +167,11 @@ declare module 'klasa' {
 		public once(event: 'userUpdate', listener: (oldUser: ExtendedUser, newUser: ExtendedUser) => void): this;
 
 		// Klasa Command Events
-		public once(event: 'commandError', listener: (msg: KlasaMessage, command: Command, params: *[], error: Error) => void): this;
+		public once(event: 'commandError', listener: (msg: KlasaMessage, command: Command, params: any[], error: Error) => void): this;
 		public once(event: 'commandInhibited', listener: (msg: KlasaMessage, command: Command, response: string | Error) => void): this;
-		public once(event: 'commandRun', listener: (msg: KlasaMessage, command: Command, params: *[], response: any) => void): this;
+		public once(event: 'commandRun', listener: (msg: KlasaMessage, command: Command, params: any[], response: any) => void): this;
 		public once(event: 'commandUnknown', listener: (msg: KlasaMessage, command: string) => void): this;
-		public once(event: 'commandSuccess', listener: (msg: KlasaMessage, command: Command, params: *[], response: any) => void): this;
+		public once(event: 'commandSuccess', listener: (msg: KlasaMessage, command: Command, params: any[], response: any) => void): this;
 
 		public once(event: 'monitorError', listener: (msg: KlasaMessage, monitor: Monitor, error: Error | string) => void): this;
 
@@ -209,7 +209,7 @@ declare module 'klasa' {
 		public prefix?: RegExp;
 		public prefixLength?: number;
 		public args: string[];
-		public params: *[];
+		public params: any[];
 		public reprompted: boolean;
 		private _currentUsage: Object;
 		private _repeat: boolean;
@@ -224,8 +224,8 @@ declare module 'klasa' {
 		public sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 		public send(content?: StringResolvable, options?: MessageOptions | MessageAttachment | MessageEmbed): Promise<KlasaMessage | KlasaMessage[]>;
 
-		private validateArgs(): Promise<*[]>;
-		private multiPossibles(possible: number, validated: boolean): Promise<*[]>;
+		private validateArgs(): Promise<any[]>;
+		private multiPossibles(possible: number, validated: boolean): Promise<any[]>;
 		private static getArgs(msg: KlasaMessage): string[];
 		private static getQuotedStringArgs(msg: KlasaMessage): string[];
 	}
@@ -308,7 +308,7 @@ declare module 'klasa' {
 		public static exec(exec: string, options?: ExecOptions): Promise<{ stdout: string, stderr: string }>;
 		public static sleep(delay: number, args?: any): Promise<any>;
 		public static isNumber(input: number): boolean;
-		public static tryParse(value: *): *;
+		public static tryParse(value: any): any;
 	}
 
 	export { Util as util };
@@ -477,7 +477,7 @@ declare module 'klasa' {
 	}
 
 	export class Possible {
-		public constructor([match, name, type, min, max, regex, flags]: [string, string, string?, string?, string?, string?, string?]);
+		public constructor([match, name, type, min, max, regex, flags]: [string, string, string, string, string, string, string]);
 		public name: string;
 		public type: string;
 		public min: number;
@@ -516,7 +516,7 @@ declare module 'klasa' {
 		public insertEntry(id: string, data?: Object): Configuration;
 		public deleteEntry(input: string): Promise<boolean>;
 
-		public sync(input?: Object | string, download?: boolean): Promise<*>;
+		public sync(input?: Object | string, download?: boolean): Promise<any>;
 
 		public getPath(key?: string, options?: ConfigurationPathOptions): ConfigurationPathResult;
 
@@ -535,7 +535,7 @@ declare module 'klasa' {
 	export class GatewaySQL extends Gateway {
 		public readonly sqlSchema: string[];
 		private parseEntry(entry: Object, schemaValues: SchemaPiece[]): Object;
-		private static _parseSQLValue(value: *, schemaPiece: SchemaPiece): *;
+		private static _parseSQLValue(value: any, schemaPiece: SchemaPiece): any;
 	}
 
 	export class Schema {
@@ -688,12 +688,12 @@ declare module 'klasa' {
 		public colors: KlasaConsoleColorsOption;
 
 		public write(data: any, type?: string): void;
-		public log(...data: *[]): void;
-		public warn(...data: *[]): void;
-		public error(...data: *[]): void;
-		public debug(...data: *[]): void;
-		public verbose(...data: *[]): void;
-		public wtf(...data: *[]): void;
+		public log(...data: any[]): void;
+		public warn(...data: any[]): void;
+		public error(...data: any[]): void;
+		public debug(...data: any[]): void;
+		public verbose(...data: any[]): void;
+		public wtf(...data: any[]): void;
 
 		public timestamp(timestamp: Date, time: string): string;
 		public messages(input: string, message: string): string;
@@ -754,7 +754,7 @@ declare module 'klasa' {
 		public usage: ParsedUsage;
 		private cooldowns: Map<Snowflake, number>;
 
-		public abstract run(msg: KlasaMessage, params: *[]): Promise<KlasaMessage | KlasaMessage[] | any>;
+		public abstract run(msg: KlasaMessage, params: any[]): Promise<KlasaMessage | KlasaMessage[] | any>;
 		public abstract init(): any;
 
 		public abstract enable(): Piece;
@@ -776,7 +776,7 @@ declare module 'klasa' {
 
 		private _run(param: any): void;
 
-		public abstract run(...params: *[]): void;
+		public abstract run(...params: any[]): void;
 		public abstract init(): any;
 
 		public abstract enable(): Piece;
@@ -799,7 +799,7 @@ declare module 'klasa' {
 		public appliesTo: string[];
 		public target: boolean;
 
-		public abstract extend(...params: *[]): any;
+		public abstract extend(...params: any[]): any;
 		public abstract init(): any;
 
 		public abstract enable(): Piece;
@@ -859,7 +859,7 @@ declare module 'klasa' {
 		public dir: string;
 		public file: string;
 
-		public get(term: string, ...args: *[]): string | Function;
+		public get(term: string, ...args: any[]): string | Function;
 		public abstract init(): any;
 
 		public abstract enable(): Piece;
@@ -917,7 +917,7 @@ declare module 'klasa' {
 	}
 
 	export class Store {
-		public init(): Promise<*[]>;
+		public init(): Promise<any[]>;
 		public load(dir: string, file: string | string[]): Piece;
 		public loadAll(): Promise<number>;
 		public resolve(name: Piece | string): Piece;
@@ -1153,7 +1153,7 @@ declare module 'klasa' {
 		parsed: any;
 		parsedID: string | number | object;
 		settings: Configuration;
-		array: *[];
+		array: any[];
 		entryID: string;
 	} & ConfigurationParseOptions;
 
@@ -1161,12 +1161,12 @@ declare module 'klasa' {
 		errors: Error[];
 		promises: Array<Promise<any>>;
 		keys: string[];
-		values: *[];
+		values: any[];
 	};
 
 	export type ConfigurationUpdateManyUpdated = {
 		keys: string[];
-		values: *[];
+		values: any[];
 	};
 
 	export type ConfigurationUpdateManyResult = {
@@ -1177,7 +1177,7 @@ declare module 'klasa' {
 	export type ConfigUpdateEntryMany = {
 		type: 'MANY';
 		keys: string[];
-		values: *[];
+		values: any[];
 	};
 
 	export type GatewayGuildResolvable = KlasaGuild
