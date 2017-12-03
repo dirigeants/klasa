@@ -207,17 +207,19 @@ class SchemaPiece {
 	 */
 	resolveString(msg) {
 		const value = this.manager.type === 'users' ? msg.author.configs.get(this.path) : msg.guildConfigs.get(this.path);
+		if (value === null) return 'Not set';
+
 		let resolver = (val) => val;
 		switch (this.type) {
 			case 'Folder': resolver = () => 'Folder';
 				break;
-			case 'user': resolver = (val) => `${(this.client.users.get(val) || { username: val && val.username ? val.username : val }).username}`;
+			case 'user': resolver = (val) => (this.client.users.get(val) || { username: val && val.username ? val.username : val }).username;
 				break;
 			case 'textchannel':
 			case 'voicechannel':
-			case 'channel': resolver = (val) => `${(msg.guild.channels.get(val) || { name: val && val.name ? val.name : val }).name}`;
+			case 'channel': resolver = (val) => (msg.guild.channels.get(val) || { name: val && val.name ? val.name : val }).name;
 				break;
-			case 'role': resolver = (val) => `${(msg.guild.roles.get(val) || { name: val && val.name ? val.name : val }).name}`;
+			case 'role': resolver = (val) => (msg.guild.roles.get(val) || { name: val && val.name ? val.name : val }).name;
 				break;
 			case 'guild': resolver = (val) => val && val.name ? val.name : val;
 				break;
@@ -227,7 +229,7 @@ class SchemaPiece {
 		}
 
 		if (this.array && Array.isArray(value)) return value.length > 0 ? `[ ${value.map(resolver).join(' | ')} ]` : 'None';
-		return value === null ? 'Not set' : resolver(value);
+		return resolver(value);
 	}
 
 	/**
