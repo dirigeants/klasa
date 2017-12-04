@@ -13,6 +13,10 @@ module.exports = class extends Monitor {
 	async run(msg) {
 		if (this.client.user.bot && msg.guild && !msg.guild.me) await msg.guild.members.fetch(this.client.user);
 		if (msg.guild && !msg.channel.permissionsFor(msg.guild.me).has('SEND_MESSAGES')) return;
+		if (msg.content === this.client.user.toString() || (msg.guild && msg.content === msg.guild.me.toString())) {
+			msg.sendMessage(Array.isArray(msg.guildConfigs.prefix) ? msg.guildConfigs.prefix.map(prefix => `\`${prefix}\``).join(', ') : `\`${msg.guildConfigs.prefix}\``);
+			return;
+		}
 		const { command, prefix, prefixLength } = this.parseCommand(msg);
 		if (!command) return;
 		const validCommand = this.client.commands.get(command);

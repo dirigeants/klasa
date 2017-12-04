@@ -11,7 +11,7 @@ class Finalizer {
 	/**
 	 * @typedef {Object} FinalizerOptions
 	 * @memberof Finalizer
-	 * @property {string} [name = theFileName] The name of the finalizer
+	 * @property {string} [name=theFileName] The name of the finalizer
 	 * @property {boolean} [enabled=true] Whether the finalizer is enabled or not
 	 */
 
@@ -68,8 +68,8 @@ class Finalizer {
 	/**
 	 * The run method to be overwritten in actual finalizers
 	 * @since 0.0.1
-	 * @param {CommandMessage} msg The command message mapped on top of the message used to trigger this finalizer
-	 * @param {external:Message} mes The bot's response message, if one is returned
+	 * @param {KlasaMessage} msg The message used to trigger this finalizer
+	 * @param {KlasaMessage|KlasaMessage[]} mes The bot's response message, if one is returned
 	 * @param {number} start The performance now start time including all command overhead
 	 * @abstract
 	 * @returns {void}

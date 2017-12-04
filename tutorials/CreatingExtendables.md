@@ -43,7 +43,7 @@ constructor(...args) {
     super(...args, appliesTo, {
 		name: 'nameOfExtendable', // default the file name
 		enabled: true, // default true
-		klasa: false // default false	
+		klasa: false // default false
 	);
 } 
 ```

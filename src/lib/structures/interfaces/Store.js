@@ -37,7 +37,7 @@ class Store {
 			piece = this.set(new (require(loc))(this.client, dir, file));
 		} catch (err) {
 			const error = err.message.endsWith('not a constructor') ? new TypeError(`Exported Structure Not A Class`) : err;
-			this.client.emit('wtf', `${error}\n${loc}`);
+			this.client.emit('wtf', `Failed to load file '${loc}'. Error:\n${error.stack}`);
 		}
 		delete require.cache[loc];
 		return piece;

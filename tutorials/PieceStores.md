@@ -263,8 +263,8 @@ Then we use it in our player class I completely made up earlier like so:
 
 ```javascript
 ...
-	// without going over setting up guild settings, or actually writing a player class
-	const nextSong = await this.client.genres.get(this.guild.settings.genre).getNext(this);
+	// without going over setting up guild configs, or actually writing a player class
+	const nextSong = await this.client.genres.get(this.guild.configs.genre).getNext(this);
 	// nextSong should now be a pseudo random song based on the genre seeds and what has recently played
 ...
 ```
