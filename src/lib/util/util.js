@@ -139,6 +139,310 @@ class Util {
 		}
 	}
 
+	/*
+	 * Get the type of value. A better version of the `typeof` operator, basically
+	 * @since 0.4.0
+	 * @param {*} value The object or primitive whose type is to be returned
+	 * @returns {string}
+	 */
+	static getType(value) {
+		if (value == null) return String(value); // eslint-disable-line eqeqeq
+		return typeof value;
+	}
+
+	/**
+	 * Get the class (constructor) name of value
+	 * @since 0.4.0
+	 * @param {*} value The object whose class name is to be returned
+	 * @returns {string}
+	 */
+	static getClass(value) {
+		return value && value.constructor && value.constructor.name ?
+			value.constructor.name :
+			{}.toString.call(value).match(/\[object (\w+)\]/)[1];
+	}
+
+	/**
+	 * Get the type info for value
+	 * @since 0.4.0
+	 * @param {*} value The object or primitive whose complex type is to be returned
+	 * @returns {{basicType: string, type: string}}
+	 */
+	static getComplexType(value) {
+		const basicType = this.getType(value);
+		if (basicType === 'object' || basicType === 'function') return { basicType, type: this.getClass(value) };
+		return { basicType, type: basicType };
+	}
+
+	/**
+	 * Determines whether the passed value is a promise
+	 * @since 0.4.0
+	 * @param {*} value The value to be checked.
+	 * @returns {boolean}
+	 */
+	static isThenable(value) {
+		return value && typeof value.then === 'function';
+	}
+
+	/**
+	 * @typedef deepTypeOptions
+	 * @property {number} depth The depth limit
+	 * @property {number} wait How long to await promises (0 for no awaiting)
+	 * @property {Promise} [surrogatePromise] The promise to await, if different from `value`;
+	 *  this allows, e.g., a promise from `this.timeoutPromise` to be awaited instead of `value`
+	 */
+
+	/**
+	 * @typedef deepType
+	 * @property {"none"|"values"|"keys&values"|"arity"|"emptiness"|"unknown-depths"|"unknown-value"} has
+	 * @property {string} [type] Not present if depth limit reached in previous recursion (`has` is "unknown-depths")
+	 *  or if empty (`has` is "emptiness")
+	 * @property {deepType} [keys] If present and `keys.has` is "unknown-depths", depth limit reached in current recursion
+	 * @property {deepType} [values] If present and `values.has` is "unknown-depths", depth limit reached in current recursion
+	 * @property {?number} [arity] If present and `arity` is null, depth limit reached in current recursion
+	 */
+
+	/**
+	 * Returns the deep type of `value`, as a JSDoc-like string
+	 * @since 0.4.0
+	 * @param {*} value The value to get the deep type of
+	 * @param {deepTypeOptions} options Options
+	 * @returns {Promise<string>}
+	 */
+	static async getJSDocString(value, options) {
+		return Util.deepTypeToJSDoc(await Util.getDeepType(value, options));
+	}
+
+	/**
+	 * Takes a deep type object and returns a JSDoc-like string representation of it
+	 * @since 0.4.0
+	 * @private
+	 * @param {deepType} deepType The deep type to parse
+	 * @returns {string}
+	 */
+	static deepTypeToJSDoc(deepType) {
+		return {
+			none: () => deepType.type,
+			values: () => {
+				if (deepType.values.has === 'emptiness') return `${deepType.type}<>`;
+				if (deepType.values.has === 'unknown-depths') return deepType.type;
+				if (deepType.values.has === 'unknown-value') return `${deepType.type}<?>`;
+				return `${deepType.type}<${Util.deepTypeToJSDoc(deepType.values)}>`;
+			},
+			'keys&values': () => {
+				if (deepType.values.has === 'emptiness') return `${deepType.type}<>`;
+				if (deepType.values.has === 'unknown-depths') return deepType.type;
+				if (deepType.values.has === 'unknown-value') {
+					console.error(`I didn't think this could happen.${deepType.keys.has === 'unknown-value' ? ' deepType.keys.has is also "unknown-value".' : ''}`);
+					return `${deepType.type}<?, ?>`;
+				}
+				return `${deepType.type}<${Util.deepTypeToJSDoc(deepType.keys)}, ${Util.deepTypeToJSDoc(deepType.values)}>`;
+			},
+			arity: () => {
+				if (deepType.arity === null) return deepType.type;
+				return deepType.arity > 0 ?
+					`${deepType.type}(${deepType.arity})` :
+					`${deepType.type}()`;
+			}
+		}[deepType.has]();
+	}
+
+	/**
+	 * Returns the deep type of `value`, as nested objects
+	 * @since 0.4.0
+	 * @param {*} value The value to get the deep type of
+	 * @param {deepTypeOptions} options Options
+	 * @returns {Promise<deepType>}
+	 */
+	static async getDeepType(value, options) {
+		if (!options) throw new TypeError('`options` is a required argument');
+		if (typeof options.depth !== 'number') throw new TypeError('`options.depth` is a required argument');
+		if (typeof options.wait !== 'number') throw new TypeError('`options.wait` is a required argument');
+
+		const valuelessObjects = [Error, Date];
+		const newOptions = Object.assign({}, options, { depth: options.depth - 1 });
+		const recur = val => Util.getDeepType(val, newOptions);
+
+		const { type, basicType } = Util.getComplexType(value);
+		// I'm not sure if syntax exists to name a function/class like this, but might as well do a sanity check
+		if (type === '*' || type[0] === '?') throw new TypeError('ffs, why would you name a class or function that?!');
+
+		const deepType = { has: 'none', type };
+
+		if (basicType === 'object' && !valuelessObjects.some(klass => value instanceof klass)) {
+			if (Util.isThenable(value) || Array.isArray(value) || value instanceof Set) {
+				// Objects whose values should be displayed
+				await Util._getDeepTypeValuedObj(recur, deepType, value, options);
+			} else {
+				// Objects whose keys and values should be displayed
+				await Util._getDeepTypeKeyedObject(recur, deepType, value, options);
+			}
+		} else if (basicType === 'function') {
+			// Callable objects will just have their arity displayed
+			await Util._getDeepTypeFn(recur, deepType, value, options);
+		}
+
+		return deepType;
+	}
+
+	/**
+	 * @since 0.2.0
+	 * @private
+	 * @param {Function} recur The function to call to continue recursion
+	 * @param {deepType} deepType The deep type to mutate
+	 * @param {Promise|Array|Set} value The value to get the deep type of
+	 * @param {deepTypeOptions} options Options
+	 */
+	static async _getDeepTypeValuedObj(recur, deepType, value, options) {
+		// Objects whose values should be displayed
+
+		deepType.has = 'values';
+
+		if (options.depth < 1) {
+			deepType.values = { has: 'unknown-depths' };
+		} else if (Util.isThenable(value)) {
+			const awaitedValue = await (options.surrogatePromise || Util.timeoutPromise(value, options.wait));
+			deepType.values = awaitedValue instanceof Util.TimeoutError ?
+				{ has: 'unknown-value' } :
+				await recur(awaitedValue);
+		} else if (Array.isArray(value)) {
+			deepType.values = value.length === 0 ?
+				{ has: 'emptiness' } :
+				Util.mergeDeepTypeArray(await Promise.all(value.map(recur)));
+		} else if (value instanceof Set) {
+			deepType.values = value.size === 0 ?
+				{ has: 'emptiness' } :
+				Util.mergeDeepTypeArray(await Promise.all(Array.from(value.values()).map(recur)));
+		}
+	}
+
+	/**
+	 * @since 0.2.0
+	 * @private
+	 * @param {Function} recur The function to call to continue recursion
+	 * @param {deepType} deepType The deep type to mutate
+	 * @param {Map|Object} value The value to get the deep type of
+	 * @param {deepTypeOptions} options Options
+	 */
+	static async _getDeepTypeKeyedObject(recur, deepType, value, options) {
+		// Objects whose keys and values should be displayed
+
+		deepType.has = 'keys&values';
+
+		if (options.depth < 1) {
+			deepType.keys = { has: 'unknown-depths' };
+			deepType.values = { has: 'unknown-depths' };
+		} else if (value instanceof Map) {
+			if (value.size === 0) {
+				deepType.keys = { has: 'emptiness' };
+				deepType.values = { has: 'emptiness' };
+			} else {
+				deepType.keys = Util.mergeDeepTypeArray(await Promise.all(Array.from(value.keys()).map(recur)));
+				deepType.values = Util.mergeDeepTypeArray(await Promise.all(Array.from(value.values()).map(recur)));
+			}
+			// Plain objects and others
+		} else if (Object.keys(value).length === 0) {
+			deepType.keys = { has: 'emptiness' };
+			deepType.values = { has: 'emptiness' };
+		} else {
+			deepType.keys = Util.mergeDeepTypeArray(await Promise.all(Object.keys(value).map(recur)));
+			deepType.values = Util.mergeDeepTypeArray(await Promise.all(Object.values(value).map(recur)));
+		}
+	}
+
+	/**
+	 * @since 0.2.0
+	 * @private
+	 * @param {Function} recur The function to call to continue recursion
+	 * @param {deepType} deepType The deep type to mutate
+	 * @param {Function} value The value to get the deep type of
+	 * @param {deepTypeOptions} options Options
+	 */
+	static async _getDeepTypeFn(recur, deepType, value, options) {
+		// Callable objects will just have their arity displayed
+		deepType.has = 'arity';
+		if (options.depth < 1) deepType.arity = null;
+		else deepType.arity = value.length;
+	}
+
+	/**
+	 * Reduce an array of deepType objects into a simgle one
+	 * @since 0.4.0
+	 * @private
+	 * @param {Array<deepType>} deepTypes Array of the deep types of value's contents
+	 * @returns {deepType} The merged deep type of value's contents
+	 */
+	static mergeDeepTypeArray(deepTypes) {
+		if (deepTypes.length === 0) throw new TypeError('`deepTypes` cannot be empty');
+
+		/**
+  	 * @type {deepType}
+  	 * `mergedDeepType._nullType` should be "", "null", "undefined", or "null|undefined" if it exists at all
+  	 */
+		const mergedDeepType = deepTypes.reduce(Util.mergeTwoDeepTypes);
+
+		if (mergedDeepType._nullType) mergedDeepType.type = `?${mergedDeepType.type}`;
+		delete mergedDeepType._nullType;
+
+		return mergedDeepType;
+	}
+
+	/**
+	 * Merges `b` into `a`, intelligently comparing their types
+	 *
+	 * Not guaranteed to modify `a` in-place. Use the return value.
+	 * @since 0.4.0
+	 * @private
+	 * @param {deepType} a The first deep type (the target)
+	 * @param {deepType} b The second deep type (the source)
+	 * @returns {deepType}
+	 */
+	static mergeTwoDeepTypes(a, b) {
+		if (['emptiness', 'unknown-depths', 'unknown-value'].indexOf(a.has) !== -1 || a.type === '*') return a;
+
+		if (Util.nullOrUndefinedRE.test(b.type)) {
+			if (!a._nullType) a._nullType = b.type;
+			else if (a._nullType !== b.type) a._nullType = 'null|undefined';
+		} else if (!a.type) {
+			// Deep clone the object
+			return JSON.parse(JSON.stringify(b));
+		} else if (a.has === b.has && a.type === b.type) {
+			({
+				none: () => undefined,
+				values: () => {
+					a.values = Util.mergeTwoDeepTypes(a.values, b.values);
+				},
+				'keys&values': () => {
+					a.keys = Util.mergeTwoDeepTypes(a.keys, b.keys);
+					a.values = Util.mergeTwoDeepTypes(a.values, b.values);
+				},
+				arity: () => {
+					if (a.arity !== b.arity) a.arity = null;
+				}
+			}[a.has])();
+		} else {
+			return { has: 'none', type: '*' };
+		}
+
+		if (!a.type) a.type = a._nullType;
+
+		return a;
+	}
+
+	/**
+	 * Wrap a promise in a promise that will timeout in a certain amount of time.
+	 *
+	 * Whichever promise (the inputted one or the timeout one) resolves first will have its value be
+	 * the resolved value of the returned promise.
+	 * @since 0.4.0
+	 * @param {Promise} promise The promise to wrap.
+	 * @param {number} timeout How long the new promise should wait before timing out.
+	 * @returns {Promise}
+	 */
+	static timeoutPromise(promise, timeout) {
+		return Promise.race([promise, this.sleep(timeout, new this.TimeoutError('Promise timed out'))]);
+	}
+
 }
 
 /**
@@ -174,5 +478,17 @@ Util.exec = promisify(exec);
  * @returns {Promise<*>} The args value passed in
  */
 Util.sleep = promisify(setTimeout);
+
+/**
+ * Used to mark when a promise has timed out
+ * @since 0.4.0
+ */
+Util.TimeoutError = class TimeoutError extends Error {};
+
+/**
+ * Test if string is exactly "null" or "undefined"
+ * @since 0.4.0
+ */
+Util.nullOrUndefinedRE = /^null$|^undefined$/;
 
 module.exports = Util;
