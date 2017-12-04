@@ -12,17 +12,13 @@ module.exports = class extends Command {
 	}
 
 	async run(msg) {
-		return msg.sendCode('asciidoc', [
-			msg.language.get('COMMAND_STATS_TITLE'),
-			'',
-			msg.language.get('COMMAND_STATS_MEM_USAGE', (process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)),
-			msg.language.get('COMMAND_STATS_UPTIME', moment(Date.now() - (process.uptime() * 1000)).toNow(true)),
-			msg.language.get('COMMAND_STATS_USERS', this.client.users.size.toLocaleString()),
-			msg.language.get('COMMAND_STATS_SERVERS', this.client.guilds.size.toLocaleString()),
-			msg.language.get('COMMAND_STATS_CHANNELS', this.client.channels.size.toLocaleString()),
-			msg.language.get('COMMAND_STATS_KLASA', klasaVersion),
-			msg.language.get('COMMAND_STATS_DISCORDJS', discordVersion),
-			msg.language.get('COMMAND_STATS_NODEJS', process.version)
+		return msg.sendCode('asciidoc', msg.language.get('COMMAND_STATS',
+			(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2),
+			moment(Date.now() - (process.uptime() * 1000)).toNow(true),
+			this.client.users.size.toLocaleString(),
+			this.client.guilds.size.toLocaleString(),
+			this.client.channels.size.toLocaleString(),
+			klasaVersion, discordVersion, process.version)
 		]);
 	}
 
