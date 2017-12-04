@@ -71,6 +71,7 @@ module.exports = class extends Language {
 				'Most of the code is modularized, which allows developers to edit Klasa to suit their needs.',
 				'',
 				'Some features of Klasa include:',
+<<<<<<< HEAD
 				'• Fast Loading times with ES7 Support (Async/Await)',
 				'• Per-server configuration, that can be extended with your own code',
 				'• Customizable Command system with automated usage parsing and easy to use reloading and downloading modules',
@@ -80,6 +81,17 @@ module.exports = class extends Language {
 				'• "Finalizers" which run on messages after a successful command.',
 				'• "Extendables", code that acts passively. They add properties or methods to existing Discord.js classes.',
 				'• "Languages", which allow you to localize your bot.',
+=======
+				'• 🐇💨 Fast loading times with ES8 support (`async`/`await`)',
+				'• 🎚🎛 Per-server settings that can be extended with your own fields',
+				'• 💬 Customizable command system with automated usage parsing and the ability to load/reload commands on-the-fly',
+				'• 👀 "Monitors", which can watch messages and act on them, like a normal message event (for swear filters, spam protection, etc.)',
+				'• ⛔ "Inhibitors", which can prevent commands from running based on a set of parameters (for permissions, blacklists, etc.)',
+				'• 🗄 "Providers", which standardize and simplify usage of outside databases of your choosing',
+				'• ✅ "Finalizers", which run on messages after a successful command',
+				'• ➕ "Extendables", which passively add properties or methods to existing Discord.js or Klasa classes',
+				'• 🌐 "Languages", which allow you to localize your bot',
+>>>>>>> info-cmd-text
 				'',
 				'We hope to be a 100% customizable framework that can cater to all audiences. We do frequent updates and bugfixes when available.',
 				"If you're interested in us, check us out at https://klasa.js.org"
