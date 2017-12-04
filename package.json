@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "fs-nextra": "^0.3.2",
-    "moment": "^2.19.2"
+    "moment": "^2.19.3"
   },
   "peerDependencies": {
     "discord.js": "github:hydrabolt/discord.js#master"
