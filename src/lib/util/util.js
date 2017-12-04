@@ -107,6 +107,15 @@ class Util {
 	}
 
 	/**
+	 * @since 0.5.0
+	 * @param {Function} func The function to verify.
+	 * @returns {boolean}
+	 */
+	static isFunction(func) {
+		return typeof func === 'function';
+	}
+
+	/*
 	 * Verify if a number is a finite number.
 	 * @since 0.5.0
 	 * @param {number} input The number to verify.

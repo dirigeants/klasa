@@ -1,4 +1,4 @@
-const { Command } = require('klasa');
+const { Command, util } = require('klasa');
 
 module.exports = class extends Command {
 
@@ -6,7 +6,7 @@ module.exports = class extends Command {
 		super(...args, {
 			aliases: ['commands'],
 			guarded: true,
-			description: 'Display help for a command.',
+			description: (msg) => msg.language.get('COMMAND_HELP_DESCRIPTION'),
 			usage: '[Command:cmd]'
 		});
 	}
@@ -16,10 +16,10 @@ module.exports = class extends Command {
 		if (cmd) {
 			const info = [
 				`= ${cmd.name} = `,
-				cmd.description,
-				`usage :: ${cmd.usage.fullUsage(msg)}`,
-				'Extended Help ::',
-				cmd.extendedHelp
+				util.isFunction(cmd.description) ? cmd.description(msg) : cmd.description,
+				msg.language.get('COMMAND_HELP_USAGE', cmd.usage.fullUsage(msg)),
+				msg.language.get('COMMAND_HELP_EXTENDED'),
+				util.isFunction(cmd.extendedHelp) ? cmd.extendedHelp(msg) : cmd.extendedHelp
 			].join('\n');
 			return msg.sendMessage(info, { code: 'asciidoc' });
 		}
@@ -49,8 +49,8 @@ module.exports = class extends Command {
 				.then(() => {
 					if (!help.hasOwnProperty(command.category)) help[command.category] = {};
 					if (!help[command.category].hasOwnProperty(command.subCategory)) help[command.category][command.subCategory] = [];
-					help[command.category][command.subCategory].push(`${msg.guildConfigs.prefix}${command.name.padEnd(longest)} :: ${command.description}`);
-					return;
+					const description = typeof command.description === 'function' ? command.description(msg) : command.description;
+					help[command.category][command.subCategory].push(`${msg.guildSettings.prefix}${command.name.padEnd(longest)} :: ${description}`);
 				})
 				.catch(() => {
 					// noop

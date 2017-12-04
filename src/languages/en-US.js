@@ -84,9 +84,12 @@ module.exports = class extends Language {
 				'We hope to be a 100% customizable framework that can cater to all audiences. We do frequent updates and bugfixes when available.',
 				"If you're interested in us, check us out at https://klasa.js.org"
 			],
+			COMMAND_HELP_DESCRIPTION: 'Display help for a command.',
+			COMMAND_HELP_NO_EXTENDED: 'No extended help available.',
 			COMMAND_HELP_DM: '📥 | The list of commands you have access to has been sent to your DMs.',
 			COMMAND_HELP_NODM: '❌ | You have DMs disabled, I couldn\'t send you the commands in DMs.',
-			COMMAND_HELP_COMMAND_NOT_FOUND: '❌ | Unknown command, please run the help command with no arguments to get a list of them all.',
+			COMMAND_HELP_USAGE: (usage) => `usage :: ${usage}`,
+			COMMAND_HELP_EXTENDED: 'Extended Help ::',
 			COMMAND_ENABLE: (type, name) => `+ Successfully enabled ${type}: ${name}`,
 			COMMAND_DISABLE: (type, name) => `+ Successfully disabled ${type}: ${name}`,
 			COMMAND_DISABLE_WARN: 'You probably don\'t want to disable that, since you wouldn\'t be able to run any command to enable it again',
