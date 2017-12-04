@@ -46,14 +46,20 @@ module.exports = class extends Language {
 			INHIBITOR_REQUIRED_CONFIGS: (configs) => `The guild is missing the **${configs.join(', ')}** guild setting${configs.length !== 1 ? 's' : ''} and thus the command cannot run.`,
 			INHIBITOR_RUNIN: (types) => `This command is only available in ${types} channels`,
 			INHIBITOR_RUNIN_NONE: (name) => `The ${name} command is not configured to run in any channel.`,
+			COMMAND_EVAL_DESCRIPTION: 'Evaluates arbitrary Javascript. Reserved for bot owner.',
 			COMMAND_UNLOAD: (type, name) => `✅ Unloaded ${type}: ${name}`,
+			COMMAND_UNLOAD_DESCRIPTION: 'Unloads the klasa piece.',
 			COMMAND_TRANSFER_ERROR: '❌ That file has been transfered already or never existed.',
 			COMMAND_TRANSFER_SUCCESS: (type, name) => `✅ Successfully transferred ${type}: ${name}`,
 			COMMAND_TRANSFER_FAILED: (type, name) => `Transfer of ${type}: ${name} to Client has failed. Please check your Console.`,
+			COMMAND_TRANSFER_DESCRIPTION: 'Transfers a core piece to its respective folder',
 			COMMAND_RELOAD: (type, name) => `✅ Reloaded ${type}: ${name}`,
 			COMMAND_RELOAD_ALL: (type) => `✅ Reloaded all ${type}.`,
+			COMMAND_RELOAD_DESCRIPTION: 'Reloads a klasa piece, or all pieces of a klasa store.',
 			COMMAND_REBOOT: 'Rebooting...',
+			COMMAND_REBOOT_DESCRIPTION: 'Reboots the bot.',
 			COMMAND_PING: 'Ping?',
+			COMMAND_PING_DESCRIPTION: 'Runs a connection test to Discord.',
 			COMMAND_PINGPONG: (diff, ping) => `Pong! (Roundtrip took: ${diff}ms. Heartbeat: ${ping}ms.)`,
 			COMMAND_INVITE_SELFBOT: 'Why would you need an invite link for a selfbot...',
 			COMMAND_INVITE: (client) => [
@@ -66,6 +72,7 @@ module.exports = class extends Language {
 				].join(' ')),
 				'Please file an issue at <https://github.com/dirigeants/klasa> if you find any bugs.'
 			],
+			COMMAND_INVITE_DESCRIPTION: 'Displays the join server link of the bot.',
 			COMMAND_INFO: [
 				"Klasa is a 'plug-and-play' framework built on top of the Discord.js library.",
 				'Most of the code is modularized, which allows developers to edit Klasa to suit their needs.',
@@ -84,6 +91,7 @@ module.exports = class extends Language {
 				'We hope to be a 100% customizable framework that can cater to all audiences. We do frequent updates and bugfixes when available.',
 				"If you're interested in us, check us out at https://klasa.js.org"
 			],
+			COMMAND_INFO_DESCRIPTION: 'Provides some information about this bot.',
 			COMMAND_HELP_DESCRIPTION: 'Display help for a command.',
 			COMMAND_HELP_NO_EXTENDED: 'No extended help available.',
 			COMMAND_HELP_DM: '📥 | The list of commands you have access to has been sent to your DMs.',
@@ -91,7 +99,9 @@ module.exports = class extends Language {
 			COMMAND_HELP_USAGE: (usage) => `usage :: ${usage}`,
 			COMMAND_HELP_EXTENDED: 'Extended Help ::',
 			COMMAND_ENABLE: (type, name) => `+ Successfully enabled ${type}: ${name}`,
+			COMMAND_ENABLE_DESCRIPTION: 'Re-enables or temporarily enables a command/inhibitor/monitor/finalizer. Default state restored on reboot.',
 			COMMAND_DISABLE: (type, name) => `+ Successfully disabled ${type}: ${name}`,
+			COMMAND_DISABLE_DESCRIPTION: 'Re-disables or temporarily disables a command/inhibitor/monitor/finalizer/event. Default state restored on reboot.',
 			COMMAND_DISABLE_WARN: 'You probably don\'t want to disable that, since you wouldn\'t be able to run any command to enable it again',
 			COMMAND_CONF_NOKEY: 'You must provide a key',
 			COMMAND_CONF_NOVALUE: 'You must provide a value',
@@ -100,7 +110,24 @@ module.exports = class extends Language {
 			COMMAND_CONF_KEY_NOT_ARRAY: 'This key is not array type. Use the action \'reset\' instead.',
 			COMMAND_CONF_GET_NOEXT: (key) => `The key **${key}** does not seem to exist.`,
 			COMMAND_CONF_GET: (key, value) => `The value for the key **${key}** is: \`${value}\``,
-			COMMAND_CONF_RESET: (key, response) => `The key **${key}** has been reset to: \`${response}\``
+			COMMAND_CONF_RESET: (key, response) => `The key **${key}** has been reset to: \`${response}\``,
+			COMMAND_CONF_SERVER_DESCRIPTION: 'Define per-server configuration.',
+			COMMAND_CONF_SERVER: (key, list) => `**Server Configuration${key}**\n${list}`,
+			COMMAND_CONF_USER_DESCRIPTION: 'Define per-user configuration.',
+			COMMAND_CONF_USER: (key, list) => `**User Configuration${key}**\n${list}`,
+			COMMAND_STATS: (memUsage, uptime, users, servers, channels, klasaVersion, discordVersion, processVersion) => [
+				'= STATISTICS =',
+				'',
+				`• Mem Usage  :: ${memUsage} MB`,
+				`• Uptime     :: ${uptime}`,
+				`• Users      :: ${users}`,
+				`• Servers    :: ${servers}`,
+				`• Channels   :: ${channels}`,
+				`• Klasa      :: v${klasaVersion}`,
+				`• Discord.js :: v${discordVersion}`,
+				`• Node.js    :: ${processVersion}`
+			],
+			COMMAND_STATS_DESCRIPTION: 'Provides some details about the bot and stats.'
 		};
 	}
 

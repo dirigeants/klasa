@@ -8,7 +8,7 @@ module.exports = class extends Command {
 		super(...args, {
 			permLevel: 10,
 			guarded: true,
-			description: 'Transfers a core piece to its respective folder',
+			description: (msg) => msg.language.get('COMMAND_TRANSFER_DESCRIPTION'),
 			usage: '<Piece:piece>'
 		});
 	}

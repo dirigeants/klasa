@@ -6,7 +6,7 @@ module.exports = class extends Command {
 		super(...args, {
 			permLevel: 10,
 			guarded: true,
-			description: 'Re-disables or temporarily disables a command/inhibitor/monitor/finalizer/event. Default state restored on reboot.',
+			description: (msg) => msg.language.get('COMMAND_DISABLE_DESCRIPTION'),
 			usage: '<Piece:piece>'
 		});
 	}

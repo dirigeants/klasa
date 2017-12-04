@@ -5,7 +5,7 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			guarded: true,
-			description: 'Runs a connection test to Discord.'
+			description: (msg) => msg.language.get('COMMAND_PING_DESCRIPTION')
 		});
 	}
 
