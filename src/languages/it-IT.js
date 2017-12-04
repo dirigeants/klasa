@@ -45,7 +45,7 @@ module.exports = class extends Language {
 			INHIBITOR_REQUIRED_SETTINGS: (settings) => `Il server manca ${settings.length > 1 ? 'del permesso' : 'dei permessi'} **${settings.join(', ')}** e quindi non è possibile continuare.`,
 			INHIBITOR_RUNIN: (types) => `Questo comando è disponibile solo in canali di tipo ${types}`,
 			INHIBITOR_RUNIN_NONE: (name) => `Il comando ${name} non è configurato per essere eseguito in alcun canale.`,
-			COMMAD_UNLOAD: (type, name) => `✅ Scaricato ${type}: ${name}`,
+			COMMAND_UNLOAD: (type, name) => `✅ Scaricato ${type}: ${name}`,
 			COMMAND_TRANSFER_ERROR: '❌ Il file è stato già trasferito o non è mai esistito.',
 			COMMAND_TRANSFER_SUCCESS: (type, name) => `✅ Trasferito con successo il ${type}: ${name}`,
 			COMMAND_TRANSFER_FAILED: (type, name) => `Trasferimento del ${type}: ${name} al Client è fallito, controlla la Console.`,
