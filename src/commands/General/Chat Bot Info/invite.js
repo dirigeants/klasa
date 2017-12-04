@@ -6,7 +6,7 @@ module.exports = class extends Command {
 		super(...args, {
 			runIn: ['text'],
 			guarded: true,
-			description: 'Displays the join server link of the bot.'
+			description: (msg) => msg.language.get('COMMAND_INVITE_DESCRIPTION')
 		});
 	}
 
