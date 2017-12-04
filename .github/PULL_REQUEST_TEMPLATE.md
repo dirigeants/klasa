@@ -5,8 +5,9 @@
 
 -
 
-### Classification
+### Semver Classification
 
-- [ ] This PR changes the library interface.
-	- [ ] This PR includes breaking changes.
-- [ ] This PR aims for documentation or non-code changes.
+- [ ] This PR only includes documentation or non-code changes.
+- [ ] This PR fixes a bug and does not change the framework interface.
+- [ ] This PR adds methods or properties to the framework interface.
+- [ ] This PR removes or renames methods or properties in the framework interface.
