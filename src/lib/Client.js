@@ -69,6 +69,14 @@ class KlasaClient extends Discord.Client {
 	 */
 
 	/**
+	 * @typedef  {Object} ConfigUpdateEntryMany
+	 * @memberof KlasaClient
+	 * @property {'MANY'} type
+	 * @property {string[]} keys
+	 * @property {Array<*>} values
+	 */
+
+	/**
 	 * Constructs the klasa client
 	 * @since 0.0.1
 	 * @param {KlasaClientConfig} config The config to pass to the new client
@@ -439,12 +447,6 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
 	.addLevel(9, true, (client, msg) => msg.author === client.owner)
 	.addLevel(10, false, (client, msg) => msg.author === client.owner);
 
-/**
- * @typedef  {Object} ConfigUpdateEntryMany
- * @property {'MANY'} type
- * @property {string[]} keys
- * @property {Array<*>} values
- */
 
 /**
  * Emitted when Klasa is fully ready and initialized.

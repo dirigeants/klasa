@@ -19,6 +19,7 @@ module.exports = Structures.extend('Message', Message => {
 		/**
 		 * Options provided when sending or editing a message.
 		 * @typedef {Object} MessageOptions
+		 * @memberof KlasaMessage
 		 * @property {boolean} [tts=false] Whether or not the message should be spoken aloud
 		 * @property {string} [nonce=''] The nonce for the message
 		 * @property {RichEmbed|Object} [embed] An embed for the message
