@@ -45,7 +45,7 @@ module.exports = class extends Language {
 			INHIBITOR_REQUIRED_SETTINGS: (settings) => `Bu sunucu **${settings.join(', ')}** ayar${settings.length > 1 ? 'larına' : ''} sahip değil. Bu yüzden bu komut çalıştırılamaz.`,
 			INHIBITOR_RUNIN: (types) => `Bu komut sadece ${types} kanallarında kullanılabilir.`,
 			INHIBITOR_RUNIN_NONE: (name) => `${name} komut herhangi bir kanalda kullanılmak için ayarlanmamış.`,
-			COMMAD_UNLOAD: (type, name) => `✅ Geçici olarak hafızadan silindi ${type}: ${name}`,
+			COMMAND_UNLOAD: (type, name) => `✅ Geçici olarak hafızadan silindi ${type}: ${name}`,
 			COMMAND_TRANSFER_ERROR: '❌ Bu dosya çoktan transfer edildi yada hiç varolmadı.',
 			COMMAND_TRANSFER_SUCCESS: (type, name) => `✅ Başarıyla transfer edildi ${type}: ${name}`,
 			COMMAND_TRANSFER_FAILED: (type, name) => `${type}: ${name} transferi başarısız. Lütfen Konsola bakın.`,
