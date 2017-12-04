@@ -1,6 +1,6 @@
 {
   "name": "klasa",
-  "version": "0.4.0",
+  "version": "0.5.0-dev",
   "description": "Klasa: Croatian for 'class', is a class based remix on Komada.",
   "homepage": "https://github.com/dirigeants/klasa#readme",
   "bugs": {
@@ -27,7 +27,7 @@
     "discord.js": "github:hydrabolt/discord.js#master"
   },
   "devDependencies": {
-    "eslint": "^4.12.0",
+    "eslint": "^4.12.1",
     "ink-docstrap": "github:bdistin/docstrap#klasa",
     "jsdoc": "github:jsdoc3/jsdoc",
     "markdownlint-cli": "^0.5.0",

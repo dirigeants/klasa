@@ -190,8 +190,8 @@ class KlasaConsole extends Console {
 	/**
 	 * Logs everything to the console/writable stream.
 	 * @since 0.4.0
-	 * @param  {*} data The data we want to print.
-	 * @param  {string} [type="log"] The type of log, particularly useful for coloring.
+	 * @param {*} data The data we want to print.
+	 * @param {string} [type="log"] The type of log, particularly useful for coloring.
 	 */
 	write(data, type = 'log') {
 		data = KlasaConsole.flatten(data, this.useColors);

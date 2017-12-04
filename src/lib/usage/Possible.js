@@ -55,6 +55,7 @@ class Possible {
 	 * @param {string} limit The limit to evaluate
 	 * @param {string} type The type of limit
 	 * @returns {number}
+	 * @private
 	 */
 	static resolveLimit(limit, type) {
 		if (isNaN(limit)) throw `${type} must be a number`;
