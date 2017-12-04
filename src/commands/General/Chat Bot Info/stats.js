@@ -7,23 +7,19 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			guarded: true,
-			description: 'Provides some details about the bot and stats.'
+			description: (msg) => msg.language.get('COMMAND_STATS_DESCRIPTION')
 		});
 	}
 
 	async run(msg) {
-		return msg.sendCode('asciidoc', [
-			'= STATISTICS =',
-			'',
-			`• Mem Usage  :: ${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB`,
-			`• Uptime     :: ${moment(Date.now() - (process.uptime() * 1000)).toNow(true)}`,
-			`• Users      :: ${this.client.users.size.toLocaleString()}`,
-			`• Servers    :: ${this.client.guilds.size.toLocaleString()}`,
-			`• Channels   :: ${this.client.channels.size.toLocaleString()}`,
-			`• Klasa      :: v${klasaVersion}`,
-			`• Discord.js :: v${discordVersion}`,
-			`• Node.js    :: ${process.version}`
-		]);
+		return msg.sendCode('asciidoc', msg.language.get('COMMAND_STATS',
+			(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2),
+			moment(Date.now() - (process.uptime() * 1000)).toNow(true),
+			this.client.users.size.toLocaleString(),
+			this.client.guilds.size.toLocaleString(),
+			this.client.channels.size.toLocaleString(),
+			klasaVersion, discordVersion, process.version
+		));
 	}
 
 };

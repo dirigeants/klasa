@@ -7,7 +7,7 @@ module.exports = class extends Command {
 			runIn: ['text'],
 			permLevel: 6,
 			guarded: true,
-			description: 'Define per-server configuration.',
+			description: (msg) => msg.language.get('COMMAND_CONF_SERVER_DESCRIPTION'),
 			usage: '<set|get|reset|list|remove> [key:string] [value:string] [...]',
 			usageDelim: ' '
 		});
@@ -45,7 +45,7 @@ module.exports = class extends Command {
 
 	list(msg, key) {
 		const { path } = this.client.gateways.guilds.getPath(key, { avoidUnconfigurable: true, piece: false });
-		return msg.sendMessage(`**Server Configuration${key ? `: ${toTitleCase(key)}` : ''}**\n${codeBlock('asciidoc', path.getList(msg))}`);
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_SERVER', key ? `: ${key.split('.').map(toTitleCase).join('/')}` : '', codeBlock('asciidoc', path.getList(msg))));
 	}
 
 };

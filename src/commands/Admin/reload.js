@@ -7,7 +7,7 @@ module.exports = class extends Command {
 			aliases: ['r'],
 			permLevel: 10,
 			guarded: true,
-			description: 'Reloads a klasa piece, or all pieces of a klasa store.',
+			description: (msg) => msg.language.get('COMMAND_RELOAD_DESCRIPTION'),
 			usage: '<Store:store|Piece:piece>'
 		});
 	}
