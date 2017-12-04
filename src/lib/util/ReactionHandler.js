@@ -29,7 +29,7 @@ class ReactionHandler extends ReactionCollector {
 	/**
 	 * Constructs our ReactionHandler instance
 	 * @since 0.4.0
-	 * @param  {external:Message} msg A message this ReactionHandler should handle reactions
+	 * @param  {KlasaMessage} msg A message this ReactionHandler should handle reactions
 	 * @param  {Function} filter A filter function to determine which emoji reactions should be handled
 	 * @param  {ReactionHandlerOptions} options The options for this ReactionHandler
 	 * @param  {(RichDisplay|RichMenu)} display The RichDisplay or RichMenu that this handler is for
@@ -165,7 +165,7 @@ class ReactionHandler extends ReactionCollector {
 	/**
 	 * The action to take when the "jump" emoji is reacted
 	 * @since 0.4.0
-	 * @param {external:User} user The user to lock the awaitMessages to
+	 * @param {KlasaUser} user The user to lock the awaitMessages to
 	 * @returns {void}
 	 */
 	async jump(user) {

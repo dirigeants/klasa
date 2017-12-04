@@ -12,7 +12,7 @@ class ParsedUsage {
 	 */
 	constructor(client, command) {
 		/**
-		 * The client this CommandMessage was created with.
+		 * The client this ParsedUsage was created with
 		 * @since 0.0.1
 		 * @name ParsedUsage#client
 		 * @type {KlasaClient}
@@ -66,11 +66,12 @@ class ParsedUsage {
 	/**
 	 * Creates a full usage string including prefix and commands/aliases for documentation/help purposes
 	 * @since 0.0.1
-	 * @param {external:Message} msg a message to check to get the current prefix
+	 * @param {KlasaMessage} msg The message context for which to generate usage for
 	 * @returns {string}
 	 */
 	fullUsage(msg) {
-		const { prefix } = msg.guildSettings;
+		let { prefix } = msg.guildConfigs;
+		if (Array.isArray(prefix)) prefix = prefix.find(pre => msg.prefix.test(pre)) || prefix[0];
 		return `${prefix.length !== 1 ? `${prefix} ` : prefix}${this.nearlyFullUsage}`;
 	}
 
@@ -79,6 +80,7 @@ class ParsedUsage {
 	 * @since 0.0.1
 	 * @param {string} usageString The usage string to parse
 	 * @returns {Tag[]}
+	 * @private
 	 */
 	static parseUsage(usageString) {
 		let usage = {
@@ -128,6 +130,7 @@ class ParsedUsage {
 	 * @param {Object} usage The current usage interum object
 	 * @param {string} char The character that triggered this function
 	 * @returns {Object} The current usage interum object
+	 * @private
 	 */
 	static tagOpen(usage, char) {
 		if (usage.opened) throw `${usage.at}: you may not open a tag inside another tag.`;
@@ -143,6 +146,7 @@ class ParsedUsage {
 	 * @param {Object} usage The current usage interum object
 	 * @param {string} char The character that triggered this function
 	 * @returns {Object} The current usage interum object
+	 * @private
 	 */
 	static tagClose(usage, char) {
 		const required = char === '>';
@@ -169,6 +173,7 @@ class ParsedUsage {
 	 * @param {Object} usage The current usage interum object
 	 * @param {string} char The character that triggered this function
 	 * @returns {Object} The current usage interum object
+	 * @private
 	 */
 	static tagSpace(usage, char) {
 		if (char === '\n') throw `${usage.at}: there can't be a line break in the usage string`;

@@ -41,7 +41,6 @@ new Client({
 | **permissionLevels**       | `defaultPermissionLevels` | PermissionLevels   | The permission levels to use with this bot                                          |
 | **clientBaseDir**          | see below³                | string             | The directory where all piece folders can be found                                  |
 | **commandMessageLifetime** | `1800`                    | number             | The threshold for when comand messages should be sweeped in seconds since last edit |
-| **commandMessageSweep**    | `900`                     | number             | The interval duration for which command messages should be sweept in seconds        |
 | **provider**               | `json`                    | string             | The provider to use in Klasa                                                        |
 | **language**               | `en-US`                   | string             | The default language Klasa should opt-in for the commands                           |
 | **promptTime**             | `30000`                   | number             | The amount of time in milliseconds prompts should last                              |
@@ -61,7 +60,7 @@ new Client({
 >3: The directory of the main file. `path.dirname(require.main.filename)`  
 >4: quotedStringSupport is overridable per command  
 >5: `Successfully initialized. Ready to serve ${client.guilds.size} guilds.`  
->6: ID gotten from teh Discord api if not provided: `client.application.owner.id`  
+>6: ID gotten from the Discord api if not provided: `client.application.owner.id`  
 
 ## Running the bot
 

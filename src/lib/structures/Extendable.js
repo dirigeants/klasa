@@ -85,9 +85,9 @@ class Extendable {
 	/**
 	 * The extend method to be overwritten in actual extend pieces
 	 * @since 0.0.1
-	 * @param {any} params Any parameters you want
+	 * @param {*} params Any parameters you want
 	 * @abstract
-	 * @returns {any}
+	 * @returns {*}
 	 */
 	extend() {
 		// Defined in extension Classes
@@ -129,8 +129,8 @@ class Extendable {
 
 	// left for documentation
 	/* eslint-disable no-empty-function */
-	async reload() {}
-	unload() {}
+	async reload() { }
+	unload() { }
 	/* eslint-enable no-empty-function */
 
 }
