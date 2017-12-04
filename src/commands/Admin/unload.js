@@ -7,7 +7,7 @@ module.exports = class extends Command {
 			aliases: ['u'],
 			permLevel: 10,
 			guarded: true,
-			description: 'Unloads the klasa piece.',
+			description: (msg) => msg.language.get('COMMAND_UNLOAD_DESCRIPTION'),
 			usage: '<Piece:piece>'
 		});
 	}
