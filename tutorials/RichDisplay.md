@@ -15,7 +15,7 @@ module.exports = class extends Command {
 		return new RichDisplay()
 			.addPage(new Embed().setDescription('First page'))
 			.addPage(new Embed().setDescription('Second page'))
-			.run(await msg.send('Loading...'));
+			.run(await msg.sendMessage('Loading...'));
 	}
 
 };
@@ -35,7 +35,7 @@ for (let i = 0; i < 10; i++) {
 	display.addPage(template => template.setImage('https://lorempixel.com/400/200/'));
 }
 
-return display.run(await msg.send('Loading slideshow...'));
+return display.run(await msg.sendMessage('Loading slideshow...'));
 ```
 
 > The code is contained in the block of the aforementioned command, inside the `async run(msg)` method but the display or its pages can easily be reused by placing its initialization in the command's constructor method.
@@ -71,7 +71,7 @@ From here we will be able to add content or edit properties of the template, and
 Then, after the {@link RichDisplay} is setup, we return, executing it on a new message.
 
 ```javascript
-return display.run(await msg.send('Loading slideshow...'));
+return display.run(await msg.sendMessage('Loading slideshow...'));
 ```
 
 ## Info Page
@@ -94,5 +94,5 @@ To handle whether or not a user should trigger an action when interacting with t
 A simple example for this would be a filter that only allows the user who executes the command to interact with it:
 
 ```javascript
-display.run(await msg.send('Loading slideshow...'), { filter: (reaction, user) => user === msg.author });
+display.run(await msg.sendMessage('Loading slideshow...'), { filter: (reaction, user) => user === msg.author });
 ```

@@ -79,6 +79,12 @@ class Provider {
 		 * @type {boolean}
 		 */
 		this.sql = 'sql' in options ? options.sql : false;
+
+		/**
+		 * If the provider is designed to handle cache operations
+		 * @type {boolean}
+		 */
+		this.cache = 'cache' in options ? options.cache : false;
 	}
 
 	/**
