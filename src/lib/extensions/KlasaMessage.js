@@ -33,6 +33,9 @@ module.exports = Structures.extend('Message', Message => {
 		 * @property {UserResolvable} [reply] User to reply to (prefixes the message with a mention, except in DMs)
 		 */
 
+		/**
+		 * @param {...*} args Normal D.JS Message args
+		 */
 		constructor(...args) {
 			super(...args);
 

@@ -7,6 +7,9 @@ module.exports = Structures.extend('Guild', Guild => {
 	 */
 	class KlasaGuild extends Guild {
 
+		/**
+		 * @param {...*} args Normal D.JS Guild args
+		 */
 		constructor(...args) {
 			super(...args);
 

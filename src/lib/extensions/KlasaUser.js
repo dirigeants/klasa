@@ -7,6 +7,9 @@ module.exports = Structures.extend('User', User => {
 	 */
 	class KlasaUser extends User {
 
+		/**
+		 * @param {...*} args Normal D.JS User args
+		 */
 		constructor(...args) {
 			super(...args);
 
