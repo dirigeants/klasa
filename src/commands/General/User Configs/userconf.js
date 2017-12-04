@@ -4,7 +4,7 @@ module.exports = class extends Command {
 
 	constructor(...args) {
 		super(...args, {
-			description: 'Define per-user configuration.',
+			description: (msg) => msg.language.get('COMMAND_CONF_DESCRIPTION'),
 			usage: '<set|get|reset|list|remove> [key:string] [value:string] [...]',
 			usageDelim: ' '
 		});
@@ -38,7 +38,7 @@ module.exports = class extends Command {
 
 	list(msg, key) {
 		const { path } = this.client.gateways.users.getPath(key, { avoidUnconfigurable: true, piece: false });
-		return msg.sendMessage(`**User Configuration${key ? `: ${toTitleCase(key)}` : ''}**\n${codeBlock('asciidoc', path.getList(msg))}`);
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_USER', key ? `: ${toTitleCase(key)}` : '', codeBlock('asciidoc', path.getList(msg)));
 	}
 
 };
