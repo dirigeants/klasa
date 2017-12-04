@@ -139,6 +139,7 @@ class Util {
 		}
 	}
 
+	/*
 	 * Get the type of value. A better version of the `typeof` operator, basically
 	 * @since 0.4.0
 	 * @param {*} value The object or primitive whose type is to be returned
