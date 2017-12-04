@@ -98,7 +98,7 @@ class Command {
 		 * @since 0.0.1
 		 * @type {string}
 		 */
-		this.name = options.name || file[file.length - 1].slice(0, -3);
+		this.name = options.name || file[file.length - 1].slice(0, -3).toLowerCase();
 
 		/**
 		 * The aliases for this command
