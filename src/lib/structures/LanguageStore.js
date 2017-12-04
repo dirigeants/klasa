@@ -89,6 +89,7 @@ class LanguageStore extends Collection {
 		if (!(language instanceof this.holds)) return this.client.emit('error', `Only ${this.name} may be stored in the Store.`);
 		const existing = this.get(language.name);
 		if (existing) this.delete(existing);
+		else if (this.client.listenerCount('pieceLoaded')) this.client.emit('pieceLoaded', language);
 		super.set(language.name, language);
 		return language;
 	}

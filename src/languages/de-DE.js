@@ -35,7 +35,7 @@ module.exports = class extends Language {
 			COMMANDMESSAGE_MISSING_REQUIRED: (name) => `${name} ist ein erforderliches Argument.`,
 			COMMANDMESSAGE_MISSING_OPTIONALS: (possibles) => `Fehlende notwendige Auswahl: (${possibles})`,
 			COMMANDMESSAGE_NOMATCH: (possibles) => `Deine Auswahl trifft auf keine der folgenden Möglichkeiten zu: (${possibles})`,
-			MONITOR_COMMAND_HANDLER_REPROMPT: (tag, error) => `${tag} | **${error}** | Sie haben **30** Sekunden, um einen gültigen Wert einzugeben. Mit "ABORT" brechen Sie den Vorgang ab.`,
+			MONITOR_COMMAND_HANDLER_REPROMPT: (tag, error, time) => `${tag} | **${error}** | Sie haben **${time}** Sekunden, um einen gültigen Wert einzugeben. Mit "ABORT" brechen Sie den Vorgang ab.`,
 			MONITOR_COMMAND_HANDLER_ABORTED: 'Abgebrochen',
 			INHIBITOR_COOLDOWN: (remaining) => `Sie haben gerade erst diesen Befehl benutzt. Der Befehl kann von Ihnen wieder in ${remaining} Sekunden verwendet werden.`,
 			INHIBITOR_DISABLED: 'Dieser Befehl ist aktuell deaktiviert.',

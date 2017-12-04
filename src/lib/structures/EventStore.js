@@ -89,6 +89,7 @@ class EventStore extends Collection {
 		if (!(event instanceof Event)) return this.client.emit('error', 'Only events may be stored in the EventStore.');
 		const existing = this.get(event.name);
 		if (existing) this.delete(existing);
+		else if (this.client.listenerCount('pieceLoaded')) this.client.emit('pieceLoaded', event);
 		this.client.on(event.name, event._run.bind(event));
 		super.set(event.name, event);
 		return event;

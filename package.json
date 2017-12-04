@@ -16,22 +16,23 @@
   },
   "scripts": {
     "lint": "npx eslint --fix src && npx tslint --fix 'typings/*.ts'",
-    "test": "npx eslint src && npx tslint 'typings/*.ts'",
+    "test": "npx eslint src && npx tslint 'typings/*.ts' && npx markdownlint tutorials README.md",
     "docs": "npx jsdoc -c ./.docstrap.json -R README.md"
   },
   "dependencies": {
     "fs-nextra": "^0.3.2",
-    "moment": "^2.19.1"
+    "moment": "^2.19.2"
   },
   "peerDependencies": {
     "discord.js": "github:hydrabolt/discord.js#master"
   },
   "devDependencies": {
-    "eslint": "^4.10.0",
+    "eslint": "^4.12.0",
     "ink-docstrap": "github:bdistin/docstrap#klasa",
     "jsdoc": "github:jsdoc3/jsdoc",
+    "markdownlint-cli": "^0.5.0",
     "tslint": "^5.8.0",
-    "typescript": "^2.5.3"
+    "typescript": "^2.6.2"
   },
   "engines": {
     "node": ">=8.5.0"
