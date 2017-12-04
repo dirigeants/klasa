@@ -45,7 +45,7 @@ module.exports = class extends Command {
 
 	list(msg, key) {
 		const { path } = this.client.gateways.guilds.getPath(key, { avoidUnconfigurable: true, piece: false });
-		return msg.sendMessage(msg.language.get('COMMAND_CONF_SERVER', key ? `: ${toTitleCase(key)}` : '', codeBlock('asciidoc', path.getList(msg))));
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_SERVER', key ? `: ${key.split('.').map(toTitleCase).join('/')}` : '', codeBlock('asciidoc', path.getList(msg))));
 	}
 
 };
