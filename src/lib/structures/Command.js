@@ -79,13 +79,19 @@ class Command {
 		 */
 		this.nsfw = Boolean(options.nsfw);
 
-
 		/**
 		 * Whether this command shound not be able to be disabled in a guild or not
 		 * @since 0.5.0
 		 * @type {boolean}
 		 */
 		this.guarded = Boolean(options.guarded);
+
+		/**
+		 * Whether this command should have it's responses deleted if the triggering message is deleted
+		 * @since 0.5.0
+		 * @type {boolean}
+		 */
+		this.deletable = Boolean(options.deletable);
 
 		/**
 		 * The name of the command
