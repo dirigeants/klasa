@@ -76,7 +76,9 @@ class MonitorStore extends Collection {
 	 */
 	run(msg) {
 		for (const monit of this.values()) {
-			if (monit.enabled && !(monit.ignoreBots && msg.author.bot) && !(monit.ignoreSelf && this.client.user === msg.author) && !(monit.ignoreOthers && this.client.user !== msg.author)) monit.run(msg);
+			if (monit.enabled && !(monit.ignoreBots && msg.author.bot) && !(monit.ignoreSelf && this.client.user === msg.author) && !(monit.ignoreOthers && this.client.user !== msg.author)) {
+				monit.run(msg).catch(err => this.client.emit('monitorError', msg, monit, err));
+			}
 		}
 	}
 
@@ -90,6 +92,7 @@ class MonitorStore extends Collection {
 		if (!(monitor instanceof this.holds)) return this.client.emit('error', `Only ${this.name} may be stored in the Store.`);
 		const existing = this.get(monitor.name);
 		if (existing) this.delete(existing);
+		else if (this.client.listenerCount('pieceLoaded')) this.client.emit('pieceLoaded', monitor);
 		super.set(monitor.name, monitor);
 		return monitor;
 	}

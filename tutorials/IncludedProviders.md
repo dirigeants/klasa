@@ -7,9 +7,11 @@ The basic data storage provider for klasa. Uses atomic methods from [fs-nextra](
 [providers/json.js](https://github.com/dirigeants/klasa/blob/master/src/providers/json.js)
 
 ## Further Reading:
+
 - {@tutorial IncludedCommands}
 - {@tutorial IncludedEvents}
 - {@tutorial IncludedExtendables}
 - {@tutorial IncludedFinalizers}
 - {@tutorial IncludedInhibitors}
+- {@tutorial IncludedLanguages}
 - {@tutorial IncludedMonitors}

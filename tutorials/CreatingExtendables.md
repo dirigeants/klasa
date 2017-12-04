@@ -45,13 +45,17 @@ constructor(...args) {
 		enabled: true, // default true
 		klasa: false // default false	
 	);
-}
+} 
 ```
 
-- **appliesTo**: An array of affected classes from Discord.js or Klasa. You can find all extendable classes for [Discord.js](https://github.com/hydrabolt/discord.js/blob/master/src/index.js) and [Klasa](https://github.com/dirigeants/klasa/blob/master/src/index.js) in those respective links.
-- **options.name**: The name of the method/property.
-- **options.enabled**: If the extendable should be enabled on start, can be toggled with enable/disable commands.
-- **options.klasa**: If the extendable should target Klasa's classes instead of Discord.js's.
+| Name                | Default       | Type    | Description                                            |
+| ------------------- | ------------- | ------- | ------------------------------------------------------ |
+| **options.name**    | `theFileName` | string  | The name of the method/property                        |
+| **options.enabled** | `true`        | boolean | If the extendable is enabled or not                    |
+| **options.klasa**   | `false`       | boolean | If the extendable is for Klasa instead of Discord.js   |
+| **appliesTo**       | `[]`          | Array   | An array of affected classes from Discord.js or Klasa. |
+
+> You can find all extendable classes for [Discord.js](https://github.com/hydrabolt/discord.js/blob/master/src/index.js) and [Klasa](https://github.com/dirigeants/klasa/blob/master/src/index.js) in those respective links.
 
 ## Understanding extend
 
@@ -85,8 +89,8 @@ module.exports = class extends Extendable {
 
 Where `prompt()` is your prompt function.
 
-
 ## Further Reading:
+
 - {@tutorial CreatingCommands}
 - {@tutorial CreatingEvents}
 - {@tutorial CreatingFinalizers}

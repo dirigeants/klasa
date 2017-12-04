@@ -36,7 +36,7 @@ module.exports = class extends Language {
 			COMMANDMESSAGE_MISSING_OPTIONALS: (possibles) => `Falta una opción requerida: (${possibles})`,
 			COMMANDMESSAGE_NOMATCH: (possibles) => `Su opción no coincide con ninguna de las posibilidades: (${possibles})`,
 			// eslint-disable-next-line max-len
-			MONITOR_COMMAND_HANDLER_REPROMPT: (tag, error) => `${tag} | **${error}** | Usted tiene **30** segundos para responder este mensage emergente con un argumento válido. Escribe **"ABORT"** para abortar el mensaje emergente.`,
+			MONITOR_COMMAND_HANDLER_REPROMPT: (tag, error, time) => `${tag} | **${error}** | Usted tiene **${time}** segundos para responder este mensage emergente con un argumento válido. Escribe **"ABORT"** para abortar el mensaje emergente.`,
 			MONITOR_COMMAND_HANDLER_ABORTED: 'Abortado.',
 			INHIBITOR_COOLDOWN: (remaining) => `Acabas de usar este comando. Puedes usarlo de nuevo en ${remaining} segundos.`,
 			INHIBITOR_DISABLED: 'Este comando está desactivado.',

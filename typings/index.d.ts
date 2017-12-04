@@ -115,11 +115,20 @@ declare module 'klasa' {
 		// Klasa Command Events
 		public on(event: 'commandError', listener: (msg: CommandMessage, command: Command, params: any[], error: Error) => void): this;
 		public on(event: 'commandInhibited', listener: (msg: CommandMessage, command: Command, response: string|Error) => void): this;
+		public on(event: 'commandRun', listener: (msg: CommandMessage, command: Command, params: any[], response: any) => void): this;
+		public on(event: 'commandUnknown', listener: (msg: ExtendedMessage, command: string) => void): this;
 
 		// Klasa Console Custom Events
 		public on(event: 'log', listener: (data: any, type: string) => void): this;
 		public on(event: 'wtf', listener: (failure: Error) => void): this;
 		public on(event: 'verbose', listener: (data: any) => void): this;
+
+		// Klasa Piece Events
+		public on(event: 'pieceLoaded', listener: (piece: Piece) => void): this;
+		public on(event: 'pieceUnloaded', listener: (piece: Piece) => void): this;
+		public on(event: 'pieceReloaded', listener: (piece: Piece) => void): this;
+		public on(event: 'pieceEnabled', listener: (piece: Piece) => void): this;
+		public on(event: 'pieceDisabled', listener: (piece: Piece) => void): this;
 
 		// Discord.js events
 		public once(event: string, listener: Function): this;
@@ -155,11 +164,20 @@ declare module 'klasa' {
 		// Klasa Command Events
 		public once(event: 'commandError', listener: (msg: CommandMessage, command: Command, params: any[], error: Error) => void): this;
 		public once(event: 'commandInhibited', listener: (msg: CommandMessage, command: Command, response: string|Error) => void): this;
+		public once(event: 'commandRun', listener: (msg: CommandMessage, command: Command, params: any[], response: any) => void): this;
+		public once(event: 'commandUnknown', listener: (msg: ExtendedMessage, command: string) => void): this;
 
 		// Klasa Console Custom Events
 		public once(event: 'log', listener: (data: any, type: string) => void): this;
 		public once(event: 'wtf', listener: (failure: Error) => void): this;
 		public once(event: 'verbose', listener: (data: any) => void): this;
+
+		// Klasa Piece Events
+		public once(event: 'pieceLoaded', listener: (piece: Piece) => void): this;
+		public once(event: 'pieceUnloaded', listener: (piece: Piece) => void): this;
+		public once(event: 'pieceReloaded', listener: (piece: Piece) => void): this;
+		public once(event: 'pieceEnabled', listener: (piece: Piece) => void): this;
+		public once(event: 'pieceDisabled', listener: (piece: Piece) => void): this;
 
 	}
 
@@ -742,7 +760,7 @@ declare module 'klasa' {
 
 		public ignoreBots: boolean;
 		public ignoreSelf: boolean;
-
+		public ignoreOthers: boolean;
 		public abstract run(msg: ExtendedMessage): void;
 		public abstract init(): any;
 
@@ -960,6 +978,8 @@ declare module 'klasa' {
 		provider?: { engine: string, cache: string };
 		console?: KlasaConsoleConfig;
 		consoleEvents?: KlasaConsoleEvents;
+		language?: string;
+		promptTime?: number;
 		ignoreBots?: boolean;
 		ignoreSelf?: boolean;
 		cmdPrompt?: boolean;

@@ -11,8 +11,8 @@ class Language {
 	/**
 	 * @typedef {Object} LanguageOptions
 	 * @memberof Language
-	 * @property {string} [name = theFileName] The name of the finalizer
-	 * @property {boolean} [enabled=true] Whether the finalizer is enabled or not
+	 * @property {string} [name = theFileName] The name of the language
+	 * @property {boolean} [enabled=true] Whether the language is enabled or not
 	 */
 
 	/**
@@ -44,7 +44,7 @@ class Language {
 		this.file = file;
 
 		/**
-		 * The name of the finalizer
+		 * The name of the language
 		 * @since 0.2.1
 		 * @type {string}
 		 */

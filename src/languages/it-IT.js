@@ -36,7 +36,7 @@ module.exports = class extends Language {
 			COMMANDMESSAGE_MISSING_REQUIRED: (name) => `${name} è un argomento richiesto.`,
 			COMMANDMESSAGE_MISSING_OPTIONALS: (possibles) => `Opzione richiesta mancante: (${possibles})`,
 			COMMANDMESSAGE_NOMATCH: (possibles) => `La tua opzione non corrisponde a nessuna possibilità: (${possibles})`,
-			MONITOR_COMMAND_HANDLER_REPROMPT: (tag, error) => `${tag} | **${error}** | Hai **30** secondi per rispondere a questo messaggio con un argomento calido. Scrivi **"ABORT"** per annullare.`,
+			MONITOR_COMMAND_HANDLER_REPROMPT: (tag, error, time) => `${tag} | **${error}** | Hai **${time}** secondi per rispondere a questo messaggio con un argomento calido. Scrivi **"ABORT"** per annullare.`, // eslint-disable-line max-len
 			MONITOR_COMMAND_HANDLER_ABORTED: 'Annullato',
 			INHIBITOR_COOLDOWN: (remaining) => `Hai appena usato questo comando. Potrai usare questo comando nuovamente in ${remaining} secondi.`,
 			INHIBITOR_DISABLED: 'Questo comando è al momento disabilitato',
