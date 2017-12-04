@@ -8,7 +8,7 @@ module.exports = class extends Command {
 			aliases: ['ev'],
 			permLevel: 10,
 			guarded: true,
-			description: 'Evaluates arbitrary Javascript. Reserved for bot owner.',
+			description: (msg) => msg.language.get('COMMAND_EVAL_DESCRIPTION'),
 			usage: '<expression:str>'
 		});
 	}
