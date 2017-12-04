@@ -12,12 +12,15 @@ class MonitorStore extends Collection {
 
 	/**
 	 * Constructs our MonitorStore for use in Klasa
+	 * @since 0.0.1
 	 * @param  {KlasaClient} client The Klasa Client
 	 */
 	constructor(client) {
 		super();
+
 		/**
 		 * The client this MonitorStore was created with.
+		 * @since 0.0.1
 		 * @name MonitorStore#client
 		 * @type {KlasaClient}
 		 * @readonly
@@ -25,25 +28,29 @@ class MonitorStore extends Collection {
 		Object.defineProperty(this, 'client', { value: client });
 
 		/**
-		* The directory of monitors in Klasa relative to where its installed.
+		 * The directory of monitors in Klasa relative to where its installed.
+		 * @since 0.0.1
 		 * @type {String}
 		 */
 		this.coreDir = join(this.client.coreBaseDir, 'monitors');
 
 		/**
-		* The directory of local monitors relative to where you run Klasa from.
+		 * The directory of local monitors relative to where you run Klasa from.
+		 * @since 0.0.1
 		 * @type {String}
 		 */
 		this.userDir = join(this.client.clientBaseDir, 'monitors');
 
 		/**
 		 * The type of structure this store holds
+		 * @since 0.1.1
 		 * @type {Inhibitor}
 		 */
 		this.holds = Monitor;
 
 		/**
 		 * The name of what this holds
+		 * @since 0.3.0
 		 * @type {String}
 		 */
 		this.name = 'monitors';
@@ -51,6 +58,7 @@ class MonitorStore extends Collection {
 
 	/**
 	 * Deletes a monitor from the store
+	 * @since 0.0.1
 	 * @param  {Monitor|string} name The monitor object or a string representing the structure this store caches
 	 * @return {boolean} whether or not the delete was successful.
 	 */
@@ -63,14 +71,20 @@ class MonitorStore extends Collection {
 
 	/**
 	 * Runs our monitors on the message.
+	 * @since 0.0.1
 	 * @param  {external:Message} msg The message object from Discord.js
 	 */
 	run(msg) {
-		for (const monit of this.values()) if (monit.enabled && !(monit.ignoreBots && msg.author.bot) && !(monit.ignoreSelf && this.client.user === msg.author)) monit.run(msg);
+		for (const monit of this.values()) {
+			if (monit.enabled && !(monit.ignoreBots && msg.author.bot) && !(monit.ignoreSelf && this.client.user === msg.author) && !(monit.ignoreOthers && this.client.user !== msg.author)) {
+				monit.run(msg).catch(err => this.client.emit('monitorError', msg, monit, err));
+			}
+		}
 	}
 
 	/**
 	 * Sets up a monitor in our store.
+	 * @since 0.0.1
 	 * @param {Monitor} monitor The monitor object we are setting up.
 	 * @returns {Monitor}
 	 */
@@ -78,6 +92,7 @@ class MonitorStore extends Collection {
 		if (!(monitor instanceof this.holds)) return this.client.emit('error', `Only ${this.name} may be stored in the Store.`);
 		const existing = this.get(monitor.name);
 		if (existing) this.delete(existing);
+		else if (this.client.listenerCount('pieceLoaded')) this.client.emit('pieceLoaded', monitor);
 		super.set(monitor.name, monitor);
 		return monitor;
 	}

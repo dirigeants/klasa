@@ -3,6 +3,7 @@
 A getter to check and see if you can attach files in the channel.
 
 **Applies to:**
+
 - {@link external:GroupDMChannel}
 - {@link external:DMChannel}
 - {@link external:TextChannel}
@@ -16,6 +17,7 @@ A getter to check and see if you can attach files in the channel.
 A getter to check and see if you can embed links in the channel.
 
 **Applies to:**
+
 - {@link external:GroupDMChannel}
 - {@link external:DMChannel}
 - {@link external:TextChannel}
@@ -29,6 +31,7 @@ A getter to check and see if you can embed links in the channel.
 A getter to check get either the guild settings if in a guild, or the default bot settings in dm/group dm.
 
 **Applies to:**
+
 - {@link external:Message}
 
 **Source:**
@@ -40,6 +43,7 @@ A getter to check get either the guild settings if in a guild, or the default bo
 A getter to check and see if you can send messages in the channel.
 
 **Applies to:**
+
 - {@link external:GroupDMChannel}
 - {@link external:DMChannel}
 - {@link external:TextChannel}
@@ -53,6 +57,7 @@ A getter to check and see if you can send messages in the channel.
 A getter to get the configured language.
 
 **Applies to:**
+
 - {@link external:Guild}
 - {@link external:Message}
 
@@ -65,6 +70,7 @@ A getter to get the configured language.
 A getter to check and see if you can react in the channel.
 
 **Applies to:**
+
 - {@link external:GroupDMChannel}
 - {@link external:DMChannel}
 - {@link external:TextChannel}
@@ -78,6 +84,7 @@ A getter to check and see if you can react in the channel.
 A getter to check and see if you can read in the channel.
 
 **Applies to:**
+
 - {@link external:GroupDMChannel}
 - {@link external:DMChannel}
 - {@link external:TextChannel}
@@ -91,6 +98,7 @@ A getter to check and see if you can read in the channel.
 A getter to get the settings in a guild.
 
 **Applies to:**
+
 - {@link external:Guild}
 
 **Source:**
@@ -102,28 +110,31 @@ A getter to get the settings in a guild.
 A getter to return a collection of usable commands by the message author/member.
 
 **Applies to:**
+
 - {@link external:Message}
 
 **Source:**
 
 [extendables/usableCommands.js](https://github.com/dirigeants/klasa/blob/master/src/extendables/usableCommands.js)
 
-## hasAtleastPermissionLevel(permission:number)
+## hasAtLeastPermissionLevel(permission:number)
 
 Checks to see if the author/member has atleast the Permission level passed.
 
 **Applies to:**
+
 - {@link external:Message}
 
 **Source:**
 
-[extendables/hasAtleastPermissionLevel.js](https://github.com/dirigeants/klasa/blob/master/src/extendables/hasAtLeastPermissionLevel.js)
+[extendables/hasAtLeastPermissionLevel.js](https://github.com/dirigeants/klasa/blob/master/src/extendables/hasAtLeastPermissionLevel.js)
 
 ## send(content:string, options:Object)
 
 A shortcut to channel.send, but also makes the response an editable command.
 
 **Applies to:**
+
 - {@link external:Message}
 
 **Source:**
@@ -135,6 +146,7 @@ A shortcut to channel.send, but also makes the response an editable command.
 A shortcut to channel.send, but also makes the response an editable command.
 
 **Applies to:**
+
 - {@link external:Message}
 - {@link external:GroupDMChannel}
 - {@link external:DMChannel}
@@ -149,6 +161,7 @@ A shortcut to channel.send, but also makes the response an editable command.
 A shortcut to channel.send, but also makes the response an editable command.
 
 **Applies to:**
+
 - {@link external:Message}
 - {@link external:GroupDMChannel}
 - {@link external:DMChannel}
@@ -163,6 +176,7 @@ A shortcut to channel.send, but also makes the response an editable command.
 A alias to channel.send({files:{file:....
 
 **Applies to:**
+
 - {@link external:GroupDMChannel}
 - {@link external:DMChannel}
 - {@link external:TextChannel}
@@ -176,6 +190,7 @@ A alias to channel.send({files:{file:....
 A alias to channel.send({files:...
 
 **Applies to:**
+
 - {@link external:GroupDMChannel}
 - {@link external:DMChannel}
 - {@link external:TextChannel}
@@ -189,6 +204,7 @@ A alias to channel.send({files:...
 A shortcut to channel.send, but also makes the response an editable command.
 
 **Applies to:**
+
 - {@link external:Message}
 - {@link external:GroupDMChannel}
 - {@link external:DMChannel}
@@ -199,9 +215,11 @@ A shortcut to channel.send, but also makes the response an editable command.
 [extendables/sendMessage.js](https://github.com/dirigeants/klasa/blob/master/src/extendables/sendMessage.js)
 
 ## Further Reading:
+
 - {@tutorial IncludedCommands}
 - {@tutorial IncludedEvents}
 - {@tutorial IncludedFinalizers}
 - {@tutorial IncludedInhibitors}
+- {@tutorial IncludedLanguages}
 - {@tutorial IncludedMonitors}
 - {@tutorial IncludedProviders}

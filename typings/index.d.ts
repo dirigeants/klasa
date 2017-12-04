@@ -2,6 +2,7 @@ declare module 'klasa' {
 
 	import {
 		Client,
+		ClientApplication,
 		ClientOptions,
 		Collection,
 		Snowflake,
@@ -23,14 +24,11 @@ declare module 'klasa' {
 		VoiceChannel as DiscordVoiceChannel,
 		DMChannel as DiscordDMChannel,
 		GroupDMChannel as DiscordGroupDMChannel,
-		OAuth2Application,
 		MessageOptions,
 		ReactionCollector,
 
 		StringResolvable,
-		Attachment,
-		RichEmbed,
-		RichEmbedOptions,
+		MessageAttachment,
 		BufferResolvable
 	} from 'discord.js';
 
@@ -66,7 +64,7 @@ declare module 'klasa' {
 			util: Util;
 		};
 		public settings: StringMappedType<SettingGateway<string>>;
-		public application: OAuth2Application;
+		public application: ClientApplication;
 
 		public readonly invite: string;
 		public readonly owner: ExtendedUser;
@@ -117,11 +115,20 @@ declare module 'klasa' {
 		// Klasa Command Events
 		public on(event: 'commandError', listener: (msg: CommandMessage, command: Command, params: any[], error: Error) => void): this;
 		public on(event: 'commandInhibited', listener: (msg: CommandMessage, command: Command, response: string|Error) => void): this;
+		public on(event: 'commandRun', listener: (msg: CommandMessage, command: Command, params: any[], response: any) => void): this;
+		public on(event: 'commandUnknown', listener: (msg: ExtendedMessage, command: string) => void): this;
 
 		// Klasa Console Custom Events
 		public on(event: 'log', listener: (data: any, type: string) => void): this;
 		public on(event: 'wtf', listener: (failure: Error) => void): this;
 		public on(event: 'verbose', listener: (data: any) => void): this;
+
+		// Klasa Piece Events
+		public on(event: 'pieceLoaded', listener: (piece: Piece) => void): this;
+		public on(event: 'pieceUnloaded', listener: (piece: Piece) => void): this;
+		public on(event: 'pieceReloaded', listener: (piece: Piece) => void): this;
+		public on(event: 'pieceEnabled', listener: (piece: Piece) => void): this;
+		public on(event: 'pieceDisabled', listener: (piece: Piece) => void): this;
 
 		// Discord.js events
 		public once(event: string, listener: Function): this;
@@ -157,11 +164,20 @@ declare module 'klasa' {
 		// Klasa Command Events
 		public once(event: 'commandError', listener: (msg: CommandMessage, command: Command, params: any[], error: Error) => void): this;
 		public once(event: 'commandInhibited', listener: (msg: CommandMessage, command: Command, response: string|Error) => void): this;
+		public once(event: 'commandRun', listener: (msg: CommandMessage, command: Command, params: any[], response: any) => void): this;
+		public once(event: 'commandUnknown', listener: (msg: ExtendedMessage, command: string) => void): this;
 
 		// Klasa Console Custom Events
 		public once(event: 'log', listener: (data: any, type: string) => void): this;
 		public once(event: 'wtf', listener: (failure: Error) => void): this;
 		public once(event: 'verbose', listener: (data: any) => void): this;
+
+		// Klasa Piece Events
+		public once(event: 'pieceLoaded', listener: (piece: Piece) => void): this;
+		public once(event: 'pieceUnloaded', listener: (piece: Piece) => void): this;
+		public once(event: 'pieceReloaded', listener: (piece: Piece) => void): this;
+		public once(event: 'pieceEnabled', listener: (piece: Piece) => void): this;
+		public once(event: 'pieceDisabled', listener: (piece: Piece) => void): this;
 
 	}
 
@@ -173,6 +189,7 @@ declare module 'klasa' {
 		public methodMap: Map<string, emoji>;
 		public currentPage: number;
 		public prompt: string;
+		public time: number;
 		public awaiting: boolean;
 		public selection: Promise<number?>;
 		public reactionsDone: boolean;
@@ -200,9 +217,9 @@ declare module 'klasa' {
 	}
 
 	export class RichDisplay {
-		public constructor(embed: RichEmbed);
-		public embedTemplate: RichEmbed;
-		public pages: RichEmbed[];
+		public constructor(embed: MessageEmbed);
+		public embedTemplate: MessageEmbed;
+		public pages: MessageEmbed[];
 		public infoPage?: MessageEmbed;
 		public emojis: RichDisplayEmojisObject;
 		public footered: boolean;
@@ -212,20 +229,20 @@ declare module 'klasa' {
 		public setInfoPage(embed: MessageEmbed): RichDisplay;
 		public run(msg: ExtendedMessage, options?: RichDisplayRunOptions): Promise<ReactionHandler>;
 		private _footer(): void;
-		private _determineEmojis(emojis: emoji[], stop: boolean): emoji[];
-		private _handlePageGeneration(cb: Function|RichEmbed): RichEmbed;
+		protected _determineEmojis(emojis: emoji[], stop: boolean, jump: boolean, firstLast: boolean): emoji[];
+		private _handlePageGeneration(cb: Function|MessageEmbed): MessageEmbed;
 	}
 
 	export class RichMenu extends RichDisplay {
-		public constructor(embed: RichEmbed);
+		public constructor(embed: MessageEmbed);
 		public emojis: RichMenuEmojisObject;
 		public paginated: boolean;
 		public options: MenuOption[];
 
 		public addOption(name: string, body: string, inline?: boolean): RichMenu;
-		public run(msg: ExtendedMessage, options?: RichMenuRunOptions): ReactionHandler;
+		public run(msg: ExtendedMessage, options?: RichMenuRunOptions): Promise<ReactionHandler>;
 
-		private _determineEmojis(emojis: emoji[], stop: boolean, jump: boolean, firstLast: boolean): emoji[];
+		protected _determineEmojis(emojis: emoji[], stop: boolean): emoji[];
 		private _paginate(): void;
 	}
 
@@ -514,11 +531,11 @@ declare module 'klasa' {
 		public BACKGROUNDS: ColorsBackgrounds;
 
 		public static hexToRGB(hex: string): number[];
-		public static hslToRGB(hsl: number[]): number[];
 		public static hueToRGB(p: number, q: number, t: number): number;
-		public static formatArray(array: string[]): string|number[];
+		public static hslToRGB([h, s, l]: [number|string, number|string, number|string]): number[];
+		public static formatArray([pos1, pos2, pos3]: [number|string, number|string, number|string]): string;
 
-		public format(input: string, type?: { style: string|string[], background: string|number|string[], text: string|number|string[] }): string;
+		public format(input: string, type?: ColorsFormatOptions): string;
 	}
 
 	class KlasaConsole extends Console {
@@ -541,6 +558,22 @@ declare module 'klasa' {
 		public messages(input: string, message: string): string;
 
 		public static flatten(data: any, useColors: boolean): string;
+	}
+
+	export class Stopwatch {
+		public constructor(digits?: number);
+		private _start: number;
+		private _end?: number;
+		public digits: number;
+
+		public readonly duration: number;
+		public readonly friendlyDuration: string;
+		public readonly running: boolean;
+		public restart(): this;
+		public reset(): this;
+		public start(): this;
+		public stop(): this;
+		public toString(): string;
 	}
 
 	export { KlasaConsole as Console };
@@ -665,7 +698,7 @@ declare module 'klasa' {
 		public dir: string;
 		public file: string;
 
-		public abstract run(msg: CommandMessage, mes: ExtendedMessage, start: number): void;
+		public abstract run(msg: CommandMessage, mes: ExtendedMessage, start: Stopwatch): void;
 		public abstract init(): any;
 
 		public abstract enable(): Piece;
@@ -727,7 +760,7 @@ declare module 'klasa' {
 
 		public ignoreBots: boolean;
 		public ignoreSelf: boolean;
-
+		public ignoreOthers: boolean;
 		public abstract run(msg: ExtendedMessage): void;
 		public abstract init(): any;
 
@@ -936,6 +969,7 @@ declare module 'klasa' {
 	}
 
 	export type KlasaClientConfig = {
+		clientOptions?: ClientOptions;
 		prefix?: string;
 		permissionLevels?: PermissionLevels;
 		clientBaseDir?: string;
@@ -944,9 +978,10 @@ declare module 'klasa' {
 		provider?: { engine: string, cache: string };
 		console?: KlasaConsoleConfig;
 		consoleEvents?: KlasaConsoleEvents;
+		language?: string;
+		promptTime?: number;
 		ignoreBots?: boolean;
 		ignoreSelf?: boolean;
-		prefixMention?: RegExp;
 		cmdPrompt?: boolean;
 		cmdEditing?: boolean;
 		cmdLogging?: boolean;
@@ -954,7 +989,7 @@ declare module 'klasa' {
 		quotedStringSupport?: boolean;
 		readyMessage?: string|Function;
 		ownerID?: string;
-	} & ClientOptions;
+	};
 
 	export type KlasaConsoleConfig = {
 		stdout?: NodeJS.WritableStream;
@@ -1102,7 +1137,7 @@ declare module 'klasa' {
 
 	export type MenuOption = {
 		name: string;
-		description: string;
+		body: string;
 		inline?: boolean;
 	};
 
@@ -1194,6 +1229,12 @@ declare module 'klasa' {
 		white: 107;
 	};
 
+	export type ColorsFormatOptions = {
+		style: string|string[];
+		background: string|number|string[];
+		text: string|number|string[]
+	};
+
 	export type KlasaConsoleColorsOption = boolean | StringMappedType<KlasaConsoleColorObjects> | KlasaConsoleColors;
 
 	export type KlasaConsoleColors = {
@@ -1245,7 +1286,7 @@ declare module 'klasa' {
 		send(content?: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
 		send(options: MessageOptions): Promise<SentMessage>;
 		sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
-		sendEmbed(embed: RichEmbed | RichEmbedOptions, content?: string, options?: MessageOptions): Promise<SentMessage>;
+		sendEmbed(embed: MessageEmbed, content?: string, options?: MessageOptions): Promise<SentMessage>;
 		sendMessage(content?: string, options?: MessageOptions): Promise<SentMessage>;
 	} & DiscordMessage;
 
@@ -1258,10 +1299,10 @@ declare module 'klasa' {
 		send(content?: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
 		send(options: MessageOptions): Promise<SentMessage>;
 		sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
-		sendEmbed(embed: RichEmbed | RichEmbedOptions, content?: string, options?: MessageOptions): Promise<SentMessage>;
-		sendEmbed(embed: RichEmbed | RichEmbedOptions, options?: MessageOptions): Promise<ExtendedMessage>;
+		sendEmbed(embed: MessageEmbed, content?: string, options?: MessageOptions): Promise<SentMessage>;
+		sendEmbed(embed: MessageEmbed, options?: MessageOptions): Promise<ExtendedMessage>;
 		sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
-		sendFiles(attachments: Attachment[], content: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
+		sendFiles(attachments: MessageAttachment[], content: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
 		sendMessage(content?: string, options?: MessageOptions): Promise<SentMessage>;
 		sendMessage(options: MessageOptions): Promise<SentMessage>;
 	} & DiscordUser;
@@ -1274,10 +1315,10 @@ declare module 'klasa' {
 		send(content?: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
 		send(options: MessageOptions): Promise<SentMessage>;
 		sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
-		sendEmbed(embed: RichEmbed | RichEmbedOptions, content?: string, options?: MessageOptions): Promise<SentMessage>;
-		sendEmbed(embed: RichEmbed | RichEmbedOptions, options?: MessageOptions): Promise<ExtendedMessage>;
+		sendEmbed(embed: MessageEmbed, content?: string, options?: MessageOptions): Promise<SentMessage>;
+		sendEmbed(embed: MessageEmbed, options?: MessageOptions): Promise<ExtendedMessage>;
 		sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
-		sendFiles(attachments: Attachment[], content: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
+		sendFiles(attachments: MessageAttachment[], content: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
 		sendMessage(content?: string, options?: MessageOptions): Promise<SentMessage>;
 		sendMessage(options: MessageOptions): Promise<SentMessage>;
 	} & DiscordTextChannel;
@@ -1293,10 +1334,10 @@ declare module 'klasa' {
 		send(content?: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
 		send(options: MessageOptions): Promise<SentMessage>;
 		sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
-		sendEmbed(embed: RichEmbed | RichEmbedOptions, content?: string, options?: MessageOptions): Promise<SentMessage>;
-		sendEmbed(embed: RichEmbed | RichEmbedOptions, options?: MessageOptions): Promise<ExtendedMessage>;
+		sendEmbed(embed: MessageEmbed, content?: string, options?: MessageOptions): Promise<SentMessage>;
+		sendEmbed(embed: MessageEmbed, options?: MessageOptions): Promise<ExtendedMessage>;
 		sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
-		sendFiles(attachments: Attachment[], content: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
+		sendFiles(attachments: MessageAttachment[], content: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
 		sendMessage(content?: string, options?: MessageOptions): Promise<SentMessage>;
 		sendMessage(options: MessageOptions): Promise<SentMessage>;
 	} & DiscordDMChannel;
@@ -1308,10 +1349,10 @@ declare module 'klasa' {
 		send(content?: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
 		send(options: MessageOptions): Promise<SentMessage>;
 		sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
-		sendEmbed(embed: RichEmbed | RichEmbedOptions, content?: string, options?: MessageOptions): Promise<SentMessage>;
-		sendEmbed(embed: RichEmbed | RichEmbedOptions, options?: MessageOptions): Promise<ExtendedMessage>;
+		sendEmbed(embed: MessageEmbed, content?: string, options?: MessageOptions): Promise<SentMessage>;
+		sendEmbed(embed: MessageEmbed, options?: MessageOptions): Promise<ExtendedMessage>;
 		sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
-		sendFiles(attachments: Attachment[], content: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
+		sendFiles(attachments: MessageAttachment[], content: StringResolvable, options?: MessageOptions): Promise<SentMessage>;
 		sendMessage(content?: string, options?: MessageOptions): Promise<SentMessage>;
 		sendMessage(options: MessageOptions): Promise<SentMessage>;
 	} & DiscordGroupDMChannel;

@@ -111,9 +111,11 @@ Unloads any piece except extendables.
 [commands/System/unload.js](https://github.com/dirigeants/klasa/blob/master/src/commands/System/unload.js)
 
 ## Further Reading:
+
 - {@tutorial IncludedEvents}
 - {@tutorial IncludedExtendables}
 - {@tutorial IncludedFinalizers}
 - {@tutorial IncludedInhibitors}
+- {@tutorial IncludedLanguages}
 - {@tutorial IncludedMonitors}
 - {@tutorial IncludedProviders}

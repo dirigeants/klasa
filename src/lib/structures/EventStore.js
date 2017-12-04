@@ -12,12 +12,15 @@ class EventStore extends Collection {
 
 	/**
 	 * Constructs our EventStore for use in Klasa
+	 * @since 0.0.1
 	 * @param  {KlasaClient} client The klasa client initializing this store.
 	 */
 	constructor(client) {
 		super();
+
 		/**
 		 * The client this EventStore was creaated with.
+		 * @since 0.0.1
 		 * @name EventStore#client
 		 * @type {KlasaClient}
 		 * @readonly
@@ -26,24 +29,28 @@ class EventStore extends Collection {
 
 		/**
 		 * The directory of events in Klasa relative to where its installled.
+		 * @since 0.0.1
 		 * @type {String}
 		 */
 		this.coreDir = join(this.client.coreBaseDir, 'events');
 
 		/**
-		* The directory of local events relative to where you run Klasa from.
+		 * The directory of local events relative to where you run Klasa from.
+		 * @since 0.0.1
 		 * @type {String}
 		 */
 		this.userDir = join(this.client.clientBaseDir, 'events');
 
 		/**
 		 * The type of structure this store holds
+		 * @since 0.1.1
 		 * @type {Event}
 		 */
 		this.holds = Event;
 
 		/**
 		 * The name of what this holds
+		 * @since 0.3.0
 		 * @type {String}
 		 */
 		this.name = 'events';
@@ -51,6 +58,7 @@ class EventStore extends Collection {
 
 	/**
 	 * Clears the events from the store and removes the listeners.
+	 * @since 0.0.1
 	 * @return {void}
 	 */
 	clear() {
@@ -59,6 +67,7 @@ class EventStore extends Collection {
 
 	/**
 	 * Deletes an event from the store.
+	 * @since 0.0.1
 	 * @param  {Event|string} name An event object or a string representing the event name.
 	 * @return {boolean} whether or not the delete was successful.
 	 */
@@ -72,6 +81,7 @@ class EventStore extends Collection {
 
 	/**
 	 * Sets up an event in our store.
+	 * @since 0.0.1
 	 * @param {Event} event The event object we are setting up.
 	 * @returns {Event}
 	 */
@@ -79,6 +89,7 @@ class EventStore extends Collection {
 		if (!(event instanceof Event)) return this.client.emit('error', 'Only events may be stored in the EventStore.');
 		const existing = this.get(event.name);
 		if (existing) this.delete(existing);
+		else if (this.client.listenerCount('pieceLoaded')) this.client.emit('pieceLoaded', event);
 		this.client.on(event.name, event._run.bind(event));
 		super.set(event.name, event);
 		return event;

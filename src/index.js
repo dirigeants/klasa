@@ -6,6 +6,7 @@ module.exports = {
 	RichDisplay: require('./lib/util/RichDisplay'),
 	RichMenu: require('./lib/util/RichMenu'),
 	ReactionHandler: require('./lib/util/ReactionHandler'),
+	Stopwatch: require('./lib/util/Stopwatch'),
 	Command: require('./lib/structures/Command'),
 	CommandMessage: require('./lib/structures/CommandMessage'),
 	Event: require('./lib/structures/Event'),
@@ -50,6 +51,10 @@ module.exports = {
 /**
  * @external DiscordJSConfig
  * @see {@link https://discord.js.org/#/docs/main/master/typedef/ClientOptions}
+ */
+/**
+ * @external ClientApplication
+ * @see {@link https://discord.js.org/#/docs/main/master/class/ClientApplication}
  */
 /**
  * @external Collection

@@ -9,11 +9,13 @@ However, as Klasa works on a [NoSQL](https://en.wikipedia.org/wiki/NoSQL) enviro
 ## Change the *provider's engine*.
 
 For example, let's say I have downloaded the *levelup* provider and I want to work with it, then we go to your main script file (`app.js`, `bot.js`..., wherever you declare the new Klasa.Client), and write the following code:
+
 ```javascript
 provider: { engine: "levelup" }
 ```
 
 Your Klasa's configuration will look something like this:
+
 ```javascript
 const client = new Klasa.Client({
   ownerID: "",
@@ -24,6 +26,7 @@ const client = new Klasa.Client({
 
 client.login("...");
 ```
+
 And now, you're using levelup's provider to store the data from SettingGateway.
 
 What happens when I use an engine that does not exist as a provider? Simply, SettingGateway will throw an error, it is enough user-friendly and readable, if that happens, make sure you wrote the provider's name correctly.
@@ -37,6 +40,7 @@ client.settings.guilds.add(key, options, force?);
 ```
 
 Where:
+
 - `key` is the key's name to add, `String` type.
 - `options` is an object containing the options for the key, such as `type`, `default`, `sql`, `array`...
 - `force` (defaults to `true`) is whether SchemaManager should update all documents/rows to match the new schema, using the `options.default` value.

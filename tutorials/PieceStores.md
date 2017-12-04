@@ -1,6 +1,7 @@
 Probably one of the most advanced and powerful tools in klasa is making your own stores and pieces, to do the things you want.
 
 The most basic store:
+
 ```javascript
 const { join } = require('path');
 const { Collection } = require('discord.js');
@@ -48,6 +49,7 @@ module.exports = SomethingStore;
 ```
 
 The most basic Piece:
+
 ```javascript
 const { Piece } = require('klasa');
 
@@ -134,6 +136,7 @@ Store.applyToClass(GenreStore);
 
 module.exports = GenreStore;
 ```
+
 Tbh, not that different than a simple store. Although be sure to take a look at all of the core stores. Sometimes, like in the case of Providers, we want to run a shutdown method before we delete the collection entry. In that case we also want to overwrite the clear method, and loop over the collection doing this.delete() so that all entries are shutdown properly.
 
 ```javascript
@@ -230,7 +233,9 @@ module.exports = class extends Genre {
 
 }
 ```
+
 This is great and all, but we need to register these pieces/store:
+
 ```javascript
 const { Client } = require('klasa');
 const GenreStore = require('./GenreStore');
@@ -253,7 +258,9 @@ class MySwankyMusicBot extends Client {
 
 new MySwankyMusicBot().login('token-goes-here');
 ```
+
 Then we use it in our player class I completely made up earlier like so:
+
 ```javascript
 ...
 	// without going over setting up guild settings, or actually writing a player class

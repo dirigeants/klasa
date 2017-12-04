@@ -30,6 +30,13 @@ module.exports = class extends Language {
 };
 ```
 
+## Configuration
+
+| Name        | Default       | Type    | Description                            |
+| ----------- | ------------- | ------- | -------------------------------------- |
+| **name**    | `theFileName` | string  | The name of the language               |
+| **enabled** | `true`        | boolean | Whether the language is enabled or not |
+
 ## Using Languages:
 
 There are some extendables to help use languages. msg.language will return the language that is either default (if dms) or the guild's configured language. All languages have a get method, which is used for key lookup and function arg passing.
@@ -56,6 +63,7 @@ msg.language.get('SomeKeyThatExistsOnlyInEnlgish');
 Also, if a language is disabled, and a guild has it configured, the default language will be used exclusivly until either that language is no-longer disabled, or the guild configures another enabled language.
 
 ## Further Reading:
+
 - {@tutorial CreatingCommands}
 - {@tutorial CreatingEvents}
 - {@tutorial CreatingExtendables}
