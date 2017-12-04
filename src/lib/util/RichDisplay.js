@@ -135,7 +135,7 @@ class RichDisplay {
 	/**
 	 * Runs the RichDisplay
 	 * @since 0.4.0
-	 * @param {external:Message} msg A message to either edit, or use to send a new message for this RichDisplay
+	 * @param {KlasaMessage} msg A message to either edit, or use to send a new message for this RichDisplay
 	 * @param {RichDisplayRunOptions} [options={}] The options to use while running this RichDisplay
 	 * @returns {ReactionHandler}
 	 */

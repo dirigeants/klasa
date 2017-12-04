@@ -69,7 +69,7 @@ class Language {
 	 * The method to get language strings
 	 * @since 0.2.1
 	 * @param {string} term The string or function to look up
-	 * @param {...any} args Any arguments to pass to the lookup
+	 * @param {...*} args Any arguments to pass to the lookup
 	 * @returns {string|Function}
 	 */
 	get(term, ...args) {

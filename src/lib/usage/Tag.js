@@ -33,6 +33,7 @@ class Tag {
 	 * @param {string} members The tag contents to parse
 	 * @param {number} count The position of the tag in the usage string
 	 * @returns {Possible[]}
+	 * @private
 	 */
 	static parseMembers(members, count) {
 		const literals = [];
@@ -64,6 +65,7 @@ class Tag {
 	 * @since 0.2.1
 	 * @param {string} members The tag contents to parse
 	 * @returns {string[]}
+	 * @private
 	 */
 	static parseTrueMembers(members) {
 		const trueMembers = [];
