@@ -18,8 +18,8 @@ module.exports = class extends Command {
 			this.client.users.size.toLocaleString(),
 			this.client.guilds.size.toLocaleString(),
 			this.client.channels.size.toLocaleString(),
-			klasaVersion, discordVersion, process.version)
-		]);
+			klasaVersion, discordVersion, process.version
+		));
 	}
 
 };
