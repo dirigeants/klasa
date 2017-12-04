@@ -2,9 +2,9 @@ const { Structures, splitMessage } = require('discord.js');
 
 module.exports = Structures.extend('Message', Message => {
 	/**
-     * Klasa's Extended Message
-     * @extends external:Message
-     */
+	 * Klasa's Extended Message
+	 * @extends external:Message
+	 */
 	class KlasaMessage extends Message {
 
 		/**
@@ -39,9 +39,9 @@ module.exports = Structures.extend('Message', Message => {
 			/**
 			 * The guild level configs for this context (guild || default)
 			 * @since 0.5.0
-			 * @type {SettingsGateway}
+			 * @type {Configuration}
 			 */
-			this.guildConfigs = this.guild ? this.guild.configs : this.client.settings.guilds.defaults;
+			this.guildConfigs = this.guild ? this.guild.configs : this.client.gateways.guilds.defaults;
 
 			/**
 			 * The previous responses to this message
@@ -123,7 +123,7 @@ module.exports = Structures.extend('Message', Message => {
 			 * @since 0.3.0
 			 * @type {Language}
 			 */
-			this.language = this.guild ? this.guild.language : this.client.config.language;
+			this.language = this.guild ? this.guild.language : this.client.languages.get(this.client.config.language);
 		}
 
 		/**
@@ -159,7 +159,7 @@ module.exports = Structures.extend('Message', Message => {
 		/**
 		 * The usable commands by the author in this message's context
 		 * @since 0.0.1
-		 * @returns {CommandStore<string, Command>} The filtered CommandStore
+		 * @returns {Promise<CommandStore>} The filtered CommandStore
 		 */
 		async usableCommands() {
 			return this.client.commands.filter(async command => await !this.client.commandInhibitors.some(async inhibitor => {
@@ -172,7 +172,7 @@ module.exports = Structures.extend('Message', Message => {
 		 * Checks if the author of this message, has applicable permission in this message's context of at least min
 		 * @since 0.0.1
 		 * @param {number} min The minimum level required
-		 * @returns {boolean}
+		 * @returns {Promise<boolean>}
 		 */
 		async hasAtLeastPermissionLevel(min) {
 			const { permission } = await this.client.permissionLevels.run(this, min);
@@ -275,7 +275,7 @@ module.exports = Structures.extend('Message', Message => {
 		 * Validates and resolves args into parameters
 		 * @since 0.0.1
 		 * @private
-		 * @returns {any[]} The resolved parameters
+		 * @returns {Promise<any[]>} The resolved parameters
 		 */
 		async validateArgs() {
 			if (this.params.length >= this.command.usage.parsedUsage.length && this.params.length >= this.args.length) {
@@ -334,7 +334,7 @@ module.exports = Structures.extend('Message', Message => {
 		 * @param {number} possible The id of the possible usage currently being checked
 		 * @param {boolean} validated Escapes the recursive function if the previous iteration validated the arg into a parameter
 		 * @private
-		 * @returns {any[]} The resolved parameters
+		 * @returns {Promise<any[]>} The resolved parameters
 		 */
 		async multiPossibles(possible, validated) {
 			if (validated) {

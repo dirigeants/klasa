@@ -30,13 +30,13 @@ Checks if the author/member has permission to use the command. (based on {@link 
 
 [inhibitors/permissions.js](https://github.com/dirigeants/klasa/blob/master/src/inhibitors/permissions.js)
 
-## requiredSettings
+## requiredConfigs (requiredSettings pre v0.5.0)
 
-Checks if the guild has the required settings defined. (based on {@link Command#requiredSettings})
+Checks if the guild has the required configs defined. (based on {@link Command#requiredConfigs})
 
 **Source:**
 
-[inhibitors/requiredSettings.js](https://github.com/dirigeants/klasa/blob/master/src/inhibitors/requiredSettings.js)
+[inhibitors/requiredConfigs.js](https://github.com/dirigeants/klasa/blob/master/src/inhibitors/requiredConfigs.js)
 
 ## runIn
 

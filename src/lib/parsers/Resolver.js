@@ -17,6 +17,19 @@ class Resolver {
 		 * @type {KlasaClient}
 		 */
 		Object.defineProperty(this, 'client', { value: client });
+
+		this._language = null;
+	}
+
+	/**
+	 * The default Language of the bot
+	 * @since 0.5.0
+	 * @type {?Language}
+	 */
+	get language() {
+		if (this._language) return this._language;
+		this._language = this.client.languages.get(this.client.config.language);
+		return this._language;
 	}
 
 	/**
@@ -24,7 +37,7 @@ class Resolver {
 	 * @since 0.0.1
 	 * @param {Message|Snowflake} message The message snowflake to validate.
 	 * @param {Channel} channel The Channel object in which the message can be found.
-	 * @returns {?external:Message}
+	 * @returns {?KlasaMessage}
 	 */
 	async msg(message, channel) {
 		if (message instanceof Message) return message;
@@ -35,7 +48,7 @@ class Resolver {
 	 * Resolve a User object by its instance of User, GuildMember, or by its Snowflake.
 	 * @since 0.0.1
 	 * @param {(User|GuildMember|Message|Snowflake)} user The user to validate.
-	 * @returns {?external:User}
+	 * @returns {?KlasaUser}
 	 */
 	async user(user) {
 		if (user instanceof User) return user;
@@ -84,7 +97,7 @@ class Resolver {
 	 * Resolve a Guild object by its instance of Guild, or by its Snowflake.
 	 * @since 0.0.1
 	 * @param {(Guild|Snowflake)} guild The guild to validate/find.
-	 * @returns {?external:Guild}
+	 * @returns {?KlasaGuild}
 	 */
 	async guild(guild) {
 		if (guild instanceof Guild) return guild;

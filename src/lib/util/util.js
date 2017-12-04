@@ -59,7 +59,7 @@ class Util {
 	 * @returns {string}
 	 */
 	static toTitleCase(str) {
-		return str.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+		return str.replace(/[A-Za-zÀ-ÖØ-öø-ÿ]\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
 	}
 
 	/**
@@ -106,10 +106,34 @@ class Util {
 		}
 	}
 
+	/**
+	 * Verify if a number is a finite number.
+	 * @since 0.5.0
+	 * @param {number} input The number to verify.
+	 * @returns {boolean}
+	 */
+	static isNumber(input) {
+		return typeof input === 'number' && !isNaN(input) && Number.isFinite(input);
+	}
+
+	/**
+	 * Try parse a stringified JSON string.
+	 * @since 0.5.0
+	 * @param {string} value The value to parse.
+	 * @returns {*}
+	 */
+	static tryParse(value) {
+		try {
+			return JSON.parse(value);
+		} catch (err) {
+			return value;
+		}
+	}
+
 }
 
 /**
- * @typedef {Object} execOptions
+ * @typedef {Object} ExecOptions
  * @memberof {Util}
  * @property {string} [cwd=process.cwd()] Current working directory of the child process
  * @property {Object} [env={}] Environment key-value pairs
@@ -127,8 +151,8 @@ class Util {
  * @method
  * @since 0.3.0
  * @param {string} command The command to run
- * @param {execOptions} options The options to pass to exec
- * @returns {string}
+ * @param {ExecOptions} [options] The options to pass to exec
+ * @returns {Promise<{ stdout: string, stderr: string }>}
  */
 Util.exec = promisify(exec);
 
@@ -137,8 +161,8 @@ Util.exec = promisify(exec);
  * @method
  * @since 0.3.0
  * @param {number} delay The amount of time in ms to delay
- * @param {any} args Any args to pass to the .then (mostly pointless in this form)
- * @returns {Promise<any>} The args value passed in
+ * @param {*} [args] Any args to pass to the .then (mostly pointless in this form)
+ * @returns {Promise<*>} The args value passed in
  */
 Util.sleep = promisify(setTimeout);
 
