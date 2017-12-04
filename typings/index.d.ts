@@ -1108,6 +1108,7 @@ declare module 'klasa' {
 		quotedStringSupport?: boolean;
 		readyMessage?: string | Function;
 		ownerID?: string;
+		regexPrefix?: RegExp;
 	};
 
 	export type ExecOptions = {
