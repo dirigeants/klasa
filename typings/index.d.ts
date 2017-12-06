@@ -590,6 +590,7 @@ declare module 'klasa' {
 		public max?: number;
 		public sql: [string, string];
 		public configurable: boolean;
+		private readonly _inited: boolean;
 
 		public parse(value: any, guild: KlasaGuild): Promise<any>;
 		public resolveString(msg: KlasaMessage, value: any): string;

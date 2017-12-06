@@ -137,7 +137,15 @@ class SchemaPiece {
 		 */
 		this.configurable = typeof options.configurable !== 'undefined' ? options.configurable : this.type !== 'any';
 
-		this.init(options);
+		/**
+		 * The path of this SchemaPiece instance.
+		 * @since 0.5.0
+		 * @type {boolean}
+		 * @name SchemaPiece#_inited
+		 * @readonly
+		 * @private
+		 */
+		Object.defineProperty(this, '_inited', { value: this.init(options) });
 	}
 
 	/**
@@ -218,9 +226,11 @@ class SchemaPiece {
 	 * Check if the key is properly configured.
 	 * @since 0.5.0
 	 * @param {AddOptions} options The options to parse.
+	 * @returns {boolean}
 	 * @private
 	 */
 	init(options) {
+		if (this._inited) throw new TypeError(`[INIT] ${this} - Is already init. Aborting re-init.`);
 		// Check if the 'options' parameter is an object.
 		if (!isObject(options)) throw new TypeError(`SchemaPiece#init expected an object as a parameter. Got: ${typeof options}`);
 		this._schemaCheckType(this.type);
@@ -231,6 +241,8 @@ class SchemaPiece {
 
 		this.sql[1] = options.sql || ((this.type === 'integer' || this.type === 'float' ? 'INTEGER' :
 			this.max !== null ? `VARCHAR(${this.max})` : 'TEXT') + (this.default !== null ? ` DEFAULT ${SchemaPiece._parseSQLValue(this.default)}` : ''));
+
+		return true;
 	}
 
 	/**
