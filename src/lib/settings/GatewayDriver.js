@@ -77,6 +77,14 @@ class GatewayDriver {
 				array: false,
 				sql: `VARCHAR(5) NOT NULL DEFAULT '${this.client.config.language}'`
 			},
+			disableNaturalPrefix: {
+				type: 'boolean',
+				default: false,
+				min: null,
+				max: null,
+				array: false,
+				sql: `BIT(1) NOT NULL DEFAULT 0`
+			},
 			disabledCommands: {
 				type: 'command',
 				default: [],

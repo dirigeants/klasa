@@ -620,7 +620,8 @@ declare module 'klasa' {
 		public readonly defaultDataSchema: {
 			prefix: SchemaPieceJSON,
 			language: SchemaPieceJSON,
-			disabledCommands: SchemaPieceJSON
+			disableNaturalPrefix: SchemaPieceJSON,
+			disabledCommands: SchemaPieceJSON,
 		};
 	}
 
