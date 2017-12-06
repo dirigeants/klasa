@@ -621,7 +621,7 @@ declare module 'klasa' {
 			prefix: SchemaPieceJSON,
 			language: SchemaPieceJSON,
 			disableNaturalPrefix: SchemaPieceJSON,
-			disabledCommands: SchemaPieceJSON,
+			disabledCommands: SchemaPieceJSON
 		};
 	}
 
