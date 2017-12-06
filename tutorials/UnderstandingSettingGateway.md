@@ -73,7 +73,7 @@ Now that I have a new key called `modlogs`, I want to configure it outside the `
 msg.guild.configs.updateOne('modlogs', '267727088465739778', msg.guild);
 ```
 
-Check: {@link Gateway.updateOne}
+Check: {@link Configuration.updateOne}
 
 > You can use a Channel instance, {@link SettingResolver} will make sure the input is valid and the database gets an **ID** and not an object.
 
