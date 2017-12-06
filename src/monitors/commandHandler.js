@@ -47,7 +47,7 @@ module.exports = class extends Monitor {
 
 	getPrefix(msg) {
 		if (this.prefixMention.test(msg.content)) return { length: this.nick.test(msg.content) ? this.prefixMentionLength + 1 : this.prefixMentionLength, regex: this.prefixMention };
-		if (this.client.config.regexPrefix) {
+		if (msg.guildConfigs.disableNaturalPrefix !== true && this.client.config.regexPrefix) {
 			const results = this.client.config.regexPrefix.exec(msg.content);
 			if (results) return { length: results[0].length, regex: this.client.config.regexPrefix };
 		}

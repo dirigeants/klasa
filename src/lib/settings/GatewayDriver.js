@@ -64,9 +64,10 @@ class GatewayDriver {
 			prefix: {
 				type: 'string',
 				default: this.client.config.prefix,
-				array: this.client.config.prefix.constructor.name === 'Array',
 				min: null,
 				max: 10,
+				array: this.client.config.prefix.constructor.name === 'Array',
+				configurable: true,
 				sql: `VARCHAR(10) NOT NULL DEFAULT '${this.client.config.prefix.constructor.name === 'Array' ? JSON.stringify(this.client.config.prefix) : this.client.config.prefix}'`
 			},
 			language: {
@@ -75,7 +76,17 @@ class GatewayDriver {
 				min: null,
 				max: null,
 				array: false,
+				configurable: true,
 				sql: `VARCHAR(5) NOT NULL DEFAULT '${this.client.config.language}'`
+			},
+			disableNaturalPrefix: {
+				type: 'boolean',
+				default: false,
+				min: null,
+				max: null,
+				array: false,
+				configurable: Boolean(this.client.config.regexPrefix),
+				sql: `BIT(1) NOT NULL DEFAULT 0`
 			},
 			disabledCommands: {
 				type: 'command',
@@ -83,6 +94,7 @@ class GatewayDriver {
 				min: null,
 				max: null,
 				array: true,
+				configurable: true,
 				sql: 'TEXT'
 			}
 		};
