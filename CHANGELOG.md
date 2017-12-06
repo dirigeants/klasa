@@ -100,6 +100,11 @@ NOTE: For the contributors, you add new entries to this document following this 
 - [[`adb5afa450`](https://github.com/dirigeants/klasa/commit/adb5afa45027771b07730c07e6d442f4a54c1ae0)] ([#52](https://github.com/dirigeants/klasa/pull/52)) Added the RichDisplay tutorial. (HellPie)
 - [[`0c066e0694`](https://github.com/dirigeants/klasa/commit/0c066e06943aaf564fdfe099b1c56a6d1f38955b)] and
 [[`4c095dc7fd`](https://github.com/dirigeants/klasa/commit/4c095dc7fdab7d470c8c6d0c31266d57c2195857)] Added `toString()` method to the Store class. (bdistin)
+- [[`4d5b2bc5e4`](https://github.com/dirigeants/klasa/commit/4d5b2bc5e4d97c47c58c3e60466b6b431968f009)] ([#35](https://github.com/dirigeants/klasa/pull/35)) Added RichDisplay and RichMenu. (bdistin)
+- [[`e6048e6181`](https://github.com/dirigeants/klasa/commit/e6048e618146337dbc54975b116aff293e8b087f)] ([#26](https://github.com/dirigeants/klasa/pull/26)) Added typings. (kyranet)
+- [[`b1bf841214`](https://github.com/dirigeants/klasa/commit/b1bf841214eaef5bbbc996122a4da1b73048d3a6)] ([#21](https://github.com/dirigeants/klasa/pull/21)) Added KlasaColors and KlasaConsole. (bdistin)
+- [[`e1cceac96c`](https://github.com/dirigeants/klasa/commit/e1cceac96c30b6716c01124cb0ee37e32c1750ad)] ([#19](https://github.com/dirigeants/klasa/pull/19)) Added the events `verbose` and `wtf`. (HellPie)
+- [[`c5615ffb74`](https://github.com/dirigeants/klasa/commit/c5615ffb74639bb61bbde9f49780507f849e5e48)] ([#18](https://github.com/dirigeants/klasa/pull/18)) Added readyMessage as a KlasaClientConfig option. (MrJacz)
 
 ### Changed
 
@@ -114,11 +119,23 @@ NOTE: For the contributors, you add new entries to this document following this 
 - [[`92ef3cba08`](https://github.com/dirigeants/klasa/commit/92ef3cba08d8f75bb1dc91a29159399bf1e80650)] Better usage for the transfer command. (bdistin)
 - [[`c24e3f7b7a`](https://github.com/dirigeants/klasa/commit/c24e3f7b7aa5b1b522ddbbf5bc1553571cd68d67)] ([#59](https://github.com/dirigeants/klasa/pull/59)) Renamed `messageBulkDelete` to `messageDeleteBulk`. (ghost)
 - [[`2603688f84`](https://github.com/dirigeants/klasa/commit/2603688f8405e3871f0f45e3eb5185eced468222)] Updated the `sendMessage` extendable. (bdistin)
+- [[`a22f1b7049`](https://github.com/dirigeants/klasa/commit/a22f1b70494ee70778d6c3f4d93566880d107df9)] Updated `README.md` (bdistin)
+- [[`834093ad76`](https://github.com/dirigeants/klasa/commit/834093ad763bf145f33c958af735fb7aa78e4580)] ([#40](https://github.com/dirigeants/klasa/pull/40)) Improved reaction options for RichDisplay. (pedall)
+- [[`71b399d2a0`](https://github.com/dirigeants/klasa/commit/71b399d2a006f3699728dfb4639be2137709a26f)] ([#38](https://github.com/dirigeants/klasa/pull/38)) Added more info to stats command. (tech6hutch)
+- [[`044f58e295`](https://github.com/dirigeants/klasa/commit/044f58e2956acf9ab72f6d486515a19a04ced9c1)] Updated Getting Started tutorial. (bdistin)
+- [[`d244d7b905`](https://github.com/dirigeants/klasa/commit/d244d7b905a19471faba0ed78eaf56e3b32e242c)] Updated `fs-nextra` to `0.3.0` and require `Node.js 8.5.0`. (bdistin)
+- [[`bfdec7a85d`](https://github.com/dirigeants/klasa/commit/bfdec7a85d263c9d4e12abbd74f05873c910fcaa)] Updated the commandInhibited event. (bdistin)
+- [[`4f33028286`](https://github.com/dirigeants/klasa/commit/4f33028286037a8ce6cc3ecfa7d30a5ed430d882)] Made the error better when a piece is not a class. (bdistin)
+- [[`c824733037`](https://github.com/dirigeants/klasa/commit/c824733037605947c45738e5a111ff108e001726)] ([#23](https://github.com/dirigeants/klasa/pull/23)) Added quotedStringSupport to the CreatingCommand docs. (Skillz4Killz)
+- [[`b3db1a1c7c`](https://github.com/dirigeants/klasa/commit/b3db1a1c7c21a6f81a70e1683372242f78f30110)] ([#20](https://github.com/dirigeants/klasa/pull/20)) Added several missing properties to the CreatingEvents docs. (MrJacz)
+- [[`7c3b797d33`](https://github.com/dirigeants/klasa/commit/7c3b797d334dc65cc4f41002097f979f58040230)] **[DEPS]** Moved `discord.js` to be a peer dependency. (bdistin)
+- [[`e1cceac96c`](https://github.com/dirigeants/klasa/commit/e1cceac96c30b6716c01124cb0ee37e32c1750ad)] ([#19](https://github.com/dirigeants/klasa/pull/19)) Redesigned the log output. (HellPie)
 
 ### Removed
 
 - [[`c096d8fac0`](https://github.com/dirigeants/klasa/commit/c096d8fac0dfdb27d4fdca7100e5c2253910b358)] ([#81](https://github.com/dirigeants/klasa/pull/81)) Removed `prefixMention` from `ClientOptions`. (bdistin)
 - [[`b93cfb57fb`](https://github.com/dirigeants/klasa/commit/b93cfb57fb7f3e4eaaa2bdde88b892cd76e36e35)] ([#65](https://github.com/dirigeants/klasa/pull/65)) **[DEPS]** Removed `performance-now` as a dependency (replaced with `perf_hooks`). Bumped Node.js' minimum version to `8.5.0`. (bdistin)
+- [[`b1bf841214`](https://github.com/dirigeants/klasa/commit/b1bf841214eaef5bbbc996122a4da1b73048d3a6)] ([#21](https://github.com/dirigeants/klasa/pull/21)) **[DEPS]** Removed `chalk` and `moment-duration-format` as dependencies. (bdistin)
 
 ### Fixed
 
@@ -144,12 +161,23 @@ NOTE: For the contributors, you add new entries to this document following this 
 - [[`de92f50a8d`](https://github.com/dirigeants/klasa/commit/de92f50a8dba9321ba46be51a8f56b9f35bc3b69)] Fixed a code error in the RichDisplay tutorial. (bdistin)
 - [[`584409046f`](https://github.com/dirigeants/klasa/commit/584409046f40924d06b8b9e64512b18e5c6fe072)] Fixed some docs in util/util. (bdistin)
 - [[`858552c019`](https://github.com/dirigeants/klasa/commit/858552c0196146d7849c6a47b8caaa576137fcbe)] Added a missing `@readonly` tag to a JSDoc. (bdistin)
-
-<!--
-Needs to update the 0.5.0 changelog with the format of 0.4.0's, and include links to the tutorials as well as the user who contributed for each change.
--->
-
-<!--
-Current progress:
-https://github.com/dirigeants/klasa/commits/master?after=550ac275c849c285692ffff5c4e99cb53753a85b+69
--->
+- [[`5581a9e258`](https://github.com/dirigeants/klasa/commit/5581a9e25898d8841976b4e7b00c2e3188aece76)] ([#41](https://github.com/dirigeants/klasa/pull/41)) Fixed docs for PieceStores (UnseenFaith)
+- [[`d9c165e604`](https://github.com/dirigeants/klasa/commit/d9c165e604d5e644babfbd02df404bfedd7b2347)] ([#39](https://github.com/dirigeants/klasa/pull/39)) Fixed a typo in docs (Pandraghon)
+- [[`bb0a51d325`](https://github.com/dirigeants/klasa/commit/bb0a51d325ed0e6c88e2d56212dc6b5d11c917ff)] Changed the type for language in SG's default schema. (bdistin)
+- [[`064c8bf0d3`](https://github.com/dirigeants/klasa/commit/064c8bf0d3f3c5bcbfd2513b8fcad44321e7a758)] ([#34](https://github.com/dirigeants/klasa/pull/34)) Fixed a typo in docs (avallette)
+- [[`aaa676e87f`](https://github.com/dirigeants/klasa/commit/aaa676e87f14509328d26baf77b49175f34605a3)] ([#29](https://github.com/dirigeants/klasa/pull/29)) Added some exports, little cleanup in typings. (kyranet)
+- [[`39c4c3fbe6`](https://github.com/dirigeants/klasa/commit/39c4c3fbe6d1c041b41797a86d4142be4d5f2111)] Fixed the reload all not initing pieces. (bdistin)
+- [[`314725e185`](https://github.com/dirigeants/klasa/commit/314725e185d448c3b40559b12771f00aa8780011)] ([#31](https://github.com/dirigeants/klasa/pull/31)) Fixed the registerPiece method. (Pandraghon)
+- [[`242ecf5647`](https://github.com/dirigeants/klasa/commit/242ecf5647f5e10a4a001748f551da2706e131b2)] ([#30](https://github.com/dirigeants/klasa/pull/30)) Fixed a code snippet from the documentation missing args. (Pandraghon)
+- [[`ba5e2220b4`](https://github.com/dirigeants/klasa/commit/ba5e2220b4a1aa16abbdcdc8a0d8916d41e85f2c)] ([#28](https://github.com/dirigeants/klasa/pull/28)) Fixed several things in typings. (kyranet)
+- [[`dfd19f7086`](https://github.com/dirigeants/klasa/commit/dfd19f708613e2d8590c813246fddb80ae446bb2)] ([#27](https://github.com/dirigeants/klasa/pull/27)) Fixed the ESLint linter's configuration. (kyranet)
+- [[`386e441191`](https://github.com/dirigeants/klasa/commit/386e441191a12c78a651416d926ff13232cef318)] ([#25](https://github.com/dirigeants/klasa/pull/25)) Fixed several require errors in the loader. (bdistin)
+- [[`2ccc2ef0a1`](https://github.com/dirigeants/klasa/commit/2ccc2ef0a145c2ef1f69fc33ffde299fb2e7d56b)] Fixed several events to be enabled/disabled in the constructor instead of in init. (bdistin)
+- [[`98ab0c4e31`](https://github.com/dirigeants/klasa/commit/98ab0c4e31957f46b34f5c8f0d82921fe003d616)] Fixed a JSDoc showing `useColor`'s default value to `true` instead of `false`. (bdistin)
+- [[`8888fcfa21`](https://github.com/dirigeants/klasa/commit/8888fcfa2195311be9efdb4be3c7885d9336e57d)] Fixed KlasaClientOptions missing the property of `cmdLogging`. (bdistin)
+- [[`6a67517cf3`](https://github.com/dirigeants/klasa/commit/6a67517cf39c35a04790116cc196a91436de0bb7)] Fixed a missing check for inhibitors, making them run even when disabled. (bdistin)
+- [[`4cb94fc90f`](https://github.com/dirigeants/klasa/commit/4cb94fc90f482b1c574a86957cac07b5c9990f1b)] Fixed a missing check for selfbots making them fetch the member (endpoint not accessible for user accounts). (bdistin)
+- [[`b6659a8a84`](https://github.com/dirigeants/klasa/commit/b6659a8a840e1baa55a3d5dd6a7d6c8661233b7d)] Fixed a typo in CommandHandler. (bdistin)
+- [[`b8fae03bc0`](https://github.com/dirigeants/klasa/commit/b8fae03bc095dac6652592789fdc56b9b12bb72f)] Fixed event inits. (bdistin)
+- [[`760f32a648`](https://github.com/dirigeants/klasa/commit/760f32a648822404705a23bbf8cf4b4c3449cf96)] Fixed a spelling mistake. (bdistin)
+- [[`e12dbe3388`](https://github.com/dirigeants/klasa/commit/e12dbe33889a93dec5cd4edcd8ab7ab83879faa8)] ([#17](https://github.com/dirigeants/klasa/pull/17)) Updated `README.md` and fixed a reference link. (MrJacz)
