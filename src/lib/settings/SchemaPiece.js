@@ -1,4 +1,5 @@
-const { isNumber } = require('../util/util');
+const { isNumber, isObject } = require('../util/util');
+const fs = require('fs-nextra');
 
 /**
  * The SchemaPiece class that contains the data for a key and several helpers.
@@ -14,6 +15,15 @@ class SchemaPiece {
 	 * @property {string[]} sql A tuple containing the name of the column and its data type.
 	 * @property {boolean} array Whether the key should be stored as Array or not.
 	 * @property {boolean} configurable Whether the key should be configurable by the config command or not.
+	 * @memberof SchemaPiece
+	 */
+
+	/**
+	 * @typedef  {Object} ModifyOptions
+	 * @property {*} [default] The new default value.
+	 * @property {number} [min] The new minimum range value.
+	 * @property {number} [max] The new maximum range value.
+	 * @property {boolean} [configurable] The new configurable value.
 	 * @memberof SchemaPiece
 	 */
 
@@ -142,39 +152,6 @@ class SchemaPiece {
 	}
 
 	/**
-	 * Check if the key is properly configured.
-	 * @since 0.5.0
-	 * @param {AddOptions} options The options to parse.
-	 * @private
-	 */
-	init(options) {
-		// Check if the 'options' parameter is an object.
-		if (!options || Object.prototype.toString.call(options) !== '[object Object]') throw new TypeError(`SchemaPiece#init expected an object as first parameter. Got: ${typeof options}`);
-		if (typeof this.type !== 'string') throw new TypeError(`[KEY] ${this} - Parameter type must be a string.`);
-		if (!this.manager.store.types.includes(this.type)) throw new TypeError(`[KEY] ${this} - ${this.type} is not a valid type.`);
-		if (typeof this.array !== 'boolean') throw new TypeError(`[KEY] ${this} - Parameter array must be a boolean.`);
-		// Default value checking
-		if (this.array === true) {
-			if (!Array.isArray(this.default)) throw new TypeError(`[DEFAULT] ${this} - Default key must be an array if the key stores an array.`);
-		} else if (this.type === 'boolean' && typeof this.default !== 'boolean') {
-			throw new TypeError(`[DEFAULT] ${this} - Default key must be a boolean if the key stores a boolean.`);
-		} else if (this.type === 'string' && typeof this.default !== 'string' && this.default !== null) {
-			throw new TypeError(`[DEFAULT] ${this} - Default key must be either a string or null if the key stores a string.`);
-		} else if (this.type !== 'any' && typeof this.default === 'object' && this.default !== null) {
-			throw new TypeError(`[DEFAULT] ${this} - Default key must not be type of object unless it is type any or null.`);
-		}
-		// Min and max checking
-		if (this.min !== null && !isNumber(this.min)) throw new TypeError(`[KEY] ${this} - Parameter min must be a number or null.`);
-		if (this.max !== null && !isNumber(this.max)) throw new TypeError(`[KEY] ${this} - Parameter max must be a number or null.`);
-		if (this.min !== null && this.max !== null && this.min > this.max) throw new TypeError(`[KEY] ${this} - Parameter min must contain a value lower than the parameter max.`);
-		// Configurable checking
-		if (typeof this.configurable !== 'boolean') throw new TypeError(`[KEY] ${this} - Parameter configurable must be a boolean.`);
-
-		this.sql.push(options.sql || ((this.type === 'integer' || this.type === 'float' ? 'INTEGER' :
-			this.max !== null ? `VARCHAR(${this.max})` : 'TEXT') + (this.default !== null ? ` DEFAULT ${SchemaPiece._parseSQLValue(this.default)}` : '')));
-	}
-
-	/**
 	 * Resolve a string.
 	 * @since 0.5.0
 	 * @param {KlasaMessage} msg The Message to use.
@@ -205,6 +182,107 @@ class SchemaPiece {
 
 		if (this.array && Array.isArray(value)) return value.length > 0 ? `[ ${value.map(resolver).join(' | ')} ]` : 'None';
 		return resolver(value);
+	}
+
+	/**
+	 * Modify this SchemaPiece's properties.
+	 * @since 0.5.0
+	 * @param {ModifyOptions} options The new options.
+	 * @returns {Promise<this>}
+	 */
+	async modify(options) {
+		// Check if the 'options' parameter is an object.
+		if (!isObject(options)) throw new TypeError(`SchemaPiece#modify expected an object as a parameter. Got: ${typeof options}`);
+		if (typeof options.default !== 'undefined' && this.default !== options.default) {
+			this._schemaCheckDefault(Object.assign(this.toJSON(), options));
+			this.default = options.default;
+		}
+		if (typeof options.min !== 'undefined' && this.min !== options.min) {
+			this._schemaCheckLimits(options.min, typeof options.max !== 'undefined' ? options.max : this.max);
+			this.min = options.min;
+		}
+		if (typeof options.max !== 'undefined' && this.max !== options.max) {
+			this._schemaCheckLimits(typeof options.min !== 'undefined' ? options.min : this.min, options.max);
+			this.max = options.max;
+		}
+		if (typeof options.configurable !== 'undefined' && this.configurable !== options.configurable) {
+			this._schemaCheckConfigurable(options.configurable);
+			this.configurable = options.configurable;
+		}
+		await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
+
+		return this;
+	}
+
+	/**
+	 * Check if the key is properly configured.
+	 * @since 0.5.0
+	 * @param {AddOptions} options The options to parse.
+	 * @private
+	 */
+	init(options) {
+		// Check if the 'options' parameter is an object.
+		if (!isObject(options)) throw new TypeError(`SchemaPiece#init expected an object as a parameter. Got: ${typeof options}`);
+		this._schemaCheckType(this.type);
+		this._schemaCheckArray(this.array);
+		this._schemaCheckDefault(this.default, this.type, this.array);
+		this._schemaCheckLimits(this.min, this.max);
+		this._schemaCheckConfigurable(this.configurable);
+
+		this.sql[1] = options.sql || ((this.type === 'integer' || this.type === 'float' ? 'INTEGER' :
+			this.max !== null ? `VARCHAR(${this.max})` : 'TEXT') + (this.default !== null ? ` DEFAULT ${SchemaPiece._parseSQLValue(this.default)}` : ''));
+	}
+
+	/**
+	 * Checks if options.type is valid.
+	 * @param {string} type The parameter to validate.
+	 */
+	_schemaCheckType(type) {
+		if (typeof type !== 'string') throw new TypeError(`[KEY] ${this} - Parameter type must be a string.`);
+		if (!this.manager.store.types.includes(type)) throw new TypeError(`[KEY] ${this} - ${type} is not a valid type.`);
+	}
+
+	/**
+	 * Checks if options.array is valid.
+	 * @param {boolean} array The parameter to validate.
+	 */
+	_schemaCheckArray(array) {
+		if (typeof array !== 'boolean') throw new TypeError(`[KEY] ${this} - Parameter array must be a boolean.`);
+	}
+
+	/**
+	 * Checks if options.default is valid.
+	 * @param {AddOptions} options The options to validate.
+	 */
+	_schemaCheckDefault(options) {
+		if (options.array === true) {
+			if (!Array.isArray(options.default)) throw new TypeError(`[DEFAULT] ${this} - Default key must be an array if the key stores an array.`);
+		} else if (options.type === 'boolean' && typeof options.default !== 'boolean') {
+			throw new TypeError(`[DEFAULT] ${this} - Default key must be a boolean if the key stores a boolean.`);
+		} else if (options.type === 'string' && typeof options.default !== 'string' && options.default !== null) {
+			throw new TypeError(`[DEFAULT] ${this} - Default key must be either a string or null if the key stores a string.`);
+		} else if (options.type !== 'any' && typeof options.default === 'object' && options.default !== null) {
+			throw new TypeError(`[DEFAULT] ${this} - Default key must not be type of object unless it is type any or null.`);
+		}
+	}
+
+	/**
+	 * Checks if options.min and options.max are valid.
+	 * @param {number} min The options.min parameter to validate.
+	 * @param {number} max The options.max parameter to validate.
+	 */
+	_schemaCheckLimits(min, max) {
+		if (min !== null && !isNumber(min)) throw new TypeError(`[KEY] ${this} - Parameter min must be a number or null.`);
+		if (max !== null && !isNumber(max)) throw new TypeError(`[KEY] ${this} - Parameter max must be a number or null.`);
+		if (min !== null && max !== null && min > max) throw new TypeError(`[KEY] ${this} - Parameter min must contain a value lower than the parameter max.`);
+	}
+
+	/**
+	 * Checks if options.configurable is valid.
+	 * @param {boolean} configurable The parameter to validate.
+	 */
+	_schemaCheckConfigurable(configurable) {
+		if (typeof configurable !== 'boolean') throw new TypeError(`[KEY] ${this} - Parameter configurable must be a boolean.`);
 	}
 
 	/**
