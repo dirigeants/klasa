@@ -233,9 +233,8 @@ class SchemaPiece {
 			if (this.manager.sql && this.manager.provider.updateColumn === 'function') {
 				this.manager.provider.updateColumn(this.manager.type, this.key, this._generateSQLDatatype(options.sql));
 			}
-			// TODO(kyranet): Implement force mode.
+			if (this.client.listenerCount('schemaKeyUpdate')) this.client.emit('schemaKeyUpdate', this);
 		}
-		// TODO(kyranet): Implement schemaKeyUpdate event.
 
 		return this;
 	}

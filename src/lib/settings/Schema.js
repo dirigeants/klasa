@@ -144,7 +144,7 @@ class Schema {
 			await this.force('add', key, folder);
 		}
 
-		// TODO(kyranet): Implement schemaKeyAdd event.
+		if (this.client.listenerCount('schemaKeyAdd')) this.client.emit('schemaKeyAdd', folder);
 		return this.manager.schema;
 	}
 
@@ -172,7 +172,7 @@ class Schema {
 			await this.force('delete', key, folder);
 		}
 
-		// TODO(kyranet): Implement schemaKeyRemove event.
+		if (this.client.listenerCount('schemaKeyRemove')) this.client.emit('schemaKeyRemove', folder);
 		return this.manager.schema;
 	}
 
@@ -223,7 +223,7 @@ class Schema {
 			await this.force('add', key, this[key]);
 		}
 
-		// TODO(kyranet): Implement schemaKeyAdd event.
+		if (this.client.listenerCount('schemaKeyAdd')) this.client.emit('schemaKeyAdd', this[key]);
 		return this.manager.schema;
 	}
 
@@ -269,7 +269,7 @@ class Schema {
 			await this.force('delete', key, schemaPiece);
 		}
 
-		// TODO(kyranet): Implement schemaKeyRemove event.
+		if (this.client.listenerCount('schemaKeyRemove')) this.client.emit('schemaKeyRemove', schemaPiece);
 		return this.manager.schema;
 	}
 

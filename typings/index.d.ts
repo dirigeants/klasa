@@ -123,6 +123,11 @@ declare module 'klasa' {
 		public on(event: 'configDeleteEntry', listener: (entry: Configuration) => void): this;
 		public on(event: 'configCreateEntry', listener: (entry: Configuration) => void): this;
 
+		// Schema Events
+		public on(event: 'schemaKeyAdd', listener: (key: Schema | SchemaPiece) => void): this;
+		public on(event: 'schemaKeyRemove', listener: (key: Schema | SchemaPiece) => void): this;
+		public on(event: 'schemaKeyUpdate', listener: (key: SchemaPiece) => void): this;
+
 		// Klasa Console Custom Events
 		public on(event: 'log', listener: (data: any, type: string) => void): this;
 		public on(event: 'wtf', listener: (failure: Error) => void): this;
@@ -179,6 +184,11 @@ declare module 'klasa' {
 		public once(event: 'configUpdateEntry', listener: (oldEntry: Configuration, newEntry: Configuration, path?: string) => void): this;
 		public once(event: 'configDeleteEntry', listener: (entry: Configuration) => void): this;
 		public once(event: 'configCreateEntry', listener: (entry: Configuration) => void): this;
+
+		// Schema Events
+		public once(event: 'schemaKeyAdd', listener: (key: Schema | SchemaPiece) => void): this;
+		public once(event: 'schemaKeyRemove', listener: (key: Schema | SchemaPiece) => void): this;
+		public once(event: 'schemaKeyUpdate', listener: (key: SchemaPiece) => void): this;
 
 		// Klasa Console Custom Events
 		public once(event: 'log', listener: (data: any, type: string) => void): this;
