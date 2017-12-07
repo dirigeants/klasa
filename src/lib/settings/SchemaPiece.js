@@ -263,6 +263,7 @@ class SchemaPiece {
 
 	/**
 	 * Checks if options.type is valid.
+	 * @since 0.5.0
 	 * @param {string} type The parameter to validate.
 	 * @private
 	 */
@@ -273,6 +274,7 @@ class SchemaPiece {
 
 	/**
 	 * Checks if options.array is valid.
+	 * @since 0.5.0
 	 * @param {boolean} array The parameter to validate.
 	 * @private
 	 */
@@ -282,6 +284,7 @@ class SchemaPiece {
 
 	/**
 	 * Checks if options.default is valid.
+	 * @since 0.5.0
 	 * @param {AddOptions} options The options to validate.
 	 * @private
 	 */
@@ -299,6 +302,7 @@ class SchemaPiece {
 
 	/**
 	 * Checks if options.min and options.max are valid.
+	 * @since 0.5.0
 	 * @param {number} min The options.min parameter to validate.
 	 * @param {number} max The options.max parameter to validate.
 	 * @private
@@ -311,6 +315,7 @@ class SchemaPiece {
 
 	/**
 	 * Checks if options.configurable is valid.
+	 * @since 0.5.0
 	 * @param {boolean} configurable The parameter to validate.
 	 * @private
 	 */
@@ -320,6 +325,7 @@ class SchemaPiece {
 
 	/**
 	 * Generate a new SQL datatype.
+	 * @since 0.5.0
 	 * @param {string} [sql] The new SQL datatype.
 	 * @returns {string}
 	 * @private
