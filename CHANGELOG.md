@@ -13,6 +13,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#115](https://github.com/dirigeants/klasa/pull/115)] Added the events `schemaKeyAdd`, `schemaKeyRemove` and `schemaKeyUpdate`. (kyranet)
 - [[#115](https://github.com/dirigeants/klasa/pull/115)] Added `isObject` method to `Util`. (kyranet)
 - [[#115](https://github.com/dirigeants/klasa/pull/115)] Added `SchemaPiece#modify`, allowing users to modify a SP's options. (kyranet)
 - [[#113](https://github.com/dirigeants/klasa/pull/113)] Added disableNaturalPrefix. (kyranet)

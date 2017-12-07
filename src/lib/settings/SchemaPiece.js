@@ -264,6 +264,7 @@ class SchemaPiece {
 	/**
 	 * Checks if options.type is valid.
 	 * @param {string} type The parameter to validate.
+	 * @private
 	 */
 	_schemaCheckType(type) {
 		if (typeof type !== 'string') throw new TypeError(`[KEY] ${this} - Parameter type must be a string.`);
@@ -273,6 +274,7 @@ class SchemaPiece {
 	/**
 	 * Checks if options.array is valid.
 	 * @param {boolean} array The parameter to validate.
+	 * @private
 	 */
 	_schemaCheckArray(array) {
 		if (typeof array !== 'boolean') throw new TypeError(`[KEY] ${this} - Parameter array must be a boolean.`);
@@ -281,6 +283,7 @@ class SchemaPiece {
 	/**
 	 * Checks if options.default is valid.
 	 * @param {AddOptions} options The options to validate.
+	 * @private
 	 */
 	_schemaCheckDefault(options) {
 		if (options.array === true) {
@@ -298,6 +301,7 @@ class SchemaPiece {
 	 * Checks if options.min and options.max are valid.
 	 * @param {number} min The options.min parameter to validate.
 	 * @param {number} max The options.max parameter to validate.
+	 * @private
 	 */
 	_schemaCheckLimits(min, max) {
 		if (min !== null && !isNumber(min)) throw new TypeError(`[KEY] ${this} - Parameter min must be a number or null.`);
@@ -308,6 +312,7 @@ class SchemaPiece {
 	/**
 	 * Checks if options.configurable is valid.
 	 * @param {boolean} configurable The parameter to validate.
+	 * @private
 	 */
 	_schemaCheckConfigurable(configurable) {
 		if (typeof configurable !== 'boolean') throw new TypeError(`[KEY] ${this} - Parameter configurable must be a boolean.`);
@@ -317,6 +322,7 @@ class SchemaPiece {
 	 * Generate a new SQL datatype.
 	 * @param {string} [sql] The new SQL datatype.
 	 * @returns {string}
+	 * @private
 	 */
 	_generateSQLDatatype(sql) {
 		return typeof sql === 'string' ? sql : (this.type === 'integer' || this.type === 'float' ? 'INTEGER' :
