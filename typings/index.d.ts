@@ -602,6 +602,7 @@ declare module 'klasa' {
 		private _schemaCheckDefault(options: AddOptions): void;
 		private _schemaCheckLimits(min: number, max: number): void;
 		private _schemaCheckConfigurable(configurable: boolean): void;
+		private _generateSQLDatatype(sql?: string): string;
 
 		public toJSON(): SchemaPieceJSON;
 		public toString(): string;
@@ -1319,6 +1320,7 @@ declare module 'klasa' {
 		min?: number;
 		max?: number;
 		configurable?: boolean;
+		sql?: string;
 	};
 
 	export type emoji = string;

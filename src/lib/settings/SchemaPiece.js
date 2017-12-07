@@ -24,6 +24,7 @@ class SchemaPiece {
 	 * @property {number} [min] The new minimum range value.
 	 * @property {number} [max] The new maximum range value.
 	 * @property {boolean} [configurable] The new configurable value.
+	 * @property {string} [sql] The new sql datatype.
 	 * @memberof SchemaPiece
 	 */
 
@@ -200,24 +201,39 @@ class SchemaPiece {
 	 */
 	async modify(options) {
 		// Check if the 'options' parameter is an object.
+		const edited = new Set();
+
 		if (!isObject(options)) throw new TypeError(`SchemaPiece#modify expected an object as a parameter. Got: ${typeof options}`);
 		if (typeof options.default !== 'undefined' && this.default !== options.default) {
 			this._schemaCheckDefault(Object.assign(this.toJSON(), options));
 			this.default = options.default;
+			edited.add('DEFAULT');
 		}
 		if (typeof options.min !== 'undefined' && this.min !== options.min) {
 			this._schemaCheckLimits(options.min, typeof options.max !== 'undefined' ? options.max : this.max);
 			this.min = options.min;
+			edited.add('MIN');
 		}
 		if (typeof options.max !== 'undefined' && this.max !== options.max) {
 			this._schemaCheckLimits(typeof options.min !== 'undefined' ? options.min : this.min, options.max);
 			this.max = options.max;
+			edited.add('MAX');
 		}
 		if (typeof options.configurable !== 'undefined' && this.configurable !== options.configurable) {
 			this._schemaCheckConfigurable(options.configurable);
 			this.configurable = options.configurable;
+			edited.add('CONFIGURABLE');
 		}
-		await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
+		if (typeof options.sql === 'string' && this.sql[1] !== options.sql) {
+			this.sql[1] = options.sql;
+			edited.add('SQL');
+		}
+		if (edited.size > 0) {
+			await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
+			if (this.manager.sql && this.manager.provider.updateColumn === 'function') {
+				this.manager.provider.updateColumn(this.manager.type, this.key, this._generateSQLDatatype(options.sql));
+			}
+		}
 
 		return this;
 	}
@@ -239,8 +255,7 @@ class SchemaPiece {
 		this._schemaCheckLimits(this.min, this.max);
 		this._schemaCheckConfigurable(this.configurable);
 
-		this.sql[1] = options.sql || ((this.type === 'integer' || this.type === 'float' ? 'INTEGER' :
-			this.max !== null ? `VARCHAR(${this.max})` : 'TEXT') + (this.default !== null ? ` DEFAULT ${SchemaPiece._parseSQLValue(this.default)}` : ''));
+		this.sql[1] = this._generateSQLDatatype(options.sql);
 
 		return true;
 	}
@@ -295,6 +310,16 @@ class SchemaPiece {
 	 */
 	_schemaCheckConfigurable(configurable) {
 		if (typeof configurable !== 'boolean') throw new TypeError(`[KEY] ${this} - Parameter configurable must be a boolean.`);
+	}
+
+	/**
+	 * Generate a new SQL datatype.
+	 * @param {string} [sql] The new SQL datatype.
+	 * @returns {string}
+	 */
+	_generateSQLDatatype(sql) {
+		return typeof sql === 'string' ? sql : (this.type === 'integer' || this.type === 'float' ? 'INTEGER' :
+			this.max !== null ? `VARCHAR(${this.max})` : 'TEXT') + (this.default !== null ? ` DEFAULT ${SchemaPiece._parseSQLValue(this.default)}` : '');
 	}
 
 	/**
