@@ -77,6 +77,8 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
+- [[#115](https://github.com/dirigeants/klasa/pull/115)] Fixed some issues from ESLint's betrayal. (MrJacz with kyranet)
+- [[#115](https://github.com/dirigeants/klasa/pull/115)] Improved object check for `Message#sendMessage` and `Message#send`. (kyranet)
 - [[#115](https://github.com/dirigeants/klasa/pull/115)] Fixed typings not including the `isFunction` method in Util. (kyranet)
 - [[#114](https://github.com/dirigeants/klasa/pull/114)] Fixed a typo in `UnderstandingSettingGateway.md`. (Pandraghon)
 - [[`ede5894763`](https://github.com/dirigeants/klasa/commit/ede58947635bba77ebac32e94551e6246a61d1ad)] Fixed a typo in the help command. (bdistin)

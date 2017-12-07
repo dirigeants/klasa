@@ -218,7 +218,7 @@ class Gateway {
 	async createEntry(input) {
 		const target = await this.validate(input).then(output => output && output.id ? output.id : output);
 		const cache = this.cache.get(this.type, target);
-		if (cache && cache.existsInDB) return configs;
+		if (cache && cache.existsInDB) return cache;
 		await this.provider.create(this.type, target);
 		const configs = cache || new Configuration(this, { id: target });
 		configs.existsInDB = true;
