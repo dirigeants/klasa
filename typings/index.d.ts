@@ -596,7 +596,7 @@ declare module 'klasa' {
 		public resolveString(msg: KlasaMessage, value: any): string;
 		public modify(options: ModifyOptions): Promise<this>;
 
-		private init(options: AddOptions): void;
+		private init(options: AddOptions): true;
 		private _schemaCheckType(type: string): void;
 		private _schemaCheckArray(array: boolean): void;
 		private _schemaCheckDefault(options: AddOptions): void;

@@ -201,9 +201,9 @@ class SchemaPiece {
 	 */
 	async modify(options) {
 		// Check if the 'options' parameter is an object.
-		const edited = new Set();
-
 		if (!isObject(options)) throw new TypeError(`SchemaPiece#modify expected an object as a parameter. Got: ${typeof options}`);
+
+		const edited = new Set();
 		if (typeof options.default !== 'undefined' && this.default !== options.default) {
 			this._schemaCheckDefault(Object.assign(this.toJSON(), options));
 			this.default = options.default;
@@ -233,7 +233,9 @@ class SchemaPiece {
 			if (this.manager.sql && this.manager.provider.updateColumn === 'function') {
 				this.manager.provider.updateColumn(this.manager.type, this.key, this._generateSQLDatatype(options.sql));
 			}
+			// TODO(kyranet): Implement force mode.
 		}
+		// TODO(kyranet): Implement schemaKeyUpdate event.
 
 		return this;
 	}
@@ -242,7 +244,7 @@ class SchemaPiece {
 	 * Check if the key is properly configured.
 	 * @since 0.5.0
 	 * @param {AddOptions} options The options to parse.
-	 * @returns {boolean}
+	 * @returns {true}
 	 * @private
 	 */
 	init(options) {

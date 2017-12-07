@@ -143,6 +143,8 @@ class Schema {
 		} else if (force) {
 			await this.force('add', key, folder);
 		}
+
+		// TODO(kyranet): Implement schemaKeyAdd event.
 		return this.manager.schema;
 	}
 
@@ -169,6 +171,8 @@ class Schema {
 		} else if (force) {
 			await this.force('delete', key, folder);
 		}
+
+		// TODO(kyranet): Implement schemaKeyRemove event.
 		return this.manager.schema;
 	}
 
@@ -218,6 +222,8 @@ class Schema {
 		} else if (force) {
 			await this.force('add', key, this[key]);
 		}
+
+		// TODO(kyranet): Implement schemaKeyAdd event.
 		return this.manager.schema;
 	}
 
@@ -262,6 +268,8 @@ class Schema {
 		} else if (force) {
 			await this.force('delete', key, schemaPiece);
 		}
+
+		// TODO(kyranet): Implement schemaKeyRemove event.
 		return this.manager.schema;
 	}
 
