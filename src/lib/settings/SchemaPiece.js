@@ -233,6 +233,7 @@ class SchemaPiece {
 			if (this.manager.sql && this.manager.provider.updateColumn === 'function') {
 				this.manager.provider.updateColumn(this.manager.type, this.key, this._generateSQLDatatype(options.sql));
 			}
+			await this.parent._shardSyncSchema(this, 'update', false);
 			if (this.client.listenerCount('schemaKeyUpdate')) this.client.emit('schemaKeyUpdate', this);
 		}
 
@@ -333,6 +334,16 @@ class SchemaPiece {
 	_generateSQLDatatype(sql) {
 		return typeof sql === 'string' ? sql : (this.type === 'integer' || this.type === 'float' ? 'INTEGER' :
 			this.max !== null ? `VARCHAR(${this.max})` : 'TEXT') + (this.default !== null ? ` DEFAULT ${SchemaPiece._parseSQLValue(this.default)}` : '');
+	}
+
+	/**
+	 * Patch an object applying all its properties to this instance.
+	 * @since 0.5.0
+	 * @param {Object} object The object to patch.
+	 * @private
+	 */
+	_patch(object) {
+		for (const key of Object.keys(object)) this[key] = object[key];
 	}
 
 	/**

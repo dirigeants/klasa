@@ -460,7 +460,7 @@ class Schema {
 	 * Sync all shards' schemas.
 	 * @since 0.5.0
 	 * @param {(Schema|SchemaPiece)} piece The piece to send.
-	 * @param {('add'|'delete')} action Whether the piece got added or removed.
+	 * @param {('add'|'delete'|'update')} action Whether the piece got added or removed.
 	 * @param {boolean} force Whether the piece got modified with force or not.
 	 * @private
 	 */

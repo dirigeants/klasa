@@ -366,7 +366,7 @@ class Gateway {
 	 * @since 0.5.0
 	 * @param {string[]} path The key's path.
 	 * @param {Object} data The data to insert.
-	 * @param {('add'|'delete')} action Whether the piece got added or removed.
+	 * @param {('add'|'delete'|'update')} action Whether the piece got added or removed.
 	 * @param {boolean} force Whether the key got added with force or not.
 	 * @private
 	 */
@@ -380,9 +380,11 @@ class Gateway {
 		if (action === 'add') {
 			if (parsed.type === 'Folder') piece = route[key] = new Schema(this.client, this, parsed, route, key);
 			else piece = route[key] = new SchemaPiece(this.client, this, parsed, route, key);
-		} else {
+		} else if (action === 'delete') {
 			piece = route[key];
 			delete route[key];
+		} else {
+			route[key]._patch(parsed);
 		}
 		if (force) await route.force(action, key, piece);
 	}
