@@ -13,6 +13,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#116](https://github.com/dirigeants/klasa/pull/116)] Added the Timestamp class to replace `moment.js`. (kyranet)
 - [[#113](https://github.com/dirigeants/klasa/pull/113)] Added disableNaturalPrefix. (kyranet)
 - [[`550ac275c8`](https://github.com/dirigeants/klasa/commit/550ac275c849c285692ffff5c4e99cb53753a85b) ([#109](https://github.com/dirigeants/klasa/pull/109)) Added the keys `COMMAND_EVAL_DESCRIPTION`, `COMMAND_UNLOAD_DESCRIPTION`, `COMMAND_TRANSFER_DESCRIPTION`, `COMMAND_RELOAD_DESCRIPTION`, `COMMAND_REBOOT_DESCRIPTION`, `COMMAND_PING_DESCRIPTION`, `COMMAND_INVITE_DESCRIPTION`, `COMMAND_INFO_DESCRIPTION`, `COMMAND_ENABLE_DESCRIPTION`, `COMMAND_DISABLE_DESCRIPTION`, `COMMAND_CONF_SERVER_DESCRIPTION`, `COMMAND_CONF_SERVER`, `COMMAND_CONF_USER_DESCRIPTION`, `COMMAND_CONF_USER`, `COMMAND_STATS` and `COMMAND_STATS_DESCRIPTION` to the en-US language. (Pandraghon)
 - [[`6f16689144`](https://github.com/dirigeants/klasa/commit/6f1668914401bfa8d3e08f81594e5eedd514ccce) ([#104](https://github.com/dirigeants/klasa/pull/104)) Added `regexPrefix` as an option for `KlasaClientOptions`. (MrJacz)
@@ -61,6 +62,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Removed
 
+- [[#116](https://github.com/dirigeants/klasa/pull/116)] Removed `moment.js` from the dependency list. (kyranet)
 - [[`2915d31b92`](https://github.com/dirigeants/klasa/commit/2915d31b92c8ea4b9202edfdb146a2d8b36ad8d6)] ([#43](https://github.com/dirigeants/klasa/pull/43)) Removed a bunch of extendables. (kyranet)
 - [[`2915d31b92`](https://github.com/dirigeants/klasa/commit/2915d31b92c8ea4b9202edfdb146a2d8b36ad8d6)] ([#43](https://github.com/dirigeants/klasa/pull/43)) **[PERF]** Removed `CommandMessage` proxy in favor of the brand new `KlasaMessage`. As in *Node.js 9.2.0*, Proxy creation performs 37M ops/sec, and property access 1.7M ops/sec (all pieces after Inhibitors use that proxy). As it's now removed, property access should perform around 520M ops/sec (~305 times faster). (kyranet)
 - [[`2915d31b92`](https://github.com/dirigeants/klasa/commit/2915d31b92c8ea4b9202edfdb146a2d8b36ad8d6)] ([#43](https://github.com/dirigeants/klasa/pull/43)) Removed the `messageDelete` event. (kyranet)

@@ -10,6 +10,7 @@ module.exports = {
 	RichMenu: require('./lib/util/RichMenu'),
 	ReactionHandler: require('./lib/util/ReactionHandler'),
 	Stopwatch: require('./lib/util/Stopwatch'),
+	Timestamp: require('./lib/util/Timestamp'),
 	Command: require('./lib/structures/Command'),
 	Event: require('./lib/structures/Event'),
 	Extendable: require('./lib/structures/Extendable'),

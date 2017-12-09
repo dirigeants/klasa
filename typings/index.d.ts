@@ -699,6 +699,8 @@ declare module 'klasa' {
 		public static flatten(data: any, useColors: boolean): string;
 	}
 
+	export { KlasaConsole as Console };
+
 	export class Stopwatch {
 		public constructor(digits?: number);
 		private _start: number;
@@ -715,7 +717,19 @@ declare module 'klasa' {
 		public toString(): string;
 	}
 
-	export { KlasaConsole as Console };
+	export class Timestamp {
+		public constructor(pattern: string);
+		public pattern: string;
+		private _template: TimestampObject[];
+
+		public display(time: Date | number | string): string;
+		public edit(pattern: string): this;
+
+		private _parse(type: string, time: Date): string;
+		private _patch(pattern: string): void;
+
+		static toNow(earlier: Date | number | string, showIn?: boolean): string;
+	}
 
 	// Structures
 	export class Piece {
@@ -1226,6 +1240,11 @@ declare module 'klasa' {
 		debug?: boolean;
 		verbose?: boolean;
 		wtf?: boolean;
+	};
+
+	export type TimestampObject = {
+		type: string;
+		content?: string;
 	};
 
 	export type PermissionLevel = {
