@@ -173,9 +173,10 @@ class Timestamp {
 
 	/**
 	 * Shows the userfriendly duration of time between a period and now.
+	 * @since 0.5.0
 	 * @param {(Date|number|string)} earlier The time to compare.
-	 * @param {*} showIn Whether the output should be prefixed.
-	 * @returns {string};
+	 * @param {boolean} [showIn] Whether the output should be prefixed.
+	 * @returns {string}
 	 */
 	static toNow(earlier, showIn) {
 		if (!(earlier instanceof Date)) earlier = new Date(earlier);

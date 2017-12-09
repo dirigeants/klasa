@@ -728,7 +728,7 @@ declare module 'klasa' {
 		private _parse(type: string, time: Date): string;
 		private _patch(pattern: string): void;
 
-		static toNow(earlier: Date | number | string, showIn?: boolean): string;
+		public static toNow(earlier: Date | number | string, showIn?: boolean): string;
 	}
 
 	// Structures
