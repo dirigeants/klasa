@@ -1,4 +1,5 @@
 const Schema = require('./Schema');
+const SchemaPiece = require('./SchemaPiece');
 const Configuration = require('../structures/Configuration');
 const { resolve } = require('path');
 const fs = require('fs-nextra');
@@ -358,6 +359,32 @@ class Gateway {
 		}
 		if (typeof guild === 'string' && /^\d{17,19}$/.test(guild)) return this.client.guilds.get(guild);
 		return null;
+	}
+
+	/**
+	 * Sync this shard's schema.
+	 * @since 0.5.0
+	 * @param {string[]} path The key's path.
+	 * @param {Object} data The data to insert.
+	 * @param {('add'|'delete')} action Whether the piece got added or removed.
+	 * @param {boolean} force Whether the key got added with force or not.
+	 * @private
+	 */
+	async _shardSyncSchema(path, data, action, force) {
+		if (this.client.options.shardCount === 0) return;
+		const parsed = typeof data === 'string' ? JSON.parse(data) : data;
+		let route = this.schema;
+		const key = path.pop();
+		for (const pt of path) route = route[pt];
+		let piece;
+		if (action === 'add') {
+			if (parsed.type === 'Folder') piece = route[key] = new Schema(this.client, this, parsed, route, key);
+			else piece = route[key] = new SchemaPiece(this.client, this, parsed, route, key);
+		} else {
+			piece = route[key];
+			delete route[key];
+		}
+		if (force) await route.force(action, key, piece);
 	}
 
 	/**
