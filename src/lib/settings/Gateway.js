@@ -149,7 +149,7 @@ class Gateway {
 	 * @param {boolean} [download=true] Whether this Gateway should download the data from the database.
 	 */
 	async init(download = true) {
-		await this.initSchema().then(schema => { this.schema = new Schema(this.client, this, schema, null, ''); });
+		await this.initSchema();
 		await this.initTable();
 		if (download) await this.sync();
 	}
@@ -170,15 +170,17 @@ class Gateway {
 	/**
 	 * Inits the schema, creating a file if it does not exist, and returning the current schema or the default.
 	 * @since 0.5.0
-	 * @returns {Promise<Object>}
+	 * @returns {Promise<Schema>}
 	 * @private
 	 */
 	async initSchema() {
 		const baseDir = resolve(this.client.clientBaseDir, 'bwd');
 		await fs.ensureDir(baseDir);
 		this.filePath = resolve(baseDir, `${this.type}_Schema.json`);
-		return fs.readJSON(this.filePath)
+		const schema = await fs.readJSON(this.filePath)
 			.catch(() => fs.outputJSONAtomic(this.filePath, this.defaultSchema).then(() => this.defaultSchema));
+		this.schema = new Schema(this.client, this, schema, null, '');
+		return this.schema;
 	}
 
 	/**
