@@ -593,6 +593,27 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  * @param {Piece} piece The piece that was disabled
  */
 
+/**
+ * Emitted when a new key or folder is added to the Schema.
+ * @event KlasaClient#schemaKeyAdd
+ * @since 0.5.0
+ * @param {(Schema|SchemaPiece)} key The key that was added.
+ */
+
+/**
+ * Emitted when a key or folder has been removed from the Schema.
+ * @event KlasaClient#schemaKeyRemove
+ * @since 0.5.0
+ * @param {(Schema|SchemaPiece)} key The key that was removed.
+ */
+
+/**
+ * Emitted when a key's properties are modified.
+ * @event KlasaClient#schemaKeyUpdate
+ * @since 0.5.0
+ * @param {SchemaPiece} key The piece that was updated.
+ */
+
 process.on('unhandledRejection', (err) => {
 	if (!err) return;
 	console.error(`Uncaught Promise Error: \n${err.stack || err}`);

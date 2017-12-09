@@ -1,4 +1,5 @@
 const { Structures, splitMessage } = require('discord.js');
+const { isObject } = require('../util/util');
 
 module.exports = Structures.extend('Message', Message => {
 	/**
@@ -191,7 +192,7 @@ module.exports = Structures.extend('Message', Message => {
 		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
 		 */
 		sendMessage(content, options) {
-			if (!options && typeof content === 'object' && !Array.isArray(content)) {
+			if (!options && isObject(options)) {
 				options = content;
 				content = '';
 			} else if (!options) {
@@ -243,7 +244,7 @@ module.exports = Structures.extend('Message', Message => {
 		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
 		 */
 		sendEmbed(embed, content, options) {
-			if (!options && typeof content === 'object') {
+			if (!options && isObject(options)) {
 				options = content;
 				content = '';
 			} else if (!options) {

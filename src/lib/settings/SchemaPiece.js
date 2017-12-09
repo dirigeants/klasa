@@ -1,4 +1,5 @@
-const { isNumber } = require('../util/util');
+const { isNumber, isObject } = require('../util/util');
+const fs = require('fs-nextra');
 
 /**
  * The SchemaPiece class that contains the data for a key and several helpers.
@@ -14,6 +15,16 @@ class SchemaPiece {
 	 * @property {string[]} sql A tuple containing the name of the column and its data type.
 	 * @property {boolean} array Whether the key should be stored as Array or not.
 	 * @property {boolean} configurable Whether the key should be configurable by the config command or not.
+	 * @memberof SchemaPiece
+	 */
+
+	/**
+	 * @typedef  {Object} ModifyOptions
+	 * @property {*} [default] The new default value.
+	 * @property {number} [min] The new minimum range value.
+	 * @property {number} [max] The new maximum range value.
+	 * @property {boolean} [configurable] The new configurable value.
+	 * @property {string} [sql] The new sql datatype.
 	 * @memberof SchemaPiece
 	 */
 
@@ -127,7 +138,15 @@ class SchemaPiece {
 		 */
 		this.configurable = typeof options.configurable !== 'undefined' ? options.configurable : this.type !== 'any';
 
-		this.init(options);
+		/**
+		 * The path of this SchemaPiece instance.
+		 * @since 0.5.0
+		 * @type {boolean}
+		 * @name SchemaPiece#_inited
+		 * @readonly
+		 * @private
+		 */
+		Object.defineProperty(this, '_inited', { value: this.init(options) });
 	}
 
 	/**
@@ -139,39 +158,6 @@ class SchemaPiece {
 	 */
 	parse(value, guild = this.client.guilds.get(this.id)) {
 		return this.manager.resolver[this.type](value, guild, this.key, { min: this.min, max: this.max });
-	}
-
-	/**
-	 * Check if the key is properly configured.
-	 * @since 0.5.0
-	 * @param {AddOptions} options The options to parse.
-	 * @private
-	 */
-	init(options) {
-		// Check if the 'options' parameter is an object.
-		if (!options || Object.prototype.toString.call(options) !== '[object Object]') throw new TypeError(`SchemaPiece#init expected an object as first parameter. Got: ${typeof options}`);
-		if (typeof this.type !== 'string') throw new TypeError(`[KEY] ${this} - Parameter type must be a string.`);
-		if (!this.manager.store.types.includes(this.type)) throw new TypeError(`[KEY] ${this} - ${this.type} is not a valid type.`);
-		if (typeof this.array !== 'boolean') throw new TypeError(`[KEY] ${this} - Parameter array must be a boolean.`);
-		// Default value checking
-		if (this.array === true) {
-			if (!Array.isArray(this.default)) throw new TypeError(`[DEFAULT] ${this} - Default key must be an array if the key stores an array.`);
-		} else if (this.type === 'boolean' && typeof this.default !== 'boolean') {
-			throw new TypeError(`[DEFAULT] ${this} - Default key must be a boolean if the key stores a boolean.`);
-		} else if (this.type === 'string' && typeof this.default !== 'string' && this.default !== null) {
-			throw new TypeError(`[DEFAULT] ${this} - Default key must be either a string or null if the key stores a string.`);
-		} else if (this.type !== 'any' && typeof this.default === 'object' && this.default !== null) {
-			throw new TypeError(`[DEFAULT] ${this} - Default key must not be type of object unless it is type any or null.`);
-		}
-		// Min and max checking
-		if (this.min !== null && !isNumber(this.min)) throw new TypeError(`[KEY] ${this} - Parameter min must be a number or null.`);
-		if (this.max !== null && !isNumber(this.max)) throw new TypeError(`[KEY] ${this} - Parameter max must be a number or null.`);
-		if (this.min !== null && this.max !== null && this.min > this.max) throw new TypeError(`[KEY] ${this} - Parameter min must contain a value lower than the parameter max.`);
-		// Configurable checking
-		if (typeof this.configurable !== 'boolean') throw new TypeError(`[KEY] ${this} - Parameter configurable must be a boolean.`);
-
-		this.sql.push(options.sql || ((this.type === 'integer' || this.type === 'float' ? 'INTEGER' :
-			this.max !== null ? `VARCHAR(${this.max})` : 'TEXT') + (this.default !== null ? ` DEFAULT ${SchemaPiece._parseSQLValue(this.default)}` : '')));
 	}
 
 	/**
@@ -205,6 +191,160 @@ class SchemaPiece {
 
 		if (this.array && Array.isArray(value)) return value.length > 0 ? `[ ${value.map(resolver).join(' | ')} ]` : 'None';
 		return resolver(value);
+	}
+
+	/**
+	 * Modify this SchemaPiece's properties.
+	 * @since 0.5.0
+	 * @param {ModifyOptions} options The new options.
+	 * @returns {Promise<this>}
+	 */
+	async modify(options) {
+		// Check if the 'options' parameter is an object.
+		if (!isObject(options)) throw new TypeError(`SchemaPiece#modify expected an object as a parameter. Got: ${typeof options}`);
+
+		const edited = new Set();
+		if (typeof options.sql === 'string' && this.sql[1] !== options.sql) {
+			this.sql[1] = options.sql;
+			edited.add('SQL');
+		}
+		if (typeof options.default !== 'undefined' && this.default !== options.default) {
+			this._schemaCheckDefault(Object.assign(this.toJSON(), options));
+			this.default = options.default;
+			if (!edited.has('SQL')) this.sql[1] = this._generateSQLDatatype(options.sql);
+			edited.add('DEFAULT');
+		}
+		if (typeof options.min !== 'undefined' && this.min !== options.min) {
+			this._schemaCheckLimits(options.min, typeof options.max !== 'undefined' ? options.max : this.max);
+			this.min = options.min;
+			edited.add('MIN');
+		}
+		if (typeof options.max !== 'undefined' && this.max !== options.max) {
+			this._schemaCheckLimits(typeof options.min !== 'undefined' ? options.min : this.min, options.max);
+			this.max = options.max;
+			edited.add('MAX');
+		}
+		if (typeof options.configurable !== 'undefined' && this.configurable !== options.configurable) {
+			this._schemaCheckConfigurable(options.configurable);
+			this.configurable = options.configurable;
+			edited.add('CONFIGURABLE');
+		}
+		if (edited.size > 0) {
+			await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
+			if (this.manager.sql && this.manager.provider.updateColumn === 'function') {
+				this.manager.provider.updateColumn(this.manager.type, this.key, this._generateSQLDatatype(options.sql));
+			}
+			await this.parent._shardSyncSchema(this, 'update', false);
+			if (this.client.listenerCount('schemaKeyUpdate')) this.client.emit('schemaKeyUpdate', this);
+		}
+
+		return this;
+	}
+
+	/**
+	 * Check if the key is properly configured.
+	 * @since 0.5.0
+	 * @param {AddOptions} options The options to parse.
+	 * @returns {true}
+	 * @private
+	 */
+	init(options) {
+		if (this._inited) throw new TypeError(`[INIT] ${this} - Is already init. Aborting re-init.`);
+		// Check if the 'options' parameter is an object.
+		if (!isObject(options)) throw new TypeError(`SchemaPiece#init expected an object as a parameter. Got: ${typeof options}`);
+		this._schemaCheckType(this.type);
+		this._schemaCheckArray(this.array);
+		this._schemaCheckDefault(this);
+		this._schemaCheckLimits(this.min, this.max);
+		this._schemaCheckConfigurable(this.configurable);
+
+		this.sql[1] = this._generateSQLDatatype(options.sql);
+
+		return true;
+	}
+
+	/**
+	 * Checks if options.type is valid.
+	 * @since 0.5.0
+	 * @param {string} type The parameter to validate.
+	 * @private
+	 */
+	_schemaCheckType(type) {
+		if (typeof type !== 'string') throw new TypeError(`[KEY] ${this} - Parameter type must be a string.`);
+		if (!this.manager.store.types.includes(type)) throw new TypeError(`[KEY] ${this} - ${type} is not a valid type.`);
+	}
+
+	/**
+	 * Checks if options.array is valid.
+	 * @since 0.5.0
+	 * @param {boolean} array The parameter to validate.
+	 * @private
+	 */
+	_schemaCheckArray(array) {
+		if (typeof array !== 'boolean') throw new TypeError(`[KEY] ${this} - Parameter array must be a boolean.`);
+	}
+
+	/**
+	 * Checks if options.default is valid.
+	 * @since 0.5.0
+	 * @param {AddOptions} options The options to validate.
+	 * @private
+	 */
+	_schemaCheckDefault(options) {
+		if (options.array === true) {
+			if (!Array.isArray(options.default)) throw new TypeError(`[DEFAULT] ${this} - Default key must be an array if the key stores an array.`);
+		} else if (options.type === 'boolean' && typeof options.default !== 'boolean') {
+			throw new TypeError(`[DEFAULT] ${this} - Default key must be a boolean if the key stores a boolean.`);
+		} else if (options.type === 'string' && typeof options.default !== 'string' && options.default !== null) {
+			throw new TypeError(`[DEFAULT] ${this} - Default key must be either a string or null if the key stores a string.`);
+		} else if (options.type !== 'any' && typeof options.default === 'object' && options.default !== null) {
+			throw new TypeError(`[DEFAULT] ${this} - Default key must not be type of object unless it is type any or null.`);
+		}
+	}
+
+	/**
+	 * Checks if options.min and options.max are valid.
+	 * @since 0.5.0
+	 * @param {number} min The options.min parameter to validate.
+	 * @param {number} max The options.max parameter to validate.
+	 * @private
+	 */
+	_schemaCheckLimits(min, max) {
+		if (min !== null && !isNumber(min)) throw new TypeError(`[KEY] ${this} - Parameter min must be a number or null.`);
+		if (max !== null && !isNumber(max)) throw new TypeError(`[KEY] ${this} - Parameter max must be a number or null.`);
+		if (min !== null && max !== null && min > max) throw new TypeError(`[KEY] ${this} - Parameter min must contain a value lower than the parameter max.`);
+	}
+
+	/**
+	 * Checks if options.configurable is valid.
+	 * @since 0.5.0
+	 * @param {boolean} configurable The parameter to validate.
+	 * @private
+	 */
+	_schemaCheckConfigurable(configurable) {
+		if (typeof configurable !== 'boolean') throw new TypeError(`[KEY] ${this} - Parameter configurable must be a boolean.`);
+	}
+
+	/**
+	 * Generate a new SQL datatype.
+	 * @since 0.5.0
+	 * @param {string} [sql] The new SQL datatype.
+	 * @returns {string}
+	 * @private
+	 */
+	_generateSQLDatatype(sql) {
+		return typeof sql === 'string' ? sql : (this.type === 'integer' || this.type === 'float' ? 'INTEGER' :
+			this.max !== null ? `VARCHAR(${this.max})` : 'TEXT') + (this.default !== null ? ` DEFAULT ${SchemaPiece._parseSQLValue(this.default)}` : '');
+	}
+
+	/**
+	 * Patch an object applying all its properties to this instance.
+	 * @since 0.5.0
+	 * @param {Object} object The object to patch.
+	 * @private
+	 */
+	_patch(object) {
+		for (const key of Object.keys(object)) this[key] = object[key];
 	}
 
 	/**

@@ -1,4 +1,5 @@
 const Schema = require('./Schema');
+const SchemaPiece = require('./SchemaPiece');
 const Configuration = require('../structures/Configuration');
 const { resolve } = require('path');
 const fs = require('fs-nextra');
@@ -149,7 +150,7 @@ class Gateway {
 	 * @param {boolean} [download=true] Whether this Gateway should download the data from the database.
 	 */
 	async init(download = true) {
-		await this.initSchema().then(schema => { this.schema = new Schema(this.client, this, schema, null, ''); });
+		await this.initSchema();
 		await this.initTable();
 		if (download) await this.sync();
 	}
@@ -170,15 +171,17 @@ class Gateway {
 	/**
 	 * Inits the schema, creating a file if it does not exist, and returning the current schema or the default.
 	 * @since 0.5.0
-	 * @returns {Promise<Object>}
+	 * @returns {Promise<Schema>}
 	 * @private
 	 */
 	async initSchema() {
 		const baseDir = resolve(this.client.clientBaseDir, 'bwd');
 		await fs.ensureDir(baseDir);
 		this.filePath = resolve(baseDir, `${this.type}_Schema.json`);
-		return fs.readJSON(this.filePath)
+		const schema = await fs.readJSON(this.filePath)
 			.catch(() => fs.outputJSONAtomic(this.filePath, this.defaultSchema).then(() => this.defaultSchema));
+		this.schema = new Schema(this.client, this, schema, null, '');
+		return this.schema;
 	}
 
 	/**
@@ -218,7 +221,7 @@ class Gateway {
 	async createEntry(input) {
 		const target = await this.validate(input).then(output => output && output.id ? output.id : output);
 		const cache = this.cache.get(this.type, target);
-		if (cache && cache.existsInDB) return configs;
+		if (cache && cache.existsInDB) return cache;
 		await this.provider.create(this.type, target);
 		const configs = cache || new Configuration(this, { id: target });
 		configs.existsInDB = true;
@@ -356,6 +359,34 @@ class Gateway {
 		}
 		if (typeof guild === 'string' && /^\d{17,19}$/.test(guild)) return this.client.guilds.get(guild);
 		return null;
+	}
+
+	/**
+	 * Sync this shard's schema.
+	 * @since 0.5.0
+	 * @param {string[]} path The key's path.
+	 * @param {Object} data The data to insert.
+	 * @param {('add'|'delete'|'update')} action Whether the piece got added or removed.
+	 * @param {boolean} force Whether the key got added with force or not.
+	 * @private
+	 */
+	async _shardSyncSchema(path, data, action, force) {
+		if (this.client.options.shardCount === 0) return;
+		const parsed = typeof data === 'string' ? JSON.parse(data) : data;
+		let route = this.schema;
+		const key = path.pop();
+		for (const pt of path) route = route[pt];
+		let piece;
+		if (action === 'add') {
+			if (parsed.type === 'Folder') piece = route[key] = new Schema(this.client, this, parsed, route, key);
+			else piece = route[key] = new SchemaPiece(this.client, this, parsed, route, key);
+		} else if (action === 'delete') {
+			piece = route[key];
+			delete route[key];
+		} else {
+			route[key]._patch(parsed);
+		}
+		if (force) await route.force(action, key, piece);
 	}
 
 	/**

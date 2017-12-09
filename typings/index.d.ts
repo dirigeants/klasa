@@ -123,6 +123,11 @@ declare module 'klasa' {
 		public on(event: 'configDeleteEntry', listener: (entry: Configuration) => void): this;
 		public on(event: 'configCreateEntry', listener: (entry: Configuration) => void): this;
 
+		// Schema Events
+		public on(event: 'schemaKeyAdd', listener: (key: Schema | SchemaPiece) => void): this;
+		public on(event: 'schemaKeyRemove', listener: (key: Schema | SchemaPiece) => void): this;
+		public on(event: 'schemaKeyUpdate', listener: (key: SchemaPiece) => void): this;
+
 		// Klasa Console Custom Events
 		public on(event: 'log', listener: (data: any, type: string) => void): this;
 		public on(event: 'wtf', listener: (failure: Error) => void): this;
@@ -179,6 +184,11 @@ declare module 'klasa' {
 		public once(event: 'configUpdateEntry', listener: (oldEntry: Configuration, newEntry: Configuration, path?: string) => void): this;
 		public once(event: 'configDeleteEntry', listener: (entry: Configuration) => void): this;
 		public once(event: 'configCreateEntry', listener: (entry: Configuration) => void): this;
+
+		// Schema Events
+		public once(event: 'schemaKeyAdd', listener: (key: Schema | SchemaPiece) => void): this;
+		public once(event: 'schemaKeyRemove', listener: (key: Schema | SchemaPiece) => void): this;
+		public once(event: 'schemaKeyUpdate', listener: (key: SchemaPiece) => void): this;
 
 		// Klasa Console Custom Events
 		public once(event: 'log', listener: (data: any, type: string) => void): this;
@@ -307,7 +317,9 @@ declare module 'klasa' {
 		public static applyToClass(base: Object, structure: Object, skips?: string[]): void;
 		public static exec(exec: string, options?: ExecOptions): Promise<{ stdout: string, stderr: string }>;
 		public static sleep(delay: number, args?: any): Promise<any>;
+		public static isFunction(input: Function): boolean;
 		public static isNumber(input: number): boolean;
+		public static isObject(input: Object): boolean;
 		public static tryParse(value: any): any;
 	}
 
@@ -588,11 +600,19 @@ declare module 'klasa' {
 		public max?: number;
 		public sql: [string, string];
 		public configurable: boolean;
+		private readonly _inited: boolean;
 
 		public parse(value: any, guild: KlasaGuild): Promise<any>;
-		private init(options: AddOptions): void;
-
 		public resolveString(msg: KlasaMessage, value: any): string;
+		public modify(options: ModifyOptions): Promise<this>;
+
+		private init(options: AddOptions): true;
+		private _schemaCheckType(type: string): void;
+		private _schemaCheckArray(array: boolean): void;
+		private _schemaCheckDefault(options: AddOptions): void;
+		private _schemaCheckLimits(min: number, max: number): void;
+		private _schemaCheckConfigurable(configurable: boolean): void;
+		private _generateSQLDatatype(sql?: string): string;
 
 		public toJSON(): SchemaPieceJSON;
 		public toString(): string;
@@ -1322,6 +1342,14 @@ declare module 'klasa' {
 		array?: boolean;
 		sql?: string;
 		configurable?: boolean;
+	};
+
+	export type ModifyOptions = {
+		default?: any;
+		min?: number;
+		max?: number;
+		configurable?: boolean;
+		sql?: string;
 	};
 
 	export type emoji = string;
