@@ -457,7 +457,7 @@ class Schema {
 	}
 
 	/**
-	 * Sync this shard's schema.
+	 * Sync all shards' schemas.
 	 * @since 0.5.0
 	 * @param {(Schema|SchemaPiece)} piece The piece to send.
 	 * @param {('add'|'delete')} action Whether the piece got added or removed.
