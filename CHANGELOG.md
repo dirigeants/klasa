@@ -77,6 +77,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
+- [[#115](https://github.com/dirigeants/klasa/pull/115)] Fixed Schema's updates not reflecting in other shards. (kyranet)
 - [[#115](https://github.com/dirigeants/klasa/pull/115)] Fixed some issues from ESLint's betrayal. (MrJacz with kyranet)
 - [[#115](https://github.com/dirigeants/klasa/pull/115)] Improved object check for `Message#sendMessage` and `Message#send`. (kyranet)
 - [[#115](https://github.com/dirigeants/klasa/pull/115)] Fixed typings not including the `isFunction` method in Util. (kyranet)
