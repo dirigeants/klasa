@@ -253,7 +253,7 @@ class SchemaPiece {
 		if (!isObject(options)) throw new TypeError(`SchemaPiece#init expected an object as a parameter. Got: ${typeof options}`);
 		this._schemaCheckType(this.type);
 		this._schemaCheckArray(this.array);
-		this._schemaCheckDefault(this.default, this.type, this.array);
+		this._schemaCheckDefault(this);
 		this._schemaCheckLimits(this.min, this.max);
 		this._schemaCheckConfigurable(this.configurable);
 
