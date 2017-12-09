@@ -204,9 +204,14 @@ class SchemaPiece {
 		if (!isObject(options)) throw new TypeError(`SchemaPiece#modify expected an object as a parameter. Got: ${typeof options}`);
 
 		const edited = new Set();
+		if (typeof options.sql === 'string' && this.sql[1] !== options.sql) {
+			this.sql[1] = options.sql;
+			edited.add('SQL');
+		}
 		if (typeof options.default !== 'undefined' && this.default !== options.default) {
 			this._schemaCheckDefault(Object.assign(this.toJSON(), options));
 			this.default = options.default;
+			if (!edited.has('SQL')) this.sql[1] = this._generateSQLDatatype(options.sql);
 			edited.add('DEFAULT');
 		}
 		if (typeof options.min !== 'undefined' && this.min !== options.min) {
@@ -223,10 +228,6 @@ class SchemaPiece {
 			this._schemaCheckConfigurable(options.configurable);
 			this.configurable = options.configurable;
 			edited.add('CONFIGURABLE');
-		}
-		if (typeof options.sql === 'string' && this.sql[1] !== options.sql) {
-			this.sql[1] = options.sql;
-			edited.add('SQL');
 		}
 		if (edited.size > 0) {
 			await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
