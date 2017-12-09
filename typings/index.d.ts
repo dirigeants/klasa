@@ -681,7 +681,7 @@ declare module 'klasa' {
 		public constructor(options: KlasaConsoleConfig);
 		public readonly stdout: NodeJS.WritableStream;
 		public readonly stderr: NodeJS.WritableStream;
-		public timestaamps: boolean | string;
+		public template?: Timestamp;
 		public useColors: boolean;
 		public colors: KlasaConsoleColorsOption;
 
