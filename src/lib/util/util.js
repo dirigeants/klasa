@@ -107,15 +107,26 @@ class Util {
 	}
 
 	/**
+	 * Verify if the input is a function.
 	 * @since 0.5.0
-	 * @param {Function} func The function to verify.
+	 * @param {Function} input The function to verify.
 	 * @returns {boolean}
 	 */
-	static isFunction(func) {
-		return typeof func === 'function';
+	static isFunction(input) {
+		return typeof input === 'function';
 	}
 
-	/*
+	/**
+	 * Verify if the input is an object literal (or class).
+	 * @since 0.5.0
+	 * @param {Object} input The object to verify.
+	 * @returns {boolean}
+	 */
+	static isObject(input) {
+		return Object.prototype.toString.call(input) === '[object Object]';
+	}
+
+	/**
 	 * Verify if a number is a finite number.
 	 * @since 0.5.0
 	 * @param {number} input The number to verify.

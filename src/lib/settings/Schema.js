@@ -143,6 +143,9 @@ class Schema {
 		} else if (force) {
 			await this.force('add', key, folder);
 		}
+
+		await this._shardSyncSchema(folder, 'add', force);
+		if (this.client.listenerCount('schemaKeyAdd')) this.client.emit('schemaKeyAdd', folder);
 		return this.manager.schema;
 	}
 
@@ -169,6 +172,9 @@ class Schema {
 		} else if (force) {
 			await this.force('delete', key, folder);
 		}
+
+		await this._shardSyncSchema(folder, 'delete', force);
+		if (this.client.listenerCount('schemaKeyRemove')) this.client.emit('schemaKeyRemove', folder);
 		return this.manager.schema;
 	}
 
@@ -218,6 +224,9 @@ class Schema {
 		} else if (force) {
 			await this.force('add', key, this[key]);
 		}
+
+		await this._shardSyncSchema(this[key], 'add', force);
+		if (this.client.listenerCount('schemaKeyAdd')) this.client.emit('schemaKeyAdd', this[key]);
 		return this.manager.schema;
 	}
 
@@ -262,6 +271,9 @@ class Schema {
 		} else if (force) {
 			await this.force('delete', key, schemaPiece);
 		}
+
+		await this._shardSyncSchema(schemaPiece, 'delete', force);
+		if (this.client.listenerCount('schemaKeyRemove')) this.client.emit('schemaKeyRemove', schemaPiece);
 		return this.manager.schema;
 	}
 
@@ -443,6 +455,20 @@ class Schema {
 		}
 		this.keyArray.sort((a, b) => a.localeCompare(b));
 	}
+
+	/**
+	 * Sync all shards' schemas.
+	 * @since 0.5.0
+	 * @param {(Schema|SchemaPiece)} piece The piece to send.
+	 * @param {('add'|'delete'|'update')} action Whether the piece got added or removed.
+	 * @param {boolean} force Whether the piece got modified with force or not.
+	 * @private
+	 */
+	async _shardSyncSchema(piece, action, force) {
+		if (this.client.options.shardCount === 0) return;
+		await this.client.shard.broadcastEval(`this.gateways.${this.manager.type}._shardSyncSchema(${piece.path.split('.')}, ${JSON.stringify(piece)}, ${action}, ${force});`);
+	}
+
 
 	/**
 	 * Get a JSON object containing all the objects from this schema's children.

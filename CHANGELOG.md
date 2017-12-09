@@ -13,6 +13,9 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#115](https://github.com/dirigeants/klasa/pull/115)] Added the events `schemaKeyAdd`, `schemaKeyRemove` and `schemaKeyUpdate`. (kyranet)
+- [[#115](https://github.com/dirigeants/klasa/pull/115)] Added `isObject` method to `Util`. (kyranet)
+- [[#115](https://github.com/dirigeants/klasa/pull/115)] Added `SchemaPiece#modify`, allowing users to modify a SP's options. (kyranet)
 - [[#113](https://github.com/dirigeants/klasa/pull/113)] Added disableNaturalPrefix. (kyranet)
 - [[`550ac275c8`](https://github.com/dirigeants/klasa/commit/550ac275c849c285692ffff5c4e99cb53753a85b) ([#109](https://github.com/dirigeants/klasa/pull/109)) Added the keys `COMMAND_EVAL_DESCRIPTION`, `COMMAND_UNLOAD_DESCRIPTION`, `COMMAND_TRANSFER_DESCRIPTION`, `COMMAND_RELOAD_DESCRIPTION`, `COMMAND_REBOOT_DESCRIPTION`, `COMMAND_PING_DESCRIPTION`, `COMMAND_INVITE_DESCRIPTION`, `COMMAND_INFO_DESCRIPTION`, `COMMAND_ENABLE_DESCRIPTION`, `COMMAND_DISABLE_DESCRIPTION`, `COMMAND_CONF_SERVER_DESCRIPTION`, `COMMAND_CONF_SERVER`, `COMMAND_CONF_USER_DESCRIPTION`, `COMMAND_CONF_USER`, `COMMAND_STATS` and `COMMAND_STATS_DESCRIPTION` to the en-US language. (Pandraghon)
 - [[`6f16689144`](https://github.com/dirigeants/klasa/commit/6f1668914401bfa8d3e08f81594e5eedd514ccce) ([#104](https://github.com/dirigeants/klasa/pull/104)) Added `regexPrefix` as an option for `KlasaClientOptions`. (MrJacz)
@@ -74,6 +77,11 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
+- [[#115](https://github.com/dirigeants/klasa/pull/115)] Fixed Schema's updates not reflecting in other shards. (kyranet)
+- [[#115](https://github.com/dirigeants/klasa/pull/115)] Fixed some issues from ESLint's betrayal. (MrJacz with kyranet)
+- [[#115](https://github.com/dirigeants/klasa/pull/115)] Improved object check for `Message#sendMessage` and `Message#send`. (kyranet)
+- [[#115](https://github.com/dirigeants/klasa/pull/115)] Fixed typings not including the `isFunction` method in Util. (kyranet)
+- [[#114](https://github.com/dirigeants/klasa/pull/114)] Fixed a typo in `UnderstandingSettingGateway.md`. (Pandraghon)
 - [[`ede5894763`](https://github.com/dirigeants/klasa/commit/ede58947635bba77ebac32e94551e6246a61d1ad)] Fixed a typo in the help command. (bdistin)
 - [[`2915d31b92`](https://github.com/dirigeants/klasa/commit/2915d31b92c8ea4b9202edfdb146a2d8b36ad8d6)] ([#43](https://github.com/dirigeants/klasa/pull/43)) A lot of things in Typings and marked a lot of private methods properly. (kyranet)
 - [[`2915d31b92`](https://github.com/dirigeants/klasa/commit/2915d31b92c8ea4b9202edfdb146a2d8b36ad8d6)] ([#43](https://github.com/dirigeants/klasa/pull/43)) Typos in languages. (kyranet)
