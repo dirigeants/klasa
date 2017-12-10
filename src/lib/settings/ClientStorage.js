@@ -86,10 +86,13 @@ class ClientStorage extends GatewayStorage {
 		const route = typeof path === 'string' ? path.split('.') : path;
 		if (value && value.id) value = value.id;
 		const lastKey = route.pop();
-		let { data } = this;
-		for (const key of route) data = data[key];
+		let { data, schema } = this;
+		for (const key of route) {
+			data = data[key];
+			schema = schema[key];
+		}
 		data[lastKey] = value;
-		if (this.sql) await this.provider.update(this.type, 'klasa', [route.join('.')], [value]);
+		if (this.sql) await this.provider.update(this.type, 'klasa', [schema.path.split('.')], [value]);
 		else await this.provider.update(this.type, 'klasa', this.data);
 		await this._shardSyncEmit(path.split('.'), value, 'update');
 
