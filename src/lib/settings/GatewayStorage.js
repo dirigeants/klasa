@@ -130,7 +130,7 @@ class GatewayStorage {
 	 */
 	async initTable() {
 		const hasTable = await this.provider.hasTable(this.type);
-		if (hasTable === false) await this.provider.createTable(this.type, this.sql ? this.sqlSchema.map(([k, v]) => `${k} ${v}`).join(', ') : undefined);
+		if (!hasTable) await this.provider.createTable(this.type, this.sql ? this.sqlSchema.map(([k, v]) => `${k} ${v}`).join(', ') : undefined);
 	}
 
 	/**
