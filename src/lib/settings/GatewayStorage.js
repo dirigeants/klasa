@@ -111,6 +111,10 @@ class GatewayStorage {
 		return Object.assign(this.schema.defaults, { default: true });
 	}
 
+	/**
+	 * Inits the current Gateway.
+	 * @since 0.5.0
+	 */
 	async init() {
 		if (this.ready) throw new Error('KlasaGatewayStorage already inited.');
 		await this.initSchema();
@@ -180,6 +184,7 @@ class GatewayStorage {
 	 * @param {(string|number)} code The code of the error.
 	 * @param {(string|Error)} error The error.
 	 * @returns {string}
+	 * @private
 	 * @static
 	 */
 	static throwError(guild, code, error) {

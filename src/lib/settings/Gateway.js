@@ -71,14 +71,6 @@ class Gateway extends GatewayStorage {
 		 * @type {Object}
 		 */
 		this.defaultSchema = schema;
-
-		/**
-		 * @since 0.0.1
-		 * @type {SettingResolver}
-		 * @name Gateway#resolver
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'resolver', { value: this.store.resolver });
 	}
 
 	/**
@@ -88,20 +80,17 @@ class Gateway extends GatewayStorage {
 	 * @readonly
 	 */
 	get cache() {
-		return this.options.cache;
+		return this.client.providers.get(this.options.cache);
 	}
 
 	/**
-	 * Inits the table and the schema for its use in this gateway.
 	 * @since 0.0.1
-	 * @param {boolean} [download=true] Whether this Gateway should download the data from the database.
+	 * @type {SettingResolver}
+	 * @name Gateway#resolver
+	 * @readonly
 	 */
-	async init(download = true) {
-		await this.initSchema();
-		await this.initTable();
-		if (!this.cache.hasTable(this.type)) this.cache.createTable(this.type);
-
-		if (download) await this.sync();
+	get resolver() {
+		return this.store.resolver;
 	}
 
 	/**
@@ -250,6 +239,20 @@ class Gateway extends GatewayStorage {
 	}
 
 	/**
+	 * Inits the table and the schema for its use in this gateway.
+	 * @since 0.0.1
+	 * @param {boolean} [download=true] Whether this Gateway should download the data from the database.
+	 * @private
+	 */
+	async init(download = true) {
+		await this.initSchema();
+		await this.initTable();
+		if (!this.cache.hasTable(this.type)) this.cache.createTable(this.type);
+
+		if (download) await this.sync();
+	}
+
+	/**
 	 * Readies up all Configuration instances in this gateway
 	 * @since 0.5.0
 	 * @returns {Promise<Array<external:Collection<string, Configuration>>>}
@@ -269,7 +272,7 @@ class Gateway extends GatewayStorage {
 	 * Resolves a guild
 	 * @since 0.5.0
 	 * @param {GatewayGuildResolvable} guild A guild resolvable.
-	 * @returns {?Guild}
+	 * @returns {?KlasaGuild}
 	 * @private
 	 */
 	_resolveGuild(guild) {

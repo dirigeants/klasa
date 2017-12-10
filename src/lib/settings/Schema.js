@@ -231,28 +231,6 @@ class Schema {
 	}
 
 	/**
-	 * Add a key to the instance.
-	 * @since 0.5.0
-	 * @param {string} key The name of the key.
-	 * @param {AddOptions} options The options of the key.
-	 * @param {(Schema|SchemaPiece)} Piece The class to create.
-	 * @returns {(Schema|SchemaPiece)}
-	 * @private
-	 */
-	_addKey(key, options, Piece) {
-		if (this.hasKey(key)) throw new Error(`The key '${key}' already exists.`);
-		const piece = new Piece(this.client, this.manager, options, this, key);
-		this[key] = piece;
-		this.defaults[key] = piece.type === 'Folder' ? piece.defaults : options.default;
-
-		this.keys.add(key);
-		this.keyArray.push(key);
-		this.keyArray.sort((a, b) => a.localeCompare(b));
-
-		return piece;
-	}
-
-	/**
 	 * Remove a key from this folder.
 	 * @since 0.5.0
 	 * @param {string} key The key's name to remove.
@@ -275,22 +253,6 @@ class Schema {
 		await this._shardSyncSchema(schemaPiece, 'delete', force);
 		if (this.client.listenerCount('schemaKeyRemove')) this.client.emit('schemaKeyRemove', schemaPiece);
 		return this.manager.schema;
-	}
-
-	/**
-	 * Remove a key from the instance.
-	 * @since 0.5.0
-	 * @param {string} key The name of the key.
-	 * @private
-	 */
-	_removeKey(key) {
-		const index = this.keyArray.indexOf(key);
-		if (index === -1) throw new Error(`The key '${key}' does not exist.`);
-
-		this.keys.delete(key);
-		this.keyArray.splice(index, 1);
-		delete this[key];
-		delete this.defaults[key];
 	}
 
 	/**
@@ -431,6 +393,44 @@ class Schema {
 	}
 
 	/**
+	 * Add a key to the instance.
+	 * @since 0.5.0
+	 * @param {string} key The name of the key.
+	 * @param {AddOptions} options The options of the key.
+	 * @param {(Schema|SchemaPiece)} Piece The class to create.
+	 * @returns {(Schema|SchemaPiece)}
+	 * @private
+	 */
+	_addKey(key, options, Piece) {
+		if (this.hasKey(key)) throw new Error(`The key '${key}' already exists.`);
+		const piece = new Piece(this.client, this.manager, options, this, key);
+		this[key] = piece;
+		this.defaults[key] = piece.type === 'Folder' ? piece.defaults : options.default;
+
+		this.keys.add(key);
+		this.keyArray.push(key);
+		this.keyArray.sort((a, b) => a.localeCompare(b));
+
+		return piece;
+	}
+
+	/**
+	 * Remove a key from the instance.
+	 * @since 0.5.0
+	 * @param {string} key The name of the key.
+	 * @private
+	 */
+	_removeKey(key) {
+		const index = this.keyArray.indexOf(key);
+		if (index === -1) throw new Error(`The key '${key}' does not exist.`);
+
+		this.keys.delete(key);
+		this.keyArray.splice(index, 1);
+		delete this[key];
+		delete this.defaults[key];
+	}
+
+	/**
 	 * Method called in initialization to populate the instance with the keys from the schema.
 	 * @since 0.5.0
 	 * @param {Object} object The object to parse. Only called once per initialization.
@@ -473,7 +473,7 @@ class Schema {
 	/**
 	 * Get a JSON object containing all the objects from this schema's children.
 	 * @since 0.5.0
-	 * @returns {Object}
+	 * @returns {any}
 	 */
 	toJSON() {
 		return Object.assign({ type: 'Folder' }, ...this.keyArray.map(key => ({ [key]: this[key].toJSON() })));

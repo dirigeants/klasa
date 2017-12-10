@@ -6,6 +6,7 @@ const util = require('./util/util');
 const Stopwatch = require('./util/Stopwatch');
 const Console = require('./util/Console');
 const GatewayDriver = require('./settings/GatewayDriver');
+const ClientStorage = require('./settings/ClientStorage');
 const CommandStore = require('./structures/CommandStore');
 const InhibitorStore = require('./structures/InhibitorStore');
 const FinalizerStore = require('./structures/FinalizerStore');
@@ -241,6 +242,13 @@ class KlasaClient extends Discord.Client {
 		this.gateways = new GatewayDriver(this);
 
 		/**
+		 * The ClientStorage instance that handles this client's configuration
+		 * @since 0.5.0
+		 * @type {ClientStorage}
+		 */
+		this.configs = new ClientStorage(this);
+
+		/**
 		 * The application info cached from the discord api
 		 * @since 0.0.1
 		 * @type {external:ClientApplication}
@@ -365,6 +373,7 @@ class KlasaClient extends Discord.Client {
 		await this.providers.init();
 		await this.gateways.add('guilds', this.gateways.validateGuild, this.gateways.defaultDataSchema, undefined, false);
 		await this.gateways.add('users', this.gateways.validateUser, undefined, undefined, false);
+		await this.configs.init();
 
 		// Automatic Prefix editing detection.
 		if (typeof this.config.prefix === 'string' && this.config.prefix !== this.gateways.guilds.schema.prefix.default) {

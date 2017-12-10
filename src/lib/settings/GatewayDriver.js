@@ -48,7 +48,7 @@ class GatewayDriver {
 
 		/**
 		 * If the driver is ready
-		 * @type {string[]}
+		 * @type {boolean}
 		 */
 		this.ready = false;
 	}
@@ -165,14 +165,14 @@ class GatewayDriver {
 	 * Check if a provider exists.
 	 * @since 0.5.0
 	 * @param {string} engine Check if a provider exists.
-	 * @returns {Provider}
+	 * @returns {string}
 	 * @private
 	 */
 	_checkProvider(engine) {
 		const provider = this.client.providers.get(engine);
 		if (!provider) throw `This provider (${engine}) does not exist in your system.`;
 
-		return provider;
+		return engine;
 	}
 
 	/**
