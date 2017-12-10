@@ -197,8 +197,7 @@ class KlasaConsole extends Console {
 		data = KlasaConsole.flatten(data, this.useColors);
 		const color = this.colors[type.toLowerCase()] || {};
 		const message = color.message || {};
-		const time = color.time || {};
-		const timestamp = this.template ? `${this.template.display(time)} ` : '';
+		const timestamp = this.template ? `${this.template.display()} ` : '';
 		super[color.type || 'log'](data.split('\n').map(str => `${timestamp}${this.messages(str, message)}`).join('\n'));
 	}
 
