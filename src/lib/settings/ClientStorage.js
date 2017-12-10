@@ -1,6 +1,7 @@
 const GatewayStorage = require('./GatewayStorage');
 const SchemaPiece = require('./SchemaPiece');
 const Schema = require('./Schema');
+const fs = require('fs-nextra');
 
 /**
  * The ClientStorage class that manages client-wide configurations.
@@ -118,6 +119,7 @@ class ClientStorage extends GatewayStorage {
 		} else {
 			await this.provider.update(this.type, 'klasa', this.data);
 		}
+		await fs.outputJSONAtomic(this.filePath, this.schema.toJSON());
 		await this._shardSyncEmit(path.split('.'), schema[lastKey], 'add');
 
 		return this;
@@ -142,6 +144,7 @@ class ClientStorage extends GatewayStorage {
 			} else {
 				await this.provider.replace(this.type, 'klasa', this.data);
 			}
+			await fs.outputJSONAtomic(this.filePath, this.schema.toJSON());
 			await this._shardSyncEmit(path.split('.'), piece, 'delete');
 		}
 
@@ -183,7 +186,7 @@ class ClientStorage extends GatewayStorage {
 			await this.provider.create(this.type, 'klasa');
 			this.data = this.schema.getDefaults();
 		} else {
-			this.data = this.sql ? this.parseEntry(data) : data;
+			this.data = ClientStorage._merge(this.sql ? this.parseEntry(data) : data, this.schema);
 		}
 
 		this.ready = true;
@@ -242,6 +245,33 @@ class ClientStorage extends GatewayStorage {
 	 */
 	toJSON() {
 		return this.data;
+	}
+
+	/**
+	 * Assign data to the ClientStorage instance.
+	 * @since 0.5.0
+	 * @param {Object} data The data contained in the group.
+	 * @param {(Schema|SchemaPiece)} schema A Schema or a SchemaPiece instance.
+	 * @returns {Object}
+	 * @private
+	 * @static
+	 */
+	static _merge(data, schema) {
+		if (schema.type === 'Folder') {
+			if (typeof data === 'undefined') data = {};
+			for (let i = 0; i < schema.keyArray.length; i++) {
+				const key = schema.keyArray[i];
+				data[key] = ClientStorage._merge(data[key], schema[key]);
+			}
+		} else if (typeof data === 'undefined') {
+			// It's a SchemaPiece instance, so it has a property of 'key'.
+			data = schema.array ? schema.default.slice(0) : schema.default;
+		} else if (schema.array) {
+			// Some SQL databases are unable to store Arrays...
+			data = data === null ? schema.default.slice(0) : typeof data === 'string' ? JSON.stringify(data) : schema.default.slice(0);
+		}
+
+		return data;
 	}
 
 }

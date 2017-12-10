@@ -462,7 +462,7 @@ class Configuration {
 	}
 
 	/**
-	 * Assign data to the settConfigurationings.
+	 * Assign data to the Configuration.
 	 * @since 0.5.0
 	 * @param {Object} data The data contained in the group.
 	 * @param {(Schema|SchemaPiece)} schema A Schema or a SchemaPiece instance.
