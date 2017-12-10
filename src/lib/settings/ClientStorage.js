@@ -92,7 +92,7 @@ class ClientStorage extends GatewayStorage {
 			schema = schema[key];
 		}
 		data[lastKey] = value;
-		if (this.sql) await this.provider.update(this.type, 'klasa', [schema.path.split('.')], [value]);
+		if (this.sql) await this.provider.update(this.type, 'klasa', [schema.path], [value]);
 		else await this.provider.update(this.type, 'klasa', this.data);
 		await this._shardSyncEmit(path.split('.'), value, 'update');
 
