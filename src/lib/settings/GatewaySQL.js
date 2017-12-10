@@ -75,7 +75,7 @@ class GatewaySQL extends Gateway {
 			if (schemaPiece.array) {
 				if (value === null) return schemaPiece.default.slice(0);
 				if (typeof value === 'string') value = tryParse(value);
-				if (Array.isArray(value)) value = value.map(val => GatewaySQL.parseSQLValue(val, schemaPiece));
+				if (Array.isArray(value)) value = value.map(val => GatewaySQL._parseSQLValue(val, schemaPiece));
 				return value;
 			}
 			if (schemaPiece.type === 'any') {

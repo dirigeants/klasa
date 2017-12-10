@@ -13,7 +13,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
-- [[#117](https://github.com/dirigeants/klasa/pull/117)] Now, if you edit the prefix value in `KlasaClientOptions`, the changes will be reflected in the schema. (kyranet)
+- [[#118](https://github.com/dirigeants/klasa/pull/118)] Now, if you edit the prefix value in `KlasaClientOptions`, the changes will be reflected in the schema. (kyranet)
 - [[#116](https://github.com/dirigeants/klasa/pull/116)] Added the Timestamp class to replace `moment.js`. (kyranet)
 - [[#115](https://github.com/dirigeants/klasa/pull/115)] Added the events `schemaKeyAdd`, `schemaKeyRemove` and `schemaKeyUpdate`. (kyranet)
 - [[#115](https://github.com/dirigeants/klasa/pull/115)] Added `isObject` method to `Util`. (kyranet)
@@ -80,8 +80,8 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
-- [[#117](https://github.com/dirigeants/klasa/pull/117)] Fixed `SchemaPiece#modify` not editing the datatype from the SQL database when using a SQL provider. (kyranet)
-- [[#117](https://github.com/dirigeants/klasa/pull/117)] Fixed `NULL` not being resolved correctly in `_parseSQLValue` (kyranet)
+- [[#118](https://github.com/dirigeants/klasa/pull/118)] Fixed `SchemaPiece#modify` not editing the datatype from the SQL database when using a SQL provider. (kyranet)
+- [[#118](https://github.com/dirigeants/klasa/pull/118)] Fixed `NULL` not being resolved correctly in `_parseSQLValue` (kyranet)
 - [[#115](https://github.com/dirigeants/klasa/pull/115)] Fixed Schema's updates not reflecting in other shards. (kyranet)
 - [[#115](https://github.com/dirigeants/klasa/pull/115)] Fixed some issues from ESLint's betrayal. (MrJacz with kyranet)
 - [[#115](https://github.com/dirigeants/klasa/pull/115)] Improved object check for `Message#sendMessage` and `Message#send`. (kyranet)
