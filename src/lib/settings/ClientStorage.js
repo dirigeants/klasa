@@ -10,7 +10,7 @@ class ClientStorage extends GatewayStorage {
 
 	/**
 	 * @typedef  {Object} ClientStoragePathResult
-	 * @property {SchemaPiece} schema
+	 * @property {Schema} schema
 	 * @property {*} data
 	 * @property {string} lastKey
 	 * @memberof ClientStorage
@@ -89,7 +89,7 @@ class ClientStorage extends GatewayStorage {
 	 * // ['272689325521502208']
 	 */
 	async updateOne(path, value) {
-		const { schema, data, lastKey } = this.getPath(path);
+		const { schema, data, lastKey } = this.getFolder(path);
 		if (value && value.id) value = value.id;
 		data[lastKey] = value;
 		if (this.sql) await this.provider.update(this.type, 'klasa', [schema[lastKey].path], [value]);
@@ -107,7 +107,7 @@ class ClientStorage extends GatewayStorage {
 	 * @returns {Promise<ClientStorage>}
 	 */
 	async addKey(path, value) {
-		const { schema, data, lastKey } = this.getPath(path);
+		const { schema, data, lastKey } = this.getFolder(path);
 		if (!value.type || value.type === 'Folder') schema[lastKey] = new Schema(this.client, this, value, schema, lastKey);
 		else schema[lastKey] = new SchemaPiece(this.client, this, value, schema, lastKey);
 		data[lastKey] = schema[lastKey].type === 'Folder' ? schema[lastKey].defaults : schema[lastKey].default;
@@ -130,7 +130,7 @@ class ClientStorage extends GatewayStorage {
 	 * @returns {Promise<ClientStorage>}
 	 */
 	async removeKey(path) {
-		const { schema, data, lastKey } = this.getPath(path);
+		const { schema, data, lastKey } = this.getFolder(path);
 		if (typeof schema[lastKey] !== 'undefined') {
 			const piece = schema[lastKey];
 			delete schema[lastKey];
@@ -155,15 +155,15 @@ class ClientStorage extends GatewayStorage {
 	 * @returns {ClientStoragePathResult}
 	 * @private
 	 */
-	getPath(path) {
+	getFolder(path) {
 		const route = typeof path === 'string' ? path.split('.') : path;
 		const lastKey = route.pop();
 		let { data, schema } = this;
 		for (const key of route) {
 			if (!schema.hasKey(key)) throw new Error(`The key ${schema.path ? `${schema.path}.` : ''}${key} does not exist in the current schema.`);
+			if (schema[key].type !== 'Folder') break;
 			schema = schema[key];
 			data = data[key];
-			if (schema.type !== 'Folder') break;
 		}
 
 		return { schema, data, lastKey };

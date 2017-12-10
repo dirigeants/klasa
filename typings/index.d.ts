@@ -523,7 +523,7 @@ declare module 'klasa' {
 		public addKey(path: string | string[], value: AddOptions): Promise<this>;
 		public removeKey(path: string | string[]): Promise<this>;
 
-		private getPath(path: string): ClientStoragePathResult;
+		private getFolder(path: string): ClientStoragePathResult;
 		private init(): Promise<void>;
 		private _shardSync(path: string[], data: Object, action: 'add' | 'delete' | 'update'): void;
 		private _shardSyncEmit(path: string[], data: Schema | SchemaPiece | Object, action: 'add' | 'delete' | 'update'): Promise<void>;
@@ -1257,7 +1257,7 @@ declare module 'klasa' {
 	};
 
 	export type ClientStoragePathResult = {
-		schema: SchemaPiece;
+		schema: Schema;
 		data: any;
 		lastKey: string;
 	};
