@@ -165,7 +165,7 @@ class Timestamp {
 				this._template.push({ type: 'literal', content: current });
 			} else {
 				current += currentChar;
-				while (i + 1 < pattern.length && !(pattern[i + 1] in TOKENS)) current += pattern[++i];
+				while (i + 1 < pattern.length && !(pattern[i + 1] in TOKENS) && pattern[i + 1] !== '[') current += pattern[++i];
 				this._template.push({ type: 'literal', content: current });
 			}
 		}
