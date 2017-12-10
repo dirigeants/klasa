@@ -367,8 +367,8 @@ class KlasaClient extends Discord.Client {
 		await this.gateways.add('users', this.gateways.validateUser, undefined, undefined, false);
 
 		// Automatic Prefix editing detection.
-		if (typeof this.configs.prefix === 'string' && this.configs.prefix !== this.gateways.guilds.prefix.default) {
-			await this.gateways.guilds.prefix.modify({ default: this.configs.prefix });
+		if (typeof this.config.prefix === 'string' && this.config.prefix !== this.gateways.guilds.prefix.default) {
+			await this.gateways.guilds.prefix.modify({ default: this.config.prefix });
 		}
 
 		this.emit('log', `Loaded in ${timer.stop()}.`);
