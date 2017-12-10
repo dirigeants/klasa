@@ -163,6 +163,7 @@ class ClientStorage extends GatewayStorage {
 	 * @private
 	 */
 	async init() {
+		if (this.ready) throw new Error('KlasaGatewayStorage already inited.');
 		await this.initSchema();
 		await this.initTable();
 		const data = await this.provider.get(this.type, 'klasa');
@@ -172,6 +173,8 @@ class ClientStorage extends GatewayStorage {
 		} else {
 			this.data = this.sql ? this.parseEntry(data) : data;
 		}
+
+		this.ready = true;
 	}
 
 	/**

@@ -245,11 +245,14 @@ class Gateway extends GatewayStorage {
 	 * @private
 	 */
 	async init(download = true) {
+		if (this.ready) throw new Error('KlasaGatewayStorage already inited.');
+
 		await this.initSchema();
 		await this.initTable();
 		if (!this.cache.hasTable(this.type)) this.cache.createTable(this.type);
 
 		if (download) await this.sync();
+		this.ready = true;
 	}
 
 	/**
@@ -265,7 +268,10 @@ class Gateway extends GatewayStorage {
 			const structure = this.client[this.type].get(keys[i]);
 			if (structure) promises.push(structure.configs.sync().then(() => this.cache.set(this.type, keys[i], structure.configs)));
 		}
-		return Promise.all(promises);
+		const results = await Promise.all(promises);
+		if (!this.ready) this.ready = true;
+
+		return results;
 	}
 
 	/**
