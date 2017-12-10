@@ -13,6 +13,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#116](https://github.com/dirigeants/klasa/pull/116)] Added the Timestamp class to replace `moment.js`. (kyranet)
 - [[#115](https://github.com/dirigeants/klasa/pull/115)] Added the events `schemaKeyAdd`, `schemaKeyRemove` and `schemaKeyUpdate`. (kyranet)
 - [[#115](https://github.com/dirigeants/klasa/pull/115)] Added `isObject` method to `Util`. (kyranet)
 - [[#115](https://github.com/dirigeants/klasa/pull/115)] Added `SchemaPiece#modify`, allowing users to modify a SP's options. (kyranet)
@@ -64,6 +65,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Removed
 
+- [[#116](https://github.com/dirigeants/klasa/pull/116)] Removed `moment.js` from the dependency list. (kyranet)
 - [[`2915d31b92`](https://github.com/dirigeants/klasa/commit/2915d31b92c8ea4b9202edfdb146a2d8b36ad8d6)] ([#43](https://github.com/dirigeants/klasa/pull/43)) Removed a bunch of extendables. (kyranet)
 - [[`2915d31b92`](https://github.com/dirigeants/klasa/commit/2915d31b92c8ea4b9202edfdb146a2d8b36ad8d6)] ([#43](https://github.com/dirigeants/klasa/pull/43)) **[PERF]** Removed `CommandMessage` proxy in favor of the brand new `KlasaMessage`. As in *Node.js 9.2.0*, Proxy creation performs 37M ops/sec, and property access 1.7M ops/sec (all pieces after Inhibitors use that proxy). As it's now removed, property access should perform around 520M ops/sec (~305 times faster). (kyranet)
 - [[`2915d31b92`](https://github.com/dirigeants/klasa/commit/2915d31b92c8ea4b9202edfdb146a2d8b36ad8d6)] ([#43](https://github.com/dirigeants/klasa/pull/43)) Removed the `messageDelete` event. (kyranet)

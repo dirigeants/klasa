@@ -1,6 +1,6 @@
 const { Console } = require('console');
 const Colors = require('./Colors');
-const moment = require('moment');
+const Timestamp = require('./Timestamp');
 const { inspect } = require('util');
 
 /**
@@ -134,10 +134,10 @@ class KlasaConsole extends Console {
 
 		/**
 		 * Whether or not timestamps should be enabled for this console.
-		 * @since 0.4.0
-		 * @type {(boolean|string)}
+		 * @since 0.5.0
+		 * @type {Timestamp}
 		 */
-		this.timestamps = timestamps === true ? 'YYYY-MM-DD HH:mm:ss' : timestamps;
+		this.template = timestamps !== false ? new Timestamp(timestamps === true ? 'YYYY-MM-DD HH:mm:ss' : timestamps) : null;
 
 		/**
 		 * Whether or not this console should use colors.
@@ -198,7 +198,7 @@ class KlasaConsole extends Console {
 		const color = this.colors[type.toLowerCase()] || {};
 		const message = color.message || {};
 		const time = color.time || {};
-		const timestamp = this.timestamps ? `${this.timestamp(`[${moment().format(this.timestamps)}]`, time)} ` : '';
+		const timestamp = this.template ? `${this.template.display(time)} ` : '';
 		super[color.type || 'log'](data.split('\n').map(str => `${timestamp}${this.messages(str, message)}`).join('\n'));
 	}
 
