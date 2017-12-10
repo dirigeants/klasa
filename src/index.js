@@ -32,7 +32,6 @@ module.exports = {
 	Piece: require('./lib/structures/interfaces/Piece'),
 	Store: require('./lib/structures/interfaces/Store'),
 	Gateway: require('./lib/settings/Gateway'),
-	GatewaySQL: require('./lib/settings/GatewaySQL'),
 	Schema: require('./lib/settings/Schema'),
 	SchemaPiece: require('./lib/settings/SchemaPiece'),
 	GatewayDriver: require('./lib/settings/GatewayDriver'),

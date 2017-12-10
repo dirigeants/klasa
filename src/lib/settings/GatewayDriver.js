@@ -1,5 +1,4 @@
 const Gateway = require('./Gateway');
-const GatewaySQL = require('./GatewaySQL');
 const SettingResolver = require('../parsers/SettingResolver');
 const { Guild, User } = require('discord.js');
 
@@ -139,9 +138,7 @@ class GatewayDriver {
 		options.cache = this._checkProvider('collection');
 		if (options.cache.cache === false) throw `The provider ${options.cache.name} is designed for persistent data, not cache. Please try again with another.`;
 
-		if (options.provider.sql) this[name] = new GatewaySQL(this, name, validateFunction, schema, options);
-		else this[name] = new Gateway(this, name, validateFunction, schema, options);
-
+		this[name] = new Gateway(this, name, validateFunction, schema, options);
 		await this[name].init(download);
 		this.caches.push(name);
 		return this[name];

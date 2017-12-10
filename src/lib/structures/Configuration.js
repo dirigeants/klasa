@@ -71,7 +71,7 @@ class Configuration {
 
 	/**
 	 * @since 0.5.0
-	 * @param {(Gateway|GatewaySQL)} manager The Gateway that manages this Configuration instance.
+	 * @param {Gateway} manager The Gateway that manages this Configuration instance.
 	 * @param {Object} data The data that is cached in this Configuration instance.
 	 */
 	constructor(manager, data) {
@@ -87,7 +87,7 @@ class Configuration {
 		/**
 		 * The Gateway that manages this Configuration instance.
 		 * @since 0.5.0
-		 * @type {(Gateway|GatewaySQL)}
+		 * @type {Gateway}
 		 * @name Configuration#gateway
 		 * @readonly
 		 */

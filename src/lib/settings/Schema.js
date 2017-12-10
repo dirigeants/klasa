@@ -22,7 +22,7 @@ class Schema {
 	/**
 	 * @since 0.5.0
 	 * @param {KlasaClient} client The client which initialized this instance.
-	 * @param {(Gateway|GatewaySQL)} manager The Gateway that manages this schema instance.
+	 * @param {Gateway} manager The Gateway that manages this schema instance.
 	 * @param {Object} object The object containing the properties for this schema instance.
 	 * @param {?Schema} parent The parent which holds this instance.
 	 * @param {string} key The name of this key.
@@ -40,7 +40,7 @@ class Schema {
 		/**
 		 * The Gateway that manages this schema instance.
 		 * @since 0.5.0
-		 * @type {(Gateway|GatewaySQL)}
+		 * @type {Gateway}
 		 * @name Schema#manager
 		 * @readonly
 		 */
@@ -409,7 +409,7 @@ class Schema {
 	}
 
 	/**
-	 * Get all the SchemaPieces instances from this schema's children. Used for GatewaySQL.
+	 * Get all the SchemaPieces instances from this schema's children. Used for SQL.
 	 * @since 0.5.0
 	 * @param {string[]} [array=[]] The array to push.
 	 * @returns {SchemaPiece[]}
