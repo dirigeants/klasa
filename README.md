@@ -12,7 +12,7 @@ Klasa is a class remix on the Komada Bot Framework, built on top of [Discord.js]
 
 ## What's with the name?
 
-Following suit from Komada (the Croatian word for "pieces"), Klasa is the croation word for "class". Like Komada, Klasa is modular, meaning each "piece" is a standalone part that can be easily replaced, enhanced, reloaded, removed.
+Following suit from Komada (the Croatian word for "pieces"), Klasa is the Croatian word for "class". Like Komada, Klasa is modular, meaning each "piece" is a standalone part that can be easily replaced, enhanced, reloaded, removed.
 
 ## Why Klasa?
 
