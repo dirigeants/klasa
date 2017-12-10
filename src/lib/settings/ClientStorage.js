@@ -9,6 +9,14 @@ const Schema = require('./Schema');
 class ClientStorage extends GatewayStorage {
 
 	/**
+	 * @typedef  {Object} ClientStoragePathResult
+	 * @property {SchemaPiece} schema
+	 * @property {*} data
+	 * @property {string} lastKey
+	 * @memberof ClientStorage
+	 */
+
+	/**
 	 * @since 0.5.0
 	 * @param {KlasaClient} client The client which initialized this instance.
 	 */
@@ -71,28 +79,20 @@ class ClientStorage extends GatewayStorage {
 	 * @returns {Promise<ClientStorage>}
 	 * @example
 	 * // Updating the key 'userBlacklist'
-	 * (async () => {
-	 *     await this.client.configs.updateOne('userBlacklist', ['272689325521502208']);
-	 *     console.log(this.client.configs.get('userBlacklist')); // ['272689325521502208']
-	 * })();
+	 * await this.client.configs.updateOne('userBlacklist', ['272689325521502208']);
+	 * console.log(this.client.configs.get('userBlacklist'));
+	 * // ['272689325521502208']
 	 *
 	 * // Updating a nested key, for example, the property 'users' of folder 'blacklist'
-	 * (async () => {
-	 *     await this.client.configs.updateOne('blacklist.users', ['272689325521502208']);
-	 *     console.log(this.client.configs.get('blacklist.users')); // ['272689325521502208']
-	 * })();
+	 * await this.client.configs.updateOne('blacklist.users', ['272689325521502208']);
+	 * console.log(this.client.configs.get('blacklist.users'));
+	 * // ['272689325521502208']
 	 */
 	async updateOne(path, value) {
-		const route = typeof path === 'string' ? path.split('.') : path;
+		const { schema, data, lastKey } = this.getPath(path);
 		if (value && value.id) value = value.id;
-		const lastKey = route.pop();
-		let { data, schema } = this;
-		for (const key of route) {
-			data = data[key];
-			schema = schema[key];
-		}
 		data[lastKey] = value;
-		if (this.sql) await this.provider.update(this.type, 'klasa', [schema.path], [value]);
+		if (this.sql) await this.provider.update(this.type, 'klasa', [schema[lastKey].path], [value]);
 		else await this.provider.update(this.type, 'klasa', this.data);
 		await this._shardSyncEmit(path.split('.'), value, 'update');
 
@@ -107,13 +107,7 @@ class ClientStorage extends GatewayStorage {
 	 * @returns {Promise<ClientStorage>}
 	 */
 	async addKey(path, value) {
-		const route = typeof path === 'string' ? path.split('.') : path;
-		const lastKey = route.pop();
-		let { schema, data } = this;
-		for (const key of route) {
-			schema = schema[key];
-			data = schema[key];
-		}
+		const { schema, data, lastKey } = this.getPath(path);
 		if (!value.type || value.type === 'Folder') schema[lastKey] = new Schema(this.client, this, value, schema, lastKey);
 		else schema[lastKey] = new SchemaPiece(this.client, this, value, schema, lastKey);
 		data[lastKey] = schema[lastKey].type === 'Folder' ? schema[lastKey].defaults : schema[lastKey].default;
@@ -136,13 +130,7 @@ class ClientStorage extends GatewayStorage {
 	 * @returns {Promise<ClientStorage>}
 	 */
 	async removeKey(path) {
-		const route = typeof path === 'string' ? path.split('.') : path;
-		const lastKey = route.pop();
-		let { schema, data } = this;
-		for (const key of route) {
-			schema = schema[key];
-			data = schema[key];
-		}
+		const { schema, data, lastKey } = this.getPath(path);
 		if (typeof schema[lastKey] !== 'undefined') {
 			const piece = schema[lastKey];
 			delete schema[lastKey];
@@ -158,6 +146,27 @@ class ClientStorage extends GatewayStorage {
 		}
 
 		return this;
+	}
+
+	/**
+	 * Gets a path.
+	 * @since 0.5.0
+	 * @param {(string|string[])} path The path to get.
+	 * @returns {ClientStoragePathResult}
+	 * @private
+	 */
+	getPath(path) {
+		const route = typeof path === 'string' ? path.split('.') : path;
+		const lastKey = route.pop();
+		let { data, schema } = this;
+		for (const key of route) {
+			if (!schema.hasKey(key)) throw new Error(`The key ${schema.path ? `${schema.path}.` : ''}${key} does not exist in the current schema.`);
+			schema = schema[key];
+			data = data[key];
+			if (schema.type !== 'Folder') break;
+		}
+
+		return { schema, data, lastKey };
 	}
 
 	/**

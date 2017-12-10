@@ -523,6 +523,7 @@ declare module 'klasa' {
 		public addKey(path: string | string[], value: AddOptions): Promise<this>;
 		public removeKey(path: string | string[]): Promise<this>;
 
+		private getPath(path: string): ClientStoragePathResult;
 		private init(): Promise<void>;
 		private _shardSync(path: string[], data: Object, action: 'add' | 'delete' | 'update'): void;
 		private _shardSyncEmit(path: string[], data: Schema | SchemaPiece | Object, action: 'add' | 'delete' | 'update'): Promise<void>;
@@ -1253,6 +1254,12 @@ declare module 'klasa' {
 	export type ConfigurationPathResult = {
 		path: SchemaPiece;
 		route: string[];
+	};
+
+	export type ClientStoragePathResult = {
+		schema: SchemaPiece;
+		data: any;
+		lastKey: string;
 	};
 
 	export type SchemaPieceJSON = {
