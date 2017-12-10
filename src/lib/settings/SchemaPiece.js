@@ -207,6 +207,7 @@ class SchemaPiece {
 		if (typeof options.sql === 'string' && this.sql[1] !== options.sql) {
 			this.sql[1] = options.sql;
 			edited.add('SQL');
+			if (this.manager.sql) await this.manager.provider.updateColumn(this.manager.type, this.path, options.sql);
 		}
 		if (typeof options.default !== 'undefined' && this.default !== options.default) {
 			this._schemaCheckDefault(Object.assign(this.toJSON(), options));

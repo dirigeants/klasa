@@ -73,8 +73,9 @@ class GatewaySQL extends Gateway {
 	static _parseSQLValue(value, schemaPiece) {
 		if (typeof value !== 'undefined') {
 			if (schemaPiece.array) {
+				if (value === null) return schemaPiece.default.slice(0);
 				if (typeof value === 'string') value = tryParse(value);
-				if (Array.isArray(value)) value.map(val => GatewaySQL.parseSQLValue(val, schemaPiece));
+				if (Array.isArray(value)) value = value.map(val => GatewaySQL.parseSQLValue(val, schemaPiece));
 				return value;
 			}
 			if (schemaPiece.type === 'any') {
@@ -86,7 +87,12 @@ class GatewaySQL extends Gateway {
 				if (typeof value === 'boolean') return value;
 				if (typeof value === 'number') return value === 1;
 				if (typeof value === 'string') return value === 'true';
+			} else if (schemaPiece.type === 'string') {
+				if (typeof value === 'string' && /^\s|\s$/.test(value)) return value.trim();
+				return value;
 			}
+
+			return value;
 		}
 		return schemaPiece.array ? schemaPiece.default.slice(0) : schemaPiece.default;
 	}
