@@ -61,6 +61,7 @@ declare module 'klasa' {
 			util: typeof Util;
 		};
 		public gateways: GatewayDriver;
+		public configs?: ClientStorage;
 		public application: ClientApplication;
 
 		public readonly invite: string;

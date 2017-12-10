@@ -244,9 +244,9 @@ class KlasaClient extends Discord.Client {
 		/**
 		 * The ClientStorage instance that handles this client's configuration
 		 * @since 0.5.0
-		 * @type {ClientStorage}
+		 * @type {?ClientStorage}
 		 */
-		this.configs = new ClientStorage(this);
+		this.configs = null;
 
 		/**
 		 * The application info cached from the discord api
@@ -373,6 +373,7 @@ class KlasaClient extends Discord.Client {
 		await this.providers.init();
 		await this.gateways.add('guilds', this.gateways.validateGuild, this.gateways.defaultDataSchema, undefined, false);
 		await this.gateways.add('users', this.gateways.validateUser, undefined, undefined, false);
+		this.configs = new ClientStorage(this);
 		await this.configs.init();
 
 		// Automatic Prefix editing detection.
