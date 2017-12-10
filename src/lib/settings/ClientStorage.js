@@ -1,7 +1,6 @@
 const GatewayStorage = require('./GatewayStorage');
 const SchemaPiece = require('./SchemaPiece');
 const Schema = require('./Schema');
-const fs = require('fs-nextra');
 
 /**
  * The ClientStorage class that manages client-wide configurations.
@@ -96,57 +95,6 @@ class ClientStorage extends GatewayStorage {
 		if (this.sql) await this.provider.update(this.type, 'klasa', [schema[lastKey].path], [value]);
 		else await this.provider.update(this.type, 'klasa', this.data);
 		await this._shardSyncEmit(path.split('.'), value, 'update');
-
-		return this;
-	}
-
-	/**
-	 * Set a new key or object into the schema.
-	 * @since 0.5.0
-	 * @param {(string|string[])} path The path to set the data to.
-	 * @param {AddOptions} value The value for the new key.
-	 * @returns {Promise<ClientStorage>}
-	 */
-	async addKey(path, value) {
-		const { schema, data, lastKey } = this.getFolder(path);
-		if (!value.type || value.type === 'Folder') schema[lastKey] = new Schema(this.client, this, value, schema, lastKey);
-		else schema[lastKey] = new SchemaPiece(this.client, this, value, schema, lastKey);
-		data[lastKey] = schema[lastKey].type === 'Folder' ? schema[lastKey].defaults : schema[lastKey].default;
-
-		if (this.sql) {
-			if (typeof this.provider.addColumn === 'function') await this.provider.addColumn(this.type, lastKey, schema[lastKey].sql[1]);
-			else throw new Error('The method \'addColumn\' in your provider is required in order to add new columns.');
-		} else {
-			await this.provider.update(this.type, 'klasa', this.data);
-		}
-		await fs.outputJSONAtomic(this.filePath, this.schema.toJSON());
-		await this._shardSyncEmit(path.split('.'), schema[lastKey], 'add');
-
-		return this;
-	}
-
-	/**
-	 * Delete a key or object from the schema.
-	 * @since 0.5.0
-	 * @param {(string|string[])} path The path to delete the data from.
-	 * @returns {Promise<ClientStorage>}
-	 */
-	async removeKey(path) {
-		const { schema, data, lastKey } = this.getFolder(path);
-		if (typeof schema[lastKey] !== 'undefined') {
-			const piece = schema[lastKey];
-			delete schema[lastKey];
-			delete data[lastKey];
-
-			if (this.sql) {
-				if (typeof this.provider.removeColumn === 'function') await this.provider.removeColumn(this.type, lastKey);
-				else throw new Error('The method \'removeColumn\' in your provider is required in order to remove columns.');
-			} else {
-				await this.provider.replace(this.type, 'klasa', this.data);
-			}
-			await fs.outputJSONAtomic(this.filePath, this.schema.toJSON());
-			await this._shardSyncEmit(path.split('.'), piece, 'delete');
-		}
 
 		return this;
 	}

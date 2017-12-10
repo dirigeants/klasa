@@ -299,7 +299,7 @@ class Gateway extends GatewayStorage {
 	 * @param {boolean} force Whether the key got added with force or not.
 	 * @private
 	 */
-	async _shardSyncSchema(path, data, action, force) {
+	async _shardSync(path, data, action, force) {
 		if (this.client.options.shardCount === 0) return;
 		const parsed = typeof data === 'string' ? JSON.parse(data) : data;
 		let route = this.schema;

@@ -140,7 +140,7 @@ class Schema {
 				if (typeof this.manager.provider.addColumn === 'function') await this.manager.provider.addColumn(this.manager.type, folder.getSQL());
 				else throw new Error('The method \'addColumn\' in your provider is required in order to add new columns.');
 			}
-		} else if (force) {
+		} else if (force || this.manager.type === 'clientStorage') {
 			await this.force('add', key, folder);
 		}
 
@@ -169,7 +169,7 @@ class Schema {
 				if (typeof this.manager.provider.removeColumn === 'function') await this.manager.provider.removeColumn(this.manager.type, folder.getKeys());
 				else throw new Error('The method \'removeColumn\' in your provider is required in order to remove columns.');
 			}
-		} else if (force) {
+		} else if (force || this.manager.type === 'clientStorage') {
 			await this.force('delete', key, folder);
 		}
 
@@ -221,7 +221,7 @@ class Schema {
 		if (this.manager.sql) {
 			if (typeof this.manager.provider.addColumn === 'function') await this.manager.provider.addColumn(this.manager.type, key, this[key].sql[1]);
 			else throw new Error('The method \'addColumn\' in your provider is required in order to add new columns.');
-		} else if (force) {
+		} else if (force || this.manager.type === 'clientStorage') {
 			await this.force('add', key, this[key]);
 		}
 
@@ -266,6 +266,14 @@ class Schema {
 	 */
 	force(action, key, piece) {
 		if (!(piece instanceof SchemaPiece) && !(piece instanceof Schema)) throw new TypeError(`'schemaPiece' must be an instance of 'SchemaPiece' or an instance of 'Schema'.`);
+		if (this.manager.type === 'clientStorage') {
+			const { data, lastKey } = this.manager.getFolder(piece.path);
+			if (action === 'add') data[lastKey] = this.defaults[key];
+			else if (action === 'delete') delete data[lastKey];
+
+			if (this.manager.sql) return this.manager.provider.update(this.manager.type, 'klasa', this.manager.data);
+			return this.manager.provider[action === 'delete' ? 'replace' : 'update'](this.manager.type, 'klasa', this.manager.data);
+		}
 
 		const values = this.manager.cache.getValues(this.manager.type);
 		const path = piece.path.split('.');
@@ -466,7 +474,8 @@ class Schema {
 	 */
 	async _shardSyncSchema(piece, action, force) {
 		if (this.client.options.shardCount === 0) return;
-		await this.client.shard.broadcastEval(`this.gateways.${this.manager.type}._shardSyncSchema(${piece.path.split('.')}, ${JSON.stringify(piece)}, ${action}, ${force});`);
+		const gateway = this.manager.type !== 'clientStorage' ? `this.gateways.${this.manager.type}` : 'this.configs';
+		await this.client.shard.broadcastEval(`${gateway}._shardSync(${piece.path.split('.')}, ${JSON.stringify(piece)}, ${action}, ${force});`);
 	}
 
 

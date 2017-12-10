@@ -520,8 +520,6 @@ declare module 'klasa' {
 
 		public get(path: string | string[]): any;
 		public updateOne(path: string | string[], value: any): Promise<this>;
-		public addKey(path: string | string[], value: AddOptions): Promise<this>;
-		public removeKey(path: string | string[]): Promise<this>;
 
 		private getFolder(path: string): ClientStoragePathResult;
 		private init(): Promise<void>;
@@ -550,7 +548,7 @@ declare module 'klasa' {
 		private init(download?: boolean): Promise<void>;
 		private _ready(): Promise<Array<Collection<string, Configuration>>>;
 		private _resolveGuild(guild: GatewayGuildResolvable): KlasaGuild;
-		private _shardSyncSchema(path: string[], data: any, action: 'add' | 'delete' | 'update', force: boolean): Promise<void>;
+		private _shardSync(path: string[], data: any, action: 'add' | 'delete' | 'update', force: boolean): Promise<void>;
 	}
 
 	export class GatewayStorage {
