@@ -13,7 +13,7 @@ module.exports = class extends Command {
 	async run(msg) {
 		return msg.sendCode('asciidoc', msg.language.get('COMMAND_STATS',
 			(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2),
-			Timestamp.toNow(Date.now() - (process.uptime() * 1000), true),
+			Timestamp.toNow(Date.now() - (process.uptime() * 1000)),
 			this.client.users.size.toLocaleString(),
 			this.client.guilds.size.toLocaleString(),
 			this.client.channels.size.toLocaleString(),
