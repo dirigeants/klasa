@@ -272,7 +272,7 @@ class SchemaPiece {
 	 */
 	_schemaCheckType(type) {
 		if (typeof type !== 'string') throw new TypeError(`[KEY] ${this} - Parameter type must be a string.`);
-		if (!this.manager.store.types.includes(type)) throw new TypeError(`[KEY] ${this} - ${type} is not a valid type.`);
+		if (!this.client.gateways.types.includes(type)) throw new TypeError(`[KEY] ${this} - ${type} is not a valid type.`);
 	}
 
 	/**
