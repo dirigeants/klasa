@@ -365,7 +365,7 @@ class KlasaClient extends Discord.Client {
 
 		// Client-wide settings
 		this.configs = this.gateways.clientStorage.cache.get('clientStorage', this.id) || this.gateways.clientStorage.insertEntry(this.id);
-		await this.configs.sync().then(() => this.cache.set(this.type, this.id, this.configs));
+		await this.configs.sync().then(() => this.gateways.clientStorage.cache.set(this.type, this.id, this.configs));
 
 		// Automatic Prefix editing detection.
 		if (typeof this.options.prefix === 'string' && this.options.prefix !== this.gateways.guilds.schema.prefix.default) {
