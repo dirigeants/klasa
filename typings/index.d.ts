@@ -37,7 +37,7 @@ declare module 'klasa' {
 
 	class KlasaClient extends Client {
 		public constructor(options?: KlasaClientConfig);
-		public config: KlasaClientConfig;
+		public options: KlasaClientConfig & ClientOptions;
 		public coreBaseDir: string;
 		public clientBaseDir: string;
 		public console: KlasaConsole;
@@ -531,6 +531,8 @@ declare module 'klasa' {
 		private _ready(): Promise<Array<Collection<string, Configuration>>>;
 		private _resolveGuild(guild: GatewayGuildResolvable): KlasaGuild;
 		private _shardSync(path: string[], data: any, action: 'add' | 'delete' | 'update', force: boolean): Promise<void>;
+
+		public toString(): string;
 	}
 
 	export class GatewayStorage {

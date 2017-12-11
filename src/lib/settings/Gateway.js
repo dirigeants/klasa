@@ -319,6 +319,15 @@ class Gateway extends GatewayStorage {
 		if (force) await route.force(action, key, piece);
 	}
 
+	/**
+	 * Stringify a value or the instance itself.
+	 * @since 0.5.0
+	 * @returns {string}
+	 */
+	toString() {
+		return `Gateway(${this.type})`;
+	}
+
 }
 
 module.exports = Gateway;
