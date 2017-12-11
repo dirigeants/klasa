@@ -13,6 +13,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#121](https://github.com/dirigeants/klasa/pull/121)] Added `constants` and `Util.mergeDefault` (bdistin)
 - [[#121](https://github.com/dirigeants/klasa/pull/121)] Added `GatewayStorage`, containing `SettingGateway`'s core (kyranet)
 - [[#121](https://github.com/dirigeants/klasa/pull/121)] Added a new gateway called `clientStorage`, for client-wide configs (kyranet)
 - [[#118](https://github.com/dirigeants/klasa/pull/118)] Now, if you edit the prefix value in `KlasaClientOptions`, the changes will be reflected in the schema. (kyranet)
@@ -42,6 +43,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#121](https://github.com/dirigeants/klasa/pull/121)] **[BREAKING]** Merged `this.client.config` to `this.client.options` (bdistin)
 - [[#121](https://github.com/dirigeants/klasa/pull/121)] Refactored `Gateway` to extend `GatewayStorage` (kyranet)
 - [[`550ac275c8`](https://github.com/dirigeants/klasa/commit/550ac275c849c285692ffff5c4e99cb53753a85b)] ([#109](https://github.com/dirigeants/klasa/pull/109)) Translated the description for all commands. (Pandraghon)
 - [[`550ac275c8`](https://github.com/dirigeants/klasa/commit/550ac275c849c285692ffff5c4e99cb53753a85b)] ([#109](https://github.com/dirigeants/klasa/pull/109)) Nested folders in the configuration will show with a format of `Folder1/Folder2/Folder3/...` instead of `Folder1.folder2.folder3...`. (bdistin and Pandraghon)

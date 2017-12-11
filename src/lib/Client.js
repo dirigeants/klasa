@@ -360,7 +360,7 @@ class KlasaClient extends Discord.Client {
 		await Promise.all([
 			this.gateways.add('guilds', constants.DEFAULTS.GATEWAY_GUILDS_RESOLVER, this.gateways.guildsSchema, undefined, false),
 			this.gateways.add('users', constants.DEFAULTS.GATEWAY_USERS_RESOLVER, undefined, undefined, false),
-			this.gateways.add('clientStorage', constants.DEFAULTS.GATEWAY_CLIENTSTORAGE_RESOLVER, this.gateways.clientStorageSchema, false)
+			this.gateways.add('clientStorage', constants.DEFAULTS.GATEWAY_CLIENTSTORAGE_RESOLVER, this.gateways.clientStorageSchema, undefined, false)
 		]);
 
 		// Client-wide settings

@@ -213,8 +213,8 @@ class GatewayStorage {
 					if (typeof value === 'string') return tryParse(value);
 					break;
 				case 'integer':
-					if (typeof value === 'string') return parseInt(value);
 					if (typeof value === 'number') return value;
+					if (typeof value === 'string') return parseInt(value);
 					break;
 				case 'boolean':
 					if (typeof value === 'boolean') return value;
