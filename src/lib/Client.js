@@ -365,7 +365,6 @@ class KlasaClient extends Discord.Client {
 
 		// Client-wide settings
 		this.configs = this.gateways.clientStorage.cache.get('clientStorage', this.id) || this.gateways.clientStorage.insertEntry(this.id);
-		await this.configs.sync().then(() => this.gateways.clientStorage.cache.set(this.type, this.id, this.configs));
 
 		// Automatic Prefix editing detection.
 		if (typeof this.options.prefix === 'string' && this.options.prefix !== this.gateways.guilds.schema.prefix.default) {
@@ -387,6 +386,7 @@ class KlasaClient extends Discord.Client {
 		if (typeof this.options.ignoreSelf === 'undefined') this.options.ignoreSelf = this.user.bot;
 		if (this.user.bot) this.application = await super.fetchApplication();
 		if (!this.options.ownerID) this.options.ownerID = this.user.bot ? this.application.owner.id : this.user.id;
+		await this.configs.sync().then(() => this.gateways.clientStorage.cache.set(this.type, this.user.id, this.configs));
 
 		// Init all the pieces
 		await Promise.all(this.pieceStores.filter(store => store.name !== 'providers').map(store => store.init()));
