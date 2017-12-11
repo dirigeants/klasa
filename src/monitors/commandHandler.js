@@ -92,7 +92,7 @@ module.exports = class extends Monitor {
 				this.client.finalizers.run(msg, mes, timer);
 				this.client.emit('commandSuccess', msg, msg.command, msg.params, mes);
 			})
-			.catch(error => this.client.emit('commandError', msg, msg.cmd, msg.params, error));
+			.catch(error => this.client.emit('commandError', msg, msg.command, msg.params, error));
 	}
 
 	async awaitMessage(msg, timer, error) {
