@@ -1,14 +1,14 @@
-const Schema = require('./Schema');
-const SchemaPiece = require('./SchemaPiece');
+const GatewayStorage = require('./GatewayStorage');
 const Configuration = require('../structures/Configuration');
-const { resolve } = require('path');
-const fs = require('fs-nextra');
+const SchemaPiece = require('./SchemaPiece');
+const Schema = require('./Schema');
 const discord = require('discord.js');
 
 /**
  * The Gateway class that manages the data input, parsing, and output, of an entire database, while keeping a cache system sync with the changes.
+ * @extends GatewayStorage
  */
-class Gateway {
+class Gateway extends GatewayStorage {
 
 	/**
 	 * @typedef  {Object} GatewayOptions
@@ -46,26 +46,13 @@ class Gateway {
 	 * @param {GatewayOptions} options The options for this schema.
 	 */
 	constructor(store, type, validateFunction, schema, options) {
-		/**
-		 * The client this Gateway was created with.
-		 * @since 0.0.1
-		 * @name Gateway#client
-		 * @type {KlasaClient}
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'client', { value: store.client });
+		super(store.client, type, options.provider);
 
 		/**
 		 * @since 0.0.1
 		 * @type {GatewayDriver}
 		 */
 		this.store = store;
-
-		/**
-		 * @since 0.3.0
-		 * @type {string}
-		 */
-		this.type = type;
 
 		/**
 		 * @since 0.5.0
@@ -84,34 +71,6 @@ class Gateway {
 		 * @type {Object}
 		 */
 		this.defaultSchema = schema;
-
-		/**
-		 * @since 0.0.1
-		 * @type {Schema}
-		 */
-		this.schema = null;
-
-		/**
-		 * @since 0.5.0
-		 * @type {boolean}
-		 */
-		this.ready = false;
-
-		/**
-		 * @since 0.0.1
-		 * @type {SettingResolver}
-		 * @name Gateway#resolver
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'resolver', { value: this.store.resolver });
-
-		/**
-		 * @since 0.0.1
-		 * @type {boolean}
-		 * @name Gateway#sql
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'sql', { value: this.provider.sql });
 	}
 
 	/**
@@ -121,67 +80,17 @@ class Gateway {
 	 * @readonly
 	 */
 	get cache() {
-		return this.options.cache;
+		return this.client.providers.get(this.options.cache);
 	}
 
 	/**
-	 * Get the provider that manages the persistent data.
 	 * @since 0.0.1
-	 * @type {Provider}
+	 * @type {SettingResolver}
+	 * @name Gateway#resolver
 	 * @readonly
 	 */
-	get provider() {
-		return this.options.provider;
-	}
-
-	/**
-	 * Get this gateway's defaults.
-	 * @since 0.5.0
-	 * @type {Object}
-	 * @readonly
-	 */
-	get defaults() {
-		return Object.assign(this.schema.defaults, { default: true });
-	}
-
-	/**
-	 * Inits the table and the schema for its use in this gateway.
-	 * @since 0.0.1
-	 * @param {boolean} [download=true] Whether this Gateway should download the data from the database.
-	 */
-	async init(download = true) {
-		await this.initSchema();
-		await this.initTable();
-		if (download) await this.sync();
-	}
-
-	/**
-	 * Inits the table for its use in this gateway.
-	 * @since 0.5.0
-	 * @private
-	 */
-	async initTable() {
-		const hasTable = await this.provider.hasTable(this.type);
-		if (!hasTable) await this.provider.createTable(this.type);
-
-		const hasCacheTable = this.cache.hasTable(this.type);
-		if (!hasCacheTable) this.cache.createTable(this.type);
-	}
-
-	/**
-	 * Inits the schema, creating a file if it does not exist, and returning the current schema or the default.
-	 * @since 0.5.0
-	 * @returns {Promise<Schema>}
-	 * @private
-	 */
-	async initSchema() {
-		const baseDir = resolve(this.client.clientBaseDir, 'bwd');
-		await fs.ensureDir(baseDir);
-		this.filePath = resolve(baseDir, `${this.type}_Schema.json`);
-		const schema = await fs.readJSON(this.filePath)
-			.catch(() => fs.outputJSONAtomic(this.filePath, this.defaultSchema).then(() => this.defaultSchema));
-		this.schema = new Schema(this.client, this, schema, null, '');
-		return this.schema;
+	get resolver() {
+		return this.store.resolver;
 	}
 
 	/**
@@ -330,26 +239,47 @@ class Gateway {
 	}
 
 	/**
+	 * Inits the table and the schema for its use in this gateway.
+	 * @since 0.0.1
+	 * @param {boolean} [download=true] Whether this Gateway should download the data from the database.
+	 * @private
+	 */
+	async init(download = true) {
+		if (this.ready) throw new Error(`[INIT] ${this} already inited.`);
+
+		await this.initSchema();
+		await this.initTable();
+		if (!this.cache.hasTable(this.type)) this.cache.createTable(this.type);
+
+		if (download) await this.sync();
+		this.ready = true;
+	}
+
+	/**
 	 * Readies up all Configuration instances in this gateway
 	 * @since 0.5.0
 	 * @returns {Promise<Array<external:Collection<string, Configuration>>>}
 	 * @private
 	 */
 	async _ready() {
+		if (typeof this.client[this.type] === 'undefined') return null;
 		const promises = [];
 		const keys = await this.provider.getKeys(this.type);
 		for (let i = 0; i < keys.length; i++) {
 			const structure = this.client[this.type].get(keys[i]);
 			if (structure) promises.push(structure.configs.sync().then(() => this.cache.set(this.type, keys[i], structure.configs)));
 		}
-		return Promise.all(promises);
+		const results = await Promise.all(promises);
+		if (!this.ready) this.ready = true;
+
+		return results;
 	}
 
 	/**
 	 * Resolves a guild
 	 * @since 0.5.0
 	 * @param {GatewayGuildResolvable} guild A guild resolvable.
-	 * @returns {?Guild}
+	 * @returns {?KlasaGuild}
 	 * @private
 	 */
 	_resolveGuild(guild) {
@@ -370,7 +300,7 @@ class Gateway {
 	 * @param {boolean} force Whether the key got added with force or not.
 	 * @private
 	 */
-	async _shardSyncSchema(path, data, action, force) {
+	async _shardSync(path, data, action, force) {
 		if (this.client.options.shardCount === 0) return;
 		const parsed = typeof data === 'string' ? JSON.parse(data) : data;
 		let route = this.schema;
@@ -390,17 +320,12 @@ class Gateway {
 	}
 
 	/**
-	 * Make an error that can or not have a valid Guild.
+	 * Stringify a value or the instance itself.
 	 * @since 0.5.0
-	 * @param {KlasaGuild} guild The guild to get the language from.
-	 * @param {(string|number)} code The code of the error.
-	 * @param {(string|Error)} error The error.
 	 * @returns {string}
-	 * @static
 	 */
-	static throwError(guild, code, error) {
-		if (guild && guild.language && typeof guild.language.get === 'function') return guild.language.get(code);
-		return `ERROR: [${code}]: ${error}`;
+	toString() {
+		return `Gateway(${this.type})`;
 	}
 
 }

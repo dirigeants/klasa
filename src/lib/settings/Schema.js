@@ -22,7 +22,7 @@ class Schema {
 	/**
 	 * @since 0.5.0
 	 * @param {KlasaClient} client The client which initialized this instance.
-	 * @param {(Gateway|GatewaySQL)} manager The Gateway that manages this schema instance.
+	 * @param {Gateway} manager The Gateway that manages this schema instance.
 	 * @param {Object} object The object containing the properties for this schema instance.
 	 * @param {?Schema} parent The parent which holds this instance.
 	 * @param {string} key The name of this key.
@@ -40,7 +40,7 @@ class Schema {
 		/**
 		 * The Gateway that manages this schema instance.
 		 * @since 0.5.0
-		 * @type {(Gateway|GatewaySQL)}
+		 * @type {Gateway}
 		 * @name Schema#manager
 		 * @readonly
 		 */
@@ -140,7 +140,7 @@ class Schema {
 				if (typeof this.manager.provider.addColumn === 'function') await this.manager.provider.addColumn(this.manager.type, folder.getSQL());
 				else throw new Error('The method \'addColumn\' in your provider is required in order to add new columns.');
 			}
-		} else if (force) {
+		} else if (force || this.manager.type === 'clientStorage') {
 			await this.force('add', key, folder);
 		}
 
@@ -169,7 +169,7 @@ class Schema {
 				if (typeof this.manager.provider.removeColumn === 'function') await this.manager.provider.removeColumn(this.manager.type, folder.getKeys());
 				else throw new Error('The method \'removeColumn\' in your provider is required in order to remove columns.');
 			}
-		} else if (force) {
+		} else if (force || this.manager.type === 'clientStorage') {
 			await this.force('delete', key, folder);
 		}
 
@@ -221,35 +221,13 @@ class Schema {
 		if (this.manager.sql) {
 			if (typeof this.manager.provider.addColumn === 'function') await this.manager.provider.addColumn(this.manager.type, key, this[key].sql[1]);
 			else throw new Error('The method \'addColumn\' in your provider is required in order to add new columns.');
-		} else if (force) {
+		} else if (force || this.manager.type === 'clientStorage') {
 			await this.force('add', key, this[key]);
 		}
 
 		await this._shardSyncSchema(this[key], 'add', force);
 		if (this.client.listenerCount('schemaKeyAdd')) this.client.emit('schemaKeyAdd', this[key]);
 		return this.manager.schema;
-	}
-
-	/**
-	 * Add a key to the instance.
-	 * @since 0.5.0
-	 * @param {string} key The name of the key.
-	 * @param {AddOptions} options The options of the key.
-	 * @param {(Schema|SchemaPiece)} Piece The class to create.
-	 * @returns {(Schema|SchemaPiece)}
-	 * @private
-	 */
-	_addKey(key, options, Piece) {
-		if (this.hasKey(key)) throw new Error(`The key '${key}' already exists.`);
-		const piece = new Piece(this.client, this.manager, options, this, key);
-		this[key] = piece;
-		this.defaults[key] = piece.type === 'Folder' ? piece.defaults : options.default;
-
-		this.keys.add(key);
-		this.keyArray.push(key);
-		this.keyArray.sort((a, b) => a.localeCompare(b));
-
-		return piece;
 	}
 
 	/**
@@ -278,22 +256,6 @@ class Schema {
 	}
 
 	/**
-	 * Remove a key from the instance.
-	 * @since 0.5.0
-	 * @param {string} key The name of the key.
-	 * @private
-	 */
-	_removeKey(key) {
-		const index = this.keyArray.indexOf(key);
-		if (index === -1) throw new Error(`The key '${key}' does not exist.`);
-
-		this.keys.delete(key);
-		this.keyArray.splice(index, 1);
-		delete this[key];
-		delete this.defaults[key];
-	}
-
-	/**
 	 * Modifies all entries from the database.
 	 * @since 0.5.0
 	 * @param {('add'|'edit'|'delete')} action The action to perform.
@@ -304,6 +266,14 @@ class Schema {
 	 */
 	force(action, key, piece) {
 		if (!(piece instanceof SchemaPiece) && !(piece instanceof Schema)) throw new TypeError(`'schemaPiece' must be an instance of 'SchemaPiece' or an instance of 'Schema'.`);
+		if (this.manager.type === 'clientStorage') {
+			const { data, lastKey } = this.manager.getPath(piece.path, { piece: false });
+			if (action === 'add') data[lastKey] = this.defaults[key];
+			else if (action === 'delete') delete data[lastKey];
+
+			if (this.manager.sql) return this.manager.provider.update(this.manager.type, this.client.id, this.manager.data);
+			return this.manager.provider[action === 'delete' ? 'replace' : 'update'](this.manager.type, this.client.id, this.manager.data);
+		}
 
 		const values = this.manager.cache.getValues(this.manager.type);
 		const path = piece.path.split('.');
@@ -409,7 +379,7 @@ class Schema {
 	}
 
 	/**
-	 * Get all the SchemaPieces instances from this schema's children. Used for GatewaySQL.
+	 * Get all the SchemaPieces instances from this schema's children. Used for SQL.
 	 * @since 0.5.0
 	 * @param {string[]} [array=[]] The array to push.
 	 * @returns {SchemaPiece[]}
@@ -428,6 +398,44 @@ class Schema {
 	 */
 	resolveString() {
 		return this.toString();
+	}
+
+	/**
+	 * Add a key to the instance.
+	 * @since 0.5.0
+	 * @param {string} key The name of the key.
+	 * @param {AddOptions} options The options of the key.
+	 * @param {(Schema|SchemaPiece)} Piece The class to create.
+	 * @returns {(Schema|SchemaPiece)}
+	 * @private
+	 */
+	_addKey(key, options, Piece) {
+		if (this.hasKey(key)) throw new Error(`The key '${key}' already exists.`);
+		const piece = new Piece(this.client, this.manager, options, this, key);
+		this[key] = piece;
+		this.defaults[key] = piece.type === 'Folder' ? piece.defaults : options.default;
+
+		this.keys.add(key);
+		this.keyArray.push(key);
+		this.keyArray.sort((a, b) => a.localeCompare(b));
+
+		return piece;
+	}
+
+	/**
+	 * Remove a key from the instance.
+	 * @since 0.5.0
+	 * @param {string} key The name of the key.
+	 * @private
+	 */
+	_removeKey(key) {
+		const index = this.keyArray.indexOf(key);
+		if (index === -1) throw new Error(`The key '${key}' does not exist.`);
+
+		this.keys.delete(key);
+		this.keyArray.splice(index, 1);
+		delete this[key];
+		delete this.defaults[key];
 	}
 
 	/**
@@ -466,14 +474,13 @@ class Schema {
 	 */
 	async _shardSyncSchema(piece, action, force) {
 		if (this.client.options.shardCount === 0) return;
-		await this.client.shard.broadcastEval(`this.gateways.${this.manager.type}._shardSyncSchema(${piece.path.split('.')}, ${JSON.stringify(piece)}, ${action}, ${force});`);
+		await this.client.shard.broadcastEval(`this.gateways.${this.manager.type}._shardSync(${piece.path.split('.')}, ${JSON.stringify(piece)}, ${action}, ${force});`);
 	}
-
 
 	/**
 	 * Get a JSON object containing all the objects from this schema's children.
 	 * @since 0.5.0
-	 * @returns {Object}
+	 * @returns {any}
 	 */
 	toJSON() {
 		return Object.assign({ type: 'Folder' }, ...this.keyArray.map(key => ({ [key]: this[key].toJSON() })));

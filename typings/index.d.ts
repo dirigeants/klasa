@@ -29,14 +29,15 @@ declare module 'klasa' {
 
 		StringResolvable,
 		MessageAttachment,
-		BufferResolvable
+		BufferResolvable,
+		ClientUser
 	} from 'discord.js';
 
 	export const version: string;
 
 	class KlasaClient extends Client {
 		public constructor(options?: KlasaClientConfig);
-		public config: KlasaClientConfig;
+		public options: KlasaClientConfig & ClientOptions;
 		public coreBaseDir: string;
 		public clientBaseDir: string;
 		public console: KlasaConsole;
@@ -61,6 +62,7 @@ declare module 'klasa' {
 			util: typeof Util;
 		};
 		public gateways: GatewayDriver;
+		public configs?: Configuration;
 		public application: ClientApplication;
 
 		public readonly invite: string;
@@ -318,6 +320,7 @@ declare module 'klasa' {
 		public static exec(exec: string, options?: ExecOptions): Promise<{ stdout: string, stderr: string }>;
 		public static sleep(delay: number, args?: any): Promise<any>;
 		public static isFunction(input: Function): boolean;
+		public static isClass(input: Function): boolean;
 		public static isNumber(input: number): boolean;
 		public static isObject(input: Object): boolean;
 		public static tryParse(value: any): any;
@@ -509,51 +512,87 @@ declare module 'klasa' {
 	}
 
 	// Configuration
-	export class Gateway {
+	export class Gateway extends GatewayStorage {
 		public constructor(store: GatewayDriver, type: string, validateFunction: Function, schema: Object, options: GatewayOptions);
 		public store: GatewayDriver;
-		public type: string;
 		public options: GatewayOptions;
 		public validate: Function;
 		public defaultSchema: Object;
-		public schema: Schema;
-		public readonly sql: boolean;
-
-		public init(download?: boolean): Promise<void>;
-		private initTable(): Promise<void>;
-		private initSchema(): Promise<Object>;
+		public readonly cache: Provider;
+		public readonly resolver: SettingResolver;
 
 		public getEntry(input: string, create?: boolean): Object | Configuration;
 		public createEntry(input: string): Promise<Configuration>;
 		public insertEntry(id: string, data?: Object): Configuration;
 		public deleteEntry(input: string): Promise<boolean>;
-
 		public sync(input?: Object | string, download?: boolean): Promise<any>;
-
 		public getPath(key?: string, options?: ConfigurationPathOptions): ConfigurationPathResult;
 
-		private _resolveGuild(guild: GatewayGuildResolvable): KlasaGuild;
+		private init(download?: boolean): Promise<void>;
 		private _ready(): Promise<Array<Collection<string, Configuration>>>;
+		private _resolveGuild(guild: GatewayGuildResolvable): KlasaGuild;
+		private _shardSync(path: string[], data: any, action: 'add' | 'delete' | 'update', force: boolean): Promise<void>;
 
-		public readonly cache: Provider;
-		public readonly provider: Provider;
-		public readonly defaults: Object;
-		public readonly client: KlasaClient;
-		public readonly resolver: Resolver;
-
-		public static throwError(guild: KlasaGuild, code: string | number, error: string | Error): string;
+		public toString(): string;
 	}
 
-	export class GatewaySQL extends Gateway {
-		public readonly sqlSchema: string[];
-		private parseEntry(entry: Object, schemaValues: SchemaPiece[]): Object;
+	export class GatewayStorage {
+		public constructor(client: KlasaClient, type: string, provider?: string);
+		public readonly client: KlasaClient;
+		public readonly type: string;
+		public readonly providerName: string;
+		public readonly baseDir: string;
+		public readonly filePath: string;
+		public readonly sql: boolean;
+		public schema?: Schema;
+		public ready: boolean;
+
+		public readonly sqlSchema: string[][];
+		public readonly provider: Provider;
+		public readonly defaults: any;
+
+		private init(): Promise<void>;
+		private initTable(): Promise<void>;
+		private initSchema(): Promise<Schema>;
+		private parseEntry(entry: any): any;
+
+		private static throwError(guild: KlasaGuild, code: string | number, error: string | Error): string;
 		private static _parseSQLValue(value: any, schemaPiece: SchemaPiece): any;
 	}
 
-	export class Schema {
-		public constructor(client: KlasaClient, manager: Gateway | GatewaySQL, object: Object, parent: Schema, key: string);
+	export class GatewayDriver {
+		public constructor(client: KlasaClient);
 		public readonly client: KlasaClient;
-		public readonly manager: Gateway | GatewaySQL;
+		public resolver: SettingResolver;
+		public types: string[];
+		public caches: string[];
+		public ready: boolean;
+
+		public readonly guildsSchema: {
+			prefix: SchemaPieceJSON,
+			language: SchemaPieceJSON,
+			disableNaturalPrefix: SchemaPieceJSON,
+			disabledCommands: SchemaPieceJSON
+		};
+
+		public readonly clientStorageSchema: {
+			userBlacklist: SchemaPieceJSON,
+			guildBlacklist: SchemaPieceJSON
+		};
+
+		public guilds: Gateway;
+		public users: Gateway;
+		public clientStorage: Gateway;
+
+		public add(name: string, validateFunction: Function, schema?: Object, options?: SettingsOptions, download?: boolean): Promise<Gateway>;
+		private _ready(): Promise<Array<Array<Collection<string, Configuration>>>>;
+		private _checkProvider(engine: string): string;
+	}
+
+	export class Schema {
+		public constructor(client: KlasaClient, manager: Gateway, object: Object, parent: Schema, key: string);
+		public readonly client: KlasaClient;
+		public readonly manager: Gateway;
 		public readonly parent?: Schema;
 		public readonly path: string;
 		public readonly key: string;
@@ -562,14 +601,13 @@ declare module 'klasa' {
 		public keys: Set<string>;
 		public keyArray: string[];
 
+		public readonly configurableKeys: string[];
+
 		public addFolder(key: string, object?: Object, force?: boolean): Promise<Schema>;
 		public removeFolder(key: string, force?: boolean): Promise<Schema>;
 		public hasKey(key: string): boolean;
 		public addKey(key: string, options: AddOptions, force?: boolean): Promise<Schema>;
-		private _addKey(key: string, options: AddOptions): void;
 		public removeKey(key: string, force?: boolean): Promise<Schema>;
-		private _removeKey(key: string): void;
-
 		public force(action: 'add' | 'edit' | 'delete', key: string, piece: Schema | SchemaPiece): Promise<any>;
 		public getList(msg: KlasaMessage): string;
 		public getDefaults(object?: Object): Object;
@@ -577,19 +615,19 @@ declare module 'klasa' {
 		public getKeys(array?: string[]): string[];
 		public getValues(array?: SchemaPiece[]): SchemaPiece[];
 		public resolveString(): string;
-		public toJSON(): Object;
+
+		private _addKey(key: string, options: AddOptions): void;
+		private _removeKey(key: string): void;
+		private _patch(object: any): void;
+
+		public toJSON(): any;
 		public toString(): string;
-
-		public readonly configurableKeys: string[];
-
-		private _setValue(parsedID: string, path: SchemaPiece, route: string[]): void;
-		private _patch(object: Object): void;
 	}
 
 	export class SchemaPiece {
-		public constructor(client: KlasaClient, manager: Gateway | GatewaySQL, options: AddOptions, parent: Schema, key: string);
+		public constructor(client: KlasaClient, manager: Gateway, options: AddOptions, parent: Schema, key: string);
 		public readonly client: KlasaClient;
-		public readonly manager: Gateway | GatewaySQL;
+		public readonly manager: Gateway;
 		public readonly parent: Schema;
 		public readonly path: string;
 		public readonly key: string;
@@ -603,7 +641,7 @@ declare module 'klasa' {
 		private readonly _inited: boolean;
 
 		public parse(value: any, guild: KlasaGuild): Promise<any>;
-		public resolveString(msg: KlasaMessage, value: any): string;
+		public resolveString(msg: KlasaMessage): string;
 		public modify(options: ModifyOptions): Promise<this>;
 
 		private init(options: AddOptions): true;
@@ -620,35 +658,10 @@ declare module 'klasa' {
 		private static _parseSQLValue(value: any): string;
 	}
 
-	export class GatewayDriver {
-		public constructor(client: KlasaClient);
-		public readonly client: KlasaClient;
-		public resolver: SettingResolver;
-		public types: string[];
-		public caches: string[];
-		public ready: boolean;
-
-		public guilds: Gateway | GatewaySQL;
-		public users: Gateway | GatewaySQL;
-
-		public add(name: string, validateFunction: Function, schema?: Object, options?: SettingsOptions, download?: boolean): Promise<Gateway | GatewaySQL>;
-		private _ready(): Promise<Array<Array<Collection<string, Configuration>>>>;
-		private _checkProvider(engine: string): Provider;
-		private validateGuild(guildResolvable: Object | string): KlasaGuild;
-		private validateUser(userResolvable: Object | string): ExtendedUser;
-
-		public readonly defaultDataSchema: {
-			prefix: SchemaPieceJSON,
-			language: SchemaPieceJSON,
-			disableNaturalPrefix: SchemaPieceJSON,
-			disabledCommands: SchemaPieceJSON
-		};
-	}
-
 	export class Configuration {
-		public constructor(manager: Gateway | GatewaySQL, data: Object);
+		public constructor(manager: Gateway, data: Object);
 		public readonly client: KlasaClient;
-		public readonly gateway: Gateway | GatewaySQL;
+		public readonly gateway: Gateway;
 		public readonly type: string;
 		public readonly id: string;
 		public readonly existsInDB: boolean;
@@ -720,6 +733,16 @@ declare module 'klasa' {
 	}
 
 	export { KlasaConsole as Console };
+
+	export type constants = {
+		DEFAULTS: {
+			CLIENT: KlasaConstantsClient,
+			COMMAND: KlasaConstantsCommand,
+			GATEWAY_GUILDS_RESOLVER: (guildResolvable: string | KlasaGuild) => KlasaGuild,
+			GATEWAY_USERS_RESOLVER: (userResolvable: string | KlasaUser) => KlasaUser,
+			GATEWAY_CLIENTSTORAGE_RESOLVER: (clientResolvable: string | KlasaClient) => ClientUser
+		};
+	};
 
 	export class Stopwatch {
 		public constructor(digits?: number);
@@ -1156,6 +1179,48 @@ declare module 'klasa' {
 		killSignal?: string | number;
 		uid?: number;
 		gid?: number;
+	};
+
+	export type KlasaConstantsClient = {
+		clientBaseDir: string;
+		commandMessageLifetime: 1800;
+		console: {};
+		consoleEvents: {
+			debug: false;
+			error: true;
+			log: true;
+			verbose: false;
+			warn: true;
+			wtf: true;
+		};
+		language: 'en-US';
+		promptTime: 30000;
+		ignoreBots: true;
+		ignoreSelf: true;
+		cmdPrompt: false;
+		cmdEditing: false;
+		cmdLogging: false;
+		typing: false;
+		preserveConfigs: true;
+		provider: {};
+		quotedStringSupport: false;
+		readyMessage: (client: KlasaClient) => string;
+	};
+
+	export type KlasaConstantsCommand = {
+		enabled: true;
+		runIn: string[];
+		cooldown: 0;
+		deletable: false;
+		nsfw: false;
+		guarded: false;
+		aliases: string[];
+		autoAliases: true;
+		permLevel: 0;
+		botPerms: string[];
+		requiredConfigs: string[];
+		description: string;
+		usage: string;
 	};
 
 	export type GatewayOptions = {

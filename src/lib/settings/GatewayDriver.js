@@ -1,7 +1,5 @@
 const Gateway = require('./Gateway');
-const GatewaySQL = require('./GatewaySQL');
 const SettingResolver = require('../parsers/SettingResolver');
-const { Guild, User } = require('discord.js');
 
 /**
  * Gateway's driver to make new instances of it, with the purpose to handle different databases simultaneously.
@@ -49,35 +47,35 @@ class GatewayDriver {
 
 		/**
 		 * If the driver is ready
-		 * @type {string[]}
+		 * @type {boolean}
 		 */
 		this.ready = false;
 	}
 
 	/**
 	 * The data schema Klasa uses for guild configs.
-	 * @since 0.3.0
+	 * @since 0.5.0
 	 * @readonly
 	 */
-	get defaultDataSchema() {
+	get guildsSchema() {
 		return {
 			prefix: {
 				type: 'string',
-				default: this.client.config.prefix,
+				default: this.client.options.prefix,
 				min: null,
 				max: 10,
-				array: this.client.config.prefix.constructor.name === 'Array',
+				array: this.client.options.prefix.constructor.name === 'Array',
 				configurable: true,
-				sql: `VARCHAR(10) NOT NULL DEFAULT '${this.client.config.prefix.constructor.name === 'Array' ? JSON.stringify(this.client.config.prefix) : this.client.config.prefix}'`
+				sql: `VARCHAR(10) NOT NULL DEFAULT '${this.client.options.prefix.constructor.name === 'Array' ? JSON.stringify(this.client.options.prefix) : this.client.options.prefix}'`
 			},
 			language: {
 				type: 'language',
-				default: this.client.config.language,
+				default: this.client.options.language,
 				min: null,
 				max: null,
 				array: false,
 				configurable: true,
-				sql: `VARCHAR(5) NOT NULL DEFAULT '${this.client.config.language}'`
+				sql: `VARCHAR(5) NOT NULL DEFAULT '${this.client.options.language}'`
 			},
 			disableNaturalPrefix: {
 				type: 'boolean',
@@ -85,11 +83,39 @@ class GatewayDriver {
 				min: null,
 				max: null,
 				array: false,
-				configurable: Boolean(this.client.config.regexPrefix),
+				configurable: Boolean(this.client.options.regexPrefix),
 				sql: `BIT(1) NOT NULL DEFAULT 0`
 			},
 			disabledCommands: {
 				type: 'command',
+				default: [],
+				min: null,
+				max: null,
+				array: true,
+				configurable: true,
+				sql: 'TEXT'
+			}
+		};
+	}
+
+	/**
+	 * The data schema Klasa uses for client-wide configs.
+	 * @since 0.5.0
+	 * @readonly
+	 */
+	get clientStorageSchema() {
+		return {
+			userBlacklist: {
+				type: 'user',
+				default: [],
+				min: null,
+				max: null,
+				array: true,
+				configurable: true,
+				sql: 'TEXT'
+			},
+			guildBlacklist: {
+				type: 'guild',
 				default: [],
 				min: null,
 				max: null,
@@ -134,14 +160,12 @@ class GatewayDriver {
 		validateFunction = validateFunction.bind(this);
 		if (schema.constructor.name !== 'Object') throw 'Schema must be a valid object or left undefined for an empty object.';
 
-		options.provider = this._checkProvider(options.provider || this.client.config.provider.engine || 'json');
+		options.provider = this._checkProvider(options.provider || this.client.options.provider.engine || 'json');
 		if (options.provider.cache) throw `The provider ${options.provider.name} is designed for caching, not persistent data. Please try again with another.`;
 		options.cache = this._checkProvider('collection');
 		if (options.cache.cache === false) throw `The provider ${options.cache.name} is designed for persistent data, not cache. Please try again with another.`;
 
-		if (options.provider.sql) this[name] = new GatewaySQL(this, name, validateFunction, schema, options);
-		else this[name] = new Gateway(this, name, validateFunction, schema, options);
-
+		this[name] = new Gateway(this, name, validateFunction, schema, options);
 		await this[name].init(download);
 		this.caches.push(name);
 		return this[name];
@@ -168,52 +192,14 @@ class GatewayDriver {
 	 * Check if a provider exists.
 	 * @since 0.5.0
 	 * @param {string} engine Check if a provider exists.
-	 * @returns {Provider}
+	 * @returns {string}
 	 * @private
 	 */
 	_checkProvider(engine) {
 		const provider = this.client.providers.get(engine);
 		if (!provider) throw `This provider (${engine}) does not exist in your system.`;
 
-		return provider;
-	}
-
-	/**
-	 * The validator function Klasa uses for guild configs.
-	 * @since 0.5.0
-	 * @param {(Object|string)} guildResolvable The guild to validate.
-	 * @returns {KlasaGuild}
-	 * @private
-	 */
-	async validateGuild(guildResolvable) {
-		if (guildResolvable) {
-			let value;
-
-			if (typeof guildResolvable === 'string' && /^\d{17,19}$/.test(guildResolvable)) value = this.client.guilds.get(guildResolvable);
-			else if (guildResolvable instanceof Guild) value = guildResolvable;
-			if (value) return value;
-		}
-
-		throw new Error('The parameter <Guild> expects either a Guild ID or a Guild Instance.');
-	}
-
-	/**
-	 * The validator function Klasa uses for user configs.
-	 * @since 0.5.0
-	 * @param {(Object|string)} userResolvable The user to validate.
-	 * @returns {KlasaUser}
-	 * @private
-	 */
-	async validateUser(userResolvable) {
-		if (userResolvable) {
-			let value;
-
-			if (typeof userResolvable === 'string' && /^\d{17,19}$/.test(userResolvable)) value = await this.client.users.fetch(userResolvable);
-			else if (userResolvable instanceof User) value = userResolvable;
-			if (value) return value;
-		}
-
-		throw new Error('The parameter <User> expects either a User ID or a User Instance.');
+		return engine;
 	}
 
 }

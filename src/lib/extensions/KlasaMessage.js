@@ -128,7 +128,7 @@ module.exports = Structures.extend('Message', Message => {
 			 * @since 0.3.0
 			 * @type {Language}
 			 */
-			this.language = this.guild ? this.guild.language : this.client.languages.get(this.client.config.language);
+			this.language = this.guild ? this.guild.language : this.client.languages.get(this.client.options.language);
 		}
 
 		/**

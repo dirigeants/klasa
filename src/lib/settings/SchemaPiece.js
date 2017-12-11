@@ -31,7 +31,7 @@ class SchemaPiece {
 	/**
 	 * @since 0.5.0
 	 * @param {KlasaClient} client The client which initialized this instance.
-	 * @param {(Gateway|GatewaySQL)} manager The Gateway that manages this schema instance.
+	 * @param {Gateway} manager The Gateway that manages this schema instance.
 	 * @param {AddOptions} options The object containing the properties for this schema instance.
 	 * @param {Schema} parent The parent which holds this instance.
 	 * @param {string} key The name of the key.
@@ -49,7 +49,7 @@ class SchemaPiece {
 		/**
 		 * The Gateway that manages this SchemaPiece instance.
 		 * @since 0.5.0
-		 * @type {(Gateway|GatewaySQL)}
+		 * @type {Gateway}
 		 * @name SchemaPiece#manager
 		 * @readonly
 		 */
@@ -272,7 +272,7 @@ class SchemaPiece {
 	 */
 	_schemaCheckType(type) {
 		if (typeof type !== 'string') throw new TypeError(`[KEY] ${this} - Parameter type must be a string.`);
-		if (!this.manager.store.types.includes(type)) throw new TypeError(`[KEY] ${this} - ${type} is not a valid type.`);
+		if (!this.client.gateways.types.includes(type)) throw new TypeError(`[KEY] ${this} - ${type} is not a valid type.`);
 	}
 
 	/**

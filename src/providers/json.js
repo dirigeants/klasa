@@ -9,8 +9,12 @@ module.exports = class extends Provider {
 		this.baseDir = resolve(this.client.clientBaseDir, 'bwd', 'provider', 'json');
 	}
 
-	init() {
-		return fs.ensureDir(this.baseDir).catch(err => this.client.emit('error', err));
+	/**
+	 * Inits the database
+	 * @private
+	 */
+	async init() {
+		await fs.ensureDir(this.baseDir).catch(err => this.client.emit('error', err));
 	}
 
 	/* Table methods */
@@ -130,25 +134,6 @@ module.exports = class extends Provider {
 	}
 
 	/**
-	 * Update or insert a new value to a specified entry.
-	 * @param {string} table The name of the directory.
-	 * @param {string[]} route An array with the path to update.
-	 * @param {Object} object The entry to update.
-	 * @param {*} newValue The new value for the key.
-	 * @returns {Promise<void>}
-	 * @private
-	 */
-	_updateValue(table, route, object, newValue) {
-		let value = object;
-		for (let j = 0; j < route.length - 1; j++) {
-			if (typeof value[route[j]] === 'undefined') value[route[j]] = { [route[j + 1]]: {} };
-			value = value[route[j]];
-		}
-		value[route[route.length - 1]] = newValue;
-		return this.replace(table, object.id, object);
-	}
-
-	/**
 	 * Remove a value or object from all entries.
 	 * @param {string} table The name of the directory.
 	 * @param {string} [path=false] The key's path to update.
@@ -163,21 +148,6 @@ module.exports = class extends Provider {
 			const values = await this.getAll(table);
 			await Promise.all(values.map(object => this._removeValue(table, route, object)));
 		}
-	}
-
-	/**
-	 * Remove a value from a specified entry.
-	 * @param {string} table The name of the directory.
-	 * @param {string[]} route An array with the path to update.
-	 * @param {Object} object The entry to update.
-	 * @returns {Promise<void>}
-	 * @private
-	 */
-	_removeValue(table, route, object) {
-		let value = object;
-		for (let j = 0; j < route.length - 1; j++) value = value[route[j]] || {};
-		delete value[route[route.length - 1]];
-		return this.replace(table, object.id, object);
 	}
 
 	/**
@@ -230,6 +200,40 @@ module.exports = class extends Provider {
 	 */
 	delete(table, document) {
 		return fs.unlink(resolve(this.baseDir, table, `${document}.json`));
+	}
+
+	/**
+	 * Update or insert a new value to a specified entry.
+	 * @param {string} table The name of the directory.
+	 * @param {string[]} route An array with the path to update.
+	 * @param {Object} object The entry to update.
+	 * @param {*} newValue The new value for the key.
+	 * @returns {Promise<void>}
+	 * @private
+	 */
+	_updateValue(table, route, object, newValue) {
+		let value = object;
+		for (let j = 0; j < route.length - 1; j++) {
+			if (typeof value[route[j]] === 'undefined') value[route[j]] = { [route[j + 1]]: {} };
+			value = value[route[j]];
+		}
+		value[route[route.length - 1]] = newValue;
+		return this.replace(table, object.id, object);
+	}
+
+	/**
+	 * Remove a value from a specified entry.
+	 * @param {string} table The name of the directory.
+	 * @param {string[]} route An array with the path to update.
+	 * @param {Object} object The entry to update.
+	 * @returns {Promise<void>}
+	 * @private
+	 */
+	_removeValue(table, route, object) {
+		let value = object;
+		for (let j = 0; j < route.length - 1; j++) value = value[route[j]] || {};
+		delete value[route[route.length - 1]];
+		return this.replace(table, object.id, object);
 	}
 
 };

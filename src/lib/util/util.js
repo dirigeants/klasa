@@ -1,6 +1,7 @@
 const { promisify } = require('util');
 const { exec } = require('child_process');
 const zws = String.fromCharCode(8203);
+const has = (ob, ke) => Object.prototype.hasOwnProperty.call(ob, ke);
 let sensitivePattern;
 
 /**
@@ -94,7 +95,7 @@ class Util {
 	}
 
 	/**
-	 * Applies an interface to a class|
+	 * Applies an interface to a class
 	 * @since 0.1.1
 	 * @param {Object} base The interface to apply to a structure
 	 * @param {Object} structure The structure to apply the interface to
@@ -114,6 +115,19 @@ class Util {
 	 */
 	static isFunction(input) {
 		return typeof input === 'function';
+	}
+
+	/**
+	 * Verify if the input is a class constructor.
+	 * @since 0.5.0
+	 * @param {Function} input The function to verify.
+	 * @returns {boolean}
+	 */
+	static isClass(input) {
+		return typeof input === 'function' &&
+			typeof input.constructor !== 'undefined' &&
+			typeof input.constructor.constructor.toString === 'function' &&
+			input.prototype.constructor.toString().substring(0, 5) === 'class';
 	}
 
 	/**
@@ -148,6 +162,27 @@ class Util {
 		} catch (err) {
 			return value;
 		}
+	}
+
+	/**
+	 * Sets default properties on an object that aren't already specified.
+	 * @since 0.5.0
+	 * @param {Object} def Default properties
+	 * @param {Object} given Object to assign defaults to
+	 * @returns {Object}
+	 * @private
+	 */
+	static mergeDefault(def, given) {
+		if (!given) return def;
+		for (const key in def) {
+			if (!has(given, key) || given[key] === undefined) {
+				given[key] = def[key];
+			} else if (given[key] === Object(given[key])) {
+				given[key] = Util.mergeDefault(def[key], given[key]);
+			}
+		}
+
+		return given;
 	}
 
 }

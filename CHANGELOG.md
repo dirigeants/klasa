@@ -13,6 +13,9 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#121](https://github.com/dirigeants/klasa/pull/121)] Added `constants` and `Util.mergeDefault` (bdistin) added `Util.isClass` (kyranet)
+- [[#121](https://github.com/dirigeants/klasa/pull/121)] Added `GatewayStorage`, containing `SettingGateway`'s core (kyranet)
+- [[#121](https://github.com/dirigeants/klasa/pull/121)] Added a new gateway called `clientStorage`, for client-wide configs (kyranet)
 - [[#118](https://github.com/dirigeants/klasa/pull/118)] Now, if you edit the prefix value in `KlasaClientOptions`, the changes will be reflected in the schema. (kyranet)
 - [[#116](https://github.com/dirigeants/klasa/pull/116)] Added the Timestamp class to replace `moment.js`. (kyranet)
 - [[#115](https://github.com/dirigeants/klasa/pull/115)] Added the events `schemaKeyAdd`, `schemaKeyRemove` and `schemaKeyUpdate`. (kyranet)
@@ -40,6 +43,8 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#121](https://github.com/dirigeants/klasa/pull/121)] **[BREAKING]** Merged `this.client.config` to `this.client.options` (bdistin)
+- [[#121](https://github.com/dirigeants/klasa/pull/121)] Refactored `Gateway` to extend `GatewayStorage` (kyranet)
 - [[`550ac275c8`](https://github.com/dirigeants/klasa/commit/550ac275c849c285692ffff5c4e99cb53753a85b)] ([#109](https://github.com/dirigeants/klasa/pull/109)) Translated the description for all commands. (Pandraghon)
 - [[`550ac275c8`](https://github.com/dirigeants/klasa/commit/550ac275c849c285692ffff5c4e99cb53753a85b)] ([#109](https://github.com/dirigeants/klasa/pull/109)) Nested folders in the configuration will show with a format of `Folder1/Folder2/Folder3/...` instead of `Folder1.folder2.folder3...`. (bdistin and Pandraghon)
 - [[`63af836277`](https://github.com/dirigeants/klasa/commit/63af836277541695d1d3489397f901b51e7dc23a)] ([#80](https://github.com/dirigeants/klasa/pull/80)) If the command's name contains uppercase characters, they will get lowercased. (kyranet)
@@ -66,6 +71,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Removed
 
+- [[#121](https://github.com/dirigeants/klasa/pull/121)] Removed `GatewaySQL`. (kyranet)
 - [[#116](https://github.com/dirigeants/klasa/pull/116)] Removed `moment.js` from the dependency list. (kyranet)
 - [[`2915d31b92`](https://github.com/dirigeants/klasa/commit/2915d31b92c8ea4b9202edfdb146a2d8b36ad8d6)] ([#43](https://github.com/dirigeants/klasa/pull/43)) Removed a bunch of extendables. (kyranet)
 - [[`2915d31b92`](https://github.com/dirigeants/klasa/commit/2915d31b92c8ea4b9202edfdb146a2d8b36ad8d6)] ([#43](https://github.com/dirigeants/klasa/pull/43)) **[PERF]** Removed `CommandMessage` proxy in favor of the brand new `KlasaMessage`. As in *Node.js 9.2.0*, Proxy creation performs 37M ops/sec, and property access 1.7M ops/sec (all pieces after Inhibitors use that proxy). As it's now removed, property access should perform around 520M ops/sec (~305 times faster). (kyranet)

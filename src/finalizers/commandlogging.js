@@ -28,7 +28,7 @@ module.exports = class extends Finalizer {
 	}
 
 	init() {
-		this.enabled = !!this.client.config.cmdLogging;
+		this.enabled = this.client.options.cmdLogging;
 	}
 
 	text(msg) {

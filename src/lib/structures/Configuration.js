@@ -71,7 +71,7 @@ class Configuration {
 
 	/**
 	 * @since 0.5.0
-	 * @param {(Gateway|GatewaySQL)} manager The Gateway that manages this Configuration instance.
+	 * @param {Gateway} manager The Gateway that manages this Configuration instance.
 	 * @param {Object} data The data that is cached in this Configuration instance.
 	 */
 	constructor(manager, data) {
@@ -87,7 +87,7 @@ class Configuration {
 		/**
 		 * The Gateway that manages this Configuration instance.
 		 * @since 0.5.0
-		 * @type {(Gateway|GatewaySQL)}
+		 * @type {Gateway}
 		 * @name Configuration#gateway
 		 * @readonly
 		 */
@@ -462,7 +462,7 @@ class Configuration {
 	}
 
 	/**
-	 * Assign data to the settConfigurationings.
+	 * Assign data to the Configuration.
 	 * @since 0.5.0
 	 * @param {Object} data The data contained in the group.
 	 * @param {(Schema|SchemaPiece)} schema A Schema or a SchemaPiece instance.
