@@ -6,6 +6,7 @@ module.exports = {
 	util: require('./lib/util/util'),
 	Colors: require('./lib/util/Colors'),
 	Console: require('./lib/util/Console'),
+	constants: require('./lib/util/constants'),
 	RichDisplay: require('./lib/util/RichDisplay'),
 	RichMenu: require('./lib/util/RichMenu'),
 	ReactionHandler: require('./lib/util/ReactionHandler'),

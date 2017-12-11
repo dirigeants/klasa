@@ -62,21 +62,21 @@ class GatewayDriver {
 		return {
 			prefix: {
 				type: 'string',
-				default: this.client.config.prefix,
+				default: this.client.options.prefix,
 				min: null,
 				max: 10,
-				array: this.client.config.prefix.constructor.name === 'Array',
+				array: this.client.options.prefix.constructor.name === 'Array',
 				configurable: true,
-				sql: `VARCHAR(10) NOT NULL DEFAULT '${this.client.config.prefix.constructor.name === 'Array' ? JSON.stringify(this.client.config.prefix) : this.client.config.prefix}'`
+				sql: `VARCHAR(10) NOT NULL DEFAULT '${this.client.options.prefix.constructor.name === 'Array' ? JSON.stringify(this.client.options.prefix) : this.client.options.prefix}'`
 			},
 			language: {
 				type: 'language',
-				default: this.client.config.language,
+				default: this.client.options.language,
 				min: null,
 				max: null,
 				array: false,
 				configurable: true,
-				sql: `VARCHAR(5) NOT NULL DEFAULT '${this.client.config.language}'`
+				sql: `VARCHAR(5) NOT NULL DEFAULT '${this.client.options.language}'`
 			},
 			disableNaturalPrefix: {
 				type: 'boolean',
@@ -84,7 +84,7 @@ class GatewayDriver {
 				min: null,
 				max: null,
 				array: false,
-				configurable: Boolean(this.client.config.regexPrefix),
+				configurable: Boolean(this.client.options.regexPrefix),
 				sql: `BIT(1) NOT NULL DEFAULT 0`
 			},
 			disabledCommands: {
@@ -133,7 +133,7 @@ class GatewayDriver {
 		validateFunction = validateFunction.bind(this);
 		if (schema.constructor.name !== 'Object') throw 'Schema must be a valid object or left undefined for an empty object.';
 
-		options.provider = this._checkProvider(options.provider || this.client.config.provider.engine || 'json');
+		options.provider = this._checkProvider(options.provider || this.client.options.provider.engine || 'json');
 		if (options.provider.cache) throw `The provider ${options.provider.name} is designed for caching, not persistent data. Please try again with another.`;
 		options.cache = this._checkProvider('collection');
 		if (options.cache.cache === false) throw `The provider ${options.cache.name} is designed for persistent data, not cache. Please try again with another.`;

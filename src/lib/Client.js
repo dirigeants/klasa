@@ -3,6 +3,7 @@ const path = require('path');
 const ArgResolver = require('./parsers/ArgResolver');
 const PermLevels = require('./structures/PermissionLevels');
 const util = require('./util/util');
+const constants = require('./util/constants');
 const Stopwatch = require('./util/Stopwatch');
 const Console = require('./util/Console');
 const GatewayDriver = require('./settings/GatewayDriver');
@@ -24,10 +25,9 @@ const ExtendableStore = require('./structures/ExtendableStore');
 class KlasaClient extends Discord.Client {
 
 	/**
-	 * @typedef {Object} KlasaClientConfig
+	 * @typedef {external:DiscordJSConfig} KlasaClientConfig
 	 * @memberof KlasaClient
 	 * @property {string} [prefix] The default prefix the bot should respond to
-	 * @property {DiscordJSConfig} [clientOptions={}] The options to pass to D.JS
 	 * @property {PermissionLevels} [permissionLevels=KlasaClient.defaultPermissionLevels] The permission levels to use with this bot
 	 * @property {string} [clientBaseDir=path.dirname(require.main.filename)] The directory where all piece folders can be found
 	 * @property {number} [commandMessageLifetime=1800] The threshold for how old command messages can be before sweeping since the last edit in seconds
@@ -46,7 +46,7 @@ class KlasaClient extends Discord.Client {
 	 * @property {boolean} [quotedStringSupport=false] Whether the bot should default to using quoted string support in arg parsing, or not (overridable per command)
 	 * @property {?(string|Function)} [readyMessage=`Successfully initialized. Ready to serve ${this.guilds.size} guilds.`] readyMessage to be passed thru Klasa's ready event
 	 * @property {string} [ownerID] The discord user id for the user the bot should respect as the owner (gotten from Discord api if not provided)
-	 * @property {RegExp} [regexPrefix=null] The regular expression prefix if one is provided
+	 * @property {RegExp} [regexPrefix] The regular expression prefix if one is provided
 	 */
 
 	/**
@@ -85,22 +85,9 @@ class KlasaClient extends Discord.Client {
 	 */
 	constructor(config = {}) {
 		if (typeof config !== 'object') throw new TypeError('Configuration for Klasa must be an object.');
-		super(config.clientOptions);
+		config = util.mergeDefault(constants.DEFAULTS.CLIENT, config);
+		super(config);
 
-		/**
-		 * The config passed to the new Klasa.Client
-		 * @since 0.0.1
-		 * @type {KlasaClientConfig}
-		 */
-		this.config = config;
-		this.config.provider = config.provider || {};
-		this.config.console = config.console || {};
-		this.config.consoleEvents = config.consoleEvents || {};
-		this.config.language = config.language || 'en-US';
-		this.config.promptTime = typeof config.promptTime === 'number' && Number.isInteger(config.promptTime) ? config.promptTime : 30000;
-		this.config.regexPrefix = config.regexPrefix || null;
-		this.config.commandMessageLifetime = config.commandMessageLifetime || 1800;
-		this.config.preserveConfigs = 'preserverConfigs' in config ? config.preserveConfigs : true;
 		/**
 		 * The directory to the node_modules folder where Klasa exists
 		 * @since 0.0.1
@@ -121,11 +108,11 @@ class KlasaClient extends Discord.Client {
 		 * @type {KlasaConsole}
 		 */
 		this.console = new Console({
-			stdout: this.config.console.stdout,
-			stderr: this.config.console.stderr,
-			useColor: this.config.console.useColor,
-			colors: this.config.console.colors,
-			timestamps: this.config.console.timestamps
+			stdout: this.options.console.stdout,
+			stderr: this.options.console.stderr,
+			useColor: this.options.console.useColor,
+			colors: this.options.console.colors,
+			timestamps: this.options.console.timestamps
 		});
 
 		/**
@@ -287,7 +274,7 @@ class KlasaClient extends Discord.Client {
 	 * @type {KlasaUser}
 	 */
 	get owner() {
-		return this.users.get(this.config.ownerID);
+		return this.users.get(this.options.ownerID);
 	}
 
 	/**
@@ -297,7 +284,7 @@ class KlasaClient extends Discord.Client {
 	 * @returns {PermissionLevels}
 	 */
 	validatePermissionLevels() {
-		const permLevels = this.config.permissionLevels || KlasaClient.defaultPermissionLevels;
+		const permLevels = this.options.permissionLevels || KlasaClient.defaultPermissionLevels;
 		if (!(permLevels instanceof PermLevels)) throw new Error('permissionLevels must be an instance of the PermissionLevels class');
 		if (permLevels.isValid()) return permLevels;
 		throw new Error(permLevels.debug());
@@ -377,8 +364,8 @@ class KlasaClient extends Discord.Client {
 		await this.configs.init();
 
 		// Automatic Prefix editing detection.
-		if (typeof this.config.prefix === 'string' && this.config.prefix !== this.gateways.guilds.schema.prefix.default) {
-			await this.gateways.guilds.schema.prefix.modify({ default: this.config.prefix });
+		if (typeof this.options.prefix === 'string' && this.options.prefix !== this.gateways.guilds.schema.prefix.default) {
+			await this.gateways.guilds.schema.prefix.modify({ default: this.options.prefix });
 		}
 
 		this.emit('log', `Loaded in ${timer.stop()}.`);
@@ -392,17 +379,17 @@ class KlasaClient extends Discord.Client {
 	 */
 	async _ready() {
 		await this.gateways._ready();
-		if (typeof this.config.ignoreBots === 'undefined') this.config.ignoreBots = true;
-		if (typeof this.config.ignoreSelf === 'undefined') this.config.ignoreSelf = this.user.bot;
+		if (typeof this.options.ignoreBots === 'undefined') this.options.ignoreBots = true;
+		if (typeof this.options.ignoreSelf === 'undefined') this.options.ignoreSelf = this.user.bot;
 		if (this.user.bot) this.application = await super.fetchApplication();
-		if (!this.config.ownerID) this.config.ownerID = this.user.bot ? this.application.owner.id : this.user.id;
+		if (!this.options.ownerID) this.options.ownerID = this.user.bot ? this.application.owner.id : this.user.id;
 
 		// Init all the pieces
 		await Promise.all(this.pieceStores.filter(store => store.name !== 'providers').map(store => store.init()));
 		util.initClean(this);
 		this.ready = true;
-		if (typeof this.config.readyMessage === 'undefined') this.emit('log', `Successfully initialized. Ready to serve ${this.guilds.size} guilds.`);
-		else if (this.config.readyMessage !== null) this.emit('log', typeof this.config.readyMessage === 'function' ? this.config.readyMessage(this) : this.config.readyMessage);
+		if (typeof this.options.readyMessage === 'undefined') this.emit('log', `Successfully initialized. Ready to serve ${this.guilds.size} guilds.`);
+		else if (this.options.readyMessage !== null) this.emit('log', typeof this.options.readyMessage === 'function' ? this.options.readyMessage(this) : this.options.readyMessage);
 		this.emit('klasaReady');
 	}
 
@@ -412,12 +399,12 @@ class KlasaClient extends Discord.Client {
 	 * @since 0.5.0
 	 * @param {number} [lifetime=this.options.messageCacheLifetime] Messages that are older than this (in seconds)
 	 * will be removed from the caches. The default is based on [ClientOptions#messageCacheLifetime]{@link https://discord.js.org/#/docs/main/master/typedef/ClientOptions?scrollTo=messageCacheLifetime}
-	 * @param {number} [commandLifetime=this.config.commandMessageLifetime] Messages that are older than this (in seconds)
+	 * @param {number} [commandLifetime=this.options.commandMessageLifetime] Messages that are older than this (in seconds)
 	 * will be removed from the caches. The default is based on {@link KlasaClientConfig#commandMessageLifetime}
 	 * @returns {number} Amount of messages that were removed from the caches,
 	 * or -1 if the message cache lifetime is unlimited
 	 */
-	sweepMessages(lifetime = this.options.messageCacheLifetime, commandLifetime = this.config.commandMessageLifetime) {
+	sweepMessages(lifetime = this.options.messageCacheLifetime, commandLifetime = this.options.commandMessageLifetime) {
 		if (typeof lifetime !== 'number' || isNaN(lifetime)) throw new TypeError('The lifetime must be a number.');
 		if (lifetime <= 0) {
 			this.emit('debug', 'Didn\'t sweep messages - lifetime is unlimited');

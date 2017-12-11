@@ -1,4 +1,6 @@
 const Piece = require('./interfaces/Piece');
+const { mergeDefault } = require('../util/util');
+const constants = require('../util/constants');
 const ParsedUsage = require('../usage/ParsedUsage');
 
 /**
@@ -17,6 +19,7 @@ class Command {
 	 * @property {string[]} [runIn=['text','dm','group']] What channel types the command should run in
 	 * @property {number} [cooldown=0] The amount of time before the user can run the command again in seconds
 	 * @property {boolean} [nsfw=false] If the command should only run in nsfw channels
+	 * @property {boolean} [deletable=false] If the responses should be deleted if the triggering message is deleted
 	 * @property {boolean} [guarded=false] If the command can be disabled on a guild level (does not effect global disable)
 	 * @property {string[]} [aliases=[]] Any comand aliases
 	 * @property {boolean} [autoAliases=true] If automatic aliases should be added (adds aliases of name and aliases without dashes)
@@ -26,7 +29,7 @@ class Command {
 	 * @property {(string|Function)} [description=''] The help description for the command
 	 * @property {string} [usage=''] The usage string for the command
 	 * @property {?string} [usageDelim=undefined] The string to deliminate the command input for usage
-	 * @property {boolean} [quotedStringSupport=this.client.config.quotedStringSupport] Wheter args for this command should not deliminated inside quotes
+	 * @property {boolean} [quotedStringSupport=this.client.options.quotedStringSupport] Wheter args for this command should not deliminated inside quotes
 	 * @property {(string|Function)} [extendedHelp=msg.language.get('COMMAND_HELP_NO_EXTENDED')] Extended help strings
 	 */
 
@@ -38,6 +41,8 @@ class Command {
 	 * @param {CommandOptions} [options = {}] Optional Command settings
 	 */
 	constructor(client, dir, file, options = {}) {
+		options = mergeDefault(constants.DEFAULTS.COMMAND, options);
+
 		/**
 		 * @since 0.0.1
 		 * @type {KlasaClient}
@@ -56,42 +61,42 @@ class Command {
 		 * @since 0.0.1
 		 * @type {boolean}
 		 */
-		this.enabled = 'enabled' in options ? options.enabled : true;
+		this.enabled = options.enabled;
 
 		/**
 		 * What channels the command should run in
 		 * @since 0.0.1
 		 * @type {string[]}
 		 */
-		this.runIn = options.runIn || ['text', 'dm', 'group'];
+		this.runIn = options.runIn;
 
 		/**
 		 * The cooldown in seconds this command has
 		 * @since 0.0.1
 		 * @type {number}
 		 */
-		this.cooldown = options.cooldown || 0;
+		this.cooldown = options.cooldown;
 
 		/**
 		 * Whether this command should only run in NSFW channels or not
 		 * @since 0.5.0
 		 * @type {boolean}
 		 */
-		this.nsfw = Boolean(options.nsfw);
+		this.nsfw = options.nsfw;
 
 		/**
 		 * Whether this command shound not be able to be disabled in a guild or not
 		 * @since 0.5.0
 		 * @type {boolean}
 		 */
-		this.guarded = Boolean(options.guarded);
+		this.guarded = options.guarded;
 
 		/**
 		 * Whether this command should have it's responses deleted if the triggering message is deleted
 		 * @since 0.5.0
 		 * @type {boolean}
 		 */
-		this.deletable = Boolean(options.deletable);
+		this.deletable = options.deletable;
 
 		/**
 		 * The name of the command
@@ -105,8 +110,8 @@ class Command {
 		 * @since 0.0.1
 		 * @type {string[]}
 		 */
-		this.aliases = options.aliases || [];
-		if ('autoAliases' in options ? options.autoAliases : true) {
+		this.aliases = options.aliases;
+		if (options.autoAliases) {
 			if (this.name.includes('-')) this.aliases.push(this.name.replace(/-/g, ''));
 			for (const alias of this.aliases) if (alias.includes('-')) this.aliases.push(alias.replace(/-/g, ''));
 		}
@@ -116,21 +121,21 @@ class Command {
 		 * @since 0.0.1
 		 * @type {number}
 		 */
-		this.permLevel = options.permLevel || 0;
+		this.permLevel = options.permLevel;
 
 		/**
 		 * The required bot permissions to run this command
 		 * @since 0.0.1
 		 * @type {string[]}
 		 */
-		this.botPerms = options.botPerms || [];
+		this.botPerms = options.botPerms;
 
 		/**
 		 * The required per guild configs to run this command
 		 * @since 0.0.1
 		 * @type {string[]}
 		 */
-		this.requiredConfigs = options.requiredConfigs || [];
+		this.requiredConfigs = options.requiredConfigs;
 
 		/**
 		 * The description of the command
@@ -139,7 +144,7 @@ class Command {
 		 * @param {KlasaMessage} msg The message used to trigger this command
 		 * @returns {string}
 		 */
-		this.description = options.description || '';
+		this.description = options.description;
 
 		/**
 		 * The extended help for the command
@@ -155,7 +160,7 @@ class Command {
 		 * @since 0.0.1
 		 * @type {string}
 		 */
-		this.usageString = options.usage || '';
+		this.usageString = options.usage;
 
 		/**
 		 * The usage deliminator for the command input
@@ -169,7 +174,7 @@ class Command {
 		 * @since 0.2.1
 		 * @type {boolean}
 		 */
-		this.quotedStringSupport = 'quotedStringSupport' in options ? options.quotedStringSupport : this.client.config.quotedStringSupport;
+		this.quotedStringSupport = options.quotedStringSupport;
 
 		/**
 		 * The full category for the command

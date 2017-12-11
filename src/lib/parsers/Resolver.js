@@ -28,7 +28,7 @@ class Resolver {
 	 */
 	get language() {
 		if (this._language) return this._language;
-		this._language = this.client.languages.get(this.client.config.language);
+		this._language = this.client.languages.get(this.client.options.language);
 		return this._language;
 	}
 
