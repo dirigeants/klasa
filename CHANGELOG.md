@@ -14,7 +14,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 ### Added
 
 - [[#121](https://github.com/dirigeants/klasa/pull/121)] Added `GatewayStorage`, containing `SettingGateway`'s core (kyranet)
-- [[#121](https://github.com/dirigeants/klasa/pull/121)] Added `ClientStorage`, for client-wide configs, extending `GatewayStorage` (kyranet)
+- [[#121](https://github.com/dirigeants/klasa/pull/121)] Added a new gateway called `clientStorage`, for client-wide configs (kyranet)
 - [[#118](https://github.com/dirigeants/klasa/pull/118)] Now, if you edit the prefix value in `KlasaClientOptions`, the changes will be reflected in the schema. (kyranet)
 - [[#116](https://github.com/dirigeants/klasa/pull/116)] Added the Timestamp class to replace `moment.js`. (kyranet)
 - [[#115](https://github.com/dirigeants/klasa/pull/115)] Added the events `schemaKeyAdd`, `schemaKeyRemove` and `schemaKeyUpdate`. (kyranet)

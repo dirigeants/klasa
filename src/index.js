@@ -32,7 +32,6 @@ module.exports = {
 	ProviderStore: require('./lib/structures/ProviderStore'),
 	Piece: require('./lib/structures/interfaces/Piece'),
 	Store: require('./lib/structures/interfaces/Store'),
-	ClientStorage: require('./lib/settings/ClientStorage'),
 	Gateway: require('./lib/settings/Gateway'),
 	GatewayDriver: require('./lib/settings/GatewayDriver'),
 	GatewayStorage: require('./lib/settings/GatewayStorage'),

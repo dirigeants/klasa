@@ -7,7 +7,6 @@ const constants = require('./util/constants');
 const Stopwatch = require('./util/Stopwatch');
 const Console = require('./util/Console');
 const GatewayDriver = require('./settings/GatewayDriver');
-const ClientStorage = require('./settings/ClientStorage');
 const CommandStore = require('./structures/CommandStore');
 const InhibitorStore = require('./structures/InhibitorStore');
 const FinalizerStore = require('./structures/FinalizerStore');
@@ -229,9 +228,9 @@ class KlasaClient extends Discord.Client {
 		this.gateways = new GatewayDriver(this);
 
 		/**
-		 * The ClientStorage instance that handles this client's configuration
+		 * The Configuration instance that handles this client's configuration
 		 * @since 0.5.0
-		 * @type {?ClientStorage}
+		 * @type {Configuration}
 		 */
 		this.configs = null;
 
@@ -358,10 +357,15 @@ class KlasaClient extends Discord.Client {
 
 		// Providers must be init before configs, and those before all other stores.
 		await this.providers.init();
-		await this.gateways.add('guilds', this.gateways.validateGuild, this.gateways.defaultDataSchema, undefined, false);
-		await this.gateways.add('users', this.gateways.validateUser, undefined, undefined, false);
-		this.configs = new ClientStorage(this);
-		await this.configs.init();
+		await Promise.all([
+			this.gateways.add('guilds', constants.DEFAULTS.GATEWAY_GUILDS_RESOLVER, this.gateways.guildsSchema, undefined, false),
+			this.gateways.add('users', constants.DEFAULTS.GATEWAY_USERS_RESOLVER, undefined, undefined, false),
+			this.gateways.add('clientStorage', constants.DEFAULTS.GATEWAYS_CLIENTSTORAGE_RESOLVER, this.gateways.clientStorageSchema, false)
+		]);
+
+		// Client-wide settings
+		this.configs = this.gateways.clientStorage.cache.get('clientStorage', this.id) || this.gateways.clientStorage.insertEntry(this.id);
+		await this.configs.sync().then(() => this.cache.set(this.type, this.id, this.configs));
 
 		// Automatic Prefix editing detection.
 		if (typeof this.options.prefix === 'string' && this.options.prefix !== this.gateways.guilds.schema.prefix.default) {

@@ -1,4 +1,5 @@
 const { dirname } = require('path');
+const { Guild, User, Client } = require('discord.js');
 
 exports.DEFAULTS = {
 
@@ -42,6 +43,37 @@ exports.DEFAULTS = {
 		requiredConfigs: [],
 		description: '',
 		usage: ''
+	},
+
+	GATEWAY_GUILDS_RESOLVER: async function validateGuild(guildResolvable) {
+		if (guildResolvable) {
+			let value;
+
+			if (typeof guildResolvable === 'string' && /^\d{17,19}$/.test(guildResolvable)) value = this.client.guilds.get(guildResolvable);
+			else if (guildResolvable instanceof Guild) value = guildResolvable;
+			if (value) return value;
+		}
+
+		throw new Error('The parameter <Guild> expects either a Guild ID or a Guild Instance.');
+	},
+
+	GATEWAY_USERS_RESOLVER: async function validateUser(userResolvable) {
+		if (userResolvable) {
+			let value;
+
+			if (typeof userResolvable === 'string' && /^\d{17,19}$/.test(userResolvable)) value = await this.client.users.fetch(userResolvable);
+			else if (userResolvable instanceof User) value = userResolvable;
+			if (value) return value;
+		}
+
+		throw new Error('The parameter <User> expects either a User ID or a User Instance.');
+	},
+
+	GATEWAYS_CLIENTSTORAGE_RESOLVER: async function validateClient(clientResolvable) {
+		if (clientResolvable instanceof Client) return clientResolvable;
+		if (typeof clientResolvable.client !== 'undefined' && clientResolvable.client instanceof Client) return clientResolvable.client;
+
+		throw new Error('The parameter <Client> expects either a Client Instance.');
 	}
 
 };

@@ -267,12 +267,12 @@ class Schema {
 	force(action, key, piece) {
 		if (!(piece instanceof SchemaPiece) && !(piece instanceof Schema)) throw new TypeError(`'schemaPiece' must be an instance of 'SchemaPiece' or an instance of 'Schema'.`);
 		if (this.manager.type === 'clientStorage') {
-			const { data, lastKey } = this.manager.getFolder(piece.path);
+			const { data, lastKey } = this.manager.getPath(piece.path, { piece: false });
 			if (action === 'add') data[lastKey] = this.defaults[key];
 			else if (action === 'delete') delete data[lastKey];
 
-			if (this.manager.sql) return this.manager.provider.update(this.manager.type, 'klasa', this.manager.data);
-			return this.manager.provider[action === 'delete' ? 'replace' : 'update'](this.manager.type, 'klasa', this.manager.data);
+			if (this.manager.sql) return this.manager.provider.update(this.manager.type, this.client.id, this.manager.data);
+			return this.manager.provider[action === 'delete' ? 'replace' : 'update'](this.manager.type, this.client.id, this.manager.data);
 		}
 
 		const values = this.manager.cache.getValues(this.manager.type);
@@ -474,10 +474,8 @@ class Schema {
 	 */
 	async _shardSyncSchema(piece, action, force) {
 		if (this.client.options.shardCount === 0) return;
-		const gateway = this.manager.type !== 'clientStorage' ? `this.gateways.${this.manager.type}` : 'this.configs';
-		await this.client.shard.broadcastEval(`${gateway}._shardSync(${piece.path.split('.')}, ${JSON.stringify(piece)}, ${action}, ${force});`);
+		await this.client.shard.broadcastEval(`this.gateways.${this.manager.type}._shardSync(${piece.path.split('.')}, ${JSON.stringify(piece)}, ${action}, ${force});`);
 	}
-
 
 	/**
 	 * Get a JSON object containing all the objects from this schema's children.

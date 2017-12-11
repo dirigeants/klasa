@@ -61,7 +61,7 @@ declare module 'klasa' {
 			util: typeof Util;
 		};
 		public gateways: GatewayDriver;
-		public configs?: ClientStorage;
+		public configs?: Configuration;
 		public application: ClientApplication;
 
 		public readonly invite: string;
@@ -510,25 +510,6 @@ declare module 'klasa' {
 	}
 
 	// Configuration
-	export class ClientStorage extends GatewayStorage {
-		public constructor(client: KlasaClient);
-		public data: Object;
-		public readonly defaultSchema: {
-			userBlacklist: SchemaPieceJSON,
-			guildBlacklist: SchemaPieceJSON
-		};
-
-		public get(path: string | string[]): any;
-		public updateOne(path: string | string[], value: any): Promise<this>;
-
-		private getFolder(path: string): ClientStoragePathResult;
-		private init(): Promise<void>;
-		private _shardSync(path: string[], data: Object, action: 'add' | 'delete' | 'update'): void;
-		private _shardSyncEmit(path: string[], data: Schema | SchemaPiece | Object, action: 'add' | 'delete' | 'update'): Promise<void>;
-
-		public toJSON(): Object;
-	}
-
 	export class Gateway extends GatewayStorage {
 		public constructor(store: GatewayDriver, type: string, validateFunction: Function, schema: Object, options: GatewayOptions);
 		public store: GatewayDriver;
@@ -583,7 +564,7 @@ declare module 'klasa' {
 		public caches: string[];
 		public ready: boolean;
 
-		public readonly defaultDataSchema: {
+		public readonly guildsSchema: {
 			prefix: SchemaPieceJSON,
 			language: SchemaPieceJSON,
 			disableNaturalPrefix: SchemaPieceJSON,
@@ -596,8 +577,6 @@ declare module 'klasa' {
 		public add(name: string, validateFunction: Function, schema?: Object, options?: SettingsOptions, download?: boolean): Promise<Gateway>;
 		private _ready(): Promise<Array<Array<Collection<string, Configuration>>>>;
 		private _checkProvider(engine: string): string;
-		private validateGuild(guildResolvable: Object | string): KlasaGuild;
-		private validateUser(userResolvable: Object | string): KlasaUser;
 	}
 
 	export class Schema {
@@ -744,6 +723,16 @@ declare module 'klasa' {
 	}
 
 	export { KlasaConsole as Console };
+
+	export type constants = {
+		DEFAULTS: {
+			CLIENT: KlasaConstantsClient,
+			COMMAND: KlasaConstantsCommand,
+			GATEWAY_GUILDS_RESOLVER: (guildResolvable: string | KlasaGuild) => KlasaGuild,
+			GATEWAY_USERS_RESOLVER: (userResolvable: string | KlasaUser) => KlasaUser,
+			GATEWAYS_CLIENTSTORAGE_RESOLVER: (clientResolvable: KlasaClient) => KlasaClient
+		};
+	};
 
 	export class Stopwatch {
 		public constructor(digits?: number);
@@ -1182,6 +1171,48 @@ declare module 'klasa' {
 		gid?: number;
 	};
 
+	export type KlasaConstantsClient = {
+		clientBaseDir: string;
+		commandMessageLifetime: 1800;
+		console: {};
+		consoleEvents: {
+			debug: false;
+			error: true;
+			log: true;
+			verbose: false;
+			warn: true;
+			wtf: true;
+		};
+		language: 'en-US';
+		promptTime: 30000;
+		ignoreBots: true;
+		ignoreSelf: true;
+		cmdPrompt: false;
+		cmdEditing: false;
+		cmdLogging: false;
+		typing: false;
+		preserveConfigs: true;
+		provider: {};
+		quotedStringSupport: false;
+		readyMessage: (client: KlasaClient) => string;
+	};
+
+	export type KlasaConstantsCommand = {
+		enabled: true;
+		runIn: string[];
+		cooldown: 0;
+		deletable: false;
+		nsfw: false;
+		guarded: false;
+		aliases: string[];
+		autoAliases: true;
+		permLevel: 0;
+		botPerms: string[];
+		requiredConfigs: string[];
+		description: string;
+		usage: string;
+	};
+
 	export type GatewayOptions = {
 		provider?: Provider;
 		cache?: Provider;
@@ -1252,12 +1283,6 @@ declare module 'klasa' {
 	export type ConfigurationPathResult = {
 		path: SchemaPiece;
 		route: string[];
-	};
-
-	export type ClientStoragePathResult = {
-		schema: Schema;
-		data: any;
-		lastKey: string;
 	};
 
 	export type SchemaPieceJSON = {
