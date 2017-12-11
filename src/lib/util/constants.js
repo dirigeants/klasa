@@ -70,8 +70,10 @@ exports.DEFAULTS = {
 	},
 
 	GATEWAY_CLIENTSTORAGE_RESOLVER: async function validateClient(clientResolvable) {
-		if (clientResolvable instanceof Client) return clientResolvable;
-		if (typeof clientResolvable.client !== 'undefined' && clientResolvable.client instanceof Client) return clientResolvable.client;
+		if (clientResolvable instanceof Client) return clientResolvable.user;
+		if (typeof clientResolvable === 'object' &&
+			typeof clientResolvable.client !== 'undefined' &&
+			clientResolvable.client instanceof Client) return clientResolvable.client.user;
 
 		throw new Error('The parameter <Client> expects either a Client Instance.');
 	}
