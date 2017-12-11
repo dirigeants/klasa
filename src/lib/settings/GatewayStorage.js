@@ -55,7 +55,7 @@ class GatewayStorage {
 		 * @type {string}
 		 * @readonly
 		 */
-		Object.defineProperty(this, 'filePath', { value: resolve(this.baseDir, `${this.type}.json`) });
+		Object.defineProperty(this, 'filePath', { value: resolve(this.baseDir, `${this.type}_Schema.json`) });
 
 		/**
 		 * Whether the active provider is SQL or not.
