@@ -70,6 +70,7 @@ exports.DEFAULTS = {
 	},
 
 	GATEWAY_CLIENTSTORAGE_RESOLVER: async function validateClient(clientResolvable) {
+		if (typeof clientResolvable === 'string' && clientResolvable === this.client.user.id) return this.client.user;
 		if (clientResolvable instanceof Client) return clientResolvable.user;
 		if (typeof clientResolvable === 'object' &&
 			typeof clientResolvable.client !== 'undefined' &&

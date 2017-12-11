@@ -737,7 +737,7 @@ declare module 'klasa' {
 			COMMAND: KlasaConstantsCommand,
 			GATEWAY_GUILDS_RESOLVER: (guildResolvable: string | KlasaGuild) => KlasaGuild,
 			GATEWAY_USERS_RESOLVER: (userResolvable: string | KlasaUser) => KlasaUser,
-			GATEWAY_CLIENTSTORAGE_RESOLVER: (clientResolvable: KlasaClient) => ClientUser
+			GATEWAY_CLIENTSTORAGE_RESOLVER: (clientResolvable: string | KlasaClient) => ClientUser
 		};
 	};
 
