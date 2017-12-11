@@ -34,9 +34,10 @@ class Store {
 		const loc = Array.isArray(file) ? join(dir, ...file) : join(dir, file);
 		let piece = null;
 		try {
-			piece = this.set(new (require(loc))(this.client, dir, file));
-		} catch (err) {
-			const error = err.message.endsWith('not a constructor') ? new TypeError(`Exported Structure Not A Class`) : err;
+			const Piece = require(loc);
+			if (typeof load !== 'function') throw new TypeError(`Failed to load file '${loc}'. The exported structure is not a class.`);
+			piece = this.set(new Piece(this.client, dir, file));
+		} catch (error) {
 			this.client.emit('wtf', `Failed to load file '${loc}'. Error:\n${error.stack}`);
 		}
 		delete require.cache[loc];
