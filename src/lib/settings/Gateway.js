@@ -245,7 +245,7 @@ class Gateway extends GatewayStorage {
 	 * @private
 	 */
 	async init(download = true) {
-		if (this.ready) throw new Error('KlasaGatewayStorage already inited.');
+		if (this.ready) throw new Error(`[INIT] ${this} already inited.`);
 
 		await this.initSchema();
 		await this.initTable();
