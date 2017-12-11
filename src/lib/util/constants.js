@@ -69,7 +69,7 @@ exports.DEFAULTS = {
 		throw new Error('The parameter <User> expects either a User ID or a User Instance.');
 	},
 
-	GATEWAYS_CLIENTSTORAGE_RESOLVER: async function validateClient(clientResolvable) {
+	GATEWAY_CLIENTSTORAGE_RESOLVER: async function validateClient(clientResolvable) {
 		if (clientResolvable instanceof Client) return clientResolvable;
 		if (typeof clientResolvable.client !== 'undefined' && clientResolvable.client instanceof Client) return clientResolvable.client;
 

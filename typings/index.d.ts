@@ -571,8 +571,14 @@ declare module 'klasa' {
 			disabledCommands: SchemaPieceJSON
 		};
 
+		public readonly clientStorageSchema: {
+			userBlacklist: SchemaPieceJSON,
+			guildBlacklist: SchemaPieceJSON
+		};
+
 		public guilds: Gateway;
 		public users: Gateway;
+		public clientStorage: Gateway;
 
 		public add(name: string, validateFunction: Function, schema?: Object, options?: SettingsOptions, download?: boolean): Promise<Gateway>;
 		private _ready(): Promise<Array<Array<Collection<string, Configuration>>>>;
@@ -730,7 +736,7 @@ declare module 'klasa' {
 			COMMAND: KlasaConstantsCommand,
 			GATEWAY_GUILDS_RESOLVER: (guildResolvable: string | KlasaGuild) => KlasaGuild,
 			GATEWAY_USERS_RESOLVER: (userResolvable: string | KlasaUser) => KlasaUser,
-			GATEWAYS_CLIENTSTORAGE_RESOLVER: (clientResolvable: KlasaClient) => KlasaClient
+			GATEWAY_CLIENTSTORAGE_RESOLVER: (clientResolvable: KlasaClient) => KlasaClient
 		};
 	};
 
