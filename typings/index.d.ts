@@ -320,6 +320,7 @@ declare module 'klasa' {
 		public static exec(exec: string, options?: ExecOptions): Promise<{ stdout: string, stderr: string }>;
 		public static sleep(delay: number, args?: any): Promise<any>;
 		public static isFunction(input: Function): boolean;
+		public static isClass(input: Function): boolean;
 		public static isNumber(input: number): boolean;
 		public static isObject(input: Object): boolean;
 		public static tryParse(value: any): any;

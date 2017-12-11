@@ -13,7 +13,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
-- [[#121](https://github.com/dirigeants/klasa/pull/121)] Added `constants` and `Util.mergeDefault` (bdistin)
+- [[#121](https://github.com/dirigeants/klasa/pull/121)] Added `constants` and `Util.mergeDefault` (bdistin) added `Util.isClass` (kyranet)
 - [[#121](https://github.com/dirigeants/klasa/pull/121)] Added `GatewayStorage`, containing `SettingGateway`'s core (kyranet)
 - [[#121](https://github.com/dirigeants/klasa/pull/121)] Added a new gateway called `clientStorage`, for client-wide configs (kyranet)
 - [[#118](https://github.com/dirigeants/klasa/pull/118)] Now, if you edit the prefix value in `KlasaClientOptions`, the changes will be reflected in the schema. (kyranet)

@@ -1,6 +1,6 @@
 const { join } = require('path');
 const fs = require('fs-nextra');
-const { applyToClass } = require('../../util/util');
+const { applyToClass, isClass } = require('../../util/util');
 
 /**
  * The common interface for all stores
@@ -35,7 +35,7 @@ class Store {
 		let piece = null;
 		try {
 			const Piece = require(loc);
-			if (typeof load !== 'function') throw new TypeError(`Failed to load file '${loc}'. The exported structure is not a class.`);
+			if (!isClass(Piece)) throw new TypeError(`Failed to load file '${loc}'. The exported structure is not a class.`);
 			piece = this.set(new Piece(this.client, dir, file));
 		} catch (error) {
 			this.client.emit('wtf', `Failed to load file '${loc}'. Error:\n${error.stack}`);

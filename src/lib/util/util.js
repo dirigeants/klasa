@@ -118,6 +118,19 @@ class Util {
 	}
 
 	/**
+	 * Verify if the input is a class constructor.
+	 * @since 0.5.0
+	 * @param {Function} input The function to verify.
+	 * @returns {boolean}
+	 */
+	static isClass(input) {
+		return typeof input === 'function' &&
+			typeof input.constructor !== 'undefined' &&
+			typeof input.constructor.constructor.toString === 'function' &&
+			input.prototype.constructor.toString().substring(0, 5) === 'class';
+	}
+
+	/**
 	 * Verify if the input is an object literal (or class).
 	 * @since 0.5.0
 	 * @param {Object} input The object to verify.
