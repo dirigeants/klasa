@@ -202,30 +202,32 @@ class GatewayStorage {
 	 * @static
 	 */
 	static _parseSQLValue(value, schemaPiece) {
-		if (typeof value !== 'undefined') {
-			if (schemaPiece.array) {
-				if (value === null) return schemaPiece.default.slice(0);
-				if (typeof value === 'string') value = tryParse(value);
-				if (Array.isArray(value)) value = value.map(val => GatewayStorage._parseSQLValue(val, schemaPiece));
-				return value;
+		if (typeof value === 'undefined') return schemaPiece.array ? schemaPiece.default.slice(0) : schemaPiece.default;
+		if (schemaPiece.array) {
+			if (value === null) return schemaPiece.default.slice(0);
+			if (typeof value === 'string') value = tryParse(value);
+			if (Array.isArray(value)) return value.map(val => GatewayStorage._parseSQLValue(val, schemaPiece));
+		} else {
+			switch (schemaPiece.type) {
+				case 'any':
+					if (typeof value === 'string') return tryParse(value);
+					break;
+				case 'integer':
+					if (typeof value === 'string') return parseInt(value);
+					if (typeof value === 'number') return value;
+					break;
+				case 'boolean':
+					if (typeof value === 'boolean') return value;
+					if (typeof value === 'number') return value === 1;
+					if (typeof value === 'string') return value === 'true';
+					break;
+				case 'string':
+					if (typeof value === 'string' && /^\s|\s$/.test(value)) return value.trim();
+				// no default
 			}
-			if (schemaPiece.type === 'any') {
-				if (typeof value === 'string') return tryParse(value);
-			} else if (schemaPiece.type === 'integer') {
-				if (typeof value === 'string') return parseInt(value);
-				if (typeof value === 'number') return value;
-			} else if (schemaPiece.type === 'boolean') {
-				if (typeof value === 'boolean') return value;
-				if (typeof value === 'number') return value === 1;
-				if (typeof value === 'string') return value === 'true';
-			} else if (schemaPiece.type === 'string') {
-				if (typeof value === 'string' && /^\s|\s$/.test(value)) return value.trim();
-				return value;
-			}
-
-			return value;
 		}
-		return schemaPiece.array ? schemaPiece.default.slice(0) : schemaPiece.default;
+
+		return value;
 	}
 
 }
