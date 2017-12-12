@@ -347,11 +347,8 @@ class ArgResolver extends Resolver {
 	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @returns {?boolean}
 	 */
-	async boolean(arg, currentUsage, possible, repeat, msg) {
-		const boolean = await super.boolean(arg);
-		if (boolean !== null) return boolean;
-		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.language).get('RESOLVER_INVALID_BOOL', currentUsage.possibles[possible].name);
+	boolean(...args) {
+		return this.bool(...args);
 	}
 
 	/**
@@ -364,8 +361,11 @@ class ArgResolver extends Resolver {
 	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @returns {?boolean}
 	 */
-	bool(...args) {
-		return this.boolean(...args);
+	async bool(arg, currentUsage, possible, repeat, msg) {
+		const boolean = await super.boolean(arg);
+		if (boolean !== null) return boolean;
+		if (currentUsage.type === 'optional' && !repeat) return null;
+		throw (msg ? msg.language : this.language).get('RESOLVER_INVALID_BOOL', currentUsage.possibles[possible].name);
 	}
 
 	/**
@@ -378,24 +378,24 @@ class ArgResolver extends Resolver {
 	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @returns {?string}
 	 */
-	async string(arg, currentUsage, possible, repeat, msg) {
+	string(...args) {
+		return this.str(...args);
+	}
+
+	/**
+	 * Resolves a string
+	 * @since 0.0.1
+	 * @param {string} arg This arg
+	 * @param {Object} currentUsage This current usage
+	 * @param {number} possible This possible usage id
+	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {KlasaMessage} msg The message that triggered the command
+	 * @returns {?string}
+	 */
+	async str(arg, currentUsage, possible, repeat, msg) {
 		const { min, max } = currentUsage.possibles[possible];
 		if (this.constructor.minOrMax(arg.length, min, max, currentUsage, possible, repeat, msg, (msg ? msg.language : this.language).get('RESOLVER_STRING_SUFFIX'))) return arg;
 		return null;
-	}
-
-	/**
-	 * Resolves a string
-	 * @since 0.0.1
-	 * @param {string} arg This arg
-	 * @param {Object} currentUsage This current usage
-	 * @param {number} possible This possible usage id
-	 * @param {boolean} repeat If it is a looping/repeating arg
-	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?string}
-	 */
-	str(...args) {
-		return this.string(...args);
 	}
 
 	/**
@@ -408,7 +408,21 @@ class ArgResolver extends Resolver {
 	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @returns {?number}
 	 */
-	async integer(arg, currentUsage, possible, repeat, msg) {
+	integer(...args) {
+		return this.int(...args);
+	}
+
+	/**
+	 * Resolves a integer
+	 * @since 0.0.1
+	 * @param {string} arg This arg
+	 * @param {Object} currentUsage This current usage
+	 * @param {number} possible This possible usage id
+	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {KlasaMessage} msg The message that triggered the command
+	 * @returns {?number}
+	 */
+	async int(arg, currentUsage, possible, repeat, msg) {
 		const { min, max } = currentUsage.possibles[possible];
 		arg = await super.integer(arg);
 		if (arg === null) {
@@ -417,20 +431,6 @@ class ArgResolver extends Resolver {
 		}
 		if (this.constructor.minOrMax(arg, min, max, currentUsage, possible, repeat, msg)) return arg;
 		return null;
-	}
-
-	/**
-	 * Resolves a integer
-	 * @since 0.0.1
-	 * @param {string} arg This arg
-	 * @param {Object} currentUsage This current usage
-	 * @param {number} possible This possible usage id
-	 * @param {boolean} repeat If it is a looping/repeating arg
-	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?number}
-	 */
-	async int(...args) {
-		return this.integer(...args);
 	}
 
 	/**
@@ -492,8 +492,11 @@ class ArgResolver extends Resolver {
 	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @returns {?string}
 	 */
-	reg(...args) {
-		return this.regexp(...args);
+	async reg(arg, currentUsage, possible, repeat, msg) {
+		const results = currentUsage.possibles[possible].regex.exec(arg);
+		if (results !== null) return results;
+		if (currentUsage.type === 'optional' && !repeat) return null;
+		throw (msg ? msg.language : this.language).get('RESOLVER_INVALID_REGEX_MATCH', currentUsage.possibles[possible].name, currentUsage.possibles[possible].regex.toString());
 	}
 
 	/**
@@ -520,11 +523,8 @@ class ArgResolver extends Resolver {
 	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @returns {?string}
 	 */
-	async regexp(arg, currentUsage, possible, repeat, msg) {
-		const results = currentUsage.possibles[possible].regex.exec(arg);
-		if (results !== null) return results;
-		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.language).get('RESOLVER_INVALID_REGEX_MATCH', currentUsage.possibles[possible].name, currentUsage.possibles[possible].regex.toString());
+	regexp(...args) {
+		return this.reg(...args);
 	}
 
 	/**
