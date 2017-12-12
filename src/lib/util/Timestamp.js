@@ -32,9 +32,9 @@ class Timestamp {
 
 	/**
 	 * @typedef  {Object} TimestampObject
-	 * @memberof Timestamp
 	 * @property {string} type The type of the current variable.
 	 * @property {string} [content] The content of the type. Only accessible if the type is 'literal'.
+	 * @memberof Timestamp
 	 */
 
 	/**
@@ -53,23 +53,17 @@ class Timestamp {
 		 * @type {TimestampObject[]}
 		 * @private
 		 */
-		this._template = [];
-		this._patch(pattern);
+		this._template = this._patch(pattern);
 	}
 
 	/**
 	 * Display the current date with the current pattern.
 	 * @since 0.5.0
-	 * @param {(Date|number|string)} time The time to display.
+	 * @param {(Date|number|string)} [time=new Date()] The time to display.
 	 * @returns {string}
 	 */
-	display(time = Date.now()) {
-		let output = '';
-		const parsedTime = time instanceof Date ? time : new Date(time);
-		for (const entry of this._template) {
-			output += entry.content || this._parse(entry.type, parsedTime);
-		}
-		return output;
+	display(time = new Date()) {
+		return Timestamp._display(this._template, time);
 	}
 
 	/**
@@ -80,9 +74,72 @@ class Timestamp {
 	 */
 	edit(pattern) {
 		this.pattern = pattern;
-		this._template = [];
-		this._patch(pattern);
+		this._template = Timestamp._patch(pattern);
 		return this;
+	}
+
+	/**
+	 * Display the current date with the current pattern.
+	 * @since 0.5.0
+	 * @param {string} pattern The pattern to parse.
+	 * @param {(Date|number|string)} [time=new Date()] The time to display.
+	 * @returns {string}
+	 */
+	static displayArbitrary(pattern, time = new Date()) {
+		return Timestamp._display(Timestamp._patch(pattern), time);
+	}
+
+	/**
+	 * Shows the userfriendly duration of time between a period and now.
+	 * @since 0.5.0
+	 * @param {(Date|number|string)} earlier The time to compare.
+	 * @param {boolean} [showIn] Whether the output should be prefixed.
+	 * @returns {string}
+	 */
+	static toNow(earlier, showIn) {
+		if (!(earlier instanceof Date)) earlier = new Date(earlier);
+		const returnString = showIn ? 'in ' : '';
+		let duration = (Date.now() - earlier) / 1000;
+
+		// Compare the duration in seconds
+		if (duration < 45) return `${returnString}seconds`;
+		else if (duration < 90) return `${returnString}a minute`;
+
+		// Compare the duration in minutes
+		duration /= 60;
+		if (duration < 45) return `${returnString + Math.round(duration)} minutes`;
+		else if (duration < 90) return `${returnString}an hour`;
+
+		// Compare the duration in hours
+		duration /= 60;
+		if (duration < 22) return `${returnString + Math.round(duration)} hours`;
+		else if (duration < 36) return `${returnString}a day`;
+
+		// Compare the duration in days
+		duration /= 24;
+		if (duration < 26) return `${returnString + Math.round(duration)} days`;
+		else if (duration < 46) return `${returnString}a month`;
+		else if (duration < 320) return `${returnString + Math.round(duration / 30)} months`;
+		else if (duration < 548) return `${returnString}a year`;
+
+		return `${returnString + Math.floor(duration / 365)} years`;
+	}
+
+	/**
+	 * Display the current date with the current pattern.
+	 * @since 0.5.0
+	 * @param {string} template The pattern to parse.
+	 * @param {(Date|number|string)} time The time to display.
+	 * @returns {string}
+	 * @static
+	 * @private
+	 */
+	static _display(template, time) {
+		let output = '';
+		const parsedTime = time instanceof Date ? time : new Date(time);
+		for (const entry of template) output += entry.content || Timestamp._parse(entry.type, parsedTime);
+
+		return output;
 	}
 
 	/**
@@ -91,9 +148,10 @@ class Timestamp {
 	 * @param {string} type The type of variable
 	 * @param {Date} time The current time.
 	 * @returns {string}
+	 * @static
 	 * @private
 	 */
-	_parse(type, time) {
+	static _parse(type, time) {
 		switch (type) {
 			// Dates
 			case 'Y':
@@ -150,62 +208,31 @@ class Timestamp {
 	 * Parses the pattern.
 	 * @since 0.5.0
 	 * @param {string} pattern The pattern to parse.
+	 * @returns {TimestampObject[]}
+	 * @static
 	 * @private
 	 */
-	_patch(pattern) {
+	static _patch(pattern) {
+		const template = [];
 		for (let i = 0; i < pattern.length; i++) {
 			let current = '';
 			const currentChar = pattern[i];
 			if (currentChar in TOKENS) {
 				current += currentChar;
 				while (pattern[i + 1] === currentChar && current.length < TOKENS[currentChar]) current += pattern[++i];
-				this._template.push({ type: current });
+				template.push({ type: current });
 			} else if (currentChar === '[') {
 				while (i + 1 < pattern.length && pattern[i + 1] !== ']') current += pattern[++i];
 				i++;
-				this._template.push({ type: 'literal', content: current });
+				template.push({ type: 'literal', content: current });
 			} else {
 				current += currentChar;
 				while (i + 1 < pattern.length && !(pattern[i + 1] in TOKENS) && pattern[i + 1] !== '[') current += pattern[++i];
-				this._template.push({ type: 'literal', content: current });
+				template.push({ type: 'literal', content: current });
 			}
 		}
-	}
 
-	/**
-	 * Shows the userfriendly duration of time between a period and now.
-	 * @since 0.5.0
-	 * @param {(Date|number|string)} earlier The time to compare.
-	 * @param {boolean} [showIn] Whether the output should be prefixed.
-	 * @returns {string}
-	 */
-	static toNow(earlier, showIn) {
-		if (!(earlier instanceof Date)) earlier = new Date(earlier);
-		const returnString = showIn ? 'in ' : '';
-		let duration = (Date.now() - earlier) / 1000;
-
-		// Compare the duration in seconds
-		if (duration < 45) return `${returnString}seconds`;
-		else if (duration < 90) return `${returnString}a minute`;
-
-		// Compare the duration in minutes
-		duration /= 60;
-		if (duration < 45) return `${returnString + Math.round(duration)} minutes`;
-		else if (duration < 90) return `${returnString}an hour`;
-
-		// Compare the duration in hours
-		duration /= 60;
-		if (duration < 22) return `${returnString + Math.round(duration)} hours`;
-		else if (duration < 36) return `${returnString}a day`;
-
-		// Compare the duration in days
-		duration /= 24;
-		if (duration < 26) return `${returnString + Math.round(duration)} days`;
-		else if (duration < 46) return `${returnString}a month`;
-		else if (duration < 320) return `${returnString + Math.round(duration / 30)} months`;
-		else if (duration < 548) return `${returnString}a year`;
-
-		return `${returnString + Math.floor(duration / 365)} years`;
+		return template;
 	}
 
 }

@@ -1,6 +1,6 @@
+const SchemaFolder = require('./SchemaFolder');
 const { tryParse } = require('../util/util');
 const { resolve } = require('path');
-const Schema = require('./Schema');
 const fs = require('fs-nextra');
 
 class GatewayStorage {
@@ -68,7 +68,7 @@ class GatewayStorage {
 
 		/**
 		 * @since 0.5.0
-		 * @type {Schema}
+		 * @type {SchemaFolder}
 		 */
 		this.schema = null;
 
@@ -136,14 +136,14 @@ class GatewayStorage {
 	/**
 	 * Inits the schema, creating a file if it does not exist, and returning the current schema or the default.
 	 * @since 0.5.0
-	 * @returns {Promise<Schema>}
+	 * @returns {Promise<SchemaFolder>}
 	 * @private
 	 */
 	async initSchema() {
 		await fs.ensureDir(this.baseDir);
 		const schema = await fs.readJSON(this.filePath)
 			.catch(() => fs.outputJSONAtomic(this.filePath, this.defaultSchema).then(() => this.defaultSchema));
-		this.schema = new Schema(this.client, this, schema, null, '');
+		this.schema = new SchemaFolder(this.client, this, schema, null, '');
 		return this.schema;
 	}
 

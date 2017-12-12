@@ -1,7 +1,7 @@
 const GatewayStorage = require('./GatewayStorage');
 const Configuration = require('../structures/Configuration');
 const SchemaPiece = require('./SchemaPiece');
-const Schema = require('./Schema');
+const SchemaFolder = require('./SchemaFolder');
 const discord = require('discord.js');
 
 /**
@@ -308,7 +308,7 @@ class Gateway extends GatewayStorage {
 		for (const pt of path) route = route[pt];
 		let piece;
 		if (action === 'add') {
-			if (parsed.type === 'Folder') piece = route[key] = new Schema(this.client, this, parsed, route, key);
+			if (parsed.type === 'Folder') piece = route[key] = new SchemaFolder(this.client, this, parsed, route, key);
 			else piece = route[key] = new SchemaPiece(this.client, this, parsed, route, key);
 		} else if (action === 'delete') {
 			piece = route[key];

@@ -1,10 +1,11 @@
 const { isNumber, isObject } = require('../util/util');
+const Schema = require('./Schema');
 const fs = require('fs-nextra');
 
 /**
  * The SchemaPiece class that contains the data for a key and several helpers.
  */
-class SchemaPiece {
+class SchemaPiece extends Schema {
 
 	/**
 	 * @typedef  {Object} SchemaPieceJSON
@@ -31,56 +32,13 @@ class SchemaPiece {
 	/**
 	 * @since 0.5.0
 	 * @param {KlasaClient} client The client which initialized this instance.
-	 * @param {Gateway} manager The Gateway that manages this schema instance.
+	 * @param {Gateway} gateway The Gateway that manages this schema instance.
 	 * @param {AddOptions} options The object containing the properties for this schema instance.
-	 * @param {Schema} parent The parent which holds this instance.
+	 * @param {SchemaFolder} parent The parent which holds this instance.
 	 * @param {string} key The name of the key.
 	 */
-	constructor(client, manager, options, parent, key) {
-		/**
-		 * The Klasa client.
-		 * @since 0.5.0
-		 * @type {KlasaClient}
-		 * @name SchemaPiece#client
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'client', { value: client });
-
-		/**
-		 * The Gateway that manages this SchemaPiece instance.
-		 * @since 0.5.0
-		 * @type {Gateway}
-		 * @name SchemaPiece#manager
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'manager', { value: manager });
-
-		/**
-		 * The Schema instance that is parent of this instance.
-		 * @since 0.5.0
-		 * @type {Schema}
-		 * @name SchemaPiece#parent
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'parent', { value: parent });
-
-		/**
-		 * The path of this SchemaPiece instance.
-		 * @since 0.5.0
-		 * @type {string}
-		 * @name SchemaPiece#path
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'path', { value: `${parent && parent.path.length > 0 ? `${parent.path}.` : ''}${key}` });
-
-		/**
-		 * This keys' name.
-		 * @since 0.5.0
-		 * @type {string}
-		 * @name SchemaPiece#key
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'key', { value: key });
+	constructor(client, gateway, options, parent, key) {
+		super(client, gateway, options, parent, key);
 
 		/**
 		 * The type of this key.
@@ -157,7 +115,7 @@ class SchemaPiece {
 	 * @returns {Promise<*>}
 	 */
 	parse(value, guild = this.client.guilds.get(this.id)) {
-		return this.manager.resolver[this.type](value, guild, this.key, { min: this.min, max: this.max });
+		return this.gateway.resolver[this.type](value, guild, this.key, { min: this.min, max: this.max });
 	}
 
 	/**
@@ -167,7 +125,7 @@ class SchemaPiece {
 	 * @returns {string}
 	 */
 	resolveString(msg) {
-		const value = this.manager.type === 'users' ? msg.author.configs.get(this.path) : msg.guildConfigs.get(this.path);
+		const value = this.gateway.type === 'users' ? msg.author.configs.get(this.path) : msg.guildConfigs.get(this.path);
 		if (value === null) return 'Not set';
 
 		let resolver = (val) => val;
@@ -207,7 +165,7 @@ class SchemaPiece {
 		if (typeof options.sql === 'string' && this.sql[1] !== options.sql) {
 			this.sql[1] = options.sql;
 			edited.add('SQL');
-			if (this.manager.sql) await this.manager.provider.updateColumn(this.manager.type, this.path, options.sql);
+			if (this.gateway.sql) await this.gateway.provider.updateColumn(this.gateway.type, this.path, options.sql);
 		}
 		if (typeof options.default !== 'undefined' && this.default !== options.default) {
 			this._schemaCheckDefault(Object.assign(this.toJSON(), options));
@@ -231,37 +189,15 @@ class SchemaPiece {
 			edited.add('CONFIGURABLE');
 		}
 		if (edited.size > 0) {
-			await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
-			if (this.manager.sql && this.manager.provider.updateColumn === 'function') {
-				this.manager.provider.updateColumn(this.manager.type, this.key, this._generateSQLDatatype(options.sql));
+			await fs.outputJSONAtomic(this.gateway.filePath, this.gateway.schema.toJSON());
+			if (this.gateway.sql && this.gateway.provider.updateColumn === 'function') {
+				this.gateway.provider.updateColumn(this.gateway.type, this.key, this._generateSQLDatatype(options.sql));
 			}
 			await this.parent._shardSyncSchema(this, 'update', false);
 			if (this.client.listenerCount('schemaKeyUpdate')) this.client.emit('schemaKeyUpdate', this);
 		}
 
 		return this;
-	}
-
-	/**
-	 * Check if the key is properly configured.
-	 * @since 0.5.0
-	 * @param {AddOptions} options The options to parse.
-	 * @returns {true}
-	 * @private
-	 */
-	init(options) {
-		if (this._inited) throw new TypeError(`[INIT] ${this} - Is already init. Aborting re-init.`);
-		// Check if the 'options' parameter is an object.
-		if (!isObject(options)) throw new TypeError(`SchemaPiece#init expected an object as a parameter. Got: ${typeof options}`);
-		this._schemaCheckType(this.type);
-		this._schemaCheckArray(this.array);
-		this._schemaCheckDefault(this);
-		this._schemaCheckLimits(this.min, this.max);
-		this._schemaCheckConfigurable(this.configurable);
-
-		this.sql[1] = this._generateSQLDatatype(options.sql);
-
-		return true;
 	}
 
 	/**
@@ -345,16 +281,34 @@ class SchemaPiece {
 	 * @private
 	 */
 	_patch(object) {
-		for (const key of Object.keys(object)) this[key] = object[key];
+		if (typeof object.array === 'boolean') this.array = object.array;
+		if (typeof object.default !== 'undefined') this.default = object.default;
+		if (typeof object.min === 'number') this.min = object.min;
+		if (typeof object.max === 'number') this.max = object.max;
+		if (typeof object.sql === 'string') this.sql[1] = object.sql;
+		if (typeof object.configurable === 'boolean') this.configurable = object.configurable;
 	}
 
 	/**
-	 * Stringify a value or the instance itself.
+	 * Check if the key is properly configured.
 	 * @since 0.5.0
-	 * @returns {string}
+	 * @param {AddOptions} options The options to parse.
+	 * @returns {true}
+	 * @private
 	 */
-	toString() {
-		return `SchemaPiece(${this.manager.type}:${this.path})`;
+	_init(options) {
+		if (this._inited) throw new TypeError(`[INIT] ${this} - Is already init. Aborting re-init.`);
+		// Check if the 'options' parameter is an object.
+		if (!isObject(options)) throw new TypeError(`SchemaPiece#init expected an object as a parameter. Got: ${typeof options}`);
+		this._schemaCheckType(this.type);
+		this._schemaCheckArray(this.array);
+		this._schemaCheckDefault(this);
+		this._schemaCheckLimits(this.min, this.max);
+		this._schemaCheckConfigurable(this.configurable);
+
+		this.sql[1] = this._generateSQLDatatype(options.sql);
+
+		return true;
 	}
 
 	/**
@@ -372,6 +326,15 @@ class SchemaPiece {
 			sql: this.sql[1],
 			configurable: this.configurable
 		};
+	}
+
+	/**
+	 * Stringify a value or the instance itself.
+	 * @since 0.5.0
+	 * @returns {string}
+	 */
+	toString() {
+		return `SchemaPiece(${this.gateway.type}:${this.path})`;
 	}
 
 	/**

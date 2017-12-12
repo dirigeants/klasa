@@ -1,5 +1,5 @@
-const Gateway = require('./Gateway');
 const SettingResolver = require('../parsers/SettingResolver');
+const Gateway = require('./Gateway');
 
 /**
  * Gateway's driver to make new instances of it, with the purpose to handle different databases simultaneously.
@@ -50,6 +50,24 @@ class GatewayDriver {
 		 * @type {boolean}
 		 */
 		this.ready = false;
+
+		/**
+		 * The Gateway that manages per-guild data
+		 * @type {?Gateway}
+		 */
+		this.guilds = null;
+
+		/**
+		 * The Gateway that manages per-user data
+		 * @type {?Gateway}
+		 */
+		this.users = null;
+
+		/**
+		 * The Gateway that manages per-client data
+		 * @type {?Gateway}
+		 */
+		this.clientStorage = null;
 	}
 
 	/**
@@ -155,10 +173,11 @@ class GatewayDriver {
 	 */
 	async add(name, validateFunction, schema = {}, options = {}, download = true) {
 		if (typeof name !== 'string') throw 'You must pass a name for your new gateway and it must be a string.';
-		if (typeof this[name] !== 'undefined') throw 'There is already a Gateway with that name.';
+
+		if (this[name] !== undefined && this[name] !== null) throw 'There is already a Gateway with that name.';
 		if (typeof validateFunction !== 'function') throw 'You must pass a validate function.';
 		validateFunction = validateFunction.bind(this);
-		if (schema.constructor.name !== 'Object') throw 'Schema must be a valid object or left undefined for an empty object.';
+		if (!this.client.methods.util.isObject(schema)) throw 'Schema must be a valid object or left undefined for an empty object.';
 
 		options.provider = this._checkProvider(options.provider || this.client.options.provider.engine || 'json');
 		if (options.provider.cache) throw `The provider ${options.provider.name} is designed for caching, not persistent data. Please try again with another.`;
@@ -196,10 +215,8 @@ class GatewayDriver {
 	 * @private
 	 */
 	_checkProvider(engine) {
-		const provider = this.client.providers.get(engine);
-		if (!provider) throw `This provider (${engine}) does not exist in your system.`;
-
-		return engine;
+		if (this.client.providers.has(engine)) return engine;
+		throw `This provider (${engine}) does not exist in your system.`;
 	}
 
 }

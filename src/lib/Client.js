@@ -192,13 +192,6 @@ class KlasaClient extends Discord.Client {
 		this.permissionLevels = this.validatePermissionLevels();
 
 		/**
-		 * Whether the client is truely ready or not
-		 * @since 0.0.1
-		 * @type {boolean}
-		 */
-		this.ready = false;
-
-		/**
 		 * Additional methods to be used elsewhere in the bot
 		 * @since 0.0.1
 		 * @type {object}
@@ -250,6 +243,13 @@ class KlasaClient extends Discord.Client {
 			.registerStore(this.events)
 			.registerStore(this.extendables);
 		// Core pieces already have argresolver entries for the purposes of documentation.
+
+		/**
+		 * Whether the client is truely ready or not
+		 * @since 0.0.1
+		 * @type {boolean}
+		 */
+		this.ready = false;
 
 		this.once('ready', this._ready.bind(this));
 	}
@@ -604,14 +604,14 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  * Emitted when a new key or folder is added to the Schema.
  * @event KlasaClient#schemaKeyAdd
  * @since 0.5.0
- * @param {(Schema|SchemaPiece)} key The key that was added.
+ * @param {(SchemaFolder|SchemaPiece)} key The key that was added.
  */
 
 /**
  * Emitted when a key or folder has been removed from the Schema.
  * @event KlasaClient#schemaKeyRemove
  * @since 0.5.0
- * @param {(Schema|SchemaPiece)} key The key that was removed.
+ * @param {(SchemaFolder|SchemaPiece)} key The key that was removed.
  */
 
 /**

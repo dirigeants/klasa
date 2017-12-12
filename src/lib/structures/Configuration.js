@@ -381,7 +381,7 @@ class Configuration {
 	 * @since 0.5.0
 	 * @param {Object} cache The key target.
 	 * @param {Object} object The key to edit.
-	 * @param {Schema} schema The new value.
+	 * @param {SchemaFolder} schema The new value.
 	 * @param {ConfigGuildResolvable} guild The guild to take.
 	 * @param {ConfigurationUpdateManyList} list The options.
 	 * @private
@@ -465,7 +465,7 @@ class Configuration {
 	 * Assign data to the Configuration.
 	 * @since 0.5.0
 	 * @param {Object} data The data contained in the group.
-	 * @param {(Schema|SchemaPiece)} schema A Schema or a SchemaPiece instance.
+	 * @param {(SchemaFolder|SchemaPiece)} schema A SchemaFolder or a SchemaPiece instance.
 	 * @returns {Object}
 	 * @private
 	 * @static
@@ -492,7 +492,7 @@ class Configuration {
 	 * Clone configs.
 	 * @since 0.5.0
 	 * @param {Object} data The data to clone.
-	 * @param {Schema} schema A Schema instance.
+	 * @param {SchemaFolder} schema A SchemaFolder instance.
 	 * @returns {Object}
 	 * @private
 	 * @static
@@ -514,7 +514,7 @@ class Configuration {
 	 * @since 0.5.0
 	 * @param {Object} inst The reference of the Configuration instance.
 	 * @param {Object} data The original object.
-	 * @param {Schema} schema A Schema or a SchemaPiece instance.
+	 * @param {SchemaFolder} schema A SchemaFolder instance.
 	 */
 	static _patch(inst, data, schema) {
 		for (let i = 0; i < schema.keyArray.length; i++) {
