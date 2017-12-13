@@ -212,7 +212,6 @@ class SettingResolver extends Resolver {
 	/**
 	 * Check if the input is valid with min and/or max values.
 	 * @since 0.0.1
-	 * @static
 	 * @param {KlasaGuild} guild The guild to resolve for
 	 * @param {number} value The value to check.
 	 * @param {?number} min Min value.
@@ -220,6 +219,8 @@ class SettingResolver extends Resolver {
 	 * @param {string} name The name of the key being resolved
 	 * @param {string} [suffix=''] The suffix to apply to the error messages
 	 * @returns {boolean}
+	 * @private
+	 * @static
 	 */
 	static maxOrMin(guild, value, min, max, name, suffix = '') {
 		if (min && max) {

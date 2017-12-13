@@ -12,9 +12,9 @@ class Extendable {
 	/**
 	 * @typedef {object} ExtendableOptions
 	 * @memberof Extendable
-	 * @property {string} [name = theFileName] The name of the extendable
-	 * @property {boolean} [enabled = true] If the extendable is enabled or not
-	 * @property {boolean} [klasa = false] If the extendable is for Klasa instead of Discord.js
+	 * @property {string} [name=theFileName] The name of the extendable
+	 * @property {boolean} [enabled=true] If the extendable is enabled or not
+	 * @property {boolean} [klasa=false] If the extendable is for Klasa instead of Discord.js
 	 */
 
 	/**

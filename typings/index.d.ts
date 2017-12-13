@@ -348,7 +348,7 @@ declare module 'klasa' {
 			userOrMember: RegExp,
 			channel: RegExp,
 			role: RegExp,
-			snowflake: RegExp,
+			snowflake: RegExp
 		};
 	}
 
@@ -797,21 +797,22 @@ declare module 'klasa' {
 		public aliases: string[];
 		public runIn: string[];
 		public botPerms: string[];
-		public requiredSettings: string[];
+		public requiredConfigs: string[];
 		public cooldown: number;
 		public permLevel: number;
-		public description: string;
-		public usageDelim: string;
-		public extendedHelp: string;
+		public description: string | ((msg: KlasaMessage) => string);
+		public extendedHelp: string | ((msg: KlasaMessage) => string);
 		public quotedStringSupport: boolean;
 
-		public fullCategory: string[];
 		public category: string;
 		public subCategory: string;
 		public usage: ParsedUsage;
+		public usageString: string;
+		public usageDelim: string;
+		private fullCategory: string[];
 		private cooldowns: Map<Snowflake, number>;
 
-		public abstract run(msg: KlasaMessage, params: any[]): Promise<KlasaMessage | KlasaMessage[] | any>;
+		public abstract run(msg: KlasaMessage, params: any[]): Promise<KlasaMessage | KlasaMessage[]>;
 		public abstract init(): any;
 
 		public abstract enable(): Piece;
@@ -1353,10 +1354,10 @@ declare module 'klasa' {
 		requiredSettings?: string[];
 		cooldown?: number;
 		permLevel?: number;
-		description?: string;
+		description?: string | ((msg: KlasaMessage) => string);
+		extendedHelp?: string | ((msg: KlasaMessage) => string);
 		usage?: string;
 		usageDelim?: string;
-		extendedHelp?: string;
 		quotedStringSupport?: boolean;
 	};
 

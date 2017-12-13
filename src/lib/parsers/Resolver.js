@@ -187,6 +187,7 @@ class Resolver {
  * @property {RegExp} channel Regex for channels
  * @property {RegExp} role Regex for roles
  * @property {RegExp} snowflake Regex for simple snowflake ids
+ * @static
  */
 Resolver.regex = {
 	userOrMember: new RegExp('^(?:<@!?)?(\\d{17,19})>?$'),

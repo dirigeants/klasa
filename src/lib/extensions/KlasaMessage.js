@@ -51,7 +51,7 @@ module.exports = Structures.extend('Message', Message => {
 			/**
 			 * The previous responses to this message
 			 * @since 0.5.0
-			 * @type {?KlasaMessage|KlasaMessage[]}
+			 * @type {?(KlasaMessage|KlasaMessage[])}
 			 */
 			this.responses = null;
 
@@ -100,61 +100,25 @@ module.exports = Structures.extend('Message', Message => {
 			/**
 			 * A cache of the current usage while validating
 			 * @since 0.0.1
+			 * @type {Tag}
 			 * @private
-			 * @type {Object}
 			 */
 			this._currentUsage = {};
 
 			/**
 			 * Whether the current usage is a repeating arg
 			 * @since 0.0.1
-			 * @private
 			 * @type {boolean}
+			 * @private
 			 */
 			this._repeat = false;
 		}
 
 		/**
-		 * Extends the patch method from D.JS to attach and update the language to this instance
-		 * @since 0.5.0
-		 * @private
-		 * @param {*} data The data passed from the original constructor
-		 */
-		_patch(data) {
-			super._patch(data);
-
-			/**
-			 * The language in this setting
-			 * @since 0.3.0
-			 * @type {Language}
-			 */
-			this.language = this.guild ? this.guild.language : this.client.languages.get(this.client.options.language);
-		}
-
-		/**
-		 * Register's this message as a Command Message
-		 * @since 0.5.0
-		 * @private
-		 * @param {Object} commandInfo The info about the command and prefix used
-		 * @property {Command} command The command run
-		 * @property {RegExp} prefix The prefix used
-		 * @property {number} prefixLength The length of the prefix used
-		 */
-		_registerCommand({ command, prefix, prefixLength }) {
-			this.reprompted = false;
-			this.params = [];
-			this.command = command;
-			this.prefix = prefix;
-			this.prefixLength = prefixLength;
-			this.args = this.command.quotedStringSupport ? this.constructor.getQuotedStringArgs(this) : this.constructor.getArgs(this);
-			this.client.emit('commandRun', this, this.command, this.args);
-		}
-
-		/**
 		 * If this message can be reacted to by the bot
 		 * @since 0.0.1
-		 * @readonly
 		 * @type {boolean}
+		 * @readonly
 		 */
 		get reactable() {
 			if (!this.guild) return true;
@@ -192,7 +156,7 @@ module.exports = Structures.extend('Message', Message => {
 		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
 		 */
 		sendMessage(content, options) {
-			if (!options && isObject(options)) {
+			if (!options && isObject(content)) {
 				options = content;
 				content = '';
 			} else if (!options) {
@@ -244,13 +208,7 @@ module.exports = Structures.extend('Message', Message => {
 		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
 		 */
 		sendEmbed(embed, content, options) {
-			if (!options && isObject(options)) {
-				options = content;
-				content = '';
-			} else if (!options) {
-				options = {};
-			}
-			return this.sendMessage(content, Object.assign(options, { embed }));
+			return this.sendMessage(Object.assign(this.constructor.combineContentOptions(content, options), { embed }));
 		}
 
 		/**
@@ -261,8 +219,8 @@ module.exports = Structures.extend('Message', Message => {
 		 * @param {MessageOptions} [options] The D.JS message options
 		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
 		 */
-		sendCode(lang, content, options = {}) {
-			return this.sendMessage(content, Object.assign(options, { code: lang }));
+		sendCode(lang, content, options) {
+			return this.sendMessage(Object.assign(this.constructor.combineContentOptions(content, options), { code: lang }));
 		}
 
 		/**
@@ -277,10 +235,46 @@ module.exports = Structures.extend('Message', Message => {
 		}
 
 		/**
+		 * Extends the patch method from D.JS to attach and update the language to this instance
+		 * @since 0.5.0
+		 * @param {*} data The data passed from the original constructor
+		 * @private
+		 */
+		_patch(data) {
+			super._patch(data);
+
+			/**
+			 * The language in this setting
+			 * @since 0.3.0
+			 * @type {Language}
+			 */
+			this.language = this.guild ? this.guild.language : this.client.languages.get(this.client.options.language);
+		}
+
+		/**
+		 * Register's this message as a Command Message
+		 * @since 0.5.0
+		 * @param {Object} commandInfo The info about the command and prefix used
+		 * @property {Command} command The command run
+		 * @property {RegExp} prefix The prefix used
+		 * @property {number} prefixLength The length of the prefix used
+		 * @private
+		 */
+		_registerCommand({ command, prefix, prefixLength }) {
+			this.reprompted = false;
+			this.params = [];
+			this.command = command;
+			this.prefix = prefix;
+			this.prefixLength = prefixLength;
+			this.args = this.command.quotedStringSupport ? this.constructor.getQuotedStringArgs(this) : this.constructor.getArgs(this);
+			this.client.emit('commandRun', this, this.command, this.args);
+		}
+
+		/**
 		 * Validates and resolves args into parameters
 		 * @since 0.0.1
-		 * @private
 		 * @returns {Promise<any[]>} The resolved parameters
+		 * @private
 		 */
 		async validateArgs() {
 			if (this.params.length >= this.command.usage.parsedUsage.length && this.params.length >= this.args.length) {
@@ -338,8 +332,8 @@ module.exports = Structures.extend('Message', Message => {
 		 * @since 0.0.1
 		 * @param {number} possible The id of the possible usage currently being checked
 		 * @param {boolean} validated Escapes the recursive function if the previous iteration validated the arg into a parameter
-		 * @private
 		 * @returns {Promise<any[]>} The resolved parameters
+		 * @private
 		 */
 		async multiPossibles(possible, validated) {
 			if (validated) {
@@ -372,8 +366,8 @@ module.exports = Structures.extend('Message', Message => {
 		 * Parses a message into string args
 		 * @since 0.0.1
 		 * @param {KlasaMessage} msg this message
-		 * @private
 		 * @returns {string[]}
+		 * @private
 		 */
 		static getArgs(msg) {
 			// eslint-disable-next-line newline-per-chained-call
@@ -385,8 +379,8 @@ module.exports = Structures.extend('Message', Message => {
 		 * Parses a message into string args taking into account quoted strings
 		 * @since 0.0.1
 		 * @param {KlasaMessage} msg this message
-		 * @private
 		 * @returns {string[]}
+		 * @private
 		 */
 		static getQuotedStringArgs(msg) {
 			const content = msg.content.slice(msg.prefixLength).trim().split(' ').slice(1).join(' ').trim();
@@ -415,6 +409,19 @@ module.exports = Structures.extend('Message', Message => {
 			if (current !== '') args.push(current);
 
 			return args.length === 1 && args[0] === '' ? [] : args;
+		}
+
+		/**
+		 * Merge the content with the options.
+		 * @since 0.5.0
+		 * @param {StringResolvable} [content] The content to send
+		 * @param {MessageOptions|external:MessageAttachment|external:MessageEmbed} [options] The D.JS message options
+		 * @returns {*}
+		 * @static
+		 */
+		static combineContentOptions(content, options) {
+			if (!options) return isObject(content) ? content : { content };
+			return Object.assign(options, { content });
 		}
 
 	}
