@@ -166,11 +166,11 @@ module.exports = Structures.extend('Message', Message => {
 			delete options.content;
 
 			options.embed = options.embed || null;
-			if (this.responses && (!options || !('files' in options))) {
+			if (this.responses && typeof options.files === 'undefined') {
 				if (options && options.split) content = splitMessage(content, options.split);
-				if (content instanceof Array) {
+				if (Array.isArray(content)) {
 					const promises = [];
-					if (this.responses instanceof Array) {
+					if (Array.isArray(this.responses)) {
 						/* eslint-disable max-depth */
 						for (let i = 0; i < content.length; i++) {
 							if (this.responses.length > i) promises.push(this.responses[i].edit(content[i], options));
@@ -189,7 +189,7 @@ module.exports = Structures.extend('Message', Message => {
 							this.responses = mes;
 							return mes;
 						});
-				} else if (this.responses instanceof Array) {
+				} else if (Array.isArray(this.responses)) {
 					for (let i = this.responses.length - 1; i > 0; i--) this.responses[i].delete();
 					[this.responses] = this.responses;
 				}
@@ -197,9 +197,7 @@ module.exports = Structures.extend('Message', Message => {
 			}
 			return this.channel.send(content, options)
 				.then(mes => {
-					if (!options || !('files' in options)) {
-						this.responses = mes;
-					}
+					if (typeof options.files === 'undefined') this.responses = mes;
 					return mes;
 				});
 		}
