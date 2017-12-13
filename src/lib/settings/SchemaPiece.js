@@ -117,7 +117,7 @@ class SchemaPiece extends Schema {
 	 * @returns {string}
 	 */
 	resolveString(msg) {
-		const value = this.gateway.type === 'users' ? msg.author.configs.get(this.path) : msg.guildConfigs.get(this.path);
+		const value = this.constructor._resolveConfigs(this.gateway.type, msg);
 		if (value === null) return 'Not set';
 
 		let resolver = (val) => val;
@@ -335,6 +335,7 @@ class SchemaPiece extends Schema {
 	 * @since 0.5.0
 	 * @param {*} value The value to parse
 	 * @returns {string}
+	 * @private
 	 */
 	static _parseSQLValue(value) {
 		const type = typeof value;
@@ -342,6 +343,23 @@ class SchemaPiece extends Schema {
 		if (type === 'string') return `'${value.replace(/'/g, "''")}'`;
 		if (type === 'object') return `'${JSON.stringify(value).replace(/'/g, "''")}'`;
 		return '';
+	}
+
+	/**
+	 * Gets a configuration instance from KlasaMessage depending on the schema.gateway type.
+	 * @since 0.5.0
+	 * @param {string} type The type of gateway
+	 * @param {KlasaMessage} msg The message context to resolve from
+	 * @returns {Configuration}
+	 * @private
+	 */
+	static _resolveConfigs(type, msg) {
+		switch(type) {
+			case 'users': return msg.author.configs;
+			case 'guilds': return msg.guildConfigs;
+			case 'clientStorage': return msg.client.configs;
+			default: return null;
+		}
 	}
 
 }
