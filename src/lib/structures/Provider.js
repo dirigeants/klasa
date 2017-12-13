@@ -88,6 +88,16 @@ class Provider {
 	}
 
 	/**
+	 * The default provider
+	 * @since 0.5.0
+	 * @readonly
+	 * @return {Provider} The default provider set in KlasaClientOptions.provider
+	 */
+	get default() {
+		return this.get(this.client.options.provider.engine);
+	}
+
+	/**
 	 * The init method to be optionaly overwritten in actual provider pieces
 	 * @since 0.0.1
 	 * @abstract

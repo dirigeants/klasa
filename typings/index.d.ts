@@ -1112,6 +1112,7 @@ declare module 'klasa' {
 		public holds: Provider;
 		public name: 'providers';
 
+		public readonly default: Provider;
 		public delete(name: Provider | string): boolean;
 		public set(key: string, value: Provider): this;
 		public set(provider: Provider): Provider;
@@ -1141,8 +1142,7 @@ declare module 'klasa' {
 		promptTime?: number;
 		provider?: {
 			engine: string,
-			main?: Provider,
-			[key: string]: any
+			[key: string]: string | object
 		};
 		quotedStringSupport?: boolean;
 		readyMessage?: (client: KlasaClient) => string;
