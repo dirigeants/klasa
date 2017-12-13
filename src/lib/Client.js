@@ -357,6 +357,9 @@ class KlasaClient extends Discord.Client {
 
 		// Providers must be init before configs, and those before all other stores.
 		await this.providers.init();
+		this.options.provider.main = this.providers.get(this.options.provider.engine);
+
+		// Add the gateways
 		await Promise.all([
 			this.gateways.add('guilds', constants.DEFAULTS.GATEWAY_GUILDS_RESOLVER, this.gateways.guildsSchema, undefined, false),
 			this.gateways.add('users', constants.DEFAULTS.GATEWAY_USERS_RESOLVER, undefined, undefined, false),

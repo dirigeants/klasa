@@ -24,7 +24,10 @@ exports.DEFAULTS = {
 		prefix: '!',
 		preserveConfigs: true,
 		promptTime: 30000,
-		provider: {},
+		provider: {
+			engine: 'json',
+			main: null
+		},
 		quotedStringSupport: false,
 		readyMessage: (client) => `Successfully initialized. Ready to serve ${client.guilds.size} guilds.`,
 		typing: false

@@ -221,7 +221,6 @@ declare module 'klasa' {
 		public args: string[];
 		public params: any[];
 		public reprompted: boolean;
-		public language: Language;
 		private _currentUsage: Tag;
 		private _repeat: boolean;
 
@@ -443,7 +442,7 @@ declare module 'klasa' {
 		public constructor(levels?: number);
 		public requiredLevels: number;
 
-		public addLevel(level: number, brk: boolean, check: Function);
+		public addLevel(level: number, brk: boolean, check: (client: KlasaMessage, msg: KlasaMessage) => true);
 		public set(level: number, obj: PermissionLevel): this;
 		public isValid(): boolean;
 		public debug(): string;
@@ -490,6 +489,29 @@ declare module 'klasa' {
 	}
 
 	// Configuration
+	export class GatewayStorage {
+		public constructor(client: KlasaClient, type: string, provider?: string);
+		public readonly client: KlasaClient;
+		public readonly type: string;
+		public readonly providerName: string;
+		public readonly baseDir: string;
+		public readonly filePath: string;
+		public readonly sql: boolean;
+		public schema?: SchemaFolder;
+		public ready: boolean;
+
+		public readonly sqlSchema: string[][];
+		public readonly provider: Provider;
+		public readonly defaults: any;
+
+		private initTable(): Promise<void>;
+		private initSchema(): Promise<SchemaFolder>;
+		private parseEntry(entry: any): any;
+
+		private static throwError(guild: KlasaGuild, code: string | number, error: string | Error): string;
+		private static _parseSQLValue(value: any, schemaPiece: SchemaPiece): any;
+	}
+
 	export class Gateway extends GatewayStorage {
 		public constructor(store: GatewayDriver, type: string, validateFunction: Function, schema: object, options: GatewayOptions);
 		public store: GatewayDriver;
@@ -512,30 +534,6 @@ declare module 'klasa' {
 		private _shardSync(path: string[], data: any, action: 'add' | 'delete' | 'update', force: boolean): Promise<void>;
 
 		public toString(): string;
-	}
-
-	export class GatewayStorage {
-		public constructor(client: KlasaClient, type: string, provider?: string);
-		public readonly client: KlasaClient;
-		public readonly type: string;
-		public readonly providerName: string;
-		public readonly baseDir: string;
-		public readonly filePath: string;
-		public readonly sql: boolean;
-		public schema?: SchemaFolder;
-		public ready: boolean;
-
-		public readonly sqlSchema: string[][];
-		public readonly provider: Provider;
-		public readonly defaults: any;
-
-		private init(): Promise<void>;
-		private initTable(): Promise<void>;
-		private initSchema(): Promise<SchemaFolder>;
-		private parseEntry(entry: any): any;
-
-		private static throwError(guild: KlasaGuild, code: string | number, error: string | Error): string;
-		private static _parseSQLValue(value: any, schemaPiece: SchemaPiece): any;
 	}
 
 	export class GatewayDriver {
@@ -575,8 +573,6 @@ declare module 'klasa' {
 		public readonly path: string;
 		public readonly key: string;
 		private readonly _inited: true;
-
-		abstract private _init(options?: object): true;
 	}
 
 	export class SchemaFolder extends Schema {
@@ -603,7 +599,7 @@ declare module 'klasa' {
 
 		private _addKey(key: string, options: AddOptions): void;
 		private _removeKey(key: string): void;
-		private _init(object: any): true;
+		private _init(options: object): true;
 
 		public toJSON(): any;
 		public toString(): string;
@@ -618,7 +614,6 @@ declare module 'klasa' {
 		public max?: number;
 		public sql: [string, string];
 		public configurable: boolean;
-		private readonly _inited: boolean;
 
 		public parse(value: any, guild: KlasaGuild): Promise<any>;
 		public resolveString(msg: KlasaMessage): string;
@@ -897,7 +892,7 @@ declare module 'klasa' {
 		public dir: string;
 		public file: string;
 
-		public get(term: string, ...args: any[]): string | Function;
+		public get(term: string, ...args: any[]): string | ((...args: any) => string);
 		public abstract init(): any;
 
 		public abstract enable(): Piece;
@@ -1145,8 +1140,9 @@ declare module 'klasa' {
 		preserveConfigs?: boolean;
 		promptTime?: number;
 		provider?: {
-			[key: string]: object
 			engine: string,
+			main?: Provider,
+			[key: string]: any
 		};
 		quotedStringSupport?: boolean;
 		readyMessage?: (client: KlasaClient) => string;
@@ -1319,7 +1315,7 @@ declare module 'klasa' {
 
 	export type PermissionLevel = {
 		break: boolean;
-		check: Function;
+		check: (client: KlasaClient, msg: KlasaMessage) => boolean;
 	};
 
 	export type permissionLevelResponse = {
