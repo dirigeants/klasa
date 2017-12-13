@@ -277,6 +277,23 @@ module.exports = Structures.extend('Message', Message => {
 		}
 
 		/**
+		 * Replies to the message that will be editable via command editing (if nothing is attached)
+		 * @since 0.0.1
+		 * @param {StringResolvable} [content] The content to send
+		 * @param {MessageOptions} [options] The D.JS message options
+		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
+		 */
+		reply(content, options) {
+			if (!options && typeof content === 'object' && !(content instanceof Array)) {
+				options = content;
+				content = '';
+			} else if (!options) {
+				options = {};
+			}
+			return this.sendMessage(content, Object.assign(options, { reply: this.member || this.author }));
+		}
+
+		/**
 		 * Validates and resolves args into parameters
 		 * @since 0.0.1
 		 * @private

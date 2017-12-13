@@ -16,7 +16,7 @@ exports.DEFAULTS = {
 			wtf: true
 		},
 		language: 'en-US',
-		prompTime: 30000,
+		promptTime: 30000,
 		ignoreBots: true,
 		ignoreSelf: true,
 		cmdPrompt: false,

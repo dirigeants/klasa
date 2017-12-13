@@ -235,7 +235,8 @@ declare module 'klasa' {
 		public sendEmbed(embed: MessageEmbed, content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 		public sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 		public send(content?: StringResolvable, options?: MessageOptions | MessageAttachment | MessageEmbed): Promise<KlasaMessage | KlasaMessage[]>;
-
+		public reply(content?: StringResolvable, options?: MessageOptions | MessageAttachment | MessageEmbed): Promise<KlasaMessage | KlasaMessage[]>;
+		
 		private validateArgs(): Promise<any[]>;
 		private multiPossibles(possible: number, validated: boolean): Promise<any[]>;
 		private static getArgs(msg: KlasaMessage): string[];
