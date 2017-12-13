@@ -192,7 +192,7 @@ module.exports = Structures.extend('Message', Message => {
 		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
 		 */
 		sendMessage(content, options) {
-			if (!options && isObject(options)) {
+			if (!options && isObject(content)) {
 				options = content;
 				content = '';
 			} else if (!options) {
@@ -244,7 +244,7 @@ module.exports = Structures.extend('Message', Message => {
 		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
 		 */
 		sendEmbed(embed, content, options) {
-			if (!options && isObject(options)) {
+			if (!options && isObject(content)) {
 				options = content;
 				content = '';
 			} else if (!options) {
@@ -274,6 +274,23 @@ module.exports = Structures.extend('Message', Message => {
 		 */
 		send(content, options) {
 			return this.sendMessage(content, options);
+		}
+
+		/**
+		 * Replies to the message that will be editable via command editing (if nothing is attached)
+		 * @since 0.0.1
+		 * @param {StringResolvable} [content] The content to send
+		 * @param {MessageOptions} [options] The D.JS message options
+		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
+		 */
+		reply(content, options) {
+			if (!options && isObject(content)) {
+				options = content;
+				content = '';
+			} else if (!options) {
+				options = {};
+			}
+			return this.sendMessage(content, Object.assign(options, { reply: this.member || this.author }));
 		}
 
 		/**

@@ -13,6 +13,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#126](https://github.com/dirigeants/klasa/pull/126)] Added `KlasaMessage#reply` due to message editing (MrJacz)
 - [[#121](https://github.com/dirigeants/klasa/pull/121)] Added `constants` and `Util.mergeDefault` (bdistin) added `Util.isClass` (kyranet)
 - [[#121](https://github.com/dirigeants/klasa/pull/121)] Added `GatewayStorage`, containing `SettingGateway`'s core (kyranet)
 - [[#121](https://github.com/dirigeants/klasa/pull/121)] Added a new gateway called `clientStorage`, for client-wide configs (kyranet)
@@ -86,6 +87,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
+- [[#126](https://github.com/dirigeants/klasa/pull/126)] promptTime spelling mistake in Constants (MrJacz)
 - [[#118](https://github.com/dirigeants/klasa/pull/118)] Fixed `SchemaPiece#modify` not editing the datatype from the SQL database when using a SQL provider. (kyranet)
 - [[#118](https://github.com/dirigeants/klasa/pull/118)] Fixed `NULL` not being resolved correctly in `_parseSQLValue` (kyranet)
 - [[#115](https://github.com/dirigeants/klasa/pull/115)] Fixed Schema's updates not reflecting in other shards. (kyranet)
