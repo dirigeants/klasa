@@ -5,7 +5,7 @@ const fs = require('fs-nextra');
 module.exports = class extends Provider {
 
 	constructor(...args) {
-		super(...args, { description: 'Allows you to use JSON functionality through Klasa' });
+		super(...args, { description: 'Allows you to use JSON functionality throughout Klasa' });
 		this.baseDir = resolve(this.client.clientBaseDir, 'bwd', 'provider', 'json');
 	}
 

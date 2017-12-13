@@ -5,7 +5,7 @@ module.exports = class extends Provider {
 
 	constructor(...args) {
 		super(...args, {
-			description: 'Allows you to use JSON functionality through Klasa',
+			description: 'Allows you to use JSON functionality throughout Klasa',
 			cache: true
 		});
 		this.database = new Collection();
