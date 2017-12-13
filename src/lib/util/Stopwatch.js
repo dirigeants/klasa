@@ -12,6 +12,13 @@ class Stopwatch {
 	 */
 	constructor(digits = 2) {
 		/**
+		 * The number of digits to appear after the decimal point when returning the friendly duration.
+		 * @since 0.4.0
+		 * @type {number}
+		 */
+		this.digits = digits;
+
+		/**
 		 * The start time of this stopwatch
 		 * @since 0.4.0
 		 * @type {number}
@@ -26,13 +33,6 @@ class Stopwatch {
 		 * @private
 		 */
 		this._end = null;
-
-		/**
-		 * The number of digits to appear after the decimal point when returning the friendly duration.
-		 * @since 0.4.0
-		 * @type {number}
-		 */
-		this.digits = digits;
 	}
 
 	/**

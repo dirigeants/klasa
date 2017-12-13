@@ -5,6 +5,9 @@ exports.DEFAULTS = {
 
 	CLIENT: {
 		clientBaseDir: dirname(require.main.filename),
+		cmdEditing: false,
+		cmdLogging: false,
+		cmdPrompt: false,
 		commandMessageLifetime: 1800,
 		console: {},
 		consoleEvents: {
@@ -15,33 +18,31 @@ exports.DEFAULTS = {
 			warn: true,
 			wtf: true
 		},
-		language: 'en-US',
-		promptTime: 30000,
 		ignoreBots: true,
 		ignoreSelf: true,
-		cmdPrompt: false,
-		cmdEditing: false,
-		cmdLogging: false,
-		typing: false,
+		language: 'en-US',
+		prefix: '!',
 		preserveConfigs: true,
+		promptTime: 30000,
 		provider: {},
 		quotedStringSupport: false,
-		readyMessage: (client) => `Successfully initialized. Ready to serve ${client.guilds.size} guilds.`
+		readyMessage: (client) => `Successfully initialized. Ready to serve ${client.guilds.size} guilds.`,
+		typing: false
 	},
 
 	COMMAND: {
-		enabled: true,
-		runIn: ['text', 'dm', 'group'],
-		cooldown: 0,
-		deletable: false,
-		nsfw: false,
-		guarded: false,
 		aliases: [],
 		autoAliases: true,
-		permLevel: 0,
 		botPerms: [],
-		requiredConfigs: [],
+		cooldown: 0,
+		deletable: false,
 		description: '',
+		enabled: true,
+		guarded: false,
+		nsfw: false,
+		permLevel: 0,
+		requiredConfigs: [],
+		runIn: ['text', 'dm', 'group'],
 		usage: ''
 	},
 

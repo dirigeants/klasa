@@ -220,7 +220,6 @@ class SettingResolver extends Resolver {
 	 * @param {string} [suffix=''] The suffix to apply to the error messages
 	 * @returns {boolean}
 	 * @private
-	 * @static
 	 */
 	static maxOrMin(guild, value, min, max, name, suffix = '') {
 		if (min && max) {

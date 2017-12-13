@@ -557,7 +557,6 @@ class ArgResolver extends Resolver {
 	 * @param {string} suffix An error suffix
 	 * @returns {boolean}
 	 * @private
-	 * @static
 	 */
 	static minOrMax(value, min, max, currentUsage, possible, repeat, msg, suffix = '') {
 		if (min && max) {

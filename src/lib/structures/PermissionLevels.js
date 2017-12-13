@@ -10,9 +10,9 @@ class PermissionLevels extends Collection {
 
 	/**
 	 * @typedef {Object} permissionLevelResponse
-	 * @memberof PermissionLevels
 	 * @property {boolean} broke Whether the loop broke execution of higher levels
 	 * @property {boolean} permission Whether the permission level check passed or not
+	 * @memberof PermissionLevels
 	 */
 
 	/**

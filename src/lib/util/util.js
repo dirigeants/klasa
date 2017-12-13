@@ -168,7 +168,7 @@ class Util {
 	 * Sets default properties on an object that aren't already specified.
 	 * @since 0.5.0
 	 * @param {Object} def Default properties
-	 * @param {Object} given Object to assign defaults to
+	 * @param {Object} [given] Object to assign defaults to
 	 * @returns {Object}
 	 * @private
 	 */
@@ -189,7 +189,6 @@ class Util {
 
 /**
  * @typedef {Object} ExecOptions
- * @memberof {Util}
  * @property {string} [cwd=process.cwd()] Current working directory of the child process
  * @property {Object} [env={}] Environment key-value pairs
  * @property {string} [encoding='utf8'] encoding to use
@@ -199,25 +198,28 @@ class Util {
  * @property {string|number} [killSignal='SIGTERM'] <string> | <integer> (Default: 'SIGTERM')
  * @property {number} [uid] Sets the user identity of the process
  * @property {number} [gid] Sets the group identity of the process
+ * @memberof Util
  */
 
 /**
  * Promisified version of child_process.exec for use with await
- * @method
  * @since 0.3.0
  * @param {string} command The command to run
  * @param {ExecOptions} [options] The options to pass to exec
  * @returns {Promise<{ stdout: string, stderr: string }>}
+ * @method
+ * @static
  */
 Util.exec = promisify(exec);
 
 /**
  * Promisified version of setTimeout for use with await
- * @method
  * @since 0.3.0
  * @param {number} delay The amount of time in ms to delay
  * @param {*} [args] Any args to pass to the .then (mostly pointless in this form)
  * @returns {Promise<*>} The args value passed in
+ * @method
+ * @static
  */
 Util.sleep = promisify(setTimeout);
 

@@ -185,7 +185,6 @@ class GatewayStorage {
 	 * @param {(string|Error)} error The error
 	 * @returns {string}
 	 * @private
-	 * @static
 	 */
 	static throwError(guild, code, error) {
 		if (guild && guild.language && typeof guild.language.get === 'function') return guild.language.get(code);
@@ -199,7 +198,6 @@ class GatewayStorage {
 	 * @param {SchemaPiece} schemaPiece The SchemaPiece which manages this value
 	 * @returns {*}
 	 * @private
-	 * @static
 	 */
 	static _parseSQLValue(value, schemaPiece) {
 		if (typeof value === 'undefined') return schemaPiece.array ? schemaPiece.default.slice(0) : schemaPiece.default;

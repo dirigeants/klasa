@@ -24,8 +24,7 @@ const ExtendableStore = require('./structures/ExtendableStore');
 class KlasaClient extends Discord.Client {
 
 	/**
-	 * @typedef {external:DiscordJSConfig} KlasaClientConfig
-	 * @memberof KlasaClient
+	 * @typedef {external:DiscordJSConfig} KlasaClientOptions
 	 * @property {string} [prefix] The default prefix the bot should respond to
 	 * @property {PermissionLevels} [permissionLevels=KlasaClient.defaultPermissionLevels] The permission levels to use with this bot
 	 * @property {string} [clientBaseDir=path.dirname(require.main.filename)] The directory where all piece folders can be found
@@ -46,41 +45,42 @@ class KlasaClient extends Discord.Client {
 	 * @property {?(string|Function)} [readyMessage=`Successfully initialized. Ready to serve ${this.guilds.size} guilds.`] readyMessage to be passed thru Klasa's ready event
 	 * @property {string} [ownerID] The discord user id for the user the bot should respect as the owner (gotten from Discord api if not provided)
 	 * @property {RegExp} [regexPrefix] The regular expression prefix if one is provided
+	 * @memberof KlasaClient
 	 */
 
 	/**
 	 * @typedef {Object} KlasaConsoleConfig
-	 * @memberof KlasaClient
 	 * @property {WriteableStream} [stdout=process.stdout] Output stream
 	 * @property {WriteableStream} [stderr=process.stderr] Error stream
 	 * @property {boolean} [useColor=false] Whether the client console should use colors
 	 * @property {Colors} [colors] Color formats to use
 	 * @property {(boolean|string)} [timestamps=true] Whether to use timestamps or not, or the Timestamp format of the timestamp you want to use
+	 * @memberof KlasaClient
 	 */
 
 	/**
 	 * @typedef {Object} KlasaConsoleEvents
-	 * @memberof KlasaClient
 	 * @property {boolean} [log=true] If the log event should be enabled by default
 	 * @property {boolean} [warn=true] If the warn event should be enabled by default
 	 * @property {boolean} [error=true] If the error event should be enabled by default
 	 * @property {boolean} [debug=false] If the debug event should be enabled by default
 	 * @property {boolean} [verbose=false] If the verbose event should be enabled by default
 	 * @property {boolean} [wtf=true] If the wtf event should be enabled by default
+	 * @memberof KlasaClient
 	 */
 
 	/**
 	 * @typedef  {Object} ConfigUpdateEntryMany
-	 * @memberof KlasaClient
 	 * @property {'MANY'} type
 	 * @property {string[]} keys
 	 * @property {Array<*>} values
+	 * @memberof KlasaClient
 	 */
 
 	/**
 	 * Constructs the klasa client
 	 * @since 0.0.1
-	 * @param {KlasaClientConfig} config The config to pass to the new client
+	 * @param {KlasaClientOptions} config The config to pass to the new client
 	 */
 	constructor(config = {}) {
 		if (typeof config !== 'object') throw new TypeError('Configuration for Klasa must be an object.');
@@ -107,11 +107,11 @@ class KlasaClient extends Discord.Client {
 		 * @type {KlasaConsole}
 		 */
 		this.console = new Console({
-			stdout: this.options.console.stdout,
-			stderr: this.options.console.stderr,
-			useColor: this.options.console.useColor,
 			colors: this.options.console.colors,
-			timestamps: this.options.console.timestamps
+			stderr: this.options.console.stderr,
+			stdout: this.options.console.stdout,
+			timestamps: this.options.console.timestamps,
+			useColor: this.options.console.useColor
 		});
 
 		/**
@@ -206,10 +206,10 @@ class KlasaClient extends Discord.Client {
 		this.methods = {
 			Collection: Discord.Collection,
 			Embed: Discord.MessageEmbed,
-			MessageCollector: Discord.MessageCollector,
-			Webhook: Discord.WebhookClient,
 			escapeMarkdown: Discord.escapeMarkdown,
+			MessageCollector: Discord.MessageCollector,
 			splitMessage: Discord.splitMessage,
+			Webhook: Discord.WebhookClient,
 			util
 		};
 
@@ -404,7 +404,7 @@ class KlasaClient extends Discord.Client {
 	 * @param {number} [lifetime=this.options.messageCacheLifetime] Messages that are older than this (in seconds)
 	 * will be removed from the caches. The default is based on [ClientOptions#messageCacheLifetime]{@link https://discord.js.org/#/docs/main/master/typedef/ClientOptions?scrollTo=messageCacheLifetime}
 	 * @param {number} [commandLifetime=this.options.commandMessageLifetime] Messages that are older than this (in seconds)
-	 * will be removed from the caches. The default is based on {@link KlasaClientConfig#commandMessageLifetime}
+	 * will be removed from the caches. The default is based on {@link KlasaClientOptions#commandMessageLifetime}
 	 * @returns {number} Amount of messages that were removed from the caches,
 	 * or -1 if the message cache lifetime is unlimited
 	 */

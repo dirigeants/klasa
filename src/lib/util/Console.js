@@ -9,7 +9,6 @@ const { inspect } = require('util');
 class KlasaConsole extends Console {
 
 	/**
-	 * @memberof KlasaConsole
 	 * @typedef {object} Colors - Time is for the timestamp of the log, message is for the actual output.
 	 * @property {KlasaConsoleColorObjects} debug An object containing a message and time color object
 	 * @property {KlasaConsoleColorObjects} error An object containing a message and time color object
@@ -17,34 +16,34 @@ class KlasaConsole extends Console {
 	 * @property {KlasaConsoleColorObjects} verbose An object containing a message and time color object
 	 * @property {KlasaConsoleColorObjects} warn An object containing a message and time color object
 	 * @property {KlasaConsoleColorObjects} wtf An object containing a message and time Color Object
+	 * @memberof KlasaConsole
 	 */
 
 	/**
-	 * @memberof KlasaConsole
 	 * @typedef {object} KlasaConsoleColorObjects
 	 * @property {string} [type='log'] The method from Console this color object should call
 	 * @property {KlasaConsoleMessageObject} message A message object containing colors and styles
 	 * @property {KlasaConsoleTimeObject} time A time object containing colors and styles
+	 * @memberof KlasaConsole
 	 */
 
 	/**
-	 * @memberof KlasaConsole
 	 * @typedef {object} KlasaConsoleMessageObject
 	 * @property {BackgroundColorTypes} background The background color. Can be a basic string like "red", a hex string, or a RGB array
 	 * @property {TextColorTypes} text The text color. Can be a basic string like "red", a hex string, or a RGB array
 	 * @property {StyleTypes} style A style string from StyleTypes
+	 * @memberof KlasaConsole
 	 */
 
 	/**
-	 * @memberof KlasaConsole
 	 * @typedef {object} KlasaConsoleTimeObject
 	 * @property {BackgroundColorTypes} background The background color. Can be a basic string like "red", a hex string, or a RGB array
 	 * @property {TextColorTypes} text The text color. Can be a basic string like "red", a hex string, a RGB array, or HSL array
 	 * @property {StyleTypes} style A style string from StyleTypes
+	 * @memberof KlasaConsole
 	 */
 
 	/**
-	 * @memberof KlasaConsole
 	 * @typedef {*} TextColorTypes - All the valid color types.
 	 * @property {string} black
 	 * @property {string} red
@@ -68,10 +67,10 @@ class KlasaConsole extends Console {
 	 * @property {string} #008000 green
 	 * @property {Array} [255,0,0] red
 	 * @property {Array} [229,50%,50%] blue
+	 * @memberof KlasaConsole
 	 */
 
 	/**
-	 * @memberof KlasaConsole
 	 * @typedef {*} BackgroundColorTypes - One of these strings, HexStrings, RGB, or HSL are valid types.
 	 * @property {string} black
 	 * @property {string} red
@@ -93,10 +92,10 @@ class KlasaConsole extends Console {
 	 * @property {string} #008000 green
 	 * @property {Array} [255,0,0] red
 	 * @property {Array} [229,50%,50%] blue
+	 * @memberof KlasaConsole
 	 */
 
 	/**
-	 * @memberof KlasaConsole
 	 * @typedef {*} StyleTypes
 	 * @property {string} normal
 	 * @property {string} bold
@@ -106,6 +105,7 @@ class KlasaConsole extends Console {
 	 * @property {string} inverse
 	 * @property {string} hidden
 	 * @property {string} strikethrough
+	 * @memberof KlasaConsole
 	 */
 
 	/**

@@ -469,7 +469,6 @@ class Configuration {
 	 * @param {(SchemaFolder|SchemaPiece)} schema A SchemaFolder or a SchemaPiece instance
 	 * @returns {Object}
 	 * @private
-	 * @static
 	 */
 	static _merge(data, schema) {
 		if (schema.type === 'Folder') {
@@ -496,7 +495,6 @@ class Configuration {
 	 * @param {SchemaFolder} schema A SchemaFolder instance
 	 * @returns {Object}
 	 * @private
-	 * @static
 	 */
 	static _clone(data, schema) {
 		const clone = {};
@@ -511,11 +509,12 @@ class Configuration {
 	}
 
 	/**
-	 * Path an object.
+	 * Patch an object.
 	 * @since 0.5.0
 	 * @param {Object} inst The reference of the Configuration instance
 	 * @param {Object} data The original object
 	 * @param {SchemaFolder} schema A SchemaFolder instance
+	 * @private
 	 */
 	static _patch(inst, data, schema) {
 		for (let i = 0; i < schema.keyArray.length; i++) {

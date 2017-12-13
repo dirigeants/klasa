@@ -131,7 +131,6 @@ class Timestamp {
 	 * @param {string} template The pattern to parse
 	 * @param {(Date|number|string)} time The time to display
 	 * @returns {string}
-	 * @static
 	 * @private
 	 */
 	static _display(template, time) {
@@ -148,7 +147,6 @@ class Timestamp {
 	 * @param {string} type The type of variable
 	 * @param {Date} time The current time
 	 * @returns {string}
-	 * @static
 	 * @private
 	 */
 	static _parse(type, time) {
@@ -209,7 +207,6 @@ class Timestamp {
 	 * @since 0.5.0
 	 * @param {string} pattern The pattern to parse
 	 * @returns {TimestampObject[]}
-	 * @static
 	 * @private
 	 */
 	static _patch(pattern) {

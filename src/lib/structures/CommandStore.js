@@ -74,7 +74,8 @@ class CommandStore extends Collection {
 		return super.get(name) || this.aliases.get(name);
 	}
 
-	/** Returns a boolean if the command or alias is found within the store.
+	/**
+	 * Returns a boolean if the command or alias is found within the store.
 	 * @since 0.0.1
 	 * @param {string} name A command or alias name
 	 * @returns {boolean}

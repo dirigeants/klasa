@@ -20,7 +20,6 @@ module.exports = Structures.extend('Message', Message => {
 		/**
 		 * Options provided when sending or editing a message.
 		 * @typedef {Object} MessageOptions
-		 * @memberof KlasaMessage
 		 * @property {boolean} [tts=false] Whether or not the message should be spoken aloud
 		 * @property {string} [nonce=''] The nonce for the message
 		 * @property {RichEmbed|Object} [embed] An embed for the message
@@ -33,6 +32,7 @@ module.exports = Structures.extend('Message', Message => {
 		 * @property {boolean|SplitOptions} [split=false] Whether or not the message should be split into multiple messages if
 		 * it exceeds the character limit. If an object is provided, these are the options for splitting the message
 		 * @property {UserResolvable} [reply] User to reply to (prefixes the message with a mention, except in DMs)
+		 * @memberof KlasaMessage
 		 */
 
 		/**
@@ -130,7 +130,7 @@ module.exports = Structures.extend('Message', Message => {
 		 * @since 0.0.1
 		 * @returns {Promise<CommandStore>} The filtered CommandStore
 		 */
-		async usableCommands() {
+		usableCommands() {
 			return this.client.commands.filter(async command => await !this.client.commandInhibitors.some(async inhibitor => {
 				if (inhibitor.enabled && !inhibitor.spamProtection) return await inhibitor.run(this.client, this, command).catch(() => true);
 				return false;
@@ -152,7 +152,7 @@ module.exports = Structures.extend('Message', Message => {
 		 * Sends a message that will be editable via command editing (if nothing is attached)
 		 * @since 0.0.1
 		 * @param {StringResolvable} [content] The content to send
-		 * @param {MessageOptions|external:MessageAttachment|external:MessageEmbed} [options] The D.JS message options
+		 * @param {MessageOptions} [options] The D.JS message options
 		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
 		 */
 		sendMessage(content, options) {
@@ -227,7 +227,7 @@ module.exports = Structures.extend('Message', Message => {
 		 * Sends a message that will be editable via command editing (if nothing is attached)
 		 * @since 0.0.1
 		 * @param {StringResolvable} [content] The content to send
-		 * @param {MessageOptions|external:MessageAttachment|external:MessageEmbed} [options] The D.JS message options
+		 * @param {MessageOptions} [options] The D.JS message options
 		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
 		 */
 		send(content, options) {
@@ -416,8 +416,8 @@ module.exports = Structures.extend('Message', Message => {
 		 * @since 0.5.0
 		 * @param {StringResolvable} [content] The content to send
 		 * @param {MessageOptions} [options] The D.JS message options
-		 * @returns {*}
-		 * @static
+		 * @returns {MessageOptions}
+		 * @private
 		 */
 		static combineContentOptions(content, options) {
 			if (!options) return isObject(content) ? content : { content };

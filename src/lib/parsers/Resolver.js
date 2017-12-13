@@ -15,6 +15,7 @@ class Resolver {
 		 * The Klasa Client
 		 * @since 0.0.1
 		 * @type {KlasaClient}
+		 * @readonly
 		 */
 		Object.defineProperty(this, 'client', { value: client });
 
