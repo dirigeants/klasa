@@ -192,7 +192,7 @@ module.exports = Structures.extend('Message', Message => {
 		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
 		 */
 		sendMessage(content, options) {
-			if (!options && isObject(options)) {
+			if (!options && isObject(content)) {
 				options = content;
 				content = '';
 			} else if (!options) {
@@ -244,7 +244,7 @@ module.exports = Structures.extend('Message', Message => {
 		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
 		 */
 		sendEmbed(embed, content, options) {
-			if (!options && isObject(options)) {
+			if (!options && isObject(content)) {
 				options = content;
 				content = '';
 			} else if (!options) {
@@ -284,7 +284,7 @@ module.exports = Structures.extend('Message', Message => {
 		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
 		 */
 		reply(content, options) {
-			if (!options && typeof content === 'object' && !(content instanceof Array)) {
+			if (!options && isObject(content)) {
 				options = content;
 				content = '';
 			} else if (!options) {
