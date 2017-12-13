@@ -1,4 +1,4 @@
-const { Structures, splitMessage } = require('discord.js');
+const { Structures, splitMessage, Collection } = require('discord.js');
 const { isObject } = require('../util/util');
 
 module.exports = Structures.extend('Message', Message => {
@@ -128,13 +128,18 @@ module.exports = Structures.extend('Message', Message => {
 		/**
 		 * The usable commands by the author in this message's context
 		 * @since 0.0.1
-		 * @returns {Promise<CommandStore>} The filtered CommandStore
+		 * @returns {Promise<Collection>} The filtered CommandStore
 		 */
-		usableCommands() {
-			return this.client.commands.filter(async command => await !this.client.commandInhibitors.some(async inhibitor => {
-				if (inhibitor.enabled && !inhibitor.spamProtection) return await inhibitor.run(this.client, this, command).catch(() => true);
-				return false;
-			}));
+		async usableCommands() {
+			const col = new Collection();
+			await Promise.all(this.client.commands.map((command) =>
+				this.client.inhibitors.run(this, command, true)
+					.then(() => { col.set(command.name, command); })
+					.catch(() => {
+						// noop
+					})
+			));
+			return col;
 		}
 
 		/**
@@ -156,18 +161,17 @@ module.exports = Structures.extend('Message', Message => {
 		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
 		 */
 		sendMessage(content, options) {
-			if (!options && isObject(content)) {
-				options = content;
-				content = '';
-			} else if (!options) {
-				options = {};
-			}
+			options = this.constructor.combineContentOptions(content, options);
+			content = options.content; // eslint-disable-line prefer-destructuring
+			delete options.content;
+
 			options.embed = options.embed || null;
 			if (this.responses && (!options || !('files' in options))) {
 				if (options && options.split) content = splitMessage(content, options.split);
 				if (content instanceof Array) {
 					const promises = [];
 					if (this.responses instanceof Array) {
+						/* eslint-disable max-depth */
 						for (let i = 0; i < content.length; i++) {
 							if (this.responses.length > i) promises.push(this.responses[i].edit(content[i], options));
 							else promises.push(this.channel.send(content[i]));
@@ -175,6 +179,7 @@ module.exports = Structures.extend('Message', Message => {
 						if (this.responses.length > content.length) {
 							for (let i = content.length; i < this.responses.length; i++) this.responses[i].delete();
 						}
+						/* eslint-enable max-depth */
 					} else {
 						promises.push(this.responses.edit(content[0], options));
 						for (let i = 1; i < content.length; i++) promises.push(this.channel.send(content[i]));

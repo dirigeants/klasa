@@ -225,7 +225,7 @@ declare module 'klasa' {
 		private _repeat: boolean;
 
 		public readonly reactable: boolean;
-		public usableCommands(): Promise<CommandStore>;
+		public usableCommands(): Promise<Collection>;
 		public hasAtLeastPermissionLevel(min: number): Promise<boolean>;
 
 		public sendMessage(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
