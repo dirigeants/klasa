@@ -174,7 +174,7 @@ class Command {
 		 * @since 0.2.1
 		 * @type {boolean}
 		 */
-		this.quotedStringSupport = options.quotedStringSupport;
+		this.quotedStringSupport = options.quotedStringSupport || this.client.options.quotedStringSupport;
 
 		/**
 		 * The full category for the command

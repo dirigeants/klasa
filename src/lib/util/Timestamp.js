@@ -115,9 +115,9 @@ class Timestamp {
 			}
 			case 'd': {
 				const day = String(time.getDate());
-				if (day.endsWith('1')) return `${day}st`;
-				if (day.endsWith('2')) return `${day}nd`;
-				if (day.endsWith('3')) return `${day}rd`;
+				if (day !== '11' && day.endsWith('1')) return `${day}st`;
+				if (day !== '12' && day.endsWith('2')) return `${day}nd`;
+				if (day !== '13' && day.endsWith('3')) return `${day}rd`;
 				return `${day}th`;
 			}
 			case 'X': return String(time.valueOf() / SECOND);
