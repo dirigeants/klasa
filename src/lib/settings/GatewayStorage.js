@@ -7,9 +7,9 @@ class GatewayStorage {
 
 	/**
 	 * @since 0.5.0
-	 * @param {KlasaClient} client The client this GatewayStorage was created with.
-	 * @param {string} type The name of this GatewayStorage.
-	 * @param {string} [provider] The provider's name.
+	 * @param {KlasaClient} client The client this GatewayStorage was created with
+	 * @param {string} type The name of this GatewayStorage
+	 * @param {string} [provider] The provider's name
 	 */
 	constructor(client, type, provider) {
 		/**
@@ -150,7 +150,7 @@ class GatewayStorage {
 	/**
 	 * Parses an entry
 	 * @since 0.5.0
-	 * @param {Object} entry An entry to parse.
+	 * @param {Object} entry An entry to parse
 	 * @returns {Object}
 	 * @private
 	 */
@@ -180,9 +180,9 @@ class GatewayStorage {
 	/**
 	 * Make an error that can or not have a valid Guild.
 	 * @since 0.5.0
-	 * @param {KlasaGuild} guild The guild to get the language from.
-	 * @param {(string|number)} code The code of the error.
-	 * @param {(string|Error)} error The error.
+	 * @param {KlasaGuild} guild The guild to get the language from
+	 * @param {(string|number)} code The code of the error
+	 * @param {(string|Error)} error The error
 	 * @returns {string}
 	 * @private
 	 * @static

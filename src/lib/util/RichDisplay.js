@@ -27,15 +27,15 @@ class RichDisplay {
 	/**
 	 * @typedef {object} RichDisplayRunOptions
 	 * @property {Function} [filter] A filter function to add to the ReactionHandler (Recieves: Reaction, User)
-	 * @property {boolean} [stop=true] If a stop reaction should be included.
-	 * @property {boolean} [jump=true] If a jump reaction should be included.
-	 * @property {boolean} [firstLast=true] If a first and last reaction should be included.
-	 * @property {string} [prompt=msg.language.get('REACTIONHANDLER_PROMPT')] The prompt to be used when awaiting user input on a page to jump to.
-	 * @property {number} [startPage=0] The page to start the RichDisplay on.
-	 * @property {number} [max] The maximum total amount of reactions to collect.
-	 * @property {number} [maxEmojis] The maximum number of emojis to collect.
-	 * @property {number} [maxUsers] The maximum number of users to react.
-	 * @property {number} [time] The maximum amount of time before this RichDisplay should expire.
+	 * @property {boolean} [stop=true] If a stop reaction should be included
+	 * @property {boolean} [jump=true] If a jump reaction should be included
+	 * @property {boolean} [firstLast=true] If a first and last reaction should be included
+	 * @property {string} [prompt=msg.language.get('REACTIONHANDLER_PROMPT')] The prompt to be used when awaiting user input on a page to jump to
+	 * @property {number} [startPage=0] The page to start the RichDisplay on
+	 * @property {number} [max] The maximum total amount of reactions to collect
+	 * @property {number} [maxEmojis] The maximum number of emojis to collect
+	 * @property {number} [maxUsers] The maximum number of users to react
+	 * @property {number} [time] The maximum amount of time before this RichDisplay should expire
 	 * @memberof RichDisplay
 	 */
 
@@ -102,7 +102,7 @@ class RichDisplay {
 	/**
 	 * Sets emojis to a new set of emojis
 	 * @since 0.4.0
-	 * @param {RichDisplayEmojisObject} emojis An object containing replacement emojis to use instead.
+	 * @param {RichDisplayEmojisObject} emojis An object containing replacement emojis to use instead
 	 * @returns {RichDisplay} this RichDisplay
 	 */
 	setEmojis(emojis) {
@@ -113,7 +113,7 @@ class RichDisplay {
 	/**
 	 * Adds a page to the RichDisplay
 	 * @since 0.4.0
-	 * @param {(Function|external:MessageEmbed)} embed A callback with the embed template passed and the embed returned, or an embed.
+	 * @param {(Function|external:MessageEmbed)} embed A callback with the embed template passed and the embed returned, or an embed
 	 * @returns {RichDisplay} this RichDisplay
 	 */
 	addPage(embed) {
@@ -124,7 +124,7 @@ class RichDisplay {
 	/**
 	 * Adds an info page to the RichDisplay
 	 * @since 0.4.0
-	 * @param {(Function|external:MessageEmbed)} embed A callback with the embed template passed and the embed returned, or an embed.
+	 * @param {(Function|external:MessageEmbed)} embed A callback with the embed template passed and the embed returned, or an embed
 	 * @returns {RichDisplay} this RichDisplay
 	 */
 	setInfoPage(embed) {

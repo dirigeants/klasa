@@ -9,33 +9,33 @@ class SchemaPiece extends Schema {
 
 	/**
 	 * @typedef  {Object} SchemaPieceJSON
-	 * @property {string} type The type for the key.
-	 * @property {*} default The default value for the key.
-	 * @property {number} min The min value for the key (String.length for String, value for number).
-	 * @property {number} max The max value for the key (String.length for String, value for number).
-	 * @property {string[]} sql A tuple containing the name of the column and its data type.
-	 * @property {boolean} array Whether the key should be stored as Array or not.
-	 * @property {boolean} configurable Whether the key should be configurable by the config command or not.
+	 * @property {string} type The type for the key
+	 * @property {*} default The default value for the key
+	 * @property {number} min The min value for the key (String.length for String, value for number)
+	 * @property {number} max The max value for the key (String.length for String, value for number)
+	 * @property {string[]} sql A tuple containing the name of the column and its data type
+	 * @property {boolean} array Whether the key should be stored as Array or not
+	 * @property {boolean} configurable Whether the key should be configurable by the config command or not
 	 * @memberof SchemaPiece
 	 */
 
 	/**
 	 * @typedef  {Object} ModifyOptions
-	 * @property {*} [default] The new default value.
-	 * @property {number} [min] The new minimum range value.
-	 * @property {number} [max] The new maximum range value.
-	 * @property {boolean} [configurable] The new configurable value.
-	 * @property {string} [sql] The new sql datatype.
+	 * @property {*} [default] The new default value
+	 * @property {number} [min] The new minimum range value
+	 * @property {number} [max] The new maximum range value
+	 * @property {boolean} [configurable] The new configurable value
+	 * @property {string} [sql] The new sql datatype
 	 * @memberof SchemaPiece
 	 */
 
 	/**
 	 * @since 0.5.0
-	 * @param {KlasaClient} client The client which initialized this instance.
-	 * @param {Gateway} gateway The Gateway that manages this schema instance.
-	 * @param {AddOptions} options The object containing the properties for this schema instance.
-	 * @param {SchemaFolder} parent The parent which holds this instance.
-	 * @param {string} key The name of the key.
+	 * @param {KlasaClient} client The client which initialized this instance
+	 * @param {Gateway} gateway The Gateway that manages this schema instance
+	 * @param {AddOptions} options The object containing the properties for this schema instance
+	 * @param {SchemaFolder} parent The parent which holds this instance
+	 * @param {string} key The name of the key
 	 */
 	constructor(client, gateway, options, parent, key) {
 		super(client, gateway, options, parent, key);
@@ -110,8 +110,8 @@ class SchemaPiece extends Schema {
 	/**
 	 * Parse a value in this key's resolver.
 	 * @since 0.5.0
-	 * @param {string} value The value to parse.
-	 * @param {KlasaGuild} guild A Guild instance required for the resolver to work.
+	 * @param {string} value The value to parse
+	 * @param {KlasaGuild} guild A Guild instance required for the resolver to work
 	 * @returns {Promise<*>}
 	 */
 	parse(value, guild = this.client.guilds.get(this.id)) {
@@ -121,7 +121,7 @@ class SchemaPiece extends Schema {
 	/**
 	 * Resolve a string.
 	 * @since 0.5.0
-	 * @param {KlasaMessage} msg The Message to use.
+	 * @param {KlasaMessage} msg The Message to use
 	 * @returns {string}
 	 */
 	resolveString(msg) {
@@ -154,7 +154,7 @@ class SchemaPiece extends Schema {
 	/**
 	 * Modify this SchemaPiece's properties.
 	 * @since 0.5.0
-	 * @param {ModifyOptions} options The new options.
+	 * @param {ModifyOptions} options The new options
 	 * @returns {Promise<this>}
 	 */
 	async modify(options) {
@@ -203,7 +203,7 @@ class SchemaPiece extends Schema {
 	/**
 	 * Checks if options.type is valid.
 	 * @since 0.5.0
-	 * @param {string} type The parameter to validate.
+	 * @param {string} type The parameter to validate
 	 * @private
 	 */
 	_schemaCheckType(type) {
@@ -214,7 +214,7 @@ class SchemaPiece extends Schema {
 	/**
 	 * Checks if options.array is valid.
 	 * @since 0.5.0
-	 * @param {boolean} array The parameter to validate.
+	 * @param {boolean} array The parameter to validate
 	 * @private
 	 */
 	_schemaCheckArray(array) {
@@ -224,7 +224,7 @@ class SchemaPiece extends Schema {
 	/**
 	 * Checks if options.default is valid.
 	 * @since 0.5.0
-	 * @param {AddOptions} options The options to validate.
+	 * @param {AddOptions} options The options to validate
 	 * @private
 	 */
 	_schemaCheckDefault(options) {
@@ -242,8 +242,8 @@ class SchemaPiece extends Schema {
 	/**
 	 * Checks if options.min and options.max are valid.
 	 * @since 0.5.0
-	 * @param {number} min The options.min parameter to validate.
-	 * @param {number} max The options.max parameter to validate.
+	 * @param {number} min The options.min parameter to validate
+	 * @param {number} max The options.max parameter to validate
 	 * @private
 	 */
 	_schemaCheckLimits(min, max) {
@@ -255,7 +255,7 @@ class SchemaPiece extends Schema {
 	/**
 	 * Checks if options.configurable is valid.
 	 * @since 0.5.0
-	 * @param {boolean} configurable The parameter to validate.
+	 * @param {boolean} configurable The parameter to validate
 	 * @private
 	 */
 	_schemaCheckConfigurable(configurable) {
@@ -265,7 +265,7 @@ class SchemaPiece extends Schema {
 	/**
 	 * Generate a new SQL datatype.
 	 * @since 0.5.0
-	 * @param {string} [sql] The new SQL datatype.
+	 * @param {string} [sql] The new SQL datatype
 	 * @returns {string}
 	 * @private
 	 */
@@ -277,7 +277,7 @@ class SchemaPiece extends Schema {
 	/**
 	 * Patch an object applying all its properties to this instance.
 	 * @since 0.5.0
-	 * @param {Object} object The object to patch.
+	 * @param {Object} object The object to patch
 	 * @private
 	 */
 	_patch(object) {
@@ -292,7 +292,7 @@ class SchemaPiece extends Schema {
 	/**
 	 * Check if the key is properly configured.
 	 * @since 0.5.0
-	 * @param {AddOptions} options The options to parse.
+	 * @param {AddOptions} options The options to parse
 	 * @returns {true}
 	 * @private
 	 */
@@ -340,7 +340,7 @@ class SchemaPiece extends Schema {
 	/**
 	 * Parses a value to a valid string that can be used for SQL input.
 	 * @since 0.5.0
-	 * @param {*} value The value to parse.
+	 * @param {*} value The value to parse
 	 * @returns {string}
 	 */
 	static _parseSQLValue(value) {

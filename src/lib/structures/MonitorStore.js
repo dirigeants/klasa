@@ -85,7 +85,7 @@ class MonitorStore extends Collection {
 	/**
 	 * Sets up a monitor in our store.
 	 * @since 0.0.1
-	 * @param {Monitor} monitor The monitor object we are setting up.
+	 * @param {Monitor} monitor The monitor object we are setting up
 	 * @returns {Monitor}
 	 */
 	set(monitor) {

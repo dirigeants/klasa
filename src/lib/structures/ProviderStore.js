@@ -73,7 +73,7 @@ class ProviderStore extends Collection {
 	/**
 	 * Sets up a provider in our store.
 	 * @since 0.0.1
-	 * @param {Provider} provider The provider object we are setting up.
+	 * @param {Provider} provider The provider object we are setting up
 	 * @returns {Provider}
 	 */
 	set(provider) {

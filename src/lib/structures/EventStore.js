@@ -82,7 +82,7 @@ class EventStore extends Collection {
 	/**
 	 * Sets up an event in our store.
 	 * @since 0.0.1
-	 * @param {Event} event The event object we are setting up.
+	 * @param {Event} event The event object we are setting up
 	 * @returns {Event}
 	 */
 	set(event) {

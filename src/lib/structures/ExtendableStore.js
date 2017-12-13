@@ -59,7 +59,7 @@ class ExtendableStore extends Collection {
 	/**
 	 * Deletes an extendable from the store.
 	 * @since 0.0.1
-	 * @param {Extendable|string} name A extendable object or a string representing a command or alias name.
+	 * @param {Extendable|string} name A extendable object or a string representing a command or alias name
 	 * @returns {boolean} whether or not the delete was successful.
 	 */
 	delete(name) {
@@ -82,7 +82,7 @@ class ExtendableStore extends Collection {
 	/**
 	 * Sets up an extendable in our store.
 	 * @since 0.0.1
-	 * @param {Extendable} extendable The extendable object we are setting up.
+	 * @param {Extendable} extendable The extendable object we are setting up
 	 * @returns {Extendable}
 	 */
 	set(extendable) {

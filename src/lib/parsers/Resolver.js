@@ -35,8 +35,8 @@ class Resolver {
 	/**
 	 * Fetch a Message object by its Snowflake or instanceof Message.
 	 * @since 0.0.1
-	 * @param {Message|Snowflake} message The message snowflake to validate.
-	 * @param {Channel} channel The Channel object in which the message can be found.
+	 * @param {Message|Snowflake} message The message snowflake to validate
+	 * @param {Channel} channel The Channel object in which the message can be found
 	 * @returns {?KlasaMessage}
 	 */
 	async msg(message, channel) {
@@ -47,7 +47,7 @@ class Resolver {
 	/**
 	 * Resolve a User object by its instance of User, GuildMember, or by its Snowflake.
 	 * @since 0.0.1
-	 * @param {(User|GuildMember|Message|Snowflake)} user The user to validate.
+	 * @param {(User|GuildMember|Message|Snowflake)} user The user to validate
 	 * @returns {?KlasaUser}
 	 */
 	async user(user) {
@@ -65,8 +65,8 @@ class Resolver {
 	/**
 	 * Resolve a GuildMember object by its instance of GuildMember, User, or by its Snowflake.
 	 * @since 0.0.1
-	 * @param {(GuildMember|User|Snowflake)} member The number to validate.
-	 * @param {Guild} guild The Guild object in which the member can be found.
+	 * @param {(GuildMember|User|Snowflake)} member The number to validate
+	 * @param {Guild} guild The Guild object in which the member can be found
 	 * @returns {?external:GuildMember}
 	 */
 	async member(member, guild) {
@@ -84,7 +84,7 @@ class Resolver {
 	/**
 	 * Resolve a Channel object by its instance of Channel, or by its Snowflake.
 	 * @since 0.0.1
-	 * @param {(Channel|Snowflake)} channel The channel to validate.
+	 * @param {(Channel|Snowflake)} channel The channel to validate
 	 * @returns {?external:Channel}
 	 */
 	async channel(channel) {
@@ -96,7 +96,7 @@ class Resolver {
 	/**
 	 * Resolve a Guild object by its instance of Guild, or by its Snowflake.
 	 * @since 0.0.1
-	 * @param {(Guild|Snowflake)} guild The guild to validate/find.
+	 * @param {(Guild|Snowflake)} guild The guild to validate/find
 	 * @returns {?KlasaGuild}
 	 */
 	async guild(guild) {
@@ -108,8 +108,8 @@ class Resolver {
 	/**
 	 * Resolve a Role object by its instance of Role, or by its Snowflake.
 	 * @since 0.0.1
-	 * @param {(Role|Snowflake)} role The role to validate/find.
-	 * @param {Guild} guild The Guild object in which the role can be found.
+	 * @param {(Role|Snowflake)} role The role to validate/find
+	 * @param {Guild} guild The Guild object in which the role can be found
 	 * @returns {?external:Role}
 	 */
 	async role(role, guild) {
@@ -121,7 +121,7 @@ class Resolver {
 	/**
 	 * Resolve a Boolean instance.
 	 * @since 0.0.1
-	 * @param {(boolean|string)} bool The boolean to validate.
+	 * @param {(boolean|string)} bool The boolean to validate
 	 * @returns {?boolean}
 	 */
 	async boolean(bool) {
@@ -134,7 +134,7 @@ class Resolver {
 	/**
 	 * Resolve a String instance.
 	 * @since 0.0.1
-	 * @param {string} string The string to validate.
+	 * @param {string} string The string to validate
 	 * @returns {?string}
 	 */
 	async string(string) {
@@ -144,7 +144,7 @@ class Resolver {
 	/**
 	 * Resolve an Integer.
 	 * @since 0.0.1
-	 * @param {(string|number)} integer The integer to validate.
+	 * @param {(string|number)} integer The integer to validate
 	 * @returns {?number}
 	 */
 	async integer(integer) {
@@ -156,7 +156,7 @@ class Resolver {
 	/**
 	 * Resolve a Float.
 	 * @since 0.0.1
-	 * @param {(string|number)} number The float to validate.
+	 * @param {(string|number)} number The float to validate
 	 * @returns {?number}
 	 */
 	async float(number) {
@@ -168,7 +168,7 @@ class Resolver {
 	/**
 	 * Resolve a hyperlink.
 	 * @since 0.0.1
-	 * @param {string} hyperlink The hyperlink to validate.
+	 * @param {string} hyperlink The hyperlink to validate
 	 * @returns {?string}
 	 */
 	async url(hyperlink) {

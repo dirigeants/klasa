@@ -13,7 +13,6 @@ class Command {
 
 	/**
 	 * @typedef {Object} CommandOptions
-	 * @memberof Command
 	 * @property {string} [name=theFileName] The name of the command
 	 * @property {boolean} [enabled=true] Whether the command is enabled or not
 	 * @property {string[]} [runIn=['text','dm','group']] What channel types the command should run in
@@ -31,6 +30,7 @@ class Command {
 	 * @property {?string} [usageDelim=undefined] The string to deliminate the command input for usage
 	 * @property {boolean} [quotedStringSupport=this.client.options.quotedStringSupport] Wheter args for this command should not deliminated inside quotes
 	 * @property {(string|Function)} [extendedHelp=msg.language.get('COMMAND_HELP_NO_EXTENDED')] Extended help strings
+	 * @memberof Command
 	 */
 
 	/**

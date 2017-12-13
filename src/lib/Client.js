@@ -40,8 +40,8 @@ class KlasaClient extends Discord.Client {
 	 * @property {boolean} [cmdPrompt=false] Whether the bot should prompt missing parameters
 	 * @property {boolean} [cmdEditing=false] Whether the bot should update responses if the command is edited
 	 * @property {boolean} [cmdLogging=false] Whether the bot should log command usage
-	 * @property {boolean} [typing=false] Whether the bot should type while processing commands.
-	 * @property {boolean} [preserveConfigs=true] Whetheer the bot should preserve (non-default) configs when removed from a guild.
+	 * @property {boolean} [typing=false] Whether the bot should type while processing commands
+	 * @property {boolean} [preserveConfigs=true] Whetheer the bot should preserve (non-default) configs when removed from a guild
 	 * @property {boolean} [quotedStringSupport=false] Whether the bot should default to using quoted string support in arg parsing, or not (overridable per command)
 	 * @property {?(string|Function)} [readyMessage=`Successfully initialized. Ready to serve ${this.guilds.size} guilds.`] readyMessage to be passed thru Klasa's ready event
 	 * @property {string} [ownerID] The discord user id for the user the bot should respect as the owner (gotten from Discord api if not provided)
@@ -292,7 +292,7 @@ class KlasaClient extends Discord.Client {
 	/**
 	 * Registers a custom store to the client
 	 * @since 0.3.0
-	 * @param {Store} store The store that pieces will be stored in.
+	 * @param {Store} store The store that pieces will be stored in
 	 * @returns {KlasaClient} this client
 	 */
 	registerStore(store) {
@@ -303,7 +303,7 @@ class KlasaClient extends Discord.Client {
 	/**
 	 * Unregisters a custom store from the client
 	 * @since 0.3.0
-	 * @param {Store} storeName The store that pieces will be stored in.
+	 * @param {Store} storeName The store that pieces will be stored in
 	 * @returns {KlasaClient} this client
 	 */
 	unregisterStore(storeName) {
@@ -315,7 +315,7 @@ class KlasaClient extends Discord.Client {
 	 * Registers a custom piece to the client
 	 * @since 0.3.0
 	 * @param {string} pieceName The name of the piece, if you want to register an arg resolver for this piece
-	 * @param {Store} store The store that pieces will be stored in.
+	 * @param {Store} store The store that pieces will be stored in
 	 * @returns {KlasaClient} this client
 	 */
 	registerPiece(pieceName, store) {
@@ -467,7 +467,7 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  * @event KlasaClient#log
  * @since 0.3.0
  * @param {(string|Object)} data The data to log
- * @param {string} [type='log'] The type of log: 'log', 'debug', 'warn', or 'error'.
+ * @param {string} [type='log'] The type of log: 'log', 'debug', 'warn', or 'error'
  */
 
 /**
@@ -517,7 +517,7 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  * @param {KlasaMessage} message The message that triggered the command
  * @param {Command} command The command run
  * @param {any[]} params The resolved parameters of the command
- * @param {?any} response Usually a response message, but whatever the command returned.
+ * @param {?any} response Usually a response message, but whatever the command returned
  */
 
 /**
@@ -604,21 +604,21 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  * Emitted when a new key or folder is added to the Schema.
  * @event KlasaClient#schemaKeyAdd
  * @since 0.5.0
- * @param {(SchemaFolder|SchemaPiece)} key The key that was added.
+ * @param {(SchemaFolder|SchemaPiece)} key The key that was added
  */
 
 /**
  * Emitted when a key or folder has been removed from the Schema.
  * @event KlasaClient#schemaKeyRemove
  * @since 0.5.0
- * @param {(SchemaFolder|SchemaPiece)} key The key that was removed.
+ * @param {(SchemaFolder|SchemaPiece)} key The key that was removed
  */
 
 /**
  * Emitted when a key's properties are modified.
  * @event KlasaClient#schemaKeyUpdate
  * @since 0.5.0
- * @param {SchemaPiece} key The piece that was updated.
+ * @param {SchemaPiece} key The piece that was updated
  */
 
 process.on('unhandledRejection', (err) => {

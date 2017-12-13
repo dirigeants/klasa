@@ -82,7 +82,7 @@ class LanguageStore extends Collection {
 	/**
 	 * Sets up a language in our store.
 	 * @since 0.2.1
-	 * @param {Language} language The language object we are setting up.
+	 * @param {Language} language The language object we are setting up
 	 * @returns {Language}
 	 */
 	set(language) {

@@ -11,7 +11,7 @@ class Language {
 	/**
 	 * @typedef {Object} LanguageOptions
 	 * @property {string} [name=theFileName] The name of the language
-	 * @property {boolean} [enabled=true] Whether the language is enabled or not.
+	 * @property {boolean} [enabled=true] Whether the language is enabled or not
 	 * @memberof Language
 	 */
 

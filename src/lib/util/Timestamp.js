@@ -32,15 +32,15 @@ class Timestamp {
 
 	/**
 	 * @typedef  {Object} TimestampObject
-	 * @property {string} type The type of the current variable.
-	 * @property {string} [content] The content of the type. Only accessible if the type is 'literal'.
+	 * @property {string} type The type of the current variable
+	 * @property {string} [content] The content of the type. Only accessible if the type is 'literal'
 	 * @memberof Timestamp
 	 */
 
 	/**
 	 * Starts a new Timestamp and parses the pattern.
 	 * @since 0.5.0
-	 * @param {string} pattern The pattern to parse.
+	 * @param {string} pattern The pattern to parse
 	 */
 	constructor(pattern) {
 		/**
@@ -59,7 +59,7 @@ class Timestamp {
 	/**
 	 * Display the current date with the current pattern.
 	 * @since 0.5.0
-	 * @param {(Date|number|string)} [time=new Date()] The time to display.
+	 * @param {(Date|number|string)} [time=new Date()] The time to display
 	 * @returns {string}
 	 */
 	display(time = new Date()) {
@@ -69,7 +69,7 @@ class Timestamp {
 	/**
 	 * Edits the current pattern.
 	 * @since 0.5.0
-	 * @param {string} pattern The new pattern for this instance.
+	 * @param {string} pattern The new pattern for this instance
 	 * @returns {Timestamp}
 	 */
 	edit(pattern) {
@@ -81,8 +81,8 @@ class Timestamp {
 	/**
 	 * Display the current date with the current pattern.
 	 * @since 0.5.0
-	 * @param {string} pattern The pattern to parse.
-	 * @param {(Date|number|string)} [time=new Date()] The time to display.
+	 * @param {string} pattern The pattern to parse
+	 * @param {(Date|number|string)} [time=new Date()] The time to display
 	 * @returns {string}
 	 */
 	static displayArbitrary(pattern, time = new Date()) {
@@ -92,8 +92,8 @@ class Timestamp {
 	/**
 	 * Shows the userfriendly duration of time between a period and now.
 	 * @since 0.5.0
-	 * @param {(Date|number|string)} earlier The time to compare.
-	 * @param {boolean} [showIn] Whether the output should be prefixed.
+	 * @param {(Date|number|string)} earlier The time to compare
+	 * @param {boolean} [showIn] Whether the output should be prefixed
 	 * @returns {string}
 	 */
 	static toNow(earlier, showIn) {
@@ -128,8 +128,8 @@ class Timestamp {
 	/**
 	 * Display the current date with the current pattern.
 	 * @since 0.5.0
-	 * @param {string} template The pattern to parse.
-	 * @param {(Date|number|string)} time The time to display.
+	 * @param {string} template The pattern to parse
+	 * @param {(Date|number|string)} time The time to display
 	 * @returns {string}
 	 * @static
 	 * @private
@@ -146,7 +146,7 @@ class Timestamp {
 	 * Parses the current variable.
 	 * @since 0.5.0
 	 * @param {string} type The type of variable
-	 * @param {Date} time The current time.
+	 * @param {Date} time The current time
 	 * @returns {string}
 	 * @static
 	 * @private
@@ -207,7 +207,7 @@ class Timestamp {
 	/**
 	 * Parses the pattern.
 	 * @since 0.5.0
-	 * @param {string} pattern The pattern to parse.
+	 * @param {string} pattern The pattern to parse
 	 * @returns {TimestampObject[]}
 	 * @static
 	 * @private

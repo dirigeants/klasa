@@ -10,23 +10,23 @@ class SchemaFolder extends Schema {
 
 	/**
 	 * @typedef  {Object} AddOptions
-	 * @property {string} type The type for the key.
-	 * @property {*} [default] The default value for the key.
-	 * @property {number} [min] The min value for the key (String.length for String, value for number).
-	 * @property {number} [max] The max value for the key (String.length for String, value for number).
-	 * @property {boolean} [array] Whether the key should be stored as Array or not.
-	 * @property {string} [sql] The datatype of the key.
-	 * @property {boolean} [configurable] Whether the key should be configurable by the config command or not.
+	 * @property {string} type The type for the key
+	 * @property {*} [default] The default value for the key
+	 * @property {number} [min] The min value for the key (String.length for String, value for number)
+	 * @property {number} [max] The max value for the key (String.length for String, value for number)
+	 * @property {boolean} [array] Whether the key should be stored as Array or not
+	 * @property {string} [sql] The datatype of the key
+	 * @property {boolean} [configurable] Whether the key should be configurable by the config command or not
 	 * @memberof Schema
 	 */
 
 	/**
 	 * @since 0.5.0
-	 * @param {KlasaClient} client The client which initialized this instance.
-	 * @param {Gateway} gateway The Gateway that manages this schema instance.
-	 * @param {Object} object The object containing the properties for this schema instance.
-	 * @param {?Schema} parent The parent which holds this instance.
-	 * @param {string} key The name of this key.
+	 * @param {KlasaClient} client The client which initialized this instance
+	 * @param {Gateway} gateway The Gateway that manages this schema instance
+	 * @param {Object} object The object containing the properties for this schema instance
+	 * @param {?Schema} parent The parent which holds this instance
+	 * @param {string} key The name of this key
 	 */
 	constructor(client, gateway, object, parent, key) {
 		super(client, gateway, object, parent, key);
@@ -79,9 +79,9 @@ class SchemaFolder extends Schema {
 	/**
 	 * Create a new nested folder.
 	 * @since 0.5.0
-	 * @param {string} key The name's key for the folder.
-	 * @param {Object} [object={}] An object containing all the Schema/SchemaPieces literals for this folder.
-	 * @param {boolean} [force=true] Whether this function call should modify all entries from the database.
+	 * @param {string} key The name's key for the folder
+	 * @param {Object} [object={}] An object containing all the Schema/SchemaPieces literals for this folder
+	 * @param {boolean} [force=true] Whether this function call should modify all entries from the database
 	 * @returns {Promise<Schema>}
 	 */
 	async addFolder(key, object = {}, force = true) {
@@ -108,8 +108,8 @@ class SchemaFolder extends Schema {
 	/**
 	 * Remove a nested folder.
 	 * @since 0.5.0
-	 * @param {string} key The folder's name to remove.
-	 * @param {boolean} [force=true] Whether this function call should modify all entries from the database.
+	 * @param {string} key The folder's name to remove
+	 * @param {boolean} [force=true] Whether this function call should modify all entries from the database
 	 * @returns {Promise<Schema>}
 	 */
 	async removeFolder(key, force = true) {
@@ -137,7 +137,7 @@ class SchemaFolder extends Schema {
 	/**
 	 * Check if the key exists in this folder.
 	 * @since 0.5.0
-	 * @param {string} key The key to check.
+	 * @param {string} key The key to check
 	 * @returns {boolean}
 	 */
 	hasKey(key) {
@@ -147,9 +147,9 @@ class SchemaFolder extends Schema {
 	/**
 	 * Add a new key to this folder.
 	 * @since 0.5.0
-	 * @param {string} key The name for the key.
-	 * @param {AddOptions} options The key's options to apply.
-	 * @param {boolean} [force=true] Whether this function call should modify all entries from the database.
+	 * @param {string} key The name for the key
+	 * @param {AddOptions} options The key's options to apply
+	 * @param {boolean} [force=true] Whether this function call should modify all entries from the database
 	 * @returns {Promise<Schema>}
 	 */
 	async addKey(key, options, force = true) {
@@ -189,8 +189,8 @@ class SchemaFolder extends Schema {
 	/**
 	 * Remove a key from this folder.
 	 * @since 0.5.0
-	 * @param {string} key The key's name to remove.
-	 * @param {boolean} [force=true] Whether this function call should modify all entries from the database.
+	 * @param {string} key The key's name to remove
+	 * @param {boolean} [force=true] Whether this function call should modify all entries from the database
 	 * @returns {Promise<Schema>}
 	 */
 	async removeKey(key, force = true) {
@@ -214,9 +214,9 @@ class SchemaFolder extends Schema {
 	/**
 	 * Modifies all entries from the database.
 	 * @since 0.5.0
-	 * @param {('add'|'edit'|'delete')} action The action to perform.
-	 * @param {string} key The key.
-	 * @param {(SchemaPiece|Schema)} piece The SchemaPiece instance to handle.
+	 * @param {('add'|'edit'|'delete')} action The action to perform
+	 * @param {string} key The key
+	 * @param {(SchemaPiece|Schema)} piece The SchemaPiece instance to handle
 	 * @returns {Promise<*>}
 	 * @private
 	 */
@@ -259,7 +259,7 @@ class SchemaFolder extends Schema {
 	/**
 	 * Get a list.
 	 * @since 0.5.0
-	 * @param {KlasaMessage} msg The Message instance.
+	 * @param {KlasaMessage} msg The Message instance
 	 * @returns {string}
 	 */
 	getList(msg) {
@@ -293,7 +293,7 @@ class SchemaFolder extends Schema {
 	/**
 	 * Get a JSON object with all the default values.
 	 * @since 0.5.0
-	 * @param {Object} [data={}] The object to update.
+	 * @param {Object} [data={}] The object to update
 	 * @returns {Object}
 	 */
 	getDefaults(data = {}) {
@@ -359,9 +359,9 @@ class SchemaFolder extends Schema {
 	/**
 	 * Add a key to the instance.
 	 * @since 0.5.0
-	 * @param {string} key The name of the key.
-	 * @param {AddOptions} options The options of the key.
-	 * @param {(Schema|SchemaPiece)} Piece The class to create.
+	 * @param {string} key The name of the key
+	 * @param {AddOptions} options The options of the key
+	 * @param {(Schema|SchemaPiece)} Piece The class to create
 	 * @returns {(Schema|SchemaPiece)}
 	 * @private
 	 */
@@ -381,7 +381,7 @@ class SchemaFolder extends Schema {
 	/**
 	 * Remove a key from the instance.
 	 * @since 0.5.0
-	 * @param {string} key The name of the key.
+	 * @param {string} key The name of the key
 	 * @private
 	 */
 	_removeKey(key) {
@@ -397,9 +397,9 @@ class SchemaFolder extends Schema {
 	/**
 	 * Sync all shards' schemas.
 	 * @since 0.5.0
-	 * @param {(Schema|SchemaPiece)} piece The piece to send.
-	 * @param {('add'|'delete'|'update')} action Whether the piece got added or removed.
-	 * @param {boolean} force Whether the piece got modified with force or not.
+	 * @param {(Schema|SchemaPiece)} piece The piece to send
+	 * @param {('add'|'delete'|'update')} action Whether the piece got added or removed
+	 * @param {boolean} force Whether the piece got modified with force or not
 	 * @private
 	 */
 	async _shardSyncSchema(piece, action, force) {
@@ -410,7 +410,7 @@ class SchemaFolder extends Schema {
 	/**
 	 * Method called in initialization to populate the instance with the keys from the schema.
 	 * @since 0.5.0
-	 * @param {Object} object The object to parse. Only called once per initialization.
+	 * @param {Object} object The object to parse. Only called once per initialization
 	 * @returns {true}
 	 * @private
 	 */

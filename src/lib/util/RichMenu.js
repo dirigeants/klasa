@@ -36,9 +36,9 @@ class RichMenu extends RichDisplay {
 
 	/**
 	 * @typedef {object} MenuOption
-	 * @property {string} name The name of the option.
-	 * @property {string} body The description of the option.
-	 * @property {boolean} [inline=false] Whether the option should be inline.
+	 * @property {string} name The name of the option
+	 * @property {string} body The description of the option
+	 * @property {boolean} [inline=false] Whether the option should be inline
 	 * @memberof RichMenu
 	 */
 
@@ -48,17 +48,17 @@ class RichMenu extends RichDisplay {
 	 * @property {boolean} [stop=true] If a stop reaction should be included
 	 * @property {string} [prompt=msg.language.get('REACTIONHANDLER_PROMPT')] The prompt to be used when awaiting user input on a page to jump to
 	 * @property {number} [startPage=0] The page to start the RichMenu on
-	 * @property {number} [max] The maximum total amount of reactions to collect.
-	 * @property {number} [maxEmojis] The maximum number of emojis to collect.
-	 * @property {number} [maxUsers] The maximum number of users to react.
-	 * @property {number} [time] The maximum amount of time before this RichMenu should expire.
+	 * @property {number} [max] The maximum total amount of reactions to collect
+	 * @property {number} [maxEmojis] The maximum number of emojis to collect
+	 * @property {number} [maxUsers] The maximum number of users to react
+	 * @property {number} [time] The maximum amount of time before this RichMenu should expire
 	 * @memberof RichMenu
 	 */
 
 	/**
 	 * Constructs our RichMenu instance
 	 * @since 0.4.0
-	 * @param {external:MessageEmbed} [embed=new MessageEmbed()] A Template embed to apply to all pages.
+	 * @param {external:MessageEmbed} [embed=new MessageEmbed()] A Template embed to apply to all pages
 	 */
 	constructor(embed) {
 		super(embed);

@@ -89,7 +89,7 @@ class InhibitorStore extends Collection {
 	/**
 	 * Sets up a inhibitor in our store.
 	 * @since 0.0.1
-	 * @param {Inhibitor} inhibitor The inhibitor object we are setting up.
+	 * @param {Inhibitor} inhibitor The inhibitor object we are setting up
 	 * @returns {Inhibitor}
 	 */
 	set(inhibitor) {

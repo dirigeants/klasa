@@ -67,7 +67,7 @@ class CommandStore extends Collection {
 	/**
 	 * Returns a command in the store if it exists by its name or by an alias.
 	 * @since 0.0.1
-	 * @param {string} name A command or alias name.
+	 * @param {string} name A command or alias name
 	 * @returns {Command}
 	 */
 	get(name) {
@@ -86,7 +86,7 @@ class CommandStore extends Collection {
 	/**
 	 * Sets up a command in our store.
 	 * @since 0.0.1
-	 * @param {Command} command The command object we are setting up.
+	 * @param {Command} command The command object we are setting up
 	 * @returns {Command}
 	 */
 	set(command) {
@@ -102,7 +102,7 @@ class CommandStore extends Collection {
 	/**
 	 * Deletes a command from the store.
 	 * @since 0.0.1
-	 * @param {Command|string} name A command object or a string representing a command or alias name.
+	 * @param {Command|string} name A command object or a string representing a command or alias name
 	 * @returns {boolean} whether or not the delete was successful.
 	 */
 	delete(name) {
@@ -144,9 +144,9 @@ class CommandStore extends Collection {
 	/**
 	 * Walks our directory of commands for the user and core directories.
 	 * @since 0.0.1
-	 * @param {CommandStore} store The command store we're loading into.
-	 * @param {string} dir The directory of commands we're using to load commands from.
-	 * @param {string[]} subs Subfolders for recursion.
+	 * @param {CommandStore} store The command store we're loading into
+	 * @param {string} dir The directory of commands we're using to load commands from
+	 * @param {string[]} subs Subfolders for recursion
 	 * @returns {void}
 	 */
 	static async walk(store, dir, subs = []) {

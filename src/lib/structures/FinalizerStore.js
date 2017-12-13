@@ -82,7 +82,7 @@ class FinalizerStore extends Collection {
 	/**
 	 * Sets up a finalizer in our store.
 	 * @since 0.0.1
-	 * @param {Finalizer} finalizer The finalizer object we are setting up.
+	 * @param {Finalizer} finalizer The finalizer object we are setting up
 	 * @returns {Finalizer}
 	 */
 	set(finalizer) {
