@@ -53,7 +53,7 @@ class Timestamp {
 		 * @type {TimestampObject[]}
 		 * @private
 		 */
-		this._template = this._patch(pattern);
+		this._template = Timestamp._patch(pattern);
 	}
 
 	/**
