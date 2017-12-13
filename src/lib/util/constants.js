@@ -58,43 +58,46 @@ exports.DEFAULTS = {
 
 			throw new Error('The parameter <Guild> expects either a Guild ID or a Guild Instance.');
 		},
-		schema: {
-			prefix: {
-				type: 'string',
-				default: this.client.options.prefix,
-				min: null,
-				max: 10,
-				array: this.client.options.prefix.constructor.name === 'Array',
-				configurable: true,
-				sql: `VARCHAR(10) NOT NULL DEFAULT '${this.client.options.prefix.constructor.name === 'Array' ? JSON.stringify(this.client.options.prefix) : this.client.options.prefix}'`
-			},
-			language: {
-				type: 'language',
-				default: this.client.options.language,
-				min: null,
-				max: null,
-				array: false,
-				configurable: true,
-				sql: `VARCHAR(5) NOT NULL DEFAULT '${this.client.options.language}'`
-			},
-			disableNaturalPrefix: {
-				type: 'boolean',
-				default: false,
-				min: null,
-				max: null,
-				array: false,
-				configurable: Boolean(this.client.options.regexPrefix),
-				sql: `BIT(1) NOT NULL DEFAULT 0`
-			},
-			disabledCommands: {
-				type: 'command',
-				default: [],
-				min: null,
-				max: null,
-				array: true,
-				configurable: true,
-				sql: 'TEXT'
-			}
+		// eslint-disable-next-line func-names
+		getSchema: function () {
+			return {
+				prefix: {
+					type: 'string',
+					default: this.client.options.prefix,
+					min: null,
+					max: 10,
+					array: this.client.options.prefix.constructor.name === 'Array',
+					configurable: true,
+					sql: `VARCHAR(10) NOT NULL DEFAULT '${this.client.options.prefix.constructor.name === 'Array' ? JSON.stringify(this.client.options.prefix) : this.client.options.prefix}'`
+				},
+				language: {
+					type: 'language',
+					default: this.client.options.language,
+					min: null,
+					max: null,
+					array: false,
+					configurable: true,
+					sql: `VARCHAR(5) NOT NULL DEFAULT '${this.client.options.language}'`
+				},
+				disableNaturalPrefix: {
+					type: 'boolean',
+					default: false,
+					min: null,
+					max: null,
+					array: false,
+					configurable: Boolean(this.client.options.regexPrefix),
+					sql: `BIT(1) NOT NULL DEFAULT 0`
+				},
+				disabledCommands: {
+					type: 'command',
+					default: [],
+					min: null,
+					max: null,
+					array: true,
+					configurable: true,
+					sql: 'TEXT'
+				}
+			};
 		},
 		options: undefined,
 		download: false
@@ -113,7 +116,10 @@ exports.DEFAULTS = {
 
 			throw new Error('The parameter <User> expects either a User ID or a User Instance.');
 		},
-		schema: undefined,
+		// eslint-disable-next-line func-names
+		getSchema: function () {
+			return undefined;
+		},
 		options: undefined,
 		download: false
 	},
@@ -129,25 +135,28 @@ exports.DEFAULTS = {
 
 			throw new Error('The parameter <Client> expects either a Client Instance.');
 		},
-		schema: {
-			userBlacklist: {
-				type: 'user',
-				default: [],
-				min: null,
-				max: null,
-				array: true,
-				configurable: true,
-				sql: 'TEXT'
-			},
-			guildBlacklist: {
-				type: 'guild',
-				default: [],
-				min: null,
-				max: null,
-				array: true,
-				configurable: true,
-				sql: 'TEXT'
-			}
+		// eslint-disable-next-line func-names
+		getSchema: function () {
+			return {
+				userBlacklist: {
+					type: 'user',
+					default: [],
+					min: null,
+					max: null,
+					array: true,
+					configurable: true,
+					sql: 'TEXT'
+				},
+				guildBlacklist: {
+					type: 'guild',
+					default: [],
+					min: null,
+					max: null,
+					array: true,
+					configurable: true,
+					sql: 'TEXT'
+				}
+			};
 		},
 		options: undefined,
 		download: false
