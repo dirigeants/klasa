@@ -62,20 +62,9 @@ class Schema {
 		 * @since 0.5.0
 		 * @type {boolean}
 		 * @name Schema#_inited
-		 * @readonly
 		 * @private
 		 */
-		Object.defineProperty(this, '_inited', { value: this._init(options) });
-	}
-
-	/**
-	 * @abstract
-	 * @private
-	 * @param {Object} [options] The options
-	 * @returns {true}
-	 */
-	_init() {
-		return true;
+		Object.defineProperty(this, '_inited', { value: false, writable: true });
 	}
 
 }

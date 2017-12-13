@@ -96,15 +96,7 @@ class SchemaPiece extends Schema {
 		 */
 		this.configurable = typeof options.configurable !== 'undefined' ? options.configurable : this.type !== 'any';
 
-		/**
-		 * The path of this SchemaPiece instance.
-		 * @since 0.5.0
-		 * @type {boolean}
-		 * @name SchemaPiece#_inited
-		 * @readonly
-		 * @private
-		 */
-		Object.defineProperty(this, '_inited', { value: this.init(options) });
+		this._init(options);
 	}
 
 	/**
@@ -307,6 +299,7 @@ class SchemaPiece extends Schema {
 		this._schemaCheckConfigurable(this.configurable);
 
 		this.sql[1] = this._generateSQLDatatype(options.sql);
+		this._inited = true;
 
 		return true;
 	}
