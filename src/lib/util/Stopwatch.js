@@ -8,22 +8,22 @@ class Stopwatch {
 	/**
 	 * Starts a new Stopwatch
 	 * @since 0.4.0
-	 * @param {number} [digits = 2] The number of digits to appear after the decimal point when returning the friendly duration
+	 * @param {number} [digits=2] The number of digits to appear after the decimal point when returning the friendly duration
 	 */
 	constructor(digits = 2) {
 		/**
 		 * The start time of this stopwatch
 		 * @since 0.4.0
-		 * @private
 		 * @type {number}
+		 * @private
 		 */
 		this._start = performance.now();
 
 		/**
 		 * The end time of this stopwatch
 		 * @since 0.4.0
-		 * @private
 		 * @type {?number}
+		 * @private
 		 */
 		this._end = null;
 
@@ -38,8 +38,8 @@ class Stopwatch {
 	/**
 	 * The duration of this stopwatch since start or start to end if this stopwatch has stopped.
 	 * @since 0.4.0
-	 * @readonly
 	 * @type {number}
+	 * @readonly
 	 */
 	get duration() {
 		return this._end ? this._end - this._start : performance.now() - this._start;
@@ -48,8 +48,8 @@ class Stopwatch {
 	/**
 	 * The duration formatted in a friendly string
 	 * @since 0.4.0
-	 * @readonly
 	 * @type {string}
+	 * @readonly
 	 */
 	get friendlyDuration() {
 		const time = this.duration;
@@ -61,8 +61,8 @@ class Stopwatch {
 	/**
 	 * If the stopwatch is running or not
 	 * @since 0.4.0
-	 * @readonly
 	 * @type {boolean}
+	 * @readonly
 	 */
 	get running() {
 		return Boolean(!this._end);

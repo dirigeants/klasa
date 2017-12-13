@@ -415,7 +415,7 @@ module.exports = Structures.extend('Message', Message => {
 		 * Merge the content with the options.
 		 * @since 0.5.0
 		 * @param {StringResolvable} [content] The content to send
-		 * @param {MessageOptions|external:MessageAttachment|external:MessageEmbed} [options] The D.JS message options
+		 * @param {MessageOptions} [options] The D.JS message options
 		 * @returns {*}
 		 * @static
 		 */

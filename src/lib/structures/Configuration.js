@@ -133,7 +133,7 @@ class Configuration {
 	 * @returns {*}
 	 */
 	get(key) {
-		if (!key.includes('.')) return this[key];
+		if (!key.includes('.')) return this.gateway.schema.hasKey(key) ? this[key] : undefined;
 
 		const path = key.split('.');
 		let refSetting = this; // eslint-disable-line consistent-this
@@ -431,6 +431,7 @@ class Configuration {
 	 * Path this Configuration instance.
 	 * @since 0.5.0
 	 * @param {Object} data The data to patch.
+	 * @private
 	 */
 	_patch(data) {
 		if (this.gateway.sql) data = this.gateway.parseEntry(data);

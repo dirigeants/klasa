@@ -10,9 +10,9 @@ class Event {
 
 	/**
 	 * @typedef {Object} EventOptions
+	 * @property {string} [name=theFileName] The name of the event.
+	 * @property {boolean} [enabled=true] Whether the event is enabled or not.
 	 * @memberof Event
-	 * @property {string} [name = theFileName] The name of the event
-	 * @property {boolean} [enabled=true] Whether the event is enabled or not
 	 */
 
 	/**

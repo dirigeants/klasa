@@ -10,9 +10,9 @@ class Finalizer {
 
 	/**
 	 * @typedef {Object} FinalizerOptions
-	 * @memberof Finalizer
 	 * @property {string} [name=theFileName] The name of the finalizer
 	 * @property {boolean} [enabled=true] Whether the finalizer is enabled or not
+	 * @memberof Finalizer
 	 */
 
 	/**
@@ -20,7 +20,7 @@ class Finalizer {
 	 * @param {KlasaClient} client The Klasa Client
 	 * @param {string} dir The path to the core or user finalizer pieces folder
 	 * @param {string} file The path from the pieces folder to the finalizer file
-	 * @param {FinalizerOptions} [options = {}] Optional Finalizer settings
+	 * @param {FinalizerOptions} [options={}] Optional Finalizer settings
 	 */
 	constructor(client, dir, file, options = {}) {
 		/**

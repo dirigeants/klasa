@@ -14,7 +14,6 @@ class RichDisplay {
 
 	/**
 	 * @typedef {object} RichDisplayEmojisObject
-	 * @memberof RichDisplay
 	 * @property {emoji} first
 	 * @property {emoji} back
 	 * @property {emoji} forward
@@ -22,21 +21,22 @@ class RichDisplay {
 	 * @property {emoji} jump
 	 * @property {emoji} info
 	 * @property {emoji} stop
+	 * @memberof RichDisplay
 	 */
 
 	/**
 	 * @typedef {object} RichDisplayRunOptions
-	 * @memberof RichDisplay
 	 * @property {Function} [filter] A filter function to add to the ReactionHandler (Recieves: Reaction, User)
-	 * @property {boolean} [stop = true] If a stop reaction should be included
-	 * @property {boolean} [jump = true] If a jump reaction should be included
-	 * @property {boolean} [firstLast = true] If a first and last reaction should be included
-	 * @property {string} [prompt = msg.language.get('REACTIONHANDLER_PROMPT')] The prompt to be used when awaiting user input on a page to jump to
-	 * @property {number} [startPage = 0] The page to start the RichDisplay on
-	 * @property {number} [max] The maximum total amount of reactions to collect
-	 * @property {number} [maxEmojis] The maximum number of emojis to collect
-	 * @property {number} [maxUsers] The maximum number of users to react
-	 * @property {number} [time] The maximum amount of time before this RichDisplay should expire
+	 * @property {boolean} [stop=true] If a stop reaction should be included.
+	 * @property {boolean} [jump=true] If a jump reaction should be included.
+	 * @property {boolean} [firstLast=true] If a first and last reaction should be included.
+	 * @property {string} [prompt=msg.language.get('REACTIONHANDLER_PROMPT')] The prompt to be used when awaiting user input on a page to jump to.
+	 * @property {number} [startPage=0] The page to start the RichDisplay on.
+	 * @property {number} [max] The maximum total amount of reactions to collect.
+	 * @property {number} [maxEmojis] The maximum number of emojis to collect.
+	 * @property {number} [maxUsers] The maximum number of users to react.
+	 * @property {number} [time] The maximum amount of time before this RichDisplay should expire.
+	 * @memberof RichDisplay
 	 */
 
 	/**
