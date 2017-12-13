@@ -40,6 +40,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 - [[`2915d31b92`](https://github.com/dirigeants/klasa/commit/2915d31b92c8ea4b9202edfdb146a2d8b36ad8d6)] ([#43](https://github.com/dirigeants/klasa/pull/43)) Added `Provider.cache`. (kyranet)
 - [[`2915d31b92`](https://github.com/dirigeants/klasa/commit/2915d31b92c8ea4b9202edfdb146a2d8b36ad8d6)] ([#43](https://github.com/dirigeants/klasa/pull/43)) Added GatewaySQL (extends Gateway, overriding the methods for better SQL parsing). (kyranet)
 - [[`2915d31b92`](https://github.com/dirigeants/klasa/commit/2915d31b92c8ea4b9202edfdb146a2d8b36ad8d6)] ([#43](https://github.com/dirigeants/klasa/pull/43)) Added `Gateway#insertEntry`, which inserts a new `Configuration` entry to the cache and sync if possible. (kyranet)
+- [[#126](https://github.com/dirigeants/klasa/pull/126)] Added `KlasaMessage#reply` due to message editing (MrJacz)
 
 ### Changed
 
@@ -102,6 +103,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 - [[`2915d31b92`](https://github.com/dirigeants/klasa/commit/2915d31b92c8ea4b9202edfdb146a2d8b36ad8d6)] ([#43](https://github.com/dirigeants/klasa/pull/43)) Fixed multiple minor issues. (kyranet)
 - [[`2915d31b92`](https://github.com/dirigeants/klasa/commit/2915d31b92c8ea4b9202edfdb146a2d8b36ad8d6)] ([#43](https://github.com/dirigeants/klasa/pull/43)) Store loader not showing error stack. (kyranet)
 - [[`2915d31b92`](https://github.com/dirigeants/klasa/commit/2915d31b92c8ea4b9202edfdb146a2d8b36ad8d6)] ([#43](https://github.com/dirigeants/klasa/pull/43)) JSON provider loading files that are not JSON. (kyranet)
+- [[#126](https://github.com/dirigeants/klasa/pull/126)] promptTime spelling mistake in Constants (MrJacz)
 
 ## 0.4.0
 
