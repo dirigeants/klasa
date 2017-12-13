@@ -424,7 +424,7 @@ class SchemaFolder extends Schema {
 			// Force retrocompatibility with SGv1's schema
 			if (typeof object[key].type === 'undefined') object[key].type = 'Folder';
 			if (object[key].type === 'Folder') {
-				const folder = new Schema(this.client, this.gateway, object[key], this, key);
+				const folder = new SchemaFolder(this.client, this.gateway, object[key], this, key);
 				this[key] = folder;
 				this.defaults[key] = folder.defaults;
 			} else {
