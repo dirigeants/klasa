@@ -13,6 +13,11 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#125](https://github.com/dirigeants/klasa/pull/125)] Added the default gateways to `GatewayDriver` defaulted by null to reflect in the documentation. (kyranet)
+- [[#125](https://github.com/dirigeants/klasa/pull/125)] Added `Schema` (the previous got renamed to `SchemaFolder`), reducing duplicated code and bringing more code consistency. (kyranet)
+- [[#125](https://github.com/dirigeants/klasa/pull/125)] Added a private tool that ensures the `content` and `options` in `Message#sendMessage` and aliases are processed correctly while also reducing duplicated code. (kyranet w/ bdistin)
+- [[#125](https://github.com/dirigeants/klasa/pull/125)] Added a default value for the prefix when not given: `!`. (kyranet)
+- [[#125](https://github.com/dirigeants/klasa/pull/125)] Added `ProviderStore.default`, returning the default provider (by default `json`, but configurable via `KlasaClientOptions.provider.engine`). (kyranet)
 - [[#121](https://github.com/dirigeants/klasa/pull/121)] Added `constants` and `Util.mergeDefault` (bdistin) added `Util.isClass` (kyranet)
 - [[#121](https://github.com/dirigeants/klasa/pull/121)] Added `GatewayStorage`, containing `SettingGateway`'s core (kyranet)
 - [[#121](https://github.com/dirigeants/klasa/pull/121)] Added a new gateway called `clientStorage`, for client-wide configs (kyranet)
@@ -43,6 +48,11 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#125](https://github.com/dirigeants/klasa/pull/125)] `Schema#manager` and `SchemaPiece#manager` got renamed to `Schema#gateway` and `SchemaPiece#gateway`. (kyranet)
+- [[#125](https://github.com/dirigeants/klasa/pull/125)] Updated typings.
+- [[#125](https://github.com/dirigeants/klasa/pull/125)] Refactored `Timestamp` to be able to show a formatted date with an arbitrary pattern. (kyranet)
+- [[#125](https://github.com/dirigeants/klasa/pull/125)] Refactored `SchemaFolder` to extend the brand new `Schema` class. (kyranet)
+- [[#125](https://github.com/dirigeants/klasa/pull/125)] **[BREAKING]** Changed `KlasaClientConfigs` to `KlasaClientOptions` (kyranet)
 - [[#121](https://github.com/dirigeants/klasa/pull/121)] **[BREAKING]** Merged `this.client.config` to `this.client.options` (bdistin)
 - [[#121](https://github.com/dirigeants/klasa/pull/121)] Refactored `Gateway` to extend `GatewayStorage` (kyranet)
 - [[`550ac275c8`](https://github.com/dirigeants/klasa/commit/550ac275c849c285692ffff5c4e99cb53753a85b)] ([#109](https://github.com/dirigeants/klasa/pull/109)) Translated the description for all commands. (Pandraghon)
@@ -86,6 +96,9 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
+- [[#125](https://github.com/dirigeants/klasa/pull/125)] Fixed a serious security issue in `Configuration#get`. (kyranet)
+- [[#125](https://github.com/dirigeants/klasa/pull/125)] Now instances of `Gateway` and `Schema` cannot re-init twice. (kyranet)
+- [[#125](https://github.com/dirigeants/klasa/pull/125)] Fixed many typos and many JSDocs. IntelliSense should work better now. (kyranet)
 - [[#118](https://github.com/dirigeants/klasa/pull/118)] Fixed `SchemaPiece#modify` not editing the datatype from the SQL database when using a SQL provider. (kyranet)
 - [[#118](https://github.com/dirigeants/klasa/pull/118)] Fixed `NULL` not being resolved correctly in `_parseSQLValue` (kyranet)
 - [[#115](https://github.com/dirigeants/klasa/pull/115)] Fixed Schema's updates not reflecting in other shards. (kyranet)
