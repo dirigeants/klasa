@@ -354,7 +354,7 @@ class SchemaPiece extends Schema {
 	 * @private
 	 */
 	static _resolveConfigs(type, msg) {
-		switch(type) {
+		switch (type) {
 			case 'users': return msg.author.configs;
 			case 'guilds': return msg.guildConfigs;
 			case 'clientStorage': return msg.client.configs;
