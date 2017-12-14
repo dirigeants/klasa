@@ -17,12 +17,12 @@ module.exports = class extends Command {
 	}
 
 	async set(msg, key, valueToSet) {
-		const { path } = await msg.author.configs.updateOne(key, valueToSet.join(' '), msg, true);
+		const { path } = await msg.author.configs.update(key, valueToSet.join(' '), msg.guild, { avoidUnconfigurable: true, action: 'add' });
 		return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', path.path, path.resolveString(msg)));
 	}
 
 	async remove(msg, key, valueToRemove) {
-		const { path } = await msg.author.configs.updateArray('remove', key, valueToRemove.join(' '), msg, true);
+		const { path } = await msg.author.configs.update(key, valueToRemove.join(' '), msg.guild, { avoidUnconfigurable: true, action: 'remove' });
 		return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', path.path, path.resolveString(msg)));
 	}
 
