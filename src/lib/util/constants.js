@@ -63,21 +63,21 @@ exports.DEFAULTS = {
 			return {
 				prefix: {
 					type: 'string',
-					default: this.client.options.prefix,
+					default: this.options.prefix,
 					min: null,
 					max: 10,
-					array: this.client.options.prefix.constructor.name === 'Array',
+					array: this.options.prefix.constructor.name === 'Array',
 					configurable: true,
-					sql: `VARCHAR(10) NOT NULL DEFAULT '${this.client.options.prefix.constructor.name === 'Array' ? JSON.stringify(this.client.options.prefix) : this.client.options.prefix}'`
+					sql: `VARCHAR(10) NOT NULL DEFAULT '${this.options.prefix.constructor.name === 'Array' ? JSON.stringify(this.options.prefix) : this.options.prefix}'`
 				},
 				language: {
 					type: 'language',
-					default: this.client.options.language,
+					default: this.options.language,
 					min: null,
 					max: null,
 					array: false,
 					configurable: true,
-					sql: `VARCHAR(5) NOT NULL DEFAULT '${this.client.options.language}'`
+					sql: `VARCHAR(5) NOT NULL DEFAULT '${this.options.language}'`
 				},
 				disableNaturalPrefix: {
 					type: 'boolean',
@@ -85,7 +85,7 @@ exports.DEFAULTS = {
 					min: null,
 					max: null,
 					array: false,
-					configurable: Boolean(this.client.options.regexPrefix),
+					configurable: Boolean(this.options.regexPrefix),
 					sql: `BIT(1) NOT NULL DEFAULT 0`
 				},
 				disabledCommands: {
