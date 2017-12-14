@@ -658,7 +658,7 @@ declare module 'klasa' {
 		private _parseUpdateOne(key: string, value: any, guild: KlasaGuild, options: ConfigurationParseOptions): Promise<ConfigurationParseResult>;
 		private _parseUpdateArray(action: 'add' | 'remove' | 'auto', key: string, value: any, guild: KlasaGuild, options: ConfigurationParseOptions): Promise<ConfigurationParseResultArray>;
 		private _updateSingle(action: 'add' | 'remove' | 'auto', key: string, value: any, guild: KlasaGuild, avoidUnconfigurable: boolean): Promise<ConfigurationParseResult | ConfigurationParseResultArray>;
-		private _updateMany(cache: any, object: any, schema: SchemaFolder, guild: KlasaGuild, list: ConfigurationUpdateManyResult): void;
+		private _updateMany(cache: any, object: any, schema: SchemaFolder, guild: KlasaGuild, list: ConfigurationUpdateManyResult, updateObject: object): void;
 		private _setValue(parsedID: string, path: SchemaPiece, route: string[]): Promise<void>;
 		private _patch(data: any): void;
 

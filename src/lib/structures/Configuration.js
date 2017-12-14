@@ -232,7 +232,7 @@ class Configuration {
 	 * Configuration#update('userBlacklist', '272689325521502208');
 	 *
 	 * // Ensuring the function call adds (error if it exists):
-	 * Configuration#update('userBlacklist', '272689325521502208', undefined, { action: 'add' });
+	 * Configuration#update('userBlacklist', '272689325521502208', { action: 'add' });
 	 *
 	 * // Updating it with a json object:
 	 * Configuration#update({ roles: { administrator: '339943234405007361' } }, msg.guild);
@@ -259,12 +259,13 @@ class Configuration {
 		if (!this.existsInDB) await this.gateway.createEntry(this.id);
 
 		const oldClone = this.client.listenerCount('configUpdateEntry') ? this.clone() : null;
-		this._updateMany(this, object, this.gateway.schema, guild, list);
+		const updateObject = {};
+		this._updateMany(this, object, this.gateway.schema, guild, list, updateObject);
 		await Promise.all(list.promises);
 
 		if (oldClone !== null) this.client.emit('configUpdateEntry', oldClone, this, { type: 'MANY', keys: list.keys, values: list.values });
 		if (this.gateway.sql) await this.gateway.provider.update(this.gateway.type, this.id, list.keys, list.values);
-		else await this.gateway.provider.update(this.gateway.type, this.id, this.toJSON());
+		else await this.gateway.provider.update(this.gateway.type, this.id, updateObject);
 		return { updated: { keys: list.keys, values: list.values }, errors: list.errors };
 	}
 
@@ -396,22 +397,25 @@ class Configuration {
 	 * @param {SchemaFolder} schema The new value
 	 * @param {ConfigGuildResolvable} guild The guild to take
 	 * @param {ConfigurationUpdateManyList} list The options
+	 * @param {*} updateObject The object to update
 	 * @private
 	 */
-	_updateMany(cache, object, schema, guild, list) {
+	_updateMany(cache, object, schema, guild, list, updateObject) {
 		guild = this.gateway._resolveGuild(guild);
 		const keys = Object.keys(object);
 		for (let i = 0; i < keys.length; i++) {
 			const key = keys[i];
 			if (schema.hasKey(key) === false) continue;
 			if (schema[key].type === 'Folder') {
-				this._updateMany(cache[key], object[key], schema[key], guild, list);
+				if (!updateObject[key]) updateObject[key] = {};
+				this._updateMany(cache[key], object[key], schema[key], guild, list, updateObject[key]);
 				continue;
 			}
 			list.promises.push(schema[key].parse(object[key], guild)
 				.then(result => {
 					const parsedID = result && result.id ? result.id : result;
 					cache[key] = parsedID;
+					updateObject[key] = parsedID;
 					list.keys.push(schema[key].path);
 					list.values.push(parsedID);
 				})
