@@ -48,6 +48,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#125](https://github.com/dirigeants/klasa/pull/125)] Moved the gateway resolvers from `GatewayDriver` (as getters) to `constants.GATEWAY_RESOLVERS`. (kyranet)
 - [[#125](https://github.com/dirigeants/klasa/pull/125)] `Schema#manager` and `SchemaPiece#manager` got renamed to `Schema#gateway` and `SchemaPiece#gateway`. (kyranet)
 - [[#125](https://github.com/dirigeants/klasa/pull/125)] Updated typings.
 - [[#125](https://github.com/dirigeants/klasa/pull/125)] Refactored `Timestamp` to be able to show a formatted date with an arbitrary pattern. (kyranet)
