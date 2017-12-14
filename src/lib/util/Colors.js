@@ -3,7 +3,7 @@
 class Colors {
 
 	/**
-	 * @typedef  {object} ColorsFormatOptions
+	 * @typedef {object} ColorsFormatOptions
 	 * @property {(string | string[])} style
 	 * @property {(number | string | number[] | string[])} background
 	 * @property {(number | string | number[] | string[])} text
@@ -81,7 +81,7 @@ class Colors {
 	/**
 	 * Convert hex to RGB
 	 * @since 0.4.0
-	 * @param {string} hex The hexadecimal value to parse.
+	 * @param {string} hex The hexadecimal value to parse
 	 * @returns {number[]}
 	 */
 	static hexToRGB(hex) {
@@ -94,9 +94,9 @@ class Colors {
 	/**
 	 * Convert hue to RGB
 	 * @since 0.4.0
-	 * @param {number} p Value number one.
-	 * @param {number} q Value number two.
-	 * @param {number} t Value number three.
+	 * @param {number} p Value number one
+	 * @param {number} q Value number two
+	 * @param {number} t Value number three
 	 * @returns {number}
 	 */
 	static hueToRGB(p, q, t) {
@@ -111,7 +111,7 @@ class Colors {
 	/**
 	 * Format HSL to RGB
 	 * @since 0.4.0
-	 * @param {(number[]|string[])} formatArray The array to format.
+	 * @param {(number[]|string[])} formatArray The array to format
 	 * @returns {number[]}
 	 */
 	static hslToRGB([h, s, l]) {
@@ -128,7 +128,7 @@ class Colors {
 	/**
 	 * Format an array into a string
 	 * @since 0.4.0
-	 * @param {(number[]|string[])} formatArray The array to format.
+	 * @param {(number[]|string[])} formatArray The array to format
 	 * @returns {string}
 	 */
 	static formatArray([pos1, pos2, pos3]) {
@@ -149,8 +149,8 @@ class Colors {
 	/**
 	 * Format a string
 	 * @since 0.4.0
-	 * @param {string} string The string to format.
-	 * @param {ColorsFormatOptions} formatOptions The format options.
+	 * @param {string} string The string to format
+	 * @param {ColorsFormatOptions} formatOptions The format options
 	 * @returns {string}
 	 */
 	format(string, { style, background, text } = {}) {

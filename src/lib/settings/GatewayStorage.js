@@ -1,15 +1,15 @@
+const SchemaFolder = require('./SchemaFolder');
 const { tryParse } = require('../util/util');
 const { resolve } = require('path');
-const Schema = require('./Schema');
 const fs = require('fs-nextra');
 
 class GatewayStorage {
 
 	/**
 	 * @since 0.5.0
-	 * @param {KlasaClient} client The client this GatewayStorage was created with.
-	 * @param {string} type The name of this GatewayStorage.
-	 * @param {string} [provider] The provider's name.
+	 * @param {KlasaClient} client The client this GatewayStorage was created with
+	 * @param {string} type The name of this GatewayStorage
+	 * @param {string} [provider] The provider's name
 	 */
 	constructor(client, type, provider) {
 		/**
@@ -68,7 +68,7 @@ class GatewayStorage {
 
 		/**
 		 * @since 0.5.0
-		 * @type {Schema}
+		 * @type {SchemaFolder}
 		 */
 		this.schema = null;
 
@@ -116,7 +116,7 @@ class GatewayStorage {
 	 * @since 0.5.0
 	 */
 	async init() {
-		if (this.ready) throw new Error('KlasaGatewayStorage already inited.');
+		if (this.ready) throw new Error(`[INIT] ${this} has already initialized.`);
 		await this.initSchema();
 		await this.initTable();
 
@@ -136,21 +136,21 @@ class GatewayStorage {
 	/**
 	 * Inits the schema, creating a file if it does not exist, and returning the current schema or the default.
 	 * @since 0.5.0
-	 * @returns {Promise<Schema>}
+	 * @returns {Promise<SchemaFolder>}
 	 * @private
 	 */
 	async initSchema() {
 		await fs.ensureDir(this.baseDir);
 		const schema = await fs.readJSON(this.filePath)
 			.catch(() => fs.outputJSONAtomic(this.filePath, this.defaultSchema).then(() => this.defaultSchema));
-		this.schema = new Schema(this.client, this, schema, null, '');
+		this.schema = new SchemaFolder(this.client, this, schema, null, '');
 		return this.schema;
 	}
 
 	/**
 	 * Parses an entry
 	 * @since 0.5.0
-	 * @param {Object} entry An entry to parse.
+	 * @param {Object} entry An entry to parse
 	 * @returns {Object}
 	 * @private
 	 */
@@ -180,12 +180,11 @@ class GatewayStorage {
 	/**
 	 * Make an error that can or not have a valid Guild.
 	 * @since 0.5.0
-	 * @param {KlasaGuild} guild The guild to get the language from.
-	 * @param {(string|number)} code The code of the error.
-	 * @param {(string|Error)} error The error.
+	 * @param {KlasaGuild} guild The guild to get the language from
+	 * @param {(string|number)} code The code of the error
+	 * @param {(string|Error)} error The error
 	 * @returns {string}
 	 * @private
-	 * @static
 	 */
 	static throwError(guild, code, error) {
 		if (guild && guild.language && typeof guild.language.get === 'function') return guild.language.get(code);
@@ -199,7 +198,6 @@ class GatewayStorage {
 	 * @param {SchemaPiece} schemaPiece The SchemaPiece which manages this value
 	 * @returns {*}
 	 * @private
-	 * @static
 	 */
 	static _parseSQLValue(value, schemaPiece) {
 		if (typeof value === 'undefined') return schemaPiece.array ? schemaPiece.default.slice(0) : schemaPiece.default;

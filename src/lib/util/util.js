@@ -110,7 +110,7 @@ class Util {
 	/**
 	 * Verify if the input is a function.
 	 * @since 0.5.0
-	 * @param {Function} input The function to verify.
+	 * @param {Function} input The function to verify
 	 * @returns {boolean}
 	 */
 	static isFunction(input) {
@@ -120,7 +120,7 @@ class Util {
 	/**
 	 * Verify if the input is a class constructor.
 	 * @since 0.5.0
-	 * @param {Function} input The function to verify.
+	 * @param {Function} input The function to verify
 	 * @returns {boolean}
 	 */
 	static isClass(input) {
@@ -133,7 +133,7 @@ class Util {
 	/**
 	 * Verify if the input is an object literal (or class).
 	 * @since 0.5.0
-	 * @param {Object} input The object to verify.
+	 * @param {Object} input The object to verify
 	 * @returns {boolean}
 	 */
 	static isObject(input) {
@@ -143,7 +143,7 @@ class Util {
 	/**
 	 * Verify if a number is a finite number.
 	 * @since 0.5.0
-	 * @param {number} input The number to verify.
+	 * @param {number} input The number to verify
 	 * @returns {boolean}
 	 */
 	static isNumber(input) {
@@ -153,7 +153,7 @@ class Util {
 	/**
 	 * Try parse a stringified JSON string.
 	 * @since 0.5.0
-	 * @param {string} value The value to parse.
+	 * @param {string} value The value to parse
 	 * @returns {*}
 	 */
 	static tryParse(value) {
@@ -168,7 +168,7 @@ class Util {
 	 * Sets default properties on an object that aren't already specified.
 	 * @since 0.5.0
 	 * @param {Object} def Default properties
-	 * @param {Object} given Object to assign defaults to
+	 * @param {Object} [given] Object to assign defaults to
 	 * @returns {Object}
 	 * @private
 	 */
@@ -189,35 +189,37 @@ class Util {
 
 /**
  * @typedef {Object} ExecOptions
- * @memberof {Util}
  * @property {string} [cwd=process.cwd()] Current working directory of the child process
  * @property {Object} [env={}] Environment key-value pairs
  * @property {string} [encoding='utf8'] encoding to use
  * @property {string} [shell=os === unix ? '/bin/sh' : process.env.ComSpec] Shell to execute the command with
  * @property {number} [timeout=0]
- * @property {number} [maxBuffer=200*1024] Largest amount of data in bytes allowed on stdout or stderr. If exceeded, the child process is terminated.
+ * @property {number} [maxBuffer=200*1024] Largest amount of data in bytes allowed on stdout or stderr. If exceeded, the child process is terminated
  * @property {string|number} [killSignal='SIGTERM'] <string> | <integer> (Default: 'SIGTERM')
- * @property {number} [uid] Sets the user identity of the process.
- * @property {number} [gid] Sets the group identity of the process.
+ * @property {number} [uid] Sets the user identity of the process
+ * @property {number} [gid] Sets the group identity of the process
+ * @memberof Util
  */
 
 /**
  * Promisified version of child_process.exec for use with await
- * @method
  * @since 0.3.0
  * @param {string} command The command to run
  * @param {ExecOptions} [options] The options to pass to exec
  * @returns {Promise<{ stdout: string, stderr: string }>}
+ * @method
+ * @static
  */
 Util.exec = promisify(exec);
 
 /**
  * Promisified version of setTimeout for use with await
- * @method
  * @since 0.3.0
  * @param {number} delay The amount of time in ms to delay
  * @param {*} [args] Any args to pass to the .then (mostly pointless in this form)
  * @returns {Promise<*>} The args value passed in
+ * @method
+ * @static
  */
 Util.sleep = promisify(setTimeout);
 

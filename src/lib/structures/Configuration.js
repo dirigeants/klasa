@@ -4,21 +4,21 @@
 class Configuration {
 
 	/**
-	 * @typedef  {Object} ConfigurationUpdateResult
+	 * @typedef {Object} ConfigurationUpdateResult
 	 * @property {*} value
 	 * @property {SchemaPiece} path
 	 * @memberof Configuration
 	 */
 
 	/**
-	 * @typedef  {Object} ConfigurationParseOptions
+	 * @typedef {Object} ConfigurationParseOptions
 	 * @property {string} path
 	 * @property {string[]} route
 	 * @memberof Configuration
 	 */
 
 	/**
-	 * @typedef  {Object} ConfigurationParseResult
+	 * @typedef {Object} ConfigurationParseResult
 	 * @property {*} parsed
 	 * @property {(string|number|object)} parsedID
 	 * @property {null} array
@@ -29,7 +29,7 @@ class Configuration {
 	 */
 
 	/**
-	 * @typedef  {Object} ConfigurationParseResultArray
+	 * @typedef {Object} ConfigurationParseResultArray
 	 * @property {*} parsed
 	 * @property {*} parsedID
 	 * @property {any[]} array
@@ -40,7 +40,7 @@ class Configuration {
 	 */
 
 	/**
-	 * @typedef  {Object} ConfigurationUpdateManyList
+	 * @typedef {Object} ConfigurationUpdateManyList
 	 * @property {Error[]} errors
 	 * @property {Array<Promise<any>>} promises
 	 * @property {string[]} keys
@@ -49,14 +49,14 @@ class Configuration {
 	 */
 
 	/**
-	 * @typedef  {Object} ConfigurationUpdateManyUpdated
+	 * @typedef {Object} ConfigurationUpdateManyUpdated
 	 * @property {string[]} keys
 	 * @property {Array<*>} values
 	 * @memberof Configuration
 	 */
 
 	/**
-	 * @typedef  {Object} ConfigurationUpdateManyResult
+	 * @typedef {Object} ConfigurationUpdateManyResult
 	 * @property {ConfigurationUpdateManyUpdated} updated
 	 * @property {Error[]} errors
 	 * @memberof Configuration
@@ -71,8 +71,8 @@ class Configuration {
 
 	/**
 	 * @since 0.5.0
-	 * @param {Gateway} manager The Gateway that manages this Configuration instance.
-	 * @param {Object} data The data that is cached in this Configuration instance.
+	 * @param {Gateway} manager The Gateway that manages this Configuration instance
+	 * @param {Object} data The data that is cached in this Configuration instance
 	 */
 	constructor(manager, data) {
 		/**
@@ -129,11 +129,11 @@ class Configuration {
 	/**
 	 * Get a value from the configuration. Admits nested objects separating by comma.
 	 * @since 0.5.0
-	 * @param {string} key The key to get from this instance.
+	 * @param {string} key The key to get from this instance
 	 * @returns {*}
 	 */
 	get(key) {
-		if (!key.includes('.')) return this[key];
+		if (!key.includes('.')) return this.gateway.schema.hasKey(key) ? this[key] : undefined;
 
 		const path = key.split('.');
 		let refSetting = this; // eslint-disable-line consistent-this
@@ -195,8 +195,8 @@ class Configuration {
 	/**
 	 * Reset a value from an entry.
 	 * @since 0.5.0
-	 * @param {string} key The key to reset.
-	 * @param {boolean} [avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key.
+	 * @param {string} key The key to reset
+	 * @param {boolean} [avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key
 	 * @returns {Promise<ConfigurationUpdateResult>}
 	 */
 	async reset(key, avoidUnconfigurable = false) {
@@ -210,10 +210,10 @@ class Configuration {
 	/**
 	 * Update a value from an entry.
 	 * @since 0.5.0
-	 * @param {string} key The key to modify.
-	 * @param {*} value The value to parse and save.
-	 * @param {ConfigGuildResolvable} [guild] A guild resolvable.
-	 * @param {boolean} [avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key.
+	 * @param {string} key The key to modify
+	 * @param {*} value The value to parse and save
+	 * @param {ConfigGuildResolvable} [guild] A guild resolvable
+	 * @param {boolean} [avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key
 	 * @returns {Promise<ConfigurationUpdateResult>}
 	 */
 	updateOne(key, value, guild, avoidUnconfigurable = false) {
@@ -223,11 +223,11 @@ class Configuration {
 	/**
 	 * Update an array from an entry.
 	 * @since 0.5.0
-	 * @param {('add'|'remove')} action Whether the value should be added or removed to the array.
-	 * @param {string} key The key to modify.
-	 * @param {*} value The value to parse and save or remove.
-	 * @param {ConfigGuildResolvable} [guild] A guild resolvable.
-	 * @param {boolean} [avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key.
+	 * @param {('add'|'remove')} action Whether the value should be added or removed to the array
+	 * @param {string} key The key to modify
+	 * @param {*} value The value to parse and save or remove
+	 * @param {ConfigGuildResolvable} [guild] A guild resolvable
+	 * @param {boolean} [avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key
 	 * @returns {Promise<ConfigurationUpdateResult>}
 	 */
 	async updateArray(action, key, value, guild, avoidUnconfigurable = false) {
@@ -237,8 +237,8 @@ class Configuration {
 	/**
 	 * Update multiple keys given a JSON object.
 	 * @since 0.5.0
-	 * @param {Object} object A JSON object to iterate and parse.
-	 * @param {ConfigGuildResolvable} [guild] A guild resolvable.
+	 * @param {Object} object A JSON object to iterate and parse
+	 * @param {ConfigGuildResolvable} [guild] A guild resolvable
 	 * @returns {Promise<ConfigurationUpdateManyResult>}
 	 */
 	async updateMany(object, guild) {
@@ -260,8 +260,8 @@ class Configuration {
 	/**
 	 * Reset a value from an entry.
 	 * @since 0.5.0
-	 * @param {string} key The key to reset.
-	 * @param {boolean} avoidUnconfigurable Whether the Gateway should avoid configuring the selected key.
+	 * @param {string} key The key to reset
+	 * @param {boolean} avoidUnconfigurable Whether the Gateway should avoid configuring the selected key
 	 * @returns {Promise<ConfigurationParseResult>}
 	 * @private
 	 */
@@ -274,8 +274,8 @@ class Configuration {
 	/**
 	 * Parse the data for reset.
 	 * @since 0.5.0
-	 * @param {string} key The key to edit.
-	 * @param {ConfigurationParseOptions} options The options.
+	 * @param {string} key The key to edit
+	 * @param {ConfigurationParseOptions} options The options
 	 * @returns {Promise<ConfigurationParseResult>}
 	 * @private
 	 */
@@ -288,10 +288,10 @@ class Configuration {
 	/**
 	 * Update a single key
 	 * @since 0.5.0
-	 * @param {string} key The key to edit.
-	 * @param {*} value The new value.
-	 * @param {ConfigGuildResolvable} guild The guild to take.
-	 * @param {ConfigurationParseOptions} options The options.
+	 * @param {string} key The key to edit
+	 * @param {*} value The new value
+	 * @param {ConfigGuildResolvable} guild The guild to take
+	 * @param {ConfigurationParseOptions} options The options
 	 * @returns {Promise<ConfigurationParseResult>}
 	 * @private
 	 */
@@ -308,11 +308,11 @@ class Configuration {
 	/**
 	 * Update an array
 	 * @since 0.5.0
-	 * @param {('add'|'remove')} action Whether the value should be added or removed to the array.
-	 * @param {string} key The key to edit.
-	 * @param {*} value The new value.
-	 * @param {ConfigGuildResolvable} guild The guild to take.
-	 * @param {ConfigurationParseOptions} options The options.
+	 * @param {('add'|'remove')} action Whether the value should be added or removed to the array
+	 * @param {string} key The key to edit
+	 * @param {*} value The new value
+	 * @param {ConfigGuildResolvable} guild The guild to take
+	 * @param {ConfigurationParseOptions} options The options
 	 * @returns {Promise<ConfigurationParseResultArray>}
 	 * @private
 	 */
@@ -350,11 +350,11 @@ class Configuration {
 	/**
 	 * Update an array
 	 * @since 0.5.0
-	 * @param {('add'|'remove')} action Whether the value should be added or removed to the array.
-	 * @param {string} key The key to edit.
-	 * @param {*} value The new value.
-	 * @param {ConfigGuildResolvable} guild The guild to take.
-	 * @param {boolean} avoidUnconfigurable Whether the Gateway should avoid configuring the selected key.
+	 * @param {('add'|'remove')} action Whether the value should be added or removed to the array
+	 * @param {string} key The key to edit
+	 * @param {*} value The new value
+	 * @param {ConfigGuildResolvable} guild The guild to take
+	 * @param {boolean} avoidUnconfigurable Whether the Gateway should avoid configuring the selected key
 	 * @returns {Promise<ConfigurationUpdateResult>}
 	 * @private
 	 */
@@ -379,11 +379,11 @@ class Configuration {
 	/**
 	 * Update many keys in a single query.
 	 * @since 0.5.0
-	 * @param {Object} cache The key target.
-	 * @param {Object} object The key to edit.
-	 * @param {Schema} schema The new value.
-	 * @param {ConfigGuildResolvable} guild The guild to take.
-	 * @param {ConfigurationUpdateManyList} list The options.
+	 * @param {Object} cache The key target
+	 * @param {Object} object The key to edit
+	 * @param {SchemaFolder} schema The new value
+	 * @param {ConfigGuildResolvable} guild The guild to take
+	 * @param {ConfigurationUpdateManyList} list The options
 	 * @private
 	 */
 	_updateMany(cache, object, schema, guild, list) {
@@ -430,7 +430,8 @@ class Configuration {
 	/**
 	 * Path this Configuration instance.
 	 * @since 0.5.0
-	 * @param {Object} data The data to patch.
+	 * @param {Object} data The data to patch
+	 * @private
 	 */
 	_patch(data) {
 		if (this.gateway.sql) data = this.gateway.parseEntry(data);
@@ -464,11 +465,10 @@ class Configuration {
 	/**
 	 * Assign data to the Configuration.
 	 * @since 0.5.0
-	 * @param {Object} data The data contained in the group.
-	 * @param {(Schema|SchemaPiece)} schema A Schema or a SchemaPiece instance.
+	 * @param {Object} data The data contained in the group
+	 * @param {(SchemaFolder|SchemaPiece)} schema A SchemaFolder or a SchemaPiece instance
 	 * @returns {Object}
 	 * @private
-	 * @static
 	 */
 	static _merge(data, schema) {
 		if (schema.type === 'Folder') {
@@ -491,11 +491,10 @@ class Configuration {
 	/**
 	 * Clone configs.
 	 * @since 0.5.0
-	 * @param {Object} data The data to clone.
-	 * @param {Schema} schema A Schema instance.
+	 * @param {Object} data The data to clone
+	 * @param {SchemaFolder} schema A SchemaFolder instance
 	 * @returns {Object}
 	 * @private
-	 * @static
 	 */
 	static _clone(data, schema) {
 		const clone = {};
@@ -510,11 +509,12 @@ class Configuration {
 	}
 
 	/**
-	 * Path an object.
+	 * Patch an object.
 	 * @since 0.5.0
-	 * @param {Object} inst The reference of the Configuration instance.
-	 * @param {Object} data The original object.
-	 * @param {Schema} schema A Schema or a SchemaPiece instance.
+	 * @param {Object} inst The reference of the Configuration instance
+	 * @param {Object} data The original object
+	 * @param {SchemaFolder} schema A SchemaFolder instance
+	 * @private
 	 */
 	static _patch(inst, data, schema) {
 		for (let i = 0; i < schema.keyArray.length; i++) {

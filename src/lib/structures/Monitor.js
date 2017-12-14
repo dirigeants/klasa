@@ -10,12 +10,12 @@ class Monitor {
 
 	/**
 	 * @typedef {Object} MonitorOptions
-	 * @memberof Monitor
-	 * @property {string} [name = theFileName] The name of the monitor
+	 * @property {string} [name=theFileName] The name of the monitor
 	 * @property {boolean} [enabled=true] Whether the monitor is enabled or not
 	 * @property {boolean} [ignoreBots=true] Whether the monitor ignores bots or not
 	 * @property {boolean} [ignoreSelf=true] Whether the monitor ignores itself or not
 	 * @property {boolean} [ignoreOthers=true] Whether the monitor ignores others or not
+	 * @memberof Monitor
 	 */
 
 	/**
@@ -23,7 +23,7 @@ class Monitor {
 	 * @param {KlasaClient} client The Klasa client
 	 * @param {string} dir The path to the core or user monitor pieces folder
 	 * @param {string} file The path from the pieces folder to the monitor file
-	 * @param {MonitorOptions} [options = {}] Optional Monitor settings
+	 * @param {MonitorOptions} [options={}] Optional Monitor settings
 	 */
 	constructor(client, dir, file, options = {}) {
 		/**
@@ -93,18 +93,18 @@ class Monitor {
 	 * The run method to be overwritten in actual monitor pieces
 	 * @since 0.0.1
 	 * @param {KlasaMessage} msg The discord message
-	 * @abstract
 	 * @returns {void}
+	 * @abstract
 	 */
 	run() {
 		// Defined in extension Classes
 	}
 
 	/**
-	 * The init method to be optionaly overwritten in actual monitor pieces
+	 * The init method to be optionally overwritten in actual monitor pieces
 	 * @since 0.0.1
-	 * @abstract
 	 * @returns {void}
+	 * @abstract
 	 */
 	async init() {
 		// Optionally defined in extension Classes

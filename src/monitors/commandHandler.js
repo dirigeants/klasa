@@ -52,7 +52,7 @@ module.exports = class extends Monitor {
 			if (results) return { length: results[0].length, regex: this.client.options.regexPrefix };
 		}
 		const prefix = msg.guildConfigs.prefix || this.client.options.prefix;
-		if (prefix instanceof Array) {
+		if (Array.isArray(prefix)) {
 			for (let i = prefix.length - 1; i >= 0; i--) {
 				const testingPrefix = this.prefixes.get(prefix[i]) || this.generateNewPrefix(prefix[i]);
 				if (testingPrefix.regex.test(msg.content)) return testingPrefix;

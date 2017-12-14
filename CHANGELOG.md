@@ -13,6 +13,11 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#125](https://github.com/dirigeants/klasa/pull/125)] Added the default gateways to `GatewayDriver` defaulted by null to reflect in the documentation. (kyranet)
+- [[#125](https://github.com/dirigeants/klasa/pull/125)] Added `Schema` (the previous got renamed to `SchemaFolder`), reducing duplicated code and bringing more code consistency. (kyranet)
+- [[#125](https://github.com/dirigeants/klasa/pull/125)] Added a private tool that ensures the `content` and `options` in `Message#sendMessage` and aliases are processed correctly while also reducing duplicated code. (kyranet w/ bdistin)
+- [[#125](https://github.com/dirigeants/klasa/pull/125)] Added a default value for the prefix when not given: `!`. (kyranet)
+- [[#125](https://github.com/dirigeants/klasa/pull/125)] Added `ProviderStore.default`, returning the default provider (by default `json`, but configurable via `KlasaClientOptions.provider.engine`). (kyranet)
 - [[#121](https://github.com/dirigeants/klasa/pull/121)] Added `constants` and `Util.mergeDefault` (bdistin) added `Util.isClass` (kyranet)
 - [[#121](https://github.com/dirigeants/klasa/pull/121)] Added `GatewayStorage`, containing `SettingGateway`'s core (kyranet)
 - [[#121](https://github.com/dirigeants/klasa/pull/121)] Added a new gateway called `clientStorage`, for client-wide configs (kyranet)
@@ -43,6 +48,12 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#125](https://github.com/dirigeants/klasa/pull/125)] Moved the gateway resolvers from `GatewayDriver` (as getters) to `constants.GATEWAY_RESOLVERS`. (kyranet)
+- [[#125](https://github.com/dirigeants/klasa/pull/125)] `Schema#manager` and `SchemaPiece#manager` got renamed to `Schema#gateway` and `SchemaPiece#gateway`. (kyranet)
+- [[#125](https://github.com/dirigeants/klasa/pull/125)] Updated typings.
+- [[#125](https://github.com/dirigeants/klasa/pull/125)] Refactored `Timestamp` to be able to show a formatted date with an arbitrary pattern. (kyranet)
+- [[#125](https://github.com/dirigeants/klasa/pull/125)] Refactored `SchemaFolder` to extend the brand new `Schema` class. (kyranet)
+- [[#125](https://github.com/dirigeants/klasa/pull/125)] **[BREAKING]** Changed `KlasaClientConfigs` to `KlasaClientOptions` (kyranet)
 - [[#121](https://github.com/dirigeants/klasa/pull/121)] **[BREAKING]** Merged `this.client.config` to `this.client.options` (bdistin)
 - [[#121](https://github.com/dirigeants/klasa/pull/121)] Refactored `Gateway` to extend `GatewayStorage` (kyranet)
 - [[`550ac275c8`](https://github.com/dirigeants/klasa/commit/550ac275c849c285692ffff5c4e99cb53753a85b)] ([#109](https://github.com/dirigeants/klasa/pull/109)) Translated the description for all commands. (Pandraghon)
@@ -58,16 +69,16 @@ NOTE: For the contributors, you add new entries to this document following this 
 - [[`2915d31b92`](https://github.com/dirigeants/klasa/commit/2915d31b92c8ea4b9202edfdb146a2d8b36ad8d6)] ([#43](https://github.com/dirigeants/klasa/pull/43)) **[BREAKING]** `GatewayDriver#validate` does not longer have an instance of `SettingResolver` as first parameter, but a bound `this` referring to the GatewayDriver instance. (With access to KlasaClient and SettingResolver). (kyranet)
 - [[`2915d31b92`](https://github.com/dirigeants/klasa/commit/2915d31b92c8ea4b9202edfdb146a2d8b36ad8d6)] ([#43](https://github.com/dirigeants/klasa/pull/43)) **[BREAKING]** `Gateway#get` -> `Gateway#getEntry`. (kyranet)
 - [[`2915d31b92`](https://github.com/dirigeants/klasa/commit/2915d31b92c8ea4b9202edfdb146a2d8b36ad8d6)] ([#43](https://github.com/dirigeants/klasa/pull/43)) **[BREAKING]** `Gateway#update` has been completely removed. Use `Configuration#updateOne`, `Configuration#updateArray` or `Configuration#updateMany` instead. (kyranet)
-- [[`2915d31b92`](https://github.com/dirigeants/klasa/commit/2915d31b92c8ea4b9202edfdb146a2d8b36ad8d6)] ([#43](https://github.com/dirigeants/klasa/pull/43)) **[FEATURE]** `Configuration#updateOne`, `Configuration#updateMany`, `Configuration#reset` and `Configuration#updateArray` can now filter unconfigureable keys if the parameter `avoidUnconfigurable` is passed and set to `true`. (kyranet)
+- [[`2915d31b92`](https://github.com/dirigeants/klasa/commit/2915d31b92c8ea4b9202edfdb146a2d8b36ad8d6)] ([#43](https://github.com/dirigeants/klasa/pull/43)) **[FEATURE]** `Configuration#updateOne`, `Configuration#updateMany`, `Configuration#reset` and `Configuration#updateArray` can now filter unconfigurable keys if the parameter `avoidUnconfigurable` is passed and set to `true`. (kyranet)
 - [[`2915d31b92`](https://github.com/dirigeants/klasa/commit/2915d31b92c8ea4b9202edfdb146a2d8b36ad8d6)] ([#43](https://github.com/dirigeants/klasa/pull/43)) `Gateway#schema` is not longer a plain object, but a `Schema` instance. (kyranet)
 - [[`2915d31b92`](https://github.com/dirigeants/klasa/commit/2915d31b92c8ea4b9202edfdb146a2d8b36ad8d6)] ([#43](https://github.com/dirigeants/klasa/pull/43)) **[PERF]** Removed tuplifier in favor of cached tuples. (kyranet)
 - [[`2915d31b92`](https://github.com/dirigeants/klasa/commit/2915d31b92c8ea4b9202edfdb146a2d8b36ad8d6)] ([#43](https://github.com/dirigeants/klasa/pull/43)) **[PERF]** Improved updateArray remove method. (~1.85 times faster). (kyranet)
 - [[`2915d31b92`](https://github.com/dirigeants/klasa/commit/2915d31b92c8ea4b9202edfdb146a2d8b36ad8d6)] ([#43](https://github.com/dirigeants/klasa/pull/43)) **[PERF]** The cache now updates from the cache instead of re-syncing with the DB. (When using JSON and Collection, Samsung SSD at 600 MB/s read, performance is improved by 97k ops/sec to 53M ops/sec, 454 times faster). (kyranet)
 - [[`2915d31b92`](https://github.com/dirigeants/klasa/commit/2915d31b92c8ea4b9202edfdb146a2d8b36ad8d6)] ([#43](https://github.com/dirigeants/klasa/pull/43)) `Configuration#updateOne` now accepts array type. It'll call the private method that does the parsing for updateArray. (kyranet)
 - [[`2915d31b92`](https://github.com/dirigeants/klasa/commit/2915d31b92c8ea4b9202edfdb146a2d8b36ad8d6)] ([#43](https://github.com/dirigeants/klasa/pull/43)) **[PERF]** SQL parsing is now shared with NoSQL, however, SettingGateway's parsing procedures do not return JSON objects, instead, it returns data compatible for both environments. (kyranet)
-- [[`2915d31b92`](https://github.com/dirigeants/klasa/commit/2915d31b92c8ea4b9202edfdb146a2d8b36ad8d6)] ([#43](https://github.com/dirigeants/klasa/pull/43)) **[PERF]** When using `SettingResolver`, SettingGateway will not longer do `type.toLowerCase()`, but they're lowercase'd at startup. (kyranet)
+- [[`2915d31b92`](https://github.com/dirigeants/klasa/commit/2915d31b92c8ea4b9202edfdb146a2d8b36ad8d6)] ([#43](https://github.com/dirigeants/klasa/pull/43)) **[PERF]** When using `SettingResolver`, SettingGateway will not longer do `type.toLowerCase()`, but they're lowercased at startup. (kyranet)
 - [[`2915d31b92`](https://github.com/dirigeants/klasa/commit/2915d31b92c8ea4b9202edfdb146a2d8b36ad8d6)] ([#43](https://github.com/dirigeants/klasa/pull/43)) **[BREAKING]** Gateway do not longer extend SchemaManager and CacheManager, but it's a class by itself. (kyranet)
-- [[`2915d31b92`](https://github.com/dirigeants/klasa/commit/2915d31b92c8ea4b9202edfdb146a2d8b36ad8d6)] ([#43](https://github.com/dirigeants/klasa/pull/43)) Made the types that SettingGateway accepts for the key types dynamic (based on SettingResolver's prototype) and public throught `client.gateways.types;`. (kyranet)
+- [[`2915d31b92`](https://github.com/dirigeants/klasa/commit/2915d31b92c8ea4b9202edfdb146a2d8b36ad8d6)] ([#43](https://github.com/dirigeants/klasa/pull/43)) Made the types that SettingGateway accepts for the key types dynamic (based on SettingResolver's prototype) and public through `client.gateways.types;`. (kyranet)
 
 ### Removed
 
@@ -86,6 +97,11 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
+- [[#125](https://github.com/dirigeants/klasa/pull/125)] Fixed many typos in the documentation. (kyranet)
+- [[#125](https://github.com/dirigeants/klasa/pull/125)] Fixed `MessageOptions` not being correctly handled with `StringResolvable`, resulting on code like `msg.send({ embed });` to fail. (kyranet)
+- [[#125](https://github.com/dirigeants/klasa/pull/125)] Fixed a serious security issue in `Configuration#get`. (kyranet)
+- [[#125](https://github.com/dirigeants/klasa/pull/125)] Now instances of `Gateway` and `Schema` cannot re-init twice. (kyranet)
+- [[#125](https://github.com/dirigeants/klasa/pull/125)] Fixed many typos and many JSDocs. IntelliSense should work better now. (kyranet)
 - [[#118](https://github.com/dirigeants/klasa/pull/118)] Fixed `SchemaPiece#modify` not editing the datatype from the SQL database when using a SQL provider. (kyranet)
 - [[#118](https://github.com/dirigeants/klasa/pull/118)] Fixed `NULL` not being resolved correctly in `_parseSQLValue` (kyranet)
 - [[#115](https://github.com/dirigeants/klasa/pull/115)] Fixed Schema's updates not reflecting in other shards. (kyranet)
@@ -115,7 +131,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 [[`b4052c9db8`](https://github.com/dirigeants/klasa/commit/b4052c9db84302943e0fb13dd260bc51e4aec89c)],
 [[`67dd509dff`](https://github.com/dirigeants/klasa/commit/67dd509dff5c03d3753a8d48c904277ac24a011a)] and
 [[`a7a3b82ec7`](https://github.com/dirigeants/klasa/commit/a7a3b82ec7ab6febdecc3d9d86b9d1e2550c1c22)] Added the `@since` to all the JSDocs. (bdistin)
-- [[`95e4d4fdd4`](https://github.com/dirigeants/klasa/commit/95e4d4fdd42548c78336b8ba9b733c05f0901466)] ([#57](https://github.com/dirigeants/klasa/pull/57)) Added a configureable menu time for RichDisplay. (pedall)
+- [[`95e4d4fdd4`](https://github.com/dirigeants/klasa/commit/95e4d4fdd42548c78336b8ba9b733c05f0901466)] ([#57](https://github.com/dirigeants/klasa/pull/57)) Added a configurable menu time for RichDisplay. (pedall)
 - [[`b93cfb57fb`](https://github.com/dirigeants/klasa/commit/b93cfb57fb7f3e4eaaa2bdde88b892cd76e36e35)] ([#65](https://github.com/dirigeants/klasa/pull/65)) Added the Stopwatch class. (bdistin)
 - [[`adb5afa450`](https://github.com/dirigeants/klasa/commit/adb5afa45027771b07730c07e6d442f4a54c1ae0)] ([#52](https://github.com/dirigeants/klasa/pull/52)) Added the RichDisplay tutorial. (HellPie)
 - [[`0c066e0694`](https://github.com/dirigeants/klasa/commit/0c066e06943aaf564fdfe099b1c56a6d1f38955b)] and
@@ -167,7 +183,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 - [[`2b40342a12`](https://github.com/dirigeants/klasa/commit/2b40342a12d02c1b7d41e19d9fef2bac40423012)] Fixed the initial edit for RichDisplay. (bdistin)
 - [[`1443d3b9f2`](https://github.com/dirigeants/klasa/commit/1443d3b9f2d422e9b032586fc53ca130dd034ba9)] Fixed the loading bug. (bdistin)
 - [[`b6df5b5816`](https://github.com/dirigeants/klasa/commit/b6df5b58161d9335412801559ec3c3af1594a159)] ([#76](https://github.com/dirigeants/klasa/pull/76)) Fix for commands that return a virtual "never". (kyranet)
-- [[`c429420cb2`](https://github.com/dirigeants/klasa/commit/c429420cb2856ff65fce688a845ae1fc4bf0b199)] Fixed the event emit to `commandError`  from the `commandHandler` monitor firing up even when there's not an error. (bdistin)
+- [[`c429420cb2`](https://github.com/dirigeants/klasa/commit/c429420cb2856ff65fce688a845ae1fc4bf0b199)] Fixed the event emit to `commandError` from the `commandHandler` monitor firing up even when there's not an error. (bdistin)
 - [[`53eacfb9f8`](https://github.com/dirigeants/klasa/commit/53eacfb9f89114ce446638b5dc02ce4467dd7348)] Removed a double check. (bdistin)
 - [[`3a1e4e9280`](https://github.com/dirigeants/klasa/commit/3a1e4e9280ecf873c3a31fa90195e36c06f03e17)] Fixed [#75](https://github.com/dirigeants/klasa/issues/75). (bdistin)
 - [[`df6e6e90e3`](https://github.com/dirigeants/klasa/commit/df6e6e90e33d45e7ecc384a03da847c3f3ae7147)] Fixed some JSDocs (`@since`s are on constructors for classes instead of on the classes). (bdistin)
