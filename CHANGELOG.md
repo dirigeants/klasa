@@ -102,6 +102,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
+- [[#129](https://github.com/dirigeants/klasa/pull/129)] Fixed identifiers not being resolved correctly when using `Configuration#update`. (kyranet)
 - [[#129](https://github.com/dirigeants/klasa/pull/129)] Fixed both config commands not removing the entries. (kyranet)
 - [[#125](https://github.com/dirigeants/klasa/pull/125)] Fixed many typos in the documentation. (kyranet)
 - [[#125](https://github.com/dirigeants/klasa/pull/125)] Fixed `MessageOptions` not being correctly handled with `StringResolvable`, resulting on code like `msg.send({ embed });` to fail. (kyranet)

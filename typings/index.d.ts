@@ -668,6 +668,7 @@ declare module 'klasa' {
 		private static _merge(data: any, folder: SchemaFolder | SchemaPiece): any;
 		private static _clone(data: any, schema: SchemaFolder): any;
 		private static _patch(inst: any, data: any, schema: SchemaFolder): void;
+		private static getIdentifier(value: any): any;
 	}
 
 	// Util

@@ -312,7 +312,7 @@ class Configuration {
 		guild = this.gateway._resolveGuild(guild);
 
 		const parsed = await path.parse(value, guild);
-		const parsedID = parsed && parsed.id ? parsed.id : parsed;
+		const parsedID = Configuration.getIdentifier(parsed);
 		await this._setValue(parsedID, path, route);
 		return { parsed, parsedID, array: null, path, route };
 	}
@@ -336,7 +336,7 @@ class Configuration {
 		guild = this.gateway._resolveGuild(guild);
 
 		const parsed = await path.parse(value, guild);
-		const parsedID = parsed && parsed.id ? parsed.id : parsed;
+		const parsedID = Configuration.getIdentifier(parsed);
 
 		// Handle entry creation if it does not exist.
 		if (!this.existsInDB) await this.gateway.createEntry(this.id);
@@ -415,8 +415,8 @@ class Configuration {
 				continue;
 			}
 			list.promises.push(schema[key].parse(object[key], guild)
-				.then(result => {
-					const parsedID = result && result.id ? result.id : result;
+				.then(parsed => {
+					const parsedID = Configuration.getIdentifier(parsed);
 					cache[key] = parsedID;
 					updateObject[key] = parsedID;
 					list.keys.push(schema[key].path);
@@ -543,6 +543,20 @@ class Configuration {
 				Configuration._patch(inst[key], data[key], schema[key]) :
 				data[key];
 		}
+	}
+
+	/**
+	 * Get the identifier of a value.
+	 * @since 0.5.0
+	 * @param {*} value The value to get the identifier from
+	 * @returns {*}
+	 * @private
+	 */
+	static getIdentifier(value) {
+		if (typeof value !== 'object' || value === null) return value;
+		if (value.id) return value.id;
+		if (value.name) return value.name;
+		return value;
 	}
 
 }
