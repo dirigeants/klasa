@@ -241,7 +241,7 @@ class Configuration {
 	 * Configuration#update({ prefix: 'k!', language: 'es-ES' }, msg.guild);
 	 */
 	update(key, value, guild, { avoidUnconfigurable = false, action = 'auto' } = {}) {
-		if (isObject(key)) return this.updateMany(key, guild);
+		if (isObject(key)) return this.updateMany(key, value);
 		return this._updateSingle(action, key, value, guild, avoidUnconfigurable);
 	}
 
