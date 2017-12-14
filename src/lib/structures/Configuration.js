@@ -345,7 +345,7 @@ class Configuration {
 		for (let i = 0; i < route.length - 1; i++) cache = cache[route[i]] || {};
 		cache = cache[route[route.length - 1]] || [];
 
-		if (action === 'auto') action = cache.includes(parsedID) ? 'add' : 'remove';
+		if (action === 'auto') action = cache.includes(parsedID) ? 'remove' : 'add';
 		if (action === 'add') {
 			if (cache.includes(parsedID)) throw `The value ${parsedID} for the key ${path.path} already exists.`;
 			cache.push(parsedID);
