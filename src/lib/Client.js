@@ -32,8 +32,8 @@ class KlasaClient extends Discord.Client {
 	 * @property {object} [provider] The provider to use in Klasa
 	 * @property {KlasaConsoleConfig} [console={}] Config options to pass to the client console
 	 * @property {KlasaConsoleEvents} [consoleEvents={}] Config options to pass to the client console
-	 * @property {string}  [language='en-US'] The default language Klasa should opt-in for the commands
-	 * @property {number}  [promptTime=30000] The amount of time in milliseconds prompts should last
+	 * @property {string} [language='en-US'] The default language Klasa should opt-in for the commands
+	 * @property {number} [promptTime=30000] The amount of time in milliseconds prompts should last
 	 * @property {boolean} [ignoreBots=true] Whether or not this bot should ignore other bots
 	 * @property {boolean} [ignoreSelf=true] Whether or not this bot should ignore itself
 	 * @property {boolean} [cmdPrompt=false] Whether the bot should prompt missing parameters

@@ -96,6 +96,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
+- [[#125](https://github.com/dirigeants/klasa/pull/125)] Fixed many typos in the documentation. (kyranet)
 - [[#125](https://github.com/dirigeants/klasa/pull/125)] Fixed `MessageOptions` not being correctly handled with `StringResolvable`, resulting on code like `msg.send({ embed });` to fail. (kyranet)
 - [[#125](https://github.com/dirigeants/klasa/pull/125)] Fixed a serious security issue in `Configuration#get`. (kyranet)
 - [[#125](https://github.com/dirigeants/klasa/pull/125)] Now instances of `Gateway` and `Schema` cannot re-init twice. (kyranet)
@@ -181,7 +182,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 - [[`2b40342a12`](https://github.com/dirigeants/klasa/commit/2b40342a12d02c1b7d41e19d9fef2bac40423012)] Fixed the initial edit for RichDisplay. (bdistin)
 - [[`1443d3b9f2`](https://github.com/dirigeants/klasa/commit/1443d3b9f2d422e9b032586fc53ca130dd034ba9)] Fixed the loading bug. (bdistin)
 - [[`b6df5b5816`](https://github.com/dirigeants/klasa/commit/b6df5b58161d9335412801559ec3c3af1594a159)] ([#76](https://github.com/dirigeants/klasa/pull/76)) Fix for commands that return a virtual "never". (kyranet)
-- [[`c429420cb2`](https://github.com/dirigeants/klasa/commit/c429420cb2856ff65fce688a845ae1fc4bf0b199)] Fixed the event emit to `commandError`  from the `commandHandler` monitor firing up even when there's not an error. (bdistin)
+- [[`c429420cb2`](https://github.com/dirigeants/klasa/commit/c429420cb2856ff65fce688a845ae1fc4bf0b199)] Fixed the event emit to `commandError` from the `commandHandler` monitor firing up even when there's not an error. (bdistin)
 - [[`53eacfb9f8`](https://github.com/dirigeants/klasa/commit/53eacfb9f89114ce446638b5dc02ce4467dd7348)] Removed a double check. (bdistin)
 - [[`3a1e4e9280`](https://github.com/dirigeants/klasa/commit/3a1e4e9280ecf873c3a31fa90195e36c06f03e17)] Fixed [#75](https://github.com/dirigeants/klasa/issues/75). (bdistin)
 - [[`df6e6e90e3`](https://github.com/dirigeants/klasa/commit/df6e6e90e33d45e7ecc384a03da847c3f3ae7147)] Fixed some JSDocs (`@since`s are on constructors for classes instead of on the classes). (bdistin)
