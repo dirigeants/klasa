@@ -63,7 +63,7 @@ this.client.gateways.guilds.schema.addKey('users', { type: 'User', array: true }
 
 > `options.array` defaults to `false`, and when `options.default` is not specified, it defaults to `null`, however, when `options.array` is `true`, `options.default` defaults to `[]` (empty array).
 
-What have we done? `client.gateways.guilds.schema` is a **Schema** instance (also called Folder type) which can manage itself, such as adding keys/folders to itself (it certainly follows the OOP paradigm).
+What have we done? `client.gateways.guilds.schema` is a **SchemaFolder** instance (also called Folder type) which can manage itself, such as adding keys/folders to itself (it certainly follows the OOP paradigm).
 
 ## Editing keys from the guild configuration.
 
@@ -73,7 +73,7 @@ Now that I have a new key called `modlogs`, I want to configure it outside the `
 msg.guild.configs.updateOne('modlogs', '267727088465739778', msg.guild);
 ```
 
-Check: {@link Gateway.updateOne}
+Check: {@link Configuration.updateOne}
 
 > You can use a Channel instance, {@link SettingResolver} will make sure the input is valid and the database gets an **ID** and not an object.
 

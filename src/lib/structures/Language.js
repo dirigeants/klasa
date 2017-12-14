@@ -10,9 +10,9 @@ class Language {
 
 	/**
 	 * @typedef {Object} LanguageOptions
-	 * @memberof Language
-	 * @property {string} [name = theFileName] The name of the language
+	 * @property {string} [name=theFileName] The name of the language
 	 * @property {boolean} [enabled=true] Whether the language is enabled or not
+	 * @memberof Language
 	 */
 
 	/**
@@ -20,7 +20,7 @@ class Language {
 	 * @param {KlasaClient} client The Klasa Client
 	 * @param {string} dir The path to the core or user language pieces folder
 	 * @param {Array} file The path from the pieces folder to the finalizer file
-	 * @param {LanguageOptions} [options = {}] Optional Language settings
+	 * @param {LanguageOptions} [options={}] Optional Language settings
 	 */
 	constructor(client, dir, file, options = {}) {
 		/**
@@ -89,10 +89,10 @@ class Language {
 	}
 
 	/**
-	 * The init method to be optionaly overwritten in actual languages
+	 * The init method to be optionally overwritten in actual languages
 	 * @since 0.2.1
-	 * @abstract
 	 * @returns {void}
+	 * @abstract
 	 */
 	async init() {
 		// Optionally defined in extension Classes

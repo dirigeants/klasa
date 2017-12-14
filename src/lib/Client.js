@@ -3,6 +3,7 @@ const path = require('path');
 const ArgResolver = require('./parsers/ArgResolver');
 const PermLevels = require('./structures/PermissionLevels');
 const util = require('./util/util');
+const constants = require('./util/constants');
 const Stopwatch = require('./util/Stopwatch');
 const Console = require('./util/Console');
 const GatewayDriver = require('./settings/GatewayDriver');
@@ -23,83 +24,69 @@ const ExtendableStore = require('./structures/ExtendableStore');
 class KlasaClient extends Discord.Client {
 
 	/**
-	 * @typedef {Object} KlasaClientConfig
-	 * @memberof KlasaClient
+	 * @typedef {external:DiscordJSConfig} KlasaClientOptions
 	 * @property {string} [prefix] The default prefix the bot should respond to
-	 * @property {DiscordJSConfig} [clientOptions={}] The options to pass to D.JS
 	 * @property {PermissionLevels} [permissionLevels=KlasaClient.defaultPermissionLevels] The permission levels to use with this bot
 	 * @property {string} [clientBaseDir=path.dirname(require.main.filename)] The directory where all piece folders can be found
 	 * @property {number} [commandMessageLifetime=1800] The threshold for how old command messages can be before sweeping since the last edit in seconds
 	 * @property {object} [provider] The provider to use in Klasa
 	 * @property {KlasaConsoleConfig} [console={}] Config options to pass to the client console
 	 * @property {KlasaConsoleEvents} [consoleEvents={}] Config options to pass to the client console
-	 * @property {string}  [language='en-US'] The default language Klasa should opt-in for the commands
-	 * @property {number}  [promptTime=30000] The amount of time in milliseconds prompts should last
+	 * @property {string} [language='en-US'] The default language Klasa should opt-in for the commands
+	 * @property {number} [promptTime=30000] The amount of time in milliseconds prompts should last
 	 * @property {boolean} [ignoreBots=true] Whether or not this bot should ignore other bots
 	 * @property {boolean} [ignoreSelf=true] Whether or not this bot should ignore itself
 	 * @property {boolean} [cmdPrompt=false] Whether the bot should prompt missing parameters
 	 * @property {boolean} [cmdEditing=false] Whether the bot should update responses if the command is edited
 	 * @property {boolean} [cmdLogging=false] Whether the bot should log command usage
-	 * @property {boolean} [typing=false] Whether the bot should type while processing commands.
-	 * @property {boolean} [preserveConfigs=true] Whetheer the bot should preserve (non-default) configs when removed from a guild.
+	 * @property {boolean} [typing=false] Whether the bot should type while processing commands
+	 * @property {boolean} [preserveConfigs=true] Whether the bot should preserve (non-default) configs when removed from a guild
 	 * @property {boolean} [quotedStringSupport=false] Whether the bot should default to using quoted string support in arg parsing, or not (overridable per command)
-	 * @property {?(string|Function)} [readyMessage=`Successfully initialized. Ready to serve ${this.guilds.size} guilds.`] readyMessage to be passed thru Klasa's ready event
+	 * @property {(string|Function)} [readyMessage=`Successfully initialized. Ready to serve ${this.guilds.size} guilds.`] readyMessage to be passed throughout Klasa's ready event
 	 * @property {string} [ownerID] The discord user id for the user the bot should respect as the owner (gotten from Discord api if not provided)
-	 * @property {RegExp} [regexPrefix=null] The regular expression prefix if one is provided
+	 * @property {RegExp} [regexPrefix] The regular expression prefix if one is provided
+	 * @memberof KlasaClient
 	 */
 
 	/**
 	 * @typedef {Object} KlasaConsoleConfig
-	 * @memberof KlasaClient
-	 * @property {WriteableStream} [stdout=process.stdout] Output stream
-	 * @property {WriteableStream} [stderr=process.stderr] Error stream
+	 * @property {WritableStream} [stdout=process.stdout] Output stream
+	 * @property {WritableStream} [stderr=process.stderr] Error stream
 	 * @property {boolean} [useColor=false] Whether the client console should use colors
 	 * @property {Colors} [colors] Color formats to use
-	 * @property {(boolean|string)} [timestamps=true] Whether to use timestamps or not, or the moment format of the timestamp you want to use
+	 * @property {(boolean|string)} [timestamps=true] Whether to use timestamps or not, or the Timestamp format of the timestamp you want to use
+	 * @memberof KlasaClient
 	 */
 
 	/**
 	 * @typedef {Object} KlasaConsoleEvents
-	 * @memberof KlasaClient
 	 * @property {boolean} [log=true] If the log event should be enabled by default
 	 * @property {boolean} [warn=true] If the warn event should be enabled by default
 	 * @property {boolean} [error=true] If the error event should be enabled by default
 	 * @property {boolean} [debug=false] If the debug event should be enabled by default
 	 * @property {boolean} [verbose=false] If the verbose event should be enabled by default
 	 * @property {boolean} [wtf=true] If the wtf event should be enabled by default
+	 * @memberof KlasaClient
 	 */
 
 	/**
-	 * @typedef  {Object} ConfigUpdateEntryMany
-	 * @memberof KlasaClient
+	 * @typedef {Object} ConfigUpdateEntryMany
 	 * @property {'MANY'} type
 	 * @property {string[]} keys
 	 * @property {Array<*>} values
+	 * @memberof KlasaClient
 	 */
 
 	/**
 	 * Constructs the klasa client
 	 * @since 0.0.1
-	 * @param {KlasaClientConfig} config The config to pass to the new client
+	 * @param {KlasaClientOptions} config The config to pass to the new client
 	 */
 	constructor(config = {}) {
 		if (typeof config !== 'object') throw new TypeError('Configuration for Klasa must be an object.');
-		super(config.clientOptions);
+		config = util.mergeDefault(constants.DEFAULTS.CLIENT, config);
+		super(config);
 
-		/**
-		 * The config passed to the new Klasa.Client
-		 * @since 0.0.1
-		 * @type {KlasaClientConfig}
-		 */
-		this.config = config;
-		this.config.provider = config.provider || {};
-		this.config.console = config.console || {};
-		this.config.consoleEvents = config.consoleEvents || {};
-		this.config.language = config.language || 'en-US';
-		this.config.promptTime = typeof config.promptTime === 'number' && Number.isInteger(config.promptTime) ? config.promptTime : 30000;
-		this.config.regexPrefix = config.regexPrefix || null;
-		this.config.commandMessageLifetime = config.commandMessageLifetime || 1800;
-		this.config.preserveConfigs = 'preserverConfigs' in config ? config.preserveConfigs : true;
 		/**
 		 * The directory to the node_modules folder where Klasa exists
 		 * @since 0.0.1
@@ -115,16 +102,16 @@ class KlasaClient extends Discord.Client {
 		this.clientBaseDir = config.clientBaseDir ? path.resolve(config.clientBaseDir) : path.dirname(require.main.filename);
 
 		/**
-		 * The console for this instance of klasa. You can disable timestmaps, colors, and add writable streams as config options to configure this.
+		 * The console for this instance of klasa. You can disable timestamps, colors, and add writable streams as config options to configure this.
 		 * @since 0.4.0
 		 * @type {KlasaConsole}
 		 */
 		this.console = new Console({
-			stdout: this.config.console.stdout,
-			stderr: this.config.console.stderr,
-			useColor: this.config.console.useColor,
-			colors: this.config.console.colors,
-			timestamps: this.config.console.timestamps
+			colors: this.options.console.colors,
+			stderr: this.options.console.stderr,
+			stdout: this.options.console.stdout,
+			timestamps: this.options.console.timestamps,
+			useColor: this.options.console.useColor
 		});
 
 		/**
@@ -205,13 +192,6 @@ class KlasaClient extends Discord.Client {
 		this.permissionLevels = this.validatePermissionLevels();
 
 		/**
-		 * Whether the client is truely ready or not
-		 * @since 0.0.1
-		 * @type {boolean}
-		 */
-		this.ready = false;
-
-		/**
 		 * Additional methods to be used elsewhere in the bot
 		 * @since 0.0.1
 		 * @type {object}
@@ -221,15 +201,15 @@ class KlasaClient extends Discord.Client {
 		 * @property {class} Webhook A discord.js WebhookClient
 		 * @property {function} escapeMarkdown A discord.js escape markdown function
 		 * @property {function} splitMessage A discord.js split message function
-		 * @property {Util} util A collection of static methods to be used thoughout the bot
+		 * @property {Util} util A collection of static methods to be used throughout the bot
 		 */
 		this.methods = {
 			Collection: Discord.Collection,
 			Embed: Discord.MessageEmbed,
-			MessageCollector: Discord.MessageCollector,
-			Webhook: Discord.WebhookClient,
 			escapeMarkdown: Discord.escapeMarkdown,
+			MessageCollector: Discord.MessageCollector,
 			splitMessage: Discord.splitMessage,
+			Webhook: Discord.WebhookClient,
 			util
 		};
 
@@ -239,6 +219,13 @@ class KlasaClient extends Discord.Client {
 		 * @type {GatewayDriver}
 		 */
 		this.gateways = new GatewayDriver(this);
+
+		/**
+		 * The Configuration instance that handles this client's configuration
+		 * @since 0.5.0
+		 * @type {Configuration}
+		 */
+		this.configs = null;
 
 		/**
 		 * The application info cached from the discord api
@@ -255,7 +242,14 @@ class KlasaClient extends Discord.Client {
 			.registerStore(this.providers)
 			.registerStore(this.events)
 			.registerStore(this.extendables);
-		// Core pieces already have argresolver entries for the purposes of documentation.
+		// Core pieces already have ArgResolver entries for the purposes of documentation.
+
+		/**
+		 * Whether the client is truly ready or not
+		 * @since 0.0.1
+		 * @type {boolean}
+		 */
+		this.ready = false;
 
 		this.once('ready', this._ready.bind(this));
 	}
@@ -279,7 +273,7 @@ class KlasaClient extends Discord.Client {
 	 * @type {KlasaUser}
 	 */
 	get owner() {
-		return this.users.get(this.config.ownerID);
+		return this.users.get(this.options.ownerID);
 	}
 
 	/**
@@ -289,7 +283,7 @@ class KlasaClient extends Discord.Client {
 	 * @returns {PermissionLevels}
 	 */
 	validatePermissionLevels() {
-		const permLevels = this.config.permissionLevels || KlasaClient.defaultPermissionLevels;
+		const permLevels = this.options.permissionLevels || KlasaClient.defaultPermissionLevels;
 		if (!(permLevels instanceof PermLevels)) throw new Error('permissionLevels must be an instance of the PermissionLevels class');
 		if (permLevels.isValid()) return permLevels;
 		throw new Error(permLevels.debug());
@@ -298,7 +292,7 @@ class KlasaClient extends Discord.Client {
 	/**
 	 * Registers a custom store to the client
 	 * @since 0.3.0
-	 * @param {Store} store The store that pieces will be stored in.
+	 * @param {Store} store The store that pieces will be stored in
 	 * @returns {KlasaClient} this client
 	 */
 	registerStore(store) {
@@ -309,7 +303,7 @@ class KlasaClient extends Discord.Client {
 	/**
 	 * Unregisters a custom store from the client
 	 * @since 0.3.0
-	 * @param {Store} storeName The store that pieces will be stored in.
+	 * @param {Store} storeName The store that pieces will be stored in
 	 * @returns {KlasaClient} this client
 	 */
 	unregisterStore(storeName) {
@@ -321,7 +315,7 @@ class KlasaClient extends Discord.Client {
 	 * Registers a custom piece to the client
 	 * @since 0.3.0
 	 * @param {string} pieceName The name of the piece, if you want to register an arg resolver for this piece
-	 * @param {Store} store The store that pieces will be stored in.
+	 * @param {Store} store The store that pieces will be stored in
 	 * @returns {KlasaClient} this client
 	 */
 	registerPiece(pieceName, store) {
@@ -363,8 +357,19 @@ class KlasaClient extends Discord.Client {
 
 		// Providers must be init before configs, and those before all other stores.
 		await this.providers.init();
-		await this.gateways.add('guilds', this.gateways.validateGuild, this.gateways.defaultDataSchema, undefined, false);
-		await this.gateways.add('users', this.gateways.validateUser, undefined, undefined, false);
+
+		// Add the gateways
+		await Promise.all([
+			this.gateways.add('guilds', constants.GATEWAY_RESOLVERS.GUILDS, this.gateways.guildsSchema, undefined, false),
+			this.gateways.add('users', constants.GATEWAY_RESOLVERS.USERS, undefined, undefined, false),
+			this.gateways.add('clientStorage', constants.GATEWAY_RESOLVERS.CLIENT_STORAGE, this.gateways.clientStorageSchema, undefined, false)
+		]);
+
+		// Automatic Prefix editing detection.
+		if (typeof this.options.prefix === 'string' && this.options.prefix !== this.gateways.guilds.schema.prefix.default) {
+			await this.gateways.guilds.schema.prefix.modify({ default: this.options.prefix });
+		}
+
 		this.emit('log', `Loaded in ${timer.stop()}.`);
 		return super.login(token);
 	}
@@ -376,17 +381,21 @@ class KlasaClient extends Discord.Client {
 	 */
 	async _ready() {
 		await this.gateways._ready();
-		if (typeof this.config.ignoreBots === 'undefined') this.config.ignoreBots = true;
-		if (typeof this.config.ignoreSelf === 'undefined') this.config.ignoreSelf = this.user.bot;
+		if (typeof this.options.ignoreBots === 'undefined') this.options.ignoreBots = true;
+		if (typeof this.options.ignoreSelf === 'undefined') this.options.ignoreSelf = this.user.bot;
 		if (this.user.bot) this.application = await super.fetchApplication();
-		if (!this.config.ownerID) this.config.ownerID = this.user.bot ? this.application.owner.id : this.user.id;
+		if (!this.options.ownerID) this.options.ownerID = this.user.bot ? this.application.owner.id : this.user.id;
+
+		// Client-wide settings
+		this.configs = this.gateways.clientStorage.cache.get('clientStorage', this.user.id) || this.gateways.clientStorage.insertEntry(this.user.id);
+		await this.configs.sync().then(() => this.gateways.clientStorage.cache.set(this.type, this.user.id, this.configs));
 
 		// Init all the pieces
 		await Promise.all(this.pieceStores.filter(store => store.name !== 'providers').map(store => store.init()));
 		util.initClean(this);
 		this.ready = true;
-		if (typeof this.config.readyMessage === 'undefined') this.emit('log', `Successfully initialized. Ready to serve ${this.guilds.size} guilds.`);
-		else if (this.config.readyMessage !== null) this.emit('log', typeof this.config.readyMessage === 'function' ? this.config.readyMessage(this) : this.config.readyMessage);
+		if (typeof this.options.readyMessage === 'undefined') this.emit('log', `Successfully initialized. Ready to serve ${this.guilds.size} guilds.`);
+		else if (this.options.readyMessage !== null) this.emit('log', typeof this.options.readyMessage === 'function' ? this.options.readyMessage(this) : this.options.readyMessage);
 		this.emit('klasaReady');
 	}
 
@@ -396,12 +405,12 @@ class KlasaClient extends Discord.Client {
 	 * @since 0.5.0
 	 * @param {number} [lifetime=this.options.messageCacheLifetime] Messages that are older than this (in seconds)
 	 * will be removed from the caches. The default is based on [ClientOptions#messageCacheLifetime]{@link https://discord.js.org/#/docs/main/master/typedef/ClientOptions?scrollTo=messageCacheLifetime}
-	 * @param {number} [commandLifetime=this.config.commandMessageLifetime] Messages that are older than this (in seconds)
-	 * will be removed from the caches. The default is based on {@link KlasaClientConfig#commandMessageLifetime}
+	 * @param {number} [commandLifetime=this.options.commandMessageLifetime] Messages that are older than this (in seconds)
+	 * will be removed from the caches. The default is based on {@link KlasaClientOptions#commandMessageLifetime}
 	 * @returns {number} Amount of messages that were removed from the caches,
 	 * or -1 if the message cache lifetime is unlimited
 	 */
-	sweepMessages(lifetime = this.options.messageCacheLifetime, commandLifetime = this.config.commandMessageLifetime) {
+	sweepMessages(lifetime = this.options.messageCacheLifetime, commandLifetime = this.options.commandMessageLifetime) {
 		if (typeof lifetime !== 'number' || isNaN(lifetime)) throw new TypeError('The lifetime must be a number.');
 		if (lifetime <= 0) {
 			this.emit('debug', 'Didn\'t sweep messages - lifetime is unlimited');
@@ -460,7 +469,7 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  * @event KlasaClient#log
  * @since 0.3.0
  * @param {(string|Object)} data The data to log
- * @param {string} [type='log'] The type of log: 'log', 'debug', 'warn', or 'error'.
+ * @param {string} [type='log'] The type of log: 'log', 'debug', 'warn', or 'error'
  */
 
 /**
@@ -510,11 +519,11 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  * @param {KlasaMessage} message The message that triggered the command
  * @param {Command} command The command run
  * @param {any[]} params The resolved parameters of the command
- * @param {?any} response Usually a response message, but whatever the command returned.
+ * @param {?any} response Usually a response message, but whatever the command returned
  */
 
 /**
- * Emitted when a command has errored.
+ * Emitted when a command has encountered an error.
  * @event KlasaClient#commandError
  * @since 0.3.0
  * @param {KlasaMessage} message The message that triggered the command
@@ -524,7 +533,7 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  */
 
 /**
- * Emitted when a monitor has errored.
+ * Emitted when a monitor has encountered an error.
  * @event KlasaClient#monitorError
  * @since 0.4.0
  * @param {KlasaMessage} message The message that triggered the monitor
@@ -591,6 +600,27 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  * @event KlasaClient#pieceDisabled
  * @since 0.4.0
  * @param {Piece} piece The piece that was disabled
+ */
+
+/**
+ * Emitted when a new key or folder is added to the Schema.
+ * @event KlasaClient#schemaKeyAdd
+ * @since 0.5.0
+ * @param {(SchemaFolder|SchemaPiece)} key The key that was added
+ */
+
+/**
+ * Emitted when a key or folder has been removed from the Schema.
+ * @event KlasaClient#schemaKeyRemove
+ * @since 0.5.0
+ * @param {(SchemaFolder|SchemaPiece)} key The key that was removed
+ */
+
+/**
+ * Emitted when a key's properties are modified.
+ * @event KlasaClient#schemaKeyUpdate
+ * @since 0.5.0
+ * @param {SchemaPiece} key The piece that was updated
  */
 
 process.on('unhandledRejection', (err) => {

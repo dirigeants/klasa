@@ -15,25 +15,25 @@ class ReactionHandler extends ReactionCollector {
 
 	/**
 	 * @typedef {object} ReactionHandlerOptions
-	 * @memberof RichMenu
 	 * @property {Function} [filter] A filter function to add to the ReactionHandler
-	 * @property {boolean} [stop = true] If a stop reaction should be included
-	 * @property {string} [prompt = 'Which page would you like to jump to?'] The prompt to be used when awaiting user input on a page to jump to
-	 * @property {number} [startPage = 0] The page to start the RichMenu on
+	 * @property {boolean} [stop=true] If a stop reaction should be included
+	 * @property {string} [prompt=msg.language.get('REACTIONHANDLER_PROMPT')] The prompt to be used when awaiting user input on a page to jump to
+	 * @property {number} [startPage=0] The page to start the RichMenu on
 	 * @property {number} [max] The maximum total amount of reactions to collect
 	 * @property {number} [maxEmojis] The maximum number of emojis to collect
 	 * @property {number} [maxUsers] The maximum number of users to react
 	 * @property {number} [time] The maximum amount of time before this RichMenu should expire
+	 * @memberof RichMenu
 	 */
 
 	/**
 	 * Constructs our ReactionHandler instance
 	 * @since 0.4.0
-	 * @param  {KlasaMessage} msg A message this ReactionHandler should handle reactions
-	 * @param  {Function} filter A filter function to determine which emoji reactions should be handled
-	 * @param  {ReactionHandlerOptions} options The options for this ReactionHandler
-	 * @param  {(RichDisplay|RichMenu)} display The RichDisplay or RichMenu that this handler is for
-	 * @param  {emoji[]} emojis The emojis which should be used in this handler
+	 * @param {KlasaMessage} msg A message this ReactionHandler should handle reactions
+	 * @param {Function} filter A filter function to determine which emoji reactions should be handled
+	 * @param {ReactionHandlerOptions} options The options for this ReactionHandler
+	 * @param {(RichDisplay|RichMenu)} display The RichDisplay or RichMenu that this handler is for
+	 * @param {emoji[]} emojis The emojis which should be used in this handler
 	 */
 	constructor(msg, filter, options, display, emojis) {
 		super(msg, filter, options);
@@ -64,7 +64,7 @@ class ReactionHandler extends ReactionCollector {
 		 * @since 0.4.0
 		 * @type {string}
 		 */
-		this.prompt = this.options.prompt || 'Which page would you like to jump to?';
+		this.prompt = this.options.prompt || msg.language.get('REACTIONHANDLER_PROMPT');
 
 		/**
 		 * The time until the reaction collector closes automatically
@@ -209,8 +209,8 @@ class ReactionHandler extends ReactionCollector {
 	 * @returns {void}
 	 */
 	zero() {
-		if (this.display.options.length - 1 < 0 + (this.currentPage * 10)) return;
-		this.resolve(0 + (this.currentPage * 10));
+		if (this.display.options.length - 1 < this.currentPage * 10) return;
+		this.resolve(this.currentPage * 10);
 		this.stop();
 	}
 

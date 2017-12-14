@@ -25,12 +25,12 @@ module.exports = class extends Monitor {
 			return;
 		}
 		const timer = new Stopwatch();
-		if (this.client.config.typing) msg.channel.startTyping();
+		if (this.client.options.typing) msg.channel.startTyping();
 		msg._registerCommand({ command: validCommand, prefix, prefixLength });
 		this.client.inhibitors.run(msg, validCommand)
 			.then(() => this.runCommand(msg, timer))
 			.catch((response) => {
-				if (this.client.config.typing) msg.channel.stopTyping();
+				if (this.client.options.typing) msg.channel.stopTyping();
 				this.client.emit('commandInhibited', msg, validCommand, response);
 			});
 	}
@@ -47,12 +47,12 @@ module.exports = class extends Monitor {
 
 	getPrefix(msg) {
 		if (this.prefixMention.test(msg.content)) return { length: this.nick.test(msg.content) ? this.prefixMentionLength + 1 : this.prefixMentionLength, regex: this.prefixMention };
-		if (this.client.config.regexPrefix) {
-			const results = this.client.config.regexPrefix.exec(msg.content);
-			if (results) return { length: results[0].length, regex: this.client.config.regexPrefix };
+		if (msg.guildConfigs.disableNaturalPrefix !== true && this.client.options.regexPrefix) {
+			const results = this.client.options.regexPrefix.exec(msg.content);
+			if (results) return { length: results[0].length, regex: this.client.options.regexPrefix };
 		}
-		const prefix = msg.guildConfigs.prefix || this.client.config.prefix;
-		if (prefix instanceof Array) {
+		const prefix = msg.guildConfigs.prefix || this.client.options.prefix;
+		if (Array.isArray(prefix)) {
 			for (let i = prefix.length - 1; i >= 0; i--) {
 				const testingPrefix = this.prefixes.get(prefix[i]) || this.generateNewPrefix(prefix[i]);
 				if (testingPrefix.regex.test(msg.content)) return testingPrefix;
@@ -74,8 +74,8 @@ module.exports = class extends Monitor {
 		try {
 			await msg.validateArgs();
 		} catch (error) {
-			if (this.client.config.typing) msg.channel.stopTyping();
-			if (error.code === 1 && this.client.config.cmdPrompt) {
+			if (this.client.options.typing) msg.channel.stopTyping();
+			if (error.code === 1 && this.client.options.cmdPrompt) {
 				return this.awaitMessage(msg, timer, error.message)
 					.catch(err => this.client.emit('commandError', msg, msg.command, msg.params, err));
 			}
@@ -84,7 +84,7 @@ module.exports = class extends Monitor {
 
 		const commandRun = msg.command.run(msg, msg.params);
 
-		if (this.client.config.typing) msg.channel.stopTyping();
+		if (this.client.options.typing) msg.channel.stopTyping();
 		timer.stop();
 
 		return commandRun
@@ -92,14 +92,14 @@ module.exports = class extends Monitor {
 				this.client.finalizers.run(msg, mes, timer);
 				this.client.emit('commandSuccess', msg, msg.command, msg.params, mes);
 			})
-			.catch(error => this.client.emit('commandError', msg, msg.cmd, msg.params, error));
+			.catch(error => this.client.emit('commandError', msg, msg.command, msg.params, error));
 	}
 
 	async awaitMessage(msg, timer, error) {
-		const message = await msg.channel.send(msg.language.get('MONITOR_COMMAND_HANDLER_REPROMPT', `<@!${msg.author.id}>`, error, this.client.config.promptTime / 1000))
+		const message = await msg.channel.send(msg.language.get('MONITOR_COMMAND_HANDLER_REPROMPT', `<@!${msg.author.id}>`, error, this.client.options.promptTime / 1000))
 			.catch((err) => { throw newError(err); });
 
-		const param = await msg.channel.awaitMessages(response => response.author.id === msg.author.id && response.id !== message.id, { max: 1, time: this.client.config.promptTime, errors: ['time'] })
+		const param = await msg.channel.awaitMessages(response => response.author.id === msg.author.id && response.id !== message.id, { max: 1, time: this.client.options.promptTime, errors: ['time'] })
 			.catch(() => {
 				message.delete();
 				throw undefined;
@@ -110,7 +110,7 @@ module.exports = class extends Monitor {
 		msg.reprompted = true;
 
 		message.delete();
-		if (this.client.config.typing) msg.channel.startTyping();
+		if (this.client.options.typing) msg.channel.startTyping();
 		return this.runCommand(msg, timer);
 	}
 

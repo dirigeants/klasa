@@ -8,11 +8,11 @@
 [![Greenkeeper badge](https://badges.greenkeeper.io/dirigeants/klasa.svg)](https://greenkeeper.io/)
 [![David](https://img.shields.io/david/dirigeants/klasa.svg?maxAge=3600)](https://david-dm.org/dirigeants/klasa)
 
-Klasa is a class remix on the Komada Bot Framework, built on top of [Discord.js](https://github.com/hydrabolt/dicord.js). It offers an extremely easy installation and framework to build your own commands, event handlers, and much more.
+Klasa is a class remix on the Komada Bot Framework, built on top of [Discord.js](https://github.com/hydrabolt/discord.js). It offers an extremely easy installation and framework to build your own commands, event handlers, and much more.
 
 ## What's with the name?
 
-Following suit from Komada (the Croatian word for "pieces"), Klasa is the croation word for "class". Like Komada, Klasa is modular, meaning each "piece" is a standalone part that can be easily replaced, enhanced, reloaded, removed.
+Following suit from Komada (the Croatian word for "pieces"), Klasa is the Croatian word for "class". Like Komada, Klasa is modular, meaning each "piece" is a standalone part that can be easily replaced, enhanced, reloaded, removed.
 
 ## Why Klasa?
 

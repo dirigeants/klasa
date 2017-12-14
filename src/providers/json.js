@@ -5,19 +5,23 @@ const fs = require('fs-nextra');
 module.exports = class extends Provider {
 
 	constructor(...args) {
-		super(...args, { description: 'Allows you to use JSON functionality throught Klasa' });
+		super(...args, { description: 'Allows you to use JSON functionality throughout Klasa' });
 		this.baseDir = resolve(this.client.clientBaseDir, 'bwd', 'provider', 'json');
 	}
 
-	init() {
-		return fs.ensureDir(this.baseDir).catch(err => this.client.emit('error', err));
+	/**
+	 * Initializes the database
+	 * @private
+	 */
+	async init() {
+		await fs.ensureDir(this.baseDir).catch(err => this.client.emit('error', err));
 	}
 
 	/* Table methods */
 
 	/**
 	 * Checks if a directory exists.
-	 * @param {string} table The name of the table you want to check.
+	 * @param {string} table The name of the table you want to check
 	 * @returns {Promise<boolean>}
 	 */
 	hasTable(table) {
@@ -26,7 +30,7 @@ module.exports = class extends Provider {
 
 	/**
 	 * Creates a new directory.
-	 * @param {string} table The name for the new directory.
+	 * @param {string} table The name for the new directory
 	 * @returns {Promise<void>}
 	 */
 	createTable(table) {
@@ -35,7 +39,7 @@ module.exports = class extends Provider {
 
 	/**
 	 * Recursively deletes a directory.
-	 * @param {string} table The directory's name to delete.
+	 * @param {string} table The directory's name to delete
 	 * @returns {Promise<void>}
 	 */
 	deleteTable(table) {
@@ -47,8 +51,8 @@ module.exports = class extends Provider {
 
 	/**
 	 * Get all documents from a directory.
-	 * @param {string} table The name of the directory to fetch from.
-	 * @param {boolean} [nice=false] Whether the provider should update all entries at the same time or politely update them sequentially.
+	 * @param {string} table The name of the directory to fetch from
+	 * @param {boolean} [nice=false] Whether the provider should update all entries at the same time or politely update them sequentially
 	 * @returns {Promise<Object[]>}
 	 */
 	async getAll(table, nice = false) {
@@ -68,7 +72,7 @@ module.exports = class extends Provider {
 
 	/**
 	 * Get all document names from a directory, filter by json.
-	 * @param {string} table The name of the directory to fetch from.
+	 * @param {string} table The name of the directory to fetch from
 	 * @returns {Promise<string[]>}
 	 */
 	async getKeys(table) {
@@ -84,8 +88,8 @@ module.exports = class extends Provider {
 
 	/**
 	 * Get a document from a directory.
-	 * @param {string} table The name of the directory.
-	 * @param {string} document The document name.
+	 * @param {string} table The name of the directory
+	 * @param {string} document The document name
 	 * @returns {Promise<?Object>}
 	 */
 	get(table, document) {
@@ -94,8 +98,8 @@ module.exports = class extends Provider {
 
 	/**
 	 * Check if the document exists.
-	 * @param {string} table The name of the directory.
-	 * @param {string} document The document name.
+	 * @param {string} table The name of the directory
+	 * @param {string} document The document name
 	 * @returns {Promise<boolean>}
 	 */
 	has(table, document) {
@@ -104,7 +108,7 @@ module.exports = class extends Provider {
 
 	/**
 	 * Get a random document from a directory.
-	 * @param {string} table The name of the directory.
+	 * @param {string} table The name of the directory
 	 * @returns {Promise<Object>}
 	 */
 	getRandom(table) {
@@ -113,10 +117,10 @@ module.exports = class extends Provider {
 
 	/**
 	 * Update or insert a new value to all entries.
-	 * @param {string} table The name of the directory.
-	 * @param {string} path The key's path to update.
-	 * @param {*} newValue The new value for the key.
-	 * @param {boolean} [nice=false] Whether the provider should update all entries at the same time or politely update them sequentially.
+	 * @param {string} table The name of the directory
+	 * @param {string} path The key's path to update
+	 * @param {*} newValue The new value for the key
+	 * @param {boolean} [nice=false] Whether the provider should update all entries at the same time or politely update them sequentially
 	 */
 	async updateValue(table, path, newValue, nice = false) {
 		const route = path.split('.');
@@ -130,29 +134,10 @@ module.exports = class extends Provider {
 	}
 
 	/**
-	 * Update or insert a new value to a specified entry.
-	 * @param {string} table The name of the directory.
-	 * @param {string[]} route An array with the path to update.
-	 * @param {Object} object The entry to update.
-	 * @param {*} newValue The new value for the key.
-	 * @returns {Promise<void>}
-	 * @private
-	 */
-	_updateValue(table, route, object, newValue) {
-		let value = object;
-		for (let j = 0; j < route.length - 1; j++) {
-			if (typeof value[route[j]] === 'undefined') value[route[j]] = { [route[j + 1]]: {} };
-			value = value[route[j]];
-		}
-		value[route[route.length - 1]] = newValue;
-		return this.replace(table, object.id, object);
-	}
-
-	/**
 	 * Remove a value or object from all entries.
-	 * @param {string} table The name of the directory.
-	 * @param {string} [path=false] The key's path to update.
-	 * @param {boolean} nice Whether the provider should update all entries at the same time or politely update them sequentially.
+	 * @param {string} table The name of the directory
+	 * @param {string} [path=false] The key's path to update
+	 * @param {boolean} nice Whether the provider should update all entries at the same time or politely update them sequentially
 	 */
 	async removeValue(table, path, nice = false) {
 		const route = path.split('.');
@@ -166,25 +151,10 @@ module.exports = class extends Provider {
 	}
 
 	/**
-	 * Remove a value from a specified entry.
-	 * @param {string} table The name of the directory.
-	 * @param {string[]} route An array with the path to update.
-	 * @param {Object} object The entry to update.
-	 * @returns {Promise<void>}
-	 * @private
-	 */
-	_removeValue(table, route, object) {
-		let value = object;
-		for (let j = 0; j < route.length - 1; j++) value = value[route[j]] || {};
-		delete value[route[route.length - 1]];
-		return this.replace(table, object.id, object);
-	}
-
-	/**
 	 * Insert a new document into a directory.
-	 * @param {string} table The name of the directory.
-	 * @param {string} document The document name.
-	 * @param {Object} data The object with all properties you want to insert into the document.
+	 * @param {string} table The name of the directory
+	 * @param {string} document The document name
+	 * @param {Object} data The object with all properties you want to insert into the document
 	 * @returns {Promise<void>}
 	 */
 	create(table, document, data) {
@@ -201,9 +171,9 @@ module.exports = class extends Provider {
 
 	/**
 	 * Update a document from a directory.
-	 * @param {string} table The name of the directory.
-	 * @param {string} document The document name.
-	 * @param {Object} data The object with all the properties you want to update.
+	 * @param {string} table The name of the directory
+	 * @param {string} document The document name
+	 * @param {Object} data The object with all the properties you want to update
 	 * @returns {Promise<void>}
 	 */
 	async update(table, document, data) {
@@ -213,9 +183,9 @@ module.exports = class extends Provider {
 
 	/**
 	 * Replace all the data from a document.
-	 * @param {string} table The name of the directory.
-	 * @param {string} document The document name.
-	 * @param {Object} data The new data for the document.
+	 * @param {string} table The name of the directory
+	 * @param {string} document The document name
+	 * @param {Object} data The new data for the document
 	 * @returns {Promise<void>}
 	 */
 	replace(table, document, data) {
@@ -224,12 +194,46 @@ module.exports = class extends Provider {
 
 	/**
 	 * Delete a document from the table.
-	 * @param {string} table The name of the directory.
-	 * @param {string} document The document name.
+	 * @param {string} table The name of the directory
+	 * @param {string} document The document name
 	 * @returns {Promise<void>}
 	 */
 	delete(table, document) {
 		return fs.unlink(resolve(this.baseDir, table, `${document}.json`));
+	}
+
+	/**
+	 * Update or insert a new value to a specified entry.
+	 * @param {string} table The name of the directory
+	 * @param {string[]} route An array with the path to update
+	 * @param {Object} object The entry to update
+	 * @param {*} newValue The new value for the key
+	 * @returns {Promise<void>}
+	 * @private
+	 */
+	_updateValue(table, route, object, newValue) {
+		let value = object;
+		for (let j = 0; j < route.length - 1; j++) {
+			if (typeof value[route[j]] === 'undefined') value[route[j]] = { [route[j + 1]]: {} };
+			value = value[route[j]];
+		}
+		value[route[route.length - 1]] = newValue;
+		return this.replace(table, object.id, object);
+	}
+
+	/**
+	 * Remove a value from a specified entry.
+	 * @param {string} table The name of the directory
+	 * @param {string[]} route An array with the path to update
+	 * @param {Object} object The entry to update
+	 * @returns {Promise<void>}
+	 * @private
+	 */
+	_removeValue(table, route, object) {
+		let value = object;
+		for (let j = 0; j < route.length - 1; j++) value = value[route[j]] || {};
+		delete value[route[route.length - 1]];
+		return this.replace(table, object.id, object);
 	}
 
 };

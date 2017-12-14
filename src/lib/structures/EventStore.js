@@ -13,13 +13,13 @@ class EventStore extends Collection {
 	/**
 	 * Constructs our EventStore for use in Klasa
 	 * @since 0.0.1
-	 * @param  {KlasaClient} client The klasa client initializing this store.
+	 * @param {KlasaClient} client The klasa client initializing this store.
 	 */
 	constructor(client) {
 		super();
 
 		/**
-		 * The client this EventStore was creaated with.
+		 * The client this EventStore was created with.
 		 * @since 0.0.1
 		 * @name EventStore#client
 		 * @type {KlasaClient}
@@ -28,7 +28,7 @@ class EventStore extends Collection {
 		Object.defineProperty(this, 'client', { value: client });
 
 		/**
-		 * The directory of events in Klasa relative to where its installled.
+		 * The directory of events in Klasa relative to where its installed.
 		 * @since 0.0.1
 		 * @type {String}
 		 */
@@ -68,7 +68,7 @@ class EventStore extends Collection {
 	/**
 	 * Deletes an event from the store.
 	 * @since 0.0.1
-	 * @param  {Event|string} name An event object or a string representing the event name.
+	 * @param {Event|string} name An event object or a string representing the event name.
 	 * @return {boolean} whether or not the delete was successful.
 	 */
 	delete(name) {
@@ -82,7 +82,7 @@ class EventStore extends Collection {
 	/**
 	 * Sets up an event in our store.
 	 * @since 0.0.1
-	 * @param {Event} event The event object we are setting up.
+	 * @param {Event} event The event object we are setting up
 	 * @returns {Event}
 	 */
 	set(event) {

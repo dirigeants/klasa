@@ -549,13 +549,14 @@ class ArgResolver extends Resolver {
 	 * @since 0.0.1
 	 * @param {number} value The value to check against
 	 * @param {?number} min The minimum value
-	 * @param {?number} max The maxiumum value
+	 * @param {?number} max The maximum value
 	 * @param {Object} currentUsage The current usage
 	 * @param {number} possible The id of the current possible usage
 	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @param {string} suffix An error suffix
 	 * @returns {boolean}
+	 * @private
 	 */
 	static minOrMax(value, min, max, currentUsage, possible, repeat, msg, suffix = '') {
 		if (min && max) {

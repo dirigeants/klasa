@@ -11,10 +11,10 @@ class Extendable {
 
 	/**
 	 * @typedef {object} ExtendableOptions
+	 * @property {string} [name=theFileName] The name of the extendable
+	 * @property {boolean} [enabled=true] If the extendable is enabled or not
+	 * @property {boolean} [klasa=false] If the extendable is for Klasa instead of Discord.js
 	 * @memberof Extendable
-	 * @property {string} [name = theFileName] The name of the extendable
-	 * @property {boolean} [enabled = true] If the extendable is enabled or not
-	 * @property {boolean} [klasa = false] If the extendable is for Klasa instead of Discord.js
 	 */
 
 	/**
@@ -86,8 +86,8 @@ class Extendable {
 	 * The extend method to be overwritten in actual extend pieces
 	 * @since 0.0.1
 	 * @param {*} params Any parameters you want
-	 * @abstract
 	 * @returns {*}
+	 * @abstract
 	 */
 	extend() {
 		// Defined in extension Classes
@@ -116,8 +116,8 @@ class Extendable {
 
 	/**
 	 * Enables this piece
-	 * @param {boolean} [init=false] If the piece is being init or not
 	 * @since 0.0.1
+	 * @param {boolean} [init=false] If the piece is being init or not
 	 * @returns {Piece} This piece
 	 */
 	enable(init = false) {

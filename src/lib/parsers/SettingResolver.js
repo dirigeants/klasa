@@ -111,7 +111,7 @@ class SettingResolver extends Resolver {
 	 * @param {KlasaGuild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
 	 * @param {Object} minMax The minimum and maximum
-	 * @param {?number} minMax.min The minumum value
+	 * @param {?number} minMax.min The minimum value
 	 * @param {?number} minMax.max The maximum value
 	 * @returns {string}
 	 */
@@ -128,7 +128,7 @@ class SettingResolver extends Resolver {
 	 * @param {KlasaGuild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
 	 * @param {Object} minMax The minimum and maximum
-	 * @param {?number} minMax.min The minumum value
+	 * @param {?number} minMax.min The minimum value
 	 * @param {?number} minMax.max The maximum value
 	 * @returns {number}
 	 */
@@ -146,7 +146,7 @@ class SettingResolver extends Resolver {
 	 * @param {KlasaGuild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
 	 * @param {Object} minMax The minimum and maximum
-	 * @param {?number} minMax.min The minumum value
+	 * @param {?number} minMax.min The minimum value
 	 * @param {?number} minMax.max The maximum value
 	 * @returns {number}
 	 */
@@ -202,7 +202,7 @@ class SettingResolver extends Resolver {
 	/**
 	 * Resolves anything, even objects.
 	 * @since 0.5.0
-	 * @param {*} data Raw content to pass.
+	 * @param {*} data Raw content to pass
 	 * @returns {Promise<*>}
 	 */
 	any(data) {
@@ -212,14 +212,14 @@ class SettingResolver extends Resolver {
 	/**
 	 * Check if the input is valid with min and/or max values.
 	 * @since 0.0.1
-	 * @static
 	 * @param {KlasaGuild} guild The guild to resolve for
-	 * @param {number} value The value to check.
-	 * @param {?number} min Min value.
-	 * @param {?number} max Max value.
+	 * @param {number} value The value to check
+	 * @param {?number} min Min value
+	 * @param {?number} max Max value
 	 * @param {string} name The name of the key being resolved
 	 * @param {string} [suffix=''] The suffix to apply to the error messages
 	 * @returns {boolean}
+	 * @private
 	 */
 	static maxOrMin(guild, value, min, max, name, suffix = '') {
 		if (min && max) {

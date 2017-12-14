@@ -3,7 +3,7 @@ const { Event } = require('klasa');
 module.exports = class extends Event {
 
 	constructor(client, dir, file) {
-		super(client, dir, file, { enabled: 'wtf' in client.config.consoleEvents ? !!client.config.consoleEvents.wtf : true });
+		super(client, dir, file, { enabled: client.options.consoleEvents.wtf });
 	}
 
 	run(failure) {
