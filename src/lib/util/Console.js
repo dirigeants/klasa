@@ -111,7 +111,7 @@ class KlasaConsole extends Console {
 	/**
 	 * Constructs our KlasaConsole instance
 	 * @since 0.4.0
-	 * @param  {KlasaConsoleConfig} [options] The options for the klasa console.
+	 * @param {KlasaConsoleConfig} [options] The options for the klasa console.
 	 */
 	constructor({ stdout = process.stdout, stderr = process.stderr, useColor, colors = {}, timestamps = true }) {
 		super(stdout, stderr);
@@ -150,7 +150,7 @@ class KlasaConsole extends Console {
 		 * The colors for this console.
 		 * @since 0.4.0
 		 * @name KlasaConsole#colors
-		 * @type  {boolean|Colors}
+		 * @type {boolean|Colors}
 		 */
 		this.colors = {
 			debug: colors.debug || {

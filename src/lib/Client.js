@@ -70,7 +70,7 @@ class KlasaClient extends Discord.Client {
 	 */
 
 	/**
-	 * @typedef  {Object} ConfigUpdateEntryMany
+	 * @typedef {Object} ConfigUpdateEntryMany
 	 * @property {'MANY'} type
 	 * @property {string[]} keys
 	 * @property {Array<*>} values

@@ -27,7 +27,7 @@ class Store {
 	 * Loads a piece into Klasa so it can be saved in this store.
 	 * @since 0.0.1
 	 * @param {string} dir The user directory or core directory where this file is saved
-	 * @param  {string|string[]} file A string or array of strings showing where the file is located.
+	 * @param {string|string[]} file A string or array of strings showing where the file is located.
 	 * @returns {?Piece}
 	 */
 	load(dir, file) {
@@ -63,7 +63,7 @@ class Store {
 	/**
 	 * Resolve a string or piece into a piece object.
 	 * @since 0.0.1
-	 * @param  {Piece|string} name The piece object or a string representing a piece's name
+	 * @param {Piece|string} name The piece object or a string representing a piece's name
 	 * @return {Piece}
 	 */
 	resolve(name) {

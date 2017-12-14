@@ -7,7 +7,7 @@ const Gateway = require('./Gateway');
 class GatewayDriver {
 
 	/**
-	 * @typedef  {Object} SettingsOptions
+	 * @typedef {Object} SettingsOptions
 	 * @property {string} [provider]
 	 * @property {boolean} [nice]
 	 * @memberof GatewayDriver

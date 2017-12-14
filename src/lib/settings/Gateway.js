@@ -11,7 +11,7 @@ const discord = require('discord.js');
 class Gateway extends GatewayStorage {
 
 	/**
-	 * @typedef  {Object} GatewayOptions
+	 * @typedef {Object} GatewayOptions
 	 * @property {Provider} [provider]
 	 * @property {CacheProvider} [cache]
 	 * @property {boolean} [nice=false]
@@ -24,14 +24,14 @@ class Gateway extends GatewayStorage {
 	 */
 
 	/**
-	 * @typedef  {Object} GatewayPathOptions
+	 * @typedef {Object} GatewayPathOptions
 	 * @property {boolean} [avoidUnconfigurable=false]
 	 * @property {boolean} [piece=true]
 	 * @memberof Gateway
 	 */
 
 	/**
-	 * @typedef  {Object} GatewayPathResult
+	 * @typedef {Object} GatewayPathResult
 	 * @property {SchemaPiece} path
 	 * @property {string[]} route
 	 * @memberof Gateway

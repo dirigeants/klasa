@@ -9,7 +9,7 @@ const fs = require('fs-nextra');
 class SchemaFolder extends Schema {
 
 	/**
-	 * @typedef  {Object} AddOptions
+	 * @typedef {Object} AddOptions
 	 * @property {string} type The type for the key
 	 * @property {*} [default] The default value for the key
 	 * @property {number} [min] The min value for the key (String.length for String, value for number)

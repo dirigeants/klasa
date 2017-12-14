@@ -42,7 +42,7 @@ class RichDisplay {
 	/**
 	 * Constructs our RichDisplay instance
 	 * @since 0.4.0
-	 * @param  {external:MessageEmbed} [embed=new MessageEmbed()] A Template embed to apply to all pages
+	 * @param {external:MessageEmbed} [embed=new MessageEmbed()] A Template embed to apply to all pages
 	 */
 	constructor(embed = new Embed()) {
 		/**

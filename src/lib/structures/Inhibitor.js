@@ -78,8 +78,8 @@ class Inhibitor {
 	 * @since 0.0.1
 	 * @param {KlasaMessage} msg The message that triggered this inhibitor
 	 * @param {Command} cmd The command to run
-	 * @abstract
 	 * @returns {(void|string)}
+	 * @abstract
 	 */
 	run() {
 		// Defined in extension Classes
@@ -88,8 +88,8 @@ class Inhibitor {
 	/**
 	 * The init method to be optionally overwritten in actual inhibitors
 	 * @since 0.0.1
-	 * @abstract
 	 * @returns {void}
+	 * @abstract
 	 */
 	async init() {
 		// Optionally defined in extension Classes

@@ -13,7 +13,7 @@ class ProviderStore extends Collection {
 	/**
 	 * Constructs our ProviderStore for use in Klasa
 	 * @since 0.0.1
-	 * @param  {KlasaClient} client The Klasa client
+	 * @param {KlasaClient} client The Klasa client
 	 */
 	constructor(client) {
 		super();
@@ -59,8 +59,8 @@ class ProviderStore extends Collection {
 	/**
 	 * The default provider
 	 * @since 0.5.0
-	 * @readonly
 	 * @return {Provider} The default provider set in KlasaClientOptions.provider
+	 * @readonly
 	 */
 	get default() {
 		return this.get(this.client.options.provider.engine);
@@ -69,7 +69,7 @@ class ProviderStore extends Collection {
 	/**
 	 * Deletes a provider from the store
 	 * @since 0.0.1
-	 * @param  {Provider|string} name The provider object or a string representing the structure this store caches
+	 * @param {Provider|string} name The provider object or a string representing the structure this store caches
 	 * @return {boolean} whether or not the delete was successful.
 	 */
 	delete(name) {

@@ -50,10 +50,10 @@ class PermissionLevels extends Collection {
 	/**
 	 * Adds levels to the levels cache to be converted to valid permission structure
 	 * @since 0.2.1
-	 * @private
 	 * @param {number} level The permission number for the level you are defining
 	 * @param {permissionLevelResponse} obj Whether the level should break (stop processing higher levels, and inhibit a no permission error)
 	 * @returns {PermissionLevels} This permission levels
+	 * @private
 	 */
 	set(level, obj) {
 		if (level < 0) throw new Error(`Cannot set permission level ${level}. Permission levels start at 0.`);

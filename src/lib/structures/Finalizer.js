@@ -71,8 +71,8 @@ class Finalizer {
 	 * @param {KlasaMessage} msg The message used to trigger this finalizer
 	 * @param {KlasaMessage|KlasaMessage[]} mes The bot's response message, if one is returned
 	 * @param {number} start The performance now start time including all command overhead
-	 * @abstract
 	 * @returns {void}
+	 * @abstract
 	 */
 	run() {
 		// Defined in extension Classes
@@ -81,8 +81,8 @@ class Finalizer {
 	/**
 	 * The init method to be optionally overwritten in actual finalizers
 	 * @since 0.0.1
-	 * @abstract
 	 * @returns {void}
+	 * @abstract
 	 */
 	async init() {
 		// Optionally defined in extension Classes

@@ -82,6 +82,7 @@ class Provider {
 
 		/**
 		 * If the provider is designed to handle cache operations
+		 * @since 0.5.0
 		 * @type {boolean}
 		 */
 		this.cache = 'cache' in options ? options.cache : false;

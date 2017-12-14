@@ -13,7 +13,7 @@ class MonitorStore extends Collection {
 	/**
 	 * Constructs our MonitorStore for use in Klasa
 	 * @since 0.0.1
-	 * @param  {KlasaClient} client The Klasa Client
+	 * @param {KlasaClient} client The Klasa Client
 	 */
 	constructor(client) {
 		super();
@@ -59,7 +59,7 @@ class MonitorStore extends Collection {
 	/**
 	 * Deletes a monitor from the store
 	 * @since 0.0.1
-	 * @param  {Monitor|string} name The monitor object or a string representing the structure this store caches
+	 * @param {Monitor|string} name The monitor object or a string representing the structure this store caches
 	 * @return {boolean} whether or not the delete was successful.
 	 */
 	delete(name) {

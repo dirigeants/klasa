@@ -13,7 +13,7 @@ class LanguageStore extends Collection {
 	/**
 	 * Constructs our LanguageStore for use in Klasa
 	 * @since 0.2.1
-	 * @param  {KlasaClient} client The Klasa client
+	 * @param {KlasaClient} client The Klasa client
 	 */
 	constructor(client) {
 		super();
@@ -69,7 +69,7 @@ class LanguageStore extends Collection {
 	/**
 	 * Deletes a language from the store
 	 * @since 0.2.1
-	 * @param  {Finalizer|string} name The language object or a string representing the structure this store caches
+	 * @param {Finalizer|string} name The language object or a string representing the structure this store caches
 	 * @return {boolean} whether or not the delete was successful.
 	 */
 	delete(name) {

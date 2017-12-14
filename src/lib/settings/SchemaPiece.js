@@ -8,7 +8,7 @@ const fs = require('fs-nextra');
 class SchemaPiece extends Schema {
 
 	/**
-	 * @typedef  {Object} SchemaPieceJSON
+	 * @typedef {Object} SchemaPieceJSON
 	 * @property {string} type The type for the key
 	 * @property {*} default The default value for the key
 	 * @property {number} min The min value for the key (String.length for String, value for number)
@@ -20,7 +20,7 @@ class SchemaPiece extends Schema {
 	 */
 
 	/**
-	 * @typedef  {Object} ModifyOptions
+	 * @typedef {Object} ModifyOptions
 	 * @property {*} [default] The new default value
 	 * @property {number} [min] The new minimum range value
 	 * @property {number} [max] The new maximum range value

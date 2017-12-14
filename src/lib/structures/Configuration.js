@@ -4,21 +4,21 @@
 class Configuration {
 
 	/**
-	 * @typedef  {Object} ConfigurationUpdateResult
+	 * @typedef {Object} ConfigurationUpdateResult
 	 * @property {*} value
 	 * @property {SchemaPiece} path
 	 * @memberof Configuration
 	 */
 
 	/**
-	 * @typedef  {Object} ConfigurationParseOptions
+	 * @typedef {Object} ConfigurationParseOptions
 	 * @property {string} path
 	 * @property {string[]} route
 	 * @memberof Configuration
 	 */
 
 	/**
-	 * @typedef  {Object} ConfigurationParseResult
+	 * @typedef {Object} ConfigurationParseResult
 	 * @property {*} parsed
 	 * @property {(string|number|object)} parsedID
 	 * @property {null} array
@@ -29,7 +29,7 @@ class Configuration {
 	 */
 
 	/**
-	 * @typedef  {Object} ConfigurationParseResultArray
+	 * @typedef {Object} ConfigurationParseResultArray
 	 * @property {*} parsed
 	 * @property {*} parsedID
 	 * @property {any[]} array
@@ -40,7 +40,7 @@ class Configuration {
 	 */
 
 	/**
-	 * @typedef  {Object} ConfigurationUpdateManyList
+	 * @typedef {Object} ConfigurationUpdateManyList
 	 * @property {Error[]} errors
 	 * @property {Array<Promise<any>>} promises
 	 * @property {string[]} keys
@@ -49,14 +49,14 @@ class Configuration {
 	 */
 
 	/**
-	 * @typedef  {Object} ConfigurationUpdateManyUpdated
+	 * @typedef {Object} ConfigurationUpdateManyUpdated
 	 * @property {string[]} keys
 	 * @property {Array<*>} values
 	 * @memberof Configuration
 	 */
 
 	/**
-	 * @typedef  {Object} ConfigurationUpdateManyResult
+	 * @typedef {Object} ConfigurationUpdateManyResult
 	 * @property {ConfigurationUpdateManyUpdated} updated
 	 * @property {Error[]} errors
 	 * @memberof Configuration

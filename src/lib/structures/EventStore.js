@@ -13,7 +13,7 @@ class EventStore extends Collection {
 	/**
 	 * Constructs our EventStore for use in Klasa
 	 * @since 0.0.1
-	 * @param  {KlasaClient} client The klasa client initializing this store.
+	 * @param {KlasaClient} client The klasa client initializing this store.
 	 */
 	constructor(client) {
 		super();
@@ -68,7 +68,7 @@ class EventStore extends Collection {
 	/**
 	 * Deletes an event from the store.
 	 * @since 0.0.1
-	 * @param  {Event|string} name An event object or a string representing the event name.
+	 * @param {Event|string} name An event object or a string representing the event name.
 	 * @return {boolean} whether or not the delete was successful.
 	 */
 	delete(name) {

@@ -3,7 +3,7 @@
 class Colors {
 
 	/**
-	 * @typedef  {object} ColorsFormatOptions
+	 * @typedef {object} ColorsFormatOptions
 	 * @property {(string | string[])} style
 	 * @property {(number | string | number[] | string[])} background
 	 * @property {(number | string | number[] | string[])} text
