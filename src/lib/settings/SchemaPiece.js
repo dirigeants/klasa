@@ -117,7 +117,7 @@ class SchemaPiece extends Schema {
 	 * @returns {string}
 	 */
 	resolveString(msg) {
-		const value = this.constructor._resolveConfigs(this.gateway.type, msg);
+		const value = this.constructor._resolveConfigs(this.gateway.type, msg).get(this.path);
 		if (value === null) return 'Not set';
 
 		let resolver = (val) => val;
