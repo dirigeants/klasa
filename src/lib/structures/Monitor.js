@@ -93,18 +93,18 @@ class Monitor {
 	 * The run method to be overwritten in actual monitor pieces
 	 * @since 0.0.1
 	 * @param {KlasaMessage} msg The discord message
-	 * @abstract
 	 * @returns {void}
+	 * @abstract
 	 */
 	run() {
 		// Defined in extension Classes
 	}
 
 	/**
-	 * The init method to be optionaly overwritten in actual monitor pieces
+	 * The init method to be optionally overwritten in actual monitor pieces
 	 * @since 0.0.1
-	 * @abstract
 	 * @returns {void}
+	 * @abstract
 	 */
 	async init() {
 		// Optionally defined in extension Classes

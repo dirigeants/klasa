@@ -89,10 +89,10 @@ class Language {
 	}
 
 	/**
-	 * The init method to be optionaly overwritten in actual languages
+	 * The init method to be optionally overwritten in actual languages
 	 * @since 0.2.1
-	 * @abstract
 	 * @returns {void}
+	 * @abstract
 	 */
 	async init() {
 		// Optionally defined in extension Classes

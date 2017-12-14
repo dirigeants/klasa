@@ -224,14 +224,14 @@ class Gateway extends GatewayStorage {
 			if (path[currKey].type === 'Folder') {
 				path = path[currKey];
 			} else if (piece) {
-				if (avoidUnconfigurable && !path[currKey].configurable) throw `The key ${path[currKey].path} is not configureable in the current schema.`;
+				if (avoidUnconfigurable && !path[currKey].configurable) throw `The key ${path[currKey].path} is not configurable in the current schema.`;
 				return { path: path[currKey], route: path[currKey].path.split('.') };
 			}
 		}
 
 		if (piece && path.type === 'Folder') {
 			const keys = path.configurableKeys;
-			if (keys.length === 0) throw `This group is not configureable.`;
+			if (keys.length === 0) throw `This group is not configurable.`;
 			throw `Please, choose one of the following keys: '${keys.join('\', \'')}'`;
 		}
 
@@ -245,7 +245,7 @@ class Gateway extends GatewayStorage {
 	 * @private
 	 */
 	async init(download = true) {
-		if (this.ready) throw new Error(`[INIT] ${this} already inited.`);
+		if (this.ready) throw new Error(`[INIT] ${this} has already initialized.`);
 
 		await this.initSchema();
 		await this.initTable();

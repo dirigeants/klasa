@@ -86,7 +86,7 @@ class Inhibitor {
 	}
 
 	/**
-	 * The init method to be optionaly overwritten in actual inhibitors
+	 * The init method to be optionally overwritten in actual inhibitors
 	 * @since 0.0.1
 	 * @abstract
 	 * @returns {void}

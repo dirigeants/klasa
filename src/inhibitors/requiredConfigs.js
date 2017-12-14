@@ -11,7 +11,6 @@ module.exports = class extends Inhibitor {
 			return thisConfig === undefined || thisConfig === null;
 		});
 		if (requiredConfigs.length > 0) throw msg.language.get('INHIBITOR_REQUIRED_CONFIGS', requiredConfigs);
-		return;
 	}
 
 };

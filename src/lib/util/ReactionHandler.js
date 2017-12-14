@@ -209,8 +209,8 @@ class ReactionHandler extends ReactionCollector {
 	 * @returns {void}
 	 */
 	zero() {
-		if (this.display.options.length - 1 < 0 + (this.currentPage * 10)) return;
-		this.resolve(0 + (this.currentPage * 10));
+		if (this.display.options.length - 1 < this.currentPage * 10) return;
+		this.resolve(this.currentPage * 10);
 		this.stop();
 	}
 

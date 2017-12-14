@@ -90,7 +90,7 @@ class Timestamp {
 	}
 
 	/**
-	 * Shows the userfriendly duration of time between a period and now.
+	 * Shows the user friendly duration of time between a period and now.
 	 * @since 0.5.0
 	 * @param {(Date|number|string)} earlier The time to compare
 	 * @param {boolean} [showIn] Whether the output should be prefixed

@@ -79,7 +79,7 @@ class Finalizer {
 	}
 
 	/**
-	 * The init method to be optionaly overwritten in actual finalizers
+	 * The init method to be optionally overwritten in actual finalizers
 	 * @since 0.0.1
 	 * @abstract
 	 * @returns {void}

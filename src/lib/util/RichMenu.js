@@ -44,7 +44,7 @@ class RichMenu extends RichDisplay {
 
 	/**
 	 * @typedef {object} RichMenuRunOptions
-	 * @property {Function} [filter] A filter function to add to the ReactionHandler (Recieves: Reaction, User)
+	 * @property {Function} [filter] A filter function to add to the ReactionHandler (Receives: Reaction, User)
 	 * @property {boolean} [stop=true] If a stop reaction should be included
 	 * @property {string} [prompt=msg.language.get('REACTIONHANDLER_PROMPT')] The prompt to be used when awaiting user input on a page to jump to
 	 * @property {number} [startPage=0] The page to start the RichMenu on
@@ -131,7 +131,7 @@ class RichMenu extends RichDisplay {
 	}
 
 	/**
-	 * Determins the emojis to use in this menu
+	 * Determines the emojis to use in this menu
 	 * @since 0.4.0
 	 * @param {emoji[]} emojis An array of emojis to use
 	 * @param {boolean} stop Whether the stop emoji should be included

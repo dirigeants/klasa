@@ -40,9 +40,9 @@ class KlasaClient extends Discord.Client {
 	 * @property {boolean} [cmdEditing=false] Whether the bot should update responses if the command is edited
 	 * @property {boolean} [cmdLogging=false] Whether the bot should log command usage
 	 * @property {boolean} [typing=false] Whether the bot should type while processing commands
-	 * @property {boolean} [preserveConfigs=true] Whetheer the bot should preserve (non-default) configs when removed from a guild
+	 * @property {boolean} [preserveConfigs=true] Whether the bot should preserve (non-default) configs when removed from a guild
 	 * @property {boolean} [quotedStringSupport=false] Whether the bot should default to using quoted string support in arg parsing, or not (overridable per command)
-	 * @property {?(string|Function)} [readyMessage=`Successfully initialized. Ready to serve ${this.guilds.size} guilds.`] readyMessage to be passed thru Klasa's ready event
+	 * @property {(string|Function)} [readyMessage=`Successfully initialized. Ready to serve ${this.guilds.size} guilds.`] readyMessage to be passed throughout Klasa's ready event
 	 * @property {string} [ownerID] The discord user id for the user the bot should respect as the owner (gotten from Discord api if not provided)
 	 * @property {RegExp} [regexPrefix] The regular expression prefix if one is provided
 	 * @memberof KlasaClient
@@ -50,8 +50,8 @@ class KlasaClient extends Discord.Client {
 
 	/**
 	 * @typedef {Object} KlasaConsoleConfig
-	 * @property {WriteableStream} [stdout=process.stdout] Output stream
-	 * @property {WriteableStream} [stderr=process.stderr] Error stream
+	 * @property {WritableStream} [stdout=process.stdout] Output stream
+	 * @property {WritableStream} [stderr=process.stderr] Error stream
 	 * @property {boolean} [useColor=false] Whether the client console should use colors
 	 * @property {Colors} [colors] Color formats to use
 	 * @property {(boolean|string)} [timestamps=true] Whether to use timestamps or not, or the Timestamp format of the timestamp you want to use
@@ -102,7 +102,7 @@ class KlasaClient extends Discord.Client {
 		this.clientBaseDir = config.clientBaseDir ? path.resolve(config.clientBaseDir) : path.dirname(require.main.filename);
 
 		/**
-		 * The console for this instance of klasa. You can disable timestmaps, colors, and add writable streams as config options to configure this.
+		 * The console for this instance of klasa. You can disable timestamps, colors, and add writable streams as config options to configure this.
 		 * @since 0.4.0
 		 * @type {KlasaConsole}
 		 */
@@ -201,7 +201,7 @@ class KlasaClient extends Discord.Client {
 		 * @property {class} Webhook A discord.js WebhookClient
 		 * @property {function} escapeMarkdown A discord.js escape markdown function
 		 * @property {function} splitMessage A discord.js split message function
-		 * @property {Util} util A collection of static methods to be used thoughout the bot
+		 * @property {Util} util A collection of static methods to be used throughout the bot
 		 */
 		this.methods = {
 			Collection: Discord.Collection,
@@ -242,10 +242,10 @@ class KlasaClient extends Discord.Client {
 			.registerStore(this.providers)
 			.registerStore(this.events)
 			.registerStore(this.extendables);
-		// Core pieces already have argresolver entries for the purposes of documentation.
+		// Core pieces already have ArgResolver entries for the purposes of documentation.
 
 		/**
-		 * Whether the client is truely ready or not
+		 * Whether the client is truly ready or not
 		 * @since 0.0.1
 		 * @type {boolean}
 		 */
@@ -523,7 +523,7 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  */
 
 /**
- * Emitted when a command has errored.
+ * Emitted when a command has encountered an error.
  * @event KlasaClient#commandError
  * @since 0.3.0
  * @param {KlasaMessage} message The message that triggered the command
@@ -533,7 +533,7 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  */
 
 /**
- * Emitted when a monitor has errored.
+ * Emitted when a monitor has encountered an error.
  * @event KlasaClient#monitorError
  * @since 0.4.0
  * @param {KlasaMessage} message The message that triggered the monitor

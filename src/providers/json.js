@@ -10,7 +10,7 @@ module.exports = class extends Provider {
 	}
 
 	/**
-	 * Inits the database
+	 * Initializes the database
 	 * @private
 	 */
 	async init() {

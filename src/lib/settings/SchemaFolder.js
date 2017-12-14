@@ -68,7 +68,7 @@ class SchemaFolder extends Schema {
 	}
 
 	/**
-	 * Get all configureable keys from this schema.
+	 * Get all configurable keys from this schema.
 	 * @since 0.5.0
 	 * @readonly
 	 * @returns {string[]}
@@ -417,11 +417,11 @@ class SchemaFolder extends Schema {
 	 * @private
 	 */
 	_init(object) {
-		if (this._inited) throw new Error(`[INIT] ${this} already inited.`);
+		if (this._inited) throw new Error(`[INIT] ${this} has already initialized.`);
 
 		for (const key of Object.keys(object)) {
 			if (typeof object[key] !== 'object') continue;
-			// Force retrocompatibility with SGv1's schema
+			// Force retro compatibility with SGv1's schema
 			if (typeof object[key].type === 'undefined') object[key].type = 'Folder';
 			if (object[key].type === 'Folder') {
 				const folder = new SchemaFolder(this.client, this.gateway, object[key], this, key);

@@ -19,7 +19,7 @@ class EventStore extends Collection {
 		super();
 
 		/**
-		 * The client this EventStore was creaated with.
+		 * The client this EventStore was created with.
 		 * @since 0.0.1
 		 * @name EventStore#client
 		 * @type {KlasaClient}
@@ -28,7 +28,7 @@ class EventStore extends Collection {
 		Object.defineProperty(this, 'client', { value: client });
 
 		/**
-		 * The directory of events in Klasa relative to where its installled.
+		 * The directory of events in Klasa relative to where its installed.
 		 * @since 0.0.1
 		 * @type {String}
 		 */

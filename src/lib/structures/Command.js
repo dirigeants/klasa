@@ -20,7 +20,7 @@ class Command {
 	 * @property {boolean} [nsfw=false] If the command should only run in nsfw channels
 	 * @property {boolean} [deletable=false] If the responses should be deleted if the triggering message is deleted
 	 * @property {boolean} [guarded=false] If the command can be disabled on a guild level (does not effect global disable)
-	 * @property {string[]} [aliases=[]] Any comand aliases
+	 * @property {string[]} [aliases=[]] Any command aliases
 	 * @property {boolean} [autoAliases=true] If automatic aliases should be added (adds aliases of name and aliases without dashes)
 	 * @property {number} [permLevel=0] The required permission level to use the command
 	 * @property {string[]} [botPerms=[]] The required Discord permissions for the bot to use this command
@@ -28,7 +28,7 @@ class Command {
 	 * @property {(string|Function)} [description=''] The help description for the command
 	 * @property {string} [usage=''] The usage string for the command
 	 * @property {?string} [usageDelim=undefined] The string to deliminate the command input for usage
-	 * @property {boolean} [quotedStringSupport=this.client.options.quotedStringSupport] Wheter args for this command should not deliminated inside quotes
+	 * @property {boolean} [quotedStringSupport=this.client.options.quotedStringSupport] Whether args for this command should not deliminated inside quotes
 	 * @property {(string|Function)} [extendedHelp=msg.language.get('COMMAND_HELP_NO_EXTENDED')] Extended help strings
 	 * @memberof Command
 	 */
@@ -240,7 +240,7 @@ class Command {
 	}
 
 	/**
-	 * The init method to be optionaly overwritten in actual commands
+	 * The init method to be optionally overwritten in actual commands
 	 * @since 0.0.1
 	 * @abstract
 	 * @returns {Promise<*>}

@@ -26,7 +26,7 @@ class RichDisplay {
 
 	/**
 	 * @typedef {object} RichDisplayRunOptions
-	 * @property {Function} [filter] A filter function to add to the ReactionHandler (Recieves: Reaction, User)
+	 * @property {Function} [filter] A filter function to add to the ReactionHandler (Receives: Reaction, User)
 	 * @property {boolean} [stop=true] If a stop reaction should be included
 	 * @property {boolean} [jump=true] If a jump reaction should be included
 	 * @property {boolean} [firstLast=true] If a first and last reaction should be included
@@ -170,7 +170,7 @@ class RichDisplay {
 	}
 
 	/**
-	 * Determins the emojis to use in this display
+	 * Determines the emojis to use in this display
 	 * @since 0.4.0
 	 * @param {emoji[]} emojis An array of emojis to use
 	 * @param {boolean} stop Whether the stop emoji should be included

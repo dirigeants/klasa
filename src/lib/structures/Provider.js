@@ -88,20 +88,20 @@ class Provider {
 	}
 
 	/**
-	 * The init method to be optionaly overwritten in actual provider pieces
+	 * The init method to be optionally overwritten in actual provider pieces
 	 * @since 0.0.1
-	 * @abstract
 	 * @returns {void}
+	 * @abstract
 	 */
 	async init() {
 		// Optionally defined in extension Classes
 	}
 
 	/**
-	 * The shutdown method to be optionaly overwritten in actual provider pieces
+	 * The shutdown method to be optionally overwritten in actual provider pieces
 	 * @since 0.3.0
-	 * @abstract
 	 * @returns {void}
+	 * @abstract
 	 */
 	async shutdown() {
 		// Optionally defined in extension Classes

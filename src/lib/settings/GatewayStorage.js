@@ -116,7 +116,7 @@ class GatewayStorage {
 	 * @since 0.5.0
 	 */
 	async init() {
-		if (this.ready) throw new Error('KlasaGatewayStorage already inited.');
+		if (this.ready) throw new Error(`[INIT] ${this} has already initialized.`);
 		await this.initSchema();
 		await this.initTable();
 
