@@ -212,7 +212,7 @@ class Configuration {
 		const { parsedID, parsed, path } = await this._reset(key, avoidUnconfigurable);
 		await (this.gateway.sql ?
 			this.gateway.provider.update(this.gateway.type, this.id, key, parsedID) :
-			this.gateway.provider.update(this.gateway.type, this.id, this.toJSON()));
+			this.gateway.provider.update(this.gateway.type, this.id, makeObject(key, parsedID)));
 		return { value: parsed, path };
 	}
 
