@@ -1,4 +1,5 @@
 const Piece = require('./interfaces/Piece');
+const { mergeDefault } = require('../util/util');
 const Discord = require('discord.js');
 
 /**
@@ -26,6 +27,8 @@ class Extendable {
 	 * @param {ExtendableOptions} options The options for this extendable
 	 */
 	constructor(client, dir, file, appliesTo = [], options = {}) {
+		options = mergeDefault(client.options.pieceDefaults.extendables, options);
+
 		/**
 		 * @since 0.0.1
 		 * @type {KlasaClient}
@@ -72,7 +75,7 @@ class Extendable {
 		 * @since 0.0.1
 		 * @type {boolean}
 		 */
-		this.enabled = 'enabled' in options ? options.enabled : true;
+		this.enabled = options.enabled;
 
 		/**
 		 * The target library to apply this extendable to

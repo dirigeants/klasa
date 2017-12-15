@@ -1,4 +1,5 @@
 const Piece = require('./interfaces/Piece');
+const { mergeDefault } = require('../util/util');
 
 /**
  * Base class for all Klasa Providers. See {@tutorial CreatingProviders} for more information how to use this class
@@ -13,7 +14,7 @@ class Provider {
 	 * @property {string} [name=theFileName] The name of the provider
 	 * @property {boolean} [enabled=true] Whether the provider is enabled or not
 	 * @property {string} [description=''] The provider description
-	 * @property {boolean} [sql=false] If the provider provides to a sql datasource
+	 * @property {boolean} [sql=false] If the provider provides to a sql data source
 	 * @memberof Provider
 	 */
 
@@ -25,6 +26,8 @@ class Provider {
 	 * @param {ProviderOptions} [options={}] Optional Provider settings
 	 */
 	constructor(client, dir, file, options = {}) {
+		options = mergeDefault(client.options.pieceDefaults.providers, options);
+
 		/**
 		 * @since 0.0.1
 		 * @type {KlasaClient}
@@ -64,28 +67,28 @@ class Provider {
 		 * @since 0.0.1
 		 * @type {boolean}
 		 */
-		this.enabled = 'enabled' in options ? options.enabled : true;
+		this.enabled = options.enabled;
 
 		/**
 		 * The description of the provider
 		 * @since 0.0.1
 		 * @type {string}
 		 */
-		this.description = options.description || '';
+		this.description = options.description;
 
 		/**
-		 * If the provider provides to a sql datasource
+		 * If the provider provides to a sql data source
 		 * @since 0.0.1
 		 * @type {boolean}
 		 */
-		this.sql = 'sql' in options ? options.sql : false;
+		this.sql = options.sql;
 
 		/**
 		 * If the provider is designed to handle cache operations
 		 * @since 0.5.0
 		 * @type {boolean}
 		 */
-		this.cache = 'cache' in options ? options.cache : false;
+		this.cache = options.cache;
 	}
 
 	/**

@@ -713,11 +713,12 @@ declare module 'klasa' {
 
 	export type constants = {
 		DEFAULTS: {
-			CLIENT: KlasaConstantsClient,
-			COMMAND: KlasaConstantsCommand,
-			GATEWAY_GUILDS_RESOLVER: (guildResolvable: string | KlasaGuild) => KlasaGuild,
-			GATEWAY_USERS_RESOLVER: (userResolvable: string | KlasaUser) => KlasaUser,
-			GATEWAY_CLIENTSTORAGE_RESOLVER: (clientResolvable: string | KlasaClient) => ClientUser
+			CLIENT: KlasaConstantsClient
+		};
+		GATEWAY_RESOLVERS: {
+			GUILDS: (guildResolvable: string | KlasaGuild) => KlasaGuild,
+			USERS: (userResolvable: string | KlasaUser) => KlasaUser,
+			CLIENT_STORAGE: (clientResolvable: string | KlasaClient) => ClientUser
 		};
 	};
 
@@ -1139,18 +1140,31 @@ declare module 'klasa' {
 		language?: string;
 		ownerID?: string;
 		permissionLevels?: PermissionLevels;
+		pieceDefaults?: KlasaPieceDefaults;
 		prefix?: string;
 		preserveConfigs?: boolean;
 		promptTime?: number;
-		provider?: {
-			engine: string,
-			[key: string]: string | object
-		};
-		quotedStringSupport?: boolean;
+		provider?: KlasaProviderOptions;
 		readyMessage?: (client: KlasaClient) => string;
 		regexPrefix?: RegExp;
 		typing?: boolean;
 	} & ClientOptions;
+
+	export type KlasaPieceDefaults = {
+		commands?: CommandOptions;
+		events?: EventOptions;
+		extendables?: ExtendableOptions;
+		finalizers?: FinalizerOptions;
+		inhibitors?: InhibitorOptions;
+		languages?: LanguageOptions;
+		monitors?: MonitorOptions;
+		providers?: ProviderOptions;
+	};
+
+	export type KlasaProviderOptions = {
+		engine: string;
+		[key: string]: string | object;
+	};
 
 	export type ExecOptions = {
 		cwd?: string;
@@ -1182,28 +1196,21 @@ declare module 'klasa' {
 		ignoreBots: true;
 		ignoreSelf: true;
 		language: 'en-US';
+		pieceDefaults: {
+			commands: CommandOptions,
+			events: EventOptions,
+			extendables: ExtendableOptions,
+			finalizers: FinalizerOptions,
+			inhibitors: InhibitorOptions,
+			languages: LanguageOptions,
+			monitors: MonitorOptions,
+			providers: ProviderOptions
+		};
 		preserveConfigs: true;
 		promptTime: 30000;
 		provider: {};
-		quotedStringSupport: false;
 		readyMessage: (client: KlasaClient) => string;
 		typing: false;
-	};
-
-	export type KlasaConstantsCommand = {
-		aliases: string[];
-		autoAliases: true;
-		botPerms: string[];
-		cooldown: 0;
-		deletable: false;
-		description: string;
-		enabled: true;
-		guarded: false;
-		nsfw: false;
-		permLevel: 0;
-		requiredConfigs: string[];
-		runIn: string[];
-		usage: string;
 	};
 
 	export type GatewayOptions = {
@@ -1332,15 +1339,17 @@ declare module 'klasa' {
 
 	export type CommandOptions = {
 		aliases?: string[];
+		autoAliases?: boolean;
 		botPerms?: string[];
 		cooldown?: number;
+		deletable?: boolean;
 		description?: string | ((msg: KlasaMessage) => string);
 		enabled?: boolean;
 		extendedHelp?: string | ((msg: KlasaMessage) => string);
 		name?: string;
 		permLevel?: number;
 		quotedStringSupport?: boolean;
-		requiredSettings?: string[];
+		requiredConfigs?: string[];
 		runIn?: string[];
 		usage?: string;
 		usageDelim?: string;

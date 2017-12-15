@@ -50,7 +50,7 @@ Client.defaultPermissionLevels
 	// let some group of people who solved some easteregg clues use a special command/some custom non-admin role
     .addLevel(6, false, (client, msg) => msg.guild && msg.member.permissions.has('ADMINISTRATOR'))
 	// Make the requirements to use the conf command stricter than just who can add the bot to the guild
-    .addLevel(8, false, (client, msg) => client.config.botSupportTeam.includes(msg.author.id));
+    .addLevel(8, false, (client, msg) => client.configs.botSupportTeam.includes(msg.author.id));
 	// add a role above guild owners that let your support team help setup/troubleshoot on other guilds.
 
 new Client(config).login(config.token);
