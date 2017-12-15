@@ -413,7 +413,7 @@ class Configuration {
 			} else if (schema[key].array && !Array.isArray(object[key])) {
 				list.errors.push([schema[key].path, new Error(`${schema[key].path} expects an array as value.`)]);
 			} else {
-				const promise = schema[key].array ?
+				const promise = schema[key].array && schema[key].type !== 'any' ?
 					Promise.all(object[key].map(entry => schema[key].parse(entry, guild)
 						.then(Configuration.getIdentifier)
 						.catch(error => { list.errors.push([schema[key].path, error]); }))) :
