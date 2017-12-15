@@ -13,7 +13,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
-- [[#130](https://github.com/dirigeants/klasa/pull/130)] Added `KlasaClientOptions.cmdDeleting` to change the default value for `Command.deletable` when not given. (kyranet)
+- [[#130](https://github.com/dirigeants/klasa/pull/130)] Added a new option in `KlasaClientOptions` to allow developers to set their own defaults for each kind of piece. (bdistin)
 - [[#128](https://github.com/dirigeants/klasa/pull/128)] Added the `monitorError` event. (kyranet)
 - [[#125](https://github.com/dirigeants/klasa/pull/125)] Added the default gateways to `GatewayDriver` defaulted by null to reflect in the documentation. (kyranet)
 - [[#125](https://github.com/dirigeants/klasa/pull/125)] Added `Schema` (the previous got renamed to `SchemaFolder`), reducing duplicated code and bringing more code consistency. (kyranet)
@@ -50,6 +50,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#130](https://github.com/dirigeants/klasa/pull/130)] Updated the documentation and some outdated typings. (kyranet)
 - [[#125](https://github.com/dirigeants/klasa/pull/125)] Moved the gateway resolvers from `GatewayDriver` (as getters) to `constants.GATEWAY_RESOLVERS`. (kyranet)
 - [[#125](https://github.com/dirigeants/klasa/pull/125)] `Schema#manager` and `SchemaPiece#manager` got renamed to `Schema#gateway` and `SchemaPiece#gateway`. (kyranet)
 - [[#125](https://github.com/dirigeants/klasa/pull/125)] Updated typings.
@@ -84,6 +85,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Removed
 
+- [[#130](https://github.com/dirigeants/klasa/pull/130)] Removed `KlasaClientOptions.quotedStringSupport` in favor of the new per-piece defaults. (bdistin)
 - [[#121](https://github.com/dirigeants/klasa/pull/121)] Removed `GatewaySQL`. (kyranet)
 - [[#116](https://github.com/dirigeants/klasa/pull/116)] Removed `moment.js` from the dependency list. (kyranet)
 - [[`2915d31b92`](https://github.com/dirigeants/klasa/commit/2915d31b92c8ea4b9202edfdb146a2d8b36ad8d6)] ([#43](https://github.com/dirigeants/klasa/pull/43)) Removed a bunch of extendables. (kyranet)

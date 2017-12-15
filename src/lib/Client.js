@@ -60,25 +60,25 @@ class KlasaClient extends Discord.Client {
 
 	/**
 	 * @typedef {Object} KlasaConsoleEvents
-	 * @property {boolean} [log=true] If the log event should be enabled by default
-	 * @property {boolean} [warn=true] If the warn event should be enabled by default
-	 * @property {boolean} [error=true] If the error event should be enabled by default
 	 * @property {boolean} [debug=false] If the debug event should be enabled by default
+	 * @property {boolean} [error=true] If the error event should be enabled by default
+	 * @property {boolean} [log=true] If the log event should be enabled by default
 	 * @property {boolean} [verbose=false] If the verbose event should be enabled by default
+	 * @property {boolean} [warn=true] If the warn event should be enabled by default
 	 * @property {boolean} [wtf=true] If the wtf event should be enabled by default
 	 * @memberof KlasaClient
 	 */
 
 	/**
 	 * @typedef {Object} KlasaPieceDefaults
-	 * @property {Object} [commands={}] The default command options
-	 * @property {Object} [events={}] The default event options
-	 * @property {Object} [extendables={}] The default extendable options
-	 * @property {Object} [finalizers={}] The default finalizer options
-	 * @property {Object} [inhibitors={}] The default inhibitor options
-	 * @property {Object} [languages={}] The default language options
-	 * @property {Object} [monitors={}] The default monitor options
-	 * @property {Object} [providers={}] The default provider options
+	 * @property {CommandOptions} [commands={}] The default command options
+	 * @property {EventOptions} [events={}] The default event options
+	 * @property {ExtendableOptions} [extendables={}] The default extendable options
+	 * @property {FinalizerOptions} [finalizers={}] The default finalizer options
+	 * @property {InhibitorOptions} [inhibitors={}] The default inhibitor options
+	 * @property {LanguageOptions} [languages={}] The default language options
+	 * @property {MonitorOptions} [monitors={}] The default monitor options
+	 * @property {ProviderOptions} [providers={}] The default provider options
 	 * @memberof KlasaClient
 	 */
 
