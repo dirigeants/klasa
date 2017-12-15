@@ -96,7 +96,7 @@ class Command {
 		 * @since 0.5.0
 		 * @type {boolean}
 		 */
-		this.deletable = options.deletable || this.client.options.cmdDeleting;
+		this.deletable = 'deletable' in options ? options.deletable : this.client.options.cmdDeleting;
 
 		/**
 		 * The name of the command
@@ -174,7 +174,7 @@ class Command {
 		 * @since 0.2.1
 		 * @type {boolean}
 		 */
-		this.quotedStringSupport = options.quotedStringSupport || this.client.options.quotedStringSupport;
+		this.quotedStringSupport = 'quotedStringSupport' in options ? options.quotedStringSupport : this.client.options.quotedStringSupport;
 
 		/**
 		 * The full category for the command
