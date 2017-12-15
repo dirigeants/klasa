@@ -37,6 +37,7 @@ class KlasaClient extends Discord.Client {
 	 * @property {boolean} [ignoreBots=true] Whether or not this bot should ignore other bots
 	 * @property {boolean} [ignoreSelf=true] Whether or not this bot should ignore itself
 	 * @property {boolean} [cmdPrompt=false] Whether the bot should prompt missing parameters
+	 * @property {boolean} [cmdDeleting=false] Whether the bot should delete responses if the command is deleted
 	 * @property {boolean} [cmdEditing=false] Whether the bot should update responses if the command is edited
 	 * @property {boolean} [cmdLogging=false] Whether the bot should log command usage
 	 * @property {boolean} [typing=false] Whether the bot should type while processing commands
