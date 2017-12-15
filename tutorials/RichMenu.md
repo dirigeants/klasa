@@ -28,11 +28,11 @@ if (choice === null) {
 const command = this.client.commands.get(menu.options[choice].name);
 const info = new this.client.methods.Embed()
 	.setTitle(`Command \`${msg.guild.configs.prefix}${command.name}\``)
-	.setDescription(command.description instanceof Function ? command.description() : command.description)
+	.setDescription(typeof command.description == 'function' ? command.description(msg) : command.description)
 	.addField('Usage:', command.usageString);
 
 if (command.extendedHelp && command.extendedHelp != '') {
-	info.addField('Help:', command.extendedHelp instanceof Function ? command.extendedHelp() : command.extendedHelp);
+	info.addField('Help:', typeof command.extendedHelp == 'function' ? command.extendedHelp(msg) : command.extendedHelp);
 }
 
 return collector.message.edit(info);
