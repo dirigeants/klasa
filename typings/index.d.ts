@@ -325,6 +325,7 @@ declare module 'klasa' {
 		public static isNumber(input: number): boolean;
 		public static isObject(input: object): boolean;
 		public static tryParse(value: string): object;
+		public static makeObject(path: string, value: any): object;
 		public static mergeDefault(def: object, given?: object): object;
 	}
 
@@ -648,16 +649,16 @@ declare module 'klasa' {
 		public destroy(): Promise<this>;
 
 		public reset(key: string, avoidUnconfigurable?: boolean): Promise<ConfigurationUpdateResult>;
-		public updateOne(key: string, value: any, guild?: GatewayGuildResolvable, avoidUnconfigurable?: boolean): Promise<ConfigurationUpdateResult>;
-		public updateArray(action: 'add' | 'remove', key: string, value: any, guild?: GatewayGuildResolvable, avoidUnconfigurable?: boolean): Promise<ConfigurationUpdateResult>;
+		public update(key: object, guild?: GatewayGuildResolvable): Promise<ConfigurationUpdateManyResult>;
+		public update(key: string, value?: any, guild?: GatewayGuildResolvable, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
 		public updateMany(object: any, guild?: GatewayGuildResolvable): Promise<ConfigurationUpdateManyResult>;
 
 		private _reset(key: string, guild: GatewayGuildResolvable, avoidUnconfigurable: boolean): Promise<ConfigurationParseResult>;
 		private _parseReset(key: string, guild: KlasaGuild, options: ConfigurationParseOptions): Promise<ConfigurationParseResult>;
 		private _parseUpdateOne(key: string, value: any, guild: KlasaGuild, options: ConfigurationParseOptions): Promise<ConfigurationParseResult>;
-		private _parseUpdateArray(action: 'add' | 'remove', key: string, value: any, guild: KlasaGuild, options: ConfigurationParseOptions): Promise<ConfigurationParseResultArray>;
-		private _sharedUpdateSingle(action: 'add' | 'remove', key: string, value: any, guild: KlasaGuild, avoidUnconfigurable: boolean): Promise<ConfigurationParseResult | ConfigurationParseResultArray>;
-		private _updateMany(cache: any, object: any, schema: SchemaFolder, guild: KlasaGuild, list: ConfigurationUpdateManyResult): void;
+		private _parseUpdateArray(action: 'add' | 'remove' | 'auto', key: string, value: any, guild: KlasaGuild, options: ConfigurationParseOptions): Promise<ConfigurationParseResultArray>;
+		private _updateSingle(action: 'add' | 'remove' | 'auto', key: string, value: any, guild: KlasaGuild, avoidUnconfigurable: boolean): Promise<ConfigurationParseResult | ConfigurationParseResultArray>;
+		private _updateMany(cache: any, object: any, schema: SchemaFolder, guild: KlasaGuild, list: ConfigurationUpdateManyResult, updateObject: object): void;
 		private _setValue(parsedID: string, path: SchemaPiece, route: string[]): Promise<void>;
 		private _patch(data: any): void;
 
@@ -667,6 +668,7 @@ declare module 'klasa' {
 		private static _merge(data: any, folder: SchemaFolder | SchemaPiece): any;
 		private static _clone(data: any, schema: SchemaFolder): any;
 		private static _patch(inst: any, data: any, schema: SchemaFolder): void;
+		private static getIdentifier(value: any): any;
 	}
 
 	// Util
@@ -1225,6 +1227,11 @@ declare module 'klasa' {
 	export type ConfigurationParseOptions = {
 		path: string;
 		route: string[];
+	};
+
+	export type ConfigurationUpdateOptions = {
+		avoidUnconfigurable?: boolean;
+		action?: 'add' | 'remove' | 'auto';
 	};
 
 	export type ConfigurationParseResult = {

@@ -46,9 +46,17 @@ Re-emits the Discord.js debug event as log event, if enabled.
 
 [events/error.js](https://github.com/dirigeants/klasa/blob/master/src/events/error.js)
 
+## guildCreate
+
+Checks if the guild is blacklisted for automatic leaving.
+
+**Source:**
+
+[events/guildCreate.js](https://github.com/dirigeants/klasa/blob/master/src/events/guildCreate.js)
+
 ## guildDelete
 
-Removes SettingGateway entries for the guild.
+If `KlasaClientOptions.preserveConfigs` is set to `false` (defaults to `true` if not set), this event deletes entries from the database to free up space.
 
 **Source:**
 
@@ -70,6 +78,22 @@ Runs monitors.
 
 [events/message.js](https://github.com/dirigeants/klasa/blob/master/src/events/message.js)
 
+## messageDelete
+
+If the message ran a command with the property `deletable` set to `true`, this event will delete the response.
+
+**Source:**
+
+[events/messageDelete.js](https://github.com/dirigeants/klasa/blob/master/src/events/messageDelete.js)
+
+## messageDeleteBulk
+
+Re-emits all the messages deleted to the `messageDelete` event.
+
+**Source:**
+
+[events/messageDeleteBulk.js](https://github.com/dirigeants/klasa/blob/master/src/events/messageDeleteBulk.js)
+
 ## messageUpdate
 
 Re-emits if command editing is enabled, and if the content is not the same, to check and see if the new message is a edited command.
@@ -77,6 +101,14 @@ Re-emits if command editing is enabled, and if the content is not the same, to c
 **Source:**
 
 [events/messageUpdate.js](https://github.com/dirigeants/klasa/blob/master/src/events/messageUpdate.js)
+
+## monitorError
+
+Handles the errors thrown by any of the monitors.
+
+**Source:**
+
+[events/monitorError.js](https://github.com/dirigeants/klasa/blob/master/src/events/monitorError.js)
 
 ## verbose
 

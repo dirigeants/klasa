@@ -165,6 +165,24 @@ class Util {
 	}
 
 	/**
+	 * Turn a dotted path into a json object.
+	 * @since 0.5.0
+	 * @param {string} path The dotted path
+	 * @param {*} value The value
+	 * @returns {*}
+	 */
+	static makeObject(path, value) {
+		if (path.indexOf('.') === -1) return { [path]: value };
+		const object = {};
+		const route = path.split('.');
+		const lastKey = route.pop();
+		let reference = object;
+		for (const key of route) reference = reference[key] = {};
+		reference[lastKey] = value;
+		return object;
+	}
+
+	/**
 	 * Sets default properties on an object that aren't already specified.
 	 * @since 0.5.0
 	 * @param {Object} def Default properties

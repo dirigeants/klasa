@@ -13,6 +13,8 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#129](https://github.com/dirigeants/klasa/pull/129)] Added `Util#makeObject` to make objects given a path and a value. (kyranet)
+- [[#129](https://github.com/dirigeants/klasa/pull/129)] Added `Configuration#update`, much easier to use than `Configuration#updateOne`, `Configuration#updateArray`, and alias of `Configuration#updateMany` when a json object is providen. (kyranet)
 - [[#130](https://github.com/dirigeants/klasa/pull/130)] Added a new option in `KlasaClientOptions` to allow developers to set their own defaults for each kind of piece. (bdistin)
 - [[#128](https://github.com/dirigeants/klasa/pull/128)] Added the `monitorError` event. (kyranet)
 - [[#125](https://github.com/dirigeants/klasa/pull/125)] Added the default gateways to `GatewayDriver` defaulted by null to reflect in the documentation. (kyranet)
@@ -50,6 +52,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#129](https://github.com/dirigeants/klasa/pull/129)] **[OPTIMIZATION]** Like new entries only store the id, `Configuration#update` will upload only the modified keys rather than all of them when using a `json` database. (kyranet)
 - [[#130](https://github.com/dirigeants/klasa/pull/130)] Updated the documentation and some outdated typings. (kyranet)
 - [[#125](https://github.com/dirigeants/klasa/pull/125)] Moved the gateway resolvers from `GatewayDriver` (as getters) to `constants.GATEWAY_RESOLVERS`. (kyranet)
 - [[#125](https://github.com/dirigeants/klasa/pull/125)] `Schema#manager` and `SchemaPiece#manager` got renamed to `Schema#gateway` and `SchemaPiece#gateway`. (kyranet)
@@ -85,6 +88,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Removed
 
+- [[#129](https://github.com/dirigeants/klasa/pull/129)] **[BREAKING]** Removed the methods `Configuration#updateOne`, `Configuration#updateArray`. They're replaced by `Configuration#update`. (kyranet)
 - [[#130](https://github.com/dirigeants/klasa/pull/130)] Removed `KlasaClientOptions.quotedStringSupport` in favor of the new per-piece defaults. (bdistin)
 - [[#121](https://github.com/dirigeants/klasa/pull/121)] Removed `GatewaySQL`. (kyranet)
 - [[#116](https://github.com/dirigeants/klasa/pull/116)] Removed `moment.js` from the dependency list. (kyranet)
@@ -101,6 +105,8 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
+- [[#129](https://github.com/dirigeants/klasa/pull/129)] Fixed identifiers not being resolved correctly when using `Configuration#update`. (kyranet)
+- [[#129](https://github.com/dirigeants/klasa/pull/129)] Fixed both config commands not removing the entries. (kyranet)
 - [[#125](https://github.com/dirigeants/klasa/pull/125)] Fixed many typos in the documentation. (kyranet)
 - [[#125](https://github.com/dirigeants/klasa/pull/125)] Fixed `MessageOptions` not being correctly handled with `StringResolvable`, resulting on code like `msg.send({ embed });` to fail. (kyranet)
 - [[#125](https://github.com/dirigeants/klasa/pull/125)] Fixed a serious security issue in `Configuration#get`. (kyranet)
