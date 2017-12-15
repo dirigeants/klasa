@@ -36,21 +36,21 @@ module.exports = class extends Command {
 
 ## Configuration
 
-| Name                    | Default                             | Type    | Description                                                                 |
-| ----------------------- | ----------------------------------- | ------- | --------------------------------------------------------------------------- |
-| **name**                | `theFileName`                       | string  | The name of the command                                                     |
-| **enabled**             | `true`                              | boolean | Whether the command is enabled or not                                       |
-| **runIn**               | `['text', 'dm', 'group']`           | Array   | What channel types the command should run in                                |
-| **cooldown**            | `0`                                 | number  | The amount of time before the user can run the command again in seconds     |
-| **aliases**             | `[]`                                | Array   | Any comand aliases                                                          |
-| **permLevel**           | `0`                                 | number  | The required permission level to use the command                            |
-| **botPerms**            | `[]`                                | Array   | The required Discord permissions for the bot to use this command            |
-| **requiredConfigs**     | `[]`                                | Array   | The required guild configs to use this command                              |
-| **description**         | `''`                                | string  | The help description for the command                                        |
-| **usage**               | `''`                                | string  | The usage string for the command See. {@tutorial UnderstandingUsageStrings} |
-| **usageDelim**          | `''`                                | string  | The string to deliminate the command input for usage                        |
-| **quotedStringSupport** | `client.config.quotedStringSupport` | boolean | Wheter args for this command should not deliminated inside quotes           |
-| **extendedHelp**        | `'No extended help available.'`     | string  | Extended help strings                                                       |
+| Name                    | Default                                       | Type    | Description                                                                 |
+| ----------------------- | --------------------------------------------- | ------- | --------------------------------------------------------------------------- |
+| **name**                | `theFileName`                                 | string  | The name of the command                                                     |
+| **enabled**             | `true`                                        | boolean | Whether the command is enabled or not                                       |
+| **runIn**               | `['text', 'dm', 'group']`                     | Array   | What channel types the command should run in                                |
+| **cooldown**            | `0`                                           | number  | The amount of time before the user can run the command again in seconds     |
+| **aliases**             | `[]`                                          | Array   | Any comand aliases                                                          |
+| **permLevel**           | `0`                                           | number  | The required permission level to use the command                            |
+| **botPerms**            | `[]`                                          | Array   | The required Discord permissions for the bot to use this command            |
+| **requiredConfigs**     | `[]`                                          | Array   | The required guild configs to use this command                              |
+| **description**         | `''`                                          | string  | The help description for the command                                        |
+| **usage**               | `''`                                          | string  | The usage string for the command See. {@tutorial UnderstandingUsageStrings} |
+| **usageDelim**          | `''`                                          | string  | The string to deliminate the command input for usage                        |
+| **quotedStringSupport** | `client.options.commands.quotedStringSupport` | boolean | Wheter args for this command should not deliminated inside quotes           |
+| **extendedHelp**        | `'No extended help available.'`               | string  | Extended help strings                                                       |
 
 > All commands are required to return an [Object Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise) you can do that by adding the `async` keyword to the function, there's no need to change anything else.
 

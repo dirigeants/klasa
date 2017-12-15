@@ -27,7 +27,7 @@ class Command {
 	 * @property {(string|Function)} [description=''] The help description for the command
 	 * @property {string} [usage=''] The usage string for the command
 	 * @property {?string} [usageDelim=undefined] The string to deliminate the command input for usage
-	 * @property {boolean} [quotedStringSupport=this.client.options.quotedStringSupport] Whether args for this command should not deliminated inside quotes
+	 * @property {boolean} [quotedStringSupport=this.client.options.commands.quotedStringSupport] Whether args for this command should not deliminated inside quotes
 	 * @property {(string|Function)} [extendedHelp=msg.language.get('COMMAND_HELP_NO_EXTENDED')] Extended help strings
 	 * @memberof Command
 	 */
