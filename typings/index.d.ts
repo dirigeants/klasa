@@ -791,13 +791,13 @@ declare module 'klasa' {
 		private cooldowns: Map<Snowflake, number>;
 
 		public abstract run(msg: KlasaMessage, params: any[]): Promise<KlasaMessage | KlasaMessage[]>;
-		public abstract init(): any;
+		public abstract init(): Promise<void>;
 
-		public abstract enable(): Piece;
-		public abstract disable(): Piece;
-		public abstract reload(): Promise<any>;
-		public abstract unload(): any;
-		public abstract toString(): string;
+		public enable(): Piece;
+		public disable(): Piece;
+		public reload(): Promise<any>;
+		public unload(): any;
+		public toString(): string;
 	}
 
 	export abstract class Event implements Piece  {
@@ -813,13 +813,13 @@ declare module 'klasa' {
 		private _run(param: any): void;
 
 		public abstract run(...params: any[]): void;
-		public abstract init(): any;
+		public abstract init(): Promise<void>;
 
-		public abstract enable(): Piece;
-		public abstract disable(): Piece;
-		public abstract reload(): Promise<any>;
-		public abstract unload(): any;
-		public abstract toString(): string;
+		public enable(): Piece;
+		public disable(): Piece;
+		public reload(): Promise<any>;
+		public unload(): any;
+		public toString(): string;
 	}
 
 	export abstract class Extendable implements Piece {
@@ -836,13 +836,13 @@ declare module 'klasa' {
 		public target: boolean;
 
 		public abstract extend(...params: any[]): any;
-		public abstract init(): any;
+		public abstract init(): Promise<void>;
 
-		public abstract enable(): Piece;
-		public abstract disable(): Piece;
-		public abstract reload(): Promise<any>;
-		public abstract unload(): any;
-		public abstract toString(): string;
+		public enable(): Piece;
+		public disable(): Piece;
+		public reload(): Promise<any>;
+		public unload(): any;
+		public toString(): string;
 	}
 
 	export abstract class Finalizer implements Piece {
@@ -856,13 +856,13 @@ declare module 'klasa' {
 		public file: string;
 
 		public abstract run(msg: KlasaMessage, mes: KlasaMessage, start: Stopwatch): void;
-		public abstract init(): any;
+		public abstract init(): Promise<void>;
 
-		public abstract enable(): Piece;
-		public abstract disable(): Piece;
-		public abstract reload(): Promise<any>;
-		public abstract unload(): any;
-		public abstract toString(): string;
+		public enable(): Piece;
+		public disable(): Piece;
+		public reload(): Promise<any>;
+		public unload(): any;
+		public toString(): string;
 	}
 
 	export abstract class Inhibitor implements Piece {
@@ -876,13 +876,13 @@ declare module 'klasa' {
 		public file: string;
 
 		public abstract run(msg: KlasaMessage, cmd: Command): Promise<void | string>;
-		public abstract init(): any;
+		public abstract init(): Promise<void>;
 
-		public abstract enable(): Piece;
-		public abstract disable(): Piece;
-		public abstract reload(): Promise<any>;
-		public abstract unload(): any;
-		public abstract toString(): string;
+		public enable(): Piece;
+		public disable(): Piece;
+		public reload(): Promise<any>;
+		public unload(): any;
+		public toString(): string;
 	}
 
 	export abstract class Language implements Piece {
@@ -896,13 +896,13 @@ declare module 'klasa' {
 		public file: string;
 
 		public get(term: string, ...args: any[]): string | ((...args: any[]) => string);
-		public abstract init(): any;
+		public abstract init(): Promise<void>;
 
-		public abstract enable(): Piece;
-		public abstract disable(): Piece;
-		public abstract reload(): Promise<any>;
-		public abstract unload(): any;
-		public abstract toString(): string;
+		public enable(): Piece;
+		public disable(): Piece;
+		public reload(): Promise<any>;
+		public unload(): any;
+		public toString(): string;
 	}
 
 	export abstract class Monitor implements Piece {
@@ -919,13 +919,13 @@ declare module 'klasa' {
 		public ignoreSelf: boolean;
 		public ignoreOthers: boolean;
 		public abstract run(msg: KlasaMessage): void;
-		public abstract init(): any;
+		public abstract init(): Promise<void>;
 
-		public abstract enable(): Piece;
-		public abstract disable(): Piece;
-		public abstract reload(): Promise<any>;
-		public abstract unload(): any;
-		public abstract toString(): string;
+		public enable(): Piece;
+		public disable(): Piece;
+		public reload(): Promise<any>;
+		public unload(): any;
+		public toString(): string;
 	}
 
 	export abstract class Provider implements Piece {
@@ -942,14 +942,14 @@ declare module 'klasa' {
 		public cache: boolean;
 		public sql: boolean;
 
-		public abstract init(): any;
-		public abstract shutdown(): Promise<void>;
+		public abstract init(): Promise<void>;
+		public shutdown(): Promise<void>;
 
-		public abstract enable(): Piece;
-		public abstract disable(): Piece;
-		public abstract reload(): Promise<any>;
-		public abstract unload(): any;
-		public abstract toString(): string;
+		public enable(): Piece;
+		public disable(): Piece;
+		public reload(): Promise<any>;
+		public unload(): any;
+		public toString(): string;
 	}
 
 	export class Store {
