@@ -1132,6 +1132,7 @@ declare module 'klasa' {
 		commandMessageLifetime?: number;
 		console?: KlasaConsoleConfig;
 		consoleEvents?: KlasaConsoleEvents;
+		deletableCommands: boolean;
 		ignoreBots?: boolean;
 		ignoreSelf?: boolean;
 		language?: string;

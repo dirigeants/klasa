@@ -13,6 +13,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#130](https://github.com/dirigeants/klasa/pull/130)] Added `KlasaClientOptions.deletableCommands` to change the default value for `Command.deletable` when not given. (kyranet)
 - [[#128](https://github.com/dirigeants/klasa/pull/128)] Added the `monitorError` event. (kyranet)
 - [[#125](https://github.com/dirigeants/klasa/pull/125)] Added the default gateways to `GatewayDriver` defaulted by null to reflect in the documentation. (kyranet)
 - [[#125](https://github.com/dirigeants/klasa/pull/125)] Added `Schema` (the previous got renamed to `SchemaFolder`), reducing duplicated code and bringing more code consistency. (kyranet)

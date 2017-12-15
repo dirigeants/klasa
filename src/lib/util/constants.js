@@ -18,6 +18,7 @@ exports.DEFAULTS = {
 			warn: true,
 			wtf: true
 		},
+		deletableCommands: false,
 		ignoreBots: true,
 		ignoreSelf: true,
 		language: 'en-US',
