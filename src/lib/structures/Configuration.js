@@ -412,6 +412,8 @@ class Configuration {
 				this._updateMany(cache[key], object[key], schema[key], guild, list, updateObject);
 			} else if (schema[key].array && !Array.isArray(object[key])) {
 				list.errors.push([schema[key].path, new Error(`${schema[key].path} expects an array as value.`)]);
+			} else if (!schema[key].array && schema[key].array !== 'any' && Array.isArray(object[key])) {
+				list.errors.push([schema[key].path, new Error(`${schema[key].path} does not expect an array as value.`)]);
 			} else {
 				const promise = schema[key].array && schema[key].type !== 'any' ?
 					Promise.all(object[key].map(entry => schema[key].parse(entry, guild)
