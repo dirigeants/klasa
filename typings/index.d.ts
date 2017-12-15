@@ -35,7 +35,7 @@ declare module 'klasa' {
 	export const version: string;
 
 	class KlasaClient extends Client {
-		public constructor(options?: KlasaClientOptions);
+		public constructor(options?: KlasaClientOptions & ClientOptions);
 		public options: KlasaClientOptions & ClientOptions;
 		public coreBaseDir: string;
 		public clientBaseDir: string;
@@ -225,7 +225,7 @@ declare module 'klasa' {
 		private _repeat: boolean;
 
 		public readonly reactable: boolean;
-		public usableCommands(): Promise<Collection>;
+		public usableCommands(): Promise<Collection<string, Command>>;
 		public hasAtLeastPermissionLevel(min: number): Promise<boolean>;
 
 		public sendMessage(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
@@ -443,7 +443,7 @@ declare module 'klasa' {
 		public constructor(levels?: number);
 		public requiredLevels: number;
 
-		public addLevel(level: number, brk: boolean, check: (client: KlasaMessage, msg: KlasaMessage) => true);
+		public addLevel(level: number, brk: boolean, check: (client: KlasaMessage, msg: KlasaMessage) => true): this;
 		public set(level: number, obj: PermissionLevel): this;
 		public isValid(): boolean;
 		public debug(): string;
