@@ -1,4 +1,5 @@
 const Piece = require('./interfaces/Piece');
+const { mergeDefault } = require('../util/util');
 
 /**
  * Base class for all Klasa Finalizers. See {@tutorial CreatingFinalizers} for more information how to use this class
@@ -23,6 +24,8 @@ class Finalizer {
 	 * @param {FinalizerOptions} [options={}] Optional Finalizer settings
 	 */
 	constructor(client, dir, file, options = {}) {
+		options = mergeDefault(client.options.pieceDefaults.finalizers, options);
+
 		/**
 		 * @since 0.0.1
 		 * @type {KlasaClient}
@@ -62,7 +65,7 @@ class Finalizer {
 		 * @since 0.0.1
 		 * @type {boolean}
 		 */
-		this.enabled = 'enabled' in options ? options.enabled : true;
+		this.enabled = options.enabled;
 	}
 
 	/**

@@ -1,4 +1,5 @@
 const Piece = require('./interfaces/Piece');
+const { mergeDefault } = require('../util/util');
 
 /**
  * Base class for all Klasa Monitors. See {@tutorial CreatingMonitors} for more information how to use this class
@@ -26,6 +27,8 @@ class Monitor {
 	 * @param {MonitorOptions} [options={}] Optional Monitor settings
 	 */
 	constructor(client, dir, file, options = {}) {
+		options = mergeDefault(client.options.pieceDefaults.monitors, options);
+
 		/**
 		 * @since 0.0.1
 		 * @type {KlasaClient}
@@ -65,28 +68,28 @@ class Monitor {
 		 * @since 0.0.1
 		 * @type {boolean}
 		 */
-		this.enabled = 'enabled' in options ? options.enabled : true;
+		this.enabled = options.enabled;
 
 		/**
 		 * Whether the monitor ignores bots or not
 		 * @since 0.0.1
 		 * @type {boolean}
 		 */
-		this.ignoreBots = 'ignoreBots' in options ? options.ignoreBots : true;
+		this.ignoreBots = options.ignoreBots;
 
 		/**
 		 * Whether the monitor ignores itself or not
 		 * @since 0.0.1
 		 * @type {boolean}
 		 */
-		this.ignoreSelf = 'ignoreSelf' in options ? options.ignoreSelf : true;
+		this.ignoreSelf = options.ignoreSelf;
 
 		/**
 		 * Whether the monitor ignores others or not
 		 * @since 0.4.0
 		 * @type {boolean}
 		 */
-		this.ignoreOthers = 'ignoreOthers' in options ? options.ignoreOthers : true;
+		this.ignoreOthers = options.ignoreOthers;
 	}
 
 	/**

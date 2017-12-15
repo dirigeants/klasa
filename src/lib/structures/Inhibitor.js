@@ -1,4 +1,5 @@
 const Piece = require('./interfaces/Piece');
+const { mergeDefault } = require('../util/util');
 
 /**
  * Base class for all Klasa Inhibitors. See {@tutorial CreatingInhibitors} for more information how to use this class
@@ -24,6 +25,8 @@ class Inhibitor {
 	 * @param {InhibitorOptions} [options={}] Optional Inhibitor settings
 	 */
 	constructor(client, dir, file, options = {}) {
+		options = mergeDefault(client.options.pieceDefaults.inhibitors, options);
+
 		/**
 		 * @since 0.0.1
 		 * @type {KlasaClient}
@@ -63,14 +66,14 @@ class Inhibitor {
 		 * @since 0.0.1
 		 * @type {boolean}
 		 */
-		this.enabled = 'enabled' in options ? options.enabled : true;
+		this.enabled = options.enabled;
 
 		/**
 		 * If this inhibitor is meant for spamProtection (disables the inhibitor while generating help)
 		 * @since 0.0.1
 		 * @type {boolean}
 		 */
-		this.spamProtection = 'spamProtection' in options ? options.spamProtection : false;
+		this.spamProtection = options.spamProtection;
 	}
 
 	/**
