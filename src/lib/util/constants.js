@@ -36,7 +36,6 @@ exports.DEFAULTS = {
 		autoAliases: true,
 		botPerms: [],
 		cooldown: 0,
-		deletable: false,
 		description: '',
 		enabled: true,
 		guarded: false,
