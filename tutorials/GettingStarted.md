@@ -32,12 +32,11 @@ new Client({
 }).login('your-bot-token');
 ```
 
-### Configuration Options: [KlasaClientConfig]{@link KlasaClient.KlasaClientConfig}
+### Configuration Options: [KlasaClientOptions]{@link KlasaClient.KlasaClientOptions}
 
 | Name                       | Default                   | Type               | Description                                                                         |
 | -------------------------- | ------------------------- | ------------------ | ----------------------------------------------------------------------------------- |
-| **clientBaseDir**          | see below³                | string             | The directory where all piece folders can be found                                  |
-| **clientOptions**          | `{}`                      | Object             | These are passed directly to the discord.js library. They are optional.¹            |
+| **clientBaseDir**          | see below¹                | string             | The directory where all piece folders can be found                                  |
 | **cmdDeleting**            | `false`                   | boolean            | Whether the bot should delete responses if the command is deleted                   |
 | **cmdEditing**             | `false`                   | boolean            | Whether the bot should update responses if the command is edited                    |
 | **cmdLogging**             | `false`                   | boolean            | Whether the bot should log command usage                                            |
@@ -46,9 +45,9 @@ new Client({
 | **ignoreBots**             | `true`                    | boolean            | Whether or not this bot should ignore other bots                                    |
 | **ignoreSelf**             | `client.user.bot`         | boolean            | Whether or not this bot should ignore itself (true for bots, false for selfbots)    |
 | **language**               | `en-US`                   | string             | The default language Klasa should opt-in for the commands                           |
-| **ownerID**                | see below⁶                | string             | The discord id for the user the bot should respect as the owner                     |
+| **ownerID**                | see below²                | string             | The discord id for the user the bot should respect as the owner                     |
 | **permissionLevels**       | `defaultPermissionLevels` | PermissionLevels   | The permission levels to use with this bot                                          |
-| **prefix**                 | `undefined`               | string/regex/array | The default prefix(es) when the bot first boots up.²                                |
+| **prefix**                 | `undefined`               | string/array       | The default prefix(es) when the bot first boots up.³                                |
 | **promptTime**             | `30000`                   | number             | The amount of time in milliseconds prompts should last                              |
 | **provider.engine**        | `json`                    | string             | The provider to use in Klasa                                                        |
 | **quotedStringSupport**    | `false`                   | boolean            | Whether the bot should default to using quoted string support⁴                      |
@@ -56,12 +55,13 @@ new Client({
 | **regexPrefix**            | `null`                    | regex              | The regular expression prefix if one is provided                                    |
 | **typing**                 | `false`                   | boolean            | Whether the bot should type while processing commands.                              |
 
->1: For more information on which D.JS options are available, see [ClientOptions in the discord.js docs](https://discord.js.org/#/docs/main/master/typedef/ClientOptions).
->2: This option becomes useless after first boot, since the prefix is written to the default configuration system. Pass an array to accept multiple prefixes.
->3: The directory of the main file. `path.dirname(require.main.filename)`
+>1: The directory of the main file. `path.dirname(require.main.filename)`
+>2: ID gotten from the Discord api if not provided: `client.application.owner.id`
+>3: You can pass an array to accept multiple prefixes.
 >4: quotedStringSupport is overridable per command
 >5: `Successfully initialized. Ready to serve ${client.guilds.size} guilds.`
->6: ID gotten from the Discord api if not provided: `client.application.owner.id`
+
+> KlasaClientOptions are merged with discord.js' ClientOptions, see [ClientOptions in the discord.js docs](https://discord.js.org/#/docs/main/master/typedef/ClientOptions).
 
 ## Running the bot
 
