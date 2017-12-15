@@ -96,7 +96,7 @@ class Command {
 		 * @since 0.5.0
 		 * @type {boolean}
 		 */
-		this.deletable = options.deletable || this.client.options.deletableCommands;
+		this.deletable = options.deletable || this.client.options.cmdDeleting;
 
 		/**
 		 * The name of the command

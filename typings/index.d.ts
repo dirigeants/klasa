@@ -1126,13 +1126,13 @@ declare module 'klasa' {
 
 	export type KlasaClientOptions = {
 		clientBaseDir?: string;
+		cmdDeleting?: boolean;
 		cmdEditing?: boolean;
 		cmdLogging?: boolean;
 		cmdPrompt?: boolean;
 		commandMessageLifetime?: number;
 		console?: KlasaConsoleConfig;
 		consoleEvents?: KlasaConsoleEvents;
-		deletableCommands: boolean;
 		ignoreBots?: boolean;
 		ignoreSelf?: boolean;
 		language?: string;

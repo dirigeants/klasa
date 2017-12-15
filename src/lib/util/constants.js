@@ -5,6 +5,7 @@ exports.DEFAULTS = {
 
 	CLIENT: {
 		clientBaseDir: dirname(require.main.filename),
+		cmdDeleting: false,
 		cmdEditing: false,
 		cmdLogging: false,
 		cmdPrompt: false,
@@ -18,7 +19,6 @@ exports.DEFAULTS = {
 			warn: true,
 			wtf: true
 		},
-		deletableCommands: false,
 		ignoreBots: true,
 		ignoreSelf: true,
 		language: 'en-US',
