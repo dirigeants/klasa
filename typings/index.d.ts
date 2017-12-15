@@ -766,7 +766,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class Command implements Piece {
-		public constructor(client: KlasaClient, dir: string, file: string[], options: CommandOptions);
+		public constructor(client: KlasaClient, dir: string, file: string[], options?: CommandOptions);
 		public client: KlasaClient;
 		public type: 'command';
 
@@ -801,7 +801,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class Event implements Piece  {
-		public constructor(client: KlasaClient, dir: string, file: string[], options: EventOptions);
+		public constructor(client: KlasaClient, dir: string, file: string[], options?: EventOptions);
 		public client: KlasaClient;
 		public type: 'event';
 
@@ -823,7 +823,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class Extendable implements Piece {
-		public constructor(client: KlasaClient, dir: string, file: string[], options: ExtendableOptions);
+		public constructor(client: KlasaClient, dir: string, file: string[], options?: ExtendableOptions);
 		public client: KlasaClient;
 		public type: 'extendable';
 
@@ -846,7 +846,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class Finalizer implements Piece {
-		public constructor(client: KlasaClient, dir: string, file: string[], options: FinalizerOptions);
+		public constructor(client: KlasaClient, dir: string, file: string[], options?: FinalizerOptions);
 		public client: KlasaClient;
 		public type: 'finalizer';
 
@@ -866,7 +866,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class Inhibitor implements Piece {
-		public constructor(client: KlasaClient, dir: string, file: string[], options: InhibitorOptions);
+		public constructor(client: KlasaClient, dir: string, file: string[], options?: InhibitorOptions);
 		public client: KlasaClient;
 		public type: 'inhibitor';
 
@@ -886,7 +886,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class Language implements Piece {
-		public constructor(client: KlasaClient, dir: string, file: string[], options: LanguageOptions);
+		public constructor(client: KlasaClient, dir: string, file: string[], options?: LanguageOptions);
 		public client: KlasaClient;
 		public type: 'language';
 
@@ -906,7 +906,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class Monitor implements Piece {
-		public constructor(client: KlasaClient, dir: string, file: string[], options: MonitorOptions);
+		public constructor(client: KlasaClient, dir: string, file: string[], options?: MonitorOptions);
 		public client: KlasaClient;
 		public type: 'monitor';
 
@@ -929,7 +929,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class Provider implements Piece {
-		public constructor(client: KlasaClient, dir: string, file: string[], options: ProviderOptions);
+		public constructor(client: KlasaClient, dir: string, file: string[], options?: ProviderOptions);
 		public client: KlasaClient;
 		public type: 'monitor';
 
