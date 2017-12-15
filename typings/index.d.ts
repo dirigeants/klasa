@@ -1162,7 +1162,7 @@ declare module 'klasa' {
 	export type KlasaProviderOptions = {
 		engine: string;
 		[key: string]: string | object;
-	}
+	};
 
 	export type ExecOptions = {
 		cwd?: string;
