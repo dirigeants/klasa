@@ -1,4 +1,5 @@
 const Piece = require('./interfaces/Piece');
+const { mergeDefault } = require('../util/util');
 
 /**
  * Base class for all Klasa Languages. See {@tutorial CreatingLanguages} for more information how to use this class
@@ -23,6 +24,8 @@ class Language {
 	 * @param {LanguageOptions} [options={}] Optional Language settings
 	 */
 	constructor(client, dir, file, options = {}) {
+		options = mergeDefault(client.options.pieceDefaults.languages, options);
+
 		/**
 		 * @since 0.2.1
 		 * @type {KlasaClient}
@@ -62,7 +65,7 @@ class Language {
 		 * @since 0.2.1
 		 * @type {boolean}
 		 */
-		this.enabled = 'enabled' in options ? options.enabled : true;
+		this.enabled = options.enabled;
 	}
 
 	/**

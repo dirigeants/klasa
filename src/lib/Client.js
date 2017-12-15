@@ -32,6 +32,7 @@ class KlasaClient extends Discord.Client {
 	 * @property {object} [provider] The provider to use in Klasa
 	 * @property {KlasaConsoleConfig} [console={}] Config options to pass to the client console
 	 * @property {KlasaConsoleEvents} [consoleEvents={}] Config options to pass to the client console
+	 * @property {KlasaPieceDefaults} [pieceDefaults={}] Overrides the defaults for all pieces
 	 * @property {string} [language='en-US'] The default language Klasa should opt-in for the commands
 	 * @property {number} [promptTime=30000] The amount of time in milliseconds prompts should last
 	 * @property {boolean} [ignoreBots=true] Whether or not this bot should ignore other bots
@@ -41,7 +42,6 @@ class KlasaClient extends Discord.Client {
 	 * @property {boolean} [cmdLogging=false] Whether the bot should log command usage
 	 * @property {boolean} [typing=false] Whether the bot should type while processing commands
 	 * @property {boolean} [preserveConfigs=true] Whether the bot should preserve (non-default) configs when removed from a guild
-	 * @property {boolean} [quotedStringSupport=false] Whether the bot should default to using quoted string support in arg parsing, or not (overridable per command)
 	 * @property {(string|Function)} [readyMessage=`Successfully initialized. Ready to serve ${this.guilds.size} guilds.`] readyMessage to be passed throughout Klasa's ready event
 	 * @property {string} [ownerID] The discord user id for the user the bot should respect as the owner (gotten from Discord api if not provided)
 	 * @property {RegExp} [regexPrefix] The regular expression prefix if one is provided
@@ -60,12 +60,25 @@ class KlasaClient extends Discord.Client {
 
 	/**
 	 * @typedef {Object} KlasaConsoleEvents
-	 * @property {boolean} [log=true] If the log event should be enabled by default
-	 * @property {boolean} [warn=true] If the warn event should be enabled by default
-	 * @property {boolean} [error=true] If the error event should be enabled by default
 	 * @property {boolean} [debug=false] If the debug event should be enabled by default
+	 * @property {boolean} [error=true] If the error event should be enabled by default
+	 * @property {boolean} [log=true] If the log event should be enabled by default
 	 * @property {boolean} [verbose=false] If the verbose event should be enabled by default
+	 * @property {boolean} [warn=true] If the warn event should be enabled by default
 	 * @property {boolean} [wtf=true] If the wtf event should be enabled by default
+	 * @memberof KlasaClient
+	 */
+
+	/**
+	 * @typedef {Object} KlasaPieceDefaults
+	 * @property {CommandOptions} [commands={}] The default command options
+	 * @property {EventOptions} [events={}] The default event options
+	 * @property {ExtendableOptions} [extendables={}] The default extendable options
+	 * @property {FinalizerOptions} [finalizers={}] The default finalizer options
+	 * @property {InhibitorOptions} [inhibitors={}] The default inhibitor options
+	 * @property {LanguageOptions} [languages={}] The default language options
+	 * @property {MonitorOptions} [monitors={}] The default monitor options
+	 * @property {ProviderOptions} [providers={}] The default provider options
 	 * @memberof KlasaClient
 	 */
 

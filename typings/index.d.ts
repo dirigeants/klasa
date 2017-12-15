@@ -325,6 +325,7 @@ declare module 'klasa' {
 		public static isNumber(input: number): boolean;
 		public static isObject(input: object): boolean;
 		public static tryParse(value: string): object;
+		public static makeObject(path: string, value: any): object;
 		public static mergeDefault(def: object, given?: object): object;
 	}
 
@@ -648,16 +649,16 @@ declare module 'klasa' {
 		public destroy(): Promise<this>;
 
 		public reset(key: string, avoidUnconfigurable?: boolean): Promise<ConfigurationUpdateResult>;
-		public updateOne(key: string, value: any, guild?: GatewayGuildResolvable, avoidUnconfigurable?: boolean): Promise<ConfigurationUpdateResult>;
-		public updateArray(action: 'add' | 'remove', key: string, value: any, guild?: GatewayGuildResolvable, avoidUnconfigurable?: boolean): Promise<ConfigurationUpdateResult>;
+		public update(key: object, guild?: GatewayGuildResolvable): Promise<ConfigurationUpdateManyResult>;
+		public update(key: string, value?: any, guild?: GatewayGuildResolvable, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
 		public updateMany(object: any, guild?: GatewayGuildResolvable): Promise<ConfigurationUpdateManyResult>;
 
 		private _reset(key: string, guild: GatewayGuildResolvable, avoidUnconfigurable: boolean): Promise<ConfigurationParseResult>;
 		private _parseReset(key: string, guild: KlasaGuild, options: ConfigurationParseOptions): Promise<ConfigurationParseResult>;
 		private _parseUpdateOne(key: string, value: any, guild: KlasaGuild, options: ConfigurationParseOptions): Promise<ConfigurationParseResult>;
-		private _parseUpdateArray(action: 'add' | 'remove', key: string, value: any, guild: KlasaGuild, options: ConfigurationParseOptions): Promise<ConfigurationParseResultArray>;
-		private _sharedUpdateSingle(action: 'add' | 'remove', key: string, value: any, guild: KlasaGuild, avoidUnconfigurable: boolean): Promise<ConfigurationParseResult | ConfigurationParseResultArray>;
-		private _updateMany(cache: any, object: any, schema: SchemaFolder, guild: KlasaGuild, list: ConfigurationUpdateManyResult): void;
+		private _parseUpdateArray(action: 'add' | 'remove' | 'auto', key: string, value: any, guild: KlasaGuild, options: ConfigurationParseOptions): Promise<ConfigurationParseResultArray>;
+		private _updateSingle(action: 'add' | 'remove' | 'auto', key: string, value: any, guild: KlasaGuild, avoidUnconfigurable: boolean): Promise<ConfigurationParseResult | ConfigurationParseResultArray>;
+		private _updateMany(cache: any, object: any, schema: SchemaFolder, guild: KlasaGuild, list: ConfigurationUpdateManyResult, updateObject: object): void;
 		private _setValue(parsedID: string, path: SchemaPiece, route: string[]): Promise<void>;
 		private _patch(data: any): void;
 
@@ -667,6 +668,7 @@ declare module 'klasa' {
 		private static _merge(data: any, folder: SchemaFolder | SchemaPiece): any;
 		private static _clone(data: any, schema: SchemaFolder): any;
 		private static _patch(inst: any, data: any, schema: SchemaFolder): void;
+		private static getIdentifier(value: any): any;
 	}
 
 	// Util
@@ -711,11 +713,12 @@ declare module 'klasa' {
 
 	export type constants = {
 		DEFAULTS: {
-			CLIENT: KlasaConstantsClient,
-			COMMAND: KlasaConstantsCommand,
-			GATEWAY_GUILDS_RESOLVER: (guildResolvable: string | KlasaGuild) => KlasaGuild,
-			GATEWAY_USERS_RESOLVER: (userResolvable: string | KlasaUser) => KlasaUser,
-			GATEWAY_CLIENTSTORAGE_RESOLVER: (clientResolvable: string | KlasaClient) => ClientUser
+			CLIENT: KlasaConstantsClient
+		};
+		GATEWAY_RESOLVERS: {
+			GUILDS: (guildResolvable: string | KlasaGuild) => KlasaGuild,
+			USERS: (userResolvable: string | KlasaUser) => KlasaUser,
+			CLIENT_STORAGE: (clientResolvable: string | KlasaClient) => ClientUser
 		};
 	};
 
@@ -1137,18 +1140,31 @@ declare module 'klasa' {
 		language?: string;
 		ownerID?: string;
 		permissionLevels?: PermissionLevels;
+		pieceDefaults?: KlasaPieceDefaults;
 		prefix?: string;
 		preserveConfigs?: boolean;
 		promptTime?: number;
-		provider?: {
-			engine: string,
-			[key: string]: string | object
-		};
-		quotedStringSupport?: boolean;
+		provider?: KlasaProviderOptions;
 		readyMessage?: (client: KlasaClient) => string;
 		regexPrefix?: RegExp;
 		typing?: boolean;
 	} & ClientOptions;
+
+	export type KlasaPieceDefaults = {
+		commands?: CommandOptions;
+		events?: EventOptions;
+		extendables?: ExtendableOptions;
+		finalizers?: FinalizerOptions;
+		inhibitors?: InhibitorOptions;
+		languages?: LanguageOptions;
+		monitors?: MonitorOptions;
+		providers?: ProviderOptions;
+	};
+
+	export type KlasaProviderOptions = {
+		engine: string;
+		[key: string]: string | object;
+	};
 
 	export type ExecOptions = {
 		cwd?: string;
@@ -1180,28 +1196,21 @@ declare module 'klasa' {
 		ignoreBots: true;
 		ignoreSelf: true;
 		language: 'en-US';
+		pieceDefaults: {
+			commands: CommandOptions,
+			events: EventOptions,
+			extendables: ExtendableOptions,
+			finalizers: FinalizerOptions,
+			inhibitors: InhibitorOptions,
+			languages: LanguageOptions,
+			monitors: MonitorOptions,
+			providers: ProviderOptions
+		};
 		preserveConfigs: true;
 		promptTime: 30000;
 		provider: {};
-		quotedStringSupport: false;
 		readyMessage: (client: KlasaClient) => string;
 		typing: false;
-	};
-
-	export type KlasaConstantsCommand = {
-		aliases: string[];
-		autoAliases: true;
-		botPerms: string[];
-		cooldown: 0;
-		deletable: false;
-		description: string;
-		enabled: true;
-		guarded: false;
-		nsfw: false;
-		permLevel: 0;
-		requiredConfigs: string[];
-		runIn: string[];
-		usage: string;
 	};
 
 	export type GatewayOptions = {
@@ -1218,6 +1227,11 @@ declare module 'klasa' {
 	export type ConfigurationParseOptions = {
 		path: string;
 		route: string[];
+	};
+
+	export type ConfigurationUpdateOptions = {
+		avoidUnconfigurable?: boolean;
+		action?: 'add' | 'remove' | 'auto';
 	};
 
 	export type ConfigurationParseResult = {
@@ -1325,15 +1339,17 @@ declare module 'klasa' {
 
 	export type CommandOptions = {
 		aliases?: string[];
+		autoAliases?: boolean;
 		botPerms?: string[];
 		cooldown?: number;
+		deletable?: boolean;
 		description?: string | ((msg: KlasaMessage) => string);
 		enabled?: boolean;
 		extendedHelp?: string | ((msg: KlasaMessage) => string);
 		name?: string;
 		permLevel?: number;
 		quotedStringSupport?: boolean;
-		requiredSettings?: string[];
+		requiredConfigs?: string[];
 		runIn?: string[];
 		usage?: string;
 		usageDelim?: string;

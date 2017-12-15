@@ -1,6 +1,5 @@
 const Piece = require('./interfaces/Piece');
 const { mergeDefault } = require('../util/util');
-const constants = require('../util/constants');
 const ParsedUsage = require('../usage/ParsedUsage');
 
 /**
@@ -28,7 +27,7 @@ class Command {
 	 * @property {(string|Function)} [description=''] The help description for the command
 	 * @property {string} [usage=''] The usage string for the command
 	 * @property {?string} [usageDelim=undefined] The string to deliminate the command input for usage
-	 * @property {boolean} [quotedStringSupport=this.client.options.quotedStringSupport] Whether args for this command should not deliminated inside quotes
+	 * @property {boolean} [quotedStringSupport=this.client.options.commands.quotedStringSupport] Whether args for this command should not deliminated inside quotes
 	 * @property {(string|Function)} [extendedHelp=msg.language.get('COMMAND_HELP_NO_EXTENDED')] Extended help strings
 	 * @memberof Command
 	 */
@@ -41,7 +40,7 @@ class Command {
 	 * @param {CommandOptions} [options={}] Optional Command settings
 	 */
 	constructor(client, dir, file, options = {}) {
-		options = mergeDefault(constants.DEFAULTS.COMMAND, options);
+		options = mergeDefault(client.options.pieceDefaults.commands, options);
 
 		/**
 		 * @since 0.0.1
@@ -85,7 +84,7 @@ class Command {
 		this.nsfw = options.nsfw;
 
 		/**
-		 * Whether this command shound not be able to be disabled in a guild or not
+		 * Whether this command should not be able to be disabled in a guild or not
 		 * @since 0.5.0
 		 * @type {boolean}
 		 */
@@ -174,7 +173,7 @@ class Command {
 		 * @since 0.2.1
 		 * @type {boolean}
 		 */
-		this.quotedStringSupport = options.quotedStringSupport || this.client.options.quotedStringSupport;
+		this.quotedStringSupport = options.quotedStringSupport;
 
 		/**
 		 * The full category for the command
