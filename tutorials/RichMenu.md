@@ -10,7 +10,7 @@ An example of how {@link RichMenu} could be used is in a `help`-like command, th
 const menu = new RichMenu(new this.client.methods.Embed()
 	.setColor(0x673AB7)
 	.setAuthor(this.client.user.username, this.client.user.avatarURL())
-	.setTitle('Command List:')
+	.setTitle('Advanced Commands Help:')
 	.setDescription('Use the arrow reactions to scroll between pages.\nUse number reactions to select an option.')
 );
 
@@ -26,10 +26,16 @@ if (choice === null) {
 }
 
 const command = this.client.commands.get(menu.options[choice].name);
+const info = new this.client.methods.Embed()
+	.setTitle(`Command \`${msg.guild.configs.prefix}${command.name}\``)
+	.setDescription(command.description instanceof Function ? command.description() : command.description)
+	.addField('Usage:', command.usageString);
 
-return collector.message.edit(new this.client.methods.Embed()
-	.setDescription(`The chosen command is \`${command.name}\`.`)
-);
+if (command.extendedHelp && command.extendedHelp != '') {
+	info.addField('Help:', command.extendedHelp instanceof Function ? command.extendedHelp() : command.extendedHelp);
+}
+
+return collector.message.edit(info);
 ```
 
 > The code is designed to be placed in a command, inside the `async run(msg)` method but the menu or its options can easily be initialized within the constructor method or the {@link Command.init} method of the command.
@@ -59,7 +65,7 @@ We will also need to [`await`](https://developer.mozilla.org/en-US/docs/Web/Java
 const choice = await collector.selection;
 ```
 
-After obtaining the index of the selected option we can access the option's name and description through our menu:
+After obtaining the index of the selected option we can access the option's name through our menu:
 
 ```javascript
 const command = /* ... */(menu.options[choice].name);
@@ -68,9 +74,10 @@ const command = /* ... */(menu.options[choice].name);
 Finally, we show the user the selected command by editing the original [`MessageEmbed`](https://discord.js.org/#/docs/main/master/class/MessageEmbed):
 
 ```javascript
-return collector.message.edit(new this.client.methods.Embed()
-	.setDescription(`The chosen command is \`${command.name}\`.`)
-);
+const info = new this.client.methods.Embed()
+	/* ... */;
+
+return collector.message.edit(info);
 ```
 
 ## Personalization
