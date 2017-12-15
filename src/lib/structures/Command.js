@@ -1,6 +1,5 @@
 const Piece = require('./interfaces/Piece');
 const { mergeDefault } = require('../util/util');
-const constants = require('../util/constants');
 const ParsedUsage = require('../usage/ParsedUsage');
 
 /**
@@ -41,7 +40,7 @@ class Command {
 	 * @param {CommandOptions} [options={}] Optional Command settings
 	 */
 	constructor(client, dir, file, options = {}) {
-		options = mergeDefault(constants.DEFAULTS.COMMAND, options);
+		options = mergeDefault(client.options.pieceDefaults.commands, options);
 
 		/**
 		 * @since 0.0.1
@@ -85,7 +84,7 @@ class Command {
 		this.nsfw = options.nsfw;
 
 		/**
-		 * Whether this command shound not be able to be disabled in a guild or not
+		 * Whether this command should not be able to be disabled in a guild or not
 		 * @since 0.5.0
 		 * @type {boolean}
 		 */
@@ -96,7 +95,7 @@ class Command {
 		 * @since 0.5.0
 		 * @type {boolean}
 		 */
-		this.deletable = 'deletable' in options ? options.deletable : this.client.options.cmdDeleting;
+		this.deletable = options.deletable;
 
 		/**
 		 * The name of the command
@@ -174,7 +173,7 @@ class Command {
 		 * @since 0.2.1
 		 * @type {boolean}
 		 */
-		this.quotedStringSupport = 'quotedStringSupport' in options ? options.quotedStringSupport : this.client.options.quotedStringSupport;
+		this.quotedStringSupport = options.quotedStringSupport;
 
 		/**
 		 * The full category for the command

@@ -26,24 +26,49 @@ exports.DEFAULTS = {
 		preserveConfigs: true,
 		promptTime: 30000,
 		provider: { engine: 'json' },
-		quotedStringSupport: false,
 		readyMessage: (client) => `Successfully initialized. Ready to serve ${client.guilds.size} guilds.`,
-		typing: false
-	},
-
-	COMMAND: {
-		aliases: [],
-		autoAliases: true,
-		botPerms: [],
-		cooldown: 0,
-		description: '',
-		enabled: true,
-		guarded: false,
-		nsfw: false,
-		permLevel: 0,
-		requiredConfigs: [],
-		runIn: ['text', 'dm', 'group'],
-		usage: ''
+		typing: false,
+		pieceDefaults: {
+			commands: {
+				aliases: [],
+				autoAliases: true,
+				botPerms: [],
+				cooldown: 0,
+				description: '',
+				enabled: true,
+				guarded: false,
+				nsfw: false,
+				permLevel: 0,
+				requiredConfigs: [],
+				runIn: ['text', 'dm', 'group'],
+				usage: '',
+				quotedStringSupport: false,
+				deletable: false
+			},
+			events: { enabled: true },
+			extendables: {
+				enabled: true,
+				klasa: false
+			},
+			finalizers: { enabled: true },
+			inhibitors: {
+				enabled: true,
+				spamProtection: false
+			},
+			languages: { enabled: true },
+			monitors: {
+				enabled: true,
+				ignoreBots: true,
+				ignoreSelf: true,
+				ignoreOthers: true
+			},
+			providers: {
+				enabled: true,
+				sql: false,
+				cache: false,
+				description: ''
+			}
+		}
 	}
 
 };
