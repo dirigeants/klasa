@@ -164,6 +164,7 @@ module.exports = Structures.extend('Message', Message => {
 			options = this.constructor.combineContentOptions(content, options);
 			content = options.content; // eslint-disable-line prefer-destructuring
 			delete options.content;
+			if (Array.isArray(content)) content = content.join('\n');
 
 			options.embed = options.embed || null;
 			if (this.responses && typeof options.files === 'undefined') {
