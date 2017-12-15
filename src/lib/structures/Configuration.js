@@ -260,6 +260,7 @@ class Configuration {
 
 		const oldClone = this.client.listenerCount('configUpdateEntry') ? this.clone() : null;
 		const updateObject = {};
+		guild = this.gateway._resolveGuild(guild);
 		this._updateMany(this, object, this.gateway.schema, guild, list, updateObject);
 		await Promise.all(list.promises);
 
@@ -404,25 +405,33 @@ class Configuration {
 	 * @private
 	 */
 	_updateMany(cache, object, schema, guild, list, updateObject) {
-		guild = this.gateway._resolveGuild(guild);
-		const keys = Object.keys(object);
-		for (let i = 0; i < keys.length; i++) {
-			const key = keys[i];
-			if (schema.hasKey(key) === false) continue;
+		for (const key of Object.keys(object)) {
+			if (!schema.hasKey(key)) continue;
 			if (schema[key].type === 'Folder') {
-				if (!updateObject[key]) updateObject[key] = {};
-				this._updateMany(cache[key], object[key], schema[key], guild, list, updateObject[key]);
-				continue;
+				if (!(key in updateObject)) updateObject = updateObject[key] = {};
+				this._updateMany(cache[key], object[key], schema[key], guild, list, updateObject);
+			} else if (schema[key].array && !Array.isArray(object[key])) {
+				list.errors.push([schema[key].path, new Error(`${schema[key].path} expects an array as value.`)]);
+			} else if (!schema[key].array && schema[key].array !== 'any' && Array.isArray(object[key])) {
+				list.errors.push([schema[key].path, new Error(`${schema[key].path} does not expect an array as value.`)]);
+			} else {
+				const promise = schema[key].array && schema[key].type !== 'any' ?
+					Promise.all(object[key].map(entry => schema[key].parse(entry, guild)
+						.then(Configuration.getIdentifier)
+						.catch(error => { list.errors.push([schema[key].path, error]); }))) :
+					schema[key].parse(object[key], guild);
+
+				list.promises.push(promise
+					.then(parsed => {
+						const parsedID = schema[key].array ?
+							parsed.filter(entry => typeof entry !== 'undefined') :
+							Configuration.getIdentifier(parsed);
+						updateObject[key] = cache[key] = parsedID;
+						list.keys.push(schema[key].path);
+						list.values.push(parsedID);
+					})
+					.catch(error => list.errors.push([schema.path, error])));
 			}
-			list.promises.push(schema[key].parse(object[key], guild)
-				.then(parsed => {
-					const parsedID = Configuration.getIdentifier(parsed);
-					cache[key] = parsedID;
-					updateObject[key] = parsedID;
-					list.keys.push(schema[key].path);
-					list.values.push(parsedID);
-				})
-				.catch(error => list.errors.push([schema[key].path, error])));
 		}
 	}
 

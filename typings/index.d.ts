@@ -895,7 +895,7 @@ declare module 'klasa' {
 		public dir: string;
 		public file: string;
 
-		public get(term: string, ...args: any[]): string | ((...args: any) => string);
+		public get(term: string, ...args: any[]): string | ((...args: any[]) => string);
 		public abstract init(): any;
 
 		public abstract enable(): Piece;
