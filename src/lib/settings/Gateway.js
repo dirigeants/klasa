@@ -285,7 +285,7 @@ class Gateway extends GatewayStorage {
 	_resolveGuild(guild) {
 		if (typeof guild === 'object') {
 			if (guild instanceof discord.Guild) return guild;
-			if (guild instanceof discord.GuildChannel || guild instanceof discord.Message || guild instanceof discord.Role || guild instanceof discord.Member) return guild.guild;
+			if (guild instanceof discord.GuildChannel || guild instanceof discord.Message || guild instanceof discord.Role || guild instanceof discord.GuildMember) return guild.guild;
 		}
 		if (typeof guild === 'string' && /^\d{17,19}$/.test(guild)) return this.client.guilds.get(guild);
 		return null;
