@@ -888,7 +888,7 @@ declare module 'klasa' {
 	export abstract class Language implements Piece {
 		public constructor(client: KlasaClient, dir: string, file: string[], options?: LanguageOptions);
 		public client: KlasaClient;
-		public language: { [key: string]: string | Function };
+		public language: { [key: string]: any };
 		public type: 'language';
 
 		public enabled: boolean;
