@@ -24,15 +24,21 @@ module.exports = class extends Command {
 A more complex example with an actual usage is this:
 
 ```javascript
+const images = [
+	'https://i.imgur.com/gh3vYgj.jpg',
+	'https://i.imgur.com/vBV81m4.jpg',
+	'https://i.imgur.com/92hAsqe.jpg'
+];
+
 const display = new RichDisplay(new this.client.methods.Embed()
 	.setColor(0x673AB7)
 	.setAuthor(this.client.user.name, this.client.user.avatarURL())
-	.setTitle('Random Image Slideshow')
+	.setTitle('Norway Pictures Slideshow')
 	.setDescription('Scroll between the images using the provided reaction emotes.')
 );
 
-for (let i = 0; i < 10; i++) {
-	display.addPage(template => template.setImage('https://lorempixel.com/400/200/'));
+for (let i = 0; i < images.length; i++) {
+	display.addPage(template => template.setImage(images[i]));
 }
 
 return display.run(await msg.sendMessage('Loading slideshow...'));
@@ -59,11 +65,12 @@ for (/* ... */) {
 ```
 
 From here we will be able to add content or edit properties of the template, and then, return the final embed to the {@link RichDisplay.addPage} method to be processed into a {@link RichDisplay} page.
+In our example, we will simply add a static image from the array we defined before.
 
 ```javascript
 /* ... */
 	display.addPage(template => {
-		template.setImage('https://lorempixel.com/400/200/')
+		template.setImage(images[i])
 			.setColor(0xF44336); // You can change everything of the template
 	});
 ```
@@ -73,6 +80,8 @@ Then, after the {@link RichDisplay} is setup, we return, executing it on a new m
 ```javascript
 return display.run(await msg.sendMessage('Loading slideshow...'));
 ```
+
+The message will show the content we denfined in {@link KlasaMessage.sendMessage} initially, then, when our {@link RichDisplay} will be ready it will replace the content with the first page we defined.
 
 ## Info Page
 
