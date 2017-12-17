@@ -70,6 +70,11 @@
 		"title": "Custom Pieces and Stores"
 	},
 	"RichDisplay": {
-		"title": "Using RichDisplay for Paginated Embeds"
+		"title": "Using RichDisplay for Paginated Embeds",
+		"children": {
+			"RichMenu": {
+				"title": "Using RichMenu for Paginated Menus"
+			}
+		}
 	}
 }
