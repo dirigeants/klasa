@@ -35,7 +35,7 @@ declare module 'klasa' {
 	export const version: string;
 
 	class KlasaClient extends Client {
-		public constructor(options?: KlasaClientOptions);
+		public constructor(options?: KlasaClientOptions & ClientOptions);
 		public options: KlasaClientOptions & ClientOptions;
 		public coreBaseDir: string;
 		public clientBaseDir: string;
@@ -225,7 +225,7 @@ declare module 'klasa' {
 		private _repeat: boolean;
 
 		public readonly reactable: boolean;
-		public usableCommands(): Promise<Collection>;
+		public usableCommands(): Promise<Collection<string, Command>>;
 		public hasAtLeastPermissionLevel(min: number): Promise<boolean>;
 
 		public sendMessage(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
@@ -443,7 +443,7 @@ declare module 'klasa' {
 		public constructor(levels?: number);
 		public requiredLevels: number;
 
-		public addLevel(level: number, brk: boolean, check: (client: KlasaMessage, msg: KlasaMessage) => true);
+		public addLevel(level: number, brk: boolean, check: (client: KlasaMessage, msg: KlasaMessage) => true): this;
 		public set(level: number, obj: PermissionLevel): this;
 		public isValid(): boolean;
 		public debug(): string;
@@ -766,7 +766,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class Command implements Piece {
-		public constructor(client: KlasaClient, dir: string, file: string[], options: CommandOptions);
+		public constructor(client: KlasaClient, dir: string, file: string[], options?: CommandOptions);
 		public client: KlasaClient;
 		public type: 'command';
 
@@ -791,17 +791,17 @@ declare module 'klasa' {
 		private cooldowns: Map<Snowflake, number>;
 
 		public abstract run(msg: KlasaMessage, params: any[]): Promise<KlasaMessage | KlasaMessage[]>;
-		public abstract init(): any;
+		public abstract init(): Promise<void>;
 
-		public abstract enable(): Piece;
-		public abstract disable(): Piece;
-		public abstract reload(): Promise<any>;
-		public abstract unload(): any;
-		public abstract toString(): string;
+		public enable(): Piece;
+		public disable(): Piece;
+		public reload(): Promise<any>;
+		public unload(): any;
+		public toString(): string;
 	}
 
 	export abstract class Event implements Piece  {
-		public constructor(client: KlasaClient, dir: string, file: string[], options: EventOptions);
+		public constructor(client: KlasaClient, dir: string, file: string[], options?: EventOptions);
 		public client: KlasaClient;
 		public type: 'event';
 
@@ -813,17 +813,17 @@ declare module 'klasa' {
 		private _run(param: any): void;
 
 		public abstract run(...params: any[]): void;
-		public abstract init(): any;
+		public abstract init(): Promise<void>;
 
-		public abstract enable(): Piece;
-		public abstract disable(): Piece;
-		public abstract reload(): Promise<any>;
-		public abstract unload(): any;
-		public abstract toString(): string;
+		public enable(): Piece;
+		public disable(): Piece;
+		public reload(): Promise<any>;
+		public unload(): any;
+		public toString(): string;
 	}
 
 	export abstract class Extendable implements Piece {
-		public constructor(client: KlasaClient, dir: string, file: string[], options: ExtendableOptions);
+		public constructor(client: KlasaClient, dir: string, file: string[], options?: ExtendableOptions);
 		public client: KlasaClient;
 		public type: 'extendable';
 
@@ -836,17 +836,17 @@ declare module 'klasa' {
 		public target: boolean;
 
 		public abstract extend(...params: any[]): any;
-		public abstract init(): any;
+		public abstract init(): Promise<void>;
 
-		public abstract enable(): Piece;
-		public abstract disable(): Piece;
-		public abstract reload(): Promise<any>;
-		public abstract unload(): any;
-		public abstract toString(): string;
+		public enable(): Piece;
+		public disable(): Piece;
+		public reload(): Promise<any>;
+		public unload(): any;
+		public toString(): string;
 	}
 
 	export abstract class Finalizer implements Piece {
-		public constructor(client: KlasaClient, dir: string, file: string[], options: FinalizerOptions);
+		public constructor(client: KlasaClient, dir: string, file: string[], options?: FinalizerOptions);
 		public client: KlasaClient;
 		public type: 'finalizer';
 
@@ -856,17 +856,17 @@ declare module 'klasa' {
 		public file: string;
 
 		public abstract run(msg: KlasaMessage, mes: KlasaMessage, start: Stopwatch): void;
-		public abstract init(): any;
+		public abstract init(): Promise<void>;
 
-		public abstract enable(): Piece;
-		public abstract disable(): Piece;
-		public abstract reload(): Promise<any>;
-		public abstract unload(): any;
-		public abstract toString(): string;
+		public enable(): Piece;
+		public disable(): Piece;
+		public reload(): Promise<any>;
+		public unload(): any;
+		public toString(): string;
 	}
 
 	export abstract class Inhibitor implements Piece {
-		public constructor(client: KlasaClient, dir: string, file: string[], options: InhibitorOptions);
+		public constructor(client: KlasaClient, dir: string, file: string[], options?: InhibitorOptions);
 		public client: KlasaClient;
 		public type: 'inhibitor';
 
@@ -876,18 +876,19 @@ declare module 'klasa' {
 		public file: string;
 
 		public abstract run(msg: KlasaMessage, cmd: Command): Promise<void | string>;
-		public abstract init(): any;
+		public abstract init(): Promise<void>;
 
-		public abstract enable(): Piece;
-		public abstract disable(): Piece;
-		public abstract reload(): Promise<any>;
-		public abstract unload(): any;
-		public abstract toString(): string;
+		public enable(): Piece;
+		public disable(): Piece;
+		public reload(): Promise<any>;
+		public unload(): any;
+		public toString(): string;
 	}
 
 	export abstract class Language implements Piece {
-		public constructor(client: KlasaClient, dir: string, file: string[], options: LanguageOptions);
+		public constructor(client: KlasaClient, dir: string, file: string[], options?: LanguageOptions);
 		public client: KlasaClient;
+		public language: { [key: string]: any };
 		public type: 'language';
 
 		public enabled: boolean;
@@ -895,18 +896,18 @@ declare module 'klasa' {
 		public dir: string;
 		public file: string;
 
-		public get(term: string, ...args: any[]): string | ((...args: any[]) => string);
-		public abstract init(): any;
+		public get(term: string, ...args: any[]): any;
+		public abstract init(): Promise<void>;
 
-		public abstract enable(): Piece;
-		public abstract disable(): Piece;
-		public abstract reload(): Promise<any>;
-		public abstract unload(): any;
-		public abstract toString(): string;
+		public enable(): Piece;
+		public disable(): Piece;
+		public reload(): Promise<any>;
+		public unload(): any;
+		public toString(): string;
 	}
 
 	export abstract class Monitor implements Piece {
-		public constructor(client: KlasaClient, dir: string, file: string[], options: MonitorOptions);
+		public constructor(client: KlasaClient, dir: string, file: string[], options?: MonitorOptions);
 		public client: KlasaClient;
 		public type: 'monitor';
 
@@ -919,17 +920,17 @@ declare module 'klasa' {
 		public ignoreSelf: boolean;
 		public ignoreOthers: boolean;
 		public abstract run(msg: KlasaMessage): void;
-		public abstract init(): any;
+		public abstract init(): Promise<void>;
 
-		public abstract enable(): Piece;
-		public abstract disable(): Piece;
-		public abstract reload(): Promise<any>;
-		public abstract unload(): any;
-		public abstract toString(): string;
+		public enable(): Piece;
+		public disable(): Piece;
+		public reload(): Promise<any>;
+		public unload(): any;
+		public toString(): string;
 	}
 
 	export abstract class Provider implements Piece {
-		public constructor(client: KlasaClient, dir: string, file: string[], options: ProviderOptions);
+		public constructor(client: KlasaClient, dir: string, file: string[], options?: ProviderOptions);
 		public client: KlasaClient;
 		public type: 'monitor';
 
@@ -942,14 +943,14 @@ declare module 'klasa' {
 		public cache: boolean;
 		public sql: boolean;
 
-		public abstract init(): any;
-		public abstract shutdown(): Promise<void>;
+		public abstract init(): Promise<void>;
+		public shutdown(): Promise<void>;
 
-		public abstract enable(): Piece;
-		public abstract disable(): Piece;
-		public abstract reload(): Promise<any>;
-		public abstract unload(): any;
-		public abstract toString(): string;
+		public enable(): Piece;
+		public disable(): Piece;
+		public reload(): Promise<any>;
+		public unload(): any;
+		public toString(): string;
 	}
 
 	export class Store {
