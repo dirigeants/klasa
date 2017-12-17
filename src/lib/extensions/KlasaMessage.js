@@ -164,6 +164,7 @@ module.exports = Structures.extend('Message', Message => {
 			options = this.constructor.combineContentOptions(content, options);
 			content = options.content; // eslint-disable-line prefer-destructuring
 			delete options.content;
+			if (Array.isArray(content)) content = content.join('\n');
 
 			options.embed = options.embed || null;
 			if (this.responses && typeof options.files === 'undefined') {
@@ -251,7 +252,7 @@ module.exports = Structures.extend('Message', Message => {
 			 * @since 0.3.0
 			 * @type {Language}
 			 */
-			this.language = this.guild ? this.guild.language : this.client.languages.get(this.client.options.language);
+			this.language = this.guild ? this.guild.language : this.client.languages.default;
 		}
 
 		/**
