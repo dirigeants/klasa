@@ -154,7 +154,7 @@ exports.GATEWAYS = {
 		download: false
 	},
 
-	CLIENTSTORAGE: {
+	CLIENT_STORAGE: {
 		name: 'clientStorage',
 		resolver: async function validateClient(clientResolvable) {
 			if (typeof clientResolvable === 'string' && clientResolvable === this.client.user.id) return this.client.user;
