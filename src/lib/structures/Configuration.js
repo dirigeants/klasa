@@ -1,24 +1,33 @@
+const { isObject, makeObject } = require('../util/util');
+
 /**
  * The Configuration class that stores the cache for each entry in SettingGateway.
  */
 class Configuration {
 
 	/**
-	 * @typedef  {Object} ConfigurationUpdateResult
+	 * @typedef {Object} ConfigurationUpdateResult
 	 * @property {*} value
 	 * @property {SchemaPiece} path
 	 * @memberof Configuration
 	 */
 
 	/**
-	 * @typedef  {Object} ConfigurationParseOptions
+	 * @typedef {Object} ConfigurationParseOptions
 	 * @property {string} path
 	 * @property {string[]} route
 	 * @memberof Configuration
 	 */
 
 	/**
-	 * @typedef  {Object} ConfigurationParseResult
+	 * @typedef {Object} ConfigurationUpdateOptions
+	 * @property {boolean} [avoidUnconfigurable]
+	 * @property {('add'|'remove'|'auto')} [action]
+	 * @memberof Configuration
+	 */
+
+	/**
+	 * @typedef {Object} ConfigurationParseResult
 	 * @property {*} parsed
 	 * @property {(string|number|object)} parsedID
 	 * @property {null} array
@@ -29,7 +38,7 @@ class Configuration {
 	 */
 
 	/**
-	 * @typedef  {Object} ConfigurationParseResultArray
+	 * @typedef {Object} ConfigurationParseResultArray
 	 * @property {*} parsed
 	 * @property {*} parsedID
 	 * @property {any[]} array
@@ -40,7 +49,7 @@ class Configuration {
 	 */
 
 	/**
-	 * @typedef  {Object} ConfigurationUpdateManyList
+	 * @typedef {Object} ConfigurationUpdateManyList
 	 * @property {Error[]} errors
 	 * @property {Array<Promise<any>>} promises
 	 * @property {string[]} keys
@@ -49,14 +58,14 @@ class Configuration {
 	 */
 
 	/**
-	 * @typedef  {Object} ConfigurationUpdateManyUpdated
+	 * @typedef {Object} ConfigurationUpdateManyUpdated
 	 * @property {string[]} keys
 	 * @property {Array<*>} values
 	 * @memberof Configuration
 	 */
 
 	/**
-	 * @typedef  {Object} ConfigurationUpdateManyResult
+	 * @typedef {Object} ConfigurationUpdateManyResult
 	 * @property {ConfigurationUpdateManyUpdated} updated
 	 * @property {Error[]} errors
 	 * @memberof Configuration
@@ -71,8 +80,8 @@ class Configuration {
 
 	/**
 	 * @since 0.5.0
-	 * @param {Gateway} manager The Gateway that manages this Configuration instance.
-	 * @param {Object} data The data that is cached in this Configuration instance.
+	 * @param {Gateway} manager The Gateway that manages this Configuration instance
+	 * @param {Object} data The data that is cached in this Configuration instance
 	 */
 	constructor(manager, data) {
 		/**
@@ -129,11 +138,11 @@ class Configuration {
 	/**
 	 * Get a value from the configuration. Admits nested objects separating by comma.
 	 * @since 0.5.0
-	 * @param {string} key The key to get from this instance.
+	 * @param {string} key The key to get from this instance
 	 * @returns {*}
 	 */
 	get(key) {
-		if (!key.includes('.')) return this[key];
+		if (!key.includes('.')) return this.gateway.schema.hasKey(key) ? this[key] : undefined;
 
 		const path = key.split('.');
 		let refSetting = this; // eslint-disable-line consistent-this
@@ -195,50 +204,52 @@ class Configuration {
 	/**
 	 * Reset a value from an entry.
 	 * @since 0.5.0
-	 * @param {string} key The key to reset.
-	 * @param {boolean} [avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key.
+	 * @param {string} key The key to reset
+	 * @param {boolean} [avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key
 	 * @returns {Promise<ConfigurationUpdateResult>}
 	 */
 	async reset(key, avoidUnconfigurable = false) {
 		const { parsedID, parsed, path } = await this._reset(key, avoidUnconfigurable);
 		await (this.gateway.sql ?
 			this.gateway.provider.update(this.gateway.type, this.id, key, parsedID) :
-			this.gateway.provider.update(this.gateway.type, this.id, this.toJSON()));
+			this.gateway.provider.update(this.gateway.type, this.id, makeObject(key, parsedID)));
 		return { value: parsed, path };
 	}
 
 	/**
 	 * Update a value from an entry.
 	 * @since 0.5.0
-	 * @param {string} key The key to modify.
-	 * @param {*} value The value to parse and save.
-	 * @param {ConfigGuildResolvable} [guild] A guild resolvable.
-	 * @param {boolean} [avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key.
-	 * @returns {Promise<ConfigurationUpdateResult>}
+	 * @param {(string|Object)} key The key to modify
+	 * @param {*} [value] The value to parse and save
+	 * @param {ConfigGuildResolvable} [guild] A guild resolvable
+	 * @param {ConfigurationUpdateOptions} [options={}] The options for the update
+	 * @returns {Promise<(ConfigurationUpdateResult|ConfigurationUpdateManyResult)>}
+	 * @example
+	 * // Updating the value of a key
+	 * Configuration#update('roles.administrator', '339943234405007361', msg.guild);
+	 *
+	 * // Updating an array:
+	 * Configuration#update('userBlacklist', '272689325521502208');
+	 *
+	 * // Ensuring the function call adds (error if it exists):
+	 * Configuration#update('userBlacklist', '272689325521502208', { action: 'add' });
+	 *
+	 * // Updating it with a json object:
+	 * Configuration#update({ roles: { administrator: '339943234405007361' } }, msg.guild);
+	 *
+	 * // Updating multiple keys (only possible with json object):
+	 * Configuration#update({ prefix: 'k!', language: 'es-ES' }, msg.guild);
 	 */
-	updateOne(key, value, guild, avoidUnconfigurable = false) {
-		return this._sharedUpdateSingle('add', key, value, guild, avoidUnconfigurable);
-	}
-
-	/**
-	 * Update an array from an entry.
-	 * @since 0.5.0
-	 * @param {('add'|'remove')} action Whether the value should be added or removed to the array.
-	 * @param {string} key The key to modify.
-	 * @param {*} value The value to parse and save or remove.
-	 * @param {ConfigGuildResolvable} [guild] A guild resolvable.
-	 * @param {boolean} [avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key.
-	 * @returns {Promise<ConfigurationUpdateResult>}
-	 */
-	async updateArray(action, key, value, guild, avoidUnconfigurable = false) {
-		return this._sharedUpdateSingle(action, key, value, guild, avoidUnconfigurable);
+	update(key, value, guild, { avoidUnconfigurable = false, action = 'auto' } = {}) {
+		if (isObject(key)) return this.updateMany(key, value);
+		return this._updateSingle(action, key, value, guild, avoidUnconfigurable);
 	}
 
 	/**
 	 * Update multiple keys given a JSON object.
 	 * @since 0.5.0
-	 * @param {Object} object A JSON object to iterate and parse.
-	 * @param {ConfigGuildResolvable} [guild] A guild resolvable.
+	 * @param {Object} object A JSON object to iterate and parse
+	 * @param {ConfigGuildResolvable} [guild] A guild resolvable
 	 * @returns {Promise<ConfigurationUpdateManyResult>}
 	 */
 	async updateMany(object, guild) {
@@ -248,20 +259,22 @@ class Configuration {
 		if (!this.existsInDB) await this.gateway.createEntry(this.id);
 
 		const oldClone = this.client.listenerCount('configUpdateEntry') ? this.clone() : null;
-		this._updateMany(this, object, this.gateway.schema, guild, list);
+		const updateObject = {};
+		guild = this.gateway._resolveGuild(guild);
+		this._updateMany(this, object, this.gateway.schema, guild, list, updateObject);
 		await Promise.all(list.promises);
 
 		if (oldClone !== null) this.client.emit('configUpdateEntry', oldClone, this, { type: 'MANY', keys: list.keys, values: list.values });
 		if (this.gateway.sql) await this.gateway.provider.update(this.gateway.type, this.id, list.keys, list.values);
-		else await this.gateway.provider.update(this.gateway.type, this.id, this.toJSON());
+		else await this.gateway.provider.update(this.gateway.type, this.id, updateObject);
 		return { updated: { keys: list.keys, values: list.values }, errors: list.errors };
 	}
 
 	/**
 	 * Reset a value from an entry.
 	 * @since 0.5.0
-	 * @param {string} key The key to reset.
-	 * @param {boolean} avoidUnconfigurable Whether the Gateway should avoid configuring the selected key.
+	 * @param {string} key The key to reset
+	 * @param {boolean} avoidUnconfigurable Whether the Gateway should avoid configuring the selected key
 	 * @returns {Promise<ConfigurationParseResult>}
 	 * @private
 	 */
@@ -274,8 +287,8 @@ class Configuration {
 	/**
 	 * Parse the data for reset.
 	 * @since 0.5.0
-	 * @param {string} key The key to edit.
-	 * @param {ConfigurationParseOptions} options The options.
+	 * @param {string} key The key to edit
+	 * @param {ConfigurationParseOptions} options The options
 	 * @returns {Promise<ConfigurationParseResult>}
 	 * @private
 	 */
@@ -288,10 +301,10 @@ class Configuration {
 	/**
 	 * Update a single key
 	 * @since 0.5.0
-	 * @param {string} key The key to edit.
-	 * @param {*} value The new value.
-	 * @param {ConfigGuildResolvable} guild The guild to take.
-	 * @param {ConfigurationParseOptions} options The options.
+	 * @param {string} key The key to edit
+	 * @param {*} value The new value
+	 * @param {ConfigGuildResolvable} guild The guild to take
+	 * @param {ConfigurationParseOptions} options The options
 	 * @returns {Promise<ConfigurationParseResult>}
 	 * @private
 	 */
@@ -300,7 +313,7 @@ class Configuration {
 		guild = this.gateway._resolveGuild(guild);
 
 		const parsed = await path.parse(value, guild);
-		const parsedID = parsed && parsed.id ? parsed.id : parsed;
+		const parsedID = Configuration.getIdentifier(parsed);
 		await this._setValue(parsedID, path, route);
 		return { parsed, parsedID, array: null, path, route };
 	}
@@ -308,11 +321,11 @@ class Configuration {
 	/**
 	 * Update an array
 	 * @since 0.5.0
-	 * @param {('add'|'remove')} action Whether the value should be added or removed to the array.
-	 * @param {string} key The key to edit.
-	 * @param {*} value The new value.
-	 * @param {ConfigGuildResolvable} guild The guild to take.
-	 * @param {ConfigurationParseOptions} options The options.
+	 * @param {('add'|'remove')} action Whether the value should be added or removed to the array
+	 * @param {string} key The key to edit
+	 * @param {*} value The new value
+	 * @param {ConfigGuildResolvable} guild The guild to take
+	 * @param {ConfigurationParseOptions} options The options
 	 * @returns {Promise<ConfigurationParseResultArray>}
 	 * @private
 	 */
@@ -324,7 +337,7 @@ class Configuration {
 		guild = this.gateway._resolveGuild(guild);
 
 		const parsed = await path.parse(value, guild);
-		const parsedID = parsed && parsed.id ? parsed.id : parsed;
+		const parsedID = Configuration.getIdentifier(parsed);
 
 		// Handle entry creation if it does not exist.
 		if (!this.existsInDB) await this.gateway.createEntry(this.id);
@@ -334,6 +347,7 @@ class Configuration {
 		for (let i = 0; i < route.length - 1; i++) cache = cache[route[i]] || {};
 		cache = cache[route[route.length - 1]] || [];
 
+		if (action === 'auto') action = cache.includes(parsedID) ? 'remove' : 'add';
 		if (action === 'add') {
 			if (cache.includes(parsedID)) throw `The value ${parsedID} for the key ${path.path} already exists.`;
 			cache.push(parsedID);
@@ -350,15 +364,15 @@ class Configuration {
 	/**
 	 * Update an array
 	 * @since 0.5.0
-	 * @param {('add'|'remove')} action Whether the value should be added or removed to the array.
-	 * @param {string} key The key to edit.
-	 * @param {*} value The new value.
-	 * @param {ConfigGuildResolvable} guild The guild to take.
-	 * @param {boolean} avoidUnconfigurable Whether the Gateway should avoid configuring the selected key.
+	 * @param {('add'|'remove'|'auto')} action Whether the value should be added or removed to the array
+	 * @param {string} key The key to edit
+	 * @param {*} value The new value
+	 * @param {ConfigGuildResolvable} guild The guild to take
+	 * @param {boolean} avoidUnconfigurable Whether the Gateway should avoid configuring the selected key
 	 * @returns {Promise<ConfigurationUpdateResult>}
 	 * @private
 	 */
-	async _sharedUpdateSingle(action, key, value, guild, avoidUnconfigurable) {
+	async _updateSingle(action, key, value, guild, avoidUnconfigurable) {
 		if (typeof key !== 'string') throw new TypeError(`The argument key must be a string. Received: ${typeof key}`);
 		if (typeof guild === 'boolean') {
 			avoidUnconfigurable = guild;
@@ -366,12 +380,15 @@ class Configuration {
 		}
 
 		const pathData = this.gateway.getPath(key, { avoidUnconfigurable, piece: true });
-		const { parsedID, array, parsed } = pathData.path.array === true ?
-			await this._parseUpdateArray(action, key, value, guild, pathData) :
-			await this._parseUpdateOne(key, value, guild, pathData);
+		if (action === 'remove' && !pathData.path.array) return this._parseReset(key, pathData);
+		const { parsedID, array, parsed } = action === 'remove' && !pathData.path.array ?
+			this._parseReset(key, pathData) :
+			pathData.path.array === true ?
+				await this._parseUpdateArray(action, key, value, guild, pathData) :
+				await this._parseUpdateOne(key, value, guild, pathData);
 
-		if (this.gateway.sql) await this.gateway.provider.update(this.gateway.type, this.id, key, array === null ? parsedID : array);
-		else await this.gateway.provider.update(this.gateway.type, this.id, this.toJSON());
+		if (this.gateway.sql) await this.gateway.provider.update(this.gateway.type, this.id, key, array || parsedID);
+		else await this.gateway.provider.update(this.gateway.type, this.id, makeObject(key, array || parsedID));
 
 		return { value: parsed, path: pathData.path };
 	}
@@ -379,31 +396,42 @@ class Configuration {
 	/**
 	 * Update many keys in a single query.
 	 * @since 0.5.0
-	 * @param {Object} cache The key target.
-	 * @param {Object} object The key to edit.
-	 * @param {Schema} schema The new value.
-	 * @param {ConfigGuildResolvable} guild The guild to take.
-	 * @param {ConfigurationUpdateManyList} list The options.
+	 * @param {Object} cache The key target
+	 * @param {Object} object The key to edit
+	 * @param {SchemaFolder} schema The new value
+	 * @param {ConfigGuildResolvable} guild The guild to take
+	 * @param {ConfigurationUpdateManyList} list The options
+	 * @param {*} updateObject The object to update
 	 * @private
 	 */
-	_updateMany(cache, object, schema, guild, list) {
-		guild = this.gateway._resolveGuild(guild);
-		const keys = Object.keys(object);
-		for (let i = 0; i < keys.length; i++) {
-			const key = keys[i];
-			if (schema.hasKey(key) === false) continue;
+	_updateMany(cache, object, schema, guild, list, updateObject) {
+		for (const key of Object.keys(object)) {
+			if (!schema.hasKey(key)) continue;
 			if (schema[key].type === 'Folder') {
-				this._updateMany(cache[key], object[key], schema[key], guild, list);
-				continue;
+				if (!(key in updateObject)) updateObject = updateObject[key] = {};
+				this._updateMany(cache[key], object[key], schema[key], guild, list, updateObject);
+			} else if (schema[key].array && !Array.isArray(object[key])) {
+				list.errors.push([schema[key].path, new Error(`${schema[key].path} expects an array as value.`)]);
+			} else if (!schema[key].array && schema[key].array !== 'any' && Array.isArray(object[key])) {
+				list.errors.push([schema[key].path, new Error(`${schema[key].path} does not expect an array as value.`)]);
+			} else {
+				const promise = schema[key].array && schema[key].type !== 'any' ?
+					Promise.all(object[key].map(entry => schema[key].parse(entry, guild)
+						.then(Configuration.getIdentifier)
+						.catch(error => { list.errors.push([schema[key].path, error]); }))) :
+					schema[key].parse(object[key], guild);
+
+				list.promises.push(promise
+					.then(parsed => {
+						const parsedID = schema[key].array ?
+							parsed.filter(entry => typeof entry !== 'undefined') :
+							Configuration.getIdentifier(parsed);
+						updateObject[key] = cache[key] = parsedID;
+						list.keys.push(schema[key].path);
+						list.values.push(parsedID);
+					})
+					.catch(error => list.errors.push([schema.path, error])));
 			}
-			list.promises.push(schema[key].parse(object[key], guild)
-				.then(result => {
-					const parsedID = result && result.id ? result.id : result;
-					cache[key] = parsedID;
-					list.keys.push(schema[key].path);
-					list.values.push(parsedID);
-				})
-				.catch(error => list.errors.push([schema[key].path, error])));
 		}
 	}
 
@@ -430,7 +458,8 @@ class Configuration {
 	/**
 	 * Path this Configuration instance.
 	 * @since 0.5.0
-	 * @param {Object} data The data to patch.
+	 * @param {Object} data The data to patch
+	 * @private
 	 */
 	_patch(data) {
 		if (this.gateway.sql) data = this.gateway.parseEntry(data);
@@ -464,11 +493,10 @@ class Configuration {
 	/**
 	 * Assign data to the Configuration.
 	 * @since 0.5.0
-	 * @param {Object} data The data contained in the group.
-	 * @param {(Schema|SchemaPiece)} schema A Schema or a SchemaPiece instance.
+	 * @param {Object} data The data contained in the group
+	 * @param {(SchemaFolder|SchemaPiece)} schema A SchemaFolder or a SchemaPiece instance
 	 * @returns {Object}
 	 * @private
-	 * @static
 	 */
 	static _merge(data, schema) {
 		if (schema.type === 'Folder') {
@@ -491,11 +519,10 @@ class Configuration {
 	/**
 	 * Clone configs.
 	 * @since 0.5.0
-	 * @param {Object} data The data to clone.
-	 * @param {Schema} schema A Schema instance.
+	 * @param {Object} data The data to clone
+	 * @param {SchemaFolder} schema A SchemaFolder instance
 	 * @returns {Object}
 	 * @private
-	 * @static
 	 */
 	static _clone(data, schema) {
 		const clone = {};
@@ -510,11 +537,12 @@ class Configuration {
 	}
 
 	/**
-	 * Path an object.
+	 * Patch an object.
 	 * @since 0.5.0
-	 * @param {Object} inst The reference of the Configuration instance.
-	 * @param {Object} data The original object.
-	 * @param {Schema} schema A Schema or a SchemaPiece instance.
+	 * @param {Object} inst The reference of the Configuration instance
+	 * @param {Object} data The original object
+	 * @param {SchemaFolder} schema A SchemaFolder instance
+	 * @private
 	 */
 	static _patch(inst, data, schema) {
 		for (let i = 0; i < schema.keyArray.length; i++) {
@@ -524,6 +552,20 @@ class Configuration {
 				Configuration._patch(inst[key], data[key], schema[key]) :
 				data[key];
 		}
+	}
+
+	/**
+	 * Get the identifier of a value.
+	 * @since 0.5.0
+	 * @param {*} value The value to get the identifier from
+	 * @returns {*}
+	 * @private
+	 */
+	static getIdentifier(value) {
+		if (typeof value !== 'object' || value === null) return value;
+		if (value.id) return value.id;
+		if (value.name) return value.name;
+		return value;
 	}
 
 }

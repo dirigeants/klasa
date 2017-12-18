@@ -157,7 +157,7 @@ class ParsedUsage {
 		usage.opened--;
 		if (usage.current === '...') {
 			if (usage.openReq) throw `${usage.at}: repeat tag cannot be required`;
-			if (usage.tags.length < 1) throw `${usage.fromto}: there can't be a repeat at the begining`;
+			if (usage.tags.length < 1) throw `${usage.fromto}: there can't be a repeat at the beginning`;
 			usage.tags.push({ type: 'repeat' });
 			usage.last = true;
 		} else {
@@ -170,9 +170,9 @@ class ParsedUsage {
 	/**
 	 * Method responsible for handling tag spacing
 	 * @since 0.0.1
-	 * @param {Object} usage The current usage interum object
+	 * @param {Object} usage The current usage in the object
 	 * @param {string} char The character that triggered this function
-	 * @returns {Object} The current usage interum object
+	 * @returns {Object} The current usage in the object
 	 * @private
 	 */
 	static tagSpace(usage, char) {

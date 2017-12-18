@@ -1,4 +1,5 @@
 const Piece = require('./interfaces/Piece');
+const { mergeDefault } = require('../util/util');
 
 /**
  * Base class for all Klasa Events. See {@tutorial CreatingEvents} for more information how to use this class
@@ -10,9 +11,9 @@ class Event {
 
 	/**
 	 * @typedef {Object} EventOptions
-	 * @memberof Event
-	 * @property {string} [name = theFileName] The name of the event
+	 * @property {string} [name=theFileName] The name of the event
 	 * @property {boolean} [enabled=true] Whether the event is enabled or not
+	 * @memberof Event
 	 */
 
 	/**
@@ -23,6 +24,8 @@ class Event {
 	 * @param {EventOptions} [options={}] The Event options
 	 */
 	constructor(client, dir, file, options = {}) {
+		options = mergeDefault(client.options.pieceDefaults.events, options);
+
 		/**
 		 * @since 0.0.1
 		 * @type {KlasaClient}
@@ -62,15 +65,15 @@ class Event {
 		 * @since 0.0.1
 		 * @type {boolean}
 		 */
-		this.enabled = 'enabled' in options ? options.enabled : true;
+		this.enabled = options.enabled;
 	}
 
 	/**
 	 * A wrapper for the run method, to easily disable/enable events
 	 * @since 0.0.1
-	 * @param {*} param The event parameters emited
-	 * @private
+	 * @param {*} param The event parameters emitted
 	 * @returns {void}
+	 * @private
 	 */
 	_run(...args) {
 		if (this.enabled) this.run(...args);
@@ -79,19 +82,19 @@ class Event {
 	/**
 	 * The run method to be overwritten in actual event handlers
 	 * @since 0.0.1
-	 * @param {*} param The event parameters emited
-	 * @abstract
+	 * @param {*} param The event parameters emitted
 	 * @returns {void}
+	 * @abstract
 	 */
 	run() {
 		// Defined in extension Classes
 	}
 
 	/**
-	 * The init method to be optionaly overwritten in actual events
+	 * The init method to be optionally overwritten in actual events
 	 * @since 0.0.1
-	 * @abstract
 	 * @returns {void}
+	 * @abstract
 	 */
 	async init() {
 		// Optionally defined in extension Classes

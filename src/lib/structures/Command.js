@@ -1,6 +1,5 @@
 const Piece = require('./interfaces/Piece');
 const { mergeDefault } = require('../util/util');
-const constants = require('../util/constants');
 const ParsedUsage = require('../usage/ParsedUsage');
 
 /**
@@ -13,7 +12,6 @@ class Command {
 
 	/**
 	 * @typedef {Object} CommandOptions
-	 * @memberof Command
 	 * @property {string} [name=theFileName] The name of the command
 	 * @property {boolean} [enabled=true] Whether the command is enabled or not
 	 * @property {string[]} [runIn=['text','dm','group']] What channel types the command should run in
@@ -21,7 +19,7 @@ class Command {
 	 * @property {boolean} [nsfw=false] If the command should only run in nsfw channels
 	 * @property {boolean} [deletable=false] If the responses should be deleted if the triggering message is deleted
 	 * @property {boolean} [guarded=false] If the command can be disabled on a guild level (does not effect global disable)
-	 * @property {string[]} [aliases=[]] Any comand aliases
+	 * @property {string[]} [aliases=[]] Any command aliases
 	 * @property {boolean} [autoAliases=true] If automatic aliases should be added (adds aliases of name and aliases without dashes)
 	 * @property {number} [permLevel=0] The required permission level to use the command
 	 * @property {string[]} [botPerms=[]] The required Discord permissions for the bot to use this command
@@ -29,8 +27,9 @@ class Command {
 	 * @property {(string|Function)} [description=''] The help description for the command
 	 * @property {string} [usage=''] The usage string for the command
 	 * @property {?string} [usageDelim=undefined] The string to deliminate the command input for usage
-	 * @property {boolean} [quotedStringSupport=this.client.options.quotedStringSupport] Wheter args for this command should not deliminated inside quotes
+	 * @property {boolean} [quotedStringSupport=this.client.options.commands.quotedStringSupport] Whether args for this command should not deliminated inside quotes
 	 * @property {(string|Function)} [extendedHelp=msg.language.get('COMMAND_HELP_NO_EXTENDED')] Extended help strings
+	 * @memberof Command
 	 */
 
 	/**
@@ -38,10 +37,10 @@ class Command {
 	 * @param {KlasaClient} client The Klasa Client
 	 * @param {string} dir The path to the core or user command pieces folder
 	 * @param {Array} file The path from the pieces folder to the command file
-	 * @param {CommandOptions} [options = {}] Optional Command settings
+	 * @param {CommandOptions} [options={}] Optional Command settings
 	 */
 	constructor(client, dir, file, options = {}) {
-		options = mergeDefault(constants.DEFAULTS.COMMAND, options);
+		options = mergeDefault(client.options.pieceDefaults.commands, options);
 
 		/**
 		 * @since 0.0.1
@@ -85,7 +84,7 @@ class Command {
 		this.nsfw = options.nsfw;
 
 		/**
-		 * Whether this command shound not be able to be disabled in a guild or not
+		 * Whether this command should not be able to be disabled in a guild or not
 		 * @since 0.5.0
 		 * @type {boolean}
 		 */
@@ -174,7 +173,7 @@ class Command {
 		 * @since 0.2.1
 		 * @type {boolean}
 		 */
-		this.quotedStringSupport = options.quotedStringSupport || this.client.options.quotedStringSupport;
+		this.quotedStringSupport = options.quotedStringSupport;
 
 		/**
 		 * The full category for the command
@@ -232,18 +231,18 @@ class Command {
 	 * @since 0.0.1
 	 * @param {KlasaMessage} msg The command message mapped on top of the message used to trigger this command
 	 * @param {any[]} params The fully resolved parameters based on your usage / usageDelim
-	 * @abstract
 	 * @returns {Promise<KlasaMessage|KlasaMessage[]>} You should return the response message whenever possible
+	 * @abstract
 	 */
 	async run() {
 		// Defined in extension Classes
 	}
 
 	/**
-	 * The init method to be optionaly overwritten in actual commands
+	 * The init method to be optionally overwritten in actual commands
 	 * @since 0.0.1
-	 * @abstract
 	 * @returns {Promise<*>}
+	 * @abstract
 	 */
 	async init() {
 		// Optionally defined in extension Classes

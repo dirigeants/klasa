@@ -1,4 +1,5 @@
 const Piece = require('./interfaces/Piece');
+const { mergeDefault } = require('../util/util');
 
 /**
  * Base class for all Klasa Finalizers. See {@tutorial CreatingFinalizers} for more information how to use this class
@@ -10,9 +11,9 @@ class Finalizer {
 
 	/**
 	 * @typedef {Object} FinalizerOptions
-	 * @memberof Finalizer
 	 * @property {string} [name=theFileName] The name of the finalizer
 	 * @property {boolean} [enabled=true] Whether the finalizer is enabled or not
+	 * @memberof Finalizer
 	 */
 
 	/**
@@ -20,9 +21,11 @@ class Finalizer {
 	 * @param {KlasaClient} client The Klasa Client
 	 * @param {string} dir The path to the core or user finalizer pieces folder
 	 * @param {string} file The path from the pieces folder to the finalizer file
-	 * @param {FinalizerOptions} [options = {}] Optional Finalizer settings
+	 * @param {FinalizerOptions} [options={}] Optional Finalizer settings
 	 */
 	constructor(client, dir, file, options = {}) {
+		options = mergeDefault(client.options.pieceDefaults.finalizers, options);
+
 		/**
 		 * @since 0.0.1
 		 * @type {KlasaClient}
@@ -62,7 +65,7 @@ class Finalizer {
 		 * @since 0.0.1
 		 * @type {boolean}
 		 */
-		this.enabled = 'enabled' in options ? options.enabled : true;
+		this.enabled = options.enabled;
 	}
 
 	/**
@@ -71,18 +74,18 @@ class Finalizer {
 	 * @param {KlasaMessage} msg The message used to trigger this finalizer
 	 * @param {KlasaMessage|KlasaMessage[]} mes The bot's response message, if one is returned
 	 * @param {number} start The performance now start time including all command overhead
-	 * @abstract
 	 * @returns {void}
+	 * @abstract
 	 */
 	run() {
 		// Defined in extension Classes
 	}
 
 	/**
-	 * The init method to be optionaly overwritten in actual finalizers
+	 * The init method to be optionally overwritten in actual finalizers
 	 * @since 0.0.1
-	 * @abstract
 	 * @returns {void}
+	 * @abstract
 	 */
 	async init() {
 		// Optionally defined in extension Classes

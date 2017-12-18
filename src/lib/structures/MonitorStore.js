@@ -13,7 +13,7 @@ class MonitorStore extends Collection {
 	/**
 	 * Constructs our MonitorStore for use in Klasa
 	 * @since 0.0.1
-	 * @param  {KlasaClient} client The Klasa Client
+	 * @param {KlasaClient} client The Klasa Client
 	 */
 	constructor(client) {
 		super();
@@ -59,7 +59,7 @@ class MonitorStore extends Collection {
 	/**
 	 * Deletes a monitor from the store
 	 * @since 0.0.1
-	 * @param  {Monitor|string} name The monitor object or a string representing the structure this store caches
+	 * @param {Monitor|string} name The monitor object or a string representing the structure this store caches
 	 * @return {boolean} whether or not the delete was successful.
 	 */
 	delete(name) {
@@ -72,12 +72,12 @@ class MonitorStore extends Collection {
 	/**
 	 * Runs our monitors on the message.
 	 * @since 0.0.1
-	 * @param  {KlasaMessage} msg The message object from Discord.js
+	 * @param {KlasaMessage} msg The message object from Discord.js
 	 */
 	run(msg) {
-		for (const monit of this.values()) {
-			if (monit.enabled && !(monit.ignoreBots && msg.author.bot) && !(monit.ignoreSelf && this.client.user === msg.author) && !(monit.ignoreOthers && this.client.user !== msg.author)) {
-				monit.run(msg).catch(err => this.client.emit('monitorError', msg, monit, err));
+		for (const monitor of this.values()) {
+			if (monitor.enabled && !(monitor.ignoreBots && msg.author.bot) && !(monitor.ignoreSelf && this.client.user === msg.author) && !(monitor.ignoreOthers && this.client.user !== msg.author)) {
+				monitor.run(msg).catch(err => this.client.emit('monitorError', msg, monitor, err));
 			}
 		}
 	}
@@ -85,7 +85,7 @@ class MonitorStore extends Collection {
 	/**
 	 * Sets up a monitor in our store.
 	 * @since 0.0.1
-	 * @param {Monitor} monitor The monitor object we are setting up.
+	 * @param {Monitor} monitor The monitor object we are setting up
 	 * @returns {Monitor}
 	 */
 	set(monitor) {

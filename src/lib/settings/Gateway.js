@@ -1,7 +1,7 @@
 const GatewayStorage = require('./GatewayStorage');
 const Configuration = require('../structures/Configuration');
 const SchemaPiece = require('./SchemaPiece');
-const Schema = require('./Schema');
+const SchemaFolder = require('./SchemaFolder');
 const discord = require('discord.js');
 
 /**
@@ -11,7 +11,7 @@ const discord = require('discord.js');
 class Gateway extends GatewayStorage {
 
 	/**
-	 * @typedef  {Object} GatewayOptions
+	 * @typedef {Object} GatewayOptions
 	 * @property {Provider} [provider]
 	 * @property {CacheProvider} [cache]
 	 * @property {boolean} [nice=false]
@@ -24,14 +24,14 @@ class Gateway extends GatewayStorage {
 	 */
 
 	/**
-	 * @typedef  {Object} GatewayPathOptions
+	 * @typedef {Object} GatewayPathOptions
 	 * @property {boolean} [avoidUnconfigurable=false]
 	 * @property {boolean} [piece=true]
 	 * @memberof Gateway
 	 */
 
 	/**
-	 * @typedef  {Object} GatewayPathResult
+	 * @typedef {Object} GatewayPathResult
 	 * @property {SchemaPiece} path
 	 * @property {string[]} route
 	 * @memberof Gateway
@@ -39,11 +39,11 @@ class Gateway extends GatewayStorage {
 
 	/**
 	 * @since 0.0.1
-	 * @param {GatewayDriver} store The GatewayDriver instance which initiated this instance.
-	 * @param {string} type The name of this Gateway.
-	 * @param {Function} validateFunction The function that validates the entries' values.
-	 * @param {Object} schema The initial schema for this instance.
-	 * @param {GatewayOptions} options The options for this schema.
+	 * @param {GatewayDriver} store The GatewayDriver instance which initiated this instance
+	 * @param {string} type The name of this Gateway
+	 * @param {Function} validateFunction The function that validates the entries' values
+	 * @param {Object} schema The initial schema for this instance
+	 * @param {GatewayOptions} options The options for this schema
 	 */
 	constructor(store, type, validateFunction, schema, options) {
 		super(store.client, type, options.provider);
@@ -96,8 +96,8 @@ class Gateway extends GatewayStorage {
 	/**
 	 * Get an entry from the cache.
 	 * @since 0.5.0
-	 * @param {string} input The key to get from the cache.
-	 * @param {boolean} [create=false] Whether SG should create a new instance of Configuration in the background.
+	 * @param {string} input The key to get from the cache
+	 * @param {boolean} [create=false] Whether SG should create a new instance of Configuration in the background
 	 * @returns {(Configuration|Object)}
 	 */
 	getEntry(input, create = false) {
@@ -124,7 +124,7 @@ class Gateway extends GatewayStorage {
 	/**
 	 * Create a new entry into the database with an optional content (defaults to this Gateway's defaults).
 	 * @since 0.5.0
-	 * @param {string} input The name of the key to create.
+	 * @param {string} input The name of the key to create
 	 * @returns {Promise<Configuration>}
 	 */
 	async createEntry(input) {
@@ -142,8 +142,8 @@ class Gateway extends GatewayStorage {
 	/**
 	 * Generate a new entry and add it to the cache.
 	 * @since 0.5.0
-	 * @param {string} id The ID of the entry.
-	 * @param {*} data The data to insert.
+	 * @param {string} id The ID of the entry
+	 * @param {*} data The data to insert
 	 * @return {Configuration}
 	 */
 	insertEntry(id, data = {}) {
@@ -156,7 +156,7 @@ class Gateway extends GatewayStorage {
 	/**
 	 * Delete an entry from the database and cache.
 	 * @since 0.5.0
-	 * @param {string} input The name of the key to fetch and delete.
+	 * @param {string} input The name of the key to fetch and delete
 	 * @returns {Promise<boolean>}
 	 */
 	async deleteEntry(input) {
@@ -175,8 +175,8 @@ class Gateway extends GatewayStorage {
 	/**
 	 * Sync either all entries from the cache with the persistent database, or a single one.
 	 * @since 0.0.1
-	 * @param {(Object|string)} [input] An object containing a id property, like discord.js objects, or a string.
-	 * @param {boolean} [download] Whether the sync should download data from the database.
+	 * @param {(Object|string)} [input] An object containing a id property, like discord.js objects, or a string
+	 * @param {boolean} [download] Whether the sync should download data from the database
 	 * @returns {Promise<*>}
 	 */
 	async sync(input, download) {
@@ -207,8 +207,8 @@ class Gateway extends GatewayStorage {
 	/**
 	 * Resolve a path from a string.
 	 * @since 0.5.0
-	 * @param {string} [key=null] A string to resolve.
-	 * @param {GatewayPathOptions} [options={}] Whether the Gateway should avoid configuring the selected key.
+	 * @param {string} [key=null] A string to resolve
+	 * @param {GatewayPathOptions} [options={}] Whether the Gateway should avoid configuring the selected key
 	 * @returns {GatewayPathResult}
 	 */
 	getPath(key = '', { avoidUnconfigurable = false, piece = true } = {}) {
@@ -224,14 +224,14 @@ class Gateway extends GatewayStorage {
 			if (path[currKey].type === 'Folder') {
 				path = path[currKey];
 			} else if (piece) {
-				if (avoidUnconfigurable && !path[currKey].configurable) throw `The key ${path[currKey].path} is not configureable in the current schema.`;
+				if (avoidUnconfigurable && !path[currKey].configurable) throw `The key ${path[currKey].path} is not configurable in the current schema.`;
 				return { path: path[currKey], route: path[currKey].path.split('.') };
 			}
 		}
 
 		if (piece && path.type === 'Folder') {
 			const keys = path.configurableKeys;
-			if (keys.length === 0) throw `This group is not configureable.`;
+			if (keys.length === 0) throw `This group is not configurable.`;
 			throw `Please, choose one of the following keys: '${keys.join('\', \'')}'`;
 		}
 
@@ -241,11 +241,11 @@ class Gateway extends GatewayStorage {
 	/**
 	 * Inits the table and the schema for its use in this gateway.
 	 * @since 0.0.1
-	 * @param {boolean} [download=true] Whether this Gateway should download the data from the database.
+	 * @param {boolean} [download=true] Whether this Gateway should download the data from the database
 	 * @private
 	 */
 	async init(download = true) {
-		if (this.ready) throw new Error(`[INIT] ${this} already inited.`);
+		if (this.ready) throw new Error(`[INIT] ${this} has already initialized.`);
 
 		await this.initSchema();
 		await this.initTable();
@@ -278,14 +278,14 @@ class Gateway extends GatewayStorage {
 	/**
 	 * Resolves a guild
 	 * @since 0.5.0
-	 * @param {GatewayGuildResolvable} guild A guild resolvable.
+	 * @param {GatewayGuildResolvable} guild A guild resolvable
 	 * @returns {?KlasaGuild}
 	 * @private
 	 */
 	_resolveGuild(guild) {
 		if (typeof guild === 'object') {
 			if (guild instanceof discord.Guild) return guild;
-			if (guild instanceof discord.GuildChannel || guild instanceof discord.Message || guild instanceof discord.Role || guild instanceof discord.Member) return guild.guild;
+			if (guild instanceof discord.GuildChannel || guild instanceof discord.Message || guild instanceof discord.Role || guild instanceof discord.GuildMember) return guild.guild;
 		}
 		if (typeof guild === 'string' && /^\d{17,19}$/.test(guild)) return this.client.guilds.get(guild);
 		return null;
@@ -294,10 +294,10 @@ class Gateway extends GatewayStorage {
 	/**
 	 * Sync this shard's schema.
 	 * @since 0.5.0
-	 * @param {string[]} path The key's path.
-	 * @param {Object} data The data to insert.
-	 * @param {('add'|'delete'|'update')} action Whether the piece got added or removed.
-	 * @param {boolean} force Whether the key got added with force or not.
+	 * @param {string[]} path The key's path
+	 * @param {Object} data The data to insert
+	 * @param {('add'|'delete'|'update')} action Whether the piece got added or removed
+	 * @param {boolean} force Whether the key got added with force or not
 	 * @private
 	 */
 	async _shardSync(path, data, action, force) {
@@ -308,7 +308,7 @@ class Gateway extends GatewayStorage {
 		for (const pt of path) route = route[pt];
 		let piece;
 		if (action === 'add') {
-			if (parsed.type === 'Folder') piece = route[key] = new Schema(this.client, this, parsed, route, key);
+			if (parsed.type === 'Folder') piece = route[key] = new SchemaFolder(this.client, this, parsed, route, key);
 			else piece = route[key] = new SchemaPiece(this.client, this, parsed, route, key);
 		} else if (action === 'delete') {
 			piece = route[key];

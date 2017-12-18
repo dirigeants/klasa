@@ -39,7 +39,7 @@ class ArgResolver extends Resolver {
 		const store = this.client.pieceStores.get(arg);
 		if (store) return store;
 		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.language).get('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, 'store');
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, 'store');
 	}
 
 	/**
@@ -70,7 +70,7 @@ class ArgResolver extends Resolver {
 		const command = this.client.commands.get(arg);
 		if (command) return command;
 		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.language).get('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, 'command');
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, 'command');
 	}
 
 	/**
@@ -87,7 +87,7 @@ class ArgResolver extends Resolver {
 		const event = this.client.events.get(arg);
 		if (event) return event;
 		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.language).get('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, 'event');
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, 'event');
 	}
 
 	/**
@@ -104,7 +104,7 @@ class ArgResolver extends Resolver {
 		const extendable = this.client.extendables.get(arg);
 		if (extendable) return extendable;
 		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.language).get('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, 'extendable');
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, 'extendable');
 	}
 
 	/**
@@ -121,7 +121,7 @@ class ArgResolver extends Resolver {
 		const finalizer = this.client.finalizers.get(arg);
 		if (finalizer) return finalizer;
 		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.language).get('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, 'finalizer');
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, 'finalizer');
 	}
 
 	/**
@@ -138,7 +138,7 @@ class ArgResolver extends Resolver {
 		const inhibitor = this.client.inhibitors.get(arg);
 		if (inhibitor) return inhibitor;
 		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.language).get('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, 'inhibitor');
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, 'inhibitor');
 	}
 
 	/**
@@ -155,7 +155,7 @@ class ArgResolver extends Resolver {
 		const monitor = this.client.monitors.get(arg);
 		if (monitor) return monitor;
 		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.language).get('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, 'monitor');
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, 'monitor');
 	}
 
 	/**
@@ -172,7 +172,7 @@ class ArgResolver extends Resolver {
 		const language = this.client.languages.get(arg);
 		if (language) return language;
 		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.language).get('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, 'language');
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, 'language');
 	}
 	/**
 	 * Resolves a provider
@@ -188,7 +188,7 @@ class ArgResolver extends Resolver {
 		const provider = this.client.providers.get(arg);
 		if (provider) return provider;
 		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.language).get('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, 'provider');
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, 'provider');
 	}
 
 	/**
@@ -219,7 +219,7 @@ class ArgResolver extends Resolver {
 		const message = await super.msg(arg, msg.channel);
 		if (message) return message;
 		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.language).get('RESOLVER_INVALID_MSG', currentUsage.possibles[possible].name);
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_MSG', currentUsage.possibles[possible].name);
 	}
 
 	/**
@@ -250,7 +250,7 @@ class ArgResolver extends Resolver {
 		const user = await super.user(arg);
 		if (user) return user;
 		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.language).get('RESOLVER_INVALID_USER', currentUsage.possibles[possible].name);
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_USER', currentUsage.possibles[possible].name);
 	}
 
 	/**
@@ -267,7 +267,7 @@ class ArgResolver extends Resolver {
 		const member = await super.member(arg, msg.guild);
 		if (member) return member;
 		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.language).get('RESOLVER_INVALID_MEMBER', currentUsage.possibles[possible].name);
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_MEMBER', currentUsage.possibles[possible].name);
 	}
 
 	/**
@@ -284,7 +284,7 @@ class ArgResolver extends Resolver {
 		const channel = await super.channel(arg);
 		if (channel) return channel;
 		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.language).get('RESOLVER_INVALID_CHANNEL', currentUsage.possibles[possible].name);
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_CHANNEL', currentUsage.possibles[possible].name);
 	}
 
 	/**
@@ -301,7 +301,7 @@ class ArgResolver extends Resolver {
 		const guild = await super.guild(arg);
 		if (guild) return guild;
 		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.language).get('RESOLVER_INVALID_GUILD', currentUsage.possibles[possible].name);
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_GUILD', currentUsage.possibles[possible].name);
 	}
 
 	/**
@@ -318,7 +318,7 @@ class ArgResolver extends Resolver {
 		const role = await super.role(arg, msg.guild);
 		if (role) return role;
 		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.language).get('RESOLVER_INVALID_ROLE', currentUsage.possibles[possible].name);
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_ROLE', currentUsage.possibles[possible].name);
 	}
 
 	/**
@@ -334,7 +334,7 @@ class ArgResolver extends Resolver {
 	async literal(arg, currentUsage, possible, repeat, msg) {
 		if (arg.toLowerCase() === currentUsage.possibles[possible].name.toLowerCase()) return arg.toLowerCase();
 		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.language).get('RESOLVER_INVALID_LITERAL', currentUsage.possibles[possible].name);
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_LITERAL', currentUsage.possibles[possible].name);
 	}
 
 	/**
@@ -365,7 +365,7 @@ class ArgResolver extends Resolver {
 		const boolean = await super.boolean(arg);
 		if (boolean !== null) return boolean;
 		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.language).get('RESOLVER_INVALID_BOOL', currentUsage.possibles[possible].name);
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_BOOL', currentUsage.possibles[possible].name);
 	}
 
 	/**
@@ -394,7 +394,7 @@ class ArgResolver extends Resolver {
 	 */
 	async str(arg, currentUsage, possible, repeat, msg) {
 		const { min, max } = currentUsage.possibles[possible];
-		if (this.constructor.minOrMax(arg.length, min, max, currentUsage, possible, repeat, msg, (msg ? msg.language : this.language).get('RESOLVER_STRING_SUFFIX'))) return arg;
+		if (this.constructor.minOrMax(arg.length, min, max, currentUsage, possible, repeat, msg, (msg ? msg.language : this.client.languages.default).get('RESOLVER_STRING_SUFFIX'))) return arg;
 		return null;
 	}
 
@@ -427,7 +427,7 @@ class ArgResolver extends Resolver {
 		arg = await super.integer(arg);
 		if (arg === null) {
 			if (currentUsage.type === 'optional' && !repeat) return null;
-			throw (msg ? msg.language : this.language).get('RESOLVER_INVALID_INT', currentUsage.possibles[possible].name);
+			throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_INT', currentUsage.possibles[possible].name);
 		}
 		if (this.constructor.minOrMax(arg, min, max, currentUsage, possible, repeat, msg)) return arg;
 		return null;
@@ -476,7 +476,7 @@ class ArgResolver extends Resolver {
 		arg = await super.float(arg);
 		if (arg === null) {
 			if (currentUsage.type === 'optional' && !repeat) return null;
-			throw (msg ? msg.language : this.language).get('RESOLVER_INVALID_FLOAT', currentUsage.possibles[possible].name);
+			throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_FLOAT', currentUsage.possibles[possible].name);
 		}
 		if (this.constructor.minOrMax(arg, min, max, currentUsage, possible, repeat, msg)) return arg;
 		return null;
@@ -496,7 +496,7 @@ class ArgResolver extends Resolver {
 		const results = currentUsage.possibles[possible].regex.exec(arg);
 		if (results !== null) return results;
 		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.language).get('RESOLVER_INVALID_REGEX_MATCH', currentUsage.possibles[possible].name, currentUsage.possibles[possible].regex.toString());
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_REGEX_MATCH', currentUsage.possibles[possible].name, currentUsage.possibles[possible].regex.toString());
 	}
 
 	/**
@@ -541,7 +541,7 @@ class ArgResolver extends Resolver {
 		const hyperlink = await super.url(arg);
 		if (hyperlink !== null) return hyperlink;
 		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.language).get('RESOLVER_INVALID_URL', currentUsage.possibles[possible].name);
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_URL', currentUsage.possibles[possible].name);
 	}
 
 	/**
@@ -549,28 +549,29 @@ class ArgResolver extends Resolver {
 	 * @since 0.0.1
 	 * @param {number} value The value to check against
 	 * @param {?number} min The minimum value
-	 * @param {?number} max The maxiumum value
+	 * @param {?number} max The maximum value
 	 * @param {Object} currentUsage The current usage
 	 * @param {number} possible The id of the current possible usage
 	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @param {string} suffix An error suffix
 	 * @returns {boolean}
+	 * @private
 	 */
 	static minOrMax(value, min, max, currentUsage, possible, repeat, msg, suffix = '') {
 		if (min && max) {
 			if (value >= min && value <= max) return true;
 			if (currentUsage.type === 'optional' && !repeat) return false;
-			if (min === max) throw (msg ? msg.language : this.language).get('RESOLVER_MINMAX_EXACTLY', currentUsage.possibles[possible].name, min, suffix);
-			throw (msg ? msg.language : this.language).get('RESOLVER_MINMAX_BOTH', currentUsage.possibles[possible].name, min, max, suffix);
+			if (min === max) throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_MINMAX_EXACTLY', currentUsage.possibles[possible].name, min, suffix);
+			throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_MINMAX_BOTH', currentUsage.possibles[possible].name, min, max, suffix);
 		} else if (min) {
 			if (value >= min) return true;
 			if (currentUsage.type === 'optional' && !repeat) return false;
-			throw (msg ? msg.language : this.language).get('RESOLVER_MINMAX_MIN', currentUsage.possibles[possible].name, min, suffix);
+			throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_MINMAX_MIN', currentUsage.possibles[possible].name, min, suffix);
 		} else if (max) {
 			if (value <= max) return true;
 			if (currentUsage.type === 'optional' && !repeat) return false;
-			throw (msg ? msg.language : this.language).get('RESOLVER_MINMAX_MAX', currentUsage.possibles[possible].name, max, suffix);
+			throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_MINMAX_MAX', currentUsage.possibles[possible].name, max, suffix);
 		}
 		return true;
 	}

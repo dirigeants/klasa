@@ -9,42 +9,41 @@ const { inspect } = require('util');
 class KlasaConsole extends Console {
 
 	/**
-	 * @memberof KlasaConsole
 	 * @typedef {object} Colors - Time is for the timestamp of the log, message is for the actual output.
-	 * @property {KlasaConsoleColorObjects} debug An object containing a message and time color object.
-	 * @property {KlasaConsoleColorObjects} error An object containing a message and time color object.
-	 * @property {KlasaConsoleColorObjects} log An object containing a message and time color object.
-	 * @property {KlasaConsoleColorObjects} verbose An object containing a message and time color object.
-	 * @property {KlasaConsoleColorObjects} warn An object containing a message and time color object.
-	 * @property {KlasaConsoleColorObjects} wtf An object containing a message and time Color Object.
+	 * @property {KlasaConsoleColorObjects} debug An object containing a message and time color object
+	 * @property {KlasaConsoleColorObjects} error An object containing a message and time color object
+	 * @property {KlasaConsoleColorObjects} log An object containing a message and time color object
+	 * @property {KlasaConsoleColorObjects} verbose An object containing a message and time color object
+	 * @property {KlasaConsoleColorObjects} warn An object containing a message and time color object
+	 * @property {KlasaConsoleColorObjects} wtf An object containing a message and time Color Object
+	 * @memberof KlasaConsole
 	 */
 
 	/**
-	 * @memberof KlasaConsole
 	 * @typedef {object} KlasaConsoleColorObjects
-	 * @property {string} [type='log'] The method from Console this color object should call.
-	 * @property {KlasaConsoleMessageObject} message A message object containing colors and styles.
-	 * @property {KlasaConsoleTimeObject} time A time object containing colors and styles.
+	 * @property {string} [type='log'] The method from Console this color object should call
+	 * @property {KlasaConsoleMessageObject} message A message object containing colors and styles
+	 * @property {KlasaConsoleTimeObject} time A time object containing colors and styles
+	 * @memberof KlasaConsole
 	 */
 
 	/**
-	 * @memberof KlasaConsole
 	 * @typedef {object} KlasaConsoleMessageObject
-	 * @property {BackgroundColorTypes} background The background color. Can be a basic string like "red", a hex string, or a RGB array.
-	 * @property {TextColorTypes} text The text color. Can be a basic string like "red", a hex string, or a RGB array.
-	 * @property {StyleTypes} style A style string from StyleTypes.
+	 * @property {BackgroundColorTypes} background The background color. Can be a basic string like "red", a hex string, or a RGB array
+	 * @property {TextColorTypes} text The text color. Can be a basic string like "red", a hex string, or a RGB array
+	 * @property {StyleTypes} style A style string from StyleTypes
+	 * @memberof KlasaConsole
 	 */
 
 	/**
-	 * @memberof KlasaConsole
 	 * @typedef {object} KlasaConsoleTimeObject
-	 * @property {BackgroundColorTypes} background The background color. Can be a basic string like "red", a hex string, or a RGB array.
-	 * @property {TextColorTypes} text The text color. Can be a basic string like "red", a hex string, a RGB array, or HSL array.
-	 * @property {StyleTypes} style A style string from StyleTypes.
+	 * @property {BackgroundColorTypes} background The background color. Can be a basic string like "red", a hex string, or a RGB array
+	 * @property {TextColorTypes} text The text color. Can be a basic string like "red", a hex string, a RGB array, or HSL array
+	 * @property {StyleTypes} style A style string from StyleTypes
+	 * @memberof KlasaConsole
 	 */
 
 	/**
-	 * @memberof KlasaConsole
 	 * @typedef {*} TextColorTypes - All the valid color types.
 	 * @property {string} black
 	 * @property {string} red
@@ -68,10 +67,10 @@ class KlasaConsole extends Console {
 	 * @property {string} #008000 green
 	 * @property {Array} [255,0,0] red
 	 * @property {Array} [229,50%,50%] blue
+	 * @memberof KlasaConsole
 	 */
 
 	/**
-	 * @memberof KlasaConsole
 	 * @typedef {*} BackgroundColorTypes - One of these strings, HexStrings, RGB, or HSL are valid types.
 	 * @property {string} black
 	 * @property {string} red
@@ -93,10 +92,10 @@ class KlasaConsole extends Console {
 	 * @property {string} #008000 green
 	 * @property {Array} [255,0,0] red
 	 * @property {Array} [229,50%,50%] blue
+	 * @memberof KlasaConsole
 	 */
 
 	/**
-	 * @memberof KlasaConsole
 	 * @typedef {*} StyleTypes
 	 * @property {string} normal
 	 * @property {string} bold
@@ -106,12 +105,13 @@ class KlasaConsole extends Console {
 	 * @property {string} inverse
 	 * @property {string} hidden
 	 * @property {string} strikethrough
+	 * @memberof KlasaConsole
 	 */
 
 	/**
 	 * Constructs our KlasaConsole instance
 	 * @since 0.4.0
-	 * @param  {KlasaConsoleConfig} [options] The options for the klasa console.
+	 * @param {KlasaConsoleConfig} [options] The options for the klasa console.
 	 */
 	constructor({ stdout = process.stdout, stderr = process.stderr, useColor, colors = {}, timestamps = true }) {
 		super(stdout, stderr);
@@ -150,7 +150,7 @@ class KlasaConsole extends Console {
 		 * The colors for this console.
 		 * @since 0.4.0
 		 * @name KlasaConsole#colors
-		 * @type  {boolean|Colors}
+		 * @type {boolean|Colors}
 		 */
 		this.colors = {
 			debug: colors.debug || {
@@ -190,8 +190,8 @@ class KlasaConsole extends Console {
 	/**
 	 * Logs everything to the console/writable stream.
 	 * @since 0.4.0
-	 * @param {*} data The data we want to print.
-	 * @param {string} [type="log"] The type of log, particularly useful for coloring.
+	 * @param {*} data The data we want to print
+	 * @param {string} [type="log"] The type of log, particularly useful for coloring
 	 */
 	write(data, type = 'log') {
 		data = KlasaConsole.flatten(data, this.useColors);
@@ -204,7 +204,7 @@ class KlasaConsole extends Console {
 	/**
 	 * Calls a log write with everything to the console/writable stream.
 	 * @since 0.4.0
-	 * @param {...*} data The data we want to print.
+	 * @param {...*} data The data we want to print
 	 * @returns {void}
 	 */
 	log(...data) {
@@ -214,7 +214,7 @@ class KlasaConsole extends Console {
 	/**
 	 * Calls a warn write with everything to the console/writable stream.
 	 * @since 0.4.0
-	 * @param {...*} data The data we want to print.
+	 * @param {...*} data The data we want to print
 	 * @returns {void}
 	 */
 	warn(...data) {
@@ -224,7 +224,7 @@ class KlasaConsole extends Console {
 	/**
 	 * Calls an error write with everything to the console/writable stream.
 	 * @since 0.4.0
-	 * @param {...*} data The data we want to print.
+	 * @param {...*} data The data we want to print
 	 * @returns {void}
 	 */
 	error(...data) {
@@ -234,7 +234,7 @@ class KlasaConsole extends Console {
 	/**
 	 * Calls a debug write with everything to the console/writable stream.
 	 * @since 0.4.0
-	 * @param {...*} data The data we want to print.
+	 * @param {...*} data The data we want to print
 	 * @returns {void}
 	 */
 	debug(...data) {
@@ -244,7 +244,7 @@ class KlasaConsole extends Console {
 	/**
 	 * Calls a verbose write with everything to the console/writable stream.
 	 * @since 0.4.0
-	 * @param {...*} data The data we want to print.
+	 * @param {...*} data The data we want to print
 	 * @returns {void}
 	 */
 	verbose(...data) {
@@ -254,7 +254,7 @@ class KlasaConsole extends Console {
 	/**
 	 * Calls a wtf (what a terrible failure) write with everything to the console/writable stream.
 	 * @since 0.4.0
-	 * @param {...*} data The data we want to print.
+	 * @param {...*} data The data we want to print
 	 * @returns {void}
 	 */
 	wtf(...data) {
@@ -276,7 +276,7 @@ class KlasaConsole extends Console {
 	/**
 	 * Logs everything to the console/writable stream.
 	 * @since 0.4.0
-	 * @param {string} string The data we want to print.
+	 * @param {string} string The data we want to print
 	 * @param {string} message The message format used for coloring
 	 * @returns {string}
 	 */

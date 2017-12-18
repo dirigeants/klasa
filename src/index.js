@@ -36,6 +36,7 @@ module.exports = {
 	GatewayDriver: require('./lib/settings/GatewayDriver'),
 	GatewayStorage: require('./lib/settings/GatewayStorage'),
 	Schema: require('./lib/settings/Schema'),
+	SchemaFolder: require('./lib/settings/SchemaFolder'),
 	SchemaPiece: require('./lib/settings/SchemaPiece'),
 	ArgResolver: require('./lib/parsers/ArgResolver'),
 	Resolver: require('./lib/parsers/Resolver'),

@@ -5,7 +5,7 @@ module.exports = class extends Provider {
 
 	constructor(...args) {
 		super(...args, {
-			description: 'Allows you to use JSON functionality throught Klasa',
+			description: 'Allows you to use JSON functionality throughout Klasa',
 			cache: true
 		});
 		this.database = new Collection();
@@ -15,7 +15,7 @@ module.exports = class extends Provider {
 
 	/**
 	 * Checks if a table exists.
-	 * @param {string} table The name of the table you want to check.
+	 * @param {string} table The name of the table you want to check
 	 * @returns {boolean}
 	 */
 	hasTable(table) {
@@ -24,7 +24,7 @@ module.exports = class extends Provider {
 
 	/**
 	 * Get the raw data from a table.
-	 * @param {string} table The table to get the data from.
+	 * @param {string} table The table to get the data from
 	 * @returns {Collection<string, Object>}
 	 */
 	getTable(table) {
@@ -33,7 +33,7 @@ module.exports = class extends Provider {
 
 	/**
 	 * Creates a new table.
-	 * @param {string} table The name for the new table.
+	 * @param {string} table The name for the new table
 	 * @returns {Collection<string, Collection<string, Object>>}
 	 */
 	createTable(table) {
@@ -42,7 +42,7 @@ module.exports = class extends Provider {
 
 	/**
 	 * Recursively deletes a table.
-	 * @param {string} table The table's name to delete.
+	 * @param {string} table The table's name to delete
 	 * @returns {boolean}
 	 */
 	deleteTable(table) {
@@ -53,7 +53,7 @@ module.exports = class extends Provider {
 
 	/**
 	 * Get all the values from a table.
-	 * @param {string} table The name of the table to fetch from.
+	 * @param {string} table The name of the table to fetch from
 	 * @returns {Object[]}
 	 */
 	getAll(table) {
@@ -62,7 +62,7 @@ module.exports = class extends Provider {
 
 	/**
 	 * Get all the keys from a table.
-	 * @param {string} table The name of the table to fetch the keys from.
+	 * @param {string} table The name of the table to fetch the keys from
 	 * @returns {string[]}
 	 */
 	getKeys(table) {
@@ -71,7 +71,7 @@ module.exports = class extends Provider {
 
 	/**
 	 * Get all the values from a table.
-	 * @param {string} table The name of the table to fetch the values from.
+	 * @param {string} table The name of the table to fetch the values from
 	 * @returns {any[]}
 	 */
 	getValues(table) {
@@ -80,8 +80,8 @@ module.exports = class extends Provider {
 
 	/**
 	 * Get a entry from a table.
-	 * @param {string} table The name of the table.
-	 * @param {string} entry The entry name.
+	 * @param {string} table The name of the table
+	 * @param {string} entry The entry name
 	 * @returns {?Object}
 	 */
 	get(table, entry) {
@@ -91,8 +91,8 @@ module.exports = class extends Provider {
 
 	/**
 	 * Check if the entry exists.
-	 * @param {string} table The name of the table.
-	 * @param {string} entry The entry name.
+	 * @param {string} table The name of the table
+	 * @param {string} entry The entry name
 	 * @returns {boolean}
 	 */
 	has(table, entry) {
@@ -101,7 +101,7 @@ module.exports = class extends Provider {
 
 	/**
 	 * Get a random entry from a table.
-	 * @param {string} table The name of the table.
+	 * @param {string} table The name of the table
 	 * @returns {Object}
 	 */
 	getRandom(table) {
@@ -111,9 +111,9 @@ module.exports = class extends Provider {
 
 	/**
 	 * Insert a new entry into a table.
-	 * @param {string} table The name of the table.
-	 * @param {string} entry The entry name.
-	 * @param {Object} data The object with all properties you want to insert into the entry.
+	 * @param {string} table The name of the table
+	 * @param {string} entry The entry name
+	 * @param {Object} data The object with all properties you want to insert into the entry
 	 * @returns {void}
 	 */
 	create(table, entry, data) {
@@ -131,9 +131,9 @@ module.exports = class extends Provider {
 
 	/**
 	 * Update a entry from a table.
-	 * @param {string} table The name of the table.
-	 * @param {string} entry The entry name.
-	 * @param {Object} data The object with all the properties you want to update.
+	 * @param {string} table The name of the table
+	 * @param {string} entry The entry name
+	 * @param {Object} data The object with all the properties you want to update
 	 * @returns {Collection<string, Object>}
 	 */
 	update(table, entry, data) {
@@ -142,8 +142,8 @@ module.exports = class extends Provider {
 
 	/**
 	 * Delete a entry from the table.
-	 * @param {string} table The name of the table.
-	 * @param {string} entry The entry name.
+	 * @param {string} table The name of the table
+	 * @param {string} entry The entry name
 	 * @returns {boolean}
 	 */
 	delete(table, entry) {

@@ -1,4 +1,4 @@
-const { Structures, splitMessage } = require('discord.js');
+const { Structures, splitMessage, Collection } = require('discord.js');
 const { isObject } = require('../util/util');
 
 module.exports = Structures.extend('Message', Message => {
@@ -20,7 +20,6 @@ module.exports = Structures.extend('Message', Message => {
 		/**
 		 * Options provided when sending or editing a message.
 		 * @typedef {Object} MessageOptions
-		 * @memberof KlasaMessage
 		 * @property {boolean} [tts=false] Whether or not the message should be spoken aloud
 		 * @property {string} [nonce=''] The nonce for the message
 		 * @property {RichEmbed|Object} [embed] An embed for the message
@@ -33,6 +32,7 @@ module.exports = Structures.extend('Message', Message => {
 		 * @property {boolean|SplitOptions} [split=false] Whether or not the message should be split into multiple messages if
 		 * it exceeds the character limit. If an object is provided, these are the options for splitting the message
 		 * @property {UserResolvable} [reply] User to reply to (prefixes the message with a mention, except in DMs)
+		 * @memberof KlasaMessage
 		 */
 
 		/**
@@ -51,7 +51,7 @@ module.exports = Structures.extend('Message', Message => {
 			/**
 			 * The previous responses to this message
 			 * @since 0.5.0
-			 * @type {?KlasaMessage|KlasaMessage[]}
+			 * @type {?(KlasaMessage|KlasaMessage[])}
 			 */
 			this.responses = null;
 
@@ -100,61 +100,25 @@ module.exports = Structures.extend('Message', Message => {
 			/**
 			 * A cache of the current usage while validating
 			 * @since 0.0.1
+			 * @type {Tag}
 			 * @private
-			 * @type {Object}
 			 */
 			this._currentUsage = {};
 
 			/**
 			 * Whether the current usage is a repeating arg
 			 * @since 0.0.1
-			 * @private
 			 * @type {boolean}
+			 * @private
 			 */
 			this._repeat = false;
 		}
 
 		/**
-		 * Extends the patch method from D.JS to attach and update the language to this instance
-		 * @since 0.5.0
-		 * @private
-		 * @param {*} data The data passed from the original constructor
-		 */
-		_patch(data) {
-			super._patch(data);
-
-			/**
-			 * The language in this setting
-			 * @since 0.3.0
-			 * @type {Language}
-			 */
-			this.language = this.guild ? this.guild.language : this.client.languages.get(this.client.options.language);
-		}
-
-		/**
-		 * Register's this message as a Command Message
-		 * @since 0.5.0
-		 * @private
-		 * @param {Object} commandInfo The info about the command and prefix used
-		 * @property {Command} command The command run
-		 * @property {RegExp} prefix The prefix used
-		 * @property {number} prefixLength The length of the prefix used
-		 */
-		_registerCommand({ command, prefix, prefixLength }) {
-			this.reprompted = false;
-			this.params = [];
-			this.command = command;
-			this.prefix = prefix;
-			this.prefixLength = prefixLength;
-			this.args = this.command.quotedStringSupport ? this.constructor.getQuotedStringArgs(this) : this.constructor.getArgs(this);
-			this.client.emit('commandRun', this, this.command, this.args);
-		}
-
-		/**
 		 * If this message can be reacted to by the bot
 		 * @since 0.0.1
-		 * @readonly
 		 * @type {boolean}
+		 * @readonly
 		 */
 		get reactable() {
 			if (!this.guild) return true;
@@ -164,13 +128,18 @@ module.exports = Structures.extend('Message', Message => {
 		/**
 		 * The usable commands by the author in this message's context
 		 * @since 0.0.1
-		 * @returns {Promise<CommandStore>} The filtered CommandStore
+		 * @returns {Promise<Collection>} The filtered CommandStore
 		 */
 		async usableCommands() {
-			return this.client.commands.filter(async command => await !this.client.commandInhibitors.some(async inhibitor => {
-				if (inhibitor.enabled && !inhibitor.spamProtection) return await inhibitor.run(this.client, this, command).catch(() => true);
-				return false;
-			}));
+			const col = new Collection();
+			await Promise.all(this.client.commands.map((command) =>
+				this.client.inhibitors.run(this, command, true)
+					.then(() => { col.set(command.name, command); })
+					.catch(() => {
+						// noop
+					})
+			));
+			return col;
 		}
 
 		/**
@@ -188,22 +157,22 @@ module.exports = Structures.extend('Message', Message => {
 		 * Sends a message that will be editable via command editing (if nothing is attached)
 		 * @since 0.0.1
 		 * @param {StringResolvable} [content] The content to send
-		 * @param {MessageOptions|external:MessageAttachment|external:MessageEmbed} [options] The D.JS message options
+		 * @param {MessageOptions} [options] The D.JS message options
 		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
 		 */
 		sendMessage(content, options) {
-			if (!options && isObject(options)) {
-				options = content;
-				content = '';
-			} else if (!options) {
-				options = {};
-			}
+			options = this.constructor.combineContentOptions(content, options);
+			content = options.content; // eslint-disable-line prefer-destructuring
+			delete options.content;
+			if (Array.isArray(content)) content = content.join('\n');
+
 			options.embed = options.embed || null;
-			if (this.responses && (!options || !('files' in options))) {
+			if (this.responses && typeof options.files === 'undefined') {
 				if (options && options.split) content = splitMessage(content, options.split);
-				if (content instanceof Array) {
+				if (Array.isArray(content)) {
 					const promises = [];
-					if (this.responses instanceof Array) {
+					if (Array.isArray(this.responses)) {
+						/* eslint-disable max-depth */
 						for (let i = 0; i < content.length; i++) {
 							if (this.responses.length > i) promises.push(this.responses[i].edit(content[i], options));
 							else promises.push(this.channel.send(content[i]));
@@ -211,6 +180,7 @@ module.exports = Structures.extend('Message', Message => {
 						if (this.responses.length > content.length) {
 							for (let i = content.length; i < this.responses.length; i++) this.responses[i].delete();
 						}
+						/* eslint-enable max-depth */
 					} else {
 						promises.push(this.responses.edit(content[0], options));
 						for (let i = 1; i < content.length; i++) promises.push(this.channel.send(content[i]));
@@ -220,7 +190,7 @@ module.exports = Structures.extend('Message', Message => {
 							this.responses = mes;
 							return mes;
 						});
-				} else if (this.responses instanceof Array) {
+				} else if (Array.isArray(this.responses)) {
 					for (let i = this.responses.length - 1; i > 0; i--) this.responses[i].delete();
 					[this.responses] = this.responses;
 				}
@@ -228,9 +198,7 @@ module.exports = Structures.extend('Message', Message => {
 			}
 			return this.channel.send(content, options)
 				.then(mes => {
-					if (!options || !('files' in options)) {
-						this.responses = mes;
-					}
+					if (typeof options.files === 'undefined') this.responses = mes;
 					return mes;
 				});
 		}
@@ -244,13 +212,7 @@ module.exports = Structures.extend('Message', Message => {
 		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
 		 */
 		sendEmbed(embed, content, options) {
-			if (!options && isObject(options)) {
-				options = content;
-				content = '';
-			} else if (!options) {
-				options = {};
-			}
-			return this.sendMessage(content, Object.assign(options, { embed }));
+			return this.sendMessage(Object.assign(this.constructor.combineContentOptions(content, options), { embed }));
 		}
 
 		/**
@@ -261,15 +223,15 @@ module.exports = Structures.extend('Message', Message => {
 		 * @param {MessageOptions} [options] The D.JS message options
 		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
 		 */
-		sendCode(lang, content, options = {}) {
-			return this.sendMessage(content, Object.assign(options, { code: lang }));
+		sendCode(lang, content, options) {
+			return this.sendMessage(Object.assign(this.constructor.combineContentOptions(content, options), { code: lang }));
 		}
 
 		/**
 		 * Sends a message that will be editable via command editing (if nothing is attached)
 		 * @since 0.0.1
 		 * @param {StringResolvable} [content] The content to send
-		 * @param {MessageOptions|external:MessageAttachment|external:MessageEmbed} [options] The D.JS message options
+		 * @param {MessageOptions} [options] The D.JS message options
 		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
 		 */
 		send(content, options) {
@@ -277,10 +239,46 @@ module.exports = Structures.extend('Message', Message => {
 		}
 
 		/**
+		 * Extends the patch method from D.JS to attach and update the language to this instance
+		 * @since 0.5.0
+		 * @param {*} data The data passed from the original constructor
+		 * @private
+		 */
+		_patch(data) {
+			super._patch(data);
+
+			/**
+			 * The language in this setting
+			 * @since 0.3.0
+			 * @type {Language}
+			 */
+			this.language = this.guild ? this.guild.language : this.client.languages.default;
+		}
+
+		/**
+		 * Register's this message as a Command Message
+		 * @since 0.5.0
+		 * @param {Object} commandInfo The info about the command and prefix used
+		 * @property {Command} command The command run
+		 * @property {RegExp} prefix The prefix used
+		 * @property {number} prefixLength The length of the prefix used
+		 * @private
+		 */
+		_registerCommand({ command, prefix, prefixLength }) {
+			this.reprompted = false;
+			this.params = [];
+			this.command = command;
+			this.prefix = prefix;
+			this.prefixLength = prefixLength;
+			this.args = this.command.quotedStringSupport ? this.constructor.getQuotedStringArgs(this) : this.constructor.getArgs(this);
+			this.client.emit('commandRun', this, this.command, this.args);
+		}
+
+		/**
 		 * Validates and resolves args into parameters
 		 * @since 0.0.1
-		 * @private
 		 * @returns {Promise<any[]>} The resolved parameters
+		 * @private
 		 */
 		async validateArgs() {
 			if (this.params.length >= this.command.usage.parsedUsage.length && this.params.length >= this.args.length) {
@@ -338,8 +336,8 @@ module.exports = Structures.extend('Message', Message => {
 		 * @since 0.0.1
 		 * @param {number} possible The id of the possible usage currently being checked
 		 * @param {boolean} validated Escapes the recursive function if the previous iteration validated the arg into a parameter
-		 * @private
 		 * @returns {Promise<any[]>} The resolved parameters
+		 * @private
 		 */
 		async multiPossibles(possible, validated) {
 			if (validated) {
@@ -372,8 +370,8 @@ module.exports = Structures.extend('Message', Message => {
 		 * Parses a message into string args
 		 * @since 0.0.1
 		 * @param {KlasaMessage} msg this message
-		 * @private
 		 * @returns {string[]}
+		 * @private
 		 */
 		static getArgs(msg) {
 			// eslint-disable-next-line newline-per-chained-call
@@ -385,8 +383,8 @@ module.exports = Structures.extend('Message', Message => {
 		 * Parses a message into string args taking into account quoted strings
 		 * @since 0.0.1
 		 * @param {KlasaMessage} msg this message
-		 * @private
 		 * @returns {string[]}
+		 * @private
 		 */
 		static getQuotedStringArgs(msg) {
 			const content = msg.content.slice(msg.prefixLength).trim().split(' ').slice(1).join(' ').trim();
@@ -415,6 +413,19 @@ module.exports = Structures.extend('Message', Message => {
 			if (current !== '') args.push(current);
 
 			return args.length === 1 && args[0] === '' ? [] : args;
+		}
+
+		/**
+		 * Merge the content with the options.
+		 * @since 0.5.0
+		 * @param {StringResolvable} [content] The content to send
+		 * @param {MessageOptions} [options] The D.JS message options
+		 * @returns {MessageOptions}
+		 * @private
+		 */
+		static combineContentOptions(content, options) {
+			if (!options) return isObject(content) ? content : { content };
+			return Object.assign(options, { content });
 		}
 
 	}

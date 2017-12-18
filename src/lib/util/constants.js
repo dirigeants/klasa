@@ -5,6 +5,10 @@ exports.DEFAULTS = {
 
 	CLIENT: {
 		clientBaseDir: dirname(require.main.filename),
+		cmdDeleting: false,
+		cmdEditing: false,
+		cmdLogging: false,
+		cmdPrompt: false,
 		commandMessageLifetime: 1800,
 		console: {},
 		consoleEvents: {
@@ -15,35 +19,59 @@ exports.DEFAULTS = {
 			warn: true,
 			wtf: true
 		},
-		language: 'en-US',
-		prompTime: 30000,
 		ignoreBots: true,
 		ignoreSelf: true,
-		cmdPrompt: false,
-		cmdEditing: false,
-		cmdLogging: false,
-		typing: false,
+		language: 'en-US',
+		prefix: '!',
 		preserveConfigs: true,
-		provider: {},
-		quotedStringSupport: false,
-		readyMessage: (client) => `Successfully initialized. Ready to serve ${client.guilds.size} guilds.`
-	},
+		promptTime: 30000,
+		provider: { engine: 'json' },
+		readyMessage: (client) => `Successfully initialized. Ready to serve ${client.guilds.size} guilds.`,
+		typing: false,
+		pieceDefaults: {
+			commands: {
+				aliases: [],
+				autoAliases: true,
+				botPerms: [],
+				cooldown: 0,
+				description: '',
+				enabled: true,
+				guarded: false,
+				nsfw: false,
+				permLevel: 0,
+				requiredConfigs: [],
+				runIn: ['text', 'dm', 'group'],
+				usage: '',
+				quotedStringSupport: false,
+				deletable: false
+			},
+			events: { enabled: true },
+			extendables: {
+				enabled: true,
+				klasa: false
+			},
+			finalizers: { enabled: true },
+			inhibitors: {
+				enabled: true,
+				spamProtection: false
+			},
+			languages: { enabled: true },
+			monitors: {
+				enabled: true,
+				ignoreBots: true,
+				ignoreSelf: true,
+				ignoreOthers: true
+			},
+			providers: {
+				enabled: true,
+				sql: false,
+				cache: false,
+				description: ''
+			}
+		}
+	}
 
-	COMMAND: {
-		enabled: true,
-		runIn: ['text', 'dm', 'group'],
-		cooldown: 0,
-		deletable: false,
-		nsfw: false,
-		guarded: false,
-		aliases: [],
-		autoAliases: true,
-		permLevel: 0,
-		botPerms: [],
-		requiredConfigs: [],
-		description: '',
-		usage: ''
-	},
+};
 
 	GATEWAY_GUILDS: {
 		name: 'guilds',

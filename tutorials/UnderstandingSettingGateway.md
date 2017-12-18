@@ -63,14 +63,14 @@ this.client.gateways.guilds.schema.addKey('users', { type: 'User', array: true }
 
 > `options.array` defaults to `false`, and when `options.default` is not specified, it defaults to `null`, however, when `options.array` is `true`, `options.default` defaults to `[]` (empty array).
 
-What have we done? `client.gateways.guilds.schema` is a **Schema** instance (also called Folder type) which can manage itself, such as adding keys/folders to itself (it certainly follows the OOP paradigm).
+What have we done? `client.gateways.guilds.schema` is a **SchemaFolder** instance (also called Folder type) which can manage itself, such as adding keys/folders to itself (it certainly follows the OOP paradigm).
 
 ## Editing keys from the guild configuration.
 
 Now that I have a new key called `modlogs`, I want to configure it outside the `conf` command, how can we do this?
 
 ```javascript
-msg.guild.configs.updateOne('modlogs', '267727088465739778', msg.guild);
+msg.guild.configs.update('modlogs', '267727088465739778', msg.guild);
 ```
 
 Check: {@link Configuration.updateOne}
@@ -80,13 +80,13 @@ Check: {@link Configuration.updateOne}
 Now, I want to **add** a new user user to the `users` key, which takes an array.
 
 ```javascript
-msg.guild.configs.updateArray(msg.guild, 'add', 'users', '146048938242211840', msg.guild);
+msg.guild.configs.update('users', '146048938242211840', msg.guild, { action: 'add' });
 ```
 
 That will add the user `'146048938242211840'` to the `users` array. To remove it:
 
 ```javascript
-msg.guild.configs.updateArray(msg.guild, 'remove', 'users', '146048938242211840', msg.guild);
+msg.guild.configs.update('users', '146048938242211840', msg.guild, { action: 'remove' });
 ```
 
 Check: {@link Configuration.updateArray}

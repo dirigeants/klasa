@@ -62,3 +62,5 @@ package-lock.json
 docs
 
 \.vscode/
+\.idea/
+desktop.ini

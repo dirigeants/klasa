@@ -1,86 +1,44 @@
 const { isNumber, isObject } = require('../util/util');
+const Schema = require('./Schema');
 const fs = require('fs-nextra');
 
 /**
  * The SchemaPiece class that contains the data for a key and several helpers.
  */
-class SchemaPiece {
+class SchemaPiece extends Schema {
 
 	/**
-	 * @typedef  {Object} SchemaPieceJSON
-	 * @property {string} type The type for the key.
-	 * @property {*} default The default value for the key.
-	 * @property {number} min The min value for the key (String.length for String, value for number).
-	 * @property {number} max The max value for the key (String.length for String, value for number).
-	 * @property {string[]} sql A tuple containing the name of the column and its data type.
-	 * @property {boolean} array Whether the key should be stored as Array or not.
-	 * @property {boolean} configurable Whether the key should be configurable by the config command or not.
+	 * @typedef {Object} SchemaPieceJSON
+	 * @property {string} type The type for the key
+	 * @property {*} default The default value for the key
+	 * @property {number} min The min value for the key (String.length for String, value for number)
+	 * @property {number} max The max value for the key (String.length for String, value for number)
+	 * @property {string[]} sql A tuple containing the name of the column and its data type
+	 * @property {boolean} array Whether the key should be stored as Array or not
+	 * @property {boolean} configurable Whether the key should be configurable by the config command or not
 	 * @memberof SchemaPiece
 	 */
 
 	/**
-	 * @typedef  {Object} ModifyOptions
-	 * @property {*} [default] The new default value.
-	 * @property {number} [min] The new minimum range value.
-	 * @property {number} [max] The new maximum range value.
-	 * @property {boolean} [configurable] The new configurable value.
-	 * @property {string} [sql] The new sql datatype.
+	 * @typedef {Object} ModifyOptions
+	 * @property {*} [default] The new default value
+	 * @property {number} [min] The new minimum range value
+	 * @property {number} [max] The new maximum range value
+	 * @property {boolean} [configurable] The new configurable value
+	 * @property {string} [sql] The new sql datatype
 	 * @memberof SchemaPiece
 	 */
 
 	/**
 	 * @since 0.5.0
-	 * @param {KlasaClient} client The client which initialized this instance.
-	 * @param {Gateway} manager The Gateway that manages this schema instance.
-	 * @param {AddOptions} options The object containing the properties for this schema instance.
-	 * @param {Schema} parent The parent which holds this instance.
-	 * @param {string} key The name of the key.
+	 * @param {KlasaClient} client The client which initialized this instance
+	 * @param {Gateway} gateway The Gateway that manages this schema instance
+	 * @param {AddOptions} options The object containing the properties for this schema instance
+	 * @param {SchemaFolder} parent The parent which holds this instance
+	 * @param {string} key The name of the key
 	 */
-	constructor(client, manager, options, parent, key) {
-		/**
-		 * The Klasa client.
-		 * @since 0.5.0
-		 * @type {KlasaClient}
-		 * @name SchemaPiece#client
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'client', { value: client });
-
-		/**
-		 * The Gateway that manages this SchemaPiece instance.
-		 * @since 0.5.0
-		 * @type {Gateway}
-		 * @name SchemaPiece#manager
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'manager', { value: manager });
-
-		/**
-		 * The Schema instance that is parent of this instance.
-		 * @since 0.5.0
-		 * @type {Schema}
-		 * @name SchemaPiece#parent
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'parent', { value: parent });
-
-		/**
-		 * The path of this SchemaPiece instance.
-		 * @since 0.5.0
-		 * @type {string}
-		 * @name SchemaPiece#path
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'path', { value: `${parent && parent.path.length > 0 ? `${parent.path}.` : ''}${key}` });
-
-		/**
-		 * This keys' name.
-		 * @since 0.5.0
-		 * @type {string}
-		 * @name SchemaPiece#key
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'key', { value: key });
+	constructor(client, gateway, options, parent, key) {
+		super(client, gateway, options, parent, key);
 
 		/**
 		 * The type of this key.
@@ -138,36 +96,28 @@ class SchemaPiece {
 		 */
 		this.configurable = typeof options.configurable !== 'undefined' ? options.configurable : this.type !== 'any';
 
-		/**
-		 * The path of this SchemaPiece instance.
-		 * @since 0.5.0
-		 * @type {boolean}
-		 * @name SchemaPiece#_inited
-		 * @readonly
-		 * @private
-		 */
-		Object.defineProperty(this, '_inited', { value: this.init(options) });
+		this._init(options);
 	}
 
 	/**
 	 * Parse a value in this key's resolver.
 	 * @since 0.5.0
-	 * @param {string} value The value to parse.
-	 * @param {KlasaGuild} guild A Guild instance required for the resolver to work.
+	 * @param {string} value The value to parse
+	 * @param {KlasaGuild} guild A Guild instance required for the resolver to work
 	 * @returns {Promise<*>}
 	 */
 	parse(value, guild = this.client.guilds.get(this.id)) {
-		return this.manager.resolver[this.type](value, guild, this.key, { min: this.min, max: this.max });
+		return this.gateway.resolver[this.type](value, guild, this.key, { min: this.min, max: this.max });
 	}
 
 	/**
 	 * Resolve a string.
 	 * @since 0.5.0
-	 * @param {KlasaMessage} msg The Message to use.
+	 * @param {KlasaMessage} msg The Message to use
 	 * @returns {string}
 	 */
 	resolveString(msg) {
-		const value = this.manager.type === 'users' ? msg.author.configs.get(this.path) : msg.guildConfigs.get(this.path);
+		const value = this.constructor._resolveConfigs(this.gateway.type, msg).get(this.path);
 		if (value === null) return 'Not set';
 
 		let resolver = (val) => val;
@@ -196,7 +146,7 @@ class SchemaPiece {
 	/**
 	 * Modify this SchemaPiece's properties.
 	 * @since 0.5.0
-	 * @param {ModifyOptions} options The new options.
+	 * @param {ModifyOptions} options The new options
 	 * @returns {Promise<this>}
 	 */
 	async modify(options) {
@@ -207,7 +157,7 @@ class SchemaPiece {
 		if (typeof options.sql === 'string' && this.sql[1] !== options.sql) {
 			this.sql[1] = options.sql;
 			edited.add('SQL');
-			if (this.manager.sql) await this.manager.provider.updateColumn(this.manager.type, this.path, options.sql);
+			if (this.gateway.sql) await this.gateway.provider.updateColumn(this.gateway.type, this.path, options.sql);
 		}
 		if (typeof options.default !== 'undefined' && this.default !== options.default) {
 			this._schemaCheckDefault(Object.assign(this.toJSON(), options));
@@ -231,9 +181,9 @@ class SchemaPiece {
 			edited.add('CONFIGURABLE');
 		}
 		if (edited.size > 0) {
-			await fs.outputJSONAtomic(this.manager.filePath, this.manager.schema.toJSON());
-			if (this.manager.sql && this.manager.provider.updateColumn === 'function') {
-				this.manager.provider.updateColumn(this.manager.type, this.key, this._generateSQLDatatype(options.sql));
+			await fs.outputJSONAtomic(this.gateway.filePath, this.gateway.schema.toJSON());
+			if (this.gateway.sql && this.gateway.provider.updateColumn === 'function') {
+				this.gateway.provider.updateColumn(this.gateway.type, this.key, this._generateSQLDatatype(options.sql));
 			}
 			await this.parent._shardSyncSchema(this, 'update', false);
 			if (this.client.listenerCount('schemaKeyUpdate')) this.client.emit('schemaKeyUpdate', this);
@@ -243,31 +193,9 @@ class SchemaPiece {
 	}
 
 	/**
-	 * Check if the key is properly configured.
-	 * @since 0.5.0
-	 * @param {AddOptions} options The options to parse.
-	 * @returns {true}
-	 * @private
-	 */
-	init(options) {
-		if (this._inited) throw new TypeError(`[INIT] ${this} - Is already init. Aborting re-init.`);
-		// Check if the 'options' parameter is an object.
-		if (!isObject(options)) throw new TypeError(`SchemaPiece#init expected an object as a parameter. Got: ${typeof options}`);
-		this._schemaCheckType(this.type);
-		this._schemaCheckArray(this.array);
-		this._schemaCheckDefault(this);
-		this._schemaCheckLimits(this.min, this.max);
-		this._schemaCheckConfigurable(this.configurable);
-
-		this.sql[1] = this._generateSQLDatatype(options.sql);
-
-		return true;
-	}
-
-	/**
 	 * Checks if options.type is valid.
 	 * @since 0.5.0
-	 * @param {string} type The parameter to validate.
+	 * @param {string} type The parameter to validate
 	 * @private
 	 */
 	_schemaCheckType(type) {
@@ -278,7 +206,7 @@ class SchemaPiece {
 	/**
 	 * Checks if options.array is valid.
 	 * @since 0.5.0
-	 * @param {boolean} array The parameter to validate.
+	 * @param {boolean} array The parameter to validate
 	 * @private
 	 */
 	_schemaCheckArray(array) {
@@ -288,7 +216,7 @@ class SchemaPiece {
 	/**
 	 * Checks if options.default is valid.
 	 * @since 0.5.0
-	 * @param {AddOptions} options The options to validate.
+	 * @param {AddOptions} options The options to validate
 	 * @private
 	 */
 	_schemaCheckDefault(options) {
@@ -306,8 +234,8 @@ class SchemaPiece {
 	/**
 	 * Checks if options.min and options.max are valid.
 	 * @since 0.5.0
-	 * @param {number} min The options.min parameter to validate.
-	 * @param {number} max The options.max parameter to validate.
+	 * @param {number} min The options.min parameter to validate
+	 * @param {number} max The options.max parameter to validate
 	 * @private
 	 */
 	_schemaCheckLimits(min, max) {
@@ -319,7 +247,7 @@ class SchemaPiece {
 	/**
 	 * Checks if options.configurable is valid.
 	 * @since 0.5.0
-	 * @param {boolean} configurable The parameter to validate.
+	 * @param {boolean} configurable The parameter to validate
 	 * @private
 	 */
 	_schemaCheckConfigurable(configurable) {
@@ -329,7 +257,7 @@ class SchemaPiece {
 	/**
 	 * Generate a new SQL datatype.
 	 * @since 0.5.0
-	 * @param {string} [sql] The new SQL datatype.
+	 * @param {string} [sql] The new SQL datatype
 	 * @returns {string}
 	 * @private
 	 */
@@ -341,20 +269,39 @@ class SchemaPiece {
 	/**
 	 * Patch an object applying all its properties to this instance.
 	 * @since 0.5.0
-	 * @param {Object} object The object to patch.
+	 * @param {Object} object The object to patch
 	 * @private
 	 */
 	_patch(object) {
-		for (const key of Object.keys(object)) this[key] = object[key];
+		if (typeof object.array === 'boolean') this.array = object.array;
+		if (typeof object.default !== 'undefined') this.default = object.default;
+		if (typeof object.min === 'number') this.min = object.min;
+		if (typeof object.max === 'number') this.max = object.max;
+		if (typeof object.sql === 'string') this.sql[1] = object.sql;
+		if (typeof object.configurable === 'boolean') this.configurable = object.configurable;
 	}
 
 	/**
-	 * Stringify a value or the instance itself.
+	 * Check if the key is properly configured.
 	 * @since 0.5.0
-	 * @returns {string}
+	 * @param {AddOptions} options The options to parse
+	 * @returns {true}
+	 * @private
 	 */
-	toString() {
-		return `SchemaPiece(${this.manager.type}:${this.path})`;
+	_init(options) {
+		if (this._inited) throw new TypeError(`[INIT] ${this} - Is already init. Aborting re-init.`);
+		// Check if the 'options' parameter is an object.
+		if (!isObject(options)) throw new TypeError(`SchemaPiece#init expected an object as a parameter. Got: ${typeof options}`);
+		this._schemaCheckType(this.type);
+		this._schemaCheckArray(this.array);
+		this._schemaCheckDefault(this);
+		this._schemaCheckLimits(this.min, this.max);
+		this._schemaCheckConfigurable(this.configurable);
+
+		this.sql[1] = this._generateSQLDatatype(options.sql);
+		this._inited = true;
+
+		return true;
 	}
 
 	/**
@@ -375,10 +322,20 @@ class SchemaPiece {
 	}
 
 	/**
+	 * Stringify a value or the instance itself.
+	 * @since 0.5.0
+	 * @returns {string}
+	 */
+	toString() {
+		return `SchemaPiece(${this.gateway.type}:${this.path})`;
+	}
+
+	/**
 	 * Parses a value to a valid string that can be used for SQL input.
 	 * @since 0.5.0
-	 * @param {*} value The value to parse.
+	 * @param {*} value The value to parse
 	 * @returns {string}
+	 * @private
 	 */
 	static _parseSQLValue(value) {
 		const type = typeof value;
@@ -386,6 +343,23 @@ class SchemaPiece {
 		if (type === 'string') return `'${value.replace(/'/g, "''")}'`;
 		if (type === 'object') return `'${JSON.stringify(value).replace(/'/g, "''")}'`;
 		return '';
+	}
+
+	/**
+	 * Gets a configuration instance from KlasaMessage depending on the schema.gateway type.
+	 * @since 0.5.0
+	 * @param {string} type The type of gateway
+	 * @param {KlasaMessage} msg The message context to resolve from
+	 * @returns {Configuration}
+	 * @private
+	 */
+	static _resolveConfigs(type, msg) {
+		switch (type) {
+			case 'users': return msg.author.configs;
+			case 'guilds': return msg.guildConfigs;
+			case 'clientStorage': return msg.client.configs;
+			default: return null;
+		}
 	}
 
 }
