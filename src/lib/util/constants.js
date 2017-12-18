@@ -73,7 +73,9 @@ exports.DEFAULTS = {
 
 };
 
-	GATEWAY_GUILDS: {
+exports.GATEWAYS = {
+
+	GUILDS: {
 		name: 'guilds',
 		resolver: async function validateGuild(guildResolvable) {
 			if (guildResolvable) {
@@ -131,7 +133,7 @@ exports.DEFAULTS = {
 		download: false
 	},
 
-	GATEWAY_USERS: {
+	USERS: {
 		name: 'users',
 		resolver: async function validateUser(userResolvable) {
 			if (userResolvable) {
@@ -152,7 +154,7 @@ exports.DEFAULTS = {
 		download: false
 	},
 
-	GATEWAY_CLIENTSTORAGE: {
+	CLIENTSTORAGE: {
 		name: 'clientStorage',
 		resolver: async function validateClient(clientResolvable) {
 			if (typeof clientResolvable === 'string' && clientResolvable === this.client.user.id) return this.client.user;
