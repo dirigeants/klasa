@@ -791,7 +791,7 @@ declare module 'klasa' {
 		private cooldowns: Map<Snowflake, number>;
 
 		public abstract run(msg: KlasaMessage, params: any[]): Promise<KlasaMessage | KlasaMessage[]>;
-		public abstract init(): Promise<void>;
+		public init(): Promise<void>;
 
 		public enable(): Piece;
 		public disable(): Piece;
@@ -813,7 +813,7 @@ declare module 'klasa' {
 		private _run(param: any): void;
 
 		public abstract run(...params: any[]): void;
-		public abstract init(): Promise<void>;
+		public init(): Promise<void>;
 
 		public enable(): Piece;
 		public disable(): Piece;
@@ -836,7 +836,7 @@ declare module 'klasa' {
 		public target: boolean;
 
 		public abstract extend(...params: any[]): any;
-		public abstract init(): Promise<void>;
+		public init(): Promise<void>;
 
 		public enable(): Piece;
 		public disable(): Piece;
@@ -856,7 +856,7 @@ declare module 'klasa' {
 		public file: string;
 
 		public abstract run(msg: KlasaMessage, mes: KlasaMessage, start: Stopwatch): void;
-		public abstract init(): Promise<void>;
+		public init(): Promise<void>;
 
 		public enable(): Piece;
 		public disable(): Piece;
@@ -876,7 +876,7 @@ declare module 'klasa' {
 		public file: string;
 
 		public abstract run(msg: KlasaMessage, cmd: Command): Promise<void | string>;
-		public abstract init(): Promise<void>;
+		public init(): Promise<void>;
 
 		public enable(): Piece;
 		public disable(): Piece;
@@ -897,7 +897,7 @@ declare module 'klasa' {
 		public file: string;
 
 		public get(term: string, ...args: any[]): any;
-		public abstract init(): Promise<void>;
+		public init(): Promise<void>;
 
 		public enable(): Piece;
 		public disable(): Piece;
@@ -920,7 +920,7 @@ declare module 'klasa' {
 		public ignoreSelf: boolean;
 		public ignoreOthers: boolean;
 		public abstract run(msg: KlasaMessage): void;
-		public abstract init(): Promise<void>;
+		public init(): Promise<void>;
 
 		public enable(): Piece;
 		public disable(): Piece;
@@ -943,7 +943,7 @@ declare module 'klasa' {
 		public cache: boolean;
 		public sql: boolean;
 
-		public abstract init(): Promise<void>;
+		public init(): Promise<void>;
 		public shutdown(): Promise<void>;
 
 		public enable(): Piece;
