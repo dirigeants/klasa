@@ -129,7 +129,10 @@ class TextPrompter {
 				this.args.splice(this.params.length, 0, undefined);
 				return this.pushParam(undefined);
 			}
-			return this.handleError(err);
+			return this.handleError(this.args[this.params.length] === undefined ?
+				this.message.language.get('COMMANDMESSAGE_MISSING_REQUIRED', this._currentUsage.possibles[0].name) :
+				err
+			);
 		}
 	}
 
