@@ -115,7 +115,7 @@ class TextPrompter {
 		}
 
 		try {
-			const res = await this.client.argResolver[this._currentUsage.possibles[0].type](this.args[this.params.length], this._currentUsage, 0, this._repeat, this);
+			const res = await this.client.argResolver[this._currentUsage.possibles[0].type](this.args[this.params.length], this._currentUsage, 0, this._repeat, this.message);
 			if (res !== null) return this.pushParam(res);
 			this.args.splice(this.params.length, 0, undefined);
 			return this.pushParam(undefined);
@@ -152,7 +152,7 @@ class TextPrompter {
 		}
 
 		try {
-			const res = await this.client.argResolver[this._currentUsage.possibles[possible].type](this.args[this.params.length], this._currentUsage, possible, this._repeat, this);
+			const res = await this.client.argResolver[this._currentUsage.possibles[possible].type](this.args[this.params.length], this._currentUsage, possible, this._repeat, this.message);
 			if (res !== null) return this.pushParam(res);
 			return this.multiPossibles(++possible);
 		} catch (err) {
