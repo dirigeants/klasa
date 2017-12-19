@@ -78,17 +78,6 @@ module.exports = Structures.extend('Message', Message => {
 			this.prefixLength = null;
 
 			/**
-			 * A cache of the current usage while validating
-			 * @since 0.0.1
-			 * @type {Tag}
-			 * @private
-			 */
-			this._currentUsage = {};
-
-
-			this._repeat = false;
-
-			/**
 			 * A command prompt/argument handler
 			 * @since 0.5.0
 			 * @type {TextPrompter}

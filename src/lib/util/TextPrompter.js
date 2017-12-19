@@ -48,7 +48,6 @@ class TextPrompter {
 		 */
 		this.params = [];
 
-
 		/**
 		 * Whether the current usage is a repeating arg
 		 * @since 0.0.1
@@ -65,7 +64,13 @@ class TextPrompter {
 		 */
 		this._prompted = 0;
 
-		this._currentUsage = null;
+		/**
+		 * A cache of the current usage while validating
+		 * @since 0.0.1
+		 * @type {Tag}
+		 * @private
+		 */
+		this._currentUsage = {};
 	}
 
 	async reprompt(prompt) {
