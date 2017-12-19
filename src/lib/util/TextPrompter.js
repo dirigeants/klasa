@@ -191,8 +191,8 @@ class TextPrompter {
 		const flags = {};
 		const prefix = content.substr(0, prefixLength);
 		const [command, ...rest] = content.slice(prefixLength).trim().split(' ');
-		content = rest.join(' ').replace(/--(\w+)(?:=(?:"((?:[^"\\]|\\.)*)"|'((?:[^'\\]|\\.)*)'|(\w+)))?/g, (match, fl, arg) => {
-			flags[fl] = arg || fl;
+		content = rest.join(' ').replace(/--(\w+)(?:=(?:"((?:[^"\\]|\\.)*)"|'((?:[^'\\]|\\.)*)'|(\w+)))?/g, (match, fl, quotes, singles, none) => {
+			flags[fl] = quotes || singles || none || fl;
 			return '';
 		}).replace(new RegExp(`(?:(\\s)\\s+|(${delim})(?:${delim})+)`, 'g'), '$1').trim();
 		content = `${prefix + command} ${content}`;
