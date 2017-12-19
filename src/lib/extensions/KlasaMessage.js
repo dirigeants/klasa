@@ -124,7 +124,7 @@ module.exports = Structures.extend('Message', Message => {
 		 * @readonly
 		 */
 		get reprompted() {
-			return this.prompter ? this.prompter.args : false;
+			return this.prompter ? this.prompter.reprompted : false;
 		}
 
 		/**
