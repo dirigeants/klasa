@@ -93,7 +93,7 @@ class TextPrompter {
 	 */
 	async validateArgs() {
 		if (this.params.length >= this.parsedUsage.length && this.params.length >= this.args.length) {
-			return this.params;
+			return this.finalize;
 		} else if (this.parsedUsage[this.params.length]) {
 			if (this.parsedUsage[this.params.length].type !== 'repeat') {
 				this._currentUsage = this.parsedUsage[this.params.length];
@@ -102,7 +102,7 @@ class TextPrompter {
 				this._repeat = true;
 			}
 		} else if (!this._repeat) {
-			return this.params;
+			return this.finalize;
 		}
 
 		if (this._currentUsage.possibles.length !== 1) return this.multiPossibles(0);
@@ -170,6 +170,12 @@ class TextPrompter {
 		this.args.splice(this.params.length, 1, null);
 		if (this.promptLimit && this._prompted < this.promptLimit) return this.reprompt(err);
 		throw err;
+	}
+
+	finalize() {
+		while (this.params[this.params.length] === undefined) this.params.pop();
+		while (this.args[this.args.length] === undefined) this.args.pop();
+		return this.params;
 	}
 
 	/**
