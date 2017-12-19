@@ -173,8 +173,8 @@ class TextPrompter {
 	}
 
 	finalize() {
-		while (this.params[this.params.length] === undefined) this.params.pop();
-		while (this.args[this.args.length] === undefined) this.args.pop();
+		while (this.params[this.params.length - 1] === undefined) this.params.pop();
+		while (this.args[this.args.length - 1] === undefined) this.args.pop();
 		return this.params;
 	}
 
