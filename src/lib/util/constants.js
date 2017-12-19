@@ -8,7 +8,6 @@ exports.DEFAULTS = {
 		cmdDeleting: false,
 		cmdEditing: false,
 		cmdLogging: false,
-		cmdPrompt: false,
 		commandMessageLifetime: 1800,
 		console: {},
 		consoleEvents: {
@@ -24,6 +23,7 @@ exports.DEFAULTS = {
 		language: 'en-US',
 		prefix: '!',
 		preserveConfigs: true,
+		promptLimit: 0,
 		promptTime: 30000,
 		provider: { engine: 'json' },
 		readyMessage: (client) => `Successfully initialized. Ready to serve ${client.guilds.size} guilds.`,

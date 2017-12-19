@@ -76,6 +76,22 @@ class ParsedUsage {
 	}
 
 	/**
+	 * Defines json stringify behavior of this class.
+	 * @returns {Object}
+	 */
+	toJSON() {
+		return this.parsedUsage;
+	}
+
+	/**
+	 * Defines to string behavior of this class.
+	 * @returns {string}
+	 */
+	toString() {
+		return this.nearlyFullUsage;
+	}
+
+	/**
 	 * Method responsible for building the usage object to check against
 	 * @since 0.0.1
 	 * @param {string} usageString The usage string to parse
@@ -93,7 +109,7 @@ class ParsedUsage {
 			char: 0,
 			from: 0,
 			at: '',
-			fromto: ''
+			fromTo: ''
 		};
 
 		for (let i = 0; i < usageString.length; i++) {
@@ -101,7 +117,7 @@ class ParsedUsage {
 			usage.char = i + 1;
 			usage.from = usage.char - usage.current.length;
 			usage.at = `at char #${usage.char} '${char}'`;
-			usage.fromto = `from char #${usage.from} to #${usage.char} '${usage.current}'`;
+			usage.fromTo = `from char #${usage.from} to #${usage.char} '${usage.current}'`;
 
 			if (usage.last && char !== ' ') throw `${usage.at}: there can't be anything else after the repeat tag.`;
 
@@ -127,14 +143,14 @@ class ParsedUsage {
 	/**
 	 * Method responsible for handling tag opens
 	 * @since 0.0.1
-	 * @param {Object} usage The current usage interum object
+	 * @param {Object} usage The current usage interim object
 	 * @param {string} char The character that triggered this function
-	 * @returns {Object} The current usage interum object
+	 * @returns {Object} The current usage interim object
 	 * @private
 	 */
 	static tagOpen(usage, char) {
 		if (usage.opened) throw `${usage.at}: you may not open a tag inside another tag.`;
-		if (usage.current) throw `${usage.fromto}: there can't be a literal outside a tag`;
+		if (usage.current) throw `${usage.fromTo}: there can't be a literal outside a tag`;
 		usage.opened++;
 		usage.openReq = char === '<';
 		return usage;
@@ -143,9 +159,9 @@ class ParsedUsage {
 	/**
 	 * Method responsible for handling tag closes
 	 * @since 0.0.1
-	 * @param {Object} usage The current usage interum object
+	 * @param {Object} usage The current usage interim object
 	 * @param {string} char The character that triggered this function
-	 * @returns {Object} The current usage interum object
+	 * @returns {Object} The current usage interim object
 	 * @private
 	 */
 	static tagClose(usage, char) {
@@ -157,7 +173,7 @@ class ParsedUsage {
 		usage.opened--;
 		if (usage.current === '...') {
 			if (usage.openReq) throw `${usage.at}: repeat tag cannot be required`;
-			if (usage.tags.length < 1) throw `${usage.fromto}: there can't be a repeat at the beginning`;
+			if (usage.tags.length < 1) throw `${usage.fromTo}: there can't be a repeat at the beginning`;
 			usage.tags.push({ type: 'repeat' });
 			usage.last = true;
 		} else {
@@ -178,7 +194,7 @@ class ParsedUsage {
 	static tagSpace(usage, char) {
 		if (char === '\n') throw `${usage.at}: there can't be a line break in the usage string`;
 		if (usage.opened) throw `${usage.at}: spaces aren't allowed inside a tag`;
-		if (usage.current) throw `${usage.fromto}: there can't be a literal outside a tag.`;
+		if (usage.current) throw `${usage.fromTo}: there can't be a literal outside a tag.`;
 		return usage;
 	}
 

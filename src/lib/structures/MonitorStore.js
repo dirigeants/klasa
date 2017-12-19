@@ -74,10 +74,14 @@ class MonitorStore extends Collection {
 	 * @since 0.0.1
 	 * @param {KlasaMessage} msg The message object from Discord.js
 	 */
-	run(msg) {
+	async run(msg) {
 		for (const monitor of this.values()) {
 			if (monitor.enabled && !(monitor.ignoreBots && msg.author.bot) && !(monitor.ignoreSelf && this.client.user === msg.author) && !(monitor.ignoreOthers && this.client.user !== msg.author)) {
-				monitor.run(msg).catch(err => this.client.emit('monitorError', msg, monitor, err));
+				try {
+					await monitor.run(msg);
+				} catch (err) {
+					this.client.emit('monitorError', msg, monitor, err);
+				}
 			}
 		}
 	}

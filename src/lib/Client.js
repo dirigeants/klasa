@@ -35,9 +35,9 @@ class KlasaClient extends Discord.Client {
 	 * @property {KlasaPieceDefaults} [pieceDefaults={}] Overrides the defaults for all pieces
 	 * @property {string} [language='en-US'] The default language Klasa should opt-in for the commands
 	 * @property {number} [promptTime=30000] The amount of time in milliseconds prompts should last
+	 * @property {number} [promptLimit=0] Whether the bot should prompt missing parameters
 	 * @property {boolean} [ignoreBots=true] Whether or not this bot should ignore other bots
 	 * @property {boolean} [ignoreSelf=true] Whether or not this bot should ignore itself
-	 * @property {boolean} [cmdPrompt=false] Whether the bot should prompt missing parameters
 	 * @property {boolean} [cmdEditing=false] Whether the bot should update responses if the command is edited
 	 * @property {boolean} [cmdLogging=false] Whether the bot should log command usage
 	 * @property {boolean} [typing=false] Whether the bot should type while processing commands
@@ -314,7 +314,7 @@ class KlasaClient extends Discord.Client {
 	}
 
 	/**
-	 * Unregisters a custom store from the client
+	 * Un-registers a custom store from the client
 	 * @since 0.3.0
 	 * @param {Store} storeName The store that pieces will be stored in
 	 * @returns {KlasaClient} this client
@@ -343,7 +343,7 @@ class KlasaClient extends Discord.Client {
 	}
 
 	/**
-	 * Unregisters a custom piece from the client
+	 * Un-registers a custom piece from the client
 	 * @since 0.3.0
 	 * @param {string} pieceName The name of the piece
 	 * @returns {KlasaClient} this client

@@ -1,4 +1,4 @@
-const { Monitor, Stopwatch, util: { regExpEsc, newError } } = require('klasa');
+const { Monitor, Stopwatch, util: { regExpEsc } } = require('klasa');
 
 module.exports = class extends Monitor {
 
@@ -72,13 +72,9 @@ module.exports = class extends Monitor {
 
 	async runCommand(msg, timer) {
 		try {
-			await msg.validateArgs();
+			await msg._validateArgs();
 		} catch (error) {
 			if (this.client.options.typing) msg.channel.stopTyping();
-			if (error.code === 1 && this.client.options.cmdPrompt) {
-				return this.awaitMessage(msg, timer, error.message)
-					.catch(err => this.client.emit('commandError', msg, msg.command, msg.params, err));
-			}
 			return this.client.emit('commandError', msg, msg.command, msg.params, error);
 		}
 
@@ -93,25 +89,6 @@ module.exports = class extends Monitor {
 				this.client.emit('commandSuccess', msg, msg.command, msg.params, mes);
 			})
 			.catch(error => this.client.emit('commandError', msg, msg.command, msg.params, error));
-	}
-
-	async awaitMessage(msg, timer, error) {
-		const message = await msg.channel.send(msg.language.get('MONITOR_COMMAND_HANDLER_REPROMPT', `<@!${msg.author.id}>`, error, this.client.options.promptTime / 1000))
-			.catch((err) => { throw newError(err); });
-
-		const param = await msg.channel.awaitMessages(response => response.author.id === msg.author.id && response.id !== message.id, { max: 1, time: this.client.options.promptTime, errors: ['time'] })
-			.catch(() => {
-				message.delete();
-				throw undefined;
-			});
-
-		if (param.first().content.toLowerCase() === 'abort') throw msg.language.get('MONITOR_COMMAND_HANDLER_ABORTED');
-		msg.args[msg.args.lastIndexOf(null)] = param.first().content;
-		msg.reprompted = true;
-
-		message.delete();
-		if (this.client.options.typing) msg.channel.startTyping();
-		return this.runCommand(msg, timer);
 	}
 
 	init() {
