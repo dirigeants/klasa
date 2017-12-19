@@ -304,10 +304,10 @@ module.exports = Structures.extend('Message', Message => {
 		 * @private
 		 */
 		_registerCommand({ command, prefix, prefixLength }) {
-			this.prompter = new TextPrompter(this, command.usage, { quotedStringSupport: command.quotedStringSupport });
 			this.command = command;
 			this.prefix = prefix;
 			this.prefixLength = prefixLength;
+			this.prompter = new TextPrompter(this, this.command.usage, { quotedStringSupport: this.command.quotedStringSupport });
 			this.client.emit('commandRun', this, this.command, this.args);
 		}
 
