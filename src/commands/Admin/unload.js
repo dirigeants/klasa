@@ -14,6 +14,11 @@ module.exports = class extends Command {
 
 	async run(msg, [piece]) {
 		piece.unload();
+		if (this.client.shard) {
+			await this.client.shard.broadcastEval(`
+				if (this.shard.id !== ${this.client.shard.id}) this.${piece.type}s.get('${piece.name}').unload();
+			`);
+		}
 		return msg.sendMessage(msg.language.get('COMMAND_UNLOAD', piece.type, piece.name));
 	}
 
