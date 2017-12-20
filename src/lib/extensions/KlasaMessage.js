@@ -295,7 +295,7 @@ module.exports = Structures.extend('Message', Message => {
 			this.command = command;
 			this.prefix = prefix;
 			this.prefixLength = prefixLength;
-			this.prompter = new TextPrompter(this, this.command.usage, { quotedStringSupport: this.command.quotedStringSupport, usageDelim: this.command.usageDelim });
+			this.prompter = new TextPrompter(this, this.command.usage, { quotedStringSupport: this.command.quotedStringSupport, usageDelim: this.command.usageDelim, isCommand: true });
 			this.client.emit('commandRun', this, this.command, this.args);
 		}
 

@@ -6,13 +6,11 @@ class TextPrompter {
 		this.client = msg.client;
 		this.message = msg;
 		this.parsedUsage = usage instanceof ParsedUsage ? usage.parsedUsage : ParsedUsage.parseUsage(usage);
-		this.options = options;
-
 		this.promptTime = options.promptTime || this.client.options.promptTime;
 		this.promptLimit = options.promptLimit || this.client.options.promptLimit;
 		this.usageDelim = options.usageDelim || '';
 		this.quotedStringSupport = 'quotedStringSupport' in options ? options.quotedStringSupport : this.client.options.quotedStringSupport;
-		this.typing = msg.command ? this.client.options.typing : false;
+		this.typing = options.isCommand ? this.client.options.typing : false;
 
 		/**
 		 * If the command reprompted for missing args
@@ -67,7 +65,7 @@ class TextPrompter {
 		 */
 		this._currentUsage = {};
 
-		if (this.message.command) this._setup(this.message.content.slice(this.message.prefixLength).trim().split(' ').slice(1).join(' ').trim());
+		if (options.isCommand) this._setup(this.message.content.slice(this.message.prefixLength).trim().split(' ').slice(1).join(' ').trim());
 	}
 
 	async run(prompt) {
