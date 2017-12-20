@@ -17,14 +17,26 @@ module.exports = class extends Command {
 			const timer = new Stopwatch();
 			await piece.loadAll();
 			await piece.init();
+			if (this.client.shard) {
+				await this.client.shard.broadcastEval(`
+					if (this.shard.id !== ${this.client.shard.id}) this.${piece.name}.loadAll().then(() => this.${piece.name}.loadAll());
+				`);
+			}
 			return msg.sendMessage(`${msg.language.get('COMMAND_RELOAD_ALL', piece)} (Took: ${timer.stop()})`);
 		}
-		return piece.reload()
-			.then(itm => msg.sendMessage(msg.language.get('COMMAND_RELOAD', itm.type, itm.name)))
-			.catch(err => {
-				this.client[`${piece.type}s`].set(piece);
-				msg.sendMessage(`❌ ${err}`);
-			});
+
+		try {
+			const itm = await piece.reload();
+			if (this.client.shard) {
+				await this.client.shard.broadcastEval(`
+					if (this.shard.id !== ${this.client.shard.id}) this.${piece.type}s.get('${piece.name}').reload();
+				`);
+			}
+			return msg.sendMessage(msg.language.get('COMMAND_RELOAD', itm.type, itm.name));
+		} catch (err) {
+			this.client[`${piece.type}s`].set(piece);
+			return msg.sendMessage(`❌ ${err}`);
+		}
 	}
 
 };
