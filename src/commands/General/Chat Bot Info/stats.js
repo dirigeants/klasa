@@ -11,22 +11,24 @@ module.exports = class extends Command {
 	}
 
 	async run(msg) {
-		let users = this.client.users.size.toLocaleString();
-		let guilds = this.client.guilds.size.toLocaleString();
-		let channels = this.client.channels.size.toLocaleString();
+		let users, guilds, channels, memory = 0;
 
 		if (this.client.shard) {
-			users = (await this.client.shard.fetchClientValues('users.size')).reduce((prev, val) => prev + val, 0).toLocaleString();
-			guilds = (await this.client.shard.fetchClientValues('guilds.size')).reduce((prev, val) => prev + val, 0).toLocaleString();
-			channels = (await this.client.shard.fetchClientValues('channels.size')).reduce((prev, val) => prev + val, 0).toLocaleString();
+			const results = await this.client.shard.broadcastEval(`[this.users.size, this.guilds.size, this.channels.size, (process.memoryUsage().heapUsed / 1024 / 1024)]`);
+			for (const result of results) {
+				users += result[0];
+				guilds += result[1];
+				channels += result[2];
+				memory += result[3];
+			}
 		}
 
 		return msg.sendCode('asciidoc', msg.language.get('COMMAND_STATS',
-			(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2),
+			(memory || process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2),
 			Timestamp.toNow(Date.now() - (process.uptime() * 1000)),
-			users,
-			guilds,
-			channels,
+			(users || this.client.users.size).toLocaleString(),
+			(guilds || this.client.guilds.size).toLocaleString(),
+			(channels || this.client.channels.size).toLocaleString(),
 			klasaVersion, discordVersion, process.version
 		));
 	}
