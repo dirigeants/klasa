@@ -17,7 +17,7 @@ class SchemaFolder extends Schema {
 	 * @property {boolean} [array] Whether the key should be stored as Array or not
 	 * @property {string} [sql] The datatype of the key
 	 * @property {boolean} [configurable] Whether the key should be configurable by the config command or not
-	 * @memberof Schema
+	 * @memberof SchemaFolder
 	 */
 
 	/**
@@ -25,7 +25,7 @@ class SchemaFolder extends Schema {
 	 * @param {KlasaClient} client The client which initialized this instance
 	 * @param {Gateway} gateway The Gateway that manages this schema instance
 	 * @param {Object} options The object containing the properties for this schema instance
-	 * @param {?Schema} parent The parent which holds this instance
+	 * @param {?SchemaFolder} parent The parent which holds this instance
 	 * @param {string} key The name of this key
 	 */
 	constructor(client, gateway, options, parent, key) {
@@ -49,7 +49,7 @@ class SchemaFolder extends Schema {
 		Object.defineProperty(this, 'defaults', { value: {}, writable: true });
 
 		/**
-		 * A Set containing all keys' names which value is either a Schema or a SchemaPiece instance.
+		 * A Set containing all keys' names which value is either a SchemaFolder or a SchemaPiece instance.
 		 * @since 0.5.0
 		 * @type {Set<string>}
 		 * @name SchemaFolder#keys
@@ -82,15 +82,15 @@ class SchemaFolder extends Schema {
 	 * Create a new nested folder.
 	 * @since 0.5.0
 	 * @param {string} key The name's key for the folder
-	 * @param {Object} [object={}] An object containing all the Schema/SchemaPieces literals for this folder
+	 * @param {Object} [object={}] An object containing all the SchemaFolders/SchemaPieces literals for this folder
 	 * @param {boolean} [force=true] Whether this function call should modify all entries from the database
-	 * @returns {Promise<Schema>}
+	 * @returns {Promise<SchemaFolder>}
 	 */
 	async addFolder(key, object = {}, force = true) {
 		if (this.hasKey(key)) throw `The key ${key} already exists in the current schema.`;
 		if (typeof this[key] !== 'undefined') throw `The key ${key} conflicts with a property of Schema.`;
 
-		const folder = this._addKey(key, object, Schema);
+		const folder = this._addKey(key, object, SchemaFolder);
 		await fs.outputJSONAtomic(this.gateway.filePath, this.gateway.schema.toJSON());
 
 		if (this.gateway.sql) {
@@ -112,7 +112,7 @@ class SchemaFolder extends Schema {
 	 * @since 0.5.0
 	 * @param {string} key The folder's name to remove
 	 * @param {boolean} [force=true] Whether this function call should modify all entries from the database
-	 * @returns {Promise<Schema>}
+	 * @returns {Promise<SchemaFolder>}
 	 */
 	async removeFolder(key, force = true) {
 		if (this.hasKey(key) === false) throw new Error(`The key ${key} does not exist in the current schema.`);
@@ -152,7 +152,7 @@ class SchemaFolder extends Schema {
 	 * @param {string} key The name for the key
 	 * @param {AddOptions} options The key's options to apply
 	 * @param {boolean} [force=true] Whether this function call should modify all entries from the database
-	 * @returns {Promise<Schema>}
+	 * @returns {Promise<SchemaFolder>}
 	 */
 	async addKey(key, options, force = true) {
 		if (this.hasKey(key)) throw `The key ${key} already exists in the current schema.`;
@@ -193,7 +193,7 @@ class SchemaFolder extends Schema {
 	 * @since 0.5.0
 	 * @param {string} key The key's name to remove
 	 * @param {boolean} [force=true] Whether this function call should modify all entries from the database
-	 * @returns {Promise<Schema>}
+	 * @returns {Promise<SchemaFolder>}
 	 */
 	async removeKey(key, force = true) {
 		if (this.hasKey(key) === false) throw `The key ${key} does not exist in the current schema.`;
@@ -218,12 +218,12 @@ class SchemaFolder extends Schema {
 	 * @since 0.5.0
 	 * @param {('add'|'edit'|'delete')} action The action to perform
 	 * @param {string} key The key
-	 * @param {(SchemaPiece|Schema)} piece The SchemaPiece instance to handle
+	 * @param {(SchemaPiece|SchemaFolder)} piece The SchemaPiece instance to handle
 	 * @returns {Promise<*>}
 	 * @private
 	 */
 	force(action, key, piece) {
-		if (!(piece instanceof SchemaPiece) && !(piece instanceof Schema)) throw new TypeError(`'schemaPiece' must be an instance of 'SchemaPiece' or an instance of 'Schema'.`);
+		if (!(piece instanceof SchemaPiece) && !(piece instanceof SchemaFolder)) throw new TypeError(`'schemaPiece' must be an instance of 'SchemaPiece' or an instance of 'SchemaFolder'.`);
 		if (this.gateway.type === 'clientStorage') {
 			const { data, lastKey } = this.gateway.getPath(piece.path, { piece: false });
 			if (action === 'add') data[lastKey] = this.defaults[key];
@@ -363,8 +363,8 @@ class SchemaFolder extends Schema {
 	 * @since 0.5.0
 	 * @param {string} key The name of the key
 	 * @param {AddOptions} options The options of the key
-	 * @param {(Schema|SchemaPiece)} Piece The class to create
-	 * @returns {(Schema|SchemaPiece)}
+	 * @param {(SchemaFolder|SchemaPiece)} Piece The class to create
+	 * @returns {(SchemaFolder|SchemaPiece)}
 	 * @private
 	 */
 	_addKey(key, options, Piece) {
@@ -399,7 +399,7 @@ class SchemaFolder extends Schema {
 	/**
 	 * Sync all shards' schemas.
 	 * @since 0.5.0
-	 * @param {(Schema|SchemaPiece)} piece The piece to send
+	 * @param {(SchemaFolder|SchemaPiece)} piece The piece to send
 	 * @param {('add'|'delete'|'update')} action Whether the piece got added or removed
 	 * @param {boolean} force Whether the piece got modified with force or not
 	 * @private
