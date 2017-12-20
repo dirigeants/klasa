@@ -11,7 +11,7 @@ class TextPrompter {
 		this.promptTime = options.promptTime || this.client.options.promptTime;
 		this.promptLimit = options.promptLimit || this.client.options.promptLimit;
 		this.usageDelim = options.usageDelim || '';
-		this.quotedStringSupport = 'quotedStringSupport' in options ? options.quotedStringSupport : false;
+		this.quotedStringSupport = 'quotedStringSupport' in options ? options.quotedStringSupport : this.client.options.quotedStringSupport;
 		this.typing = msg.command ? this.client.options.typing : false;
 
 		/**
