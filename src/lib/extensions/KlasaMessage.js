@@ -1,6 +1,5 @@
 const { Structures, splitMessage, Collection } = require('discord.js');
 const { isObject } = require('../util/util');
-const TextPrompter = require('../util/TextPrompter');
 
 module.exports = Structures.extend('Message', Message => {
 	/**
@@ -80,7 +79,7 @@ module.exports = Structures.extend('Message', Message => {
 			/**
 			 * A command prompt/argument handler
 			 * @since 0.5.0
-			 * @type {TextPrompter}
+			 * @type {CommandPrompter}
 			 * @private
 			 */
 			this.prompter = null;
@@ -272,17 +271,6 @@ module.exports = Structures.extend('Message', Message => {
 		}
 
 		/**
-		 * Validates and resolves args into parameters
-		 * @since 0.0.1
-		 * @returns {Promise<any[]>} The resolved parameters
-		 * @private
-		 */
-		_validateArgs() {
-			if (!this.prompter) throw 'No Prompter initiated';
-			return this.prompter.validateArgs();
-		}
-
-		/**
 		 * Register's this message as a Command Message
 		 * @since 0.5.0
 		 * @param {Object} commandInfo The info about the command and prefix used
@@ -295,7 +283,7 @@ module.exports = Structures.extend('Message', Message => {
 			this.command = command;
 			this.prefix = prefix;
 			this.prefixLength = prefixLength;
-			this.prompter = new TextPrompter(this, this.command.usage, { quotedStringSupport: this.command.quotedStringSupport, usageDelim: this.command.usageDelim, isCommand: true });
+			this.prompter = this.command.usage.createPrompt(this, { quotedStringSupport: this.command.quotedStringSupport });
 			this.client.emit('commandRun', this, this.command, this.args);
 		}
 

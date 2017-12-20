@@ -1,6 +1,6 @@
 const Piece = require('./interfaces/Piece');
 const { mergeDefault } = require('../util/util');
-const ParsedUsage = require('../usage/ParsedUsage');
+const CommandUsage = require('../usage/CommandUsage');
 
 /**
  * Base class for all Klasa Commands. See {@tutorial CreatingCommands} for more information how to use this class
@@ -26,7 +26,7 @@ class Command {
 	 * @property {string[]} [requiredConfigs=[]] The required guild configs to use this command
 	 * @property {(string|Function)} [description=''] The help description for the command
 	 * @property {string} [usage=''] The usage string for the command
-	 * @property {?string} [usageDelim=undefined] The string to deliminate the command input for usage
+	 * @property {?string} [usageDelim=undefined] The string to delimit the command input for usage
 	 * @property {boolean} [quotedStringSupport=this.client.options.commands.quotedStringSupport] Whether args for this command should not deliminated inside quotes
 	 * @property {(string|Function)} [extendedHelp=msg.language.get('COMMAND_HELP_NO_EXTENDED')] Extended help strings
 	 * @memberof Command
@@ -199,9 +199,9 @@ class Command {
 		/**
 		 * The parsed usage for the command
 		 * @since 0.0.1
-		 * @type {ParsedUsage}
+		 * @type {CommandUsage}
 		 */
-		this.usage = new ParsedUsage(client, this);
+		this.usage = new CommandUsage(client, this);
 
 		/**
 		 * Any active cooldowns for the command

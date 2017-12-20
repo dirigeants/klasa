@@ -1,16 +1,15 @@
-const ParsedUsage = require('../usage/ParsedUsage');
-
+/**
+ * A class to handle argument collection and parameter resolution
+ */
 class TextPrompter {
 
 	constructor(msg, usage, options) {
 		this.client = msg.client;
 		this.message = msg;
-		this.parsedUsage = usage instanceof ParsedUsage ? usage.parsedUsage : ParsedUsage.parseUsage(usage);
+		this.usage = usage;
 		this.promptTime = options.promptTime || this.client.options.promptTime;
 		this.promptLimit = options.promptLimit || this.client.options.promptLimit;
-		this.usageDelim = options.usageDelim || '';
 		this.quotedStringSupport = 'quotedStringSupport' in options ? options.quotedStringSupport : this.client.options.quotedStringSupport;
-		this.typing = options.isCommand ? this.client.options.typing : false;
 
 		/**
 		 * If the command reprompted for missing args
@@ -18,7 +17,6 @@ class TextPrompter {
 		 * @type {boolean}
 		 */
 		this.reprompted = false;
-
 
 		/**
 		 * The flag arguments resolved by this class
@@ -64,8 +62,6 @@ class TextPrompter {
 		 * @private
 		 */
 		this._currentUsage = {};
-
-		if (options.isCommand) this._setup(this.message.content.slice(this.message.prefixLength).trim().split(' ').slice(1).join(' ').trim());
 	}
 
 	async run(prompt) {
@@ -98,12 +94,12 @@ class TextPrompter {
 	 * @private
 	 */
 	async validateArgs() {
-		if (this.params.length >= this.parsedUsage.length && this.params.length >= this.args.length) {
+		if (this.params.length >= this.usage.parsedUsage.length && this.params.length >= this.args.length) {
 			return this.finalize();
-		} else if (this.parsedUsage[this.params.length]) {
-			if (this.parsedUsage[this.params.length].type !== 'repeat') {
-				this._currentUsage = this.parsedUsage[this.params.length];
-			} else if (this.parsedUsage[this.params.length].type === 'repeat') {
+		} else if (this.usage.parsedUsage[this.params.length]) {
+			if (this.usage.parsedUsage[this.params.length].type !== 'repeat') {
+				this._currentUsage = this.usage.parsedUsage[this.params.length];
+			} else if (this.usage.parsedUsage[this.params.length].type === 'repeat') {
 				this._currentUsage.type = 'optional';
 				this._repeat = true;
 			}
@@ -188,11 +184,11 @@ class TextPrompter {
 	}
 
 	_setup(original) {
-		const { content, flags } = this.constructor.getFlags(original, this.usageDelim);
+		const { content, flags } = this.constructor.getFlags(original, this.usage.usageDelim);
 		this.flags = flags;
 		this.args = this.quotedStringSupport ?
-			this.constructor.getQuotedStringArgs(content, this.usageDelim) :
-			this.constructor.getArgs(content, this.usageDelim);
+			this.constructor.getQuotedStringArgs(content, this.usage.usageDelim) :
+			this.constructor.getArgs(content, this.usage.usageDelim);
 	}
 
 	/**

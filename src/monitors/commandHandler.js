@@ -72,7 +72,7 @@ module.exports = class extends Monitor {
 
 	async runCommand(msg, timer) {
 		try {
-			await msg._validateArgs();
+			await msg.prompter.run();
 		} catch (error) {
 			if (this.client.options.typing) msg.channel.stopTyping();
 			return this.client.emit('commandError', msg, msg.command, msg.params, error);

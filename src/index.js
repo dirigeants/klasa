@@ -11,7 +11,6 @@ module.exports = {
 	RichMenu: require('./lib/util/RichMenu'),
 	ReactionHandler: require('./lib/util/ReactionHandler'),
 	Stopwatch: require('./lib/util/Stopwatch'),
-	TextPrompter: require('./lib/util/TextPrompter'),
 	Timestamp: require('./lib/util/Timestamp'),
 	Command: require('./lib/structures/Command'),
 	Event: require('./lib/structures/Event'),
@@ -42,9 +41,12 @@ module.exports = {
 	ArgResolver: require('./lib/parsers/ArgResolver'),
 	Resolver: require('./lib/parsers/Resolver'),
 	SettingResolver: require('./lib/parsers/SettingResolver'),
+	CommandPrompt: require('./lib/usage/CommandPrompt'),
+	CommandUsage: require('./lib/usage/CommandUsage'),
 	ParsedUsage: require('./lib/usage/ParsedUsage'),
 	Possible: require('./lib/usage/Possible'),
 	Tag: require('./lib/usage/Tag'),
+	TextPrompter: require('./lib/usage/TextPrompter'),
 	version: require('../package').version
 };
 

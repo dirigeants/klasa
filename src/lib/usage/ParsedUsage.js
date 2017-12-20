@@ -1,4 +1,5 @@
 const Tag = require('./Tag');
+const TextPrompter = require('./TextPrompter');
 
 /**
  * Converts usage strings into objects to compare against later
@@ -8,9 +9,10 @@ class ParsedUsage {
 	/**
 	 * @since 0.0.1
 	 * @param {KlasaClient} client The klasa client
-	 * @param {Command} command The command this parsed usage is for
+	 * @param {string} usageString The raw usage string
+	 * @param {string} usageDelim The deliminator for this usage
 	 */
-	constructor(client, command) {
+	constructor(client, usageString, usageDelim) {
 		/**
 		 * The client this ParsedUsage was created with
 		 * @since 0.0.1
@@ -21,32 +23,25 @@ class ParsedUsage {
 		Object.defineProperty(this, 'client', { value: client });
 
 		/**
-		 * All names and aliases for the command
-		 * @since 0.0.1
-		 * @type {string[]}
-		 */
-		this.names = [command.name, ...command.aliases];
-
-		/**
-		 * The compiled string for all names/aliases in a usage string
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.commands = this.names.length === 1 ? this.names[0] : `(${this.names.join('|')})`;
-
-		/**
 		 * The usage string re-deliminated with the usageDelim
 		 * @since 0.0.1
 		 * @type {string}
 		 */
-		this.deliminatedUsage = command.usageString !== '' ? ` ${command.usageString.split(' ').join(command.usageDelim)}` : '';
+		this.deliminatedUsage = usageString !== '' ? ` ${usageString.split(' ').join(usageDelim)}` : '';
 
 		/**
 		 * The usage string
 		 * @since 0.0.1
 		 * @type {string}
 		 */
-		this.usageString = command.usageString;
+		this.usageString = usageString;
+
+		/**
+		 * The usage delim
+		 * @since 0.5.0
+		 * @type {string}
+		 */
+		this.usageDelim = usageDelim;
 
 		/**
 		 * The usage object to compare against later
@@ -54,25 +49,16 @@ class ParsedUsage {
 		 * @type {Tag[]}
 		 */
 		this.parsedUsage = this.constructor.parseUsage(this.usageString);
-
-		/**
-		 * The concatenated string of this.commands and this.deliminatedUsage
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.nearlyFullUsage = `${this.commands}${this.deliminatedUsage}`;
 	}
 
 	/**
-	 * Creates a full usage string including prefix and commands/aliases for documentation/help purposes
-	 * @since 0.0.1
-	 * @param {KlasaMessage} msg The message context for which to generate usage for
-	 * @returns {string}
+	 * Creates a TextPrompter instance to collect and resolve arguments with
+	 * @param {KlasaMessage} msg The message context from the prompt
+	 * @param {Object} [options] The options for the prompt
+	 * @returns {TextPrompter}
 	 */
-	fullUsage(msg) {
-		let { prefix } = msg.guildConfigs;
-		if (Array.isArray(prefix)) prefix = prefix.find(pre => msg.prefix.test(pre)) || prefix[0];
-		return `${prefix.length !== 1 ? `${prefix} ` : prefix}${this.nearlyFullUsage}`;
+	createPrompt(msg, options = {}) {
+		return new TextPrompter(msg, this, options);
 	}
 
 	/**
@@ -88,7 +74,7 @@ class ParsedUsage {
 	 * @returns {string}
 	 */
 	toString() {
-		return this.nearlyFullUsage;
+		return this.deliminatedUsage;
 	}
 
 	/**
