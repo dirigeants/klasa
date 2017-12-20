@@ -135,11 +135,9 @@ module.exports = Structures.extend('Message', Message => {
 		 */
 		async prompt(text, time = 30000) {
 			const message = await this.channel.send(text);
-			const responses = await this.channel.awaitMessages(mes => mes.author === this.author, { time, max: 1, errors: ['time'] }).catch((err) => {
-				message.delete();
-				throw err;
-			});
+			const responses = await this.channel.awaitMessages(mes => mes.author === this.author, { time, max: 1 });
 			message.delete();
+			if (responses.size === 0) throw undefined;
 			return responses.first();
 		}
 
@@ -297,7 +295,7 @@ module.exports = Structures.extend('Message', Message => {
 			this.command = command;
 			this.prefix = prefix;
 			this.prefixLength = prefixLength;
-			this.prompter = new TextPrompter(this, this.command.usage, { quotedStringSupport: this.command.quotedStringSupport });
+			this.prompter = new TextPrompter(this, this.command.usage, { quotedStringSupport: this.command.quotedStringSupport, usageDelim: this.command.usageDelim });
 			this.client.emit('commandRun', this, this.command, this.args);
 		}
 

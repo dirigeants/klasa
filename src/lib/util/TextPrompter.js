@@ -10,6 +10,8 @@ class TextPrompter {
 
 		this.promptTime = options.promptTime || this.client.options.promptTime;
 		this.promptLimit = options.promptLimit || this.client.options.promptLimit;
+		this.usageDelim = options.usageDelim || '';
+		this.quotedStringSupport = 'quotedStringSupport' in options ? options.quotedStringSupport : false;
 		this.typing = msg.command ? this.client.options.typing : false;
 
 		/**
@@ -19,27 +21,20 @@ class TextPrompter {
 		 */
 		this.reprompted = false;
 
-		let flags, content, args;
-		if (this.message.command) {
-			({ content, flags } = this.constructor.getFlags(this.message.content, this.message.command.usageDelim, this.message.prefixLength));
-			args = options.quotedStringSupport ?
-				this.constructor.getQuotedStringArgs(content, this.message.command.usageDelim) :
-				this.constructor.getArgs(content, this.message.command.usageDelim);
-		}
 
 		/**
 		 * The flag arguments resolved by this class
 		 * @since 0.5.0
 		 * @type {Object}
 		 */
-		this.flags = flags || {};
+		this.flags = {};
 
 		/**
 		 * The string arguments derived from the usageDelim of the command
 		 * @since 0.0.1
 		 * @type {string[]}
 		 */
-		this.args = args || [];
+		this.args = [];
 
 		/**
 		 * The parameters resolved by this class
@@ -71,14 +66,22 @@ class TextPrompter {
 		 * @private
 		 */
 		this._currentUsage = {};
+
+		if (this.message.command) this._setup(this.message.content.slice(this.message.prefixLength).trim().split(' ').slice(1).join(' ').trim());
+	}
+
+	async run(prompt) {
+		const message = await this.message.prompt(prompt, this.promptTime);
+		this._setup(message.content);
+		return this.validateArgs();
 	}
 
 	async reprompt(prompt) {
 		this._prompted++;
 		if (this.typing) this.message.channel.stopTyping();
 		const message = await this.message.prompt(
-			this.message.language.get('MONITOR_COMMAND_HANDLER_REPROMPT', `<@!${this.message.author.id}>`, prompt, this.client.options.promptTime / 1000),
-			this.client.options.promptTime
+			this.message.language.get('MONITOR_COMMAND_HANDLER_REPROMPT', `<@!${this.message.author.id}>`, prompt, this.promptTime / 1000),
+			this.promptTime
 		);
 
 		if (message.content.toLowerCase() === 'abort') throw this.message.language.get('MONITOR_COMMAND_HANDLER_ABORTED');
@@ -186,24 +189,28 @@ class TextPrompter {
 		return this.params;
 	}
 
+	_setup(original) {
+		const { content, flags } = this.constructor.getFlags(original, this.usageDelim);
+		this.flags = flags;
+		this.args = this.quotedStringSupport ?
+			this.constructor.getQuotedStringArgs(content, this.usageDelim) :
+			this.constructor.getArgs(content, this.usageDelim);
+	}
+
 	/**
 	 * Parses a message into string args
 	 * @since 0.5.0
 	 * @param {string} content The remaining content
 	 * @param {string} delim The delimiter
-	 * @param {number} [prefixLength=0] The length of the prefix
 	 * @returns {Object}
 	 * @private
 	 */
-	static getFlags(content, delim, prefixLength = 0) {
+	static getFlags(content, delim) {
 		const flags = {};
-		const prefix = content.substr(0, prefixLength);
-		const [command, ...rest] = content.slice(prefixLength).trim().split(' ');
-		content = rest.join(' ').replace(/--(\w+)(?:=(?:"((?:[^"\\]|\\.)*)"|'((?:[^'\\]|\\.)*)'|(\w+)))?/g, (match, fl, quotes, singles, none) => {
+		content = content.replace(/--(\w+)(?:=(?:"((?:[^"\\]|\\.)*)"|'((?:[^'\\]|\\.)*)'|(\w+)))?/g, (match, fl, quotes, singles, none) => {
 			flags[fl] = quotes || singles || none || fl;
 			return '';
 		}).replace(new RegExp(`(?:(\\s)\\s+|(${delim})(?:${delim})+)`, 'g'), '$1').trim();
-		content = `${prefix + command} ${content}`;
 		return { content, flags };
 	}
 
@@ -212,13 +219,12 @@ class TextPrompter {
 	 * @since 0.0.1
 	 * @param {string} content The remaining content
 	 * @param {string} delim The delimiter
-	 * @param {number} [prefixLength=0] The length of the prefix
 	 * @returns {string[]}
 	 * @private
 	 */
-	static getArgs(content, delim, prefixLength = 0) {
+	static getArgs(content, delim) {
 		// eslint-disable-next-line newline-per-chained-call
-		const args = content.slice(prefixLength).trim().split(' ').slice(1).join(' ').trim().split(delim !== '' ? delim : undefined);
+		const args = content.split(delim !== '' ? delim : undefined);
 		return args.length === 1 && args[0] === '' ? [] : args;
 	}
 
@@ -227,13 +233,10 @@ class TextPrompter {
 	 * @since 0.0.1
 	 * @param {string} content The remaining content
 	 * @param {string} delim The delimiter
-	 * @param {number} [prefixLength=0] The length of the prefix
 	 * @returns {string[]}
 	 * @private
 	 */
-	static getQuotedStringArgs(content, delim, prefixLength = 0) {
-		content = content.slice(prefixLength).trim().split(' ').slice(1).join(' ').trim();
-
+	static getQuotedStringArgs(content, delim) {
 		if (!delim || delim === '') return [content];
 
 		const args = [];
