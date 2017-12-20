@@ -135,7 +135,7 @@ module.exports = Structures.extend('Message', Message => {
 		 */
 		async prompt(text, time = 30000) {
 			const message = await this.send(text);
-			const responses = this.channel.awaitMessages(mes => mes.author === this.author, { time, max: 1, errors: ['time'] }).catch(() => {
+			const responses = await this.channel.awaitMessages(mes => mes.author === this.author, { time, max: 1, errors: ['time'] }).catch(() => {
 				message.delete();
 				throw undefined;
 			});
