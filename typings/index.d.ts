@@ -598,7 +598,7 @@ declare module 'klasa' {
 		public getValues(array?: SchemaPiece[]): SchemaPiece[];
 		public resolveString(): string;
 
-		private _addKey(key: string, options: AddOptions): void;
+		private _addKey(key: string, options: AddOptions, type: typeof Schema | typeof SchemaFolder): void;
 		private _removeKey(key: string): void;
 		private _init(options: object): true;
 
