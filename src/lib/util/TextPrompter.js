@@ -87,7 +87,7 @@ class TextPrompter {
 		if (message.content.toLowerCase() === 'abort') throw this.message.language.get('MONITOR_COMMAND_HANDLER_ABORTED');
 
 		if (this.typing) this.message.channel.startTyping();
-		this.args[this.message.args.lastIndexOf(null)] = message.content;
+		this.args[this.args.lastIndexOf(null)] = message.content;
 		this.reprompted = true;
 
 		return this.validateArgs();
