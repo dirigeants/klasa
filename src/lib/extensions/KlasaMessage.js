@@ -79,7 +79,7 @@ module.exports = Structures.extend('Message', Message => {
 			/**
 			 * A command prompt/argument handler
 			 * @since 0.5.0
-			 * @type {CommandPrompter}
+			 * @type {CommandPrompt}
 			 * @private
 			 */
 			this.prompter = null;
@@ -283,7 +283,11 @@ module.exports = Structures.extend('Message', Message => {
 			this.command = command;
 			this.prefix = prefix;
 			this.prefixLength = prefixLength;
-			this.prompter = this.command.usage.createPrompt(this, { quotedStringSupport: this.command.quotedStringSupport });
+			this.prompter = this.command.usage.createPrompt(this, {
+				quotedStringSupport: this.command.quotedStringSupport,
+				promptTime: this.command.promptTime,
+				promptLimit: this.command.promptLimit
+			});
 			this.client.emit('commandRun', this, this.command, this.args);
 		}
 

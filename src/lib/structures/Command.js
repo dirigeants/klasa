@@ -19,6 +19,8 @@ class Command {
 	 * @property {number} [cooldown=0] The amount of time before the user can run the command again in seconds
 	 * @property {boolean} [nsfw=false] If the command should only run in nsfw channels
 	 * @property {boolean} [deletable=false] If the responses should be deleted if the triggering message is deleted
+	 * @property {boolean} [promptTime=30000] The time allowed for re-prompting of this command
+	 * @property {boolean} [promptLimit=0] The number or attempts allowed for re-prompting an argument
 	 * @property {boolean} [guarded=false] If the command can be disabled on a guild level (does not effect global disable)
 	 * @property {string[]} [aliases=[]] Any command aliases
 	 * @property {boolean} [autoAliases=true] If automatic aliases should be added (adds aliases of name and aliases without dashes)
@@ -97,6 +99,20 @@ class Command {
 		 * @type {boolean}
 		 */
 		this.deletable = options.deletable;
+
+		/**
+		 * The time allowed for re-prompting of this command
+		 * @since 0.5.0
+		 * @type {number}
+		 */
+		this.promptTime = options.promptTime;
+
+		/**
+		 * The number or attempts allowed for re-prompting an argument
+		 * @since 0.5.0
+		 * @type {number}
+		 */
+		this.promptLimit = options.promptLimit;
 
 		/**
 		 * The name of the command

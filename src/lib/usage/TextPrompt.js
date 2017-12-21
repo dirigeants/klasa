@@ -1,14 +1,26 @@
+const { mergeDefault } = require('../util/util');
+
 /**
  * A class to handle argument collection and parameter resolution
  */
 class TextPrompt {
 
 	/**
+	 * @typedef {Object} TextPromptOptions
+	 * @property {number} [promptLimit=Infinity] The number of re-prompts before this TextPrompt gives up
+	 * @property {number} [promptTime=30000] The time-limit for re-prompting
+	 * @property {boolean} [quotedStringSupport=false] Whether this prompt should respect quoted strings
+	 * @memberof TextPrompt
+	 */
+
+	/**
 	 * @param {KlasaMessage} msg The message this prompt is for
 	 * @param {ParsedUsage} usage The usage for this prompt
-	 * @param {Object} options The options of this prompt
+	 * @param {TextPromptOptions} options The options of this prompt
 	 */
 	constructor(msg, usage, options) {
+		options = mergeDefault(msg.client.options.customPromptDefaults, options);
+
 		/**
 		 * The client this TextPrompt was created with
 		 * @since 0.5.0
@@ -29,24 +41,6 @@ class TextPrompt {
 		 * @type {ParsedUsage|CommandUsage}
 		 */
 		this.usage = usage;
-
-		/**
-		 * The time-limit for re-prompting
-		 * @type {number}
-		 */
-		this.promptTime = options.promptTime || this.client.options.promptTime;
-
-		/**
-		 * The number of re-prompts before this TextPrompt gives up
-		 * @type {number}
-		 */
-		this.promptLimit = options.promptLimit || this.client.options.promptLimit;
-
-		/**
-		 * Whether this prompt should respect quoted strings
-		 * @type {boolean}
-		 */
-		this.quotedStringSupport = 'quotedStringSupport' in options ? options.quotedStringSupport : this.client.options.quotedStringSupport;
 
 		/**
 		 * If the command reprompted for missing args
@@ -75,6 +69,24 @@ class TextPrompt {
 		 * @type {any[]}
 		 */
 		this.params = [];
+
+		/**
+		 * The time-limit for re-prompting
+		 * @type {number}
+		 */
+		this.promptTime = options.promptTime;
+
+		/**
+		 * The number of re-prompts before this TextPrompt gives up
+		 * @type {number}
+		 */
+		this.promptLimit = options.promptLimit;
+
+		/**
+		 * Whether this prompt should respect quoted strings
+		 * @type {boolean}
+		 */
+		this.quotedStringSupport = options.quotedStringSupport;
 
 		/**
 		 * Whether the current usage is a repeating arg
