@@ -144,7 +144,38 @@ class TextPrompt {
 		this.args[this.args.lastIndexOf(null)] = message.content;
 		this.reprompted = true;
 
+		if (this.usage.parsedUsage[this.params.length + 1] && this.usage.parsedUsage[this.params.length + 1].type === 'repeat') {
+			return this.repeatingPrompt(prompt);
+		}
+
 		return this.validateArgs();
+	}
+
+	/**
+	 * Collects repeating arguments.
+	 * @returns {any[]}
+	 * @private
+	 */
+	async repeatingPrompt() {
+		if (this.typing) this.message.channel.stopTyping();
+		let message;
+
+		try {
+			message = await this.message.prompt(
+				this.message.language.get('MONITOR_COMMAND_HANDLER_REPEATING_REPROMPT', `<@!${this.message.author.id}>`, this._currentUsage.possibles[0].name, this.promptTime / 1000),
+				this.promptTime
+			);
+		} catch (err) {
+			return this.validateArgs();
+		}
+
+		if (message.content.toLowerCase() === 'cancel') return this.validateArgs();
+
+		if (this.typing) this.message.channel.startTyping();
+		this.args.push(message.content);
+		this.reprompted = true;
+
+		return this.repeatingPrompt();
 	}
 
 	/**
@@ -161,7 +192,6 @@ class TextPrompt {
 				this._currentUsage = this.usage.parsedUsage[this.params.length];
 			} else if (this.usage.parsedUsage[this.params.length].type === 'repeat') {
 				this._currentUsage.type = 'optional';
-				this._repeat = true;
 			}
 		} else if (!this._repeat) {
 			return this.finalize();
