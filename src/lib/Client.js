@@ -34,8 +34,7 @@ class KlasaClient extends Discord.Client {
 	 * @property {KlasaConsoleEvents} [consoleEvents={}] Config options to pass to the client console
 	 * @property {KlasaPieceDefaults} [pieceDefaults={}] Overrides the defaults for all pieces
 	 * @property {string} [language='en-US'] The default language Klasa should opt-in for the commands
-	 * @property {number} [promptTime=30000] The amount of time in milliseconds prompts should last
-	 * @property {number} [promptLimit=0] Whether the bot should prompt missing parameters
+	 * @property {KlasaCustomPromptDefaults} [customPromptDefaults={}] The defaults for custom prompts
 	 * @property {boolean} [ignoreBots=true] Whether or not this bot should ignore other bots
 	 * @property {boolean} [ignoreSelf=true] Whether or not this bot should ignore itself
 	 * @property {boolean} [cmdEditing=false] Whether the bot should update responses if the command is edited
@@ -79,6 +78,14 @@ class KlasaClient extends Discord.Client {
 	 * @property {LanguageOptions} [languages={}] The default language options
 	 * @property {MonitorOptions} [monitors={}] The default monitor options
 	 * @property {ProviderOptions} [providers={}] The default provider options
+	 * @memberof KlasaClient
+	 */
+
+	/**
+	 * @typedef {Object} KlasaCustomPromptDefaults
+	 * @property {number} [promptLimit=Infinity] The number of re-prompts before custom prompt gives up
+	 * @property {number} [promptTime=30000] The time-limit for re-prompting custom prompts
+	 * @property {boolean} [quotedStringSupport=false] Whether the custom prompt should respect quoted strings
 	 * @memberof KlasaClient
 	 */
 
