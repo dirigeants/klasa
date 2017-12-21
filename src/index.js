@@ -46,7 +46,7 @@ module.exports = {
 	ParsedUsage: require('./lib/usage/ParsedUsage'),
 	Possible: require('./lib/usage/Possible'),
 	Tag: require('./lib/usage/Tag'),
-	TextPrompter: require('./lib/usage/TextPrompter'),
+	TextPrompt: require('./lib/usage/TextPrompt'),
 	version: require('../package').version
 };
 

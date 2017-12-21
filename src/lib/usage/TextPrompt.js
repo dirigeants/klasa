@@ -1,14 +1,51 @@
 /**
  * A class to handle argument collection and parameter resolution
  */
-class TextPrompter {
+class TextPrompt {
 
+	/**
+	 * @param {KlasaMessage} msg The message this prompt is for
+	 * @param {ParsedUsage} usage The usage for this prompt
+	 * @param {Object} options The options of this prompt
+	 */
 	constructor(msg, usage, options) {
-		this.client = msg.client;
+		/**
+		 * The client this TextPrompt was created with
+		 * @since 0.5.0
+		 * @name TextPrompt#client
+		 * @type {KlasaClient}
+		 * @readonly
+		 */
+		Object.defineProperty(this, 'client', { value: msg.client });
+
+		/**
+		 * The message this prompt is for
+		 * @type {KlasaMessage}
+		 */
 		this.message = msg;
+
+		/**
+		 * The usage for this prompt
+		 * @type {ParsedUsage|CommandUsage}
+		 */
 		this.usage = usage;
+
+		/**
+		 * The time-limit for re-prompting
+		 * @type {number}
+		 */
 		this.promptTime = options.promptTime || this.client.options.promptTime;
+
+		/**
+		 * The number of re-prompts before this TextPrompt gives up
+		 * @type {number}
+		 */
 		this.promptLimit = options.promptLimit || this.client.options.promptLimit;
+
+		/**
+		 * Whether this prompt should respect quoted strings
+		 * @type {boolean}
+		 */
 		this.quotedStringSupport = 'quotedStringSupport' in options ? options.quotedStringSupport : this.client.options.quotedStringSupport;
 
 		/**
@@ -64,12 +101,23 @@ class TextPrompter {
 		this._currentUsage = {};
 	}
 
+	/**
+	 * Runs the custom prompt.
+	 * @param {string} prompt The message to initially prompt with
+	 * @returns {any[]} The parameters resolved
+	 */
 	async run(prompt) {
 		const message = await this.message.prompt(prompt, this.promptTime);
 		this._setup(message.content);
 		return this.validateArgs();
 	}
 
+	/**
+	 * Collects missing required arguments.
+	 * @param {string} prompt The reprompt error
+	 * @returns {any[]}
+	 * @private
+	 */
 	async reprompt(prompt) {
 		this._prompted++;
 		if (this.typing) this.message.channel.stopTyping();
@@ -165,24 +213,46 @@ class TextPrompter {
 		}
 	}
 
+	/**
+	 * Pushes a parameter into this.params, and resets the re-prompt count.
+	 * @param {any} param The resolved parameter
+	 * @returns {any[]}
+	 * @private
+	 */
 	pushParam(param) {
 		this._prompted = 0;
 		this.params.push(param);
 		return this.validateArgs();
 	}
 
+	/**
+	 * Decides if the prompter should reprompt or throw the error found while validating.
+	 * @param {string} err The error found while validating
+	 * @returns {any[]}
+	 * @private
+	 */
 	async handleError(err) {
 		this.args.splice(this.params.length, 1, null);
 		if (this.promptLimit && this._prompted < this.promptLimit) return this.reprompt(err);
 		throw err;
 	}
 
+	/**
+	 * Finalizes parameters and arguments for this prompt.
+	 * @returns {any[]}
+	 * @private
+	 */
 	finalize() {
 		for (let i = this.params.length - 1; i >= 0 && this.params[i] === undefined; i--) this.params.pop();
 		for (let i = this.args.length - 1; i >= 0 && this.args[i] === undefined; i--) this.args.pop();
 		return this.params;
 	}
 
+	/**
+	 * Splits the original message string into arguments.
+	 * @param {string} original The original message string
+	 * @returns {void}
+	 */
 	_setup(original) {
 		const { content, flags } = this.constructor.getFlags(original, this.usage.usageDelim);
 		this.flags = flags;
@@ -259,4 +329,4 @@ class TextPrompter {
 
 }
 
-module.exports = TextPrompter;
+module.exports = TextPrompt;

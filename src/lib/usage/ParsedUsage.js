@@ -1,5 +1,5 @@
 const Tag = require('./Tag');
-const TextPrompter = require('./TextPrompter');
+const TextPrompt = require('./TextPrompt');
 
 /**
  * Converts usage strings into objects to compare against later
@@ -52,13 +52,13 @@ class ParsedUsage {
 	}
 
 	/**
-	 * Creates a TextPrompter instance to collect and resolve arguments with
+	 * Creates a TextPrompt instance to collect and resolve arguments with
 	 * @param {KlasaMessage} msg The message context from the prompt
 	 * @param {Object} [options] The options for the prompt
-	 * @returns {TextPrompter}
+	 * @returns {TextPrompt}
 	 */
 	createPrompt(msg, options = {}) {
-		return new TextPrompter(msg, this, options);
+		return new TextPrompt(msg, this, options);
 	}
 
 	/**

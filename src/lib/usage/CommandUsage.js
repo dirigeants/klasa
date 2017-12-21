@@ -37,10 +37,10 @@ class CommandUsage extends ParsedUsage {
 	}
 
 	/**
-	 * Creates a TextPrompter instance to collect and resolve arguments with
+	 * Creates a TextPrompt instance to collect and resolve arguments with
 	 * @param {KlasaMessage} msg The message context from the prompt
 	 * @param {Object} options The options for the prompt
-	 * @returns {TextPrompter}
+	 * @returns {TextPrompt}
 	 */
 	createPrompt(msg, options = {}) {
 		return new CommandPrompt(msg, this, options);
