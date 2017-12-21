@@ -6,7 +6,6 @@ const { ReactionCollector } = require('discord.js');
  */
 class ReactionHandler extends ReactionCollector {
 
-
 	/**
 	 * A single unicode character
 	 * @typedef {string} emoji
