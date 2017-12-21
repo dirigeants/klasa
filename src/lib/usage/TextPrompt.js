@@ -192,6 +192,7 @@ class TextPrompt {
 				this._currentUsage = this.usage.parsedUsage[this.params.length];
 			} else if (this.usage.parsedUsage[this.params.length].type === 'repeat') {
 				this._currentUsage.type = 'optional';
+				this._repeat = true;
 			}
 		} else if (!this._repeat) {
 			return this.finalize();
