@@ -288,6 +288,23 @@ class ArgResolver extends Resolver {
 	}
 
 	/**
+	 * Resolves an emoji
+	 * @since 0.5.0
+	 * @param {string} arg This arg
+	 * @param {Object} currentUsage This current usage
+	 * @param {number} possible This possible usage id
+	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {KlasaMessage} msg The message that triggered the command
+	 * @returns {?external:Emoji}
+	 */
+	async emoji(arg, currentUsage, possible, repeat, msg) {
+		const emoji = await super.emoji(arg);
+		if (emoji) return emoji;
+		if (currentUsage.type === 'optional' && !repeat) return null;
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_EMOJI', currentUsage.possibles[possible].name);
+	}
+
+	/**
 	 * Resolves a guild
 	 * @since 0.0.1
 	 * @param {string} arg This arg

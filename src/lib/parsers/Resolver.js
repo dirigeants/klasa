@@ -1,5 +1,5 @@
 const url = require('url');
-const { Message, User, GuildMember, Role, Guild, Channel } = require('discord.js');
+const { Message, User, GuildMember, Role, Guild, Channel, Emoji } = require('discord.js');
 
 /**
  * The base resolver class
@@ -78,6 +78,18 @@ class Resolver {
 	async channel(channel) {
 		if (channel instanceof Channel) return channel;
 		if (typeof channel === 'string' && this.constructor.regex.channel.test(channel)) return this.client.channels.get(this.constructor.regex.channel.exec(channel)[1]);
+		return null;
+	}
+
+	/**
+	 * Resolve an Emoji Object by it's instance of Emoji, or by it's Snowflake/mention.
+	 * @since 0.5.0
+	 * @param {(Emoji|Snowflake)} emoji The emoji to validat/find
+	 * @returns {?Emoji}
+	 */
+	async emoji(emoji) {
+		if (emoji instanceof Emoji) return emoji;
+		if (typeof channel === 'string' && this.constructor.regex.emoji.test(emoji)) return this.client.emojis.get(this.constructor.regex.emoji.exec(emoji)[1]);
 		return null;
 	}
 
@@ -173,6 +185,7 @@ class Resolver {
  * @type {Object}
  * @property {RegExp} userOrMember Regex for users or members
  * @property {RegExp} channel Regex for channels
+ * @property {RegExp} emoji Regex for custom emojis
  * @property {RegExp} role Regex for roles
  * @property {RegExp} snowflake Regex for simple snowflake ids
  * @static
@@ -180,6 +193,7 @@ class Resolver {
 Resolver.regex = {
 	userOrMember: new RegExp('^(?:<@!?)?(\\d{17,19})>?$'),
 	channel: new RegExp('^(?:<#)?(\\d{17,19})>?$'),
+	emoji: new RegExp('^(?:<a?:\\w+:)?(\\d{17,19})>?$'),
 	role: new RegExp('^(?:<@&)?(\\d{17,19})>?$'),
 	snowflake: new RegExp('^(\\d{17,19})$')
 };
