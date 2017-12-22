@@ -19,6 +19,7 @@ module.exports = class extends Language {
 			RESOLVER_INVALID_USER: (name) => `${name} must be a mention or valid user id.`,
 			RESOLVER_INVALID_MEMBER: (name) => `${name} must be a mention or valid user id.`,
 			RESOLVER_INVALID_CHANNEL: (name) => `${name} must be a channel tag or valid channel id.`,
+			RESOLVER_INVALID_EMOJI: (name) => `${name} must be a custom emoji tag or valid emoji id.`,
 			RESOLVER_INVALID_GUILD: (name) => `${name} must be a valid guild id.`,
 			RESOLVER_INVALID_ROLE: (name) => `${name} must be a role mention or role id.`,
 			RESOLVER_INVALID_LITERAL: (name) => `Your option did not match the only possibility: ${name}`,
