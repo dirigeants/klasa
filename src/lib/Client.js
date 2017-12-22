@@ -562,6 +562,17 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  */
 
 /**
+ * Emitted when a finalizer has encountered an error.
+ * @event KlasaClient#finalizerError
+ * @since 0.5.0
+ * @param {KlasaMessage} message The message that triggered the finalizer
+ * @param {KlasaMessage|any} mes The response from the command
+ * @param {Stopwatch} timer The timer run from start to queue of the command
+ * @param {Finalizer} finalizer The finalizer run
+ * @param {(Error|string)} error The finalizer error
+ */
+
+/**
  * Emitted when {@link Configuration.updateOne}, {@link Configuration.updateArray} or {@link Configuration.reset}
  * is run. When {@link Configuration.updateMany} is run, the parameter path will be an object with the following format:
  * `{ type: 'MANY', keys: string[], values: Array<*> }`
