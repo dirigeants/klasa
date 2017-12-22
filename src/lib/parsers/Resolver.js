@@ -89,7 +89,7 @@ class Resolver {
 	 */
 	async emoji(emoji) {
 		if (emoji instanceof Emoji) return emoji;
-		if (typeof channel === 'string' && this.constructor.regex.emoji.test(emoji)) return this.client.emojis.get(this.constructor.regex.emoji.exec(emoji)[1]);
+		if (typeof emoji === 'string' && this.constructor.regex.emoji.test(emoji)) return this.client.emojis.get(this.constructor.regex.emoji.exec(emoji)[1]);
 		return null;
 	}
 
@@ -191,11 +191,11 @@ class Resolver {
  * @static
  */
 Resolver.regex = {
-	userOrMember: new RegExp('^(?:<@!?)?(\\d{17,19})>?$'),
-	channel: new RegExp('^(?:<#)?(\\d{17,19})>?$'),
-	emoji: new RegExp('^(?:<a?:\\w+:)?(\\d{17,19})>?$'),
-	role: new RegExp('^(?:<@&)?(\\d{17,19})>?$'),
-	snowflake: new RegExp('^(\\d{17,19})$')
+	userOrMember: /^(?:<@!?)?(\d{17,19})>?$/,
+	channel: /^(?:<#)?(\d{17,19})>?$/,
+	emoji: /^(?:<a?:\w+:)?(\d{17,19})>?$/,
+	role: /^(?:<@&)?(\d{17,19})>?$/,
+	snowflake: /^(\d{17,19})$/
 };
 
 module.exports = Resolver;
