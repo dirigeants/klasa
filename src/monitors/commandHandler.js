@@ -17,22 +17,29 @@ module.exports = class extends Monitor {
 			msg.sendMessage(Array.isArray(msg.guildConfigs.prefix) ? msg.guildConfigs.prefix.map(prefix => `\`${prefix}\``).join(', ') : `\`${msg.guildConfigs.prefix}\``);
 			return;
 		}
+
 		const { command, prefix, prefixLength } = this.parseCommand(msg);
 		if (!command) return;
+
 		const validCommand = this.client.commands.get(command);
 		if (!validCommand) {
 			if (this.client.listenerCount('commandUnknown')) this.client.emit('commandUnknown', msg, command);
 			return;
 		}
+
 		const timer = new Stopwatch();
 		if (this.client.options.typing) msg.channel.startTyping();
 		msg._registerCommand({ command: validCommand, prefix, prefixLength });
-		this.client.inhibitors.run(msg, validCommand)
-			.then(() => this.runCommand(msg, timer))
-			.catch((response) => {
-				if (this.client.options.typing) msg.channel.stopTyping();
-				return this.client.emit('commandInhibited', msg, validCommand, response);
-			});
+
+		try {
+			await this.client.inhibitors.run(msg, validCommand);
+		} catch (response) {
+			if (this.client.options.typing) msg.channel.stopTyping();
+			this.client.emit('commandInhibited', msg, validCommand, response);
+			return;
+		}
+
+		this.runCommand(msg, timer);
 	}
 
 	parseCommand(msg) {
@@ -83,12 +90,13 @@ module.exports = class extends Monitor {
 		if (this.client.options.typing) msg.channel.stopTyping();
 		timer.stop();
 
-		return commandRun
-			.then(mes => {
-				this.client.finalizers.run(msg, mes, timer);
-				this.client.emit('commandSuccess', msg, msg.command, msg.params, mes);
-			})
-			.catch(error => this.client.emit('commandError', msg, msg.command, msg.params, error));
+		try {
+			const mes = await commandRun;
+			await this.client.finalizers.run(msg, mes, timer);
+			return this.client.emit('commandSuccess', msg, msg.command, msg.params, mes);
+		} catch (error) {
+			return this.client.emit('commandError', msg, msg.command, msg.params, error);
+		}
 	}
 
 	init() {
