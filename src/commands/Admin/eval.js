@@ -67,8 +67,7 @@ module.exports = class extends Command {
 		stopwatch.stop();
 		const type = this.getType(result, thenable);
 		if (success && typeof result !== 'string') {
-			const depth = msg.flags.depth ? parseInt(msg.flags.depth) : 0;
-			result = inspect(result, { depth: this.client.methods.util.isNumber(depth) ? depth : 0 });
+			result = inspect(result, { depth: msg.flags.depth ? parseInt(msg.flags.depth) || 0 : 0 });
 		}
 		return { success, type, time: this.formatTime(syncTime, asyncTime), result: this.client.methods.util.clean(result) };
 	}
@@ -86,8 +85,8 @@ module.exports = class extends Command {
 	}
 
 	formatTime(syncTime, asyncTime) {
-		if (asyncTime) return `⏱${asyncTime}<${syncTime}>`;
-		return `⏱${syncTime}`;
+		if (asyncTime) return `⏱ ${asyncTime}<${syncTime}>`;
+		return `⏱ ${syncTime}`;
 	}
 
 	isTooLong(evaled, headers) {
