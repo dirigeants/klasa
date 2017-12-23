@@ -15,7 +15,7 @@ module.exports = class extends Command {
 
 	async run(msg, [code]) {
 		const { success, thenable, time, result } = await this.eval(msg, code);
-		const headers = `${success ? '' : '`ERROR` '}${time} \`${this.getType(result, thenable)}\``;
+		const headers = `${success ? '' : '`ERROR` | '}\`${this.getType(result, thenable)} ${time}\``;
 
 		// Handle errors
 		if (!success) {
@@ -38,7 +38,7 @@ module.exports = class extends Command {
 
 	// Eval the input
 	async eval(msg, code) {
-		const stopwatch = new Stopwatch(5);
+		const stopwatch = new Stopwatch();
 		let success;
 		let thenable = false;
 		let syncTime;
@@ -57,6 +57,7 @@ module.exports = class extends Command {
 		} catch (error) {
 			if (!syncTime) syncTime = stopwatch.friendlyDuration;
 			if (thenable && !asyncTime) asyncTime = stopwatch.friendlyDuration;
+			result = error;
 			success = false;
 		}
 
@@ -78,7 +79,7 @@ module.exports = class extends Command {
 	}
 
 	formatTime(syncTime, asyncTime) {
-		if (asyncTime) return `⏱${syncTime}<${asyncTime}>`;
+		if (asyncTime) return `⏱${asyncTime}<${syncTime}>`;
 		return `⏱${syncTime}`;
 	}
 
