@@ -370,12 +370,15 @@ class TextPrompt {
 				i += delim.length - 1;
 			} else if (quotes.includes(content[i])) {
 				const quote = content[i];
-				while (i + 1 < content.length && (content[i] === '\\' || content[i + 1] !== quote)) current += content[++i];
+				while (i + 1 < content.length && (content[i] === '\\' || content[i + 1] !== quote)) {
+					if (content[i + 1] !== '\\')current += content[++i];
+					else i++;
+				}
 				i++;
 				args.push(current);
 			} else {
 				current += content[i];
-				while (i + 1 < content.length && content.slice(i, i + delim.length) !== delim) current += content[++i];
+				while (i + 1 < content.length && content.slice(i + 1, i + delim.length + 1) !== delim) current += content[++i];
 				args.push(current);
 			}
 		}
