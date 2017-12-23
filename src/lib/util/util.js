@@ -130,6 +130,16 @@ class Util {
 	}
 
 	/**
+	 * Verify if an object is a promise.
+	 * @since 0.5.0
+	 * @param {Promise} input The promise to verify
+	 * @returns {boolean}
+	 */
+	static isPromise(input) {
+		return (input instanceof Promise) || (Boolean(input) && Util.isFunction(input.then) && Util.isFunction(input.catch));
+	}
+
+	/**
 	 * Try parse a stringified JSON string.
 	 * @since 0.5.0
 	 * @param {string} value The value to parse

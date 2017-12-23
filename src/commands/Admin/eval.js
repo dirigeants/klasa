@@ -1,4 +1,4 @@
-const { Command } = require('klasa');
+const { Command, Stopwatch } = require('klasa');
 const { inspect } = require('util');
 
 module.exports = class extends Command {
@@ -14,15 +14,76 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [code]) {
-		try {
-			let evaled = eval(code);
-			if (evaled instanceof Promise) evaled = await evaled;
-			if (typeof evaled !== 'string') evaled = inspect(evaled, { depth: 0 });
-			return msg.sendCode('js', this.client.methods.util.clean(evaled));
-		} catch (err) {
-			if (err.stack) this.client.emit('error', err.stack);
-			return msg.sendMessage(` \`ERROR\`\n${this.client.methods.util.codeBlock('js', this.client.methods.util.clean(err))}`);
+		const { success, thenable, time, result } = await this.eval(msg, code);
+		const headers = `${success ? '' : '`ERROR` '}${time} \`${this.getType(result, thenable)}\``;
+
+		// Handle errors
+		if (!success) {
+			if (result && result.stack) this.client.emit('error', result.stack);
+			return msg.sendMessage(`${headers}\n${this.client.methods.util.codeBlock('js', result)}`);
 		}
+
+		// Handle too-long-messages
+		if (this.isTooLong(result, headers)) {
+			if (msg.guild && msg.channel.permissionsFor(msg.guild.me).has('ATTACH_FILES')) {
+				return msg.channel.sendFile(Buffer.from(result), 'eval.js', 'Output was too long... sent the result as a file.');
+			}
+			this.client.emit('log', result);
+			return msg.send('Output was too long... sent the result to console.');
+		}
+
+		// If it's a message that can be sent correctly, send it
+		return msg.send(`${headers}\n${this.client.methods.util.codeBlock('js', result)}`);
+	}
+
+	// Eval the input
+	async eval(msg, code) {
+		const stopwatch = new Stopwatch(5);
+		let success;
+		let thenable = false;
+		let syncTime;
+		let asyncTime;
+		let result;
+		try {
+			result = eval(code);
+			syncTime = stopwatch.friendlyDuration;
+			if (this.client.methods.util.isPromise(result)) {
+				thenable = true;
+				stopwatch.restart();
+				result = await result;
+				asyncTime = stopwatch.friendlyDuration;
+			}
+			success = true;
+		} catch (error) {
+			if (!syncTime) syncTime = stopwatch.friendlyDuration;
+			if (thenable && !asyncTime) asyncTime = stopwatch.friendlyDuration;
+			success = false;
+		}
+
+		stopwatch.stop();
+		if (success && typeof evaled !== 'string') result = inspect(result, { depth: 0 });
+		return { success, thenable, time: this.formatTime(syncTime, asyncTime), result: this.client.methods.util.clean(result) };
+	}
+
+	getType(output, thenable) {
+		if (thenable) return `Promise<${this.getTypePrimitive(output)}>`;
+		return this.getTypePrimitive(output);
+	}
+
+	getTypePrimitive(output) {
+		if (typeof output !== 'object') return typeof output;
+		if (output === null) return 'null';
+		if (output.constructor && output.constructor.name) return output.constructor.name;
+		return 'any';
+	}
+
+	formatTime(syncTime, asyncTime) {
+		if (asyncTime) return `⏱${syncTime}<${asyncTime}>`;
+		return `⏱${syncTime}`;
+	}
+
+	isTooLong(evaled, headers) {
+		return evaled.length > 1991 - headers.length;
 	}
 
 };
