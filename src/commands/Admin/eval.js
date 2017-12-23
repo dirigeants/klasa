@@ -63,7 +63,7 @@ module.exports = class extends Command {
 
 		stopwatch.stop();
 		const type = this.getType(result, thenable);
-		if (success && typeof evaled !== 'string') result = inspect(result, { depth: 0 });
+		if (success && typeof result !== 'string') result = inspect(result, { depth: 0 });
 		return { success, type, time: this.formatTime(syncTime, asyncTime), result: this.client.methods.util.clean(result) };
 	}
 
