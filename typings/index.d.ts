@@ -284,13 +284,20 @@ declare module 'klasa' {
 		public infoPage?: MessageEmbed;
 		public emojis: RichDisplayEmojisObject;
 		public footered: boolean;
-
+		public footerPrefix: string;
+		public footerSuffix: string;
 		public readonly template: MessageEmbed;
-		public setEmojis(emojis: RichDisplayEmojisObject): RichDisplay;
+
+		public setEmojis(emojis: RichDisplayEmojisObject): this;
+		public setFooterPrefix(prefix: string): this;
+		public setFooterSuffix(suffix: string): this;
+		public useCustomFooters(): this;
+		public addPage(embed: Function | MessageEmbed): this;
 		public setInfoPage(embed: MessageEmbed): RichDisplay;
 		public run(msg: KlasaMessage, options?: RichDisplayRunOptions): Promise<ReactionHandler>;
-		private _footer(): void;
+
 		protected _determineEmojis(emojis: emoji[], stop: boolean, jump: boolean, firstLast: boolean): emoji[];
+		private _footer(): void;
 		private _handlePageGeneration(cb: Function | MessageEmbed): MessageEmbed;
 	}
 
