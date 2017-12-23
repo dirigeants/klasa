@@ -41,9 +41,12 @@ module.exports = {
 	ArgResolver: require('./lib/parsers/ArgResolver'),
 	Resolver: require('./lib/parsers/Resolver'),
 	SettingResolver: require('./lib/parsers/SettingResolver'),
+	CommandPrompt: require('./lib/usage/CommandPrompt'),
+	CommandUsage: require('./lib/usage/CommandUsage'),
 	ParsedUsage: require('./lib/usage/ParsedUsage'),
 	Possible: require('./lib/usage/Possible'),
 	Tag: require('./lib/usage/Tag'),
+	TextPrompt: require('./lib/usage/TextPrompt'),
 	version: require('../package').version
 };
 

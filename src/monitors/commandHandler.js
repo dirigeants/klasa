@@ -1,4 +1,4 @@
-const { Monitor, Stopwatch, util: { regExpEsc, newError } } = require('klasa');
+const { Monitor, Stopwatch, util: { regExpEsc } } = require('klasa');
 
 module.exports = class extends Monitor {
 
@@ -17,22 +17,29 @@ module.exports = class extends Monitor {
 			msg.sendMessage(Array.isArray(msg.guildConfigs.prefix) ? msg.guildConfigs.prefix.map(prefix => `\`${prefix}\``).join(', ') : `\`${msg.guildConfigs.prefix}\``);
 			return;
 		}
+
 		const { command, prefix, prefixLength } = this.parseCommand(msg);
 		if (!command) return;
+
 		const validCommand = this.client.commands.get(command);
 		if (!validCommand) {
 			if (this.client.listenerCount('commandUnknown')) this.client.emit('commandUnknown', msg, command);
 			return;
 		}
+
 		const timer = new Stopwatch();
 		if (this.client.options.typing) msg.channel.startTyping();
 		msg._registerCommand({ command: validCommand, prefix, prefixLength });
-		this.client.inhibitors.run(msg, validCommand)
-			.then(() => this.runCommand(msg, timer))
-			.catch((response) => {
-				if (this.client.options.typing) msg.channel.stopTyping();
-				this.client.emit('commandInhibited', msg, validCommand, response);
-			});
+
+		try {
+			await this.client.inhibitors.run(msg, validCommand);
+		} catch (response) {
+			if (this.client.options.typing) msg.channel.stopTyping();
+			this.client.emit('commandInhibited', msg, validCommand, response);
+			return;
+		}
+
+		this.runCommand(msg, timer);
 	}
 
 	parseCommand(msg) {
@@ -72,13 +79,9 @@ module.exports = class extends Monitor {
 
 	async runCommand(msg, timer) {
 		try {
-			await msg.validateArgs();
+			await msg.prompter.run();
 		} catch (error) {
 			if (this.client.options.typing) msg.channel.stopTyping();
-			if (error.code === 1 && this.client.options.cmdPrompt) {
-				return this.awaitMessage(msg, timer, error.message)
-					.catch(err => this.client.emit('commandError', msg, msg.command, msg.params, err));
-			}
 			return this.client.emit('commandError', msg, msg.command, msg.params, error);
 		}
 
@@ -87,31 +90,13 @@ module.exports = class extends Monitor {
 		if (this.client.options.typing) msg.channel.stopTyping();
 		timer.stop();
 
-		return commandRun
-			.then(mes => {
-				this.client.finalizers.run(msg, mes, timer);
-				this.client.emit('commandSuccess', msg, msg.command, msg.params, mes);
-			})
-			.catch(error => this.client.emit('commandError', msg, msg.command, msg.params, error));
-	}
-
-	async awaitMessage(msg, timer, error) {
-		const message = await msg.channel.send(msg.language.get('MONITOR_COMMAND_HANDLER_REPROMPT', `<@!${msg.author.id}>`, error, this.client.options.promptTime / 1000))
-			.catch((err) => { throw newError(err); });
-
-		const param = await msg.channel.awaitMessages(response => response.author.id === msg.author.id && response.id !== message.id, { max: 1, time: this.client.options.promptTime, errors: ['time'] })
-			.catch(() => {
-				message.delete();
-				throw undefined;
-			});
-
-		if (param.first().content.toLowerCase() === 'abort') throw msg.language.get('MONITOR_COMMAND_HANDLER_ABORTED');
-		msg.args[msg.args.lastIndexOf(null)] = param.first().content;
-		msg.reprompted = true;
-
-		message.delete();
-		if (this.client.options.typing) msg.channel.startTyping();
-		return this.runCommand(msg, timer);
+		try {
+			const mes = await commandRun;
+			await this.client.finalizers.run(msg, mes, timer);
+			return this.client.emit('commandSuccess', msg, msg.command, msg.params, mes);
+		} catch (error) {
+			return this.client.emit('commandError', msg, msg.command, msg.params, error);
+		}
 	}
 
 	init() {

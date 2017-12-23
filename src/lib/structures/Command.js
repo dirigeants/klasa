@@ -1,6 +1,7 @@
 const Piece = require('./interfaces/Piece');
 const { mergeDefault } = require('../util/util');
 const ParsedUsage = require('../usage/ParsedUsage');
+const CommandUsage = require('../usage/CommandUsage');
 
 /**
  * Base class for all Klasa Commands. See {@tutorial CreatingCommands} for more information how to use this class
@@ -18,6 +19,8 @@ class Command {
 	 * @property {number} [cooldown=0] The amount of time before the user can run the command again in seconds
 	 * @property {boolean} [nsfw=false] If the command should only run in nsfw channels
 	 * @property {boolean} [deletable=false] If the responses should be deleted if the triggering message is deleted
+	 * @property {boolean} [promptTime=30000] The time allowed for re-prompting of this command
+	 * @property {boolean} [promptLimit=0] The number or attempts allowed for re-prompting an argument
 	 * @property {boolean} [guarded=false] If the command can be disabled on a guild level (does not effect global disable)
 	 * @property {string[]} [aliases=[]] Any command aliases
 	 * @property {boolean} [autoAliases=true] If automatic aliases should be added (adds aliases of name and aliases without dashes)
@@ -26,7 +29,7 @@ class Command {
 	 * @property {string[]} [requiredConfigs=[]] The required guild configs to use this command
 	 * @property {(string|Function)} [description=''] The help description for the command
 	 * @property {string} [usage=''] The usage string for the command
-	 * @property {?string} [usageDelim=undefined] The string to deliminate the command input for usage
+	 * @property {?string} [usageDelim=undefined] The string to delimit the command input for usage
 	 * @property {boolean} [quotedStringSupport=this.client.options.commands.quotedStringSupport] Whether args for this command should not deliminated inside quotes
 	 * @property {(string|Function)} [extendedHelp=msg.language.get('COMMAND_HELP_NO_EXTENDED')] Extended help strings
 	 * @memberof Command
@@ -96,6 +99,20 @@ class Command {
 		 * @type {boolean}
 		 */
 		this.deletable = options.deletable;
+
+		/**
+		 * The time allowed for re-prompting of this command
+		 * @since 0.5.0
+		 * @type {number}
+		 */
+		this.promptTime = options.promptTime;
+
+		/**
+		 * The number or attempts allowed for re-prompting an argument
+		 * @since 0.5.0
+		 * @type {number}
+		 */
+		this.promptLimit = options.promptLimit;
 
 		/**
 		 * The name of the command
@@ -199,9 +216,9 @@ class Command {
 		/**
 		 * The parsed usage for the command
 		 * @since 0.0.1
-		 * @type {ParsedUsage}
+		 * @type {CommandUsage}
 		 */
-		this.usage = new ParsedUsage(client, this);
+		this.usage = new CommandUsage(client, this);
 
 		/**
 		 * Any active cooldowns for the command
@@ -224,6 +241,16 @@ class Command {
 		 * @type {string}
 		 */
 		this.dir = dir;
+	}
+
+	/**
+	 * Creates a ParsedUsage to run custom prompts off of
+	 * @param {string} usageString The string designating all parameters expected
+	 * @param {string} usageDelim The string to delimit the input
+	 * @returns {ParsedUsage}
+	 */
+	definePrompt(usageString, usageDelim) {
+		return new ParsedUsage(this.client, usageString, usageDelim);
 	}
 
 	/**

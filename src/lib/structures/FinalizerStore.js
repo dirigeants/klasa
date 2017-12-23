@@ -72,11 +72,21 @@ class FinalizerStore extends Collection {
 	/**
 	 * Runs all of our finalizers after a command is ran successfully.
 	 * @since 0.0.1
-	 * @param {Array} args An array of arguments passed down from the command
+	 * @param {KlasaMessage} msg The message that called the command
+	 * @param {KlasaMessage|any} mes The response of the command
+	 * @param {StopWatch} timer The timer run from start to queue of the command
 	 * @return {void}
 	 */
-	run(...args) {
-		for (const finalizer of this.values()) if (finalizer.enabled) finalizer.run(...args);
+	async run(msg, mes, timer) {
+		for (const finalizer of this.values()) {
+			if (finalizer.enabled) {
+				try {
+					await finalizer.run(msg, mes, timer);
+				} catch (err) {
+					this.client.emit('finalizerError', msg, mes, timer, finalizer, err);
+				}
+			}
+		}
 	}
 
 	/**

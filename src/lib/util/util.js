@@ -56,32 +56,11 @@ class Util {
 	/**
 	 * Converts a string to Title Case
 	 * @since 0.0.1
-	 * @param {string} str The string to titlecaseify
+	 * @param {string} str The string to title case
 	 * @returns {string}
 	 */
 	static toTitleCase(str) {
 		return str.replace(/[A-Za-zÀ-ÖØ-öø-ÿ]\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
-	}
-
-	/**
-	 * Generates an error object used for argument reprompting
-	 * @since 0.0.1
-	 * @param {Error} error An error object
-	 * @param {number} code The status code to assign to the error
-	 * @returns {Error}
-	 */
-	static newError(error, code) {
-		if (error.status) {
-			this.statusCode = error.response.res.statusCode;
-			this.statusMessage = error.response.res.statusMessage;
-			this.code = error.response.body.code;
-			this.message = error.response.body.message;
-			return this;
-		}
-		this.code = code || null;
-		this.message = error;
-		this.stack = error.stack || null;
-		return this;
 	}
 
 	/**

@@ -8,7 +8,6 @@ exports.DEFAULTS = {
 		cmdDeleting: false,
 		cmdEditing: false,
 		cmdLogging: false,
-		cmdPrompt: false,
 		commandMessageLifetime: 1800,
 		console: {},
 		consoleEvents: {
@@ -24,10 +23,14 @@ exports.DEFAULTS = {
 		language: 'en-US',
 		prefix: '!',
 		preserveConfigs: true,
-		promptTime: 30000,
 		provider: { engine: 'json' },
 		readyMessage: (client) => `Successfully initialized. Ready to serve ${client.guilds.size} guilds.`,
 		typing: false,
+		customPromptDefaults: {
+			promptTime: 30000,
+			promptLimit: Infinity,
+			quotedStringSupport: false
+		},
 		pieceDefaults: {
 			commands: {
 				aliases: [],
@@ -39,6 +42,8 @@ exports.DEFAULTS = {
 				guarded: false,
 				nsfw: false,
 				permLevel: 0,
+				promptLimit: 0,
+				promptTime: 30000,
 				requiredConfigs: [],
 				runIn: ['text', 'dm', 'group'],
 				usage: '',

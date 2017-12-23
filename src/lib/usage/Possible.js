@@ -30,21 +30,21 @@ class Possible {
 		 * @since 0.2.1
 		 * @type {?number}
 		 */
-		this.min = minMaxTypes.includes(this.type) && min ? Possible.resolveLimit(min, 'min') : null;
+		this.min = minMaxTypes.includes(this.type) && min ? Possible.resolveLimit(min, 'min') : undefined;
 
 		/**
 		 * The max of this possible
 		 * @since 0.2.1
 		 * @type {?number}
 		 */
-		this.max = minMaxTypes.includes(this.type) && max ? Possible.resolveLimit(max, 'max') : null;
+		this.max = minMaxTypes.includes(this.type) && max ? Possible.resolveLimit(max, 'max') : undefined;
 
 		/**
 		 * The regex of this possible
 		 * @since 0.3.0
 		 * @type {?RegExp}
 		 */
-		this.regex = regexTypes.includes(this.type) && regex ? new RegExp(regex, flags) : null;
+		this.regex = regexTypes.includes(this.type) && regex ? new RegExp(regex, flags) : undefined;
 
 		if (regexTypes.includes(this.type) && !this.regex) throw 'Regex types must include a regular expression';
 	}

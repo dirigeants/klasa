@@ -34,10 +34,9 @@ class KlasaClient extends Discord.Client {
 	 * @property {KlasaConsoleEvents} [consoleEvents={}] Config options to pass to the client console
 	 * @property {KlasaPieceDefaults} [pieceDefaults={}] Overrides the defaults for all pieces
 	 * @property {string} [language='en-US'] The default language Klasa should opt-in for the commands
-	 * @property {number} [promptTime=30000] The amount of time in milliseconds prompts should last
+	 * @property {KlasaCustomPromptDefaults} [customPromptDefaults={}] The defaults for custom prompts
 	 * @property {boolean} [ignoreBots=true] Whether or not this bot should ignore other bots
 	 * @property {boolean} [ignoreSelf=true] Whether or not this bot should ignore itself
-	 * @property {boolean} [cmdPrompt=false] Whether the bot should prompt missing parameters
 	 * @property {boolean} [cmdEditing=false] Whether the bot should update responses if the command is edited
 	 * @property {boolean} [cmdLogging=false] Whether the bot should log command usage
 	 * @property {boolean} [typing=false] Whether the bot should type while processing commands
@@ -79,6 +78,14 @@ class KlasaClient extends Discord.Client {
 	 * @property {LanguageOptions} [languages={}] The default language options
 	 * @property {MonitorOptions} [monitors={}] The default monitor options
 	 * @property {ProviderOptions} [providers={}] The default provider options
+	 * @memberof KlasaClient
+	 */
+
+	/**
+	 * @typedef {Object} KlasaCustomPromptDefaults
+	 * @property {number} [promptLimit=Infinity] The number of re-prompts before custom prompt gives up
+	 * @property {number} [promptTime=30000] The time-limit for re-prompting custom prompts
+	 * @property {boolean} [quotedStringSupport=false] Whether the custom prompt should respect quoted strings
 	 * @memberof KlasaClient
 	 */
 
@@ -314,7 +321,7 @@ class KlasaClient extends Discord.Client {
 	}
 
 	/**
-	 * Unregisters a custom store from the client
+	 * Un-registers a custom store from the client
 	 * @since 0.3.0
 	 * @param {Store} storeName The store that pieces will be stored in
 	 * @returns {KlasaClient} this client
@@ -343,7 +350,7 @@ class KlasaClient extends Discord.Client {
 	}
 
 	/**
-	 * Unregisters a custom piece from the client
+	 * Un-registers a custom piece from the client
 	 * @since 0.3.0
 	 * @param {string} pieceName The name of the piece
 	 * @returns {KlasaClient} this client
@@ -552,6 +559,17 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  * @param {KlasaMessage} message The message that triggered the monitor
  * @param {Monitor} monitor The monitor run
  * @param {(Error|string)} error The monitor error
+ */
+
+/**
+ * Emitted when a finalizer has encountered an error.
+ * @event KlasaClient#finalizerError
+ * @since 0.5.0
+ * @param {KlasaMessage} message The message that triggered the finalizer
+ * @param {KlasaMessage|any} mes The response from the command
+ * @param {Stopwatch} timer The timer run from start to queue of the command
+ * @param {Finalizer} finalizer The finalizer run
+ * @param {(Error|string)} error The finalizer error
  */
 
 /**

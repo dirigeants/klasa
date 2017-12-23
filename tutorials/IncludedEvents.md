@@ -110,6 +110,14 @@ Handles the errors thrown by any of the monitors.
 
 [events/monitorError.js](https://github.com/dirigeants/klasa/blob/master/src/events/monitorError.js)
 
+## finalizerError
+
+Handles the errors thrown by any of the finalizers.
+
+**Source:**
+
+[events/finalizerError.js](https://github.com/dirigeants/klasa/blob/master/src/events/finalizerError.js)
+
 ## verbose
 
 Logs verbose messages to the console.
