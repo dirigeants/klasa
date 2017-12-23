@@ -26,10 +26,10 @@ module.exports = class extends Command {
 		// Handle too-long-messages
 		if (this.isTooLong(result, headers)) {
 			if (msg.guild && msg.channel.permissionsFor(msg.guild.me).has('ATTACH_FILES')) {
-				return msg.channel.sendFile(Buffer.from(result), 'eval.js', 'Output was too long... sent the result as a file.');
+				return msg.channel.sendFile(Buffer.from(result), 'eval.js', `${headers} | Output was too long... sent the result as a file.`);
 			}
 			this.client.emit('log', result);
-			return msg.send('Output was too long... sent the result to console.');
+			return msg.send(`${headers} | Output was too long... sent the result to console.`);
 		}
 
 		// If it's a message that can be sent correctly, send it
