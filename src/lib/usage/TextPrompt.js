@@ -1,4 +1,5 @@
 const { mergeDefault } = require('../util/util');
+const quotes = ['"', "'", '”', '‘'];
 
 /**
  * A class to handle argument collection and parameter resolution
@@ -328,8 +329,9 @@ class TextPrompt {
 	 */
 	static getFlags(content, delim) {
 		const flags = {};
-		content = content.replace(/--(\w+)(?:=(?:"((?:[^"\\]|\\.)*)"|'((?:[^'\\]|\\.)*)'|(\w+)))?/g, (match, fl, quotes, singles, none) => {
-			flags[fl] = quotes || singles || none || fl;
+		content = content.replace(this.constructor.flagRegex, (match, fl, ...quote) => {
+			console.log(quote);
+			flags[fl] = quote.slice(0, -2).find(el => el) || fl;
 			return '';
 		}).replace(new RegExp(`(?:(\\s)\\s+|(${delim})(?:${delim})+)`, 'g'), '$1').trim();
 		return { content, flags };
@@ -361,29 +363,28 @@ class TextPrompt {
 		if (!delim || delim === '') return [content];
 
 		const args = [];
-		let current = '';
-		let openQuote = false;
 
 		for (let i = 0; i < content.length; i++) {
-			if (!openQuote && content.slice(i, i + delim.length) === delim) {
-				if (current !== '') args.push(current);
-				current = '';
+			let current = '';
+			if (content.slice(i, i + delim.length) === delim) {
 				i += delim.length - 1;
-				continue;
+			} else if (quotes.inclues(content[i])) {
+				const quote = content[i];
+				while (i + 1 < content.length && (content[i] === '\\' || content[i + 1] !== quote)) current += content[++i];
+				i++;
+				args.push(current);
+			} else {
+				current += content[i];
+				while (i + 1 < content.length && content.slice(i, i + delim.length) === delim) current += content[++i];
+				args.push(current);
 			}
-			if (content[i] === '"' && content[i - 1] !== '\\') {
-				openQuote = !openQuote;
-				if (current !== '') args.push(current);
-				current = '';
-				continue;
-			}
-			current += content[i];
 		}
-		if (current !== '') args.push(current);
 
 		return args.length === 1 && args[0] === '' ? [] : args;
 	}
 
 }
+
+TextPrompt.flagRegex = new RegExp(`--(\\w{2,32})(?:=(?:${quotes.map(qu => `${qu}((?:[^${qu}\\]|\\.)*)${qu}`).join('|')}|(\\w+)))?`, 'g');
 
 module.exports = TextPrompt;
