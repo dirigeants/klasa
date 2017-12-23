@@ -106,6 +106,16 @@ module.exports = Structures.extend('Message', Message => {
 		}
 
 		/**
+		 * The flags resolved by this class
+		 * @since 0.5.0
+		 * @type {Object}
+		 * @readonly
+		 */
+		get flags() {
+			return this.prompter ? this.prompter.flags : {};
+		}
+
+		/**
 		 * If the command reprompted for missing args
 		 * @since 0.0.1
 		 * @type {boolean}
