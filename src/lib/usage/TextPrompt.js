@@ -367,9 +367,12 @@ class TextPrompt {
 			let current = '';
 			if (content.slice(i, i + delim.length) === delim) {
 				i += delim.length - 1;
-			} else if (quotes.some(qt => qt.includes(content[i]))) {
-				const quote = quotes.find(qt => qt.includes(content[i])).split('');
-				while (i + 1 < content.length && (content[i] === '\\' || !quote.includes(content[i + 1]))) {
+				continue;
+			}
+			const quote = quotes.find(qt => qt.includes(content[i]));
+			if (quote) {
+				const qts = quote.split('');
+				while (i + 1 < content.length && (content[i] === '\\' || !qts.includes(content[i + 1]))) {
 					if (content[i + 1] !== '\\') current += content[++i];
 					else i++;
 				}
