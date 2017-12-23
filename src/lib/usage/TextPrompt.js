@@ -387,6 +387,12 @@ class TextPrompt {
 
 }
 
-TextPrompt.flagRegex = new RegExp(`--(\\w{2,32})(?:=(?:${quotes.map(qu => `[${qu}]((?:[^${qu}\\\\]|\\.)*)[${qu}]`).join('|')}|(\\w+)))?`, 'g');
+/**
+ * Regular Expression to match flags with quoted string support.
+ * @since 0.5.0
+ * @type {RegExp}
+ * @static
+ */
+TextPrompt.flagRegex = new RegExp(`--(\\w{2,})(?:=(?:${quotes.map(qu => `[${qu}]((?:[^${qu}\\\\]|\\.)*)[${qu}]`).join('|')}|(\\w+)))?`, 'g');
 
 module.exports = TextPrompt;
