@@ -52,8 +52,10 @@ module.exports = class extends Language {
 			COMMAND_EVAL_DESCRIPTION: 'Evaluates arbitrary Javascript. Reserved for bot owner.',
 			COMMAND_EVAL_EXTENDEDHELP: [
 				'The eval command evaluates code as-in, any error thrown from it will be handled.',
-				'It also uses the flags feature. Write --silent or --depth=number to customize the output.',
-				'For example, running the eval with the --silent will make it output nothing (with exception of errors), and --depth accepts a number, for example, --depth=2, to customize util.inspect\'s depth.', // eslint-disable-line max-len
+				'It also uses the flags feature. Write --silent, --depth=number or --async to customize the output.',
+				'The --silent flag will make it output nothing (with exception of errors).',
+				'The --depth flag accepts a number, for example, --depth=2, to customize util.inspect\'s depth.',
+				'The --async flag will wrap the code into an async function where you can enjoy the use of await, however, if you want to return something, you will need the return keyword',
 				'If the output is too large, it\'ll send the output as a file, or in the console if the bot does not have the ATTACH_FILES permission.'
 			],
 			COMMAND_UNLOAD: (type, name) => `✅ Unloaded ${type}: ${name}`,
