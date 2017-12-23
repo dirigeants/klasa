@@ -87,6 +87,20 @@ class RichDisplay {
 		 * @type {boolean}
 		 */
 		this.footered = false;
+
+		/**
+		 * Adds a prefix to all footers (before page/pages)
+		 * @since 0.5.0
+		 * @type {string}
+		 */
+		this.footerPrefix = '';
+
+		/**
+		 * Adds a suffix to all footers (after page/pages)
+		 * @since 0.5.0
+		 * @type {string}
+		 */
+		this.footerSuffix = '';
 	}
 
 	/**
@@ -107,6 +121,40 @@ class RichDisplay {
 	 */
 	setEmojis(emojis) {
 		Object.assign(this.emojis, emojis);
+		return this;
+	}
+
+	/**
+	 * Sets a prefix for all footers
+	 * @since 0.5.0
+	 * @param {string} prefix The prefix you want to add
+	 * @returns {RichDisplay} this RichDisplay
+	 */
+	setFooterPrefix(prefix) {
+		this.footered = false;
+		this.footerPrefix = prefix;
+		return this;
+	}
+
+	/**
+	 * Sets a suffix for all footers
+	 * @since 0.5.0
+	 * @param {string} suffix The suffix you want to add
+	 * @returns {RichDisplay} this RichDisplay
+	 */
+	setFooterSuffix(suffix) {
+		this.footered = false;
+		this.footerSuffix = suffix;
+		return this;
+	}
+
+	/**
+	 * Turns off the footer altering function
+	 * @since 0.5.0
+	 * @returns {RichDisplay} this RichDisplay
+	 */
+	useCustomFooters() {
+		this.footered = true;
 		return this;
 	}
 
@@ -165,7 +213,7 @@ class RichDisplay {
 	 * @private
 	 */
 	async _footer() {
-		for (let i = 1; i <= this.pages.length; i++) this.pages[i - 1].setFooter(`${i}/${this.pages.length}`);
+		for (let i = 1; i <= this.pages.length; i++) this.pages[i - 1].setFooter(`${this.footerPrefix}${i}/${this.pages.length}${this.footerSuffix}`);
 		if (this.infoPage) this.infoPage.setFooter('ℹ');
 	}
 
