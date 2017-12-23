@@ -48,6 +48,7 @@ module.exports = class extends Command {
 		let asyncTime;
 		let result;
 		try {
+			if (msg.flags.async) code = `(async () => { ${code} })();`;
 			result = eval(code);
 			syncTime = stopwatch.friendlyDuration;
 			if (this.client.methods.util.isPromise(result)) {
