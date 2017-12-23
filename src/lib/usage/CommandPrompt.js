@@ -2,27 +2,22 @@ const TextPrompt = require('./TextPrompt');
 
 /**
  * A class to handle argument collection and parameter resolution for commands
+ * @extends TextPrompt
  */
 class CommandPrompt extends TextPrompt {
 
 	/**
-	 * @typedef {Object} CommandPromptOptions
-	 * @property {number} [promptLimit=Infinity] The number of re-prompts before this TextPrompt gives up
-	 * @property {number} [promptTime=30000] The time-limit for re-prompting
-	 * @property {boolean} [quotedStringSupport=false] Whether this prompt should respect quoted strings
-	 * @memberof CommandPrompt
-	 */
-
-	/**
+	 * @since 0.5.0
 	 * @param {KlasaMessage} msg The message for the command
 	 * @param {CommandUsage} usage The usage of the command
-	 * @param {CommandPromptOptions} options The options for this CommandPrompt
+	 * @param {TextPromptOptions} options The options for this CommandPrompt
 	 */
 	constructor(msg, usage, options) {
 		super(msg, usage, options);
 
 		/**
 		 * The typing state of this CommandPrompt
+		 * @since 0.5.0
 		 * @type {boolean}
 		 * @private
 		 */
@@ -33,9 +28,10 @@ class CommandPrompt extends TextPrompt {
 
 	/**
 	 * Runs the internal validation, and re-prompts according to the settings
-	 * @returns {any[]} The parameters resolved
+	 * @since 0.5.0
+	 * @returns {Promise<any[]>} The parameters resolved
 	 */
-	async run() {
+	run() {
 		return this.validateArgs();
 	}
 

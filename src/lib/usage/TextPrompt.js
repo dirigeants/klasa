@@ -14,6 +14,7 @@ class TextPrompt {
 	 */
 
 	/**
+	 * @since 0.5.0
 	 * @param {KlasaMessage} msg The message this prompt is for
 	 * @param {ParsedUsage} usage The usage for this prompt
 	 * @param {TextPromptOptions} options The options of this prompt
@@ -32,12 +33,14 @@ class TextPrompt {
 
 		/**
 		 * The message this prompt is for
+		 * @since 0.5.0
 		 * @type {KlasaMessage}
 		 */
 		this.message = msg;
 
 		/**
 		 * The usage for this prompt
+		 * @since 0.5.0
 		 * @type {ParsedUsage|CommandUsage}
 		 */
 		this.usage = usage;
@@ -72,18 +75,21 @@ class TextPrompt {
 
 		/**
 		 * The time-limit for re-prompting
+		 * @since 0.5.0
 		 * @type {number}
 		 */
 		this.promptTime = options.promptTime;
 
 		/**
 		 * The number of re-prompts before this TextPrompt gives up
+		 * @since 0.5.0
 		 * @type {number}
 		 */
 		this.promptLimit = options.promptLimit;
 
 		/**
 		 * Whether this prompt should respect quoted strings
+		 * @since 0.5.0
 		 * @type {boolean}
 		 */
 		this.quotedStringSupport = options.quotedStringSupport;
@@ -115,8 +121,9 @@ class TextPrompt {
 
 	/**
 	 * Runs the custom prompt.
+	 * @since 0.5.0
 	 * @param {string} prompt The message to initially prompt with
-	 * @returns {any[]} The parameters resolved
+	 * @returns {Promise<any[]>} The parameters resolved
 	 */
 	async run(prompt) {
 		const message = await this.message.prompt(prompt, this.promptTime);
@@ -126,8 +133,9 @@ class TextPrompt {
 
 	/**
 	 * Collects missing required arguments.
+	 * @since 0.5.0
 	 * @param {string} prompt The reprompt error
-	 * @returns {any[]}
+	 * @returns {Promise<any[]>}
 	 * @private
 	 */
 	async reprompt(prompt) {
@@ -153,7 +161,8 @@ class TextPrompt {
 
 	/**
 	 * Collects repeating arguments.
-	 * @returns {any[]}
+	 * @since 0.5.0
+	 * @returns {Promise<any[]>}
 	 * @private
 	 */
 	async repeatingPrompt() {
@@ -258,6 +267,7 @@ class TextPrompt {
 
 	/**
 	 * Pushes a parameter into this.params, and resets the re-prompt count.
+	 * @since 0.5.0
 	 * @param {any} param The resolved parameter
 	 * @returns {any[]}
 	 * @private
@@ -270,8 +280,9 @@ class TextPrompt {
 
 	/**
 	 * Decides if the prompter should reprompt or throw the error found while validating.
+	 * @since 0.5.0
 	 * @param {string} err The error found while validating
-	 * @returns {any[]}
+	 * @returns {Promise<any[]>}
 	 * @private
 	 */
 	async handleError(err) {
@@ -282,6 +293,7 @@ class TextPrompt {
 
 	/**
 	 * Finalizes parameters and arguments for this prompt.
+	 * @since 0.5.0
 	 * @returns {any[]}
 	 * @private
 	 */
@@ -293,8 +305,10 @@ class TextPrompt {
 
 	/**
 	 * Splits the original message string into arguments.
+	 * @since 0.5.0
 	 * @param {string} original The original message string
 	 * @returns {void}
+	 * @private
 	 */
 	_setup(original) {
 		const { content, flags } = this.constructor.getFlags(original, this.usage.usageDelim);

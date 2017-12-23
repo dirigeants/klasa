@@ -130,7 +130,7 @@ module.exports = Structures.extend('Message', Message => {
 		 * Awaits a response from the author.
 		 * @param {string} text The text to prompt the author
 		 * @param {number} [time=30000] The time to wait before giving up
-		 * @returns {Message}
+		 * @returns {Promise<KlasaMessage>}
 		 */
 		async prompt(text, time = 30000) {
 			const message = await this.channel.send(text);

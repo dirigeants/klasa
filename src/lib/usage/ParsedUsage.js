@@ -52,9 +52,10 @@ class ParsedUsage {
 	}
 
 	/**
-	 * Creates a TextPrompt instance to collect and resolve arguments with
+	 * Creates a TextPrompt instance to collect and resolve arguments with.
+	 * @since 0.5.0
 	 * @param {KlasaMessage} msg The message context from the prompt
-	 * @param {Object} [options] The options for the prompt
+	 * @param {TextPromptOptions} [options] The options for the prompt
 	 * @returns {TextPrompt}
 	 */
 	createPrompt(msg, options = {}) {
@@ -63,7 +64,8 @@ class ParsedUsage {
 
 	/**
 	 * Defines json stringify behavior of this class.
-	 * @returns {Object}
+	 * @since 0.5.0
+	 * @returns {Tag[]}
 	 */
 	toJSON() {
 		return this.parsedUsage;
@@ -71,6 +73,7 @@ class ParsedUsage {
 
 	/**
 	 * Defines to string behavior of this class.
+	 * @since 0.5.0
 	 * @returns {string}
 	 */
 	toString() {

@@ -118,6 +118,7 @@ declare module 'klasa' {
 		public on(event: 'commandUnknown', listener: (msg: KlasaMessage, command: string) => void): this;
 
 		public on(event: 'monitorError', listener: (msg: KlasaMessage, monitor: Monitor, error: Error | string) => void): this;
+		public on(event: 'finalizerError', listener: (msg: KlasaMessage, mes: KlasaMessage, timer: Timestamp, finalizer: Finalizer, error: Error | string) => void): this;
 
 		// SettingGateway Events
 		public on(event: 'configCreateEntry', listener: (entry: Configuration) => void): this;
@@ -180,6 +181,7 @@ declare module 'klasa' {
 		public once(event: 'commandUnknown', listener: (msg: KlasaMessage, command: string) => void): this;
 
 		public once(event: 'monitorError', listener: (msg: KlasaMessage, monitor: Monitor, error: Error | string) => void): this;
+		public once(event: 'finalizerError', listener: (msg: KlasaMessage, mes: KlasaMessage, timer: Timestamp, finalizer: Finalizer, error: Error | string) => void): this;
 
 		// SettingGateway Events
 		public once(event: 'configCreateEntry', listener: (entry: Configuration) => void): this;
@@ -218,13 +220,13 @@ declare module 'klasa' {
 		public command?: Command;
 		public prefix?: RegExp;
 		public prefixLength?: number;
-		public args: string[];
-		public params: any[];
-		public reprompted: boolean;
-		private _currentUsage: Tag;
-		private _repeat: boolean;
+		private prompter?: CommandPrompt;
 
+		public readonly args: string[];
+		public readonly params: any[];
+		public readonly reprompted: boolean;
 		public readonly reactable: boolean;
+		public prompt(text: string, time?: number): Promise<KlasaMessage>;
 		public usableCommands(): Promise<Collection<string, Command>>;
 		public hasAtLeastPermissionLevel(min: number): Promise<boolean>;
 
@@ -235,10 +237,6 @@ declare module 'klasa' {
 
 		private _patch(data: any): void;
 		private _registerCommand(commandInfo: { command: Command, prefix: RegExp, prefixLength: number }): void;
-		private validateArgs(): Promise<any[]>;
-		private multiPossibles(possible: number, validated: boolean): Promise<any[]>;
-		private static getArgs(msg: KlasaMessage): string[];
-		private static getQuotedStringArgs(msg: KlasaMessage): string[];
 		private static combineContentOptions(content?: StringResolvable, options?: MessageOptions): MessageOptions;
 	}
 
@@ -314,7 +312,6 @@ declare module 'klasa' {
 		public static clean(text: string): string;
 		private static initClean(client: KlasaClient): void;
 		public static toTitleCase(str: string): string;
-		public static newError(error: Error, code: number): Error;
 		public static regExpEsc(str: string): string;
 		public static applyToClass(base: object, structure: object, skips?: string[]): void;
 		public static exec(exec: string, options?: ExecOptions): Promise<{ stdout: string, stderr: string }>;
@@ -439,6 +436,24 @@ declare module 'klasa' {
 		public static maxOrMin(guild: KlasaGuild, value: number, min: number, max: number, name: string, suffix: string): boolean;
 	}
 
+	export class CommandPrompt extends TextPrompt {
+		public constructor(msg: KlasaMessage, usage: CommandUsage, options: TextPromptOptions);
+		private typing: boolean;
+
+		public run(): Promise<any[]>;
+	}
+
+	export class CommandUsage extends ParsedUsage {
+		public constructor(client: KlasaClient, command: Command);
+		public names: string[];
+		public commands: string;
+		public nearlyFullUsage: string;
+
+		public createPrompt(msg: KlasaClient, options?: TextPromptOptions): CommandPrompt;
+		public fullUsage(msg: KlasaMessage): string;
+		public toString(): string;
+	}
+
 	export class PermissionLevels extends Collection<number, PermissionLevel> {
 		public constructor(levels?: number);
 		public requiredLevels: number;
@@ -453,16 +468,17 @@ declare module 'klasa' {
 
 	// Usage
 	export class ParsedUsage {
-		public constructor(client: KlasaClient, command: Command);
+		public constructor(client: KlasaClient, usageString: string, usageDelim: string);
 		public readonly client: KlasaClient;
-		public names: string[];
-		public commands: string;
 		public deliminatedUsage: string;
 		public usageString: string;
+		public usageDelim: string;
 		public parsedUsage: Tag[];
-		public nearlyFullUsage: string;
 
-		public fullUsage(msg: KlasaMessage): string;
+		public createPrompt(msg: KlasaMessage, options?: TextPromptOptions): TextPrompt;
+		public toJSON(): Tag[];
+		public toString(): string;
+
 		private static parseUsage(usageString: string): Tag[];
 		private static tagOpen(usage: object, char: string): object;
 		private static tagClose(usage: object, char: string): object;
@@ -487,6 +503,37 @@ declare module 'klasa' {
 
 		private static parseMembers(members: string, count: number): Possible[];
 		private static parseTrueMembers(members: string): string[];
+	}
+
+	export class TextPrompt {
+		public constructor(msg: KlasaMessage, usage: ParsedUsage, options: TextPromptOptions);
+		public readonly client: KlasaClient;
+		public message: KlasaMessage;
+		public usage: ParsedUsage | CommandUsage;
+		public reprompted: boolean;
+		public flags: object;
+		public args: string[];
+		public params: any[];
+		public promptTime: number;
+		public promptLimit: number;
+		public quotedStringSupport: boolean;
+		private _repeat: boolean;
+		private _prompted: number;
+		private _currentUsage: Tag;
+
+		public run(prompt: string): Promise<any[]>;
+		private reprompt(prompt: string): Promise<any[]>;
+		private repeatingPrompt(): Promise<any[]>;
+		private validateArgs(): Promise<any[]>;
+		private multiPossibles(possible: number): Promise<any[]>;
+		private pushParam(param: any): any[];
+		private handleError(err: string): Promise<any[]>;
+		private finalize(): any[];
+		private _setup(original: string): void;
+
+		private static getFlags(content: string, delim: string): { content: string; flags: object };
+		private static getArgs(content: string, delim: string): string[];
+		private static getQuotedStringArgs(content: string, delim: string): string[];
 	}
 
 	// Configuration
@@ -770,25 +817,28 @@ declare module 'klasa' {
 		public client: KlasaClient;
 		public type: 'command';
 
-		public enabled: boolean;
-		public name: string;
 		public aliases: string[];
-		public runIn: string[];
 		public botPerms: string[];
-		public requiredConfigs: string[];
-		public cooldown: number;
-		public permLevel: number;
-		public description: string | ((msg: KlasaMessage) => string);
-		public extendedHelp: string | ((msg: KlasaMessage) => string);
-		public quotedStringSupport: boolean;
-
 		public category: string;
+		public cooldown: number;
+		public description: string | ((msg: KlasaMessage) => string);
+		public enabled: boolean;
+		public extendedHelp: string | ((msg: KlasaMessage) => string);
+		public name: string;
+		public permLevel: number;
+		public promptLimit: number;
+		public promptTime: number;
+		public quotedStringSupport: boolean;
+		public requiredConfigs: string[];
+		public runIn: string[];
 		public subCategory: string;
-		public usage: ParsedUsage;
-		public usageString: string;
+		public usage: CommandUsage;
 		public usageDelim: string;
-		private fullCategory: string[];
+		public usageString: string;
 		private cooldowns: Map<Snowflake, number>;
+		private fullCategory: string[];
+
+		public definePrompt(usageString: string, usageDelim: string): ParsedUsage;
 
 		public abstract run(msg: KlasaMessage, params: any[]): Promise<KlasaMessage | KlasaMessage[]>;
 		public init(): Promise<void>;
@@ -1144,12 +1194,24 @@ declare module 'klasa' {
 		pieceDefaults?: KlasaPieceDefaults;
 		prefix?: string;
 		preserveConfigs?: boolean;
-		promptTime?: number;
+		customPromptDefaults?: KlasaCustomPromptDefaults;
 		provider?: KlasaProviderOptions;
 		readyMessage?: (client: KlasaClient) => string;
 		regexPrefix?: RegExp;
 		typing?: boolean;
 	} & ClientOptions;
+
+	export type KlasaCustomPromptDefaults = {
+		promptLimit?: number;
+		promptTime?: number;
+		quotedStringSupport?: number;
+	};
+
+	export type TextPromptOptions = {
+		promptLimit?: number;
+		promptTime?: number;
+		quotedStringSupport?: number;
+	};
 
 	export type KlasaPieceDefaults = {
 		commands?: CommandOptions;
@@ -1212,6 +1274,11 @@ declare module 'klasa' {
 		provider: {};
 		readyMessage: (client: KlasaClient) => string;
 		typing: false;
+		customPromptDefaults: {
+			promptTime: 30000,
+			promptLimit: number,
+			quotedStringSupport: false
+		};
 	};
 
 	export type GatewayOptions = {
@@ -1344,6 +1411,8 @@ declare module 'klasa' {
 		botPerms?: string[];
 		cooldown?: number;
 		deletable?: boolean;
+		promptTime?: number;
+		promptLimit?: number;
 		description?: string | ((msg: KlasaMessage) => string);
 		enabled?: boolean;
 		extendedHelp?: string | ((msg: KlasaMessage) => string);

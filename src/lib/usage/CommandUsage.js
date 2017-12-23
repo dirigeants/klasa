@@ -3,6 +3,7 @@ const CommandPrompt = require('./CommandPrompt');
 
 /**
  * Converts usage strings into objects to compare against later
+ * @extends ParsedUsage
  */
 class CommandUsage extends ParsedUsage {
 
@@ -37,10 +38,11 @@ class CommandUsage extends ParsedUsage {
 	}
 
 	/**
-	 * Creates a TextPrompt instance to collect and resolve arguments with
+	 * Creates a CommandPrompt instance to collect and resolve arguments with
+	 * @since 0.5.0
 	 * @param {KlasaMessage} msg The message context from the prompt
-	 * @param {Object} options The options for the prompt
-	 * @returns {TextPrompt}
+	 * @param {TextPromptOptions} options The options for the prompt
+	 * @returns {CommandPrompt}
 	 */
 	createPrompt(msg, options = {}) {
 		return new CommandPrompt(msg, this, options);
@@ -60,6 +62,7 @@ class CommandUsage extends ParsedUsage {
 
 	/**
 	 * Defines to string behavior of this class.
+	 * @since 0.5.0
 	 * @returns {string}
 	 */
 	toString() {
