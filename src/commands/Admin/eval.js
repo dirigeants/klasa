@@ -79,6 +79,7 @@ module.exports = class extends Command {
 	}
 
 	getTypePrimitive(output) {
+		if (typeof output === 'undefined') return 'void';
 		if (typeof output !== 'object') return typeof output;
 		if (output === null) return 'null';
 		if (output.constructor && output.constructor.name) return output.constructor.name;
