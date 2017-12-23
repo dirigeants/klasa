@@ -449,7 +449,7 @@ declare module 'klasa' {
 		public commands: string;
 		public nearlyFullUsage: string;
 
-		public createPrompt(msg: KlasaClient, options?: TextPromptOptions): CommandPrompt;
+		public createPrompt(msg: KlasaMessage, options?: TextPromptOptions): CommandPrompt;
 		public fullUsage(msg: KlasaMessage): string;
 		public toString(): string;
 	}
