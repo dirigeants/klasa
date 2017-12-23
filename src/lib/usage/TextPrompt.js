@@ -329,7 +329,7 @@ class TextPrompt {
 	 */
 	static getFlags(content, delim) {
 		const flags = {};
-		content = content.replace(this.constructor.flagRegex, (match, fl, ...quote) => {
+		content = content.replace(TextPrompt.flagRegex, (match, fl, ...quote) => {
 			console.log(quote);
 			flags[fl] = quote.slice(0, -2).find(el => el) || fl;
 			return '';
