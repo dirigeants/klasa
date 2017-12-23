@@ -330,7 +330,6 @@ class TextPrompt {
 	static getFlags(content, delim) {
 		const flags = {};
 		content = content.replace(TextPrompt.flagRegex, (match, fl, ...quote) => {
-			console.log(quote);
 			flags[fl] = quote.slice(0, -2).find(el => el) || fl;
 			return '';
 		}).replace(new RegExp(`(?:(\\s)\\s+|(${delim})(?:${delim})+)`, 'g'), '$1').trim();
@@ -369,8 +368,8 @@ class TextPrompt {
 			if (content.slice(i, i + delim.length) === delim) {
 				i += delim.length - 1;
 			} else if (quotes.some(qt => qt.includes(content[i]))) {
-				const quote = quotes.find(qt => qt.includes(content[i])).split();
-				while (i + 1 < content.length && (content[i] === '\\' || quote.includes(content[i + 1]))) {
+				const quote = quotes.find(qt => qt.includes(content[i])).split('');
+				while (i + 1 < content.length && (content[i] === '\\' || !quote.includes(content[i + 1]))) {
 					if (content[i + 1] !== '\\') current += content[++i];
 					else i++;
 				}
