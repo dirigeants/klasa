@@ -50,6 +50,12 @@ module.exports = class extends Language {
 			INHIBITOR_RUNIN: (types) => `This command is only available in ${types} channels`,
 			INHIBITOR_RUNIN_NONE: (name) => `The ${name} command is not configured to run in any channel.`,
 			COMMAND_EVAL_DESCRIPTION: 'Evaluates arbitrary Javascript. Reserved for bot owner.',
+			COMMAND_EVAL_EXTENDEDHELP: [
+				'The eval command evaluates code as-in, any error thrown from it will be handled.',
+				'It also uses the flags feature. Write --silent or --depth=number to customize the output.',
+				'For example, running the eval with the --silent will make it output nothing (with exception of errors), and --depth accepts a number, for example, --depth=2, to customize util.inspect\'s depth.', // eslint-disable-line max-len
+				'If the output is too large, it\'ll send the output as a file, or in the console if the bot does not have the ATTACH_FILES permission.'
+			],
 			COMMAND_UNLOAD: (type, name) => `✅ Unloaded ${type}: ${name}`,
 			COMMAND_UNLOAD_DESCRIPTION: 'Unloads the klasa piece.',
 			COMMAND_TRANSFER_ERROR: '❌ That file has been transfered already or never existed.',

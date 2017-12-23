@@ -224,6 +224,7 @@ declare module 'klasa' {
 
 		public readonly args: string[];
 		public readonly params: any[];
+		public readonly flags: object;
 		public readonly reprompted: boolean;
 		public readonly reactable: boolean;
 		public prompt(text: string, time?: number): Promise<KlasaMessage>;

@@ -9,6 +9,7 @@ module.exports = class extends Command {
 			permLevel: 10,
 			guarded: true,
 			description: (msg) => msg.language.get('COMMAND_EVAL_DESCRIPTION'),
+			extendedHelp: (msg) => msg.language.get('COMMAND_EVAL_EXTENDEDHELP'),
 			usage: '<expression:str>'
 		});
 	}
@@ -22,6 +23,8 @@ module.exports = class extends Command {
 			if (result && result.stack) this.client.emit('error', result.stack);
 			return msg.sendMessage(`${headers}\n${this.client.methods.util.codeBlock('js', result)}`);
 		}
+
+		if (msg.flags.silent) return null;
 
 		// Handle too-long-messages
 		if (this.isTooLong(result, headers)) {
@@ -63,7 +66,10 @@ module.exports = class extends Command {
 
 		stopwatch.stop();
 		const type = this.getType(result, thenable);
-		if (success && typeof result !== 'string') result = inspect(result, { depth: 0 });
+		if (success && typeof result !== 'string') {
+			const depth = msg.flags.depth ? parseInt(msg.flags.depth) : 0;
+			result = inspect(result, { depth: this.client.methods.util.isNumber(depth) ? depth : 0 });
+		}
 		return { success, type, time: this.formatTime(syncTime, asyncTime), result: this.client.methods.util.clean(result) };
 	}
 
