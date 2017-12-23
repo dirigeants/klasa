@@ -375,7 +375,7 @@ class TextPrompt {
 				args.push(current);
 			} else {
 				current += content[i];
-				while (i + 1 < content.length && content.slice(i, i + delim.length) === delim) current += content[++i];
+				while (i + 1 < content.length && content.slice(i, i + delim.length) !== delim) current += content[++i];
 				args.push(current);
 			}
 		}
