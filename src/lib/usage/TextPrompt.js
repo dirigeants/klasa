@@ -368,7 +368,7 @@ class TextPrompt {
 			let current = '';
 			if (content.slice(i, i + delim.length) === delim) {
 				i += delim.length - 1;
-			} else if (quotes.inclues(content[i])) {
+			} else if (quotes.includes(content[i])) {
 				const quote = content[i];
 				while (i + 1 < content.length && (content[i] === '\\' || content[i + 1] !== quote)) current += content[++i];
 				i++;
