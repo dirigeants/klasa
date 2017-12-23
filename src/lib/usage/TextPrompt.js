@@ -385,6 +385,6 @@ class TextPrompt {
 
 }
 
-TextPrompt.flagRegex = new RegExp(`--(\\w{2,32})(?:=(?:${quotes.map(qu => `${qu}((?:[^${qu}\\]|\\.)*)${qu}`).join('|')}|(\\w+)))?`, 'g');
+TextPrompt.flagRegex = new RegExp(`--(\\w{2,32})(?:=(?:${quotes.map(qu => `${qu}((?:[^${qu}\\\\]|\\.)*)${qu}`).join('|')}|(\\w+)))?`, 'g');
 
 module.exports = TextPrompt;
