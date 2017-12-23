@@ -1,5 +1,5 @@
 const { mergeDefault } = require('../util/util');
-const quotes = ['"', "'", '”', '‘'];
+const quotes = ['"', "'", '“”', '‘’'];
 
 /**
  * A class to handle argument collection and parameter resolution
@@ -368,10 +368,10 @@ class TextPrompt {
 			let current = '';
 			if (content.slice(i, i + delim.length) === delim) {
 				i += delim.length - 1;
-			} else if (quotes.includes(content[i])) {
-				const quote = content[i];
-				while (i + 1 < content.length && (content[i] === '\\' || content[i + 1] !== quote)) {
-					if (content[i + 1] !== '\\')current += content[++i];
+			} else if (quotes.some(qt => qt.includes(content[i]))) {
+				const quote = quotes.find(qt => qt.includes(content[i])).split();
+				while (i + 1 < content.length && (content[i] === '\\' || quote.includes(content[i + 1]))) {
+					if (content[i + 1] !== '\\') current += content[++i];
 					else i++;
 				}
 				i++;
@@ -388,6 +388,6 @@ class TextPrompt {
 
 }
 
-TextPrompt.flagRegex = new RegExp(`--(\\w{2,32})(?:=(?:${quotes.map(qu => `${qu}((?:[^${qu}\\\\]|\\.)*)${qu}`).join('|')}|(\\w+)))?`, 'g');
+TextPrompt.flagRegex = new RegExp(`--(\\w{2,32})(?:=(?:${quotes.map(qu => `[${qu}]((?:[^${qu}\\\\]|\\.)*)[${qu}]`).join('|')}|(\\w+)))?`, 'g');
 
 module.exports = TextPrompt;
