@@ -14,8 +14,8 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [code]) {
-		const { success, thenable, time, result } = await this.eval(msg, code);
-		const headers = `${success ? '' : '`ERROR` | '}\`${this.getType(result, thenable)} ${time}\``;
+		const { success, result, time, type } = await this.eval(msg, code);
+		const headers = `${success ? '' : '`ERROR` | '}\`${type} ${time}\``;
 
 		// Handle errors
 		if (!success) {
@@ -62,8 +62,9 @@ module.exports = class extends Command {
 		}
 
 		stopwatch.stop();
+		const type = this.getType(result, thenable);
 		if (success && typeof evaled !== 'string') result = inspect(result, { depth: 0 });
-		return { success, thenable, time: this.formatTime(syncTime, asyncTime), result: this.client.methods.util.clean(result) };
+		return { success, type, time: this.formatTime(syncTime, asyncTime), result: this.client.methods.util.clean(result) };
 	}
 
 	getType(output, thenable) {
