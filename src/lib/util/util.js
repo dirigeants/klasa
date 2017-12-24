@@ -155,6 +155,50 @@ class Util {
 	}
 
 	/**
+	 * Get the deep type name that defines the input.
+	 * @since 0.5.0
+	 * @param {*} result The value to get the deep type from
+	 * @returns {string}
+	 */
+	static getDeepTypeName(result) {
+		const basic = Util.getTypeName(result);
+		switch (basic) {
+			case 'WeakMap':
+			case 'Map':
+			case 'Collection': {
+				const typeKeys = new Set(),
+					typeValues = new Set();
+				for (const [key, value] of result) {
+					const typeKey = Util.getDeepTypeName(key);
+					if (!typeKeys.has(typeKey)) typeKeys.add(typeKey);
+					const typeValue = Util.getDeepTypeName(value);
+					if (!typeValues.has(typeValue)) typeValues.add(typeValue);
+				}
+				const typeK = typeKeys.size === 0 || typeKeys.has('any') ? 'any' : Array.from(typeKeys).sort().join(' | ');
+				const typeV = typeValues.size === 0 || typeValues.has('any') ? 'any' : Array.from(typeValues).sort().join(' | ');
+
+				return `${basic}<${typeK}, ${typeV}>`;
+			}
+			case 'WeakSet':
+			case 'Set':
+			case 'Array': {
+				const types = new Set();
+				for (const value of result) {
+					const type = Util.getDeepTypeName(value);
+					if (!types.has(type)) types.add(type);
+				}
+				const typeV = types.size === 0 || types.has('Object') ? 'any' : Array.from(types).sort().join(' | ');
+
+				return `${basic}<${typeV}>`;
+			}
+			case 'Object':
+				return 'any';
+			default:
+				return basic;
+		}
+	}
+
+	/**
 	 * Try parse a stringified JSON string.
 	 * @since 0.5.0
 	 * @param {string} value The value to parse

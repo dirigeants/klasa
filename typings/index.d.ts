@@ -51,7 +51,7 @@ declare module 'klasa' {
 		public extendables: ExtendableStore;
 		public pieceStores: Collection<string, any>;
 		public permissionLevels: PermissionLevels;
-		public ready: boolean;
+		public sharded: boolean;
 		public methods: {
 			Collection: typeof Collection;
 			Embed: typeof MessageEmbed;
@@ -63,6 +63,7 @@ declare module 'klasa' {
 		public gateways: GatewayDriver;
 		public configs?: Configuration;
 		public application: ClientApplication;
+		public ready: boolean;
 
 		public readonly invite: string;
 		public readonly owner: ExtendedUser;
@@ -331,6 +332,7 @@ declare module 'klasa' {
 		public static isThenable(input: Promise): boolean;
 		public static isObject(input: object): boolean;
 		public static getTypeName(input: any): string;
+		public static getDeepTypeName(input: any): string;
 		public static tryParse(value: string): object;
 		public static makeObject(path: string, value: any): object;
 		public static mergeDefault(def: object, given?: object): object;
@@ -747,7 +749,8 @@ declare module 'klasa' {
 	}
 
 	class KlasaConsole extends Console {
-		public constructor(options: KlasaConsoleConfig);
+		public constructor(client: KlasaClient, options: KlasaConsoleConfig);
+		public readonly client: KlasaClient;
 		public readonly stdout: NodeJS.WritableStream;
 		public readonly stderr: NodeJS.WritableStream;
 		public template?: Timestamp;
@@ -762,8 +765,9 @@ declare module 'klasa' {
 		public verbose(...data: any[]): void;
 		public wtf(...data: any[]): void;
 
-		public timestamp(timestamp: Date, time: string): string;
-		public messages(input: string, message: string): string;
+		public timestamp(timestamp: string, time: ColorsFormatOptions): string;
+		public shard(input: string, shard: ColorsFormatOptions): string;
+		public messages(input: string, message: ColorsFormatOptions): string;
 
 		public static flatten(data: any, useColors: boolean): string;
 	}
@@ -772,7 +776,8 @@ declare module 'klasa' {
 
 	export type constants = {
 		DEFAULTS: {
-			CLIENT: KlasaConstantsClient
+			CLIENT: KlasaConstantsClient,
+			CONSOLE: KlasaConsoleConfig
 		};
 		GATEWAY_RESOLVERS: {
 			GUILDS: (guildResolvable: string | KlasaGuild) => KlasaGuild,

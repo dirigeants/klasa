@@ -66,7 +66,7 @@ module.exports = class extends Command {
 		}
 
 		stopwatch.stop();
-		type += thenable ? `<${this.client.methods.util.getTypeName(result)}>` : this.client.methods.util.getTypeName(result);
+		type += thenable ? `<${this.client.methods.util.getDeepTypeName(result)}>` : this.client.methods.util.getDeepTypeName(result);
 		if (success && typeof result !== 'string') {
 			result = inspect(result, {
 				depth: msg.flags.depth ? parseInt(msg.flags.depth) || 0 : 0,
