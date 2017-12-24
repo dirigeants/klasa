@@ -405,7 +405,7 @@ class SchemaFolder extends Schema {
 	 * @private
 	 */
 	async _shardSyncSchema(piece, action, force) {
-		if (this.client.options.shardCount === 0) return;
+		if (!this.client.shard) return;
 		await this.client.shard.broadcastEval(`this.gateways.${this.gateway.type}._shardSync(${piece.path.split('.')}, ${JSON.stringify(piece)}, ${action}, ${force});`);
 	}
 

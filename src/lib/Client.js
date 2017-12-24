@@ -126,13 +126,7 @@ class KlasaClient extends Discord.Client {
 		 * @since 0.4.0
 		 * @type {KlasaConsole}
 		 */
-		this.console = new Console({
-			colors: this.options.console.colors,
-			stderr: this.options.console.stderr,
-			stdout: this.options.console.stdout,
-			timestamps: this.options.console.timestamps,
-			useColor: this.options.console.useColor
-		});
+		this.console = new Console(this, this.options.console);
 
 		/**
 		 * The argument resolver
