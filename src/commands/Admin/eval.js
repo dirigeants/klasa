@@ -1,4 +1,4 @@
-const { Command } = require('klasa');
+const { Command, Stopwatch } = require('klasa');
 const { inspect } = require('util');
 
 module.exports = class extends Command {
@@ -9,20 +9,75 @@ module.exports = class extends Command {
 			permLevel: 10,
 			guarded: true,
 			description: (msg) => msg.language.get('COMMAND_EVAL_DESCRIPTION'),
+			extendedHelp: (msg) => msg.language.get('COMMAND_EVAL_EXTENDEDHELP'),
 			usage: '<expression:str>'
 		});
 	}
 
 	async run(msg, [code]) {
-		try {
-			let evaled = eval(code);
-			if (evaled instanceof Promise) evaled = await evaled;
-			if (typeof evaled !== 'string') evaled = inspect(evaled, { depth: 0 });
-			return msg.sendCode('js', this.client.methods.util.clean(evaled));
-		} catch (err) {
-			if (err.stack) this.client.emit('error', err.stack);
-			return msg.sendMessage(` \`ERROR\`\n${this.client.methods.util.codeBlock('js', this.client.methods.util.clean(err))}`);
+		const { success, result, time, type } = await this.eval(msg, code);
+		const headers = `${success ? '' : '`ERROR` | '}\`${type} ${time}\``;
+		const silent = 'silent' in msg.flags;
+
+		// Handle errors
+		if (!success) {
+			if (result && result.stack) this.client.emit('error', result.stack);
+			if (!silent) return msg.sendMessage(`${headers}\n${this.client.methods.util.codeBlock('js', result)}`);
 		}
+
+		if (silent) return null;
+
+		// Handle too-long-messages
+		if (result.length > 1991 - headers.length) {
+			if (msg.guild && msg.channel.permissionsFor(msg.guild.me).has('ATTACH_FILES')) {
+				return msg.channel.sendFile(Buffer.from(result), 'eval.js', `${headers} | Output was too long... sent the result as a file.`);
+			}
+			this.client.emit('log', result);
+			return msg.send(`${headers} | Output was too long... sent the result to console.`);
+		}
+
+		// If it's a message that can be sent correctly, send it
+		return msg.send(`${headers}\n${this.client.methods.util.codeBlock('js', result)}`);
+	}
+
+	// Eval the input
+	async eval(msg, code) {
+		const stopwatch = new Stopwatch();
+		let success, syncTime, asyncTime, result;
+		let thenable = false;
+		let type = '';
+		try {
+			if (msg.flags.async) code = `(async () => { ${code} })();`;
+			result = eval(code);
+			syncTime = stopwatch.friendlyDuration;
+			if (this.client.methods.util.isPromise(result)) {
+				thenable = true;
+				type += this.client.methods.util.getTypeName(result);
+				stopwatch.restart();
+				result = await result;
+				asyncTime = stopwatch.friendlyDuration;
+			}
+			success = true;
+		} catch (error) {
+			if (!syncTime) syncTime = stopwatch.friendlyDuration;
+			if (thenable && !asyncTime) asyncTime = stopwatch.friendlyDuration;
+			result = error;
+			success = false;
+		}
+
+		stopwatch.stop();
+		type += thenable ? `<${this.client.methods.util.getTypeName(result)}>` : this.client.methods.util.getTypeName(result);
+		if (success && typeof result !== 'string') {
+			result = inspect(result, {
+				depth: msg.flags.depth ? parseInt(msg.flags.depth) || 0 : 0,
+				showHidden: Boolean(msg.flags.showHidden)
+			});
+		}
+		return { success, type, time: this.formatTime(syncTime, asyncTime), result: this.client.methods.util.clean(result) };
+	}
+
+	formatTime(syncTime, asyncTime) {
+		return asyncTime ? `⏱ ${asyncTime}<${syncTime}>` : `⏱ ${syncTime}`;
 	}
 
 };

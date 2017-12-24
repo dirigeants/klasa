@@ -13,6 +13,12 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#138](https://github.com/dirigeants/klasa/pull/138)] Added `util.getTypeName` to get the input's type. (kyranet)
+- [[#136](https://github.com/dirigeants/klasa/pull/136)] Added flag arguments. (bdistin)
+- [[#136](https://github.com/dirigeants/klasa/pull/136)] Added the options `CommandOptions.promptTime` and `CommandOptions.promptLimit`. (bdistin)
+- [[#136](https://github.com/dirigeants/klasa/pull/136)] Added `KlasaMessage#prompt`
+- [[#136](https://github.com/dirigeants/klasa/pull/136)] Added CommandPrompt, CommandUsage and TextPrompt classes (fixes [#87](https://github.com/dirigeants/klasa/issues/87)). (bdistin)
+- [[#136](https://github.com/dirigeants/klasa/pull/136)] Added the event `finalizerError`. (bdistin)
 - [[#129](https://github.com/dirigeants/klasa/pull/129)] Added `Util#makeObject` to make objects given a path and a value. (kyranet)
 - [[#129](https://github.com/dirigeants/klasa/pull/129)] Added `Configuration#update`, much easier to use than `Configuration#updateOne`, `Configuration#updateArray`, and alias of `Configuration#updateMany` when a json object is providen. (kyranet)
 - [[#130](https://github.com/dirigeants/klasa/pull/130)] Added a new option in `KlasaClientOptions` to allow developers to set their own defaults for each kind of piece. (bdistin)
@@ -52,6 +58,9 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#138](https://github.com/dirigeants/klasa/pull/138)] Upgraded the built-in eval command, **inspired in tech6hutch's The Duke Of Evals**. (kyranet)
+- [[#136](https://github.com/dirigeants/klasa/pull/136)] Changed command parsing internals, `KlasaMessage#args` and `KlasaMessage#params` are now readonly and getters from `KlasaMessage#prompter`. (bdistin)
+- [[#136](https://github.com/dirigeants/klasa/pull/136)] Changed `KlasaClientOptions.promptTime` to `KlasaClientOptions.customPromptDefaults`, changing type from `number` to `KlasaCustomPromptDefaults` aswell. (bdistin)
 - [[#129](https://github.com/dirigeants/klasa/pull/129)] **[OPTIMIZATION]** Like new entries only store the id, `Configuration#update` will upload only the modified keys rather than all of them when using a `json` database. (kyranet)
 - [[#130](https://github.com/dirigeants/klasa/pull/130)] Updated the documentation and some outdated typings. (kyranet)
 - [[#125](https://github.com/dirigeants/klasa/pull/125)] Moved the gateway resolvers from `GatewayDriver` (as getters) to `constants.GATEWAY_RESOLVERS`. (kyranet)
@@ -88,6 +97,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Removed
 
+- [[#136](https://github.com/dirigeants/klasa/pull/136)] Removed `util.newError`. (bdistin)
 - [[#129](https://github.com/dirigeants/klasa/pull/129)] **[BREAKING]** Removed the methods `Configuration#updateOne`, `Configuration#updateArray`. They're replaced by `Configuration#update`. (kyranet)
 - [[#130](https://github.com/dirigeants/klasa/pull/130)] Removed `KlasaClientOptions.quotedStringSupport` in favor of the new per-piece defaults. (bdistin)
 - [[#121](https://github.com/dirigeants/klasa/pull/121)] Removed `GatewaySQL`. (kyranet)
@@ -105,6 +115,9 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
+- [[#136](https://github.com/dirigeants/klasa/pull/136)] Fixed prompt bug [#78](https://github.com/dirigeants/klasa/issues/78). (bdistin)
+- [[#136](https://github.com/dirigeants/klasa/pull/136)] Fixed an unknown issue with sync providers. (bdistin)
+- [[#136](https://github.com/dirigeants/klasa/pull/136)] Fixed finalizers erroring incorrectly. (bdistin)
 - [[#135](https://github.com/dirigeants/klasa/pull/135)] Fixed `SchemaFolder#addFolder` not working correctly. (kyranet)
 - [[#131](https://github.com/dirigeants/klasa/pull/131)] Fixed Configuration's `updateMany` not parsing arrays. (kyranet)
 - [[#129](https://github.com/dirigeants/klasa/pull/129)] Fixed identifiers not being resolved correctly when using `Configuration#update`. (kyranet)

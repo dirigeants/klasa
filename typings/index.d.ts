@@ -224,6 +224,7 @@ declare module 'klasa' {
 
 		public readonly args: string[];
 		public readonly params: any[];
+		public readonly flags: object;
 		public readonly reprompted: boolean;
 		public readonly reactable: boolean;
 		public prompt(text: string, time?: number): Promise<KlasaMessage>;
@@ -327,6 +328,7 @@ declare module 'klasa' {
 		public static isFunction(input: Function): boolean;
 		public static isClass(input: Function): boolean;
 		public static isNumber(input: number): boolean;
+		public static isPromise(input: Promise): boolean;
 		public static isObject(input: object): boolean;
 		public static tryParse(value: string): object;
 		public static makeObject(path: string, value: any): object;
