@@ -261,8 +261,9 @@ class Command {
 	 * @returns {Promise<KlasaMessage|KlasaMessage[]>} You should return the response message whenever possible
 	 * @abstract
 	 */
-	async run() {
+	async run(msg) {
 		// Defined in extension Classes
+		return msg;
 	}
 
 	/**

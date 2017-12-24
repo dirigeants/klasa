@@ -89,7 +89,6 @@ class Extendable {
 	 * The extend method to be overwritten in actual extend pieces
 	 * @since 0.0.1
 	 * @param {*} params Any parameters you want
-	 * @returns {*}
 	 * @abstract
 	 */
 	extend() {
