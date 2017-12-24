@@ -59,6 +59,9 @@ module.exports = class extends Language {
 				'The --showHidden flag will enable the showHidden option in util.inspect.',
 				'If the output is too large, it\'ll send the output as a file, or in the console if the bot does not have the ATTACH_FILES permission.'
 			].join('\n'),
+			COMMAND_EVAL_ERROR_HEADER: 'ERROR',
+			COMMAND_EVAL_SENDFILE: 'Output was too long... sent the result as a file.',
+			COMMAND_EVAL_SENDCONSOLE: 'Output was too long... sent the result to console.',
 			COMMAND_UNLOAD: (type, name) => `✅ Unloaded ${type}: ${name}`,
 			COMMAND_UNLOAD_DESCRIPTION: 'Unloads the klasa piece.',
 			COMMAND_TRANSFER_ERROR: '❌ That file has been transfered already or never existed.',

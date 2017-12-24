@@ -16,7 +16,7 @@ module.exports = class extends Command {
 
 	async run(msg, [code]) {
 		const { success, result, time, type } = await this.eval(msg, code);
-		const headers = `${success ? '' : '`ERROR` | '}\`${type} ${time}\``;
+		const headers = `${success ? '' : `\`${msg.language.get('COMMAND_EVAL_ERROR_HEADER')}\` | `}\`${type} ${time}\``;
 		const silent = 'silent' in msg.flags;
 
 		// Handle errors
@@ -29,11 +29,11 @@ module.exports = class extends Command {
 
 		// Handle too-long-messages
 		if (result.length > 1991 - headers.length) {
-			if (msg.guild && msg.channel.permissionsFor(msg.guild.me).has('ATTACH_FILES')) {
-				return msg.channel.sendFile(Buffer.from(result), 'eval.js', `${headers} | Output was too long... sent the result as a file.`);
+			if (msg.guild && msg.channel.attachable) {
+				return msg.channel.sendFile(Buffer.from(result), 'eval.js', `${headers} | ${msg.language.get('COMMAND_EVAL_SENDFILE')}`);
 			}
 			this.client.emit('log', result);
-			return msg.send(`${headers} | Output was too long... sent the result to console.`);
+			return msg.send(`${headers} | ${msg.language.get('COMMAND_EVAL_SENDCONSOLE')}`);
 		}
 
 		// If it's a message that can be sent correctly, send it
