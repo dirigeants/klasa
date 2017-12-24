@@ -28,7 +28,7 @@ module.exports = class extends Command {
 		if (silent) return null;
 
 		// Handle too-long-messages
-		if (this.isTooLong(result, headers)) {
+		if (result.length > 1991 - headers.length) {
 			if (msg.guild && msg.channel.permissionsFor(msg.guild.me).has('ATTACH_FILES')) {
 				return msg.channel.sendFile(Buffer.from(result), 'eval.js', `${headers} | Output was too long... sent the result as a file.`);
 			}
@@ -48,12 +48,14 @@ module.exports = class extends Command {
 		let syncTime;
 		let asyncTime;
 		let result;
+		let type = '';
 		try {
 			if (msg.flags.async) code = `(async () => { ${code} })();`;
 			result = eval(code);
 			syncTime = stopwatch.friendlyDuration;
 			if (this.client.methods.util.isPromise(result)) {
 				thenable = true;
+				type += this.client.methods.util.getClassName(result);
 				stopwatch.restart();
 				result = await result;
 				asyncTime = stopwatch.friendlyDuration;
@@ -67,7 +69,7 @@ module.exports = class extends Command {
 		}
 
 		stopwatch.stop();
-		const type = this.getType(result, thenable);
+		type += thenable ? `<${this.client.methods.util.getClassName(result)}>` : this.client.methods.util.getClassName(result);
 		if (success && typeof result !== 'string') {
 			result = inspect(result, {
 				depth: msg.flags.depth ? parseInt(msg.flags.depth) || 0 : 0,
@@ -77,26 +79,9 @@ module.exports = class extends Command {
 		return { success, type, time: this.formatTime(syncTime, asyncTime), result: this.client.methods.util.clean(result) };
 	}
 
-	getType(output, thenable) {
-		if (thenable) return `Promise<${this.getTypePrimitive(output)}>`;
-		return this.getTypePrimitive(output);
-	}
-
-	getTypePrimitive(output) {
-		if (typeof output === 'undefined') return 'void';
-		if (typeof output !== 'object') return typeof output;
-		if (output === null) return 'null';
-		if (output.constructor && output.constructor.name) return output.constructor.name;
-		return 'any';
-	}
-
 	formatTime(syncTime, asyncTime) {
 		if (asyncTime) return `⏱ ${asyncTime}<${syncTime}>`;
 		return `⏱ ${syncTime}`;
-	}
-
-	isTooLong(evaled, headers) {
-		return evaled.length > 1991 - headers.length;
 	}
 
 };

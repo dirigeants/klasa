@@ -140,6 +140,21 @@ class Util {
 	}
 
 	/**
+	 * Get the name that defines the input.
+	 * @since 0.5.0
+	 * @param {*} input The value to get the type from
+	 * @returns {string}
+	 */
+	static getClassName(input) {
+		switch (typeof input) {
+			case 'object': return input === null ? 'null' : input.constructor.name;
+			case 'function': return `${input.constructor.name}(${input.length}-arity)`;
+			case 'undefined': return 'void';
+			default: return typeof input;
+		}
+	}
+
+	/**
 	 * Try parse a stringified JSON string.
 	 * @since 0.5.0
 	 * @param {string} value The value to parse
