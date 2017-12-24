@@ -29,7 +29,7 @@ module.exports = class extends Command {
 			(users || this.client.users.size).toLocaleString(),
 			(guilds || this.client.guilds.size).toLocaleString(),
 			(channels || this.client.channels.size).toLocaleString(),
-			klasaVersion, discordVersion, process.version
+			klasaVersion, discordVersion, process.version, msg
 		));
 	}
 
