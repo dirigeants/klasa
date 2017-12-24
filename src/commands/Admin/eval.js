@@ -17,14 +17,15 @@ module.exports = class extends Command {
 	async run(msg, [code]) {
 		const { success, result, time, type } = await this.eval(msg, code);
 		const headers = `${success ? '' : '`ERROR` | '}\`${type} ${time}\``;
+		const silent = 'silent' in msg.flags;
 
 		// Handle errors
 		if (!success) {
 			if (result && result.stack) this.client.emit('error', result.stack);
-			return msg.sendMessage(`${headers}\n${this.client.methods.util.codeBlock('js', result)}`);
+			if (!silent) return msg.sendMessage(`${headers}\n${this.client.methods.util.codeBlock('js', result)}`);
 		}
 
-		if (msg.flags.silent) return null;
+		if (silent) return null;
 
 		// Handle too-long-messages
 		if (this.isTooLong(result, headers)) {
@@ -68,7 +69,10 @@ module.exports = class extends Command {
 		stopwatch.stop();
 		const type = this.getType(result, thenable);
 		if (success && typeof result !== 'string') {
-			result = inspect(result, { depth: msg.flags.depth ? parseInt(msg.flags.depth) || 0 : 0 });
+			result = inspect(result, {
+				depth: msg.flags.depth ? parseInt(msg.flags.depth) || 0 : 0,
+				showHidden: Boolean(msg.flags.showHidden)
+			});
 		}
 		return { success, type, time: this.formatTime(syncTime, asyncTime), result: this.client.methods.util.clean(result) };
 	}

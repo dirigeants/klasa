@@ -53,9 +53,10 @@ module.exports = class extends Language {
 			COMMAND_EVAL_EXTENDEDHELP: [
 				'The eval command evaluates code as-in, any error thrown from it will be handled.',
 				'It also uses the flags feature. Write --silent, --depth=number or --async to customize the output.',
-				'The --silent flag will make it output nothing (with exception of errors).',
+				'The --silent flag will make it output nothing.',
 				'The --depth flag accepts a number, for example, --depth=2, to customize util.inspect\'s depth.',
 				'The --async flag will wrap the code into an async function where you can enjoy the use of await, however, if you want to return something, you will need the return keyword',
+				'The --showHidden flag will enable the showHidden option in util.inspect.',
 				'If the output is too large, it\'ll send the output as a file, or in the console if the bot does not have the ATTACH_FILES permission.'
 			].join('\n'),
 			COMMAND_UNLOAD: (type, name) => `✅ Unloaded ${type}: ${name}`,
