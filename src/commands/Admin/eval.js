@@ -50,7 +50,7 @@ module.exports = class extends Command {
 			if (msg.flags.async) code = `(async () => { ${code} })();`;
 			result = eval(code);
 			syncTime = stopwatch.friendlyDuration;
-			if (this.client.methods.util.isPromise(result)) {
+			if (this.client.methods.util.isThenable(result)) {
 				thenable = true;
 				type += this.client.methods.util.getTypeName(result);
 				stopwatch.restart();

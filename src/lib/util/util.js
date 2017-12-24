@@ -135,7 +135,7 @@ class Util {
 	 * @param {Promise} input The promise to verify
 	 * @returns {boolean}
 	 */
-	static isPromise(input) {
+	static isThenable(input) {
 		return (input instanceof Promise) || (Boolean(input) && Util.isFunction(input.then) && Util.isFunction(input.catch));
 	}
 
