@@ -270,7 +270,7 @@ class KlasaClient extends Discord.Client {
 		 * @since 0.5.0
 		 * @type {boolean}
 		 */
-		this.sharded = this.shard && !process.argv[1].includes(`${path.sep}pm2${path.sep}`);
+		this.sharded = Boolean(this.shard && !process.argv[1].includes(`${path.sep}pm2${path.sep}`));
 
 		this.once('ready', this._ready.bind(this));
 	}
