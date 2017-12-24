@@ -191,6 +191,8 @@ class Util {
 
 				return `${basic}<${typeV}>`;
 			}
+			case 'Proxy':
+				return Util.getDeepTypeName(process.binding('util').getProxyDetails(result));
 			case 'Object':
 				return 'any';
 			default:
