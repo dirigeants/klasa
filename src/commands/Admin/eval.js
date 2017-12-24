@@ -55,7 +55,7 @@ module.exports = class extends Command {
 			syncTime = stopwatch.friendlyDuration;
 			if (this.client.methods.util.isPromise(result)) {
 				thenable = true;
-				type += this.client.methods.util.getClassName(result);
+				type += this.client.methods.util.getTypeName(result);
 				stopwatch.restart();
 				result = await result;
 				asyncTime = stopwatch.friendlyDuration;
@@ -69,7 +69,7 @@ module.exports = class extends Command {
 		}
 
 		stopwatch.stop();
-		type += thenable ? `<${this.client.methods.util.getClassName(result)}>` : this.client.methods.util.getClassName(result);
+		type += thenable ? `<${this.client.methods.util.getTypeName(result)}>` : this.client.methods.util.getTypeName(result);
 		if (success && typeof result !== 'string') {
 			result = inspect(result, {
 				depth: msg.flags.depth ? parseInt(msg.flags.depth) || 0 : 0,
@@ -80,8 +80,7 @@ module.exports = class extends Command {
 	}
 
 	formatTime(syncTime, asyncTime) {
-		if (asyncTime) return `⏱ ${asyncTime}<${syncTime}>`;
-		return `⏱ ${syncTime}`;
+		return asyncTime ? `⏱ ${asyncTime}<${syncTime}>` : `⏱ ${syncTime}`;
 	}
 
 };

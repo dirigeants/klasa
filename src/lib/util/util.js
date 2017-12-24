@@ -140,12 +140,12 @@ class Util {
 	}
 
 	/**
-	 * Get the name that defines the input.
+	 * Get the type name that defines the input.
 	 * @since 0.5.0
 	 * @param {*} input The value to get the type from
 	 * @returns {string}
 	 */
-	static getClassName(input) {
+	static getTypeName(input) {
 		switch (typeof input) {
 			case 'object': return input === null ? 'null' : input.constructor.name;
 			case 'function': return `${input.constructor.name}(${input.length}-arity)`;
