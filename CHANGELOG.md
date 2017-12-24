@@ -13,6 +13,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#138](https://github.com/dirigeants/klasa/pull/138)] Added `util.getTypeName` to get the input's type. (kyranet)
 - [[#136](https://github.com/dirigeants/klasa/pull/136)] Added flag arguments. (bdistin)
 - [[#136](https://github.com/dirigeants/klasa/pull/136)] Added the options `CommandOptions.promptTime` and `CommandOptions.promptLimit`. (bdistin)
 - [[#136](https://github.com/dirigeants/klasa/pull/136)] Added `KlasaMessage#prompt`

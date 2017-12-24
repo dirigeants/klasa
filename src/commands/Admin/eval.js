@@ -43,11 +43,8 @@ module.exports = class extends Command {
 	// Eval the input
 	async eval(msg, code) {
 		const stopwatch = new Stopwatch();
-		let success;
+		let success, syncTime, asyncTime, result;
 		let thenable = false;
-		let syncTime;
-		let asyncTime;
-		let result;
 		let type = '';
 		try {
 			if (msg.flags.async) code = `(async () => { ${code} })();`;
