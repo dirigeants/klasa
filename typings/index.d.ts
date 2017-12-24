@@ -328,8 +328,9 @@ declare module 'klasa' {
 		public static isFunction(input: Function): boolean;
 		public static isClass(input: Function): boolean;
 		public static isNumber(input: number): boolean;
-		public static isPromise(input: Promise): boolean;
+		public static isThenable(input: Promise): boolean;
 		public static isObject(input: object): boolean;
+		public static getTypeName(input: any): string;
 		public static tryParse(value: string): object;
 		public static makeObject(path: string, value: any): object;
 		public static mergeDefault(def: object, given?: object): object;
