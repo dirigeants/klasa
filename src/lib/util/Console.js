@@ -117,7 +117,7 @@ class KlasaConsole extends Console {
 	 * @param {KlasaConsoleConfig} [options] The options for the klasa console
 	 */
 	constructor(client, options = {}) {
-		options = mergeDefault(constants.CONSOLE, options);
+		options = mergeDefault(constants.DEFAULTS.CONSOLE, options);
 
 		super(options.stdout, options.stderr);
 
