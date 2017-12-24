@@ -1,4 +1,5 @@
 const { mergeDefault } = require('../util/util');
+const quotes = ['"', "'", '“”', '‘’'];
 
 /**
  * A class to handle argument collection and parameter resolution
@@ -328,8 +329,8 @@ class TextPrompt {
 	 */
 	static getFlags(content, delim) {
 		const flags = {};
-		content = content.replace(/--(\w+)(?:=(?:"((?:[^"\\]|\\.)*)"|'((?:[^'\\]|\\.)*)'|(\w+)))?/g, (match, fl, quotes, singles, none) => {
-			flags[fl] = quotes || singles || none || fl;
+		content = content.replace(TextPrompt.flagRegex, (match, fl, ...quote) => {
+			flags[fl] = quote.slice(0, -2).find(el => el) || fl;
 			return '';
 		}).replace(new RegExp(`(?:(\\s)\\s+|(${delim})(?:${delim})+)`, 'g'), '$1').trim();
 		return { content, flags };
@@ -361,29 +362,37 @@ class TextPrompt {
 		if (!delim || delim === '') return [content];
 
 		const args = [];
-		let current = '';
-		let openQuote = false;
 
 		for (let i = 0; i < content.length; i++) {
-			if (!openQuote && content.slice(i, i + delim.length) === delim) {
-				if (current !== '') args.push(current);
-				current = '';
+			let current = '';
+			if (content.slice(i, i + delim.length) === delim) {
 				i += delim.length - 1;
 				continue;
 			}
-			if (content[i] === '"' && content[i - 1] !== '\\') {
-				openQuote = !openQuote;
-				if (current !== '') args.push(current);
-				current = '';
-				continue;
+			const quote = quotes.find(qt => qt.includes(content[i]));
+			if (quote) {
+				const qts = quote.split('');
+				while (i + 1 < content.length && (content[i] === '\\' || !qts.includes(content[i + 1]))) current += content[++i] !== '\\' ? content[i] : '';
+				i++;
+				args.push(current);
+			} else {
+				current += content[i];
+				while (i + 1 < content.length && content.slice(i + 1, i + delim.length + 1) !== delim) current += content[++i];
+				args.push(current);
 			}
-			current += content[i];
 		}
-		if (current !== '') args.push(current);
 
 		return args.length === 1 && args[0] === '' ? [] : args;
 	}
 
 }
+
+/**
+ * Regular Expression to match flags with quoted string support.
+ * @since 0.5.0
+ * @type {RegExp}
+ * @static
+ */
+TextPrompt.flagRegex = new RegExp(`--([\\w-]{2,})(?:=(?:${quotes.map(qu => `[${qu}]((?:[^${qu}\\\\]|\\.)*)[${qu}]`).join('|')}|([\\w-]+)))?`, 'g');
 
 module.exports = TextPrompt;

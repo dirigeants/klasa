@@ -541,6 +541,8 @@ declare module 'klasa' {
 		private static getFlags(content: string, delim: string): { content: string; flags: object };
 		private static getArgs(content: string, delim: string): string[];
 		private static getQuotedStringArgs(content: string, delim: string): string[];
+
+		public static readonly flagRegex: RegExp;
 	}
 
 	// Configuration
