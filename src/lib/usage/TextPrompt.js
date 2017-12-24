@@ -330,7 +330,7 @@ class TextPrompt {
 	static getFlags(content, delim) {
 		const flags = {};
 		content = content.replace(TextPrompt.flagRegex, (match, fl, ...quote) => {
-			flags[fl] = quote.slice(0, -2).find(el => el) || fl;
+			flags[fl] = (quote.slice(0, -2).find(el => el) || fl).replace(/\\/g, '');
 			return '';
 		}).replace(new RegExp(`(?:(\\s)\\s+|(${delim})(?:${delim})+)`, 'g'), '$1').trim();
 		return { content, flags };
@@ -393,6 +393,6 @@ class TextPrompt {
  * @type {RegExp}
  * @static
  */
-TextPrompt.flagRegex = new RegExp(`--([\\w-]{2,})(?:=(?:${quotes.map(qu => `[${qu}]((?:[^${qu}\\\\]|\\.)*)[${qu}]`).join('|')}|([\\w-]+)))?`, 'g');
+TextPrompt.flagRegex = new RegExp(`--([\\w-]{2,})(?:=(?:${quotes.map(qu => `[${qu}]((?:[^${qu}\\\\]|\\\\.)*)[${qu}]`).join('|')}|([\\w-]+)))?`, 'g');
 
 module.exports = TextPrompt;
