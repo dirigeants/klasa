@@ -17,7 +17,7 @@ module.exports = class extends Command {
 			const timer = new Stopwatch();
 			await piece.loadAll();
 			await piece.init();
-			if (this.client.shard) {
+			if (this.client.sharded) {
 				await this.client.shard.broadcastEval(`
 					if (this.shard.id !== ${this.client.shard.id}) this.${piece.name}.loadAll().then(() => this.${piece.name}.loadAll());
 				`);
@@ -27,7 +27,7 @@ module.exports = class extends Command {
 
 		try {
 			const itm = await piece.reload();
-			if (this.client.shard) {
+			if (this.client.sharded) {
 				await this.client.shard.broadcastEval(`
 					if (this.shard.id !== ${this.client.shard.id}) this.${piece.type}s.get('${piece.name}').reload();
 				`);

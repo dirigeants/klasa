@@ -301,7 +301,7 @@ class Gateway extends GatewayStorage {
 	 * @private
 	 */
 	async _shardSync(path, data, action, force) {
-		if (!this.client.shard) return;
+		if (!this.client.sharded) return;
 		const parsed = typeof data === 'string' ? JSON.parse(data) : data;
 		let route = this.schema;
 		const key = path.pop();
