@@ -32,7 +32,7 @@ module.exports = class extends Command {
 		// Handle too-long-messages
 		if (output > 2000) {
 			if (msg.guild && msg.channel.attachable) {
-				return msg.channel.sendFile(Buffer.from(result), 'eval.js', msg.language.get('COMMAND_EVAL_SENDFILE', time, footer));
+				return msg.channel.sendFile(Buffer.from(result), 'output.txt', msg.language.get('COMMAND_EVAL_SENDFILE', time, footer));
 			}
 			this.client.emit('log', result);
 			return msg.sendMessage(msg.language.get('COMMAND_EVAL_SENDCONSOLE', time, footer));
