@@ -322,6 +322,7 @@ declare module 'klasa' {
 		private static initClean(client: KlasaClient): void;
 		public static toTitleCase(str: string): string;
 		public static regExpEsc(str: string): string;
+		public static mergeObjects(objTarget: object, objSource: object): object;
 		public static applyToClass(base: object, structure: object, skips?: string[]): void;
 		public static exec(exec: string, options?: ExecOptions): Promise<{ stdout: string, stderr: string }>;
 		public static sleep(delay: number, args?: any): Promise<any>;

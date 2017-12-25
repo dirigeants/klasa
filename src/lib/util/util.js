@@ -74,6 +74,26 @@ class Util {
 	}
 
 	/**
+	 * Merges two objects
+	 * @since 0.5.0
+	 * @param {*} objTarget The object to be merged
+	 * @param {*} objSource The object to merge
+	 * @returns {*}
+	 */
+	static mergeObjects(objTarget, objSource) {
+		for (const key in objSource) {
+			if (Util.isObject(objSource[key])) {
+				if (!has(objTarget, key)) objTarget[key] = {};
+				objTarget[key] = Util.mergeObjects(objTarget[key], objSource[key]);
+			} else {
+				objTarget[key] = objSource[key];
+			}
+		}
+
+		return objTarget;
+	}
+
+	/**
 	 * Applies an interface to a class
 	 * @since 0.1.1
 	 * @param {Object} base The interface to apply to a structure

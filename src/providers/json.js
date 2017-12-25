@@ -1,4 +1,4 @@
-const { Provider } = require('klasa');
+const { Provider, util } = require('klasa');
 const { resolve } = require('path');
 const fs = require('fs-nextra');
 
@@ -158,7 +158,7 @@ module.exports = class extends Provider {
 	 * @returns {Promise<void>}
 	 */
 	create(table, document, data) {
-		return fs.outputJSONAtomic(resolve(this.baseDir, table, `${document}.json`), Object.assign({ id: document }, data));
+		return fs.outputJSONAtomic(resolve(this.baseDir, table, `${document}.json`), util.mergeObjects({ id: document }, data));
 	}
 
 	set(...args) {
@@ -178,7 +178,7 @@ module.exports = class extends Provider {
 	 */
 	async update(table, document, data) {
 		const existent = await this.get(table, document);
-		return fs.outputJSONAtomic(resolve(this.baseDir, table, `${document}.json`), Object.assign(existent || { id: document }, data));
+		return fs.outputJSONAtomic(resolve(this.baseDir, table, `${document}.json`), util.mergeObjects(existent || { id: document }, data));
 	}
 
 	/**
