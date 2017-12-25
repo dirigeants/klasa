@@ -23,7 +23,7 @@ module.exports = class extends Command {
 		// Handle errors
 		if (!success) {
 			if (result && result.stack) this.client.emit('error', result.stack);
-			if (!silent) return msg.sendMessage(`${headers}\n${this.client.methods.util.codeBlock('js', result)}`);
+			if (!silent) return msg.sendMessage(`${headers}\n${this.client.methods.util.codeBlock('js', result)}\n${footer}`);
 		}
 
 		if (silent) return null;
