@@ -60,7 +60,7 @@ module.exports = class extends Language {
 				'If the output is too large, it\'ll send the output as a file, or in the console if the bot does not have the ATTACH_FILES permission.'
 			].join('\n'),
 			COMMAND_EVAL_ERROR: (time, output, footer) => `\`ERROR\` (\`${time}\`)${output}\n\`TYPE\` ${footer}`,
-			COMMAND_EVAL_OUTPUT: (time, output, footer) => `\`OUTPUT\` (${time}\`)${output}\n\`TYPE\` ${footer}`,
+			COMMAND_EVAL_OUTPUT: (time, output, footer) => `\`OUTPUT\` (\`${time}\`)${output}\n\`TYPE\` ${footer}`,
 			COMMAND_EVAL_SENDFILE: (time, footer) => `\`OUTPUT\` (\`${time}\`) Output was too long... sent the result as a file.\n\`TYPE\` ${footer}`,
 			COMMAND_EVAL_SENDCONSOLE: (time, footer) => `\`OUTPUT\` (\`${time}\`) Output was too long... sent the result to console.\n\`TYPE\` ${footer}`,
 			COMMAND_UNLOAD: (type, name) => `✅ Unloaded ${type}: ${name}`,
