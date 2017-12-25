@@ -157,47 +157,81 @@ class Util {
 	/**
 	 * Get the deep type name that defines the input.
 	 * @since 0.5.0
-	 * @param {*} result The value to get the deep type from
+	 * @param {*} input The value to get the deep type from
 	 * @returns {string}
 	 */
-	static getDeepTypeName(result) {
-		const basic = Util.getTypeName(result);
+	static getDeepTypeName(input) {
+		const basic = Util.getTypeName(input);
 		switch (basic) {
-			case 'WeakMap':
 			case 'Map':
-			case 'Collection': {
-				const typeKeys = new Set(),
-					typeValues = new Set();
-				for (const [key, value] of result) {
-					const typeKey = Util.getDeepTypeName(key);
-					if (!typeKeys.has(typeKey)) typeKeys.add(typeKey);
-					const typeValue = Util.getDeepTypeName(value);
-					if (!typeValues.has(typeValue)) typeValues.add(typeValue);
-				}
-				const typeK = typeKeys.size === 0 || typeKeys.has('any') ? 'any' : Array.from(typeKeys).sort().join(' | ');
-				const typeV = typeValues.size === 0 || typeValues.has('any') ? 'any' : Array.from(typeValues).sort().join(' | ');
-
-				return `${basic}<${typeK}, ${typeV}>`;
-			}
-			case 'WeakSet':
+			case 'Collection':
+			case 'WeakMap':
+				return Util.getDeepTypeMap(input, basic);
 			case 'Set':
-			case 'Array': {
-				const types = new Set();
-				for (const value of result) {
-					const type = Util.getDeepTypeName(value);
-					if (!types.has(type)) types.add(type);
-				}
-				const typeV = types.size === 0 || types.has('Object') ? 'any' : Array.from(types).sort().join(' | ');
-
-				return `${basic}<${typeV}>`;
-			}
+			case 'Array':
+			case 'WeakSet':
+				return Util.getDeepTypeSetOrArray(input, basic);
 			case 'Proxy':
-				return Util.getDeepTypeName(process.binding('util').getProxyDetails(result));
+				return Util.getDeepTypeProxy(input);
 			case 'Object':
 				return 'any';
 			default:
 				return basic;
 		}
+	}
+
+	/**
+	 * Get the deep type name that defines a Map, WeakMap, or a discord.js' Collection.
+	 * @since 0.5.0
+	 * @param {(Map|WeakMap|external:Collection)} input The value to get the deep type from
+	 * @param {string} [basic] The basic type
+	 * @returns {string}
+	 */
+	static getDeepTypeMap(input, basic = Util.getTypeName(input)) {
+		if (!(input instanceof Map || input instanceof WeakMap)) return basic;
+		const typeKeys = new Set(),
+			typeValues = new Set();
+		for (const [key, value] of input) {
+			const typeKey = Util.getDeepTypeName(key);
+			if (!typeKeys.has(typeKey)) typeKeys.add(typeKey);
+			const typeValue = Util.getDeepTypeName(value);
+			if (!typeValues.has(typeValue)) typeValues.add(typeValue);
+		}
+		const typeK = typeKeys.size === 0 || typeKeys.has('any') ? 'any' : Array.from(typeKeys).sort().join(' | ');
+		const typeV = typeValues.size === 0 || typeValues.has('any') ? 'any' : Array.from(typeValues).sort().join(' | ');
+
+		return `${basic}<${typeK}, ${typeV}>`;
+	}
+
+	/**
+	 * Get the deep type name that defines an Array, Set, or a WeakSet.
+	 * @since 0.5.0
+	 * @param {(Array|Set|WeakSet)} input The value to get the deep type from
+	 * @param {string} [basic] The basic type
+	 * @returns {string}
+	 */
+	static getDeepTypeSetOrArray(input, basic = Util.getTypeName(input)) {
+		if (!(input instanceof Array || input instanceof Set || input instanceof WeakSet)) return basic;
+		const types = new Set();
+		for (const value of input) {
+			const type = Util.getDeepTypeName(value);
+			if (!types.has(type)) types.add(type);
+		}
+		const typeV = types.size === 0 || types.has('Object') ? 'any' : Array.from(types).sort().join(' | ');
+
+		return `${basic}<${typeV}>`;
+	}
+
+	/**
+	 * Get the deep type name that defines a Proxy.
+	 * @since 0.5.0
+	 * @param {Proxy} input The value to get the deep type from
+	 * @returns {string}
+	 */
+	static getDeepTypeProxy(input) {
+		const proxy = process.binding('util').getProxyDetails(input);
+		if (proxy) return `Proxy<${Util.getDeepTypeName(proxy)}>`;
+		return 'any';
 	}
 
 	/**

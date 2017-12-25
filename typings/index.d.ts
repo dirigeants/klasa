@@ -333,6 +333,9 @@ declare module 'klasa' {
 		public static isObject(input: object): boolean;
 		public static getTypeName(input: any): string;
 		public static getDeepTypeName(input: any): string;
+		public static getDeepTypeMap(input: Map | WeakMap | Collection, basic?: string): string;
+		public static getDeepTypeSetOrMap(input: Array | Set | WeakSet, basic?: string): string;
+		public static getDeepTypeProxy(input: Proxy): string;
 		public static tryParse(value: string): object;
 		public static makeObject(path: string, value: any): object;
 		public static mergeDefault(def: object, given?: object): object;

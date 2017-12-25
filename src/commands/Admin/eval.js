@@ -16,7 +16,8 @@ module.exports = class extends Command {
 
 	async run(msg, [code]) {
 		const { success, result, time, type } = await this.eval(msg, code);
-		const headers = `${success ? '' : `\`${msg.language.get('COMMAND_EVAL_ERROR_HEADER')}\` | `}\`${type} ${time}\``;
+		const headers = `${success ? '' : `\`${msg.language.get('COMMAND_EVAL_ERROR_HEADER')}\` | `}\`${time}\``;
+		const footer = `\`${msg.language.get('COMMAND_EVAL_TYPE')}\`:\n${this.client.methods.util.codeBlock('ts', type)}`;
 		const silent = 'silent' in msg.flags;
 
 		// Handle errors
@@ -28,16 +29,16 @@ module.exports = class extends Command {
 		if (silent) return null;
 
 		// Handle too-long-messages
-		if (result.length > 1991 - headers.length) {
+		if (result.length > 1991 - headers.length - footer.length) {
 			if (msg.guild && msg.channel.attachable) {
-				return msg.channel.sendFile(Buffer.from(result), 'eval.js', `${headers} | ${msg.language.get('COMMAND_EVAL_SENDFILE')}`);
+				return msg.channel.sendFile(Buffer.from(result), 'eval.js', `${headers} | ${msg.language.get('COMMAND_EVAL_SENDFILE')}\n${footer}`);
 			}
 			this.client.emit('log', result);
-			return msg.send(`${headers} | ${msg.language.get('COMMAND_EVAL_SENDCONSOLE')}`);
+			return msg.send(`${headers} | ${msg.language.get('COMMAND_EVAL_SENDCONSOLE')}\n${footer}`);
 		}
 
 		// If it's a message that can be sent correctly, send it
-		return msg.send(`${headers}\n${this.client.methods.util.codeBlock('js', result)}`);
+		return msg.send(`${headers}\n${this.client.methods.util.codeBlock('js', result)}${footer}`);
 	}
 
 	// Eval the input
