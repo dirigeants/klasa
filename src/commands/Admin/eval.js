@@ -30,7 +30,7 @@ module.exports = class extends Command {
 		if (silent) return null;
 
 		// Handle too-long-messages
-		if (output > 2000) {
+		if (output.length > 2000) {
 			if (msg.guild && msg.channel.attachable) {
 				return msg.channel.sendFile(Buffer.from(result), 'output.txt', msg.language.get('COMMAND_EVAL_SENDFILE', time, footer));
 			}
