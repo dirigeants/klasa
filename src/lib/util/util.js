@@ -147,7 +147,7 @@ class Util {
 	 */
 	static getTypeName(input) {
 		switch (typeof input) {
-			case 'object': return input === null ? 'null' : input.constructor.name;
+			case 'object': return input === null ? 'null' : input.constructor ? input.constructor.name : 'any';
 			case 'function': return `${input.constructor.name}(${input.length}-arity)`;
 			case 'undefined': return 'void';
 			default: return typeof input;
