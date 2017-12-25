@@ -13,7 +13,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
-- [[#142](https://github.com/dirigeants/klasa/pull/142)] Added `util.getDeepTypeName` to get deeper types. (kyranet)
+- [[#142](https://github.com/dirigeants/klasa/pull/142)] Added several typing-related methods to get deeper (JSDoc) types. (kyranet)
 - [[#138](https://github.com/dirigeants/klasa/pull/138)] Added `util.getTypeName` to get the input's type. (kyranet)
 - [[#136](https://github.com/dirigeants/klasa/pull/136)] Added flag arguments. (bdistin)
 - [[#136](https://github.com/dirigeants/klasa/pull/136)] Added the options `CommandOptions.promptTime` and `CommandOptions.promptLimit`. (bdistin)
@@ -117,6 +117,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
+- [[#142](https://github.com/dirigeants/klasa/pull/142)] Fixed a critical bug in nested objects when using the JSON provider. Note: `Object.assign` doesn't merge nested objects. (kyranet)
 - [[#141](https://github.com/dirigeants/klasa/pull/141)] Fixed `KlasaConsoleConfigs` not defaulting correctly. (bdistin)
 - [[#141](https://github.com/dirigeants/klasa/pull/141)] Fixed wrong sharding behaviour when using PM2 in a non-sharded bot. (bdistin)
 - [[#136](https://github.com/dirigeants/klasa/pull/136)] Fixed prompt bug [#78](https://github.com/dirigeants/klasa/issues/78). (bdistin)
