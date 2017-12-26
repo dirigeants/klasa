@@ -1,5 +1,4 @@
 const { Language, util } = require('klasa');
-const { join } = require('path');
 
 module.exports = class extends Language {
 
@@ -149,18 +148,8 @@ module.exports = class extends Language {
 		};
 	}
 
-	init() {
-		if (this.dir !== this.client.coreBaseDir) {
-			const loc = join(this.client.coreBaseDir, 'languages', this.file);
-			try {
-				const Piece = require(loc);
-				if (!util.isClass(Piece)) return;
-				const coreLang = new Piece(this.client, this.client.coreBaseDir, this.file);
-				this.language = util.mergeDefault(coreLang.language, this.language);
-			} catch (error) {
-				return;
-			}
-		}
+	async init() {
+		await super.init();
 	}
 
 };
