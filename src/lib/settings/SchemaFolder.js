@@ -154,7 +154,7 @@ class SchemaFolder extends Schema {
 	 * @param {boolean} [force=true] Whether this function call should modify all entries from the database
 	 * @returns {Promise<SchemaFolder>}
 	 */
-	async addKey(key, options, force = true) {
+	async addKey(key, options, force = true) { // eslint-disable-line complexity
 		if (this.hasKey(key)) throw `The key ${key} already exists in the current schema.`;
 		if (typeof this[key] !== 'undefined') throw `The key ${key} conflicts with a property of Schema.`;
 		if (!options) throw 'You must pass an options argument to this method.';

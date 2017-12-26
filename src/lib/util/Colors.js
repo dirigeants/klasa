@@ -153,7 +153,7 @@ class Colors {
 	 * @param {ColorsFormatOptions} formatOptions The format options
 	 * @returns {string}
 	 */
-	format(string, { style, background, text } = {}) {
+	format(string, { style, background, text } = {}) { // eslint-disable-line complexity
 		const opening = [];
 		const closing = [];
 		if (style) {
