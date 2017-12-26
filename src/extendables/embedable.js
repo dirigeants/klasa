@@ -7,8 +7,7 @@ module.exports = class extends Extendable {
 	}
 
 	get extend() {
-		if (!this.guild) return true;
-		return this.postable && this.permissionsFor(this.guild.me).has('EMBED_LINKS');
+		return !this.guild || (this.postable && this.permissionsFor(this.guild.me).has('EMBED_LINKS'));
 	}
 
 };
