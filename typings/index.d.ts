@@ -66,7 +66,7 @@ declare module 'klasa' {
 		public ready: boolean;
 
 		public readonly invite: string;
-		public readonly owner: ExtendedUser;
+		public readonly owner: KlasaUser;
 		public validatePermissionLevels(): PermissionLevels;
 		public registerStore(store: Store): KlasaClient;
 		public unregisterStore(store: Store): KlasaClient;
@@ -93,7 +93,7 @@ declare module 'klasa' {
 		public on(event: 'emojiCreate | emojiDelete', listener: (emoji: Emoji) => void): this;
 		public on(event: 'emojiUpdate', listener: (oldEmoji: Emoji, newEmoji: Emoji) => void): this;
 		public on(event: 'error', listener: (error: Error) => void): this;
-		public on(event: 'guildBanAdd' | 'guildBanRemove', listener: (guild: KlasaGuild, user: ExtendedUser) => void): this;
+		public on(event: 'guildBanAdd' | 'guildBanRemove', listener: (guild: KlasaGuild, user: KlasaUser) => void): this;
 		public on(event: 'guildCreate' | 'guildDelete' | 'guildUnavailable', listener: (guild: KlasaGuild) => void): this;
 		public on(event: 'guildMemberAdd' | 'guildMemberAvailable' | 'guildMemberRemove', listener: (member: GuildMember) => void): this;
 		public on(event: 'guildMembersChunk', listener: (members: GuildMember[], guild: KlasaGuild) => void): this;
@@ -102,14 +102,14 @@ declare module 'klasa' {
 		public on(event: 'guildUpdate', listener: (oldGuild: KlasaGuild, newGuild: KlasaGuild) => void): this;
 		public on(event: 'message' | 'messageDelete' | 'messageReactionRemoveAll', listener: (message: KlasaMessage) => void): this;
 		public on(event: 'messageDeleteBulk', listener: (messages: Collection<Snowflake, KlasaMessage>) => void): this;
-		public on(event: 'messageReactionAdd' | 'messageReactionRemove', listener: (messageReaction: MessageReaction, user: ExtendedUser) => void): this;
+		public on(event: 'messageReactionAdd' | 'messageReactionRemove', listener: (messageReaction: MessageReaction, user: KlasaUser) => void): this;
 		public on(event: 'messageUpdate', listener: (oldMessage: KlasaMessage, newMessage: KlasaMessage) => void): this;
 		public on(event: 'ready' | 'reconnecting' | 'resume', listener: () => void): this;
 		public on(event: 'roleCreate' | 'roleDelete', listener: (role: Role) => void): this;
 		public on(event: 'roleUpdate', listener: (oldRole: Role, newRole: Role) => void): this;
-		public on(event: 'typingStart' | 'typingStop', listener: (channel: Channel, user: ExtendedUser) => void): this;
+		public on(event: 'typingStart' | 'typingStop', listener: (channel: Channel, user: KlasaUser) => void): this;
 		public on(event: 'userNoteUpdate', listener: (user: UserResolvable, oldNote: string, newNote: string) => void): this;
-		public on(event: 'userUpdate', listener: (oldUser: ExtendedUser, newUser: ExtendedUser) => void): this;
+		public on(event: 'userUpdate', listener: (oldUser: KlasaUser, newUser: KlasaUser) => void): this;
 
 		// Klasa Command Events
 		public on(event: 'commandError', listener: (msg: KlasaMessage, command: Command, params: any[], error: Error) => void): this;
@@ -156,7 +156,7 @@ declare module 'klasa' {
 		public once(event: 'emojiCreate | emojiDelete', listener: (emoji: Emoji) => void): this;
 		public once(event: 'emojiUpdate', listener: (oldEmoji: Emoji, newEmoji: Emoji) => void): this;
 		public once(event: 'error', listener: (error: Error) => void): this;
-		public once(event: 'guildBanAdd' | 'guildBanRemove', listener: (guild: KlasaGuild, user: ExtendedUser) => void): this;
+		public once(event: 'guildBanAdd' | 'guildBanRemove', listener: (guild: KlasaGuild, user: KlasaUser) => void): this;
 		public once(event: 'guildCreate' | 'guildDelete' | 'guildUnavailable', listener: (guild: KlasaGuild) => void): this;
 		public once(event: 'guildMemberAdd' | 'guildMemberAvailable' | 'guildMemberRemove', listener: (member: GuildMember) => void): this;
 		public once(event: 'guildMembersChunk', listener: (members: GuildMember[], guild: KlasaGuild) => void): this;
@@ -165,14 +165,14 @@ declare module 'klasa' {
 		public once(event: 'guildUpdate', listener: (oldGuild: KlasaGuild, newGuild: KlasaGuild) => void): this;
 		public once(event: 'message' | 'messageDelete' | 'messageReactionRemoveAll', listener: (message: KlasaMessage) => void): this;
 		public once(event: 'messageDeleteBulk', listener: (messages: Collection<Snowflake, KlasaMessage>) => void): this;
-		public once(event: 'messageReactionAdd' | 'messageReactionRemove', listener: (messageReaction: MessageReaction, user: ExtendedUser) => void): this;
+		public once(event: 'messageReactionAdd' | 'messageReactionRemove', listener: (messageReaction: MessageReaction, user: KlasaUser) => void): this;
 		public once(event: 'messageUpdate', listener: (oldMessage: KlasaMessage, newMessage: KlasaMessage) => void): this;
 		public once(event: 'ready' | 'reconnecting' | 'resume', listener: () => void): this;
 		public once(event: 'roleCreate' | 'roleDelete', listener: (role: Role) => void): this;
 		public once(event: 'roleUpdate', listener: (oldRole: Role, newRole: Role) => void): this;
-		public once(event: 'typingStart' | 'typingStop', listener: (channel: Channel, user: ExtendedUser) => void): this;
+		public once(event: 'typingStart' | 'typingStop', listener: (channel: Channel, user: KlasaUser) => void): this;
 		public once(event: 'userNoteUpdate', listener: (user: UserResolvable, oldNote: string, newNote: string) => void): this;
-		public once(event: 'userUpdate', listener: (oldUser: ExtendedUser, newUser: ExtendedUser) => void): this;
+		public once(event: 'userUpdate', listener: (oldUser: KlasaUser, newUser: KlasaUser) => void): this;
 
 		// Klasa Command Events
 		public once(event: 'commandError', listener: (msg: KlasaMessage, command: Command, params: any[], error: Error) => void): this;
@@ -244,6 +244,15 @@ declare module 'klasa' {
 
 	export class KlasaUser extends DiscordUser {
 		public configs: Configuration;
+		public send(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public send(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendEmbed(embed: MessageEmbed, content?: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendEmbed(embed: MessageEmbed, options?: MessageOptions): Promise<KlasaMessage>;
+		public sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendFiles(attachments: MessageAttachment[], content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendMessage(content?: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendMessage(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 	}
 
 	export class ReactionHandler extends ReactionCollector {
@@ -321,16 +330,16 @@ declare module 'klasa' {
 		public static clean(text: string): string;
 		public static codeBlock(lang: string, expression: string): string;
 		public static exec(exec: string, options?: ExecOptions): Promise<{ stdout: string, stderr: string }>;
-		public static getDeepTypeMap(input: Map | WeakMap | Collection, basic?: string): string;
+		public static getDeepTypeMap(input: Map<any, any> | WeakMap<object, any> | Collection<any, any>, basic?: string): string;
 		public static getDeepTypeName(input: any): string;
-		public static getDeepTypeProxy(input: Proxy): string;
-		public static getDeepTypeSetOrMap(input: Array | Set | WeakSet, basic?: string): string;
+		public static getDeepTypeProxy(input: Proxy<any>): string;
+		public static getDeepTypeSetOrMap(input: Array<any> | Set<any> | WeakSet<any>, basic?: string): string;
 		public static getTypeName(input: any): string;
 		public static isClass(input: Function): boolean;
 		public static isFunction(input: Function): boolean;
 		public static isNumber(input: number): boolean;
 		public static isObject(input: object): boolean;
-		public static isThenable(input: Promise): boolean;
+		public static isThenable(input: Promise<any>): boolean;
 		public static makeObject(path: string, value: any): object;
 		public static mergeDefault(def: object, given?: object): object;
 		public static mergeObjects(objTarget: object, objSource: object): object;
@@ -353,12 +362,12 @@ declare module 'klasa' {
 		public float(input: string | number): Promise<number>;
 		public guild(input: KlasaGuild | Snowflake): Promise<KlasaGuild>;
 		public integer(input: string | number): Promise<number>;
-		public member(input: ExtendedUser | GuildMember | Snowflake, guild: KlasaGuild): Promise<GuildMember>;
+		public member(input: KlasaUser | GuildMember | Snowflake, guild: KlasaGuild): Promise<GuildMember>;
 		public msg(input: KlasaMessage | Snowflake, channel: Channel): Promise<KlasaMessage>;
 		public role(input: Role | Snowflake, guild: KlasaGuild): Promise<Role>;
 		public string(input: string): Promise<string>;
 		public url(input: string): Promise<string>;
-		public user(input: ExtendedUser | GuildMember | KlasaMessage | Snowflake): Promise<ExtendedUser>;
+		public user(input: KlasaUser | GuildMember | KlasaMessage | Snowflake): Promise<KlasaUser>;
 
 		public static readonly regex: {
 			userOrMember: RegExp,
@@ -394,9 +403,9 @@ declare module 'klasa' {
 		public language(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Language>;
 		public literal(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<string>;
 		public member(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<GuildMember>;
-		public member(input: ExtendedUser | GuildMember | Snowflake, guild: KlasaGuild): Promise<GuildMember>;
-		public mention(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<ExtendedUser>;
-		public mention(input: ExtendedUser | GuildMember | KlasaMessage | Snowflake): Promise<ExtendedUser>;
+		public member(input: KlasaUser | GuildMember | Snowflake, guild: KlasaGuild): Promise<GuildMember>;
+		public mention(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<KlasaUser>;
+		public mention(input: KlasaUser | GuildMember | KlasaMessage | Snowflake): Promise<KlasaUser>;
 		public message(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<KlasaMessage>;
 		public message(input: string | KlasaMessage, channel: Channel): Promise<KlasaMessage>;
 		public monitor(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Monitor>;
@@ -418,8 +427,8 @@ declare module 'klasa' {
 		public string(input: string): Promise<string>;
 		public url(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<string>;
 		public url(input: string): Promise<string>;
-		public user(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<ExtendedUser>;
-		public user(input: ExtendedUser | GuildMember | KlasaMessage | Snowflake): Promise<ExtendedUser>;
+		public user(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<KlasaUser>;
+		public user(input: KlasaUser | GuildMember | KlasaMessage | Snowflake): Promise<KlasaUser>;
 
 		private static minOrMax(value: number, min: number, max: number, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage, suffix: string): Promise<boolean>;
 	}
@@ -442,12 +451,12 @@ declare module 'klasa' {
 		public role(input: Role | Snowflake, guild: KlasaGuild): Promise<Role>;
 		public string(data: any, guild: KlasaGuild, name: string, minMax: { min: number, max: number }): Promise<string>;
 		public string(input: string): Promise<string>;
-		public textchannel(data: any, guild: KlasaGuild, name: string): Promise<ExtendedTextChannel>;
+		public textchannel(data: any, guild: KlasaGuild, name: string): Promise<KlasaTextChannel>;
 		public url(data: any, guild: KlasaGuild, name: string): Promise<string>;
 		public url(input: string): Promise<string>;
-		public user(data: any, guild: KlasaGuild, name: string): Promise<ExtendedUser>;
-		public user(input: ExtendedUser | GuildMember | KlasaMessage | Snowflake): Promise<ExtendedUser>;
-		public voicechannel(data: any, guild: KlasaGuild, name: string): Promise<ExtendedVoiceChannel>;
+		public user(data: any, guild: KlasaGuild, name: string): Promise<KlasaUser>;
+		public user(input: KlasaUser | GuildMember | KlasaMessage | Snowflake): Promise<KlasaUser>;
+		public voicechannel(data: any, guild: KlasaGuild, name: string): Promise<KlasaVoiceChannel>;
 
 		public static maxOrMin(guild: KlasaGuild, value: number, min: number, max: number, name: string, suffix: string): boolean;
 	}
@@ -871,7 +880,7 @@ declare module 'klasa' {
 		public toString(): string;
 	}
 
-	export abstract class Event implements Piece  {
+	export abstract class Event implements Piece {
 		public constructor(client: KlasaClient, dir: string, file: string[], options?: EventOptions);
 		public client: KlasaClient;
 		public type: 'event';
@@ -1199,6 +1208,58 @@ declare module 'klasa' {
 		public toString(): string;
 	}
 
+	// Extended classes
+	export class KlasaTextChannel extends DiscordTextChannel {
+		public readonly attachable: boolean;
+		public readonly embedable: boolean;
+		public readonly postable: boolean;
+		public readonly guild: KlasaGuild;
+		public send(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public send(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendEmbed(embed: MessageEmbed, content?: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendEmbed(embed: MessageEmbed, options?: MessageOptions): Promise<KlasaMessage>;
+		public sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendFiles(attachments: MessageAttachment[], content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendMessage(content?: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendMessage(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+	}
+
+	export class KlasaVoiceChannel extends DiscordVoiceChannel {
+		public readonly guild: KlasaGuild;
+	}
+
+	export class KlasaDMChannel extends DiscordDMChannel {
+		public readonly attachable: boolean;
+		public readonly embedable: boolean;
+		public readonly postable: boolean;
+		public send(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public send(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendEmbed(embed: MessageEmbed, content?: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendEmbed(embed: MessageEmbed, options?: MessageOptions): Promise<KlasaMessage>;
+		public sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendFiles(attachments: MessageAttachment[], content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendMessage(content?: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendMessage(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+	}
+
+	export class KlasaGroupDMChannel extends DiscordGroupDMChannel {
+		public readonly attachable: boolean;
+		public readonly embedable: boolean;
+		public readonly postable: boolean;
+		public send(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public send(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendEmbed(embed: MessageEmbed, content?: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendEmbed(embed: MessageEmbed, options?: MessageOptions): Promise<KlasaMessage>;
+		public sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendFiles(attachments: MessageAttachment[], content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendMessage(content?: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendMessage(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+	}
+
+	// Types
 	export type KlasaClientOptions = {
 		clientBaseDir?: string;
 		cmdEditing?: boolean;
@@ -1363,8 +1424,8 @@ declare module 'klasa' {
 	};
 
 	export type GatewayGuildResolvable = KlasaGuild
-		| ExtendedTextChannel
-		| ExtendedVoiceChannel
+		| KlasaTextChannel
+		| KlasaVoiceChannel
 		| KlasaMessage
 		| Role
 		| Snowflake;
@@ -1684,67 +1745,10 @@ declare module 'klasa' {
 	export type SchemaObject = StringMappedType<SchemaPiece>;
 	export type SchemaDefaults = StringMappedType<any>;
 
-	// Extended classes
-	export type ExtendedUser = {
-		send(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		send(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		sendEmbed(embed: MessageEmbed, content?: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		sendEmbed(embed: MessageEmbed, options?: MessageOptions): Promise<KlasaMessage>;
-		sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		sendFiles(attachments: MessageAttachment[], content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		sendMessage(content?: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		sendMessage(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-	} & KlasaUser;
-
-	export type ExtendedTextChannel = {
-		attachable: boolean;
-		embedable: boolean;
-		postable: boolean;
-		guild: KlasaGuild;
-		send(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		send(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		sendEmbed(embed: MessageEmbed, content?: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		sendEmbed(embed: MessageEmbed, options?: MessageOptions): Promise<KlasaMessage>;
-		sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		sendFiles(attachments: MessageAttachment[], content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		sendMessage(content?: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		sendMessage(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-	} & DiscordTextChannel;
-
-	export type ExtendedVoiceChannel = {
-		guild: KlasaGuild;
-	} & DiscordVoiceChannel;
-
-	export type ExtendedDMChannel = {
-		attachable: boolean;
-		embedable: boolean;
-		postable: boolean;
-		send(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		send(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		sendEmbed(embed: MessageEmbed, content?: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		sendEmbed(embed: MessageEmbed, options?: MessageOptions): Promise<KlasaMessage>;
-		sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		sendFiles(attachments: MessageAttachment[], content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		sendMessage(content?: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		sendMessage(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-	} & DiscordDMChannel;
-
-	export type ExtendedGroupDMChannel = {
-		attachable: boolean;
-		embedable: boolean;
-		postable: boolean;
-		send(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		send(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		sendEmbed(embed: MessageEmbed, content?: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		sendEmbed(embed: MessageEmbed, options?: MessageOptions): Promise<KlasaMessage>;
-		sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		sendFiles(attachments: MessageAttachment[], content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		sendMessage(content?: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		sendMessage(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-	} & DiscordGroupDMChannel;
+	// TypeScript lacks of Proxy
+	export type Proxy<T> = {
+		get(): T;
+		set(value: T): void;
+	};
 
 }
