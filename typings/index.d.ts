@@ -317,29 +317,29 @@ declare module 'klasa' {
 	}
 
 	class Util {
-		public static codeBlock(lang: string, expression: string): string;
-		public static clean(text: string): string;
-		private static initClean(client: KlasaClient): void;
-		public static toTitleCase(str: string): string;
-		public static regExpEsc(str: string): string;
-		public static mergeObjects(objTarget: object, objSource: object): object;
 		public static applyToClass(base: object, structure: object, skips?: string[]): void;
+		public static clean(text: string): string;
+		public static codeBlock(lang: string, expression: string): string;
 		public static exec(exec: string, options?: ExecOptions): Promise<{ stdout: string, stderr: string }>;
-		public static sleep(delay: number, args?: any): Promise<any>;
-		public static sleep<T>(delay: number, args?: T): Promise<T>;
-		public static isFunction(input: Function): boolean;
-		public static isClass(input: Function): boolean;
-		public static isNumber(input: number): boolean;
-		public static isThenable(input: Promise): boolean;
-		public static isObject(input: object): boolean;
-		public static getTypeName(input: any): string;
-		public static getDeepTypeName(input: any): string;
 		public static getDeepTypeMap(input: Map | WeakMap | Collection, basic?: string): string;
-		public static getDeepTypeSetOrMap(input: Array | Set | WeakSet, basic?: string): string;
+		public static getDeepTypeName(input: any): string;
 		public static getDeepTypeProxy(input: Proxy): string;
-		public static tryParse(value: string): object;
+		public static getDeepTypeSetOrMap(input: Array | Set | WeakSet, basic?: string): string;
+		public static getTypeName(input: any): string;
+		public static isClass(input: Function): boolean;
+		public static isFunction(input: Function): boolean;
+		public static isNumber(input: number): boolean;
+		public static isObject(input: object): boolean;
+		public static isThenable(input: Promise): boolean;
 		public static makeObject(path: string, value: any): object;
 		public static mergeDefault(def: object, given?: object): object;
+		public static mergeObjects(objTarget: object, objSource: object): object;
+		public static regExpEsc(str: string): string;
+		public static sleep(delay: number, args?: any): Promise<any>;
+		public static sleep<T>(delay: number, args?: T): Promise<T>;
+		public static toTitleCase(str: string): string;
+		public static tryParse(value: string): object;
+		private static initClean(client: KlasaClient): void;
 	}
 
 	export { Util as util };

@@ -80,16 +80,8 @@ class Util {
 	 * @param {*} objSource The object to merge
 	 * @returns {*}
 	 */
-	static mergeObjects(objTarget, objSource) {
-		for (const key in objSource) {
-			if (Util.isObject(objSource[key])) {
-				if (!has(objTarget, key)) objTarget[key] = {};
-				objTarget[key] = Util.mergeObjects(objTarget[key], objSource[key]);
-			} else {
-				objTarget[key] = objSource[key];
-			}
-		}
-
+	static mergeObjects(objTarget = {}, objSource) {
+		for (const key in objSource) objTarget[key] = Util.isObject(objSource[key]) ? Util.mergeObjects(objTarget[key], objSource[key]) : objSource[key];
 		return objTarget;
 	}
 
