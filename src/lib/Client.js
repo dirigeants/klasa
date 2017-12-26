@@ -390,6 +390,12 @@ class KlasaClient extends Discord.Client {
 		if (typeof this.options.prefix === 'string' && this.options.prefix !== this.gateways.guilds.schema.prefix.default) {
 			await this.gateways.guilds.schema.prefix.modify({ default: this.options.prefix });
 		}
+		if (this.gateways.guilds.schema.hasKey('disabledCommands')) {
+			const languageStore = this.client.languages;
+			this.gateways.guilds.schema.disabledCommands.setValidator(function (command, guild) { // eslint-disable-line
+				if (command && command.guarded) throw (guild ? guild.language : languageStore.default).language.get('COMMAND_CONF_GUARDED', command.name);
+			});
+		}
 
 		this.emit('log', `Loaded in ${timer.stop()}.`);
 		return super.login(token);

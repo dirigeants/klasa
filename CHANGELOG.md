@@ -13,6 +13,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#144](https://github.com/dirigeants/klasa/pull/144)] Added `SchemaPiece#setValidator` and `SchemaPiece#validator`, to "inhibit" certain values to be set. (kyranet)
 - [[#142](https://github.com/dirigeants/klasa/pull/142)] Added several typing-related methods to get deeper (JSDoc) types. (kyranet)
 - [[#138](https://github.com/dirigeants/klasa/pull/138)] Added `util.getTypeName` to get the input's type. (kyranet)
 - [[#136](https://github.com/dirigeants/klasa/pull/136)] Added flag arguments. (bdistin)

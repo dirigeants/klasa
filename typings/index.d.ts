@@ -689,7 +689,9 @@ declare module 'klasa' {
 		public max?: number;
 		public sql: [string, string];
 		public configurable: boolean;
+		public validator?: (resolved: any, guild?: KlasaGuild) => void;
 
+		public setValidator(fn: Function): this;
 		public parse(value: any, guild: KlasaGuild): Promise<any>;
 		public resolveString(msg: KlasaMessage): string;
 		public modify(options: ModifyOptions): Promise<this>;

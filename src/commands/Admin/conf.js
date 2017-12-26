@@ -16,10 +16,7 @@ module.exports = class extends Command {
 	async run(msg, [action, key, ...value]) {
 		if (action !== 'list' && !key) throw msg.language.get('COMMAND_CONF_NOKEY');
 		if (['set', 'remove'].includes(action) && value.length === 0) throw msg.language.get('COMMAND_CONF_NOVALUE');
-		if (action === 'set' && key === 'disabledCommands') {
-			const command = this.client.commands.get(value.join(' '));
-			if (command && command.guarded) throw msg.language.get('COMMAND_CONF_GUARDED', command.name);
-		}
+
 		return this[action](msg, key, value);
 	}
 
