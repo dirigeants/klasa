@@ -59,6 +59,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#143](https://github.com/dirigeants/klasa/pull/143)] TS' typings cleanup (kyranet)
 - [[#141](https://github.com/dirigeants/klasa/pull/141)] Added a shard prefix into the `KlasaConsole` class to recognize the shard the message got sent. (bdistin)
 - [[#138](https://github.com/dirigeants/klasa/pull/138)] Upgraded the built-in eval command, **inspired in tech6hutch's The Duke Of Evals**. (kyranet)
 - [[#136](https://github.com/dirigeants/klasa/pull/136)] Changed command parsing internals, `KlasaMessage#args` and `KlasaMessage#params` are now readonly and getters from `KlasaMessage#prompter`. (bdistin)
