@@ -151,7 +151,7 @@ module.exports = class extends Language {
 
 	init() {
 		if (this.dir !== this.client.coreBaseDir) {
-			const loc = join(this.client.coreBaseDir, this.file);
+			const loc = join(this.client.coreBaseDir, 'languages', this.file);
 			try {
 				const Piece = require(loc);
 				if (!util.isClass(Piece)) return;
