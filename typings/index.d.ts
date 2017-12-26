@@ -51,7 +51,7 @@ declare module 'klasa' {
 		public extendables: ExtendableStore;
 		public pieceStores: Collection<string, any>;
 		public permissionLevels: PermissionLevels;
-		public ready: boolean;
+		public sharded: boolean;
 		public methods: {
 			Collection: typeof Collection;
 			Embed: typeof MessageEmbed;
@@ -63,6 +63,7 @@ declare module 'klasa' {
 		public gateways: GatewayDriver;
 		public configs?: Configuration;
 		public application: ClientApplication;
+		public ready: boolean;
 
 		public readonly invite: string;
 		public readonly owner: ExtendedUser;
@@ -316,24 +317,29 @@ declare module 'klasa' {
 	}
 
 	class Util {
-		public static codeBlock(lang: string, expression: string): string;
-		public static clean(text: string): string;
-		private static initClean(client: KlasaClient): void;
-		public static toTitleCase(str: string): string;
-		public static regExpEsc(str: string): string;
 		public static applyToClass(base: object, structure: object, skips?: string[]): void;
+		public static clean(text: string): string;
+		public static codeBlock(lang: string, expression: string): string;
 		public static exec(exec: string, options?: ExecOptions): Promise<{ stdout: string, stderr: string }>;
-		public static sleep(delay: number, args?: any): Promise<any>;
-		public static sleep<T>(delay: number, args?: T): Promise<T>;
-		public static isFunction(input: Function): boolean;
-		public static isClass(input: Function): boolean;
-		public static isNumber(input: number): boolean;
-		public static isThenable(input: Promise): boolean;
-		public static isObject(input: object): boolean;
+		public static getDeepTypeMap(input: Map | WeakMap | Collection, basic?: string): string;
+		public static getDeepTypeName(input: any): string;
+		public static getDeepTypeProxy(input: Proxy): string;
+		public static getDeepTypeSetOrMap(input: Array | Set | WeakSet, basic?: string): string;
 		public static getTypeName(input: any): string;
-		public static tryParse(value: string): object;
+		public static isClass(input: Function): boolean;
+		public static isFunction(input: Function): boolean;
+		public static isNumber(input: number): boolean;
+		public static isObject(input: object): boolean;
+		public static isThenable(input: Promise): boolean;
 		public static makeObject(path: string, value: any): object;
 		public static mergeDefault(def: object, given?: object): object;
+		public static mergeObjects(objTarget: object, objSource: object): object;
+		public static regExpEsc(str: string): string;
+		public static sleep(delay: number, args?: any): Promise<any>;
+		public static sleep<T>(delay: number, args?: T): Promise<T>;
+		public static toTitleCase(str: string): string;
+		public static tryParse(value: string): object;
+		private static initClean(client: KlasaClient): void;
 	}
 
 	export { Util as util };
@@ -747,7 +753,8 @@ declare module 'klasa' {
 	}
 
 	class KlasaConsole extends Console {
-		public constructor(options: KlasaConsoleConfig);
+		public constructor(client: KlasaClient, options: KlasaConsoleConfig);
+		public readonly client: KlasaClient;
 		public readonly stdout: NodeJS.WritableStream;
 		public readonly stderr: NodeJS.WritableStream;
 		public template?: Timestamp;
@@ -762,8 +769,9 @@ declare module 'klasa' {
 		public verbose(...data: any[]): void;
 		public wtf(...data: any[]): void;
 
-		public timestamp(timestamp: Date, time: string): string;
-		public messages(input: string, message: string): string;
+		public timestamp(timestamp: string, time: ColorsFormatOptions): string;
+		public shard(input: string, shard: ColorsFormatOptions): string;
+		public messages(input: string, message: ColorsFormatOptions): string;
 
 		public static flatten(data: any, useColors: boolean): string;
 	}
@@ -772,7 +780,8 @@ declare module 'klasa' {
 
 	export type constants = {
 		DEFAULTS: {
-			CLIENT: KlasaConstantsClient
+			CLIENT: KlasaConstantsClient,
+			CONSOLE: KlasaConsoleConfig
 		};
 		GATEWAY_RESOLVERS: {
 			GUILDS: (guildResolvable: string | KlasaGuild) => KlasaGuild,

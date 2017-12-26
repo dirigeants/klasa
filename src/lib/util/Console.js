@@ -247,37 +247,37 @@ class KlasaConsole extends Console {
 	/**
 	 * Logs everything to the console/writable stream.
 	 * @since 0.4.0
-	 * @param {Date} timestamp The timestamp to maybe format
-	 * @param {Object} time The time format used for coloring
+	 * @param {string} input The timestamp to maybe format
+	 * @param {ColorsFormatOptions} time The time format used for coloring
 	 * @returns {string}
 	 */
-	timestamp(timestamp, time) {
-		if (!this.useColors) return timestamp;
-		return Colors.format(timestamp, time);
+	timestamp(input, time) {
+		if (!this.useColors) return input;
+		return Colors.format(input, time);
 	}
 
 	/**
 	 * Logs everything to the console/writable stream.
 	 * @since 0.5.0
-	 * @param {string} string The shard string to maybe format
-	 * @param {Object} shard The shard format used for coloring
+	 * @param {string} input The shard string to maybe format
+	 * @param {ColorsFormatOptions} shard The shard format used for coloring
 	 * @returns {string}
 	 */
-	shard(string, shard) {
-		if (!this.useColors) return string;
-		return Colors.format(string, shard);
+	shard(input, shard) {
+		if (!this.useColors) return input;
+		return Colors.format(input, shard);
 	}
 
 	/**
 	 * Logs everything to the console/writable stream.
 	 * @since 0.4.0
-	 * @param {string} string The data we want to print
-	 * @param {Object} message The message format used for coloring
+	 * @param {string} input The data we want to print
+	 * @param {ColorsFormatOptions} message The message format used for coloring
 	 * @returns {string}
 	 */
-	messages(string, message) {
-		if (!this.useColors) return string;
-		return Colors.format(string, message);
+	messages(input, message) {
+		if (!this.useColors) return input;
+		return Colors.format(input, message);
 	}
 
 	/**

@@ -182,12 +182,13 @@ class GatewayDriver {
 		options.provider = this._checkProvider(options.provider || this.client.options.provider.engine || 'json');
 		if (options.provider.cache) throw `The provider ${options.provider.name} is designed for caching, not persistent data. Please try again with another.`;
 		options.cache = this._checkProvider('collection');
-		if (options.cache.cache === false) throw `The provider ${options.cache.name} is designed for persistent data, not cache. Please try again with another.`;
 
-		this[name] = new Gateway(this, name, validateFunction, schema, options);
-		await this[name].init(download);
+		const gateway = new Gateway(this, name, validateFunction, schema, options);
+		await gateway.init(download);
 		this.caches.push(name);
-		return this[name];
+		this[name] = gateway;
+
+		return gateway;
 	}
 
 	/**

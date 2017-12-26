@@ -100,7 +100,7 @@ class SettingResolver extends Resolver {
 	 */
 	async boolean(data, guild, name) {
 		const result = await super.boolean(data);
-		if (!result) throw (guild ? guild.language : this.client.languages.default).get('RESOLVER_INVALID_BOOL', name);
+		if (result === null) throw (guild ? guild.language : this.client.languages.default).get('RESOLVER_INVALID_BOOL', name);
 		return result;
 	}
 
