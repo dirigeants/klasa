@@ -118,6 +118,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
+- [[#148](https://github.com/dirigeants/klasa/pull/148)] Fixed ReactionHandler trying to remove reactions from other users or clear all reactions from a message even when the client doesn't have permissions in the guild or is in DMs [#147](https://github.com/dirigeants/klasa/issues/147). (kyranet)
 - [[#142](https://github.com/dirigeants/klasa/pull/142)] Fixed a critical bug in nested objects when using the JSON provider. Note: `Object.assign` doesn't merge nested objects. (kyranet)
 - [[#141](https://github.com/dirigeants/klasa/pull/141)] Fixed `KlasaConsoleConfigs` not defaulting correctly. (bdistin)
 - [[#141](https://github.com/dirigeants/klasa/pull/141)] Fixed wrong sharding behaviour when using PM2 in a non-sharded bot. (bdistin)

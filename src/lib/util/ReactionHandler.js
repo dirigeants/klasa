@@ -111,12 +111,22 @@ class ReactionHandler extends ReactionCollector {
 
 		this._queueEmojiReactions(emojis.slice(0));
 		this.on('collect', (reaction, reactionAgain, user) => {
-			reaction.remove(user);
+			if (this.unreactable) reaction.remove(user);
 			this[this.methodMap.get(reaction.emoji.name)](user);
 		});
 		this.on('end', () => {
-			if (this.reactionsDone) this.message.clearReactions();
+			if (this.reactionsDone && this.unreactable) this.message.clearReactions();
 		});
+	}
+
+	/**
+	 * Whether the client has permissions to remove reactions from other users or all reactions from a message
+	 * @since 0.5.0
+	 * @returns {boolean}
+	 * @readonly
+	 */
+	get unreactable() {
+		return Boolean(this.message.guild) && this.message.channel.permissionsFor(this.message.guild.me).has('MANAGE_MESSAGES');
 	}
 
 	/**
@@ -176,7 +186,7 @@ class ReactionHandler extends ReactionCollector {
 		await mes.delete();
 		if (!collected.size) return;
 		const newPage = parseInt(collected.first().content);
-		collected.first().delete();
+		if (this.unreactable) collected.first().delete();
 		if (newPage && newPage > 0 && newPage <= this.display.pages.length) {
 			this.currentPage = newPage - 1;
 			this.update();
@@ -329,7 +339,7 @@ class ReactionHandler extends ReactionCollector {
 	 * @private
 	 */
 	async _queueEmojiReactions(emojis) {
-		if (this.ended) return this.message.clearReactions();
+		if (this.ended) return this.unreactable ? this.message.clearReactions() : null;
 		await this.message.react(emojis.shift());
 		if (emojis.length) return this._queueEmojiReactions(emojis);
 		this.reactionsDone = true;
