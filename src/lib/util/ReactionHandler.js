@@ -120,6 +120,17 @@ class ReactionHandler extends ReactionCollector {
 	}
 
 	/**
+	 * Whether the client has permissions to remove reactions from other users or all reactions from a message
+	 * @since 0.5.0
+	 * @returns {boolean}
+	 * @readonly
+	 */
+	get unreactable() {
+		if (!this.message.guild) return false;
+		return this.message.guild.permissionsFor(this.message.guild.me).has('MANAGE_MESSAGES');
+	}
+
+	/**
 	 * The action to take when the "first" emoji is reacted
 	 * @since 0.4.0
 	 * @returns {void}
@@ -176,7 +187,7 @@ class ReactionHandler extends ReactionCollector {
 		await mes.delete();
 		if (!collected.size) return;
 		const newPage = parseInt(collected.first().content);
-		collected.first().delete();
+		if (this.unreactable) collected.first().delete();
 		if (newPage && newPage > 0 && newPage <= this.display.pages.length) {
 			this.currentPage = newPage - 1;
 			this.update();
@@ -329,7 +340,7 @@ class ReactionHandler extends ReactionCollector {
 	 * @private
 	 */
 	async _queueEmojiReactions(emojis) {
-		if (this.ended) return this.message.clearReactions();
+		if (this.ended) return this.unreactable ? this.message.clearReactions() : null;
 		await this.message.react(emojis.shift());
 		if (emojis.length) return this._queueEmojiReactions(emojis);
 		this.reactionsDone = true;

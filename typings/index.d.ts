@@ -265,6 +265,7 @@ declare module 'klasa' {
 		public awaiting: boolean;
 		public selection: Promise<number>;
 		public reactionsDone: boolean;
+		public readonly unreactable: boolean;
 
 		public first(): void;
 		public back(): void;
