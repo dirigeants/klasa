@@ -126,8 +126,7 @@ class ReactionHandler extends ReactionCollector {
 	 * @readonly
 	 */
 	get unreactable() {
-		if (!this.message.guild) return false;
-		return this.message.guild.permissionsFor(this.message.guild.me).has('MANAGE_MESSAGES');
+		return this.message.guild && this.message.guild.permissionsFor(this.message.guild.me).has('MANAGE_MESSAGES');
 	}
 
 	/**
