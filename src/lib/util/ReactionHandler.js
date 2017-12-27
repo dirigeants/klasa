@@ -111,11 +111,11 @@ class ReactionHandler extends ReactionCollector {
 
 		this._queueEmojiReactions(emojis.slice(0));
 		this.on('collect', (reaction, reactionAgain, user) => {
-			reaction.remove(user);
+			if (this.unreactable) reaction.remove(user);
 			this[this.methodMap.get(reaction.emoji.name)](user);
 		});
 		this.on('end', () => {
-			if (this.reactionsDone) this.message.clearReactions();
+			if (this.reactionsDone && this.unreactable) this.message.clearReactions();
 		});
 	}
 
