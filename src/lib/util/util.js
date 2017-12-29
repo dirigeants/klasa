@@ -92,25 +92,26 @@ class Util {
 	 * @returns {*}
 	 */
 	static deepClone(source) {
+		// Check if it's a primitive (with exception of function and null, which is typeof object)
 		if (typeof source !== 'object' || source === null) return source;
 		if (Array.isArray(source)) {
 			const output = new Array(source.length);
 			for (let i = 0; i < source.length; i++) output[i] = Util.deepClone(source[i]);
 			return output;
 		}
-		if (source instanceof Map) {
+		if (Util.isObject(source)) {
+			const output = {};
+			for (const key in source) output[key] = source[key];
+			return output;
+		}
+		if (source instanceof Map || source instanceof WeakMap) {
 			const output = new source.constructor();
 			for (const [key, value] of source.entries()) output.set(key, Util.deepClone(value));
 			return output;
 		}
-		if (source instanceof Set) {
+		if (source instanceof Set || source instanceof WeakSet) {
 			const output = new source.constructor();
 			for (const value of source.values()) output.add(Util.deepClone(value));
-			return output;
-		}
-		if (Util.isObject(source)) {
-			const output = {};
-			for (const key in source) output[key] = source[key];
 			return output;
 		}
 		return source;
