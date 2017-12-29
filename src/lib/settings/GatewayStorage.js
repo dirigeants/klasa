@@ -1,5 +1,5 @@
 const SchemaFolder = require('./SchemaFolder');
-const { tryParse } = require('../util/util');
+const { tryParse, deepClone } = require('../util/util');
 const { resolve } = require('path');
 const fs = require('fs-nextra');
 
@@ -200,9 +200,9 @@ class GatewayStorage {
 	 * @private
 	 */
 	static _parseSQLValue(value, schemaPiece) {
-		if (typeof value === 'undefined') return schemaPiece.array ? schemaPiece.default.slice(0) : schemaPiece.default;
+		if (typeof value === 'undefined') return deepClone(schemaPiece.default);
 		if (schemaPiece.array) {
-			if (value === null) return schemaPiece.default.slice(0);
+			if (value === null) return deepClone(schemaPiece.default);
 			if (typeof value === 'string') value = tryParse(value);
 			if (Array.isArray(value)) return value.map(val => GatewayStorage._parseSQLValue(val, schemaPiece));
 		} else {
