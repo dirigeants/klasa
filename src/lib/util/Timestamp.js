@@ -9,7 +9,7 @@ const TOKENS = {
 	Q: 1,
 	M: 4,
 	D: 4,
-	d: 1,
+	d: 4,
 	X: 1,
 	x: 1,
 	H: 2,
@@ -23,6 +23,7 @@ const TOKENS = {
 };
 /* eslint-enable id-length */
 
+const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 /**
@@ -175,6 +176,15 @@ class Timestamp {
 				if (day !== '12' && day.endsWith('2')) return `${day}nd`;
 				if (day !== '13' && day.endsWith('3')) return `${day}rd`;
 				return `${day}th`;
+			}
+			case 'dd': {
+				return days[time.getDate()].slice(0, 2);
+			}
+			case 'ddd': {
+				return days[time.getDate()].slice(0, 3);
+			}
+			case 'dddd': {
+				return days[time.getDate()];
 			}
 			case 'X': return String(time.valueOf() / SECOND);
 			case 'x': return String(time.valueOf());
