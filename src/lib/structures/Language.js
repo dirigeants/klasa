@@ -1,5 +1,7 @@
+const { pathExists } = require('fs-nextra');
+const { join } = require('path');
 const Piece = require('./interfaces/Piece');
-const { mergeDefault } = require('../util/util');
+const { mergeDefault, isClass } = require('../util/util');
 
 /**
  * Base class for all Klasa Languages. See {@tutorial CreatingLanguages} for more information how to use this class
@@ -98,7 +100,18 @@ class Language {
 	 * @abstract
 	 */
 	async init() {
-		// Optionally defined in extension Classes
+		const loc = join(this.client.coreBaseDir, 'languages', this.file);
+		if (this.dir !== this.client.coreBaseDir && await pathExists(loc)) {
+			try {
+				const CorePiece = require(loc);
+				if (!isClass(CorePiece)) return;
+				const coreLang = new CorePiece(this.client, this.client.coreBaseDir, this.file);
+				this.language = mergeDefault(coreLang.language, this.language);
+			} catch (error) {
+				return;
+			}
+		}
+		return;
 	}
 
 	// left for documentation

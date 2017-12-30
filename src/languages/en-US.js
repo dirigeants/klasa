@@ -148,4 +148,8 @@ module.exports = class extends Language {
 		};
 	}
 
+	async init() {
+		await super.init();
+	}
+
 };
