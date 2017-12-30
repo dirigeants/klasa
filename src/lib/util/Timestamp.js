@@ -178,13 +178,13 @@ class Timestamp {
 				return `${day}th`;
 			}
 			case 'dd': {
-				return days[time.getDate()].slice(0, 2);
+				return days[time.getDay()].slice(0, 2);
 			}
 			case 'ddd': {
-				return days[time.getDate()].slice(0, 3);
+				return days[time.getDay()].slice(0, 3);
 			}
 			case 'dddd': {
-				return days[time.getDate()];
+				return days[time.getDay()];
 			}
 			case 'X': return String(time.valueOf() / SECOND);
 			case 'x': return String(time.valueOf());
