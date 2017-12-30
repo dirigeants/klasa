@@ -1,6 +1,6 @@
 const SchemaPiece = require('./SchemaPiece');
 const Schema = require('./Schema');
-const { toTitleCase } = require('../util/util');
+const { toTitleCase, deepClone } = require('../util/util');
 const fs = require('fs-nextra');
 
 /**
@@ -224,14 +224,6 @@ class SchemaFolder extends Schema {
 	 */
 	force(action, key, piece) {
 		if (!(piece instanceof SchemaPiece) && !(piece instanceof SchemaFolder)) throw new TypeError(`'schemaPiece' must be an instance of 'SchemaPiece' or an instance of 'SchemaFolder'.`);
-		if (this.gateway.type === 'clientStorage') {
-			const { data, lastKey } = this.gateway.getPath(piece.path, { piece: false });
-			if (action === 'add') data[lastKey] = this.defaults[key];
-			else if (action === 'delete') delete data[lastKey];
-
-			if (this.gateway.sql) return this.gateway.provider.update(this.gateway.type, this.client.id, this.gateway.data);
-			return this.gateway.provider[action === 'delete' ? 'replace' : 'update'](this.gateway.type, this.client.id, this.gateway.data);
-		}
 
 		const values = this.gateway.cache.getValues(this.gateway.type);
 		const path = piece.path.split('.');
@@ -241,7 +233,7 @@ class SchemaFolder extends Schema {
 			for (let i = 0; i < values.length; i++) {
 				let value = values[i];
 				for (let j = 0; j < path.length - 1; j++) value = value[path[j]];
-				value[path[path.length - 1]] = defValue;
+				value[path[path.length - 1]] = deepClone(defValue);
 			}
 			return this.gateway.provider.updateValue(this.gateway.type, piece.path, defValue, this.gateway.options.nice);
 		}
@@ -302,8 +294,7 @@ class SchemaFolder extends Schema {
 		for (let i = 0; i < this.keyArray.length; i++) {
 			const key = this.keyArray[i];
 			if (key.type === 'Folder') data[key] = key.getDefaults(data[key]);
-			else if (this[key].array && Array.isArray(this[key].default)) data[key] = this[key].default.slice(0);
-			else data[key] = this[key].default;
+			else data[key] = deepClone(this[key].default);
 		}
 		return data;
 	}

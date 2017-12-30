@@ -13,6 +13,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#150](https://github.com/dirigeants/klasa/pull/150)] Added `util.deepClone` to clone objects. (kyranet)
 - [[#142](https://github.com/dirigeants/klasa/pull/142)] Added several typing-related methods to get deeper (JSDoc) types. (kyranet)
 - [[#138](https://github.com/dirigeants/klasa/pull/138)] Added `util.getTypeName` to get the input's type. (kyranet)
 - [[#136](https://github.com/dirigeants/klasa/pull/136)] Added flag arguments. (bdistin)
@@ -119,6 +120,8 @@ NOTE: For the contributors, you add new entries to this document following this 
 ### Fixed
 
 - [[#145](https://github.com/dirigeants/klasa/pull/145)] Fixed ClientStorage configs not updating across shards, and added a missing check in some `broadcastEval`s. (kyranet)
+- [[#150](https://github.com/dirigeants/klasa/pull/150)] Fixed a wrong type in typings. (kyranet)
+- [[#150](https://github.com/dirigeants/klasa/pull/150)] Fixed a bug where some objects would be partially cloned when adding new keys or defaulting. (kyranet)
 - [[#142](https://github.com/dirigeants/klasa/pull/142)] Fixed a critical bug in nested objects when using the JSON provider. Note: `Object.assign` doesn't merge nested objects. (kyranet)
 - [[#141](https://github.com/dirigeants/klasa/pull/141)] Fixed `KlasaConsoleConfigs` not defaulting correctly. (bdistin)
 - [[#141](https://github.com/dirigeants/klasa/pull/141)] Fixed wrong sharding behaviour when using PM2 in a non-sharded bot. (bdistin)
