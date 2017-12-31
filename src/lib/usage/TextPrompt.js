@@ -243,7 +243,7 @@ class TextPrompt {
 	 */
 	async multiPossibles(possible) {
 		if (possible >= this._currentUsage.possibles.length) {
-			if (this._currentUsage.type !== 'optional' || !this._repeat) {
+			if (this._currentUsage.type !== 'optional' && !this._repeat) {
 				return this.handleError(this.message.language.get('COMMANDMESSAGE_NOMATCH', this._currentUsage.possibles.map(poss => poss.name).join(', ')));
 			}
 			this.args.splice(this.params.length, 0, undefined);
