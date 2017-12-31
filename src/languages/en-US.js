@@ -49,6 +49,13 @@ module.exports = class extends Language {
 			INHIBITOR_REQUIRED_CONFIGS: (configs) => `The guild is missing the **${configs.join(', ')}** guild setting${configs.length !== 1 ? 's' : ''} and thus the command cannot run.`,
 			INHIBITOR_RUNIN: (types) => `This command is only available in ${types} channels`,
 			INHIBITOR_RUNIN_NONE: (name) => `The ${name} command is not configured to run in any channel.`,
+			COMMAND_BLACKLIST_DESCRIPTION: 'Blacklists or un-blacklists users and guilds from the bot.',
+			COMMAND_BLACKLIST_SUCCESS: (usersAdded, usersRemoved, guildsAdded, guildsRemoved) => [
+				usersAdded.length ? `**UsersAdded**\n${util.codeBlock('', usersAdded.join(', '))}` : '',
+				usersRemoved.length ? `**UsersRemoved**\n${util.codeBlock('', usersRemoved.join(', '))}` : '',
+				guildsAdded.length ? `**GuildsAdded**\n${util.codeBlock('', guildsAdded.join(', '))}` : '',
+				guildsRemoved.length ? `**GuildsRemoved**\n${util.codeBlock('', guildsRemoved.join(', '))}` : ''
+			].filter(val => val !== '').join('\n'),
 			COMMAND_EVAL_DESCRIPTION: 'Evaluates arbitrary Javascript. Reserved for bot owner.',
 			COMMAND_EVAL_EXTENDEDHELP: [
 				'The eval command evaluates code as-in, any error thrown from it will be handled.',
