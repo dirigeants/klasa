@@ -315,8 +315,8 @@ class TextPrompt {
 		const { content, flags } = this.constructor.getFlags(original, this.usage.usageDelim);
 		this.flags = flags;
 		this.args = this.quotedStringSupport ?
-			this.constructor.getQuotedStringArgs(content, this.usage.usageDelim) :
-			this.constructor.getArgs(content, this.usage.usageDelim);
+			this.constructor.getQuotedStringArgs(content, this.usage.usageDelim).map(arg => arg.trim()) :
+			this.constructor.getArgs(content, this.usage.usageDelim).map(arg => arg.trim());
 	}
 
 	/**
@@ -345,8 +345,7 @@ class TextPrompt {
 	 * @private
 	 */
 	static getArgs(content, delim) {
-		// eslint-disable-next-line newline-per-chained-call
-		const args = content.split(delim !== '' ? delim : undefined);
+		const args = content.replace(new RegExp(`(${delim})(?:${delim})+`, 'g'), '$1').split(delim !== '' ? delim : undefined);
 		return args.length === 1 && args[0] === '' ? [] : args;
 	}
 
