@@ -381,10 +381,10 @@ class KlasaClient extends Discord.Client {
 
 		// Add the gateways
 		await Promise.all([
-			this.gateways.add('guilds', constants.GATEWAY_RESOLVERS.GUILDS, this.gateways.guildsSchema, undefined, false),
-			this.gateways.add('users', constants.GATEWAY_RESOLVERS.USERS, undefined, undefined, false),
-			this.gateways.add('clientStorage', constants.GATEWAY_RESOLVERS.CLIENT_STORAGE, this.gateways.clientStorageSchema, undefined, false)
-		]);
+			constants.GATEWAYS.GUILDS,
+			constants.GATEWAYS.USERS,
+			constants.GATEWAYS.CLIENT_STORAGE
+		].map(gw => this.gateways.add(gw.name, gw.resolver, gw.getSchema.call(this), gw.options, gw.download)));
 
 		// Automatic Prefix editing detection.
 		if (typeof this.options.prefix === 'string' && this.options.prefix !== this.gateways.guilds.schema.prefix.default) {

@@ -620,18 +620,6 @@ declare module 'klasa' {
 		public caches: string[];
 		public ready: boolean;
 
-		public readonly guildsSchema: {
-			prefix: SchemaPieceJSON,
-			language: SchemaPieceJSON,
-			disableNaturalPrefix: SchemaPieceJSON,
-			disabledCommands: SchemaPieceJSON
-		};
-
-		public readonly clientStorageSchema: {
-			userBlacklist: SchemaPieceJSON,
-			guildBlacklist: SchemaPieceJSON
-		};
-
 		public guilds: Gateway;
 		public users: Gateway;
 		public clientStorage: Gateway;
