@@ -68,6 +68,16 @@ class Timestamp {
 	}
 
 	/**
+	 * Display the current date utc with the current pattern.
+	 * @since 0.5.0
+	 * @param {(Date|number|string)} [time=new Date()] The time to display in utc
+	 * @returns {string}
+	 */
+	displayUTC(time = new Date()) {
+		return Timestamp._display(this._template, Timestamp.utc(time));
+	}
+
+	/**
 	 * Edits the current pattern.
 	 * @since 0.5.0
 	 * @param {string} pattern The new pattern for this instance
