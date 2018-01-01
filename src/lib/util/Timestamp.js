@@ -143,7 +143,7 @@ class Timestamp {
 	 * @returns {Date}
 	 */
 	static utc(time = new Date()) {
-		time = Timestamp.resolveDate(time);
+		time = Timestamp._resolveDate(time);
 		return new Date(time.getUTCFullYear(), time.getUTCMonth(), time.getUTCDate(), time.getUTCHours(), time.getUTCMinutes(), time.getUTCSeconds());
 	}
 
@@ -157,7 +157,7 @@ class Timestamp {
 	 */
 	static _display(template, time) {
 		let output = '';
-		const parsedTime = Timestamp.resolveDate(time);
+		const parsedTime = Timestamp._resolveDate(time);
 		for (const entry of template) output += entry.content || Timestamp._parse(entry.type, parsedTime);
 
 		return output;
@@ -270,7 +270,7 @@ class Timestamp {
 	 * @returns {Date}
 	 * @private
 	 */
-	static resolveDate(time) {
+	static _resolveDate(time) {
 		return time instanceof Date ? time : new Date(time);
 	}
 
