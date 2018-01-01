@@ -1,5 +1,5 @@
 const { Command } = require('klasa');
-const { User } = require('discord.js');
+const { Guild } = require('discord.js');
 
 module.exports = class extends Command {
 
@@ -7,7 +7,7 @@ module.exports = class extends Command {
 		super(...args, {
 			permLevel: 10,
 			description: (msg) => msg.language.get('COMMAND_BLACKLIST_DESCRIPTION'),
-			usage: '<User:user|Guild:guild|guild:str> [...]',
+			usage: '<User:user|Guild:guild> [...]',
 			usageDelim: ' '
 		});
 	}
@@ -20,12 +20,12 @@ module.exports = class extends Command {
 		const guildsRemoved = [];
 
 		for (const userOrGuild of usersAndGuilds) {
-			const type = userOrGuild instanceof User ? 'user' : 'guild';
+			const type = userOrGuild instanceof Guild ? 'guild' : 'user';
 
-			await this.client.configs.update(`${type}Blacklist`, userOrGuild.id || userOrGuild, msg.guild);
+			await this.client.configs.update(`${type}Blacklist`, userOrGuild.id, msg.guild);
 
-			if (type === 'guild' && this.client.configs.guildBlacklist.includes(userOrGuild.id || userOrGuild)) guildsAdded.push(userOrGuild.name || userOrGuild);
-			else if (type === 'guild') guildsRemoved.push(userOrGuild.name || userOrGuild);
+			if (type === 'guild' && this.client.configs.guildBlacklist.includes(userOrGuild.id)) guildsAdded.push(userOrGuild.name);
+			else if (type === 'guild') guildsRemoved.push(userOrGuild.name);
 			else if (type === 'user' && this.client.configs.userBlacklist.includes(userOrGuild.id)) usersAdded.push(userOrGuild.username);
 			else usersRemoved.push(userOrGuild.username);
 		}
