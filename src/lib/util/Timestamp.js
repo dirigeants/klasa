@@ -242,6 +242,17 @@ class Timestamp {
 		return template;
 	}
 
+	/**
+	 * Creates a UTC Date object to work with.
+	 * @since 0.5.0
+	 * @param {Date} [date=new Date()] The date to convert to utc
+	 * @returns {Date}
+	 * @private
+	 */
+	static utc(date = new Date()) {
+		return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
+	}
+
 }
 
 module.exports = Timestamp;
