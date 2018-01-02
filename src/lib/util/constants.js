@@ -31,9 +31,8 @@ exports.DEFAULTS = {
 			promptLimit: Infinity,
 			quotedStringSupport: false
 		},
-		providers: {},
+		providers: { default: 'json' },
 		gateways: {
-			defaultProvider: 'json',
 			guilds: {},
 			users: {},
 			clientStorage: {}

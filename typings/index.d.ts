@@ -1270,7 +1270,7 @@ declare module 'klasa' {
 		console?: KlasaConsoleConfig;
 		consoleEvents?: KlasaConsoleEvents;
 		customPromptDefaults?: KlasaCustomPromptDefaults;
-		gateways?: KlasaGatewayOptions;
+		gateways?: KlasaGatewaysOptions;
 		ignoreBots?: boolean;
 		ignoreSelf?: boolean;
 		language?: string;
@@ -1279,7 +1279,7 @@ declare module 'klasa' {
 		pieceDefaults?: KlasaPieceDefaults;
 		prefix?: string;
 		preserveConfigs?: boolean;
-		providers?: { [key: string]: any };
+		providers?: KlasaProvidersOptions;
 		readyMessage?: (client: KlasaClient) => string;
 		regexPrefix?: RegExp;
 		typing?: boolean;
@@ -1308,8 +1308,12 @@ declare module 'klasa' {
 		providers?: ProviderOptions;
 	};
 
-	export type KlasaGatewayOptions = {
-		defaultProvider?: string;
+	export type KlasaProvidersOptions = {
+		default?: string;
+		[key: string]: string | object;
+	};
+
+	export type KlasaGatewaysOptions = {
 		clientStorage?: SettingsOptions;
 		guilds?: SettingsOptions;
 		users?: SettingsOptions;

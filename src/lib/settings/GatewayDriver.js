@@ -179,7 +179,7 @@ class GatewayDriver {
 		validateFunction = validateFunction.bind(this);
 		if (!this.client.methods.util.isObject(schema)) throw 'Schema must be a valid object or left undefined for an empty object.';
 
-		options.provider = this._checkProvider(options.provider || this.client.options.gateways.defaultProvider);
+		options.provider = this._checkProvider(options.provider || this.client.options.providers.default);
 		if (options.provider.cache) throw `The provider ${options.provider.name} is designed for caching, not persistent data. Please try again with another.`;
 		options.cache = this._checkProvider('collection');
 
