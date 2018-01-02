@@ -163,7 +163,7 @@ class Configuration {
 	 * @returns {Configuration}
 	 */
 	clone() {
-		return new Configuration(this.gateway, Configuration._clone(this, this.gateway.schema));
+		return new this.gateway.Configuration(this.gateway, this.gateway.Configuration._clone(this, this.gateway.schema));
 	}
 
 	/**
