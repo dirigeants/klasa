@@ -86,6 +86,38 @@ class Util {
 	}
 
 	/**
+	 * Deep clone a value
+	 * @since 0.5.0
+	 * @param {*} source The object to clone
+	 * @returns {*}
+	 */
+	static deepClone(source) {
+		// Check if it's a primitive (with exception of function and null, which is typeof object)
+		if (typeof source !== 'object' || source === null) return source;
+		if (Array.isArray(source)) {
+			const output = new Array(source.length);
+			for (let i = 0; i < source.length; i++) output[i] = Util.deepClone(source[i]);
+			return output;
+		}
+		if (Util.isObject(source)) {
+			const output = {};
+			for (const key in source) output[key] = source[key];
+			return output;
+		}
+		if (source instanceof Map || source instanceof WeakMap) {
+			const output = new source.constructor();
+			for (const [key, value] of source.entries()) output.set(key, Util.deepClone(value));
+			return output;
+		}
+		if (source instanceof Set || source instanceof WeakSet) {
+			const output = new source.constructor();
+			for (const value of source.values()) output.add(Util.deepClone(value));
+			return output;
+		}
+		return source;
+	}
+
+	/**
 	 * Applies an interface to a class
 	 * @since 0.1.1
 	 * @param {Object} base The interface to apply to a structure
@@ -290,7 +322,7 @@ class Util {
 		if (!given) return def;
 		for (const key in def) {
 			if (!has(given, key) || given[key] === undefined) {
-				given[key] = def[key];
+				given[key] = Array.isArray(def[key]) ? def[key].slice(0) : def[key];
 			} else if (given[key] === Object(given[key])) {
 				given[key] = Util.mergeDefault(def[key], given[key]);
 			}

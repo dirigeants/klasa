@@ -133,10 +133,10 @@ class GatewayDriver {
 				sql: 'TEXT'
 			},
 			guildBlacklist: {
-				type: 'guild',
+				type: 'string',
 				default: [],
-				min: null,
-				max: null,
+				min: 17,
+				max: 19,
 				array: true,
 				configurable: true,
 				sql: 'TEXT'

@@ -329,6 +329,7 @@ declare module 'klasa' {
 		public static applyToClass(base: object, structure: object, skips?: string[]): void;
 		public static clean(text: string): string;
 		public static codeBlock(lang: string, expression: string): string;
+		public static deepClone(source: any): any;
 		public static exec(exec: string, options?: ExecOptions): Promise<{ stdout: string, stderr: string }>;
 		public static getDeepTypeMap(input: Map<any, any> | WeakMap<object, any> | Collection<any, any>, basic?: string): string;
 		public static getDeepTypeName(input: any): string;
@@ -483,7 +484,7 @@ declare module 'klasa' {
 		public constructor(levels?: number);
 		public requiredLevels: number;
 
-		public addLevel(level: number, brk: boolean, check: (client: KlasaMessage, msg: KlasaMessage) => true): this;
+		public addLevel(level: number, brk: boolean, check: (client: KlasaClient, msg: KlasaMessage) => boolean): this;
 		public set(level: number, obj: PermissionLevel): this;
 		public isValid(): boolean;
 		public debug(): string;
