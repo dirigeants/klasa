@@ -397,7 +397,12 @@ class SchemaFolder extends Schema {
 	 */
 	async _shardSyncSchema(piece, action, force) {
 		if (!this.client.sharded) return;
-		await this.client.shard.broadcastEval(`this.gateways.${this.gateway.type}._shardSync(${piece.path.split('.')}, ${JSON.stringify(piece)}, ${action}, ${force});`);
+		await this.client.shard.broadcastEval(`
+			if (this.shard.id !== ${this.client.shard.id}) {
+				this.gateways.${this.gateway.type}._shardSync(
+					${JSON.stringify(piece.path.split('.'))}, ${JSON.stringify(piece)}, ${action}, ${force});
+			}
+		`);
 	}
 
 	/**
