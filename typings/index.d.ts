@@ -1278,7 +1278,7 @@ declare module 'klasa' {
 		prefix?: string;
 		preserveConfigs?: boolean;
 		customPromptDefaults?: KlasaCustomPromptDefaults;
-		provider?: KlasaProviderOptions;
+		gateways?: KlasaGatewayOptions;
 		readyMessage?: (client: KlasaClient) => string;
 		regexPrefix?: RegExp;
 		typing?: boolean;
@@ -1307,8 +1307,11 @@ declare module 'klasa' {
 		providers?: ProviderOptions;
 	};
 
-	export type KlasaProviderOptions = {
-		engine: string;
+	export type KlasaGatewayOptions = {
+		defaultProvider?: string;
+		clientStorage?: SettingsOptions;
+		guilds?: SettingsOptions;
+		users?: SettingsOptions;
 		[key: string]: string | object;
 	};
 

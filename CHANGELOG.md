@@ -13,6 +13,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#152](https://github.com/dirigeants/klasa/pull/152)] Added the possibility to configure each default gateway separately. (kyranet)
 - [[#150](https://github.com/dirigeants/klasa/pull/150)] Added `util.deepClone` to clone objects. (kyranet)
 - [[#142](https://github.com/dirigeants/klasa/pull/142)] Added several typing-related methods to get deeper (JSDoc) types. (kyranet)
 - [[#138](https://github.com/dirigeants/klasa/pull/138)] Added `util.getTypeName` to get the input's type. (kyranet)
@@ -60,6 +61,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#152](https://github.com/dirigeants/klasa/pull/152)] **[BREAKING]** Changed `KlasaClientOptions.provider.engine` to `KlasaClientOptions.gateways.defaultProvider`. (kyranet)
 - [[#143](https://github.com/dirigeants/klasa/pull/143)] TS' typings cleanup (kyranet)
 - [[#141](https://github.com/dirigeants/klasa/pull/141)] Added a shard prefix into the `KlasaConsole` class to recognize the shard the message got sent. (bdistin)
 - [[#138](https://github.com/dirigeants/klasa/pull/138)] Upgraded the built-in eval command, **inspired in tech6hutch's The Duke Of Evals**. (kyranet)

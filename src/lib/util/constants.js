@@ -31,6 +31,12 @@ exports.DEFAULTS = {
 			promptLimit: Infinity,
 			quotedStringSupport: false
 		},
+		gateways: {
+			defaultProvider: 'json',
+			guilds: { provider: 'json' },
+			users: { provider: 'json' },
+			clientStorage: { provider: 'json' }
+		},
 		pieceDefaults: {
 			commands: {
 				aliases: [],
