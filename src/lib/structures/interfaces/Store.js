@@ -38,7 +38,7 @@ class Store {
 			if (!isClass(Piece)) throw new TypeError(`Failed to load file '${loc}'. The exported structure is not a class.`);
 			piece = this.set(new Piece(this.client, dir, file));
 		} catch (error) {
-			this.client.emit('wtf', `Failed to load file '${loc}'. Error:\n${error.stack}`);
+			this.client.emit('wtf', `Failed to load file '${loc}'. Error:\n${error.stack || error}`);
 		}
 		delete require.cache[loc];
 		return piece;
