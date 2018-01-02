@@ -33,9 +33,9 @@ exports.DEFAULTS = {
 		},
 		gateways: {
 			defaultProvider: 'json',
-			guilds: { provider: 'json' },
-			users: { provider: 'json' },
-			clientStorage: { provider: 'json' }
+			guilds: {},
+			users: {},
+			clientStorage: {}
 		},
 		pieceDefaults: {
 			commands: {
