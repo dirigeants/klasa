@@ -1,4 +1,4 @@
-const { isObject, makeObject } = require('../util/util');
+const { isObject, makeObject, deepClone, tryParse } = require('../util/util');
 
 /**
  * The Configuration class that stores the cache for each entry in SettingGateway.
@@ -293,7 +293,7 @@ class Configuration {
 	 * @private
 	 */
 	async _parseReset(key, { path, route }) {
-		const parsedID = path.default;
+		const parsedID = deepClone(path.default);
 		await this._setValue(parsedID, path, route);
 		return { parsed: parsedID, parsedID, array: null, path, route };
 	}
@@ -507,10 +507,14 @@ class Configuration {
 			}
 		} else if (typeof data === 'undefined') {
 			// It's a SchemaPiece instance, so it has a property of 'key'.
-			data = schema.array ? schema.default.slice(0) : schema.default;
+			data = deepClone(schema.default);
 		} else if (schema.array) {
+			if (Array.isArray(data)) return data;
 			// Some SQL databases are unable to store Arrays...
-			data = data === null ? schema.default.slice(0) : typeof data === 'string' ? JSON.stringify(data) : schema.default.slice(0);
+			if (data === null) return deepClone(schema.default);
+			if (typeof data === 'string') return tryParse(data);
+			this.client.emit('wtf',
+				new TypeError(`${this} - ${schema.path} | Expected an array, null, or undefined. Got: ${Object.prototype.toString.call(data)}`));
 		}
 
 		return data;

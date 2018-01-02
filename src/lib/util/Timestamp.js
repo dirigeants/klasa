@@ -9,7 +9,7 @@ const TOKENS = {
 	Q: 1,
 	M: 4,
 	D: 4,
-	d: 1,
+	d: 4,
 	X: 1,
 	x: 1,
 	H: 2,
@@ -23,6 +23,7 @@ const TOKENS = {
 };
 /* eslint-enable id-length */
 
+const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 /**
@@ -64,6 +65,16 @@ class Timestamp {
 	 */
 	display(time = new Date()) {
 		return Timestamp._display(this._template, time);
+	}
+
+	/**
+	 * Display the current date utc with the current pattern.
+	 * @since 0.5.0
+	 * @param {(Date|number|string)} [time=new Date()] The time to display in utc
+	 * @returns {string}
+	 */
+	displayUTC(time) {
+		return Timestamp._display(this._template, Timestamp.utc(time));
 	}
 
 	/**
@@ -126,6 +137,17 @@ class Timestamp {
 	}
 
 	/**
+	 * Creates a UTC Date object to work with.
+	 * @since 0.5.0
+	 * @param {(Date|number|string)} [time=new Date()] The date to convert to utc
+	 * @returns {Date}
+	 */
+	static utc(time = new Date()) {
+		time = Timestamp._resolveDate(time);
+		return new Date(time.getUTCFullYear(), time.getUTCMonth(), time.getUTCDate(), time.getUTCHours(), time.getUTCMinutes(), time.getUTCSeconds());
+	}
+
+	/**
 	 * Display the current date with the current pattern.
 	 * @since 0.5.0
 	 * @param {string} template The pattern to parse
@@ -135,7 +157,7 @@ class Timestamp {
 	 */
 	static _display(template, time) {
 		let output = '';
-		const parsedTime = time instanceof Date ? time : new Date(time);
+		const parsedTime = Timestamp._resolveDate(time);
 		for (const entry of template) output += entry.content || Timestamp._parse(entry.type, parsedTime);
 
 		return output;
@@ -175,6 +197,15 @@ class Timestamp {
 				if (day !== '12' && day.endsWith('2')) return `${day}nd`;
 				if (day !== '13' && day.endsWith('3')) return `${day}rd`;
 				return `${day}th`;
+			}
+			case 'dd': {
+				return days[time.getDay()].slice(0, 2);
+			}
+			case 'ddd': {
+				return days[time.getDay()].slice(0, 3);
+			}
+			case 'dddd': {
+				return days[time.getDay()];
 			}
 			case 'X': return String(time.valueOf() / SECOND);
 			case 'x': return String(time.valueOf());
@@ -230,6 +261,17 @@ class Timestamp {
 		}
 
 		return template;
+	}
+
+	/**
+	 * Resolves a date.
+	 * @since 0.5.0
+	 * @param {(Date|number|string)} time The time to parse
+	 * @returns {Date}
+	 * @private
+	 */
+	static _resolveDate(time) {
+		return time instanceof Date ? time : new Date(time);
 	}
 
 }
