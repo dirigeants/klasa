@@ -68,6 +68,16 @@ class Timestamp {
 	}
 
 	/**
+	 * Display the current date utc with the current pattern.
+	 * @since 0.5.0
+	 * @param {(Date|number|string)} [time=new Date()] The time to display in utc
+	 * @returns {string}
+	 */
+	displayUTC(time) {
+		return Timestamp._display(this._template, Timestamp.utc(time));
+	}
+
+	/**
 	 * Edits the current pattern.
 	 * @since 0.5.0
 	 * @param {string} pattern The new pattern for this instance
@@ -127,6 +137,17 @@ class Timestamp {
 	}
 
 	/**
+	 * Creates a UTC Date object to work with.
+	 * @since 0.5.0
+	 * @param {(Date|number|string)} [time=new Date()] The date to convert to utc
+	 * @returns {Date}
+	 */
+	static utc(time = new Date()) {
+		time = Timestamp._resolveDate(time);
+		return new Date(time.getUTCFullYear(), time.getUTCMonth(), time.getUTCDate(), time.getUTCHours(), time.getUTCMinutes(), time.getUTCSeconds());
+	}
+
+	/**
 	 * Display the current date with the current pattern.
 	 * @since 0.5.0
 	 * @param {string} template The pattern to parse
@@ -136,7 +157,7 @@ class Timestamp {
 	 */
 	static _display(template, time) {
 		let output = '';
-		const parsedTime = time instanceof Date ? time : new Date(time);
+		const parsedTime = Timestamp._resolveDate(time);
 		for (const entry of template) output += entry.content || Timestamp._parse(entry.type, parsedTime);
 
 		return output;
@@ -240,6 +261,17 @@ class Timestamp {
 		}
 
 		return template;
+	}
+
+	/**
+	 * Resolves a date.
+	 * @since 0.5.0
+	 * @param {(Date|number|string)} time The time to parse
+	 * @returns {Date}
+	 * @private
+	 */
+	static _resolveDate(time) {
+		return time instanceof Date ? time : new Date(time);
 	}
 
 }
