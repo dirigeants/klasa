@@ -155,7 +155,7 @@ class Gateway extends GatewayStorage {
 	 * @since 0.5.0
 	 * @param {string} id The ID of the entry
 	 * @param {*} data The data to insert
-	 * @return {Configuration}
+	 * @returns {Configuration}
 	 */
 	insertEntry(id, data = {}) {
 		const configs = new this.Configuration(this, Object.assign(data, { id }));

@@ -60,7 +60,7 @@ class FinalizerStore extends Collection {
 	 * Deletes a finalizer from the store
 	 * @since 0.0.1
 	 * @param {Finalizer|string} name The finalizer object or a string representing the structure this store caches
-	 * @return {boolean} whether or not the delete was successful.
+	 * @returns {boolean} whether or not the delete was successful.
 	 */
 	delete(name) {
 		const finalizer = this.resolve(name);
@@ -75,7 +75,7 @@ class FinalizerStore extends Collection {
 	 * @param {KlasaMessage} msg The message that called the command
 	 * @param {KlasaMessage|any} mes The response of the command
 	 * @param {StopWatch} timer The timer run from start to queue of the command
-	 * @return {void}
+	 * @returns {void}
 	 */
 	async run(msg, mes, timer) {
 		for (const finalizer of this.values()) {

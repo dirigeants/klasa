@@ -17,7 +17,7 @@ class Store {
 	/**
 	 * Initializes all pieces in this store.
 	 * @since 0.0.1
-	 * @return {Array}
+	 * @returns {Array}
 	 */
 	init() {
 		return Promise.all(this.map(piece => piece.enabled ? piece.init() : true));
@@ -47,7 +47,7 @@ class Store {
 	/**
 	 * Loads all of our pieces from both the user and core directories.
 	 * @since 0.0.1
-	 * @return {number} The number of pieces loaded.
+	 * @returns {number} The number of pieces loaded.
 	 */
 	async loadAll() {
 		this.clear();
@@ -64,7 +64,7 @@ class Store {
 	 * Resolve a string or piece into a piece object.
 	 * @since 0.0.1
 	 * @param {Piece|string} name The piece object or a string representing a piece's name
-	 * @return {Piece}
+	 * @returns {Piece}
 	 */
 	resolve(name) {
 		if (name instanceof this.holds) return name;

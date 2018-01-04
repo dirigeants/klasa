@@ -285,7 +285,7 @@ class KlasaConsole extends Console {
 	 * @since 0.4.0
 	 * @param {*} data Some data to flatten
 	 * @param {boolean} useColors Whether or not the inspection should color the output
-	 * @return {string}
+	 * @returns {string}
 	 */
 	static flatten(data, useColors) {
 		if (typeof data === 'undefined' || typeof data === 'number' || data === null) return String(data);

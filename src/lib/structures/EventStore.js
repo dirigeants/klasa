@@ -59,7 +59,7 @@ class EventStore extends Collection {
 	/**
 	 * Clears the events from the store and removes the listeners.
 	 * @since 0.0.1
-	 * @return {void}
+	 * @returns {void}
 	 */
 	clear() {
 		for (const event of this.keys()) this.delete(event);
@@ -69,7 +69,7 @@ class EventStore extends Collection {
 	 * Deletes an event from the store.
 	 * @since 0.0.1
 	 * @param {Event|string} name An event object or a string representing the event name.
-	 * @return {boolean} whether or not the delete was successful.
+	 * @returns {boolean} whether or not the delete was successful.
 	 */
 	delete(name) {
 		const event = this.resolve(name);
