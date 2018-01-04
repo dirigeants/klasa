@@ -154,8 +154,8 @@ class Colors {
 	 * @returns {string}
 	 */
 	format(string, { style, background, text } = {}) {
-		const closures = this.text(text, this.background(background, this.style(style)));
-		return `\u001B[${closures.opening.join(';')}m${string}\u001B[${closures.closing.join(';')}m`;
+		const { opening, closing } = this.text(text, this.background(background, this.style(style)));
+		return `\u001B[${opening.join(';')}m${string}\u001B[${closing.join(';')}m`;
 	}
 
 	style(style, { opening = [], closing = [] } = {}) {
