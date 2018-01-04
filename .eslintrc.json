@@ -22,7 +22,7 @@
 				"augments": "extends",
 				"fires": "emits",
 				"var": "member",
-				"yeild": "yeilds",
+				"yield": "yields",
 				"return": "returns",
 				"exception": "throws",
 				"virtual": "abstract"
