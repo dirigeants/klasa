@@ -15,6 +15,7 @@ const LanguageStore = require('./structures/LanguageStore');
 const ProviderStore = require('./structures/ProviderStore');
 const EventStore = require('./structures/EventStore');
 const ExtendableStore = require('./structures/ExtendableStore');
+const TaskStore = require('./structures/TaskStore');
 
 /**
  * The client for handling everything. See {@tutorial GettingStarted} for more information how to get started using this class.
@@ -190,6 +191,13 @@ class KlasaClient extends Discord.Client {
 		 * @type {ExtendableStore}
 		 */
 		this.extendables = new ExtendableStore(this);
+
+		/**
+		 * The cache where tasks are stored
+		 * @since 0.5.0
+		 * @type {TaskStore}
+		 */
+		this.tasks = new TaskStore(this);
 
 		/**
 		 * A Store registry

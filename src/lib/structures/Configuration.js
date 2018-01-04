@@ -197,7 +197,11 @@ class Configuration {
 	 * @returns {Promise<Configuration>}
 	 */
 	async destroy() {
-		await this.gateway.deleteEntry(this.id);
+		if (this.existsInDB) {
+			await this.gateway.provider.delete(this.gateway.type, this.id);
+			if (this.client.listenerCount('configDeleteEntry')) this.client.emit('configDeleteEntry', this);
+		}
+		this.gateway.cache.delete(this.gateway.type, this.id);
 		return this;
 	}
 
@@ -534,7 +538,7 @@ class Configuration {
 		for (let i = 0; i < schema.keyArray.length; i++) {
 			const key = schema.keyArray[i];
 			if (schema[key].type === 'Folder') clone[key] = Configuration._clone(data[key], schema[key]);
-			else clone[key] = schema[key].array ? data[key].slice(0) : data[key];
+			else clone[key] = deepClone(data[key]);
 		}
 
 		return clone;

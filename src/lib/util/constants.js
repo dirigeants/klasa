@@ -72,7 +72,8 @@ exports.DEFAULTS = {
 				sql: false,
 				cache: false,
 				description: ''
-			}
+			},
+			tasks: { enabled: true }
 		}
 	},
 
