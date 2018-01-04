@@ -154,27 +154,26 @@ class Colors {
 	 * @returns {string}
 	 */
 	format(string, { style, background, text } = {}) {
-		const closures = this.text(this.background(this.style(style), background), text);
+		const closures = this.text(text, this.background(background, this.style(style)));
 		return `\u001B[${closures.opening.join(';')}m${string}\u001B[${closures.closing.join(';')}m`;
 	}
 
-	style(style) {
-		const closures = { opening: [], closing: [] };
+	style(style, { opening = [], closing = [] } = {}) {
 		if (style) {
 			if (Array.isArray(style)) {
 				for (let i = 0; i < style.length; i++) {
-					closures.opening.push(`${this.STYLES[style[i].toLowerCase()]}`);
-					closures.closing.push(`${this.CLOSE[style[i].toLowerCase()]}`);
+					opening.push(`${this.STYLES[style[i].toLowerCase()]}`);
+					closing.push(`${this.CLOSE[style[i].toLowerCase()]}`);
 				}
 			} else if (typeof style === 'string' && style.toLowerCase() in this.STYLES) {
-				closures.opening.push(`${this.STYLES[style.toLowerCase()]}`);
-				closures.closing.push(`${this.CLOSE[style.toLowerCase()]}`);
+				opening.push(`${this.STYLES[style.toLowerCase()]}`);
+				closing.push(`${this.CLOSE[style.toLowerCase()]}`);
 			}
 		}
-		return closures;
+		return { opening, closing };
 	}
 
-	background(closures, background) {
+	background(background, { opening = [], closing = [] } = {}) {
 		if (background) {
 			if (typeof background === 'number') {
 				if (Number.isInteger(background) === false) background = Math.round(background);
@@ -184,35 +183,35 @@ class Colors {
 					null;
 
 				if (number !== null) {
-					closures.opening.push(`48;5;${background}`);
-					closures.closing.push(`${this.CLOSE.background}`);
+					opening.push(`48;5;${background}`);
+					closing.push(`${this.CLOSE.background}`);
 				}
 			} else if (Array.isArray(background)) {
-				closures.opening.push(Colors.formatArray([background[0], background[1], background[2]]));
-				closures.closing.push(`\u001B[${this.CLOSE.background}`);
+				opening.push(Colors.formatArray([background[0], background[1], background[2]]));
+				closing.push(`\u001B[${this.CLOSE.background}`);
 			} else if (typeof background === 'string' && background.toLowerCase() in this.BACKGROUNDS) {
-				closures.opening.push(`${this.BACKGROUNDS[background.toLowerCase()]}`);
-				closures.closing.push(`${this.CLOSE.background}`);
+				opening.push(`${this.BACKGROUNDS[background.toLowerCase()]}`);
+				closing.push(`${this.CLOSE.background}`);
 			}
 		}
-		return closures;
+		return { opening, closing };
 	}
 
-	text(closures, text) {
+	text(text, { opening = [], closing = [] } = {}) {
 		if (text) {
 			if (typeof text === 'number') {
 				if (Number.isInteger(text) === false) text = Math.round(text);
-				closures.opening.push(`38;5;${text}`);
-				closures.closing.push(`${this.CLOSE.text}`);
+				opening.push(`38;5;${text}`);
+				closing.push(`${this.CLOSE.text}`);
 			} else if (Array.isArray(text)) {
-				closures.opening.push(Colors.formatArray([text[0], text[1], text[2]]));
-				closures.closing.push(`${this.CLOSE.text}`);
+				opening.push(Colors.formatArray([text[0], text[1], text[2]]));
+				closing.push(`${this.CLOSE.text}`);
 			} else if (typeof text === 'string' && text.toLowerCase() in this.TEXTS) {
-				closures.opening.push(`${this.TEXTS[text.toLowerCase()]}`);
-				closures.closing.push(`${this.CLOSE.text}`);
+				opening.push(`${this.TEXTS[text.toLowerCase()]}`);
+				closing.push(`${this.CLOSE.text}`);
 			}
 		}
-		return closures;
+		return { opening, closing };
 	}
 
 }
