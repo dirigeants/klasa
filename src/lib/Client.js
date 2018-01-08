@@ -263,7 +263,8 @@ class KlasaClient extends Discord.Client {
 			.registerStore(this.languages)
 			.registerStore(this.providers)
 			.registerStore(this.events)
-			.registerStore(this.extendables);
+			.registerStore(this.extendables)
+			.registerStore(this.tasks);
 		// Core pieces already have ArgResolver entries for the purposes of documentation.
 
 		/**
