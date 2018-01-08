@@ -1,4 +1,4 @@
-const { cron: { allowedNum, partRegex, day, predefined, tokens, tokensRegex } } = require('./constants');
+const { CRON: { allowedNum, partRegex, day, predefined, tokens, tokensRegex } } = require('./constants');
 
 class Cron {
 
