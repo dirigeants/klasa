@@ -179,7 +179,7 @@ class ScheduledTask {
 	static _generateID(client, time) {
 		if (time === null) time = Date.now();
 		else if (time instanceof Date) time.getTime();
-		return Buffer.from(`${time}${client.sharded ? client.shard.id : ''}`).toString('hex');
+		return Buffer.from(`${time}${client.shard ? client.shard.id : ''}`).toString('hex');
 	}
 
 	/**
