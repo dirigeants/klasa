@@ -69,7 +69,7 @@ class Clock {
 		// Do not execute if the Client is not available
 		if (this.client.status !== 0) return;
 		if (this.tasks.length === 0) {
-			this._interval = null;
+			this._checkInterval();
 			return;
 		}
 
