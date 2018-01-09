@@ -180,7 +180,7 @@ class KlasaConsole extends Console {
 		data = KlasaConsole.flatten(data, this.useColors);
 		const color = this.colors[type.toLowerCase()] || {};
 		const timestamp = this.template ? `${this.timestamp(`[${this.template.display()}]`, color.time || {})} ` : '';
-		const shard = this.client.sharded ? `${this.shard(`[${this.client.shard.id}]`, color.shard)} ` : '';
+		const shard = this.client.shard ? `${this.shard(`[${this.client.shard.id}]`, color.shard)} ` : '';
 		super[color.type || 'log'](data.split('\n').map(str => `${timestamp}${shard}${this.messages(str, color.message)}`).join('\n'));
 	}
 
@@ -285,7 +285,7 @@ class KlasaConsole extends Console {
 	 * @since 0.4.0
 	 * @param {*} data Some data to flatten
 	 * @param {boolean} useColors Whether or not the inspection should color the output
-	 * @return {string}
+	 * @returns {string}
 	 */
 	static flatten(data, useColors) {
 		if (typeof data === 'undefined' || typeof data === 'number' || data === null) return String(data);

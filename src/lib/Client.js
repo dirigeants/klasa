@@ -265,13 +265,6 @@ class KlasaClient extends Discord.Client {
 		 */
 		this.ready = false;
 
-		/**
-		 * Whether the client is truly sharded or not
-		 * @since 0.5.0
-		 * @type {boolean}
-		 */
-		this.sharded = Boolean(this.shard && !process.argv[1].includes(`${path.sep}pm2${path.sep}`));
-
 		this.once('ready', this._ready.bind(this));
 	}
 
@@ -381,9 +374,9 @@ class KlasaClient extends Discord.Client {
 
 		// Add the gateways
 		await Promise.all([
-			this.gateways.add('guilds', constants.GATEWAY_RESOLVERS.GUILDS, this.gateways.guildsSchema, undefined, false),
-			this.gateways.add('users', constants.GATEWAY_RESOLVERS.USERS, undefined, undefined, false),
-			this.gateways.add('clientStorage', constants.GATEWAY_RESOLVERS.CLIENT_STORAGE, this.gateways.clientStorageSchema, undefined, false)
+			this.gateways.add('guilds', constants.GATEWAY_RESOLVERS.GUILDS, this.gateways.guildsSchema, this.options.gateways.guilds, false),
+			this.gateways.add('users', constants.GATEWAY_RESOLVERS.USERS, undefined, this.options.gateways.users, false),
+			this.gateways.add('clientStorage', constants.GATEWAY_RESOLVERS.CLIENT_STORAGE, this.gateways.clientStorageSchema, this.options.gateways.clientStorage, false)
 		]);
 
 		// Automatic Prefix editing detection.

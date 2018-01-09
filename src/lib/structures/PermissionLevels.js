@@ -64,7 +64,7 @@ class PermissionLevels extends Collection {
 	/**
 	 * Checks if all permission levels are valid
 	 * @since 0.2.1
-	 * @return {boolean}
+	 * @returns {boolean}
 	 */
 	isValid() {
 		return this.every(level => typeof level === 'object' && typeof level.break === 'boolean' && typeof level.check === 'function');
@@ -73,7 +73,7 @@ class PermissionLevels extends Collection {
 	/**
 	 * Returns any errors in the perm levels
 	 * @since 0.2.1
-	 * @return {string} Error message(s)
+	 * @returns {string} Error message(s)
 	 */
 	debug() {
 		const errors = [];

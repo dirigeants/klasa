@@ -74,6 +74,17 @@ class Gateway extends GatewayStorage {
 	}
 
 	/**
+	 * The configuration that this class should make.
+	 * @since 0.5.0
+	 * @type {Configuration}
+	 * @readonly
+	 * @private
+	 */
+	get Configuration() {
+		return Configuration;
+	}
+
+	/**
 	 * Get the cache-provider that manages the cache data.
 	 * @since 0.0.1
 	 * @type {Provider}
@@ -105,7 +116,7 @@ class Gateway extends GatewayStorage {
 		if (create) {
 			const entry = this.cache.get(this.type, input);
 			if (!entry) {
-				const configs = new Configuration(this, { id: input });
+				const configs = new this.Configuration(this, { id: input });
 				this.cache.set(this.type, input, configs);
 				// Silently create a new entry. The new data does not matter as Configuration default all the keys.
 				this.provider.create(this.type, input)
@@ -132,7 +143,7 @@ class Gateway extends GatewayStorage {
 		const cache = this.cache.get(this.type, target);
 		if (cache && cache.existsInDB) return cache;
 		await this.provider.create(this.type, target);
-		const configs = cache || new Configuration(this, { id: target });
+		const configs = cache || new this.Configuration(this, { id: target });
 		configs.existsInDB = true;
 		if (!cache) this.cache.set(this.type, target, configs);
 		if (this.client.listenerCount('configCreateEntry')) this.client.emit('configCreateEntry', configs);
@@ -144,10 +155,10 @@ class Gateway extends GatewayStorage {
 	 * @since 0.5.0
 	 * @param {string} id The ID of the entry
 	 * @param {*} data The data to insert
-	 * @return {Configuration}
+	 * @returns {Configuration}
 	 */
 	insertEntry(id, data = {}) {
-		const configs = new Configuration(this, Object.assign(data, { id }));
+		const configs = new this.Configuration(this, Object.assign(data, { id }));
 		this.cache.set(this.type, id, configs);
 		if (this.ready) configs.sync().catch(err => this.client.emit('error', err));
 		return configs;
@@ -189,7 +200,7 @@ class Gateway extends GatewayStorage {
 					if (!cache.existsInDB) cache.existsInDB = true;
 					cache._patch(entry);
 				} else {
-					const newEntry = new Configuration(this, entry);
+					const newEntry = new this.Configuration(this, entry);
 					newEntry.existsInDB = true;
 					this.cache.set(this.type, entry.id, newEntry);
 				}
@@ -199,7 +210,7 @@ class Gateway extends GatewayStorage {
 		const cache = this.cache.get(this.type, target);
 		if (cache) return cache.sync();
 
-		const configs = new Configuration(this, { id: target });
+		const configs = new this.Configuration(this, { id: target });
 		this.cache.set(this.type, target, configs);
 		return configs.sync();
 	}
@@ -301,7 +312,7 @@ class Gateway extends GatewayStorage {
 	 * @private
 	 */
 	async _shardSync(path, data, action, force) {
-		if (!this.client.sharded) return;
+		if (!this.client.shard) return;
 		const parsed = typeof data === 'string' ? JSON.parse(data) : data;
 		let route = this.schema;
 		const key = path.pop();

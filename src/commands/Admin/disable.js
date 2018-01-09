@@ -16,7 +16,7 @@ module.exports = class extends Command {
 			return msg.sendMessage(msg.language.get('COMMAND_DISABLE_WARN'));
 		}
 		piece.disable();
-		if (this.client.sharded) {
+		if (this.client.shard) {
 			await this.client.shard.broadcastEval(`
 				if (this.shard.id !== ${this.client.shard.id}) this.${piece.type}s.get('${piece.name}').disable();
 			`);

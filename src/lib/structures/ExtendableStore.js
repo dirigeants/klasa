@@ -73,7 +73,7 @@ class ExtendableStore extends Collection {
 	/**
 	 * Clears the extendable from the store and removes the extensions.
 	 * @since 0.0.1
-	 * @return {void}
+	 * @returns {void}
 	 */
 	clear() {
 		for (const extendable of this.keys()) this.delete(extendable);

@@ -153,9 +153,12 @@ class Colors {
 	 * @param {ColorsFormatOptions} formatOptions The format options
 	 * @returns {string}
 	 */
-	format(string, { style, background, text } = {}) { // eslint-disable-line complexity
-		const opening = [];
-		const closing = [];
+	format(string, { style, background, text } = {}) {
+		const { opening, closing } = this.text(text, this.background(background, this.style(style)));
+		return `\u001B[${opening.join(';')}m${string}\u001B[${closing.join(';')}m`;
+	}
+
+	style(style, { opening = [], closing = [] } = {}) {
 		if (style) {
 			if (Array.isArray(style)) {
 				for (let i = 0; i < style.length; i++) {
@@ -167,6 +170,10 @@ class Colors {
 				closing.push(`${this.CLOSE[style.toLowerCase()]}`);
 			}
 		}
+		return { opening, closing };
+	}
+
+	background(background, { opening = [], closing = [] } = {}) {
 		if (background) {
 			if (typeof background === 'number') {
 				if (Number.isInteger(background) === false) background = Math.round(background);
@@ -187,6 +194,10 @@ class Colors {
 				closing.push(`${this.CLOSE.background}`);
 			}
 		}
+		return { opening, closing };
+	}
+
+	text(text, { opening = [], closing = [] } = {}) {
 		if (text) {
 			if (typeof text === 'number') {
 				if (Number.isInteger(text) === false) text = Math.round(text);
@@ -200,7 +211,7 @@ class Colors {
 				closing.push(`${this.CLOSE.text}`);
 			}
 		}
-		return `\u001B[${opening.join(';')}m${string}\u001B[${closing.join(';')}m`;
+		return { opening, closing };
 	}
 
 }
