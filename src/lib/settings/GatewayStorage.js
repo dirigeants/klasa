@@ -37,7 +37,7 @@ class GatewayStorage {
 		 * @type {string}
 		 * @readonly
 		 */
-		Object.defineProperty(this, 'providerName', { value: provider || this.client.options.provider.default });
+		Object.defineProperty(this, 'providerName', { value: provider || this.client.options.providers.default });
 
 		/**
 		 * Where the bwd folder is located at.
