@@ -274,13 +274,6 @@ class KlasaClient extends Discord.Client {
 		 */
 		this.ready = false;
 
-		/**
-		 * Whether the client is truly sharded or not
-		 * @since 0.5.0
-		 * @type {boolean}
-		 */
-		this.sharded = Boolean(this.shard && !process.argv[1].includes(`${path.sep}pm2${path.sep}`));
-
 		this.once('ready', this._ready.bind(this));
 	}
 

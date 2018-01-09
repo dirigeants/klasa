@@ -21,7 +21,7 @@ module.exports = class extends Command {
 			const newFileLocation = resolve(this.client.clientBaseDir, `${piece.type}s`);
 			await fs.copy(fileLocation, join(newFileLocation, file));
 			this.client[`${piece.type}s`].load(newFileLocation, piece.file);
-			if (this.client.sharded) {
+			if (this.client.shard) {
 				await this.client.shard.broadcastEval(`
 					if (this.shard.id !== ${this.client.shard.id}) this.${piece.type}s.load('${newFileLocation}', ${JSON.stringify(piece.file)});
 				`);

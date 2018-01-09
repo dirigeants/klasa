@@ -3,7 +3,7 @@ const { Event } = require('klasa');
 module.exports = class extends Event {
 
 	run(configs) {
-		if (!this.client.sharded) return;
+		if (!this.client.shard) return;
 		if (configs.type === 'users') {
 			this.client.shard.broadcastEval(`
 				if (this.shard.id !== ${this.client.shard.id}) {

@@ -155,25 +155,7 @@ class SchemaFolder extends Schema {
 	 * @returns {Promise<SchemaFolder>}
 	 */
 	async addKey(key, options, force = true) {
-		if (this.hasKey(key)) throw `The key ${key} already exists in the current schema.`;
-		if (typeof this[key] !== 'undefined') throw `The key ${key} conflicts with a property of Schema.`;
-		if (!options) throw 'You must pass an options argument to this method.';
-		if (typeof options.type !== 'string') throw 'The option type is required and must be a string.';
-		options.type = options.type.toLowerCase();
-		if (this.client.gateways.types.includes(options.type) === false) throw `The type ${options.type} is not supported.`;
-		if (typeof options.min !== 'undefined' && isNaN(options.min)) throw 'The option min must be a number.';
-		if (typeof options.max !== 'undefined' && isNaN(options.max)) throw 'The option max must be a number.';
-		if (typeof options.array !== 'undefined' && typeof options.array !== 'boolean') throw 'The option array must be a boolean.';
-		if (typeof options.configurable !== 'undefined' && typeof options.configurable !== 'boolean') throw 'The option configurable must be a boolean.';
-
-		if (options.array === true) {
-			if (typeof options.default === 'undefined') options.default = [];
-			else if (Array.isArray(options.default) === false) throw 'The option default must be an array if the array option is set to true.';
-		} else {
-			if (typeof options.default === 'undefined') options.default = options.type === 'boolean' ? false : null;
-			options.array = false;
-		}
-		this._addKey(key, options, SchemaPiece);
+		this._addKey(key, this._verifyKeyOptions(key, options), SchemaPiece);
 		await fs.outputJSONAtomic(this.gateway.filePath, this.gateway.schema.toJSON());
 
 		if (this.gateway.sql) {
@@ -396,13 +378,42 @@ class SchemaFolder extends Schema {
 	 * @private
 	 */
 	async _shardSyncSchema(piece, action, force) {
-		if (!this.client.sharded) return;
+		if (!this.client.shard) return;
 		await this.client.shard.broadcastEval(`
 			if (this.shard.id !== ${this.client.shard.id}) {
 				this.gateways.${this.gateway.type}._shardSync(
 					${JSON.stringify(piece.path.split('.'))}, ${JSON.stringify(piece)}, ${action}, ${force});
 			}
 		`);
+	}
+
+	/**
+	 * Verifies the key add options.
+	 * @since 0.5.0
+	 * @param {string} key The name for the key
+	 * @param {AddOptions} options The key's options to apply
+	 * @returns {addOptions}
+	 * @private
+	 */
+	_verifyKeyOptions(key, options) {
+		if (this.hasKey(key)) throw `The key ${key} already exists in the current schema.`;
+		if (typeof this[key] !== 'undefined') throw `The key ${key} conflicts with a property of Schema.`;
+		if (!options) throw 'You must pass an options argument to this method.';
+		if (typeof options.type !== 'string') throw 'The option type is required and must be a string.';
+		options.type = options.type.toLowerCase();
+		if (!this.client.gateways.types.includes(options.type)) throw `The type ${options.type} is not supported.`;
+		if (typeof options.min !== 'undefined' && isNaN(options.min)) throw 'The option min must be a number.';
+		if (typeof options.max !== 'undefined' && isNaN(options.max)) throw 'The option max must be a number.';
+		if (typeof options.array !== 'undefined' && typeof options.array !== 'boolean') throw 'The option array must be a boolean.';
+		if (typeof options.configurable !== 'undefined' && typeof options.configurable !== 'boolean') throw 'The option configurable must be a boolean.';
+		if (options.array === true) {
+			if (typeof options.default === 'undefined') options.default = [];
+			else if (!Array.isArray(options.default)) throw 'The option default must be an array if the array option is set to true.';
+		} else {
+			if (typeof options.default === 'undefined') options.default = options.type === 'boolean' ? false : null;
+			options.array = false;
+		}
+		return options;
 	}
 
 	/**
