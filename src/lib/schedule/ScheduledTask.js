@@ -113,14 +113,18 @@ class ScheduledTask {
 	 */
 	async update({ time, data } = {}) {
 		const [_time, _cron] = time ? this.constructor._resolveTime(time) : [null, null];
-		if (_time) this.time = _time;
+		if (_time) {
+			this.time = _time;
+			this.store.tasks.splice(this.store.tasks.indexOf(this), 1);
+			this.store._insert(this);
+		}
 		if (_cron) this.cron = _cron;
 		if (data) this.data = data;
 
 		// Sync the database if some of the properties changed or the time changed manually
 		// (recurring tasks bump the time automatically)
-		await this.store.sync(this);
-		// TODO (kyranet): Make Configuration#update able to edit an entry from an array.
+		const _index = this.store._tasks.findIndex(entry => entry.id === this.id);
+		if (_index !== -1) await this.client.configs.update('schedules', this.toJSON(), { arrayPosition: _index });
 
 		return this;
 	}
