@@ -96,7 +96,7 @@ module.exports = class extends Provider {
 	 * @returns {boolean}
 	 */
 	has(table, entry) {
-		return !!this.get(table, entry);
+		return Boolean(this.get(table, entry));
 	}
 
 	/**
