@@ -378,7 +378,7 @@ class SchemaFolder extends Schema {
 	 * @private
 	 */
 	async _shardSyncSchema(piece, action, force) {
-		if (!this.client.sharded) return;
+		if (!this.client.shard) return;
 		await this.client.shard.broadcastEval(`
 			if (this.shard.id !== ${this.client.shard.id}) {
 				this.gateways.${this.gateway.type}._shardSync(
