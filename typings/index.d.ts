@@ -1292,7 +1292,7 @@ declare module 'klasa' {
 		public next(): ScheduledTask;
 		public create(taskName: string, options: ScheduledTaskOptions);
 		public add(taskName: string, options: ScheduledTaskOptions);
-		public delete(id: string): Promise<ScheduledTask>;
+		public delete(id: string): Promise<this>;
 		public clear(): Promise<void>;
 
 		private _insert(task: ScheduledTask): ScheduledTask;
@@ -1312,7 +1312,7 @@ declare module 'klasa' {
 
 		public run(): Promise<this>;
 		public update(options?: ScheduledTaskUpdateOptions): Promise<this>;
-		public delete(): Promise<this>;
+		public delete(): Promise<Clock>;
 		public toJSON(): ScheduledTaskJSON;
 
 		private static _generateID(client: KlasaCLient, time: Date | number): string;

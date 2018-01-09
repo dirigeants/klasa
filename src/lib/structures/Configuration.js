@@ -236,7 +236,7 @@ class Configuration {
 	 * Configuration#update('userBlacklist', '272689325521502208');
 	 *
 	 * // Ensuring the function call adds (error if it exists):
-	 * Configuration#update('userBlacklist', '272689325521502208', undefined, { action: 'add' });
+	 * Configuration#update('userBlacklist', '272689325521502208', { action: 'add' });
 	 *
 	 * // Updating it with a json object:
 	 * Configuration#update({ roles: { administrator: '339943234405007361' } }, msg.guild);
@@ -244,9 +244,14 @@ class Configuration {
 	 * // Updating multiple keys (only possible with json object):
 	 * Configuration#update({ prefix: 'k!', language: 'es-ES' }, msg.guild);
 	 */
-	update(key, value, guild, { avoidUnconfigurable = false, action = 'auto' } = {}) {
+	update(key, value, guild, options) {
+		if (typeof options === 'undefined' && isObject(guild)) {
+			options = guild;
+			guild = undefined;
+		}
+
 		if (isObject(key)) return this.updateMany(key, value);
-		return this._updateSingle(action, key, value, guild, avoidUnconfigurable);
+		return this._updateSingle(options.action, key, value, guild, options.avoidUnconfigurable);
 	}
 
 	/**
@@ -368,15 +373,15 @@ class Configuration {
 	/**
 	 * Update an array
 	 * @since 0.5.0
-	 * @param {('add'|'remove'|'auto')} action Whether the value should be added or removed to the array
+	 * @param {('add'|'remove'|'auto')} [action='auto'] Whether the value should be added or removed to the array
 	 * @param {string} key The key to edit
 	 * @param {*} value The new value
 	 * @param {ConfigGuildResolvable} guild The guild to take
-	 * @param {boolean} avoidUnconfigurable Whether the Gateway should avoid configuring the selected key
+	 * @param {boolean} [avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key
 	 * @returns {Promise<ConfigurationUpdateResult>}
 	 * @private
 	 */
-	async _updateSingle(action, key, value, guild, avoidUnconfigurable) {
+	async _updateSingle(action = 'auto', key, value, guild, avoidUnconfigurable = false) {
 		if (typeof key !== 'string') throw new TypeError(`The argument key must be a string. Received: ${typeof key}`);
 		if (typeof guild === 'boolean') {
 			avoidUnconfigurable = guild;

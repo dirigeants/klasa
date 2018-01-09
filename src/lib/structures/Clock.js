@@ -77,7 +77,7 @@ class Clock {
 		const now = Date.now();
 		const execute = [];
 		for (const task of this.tasks) {
-			if (task.time.getTime() < now) break;
+			if (task.time.getTime() > now) break;
 			execute.push(task.run());
 		}
 
@@ -149,12 +149,19 @@ class Clock {
 	 * Delete a Task by its ID
 	 * @since 0.5.0
 	 * @param {string} id The ID to search for
-	 * @returns {Promise<ScheduledTask>}
+	 * @returns {Promise<this>}
 	 */
 	async delete(id) {
-		const task = this.tasks.find(entry => entry.id === id);
-		if (!task) throw new Error('This task does not exist.');
-		return task.delete();
+		const _task = this._tasks.find(entry => entry.id === id);
+		if (!_task) throw new Error('This task does not exist.');
+
+		// Get the task and use it to remove
+		await this.client.configs.update('schedule', _task, undefined, { action: 'remove' });
+
+		// Remove the task from the current cache if successful
+		this.tasks.splice(this.tasks.findIndex(entry => entry.id === id), 1);
+
+		return this;
 	}
 
 	/**
@@ -191,7 +198,7 @@ class Clock {
 			clearInterval(this._interval);
 			this._interval = null;
 		} else if (!this._interval) {
-			this._interval = setInterval(this.execute.bind(this), this.timeInterval);
+			this._interval = this.client.setInterval(this.execute.bind(this), this.timeInterval);
 		}
 	}
 

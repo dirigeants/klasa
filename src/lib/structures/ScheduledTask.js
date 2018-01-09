@@ -138,20 +138,10 @@ class ScheduledTask {
 	/**
 	 * Delete the task
 	 * @since 0.5.0
-	 * @returns {Promise<this>}
+	 * @returns {Promise<Clock>}
 	 */
-	async delete() {
-		const index = this.store._tasks.findIndex(entry => entry.id === this.id);
-		if (index === -1) throw new Error('This task does not exist.');
-
-		// Get the task and use it to remove
-		const _task = this.store._tasks[index];
-		await this.client.configs.update('schedule', _task, undefined, { action: 'remove' });
-
-		// Remove the task from the current cache if successful
-		this.tasks.splice(this.tasks.findIndex(entry => entry.id === this.id), 1);
-
-		return this;
+	delete() {
+		return this.store.delete(this.id);
 	}
 
 	/**
@@ -161,9 +151,9 @@ class ScheduledTask {
 	 */
 	toJSON() {
 		const object = { id: this.id, taskName: this.task };
-		if (this.recurring) object.repeat = this.repeat;
-		else if (this.time) object.time = this.time.getTime();
-		if (this.data !== undefined) object.data = this.data;
+		if (this.recurring) object.repeat = this.recurring.cron;
+		if (this.time) object.time = this.time.getTime();
+		if (typeof this.data !== 'undefined') object.data = this.data;
 
 		return object;
 	}
