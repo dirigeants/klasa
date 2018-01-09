@@ -1269,6 +1269,8 @@ declare module 'klasa' {
 		commandMessageLifetime?: number;
 		console?: KlasaConsoleConfig;
 		consoleEvents?: KlasaConsoleEvents;
+		customPromptDefaults?: KlasaCustomPromptDefaults;
+		gateways?: KlasaGatewaysOptions;
 		ignoreBots?: boolean;
 		ignoreSelf?: boolean;
 		language?: string;
@@ -1277,8 +1279,7 @@ declare module 'klasa' {
 		pieceDefaults?: KlasaPieceDefaults;
 		prefix?: string;
 		preserveConfigs?: boolean;
-		customPromptDefaults?: KlasaCustomPromptDefaults;
-		provider?: KlasaProviderOptions;
+		providers?: KlasaProvidersOptions;
 		readyMessage?: (client: KlasaClient) => string;
 		regexPrefix?: RegExp;
 		typing?: boolean;
@@ -1307,8 +1308,15 @@ declare module 'klasa' {
 		providers?: ProviderOptions;
 	};
 
-	export type KlasaProviderOptions = {
-		engine: string;
+	export type KlasaProvidersOptions = {
+		default?: string;
+		[key: string]: string | object;
+	};
+
+	export type KlasaGatewaysOptions = {
+		clientStorage?: SettingsOptions;
+		guilds?: SettingsOptions;
+		users?: SettingsOptions;
 		[key: string]: string | object;
 	};
 

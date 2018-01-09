@@ -11,7 +11,7 @@ However, as Klasa works on a [NoSQL](https://en.wikipedia.org/wiki/NoSQL) enviro
 For example, let's say I have downloaded the *levelup* provider and I want to work with it, then we go to your main script file (`app.js`, `bot.js`..., wherever you declare the new Klasa.Client), and write the following code:
 
 ```javascript
-provider: { engine: 'levelup' }
+{ providers: { default: 'levelup' } }
 ```
 
 Your Klasa's configuration will look something like this:
@@ -21,7 +21,7 @@ const client = new Klasa.Client({
   ownerID: '',
   prefix: 'k!',
   clientOptions: {},
-  provider: { engine: '' },
+  providers: { default: '' },
 });
 
 client.login('A_BEAUTIFUL_TOKEN_AINT_IT?');
