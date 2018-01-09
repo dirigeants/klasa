@@ -23,7 +23,7 @@ exports.DEFAULTS = {
 		language: 'en-US',
 		prefix: '!',
 		preserveConfigs: true,
-		provider: { engine: 'json' },
+		providers: { default: 'json' },
 		readyMessage: (client) => `Successfully initialized. Ready to serve ${client.guilds.size} guilds.`,
 		typing: false,
 		customPromptDefaults: {
