@@ -179,8 +179,9 @@ class GatewayDriver {
 		validateFunction = validateFunction.bind(this);
 		if (!this.client.methods.util.isObject(schema)) throw 'Schema must be a valid object or left undefined for an empty object.';
 
-		options.provider = this._checkProvider(options.provider || this.client.providers.default);
-		if (options.provider.cache) throw `The provider ${options.provider.name} is designed for caching, not persistent data. Please try again with another.`;
+		options.provider = this._checkProvider(options.provider || this.client.options.providers.default);
+		const provider = this.client.providers.get(options.provider);
+		if (provider.cache) throw `The provider ${provider.name} is designed for caching, not persistent data. Please try again with another.`;
 		options.cache = this._checkProvider('collection');
 
 		const gateway = new Gateway(this, name, validateFunction, schema, options);
