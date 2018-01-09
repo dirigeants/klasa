@@ -1,105 +1,16 @@
-// const { Collection } = require('discord.js');
-// const RECURRING_TYPES = ['daily', 'weekly', 'monthly', 'yearly'];
-// const RECURRING_WEEK_TYPES = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+const Cron = require('../util/Cron');
 
+/**
+ * The structure for future tasks to be run
+ */
 class ScheduledTask {
-
-	/**
-	 * @typedef  {Object} RecurringWeek
-	 * @property {Date[]} [monday]
-	 * @property {Date[]} [tuesday]
-	 * @property {Date[]} [wednesday]
-	 * @property {Date[]} [thursday]
-	 * @property {Date[]} [friday]
-	 * @property {Date[]} [saturday]
-	 * @property {Date[]} [sunday]
-	 * @memberof ScheduledTask
-	 */
-
-	/**
-	 * @typedef  {string[]} ScheduledTaskOptionsRecurringDaily
-	 * @memberof ScheduledTask
-	 */
-
-	/**
-	 * @typedef  {Object} ScheduledTaskOptionsRecurringYearly
-	 * @property {ScheduledTaskOptionsRecurringMontly} [january]
-	 * @property {ScheduledTaskOptionsRecurringMontly} [february]
-	 * @property {ScheduledTaskOptionsRecurringMontly} [march]
-	 * @property {ScheduledTaskOptionsRecurringMontly} [april]
-	 * @property {ScheduledTaskOptionsRecurringMontly} [may]
-	 * @property {ScheduledTaskOptionsRecurringMontly} [june]
-	 * @property {ScheduledTaskOptionsRecurringMontly} [july]
-	 * @property {ScheduledTaskOptionsRecurringMontly} [august]
-	 * @property {ScheduledTaskOptionsRecurringMontly} [september]
-	 * @property {ScheduledTaskOptionsRecurringMontly} [october]
-	 * @property {ScheduledTaskOptionsRecurringMontly} [november]
-	 * @property {ScheduledTaskOptionsRecurringMontly} [december]
-	 */
-
-	/**
-	 * @typedef  {Object} ScheduledTaskOptionsRecurringMontly
-	 * @property {ScheduledTaskOptionsRecurringDaily} [d1]
-	 * @property {ScheduledTaskOptionsRecurringDaily} [d2]
-	 * @property {ScheduledTaskOptionsRecurringDaily} [d3]
-	 * @property {ScheduledTaskOptionsRecurringDaily} [d4]
-	 * @property {ScheduledTaskOptionsRecurringDaily} [d5]
-	 * @property {ScheduledTaskOptionsRecurringDaily} [d6]
-	 * @property {ScheduledTaskOptionsRecurringDaily} [d7]
-	 * @property {ScheduledTaskOptionsRecurringDaily} [d8]
-	 * @property {ScheduledTaskOptionsRecurringDaily} [d9]
-	 * @property {ScheduledTaskOptionsRecurringDaily} [d10]
-	 * @property {ScheduledTaskOptionsRecurringDaily} [d11]
-	 * @property {ScheduledTaskOptionsRecurringDaily} [d12]
-	 * @property {ScheduledTaskOptionsRecurringDaily} [d13]
-	 * @property {ScheduledTaskOptionsRecurringDaily} [d14]
-	 * @property {ScheduledTaskOptionsRecurringDaily} [d15]
-	 * @property {ScheduledTaskOptionsRecurringDaily} [d16]
-	 * @property {ScheduledTaskOptionsRecurringDaily} [d17]
-	 * @property {ScheduledTaskOptionsRecurringDaily} [d18]
-	 * @property {ScheduledTaskOptionsRecurringDaily} [d19]
-	 * @property {ScheduledTaskOptionsRecurringDaily} [d20]
-	 * @property {ScheduledTaskOptionsRecurringDaily} [d21]
-	 * @property {ScheduledTaskOptionsRecurringDaily} [d22]
-	 * @property {ScheduledTaskOptionsRecurringDaily} [d23]
-	 * @property {ScheduledTaskOptionsRecurringDaily} [d24]
-	 * @property {ScheduledTaskOptionsRecurringDaily} [d25]
-	 * @property {ScheduledTaskOptionsRecurringDaily} [d26]
-	 * @property {ScheduledTaskOptionsRecurringDaily} [d27]
-	 * @property {ScheduledTaskOptionsRecurringDaily} [d28]
-	 * @property {ScheduledTaskOptionsRecurringDaily} [d29]
-	 * @property {ScheduledTaskOptionsRecurringDaily} [d30]
-	 * @property {ScheduledTaskOptionsRecurringDaily} [d31]
-	 * @memberof ScheduledTask
-	 */
-
-	/**
-	 * @typedef  {Object} ScheduledTaskOptionsRecurringWeekly
-	 * @property {string[]} [monday]
-	 * @property {string[]} [tuesday]
-	 * @property {string[]} [wednesday]
-	 * @property {string[]} [thursday]
-	 * @property {string[]} [friday]
-	 * @property {string[]} [saturday]
-	 * @property {string[]} [sunday]
-	 * @memberof ScheduledTask
-	 */
-
-	/**
-	 * @typedef  {Object} ScheduledTaskOptionsRecurring
-	 * @property {ScheduledTaskOptionsRecurringDaily} [daily]
-	 * @property {ScheduledTaskOptionsRecurringWeekly} [weekly]
-	 * @property {ScheduledTaskOptionsRecurringMontly} [montly]
-	 * @property {ScheduledTaskOptionsRecurringYearly} [yearly]
-	 * @memberof ScheduledTask
-	 */
 
 	/**
 	 * @typedef  {Object} ScheduledTaskOptions
 	 * @property {string} id
 	 * @property {Date} [time]
-	 * @property {boolean} utc
-	 * @property {ScheduledTaskOptionsRecurring} [recurring]
+	 * @property {boolean} [utc=false]
+	 * @property {string} [repeat]
 	 * @property {*} [data]
 	 */
 
@@ -107,10 +18,10 @@ class ScheduledTask {
 	 * Initializes a new ScheduledTask
 	 * @since 0.5.0
 	 * @param {KlasaClient} client The client that initialized this instance
-	 * @param {Schedule} store The store that manages this ScheduledTask instance
+	 * @param {string} task The task this ScheduledTask is for
 	 * @param {ScheduledTaskOptions} options The options for this ScheduledTask instance
 	 */
-	constructor(client, store, options) {
+	constructor(client, task, options) {
 		/**
 		 * @since 0.5.0
 		 * @name ScheduledTask#client
@@ -125,7 +36,13 @@ class ScheduledTask {
 		 * @type {Schedule}
 		 * @readonly
 		 */
-		Object.defineProperty(this, 'store', { value: store });
+		Object.defineProperty(this, 'store', { value: client.schedule });
+
+		/**
+		 * @since 0.5.0
+		 * @type {Task}
+		 */
+		this.task = this.client.tasks.get(task);
 
 		/**
 		 * @type {string}
@@ -133,24 +50,39 @@ class ScheduledTask {
 		this.id = options.id;
 
 		/**
+		 * @type {boolean}
+		 */
+		this.utc = Boolean(options.utc);
+
+		/**
+		 * @type {string}
+		 */
+		this.repeat = options.repeat;
+
+		/**
+		 * @type {?Cron}
+		 */
+		this.recurring = options.repeat ? new Cron(options.repeat) : null;
+
+		/**
 		 * @type {?Date}
 		 */
 		this.time = options.time instanceof Date ? options.time : null;
 
 		/**
-		 * @type {boolean}
-		 */
-		this.utc = options.utc;
-
-		/**
-		 * @type {ScheduledTaskOptionsRecurring}
-		 */
-		this.recurring = options.recurring;
-
-		/**
 		 * @type {*}
 		 */
 		this.data = options.data;
+	}
+
+	async run() {
+		try {
+			await this.task.run(this.data);
+		} catch (err) {
+			this.client.emit('taskError', this, this.task, err);
+		}
+		if (!this.recurring) return this.delete();
+		return this.update({ time: this.recurring.next() });
 	}
 
 	// _parseRecurringDaily(options) {
