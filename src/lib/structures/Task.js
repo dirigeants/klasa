@@ -33,27 +33,6 @@ class Task {
 		this.client = client;
 
 		/**
-		 * The directory to where this task piece is stored
-		 * @since 0.5.0
-		 * @type {string}
-		 */
-		this.dir = dir;
-
-		/**
-		 * The file location where this task piece is stored
-		 * @since 0.5.0
-		 * @type {string}
-		 */
-		this.file = file;
-
-		/**
-		 * The name of the task
-		 * @since 0.5.0
-		 * @type {string}
-		 */
-		this.name = options.name || file.slice(0, -3);
-
-		/**
 		 * The type of Klasa piece this is
 		 * @since 0.5.0
 		 * @type {string}
@@ -66,12 +45,33 @@ class Task {
 		 * @type {boolean}
 		 */
 		this.enabled = options.enabled;
+
+		/**
+		 * The name of the task
+		 * @since 0.5.0
+		 * @type {string}
+		 */
+		this.name = options.name || file.slice(0, -3);
+
+		/**
+		 * The directory to where this task piece is stored
+		 * @since 0.5.0
+		 * @type {string}
+		 */
+		this.dir = dir;
+
+		/**
+		 * The file location where this task piece is stored
+		 * @since 0.5.0
+		 * @type {string}
+		 */
+		this.file = file;
 	}
 
 	/**
 	 * The run method to be overwritten in actual Task pieces
 	 * @since 0.5.0
-	 * @param {KlasaMessage} msg The discord message
+	 * @param {*} data The data from the ScheduledTask instance
 	 * @returns {Promise<void>}
 	 * @abstract
 	 */

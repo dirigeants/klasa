@@ -236,7 +236,7 @@ class Configuration {
 	 * Configuration#update('userBlacklist', '272689325521502208');
 	 *
 	 * // Ensuring the function call adds (error if it exists):
-	 * Configuration#update('userBlacklist', '272689325521502208', { action: 'add' });
+	 * Configuration#update('userBlacklist', '272689325521502208', undefined, { action: 'add' });
 	 *
 	 * // Updating it with a json object:
 	 * Configuration#update({ roles: { administrator: '339943234405007361' } }, msg.guild);
@@ -325,7 +325,7 @@ class Configuration {
 	/**
 	 * Update an array
 	 * @since 0.5.0
-	 * @param {('add'|'remove')} action Whether the value should be added or removed to the array
+	 * @param {('add'|'remove'|'auto')} action Whether the value should be added or removed to the array
 	 * @param {string} key The key to edit
 	 * @param {*} value The new value
 	 * @param {ConfigGuildResolvable} guild The guild to take

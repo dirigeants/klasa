@@ -18,11 +18,22 @@ class Cron {
 	 * 2,4 - use list of values provided, separated by comma
 	 */
 
+	/**
+	 * @since 0.5.0
+	 * @param {string} cron The cron pattern to use
+	 */
 	constructor(cron) {
 		this.cron = this.constructor._normalize(cron.toLowerCase());
 		[this.seconds, this.minutes, this.hours, this.days, this.months, this.dows] = this.constructor._parseString(this.cron);
 	}
 
+	/**
+	 * Get the next date that matches with the current pattern
+	 * @since 0.5.0
+	 * @param {Date} zDay The Date instance to compare with
+	 * @param {boolean} origin Whether this next call is origin
+	 * @returns {Date}
+	 */
 	next(zDay = new Date(), origin = true) {
 		if (this.days.includes(zDay.getUTCDate()) && this.months.includes(zDay.getUTCMonth() + 1) && this.dows.includes(zDay.getUTCDay())) {
 			const now = new Date(zDay.getTime() + 1000);
@@ -36,17 +47,39 @@ class Cron {
 		return this.next(new Date(zDay.getTime() + day), false);
 	}
 
+	/**
+	 * Normalize the pattern
+	 * @since 0.5.0
+	 * @param {string} cron The pattern to normalize
+	 * @returns {string}
+	 * @private
+	 */
 	static _normalize(cron) {
 		if (cron in predefined) return predefined[cron];
 		return cron.replace(tokensRegex, match => tokens[match]);
 	}
 
+	/**
+	 * Parse the pattern
+	 * @since 0.5.0
+	 * @param {string} cron The pattern to parse
+	 * @returns {Array<number[]>}
+	 * @private
+	 */
 	static _parseString(cron) {
-		cron = cron.split(' ');
-		if (cron.length !== 6) throw new Error('Invalid Cron Provided');
-		return cron.map(Cron._parsePart);
+		const parts = cron.split(' ');
+		if (parts.length !== 6) throw new Error('Invalid Cron Provided');
+		return parts.map(Cron._parsePart);
 	}
 
+	/**
+	 * Parse the current part
+	 * @since 0.5.0
+	 * @param {string} cronPart The part of the pattern to parse
+	 * @param {number} id The id that identifies the current part
+	 * @returns {number[]}
+	 * @private
+	 */
 	static _parsePart(cronPart, id) {
 		if (cronPart.includes(',')) {
 			const res = [];
@@ -62,6 +95,15 @@ class Cron {
 		return Cron._range(parseInt(min), parseInt(max) || allowedNum[id][1], parseInt(step) || 1);
 	}
 
+	/**
+	 * Get an array of numbers with the selected range
+	 * @since 0.5.0
+	 * @param {number} min The minimum value
+	 * @param {number} max The maximum value
+	 * @param {number} step The step value
+	 * @returns {number[]}
+	 * @private
+	 */
 	static _range(min, max, step) {
 		if (max < min) {
 			const temp = max;

@@ -198,5 +198,5 @@ exports.CRON = {
 		fri: 5,
 		sat: 6
 	},
-	tokensRegex: new RegExp(Object.keys(this.CRON.tokens).join('|'), 'g')
+	tokensRegex: new RegExp(Object.keys(exports.CRON.tokens).join('|'), 'g')
 };

@@ -47,6 +47,7 @@ declare module 'klasa' {
 		public monitors: MonitorStore;
 		public languages: LanguageStore;
 		public providers: ProviderStore;
+		public tasks: TaskStore;
 		public events: EventStore;
 		public extendables: ExtendableStore;
 		public pieceStores: Collection<string, any>;
@@ -120,6 +121,7 @@ declare module 'klasa' {
 
 		public on(event: 'monitorError', listener: (msg: KlasaMessage, monitor: Monitor, error: Error | string) => void): this;
 		public on(event: 'finalizerError', listener: (msg: KlasaMessage, mes: KlasaMessage, timer: Timestamp, finalizer: Finalizer, error: Error | string) => void): this;
+		public on(event: 'taskError', listener: (scheduledTask: ScheduledTask, task: Task, error: Error) => void): this;
 
 		// SettingGateway Events
 		public on(event: 'configCreateEntry', listener: (entry: Configuration) => void): this;
@@ -183,6 +185,7 @@ declare module 'klasa' {
 
 		public once(event: 'monitorError', listener: (msg: KlasaMessage, monitor: Monitor, error: Error | string) => void): this;
 		public once(event: 'finalizerError', listener: (msg: KlasaMessage, mes: KlasaMessage, timer: Timestamp, finalizer: Finalizer, error: Error | string) => void): this;
+		public once(event: 'taskError', listener: (scheduledTask: ScheduledTask, task: Task, error: Error) => void): this;
 
 		// SettingGateway Events
 		public once(event: 'configCreateEntry', listener: (entry: Configuration) => void): this;
@@ -798,6 +801,40 @@ declare module 'klasa' {
 			USERS: (userResolvable: string | KlasaUser) => KlasaUser,
 			CLIENT_STORAGE: (clientResolvable: string | KlasaClient) => ClientUser
 		};
+		CRON: {
+			allowedNum: number[][];
+			partRegex: RegExp;
+			day: number;
+			predefined: {
+				'@yearly': '0 0 0 1 1 *',
+				'@monthly': '0 0 0 1 * *',
+				'@weekly': '0 0 0 * * 0',
+				'@daily': '0 0 0 * * *',
+				'@hourly': '0 0 * * * *'
+			};
+			tokens: {
+				jan: 1,
+				feb: 2,
+				mar: 3,
+				apr: 4,
+				may: 5,
+				jun: 6,
+				jul: 7,
+				aug: 8,
+				sep: 9,
+				oct: 10,
+				nov: 11,
+				dec: 12,
+				sun: 0,
+				mon: 1,
+				tue: 2,
+				wed: 3,
+				thu: 4,
+				fri: 5,
+				sat: 6
+			};
+			tokensRegex: RegExp;
+		};
 	};
 
 	export class Stopwatch {
@@ -1034,6 +1071,26 @@ declare module 'klasa' {
 		public toString(): string;
 	}
 
+	export abstract class Task implements Piece {
+		public constructor(client: KlasaClient, dir: string, file: string[], options?: TaskOptions);
+		public client: KlasaClient;
+		public type: 'task';
+
+		public enabled: boolean;
+		public name: string;
+		public dir: string;
+		public file: string;
+
+		public abstract run(data: any): Promise<void>;
+		public init(): Promise<void>;
+
+		public enable(): Piece;
+		public disable(): Piece;
+		public reload(): Promise<any>;
+		public unload(): any;
+		public toString(): string;
+	}
+
 	export class Store {
 		public init(): Promise<any[]>;
 		public load(dir: string, file: string | string[]): Piece;
@@ -1061,7 +1118,6 @@ declare module 'klasa' {
 		public clear(): void;
 		public load(dir: string, file: string[]): Command;
 		public loadAll(): Promise<number>;
-		public toString(): string;
 
 		public init(): any;
 		public resolve(): any;
@@ -1086,7 +1142,6 @@ declare module 'klasa' {
 		public load(): any;
 		public loadAll(): Promise<any>;
 		public resolve(): any;
-		public toString(): string;
 	}
 
 	export class ExtendableStore extends Collection<string, Extendable> implements Store {
@@ -1106,7 +1161,6 @@ declare module 'klasa' {
 		public load(): any;
 		public loadAll(): Promise<any>;
 		public resolve(): any;
-		public toString(): string;
 	}
 
 	export class FinalizerStore extends Collection<string, Finalizer> implements Store {
@@ -1126,7 +1180,6 @@ declare module 'klasa' {
 		public load(): any;
 		public loadAll(): Promise<any>;
 		public resolve(): any;
-		public toString(): string;
 	}
 
 	export class InhibitorStore extends Collection<string, Inhibitor> implements Store {
@@ -1146,7 +1199,6 @@ declare module 'klasa' {
 		public load(): any;
 		public loadAll(): Promise<any>;
 		public resolve(): any;
-		public toString(): string;
 	}
 
 	export class LanguageStore extends Collection<string, Language> implements Store {
@@ -1166,7 +1218,6 @@ declare module 'klasa' {
 		public load(): any;
 		public loadAll(): Promise<any>;
 		public resolve(): any;
-		public toString(): string;
 	}
 
 	export class MonitorStore extends Collection<string, Monitor> implements Store {
@@ -1186,7 +1237,6 @@ declare module 'klasa' {
 		public load(): any;
 		public loadAll(): Promise<any>;
 		public resolve(): any;
-		public toString(): string;
 	}
 
 	export class ProviderStore extends Collection<string, Provider> implements Store {
@@ -1206,7 +1256,70 @@ declare module 'klasa' {
 		public load(): any;
 		public loadAll(): Promise<any>;
 		public resolve(): any;
-		public toString(): string;
+	}
+
+	export class TaskStore extends Collection<string, Task> implements Store {
+		public constructor(client: KlasaClient);
+		public client: KlasaClient;
+		public coreDir: string;
+		public userDir: string;
+		public holds: Provider;
+		public name: 'tasks';
+
+		public delete(name: Task | string): boolean;
+		public set(key: string, value: Task): this;
+		public set(task: Task): Task;
+
+		public init(): any;
+		public load(): any;
+		public loadAll(): Promise<any>;
+		public resolve(): any;
+	}
+
+	// Schedule classes
+	export class Schedule {
+		public constructor(client: KlasaClient);
+		public client: KlasaClient;
+		public tasks: ScheduledTask[];
+
+		private readonly _tasks: ScheduledTaskOptions[];
+		public next(): ScheduledTask;
+		public create(taskName: string, options: ScheduledTaskOptions);
+		public add(taskName: string, options: ScheduledTaskOptions);
+		public delete(id: string): Promise<ScheduledTask>;
+		public clear(): Promise<void>;
+
+		private _insert(task: ScheduledTask): ScheduledTask;
+	}
+
+	export class ScheduledTask {
+		public constructor(client: KlasaClient, taskName: string, options: ScheduledTaskOptions);
+		public readonly client: KlasaClient;
+		public readonly store: Schedule;
+		public task: Task;
+		public repeat?: string;
+		public recurring?: Cron;
+		public time?: Date;
+		public id: string;
+		public data: any;
+
+		public run(): Promise<this>;
+		public update(options?: ScheduledTaskUpdateOptions): Promise<this>;
+		public delete(): Promise<this>;
+		public toJSON(): ScheduledTaskJSON;
+
+		private static _generateID(client: KlasaCLient, time: Date | number): string;
+		private static _validate(st: ScheduledTask): void;
+	}
+
+	export class Cron {
+		public constructor(cron: string);
+		public next(zDay?: Date, origin?: boolean): Date;
+
+		private static _normalize(cron: string): string;
+		private static _parseString(cron: string): number[][];
+		private static _parsePart(cronPart: string, id: number): number[];
+		private static _range(min: number, max: number, step: number): number[];
 	}
 
 	// Extended classes
@@ -1555,6 +1668,31 @@ declare module 'klasa' {
 		name?: string;
 		description?: string;
 		sql?: boolean;
+	};
+
+	export type TaskOptions = {
+		enabled?: boolean;
+		name?: string;
+	};
+
+	export type ScheduledTaskOptions = {
+		id?: string;
+		time?: Date | number;
+		repeat?: string;
+		data?: any;
+	};
+
+	export type ScheduledTaskJSON = {
+		id: string;
+		time?: number;
+		repeat?: string;
+		data?: any;
+	};
+
+	export type ScheduledTaskUpdateOptions = {
+		repeat?: string;
+		time?: Date;
+		data?: any;
 	};
 
 	export type AddOptions = {
