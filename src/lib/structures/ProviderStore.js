@@ -63,7 +63,7 @@ class ProviderStore extends Collection {
 	 * @readonly
 	 */
 	get default() {
-		return this.get(this.client.options.provider.default);
+		return this.get(this.client.options.providers.default);
 	}
 
 	/**
