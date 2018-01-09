@@ -13,7 +13,6 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
-
 - [[#144](https://github.com/dirigeants/klasa/pull/144)] Added `SchemaPiece#setValidator` and `SchemaPiece#validator`, to "inhibit" certain values to be set. (kyranet)
 - [[#152](https://github.com/dirigeants/klasa/pull/152)] Added the possibility to configure each default gateway separately. (kyranet)
 - [[#150](https://github.com/dirigeants/klasa/pull/150)] Added `util.deepClone` to clone objects. (kyranet)
