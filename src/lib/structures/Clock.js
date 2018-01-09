@@ -208,11 +208,8 @@ class Clock {
 	 * @private
 	 */
 	_checkInterval() {
-		if (this.tasks.length === 0) {
-			this._clearInterval();
-		} else if (!this._interval) {
-			this._interval = this.client.setInterval(this.execute.bind(this), this.timeInterval);
-		}
+		if (this.tasks.length === 0) this._clearInterval();
+		else if (!this._interval) this._interval = this.client.setInterval(this.execute.bind(this), this.timeInterval);
 	}
 
 }

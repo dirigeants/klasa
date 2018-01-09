@@ -73,7 +73,7 @@ class ScheduledTask {
 		 * @since 0.5.0
 		 * @type {?Date}
 		 */
-		this.time = options.time || _time;
+		this.time = 'time' in options ? new Date(options.time) : _time;
 
 		/**
 		 * @since 0.5.0
@@ -111,17 +111,15 @@ class ScheduledTask {
 	 * @param {ScheduledTaskUpdateOptions} options The options to update
 	 * @returns {Promise<this>}
 	 */
-	async update({ repeat, time, data } = {}) {
-		if (repeat) {
-			this.recurring = new Cron(repeat);
-			this.time = this.recurring.next();
-		}
-		if (time) this.time = time;
+	async update({ time, data } = {}) {
+		const [_time, _cron] = time ? this.constructor._resolveTime(time) : [null, null];
+		if (_time) this.time = _time;
+		if (_cron) this.cron = _cron;
 		if (data) this.data = data;
 
 		// Sync the database if some of the properties changed or the time changed manually
 		// (recurring tasks bump the time automatically)
-		if (repeat || data || (time && !this.recurring)) await this.store.sync(this);
+		await this.store.sync(this);
 		// TODO (kyranet): Make Configuration#update able to edit an entry from an array.
 
 		return this;
@@ -153,7 +151,7 @@ class ScheduledTask {
 	 * Resolve the time and crono
 	 * @since 0.5.0
 	 * @param {(Date|number|string)} time The time or Cron pattern
-	 * @returns {*[]}
+	 * @returns {any[]}
 	 * @private
 	 */
 	static _resolveTime(time) {
