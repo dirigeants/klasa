@@ -69,7 +69,7 @@ class Clock {
 		// Do not execute if the Client is not available
 		if (this.client.status !== 0) return;
 		if (this.tasks.length === 0) {
-			this._checkInterval();
+			this._clearInterval();
 			return;
 		}
 
@@ -189,14 +189,23 @@ class Clock {
 	}
 
 	/**
+	 * Clear the current interval
+	 * @since 0.5.0
+	 * @private
+	 */
+	_clearInterval() {
+		clearInterval(this._interval);
+		this._interval = null;
+	}
+
+	/**
 	 * Sets the interval when needed
 	 * @since 0.5.0
 	 * @private
 	 */
 	_checkInterval() {
 		if (this.tasks.length === 0) {
-			clearInterval(this._interval);
-			this._interval = null;
+			this._clearInterval();
 		} else if (!this._interval) {
 			this._interval = this.client.setInterval(this.execute.bind(this), this.timeInterval);
 		}

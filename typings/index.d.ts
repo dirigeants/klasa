@@ -1297,6 +1297,7 @@ declare module 'klasa' {
 		public clear(): Promise<void>;
 
 		private _insert(task: ScheduledTask): ScheduledTask;
+		private _clearInterval(): void;
 		private _checkInterval(): void;
 	}
 
