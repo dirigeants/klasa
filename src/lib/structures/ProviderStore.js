@@ -70,7 +70,7 @@ class ProviderStore extends Collection {
 	 * Deletes a provider from the store
 	 * @since 0.0.1
 	 * @param {Provider|string} name The provider object or a string representing the structure this store caches
-	 * @return {boolean} whether or not the delete was successful.
+	 * @returns {boolean} whether or not the delete was successful.
 	 */
 	delete(name) {
 		const pro = this.resolve(name);

@@ -60,7 +60,7 @@ class LanguageStore extends Collection {
 	 * The default language
 	 * @since 0.2.1
 	 * @readonly
-	 * @return {Language} The default language set in KlasaClientOptions.language
+	 * @returns {Language} The default language set in KlasaClientOptions.language
 	 */
 	get default() {
 		return this.get(this.client.options.language);
@@ -70,7 +70,7 @@ class LanguageStore extends Collection {
 	 * Deletes a language from the store
 	 * @since 0.2.1
 	 * @param {Finalizer|string} name The language object or a string representing the structure this store caches
-	 * @return {boolean} whether or not the delete was successful.
+	 * @returns {boolean} whether or not the delete was successful.
 	 */
 	delete(name) {
 		const finalizer = this.resolve(name);

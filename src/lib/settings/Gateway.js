@@ -155,7 +155,7 @@ class Gateway extends GatewayStorage {
 	 * @since 0.5.0
 	 * @param {string} id The ID of the entry
 	 * @param {*} data The data to insert
-	 * @return {Configuration}
+	 * @returns {Configuration}
 	 */
 	insertEntry(id, data = {}) {
 		const configs = new this.Configuration(this, Object.assign(data, { id }));
@@ -312,7 +312,7 @@ class Gateway extends GatewayStorage {
 	 * @private
 	 */
 	async _shardSync(path, data, action, force) {
-		if (!this.client.sharded) return;
+		if (!this.client.shard) return;
 		const parsed = typeof data === 'string' ? JSON.parse(data) : data;
 		let route = this.schema;
 		const key = path.pop();

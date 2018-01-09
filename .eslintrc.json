@@ -14,6 +14,19 @@
 		"valid-jsdoc": ["warn", {
 			"requireReturn": false,
 			"requireReturnDescription": false,
+			"prefer": {
+				"arg": "param",
+				"argument": "param",
+				"prop": "property",
+				"constructor": "class",
+				"augments": "extends",
+				"fires": "emits",
+				"var": "member",
+				"yield": "yields",
+				"return": "returns",
+				"exception": "throws",
+				"virtual": "abstract"
+			},
 			"preferType": {
 				"String": "string",
 				"Number": "number",
