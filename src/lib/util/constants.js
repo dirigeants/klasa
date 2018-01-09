@@ -5,6 +5,7 @@ exports.DEFAULTS = {
 
 	CLIENT: {
 		clientBaseDir: dirname(require.main.filename),
+		clock: { interval: 60000 },
 		cmdDeleting: false,
 		cmdEditing: false,
 		cmdLogging: false,

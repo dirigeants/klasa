@@ -16,6 +16,7 @@ const ProviderStore = require('./structures/ProviderStore');
 const EventStore = require('./structures/EventStore');
 const ExtendableStore = require('./structures/ExtendableStore');
 const TaskStore = require('./structures/TaskStore');
+const Clock = require('./structures/Clock');
 
 /**
  * The client for handling everything. See {@tutorial GettingStarted} for more information how to get started using this class.
@@ -268,6 +269,13 @@ class KlasaClient extends Discord.Client {
 		// Core pieces already have ArgResolver entries for the purposes of documentation.
 
 		/**
+		 * The Clock that runs the tasks
+		 * @since 0.5.0
+		 * @type {Clock}
+		 */
+		this.clock = new Clock(this);
+
+		/**
 		 * Whether the client is truly ready or not
 		 * @since 0.0.1
 		 * @type {boolean}
@@ -412,6 +420,9 @@ class KlasaClient extends Discord.Client {
 		// Client-wide settings
 		this.configs = this.gateways.clientStorage.cache.get('clientStorage', this.user.id) || this.gateways.clientStorage.insertEntry(this.user.id);
 		await this.configs.sync().then(() => this.gateways.clientStorage.cache.set(this.type, this.user.id, this.configs));
+
+		// Init the clock
+		this.clock.init();
 
 		// Init all the pieces
 		await Promise.all(this.pieceStores.filter(store => store.name !== 'providers').map(store => store.init()));

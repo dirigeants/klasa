@@ -1,6 +1,6 @@
 const ScheduledTask = require('./ScheduledTask');
 
-class Schedule {
+class Clock {
 
 	/**
 	 * @typedef  {Object} ScheduledTaskOptions
@@ -8,7 +8,7 @@ class Schedule {
 	 * @property {(Date|number)} [time]
 	 * @property {string} [repeat]
 	 * @property {*} [data]
-	 * @memberof Schedule
+	 * @memberof Clock
 	 */
 
 	/**
@@ -27,13 +27,65 @@ class Schedule {
 		 * @type {ScheduledTask[]}
 		 */
 		this.tasks = [];
+
+		/**
+		 * @since 0.5.0
+		 * @type {number}
+		 */
+		this.timeInterval = this.client.options.clock.interval;
+
+		/**
+		 * @since 0.5.0
+		 * @type {NodeJS.Timer}
+		 */
+		this._interval = null;
 	}
 
 	/**
 	 * @returns {ScheduledTaskOptions[]}
 	 */
 	get _tasks() {
-		return this.client.configs.schedule;
+		return this.client.configs.schedules;
+	}
+
+	/**
+	 * Init the Clock
+	 * @since 0.5.0
+	 */
+	init() {
+		const tasks = this._tasks;
+		if (!tasks || !Array.isArray(tasks)) return;
+
+		for (const task of tasks) this.add(task.taskName, task);
+
+		this._checkInterval();
+	}
+
+	/**
+	 * Execute the current tasks
+	 * @since 0.5.0
+	 */
+	async execute() {
+		// Do not execute if the Client is not available
+		if (this.client.status !== 0) return;
+		if (this.tasks.length === 0) {
+			this._interval = null;
+			return;
+		}
+
+		// Process the active tasks, they're sorted by the time they end
+		const now = Date.now();
+		const execute = [];
+		for (const task of this.tasks) {
+			if (task.time.getTime() < now) break;
+			execute.push(task.run());
+		}
+
+		// Check if the Clock has a task to run and run them if they exist
+		if (execute.length === 0) return;
+		await Promise.all(execute);
+
+		this._checkInterval();
 	}
 
 	/**
@@ -52,7 +104,7 @@ class Schedule {
 	 * @returns {Promise<ScheduledTask>}
 	 * @example
 	 * // Create a new reminder that ends in 2018-03-09T12:30:00.000Z (UTC)
-	 * Schedule.create('reminder', {
+	 * Clock.create('reminder', {
 	 *     time: new Date(Date.UTC(2018, 2, 9, 12, 30)),
 	 *     data: {
 	 *         user: '242043489611808769',
@@ -61,12 +113,12 @@ class Schedule {
 	 * });
 	 *
 	 * // Create a scheduled task that runs once a week
-	 * Schedule.create('backup', {
+	 * Clock.create('backup', {
 	 *     repeat: '@weekly'
 	 * });
 	 *
 	 * // Or even, a weekly backup on Tuesday and Friday that fires at 00:00 (UTC)
-	 * Schedule.create('backup', {
+	 * Clock.create('backup', {
 	 *     repeat: '0 0 0 * * tue,fri'
 	 * });
 	 *
@@ -77,7 +129,7 @@ class Schedule {
 	 */
 	async create(taskName, options) {
 		const task = new ScheduledTask(this.client, taskName, options);
-		await this.client.configs.update('schedule', task.toJSON(), undefined, { action: 'add' });
+		await this.client.configs.update('schedules', task.toJSON(), undefined, { action: 'add' });
 		return this._insert(task);
 	}
 
@@ -111,12 +163,13 @@ class Schedule {
 	 */
 	async clear() {
 		// this._tasks is unedited as Configuration#update will clear the array
-		await this.client.configs.update({ schedule: [] });
+		await this.client.configs.update({ schedules: [] });
 		this.tasks = [];
 	}
 
 	/**
 	 * Inserts the ScheduledTask instance in its sorted position for optimization
+	 * @since 0.5.0
 	 * @param {ScheduledTask} task The ScheduledTask instance to insert
 	 * @returns {ScheduledTask}
 	 * @private
@@ -128,6 +181,20 @@ class Schedule {
 		return task;
 	}
 
+	/**
+	 * Sets the interval when needed
+	 * @since 0.5.0
+	 * @private
+	 */
+	_checkInterval() {
+		if (this.tasks.length === 0) {
+			clearInterval(this._interval);
+			this._interval = null;
+		} else if (!this._interval) {
+			this._interval = setInterval(this.execute.bind(this), this.timeInterval);
+		}
+	}
+
 }
 
-module.exports = Schedule;
+module.exports = Clock;

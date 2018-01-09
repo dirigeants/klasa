@@ -64,6 +64,7 @@ declare module 'klasa' {
 		public gateways: GatewayDriver;
 		public configs?: Configuration;
 		public application: ClientApplication;
+		public clock: Clock;
 		public ready: boolean;
 
 		public readonly invite: string;
@@ -632,7 +633,8 @@ declare module 'klasa' {
 
 		public readonly clientStorageSchema: {
 			userBlacklist: SchemaPieceJSON,
-			guildBlacklist: SchemaPieceJSON
+			guildBlacklist: SchemaPieceJSON,
+			schedules: SchemaPieceJSON
 		};
 
 		public guilds: Gateway;
@@ -1277,12 +1279,16 @@ declare module 'klasa' {
 	}
 
 	// Schedule classes
-	export class Schedule {
+	export class Clock {
 		public constructor(client: KlasaClient);
 		public client: KlasaClient;
 		public tasks: ScheduledTask[];
+		public timeInterval: number;
+		private _interval: NodeJS.Timer;
 
 		private readonly _tasks: ScheduledTaskOptions[];
+		public init(): void;
+		public execute(): Promise<void>;
 		public next(): ScheduledTask;
 		public create(taskName: string, options: ScheduledTaskOptions);
 		public add(taskName: string, options: ScheduledTaskOptions);
@@ -1290,12 +1296,13 @@ declare module 'klasa' {
 		public clear(): Promise<void>;
 
 		private _insert(task: ScheduledTask): ScheduledTask;
+		private _checkInterval(): void;
 	}
 
 	export class ScheduledTask {
 		public constructor(client: KlasaClient, taskName: string, options: ScheduledTaskOptions);
 		public readonly client: KlasaClient;
-		public readonly store: Schedule;
+		public readonly store: Clock;
 		public task: Task;
 		public repeat?: string;
 		public recurring?: Cron;
@@ -1376,6 +1383,7 @@ declare module 'klasa' {
 	// Types
 	export type KlasaClientOptions = {
 		clientBaseDir?: string;
+		clock?: KlasaClientOptionsClock;
 		cmdEditing?: boolean;
 		cmdLogging?: boolean;
 		cmdPrompt?: boolean;
@@ -1397,6 +1405,10 @@ declare module 'klasa' {
 		regexPrefix?: RegExp;
 		typing?: boolean;
 	} & ClientOptions;
+
+	export type KlasaClientOptionsClock = {
+		interval?: number;
+	};
 
 	export type KlasaCustomPromptDefaults = {
 		promptLimit?: number;
@@ -1447,6 +1459,7 @@ declare module 'klasa' {
 
 	export type KlasaConstantsClient = {
 		clientBaseDir: string;
+		clock: { interval: 60000 };
 		cmdEditing: false;
 		cmdLogging: false;
 		cmdPrompt: false;
@@ -1684,6 +1697,7 @@ declare module 'klasa' {
 
 	export type ScheduledTaskJSON = {
 		id: string;
+		taskName: string;
 		time?: number;
 		repeat?: string;
 		data?: any;

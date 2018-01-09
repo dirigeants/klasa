@@ -25,6 +25,7 @@ class ScheduledTask {
 	/**
 	 * @typedef  {Object} ScheduledTaskJSON
 	 * @property {string} id
+	 * @property {string} taskName
 	 * @property {string} [repeat]
 	 * @property {number} [time]
 	 * @property {*} [data]
@@ -50,10 +51,10 @@ class ScheduledTask {
 		/**
 		 * @since 0.5.0
 		 * @name ScheduledTask#store
-		 * @type {Schedule}
+		 * @type {Clock}
 		 * @readonly
 		 */
-		Object.defineProperty(this, 'store', { value: client.schedule });
+		Object.defineProperty(this, 'store', { value: client.clock });
 
 		/**
 		 * @since 0.5.0
@@ -140,11 +141,11 @@ class ScheduledTask {
 	 * @returns {Promise<this>}
 	 */
 	async delete() {
-		const _index = this.store._tasks.findIndex(entry => entry.id === this.id);
-		if (_index === -1) throw new Error('This task does not exist.');
+		const index = this.store._tasks.findIndex(entry => entry.id === this.id);
+		if (index === -1) throw new Error('This task does not exist.');
 
 		// Get the task and use it to remove
-		const _task = this.store._tasks[_index];
+		const _task = this.store._tasks[index];
 		await this.client.configs.update('schedule', _task, undefined, { action: 'remove' });
 
 		// Remove the task from the current cache if successful
@@ -159,7 +160,7 @@ class ScheduledTask {
 	 * @returns {ScheduledTaskJSON}
 	 */
 	toJSON() {
-		const object = { id: this.id };
+		const object = { id: this.id, taskName: this.task };
 		if (this.recurring) object.repeat = this.repeat;
 		else if (this.time) object.time = this.time.getTime();
 		if (this.data !== undefined) object.data = this.data;

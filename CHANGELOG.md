@@ -13,7 +13,14 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#156](https://github.com/dirigeants/klasa/pull/156)] Added `taskError` event. (bdistin)
+- [[#156](https://github.com/dirigeants/klasa/pull/156)] Added `Clock` and `Cron` alongside a new piece structure named `Task` and its store, `TaskStore`. (bdistin & kyranet)
 - [[#152](https://github.com/dirigeants/klasa/pull/152)] Added the possibility to configure each default gateway separately. (kyranet)
+- [[#146](https://github.com/dirigeants/klasa/pull/146)] Added a Creating Custom Arguments tutorial. (kyranet)
+- [[`14d2b19a9f`](https://github.com/dirigeants/klasa/commit/14d2b19a9fe62c775e393ee7e60c2b60e0c1fa9e)] Added the possibility to create custom Configuration classes by extending `Gateway#Configuration`. (bdistin)
+- [[`5130f9db6d`](https://github.com/dirigeants/klasa/commit/5130f9db6d3a5ab12dbb579c16debfc78675d9ec)] Added `Timestamp#displayUTC`. (bdistin)
+- [[`9f1ee51aa3`](https://github.com/dirigeants/klasa/commit/9f1ee51aa39c3134848e38a3d62d76224a54f05a)] Added `Timestamp.utc`. (bdistin)
+- [[`266d64b2ba`](https://github.com/dirigeants/klasa/commit/266d64b2ba6f06f31a49826fca470bae3dd28a7a)] Added **blacklist** command. (bdistin)
 - [[#150](https://github.com/dirigeants/klasa/pull/150)] Added `util.deepClone` to clone objects. (kyranet)
 - [[#142](https://github.com/dirigeants/klasa/pull/142)] Added several typing-related methods to get deeper (JSDoc) types. (kyranet)
 - [[#138](https://github.com/dirigeants/klasa/pull/138)] Added `util.getTypeName` to get the input's type. (kyranet)
@@ -61,6 +68,10 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#155](https://github.com/dirigeants/klasa/pull/155)] Complexity reductions for `SchemaFolder#addKey` and `Colors`. (bdistin)
+- [[`338ebb0eb2`](https://github.com/dirigeants/klasa/commit/338ebb0eb2334810229720eda3abab198d6cc0ba)] Prefixed `Timestamp#_resolveDate`. (bdistin)
+- [[`f2cc604ead`](https://github.com/dirigeants/klasa/commit/f2cc604eaddf2d6239378b638e4c2fb792455e3d)] Arguments are now trimmed. (bdistin)
+- [[`4a70f1c271`](https://github.com/dirigeants/klasa/commit/4a70f1c271e233f9884265a5b443afe892822ffa)] Added spaces to blacklist output. (bdistin)
 - [[#152](https://github.com/dirigeants/klasa/pull/152)] **[BREAKING]** Changed `KlasaClientOptions.provider.engine` to `KlasaClientOptions.providers.default`. (kyranet)
 - [[#143](https://github.com/dirigeants/klasa/pull/143)] TS' typings cleanup (kyranet)
 - [[#141](https://github.com/dirigeants/klasa/pull/141)] Added a shard prefix into the `KlasaConsole` class to recognize the shard the message got sent. (bdistin)
@@ -103,6 +114,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Removed
 
+- [[`5b0c468362`](https://github.com/dirigeants/klasa/commit/5b0c46836200a57577bbd4aaa5cd463089a3bff0)] Removed `KlasaClient.sharded` as `Client.shard` is now fixed. (bdistin)
 - [[#136](https://github.com/dirigeants/klasa/pull/136)] Removed `util.newError`. (bdistin)
 - [[#129](https://github.com/dirigeants/klasa/pull/129)] **[BREAKING]** Removed the methods `Configuration#updateOne`, `Configuration#updateArray`. They're replaced by `Configuration#update`. (kyranet)
 - [[#130](https://github.com/dirigeants/klasa/pull/130)] Removed `KlasaClientOptions.quotedStringSupport` in favor of the new per-piece defaults. (bdistin)
@@ -121,6 +133,16 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
+- [[#156](https://github.com/dirigeants/klasa/pull/156)] Fixed a bug in Configuration not cloning objects correctly. (kyranet)
+- [[`35c42296fe`](https://github.com/dirigeants/klasa/commit/35c42296fe2738361dc48e3eee7716cfa73041b9)] Fixed GatewayStorage getting the wrong value. (bdistin)
+- [[`ab1f7c9ecf`](https://github.com/dirigeants/klasa/commit/ab1f7c9ecfa64e0b25c910ebe03d4f79eb29c8c0)] Fixed a bug where GatewayDriver wasn't checking if the provider was a CacheProvider correctly. (bdistin)
+- [[`d7b0eaaffc`](https://github.com/dirigeants/klasa/commit/d7b0eaaffc2d136cc5ca257f092630378efa3f6a)] Fixed `KlasaClientOptions.providers`. (bdistin)
+- [[#153](https://github.com/dirigeants/klasa/pull/153)] Fixed userBlacklist not ignoring the owner. (QuantumlyTangled)
+- [[`39380f29d4`](https://github.com/dirigeants/klasa/commit/39380f29d4fd908d3af312db7155667b40e9f47f)] Fixed mergeDefault not cloning arrays. (bdistin)
+- [[`08e5314565`](https://github.com/dirigeants/klasa/commit/08e5314565a4fa4c1cadc904815aaa74aacbc2cd)] Fixed duplication in Timestamp. (bdistin)
+- [[`9f1ee51aa3`](https://github.com/dirigeants/klasa/commit/9f1ee51aa39c3134848e38a3d62d76224a54f05a)] Fixed guildBlacklist being unable to add guilds where the bot is not in. (bdistin)
+- [[`649d088c06`](https://github.com/dirigeants/klasa/commit/649d088c0684d6658e7438296f22b16caf97b249)] Fixed multiple non repeating in Usage. (bdistin)
+- [[`d9459c78c7`](https://github.com/dirigeants/klasa/commit/d9459c78c73f1f07cd8965d55119079f69536fde)] Fixed the stats command not initializing the variables correctly. (bdistin)
 - [[#145](https://github.com/dirigeants/klasa/pull/145)] Fixed ClientStorage configs not updating across shards, and added a missing check in some `broadcastEval`s. (kyranet)
 - [[#150](https://github.com/dirigeants/klasa/pull/150)] Fixed a wrong type in typings. (kyranet)
 - [[#150](https://github.com/dirigeants/klasa/pull/150)] Fixed a bug where some objects would be partially cloned when adding new keys or defaulting. (kyranet)
