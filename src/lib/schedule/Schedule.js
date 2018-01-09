@@ -142,7 +142,7 @@ class Schedule {
 		if (!_task) throw new Error('This task does not exist.');
 
 		// Get the task and use it to remove
-		await this.client.configs.update('schedule', _task, { action: 'remove' });
+		await this.client.configs.update('schedules', _task, { action: 'remove' });
 
 		// Remove the task from the current cache if successful
 		this.tasks.splice(this.tasks.findIndex(entry => entry.id === id), 1);
@@ -155,8 +155,8 @@ class Schedule {
 	 * @since 0.5.0
 	 */
 	async clear() {
-		// this._tasks is unedited as Configuration#update will clear the array
-		await this.client.configs.update({ schedules: [] });
+		// this._tasks is unedited as Configuration#clear will clear the array
+		await this.client.configs.reset('schedules');
 		this.tasks = [];
 	}
 
