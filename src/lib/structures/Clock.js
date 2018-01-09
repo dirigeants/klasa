@@ -62,7 +62,7 @@ class Clock {
 		const tasks = this._tasks;
 		if (!tasks || !Array.isArray(tasks)) return;
 
-		for (const task of tasks) this.add(task.taskName, task);
+		for (const task of tasks) this._add(task.taskName, task);
 
 		this._checkInterval();
 	}
@@ -74,23 +74,19 @@ class Clock {
 	async execute() {
 		// Do not execute if the Client is not available
 		if (this.client.status !== 0) return;
-		if (this.tasks.length === 0) {
-			this._clearInterval();
-			return;
+		if (this.tasks.length) {
+			// Process the active tasks, they're sorted by the time they end
+			const now = Date.now();
+			const execute = [];
+			for (const task of this.tasks) {
+				if (task.time.getTime() > now) break;
+				execute.push(task.run());
+			}
+
+			// Check if the Clock has a task to run and run them if they exist
+			if (execute.length === 0) return;
+			await Promise.all(execute);
 		}
-
-		// Process the active tasks, they're sorted by the time they end
-		const now = Date.now();
-		const execute = [];
-		for (const task of this.tasks) {
-			if (task.time.getTime() > now) break;
-			execute.push(task.run());
-		}
-
-		// Check if the Clock has a task to run and run them if they exist
-		if (execute.length === 0) return;
-		await Promise.all(execute);
-
 		this._checkInterval();
 	}
 
@@ -124,7 +120,7 @@ class Clock {
 	 * // Or even, a weekly backup on Tuesday and Friday that fires at 00:00 (UTC)
 	 * Clock.create('backup', '0 0 0 * * tue,fri');
 	 *
-	 * // NOTE: It's highly adviced ScheduledTaskOptions.data to be a small object or string,
+	 * // NOTE: It's highly advised ScheduledTaskOptions.data to be a small object or string,
 	 * // as it being larger can cause a slowdown and memory increase. You can, however, have
 	 * // a table in your database and query it by its entry id from the Task instance.
 	 * @see https://en.wikipedia.org/wiki/Cron For more details
@@ -175,7 +171,9 @@ class Clock {
 	 */
 	_add(taskName, time, options) {
 		const task = new ScheduledTask(this.client, taskName, time, options);
-		return this._insert(task);
+		this._insert(task);
+		this._checkInterval();
+		return task;
 	}
 
 	/**
