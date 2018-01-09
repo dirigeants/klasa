@@ -52,10 +52,10 @@ class ScheduledTask {
 		/**
 		 * @since 0.5.0
 		 * @name ScheduledTask#store
-		 * @type {Clock}
+		 * @type {Schedule}
 		 * @readonly
 		 */
-		Object.defineProperty(this, 'store', { value: client.clock });
+		Object.defineProperty(this, 'store', { value: client.schedule });
 
 		/**
 		 * @since 0.5.0
@@ -128,7 +128,7 @@ class ScheduledTask {
 	/**
 	 * Delete the task
 	 * @since 0.5.0
-	 * @returns {Promise<Clock>}
+	 * @returns {Promise<Schedule>}
 	 */
 	delete() {
 		return this.store.delete(this.id);

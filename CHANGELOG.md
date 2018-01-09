@@ -14,7 +14,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 ### Added
 
 - [[#156](https://github.com/dirigeants/klasa/pull/156)] Added `taskError` event. (bdistin)
-- [[#156](https://github.com/dirigeants/klasa/pull/156)] Added `Clock` and `Cron` alongside a new piece structure named `Task` and its store, `TaskStore`. (bdistin & kyranet)
+- [[#156](https://github.com/dirigeants/klasa/pull/156)] Added `Schedule`, `ScheduledTask` and `Cron` alongside a new piece structure named `Task` and its store, `TaskStore`. (bdistin & kyranet)
 - [[#152](https://github.com/dirigeants/klasa/pull/152)] Added the possibility to configure each default gateway separately. (kyranet)
 - [[#146](https://github.com/dirigeants/klasa/pull/146)] Added a Creating Custom Arguments tutorial. (kyranet)
 - [[`14d2b19a9f`](https://github.com/dirigeants/klasa/commit/14d2b19a9fe62c775e393ee7e60c2b60e0c1fa9e)] Added the possibility to create custom Configuration classes by extending `Gateway#Configuration`. (bdistin)

@@ -1,13 +1,13 @@
 const ScheduledTask = require('./ScheduledTask');
 
-class Clock {
+class Schedule {
 
 	/**
 	 * @typedef  {Object} ScheduledTaskOptions
 	 * @property {string} [id]
 	 * @property {string} [repeat]
 	 * @property {*} [data]
-	 * @memberof Clock
+	 * @memberof Schedule
 	 */
 
 	/**
@@ -34,7 +34,7 @@ class Clock {
 		 * @since 0.5.0
 		 * @type {number}
 		 */
-		this.timeInterval = this.client.options.clock.interval;
+		this.timeInterval = this.client.options.schedule.interval;
 
 		/**
 		 * The current interval that runs the tasks
@@ -55,7 +55,7 @@ class Clock {
 	}
 
 	/**
-	 * Init the Clock
+	 * Init the Schedule
 	 * @since 0.5.0
 	 */
 	init() {
@@ -83,7 +83,7 @@ class Clock {
 				execute.push(task.run());
 			}
 
-			// Check if the Clock has a task to run and run them if they exist
+			// Check if the Schedule has a task to run and run them if they exist
 			if (execute.length === 0) return;
 			await Promise.all(execute);
 		}
@@ -107,7 +107,7 @@ class Clock {
 	 * @returns {Promise<ScheduledTask>}
 	 * @example
 	 * // Create a new reminder that ends in 2018-03-09T12:30:00.000Z (UTC)
-	 * Clock.create('reminder', new Date(Date.UTC(2018, 2, 9, 12, 30)), {
+	 * Schedule.create('reminder', new Date(Date.UTC(2018, 2, 9, 12, 30)), {
 	 *     data: {
 	 *         user: '242043489611808769',
 	 *         db_id: 'jbifpb4f'
@@ -115,10 +115,10 @@ class Clock {
 	 * });
 	 *
 	 * // Create a scheduled task that runs once a week
-	 * Clock.create('backup', '@weekly');
+	 * Schedule.create('backup', '@weekly');
 	 *
 	 * // Or even, a weekly backup on Tuesday and Friday that fires at 00:00 (UTC)
-	 * Clock.create('backup', '0 0 0 * * tue,fri');
+	 * Schedule.create('backup', '0 0 0 * * tue,fri');
 	 *
 	 * // NOTE: It's highly advised ScheduledTaskOptions.data to be a small object or string,
 	 * // as it being larger can cause a slowdown and memory increase. You can, however, have
@@ -212,4 +212,4 @@ class Clock {
 
 }
 
-module.exports = Clock;
+module.exports = Schedule;

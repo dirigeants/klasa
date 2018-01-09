@@ -1,22 +1,34 @@
 const Discord = require('discord.js');
 const path = require('path');
+
+// lib/parsers
 const ArgResolver = require('./parsers/ArgResolver');
-const PermLevels = require('./structures/PermissionLevels');
-const util = require('./util/util');
-const constants = require('./util/constants');
-const Stopwatch = require('./util/Stopwatch');
-const Console = require('./util/Console');
+
+// lib/permissions
+const PermLevels = require('./permissions/PermissionLevels');
+
+// lib/schedule
+const Schedule = require('./schedule/Schedule');
+
+// lib/settings
 const GatewayDriver = require('./settings/GatewayDriver');
+
+// lib/structures
 const CommandStore = require('./structures/CommandStore');
-const InhibitorStore = require('./structures/InhibitorStore');
-const FinalizerStore = require('./structures/FinalizerStore');
-const MonitorStore = require('./structures/MonitorStore');
-const LanguageStore = require('./structures/LanguageStore');
-const ProviderStore = require('./structures/ProviderStore');
 const EventStore = require('./structures/EventStore');
 const ExtendableStore = require('./structures/ExtendableStore');
+const FinalizerStore = require('./structures/FinalizerStore');
+const InhibitorStore = require('./structures/InhibitorStore');
+const LanguageStore = require('./structures/LanguageStore');
+const MonitorStore = require('./structures/MonitorStore');
+const ProviderStore = require('./structures/ProviderStore');
 const TaskStore = require('./structures/TaskStore');
-const Clock = require('./structures/Clock');
+
+// lib/util
+const Console = require('./util/Console');
+const constants = require('./util/constants');
+const Stopwatch = require('./util/Stopwatch');
+const util = require('./util/util');
 
 /**
  * The client for handling everything. See {@tutorial GettingStarted} for more information how to get started using this class.
@@ -269,11 +281,11 @@ class KlasaClient extends Discord.Client {
 		// Core pieces already have ArgResolver entries for the purposes of documentation.
 
 		/**
-		 * The Clock that runs the tasks
+		 * The Schedule that runs the tasks
 		 * @since 0.5.0
-		 * @type {Clock}
+		 * @type {Schedule}
 		 */
-		this.clock = new Clock(this);
+		this.schedule = new Schedule(this);
 
 		/**
 		 * Whether the client is truly ready or not
@@ -421,8 +433,8 @@ class KlasaClient extends Discord.Client {
 		this.configs = this.gateways.clientStorage.cache.get('clientStorage', this.user.id) || this.gateways.clientStorage.insertEntry(this.user.id);
 		await this.configs.sync().then(() => this.gateways.clientStorage.cache.set(this.type, this.user.id, this.configs));
 
-		// Init the clock
-		this.clock.init();
+		// Init the schedule
+		this.schedule.init();
 
 		// Init all the pieces
 		await Promise.all(this.pieceStores.filter(store => store.name !== 'providers').map(store => store.init()));

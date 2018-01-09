@@ -5,7 +5,6 @@ exports.DEFAULTS = {
 
 	CLIENT: {
 		clientBaseDir: dirname(require.main.filename),
-		clock: { interval: 60000 },
 		cmdDeleting: false,
 		cmdEditing: false,
 		cmdLogging: false,
@@ -31,12 +30,12 @@ exports.DEFAULTS = {
 			promptLimit: Infinity,
 			quotedStringSupport: false
 		},
-		providers: { default: 'json' },
 		gateways: {
 			guilds: {},
 			users: {},
 			clientStorage: {}
 		},
+		providers: { default: 'json' },
 		pieceDefaults: {
 			commands: {
 				aliases: [],
@@ -80,7 +79,8 @@ exports.DEFAULTS = {
 				description: ''
 			},
 			tasks: { enabled: true }
-		}
+		},
+		schedule: { interval: 60000 }
 	},
 
 	CONSOLE: {

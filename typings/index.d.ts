@@ -64,7 +64,7 @@ declare module 'klasa' {
 		public gateways: GatewayDriver;
 		public configs?: Configuration;
 		public application: ClientApplication;
-		public clock: Clock;
+		public schedule: Schedule;
 		public ready: boolean;
 
 		public readonly invite: string;
@@ -1280,7 +1280,7 @@ declare module 'klasa' {
 	}
 
 	// Schedule classes
-	export class Clock {
+	export class Schedule {
 		public constructor(client: KlasaClient);
 		public client: KlasaClient;
 		public tasks: ScheduledTask[];
@@ -1304,7 +1304,7 @@ declare module 'klasa' {
 	export class ScheduledTask {
 		public constructor(client: KlasaClient, taskName: string, time: Date | number | string, options?: ScheduledTaskOptions);
 		public readonly client: KlasaClient;
-		public readonly store: Clock;
+		public readonly store: Schedule;
 		public task: Task;
 		public recurring?: Cron;
 		public time?: Date;
@@ -1313,7 +1313,7 @@ declare module 'klasa' {
 
 		public run(): Promise<this>;
 		public update(options?: ScheduledTaskUpdateOptions): Promise<this>;
-		public delete(): Promise<Clock>;
+		public delete(): Promise<Schedule>;
 		public toJSON(): ScheduledTaskJSON;
 
 		private static _resolveTime(time: Date | number | string): [Date, Cron];
@@ -1461,7 +1461,7 @@ declare module 'klasa' {
 
 	export type KlasaConstantsClient = {
 		clientBaseDir: string;
-		clock: { interval: 60000 };
+		schedule: { interval: 60000 };
 		cmdEditing: false;
 		cmdLogging: false;
 		cmdPrompt: false;

@@ -1,5 +1,5 @@
 const GatewayStorage = require('./GatewayStorage');
-const Configuration = require('../structures/Configuration');
+const Configuration = require('./Configuration');
 const SchemaPiece = require('./SchemaPiece');
 const SchemaFolder = require('./SchemaFolder');
 const discord = require('discord.js');
