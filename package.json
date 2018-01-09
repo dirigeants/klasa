@@ -26,7 +26,7 @@
     "discord.js": "github:hydrabolt/discord.js#master"
   },
   "devDependencies": {
-    "@types/node": "^8.5.2",
+    "@types/node": "^9.3.0",
     "eslint": "^4.14.0",
     "ink-docstrap": "github:bdistin/docstrap#klasa",
     "jsdoc": "github:jsdoc3/jsdoc",
