@@ -118,7 +118,7 @@ class Schedule {
 	 * Schedule.create('backup', '@weekly');
 	 *
 	 * // Or even, a weekly backup on Tuesday and Friday that fires at 00:00 (UTC)
-	 * Schedule.create('backup', '0 0 0 * * tue,fri');
+	 * Schedule.create('backup', '0 0 * * tue,fri');
 	 *
 	 * // NOTE: It's highly advised ScheduledTaskOptions.data to be a small object or string,
 	 * // as it being larger can cause a slowdown and memory increase. You can, however, have

@@ -1,22 +1,10 @@
 const { CRON: { allowedNum, partRegex, day, predefined, tokens, tokensRegex } } = require('./constants');
 
+/**
+ * Handles Cron strings and generates dates based on the cron string provided.
+ * @see https://en.wikipedia.org/wiki/Cron
+ */
 class Cron {
-
-	/**
-	 * Cron Format
-	 * -----------
-	 * *	*	*	*	*	*
-	 * |	|	|	|	|	|day of week(0-6)
-	 * |	|	|	|	|month(1-12)
-	 * |	|	|	|day of month(1-31)
-	 * |	|	|hour(0-23)
-	 * |	|minute(0-59)
-	 * |seconds(0-59)
-	 * *	- all the options for that field
-	 * * /2- starting from the first option, every other option
-	 * 0	- only use the explicitly provided option
-	 * 2,4 - use list of values provided, separated by comma
-	 */
 
 	/**
 	 * @since 0.5.0
@@ -24,7 +12,7 @@ class Cron {
 	 */
 	constructor(cron) {
 		this.cron = this.constructor._normalize(cron.toLowerCase());
-		[this.seconds, this.minutes, this.hours, this.days, this.months, this.dows] = this.constructor._parseString(this.cron);
+		[this.minutes, this.hours, this.days, this.months, this.dows] = this.constructor._parseString(this.cron);
 	}
 
 	/**
@@ -39,9 +27,8 @@ class Cron {
 			const now = new Date(zDay.getTime() + 1000);
 			const hour = origin ? this.hours.find(hr => hr >= now.getUTCHours()) : this.hours[0];
 			const minute = origin ? this.minutes.find(min => min >= now.getUTCMinutes()) : this.minutes[0];
-			const second = origin ? this.seconds.find(sec => sec >= now.getUTCSeconds()) : this.seconds[0];
-			if (typeof hour !== 'undefined' && typeof hour !== 'undefined' && typeof second !== 'undefined') {
-				return new Date(Date.UTC(zDay.getUTCFullYear(), zDay.getUTCMonth(), zDay.getUTCDate(), hour, minute, second));
+			if (typeof hour !== 'undefined' && typeof hour !== 'undefined') {
+				return new Date(Date.UTC(zDay.getUTCFullYear(), zDay.getUTCMonth(), zDay.getUTCDate(), hour, minute));
 			}
 		}
 		return this.next(new Date(zDay.getTime() + day), false);
@@ -68,7 +55,7 @@ class Cron {
 	 */
 	static _parseString(cron) {
 		const parts = cron.split(' ');
-		if (parts.length !== 6) throw new Error('Invalid Cron Provided');
+		if (parts.length !== 5) throw new Error('Invalid Cron Provided');
 		return parts.map(Cron._parsePart);
 	}
 
