@@ -62,7 +62,7 @@ class Schedule {
 		const tasks = this._tasks;
 		if (!tasks || !Array.isArray(tasks)) return;
 
-		for (const task of tasks) this._add(task.taskName, task);
+		for (const task of tasks) this._add(task.taskName, task.time, task);
 
 		this._checkInterval();
 	}
