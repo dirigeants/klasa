@@ -26,8 +26,8 @@ class ScheduledTask {
 	 * @typedef  {Object} ScheduledTaskJSON
 	 * @property {string} id
 	 * @property {string} taskName
+	 * @property {number} time
 	 * @property {string} [repeat]
-	 * @property {number} [time]
 	 * @property {*} [data]
 	 * @memberof ScheduledTask
 	 */
@@ -150,9 +150,8 @@ class ScheduledTask {
 	 * @returns {ScheduledTaskJSON}
 	 */
 	toJSON() {
-		const object = { id: this.id, taskName: this.task };
+		const object = { id: this.id, taskName: this.task, time: this.time.getTime() };
 		if (this.recurring) object.repeat = this.recurring.cron;
-		if (this.time) object.time = this.time.getTime();
 		if (typeof this.data !== 'undefined') object.data = this.data;
 
 		return object;

@@ -1699,7 +1699,7 @@ declare module 'klasa' {
 	export type ScheduledTaskJSON = {
 		id: string;
 		taskName: string;
-		time?: number;
+		time: number;
 		repeat?: string;
 		data?: any;
 	};
