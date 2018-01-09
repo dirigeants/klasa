@@ -129,7 +129,7 @@ class Clock {
 	 */
 	async create(taskName, options) {
 		const task = new ScheduledTask(this.client, taskName, options);
-		await this.client.configs.update('schedules', task.toJSON(), undefined, { action: 'add' });
+		await this.client.configs.update('schedules', task.toJSON(), { action: 'add' });
 		return this._insert(task);
 	}
 
@@ -156,7 +156,7 @@ class Clock {
 		if (!_task) throw new Error('This task does not exist.');
 
 		// Get the task and use it to remove
-		await this.client.configs.update('schedule', _task, undefined, { action: 'remove' });
+		await this.client.configs.update('schedule', _task, { action: 'remove' });
 
 		// Remove the task from the current cache if successful
 		this.tasks.splice(this.tasks.findIndex(entry => entry.id === id), 1);
