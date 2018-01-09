@@ -1291,22 +1291,21 @@ declare module 'klasa' {
 		public init(): void;
 		public execute(): Promise<void>;
 		public next(): ScheduledTask;
-		public create(taskName: string, options: ScheduledTaskOptions);
-		public add(taskName: string, options: ScheduledTaskOptions);
+		public create(taskName: string, time: Date | number | string, options: ScheduledTaskOptions);
 		public delete(id: string): Promise<this>;
 		public clear(): Promise<void>;
 
+		private _add(taskName: string, time: Date | number | string, options: ScheduledTaskOptions);
 		private _insert(task: ScheduledTask): ScheduledTask;
 		private _clearInterval(): void;
 		private _checkInterval(): void;
 	}
 
 	export class ScheduledTask {
-		public constructor(client: KlasaClient, taskName: string, options: ScheduledTaskOptions);
+		public constructor(client: KlasaClient, taskName: string, time: Date | number | string, options?: ScheduledTaskOptions);
 		public readonly client: KlasaClient;
 		public readonly store: Clock;
 		public task: Task;
-		public repeat?: string;
 		public recurring?: Cron;
 		public time?: Date;
 		public id: string;
@@ -1317,6 +1316,7 @@ declare module 'klasa' {
 		public delete(): Promise<Clock>;
 		public toJSON(): ScheduledTaskJSON;
 
+		private static _resolveTime(time: Date | number | string): [Date, Cron];
 		private static _generateID(client: KlasaCLient, time: Date | number): string;
 		private static _validate(st: ScheduledTask): void;
 	}
@@ -1692,8 +1692,6 @@ declare module 'klasa' {
 
 	export type ScheduledTaskOptions = {
 		id?: string;
-		time?: Date | number;
-		repeat?: string;
 		data?: any;
 	};
 
@@ -1701,7 +1699,6 @@ declare module 'klasa' {
 		id: string;
 		taskName: string;
 		time: number;
-		repeat?: string;
 		data?: any;
 	};
 

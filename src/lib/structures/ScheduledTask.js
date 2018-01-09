@@ -8,8 +8,6 @@ class ScheduledTask {
 	/**
 	 * @typedef  {Object} ScheduledTaskOptions
 	 * @property {string} [id]
-	 * @property {(Date|number)} [time]
-	 * @property {string} [repeat]
 	 * @property {*} [data]
 	 * @memberof ScheduledTask
 	 */
@@ -37,9 +35,12 @@ class ScheduledTask {
 	 * @since 0.5.0
 	 * @param {KlasaClient} client The client that initialized this instance
 	 * @param {string} taskName The name of the task this ScheduledTask is for
-	 * @param {ScheduledTaskOptions} options The options for this ScheduledTask instance
+	 * @param {(Date|number|string)} time The time or Cron pattern
+	 * @param {ScheduledTaskOptions} [options={}] The options for this ScheduledTask instance
 	 */
-	constructor(client, taskName, options) {
+	constructor(client, taskName, time, options = {}) {
+		const [_time, _recurring] = this.constructor._resolveTime(time);
+
 		/**
 		 * @since 0.5.0
 		 * @name ScheduledTask#client
@@ -64,23 +65,15 @@ class ScheduledTask {
 
 		/**
 		 * @since 0.5.0
-		 * @type {?string}
-		 */
-		this.repeat = options.repeat;
-
-		/**
-		 * @since 0.5.0
 		 * @type {?Cron}
 		 */
-		this.recurring = options.repeat ? new Cron(options.repeat) : null;
+		this.recurring = _recurring;
 
 		/**
 		 * @since 0.5.0
 		 * @type {?Date}
 		 */
-		this.time = options.time instanceof Date ? options.time :
-			typeof options.time === 'number' ? new Date(options.time) :
-				this.recurring ? this.recurring.next() : null;
+		this.time = options.time || _time;
 
 		/**
 		 * @since 0.5.0
@@ -120,7 +113,6 @@ class ScheduledTask {
 	 */
 	async update({ repeat, time, data } = {}) {
 		if (repeat) {
-			this.repeat = repeat;
 			this.recurring = new Cron(repeat);
 			this.time = this.recurring.next();
 		}
@@ -155,6 +147,23 @@ class ScheduledTask {
 		if (typeof this.data !== 'undefined') object.data = this.data;
 
 		return object;
+	}
+
+	/**
+	 * Resolve the time and crono
+	 * @since 0.5.0
+	 * @param {(Date|number|string)} time The time or Cron pattern
+	 * @returns {*[]}
+	 * @private
+	 */
+	static _resolveTime(time) {
+		if (time instanceof Date) return [time, null];
+		if (typeof time === 'number') return [new Date(time), null];
+		if (typeof time === 'string') {
+			const cron = new Cron(time);
+			return [cron.next(), cron];
+		}
+		throw new Error('invalid time passed');
 	}
 
 	/**

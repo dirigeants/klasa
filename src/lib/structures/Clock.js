@@ -5,7 +5,6 @@ class Clock {
 	/**
 	 * @typedef  {Object} ScheduledTaskOptions
 	 * @property {string} [id]
-	 * @property {(Date|number)} [time]
 	 * @property {string} [repeat]
 	 * @property {*} [data]
 	 * @memberof Clock
@@ -17,32 +16,39 @@ class Clock {
 	 */
 	constructor(client) {
 		/**
+		 * The Client instance that initialized this instance
 		 * @since 0.5.0
 		 * @type {KlasaClient}
 		 */
 		this.client = client;
 
 		/**
+		 * An array of all processed ScheduledTask instances
 		 * @since 0.5.0
 		 * @type {ScheduledTask[]}
 		 */
 		this.tasks = [];
 
 		/**
+		 * The time in milliseconds for the delay between interval executions
 		 * @since 0.5.0
 		 * @type {number}
 		 */
 		this.timeInterval = this.client.options.clock.interval;
 
 		/**
+		 * The current interval that runs the tasks
 		 * @since 0.5.0
 		 * @type {NodeJS.Timer}
+		 * @private
 		 */
 		this._interval = null;
 	}
 
 	/**
+	 * Get all the tasks from the cache
 	 * @returns {ScheduledTaskOptions[]}
+	 * @private
 	 */
 	get _tasks() {
 		return this.client.configs.schedules;
@@ -100,12 +106,12 @@ class Clock {
 	 * Adds a new task to the database
 	 * @since 0.5.0
 	 * @param {string} taskName The name of the task
+	 * @param {(Date|number|string)} time The time or Cron pattern
 	 * @param {ScheduledTaskOptions} options The options for the ScheduleTask instance
 	 * @returns {Promise<ScheduledTask>}
 	 * @example
 	 * // Create a new reminder that ends in 2018-03-09T12:30:00.000Z (UTC)
-	 * Clock.create('reminder', {
-	 *     time: new Date(Date.UTC(2018, 2, 9, 12, 30)),
+	 * Clock.create('reminder', new Date(Date.UTC(2018, 2, 9, 12, 30)), {
 	 *     data: {
 	 *         user: '242043489611808769',
 	 *         db_id: 'jbifpb4f'
@@ -113,36 +119,20 @@ class Clock {
 	 * });
 	 *
 	 * // Create a scheduled task that runs once a week
-	 * Clock.create('backup', {
-	 *     repeat: '@weekly'
-	 * });
+	 * Clock.create('backup', '@weekly');
 	 *
 	 * // Or even, a weekly backup on Tuesday and Friday that fires at 00:00 (UTC)
-	 * Clock.create('backup', {
-	 *     repeat: '0 0 0 * * tue,fri'
-	 * });
+	 * Clock.create('backup', '0 0 0 * * tue,fri');
 	 *
 	 * // NOTE: It's highly adviced ScheduledTaskOptions.data to be a small object or string,
 	 * // as it being larger can cause a slowdown and memory increase. You can, however, have
 	 * // a table in your database and query it by its entry id from the Task instance.
 	 * @see https://en.wikipedia.org/wiki/Cron For more details
 	 */
-	async create(taskName, options) {
-		const task = new ScheduledTask(this.client, taskName, options);
+	async create(taskName, time, options) {
+		const task = this._add(taskName, time, options);
 		await this.client.configs.update('schedules', task.toJSON(), { action: 'add' });
-		return this._insert(task);
-	}
-
-	/**
-	 * Adds a task to the cache
-	 * @since 0.5.0
-	 * @param {string} taskName The name of the task
-	 * @param {ScheduledTaskOptions} options The options for the ScheduledTask instance
-	 * @returns {ScheduledTask}
-	 */
-	add(taskName, options) {
-		const task = new ScheduledTask(this.client, taskName, options);
-		return this._insert(task);
+		return task;
 	}
 
 	/**
@@ -172,6 +162,20 @@ class Clock {
 		// this._tasks is unedited as Configuration#update will clear the array
 		await this.client.configs.update({ schedules: [] });
 		this.tasks = [];
+	}
+
+	/**
+	 * Adds a task to the cache
+	 * @since 0.5.0
+	 * @param {string} taskName The name of the task
+	 * @param {(Date|number|string)} time The time or Cron pattern
+	 * @param {ScheduledTaskOptions} options The options for the ScheduledTask instance
+	 * @returns {ScheduledTask}
+	 * @private
+	 */
+	_add(taskName, time, options) {
+		const task = new ScheduledTask(this.client, taskName, time, options);
+		return this._insert(task);
 	}
 
 	/**
