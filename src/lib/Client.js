@@ -600,6 +600,15 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  */
 
 /**
+ * Emitted when a task has encountered an error.
+ * @event KlasaClient#taskError
+ * @since 0.5.0
+ * @param {ScheduledTask} scheduledTask The scheduled task
+ * @param {Task} task The task run
+ * @param {(Error|string)} error The task error
+ */
+
+/**
  * Emitted when {@link Configuration.updateOne}, {@link Configuration.updateArray} or {@link Configuration.reset}
  * is run. When {@link Configuration.updateMany} is run, the parameter path will be an object with the following format:
  * `{ type: 'MANY', keys: string[], values: Array<*> }`
