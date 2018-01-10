@@ -609,7 +609,7 @@ class ArgResolver extends Resolver {
 	 */
 	async duration(arg, currentUsage, possible, repeat, msg) {
 		const date = new Duration(arg).fromNow;
-		if (!isNaN(date.getTime())) return date;
+		if (!isNaN(date.getTime()) && date.getTime() - Date.now() > 0) return date;
 		if (currentUsage.type === 'optional' && !repeat) return null;
 		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_DURATION', currentUsage.possibles[possible].name);
 	}
