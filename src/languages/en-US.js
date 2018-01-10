@@ -30,6 +30,7 @@ module.exports = class extends Language {
 			RESOLVER_INVALID_URL: (name) => `${name} must be a valid url.`,
 			RESOLVER_INVALID_DATE: (name) => `${name} must be a valid date.`,
 			RESOLVER_INVALID_DURATION: (name) => `${name} must be a valid duration string.`,
+			RESOLVER_INVALID_TIME: (name) => `${name} must be a valid duration or date string.`,
 			RESOLVER_STRING_SUFFIX: ' characters',
 			RESOLVER_MINMAX_EXACTLY: (name, min, suffix) => `${name} must be exactly ${min}${suffix}.`,
 			RESOLVER_MINMAX_BOTH: (name, min, max, suffix) => `${name} must be between ${min} and ${max}${suffix}.`,
