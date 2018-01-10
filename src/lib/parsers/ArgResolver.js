@@ -592,7 +592,7 @@ class ArgResolver extends Resolver {
 	 */
 	async date(arg, currentUsage, possible, repeat, msg) {
 		const date = new Date(arg);
-		if (isNaN(date.getTime())) return date;
+		if (!isNaN(date.getTime())) return date;
 		if (currentUsage.type === 'optional' && !repeat) return null;
 		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_DATE', currentUsage.possibles[possible].name);
 	}
@@ -609,7 +609,7 @@ class ArgResolver extends Resolver {
 	 */
 	async duration(arg, currentUsage, possible, repeat, msg) {
 		const date = new Duration(arg).fromNow;
-		if (isNaN(date.getTime())) return date;
+		if (!isNaN(date.getTime())) return date;
 		if (currentUsage.type === 'optional' && !repeat) return null;
 		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_DURATION', currentUsage.possibles[possible].name);
 	}
