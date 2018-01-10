@@ -1,52 +1,79 @@
 module.exports = {
+	// KlasaClient
 	Client: require('./lib/Client'),
+
+	// lib/extensions
 	KlasaGuild: require('./lib/extensions/KlasaGuild'),
 	KlasaMessage: require('./lib/extensions/KlasaMessage'),
 	KlasaUser: require('./lib/extensions/KlasaUser'),
-	util: require('./lib/util/util'),
-	Colors: require('./lib/util/Colors'),
-	Console: require('./lib/util/Console'),
-	constants: require('./lib/util/constants'),
-	RichDisplay: require('./lib/util/RichDisplay'),
-	RichMenu: require('./lib/util/RichMenu'),
-	ReactionHandler: require('./lib/util/ReactionHandler'),
-	Stopwatch: require('./lib/util/Stopwatch'),
-	Timestamp: require('./lib/util/Timestamp'),
-	Command: require('./lib/structures/Command'),
-	Event: require('./lib/structures/Event'),
-	Extendable: require('./lib/structures/Extendable'),
-	Finalizer: require('./lib/structures/Finalizer'),
-	Inhibitor: require('./lib/structures/Inhibitor'),
-	Language: require('./lib/structures/Language'),
-	Monitor: require('./lib/structures/Monitor'),
-	Configuration: require('./lib/structures/Configuration'),
-	PermissionLevels: require('./lib/structures/PermissionLevels'),
-	Provider: require('./lib/structures/Provider'),
-	CommandStore: require('./lib/structures/CommandStore'),
-	EventStore: require('./lib/structures/EventStore'),
-	ExtendableStore: require('./lib/structures/ExtendableStore'),
-	FinalizerStore: require('./lib/structures/FinalizerStore'),
-	InhibitorStore: require('./lib/structures/InhibitorStore'),
-	LanguageStore: require('./lib/structures/LanguageStore'),
-	MonitorStore: require('./lib/structures/MonitorStore'),
-	ProviderStore: require('./lib/structures/ProviderStore'),
-	Piece: require('./lib/structures/interfaces/Piece'),
-	Store: require('./lib/structures/interfaces/Store'),
+
+	// lib/parsers
+	ArgResolver: require('./lib/parsers/ArgResolver'),
+	Resolver: require('./lib/parsers/Resolver'),
+	SettingResolver: require('./lib/parsers/SettingResolver'),
+
+	// lib/permissions
+	PermissionLevels: require('./lib/permissions/PermissionLevels'),
+
+	// lib/schedule
+	Schedule: require('./lib/schedule/Schedule'),
+	ScheduledTask: require('./lib/schedule/ScheduledTask'),
+
+	// lib/settings
+	Configuration: require('./lib/settings/Configuration'),
 	Gateway: require('./lib/settings/Gateway'),
 	GatewayDriver: require('./lib/settings/GatewayDriver'),
 	GatewayStorage: require('./lib/settings/GatewayStorage'),
 	Schema: require('./lib/settings/Schema'),
 	SchemaFolder: require('./lib/settings/SchemaFolder'),
 	SchemaPiece: require('./lib/settings/SchemaPiece'),
-	ArgResolver: require('./lib/parsers/ArgResolver'),
-	Resolver: require('./lib/parsers/Resolver'),
-	SettingResolver: require('./lib/parsers/SettingResolver'),
+
+	// lib/structures/interfaces
+	Piece: require('./lib/structures/interfaces/Piece'),
+	Store: require('./lib/structures/interfaces/Store'),
+
+	// lib/structures
+	Command: require('./lib/structures/Command'),
+	CommandStore: require('./lib/structures/CommandStore'),
+	Event: require('./lib/structures/Event'),
+	EventStore: require('./lib/structures/EventStore'),
+	Extendable: require('./lib/structures/Extendable'),
+	ExtendableStore: require('./lib/structures/ExtendableStore'),
+	Finalizer: require('./lib/structures/Finalizer'),
+	FinalizerStore: require('./lib/structures/FinalizerStore'),
+	Inhibitor: require('./lib/structures/Inhibitor'),
+	InhibitorStore: require('./lib/structures/InhibitorStore'),
+	Language: require('./lib/structures/Language'),
+	LanguageStore: require('./lib/structures/LanguageStore'),
+	Monitor: require('./lib/structures/Monitor'),
+	MonitorStore: require('./lib/structures/MonitorStore'),
+	Provider: require('./lib/structures/Provider'),
+	ProviderStore: require('./lib/structures/ProviderStore'),
+	Task: require('./lib/structures/Task'),
+	TaskStore: require('./lib/structures/TaskStore'),
+
+	// lib/usage
 	CommandPrompt: require('./lib/usage/CommandPrompt'),
 	CommandUsage: require('./lib/usage/CommandUsage'),
 	ParsedUsage: require('./lib/usage/ParsedUsage'),
 	Possible: require('./lib/usage/Possible'),
 	Tag: require('./lib/usage/Tag'),
 	TextPrompt: require('./lib/usage/TextPrompt'),
+
+	// lib/util
+	Colors: require('./lib/util/Colors'),
+	Console: require('./lib/util/Console'),
+	constants: require('./lib/util/constants'),
+	Cron: require('./lib/util/Cron'),
+	Duration: require('./lib/util/Duration'),
+	ReactionHandler: require('./lib/util/ReactionHandler'),
+	RichDisplay: require('./lib/util/RichDisplay'),
+	RichMenu: require('./lib/util/RichMenu'),
+	Stopwatch: require('./lib/util/Stopwatch'),
+	Timestamp: require('./lib/util/Timestamp'),
+	util: require('./lib/util/util'),
+
+	// version
 	version: require('../package').version
 };
 

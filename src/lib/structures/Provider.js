@@ -94,7 +94,7 @@ class Provider {
 	/**
 	 * The init method to be optionally overwritten in actual provider pieces
 	 * @since 0.0.1
-	 * @returns {void}
+	 * @returns {Promise<void>}
 	 * @abstract
 	 */
 	async init() {

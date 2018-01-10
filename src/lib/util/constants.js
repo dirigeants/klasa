@@ -30,12 +30,12 @@ exports.DEFAULTS = {
 			promptLimit: Infinity,
 			quotedStringSupport: false
 		},
-		providers: { default: 'json' },
 		gateways: {
 			guilds: {},
 			users: {},
 			clientStorage: {}
 		},
+		providers: { default: 'json' },
 		pieceDefaults: {
 			commands: {
 				aliases: [],
@@ -77,8 +77,10 @@ exports.DEFAULTS = {
 				sql: false,
 				cache: false,
 				description: ''
-			}
-		}
+			},
+			tasks: { enabled: true }
+		},
+		schedule: { interval: 60000 }
 	},
 
 	CONSOLE: {
@@ -164,3 +166,39 @@ exports.GATEWAY_RESOLVERS = {
 	}
 
 };
+
+exports.CRON = {
+	allowedNum: [[0, 59], [0, 23], [1, 31], [1, 12], [0, 6]],
+	partRegex: /^(?:(\*)|(\d+)(?:-(\d+))?)(?:\/(\d+))?$/,
+	day: 24 * 60 * 60 * 1000,
+	predefined: {
+		'@yearly': '0 0 1 1 *',
+		'@monthly': '0 0 1 * *',
+		'@weekly': '0 0 * * 0',
+		'@daily': '0 0 * * *',
+		'@hourly': '0 * * * *'
+	},
+	tokens: {
+		jan: 1,
+		feb: 2,
+		mar: 3,
+		apr: 4,
+		may: 5,
+		jun: 6,
+		jul: 7,
+		aug: 8,
+		sep: 9,
+		oct: 10,
+		nov: 11,
+		dec: 12,
+		sun: 0,
+		mon: 1,
+		tue: 2,
+		wed: 3,
+		thu: 4,
+		fri: 5,
+		sat: 6
+	}
+};
+
+exports.CRON.tokensRegex = new RegExp(Object.keys(exports.CRON.tokens).join('|'), 'g');
