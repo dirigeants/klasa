@@ -1,4 +1,5 @@
 const Resolver = require('./Resolver');
+const Duration = require('../util/Duration');
 
 /**
  * The command argument resolver
@@ -594,6 +595,23 @@ class ArgResolver extends Resolver {
 		if (isNaN(date.getTime())) return date;
 		if (currentUsage.type === 'optional' && !repeat) return null;
 		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_DATE', currentUsage.possibles[possible].name);
+	}
+
+	/**
+	 * Resolves a Date from a relative duration
+	 * @since 0.5.0
+	 * @param {string} arg This arg
+	 * @param {Object} currentUsage This current usage
+	 * @param {number} possible This possible usage id
+	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {KlasaMessage} msg The message that triggered the command
+	 * @returns {?string}
+	 */
+	async duration(arg, currentUsage, possible, repeat, msg) {
+		const date = new Duration(arg).fromNow;
+		if (isNaN(date.getTime())) return date;
+		if (currentUsage.type === 'optional' && !repeat) return null;
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_DURATION', currentUsage.possibles[possible].name);
 	}
 
 	/**
