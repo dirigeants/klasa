@@ -626,8 +626,8 @@ class ArgResolver extends Resolver {
 	 */
 	async time(arg, currentUsage, possible, repeat, msg) {
 		const date = await Promise.all([
-			this.duration(arg, currentUsage, possible, repeat, msg).catch(() => null),
-			this.date(arg, currentUsage, possible, repeat, msg).catch(() => null)
+			this.date(arg, currentUsage, possible, repeat, msg).catch(() => null),
+			this.duration(arg, currentUsage, possible, repeat, msg).catch(() => null)
 		]).then(ret => ret.find(Boolean));
 		if (!isNaN(date.getTime()) && date.getTime() - Date.now() > 0) return date;
 		if (currentUsage.type === 'optional' && !repeat) return null;
