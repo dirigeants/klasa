@@ -79,7 +79,7 @@ class ScheduledTask {
 		 * @since 0.5.0
 		 * @type {string}
 		 */
-		this.id = options.id || this.constructor._generateID(this.client, this.time);
+		this.id = options.id || this.constructor._generateID(this.client);
 
 		/**
 		 * @since 0.5.0
@@ -172,14 +172,11 @@ class ScheduledTask {
 	 * Generate a new ID based on timestamp and shard
 	 * @since 0.5.0
 	 * @param {KlasaClient} client The Discord client
-	 * @param {(Date|number)} time The time
 	 * @returns {string}
 	 * @private
 	 */
-	static _generateID(client, time) {
-		if (time === null) time = Date.now();
-		else if (time instanceof Date) time.getTime();
-		return Buffer.from(`${time}${client.shard ? client.shard.id : ''}`).toString('hex');
+	static _generateID(client) {
+		return Date.now().toString(36) + (client.shard ? client.shard.id.toString(36) : '') + String.fromCharCode((1 % 26) + 97);
 	}
 
 	/**

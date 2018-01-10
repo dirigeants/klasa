@@ -91,6 +91,15 @@ class Schedule {
 	}
 
 	/**
+	 * Returns the next ScheduledTask from the id
+	 * @param {string} id The id of the ScheduledTask you want
+	 * @returns {ScheduledTask}
+	 */
+	get(id) {
+		return this.tasks.find(entry => entry.id === id);
+	}
+
+	/**
 	 * Return the next ScheduledTask pending for execution
 	 * @returns {ScheduledTask}
 	 */
