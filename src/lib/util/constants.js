@@ -168,7 +168,7 @@ exports.GATEWAY_RESOLVERS = {
 };
 
 exports.CRON = {
-	allowedNum: [[0, 59], [0, 59], [0, 23], [1, 31], [1, 12], [0, 6]],
+	allowedNum: [[0, 59], [0, 23], [1, 31], [1, 12], [0, 6]],
 	partRegex: /^(?:(\*)|(\d+)(?:-(\d+))?)(?:\/(\d+))?$/,
 	day: 24 * 60 * 60 * 1000,
 	predefined: {
