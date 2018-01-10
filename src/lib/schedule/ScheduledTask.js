@@ -155,7 +155,7 @@ class ScheduledTask {
 	/**
 	 * Resolve the time and cron
 	 * @since 0.5.0
-	 * @param {(Date|number|string)} time The time or Cron pattern
+	 * @param {(Date|number|Cron|string)} time The time or Cron pattern
 	 * @returns {any[]}
 	 * @private
 	 */

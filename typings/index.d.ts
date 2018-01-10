@@ -1360,7 +1360,7 @@ declare module 'klasa' {
 		public delete(): Promise<Schedule>;
 		public toJSON(): ScheduledTaskJSON;
 
-		private static _resolveTime(time: Date | number | string): [Date, Cron];
+		private static _resolveTime(time: Date | number | Cron | string): [Date, Cron];
 		private static _generateID(client: KlasaCLient, time: Date | number): string;
 		private static _validate(st: ScheduledTask): void;
 	}
