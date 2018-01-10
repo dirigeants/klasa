@@ -433,13 +433,14 @@ class KlasaClient extends Discord.Client {
 		this.configs = this.gateways.clientStorage.cache.get('clientStorage', this.user.id) || this.gateways.clientStorage.insertEntry(this.user.id);
 		await this.configs.sync().then(() => this.gateways.clientStorage.cache.set(this.type, this.user.id, this.configs));
 
-		// Init the schedule
-		this.schedule.init();
-
 		// Init all the pieces
-		await Promise.all(this.pieceStores.filter(store => store.name !== 'providers').map(store => store.init()));
+		await Promise.all(this.pieceStores.filter(store => !['providers', 'extendables'].includes(store.name)).map(store => store.init()));
 		util.initClean(this);
 		this.ready = true;
+
+		// Init the schedule
+		await this.schedule.init();
+
 		if (typeof this.options.readyMessage === 'undefined') this.emit('log', `Successfully initialized. Ready to serve ${this.guilds.size} guilds.`);
 		else if (this.options.readyMessage !== null) this.emit('log', util.isFunction(this.options.readyMessage) ? this.options.readyMessage(this) : this.options.readyMessage);
 		this.emit('klasaReady');

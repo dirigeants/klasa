@@ -58,7 +58,20 @@ class Schedule {
 	 * Init the Schedule
 	 * @since 0.5.0
 	 */
-	init() {
+	async init() {
+		const { schema } = this.client.gateways.clientStorage;
+		if (!schema.hasKey('schedules')) {
+			await schema.addKey('schedules', {
+				type: 'any',
+				default: [],
+				min: null,
+				max: null,
+				array: true,
+				configurable: false,
+				sql: 'TEXT'
+			});
+		}
+
 		const tasks = this._tasks;
 		if (!tasks || !Array.isArray(tasks)) return;
 
