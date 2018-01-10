@@ -1,20 +1,34 @@
 const Discord = require('discord.js');
 const path = require('path');
+
+// lib/parsers
 const ArgResolver = require('./parsers/ArgResolver');
-const PermLevels = require('./structures/PermissionLevels');
-const util = require('./util/util');
-const constants = require('./util/constants');
-const Stopwatch = require('./util/Stopwatch');
-const Console = require('./util/Console');
+
+// lib/permissions
+const PermLevels = require('./permissions/PermissionLevels');
+
+// lib/schedule
+const Schedule = require('./schedule/Schedule');
+
+// lib/settings
 const GatewayDriver = require('./settings/GatewayDriver');
+
+// lib/structures
 const CommandStore = require('./structures/CommandStore');
-const InhibitorStore = require('./structures/InhibitorStore');
-const FinalizerStore = require('./structures/FinalizerStore');
-const MonitorStore = require('./structures/MonitorStore');
-const LanguageStore = require('./structures/LanguageStore');
-const ProviderStore = require('./structures/ProviderStore');
 const EventStore = require('./structures/EventStore');
 const ExtendableStore = require('./structures/ExtendableStore');
+const FinalizerStore = require('./structures/FinalizerStore');
+const InhibitorStore = require('./structures/InhibitorStore');
+const LanguageStore = require('./structures/LanguageStore');
+const MonitorStore = require('./structures/MonitorStore');
+const ProviderStore = require('./structures/ProviderStore');
+const TaskStore = require('./structures/TaskStore');
+
+// lib/util
+const Console = require('./util/Console');
+const constants = require('./util/constants');
+const Stopwatch = require('./util/Stopwatch');
+const util = require('./util/util');
 
 /**
  * The client for handling everything. See {@tutorial GettingStarted} for more information how to get started using this class.
@@ -192,6 +206,13 @@ class KlasaClient extends Discord.Client {
 		this.extendables = new ExtendableStore(this);
 
 		/**
+		 * The cache where tasks are stored
+		 * @since 0.5.0
+		 * @type {TaskStore}
+		 */
+		this.tasks = new TaskStore(this);
+
+		/**
 		 * A Store registry
 		 * @since 0.3.0
 		 * @type {external:Collection}
@@ -255,8 +276,16 @@ class KlasaClient extends Discord.Client {
 			.registerStore(this.languages)
 			.registerStore(this.providers)
 			.registerStore(this.events)
-			.registerStore(this.extendables);
+			.registerStore(this.extendables)
+			.registerStore(this.tasks);
 		// Core pieces already have ArgResolver entries for the purposes of documentation.
+
+		/**
+		 * The Schedule that runs the tasks
+		 * @since 0.5.0
+		 * @type {Schedule}
+		 */
+		this.schedule = new Schedule(this);
 
 		/**
 		 * Whether the client is truly ready or not
@@ -405,9 +434,13 @@ class KlasaClient extends Discord.Client {
 		await this.configs.sync().then(() => this.gateways.clientStorage.cache.set(this.type, this.user.id, this.configs));
 
 		// Init all the pieces
-		await Promise.all(this.pieceStores.filter(store => store.name !== 'providers').map(store => store.init()));
+		await Promise.all(this.pieceStores.filter(store => !['providers', 'extendables'].includes(store.name)).map(store => store.init()));
 		util.initClean(this);
 		this.ready = true;
+
+		// Init the schedule
+		await this.schedule.init();
+
 		if (typeof this.options.readyMessage === 'undefined') this.emit('log', `Successfully initialized. Ready to serve ${this.guilds.size} guilds.`);
 		else if (this.options.readyMessage !== null) this.emit('log', util.isFunction(this.options.readyMessage) ? this.options.readyMessage(this) : this.options.readyMessage);
 		this.emit('klasaReady');
@@ -567,8 +600,16 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  */
 
 /**
- * Emitted when {@link Configuration.updateOne}, {@link Configuration.updateArray} or {@link Configuration.reset}
- * is run. When {@link Configuration.updateMany} is run, the parameter path will be an object with the following format:
+ * Emitted when a task has encountered an error.
+ * @event KlasaClient#taskError
+ * @since 0.5.0
+ * @param {ScheduledTask} scheduledTask The scheduled task
+ * @param {Task} task The task run
+ * @param {(Error|string)} error The task error
+ */
+
+/**
+ * Emitted when {@link Configuration.update} is run, the parameter path will be an object with the following format:
  * `{ type: 'MANY', keys: string[], values: Array<*> }`
  * @event KlasaClient#configUpdateEntry
  * @since 0.5.0

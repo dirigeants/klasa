@@ -20,7 +20,7 @@ class Store {
 	 * @returns {Array}
 	 */
 	init() {
-		return Promise.all(this.map(piece => piece.enabled ? piece.init() : true));
+		return Promise.all(this.map(piece => piece.enabled ? piece.init() : piece.unload()));
 	}
 
 	/**

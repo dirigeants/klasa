@@ -55,3 +55,4 @@ module.exports = class extends Monitor {
 - {@tutorial CreatingInhibitors}
 - {@tutorial CreatingLanguages}
 - {@tutorial CreatingProviders}
+- {@tutorial CreatingTasks}

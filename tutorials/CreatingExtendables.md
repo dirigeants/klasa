@@ -45,7 +45,7 @@ constructor(...args) {
 		enabled: true, // default true
 		klasa: false // default false
 	);
-} 
+}
 ```
 
 | Name                | Default       | Type    | Description                                            |
@@ -98,3 +98,4 @@ Where `prompt()` is your prompt function.
 - {@tutorial CreatingLanguages}
 - {@tutorial CreatingMonitors}
 - {@tutorial CreatingProviders}
+- {@tutorial CreatingTasks}

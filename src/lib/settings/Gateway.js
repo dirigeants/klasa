@@ -1,5 +1,5 @@
 const GatewayStorage = require('./GatewayStorage');
-const Configuration = require('../structures/Configuration');
+const Configuration = require('./Configuration');
 const SchemaPiece = require('./SchemaPiece');
 const SchemaFolder = require('./SchemaFolder');
 const discord = require('discord.js');
@@ -174,12 +174,7 @@ class Gateway extends GatewayStorage {
 		const configs = this.cache.get(this.type, input);
 		if (!configs) return false;
 
-		if (configs.existsInDB) {
-			await this.provider.delete(this.type, input);
-			if (this.client.listenerCount('configDeleteEntry')) this.client.emit('configDeleteEntry', configs);
-		}
-		this.cache.delete(this.type, input);
-
+		await configs.destroy();
 		return true;
 	}
 

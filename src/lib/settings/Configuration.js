@@ -197,7 +197,11 @@ class Configuration {
 	 * @returns {Promise<Configuration>}
 	 */
 	async destroy() {
-		await this.gateway.deleteEntry(this.id);
+		if (this.existsInDB) {
+			await this.gateway.provider.delete(this.gateway.type, this.id);
+			if (this.client.listenerCount('configDeleteEntry')) this.client.emit('configDeleteEntry', this);
+		}
+		this.gateway.cache.delete(this.gateway.type, this.id);
 		return this;
 	}
 
@@ -240,9 +244,14 @@ class Configuration {
 	 * // Updating multiple keys (only possible with json object):
 	 * Configuration#update({ prefix: 'k!', language: 'es-ES' }, msg.guild);
 	 */
-	update(key, value, guild, { avoidUnconfigurable = false, action = 'auto' } = {}) {
+	update(key, value, guild, options) {
+		if (typeof options === 'undefined' && isObject(guild)) {
+			options = guild;
+			guild = undefined;
+		}
+
 		if (isObject(key)) return this.updateMany(key, value);
-		return this._updateSingle(action, key, value, guild, avoidUnconfigurable);
+		return this._updateSingle(key, value, guild, options);
 	}
 
 	/**
@@ -321,23 +330,24 @@ class Configuration {
 	/**
 	 * Update an array
 	 * @since 0.5.0
-	 * @param {('add'|'remove')} action Whether the value should be added or removed to the array
+	 * @param {('add'|'remove'|'auto')} action Whether the value should be added or removed to the array
 	 * @param {string} key The key to edit
 	 * @param {*} value The new value
 	 * @param {ConfigGuildResolvable} guild The guild to take
+	 * @param {number} arrayPosition The array position to update
 	 * @param {ConfigurationParseOptions} options The options
 	 * @returns {Promise<ConfigurationParseResultArray>}
 	 * @private
 	 */
-	async _parseUpdateArray(action, key, value, guild, { path, route }) {
+	async _parseUpdateArray(action, key, value, guild, arrayPosition, { path, route }) {
 		if (path.array === false) {
 			if (guild) throw guild.language.get('COMMAND_CONF_KEY_NOT_ARRAY');
-			throw 'The key is not an array.';
+			throw new Error('The key is not an array.');
 		}
 		guild = this.gateway._resolveGuild(guild);
 
 		const parsed = await path.parse(value, guild);
-		const parsedID = Configuration.getIdentifier(parsed);
+		const parsedID = path.type !== 'any' ? Configuration.getIdentifier(parsed) : parsed;
 
 		// Handle entry creation if it does not exist.
 		if (!this.existsInDB) await this.gateway.createEntry(this.id);
@@ -347,14 +357,19 @@ class Configuration {
 		for (let i = 0; i < route.length - 1; i++) cache = cache[route[i]] || {};
 		cache = cache[route[route.length - 1]] || [];
 
-		if (action === 'auto') action = cache.includes(parsedID) ? 'remove' : 'add';
-		if (action === 'add') {
-			if (cache.includes(parsedID)) throw `The value ${parsedID} for the key ${path.path} already exists.`;
-			cache.push(parsedID);
+		if (typeof arrayPosition === 'number') {
+			if (arrayPosition >= cache.length) throw new Error(`The option arrayPosition should be a number between 0 and ${cache.length - 1}`);
+			cache[arrayPosition] = parsedID;
 		} else {
-			const index = cache.indexOf(parsedID);
-			if (index === -1) throw `The value ${parsedID} for the key ${path.path} does not exist.`;
-			cache.splice(index, 1);
+			if (action === 'auto') action = cache.includes(parsedID) ? 'remove' : 'add';
+			if (action === 'add') {
+				if (cache.includes(parsedID)) throw `The value ${parsedID} for the key ${path.path} already exists.`;
+				cache.push(parsedID);
+			} else {
+				const index = cache.indexOf(parsedID);
+				if (index === -1) throw `The value ${parsedID} for the key ${path.path} does not exist.`;
+				cache.splice(index, 1);
+			}
 		}
 
 		if (oldClone !== null) this.client.emit('configUpdateEntry', oldClone, this, path.path);
@@ -364,15 +379,17 @@ class Configuration {
 	/**
 	 * Update an array
 	 * @since 0.5.0
-	 * @param {('add'|'remove'|'auto')} action Whether the value should be added or removed to the array
 	 * @param {string} key The key to edit
 	 * @param {*} value The new value
 	 * @param {ConfigGuildResolvable} guild The guild to take
-	 * @param {boolean} avoidUnconfigurable Whether the Gateway should avoid configuring the selected key
+	 * @param {Object} [options={}] The options
+	 * @param {boolean} [options.avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key
+	 * @param {('add'|'remove'|'auto')} [options.action='auto'] Whether the value should be added or removed to the array
+	 * @param {number} [options.arrayPosition=null] The array position to update
 	 * @returns {Promise<ConfigurationUpdateResult>}
 	 * @private
 	 */
-	async _updateSingle(action, key, value, guild, avoidUnconfigurable) {
+	async _updateSingle(key, value, guild, { avoidUnconfigurable = false, action = 'auto', arrayPosition = null } = {}) {
 		if (typeof key !== 'string') throw new TypeError(`The argument key must be a string. Received: ${typeof key}`);
 		if (typeof guild === 'boolean') {
 			avoidUnconfigurable = guild;
@@ -384,7 +401,7 @@ class Configuration {
 		const { parsedID, array, parsed } = action === 'remove' && !pathData.path.array ?
 			this._parseReset(key, pathData) :
 			pathData.path.array === true ?
-				await this._parseUpdateArray(action, key, value, guild, pathData) :
+				await this._parseUpdateArray(action, key, value, guild, arrayPosition, pathData) :
 				await this._parseUpdateOne(key, value, guild, pathData);
 
 		if (this.gateway.sql) await this.gateway.provider.update(this.gateway.type, this.id, key, array || parsedID);
@@ -534,7 +551,7 @@ class Configuration {
 		for (let i = 0; i < schema.keyArray.length; i++) {
 			const key = schema.keyArray[i];
 			if (schema[key].type === 'Folder') clone[key] = Configuration._clone(data[key], schema[key]);
-			else clone[key] = schema[key].array ? data[key].slice(0) : data[key];
+			else clone[key] = deepClone(data[key]);
 		}
 
 		return clone;

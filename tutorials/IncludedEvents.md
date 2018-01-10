@@ -118,6 +118,14 @@ Handles the errors thrown by any of the finalizers.
 
 [events/finalizerError.js](https://github.com/dirigeants/klasa/blob/master/src/events/finalizerError.js)
 
+## taskError
+
+Handles the errors thrown by any of the tasks.
+
+**Source:**
+
+[events/taskError.js](https://github.com/dirigeants/klasa/blob/master/src/events/taskError.js)
+
 ## verbose
 
 Logs verbose messages to the console.

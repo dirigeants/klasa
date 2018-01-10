@@ -29,7 +29,7 @@ declare module 'klasa' {
 		User as DiscordUser,
 		UserResolvable,
 		VoiceChannel as DiscordVoiceChannel,
-		WebhookClient,
+		WebhookClient
 	} from 'discord.js';
 
 	export const version: string;
@@ -47,6 +47,7 @@ declare module 'klasa' {
 		public monitors: MonitorStore;
 		public languages: LanguageStore;
 		public providers: ProviderStore;
+		public tasks: TaskStore;
 		public events: EventStore;
 		public extendables: ExtendableStore;
 		public pieceStores: Collection<string, any>;
@@ -63,6 +64,7 @@ declare module 'klasa' {
 		public gateways: GatewayDriver;
 		public configs?: Configuration;
 		public application: ClientApplication;
+		public schedule: Schedule;
 		public ready: boolean;
 
 		public readonly invite: string;
@@ -120,6 +122,7 @@ declare module 'klasa' {
 
 		public on(event: 'monitorError', listener: (msg: KlasaMessage, monitor: Monitor, error: Error | string) => void): this;
 		public on(event: 'finalizerError', listener: (msg: KlasaMessage, mes: KlasaMessage, timer: Timestamp, finalizer: Finalizer, error: Error | string) => void): this;
+		public on(event: 'taskError', listener: (scheduledTask: ScheduledTask, task: Task, error: Error) => void): this;
 
 		// SettingGateway Events
 		public on(event: 'configCreateEntry', listener: (entry: Configuration) => void): this;
@@ -183,6 +186,7 @@ declare module 'klasa' {
 
 		public once(event: 'monitorError', listener: (msg: KlasaMessage, monitor: Monitor, error: Error | string) => void): this;
 		public once(event: 'finalizerError', listener: (msg: KlasaMessage, mes: KlasaMessage, timer: Timestamp, finalizer: Finalizer, error: Error | string) => void): this;
+		public once(event: 'taskError', listener: (scheduledTask: ScheduledTask, task: Task, error: Error) => void): this;
 
 		// SettingGateway Events
 		public once(event: 'configCreateEntry', listener: (entry: Configuration) => void): this;
@@ -379,57 +383,67 @@ declare module 'klasa' {
 	}
 
 	export class ArgResolver extends Resolver {
+
 		public piece(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Piece>;
 		public store(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Store>;
-		public bool(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<boolean>;
-		public bool(input: boolean | string): Promise<boolean>;
-		public boolean(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<boolean>;
-		public boolean(input: boolean | string): Promise<boolean>;
-		public channel(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Channel>;
-		public channel(input: Channel | Snowflake): Promise<Channel>;
-		public cmd(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Command>;
+
 		public command(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Command>;
+		public cmd(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Command>;
 		public event(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Event>;
 		public extendable(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Extendable>;
 		public finalizer(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Finalizer>;
-		public float(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<number>;
-		public float(input: string | number): Promise<number>;
-		public guild(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<KlasaGuild>;
-		public guild(input: KlasaGuild | Snowflake): Promise<KlasaGuild>;
 		public inhibitor(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Inhibitor>;
-		public int(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<number>;
-		public int(input: string | number): Promise<number>;
-		public integer(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<number>;
-		public integer(input: string | number): Promise<number>;
-		public language(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Language>;
-		public literal(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<string>;
-		public member(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<GuildMember>;
-		public member(input: KlasaUser | GuildMember | Snowflake, guild: KlasaGuild): Promise<GuildMember>;
-		public mention(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<KlasaUser>;
-		public mention(input: KlasaUser | GuildMember | KlasaMessage | Snowflake): Promise<KlasaUser>;
-		public message(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<KlasaMessage>;
-		public message(input: string | KlasaMessage, channel: Channel): Promise<KlasaMessage>;
 		public monitor(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Monitor>;
-		public msg(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<KlasaMessage>;
-		public msg(input: string | KlasaMessage, channel: Channel): Promise<KlasaMessage>;
-		public num(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<number>;
-		public num(input: string | number): Promise<number>;
-		public number(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<number>;
-		public number(input: string | number): Promise<number>;
+		public language(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Language>;
 		public provider(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Provider>;
+		public task(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Task>;
+
+		public message(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<KlasaMessage>;
+		public msg(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<KlasaMessage>;
+		public mention(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<KlasaUser>;
+		public user(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<KlasaUser>;
+		public member(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<GuildMember>;
+		public channel(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Channel>;
+		public emoji(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Emoji>;
+		public guild(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<KlasaGuild>;
+		public role(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Role>;
+		public literal(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<string>;
+		public boolean(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<boolean>;
+		public bool(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<boolean>;
+		public string(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<string>;
+		public str(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<string>;
+		public integer(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<number>;
+		public int(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<number>;
+		public num(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<number>;
+		public number(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<number>;
+		public float(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<number>;
 		public reg(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<string>;
 		public regex(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<string>;
 		public regexp(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<string>;
-		public role(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Role>;
-		public role(input: Role | Snowflake, guild: KlasaGuild): Promise<Role>;
-		public str(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<string>;
-		public str(input: string): Promise<string>;
-		public string(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<string>;
-		public string(input: string): Promise<string>;
 		public url(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<string>;
-		public url(input: string): Promise<string>;
-		public user(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<KlasaUser>;
+		public date(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Date>;
+		public duration(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Date>;
+		public time(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Date>;
+
+		// Overloads for TS retrocompatibility
+		public message(input: string | KlasaMessage, channel: Channel): Promise<KlasaMessage>;
+		public msg(input: string | KlasaMessage, channel: Channel): Promise<KlasaMessage>;
+		public mention(input: KlasaUser | GuildMember | KlasaMessage | Snowflake): Promise<KlasaUser>;
 		public user(input: KlasaUser | GuildMember | KlasaMessage | Snowflake): Promise<KlasaUser>;
+		public member(input: KlasaUser | GuildMember | Snowflake, guild: KlasaGuild): Promise<GuildMember>;
+		public channel(input: Channel | Snowflake): Promise<Channel>;
+		public guild(input: KlasaGuild | Snowflake): Promise<KlasaGuild>;
+		public role(input: Role | Snowflake, guild: KlasaGuild): Promise<Role>;
+		public boolean(input: boolean | string): Promise<boolean>;
+		public bool(input: boolean | string): Promise<boolean>;
+		public string(input: string): Promise<string>;
+		public str(input: string): Promise<string>;
+		public integer(input: string | number): Promise<number>;
+		public int(input: string | number): Promise<number>;
+		public num(input: string | number): Promise<number>;
+		public number(input: string | number): Promise<number>;
+		public float(input: string | number): Promise<number>;
+		public url(input: string): Promise<string>;
 
 		private static minOrMax(value: number, min: number, max: number, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage, suffix: string): Promise<boolean>;
 	}
@@ -629,7 +643,8 @@ declare module 'klasa' {
 
 		public readonly clientStorageSchema: {
 			userBlacklist: SchemaPieceJSON,
-			guildBlacklist: SchemaPieceJSON
+			guildBlacklist: SchemaPieceJSON,
+			schedules: SchemaPieceJSON
 		};
 
 		public guilds: Gateway;
@@ -725,14 +740,15 @@ declare module 'klasa' {
 
 		public reset(key: string, avoidUnconfigurable?: boolean): Promise<ConfigurationUpdateResult>;
 		public update(key: object, guild?: GatewayGuildResolvable): Promise<ConfigurationUpdateManyResult>;
+		public update(key: string, value?: any, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
 		public update(key: string, value?: any, guild?: GatewayGuildResolvable, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
 		public updateMany(object: any, guild?: GatewayGuildResolvable): Promise<ConfigurationUpdateManyResult>;
 
 		private _reset(key: string, guild: GatewayGuildResolvable, avoidUnconfigurable: boolean): Promise<ConfigurationParseResult>;
 		private _parseReset(key: string, guild: KlasaGuild, options: ConfigurationParseOptions): Promise<ConfigurationParseResult>;
 		private _parseUpdateOne(key: string, value: any, guild: KlasaGuild, options: ConfigurationParseOptions): Promise<ConfigurationParseResult>;
-		private _parseUpdateArray(action: 'add' | 'remove' | 'auto', key: string, value: any, guild: KlasaGuild, options: ConfigurationParseOptions): Promise<ConfigurationParseResultArray>;
-		private _updateSingle(action: 'add' | 'remove' | 'auto', key: string, value: any, guild: KlasaGuild, avoidUnconfigurable: boolean): Promise<ConfigurationParseResult | ConfigurationParseResultArray>;
+		private _parseUpdateArray(action: 'add' | 'remove' | 'auto', key: string, value: any, guild: KlasaGuild, arrayPosition: number, options: ConfigurationParseOptions): Promise<ConfigurationParseResultArray>;
+		private _updateSingle(key: string, value: any, guild: KlasaGuild, options: ConfigurationUpdateOptions): Promise<ConfigurationParseResult | ConfigurationParseResultArray>;
 		private _updateMany(cache: any, object: any, schema: SchemaFolder, guild: KlasaGuild, list: ConfigurationUpdateManyResult, updateObject: object): void;
 		private _setValue(parsedID: string, path: SchemaPiece, route: string[]): Promise<void>;
 		private _patch(data: any): void;
@@ -798,6 +814,40 @@ declare module 'klasa' {
 			USERS: (userResolvable: string | KlasaUser) => KlasaUser,
 			CLIENT_STORAGE: (clientResolvable: string | KlasaClient) => ClientUser
 		};
+		CRON: {
+			allowedNum: number[][];
+			partRegex: RegExp;
+			day: number;
+			predefined: {
+				'@yearly': '0 0 0 1 1 *',
+				'@monthly': '0 0 0 1 * *',
+				'@weekly': '0 0 0 * * 0',
+				'@daily': '0 0 0 * * *',
+				'@hourly': '0 0 * * * *'
+			};
+			tokens: {
+				jan: 1,
+				feb: 2,
+				mar: 3,
+				apr: 4,
+				may: 5,
+				jun: 6,
+				jul: 7,
+				aug: 8,
+				sep: 9,
+				oct: 10,
+				nov: 11,
+				dec: 12,
+				sun: 0,
+				mon: 1,
+				tue: 2,
+				wed: 3,
+				thu: 4,
+				fri: 5,
+				sat: 6
+			};
+			tokensRegex: RegExp;
+		};
 	};
 
 	export class Stopwatch {
@@ -830,6 +880,40 @@ declare module 'klasa' {
 		private static _display(template: string, time: Date | number | string): string;
 		private static _parse(type: string, time: Date): string;
 		private static _patch(pattern: string): TimestampObject[];
+	}
+
+	export class Duration {
+		public constructor(pattern: string);
+		public offset: number;
+		public readonly fromNow: Date;
+
+		public dateFrom(date: Date): Date;
+
+		private static regex: RegExp;
+		private static nanosecond: number;
+		private static ns: number;
+		private static microsecond: number;
+		private static μs: number;
+		private static millisecond: number;
+		private static ms: number;
+		private static second: number;
+		private static sec: number;
+		private static s: number;
+		private static minute: number;
+		private static min: number;
+		private static m: number;
+		private static hour: number;
+		private static hr: number;
+		private static h: number;
+		private static day: number;
+		private static d: number;
+		private static month: number;
+		private static b: number;
+		private static year: number;
+		private static yr: number;
+		private static y: number;
+
+		private static _parse(pattern: string): number;
 	}
 
 	// Structures
@@ -1034,6 +1118,26 @@ declare module 'klasa' {
 		public toString(): string;
 	}
 
+	export abstract class Task implements Piece {
+		public constructor(client: KlasaClient, dir: string, file: string[], options?: TaskOptions);
+		public client: KlasaClient;
+		public type: 'task';
+
+		public enabled: boolean;
+		public name: string;
+		public dir: string;
+		public file: string;
+
+		public abstract run(data: any): Promise<void>;
+		public init(): Promise<void>;
+
+		public enable(): Piece;
+		public disable(): Piece;
+		public reload(): Promise<any>;
+		public unload(): any;
+		public toString(): string;
+	}
+
 	export class Store {
 		public init(): Promise<any[]>;
 		public load(dir: string, file: string | string[]): Piece;
@@ -1061,7 +1165,6 @@ declare module 'klasa' {
 		public clear(): void;
 		public load(dir: string, file: string[]): Command;
 		public loadAll(): Promise<number>;
-		public toString(): string;
 
 		public init(): any;
 		public resolve(): any;
@@ -1086,7 +1189,6 @@ declare module 'klasa' {
 		public load(): any;
 		public loadAll(): Promise<any>;
 		public resolve(): any;
-		public toString(): string;
 	}
 
 	export class ExtendableStore extends Collection<string, Extendable> implements Store {
@@ -1106,7 +1208,6 @@ declare module 'klasa' {
 		public load(): any;
 		public loadAll(): Promise<any>;
 		public resolve(): any;
-		public toString(): string;
 	}
 
 	export class FinalizerStore extends Collection<string, Finalizer> implements Store {
@@ -1126,7 +1227,6 @@ declare module 'klasa' {
 		public load(): any;
 		public loadAll(): Promise<any>;
 		public resolve(): any;
-		public toString(): string;
 	}
 
 	export class InhibitorStore extends Collection<string, Inhibitor> implements Store {
@@ -1146,7 +1246,6 @@ declare module 'klasa' {
 		public load(): any;
 		public loadAll(): Promise<any>;
 		public resolve(): any;
-		public toString(): string;
 	}
 
 	export class LanguageStore extends Collection<string, Language> implements Store {
@@ -1166,7 +1265,6 @@ declare module 'klasa' {
 		public load(): any;
 		public loadAll(): Promise<any>;
 		public resolve(): any;
-		public toString(): string;
 	}
 
 	export class MonitorStore extends Collection<string, Monitor> implements Store {
@@ -1186,7 +1284,6 @@ declare module 'klasa' {
 		public load(): any;
 		public loadAll(): Promise<any>;
 		public resolve(): any;
-		public toString(): string;
 	}
 
 	export class ProviderStore extends Collection<string, Provider> implements Store {
@@ -1206,7 +1303,76 @@ declare module 'klasa' {
 		public load(): any;
 		public loadAll(): Promise<any>;
 		public resolve(): any;
-		public toString(): string;
+	}
+
+	export class TaskStore extends Collection<string, Task> implements Store {
+		public constructor(client: KlasaClient);
+		public client: KlasaClient;
+		public coreDir: string;
+		public userDir: string;
+		public holds: Provider;
+		public name: 'tasks';
+
+		public delete(name: Task | string): boolean;
+		public set(key: string, value: Task): this;
+		public set(task: Task): Task;
+
+		public init(): any;
+		public load(): any;
+		public loadAll(): Promise<any>;
+		public resolve(): any;
+	}
+
+	// Schedule classes
+	export class Schedule {
+		public constructor(client: KlasaClient);
+		public client: KlasaClient;
+		public tasks: ScheduledTask[];
+		public timeInterval: number;
+		private _interval: NodeJS.Timer;
+
+		private readonly _tasks: ScheduledTaskOptions[];
+		public init(): Promise<void>;
+		public execute(): Promise<void>;
+		public next(): ScheduledTask;
+		public create(taskName: string, time: Date | number | string, options: ScheduledTaskOptions);
+		public delete(id: string): Promise<this>;
+		public clear(): Promise<void>;
+
+		private _add(taskName: string, time: Date | number | string, options: ScheduledTaskOptions);
+		private _insert(task: ScheduledTask): ScheduledTask;
+		private _clearInterval(): void;
+		private _checkInterval(): void;
+	}
+
+	export class ScheduledTask {
+		public constructor(client: KlasaClient, taskName: string, time: Date | number | string, options?: ScheduledTaskOptions);
+		public readonly client: KlasaClient;
+		public readonly store: Schedule;
+		public task: Task;
+		public recurring?: Cron;
+		public time?: Date;
+		public id: string;
+		public data: any;
+
+		public run(): Promise<this>;
+		public update(options?: ScheduledTaskUpdateOptions): Promise<this>;
+		public delete(): Promise<Schedule>;
+		public toJSON(): ScheduledTaskJSON;
+
+		private static _resolveTime(time: Date | number | Cron | string): [Date, Cron];
+		private static _generateID(client: KlasaCLient, time: Date | number): string;
+		private static _validate(st: ScheduledTask): void;
+	}
+
+	export class Cron {
+		public constructor(cron: string);
+		public next(zDay?: Date, origin?: boolean): Date;
+
+		private static _normalize(cron: string): string;
+		private static _parseString(cron: string): number[][];
+		private static _parsePart(cronPart: string, id: number): number[];
+		private static _range(min: number, max: number, step: number): number[];
 	}
 
 	// Extended classes
@@ -1263,6 +1429,7 @@ declare module 'klasa' {
 	// Types
 	export type KlasaClientOptions = {
 		clientBaseDir?: string;
+		clock?: KlasaClientOptionsClock;
 		cmdEditing?: boolean;
 		cmdLogging?: boolean;
 		cmdPrompt?: boolean;
@@ -1284,6 +1451,10 @@ declare module 'klasa' {
 		regexPrefix?: RegExp;
 		typing?: boolean;
 	} & ClientOptions;
+
+	export type KlasaClientOptionsClock = {
+		interval?: number;
+	};
 
 	export type KlasaCustomPromptDefaults = {
 		promptLimit?: number;
@@ -1334,6 +1505,7 @@ declare module 'klasa' {
 
 	export type KlasaConstantsClient = {
 		clientBaseDir: string;
+		schedule: { interval: 60000 };
 		cmdEditing: false;
 		cmdLogging: false;
 		cmdPrompt: false;
@@ -1390,6 +1562,7 @@ declare module 'klasa' {
 
 	export type ConfigurationUpdateOptions = {
 		avoidUnconfigurable?: boolean;
+		arrayPosition?: number;
 		action?: 'add' | 'remove' | 'auto';
 	};
 
@@ -1555,6 +1728,29 @@ declare module 'klasa' {
 		name?: string;
 		description?: string;
 		sql?: boolean;
+	};
+
+	export type TaskOptions = {
+		enabled?: boolean;
+		name?: string;
+	};
+
+	export type ScheduledTaskOptions = {
+		id?: string;
+		data?: any;
+	};
+
+	export type ScheduledTaskJSON = {
+		id: string;
+		taskName: string;
+		time: number;
+		data?: any;
+	};
+
+	export type ScheduledTaskUpdateOptions = {
+		repeat?: string;
+		time?: Date;
+		data?: any;
 	};
 
 	export type AddOptions = {

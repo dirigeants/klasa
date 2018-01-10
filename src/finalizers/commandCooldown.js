@@ -7,7 +7,7 @@ module.exports = class extends Finalizer {
 		if (!msg.command.cooldown || msg.command.cooldown <= 0) return;
 
 		msg.command.cooldowns.set(msg.author.id, Date.now());
-		setTimeout(() => msg.command.cooldowns.delete(msg.author.id), msg.command.cooldown * 1000);
+		this.client.setTimeout(() => msg.command.cooldowns.delete(msg.author.id), msg.command.cooldown * 1000);
 	}
 
 };

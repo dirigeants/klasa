@@ -140,6 +140,15 @@ class GatewayDriver {
 				array: true,
 				configurable: true,
 				sql: 'TEXT'
+			},
+			schedules: {
+				type: 'any',
+				default: [],
+				min: null,
+				max: null,
+				array: true,
+				configurable: false,
+				sql: 'TEXT'
 			}
 		};
 	}

@@ -8,7 +8,7 @@ const { Event } = require('klasa');
 module.exports = class extends Event {
 
 	constructor(...args) {
-		super(...args, { name:'yourEventName', enabled: true });
+		super(...args, { name: 'yourEventName', enabled: true });
 	}
 
 	run(...params) {
@@ -40,3 +40,4 @@ Where `...params` are arguments you would *normally* get from those events. For 
 - {@tutorial CreatingLanguages}
 - {@tutorial CreatingMonitors}
 - {@tutorial CreatingProviders}
+- {@tutorial CreatingTasks}
