@@ -174,6 +174,7 @@ class ArgResolver extends Resolver {
 		if (currentUsage.type === 'optional' && !repeat) return null;
 		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, 'language');
 	}
+
 	/**
 	 * Resolves a provider
 	 * @since 0.0.1
@@ -187,6 +188,23 @@ class ArgResolver extends Resolver {
 	async provider(arg, currentUsage, possible, repeat, msg) {
 		const provider = this.client.providers.get(arg);
 		if (provider) return provider;
+		if (currentUsage.type === 'optional' && !repeat) return null;
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, 'provider');
+	}
+
+	/**
+	 * Resolves a Task
+	 * @since 0.5.0
+	 * @param {string} arg This arg
+	 * @param {Object} currentUsage This current usage
+	 * @param {number} possible This possible usage id
+	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {KlasaMessage} msg The message that triggered the command
+	 * @returns {?Provider}
+	 */
+	async task(arg, currentUsage, possible, repeat, msg) {
+		const task = this.client.tasks.get(arg);
+		if (task) return task;
 		if (currentUsage.type === 'optional' && !repeat) return null;
 		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, 'provider');
 	}
@@ -559,6 +577,23 @@ class ArgResolver extends Resolver {
 		if (hyperlink !== null) return hyperlink;
 		if (currentUsage.type === 'optional' && !repeat) return null;
 		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_URL', currentUsage.possibles[possible].name);
+	}
+
+	/**
+	 * Resolves a Date or Timestamp
+	 * @since 0.5.0
+	 * @param {string} arg This arg
+	 * @param {Object} currentUsage This current usage
+	 * @param {number} possible This possible usage id
+	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {KlasaMessage} msg The message that triggered the command
+	 * @returns {?string}
+	 */
+	async date(arg, currentUsage, possible, repeat, msg) {
+		const date = new Date(arg);
+		if (isNaN(date.getTime())) return date;
+		if (currentUsage.type === 'optional' && !repeat) return null;
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_DATE', currentUsage.possibles[possible].name);
 	}
 
 	/**
