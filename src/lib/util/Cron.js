@@ -71,7 +71,7 @@ class Cron {
 		if (cronPart.includes(',')) {
 			const res = [];
 			for (const part of cronPart.split(',')) res.push(...Cron._parsePart(part, id));
-			return res;
+			return [...new Set(res)].sort((a, b) => a - b);
 		}
 
 		// eslint-disable-next-line prefer-const
