@@ -103,7 +103,7 @@ class ScheduledTask {
 			this.client.emit('taskError', this, this.task, err);
 		}
 		if (!this.recurring) return this.delete();
-		return this.update({ time: this.recurring.next() });
+		return this.update({ time: this.recurring });
 	}
 
 	/**
@@ -119,7 +119,7 @@ class ScheduledTask {
 			this.store.tasks.splice(this.store.tasks.indexOf(this), 1);
 			this.store._insert(this);
 		}
-		if (_cron) this.cron = _cron;
+		this.recurring = _cron;
 		if (data) this.data = data;
 
 		// Sync the database if some of the properties changed or the time changed manually
@@ -153,7 +153,7 @@ class ScheduledTask {
 	}
 
 	/**
-	 * Resolve the time and crono
+	 * Resolve the time and cron
 	 * @since 0.5.0
 	 * @param {(Date|number|string)} time The time or Cron pattern
 	 * @returns {any[]}
@@ -161,6 +161,7 @@ class ScheduledTask {
 	 */
 	static _resolveTime(time) {
 		if (time instanceof Date) return [time, null];
+		if (time instanceof Cron) return [time.next(), time];
 		if (typeof time === 'number') return [new Date(time), null];
 		if (typeof time === 'string') {
 			const cron = new Cron(time);
