@@ -1332,7 +1332,7 @@ declare module 'klasa' {
 		private _interval: NodeJS.Timer;
 
 		private readonly _tasks: ScheduledTaskOptions[];
-		public init(): void;
+		public init(): Promise<void>;
 		public execute(): Promise<void>;
 		public next(): ScheduledTask;
 		public create(taskName: string, time: Date | number | string, options: ScheduledTaskOptions);
