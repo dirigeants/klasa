@@ -96,6 +96,7 @@ class ScheduledTask {
 	 * @returns {Promise<this>}
 	 */
 	async run() {
+		if (!this.task.enabled) return this;
 		try {
 			await this.task.run(this.data);
 		} catch (err) {
