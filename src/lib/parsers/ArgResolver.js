@@ -615,6 +615,26 @@ class ArgResolver extends Resolver {
 	}
 
 	/**
+	 * Resolves a Date from a relative duration or timestamp
+	 * @since 0.5.0
+	 * @param {string} arg This arg
+	 * @param {Object} currentUsage This current usage
+	 * @param {number} possible This possible usage id
+	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {KlasaMessage} msg The message that triggered the command
+	 * @returns {?string}
+	 */
+	async time(arg, currentUsage, possible, repeat, msg) {
+		const date = await Promise.all([
+			this.duration(arg, currentUsage, possible, repeat, msg).catch(() => null),
+			this.date(arg, currentUsage, possible, repeat, msg).catch(() => null)
+		]).then(ret => ret.find(Boolean));
+		if (!isNaN(date.getTime()) && date.getTime() - Date.now() > 0) return date;
+		if (currentUsage.type === 'optional' && !repeat) return null;
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_TIME', currentUsage.possibles[possible].name);
+	}
+
+	/**
 	 * Checks min and max values
 	 * @since 0.0.1
 	 * @param {number} value The value to check against
