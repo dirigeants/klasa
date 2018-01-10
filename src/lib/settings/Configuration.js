@@ -357,7 +357,7 @@ class Configuration {
 		for (let i = 0; i < route.length - 1; i++) cache = cache[route[i]] || {};
 		cache = cache[route[route.length - 1]] || [];
 
-		if (arrayPosition) {
+		if (typeof arrayPosition === 'number') {
 			if (arrayPosition >= cache.length) throw new Error(`The option arrayPosition should be a number between 0 and ${cache.length - 1}`);
 			cache[arrayPosition] = parsedID;
 		} else {

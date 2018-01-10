@@ -588,7 +588,7 @@ class ArgResolver extends Resolver {
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?string}
+	 * @returns {?Date}
 	 */
 	async date(arg, currentUsage, possible, repeat, msg) {
 		const date = new Date(arg);
@@ -605,7 +605,7 @@ class ArgResolver extends Resolver {
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?string}
+	 * @returns {?Date}
 	 */
 	async duration(arg, currentUsage, possible, repeat, msg) {
 		const date = new Duration(arg).fromNow;
@@ -622,7 +622,7 @@ class ArgResolver extends Resolver {
 	 * @param {number} possible This possible usage id
 	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?string}
+	 * @returns {?Date}
 	 */
 	async time(arg, currentUsage, possible, repeat, msg) {
 		const date = await Promise.all([

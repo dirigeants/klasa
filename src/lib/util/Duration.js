@@ -3,23 +3,52 @@
  */
 class Duration {
 
-	constructor(str) {
-		this.offset = this.constructor.parse(str);
+	/**
+	 * Create a new Duration instance
+	 * @since 0.5.0
+	 * @param {string} pattern The string to parse
+	 */
+	constructor(pattern) {
+		/**
+		 * The offset
+		 * @since 0.5.0
+		 * @type {number}
+		 */
+		this.offset = Duration._parse(pattern);
 	}
 
+	/**
+	 * Get the date from now
+	 * @since 0.5.0
+	 * @returns {Date}
+	 * @readonly
+	 */
 	get fromNow() {
 		return this.dateFrom(new Date());
 	}
 
+	/**
+	 * Get the date from
+	 * @since 0.5.0
+	 * @param {Date} date The Date instance to get the date from
+	 * @returns {Date}
+	 */
 	dateFrom(date) {
 		return new Date(date.getTime() + this.offset);
 	}
 
-	static parse(str) {
+	/**
+	 * Parse the pattern
+	 * @since 0.5.0
+	 * @param {string} pattern The pattern to parse
+	 * @returns {number}
+	 * @private
+	 */
+	static _parse(pattern) {
 		let result = 0;
 		// ignore commas
-		str = str.replace(/(\d),(\d)/g, '$1$2');
-		str.replace(Duration.regex, (match, i, units) => {
+		pattern = pattern.replace(/(\d),(\d)/g, '$1$2');
+		pattern.replace(Duration.regex, (match, i, units) => {
 			units = Duration[units] || Duration[units.toLowerCase().replace(/s$/, '')] || 1;
 			result += parseFloat(i, 10) * units;
 		});
@@ -30,6 +59,12 @@ class Duration {
 
 module.exports = Duration;
 
+/**
+ * The RegExp used for the pattern parsing
+ * @since 0.5.0
+ * @type {RegExp}
+ * @static
+ */
 Duration.regex = /(-?\d*\.?\d+(?:e[-+]?\d+)?)\s*([a-zμ]*)/ig;
 
 /**
@@ -41,8 +76,8 @@ Duration.regex = /(-?\d*\.?\d+(?:e[-+]?\d+)?)\s*([a-zμ]*)/ig;
 Duration.nanosecond =
 Duration.ns = 1 / 1e6;
 
-Duration.μs =
-Duration.microsecond = 1 / 1e3;
+Duration.microsecond =
+Duration.μs = 1 / 1e3;
 
 Duration.millisecond =
 Duration.ms = 1;
@@ -66,8 +101,8 @@ Duration.week =
 Duration.wk =
 Duration.w = Duration.d * 7;
 
-Duration.b =
-Duration.month = Duration.d * (365.25 / 12);
+Duration.month =
+Duration.b = Duration.d * (365.25 / 12);
 
 Duration.year =
 Duration.yr =

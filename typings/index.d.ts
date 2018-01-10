@@ -29,7 +29,7 @@ declare module 'klasa' {
 		User as DiscordUser,
 		UserResolvable,
 		VoiceChannel as DiscordVoiceChannel,
-		WebhookClient,
+		WebhookClient
 	} from 'discord.js';
 
 	export const version: string;
@@ -383,57 +383,67 @@ declare module 'klasa' {
 	}
 
 	export class ArgResolver extends Resolver {
+
 		public piece(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Piece>;
 		public store(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Store>;
-		public bool(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<boolean>;
-		public bool(input: boolean | string): Promise<boolean>;
-		public boolean(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<boolean>;
-		public boolean(input: boolean | string): Promise<boolean>;
-		public channel(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Channel>;
-		public channel(input: Channel | Snowflake): Promise<Channel>;
-		public cmd(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Command>;
+
 		public command(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Command>;
+		public cmd(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Command>;
 		public event(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Event>;
 		public extendable(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Extendable>;
 		public finalizer(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Finalizer>;
-		public float(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<number>;
-		public float(input: string | number): Promise<number>;
-		public guild(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<KlasaGuild>;
-		public guild(input: KlasaGuild | Snowflake): Promise<KlasaGuild>;
 		public inhibitor(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Inhibitor>;
-		public int(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<number>;
-		public int(input: string | number): Promise<number>;
-		public integer(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<number>;
-		public integer(input: string | number): Promise<number>;
-		public language(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Language>;
-		public literal(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<string>;
-		public member(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<GuildMember>;
-		public member(input: KlasaUser | GuildMember | Snowflake, guild: KlasaGuild): Promise<GuildMember>;
-		public mention(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<KlasaUser>;
-		public mention(input: KlasaUser | GuildMember | KlasaMessage | Snowflake): Promise<KlasaUser>;
-		public message(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<KlasaMessage>;
-		public message(input: string | KlasaMessage, channel: Channel): Promise<KlasaMessage>;
 		public monitor(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Monitor>;
-		public msg(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<KlasaMessage>;
-		public msg(input: string | KlasaMessage, channel: Channel): Promise<KlasaMessage>;
-		public num(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<number>;
-		public num(input: string | number): Promise<number>;
-		public number(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<number>;
-		public number(input: string | number): Promise<number>;
+		public language(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Language>;
 		public provider(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Provider>;
+		public task(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Task>;
+
+		public message(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<KlasaMessage>;
+		public msg(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<KlasaMessage>;
+		public mention(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<KlasaUser>;
+		public user(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<KlasaUser>;
+		public member(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<GuildMember>;
+		public channel(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Channel>;
+		public emoji(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Emoji>;
+		public guild(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<KlasaGuild>;
+		public role(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Role>;
+		public literal(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<string>;
+		public boolean(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<boolean>;
+		public bool(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<boolean>;
+		public string(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<string>;
+		public str(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<string>;
+		public integer(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<number>;
+		public int(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<number>;
+		public num(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<number>;
+		public number(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<number>;
+		public float(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<number>;
 		public reg(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<string>;
 		public regex(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<string>;
 		public regexp(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<string>;
-		public role(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Role>;
-		public role(input: Role | Snowflake, guild: KlasaGuild): Promise<Role>;
-		public str(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<string>;
-		public str(input: string): Promise<string>;
-		public string(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<string>;
-		public string(input: string): Promise<string>;
 		public url(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<string>;
-		public url(input: string): Promise<string>;
-		public user(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<KlasaUser>;
+		public date(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Date>;
+		public duration(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Date>;
+		public time(arg: string, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage): Promise<Date>;
+
+		// Overloads for TS retrocompatibility
+		public message(input: string | KlasaMessage, channel: Channel): Promise<KlasaMessage>;
+		public msg(input: string | KlasaMessage, channel: Channel): Promise<KlasaMessage>;
+		public mention(input: KlasaUser | GuildMember | KlasaMessage | Snowflake): Promise<KlasaUser>;
 		public user(input: KlasaUser | GuildMember | KlasaMessage | Snowflake): Promise<KlasaUser>;
+		public member(input: KlasaUser | GuildMember | Snowflake, guild: KlasaGuild): Promise<GuildMember>;
+		public channel(input: Channel | Snowflake): Promise<Channel>;
+		public guild(input: KlasaGuild | Snowflake): Promise<KlasaGuild>;
+		public role(input: Role | Snowflake, guild: KlasaGuild): Promise<Role>;
+		public boolean(input: boolean | string): Promise<boolean>;
+		public bool(input: boolean | string): Promise<boolean>;
+		public string(input: string): Promise<string>;
+		public str(input: string): Promise<string>;
+		public integer(input: string | number): Promise<number>;
+		public int(input: string | number): Promise<number>;
+		public num(input: string | number): Promise<number>;
+		public number(input: string | number): Promise<number>;
+		public float(input: string | number): Promise<number>;
+		public url(input: string): Promise<string>;
 
 		private static minOrMax(value: number, min: number, max: number, currentUsage: object, possible: number, repeat: boolean, msg: KlasaMessage, suffix: string): Promise<boolean>;
 	}
@@ -737,8 +747,8 @@ declare module 'klasa' {
 		private _reset(key: string, guild: GatewayGuildResolvable, avoidUnconfigurable: boolean): Promise<ConfigurationParseResult>;
 		private _parseReset(key: string, guild: KlasaGuild, options: ConfigurationParseOptions): Promise<ConfigurationParseResult>;
 		private _parseUpdateOne(key: string, value: any, guild: KlasaGuild, options: ConfigurationParseOptions): Promise<ConfigurationParseResult>;
-		private _parseUpdateArray(action: 'add' | 'remove' | 'auto', key: string, value: any, guild: KlasaGuild, options: ConfigurationParseOptions): Promise<ConfigurationParseResultArray>;
-		private _updateSingle(action: 'add' | 'remove' | 'auto', key: string, value: any, guild: KlasaGuild, avoidUnconfigurable: boolean): Promise<ConfigurationParseResult | ConfigurationParseResultArray>;
+		private _parseUpdateArray(action: 'add' | 'remove' | 'auto', key: string, value: any, guild: KlasaGuild, arrayPosition: number, options: ConfigurationParseOptions): Promise<ConfigurationParseResultArray>;
+		private _updateSingle(key: string, value: any, guild: KlasaGuild, options: ConfigurationUpdateOptions): Promise<ConfigurationParseResult | ConfigurationParseResultArray>;
 		private _updateMany(cache: any, object: any, schema: SchemaFolder, guild: KlasaGuild, list: ConfigurationUpdateManyResult, updateObject: object): void;
 		private _setValue(parsedID: string, path: SchemaPiece, route: string[]): Promise<void>;
 		private _patch(data: any): void;
@@ -870,6 +880,40 @@ declare module 'klasa' {
 		private static _display(template: string, time: Date | number | string): string;
 		private static _parse(type: string, time: Date): string;
 		private static _patch(pattern: string): TimestampObject[];
+	}
+
+	export class Duration {
+		public constructor(pattern: string);
+		public offset: number;
+		public readonly fromNow: Date;
+
+		public dateFrom(date: Date): Date;
+
+		private static regex: RegExp;
+		private static nanosecond: number;
+		private static ns: number;
+		private static microsecond: number;
+		private static μs: number;
+		private static millisecond: number;
+		private static ms: number;
+		private static second: number;
+		private static sec: number;
+		private static s: number;
+		private static minute: number;
+		private static min: number;
+		private static m: number;
+		private static hour: number;
+		private static hr: number;
+		private static h: number;
+		private static day: number;
+		private static d: number;
+		private static month: number;
+		private static b: number;
+		private static year: number;
+		private static yr: number;
+		private static y: number;
+
+		private static _parse(pattern: string): number;
 	}
 
 	// Structures
@@ -1518,6 +1562,7 @@ declare module 'klasa' {
 
 	export type ConfigurationUpdateOptions = {
 		avoidUnconfigurable?: boolean;
+		arrayPosition?: number;
 		action?: 'add' | 'remove' | 'auto';
 	};
 
