@@ -74,3 +74,4 @@ Also, if a language is disabled, and a guild has it configured, the default lang
 - {@tutorial CreatingInhibitors}
 - {@tutorial CreatingMonitors}
 - {@tutorial CreatingProviders}
+- {@tutorial CreatingTasks}

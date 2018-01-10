@@ -609,8 +609,7 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  */
 
 /**
- * Emitted when {@link Configuration.updateOne}, {@link Configuration.updateArray} or {@link Configuration.reset}
- * is run. When {@link Configuration.updateMany} is run, the parameter path will be an object with the following format:
+ * Emitted when {@link Configuration.update} is run, the parameter path will be an object with the following format:
  * `{ type: 'MANY', keys: string[], values: Array<*> }`
  * @event KlasaClient#configUpdateEntry
  * @since 0.5.0

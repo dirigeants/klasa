@@ -13,6 +13,11 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#156](https://github.com/dirigeants/klasa/pull/156)] Added `time`, `duration`, `date` and `task` types to `ArgResolver`. (bdistin)
+- [[#156](https://github.com/dirigeants/klasa/pull/156)] Added `Duration`, a class helper to resolve human duration input into milliseconds. (bdistin)
+- [[#156](https://github.com/dirigeants/klasa/pull/156)] Added new key to `ClientStorage`: `schedules`. (kyranet)
+- [[#156](https://github.com/dirigeants/klasa/pull/156)] Added `CreatingTasks` tutorial. (kyranet)
+- [[#156](https://github.com/dirigeants/klasa/pull/156)] Added `arrayPosition` property to `ConfigurationUpdateOptions` to update objects in the middle of an array without removing/pushing. (kyranet)
 - [[#156](https://github.com/dirigeants/klasa/pull/156)] Added `taskError` event. (bdistin)
 - [[#156](https://github.com/dirigeants/klasa/pull/156)] Added `Schedule`, `ScheduledTask` and `Cron` alongside a new piece structure named `Task` and its store, `TaskStore`. (bdistin & kyranet)
 - [[#152](https://github.com/dirigeants/klasa/pull/152)] Added the possibility to configure each default gateway separately. (kyranet)
@@ -68,6 +73,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#156](https://github.com/dirigeants/klasa/pull/156)] Tweaked `Configuration#update` to accept the overload `(key: string, value: any, options:ConfigurationUpdateOptions)` as opposed of passing `undefined` in the `guild` field between `value` and `options`. (kyranet)
 - [[#155](https://github.com/dirigeants/klasa/pull/155)] Complexity reductions for `SchemaFolder#addKey` and `Colors`. (bdistin)
 - [[`338ebb0eb2`](https://github.com/dirigeants/klasa/commit/338ebb0eb2334810229720eda3abab198d6cc0ba)] Prefixed `Timestamp#_resolveDate`. (bdistin)
 - [[`f2cc604ead`](https://github.com/dirigeants/klasa/commit/f2cc604eaddf2d6239378b638e4c2fb792455e3d)] Arguments are now trimmed. (bdistin)
