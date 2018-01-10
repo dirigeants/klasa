@@ -62,7 +62,13 @@ class Schedule {
 		const tasks = this._tasks;
 		if (!tasks || !Array.isArray(tasks)) return;
 
-		for (const task of tasks) this._add(task.taskName, task.time, task);
+		for (const task of tasks) {
+			try {
+				this._add(task.taskName, task.time, task);
+			} catch (error) {
+				this.client.emit('warn', `Task ${task.taskName} [${task.id}] was not queued: ${error}`);
+			}
+		}
 
 		this._checkInterval();
 	}
