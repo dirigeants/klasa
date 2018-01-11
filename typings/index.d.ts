@@ -503,7 +503,7 @@ declare module 'klasa' {
 		public isValid(): boolean;
 		public debug(): string;
 
-		public run(msg: KlasaMessage, min: number): permissionLevelResponse;
+		public run(msg: KlasaMessage, min: number): PermissionLevelsData;
 	}
 
 	// Usage
@@ -603,9 +603,9 @@ declare module 'klasa' {
 	}
 
 	export class Gateway extends GatewayStorage {
-		public constructor(store: GatewayDriver, type: string, validateFunction: Function, schema: object, options: GatewayOptions);
+		public constructor(store: GatewayDriver, type: string, validateFunction: Function, schema: object, options: GatewayDriverAddOptions);
 		public store: GatewayDriver;
-		public options: GatewayOptions;
+		public options: GatewayDriverAddOptions;
 		public validate: Function;
 		public defaultSchema: object;
 		public readonly cache: Provider;
@@ -616,7 +616,7 @@ declare module 'klasa' {
 		public insertEntry(id: string, data?: object): Configuration;
 		public deleteEntry(input: string): Promise<boolean>;
 		public sync(input?: object | string, download?: boolean): Promise<any>;
-		public getPath(key?: string, options?: ConfigurationPathOptions): ConfigurationPathResult;
+		public getPath(key?: string, options?: GatewayGetPathOptions): GatewayGetPathResult;
 
 		private init(download?: boolean): Promise<void>;
 		private _ready(): Promise<Array<Collection<string, Configuration>>>;
@@ -651,7 +651,7 @@ declare module 'klasa' {
 		public users: Gateway;
 		public clientStorage: Gateway;
 
-		public add(name: string, validateFunction: Function, schema?: object, options?: SettingsOptions, download?: boolean): Promise<Gateway>;
+		public add(name: string, validateFunction: Function, schema?: object, options?: GatewayDriverAddOptions, download?: boolean): Promise<Gateway>;
 		private _ready(): Promise<Array<Array<Collection<string, Configuration>>>>;
 		private _checkProvider(engine: string): string;
 	}
@@ -678,7 +678,7 @@ declare module 'klasa' {
 		public addFolder(key: string, object?: object, force?: boolean): Promise<SchemaFolder>;
 		public removeFolder(key: string, force?: boolean): Promise<SchemaFolder>;
 		public hasKey(key: string): boolean;
-		public addKey(key: string, options: AddOptions, force?: boolean): Promise<SchemaFolder>;
+		public addKey(key: string, options: SchemaFolderAddOptions, force?: boolean): Promise<SchemaFolder>;
 		public removeKey(key: string, force?: boolean): Promise<SchemaFolder>;
 		public force(action: 'add' | 'edit' | 'delete', key: string, piece: SchemaFolder | SchemaPiece): Promise<any>;
 		public getList(msg: KlasaMessage): string;
@@ -688,7 +688,7 @@ declare module 'klasa' {
 		public getValues(array?: SchemaPiece[]): SchemaPiece[];
 		public resolveString(): string;
 
-		private _addKey(key: string, options: AddOptions, type: typeof Schema | typeof SchemaFolder): void;
+		private _addKey(key: string, options: SchemaFolderAddOptions, type: typeof Schema | typeof SchemaFolder): void;
 		private _removeKey(key: string): void;
 		private _init(options: object): true;
 
@@ -697,7 +697,7 @@ declare module 'klasa' {
 	}
 
 	export class SchemaPiece extends Schema {
-		public constructor(client: KlasaClient, gateway: Gateway, options: AddOptions, parent: SchemaFolder, key: string);
+		public constructor(client: KlasaClient, gateway: Gateway, options: SchemaFolderAddOptions, parent: SchemaFolder, key: string);
 		public type: string;
 		public array: boolean;
 		public default: any;
@@ -710,15 +710,15 @@ declare module 'klasa' {
 		public setValidator(fn: Function): this;
 		public parse(value: any, guild: KlasaGuild): Promise<any>;
 		public resolveString(msg: KlasaMessage): string;
-		public modify(options: ModifyOptions): Promise<this>;
+		public modify(options: SchemaPieceModifyOptions): Promise<this>;
 
 		private _schemaCheckType(type: string): void;
 		private _schemaCheckArray(array: boolean): void;
-		private _schemaCheckDefault(options: AddOptions): void;
+		private _schemaCheckDefault(options: SchemaFolderAddOptions): void;
 		private _schemaCheckLimits(min: number, max: number): void;
 		private _schemaCheckConfigurable(configurable: boolean): void;
 		private _generateSQLDatatype(sql?: string): string;
-		private _init(options: AddOptions): true;
+		private _init(options: SchemaFolderAddOptions): true;
 
 		public toJSON(): SchemaPieceJSON;
 		public toString(): string;
@@ -732,7 +732,7 @@ declare module 'klasa' {
 		public readonly gateway: Gateway;
 		public readonly type: string;
 		public readonly id: string;
-		public readonly existsInDB: boolean;
+		private _existsInDB: boolean;
 
 		public get(key: string): any;
 		public clone(): Configuration;
@@ -744,14 +744,14 @@ declare module 'klasa' {
 		public update(key: object, guild?: GatewayGuildResolvable): Promise<ConfigurationUpdateManyResult>;
 		public update(key: string, value?: any, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
 		public update(key: string, value?: any, guild?: GatewayGuildResolvable, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
-		public updateMany(object: any, guild?: GatewayGuildResolvable): Promise<ConfigurationUpdateManyResult>;
 
+		private _updateMany(object: any, guild?: GatewayGuildResolvable): Promise<ConfigurationUpdateManyResult>;
 		private _reset(key: string, guild: GatewayGuildResolvable, avoidUnconfigurable: boolean): Promise<ConfigurationParseResult>;
-		private _parseReset(key: string, guild: KlasaGuild, options: ConfigurationParseOptions): Promise<ConfigurationParseResult>;
-		private _parseUpdateOne(key: string, value: any, guild: KlasaGuild, options: ConfigurationParseOptions): Promise<ConfigurationParseResult>;
-		private _parseUpdateArray(action: 'add' | 'remove' | 'auto', key: string, value: any, guild: KlasaGuild, arrayPosition: number, options: ConfigurationParseOptions): Promise<ConfigurationParseResultArray>;
-		private _updateSingle(key: string, value: any, guild: KlasaGuild, options: ConfigurationUpdateOptions): Promise<ConfigurationParseResult | ConfigurationParseResultArray>;
-		private _updateMany(cache: any, object: any, schema: SchemaFolder, guild: KlasaGuild, list: ConfigurationUpdateManyResult, updateObject: object): void;
+		private _parseReset(key: string, guild: KlasaGuild, options: ConfigurationPathResult): Promise<ConfigurationParseResult>;
+		private _parseUpdateOne(key: string, value: any, guild: KlasaGuild, options: ConfigurationPathResult): Promise<ConfigurationParseResult>;
+		private _parseUpdateArray(action: 'add' | 'remove' | 'auto', key: string, value: any, guild: KlasaGuild, arrayPosition: number, options: ConfigurationPathResult): Promise<ConfigurationParseResult>;
+		private _parseUpdateMany(cache: any, object: any, schema: SchemaFolder, guild: KlasaGuild, list: ConfigurationUpdateManyResult, updateObject: object): void;
+		private _updateSingle(key: string, value: any, guild: KlasaGuild, options: ConfigurationUpdateOptions): Promise<ConfigurationParseResult>;
 		private _setValue(parsedID: string, path: SchemaPiece, route: string[]): Promise<void>;
 		private _patch(data: any): void;
 
@@ -778,6 +778,9 @@ declare module 'klasa' {
 		public static formatArray([pos1, pos2, pos3]: [number | string, number | string, number | string]): string;
 
 		public format(input: string, type?: ColorsFormatOptions): string;
+		private style(style: string | string[], data?: ColorsFormatData): ColorsFormatData;
+		private background(style: ColorsFormatType, data?: ColorsFormatData): ColorsFormatData;
+		private text(style: ColorsFormatType, data?: ColorsFormatData): ColorsFormatData;
 	}
 
 	class KlasaConsole extends Console {
@@ -787,7 +790,7 @@ declare module 'klasa' {
 		public readonly stderr: NodeJS.WritableStream;
 		public template?: Timestamp;
 		public useColors: boolean;
-		public colors: KlasaConsoleColorsOption;
+		public colors: boolean | KlasaConsoleColorStyles;
 
 		public write(data: any, type?: string): void;
 		public log(...data: any[]): void;
@@ -801,7 +804,7 @@ declare module 'klasa' {
 		public shard(input: string, shard: ColorsFormatOptions): string;
 		public messages(input: string, message: ColorsFormatOptions): string;
 
-		public static flatten(data: any, useColors: boolean): string;
+		private static _flatten(data: any, useColors: boolean): string;
 	}
 
 	export { KlasaConsole as Console };
@@ -1465,12 +1468,6 @@ declare module 'klasa' {
 		quotedStringSupport?: number;
 	};
 
-	export type TextPromptOptions = {
-		promptLimit?: number;
-		promptTime?: number;
-		quotedStringSupport?: number;
-	};
-
 	export type KlasaPieceDefaults = {
 		commands?: CommandOptions;
 		events?: EventOptions;
@@ -1488,9 +1485,9 @@ declare module 'klasa' {
 	};
 
 	export type KlasaGatewaysOptions = {
-		clientStorage?: SettingsOptions;
-		guilds?: SettingsOptions;
-		users?: SettingsOptions;
+		clientStorage?: GatewayDriverAddOptions;
+		guilds?: GatewayDriverAddOptions;
+		users?: GatewayDriverAddOptions;
 		[key: string]: string | object;
 	};
 
@@ -1506,62 +1503,53 @@ declare module 'klasa' {
 		uid?: number;
 	};
 
-	export type KlasaConstantsClient = {
-		clientBaseDir: string;
-		schedule: { interval: 60000 };
-		cmdEditing: false;
-		cmdLogging: false;
-		cmdPrompt: false;
-		commandMessageLifetime: 1800;
-		console: {};
-		consoleEvents: {
-			debug: false;
-			error: true;
-			log: true;
-			verbose: false;
-			warn: true;
-			wtf: true;
-		};
-		ignoreBots: true;
-		ignoreSelf: true;
-		language: 'en-US';
-		pieceDefaults: {
-			commands: CommandOptions,
-			events: EventOptions,
-			extendables: ExtendableOptions,
-			finalizers: FinalizerOptions,
-			inhibitors: InhibitorOptions,
-			languages: LanguageOptions,
-			monitors: MonitorOptions,
-			providers: ProviderOptions
-		};
-		preserveConfigs: true;
-		promptTime: 30000;
-		provider: {};
-		readyMessage: (client: KlasaClient) => string;
-		typing: false;
-		customPromptDefaults: {
-			promptTime: 30000,
-			promptLimit: number,
-			quotedStringSupport: false
-		};
+	// Permissions
+	export type PermissionLevel = {
+		break: boolean;
+		check: (client: KlasaClient, msg: KlasaMessage) => boolean;
 	};
 
-	export type GatewayOptions = {
-		cache?: Provider;
-		nice?: boolean;
-		provider?: Provider;
+	export type PermissionLevelsData = {
+		broke: boolean;
+		permission: boolean;
 	};
 
-	export type ConfigurationUpdateResult = {
+	// Schedule
+	export type ScheduledTaskOptions = {
+		id?: string;
+		data?: any;
+	};
+
+	export type ScheduledTaskJSON = {
+		id: string;
+		taskName: string;
+		time: number;
+		data?: any;
+	};
+
+	export type ScheduledTaskUpdateOptions = {
+		repeat?: string;
+		time?: Date;
+		data?: any;
+	};
+
+	// Settings
+	export type GatewayGetPathOptions = {
+		avoidUnconfigurable?: boolean;
+		piece?: boolean;
+	};
+
+	export type GatewayGetPathResult = {
 		path: SchemaPiece;
-		value: any;
-	};
-
-	export type ConfigurationParseOptions = {
-		path: string;
 		route: string[];
 	};
+
+	export type GuildResolvable = KlasaGuild
+		| KlasaMessage
+		| KlasaTextChannel
+		| KlasaVoiceChannel
+		| GuildMember
+		| Role;
 
 	export type ConfigurationUpdateOptions = {
 		avoidUnconfigurable?: boolean;
@@ -1569,37 +1557,44 @@ declare module 'klasa' {
 		action?: 'add' | 'remove' | 'auto';
 	};
 
-	export type ConfigurationParseResult = {
-		array: null;
+	export type ConfigurationUpdateResult = {
+		path: SchemaPiece;
+		value: any;
+	};
+
+	export type ConfigurationUpdateObjectResult = {
+		updated: ConfigurationUpdateObjectList;
+		errors: Error[];
+	};
+
+	export type ConfigurationUpdateObjectList = {
+		keys: string[];
+		values: any[];
+	};
+
+	type ConfigurationPathResult = {
+		path: string;
+		route: string[];
+	};
+
+	type ConfigurationParseResult = {
+		array?: any[];
 		entryID: string;
 		parsed: any;
 		parsedID: string | number | object;
 		settings: Configuration;
-	} & ConfigurationParseOptions;
+	} & ConfigurationPathResult;
 
-	export type ConfigurationParseResultArray = {
-		array: any[];
-		entryID: string;
-		parsed: any;
-		parsedID: string | number | object;
-		settings: Configuration;
-	} & ConfigurationParseOptions;
-
-	export type ConfigurationUpdateManyList = {
+	type ConfigurationUpdateManyList = {
 		errors: Error[];
 		keys: string[];
 		promises: Array<Promise<any>>;
 		values: any[];
 	};
 
-	export type ConfigurationUpdateManyUpdated = {
-		keys: string[];
-		values: any[];
-	};
-
 	export type ConfigurationUpdateManyResult = {
 		errors: Error[];
-		updated: ConfigurationUpdateManyUpdated;
+		updated: ConfigurationUpdateObjectList;
 	};
 
 	export type ConfigUpdateEntryMany = {
@@ -1625,53 +1620,40 @@ declare module 'klasa' {
 		route: string[];
 	};
 
+	export type GatewayDriverAddOptions = {
+		provider?: string;
+		nice?: boolean;
+	};
+
+	export type SchemaFolderAddOptions = {
+		type: string;
+		default?: any;
+		min?: number;
+		max?: number;
+		array?: boolean;
+		sql?: string;
+		configurable?: boolean;
+	};
+
+	export type SchemaPieceModifyOptions = {
+		default?: any;
+		min?: number;
+		max?: number;
+		configurable?: boolean;
+		sql?: string;
+	};
+
 	export type SchemaPieceJSON = {
 		type: string;
 		array: boolean;
 		default: any;
 		min?: number;
 		max?: number;
-		sql: [string, string];
+		sql: string;
 		configurable: boolean;
 	};
 
-	export type SettingsOptions = {
-		provider?: string;
-		nice?: boolean;
-	};
-
-	export type KlasaConsoleConfig = {
-		colors?: Colors;
-		stderr?: NodeJS.WritableStream;
-		stdout?: NodeJS.WritableStream;
-		timestamps?: boolean | string;
-		useColor?: boolean;
-	};
-
-	export type KlasaConsoleEvents = {
-		debug?: boolean;
-		error?: boolean;
-		log?: boolean;
-		verbose?: boolean;
-		warn?: boolean;
-		wtf?: boolean;
-	};
-
-	export type TimestampObject = {
-		content?: string;
-		type: string;
-	};
-
-	export type PermissionLevel = {
-		break: boolean;
-		check: (client: KlasaClient, msg: KlasaMessage) => boolean;
-	};
-
-	export type permissionLevelResponse = {
-		broke: boolean;
-		permission: boolean;
-	};
-
+	// Structures
 	export type CommandOptions = {
 		aliases?: string[];
 		autoAliases?: boolean;
@@ -1738,108 +1720,14 @@ declare module 'klasa' {
 		name?: string;
 	};
 
-	export type ScheduledTaskOptions = {
-		id?: string;
-		data?: any;
+	// Usage
+	export type TextPromptOptions = {
+		promptLimit?: number;
+		promptTime?: number;
+		quotedStringSupport?: number;
 	};
 
-	export type ScheduledTaskJSON = {
-		id: string;
-		taskName: string;
-		time: number;
-		data?: any;
-	};
-
-	export type ScheduledTaskUpdateOptions = {
-		repeat?: string;
-		time?: Date;
-		data?: any;
-	};
-
-	export type AddOptions = {
-		type: string;
-		default?: any;
-		min?: number;
-		max?: number;
-		array?: boolean;
-		sql?: string;
-		configurable?: boolean;
-	};
-
-	export type ModifyOptions = {
-		default?: any;
-		min?: number;
-		max?: number;
-		configurable?: boolean;
-		sql?: string;
-	};
-
-	export type emoji = string;
-
-	export type RichDisplayEmojisObject = {
-		first: emoji;
-		back: emoji;
-		forward: emoji;
-		last: emoji;
-		jump: emoji;
-		info: emoji;
-		stop: emoji;
-	};
-
-	export type RichMenuEmojisObject = {
-		zero: emoji;
-		one: emoji;
-		two: emoji;
-		three: emoji;
-		four: emoji;
-		five: emoji;
-		six: emoji;
-		seven: emoji;
-		eight: emoji;
-		nine: emoji;
-	} & RichDisplayEmojisObject;
-
-	export type RichDisplayRunOptions = {
-		filter?: Function;
-		firstLast?: boolean;
-		jump?: boolean;
-		max?: number;
-		maxEmojis?: number;
-		maxUsers?: number;
-		prompt?: string;
-		startPage?: number;
-		stop?: boolean;
-		time?: number;
-	};
-
-	export type MenuOption = {
-		name: string;
-		body: string;
-		inline?: boolean;
-	};
-
-	export type RichMenuRunOptions = {
-		filter?: Function;
-		max?: number;
-		maxEmojis?: number;
-		maxUsers?: number;
-		prompt?: string;
-		startPage?: number;
-		stop?: boolean;
-		time?: number;
-	};
-
-	export type ReactionHandlerOptions = {
-		filter?: Function;
-		max?: number;
-		maxEmojis?: number;
-		maxUsers?: number;
-		prompt?: string;
-		startPage?: number;
-		stop?: boolean;
-		time?: number;
-	};
-
+	// Util
 	export type ColorsClose = {
 		normal: 0;
 		bold: 22;
@@ -1912,9 +1800,31 @@ declare module 'klasa' {
 		text: string | number | string[]
 	};
 
-	export type KlasaConsoleColorsOption = boolean | StringMappedType<KlasaConsoleColorObjects> | KlasaConsoleColors;
+	export type ColorsFormatType = string | number | [string, string, string] | [number, number, number];
 
-	export type KlasaConsoleColors = {
+	type ColorsFormatData = {
+		opening: string[];
+		closing: string[];
+	};
+
+	export type KlasaConsoleConfig = {
+		colors?: KlasaConsoleColorStyles;
+		stderr?: NodeJS.WritableStream;
+		stdout?: NodeJS.WritableStream;
+		timestamps?: boolean | string;
+		useColor?: boolean;
+	};
+
+	export type KlasaConsoleEvents = {
+		debug?: boolean;
+		error?: boolean;
+		log?: boolean;
+		verbose?: boolean;
+		warn?: boolean;
+		wtf?: boolean;
+	};
+
+	export type KlasaConsoleColorStyles = {
 		debug: KlasaConsoleColorObjects;
 		error: KlasaConsoleColorObjects;
 		log: KlasaConsoleColorObjects;
@@ -1930,22 +1840,157 @@ declare module 'klasa' {
 	};
 
 	export type KlasaConsoleMessageObject = {
-		background?: BackgroundColorTypes;
-		style?: StyleTypes;
-		text?: TextColorTypes;
+		background?: KlasaConsoleBackgroundColorTypes;
+		style?: KlasaConsoleStyleTypes;
+		text?: KlasaConsoleTextColorTypes;
 	};
 
 	export type KlasaConsoleTimeObject = {
-		background?: BackgroundColorTypes;
-		style?: StyleTypes;
-		text?: TextColorTypes;
+		background?: KlasaConsoleBackgroundColorTypes;
+		style?: KlasaConsoleStyleTypes;
+		text?: KlasaConsoleTextColorTypes;
 	};
 
-	export type TextColorTypes = 'black' | 'red' | 'green' | 'yellow' | 'blue' | 'magenta' | 'cyan' | 'gray' | 'grey' | 'lightgray' | 'lightgrey' | 'lightred' | 'lightgreen' | 'lightyellow' | 'lightblue' | 'lightmagenta' | 'lightcyan' | 'white' | number[] | string[];
+	export type KlasaConsoleColorTypes = 'black'
+		| 'blue'
+		| 'cyan'
+		| 'gray'
+		| 'green'
+		| 'grey'
+		| 'lightblue'
+		| 'lightcyan'
+		| 'lightgray'
+		| 'lightgreen'
+		| 'lightgrey'
+		| 'lightmagenta'
+		| 'lightred'
+		| 'lightyellow'
+		| 'magenta'
+		| 'red'
+		| 'white'
+		| number[]
+		| string[];
 
-	export type BackgroundColorTypes = 'black' | 'red' | 'green' | 'blue' | 'magenta' | 'cyan' | 'gray' | 'grey' | 'lightgray' | 'lightgrey' | 'lightred' | 'lightgreen' | 'lightyellow' | 'lightblue' | 'lightmagenta' | 'lightcyan' | 'white' | number[] | string[];
+	export type KlasaConsoleStyleTypes = 'normal'
+		| 'bold'
+		| 'dim'
+		| 'italic'
+		| 'underline'
+		| 'inverse'
+		| 'hidden'
+		| 'strikethrough';
 
-	export type StyleTypes = 'normal' | 'bold' | 'dim' | 'italic' | 'underline' | 'inverse' | 'hidden' | 'strikethrough';
+	export type KlasaConstantsClient = {
+		clientBaseDir: string;
+		schedule: { interval: 60000 };
+		cmdEditing: false;
+		cmdLogging: false;
+		cmdPrompt: false;
+		commandMessageLifetime: 1800;
+		console: {};
+		consoleEvents: {
+			debug: false;
+			error: true;
+			log: true;
+			verbose: false;
+			warn: true;
+			wtf: true;
+		};
+		ignoreBots: true;
+		ignoreSelf: true;
+		language: 'en-US';
+		pieceDefaults: {
+			commands: CommandOptions,
+			events: EventOptions,
+			extendables: ExtendableOptions,
+			finalizers: FinalizerOptions,
+			inhibitors: InhibitorOptions,
+			languages: LanguageOptions,
+			monitors: MonitorOptions,
+			providers: ProviderOptions
+		};
+		preserveConfigs: true;
+		promptTime: 30000;
+		provider: {};
+		readyMessage: (client: KlasaClient) => string;
+		typing: false;
+		customPromptDefaults: {
+			promptTime: 30000,
+			promptLimit: number,
+			quotedStringSupport: false
+		};
+	};
+
+	export type ReactionHandlerOptions = {
+		filter?: Function;
+		max?: number;
+		maxEmojis?: number;
+		maxUsers?: number;
+		prompt?: string;
+		startPage?: number;
+		stop?: boolean;
+		time?: number;
+	};
+
+	export type TimestampObject = {
+		content?: string;
+		type: string;
+	};
+
+	export type RichDisplayRunOptions = {
+		filter?: ((reaction: MessageReaction, user: KlasaUser) => boolean);
+		firstLast?: boolean;
+		jump?: boolean;
+		max?: number;
+		maxEmojis?: number;
+		maxUsers?: number;
+		prompt?: string;
+		startPage?: number;
+		stop?: boolean;
+		time?: number;
+	};
+
+	export type emoji = string;
+
+	export type RichDisplayEmojisObject = {
+		first: emoji;
+		back: emoji;
+		forward: emoji;
+		last: emoji;
+		jump: emoji;
+		info: emoji;
+		stop: emoji;
+	};
+
+	export type RichMenuEmojisObject = {
+		zero: emoji;
+		one: emoji;
+		two: emoji;
+		three: emoji;
+		four: emoji;
+		five: emoji;
+		six: emoji;
+		seven: emoji;
+		eight: emoji;
+		nine: emoji;
+	} & RichDisplayEmojisObject;
+
+	export type MenuOption = {
+		name: string;
+		body: string;
+		inline?: boolean;
+	};
+
+	export type RichMenuRunOptions = {
+		filter?: Function;
+		max?: number;
+		maxEmojis?: number;
+		maxUsers?: number;
+		prompt?: string;
+		startPage?: number;
+		stop?: boolean;
+		time?: number;
+	};
 
 	type StringMappedType<T> = { [key: string]: T };
 

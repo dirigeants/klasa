@@ -43,7 +43,7 @@ class KlasaClient extends Discord.Client {
 	 * @property {PermissionLevels} [permissionLevels=KlasaClient.defaultPermissionLevels] The permission levels to use with this bot
 	 * @property {string} [clientBaseDir=path.dirname(require.main.filename)] The directory where all piece folders can be found
 	 * @property {number} [commandMessageLifetime=1800] The threshold for how old command messages can be before sweeping since the last edit in seconds
-	 * @property {object} [provider] The provider to use in Klasa
+	 * @property {Object} [provider] The provider to use in Klasa
 	 * @property {KlasaConsoleConfig} [console={}] Config options to pass to the client console
 	 * @property {KlasaConsoleEvents} [consoleEvents={}] Config options to pass to the client console
 	 * @property {KlasaPieceDefaults} [pieceDefaults={}] Overrides the defaults for all pieces
@@ -229,7 +229,7 @@ class KlasaClient extends Discord.Client {
 		/**
 		 * Additional methods to be used elsewhere in the bot
 		 * @since 0.0.1
-		 * @type {object}
+		 * @type {Object}
 		 * @property {class} Collection A discord.js collection
 		 * @property {class} Embed A discord.js Message Embed
 		 * @property {class} MessageCollector A discord.js MessageCollector

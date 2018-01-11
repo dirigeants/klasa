@@ -3,11 +3,22 @@
 class Colors {
 
 	/**
-	 * @typedef {object} ColorsFormatOptions
-	 * @property {(string | string[])} style
-	 * @property {(number | string | number[] | string[])} background
-	 * @property {(number | string | number[] | string[])} text
+	 * @typedef {Object} ColorsFormatOptions
+	 * @property {(string|string[])} style
+	 * @property {ColorsFormatType} background
+	 * @property {ColorsFormatType} text
 	 * @memberof Colors
+	 */
+
+	/**
+	 * @typedef {(string|number|string[]|number[])} ColorsFormatType
+	 */
+
+	/**
+	 * @typedef {Object} ColorsFormatData
+	 * @property {string[]} opening
+	 * @property {string[]} closing
+	 * @private
 	 */
 
 	constructor() {
@@ -158,6 +169,14 @@ class Colors {
 		return `\u001B[${opening.join(';')}m${string}\u001B[${closing.join(';')}m`;
 	}
 
+	/**
+	 * Apply the style
+	 * @since 0.5.0
+	 * @param {(string|string[])} style The style to apply
+	 * @param {ColorsFormatData} [data={}] The data
+	 * @returns {ColorsFormatData}
+	 * @private
+	 */
 	style(style, { opening = [], closing = [] } = {}) {
 		if (style) {
 			if (Array.isArray(style)) {
@@ -173,10 +192,18 @@ class Colors {
 		return { opening, closing };
 	}
 
+	/**
+	 * Apply the background
+	 * @since 0.5.0
+	 * @param {ColorsFormatType} background The background to apply
+	 * @param {ColorsFormatData} [data={}] The data
+	 * @returns {ColorsFormatData}
+	 * @private
+	 */
 	background(background, { opening = [], closing = [] } = {}) {
 		if (background) {
 			if (typeof background === 'number') {
-				if (Number.isInteger(background) === false) background = Math.round(background);
+				if (!Number.isInteger(background)) background = Math.round(background);
 
 				const number = (background >= 0x100 && background <= 0xFFF) || (background >= 0x100000 && background <= 0xFFFFFF) ?
 					background.toString(16) :
@@ -197,10 +224,18 @@ class Colors {
 		return { opening, closing };
 	}
 
+	/**
+	 * Apply the text format
+	 * @since 0.5.0
+	 * @param {ColorsFormatType} text The text format to apply
+	 * @param {ColorsFormatData} [data={}] The data
+	 * @returns {ColorsFormatData}
+	 * @private
+	 */
 	text(text, { opening = [], closing = [] } = {}) {
 		if (text) {
 			if (typeof text === 'number') {
-				if (Number.isInteger(text) === false) text = Math.round(text);
+				if (!Number.isInteger(text)) text = Math.round(text);
 				opening.push(`38;5;${text}`);
 				closing.push(`${this.CLOSE.text}`);
 			} else if (Array.isArray(text)) {

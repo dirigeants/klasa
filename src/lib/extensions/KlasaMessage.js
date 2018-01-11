@@ -13,7 +13,7 @@ module.exports = Structures.extend('Message', Message => {
 		 * * A string
 		 * * An array (joined with a new line delimiter to give a string)
 		 * * Any value
-		 * @typedef {string|Array|*} StringResolvable
+		 * @typedef {(string|Array|*)} StringResolvable
 		 * @memberof KlasaMessage
 		 */
 
@@ -153,7 +153,7 @@ module.exports = Structures.extend('Message', Message => {
 		/**
 		 * The usable commands by the author in this message's context
 		 * @since 0.0.1
-		 * @returns {Promise<Collection>} The filtered CommandStore
+		 * @returns {Promise<Collection<string, Command>>} The filtered CommandStore
 		 */
 		async usableCommands() {
 			const col = new Collection();

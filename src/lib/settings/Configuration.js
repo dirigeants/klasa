@@ -13,39 +13,33 @@ class Configuration {
 	 */
 
 	/**
-	 * @typedef {Object} ConfigurationParseOptions
-	 * @property {string} path
-	 * @property {string[]} route
-	 * @memberof Configuration
-	 */
-
-	/**
 	 * @typedef {Object} ConfigurationUpdateOptions
 	 * @property {boolean} [avoidUnconfigurable]
 	 * @property {('add'|'remove'|'auto')} [action]
+	 * @property {number} [arrayPosition]
 	 * @memberof Configuration
 	 */
 
 	/**
-	 * @typedef {Object} ConfigurationParseResult
-	 * @property {*} parsed
-	 * @property {(string|number|object)} parsedID
-	 * @property {null} array
-	 * @property {string} path
-	 * @property {string[]} route
-	 * @property {string} entryID
+	 * @typedef {Object} ConfigurationUpdateObjectResult
+	 * @property {ConfigurationUpdateObjectList} updated
+	 * @property {Error[]} errors
 	 * @memberof Configuration
 	 */
 
 	/**
-	 * @typedef {Object} ConfigurationParseResultArray
-	 * @property {*} parsed
-	 * @property {*} parsedID
-	 * @property {any[]} array
+	 * @typedef {Object} ConfigurationUpdateObjectList
+	 * @property {string[]} keys
+	 * @property {Array<*>} values
+	 * @memberof Configuration
+	 */
+
+	/**
+	 * @typedef {Object} ConfigurationPathResult
 	 * @property {string} path
 	 * @property {string[]} route
-	 * @property {string} entryID
 	 * @memberof Configuration
+	 * @private
 	 */
 
 	/**
@@ -55,27 +49,19 @@ class Configuration {
 	 * @property {string[]} keys
 	 * @property {Array<*>} values
 	 * @memberof Configuration
+	 * @private
 	 */
 
 	/**
-	 * @typedef {Object} ConfigurationUpdateManyUpdated
-	 * @property {string[]} keys
-	 * @property {Array<*>} values
+	 * @typedef {Object} ConfigurationParseResult
+	 * @property {*} parsed
+	 * @property {(string|number|object)} parsedID
+	 * @property {(null|any[])} array
+	 * @property {string} path
+	 * @property {string[]} route
+	 * @property {string} entryID
 	 * @memberof Configuration
-	 */
-
-	/**
-	 * @typedef {Object} ConfigurationUpdateManyResult
-	 * @property {ConfigurationUpdateManyUpdated} updated
-	 * @property {Error[]} errors
-	 * @memberof Configuration
-	 */
-
-	// { updated: { keys: list.keys, values: list.values }, errors: list.errors }
-
-	/**
-	 * @typedef {(KlasaGuild|KlasaMessage|external:TextChannel|external:VoiceChannel|external:CategoryChannel|external:Member|external:GuildChannel|external:Role)} GatewayGuildResolvable
-	 * @memberof Configuration
+	 * @private
 	 */
 
 	/**
@@ -124,9 +110,10 @@ class Configuration {
 		 * Whether this entry exists in the DB or not.
 		 * @since 0.5.0
 		 * @type {boolean}
-		 * @name Configuration#existsInDB
+		 * @name Configuration#_existsInDB
+		 * @private
 		 */
-		Object.defineProperty(this, 'existsInDB', { value: false, writable: true });
+		Object.defineProperty(this, '_existsInDB', { value: false, writable: true });
 
 		const { schema } = this.gateway;
 		for (let i = 0; i < schema.keyArray.length; i++) {
@@ -147,8 +134,7 @@ class Configuration {
 		const path = key.split('.');
 		let refSetting = this; // eslint-disable-line consistent-this
 		let refSchema = this.gateway.schema;
-		for (let i = 0; i < path.length; i++) {
-			const currKey = path[i];
+		for (const currKey of path) {
 			if (refSchema.type !== 'Folder' || !refSchema.hasKey(currKey)) return undefined;
 			refSetting = refSetting[currKey];
 			refSchema = refSchema[currKey];
@@ -172,7 +158,7 @@ class Configuration {
 	 * @returns {Promise<Configuration>}
 	 */
 	async resetConfiguration() {
-		if (this.existsInDB) await this.gateway.provider.delete(this.gateway.type, this.id);
+		if (this._existsInDB) await this.gateway.provider.delete(this.gateway.type, this.id);
 		for (const key of this.gateway.schema.keyArray) this[key] = Configuration._merge(undefined, this.gateway.schema[key]);
 		return this;
 	}
@@ -185,7 +171,7 @@ class Configuration {
 	async sync() {
 		const data = await this.gateway.provider.get(this.gateway.type, this.id);
 		if (data) {
-			if (!this.existsInDB) this.existsInDB = true;
+			if (!this._existsInDB) this._existsInDB = true;
 			this._patch(data);
 		}
 		return this;
@@ -197,7 +183,7 @@ class Configuration {
 	 * @returns {Promise<Configuration>}
 	 */
 	async destroy() {
-		if (this.existsInDB) {
+		if (this._existsInDB) {
 			await this.gateway.provider.delete(this.gateway.type, this.id);
 			if (this.client.listenerCount('configDeleteEntry')) this.client.emit('configDeleteEntry', this);
 		}
@@ -227,7 +213,7 @@ class Configuration {
 	 * @param {*} [value] The value to parse and save
 	 * @param {ConfigGuildResolvable} [guild] A guild resolvable
 	 * @param {ConfigurationUpdateOptions} [options={}] The options for the update
-	 * @returns {Promise<(ConfigurationUpdateResult|ConfigurationUpdateManyResult)>}
+	 * @returns {Promise<(ConfigurationUpdateResult|ConfigurationUpdateObjectResult)>}
 	 * @example
 	 * // Updating the value of a key
 	 * Configuration#update('roles.administrator', '339943234405007361', msg.guild);
@@ -259,18 +245,19 @@ class Configuration {
 	 * @since 0.5.0
 	 * @param {Object} object A JSON object to iterate and parse
 	 * @param {ConfigGuildResolvable} [guild] A guild resolvable
-	 * @returns {Promise<ConfigurationUpdateManyResult>}
+	 * @returns {Promise<ConfigurationUpdateObjectResult>}
+	 * @private
 	 */
-	async updateMany(object, guild) {
+	async _updateMany(object, guild) {
 		const list = { errors: [], promises: [], keys: [], values: [] };
 
 		// Handle entry creation if it does not exist.
-		if (!this.existsInDB) await this.gateway.createEntry(this.id);
+		if (!this._existsInDB) await this.gateway.createEntry(this.id);
 
 		const oldClone = this.client.listenerCount('configUpdateEntry') ? this.clone() : null;
 		const updateObject = {};
 		guild = this.gateway._resolveGuild(guild);
-		this._updateMany(this, object, this.gateway.schema, guild, list, updateObject);
+		this._parseUpdateMany(this, object, this.gateway.schema, guild, list, updateObject);
 		await Promise.all(list.promises);
 
 		if (oldClone !== null) this.client.emit('configUpdateEntry', oldClone, this, { type: 'MANY', keys: list.keys, values: list.values });
@@ -297,7 +284,7 @@ class Configuration {
 	 * Parse the data for reset.
 	 * @since 0.5.0
 	 * @param {string} key The key to edit
-	 * @param {ConfigurationParseOptions} options The options
+	 * @param {ConfigurationPathResult} options The options
 	 * @returns {Promise<ConfigurationParseResult>}
 	 * @private
 	 */
@@ -313,7 +300,7 @@ class Configuration {
 	 * @param {string} key The key to edit
 	 * @param {*} value The new value
 	 * @param {ConfigGuildResolvable} guild The guild to take
-	 * @param {ConfigurationParseOptions} options The options
+	 * @param {ConfigurationPathResult} options The options
 	 * @returns {Promise<ConfigurationParseResult>}
 	 * @private
 	 */
@@ -335,8 +322,8 @@ class Configuration {
 	 * @param {*} value The new value
 	 * @param {ConfigGuildResolvable} guild The guild to take
 	 * @param {number} arrayPosition The array position to update
-	 * @param {ConfigurationParseOptions} options The options
-	 * @returns {Promise<ConfigurationParseResultArray>}
+	 * @param {ConfigurationPathResult} options The options
+	 * @returns {Promise<ConfigurationParseResult>}
 	 * @private
 	 */
 	async _parseUpdateArray(action, key, value, guild, arrayPosition, { path, route }) {
@@ -350,7 +337,7 @@ class Configuration {
 		const parsedID = path.type !== 'any' ? Configuration.getIdentifier(parsed) : parsed;
 
 		// Handle entry creation if it does not exist.
-		if (!this.existsInDB) await this.gateway.createEntry(this.id);
+		if (!this._existsInDB) await this.gateway.createEntry(this.id);
 		const oldClone = this.client.listenerCount('configUpdateEntry') ? this.clone() : null;
 
 		let cache = this; // eslint-disable-line consistent-this
@@ -421,12 +408,12 @@ class Configuration {
 	 * @param {*} updateObject The object to update
 	 * @private
 	 */
-	_updateMany(cache, object, schema, guild, list, updateObject) {
+	_parseUpdateMany(cache, object, schema, guild, list, updateObject) {
 		for (const key of Object.keys(object)) {
 			if (!schema.hasKey(key)) continue;
 			if (schema[key].type === 'Folder') {
 				if (!(key in updateObject)) updateObject = updateObject[key] = {};
-				this._updateMany(cache[key], object[key], schema[key], guild, list, updateObject);
+				this._parseUpdateMany(cache[key], object[key], schema[key], guild, list, updateObject);
 			} else if (schema[key].array && !Array.isArray(object[key])) {
 				list.errors.push([schema[key].path, new Error(`${schema[key].path} expects an array as value.`)]);
 			} else if (!schema[key].array && schema[key].array !== 'any' && Array.isArray(object[key])) {
@@ -462,7 +449,7 @@ class Configuration {
 	 */
 	async _setValue(parsedID, path, route) {
 		// Handle entry creation if it does not exist.
-		if (!this.existsInDB) await this.gateway.createEntry(this.id);
+		if (!this._existsInDB) await this.gateway.createEntry(this.id);
 		const oldClone = this.client.listenerCount('configUpdateEntry') ? this.clone() : null;
 
 		let cache = this; // eslint-disable-line consistent-this

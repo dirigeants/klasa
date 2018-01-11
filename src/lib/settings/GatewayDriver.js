@@ -7,9 +7,9 @@ const Gateway = require('./Gateway');
 class GatewayDriver {
 
 	/**
-	 * @typedef {Object} SettingsOptions
+	 * @typedef {Object} GatewayDriverAddOptions
 	 * @property {string} [provider]
-	 * @property {boolean} [nice]
+	 * @property {boolean} [nice=false]
 	 * @memberof GatewayDriver
 	 */
 
@@ -159,7 +159,7 @@ class GatewayDriver {
 	 * @param {string} name The name for the new instance
 	 * @param {Function} validateFunction The function that validates the input
 	 * @param {Object} [schema={}] The schema
-	 * @param {SettingsOptions} [options={}] A provider to use. If not specified it'll use the one in the client
+	 * @param {GatewayDriverAddOptions} [options={}] A provider to use. If not specified it'll use the one in the client
 	 * @param {boolean} [download=true] Whether this Gateway should download the data from the database at init
 	 * @returns {Gateway}
 	 * @example

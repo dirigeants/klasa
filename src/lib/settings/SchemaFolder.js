@@ -9,7 +9,7 @@ const fs = require('fs-nextra');
 class SchemaFolder extends Schema {
 
 	/**
-	 * @typedef {Object} AddOptions
+	 * @typedef {Object} SchemaFolderAddOptions
 	 * @property {string} type The type for the key
 	 * @property {*} [default] The default value for the key
 	 * @property {number} [min] The min value for the key (String.length for String, value for number)
@@ -150,7 +150,7 @@ class SchemaFolder extends Schema {
 	 * Add a new key to this folder.
 	 * @since 0.5.0
 	 * @param {string} key The name for the key
-	 * @param {AddOptions} options The key's options to apply
+	 * @param {SchemaFolderAddOptions} options The key's options to apply
 	 * @param {boolean} [force=true] Whether this function call should modify all entries from the database
 	 * @returns {Promise<SchemaFolder>}
 	 */
@@ -335,7 +335,7 @@ class SchemaFolder extends Schema {
 	 * Add a key to the instance.
 	 * @since 0.5.0
 	 * @param {string} key The name of the key
-	 * @param {AddOptions} options The options of the key
+	 * @param {SchemaFolderAddOptions} options The options of the key
 	 * @param {(SchemaFolder|SchemaPiece)} Piece The class to create
 	 * @returns {(SchemaFolder|SchemaPiece)}
 	 * @private
@@ -391,7 +391,7 @@ class SchemaFolder extends Schema {
 	 * Verifies the key add options.
 	 * @since 0.5.0
 	 * @param {string} key The name for the key
-	 * @param {AddOptions} options The key's options to apply
+	 * @param {SchemaFolderAddOptions} options The key's options to apply
 	 * @returns {addOptions}
 	 * @private
 	 */

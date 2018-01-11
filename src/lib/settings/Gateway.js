@@ -19,21 +19,21 @@ class Gateway extends GatewayStorage {
 	 */
 
 	/**
-	 * @typedef {(KlasaGuild|KlasaMessage|external:TextChannel|external:VoiceChannel|external:CategoryChannel|external:Member|external:GuildChannel|external:Role)} GatewayGuildResolvable
-	 * @memberof Gateway
-	 */
-
-	/**
-	 * @typedef {Object} GatewayPathOptions
+	 * @typedef {Object} GatewayGetPathOptions
 	 * @property {boolean} [avoidUnconfigurable=false]
 	 * @property {boolean} [piece=true]
 	 * @memberof Gateway
 	 */
 
 	/**
-	 * @typedef {Object} GatewayPathResult
+	 * @typedef {Object} GatewayGetPathResult
 	 * @property {SchemaPiece} path
 	 * @property {string[]} route
+	 * @memberof Gateway
+	 */
+
+	/**
+	 * @typedef {(KlasaGuild|KlasaMessage|external:TextChannel|external:VoiceChannel|external:CategoryChannel|external:GuildMember|external:Role)} GuildResolvable
 	 * @memberof Gateway
 	 */
 
@@ -214,7 +214,7 @@ class Gateway extends GatewayStorage {
 	 * Resolve a path from a string.
 	 * @since 0.5.0
 	 * @param {string} [key=null] A string to resolve
-	 * @param {GatewayPathOptions} [options={}] Whether the Gateway should avoid configuring the selected key
+	 * @param {GatewayGetPathOptions} [options={}] Whether the Gateway should avoid configuring the selected key
 	 * @returns {GatewayPathResult}
 	 */
 	getPath(key = '', { avoidUnconfigurable = false, piece = true } = {}) {
@@ -284,7 +284,7 @@ class Gateway extends GatewayStorage {
 	/**
 	 * Resolves a guild
 	 * @since 0.5.0
-	 * @param {GatewayGuildResolvable} guild A guild resolvable
+	 * @param {GuildResolvable} guild A guild resolvable
 	 * @returns {?KlasaGuild}
 	 * @private
 	 */
