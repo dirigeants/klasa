@@ -1349,12 +1349,13 @@ declare module 'klasa' {
 		public constructor(client: KlasaClient, taskName: string, time: Date | number | string, options?: ScheduledTaskOptions);
 		public readonly client: KlasaClient;
 		public readonly store: Schedule;
-		public task: Task;
+		public taskName: string;
 		public recurring?: Cron;
 		public time?: Date;
 		public id: string;
 		public data: any;
 
+		public readonly task: Task;
 		public run(): Promise<this>;
 		public update(options?: ScheduledTaskUpdateOptions): Promise<this>;
 		public delete(): Promise<Schedule>;
