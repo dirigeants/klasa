@@ -25,21 +25,25 @@ class Cron {
 	 */
 	next(zDay = new Date(), origin = true) {
 		if (!this.days.includes(zDay.getUTCDate()) || !this.months.includes(zDay.getUTCMonth() + 1) || !this.dows.includes(zDay.getUTCDay())) return this.next(new Date(zDay.getTime() + day), false);
-		const now = new Date(zDay.getTime() + 60000);
-		let hour, minute;
+
+		let [hour] = this.hours;
+		let [minute] = this.minutes;
+
 		if (origin) {
+			const now = new Date(zDay.getTime() + 60000);
 			const hourIndex = this.hours.findIndex(hr => hr >= now.getUTCHours());
-			minute = this.minutes.find(min => min >= now.getUTCMinutes());
-			if (typeof minute === 'undefined') {
+
+			if (hourIndex === -1) return this.next(new Date(zDay.getTime() + day), false);
+
+			const minuteIndex = this.minutes.findIndex(min => min >= now.getUTCMinutes());
+
+			if (minuteIndex === -1) {
 				hour = this.hours[hourIndex + 1];
 				if (typeof hour === 'undefined') return this.next(new Date(zDay.getTime() + day), false);
-				[minute] = this.minutes;
 			} else {
 				hour = this.hours[hourIndex];
+				minute = this.minutes[minuteIndex];
 			}
-		} else {
-			[hour] = this.hours;
-			[minute] = this.minutes;
 		}
 
 		return new Date(Date.UTC(zDay.getUTCFullYear(), zDay.getUTCMonth(), zDay.getUTCDate(), hour, minute));
