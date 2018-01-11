@@ -1339,11 +1339,11 @@ declare module 'klasa' {
 		public init(): Promise<void>;
 		public execute(): Promise<void>;
 		public next(): ScheduledTask;
-		public create(taskName: string, time: Date | number | string, options: ScheduledTaskOptions);
+		public create(taskName: string, time: Date | number | string, options: ScheduledTaskOptions): Promise<ScheduledTask>;
 		public delete(id: string): Promise<this>;
 		public clear(): Promise<void>;
 
-		private _add(taskName: string, time: Date | number | string, options: ScheduledTaskOptions);
+		private _add(taskName: string, time: Date | number | string, options: ScheduledTaskOptions): ScheduledTask;
 		private _insert(task: ScheduledTask): ScheduledTask;
 		private _clearInterval(): void;
 		private _checkInterval(): void;
@@ -1366,7 +1366,7 @@ declare module 'klasa' {
 		public toJSON(): ScheduledTaskJSON;
 
 		private static _resolveTime(time: Date | number | Cron | string): [Date, Cron];
-		private static _generateID(client: KlasaCLient, time: Date | number): string;
+		private static _generateID(client: KlasaClient, time: Date | number): string;
 		private static _validate(st: ScheduledTask): void;
 	}
 
