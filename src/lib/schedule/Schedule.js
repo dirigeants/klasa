@@ -77,7 +77,7 @@ class Schedule {
 
 		for (const task of tasks) {
 			try {
-				this._add(task.taskName, task.time, task);
+				this._add(task.taskName, task.repeat || task.time, task);
 			} catch (error) {
 				this.client.emit('warn', `Task ${task.taskName} [${task.id}] was not queued: ${error}`);
 			}
