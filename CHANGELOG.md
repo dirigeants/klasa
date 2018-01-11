@@ -73,6 +73,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#158](https://github.com/dirigeants/klasa/pull/158)] Refactored typings and JSDoc types. (kyranet)
 - [[#156](https://github.com/dirigeants/klasa/pull/156)] Tweaked `Configuration#update` to accept the overload `(key: string, value: any, options:ConfigurationUpdateOptions)` as opposed of passing `undefined` in the `guild` field between `value` and `options`. (kyranet)
 - [[#155](https://github.com/dirigeants/klasa/pull/155)] Complexity reductions for `SchemaFolder#addKey` and `Colors`. (bdistin)
 - [[`338ebb0eb2`](https://github.com/dirigeants/klasa/commit/338ebb0eb2334810229720eda3abab198d6cc0ba)] Prefixed `Timestamp#_resolveDate`. (bdistin)
@@ -120,6 +121,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Removed
 
+- [[#158](https://github.com/dirigeants/klasa/pull/158)] `Configuration#updateMany` is now under `Configuration#update`, in favor of a much less confusing naming. (kyranet)
 - [[`5b0c468362`](https://github.com/dirigeants/klasa/commit/5b0c46836200a57577bbd4aaa5cd463089a3bff0)] Removed `KlasaClient.sharded` as `Client.shard` is now fixed. (bdistin)
 - [[#136](https://github.com/dirigeants/klasa/pull/136)] Removed `util.newError`. (bdistin)
 - [[#129](https://github.com/dirigeants/klasa/pull/129)] **[BREAKING]** Removed the methods `Configuration#updateOne`, `Configuration#updateArray`. They're replaced by `Configuration#update`. (kyranet)
