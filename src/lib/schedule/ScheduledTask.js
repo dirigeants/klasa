@@ -59,9 +59,9 @@ class ScheduledTask {
 
 		/**
 		 * @since 0.5.0
-		 * @type {Task}
+		 * @type {string}
 		 */
-		this.task = this.client.tasks.get(taskName);
+		this.taskName = taskName;
 
 		/**
 		 * @since 0.5.0
@@ -88,6 +88,14 @@ class ScheduledTask {
 		this.data = 'data' in options ? options.data : null;
 
 		this.constructor._validate(this);
+	}
+
+	/**
+	 * @since 0.5.0
+	 * @type {Task}
+	 */
+	get task() {
+		return this.client.tasks.get(this.taskName);
 	}
 
 	/**
@@ -133,6 +141,7 @@ class ScheduledTask {
 	/**
 	 * Delete the task
 	 * @since 0.5.0
+	 * @readonly
 	 * @returns {Promise<Schedule>}
 	 */
 	delete() {
@@ -145,7 +154,7 @@ class ScheduledTask {
 	 * @returns {ScheduledTaskJSON}
 	 */
 	toJSON() {
-		const object = { id: this.id, taskName: this.task.name, time: this.time.getTime() };
+		const object = { id: this.id, taskName: this.taskName, time: this.time.getTime() };
 		if (this.recurring) object.repeat = this.recurring.cron;
 		if (typeof this.data !== 'undefined') object.data = this.data;
 
