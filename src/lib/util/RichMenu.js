@@ -13,7 +13,7 @@ class RichMenu extends RichDisplay {
 	 */
 
 	/**
-	 * @typedef {object} RichMenuEmojisObject
+	 * @typedef {Object} RichMenuEmojisObject
 	 * @property {emoji} first
 	 * @property {emoji} back
 	 * @property {emoji} forward
@@ -35,7 +35,7 @@ class RichMenu extends RichDisplay {
 	 */
 
 	/**
-	 * @typedef {object} MenuOption
+	 * @typedef {Object} MenuOption
 	 * @property {string} name The name of the option
 	 * @property {string} body The description of the option
 	 * @property {boolean} [inline=false] Whether the option should be inline
@@ -43,7 +43,7 @@ class RichMenu extends RichDisplay {
 	 */
 
 	/**
-	 * @typedef {object} RichMenuRunOptions
+	 * @typedef {Object} RichMenuRunOptions
 	 * @property {Function} [filter] A filter function to add to the ReactionHandler (Receives: Reaction, User)
 	 * @property {boolean} [stop=true] If a stop reaction should be included
 	 * @property {string} [prompt=msg.language.get('REACTIONHANDLER_PROMPT')] The prompt to be used when awaiting user input on a page to jump to

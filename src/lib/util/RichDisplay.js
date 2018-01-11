@@ -13,7 +13,7 @@ class RichDisplay {
 	 */
 
 	/**
-	 * @typedef {object} RichDisplayEmojisObject
+	 * @typedef {Object} RichDisplayEmojisObject
 	 * @property {emoji} first
 	 * @property {emoji} back
 	 * @property {emoji} forward
@@ -25,7 +25,7 @@ class RichDisplay {
 	 */
 
 	/**
-	 * @typedef {object} RichDisplayRunOptions
+	 * @typedef {Object} RichDisplayRunOptions
 	 * @property {Function} [filter] A filter function to add to the ReactionHandler (Receives: Reaction, User)
 	 * @property {boolean} [stop=true] If a stop reaction should be included
 	 * @property {boolean} [jump=true] If a jump reaction should be included

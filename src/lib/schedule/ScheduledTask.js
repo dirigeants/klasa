@@ -93,6 +93,7 @@ class ScheduledTask {
 	/**
 	 * @since 0.5.0
 	 * @type {Task}
+	 * @readonly
 	 */
 	get task() {
 		return this.client.tasks.get(this.taskName);
@@ -141,7 +142,6 @@ class ScheduledTask {
 	/**
 	 * Delete the task
 	 * @since 0.5.0
-	 * @readonly
 	 * @returns {Promise<Schedule>}
 	 */
 	delete() {
