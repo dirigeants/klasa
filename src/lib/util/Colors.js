@@ -3,7 +3,7 @@
 class Colors {
 
 	/**
-	 * @typedef  {Object} ColorsFormatOptions
+	 * @typedef {Object} ColorsFormatOptions
 	 * @property {(string|string[])} style
 	 * @property {ColorsFormatType} background
 	 * @property {ColorsFormatType} text
@@ -11,11 +11,11 @@ class Colors {
 	 */
 
 	/**
-	 * @typedef  {(string|number|string[]|number[])} ColorsFormatType
+	 * @typedef {(string|number|string[]|number[])} ColorsFormatType
 	 */
 
 	/**
-	 * @typedef  {Object} ColorsFormatData
+	 * @typedef {Object} ColorsFormatData
 	 * @property {string[]} opening
 	 * @property {string[]} closing
 	 * @private
