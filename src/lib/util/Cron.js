@@ -30,11 +30,10 @@ class Cron {
 			const minute = origin ? this.minutes.find(min => min >= now.getUTCMinutes()) : this.minutes[0];
 			if (typeof hour !== 'undefined' && typeof minute !== 'undefined') {
 				return new Date(Date.UTC(zDay.getUTCFullYear(), zDay.getUTCMonth(), zDay.getUTCDate(), hour, minute));
-			} else {
-				const hourAlt = this.hours[this.hours.indexOf(hour) + 1];
-				if (typeof hourAlt !== 'undefined') {
-					return new Date(Date.UTC(zDay.getUTCFullYear(), zDay.getUTCMonth(), zDay.getUTCDate(), hourAlt, this.minutes[0]));
-				}
+			}
+			const hourAlt = this.hours[this.hours.indexOf(hour) + 1];
+			if (typeof hourAlt !== 'undefined') {
+				return new Date(Date.UTC(zDay.getUTCFullYear(), zDay.getUTCMonth(), zDay.getUTCDate(), hourAlt, this.minutes[0]));
 			}
 		}
 		return this.next(new Date(zDay.getTime() + day), false);
