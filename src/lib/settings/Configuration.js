@@ -180,7 +180,7 @@ class Configuration {
 	async sync() {
 		this._syncStatus = this.gateway.provider.get(this.gateway.type, this.id);
 		this._syncStatus.then(() => { this._syncStatus = null; });
-		const data = await this._syncStatus;
+		const data = await this._syncStatus.catch(() => null);
 		if (data) {
 			if (!this._existsInDB) this._existsInDB = true;
 			this._patch(data);
