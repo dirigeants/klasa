@@ -20,7 +20,7 @@ class Cron {
 	 * Get the next date that matches with the current pattern
 	 * @since 0.5.0
 	 * @param {Date} [zDay=new Date()] The Date instance to compare with
-	 * @param {boolean} [origin = true] Whether this next call is origin
+	 * @param {boolean} [origin=true] Whether this next call is origin
 	 * @returns {Date}
 	 */
 	next(zDay = new Date(), origin = true) {
