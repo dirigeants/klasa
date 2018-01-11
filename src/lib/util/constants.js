@@ -172,6 +172,7 @@ exports.CRON = {
 	partRegex: /^(?:(\*)|(\d+)(?:-(\d+))?)(?:\/(\d+))?$/,
 	day: 24 * 60 * 60 * 1000,
 	predefined: {
+		'@annually': '0 0 1 1 *',
 		'@yearly': '0 0 1 1 *',
 		'@monthly': '0 0 1 * *',
 		'@weekly': '0 0 * * 0',
