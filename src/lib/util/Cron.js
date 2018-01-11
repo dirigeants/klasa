@@ -99,7 +99,7 @@ class Cron {
 
 		if (wild) [min, max] = allowedNum[id];
 		else if (!max && !step) return [parseInt(min)];
-		return Cron._range(parseInt(min), parseInt(max) || allowedNum[id][1], parseInt(step) || 1);
+		return Cron._range(...[parseInt(min), parseInt(max) || allowedNum[id][1]].sort((a, b) => a - b), parseInt(step) || 1);
 	}
 
 	/**
@@ -112,14 +112,7 @@ class Cron {
 	 * @private
 	 */
 	static _range(min, max, step) {
-		if (max < min) {
-			const temp = max;
-			max = min;
-			min = temp;
-		}
-		const res = new Array(Math.floor((max - min) / step) + 1);
-		for (let i = 0; i < res.length; i++) res[i] = min + (i * step);
-		return res;
+		return new Array(Math.floor((max - min) / step) + 1).map((val, i) => min + (i * step));
 	}
 
 }
