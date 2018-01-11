@@ -112,7 +112,7 @@ class Cron {
 	 * @private
 	 */
 	static _range(min, max, step) {
-		return new Array(Math.floor((max - min) / step) + 1).map((val, i) => min + (i * step));
+		return new Array(Math.floor((max - min) / step) + 1).fill(0).map((val, i) => min + (i * step));
 	}
 
 }
