@@ -11,8 +11,9 @@ class Cron {
 	 * @param {string} cron The cron pattern to use
 	 */
 	constructor(cron) {
-		this.cron = this.constructor._normalize(cron.toLowerCase());
-		[this.minutes, this.hours, this.days, this.months, this.dows] = this.constructor._parseString(this.cron);
+		this.cron = cron.toLowerCase();
+		this.normalized = this.constructor._normalize(this.cron);
+		[this.minutes, this.hours, this.days, this.months, this.dows] = this.constructor._parseString(this.normalized);
 	}
 
 	/**
@@ -43,6 +44,20 @@ class Cron {
 	 */
 	static _normalize(cron) {
 		if (cron in predefined) return predefined[cron];
+		const now = new Date();
+		cron = cron.split(' ').map((val, i) => {
+			if (val === 'h') return Math.floor(Math.random() * (allowedNum[i][1] + 1));
+			if (val === '?') {
+				switch (i) {
+					case 0: return now.getUTCMinutes();
+					case 1: return now.getUTCHours();
+					case 2: return now.getUTCDate();
+					case 3: return now.getUTCMonth();
+					case 4: return now.getUTCDay();
+				}
+			}
+			return val;
+		}).join(' ');
 		return cron.replace(tokensRegex, match => tokens[match]);
 	}
 
