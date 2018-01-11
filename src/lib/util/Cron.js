@@ -19,26 +19,25 @@ class Cron {
 	/**
 	 * Get the next date that matches with the current pattern
 	 * @since 0.5.0
-	 * @param {Date} zDay The Date instance to compare with
-	 * @param {boolean} origin Whether this next call is origin
+	 * @param {Date} [zDay=new Date()] The Date instance to compare with
+	 * @param {boolean} [origin = true] Whether this next call is origin
 	 * @returns {Date}
 	 */
 	next(zDay = new Date(), origin = true) {
 		if (!this.days.includes(zDay.getUTCDate()) || !this.months.includes(zDay.getUTCMonth() + 1) || !this.dows.includes(zDay.getUTCDay())) return this.next(new Date(zDay.getTime() + day), false);
+		if (!origin) return new Date(Date.UTC(zDay.getUTCFullYear(), zDay.getUTCMonth(), zDay.getUTCDate(), this.hours[0], this.minutes[0]));
 
-		if (origin) {
-			const now = new Date(zDay.getTime() + 60000);
-			for (const hour of this.hours) {
-				if (hour <= now.getUTCHours()) continue;
-				for (const minute of this.minutes) {
-					if (minute <= now.getUTCHours()) continue;
-					return new Date(Date.UTC(zDay.getUTCFullYear(), zDay.getUTCMonth(), zDay.getUTCDate(), hour, minute));
-				}
+		const now = new Date(zDay.getTime() + 60000);
+
+		for (const hour of this.hours) {
+			if (hour <= now.getUTCHours()) continue;
+			for (const minute of this.minutes) {
+				if (minute <= now.getUTCHours()) continue;
+				return new Date(Date.UTC(zDay.getUTCFullYear(), zDay.getUTCMonth(), zDay.getUTCDate(), hour, minute));
 			}
-			return this.next(new Date(zDay.getTime() + day), false);
 		}
 
-		return new Date(Date.UTC(zDay.getUTCFullYear(), zDay.getUTCMonth(), zDay.getUTCDate(), this.hours[0], this.minutes[0]));
+		return this.next(new Date(zDay.getTime() + day), false);
 	}
 
 	/**
