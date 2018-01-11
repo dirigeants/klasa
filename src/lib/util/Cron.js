@@ -27,7 +27,7 @@ class Cron {
 			const now = new Date(zDay.getTime() + 60000);
 			const hour = origin ? this.hours.find(hr => hr >= now.getUTCHours()) : this.hours[0];
 			const minute = origin ? this.minutes.find(min => min >= now.getUTCMinutes()) : this.minutes[0];
-			if (typeof hour !== 'undefined' && typeof hour !== 'undefined') {
+			if (typeof hour !== 'undefined' && typeof minute !== 'undefined') {
 				return new Date(Date.UTC(zDay.getUTCFullYear(), zDay.getUTCMonth(), zDay.getUTCDate(), hour, minute));
 			}
 		}
