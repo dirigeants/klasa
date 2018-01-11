@@ -8,24 +8,24 @@ const fs = require('fs-nextra');
 class SchemaPiece extends Schema {
 
 	/**
-	 * @typedef {Object} SchemaPieceJSON
-	 * @property {string} type The type for the key
-	 * @property {*} default The default value for the key
-	 * @property {number} min The min value for the key (String.length for String, value for number)
-	 * @property {number} max The max value for the key (String.length for String, value for number)
-	 * @property {string[]} sql A tuple containing the name of the column and its data type
-	 * @property {boolean} array Whether the key should be stored as Array or not
-	 * @property {boolean} configurable Whether the key should be configurable by the config command or not
-	 * @memberof SchemaPiece
-	 */
-
-	/**
-	 * @typedef {Object} ModifyOptions
+	 * @typedef {Object} SchemaPieceModifyOptions
 	 * @property {*} [default] The new default value
 	 * @property {number} [min] The new minimum range value
 	 * @property {number} [max] The new maximum range value
 	 * @property {boolean} [configurable] The new configurable value
 	 * @property {string} [sql] The new sql datatype
+	 * @memberof SchemaPiece
+	 */
+
+	/**
+	 * @typedef {Object} SchemaPieceJSON
+	 * @property {string} type The type for the key
+	 * @property {*} default The default value for the key
+	 * @property {number} min The min value for the key (String.length for String, value for number)
+	 * @property {number} max The max value for the key (String.length for String, value for number)
+	 * @property {string} sql A tuple containing the name of the column and its data type
+	 * @property {boolean} array Whether the key should be stored as Array or not
+	 * @property {boolean} configurable Whether the key should be configurable by the config command or not
 	 * @memberof SchemaPiece
 	 */
 
@@ -146,7 +146,7 @@ class SchemaPiece extends Schema {
 	/**
 	 * Modify this SchemaPiece's properties.
 	 * @since 0.5.0
-	 * @param {ModifyOptions} options The new options
+	 * @param {SchemaPieceModifyOptions} options The new options
 	 * @returns {Promise<this>}
 	 */
 	async modify(options) {
