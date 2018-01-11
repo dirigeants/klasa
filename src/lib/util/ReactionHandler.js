@@ -13,7 +13,7 @@ class ReactionHandler extends ReactionCollector {
 	 */
 
 	/**
-	 * @typedef {object} ReactionHandlerOptions
+	 * @typedef {Object} ReactionHandlerOptions
 	 * @property {Function} [filter] A filter function to add to the ReactionHandler
 	 * @property {boolean} [stop=true] If a stop reaction should be included
 	 * @property {string} [prompt=msg.language.get('REACTIONHANDLER_PROMPT')] The prompt to be used when awaiting user input on a page to jump to

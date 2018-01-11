@@ -11,7 +11,16 @@ const { mergeDefault } = require('./util');
 class KlasaConsole extends Console {
 
 	/**
-	 * @typedef {object} Colors - Time is for the timestamp of the log, message is for the actual output.
+	 * @typedef {Object} KlasaConsoleConfig
+	 * @property {KlasaConsoleColorStyles} [colors]
+	 * @property {NodeJS.WritableStream} [stdout]
+	 * @property {NodeJS.WritableStream} [stderr]
+	 * @property {(boolean|string)} [timestamps]
+	 * @property {boolean} [useColor]
+	 */
+
+	/**
+	 * @typedef {Object} KlasaConsoleColorStyles Time is for the timestamp of the log, message is for the actual output.
 	 * @property {KlasaConsoleColorObjects} debug An object containing a message and time color object
 	 * @property {KlasaConsoleColorObjects} error An object containing a message and time color object
 	 * @property {KlasaConsoleColorObjects} log An object containing a message and time color object
@@ -22,7 +31,7 @@ class KlasaConsole extends Console {
 	 */
 
 	/**
-	 * @typedef {object} KlasaConsoleColorObjects
+	 * @typedef {Object} KlasaConsoleColorObjects
 	 * @property {string} [type='log'] The method from Console this color object should call
 	 * @property {KlasaConsoleMessageObject} message A message object containing colors and styles
 	 * @property {KlasaConsoleTimeObject} time A time object containing colors and styles
@@ -30,23 +39,23 @@ class KlasaConsole extends Console {
 	 */
 
 	/**
-	 * @typedef {object} KlasaConsoleMessageObject
-	 * @property {BackgroundColorTypes} background The background color. Can be a basic string like "red", a hex string, or a RGB array
-	 * @property {TextColorTypes} text The text color. Can be a basic string like "red", a hex string, or a RGB array
-	 * @property {StyleTypes} style A style string from StyleTypes
+	 * @typedef {Object} KlasaConsoleMessageObject
+	 * @property {KlasaConsoleColorTypes} background The background color. Can be a basic string like "red", a hex string, or a RGB array
+	 * @property {KlasaConsoleColorTypes} text The text color. Can be a basic string like "red", a hex string, or a RGB array
+	 * @property {KlasaConsoleStyleTypes} style A style string from KlasaConsoleStyleTypes
 	 * @memberof KlasaConsole
 	 */
 
 	/**
-	 * @typedef {object} KlasaConsoleTimeObject
-	 * @property {BackgroundColorTypes} background The background color. Can be a basic string like "red", a hex string, or a RGB array
-	 * @property {TextColorTypes} text The text color. Can be a basic string like "red", a hex string, a RGB array, or HSL array
-	 * @property {StyleTypes} style A style string from StyleTypes
+	 * @typedef {Object} KlasaConsoleTimeObject
+	 * @property {KlasaConsoleColorTypes} background The background color. Can be a basic string like "red", a hex string, or a RGB array
+	 * @property {KlasaConsoleColorTypes} text The text color. Can be a basic string like "red", a hex string, a RGB array, or HSL array
+	 * @property {KlasaConsoleStyleTypes} style A style string from KlasaConsoleStyleTypes
 	 * @memberof KlasaConsole
 	 */
 
 	/**
-	 * @typedef {*} TextColorTypes - All the valid color types.
+	 * @typedef {*} KlasaConsoleColorTypes - All the valid color types.
 	 * @property {string} black
 	 * @property {string} red
 	 * @property {string} green
@@ -73,32 +82,7 @@ class KlasaConsole extends Console {
 	 */
 
 	/**
-	 * @typedef {*} BackgroundColorTypes - One of these strings, HexStrings, RGB, or HSL are valid types.
-	 * @property {string} black
-	 * @property {string} red
-	 * @property {string} green
-	 * @property {string} blue
-	 * @property {string} magenta
-	 * @property {string} cyan
-	 * @property {string} gray
-	 * @property {string} grey
-	 * @property {string} lightgray
-	 * @property {string} lightgrey
-	 * @property {string} lightred
-	 * @property {string} lightgreen
-	 * @property {string} lightyellow
-	 * @property {string} lightblue
-	 * @property {string} lightmagenta
-	 * @property {string} lightcyan
-	 * @property {string} white
-	 * @property {string} #008000 green
-	 * @property {Array} [255,0,0] red
-	 * @property {Array} [229,50%,50%] blue
-	 * @memberof KlasaConsole
-	 */
-
-	/**
-	 * @typedef {*} StyleTypes
+	 * @typedef {*} KlasaConsoleStyleTypes
 	 * @property {string} normal
 	 * @property {string} bold
 	 * @property {string} dim
@@ -134,7 +118,8 @@ class KlasaConsole extends Console {
 		 * The standard output stream for this console, defaulted to process.stderr.
 		 * @since 0.4.0
 		 * @name KlasaConsole#stdout
-		 * @type {WritableStream}
+		 * @type {NodeJS.WritableStream}
+		 * @readonly
 		 */
 		Object.defineProperty(this, 'stdout', { value: options.stdout });
 
@@ -142,7 +127,8 @@ class KlasaConsole extends Console {
 		 * The standard error output stream for this console, defaulted to process.stderr.
 		 * @since 0.4.0
 		 * @name KlasaConsole#stderr
-		 * @type {WritableStream}
+		 * @type {NodeJS.WritableStream}
+		 * @readonly
 		 */
 		Object.defineProperty(this, 'stderr', { value: options.stderr });
 
@@ -164,7 +150,7 @@ class KlasaConsole extends Console {
 		 * The colors for this console.
 		 * @since 0.4.0
 		 * @name KlasaConsole#colors
-		 * @type {boolean|Colors}
+		 * @type {(boolean|KlasaConsoleColorStyles)}
 		 */
 		this.colors = options.colors;
 	}
@@ -177,7 +163,7 @@ class KlasaConsole extends Console {
 	 * @param {string} [type="log"] The type of log, particularly useful for coloring
 	 */
 	write(data, type = 'log') {
-		data = KlasaConsole.flatten(data, this.useColors);
+		data = KlasaConsole._flatten(data, this.useColors);
 		const color = this.colors[type.toLowerCase()] || {};
 		const timestamp = this.template ? `${this.timestamp(`[${this.template.display()}]`, color.time || {})} ` : '';
 		const shard = this.client.shard ? `${this.shard(`[${this.client.shard.id}]`, color.shard)} ` : '';
@@ -286,8 +272,9 @@ class KlasaConsole extends Console {
 	 * @param {*} data Some data to flatten
 	 * @param {boolean} useColors Whether or not the inspection should color the output
 	 * @returns {string}
+	 * @private
 	 */
-	static flatten(data, useColors) {
+	static _flatten(data, useColors) {
 		if (typeof data === 'undefined' || typeof data === 'number' || data === null) return String(data);
 		if (typeof data === 'string') return data;
 		if (typeof data === 'object') {
