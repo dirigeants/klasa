@@ -115,6 +115,15 @@ class Configuration {
 		 */
 		Object.defineProperty(this, '_existsInDB', { value: false, writable: true });
 
+		/**
+		 * The sync status for this Configuration instance.
+		 * @since 0.5.0
+		 * @type {boolean}
+		 * @name Configuration#_syncStatus
+		 * @private
+		 */
+		Object.defineProperty(this, '_syncStatus', { value: null, writable: true });
+
 		const { schema } = this.gateway;
 		for (let i = 0; i < schema.keyArray.length; i++) {
 			const key = schema.keyArray[i];
@@ -169,7 +178,9 @@ class Configuration {
 	 * @returns {Promise<Configuration>}
 	 */
 	async sync() {
-		const data = await this.gateway.provider.get(this.gateway.type, this.id);
+		this._syncStatus = this.gateway.provider.get(this.gateway.type, this.id);
+		this._syncStatus.then(() => { this._syncStatus = null; });
+		const data = await this._syncStatus;
 		if (data) {
 			if (!this._existsInDB) this._existsInDB = true;
 			this._patch(data);

@@ -12,12 +12,14 @@ class Colors {
 
 	/**
 	 * @typedef {(string|number|string[]|number[])} ColorsFormatType
+	 * @memberof Colors
 	 */
 
 	/**
 	 * @typedef {Object} ColorsFormatData
 	 * @property {string[]} opening
 	 * @property {string[]} closing
+	 * @memberof Colors
 	 * @private
 	 */
 

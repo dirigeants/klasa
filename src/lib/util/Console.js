@@ -17,6 +17,7 @@ class KlasaConsole extends Console {
 	 * @property {NodeJS.WritableStream} [stderr]
 	 * @property {(boolean|string)} [timestamps]
 	 * @property {boolean} [useColor]
+	 * @memberof KlasaConsole
 	 */
 
 	/**

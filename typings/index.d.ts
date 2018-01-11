@@ -731,6 +731,7 @@ declare module 'klasa' {
 		public readonly type: string;
 		public readonly id: string;
 		private _existsInDB: boolean;
+		private _syncStatus?: Promise<object>;
 
 		public get(key: string): any;
 		public clone(): Configuration;
@@ -753,7 +754,7 @@ declare module 'klasa' {
 		private _setValue(parsedID: string, path: SchemaPiece, route: string[]): Promise<void>;
 		private _patch(data: any): void;
 
-		public toJSON(): any;
+		public toJSON(): object;
 		public toString(): string;
 
 		private static _merge(data: any, folder: SchemaFolder | SchemaPiece): any;
