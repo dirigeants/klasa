@@ -154,7 +154,7 @@ class ScheduledTask {
 	 * @returns {ScheduledTaskJSON}
 	 */
 	toJSON() {
-		const object = { id: this.id, taskName: this.task.name, time: this.time.getTime() };
+		const object = { id: this.id, taskName: this.taskName, time: this.time.getTime() };
 		if (this.recurring) object.repeat = this.recurring.cron;
 		if (typeof this.data !== 'undefined') object.data = this.data;
 
