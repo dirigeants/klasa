@@ -49,11 +49,11 @@ class Cron {
 			if (val === 'h') return Math.floor(Math.random() * (allowedNum[i][1] + 1));
 			if (val === '?') {
 				switch (i) {
-					case 1: return now.getUTCMinutes();
-					case 2: return now.getUTCHours();
-					case 3: return now.getUTCDate();
-					case 4: return now.getUTCMonth();
-					case 5: return now.getUTCDay();
+					case 0: return now.getUTCMinutes();
+					case 1: return now.getUTCHours();
+					case 2: return now.getUTCDate();
+					case 3: return now.getUTCMonth();
+					case 4: return now.getUTCDay();
 				}
 			}
 			return val;
