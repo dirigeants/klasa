@@ -24,19 +24,25 @@ class Cron {
 	 * @returns {Date}
 	 */
 	next(zDay = new Date(), origin = true) {
-		if (this.days.includes(zDay.getUTCDate()) && this.months.includes(zDay.getUTCMonth() + 1) && this.dows.includes(zDay.getUTCDay())) {
-			const now = new Date(zDay.getTime() + 60000);
-			const hour = origin ? this.hours.find(hr => hr >= now.getUTCHours()) : this.hours[0];
-			const minute = origin ? this.minutes.find(min => min >= now.getUTCMinutes()) : this.minutes[0];
-			if (typeof hour !== 'undefined' && typeof minute !== 'undefined') {
-				return new Date(Date.UTC(zDay.getUTCFullYear(), zDay.getUTCMonth(), zDay.getUTCDate(), hour, minute));
+		if (!this.days.includes(zDay.getUTCDate()) || !this.months.includes(zDay.getUTCMonth() + 1) || !this.dows.includes(zDay.getUTCDay())) return this.next(new Date(zDay.getTime() + day), false);
+		const now = new Date(zDay.getTime() + 60000);
+		let hour, minute;
+		if (origin) {
+			const hourIndex = this.hours.findIndex(hr => hr >= now.getUTCHours());
+			minute = this.minutes.find(min => min >= now.getUTCMinutes());
+			if (typeof minute === 'undefined') {
+				hour = this.hours[hourIndex + 1];
+				if (typeof hour === 'undefined') return this.next(new Date(zDay.getTime() + day), false);
+				[minute] = this.minutes;
+			} else {
+				hour = this.hours[hourIndex];
 			}
-			const hourAlt = this.hours[this.hours.indexOf(hour) + 1];
-			if (typeof hourAlt !== 'undefined') {
-				return new Date(Date.UTC(zDay.getUTCFullYear(), zDay.getUTCMonth(), zDay.getUTCDate(), hourAlt, this.minutes[0]));
-			}
+		} else {
+			[hour] = this.hours;
+			[minute] = this.minutes;
 		}
-		return this.next(new Date(zDay.getTime() + day), false);
+
+		return new Date(Date.UTC(zDay.getUTCFullYear(), zDay.getUTCMonth(), zDay.getUTCDate(), hour, minute));
 	}
 
 	/**
