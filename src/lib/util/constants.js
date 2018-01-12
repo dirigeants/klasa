@@ -234,4 +234,4 @@ exports.TIME = {
 
 };
 
-exports.CRON.tokensRegex = new RegExp(Object.keys(exports.CRON.tokens).join('|'), 'g');
+exports.TIME.CRON.tokensRegex = new RegExp(Object.keys(exports.TIME.CRON.tokens).join('|'), 'g');
