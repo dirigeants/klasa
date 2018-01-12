@@ -32,7 +32,7 @@ class Cron {
 		for (const hour of this.hours) {
 			if (hour < now.getUTCHours()) continue;
 			for (const minute of this.minutes) {
-				if (minute < now.getUTCMinutes() && hour === now.getUTCHours()) continue;
+				if (hour === now.getUTCHours() && minute < now.getUTCMinutes()) continue;
 				return new Date(Date.UTC(zDay.getUTCFullYear(), zDay.getUTCMonth(), zDay.getUTCDate(), hour, minute));
 			}
 		}
