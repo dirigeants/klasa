@@ -30,9 +30,9 @@ class Cron {
 		const now = new Date(zDay.getTime() + 60000);
 
 		for (const hour of this.hours) {
-			if (hour <= now.getUTCHours()) continue;
+			if (hour < now.getUTCHours()) continue;
 			for (const minute of this.minutes) {
-				if (minute <= now.getUTCHours()) continue;
+				if (minute < now.getUTCMinutes() && hour === now.getUTCHours()) continue;
 				return new Date(Date.UTC(zDay.getUTCFullYear(), zDay.getUTCMonth(), zDay.getUTCDate(), hour, minute));
 			}
 		}
