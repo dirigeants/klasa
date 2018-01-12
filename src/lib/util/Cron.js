@@ -1,4 +1,4 @@
-const { CRON: { allowedNum, partRegex, day, predefined, tokens, tokensRegex } } = require('./constants');
+const { TIME: { DAY, CRON: { allowedNum, partRegex, predefined, tokens, tokensRegex } } } = require('./constants');
 
 /**
  * Handles Cron strings and generates dates based on the cron string provided.
@@ -24,7 +24,7 @@ class Cron {
 	 * @returns {Date}
 	 */
 	next(zDay = new Date(), origin = true) {
-		if (!this.days.includes(zDay.getUTCDate()) || !this.months.includes(zDay.getUTCMonth() + 1) || !this.dows.includes(zDay.getUTCDay())) return this.next(new Date(zDay.getTime() + day), false);
+		if (!this.days.includes(zDay.getUTCDate()) || !this.months.includes(zDay.getUTCMonth() + 1) || !this.dows.includes(zDay.getUTCDay())) return this.next(new Date(zDay.getTime() + DAY), false);
 		if (!origin) return new Date(Date.UTC(zDay.getUTCFullYear(), zDay.getUTCMonth(), zDay.getUTCDate(), this.hours[0], this.minutes[0]));
 
 		const now = new Date(zDay.getTime() + 60000);
@@ -37,7 +37,7 @@ class Cron {
 			}
 		}
 
-		return this.next(new Date(zDay.getTime() + day), false);
+		return this.next(new Date(zDay.getTime() + DAY), false);
 	}
 
 	/**
