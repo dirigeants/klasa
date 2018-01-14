@@ -75,8 +75,14 @@ class Event {
 	 * @returns {void}
 	 * @private
 	 */
-	_run(...args) {
-		if (this.enabled) this.run(...args);
+	async _run(...args) {
+		if (this.enabled) {
+			try {
+				await this.run(...args);
+			} catch (err) {
+				this.client.emit('eventError', this, args, err);
+			}
+		}
 	}
 
 	/**

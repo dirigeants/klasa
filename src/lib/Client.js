@@ -580,6 +580,15 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  */
 
 /**
+ * Emitted when anevent has encountered an error.
+ * @event KlasaClient#eventError
+ * @since 0.5.0
+ * @param {KlasaMessage} event The event that errored
+ * @param {any[]} args The event arguments
+ * @param {(string|Object)} error The command error
+ */
+
+/**
  * Emitted when a monitor has encountered an error.
  * @event KlasaClient#monitorError
  * @since 0.4.0
