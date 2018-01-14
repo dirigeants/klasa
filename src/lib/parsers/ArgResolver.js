@@ -629,7 +629,7 @@ class ArgResolver extends Resolver {
 			this.date(arg, currentUsage, possible, repeat, msg).catch(() => null),
 			this.duration(arg, currentUsage, possible, repeat, msg).catch(() => null)
 		]).then(ret => ret.find(Boolean));
-		if (!isNaN(date.getTime()) && date.getTime() > Date.now()) return date;
+		if (date && !isNaN(date.getTime()) && date.getTime() > Date.now()) return date;
 		if (currentUsage.type === 'optional' && !repeat) return null;
 		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_TIME', currentUsage.possibles[possible].name);
 	}

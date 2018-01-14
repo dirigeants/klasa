@@ -1,4 +1,4 @@
-const { CRON: { allowedNum, partRegex, day, predefined, tokens, tokensRegex } } = require('./constants');
+const { TIME: { DAY, CRON: { allowedNum, partRegex, predefined, tokens, tokensRegex } } } = require('./constants');
 
 /**
  * Handles Cron strings and generates dates based on the cron string provided.
@@ -19,20 +19,25 @@ class Cron {
 	/**
 	 * Get the next date that matches with the current pattern
 	 * @since 0.5.0
-	 * @param {Date} zDay The Date instance to compare with
-	 * @param {boolean} origin Whether this next call is origin
+	 * @param {Date} [zDay=new Date()] The Date instance to compare with
+	 * @param {boolean} [origin=true] Whether this next call is origin
 	 * @returns {Date}
 	 */
 	next(zDay = new Date(), origin = true) {
-		if (this.days.includes(zDay.getUTCDate()) && this.months.includes(zDay.getUTCMonth() + 1) && this.dows.includes(zDay.getUTCDay())) {
-			const now = new Date(zDay.getTime() + 60000);
-			const hour = origin ? this.hours.find(hr => hr >= now.getUTCHours()) : this.hours[0];
-			const minute = origin ? this.minutes.find(min => min >= now.getUTCMinutes()) : this.minutes[0];
-			if (typeof hour !== 'undefined' && typeof minute !== 'undefined') {
+		if (!this.days.includes(zDay.getUTCDate()) || !this.months.includes(zDay.getUTCMonth() + 1) || !this.dows.includes(zDay.getUTCDay())) return this.next(new Date(zDay.getTime() + DAY), false);
+		if (!origin) return new Date(Date.UTC(zDay.getUTCFullYear(), zDay.getUTCMonth(), zDay.getUTCDate(), this.hours[0], this.minutes[0]));
+
+		const now = new Date(zDay.getTime() + 60000);
+
+		for (const hour of this.hours) {
+			if (hour < now.getUTCHours()) continue;
+			for (const minute of this.minutes) {
+				if (hour === now.getUTCHours() && minute < now.getUTCMinutes()) continue;
 				return new Date(Date.UTC(zDay.getUTCFullYear(), zDay.getUTCMonth(), zDay.getUTCDate(), hour, minute));
 			}
 		}
-		return this.next(new Date(zDay.getTime() + day), false);
+
+		return this.next(new Date(zDay.getTime() + DAY), false);
 	}
 
 	/**
@@ -94,7 +99,7 @@ class Cron {
 
 		if (wild) [min, max] = allowedNum[id];
 		else if (!max && !step) return [parseInt(min)];
-		return Cron._range(parseInt(min), parseInt(max) || allowedNum[id][1], parseInt(step) || 1);
+		return Cron._range(...[parseInt(min), parseInt(max) || allowedNum[id][1]].sort((a, b) => a - b), parseInt(step) || 1);
 	}
 
 	/**
@@ -107,14 +112,7 @@ class Cron {
 	 * @private
 	 */
 	static _range(min, max, step) {
-		if (max < min) {
-			const temp = max;
-			max = min;
-			min = temp;
-		}
-		const res = new Array(Math.floor((max - min) / step) + 1);
-		for (let i = 0; i < res.length; i++) res[i] = min + (i * step);
-		return res;
+		return new Array(Math.floor((max - min) / step) + 1).fill(0).map((val, i) => min + (i * step));
 	}
 
 }

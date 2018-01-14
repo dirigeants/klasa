@@ -213,7 +213,7 @@ class TextPrompt {
 		if (this._currentUsage.possibles[0].name in this.flags) this.args.splice(this.params.length, 0, this.flags[this._currentUsage.possibles[0].name]);
 
 		if (!this.client.argResolver[this._currentUsage.possibles[0].type]) {
-			this.client.emit('warn', 'Unknown Argument Type encountered');
+			this.client.emit('warn', `Unknown Argument Type encountered: ${this._currentUsage.possibles[0].type}`);
 			return this.pushParam(undefined);
 		}
 
@@ -253,7 +253,7 @@ class TextPrompt {
 		if (this._currentUsage.possibles[possible].name in this.flags) this.args.splice(this.params.length, 0, this.flags[this._currentUsage.possibles[possible].name]);
 
 		if (!this.client.argResolver[this._currentUsage.possibles[possible].type]) {
-			this.client.emit('warn', 'Unknown Argument Type encountered');
+			this.client.emit('warn', `Unknown Argument Type encountered: ${this._currentUsage.possibles[possible].type}`);
 			return this.multiPossibles(++possible);
 		}
 
