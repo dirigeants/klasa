@@ -430,7 +430,7 @@ class ArgResolver extends Resolver {
 	 */
 	async str(arg, currentUsage, possible, repeat, msg) {
 		const { min, max } = currentUsage.possibles[possible];
-		if (this.constructor.minOrMax(arg.length, min, max, currentUsage, possible, repeat, msg, (msg ? msg.language : this.client.languages.default).get('RESOLVER_STRING_SUFFIX'))) return arg;
+		if (this.constructor.minOrMax(this.client, arg.length, min, max, currentUsage, possible, repeat, msg, 'RESOLVER_STRING_SUFFIX')) return arg;
 		return null;
 	}
 
@@ -465,7 +465,7 @@ class ArgResolver extends Resolver {
 			if (currentUsage.type === 'optional' && !repeat) return null;
 			throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_INT', currentUsage.possibles[possible].name);
 		}
-		if (this.constructor.minOrMax(arg, min, max, currentUsage, possible, repeat, msg)) return arg;
+		if (this.constructor.minOrMax(this.client, arg, min, max, currentUsage, possible, repeat, msg)) return arg;
 		return null;
 	}
 
@@ -514,7 +514,7 @@ class ArgResolver extends Resolver {
 			if (currentUsage.type === 'optional' && !repeat) return null;
 			throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_FLOAT', currentUsage.possibles[possible].name);
 		}
-		if (this.constructor.minOrMax(arg, min, max, currentUsage, possible, repeat, msg)) return arg;
+		if (this.constructor.minOrMax(this.client, arg, min, max, currentUsage, possible, repeat, msg)) return arg;
 		return null;
 	}
 
@@ -637,6 +637,7 @@ class ArgResolver extends Resolver {
 	/**
 	 * Checks min and max values
 	 * @since 0.0.1
+	 * @param {KlasaClient} client The client of this bot
 	 * @param {number} value The value to check against
 	 * @param {?number} min The minimum value
 	 * @param {?number} max The maximum value
@@ -648,20 +649,21 @@ class ArgResolver extends Resolver {
 	 * @returns {boolean}
 	 * @private
 	 */
-	static minOrMax(value, min, max, currentUsage, possible, repeat, msg, suffix = '') {
+	static minOrMax(client, value, min, max, currentUsage, possible, repeat, msg, suffix) {
+		suffix = suffix ? (msg ? msg.language : client.languages.default).get(suffix) : '';
 		if (min && max) {
 			if (value >= min && value <= max) return true;
 			if (currentUsage.type === 'optional' && !repeat) return false;
-			if (min === max) throw (msg ? msg.language : msg.client.languages.default).get('RESOLVER_MINMAX_EXACTLY', currentUsage.possibles[possible].name, min, suffix);
-			throw (msg ? msg.language : msg.client.languages.default).get('RESOLVER_MINMAX_BOTH', currentUsage.possibles[possible].name, min, max, suffix);
+			if (min === max) throw (msg ? msg.language : client.languages.default).get('RESOLVER_MINMAX_EXACTLY', currentUsage.possibles[possible].name, min, suffix);
+			throw (msg ? msg.language : client.languages.default).get('RESOLVER_MINMAX_BOTH', currentUsage.possibles[possible].name, min, max, suffix);
 		} else if (min) {
 			if (value >= min) return true;
 			if (currentUsage.type === 'optional' && !repeat) return false;
-			throw (msg ? msg.language : msg.client.languages.default).get('RESOLVER_MINMAX_MIN', currentUsage.possibles[possible].name, min, suffix);
+			throw (msg ? msg.language : client.languages.default).get('RESOLVER_MINMAX_MIN', currentUsage.possibles[possible].name, min, suffix);
 		} else if (max) {
 			if (value <= max) return true;
 			if (currentUsage.type === 'optional' && !repeat) return false;
-			throw (msg ? msg.language : msg.client.languages.default).get('RESOLVER_MINMAX_MAX', currentUsage.possibles[possible].name, max, suffix);
+			throw (msg ? msg.language : client.languages.default).get('RESOLVER_MINMAX_MAX', currentUsage.possibles[possible].name, max, suffix);
 		}
 		return true;
 	}
