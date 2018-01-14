@@ -224,14 +224,14 @@ class SettingResolver extends Resolver {
 	static maxOrMin(guild, value, min, max, name, suffix = '') {
 		if (min && max) {
 			if (value >= min && value <= max) return true;
-			if (min === max) throw (guild ? guild.language : this.client.languages.default).get('RESOLVER_MINMAX_EXACTLY', name, min, suffix);
-			throw (guild ? guild.language : this.client.languages.default).get('RESOLVER_MINMAX_BOTH', name, min, max, suffix);
+			if (min === max) throw (guild ? guild.language : guild.client.languages.default).get('RESOLVER_MINMAX_EXACTLY', name, min, suffix);
+			throw (guild ? guild.language : guild.client.languages.default).get('RESOLVER_MINMAX_BOTH', name, min, max, suffix);
 		} else if (min) {
 			if (value >= min) return true;
-			throw (guild ? guild.language : this.client.languages.default).get('RESOLVER_MINMAX_MIN', name, min, suffix);
+			throw (guild ? guild.language : guild.client.languages.default).get('RESOLVER_MINMAX_MIN', name, min, suffix);
 		} else if (max) {
 			if (value <= max) return true;
-			throw (guild ? guild.language : this.client.languages.default).get('RESOLVER_MINMAX_MAX', name, max, suffix);
+			throw (guild ? guild.language : guild.client.languages.default).get('RESOLVER_MINMAX_MAX', name, max, suffix);
 		}
 		return true;
 	}

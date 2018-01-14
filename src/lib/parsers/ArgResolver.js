@@ -652,16 +652,16 @@ class ArgResolver extends Resolver {
 		if (min && max) {
 			if (value >= min && value <= max) return true;
 			if (currentUsage.type === 'optional' && !repeat) return false;
-			if (min === max) throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_MINMAX_EXACTLY', currentUsage.possibles[possible].name, min, suffix);
-			throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_MINMAX_BOTH', currentUsage.possibles[possible].name, min, max, suffix);
+			if (min === max) throw (msg ? msg.language : msg.client.languages.default).get('RESOLVER_MINMAX_EXACTLY', currentUsage.possibles[possible].name, min, suffix);
+			throw (msg ? msg.language : msg.client.languages.default).get('RESOLVER_MINMAX_BOTH', currentUsage.possibles[possible].name, min, max, suffix);
 		} else if (min) {
 			if (value >= min) return true;
 			if (currentUsage.type === 'optional' && !repeat) return false;
-			throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_MINMAX_MIN', currentUsage.possibles[possible].name, min, suffix);
+			throw (msg ? msg.language : msg.client.languages.default).get('RESOLVER_MINMAX_MIN', currentUsage.possibles[possible].name, min, suffix);
 		} else if (max) {
 			if (value <= max) return true;
 			if (currentUsage.type === 'optional' && !repeat) return false;
-			throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_MINMAX_MAX', currentUsage.possibles[possible].name, max, suffix);
+			throw (msg ? msg.language : msg.client.languages.default).get('RESOLVER_MINMAX_MAX', currentUsage.possibles[possible].name, max, suffix);
 		}
 		return true;
 	}
