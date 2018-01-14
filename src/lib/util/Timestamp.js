@@ -1,30 +1,4 @@
-const SECOND = 1000;
-const MINUTE = SECOND * 60;
-const HOUR = MINUTE * 60;
-const DAY = HOUR * 24;
-
-/* eslint-disable id-length, complexity */
-const TOKENS = {
-	Y: 4,
-	Q: 1,
-	M: 4,
-	D: 4,
-	d: 4,
-	X: 1,
-	x: 1,
-	H: 2,
-	h: 2,
-	a: 1,
-	A: 1,
-	m: 2,
-	s: 2,
-	S: 3,
-	Z: 2
-};
-/* eslint-enable id-length */
-
-const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const { TIME: { SECOND, MINUTE, DAY, DAYS, MONTHS, TIMESTAMP: { TOKENS } } } = require('./constants');
 
 /**
  * Klasa's Timestamp class, parses the pattern once, displays the desired Date or UNIX timestamp with the selected pattern.
@@ -163,6 +137,8 @@ class Timestamp {
 		return output;
 	}
 
+	/* eslint-disable complexity */
+
 	/**
 	 * Parses the current variable.
 	 * @since 0.5.0
@@ -182,7 +158,7 @@ class Timestamp {
 			case 'M': return String(time.getMonth() + 1);
 			case 'MM': return String(time.getMonth() + 1).padStart(2, '0');
 			case 'MMM':
-			case 'MMMM': return months[time.getMonth()];
+			case 'MMMM': return MONTHS[time.getMonth()];
 			case 'D': return String(time.getDate());
 			case 'DD': return String(time.getDate()).padStart(2, '0');
 			case 'DDD':
@@ -199,13 +175,13 @@ class Timestamp {
 				return `${day}th`;
 			}
 			case 'dd': {
-				return days[time.getDay()].slice(0, 2);
+				return DAYS[time.getDay()].slice(0, 2);
 			}
 			case 'ddd': {
-				return days[time.getDay()].slice(0, 3);
+				return DAYS[time.getDay()].slice(0, 3);
 			}
 			case 'dddd': {
-				return days[time.getDay()];
+				return DAYS[time.getDay()];
 			}
 			case 'X': return String(time.valueOf() / SECOND);
 			case 'x': return String(time.valueOf());
@@ -232,6 +208,8 @@ class Timestamp {
 			default: return type;
 		}
 	}
+
+	/* eslint-enable complexity */
 
 	/**
 	 * Parses the pattern.
