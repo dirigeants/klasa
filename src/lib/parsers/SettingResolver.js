@@ -117,7 +117,7 @@ class SettingResolver extends Resolver {
 	 */
 	async string(data, guild, name, { min, max } = {}) {
 		const result = await super.string(data);
-		if (SettingResolver.maxOrMin(guild, result.length, min, max, name, (guild ? guild.language : this.client.languages.default).get('RESOLVER_STRING_SUFFIX'))) return result;
+		if (SettingResolver.maxOrMin(this.client, guild, result.length, min, max, name, 'RESOLVER_STRING_SUFFIX')) return result;
 		return null;
 	}
 
@@ -135,7 +135,7 @@ class SettingResolver extends Resolver {
 	async integer(data, guild, name, { min, max } = {}) {
 		const result = await super.integer(data);
 		if (!result) throw (guild ? guild.language : this.client.languages.default).get('RESOLVER_INVALID_INT', name);
-		if (SettingResolver.maxOrMin(guild, result, min, max, name)) return result;
+		if (SettingResolver.maxOrMin(this.client, guild, result, min, max, name)) return result;
 		return null;
 	}
 
@@ -153,7 +153,7 @@ class SettingResolver extends Resolver {
 	async float(data, guild, name, { min, max } = {}) {
 		const result = await super.float(data);
 		if (!result) throw (guild ? guild.language : this.client.languages.default).get('RESOLVER_INVALID_FLOAT', name);
-		if (SettingResolver.maxOrMin(guild, result, min, max, name)) return result;
+		if (SettingResolver.maxOrMin(this.client, guild, result, min, max, name)) return result;
 		return null;
 	}
 
@@ -212,6 +212,7 @@ class SettingResolver extends Resolver {
 	/**
 	 * Check if the input is valid with min and/or max values.
 	 * @since 0.0.1
+	 * @param {KlasaClient} client The client of this bot
 	 * @param {KlasaGuild} guild The guild to resolve for
 	 * @param {number} value The value to check
 	 * @param {?number} min Min value
@@ -221,17 +222,18 @@ class SettingResolver extends Resolver {
 	 * @returns {boolean}
 	 * @private
 	 */
-	static maxOrMin(guild, value, min, max, name, suffix = '') {
+	static maxOrMin(client, guild, value, min, max, name, suffix) {
+		suffix = suffix ? (guild ? guild.language : client.languages.default).get(suffix) : '';
 		if (min && max) {
 			if (value >= min && value <= max) return true;
-			if (min === max) throw (guild ? guild.language : this.client.languages.default).get('RESOLVER_MINMAX_EXACTLY', name, min, suffix);
-			throw (guild ? guild.language : this.client.languages.default).get('RESOLVER_MINMAX_BOTH', name, min, max, suffix);
+			if (min === max) throw (guild ? guild.language : client.languages.default).get('RESOLVER_MINMAX_EXACTLY', name, min, suffix);
+			throw (guild ? guild.language : client.languages.default).get('RESOLVER_MINMAX_BOTH', name, min, max, suffix);
 		} else if (min) {
 			if (value >= min) return true;
-			throw (guild ? guild.language : this.client.languages.default).get('RESOLVER_MINMAX_MIN', name, min, suffix);
+			throw (guild ? guild.language : client.languages.default).get('RESOLVER_MINMAX_MIN', name, min, suffix);
 		} else if (max) {
 			if (value <= max) return true;
-			throw (guild ? guild.language : this.client.languages.default).get('RESOLVER_MINMAX_MAX', name, max, suffix);
+			throw (guild ? guild.language : client.languages.default).get('RESOLVER_MINMAX_MAX', name, max, suffix);
 		}
 		return true;
 	}
