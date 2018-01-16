@@ -250,11 +250,11 @@ class TextPrompt {
 	 */
 	async multiPossibles(index) {
 		if (index >= this._currentUsage.possibles.length) {
-			if (this._required) {
-				return this.handleError(this.message.language.get('COMMANDMESSAGE_NOMATCH', this._currentUsage.possibles.map(poss => poss.name).join(', ')));
+			if (!this._required) {
+				this.args.splice(this.params.length, 0, undefined);
+				return this.pushParam(undefined);
 			}
-			this.args.splice(this.params.length, 0, undefined);
-			return this.pushParam(undefined);
+			return this.handleError(this.message.language.get('COMMANDMESSAGE_NOMATCH', this._currentUsage.possibles.map(poss => poss.name).join(', ')));
 		}
 
 		const possible = this._currentUsage.possibles[index];
@@ -265,7 +265,6 @@ class TextPrompt {
 			this.client.emit('warn', `Unknown Argument Type encountered: ${possible.type}`);
 			return this.multiPossibles(++index);
 		}
-
 
 		try {
 			const res = await this.client.argResolver[custom ? 'custom' : possible.type](this.args[this.params.length], possible, this.message, custom);
