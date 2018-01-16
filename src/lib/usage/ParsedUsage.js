@@ -56,6 +56,13 @@ class ParsedUsage {
 		 * @type {Object}
 		 */
 		this.customResolvers = {};
+
+		/**
+		 * Stores custom responses
+		 * @since 0.5.0
+		 * @type {Object}
+		 */
+		this.customResponses = {};
 	}
 
 	/**
@@ -68,6 +75,19 @@ class ParsedUsage {
 	 */
 	createCustomResolver(type, resolver) {
 		this.customResolvers[type] = resolver;
+		return this;
+	}
+
+	/**
+	 * Customizes the response of an argument if it fails resolution.
+	 * @param {string} name The type of the usage argument
+	 * @param {string|Function} response The custom response or i18n function
+	 * @returns {ParsedUsage}
+	 * @chainable
+	 * @since 0.5.0
+	 */
+	customizeResponse(name, response) {
+		this.customResponses[name] = response;
 		return this;
 	}
 

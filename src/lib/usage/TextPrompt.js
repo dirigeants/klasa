@@ -234,7 +234,9 @@ class TextPrompt {
 				this.args.splice(this.params.length, 0, undefined);
 				return this.pushParam(undefined);
 			}
-			return this.handleError(this.args[this.params.length] === undefined ?
+			const response = this.usage.customResponses[possible.name];
+			const error = typeof response === 'function' ? response(possible, this.message) : response;
+			return this.handleError(error || this.args[this.params.length] === undefined ?
 				this.message.language.get('COMMANDMESSAGE_MISSING_REQUIRED', possible.name) :
 				err
 			);
@@ -253,6 +255,12 @@ class TextPrompt {
 			if (!this._required) {
 				this.args.splice(this.params.length, 0, undefined);
 				return this.pushParam(undefined);
+			}
+			const possible = this._currentUsage.possibles.find(val => val.name in this.usage.customResponses);
+			if (possible) {
+				const response = this.usage.customResponses[possible.name];
+				const error = typeof response === 'function' ? response(possible, this.message) : response;
+				return this.handleError(error);
 			}
 			return this.handleError(this.message.language.get('COMMANDMESSAGE_NOMATCH', this._currentUsage.possibles.map(poss => poss.name).join(', ')));
 		}

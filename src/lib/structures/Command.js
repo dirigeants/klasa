@@ -267,6 +267,19 @@ class Command {
 	}
 
 	/**
+	 * Customizes the response of an argument if it fails resolution.
+	 * @param {string} name The type of the usage argument
+	 * @param {string|Function} response The custom response or i18n function
+	 * @returns {Command}
+	 * @chainable
+	 * @since 0.5.0
+	 */
+	customizeResponse(name, response) {
+		this.usage.customizeResponse(name, response);
+		return this;
+	}
+
+	/**
 	 * The run method to be overwritten in actual commands
 	 * @since 0.0.1
 	 * @param {KlasaMessage} msg The command message mapped on top of the message used to trigger this command
