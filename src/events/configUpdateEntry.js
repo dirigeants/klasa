@@ -10,7 +10,7 @@ module.exports = class extends Event {
 					const user = this.users.get('${configs.id}');
 					if (user) user.configs.sync();
 				}
-				`);
+			`);
 		} else if (configs.type === 'clientStorage') {
 			this.client.shard.broadcastEval(`
 				if (this.shard.id !== ${this.client.shard.id}) {
