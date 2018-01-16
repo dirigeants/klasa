@@ -234,7 +234,7 @@ class TextPrompt {
 				this.args.splice(this.params.length, 0, undefined);
 				return this.pushParam(undefined);
 			}
-			const response = this.usage.customResponses[possible.name];
+			const { response } = this._currentUsage;
 			const error = typeof response === 'function' ? response(possible, this.message) : response;
 			return this.handleError(error || this.args[this.params.length] === undefined ?
 				this.message.language.get('COMMANDMESSAGE_MISSING_REQUIRED', possible.name) :
@@ -256,9 +256,8 @@ class TextPrompt {
 				this.args.splice(this.params.length, 0, undefined);
 				return this.pushParam(undefined);
 			}
-			const possible = this._currentUsage.possibles.find(val => val.name in this.usage.customResponses);
-			if (possible) {
-				const response = this.usage.customResponses[possible.name];
+			const { response } = this._currentUsage;
+			if (response) {
 				const error = typeof response === 'function' ? response(possible, this.message) : response;
 				return this.handleError(error);
 			}

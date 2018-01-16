@@ -32,6 +32,30 @@ class Tag {
 		 * @type {Possible[]}
 		 */
 		this.possibles = Tag.parseMembers(members, count);
+
+		/**
+		 * The custom response defined for this possible
+		 * @since 0.5.0
+		 * @type {?(string|Function)}
+		 */
+		this.response = null;
+	}
+
+	/**
+	 * Registers a response
+	 * @since 0.5.0
+	 * @param {string} name The argument name the response is for
+	 * @param {string|Function} response The custom response
+	 * @returns {boolean}
+	 * @private
+	 */
+	register(name, response) {
+		if (this.response) return false;
+		if (this.possibles.some(val => val.name === name)) {
+			this.response = response;
+			return true;
+		}
+		return false;
 	}
 
 	/**

@@ -56,13 +56,6 @@ class ParsedUsage {
 		 * @type {Object}
 		 */
 		this.customResolvers = {};
-
-		/**
-		 * Stores custom responses
-		 * @since 0.5.0
-		 * @type {Object}
-		 */
-		this.customResponses = {};
 	}
 
 	/**
@@ -87,7 +80,7 @@ class ParsedUsage {
 	 * @since 0.5.0
 	 */
 	customizeResponse(name, response) {
-		this.customResponses[name] = response;
+		this.parsedUsage.some(tag => tag.register(name, response));
 		return this;
 	}
 
