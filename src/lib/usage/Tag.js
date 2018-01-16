@@ -14,10 +14,17 @@ class Tag {
 	constructor(members, count, required) {
 		/**
 		 * The type of this tag
-		 * @since 0.2.1
-		 * @type {string}
+		 * @since 0.5.0
+		 * @type {boolean}
 		 */
-		this.type = required ? 'required' : 'optional';
+		this.required = required;
+
+		/**
+		 * If this tag is repeating
+		 * @since 0.5.0
+		 * @type {boolean}
+		 */
+		this.repeat = false;
 
 		/**
 		 * The possibilities of this tag
