@@ -8,6 +8,25 @@ const Duration = require('../util/Duration');
 class ArgResolver extends Resolver {
 
 	/**
+	 * Resolves a one-off custom argument
+	 * @since 0.5.0
+	 * @param {string} arg This arg
+	 * @param {Object} currentUsage This current usage
+	 * @param {number} possible This possible usage id
+	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {KlasaMessage} msg The message that triggered the command
+	 * @param {Function} custom The custom resolver
+	 * @returns {Piece}
+	 */
+	async custom(arg, currentUsage, possible, repeat, msg, custom) {
+		if (!custom) throw (msg ? msg.language : this.language).get('RESOLVER_MISSING_CUSTOM', currentUsage.possibles[possible].name);
+		const resolved = await custom(arg, msg, msg.params);
+		if (resolved) return resolved;
+		if (currentUsage.type === 'optional' && !repeat) return null;
+		throw (msg ? msg.language : this.language).get('RESOLVER_INVALID_CUSTOM', currentUsage.possibles[possible].name);
+	}
+
+	/**
 	 * Resolves a piece
 	 * @since 0.3.0
 	 * @param {string} arg This arg

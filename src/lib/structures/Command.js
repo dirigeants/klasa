@@ -254,6 +254,19 @@ class Command {
 	}
 
 	/**
+	 * Registers a one-off custom resolver
+	 * @param {string} type The type of the usage argument
+	 * @param {Function} resolver The one-off custom resolver
+	 * @returns {Command}
+	 * @chainable
+	 * @since 0.5.0
+	 */
+	createCustomResolver(type, resolver) {
+		this.usage.createCustomResolver(type, resolver);
+		return this;
+	}
+
+	/**
 	 * The run method to be overwritten in actual commands
 	 * @since 0.0.1
 	 * @param {KlasaMessage} msg The command message mapped on top of the message used to trigger this command

@@ -210,15 +210,17 @@ class TextPrompt {
 
 		if (this._currentUsage.possibles.length !== 1) return this.multiPossibles(0);
 
-		if (this._currentUsage.possibles[0].name in this.flags) this.args.splice(this.params.length, 0, this.flags[this._currentUsage.possibles[0].name]);
+		const { name, type } = this._currentUsage.possibles[0];
+		const custom = this.usage.customResolvers[name];
 
-		if (!this.client.argResolver[this._currentUsage.possibles[0].type]) {
-			this.client.emit('warn', `Unknown Argument Type encountered: ${this._currentUsage.possibles[0].type}`);
+		if (name in this.flags) this.args.splice(this.params.length, 0, this.flags[name]);
+		if (!this.client.argResolver[type] && !custom) {
+			this.client.emit('warn', `Unknown Argument Type encountered: ${type}`);
 			return this.pushParam(undefined);
 		}
 
 		try {
-			const res = await this.client.argResolver[this._currentUsage.possibles[0].type](this.args[this.params.length], this._currentUsage, 0, this._repeat, this.message);
+			const res = await this.client.argResolver[custom ? 'custom' : type](this.args[this.params.length], this._currentUsage, 0, this._repeat, this.message, custom);
 			if (res !== null) return this.pushParam(res);
 			this.args.splice(this.params.length, 0, undefined);
 			return this.pushParam(undefined);
@@ -228,7 +230,7 @@ class TextPrompt {
 				return this.pushParam(undefined);
 			}
 			return this.handleError(this.args[this.params.length] === undefined ?
-				this.message.language.get('COMMANDMESSAGE_MISSING_REQUIRED', this._currentUsage.possibles[0].name) :
+				this.message.language.get('COMMANDMESSAGE_MISSING_REQUIRED', name) :
 				err
 			);
 		}
@@ -250,15 +252,18 @@ class TextPrompt {
 			return this.pushParam(undefined);
 		}
 
-		if (this._currentUsage.possibles[possible].name in this.flags) this.args.splice(this.params.length, 0, this.flags[this._currentUsage.possibles[possible].name]);
+		const { name, type } = this._currentUsage.possibles[possible];
+		const custom = this.usage.customResolvers[name];
 
-		if (!this.client.argResolver[this._currentUsage.possibles[possible].type]) {
-			this.client.emit('warn', `Unknown Argument Type encountered: ${this._currentUsage.possibles[possible].type}`);
+		if (name in this.flags) this.args.splice(this.params.length, 0, this.flags[name]);
+		if (!this.client.argResolver[type] && !custom) {
+			this.client.emit('warn', `Unknown Argument Type encountered: ${type}`);
 			return this.multiPossibles(++possible);
 		}
 
+
 		try {
-			const res = await this.client.argResolver[this._currentUsage.possibles[possible].type](this.args[this.params.length], this._currentUsage, possible, this._repeat, this.message);
+			const res = await this.client.argResolver[custom ? 'custom' : type](this.args[this.params.length], this._currentUsage, possible, this._repeat, this.message, custom);
 			if (res !== null) return this.pushParam(res);
 			return this.multiPossibles(++possible);
 		} catch (err) {

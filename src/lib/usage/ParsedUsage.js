@@ -49,6 +49,26 @@ class ParsedUsage {
 		 * @type {Tag[]}
 		 */
 		this.parsedUsage = this.constructor.parseUsage(this.usageString);
+
+		/**
+		 * Stores one-off custom resolvers for use with the custom type arg
+		 * @since 0.5.0
+		 * @type {Object}
+		 */
+		this.customResolvers = {};
+	}
+
+	/**
+	 * Registers a one-off custom resolver
+	 * @param {string} type The type of the usage argument
+	 * @param {Function} resolver The one-off custom resolver
+	 * @returns {ParsedUsage}
+	 * @chainable
+	 * @since 0.5.0
+	 */
+	createCustomResolver(type, resolver) {
+		this.customResolvers[type] = resolver;
+		return this;
 	}
 
 	/**
