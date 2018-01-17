@@ -12,13 +12,17 @@ module.exports = class extends Command {
 			usageDelim: ' '
 		});
 
-		this.createCustomResolver('key', (arg, possible, msg, [action]) => {
-			if (action === 'list' || arg) return arg;
-			throw msg.language.get('COMMAND_CONF_NOKEY');
-		}).createCustomResolver('value', (arg, possible, msg, [action]) => {
-			if (!['set', 'remove'].includes(action) || arg) return arg;
-			throw msg.language.get('COMMAND_CONF_NOVALUE');
-		});
+		this
+			.createCustomResolver('key', (arg, possible, msg, [action]) => {
+				if (action === 'list' || arg) return arg;
+				throw undefined;
+			})
+			.createCustomResolver('value', (arg, possible, msg, [action]) => {
+				if (!['set', 'remove'].includes(action) || arg) return arg;
+				throw undefined;
+			})
+			.customizeResponse('key', msg => msg.language.get('COMMAND_CONF_NOKEY'))
+			.customizeResponse('value', msg => msg.language.get('COMMAND_CONF_NOVALUE'));
 	}
 
 	async run(msg, [action, key, ...value]) {
