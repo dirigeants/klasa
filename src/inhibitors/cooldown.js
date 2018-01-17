@@ -12,7 +12,7 @@ module.exports = class extends Inhibitor {
 
 		const instance = cmd.cooldowns.get(msg.author.id);
 
-		if (!instance) return;
+		if (!instance || instance < cmd.bucket) return;
 
 		const remaining = ((cmd.cooldown * 1000) - (Date.now() - instance)) / 1000;
 
