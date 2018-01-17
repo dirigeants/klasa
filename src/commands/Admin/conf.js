@@ -8,14 +8,20 @@ module.exports = class extends Command {
 			permLevel: 6,
 			guarded: true,
 			description: (msg) => msg.language.get('COMMAND_CONF_SERVER_DESCRIPTION'),
-			usage: '<get|set|remove|reset|list> [key:string] [value:string] [...]',
+			usage: '<get|set|remove|reset|list> <key:key> <value:value> [...]',
 			usageDelim: ' '
+		});
+
+		this.createCustomArgument('key', (arg, possible, msg, [action]) => {
+			if (action !== 'list') return arg;
+			throw msg.language.get('COMMAND_CONF_NOKEY');
+		}).createCustomArgument('value', (arg, possible, msg, [action]) => {
+			if (!['set', 'remove'].includes(action)) return arg;
+			throw msg.language.get('COMMAND_CONF_NOVALUE');
 		});
 	}
 
 	async run(msg, [action, key, ...value]) {
-		if (action !== 'list' && !key) throw msg.language.get('COMMAND_CONF_NOKEY');
-		if (['set', 'remove'].includes(action) && value.length === 0) throw msg.language.get('COMMAND_CONF_NOVALUE');
 		if (action === 'set' && key === 'disabledCommands') {
 			const command = this.client.commands.get(value.join(' '));
 			if (command && command.guarded) throw msg.language.get('COMMAND_CONF_GUARDED', command.name);
