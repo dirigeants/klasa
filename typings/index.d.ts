@@ -1674,7 +1674,7 @@ declare module 'klasa' {
 		name?: string;
 		permLevel?: number;
 		quotedStringSupport?: boolean;
-		subcommands: boolean;
+		subcommands?: boolean;
 		requiredConfigs?: string[];
 		runIn?: string[];
 		usage?: string;
