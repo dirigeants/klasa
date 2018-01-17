@@ -15,6 +15,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 - [[#162](https://github.com/dirigeants/klasa/pull/162)] Added subcommand support. (bdistin)
 - [[#162](https://github.com/dirigeants/klasa/pull/162)] Added per-command custom resolvers and per-command and per-argument custom responses (with i18n support). (bdistin)
+- [[#159](https://github.com/dirigeants/klasa/pull/159)] Added `Configuration#_syncStatus`. (kyranet)
 - [[`692e485d2b`](https://github.com/dirigeants/klasa/commit/692e485d2b7af5bf2b1d29c9e2dc4871f2e04f06)] Implemented the wildcards `?`, `H`, and the scheduling definition `@annually`. (bdistin)
 - [[#156](https://github.com/dirigeants/klasa/pull/156)] Added `time`, `duration`, `date` and `task` types to `ArgResolver`. (bdistin)
 - [[#156](https://github.com/dirigeants/klasa/pull/156)] Added `Duration`, a class helper to resolve human duration input into milliseconds. (bdistin)
@@ -78,6 +79,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 - [[#162](https://github.com/dirigeants/klasa/pull/162)] Modified the built-in conf command to use `dependant arguments`-like arguments using custom arguments and messages. (bdistin)
 - [[#162](https://github.com/dirigeants/klasa/pull/162)] **[BREAKING]** Refactored ArgResolver. Now they take `arg`, `possible` and `msg` as parameters instead of `arg`, `currentUsage`, `possible`, `repeat` and `msg`. Repeating handling is now done in the backends. (bdistin)
+- [[#159](https://github.com/dirigeants/klasa/pull/159)] Made `'id'` a `PRIMARY KEY` in the SQL schema generator. (kyranet)
 - [[#158](https://github.com/dirigeants/klasa/pull/158)] Refactored typings and JSDoc types. (kyranet)
 - [[#156](https://github.com/dirigeants/klasa/pull/156)] Tweaked `Configuration#update` to accept the overload `(key: string, value: any, options:ConfigurationUpdateOptions)` as opposed of passing `undefined` in the `guild` field between `value` and `options`. (kyranet)
 - [[#155](https://github.com/dirigeants/klasa/pull/155)] Complexity reductions for `SchemaFolder#addKey` and `Colors`. (bdistin)
@@ -126,6 +128,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Removed
 
+- [[#159](https://github.com/dirigeants/klasa/pull/159)] Removed deprecated property `GatewayOptions.cache` to be locked to `'collection'`. (kyranet)
 - [[#158](https://github.com/dirigeants/klasa/pull/158)] `Configuration#updateMany` is now under `Configuration#update`, in favor of a much less confusing naming. (kyranet)
 - [[`5b0c468362`](https://github.com/dirigeants/klasa/commit/5b0c46836200a57577bbd4aaa5cd463089a3bff0)] Removed `KlasaClient.sharded` as `Client.shard` is now fixed. (bdistin)
 - [[#136](https://github.com/dirigeants/klasa/pull/136)] Removed `util.newError`. (bdistin)
@@ -146,6 +149,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
+- [[#159](https://github.com/dirigeants/klasa/pull/159)] Fixed Timestamp's `'MM'` token not padding with zeroes in the start. (kyranet)
 - [[#156](https://github.com/dirigeants/klasa/pull/156)] Fixed a bug in Configuration not cloning objects correctly. (kyranet)
 - [[`35c42296fe`](https://github.com/dirigeants/klasa/commit/35c42296fe2738361dc48e3eee7716cfa73041b9)] Fixed GatewayStorage getting the wrong value. (bdistin)
 - [[`ab1f7c9ecf`](https://github.com/dirigeants/klasa/commit/ab1f7c9ecfa64e0b25c910ebe03d4f79eb29c8c0)] Fixed a bug where GatewayDriver wasn't checking if the provider was a CacheProvider correctly. (bdistin)

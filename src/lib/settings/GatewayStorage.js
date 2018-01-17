@@ -86,7 +86,7 @@ class GatewayStorage {
 	 * @readonly
 	 */
 	get sqlSchema() {
-		const schema = [['id', 'VARCHAR(19) NOT NULL UNIQUE']];
+		const schema = [['id', 'VARCHAR(19) NOT NULL UNIQUE PRIMARY KEY']];
 		this.schema.getSQL(schema);
 		return schema;
 	}
