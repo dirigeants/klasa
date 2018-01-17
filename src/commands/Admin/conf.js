@@ -12,10 +12,10 @@ module.exports = class extends Command {
 			usageDelim: ' '
 		});
 
-		this.createCustomArgument('key', (arg, possible, msg, [action]) => {
+		this.createCustomResolver('key', (arg, possible, msg, [action]) => {
 			if (action !== 'list') return arg;
 			throw msg.language.get('COMMAND_CONF_NOKEY');
-		}).createCustomArgument('value', (arg, possible, msg, [action]) => {
+		}).createCustomResolver('value', (arg, possible, msg, [action]) => {
 			if (!['set', 'remove'].includes(action)) return arg;
 			throw msg.language.get('COMMAND_CONF_NOVALUE');
 		});
