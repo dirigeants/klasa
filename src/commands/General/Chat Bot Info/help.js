@@ -25,7 +25,7 @@ module.exports = class extends Command {
 		}
 		const help = await this.buildHelp(msg);
 		const categories = Object.keys(help);
-		const helpMessage = [];
+		let helpMessage = [];
 		for (let cat = 0; cat < categories.length; cat++) {
 			helpMessage.push(`**${categories[cat]} Commands**: \`\`\`asciidoc`, '');
 			const subCategories = Object.keys(help[categories[cat]]);
@@ -33,6 +33,10 @@ module.exports = class extends Command {
 			helpMessage.push('```\n\u200b');
 		}
 
+		helpMessage = helpMessage.join('\n');
+		let index = helpMessage.lastIndexOf('\n\u200b');
+		helpMessage = helpMessage.substring(0, index);
+		
 		return msg[method].send(helpMessage, { split: { char: '\u200b' } })
 			.then(() => { if (msg.channel.type !== 'dm' && this.client.user.bot) msg.sendMessage(msg.language.get('COMMAND_HELP_DM')); })
 			.catch(() => { if (msg.channel.type !== 'dm' && this.client.user.bot) msg.sendMessage(msg.language.get('COMMAND_HELP_NODM')); });
