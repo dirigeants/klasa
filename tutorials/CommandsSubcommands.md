@@ -1,5 +1,3 @@
-# Commands II: Subcommands
-
 > This feature is implemented in Klasa **0.5.0**, check the PR that implemented it [here](https://github.com/dirigeants/klasa/pull/162).
 
 It is called **subcommand** to the special behaviour when a command takes multiple **Possible**s of literals as first parameter, and the command has {@link CommandOptions.subcommands} set to true. An example is the [built-in conf](https://github.com/dirigeants/klasa/blob/master/src/commands/Admin/conf.js) command, which unlike any other command, it does not have a `Command#run` method.

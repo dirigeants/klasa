@@ -1,5 +1,3 @@
-# Commands I: Arguments
-
 This is an in-depth tutorial for **Klasa's Usage arguments**, explaining all kinds of arguments and what you can do with them, as well as how they're used in the framework's backends.
 
 ## Command Arguments

@@ -1,5 +1,3 @@
-# Commands III: Per-Command and per-parameter custom responses
-
 > This feature is implemented in Klasa **0.5.0**, check the PR that implemented it [here](https://github.com/dirigeants/klasa/pull/162).
 
 ## Custom Responses

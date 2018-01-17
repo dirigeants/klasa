@@ -1681,6 +1681,7 @@ declare module 'klasa' {
 		subcommands?: boolean;
 		requiredConfigs?: string[];
 		runIn?: string[];
+		bucket?: number;
 		usage?: string;
 		usageDelim?: string;
 	};
