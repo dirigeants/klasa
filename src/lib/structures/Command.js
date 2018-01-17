@@ -17,6 +17,7 @@ class Command {
 	 * @property {boolean} [enabled=true] Whether the command is enabled or not
 	 * @property {string[]} [runIn=['text','dm','group']] What channel types the command should run in
 	 * @property {number} [cooldown=0] The amount of time before the user can run the command again in seconds
+	 * @property {number} [bucket=1] The number of times this command can be run before ratelimited by the cooldown
 	 * @property {boolean} [nsfw=false] If the command should only run in nsfw channels
 	 * @property {boolean} [deletable=false] If the responses should be deleted if the triggering message is deleted
 	 * @property {boolean} [promptTime=30000] The time allowed for re-prompting of this command
@@ -30,8 +31,8 @@ class Command {
 	 * @property {(string|Function)} [description=''] The help description for the command
 	 * @property {string} [usage=''] The usage string for the command
 	 * @property {?string} [usageDelim=undefined] The string to delimit the command input for usage
-	 * @property {boolean} [subcommands=false] Whether the command should run subcommands or not
-	 * @property {boolean} [quotedStringSupport=this.client.options.commands.quotedStringSupport] Whether args for this command should not deliminated inside quotes
+	 * @property {boolean} [quotedStringSupport=false] Whether args for this command should not deliminated inside quotes
+	 * @property {boolean} [subcommands=false] Whether to enable sub commands or not
 	 * @property {(string|Function)} [extendedHelp=msg.language.get('COMMAND_HELP_NO_EXTENDED')] Extended help strings
 	 * @memberof Command
 	 */
@@ -72,6 +73,13 @@ class Command {
 		 * @type {string[]}
 		 */
 		this.runIn = options.runIn;
+
+		/**
+		 * The number of times this command can be run before ratelimited by the cooldown
+		 * @since 0.5.0
+		 * @type {number}
+		 */
+		this.bucket = options.bucket;
 
 		/**
 		 * The cooldown in seconds this command has

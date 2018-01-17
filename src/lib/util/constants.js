@@ -41,6 +41,7 @@ exports.DEFAULTS = {
 				aliases: [],
 				autoAliases: true,
 				botPerms: [],
+				bucket: 1,
 				cooldown: 0,
 				description: '',
 				enabled: true,
