@@ -238,7 +238,7 @@ class TextPrompt {
 			const { response } = this._currentUsage;
 			const error = typeof response === 'function' ? response(this.message, possible) : response;
 
-			if (this._required === 1) return this.handleError(response || err);
+			if (this._required === 1) return this.handleError(error || err);
 			return this.handleError(error || (this.args[this.params.length] === undefined ?
 				this.message.language.get('COMMANDMESSAGE_MISSING_REQUIRED', possible.name) :
 				err)
@@ -276,7 +276,7 @@ class TextPrompt {
 			const { response } = this._currentUsage;
 			const error = typeof response === 'function' ? response(this.message, possible) : response;
 
-			if (this._required === 1) return this.handleError(response || err);
+			if (this._required === 1) return this.handleError(error || err);
 			return this.handleError(error || this.message.language.get('COMMANDMESSAGE_NOMATCH', this._currentUsage.possibles.map(poss => poss.name).join(', ')));
 		}
 	}
