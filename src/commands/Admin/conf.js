@@ -13,10 +13,10 @@ module.exports = class extends Command {
 		});
 
 		this.createCustomResolver('key', (arg, possible, msg, [action]) => {
-			if (action !== 'list') return arg;
+			if (action === 'list' || arg) return arg;
 			throw msg.language.get('COMMAND_CONF_NOKEY');
 		}).createCustomResolver('value', (arg, possible, msg, [action]) => {
-			if (!['set', 'remove'].includes(action)) return arg;
+			if (!['set', 'remove'].includes(action) || arg) return arg;
 			throw msg.language.get('COMMAND_CONF_NOVALUE');
 		});
 	}
