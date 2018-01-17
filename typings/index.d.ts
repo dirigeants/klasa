@@ -954,6 +954,7 @@ declare module 'klasa' {
 		public promptLimit: number;
 		public promptTime: number;
 		public quotedStringSupport: boolean;
+		public subcommands: boolean;
 		public requiredConfigs: string[];
 		public runIn: string[];
 		public subCategory: string;
@@ -1673,6 +1674,7 @@ declare module 'klasa' {
 		name?: string;
 		permLevel?: number;
 		quotedStringSupport?: boolean;
+		subcommands: boolean;
 		requiredConfigs?: string[];
 		runIn?: string[];
 		usage?: string;
