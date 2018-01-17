@@ -34,7 +34,7 @@ module.exports = class extends Command {
 		}
 
 		helpMessage = helpMessage.join('\n');
-		let index = helpMessage.lastIndexOf('\n\u200b');
+		const index = helpMessage.lastIndexOf('\n\u200b');
 		helpMessage = helpMessage.substring(0, index);
 		
 		return msg[method].send(helpMessage, { split: { char: '\u200b' } })
