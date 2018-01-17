@@ -1,5 +1,7 @@
 const Tag = require('./Tag');
 const TextPrompt = require('./TextPrompt');
+const open = ['[', '(', '<'];
+const close = [']', ')', '>'];
 
 /**
  * Converts usage strings into objects to compare against later
@@ -49,6 +51,39 @@ class ParsedUsage {
 		 * @type {Tag[]}
 		 */
 		this.parsedUsage = this.constructor.parseUsage(this.usageString);
+
+		/**
+		 * Stores one-off custom resolvers for use with the custom type arg
+		 * @since 0.5.0
+		 * @type {Object}
+		 */
+		this.customResolvers = {};
+	}
+
+	/**
+	 * Registers a one-off custom resolver
+	 * @param {string} type The type of the usage argument
+	 * @param {Function} resolver The one-off custom resolver
+	 * @returns {ParsedUsage}
+	 * @chainable
+	 * @since 0.5.0
+	 */
+	createCustomResolver(type, resolver) {
+		this.customResolvers[type] = resolver;
+		return this;
+	}
+
+	/**
+	 * Customizes the response of an argument if it fails resolution.
+	 * @param {string} name The name of the usage argument
+	 * @param {(string|Function)} response The custom response or i18n function
+	 * @returns {ParsedUsage}
+	 * @chainable
+	 * @since 0.5.0
+	 */
+	customizeResponse(name, response) {
+		this.parsedUsage.some(tag => tag.register(name, response));
+		return this;
 	}
 
 	/**
@@ -117,8 +152,8 @@ class ParsedUsage {
 				continue;
 			}
 
-			if (['<', '['].includes(char)) usage = ParsedUsage.tagOpen(usage, char);
-			else if (['>', ']'].includes(char)) usage = ParsedUsage.tagClose(usage, char);
+			if (open.includes(char)) usage = ParsedUsage.tagOpen(usage, char);
+			else if (close.includes(char)) usage = ParsedUsage.tagClose(usage, char);
 			else if ([' ', '\n'].includes(char)) usage = ParsedUsage.tagSpace(usage, char);
 			else usage.current += char;
 		}
@@ -141,7 +176,7 @@ class ParsedUsage {
 		if (usage.opened) throw `${usage.at}: you may not open a tag inside another tag.`;
 		if (usage.current) throw `${usage.fromTo}: there can't be a literal outside a tag`;
 		usage.opened++;
-		usage.openReq = char === '<';
+		usage.openReq = open.indexOf(char);
 		return usage;
 	}
 
@@ -154,16 +189,15 @@ class ParsedUsage {
 	 * @private
 	 */
 	static tagClose(usage, char) {
-		const required = char === '>';
+		const required = close.indexOf(char);
 		if (!usage.opened) throw `${usage.at}: invalid close tag found`;
-		if (!usage.openReq && required) throw `${usage.at}: Invalid closure of '[${usage.current}' with '>'`;
-		if (usage.openReq && !required) throw `${usage.at}: Invalid closure of '<${usage.current}' with ']'`;
+		if (usage.openReq !== required) throw `${usage.at}: Invalid closure of '${open[usage.openReq]}${usage.current}' with '${close[required]}'`;
 		if (!usage.current) throw `${usage.at}: empty tag found`;
 		usage.opened--;
 		if (usage.current === '...') {
 			if (usage.openReq) throw `${usage.at}: repeat tag cannot be required`;
 			if (usage.tags.length < 1) throw `${usage.fromTo}: there can't be a repeat at the beginning`;
-			usage.tags.push({ type: 'repeat' });
+			usage.tags[usage.tags.length - 1].repeat = true;
 			usage.last = true;
 		} else {
 			usage.tags.push(new Tag(usage.current, usage.tags.length + 1, required));

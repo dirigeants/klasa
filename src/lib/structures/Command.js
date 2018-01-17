@@ -193,6 +193,13 @@ class Command {
 		this.quotedStringSupport = options.quotedStringSupport;
 
 		/**
+		 * Whether to enable sub commands or not
+		 * @since 0.5.0
+		 * @type {boolean}
+		 */
+		this.subcommands = options.subcommands;
+
+		/**
 		 * The full category for the command
 		 * @since 0.0.1
 		 * @type {string[]}
@@ -251,6 +258,32 @@ class Command {
 	 */
 	definePrompt(usageString, usageDelim) {
 		return new ParsedUsage(this.client, usageString, usageDelim);
+	}
+
+	/**
+	 * Registers a one-off custom resolver
+	 * @param {string} type The type of the usage argument
+	 * @param {Function} resolver The one-off custom resolver
+	 * @returns {Command}
+	 * @chainable
+	 * @since 0.5.0
+	 */
+	createCustomResolver(type, resolver) {
+		this.usage.createCustomResolver(type, resolver);
+		return this;
+	}
+
+	/**
+	 * Customizes the response of an argument if it fails resolution.
+	 * @param {string} name The name of the usage argument
+	 * @param {(string|Function)} response The custom response or i18n function
+	 * @returns {Command}
+	 * @chainable
+	 * @since 0.5.0
+	 */
+	customizeResponse(name, response) {
+		this.usage.customizeResponse(name, response);
+		return this;
 	}
 
 	/**

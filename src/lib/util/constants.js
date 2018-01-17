@@ -51,6 +51,7 @@ exports.DEFAULTS = {
 				promptTime: 30000,
 				requiredConfigs: [],
 				runIn: ['text', 'dm', 'group'],
+				subcommands: false,
 				usage: '',
 				quotedStringSupport: false,
 				deletable: false

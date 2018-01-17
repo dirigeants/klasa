@@ -27,7 +27,7 @@ class CommandUsage extends ParsedUsage {
 		 * @since 0.0.1
 		 * @type {string}
 		 */
-		this.commands = this.names.length === 1 ? this.names[0] : `(${this.names.join('|')})`;
+		this.commands = this.names.length === 1 ? this.names[0] : `《${this.names.join('|')}》`;
 
 		/**
 		 * The concatenated string of this.commands and this.deliminatedUsage

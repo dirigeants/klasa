@@ -13,6 +13,9 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#162](https://github.com/dirigeants/klasa/pull/162)] Added better dependent arguments support. (bdistin)
+- [[#162](https://github.com/dirigeants/klasa/pull/162)] Added subcommand support. (bdistin)
+- [[#162](https://github.com/dirigeants/klasa/pull/162)] Added per-command custom resolvers and per-command and per-argument custom responses (with i18n support). (bdistin)
 - [[#159](https://github.com/dirigeants/klasa/pull/159)] Added `Configuration#_syncStatus`. (kyranet)
 - [[#144](https://github.com/dirigeants/klasa/pull/144)] Added `SchemaPiece#setValidator` and `SchemaPiece#validator`, to "inhibit" certain values to be set. (kyranet)
 - [[`692e485d2b`](https://github.com/dirigeants/klasa/commit/692e485d2b7af5bf2b1d29c9e2dc4871f2e04f06)] Implemented the wildcards `?`, `H`, and the scheduling definition `@annually`. (bdistin)
@@ -76,6 +79,8 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#162](https://github.com/dirigeants/klasa/pull/162)] Modified the built-in conf command to use `dependant arguments`-like arguments using custom arguments and messages. (bdistin)
+- [[#162](https://github.com/dirigeants/klasa/pull/162)] **[BREAKING]** Refactored ArgResolver. Now they take `arg`, `possible` and `msg` as parameters instead of `arg`, `currentUsage`, `possible`, `repeat` and `msg`. Repeating handling is now done in the backends. (bdistin)
 - [[#159](https://github.com/dirigeants/klasa/pull/159)] Made `'id'` a `PRIMARY KEY` in the SQL schema generator. (kyranet)
 - [[#158](https://github.com/dirigeants/klasa/pull/158)] Refactored typings and JSDoc types. (kyranet)
 - [[#156](https://github.com/dirigeants/klasa/pull/156)] Tweaked `Configuration#update` to accept the overload `(key: string, value: any, options:ConfigurationUpdateOptions)` as opposed of passing `undefined` in the `guild` field between `value` and `options`. (kyranet)

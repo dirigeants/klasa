@@ -363,11 +363,10 @@ class KlasaClient extends Discord.Client {
 	 */
 	registerPiece(pieceName, store) {
 		// eslint-disable-next-line func-names
-		ArgResolver.prototype[pieceName] = async function (arg, currentUsage, possible, repeat, msg) {
+		ArgResolver.prototype[pieceName] = async function (arg, possible, msg) {
 			const piece = store.get(arg);
 			if (piece) return piece;
-			if (currentUsage.type === 'optional' && !repeat) return null;
-			throw (msg ? msg.language : this.language).get('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, pieceName);
+			throw (msg ? msg.language : this.language).get('RESOLVER_INVALID_PIECE', possible.name, pieceName);
 		};
 		return this;
 	}
@@ -413,7 +412,7 @@ class KlasaClient extends Discord.Client {
 			await this.gateways.guilds.schema.prefix.modify({ default: this.options.prefix });
 		}
 		if (this.gateways.guilds.schema.hasKey('disabledCommands')) {
-			const languageStore = this.client.languages;
+			const languageStore = this.languages;
 			this.gateways.guilds.schema.disabledCommands.setValidator(function (command, guild) { // eslint-disable-line
 				if (command && command.guarded) throw (guild ? guild.language : languageStore.default).language.get('COMMAND_CONF_GUARDED', command.name);
 			});

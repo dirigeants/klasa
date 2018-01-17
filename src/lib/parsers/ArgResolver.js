@@ -8,50 +8,61 @@ const Duration = require('../util/Duration');
 class ArgResolver extends Resolver {
 
 	/**
+	 * Resolves a one-off custom argument
+	 * @since 0.5.0
+	 * @param {string} arg This arg
+	 * @param {Possible} possible This current usage possible
+	 * @param {KlasaMessage} msg The message that triggered the command
+	 * @param {Function} custom The custom resolver
+	 * @returns {Promise<any>}
+	 */
+	async custom(arg, possible, msg, custom) {
+		try {
+			const resolved = await custom(arg, possible, msg, msg.params);
+			return resolved;
+		} catch (err) {
+			if (err) throw err;
+			throw (msg ? msg.language : this.language).get('RESOLVER_INVALID_CUSTOM', possible.name, possible.type);
+		}
+	}
+
+	/**
 	 * Resolves a piece
 	 * @since 0.3.0
 	 * @param {string} arg This arg
-	 * @param {Object} currentUsage This current usage
-	 * @param {number} possible This possible usage id
-	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {Piece}
+	 * @returns {Promise<Piece>}
 	 */
-	async piece(arg, currentUsage, possible, repeat, msg) {
+	async piece(arg, possible, msg) {
 		for (const store of this.client.pieceStores.values()) {
 			const piece = store.get(arg);
 			if (piece) return piece;
 		}
-		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.language).get('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, 'piece');
+		throw (msg ? msg.language : this.language).get('RESOLVER_INVALID_PIECE', possible.name, 'piece');
 	}
 
 	/**
 	 * Resolves a store
 	 * @since 0.3.0
 	 * @param {string} arg This arg
-	 * @param {Object} currentUsage This current usage
-	 * @param {number} possible This possible usage id
-	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {Store}
+	 * @returns {Promise<Store>}
 	 */
-	async store(arg, currentUsage, possible, repeat, msg) {
+	async store(arg, possible, msg) {
 		const store = this.client.pieceStores.get(arg);
 		if (store) return store;
-		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, 'store');
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_PIECE', possible.name, 'store');
 	}
 
 	/**
 	 * Resolves a command
 	 * @since 0.0.1
 	 * @param {string} arg This arg
-	 * @param {Object} currentUsage This current usage
-	 * @param {number} possible This possible usage id
-	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {Command}
+	 * @returns {Promise<Command>}
 	 */
 	async command(...args) {
 		return this.cmd(...args);
@@ -61,164 +72,135 @@ class ArgResolver extends Resolver {
 	 * Resolves a command
 	 * @since 0.0.1
 	 * @param {string} arg This arg
-	 * @param {Object} currentUsage This current usage
-	 * @param {number} possible This possible usage id
-	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?Command}
+	 * @returns {Promise<Command>}
 	 */
-	async cmd(arg, currentUsage, possible, repeat, msg) {
+	async cmd(arg, possible, msg) {
 		const command = this.client.commands.get(arg);
 		if (command) return command;
-		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, 'command');
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_PIECE', possible.name, 'command');
 	}
 
 	/**
 	 * Resolves an event
 	 * @since 0.0.1
 	 * @param {string} arg This arg
-	 * @param {Object} currentUsage This current usage
-	 * @param {number} possible This possible usage id
-	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?Event}
+	 * @returns {Promise<Event>}
 	 */
-	async event(arg, currentUsage, possible, repeat, msg) {
+	async event(arg, possible, msg) {
 		const event = this.client.events.get(arg);
 		if (event) return event;
-		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, 'event');
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_PIECE', possible.name, 'event');
 	}
 
 	/**
 	 * Resolves an extendable
 	 * @since 0.0.1
 	 * @param {string} arg This arg
-	 * @param {Object} currentUsage This current usage
-	 * @param {number} possible This possible usage id
-	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?Extendable}
+	 * @returns {Promise<Extendable>}
 	 */
-	async extendable(arg, currentUsage, possible, repeat, msg) {
+	async extendable(arg, possible, msg) {
 		const extendable = this.client.extendables.get(arg);
 		if (extendable) return extendable;
-		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, 'extendable');
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_PIECE', possible.name, 'extendable');
 	}
 
 	/**
 	 * Resolves a finalizer
 	 * @since 0.0.1
 	 * @param {string} arg This arg
-	 * @param {Object} currentUsage This current usage
-	 * @param {number} possible This possible usage id
-	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?Finalizer}
+	 * @returns {Promise<Finalizer>}
 	 */
-	async finalizer(arg, currentUsage, possible, repeat, msg) {
+	async finalizer(arg, possible, msg) {
 		const finalizer = this.client.finalizers.get(arg);
 		if (finalizer) return finalizer;
-		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, 'finalizer');
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_PIECE', possible.name, 'finalizer');
 	}
 
 	/**
 	 * Resolves a inhibitor
 	 * @since 0.0.1
 	 * @param {string} arg This arg
-	 * @param {Object} currentUsage This current usage
-	 * @param {number} possible This possible usage id
-	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?Inhibitor}
+	 * @returns {Promise<Inhibitor>}
 	 */
-	async inhibitor(arg, currentUsage, possible, repeat, msg) {
+	async inhibitor(arg, possible, msg) {
 		const inhibitor = this.client.inhibitors.get(arg);
 		if (inhibitor) return inhibitor;
-		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, 'inhibitor');
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_PIECE', possible.name, 'inhibitor');
 	}
 
 	/**
 	 * Resolves a monitor
 	 * @since 0.0.1
 	 * @param {string} arg This arg
-	 * @param {Object} currentUsage This current usage
-	 * @param {number} possible This possible usage id
-	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?Monitor}
+	 * @returns {Promise<Monitor>}
 	 */
-	async monitor(arg, currentUsage, possible, repeat, msg) {
+	async monitor(arg, possible, msg) {
 		const monitor = this.client.monitors.get(arg);
 		if (monitor) return monitor;
-		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, 'monitor');
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_PIECE', possible.name, 'monitor');
 	}
 
 	/**
 	 * Resolves a language
 	 * @since 0.2.1
 	 * @param {string} arg This arg
-	 * @param {Object} currentUsage This current usage
-	 * @param {number} possible This possible usage id
-	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?Language}
+	 * @returns {Promise<Language>}
 	 */
-	async language(arg, currentUsage, possible, repeat, msg) {
+	async language(arg, possible, msg) {
 		const language = this.client.languages.get(arg);
 		if (language) return language;
-		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, 'language');
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_PIECE', possible.name, 'language');
 	}
 
 	/**
 	 * Resolves a provider
 	 * @since 0.0.1
 	 * @param {string} arg This arg
-	 * @param {Object} currentUsage This current usage
-	 * @param {number} possible This possible usage id
-	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?Provider}
+	 * @returns {Promise<Provider>}
 	 */
-	async provider(arg, currentUsage, possible, repeat, msg) {
+	async provider(arg, possible, msg) {
 		const provider = this.client.providers.get(arg);
 		if (provider) return provider;
-		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, 'provider');
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_PIECE', possible.name, 'provider');
 	}
 
 	/**
 	 * Resolves a Task
 	 * @since 0.5.0
 	 * @param {string} arg This arg
-	 * @param {Object} currentUsage This current usage
-	 * @param {number} possible This possible usage id
-	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?Provider}
+	 * @returns {Promise<Task>}
 	 */
-	async task(arg, currentUsage, possible, repeat, msg) {
+	async task(arg, possible, msg) {
 		const task = this.client.tasks.get(arg);
 		if (task) return task;
-		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_PIECE', currentUsage.possibles[possible].name, 'provider');
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_PIECE', possible.name, 'task');
 	}
 
 	/**
 	 * Resolves a message
 	 * @since 0.0.1
 	 * @param {string} arg This arg
-	 * @param {Object} currentUsage This current usage
-	 * @param {number} possible This possible usage id
-	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?KlasaMessage}
+	 * @returns {Promise<KlasaMessage>}
 	 */
 	message(...args) {
 		return this.msg(...args);
@@ -228,28 +210,23 @@ class ArgResolver extends Resolver {
 	 * Resolves a message
 	 * @since 0.0.1
 	 * @param {string} arg This arg
-	 * @param {Object} currentUsage This current usage
-	 * @param {number} possible This possible usage id
-	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?KlasaMessage}
+	 * @returns {Promise<KlasaMessage>}
 	 */
-	async msg(arg, currentUsage, possible, repeat, msg) {
+	async msg(arg, possible, msg) {
 		const message = await super.msg(arg, msg.channel);
 		if (message) return message;
-		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_MSG', currentUsage.possibles[possible].name);
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_MSG', possible.name);
 	}
 
 	/**
 	 * Resolves a user
 	 * @since 0.0.1
 	 * @param {string} arg This arg
-	 * @param {Object} currentUsage This current usage
-	 * @param {number} possible This possible usage id
-	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?KlasaUser}
+	 * @returns {Promise<KlasaUser>}
 	 */
 	mention(...args) {
 		return this.user(...args);
@@ -259,129 +236,107 @@ class ArgResolver extends Resolver {
 	 * Resolves a user
 	 * @since 0.0.1
 	 * @param {string} arg This arg
-	 * @param {Object} currentUsage This current usage
-	 * @param {number} possible This possible usage id
-	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?KlasaUser}
+	 * @returns {Promise<KlasaUser>}
 	 */
-	async user(arg, currentUsage, possible, repeat, msg) {
+	async user(arg, possible, msg) {
 		const user = await super.user(arg);
 		if (user) return user;
-		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_USER', currentUsage.possibles[possible].name);
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_USER', possible.name);
 	}
 
 	/**
 	 * Resolves a member
 	 * @since 0.0.1
 	 * @param {string} arg This arg
-	 * @param {Object} currentUsage This current usage
-	 * @param {number} possible This possible usage id
-	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?external:GuildMember}
+	 * @returns {Promise<external:GuildMember>}
 	 */
-	async member(arg, currentUsage, possible, repeat, msg) {
+	async member(arg, possible, msg) {
 		const member = await super.member(arg, msg.guild);
 		if (member) return member;
-		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_MEMBER', currentUsage.possibles[possible].name);
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_MEMBER', possible.name);
 	}
 
 	/**
 	 * Resolves a channel
 	 * @since 0.0.1
 	 * @param {string} arg This arg
-	 * @param {Object} currentUsage This current usage
-	 * @param {number} possible This possible usage id
-	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?external:Channel}
+	 * @returns {Promise<external:Channel>}
 	 */
-	async channel(arg, currentUsage, possible, repeat, msg) {
+	async channel(arg, possible, msg) {
 		const channel = await super.channel(arg);
 		if (channel) return channel;
-		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_CHANNEL', currentUsage.possibles[possible].name);
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_CHANNEL', possible.name);
 	}
 
 	/**
 	 * Resolves an emoji
 	 * @since 0.5.0
 	 * @param {string} arg This arg
-	 * @param {Object} currentUsage This current usage
-	 * @param {number} possible This possible usage id
-	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?external:Emoji}
+	 * @returns {Promise<external:Emoji>}
 	 */
-	async emoji(arg, currentUsage, possible, repeat, msg) {
+	async emoji(arg, possible, msg) {
 		const emoji = await super.emoji(arg);
 		if (emoji) return emoji;
-		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_EMOJI', currentUsage.possibles[possible].name);
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_EMOJI', possible.name);
 	}
 
 	/**
 	 * Resolves a guild
 	 * @since 0.0.1
 	 * @param {string} arg This arg
-	 * @param {Object} currentUsage This current usage
-	 * @param {number} possible This possible usage id
-	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?KlasaGuild}
+	 * @returns {Promise<KlasaGuild>}
 	 */
-	async guild(arg, currentUsage, possible, repeat, msg) {
+	async guild(arg, possible, msg) {
 		const guild = await super.guild(arg);
 		if (guild) return guild;
-		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_GUILD', currentUsage.possibles[possible].name);
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_GUILD', possible.name);
 	}
 
 	/**
 	 * Resolves a role
 	 * @since 0.0.1
 	 * @param {string} arg This arg
-	 * @param {Object} currentUsage This current usage
-	 * @param {number} possible This possible usage id
-	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?external:Role}
+	 * @returns {Promise<external:Role>}
 	 */
-	async role(arg, currentUsage, possible, repeat, msg) {
+	async role(arg, possible, msg) {
 		const role = await super.role(arg, msg.guild);
 		if (role) return role;
-		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_ROLE', currentUsage.possibles[possible].name);
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_ROLE', possible.name);
 	}
 
 	/**
 	 * Resolves a literal
 	 * @since 0.0.1
 	 * @param {string} arg This arg
-	 * @param {Object} currentUsage This current usage
-	 * @param {number} possible This possible usage id
-	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?string}
+	 * @returns {Promise<string>}
 	 */
-	async literal(arg, currentUsage, possible, repeat, msg) {
-		if (arg.toLowerCase() === currentUsage.possibles[possible].name.toLowerCase()) return arg.toLowerCase();
-		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_LITERAL', currentUsage.possibles[possible].name);
+	async literal(arg, possible, msg) {
+		arg = arg.toLowerCase();
+		if (arg === possible.name.toLowerCase()) return arg;
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_LITERAL', possible.name);
 	}
 
 	/**
 	 * Resolves a boolean
 	 * @since 0.0.1
 	 * @param {string} arg This arg
-	 * @param {Object} currentUsage This current usage
-	 * @param {number} possible This possible usage id
-	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?boolean}
+	 * @returns {Promise<boolean>}
 	 */
 	boolean(...args) {
 		return this.bool(...args);
@@ -391,28 +346,23 @@ class ArgResolver extends Resolver {
 	 * Resolves a boolean
 	 * @since 0.0.1
 	 * @param {string} arg This arg
-	 * @param {Object} currentUsage This current usage
-	 * @param {number} possible This possible usage id
-	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?boolean}
+	 * @returns {Promise<boolean>}
 	 */
-	async bool(arg, currentUsage, possible, repeat, msg) {
+	async bool(arg, possible, msg) {
 		const boolean = await super.boolean(arg);
 		if (boolean !== null) return boolean;
-		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_BOOL', currentUsage.possibles[possible].name);
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_BOOL', possible.name);
 	}
 
 	/**
 	 * Resolves a string
 	 * @since 0.0.1
 	 * @param {string} arg This arg
-	 * @param {Object} currentUsage This current usage
-	 * @param {number} possible This possible usage id
-	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?string}
+	 * @returns {Promise<string>}
 	 */
 	string(...args) {
 		return this.str(...args);
@@ -422,15 +372,13 @@ class ArgResolver extends Resolver {
 	 * Resolves a string
 	 * @since 0.0.1
 	 * @param {string} arg This arg
-	 * @param {Object} currentUsage This current usage
-	 * @param {number} possible This possible usage id
-	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?string}
+	 * @returns {Promise<string>}
 	 */
-	async str(arg, currentUsage, possible, repeat, msg) {
-		const { min, max } = currentUsage.possibles[possible];
-		if (this.constructor.minOrMax(this.client, arg.length, min, max, currentUsage, possible, repeat, msg, 'RESOLVER_STRING_SUFFIX')) return arg;
+	async str(arg, possible, msg) {
+		const { min, max } = possible;
+		if (this.constructor.minOrMax(this.client, arg.length, min, max, possible, msg, 'RESOLVER_STRING_SUFFIX')) return arg;
 		return null;
 	}
 
@@ -438,11 +386,9 @@ class ArgResolver extends Resolver {
 	 * Resolves a integer
 	 * @since 0.0.1
 	 * @param {string} arg This arg
-	 * @param {Object} currentUsage This current usage
-	 * @param {number} possible This possible usage id
-	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?number}
+	 * @returns {Promise<number>}
 	 */
 	integer(...args) {
 		return this.int(...args);
@@ -452,20 +398,17 @@ class ArgResolver extends Resolver {
 	 * Resolves a integer
 	 * @since 0.0.1
 	 * @param {string} arg This arg
-	 * @param {Object} currentUsage This current usage
-	 * @param {number} possible This possible usage id
-	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?number}
+	 * @returns {Promise<number>}
 	 */
-	async int(arg, currentUsage, possible, repeat, msg) {
-		const { min, max } = currentUsage.possibles[possible];
+	async int(arg, possible, msg) {
+		const { min, max } = possible;
 		arg = await super.integer(arg);
 		if (arg === null) {
-			if (currentUsage.type === 'optional' && !repeat) return null;
-			throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_INT', currentUsage.possibles[possible].name);
+			throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_INT', possible.name);
 		}
-		if (this.constructor.minOrMax(this.client, arg, min, max, currentUsage, possible, repeat, msg)) return arg;
+		if (this.constructor.minOrMax(this.client, arg, min, max, possible, msg)) return arg;
 		return null;
 	}
 
@@ -473,11 +416,9 @@ class ArgResolver extends Resolver {
 	 * Resolves a number
 	 * @since 0.0.1
 	 * @param {string} arg This arg
-	 * @param {Object} currentUsage This current usage
-	 * @param {number} possible This possible usage id
-	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?number}
+	 * @returns {Promise<number>}
 	 */
 	num(...args) {
 		return this.float(...args);
@@ -487,11 +428,9 @@ class ArgResolver extends Resolver {
 	 * Resolves a number
 	 * @since 0.0.1
 	 * @param {string} arg This arg
-	 * @param {Object} currentUsage This current usage
-	 * @param {number} possible This possible usage id
-	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?number}
+	 * @returns {Promise<number>}
 	 */
 	number(...args) {
 		return this.float(...args);
@@ -501,20 +440,17 @@ class ArgResolver extends Resolver {
 	 * Resolves a number
 	 * @since 0.0.1
 	 * @param {string} arg This arg
-	 * @param {Object} currentUsage This current usage
-	 * @param {number} possible This possible usage id
-	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?number}
+	 * @returns {Promise<number>}
 	 */
-	async float(arg, currentUsage, possible, repeat, msg) {
-		const { min, max } = currentUsage.possibles[possible];
+	async float(arg, possible, msg) {
+		const { min, max } = possible;
 		arg = await super.float(arg);
 		if (arg === null) {
-			if (currentUsage.type === 'optional' && !repeat) return null;
-			throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_FLOAT', currentUsage.possibles[possible].name);
+			throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_FLOAT', possible.name);
 		}
-		if (this.constructor.minOrMax(this.client, arg, min, max, currentUsage, possible, repeat, msg)) return arg;
+		if (this.constructor.minOrMax(this.client, arg, min, max, possible, msg)) return arg;
 		return null;
 	}
 
@@ -522,28 +458,23 @@ class ArgResolver extends Resolver {
 	 * Resolves an argument based on a regular expression
 	 * @since 0.3.0
 	 * @param {string} arg This arg
-	 * @param {Object} currentUsage This current usage
-	 * @param {number} possible This possible usage id
-	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?string}
+	 * @returns {Promise<RegExpExecArray>}
 	 */
-	async reg(arg, currentUsage, possible, repeat, msg) {
-		const results = currentUsage.possibles[possible].regex.exec(arg);
+	async reg(arg, possible, msg) {
+		const results = possible.regex.exec(arg);
 		if (results !== null) return results;
-		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_REGEX_MATCH', currentUsage.possibles[possible].name, currentUsage.possibles[possible].regex.toString());
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_REGEX_MATCH', possible.name, possible.regex.toString());
 	}
 
 	/**
 	 * Resolves an argument based on a regular expression
 	 * @since 0.3.0
 	 * @param {string} arg This arg
-	 * @param {Object} currentUsage This current usage
-	 * @param {number} possible This possible usage id
-	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?string}
+	 * @returns {Promise<RegExpExecArray>}
 	 */
 	regex(...args) {
 		return this.reg(...args);
@@ -553,11 +484,9 @@ class ArgResolver extends Resolver {
 	 * Resolves an argument based on a regular expression
 	 * @since 0.3.0
 	 * @param {string} arg This arg
-	 * @param {Object} currentUsage This current usage
-	 * @param {number} possible This possible usage id
-	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?string}
+	 * @returns {Promise<RegExpExecArray>}
 	 */
 	regexp(...args) {
 		return this.reg(...args);
@@ -567,71 +496,59 @@ class ArgResolver extends Resolver {
 	 * Resolves a hyperlink
 	 * @since 0.0.1
 	 * @param {string} arg This arg
-	 * @param {Object} currentUsage This current usage
-	 * @param {number} possible This possible usage id
-	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?string}
+	 * @returns {Promise<string>}
 	 */
-	async url(arg, currentUsage, possible, repeat, msg) {
+	async url(arg, possible, msg) {
 		const hyperlink = await super.url(arg);
 		if (hyperlink !== null) return hyperlink;
-		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_URL', currentUsage.possibles[possible].name);
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_URL', possible.name);
 	}
 
 	/**
 	 * Resolves a Date or Timestamp
 	 * @since 0.5.0
 	 * @param {string} arg This arg
-	 * @param {Object} currentUsage This current usage
-	 * @param {number} possible This possible usage id
-	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?Date}
+	 * @returns {Promise<Date>}
 	 */
-	async date(arg, currentUsage, possible, repeat, msg) {
+	async date(arg, possible, msg) {
 		const date = new Date(arg);
 		if (!isNaN(date.getTime()) && date.getTime() > Date.now()) return date;
-		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_DATE', currentUsage.possibles[possible].name);
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_DATE', possible.name);
 	}
 
 	/**
 	 * Resolves a Date from a relative duration
 	 * @since 0.5.0
 	 * @param {string} arg This arg
-	 * @param {Object} currentUsage This current usage
-	 * @param {number} possible This possible usage id
-	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?Date}
+	 * @returns {Promise<Date>}
 	 */
-	async duration(arg, currentUsage, possible, repeat, msg) {
+	async duration(arg, possible, msg) {
 		const date = new Duration(arg).fromNow;
 		if (!isNaN(date.getTime()) && date.getTime() > Date.now()) return date;
-		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_DURATION', currentUsage.possibles[possible].name);
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_DURATION', possible.name);
 	}
 
 	/**
 	 * Resolves a Date from a relative duration or timestamp
 	 * @since 0.5.0
 	 * @param {string} arg This arg
-	 * @param {Object} currentUsage This current usage
-	 * @param {number} possible This possible usage id
-	 * @param {boolean} repeat If it is a looping/repeating arg
+	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {?Date}
+	 * @returns {Promise<Date>}
 	 */
-	async time(arg, currentUsage, possible, repeat, msg) {
+	async time(arg, possible, msg) {
 		const date = await Promise.all([
-			this.date(arg, currentUsage, possible, repeat, msg).catch(() => null),
-			this.duration(arg, currentUsage, possible, repeat, msg).catch(() => null)
+			this.date(arg, possible, msg).catch(() => null),
+			this.duration(arg, possible, msg).catch(() => null)
 		]).then(ret => ret.find(Boolean));
 		if (date && !isNaN(date.getTime()) && date.getTime() > Date.now()) return date;
-		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_TIME', currentUsage.possibles[possible].name);
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_TIME', possible.name);
 	}
 
 	/**
@@ -641,29 +558,24 @@ class ArgResolver extends Resolver {
 	 * @param {number} value The value to check against
 	 * @param {?number} min The minimum value
 	 * @param {?number} max The maximum value
-	 * @param {Object} currentUsage The current usage
 	 * @param {number} possible The id of the current possible usage
-	 * @param {boolean} repeat If it is a looping/repeating arg
 	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @param {string} suffix An error suffix
 	 * @returns {boolean}
 	 * @private
 	 */
-	static minOrMax(client, value, min, max, currentUsage, possible, repeat, msg, suffix) {
+	static minOrMax(client, value, min, max, possible, msg, suffix) {
 		suffix = suffix ? (msg ? msg.language : client.languages.default).get(suffix) : '';
 		if (min && max) {
 			if (value >= min && value <= max) return true;
-			if (currentUsage.type === 'optional' && !repeat) return false;
-			if (min === max) throw (msg ? msg.language : client.languages.default).get('RESOLVER_MINMAX_EXACTLY', currentUsage.possibles[possible].name, min, suffix);
-			throw (msg ? msg.language : client.languages.default).get('RESOLVER_MINMAX_BOTH', currentUsage.possibles[possible].name, min, max, suffix);
+			if (min === max) throw (msg ? msg.language : client.languages.default).get('RESOLVER_MINMAX_EXACTLY', possible.name, min, suffix);
+			throw (msg ? msg.language : client.languages.default).get('RESOLVER_MINMAX_BOTH', possible.name, min, max, suffix);
 		} else if (min) {
 			if (value >= min) return true;
-			if (currentUsage.type === 'optional' && !repeat) return false;
-			throw (msg ? msg.language : client.languages.default).get('RESOLVER_MINMAX_MIN', currentUsage.possibles[possible].name, min, suffix);
+			throw (msg ? msg.language : client.languages.default).get('RESOLVER_MINMAX_MIN', possible.name, min, suffix);
 		} else if (max) {
 			if (value <= max) return true;
-			if (currentUsage.type === 'optional' && !repeat) return false;
-			throw (msg ? msg.language : client.languages.default).get('RESOLVER_MINMAX_MAX', currentUsage.possibles[possible].name, max, suffix);
+			throw (msg ? msg.language : client.languages.default).get('RESOLVER_MINMAX_MAX', possible.name, max, suffix);
 		}
 		return true;
 	}

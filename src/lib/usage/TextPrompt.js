@@ -104,7 +104,15 @@ class TextPrompt {
 		this._repeat = false;
 
 		/**
-		 * Whether the current usage is a repeating arg
+		 * Whether the current usage is required
+		 * @since 0.0.1
+		 * @type {number}
+		 * @private
+		 */
+		this._required = 0;
+
+		/**
+		 * How many time this class has reprompted
 		 * @since 0.0.1
 		 * @type {boolean}
 		 * @private
@@ -198,38 +206,40 @@ class TextPrompt {
 		if (this.params.length >= this.usage.parsedUsage.length && this.params.length >= this.args.length) {
 			return this.finalize();
 		} else if (this.usage.parsedUsage[this.params.length]) {
-			if (this.usage.parsedUsage[this.params.length].type !== 'repeat') {
-				this._currentUsage = this.usage.parsedUsage[this.params.length];
-			} else if (this.usage.parsedUsage[this.params.length].type === 'repeat') {
-				this._currentUsage.type = 'optional';
-				this._repeat = true;
-			}
-		} else if (!this._repeat) {
+			this._currentUsage = this.usage.parsedUsage[this.params.length];
+			this._required = this._currentUsage.required;
+		} else if (this._currentUsage.repeat) {
+			this._required = 0;
+			this._repeat = true;
+		} else {
 			return this.finalize();
 		}
 
 		if (this._currentUsage.possibles.length !== 1) return this.multiPossibles(0);
 
-		if (this._currentUsage.possibles[0].name in this.flags) this.args.splice(this.params.length, 0, this.flags[this._currentUsage.possibles[0].name]);
+		const possible = this._currentUsage.possibles[0];
+		const custom = this.usage.customResolvers[possible.type];
 
-		if (!this.client.argResolver[this._currentUsage.possibles[0].type]) {
-			this.client.emit('warn', `Unknown Argument Type encountered: ${this._currentUsage.possibles[0].type}`);
+		if (possible.name in this.flags) this.args.splice(this.params.length, 0, this.flags[possible.name]);
+		if (!this.client.argResolver[possible.type] && !custom) {
+			this.client.emit('warn', `Unknown Argument Type encountered: ${possible.type}`);
 			return this.pushParam(undefined);
 		}
 
 		try {
-			const res = await this.client.argResolver[this._currentUsage.possibles[0].type](this.args[this.params.length], this._currentUsage, 0, this._repeat, this.message);
-			if (res !== null) return this.pushParam(res);
-			this.args.splice(this.params.length, 0, undefined);
-			return this.pushParam(undefined);
+			const res = await this.client.argResolver[custom ? 'custom' : possible.type](this.args[this.params.length], possible, this.message, custom);
+			return this.pushParam(res);
 		} catch (err) {
-			if (this._currentUsage.type === 'optional') {
+			if (!this._required) {
 				this.args.splice(this.params.length, 0, undefined);
 				return this.pushParam(undefined);
 			}
-			return this.handleError(this.args[this.params.length] === undefined ?
-				this.message.language.get('COMMANDMESSAGE_MISSING_REQUIRED', this._currentUsage.possibles[0].name) :
-				err
+			const { response } = this._currentUsage;
+			const error = typeof response === 'function' ? response(this.message, possible) : response;
+			if (this._required === 1) return this.handleError(response || err);
+			return this.handleError(error || (this.args[this.params.length] === undefined ?
+				this.message.language.get('COMMANDMESSAGE_MISSING_REQUIRED', possible.name) :
+				err)
 			);
 		}
 	}
@@ -237,32 +247,38 @@ class TextPrompt {
 	/**
 	 * Validates and resolves args into parameters, when multiple types of usage is defined
 	 * @since 0.0.1
-	 * @param {number} possible The id of the possible usage currently being checked
+	 * @param {number} index The id of the possible usage currently being checked
 	 * @returns {Promise<any[]>} The resolved parameters
 	 * @private
 	 */
-	async multiPossibles(possible) {
-		if (possible >= this._currentUsage.possibles.length) {
-			if (this._currentUsage.type !== 'optional' && !this._repeat) {
-				return this.handleError(this.message.language.get('COMMANDMESSAGE_NOMATCH', this._currentUsage.possibles.map(poss => poss.name).join(', ')));
+	async multiPossibles(index) {
+		if (index >= this._currentUsage.possibles.length) {
+			if (!this._required) {
+				this.args.splice(this.params.length, 0, undefined);
+				return this.pushParam(undefined);
 			}
-			this.args.splice(this.params.length, 0, undefined);
-			return this.pushParam(undefined);
+			const { response } = this._currentUsage;
+			if (response) {
+				const error = typeof response === 'function' ? response(this.message, possible) : response;
+				return this.handleError(error);
+			}
+			return this.handleError(this.message.language.get('COMMANDMESSAGE_NOMATCH', this._currentUsage.possibles.map(poss => poss.name).join(', ')));
 		}
 
-		if (this._currentUsage.possibles[possible].name in this.flags) this.args.splice(this.params.length, 0, this.flags[this._currentUsage.possibles[possible].name]);
+		const possible = this._currentUsage.possibles[index];
+		const custom = this.usage.customResolvers[possible.type];
 
-		if (!this.client.argResolver[this._currentUsage.possibles[possible].type]) {
-			this.client.emit('warn', `Unknown Argument Type encountered: ${this._currentUsage.possibles[possible].type}`);
-			return this.multiPossibles(++possible);
+		if (possible.name in this.flags) this.args.splice(this.params.length, 0, this.flags[possible.name]);
+		if (!this.client.argResolver[possible.type] && !custom) {
+			this.client.emit('warn', `Unknown Argument Type encountered: ${possible.type}`);
+			return this.multiPossibles(++index);
 		}
 
 		try {
-			const res = await this.client.argResolver[this._currentUsage.possibles[possible].type](this.args[this.params.length], this._currentUsage, possible, this._repeat, this.message);
-			if (res !== null) return this.pushParam(res);
-			return this.multiPossibles(++possible);
+			const res = await this.client.argResolver[custom ? 'custom' : possible.type](this.args[this.params.length], possible, this.message, custom);
+			return this.pushParam(res);
 		} catch (err) {
-			return this.multiPossibles(++possible);
+			return this.multiPossibles(++index);
 		}
 	}
 

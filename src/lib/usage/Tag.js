@@ -14,10 +14,17 @@ class Tag {
 	constructor(members, count, required) {
 		/**
 		 * The type of this tag
-		 * @since 0.2.1
-		 * @type {string}
+		 * @since 0.5.0
+		 * @type {number}
 		 */
-		this.type = required ? 'required' : 'optional';
+		this.required = required;
+
+		/**
+		 * If this tag is repeating
+		 * @since 0.5.0
+		 * @type {boolean}
+		 */
+		this.repeat = false;
 
 		/**
 		 * The possibilities of this tag
@@ -25,6 +32,30 @@ class Tag {
 		 * @type {Possible[]}
 		 */
 		this.possibles = Tag.parseMembers(members, count);
+
+		/**
+		 * The custom response defined for this possible
+		 * @since 0.5.0
+		 * @type {?(string|Function)}
+		 */
+		this.response = null;
+	}
+
+	/**
+	 * Registers a response
+	 * @since 0.5.0
+	 * @param {string} name The argument name the response is for
+	 * @param {(string|Function)} response The custom response
+	 * @returns {boolean}
+	 * @private
+	 */
+	register(name, response) {
+		if (this.response) return false;
+		if (this.possibles.some(val => val.name === name)) {
+			this.response = response;
+			return true;
+		}
+		return false;
 	}
 
 	/**
