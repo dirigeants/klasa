@@ -26,27 +26,27 @@ module.exports = class extends Command {
 			.customizeResponse('value', msg => msg.language.get('COMMAND_CONF_NOVALUE'));
 	}
 
-	get(msg, key) {
+	get(msg, [key]) {
 		const { path } = this.client.gateways.guilds.getPath(key, { avoidUnconfigurable: true, piece: true });
 		return msg.sendMessage(msg.language.get('COMMAND_CONF_GET', path.path, path.resolveString(msg)));
 	}
 
-	async set(msg, key, valueToSet) {
+	async set(msg, [key, ...valueToSet]) {
 		const { path } = await msg.guild.configs.update(key, valueToSet.join(' '), msg.guild, { avoidUnconfigurable: true, action: 'add' });
 		return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', path.path, path.resolveString(msg)));
 	}
 
-	async remove(msg, key, valueToRemove) {
+	async remove(msg, [key, ...valueToRemove]) {
 		const { path } = await msg.guild.configs.update(key, valueToRemove.join(' '), msg.guild, { avoidUnconfigurable: true, action: 'remove' });
 		return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', path.path, path.resolveString(msg)));
 	}
 
-	async reset(msg, key) {
+	async reset(msg, [key]) {
 		const { path } = await msg.guild.configs.reset(key, true);
 		return msg.sendMessage(msg.language.get('COMMAND_CONF_RESET', path.path, path.resolveString(msg)));
 	}
 
-	list(msg, key) {
+	list(msg, [key]) {
 		const { path } = this.client.gateways.guilds.getPath(key, { avoidUnconfigurable: true, piece: false });
 		return msg.sendMessage(msg.language.get('COMMAND_CONF_SERVER', key ? `: ${key.split('.').map(toTitleCase).join('/')}` : '', codeBlock('asciidoc', path.getList(msg))));
 	}
