@@ -17,9 +17,13 @@ class ArgResolver extends Resolver {
 	 * @returns {Promise<any>}
 	 */
 	async custom(arg, possible, msg, custom) {
-		const resolved = await custom(arg, possible, msg, msg.params);
-		if (resolved) return resolved;
-		throw (msg ? msg.language : this.language).get('RESOLVER_INVALID_CUSTOM', possible.name, possible.type);
+		try {
+			const resolved = await custom(arg, possible, msg, msg.params);
+			return resolved;
+		} catch (err) {
+			if (err) throw err;
+			throw (msg ? msg.language : this.language).get('RESOLVER_INVALID_CUSTOM', possible.name, possible.type);
+		}
 	}
 
 	/**
