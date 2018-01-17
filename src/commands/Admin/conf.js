@@ -7,6 +7,7 @@ module.exports = class extends Command {
 			runIn: ['text'],
 			permLevel: 6,
 			guarded: true,
+			subcommands: true,
 			description: (msg) => msg.language.get('COMMAND_CONF_SERVER_DESCRIPTION'),
 			usage: '<get|set|remove|reset|list> <key:key> <value:value> [...]',
 			usageDelim: ' '
@@ -23,14 +24,6 @@ module.exports = class extends Command {
 			})
 			.customizeResponse('key', msg => msg.language.get('COMMAND_CONF_NOKEY'))
 			.customizeResponse('value', msg => msg.language.get('COMMAND_CONF_NOVALUE'));
-	}
-
-	async run(msg, [action, key, ...value]) {
-		if (action === 'set' && key === 'disabledCommands') {
-			const command = this.client.commands.get(value.join(' '));
-			if (command && command.guarded) throw msg.language.get('COMMAND_CONF_GUARDED', command.name);
-		}
-		return this[action](msg, key, value);
 	}
 
 	get(msg, key) {
