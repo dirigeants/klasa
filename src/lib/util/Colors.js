@@ -19,6 +19,7 @@ class Colors {
 	 * @typedef {Object} ColorsFormatData
 	 * @property {string[]} opening
 	 * @property {string[]} closing
+	 * @memberof Colors
 	 * @private
 	 */
 

@@ -733,6 +733,7 @@ declare module 'klasa' {
 		public readonly type: string;
 		public readonly id: string;
 		private _existsInDB: boolean;
+		private _syncStatus?: Promise<object>;
 
 		public get(key: string): any;
 		public clone(): Configuration;
@@ -755,7 +756,7 @@ declare module 'klasa' {
 		private _setValue(parsedID: string, path: SchemaPiece, route: string[]): Promise<void>;
 		private _patch(data: any): void;
 
-		public toJSON(): any;
+		public toJSON(): object;
 		public toString(): string;
 
 		private static _merge(data: any, folder: SchemaFolder | SchemaPiece): any;
@@ -1340,11 +1341,11 @@ declare module 'klasa' {
 		public init(): Promise<void>;
 		public execute(): Promise<void>;
 		public next(): ScheduledTask;
-		public create(taskName: string, time: Date | number | string, options: ScheduledTaskOptions);
+		public create(taskName: string, time: Date | number | string, options: ScheduledTaskOptions): Promise<ScheduledTask>;
 		public delete(id: string): Promise<this>;
 		public clear(): Promise<void>;
 
-		private _add(taskName: string, time: Date | number | string, options: ScheduledTaskOptions);
+		private _add(taskName: string, time: Date | number | string, options: ScheduledTaskOptions): ScheduledTask;
 		private _insert(task: ScheduledTask): ScheduledTask;
 		private _clearInterval(): void;
 		private _checkInterval(): void;
@@ -1367,7 +1368,7 @@ declare module 'klasa' {
 		public toJSON(): ScheduledTaskJSON;
 
 		private static _resolveTime(time: Date | number | Cron | string): [Date, Cron];
-		private static _generateID(client: KlasaCLient, time: Date | number): string;
+		private static _generateID(client: KlasaClient, time: Date | number): string;
 		private static _validate(st: ScheduledTask): void;
 	}
 
