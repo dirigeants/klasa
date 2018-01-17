@@ -2,8 +2,6 @@
 
 > This feature is implemented in Klasa **0.5.0**, check the PR that implemented it [here](https://github.com/dirigeants/klasa/pull/162).
 
-Starting with Klasa 0.5.0, we implemented two more features for each command to customize its behaviour: per-command custom types and per-command and per-argument responses.
-
 ## Custom Responses
 
 This is one of the most requested features for Klasa: the ability to translate and/or customize the error messages when a parameter is missing. This is now achievable thanks to {@link Command.customizeResponse}, which takes the name of the key of the possible (remember the {@tutorial CommandsArguments} tutorial) and either a `string` or a `function` that takes one parameter: `msg` being a `KlasaMessage` instance, that you can use to get the Language instance from (check {@link KlasaMessage.language}).
@@ -79,9 +77,5 @@ this.customizeResponse('arg1', 'Response for argument 1')
 ## Further learning:
 
 {@tutorial CommandsArguments}
-{@tutorial CommandsCustomTypes}
+{@tutorial CommandsCustomResolvers}
 {@tutorial CommandsSubcommands}
-
-## Doubts
-
-If you have doubts about this part, feel free to open an issue [here](https://github.com/dirigeants/klasa/issues) or join our Discord guild, invite link is in the [README](https://github.com/dirigeants/klasa/blob/master/README.md).

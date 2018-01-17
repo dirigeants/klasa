@@ -67,8 +67,4 @@ Thanks to this feature, they're not longer required to use this hacky behaviour,
 
 {@tutorial CommandsArguments}
 {@tutorial CommandsCustomResponses}
-{@tutorial CommandsCustomTypes}
-
-## Doubts
-
-If you have doubts about this part, feel free to open an issue [here](https://github.com/dirigeants/klasa/issues) or join our Discord guild, invite link is in the [README](https://github.com/dirigeants/klasa/blob/master/README.md).
+{@tutorial CommandsCustomResolvers}

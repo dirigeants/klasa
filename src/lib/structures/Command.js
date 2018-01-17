@@ -30,6 +30,7 @@ class Command {
 	 * @property {(string|Function)} [description=''] The help description for the command
 	 * @property {string} [usage=''] The usage string for the command
 	 * @property {?string} [usageDelim=undefined] The string to delimit the command input for usage
+	 * @property {boolean} [subcommands=false] Whether the command should run subcommands or not
 	 * @property {boolean} [quotedStringSupport=this.client.options.commands.quotedStringSupport] Whether args for this command should not deliminated inside quotes
 	 * @property {(string|Function)} [extendedHelp=msg.language.get('COMMAND_HELP_NO_EXTENDED')] Extended help strings
 	 * @memberof Command
@@ -261,7 +262,7 @@ class Command {
 	}
 
 	/**
-	 * Registers a one-off custom resolver
+	 * Registers a one-off custom resolver. See tutorial {@link CommandsCustomResolvers}
 	 * @param {string} type The type of the usage argument
 	 * @param {Function} resolver The one-off custom resolver
 	 * @returns {Command}
@@ -274,12 +275,19 @@ class Command {
 	}
 
 	/**
-	 * Customizes the response of an argument if it fails resolution.
+	 * Customizes the response of an argument if it fails resolution. See tutorial {@link CommandsCustomResponses}
 	 * @param {string} name The name of the usage argument
 	 * @param {(string|Function)} response The custom response or i18n function
 	 * @returns {Command}
 	 * @chainable
 	 * @since 0.5.0
+	 * @example
+	 * // Changing the message for a parameter called 'targetUser'
+	 * this.customizeResponse('targetUser', 'You did not give me a user...');
+	 *
+	 * // Or also using functions to have multilanguage support:
+	 * this.customizeResponse('targetUser', (msg) =>
+	 *     msg.language.get('COMMAND_REQUIRED_USER_FRIENDLY'));
 	 */
 	customizeResponse(name, response) {
 		this.usage.customizeResponse(name, response);

@@ -55,7 +55,7 @@
 			"CommandsCustomResponses": {
 				"title": "(III) Per-Command and per-parameter custom responses"
 			},
-			"CommandsCustomTypes": {
+			"CommandsCustomResolvers": {
 				"title": "(IV) Per-Command custom argument types"
 			}
 		}

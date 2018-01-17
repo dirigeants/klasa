@@ -971,7 +971,7 @@ declare module 'klasa' {
 		public createCustomResolver(type: string, resolver: ArgResolverCustomMethod): this;
 		public customizeResponse(name: string, response: string | ((msg: KlasaMessage, possible: Possible) => string)): this;
 
-		public abstract run(msg: KlasaMessage, params: any[]): Promise<KlasaMessage | KlasaMessage[]>;
+		public run(msg: KlasaMessage, params: any[]): Promise<KlasaMessage | KlasaMessage[]>;
 		public init(): Promise<void>;
 
 		public enable(): Piece;

@@ -25,9 +25,7 @@ Each method in ArgResolver takes 5 parameters:
 | Name             | Type                 | Description                            |
 | ---------------- | -------------------- | -------------------------------------- |
 | **arg**          | string               | The parameter given to parse           |
-| **currentUsage** | Object               | The current usage                      |
-| **possible**     | number               | The possible's index                   |
-| **repeat**       | boolean              | If it is a looping/repeating arg       |
+| **possible**     | {@link Possible}     | The Possible instance that is running  |
 | **msg**          | {@link KlasaMessage} | The message that triggered the command |
 
 ```javascript
@@ -40,12 +38,11 @@ module.exports = class extends Extendable {
 		super(...args, ['ArgResolver'], { klasa: true });
 	}
 
-	async extend(arg, currentUsage, possible, repeat, msg) {
+	async extend(arg, possible, msg) {
 		const results = REGEX_EMOJI.exec(arg);
 		const emoji = results ? this.client.emojis.get(results[1]) : null;
 		if (emoji) return emoji;
-		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_EMOJI', currentUsage.possibles[possible].name);
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_EMOJI', possible.name);
 	}
 
 };
