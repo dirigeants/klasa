@@ -960,6 +960,7 @@ declare module 'klasa' {
 		public subcommands: boolean;
 		public requiredConfigs: string[];
 		public runIn: string[];
+		public bucket: number;
 		public subCategory: string;
 		public usage: CommandUsage;
 		public usageDelim: string;
