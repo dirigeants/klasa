@@ -85,7 +85,8 @@ module.exports = class extends Monitor {
 			return this.client.emit('commandError', msg, msg.command, msg.params, error);
 		}
 
-		const commandRun = msg.command.run(msg, msg.params);
+		const subcommand = msg.command.subcommands ? msg.params.shift() : undefined;
+		const commandRun = subcommand ? msg.command[subcommand](msg, msg.params) : msg.command.run(msg, msg.params);
 
 		if (this.client.options.typing) msg.channel.stopTyping();
 		timer.stop();

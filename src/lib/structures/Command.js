@@ -193,6 +193,13 @@ class Command {
 		this.quotedStringSupport = options.quotedStringSupport;
 
 		/**
+		 * Whether to enable sub commands or not
+		 * @since 0.5.0
+		 * @type {boolean}
+		 */
+		this.subcommands = options.subcommands;
+
+		/**
 		 * The full category for the command
 		 * @since 0.0.1
 		 * @type {string[]}
