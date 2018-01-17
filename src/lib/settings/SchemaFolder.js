@@ -406,7 +406,7 @@ class SchemaFolder extends Schema {
 		if (typeof options.max !== 'undefined' && isNaN(options.max)) throw 'The option max must be a number.';
 		if (typeof options.array !== 'undefined' && typeof options.array !== 'boolean') throw 'The option array must be a boolean.';
 		if (typeof options.configurable !== 'undefined' && typeof options.configurable !== 'boolean') throw 'The option configurable must be a boolean.';
-		if (options.array === true) {
+		if (options.array) {
 			if (typeof options.default === 'undefined') options.default = [];
 			else if (!Array.isArray(options.default)) throw 'The option default must be an array if the array option is set to true.';
 		} else {

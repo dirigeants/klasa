@@ -14,6 +14,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 ### Added
 
 - [[#159](https://github.com/dirigeants/klasa/pull/159)] Added `Configuration#_syncStatus`. (kyranet)
+- [[#144](https://github.com/dirigeants/klasa/pull/144)] Added `SchemaPiece#setValidator` and `SchemaPiece#validator`, to "inhibit" certain values to be set. (kyranet)
 - [[`692e485d2b`](https://github.com/dirigeants/klasa/commit/692e485d2b7af5bf2b1d29c9e2dc4871f2e04f06)] Implemented the wildcards `?`, `H`, and the scheduling definition `@annually`. (bdistin)
 - [[#156](https://github.com/dirigeants/klasa/pull/156)] Added `time`, `duration`, `date` and `task` types to `ArgResolver`. (bdistin)
 - [[#156](https://github.com/dirigeants/klasa/pull/156)] Added `Duration`, a class helper to resolve human duration input into milliseconds. (bdistin)

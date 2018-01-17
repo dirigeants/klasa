@@ -96,7 +96,27 @@ class SchemaPiece extends Schema {
 		 */
 		this.configurable = typeof options.configurable !== 'undefined' ? options.configurable : this.type !== 'any';
 
+		/**
+		 * The validator function for this instance.
+		 * @since 0.5.0
+		 * @type {?Function}
+		 */
+		this.validator = null;
+
 		this._init(options);
+	}
+
+	/**
+	 * Set a validator function for this instance.
+	 * @since 0.5.0
+	 * @param {Function} fn The validator function
+	 * @returns {SchemaPiece}
+	 */
+	setValidator(fn) {
+		if (typeof fn !== 'function') throw new TypeError(`[TYPE] ${this} - SchemaPiece#setValidator expects a function. Got: ${typeof fn}`);
+		this.validator = fn.bind(this);
+
+		return this;
 	}
 
 	/**
@@ -106,8 +126,10 @@ class SchemaPiece extends Schema {
 	 * @param {KlasaGuild} guild A Guild instance required for the resolver to work
 	 * @returns {Promise<*>}
 	 */
-	parse(value, guild = this.client.guilds.get(this.id)) {
-		return this.gateway.resolver[this.type](value, guild, this.key, { min: this.min, max: this.max });
+	async parse(value, guild = this.client.guilds.get(this.id)) {
+		const resolved = await this.gateway.resolver[this.type](value, guild, this.key, { min: this.min, max: this.max });
+		if (this.validator) this.validator(resolved, guild);
+		return resolved;
 	}
 
 	/**
