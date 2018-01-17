@@ -13,6 +13,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#162](https://github.com/dirigeants/klasa/pull/162)] Added per-command custom resolvers and per-command and per-argument custom responses (with i18n support). (bdistin)
 - [[`692e485d2b`](https://github.com/dirigeants/klasa/commit/692e485d2b7af5bf2b1d29c9e2dc4871f2e04f06)] Implemented the wildcards `?`, `H`, and the scheduling definition `@annually`. (bdistin)
 - [[#156](https://github.com/dirigeants/klasa/pull/156)] Added `time`, `duration`, `date` and `task` types to `ArgResolver`. (bdistin)
 - [[#156](https://github.com/dirigeants/klasa/pull/156)] Added `Duration`, a class helper to resolve human duration input into milliseconds. (bdistin)
@@ -74,6 +75,8 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#162](https://github.com/dirigeants/klasa/pull/162)] Modified the built-in conf command to use `dependant arguments`-like arguments using custom arguments and messages. (bdistin)
+- [[#162](https://github.com/dirigeants/klasa/pull/162)] **[BREAKING]** Refactored ArgResolver. Now they take `arg`, `possible` and `msg` as parameters instead of `arg`, `currentUsage`, `possible`, `repeat` and `msg`. Repeating handling is now done in the backends. (bdistin)
 - [[#158](https://github.com/dirigeants/klasa/pull/158)] Refactored typings and JSDoc types. (kyranet)
 - [[#156](https://github.com/dirigeants/klasa/pull/156)] Tweaked `Configuration#update` to accept the overload `(key: string, value: any, options:ConfigurationUpdateOptions)` as opposed of passing `undefined` in the `guild` field between `value` and `options`. (kyranet)
 - [[#155](https://github.com/dirigeants/klasa/pull/155)] Complexity reductions for `SchemaFolder#addKey` and `Colors`. (bdistin)
