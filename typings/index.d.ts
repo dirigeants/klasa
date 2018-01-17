@@ -969,7 +969,7 @@ declare module 'klasa' {
 
 		public definePrompt(usageString: string, usageDelim: string): ParsedUsage;
 		public createCustomResolver(type: string, resolver: ArgResolverCustomMethod): this;
-		public customizeResponse(name: string, response: string | ((msg: KlasaMessage) => string)): this;
+		public customizeResponse(name: string, response: string | ((msg: KlasaMessage, possible: Possible) => string)): this;
 
 		public abstract run(msg: KlasaMessage, params: any[]): Promise<KlasaMessage | KlasaMessage[]>;
 		public init(): Promise<void>;

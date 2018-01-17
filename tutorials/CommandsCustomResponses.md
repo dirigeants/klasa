@@ -6,7 +6,7 @@ Starting with Klasa 0.5.0, we implemented two more features for each command to 
 
 ## Custom Responses
 
-This is one of the most requested features for Klasa: the hability to translate and/or customize the error messages when a parameter is missing. This is now achievable thanks to {@link Command.customizeResponse}, which takes the name of the key of the possible (remember the {@tutorial CommandsArguments} tutorial) and either a `string` or a `function` that takes one parameter: `msg` being a `KlasaMessage` instance, that you can use to get the Language instance from (check {@link KlasaMessage.language}).
+This is one of the most requested features for Klasa: the ability to translate and/or customize the error messages when a parameter is missing. This is now achievable thanks to {@link Command.customizeResponse}, which takes the name of the key of the possible (remember the {@tutorial CommandsArguments} tutorial) and either a `string` or a `function` that takes one parameter: `msg` being a `KlasaMessage` instance, that you can use to get the Language instance from (check {@link KlasaMessage.language}).
 
 ## Configuring/Creating a custom response
 
@@ -53,7 +53,7 @@ module.exports = class extends Command {
 
 And when you miss that argument or you input something that doesn't match the RegExp pattern (triggering the required arguments' error message), it'll send the string you used instead of `'battletag is a required parameter.'`.
 
-For multilanguage purposes, you can also pass a function with the parameter msg (as {@link KlasaMessage}), and if you have a `COMMAND_INVALID_BATTLETAG` key in your language files, you can do:
+For multilanguage purposes, you can also pass a function with the parameters msg ({@link KlasaMessage}) and possible ({@link Possible}), and if you have a `COMMAND_INVALID_BATTLETAG` key in your language files, you can do:
 
 ```javascript
 this.customizeResponse('battletag', msg =>
@@ -66,7 +66,7 @@ In a side note, `Command#customizeResponse` returns the command instance, meanin
 this.customizeResponse('arg1', 'Response for argument 1')
     .customizeResponse('arg2', 'Response for argument 2')
     .customizeResponse('arg3', 'Response for argument 3')
-	.customizeResponse('arg4', 'Response for argument 4');
+    .customizeResponse('arg4', 'Response for argument 4');
 ```
 
 > **Note**: If an argument already has an argument, you cannot re-set it.
