@@ -9,7 +9,7 @@ module.exports = class extends Command {
 			guarded: true,
 			subcommands: true,
 			description: (msg) => msg.language.get('COMMAND_CONF_SERVER_DESCRIPTION'),
-			usage: '<get|set|remove|reset|list> {key:key} {value:value} [...]',
+			usage: '<get|set|remove|reset|list> (key:key) (value:value) [...]',
 			usageDelim: ' '
 		});
 

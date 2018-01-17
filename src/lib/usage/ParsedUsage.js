@@ -1,7 +1,7 @@
 const Tag = require('./Tag');
 const TextPrompt = require('./TextPrompt');
-const open = ['[', '{', '<'];
-const close = [']', '}', '>'];
+const open = ['[', '(', '<'];
+const close = [']', ')', '>'];
 
 /**
  * Converts usage strings into objects to compare against later
