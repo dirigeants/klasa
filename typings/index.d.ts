@@ -542,7 +542,7 @@ declare module 'klasa' {
 
 	export class Tag {
 		public constructor(members: string, count: number, required: boolean);
-		public required: boolean;
+		public required: number;
 		public possibles: Possible[];
 		public response: string | ((msg: KlasaMessage) => string);
 
@@ -564,7 +564,7 @@ declare module 'klasa' {
 		public promptLimit: number;
 		public quotedStringSupport: boolean;
 		private _repeat: boolean;
-		private _required: boolean;
+		private _required: number;
 		private _prompted: number;
 		private _currentUsage: Tag;
 
