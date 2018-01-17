@@ -155,8 +155,8 @@ class Timestamp {
 			case 'YYY':
 			case 'YYYY': return String(time.getFullYear());
 			case 'Q': return String((time.getMonth() + 1) / 3);
-			case 'M':
-			case 'MM': return String(time.getMonth() + 1);
+			case 'M': return String(time.getMonth() + 1);
+			case 'MM': return String(time.getMonth() + 1).padStart(2, '0');
 			case 'MMM':
 			case 'MMMM': return MONTHS[time.getMonth()];
 			case 'D': return String(time.getDate());

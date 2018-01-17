@@ -91,7 +91,7 @@ class Gateway extends GatewayStorage {
 	 * @readonly
 	 */
 	get cache() {
-		return this.client.providers.get(this.options.cache);
+		return this.client.providers.get('collection');
 	}
 
 	/**
