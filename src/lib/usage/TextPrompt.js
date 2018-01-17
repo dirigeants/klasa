@@ -234,8 +234,10 @@ class TextPrompt {
 				this.args.splice(this.params.length, 0, undefined);
 				return this.pushParam(undefined);
 			}
+
 			const { response } = this._currentUsage;
 			const error = typeof response === 'function' ? response(this.message, possible) : response;
+
 			if (this._required === 1) return this.handleError(response || err);
 			return this.handleError(error || (this.args[this.params.length] === undefined ?
 				this.message.language.get('COMMANDMESSAGE_MISSING_REQUIRED', possible.name) :
@@ -252,19 +254,6 @@ class TextPrompt {
 	 * @private
 	 */
 	async multiPossibles(index) {
-		if (index >= this._currentUsage.possibles.length) {
-			if (!this._required) {
-				this.args.splice(this.params.length, 0, undefined);
-				return this.pushParam(undefined);
-			}
-			const { response } = this._currentUsage;
-			if (response) {
-				const error = typeof response === 'function' ? response(this.message, possible) : response;
-				return this.handleError(error);
-			}
-			return this.handleError(this.message.language.get('COMMANDMESSAGE_NOMATCH', this._currentUsage.possibles.map(poss => poss.name).join(', ')));
-		}
-
 		const possible = this._currentUsage.possibles[index];
 		const custom = this.usage.customResolvers[possible.type];
 
@@ -278,8 +267,17 @@ class TextPrompt {
 			const res = await this.client.argResolver[custom ? 'custom' : possible.type](this.args[this.params.length], possible, this.message, custom);
 			return this.pushParam(res);
 		} catch (err) {
-			if (this._required === 1 && index === this._currentUsage.possibles.length - 1) return this.handleError(err);
-			return this.multiPossibles(++index);
+			if (index < this._currentUsage.possibles.length - 1) return this.multiPossibles(++index);
+			if (!this._required) {
+				this.args.splice(this.params.length, 0, undefined);
+				return this.pushParam(undefined);
+			}
+
+			const { response } = this._currentUsage;
+			const error = typeof response === 'function' ? response(this.message, possible) : response;
+
+			if (this._required === 1) return this.handleError(response || err);
+			return this.handleError(error || this.message.language.get('COMMANDMESSAGE_NOMATCH', this._currentUsage.possibles.map(poss => poss.name).join(', ')));
 		}
 	}
 
