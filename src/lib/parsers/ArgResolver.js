@@ -325,7 +325,8 @@ class ArgResolver extends Resolver {
 	 * @returns {Promise<string>}
 	 */
 	async literal(arg, possible, msg) {
-		if (arg.toLowerCase() === possible.name.toLowerCase()) return arg.toLowerCase();
+		arg = arg.toLowerCase();
+		if (arg === possible.name.toLowerCase()) return arg;
 		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_LITERAL', possible.name);
 	}
 
