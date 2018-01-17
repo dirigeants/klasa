@@ -7,21 +7,19 @@ module.exports = class extends Command {
 			guarded: true,
 			description: (msg) => msg.language.get('COMMAND_CONF_USER_DESCRIPTION'),
 			subcommands: true,
-			usage: '<get|set|remove|reset|list> <key:key> <value:value> [...]',
+			usage: '<get|set|remove|reset|list> {key:key} {value:value} [...]',
 			usageDelim: ' '
 		});
 
 		this
 			.createCustomResolver('key', (arg, possible, msg, [action]) => {
 				if (action === 'list' || arg) return arg;
-				throw undefined;
+				throw msg.language.get('COMMAND_CONF_NOKEY');
 			})
 			.createCustomResolver('value', (arg, possible, msg, [action]) => {
 				if (!['set', 'remove'].includes(action) || arg) return arg;
-				throw undefined;
-			})
-			.customizeResponse('key', msg => msg.language.get('COMMAND_CONF_NOKEY'))
-			.customizeResponse('value', msg => msg.language.get('COMMAND_CONF_NOVALUE'));
+				throw msg.language.get('COMMAND_CONF_NOVALUE');
+			});
 	}
 
 	get(msg, [key]) {

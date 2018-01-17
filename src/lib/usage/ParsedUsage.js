@@ -1,5 +1,7 @@
 const Tag = require('./Tag');
 const TextPrompt = require('./TextPrompt');
+const open = ['[', '{', '<'];
+const close = [']', '}', '>'];
 
 /**
  * Converts usage strings into objects to compare against later
@@ -150,8 +152,8 @@ class ParsedUsage {
 				continue;
 			}
 
-			if (['<', '['].includes(char)) usage = ParsedUsage.tagOpen(usage, char);
-			else if (['>', ']'].includes(char)) usage = ParsedUsage.tagClose(usage, char);
+			if (['<', '{', '['].includes(char)) usage = ParsedUsage.tagOpen(usage, char);
+			else if (['>', '}', ']'].includes(char)) usage = ParsedUsage.tagClose(usage, char);
 			else if ([' ', '\n'].includes(char)) usage = ParsedUsage.tagSpace(usage, char);
 			else usage.current += char;
 		}
@@ -174,7 +176,7 @@ class ParsedUsage {
 		if (usage.opened) throw `${usage.at}: you may not open a tag inside another tag.`;
 		if (usage.current) throw `${usage.fromTo}: there can't be a literal outside a tag`;
 		usage.opened++;
-		usage.openReq = char === '<';
+		usage.openReq = open.indexOf(char);
 		return usage;
 	}
 
@@ -187,10 +189,9 @@ class ParsedUsage {
 	 * @private
 	 */
 	static tagClose(usage, char) {
-		const required = char === '>';
+		const required = close.indexOf(char);
 		if (!usage.opened) throw `${usage.at}: invalid close tag found`;
-		if (!usage.openReq && required) throw `${usage.at}: Invalid closure of '[${usage.current}' with '>'`;
-		if (usage.openReq && !required) throw `${usage.at}: Invalid closure of '<${usage.current}' with ']'`;
+		if (usage.openReq !== required) throw `${usage.at}: Invalid closure of '${open[usage.openReq]}${usage.current}' with '${close[required]}'`;
 		if (!usage.current) throw `${usage.at}: empty tag found`;
 		usage.opened--;
 		if (usage.current === '...') {

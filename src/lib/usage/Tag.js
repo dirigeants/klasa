@@ -15,7 +15,7 @@ class Tag {
 		/**
 		 * The type of this tag
 		 * @since 0.5.0
-		 * @type {boolean}
+		 * @type {number}
 		 */
 		this.required = required;
 

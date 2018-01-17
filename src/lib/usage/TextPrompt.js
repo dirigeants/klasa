@@ -106,10 +106,10 @@ class TextPrompt {
 		/**
 		 * Whether the current usage is required
 		 * @since 0.0.1
-		 * @type {boolean}
+		 * @type {number}
 		 * @private
 		 */
-		this._required = false;
+		this._required = 0;
 
 		/**
 		 * How many time this class has reprompted
@@ -209,7 +209,7 @@ class TextPrompt {
 			this._currentUsage = this.usage.parsedUsage[this.params.length];
 			this._required = this._currentUsage.required;
 		} else if (this._currentUsage.repeat) {
-			this._required = false;
+			this._required = 0;
 			this._repeat = true;
 		} else {
 			return this.finalize();
@@ -236,6 +236,7 @@ class TextPrompt {
 			}
 			const { response } = this._currentUsage;
 			const error = typeof response === 'function' ? response(this.message, possible) : response;
+			if (this._required === 1) return this.handleError(response || err);
 			return this.handleError(error || (this.args[this.params.length] === undefined ?
 				this.message.language.get('COMMANDMESSAGE_MISSING_REQUIRED', possible.name) :
 				err)
