@@ -15,7 +15,7 @@
         "outputSourcePath"      : true,
         "dateFormat"            : "dddd, MMMM Do YYYY, h:mm:ss a",
         "syntaxTheme"           : "dark",
-        "sort"                  : true,
+        "sort"                  : false,
         "search"                : true 
     },
     "source": {

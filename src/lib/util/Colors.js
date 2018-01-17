@@ -12,6 +12,7 @@ class Colors {
 
 	/**
 	 * @typedef {(string|number|string[]|number[])} ColorsFormatType
+	 * @memberof Colors
 	 */
 
 	/**
