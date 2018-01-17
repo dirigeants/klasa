@@ -43,6 +43,23 @@
 	"UnderstandingSettingGateway": {
 		"title": "Understanding Setting Gateway"
 	},
+	"UnderstandingCommands": {
+		"title": "Understanding Commands and their Structures",
+		"children": {
+			"CommandsArguments": {
+				"title": "(I) Arguments"
+			},
+			"CommandsSubcommands": {
+				"title": "(II) Subcommands"
+			},
+			"CommandsCustomResponses": {
+				"title": "(III) Per-Command and per-parameter custom responses"
+			},
+			"CommandsCustomTypes": {
+				"title": "(IV) Per-Command custom argument types"
+			}
+		}
+	},
 	"IncludedPieces": {
 		"title": "Included Pieces",
 		"children": {
