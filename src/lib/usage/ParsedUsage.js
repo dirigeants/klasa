@@ -196,7 +196,7 @@ class ParsedUsage {
 		if (usage.current === '...') {
 			if (usage.openReq) throw `${usage.at}: repeat tag cannot be required`;
 			if (usage.tags.length < 1) throw `${usage.fromTo}: there can't be a repeat at the beginning`;
-			usage.tags.push({ type: 'repeat' });
+			usage.tags[usage.tags.length - 1].repeat = true;
 			usage.last = true;
 		} else {
 			usage.tags.push(new Tag(usage.current, usage.tags.length + 1, required));
