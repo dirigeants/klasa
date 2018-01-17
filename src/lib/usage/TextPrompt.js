@@ -278,6 +278,7 @@ class TextPrompt {
 			const res = await this.client.argResolver[custom ? 'custom' : possible.type](this.args[this.params.length], possible, this.message, custom);
 			return this.pushParam(res);
 		} catch (err) {
+			if (this._required === 1) return this.handleError(err);
 			return this.multiPossibles(++index);
 		}
 	}
