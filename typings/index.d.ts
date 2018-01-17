@@ -418,9 +418,9 @@ declare module 'klasa' {
 		public num(arg: string, possible: Possible, msg: KlasaMessage): Promise<number>;
 		public number(arg: string, possible: Possible, msg: KlasaMessage): Promise<number>;
 		public float(arg: string, possible: Possible, msg: KlasaMessage): Promise<number>;
-		public reg(arg: string, possible: Possible, msg: KlasaMessage): Promise<string>;
-		public regex(arg: string, possible: Possible, msg: KlasaMessage): Promise<string>;
-		public regexp(arg: string, possible: Possible, msg: KlasaMessage): Promise<string>;
+		public reg(arg: string, possible: Possible, msg: KlasaMessage): Promise<RegExpExecArray>;
+		public regex(arg: string, possible: Possible, msg: KlasaMessage): Promise<RegExpExecArray>;
+		public regexp(arg: string, possible: Possible, msg: KlasaMessage): Promise<RegExpExecArray>;
 		public url(arg: string, possible: Possible, msg: KlasaMessage): Promise<string>;
 		public date(arg: string, possible: Possible, msg: KlasaMessage): Promise<Date>;
 		public duration(arg: string, possible: Possible, msg: KlasaMessage): Promise<Date>;

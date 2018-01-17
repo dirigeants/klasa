@@ -45,7 +45,7 @@ class Tag {
 	 * Registers a response
 	 * @since 0.5.0
 	 * @param {string} name The argument name the response is for
-	 * @param {string|Function} response The custom response
+	 * @param {(string|Function)} response The custom response
 	 * @returns {boolean}
 	 * @private
 	 */

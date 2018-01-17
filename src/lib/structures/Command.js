@@ -269,7 +269,7 @@ class Command {
 	/**
 	 * Customizes the response of an argument if it fails resolution.
 	 * @param {string} name The name of the usage argument
-	 * @param {string|Function} response The custom response or i18n function
+	 * @param {(string|Function)} response The custom response or i18n function
 	 * @returns {Command}
 	 * @chainable
 	 * @since 0.5.0
