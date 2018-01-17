@@ -152,8 +152,8 @@ class ParsedUsage {
 				continue;
 			}
 
-			if (['<', '{', '['].includes(char)) usage = ParsedUsage.tagOpen(usage, char);
-			else if (['>', '}', ']'].includes(char)) usage = ParsedUsage.tagClose(usage, char);
+			if (open.includes(char)) usage = ParsedUsage.tagOpen(usage, char);
+			else if (close.includes(char)) usage = ParsedUsage.tagClose(usage, char);
 			else if ([' ', '\n'].includes(char)) usage = ParsedUsage.tagSpace(usage, char);
 			else usage.current += char;
 		}
