@@ -46,6 +46,7 @@ class KlasaClient extends Discord.Client {
 	 * @property {Object} [provider] The provider to use in Klasa
 	 * @property {KlasaConsoleConfig} [console={}] Config options to pass to the client console
 	 * @property {KlasaConsoleEvents} [consoleEvents={}] Config options to pass to the client console
+	 * @property {KlasaGatewaysOptions} [gateways={}] The options for each built-in gateway
 	 * @property {KlasaPieceDefaults} [pieceDefaults={}] Overrides the defaults for all pieces
 	 * @property {string} [language='en-US'] The default language Klasa should opt-in for the commands
 	 * @property {KlasaCustomPromptDefaults} [customPromptDefaults={}] The defaults for custom prompts
@@ -58,6 +59,14 @@ class KlasaClient extends Discord.Client {
 	 * @property {(string|Function)} [readyMessage=`Successfully initialized. Ready to serve ${this.guilds.size} guilds.`] readyMessage to be passed throughout Klasa's ready event
 	 * @property {string} [ownerID] The discord user id for the user the bot should respect as the owner (gotten from Discord api if not provided)
 	 * @property {RegExp} [regexPrefix] The regular expression prefix if one is provided
+	 * @memberof KlasaClient
+	 */
+
+	/**
+	 * @typedef {Object} KlasaGatewaysOptions
+	 * @property {GatewayDriverAddOptions} [clientStorage] The options for clientStorage's gateway
+	 * @property {GatewayDriverAddOptions} [guilds] The options for guilds' gateway
+	 * @property {GatewayDriverAddOptions} [users] The options for users' gateway
 	 * @memberof KlasaClient
 	 */
 

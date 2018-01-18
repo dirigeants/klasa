@@ -53,6 +53,6 @@ As mentioned before, a `Tag` is a **parsed argument** that contains an array of 
 
 ## Further learning:
 
-{@tutorial CommandsSubcommands}
-{@tutorial CommandsCustomResponses}
-{@tutorial CommandsCustomResolvers}
+- {@tutorial CommandsSubcommands}
+- {@tutorial CommandsCustomResponses}
+- {@tutorial CommandsCustomResolvers}

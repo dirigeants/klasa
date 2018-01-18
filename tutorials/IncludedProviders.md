@@ -15,3 +15,4 @@ The basic data storage provider for klasa. Uses atomic methods from [fs-nextra](
 - {@tutorial IncludedInhibitors}
 - {@tutorial IncludedLanguages}
 - {@tutorial IncludedMonitors}
+- {@tutorial IncludedTasks}

@@ -1,10 +1,4 @@
-## en-US
-
-English/United States
-
-**Source:**
-
-[languages/en-US.js](https://github.com/dirigeants/klasa/blob/master/src/languages/en-US.js)
+There's no included {@Task} piece in Klasa, however, they are available in the [Klasa-Pieces](https://github.com/dirigeants/klasa-pieces) repository.
 
 ## Further Reading:
 
@@ -13,6 +7,6 @@ English/United States
 - {@tutorial IncludedExtendables}
 - {@tutorial IncludedFinalizers}
 - {@tutorial IncludedInhibitors}
+- {@tutorial IncludedLanguages}
 - {@tutorial IncludedMonitors}
 - {@tutorial IncludedProviders}
-- {@tutorial IncludedTasks}

@@ -22,9 +22,7 @@ Create a file called `app.js` (or whatever you prefer) which will initiate and c
 const { Client } = require('klasa');
 
 new Client({
-    clientOptions: {
-        fetchAllMembers: false
-    },
+    fetchAllMembers: false,
     prefix: '+',
     cmdEditing: true,
     typing: true,

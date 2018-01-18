@@ -63,6 +63,6 @@ Thanks to this feature, they're not longer required to use this hacky behaviour,
 
 ## Further learning:
 
-{@tutorial CommandsArguments}
-{@tutorial CommandsCustomResponses}
-{@tutorial CommandsCustomResolvers}
+- {@tutorial CommandsArguments}
+- {@tutorial CommandsCustomResponses}
+- {@tutorial CommandsCustomResolvers}

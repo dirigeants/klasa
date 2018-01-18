@@ -4,30 +4,28 @@ The SettingGateway is designed to provide users a very useful interface for mana
 
 By default, Klasa uses the [json](https://github.com/dirigeants/klasa/blob/master/src/providers/json.js) provider. Do not be fooled and insta-replace with SQLite, Klasa's JSON provider writes the data [atomically](https://en.wikipedia.org/wiki/Atomicity_(database_systems)), in other words, it is very rare for the data to corrupt.
 
-However, as Klasa works on a [NoSQL](https://en.wikipedia.org/wiki/NoSQL) environment, however, SQL parsing has been improved to reduce the NoSQL middleware processing and be able to match it in performance's speed. SQL providers also need a special set of methods and properties to make the provider {@link SQL} compatible.
+However, as Klasa works on a [NoSQL](https://en.wikipedia.org/wiki/NoSQL) environment, however, SQL parsing has been improved to reduce the NoSQL middleware processing and be able to match it in performance's speed. SQL providers also need a special set of methods and properties to make the provider SQL compatible.
 
 ## Change the *provider's engine*.
 
-For example, let's say I have downloaded the *levelup* provider and I want to work with it, then we go to your main script file (`app.js`, `bot.js`..., wherever you declare the new Klasa.Client), and write the following code:
+For example, let's say I have downloaded the *rethinkdb* provider and I want to work with it, then we go to your main script file (`app.js`, `bot.js`..., wherever you declare the new Klasa.Client), and write the following code:
 
 ```javascript
-{ providers: { default: 'levelup' } }
+{ providers: { default: 'rethinkdb' } }
 ```
 
 Your Klasa's configuration will look something like this:
 
 ```javascript
 const client = new Klasa.Client({
-  ownerID: '',
   prefix: 'k!',
-  clientOptions: {},
-  providers: { default: '' },
+  providers: { default: 'json' },
 });
 
 client.login('A_BEAUTIFUL_TOKEN_AINT_IT?');
 ```
 
-And now, you're using levelup's provider to store the data from SettingGateway.
+And now, you're using rethinkdb's provider to store the data from SettingGateway.
 
 What happens when I use an engine that does not exist as a provider? Simply, SettingGateway will throw an error, it is enough user-friendly and readable, if that happens, make sure you wrote the provider's name correctly.
 
@@ -63,7 +61,7 @@ this.client.gateways.guilds.schema.addKey('users', { type: 'User', array: true }
 
 > `options.array` defaults to `false`, and when `options.default` is not specified, it defaults to `null`, however, when `options.array` is `true`, `options.default` defaults to `[]` (empty array).
 
-What have we done? `client.gateways.guilds.schema` is a **SchemaFolder** instance (also called Folder type) which can manage itself, such as adding keys/folders to itself (it certainly follows the OOP paradigm).
+What have we done? `client.gateways.guilds.schema` is a {@link SchemaFolder} instance (also called Folder type) which can manage itself, such as adding keys/folders to itself (it certainly follows the OOP paradigm).
 
 ## Editing keys from the guild configuration.
 
@@ -73,23 +71,23 @@ Now that I have a new key called `modlogs`, I want to configure it outside the `
 msg.guild.configs.update('modlogs', '267727088465739778', msg.guild);
 ```
 
-Check: {@link Configuration.updateOne}
+Check: {@link Configuration#update}
 
 > You can use a Channel instance, {@link SettingResolver} will make sure the input is valid and the database gets an **ID** and not an object.
 
 Now, I want to **add** a new user user to the `users` key, which takes an array.
 
 ```javascript
-msg.guild.configs.update('users', '146048938242211840', msg.guild, { action: 'add' });
+msg.guild.configs.update('users', '146048938242211840', { action: 'add' });
 ```
 
 That will add the user `'146048938242211840'` to the `users` array. To remove it:
 
 ```javascript
-msg.guild.configs.update('users', '146048938242211840', msg.guild, { action: 'remove' });
+msg.guild.configs.update('users', '146048938242211840', { action: 'remove' });
 ```
 
-Check: {@link Configuration.updateArray}
+> Additionally, if no 'action' option is passed to {@link Configuration.ConfigurationUpdateOptions}, it'll assume the `auto` mode, which will add or remove depending on the existence of the key.
 
 ## Removing a key from the guild configuration.
 
@@ -211,7 +209,7 @@ this.client.gateways.add('channels', validate, schema);
 
 > The `validate` function must be a [**function**](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/function), not a [**Arrow Function**](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Functions/Arrow_functions), the difference between them is that an arrow function binds `this` to wherever the function has been created (for example, the `exports` from your eval command, if you are doing this with eval), while the normal functions does not do this.
 
-> If the `validate` function does not resolve **Guild** type, you might want to use the fourth argument of `Gateway#updateOne` (third in Gateway#updateMany), which takes a Guild resolvable.
+> If the `validate` function does not resolve **Guild** type, you might want to use the third argument of {@link Configuration#update}, which takes a Guild resolvable.
 
 And then, you can access to it by:
 
@@ -228,3 +226,22 @@ this.client.gateways.add('channels', validate, schema, { provider: 'rethinkdb' }
 ```
 
 The code above will create a new Gateway instance called 'channels', which will use RethinkDB to store the persistent data.
+
+## Customizing the options for each built-in gateway
+
+This is available in 0.5.0 since the PR [#152](https://github.com/dirigeants/klasa/pull/152), and you're able to configure the three built-in gateways: `guilds`, `users` and `clientStorage`. The option to configure them is {@link KlasaClient.KlasaClientOptions.gateways}, where you would add the option `gateways` to your KlasaClientOptions:
+
+```javascript
+const client = new Klasa.Client({
+  prefix: 'k!',
+  providers: { default: 'json' },
+  gateways: {
+	guilds: { provider: 'rethinkdb' },
+	users: { provider: 'postgresql' }
+  }
+});
+
+client.login('A_BEAUTIFUL_TOKEN_AINT_IT?');
+```
+
+Where the *clientStorage* gateway would take the default options (json provider), the *guilds* gateway would use the rethinkdb provider, and finally the *users* one would use the postgresql provider. These options are {@link GatewayDriver.GatewayDriverAddOptions}.

@@ -388,14 +388,14 @@ declare module 'klasa' {
 		public piece(arg: string, possible: Possible, msg: KlasaMessage): Promise<Piece>;
 		public store(arg: string, possible: Possible, msg: KlasaMessage): Promise<Store>;
 
-		public command(arg: string, possible: Possible, msg: KlasaMessage): Promise<Command>;
 		public cmd(arg: string, possible: Possible, msg: KlasaMessage): Promise<Command>;
+		public command(arg: string, possible: Possible, msg: KlasaMessage): Promise<Command>;
 		public event(arg: string, possible: Possible, msg: KlasaMessage): Promise<Event>;
 		public extendable(arg: string, possible: Possible, msg: KlasaMessage): Promise<Extendable>;
 		public finalizer(arg: string, possible: Possible, msg: KlasaMessage): Promise<Finalizer>;
 		public inhibitor(arg: string, possible: Possible, msg: KlasaMessage): Promise<Inhibitor>;
-		public monitor(arg: string, possible: Possible, msg: KlasaMessage): Promise<Monitor>;
 		public language(arg: string, possible: Possible, msg: KlasaMessage): Promise<Language>;
+		public monitor(arg: string, possible: Possible, msg: KlasaMessage): Promise<Monitor>;
 		public provider(arg: string, possible: Possible, msg: KlasaMessage): Promise<Provider>;
 		public task(arg: string, possible: Possible, msg: KlasaMessage): Promise<Task>;
 

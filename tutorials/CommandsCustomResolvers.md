@@ -20,6 +20,6 @@ Then in your usage, you can use the type `key`, it'll be recognized as a *local*
 
 ## Further learning:
 
-{@tutorial CommandsArguments}
-{@tutorial CommandsCustomResponses}
-{@tutorial CommandsSubcommands}
+- {@tutorial CommandsArguments}
+- {@tutorial CommandsCustomResponses}
+- {@tutorial CommandsSubcommands}

@@ -86,6 +86,9 @@
 			},
 			"IncludedProviders": {
 				"title": "Included Providers"
+			},
+			"IncludedTasks": {
+				"title": "Included Tasks"
 			}
 		}
 	},

@@ -20,7 +20,7 @@ const { Client, PermissionLevels } = require('klasa');
 const config = require('./config.json');
 
 config.permissionLevels = new PermissionLevels()
-//Optionally you can pass a number to set a custom number of permission levels. It is not advised however, as internal commands expect 10 to be the highest permission level. Modifying away from 10 without further modification of all core commands, could put your server at risk of malicious users using the core eval command.
+// Optionally you can pass a number to set a custom number of permission levels. It is not advised however, as internal commands expect 10 to be the highest permission level. Modifying away from 10 without further modification of all core commands, could put your server at risk of malicious users using the core eval command.
 	.addLevel(0, false, () => true)
 	// everyone can use these commands
 	.addLevel(6, false, (client, msg) => msg.guild && msg.member.permissions.has('MANAGE_GUILD'))

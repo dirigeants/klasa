@@ -141,7 +141,7 @@ Tbh, not that different than a simple store. Although be sure to take a look at 
 
 ```javascript
 const { Piece, util } = require('klasa');
-const getInfoAsync = require("util").promisify(require("ytdl-core").getInfo);
+const getInfoAsync = require('util').promisify(require('ytdl-core').getInfo);
 
 class Genre {
 
@@ -165,7 +165,7 @@ class Genre {
 		if (!player.playingURL) return this.wrapLink(this.seeds[Math.floor(Math.random() * this.seeds.length)]);
 		// If we do have a link, lets get youtube info about that link
 		const info = await getInfoAsync(player.playingURL).catch((err) => {
-        	this.client.emit("log", err, "error");
+        	this.client.emit('log', err, 'error');
         	throw `something happened with YouTube URL: ${url}\n${util.codeBlock('', err)}`;
     	});
 		// Find the first video that we haven't recenly played on our player

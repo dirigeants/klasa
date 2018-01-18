@@ -23,3 +23,4 @@ Emits log to log command use in the console.
 - {@tutorial IncludedLanguages}
 - {@tutorial IncludedMonitors}
 - {@tutorial IncludedProviders}
+- {@tutorial IncludedTasks}
