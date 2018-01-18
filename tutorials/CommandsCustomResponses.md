@@ -25,7 +25,7 @@ module.exports = class extends Command {
 };
 ```
 
-And you want to make it so when the user doesn't input a string that matches with the RegExp, the framework sends `'You must insert a valid battletag with the format username#0000'`, then you may use the method {@link Command.customizeResponse} inside the commands' constructor:
+And you want it to send 'You must insert a valid battletag with the format username#0000' when the user doesn't input a string matching the RegExp, then you may use the method {@link Command.customizeResponse} inside the commands' constructor:
 
 ```javascript
 const { Command } = require('klasa');

@@ -1,12 +1,12 @@
-This is an in-depth tutorial for **Klasa's Usage arguments**, explaining all kinds of arguments and what you can do with them, as well as how they're used in the framework's backends.
+This is an in-depth tutorial for the **Klasa's Usage**. Unlike many other frameworks, Klasa and Komada use a system called **usage string** to improve simplicity, in the next three pages, you will learn how to use it correctly.
 
 ## Command Arguments
 
-What are command arguments and how do they differ from parameters? Arguments are raw strings based on the input by the user split based on {@link Command.usageDelim} or {@link Command.quotedStringSupport}. An resolver converts the arguments to parameters based on the possible usage type.
+What are command arguments and how do they differ from parameters? Arguments are raw strings based on the input by the user split based on {@link Command#usageDelim} or {@link Command#quotedStringSupport}. A resolver converts the arguments to parameters based on the possible usage type.
 
-For example, let's say you want a command to take a user and a channel, then you just put a string to usage being: `'<selectedUser:user> <selectedChannel:channel>'`, they're command arguments, and tells the __internal parser__ to take and parse them, if both validate correctly in the command output (i.e. `[p]command @user #channel`), the internal parser will pass an instance of {@link KlasaUser} and {@link external:Channel} inside an array, being **parameters**.
+For example, let's say you want a command to take a user and a channel, then you just put a string to usage being: `'<selectedUser:user> <selectedChannel:channel>'`, they're command arguments, and tell the __internal parser__ to take and parse them, if both validate correctly in the command output (i.e. `[p]command @user #channel`), the internal parser will pass an instance of {@link KlasaUser} and {@link external:Channel} inside an array, being **parameters**.
 
-In short, command arguments are what define the input that the command and internal parser should take, message arguments (`KlasaMessage#args`) are the raw arguments (array of string), and message parameters (`KlasaMessage#params`) an array with the parsed arguments.
+In short, command arguments are what define the input that the command and internal parser should take, message arguments ({@link KlasaMessage#args}) are the raw arguments (array of string), and message parameters ({@link KlasaMessage#params}) are an array with the parsed arguments.
 
 ## Structure
 
@@ -50,6 +50,21 @@ As mentioned before, a `Tag` is a **parsed argument** that contains an array of 
 - We want a required argument that takes a user, and an optional argument for a role: `<targetUser:user> [targetRole:role]`.
 - We want to accept `set`, `add`, `remove` or `reset` as required argument: `<set|add|remove|reset>`. (Remember that if no type is given, Usage will imply they are literals).
 - We want to get a GuildMember instance, or its user ID if the user is not in the guild: `<targetMember:member|userID:string{17,18}>`. (Either a GuildMember resolvable or a string with a length of 17-18, which matches with a Discord snowflake's length).
+
+## The Usage Analogy
+
+Let's make everything basic:
+
+- usage -> **blueprints**.
+- arguments -> **wood**.
+- resolvers -> **contractors**.
+- parameters -> **houses**.
+
+First, you write your blueprints for your houses, later, you receive wood from the woodcutters. The contractors will receive that wood and will try to build the houses with them based on the blueprints.
+
+If the contractors work in a union, they pass on the wood to the next contractor until they can either build a house, or complain that nobody can. However, if the constractor says it's cool to not build a house here, they pass the wood on to the next place.
+
+Credits to [@bdistin](https://github.com/bdistin) for this analogy.
 
 ## Further learning:
 
