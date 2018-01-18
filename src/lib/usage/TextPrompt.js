@@ -228,6 +228,7 @@ class TextPrompt {
 
 		try {
 			const res = await this.client.argResolver[custom ? 'custom' : possible.type](this.args[this.params.length], possible, this.message, custom);
+			if (typeof res === 'undefined' && this._required === 1) this.args.splice(this.params.length, 0, undefined);
 			return this.pushParam(res);
 		} catch (err) {
 			if (!this._required) {
@@ -265,6 +266,7 @@ class TextPrompt {
 
 		try {
 			const res = await this.client.argResolver[custom ? 'custom' : possible.type](this.args[this.params.length], possible, this.message, custom);
+			if (typeof res === 'undefined' && this._required === 1) this.args.splice(this.params.length, 0, undefined);
 			return this.pushParam(res);
 		} catch (err) {
 			if (index < this._currentUsage.possibles.length - 1) return this.multiPossibles(++index);
