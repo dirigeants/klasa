@@ -43,7 +43,6 @@
 | `duration`                 | A Date instance returned from the parsed human duration to milliseconds.                                                           |
 | `time`                     | A Date instance returned from date or duration.                                                                                    |
 
-
 > Note: `Literal` is very useful in arguments with multiple options.
 
 ___
