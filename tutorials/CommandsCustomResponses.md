@@ -6,7 +6,7 @@ This is one of the most requested features for Klasa: the ability to translate a
 
 ## Configuring/Creating a custom response
 
-They require an argument name from the `usageString`, as you have seen in {@tutorial CommandsArguments}, the `name` is what identifies a Tag/argument, to do so, you put that name, and Klasa will modify the Tag so when it's value is not providen or is incorrect, use your custom message. Let's say we have an Overwatch command and you want Klasa to reply with a *nicer* response, for example, when you have the [RegExp](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp) type with `/(\w{3,12})#(\d{4,5})/i` and you want to notify the user that they did not write the name correctly, then you may want the message the framework sends so they can understand what's going wrong better. Consider the following command example:
+They require an argument name from the `usageString`, as you have seen in {@tutorial CommandsArguments}, the `name` is what identifies a Tag/argument, to do so, you put that name, and Klasa will modify the Tag so when it's value is not providen or is incorrect, use your custom message. Let's say we have an Overwatch command and you want Klasa to reply with a *nicer* response, for example, when you have the [RegExp](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp) type with `/(\w{3,12})#(\d{4,5})/i` and you want to notify the user that they did not write the name correctly, then you may want to customize the message that the framework sends so they can understand what's going wrong better. Consider the following command example:
 
 ```javascript
 const { Command } = require('klasa');
@@ -65,7 +65,7 @@ this.customizeResponse('arg1', 'Response for argument 1')
     .customizeResponse('arg4', 'Response for argument 4');
 ```
 
-> **Note**: If an argument already has an argument, you cannot re-set it.
+> **Note**: If an argument already has a custom response, you cannot re-set it.
 
 ## FAQ
 

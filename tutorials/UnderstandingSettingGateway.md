@@ -4,8 +4,6 @@ The SettingGateway is designed to provide users a very useful interface for mana
 
 By default, Klasa uses the [json](https://github.com/dirigeants/klasa/blob/master/src/providers/json.js) provider. Do not be fooled and insta-replace with SQLite, Klasa's JSON provider writes the data [atomically](https://en.wikipedia.org/wiki/Atomicity_(database_systems)), in other words, it is very rare for the data to corrupt.
 
-However, as Klasa works on a [NoSQL](https://en.wikipedia.org/wiki/NoSQL) environment, however, SQL parsing has been improved to reduce the NoSQL middleware processing and be able to match it in performance's speed. SQL providers also need a special set of methods and properties to make the provider SQL compatible.
-
 ## Change the *provider's engine*.
 
 For example, let's say I have downloaded the *rethinkdb* provider and I want to work with it, then we go to your main script file (`app.js`, `bot.js`..., wherever you declare the new Klasa.Client), and write the following code:

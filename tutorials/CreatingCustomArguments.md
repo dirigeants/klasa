@@ -1,4 +1,4 @@
-One of the best features from Klasa's (and Komada's) usage is that you can extend its functionality by adding new types, to achieve that, we will use our {@link Extendable}s. We will create an empty extendable, called `emoji.js`, and aim it to Klasa:
+One of the best features from Klasa's (and Komada's) usage is that you can extend its functionality by adding new types. To achieve this, we will use our {@link Extendable}s. We will create an empty extendable, called `emoji.js`, and aim it to Klasa:
 
 > **Note**: The following argument type type is already included in klasa, and is just an explanation of how it works.
 
@@ -20,7 +20,7 @@ module.exports = class extends Extendable {
 
 > **Note**: that the class we want to extend to add new types to usage is **{@link ArgResolver}**, which belongs to `klasa`, so we put only `'ArgResolver'` to the classes we want to extend, and select `klasa: true` in the {@link ExtendableOptions}.
 
-Each method in ArgResolver takes 5 parameters:
+Each method in {@link ArgResolver} takes 3 parameters:
 
 | Name             | Type                 | Description                            |
 | ---------------- | -------------------- | -------------------------------------- |
