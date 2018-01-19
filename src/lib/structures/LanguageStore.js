@@ -59,8 +59,8 @@ class LanguageStore extends Collection {
 	/**
 	 * The default language
 	 * @since 0.2.1
+	 * @type {Language} The default language set in KlasaClientOptions.language
 	 * @readonly
-	 * @returns {Language} The default language set in KlasaClientOptions.language
 	 */
 	get default() {
 		return this.get(this.client.options.language);

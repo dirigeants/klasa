@@ -20,7 +20,7 @@ class Duration {
 	/**
 	 * Get the date from now
 	 * @since 0.5.0
-	 * @returns {Date}
+	 * @type {Date}
 	 * @readonly
 	 */
 	get fromNow() {

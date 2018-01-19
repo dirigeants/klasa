@@ -301,7 +301,7 @@ class KlasaClient extends Discord.Client {
 	 * The invite link for the bot
 	 * @since 0.0.1
 	 * @readonly
-	 * @returns {string}
+	 * @type {string}
 	 */
 	get invite() {
 		if (!this.user.bot) throw 'Why would you need an invite link for a selfbot...';

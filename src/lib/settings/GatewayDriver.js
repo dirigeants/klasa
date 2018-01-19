@@ -14,6 +14,25 @@ class GatewayDriver {
 	 */
 
 	/**
+	 * @typedef {Object} GatewayDriverGuildsSchema
+	 * @property {SchemaPieceJSON} prefix
+	 * @property {SchemaPieceJSON} language
+	 * @property {SchemaPieceJSON} disableNaturalPrefix
+	 * @property {SchemaPieceJSON} disabledCommands
+	 * @memberof GatewayDriver
+	 * @private
+	 */
+
+	/**
+	 * @typedef {Object} GatewayDriverClientStorageSchema
+	 * @property {SchemaPieceJSON} userBlacklist
+	 * @property {SchemaPieceJSON} guildBlacklist
+	 * @property {SchemaPieceJSON} schedules
+	 * @memberof GatewayDriver
+	 * @private
+	 */
+
+	/**
 	 * @since 0.3.0
 	 * @param {KlasaClient} client The Klasa client
 	 */
@@ -74,6 +93,7 @@ class GatewayDriver {
 	 * The data schema Klasa uses for guild configs.
 	 * @since 0.5.0
 	 * @readonly
+	 * @type {GatewayDriverGuildsSchema}
 	 */
 	get guildsSchema() {
 		return {
@@ -120,6 +140,7 @@ class GatewayDriver {
 	 * The data schema Klasa uses for client-wide configs.
 	 * @since 0.5.0
 	 * @readonly
+	 * @type {GatewayDriverClientStorageSchema}
 	 */
 	get clientStorageSchema() {
 		return {
