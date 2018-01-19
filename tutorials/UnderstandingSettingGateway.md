@@ -243,3 +243,21 @@ client.login('A_BEAUTIFUL_TOKEN_AINT_IT?');
 ```
 
 Where the *clientStorage* gateway would take the default options (json provider), the *guilds* gateway would use the rethinkdb provider, and finally the *users* one would use the postgresql provider. These options are {@link GatewayDriver.GatewayDriverAddOptions}.
+
+## Modifying a SchemaPiece's parameters
+
+Once created, it's possible since 0.5.0 to modify a {@link SchemaPiece}'s parameter, it's as simply as doing {@link SchemaPiece#update} which takes the same options for adding a key with {@link SchemaFolder#addKey} but with one exception: `array` and `type` can't change.
+
+For example, let's say we dislike the current prefix and we want to change it to `s!` for the next entries, then you can simply do:
+
+```javascript
+this.client.gateways.guilds.schema.prefix.modify({ default: 's!' });
+```
+
+### The Type Issue
+
+The main reason for what we don't support modifying the parameters `array` and `type` is:
+
+> Changing the type is very complex, in SQL, if we changed the type from `TEXT`, `VARCHAR` or any string type to a numeric one such as `INTEGER`, we could risk the data: the DB could throw an error or set them to `NULL`, resulting on data loss. Then we'd need to download all the data first and insert all of them with the conversion, that's quite tedious. Same happens in NoSQL where we would need to process all the entries checking the type and many parameters.
+
+Changing the value of `array` from a non-string datatype can result on the issue above, and it's a very slow process. Therefore, it's much better to just remove the key and add it back.
