@@ -23,7 +23,7 @@
     "fs-nextra": "^0.3.2"
   },
   "peerDependencies": {
-    "discord.js": "github:hydrabolt/discord.js#master"
+    "discord.js": "github:discordjs/discord.js#master"
   },
   "devDependencies": {
     "@types/node": "^9.3.0",

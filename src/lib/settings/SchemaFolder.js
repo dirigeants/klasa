@@ -70,8 +70,8 @@ class SchemaFolder extends Schema {
 	/**
 	 * Get all configurable keys from this schema.
 	 * @since 0.5.0
+	 * @type {string[]}
 	 * @readonly
-	 * @returns {string[]}
 	 */
 	get configurableKeys() {
 		if (this.keyArray.length === 0) return [];
