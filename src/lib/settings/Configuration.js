@@ -247,7 +247,7 @@ class Configuration {
 			guild = undefined;
 		}
 
-		if (isObject(key)) return this.updateMany(key, value);
+		if (isObject(key)) return this._updateMany(key, value);
 		return this._updateSingle(key, value, guild, options);
 	}
 
