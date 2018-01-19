@@ -151,6 +151,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
+- [[#165](https://github.com/dirigeants/klasa/pull/165)] Updated url for peer dependency `discord.js` and fixed all `JSDocs`. (kyranet)
 - [[#159](https://github.com/dirigeants/klasa/pull/159)] Fixed Timestamp's `'MM'` token not padding with zeroes in the start. (kyranet)
 - [[#156](https://github.com/dirigeants/klasa/pull/156)] Fixed a bug in Configuration not cloning objects correctly. (kyranet)
 - [[`35c42296fe`](https://github.com/dirigeants/klasa/commit/35c42296fe2738361dc48e3eee7716cfa73041b9)] Fixed GatewayStorage getting the wrong value. (bdistin)
