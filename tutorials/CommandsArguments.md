@@ -4,9 +4,9 @@ This is an in-depth tutorial for the **Klasa's Usage**. Unlike many other framew
 
 What are command arguments and how do they differ from parameters? Arguments are raw strings based on the input by the user split based on {@link Command#usageDelim} or {@link Command#quotedStringSupport}. A resolver converts the arguments to parameters based on the possible usage type.
 
-For example, let's say you want a command to take a user and a channel, then you just put a string to usage being: `'<selectedUser:user> <selectedChannel:channel>'`, they're command arguments, and tell the __internal parser__ to take and parse them, if both validate correctly in the command output (i.e. `[p]command @user #channel`), the internal parser will pass an instance of {@link KlasaUser} and {@link external:Channel} inside an array, being **parameters**.
+For example, let's say you want a command to take a user and a channel, then you just put a string to usage being: `'<selectedUser:user> <selectedChannel:channel>'`, that tells the __internal parser__ to take and parse them, if both validate correctly in the command output (i.e. `[p]command @user #channel`), the internal parser will pass an instance of {@link KlasaUser} and {@link external:Channel} inside an array, being **parameters**.
 
-In short, command arguments are what define the input that the command and internal parser should take, message arguments ({@link KlasaMessage#args}) are the raw arguments (array of string), and message parameters ({@link KlasaMessage#params}) are an array with the parsed arguments.
+In short, usage is what defines the input that the command and internal parser should take, message arguments ({@link KlasaMessage#args}) are the raw arguments (array of string), and message parameters ({@link KlasaMessage#params}) are an array with the parsed arguments.
 
 ## Structure
 
@@ -39,7 +39,7 @@ Unlike normal arguments, a repeating one can resolve into one or more parameters
 
 ## Possible Structure
 
-As mentioned before, a `Tag` is a **parsed argument** that contains an array of **multiple Possible**s. But what is their format? Generally, they're written as `name:type`, where `name` is the name of the argument, and `type` is the type. However, depending on the type you can use the options or not.
+As mentioned before, a `Tag` is a **parsed argument tag** (`<>`, `()` or `[]`) that contains an array of **multiple Possible**s. But what is their format? Generally, they're written as `name:type`, where `name` is the name of the argument, and `type` is the type. However, depending on the type you can use the options or not.
 
 - **name** is the name of the argument, they're used to identify an argument by giving it a name, a good name should be self explanatory and easy to read for the end user.
 - **type** is the name of the type, they're not arbitrary but depends on the methods {@link ArgResolver} has. By default, there are many of them, such as `string`, `integer`, `msg`, `user`, `member`. You can also extend ArgResolver to implement extra methods, check this tutorial: {@tutorial CreatingCustomArguments}, however, if no type is given, the parser will assume them as **literal**.
