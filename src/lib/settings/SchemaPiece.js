@@ -171,7 +171,6 @@ class SchemaPiece extends Schema {
 	 * @since 0.5.0
 	 * @param {SchemaPieceModifyOptions} options The new options
 	 * @returns {Promise<this>}
-	 * @chainable
 	 */
 	async modify(options) {
 		// Check if the 'options' parameter is an object.
