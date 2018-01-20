@@ -16,7 +16,7 @@
   },
   "scripts": {
     "lint": "npx eslint --fix src && npx tslint --fix 'typings/*.ts'",
-    "test": "npx eslint src && npx tslint 'typings/*.ts' && npx markdownlint tutorials README.md",
+    "test": "npx eslint src tutorials && npx tslint 'typings/*.ts' && npx markdownlint tutorials README.md",
     "docs": "npx jsdoc -c ./.docstrap.json -R README.md"
   },
   "dependencies": {
@@ -27,7 +27,8 @@
   },
   "devDependencies": {
     "@types/node": "^9.3.0",
-    "eslint": "^4.15.0",
+    "eslint": "^4.16.0",
+    "eslint-plugin-markdown": "^1.0.0-beta.6",
     "ink-docstrap": "github:bdistin/docstrap#klasa",
     "jsdoc": "github:jsdoc3/jsdoc",
     "markdownlint-cli": "^0.6.0",
