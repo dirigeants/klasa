@@ -20,17 +20,21 @@ const { Client, PermissionLevels } = require('klasa');
 const config = require('./config.json');
 
 config.permissionLevels = new PermissionLevels()
-//Optionally you can pass a number to set a custom number of permission levels. It is not advised however, as internal commands expect 10 to be the highest permission level. Modifying away from 10 without further modification of all core commands, could put your server at risk of malicious users using the core eval command.
-	.addLevel(0, false, () => true)
+	/*
+	* Optionally you can pass a number to set a custom number of permission levels.
+	* It is not advised however, as internal commands expect 10 to be the highest permission level.
+	* Modifying away from 10 without further modification of all core commands, could put your server at risk of malicious users using the core eval command.
+	*/
 	// everyone can use these commands
-	.addLevel(6, false, (client, msg) => msg.guild && msg.member.permissions.has('MANAGE_GUILD'))
+	.addLevel(0, false, () => true)
 	// Members of guilds must have 'MANAGE_GUILD' permission
-	.addLevel(7, false, (client, msg) => msg.guild && msg.member === msg.guild.owner)
+	.addLevel(6, false, (client, msg) => msg.guild && msg.member.permissions.has('MANAGE_GUILD'))
 	// The member using this command must be the guild owner
-	.addLevel(9, true, (client, msg) => msg.author === client.owner)
+	.addLevel(7, false, (client, msg) => msg.guild && msg.member === msg.guild.owner)
 	// Allows the Bot Owner to use any lower commands, and causes any command with a permission level 9 or lower to return an error if no check passes.
-	.addLevel(10, false, (client, msg) => msg.author === client.owner);
+	.addLevel(9, true, (client, msg) => msg.author === client.owner)
 	// Allows the bot owner to use Bot Owner only commands, which silently fail for other users.
+	.addLevel(10, false, (client, msg) => msg.author === client.owner);
 
 new Client(config).login(config.token);
 ```
@@ -46,12 +50,12 @@ const { Client } = require('klasa');
 const config = require('./config.json');
 
 Client.defaultPermissionLevels
-    .addLevel(3, false, ...)
 	// let some group of people who solved some easteregg clues use a special command/some custom non-admin role
-    .addLevel(6, false, (client, msg) => msg.guild && msg.member.permissions.has('ADMINISTRATOR'))
+	.addLevel(3, false, (client, msg) => msg.guild.configs.solvers.includes(msg.author.id))
 	// Make the requirements to use the conf command stricter than just who can add the bot to the guild
-    .addLevel(8, false, (client, msg) => client.configs.botSupportTeam.includes(msg.author.id));
+	.addLevel(6, false, (client, msg) => msg.guild && msg.member.permissions.has('ADMINISTRATOR'))
 	// add a role above guild owners that let your support team help setup/troubleshoot on other guilds.
+	.addLevel(8, false, (client, msg) => client.configs.botSupportTeam.includes(msg.author.id));
 
 new Client(config).login(config.token);
 ```
@@ -77,7 +81,8 @@ Permission levels are fairly close to the same as Komada Permission levels, with
 So you can have:
 
 ```javascript
-    .addLevel(3, false, async(client, msg) => {
+Client.defaultPermissionLevels
+	.addLevel(3, false, async (client, msg) => {
 		const value = await someAsyncFunction();
 		return value === someOtherValue;
 	});

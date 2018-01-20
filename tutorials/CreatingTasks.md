@@ -19,7 +19,7 @@ module.exports = class extends Task {
 		// You can optionally define this method which will be run when the bot starts (after login, so discord data is available via this.client)
 	}
 
-}
+};
 ```
 
 Where `metadata` is what you passed to `ScheduledTaskOptions.data`, `null` if not passed.
@@ -29,7 +29,7 @@ Where `metadata` is what you passed to `ScheduledTaskOptions.data`, `null` if no
 After you have created your {@link Task} piece, you'll be able to create the first scheduled tasks for it:
 
 ```javascript
-this.client.schedule.create('reminder', Date.now() + 1000 * 60, {
+this.client.schedule.create('reminder', Date.now() + (1000 * 60), {
 	data: {
 		// This is the metadata. In one minute after the creation of this scheduled
 		// task, Schedule will call your new task with this object.

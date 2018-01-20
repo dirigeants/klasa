@@ -15,19 +15,19 @@ module.exports = class extends Extendable {
 		});
 	}
 
-// Getters
+	// Getters
 
 	get extend() {
 		// Make a getter
 	}
 
-// Setters
+	// Setters
 
-	set extend() {
-		// Make a setters
+	set extend(value) {
+		// Make a setter
 	}
 
-// Methods
+	// Methods
 
 	extend() {
 		// Make a methods
@@ -38,14 +38,20 @@ module.exports = class extends Extendable {
 
 ## Understanding extendable settings
 
-```js
-constructor(...args) {
-    super(...args, appliesTo, {
-		name: 'nameOfExtendable', // default the file name
-		enabled: true, // default true
-		klasa: false // default false
-	);
-}
+```javascript
+const { Extendable } = require('klasa');
+
+module.exports = class extends Extendable {
+
+	constructor(...args) {
+		super(...args, appliesTo, {
+			name: 'nameOfExtendable',
+			enabled: true,
+			klasa: false
+		});
+	}
+
+};
 ```
 
 | Name                | Default       | Type    | Description                                            |
@@ -73,6 +79,7 @@ and Message has both properties of `author` and `channel`.
 
 ```js
 const { Extendable } = require('klasa');
+const prompt = require('../../prompt');
 
 module.exports = class extends Extendable {
 

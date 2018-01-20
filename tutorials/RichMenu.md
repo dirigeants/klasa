@@ -7,35 +7,46 @@ Like {@tutorial RichDisplay} there is the option to define a template [`MessageE
 An example of how {@link RichMenu} could be used is in a `help`-like command, this is a simple demo of how it would work:
 
 ```javascript
-const menu = new RichMenu(new this.client.methods.Embed()
-	.setColor(0x673AB7)
-	.setAuthor(this.client.user.username, this.client.user.avatarURL())
-	.setTitle('Advanced Commands Help:')
-	.setDescription('Use the arrow reactions to scroll between pages.\nUse number reactions to select an option.')
-);
+module.exports = class extends Command {
 
-for (const command of this.client.commands.values()) {
-	menu.addOption(command.name, command.description);
-}
+	constructor(...args) {
+		super(...args);
+		this.menu = new RichMenu(new this.client.methods.Embed()
+			.setColor(0x673AB7)
+			.setAuthor(this.client.user.username, this.client.user.avatarURL())
+			.setTitle('Advanced Commands Help:')
+			.setDescription('Use the arrow reactions to scroll between pages.\nUse number reactions to select an option.')
+		);
+	}
 
-const collector = await menu.run(await msg.send('Loading commands...'));
+	async run(msg) {
+		const collector = await menu.run(await msg.send('Loading commands...'));
 
-const choice = await collector.selection;
-if (choice === null) {
-	return collector.message.delete();
-}
+		const choice = await collector.selection;
+		if (choice === null) {
+			return collector.message.delete();
+		}
 
-const command = this.client.commands.get(menu.options[choice].name);
-const info = new this.client.methods.Embed()
-	.setTitle(`Command \`${msg.guild.configs.prefix}${command.name}\``)
-	.setDescription(typeof command.description == 'function' ? command.description(msg) : command.description)
-	.addField('Usage:', command.usageString);
+		const command = this.client.commands.get(menu.options[choice].name);
+		const info = new this.client.methods.Embed()
+			.setTitle(`Command \`${msg.guild.configs.prefix}${command.name}\``)
+			.setDescription(typeof command.description === 'function' ? command.description(msg) : command.description)
+			.addField('Usage:', command.usageString);
 
-if (command.extendedHelp && command.extendedHelp != '') {
-	info.addField('Help:', typeof command.extendedHelp == 'function' ? command.extendedHelp(msg) : command.extendedHelp);
-}
+		if (command.extendedHelp && command.extendedHelp !== '') {
+			info.addField('Help:', typeof command.extendedHelp === 'function' ? command.extendedHelp(msg) : command.extendedHelp);
+		}
 
-return collector.message.edit(info);
+		return msg.sendEmbed(info);
+	}
+
+	init() {
+		for (const command of this.client.commands.values()) {
+			this.menu.addOption(command.name, command.description);
+		}
+	}
+
+};
 ```
 
 > The code is designed to be placed in a command, inside the `async run(msg)` method but the menu or its options can easily be initialized within the constructor method or the {@link Command.init} method of the command.
@@ -47,7 +58,7 @@ The creation of the {@link RichMenu} is the same as the one displayed in {@tutor
 We begin by adding the options, which will be listed in the same order we defined.
 
 ```javascript
-for (const command of /* ... */) {
+for (const command of this.client.commands.values()) {
 	menu.addOption(command.name, command.description);
 }
 ```
@@ -56,26 +67,44 @@ After listing all the options we can call {@link RichMenu.run} on our menu to re
 We will store the resulting {@link ReactionHandler} to later access the selected option.
 
 ```javascript
-const collector = await menu.run(await msg.send('Loading Commands...'));
+module.exports = class extends Command {
+
+	async run(msg) {
+		// ...
+		const collector = await menu.run(await msg.send('Loading Commands...'));
+		// ...
+	}
+
+};
 ```
 
 We will also need to [`await`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await) for the user to select an option before continuing:
 
 ```javascript
-const choice = await collector.selection;
+module.exports = class extends Command {
+
+	async run(msg) {
+		// ...
+		const choice = await collector.selection;
+		// ...
+	}
+
+};
 ```
 
 After obtaining the index of the selected option we can access the option's name through our menu:
 
 ```javascript
-const command = /* ... */(menu.options[choice].name);
+const command = this.client.commands.get(menu.options[choice].name);
 ```
 
 Finally, we show the user the selected command by editing the original [`MessageEmbed`](https://discord.js.org/#/docs/main/master/class/MessageEmbed):
 
 ```javascript
 const info = new this.client.methods.Embed()
-	/* ... */;
+	.setTitle(`Command \`${msg.guild.configs.prefix}${command.name}\``)
+	.setDescription(typeof command.description === 'function' ? command.description(msg) : command.description)
+	.addField('Usage:', command.usageString);
 
 return collector.message.edit(info);
 ```

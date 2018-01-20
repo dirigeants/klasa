@@ -11,8 +11,8 @@ module.exports = class extends Finalizer {
 	constructor(...args) {
 		super(...args, {
 			name: 'myFinalizerName',
-            enabled: true
-        });
+			enabled: true
+		});
 	}
 
 	run(msg, mes, start) {

@@ -13,8 +13,8 @@ module.exports = class extends Command {
 
 	async run(msg) {
 		return new RichDisplay()
-			.addPage(new Embed().setDescription('First page'))
-			.addPage(new Embed().setDescription('Second page'))
+			.addPage(new this.client.methods.Embed().setDescription('First page'))
+			.addPage(new this.client.methods.Embed().setDescription('Second page'))
 			.run(await msg.sendMessage('Loading...'));
 	}
 
@@ -30,18 +30,24 @@ const images = [
 	'https://i.imgur.com/92hAsqe.jpg'
 ];
 
-const display = new RichDisplay(new this.client.methods.Embed()
-	.setColor(0x673AB7)
-	.setAuthor(this.client.user.name, this.client.user.avatarURL())
-	.setTitle('Norway Pictures Slideshow')
-	.setDescription('Scroll between the images using the provided reaction emotes.')
-);
+module.exports = class extends Command {
 
-for (let i = 0; i < images.length; i++) {
-	display.addPage(template => template.setImage(images[i]));
-}
+	async run(msg) {
+		const display = new RichDisplay(new this.client.methods.Embed()
+			.setColor(0x673AB7)
+			.setAuthor(this.client.user.name, this.client.user.avatarURL())
+			.setTitle('Norway Pictures Slideshow')
+			.setDescription('Scroll between the images using the provided reaction emotes.')
+		);
 
-return display.run(await msg.sendMessage('Loading slideshow...'));
+		for (let i = 0; i < images.length; i++) {
+			display.addPage(template => template.setImage(images[i]));
+		}
+
+		return display.run(await msg.sendMessage('Loading slideshow...'));
+	}
+
+};
 ```
 
 > The code is contained in the block of the aforementioned command, inside the `async run(msg)` method but the display or its pages can easily be reused by placing its initialization in the command's constructor method.
@@ -59,8 +65,8 @@ const display = new RichDisplay(new this.client.methods.Embed()
 This [`MessageEmbed`](https://discord.js.org/#/docs/main/master/class/MessageEmbed) instance will be accessible to us by either calling the {@link RichDisplay.template} property of the {@link RichDisplay} instance, in a cloned manner, or directly through the {@link RichDisplay.addPage} method, if we pass in an arrow function or a callback.
 
 ```javascript
-for (/* ... */) {
-	display.addPage(template => /* ... */);
+for (const image of images) {
+	display.addPage(template => template.setImage(image));
 }
 ```
 
@@ -68,17 +74,25 @@ From here we will be able to add content or edit properties of the template, and
 In our example, we will simply add a static image from the array we defined before.
 
 ```javascript
-/* ... */
-	display.addPage(template => {
-		template.setImage(images[i])
-			.setColor(0xF44336); // You can change everything of the template
-	});
+display.addPage(template => {
+	template
+		.setImage(image)
+		.setColor(0xF44336);
+	// You can change everything of the template
+});
 ```
 
 Then, after the {@link RichDisplay} is setup, we return, executing it on a new message.
 
 ```javascript
-return display.run(await msg.sendMessage('Loading slideshow...'));
+module.exports = class extends Command {
+
+	async run(msg) {
+		// ...
+		return display.run(await msg.sendMessage('Loading slideshow...'));
+	}
+
+};
 ```
 
 The message will show the content we denfined in {@link KlasaMessage.sendMessage} initially, then, when our {@link RichDisplay} will be ready it will replace the content with the first page we defined.
@@ -103,5 +117,12 @@ To handle whether or not a user should trigger an action when interacting with t
 A simple example for this would be a filter that only allows the user who executes the command to interact with it:
 
 ```javascript
-display.run(await msg.sendMessage('Loading slideshow...'), { filter: (reaction, user) => user === msg.author });
+module.exports = class extends Command {
+
+	async run(msg) {
+		// ...
+		display.run(await msg.sendMessage('Loading slideshow...'), { filter: (reaction, user) => user === msg.author });
+	}
+
+};
 ```
