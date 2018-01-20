@@ -57,9 +57,9 @@ class ProviderStore extends Collection {
 	}
 
 	/**
-	 * The default provider
+	 * The default provider set in KlasaClientOptions.providers
 	 * @since 0.5.0
-	 * @type {Provider} The default provider set in KlasaClientOptions.providers
+	 * @type {Provider}
 	 * @readonly
 	 */
 	get default() {
