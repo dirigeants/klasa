@@ -38,7 +38,8 @@ class Piece {
 	/**
 	 * Disables this piece
 	 * @since 0.0.1
-	 * @returns {Piece} This piece
+	 * @returns {this}
+	 * @chainable
 	 */
 	disable() {
 		if (this.client.listenerCount('pieceDisabled')) this.client.emit('pieceDisabled', this);
@@ -49,7 +50,8 @@ class Piece {
 	/**
 	 * Enables this piece
 	 * @since 0.0.1
-	 * @returns {Piece} This piece
+	 * @returns {this}
+	 * @chainable
 	 */
 	enable() {
 		if (this.client.listenerCount('pieceEnabled')) this.client.emit('pieceEnabled', this);

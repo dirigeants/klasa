@@ -55,7 +55,8 @@ class Timestamp {
 	 * Edits the current pattern.
 	 * @since 0.5.0
 	 * @param {string} pattern The new pattern for this instance
-	 * @returns {Timestamp}
+	 * @returns {this}
+	 * @chainable
 	 */
 	edit(pattern) {
 		this.pattern = pattern;

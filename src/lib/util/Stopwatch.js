@@ -71,7 +71,8 @@ class Stopwatch {
 	/**
 	 * Restarts the Stopwatch (Returns a running state)
 	 * @since 0.4.0
-	 * @returns {Stopwatch}
+	 * @returns {this}
+	 * @chainable
 	 */
 	restart() {
 		this._start = performance.now();
@@ -82,7 +83,8 @@ class Stopwatch {
 	/**
 	 * Resets the Stopwatch to 0 duration (Returns a stopped state)
 	 * @since 0.4.0
-	 * @returns {Stopwatch}
+	 * @returns {this}
+	 * @chainable
 	 */
 	reset() {
 		this._start = performance.now();
@@ -93,7 +95,8 @@ class Stopwatch {
 	/**
 	 * Starts the Stopwatch
 	 * @since 0.4.0
-	 * @returns {Stopwatch}
+	 * @returns {this}
+	 * @chainable
 	 */
 	start() {
 		if (!this.running) {
@@ -106,7 +109,8 @@ class Stopwatch {
 	/**
 	 * Stops the Stopwatch, freezing the duration
 	 * @since 0.4.0
-	 * @returns {Stopwatch}
+	 * @returns {this}
+	 * @chainable
 	 */
 	stop() {
 		if (this.running) this._end = performance.now();

@@ -64,7 +64,7 @@ class ParsedUsage {
 	 * Registers a one-off custom resolver
 	 * @param {string} type The type of the usage argument
 	 * @param {Function} resolver The one-off custom resolver
-	 * @returns {ParsedUsage}
+	 * @returns {this}
 	 * @chainable
 	 * @since 0.5.0
 	 */
@@ -77,7 +77,7 @@ class ParsedUsage {
 	 * Customizes the response of an argument if it fails resolution.
 	 * @param {string} name The name of the usage argument
 	 * @param {(string|Function)} response The custom response or i18n function
-	 * @returns {ParsedUsage}
+	 * @returns {this}
 	 * @chainable
 	 * @since 0.5.0
 	 */

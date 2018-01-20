@@ -336,7 +336,8 @@ class KlasaClient extends Discord.Client {
 	 * Registers a custom store to the client
 	 * @since 0.3.0
 	 * @param {Store} store The store that pieces will be stored in
-	 * @returns {KlasaClient} this client
+	 * @returns {this}
+	 * @chainable
 	 */
 	registerStore(store) {
 		this.pieceStores.set(store.name, store);
@@ -347,7 +348,8 @@ class KlasaClient extends Discord.Client {
 	 * Un-registers a custom store from the client
 	 * @since 0.3.0
 	 * @param {Store} storeName The store that pieces will be stored in
-	 * @returns {KlasaClient} this client
+	 * @returns {this}
+	 * @chainable
 	 */
 	unregisterStore(storeName) {
 		this.pieceStores.delete(storeName);
@@ -359,7 +361,8 @@ class KlasaClient extends Discord.Client {
 	 * @since 0.3.0
 	 * @param {string} pieceName The name of the piece, if you want to register an arg resolver for this piece
 	 * @param {Store} store The store that pieces will be stored in
-	 * @returns {KlasaClient} this client
+	 * @returns {this}
+	 * @chainable
 	 */
 	registerPiece(pieceName, store) {
 		// eslint-disable-next-line func-names
@@ -375,7 +378,8 @@ class KlasaClient extends Discord.Client {
 	 * Un-registers a custom piece from the client
 	 * @since 0.3.0
 	 * @param {string} pieceName The name of the piece
-	 * @returns {KlasaClient} this client
+	 * @returns {this}
+	 * @chainable
 	 */
 	unregisterPiece(pieceName) {
 		delete ArgResolver.prototype[pieceName];

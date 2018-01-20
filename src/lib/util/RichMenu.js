@@ -111,7 +111,8 @@ class RichMenu extends RichDisplay {
 	 * @param {string} name The name of the option
 	 * @param {string} body The description of the option
 	 * @param {boolean} [inline=false] Whether the option should be inline
-	 * @returns {RichMenu} this RichMenu
+	 * @returns {this}
+	 * @chainable
 	 */
 	addOption(name, body, inline = false) {
 		this.options.push({ name, body, inline });

@@ -164,7 +164,8 @@ class Configuration {
 	/**
 	 * Factory resets the current configuration.
 	 * @since 0.5.0
-	 * @returns {Promise<Configuration>}
+	 * @returns {Promise<this>}
+	 * @chainable
 	 */
 	async resetConfiguration() {
 		if (this._existsInDB) await this.gateway.provider.delete(this.gateway.type, this.id);
@@ -175,7 +176,8 @@ class Configuration {
 	/**
 	 * Sync the data from the database with the cache.
 	 * @since 0.5.0
-	 * @returns {Promise<Configuration>}
+	 * @returns {Promise<this>}
+	 * @chainable
 	 */
 	async sync() {
 		this._syncStatus = this.gateway.provider.get(this.gateway.type, this.id);
@@ -191,7 +193,8 @@ class Configuration {
 	/**
 	 * Delete this entry from the database and cache.
 	 * @since 0.5.0
-	 * @returns {Promise<Configuration>}
+	 * @returns {Promise<this>}
+	 * @chainable
 	 */
 	async destroy() {
 		if (this._existsInDB) {

@@ -117,7 +117,8 @@ class RichDisplay {
 	 * Sets emojis to a new set of emojis
 	 * @since 0.4.0
 	 * @param {RichDisplayEmojisObject} emojis An object containing replacement emojis to use instead
-	 * @returns {RichDisplay} this RichDisplay
+	 * @returns {this}
+	 * @chainable
 	 */
 	setEmojis(emojis) {
 		Object.assign(this.emojis, emojis);
@@ -128,7 +129,8 @@ class RichDisplay {
 	 * Sets a prefix for all footers
 	 * @since 0.5.0
 	 * @param {string} prefix The prefix you want to add
-	 * @returns {RichDisplay} this RichDisplay
+	 * @returns {this}
+	 * @chainable
 	 */
 	setFooterPrefix(prefix) {
 		this.footered = false;
@@ -140,7 +142,8 @@ class RichDisplay {
 	 * Sets a suffix for all footers
 	 * @since 0.5.0
 	 * @param {string} suffix The suffix you want to add
-	 * @returns {RichDisplay} this RichDisplay
+	 * @returns {this}
+	 * @chainable
 	 */
 	setFooterSuffix(suffix) {
 		this.footered = false;
@@ -151,7 +154,8 @@ class RichDisplay {
 	/**
 	 * Turns off the footer altering function
 	 * @since 0.5.0
-	 * @returns {RichDisplay} this RichDisplay
+	 * @returns {this}
+	 * @chainable
 	 */
 	useCustomFooters() {
 		this.footered = true;
@@ -162,7 +166,8 @@ class RichDisplay {
 	 * Adds a page to the RichDisplay
 	 * @since 0.4.0
 	 * @param {(Function|external:MessageEmbed)} embed A callback with the embed template passed and the embed returned, or an embed
-	 * @returns {RichDisplay} this RichDisplay
+	 * @returns {this}
+	 * @chainable
 	 */
 	addPage(embed) {
 		this.pages.push(this._handlePageGeneration(embed));
@@ -173,7 +178,8 @@ class RichDisplay {
 	 * Adds an info page to the RichDisplay
 	 * @since 0.4.0
 	 * @param {(Function|external:MessageEmbed)} embed A callback with the embed template passed and the embed returned, or an embed
-	 * @returns {RichDisplay} this RichDisplay
+	 * @returns {this}
+	 * @chainable
 	 */
 	setInfoPage(embed) {
 		this.infoPage = this._handlePageGeneration(embed);
