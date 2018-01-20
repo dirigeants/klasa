@@ -60,9 +60,9 @@ In a side note, `Command#customizeResponse` returns the command instance, meanin
 
 ```javascript
 this.customizeResponse('arg1', 'Response for argument 1')
-    .customizeResponse('arg2', 'Response for argument 2')
-    .customizeResponse('arg3', 'Response for argument 3')
-    .customizeResponse('arg4', 'Response for argument 4');
+	.customizeResponse('arg2', 'Response for argument 2')
+	.customizeResponse('arg3', 'Response for argument 3')
+	.customizeResponse('arg4', 'Response for argument 4');
 ```
 
 > **Note**: If an argument already has a custom response, you cannot re-set it.

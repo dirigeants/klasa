@@ -106,7 +106,7 @@ const info = new this.client.methods.Embed()
 	.setDescription(typeof command.description === 'function' ? command.description(msg) : command.description)
 	.addField('Usage:', command.usageString);
 
-return collector.message.edit(info);
+collector.message.edit(info);
 ```
 
 ## Personalization

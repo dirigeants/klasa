@@ -16,8 +16,8 @@ Your Klasa's configuration will look something like this:
 
 ```javascript
 const client = new Klasa.Client({
-  prefix: 'k!',
-  providers: { default: 'json' },
+	prefix: 'k!',
+	providers: { default: 'json' }
 });
 
 client.login('A_BEAUTIFUL_TOKEN_AINT_IT?');
@@ -234,12 +234,12 @@ This is available in 0.5.0 since the PR [#152](https://github.com/dirigeants/kla
 
 ```javascript
 const client = new Klasa.Client({
-  prefix: 'k!',
-  providers: { default: 'json' },
-  gateways: {
-	guilds: { provider: 'rethinkdb' },
-	users: { provider: 'postgresql' }
-  }
+	prefix: 'k!',
+	providers: { default: 'json' },
+	gateways: {
+		guilds: { provider: 'rethinkdb' },
+		users: { provider: 'postgresql' }
+	}
 });
 
 client.login('A_BEAUTIFUL_TOKEN_AINT_IT?');

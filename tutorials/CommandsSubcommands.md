@@ -48,7 +48,7 @@ module.exports = class extends Command {
 	async reset(msg, params) {}
 	async list(msg, params) {}
 
-}
+};
 ```
 
 Both commands are equal, one key difference is that with the subcommands feature you omit the **run** method and Klasa does not call it anymore, saving you from using a "dynamic" usage based on the first (which is problematic for [TypeScript](https://www.typescriptlang.org/) users), and also saves time whilst the command keeps being simple and readable.
