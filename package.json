@@ -15,19 +15,20 @@
     "url": "https://github.com/dirigeants/klasa.git"
   },
   "scripts": {
-    "lint": "npx eslint --fix src && npx tslint --fix 'typings/*.ts'",
-    "test": "npx eslint src && npx tslint 'typings/*.ts' && npx markdownlint tutorials README.md",
+    "lint": "npx eslint --fix src && npx eslint --fix --config .eslintrcmd.json --ext md tutorials && npx tslint --fix 'typings/*.ts'",
+    "test": "npx eslint src && npx tslint 'typings/*.ts' && npx eslint --config .eslintrcmd.json --ext md tutorials && npx markdownlint tutorials README.md",
     "docs": "npx jsdoc -c ./.docstrap.json -R README.md"
   },
   "dependencies": {
     "fs-nextra": "^0.3.2"
   },
   "peerDependencies": {
-    "discord.js": "github:hydrabolt/discord.js#master"
+    "discord.js": "github:discordjs/discord.js#master"
   },
   "devDependencies": {
     "@types/node": "^9.3.0",
-    "eslint": "^4.15.0",
+    "eslint": "^4.16.0",
+    "eslint-plugin-markdown": "^1.0.0-beta.6",
     "ink-docstrap": "github:bdistin/docstrap#klasa",
     "jsdoc": "github:jsdoc3/jsdoc",
     "markdownlint-cli": "^0.6.0",

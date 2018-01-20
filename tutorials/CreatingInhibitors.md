@@ -16,9 +16,9 @@ module.exports = class extends Inhibitor {
 	constructor(...args) {
 		super(...args, {
 			name: 'myInhibitorName',
-            enabled: true,
-            spamProtection: false
-        });
+			enabled: true,
+			spamProtection: false
+		});
 	}
 
 	async run(msg, cmd) {

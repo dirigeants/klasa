@@ -110,7 +110,8 @@ class SchemaPiece extends Schema {
 	 * Set a validator function for this instance.
 	 * @since 0.5.0
 	 * @param {Function} fn The validator function
-	 * @returns {SchemaPiece}
+	 * @returns {this}
+	 * @chainable
 	 */
 	setValidator(fn) {
 		if (typeof fn !== 'function') throw new TypeError(`[TYPE] ${this} - SchemaPiece#setValidator expects a function. Got: ${typeof fn}`);

@@ -7,7 +7,16 @@
 	"parserOptions": {
 		"ecmaVersion": 2018
 	},
+	"plugins": [ 
+		"markdown" 
+	], 
 	"rules": {
+
+		"no-undef":"off",
+		"no-unused-vars":"off",
+		"no-unused-expressions": "off",
+		"no-dupe-class-members": "off",
+
 		"no-extra-parens": ["warn", "all", {
 			"nestedBinaryExpressions": false
 		}],
@@ -62,7 +71,7 @@
 		"no-self-compare": "error",
 		"no-sequences": "error",
 		"no-unmodified-loop-condition": "error",
-		"no-unused-expressions": "error",
+		"no-unused-expressions": "off",
 		"no-useless-call": "error",
 		"no-useless-concat": "error",
 		"no-useless-escape": "error",

@@ -165,23 +165,23 @@ class Genre {
 		if (!player.playingURL) return this.wrapLink(this.seeds[Math.floor(Math.random() * this.seeds.length)]);
 		// If we do have a link, lets get youtube info about that link
 		const info = await getInfoAsync(player.playingURL).catch((err) => {
-        	this.client.emit('log', err, 'error');
-        	throw `something happened with YouTube URL: ${url}\n${util.codeBlock('', err)}`;
-    	});
+			this.client.emit('log', err, 'error');
+			throw `something happened with YouTube URL: ${player.playingURL}\n${util.codeBlock('', err)}`;
+		});
 		// Find the first video that we haven't recenly played on our player
 		const next = info.related_videos.find(vid => vid.id && !player.recentlyPlayed.includes(this.wrapLink(vid.id)));
 		// If their isn't a video, reseed a video we havn't played recently
-		if (!nextID) {
+		if (!next) {
 			const seed = this.seeds.find(vid => !player.recentlyPlayed.includes(this.wrapLink(vid)));
 			// if we have played all of the seeds, start over on reseeding
 			if (!seed) {
 				player.recentlyPlayed = [];
-				return this.wrapLink(this.seeds[Math.floor(Math.random()*this.seeds.length)]);
+				return this.wrapLink(this.seeds[Math.floor(Math.random() * this.seeds.length)]);
 			}
 			// Else return the seed we haven't played recently
 			return this.wrapLink(seed);
 		}
-    	return this.wrapLink(next.id);
+		return this.wrapLink(next.id);
 	}
 
 	wrapLink(id) {
@@ -226,12 +226,12 @@ module.exports = class extends Genre {
 		this.seeds = [
 			'QV1xUseG6Gg',
 			'F0YYoo6oFoU',
-			...
+			// ...
 			'RhU9MZ98jxo'
-		]
+		];
 	}
 
-}
+};
 ```
 
 This is great and all, but we need to register these pieces/store:
@@ -247,7 +247,7 @@ class MySwankyMusicBot extends Client {
 		// make a new GenreStore
 		this.genres = new GenreStore();
 		// Regester the GenreStore to be loaded, init, and available to be used as an arg to be looked up in commands
-		this.registerStore(this.genres)
+		this.registerStore(this.genres);
 		// Registers genres themselves to be able to be used as an arg to be looked up in commands for reload/enable/disable ect.
 		this.registerPiece('genre', this.genres);
 		// optionally we can add more aliases for the piece
@@ -262,9 +262,9 @@ new MySwankyMusicBot().login('token-goes-here');
 Then we use it in our player class I completely made up earlier like so:
 
 ```javascript
-...
+async () => {
 	// without going over setting up guild configs, or actually writing a player class
 	const nextSong = await this.client.genres.get(this.guild.configs.genre).getNext(this);
 	// nextSong should now be a pseudo random song based on the genre seeds and what has recently played
-...
+};
 ```

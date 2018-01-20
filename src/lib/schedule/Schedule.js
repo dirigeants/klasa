@@ -48,7 +48,7 @@ class Schedule {
 	/**
 	 * Get all the tasks from the cache
 	 * @since 0.5.0
-	 * @returns {ScheduledTaskOptions[]}
+	 * @type {ScheduledTaskOptions[]}
 	 * @private
 	 */
 	get _tasks() {

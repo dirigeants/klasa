@@ -273,7 +273,7 @@ class Command {
 	 * Registers a one-off custom resolver. See tutorial {@link CommandsCustomResolvers}
 	 * @param {string} type The type of the usage argument
 	 * @param {Function} resolver The one-off custom resolver
-	 * @returns {Command}
+	 * @returns {this}
 	 * @chainable
 	 * @since 0.5.0
 	 */
@@ -286,7 +286,7 @@ class Command {
 	 * Customizes the response of an argument if it fails resolution. See tutorial {@link CommandsCustomResponses}
 	 * @param {string} name The name of the usage argument
 	 * @param {(string|Function)} response The custom response or i18n function
-	 * @returns {Command}
+	 * @returns {this}
 	 * @chainable
 	 * @since 0.5.0
 	 * @example

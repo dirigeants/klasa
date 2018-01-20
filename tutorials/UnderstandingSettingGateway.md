@@ -9,7 +9,7 @@ By default, Klasa uses the [json](https://github.com/dirigeants/klasa/blob/maste
 For example, let's say I have downloaded the *rethinkdb* provider and I want to work with it, then we go to your main script file (`app.js`, `bot.js`..., wherever you declare the new Klasa.Client), and write the following code:
 
 ```javascript
-{ providers: { default: 'rethinkdb' } }
+const client = new Klasa.Client({ providers: { default: 'rethinkdb' } });
 ```
 
 Your Klasa's configuration will look something like this:
@@ -32,7 +32,7 @@ What happens when I use an engine that does not exist as a provider? Simply, Set
 You can easily add keys to the schema by doing this:
 
 ```javascript
-this.client.gateways.guilds.schema.addKey(key, options, force?);
+this.client.gateways.guilds.schema.addKey(key, options, force);
 ```
 
 Where:
@@ -108,8 +108,9 @@ So, let's say I want a key called 'modlogs' into the 'channels' folder for organ
 ### Slower
 
 ```javascript
-const { schema } = this.client.gateways.guilds;
-async function() {
+async () => {
+	const { schema } = this.client.gateways.guilds;
+
 	await schema.addFolder('channels');
 	await schema.channels.addKey('modlogs', { type: 'TextChannel' });
 	console.log(schema.channels.modlogs.toJSON());
@@ -121,14 +122,15 @@ async function() {
 	//  	max: null,
 	//  	configurable: true
 	// }
-}
+};
 ```
 
 ### Faster
 
 ```javascript
-const { schema } = this.client.gateways.guilds;
-async function() {
+async () => {
+	const { schema } = this.client.gateways.guilds;
+
 	await schema.addFolder('channels', { modlogs: { type: 'TextChannel' } });
 	console.log(schema.channels.modlogs.toJSON());
 	// {
@@ -139,7 +141,7 @@ async function() {
 	//  	max: null,
 	//  	configurable: true
 	// }
-}
+};
 ```
 
 Now, how we do configure it with the built-in conf command? Easy:
@@ -153,12 +155,13 @@ k!conf set channels.modlogs #modlogs
 In [Klasa-Pieces](https://github.com/dirigeants/klasa-pieces/), specially, some pieces require a key from the configuration to work, however, the creator of the pieces does not know if the user who downloads the piece has it, so this function becomes is useful in this case.
 
 ```javascript
-const { schema } = this.client.gateways.guilds;
-async function() {
+async () => {
+	const { schema } = this.client.gateways.guilds;
+
 	if (!schema.hasKey('modlog')) {
 		await schema.addKey('modlog', { type: 'TextChannel' });
 	}
-}
+};
 ```
 
 ## How can I create new Gateway instances?

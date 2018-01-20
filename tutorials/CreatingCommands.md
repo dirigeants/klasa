@@ -8,18 +8,18 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			name: 'yourCommandName',
-            enabled: true,
-            runIn: ['text', 'dm', 'group'],
-            cooldown: 0,
-            aliases: [],
-            permLevel: 0,
-            botPerms: [],
-            requiredSettings: [],
-            description: '',
-            quotedStringSupport: false,
-            usage: '',
-            usageDelim: undefined,
-            extendedHelp: 'No extended help available.'
+			enabled: true,
+			runIn: ['text', 'dm', 'group'],
+			cooldown: 0,
+			aliases: [],
+			permLevel: 0,
+			botPerms: [],
+			requiredSettings: [],
+			description: '',
+			quotedStringSupport: false,
+			usage: '',
+			usageDelim: undefined,
+			extendedHelp: 'No extended help available.'
 		});
 	}
 

@@ -52,9 +52,13 @@ ___
 Now, after we understand how to configurate the command, we'll start writting it:
 
 ```javascript
-async run(msg, [...params]) {
-	// This is where you place the code you want to run when your command is called
-}
+module.exports = class extends Command {
+
+	async run(msg, [...params]) {
+		// This is where you place the code you want to run when your command is called
+	}
+
+};
 ```
 
 `[...params]` represents a variable number of parameters given when the command is run. The name of the parameters in the array (and their count) is determined by the `usage` property and its given arguments.
@@ -64,8 +68,12 @@ async run(msg, [...params]) {
 For example, when you have: `"<Message:msg> <delete|edit> [newContent:string]"` as your usage, and `"|"` as your usageDelim, then the following code block is an example of how it would look like, and how we would work with them.
 
 ```javascript
-async run(msg, [message, action, newContent]) {
-  // code
+module.exports = class extends Command {
+
+	async run(msg, [message, action, newContent]) {
+		// code
+	}
+
 };
 ```
 
@@ -86,8 +94,12 @@ Regex arguments give you even more flexibility to define custom matching. Regex 
 So we can do the following destructuring to get the first matching group of the hexColor arg:
 
 ```javascript
-async run(msg, [[, hexColor]]) {
-  // code
+module.exports = class extends Command {
+
+	async run(msg, [[, hexColor]]) {
+		// code
+	}
+
 };
 ```
 

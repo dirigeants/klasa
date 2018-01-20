@@ -15,19 +15,19 @@ module.exports = class extends Extendable {
 		});
 	}
 
-// Getters
+	// Getters
 
 	get extend() {
 		// Make a getter
 	}
 
-// Setters
+	// Setters
 
-	set extend() {
-		// Make a setters
+	set extend(value) {
+		// Make a setter
 	}
 
-// Methods
+	// Methods
 
 	extend() {
 		// Make a methods
@@ -38,14 +38,20 @@ module.exports = class extends Extendable {
 
 ## Understanding extendable settings
 
-```js
-constructor(...args) {
-    super(...args, appliesTo, {
-		name: 'nameOfExtendable', // default the file name
-		enabled: true, // default true
-		klasa: false // default false
-	);
-}
+```javascript
+const { Extendable } = require('klasa');
+
+module.exports = class extends Extendable {
+
+	constructor(...args) {
+		super(...args, appliesTo, {
+			name: 'nameOfExtendable',
+			enabled: true,
+			klasa: false
+		});
+	}
+
+};
 ```
 
 | Name                | Default       | Type    | Description                                            |
@@ -55,7 +61,7 @@ constructor(...args) {
 | **options.klasa**   | `false`       | boolean | If the extendable is for Klasa instead of Discord.js   |
 | **appliesTo**       | `[]`          | Array   | An array of affected classes from Discord.js or Klasa. |
 
-> You can find all extendable classes for [Discord.js](https://github.com/hydrabolt/discord.js/blob/master/src/index.js) and [Klasa](https://github.com/dirigeants/klasa/blob/master/src/index.js) in those respective links.
+> You can find all extendable classes for [Discord.js](https://github.com/discordjs/discord.js/blob/master/src/index.js) and [Klasa](https://github.com/dirigeants/klasa/blob/master/src/index.js) in those respective links.
 
 ## Understanding extend
 
@@ -73,6 +79,7 @@ and Message has both properties of `author` and `channel`.
 
 ```js
 const { Extendable } = require('klasa');
+const prompt = require('../../prompt');
 
 module.exports = class extends Extendable {
 

@@ -66,7 +66,7 @@ class Extendable {
 		/**
 		 * The discord classes this extendable applies to
 		 * @since 0.0.1
-		 * @type{string[]}
+		 * @type {string[]}
 		 */
 		this.appliesTo = appliesTo;
 
@@ -107,7 +107,8 @@ class Extendable {
 	/**
 	 * Disables this piece
 	 * @since 0.0.1
-	 * @returns {Piece} This piece
+	 * @returns {this}
+	 * @chainable
 	 */
 	disable() {
 		if (this.client.listenerCount('pieceDisabled')) this.client.emit('pieceDisabled', this);
@@ -120,7 +121,8 @@ class Extendable {
 	 * Enables this piece
 	 * @since 0.0.1
 	 * @param {boolean} [init=false] If the piece is being init or not
-	 * @returns {Piece} This piece
+	 * @returns {this}
+	 * @chainable
 	 */
 	enable(init = false) {
 		if (!init && this.client.listenerCount('pieceEnabled')) this.client.emit('pieceEnabled', this);
