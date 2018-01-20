@@ -300,8 +300,8 @@ class KlasaClient extends Discord.Client {
 	/**
 	 * The invite link for the bot
 	 * @since 0.0.1
+	 * @type {string}
 	 * @readonly
-	 * @returns {string}
 	 */
 	get invite() {
 		if (!this.user.bot) throw 'Why would you need an invite link for a selfbot...';
@@ -312,8 +312,8 @@ class KlasaClient extends Discord.Client {
 	/**
 	 * The owner for this bot
 	 * @since 0.1.1
-	 * @readonly
 	 * @type {KlasaUser}
+	 * @readonly
 	 */
 	get owner() {
 		return this.users.get(this.options.ownerID);
@@ -322,8 +322,8 @@ class KlasaClient extends Discord.Client {
 	/**
 	 * Validates the permission structure passed to the client
 	 * @since 0.0.1
-	 * @private
 	 * @returns {PermissionLevels}
+	 * @private
 	 */
 	validatePermissionLevels() {
 		const permLevels = this.options.permissionLevels || KlasaClient.defaultPermissionLevels;

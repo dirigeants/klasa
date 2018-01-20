@@ -66,7 +66,7 @@ class Extendable {
 		/**
 		 * The discord classes this extendable applies to
 		 * @since 0.0.1
-		 * @type{string[]}
+		 * @type {string[]}
 		 */
 		this.appliesTo = appliesTo;
 

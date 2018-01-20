@@ -60,7 +60,7 @@ class GatewayStorage {
 		/**
 		 * Whether the active provider is SQL or not.
 		 * @since 0.5.0
-		 * @name GatewayStorage#baseDir
+		 * @name GatewayStorage#sql
 		 * @type {boolean}
 		 * @readonly
 		 */

@@ -23,7 +23,7 @@ module.exports = Structures.extend('Guild', Guild => {
 
 		/**
 		 * The language configured for this guild
-		 * @returns {Language}
+		 * @type {Language}
 		 */
 		get language() {
 			return this.client.languages.get(this.configs.language);
