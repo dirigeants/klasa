@@ -13,7 +13,6 @@ class Provider {
 	 * @typedef {Object} ProviderOptions
 	 * @property {string} [name=theFileName] The name of the provider
 	 * @property {boolean} [enabled=true] Whether the provider is enabled or not
-	 * @property {string} [description=''] The provider description
 	 * @property {boolean} [sql=false] If the provider provides to a sql data source
 	 * @memberof Provider
 	 */
@@ -70,13 +69,6 @@ class Provider {
 		this.enabled = options.enabled;
 
 		/**
-		 * The description of the provider
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.description = options.description;
-
-		/**
 		 * If the provider provides to a sql data source
 		 * @since 0.0.1
 		 * @type {boolean}
@@ -111,16 +103,33 @@ class Provider {
 		// Optionally defined in extension Classes
 	}
 
+	/**
+	 * Defines the JSON.stringify behavior of this provider.
+	 * @returns {Object}
+	 */
+	toJSON() {
+		return {
+			dir: this.dir,
+			file: this.file,
+			name: this.name,
+			type: this.type,
+			enabled: this.enabled,
+			sql: this.sql,
+			cache: this.cache
+		};
+	}
+
 	// left for documentation
 	/* eslint-disable no-empty-function */
 	async reload() {}
 	unload() {}
 	disable() {}
 	enable() {}
+	toString() {}
 	/* eslint-enable no-empty-function */
 
 }
 
-Piece.applyToClass(Provider);
+Piece.applyToClass(Provider, ['toJSON']);
 
 module.exports = Provider;

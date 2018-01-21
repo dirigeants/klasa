@@ -409,6 +409,6 @@ class TextPrompt {
  * @type {RegExp}
  * @static
  */
-TextPrompt.flagRegex = new RegExp(`--(\\w[\\w-])(?:=(?:${quotes.map(qu => `[${qu}]((?:[^${qu}\\\\]|\\\\.)*)[${qu}]`).join('|')}|([\\w-]+)))?`, 'g');
+TextPrompt.flagRegex = new RegExp(`--(\\w[\\w-]+)(?:=(?:${quotes.map(qu => `[${qu}]((?:[^${qu}\\\\]|\\\\.)*)[${qu}]`).join('|')}|([\\w-]+)))?`, 'g');
 
 module.exports = TextPrompt;

@@ -429,11 +429,21 @@ class Configuration {
 				list.errors.push([schema[key].path, new Error(`${schema[key].path} expects an array as value.`)]);
 			} else if (!schema[key].array && schema[key].array !== 'any' && Array.isArray(object[key])) {
 				list.errors.push([schema[key].path, new Error(`${schema[key].path} does not expect an array as value.`)]);
+			} else if (object[key] === null) {
+				list.promises.push(
+					this.reset(key)
+						.then(({ value, path }) => {
+							updateObject[key] = cache[key] = value;
+							list.keys.push(path);
+							list.values.push(value);
+						})
+						.catch(error => list.errors.push([schema.path, error]))
+				);
 			} else {
 				const promise = schema[key].array && schema[key].type !== 'any' ?
 					Promise.all(object[key].map(entry => schema[key].parse(entry, guild)
 						.then(Configuration.getIdentifier)
-						.catch(error => { list.errors.push([schema[key].path, error]); }))) :
+						.catch(error => list.errors.push([schema[key].path, error])))) :
 					schema[key].parse(object[key], guild);
 
 				list.promises.push(promise

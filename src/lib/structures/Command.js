@@ -181,20 +181,6 @@ class Command {
 		this.extendedHelp = options.extendedHelp || (msg => msg.language.get('COMMAND_HELP_NO_EXTENDED'));
 
 		/**
-		 * The usage string for the command
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.usageString = options.usage;
-
-		/**
-		 * The usage deliminator for the command input
-		 * @since 0.0.1
-		 * @type {?string}
-		 */
-		this.usageDelim = options.usageDelim;
-
-		/**
 		 * Whether to use quoted string support for this command or not
 		 * @since 0.2.1
 		 * @type {boolean}
@@ -234,7 +220,7 @@ class Command {
 		 * @since 0.0.1
 		 * @type {CommandUsage}
 		 */
-		this.usage = new CommandUsage(client, this);
+		this.usage = new CommandUsage(client, options.usage, options.usageDelim, this);
 
 		/**
 		 * Any active cooldowns for the command
@@ -257,6 +243,26 @@ class Command {
 		 * @type {string}
 		 */
 		this.dir = dir;
+	}
+
+	/**
+	 * The usage string for the command
+	 * @since 0.0.1
+	 * @type {string}
+	 * @readonly
+	 */
+	get usageString() {
+		return this.usage.usageString;
+	}
+
+	/**
+	 * The usage deliminator for the command input
+	 * @since 0.0.1
+	 * @type {?string}
+	 * @readonly
+	 */
+	get usageDelim() {
+		return this.usage.usageDelim;
 	}
 
 	/**
@@ -325,16 +331,57 @@ class Command {
 		// Optionally defined in extension Classes
 	}
 
+	/**
+	 * Defines the JSON.stringify behavior of this command.
+	 * @returns {Object}
+	 */
+	toJSON() {
+		return {
+			type: this.type,
+			enabled: this.enabled,
+			runIn: this.runIn.slice(0),
+			bucket: this.bucket,
+			cooldown: this.cooldown,
+			nsfw: this.nsfw,
+			guarded: this.guarded,
+			deletable: this.deletable,
+			promptTime: this.promptTime,
+			promptLimit: this.promptLimit,
+			name: this.name,
+			aliases: this.aliases.slice(0),
+			permLevel: this.permLevel,
+			botPerms: this.botPerms.slice(0),
+			requiredConfigs: this.requiredConfigs.slice(0),
+			description: typeof this.description === 'function' ? this.description({ language: this.client.languages.default }) : this.description,
+			extendedHelp: typeof this.extendedHelp === 'function' ? this.extendedHelp({ language: this.client.languages.default }) : this.extendedHelp,
+			usageString: this.usageString,
+			usageDelim: this.usageDelim,
+			quotedStringSupport: this.quotedStringSupport,
+			subcommands: this.subcommands,
+			fullCategory: this.fullCategory,
+			category: this.category,
+			subCategory: this.subCategory,
+			usage: {
+				usageString: this.usage.usageString,
+				usageDelim: this.usage.usageDelim,
+				nearlyFullUsage: this.usage.nearlyFullUsage
+			},
+			file: this.file,
+			dir: this.dir
+		};
+	}
+
 	// left for documentation
 	/* eslint-disable no-empty-function */
 	async reload() {}
 	unload() {}
 	disable() {}
 	enable() {}
+	toString() {}
 	/* eslint-enable no-empty-function */
 
 }
 
-Piece.applyToClass(Command);
+Piece.applyToClass(Command, ['toJSON']);
 
 module.exports = Command;

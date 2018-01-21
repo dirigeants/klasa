@@ -91,10 +91,12 @@ class Task {
 
 	// left for documentation
 	/* eslint-disable no-empty-function */
-	async reload() { }
-	unload() { }
-	disable() { }
-	enable() { }
+	async reload() {}
+	unload() {}
+	disable() {}
+	enable() {}
+	toString() {}
+	toJSON() {}
 	/* eslint-enable no-empty-function */
 
 }

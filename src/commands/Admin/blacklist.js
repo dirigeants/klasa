@@ -8,7 +8,8 @@ module.exports = class extends Command {
 			permLevel: 10,
 			description: (msg) => msg.language.get('COMMAND_BLACKLIST_DESCRIPTION'),
 			usage: '<User:user|Guild:guild|guild:str> [...]',
-			usageDelim: ' '
+			usageDelim: ' ',
+			guarded: true
 		});
 	}
 
