@@ -13,6 +13,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#166](https://github.com/dirigeants/klasa/pull/166)] Added support for TypeScript's `export default` in the loader. (kyranet)
 - [[#162](https://github.com/dirigeants/klasa/pull/162)] Added better dependent arguments support. (bdistin)
 - [[#162](https://github.com/dirigeants/klasa/pull/162)] Added subcommand support. (bdistin)
 - [[#162](https://github.com/dirigeants/klasa/pull/162)] Added per-command custom resolvers and per-command and per-argument custom responses (with i18n support). (bdistin)
