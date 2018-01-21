@@ -49,8 +49,6 @@ class KlasaClient extends Discord.Client {
 	 * @property {KlasaPieceDefaults} [pieceDefaults={}] Overrides the defaults for all pieces
 	 * @property {string} [language='en-US'] The default language Klasa should opt-in for the commands
 	 * @property {KlasaCustomPromptDefaults} [customPromptDefaults={}] The defaults for custom prompts
-	 * @property {boolean} [ignoreBots=true] Whether or not this bot should ignore other bots
-	 * @property {boolean} [ignoreSelf=true] Whether or not this bot should ignore itself
 	 * @property {boolean} [cmdEditing=false] Whether the bot should update responses if the command is edited
 	 * @property {boolean} [cmdLogging=false] Whether the bot should log command usage
 	 * @property {boolean} [typing=false] Whether the bot should type while processing commands
@@ -433,8 +431,6 @@ class KlasaClient extends Discord.Client {
 	 */
 	async _ready() {
 		await this.gateways._ready();
-		if (typeof this.options.ignoreBots === 'undefined') this.options.ignoreBots = true;
-		if (typeof this.options.ignoreSelf === 'undefined') this.options.ignoreSelf = this.user.bot;
 		if (this.user.bot) this.application = await super.fetchApplication();
 		if (!this.options.ownerID) this.options.ownerID = this.user.bot ? this.application.owner.id : this.user.id;
 

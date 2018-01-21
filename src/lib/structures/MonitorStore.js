@@ -76,7 +76,12 @@ class MonitorStore extends Collection {
 	 */
 	async run(msg) {
 		for (const monitor of this.values()) {
-			if (monitor.enabled && !(monitor.ignoreBots && msg.author.bot) && !(monitor.ignoreSelf && this.client.user === msg.author) && !(monitor.ignoreOthers && this.client.user !== msg.author)) {
+			if (monitor.enabled &&
+				!(monitor.ignoreBots && msg.author.bot) &&
+				!(monitor.ignoreSelf && this.client.user === msg.author) &&
+				!(monitor.ignoreOthers && this.client.user !== msg.author) &&
+				!(monitor.ignoreWebhooks && msg.webhookID)
+			) {
 				try {
 					await monitor.run(msg);
 				} catch (err) {

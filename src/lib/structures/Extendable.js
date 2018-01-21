@@ -64,18 +64,18 @@ class Extendable {
 		this.type = 'extendable';
 
 		/**
-		 * The discord classes this extendable applies to
-		 * @since 0.0.1
-		 * @type {string[]}
-		 */
-		this.appliesTo = appliesTo;
-
-		/**
 		 * If the language is enabled or not
 		 * @since 0.0.1
 		 * @type {boolean}
 		 */
 		this.enabled = options.enabled;
+
+		/**
+		 * The discord classes this extendable applies to
+		 * @since 0.0.1
+		 * @type {string[]}
+		 */
+		this.appliesTo = appliesTo;
 
 		/**
 		 * The target library to apply this extendable to
@@ -131,14 +131,31 @@ class Extendable {
 		return this;
 	}
 
+	/**
+	 * Defines the JSON.stringify behavior of this extendable.
+	 * @returns {Object}
+	 */
+	toJSON() {
+		return {
+			dir: this.dir,
+			file: this.file,
+			name: this.name,
+			type: this.type,
+			enabled: this.enabled,
+			appliesTo: this.appliesTo,
+			target: this.target === Discord ? 'discord.js' : 'klasa'
+		};
+	}
+
 	// left for documentation
 	/* eslint-disable no-empty-function */
-	async reload() { }
-	unload() { }
+	async reload() {}
+	unload() {}
+	toString() {}
 	/* eslint-enable no-empty-function */
 
 }
 
-Piece.applyToClass(Extendable, ['disable', 'enable']);
+Piece.applyToClass(Extendable, ['disable', 'enable', 'toJSON']);
 
 module.exports = Extendable;

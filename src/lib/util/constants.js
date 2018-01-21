@@ -18,8 +18,6 @@ exports.DEFAULTS = {
 			warn: true,
 			wtf: true
 		},
-		ignoreBots: true,
-		ignoreSelf: true,
 		language: 'en-US',
 		prefix: '!',
 		preserveConfigs: true,
@@ -72,13 +70,13 @@ exports.DEFAULTS = {
 				enabled: true,
 				ignoreBots: true,
 				ignoreSelf: true,
-				ignoreOthers: true
+				ignoreOthers: true,
+				ignoreWebhooks: true
 			},
 			providers: {
 				enabled: true,
 				sql: false,
-				cache: false,
-				description: ''
+				cache: false
 			},
 			tasks: { enabled: true }
 		},
