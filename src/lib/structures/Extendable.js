@@ -64,7 +64,7 @@ class Extendable {
 		this.type = 'extendable';
 
 		/**
-		 * If the language is enabled or not
+		 * If the extendable is enabled or not
 		 * @since 0.0.1
 		 * @type {boolean}
 		 */
