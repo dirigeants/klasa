@@ -142,7 +142,7 @@ class Extendable {
 			name: this.name,
 			type: this.type,
 			enabled: this.enabled,
-			appliesTo: this.appliesTo,
+			appliesTo: this.appliesTo.slice(0),
 			target: this.target === Discord ? 'discord.js' : 'klasa'
 		};
 	}
