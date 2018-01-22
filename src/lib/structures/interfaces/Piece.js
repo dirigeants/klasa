@@ -69,6 +69,20 @@ class Piece {
 	}
 
 	/**
+	 * Defines the JSON.stringify behavior of this task.
+	 * @returns {Object}
+	 */
+	toJSON() {
+		return {
+			dir: this.dir,
+			file: this.file,
+			name: this.name,
+			type: this.type,
+			enabled: this.enabled
+		};
+	}
+
+	/**
 	 * Applies this interface to a class
 	 * @since 0.1.1
 	 * @param {Object} structure The structure to apply this interface to

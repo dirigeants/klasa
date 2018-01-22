@@ -99,12 +99,28 @@ class Inhibitor {
 		// Optionally defined in extension Classes
 	}
 
+	/**
+	 * Defines the JSON.stringify behavior of this inhibitor.
+	 * @returns {Object}
+	 */
+	toJSON() {
+		return {
+			dir: this.dir,
+			file: this.file,
+			name: this.name,
+			type: this.type,
+			enabled: this.enabled,
+			spamProtection: this.spamProtection
+		};
+	}
+
 	// left for documentation
 	/* eslint-disable no-empty-function */
 	async reload() {}
 	unload() {}
 	disable() {}
 	enable() {}
+	toString() {}
 	/* eslint-enable no-empty-function */
 
 }

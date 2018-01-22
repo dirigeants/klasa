@@ -224,7 +224,8 @@ class Configuration {
 	 * @param {*} [value] The value to parse and save
 	 * @param {ConfigGuildResolvable} [guild] A guild resolvable
 	 * @param {ConfigurationUpdateOptions} [options={}] The options for the update
-	 * @returns {Promise<(ConfigurationUpdateResult|ConfigurationUpdateObjectResult)>}
+	 * @returns {Promise<(ConfigurationUpdateResult|ConfigurationUpdateObjectList)>}
+	 * @throws {Promise<ConfigurationUpdateObjectResult>}
 	 * @example
 	 * // Updating the value of a key
 	 * Configuration#update('roles.administrator', '339943234405007361', msg.guild);
@@ -256,7 +257,8 @@ class Configuration {
 	 * @since 0.5.0
 	 * @param {Object} object A JSON object to iterate and parse
 	 * @param {ConfigGuildResolvable} [guild] A guild resolvable
-	 * @returns {Promise<ConfigurationUpdateObjectResult>}
+	 * @returns {Promise<ConfigurationUpdateObjectList>}
+	 * @throws {Promise<ConfigurationUpdateObjectResult>}
 	 * @private
 	 */
 	async _updateMany(object, guild) {
@@ -274,7 +276,8 @@ class Configuration {
 		if (oldClone !== null) this.client.emit('configUpdateEntry', oldClone, this, { type: 'MANY', keys: list.keys, values: list.values });
 		if (this.gateway.sql) await this.gateway.provider.update(this.gateway.type, this.id, list.keys, list.values);
 		else await this.gateway.provider.update(this.gateway.type, this.id, updateObject);
-		return { updated: { keys: list.keys, values: list.values }, errors: list.errors };
+		if (list.errors.length) throw { updated: { keys: list.keys, values: list.values }, errors: list.errors };
+		return { keys: list.keys, values: list.values };
 	}
 
 	/**
@@ -396,7 +399,7 @@ class Configuration {
 
 		const pathData = this.gateway.getPath(key, { avoidUnconfigurable, piece: true });
 		if (action === 'remove' && !pathData.path.array) return this._parseReset(key, pathData);
-		const { parsedID, array, parsed } = action === 'remove' && !pathData.path.array ?
+		const { parsedID, array, parsed } = value === null || (action === 'remove' && !pathData.path.array) ?
 			this._parseReset(key, pathData) :
 			pathData.path.array === true ?
 				await this._parseUpdateArray(action, key, value, guild, arrayPosition, pathData) :
@@ -429,11 +432,21 @@ class Configuration {
 				list.errors.push([schema[key].path, new Error(`${schema[key].path} expects an array as value.`)]);
 			} else if (!schema[key].array && schema[key].array !== 'any' && Array.isArray(object[key])) {
 				list.errors.push([schema[key].path, new Error(`${schema[key].path} does not expect an array as value.`)]);
+			} else if (object[key] === null) {
+				list.promises.push(
+					this.reset(key)
+						.then(({ value, path }) => {
+							updateObject[key] = cache[key] = value;
+							list.keys.push(path);
+							list.values.push(value);
+						})
+						.catch(error => list.errors.push([schema.path, error]))
+				);
 			} else {
 				const promise = schema[key].array && schema[key].type !== 'any' ?
 					Promise.all(object[key].map(entry => schema[key].parse(entry, guild)
 						.then(Configuration.getIdentifier)
-						.catch(error => { list.errors.push([schema[key].path, error]); }))) :
+						.catch(error => list.errors.push([schema[key].path, error])))) :
 					schema[key].parse(object[key], guild);
 
 				list.promises.push(promise

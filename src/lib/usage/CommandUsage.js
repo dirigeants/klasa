@@ -10,10 +10,12 @@ class CommandUsage extends ParsedUsage {
 	/**
 	 * @since 0.0.1
 	 * @param {KlasaClient} client The klasa client
+	 * @param {usageString} usageString The usage string for this command
+	 * @param {usageDelim} usageDelim The usage deliminator for this command
 	 * @param {Command} command The command this parsed usage is for
 	 */
-	constructor(client, command) {
-		super(client, command.usageString, command.usageDelim);
+	constructor(client, usageString, usageDelim, command) {
+		super(client, usageString, usageDelim);
 
 		/**
 		 * All names and aliases for the command

@@ -90,6 +90,13 @@ class Monitor {
 		 * @type {boolean}
 		 */
 		this.ignoreOthers = options.ignoreOthers;
+
+		/**
+		 * Whether the monitor ignores webhooks or not
+		 * @since 0.5.0
+		 * @type {boolean}
+		 */
+		this.ignoreWebhooks = options.ignoreWebhooks;
 	}
 
 	/**
@@ -113,16 +120,35 @@ class Monitor {
 		// Optionally defined in extension Classes
 	}
 
+	/**
+	 * Defines the JSON.stringify behavior of this monitor.
+	 * @returns {Object}
+	 */
+	toJSON() {
+		return {
+			dir: this.dir,
+			file: this.file,
+			name: this.name,
+			type: this.type,
+			enabled: this.enabled,
+			ignoreBots: this.ignoreBots,
+			ignoreSelf: this.ignoreSelf,
+			ignoreOthers: this.ignoreOthers,
+			ignoreWebhooks: this.ignoreWebhooks
+		};
+	}
+
 	// left for documentation
 	/* eslint-disable no-empty-function */
 	async reload() {}
 	unload() {}
 	disable() {}
 	enable() {}
+	toString() {}
 	/* eslint-enable no-empty-function */
 
 }
 
-Piece.applyToClass(Monitor);
+Piece.applyToClass(Monitor, ['toJSON']);
 
 module.exports = Monitor;

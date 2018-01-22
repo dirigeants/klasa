@@ -97,6 +97,8 @@ class Finalizer {
 	unload() {}
 	disable() {}
 	enable() {}
+	toString() {}
+	toJSON() {}
 	/* eslint-enable no-empty-function */
 
 }
