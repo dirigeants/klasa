@@ -155,7 +155,8 @@ module.exports = class extends Language {
 				`• Node.js    :: ${processVersion}`,
 				this.client.options.shardCount ? `• Shard      :: ${((msg.guild ? msg.guild.shardID : msg.channel.shardID) || this.client.options.shardId) + 1} / ${this.client.options.shardCount}` : ''
 			],
-			COMMAND_STATS_DESCRIPTION: 'Provides some details about the bot and stats.'
+			COMMAND_STATS_DESCRIPTION: 'Provides some details about the bot and stats.',
+			MESSAGE_PROMPT_TIMEOUT: 'The prompt has timed out.'
 		};
 	}
 

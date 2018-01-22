@@ -146,7 +146,7 @@ module.exports = Structures.extend('Message', Message => {
 			const message = await this.channel.send(text);
 			const responses = await this.channel.awaitMessages(mes => mes.author === this.author, { time, max: 1 });
 			message.delete();
-			if (responses.size === 0) throw undefined;
+			if (responses.size === 0) throw this.language.get('MESSAGE_PROMPT_TIMEOUT');
 			return responses.first();
 		}
 
