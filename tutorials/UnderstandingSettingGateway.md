@@ -4,6 +4,32 @@ The SettingGateway is designed to provide users a very useful interface for mana
 
 By default, Klasa uses the [json](https://github.com/dirigeants/klasa/blob/master/src/providers/json.js) provider. Do not be fooled and insta-replace with SQLite, Klasa's JSON provider writes the data [atomically](https://en.wikipedia.org/wiki/Atomicity_(database_systems)), in other words, it is very rare for the data to corrupt.
 
+## Key types
+
+The types supported for Gateway's keys are the same as the name of the properties from the {@link SettingResolver}, by extending it, you'll also extend the available key types.
+
+| Name             | Type                                  | Description                                                                              |
+| ---------------- | ------------------------------------- | ---------------------------------------------------------------------------------------- |
+| **any**          | Anything, no type restriction         | Resolves anything, even objects, the usage of this type will make a key unconfigurable   |
+| **boolean**      | A boolean resolvable                  | Resolves a boolean primitive value                                                       |
+| **channel**      | A {@link Channel} instance or id      | Resolves a channel. Be careful with using this, as it accepts any type of channel        |
+| **command**      | A {@link Command} instance or name    | Resolves a Command                                                                       |
+| **emoji**        | An {@link Emoji} instance or name     | Resolves a custom emoji                                                                  |
+| **float**        | A floating point number               | Resolves a [float](https://en.wikipedia.org/wiki/Double-precision_floating-point_format) |
+| **guild**        | A {@link KlasaGuild} instance or id   | Resolves a KlasaGuild (which extends Guild)                                              |
+| **integer**      | An integer number                     | Resolves an [integer](https://en.wikipedia.org/wiki/Integer) number                      |
+| **language**     | A {@link Language} instance or name   | Resolves a language                                                                      |
+| **member**       | A {@link GuildMember} instance or id  | Resolves a GuildMember                                                                   |
+| **msg**          | A {@link KlasaMessage} instance or id | Resolves a KlasaMessage (which extends Message)                                          |
+| **role**         | A {@link Role} instance or id         | Resolves a Role                                                                          |
+| **string**       | A string resolvable                   | Resolves a string                                                                        |
+| **textchannel**  | A {@link TextChannel} instance or id  | Resolves a TextChannel                                                                   |
+| **url**          | An URL resolvable                     | Resolves a URL with Node.js' URL parser                                                  |
+| **user**         | A {@link KlasaUser} instance or id    | Resolves a KlasaUser (which extends User)                                                |
+| **voicechannel** | A {@link VoiceChannel} instance or id | Resolves a VoiceChannel                                                                  |
+
+> To extend the types, you may extend {@link SettingResolver} by making an extendable, check how to make them here: {@tutorial CreatingExtendables}.
+
 ## Change the *provider's engine*.
 
 For example, let's say I have downloaded the *rethinkdb* provider and I want to work with it, then we go to your main script file (`app.js`, `bot.js`..., wherever you declare the new Klasa.Client), and write the following code:
