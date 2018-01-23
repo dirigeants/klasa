@@ -10,11 +10,11 @@ module.exports = class extends Inhibitor {
 		if (msg.author === this.client.owner) return;
 		if (!cmd.cooldown || cmd.cooldown <= 0) return;
 
-		const instance = cmd.cooldowns.get(msg.author.id);
+		const existing = cmd.cooldowns.get(msg.author.id);
 
-		if (!instance || instance < cmd.bucket) return;
+		if (!existing || existing.count < cmd.bucket) return;
 
-		const remaining = ((cmd.cooldown * 1000) - (Date.now() - instance)) / 1000;
+		const remaining = ((cmd.cooldown * 1000) - (Date.now() - existing.time)) / 1000;
 
 		if (remaining < 0) {
 			cmd.cooldowns.delete(msg.author.id);

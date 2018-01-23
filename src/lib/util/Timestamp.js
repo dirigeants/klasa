@@ -65,6 +65,14 @@ class Timestamp {
 	}
 
 	/**
+	 * Defines the toString behavior of Timestamp.
+	 * @returns {string}
+	 */
+	toString() {
+		return this.display();
+	}
+
+	/**
 	 * Display the current date with the current pattern.
 	 * @since 0.5.0
 	 * @param {string} pattern The pattern to parse

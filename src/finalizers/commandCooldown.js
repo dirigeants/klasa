@@ -8,11 +8,12 @@ module.exports = class extends Finalizer {
 
 		const existing = msg.command.cooldowns.get(msg.author.id);
 		if (existing) {
-			msg.command.cooldowns.set(msg.author.id, existing + 1);
+			existing.count++;
+			msg.command.cooldowns.set(msg.author.id, existing);
 			return;
 		}
 
-		msg.command.cooldowns.set(msg.author.id, 1);
+		msg.command.cooldowns.set(msg.author.id, { count: 1, time: Date.now() });
 		this.client.setTimeout(() => msg.command.cooldowns.delete(msg.author.id), msg.command.cooldown * 1000);
 	}
 
