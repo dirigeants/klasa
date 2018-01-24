@@ -72,7 +72,7 @@ this.customizeResponse('arg1', 'Response for argument 1')
 - How can I customize the response for a type with unions? Like `<add|set|delete|list>`? You can use one of the possible names, for example, `'set'`.
 - What happens if I have two arguments with the same name? Klasa will assign the custom response to the first argument that matches. A second call with that method with the same name would set it for the second.
 
-## Further learning:
+## Further Reading:
 
 - {@tutorial CommandsArguments}
 - {@tutorial CommandsCustomResolvers}

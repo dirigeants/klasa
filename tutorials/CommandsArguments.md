@@ -66,7 +66,7 @@ If the contractors work in a union, they pass on the wood to the next contractor
 
 Credits to [@bdistin](https://github.com/bdistin) for this analogy.
 
-## Further learning:
+## Further Reading:
 
 - {@tutorial CommandsSubcommands}
 - {@tutorial CommandsCustomResponses}
