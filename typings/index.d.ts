@@ -388,14 +388,14 @@ declare module 'klasa' {
 		public piece(arg: string, possible: Possible, msg: KlasaMessage): Promise<Piece>;
 		public store(arg: string, possible: Possible, msg: KlasaMessage): Promise<Store>;
 
-		public command(arg: string, possible: Possible, msg: KlasaMessage): Promise<Command>;
 		public cmd(arg: string, possible: Possible, msg: KlasaMessage): Promise<Command>;
+		public command(arg: string, possible: Possible, msg: KlasaMessage): Promise<Command>;
 		public event(arg: string, possible: Possible, msg: KlasaMessage): Promise<Event>;
 		public extendable(arg: string, possible: Possible, msg: KlasaMessage): Promise<Extendable>;
 		public finalizer(arg: string, possible: Possible, msg: KlasaMessage): Promise<Finalizer>;
 		public inhibitor(arg: string, possible: Possible, msg: KlasaMessage): Promise<Inhibitor>;
-		public monitor(arg: string, possible: Possible, msg: KlasaMessage): Promise<Monitor>;
 		public language(arg: string, possible: Possible, msg: KlasaMessage): Promise<Language>;
+		public monitor(arg: string, possible: Possible, msg: KlasaMessage): Promise<Monitor>;
 		public provider(arg: string, possible: Possible, msg: KlasaMessage): Promise<Provider>;
 		public task(arg: string, possible: Possible, msg: KlasaMessage): Promise<Task>;
 
@@ -960,6 +960,7 @@ declare module 'klasa' {
 		public subcommands: boolean;
 		public requiredConfigs: string[];
 		public runIn: string[];
+		public bucket: number;
 		public subCategory: string;
 		public usage: CommandUsage;
 		public usageDelim: string;
@@ -969,9 +970,9 @@ declare module 'klasa' {
 
 		public definePrompt(usageString: string, usageDelim: string): ParsedUsage;
 		public createCustomResolver(type: string, resolver: ArgResolverCustomMethod): this;
-		public customizeResponse(name: string, response: string | ((msg: KlasaMessage) => string)): this;
+		public customizeResponse(name: string, response: string | ((msg: KlasaMessage, possible: Possible) => string)): this;
 
-		public abstract run(msg: KlasaMessage, params: any[]): Promise<KlasaMessage | KlasaMessage[]>;
+		public run(msg: KlasaMessage, params: any[]): Promise<KlasaMessage | KlasaMessage[]>;
 		public init(): Promise<void>;
 
 		public enable(): Piece;
@@ -1680,6 +1681,7 @@ declare module 'klasa' {
 		subcommands?: boolean;
 		requiredConfigs?: string[];
 		runIn?: string[];
+		bucket?: number;
 		usage?: string;
 		usageDelim?: string;
 	};

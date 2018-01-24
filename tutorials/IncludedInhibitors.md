@@ -1,3 +1,11 @@
+## blacklist
+
+Checks if a user is on blacklist by the clientStorage's userBlacklist key.
+
+**Source:**
+
+[inhibitors/blacklist.js](https://github.com/dirigeants/klasa/blob/master/src/inhibitors/blacklist.js)
+
 ## cooldown
 
 Checks if a user is on cooldown for the command run.
@@ -21,6 +29,14 @@ Checks to make sure the bot has all permissions needed (based on {@link Command#
 **Source:**
 
 [inhibitors/missingBotPermissions.js](https://github.com/dirigeants/klasa/blob/master/src/inhibitors/missingBotPermissions.js)
+
+## nsfw
+
+Checks if the command and the channel are both NSFW. Check {@link Command#nsfw} and {@link external:TextChannel#nsfw}
+
+**Source:**
+
+[inhibitors/nsfw.js](https://github.com/dirigeants/klasa/blob/master/src/inhibitors/nsfw.js)
 
 ## permissions
 
@@ -55,3 +71,4 @@ Checks if the command can be run in the channel type this is. (based on {@link C
 - {@tutorial IncludedLanguages}
 - {@tutorial IncludedMonitors}
 - {@tutorial IncludedProviders}
+- {@tutorial IncludedTasks}

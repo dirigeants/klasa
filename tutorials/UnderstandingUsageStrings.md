@@ -27,14 +27,21 @@
 | `msg` , `message`          | A [Message](https://discord.js.org/#/docs/main/master/class/Message) instance returned from the message ID.                        |
 | `role`                     | A [Role](https://discord.js.org/#/docs/main/master/class/Role) instance returned from the role ID or mention.                      |
 | `user` , `mention`         | A [User](https://discord.js.org/#/docs/main/master/class/User) instance returned from the user ID or mention.                      |
+| `custom`                   | A custom argument resolver, takes a custom method as fourth parameter.                                                             |
+| `store`                    | Any store, whichever resolves first in order of store types alphabetically.                                                        |
 | `piece`                    | Any piece, whichever resolves first in order of piece types alphabetically.                                                        |
 | `cmd` , `command`          | A {@link Command} instance returned from the command name or alias.                                                                |
 | `event`                    | An {@link Event} instance returned from the event name.                                                                            |
-| `inhibitor`                | An {@link Inhibitor} instance returned from the inhibitor name.                                                                    |
+| `extendable`               | An {@link Extendable} instance returned from the extendable name.                                                                  |
 | `finalizer`                | A {@link Finalizer} instance returned from the finalizer name.                                                                     |
+| `inhibitor`                | An {@link Inhibitor} instance returned from the inhibitor name.                                                                    |
 | `language`                 | A {@link Language} instance returned from the language name.                                                                       |
 | `monitor`                  | A {@link Monitor} instance returned from the monitor name.                                                                         |
 | `provider`                 | A {@link Provider} instance returned from the provider name.                                                                       |
+| `task`                     | A {@link Task} instance returned from the task name.                                                                               |
+| `date`                     | A Date instance returned from the parse of a string into the Date constructor.                                                     |
+| `duration`                 | A Date instance returned from the parsed human duration to milliseconds.                                                           |
+| `time`                     | A Date instance returned from date or duration.                                                                                    |
 
 > Note: `Literal` is very useful in arguments with multiple options.
 

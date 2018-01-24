@@ -276,7 +276,7 @@ class Command {
 	}
 
 	/**
-	 * Registers a one-off custom resolver
+	 * Registers a one-off custom resolver. See tutorial {@link CommandsCustomResolvers}
 	 * @param {string} type The type of the usage argument
 	 * @param {Function} resolver The one-off custom resolver
 	 * @returns {this}
@@ -289,12 +289,19 @@ class Command {
 	}
 
 	/**
-	 * Customizes the response of an argument if it fails resolution.
+	 * Customizes the response of an argument if it fails resolution. See tutorial {@link CommandsCustomResponses}
 	 * @param {string} name The name of the usage argument
 	 * @param {(string|Function)} response The custom response or i18n function
 	 * @returns {this}
 	 * @chainable
 	 * @since 0.5.0
+	 * @example
+	 * // Changing the message for a parameter called 'targetUser'
+	 * this.customizeResponse('targetUser', 'You did not give me a user...');
+	 *
+	 * // Or also using functions to have multilanguage support:
+	 * this.customizeResponse('targetUser', (msg) =>
+	 *     msg.language.get('COMMAND_REQUIRED_USER_FRIENDLY'));
 	 */
 	customizeResponse(name, response) {
 		this.usage.customizeResponse(name, response);

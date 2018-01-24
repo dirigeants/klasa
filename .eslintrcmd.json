@@ -7,9 +7,9 @@
 	"parserOptions": {
 		"ecmaVersion": 2018
 	},
-	"plugins": [ 
-		"markdown" 
-	], 
+	"plugins": [
+		"markdown"
+	],
 	"rules": {
 
 		"no-undef":"off",
@@ -59,7 +59,7 @@
 		"no-console": ["error", { "allow": ["log", "warn", "error"] }],
 		"no-floating-decimal": "error",
 		"no-implied-eval": "error",
-		"no-invalid-this": "error",
+		"no-invalid-this": "off",
 		"no-lone-blocks": "error",
 		"no-multi-spaces": "error",
 		"no-new-func": "error",
@@ -70,7 +70,6 @@
 		"no-self-compare": "error",
 		"no-sequences": "error",
 		"no-unmodified-loop-condition": "error",
-		"no-unused-expressions": "off",
 		"no-useless-call": "error",
 		"no-useless-concat": "error",
 		"no-useless-escape": "error",

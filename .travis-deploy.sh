@@ -1,5 +1,5 @@
 #!/bin/bash
-# Based on https://github.com/hydrabolt/discord.js-site/blob/master/deploy/deploy.sh
+# Based on https://github.com/discordjs/discord.js-site/blob/master/deploy/deploy.sh
 
 set -e
 

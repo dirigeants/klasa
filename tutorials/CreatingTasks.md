@@ -24,7 +24,7 @@ module.exports = class extends Task {
 
 Where `metadata` is what you passed to `ScheduledTaskOptions.data`, `null` if not passed.
 
-## Creating the ScheduledTask
+## Creating a timed ScheduledTask
 
 After you have created your {@link Task} piece, you'll be able to create the first scheduled tasks for it:
 
@@ -58,6 +58,16 @@ module.exports = class extends Task {
 ```
 
 Check the source of the piece above [here](https://github.com/dirigeants/klasa-pieces/blob/9ba1c48b08ad2b1ea55aeadc6d7e8e067346c0a2/tasks/reminder.js).
+
+## Creating a recurring ScheduledTask
+
+Recurring tasks, as opposed to timed tasks, never end unless told to do so. They simply reschedule the task for the next possible time whenever executed. The recurring format is heavily based on [Cron](https://en.wikipedia.org/wiki/Cron) and has support for many wildcards. It also supports predefined patterns such as `'@daily'`, `'@weekly'`, `'@monthly'` and `'@yearly'` to improve simplicity. You can also generate these patterns with this tool: [**Crontab Generator**](https://crontab-generator.org/) (put a random command such as `echo "test"` to get the pattern), which allows you to create them quickly and check the next 5 dates the crontab pattern will run.
+
+```javascript
+this.client.schedule.create('backup', '0 0 * * tue,fri');
+```
+
+The pattern above is a **Crontab pattern** that runs every Tuesday and Friday at 00:00 UTC, and will execute the task `backup` every time it ends.
 
 ## Configuration
 

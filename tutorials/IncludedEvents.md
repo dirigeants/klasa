@@ -46,6 +46,22 @@ Re-emits the Discord.js debug event as log event, if enabled.
 
 [events/error.js](https://github.com/dirigeants/klasa/blob/master/src/events/error.js)
 
+## eventError
+
+Handles the errors thrown by any of the events.
+
+**Source:**
+
+[events/eventError.js](https://github.com/dirigeants/klasa/blob/master/src/events/eventError.js)
+
+## finalizerError
+
+Handles the errors thrown by any of the finalizers.
+
+**Source:**
+
+[events/finalizerError.js](https://github.com/dirigeants/klasa/blob/master/src/events/finalizerError.js)
+
 ## guildCreate
 
 Checks if the guild is blacklisted for automatic leaving.
@@ -110,14 +126,6 @@ Handles the errors thrown by any of the monitors.
 
 [events/monitorError.js](https://github.com/dirigeants/klasa/blob/master/src/events/monitorError.js)
 
-## finalizerError
-
-Handles the errors thrown by any of the finalizers.
-
-**Source:**
-
-[events/finalizerError.js](https://github.com/dirigeants/klasa/blob/master/src/events/finalizerError.js)
-
 ## taskError
 
 Handles the errors thrown by any of the tasks.
@@ -159,3 +167,4 @@ Stands for '**W**hat a **T**errible **F**ailure'. Logs fatal errors.
 - {@tutorial IncludedLanguages}
 - {@tutorial IncludedMonitors}
 - {@tutorial IncludedProviders}
+- {@tutorial IncludedTasks}

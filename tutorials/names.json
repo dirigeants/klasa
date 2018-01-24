@@ -43,6 +43,23 @@
 	"UnderstandingSettingGateway": {
 		"title": "Understanding Setting Gateway"
 	},
+	"UnderstandingCommands": {
+		"title": "Understanding Commands and their Structures",
+		"children": {
+			"CommandsArguments": {
+				"title": "Commands I: Arguments"
+			},
+			"CommandsSubcommands": {
+				"title": "Commands II: Subcommands"
+			},
+			"CommandsCustomResponses": {
+				"title": "Commands III: Per-Command and per-parameter custom responses"
+			},
+			"CommandsCustomResolvers": {
+				"title": "Commands IV: Per-Command custom argument resolvers"
+			}
+		}
+	},
 	"IncludedPieces": {
 		"title": "Included Pieces",
 		"children": {
@@ -69,6 +86,9 @@
 			},
 			"IncludedProviders": {
 				"title": "Included Providers"
+			},
+			"IncludedTasks": {
+				"title": "Included Tasks"
 			}
 		}
 	},
