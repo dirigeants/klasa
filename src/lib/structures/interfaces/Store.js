@@ -34,7 +34,7 @@ class Store {
 		const loc = Array.isArray(file) ? join(dir, ...file) : join(dir, file);
 		let piece = null;
 		try {
-			const Piece = require(loc);
+			const Piece = (req => req.default || req)(require(loc));
 			if (!isClass(Piece)) throw new TypeError(`Failed to load file '${loc}'. The exported structure is not a class.`);
 			piece = this.set(new Piece(this.client, dir, file));
 		} catch (error) {
