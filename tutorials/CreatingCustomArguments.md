@@ -1,4 +1,4 @@
-One of the best features from Klasa's (and Komada's) usage is that you can extend its functionality by adding new types, to achieve that, we will use our {@link Extendable}s. We will create an empty extendable, called `emoji.js`, and aim it to Klasa:
+One of the best features from Klasa's (and Komada's) usage is that you can extend its functionality by adding new types. To achieve this, we will use our {@link Extendable}s. We will create an empty extendable, called `emoji.js`, and aim it to Klasa:
 
 > **Note**: The following argument type type is already included in klasa, and is just an explanation of how it works.
 
@@ -20,14 +20,12 @@ module.exports = class extends Extendable {
 
 > **Note**: that the class we want to extend to add new types to usage is **{@link ArgResolver}**, which belongs to `klasa`, so we put only `'ArgResolver'` to the classes we want to extend, and select `klasa: true` in the {@link ExtendableOptions}.
 
-Each method in ArgResolver takes 5 parameters:
+Each method in {@link ArgResolver} takes 3 parameters:
 
 | Name             | Type                 | Description                            |
 | ---------------- | -------------------- | -------------------------------------- |
 | **arg**          | string               | The parameter given to parse           |
-| **currentUsage** | Object               | The current usage                      |
-| **possible**     | number               | The possible's index                   |
-| **repeat**       | boolean              | If it is a looping/repeating arg       |
+| **possible**     | {@link Possible}     | The Possible instance that is running  |
 | **msg**          | {@link KlasaMessage} | The message that triggered the command |
 
 ```javascript
@@ -40,12 +38,11 @@ module.exports = class extends Extendable {
 		super(...args, ['ArgResolver'], { klasa: true });
 	}
 
-	async extend(arg, currentUsage, possible, repeat, msg) {
+	async extend(arg, possible, msg) {
 		const results = REGEX_EMOJI.exec(arg);
 		const emoji = results ? this.client.emojis.get(results[1]) : null;
 		if (emoji) return emoji;
-		if (currentUsage.type === 'optional' && !repeat) return null;
-		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_EMOJI', currentUsage.possibles[possible].name);
+		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_EMOJI', possible.name);
 	}
 
 };

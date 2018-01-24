@@ -4,30 +4,52 @@ The SettingGateway is designed to provide users a very useful interface for mana
 
 By default, Klasa uses the [json](https://github.com/dirigeants/klasa/blob/master/src/providers/json.js) provider. Do not be fooled and insta-replace with SQLite, Klasa's JSON provider writes the data [atomically](https://en.wikipedia.org/wiki/Atomicity_(database_systems)), in other words, it is very rare for the data to corrupt.
 
-However, as Klasa works on a [NoSQL](https://en.wikipedia.org/wiki/NoSQL) environment, however, SQL parsing has been improved to reduce the NoSQL middleware processing and be able to match it in performance's speed. SQL providers also need a special set of methods and properties to make the provider {@link SQL} compatible.
+## Key types
+
+The types supported for Gateway's keys are the same as the name of the properties from the {@link SettingResolver}, by extending it, you'll also extend the available key types.
+
+| Name             | Type                                  | Description                                                                              |
+| ---------------- | ------------------------------------- | ---------------------------------------------------------------------------------------- |
+| **any**          | Anything, no type restriction         | Resolves anything, even objects, the usage of this type will make a key unconfigurable   |
+| **boolean**      | A boolean resolvable                  | Resolves a boolean primitive value                                                       |
+| **channel**      | A {@link Channel} instance or id      | Resolves a channel. Be careful with using this, as it accepts any type of channel        |
+| **command**      | A {@link Command} instance or name    | Resolves a Command                                                                       |
+| **emoji**        | An {@link Emoji} instance or name     | Resolves a custom emoji                                                                  |
+| **float**        | A floating point number               | Resolves a [float](https://en.wikipedia.org/wiki/Double-precision_floating-point_format) |
+| **guild**        | A {@link KlasaGuild} instance or id   | Resolves a KlasaGuild (which extends Guild)                                              |
+| **integer**      | An integer number                     | Resolves an [integer](https://en.wikipedia.org/wiki/Integer) number                      |
+| **language**     | A {@link Language} instance or name   | Resolves a language                                                                      |
+| **member**       | A {@link GuildMember} instance or id  | Resolves a GuildMember                                                                   |
+| **msg**          | A {@link KlasaMessage} instance or id | Resolves a KlasaMessage (which extends Message)                                          |
+| **role**         | A {@link Role} instance or id         | Resolves a Role                                                                          |
+| **string**       | A string resolvable                   | Resolves a string                                                                        |
+| **textchannel**  | A {@link TextChannel} instance or id  | Resolves a TextChannel                                                                   |
+| **url**          | An URL resolvable                     | Resolves a URL with Node.js' URL parser                                                  |
+| **user**         | A {@link KlasaUser} instance or id    | Resolves a KlasaUser (which extends User)                                                |
+| **voicechannel** | A {@link VoiceChannel} instance or id | Resolves a VoiceChannel                                                                  |
+
+> To extend the types, you may extend {@link SettingResolver} by making an extendable, check how to make them here: {@tutorial CreatingExtendables}.
 
 ## Change the *provider's engine*.
 
-For example, let's say I have downloaded the *levelup* provider and I want to work with it, then we go to your main script file (`app.js`, `bot.js`..., wherever you declare the new Klasa.Client), and write the following code:
+For example, let's say I have downloaded the *rethinkdb* provider and I want to work with it, then we go to your main script file (`app.js`, `bot.js`..., wherever you declare the new Klasa.Client), and write the following code:
 
 ```javascript
-const client = new Klasa.Client({ providers: { default: 'levelup' } });
+const client = new Klasa.Client({ providers: { default: 'rethinkdb' } });
 ```
 
 Your Klasa's configuration will look something like this:
 
 ```javascript
 const client = new Klasa.Client({
-	ownerID: '',
 	prefix: 'k!',
-	clientOptions: {},
-	providers: { default: 'rethinkdb' }
+	providers: { default: 'json' }
 });
 
 client.login('A_BEAUTIFUL_TOKEN_AINT_IT?');
 ```
 
-And now, you're using levelup's provider to store the data from SettingGateway.
+And now, you're using rethinkdb's provider to store the data from SettingGateway.
 
 What happens when I use an engine that does not exist as a provider? Simply, SettingGateway will throw an error, it is enough user-friendly and readable, if that happens, make sure you wrote the provider's name correctly.
 
@@ -63,7 +85,7 @@ this.client.gateways.guilds.schema.addKey('users', { type: 'User', array: true }
 
 > `options.array` defaults to `false`, and when `options.default` is not specified, it defaults to `null`, however, when `options.array` is `true`, `options.default` defaults to `[]` (empty array).
 
-What have we done? `client.gateways.guilds.schema` is a **SchemaFolder** instance (also called Folder type) which can manage itself, such as adding keys/folders to itself (it certainly follows the OOP paradigm).
+What have we done? `client.gateways.guilds.schema` is a {@link SchemaFolder} instance (also called Folder type) which can manage itself, such as adding keys/folders to itself (it certainly follows the OOP paradigm).
 
 ## Editing keys from the guild configuration.
 
@@ -73,23 +95,23 @@ Now that I have a new key called `modlogs`, I want to configure it outside the `
 msg.guild.configs.update('modlogs', '267727088465739778', msg.guild);
 ```
 
-Check: {@link Configuration.updateOne}
+Check: {@link Configuration#update}
 
 > You can use a Channel instance, {@link SettingResolver} will make sure the input is valid and the database gets an **ID** and not an object.
 
 Now, I want to **add** a new user user to the `users` key, which takes an array.
 
 ```javascript
-msg.guild.configs.update('users', '146048938242211840', msg.guild, { action: 'add' });
+msg.guild.configs.update('users', '146048938242211840', { action: 'add' });
 ```
 
 That will add the user `'146048938242211840'` to the `users` array. To remove it:
 
 ```javascript
-msg.guild.configs.update('users', '146048938242211840', msg.guild, { action: 'remove' });
+msg.guild.configs.update('users', '146048938242211840', { action: 'remove' });
 ```
 
-Check: {@link Configuration.updateArray}
+> Additionally, if no 'action' option is passed to {@link Configuration.ConfigurationUpdateOptions}, it'll assume the `auto` mode, which will add or remove depending on the existence of the key.
 
 ## Removing a key from the guild configuration.
 
@@ -214,7 +236,7 @@ this.client.gateways.add('channels', validate, schema);
 
 > The `validate` function must be a [**function**](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/function), not a [**Arrow Function**](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Functions/Arrow_functions), the difference between them is that an arrow function binds `this` to wherever the function has been created (for example, the `exports` from your eval command, if you are doing this with eval), while the normal functions does not do this.
 
-> If the `validate` function does not resolve **Guild** type, you might want to use the fourth argument of `Gateway#updateOne` (third in Gateway#updateMany), which takes a Guild resolvable.
+> If the `validate` function does not resolve **Guild** type, you might want to use the third argument of {@link Configuration#update}, which takes a Guild resolvable.
 
 And then, you can access to it by:
 
@@ -231,3 +253,40 @@ this.client.gateways.add('channels', validate, schema, { provider: 'rethinkdb' }
 ```
 
 The code above will create a new Gateway instance called 'channels', which will use RethinkDB to store the persistent data.
+
+## Customizing the options for each built-in gateway
+
+This is available in 0.5.0 since the PR [#152](https://github.com/dirigeants/klasa/pull/152), and you're able to configure the three built-in gateways: `guilds`, `users` and `clientStorage`. The option to configure them is {@link KlasaClient.KlasaClientOptions.gateways}, where you would add the option `gateways` to your KlasaClientOptions:
+
+```javascript
+const client = new Klasa.Client({
+	prefix: 'k!',
+	providers: { default: 'json' },
+	gateways: {
+		guilds: { provider: 'rethinkdb' },
+		users: { provider: 'postgresql' }
+	}
+});
+
+client.login('A_BEAUTIFUL_TOKEN_AINT_IT?');
+```
+
+Where the *clientStorage* gateway would take the default options (json provider), the *guilds* gateway would use the rethinkdb provider, and finally the *users* one would use the postgresql provider. These options are {@link GatewayDriver.GatewayDriverAddOptions}.
+
+## Modifying a SchemaPiece's parameters
+
+Once created, it's possible since 0.5.0 to modify a {@link SchemaPiece}'s parameter, it's as simply as doing {@link SchemaPiece#update} which takes the same options for adding a key with {@link SchemaFolder#addKey} but with one exception: `array` and `type` can't change.
+
+For example, let's say we dislike the current prefix and we want to change it to `s!` for the next entries, then you can simply do:
+
+```javascript
+this.client.gateways.guilds.schema.prefix.modify({ default: 's!' });
+```
+
+### The Type Issue
+
+The main reason for what we don't support modifying the parameters `array` and `type` is:
+
+> Changing the type is very complex, in SQL, if we changed the type from `TEXT`, `VARCHAR` or any string type to a numeric one such as `INTEGER`, we could risk the data: the DB could throw an error or set them to `NULL`, resulting on data loss. Then we'd need to download all the data first and insert all of them with the conversion, that's quite tedious. Same happens in NoSQL where we would need to process all the entries checking the type and many parameters.
+
+Changing the value of `array` from a non-string datatype can result on the issue above, and it's a very slow process. Therefore, it's much better to just remove the key and add it back.

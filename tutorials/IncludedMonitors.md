@@ -15,3 +15,4 @@ The command handler for Klasa.
 - {@tutorial IncludedInhibitors}
 - {@tutorial IncludedLanguages}
 - {@tutorial IncludedProviders}
+- {@tutorial IncludedTasks}
