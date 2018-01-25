@@ -27,3 +27,19 @@ git config user.name "Travis CI"
 git config user.email "${COMMIT_EMAIL}"
 git commit -m "Docs build: ${SHA}" || true
 git push "https://${GH_TOKEN}@${GH_REF}" $TARGET_BRANCH
+
+#new docs
+
+TARGET_BRANCH="docs"
+git clone $REPO out -b $TARGET_BRANCH
+
+npm run newdocs
+
+mv docs/docs.json out/$SOURCE.json
+
+cd new
+git add --all .
+git config user.name "Travis CI"
+git config user.email "${COMMIT_EMAIL}"
+git commit -m "Docs build: ${SHA}" || true
+git push "https://${GH_TOKEN}@${GH_REF}" $TARGET_BRANCH

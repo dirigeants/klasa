@@ -1,0 +1,108 @@
+[{
+    "name": "Tutorials",
+    "files": [{
+            "name": "Getting Started",
+            "path": "GettingStarted.md"
+        },
+        {
+            "name": "Creating Commands",
+            "path": "CreatingCommands.md"
+        },
+        {
+            "name": "Creating Custom Arguments",
+            "path": "CreatingCustomArguments.md"
+        },
+        {
+            "name": "Creating Events",
+            "path": "CreatingEvents.md"
+        },
+        {
+            "name": "Creating Extendables",
+            "path": "CreatingExtendables.md"
+        },
+        {
+            "name": "Creating Finalizers",
+            "path": "CreatingFinalizers.md"
+        },
+        {
+            "name": "Creating Inhibitors",
+            "path": "CreatingInhibitors.md"
+        },
+        {
+            "name": "Creating Languages",
+            "path": "CreatingLanguages.md"
+        },
+        {
+            "name": "Creating Monitors",
+            "path": "CreatingMonitors.md"
+        },
+        {
+            "name": "Creating Providers",
+            "path": "CreatingProviders.md"
+        },
+        {
+            "name": "Creating Tasks",
+            "path": "CreatingTasks.md"
+        },
+        {
+            "name": "Included Commands",
+            "path": "IncludedCommands.md"
+        },
+        {
+            "name": "Included Events",
+            "path": "IncludedEvents.md"
+        },
+        {
+            "name": "Included Extendables",
+            "path": "IncludedExtendables.md"
+        },
+        {
+            "name": "Included Finalizers",
+            "path": "IncludedFinalizers.md"
+        },
+        {
+            "name": "Included Inhibitors",
+            "path": "IncludedInhibitors.md"
+        },
+        {
+            "name": "Included Languages",
+            "path": "IncludedLanguages.md"
+        },
+        {
+            "name": "Included Monitors",
+            "path": "IncludedMonitors.md"
+        },
+        {
+            "name": "Included Pieces",
+            "path": "IncludedPieces.md"
+        },
+        {
+            "name": "Included Providers",
+            "path": "IncludedProviders.md"
+        },
+        {
+            "name": "Piece Stores",
+            "path": "PieceStores.md"
+        },
+        {
+            "name": "Rich Display",
+            "path": "RichDisplay.md"
+        },
+        {
+            "name": "Rich Menu",
+            "path": "RichMenu.md"
+        },
+        {
+            "name": "Understanding Permission Levels",
+            "path": "UnderstandingPermissionLevels.md"
+        },
+        {
+            "name": "Understanding SettingGateway",
+            "path": "UnderstandingSettingGateway.md"
+        },
+        {
+            "name": "Understanding Usage Strings",
+            "path": "UnderstandingUsageStrings.md"
+        }
+    ]
+}]
