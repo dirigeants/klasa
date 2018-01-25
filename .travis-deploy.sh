@@ -30,7 +30,7 @@ git push "https://${GH_TOKEN}@${GH_REF}" $TARGET_BRANCH
 
 #new docs
 
-cd ../
+cd ..
 
 TARGET_BRANCH="docs"
 git clone $REPO out -b $TARGET_BRANCH
