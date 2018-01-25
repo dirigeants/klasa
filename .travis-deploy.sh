@@ -39,7 +39,7 @@ npm run newdocs
 
 mv newdocs/docs.json out/$SOURCE.json
 
-cd new
+cd out
 git add --all .
 git config user.name "Travis CI"
 git config user.email "${COMMIT_EMAIL}"
