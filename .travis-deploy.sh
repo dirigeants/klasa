@@ -40,7 +40,7 @@ git clone $REPO out -b $TARGET_BRANCH
 
 npm run newdocs
 
-mv newdocs/docs.json out/$SOURCE.json
+mv newdocs/docs.json out/$TRAVIS_BRANCH.json
 
 cd out
 git add --all .
