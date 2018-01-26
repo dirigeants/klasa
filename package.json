@@ -16,9 +16,9 @@
   },
   "scripts": {
     "lint": "npx eslint --fix src && npx eslint --fix --config .eslintrcmd.json --ext md tutorials && npx tslint --fix 'typings/*.ts'",
-    "test": "npx eslint src && npx tslint 'typings/*.ts' && npx eslint --config .eslintrcmd.json --ext md tutorials && npx markdownlint tutorials README.md",
+    "test": "npx eslint src && npx tslint 'typings/*.ts' && npx eslint --config .eslintrcmd.json --ext md tutorials && npx markdownlint Guide/Tutorials README.md",
     "docs": "npx jsdoc -c ./.docstrap.json -R README.md",
-    "newdocs": "npx dg --source src --custom .docconfig.json --output newdocs/docs.json --logging"
+    "newdocs": "npx dg --source src --custom Guide/.docconfig.json --output newdocs/docs.json --logging"
   },
   "dependencies": {
     "fs-nextra": "^0.3.2"
