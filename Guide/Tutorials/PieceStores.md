@@ -157,8 +157,8 @@ class Genre {
 		this.type = 'genre';
 		this.enabled = 'enabled' in options ? options.enabled : true;
 		/*
-		 we should probably describe our auto play genres in the command,
-		 we will make for guild owners to set their guild's genre setting.
+		 * we should probably describe our auto play genres in the command,
+		 * we will make for guild owners to set their guild's genre setting.
 		*/
 		this.description = options.description || '';
 		// Some example artists to include with the descriptions
@@ -256,8 +256,8 @@ class MySwankyMusicBot extends Client {
 		// Regester the GenreStore to be loaded, init, and available to be used as an arg to be looked up in commands
 		this.registerStore(this.genres);
 		/*
-		 Registers genres themselves to be able to be used as an arg to be looked up in commands,
-		 for reload/enable/disable ect.
+		 * Registers genres themselves to be able to be used as an arg to be looked up in commands,
+		 * for reload/enable/disable ect.
 		*/
 		this.registerPiece('genre', this.genres);
 		// optionally we can add more aliases for the piece

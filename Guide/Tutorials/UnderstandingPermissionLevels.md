@@ -33,8 +33,8 @@ config.permissionLevels = new PermissionLevels()
 	// The member using this command must be the guild owner
 	.addLevel(7, false, (client, msg) => msg.guild && msg.member === msg.guild.owner)
 	/*
-	 Allows the Bot Owner to use any lower commands
-	 and causes any command with a permission level 9 or lower to return an error if no check passes.
+	 * Allows the Bot Owner to use any lower commands
+	 * and causes any command with a permission level 9 or lower to return an error if no check passes.
 	 */
 	.addLevel(9, true, (client, msg) => msg.author === client.owner)
 	// Allows the bot owner to use Bot Owner only commands, which silently fail for other users.
