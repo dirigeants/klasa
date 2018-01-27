@@ -34,7 +34,8 @@ module.exports = class extends Command {
 			.addField('Usage:', command.usageString);
 
 		if (command.extendedHelp && command.extendedHelp !== '') {
-			info.addField('Help:', typeof command.extendedHelp === 'function' ? command.extendedHelp(msg) : command.extendedHelp);
+			const extendHelp = typeof command.extendedHelp === 'function' ? command.extendedHelp(msg) : command.extendedHelp;
+			info.addField('Help:', extendHelp);
 		}
 
 		return msg.sendEmbed(info);

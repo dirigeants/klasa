@@ -26,7 +26,10 @@ module.exports = class extends Inhibitor {
 	}
 
 	async init() {
-		// You can optionally define this method which will be run when the bot starts (after login, so discord data is available via this.client)
+		/*
+		 * You can optionally define this method which will be run when the bot starts
+		 * (after login, so discord data is available via this.client)
+		 */
 	}
 
 };

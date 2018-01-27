@@ -23,9 +23,13 @@ module.exports = class extends Language {
 	}
 
 	async init() {
-		// You can optionally define this method which will be run when the bot starts (after login, so discord data is available via this.client)
-		// please note, that as the Language is loaded before the client is loaded, using this.client in a literal sense may throw errors such as:
-		// this.client.user.username would throw "can't get property username of null"
+		/*
+		 * You can optionally define this method which will be run when the bot starts
+		 * (after login, so discord data is available via this.client)
+		 * please note, that as the Language is loaded before the client is loaded,
+		 * using this.client in a literal sense may throw errors such as:
+		 * this.client.user.username would throw "can't get property username of null"
+		 */
 	}
 
 };
@@ -54,11 +58,12 @@ but if the guild has fr-FR as the configured language it would respond 'Langue p
 msg.language.get('DEFAULT_LANGUAGE');
 */
 
-/* 
-returns 'The key **prefix** has been reset to: \`%\`' in this example,
-but if the guild has fr-FR as the configured language it would respond 'La clef **prefix** a été réinitialisée à : \`%\`'
-msg.language.get('COMMAND_CONF_RESET', 'prefix', '%');
-*/
+/*
+ * returns 'The key **prefix** has been reset to: \`%\`' in this example,
+ * but if the guild has fr-FR as the configured language,
+ * it would respond 'La clef **prefix** a été réinitialisée à : \`%\`'
+ * msg.language.get('COMMAND_CONF_RESET', 'prefix', '%');
+ */
 ```
 
 Additionally, if one language is lagging behind another, the bot will let the user know, and provide the string in the bot's default language as follows:

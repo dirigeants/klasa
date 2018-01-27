@@ -26,7 +26,9 @@ class SomethingStore extends Collection {
 	}
 
 	set(piece) {
-		if (!(piece instanceof this.holds)) return this.client.emit('error', `Only ${this.name} may be stored in the Store.`);
+		if (!(piece instanceof this.holds)) {
+			return this.client.emit('error', `Only ${this.name} may be stored in the Store.`);
+		}
 		const existing = this.get(piece.name);
 		if (existing) this.delete(existing);
 		super.set(piece.name, piece);
@@ -115,7 +117,9 @@ class GenreStore extends Collection {
 
 	// We can wrap the set method with additional setup actions
 	set(piece) {
-		if (!(piece instanceof this.holds)) return this.client.emit('error', `Only ${this.name} may be stored in the Store.`);
+		if (!(piece instanceof this.holds)) {
+			return this.client.emit('error', `Only ${this.name} may be stored in the Store.`);
+		}
 		const existing = this.get(piece.name);
 		if (existing) this.delete(existing);
 		super.set(piece.name, piece);
@@ -152,7 +156,10 @@ class Genre {
 		this.name = options.name || file.slice(0, -3);
 		this.type = 'genre';
 		this.enabled = 'enabled' in options ? options.enabled : true;
-		// we should probably describe our auto play genres in the command we will make for guild owners to set their guild's genre setting
+		/*
+		 we should probably describe our auto play genres in the command,
+		 we will make for guild owners to set their guild's genre setting.
+		*/
 		this.description = options.description || '';
 		// Some example artists to include with the descriptions
 		this.examples = options.examples || [];
@@ -248,7 +255,10 @@ class MySwankyMusicBot extends Client {
 		this.genres = new GenreStore();
 		// Regester the GenreStore to be loaded, init, and available to be used as an arg to be looked up in commands
 		this.registerStore(this.genres);
-		// Registers genres themselves to be able to be used as an arg to be looked up in commands for reload/enable/disable ect.
+		/*
+		 Registers genres themselves to be able to be used as an arg to be looked up in commands,
+		 for reload/enable/disable ect.
+		*/
 		this.registerPiece('genre', this.genres);
 		// optionally we can add more aliases for the piece
 		this.registerPiece('musicgenre', this.genres);

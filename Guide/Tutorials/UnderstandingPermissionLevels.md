@@ -23,7 +23,8 @@ config.permissionLevels = new PermissionLevels()
 	/*
 	* Optionally you can pass a number to set a custom number of permission levels.
 	* It is not advised however, as internal commands expect 10 to be the highest permission level.
-	* Modifying away from 10 without further modification of all core commands, could put your server at risk of malicious users using the core eval command.
+	* Modifying away from 10 without further modification of all core commands,
+	  could put your server at risk of malicious users using the core eval command.
 	*/
 	// everyone can use these commands
 	.addLevel(0, false, () => true)
@@ -31,7 +32,10 @@ config.permissionLevels = new PermissionLevels()
 	.addLevel(6, false, (client, msg) => msg.guild && msg.member.permissions.has('MANAGE_GUILD'))
 	// The member using this command must be the guild owner
 	.addLevel(7, false, (client, msg) => msg.guild && msg.member === msg.guild.owner)
-	// Allows the Bot Owner to use any lower commands, and causes any command with a permission level 9 or lower to return an error if no check passes.
+	/*
+	 Allows the Bot Owner to use any lower commands
+	 and causes any command with a permission level 9 or lower to return an error if no check passes.
+	 */
 	.addLevel(9, true, (client, msg) => msg.author === client.owner)
 	// Allows the bot owner to use Bot Owner only commands, which silently fail for other users.
 	.addLevel(10, false, (client, msg) => msg.author === client.owner);
