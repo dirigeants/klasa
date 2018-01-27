@@ -48,11 +48,17 @@ There are some extendables to help use languages. msg.language is a read-only pr
 // Will skip the configs fetch and return the language which name is that one.
 this.client.languages.get('en-US');
 
-// returns 'Default Language' in this example, but if the guild has fr-FR as the configured language it would respond 'Langue par défaut'
+/*
+returns 'Default Language' in this example,
+but if the guild has fr-FR as the configured language it would respond 'Langue par défaut'
 msg.language.get('DEFAULT_LANGUAGE');
+*/
 
-// returns 'The key **prefix** has been reset to: \`%\`' in this example, but if the guild has fr-FR as the configured language it would respond 'La clef **prefix** a été réinitialisée à : \`%\`'
+/* 
+returns 'The key **prefix** has been reset to: \`%\`' in this example,
+but if the guild has fr-FR as the configured language it would respond 'La clef **prefix** a été réinitialisée à : \`%\`'
 msg.language.get('COMMAND_CONF_RESET', 'prefix', '%');
+*/
 ```
 
 Additionally, if one language is lagging behind another, the bot will let the user know, and provide the string in the bot's default language as follows:
