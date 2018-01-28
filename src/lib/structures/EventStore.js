@@ -30,14 +30,14 @@ class EventStore extends Collection {
 		/**
 		 * The directory of events in Klasa relative to where its installed.
 		 * @since 0.0.1
-		 * @type {String}
+		 * @type {string}
 		 */
 		this.coreDir = join(this.client.coreBaseDir, 'events');
 
 		/**
 		 * The directory of local events relative to where you run Klasa from.
 		 * @since 0.0.1
-		 * @type {String}
+		 * @type {string}
 		 */
 		this.userDir = join(this.client.clientBaseDir, 'events');
 
@@ -51,7 +51,7 @@ class EventStore extends Collection {
 		/**
 		 * The name of what this holds
 		 * @since 0.3.0
-		 * @type {String}
+		 * @type {string}
 		 */
 		this.name = 'events';
 	}

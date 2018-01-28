@@ -30,14 +30,14 @@ class LanguageStore extends Collection {
 		/**
 		 * The directory of languages in Klasa relative to where its installed.
 		 * @since 0.2.1
-		 * @type {String}
+		 * @type {string}
 		 */
 		this.coreDir = join(this.client.coreBaseDir, 'languages');
 
 		/**
 		 * The directory of local languages relative to where you run Klasa from.
 		 * @since 0.2.1
-		 * @type {String}
+		 * @type {string}
 		 */
 		this.userDir = join(this.client.clientBaseDir, 'languages');
 
@@ -51,7 +51,7 @@ class LanguageStore extends Collection {
 		/**
 		 * The name of what this holds
 		 * @since 0.3.0
-		 * @type {String}
+		 * @type {string}
 		 */
 		this.name = 'languages';
 	}
