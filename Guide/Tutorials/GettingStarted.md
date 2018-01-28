@@ -30,7 +30,7 @@ new Client({
 }).login('your-bot-token');
 ```
 
-### Configuration Options: [KlasaClientOptions]{@link KlasaClient.KlasaClientOptions}
+### Configuration Options: {@link KlasaClient.KlasaClientOptions KlasaClientOptions}
 
 | Name                       | Default                   | Type               | Description                                                                         |
 | -------------------------- | ------------------------- | ------------------ | ----------------------------------------------------------------------------------- |
