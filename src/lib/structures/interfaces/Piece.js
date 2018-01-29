@@ -2,6 +2,7 @@ const { applyToClass } = require('../../util/util');
 
 /**
  * The common interface for all pieces
+ * @interface
  * @see Command
  * @see Event
  * @see Extendable
@@ -10,6 +11,7 @@ const { applyToClass } = require('../../util/util');
  * @see Language
  * @see Monitor
  * @see Provider
+ * @see Task
  */
 class Piece {
 
