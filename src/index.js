@@ -1,6 +1,7 @@
 module.exports = {
 	// KlasaClient
 	Client: require('./lib/Client'),
+	KlasaClient: require('./lib/Client'),
 
 	// lib/extensions
 	KlasaGuild: require('./lib/extensions/KlasaGuild'),
@@ -55,14 +56,14 @@ module.exports = {
 	// lib/usage
 	CommandPrompt: require('./lib/usage/CommandPrompt'),
 	CommandUsage: require('./lib/usage/CommandUsage'),
-	ParsedUsage: require('./lib/usage/ParsedUsage'),
+	Usage: require('./lib/usage/Usage'),
 	Possible: require('./lib/usage/Possible'),
 	Tag: require('./lib/usage/Tag'),
 	TextPrompt: require('./lib/usage/TextPrompt'),
 
 	// lib/util
 	Colors: require('./lib/util/Colors'),
-	Console: require('./lib/util/Console'),
+	KlasaConsole: require('./lib/util/KlasaConsole'),
 	constants: require('./lib/util/constants'),
 	Cron: require('./lib/util/Cron'),
 	Duration: require('./lib/util/Duration'),
@@ -164,6 +165,10 @@ module.exports = {
 /**
  * @external ReactionEmoji
  * @see {@link https://discord.js.org/#/docs/main/master/class/ReactionEmoji}
+ */
+/**
+ * @external ReactionCollector
+ * @see {@link https://discord.js.org/#/docs/main/master/class/ReactionCollector}
  */
 /**
  * @external Webhook

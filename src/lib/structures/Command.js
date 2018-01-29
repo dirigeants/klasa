@@ -1,6 +1,6 @@
 const Piece = require('./interfaces/Piece');
 const { mergeDefault } = require('../util/util');
-const ParsedUsage = require('../usage/ParsedUsage');
+const Usage = require('../usage/Usage');
 const CommandUsage = require('../usage/CommandUsage');
 
 /**
@@ -266,13 +266,13 @@ class Command {
 	}
 
 	/**
-	 * Creates a ParsedUsage to run custom prompts off of
+	 * Creates a Usage to run custom prompts off of
 	 * @param {string} usageString The string designating all parameters expected
 	 * @param {string} usageDelim The string to delimit the input
-	 * @returns {ParsedUsage}
+	 * @returns {Usage}
 	 */
 	definePrompt(usageString, usageDelim) {
-		return new ParsedUsage(this.client, usageString, usageDelim);
+		return new Usage(this.client, usageString, usageDelim);
 	}
 
 	/**
