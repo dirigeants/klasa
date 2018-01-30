@@ -29,11 +29,10 @@ if [ "$TRAVIS_BRANCH" == "master" ]; then
   git config user.email "${COMMIT_EMAIL}"
   git commit -m "Docs build: ${SHA}" || true
   git push "https://${GH_TOKEN}@${GH_REF}" $TARGET_BRANCH
+  cd ..
 fi
 
 #new docs
-
-cd ..
 
 TARGET_BRANCH="docs"
 git clone $REPO out -b $TARGET_BRANCH
