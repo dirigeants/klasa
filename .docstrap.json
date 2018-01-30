@@ -26,6 +26,6 @@
         "encoding"              : "utf8",
         "destination"           : "./docs/",
         "recurse"               : true,
-        "tutorials"             : "./Guide/Tutorials"
+        "tutorials"             : ""
     }
 }
