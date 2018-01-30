@@ -247,6 +247,7 @@ class Configuration {
 			options = guild;
 			guild = undefined;
 		}
+		if (guild) guild = this.gateway._resolveGuild(guild);
 
 		if (isObject(key)) return this._updateMany(key, value);
 		return this._updateSingle(key, value, guild, options);
@@ -269,7 +270,6 @@ class Configuration {
 
 		const oldClone = this.client.listenerCount('configUpdateEntry') ? this.clone() : null;
 		const updateObject = {};
-		guild = this.gateway._resolveGuild(guild);
 		this._parseUpdateMany(this, object, this.gateway.schema, guild, list, updateObject);
 		await Promise.all(list.promises);
 
@@ -320,7 +320,6 @@ class Configuration {
 	 */
 	async _parseUpdateOne(key, value, guild, { path, route }) {
 		if (path.array === true) throw 'This key is array type.';
-		guild = this.gateway._resolveGuild(guild);
 
 		const parsed = await path.parse(value, guild);
 		const parsedID = Configuration.getIdentifier(parsed);
@@ -345,7 +344,6 @@ class Configuration {
 			if (guild) throw guild.language.get('COMMAND_CONF_KEY_NOT_ARRAY');
 			throw new Error('The key is not an array.');
 		}
-		guild = this.gateway._resolveGuild(guild);
 
 		const parsed = await path.parse(value, guild);
 		const parsedID = path.type !== 'any' ? Configuration.getIdentifier(parsed) : parsed;
