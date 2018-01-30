@@ -132,10 +132,6 @@
         "path": "IncludedMonitors.md"
     },
     {
-        "name": "Included Pieces",
-        "path": "IncludedPieces.md"
-    },
-    {
         "name": "Included Providers",
         "path": "IncludedProviders.md"
     }]
