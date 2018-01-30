@@ -152,6 +152,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
+- [[#170](https://github.com/dirigeants/klasa/pull/170)] Fixed guild resolvables not working correctly. (kyranet)
 - [[#165](https://github.com/dirigeants/klasa/pull/165)] Updated url for peer dependency `discord.js` and fixed all `JSDocs`. (kyranet)
 - [[#159](https://github.com/dirigeants/klasa/pull/159)] Fixed Timestamp's `'MM'` token not padding with zeroes in the start. (kyranet)
 - [[#156](https://github.com/dirigeants/klasa/pull/156)] Fixed a bug in Configuration not cloning objects correctly. (kyranet)
