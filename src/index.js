@@ -151,6 +151,14 @@ module.exports = {
  * @see {@link https://discord.js.org/#/docs/main/master/class/TextChannel}
  */
 /**
+ * @external VoiceChannel
+ * @see {@link https://discord.js.org/#/docs/main/master/class/VoiceChannel}
+ */
+/**
+ * @external CategoryChannel
+ * @see {@link https://discord.js.org/#/docs/main/master/class/CategoryChannel}
+ */
+/**
  * @external User
  * @see {@link https://discord.js.org/#/docs/main/master/class/User}
  */

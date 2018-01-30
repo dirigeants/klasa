@@ -127,7 +127,7 @@ class SchemaPiece extends Schema {
 	 * @param {KlasaGuild} guild A Guild instance required for the resolver to work
 	 * @returns {Promise<*>}
 	 */
-	async parse(value, guild = this.client.guilds.get(this.id)) {
+	async parse(value, guild) {
 		const resolved = await this.gateway.resolver[this.type](value, guild, this.key, { min: this.min, max: this.max });
 		if (this.validator) this.validator(resolved, guild);
 		return resolved;

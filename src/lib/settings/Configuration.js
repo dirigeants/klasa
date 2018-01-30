@@ -222,7 +222,7 @@ class Configuration {
 	 * @since 0.5.0
 	 * @param {(string|Object)} key The key to modify
 	 * @param {*} [value] The value to parse and save
-	 * @param {ConfigGuildResolvable} [guild] A guild resolvable
+	 * @param {GuildResolvable} [guild] A guild resolvable
 	 * @param {ConfigurationUpdateOptions} [options={}] The options for the update
 	 * @returns {Promise<(ConfigurationUpdateResult|ConfigurationUpdateObjectList)>}
 	 * @throws {Promise<ConfigurationUpdateObjectResult>}
@@ -257,7 +257,7 @@ class Configuration {
 	 * Update multiple keys given a JSON object.
 	 * @since 0.5.0
 	 * @param {Object} object A JSON object to iterate and parse
-	 * @param {ConfigGuildResolvable} [guild] A guild resolvable
+	 * @param {GuildResolvable} [guild] A guild resolvable
 	 * @returns {Promise<ConfigurationUpdateObjectList>}
 	 * @throws {Promise<ConfigurationUpdateObjectResult>}
 	 * @private
@@ -313,7 +313,7 @@ class Configuration {
 	 * @since 0.5.0
 	 * @param {string} key The key to edit
 	 * @param {*} value The new value
-	 * @param {ConfigGuildResolvable} guild The guild to take
+	 * @param {GuildResolvable} guild The guild to take
 	 * @param {ConfigurationPathResult} options The options
 	 * @returns {Promise<ConfigurationParseResult>}
 	 * @private
@@ -333,7 +333,7 @@ class Configuration {
 	 * @param {('add'|'remove'|'auto')} action Whether the value should be added or removed to the array
 	 * @param {string} key The key to edit
 	 * @param {*} value The new value
-	 * @param {ConfigGuildResolvable} guild The guild to take
+	 * @param {GuildResolvable} guild The guild to take
 	 * @param {number} arrayPosition The array position to update
 	 * @param {ConfigurationPathResult} options The options
 	 * @returns {Promise<ConfigurationParseResult>}
@@ -380,7 +380,7 @@ class Configuration {
 	 * @since 0.5.0
 	 * @param {string} key The key to edit
 	 * @param {*} value The new value
-	 * @param {ConfigGuildResolvable} guild The guild to take
+	 * @param {GuildResolvable} guild The guild to take
 	 * @param {Object} [options={}] The options
 	 * @param {boolean} [options.avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key
 	 * @param {('add'|'remove'|'auto')} [options.action='auto'] Whether the value should be added or removed to the array
@@ -415,7 +415,7 @@ class Configuration {
 	 * @param {Object} cache The key target
 	 * @param {Object} object The key to edit
 	 * @param {SchemaFolder} schema The new value
-	 * @param {ConfigGuildResolvable} guild The guild to take
+	 * @param {GuildResolvable} guild The guild to take
 	 * @param {ConfigurationUpdateManyList} list The options
 	 * @param {*} updateObject The object to update
 	 * @private
