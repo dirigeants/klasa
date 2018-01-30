@@ -22,6 +22,10 @@
     {
         "name": "Understanding Usage Strings",
         "path": "UnderstandingUsageStrings.md"
+    },
+    {
+        "name": "Understanding Custom Arguments",
+        "path": "UnderstandingCustomArguments.md"
     }]
 },
 {
@@ -85,10 +89,6 @@
 {
     "name": "Other Subjects",
     "files": [{
-        "name": "Creating Custom Arguments",
-        "path": "UnderstandingCustomArguments.md"
-    },
-    {
         "name": "Piece Stores",
         "path": "PieceStores.md"
     },
