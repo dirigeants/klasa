@@ -30,14 +30,14 @@ class TaskStore extends Collection {
 		/**
 		 * The directory of core task pieces in Klasa relative to where its installed.
 		 * @since 0.5.0
-		 * @type {String}
+		 * @type {string}
 		 */
 		this.coreDir = join(this.client.coreBaseDir, 'tasks');
 
 		/**
 		 * The directory of local task pieces relative to where you run Klasa from.
 		 * @since 0.5.0
-		 * @type {String}
+		 * @type {string}
 		 */
 		this.userDir = join(this.client.clientBaseDir, 'tasks');
 
@@ -51,7 +51,7 @@ class TaskStore extends Collection {
 		/**
 		 * The name of what this holds
 		 * @since 0.5.0
-		 * @type {String}
+		 * @type {string}
 		 */
 		this.name = 'tasks';
 	}

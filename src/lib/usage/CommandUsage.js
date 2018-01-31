@@ -1,11 +1,11 @@
-const ParsedUsage = require('./ParsedUsage');
+const Usage = require('./Usage');
 const CommandPrompt = require('./CommandPrompt');
 
 /**
  * Converts usage strings into objects to compare against later
- * @extends ParsedUsage
+ * @extends Usage
  */
-class CommandUsage extends ParsedUsage {
+class CommandUsage extends Usage {
 
 	/**
 	 * @since 0.0.1

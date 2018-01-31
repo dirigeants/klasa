@@ -17,7 +17,7 @@ class TextPrompt {
 	/**
 	 * @since 0.5.0
 	 * @param {KlasaMessage} msg The message this prompt is for
-	 * @param {ParsedUsage} usage The usage for this prompt
+	 * @param {Usage} usage The usage for this prompt
 	 * @param {TextPromptOptions} options The options of this prompt
 	 */
 	constructor(msg, usage, options) {
@@ -42,7 +42,7 @@ class TextPrompt {
 		/**
 		 * The usage for this prompt
 		 * @since 0.5.0
-		 * @type {ParsedUsage|CommandUsage}
+		 * @type {Usage|CommandUsage}
 		 */
 		this.usage = usage;
 

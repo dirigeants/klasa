@@ -25,7 +25,7 @@ const ProviderStore = require('./structures/ProviderStore');
 const TaskStore = require('./structures/TaskStore');
 
 // lib/util
-const Console = require('./util/Console');
+const KlasaConsole = require('./util/KlasaConsole');
 const constants = require('./util/constants');
 const Stopwatch = require('./util/Stopwatch');
 const util = require('./util/util');
@@ -147,7 +147,7 @@ class KlasaClient extends Discord.Client {
 		 * @since 0.4.0
 		 * @type {KlasaConsole}
 		 */
-		this.console = new Console(this, this.options.console);
+		this.console = new KlasaConsole(this, this.options.console);
 
 		/**
 		 * The argument resolver

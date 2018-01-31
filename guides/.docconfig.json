@@ -1,0 +1,131 @@
+[{
+    "name": "Getting Started",
+    "files": [{
+        "name": "Getting Started",
+        "path": "GettingStarted.md"
+    },
+    {
+        "name": "Understanding Permission Levels",
+        "path": "UnderstandingPermissionLevels.md"
+    },
+    {
+        "name": "Understanding SettingGateway",
+        "path": "UnderstandingSettingGateway.md"
+    },
+    {
+        "name": "Understanding Usage Strings",
+        "path": "UnderstandingUsageStrings.md"
+    },
+    {
+        "name": "Understanding Custom Arguments",
+        "path": "UnderstandingCustomArguments.md"
+    }]
+},
+{
+    "name": "Piece Basics",
+    "files": [{
+        "name": "Creating Commands",
+        "path": "CreatingCommands.md"
+    },
+    {
+        "name": "Creating Events",
+        "path": "CreatingEvents.md"
+    },
+    {
+        "name": "Creating Extendables",
+        "path": "CreatingExtendables.md"
+    },
+    {
+        "name": "Creating Finalizers",
+        "path": "CreatingFinalizers.md"
+    },
+    {
+        "name": "Creating Inhibitors",
+        "path": "CreatingInhibitors.md"
+    },
+    {
+        "name": "Creating Languages",
+        "path": "CreatingLanguages.md"
+    },
+    {
+        "name": "Creating Monitors",
+        "path": "CreatingMonitors.md"
+    },
+    {
+        "name": "Creating Providers",
+        "path": "CreatingProviders.md"
+    },
+    {
+        "name": "Creating Tasks",
+        "path": "CreatingTasks.md"
+    }]
+},
+{
+    "name": "Advanced Commands",
+    "files": [{
+        "name": "Commands I: Arguments",
+        "path": "CommandsArguments.md"
+    },
+    {
+        "name": "Commands II: Subcommands",
+        "path": "CommandsSubcommands.md"
+    },
+    {
+        "name": "Commands III: Per-Command and per-parameter custom responses",
+        "path": "CommandsCustomResponses.md"
+    },
+    {
+        "name": "Commands IV: Per-Command custom argument resolvers",
+        "path": "CommandsCustomResolvers.md"
+    }]
+},
+{
+    "name": "Other Subjects",
+    "files": [{
+        "name": "Piece Stores",
+        "path": "PieceStores.md"
+    },
+    {
+        "name": "Rich Display",
+        "path": "RichDisplay.md"
+    },
+    {
+        "name": "Rich Menu",
+        "path": "RichMenu.md"
+    }]
+},
+{
+    "name": "Included Pieces",
+    "files": [{
+        "name": "Included Commands",
+        "path": "IncludedCommands.md"
+    },
+    {
+        "name": "Included Events",
+        "path": "IncludedEvents.md"
+    },
+    {
+        "name": "Included Extendables",
+        "path": "IncludedExtendables.md"
+    },
+    {
+        "name": "Included Finalizers",
+        "path": "IncludedFinalizers.md"
+    },
+    {
+        "name": "Included Inhibitors",
+        "path": "IncludedInhibitors.md"
+    },
+    {
+        "name": "Included Languages",
+        "path": "IncludedLanguages.md"
+    },
+    {
+        "name": "Included Monitors",
+        "path": "IncludedMonitors.md"
+    },
+    {
+        "name": "Included Providers",
+        "path": "IncludedProviders.md"
+    }]
+}]

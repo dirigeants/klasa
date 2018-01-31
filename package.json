@@ -2,7 +2,7 @@
   "name": "klasa",
   "version": "0.5.0-dev",
   "description": "Klasa: Croatian for 'class', is a class based remix on Komada.",
-  "homepage": "https://github.com/dirigeants/klasa#readme",
+  "homepage": "https://klasa.js.org/",
   "bugs": {
     "url": "https://github.com/dirigeants/klasa/issues"
   },
@@ -15,10 +15,9 @@
     "url": "https://github.com/dirigeants/klasa.git"
   },
   "scripts": {
-    "lint": "npx eslint --fix src && npx eslint --fix --config .eslintrcmd.json --ext md tutorials && npx tslint --fix 'typings/*.ts'",
-    "test": "npx eslint src && npx tslint 'typings/*.ts' && npx eslint --config .eslintrcmd.json --ext md tutorials && npx markdownlint Guide/Tutorials README.md",
-    "docs": "npx jsdoc -c ./.docstrap.json -R README.md",
-    "newdocs": "npx dg --source src --custom Guide/.docconfig.json --output newdocs/docs.json --logging"
+    "lint": "npx eslint --fix src && npx eslint --fix --config .eslintrcmd.json --ext md guides && npx tslint --fix 'typings/*.ts'",
+    "test": "npx eslint src && npx tslint 'typings/*.ts' && npx eslint --config .eslintrcmd.json --ext md guides && npx markdownlint guides README.md",
+    "docs": "npx dg --source src --custom guides/.docconfig.json --output docs/docs.json --logging"
   },
   "dependencies": {
     "fs-nextra": "^0.3.2"
@@ -31,8 +30,6 @@
     "docgen": "github:dirigeants/docsgen",
     "eslint": "^4.16.0",
     "eslint-plugin-markdown": "^1.0.0-beta.6",
-    "ink-docstrap": "github:bdistin/docstrap#klasa",
-    "jsdoc": "github:jsdoc3/jsdoc",
     "markdownlint-cli": "^0.6.0",
     "tslint": "^5.9.1",
     "typescript": "^2.6.2"

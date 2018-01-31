@@ -222,7 +222,7 @@ class Configuration {
 	 * @since 0.5.0
 	 * @param {(string|Object)} key The key to modify
 	 * @param {*} [value] The value to parse and save
-	 * @param {ConfigGuildResolvable} [guild] A guild resolvable
+	 * @param {GuildResolvable} [guild] A guild resolvable
 	 * @param {ConfigurationUpdateOptions} [options={}] The options for the update
 	 * @returns {Promise<(ConfigurationUpdateResult|ConfigurationUpdateObjectList)>}
 	 * @throws {Promise<ConfigurationUpdateObjectResult>}
@@ -247,6 +247,7 @@ class Configuration {
 			options = guild;
 			guild = undefined;
 		}
+		if (guild) guild = this.gateway._resolveGuild(guild);
 
 		if (isObject(key)) return this._updateMany(key, value);
 		return this._updateSingle(key, value, guild, options);
@@ -256,7 +257,7 @@ class Configuration {
 	 * Update multiple keys given a JSON object.
 	 * @since 0.5.0
 	 * @param {Object} object A JSON object to iterate and parse
-	 * @param {ConfigGuildResolvable} [guild] A guild resolvable
+	 * @param {GuildResolvable} [guild] A guild resolvable
 	 * @returns {Promise<ConfigurationUpdateObjectList>}
 	 * @throws {Promise<ConfigurationUpdateObjectResult>}
 	 * @private
@@ -269,7 +270,6 @@ class Configuration {
 
 		const oldClone = this.client.listenerCount('configUpdateEntry') ? this.clone() : null;
 		const updateObject = {};
-		guild = this.gateway._resolveGuild(guild);
 		this._parseUpdateMany(this, object, this.gateway.schema, guild, list, updateObject);
 		await Promise.all(list.promises);
 
@@ -313,14 +313,13 @@ class Configuration {
 	 * @since 0.5.0
 	 * @param {string} key The key to edit
 	 * @param {*} value The new value
-	 * @param {ConfigGuildResolvable} guild The guild to take
+	 * @param {GuildResolvable} guild The guild to take
 	 * @param {ConfigurationPathResult} options The options
 	 * @returns {Promise<ConfigurationParseResult>}
 	 * @private
 	 */
 	async _parseUpdateOne(key, value, guild, { path, route }) {
 		if (path.array === true) throw 'This key is array type.';
-		guild = this.gateway._resolveGuild(guild);
 
 		const parsed = await path.parse(value, guild);
 		const parsedID = Configuration.getIdentifier(parsed);
@@ -334,7 +333,7 @@ class Configuration {
 	 * @param {('add'|'remove'|'auto')} action Whether the value should be added or removed to the array
 	 * @param {string} key The key to edit
 	 * @param {*} value The new value
-	 * @param {ConfigGuildResolvable} guild The guild to take
+	 * @param {GuildResolvable} guild The guild to take
 	 * @param {number} arrayPosition The array position to update
 	 * @param {ConfigurationPathResult} options The options
 	 * @returns {Promise<ConfigurationParseResult>}
@@ -345,7 +344,6 @@ class Configuration {
 			if (guild) throw guild.language.get('COMMAND_CONF_KEY_NOT_ARRAY');
 			throw new Error('The key is not an array.');
 		}
-		guild = this.gateway._resolveGuild(guild);
 
 		const parsed = await path.parse(value, guild);
 		const parsedID = path.type !== 'any' ? Configuration.getIdentifier(parsed) : parsed;
@@ -382,7 +380,7 @@ class Configuration {
 	 * @since 0.5.0
 	 * @param {string} key The key to edit
 	 * @param {*} value The new value
-	 * @param {ConfigGuildResolvable} guild The guild to take
+	 * @param {GuildResolvable} guild The guild to take
 	 * @param {Object} [options={}] The options
 	 * @param {boolean} [options.avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key
 	 * @param {('add'|'remove'|'auto')} [options.action='auto'] Whether the value should be added or removed to the array
@@ -417,7 +415,7 @@ class Configuration {
 	 * @param {Object} cache The key target
 	 * @param {Object} object The key to edit
 	 * @param {SchemaFolder} schema The new value
-	 * @param {ConfigGuildResolvable} guild The guild to take
+	 * @param {GuildResolvable} guild The guild to take
 	 * @param {ConfigurationUpdateManyList} list The options
 	 * @param {*} updateObject The object to update
 	 * @private

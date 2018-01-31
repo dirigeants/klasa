@@ -11,7 +11,7 @@ If any check from 6-9 returns true, the user will be able to run that command. A
 
 ## Creating Completely Custom PermissionLevels
 
-Each level consists of a number (the level), a boolean (whether the level is a break or not), and a function (the check function that returns true or false). {@link PermissionLevels.addLevel}
+Each level consists of a number (the level), a boolean (whether the level is a break or not), and a function (the check function that returns true or false). Check: {@link PermissionLevels.addLevel}
 
 Example:
 
@@ -23,7 +23,8 @@ config.permissionLevels = new PermissionLevels()
 	/*
 	* Optionally you can pass a number to set a custom number of permission levels.
 	* It is not advised however, as internal commands expect 10 to be the highest permission level.
-	* Modifying away from 10 without further modification of all core commands, could put your server at risk of malicious users using the core eval command.
+	* Modifying away from 10 without further modification of all core commands,
+	  could put your server at risk of malicious users using the core eval command.
 	*/
 	// everyone can use these commands
 	.addLevel(0, false, () => true)
@@ -31,7 +32,10 @@ config.permissionLevels = new PermissionLevels()
 	.addLevel(6, false, (client, msg) => msg.guild && msg.member.permissions.has('MANAGE_GUILD'))
 	// The member using this command must be the guild owner
 	.addLevel(7, false, (client, msg) => msg.guild && msg.member === msg.guild.owner)
-	// Allows the Bot Owner to use any lower commands, and causes any command with a permission level 9 or lower to return an error if no check passes.
+	/*
+	 * Allows the Bot Owner to use any lower commands
+	 * and causes any command with a permission level 9 or lower to return an error if no check passes.
+	 */
 	.addLevel(9, true, (client, msg) => msg.author === client.owner)
 	// Allows the bot owner to use Bot Owner only commands, which silently fail for other users.
 	.addLevel(10, false, (client, msg) => msg.author === client.owner);
@@ -74,7 +78,7 @@ Permission levels are fairly close to the same as Komada Permission levels, with
 | 9     | true  | Bot Owner                                             |
 | 10    | false | Bot Owner (silent)                                    |
 
->This gives the bot creator a more blank slate to work with when first creating a bot. (Not all bots are mod bots, so mod/admin roles were largly unneed. Also there is infinitly more that you would want to put between 0 and administrative users, than between Guild Owner and Bot Owner). This helps keep bot creators from having to completely "remake the wheel" of permissions in almost all cases, without preventing that if wanted. (This fixes most cases of those who perpetually had to transfer/modify core commands to match their custom permissionLevels.)
+>This gives the bot creator a cleaner slate to work with when first creating a bot. (Not all bots are mod bots, so mod/admin roles were largly unneed. Also there is infinitely more that you would want to put between 0 and administrative users, than between Guild Owner and Bot Owner). This helps keep bot creators from having to completely "remake the wheel" of permissions in almost all cases, without preventing that if wanted. (This fixes most cases of those who perpetually had to transfer/modify core commands to match their custom permissionLevels.)
 
 ### Since inhibitors are async in Klasa, check functions may be async
 
@@ -87,7 +91,3 @@ Client.defaultPermissionLevels
 		return value === someOtherValue;
 	});
 ```
-
-### Levels may be Overwritten/You can have any number of levels
-
-Currently in Komada, if you try to overwrite a level, it will throw an error. And PermissionLevels must be from 0-10 on komada. *(This may change in the future)*

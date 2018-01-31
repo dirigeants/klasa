@@ -30,14 +30,14 @@ class FinalizerStore extends Collection {
 		/**
 		 * The directory of finalizers in Klasa relative to where its installed.
 		 * @since 0.0.1
-		 * @type {String}
+		 * @type {string}
 		 */
 		this.coreDir = join(this.client.coreBaseDir, 'finalizers');
 
 		/**
 		 * The directory of local finalizers relative to where you run Klasa from.
 		 * @since 0.0.1
-		 * @type {String}
+		 * @type {string}
 		 */
 		this.userDir = join(this.client.clientBaseDir, 'finalizers');
 
@@ -51,7 +51,7 @@ class FinalizerStore extends Collection {
 		/**
 		 * The name of what this holds
 		 * @since 0.3.0
-		 * @type {String}
+		 * @type {string}
 		 */
 		this.name = 'finalizers';
 	}

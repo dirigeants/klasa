@@ -26,11 +26,11 @@ new Client({
 	prefix: '+',
 	cmdEditing: true,
 	typing: true,
-	readyMessage: (client) => `${client.user.tag}, Ready to serve ${client.guilds.size} guilds and ${client.users.size} users`
+	readyMessage: (client) => `Successfully initialized. Ready to serve ${client.guilds.size} guilds.`
 }).login('your-bot-token');
 ```
 
-### Configuration Options: [KlasaClientOptions]{@link KlasaClient.KlasaClientOptions}
+### Configuration Options: {@link KlasaClient.KlasaClientOptions KlasaClientOptions}
 
 | Name                       | Default                   | Type               | Description                                                                         |
 | -------------------------- | ------------------------- | ------------------ | ----------------------------------------------------------------------------------- |
@@ -53,11 +53,11 @@ new Client({
 | **regexPrefix**            | `null`                    | regex              | The regular expression prefix if one is provided                                    |
 | **typing**                 | `false`                   | boolean            | Whether the bot should type while processing commands.                              |
 
->1: The directory of the main file. `path.dirname(require.main.filename)`
->2: ID gotten from the Discord api if not provided: `client.application.owner.id`
->3: You can pass an array to accept multiple prefixes.
->4: quotedStringSupport is overridable per command
->5: `Successfully initialized. Ready to serve ${client.guilds.size} guilds.`
+>1. The directory of the main file. `path.dirname(require.main.filename)`
+>1. ID gotten from the Discord API if not provided: `client.application.owner.id`
+>1. You can pass an array to accept multiple prefixes.
+>1. quotedStringSupport is overridable per command
+>1. `Successfully initialized. Ready to serve ${client.guilds.size} guilds.`
 
 > KlasaClientOptions are merged with discord.js' ClientOptions, see [ClientOptions in the discord.js docs](https://discord.js.org/#/docs/main/master/typedef/ClientOptions).
 

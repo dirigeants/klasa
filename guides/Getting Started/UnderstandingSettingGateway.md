@@ -121,9 +121,9 @@ I have a key which is useless for me, so I *want* to remove it from the schema.
 this.client.gateways.guilds.schema.removeKey('users');
 ```
 
-## Create a new folder to the schema
+## Create a new folder in the schema
 
-It's very similar to how you create a new key into it, but it only accepts three arguments:
+It's very similar to how you create a new key, but it only accepts three arguments:
 
 ```javascript
 this.client.gateways.guilds.schema.addFolder(name, object, force);

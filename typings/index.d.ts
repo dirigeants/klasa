@@ -34,7 +34,7 @@ declare module 'klasa' {
 
 	export const version: string;
 
-	class KlasaClient extends Client {
+	export class KlasaClient extends Client {
 		public constructor(options?: KlasaClientOptions & ClientOptions);
 		public options: KlasaClientOptions & ClientOptions;
 		public coreBaseDir: string;
@@ -484,7 +484,7 @@ declare module 'klasa' {
 		public run(): Promise<any[]>;
 	}
 
-	export class CommandUsage extends ParsedUsage {
+	export class CommandUsage extends Usage {
 		public constructor(client: KlasaClient, command: Command);
 		public names: string[];
 		public commands: string;
@@ -508,7 +508,7 @@ declare module 'klasa' {
 	}
 
 	// Usage
-	export class ParsedUsage {
+	export class Usage {
 		public constructor(client: KlasaClient, usageString: string, usageDelim: string);
 		public readonly client: KlasaClient;
 		public deliminatedUsage: string;
@@ -552,10 +552,10 @@ declare module 'klasa' {
 	}
 
 	export class TextPrompt {
-		public constructor(msg: KlasaMessage, usage: ParsedUsage, options: TextPromptOptions);
+		public constructor(msg: KlasaMessage, usage: Usage, options: TextPromptOptions);
 		public readonly client: KlasaClient;
 		public message: KlasaMessage;
-		public usage: ParsedUsage | CommandUsage;
+		public usage: Usage | CommandUsage;
 		public reprompted: boolean;
 		public flags: object;
 		public args: string[];
@@ -791,7 +791,7 @@ declare module 'klasa' {
 		private text(style: ColorsFormatType, data?: ColorsFormatData): ColorsFormatData;
 	}
 
-	class KlasaConsole extends Console {
+	export class KlasaConsole extends Console {
 		public constructor(client: KlasaClient, options: KlasaConsoleConfig);
 		public readonly client: KlasaClient;
 		public readonly stdout: NodeJS.WritableStream;
@@ -814,8 +814,6 @@ declare module 'klasa' {
 
 		private static _flatten(data: any, useColors: boolean): string;
 	}
-
-	export { KlasaConsole as Console };
 
 	export type constants = {
 		DEFAULTS: {
@@ -968,7 +966,7 @@ declare module 'klasa' {
 		private cooldowns: Map<Snowflake, number>;
 		private fullCategory: string[];
 
-		public definePrompt(usageString: string, usageDelim: string): ParsedUsage;
+		public definePrompt(usageString: string, usageDelim: string): Usage;
 		public createCustomResolver(type: string, resolver: ArgResolverCustomMethod): this;
 		public customizeResponse(name: string, response: string | ((msg: KlasaMessage, possible: Possible) => string)): this;
 

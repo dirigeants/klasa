@@ -14,7 +14,7 @@
 
 | Type                       | Description                                                                                                                        |
 | -------------------------: | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `literal`                  | Literally equal to the Name. This is the default type if none is defined.                                                          |
+| `literal`                  | Literally equal to the name. This is the default type if none is defined.                                                          |
 | `boolean`                  | A [Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean).                             |
 | `float` , `num` , `number` | A [Floating Point Number](https://en.wikipedia.org/wiki/Floating-point_arithmetic).                                                |
 | `int` , `integer`          | An [Integer](https://en.wikipedia.org/wiki/Integer).                                                                               |

@@ -4,6 +4,7 @@ const { applyToClass, isClass } = require('../../util/util');
 
 /**
  * The common interface for all stores
+ * @interface
  * @see CommandStore
  * @see EventStore
  * @see ExtendableStore
@@ -11,6 +12,7 @@ const { applyToClass, isClass } = require('../../util/util');
  * @see InhibitorStore
  * @see MonitorStore
  * @see ProviderStore
+ * @see TaskStore
  */
 class Store {
 

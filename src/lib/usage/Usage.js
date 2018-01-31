@@ -6,7 +6,7 @@ const close = [']', ')', '>'];
 /**
  * Converts usage strings into objects to compare against later
  */
-class ParsedUsage {
+class Usage {
 
 	/**
 	 * @since 0.0.1
@@ -16,9 +16,9 @@ class ParsedUsage {
 	 */
 	constructor(client, usageString, usageDelim) {
 		/**
-		 * The client this ParsedUsage was created with
+		 * The client this Usage was created with
 		 * @since 0.0.1
-		 * @name ParsedUsage#client
+		 * @name Usage#client
 		 * @type {KlasaClient}
 		 * @readonly
 		 */
@@ -152,9 +152,9 @@ class ParsedUsage {
 				continue;
 			}
 
-			if (open.includes(char)) usage = ParsedUsage.tagOpen(usage, char);
-			else if (close.includes(char)) usage = ParsedUsage.tagClose(usage, char);
-			else if ([' ', '\n'].includes(char)) usage = ParsedUsage.tagSpace(usage, char);
+			if (open.includes(char)) usage = Usage.tagOpen(usage, char);
+			else if (close.includes(char)) usage = Usage.tagClose(usage, char);
+			else if ([' ', '\n'].includes(char)) usage = Usage.tagSpace(usage, char);
 			else usage.current += char;
 		}
 
@@ -223,4 +223,4 @@ class ParsedUsage {
 
 }
 
-module.exports = ParsedUsage;
+module.exports = Usage;
