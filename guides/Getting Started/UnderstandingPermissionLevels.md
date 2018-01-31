@@ -91,7 +91,3 @@ Client.defaultPermissionLevels
 		return value === someOtherValue;
 	});
 ```
-
-### Levels may be Overwritten/You can have any number of levels
-
-Currently in Komada, if you try to overwrite a level, it will throw an error. And PermissionLevels must be from 0-10 on komada. *(This may change in the future)*
