@@ -15,10 +15,10 @@
     "url": "https://github.com/dirigeants/klasa.git"
   },
   "scripts": {
-    "lint": "npx eslint --fix src && npx eslint --fix --config .eslintrcmd.json --ext md guide && npx tslint --fix 'typings/*.ts'",
-    "test": "npx eslint src && npx tslint 'typings/*.ts' && npx eslint --config .eslintrcmd.json --ext md guide && npx markdownlint guide README.md",
+    "lint": "npx eslint --fix src && npx eslint --fix --config .eslintrcmd.json --ext md guides && npx tslint --fix 'typings/*.ts'",
+    "test": "npx eslint src && npx tslint 'typings/*.ts' && npx eslint --config .eslintrcmd.json --ext md guides && npx markdownlint guides README.md",
     "docs": "npx jsdoc -c ./.docstrap.json -R README.md",
-    "newdocs": "npx dg --source src --custom guide/.docconfig.json --output newdocs/docs.json --logging"
+    "newdocs": "npx dg --source src --custom guides/.docconfig.json --output newdocs/docs.json --logging"
   },
   "dependencies": {
     "fs-nextra": "^0.3.2"
