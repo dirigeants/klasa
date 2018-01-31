@@ -13,6 +13,7 @@ echo -e "Building for a branch push - building and deploying."
 
 REPO=$(git config remote.origin.url)
 SHA=$(git rev-parse --verify HEAD)
+OUTPUT=$(${string//substring/replacement})
 
 #new docs
 
@@ -21,7 +22,7 @@ git clone $REPO out -b $TARGET_BRANCH
 
 npm run docs
 
-mv docs/docs.json out/$TRAVIS_BRANCH.json
+mv docs/docs.json out/${TRAVIS_BRANCH//\//_}.json
 
 cd out
 git add --all .
