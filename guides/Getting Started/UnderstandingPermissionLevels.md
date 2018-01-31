@@ -11,7 +11,7 @@ If any check from 6-9 returns true, the user will be able to run that command. A
 
 ## Creating Completely Custom PermissionLevels
 
-Each level consists of a number (the level), a boolean (whether the level is a break or not), and a function (the check function that returns true or false). {@link PermissionLevels.addLevel}
+Each level consists of a number (the level), a boolean (whether the level is a break or not), and a function (the check function that returns true or false). Check: {@link PermissionLevels.addLevel}
 
 Example:
 
