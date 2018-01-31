@@ -1,11 +1,4 @@
 [{
-    "name": "General",
-    "files": [{
-        "name": "Home",
-        "path": "Home.md"
-    }]
-},
-{
     "name": "Getting Started",
     "files": [{
         "name": "Getting Started",
