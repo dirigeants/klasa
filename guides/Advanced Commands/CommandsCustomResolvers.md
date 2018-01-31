@@ -6,7 +6,7 @@ Custom resolvers allow developers to set up custom types for each command, they 
 
 ## Creating a custom Command Resolver
 
-A custom resolver is usually created in the command custructor and its usage is identical to {@link ArgResolver} methods:
+A custom resolver is usually created in the command constructor and its usage is identical to {@link ArgResolver} methods:
 
 ```javascript
 this.createCustomResolver('key', (arg, possible, msg, params) => {
