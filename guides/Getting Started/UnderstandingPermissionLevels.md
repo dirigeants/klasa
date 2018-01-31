@@ -11,7 +11,7 @@ If any check from 6-9 returns true, the user will be able to run that command. A
 
 ## Creating Completely Custom PermissionLevels
 
-Each level consists of a number (the level), a boolean (whether the level is a break or not), and a function (the check function that returns true or false). {@link PermissionLevels.addLevel}
+Each level consists of a number (the level), a boolean (whether the level is a break or not), and a function (the check function that returns true or false). Check: {@link PermissionLevels.addLevel}
 
 Example:
 
@@ -78,7 +78,7 @@ Permission levels are fairly close to the same as Komada Permission levels, with
 | 9     | true  | Bot Owner                                             |
 | 10    | false | Bot Owner (silent)                                    |
 
->This gives the bot creator a more blank slate to work with when first creating a bot. (Not all bots are mod bots, so mod/admin roles were largly unneed. Also there is infinitly more that you would want to put between 0 and administrative users, than between Guild Owner and Bot Owner). This helps keep bot creators from having to completely "remake the wheel" of permissions in almost all cases, without preventing that if wanted. (This fixes most cases of those who perpetually had to transfer/modify core commands to match their custom permissionLevels.)
+>This gives the bot creator a cleaner slate to work with when first creating a bot. (Not all bots are mod bots, so mod/admin roles were largly unneed. Also there is infinitely more that you would want to put between 0 and administrative users, than between Guild Owner and Bot Owner). This helps keep bot creators from having to completely "remake the wheel" of permissions in almost all cases, without preventing that if wanted. (This fixes most cases of those who perpetually had to transfer/modify core commands to match their custom permissionLevels.)
 
 ### Since inhibitors are async in Klasa, check functions may be async
 
@@ -91,7 +91,3 @@ Client.defaultPermissionLevels
 		return value === someOtherValue;
 	});
 ```
-
-### Levels may be Overwritten/You can have any number of levels
-
-Currently in Komada, if you try to overwrite a level, it will throw an error. And PermissionLevels must be from 0-10 on komada. *(This may change in the future)*
