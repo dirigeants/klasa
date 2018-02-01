@@ -37,7 +37,8 @@ class Gateway extends GatewayStorage {
 	 */
 
 	/**
-	 * <warning>You should never create a Gateway instance by yourself, as it manages many data internally. Please check {@link UnderstandingSettingGateway} about how to construct your own Gateway</warning>
+	 * <warning>You should never create a Gateway instance by yourself, as it manages many data internally.
+	 * Please check {@link UnderstandingSettingGateway} about how to construct your own Gateway</warning>
 	 * @since 0.0.1
 	 * @param {GatewayDriver} store The GatewayDriver instance which initiated this instance
 	 * @param {string} type The name of this Gateway

@@ -6,7 +6,7 @@ const fs = require('fs-nextra');
 class GatewayStorage {
 
 	/**
-	 * <warning>You should never create a Gateway instance by yourself, as it manages many data internally. Please check {@link UnderstandingSettingGateway} about how to construct your own Gateway</warning>
+	 * <warning>You should never create an instance of this class as it's abstract</warning>
 	 * @since 0.5.0
 	 * @param {KlasaClient} client The client this GatewayStorage was created with
 	 * @param {string} type The name of this GatewayStorage

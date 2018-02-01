@@ -34,6 +34,8 @@ declare module 'klasa' {
 
 	export const version: string;
 
+//#region Classes
+
 	export class KlasaClient extends Client {
 		public constructor(options?: KlasaClientOptions & ClientOptions);
 		public options: KlasaClientOptions & ClientOptions;
@@ -213,6 +215,8 @@ declare module 'klasa' {
 
 	export { KlasaClient as Client };
 
+//#region Extensions
+
 	export class KlasaGuild extends DiscordGuild {
 		public configs: Configuration;
 		public readonly language: Language;
@@ -259,128 +263,59 @@ declare module 'klasa' {
 		public sendMessage(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 	}
 
-	export class ReactionHandler extends ReactionCollector {
-		public constructor(msg: KlasaMessage, filter: Function, options: ReactionHandlerOptions, display: RichDisplay | RichMenu, emojis: emoji[]);
-		public display: RichDisplay | RichMenu;
-		public methodMap: Map<string, emoji>;
-		public currentPage: number;
-		public prompt: string;
-		public time: number;
-		public awaiting: boolean;
-		public selection: Promise<number>;
-		public reactionsDone: boolean;
-
-		public first(): void;
-		public back(): void;
-		public forward(): void;
-		public last(): void;
-		public jump(): Promise<void>;
-		public info(): void;
-		public stop(): void;
-		public zero(): void;
-		public one(): void;
-		public two(): void;
-		public three(): void;
-		public four(): void;
-		public five(): void;
-		public six(): void;
-		public seven(): void;
-		public eight(): void;
-		public nine(): void;
-		public update(): void;
-
-		private _queueEmojiReactions(emojis: emoji[]): Promise<null>;
+	export class KlasaTextChannel extends DiscordTextChannel {
+		public readonly attachable: boolean;
+		public readonly embedable: boolean;
+		public readonly postable: boolean;
+		public readonly guild: KlasaGuild;
+		public send(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public send(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendEmbed(embed: MessageEmbed, content?: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendEmbed(embed: MessageEmbed, options?: MessageOptions): Promise<KlasaMessage>;
+		public sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendFiles(attachments: MessageAttachment[], content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendMessage(content?: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendMessage(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 	}
 
-	export class RichDisplay {
-		public constructor(embed: MessageEmbed);
-		public embedTemplate: MessageEmbed;
-		public pages: MessageEmbed[];
-		public infoPage?: MessageEmbed;
-		public emojis: RichDisplayEmojisObject;
-		public footered: boolean;
-		public footerPrefix: string;
-		public footerSuffix: string;
-		public readonly template: MessageEmbed;
-
-		public setEmojis(emojis: RichDisplayEmojisObject): this;
-		public setFooterPrefix(prefix: string): this;
-		public setFooterSuffix(suffix: string): this;
-		public useCustomFooters(): this;
-		public addPage(embed: Function | MessageEmbed): this;
-		public setInfoPage(embed: MessageEmbed): RichDisplay;
-		public run(msg: KlasaMessage, options?: RichDisplayRunOptions): Promise<ReactionHandler>;
-
-		protected _determineEmojis(emojis: emoji[], stop: boolean, jump: boolean, firstLast: boolean): emoji[];
-		private _footer(): void;
-		private _handlePageGeneration(cb: Function | MessageEmbed): MessageEmbed;
+	export class KlasaVoiceChannel extends DiscordVoiceChannel {
+		public readonly guild: KlasaGuild;
 	}
 
-	export class RichMenu extends RichDisplay {
-		public constructor(embed: MessageEmbed);
-		public emojis: RichMenuEmojisObject;
-		public paginated: boolean;
-		public options: MenuOption[];
-
-		public addOption(name: string, body: string, inline?: boolean): RichMenu;
-		public run(msg: KlasaMessage, options?: RichMenuRunOptions): Promise<ReactionHandler>;
-
-		protected _determineEmojis(emojis: emoji[], stop: boolean): emoji[];
-		private _paginate(): void;
+	export class KlasaDMChannel extends DiscordDMChannel {
+		public readonly attachable: boolean;
+		public readonly embedable: boolean;
+		public readonly postable: boolean;
+		public send(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public send(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendEmbed(embed: MessageEmbed, content?: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendEmbed(embed: MessageEmbed, options?: MessageOptions): Promise<KlasaMessage>;
+		public sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendFiles(attachments: MessageAttachment[], content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendMessage(content?: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendMessage(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 	}
 
-	class Util {
-		public static applyToClass(base: object, structure: object, skips?: string[]): void;
-		public static clean(text: string): string;
-		public static codeBlock(lang: string, expression: string): string;
-		public static deepClone(source: any): any;
-		public static exec(exec: string, options?: ExecOptions): Promise<{ stdout: string, stderr: string }>;
-		public static getDeepTypeMap(input: Map<any, any> | WeakMap<object, any> | Collection<any, any>, basic?: string): string;
-		public static getDeepTypeName(input: any): string;
-		public static getDeepTypeProxy(input: Proxy<any>): string;
-		public static getDeepTypeSetOrMap(input: Array<any> | Set<any> | WeakSet<any>, basic?: string): string;
-		public static getTypeName(input: any): string;
-		public static isClass(input: Function): boolean;
-		public static isFunction(input: Function): boolean;
-		public static isNumber(input: number): boolean;
-		public static isObject(input: object): boolean;
-		public static isThenable(input: Promise<any>): boolean;
-		public static makeObject(path: string, value: any): object;
-		public static mergeDefault(def: object, given?: object): object;
-		public static mergeObjects(objTarget: object, objSource: object): object;
-		public static regExpEsc(str: string): string;
-		public static sleep(delay: number, args?: any): Promise<any>;
-		public static sleep<T>(delay: number, args?: T): Promise<T>;
-		public static toTitleCase(str: string): string;
-		public static tryParse(value: string): object;
-		private static initClean(client: KlasaClient): void;
+	export class KlasaGroupDMChannel extends DiscordGroupDMChannel {
+		public readonly attachable: boolean;
+		public readonly embedable: boolean;
+		public readonly postable: boolean;
+		public send(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public send(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendEmbed(embed: MessageEmbed, content?: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendEmbed(embed: MessageEmbed, options?: MessageOptions): Promise<KlasaMessage>;
+		public sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendFiles(attachments: MessageAttachment[], content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendMessage(content?: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendMessage(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 	}
 
-	export { Util as util };
+//#endregion Extensions
 
-	export class Resolver {
-		public constructor(client: KlasaClient);
-		public readonly client: KlasaClient;
-
-		public boolean(input: boolean | string): Promise<boolean>;
-		public channel(input: Channel | Snowflake): Promise<Channel>;
-		public float(input: string | number): Promise<number>;
-		public guild(input: KlasaGuild | Snowflake): Promise<KlasaGuild>;
-		public integer(input: string | number): Promise<number>;
-		public member(input: KlasaUser | GuildMember | Snowflake, guild: KlasaGuild): Promise<GuildMember>;
-		public msg(input: KlasaMessage | Snowflake, channel: Channel): Promise<KlasaMessage>;
-		public role(input: Role | Snowflake, guild: KlasaGuild): Promise<Role>;
-		public string(input: string): Promise<string>;
-		public url(input: string): Promise<string>;
-		public user(input: KlasaUser | GuildMember | KlasaMessage | Snowflake): Promise<KlasaUser>;
-
-		public static readonly regex: {
-			userOrMember: RegExp,
-			channel: RegExp,
-			role: RegExp,
-			snowflake: RegExp
-		};
-	}
+//#region Parsers
 
 	export class ArgResolver extends Resolver {
 
@@ -449,6 +384,30 @@ declare module 'klasa' {
 		private static minOrMax(client: KlasaClient, value: number, min: number, max: number, possible: Possible, msg: KlasaMessage, suffix: string): boolean;
 	}
 
+	export class Resolver {
+		public constructor(client: KlasaClient);
+		public readonly client: KlasaClient;
+
+		public boolean(input: boolean | string): Promise<boolean>;
+		public channel(input: Channel | Snowflake): Promise<Channel>;
+		public float(input: string | number): Promise<number>;
+		public guild(input: KlasaGuild | Snowflake): Promise<KlasaGuild>;
+		public integer(input: string | number): Promise<number>;
+		public member(input: KlasaUser | GuildMember | Snowflake, guild: KlasaGuild): Promise<GuildMember>;
+		public msg(input: KlasaMessage | Snowflake, channel: Channel): Promise<KlasaMessage>;
+		public role(input: Role | Snowflake, guild: KlasaGuild): Promise<Role>;
+		public string(input: string): Promise<string>;
+		public url(input: string): Promise<string>;
+		public user(input: KlasaUser | GuildMember | KlasaMessage | Snowflake): Promise<KlasaUser>;
+
+		public static readonly regex: {
+			userOrMember: RegExp,
+			channel: RegExp,
+			role: RegExp,
+			snowflake: RegExp
+		};
+	}
+
 	export class SettingResolver extends Resolver {
 		public any(data: any): Promise<any>;
 		public boolean(data: any, guild: KlasaGuild, name: string): Promise<boolean>;
@@ -477,23 +436,9 @@ declare module 'klasa' {
 		public static maxOrMin(guild: KlasaGuild, value: number, min: number, max: number, name: string, suffix: string): boolean;
 	}
 
-	export class CommandPrompt extends TextPrompt {
-		public constructor(msg: KlasaMessage, usage: CommandUsage, options: TextPromptOptions);
-		private typing: boolean;
+//#endregion Parsers
 
-		public run(): Promise<any[]>;
-	}
-
-	export class CommandUsage extends Usage {
-		public constructor(client: KlasaClient, command: Command);
-		public names: string[];
-		public commands: string;
-		public nearlyFullUsage: string;
-
-		public createPrompt(msg: KlasaMessage, options?: TextPromptOptions): CommandPrompt;
-		public fullUsage(msg: KlasaMessage): string;
-		public toString(): string;
-	}
+//#region Permissions
 
 	export class PermissionLevels extends Collection<number, PermissionLevel> {
 		public constructor(levels?: number);
@@ -507,231 +452,55 @@ declare module 'klasa' {
 		public run(msg: KlasaMessage, min: number): PermissionLevelsData;
 	}
 
-	// Usage
-	export class Usage {
-		public constructor(client: KlasaClient, usageString: string, usageDelim: string);
-		public readonly client: KlasaClient;
-		public deliminatedUsage: string;
-		public usageString: string;
-		public usageDelim: string;
-		public parsedUsage: Tag[];
-		public customResolvers: { [K: string]: ArgResolverCustomMethod };
+//#endregion Permissions
 
-		public createCustomResolver(type: string, resolver: ArgResolverCustomMethod): this;
-		public customizeResponse(name: string, response: ((msg: KlasaMessage) => string)): this;
-		public createPrompt(msg: KlasaMessage, options?: TextPromptOptions): TextPrompt;
-		public toJSON(): Tag[];
-		public toString(): string;
+//#region Schedule
 
-		private static parseUsage(usageString: string): Tag[];
-		private static tagOpen(usage: object, char: string): object;
-		private static tagClose(usage: object, char: string): object;
-		private static tagSpace(usage: object, char: string): object;
-	}
-
-	export class Possible {
-		public constructor([match, name, type, min, max, regex, flags]: [string, string, string, string, string, string, string]);
-		public name: string;
-		public type: string;
-		public min: number;
-		public max: number;
-		public regex: RegExp;
-
-		private static resolveLimit(limit: string, type: string): number;
-	}
-
-	export class Tag {
-		public constructor(members: string, count: number, required: boolean);
-		public required: number;
-		public possibles: Possible[];
-		public response: string | ((msg: KlasaMessage) => string);
-
-		private register(name: string, response: ArgResolverCustomMethod): boolean;
-		private static parseMembers(members: string, count: number): Possible[];
-		private static parseTrueMembers(members: string): string[];
-	}
-
-	export class TextPrompt {
-		public constructor(msg: KlasaMessage, usage: Usage, options: TextPromptOptions);
-		public readonly client: KlasaClient;
-		public message: KlasaMessage;
-		public usage: Usage | CommandUsage;
-		public reprompted: boolean;
-		public flags: object;
-		public args: string[];
-		public params: any[];
-		public promptTime: number;
-		public promptLimit: number;
-		public quotedStringSupport: boolean;
-		private _repeat: boolean;
-		private _required: number;
-		private _prompted: number;
-		private _currentUsage: Tag;
-
-		public run(prompt: string): Promise<any[]>;
-		private reprompt(prompt: string): Promise<any[]>;
-		private repeatingPrompt(): Promise<any[]>;
-		private validateArgs(): Promise<any[]>;
-		private multiPossibles(index: number): Promise<any[]>;
-		private pushParam(param: any): any[];
-		private handleError(err: string): Promise<any[]>;
-		private finalize(): any[];
-		private _setup(original: string): void;
-
-		private static getFlags(content: string, delim: string): { content: string; flags: object };
-		private static getArgs(content: string, delim: string): string[];
-		private static getQuotedStringArgs(content: string, delim: string): string[];
-
-		public static readonly flagRegex: RegExp;
-	}
-
-	// Configuration
-	export class GatewayStorage {
-		public constructor(client: KlasaClient, type: string, provider?: string);
-		public readonly client: KlasaClient;
-		public readonly type: string;
-		public readonly providerName: string;
-		public readonly baseDir: string;
-		public readonly filePath: string;
-		public readonly sql: boolean;
-		public schema?: SchemaFolder;
-		public ready: boolean;
-
-		public readonly sqlSchema: string[][];
-		public readonly provider: Provider;
-		public readonly defaults: any;
-
-		private initTable(): Promise<void>;
-		private initSchema(): Promise<SchemaFolder>;
-		private parseEntry(entry: any): any;
-
-		private static throwError(guild: KlasaGuild, code: string | number, error: string | Error): string;
-		private static _parseSQLValue(value: any, schemaPiece: SchemaPiece): any;
-	}
-
-	export class Gateway extends GatewayStorage {
-		public constructor(store: GatewayDriver, type: string, validateFunction: Function, schema: object, options: GatewayDriverAddOptions);
-		public store: GatewayDriver;
-		public options: GatewayDriverAddOptions;
-		public validate: Function;
-		public defaultSchema: object;
-		public readonly cache: Provider;
-		public readonly resolver: SettingResolver;
-
-		public getEntry(input: string, create?: boolean): object | Configuration;
-		public createEntry(input: string): Promise<Configuration>;
-		public insertEntry(id: string, data?: object): Configuration;
-		public deleteEntry(input: string): Promise<boolean>;
-		public sync(input?: object | string, download?: boolean): Promise<any>;
-		public getPath(key?: string, options?: GatewayGetPathOptions): GatewayGetPathResult;
-
-		private init(download?: boolean): Promise<void>;
-		private _ready(): Promise<Array<Collection<string, Configuration>>>;
-		private _resolveGuild(guild: GatewayGuildResolvable): KlasaGuild;
-		private _shardSync(path: string[], data: any, action: 'add' | 'delete' | 'update', force: boolean): Promise<void>;
-
-		public toString(): string;
-	}
-
-	export class GatewayDriver {
+	export class Schedule {
 		public constructor(client: KlasaClient);
+		public client: KlasaClient;
+		public tasks: ScheduledTask[];
+		public timeInterval: number;
+		private _interval: NodeJS.Timer;
+
+		private readonly _tasks: ScheduledTaskOptions[];
+		public init(): Promise<void>;
+		public execute(): Promise<void>;
+		public next(): ScheduledTask;
+		public create(taskName: string, time: Date | number | string, options: ScheduledTaskOptions): Promise<ScheduledTask>;
+		public delete(id: string): Promise<this>;
+		public clear(): Promise<void>;
+
+		private _add(taskName: string, time: Date | number | string, options: ScheduledTaskOptions): ScheduledTask;
+		private _insert(task: ScheduledTask): ScheduledTask;
+		private _clearInterval(): void;
+		private _checkInterval(): void;
+	}
+
+	export class ScheduledTask {
+		public constructor(client: KlasaClient, taskName: string, time: Date | number | string, options?: ScheduledTaskOptions);
 		public readonly client: KlasaClient;
-		public resolver: SettingResolver;
-		public types: string[];
-		public caches: string[];
-		public ready: boolean;
+		public readonly store: Schedule;
+		public taskName: string;
+		public recurring?: Cron;
+		public time?: Date;
+		public id: string;
+		public data: any;
 
-		public readonly guildsSchema: {
-			prefix: SchemaPieceJSON,
-			language: SchemaPieceJSON,
-			disableNaturalPrefix: SchemaPieceJSON,
-			disabledCommands: SchemaPieceJSON
-		};
+		public readonly task: Task;
+		public run(): Promise<this>;
+		public update(options?: ScheduledTaskUpdateOptions): Promise<this>;
+		public delete(): Promise<Schedule>;
+		public toJSON(): ScheduledTaskJSON;
 
-		public readonly clientStorageSchema: {
-			userBlacklist: SchemaPieceJSON,
-			guildBlacklist: SchemaPieceJSON,
-			schedules: SchemaPieceJSON
-		};
-
-		public guilds: Gateway;
-		public users: Gateway;
-		public clientStorage: Gateway;
-
-		public add(name: string, validateFunction: Function, schema?: object, options?: GatewayDriverAddOptions, download?: boolean): Promise<Gateway>;
-		private _ready(): Promise<Array<Array<Collection<string, Configuration>>>>;
-		private _checkProvider(engine: string): string;
+		private static _resolveTime(time: Date | number | Cron | string): [Date, Cron];
+		private static _generateID(client: KlasaClient, time: Date | number): string;
+		private static _validate(st: ScheduledTask): void;
 	}
 
-	export class Schema {
-		public constructor(client: KlasaClient, gateway: Gateway, object: any, parent: SchemaFolder, key: string);
-		public readonly client: KlasaClient;
-		public readonly gateway: Gateway;
-		public readonly parent?: SchemaFolder;
-		public readonly path: string;
-		public readonly key: string;
-		private readonly _inited: true;
-	}
+//#endregion Schedule
 
-	export class SchemaFolder extends Schema {
-		public constructor(client: KlasaClient, gateway: Gateway, object: any, parent: SchemaFolder, key: string);
-		public readonly type: 'Folder';
-		public defaults: object;
-		public keys: Set<string>;
-		public keyArray: string[];
-
-		public readonly configurableKeys: string[];
-
-		public addFolder(key: string, object?: object, force?: boolean): Promise<SchemaFolder>;
-		public removeFolder(key: string, force?: boolean): Promise<SchemaFolder>;
-		public hasKey(key: string): boolean;
-		public addKey(key: string, options: SchemaFolderAddOptions, force?: boolean): Promise<SchemaFolder>;
-		public removeKey(key: string, force?: boolean): Promise<SchemaFolder>;
-		public force(action: 'add' | 'edit' | 'delete', key: string, piece: SchemaFolder | SchemaPiece): Promise<any>;
-		public getList(msg: KlasaMessage): string;
-		public getDefaults(data?: object): object;
-		public getSQL(array?: string[]): string[];
-		public getKeys(array?: string[]): string[];
-		public getValues(array?: SchemaPiece[]): SchemaPiece[];
-		public resolveString(): string;
-
-		private _addKey(key: string, options: SchemaFolderAddOptions, type: typeof Schema | typeof SchemaFolder): void;
-		private _removeKey(key: string): void;
-		private _init(options: object): true;
-
-		public toJSON(): any;
-		public toString(): string;
-	}
-
-	export class SchemaPiece extends Schema {
-		public constructor(client: KlasaClient, gateway: Gateway, options: SchemaFolderAddOptions, parent: SchemaFolder, key: string);
-		public type: string;
-		public array: boolean;
-		public default: any;
-		public min?: number;
-		public max?: number;
-		public sql: [string, string];
-		public configurable: boolean;
-		public validator?: (resolved: any, guild?: KlasaGuild) => void;
-
-		public setValidator(fn: Function): this;
-		public parse(value: any, guild: KlasaGuild): Promise<any>;
-		public resolveString(msg: KlasaMessage): string;
-		public modify(options: SchemaPieceModifyOptions): Promise<this>;
-
-		private _schemaCheckType(type: string): void;
-		private _schemaCheckArray(array: boolean): void;
-		private _schemaCheckDefault(options: SchemaFolderAddOptions): void;
-		private _schemaCheckLimits(min: number, max: number): void;
-		private _schemaCheckConfigurable(configurable: boolean): void;
-		private _generateSQLDatatype(sql?: string): string;
-		private _init(options: SchemaFolderAddOptions): true;
-
-		public toJSON(): SchemaPieceJSON;
-		public toString(): string;
-
-		private static _parseSQLValue(value: any): string;
-	}
+//#region Settings
 
 	export class Configuration {
 		public constructor(manager: Gateway, data: any);
@@ -772,162 +541,157 @@ declare module 'klasa' {
 		private static getIdentifier(value: any): any;
 	}
 
-	// Util
-	export class Colors {
-		public constructor();
-		public CLOSE: ColorsClose;
-		public STYLES: ColorsStyles;
-		public TEXTS: ColorsTexts;
-		public BACKGROUNDS: ColorsBackgrounds;
+	export class Gateway extends GatewayStorage {
+		private constructor(store: GatewayDriver, type: string, validateFunction: Function, schema: object, options: GatewayDriverAddOptions);
+		public store: GatewayDriver;
+		public options: GatewayDriverAddOptions;
+		public validate: Function;
+		public defaultSchema: object;
+		public readonly cache: Provider;
+		public readonly resolver: SettingResolver;
 
-		public static hexToRGB(hex: string): number[];
-		public static hueToRGB(p: number, q: number, t: number): number;
-		public static hslToRGB([h, s, l]: [number | string, number | string, number | string]): number[];
-		public static formatArray([pos1, pos2, pos3]: [number | string, number | string, number | string]): string;
+		public getEntry(input: string, create?: boolean): object | Configuration;
+		public createEntry(input: string): Promise<Configuration>;
+		public insertEntry(id: string, data?: object): Configuration;
+		public deleteEntry(input: string): Promise<boolean>;
+		public sync(input?: object | string, download?: boolean): Promise<any>;
+		public getPath(key?: string, options?: GatewayGetPathOptions): GatewayGetPathResult;
 
-		public format(input: string, type?: ColorsFormatOptions): string;
-		private style(style: string | string[], data?: ColorsFormatData): ColorsFormatData;
-		private background(style: ColorsFormatType, data?: ColorsFormatData): ColorsFormatData;
-		private text(style: ColorsFormatType, data?: ColorsFormatData): ColorsFormatData;
-	}
+		private init(download?: boolean): Promise<void>;
+		private _ready(): Promise<Array<Collection<string, Configuration>>>;
+		private _resolveGuild(guild: GatewayGuildResolvable): KlasaGuild;
+		private _shardSync(path: string[], data: any, action: 'add' | 'delete' | 'update', force: boolean): Promise<void>;
 
-	export class KlasaConsole extends Console {
-		public constructor(client: KlasaClient, options: KlasaConsoleConfig);
-		public readonly client: KlasaClient;
-		public readonly stdout: NodeJS.WritableStream;
-		public readonly stderr: NodeJS.WritableStream;
-		public template?: Timestamp;
-		public useColors: boolean;
-		public colors: boolean | KlasaConsoleColorStyles;
-
-		public write(data: any, type?: string): void;
-		public log(...data: any[]): void;
-		public warn(...data: any[]): void;
-		public error(...data: any[]): void;
-		public debug(...data: any[]): void;
-		public verbose(...data: any[]): void;
-		public wtf(...data: any[]): void;
-
-		public timestamp(timestamp: string, time: ColorsFormatOptions): string;
-		public shard(input: string, shard: ColorsFormatOptions): string;
-		public messages(input: string, message: ColorsFormatOptions): string;
-
-		private static _flatten(data: any, useColors: boolean): string;
-	}
-
-	export type constants = {
-		DEFAULTS: {
-			CLIENT: KlasaConstantsClient,
-			CONSOLE: KlasaConsoleConfig
-		};
-		GATEWAY_RESOLVERS: {
-			GUILDS: (guildResolvable: string | KlasaGuild) => KlasaGuild,
-			USERS: (userResolvable: string | KlasaUser) => KlasaUser,
-			CLIENT_STORAGE: (clientResolvable: string | KlasaClient) => ClientUser
-		};
-		CRON: {
-			allowedNum: number[][];
-			partRegex: RegExp;
-			day: number;
-			predefined: {
-				'@yearly': '0 0 0 1 1 *',
-				'@monthly': '0 0 0 1 * *',
-				'@weekly': '0 0 0 * * 0',
-				'@daily': '0 0 0 * * *',
-				'@hourly': '0 0 * * * *'
-			};
-			tokens: {
-				jan: 1,
-				feb: 2,
-				mar: 3,
-				apr: 4,
-				may: 5,
-				jun: 6,
-				jul: 7,
-				aug: 8,
-				sep: 9,
-				oct: 10,
-				nov: 11,
-				dec: 12,
-				sun: 0,
-				mon: 1,
-				tue: 2,
-				wed: 3,
-				thu: 4,
-				fri: 5,
-				sat: 6
-			};
-			tokensRegex: RegExp;
-		};
-	};
-
-	export class Stopwatch {
-		public constructor(digits?: number);
-		public digits: number;
-		private _start: number;
-		private _end?: number;
-
-		public readonly duration: number;
-		public readonly friendlyDuration: string;
-		public readonly running: boolean;
-		public restart(): this;
-		public reset(): this;
-		public start(): this;
-		public stop(): this;
 		public toString(): string;
 	}
 
-	export class Timestamp {
-		public constructor(pattern: string);
-		public pattern: string;
-		private _template: TimestampObject[];
+	export class GatewayDriver {
+		private constructor(client: KlasaClient);
+		public readonly client: KlasaClient;
+		public resolver: SettingResolver;
+		public types: string[];
+		public caches: string[];
+		public ready: boolean;
 
-		public display(time?: Date | number | string): string;
-		public edit(pattern: string): this;
+		public readonly guildsSchema: {
+			prefix: SchemaPieceJSON,
+			language: SchemaPieceJSON,
+			disableNaturalPrefix: SchemaPieceJSON,
+			disabledCommands: SchemaPieceJSON
+		};
 
-		public static displayArbitrary(pattern: string, time?: Date | number | string): string;
-		public static toNow(earlier: Date | number | string, showIn?: boolean): string;
+		public readonly clientStorageSchema: {
+			userBlacklist: SchemaPieceJSON,
+			guildBlacklist: SchemaPieceJSON,
+			schedules: SchemaPieceJSON
+		};
 
-		private static _display(template: string, time: Date | number | string): string;
-		private static _parse(type: string, time: Date): string;
-		private static _patch(pattern: string): TimestampObject[];
+		public guilds: Gateway;
+		public users: Gateway;
+		public clientStorage: Gateway;
+
+		public add(name: string, validateFunction: Function, schema?: object, options?: GatewayDriverAddOptions, download?: boolean): Promise<Gateway>;
+		private _ready(): Promise<Array<Array<Collection<string, Configuration>>>>;
+		private _checkProvider(engine: string): string;
 	}
 
-	export class Duration {
-		public constructor(pattern: string);
-		public offset: number;
-		public readonly fromNow: Date;
+	export class GatewayStorage {
+		private constructor(client: KlasaClient, type: string, provider?: string);
+		public readonly client: KlasaClient;
+		public readonly type: string;
+		public readonly providerName: string;
+		public readonly baseDir: string;
+		public readonly filePath: string;
+		public readonly sql: boolean;
+		public schema?: SchemaFolder;
+		public ready: boolean;
 
-		public dateFrom(date: Date): Date;
+		public readonly sqlSchema: string[][];
+		public readonly provider: Provider;
+		public readonly defaults: any;
 
-		private static regex: RegExp;
-		private static nanosecond: number;
-		private static ns: number;
-		private static microsecond: number;
-		private static μs: number;
-		private static millisecond: number;
-		private static ms: number;
-		private static second: number;
-		private static sec: number;
-		private static s: number;
-		private static minute: number;
-		private static min: number;
-		private static m: number;
-		private static hour: number;
-		private static hr: number;
-		private static h: number;
-		private static day: number;
-		private static d: number;
-		private static month: number;
-		private static b: number;
-		private static year: number;
-		private static yr: number;
-		private static y: number;
+		private initTable(): Promise<void>;
+		private initSchema(): Promise<SchemaFolder>;
+		private parseEntry(entry: any): any;
 
-		private static _parse(pattern: string): number;
+		private static throwError(guild: KlasaGuild, code: string | number, error: string | Error): string;
+		private static _parseSQLValue(value: any, schemaPiece: SchemaPiece): any;
 	}
 
-	// Structures
+	export class Schema {
+		private constructor(client: KlasaClient, gateway: Gateway, object: any, parent: SchemaFolder, key: string);
+		public readonly client: KlasaClient;
+		public readonly gateway: Gateway;
+		public readonly parent?: SchemaFolder;
+		public readonly path: string;
+		public readonly key: string;
+		private readonly _inited: true;
+	}
+
+	export class SchemaFolder extends Schema {
+		private constructor(client: KlasaClient, gateway: Gateway, object: any, parent: SchemaFolder, key: string);
+		public readonly type: 'Folder';
+		public defaults: object;
+		public keys: Set<string>;
+		public keyArray: string[];
+
+		public readonly configurableKeys: string[];
+
+		public addFolder(key: string, object?: object, force?: boolean): Promise<SchemaFolder>;
+		public removeFolder(key: string, force?: boolean): Promise<SchemaFolder>;
+		public hasKey(key: string): boolean;
+		public addKey(key: string, options: SchemaFolderAddOptions, force?: boolean): Promise<SchemaFolder>;
+		public removeKey(key: string, force?: boolean): Promise<SchemaFolder>;
+		public force(action: 'add' | 'edit' | 'delete', key: string, piece: SchemaFolder | SchemaPiece): Promise<any>;
+		public getList(msg: KlasaMessage): string;
+		public getDefaults(data?: object): object;
+		public getSQL(array?: string[]): string[];
+		public getKeys(array?: string[]): string[];
+		public getValues(array?: SchemaPiece[]): SchemaPiece[];
+		public resolveString(): string;
+
+		private _addKey(key: string, options: SchemaFolderAddOptions, type: typeof Schema | typeof SchemaFolder): void;
+		private _removeKey(key: string): void;
+		private _init(options: object): true;
+
+		public toJSON(): any;
+		public toString(): string;
+	}
+
+	export class SchemaPiece extends Schema {
+		private constructor(client: KlasaClient, gateway: Gateway, options: SchemaFolderAddOptions, parent: SchemaFolder, key: string);
+		public type: string;
+		public array: boolean;
+		public default: any;
+		public min?: number;
+		public max?: number;
+		public sql: [string, string];
+		public configurable: boolean;
+		public validator?: (resolved: any, guild?: KlasaGuild) => void;
+
+		public setValidator(fn: Function): this;
+		public parse(value: any, guild: KlasaGuild): Promise<any>;
+		public resolveString(msg: KlasaMessage): string;
+		public modify(options: SchemaPieceModifyOptions): Promise<this>;
+
+		private _schemaCheckType(type: string): void;
+		private _schemaCheckArray(array: boolean): void;
+		private _schemaCheckDefault(options: SchemaFolderAddOptions): void;
+		private _schemaCheckLimits(min: number, max: number): void;
+		private _schemaCheckConfigurable(configurable: boolean): void;
+		private _generateSQLDatatype(sql?: string): string;
+		private _init(options: SchemaFolderAddOptions): true;
+
+		public toJSON(): SchemaPieceJSON;
+		public toString(): string;
+
+		private static _parseSQLValue(value: any): string;
+	}
+
+//#endregion Settings
+
+//#region Pieces
+
 	export class Piece {
 		public reload(): Promise<Piece>;
 		public unload(): void;
@@ -1153,6 +917,10 @@ declare module 'klasa' {
 		public toString(): string;
 	}
 
+//#endregion Pieces
+
+//#region Stores
+
 	export class Store {
 		public init(): Promise<any[]>;
 		public load(dir: string, file: string | string[]): Piece;
@@ -1338,48 +1106,172 @@ declare module 'klasa' {
 		public resolve(): any;
 	}
 
-	// Schedule classes
-	export class Schedule {
-		public constructor(client: KlasaClient);
-		public client: KlasaClient;
-		public tasks: ScheduledTask[];
-		public timeInterval: number;
-		private _interval: NodeJS.Timer;
+//#endregion Stores
 
-		private readonly _tasks: ScheduledTaskOptions[];
-		public init(): Promise<void>;
-		public execute(): Promise<void>;
-		public next(): ScheduledTask;
-		public create(taskName: string, time: Date | number | string, options: ScheduledTaskOptions): Promise<ScheduledTask>;
-		public delete(id: string): Promise<this>;
-		public clear(): Promise<void>;
+//#region Usage
 
-		private _add(taskName: string, time: Date | number | string, options: ScheduledTaskOptions): ScheduledTask;
-		private _insert(task: ScheduledTask): ScheduledTask;
-		private _clearInterval(): void;
-		private _checkInterval(): void;
+	export class CommandPrompt extends TextPrompt {
+		public constructor(msg: KlasaMessage, usage: CommandUsage, options: TextPromptOptions);
+		private typing: boolean;
+
+		public run(): Promise<any[]>;
 	}
 
-	export class ScheduledTask {
-		public constructor(client: KlasaClient, taskName: string, time: Date | number | string, options?: ScheduledTaskOptions);
+	export class CommandUsage extends Usage {
+		public constructor(client: KlasaClient, command: Command);
+		public names: string[];
+		public commands: string;
+		public nearlyFullUsage: string;
+
+		public createPrompt(msg: KlasaMessage, options?: TextPromptOptions): CommandPrompt;
+		public fullUsage(msg: KlasaMessage): string;
+		public toString(): string;
+	}
+
+	export class Possible {
+		public constructor([match, name, type, min, max, regex, flags]: [string, string, string, string, string, string, string]);
+		public name: string;
+		public type: string;
+		public min: number;
+		public max: number;
+		public regex: RegExp;
+
+		private static resolveLimit(limit: string, type: string): number;
+	}
+
+	export class Tag {
+		public constructor(members: string, count: number, required: boolean);
+		public required: number;
+		public possibles: Possible[];
+		public response: string | ((msg: KlasaMessage) => string);
+
+		private register(name: string, response: ArgResolverCustomMethod): boolean;
+		private static parseMembers(members: string, count: number): Possible[];
+		private static parseTrueMembers(members: string): string[];
+	}
+
+	export class TextPrompt {
+		public constructor(msg: KlasaMessage, usage: Usage, options: TextPromptOptions);
 		public readonly client: KlasaClient;
-		public readonly store: Schedule;
-		public taskName: string;
-		public recurring?: Cron;
-		public time?: Date;
-		public id: string;
-		public data: any;
+		public message: KlasaMessage;
+		public usage: Usage | CommandUsage;
+		public reprompted: boolean;
+		public flags: object;
+		public args: string[];
+		public params: any[];
+		public promptTime: number;
+		public promptLimit: number;
+		public quotedStringSupport: boolean;
+		private _repeat: boolean;
+		private _required: number;
+		private _prompted: number;
+		private _currentUsage: Tag;
 
-		public readonly task: Task;
-		public run(): Promise<this>;
-		public update(options?: ScheduledTaskUpdateOptions): Promise<this>;
-		public delete(): Promise<Schedule>;
-		public toJSON(): ScheduledTaskJSON;
+		public run(prompt: string): Promise<any[]>;
+		private reprompt(prompt: string): Promise<any[]>;
+		private repeatingPrompt(): Promise<any[]>;
+		private validateArgs(): Promise<any[]>;
+		private multiPossibles(index: number): Promise<any[]>;
+		private pushParam(param: any): any[];
+		private handleError(err: string): Promise<any[]>;
+		private finalize(): any[];
+		private _setup(original: string): void;
 
-		private static _resolveTime(time: Date | number | Cron | string): [Date, Cron];
-		private static _generateID(client: KlasaClient, time: Date | number): string;
-		private static _validate(st: ScheduledTask): void;
+		private static getFlags(content: string, delim: string): { content: string; flags: object };
+		private static getArgs(content: string, delim: string): string[];
+		private static getQuotedStringArgs(content: string, delim: string): string[];
+
+		public static readonly flagRegex: RegExp;
 	}
+
+	export class Usage {
+		public constructor(client: KlasaClient, usageString: string, usageDelim: string);
+		public readonly client: KlasaClient;
+		public deliminatedUsage: string;
+		public usageString: string;
+		public usageDelim: string;
+		public parsedUsage: Tag[];
+		public customResolvers: { [K: string]: ArgResolverCustomMethod };
+
+		public createCustomResolver(type: string, resolver: ArgResolverCustomMethod): this;
+		public customizeResponse(name: string, response: ((msg: KlasaMessage) => string)): this;
+		public createPrompt(msg: KlasaMessage, options?: TextPromptOptions): TextPrompt;
+		public toJSON(): Tag[];
+		public toString(): string;
+
+		private static parseUsage(usageString: string): Tag[];
+		private static tagOpen(usage: object, char: string): object;
+		private static tagClose(usage: object, char: string): object;
+		private static tagSpace(usage: object, char: string): object;
+	}
+
+//#endregion Usage
+
+//#region Util
+
+	export class Colors {
+		public constructor();
+		public CLOSE: ColorsClose;
+		public STYLES: ColorsStyles;
+		public TEXTS: ColorsTexts;
+		public BACKGROUNDS: ColorsBackgrounds;
+
+		public static hexToRGB(hex: string): number[];
+		public static hueToRGB(p: number, q: number, t: number): number;
+		public static hslToRGB([h, s, l]: [number | string, number | string, number | string]): number[];
+		public static formatArray([pos1, pos2, pos3]: [number | string, number | string, number | string]): string;
+
+		public format(input: string, type?: ColorsFormatOptions): string;
+		private style(style: string | string[], data?: ColorsFormatData): ColorsFormatData;
+		private background(style: ColorsFormatType, data?: ColorsFormatData): ColorsFormatData;
+		private text(style: ColorsFormatType, data?: ColorsFormatData): ColorsFormatData;
+	}
+
+	export type constants = {
+		DEFAULTS: {
+			CLIENT: KlasaConstantsClient,
+			CONSOLE: KlasaConsoleConfig
+		};
+		GATEWAY_RESOLVERS: {
+			GUILDS: (guildResolvable: string | KlasaGuild) => KlasaGuild,
+			USERS: (userResolvable: string | KlasaUser) => KlasaUser,
+			CLIENT_STORAGE: (clientResolvable: string | KlasaClient) => ClientUser
+		};
+		CRON: {
+			allowedNum: number[][];
+			partRegex: RegExp;
+			day: number;
+			predefined: {
+				'@yearly': '0 0 0 1 1 *',
+				'@monthly': '0 0 0 1 * *',
+				'@weekly': '0 0 0 * * 0',
+				'@daily': '0 0 0 * * *',
+				'@hourly': '0 0 * * * *'
+			};
+			tokens: {
+				jan: 1,
+				feb: 2,
+				mar: 3,
+				apr: 4,
+				may: 5,
+				jun: 6,
+				jul: 7,
+				aug: 8,
+				sep: 9,
+				oct: 10,
+				nov: 11,
+				dec: 12,
+				sun: 0,
+				mon: 1,
+				tue: 2,
+				wed: 3,
+				thu: 4,
+				fri: 5,
+				sat: 6
+			};
+			tokensRegex: RegExp;
+		};
+	};
 
 	export class Cron {
 		public constructor(cron: string);
@@ -1391,58 +1283,201 @@ declare module 'klasa' {
 		private static _range(min: number, max: number, step: number): number[];
 	}
 
-	// Extended classes
-	export class KlasaTextChannel extends DiscordTextChannel {
-		public readonly attachable: boolean;
-		public readonly embedable: boolean;
-		public readonly postable: boolean;
-		public readonly guild: KlasaGuild;
-		public send(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public send(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendEmbed(embed: MessageEmbed, content?: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendEmbed(embed: MessageEmbed, options?: MessageOptions): Promise<KlasaMessage>;
-		public sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendFiles(attachments: MessageAttachment[], content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendMessage(content?: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendMessage(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+	export class Duration {
+		public constructor(pattern: string);
+		public offset: number;
+		public readonly fromNow: Date;
+
+		public dateFrom(date: Date): Date;
+
+		private static regex: RegExp;
+		private static nanosecond: number;
+		private static ns: number;
+		private static microsecond: number;
+		private static μs: number;
+		private static millisecond: number;
+		private static ms: number;
+		private static second: number;
+		private static sec: number;
+		private static s: number;
+		private static minute: number;
+		private static min: number;
+		private static m: number;
+		private static hour: number;
+		private static hr: number;
+		private static h: number;
+		private static day: number;
+		private static d: number;
+		private static month: number;
+		private static b: number;
+		private static year: number;
+		private static yr: number;
+		private static y: number;
+
+		private static _parse(pattern: string): number;
 	}
 
-	export class KlasaVoiceChannel extends DiscordVoiceChannel {
-		public readonly guild: KlasaGuild;
+	export class KlasaConsole extends Console {
+		private constructor(client: KlasaClient, options: KlasaConsoleConfig);
+		public readonly client: KlasaClient;
+		public readonly stdout: NodeJS.WritableStream;
+		public readonly stderr: NodeJS.WritableStream;
+		public template?: Timestamp;
+		public useColors: boolean;
+		public colors: boolean | KlasaConsoleColorStyles;
+
+		public write(data: any, type?: string): void;
+		public log(...data: any[]): void;
+		public warn(...data: any[]): void;
+		public error(...data: any[]): void;
+		public debug(...data: any[]): void;
+		public verbose(...data: any[]): void;
+		public wtf(...data: any[]): void;
+
+		public timestamp(timestamp: string, time: ColorsFormatOptions): string;
+		public shard(input: string, shard: ColorsFormatOptions): string;
+		public messages(input: string, message: ColorsFormatOptions): string;
+
+		private static _flatten(data: any, useColors: boolean): string;
 	}
 
-	export class KlasaDMChannel extends DiscordDMChannel {
-		public readonly attachable: boolean;
-		public readonly embedable: boolean;
-		public readonly postable: boolean;
-		public send(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public send(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendEmbed(embed: MessageEmbed, content?: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendEmbed(embed: MessageEmbed, options?: MessageOptions): Promise<KlasaMessage>;
-		public sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendFiles(attachments: MessageAttachment[], content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendMessage(content?: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendMessage(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+	export class ReactionHandler extends ReactionCollector {
+		public constructor(msg: KlasaMessage, filter: Function, options: ReactionHandlerOptions, display: RichDisplay | RichMenu, emojis: emoji[]);
+		public display: RichDisplay | RichMenu;
+		public methodMap: Map<string, emoji>;
+		public currentPage: number;
+		public prompt: string;
+		public time: number;
+		public awaiting: boolean;
+		public selection: Promise<number>;
+		public reactionsDone: boolean;
+
+		public first(): void;
+		public back(): void;
+		public forward(): void;
+		public last(): void;
+		public jump(): Promise<void>;
+		public info(): void;
+		public stop(): void;
+		public zero(): void;
+		public one(): void;
+		public two(): void;
+		public three(): void;
+		public four(): void;
+		public five(): void;
+		public six(): void;
+		public seven(): void;
+		public eight(): void;
+		public nine(): void;
+		public update(): void;
+
+		private _queueEmojiReactions(emojis: emoji[]): Promise<null>;
 	}
 
-	export class KlasaGroupDMChannel extends DiscordGroupDMChannel {
-		public readonly attachable: boolean;
-		public readonly embedable: boolean;
-		public readonly postable: boolean;
-		public send(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public send(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendEmbed(embed: MessageEmbed, content?: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendEmbed(embed: MessageEmbed, options?: MessageOptions): Promise<KlasaMessage>;
-		public sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendFiles(attachments: MessageAttachment[], content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendMessage(content?: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendMessage(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+	export class RichDisplay {
+		public constructor(embed: MessageEmbed);
+		public embedTemplate: MessageEmbed;
+		public pages: MessageEmbed[];
+		public infoPage?: MessageEmbed;
+		public emojis: RichDisplayEmojisObject;
+		public footered: boolean;
+		public footerPrefix: string;
+		public footerSuffix: string;
+		public readonly template: MessageEmbed;
+
+		public setEmojis(emojis: RichDisplayEmojisObject): this;
+		public setFooterPrefix(prefix: string): this;
+		public setFooterSuffix(suffix: string): this;
+		public useCustomFooters(): this;
+		public addPage(embed: Function | MessageEmbed): this;
+		public setInfoPage(embed: MessageEmbed): RichDisplay;
+		public run(msg: KlasaMessage, options?: RichDisplayRunOptions): Promise<ReactionHandler>;
+
+		protected _determineEmojis(emojis: emoji[], stop: boolean, jump: boolean, firstLast: boolean): emoji[];
+		private _footer(): void;
+		private _handlePageGeneration(cb: Function | MessageEmbed): MessageEmbed;
 	}
 
-	// Types
+	export class RichMenu extends RichDisplay {
+		public constructor(embed: MessageEmbed);
+		public emojis: RichMenuEmojisObject;
+		public paginated: boolean;
+		public options: MenuOption[];
+
+		public addOption(name: string, body: string, inline?: boolean): RichMenu;
+		public run(msg: KlasaMessage, options?: RichMenuRunOptions): Promise<ReactionHandler>;
+
+		protected _determineEmojis(emojis: emoji[], stop: boolean): emoji[];
+		private _paginate(): void;
+	}
+
+	export class Stopwatch {
+		public constructor(digits?: number);
+		public digits: number;
+		private _start: number;
+		private _end?: number;
+
+		public readonly duration: number;
+		public readonly friendlyDuration: string;
+		public readonly running: boolean;
+		public restart(): this;
+		public reset(): this;
+		public start(): this;
+		public stop(): this;
+		public toString(): string;
+	}
+
+	export class Timestamp {
+		public constructor(pattern: string);
+		public pattern: string;
+		private _template: TimestampObject[];
+
+		public display(time?: Date | number | string): string;
+		public edit(pattern: string): this;
+
+		public static displayArbitrary(pattern: string, time?: Date | number | string): string;
+		public static toNow(earlier: Date | number | string, showIn?: boolean): string;
+
+		private static _display(template: string, time: Date | number | string): string;
+		private static _parse(type: string, time: Date): string;
+		private static _patch(pattern: string): TimestampObject[];
+	}
+
+	class Util {
+		public static applyToClass(base: object, structure: object, skips?: string[]): void;
+		public static clean(text: string): string;
+		public static codeBlock(lang: string, expression: string): string;
+		public static deepClone(source: any): any;
+		public static exec(exec: string, options?: ExecOptions): Promise<{ stdout: string, stderr: string }>;
+		public static getDeepTypeMap(input: Map<any, any> | WeakMap<object, any> | Collection<any, any>, basic?: string): string;
+		public static getDeepTypeName(input: any): string;
+		public static getDeepTypeProxy(input: Proxy<any>): string;
+		public static getDeepTypeSetOrMap(input: Array<any> | Set<any> | WeakSet<any>, basic?: string): string;
+		public static getTypeName(input: any): string;
+		public static isClass(input: Function): boolean;
+		public static isFunction(input: Function): boolean;
+		public static isNumber(input: number): boolean;
+		public static isObject(input: object): boolean;
+		public static isThenable(input: Promise<any>): boolean;
+		public static makeObject(path: string, value: any): object;
+		public static mergeDefault(def: object, given?: object): object;
+		public static mergeObjects(objTarget: object, objSource: object): object;
+		public static regExpEsc(str: string): string;
+		public static sleep(delay: number, args?: any): Promise<any>;
+		public static sleep<T>(delay: number, args?: T): Promise<T>;
+		public static toTitleCase(str: string): string;
+		public static tryParse(value: string): object;
+		private static initClean(client: KlasaClient): void;
+	}
+
+	export { Util as util };
+
+//#endregion Util
+
+//#endregion Classes
+
+//#region Typedefs
+
 	export type KlasaClientOptions = {
 		clientBaseDir?: string;
 		clock?: KlasaClientOptionsClock;
@@ -2013,5 +2048,7 @@ declare module 'klasa' {
 		get(): T;
 		set(value: T): void;
 	};
+
+//#endregion
 
 }
