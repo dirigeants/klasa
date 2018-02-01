@@ -2,7 +2,7 @@
 
 Time to take the plunge! Klasa is on NPM and can be easily installed.
 
-<info>I assume you know how to open a command prompt in a folder where you want to install this. Please don't prove me wrong.</info>
+> I assume you know how to open a command prompt in a folder where you want to install this. Please don't prove me wrong.
 
 ```sh
 npm install --save klasa
