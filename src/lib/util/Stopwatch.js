@@ -118,7 +118,7 @@ class Stopwatch {
 	}
 
 	/**
-	 * Defines toString behavior o return the friendlyDuration
+	 * Defines toString behavior to return the friendlyDuration
 	 * @since 0.4.0
 	 * @returns {string}
 	 */
