@@ -4,15 +4,17 @@ class Schedule {
 
 	/**
 	 * @typedef  {Object} ScheduledTaskOptions
-	 * @property {string} [id]
-	 * @property {string} [repeat]
-	 * @property {*} [data]
+	 * @property {string} [id] The ID for the task. By default, it generates one in base36
+	 * @property {string} [repeat] The {@link Cron} pattern
+	 * @property {*} [data] The data to pass to the Task piece when the ScheduledTask is ready for execution
 	 * @memberof Schedule
 	 */
 
 	/**
+	 * <warning>Schedule is a singleton, please do not construct another, use {@link KlasaClient#schedule} instead</warning>
 	 * @since 0.5.0
 	 * @param {KlasaClient} client The Client that initialized this instance
+	 * @private
 	 */
 	constructor(client) {
 		/**

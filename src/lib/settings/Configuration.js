@@ -7,64 +7,65 @@ class Configuration {
 
 	/**
 	 * @typedef {Object} ConfigurationUpdateResult
-	 * @property {*} value
-	 * @property {SchemaPiece} path
+	 * @property {*} value The parsed value
+	 * @property {SchemaPiece} path The SchemaPiece that manages the updated value
 	 * @memberof Configuration
 	 */
 
 	/**
 	 * @typedef {Object} ConfigurationUpdateOptions
-	 * @property {boolean} [avoidUnconfigurable]
-	 * @property {('add'|'remove'|'auto')} [action]
-	 * @property {number} [arrayPosition]
+	 * @property {boolean} [avoidUnconfigurable] Whether the update should avoid unconfigurable keys
+	 * @property {('add'|'remove'|'auto')} [action='auto'] Whether the update (when using arrays) should add or remove,
+	 * leave it as 'auto' to add or remove depending on the existence of the key in the array
+	 * @property {number} [arrayPosition] The position of the array to replace
 	 * @memberof Configuration
 	 */
 
 	/**
 	 * @typedef {Object} ConfigurationUpdateObjectResult
-	 * @property {ConfigurationUpdateObjectList} updated
-	 * @property {Error[]} errors
+	 * @property {ConfigurationUpdateObjectList} updated An object containing all keys and values updated
+	 * @property {Error[]} errors All the errors caught by the parser
 	 * @memberof Configuration
 	 */
 
 	/**
 	 * @typedef {Object} ConfigurationUpdateObjectList
-	 * @property {string[]} keys
-	 * @property {Array<*>} values
+	 * @property {string[]} keys An array of all updated keys
+	 * @property {Array<*>} values An array of all updated values
 	 * @memberof Configuration
 	 */
 
 	/**
 	 * @typedef {Object} ConfigurationPathResult
-	 * @property {string} path
-	 * @property {string[]} route
+	 * @property {string} path The path of the updated key
+	 * @property {string[]} route The path split by dots
 	 * @memberof Configuration
 	 * @private
 	 */
 
 	/**
 	 * @typedef {Object} ConfigurationUpdateManyList
-	 * @property {Error[]} errors
-	 * @property {Array<Promise<any>>} promises
-	 * @property {string[]} keys
-	 * @property {Array<*>} values
+	 * @property {Error[]} errors An array containing all the errors caught
+	 * @property {Array<Promise<*>>} promises An array of promises to resolve
+	 * @property {string[]} keys An array of all keys pending for update
+	 * @property {Array<*>} values An array of all values pending for update
 	 * @memberof Configuration
 	 * @private
 	 */
 
 	/**
 	 * @typedef {Object} ConfigurationParseResult
-	 * @property {*} parsed
-	 * @property {(string|number|object)} parsedID
-	 * @property {(null|any[])} array
-	 * @property {string} path
-	 * @property {string[]} route
-	 * @property {string} entryID
+	 * @property {*} parsed The parsed value
+	 * @property {(string|number|object)} parsedID The parsed ID value for DB storage
+	 * @property {(null|Array<*>)} array The updated array. Can be null if the key doesn't hold an array
+	 * @property {string} path The path of the updated key
+	 * @property {string[]} route The path split by dots
 	 * @memberof Configuration
 	 * @private
 	 */
 
 	/**
+	 * <warning>Creating your own Configuration instances if often discouraged and unneeded. SettingGateway handles them internally for you</warning>
 	 * @since 0.5.0
 	 * @param {Gateway} manager The Gateway that manages this Configuration instance
 	 * @param {Object} data The data that is cached in this Configuration instance

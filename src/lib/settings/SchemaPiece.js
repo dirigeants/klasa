@@ -30,12 +30,14 @@ class SchemaPiece extends Schema {
 	 */
 
 	/**
+	 * <warning>You should never create an instance of this class. Please consider using {@link SchemaFolder#addKey} instead</warning>
 	 * @since 0.5.0
 	 * @param {KlasaClient} client The client which initialized this instance
 	 * @param {Gateway} gateway The Gateway that manages this schema instance
 	 * @param {AddOptions} options The object containing the properties for this schema instance
 	 * @param {SchemaFolder} parent The parent which holds this instance
 	 * @param {string} key The name of the key
+	 * @private
 	 */
 	constructor(client, gateway, options, parent, key) {
 		super(client, gateway, options, parent, key);
@@ -219,6 +221,7 @@ class SchemaPiece extends Schema {
 	 * Checks if options.type is valid.
 	 * @since 0.5.0
 	 * @param {string} type The parameter to validate
+	 * @throws {TypeError}
 	 * @private
 	 */
 	_schemaCheckType(type) {
@@ -230,6 +233,7 @@ class SchemaPiece extends Schema {
 	 * Checks if options.array is valid.
 	 * @since 0.5.0
 	 * @param {boolean} array The parameter to validate
+	 * @throws {TypeError}
 	 * @private
 	 */
 	_schemaCheckArray(array) {
@@ -240,6 +244,7 @@ class SchemaPiece extends Schema {
 	 * Checks if options.default is valid.
 	 * @since 0.5.0
 	 * @param {AddOptions} options The options to validate
+	 * @throws {TypeError}
 	 * @private
 	 */
 	_schemaCheckDefault(options) {
@@ -309,6 +314,7 @@ class SchemaPiece extends Schema {
 	 * @since 0.5.0
 	 * @param {AddOptions} options The options to parse
 	 * @returns {true}
+	 * @throws {TypeError}
 	 * @private
 	 */
 	_init(options) {

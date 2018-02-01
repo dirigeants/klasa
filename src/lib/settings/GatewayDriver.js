@@ -8,33 +8,35 @@ class GatewayDriver {
 
 	/**
 	 * @typedef {Object} GatewayDriverAddOptions
-	 * @property {string} [provider]
-	 * @property {boolean} [nice=false]
+	 * @property {string} [provider] The name of the provider to use
+	 * @property {boolean} [nice=false] Whether the JSON provider should use sequential or burst mode
 	 * @memberof GatewayDriver
 	 */
 
 	/**
 	 * @typedef {Object} GatewayDriverGuildsSchema
-	 * @property {SchemaPieceJSON} prefix
-	 * @property {SchemaPieceJSON} language
-	 * @property {SchemaPieceJSON} disableNaturalPrefix
-	 * @property {SchemaPieceJSON} disabledCommands
+	 * @property {SchemaPieceJSON} prefix The per-guild's configurable prefix key
+	 * @property {SchemaPieceJSON} language The per-guild's configurable language key
+	 * @property {SchemaPieceJSON} disableNaturalPrefix The per-guild's configurable disableNaturalPrefix key
+	 * @property {SchemaPieceJSON} disabledCommands The per-guild's configurable disabledCommands key
 	 * @memberof GatewayDriver
 	 * @private
 	 */
 
 	/**
 	 * @typedef {Object} GatewayDriverClientStorageSchema
-	 * @property {SchemaPieceJSON} userBlacklist
-	 * @property {SchemaPieceJSON} guildBlacklist
-	 * @property {SchemaPieceJSON} schedules
+	 * @property {SchemaPieceJSON} userBlacklist The client's configurable user blacklist key
+	 * @property {SchemaPieceJSON} guildBlacklist The client's configurable guild blacklist key
+	 * @property {SchemaPieceJSON} schedules The schedules where {@link ScheduledTask}s are stored at
 	 * @memberof GatewayDriver
 	 * @private
 	 */
 
 	/**
+	 * <warning>GatewayDriver is a singleton, please do not construct another, use {@link KlasaClient#gateways} instead</warning>
 	 * @since 0.3.0
 	 * @param {KlasaClient} client The Klasa client
+	 * @private
 	 */
 	constructor(client) {
 		/**

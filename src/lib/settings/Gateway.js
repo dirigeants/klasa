@@ -12,23 +12,22 @@ class Gateway extends GatewayStorage {
 
 	/**
 	 * @typedef {Object} GatewayOptions
-	 * @property {Provider} [provider]
-	 * @property {CacheProvider} [cache]
-	 * @property {boolean} [nice=false]
+	 * @property {Provider} [provider] The provider to use
+	 * @property {boolean} [nice=false] Whether the JSON provider should use sequential or burst mode
 	 * @memberof Gateway
 	 */
 
 	/**
 	 * @typedef {Object} GatewayGetPathOptions
-	 * @property {boolean} [avoidUnconfigurable=false]
-	 * @property {boolean} [piece=true]
+	 * @property {boolean} [avoidUnconfigurable=false] Whether the getPath should avoid unconfigurable keys
+	 * @property {boolean} [piece=true] Whether the getPath should return pieces or folders
 	 * @memberof Gateway
 	 */
 
 	/**
 	 * @typedef {Object} GatewayGetPathResult
-	 * @property {SchemaPiece} path
-	 * @property {string[]} route
+	 * @property {SchemaPiece} path The resolved path
+	 * @property {string[]} route The resolved path split by dots
 	 * @memberof Gateway
 	 */
 
@@ -38,12 +37,14 @@ class Gateway extends GatewayStorage {
 	 */
 
 	/**
+	 * <warning>You should never create a Gateway instance by yourself, as it manages many data internally. Please check {@link UnderstandingSettingGateway} about how to construct your own Gateway</warning>
 	 * @since 0.0.1
 	 * @param {GatewayDriver} store The GatewayDriver instance which initiated this instance
 	 * @param {string} type The name of this Gateway
 	 * @param {Function} validateFunction The function that validates the entries' values
 	 * @param {Object} schema The initial schema for this instance
 	 * @param {GatewayOptions} options The options for this schema
+	 * @private
 	 */
 	constructor(store, type, validateFunction, schema, options) {
 		super(store.client, type, options.provider);

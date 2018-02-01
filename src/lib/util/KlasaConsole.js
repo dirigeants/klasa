@@ -12,11 +12,11 @@ class KlasaConsole extends Console {
 
 	/**
 	 * @typedef {Object} KlasaConsoleConfig
-	 * @property {KlasaConsoleColorStyles} [colors]
-	 * @property {NodeJS.WritableStream} [stdout]
-	 * @property {NodeJS.WritableStream} [stderr]
-	 * @property {(boolean|string)} [timestamps]
-	 * @property {boolean} [useColor]
+	 * @property {KlasaConsoleColorStyles} [colors] The console color styles
+	 * @property {NodeJS.WritableStream} [stdout] The WritableStream for the output logs
+	 * @property {NodeJS.WritableStream} [stderr] The WritableStrwam for the error logs
+	 * @property {(boolean|string)} [timestamps] If false, it won't use timestamps. Otherwise it will use 'YYYY-MM-DD HH:mm:ss' if true or custom if string is given
+	 * @property {boolean} [useColor] Whether the timestamps should use colours
 	 * @memberof KlasaConsole
 	 */
 

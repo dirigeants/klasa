@@ -12,6 +12,8 @@ class Util {
 	/**
 	 * This class may not be initiated with new
 	 * @since 0.0.1
+	 * @throws {Error}
+	 * @private
 	 */
 	constructor() {
 		throw new Error('This class may not be initiated with new');

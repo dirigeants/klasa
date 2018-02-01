@@ -60,7 +60,7 @@ class ExtendableStore extends Collection {
 	 * Deletes an extendable from the store.
 	 * @since 0.0.1
 	 * @param {Extendable|string} name A extendable object or a string representing a command or alias name
-	 * @returns {boolean} whether or not the delete was successful.
+	 * @returns {boolean}
 	 */
 	delete(name) {
 		const extendable = this.resolve(name);
@@ -73,7 +73,6 @@ class ExtendableStore extends Collection {
 	/**
 	 * Clears the extendable from the store and removes the extensions.
 	 * @since 0.0.1
-	 * @returns {void}
 	 */
 	clear() {
 		for (const extendable of this.keys()) this.delete(extendable);

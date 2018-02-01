@@ -13,7 +13,7 @@ module.exports = Structures.extend('Message', Message => {
 		 * * A string
 		 * * An array (joined with a new line delimiter to give a string)
 		 * * Any value
-		 * @typedef {(string|Array|*)} StringResolvable
+		 * @typedef {(string|Array|*)} StringResolvable A string, array or an object that can coerce to string
 		 * @memberof KlasaMessage
 		 */
 
