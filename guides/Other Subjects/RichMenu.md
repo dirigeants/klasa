@@ -112,4 +112,4 @@ collector.message.edit(info);
 
 ## Personalization
 
-Personalization is the same offered by {@tutorial RichDisplay}. You can define an Info Page through {@link RichDisplay.setInfoPage} and you can define custom behavior handling by defining a function in the `filter` argument of {@link RichMenu.RichMenuRunOptions}
+Personalization is the same offered by {@tutorial RichDisplay}. You can define an Info Page through {@link RichDisplay.setInfoPage} and you can define custom behavior handling by defining a function in the `filter` argument of {@link RichMenuRunOptions}

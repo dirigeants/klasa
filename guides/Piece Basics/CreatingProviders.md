@@ -110,7 +110,7 @@ The example above is the JSON provider used in klasa, and interfacing with the s
 
 ## Accessing Providers
 
-The [providers]{@link ProviderStore} are stored in the main {@link KlasaClient} object, in the [providers]{@link KlasaClient#providers} property. This has an entry
+The {@link ProviderStore providers} are stored in the main {@link KlasaClient} object, in the {@link KlasaClient#providers providers} property. This has an entry
 for each provider added, based on its `name`. So for example if you have it set as
 `postgresql` , you can access it through `client.providers.get('postgresql');`.
 
