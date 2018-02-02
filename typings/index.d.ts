@@ -618,8 +618,8 @@ declare module 'klasa' {
 		private static _parseSQLValue(value: any, schemaPiece: SchemaPiece): any;
 	}
 
-	export class Schema {
-		private constructor(client: KlasaClient, gateway: Gateway, object: any, parent: SchemaFolder, key: string);
+	export abstract class Schema {
+		public constructor(client: KlasaClient, gateway: Gateway, object: any, parent: SchemaFolder, key: string);
 		public readonly client: KlasaClient;
 		public readonly gateway: Gateway;
 		public readonly parent?: SchemaFolder;
