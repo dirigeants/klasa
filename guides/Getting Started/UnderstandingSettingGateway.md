@@ -43,7 +43,7 @@ Your Klasa's configuration will look something like this:
 ```javascript
 const client = new Klasa.Client({
 	prefix: 'k!',
-	providers: { default: 'json' }
+	providers: { default: 'rethinkdb' }
 });
 
 client.login('A_BEAUTIFUL_TOKEN_AINT_IT?');
