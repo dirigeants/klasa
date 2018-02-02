@@ -1,6 +1,7 @@
 const { isObject, makeObject, deepClone, tryParse } = require('../util/util');
 
 /**
+ * <info>Creating your own Configuration instances if often discouraged and unneeded. SettingGateway handles them internally for you</info>
  * The Configuration class that stores the cache for each entry in SettingGateway.
  */
 class Configuration {
@@ -65,7 +66,6 @@ class Configuration {
 	 */
 
 	/**
-	 * <warning>Creating your own Configuration instances if often discouraged and unneeded. SettingGateway handles them internally for you</warning>
 	 * @since 0.5.0
 	 * @param {Gateway} manager The Gateway that manages this Configuration instance
 	 * @param {Object} data The data that is cached in this Configuration instance

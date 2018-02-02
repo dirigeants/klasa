@@ -2,6 +2,7 @@ const SettingResolver = require('../parsers/SettingResolver');
 const Gateway = require('./Gateway');
 
 /**
+ * <info>GatewayDriver is a singleton, please do not construct another, use {@link KlasaClient#gateways} instead</info>
  * Gateway's driver to make new instances of it, with the purpose to handle different databases simultaneously.
  */
 class GatewayDriver {
@@ -33,10 +34,8 @@ class GatewayDriver {
 	 */
 
 	/**
-	 * <warning>GatewayDriver is a singleton, please do not construct another, use {@link KlasaClient#gateways} instead</warning>
 	 * @since 0.3.0
 	 * @param {KlasaClient} client The Klasa client
-	 * @private
 	 */
 	constructor(client) {
 		/**

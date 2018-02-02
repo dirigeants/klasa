@@ -5,14 +5,12 @@
 class Schema {
 
 	/**
-	 * <warning>You should never create an instance of this class as it's abstract</warning>
 	 * @since 0.5.0
 	 * @param {KlasaClient} client The client which initialized this instance
 	 * @param {Gateway} gateway The Gateway that manages this schema instance
 	 * @param {Object} options The object containing the properties for this schema instance
 	 * @param {?Schema} parent The parent which holds this instance
 	 * @param {string} key The name of this key
-	 * @private
 	 */
 	constructor(client, gateway, options, parent, key) {
 		/**
