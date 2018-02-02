@@ -595,8 +595,8 @@ declare module 'klasa' {
 		private _checkProvider(engine: string): string;
 	}
 
-	export class GatewayStorage {
-		private constructor(client: KlasaClient, type: string, provider?: string);
+	export abstract class GatewayStorage {
+		public constructor(client: KlasaClient, type: string, provider?: string);
 		public readonly client: KlasaClient;
 		public readonly type: string;
 		public readonly providerName: string;

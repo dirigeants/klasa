@@ -341,9 +341,9 @@ class Util {
  * @property {Object} [env={}] Environment key-value pairs
  * @property {string} [encoding='utf8'] encoding to use
  * @property {string} [shell=os === unix ? '/bin/sh' : process.env.ComSpec] Shell to execute the command with
- * @property {number} [timeout=0]
+ * @property {number} [timeout=0] The maximum execution time
  * @property {number} [maxBuffer=200*1024] Largest amount of data in bytes allowed on stdout or stderr. If exceeded, the child process is terminated
- * @property {string|number} [killSignal='SIGTERM'] <string> | <integer> (Default: 'SIGTERM')
+ * @property {string|number} [killSignal='SIGTERM'] The kill signal
  * @property {number} [uid] Sets the user identity of the process
  * @property {number} [gid] Sets the group identity of the process
  * @memberof Util

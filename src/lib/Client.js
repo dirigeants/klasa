@@ -112,9 +112,9 @@ class KlasaClient extends Discord.Client {
 
 	/**
 	 * @typedef {Object} ConfigUpdateEntryMany
-	 * @property {'MANY'} type
-	 * @property {string[]} keys
-	 * @property {Array<*>} values
+	 * @property {'MANY'} type The type for config updates made with the updateMany pattern
+	 * @property {string[]} keys The keys changed
+	 * @property {Array<*>} values The values changed
 	 * @memberof KlasaClient
 	 */
 
