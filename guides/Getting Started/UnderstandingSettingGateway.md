@@ -51,7 +51,7 @@ client.login('A_BEAUTIFUL_TOKEN_AINT_IT?');
 
 And now, you're using rethinkdb's provider to store the data from SettingGateway.
 
-What happens when I use an engine that does not exist as a provider? Simply, SettingGateway will throw an error, it is enough user-friendly and readable, if that happens, make sure you wrote the provider's name correctly.
+What happens when I use an engine that does not exist as a provider? Simple, SettingGateway will throw an error. Should this happen, make sure you typed the provider's name correctly.
 
 ## Add new 'keys' to the guild configuration's schema.
 
@@ -75,7 +75,7 @@ this.client.gateways.guilds.schema.addKey('modlogs', { type: 'TextChannel' });
 
 This will create a new configuration key, called `modlogs`, and will take a `TextChannel` type.
 
-> The force parameter defaults to `true` instead to `false`. It is also recommended to use it as it can avoid certain unwanted actions.
+> The force parameter defaults to `true` instead of `false`. It's recommended to leave it as true to avoid certain unwanted actions.
 
 But now, I want to add another key, with name of `users`, *so I can set a list of blacklisted users who won't be able to use commands*, which will take an array of Users.
 
@@ -178,7 +178,7 @@ k!conf set channels.modlogs #modlogs
 
 ## Add a key to the guild configuration's schema if it doesn't exist.
 
-In [Klasa-Pieces](https://github.com/dirigeants/klasa-pieces/), specially, some pieces require a key from the configuration to work, however, the creator of the pieces does not know if the user who downloads the piece has it, so this function becomes is useful in this case.
+In [Klasa-Pieces](https://github.com/dirigeants/klasa-pieces/), specially, some pieces require a key from the configuration to work, however, the creator of the pieces does not know if the user who downloads the piece has it, so this function becomes useful in this case.
 
 ```javascript
 async () => {
@@ -194,7 +194,8 @@ async () => {
 
 By using {@link GatewayDriver}, (available from `client.gateways`).
 
-Let's say I want to add a new Gateway instance, called `channels`, which input takes channels, and stores some data to complement our permissions.
+Let's say I want to add a new Gateway instance called `channels` that stores data to complement our permissions.
+You'll want a validate function to ensure what you're inputting is a valid channel, and you would want a channel specific schema to handle our channel specific permissions, like the two below.
 
 ```javascript
 // Must use the function keyword or be a method of a class.
@@ -232,7 +233,7 @@ const schema = {
 this.client.gateways.add('channels', validate, schema);
 ```
 
-> Since [[#43](https://github.com/dirigeants/klasa/pull/43)], validate only accepts a single argument, instead of being resolver the first one.
+> Since [[#43](https://github.com/dirigeants/klasa/pull/43)], validate only accepts a single argument, instead of resolver being the first one.
 
 > The `validate` function must be a [**function**](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/function), not a [**Arrow Function**](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Functions/Arrow_functions), the difference between them is that an arrow function binds `this` to wherever the function has been created (for example, the `exports` from your eval command, if you are doing this with eval), while the normal functions does not do this.
 
@@ -275,7 +276,7 @@ Where the *clientStorage* gateway would take the default options (json provider)
 
 ## Modifying a SchemaPiece's parameters
 
-Once created, it's possible since 0.5.0 to modify a {@link SchemaPiece}'s parameter, it's as simply as doing {@link SchemaPiece#update} which takes the same options for adding a key with {@link SchemaFolder#addKey} but with one exception: `array` and `type` can't change.
+Once created, it's possible since 0.5.0 to modify a {@link SchemaPiece}'s parameter, it's as simple as doing {@link SchemaPiece#update} which takes the same options for adding a key with {@link SchemaFolder#addKey} but with one exception: `array` and `type` can't change.
 
 For example, let's say we dislike the current prefix and we want to change it to `s!` for the next entries, then you can simply do:
 
@@ -285,8 +286,8 @@ this.client.gateways.guilds.schema.prefix.modify({ default: 's!' });
 
 ### The Type Issue
 
-The main reason for what we don't support modifying the parameters `array` and `type` is:
+The main reason for why we don't support modifying the parameters `array` and `type` is:
 
-> Changing the type is very complex, in SQL, if we changed the type from `TEXT`, `VARCHAR` or any string type to a numeric one such as `INTEGER`, we could risk the data: the DB could throw an error or set them to `NULL`, resulting on data loss. Then we'd need to download all the data first and insert all of them with the conversion, that's quite tedious. Same happens in NoSQL where we would need to process all the entries checking the type and many parameters.
+> Changing the type is very complex. For example, in SQL, if we changed the type from `TEXT`, `VARCHAR`, or any other string type to a numeric one such as `INTEGER`, we could risk the database potentially throwing an error or setting them to null, which would result in data loss. We would then need to download all of the data first, and insert them back with the new type. The same thing happens in NoSQL.
 
 Changing the value of `array` from a non-string datatype can result on the issue above, and it's a very slow process. Therefore, it's much better to just remove the key and add it back.
