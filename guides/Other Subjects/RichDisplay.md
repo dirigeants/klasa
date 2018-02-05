@@ -108,7 +108,7 @@ All we have to do is simply call the {@link RichDisplay.setInfoPage} instead tha
 
 Behavior managing can be handled through the second (optional) argument of the {@link RichDisplay.run} method.
 The configuration must be defined as an [object literal](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer).
-Please refer to the {@link RichDisplay.RichDisplayRunOptions} documentation page for information about each specific option.
+Please refer to the {@link RichDisplayRunOptions} documentation page for information about each specific option.
 
 ### Custom Behavior Handling
 
