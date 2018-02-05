@@ -226,7 +226,7 @@ module.exports = class extends Genre {
 			description: 'Electronic Dance Music',
 			examples: [
 				'Skrillex',
-				'deadmou5',
+				'deadmau5',
 				'The Chainsmokers'
 			]
 		});
