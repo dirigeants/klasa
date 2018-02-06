@@ -1,7 +1,7 @@
 const { isObject, makeObject, deepClone, tryParse } = require('../util/util');
 
 /**
- * <info>Creating your own Configuration instances if often discouraged and unneeded. SettingGateway handles them internally for you</info>
+ * <warning>Creating your own Configuration instances if often discouraged and unneeded. SettingGateway handles them internally for you.</warning>
  * The Configuration class that stores the cache for each entry in SettingGateway.
  */
 class Configuration {
@@ -119,7 +119,7 @@ class Configuration {
 		/**
 		 * The sync status for this Configuration instance.
 		 * @since 0.5.0
-		 * @type {boolean}
+		 * @type {Promise}
 		 * @name Configuration#_syncStatus
 		 * @private
 		 */

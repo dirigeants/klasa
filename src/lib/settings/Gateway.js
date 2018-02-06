@@ -5,8 +5,8 @@ const SchemaFolder = require('./SchemaFolder');
 const discord = require('discord.js');
 
 /**
- * <info>You should never create a Gateway instance by yourself, as it manages many data internally.
- * Please check {@link UnderstandingSettingGateway} about how to construct your own Gateway</info>
+ * <danger>You should never create a Gateway instance by yourself.
+ * Please check {@link UnderstandingSettingGateway} about how to construct your own Gateway.</danger>
  * The Gateway class that manages the data input, parsing, and output, of an entire database, while keeping a cache system sync with the changes.
  * @extends GatewayStorage
  */

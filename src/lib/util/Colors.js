@@ -1,5 +1,9 @@
 /* eslint-disable id-length */
 
+/**
+ * The Colors class that manages the colors displayed in the console.
+ * @private
+ */
 class Colors {
 
 	/**
@@ -23,6 +27,10 @@ class Colors {
 	 * @private
 	 */
 
+	/**
+	 * Constructs our Colors instance
+	 * @since 0.4.0
+	 */
 	constructor() {
 		this.CLOSE = {
 			normal: 0,

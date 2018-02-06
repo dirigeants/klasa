@@ -1,7 +1,7 @@
 const ScheduledTask = require('./ScheduledTask');
 
 /**
- * <info>Schedule is a singleton, please do not construct another, use {@link KlasaClient#schedule} instead</info>
+ * <warning>Schedule is a singleton, use {@link KlasaClient#schedule} instead.</warning>
  * The Schedule class that manages all scheduled tasks
  */
 class Schedule {
