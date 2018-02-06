@@ -329,7 +329,7 @@ class ReactionHandler extends ReactionCollector {
 	 * @private
 	 */
 	async _queueEmojiReactions(emojis) {
-		if (this.ended) return this.message.clearReactions();
+		if (this.ended) return this.message.reactions.removeAll();
 		await this.message.react(emojis.shift());
 		if (emojis.length) return this._queueEmojiReactions(emojis);
 		this.reactionsDone = true;
