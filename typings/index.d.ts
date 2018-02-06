@@ -223,6 +223,7 @@ declare module 'klasa' {
 	}
 
 	export class KlasaMessage extends DiscordMessage {
+		public readonly guild: KlasaGuild;
 		public guildConfigs: Configuration;
 		public language: Language;
 		public responses?: KlasaMessage | KlasaMessage[];
