@@ -8,7 +8,7 @@ Allows authorized members to set per guild configuration.
 
 ## System / disable
 
-Temperarly global disable any piece except for extendables. (reverts to the in file settings upon reboot.)
+Temporarly global disable any piece except for extendables. (reverts to the in file settings upon reboot.)
 
 **Source:**
 
@@ -24,7 +24,7 @@ Temperarly global disable any piece except for extendables. (reverts to the in f
 
 ## System / enable
 
-Temperarly global enable any piece except for extendables. (reverts to the in file settings upon reboot.)
+Temporarly global enable any piece except for extendables. (reverts to the in file settings upon reboot.)
 
 **Source:**
 
