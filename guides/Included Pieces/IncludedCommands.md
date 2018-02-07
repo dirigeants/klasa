@@ -32,7 +32,7 @@ Temporarly global enable any piece except for extendables. (reverts to the in fi
 
 ## System / eval
 
-Evaluates abritrary javascript. Useful for debugging.
+Evaluates arbitrary javascript code. Useful for debugging.
 
 **Source:**
 
@@ -48,7 +48,7 @@ The default help command, compiles the help details for all commands and sends t
 
 ## System / info
 
-Standard info about klasa. Feel free to personalize, or privide bot statistics.
+Standard info about klasa. Feel free to personalize, or provide bot statistics.
 
 **Source:**
 
