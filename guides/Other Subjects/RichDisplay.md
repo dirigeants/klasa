@@ -95,7 +95,7 @@ module.exports = class extends Command {
 };
 ```
 
-The message will show the content we denfined in {@link KlasaMessage.sendMessage} initially, then, when our {@link RichDisplay} will be ready it will replace the content with the first page we defined.
+The message will show the content we defined in {@link KlasaMessage.sendMessage} initially, then, when our {@link RichDisplay} will be ready it will replace the content with the first page we defined.
 
 ## Info Page
 

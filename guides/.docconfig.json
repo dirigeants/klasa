@@ -127,5 +127,9 @@
     {
         "name": "Included Providers",
         "path": "IncludedProviders.md"
+    },
+    {
+        "name": "Included Tasks",
+        "path": "IncludedTasks.md"
     }]
 }]

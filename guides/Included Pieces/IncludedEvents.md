@@ -16,7 +16,7 @@ Replies the reason why the command was inhibited.
 
 ## configUpdateEntry
 
-Synchronices the user configs between all shards, if the bot is sharded.
+Synchronises the user configs between all shards, if the bot is sharded.
 
 **Source:**
 
@@ -40,7 +40,7 @@ Re-emits the disconnect error code and reason as log event.
 
 ## error
 
-Re-emits the Discord.js debug event as log event, if enabled.
+Re-emits the Discord.js error event as log event, if enabled.
 
 **Source:**
 
@@ -144,7 +144,7 @@ Logs verbose messages to the console.
 
 ## warn
 
-Re-emits the Discord.js debug event as log event, if enabled.
+Re-emits the Discord.js warn event as log event, if enabled.
 
 **Source:**
 

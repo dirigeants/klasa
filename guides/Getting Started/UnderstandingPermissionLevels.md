@@ -11,7 +11,7 @@ If any check from 6-9 returns true, the user will be able to run that command. A
 
 ## Creating Completely Custom PermissionLevels
 
-Each level consists of a number (the level), a boolean (whether the level is a break or not), and a function (the check function that returns true or false). Check: {@link PermissionLevels.addLevel}
+Each level consists of a number (the level), a boolean (whether the level is a break or not), and a function (the check function that returns true or false). Check: {@link PermissionLevels#addLevel}
 
 Example:
 
@@ -21,11 +21,11 @@ const config = require('./config.json');
 
 config.permissionLevels = new PermissionLevels()
 	/*
-	* Optionally you can pass a number to set a custom number of permission levels.
-	* It is not advised however, as internal commands expect 10 to be the highest permission level.
-	* Modifying away from 10 without further modification of all core commands,
-	  could put your server at risk of malicious users using the core eval command.
-	*/
+	 * Optionally you can pass a number to set a custom number of permission levels.
+	 * It is not advised however, as internal commands expect 10 to be the highest permission level.
+	 * Modifying away from 10 without further modification of all core commands,
+	 * could put your server at risk of malicious users using the core eval command.
+	 */
 	// everyone can use these commands
 	.addLevel(0, false, () => true)
 	// Members of guilds must have 'MANAGE_GUILD' permission
