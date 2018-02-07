@@ -57,12 +57,12 @@ Let's make everything basic:
 
 - usage -> **blueprints**.
 - arguments -> **wood**.
-- resolvers -> **constructors**.
+- resolvers -> **contractors**.
 - parameters -> **houses**.
 
-First, you write your blueprints for your houses, later, you receive wood from the woodcutters. The constructors will receive that wood and will try to build the houses with them based on the blueprints.
+First, you write your blueprints for your houses, later, you receive wood from the woodcutters. The contractors will receive that wood and will try to build the houses with them based on the blueprints.
 
-If the constructors work in a union, they pass on the wood to the next constructor until they can either build a house, or complain that nobody can. However, if the constructor says it's cool to not build a house here, they pass the wood on to the next place.
+If the contractors work in a union, they pass on the wood to the next contractor until they can either build a house, or complain that nobody can. However, if the contractor says it's cool to not build a house here, they pass the wood on to the next place.
 
 Credits to [@bdistin](https://github.com/bdistin) for this analogy.
 
