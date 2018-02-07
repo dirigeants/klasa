@@ -9,6 +9,38 @@ For instace the conf command requires level 6 to run, by default this is how it 
 
 If any check from 6-9 returns true, the user will be able to run that command. Also, if no break is encountered, the command will silently fail, instead of telling the user "they don't have permission to use x command"...
 
+## Understanding "Breaking Levels"
+
+Pretend for a moment, that permission levels work like this:
+
+```javascript
+switch(level) {
+	case 0:
+		return true;
+	case 1:
+	case 2:
+	case 3:
+	case 4:
+	case 5:
+	case 6:
+		if (msg.guild && msg.member.permissions.has('MANAGE_GUILD')) return true;
+	case 7:
+		if (msg.guild && msg.member === msg.guild.owner) return true;
+	case 8:
+	case 9:
+		if (msg.author === client.owner) return true;
+		break;
+	case 10:
+		if (msg.author === client.owner) return true;
+		return false;
+}
+throw 'You don\'t have permission';
+```
+
+Completely ignoring that your check function can be async and returning false is how you progress to the next check if applicable, it works like that. It checks levels starting with the __minimum level__ acceptable for any action. (Usually a {@link Command.permLevel}) And it continues checking higher levels until it __returns true__ or hits a break. And if there is no break when levels run out, it's silent.
+
+This does mean that you can design permission levels where guild owners, and even you the client/bot owner can't access. Say you have a breaking permission level 3 that checks if `msg.author.configs.xp >= 1000`. When a command with a permLevel of 3 is called, if you don't have that much xp, it will return you don't have permission to use that command even though you may satisfy higher levels. It breaks at that level, and won't check anything higher.
+
 ## Creating Completely Custom PermissionLevels
 
 Each level consists of a number (the level), a boolean (whether the level is a break or not), and a function (the check function that returns true or false). Check: {@link PermissionLevels#addLevel}
