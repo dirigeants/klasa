@@ -1,114 +1,122 @@
-## System / conf
+## Admin / blacklist
+
+Allows bot owners to blacklist users from the bot.
+
+**Source:**
+
+[commands/Admin/blacklist.js](https://github.com/dirigeants/klasa/blob/master/src/commands/Admin/blacklist.js)
+
+## Admin / conf
 
 Allows authorized members to set per guild configuration.
 
 **Source:**
 
-[commands/System/conf.js](https://github.com/dirigeants/klasa/blob/master/src/commands/System/conf.js)
+[commands/Admin/conf.js](https://github.com/dirigeants/klasa/blob/master/src/commands/Admin/conf.js)
 
-## System / disable
+## Admin / disable
 
 Temporarly global disable any piece except for extendables. (reverts to the in file settings upon reboot.)
 
 **Source:**
 
-[commands/System/disable.js](https://github.com/dirigeants/klasa/blob/master/src/commands/System/disable.js)
+[commands/Admin/disable.js](https://github.com/dirigeants/klasa/blob/master/src/commands/Admin/disable.js)
 
-## System / download
-
-**Disabled for now:** This command isn't ready for feature pairty with komada.
-
-**Source:**
-
-[commands/System/download.js](https://github.com/dirigeants/klasa/blob/master/src/commands/System/download.js)
-
-## System / enable
+## Admin / enable
 
 Temporarly global enable any piece except for extendables. (reverts to the in file settings upon reboot.)
 
 **Source:**
 
-[commands/System/enable.js](https://github.com/dirigeants/klasa/blob/master/src/commands/System/enable.js)
+[commands/Admin/enable.js](https://github.com/dirigeants/klasa/blob/master/src/commands/Admin/enable.js)
 
-## System / eval
+## Admin / eval
 
 Evaluates arbitrary javascript code. Useful for debugging.
 
 **Source:**
 
-[commands/System/eval.js](https://github.com/dirigeants/klasa/blob/master/src/commands/System/eval.js)
+[commands/Admin/eval.js](https://github.com/dirigeants/klasa/blob/master/src/commands/Admin/eval.js)
 
-## System / help
+## General / Chat Bot Info / help
 
 The default help command, compiles the help details for all commands and sends them to the user's dm, or the channel if a selfbot.
 
 **Source:**
 
-[commands/System/help.js](https://github.com/dirigeants/klasa/blob/master/src/commands/System/help.js)
+[commands/General/Chat Bot Info/help.js](https://github.com/dirigeants/klasa/blob/master/src/commands/General/Chat%20Bot%20Info/help.js)
 
-## System / info
+## General / Chat Bot Info / info
 
 Standard info about klasa. Feel free to personalize, or provide bot statistics.
 
 **Source:**
 
-[commands/System/info.js](https://github.com/dirigeants/klasa/blob/master/src/commands/System/info.js)
+[commands/General/Chat Bot Info/info.js](https://github.com/dirigeants/klasa/blob/master/src/commands/General/Chat%20Bot%20Info/info.js)
 
-## System / invite
+## General / Chat Bot Info / invite
 
 Provides an up to date invite link, taking into consideration all of the bot permissions all of your commands take to function.
 
 **Source:**
 
-[commands/System/invite.js](https://github.com/dirigeants/klasa/blob/master/src/commands/System/invite.js)
+[commands/General/Chat Bot Info/invite.js](https://github.com/dirigeants/klasa/blob/master/src/commands/General/Chat%20Bot%20Info/invite.js)
 
-## System / ping
+## General / Chat Bot Info / ping
 
 Simple ping pong, measure the time between the two command.
 
 **Source:**
 
-[commands/System/ping.js](https://github.com/dirigeants/klasa/blob/master/src/commands/System/ping.js)
+[commands/General/Chat Bot Info/ping.js](https://github.com/dirigeants/klasa/blob/master/src/commands/General/Chat%20Bot%20Info/ping.js)
 
-## System / reboot
+## Admin / reboot
 
 Reboots the bot, requires something like Forever or PM2 to actually restart the bot application.
 
 **Source:**
 
-[commands/System/reboot.js](https://github.com/dirigeants/klasa/blob/master/src/commands/System/reboot.js)
+[commands/Admin/reboot.js](https://github.com/dirigeants/klasa/blob/master/src/commands/Admin/reboot.js)
 
-## System / reload
+## Admin / reload
 
 Reloads any piece, or all pieces of a specific category.
 
 **Source:**
 
-[commands/System/reload.js](https://github.com/dirigeants/klasa/blob/master/src/commands/System/reload.js)
+[commands/Admin/reload.js](https://github.com/dirigeants/klasa/blob/master/src/commands/Admin/reload.js)
 
-## System / stats
+## General / Chat Bot Info / stats
 
 Info about the resources this bot is using
 
 **Source:**
 
-[commands/System/stats.js](https://github.com/dirigeants/klasa/blob/master/src/commands/System/stats.js)
+[commands/General/Chat Bot Info/stats.js](https://github.com/dirigeants/klasa/blob/master/src/commands/General/Chat%20Bot%20Info/stats.js)
 
-## System / Transfer
+## Admin / Transfer
 
 Transfers a core piece to your user directories, so you can edit them to your preferences.
 
 **Source:**
 
-[commands/System/Transfer.js](https://github.com/dirigeants/klasa/blob/master/src/commands/System/Transfer.js)
+[commands/Admin/transfer.js](https://github.com/dirigeants/klasa/blob/master/src/commands/Admin/transfer.js)
 
-## System / unload
+## Admin / unload
 
 Unloads any piece except extendables.
 
 **Source:**
 
-[commands/System/unload.js](https://github.com/dirigeants/klasa/blob/master/src/commands/System/unload.js)
+[commands/Admin/unload.js](https://github.com/dirigeants/klasa/blob/master/src/commands/Admin/unload.js)
+
+## General / User Configs / userconf
+
+Allows users to change their configurations.
+
+**Source:**
+
+[commands/General/User Configs/userconf.js](https://github.com/dirigeants/klasa/blob/master/src/commands/General/User%20Configs/userconf.js)
 
 ## Further Reading:
 
