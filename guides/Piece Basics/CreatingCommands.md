@@ -11,10 +11,11 @@ module.exports = class extends Command {
 			enabled: true,
 			runIn: ['text', 'dm', 'group'],
 			cooldown: 0,
+			bucket: 1,
 			aliases: [],
 			permLevel: 0,
 			botPerms: [],
-			requiredSettings: [],
+			requiredConfigs: [],
 			description: '',
 			quotedStringSupport: false,
 			usage: '',
@@ -45,6 +46,7 @@ module.exports = class extends Command {
 | **enabled**             | `true`                                        | boolean | Whether the command is enabled or not                                       |
 | **runIn**               | `['text', 'dm', 'group']`                     | Array   | What channel types the command should run in                                |
 | **cooldown**            | `0`                                           | number  | The amount of time before the user can run the command again in seconds     |
+| **bucket**              | `1`                                           | number  | The amount of successful command runs required before applying ratelimits.  |
 | **aliases**             | `[]`                                          | Array   | Any comand aliases                                                          |
 | **permLevel**           | `0`                                           | number  | The required permission level to use the command                            |
 | **botPerms**            | `[]`                                          | Array   | The required Discord permissions for the bot to use this command            |
