@@ -14,7 +14,7 @@ The command usage is an option for {@link CommandOptions.usage} and **requires**
 
 The structure is rather simple, {@link CommandOptions.usage} is always a string and not an object, and is inspired by the [CLI format standard](http://docopt.org/), inheriting the meaning for the tokens `<>` (required arguments), `[]` (optional elements), `|` (mutually exclusive or multiple choice) and `...` (repeating arguments), but adds more elements.
 
-Arguments can **only** have one requirement level and cannot be into another, neither they can have spaces inside. That is, everything must be enclosed by `<` with `>`, `[` with `]` or `(` with `)`. They have different meanings.
+Arguments can **only** have one requirement level and cannot be into another, neither can they have spaces inside. That is, everything must be enclosed by `<` with `>`, `[` with `]` or `(` with `)`. They have different meanings.
 
 - The first one (`<>`) defines **required** arguments, the command will not run until these arguments are processed correctly, they can be anywhere.
 - The second one (`[]`) defines **optional** arguments, they're ignored when the input is incorrect and said message argument may drift to the next. That is, if you have an optional argument taking `1` and the next argument is `2` (both literals) and you pass `2`, the first parameter will be ignored while the second will take it (do not confuse with arguments).
@@ -57,12 +57,12 @@ Let's make everything basic:
 
 - usage -> **blueprints**.
 - arguments -> **wood**.
-- resolvers -> **contractors**.
+- resolvers -> **constructors**.
 - parameters -> **houses**.
 
-First, you write your blueprints for your houses, later, you receive wood from the woodcutters. The contractors will receive that wood and will try to build the houses with them based on the blueprints.
+First, you write your blueprints for your houses, later, you receive wood from the woodcutters. The constructors will receive that wood and will try to build the houses with them based on the blueprints.
 
-If the contractors work in a union, they pass on the wood to the next contractor until they can either build a house, or complain that nobody can. However, if the constractor says it's cool to not build a house here, they pass the wood on to the next place.
+If the constructors work in a union, they pass on the wood to the next constructor until they can either build a house, or complain that nobody can. However, if the constructor says it's cool to not build a house here, they pass the wood on to the next place.
 
 Credits to [@bdistin](https://github.com/bdistin) for this analogy.
 
