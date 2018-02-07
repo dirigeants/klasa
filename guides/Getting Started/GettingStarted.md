@@ -43,7 +43,7 @@ new Client({
 | **ignoreBots**             | `true`                    | boolean            | Whether or not this bot should ignore other bots                                    |
 | **ignoreSelf**             | `client.user.bot`         | boolean            | Whether or not this bot should ignore itself (true for bots, false for selfbots)    |
 | **language**               | `en-US`                   | string             | The default language Klasa should opt-in for the commands                           |
-| **ownerID**                | see below²                | string             | The discord id for the user the bot should respect as the owner                     |
+| **ownerID**                | see below²                | string             | The Discord ID for the user the bot should respect as the owner                     |
 | **permissionLevels**       | `defaultPermissionLevels` | PermissionLevels   | The permission levels to use with this bot                                          |
 | **prefix**                 | `undefined`               | string/array       | The default prefix(es) when the bot first boots up.³                                |
 | **promptTime**             | `30000`                   | number             | The amount of time in milliseconds prompts should last                              |
@@ -74,4 +74,4 @@ node app.js
 
 ## What's next?
 
-Klasa will create folders in your directory to make your own custom pieces in. Klasa will automatically check these folders on bootup, or if you reload all of a type of piece. `+reload commands` ect assuming your prefix is `+` like the example app.js file above.
+Klasa will create folders in your directory to make your own custom pieces in. Klasa will automatically check those folders on bootup, or if you reload all of a piece's type. `+reload commands` ect assuming your prefix is `+` like in the example app.js file above.
