@@ -13,8 +13,9 @@ If any check from 6-9 returns true, the user will be able to run that command. A
 
 Pretend for a moment, that permission levels work like this:
 
+<!-- eslint-disable no-fallthrough -->
 ```javascript
-switch(level) {
+switch (level) {
 	case 0:
 		return true;
 	case 1:
@@ -36,6 +37,7 @@ switch(level) {
 }
 throw 'You don\'t have permission';
 ```
+<!-- eslint-enable no-fallthrough -->
 
 Completely ignoring that your check function can be async and returning false is how you progress to the next check if applicable, it works like that. It checks levels starting with the __minimum level__ acceptable for any action. (Usually a {@link Command.permLevel}) And it continues checking higher levels until it __returns true__ or hits a break. And if there is no break when levels run out, it's silent.
 
