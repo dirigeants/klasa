@@ -96,7 +96,7 @@ module.exports = class extends Provider {
 
 ```
 
-The example above is the JSON provider used in klasa, and interfacing with the settingGateway.
+The example above is the JSON provider used in klasa, and interfacing with the {@link SettingsGateway}.
 
 ## Configuration
 
