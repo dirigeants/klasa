@@ -14,7 +14,7 @@ module.exports = class extends Monitor {
 		if (this.client.user.bot && msg.guild && !msg.guild.me) await msg.guild.members.fetch(this.client.user);
 		if (msg.guild && !msg.channel.postable) return;
 		if (msg.content === this.client.user.toString() || (msg.guild && msg.content === msg.guild.me.toString())) {
-			msg.sendMessage(Array.isArray(msg.guildConfigs.prefix) ? msg.guildConfigs.prefix.map(prefix => `\`${prefix}\``).join(', ') : `\`${msg.guildConfigs.prefix}\``);
+			msg.sendMessage(msg.language.get('PREFIX_REMINDER', msg.guildConfigs.prefix));
 			return;
 		}
 
