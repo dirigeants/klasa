@@ -34,6 +34,7 @@ class Store {
 	 */
 	load(dir, file) {
 		const loc = Array.isArray(file) ? join(dir, ...file) : join(dir, file);
+		if (!loc.endsWith('.js')) return null;
 		let piece = null;
 		try {
 			const Piece = (req => req.default || req)(require(loc));

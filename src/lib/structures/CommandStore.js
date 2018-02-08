@@ -140,6 +140,8 @@ class CommandStore extends Collection {
 	/* eslint-disable no-empty-function */
 	init() {}
 	resolve() {}
+	load() {}
+	toString() {}
 	/* eslint-enable no-empty-function */
 
 	/**
