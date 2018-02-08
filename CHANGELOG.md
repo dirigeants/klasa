@@ -13,6 +13,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#176](https://github.com/dirigeants/klasa/pull/176)] Added `categorychannel` type to `ArgResolver`. (kyranet)
 - [[#166](https://github.com/dirigeants/klasa/pull/166)] Added support for TypeScript's `export default` in the loader. (kyranet)
 - [[#162](https://github.com/dirigeants/klasa/pull/162)] Added better dependent arguments support. (bdistin)
 - [[#162](https://github.com/dirigeants/klasa/pull/162)] Added subcommand support. (bdistin)
@@ -80,6 +81,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#176](https://github.com/dirigeants/klasa/pull/176)] Marked several constructors as private (singleton, abstract or discouraged). (kyranet)
 - [[#162](https://github.com/dirigeants/klasa/pull/162)] Modified the built-in conf command to use `dependant arguments`-like arguments using custom arguments and messages. (bdistin)
 - [[#162](https://github.com/dirigeants/klasa/pull/162)] **[BREAKING]** Refactored ArgResolver. Now they take `arg`, `possible` and `msg` as parameters instead of `arg`, `currentUsage`, `possible`, `repeat` and `msg`. Repeating handling is now done in the backends. (bdistin)
 - [[#159](https://github.com/dirigeants/klasa/pull/159)] Made `'id'` a `PRIMARY KEY` in the SQL schema generator. (kyranet)
@@ -152,6 +154,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
+- [[#176](https://github.com/dirigeants/klasa/pull/176)] Fixed internal parser ignoring `0` as `min` and/or `max` due to falsy value check. (kyranet)
 - [[#170](https://github.com/dirigeants/klasa/pull/170)] Fixed guild resolvables not working correctly. (kyranet)
 - [[#165](https://github.com/dirigeants/klasa/pull/165)] Updated url for peer dependency `discord.js` and fixed all `JSDocs`. (kyranet)
 - [[#159](https://github.com/dirigeants/klasa/pull/159)] Fixed Timestamp's `'MM'` token not padding with zeroes in the start. (kyranet)

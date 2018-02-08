@@ -10,6 +10,7 @@ const { applyToClass, isClass } = require('../../util/util');
  * @see ExtendableStore
  * @see FinalizerStore
  * @see InhibitorStore
+ * @see LanguageStore
  * @see MonitorStore
  * @see ProviderStore
  * @see TaskStore
@@ -19,7 +20,7 @@ class Store {
 	/**
 	 * Initializes all pieces in this store.
 	 * @since 0.0.1
-	 * @returns {Array}
+	 * @returns {Promise<Array<*>>}
 	 */
 	init() {
 		return Promise.all(this.map(piece => piece.enabled ? piece.init() : piece.unload()));
@@ -50,7 +51,7 @@ class Store {
 	/**
 	 * Loads all of our pieces from both the user and core directories.
 	 * @since 0.0.1
-	 * @returns {number} The number of pieces loaded.
+	 * @returns {Promise<number>} The number of pieces loaded.
 	 */
 	async loadAll() {
 		this.clear();

@@ -16,27 +16,29 @@ Pretend for a moment, that permission levels work like this:
 <!-- eslint-disable no-fallthrough -->
 
 ```javascript
-switch (level) {
-	case 0:
-		return true;
-	case 1:
-	case 2:
-	case 3:
-	case 4:
-	case 5:
-	case 6:
-		if (msg.guild && msg.member.permissions.has('MANAGE_GUILD')) return true;
-	case 7:
-		if (msg.guild && msg.member === msg.guild.owner) return true;
-	case 8:
-	case 9:
-		if (msg.author === client.owner) return true;
-		break;
-	case 10:
-		if (msg.author === client.owner) return true;
-		return false;
+function permissionLevel(client, msg) {
+	switch (level) {
+		case 0:
+			return true;
+		case 1:
+		case 2:
+		case 3:
+		case 4:
+		case 5:
+		case 6:
+			if (msg.guild && msg.member.permissions.has('MANAGE_GUILD')) return true;
+		case 7:
+			if (msg.guild && msg.member === msg.guild.owner) return true;
+		case 8:
+		case 9:
+			if (msg.author === client.owner) return true;
+			break;
+		case 10:
+			if (msg.author === client.owner) return true;
+			return false;
+	}
+	throw 'You don\'t have permission';
 }
-throw 'You don\'t have permission';
 ```
 
 <!-- eslint-enable no-fallthrough -->
@@ -47,7 +49,7 @@ This does mean that you can design permission levels where guild owners, and eve
 
 ## Creating Completely Custom PermissionLevels
 
-Each level consists of a number (the level), a boolean (whether the level is a break or not), and a function (the check function that returns true or false). Check: {@link PermissionLevels.addLevel}
+Each level consists of a number (the level), a boolean (whether the level is a break or not), and a function (the check function that returns true or false). Check: {@link PermissionLevels#addLevel}
 
 Example:
 
@@ -57,11 +59,11 @@ const config = require('./config.json');
 
 config.permissionLevels = new PermissionLevels()
 	/*
-	* Optionally you can pass a number to set a custom number of permission levels.
-	* It is not advised however, as internal commands expect 10 to be the highest permission level.
-	* Modifying away from 10 without further modification of all core commands,
-	  could put your server at risk of malicious users using the core eval command.
-	*/
+	 * Optionally you can pass a number to set a custom number of permission levels.
+	 * It is not advised however, as internal commands expect 10 to be the highest permission level.
+	 * Modifying away from 10 without further modification of all core commands,
+	 * could put your server at risk of malicious users using the core eval command.
+	 */
 	// everyone can use these commands
 	.addLevel(0, false, () => true)
 	// Members of guilds must have 'MANAGE_GUILD' permission

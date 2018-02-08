@@ -12,11 +12,11 @@ class KlasaConsole extends Console {
 
 	/**
 	 * @typedef {Object} KlasaConsoleConfig
-	 * @property {KlasaConsoleColorStyles} [colors]
-	 * @property {NodeJS.WritableStream} [stdout]
-	 * @property {NodeJS.WritableStream} [stderr]
-	 * @property {(boolean|string)} [timestamps]
-	 * @property {boolean} [useColor]
+	 * @property {KlasaConsoleColorStyles} [colors] The console color styles
+	 * @property {NodeJS.WritableStream} [stdout] The WritableStream for the output logs
+	 * @property {NodeJS.WritableStream} [stderr] The WritableStrwam for the error logs
+	 * @property {(boolean|string)} [timestamps] If false, it won't use timestamps. Otherwise it will use 'YYYY-MM-DD HH:mm:ss' if true or custom if string is given
+	 * @property {boolean} [useColor] Whether the timestamps should use colours
 	 * @memberof KlasaConsole
 	 */
 
@@ -56,42 +56,38 @@ class KlasaConsole extends Console {
 	 */
 
 	/**
-	 * @typedef {*} KlasaConsoleColorTypes - All the valid color types.
-	 * @property {string} black
-	 * @property {string} red
-	 * @property {string} green
-	 * @property {string} yellow
-	 * @property {string} blue
-	 * @property {string} magenta
-	 * @property {string} cyan
-	 * @property {string} gray
-	 * @property {string} grey
-	 * @property {string} lightgray
-	 * @property {string} lightgrey
-	 * @property {string} lightred
-	 * @property {string} lightgreen
-	 * @property {string} lightyellow
-	 * @property {string} lightblue
-	 * @property {string} lightmagenta
-	 * @property {string} lightcyan
-	 * @property {string} white
-	 * @property {string} #008000 green
-	 * @property {string} #008000 green
-	 * @property {Array} [255,0,0] red
-	 * @property {Array} [229,50%,50%] blue
+	 * @typedef {Object} KlasaConsoleColorTypes - All the valid color types.
+	 * @property {string} black The black colour
+	 * @property {string} red The red colour
+	 * @property {string} green The green colour
+	 * @property {string} yellow The yellow colour
+	 * @property {string} blue The blue colour
+	 * @property {string} magenta The magenta colour
+	 * @property {string} cyan The cyan colour
+	 * @property {string} gray The gray colour
+	 * @property {string} grey The grey colour (alias for gray)
+	 * @property {string} lightgray The light gray colour
+	 * @property {string} lightgrey The light grey colour (alias for light gray)
+	 * @property {string} lightred The light red colour
+	 * @property {string} lightgreen The light green colour
+	 * @property {string} lightyellow The light yellow colour
+	 * @property {string} lightblue The light blue colour
+	 * @property {string} lightmagenta The light magenta colour
+	 * @property {string} lightcyan The light cyan colour
+	 * @property {string} white The white colour
 	 * @memberof KlasaConsole
 	 */
 
 	/**
 	 * @typedef {*} KlasaConsoleStyleTypes
-	 * @property {string} normal
-	 * @property {string} bold
-	 * @property {string} dim
-	 * @property {string} italic
-	 * @property {string} underline
-	 * @property {string} inverse
-	 * @property {string} hidden
-	 * @property {string} strikethrough
+	 * @property {string} normal Default style
+	 * @property {string} bold Bold style. May appear with a lighter colour in many terminals
+	 * @property {string} dim Dim style
+	 * @property {string} italic Italic style
+	 * @property {string} underline Underline style
+	 * @property {string} inverse Inverse colours style
+	 * @property {string} hidden Hidden text style
+	 * @property {string} strikethrough Strikethrough text style
 	 * @memberof KlasaConsole
 	 */
 

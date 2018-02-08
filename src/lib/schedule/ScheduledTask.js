@@ -7,26 +7,26 @@ class ScheduledTask {
 
 	/**
 	 * @typedef  {Object} ScheduledTaskOptions
-	 * @property {string} [id]
-	 * @property {*} [data]
+	 * @property {string} [id] The ID for the task. By default, it generates one in base36
+	 * @property {*} [data] The data to pass to the Task piece when the ScheduledTask is ready for execution
 	 * @memberof ScheduledTask
 	 */
 
 	/**
 	 * @typedef  {Object} ScheduledTaskUpdateOptions
-	 * @property {string} [repeat]
-	 * @property {Date} [time]
-	 * @property {*} [data]
+	 * @property {string} [repeat] The {@link Cron} pattern
+	 * @property {Date} [time] The time the current task ends at
+	 * @property {*} [data] The data to pass to the Task piece when the ScheduledTask is ready for execution
 	 * @memberof ScheduledTask
 	 */
 
 	/**
 	 * @typedef  {Object} ScheduledTaskJSON
-	 * @property {string} id
-	 * @property {string} taskName
-	 * @property {number} time
-	 * @property {string} [repeat]
-	 * @property {*} [data]
+	 * @property {string} id The task's ID
+	 * @property {string} taskName The name of the Task piece this will execute
+	 * @property {number} time The UNIX timestamp for when this task ends at
+	 * @property {string} [repeat] The {@link Cron} pattern
+	 * @property {*} [data] The data to pass to the Task piece when the ScheduledTask is ready for execution
 	 * @memberof ScheduledTask
 	 */
 
@@ -120,6 +120,13 @@ class ScheduledTask {
 	 * @since 0.5.0
 	 * @param {ScheduledTaskUpdateOptions} options The options to update
 	 * @returns {Promise<this>}
+	 * @example
+	 * // Update the data from the current scheduled task. Let's say I want to change the reminder content to remind me
+	 * // another thing
+	 * ScheduledTask.update({ data: { content: 'Woo! I edited this reminder\'s content!' } });
+	 *
+	 * // But you can also update the time this will end at, for example, to change it so it ends in 1 hour:
+	 * ScheduledTask.update({ time: Date.now() + 60000 * 60 });
 	 */
 	async update({ time, data } = {}) {
 		const [_time, _cron] = time ? this.constructor._resolveTime(time) : [null, null];
@@ -143,6 +150,10 @@ class ScheduledTask {
 	 * Delete the task
 	 * @since 0.5.0
 	 * @returns {Promise<Schedule>}
+	 * @example
+	 * ScheduledTask.delete()
+	 *     .then(() => console.log('Successfully deleted the task'))
+	 *     .catch(console.error);
 	 */
 	delete() {
 		return this.store.delete(this.id);

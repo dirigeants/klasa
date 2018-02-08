@@ -3,6 +3,7 @@ const Schema = require('./Schema');
 const fs = require('fs-nextra');
 
 /**
+ * <info>You should never create an instance of this class. Use {@link SchemaFolder#addKey} instead.</info>
  * The SchemaPiece class that contains the data for a key and several helpers.
  */
 class SchemaPiece extends Schema {
@@ -219,6 +220,7 @@ class SchemaPiece extends Schema {
 	 * Checks if options.type is valid.
 	 * @since 0.5.0
 	 * @param {string} type The parameter to validate
+	 * @throws {TypeError}
 	 * @private
 	 */
 	_schemaCheckType(type) {
@@ -230,6 +232,7 @@ class SchemaPiece extends Schema {
 	 * Checks if options.array is valid.
 	 * @since 0.5.0
 	 * @param {boolean} array The parameter to validate
+	 * @throws {TypeError}
 	 * @private
 	 */
 	_schemaCheckArray(array) {
@@ -240,6 +243,7 @@ class SchemaPiece extends Schema {
 	 * Checks if options.default is valid.
 	 * @since 0.5.0
 	 * @param {AddOptions} options The options to validate
+	 * @throws {TypeError}
 	 * @private
 	 */
 	_schemaCheckDefault(options) {
@@ -309,6 +313,7 @@ class SchemaPiece extends Schema {
 	 * @since 0.5.0
 	 * @param {AddOptions} options The options to parse
 	 * @returns {true}
+	 * @throws {TypeError}
 	 * @private
 	 */
 	_init(options) {

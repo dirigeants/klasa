@@ -14,23 +14,23 @@ class RichMenu extends RichDisplay {
 
 	/**
 	 * @typedef {Object} RichMenuEmojisObject
-	 * @property {emoji} first
-	 * @property {emoji} back
-	 * @property {emoji} forward
-	 * @property {emoji} last
-	 * @property {emoji} jump
-	 * @property {emoji} info
-	 * @property {emoji} stop
-	 * @property {emoji} zero
-	 * @property {emoji} one
-	 * @property {emoji} two
-	 * @property {emoji} three
-	 * @property {emoji} four
-	 * @property {emoji} five
-	 * @property {emoji} six
-	 * @property {emoji} seven
-	 * @property {emoji} eight
-	 * @property {emoji} nine
+	 * @property {emoji} first The emoji for the 'first' button
+	 * @property {emoji} back The emoji for the 'back' button
+	 * @property {emoji} forward The emoji for the 'forward' button
+	 * @property {emoji} last The emoji for the 'last' button
+	 * @property {emoji} jump The emoji for the 'jump' button
+	 * @property {emoji} info The emoji for the 'info' button
+	 * @property {emoji} stop The emoji for the 'stop' button
+	 * @property {emoji} zero The emoji for the 'zero' button
+	 * @property {emoji} one The emoji for the 'one' button
+	 * @property {emoji} two The emoji for the 'two' button
+	 * @property {emoji} three The emoji for the 'three' button
+	 * @property {emoji} four The emoji for the 'four' button
+	 * @property {emoji} five The emoji for the 'five' button
+	 * @property {emoji} six The emoji for the 'six' button
+	 * @property {emoji} seven The emoji for the 'seven' button
+	 * @property {emoji} eight The emoji for the 'eight' button
+	 * @property {emoji} nine The emoji for the 'nine' button
 	 * @memberof RichMenu
 	 */
 

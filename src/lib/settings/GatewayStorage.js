@@ -6,10 +6,12 @@ const fs = require('fs-nextra');
 class GatewayStorage {
 
 	/**
+	 * <warning>You should never create an instance of this class as it's abstract.</warning>
 	 * @since 0.5.0
 	 * @param {KlasaClient} client The client this GatewayStorage was created with
 	 * @param {string} type The name of this GatewayStorage
 	 * @param {string} [provider] The provider's name
+	 * @private
 	 */
 	constructor(client, type, provider) {
 		/**

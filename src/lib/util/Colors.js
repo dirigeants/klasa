@@ -1,12 +1,16 @@
 /* eslint-disable id-length */
 
+/**
+ * The Colors class that manages the colors displayed in the console.
+ * @private
+ */
 class Colors {
 
 	/**
 	 * @typedef {Object} ColorsFormatOptions
-	 * @property {(string|string[])} style
-	 * @property {ColorsFormatType} background
-	 * @property {ColorsFormatType} text
+	 * @property {(string|string[])} style The style or styles to apply
+	 * @property {ColorsFormatType} background The format for the background
+	 * @property {ColorsFormatType} text The format for the text
 	 * @memberof Colors
 	 */
 
@@ -17,12 +21,16 @@ class Colors {
 
 	/**
 	 * @typedef {Object} ColorsFormatData
-	 * @property {string[]} opening
-	 * @property {string[]} closing
+	 * @property {string[]} opening The opening format data styles
+	 * @property {string[]} closing The closing format data styles
 	 * @memberof Colors
 	 * @private
 	 */
 
+	/**
+	 * Constructs our Colors instance
+	 * @since 0.4.0
+	 */
 	constructor() {
 		this.CLOSE = {
 			normal: 0,

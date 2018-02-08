@@ -14,13 +14,13 @@ class RichDisplay {
 
 	/**
 	 * @typedef {Object} RichDisplayEmojisObject
-	 * @property {emoji} first
-	 * @property {emoji} back
-	 * @property {emoji} forward
-	 * @property {emoji} last
-	 * @property {emoji} jump
-	 * @property {emoji} info
-	 * @property {emoji} stop
+	 * @property {emoji} first The emoji for the 'first' button
+	 * @property {emoji} back The emoji for the 'back' button
+	 * @property {emoji} forward The emoji for the 'forward' button
+	 * @property {emoji} last The emoji for the 'last' button
+	 * @property {emoji} jump The emoji for the 'jump' button
+	 * @property {emoji} info The emoji for the 'info' button
+	 * @property {emoji} stop The emoji for the 'stop' button
 	 * @memberof RichDisplay
 	 */
 

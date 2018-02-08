@@ -1,12 +1,16 @@
 const ScheduledTask = require('./ScheduledTask');
 
+/**
+ * <warning>Schedule is a singleton, use {@link KlasaClient#schedule} instead.</warning>
+ * The Schedule class that manages all scheduled tasks
+ */
 class Schedule {
 
 	/**
 	 * @typedef  {Object} ScheduledTaskOptions
-	 * @property {string} [id]
-	 * @property {string} [repeat]
-	 * @property {*} [data]
+	 * @property {string} [id] The ID for the task. By default, it generates one in base36
+	 * @property {string} [repeat] The {@link Cron} pattern
+	 * @property {*} [data] The data to pass to the Task piece when the ScheduledTask is ready for execution
 	 * @memberof Schedule
 	 */
 

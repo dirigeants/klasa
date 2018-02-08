@@ -126,8 +126,9 @@ class Resolver {
 	 */
 	async boolean(bool) {
 		if (bool instanceof Boolean) return bool;
-		if (['1', 'true', '+', 't', 'yes', 'y'].includes(String(bool).toLowerCase())) return true;
-		if (['0', 'false', '-', 'f', 'no', 'n'].includes(String(bool).toLowerCase())) return false;
+		bool = String(bool).toLowerCase();
+		if (['1', 'true', '+', 't', 'yes', 'y'].includes(bool)) return true;
+		if (['0', 'false', '-', 'f', 'no', 'n'].includes(bool)) return false;
 		return null;
 	}
 
