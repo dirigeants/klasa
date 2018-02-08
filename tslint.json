@@ -1,43 +1,62 @@
 {
 	"rules": {
-		"no-inferrable-types": [false],
-		"no-unused-expression": true,
-		"no-duplicate-variable": true,
-		"no-shadowed-variable": true,
-		"comment-format": [
-			true, "check-space"
-		],
-		"indent": [
-			true, "tabs"
-		],
-		"curly": false,
-		"class-name": true,
-		"semicolon": [true],
-		"triple-equals": true,
-		"eofline": true,
-		"no-bitwise": false,
-		"no-console": [false],
-		"member-access": [true, "check-accessor", "check-constructor"],
-		"no-consecutive-blank-lines": [true],
-		"no-parameter-properties": true,
-		"one-line": [
+		"brace-style": [
 			false
 		],
-		"variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"],
-		"interface-name": [true, "always-prefix"],
-		"no-conditional-assignment": true,
-		"use-isnan": true,
+		"class-name": true,
+		"comment-format": [
+			true,
+			"check-space"
+		],
+		"eofline": true,
+		"indent": [
+			true,
+			"tabs"
+		],
+		"member-ordering": [
+			false
+		],
+		"no-arg": false,
+		"no-console": [
+			false
+		],
+		"no-duplicate-variable": true,
+		"no-empty": false,
+		"no-eval": true,
+		"no-inferrable-types": [
+			false
+		],
+		"no-internal-module": true,
+		"no-require-imports": false,
+		"no-shadowed-variable": false,
+		"no-string-literal": false,
 		"no-trailing-whitespace": true,
-		"quotemark": [true, "single", "avoid-escape"],
-		"no-use-before-declare": false,
-		"whitespace": [true,
-			"check-branch",
-			"check-decl",
-			"check-operator",
-			"check-module",
-			"check-separator",
-			"check-type",
-			"check-typecast"
+		"no-unsafe-finally": true,
+		"no-unused-expression": false,
+		"no-unused-variable": [
+			false
+		],
+		"no-var-keyword": true,
+		"object-literal-sort-keys": false,
+		"one-line": [
+			true,
+			"check-open-brace",
+			"check-whitespace"
+		],
+		"quotemark": [
+			true,
+			"single"
+		],
+		"semicolon": [
+			true,
+			"always"
+		],
+		"trailing-comma": [
+			false
+		],
+		"triple-equals": [
+			true,
+			"allow-null-check"
 		],
 		"typedef-whitespace": [
 			true,
@@ -47,14 +66,22 @@
 				"parameter": "nospace",
 				"property-declaration": "nospace",
 				"variable-declaration": "nospace"
-			},
-			{
-				"call-signature": "onespace",
-				"index-signature": "onespace",
-				"parameter": "onespace",
-				"property-declaration": "onespace",
-				"variable-declaration": "onespace"
 			}
+		],
+		"typedef": [
+			false
+		],
+		"variable-name": [
+			true,
+			"ban-keywords"
+		],
+		"whitespace": [
+			true,
+			"check-branch",
+			"check-decl",
+			"check-operator",
+			"check-separator",
+			"check-type"
 		]
 	}
 }

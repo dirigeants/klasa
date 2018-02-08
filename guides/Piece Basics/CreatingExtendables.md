@@ -2,6 +2,8 @@ Extendables are functions that extend current Discord.js classes by adding metho
 
 Extendables have the following syntax:
 
+<!-- eslint-disable no-dupe-class-members -->
+
 ```javascript
 const { Extendable } = require('klasa');
 
@@ -35,6 +37,8 @@ module.exports = class extends Extendable {
 
 };
 ```
+
+<!-- eslint-enable no-dupe-class-members -->
 
 ## Understanding extendable settings
 

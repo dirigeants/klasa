@@ -16,27 +16,29 @@ Pretend for a moment, that permission levels work like this:
 <!-- eslint-disable no-fallthrough -->
 
 ```javascript
-switch (level) {
-	case 0:
-		return true;
-	case 1:
-	case 2:
-	case 3:
-	case 4:
-	case 5:
-	case 6:
-		if (msg.guild && msg.member.permissions.has('MANAGE_GUILD')) return true;
-	case 7:
-		if (msg.guild && msg.member === msg.guild.owner) return true;
-	case 8:
-	case 9:
-		if (msg.author === client.owner) return true;
-		break;
-	case 10:
-		if (msg.author === client.owner) return true;
-		return false;
+function permissionLevel(client, msg) {
+	switch (level) {
+		case 0:
+			return true;
+		case 1:
+		case 2:
+		case 3:
+		case 4:
+		case 5:
+		case 6:
+			if (msg.guild && msg.member.permissions.has('MANAGE_GUILD')) return true;
+		case 7:
+			if (msg.guild && msg.member === msg.guild.owner) return true;
+		case 8:
+		case 9:
+			if (msg.author === client.owner) return true;
+			break;
+		case 10:
+			if (msg.author === client.owner) return true;
+			return false;
+	}
+	throw 'You don\'t have permission';
 }
-throw 'You don\'t have permission';
 ```
 
 <!-- eslint-enable no-fallthrough -->
