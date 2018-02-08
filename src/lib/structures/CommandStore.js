@@ -1,4 +1,4 @@
-const { join } = require('path');
+const { join, extname, relative, sep } = require('path');
 const { Collection } = require('discord.js');
 const fs = require('fs-nextra');
 const Command = require('./Command');
@@ -149,16 +149,13 @@ class CommandStore extends Collection {
 	 * @since 0.0.1
 	 * @param {CommandStore} store The command store we're loading into
 	 * @param {string} dir The directory of commands we're using to load commands from
-	 * @param {string[]} subs Subfolders for recursion
 	 * @returns {void}
 	 */
-	static async walk(store, dir, subs = []) {
-		const files = await fs.readdir(join(dir, ...subs)).catch(() => { fs.ensureDir(dir).catch(err => store.client.emit('error', err)); });
+	static async walk(store, dir) {
+		const files = await fs.scan(dir, { filter: (stats, path) => stats.isFile() && extname(path) === '.js' }).catch(() => { fs.ensureDir(dir).catch(err => store.client.emit('error', err)); });
 		if (!files) return true;
-		return Promise.all(files.map(async file => {
-			if (file.endsWith('.js')) return store.load(dir, [...subs, file]);
-			return CommandStore.walk(store, dir, [...subs, file]);
-		}));
+
+		return Promise.all(Array.from(files.keys()).map(file => store.load(dir, relative(dir, file).split(sep))));
 	}
 
 }
