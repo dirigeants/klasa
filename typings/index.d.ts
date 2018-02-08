@@ -1339,6 +1339,29 @@ declare module 'klasa' {
 		public shard(input: string, shard: ColorsFormatOptions): string;
 		public messages(input: string, message: ColorsFormatOptions): string;
 
+		// Console methods
+		// tslint:disable-next-line
+		public Console: NodeJS.ConsoleConstructor;
+		public assert(test?: boolean, message?: string, ...optionalParameters: any[]): void;
+		public clear(): void;
+		public count(countTitle?: string): void;
+		public dir(value?: any, ...optionalParameters: any[]): void;
+		public dirxml(value?: any): void;
+		public exception(message?: string, ...optionalParameters: any[]): void;
+		public group(groupTitle?: string, ...optionalParameters: any[]): void;
+		public groupCollapsed(groupTitle?: string, ...optionalParameters: any[]): void;
+		public groupEnd(): void;
+		public info(message?: string, ...optionalParameters: any[]): void;
+		public msIsIndependentlyComposed(element: Element): boolean;
+		public profile(reportName?: string): void;
+		public profileEnd(): void;
+		public select(element: Element): void;
+		public table(...data: any[]): void;
+		public time(timerName?: string): void;
+		public timeEnd(timerName?: string): void;
+		public trace(message?: string, ...optionalParameters: any[]): void;
+		// End of Console methods
+
 		private static _flatten(data: any, useColors: boolean): string;
 	}
 
