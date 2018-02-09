@@ -257,6 +257,31 @@ class GatewayDriver {
 		throw `This provider (${engine}) does not exist in your system.`;
 	}
 
+	/**
+	 * The GatewayDriver with all gateways, types and keys as JSON.
+	 * @since 0.5.0
+	 * @returns {Object}
+	 */
+	toJSON() {
+		const object = {
+			types: [...this.types],
+			keys: [...this.keys],
+			ready: this.ready
+		};
+		for (const key of this.keys) object[key] = this[key].toJSON();
+
+		return object;
+	}
+
+	/**
+	 * The stringified GatewayDriver with all the managed gateways.
+	 * @since 0.5.0
+	 * @returns {string}
+	 */
+	toString() {
+		return `GatewayDriver(${[...this.keys].join(', ')})`;
+	}
+
 }
 
 module.exports = GatewayDriver;

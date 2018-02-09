@@ -7,7 +7,7 @@ As mentioned in the previous tutorial, {@tutorial UnderstandingSchema}, SettingG
 There are multiple options that configure the piece, they are:
 
 | Option       | Description                                                                |
-| :----------: | :------------------------------------------------------------------------- |
+| ------------ | -------------------------------------------------------------------------- |
 | array        | Whether the values should be stored in an array                            |
 | configurable | Whether this key can be configured with the built-in configuration command |
 | default      | The default value for this key                                             |

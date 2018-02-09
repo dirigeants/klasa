@@ -485,7 +485,7 @@ class SchemaFolder extends Schema {
 	/**
 	 * Get a JSON object containing all the objects from this schema's children.
 	 * @since 0.5.0
-	 * @returns {any}
+	 * @returns {Object}
 	 */
 	toJSON() {
 		return Object.assign({ type: 'Folder' }, ...this.keyArray.map(key => ({ [key]: this[key].toJSON() })));

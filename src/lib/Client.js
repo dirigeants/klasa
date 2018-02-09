@@ -111,14 +111,6 @@ class KlasaClient extends Discord.Client {
 	 */
 
 	/**
-	 * @typedef {Object} ConfigUpdateEntryMany
-	 * @property {'MANY'} type The type for config updates made with the updateMany pattern
-	 * @property {string[]} keys The keys changed
-	 * @property {Array<*>} values The values changed
-	 * @memberof KlasaClient
-	 */
-
-	/**
 	 * Constructs the klasa client
 	 * @since 0.0.1
 	 * @param {KlasaClientOptions} config The config to pass to the new client
@@ -632,24 +624,23 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  */
 
 /**
- * Emitted when {@link Configuration.update} is run, the parameter path will be an object with the following format:
- * `{ type: 'MANY', keys: string[], values: Array<*> }`
+ * Emitted when {@link Configuration#update} is run.
  * @event KlasaClient#configUpdateEntry
  * @since 0.5.0
  * @param {Configuration} oldEntry The old configuration entry
  * @param {Configuration} newEntry The new configuration entry
- * @param {(string|ConfigUpdateEntryMany)} path The path of the key which changed
+ * @param {string[]} path The path of the key which changed
  */
 
 /**
- * Emitted when {@link Gateway.deleteEntry} is run.
+ * Emitted when {@link Gateway#deleteEntry} is run.
  * @event KlasaClient#configDeleteEntry
  * @since 0.5.0
  * @param {Configuration} entry The entry which got deleted
  */
 
 /**
- * Emitted when {@link Gateway.createEntry} is run or when {@link Gateway.getEntry}
+ * Emitted when {@link Gateway#createEntry} is run or when {@link Gateway#getEntry}
  * with the create parameter set to true creates the entry.
  * @event KlasaClient#configCreateEntry
  * @since 0.5.0

@@ -274,7 +274,7 @@ class Configuration {
 		this._parseUpdateMany(this, object, this.gateway.schema, guild, list, updateObject);
 		await Promise.all(list.promises);
 
-		if (oldClone !== null) this.client.emit('configUpdateEntry', oldClone, this, { type: 'MANY', keys: list.keys, values: list.values });
+		if (oldClone !== null) this.client.emit('configUpdateEntry', oldClone, this, list.keys);
 		if (this.gateway.sql) await this.gateway.provider.update(this.gateway.type, this.id, list.keys, list.values);
 		else await this.gateway.provider.update(this.gateway.type, this.id, updateObject);
 		if (list.errors.length) throw { updated: { keys: list.keys, values: list.values }, errors: list.errors };
@@ -372,7 +372,7 @@ class Configuration {
 			}
 		}
 
-		if (oldClone !== null) this.client.emit('configUpdateEntry', oldClone, this, path.path);
+		if (oldClone !== null) this.client.emit('configUpdateEntry', oldClone, this, [path.path]);
 		return { parsed, parsedID, array: cache, path, route };
 	}
 
@@ -424,23 +424,25 @@ class Configuration {
 	_parseUpdateMany(cache, object, schema, guild, list, updateObject) {
 		for (const key of Object.keys(object)) {
 			if (!schema.hasKey(key)) continue;
+			// Check if it's a folder, and recursively iterate over it
 			if (schema[key].type === 'Folder') {
 				if (!(key in updateObject)) updateObject = updateObject[key] = {};
 				this._parseUpdateMany(cache[key], object[key], schema[key], guild, list, updateObject);
+				// If the value is null, reset it
+			} else if (object[key] === null) {
+				list.promises.push(this.reset(key)
+					.then(({ value, path }) => {
+						updateObject[key] = cache[key] = value;
+						list.keys.push(path);
+						list.values.push(value);
+					})
+					.catch(error => list.errors.push([schema.path, error])));
+				// Throw an error if it's not array (nor type any) but an array was given
+			} else if (!schema[key].array && schema[key].type !== 'any' && Array.isArray(object[key])) {
+				list.errors.push([schema[key].path, new Error(`${schema[key].path} does not expect an array as value.`)]);
+				// Throw an error if the key requests an array and none is given
 			} else if (schema[key].array && !Array.isArray(object[key])) {
 				list.errors.push([schema[key].path, new Error(`${schema[key].path} expects an array as value.`)]);
-			} else if (!schema[key].array && schema[key].array !== 'any' && Array.isArray(object[key])) {
-				list.errors.push([schema[key].path, new Error(`${schema[key].path} does not expect an array as value.`)]);
-			} else if (object[key] === null) {
-				list.promises.push(
-					this.reset(key)
-						.then(({ value, path }) => {
-							updateObject[key] = cache[key] = value;
-							list.keys.push(path);
-							list.values.push(value);
-						})
-						.catch(error => list.errors.push([schema.path, error]))
-				);
 			} else {
 				const promise = schema[key].array && schema[key].type !== 'any' ?
 					Promise.all(object[key].map(entry => schema[key].parse(entry, guild)
@@ -479,7 +481,7 @@ class Configuration {
 		for (let i = 0; i < route.length - 1; i++) cache = cache[route[i]] || {};
 		cache[route[route.length - 1]] = parsedID;
 
-		if (oldClone !== null) this.client.emit('configUpdateEntry', oldClone, this, path.path);
+		if (oldClone !== null) this.client.emit('configUpdateEntry', oldClone, this, [path.path]);
 	}
 
 	/**

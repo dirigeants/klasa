@@ -13,6 +13,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Added `Gateway#toJSON()` and `GatewayDriver#toJSON()`. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Added `GatewayDriver#register` to be able to register new gateways without events (directly in your `app.js`). (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Added `util.getIdentifier` as a replacement for the function validator. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Added `SchemaFolder#keys()`, `SchemaFolder#values()`, `SchemaFolder#entries()` and `SchemaFolder#[@@iterator]()`. Identical to Map's respective methods. (kyranet)
@@ -139,6 +140,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Removed
 
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Removed the `ConfigUpdateEntryMany` typedef in favor of a more constant type. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Removed the resolver functions from constants. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Removed `SchemaFolder#keys` (`Map<string>`) to reduce RAM usage and key caching duplication. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Removed SettingGateway function validators. (kyranet)

@@ -40,6 +40,14 @@ class Gateway extends GatewayStorage {
 	 */
 
 	/**
+	 * @typedef {Object} GatewayJSON
+	 * @property {string} type The name of this gateway
+	 * @property {GatewayOptions} options The options for this gateway
+	 * @property {Object} schema The current schema
+	 * @memberof Gateway
+	 */
+
+	/**
 	 * @since 0.0.1
 	 * @param {GatewayDriver} store The GatewayDriver instance which initiated this instance
 	 * @param {string} type The name of this Gateway
@@ -319,6 +327,19 @@ class Gateway extends GatewayStorage {
 			route[key]._patch(parsed);
 		}
 		if (force) await route.force(action, key, piece);
+	}
+
+	/**
+	 * Get a JSON object containing the schema and options.
+	 * @since 0.5.0
+	 * @returns {GatewayJSON}
+	 */
+	toJSON() {
+		return {
+			type: this.type,
+			options: this.options,
+			schema: this.schema.toJSON()
+		};
 	}
 
 	/**

@@ -3,7 +3,7 @@
 By default, there are several built-in types that the developer can use, and with the possibility to add custom types via {@link Extendable}s as explained below. The built-in types are:
 
 | Name                | Type                                              | Description                                                                              |
-| :-----------------: | :------------------------------------------------ | ---------------------------------------------------------------------------------------- |
+| ------------------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------- |
 | **any**             | Anything, no type restriction                     | Resolves anything, even objects, the usage of this type will make a key unconfigurable   |
 | **boolean**         | A {@link Boolean} resolvable                      | Resolves a boolean primitive value                                                       |
 | **categorychannel** | A {@link external:CategoryChannel} instance or id | Resolves a CategoryChannel                                                               |
