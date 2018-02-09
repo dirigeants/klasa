@@ -663,10 +663,10 @@ declare module 'klasa' {
 		private _removeKey(key: string): void;
 		private _init(options: object): true;
 
-		public entries(): IterableIterator<[string, SchemaFolder | SchemaPiece]>;
-		public values(): IterableIterator<SchemaFolder | SchemaPiece>;
-		public keys(): IterableIterator<string>;
-		public [Symbol.iterator](): IterableIterator<[string, SchemaFolder | SchemaPiece]>;
+		public entries(): Iterator<[string, SchemaFolder | SchemaPiece]>;
+		public values(): Iterator<SchemaFolder | SchemaPiece>;
+		public keys(): Iterator<string>;
+		public [Symbol.iterator](): Iterator<[string, SchemaFolder | SchemaPiece]>;
 
 		public toJSON(): any;
 		public toString(): string;

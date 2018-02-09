@@ -476,7 +476,7 @@ class SchemaFolder extends Schema {
 	 * @method
 	 * @instance
 	 * @generator
-	 * @returns {IterableIterator<Array<string|SchemaFolder|SchemaPiece>>}
+	 * @returns {Iterator<Array<string|SchemaFolder|SchemaPiece>>}
 	 * @memberof SchemaFolder
 	 */
 
