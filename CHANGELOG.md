@@ -164,6 +164,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Fixed SettingResolver's return types. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Fixed Gateway syncing keys even when it's unused. (kyranet)
 - [[#176](https://github.com/dirigeants/klasa/pull/176)] Fixed internal parser ignoring `0` as `min` and/or `max` due to falsy value check. (kyranet)
 - [[#170](https://github.com/dirigeants/klasa/pull/170)] Fixed guild resolvables not working correctly. (kyranet)

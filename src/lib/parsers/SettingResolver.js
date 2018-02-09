@@ -12,7 +12,7 @@ class SettingResolver extends Resolver {
 	 * @param {*} data The data to resolve
 	 * @param {KlasaGuild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
-	 * @returns {KlasaUser}
+	 * @returns {Promise<KlasaUser>}
 	 */
 	async user(data, guild, name) {
 		const result = await super.user(data);
@@ -26,7 +26,7 @@ class SettingResolver extends Resolver {
 	 * @param {*} data The data to resolve
 	 * @param {KlasaGuild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
-	 * @returns {external:Channel}
+	 * @returns {Promise<external:Channel>}
 	 */
 	async channel(data, guild, name) {
 		const result = await super.channel(data);
@@ -40,7 +40,7 @@ class SettingResolver extends Resolver {
 	 * @param {*} data The data to resolve
 	 * @param {KlasaGuild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
-	 * @returns {external:TextChannel}
+	 * @returns {Promise<external:TextChannel>}
 	 */
 	async textchannel(data, guild, name) {
 		const result = await super.channel(data);
@@ -54,7 +54,7 @@ class SettingResolver extends Resolver {
 	 * @param {*} data The data to resolve
 	 * @param {KlasaGuild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
-	 * @returns {external:VoiceChannel}
+	 * @returns {Promise<external:VoiceChannel>}
 	 */
 	async voicechannel(data, guild, name) {
 		const result = await super.channel(data);
@@ -68,7 +68,7 @@ class SettingResolver extends Resolver {
 	 * @param {*} data The data to resolve
 	 * @param {KlasaGuild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
-	 * @returns {external:CategoryChannel}
+	 * @returns {Promise<external:CategoryChannel>}
 	 */
 	async categorychannel(data, guild, name) {
 		const result = await super.channel(data);
@@ -82,7 +82,7 @@ class SettingResolver extends Resolver {
 	 * @param {*} data The data to resolve
 	 * @param {KlasaGuild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
-	 * @returns {KlasaGuild}
+	 * @returns {Promise<KlasaGuild>}
 	 */
 	async guild(data, guild, name) {
 		const result = await super.guild(data);
@@ -96,7 +96,7 @@ class SettingResolver extends Resolver {
 	 * @param {*} data The data to resolve
 	 * @param {KlasaGuild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
-	 * @returns {external:Role}
+	 * @returns {Promise<external:Role>}
 	 */
 	async role(data, guild, name) {
 		const result = await super.role(data, guild) || (guild ? guild.roles.find('name', data) : null);
@@ -110,7 +110,7 @@ class SettingResolver extends Resolver {
 	 * @param {*} data The data to resolve
 	 * @param {KlasaGuild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
-	 * @returns {boolean}
+	 * @returns {Promise<boolean>}
 	 */
 	async boolean(data, guild, name) {
 		const result = await super.boolean(data);
@@ -127,7 +127,7 @@ class SettingResolver extends Resolver {
 	 * @param {Object} minMax The minimum and maximum
 	 * @param {?number} minMax.min The minimum value
 	 * @param {?number} minMax.max The maximum value
-	 * @returns {string}
+	 * @returns {Promise<string>}
 	 */
 	async string(data, guild, name, { min, max } = {}) {
 		const result = await super.string(data);
@@ -141,10 +141,10 @@ class SettingResolver extends Resolver {
 	 * @param {*} data The data to resolve
 	 * @param {KlasaGuild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
-	 * @param {Object} minMax The minimum and maximum
+	 * @param {Object} [minMax={}] The minimum and maximum
 	 * @param {?number} minMax.min The minimum value
 	 * @param {?number} minMax.max The maximum value
-	 * @returns {number}
+	 * @returns {Promise<number>}
 	 */
 	async integer(data, guild, name, { min, max } = {}) {
 		const result = await super.integer(data);
@@ -159,10 +159,10 @@ class SettingResolver extends Resolver {
 	 * @param {*} data The data to resolve
 	 * @param {KlasaGuild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
-	 * @param {Object} minMax The minimum and maximum
+	 * @param {Object} [minMax={}] The minimum and maximum
 	 * @param {?number} minMax.min The minimum value
 	 * @param {?number} minMax.max The maximum value
-	 * @returns {number}
+	 * @returns {Promise<number>}
 	 */
 	async float(data, guild, name, { min, max } = {}) {
 		const result = await super.float(data);
@@ -177,7 +177,7 @@ class SettingResolver extends Resolver {
 	 * @param {*} data The data to resolve
 	 * @param {KlasaGuild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
-	 * @returns {string}
+	 * @returns {Promise<string>}
 	 */
 	async url(data, guild, name) {
 		const result = await super.url(data);
@@ -191,7 +191,7 @@ class SettingResolver extends Resolver {
 	 * @param {*} data The data to resolve
 	 * @param {KlasaGuild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
-	 * @returns {string}
+	 * @returns {Promise<string>}
 	 */
 	async command(data, guild, name) {
 		const command = this.client.commands.get(data.toLowerCase());
@@ -205,7 +205,7 @@ class SettingResolver extends Resolver {
 	 * @param {*} data The data to resolve
 	 * @param {KlasaGuild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
-	 * @returns {string}
+	 * @returns {Promise<string>}
 	 */
 	async language(data, guild, name) {
 		const language = this.client.languages.get(data);

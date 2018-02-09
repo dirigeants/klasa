@@ -32,26 +32,27 @@ const { Extendable } = require('klasa');
 
 module.exports = class extends Extendable {
 
-    constructor(...args) {
-        super(...args, ['SettingResolver'], {
+	constructor(...args) {
+		super(...args, ['SettingResolver'], {
 			name: 'typeName',
 			klasa: true
 		});
-    }
+	}
 
 	/**
 	 * Resolves my custom type!
 	 * @param {*} data The data to resolve
 	 * @param {KlasaGuild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
-	 * @param {Object} minMax The minimum and maximum
+	 * @param {Object} [minMax={}] The minimum and maximum
 	 * @param {?number} minMax.min The minimum value
 	 * @param {?number} minMax.max The maximum value
-	 * @returns {*}
+	 * @returns {Promise<*>}
 	 */
-    extend(data, guild, name, { min, max } = {}) {
-        // The content
-    }
+	async extend(data, guild, name, { min, max } = {}) {
+		// The content
+		return data;
+	}
 
 };
 ```

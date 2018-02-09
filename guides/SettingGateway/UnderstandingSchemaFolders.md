@@ -49,8 +49,10 @@ this.client.gateways.guilds.schema.addKey('userBlacklist', { type: 'User', array
 And now you can access to any of them in your guild configs like in the following snippet!
 
 ```javascript
-msg.guild.configs.modlogs; // null
-msg.guild.configs.userBlacklist; // []
+msg.guild.configs.modlogs;
+// null
+msg.guild.configs.userBlacklist;
+// []
 ```
 
 ## Removing keys
@@ -70,8 +72,10 @@ this.client.gateways.guilds.schema.removeKey('userBlacklist');
 And the property `userBlacklist` for all guild configs will be deleted, that being said:
 
 ```javascript
-msg.guild.configs.userBlacklist; // undefined
-'userBlacklist' in msg.guild.configs; // false
+msg.guild.configs.userBlacklist;
+// undefined
+'userBlacklist' in msg.guild.configs;
+// false
 ```
 
 ## Adding folders
@@ -97,7 +101,7 @@ async function init() {
 	//  	max: null,
 	//  	configurable: true
 	// }
-};
+}
 ```
 
 ### Faster
@@ -118,7 +122,7 @@ async function init() {
 	//  	max: null,
 	//  	configurable: true
 	// }
-};
+}
 ```
 
 > **Reminder**: To access to a key inside a folder in your configuration command, you use the access operator (`.`). For example: *k!conf set channels.modlogs #modlogs*
@@ -150,7 +154,7 @@ async function init() {
 	if (!schema.hasKey('modlog')) {
 		await schema.addKey('modlog', { type: 'TextChannel' });
 	}
-};
+}
 ```
 
 ## Further Reading:

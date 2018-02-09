@@ -25,10 +25,11 @@ declare module 'klasa' {
 		Role,
 		Snowflake,
 		StringResolvable,
-		TextChannel as DiscordTextChannel,
 		User as DiscordUser,
 		UserResolvable,
+		TextChannel as DiscordTextChannel,
 		VoiceChannel as DiscordVoiceChannel,
+		CategoryChannel as DiscordCategoryChannel,
 		WebhookClient
 	} from 'discord.js';
 
@@ -284,6 +285,10 @@ declare module 'klasa' {
 		public readonly guild: KlasaGuild;
 	}
 
+	export class KlasaCategoryChannel extends DiscordCategoryChannel {
+		public readonly guild: KlasaGuild;
+	}
+
 	export class KlasaDMChannel extends DiscordDMChannel {
 		public readonly attachable: boolean;
 		public readonly embedable: boolean;
@@ -433,6 +438,7 @@ declare module 'klasa' {
 		public user(data: any, guild: KlasaGuild, name: string): Promise<KlasaUser>;
 		public user(input: KlasaUser | GuildMember | KlasaMessage | Snowflake): Promise<KlasaUser>;
 		public voicechannel(data: any, guild: KlasaGuild, name: string): Promise<KlasaVoiceChannel>;
+		public categorychannel(data: any, guild: KlasaGuild, name: string): Promise<KlasaCategoryChannel>;
 
 		public static maxOrMin(guild: KlasaGuild, value: number, min: number, max: number, name: string, suffix: string): boolean;
 	}
@@ -1619,6 +1625,7 @@ declare module 'klasa' {
 		| KlasaMessage
 		| KlasaTextChannel
 		| KlasaVoiceChannel
+		| KlasaCategoryChannel
 		| GuildMember
 		| Role;
 
