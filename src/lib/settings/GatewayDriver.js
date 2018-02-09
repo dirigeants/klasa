@@ -60,10 +60,10 @@ class GatewayDriver {
 		this.types = Object.getOwnPropertyNames(SettingResolver.prototype).slice(1);
 
 		/**
-		 * All the caches added
-		 * @type {string[]}
+		 * All the gateways added
+		 * @type {Set<string>}
 		 */
-		this.caches = [];
+		this.keys = new Set();
 
 		/**
 		 * If the driver is ready
@@ -176,21 +176,39 @@ class GatewayDriver {
 	}
 
 	/**
-	 * Add a new instance of SettingGateway, with its own validateFunction and schema.
+	 * Registers a new Gateway.
+	 * @param {string} name The name for the new gateway
+	 * @param {Object} [schema={}] The schema for use in this gateway
+	 * @param {GatewayDriverAddOptions} [options={}] The options for the new gateway
+	 * @returns {Gateway}
+	 */
+	register(name, schema = {}, options = {}) {
+		if (typeof name !== 'string') throw 'You must pass a name for your new gateway and it must be a string.';
+
+		if (name in this) throw 'There is already a Gateway with that name.';
+		if (!this.client.methods.util.isObject(schema)) throw 'Schema must be a valid object or left undefined for an empty object.';
+
+		options.provider = this._checkProvider(options.provider || this.client.options.providers.default);
+		const provider = this.client.providers.get(options.provider);
+		if (provider.cache) throw `The provider ${provider.name} is designed for caching, not persistent data. Please try again with another.`;
+
+		const gateway = new Gateway(this, name, schema, options);
+		this.keys.add(name);
+		this[name] = gateway;
+
+		return gateway;
+	}
+
+	/**
+	 * Registers a new Gateway and inits it.
 	 * @since 0.3.0
 	 * @param {string} name The name for the new instance
-	 * @param {Function} validateFunction The function that validates the input
 	 * @param {Object} [schema={}] The schema
 	 * @param {GatewayDriverAddOptions} [options={}] A provider to use. If not specified it'll use the one in the client
 	 * @param {boolean} [download=true] Whether this Gateway should download the data from the database at init
 	 * @returns {Gateway}
 	 * @example
 	 * // Add a new SettingGateway instance, called 'users', which input takes users, and stores a quote which is a string between 2 and 140 characters.
-	 * const validate = async function(resolver, user) {
-	 *	 const result = await resolver.user(user);
-	 *	 if (!result) throw 'The parameter <User> expects either a User ID or a User Object.';
-	 *	 return result;
-	 * };
 	 * const schema = {
 	 *	 quote: {
 	 *		 type: 'String',
@@ -200,25 +218,11 @@ class GatewayDriver {
 	 *		 max: 140,
 	 *	 },
 	 * };
-	 * GatewayDriver.add('users', validate, schema);
+	 * GatewayDriver.add('users', schema);
 	 */
-	async add(name, validateFunction, schema = {}, options = {}, download = true) {
-		if (typeof name !== 'string') throw 'You must pass a name for your new gateway and it must be a string.';
-
-		if (this[name] !== undefined && this[name] !== null) throw 'There is already a Gateway with that name.';
-		if (typeof validateFunction !== 'function') throw 'You must pass a validate function.';
-		validateFunction = validateFunction.bind(this);
-		if (!this.client.methods.util.isObject(schema)) throw 'Schema must be a valid object or left undefined for an empty object.';
-
-		options.provider = this._checkProvider(options.provider || this.client.options.providers.default);
-		const provider = this.client.providers.get(options.provider);
-		if (provider.cache) throw `The provider ${provider.name} is designed for caching, not persistent data. Please try again with another.`;
-		options.cache = this._checkProvider('collection');
-
-		const gateway = new Gateway(this, name, validateFunction, schema, options);
+	async add(name, schema = {}, options = {}, download = true) {
+		const gateway = this.register(name, schema, options);
 		await gateway.init(download);
-		this.caches.push(name);
-		this[name] = gateway;
 
 		return gateway;
 	}
@@ -229,12 +233,13 @@ class GatewayDriver {
 	 * @returns {Promise<Array<Array<external:Collection<string, Configuration>>>>}
 	 * @private
 	 */
-	_ready() {
+	async _ready() {
 		if (this.ready) throw 'Configuration has already run the ready method.';
 		this.ready = true;
 		const promises = [];
 		for (const cache of this.caches) {
-			this[cache].ready = true;
+			// If the gateway did not init yet, init it now
+			if (!this[cache].ready) await this[cache].init();
 			promises.push(this[cache]._ready());
 		}
 		return Promise.all(promises);

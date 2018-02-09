@@ -50,14 +50,6 @@ class SchemaFolder extends Schema {
 		Object.defineProperty(this, 'defaults', { value: {}, writable: true });
 
 		/**
-		 * A Set containing all keys' names which value is either a SchemaFolder or a SchemaPiece instance.
-		 * @since 0.5.0
-		 * @type {Set<string>}
-		 * @name SchemaFolder#keys
-		 */
-		Object.defineProperty(this, 'keys', { value: new Set(), writable: true });
-
-		/**
 		 * A pre-processed array with all keys' names.
 		 * @since 0.5.0
 		 * @type {string[]}
@@ -144,7 +136,7 @@ class SchemaFolder extends Schema {
 	 * @returns {boolean}
 	 */
 	hasKey(key) {
-		return this.keys.has(key);
+		return this.keyArray.includes(key);
 	}
 
 	/**
@@ -299,13 +291,13 @@ class SchemaFolder extends Schema {
 	/**
 	 * Get all the pathes from this schema's children.
 	 * @since 0.5.0
-	 * @param {string[]} [array=[]] The array to push.
 	 * @returns {string[]}
 	 */
-	getKeys(array = []) {
-		for (const key of this.keyArray) {
-			if (this[key].type === 'Folder') this[key].getKeys(array);
-			else array.push(this[key].path);
+	getAllKeys() {
+		const array = [];
+		for (const value of this.values()) {
+			if (value.type === 'Folder') array.push(...value.keyArray());
+			else array.push(value.path);
 		}
 		return array;
 	}
@@ -313,13 +305,13 @@ class SchemaFolder extends Schema {
 	/**
 	 * Get all the SchemaPieces instances from this schema's children. Used for SQL.
 	 * @since 0.5.0
-	 * @param {string[]} [array=[]] The array to push.
 	 * @returns {SchemaPiece[]}
 	 */
-	getValues(array = []) {
-		for (const key of this.keyArray) {
-			if (this[key].type === 'Folder') this[key].getValues(array);
-			else array.push(this[key]);
+	getAllValues() {
+		const array = [];
+		for (const value of this.values()) {
+			if (value.type === 'Folder') array.push(...value.getAllValues());
+			else array.push(value);
 		}
 		return array;
 	}
@@ -347,7 +339,6 @@ class SchemaFolder extends Schema {
 		this[key] = piece;
 		this.defaults[key] = piece.type === 'Folder' ? piece.defaults : options.default;
 
-		this.keys.add(key);
 		this.keyArray.push(key);
 		this.keyArray.sort((a, b) => a.localeCompare(b));
 
@@ -364,7 +355,6 @@ class SchemaFolder extends Schema {
 		const index = this.keyArray.indexOf(key);
 		if (index === -1) throw new Error(`The key '${key}' does not exist.`);
 
-		this.keys.delete(key);
 		this.keyArray.splice(index, 1);
 		delete this[key];
 		delete this.defaults[key];
@@ -440,13 +430,56 @@ class SchemaFolder extends Schema {
 				this[key] = piece;
 				this.defaults[key] = piece.default;
 			}
-			this.keys.add(key);
 			this.keyArray.push(key);
 		}
 		this.keyArray.sort((a, b) => a.localeCompare(b));
 		this._inited = true;
 
 		return true;
+	}
+
+	/**
+	 * Returns a new Iterator object that contains the `[key, value]` pairs for each element contained in this folder.
+	 * Identical to [Map.entries()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/entries)
+	 * @since 0.5.0
+	 * @generator
+	 * @yields {[string, (SchemaFolder|SchemaPiece)]}
+	 */
+	*entries() {
+		for (const key of this.keyArray) yield [key, this[key]];
+	}
+
+	/**
+	 * Returns a new Iterator object that contains the values for each element contained in this folder.
+	 * Identical to [Map.values()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/values)
+	 * @since 0.5.0
+	 * @generator
+	 * @yields {(SchemaFolder|SchemaPiece)}
+	 */
+	*values() {
+		for (const key of this.keyArray) yield this[key];
+	}
+
+	/**
+	 * Returns a new Iterator object that contains the keys for each element contained in this folder.
+	 * Identical to [Map.keys()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/keys)
+	 * @since 0.5.0
+	 * @generator
+	 * @yields {string}
+	 */
+	*keys() {
+		for (const key of this.keyArray) yield key;
+	}
+
+	/**
+	 * Returns a new Iterator object that contains the `[key, value]` pairs for each element contained in this folder.
+	 * Identical to [Map.entries()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/entries)
+	 * @since 0.5.0
+	 * @generator
+	 * @returns {IterableIterator<[string, (SchemaFolder|SchemaPiece)]>}
+	 */
+	[Symbol.iterator]() {
+		return this.entries();
 	}
 
 	/**

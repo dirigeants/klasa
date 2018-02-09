@@ -539,17 +539,15 @@ declare module 'klasa' {
 		private static _merge(data: any, folder: SchemaFolder | SchemaPiece): any;
 		private static _clone(data: any, schema: SchemaFolder): any;
 		private static _patch(inst: any, data: any, schema: SchemaFolder): void;
-		private static getIdentifier(value: any): any;
 	}
 
 	export class Gateway extends GatewayStorage {
-		private constructor(store: GatewayDriver, type: string, validateFunction: Function, schema: object, options: GatewayDriverAddOptions);
+		private constructor(store: GatewayDriver, type: string, schema: object, options: GatewayDriverAddOptions);
 		public store: GatewayDriver;
 		public options: GatewayDriverAddOptions;
-		public validate: Function;
 		public defaultSchema: object;
-		public readonly cache: Provider;
 		public readonly resolver: SettingResolver;
+		public readonly cache: Collection<string, Configuration>;
 
 		public getEntry(input: string, create?: boolean): object | Configuration;
 		public createEntry(input: string): Promise<Configuration>;
@@ -571,7 +569,7 @@ declare module 'klasa' {
 		public readonly client: KlasaClient;
 		public resolver: SettingResolver;
 		public types: string[];
-		public caches: string[];
+		public keys: Set<string>;
 		public ready: boolean;
 
 		public readonly guildsSchema: {
@@ -591,7 +589,8 @@ declare module 'klasa' {
 		public users: Gateway;
 		public clientStorage: Gateway;
 
-		public add(name: string, validateFunction: Function, schema?: object, options?: GatewayDriverAddOptions, download?: boolean): Promise<Gateway>;
+		public register(name: string, schema?: object, options?: GatewayDriverAddOptions): Gateway;
+		public add(name: string, schema?: object, options?: GatewayDriverAddOptions, download?: boolean): Promise<Gateway>;
 		private _ready(): Promise<Array<Array<Collection<string, Configuration>>>>;
 		private _checkProvider(engine: string): string;
 	}
@@ -633,7 +632,6 @@ declare module 'klasa' {
 		private constructor(client: KlasaClient, gateway: Gateway, object: any, parent: SchemaFolder, key: string);
 		public readonly type: 'Folder';
 		public defaults: object;
-		public keys: Set<string>;
 		public keyArray: string[];
 
 		public readonly configurableKeys: string[];
@@ -647,13 +645,18 @@ declare module 'klasa' {
 		public getList(msg: KlasaMessage): string;
 		public getDefaults(data?: object): object;
 		public getSQL(array?: string[]): string[];
-		public getKeys(array?: string[]): string[];
-		public getValues(array?: SchemaPiece[]): SchemaPiece[];
+		public getAllKeys(array?: string[]): string[];
+		public getAllValues(array?: SchemaPiece[]): SchemaPiece[];
 		public resolveString(): string;
 
 		private _addKey(key: string, options: SchemaFolderAddOptions, type: typeof Schema | typeof SchemaFolder): void;
 		private _removeKey(key: string): void;
 		private _init(options: object): true;
+
+		public entries(): IterableIterator<[string, SchemaFolder | SchemaPiece]>;
+		public values(): IterableIterator<SchemaFolder | SchemaPiece>;
+		public keys(): IterableIterator<string>;
+		public [Symbol.iterator](): IterableIterator<[string, SchemaFolder | SchemaPiece]>;
 
 		public toJSON(): any;
 		public toString(): string;
@@ -1233,11 +1236,6 @@ declare module 'klasa' {
 			CLIENT: KlasaConstantsClient,
 			CONSOLE: KlasaConsoleConfig
 		};
-		GATEWAY_RESOLVERS: {
-			GUILDS: (guildResolvable: string | KlasaGuild) => KlasaGuild,
-			USERS: (userResolvable: string | KlasaUser) => KlasaUser,
-			CLIENT_STORAGE: (clientResolvable: string | KlasaClient) => ClientUser
-		};
 		CRON: {
 			allowedNum: number[][];
 			partRegex: RegExp;
@@ -1468,6 +1466,7 @@ declare module 'klasa' {
 	}
 
 	class Util {
+		private static initClean(client: KlasaClient): void;
 		public static applyToClass(base: object, structure: object, skips?: string[]): void;
 		public static clean(text: string): string;
 		public static codeBlock(lang: string, expression: string): string;
@@ -1477,6 +1476,7 @@ declare module 'klasa' {
 		public static getDeepTypeName(input: any): string;
 		public static getDeepTypeProxy(input: Proxy<any>): string;
 		public static getDeepTypeSetOrMap(input: Array<any> | Set<any> | WeakSet<any>, basic?: string): string;
+		public static getIdentifier(value: any): string;
 		public static getTypeName(input: any): string;
 		public static isClass(input: Function): boolean;
 		public static isFunction(input: Function): boolean;
@@ -1491,7 +1491,6 @@ declare module 'klasa' {
 		public static sleep<T>(delay: number, args?: T): Promise<T>;
 		public static toTitleCase(str: string): string;
 		public static tryParse(value: string): object;
-		private static initClean(client: KlasaClient): void;
 	}
 
 	export { Util as util };

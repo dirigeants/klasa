@@ -2,7 +2,8 @@ const GatewayStorage = require('./GatewayStorage');
 const Configuration = require('./Configuration');
 const SchemaPiece = require('./SchemaPiece');
 const SchemaFolder = require('./SchemaFolder');
-const discord = require('discord.js');
+const { Collection, Guild, GuildChannel, Message, Role, GuildMember } = require('discord.js');
+const { getIdentifier } = require('../util/util');
 
 /**
  * <danger>You should never create a Gateway instance by yourself.
@@ -42,11 +43,10 @@ class Gateway extends GatewayStorage {
 	 * @since 0.0.1
 	 * @param {GatewayDriver} store The GatewayDriver instance which initiated this instance
 	 * @param {string} type The name of this Gateway
-	 * @param {Function} validateFunction The function that validates the entries' values
 	 * @param {Object} schema The initial schema for this instance
 	 * @param {GatewayOptions} options The options for this schema
 	 */
-	constructor(store, type, validateFunction, schema, options) {
+	constructor(store, type, schema, options) {
 		super(store.client, type, options.provider);
 
 		/**
@@ -63,15 +63,15 @@ class Gateway extends GatewayStorage {
 
 		/**
 		 * @since 0.3.0
-		 * @type {Function}
-		 */
-		this.validate = validateFunction;
-
-		/**
-		 * @since 0.3.0
 		 * @type {Object}
 		 */
 		this.defaultSchema = schema;
+
+		/**
+		 * @since 0.0.1
+		 * @type {external:Collection<string, Configuration>}
+		 */
+		this.cache = new Collection();
 	}
 
 	/**
@@ -83,16 +83,6 @@ class Gateway extends GatewayStorage {
 	 */
 	get Configuration() {
 		return Configuration;
-	}
-
-	/**
-	 * Get the cache-provider that manages the cache data.
-	 * @since 0.0.1
-	 * @type {Provider}
-	 * @readonly
-	 */
-	get cache() {
-		return this.client.providers.get('collection');
 	}
 
 	/**
@@ -125,7 +115,7 @@ class Gateway extends GatewayStorage {
 						configs.existsInDB = true;
 						if (this.client.listenerCount('configCreateEntry')) this.client.emit('configCreateEntry', configs);
 					})
-					.catch(error => this.client.emit('log', error, 'error'));
+					.catch(error => this.client.emit('error', error));
 				return configs;
 			}
 			return entry;
@@ -140,7 +130,8 @@ class Gateway extends GatewayStorage {
 	 * @returns {Promise<Configuration>}
 	 */
 	async createEntry(input) {
-		const target = await this.validate(input).then(output => output && output.id ? output.id : output);
+		const target = getIdentifier(input);
+		if (!target) throw new TypeError('The selected target could not be resolved to a string.');
 		const cache = this.cache.get(this.type, target);
 		if (cache && cache.existsInDB) return cache;
 		await this.provider.create(this.type, target);
@@ -202,7 +193,9 @@ class Gateway extends GatewayStorage {
 				}
 			}
 		}
-		const target = await this.validate(input).then(output => output && output.id ? output.id : output);
+		const target = getIdentifier(input);
+		if (!target) throw new TypeError('The selected target could not be resolved to a string.');
+
 		const cache = this.cache.get(this.type, target);
 		if (cache) return cache.sync();
 
@@ -291,8 +284,11 @@ class Gateway extends GatewayStorage {
 	 */
 	_resolveGuild(guild) {
 		if (typeof guild === 'object') {
-			if (guild instanceof discord.Guild) return guild;
-			if (guild instanceof discord.GuildChannel || guild instanceof discord.Message || guild instanceof discord.Role || guild instanceof discord.GuildMember) return guild.guild;
+			if (guild instanceof Guild) return guild;
+			if (guild instanceof GuildChannel ||
+				guild instanceof Message ||
+				guild instanceof Role ||
+				guild instanceof GuildMember) return guild.guild;
 		}
 		if (typeof guild === 'string' && /^\d{17,19}$/.test(guild)) return this.client.guilds.get(guild);
 		return null;

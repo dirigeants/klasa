@@ -1,4 +1,4 @@
-const { isObject, makeObject, deepClone, tryParse } = require('../util/util');
+const { isObject, makeObject, deepClone, tryParse, getIdentifier } = require('../util/util');
 
 /**
  * <warning>Creating your own Configuration instances if often discouraged and unneeded. SettingGateway handles them internally for you.</warning>
@@ -323,7 +323,7 @@ class Configuration {
 		if (path.array === true) throw 'This key is array type.';
 
 		const parsed = await path.parse(value, guild);
-		const parsedID = Configuration.getIdentifier(parsed);
+		const parsedID = getIdentifier(parsed);
 		await this._setValue(parsedID, path, route);
 		return { parsed, parsedID, array: null, path, route };
 	}
@@ -347,7 +347,7 @@ class Configuration {
 		}
 
 		const parsed = await path.parse(value, guild);
-		const parsedID = path.type !== 'any' ? Configuration.getIdentifier(parsed) : parsed;
+		const parsedID = path.type !== 'any' ? getIdentifier(parsed) : parsed;
 
 		// Handle entry creation if it does not exist.
 		if (!this._existsInDB) await this.gateway.createEntry(this.id);
@@ -444,7 +444,7 @@ class Configuration {
 			} else {
 				const promise = schema[key].array && schema[key].type !== 'any' ?
 					Promise.all(object[key].map(entry => schema[key].parse(entry, guild)
-						.then(Configuration.getIdentifier)
+						.then(getIdentifier)
 						.catch(error => list.errors.push([schema[key].path, error])))) :
 					schema[key].parse(object[key], guild);
 
@@ -452,7 +452,7 @@ class Configuration {
 					.then(parsed => {
 						const parsedID = schema[key].array ?
 							parsed.filter(entry => typeof entry !== 'undefined') :
-							Configuration.getIdentifier(parsed);
+							getIdentifier(parsed);
 						updateObject[key] = cache[key] = parsedID;
 						list.keys.push(schema[key].path);
 						list.values.push(parsedID);
@@ -583,20 +583,6 @@ class Configuration {
 				Configuration._patch(inst[key], data[key], schema[key]) :
 				data[key];
 		}
-	}
-
-	/**
-	 * Get the identifier of a value.
-	 * @since 0.5.0
-	 * @param {*} value The value to get the identifier from
-	 * @returns {*}
-	 * @private
-	 */
-	static getIdentifier(value) {
-		if (typeof value !== 'object' || value === null) return value;
-		if (value.id) return value.id;
-		if (value.name) return value.name;
-		return value;
 	}
 
 }
