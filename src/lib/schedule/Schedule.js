@@ -243,6 +243,21 @@ class Schedule {
 		else if (!this._interval) this._interval = this.client.setInterval(this.execute.bind(this), this.timeInterval);
 	}
 
+	/**
+	 * Returns a new Iterator object that contains the values for each element contained in the task queue.
+	 * @name @@iterator
+	 * @since 0.5.0
+	 * @method
+	 * @instance
+	 * @generator
+	 * @returns {Iterator<ScheduledTask>}
+	 * @memberof Schedule
+	 */
+
+	*[Symbol.iterator]() {
+		for (let i = 0; i < this.tasks.length; i++) yield this.tasks[i];
+	}
+
 }
 
 module.exports = Schedule;

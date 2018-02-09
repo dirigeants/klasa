@@ -482,6 +482,8 @@ declare module 'klasa' {
 		private _insert(task: ScheduledTask): ScheduledTask;
 		private _clearInterval(): void;
 		private _checkInterval(): void;
+
+		public [Symbol.iterator](): Iterator<ScheduledTask>;
 	}
 
 	export class ScheduledTask {
