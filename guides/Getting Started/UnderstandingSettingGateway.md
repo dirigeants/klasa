@@ -44,7 +44,7 @@ const client = new KlasaClient({
 });
 
 // Now, we create it:
-this.client.gateways.register('channels', {
+client.gateways.register('channels', {
 	disabledCommands: {
 		type: 'Command',
 		default: [],
@@ -72,7 +72,7 @@ client.login('A_BEAUTIFUL_TOKEN_AINT_IT?');
 And then, you can access to it by:
 
 ```javascript
-this.client.gateways.channels;
+client.gateways.channels;
 ```
 
 ## Customizing the options for each built-in gateway
@@ -80,16 +80,14 @@ this.client.gateways.channels;
 This is available in 0.5.0 since the PR [#152](https://github.com/dirigeants/klasa/pull/152), and you're able to configure the three built-in gateways: `guilds`, `users` and `clientStorage`. The option to configure them is {@link KlasaClientOptions.gateways}, where you would add the option `gateways` to your KlasaClientOptions:
 
 ```javascript
-const client = new Klasa.Client({
+new Klasa.Client({
 	prefix: 'k!',
 	providers: { default: 'json' },
 	gateways: {
 		guilds: { provider: 'rethinkdb' },
 		users: { provider: 'postgresql' }
 	}
-});
-
-client.login('A_BEAUTIFUL_TOKEN_AINT_IT?');
+}).login('A_BEAUTIFUL_TOKEN_AINT_IT?');
 ```
 
 Where the *clientStorage* gateway would take the default options (json provider), the *guilds* gateway would use the rethinkdb provider, and finally the *users* one would use the postgresql provider. These options are {@link GatewayDriver.GatewayDriverAddOptions}.
