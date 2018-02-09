@@ -84,6 +84,8 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Changed the type for `GatewayDriver#types` from `string[]` to `Set<string>`. (kyranet)
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Renamed `SchemaPiece#modify()` to `SchemaPiece#edit()`. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Renamed `Gateway#getKeys()` and `Gateway#getValues()` to `Gateway#getAllKeys()` and `Gateway#getAllValues()` respectively. (kyranet)
 - [[#176](https://github.com/dirigeants/klasa/pull/176)] Marked several constructors as private (singleton, abstract or discouraged). (kyranet)
 - [[#162](https://github.com/dirigeants/klasa/pull/162)] Modified the built-in conf command to use `dependant arguments`-like arguments using custom arguments and messages. (bdistin)

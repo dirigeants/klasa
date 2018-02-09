@@ -80,6 +80,25 @@
     }]
 },
 {
+    "name": "Advanced SettingGateway",
+    "files": [{
+        "name": "Understanding SchemaFolders",
+        "path": "UnderstandingSchemaFolders.md"
+    },
+    {
+        "name": "Understanding SchemaPieces",
+        "path": "UnderstandingSchemaPieces.md"
+    },
+    {
+        "name": "SettingGateway's Types",
+        "path": "SettingGatewayKeyTypes.md"
+    },
+    {
+        "name": "Updating your Configuration",
+        "path": "SettingGatewayConfigurationUpdate.md"
+    }]
+},
+{
     "name": "Other Subjects",
     "files": [{
         "name": "Piece Stores",

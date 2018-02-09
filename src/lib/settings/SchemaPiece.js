@@ -9,7 +9,7 @@ const fs = require('fs-nextra');
 class SchemaPiece extends Schema {
 
 	/**
-	 * @typedef {Object} SchemaPieceModifyOptions
+	 * @typedef {Object} SchemaPieceEditOptions
 	 * @property {*} [default] The new default value
 	 * @property {number} [min] The new minimum range value
 	 * @property {number} [max] The new maximum range value
@@ -170,12 +170,12 @@ class SchemaPiece extends Schema {
 	/**
 	 * Modify this SchemaPiece's properties.
 	 * @since 0.5.0
-	 * @param {SchemaPieceModifyOptions} options The new options
+	 * @param {SchemaPieceEditOptions} options The new options
 	 * @returns {Promise<this>}
 	 */
-	async modify(options) {
+	async edit(options) {
 		// Check if the 'options' parameter is an object.
-		if (!isObject(options)) throw new TypeError(`SchemaPiece#modify expected an object as a parameter. Got: ${typeof options}`);
+		if (!isObject(options)) throw new TypeError(`SchemaPiece#edit expected an object as a parameter. Got: ${typeof options}`);
 
 		const edited = new Set();
 		if (typeof options.sql === 'string' && this.sql[1] !== options.sql) {
@@ -225,7 +225,7 @@ class SchemaPiece extends Schema {
 	 */
 	_schemaCheckType(type) {
 		if (typeof type !== 'string') throw new TypeError(`[KEY] ${this} - Parameter type must be a string.`);
-		if (!this.client.gateways.types.includes(type)) throw new TypeError(`[KEY] ${this} - ${type} is not a valid type.`);
+		if (!this.client.gateways.types.has(type)) throw new TypeError(`[KEY] ${this} - ${type} is not a valid type.`);
 	}
 
 	/**

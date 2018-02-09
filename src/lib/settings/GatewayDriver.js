@@ -55,9 +55,9 @@ class GatewayDriver {
 
 		/**
 		 * All the types accepted for the Gateway.
-		 * @type {string[]}
+		 * @type {Set<string>}
 		 */
-		this.types = Object.getOwnPropertyNames(SettingResolver.prototype).slice(1);
+		this.types = new Set(Object.getOwnPropertyNames(SettingResolver.prototype).slice(1));
 
 		/**
 		 * All the gateways added

@@ -568,7 +568,7 @@ declare module 'klasa' {
 		private constructor(client: KlasaClient);
 		public readonly client: KlasaClient;
 		public resolver: SettingResolver;
-		public types: string[];
+		public types: Set<string>;
 		public keys: Set<string>;
 		public ready: boolean;
 
@@ -676,7 +676,7 @@ declare module 'klasa' {
 		public setValidator(fn: Function): this;
 		public parse(value: any, guild: KlasaGuild): Promise<any>;
 		public resolveString(msg: KlasaMessage): string;
-		public modify(options: SchemaPieceModifyOptions): Promise<this>;
+		public modify(options: SchemaPieceEditOptions): Promise<this>;
 
 		private _schemaCheckType(type: string): void;
 		private _schemaCheckArray(array: boolean): void;
@@ -1701,7 +1701,7 @@ declare module 'klasa' {
 		configurable?: boolean;
 	};
 
-	export type SchemaPieceModifyOptions = {
+	export type SchemaPieceEditOptions = {
 		default?: any;
 		min?: number;
 		max?: number;

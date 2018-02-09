@@ -420,7 +420,7 @@ class KlasaClient extends Discord.Client {
 
 		// Automatic Prefix editing detection.
 		if (typeof this.options.prefix === 'string' && this.options.prefix !== this.gateways.guilds.schema.prefix.default) {
-			await this.gateways.guilds.schema.prefix.modify({ default: this.options.prefix });
+			await this.gateways.guilds.schema.prefix.edit({ default: this.options.prefix });
 		}
 		if (this.gateways.guilds.schema.hasKey('disabledCommands')) {
 			const languageStore = this.languages;
