@@ -1466,7 +1466,6 @@ declare module 'klasa' {
 	}
 
 	class Util {
-		private static initClean(client: KlasaClient): void;
 		public static applyToClass(base: object, structure: object, skips?: string[]): void;
 		public static clean(text: string): string;
 		public static codeBlock(lang: string, expression: string): string;
@@ -1491,6 +1490,7 @@ declare module 'klasa' {
 		public static sleep<T>(delay: number, args?: T): Promise<T>;
 		public static toTitleCase(str: string): string;
 		public static tryParse(value: string): object;
+		private static initClean(client: KlasaClient): void;
 	}
 
 	export { Util as util };

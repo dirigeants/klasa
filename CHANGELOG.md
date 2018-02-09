@@ -13,6 +13,9 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Added `GatewayDriver#register` to be able to register new gateways without events (directly in your `app.js`). (kyranet)
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Added `util.getIdentifier` as a replacement for the function validator. (kyranet)
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Added `SchemaFolder#keys()`, `SchemaFolder#values()`, `SchemaFolder#entries()` and `SchemaFolder#[@@iterator]()`. Identical to Map's respective methods. (kyranet)
 - [[#176](https://github.com/dirigeants/klasa/pull/176)] Added `categorychannel` type to `ArgResolver`. (kyranet)
 - [[#166](https://github.com/dirigeants/klasa/pull/166)] Added support for TypeScript's `export default` in the loader. (kyranet)
 - [[#162](https://github.com/dirigeants/klasa/pull/162)] Added better dependent arguments support. (bdistin)
@@ -81,6 +84,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Renamed `Gateway#getKeys()` and `Gateway#getValues()` to `Gateway#getAllKeys()` and `Gateway#getAllValues()` respectively. (kyranet)
 - [[#176](https://github.com/dirigeants/klasa/pull/176)] Marked several constructors as private (singleton, abstract or discouraged). (kyranet)
 - [[#162](https://github.com/dirigeants/klasa/pull/162)] Modified the built-in conf command to use `dependant arguments`-like arguments using custom arguments and messages. (bdistin)
 - [[#162](https://github.com/dirigeants/klasa/pull/162)] **[BREAKING]** Refactored ArgResolver. Now they take `arg`, `possible` and `msg` as parameters instead of `arg`, `currentUsage`, `possible`, `repeat` and `msg`. Repeating handling is now done in the backends. (bdistin)
@@ -133,6 +137,10 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Removed
 
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Removed the resolver functions from constants. (kyranet)
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Removed `SchemaFolder#keys` (`Map<string>`) to reduce RAM usage and key caching duplication. (kyranet)
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Removed SettingGateway function validators. (kyranet)
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Removed Collection cache provider (will be moved to klasa-pieces). (kyranet)
 - [[#159](https://github.com/dirigeants/klasa/pull/159)] Removed deprecated property `GatewayOptions.cache` to be locked to `'collection'`. (kyranet)
 - [[#158](https://github.com/dirigeants/klasa/pull/158)] `Configuration#updateMany` is now under `Configuration#update`, in favor of a much less confusing naming. (kyranet)
 - [[`5b0c468362`](https://github.com/dirigeants/klasa/commit/5b0c46836200a57577bbd4aaa5cd463089a3bff0)] Removed `KlasaClient.sharded` as `Client.shard` is now fixed. (bdistin)
@@ -154,6 +162,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Fixed Gateway syncing keys even when it's unused. (kyranet)
 - [[#176](https://github.com/dirigeants/klasa/pull/176)] Fixed internal parser ignoring `0` as `min` and/or `max` due to falsy value check. (kyranet)
 - [[#170](https://github.com/dirigeants/klasa/pull/170)] Fixed guild resolvables not working correctly. (kyranet)
 - [[#165](https://github.com/dirigeants/klasa/pull/165)] Updated url for peer dependency `discord.js` and fixed all `JSDocs`. (kyranet)

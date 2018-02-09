@@ -132,12 +132,12 @@ class Gateway extends GatewayStorage {
 	async createEntry(input) {
 		const target = getIdentifier(input);
 		if (!target) throw new TypeError('The selected target could not be resolved to a string.');
-		const cache = this.cache.get(this.type, target);
+		const cache = this.cache.get(target);
 		if (cache && cache.existsInDB) return cache;
 		await this.provider.create(this.type, target);
 		const configs = cache || new this.Configuration(this, { id: target });
 		configs.existsInDB = true;
-		if (!cache) this.cache.set(this.type, target, configs);
+		if (!cache) this.cache.set(target, configs);
 		if (this.client.listenerCount('configCreateEntry')) this.client.emit('configCreateEntry', configs);
 		return configs;
 	}
@@ -151,8 +151,8 @@ class Gateway extends GatewayStorage {
 	 */
 	insertEntry(id, data = {}) {
 		const configs = new this.Configuration(this, Object.assign(data, { id }));
-		this.cache.set(this.type, id, configs);
-		if (this.ready) configs.sync().catch(err => this.client.emit('error', err));
+		this.cache.set(id, configs);
+		if (this.ready && this.schema.keyArray.length) configs.sync().catch(err => this.client.emit('error', err));
 		return configs;
 	}
 
@@ -163,7 +163,7 @@ class Gateway extends GatewayStorage {
 	 * @returns {Promise<boolean>}
 	 */
 	async deleteEntry(input) {
-		const configs = this.cache.get(this.type, input);
+		const configs = this.cache.get(input);
 		if (!configs) return false;
 
 		await configs.destroy();
@@ -179,28 +179,28 @@ class Gateway extends GatewayStorage {
 	 */
 	async sync(input, download) {
 		if (typeof input === 'undefined') {
-			if (!download) return Promise.all(this.cache.getValues(this.type).map(entry => entry.sync()));
+			if (!download) return Promise.all(this.cache.map(entry => entry.sync()));
 			const entries = await this.provider.getAll(this.type);
 			for (const entry of entries) {
-				const cache = this.cache.get(this.type, entry);
+				const cache = this.cache.get(entry);
 				if (cache) {
 					if (!cache.existsInDB) cache.existsInDB = true;
 					cache._patch(entry);
 				} else {
 					const newEntry = new this.Configuration(this, entry);
 					newEntry.existsInDB = true;
-					this.cache.set(this.type, entry.id, newEntry);
+					this.cache.set(entry.id, newEntry);
 				}
 			}
 		}
 		const target = getIdentifier(input);
 		if (!target) throw new TypeError('The selected target could not be resolved to a string.');
 
-		const cache = this.cache.get(this.type, target);
+		const cache = this.cache.get(target);
 		if (cache) return cache.sync();
 
 		const configs = new this.Configuration(this, { id: target });
-		this.cache.set(this.type, target, configs);
+		this.cache.set(target, configs);
 		return configs.sync();
 	}
 
@@ -249,7 +249,6 @@ class Gateway extends GatewayStorage {
 
 		await this.initSchema();
 		await this.initTable();
-		if (!this.cache.hasTable(this.type)) this.cache.createTable(this.type);
 
 		if (download) await this.sync();
 		this.ready = true;
@@ -262,12 +261,12 @@ class Gateway extends GatewayStorage {
 	 * @private
 	 */
 	async _ready() {
-		if (typeof this.client[this.type] === 'undefined') return null;
+		if (!this.schema.keyArray.length || typeof this.client[this.type] === 'undefined') return null;
 		const promises = [];
 		const keys = await this.provider.getKeys(this.type);
 		for (let i = 0; i < keys.length; i++) {
 			const structure = this.client[this.type].get(keys[i]);
-			if (structure) promises.push(structure.configs.sync().then(() => this.cache.set(this.type, keys[i], structure.configs)));
+			if (structure) promises.push(structure.configs.sync().then(() => this.cache.set(keys[i], structure.configs)));
 		}
 		const results = await Promise.all(promises);
 		if (!this.ready) this.ready = true;

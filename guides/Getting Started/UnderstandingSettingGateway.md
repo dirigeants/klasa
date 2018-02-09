@@ -195,19 +195,8 @@ async () => {
 By using {@link GatewayDriver}, (available from `client.gateways`).
 
 Let's say I want to add a new Gateway instance called `channels` that stores data to complement our permissions.
-You'll want a validate function to ensure what you're inputting is a valid channel, and you would want a channel specific schema to handle our channel specific permissions, like the two below.
 
 ```javascript
-// Must use the function keyword or be a method of a class.
-async function validate(channelResolvable) {
-	// 'this' is referred to the GatewayDriver's instance, it has access
-	// to client, resolver...
-	const result = await this.resolver.channel(channelResolvable);
-	if (result) return result;
-
-	throw 'The parameter <Channel> expects either a Channel ID or a Channel Instance.';
-}
-
 // Define the schema for the new Gateway.
 const schema = {
 	disabledCommands: {
@@ -230,14 +219,8 @@ const schema = {
 };
 
 // Now, we create it:
-this.client.gateways.add('channels', validate, schema);
+this.client.gateways.add('channels', schema);
 ```
-
-> Since [[#43](https://github.com/dirigeants/klasa/pull/43)], validate only accepts a single argument, instead of resolver being the first one.
-
-> The `validate` function must be a [**function**](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/function), not a [**Arrow Function**](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Functions/Arrow_functions), the difference between them is that an arrow function binds `this` to wherever the function has been created (for example, the `exports` from your eval command, if you are doing this with eval), while the normal functions does not do this.
-
-> If the `validate` function does not resolve **Guild** type, you might want to use the third argument of {@link Configuration#update}, which takes a Guild resolvable.
 
 And then, you can access to it by:
 
@@ -250,7 +233,7 @@ this.client.gateways.channels;
 This is new from the SettingGateway v2 (check [#43](https://github.com/dirigeants/klasa/pull/43)), when creating a new Gateway (check above for how to do it), there's an extra parameter in `client.gateways.add` called `options`. It's optional, but it accepts an object with one key: `provider`, which is the Provider/SQLProvider (json, leveldb, rethinkdb...). For example:
 
 ```javascript
-this.client.gateways.add('channels', validate, schema, { provider: 'rethinkdb' });
+this.client.gateways.add('channels', schema, { provider: 'rethinkdb' });
 ```
 
 The code above will create a new Gateway instance called 'channels', which will use RethinkDB to store the persistent data.
