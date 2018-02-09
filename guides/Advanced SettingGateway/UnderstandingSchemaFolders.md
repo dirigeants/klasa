@@ -2,14 +2,14 @@
 
 A schema works like a diagram or a blueprint, in SettingGateway, the schema defines the keys present in the configuration for a specific gateway. This feature serves multiple purposes:
 
-1. Define what keys does the {@link Gateway} manage and their properties.
+1. Define what keys the {@link Gateway} manages and their properties.
 1. Define what type the keys must hold.
 1. Define the SQL schema when using a SQL database.
 1. Speed up performance when iterating over keys.
 
 ## Adding keys
 
-Adding keys with the schema is like adding a piece into a box, but you can also have boxes inside another boxes. That being said, you get the box you want to modify and insert the new pieces or boxes into it. The methods to achieve that are {@link SchemaFolder#addKey} to add pieces (keys) and {@link SchemaFolder#addFolder} to add boxes (more folders).
+Adding keys with the schema is like adding a piece into a box, but you can also have boxes inside other boxes. That being said, you get the box you want to modify and insert the new pieces or boxes into it. The methods to achieve that are {@link SchemaFolder#addKey} to add pieces (keys) and {@link SchemaFolder#addFolder} to add boxes (folders).
 
 You would normally use these two methods using the following snippet:
 
@@ -24,10 +24,10 @@ this.client.gateways.gatewayName.schema.addFolder(name, options, force);
 The parameters are:
 
 - **name**: The name of the new key. If it conflicts with a pre-existent key, this will error.
-- **options**: The options for the new key or folder.
-- **force**: Whether this change should affect all entries. It requires a lot of processing but ensures the changes are correctly applied in both cache and database.
+- **options**: The options for the new key or folder. Check {@link SchemaFolderAddOptions}.
+- **force**: Whether this change should affect all entries. It requires a lot of processing but ensures the changes are correctly applied in both the cache and database.
 
-You can also extend any of the three built-in {@link Gateway}s from Klasa, for example, if you want to add a new key called **modlogs** that accepts only text channels, for your guild configs, you would use the following code:
+You can also extend any of the three built-in {@link Gateway}s from Klasa. For example, if you want to add a new key called **modlogs** that accepts only text channels, for your guild configs, you would use the following code:
 
 ```javascript
 this.client.gateways.guilds.schema.addKey('modlogs', { type: 'TextChannel' });
@@ -38,7 +38,7 @@ Where you're doing the following steps:
 1. Access to {@link KlasaClient#gateways}, type of {@link GatewayDriver}, which holds all gateways.
 1. Access to the guilds' {@link Gateway}, which manages the per-guild configuration.
 1. Access to the guilds' schema via {@link Gateway#schema}, which manages the gateway's schema.
-1. Add a new key called **modlogs** in the root of the schema, with type of **TextChannel**.
+1. Add a new key called **modlogs** in the root of the schema, with a type of **TextChannel**.
 
 And you would have a perfectly configured modlogs key in your configs. However, you can also have an array of the same type. For example, you want to have a configurable array of users blacklisted in a guild, in a key named **userBlacklist**:
 
@@ -46,7 +46,7 @@ And you would have a perfectly configured modlogs key in your configs. However, 
 this.client.gateways.guilds.schema.addKey('userBlacklist', { type: 'User', array: true });
 ```
 
-And now you can access to any of them in your guild configs like in the following snippet!
+And now you can have access to any of them in your guild configs like in the following snippet!
 
 ```javascript
 msg.guild.configs.modlogs;
@@ -57,7 +57,7 @@ msg.guild.configs.userBlacklist;
 
 ## Removing keys
 
-Removing keys with the schema is quite easy, as you would access to the {@link SchemaFolder} that holds it and remove it by its name (remember that `force` is optional and defaults to `true`) using {@link SchemaFolder#removeKey} as the following example:
+Removing keys with the schema is quite easy, as you would have access to the {@link SchemaFolder} that holds it and remove it by its name (remember that `force` is optional and defaults to `true`) using {@link SchemaFolder#removeKey} as in the following example:
 
 ```javascript
 this.client.gateways.gatewayName.schema.removeKey(name, force);
@@ -69,18 +69,11 @@ In case you have a key you do not longer use and you want to get rid of it, for 
 this.client.gateways.guilds.schema.removeKey('userBlacklist');
 ```
 
-And the property `userBlacklist` for all guild configs will be deleted, that being said:
-
-```javascript
-msg.guild.configs.userBlacklist;
-// undefined
-'userBlacklist' in msg.guild.configs;
-// false
-```
+And the property `userBlacklist` for all guild configs will be deleted.
 
 ## Adding folders
 
-Folder creation is very similar to key creation, but with one key difference: it has no options for itself, but instead, it can create its children keys (like you can add a box with another boxes and pieces, into another). You can add a new key inside a new folder in two different ways:
+Folder creation is very similar to key creation, but with one key difference: it has no options for itself, but instead, it can create its children keys (just like you can add a box with other boxes and pieces, into another). You can add a new key inside a new folder in two different ways:
 
 ### Slower
 
@@ -125,7 +118,7 @@ async function init() {
 }
 ```
 
-> **Reminder**: To access to a key inside a folder in your configuration command, you use the access operator (`.`). For example: *k!conf set channels.modlogs #modlogs*
+> **Reminder**: To access a key inside a folder in your configuration command, you use the access operator (`.`). For example: *k!conf set channels.modlogs #modlogs*
 
 ## Removing folders
 
@@ -145,7 +138,7 @@ This will remove all the data from all the sub-keys and sub-folders, even very n
 
 ## Ensuring the existence of a key.
 
-In [Klasa-Pieces](https://github.com/dirigeants/klasa-pieces/), specially, some pieces require a key from the configuration to work, however, the creator of the pieces does not know if the user who downloads the piece has it, so this function becomes useful in this case.
+In [klasa pieces](https://github.com/dirigeants/klasa-pieces/) specially, some pieces require a key from the configuration to work, however, the creator of the pieces does not know if the user who downloads the piece has it, so this function becomes useful in this case.
 
 ```javascript
 async function init() {

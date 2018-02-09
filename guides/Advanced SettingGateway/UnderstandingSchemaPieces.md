@@ -1,6 +1,6 @@
 # Understanding Schema's Keys
 
-As mentioned in the previous tutorial, {@tutorial UnderstandingSchema}, SettingGateway's schema is divided in two parts: **folders** and **pieces**. Pieces are contained into folders, but it cannot have keys nor folders, instead, this holds the key's metadata such as its type, if it's configurable by the configuration command... you can check more information in the documentation: {@link SchemaPiece}.
+As mentioned in the previous tutorial, {@tutorial UnderstandingSchema}, SettingGateway's schema is divided in two parts: **folders** and **pieces**. Pieces are contained in folders, but they cannot have keys nor folders. Instead, this holds the key's metadata such as its type, if it's configurable by the configuration command... you can check more information in the documentation: {@link SchemaPiece}.
 
 ## Key options
 

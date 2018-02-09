@@ -10,7 +10,7 @@ Thanks to the abstraction of SettingGateway, the developer has many options, for
 
 As mentioned before, SettingGateway is abstracted, it does not rely on a very specific database, but can use any of them. In a production bot, you may want to use a process-based database such as rethinkdb, mongodb or postgresql, you can check and download them from the [klasa-pieces](https://github.com/dirigeants/klasa-pieces/) repository so you don't need to make one from scratch.
 
-Now... how we update it? Go to your main file, where {@link KlasaClient} is initialized, and add a new option to your {@link KlasaClientOptions}. The following code snippet as an example:
+Now... how do we update it? Go to your main file, where {@link KlasaClient} is initialized, and add a new option to your {@link KlasaClientOptions}. The following code snippet as an example:
 
 ```javascript
 const client = new KlasaClient({ providers: { default: 'rethinkdb' } });

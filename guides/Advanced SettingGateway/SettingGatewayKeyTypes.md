@@ -4,7 +4,7 @@ By default, there are several built-in types that the developer can use, and wit
 
 | Name                | Type                                              | Description                                                                              |
 | ------------------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| **any**             | Anything, no type restriction                     | Resolves anything, even objects, the usage of this type will make a key unconfigurable   |
+| **any**             | Anything, no type restriction                     | Resolves anything, even objects. The usage of this type will make a key unconfigurable   |
 | **boolean**         | A {@link Boolean} resolvable                      | Resolves a boolean primitive value                                                       |
 | **categorychannel** | A {@link external:CategoryChannel} instance or id | Resolves a CategoryChannel                                                               |
 | **channel**         | A {@link external:Channel} instance or id         | Resolves a channel. Be careful with using this, as it accepts any type of channel        |
@@ -25,7 +25,7 @@ By default, there are several built-in types that the developer can use, and wit
 
 ## Adding new types
 
-To add new keys, you use an {@link Extendable} extending {@link SettingResolver}. If you don't know how to create an extendable, check the following tutorial: {@tutorial CreatingExtendables}. The following extendable is a template for this:
+To add new types, you use an {@link Extendable} extending {@link SettingResolver}. If you don't know how to create an extendable, check the following tutorial: {@tutorial CreatingExtendables}. The following extendable is a template for this:
 
 ```javascript
 const { Extendable } = require('klasa');

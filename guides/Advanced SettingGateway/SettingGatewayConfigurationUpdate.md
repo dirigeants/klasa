@@ -9,14 +9,14 @@ Once we have our schema done with all the keys, folders and types needed, we may
 msg.guild.configs.update('roles.administrator', '339943234405007361', msg.guild);
 
 // Updating an array
-// userBlacklist, as mentioned in another tutorial, it's a piece with an array or users. Using
+// userBlacklist, as mentioned in another tutorial, it's a piece with an array of users. Using
 // the following code will add or remove it, depending on the existence of the key in the configuration.
 msg.guild.configs.update('userBlacklist', '272689325521502208');
 
 // Ensuring the function call adds (error if it exists)
 msg.guild.configs.update('userBlacklist', '272689325521502208', { action: 'add' });
 
-// Ensuring the function call removes (error if it not exists)
+// Ensuring the function call removes (error if it doesn't exist)
 msg.guild.configs.update('userBlacklist', '272689325521502208', { action: 'remove' });
 
 // Updating it with a json object
