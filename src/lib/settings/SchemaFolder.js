@@ -1,6 +1,6 @@
 const SchemaPiece = require('./SchemaPiece');
 const Schema = require('./Schema');
-const { toTitleCase, deepClone } = require('../util/util');
+const { deepClone } = require('../util/util');
 const fs = require('fs-nextra');
 
 /**
@@ -223,40 +223,6 @@ class SchemaFolder extends Schema {
 		}
 
 		throw new TypeError(`Action must be either 'add' or 'delete'. Got: ${action}`);
-	}
-
-	/**
-	 * Get a list.
-	 * @since 0.5.0
-	 * @param {KlasaMessage} msg The Message instance
-	 * @returns {string}
-	 */
-	getList(msg) {
-		const array = [];
-		const folders = [];
-		const keys = {};
-		let longest = 0;
-		for (const key of this.keyArray) {
-			if (this[key].type === 'Folder') {
-				folders.push(`// ${key}`);
-			} else if (this[key].configurable) {
-				if (!(this[key].type in keys)) keys[this[key].type] = [];
-				if (key.length > longest) longest = key.length;
-				keys[this[key].type].push(key);
-			}
-		}
-		const keysTypes = Object.keys(keys);
-		if (folders.length === 0 && keysTypes.length === 0) return '';
-		if (folders.length) array.push('= Folders =', ...folders.sort(), '');
-		if (keysTypes.length) {
-			for (const keyType of keysTypes.sort()) {
-				keys[keyType].sort();
-				array.push(`= ${toTitleCase(keyType)}s =`);
-				for (let i = 0; i < keys[keyType].length; i++) array.push(`${keys[keyType][i].padEnd(longest)} :: ${this[keys[keyType][i]].resolveString(msg)}`);
-				array.push('');
-			}
-		}
-		return array.join('\n');
 	}
 
 	/**

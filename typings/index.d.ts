@@ -530,6 +530,7 @@ declare module 'klasa' {
 		public update(key: object, guild?: GatewayGuildResolvable): Promise<ConfigurationUpdateManyResult>;
 		public update(key: string, value?: any, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
 		public update(key: string, value?: any, guild?: GatewayGuildResolvable, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
+		public list(msg: KlasaMessage, path: SchemaFolder | string): string;
 
 		private _updateMany(object: any, guild?: GatewayGuildResolvable): Promise<ConfigurationUpdateManyResult>;
 		private _reset(key: string, guild: GatewayGuildResolvable, avoidUnconfigurable: boolean): Promise<ConfigurationParseResult>;
@@ -654,7 +655,6 @@ declare module 'klasa' {
 		public addKey(key: string, options: SchemaFolderAddOptions, force?: boolean): Promise<SchemaFolder>;
 		public removeKey(key: string, force?: boolean): Promise<SchemaFolder>;
 		public force(action: 'add' | 'edit' | 'delete', key: string, piece: SchemaFolder | SchemaPiece): Promise<any>;
-		public getList(msg: KlasaMessage): string;
 		public getDefaults(data?: object): object;
 		public getSQL(array?: string[]): string[];
 		public getAllKeys(array?: string[]): string[];

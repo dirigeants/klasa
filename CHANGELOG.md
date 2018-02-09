@@ -141,6 +141,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Removed
 
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Removed `SchemaFolder#getList` and replaced it to `Configuration#list`. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Removed the `ConfigUpdateEntryMany` typedef in favor of a more constant type. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Removed the resolver functions from constants. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Removed `SchemaFolder#keys` (`Map<string>`) to reduce RAM usage and key caching duplication. (kyranet)

@@ -1,4 +1,5 @@
-const { isObject, makeObject, deepClone, tryParse, getIdentifier } = require('../util/util');
+const { isObject, makeObject, deepClone, tryParse, getIdentifier, toTitleCase } = require('../util/util');
+const SchemaFolder = require('./SchemaFolder');
 
 /**
  * <warning>Creating your own Configuration instances if often discouraged and unneeded. SettingGateway handles them internally for you.</warning>
@@ -252,6 +253,42 @@ class Configuration {
 
 		if (isObject(key)) return this._updateMany(key, value);
 		return this._updateSingle(key, value, guild, options);
+	}
+
+	/**
+	 * Get a list.
+	 * @since 0.5.0
+	 * @param {KlasaMessage} msg The Message instance
+	 * @param {(SchemaFolder|string)} path The path to resolve
+	 * @returns {string}
+	 */
+	list(msg, path) {
+		const folder = path instanceof SchemaFolder ? path : this.gateway.getPath(path, { piece: false }).path;
+		const array = [];
+		const folders = [];
+		const keys = {};
+		let longest = 0;
+		for (const [key, value] of folder.entries()) {
+			if (value.type === 'Folder') {
+				folders.push(`// ${key}`);
+			} else if (value.configurable) {
+				if (!(value.type in keys)) keys[value.type] = [];
+				if (key.length > longest) longest = key.length;
+				keys[value.type].push(key);
+			}
+		}
+		const keysTypes = Object.keys(keys);
+		if (folders.length === 0 && keysTypes.length === 0) return '';
+		if (folders.length) array.push('= Folders =', ...folders.sort(), '');
+		if (keysTypes.length) {
+			for (const keyType of keysTypes.sort()) {
+				keys[keyType].sort();
+				array.push(`= ${toTitleCase(keyType)}s =`);
+				for (const key of keys[keyType]) array.push(`${key.padEnd(longest)} :: ${folder[key].resolveString(msg)}`);
+				array.push('');
+			}
+		}
+		return array.join('\n');
 	}
 
 	/**
