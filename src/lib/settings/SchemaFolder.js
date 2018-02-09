@@ -443,7 +443,7 @@ class SchemaFolder extends Schema {
 	 * Identical to [Map.entries()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/entries)
 	 * @since 0.5.0
 	 * @generator
-	 * @yields {(string|SchemaFolder|SchemaPiece)[]}
+	 * @yields {Array<string|SchemaFolder|SchemaPiece>}
 	 */
 	*entries() {
 		for (const key of this.keyArray) yield [key, this[key]];
@@ -476,7 +476,7 @@ class SchemaFolder extends Schema {
 	 * Identical to [Map.entries()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/entries)
 	 * @since 0.5.0
 	 * @generator
-	 * @returns {IterableIterator<(string|SchemaFolder|SchemaPiece)[]>}
+	 * @returns {IterableIterator<Array<string|SchemaFolder|SchemaPiece>>}
 	 */
 	[Symbol.iterator]() {
 		return this.entries();
