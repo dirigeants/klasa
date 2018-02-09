@@ -48,6 +48,16 @@ class GatewayDriver {
 		Object.defineProperty(this, 'client', { value: client });
 
 		/**
+		 * The register creation queue.
+		 * @since 0.5.0
+		 * @name GatewayDriver#_queue
+		 * @type {Map<string, Function>}
+		 * @readonly
+		 * @private
+		 */
+		Object.defineProperty(this, '_queue', { value: new Map() });
+
+		/**
 		 * The resolver instance this Gateway uses to parse the data.
 		 * @type {SettingResolver}
 		 */
@@ -177,26 +187,25 @@ class GatewayDriver {
 
 	/**
 	 * Registers a new Gateway.
+	 * @since 0.5.0
 	 * @param {string} name The name for the new gateway
 	 * @param {Object} [schema={}] The schema for use in this gateway
 	 * @param {GatewayDriverAddOptions} [options={}] The options for the new gateway
-	 * @returns {Gateway}
+	 * @chainable
+	 * @returns {this}
 	 */
 	register(name, schema = {}, options = {}) {
-		if (typeof name !== 'string') throw 'You must pass a name for your new gateway and it must be a string.';
+		if (!this.ready) {
+			if (this._queue.has(name)) throw new Error(`There is already a Gateway with the name '${name}'.`);
+			this._queue.set(name, () => {
+				this._register(name, schema, options);
+				this._queue.delete(name);
+			});
+		} else {
+			this._register(name, schema, options);
+		}
 
-		if (name in this) throw 'There is already a Gateway with that name.';
-		if (!this.client.methods.util.isObject(schema)) throw 'Schema must be a valid object or left undefined for an empty object.';
-
-		options.provider = this._checkProvider(options.provider || this.client.options.providers.default);
-		const provider = this.client.providers.get(options.provider);
-		if (provider.cache) throw `The provider ${provider.name} is designed for caching, not persistent data. Please try again with another.`;
-
-		const gateway = new Gateway(this, name, schema, options);
-		this.keys.add(name);
-		this[name] = gateway;
-
-		return gateway;
+		return this;
 	}
 
 	/**
@@ -221,7 +230,7 @@ class GatewayDriver {
 	 * GatewayDriver.add('users', schema);
 	 */
 	async add(name, schema = {}, options = {}, download = true) {
-		const gateway = this.register(name, schema, options);
+		const gateway = this._register(name, schema, options);
 		await gateway.init(download);
 
 		return gateway;
@@ -234,15 +243,42 @@ class GatewayDriver {
 	 * @private
 	 */
 	async _ready() {
-		if (this.ready) throw 'Configuration has already run the ready method.';
+		if (this.ready) throw new Error('Configuration has already run the ready method.');
 		this.ready = true;
 		const promises = [];
-		for (const cache of this.caches) {
+		for (const register of this._queue.values()) register();
+		for (const key of this.keys) {
 			// If the gateway did not init yet, init it now
-			if (!this[cache].ready) await this[cache].init();
-			promises.push(this[cache]._ready());
+			if (!this[key].ready) await this[key].init();
+			promises.push(this[key]._ready());
 		}
 		return Promise.all(promises);
+	}
+
+	/**
+	 * Registers a new Gateway
+	 * @since 0.5.0
+	 * @param {string} name The name for the new gateway
+	 * @param {Object} schema The schema for use in this gateway
+	 * @param {GatewayDriverAddOptions} options The options for the new gateway
+	 * @returns {Gateway}
+	 * @private
+	 */
+	_register(name, schema, options) {
+		if (typeof name !== 'string') throw new Error('You must pass a name for your new gateway and it must be a string.');
+
+		if (this[name] !== undefined && this[name] !== null) throw new Error(`There is already a Gateway with the name '${name}'.`);
+		if (!this.client.methods.util.isObject(schema)) throw new Error('Schema must be a valid object or left undefined for an empty object.');
+
+		options.provider = this._checkProvider(options.provider || this.client.options.providers.default);
+		const provider = this.client.providers.get(options.provider);
+		if (provider.cache) throw new Error(`The provider ${provider.name} is designed for caching, not persistent data. Please try again with another.`);
+
+		const gateway = new Gateway(this, name, schema, options);
+		this.keys.add(name);
+		this[name] = gateway;
+
+		return gateway;
 	}
 
 	/**
@@ -254,7 +290,7 @@ class GatewayDriver {
 	 */
 	_checkProvider(engine) {
 		if (this.client.providers.has(engine)) return engine;
-		throw `This provider (${engine}) does not exist in your system.`;
+		throw new Error(`This provider (${engine}) does not exist in your system.`);
 	}
 
 	/**

@@ -581,6 +581,7 @@ declare module 'klasa' {
 		public types: Set<string>;
 		public keys: Set<string>;
 		public ready: boolean;
+		private _queue: Map<string, (() => Gateway)>;
 
 		public readonly guildsSchema: {
 			prefix: SchemaPieceJSON,
@@ -599,8 +600,9 @@ declare module 'klasa' {
 		public users: Gateway;
 		public clientStorage: Gateway;
 
-		public register(name: string, schema?: object, options?: GatewayDriverAddOptions): Gateway;
+		public register(name: string, schema?: object, options?: GatewayDriverAddOptions): this;
 		public add(name: string, schema?: object, options?: GatewayDriverAddOptions, download?: boolean): Promise<Gateway>;
+		private _register(name: string, schema?: object, options?: GatewayDriverAddOptions): Gateway;
 		private _ready(): Promise<Array<Array<Collection<string, Configuration>>>>;
 		private _checkProvider(engine: string): string;
 
