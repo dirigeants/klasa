@@ -442,7 +442,6 @@ class SchemaFolder extends Schema {
 	 * Returns a new Iterator object that contains the `[key, value]` pairs for each element contained in this folder.
 	 * Identical to [Map.entries()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/entries)
 	 * @since 0.5.0
-	 * @generator
 	 * @yields {Array<string|SchemaFolder|SchemaPiece>}
 	 */
 	*entries() {
@@ -453,7 +452,6 @@ class SchemaFolder extends Schema {
 	 * Returns a new Iterator object that contains the values for each element contained in this folder.
 	 * Identical to [Map.values()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/values)
 	 * @since 0.5.0
-	 * @generator
 	 * @yields {(SchemaFolder|SchemaPiece)}
 	 */
 	*values() {
@@ -464,7 +462,6 @@ class SchemaFolder extends Schema {
 	 * Returns a new Iterator object that contains the keys for each element contained in this folder.
 	 * Identical to [Map.keys()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/keys)
 	 * @since 0.5.0
-	 * @generator
 	 * @yields {string}
 	 */
 	*keys() {
@@ -474,10 +471,15 @@ class SchemaFolder extends Schema {
 	/**
 	 * Returns a new Iterator object that contains the `[key, value]` pairs for each element contained in this folder.
 	 * Identical to [Map.entries()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/entries)
+	 * @name @@iterator
 	 * @since 0.5.0
+	 * @method
+	 * @instance
 	 * @generator
 	 * @returns {IterableIterator<Array<string|SchemaFolder|SchemaPiece>>}
+	 * @memberof SchemaFolder
 	 */
+
 	[Symbol.iterator]() {
 		return this.entries();
 	}
