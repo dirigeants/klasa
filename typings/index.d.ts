@@ -758,6 +758,8 @@ declare module 'klasa' {
 		public disable(): Piece;
 		public reload(): Promise<any>;
 		public unload(): any;
+
+		public toJSON(): object;
 		public toString(): string;
 	}
 
@@ -780,6 +782,8 @@ declare module 'klasa' {
 		public disable(): Piece;
 		public reload(): Promise<any>;
 		public unload(): any;
+
+		public toJSON(): object;
 		public toString(): string;
 	}
 
@@ -803,6 +807,8 @@ declare module 'klasa' {
 		public disable(): Piece;
 		public reload(): Promise<any>;
 		public unload(): any;
+
+		public toJSON(): object;
 		public toString(): string;
 	}
 
@@ -823,6 +829,8 @@ declare module 'klasa' {
 		public disable(): Piece;
 		public reload(): Promise<any>;
 		public unload(): any;
+
+		public toJSON(): object;
 		public toString(): string;
 	}
 
@@ -843,6 +851,8 @@ declare module 'klasa' {
 		public disable(): Piece;
 		public reload(): Promise<any>;
 		public unload(): any;
+
+		public toJSON(): object;
 		public toString(): string;
 	}
 
@@ -864,6 +874,8 @@ declare module 'klasa' {
 		public disable(): Piece;
 		public reload(): Promise<any>;
 		public unload(): any;
+
+		public toJSON(): object;
 		public toString(): string;
 	}
 
@@ -887,6 +899,9 @@ declare module 'klasa' {
 		public disable(): Piece;
 		public reload(): Promise<any>;
 		public unload(): any;
+
+		public shouldRun(msg: KlasaMessage): boolean;
+		public toJSON(): object;
 		public toString(): string;
 	}
 
@@ -911,6 +926,8 @@ declare module 'klasa' {
 		public disable(): Piece;
 		public reload(): Promise<any>;
 		public unload(): any;
+
+		public toJSON(): object;
 		public toString(): string;
 	}
 
@@ -931,6 +948,8 @@ declare module 'klasa' {
 		public disable(): Piece;
 		public reload(): Promise<any>;
 		public unload(): any;
+
+		public toJSON(): object;
 		public toString(): string;
 	}
 
