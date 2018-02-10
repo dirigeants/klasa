@@ -121,6 +121,20 @@ class Monitor {
 	}
 
 	/**
+	 * If the monitor should run based on the filter options
+	 * @since 0.5.0
+	 * @param {KlasaMessage} msg The message to check
+	 * @returns {boolean}
+	 */
+	shouldRun(msg) {
+		return this.enabled &&
+			!(this.ignoreBots && msg.author.bot) &&
+			!(this.ignoreSelf && this.client.user === msg.author) &&
+			!(this.ignoreOthers && this.client.user !== msg.author) &&
+			!(this.ignoreWebhooks && msg.webhookID);
+	}
+
+	/**
 	 * Defines the JSON.stringify behavior of this monitor.
 	 * @returns {Object}
 	 */
