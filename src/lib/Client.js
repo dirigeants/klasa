@@ -416,8 +416,9 @@ class KlasaClient extends Discord.Client {
 		}
 		if (this.gateways.guilds.schema.hasKey('disabledCommands')) {
 			const languageStore = this.languages;
+			const commandStore = this.commands;
 			this.gateways.guilds.schema.disabledCommands.setValidator(function (command, guild) { // eslint-disable-line
-				if (command && command.guarded) throw (guild ? guild.language : languageStore.default).language.get('COMMAND_CONF_GUARDED', command.name);
+				if ((cmd => cmd && cmd.guarded)(commandStore.get(command))) throw (guild ? guild.language : languageStore.default).get('COMMAND_CONF_GUARDED', command);
 			});
 		}
 
