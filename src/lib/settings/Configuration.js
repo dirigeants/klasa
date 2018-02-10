@@ -1,5 +1,6 @@
 const { isObject, makeObject, deepClone, tryParse, getIdentifier, toTitleCase } = require('../util/util');
 const SchemaFolder = require('./SchemaFolder');
+const SchemaPiece = require('./SchemaPiece');
 
 /**
  * <warning>Creating your own Configuration instances if often discouraged and unneeded. SettingGateway handles them internally for you.</warning>
@@ -284,11 +285,50 @@ class Configuration {
 			for (const keyType of keysTypes.sort()) {
 				keys[keyType].sort();
 				array.push(`= ${toTitleCase(keyType)}s =`);
-				for (const key of keys[keyType]) array.push(`${key.padEnd(longest)} :: ${folder[key].resolveString(msg)}`);
+				for (const key of keys[keyType]) array.push(`${key.padEnd(longest)} :: ${this._resolveString(msg, folder[key])}`);
 				array.push('');
 			}
 		}
 		return array.join('\n');
+	}
+
+	/**
+	 * Resolve a string.
+	 * @since 0.5.0
+	 * @param {KlasaMessage} msg The Message to use
+	 * @param {(SchemaPiece|string)} path The path to resolve
+	 * @returns {string}
+	 * @private
+	 */
+	_resolveString(msg, path) {
+		const piece = path instanceof SchemaPiece ? path : this.gateway.getPath(path, { piece: true }).path;
+		const value = this.get(piece.path);
+		if (value === null) return 'Not set';
+		if (piece.array && value.length === 0) return 'None';
+
+		let resolver;
+		switch (this.type) {
+			case 'Folder': resolver = () => 'Folder';
+				break;
+			case 'user': resolver = (val) => (this.client.users.get(val) || { username: (val && val.username) || val }).username;
+				break;
+			case 'categorychannel':
+			case 'textchannel':
+			case 'voicechannel':
+			case 'channel': resolver = (val) => (msg.guild.channels.get(val) || { name: (val && val.name) || val }).name;
+				break;
+			case 'role': resolver = (val) => (msg.guild.roles.get(val) || { name: (val && val.name) || val }).name;
+				break;
+			case 'guild': resolver = (val) => (val && val.name) || val;
+				break;
+			case 'boolean': resolver = (val) => val ? 'Enabled' : 'Disabled';
+				break;
+			default:
+				resolver = (val) => val;
+		}
+
+		if (this.array) return `[ ${value.map(resolver).join(' | ')} ]`;
+		return resolver(value);
 	}
 
 	/**

@@ -532,6 +532,7 @@ declare module 'klasa' {
 		public update(key: string, value?: any, guild?: GatewayGuildResolvable, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
 		public list(msg: KlasaMessage, path: SchemaFolder | string): string;
 
+		private _resolveString(msg: KlasaMessage, path: SchemaPiece | string): string;
 		private _updateMany(object: any, guild?: GatewayGuildResolvable): Promise<ConfigurationUpdateManyResult>;
 		private _reset(key: string, guild: GatewayGuildResolvable, avoidUnconfigurable: boolean): Promise<ConfigurationParseResult>;
 		private _parseReset(key: string, guild: KlasaGuild, options: ConfigurationPathResult): Promise<ConfigurationParseResult>;
@@ -661,7 +662,6 @@ declare module 'klasa' {
 		public getSQL(array?: string[]): string[];
 		public getAllKeys(array?: string[]): string[];
 		public getAllValues(array?: SchemaPiece[]): SchemaPiece[];
-		public resolveString(): string;
 
 		private _addKey(key: string, options: SchemaFolderAddOptions, type: typeof Schema | typeof SchemaFolder): void;
 		private _removeKey(key: string): void;
@@ -689,7 +689,6 @@ declare module 'klasa' {
 
 		public setValidator(fn: Function): this;
 		public parse(value: any, guild: KlasaGuild): Promise<any>;
-		public resolveString(msg: KlasaMessage): string;
 		public modify(options: SchemaPieceEditOptions): Promise<this>;
 
 		private _schemaCheckType(type: string): void;

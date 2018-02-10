@@ -135,39 +135,6 @@ class SchemaPiece extends Schema {
 	}
 
 	/**
-	 * Resolve a string.
-	 * @since 0.5.0
-	 * @param {KlasaMessage} msg The Message to use
-	 * @returns {string}
-	 */
-	resolveString(msg) {
-		const value = this.constructor._resolveConfigs(this.gateway.type, msg).get(this.path);
-		if (value === null) return 'Not set';
-
-		let resolver = (val) => val;
-		switch (this.type) {
-			case 'Folder': resolver = () => 'Folder';
-				break;
-			case 'user': resolver = (val) => (this.client.users.get(val) || { username: val && val.username ? val.username : val }).username;
-				break;
-			case 'textchannel':
-			case 'voicechannel':
-			case 'channel': resolver = (val) => (msg.guild.channels.get(val) || { name: val && val.name ? val.name : val }).name;
-				break;
-			case 'role': resolver = (val) => (msg.guild.roles.get(val) || { name: val && val.name ? val.name : val }).name;
-				break;
-			case 'guild': resolver = (val) => val && val.name ? val.name : val;
-				break;
-			case 'boolean': resolver = (val) => val === true ? 'Enabled' : 'Disabled';
-				break;
-			// no default
-		}
-
-		if (this.array && Array.isArray(value)) return value.length > 0 ? `[ ${value.map(resolver).join(' | ')} ]` : 'None';
-		return resolver(value);
-	}
-
-	/**
 	 * Modify this SchemaPiece's properties.
 	 * @since 0.5.0
 	 * @param {SchemaPieceEditOptions} options The new options
@@ -371,23 +338,6 @@ class SchemaPiece extends Schema {
 		if (type === 'string') return `'${value.replace(/'/g, "''")}'`;
 		if (type === 'object') return `'${JSON.stringify(value).replace(/'/g, "''")}'`;
 		return '';
-	}
-
-	/**
-	 * Gets a configuration instance from KlasaMessage depending on the schema.gateway type.
-	 * @since 0.5.0
-	 * @param {string} type The type of gateway
-	 * @param {KlasaMessage} msg The message context to resolve from
-	 * @returns {Configuration}
-	 * @private
-	 */
-	static _resolveConfigs(type, msg) {
-		switch (type) {
-			case 'users': return msg.author.configs;
-			case 'guilds': return msg.guildConfigs;
-			case 'clientStorage': return msg.client.configs;
-			default: return null;
-		}
 	}
 
 }

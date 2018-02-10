@@ -283,14 +283,6 @@ class SchemaFolder extends Schema {
 	}
 
 	/**
-	 * @since 0.5.0
-	 * @returns {string}
-	 */
-	resolveString() {
-		return this.toString();
-	}
-
-	/**
 	 * Add a key to the instance.
 	 * @since 0.5.0
 	 * @param {string} key The name of the key
