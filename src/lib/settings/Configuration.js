@@ -327,7 +327,7 @@ class Configuration {
 				resolver = (val) => val;
 		}
 
-		if (this.array) return `[ ${value.map(resolver).join(' | ')} ]`;
+		if (piece.array) return `[ ${value.map(resolver).join(' | ')} ]`;
 		return resolver(value);
 	}
 
