@@ -24,22 +24,22 @@ module.exports = class extends Command {
 
 	get(msg, [key]) {
 		const { path } = this.client.gateways.users.getPath(key, { avoidUnconfigurable: true, piece: true });
-		return msg.sendMessage(msg.language.get('COMMAND_CONF_GET', path.path, path.resolveString(msg)));
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_GET', path.path, msg.author.configs.resolveString(msg, path)));
 	}
 
 	async set(msg, [key, ...valueToSet]) {
 		const { path } = await msg.author.configs.update(key, valueToSet.join(' '), msg.guild, { avoidUnconfigurable: true, action: 'add' });
-		return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', path.path, path.resolveString(msg)));
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', path.path, msg.author.configs.resolveString(msg, path)));
 	}
 
 	async remove(msg, [key, ...valueToRemove]) {
 		const { path } = await msg.author.configs.update(key, valueToRemove.join(' '), msg.guild, { avoidUnconfigurable: true, action: 'remove' });
-		return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', path.path, path.resolveString(msg)));
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', path.path, msg.author.configs.resolveString(msg, path)));
 	}
 
 	async reset(msg, [key]) {
 		const { path } = await msg.author.configs.reset(key, true);
-		return msg.sendMessage(msg.language.get('COMMAND_CONF_RESET', path.path, path.resolveString(msg)));
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_RESET', path.path, msg.author.configs.resolveString(msg, path)));
 	}
 
 	list(msg, [key]) {

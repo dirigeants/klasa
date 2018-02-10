@@ -285,7 +285,7 @@ class Configuration {
 			for (const keyType of keysTypes.sort()) {
 				keys[keyType].sort();
 				array.push(`= ${toTitleCase(keyType)}s =`);
-				for (const key of keys[keyType]) array.push(`${key.padEnd(longest)} :: ${this._resolveString(msg, folder[key])}`);
+				for (const key of keys[keyType]) array.push(`${key.padEnd(longest)} :: ${this.resolveString(msg, folder[key])}`);
 				array.push('');
 			}
 		}
@@ -300,7 +300,7 @@ class Configuration {
 	 * @returns {string}
 	 * @private
 	 */
-	_resolveString(msg, path) {
+	resolveString(msg, path) {
 		const piece = path instanceof SchemaPiece ? path : this.gateway.getPath(path, { piece: true }).path;
 		const value = this.get(piece.path);
 		if (value === null) return 'Not set';

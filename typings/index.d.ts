@@ -531,8 +531,8 @@ declare module 'klasa' {
 		public update(key: string, value?: any, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
 		public update(key: string, value?: any, guild?: GatewayGuildResolvable, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
 		public list(msg: KlasaMessage, path: SchemaFolder | string): string;
+		public resolveString(msg: KlasaMessage, path: SchemaPiece | string): string;
 
-		private _resolveString(msg: KlasaMessage, path: SchemaPiece | string): string;
 		private _updateMany(object: any, guild?: GatewayGuildResolvable): Promise<ConfigurationUpdateManyResult>;
 		private _reset(key: string, guild: GatewayGuildResolvable, avoidUnconfigurable: boolean): Promise<ConfigurationParseResult>;
 		private _parseReset(key: string, guild: KlasaGuild, options: ConfigurationPathResult): Promise<ConfigurationParseResult>;
@@ -1740,7 +1740,7 @@ declare module 'klasa' {
 
 	export type SchemaFolderJSON = {
 		type: 'Folder';
-		[k: string]: SchemaPieceJSON | SchemaFolderJSON;
+		[k: string]: SchemaPieceJSON | SchemaFolderJSON | string;
 	};
 
 	export type GatewayDriverJSON = {
@@ -1750,7 +1750,7 @@ declare module 'klasa' {
 		guilds: GatewayJSON;
 		users: GatewayJSON;
 		clientStorage: GatewayJSON;
-		[k: string]: GatewayJSON;
+		[k: string]: GatewayJSON | any;
 	};
 
 	// Structures
