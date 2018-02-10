@@ -307,7 +307,7 @@ class Configuration {
 		if (piece.array && value.length === 0) return 'None';
 
 		let resolver;
-		switch (this.type) {
+		switch (piece.type) {
 			case 'Folder': resolver = () => 'Folder';
 				break;
 			case 'user': resolver = (val) => (this.client.users.get(val) || { username: (val && val.username) || val }).username;
