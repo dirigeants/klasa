@@ -27,6 +27,15 @@ class Finalizer {
 		options = mergeDefault(client.options.pieceDefaults.finalizers, options);
 
 		/**
+		 * If the piece is in the core directory or not
+		 * @since 0.5.0
+		 * @name Command#core
+		 * @type {boolean}
+		 * @readonly
+		 */
+		Object.defineProperty(this, 'core', { value: core });
+
+		/**
 		 * @since 0.0.1
 		 * @type {KlasaClient}
 		 */
@@ -59,13 +68,6 @@ class Finalizer {
 		 * @type {boolean}
 		 */
 		this.enabled = options.enabled;
-
-		/**
-		 * If the piece is in the core directory or not
-		 * @since 0.5.0
-		 * @type {boolean}
-		 */
-		this.core = core;
 
 		/**
 		 * The store this piece is from

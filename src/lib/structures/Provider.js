@@ -28,6 +28,15 @@ class Provider {
 		options = mergeDefault(client.options.pieceDefaults.providers, options);
 
 		/**
+		 * If the piece is in the core directory or not
+		 * @since 0.5.0
+		 * @name Command#core
+		 * @type {boolean}
+		 * @readonly
+		 */
+		Object.defineProperty(this, 'core', { value: core });
+
+		/**
 		 * @since 0.0.1
 		 * @type {KlasaClient}
 		 */
@@ -74,13 +83,6 @@ class Provider {
 		 * @type {boolean}
 		 */
 		this.cache = options.cache;
-
-		/**
-		 * If the piece is in the core directory or not
-		 * @since 0.5.0
-		 * @type {boolean}
-		 */
-		this.core = core;
 
 		/**
 		 * The store this piece is from

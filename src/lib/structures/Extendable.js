@@ -30,6 +30,15 @@ class Extendable {
 		options = mergeDefault(client.options.pieceDefaults.extendables, options);
 
 		/**
+		 * If the piece is in the core directory or not
+		 * @since 0.5.0
+		 * @name Command#core
+		 * @type {boolean}
+		 * @readonly
+		 */
+		Object.defineProperty(this, 'core', { value: core });
+
+		/**
 		 * @since 0.0.1
 		 * @type {KlasaClient}
 		 */
@@ -76,13 +85,6 @@ class Extendable {
 		 * @type {boolean}
 		 */
 		this.target = options.klasa ? require('klasa') : Discord;
-
-		/**
-		 * If the piece is in the core directory or not
-		 * @since 0.5.0
-		 * @type {boolean}
-		 */
-		this.core = core;
 
 		/**
 		 * The store this piece is from
