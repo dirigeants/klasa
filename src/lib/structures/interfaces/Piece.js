@@ -22,7 +22,7 @@ class Piece {
 	 * @readonly
 	 */
 	get dir() {
-		return this.piece.core ? this.store.coreDir : this.store.userDir;
+		return this.core ? this.store.coreDir : this.store.userDir;
 	}
 
 	/**

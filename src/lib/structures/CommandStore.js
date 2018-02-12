@@ -140,7 +140,8 @@ class CommandStore extends Collection {
 	 * @returns {void}
 	 */
 	static async walk(store, core = false) {
-		const dir = core ? this.coreDir : this.userDir;
+		const dir = core ? store.coreDir : store.userDir;
+		console.log(dir);
 		const files = await fs.scan(dir, { filter: (stats, path) => stats.isFile() && extname(path) === '.js' }).catch(() => { fs.ensureDir(dir).catch(err => store.client.emit('error', err)); });
 		if (!files) return true;
 
