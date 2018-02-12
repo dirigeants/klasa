@@ -32,7 +32,7 @@ class Monitor {
 		/**
 		 * If the piece is in the core directory or not
 		 * @since 0.5.0
-		 * @name Command#core
+		 * @name Monitor#core
 		 * @type {boolean}
 		 * @readonly
 		 */
