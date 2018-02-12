@@ -122,6 +122,7 @@ class Tag {
  * @since 0.5.0
  * @type {RegExp}
  * @static
+ * @private
  */
 Tag.pattern = /^([^:]+)(?::([^{}/]+))?(?:{([^,]+)?(?:,(.+))?})?(?:\/(.+)\/(\w+)?)?$/i;
 
