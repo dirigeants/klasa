@@ -1,4 +1,3 @@
-const { join } = require('path');
 const { Collection } = require('discord.js');
 const Language = require('./Language');
 const Store = require('./interfaces/Store');
@@ -26,20 +25,6 @@ class LanguageStore extends Collection {
 		 * @readonly
 		 */
 		Object.defineProperty(this, 'client', { value: client });
-
-		/**
-		 * The directory of languages in Klasa relative to where its installed.
-		 * @since 0.2.1
-		 * @type {string}
-		 */
-		this.coreDir = join(this.client.coreBaseDir, 'languages');
-
-		/**
-		 * The directory of local languages relative to where you run Klasa from.
-		 * @since 0.2.1
-		 * @type {string}
-		 */
-		this.userDir = join(this.client.clientBaseDir, 'languages');
 
 		/**
 		 * The type of structure this store holds
@@ -96,6 +81,8 @@ class LanguageStore extends Collection {
 
 	// left for documentation
 	/* eslint-disable no-empty-function */
+	get coreDir() {}
+	get userDir() {}
 	init() {}
 	load() {}
 	async loadAll() {}

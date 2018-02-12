@@ -18,6 +18,26 @@ const { applyToClass, isClass } = require('../../util/util');
 class Store {
 
 	/**
+	 * The directory of commands in Klasa relative to where its installed.
+	 * @since 0.0.1
+	 * @type {string}
+	 * @readonly
+	 */
+	get coreDir() {
+		return join(this.client.coreBaseDir, this.name);
+	}
+
+	/**
+	 * The directory of local commands relative to where you run Klasa from.
+	 * @since 0.0.1
+	 * @type {string}
+	 * @readonly
+	 */
+	get userDir() {
+		return join(this.client.clientBaseDir, this.name);
+	}
+
+	/**
 	 * Initializes all pieces in this store.
 	 * @since 0.0.1
 	 * @returns {Promise<Array<*>>}
@@ -29,18 +49,19 @@ class Store {
 	/**
 	 * Loads a piece into Klasa so it can be saved in this store.
 	 * @since 0.0.1
-	 * @param {string} dir The user directory or core directory where this file is saved
 	 * @param {string|string[]} file A string or array of strings showing where the file is located.
+	 * @param {boolean} [core=false] If the file is located in the core directory or not
 	 * @returns {?Piece}
 	 */
-	load(dir, file) {
+	load(file, core = false) {
+		const dir = core ? this.coreDir : this.userDir;
 		const loc = Array.isArray(file) ? join(dir, ...file) : join(dir, file);
 		if (!loc.endsWith('.js')) return null;
 		let piece = null;
 		try {
 			const Piece = (req => req.default || req)(require(loc));
 			if (!isClass(Piece)) throw new TypeError(`Failed to load file '${loc}'. The exported structure is not a class.`);
-			piece = this.set(new Piece(this.client, dir, file));
+			piece = this.set(new Piece(this.client, file, core));
 		} catch (error) {
 			this.client.emit('wtf', `Failed to load file '${loc}'. Error:\n${error.stack || error}`);
 		}
@@ -57,10 +78,10 @@ class Store {
 		this.clear();
 		if (this.coreDir) {
 			const coreFiles = await fs.readdir(this.coreDir).catch(() => { fs.ensureDir(this.coreDir).catch(err => this.client.emit('error', err)); });
-			if (coreFiles) await Promise.all(coreFiles.map(this.load.bind(this, this.coreDir)));
+			if (coreFiles) await Promise.all(coreFiles.map(file => this.load(file, true)));
 		}
 		const userFiles = await fs.readdir(this.userDir).catch(() => { fs.ensureDir(this.userDir).catch(err => this.client.emit('error', err)); });
-		if (userFiles) await Promise.all(userFiles.map(this.load.bind(this, this.userDir)));
+		if (userFiles) await Promise.all(userFiles.map(file => this.load(file)));
 		return this.size;
 	}
 

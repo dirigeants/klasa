@@ -19,11 +19,11 @@ class Task {
 	/**
 	 * @since 0.5.0
 	 * @param {KlasaClient} client The Klasa client
-	 * @param {string} dir The path to the core or user task pieces folder
 	 * @param {string} file The path from the pieces folder to the task piece file
+	 * @param {boolean} core If the piece is in the core directory or not
 	 * @param {TaskOptions} [options={}] Optional Task settings
 	 */
-	constructor(client, dir, file, options = {}) {
+	constructor(client, file, core, options = {}) {
 		options = mergeDefault(client.options.pieceDefaults.tasks, options);
 
 		/**
@@ -54,18 +54,25 @@ class Task {
 		this.name = options.name || file.slice(0, -3);
 
 		/**
-		 * The directory to where this task piece is stored
-		 * @since 0.5.0
-		 * @type {string}
-		 */
-		this.dir = dir;
-
-		/**
 		 * The file location where this task piece is stored
 		 * @since 0.5.0
 		 * @type {string}
 		 */
 		this.file = file;
+
+		/**
+		 * If the piece is in the core directory or not
+		 * @since 0.5.0
+		 * @type {boolean}
+		 */
+		this.core = core;
+
+		/**
+		 * The store this piece is from
+		 * @since 0.5.0
+		 * @type {Store}
+		 */
+		this.store = this.client.pieceStores.get(`${this.type}s`);
 	}
 
 	/**
@@ -91,6 +98,7 @@ class Task {
 
 	// left for documentation
 	/* eslint-disable no-empty-function */
+	get dir() {}
 	async reload() {}
 	unload() {}
 	disable() {}

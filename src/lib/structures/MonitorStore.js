@@ -1,4 +1,3 @@
-const { join } = require('path');
 const { Collection } = require('discord.js');
 const Monitor = require('./Monitor');
 const Store = require('./interfaces/Store');
@@ -26,20 +25,6 @@ class MonitorStore extends Collection {
 		 * @readonly
 		 */
 		Object.defineProperty(this, 'client', { value: client });
-
-		/**
-		 * The directory of monitors in Klasa relative to where its installed.
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.coreDir = join(this.client.coreBaseDir, 'monitors');
-
-		/**
-		 * The directory of local monitors relative to where you run Klasa from.
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.userDir = join(this.client.clientBaseDir, 'monitors');
 
 		/**
 		 * The type of structure this store holds
@@ -102,6 +87,8 @@ class MonitorStore extends Collection {
 
 	// left for documentation
 	/* eslint-disable no-empty-function */
+	get coreDir() {}
+	get userDir() {}
 	init() {}
 	load() {}
 	async loadAll() {}

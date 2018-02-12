@@ -1,4 +1,4 @@
-const { join, extname, relative, sep } = require('path');
+const { extname, relative, sep } = require('path');
 const { Collection } = require('discord.js');
 const fs = require('fs-nextra');
 const Command = require('./Command');
@@ -34,20 +34,6 @@ class CommandStore extends Collection {
 		 * @type external:Collection
 		 */
 		this.aliases = new Collection();
-
-		/**
-		 * The directory of commands in Klasa relative to where its installed.
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.coreDir = join(this.client.coreBaseDir, 'commands');
-
-		/**
-		 * The directory of local commands relative to where you run Klasa from.
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.userDir = join(this.client.clientBaseDir, 'commands');
 
 		/**
 		 * The type of structure this store holds
@@ -131,13 +117,15 @@ class CommandStore extends Collection {
 	 */
 	async loadAll() {
 		this.clear();
-		await CommandStore.walk(this, this.coreDir);
-		await CommandStore.walk(this, this.userDir);
+		await CommandStore.walk(this, true);
+		await CommandStore.walk(this);
 		return this.size;
 	}
 
 	// left for documentation
 	/* eslint-disable no-empty-function */
+	get coreDir() {}
+	get userDir() {}
 	init() {}
 	resolve() {}
 	load() {}
@@ -148,10 +136,11 @@ class CommandStore extends Collection {
 	 * Walks our directory of commands for the user and core directories.
 	 * @since 0.0.1
 	 * @param {CommandStore} store The command store we're loading into
-	 * @param {string} dir The directory of commands we're using to load commands from
+	 * @param {boolean} [core=false] If the file is located in the core directory or not
 	 * @returns {void}
 	 */
-	static async walk(store, dir) {
+	static async walk(store, core = false) {
+		const dir = core ? this.coreDir : this.userDir;
 		const files = await fs.scan(dir, { filter: (stats, path) => stats.isFile() && extname(path) === '.js' }).catch(() => { fs.ensureDir(dir).catch(err => store.client.emit('error', err)); });
 		if (!files) return true;
 

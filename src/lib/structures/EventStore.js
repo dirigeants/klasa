@@ -1,4 +1,3 @@
-const { join } = require('path');
 const { Collection } = require('discord.js');
 const Event = require('./Event');
 const Store = require('./interfaces/Store');
@@ -26,20 +25,6 @@ class EventStore extends Collection {
 		 * @readonly
 		 */
 		Object.defineProperty(this, 'client', { value: client });
-
-		/**
-		 * The directory of events in Klasa relative to where its installed.
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.coreDir = join(this.client.coreBaseDir, 'events');
-
-		/**
-		 * The directory of local events relative to where you run Klasa from.
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.userDir = join(this.client.clientBaseDir, 'events');
 
 		/**
 		 * The type of structure this store holds
@@ -97,6 +82,8 @@ class EventStore extends Collection {
 
 	// left for documentation
 	/* eslint-disable no-empty-function */
+	get coreDir() {}
+	get userDir() {}
 	init() {}
 	load() {}
 	async loadAll() {}

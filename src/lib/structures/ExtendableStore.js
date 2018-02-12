@@ -1,4 +1,3 @@
-const { join } = require('path');
 const { Collection } = require('discord.js');
 const Extendable = require('./Extendable');
 const Store = require('./interfaces/Store');
@@ -26,20 +25,6 @@ class ExtendableStore extends Collection {
 		 * @readonly
 		 */
 		Object.defineProperty(this, 'client', { value: client });
-
-		/**
-		 * The directory of extendables in Klasa relative to where its installed.
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.coreDir = join(this.client.coreBaseDir, 'extendables');
-
-		/**
-		 * The directory of local extendables relative to where you run Klasa from.
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.userDir = join(this.client.clientBaseDir, 'extendables');
 
 		/**
 		 * The type of structure this store holds
@@ -94,6 +79,8 @@ class ExtendableStore extends Collection {
 
 	// left for documentation
 	/* eslint-disable no-empty-function */
+	get coreDir() {}
+	get userDir() {}
 	init() {}
 	load() {}
 	async loadAll() {}

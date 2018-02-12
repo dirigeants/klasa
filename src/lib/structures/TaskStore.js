@@ -1,4 +1,3 @@
-const { join } = require('path');
 const { Collection } = require('discord.js');
 const Task = require('./Task');
 const Store = require('./interfaces/Store');
@@ -26,20 +25,6 @@ class TaskStore extends Collection {
 		 * @readonly
 		 */
 		Object.defineProperty(this, 'client', { value: client });
-
-		/**
-		 * The directory of core task pieces in Klasa relative to where its installed.
-		 * @since 0.5.0
-		 * @type {string}
-		 */
-		this.coreDir = join(this.client.coreBaseDir, 'tasks');
-
-		/**
-		 * The directory of local task pieces relative to where you run Klasa from.
-		 * @since 0.5.0
-		 * @type {string}
-		 */
-		this.userDir = join(this.client.clientBaseDir, 'tasks');
 
 		/**
 		 * The type of structure this store holds
@@ -86,6 +71,8 @@ class TaskStore extends Collection {
 
 	// left for documentation
 	/* eslint-disable no-empty-function */
+	get coreDir() {}
+	get userDir() {}
 	init() { }
 	load() { }
 	async loadAll() { }

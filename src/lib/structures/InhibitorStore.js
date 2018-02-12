@@ -1,4 +1,3 @@
-const { join } = require('path');
 const { Collection } = require('discord.js');
 const Inhibitor = require('./Inhibitor');
 const Store = require('./interfaces/Store');
@@ -26,20 +25,6 @@ class InhibitorStore extends Collection {
 		 * @readonly
 		 */
 		Object.defineProperty(this, 'client', { value: client });
-
-		/**
-		 * The directory of inhibitors in Klasa relative to where its installed.
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.coreDir = join(this.client.coreBaseDir, 'inhibitors');
-
-		/**
-		 * The directory of local inhibitors relative to where you run Klasa from.
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.userDir = join(this.client.clientBaseDir, 'inhibitors');
 
 		/**
 		 * The type of structure this store holds
@@ -103,6 +88,8 @@ class InhibitorStore extends Collection {
 
 	// left for documentation
 	/* eslint-disable no-empty-function */
+	get coreDir() {}
+	get userDir() {}
 	init() {}
 	load() {}
 	async loadAll() {}

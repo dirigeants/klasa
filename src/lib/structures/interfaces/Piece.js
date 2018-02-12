@@ -16,12 +16,22 @@ const { applyToClass } = require('../../util/util');
 class Piece {
 
 	/**
+	 * The directory to where this event piece is stored
+	 * @since 0.0.1
+	 * @type {string}
+	 * @readonly
+	 */
+	get dir() {
+		return this.piece.core ? this.store.coreDir : this.store.userDir;
+	}
+
+	/**
 	 * Reloads this piece
 	 * @since 0.0.1
 	 * @returns {Promise<Piece>} The newly loaded piece
 	 */
 	async reload() {
-		const piece = this.client[`${this.type}s`].load(this.dir, this.file);
+		const piece = this.store.load(this.file, this.core);
 		await piece.init();
 		if (this.client.listenerCount('pieceReloaded')) this.client.emit('pieceReloaded', piece);
 		return piece;
@@ -34,7 +44,7 @@ class Piece {
 	 */
 	unload() {
 		if (this.client.listenerCount('pieceUnloaded')) this.client.emit('pieceUnloaded', this);
-		return this.client[`${this.type}s`].delete(this);
+		return this.store.delete(this);
 	}
 
 	/**

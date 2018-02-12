@@ -20,11 +20,11 @@ class Provider {
 	/**
 	 * @since 0.0.1
 	 * @param {KlasaClient} client The Klasa client
-	 * @param {string} dir The path to the core or user provider pieces folder
 	 * @param {string} file The path from the pieces folder to the provider file
+	 * @param {boolean} core If the piece is in the core directory or not
 	 * @param {ProviderOptions} [options={}] Optional Provider settings
 	 */
-	constructor(client, dir, file, options = {}) {
+	constructor(client, file, core, options = {}) {
 		options = mergeDefault(client.options.pieceDefaults.providers, options);
 
 		/**
@@ -32,13 +32,6 @@ class Provider {
 		 * @type {KlasaClient}
 		 */
 		this.client = client;
-
-		/**
-		 * The directory to where this provider piece is stored
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.dir = dir;
 
 		/**
 		 * The file location where this provider is stored
@@ -81,6 +74,20 @@ class Provider {
 		 * @type {boolean}
 		 */
 		this.cache = options.cache;
+
+		/**
+		 * If the piece is in the core directory or not
+		 * @since 0.5.0
+		 * @type {boolean}
+		 */
+		this.core = core;
+
+		/**
+		 * The store this piece is from
+		 * @since 0.5.0
+		 * @type {Store}
+		 */
+		this.store = this.client.pieceStores.get(`${this.type}s`);
 	}
 
 	/**
@@ -121,6 +128,7 @@ class Provider {
 
 	// left for documentation
 	/* eslint-disable no-empty-function */
+	get dir() {}
 	async reload() {}
 	unload() {}
 	disable() {}

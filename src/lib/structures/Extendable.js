@@ -21,12 +21,12 @@ class Extendable {
 	/**
 	 * @since 0.0.1
 	 * @param {KlasaClient} client The klasa client
-	 * @param {string} dir The path to the core or user extendable pieces folder
 	 * @param {string} file The path from the pieces folder to the extendable file
+	 * @param {boolean} core If the piece is in the core directory or not
 	 * @param {string[]} appliesTo The discord classes this extendable applies to
 	 * @param {ExtendableOptions} options The options for this extendable
 	 */
-	constructor(client, dir, file, appliesTo = [], options = {}) {
+	constructor(client, file, core, appliesTo = [], options = {}) {
 		options = mergeDefault(client.options.pieceDefaults.extendables, options);
 
 		/**
@@ -34,13 +34,6 @@ class Extendable {
 		 * @type {KlasaClient}
 		 */
 		this.client = client;
-
-		/**
-		 * The directory to where this extendable piece is stored
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.dir = dir;
 
 		/**
 		 * The file location where this extendable is stored
@@ -83,6 +76,20 @@ class Extendable {
 		 * @type {boolean}
 		 */
 		this.target = options.klasa ? require('klasa') : Discord;
+
+		/**
+		 * If the piece is in the core directory or not
+		 * @since 0.5.0
+		 * @type {boolean}
+		 */
+		this.core = core;
+
+		/**
+		 * The store this piece is from
+		 * @since 0.5.0
+		 * @type {Store}
+		 */
+		this.store = this.client.pieceStores.get(`${this.type}s`);
 	}
 
 	/**
@@ -149,6 +156,7 @@ class Extendable {
 
 	// left for documentation
 	/* eslint-disable no-empty-function */
+	get dir() {}
 	async reload() {}
 	unload() {}
 	toString() {}

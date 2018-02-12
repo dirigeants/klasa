@@ -22,11 +22,11 @@ class Monitor {
 	/**
 	 * @since 0.0.1
 	 * @param {KlasaClient} client The Klasa client
-	 * @param {string} dir The path to the core or user monitor pieces folder
 	 * @param {string} file The path from the pieces folder to the monitor file
+	 * @param {boolean} core If the piece is in the core directory or not
 	 * @param {MonitorOptions} [options={}] Optional Monitor settings
 	 */
-	constructor(client, dir, file, options = {}) {
+	constructor(client, file, core, options = {}) {
 		options = mergeDefault(client.options.pieceDefaults.monitors, options);
 
 		/**
@@ -34,13 +34,6 @@ class Monitor {
 		 * @type {KlasaClient}
 		 */
 		this.client = client;
-
-		/**
-		 * The directory to where this monitor piece is stored
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.dir = dir;
 
 		/**
 		 * The file location where this monitor is stored
@@ -97,6 +90,20 @@ class Monitor {
 		 * @type {boolean}
 		 */
 		this.ignoreWebhooks = options.ignoreWebhooks;
+
+		/**
+		 * If the piece is in the core directory or not
+		 * @since 0.5.0
+		 * @type {boolean}
+		 */
+		this.core = core;
+
+		/**
+		 * The store this piece is from
+		 * @since 0.5.0
+		 * @type {Store}
+		 */
+		this.store = this.client.pieceStores.get(`${this.type}s`);
 	}
 
 	/**
@@ -154,6 +161,7 @@ class Monitor {
 
 	// left for documentation
 	/* eslint-disable no-empty-function */
+	get dir() {}
 	async reload() {}
 	unload() {}
 	disable() {}

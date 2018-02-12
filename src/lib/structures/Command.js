@@ -40,11 +40,11 @@ class Command {
 	/**
 	 * @since 0.0.1
 	 * @param {KlasaClient} client The Klasa Client
-	 * @param {string} dir The path to the core or user command pieces folder
 	 * @param {Array} file The path from the pieces folder to the command file
+	 * @param {boolean} core If the piece is in the core directory or not
 	 * @param {CommandOptions} [options={}] Optional Command settings
 	 */
-	constructor(client, dir, file, options = {}) {
+	constructor(client, file, core, options = {}) {
 		options = mergeDefault(client.options.pieceDefaults.commands, options);
 
 		/**
@@ -238,11 +238,18 @@ class Command {
 		this.file = file;
 
 		/**
-		 * The directory to where this command piece is stored
-		 * @since 0.0.1
-		 * @type {string}
+		 * If the piece is in the core directory or not
+		 * @since 0.5.0
+		 * @type {boolean}
 		 */
-		this.dir = dir;
+		this.core = core;
+
+		/**
+		 * The store this piece is from
+		 * @since 0.5.0
+		 * @type {Store}
+		 */
+		this.store = this.client.pieceStores.get(`${this.type}s`);
 	}
 
 	/**
@@ -373,6 +380,7 @@ class Command {
 
 	// left for documentation
 	/* eslint-disable no-empty-function */
+	get dir() {}
 	async reload() {}
 	unload() {}
 	disable() {}

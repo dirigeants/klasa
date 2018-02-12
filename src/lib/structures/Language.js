@@ -21,11 +21,11 @@ class Language {
 	/**
 	 * @since 0.2.1
 	 * @param {KlasaClient} client The Klasa Client
-	 * @param {string} dir The path to the core or user language pieces folder
 	 * @param {Array} file The path from the pieces folder to the finalizer file
+	 * @param {boolean} core If the piece is in the core directory or not
 	 * @param {LanguageOptions} [options={}] Optional Language settings
 	 */
-	constructor(client, dir, file, options = {}) {
+	constructor(client, file, core, options = {}) {
 		options = mergeDefault(client.options.pieceDefaults.languages, options);
 
 		/**
@@ -33,13 +33,6 @@ class Language {
 		 * @type {KlasaClient}
 		 */
 		this.client = client;
-
-		/**
-		 * The directory to where this language piece is stored
-		 * @since 0.2.1
-		 * @type {string}
-		 */
-		this.dir = dir;
 
 		/**
 		 * The file location where this language is stored
@@ -68,6 +61,20 @@ class Language {
 		 * @type {boolean}
 		 */
 		this.enabled = options.enabled;
+
+		/**
+		 * If the piece is in the core directory or not
+		 * @since 0.5.0
+		 * @type {boolean}
+		 */
+		this.core = core;
+
+		/**
+		 * The store this piece is from
+		 * @since 0.5.0
+		 * @type {Store}
+		 */
+		this.store = this.client.pieceStores.get(`${this.type}s`);
 	}
 
 	/**
@@ -105,7 +112,7 @@ class Language {
 			try {
 				const CorePiece = require(loc);
 				if (!isClass(CorePiece)) return;
-				const coreLang = new CorePiece(this.client, this.client.coreBaseDir, this.file);
+				const coreLang = new CorePiece(this.client, this.file, true);
 				this.language = mergeDefault(coreLang.language, this.language);
 			} catch (error) {
 				return;
@@ -116,6 +123,7 @@ class Language {
 
 	// left for documentation
 	/* eslint-disable no-empty-function */
+	get dir() {}
 	async reload() {}
 	unload() {}
 	disable() {}
