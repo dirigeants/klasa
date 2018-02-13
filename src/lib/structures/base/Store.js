@@ -21,7 +21,7 @@ class Store extends Collection {
 		super();
 
 		/**
-		 * The client this CommandStore was created with.
+		 * The client this Store was created with
 		 * @since 0.0.1
 		 * @name Store#client
 		 * @type {KlasaClient}
