@@ -31,7 +31,7 @@ class Piece {
 		/**
 		 * The file location where this event is stored
 		 * @since 0.0.1
-		 * @type {string|Array<string>}
+		 * @type {string|string[]}
 		 */
 		this.file = file;
 
@@ -40,7 +40,7 @@ class Piece {
 		 * @since 0.0.1
 		 * @type {string}
 		 */
-		this.name = options.name || file.slice(0, -3);
+		this.name = options.name || (Array.isArray() ? file[file.length - 1].toLowerCase() : file).slice(0, -3);
 
 		/**
 		 * The type of Klasa piece this is
