@@ -116,6 +116,4 @@ class CommandStore extends Store {
 
 }
 
-Store.applyToClass(CommandStore, ['loadAll']);
-
 module.exports = CommandStore;
