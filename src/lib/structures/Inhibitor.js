@@ -5,9 +5,9 @@ const { mergeDefault } = require('../util/util');
  * Base class for all Klasa Inhibitors. See {@tutorial CreatingInhibitors} for more information how to use this class
  * to build custom inhibitors.
  * @tutorial CreatingInhibitors
- * @implements {Piece}
+ * @extends Piece
  */
-class Inhibitor {
+class Inhibitor extends Piece {
 
 	/**
 	 * @typedef {Object} InhibitorOptions
@@ -26,49 +26,7 @@ class Inhibitor {
 	 */
 	constructor(client, file, core, options = {}) {
 		options = mergeDefault(client.options.pieceDefaults.inhibitors, options);
-
-		/**
-		 * If the piece is in the core directory or not
-		 * @since 0.5.0
-		 * @name Inhibitor#core
-		 * @type {boolean}
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'core', { value: core });
-
-		/**
-		 * @since 0.0.1
-		 * @type {KlasaClient}
-		 */
-		this.client = client;
-
-		/**
-		 * The file location where this inhibitor is stored
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.file = file;
-
-		/**
-		 * The name of the inhibitor
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.name = options.name || file.slice(0, -3);
-
-		/**
-		 * The type of Klasa piece this is
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.type = 'inhibitor';
-
-		/**
-		 * If the inhibitor is enabled or not
-		 * @since 0.0.1
-		 * @type {boolean}
-		 */
-		this.enabled = options.enabled;
+		super(client, 'inhibitor', file, core, options);
 
 		/**
 		 * If this inhibitor is meant for spamProtection (disables the inhibitor while generating help)
@@ -76,13 +34,6 @@ class Inhibitor {
 		 * @type {boolean}
 		 */
 		this.spamProtection = options.spamProtection;
-
-		/**
-		 * The store this piece is from
-		 * @since 0.5.0
-		 * @type {Store}
-		 */
-		this.store = this.client.pieceStores.get(`${this.type}s`);
 	}
 
 	/**
@@ -114,27 +65,11 @@ class Inhibitor {
 	 */
 	toJSON() {
 		return {
-			dir: this.dir,
-			file: this.file,
-			name: this.name,
-			type: this.type,
-			enabled: this.enabled,
+			...super.toJSON(),
 			spamProtection: this.spamProtection
 		};
 	}
 
-	// left for documentation
-	/* eslint-disable no-empty-function */
-	get dir() {}
-	async reload() {}
-	unload() {}
-	disable() {}
-	enable() {}
-	toString() {}
-	/* eslint-enable no-empty-function */
-
 }
-
-Piece.applyToClass(Inhibitor);
 
 module.exports = Inhibitor;

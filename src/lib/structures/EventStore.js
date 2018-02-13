@@ -1,13 +1,11 @@
-const { Collection } = require('discord.js');
 const Event = require('./Event');
 const Store = require('./interfaces/Store');
 
 /**
  * Stores all the events that a part of Klasa
- * @extends external:Collection
- * @implements {Store}
+ * @extends Store
  */
-class EventStore extends Collection {
+class EventStore extends Store {
 
 	/**
 	 * Constructs our EventStore for use in Klasa
@@ -15,30 +13,7 @@ class EventStore extends Collection {
 	 * @param {KlasaClient} client The klasa client initializing this store.
 	 */
 	constructor(client) {
-		super();
-
-		/**
-		 * The client this EventStore was created with.
-		 * @since 0.0.1
-		 * @name EventStore#client
-		 * @type {KlasaClient}
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'client', { value: client });
-
-		/**
-		 * The type of structure this store holds
-		 * @since 0.1.1
-		 * @type {Event}
-		 */
-		this.holds = Event;
-
-		/**
-		 * The name of what this holds
-		 * @since 0.3.0
-		 * @type {string}
-		 */
-		this.name = 'events';
+		super(client, 'events', Event);
 	}
 
 	/**
@@ -80,18 +55,6 @@ class EventStore extends Collection {
 		return event;
 	}
 
-	// left for documentation
-	/* eslint-disable no-empty-function */
-	get coreDir() {}
-	get userDir() {}
-	init() {}
-	load() {}
-	async loadAll() {}
-	resolve() {}
-	/* eslint-enable no-empty-function */
-
 }
-
-Store.applyToClass(EventStore);
 
 module.exports = EventStore;

@@ -13,7 +13,7 @@ module.exports = class extends Extendable {
 		} else if (!options) {
 			options = {};
 		}
-		return this.sendMessage(content, Object.assign(options, { embed }));
+		return this.sendMessage(content, { ...options, embed });
 	}
 
 };

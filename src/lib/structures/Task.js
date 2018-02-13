@@ -7,7 +7,7 @@ const { mergeDefault } = require('../util/util');
  * @tutorial CreatingTasks
  * @implements {Piece}
  */
-class Task {
+class Task extends Piece {
 
 	/**
 	 * @typedef {Object} TaskOptions
@@ -25,56 +25,7 @@ class Task {
 	 */
 	constructor(client, file, core, options = {}) {
 		options = mergeDefault(client.options.pieceDefaults.tasks, options);
-
-		/**
-		 * If the piece is in the core directory or not
-		 * @since 0.5.0
-		 * @name Task#core
-		 * @type {boolean}
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'core', { value: core });
-
-		/**
-		 * @since 0.5.0
-		 * @type {KlasaClient}
-		 */
-		this.client = client;
-
-		/**
-		 * The type of Klasa piece this is
-		 * @since 0.5.0
-		 * @type {string}
-		 */
-		this.type = 'task';
-
-		/**
-		 * If the Task is enabled or not
-		 * @since 0.5.0
-		 * @type {boolean}
-		 */
-		this.enabled = options.enabled;
-
-		/**
-		 * The name of the task
-		 * @since 0.5.0
-		 * @type {string}
-		 */
-		this.name = options.name || file.slice(0, -3);
-
-		/**
-		 * The file location where this task piece is stored
-		 * @since 0.5.0
-		 * @type {string}
-		 */
-		this.file = file;
-
-		/**
-		 * The store this piece is from
-		 * @since 0.5.0
-		 * @type {Store}
-		 */
-		this.store = this.client.pieceStores.get(`${this.type}s`);
+		super(client, 'task', file, core, options);
 	}
 
 	/**
@@ -98,19 +49,6 @@ class Task {
 		// Optionally defined in extension Classes
 	}
 
-	// left for documentation
-	/* eslint-disable no-empty-function */
-	get dir() {}
-	async reload() {}
-	unload() {}
-	disable() {}
-	enable() {}
-	toString() {}
-	toJSON() {}
-	/* eslint-enable no-empty-function */
-
 }
-
-Piece.applyToClass(Task);
 
 module.exports = Task;

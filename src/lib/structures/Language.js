@@ -7,9 +7,9 @@ const { mergeDefault, isClass } = require('../util/util');
  * Base class for all Klasa Languages. See {@tutorial CreatingLanguages} for more information how to use this class
  * to build custom languages.
  * @tutorial CreatingLanguages
- * @implements {Piece}
+ * @extends Piece
  */
-class Language {
+class Language extends Piece {
 
 	/**
 	 * @typedef {Object} LanguageOptions
@@ -27,56 +27,7 @@ class Language {
 	 */
 	constructor(client, file, core, options = {}) {
 		options = mergeDefault(client.options.pieceDefaults.languages, options);
-
-		/**
-		 * If the piece is in the core directory or not
-		 * @since 0.5.0
-		 * @name Language#core
-		 * @type {boolean}
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'core', { value: core });
-
-		/**
-		 * @since 0.2.1
-		 * @type {KlasaClient}
-		 */
-		this.client = client;
-
-		/**
-		 * The file location where this language is stored
-		 * @since 0.2.1
-		 * @type {string}
-		 */
-		this.file = file;
-
-		/**
-		 * The name of the language
-		 * @since 0.2.1
-		 * @type {string}
-		 */
-		this.name = options.name || file.slice(0, -3);
-
-		/**
-		 * The type of Klasa piece this is
-		 * @since 0.3.0
-		 * @type {string}
-		 */
-		this.type = 'language';
-
-		/**
-		 * If the language is enabled or not
-		 * @since 0.2.1
-		 * @type {boolean}
-		 */
-		this.enabled = options.enabled;
-
-		/**
-		 * The store this piece is from
-		 * @since 0.5.0
-		 * @type {Store}
-		 */
-		this.store = this.client.pieceStores.get(`${this.type}s`);
+		super(client, 'language', file, core, options);
 	}
 
 	/**
@@ -123,19 +74,6 @@ class Language {
 		return;
 	}
 
-	// left for documentation
-	/* eslint-disable no-empty-function */
-	get dir() {}
-	async reload() {}
-	unload() {}
-	disable() {}
-	enable() {}
-	toString() {}
-	toJSON() {}
-	/* eslint-enable no-empty-function */
-
 }
-
-Piece.applyToClass(Language);
 
 module.exports = Language;

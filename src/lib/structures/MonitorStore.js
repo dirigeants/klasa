@@ -1,13 +1,11 @@
-const { Collection } = require('discord.js');
 const Monitor = require('./Monitor');
 const Store = require('./interfaces/Store');
 
 /**
  * Stores all monitors for use in Klasa
- * @extends external:Collection
- * @implements {Store}
+ * @extends Store
  */
-class MonitorStore extends Collection {
+class MonitorStore extends Store {
 
 	/**
 	 * Constructs our MonitorStore for use in Klasa
@@ -15,30 +13,7 @@ class MonitorStore extends Collection {
 	 * @param {KlasaClient} client The Klasa Client
 	 */
 	constructor(client) {
-		super();
-
-		/**
-		 * The client this MonitorStore was created with.
-		 * @since 0.0.1
-		 * @name MonitorStore#client
-		 * @type {KlasaClient}
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'client', { value: client });
-
-		/**
-		 * The type of structure this store holds
-		 * @since 0.1.1
-		 * @type {Inhibitor}
-		 */
-		this.holds = Monitor;
-
-		/**
-		 * The name of what this holds
-		 * @since 0.3.0
-		 * @type {string}
-		 */
-		this.name = 'monitors';
+		super(client, 'monitors', Monitor);
 	}
 
 	/**
@@ -85,18 +60,6 @@ class MonitorStore extends Collection {
 		return monitor;
 	}
 
-	// left for documentation
-	/* eslint-disable no-empty-function */
-	get coreDir() {}
-	get userDir() {}
-	init() {}
-	load() {}
-	async loadAll() {}
-	resolve() {}
-	/* eslint-enable no-empty-function */
-
 }
-
-Store.applyToClass(MonitorStore);
 
 module.exports = MonitorStore;

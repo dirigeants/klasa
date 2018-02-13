@@ -1,13 +1,11 @@
-const { Collection } = require('discord.js');
 const Language = require('./Language');
 const Store = require('./interfaces/Store');
 
 /**
  * Stores all languages for use in Klasa
- * @extends external:Collection
- * @implements {Store}
+ * @extends Store
  */
-class LanguageStore extends Collection {
+class LanguageStore extends Store {
 
 	/**
 	 * Constructs our LanguageStore for use in Klasa
@@ -15,30 +13,7 @@ class LanguageStore extends Collection {
 	 * @param {KlasaClient} client The Klasa client
 	 */
 	constructor(client) {
-		super();
-
-		/**
-		 * The client this LanguageStore was created with.
-		 * @since 0.2.1
-		 * @name LanguageStore#client
-		 * @type {KlasaClient}
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'client', { value: client });
-
-		/**
-		 * The type of structure this store holds
-		 * @since 0.2.1
-		 * @type {Language}
-		 */
-		this.holds = Language;
-
-		/**
-		 * The name of what this holds
-		 * @since 0.3.0
-		 * @type {string}
-		 */
-		this.name = 'languages';
+		super(client, 'languages', Language);
 	}
 
 	/**
@@ -54,13 +29,13 @@ class LanguageStore extends Collection {
 	/**
 	 * Deletes a language from the store
 	 * @since 0.2.1
-	 * @param {Finalizer|string} name The language object or a string representing the structure this store caches
+	 * @param {Language|string} name The language object or a string representing the structure this store caches
 	 * @returns {boolean} whether or not the delete was successful.
 	 */
 	delete(name) {
-		const finalizer = this.resolve(name);
-		if (!finalizer) return false;
-		super.delete(finalizer.name);
+		const language = this.resolve(name);
+		if (!language) return false;
+		super.delete(language.name);
 		return true;
 	}
 
@@ -79,18 +54,6 @@ class LanguageStore extends Collection {
 		return language;
 	}
 
-	// left for documentation
-	/* eslint-disable no-empty-function */
-	get coreDir() {}
-	get userDir() {}
-	init() {}
-	load() {}
-	async loadAll() {}
-	resolve() {}
-	/* eslint-enable no-empty-function */
-
 }
-
-Store.applyToClass(LanguageStore);
 
 module.exports = LanguageStore;
