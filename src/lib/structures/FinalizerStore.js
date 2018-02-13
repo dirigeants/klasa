@@ -1,5 +1,5 @@
 const Finalizer = require('./Finalizer');
-const Store = require('./interfaces/Store');
+const Store = require('./base/Store');
 
 /**
  * Stores all finalizers for use in Klasa.

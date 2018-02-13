@@ -1,5 +1,5 @@
 const Inhibitor = require('./Inhibitor');
-const Store = require('./interfaces/Store');
+const Store = require('./base/Store');
 
 /**
  * Stores all the inhibitors in Klasa

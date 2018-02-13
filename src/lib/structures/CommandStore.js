@@ -2,7 +2,7 @@ const { extname, relative, sep } = require('path');
 const { Collection } = require('discord.js');
 const fs = require('fs-nextra');
 const Command = require('./Command');
-const Store = require('./interfaces/Store');
+const Store = require('./base/Store');
 
 /**
  * Stores all the commands usable in Klasa

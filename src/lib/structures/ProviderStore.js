@@ -1,5 +1,5 @@
 const Provider = require('./Provider');
-const Store = require('./interfaces/Store');
+const Store = require('./base/Store');
 
 /**
  * Stores all providers for use in Klasa

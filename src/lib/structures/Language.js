@@ -1,6 +1,6 @@
 const { pathExists } = require('fs-nextra');
 const { join } = require('path');
-const Piece = require('./interfaces/Piece');
+const Piece = require('./base/Piece');
 const { mergeDefault, isClass } = require('../util/util');
 
 /**

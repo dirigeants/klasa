@@ -1,5 +1,5 @@
 const Task = require('./Task');
-const Store = require('./interfaces/Store');
+const Store = require('./base/Store');
 
 /**
  * Stores all task pieces for use in Klasa

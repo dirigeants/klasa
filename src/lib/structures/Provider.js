@@ -1,4 +1,4 @@
-const Piece = require('./interfaces/Piece');
+const Piece = require('./base/Piece');
 const { mergeDefault } = require('../util/util');
 
 /**

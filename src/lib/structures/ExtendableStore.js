@@ -1,5 +1,5 @@
 const Extendable = require('./Extendable');
-const Store = require('./interfaces/Store');
+const Store = require('./base/Store');
 
 /**
  * Stores all of our extendables that extend Discord.js

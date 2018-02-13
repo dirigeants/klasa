@@ -1,5 +1,5 @@
 const Language = require('./Language');
-const Store = require('./interfaces/Store');
+const Store = require('./base/Store');
 
 /**
  * Stores all languages for use in Klasa

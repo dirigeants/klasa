@@ -1,5 +1,5 @@
 const Monitor = require('./Monitor');
-const Store = require('./interfaces/Store');
+const Store = require('./base/Store');
 
 /**
  * Stores all monitors for use in Klasa

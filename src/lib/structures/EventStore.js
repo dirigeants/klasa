@@ -1,5 +1,5 @@
 const Event = require('./Event');
-const Store = require('./interfaces/Store');
+const Store = require('./base/Store');
 
 /**
  * Stores all the events that a part of Klasa

@@ -29,9 +29,9 @@ module.exports = {
 	SchemaFolder: require('./lib/settings/SchemaFolder'),
 	SchemaPiece: require('./lib/settings/SchemaPiece'),
 
-	// lib/structures/interfaces
-	Piece: require('./lib/structures/interfaces/Piece'),
-	Store: require('./lib/structures/interfaces/Store'),
+	// lib/structures/base
+	Piece: require('./lib/structures/base/Piece'),
+	Store: require('./lib/structures/base/Store'),
 
 	// lib/structures
 	Command: require('./lib/structures/Command'),
