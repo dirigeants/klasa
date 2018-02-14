@@ -515,7 +515,6 @@ declare module 'klasa' {
 		public constructor(manager: Gateway, data: any);
 		public readonly client: KlasaClient;
 		public readonly gateway: Gateway;
-		public readonly type: string;
 		public readonly id: string;
 		private _existsInDB: boolean;
 		private _syncStatus?: Promise<object>;

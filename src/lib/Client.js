@@ -437,8 +437,8 @@ class KlasaClient extends Discord.Client {
 		if (!this.options.ownerID) this.options.ownerID = this.user.bot ? this.application.owner.id : this.user.id;
 
 		// Client-wide settings
-		this.configs = this.gateways.clientStorage.cache.get('clientStorage', this.user.id) || this.gateways.clientStorage.insertEntry(this.user.id);
-		await this.configs.sync().then(() => this.gateways.clientStorage.cache.set(this.type, this.user.id, this.configs));
+		this.configs = this.gateways.clientStorage.cache.get(this.user.id) || this.gateways.clientStorage.insertEntry(this.user.id);
+		await this.configs.sync();
 
 		// Init all the pieces
 		await Promise.all(this.pieceStores.filter(store => !['providers', 'extendables'].includes(store.name)).map(store => store.init()));

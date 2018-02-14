@@ -92,15 +92,6 @@ class Configuration {
 		Object.defineProperty(this, 'gateway', { value: manager });
 
 		/**
-		 * The type of the Gateway.
-		 * @since 0.5.0
-		 * @type {string}
-		 * @name Configuration#type
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'type', { value: manager.type });
-
-		/**
 		 * The ID that identifies this instance.
 		 * @since 0.5.0
 		 * @type {string}

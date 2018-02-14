@@ -113,10 +113,10 @@ class Gateway extends GatewayStorage {
 	getEntry(input, create = false) {
 		if (input === 'default') return this.defaults;
 		if (create) {
-			const entry = this.cache.get(this.type, input);
+			const entry = this.cache.get(input);
 			if (!entry) {
 				const configs = new this.Configuration(this, { id: input });
-				this.cache.set(this.type, input, configs);
+				this.cache.set(input, configs);
 				// Silently create a new entry. The new data does not matter as Configuration default all the keys.
 				this.provider.create(this.type, input)
 					.then(() => {
@@ -128,7 +128,7 @@ class Gateway extends GatewayStorage {
 			}
 			return entry;
 		}
-		return this.cache.get(this.type, input) || this.defaults;
+		return this.cache.get(input) || this.defaults;
 	}
 
 	/**
