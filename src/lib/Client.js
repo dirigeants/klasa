@@ -64,11 +64,13 @@ class KlasaClient extends Discord.Client {
 	/**
 	 * @typedef {Object} KlasaProvidersOptions
 	 * @property {string} [default] The default provider to use
+	 * @memberof KlasaClient
 	 */
 
 	/**
 	 * @typedef {Object} KlasaClientOptionsClock
 	 * @property {number} [interval] The interval in milliseconds for the clock to check the tasks
+	 * @memberof KlasaClient
 	 */
 
 	/**
