@@ -1,13 +1,13 @@
-const Piece = require('./interfaces/Piece');
+const Piece = require('./base/Piece');
 const { mergeDefault } = require('../util/util');
 
 /**
  * Base class for all Klasa Events. See {@tutorial CreatingEvents} for more information how to use this class
  * to build custom events.
  * @tutorial CreatingEvents
- * @implements {Piece}
+ * @extends Piece
  */
-class Event {
+class Event extends Piece {
 
 	/**
 	 * @typedef {Object} EventOptions
@@ -25,56 +25,7 @@ class Event {
 	 */
 	constructor(client, file, core, options = {}) {
 		options = mergeDefault(client.options.pieceDefaults.events, options);
-
-		/**
-		 * If the piece is in the core directory or not
-		 * @since 0.5.0
-		 * @name Event#core
-		 * @type {boolean}
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'core', { value: core });
-
-		/**
-		 * @since 0.0.1
-		 * @type {KlasaClient}
-		 */
-		this.client = client;
-
-		/**
-		 * The file location where this event is stored
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.file = file;
-
-		/**
-		 * The name of the event
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.name = options.name || file.slice(0, -3);
-
-		/**
-		 * The type of Klasa piece this is
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.type = 'event';
-
-		/**
-		 * If the event is enabled or not
-		 * @since 0.0.1
-		 * @type {boolean}
-		 */
-		this.enabled = options.enabled;
-
-		/**
-		 * The store this piece is from
-		 * @since 0.5.0
-		 * @type {Store}
-		 */
-		this.store = this.client.pieceStores.get(`${this.type}s`);
+		super(client, 'event', file, core, options);
 	}
 
 	/**
@@ -115,19 +66,6 @@ class Event {
 		// Optionally defined in extension Classes
 	}
 
-	// left for documentation
-	/* eslint-disable no-empty-function */
-	get dir() {}
-	async reload() {}
-	unload() {}
-	disable() {}
-	enable() {}
-	toString() {}
-	toJSON() {}
-	/* eslint-enable no-empty-function */
-
 }
-
-Piece.applyToClass(Event);
 
 module.exports = Event;

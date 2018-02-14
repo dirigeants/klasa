@@ -210,7 +210,7 @@ module.exports = Structures.extend('Message', Message => {
 		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
 		 */
 		sendEmbed(embed, content, options) {
-			return this.sendMessage(Object.assign(this.constructor.combineContentOptions(content, options), { embed }));
+			return this.sendMessage({ ...this.constructor.combineContentOptions(content, options), embed });
 		}
 
 		/**
@@ -222,7 +222,7 @@ module.exports = Structures.extend('Message', Message => {
 		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
 		 */
 		sendCode(lang, content, options) {
-			return this.sendMessage(Object.assign(this.constructor.combineContentOptions(content, options), { code: lang }));
+			return this.sendMessage({ ...this.constructor.combineContentOptions(content, options), code: lang });
 		}
 
 		/**
@@ -284,7 +284,7 @@ module.exports = Structures.extend('Message', Message => {
 		 */
 		static combineContentOptions(content, options) {
 			if (!options) return isObject(content) ? content : { content };
-			return Object.assign(options, { content });
+			return { ...options, content };
 		}
 
 	}

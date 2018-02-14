@@ -1,8 +1,5 @@
-const { applyToClass } = require('../../util/util');
-
 /**
- * The common interface for all pieces
- * @interface
+ * The common class for all pieces
  * @see Command
  * @see Event
  * @see Extendable
@@ -14,6 +11,59 @@ const { applyToClass } = require('../../util/util');
  * @see Task
  */
 class Piece {
+
+	constructor(client, type, file, core, options) {
+		/**
+		 * If the piece is in the core directory or not
+		 * @since 0.5.0
+		 * @name Event#core
+		 * @type {boolean}
+		 * @readonly
+		 */
+		Object.defineProperty(this, 'core', { value: core });
+
+		/**
+		 * The client this Piece was created with
+		 * @since 0.0.1
+		 * @type {KlasaClient}
+		 */
+		this.client = client;
+
+		/**
+		 * The file location where this event is stored
+		 * @since 0.0.1
+		 * @type {string|string[]}
+		 */
+		this.file = file;
+
+		/**
+		 * The name of the event
+		 * @since 0.0.1
+		 * @type {string}
+		 */
+		this.name = options.name || (Array.isArray(file) ? file[file.length - 1].toLowerCase() : file).slice(0, -3);
+
+		/**
+		 * The type of Klasa piece this is
+		 * @since 0.0.1
+		 * @type {string}
+		 */
+		this.type = type;
+
+		/**
+		 * If the event is enabled or not
+		 * @since 0.0.1
+		 * @type {boolean}
+		 */
+		this.enabled = options.enabled;
+
+		/**
+		 * The store this piece is from
+		 * @since 0.5.0
+		 * @type {Store}
+		 */
+		this.store = this.client.pieceStores.get(`${this.type}s`);
+	}
 
 	/**
 	 * The directory to where this event piece is stored
@@ -92,16 +142,6 @@ class Piece {
 			type: this.type,
 			enabled: this.enabled
 		};
-	}
-
-	/**
-	 * Applies this interface to a class
-	 * @since 0.1.1
-	 * @param {Object} structure The structure to apply this interface to
-	 * @param {string[]} [skips=[]] The methods to skip when applying this interface
-	 */
-	static applyToClass(structure, skips) {
-		applyToClass(Piece, structure, skips);
 	}
 
 }

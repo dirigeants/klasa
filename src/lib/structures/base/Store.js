@@ -1,10 +1,10 @@
 const { join } = require('path');
+const { Collection } = require('discord.js');
 const fs = require('fs-nextra');
-const { applyToClass, isClass } = require('../../util/util');
+const { isClass } = require('../../util/util');
 
 /**
- * The common interface for all stores
- * @interface
+ * The common base for all stores
  * @see CommandStore
  * @see EventStore
  * @see ExtendableStore
@@ -15,7 +15,38 @@ const { applyToClass, isClass } = require('../../util/util');
  * @see ProviderStore
  * @see TaskStore
  */
-class Store {
+class Store extends Collection {
+
+	constructor(client, name, holds) {
+		super();
+
+		/**
+		 * The client this Store was created with
+		 * @since 0.0.1
+		 * @name Store#client
+		 * @type {KlasaClient}
+		 * @readonly
+		 */
+		Object.defineProperty(this, 'client', { value: client });
+
+		/**
+		 * The name of what this holds
+		 * @since 0.3.0
+		 * @name Store#name
+		 * @type {string}
+		 * @readonly
+		 */
+		Object.defineProperty(this, 'name', { value: name });
+
+		/**
+		 * The type of structure this store holds
+		 * @since 0.1.1
+		 * @name Store#holds
+		 * @type {Piece}
+		 * @readonly
+		 */
+		Object.defineProperty(this, 'holds', { value: holds });
+	}
 
 	/**
 	 * The directory of commands in Klasa relative to where its installed.
@@ -103,16 +134,6 @@ class Store {
 	 */
 	toString() {
 		return this.name;
-	}
-
-	/**
-	 * Applies this interface to a class
-	 * @since 0.1.1
-	 * @param {Object} structure The structure to apply this interface to
-	 * @param {string[]} [skips=[]] The methods to skip when applying this interface
-	 */
-	static applyToClass(structure, skips) {
-		applyToClass(Store, structure, skips);
 	}
 
 }

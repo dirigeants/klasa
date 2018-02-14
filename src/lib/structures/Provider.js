@@ -1,4 +1,4 @@
-const Piece = require('./interfaces/Piece');
+const Piece = require('./base/Piece');
 const { mergeDefault } = require('../util/util');
 
 /**
@@ -7,7 +7,7 @@ const { mergeDefault } = require('../util/util');
  * @tutorial CreatingProviders
  * @implements {Piece}
  */
-class Provider {
+class Provider extends Piece {
 
 	/**
 	 * @typedef {Object} ProviderOptions
@@ -26,49 +26,7 @@ class Provider {
 	 */
 	constructor(client, file, core, options = {}) {
 		options = mergeDefault(client.options.pieceDefaults.providers, options);
-
-		/**
-		 * If the piece is in the core directory or not
-		 * @since 0.5.0
-		 * @name Provider#core
-		 * @type {boolean}
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'core', { value: core });
-
-		/**
-		 * @since 0.0.1
-		 * @type {KlasaClient}
-		 */
-		this.client = client;
-
-		/**
-		 * The file location where this provider is stored
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.file = file;
-
-		/**
-		 * The name of the provider
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.name = options.name || file.slice(0, -3);
-
-		/**
-		 * The type of Klasa piece this is
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.type = 'provider';
-
-		/**
-		 * If the provider is enabled or not
-		 * @since 0.0.1
-		 * @type {boolean}
-		 */
-		this.enabled = options.enabled;
+		super(client, 'provider', file, core, options);
 
 		/**
 		 * If the provider provides to a sql data source
@@ -83,13 +41,6 @@ class Provider {
 		 * @type {boolean}
 		 */
 		this.cache = options.cache;
-
-		/**
-		 * The store this piece is from
-		 * @since 0.5.0
-		 * @type {Store}
-		 */
-		this.store = this.client.pieceStores.get(`${this.type}s`);
 	}
 
 	/**
@@ -118,28 +69,13 @@ class Provider {
 	 */
 	toJSON() {
 		return {
-			dir: this.dir,
-			file: this.file,
-			name: this.name,
-			type: this.type,
+			...super.toJSON(),
 			enabled: this.enabled,
 			sql: this.sql,
 			cache: this.cache
 		};
 	}
 
-	// left for documentation
-	/* eslint-disable no-empty-function */
-	get dir() {}
-	async reload() {}
-	unload() {}
-	disable() {}
-	enable() {}
-	toString() {}
-	/* eslint-enable no-empty-function */
-
 }
-
-Piece.applyToClass(Provider, ['toJSON']);
 
 module.exports = Provider;

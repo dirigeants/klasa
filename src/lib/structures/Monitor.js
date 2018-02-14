@@ -1,13 +1,13 @@
-const Piece = require('./interfaces/Piece');
+const Piece = require('./base/Piece');
 const { mergeDefault } = require('../util/util');
 
 /**
  * Base class for all Klasa Monitors. See {@tutorial CreatingMonitors} for more information how to use this class
  * to build custom monitors.
  * @tutorial CreatingMonitors
- * @implements {Piece}
+ * @extends Piece
  */
-class Monitor {
+class Monitor extends Piece {
 
 	/**
 	 * @typedef {Object} MonitorOptions
@@ -28,49 +28,7 @@ class Monitor {
 	 */
 	constructor(client, file, core, options = {}) {
 		options = mergeDefault(client.options.pieceDefaults.monitors, options);
-
-		/**
-		 * If the piece is in the core directory or not
-		 * @since 0.5.0
-		 * @name Monitor#core
-		 * @type {boolean}
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'core', { value: core });
-
-		/**
-		 * @since 0.0.1
-		 * @type {KlasaClient}
-		 */
-		this.client = client;
-
-		/**
-		 * The file location where this monitor is stored
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.file = file;
-
-		/**
-		 * The name of the monitor
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.name = options.name || file.slice(0, -3);
-
-		/**
-		 * The type of Klasa piece this is
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.type = 'monitor';
-
-		/**
-		 * If the monitor is enabled or not
-		 * @since 0.0.1
-		 * @type {boolean}
-		 */
-		this.enabled = options.enabled;
+		super(client, 'monitor', file, core, options);
 
 		/**
 		 * Whether the monitor ignores bots or not
@@ -99,13 +57,6 @@ class Monitor {
 		 * @type {boolean}
 		 */
 		this.ignoreWebhooks = options.ignoreWebhooks;
-
-		/**
-		 * The store this piece is from
-		 * @since 0.5.0
-		 * @type {Store}
-		 */
-		this.store = this.client.pieceStores.get(`${this.type}s`);
 	}
 
 	/**
@@ -149,11 +100,7 @@ class Monitor {
 	 */
 	toJSON() {
 		return {
-			dir: this.dir,
-			file: this.file,
-			name: this.name,
-			type: this.type,
-			enabled: this.enabled,
+			...super.toJSON(),
 			ignoreBots: this.ignoreBots,
 			ignoreSelf: this.ignoreSelf,
 			ignoreOthers: this.ignoreOthers,
@@ -161,18 +108,6 @@ class Monitor {
 		};
 	}
 
-	// left for documentation
-	/* eslint-disable no-empty-function */
-	get dir() {}
-	async reload() {}
-	unload() {}
-	disable() {}
-	enable() {}
-	toString() {}
-	/* eslint-enable no-empty-function */
-
 }
-
-Piece.applyToClass(Monitor, ['toJSON']);
 
 module.exports = Monitor;

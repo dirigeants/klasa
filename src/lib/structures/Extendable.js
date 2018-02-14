@@ -1,4 +1,4 @@
-const Piece = require('./interfaces/Piece');
+const Piece = require('./base/Piece');
 const { mergeDefault } = require('../util/util');
 const Discord = require('discord.js');
 
@@ -6,9 +6,9 @@ const Discord = require('discord.js');
  * Base class for all Klasa Extendables. See {@tutorial CreatingExtendables} for more information how to use this class
  * to build custom extendables.
  * @tutorial CreatingExtendables
- * @implements {Piece}
+ * @extends {Piece}
  */
-class Extendable {
+class Extendable extends Piece {
 
 	/**
 	 * @typedef {Object} ExtendableOptions
@@ -28,49 +28,7 @@ class Extendable {
 	 */
 	constructor(client, file, core, appliesTo = [], options = {}) {
 		options = mergeDefault(client.options.pieceDefaults.extendables, options);
-
-		/**
-		 * If the piece is in the core directory or not
-		 * @since 0.5.0
-		 * @name Extendable#core
-		 * @type {boolean}
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'core', { value: core });
-
-		/**
-		 * @since 0.0.1
-		 * @type {KlasaClient}
-		 */
-		this.client = client;
-
-		/**
-		 * The file location where this extendable is stored
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.file = file;
-
-		/**
-		 * The name of the extendable
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.name = options.name || file.slice(0, -3);
-
-		/**
-		 * The type of Klasa piece this is
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.type = 'extendable';
-
-		/**
-		 * If the extendable is enabled or not
-		 * @since 0.0.1
-		 * @type {boolean}
-		 */
-		this.enabled = options.enabled;
+		super(client, 'extendable', file, core, options);
 
 		/**
 		 * The discord classes this extendable applies to
@@ -85,13 +43,6 @@ class Extendable {
 		 * @type {boolean}
 		 */
 		this.target = options.klasa ? require('klasa') : Discord;
-
-		/**
-		 * The store this piece is from
-		 * @since 0.5.0
-		 * @type {Store}
-		 */
-		this.store = this.client.pieceStores.get(`${this.type}s`);
 	}
 
 	/**
@@ -156,16 +107,6 @@ class Extendable {
 		};
 	}
 
-	// left for documentation
-	/* eslint-disable no-empty-function */
-	get dir() {}
-	async reload() {}
-	unload() {}
-	toString() {}
-	/* eslint-enable no-empty-function */
-
 }
-
-Piece.applyToClass(Extendable, ['disable', 'enable', 'toJSON']);
 
 module.exports = Extendable;

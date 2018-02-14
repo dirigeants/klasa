@@ -1,13 +1,11 @@
-const { Collection } = require('discord.js');
 const Extendable = require('./Extendable');
-const Store = require('./interfaces/Store');
+const Store = require('./base/Store');
 
 /**
  * Stores all of our extendables that extend Discord.js
- * @extends external:Collection
- * @implements {Store}
+ * @extends Store
  */
-class ExtendableStore extends Collection {
+class ExtendableStore extends Store {
 
 	/**
 	 * Constructs our ExtendableStore for use in Klasa
@@ -15,30 +13,7 @@ class ExtendableStore extends Collection {
 	 * @param {KlasaClient} client The Klasa client
 	 */
 	constructor(client) {
-		super();
-
-		/**
-		 * The client this ExtendableStore was created with.
-		 * @since 0.0.1
-		 * @name ExtendableStore#client
-		 * @type {KlasaClient}
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'client', { value: client });
-
-		/**
-		 * The type of structure this store holds
-		 * @since 0.1.1
-		 * @type {Extendable}
-		 */
-		this.holds = Extendable;
-
-		/**
-		 * The name of what this holds
-		 * @since 0.3.0
-		 * @type {string}
-		 */
-		this.name = 'extendables';
+		super(client, 'extendables', Extendable);
 	}
 
 	/**
@@ -77,18 +52,6 @@ class ExtendableStore extends Collection {
 		return extendable;
 	}
 
-	// left for documentation
-	/* eslint-disable no-empty-function */
-	get coreDir() {}
-	get userDir() {}
-	init() {}
-	load() {}
-	async loadAll() {}
-	resolve() {}
-	/* eslint-enable no-empty-function */
-
 }
-
-Store.applyToClass(ExtendableStore);
 
 module.exports = ExtendableStore;
