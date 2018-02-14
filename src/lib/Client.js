@@ -414,7 +414,7 @@ class KlasaClient extends Discord.Client {
 		if (typeof this.options.prefix === 'string' && this.options.prefix !== this.gateways.guilds.schema.prefix.default) {
 			await this.gateways.guilds.schema.prefix.edit({ default: this.options.prefix });
 		}
-		if (this.gateways.guilds.schema.hasKey('disabledCommands')) {
+		if (this.gateways.guilds.schema.has('disabledCommands')) {
 			const languageStore = this.languages;
 			const commandStore = this.commands;
 			this.gateways.guilds.schema.disabledCommands.setValidator(function (command, guild) { // eslint-disable-line

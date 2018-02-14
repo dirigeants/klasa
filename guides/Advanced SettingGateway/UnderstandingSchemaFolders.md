@@ -57,16 +57,16 @@ msg.guild.configs.userBlacklist;
 
 ## Removing keys
 
-Removing keys with the schema is quite easy, as you would have access to the {@link SchemaFolder} that holds it and remove it by its name (remember that `force` is optional and defaults to `true`) using {@link SchemaFolder#removeKey} as in the following example:
+Removing keys with the schema is quite easy, as you would have access to the {@link SchemaFolder} that holds it and remove it by its name (remember that `force` is optional and defaults to `true`) using {@link SchemaFolder#remove} as in the following example:
 
 ```javascript
-this.client.gateways.gatewayName.schema.removeKey(name, force);
+this.client.gateways.gatewayName.schema.remove(name, force);
 ```
 
 In case you have a key you do not longer use and you want to get rid of it, for example, the recently created **userBlacklist** key for guild configs, you would run the following code:
 
 ```javascript
-this.client.gateways.guilds.schema.removeKey('userBlacklist');
+this.client.gateways.guilds.schema.remove('userBlacklist');
 ```
 
 And the property `userBlacklist` for all guild configs will be deleted.
@@ -122,19 +122,7 @@ async function init() {
 
 ## Removing folders
 
-It's exactly the same as {@link SchemaFolder#removeKey}, but using {@link SchemaFolder#removeFolder} instead. With the following syntax:
-
-```javascript
-this.client.gateways.gatewayName.schema.removeFolder(name, force);
-```
-
-To remove a folder, like the aforementioned **channels** folder, you would run the following code:
-
-```javascript
-this.client.gateways.guilds.schema.removeFolder('channels');
-```
-
-This will remove all the data from all the sub-keys and sub-folders, even very nested ones.
+Removing folders is the same as removing keys, check {@link SchemaFolder#remove}, the difference is that, while removing a key will remove one value from the schema, removing a folder will remove it with all its nested keys and folders, even very nested ones.
 
 ## Ensuring the existence of a key.
 
@@ -144,7 +132,7 @@ In [klasa pieces](https://github.com/dirigeants/klasa-pieces/) specially, some p
 async function init() {
 	const { schema } = this.client.gateways.guilds;
 
-	if (!schema.hasKey('modlog')) {
+	if (!schema.has('modlog')) {
 		await schema.addKey('modlog', { type: 'TextChannel' });
 	}
 }

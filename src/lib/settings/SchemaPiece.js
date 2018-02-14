@@ -34,7 +34,7 @@ class SchemaPiece extends Schema {
 	 * @since 0.5.0
 	 * @param {KlasaClient} client The client which initialized this instance
 	 * @param {Gateway} gateway The Gateway that manages this schema instance
-	 * @param {AddOptions} options The object containing the properties for this schema instance
+	 * @param {SchemaFolderAddOptions} options The object containing the properties for this schema instance
 	 * @param {SchemaFolder} parent The parent which holds this instance
 	 * @param {string} key The name of the key
 	 */
@@ -209,7 +209,7 @@ class SchemaPiece extends Schema {
 	/**
 	 * Checks if options.default is valid.
 	 * @since 0.5.0
-	 * @param {AddOptions} options The options to validate
+	 * @param {SchemaFolderAddOptions} options The options to validate
 	 * @throws {TypeError}
 	 * @private
 	 */
@@ -278,7 +278,7 @@ class SchemaPiece extends Schema {
 	/**
 	 * Check if the key is properly configured.
 	 * @since 0.5.0
-	 * @param {AddOptions} options The options to parse
+	 * @param {SchemaFolderAddOptions} options The options to parse
 	 * @returns {true}
 	 * @throws {TypeError}
 	 * @private

@@ -65,7 +65,7 @@ class Schedule {
 	 */
 	async init() {
 		const { schema } = this.client.gateways.clientStorage;
-		if (!schema.hasKey('schedules')) {
+		if (!schema.has('schedules')) {
 			await schema.addKey('schedules', {
 				type: 'any',
 				default: [],

@@ -652,24 +652,21 @@ declare module 'klasa' {
 
 		public readonly configurableKeys: string[];
 
-		public addFolder(key: string, object?: object, force?: boolean): Promise<SchemaFolder>;
-		public removeFolder(key: string, force?: boolean): Promise<SchemaFolder>;
-		public hasKey(key: string): boolean;
 		public addKey(key: string, options: SchemaFolderAddOptions, force?: boolean): Promise<SchemaFolder>;
-		public removeKey(key: string, force?: boolean): Promise<SchemaFolder>;
+		public addFolder(key: string, object?: object, force?: boolean): Promise<SchemaFolder>;
+		public has(key: string): boolean;
+		public remove(key: string, force?: boolean): Promise<SchemaFolder>;
 		public force(action: 'add' | 'edit' | 'delete', key: string, piece: SchemaFolder | SchemaPiece): Promise<any>;
 		public getDefaults(data?: object): object;
 		public getSQL(array?: string[]): string[];
-		public getAllKeys(array?: string[]): string[];
-		public getAllValues(array?: SchemaPiece[]): SchemaPiece[];
 
-		private _addKey(key: string, options: SchemaFolderAddOptions, type: typeof Schema | typeof SchemaFolder): void;
-		private _removeKey(key: string): void;
+		private _add(key: string, options: SchemaFolderAddOptions, type: typeof Schema | typeof SchemaFolder): void;
+		private _remove(key: string): void;
 		private _init(options: object): true;
 
-		public entries(): Iterator<[string, SchemaFolder | SchemaPiece]>;
-		public values(): Iterator<SchemaFolder | SchemaPiece>;
-		public keys(): Iterator<string>;
+		public entries(recursive?: boolean): Iterator<[string, SchemaFolder | SchemaPiece]>;
+		public values(recursive?: boolean): Iterator<SchemaFolder | SchemaPiece>;
+		public keys(recursive?: boolean): Iterator<string>;
 		public [Symbol.iterator](): Iterator<[string, SchemaFolder | SchemaPiece]>;
 
 		public toJSON(): any;

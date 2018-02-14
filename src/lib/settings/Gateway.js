@@ -227,7 +227,7 @@ class Gateway extends GatewayStorage {
 
 		for (let i = 0; i < route.length; i++) {
 			const currKey = route[i];
-			if (typeof path[currKey] === 'undefined' || !path.hasKey(currKey)) throw `The key ${route.slice(0, i + 1).join('.')} does not exist in the current schema.`;
+			if (typeof path[currKey] === 'undefined' || !path.has(currKey)) throw `The key ${route.slice(0, i + 1).join('.')} does not exist in the current schema.`;
 
 			if (path[currKey].type === 'Folder') {
 				path = path[currKey];

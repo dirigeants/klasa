@@ -141,13 +141,13 @@ class Configuration {
 	 * @returns {*}
 	 */
 	get(key) {
-		if (!key.includes('.')) return this.gateway.schema.hasKey(key) ? this[key] : undefined;
+		if (!key.includes('.')) return this.gateway.schema.has(key) ? this[key] : undefined;
 
 		const path = key.split('.');
 		let refSetting = this; // eslint-disable-line consistent-this
 		let refSchema = this.gateway.schema;
 		for (const currKey of path) {
-			if (refSchema.type !== 'Folder' || !refSchema.hasKey(currKey)) return undefined;
+			if (refSchema.type !== 'Folder' || !refSchema.has(currKey)) return undefined;
 			refSetting = refSetting[currKey];
 			refSchema = refSchema[currKey];
 		}
@@ -171,7 +171,7 @@ class Configuration {
 	 */
 	async resetConfiguration() {
 		if (this._existsInDB) await this.gateway.provider.delete(this.gateway.type, this.id);
-		for (const key of this.gateway.schema.keyArray) this[key] = Configuration._merge(undefined, this.gateway.schema[key]);
+		for (const [key, value] of this.gateway.schema) this[key] = Configuration._merge(undefined, value);
 		return this;
 	}
 
@@ -500,7 +500,7 @@ class Configuration {
 	 */
 	_parseUpdateMany(cache, object, schema, guild, list, updateObject) {
 		for (const key of Object.keys(object)) {
-			if (!schema.hasKey(key)) continue;
+			if (!schema.has(key)) continue;
 			// Check if it's a folder, and recursively iterate over it
 			if (schema[key].type === 'Folder') {
 				if (!(key in updateObject)) updateObject = updateObject[key] = {};

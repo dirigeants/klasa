@@ -88,7 +88,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Changed the type for `GatewayDriver#types` from `string[]` to `Set<string>`. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Renamed `SchemaPiece#modify()` to `SchemaPiece#edit()`. (kyranet)
-- [[#179](https://github.com/dirigeants/klasa/pull/179)] Renamed `Gateway#getKeys()` and `Gateway#getValues()` to `Gateway#getAllKeys()` and `Gateway#getAllValues()` respectively. (kyranet)
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Renamed `Gateway#getKeys()` and `Gateway#getValues()` to `Gateway#keys(true)` and `Gateway#values(true)` respectively, which return iterators. (kyranet)
 - [[#176](https://github.com/dirigeants/klasa/pull/176)] Marked several constructors as private (singleton, abstract or discouraged). (kyranet)
 - [[#162](https://github.com/dirigeants/klasa/pull/162)] Modified the built-in conf command to use `dependant arguments`-like arguments using custom arguments and messages. (bdistin)
 - [[#162](https://github.com/dirigeants/klasa/pull/162)] **[BREAKING]** Refactored ArgResolver. Now they take `arg`, `possible` and `msg` as parameters instead of `arg`, `currentUsage`, `possible`, `repeat` and `msg`. Repeating handling is now done in the backends. (bdistin)
@@ -141,6 +141,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Removed
 
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] **[BREAKING]** Removed `SchemaFolder#removeKey` and `SchemaFolder#removeFolder` in favor to a more consistent `Schema#remove`. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Removed the abstract method `resolveString()` from SchemaFolder and SchemaPiece. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Removed `SchemaFolder#getList` and replaced it to `Configuration#list`. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Removed the `ConfigUpdateEntryMany` typedef in favor of a more constant type. (kyranet)
