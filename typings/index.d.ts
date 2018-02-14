@@ -694,7 +694,7 @@ declare module 'klasa' {
 //#region Pieces
 
 	export class Piece {
-		public constructor(client: KlasaClient, type: string, file: string | string[], core: boolean);
+		public constructor(client: KlasaClient, type: string, file: string | string[], core: boolean, options: { name?: string, enabled?: boolean });
 		public readonly client: KlasaClient;
 		public readonly core: boolean;
 		public file: string | string[];
@@ -821,6 +821,7 @@ declare module 'klasa' {
 		public readonly holds: V;
 		public readonly coreDir: string;
 		public readonly userDir: string;
+
 		public init(): Promise<any[]>;
 		public load(file: string | string[], core?: boolean): Piece;
 		public loadAll(): Promise<number>;
@@ -1316,14 +1317,11 @@ declare module 'klasa' {
 		clock?: KlasaClientOptionsClock;
 		cmdEditing?: boolean;
 		cmdLogging?: boolean;
-		cmdPrompt?: boolean;
 		commandMessageLifetime?: number;
 		console?: KlasaConsoleConfig;
 		consoleEvents?: KlasaConsoleEvents;
 		customPromptDefaults?: KlasaCustomPromptDefaults;
 		gateways?: KlasaGatewaysOptions;
-		ignoreBots?: boolean;
-		ignoreSelf?: boolean;
 		language?: string;
 		ownerID?: string;
 		permissionLevels?: PermissionLevels;
