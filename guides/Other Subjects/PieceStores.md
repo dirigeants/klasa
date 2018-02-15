@@ -4,18 +4,13 @@ The most basic store:
 
 ```javascript
 const { join } = require('path');
-const { Collection } = require('discord.js');
 const { Store } = require('klasa');
 const Something = require('./Something');
 
-class SomethingStore extends Collection {
+class SomethingStore extends Store {
 
 	constructor(client) {
-		super();
-		Object.defineProperty(this, 'client', { value: client });
-		this.userDir = join(this.client.clientBaseDir, 'somethings');
-		this.holds = Something;
-		this.name = 'somethings';
+		super(client, 'somethings', Something);
 	}
 
 	delete(name) {
@@ -35,17 +30,7 @@ class SomethingStore extends Collection {
 		return piece;
 	}
 
-	// Technically left for more than just documentation
-	/* eslint-disable no-empty-function */
-	init() {}
-	load() {}
-	async loadAll() {}
-	resolve() {}
-	/* eslint-enable no-empty-function */
-
 }
-
-Store.applyToClass(SomethingStore);
 
 module.exports = SomethingStore;
 ```
@@ -55,36 +40,21 @@ The most basic Piece:
 ```javascript
 const { Piece } = require('klasa');
 
-class Something {
+class Something extends Piece {
 
-	constructor(client, dir, file, options = {}) {
-		this.client = client;
-		this.dir = dir;
-		this.file = file;
-		this.name = options.name || file.slice(0, -3);
-		this.type = 'something';
-		this.enabled = 'enabled' in options ? options.enabled : true;
+	constructor(client, file, core, options = {}) {
+		super(client, 'something', file, core, options);
 	}
 
 	run() {
 		// Defined in extension Classes
 	}
 
-	async init() {
+	init() {
 		// Optionally defined in extension Classes
 	}
 
-	// Technically left for more than just documentation
-	/* eslint-disable no-empty-function */
-	async reload() {}
-	unload() {}
-	disable() {}
-	enable() {}
-	/* eslint-enable no-empty-function */
-
 }
-
-Piece.applyToClass(Something);
 
 module.exports = Something;
 ```
@@ -93,18 +63,13 @@ Now that probably doesn't give you much idea on what that means or why. But take
 
 ```javascript
 const { join } = require('path');
-const { Collection } = require('discord.js');
 const { Store } = require('klasa');
-const Genre = require('./Genre');
+const Something = require('./Something');
 
-class GenreStore extends Collection {
+class GenreStore extends Store {
 
 	constructor(client) {
-		super();
-		Object.defineProperty(this, 'client', { value: client });
-		this.userDir = join(this.client.clientBaseDir, 'genres');
-		this.holds = Genre;
-		this.name = 'genres';
+		super(client, 'genres', Something);
 	}
 
 	// We can wrap the delete method with additional teardown actions
@@ -126,17 +91,7 @@ class GenreStore extends Collection {
 		return piece;
 	}
 
-	// Technically left for more than just documentation
-	/* eslint-disable no-empty-function */
-	init() {}
-	load() {}
-	async loadAll() {}
-	resolve() {}
-	/* eslint-enable no-empty-function */
-
 }
-
-Store.applyToClass(GenreStore);
 
 module.exports = GenreStore;
 ```
@@ -147,15 +102,10 @@ Tbh, not that different than a simple store. Although be sure to take a look at 
 const { Piece, util } = require('klasa');
 const getInfoAsync = require('util').promisify(require('ytdl-core').getInfo);
 
-class Genre {
+class Genre extends Piece {
 
-	constructor(client, dir, file, options = {}) {
-		this.client = client;
-		this.dir = dir;
-		this.file = file;
-		this.name = options.name || file.slice(0, -3);
-		this.type = 'genre';
-		this.enabled = 'enabled' in options ? options.enabled : true;
+	constructor(client, file, core, options = {}) {
+		super(client, 'genre', file, core, options);
 		/*
 		 * we should probably describe our auto play genres in the command,
 		 * we will make for guild owners to set their guild's genre setting.
@@ -195,21 +145,11 @@ class Genre {
 		return `https://youtu.be/${id}`;
 	}
 
-	async init() {
+	init() {
 		// There is really no reason to init in this type of piece, but we need this here anyway
 	}
 
-	// Technically left for more than just documentation
-	/* eslint-disable no-empty-function */
-	async reload() {}
-	unload() {}
-	disable() {}
-	enable() {}
-	/* eslint-enable no-empty-function */
-
 }
-
-Piece.applyToClass(Genre);
 
 module.exports = Genre;
 ```

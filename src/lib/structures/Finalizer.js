@@ -1,13 +1,13 @@
-const Piece = require('./interfaces/Piece');
+const Piece = require('./base/Piece');
 const { mergeDefault } = require('../util/util');
 
 /**
  * Base class for all Klasa Finalizers. See {@tutorial CreatingFinalizers} for more information how to use this class
  * to build custom finalizers.
  * @tutorial CreatingFinalizers
- * @implements {Piece}
+ * @extends {Piece}
  */
-class Finalizer {
+class Finalizer extends Piece {
 
 	/**
 	 * @typedef {Object} FinalizerOptions
@@ -19,53 +19,13 @@ class Finalizer {
 	/**
 	 * @since 0.0.1
 	 * @param {KlasaClient} client The Klasa Client
-	 * @param {string} dir The path to the core or user finalizer pieces folder
 	 * @param {string} file The path from the pieces folder to the finalizer file
+	 * @param {boolean} core If the piece is in the core directory or not
 	 * @param {FinalizerOptions} [options={}] Optional Finalizer settings
 	 */
-	constructor(client, dir, file, options = {}) {
+	constructor(client, file, core, options = {}) {
 		options = mergeDefault(client.options.pieceDefaults.finalizers, options);
-
-		/**
-		 * @since 0.0.1
-		 * @type {KlasaClient}
-		 */
-		this.client = client;
-
-		/**
-		 * The directory to where this finalizer piece is stored
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.dir = dir;
-
-		/**
-		 * The file location where this finalizer is stored
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.file = file;
-
-		/**
-		 * The name of the finalizer
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.name = options.name || file.slice(0, -3);
-
-		/**
-		 * The type of Klasa piece this is
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.type = 'finalizer';
-
-		/**
-		 * If the finalizer is enabled or not
-		 * @since 0.0.1
-		 * @type {boolean}
-		 */
-		this.enabled = options.enabled;
+		super(client, 'finalizer', file, core, options);
 	}
 
 	/**
@@ -91,18 +51,6 @@ class Finalizer {
 		// Optionally defined in extension Classes
 	}
 
-	// left for documentation
-	/* eslint-disable no-empty-function */
-	async reload() {}
-	unload() {}
-	disable() {}
-	enable() {}
-	toString() {}
-	toJSON() {}
-	/* eslint-enable no-empty-function */
-
 }
-
-Piece.applyToClass(Finalizer);
 
 module.exports = Finalizer;

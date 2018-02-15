@@ -74,7 +74,7 @@ class Tag {
 			const current = `${members}: at tag #${count} at bound #${i + 1}`;
 			let possible;
 			try {
-				possible = new Possible(/^([^:]+)(?::([^{}/]+))?(?:{([^,]+)?(?:,(.+))?})?(?:\/(.+)\/(\w+)?)?$/i.exec(member));
+				possible = new Possible(Tag.pattern.exec(member));
 			} catch (err) {
 				if (typeof err === 'string') throw `${current}: ${err}`;
 				throw `${current}: invalid syntax, non specific`;
@@ -116,5 +116,14 @@ class Tag {
 	}
 
 }
+
+/**
+ * Standard regular expressions for matching usage tags
+ * @since 0.5.0
+ * @type {RegExp}
+ * @static
+ * @private
+ */
+Tag.pattern = /^([^:]+)(?::([^{}/]+))?(?:{([^,]+)?(?:,(.+))?})?(?:\/(.+)\/(\w+)?)?$/i;
 
 module.exports = Tag;

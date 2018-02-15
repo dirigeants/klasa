@@ -1,4 +1,4 @@
-const Piece = require('./interfaces/Piece');
+const Piece = require('./base/Piece');
 const { mergeDefault } = require('../util/util');
 
 /**
@@ -7,7 +7,7 @@ const { mergeDefault } = require('../util/util');
  * @tutorial CreatingTasks
  * @implements {Piece}
  */
-class Task {
+class Task extends Piece {
 
 	/**
 	 * @typedef {Object} TaskOptions
@@ -19,53 +19,13 @@ class Task {
 	/**
 	 * @since 0.5.0
 	 * @param {KlasaClient} client The Klasa client
-	 * @param {string} dir The path to the core or user task pieces folder
 	 * @param {string} file The path from the pieces folder to the task piece file
+	 * @param {boolean} core If the piece is in the core directory or not
 	 * @param {TaskOptions} [options={}] Optional Task settings
 	 */
-	constructor(client, dir, file, options = {}) {
+	constructor(client, file, core, options = {}) {
 		options = mergeDefault(client.options.pieceDefaults.tasks, options);
-
-		/**
-		 * @since 0.5.0
-		 * @type {KlasaClient}
-		 */
-		this.client = client;
-
-		/**
-		 * The type of Klasa piece this is
-		 * @since 0.5.0
-		 * @type {string}
-		 */
-		this.type = 'task';
-
-		/**
-		 * If the Task is enabled or not
-		 * @since 0.5.0
-		 * @type {boolean}
-		 */
-		this.enabled = options.enabled;
-
-		/**
-		 * The name of the task
-		 * @since 0.5.0
-		 * @type {string}
-		 */
-		this.name = options.name || file.slice(0, -3);
-
-		/**
-		 * The directory to where this task piece is stored
-		 * @since 0.5.0
-		 * @type {string}
-		 */
-		this.dir = dir;
-
-		/**
-		 * The file location where this task piece is stored
-		 * @since 0.5.0
-		 * @type {string}
-		 */
-		this.file = file;
+		super(client, 'task', file, core, options);
 	}
 
 	/**
@@ -89,18 +49,6 @@ class Task {
 		// Optionally defined in extension Classes
 	}
 
-	// left for documentation
-	/* eslint-disable no-empty-function */
-	async reload() {}
-	unload() {}
-	disable() {}
-	enable() {}
-	toString() {}
-	toJSON() {}
-	/* eslint-enable no-empty-function */
-
 }
-
-Piece.applyToClass(Task);
 
 module.exports = Task;

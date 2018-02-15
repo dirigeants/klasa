@@ -1,4 +1,4 @@
-const Piece = require('./interfaces/Piece');
+const Piece = require('./base/Piece');
 const { mergeDefault } = require('../util/util');
 const Discord = require('discord.js');
 
@@ -6,9 +6,9 @@ const Discord = require('discord.js');
  * Base class for all Klasa Extendables. See {@tutorial CreatingExtendables} for more information how to use this class
  * to build custom extendables.
  * @tutorial CreatingExtendables
- * @implements {Piece}
+ * @extends {Piece}
  */
-class Extendable {
+class Extendable extends Piece {
 
 	/**
 	 * @typedef {Object} ExtendableOptions
@@ -21,54 +21,14 @@ class Extendable {
 	/**
 	 * @since 0.0.1
 	 * @param {KlasaClient} client The klasa client
-	 * @param {string} dir The path to the core or user extendable pieces folder
 	 * @param {string} file The path from the pieces folder to the extendable file
+	 * @param {boolean} core If the piece is in the core directory or not
 	 * @param {string[]} appliesTo The discord classes this extendable applies to
 	 * @param {ExtendableOptions} options The options for this extendable
 	 */
-	constructor(client, dir, file, appliesTo = [], options = {}) {
+	constructor(client, file, core, appliesTo = [], options = {}) {
 		options = mergeDefault(client.options.pieceDefaults.extendables, options);
-
-		/**
-		 * @since 0.0.1
-		 * @type {KlasaClient}
-		 */
-		this.client = client;
-
-		/**
-		 * The directory to where this extendable piece is stored
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.dir = dir;
-
-		/**
-		 * The file location where this extendable is stored
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.file = file;
-
-		/**
-		 * The name of the extendable
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.name = options.name || file.slice(0, -3);
-
-		/**
-		 * The type of Klasa piece this is
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.type = 'extendable';
-
-		/**
-		 * If the extendable is enabled or not
-		 * @since 0.0.1
-		 * @type {boolean}
-		 */
-		this.enabled = options.enabled;
+		super(client, 'extendable', file, core, options);
 
 		/**
 		 * The discord classes this extendable applies to
@@ -147,15 +107,6 @@ class Extendable {
 		};
 	}
 
-	// left for documentation
-	/* eslint-disable no-empty-function */
-	async reload() {}
-	unload() {}
-	toString() {}
-	/* eslint-enable no-empty-function */
-
 }
-
-Piece.applyToClass(Extendable, ['disable', 'enable', 'toJSON']);
 
 module.exports = Extendable;

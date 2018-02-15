@@ -89,6 +89,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Changed the type for `GatewayDriver#types` from `string[]` to `Set<string>`. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Renamed `SchemaPiece#modify()` to `SchemaPiece#edit()`. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Renamed `Gateway#getKeys()` and `Gateway#getValues()` to `Gateway#keys(true)` and `Gateway#values(true)` respectively, which return iterators. (kyranet)
+- [[#182](https://github.com/dirigeants/klasa/pull/182)] **[BREAKING]** Refactored all pieces and stores to extend Piece and Store respectively. (bdistin)
 - [[#176](https://github.com/dirigeants/klasa/pull/176)] Marked several constructors as private (singleton, abstract or discouraged). (kyranet)
 - [[#162](https://github.com/dirigeants/klasa/pull/162)] Modified the built-in conf command to use `dependant arguments`-like arguments using custom arguments and messages. (bdistin)
 - [[#162](https://github.com/dirigeants/klasa/pull/162)] **[BREAKING]** Refactored ArgResolver. Now they take `arg`, `possible` and `msg` as parameters instead of `arg`, `currentUsage`, `possible`, `repeat` and `msg`. Repeating handling is now done in the backends. (bdistin)
@@ -174,6 +175,8 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Fixed SettingResolver's return types. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Fixed Gateway syncing keys even when it's unused. (kyranet)
+- [[#182](https://github.com/dirigeants/klasa/pull/182)] Reduced the amount of data stored per-piece, resulting on a RAM usage decrease. (bdistin)
+- [[#182](https://github.com/dirigeants/klasa/pull/182)] Fixed MessageOptions being not correctly applied to the *send* aliases. (bdistin)
 - [[#176](https://github.com/dirigeants/klasa/pull/176)] Fixed internal parser ignoring `0` as `min` and/or `max` due to falsy value check. (kyranet)
 - [[#170](https://github.com/dirigeants/klasa/pull/170)] Fixed guild resolvables not working correctly. (kyranet)
 - [[#165](https://github.com/dirigeants/klasa/pull/165)] Updated url for peer dependency `discord.js` and fixed all `JSDocs`. (kyranet)

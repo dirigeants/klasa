@@ -1,4 +1,4 @@
-const Piece = require('./interfaces/Piece');
+const Piece = require('./base/Piece');
 const { mergeDefault } = require('../util/util');
 
 /**
@@ -7,7 +7,7 @@ const { mergeDefault } = require('../util/util');
  * @tutorial CreatingProviders
  * @implements {Piece}
  */
-class Provider {
+class Provider extends Piece {
 
 	/**
 	 * @typedef {Object} ProviderOptions
@@ -20,53 +20,13 @@ class Provider {
 	/**
 	 * @since 0.0.1
 	 * @param {KlasaClient} client The Klasa client
-	 * @param {string} dir The path to the core or user provider pieces folder
 	 * @param {string} file The path from the pieces folder to the provider file
+	 * @param {boolean} core If the piece is in the core directory or not
 	 * @param {ProviderOptions} [options={}] Optional Provider settings
 	 */
-	constructor(client, dir, file, options = {}) {
+	constructor(client, file, core, options = {}) {
 		options = mergeDefault(client.options.pieceDefaults.providers, options);
-
-		/**
-		 * @since 0.0.1
-		 * @type {KlasaClient}
-		 */
-		this.client = client;
-
-		/**
-		 * The directory to where this provider piece is stored
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.dir = dir;
-
-		/**
-		 * The file location where this provider is stored
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.file = file;
-
-		/**
-		 * The name of the provider
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.name = options.name || file.slice(0, -3);
-
-		/**
-		 * The type of Klasa piece this is
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.type = 'provider';
-
-		/**
-		 * If the provider is enabled or not
-		 * @since 0.0.1
-		 * @type {boolean}
-		 */
-		this.enabled = options.enabled;
+		super(client, 'provider', file, core, options);
 
 		/**
 		 * If the provider provides to a sql data source
@@ -109,27 +69,13 @@ class Provider {
 	 */
 	toJSON() {
 		return {
-			dir: this.dir,
-			file: this.file,
-			name: this.name,
-			type: this.type,
+			...super.toJSON(),
 			enabled: this.enabled,
 			sql: this.sql,
 			cache: this.cache
 		};
 	}
 
-	// left for documentation
-	/* eslint-disable no-empty-function */
-	async reload() {}
-	unload() {}
-	disable() {}
-	enable() {}
-	toString() {}
-	/* eslint-enable no-empty-function */
-
 }
-
-Piece.applyToClass(Provider, ['toJSON']);
 
 module.exports = Provider;

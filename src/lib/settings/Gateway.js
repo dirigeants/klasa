@@ -158,7 +158,7 @@ class Gateway extends GatewayStorage {
 	 * @returns {Configuration}
 	 */
 	insertEntry(id, data = {}) {
-		const configs = new this.Configuration(this, Object.assign(data, { id }));
+		const configs = new this.Configuration(this, { ...data, id });
 		this.cache.set(id, configs);
 		if (this.ready && this.schema.keyArray.length) configs.sync().catch(err => this.client.emit('error', err));
 		return configs;

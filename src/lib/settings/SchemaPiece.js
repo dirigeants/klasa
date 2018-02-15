@@ -151,7 +151,7 @@ class SchemaPiece extends Schema {
 			if (this.gateway.sql) await this.gateway.provider.updateColumn(this.gateway.type, this.path, options.sql);
 		}
 		if (typeof options.default !== 'undefined' && this.default !== options.default) {
-			this._schemaCheckDefault(Object.assign(this.toJSON(), options));
+			this._schemaCheckDefault({ ...this.toJSON(), ...options });
 			this.default = options.default;
 			if (!edited.has('SQL')) this.sql[1] = this._generateSQLDatatype(options.sql);
 			edited.add('DEFAULT');

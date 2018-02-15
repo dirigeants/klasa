@@ -39,24 +39,37 @@ class KlasaClient extends Discord.Client {
 
 	/**
 	 * @typedef {external:DiscordJSConfig} KlasaClientOptions
-	 * @property {string} [prefix] The default prefix the bot should respond to
-	 * @property {PermissionLevels} [permissionLevels=KlasaClient.defaultPermissionLevels] The permission levels to use with this bot
 	 * @property {string} [clientBaseDir=path.dirname(require.main.filename)] The directory where all piece folders can be found
-	 * @property {number} [commandMessageLifetime=1800] The threshold for how old command messages can be before sweeping since the last edit in seconds
-	 * @property {Object} [provider] The provider to use in Klasa
-	 * @property {KlasaConsoleConfig} [console={}] Config options to pass to the client console
-	 * @property {KlasaConsoleEvents} [consoleEvents={}] Config options to pass to the client console
-	 * @property {KlasaGatewaysOptions} [gateways={}] The options for each built-in gateway
-	 * @property {KlasaPieceDefaults} [pieceDefaults={}] Overrides the defaults for all pieces
-	 * @property {string} [language='en-US'] The default language Klasa should opt-in for the commands
-	 * @property {KlasaCustomPromptDefaults} [customPromptDefaults={}] The defaults for custom prompts
+	 * @property {KlasaClientOptionsClock} [clock] The options for the internal clock module that runs Schedule
 	 * @property {boolean} [cmdEditing=false] Whether the bot should update responses if the command is edited
 	 * @property {boolean} [cmdLogging=false] Whether the bot should log command usage
-	 * @property {boolean} [typing=false] Whether the bot should type while processing commands
-	 * @property {boolean} [preserveConfigs=true] Whether the bot should preserve (non-default) configs when removed from a guild
-	 * @property {(string|Function)} [readyMessage=`Successfully initialized. Ready to serve ${this.guilds.size} guilds.`] readyMessage to be passed throughout Klasa's ready event
+	 * @property {number} [commandMessageLifetime=1800] The threshold for how old command messages can be before sweeping since the last edit in seconds
+	 * @property {KlasaConsoleConfig} [console={}] Config options to pass to the client console
+	 * @property {KlasaConsoleEvents} [consoleEvents={}] Config options to pass to the client console
+	 * @property {KlasaCustomPromptDefaults} [customPromptDefaults={}] The defaults for custom prompts
+	 * @property {KlasaGatewaysOptions} [gateways={}] The options for each built-in gateway
+	 * @property {string} [language='en-US'] The default language Klasa should opt-in for the commands
 	 * @property {string} [ownerID] The discord user id for the user the bot should respect as the owner (gotten from Discord api if not provided)
+	 * @property {PermissionLevels} [permissionLevels=KlasaClient.defaultPermissionLevels] The permission levels to use with this bot
+	 * @property {KlasaPieceDefaults} [pieceDefaults={}] Overrides the defaults for all pieces
+	 * @property {string} [prefix] The default prefix the bot should respond to
+	 * @property {boolean} [preserveConfigs=true] Whether the bot should preserve (non-default) configs when removed from a guild
+	 * @property {KlasaProvidersOptions} [providers] The provider options
+	 * @property {(string|Function)} [readyMessage=`Successfully initialized. Ready to serve ${this.guilds.size} guilds.`] readyMessage to be passed throughout Klasa's ready event
 	 * @property {RegExp} [regexPrefix] The regular expression prefix if one is provided
+	 * @property {boolean} [typing=false] Whether the bot should type while processing commands
+	 * @memberof KlasaClient
+	 */
+
+	/**
+	 * @typedef {Object} KlasaProvidersOptions
+	 * @property {string} [default] The default provider to use
+	 * @memberof KlasaClient
+	 */
+
+	/**
+	 * @typedef {Object} KlasaClientOptionsClock
+	 * @property {number} [interval] The interval in milliseconds for the clock to check the tasks
 	 * @memberof KlasaClient
 	 */
 

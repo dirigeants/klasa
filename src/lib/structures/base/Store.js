@@ -1,10 +1,10 @@
 const { join } = require('path');
+const { Collection } = require('discord.js');
 const fs = require('fs-nextra');
-const { applyToClass, isClass } = require('../../util/util');
+const { isClass } = require('../../util/util');
 
 /**
- * The common interface for all stores
- * @interface
+ * The common base for all stores
  * @see CommandStore
  * @see EventStore
  * @see ExtendableStore
@@ -15,7 +15,58 @@ const { applyToClass, isClass } = require('../../util/util');
  * @see ProviderStore
  * @see TaskStore
  */
-class Store {
+class Store extends Collection {
+
+	constructor(client, name, holds) {
+		super();
+
+		/**
+		 * The client this Store was created with
+		 * @since 0.0.1
+		 * @name Store#client
+		 * @type {KlasaClient}
+		 * @readonly
+		 */
+		Object.defineProperty(this, 'client', { value: client });
+
+		/**
+		 * The name of what this holds
+		 * @since 0.3.0
+		 * @name Store#name
+		 * @type {string}
+		 * @readonly
+		 */
+		Object.defineProperty(this, 'name', { value: name });
+
+		/**
+		 * The type of structure this store holds
+		 * @since 0.1.1
+		 * @name Store#holds
+		 * @type {Piece}
+		 * @readonly
+		 */
+		Object.defineProperty(this, 'holds', { value: holds });
+	}
+
+	/**
+	 * The directory of commands in Klasa relative to where its installed.
+	 * @since 0.0.1
+	 * @type {string}
+	 * @readonly
+	 */
+	get coreDir() {
+		return join(this.client.coreBaseDir, this.name);
+	}
+
+	/**
+	 * The directory of local commands relative to where you run Klasa from.
+	 * @since 0.0.1
+	 * @type {string}
+	 * @readonly
+	 */
+	get userDir() {
+		return join(this.client.clientBaseDir, this.name);
+	}
 
 	/**
 	 * Initializes all pieces in this store.
@@ -29,18 +80,19 @@ class Store {
 	/**
 	 * Loads a piece into Klasa so it can be saved in this store.
 	 * @since 0.0.1
-	 * @param {string} dir The user directory or core directory where this file is saved
 	 * @param {string|string[]} file A string or array of strings showing where the file is located.
+	 * @param {boolean} [core=false] If the file is located in the core directory or not
 	 * @returns {?Piece}
 	 */
-	load(dir, file) {
+	load(file, core = false) {
+		const dir = core ? this.coreDir : this.userDir;
 		const loc = Array.isArray(file) ? join(dir, ...file) : join(dir, file);
 		if (!loc.endsWith('.js')) return null;
 		let piece = null;
 		try {
 			const Piece = (req => req.default || req)(require(loc));
 			if (!isClass(Piece)) throw new TypeError(`Failed to load file '${loc}'. The exported structure is not a class.`);
-			piece = this.set(new Piece(this.client, dir, file));
+			piece = this.set(new Piece(this.client, file, core));
 		} catch (error) {
 			this.client.emit('wtf', `Failed to load file '${loc}'. Error:\n${error.stack || error}`);
 		}
@@ -57,10 +109,10 @@ class Store {
 		this.clear();
 		if (this.coreDir) {
 			const coreFiles = await fs.readdir(this.coreDir).catch(() => { fs.ensureDir(this.coreDir).catch(err => this.client.emit('error', err)); });
-			if (coreFiles) await Promise.all(coreFiles.map(this.load.bind(this, this.coreDir)));
+			if (coreFiles) await Promise.all(coreFiles.map(file => this.load(file, true)));
 		}
 		const userFiles = await fs.readdir(this.userDir).catch(() => { fs.ensureDir(this.userDir).catch(err => this.client.emit('error', err)); });
-		if (userFiles) await Promise.all(userFiles.map(this.load.bind(this, this.userDir)));
+		if (userFiles) await Promise.all(userFiles.map(file => this.load(file)));
 		return this.size;
 	}
 
@@ -82,16 +134,6 @@ class Store {
 	 */
 	toString() {
 		return this.name;
-	}
-
-	/**
-	 * Applies this interface to a class
-	 * @since 0.1.1
-	 * @param {Object} structure The structure to apply this interface to
-	 * @param {string[]} [skips=[]] The methods to skip when applying this interface
-	 */
-	static applyToClass(structure, skips) {
-		applyToClass(Store, structure, skips);
 	}
 
 }

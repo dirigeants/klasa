@@ -1,15 +1,15 @@
-const { join, extname, relative, sep } = require('path');
+const { extname, relative, sep } = require('path');
 const { Collection } = require('discord.js');
 const fs = require('fs-nextra');
 const Command = require('./Command');
-const Store = require('./interfaces/Store');
+const Store = require('./base/Store');
 
 /**
  * Stores all the commands usable in Klasa
  * @extends external:Collection
  * @implements {Store}
  */
-class CommandStore extends Collection {
+class CommandStore extends Store {
 
 	/**
 	 * Constructs our CommandStore for use in Klasa
@@ -17,16 +17,7 @@ class CommandStore extends Collection {
 	 * @param {KlasaClient} client The Klasa Client
 	 */
 	constructor(client) {
-		super();
-
-		/**
-		 * The client this CommandStore was created with.
-		 * @since 0.0.1
-		 * @name CommandStore#client
-		 * @type {KlasaClient}
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'client', { value: client });
+		super(client, 'commands', Command);
 
 		/**
 		 * The different aliases that represent the commands in this store.
@@ -34,34 +25,6 @@ class CommandStore extends Collection {
 		 * @type external:Collection
 		 */
 		this.aliases = new Collection();
-
-		/**
-		 * The directory of commands in Klasa relative to where its installed.
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.coreDir = join(this.client.coreBaseDir, 'commands');
-
-		/**
-		 * The directory of local commands relative to where you run Klasa from.
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.userDir = join(this.client.clientBaseDir, 'commands');
-
-		/**
-		 * The type of structure this store holds
-		 * @since 0.1.1
-		 * @type {Command}
-		 */
-		this.holds = Command;
-
-		/**
-		 * The name of what this holds
-		 * @since 0.3.0
-		 * @type {string}
-		 */
-		this.name = 'commands';
 	}
 
 	/**
@@ -131,35 +94,26 @@ class CommandStore extends Collection {
 	 */
 	async loadAll() {
 		this.clear();
-		await CommandStore.walk(this, this.coreDir);
-		await CommandStore.walk(this, this.userDir);
+		await CommandStore.walk(this, true);
+		await CommandStore.walk(this);
 		return this.size;
 	}
-
-	// left for documentation
-	/* eslint-disable no-empty-function */
-	init() {}
-	resolve() {}
-	load() {}
-	toString() {}
-	/* eslint-enable no-empty-function */
 
 	/**
 	 * Walks our directory of commands for the user and core directories.
 	 * @since 0.0.1
 	 * @param {CommandStore} store The command store we're loading into
-	 * @param {string} dir The directory of commands we're using to load commands from
+	 * @param {boolean} [core=false] If the file is located in the core directory or not
 	 * @returns {void}
 	 */
-	static async walk(store, dir) {
+	static async walk(store, core = false) {
+		const dir = core ? store.coreDir : store.userDir;
 		const files = await fs.scan(dir, { filter: (stats, path) => stats.isFile() && extname(path) === '.js' }).catch(() => { fs.ensureDir(dir).catch(err => store.client.emit('error', err)); });
 		if (!files) return true;
 
-		return Promise.all([...files.keys()].map(file => store.load(dir, relative(dir, file).split(sep))));
+		return Promise.all([...files.keys()].map(file => store.load(relative(dir, file).split(sep), core)));
 	}
 
 }
-
-Store.applyToClass(CommandStore, ['loadAll']);
 
 module.exports = CommandStore;

@@ -110,7 +110,7 @@ class GatewayStorage {
 	 * @readonly
 	 */
 	get defaults() {
-		return Object.assign(this.schema.defaults, { default: true });
+		return { ...this.schema.defaults, default: true };
 	}
 
 	/**
