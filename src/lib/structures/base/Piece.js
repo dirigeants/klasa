@@ -1,4 +1,4 @@
-const { mergeDefault } = require('../util/util');
+const { mergeDefault } = require('../../util/util');
 
 /**
  * The common class for all pieces
