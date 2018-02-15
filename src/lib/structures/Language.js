@@ -26,15 +26,15 @@ class Language extends Piece {
 	 * @returns {string|Function}
 	 */
 	get(term, ...args) {
-		if (!this.enabled && this !== this.client.languages.default) return this.client.languages.default.get(term, ...args);
+		if (!this.enabled && this !== this.store.default) return this.store.default.get(term, ...args);
 		/* eslint-disable new-cap */
 		if (!this.language[term]) {
-			if (this === this.client.languages.default) return this.language.DEFAULT(term);
+			if (this === this.store.default) return this.language.DEFAULT(term);
 			return [
 				`${this.language.DEFAULT(term)}`,
 				'',
 				`**${this.language.DEFAULT_LANGUAGE}:**`,
-				`${(args.length > 0 ? this.client.languages.default.language[term](...args) : this.client.languages.default.language[term]) || this.client.languages.default.language.DEFAULT(term)}`
+				`${(args.length > 0 ? this.store.default.language[term](...args) : this.store.default.language[term]) || this.store.default.language.DEFAULT(term)}`
 			].join('\n');
 		}
 		/* eslint-enable new-cap */
@@ -48,12 +48,12 @@ class Language extends Piece {
 	 * @abstract
 	 */
 	async init() {
-		const loc = join(this.client.coreBaseDir, 'languages', this.file);
-		if (this.dir !== this.client.coreBaseDir && await pathExists(loc)) {
+		const loc = join(this.store.clientDir, this.file);
+		if (this.dir !== this.store.clientDir && await pathExists(loc)) {
 			try {
 				const CorePiece = require(loc);
 				if (!isClass(CorePiece)) return;
-				const coreLang = new CorePiece(this.client, this.file, true);
+				const coreLang = new CorePiece(this.client, this.store, this.file, true);
 				this.language = mergeDefault(coreLang.language, this.language);
 			} catch (error) {
 				return;
