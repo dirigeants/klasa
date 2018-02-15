@@ -243,8 +243,8 @@ class Util {
 			const typeValue = Util.getDeepTypeName(value);
 			if (!typeValues.has(typeValue)) typeValues.add(typeValue);
 		}
-		const typeK = typeKeys.size === 0 || typeKeys.has('any') ? 'any' : Array.from(typeKeys).sort().join(' | ');
-		const typeV = typeValues.size === 0 || typeValues.has('any') ? 'any' : Array.from(typeValues).sort().join(' | ');
+		const typeK = typeKeys.size === 0 || typeKeys.has('any') ? 'any' : [...typeKeys].sort().join(' | ');
+		const typeV = typeValues.size === 0 || typeValues.has('any') ? 'any' : [...typeValues].sort().join(' | ');
 
 		return `${basic}<${typeK}, ${typeV}>`;
 	}
@@ -263,7 +263,7 @@ class Util {
 			const type = Util.getDeepTypeName(value);
 			if (!types.has(type)) types.add(type);
 		}
-		const typeV = types.size === 0 || types.has('Object') ? 'any' : Array.from(types).sort().join(' | ');
+		const typeV = types.size === 0 || types.has('Object') ? 'any' : [...types].sort().join(' | ');
 
 		return `${basic}<${typeV}>`;
 	}

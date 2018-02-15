@@ -155,7 +155,7 @@ class CommandStore extends Collection {
 		const files = await fs.scan(dir, { filter: (stats, path) => stats.isFile() && extname(path) === '.js' }).catch(() => { fs.ensureDir(dir).catch(err => store.client.emit('error', err)); });
 		if (!files) return true;
 
-		return Promise.all(Array.from(files.keys()).map(file => store.load(dir, relative(dir, file).split(sep))));
+		return Promise.all([...files.keys()].map(file => store.load(dir, relative(dir, file).split(sep))));
 	}
 
 }

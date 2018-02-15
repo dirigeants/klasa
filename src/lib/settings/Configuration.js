@@ -156,17 +156,6 @@ class Configuration {
 	}
 
 	/**
-	 * Factory resets the current configuration.
-	 * @since 0.5.0
-	 * @returns {Promise<this>}
-	 */
-	async resetConfiguration() {
-		if (this._existsInDB) await this.gateway.provider.delete(this.gateway.type, this.id);
-		for (const [key, value] of this.gateway.schema) this[key] = Configuration._merge(undefined, value);
-		return this;
-	}
-
-	/**
 	 * Sync the data from the database with the cache.
 	 * @since 0.5.0
 	 * @returns {Promise<this>}
@@ -199,15 +188,20 @@ class Configuration {
 	/**
 	 * Reset a value from an entry.
 	 * @since 0.5.0
-	 * @param {string} key The key to reset
-	 * @param {boolean} [avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key
+	 * @param {string} [resetKey] The key to reset
+	 * @param {boolean} [avoidUnconfigurable] Whether the Gateway should avoid configuring the selected key
 	 * @returns {Promise<ConfigurationUpdateResult>}
 	 */
-	async reset(key, avoidUnconfigurable = false) {
-		const { parsedID, parsed, path } = await this._reset(key, avoidUnconfigurable);
+	async reset(resetKey, avoidUnconfigurable) {
+		if (typeof resetKey === 'undefined') {
+			if (this._existsInDB) await this.gateway.provider.delete(this.gateway.type, this.id);
+			for (const [key, value] of this.gateway.schema) this[key] = Configuration._merge(undefined, value);
+			return { value: this, path: '' };
+		}
+		const { parsedID, parsed, path } = await this._reset(resetKey, typeof avoidUnconfigurable !== 'boolean' ? false : avoidUnconfigurable);
 		await (this.gateway.sql ?
-			this.gateway.provider.update(this.gateway.type, this.id, key, parsedID) :
-			this.gateway.provider.update(this.gateway.type, this.id, makeObject(key, parsedID)));
+			this.gateway.provider.update(this.gateway.type, this.id, resetKey, parsedID) :
+			this.gateway.provider.update(this.gateway.type, this.id, makeObject(resetKey, parsedID)));
 		return { value: parsed, path };
 	}
 
