@@ -29,7 +29,7 @@ class Piece {
 	 * @param {boolean} core If the piece is in the core directory or not
 	 * @param {PieceOptions} options The options for this piece
 	 */
-	constructor(client, store, file, core, options) {
+	constructor(client, store, file, core, options = {}) {
 		options = mergeDefault(client.options.pieceDefaults[store.name], options);
 
 		/**
