@@ -41,16 +41,6 @@ class Provider extends Piece {
 	}
 
 	/**
-	 * The init method to be optionally overwritten in actual provider pieces
-	 * @since 0.0.1
-	 * @returns {Promise<void>}
-	 * @abstract
-	 */
-	async init() {
-		// Optionally defined in extension Classes
-	}
-
-	/**
 	 * The shutdown method to be optionally overwritten in actual provider pieces
 	 * @since 0.3.0
 	 * @returns {void}

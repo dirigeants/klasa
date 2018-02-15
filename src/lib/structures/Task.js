@@ -24,16 +24,6 @@ class Task extends Piece {
 		// Defined in extension Classes
 	}
 
-	/**
-	 * The init method to be optionally overwritten in actual Task pieces
-	 * @since 0.5.0
-	 * @returns {Promise<void>}
-	 * @abstract
-	 */
-	async init() {
-		// Optionally defined in extension Classes
-	}
-
 }
 
 module.exports = Task;

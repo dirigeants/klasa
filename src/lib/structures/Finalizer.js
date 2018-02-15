@@ -26,16 +26,6 @@ class Finalizer extends Piece {
 		// Defined in extension Classes
 	}
 
-	/**
-	 * The init method to be optionally overwritten in actual finalizers
-	 * @since 0.0.1
-	 * @returns {void}
-	 * @abstract
-	 */
-	async init() {
-		// Optionally defined in extension Classes
-	}
-
 }
 
 module.exports = Finalizer;

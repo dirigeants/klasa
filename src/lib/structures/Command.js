@@ -279,16 +279,6 @@ class Command extends Piece {
 	}
 
 	/**
-	 * The init method to be optionally overwritten in actual commands
-	 * @since 0.0.1
-	 * @returns {Promise<*>}
-	 * @abstract
-	 */
-	async init() {
-		// Optionally defined in extension Classes
-	}
-
-	/**
 	 * Defines the JSON.stringify behavior of this command.
 	 * @returns {Object}
 	 */

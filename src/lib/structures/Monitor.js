@@ -69,16 +69,6 @@ class Monitor extends Piece {
 	}
 
 	/**
-	 * The init method to be optionally overwritten in actual monitor pieces
-	 * @since 0.0.1
-	 * @returns {void}
-	 * @abstract
-	 */
-	async init() {
-		// Optionally defined in extension Classes
-	}
-
-	/**
 	 * If the monitor should run based on the filter options
 	 * @since 0.5.0
 	 * @param {KlasaMessage} msg The message to check

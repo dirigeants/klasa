@@ -143,6 +143,17 @@ class Piece {
 		return this;
 	}
 
+
+	/**
+	 * The init method to be optionally overwritten in actual commands
+	 * @since 0.0.1
+	 * @returns {Promise<*>}
+	 * @abstract
+	 */
+	async init() {
+		// Optionally defined in extension Classes
+	}
+
 	/**
 	 * Defines toString behavior for pieces
 	 * @since 0.3.0

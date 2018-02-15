@@ -47,16 +47,6 @@ class Inhibitor extends Piece {
 	}
 
 	/**
-	 * The init method to be optionally overwritten in actual inhibitors
-	 * @since 0.0.1
-	 * @returns {Promise<void>}
-	 * @abstract
-	 */
-	async init() {
-		// Optionally defined in extension Classes
-	}
-
-	/**
 	 * Defines the JSON.stringify behavior of this inhibitor.
 	 * @returns {Object}
 	 */
