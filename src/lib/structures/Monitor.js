@@ -1,5 +1,4 @@
 const Piece = require('./base/Piece');
-const { mergeDefault } = require('../util/util');
 
 /**
  * Base class for all Klasa Monitors. See {@tutorial CreatingMonitors} for more information how to use this class
@@ -22,13 +21,13 @@ class Monitor extends Piece {
 	/**
 	 * @since 0.0.1
 	 * @param {KlasaClient} client The Klasa client
+	 * @param {MonitorStore} store The Monitor Store
 	 * @param {string} file The path from the pieces folder to the monitor file
 	 * @param {boolean} core If the piece is in the core directory or not
 	 * @param {MonitorOptions} [options={}] Optional Monitor settings
 	 */
-	constructor(client, file, core, options = {}) {
-		options = mergeDefault(client.options.pieceDefaults.monitors, options);
-		super(client, 'monitor', file, core, options);
+	constructor(client, store, file, core, options = {}) {
+		super(client, store, file, core, options);
 
 		/**
 		 * Whether the monitor ignores bots or not

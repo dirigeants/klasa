@@ -19,18 +19,6 @@ class Language extends Piece {
 	 */
 
 	/**
-	 * @since 0.2.1
-	 * @param {KlasaClient} client The Klasa Client
-	 * @param {Array} file The path from the pieces folder to the finalizer file
-	 * @param {boolean} core If the piece is in the core directory or not
-	 * @param {LanguageOptions} [options={}] Optional Language settings
-	 */
-	constructor(client, file, core, options = {}) {
-		options = mergeDefault(client.options.pieceDefaults.languages, options);
-		super(client, 'language', file, core, options);
-	}
-
-	/**
 	 * The method to get language strings
 	 * @since 0.2.1
 	 * @param {string} term The string or function to look up

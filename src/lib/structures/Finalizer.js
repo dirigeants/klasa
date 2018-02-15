@@ -1,5 +1,4 @@
 const Piece = require('./base/Piece');
-const { mergeDefault } = require('../util/util');
 
 /**
  * Base class for all Klasa Finalizers. See {@tutorial CreatingFinalizers} for more information how to use this class
@@ -15,18 +14,6 @@ class Finalizer extends Piece {
 	 * @property {boolean} [enabled=true] Whether the finalizer is enabled or not
 	 * @memberof Finalizer
 	 */
-
-	/**
-	 * @since 0.0.1
-	 * @param {KlasaClient} client The Klasa Client
-	 * @param {string} file The path from the pieces folder to the finalizer file
-	 * @param {boolean} core If the piece is in the core directory or not
-	 * @param {FinalizerOptions} [options={}] Optional Finalizer settings
-	 */
-	constructor(client, file, core, options = {}) {
-		options = mergeDefault(client.options.pieceDefaults.finalizers, options);
-		super(client, 'finalizer', file, core, options);
-	}
 
 	/**
 	 * The run method to be overwritten in actual finalizers

@@ -1,5 +1,4 @@
 const Piece = require('./base/Piece');
-const { mergeDefault } = require('../util/util');
 
 /**
  * Base class for all Klasa Events. See {@tutorial CreatingEvents} for more information how to use this class
@@ -17,18 +16,6 @@ class Event extends Piece {
 	 */
 
 	/**
-	 * @since 0.0.1
-	 * @param {KlasaClient} client The klasa client
-	 * @param {string} file The path from the pieces folder to the event file
-	 * @param {boolean} core If the piece is in the core directory or not
-	 * @param {EventOptions} [options={}] The Event options
-	 */
-	constructor(client, file, core, options = {}) {
-		options = mergeDefault(client.options.pieceDefaults.events, options);
-		super(client, 'event', file, core, options);
-	}
-
-	/**
 	 * A wrapper for the run method, to easily disable/enable events
 	 * @since 0.0.1
 	 * @param {*} param The event parameters emitted
@@ -36,12 +23,11 @@ class Event extends Piece {
 	 * @private
 	 */
 	async _run(...args) {
-		if (this.enabled) {
-			try {
-				await this.run(...args);
-			} catch (err) {
-				this.client.emit('eventError', this, args, err);
-			}
+		if (!this.enabled) return;
+		try {
+			await this.run(...args);
+		} catch (err) {
+			this.client.emit('eventError', this, args, err);
 		}
 	}
 

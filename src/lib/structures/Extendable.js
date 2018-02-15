@@ -1,5 +1,4 @@
 const Piece = require('./base/Piece');
-const { mergeDefault } = require('../util/util');
 const Discord = require('discord.js');
 
 /**
@@ -21,14 +20,14 @@ class Extendable extends Piece {
 	/**
 	 * @since 0.0.1
 	 * @param {KlasaClient} client The klasa client
+	 * @param {ExtendableStore} store The extendable store
 	 * @param {string} file The path from the pieces folder to the extendable file
 	 * @param {boolean} core If the piece is in the core directory or not
 	 * @param {string[]} appliesTo The discord classes this extendable applies to
 	 * @param {ExtendableOptions} options The options for this extendable
 	 */
-	constructor(client, file, core, appliesTo = [], options = {}) {
-		options = mergeDefault(client.options.pieceDefaults.extendables, options);
-		super(client, 'extendable', file, core, options);
+	constructor(client, store, file, core, appliesTo = [], options = {}) {
+		super(client, store, file, core, options);
 
 		/**
 		 * The discord classes this extendable applies to

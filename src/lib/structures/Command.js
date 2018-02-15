@@ -1,5 +1,4 @@
 const Piece = require('./base/Piece');
-const { mergeDefault } = require('../util/util');
 const Usage = require('../usage/Usage');
 const CommandUsage = require('../usage/CommandUsage');
 
@@ -40,13 +39,13 @@ class Command extends Piece {
 	/**
 	 * @since 0.0.1
 	 * @param {KlasaClient} client The Klasa Client
+	 * @param {CommandStore} store The Command store
 	 * @param {Array} file The path from the pieces folder to the command file
 	 * @param {boolean} core If the piece is in the core directory or not
 	 * @param {CommandOptions} [options={}] Optional Command settings
 	 */
-	constructor(client, file, core, options = {}) {
-		options = mergeDefault(client.options.pieceDefaults.commands, options);
-		super(client, 'command', file, core, options);
+	constructor(client, store, file, core, options = {}) {
+		super(client, store, file, core, options);
 
 		/**
 		 * What channels the command should run in
@@ -259,7 +258,7 @@ class Command extends Piece {
 	 * // Changing the message for a parameter called 'targetUser'
 	 * this.customizeResponse('targetUser', 'You did not give me a user...');
 	 *
-	 * // Or also using functions to have multilanguage support:
+	 * // Or also using functions to have multilingual support:
 	 * this.customizeResponse('targetUser', (msg) =>
 	 *     msg.language.get('COMMAND_REQUIRED_USER_FRIENDLY'));
 	 */

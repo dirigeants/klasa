@@ -1,5 +1,4 @@
 const Piece = require('./base/Piece');
-const { mergeDefault } = require('../util/util');
 
 /**
  * Base class for all Klasa Providers. See {@tutorial CreatingProviders} for more information how to use this class
@@ -20,13 +19,13 @@ class Provider extends Piece {
 	/**
 	 * @since 0.0.1
 	 * @param {KlasaClient} client The Klasa client
+	 * @param {ProviderStore} store The Provider Store
 	 * @param {string} file The path from the pieces folder to the provider file
 	 * @param {boolean} core If the piece is in the core directory or not
 	 * @param {ProviderOptions} [options={}] Optional Provider settings
 	 */
-	constructor(client, file, core, options = {}) {
-		options = mergeDefault(client.options.pieceDefaults.providers, options);
-		super(client, 'provider', file, core, options);
+	constructor(client, store, file, core, options = {}) {
+		super(client, store, file, core, options);
 
 		/**
 		 * If the provider provides to a sql data source
