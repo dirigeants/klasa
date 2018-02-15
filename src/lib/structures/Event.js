@@ -9,6 +9,11 @@ const Piece = require('./base/Piece');
 class Event extends Piece {
 
 	/**
+	 * @typedef {PieceOptions} EventOptions
+	 * @memberof Event
+	 */
+
+	/**
 	 * A wrapper for the run method, to easily disable/enable events
 	 * @since 0.0.1
 	 * @param {*} param The event parameters emitted

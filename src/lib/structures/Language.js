@@ -12,6 +12,11 @@ const { mergeDefault, isClass } = require('../util/util');
 class Language extends Piece {
 
 	/**
+	 * @typedef {PieceOptions} LanguageOptions
+	 * @memberof Language
+	 */
+
+	/**
 	 * The method to get language strings
 	 * @since 0.2.1
 	 * @param {string} term The string or function to look up
