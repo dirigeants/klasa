@@ -96,11 +96,7 @@ class Extendable extends Piece {
 	 */
 	toJSON() {
 		return {
-			dir: this.dir,
-			file: this.file,
-			name: this.name,
-			type: this.type,
-			enabled: this.enabled,
+			...super.toJSON(),
 			appliesTo: this.appliesTo.slice(0),
 			target: this.target === Discord ? 'discord.js' : 'klasa'
 		};
