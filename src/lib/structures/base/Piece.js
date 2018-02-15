@@ -30,7 +30,8 @@ class Piece {
 	 * @param {PieceOptions} options The options for this piece
 	 */
 	constructor(client, store, file, core, options = {}) {
-		options = mergeDefault(client.options.pieceDefaults[store.name], options);
+		const defaults = client.options.pieceDefaults[store.name];
+		if (defaults) options = mergeDefault(defaults, options);
 
 		/**
 		 * If the piece is in the core directory or not
