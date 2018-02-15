@@ -42,16 +42,8 @@ const { Piece } = require('klasa');
 
 class Something extends Piece {
 
-	constructor(client, file, core, options = {}) {
-		super(client, 'something', file, core, options);
-	}
-
 	run() {
 		// Defined in extension Classes
-	}
-
-	init() {
-		// Optionally defined in extension Classes
 	}
 
 }
@@ -104,40 +96,63 @@ const getInfoAsync = require('util').promisify(require('ytdl-core').getInfo);
 
 class Genre extends Piece {
 
-	constructor(client, file, core, options = {}) {
-		super(client, 'genre', file, core, options);
-		/*
-		 * we should probably describe our auto play genres in the command,
-		 * we will make for guild owners to set their guild's genre setting.
-		*/
+	/**
+	 * @param {KlasaClient} client The Klasa Client
+	 * @param {GenreStore} store The Genre store
+	 * @param {Array} file The path from the pieces folder to the command file
+	 * @param {boolean} core If the piece is in the core directory or not
+	 * @param {Object} [options={}] Optional Genre settings
+	 */
+	constructor(client, store, file, core, options = {}) {
+		super(client, store, file, core, options);
+
+		// we should probably describe our auto play genres in the command,
+		// we will make for guild owners to set their guild's genre setting.
+
+		/**
+		 * The genre's description
+		 * @type {string}
+		 */
 		this.description = options.description || '';
+
 		// Some example artists to include with the descriptions
+
+		/**
+		 * Examples of artists for this genre
+		 * @type {string[]}
+		 */
 		this.examples = options.examples || [];
 	}
 
 	// We don't even need run for this, let's call it getNext
 	async getNext(player) {
 		// Let's define a default behavior here
-		// If we aren't playing anything yet, get a link from this.seeds (which is defined in each extension piece)
+		// If we aren't playing anything yet, get a link from this.seeds
+		// (which is defined in each extension piece)
 		if (!player.playingURL) return this.wrapLink(this.seeds[Math.floor(Math.random() * this.seeds.length)]);
+
 		// If we do have a link, lets get youtube info about that link
 		const info = await getInfoAsync(player.playingURL).catch((err) => {
 			this.client.emit('log', err, 'error');
 			throw `something happened with YouTube URL: ${player.playingURL}\n${util.codeBlock('', err)}`;
 		});
+
 		// Find the first video that we haven't recenly played on our player
 		const next = info.related_videos.find(vid => vid.id && !player.recentlyPlayed.includes(this.wrapLink(vid.id)));
 		// If their isn't a video, reseed a video we havn't played recently
 		if (!next) {
 			const seed = this.seeds.find(vid => !player.recentlyPlayed.includes(this.wrapLink(vid)));
-			// if we have played all of the seeds, start over on reseeding
+			// If we have played all of the seeds, start over on reseeding
 			if (!seed) {
 				player.recentlyPlayed = [];
 				return this.wrapLink(this.seeds[Math.floor(Math.random() * this.seeds.length)]);
 			}
+
 			// Else return the seed we haven't played recently
 			return this.wrapLink(seed);
 		}
+
+		// Otherwise wrap the next song
 		return this.wrapLink(next.id);
 	}
 
@@ -145,16 +160,12 @@ class Genre extends Piece {
 		return `https://youtu.be/${id}`;
 	}
 
-	init() {
-		// There is really no reason to init in this type of piece, but we need this here anyway
-	}
-
 }
 
 module.exports = Genre;
 ```
 
-Here we see some heavy customization. Additionally, there is a second argument to applyToClass, which is skips an array of methods to skip applying. Such as if you need to define special enable/disable behavior. But that makes our piece very easy to actually make now:
+Here we see some heavy customization. Such as if you need to define special enable/disable behavior. But Genre extending Piece makes our piece very easy to actually make now:
 
 ```javascript
 const Genre = require('../Genre');
@@ -191,16 +202,20 @@ class MySwankyMusicBot extends Client {
 
 	constructor(...args) {
 		super(...args);
-		// make a new GenreStore
+
+		// Make a new GenreStore and attach it to client
 		this.genres = new GenreStore();
-		// Regester the GenreStore to be loaded, init, and available to be used as an arg to be looked up in commands
+
+		// Register the GenreStore to be loaded, init, and available
+		// to be used as an arg to be looked up in commands
 		this.registerStore(this.genres);
-		/*
-		 * Registers genres themselves to be able to be used as an arg to be looked up in commands,
-		 * for reload/enable/disable ect.
-		*/
+
+		// Registers genres themselves to be able to be used as an
+		// arg to be looked up in commands,
+		// for reload/enable/disable ect.
 		this.registerPiece('genre', this.genres);
-		// optionally we can add more aliases for the piece
+
+		// Optionally we can add more aliases for the piece
 		this.registerPiece('musicgenre', this.genres);
 	}
 
@@ -213,8 +228,12 @@ Then we use it in our player class I completely made up earlier like so:
 
 ```javascript
 async () => {
-	// without going over setting up guild configs, or actually writing a player class
-	const nextSong = await this.client.genres.get(this.guild.configs.genre).getNext(this);
-	// nextSong should now be a pseudo random song based on the genre seeds and what has recently played
+	// Without going over setting up guild configs,
+	// or actually writing a player class.
+	const nextSong = await this.client.genres.get(this.guild.configs.genre)
+		.getNext(this);
+
+	// nextSong should now be a pseudo random song based on the
+	// genre seeds and what has recently played.
 };
 ```

@@ -694,12 +694,12 @@ declare module 'klasa' {
 //#region Pieces
 
 	export class Piece {
-		public constructor(client: KlasaClient, type: string, file: string | string[], core: boolean, options: { name?: string, enabled?: boolean });
+		public constructor(client: KlasaClient, store: Store, type: string, file: string | string[], core: boolean, options?: PieceOptions);
 		public readonly client: KlasaClient;
 		public readonly core: boolean;
+		public readonly type: string;
 		public file: string | string[];
 		public name: string;
-		public type: string;
 		public enabled: boolean;
 		public store: Store;
 
@@ -708,10 +708,11 @@ declare module 'klasa' {
 		public enable(): Piece;
 		public disable(): Piece;
 		public toString(): string;
+		public init(): Promise<any>;
 	}
 
 	export abstract class Command extends Piece {
-		public constructor(client: KlasaClient, file: string[], core: boolean, options?: CommandOptions);
+		public constructor(client: KlasaClient, store: CommandStore, file: string[], core: boolean, options?: CommandOptions);
 
 		public aliases: string[];
 		public botPerms: string[];
@@ -739,76 +740,61 @@ declare module 'klasa' {
 		public customizeResponse(name: string, response: string | ((msg: KlasaMessage, possible: Possible) => string)): this;
 
 		public run(msg: KlasaMessage, params: any[]): Promise<KlasaMessage | KlasaMessage[]>;
-		public init(): Promise<void>;
 	}
 
 	export abstract class Event extends Piece {
-		public constructor(client: KlasaClient, file: string, core: boolean, options?: EventOptions);
+		public constructor(client: KlasaClient, store: EventStore, file: string, core: boolean, options?: EventOptions);
 
 		private _run(param: any): void;
 
 		public abstract run(...params: any[]): void;
-		public init(): Promise<void>;
 	}
 
 	export abstract class Extendable extends Piece {
-		public constructor(client: KlasaClient, file: string, core: boolean, options?: ExtendableOptions);
+		public constructor(client: KlasaClient, store: ExtendableStore, file: string, core: boolean, options?: ExtendableOptions);
 
 		public appliesTo: string[];
 		public target: boolean;
 
 		public abstract extend(...params: any[]): any;
-		public init(): Promise<void>;
 	}
 
 	export abstract class Finalizer extends Piece {
-		public constructor(client: KlasaClient, file: string, core: boolean, options?: FinalizerOptions);
-
 		public abstract run(msg: KlasaMessage, mes: KlasaMessage, start: Stopwatch): void;
-		public init(): Promise<void>;
 	}
 
 	export abstract class Inhibitor extends Piece {
-		public constructor(client: KlasaClient, file: string, core: boolean, options?: InhibitorOptions);
+		public constructor(client: KlasaClient, store: InhibitorStore, file: string, core: boolean, options?: InhibitorOptions);
 
 		public abstract run(msg: KlasaMessage, cmd: Command): Promise<void | string>;
-		public init(): Promise<void>;
 	}
 
 	export abstract class Language extends Piece {
-		public constructor(client: KlasaClient, file: string, core: boolean, options?: LanguageOptions);
-
 		public language: { [key: string]: any };
 		public get(term: string, ...args: any[]): any;
-		public init(): Promise<void>;
 	}
 
 	export abstract class Monitor extends Piece {
-		public constructor(client: KlasaClient, file: string, core: boolean, options?: MonitorOptions);
+		public constructor(client: KlasaClient, store: MonitorStore, file: string, core: boolean, options?: MonitorOptions);
 
 		public ignoreBots: boolean;
 		public ignoreSelf: boolean;
 		public ignoreOthers: boolean;
 		public abstract run(msg: KlasaMessage): void;
-		public init(): Promise<void>;
 	}
 
 	export abstract class Provider extends Piece {
-		public constructor(client: KlasaClient, file: string, core: boolean, options?: ProviderOptions);
+		public constructor(client: KlasaClient, store: ProviderStore, file: string, core: boolean, options?: ProviderOptions);
 
 		public description: string;
 		public cache: boolean;
 		public sql: boolean;
 
-		public init(): Promise<void>;
 		public shutdown(): Promise<void>;
 	}
 
 	export abstract class Task extends Piece {
-		public constructor(client: KlasaClient, file: string, core: boolean, options?: TaskOptions);
-
 		public abstract run(data: any): Promise<void>;
-		public init(): Promise<void>;
 	}
 
 //#endregion Pieces
@@ -1528,6 +1514,11 @@ declare module 'klasa' {
 	};
 
 	// Structures
+	export type PieceOptions = {
+		name?: string,
+		enabled?: boolean
+	};
+
 	export type CommandOptions = {
 		aliases?: string[];
 		autoAliases?: boolean;
@@ -1537,9 +1528,7 @@ declare module 'klasa' {
 		promptTime?: number;
 		promptLimit?: number;
 		description?: string | ((msg: KlasaMessage) => string);
-		enabled?: boolean;
 		extendedHelp?: string | ((msg: KlasaMessage) => string);
-		name?: string;
 		permLevel?: number;
 		quotedStringSupport?: boolean;
 		subcommands?: boolean;
@@ -1548,53 +1537,33 @@ declare module 'klasa' {
 		bucket?: number;
 		usage?: string;
 		usageDelim?: string;
-	};
+	} & PieceOptions;
 
-	export type EventOptions = {
-		enabled?: boolean;
-		name?: string;
-	};
 
 	export type ExtendableOptions = {
-		enabled?: boolean;
-		name?: string;
 		klasa?: boolean;
-	};
+	} & PieceOptions;
 
-	export type FinalizerOptions = {
-		enabled?: boolean;
-		name?: string;
-	};
 
 	export type InhibitorOptions = {
-		enabled?: boolean;
-		name?: string;
 		spamProtection?: boolean;
-	};
+	} & PieceOptions;
 
-	export type LanguageOptions = {
-		enabled?: boolean;
-		name?: string;
-	};
 
 	export type MonitorOptions = {
-		enabled?: boolean;
-		name?: string;
 		ignoreBots?: boolean;
 		ignoreSelf?: boolean;
-	};
+	} & PieceOptions;
 
 	export type ProviderOptions = {
-		enabled?: boolean;
-		name?: string;
 		description?: string;
 		sql?: boolean;
-	};
+	} & PieceOptions;
 
-	export type TaskOptions = {
-		enabled?: boolean;
-		name?: string;
-	};
+	export type EventOptions = PieceOptions;
+	export type FinalizerOptions = PieceOptions;
+	export type LanguageOptions = PieceOptions;
+	export type TaskOptions = PieceOptions;
 
 	// Usage
 	export type TextPromptOptions = {
