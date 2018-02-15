@@ -72,10 +72,10 @@ declare module 'klasa' {
 		public readonly invite: string;
 		public readonly owner: KlasaUser;
 		public validatePermissionLevels(): PermissionLevels;
-		public registerStore(store: Store): KlasaClient;
-		public unregisterStore(store: Store): KlasaClient;
+		public registerStore<K, V>(store: Store<K, V>): KlasaClient;
+		public unregisterStore<K, V>(store: Store<K, V>): KlasaClient;
 
-		public registerPiece(pieceName: string, store: Store): KlasaClient;
+		public registerPiece<K, V>(pieceName: string, store: Store<K, V>): KlasaClient;
 		public unregisterPiece(pieceName: string): KlasaClient;
 
 		public login(token: string): Promise<string>;
@@ -322,7 +322,7 @@ declare module 'klasa' {
 
 		public custom(arg: string, possible: Possible, msg: KlasaMessage, custom: ArgResolverCustomMethod): Promise<any>;
 		public piece(arg: string, possible: Possible, msg: KlasaMessage): Promise<Piece>;
-		public store(arg: string, possible: Possible, msg: KlasaMessage): Promise<Store>;
+		public store<K, V>(arg: string, possible: Possible, msg: KlasaMessage): Promise<Store<K, V>>;
 
 		public cmd(arg: string, possible: Possible, msg: KlasaMessage): Promise<Command>;
 		public command(arg: string, possible: Possible, msg: KlasaMessage): Promise<Command>;
@@ -694,14 +694,14 @@ declare module 'klasa' {
 //#region Pieces
 
 	export class Piece {
-		public constructor(client: KlasaClient, store: Store, type: string, file: string | string[], core: boolean, options?: PieceOptions);
+		public constructor(client: KlasaClient, store: Store<string, this>, type: string, file: string | string[], core: boolean, options?: PieceOptions);
 		public readonly client: KlasaClient;
 		public readonly core: boolean;
 		public readonly type: string;
 		public file: string | string[];
 		public name: string;
 		public enabled: boolean;
-		public store: Store;
+		public store: Store<string, this>;
 
 		public reload(): Promise<Piece>;
 		public unload(): void;
@@ -1539,16 +1539,13 @@ declare module 'klasa' {
 		usageDelim?: string;
 	} & PieceOptions;
 
-
 	export type ExtendableOptions = {
 		klasa?: boolean;
 	} & PieceOptions;
 
-
 	export type InhibitorOptions = {
 		spamProtection?: boolean;
 	} & PieceOptions;
-
 
 	export type MonitorOptions = {
 		ignoreBots?: boolean;
