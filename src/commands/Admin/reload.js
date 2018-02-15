@@ -1,4 +1,4 @@
-const { Command, Stopwatch } = require('klasa');
+const { Command, Store, Stopwatch } = require('klasa');
 
 module.exports = class extends Command {
 
@@ -13,7 +13,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [piece]) {
-		if (piece instanceof this.client.methods.Collection) {
+		if (piece instanceof Store) {
 			const timer = new Stopwatch();
 			await piece.loadAll();
 			await piece.init();
