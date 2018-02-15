@@ -48,8 +48,8 @@ class Language extends Piece {
 	 * @abstract
 	 */
 	async init() {
-		const loc = join(this.store.clientDir, this.file);
-		if (this.dir !== this.store.clientDir && await pathExists(loc)) {
+		const loc = join(this.store.coreDir, this.file);
+		if (this.dir !== this.store.coreDir && await pathExists(loc)) {
 			try {
 				const CorePiece = require(loc);
 				if (!isClass(CorePiece)) return;
