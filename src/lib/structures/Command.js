@@ -1,4 +1,4 @@
-const Piece = require('./interfaces/Piece');
+const Piece = require('./base/Piece');
 const { mergeDefault } = require('../util/util');
 const Usage = require('../usage/Usage');
 const CommandUsage = require('../usage/CommandUsage');
@@ -7,9 +7,9 @@ const CommandUsage = require('../usage/CommandUsage');
  * Base class for all Klasa Commands. See {@tutorial CreatingCommands} for more information how to use this class
  * to build custom commands.
  * @tutorial CreatingCommands
- * @implements {Piece}
+ * @extends Piece
  */
-class Command {
+class Command extends Piece {
 
 	/**
 	 * @typedef {Object} CommandOptions
@@ -40,32 +40,13 @@ class Command {
 	/**
 	 * @since 0.0.1
 	 * @param {KlasaClient} client The Klasa Client
-	 * @param {string} dir The path to the core or user command pieces folder
 	 * @param {Array} file The path from the pieces folder to the command file
+	 * @param {boolean} core If the piece is in the core directory or not
 	 * @param {CommandOptions} [options={}] Optional Command settings
 	 */
-	constructor(client, dir, file, options = {}) {
+	constructor(client, file, core, options = {}) {
 		options = mergeDefault(client.options.pieceDefaults.commands, options);
-
-		/**
-		 * @since 0.0.1
-		 * @type {KlasaClient}
-		 */
-		this.client = client;
-
-		/**
-		 * The type of Klasa piece this is
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.type = 'command';
-
-		/**
-		 * If the command is enabled or not
-		 * @since 0.0.1
-		 * @type {boolean}
-		 */
-		this.enabled = options.enabled;
+		super(client, 'command', file, core, options);
 
 		/**
 		 * What channels the command should run in
@@ -122,13 +103,6 @@ class Command {
 		 * @type {number}
 		 */
 		this.promptLimit = options.promptLimit;
-
-		/**
-		 * The name of the command
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.name = options.name || file[file.length - 1].slice(0, -3).toLowerCase();
 
 		/**
 		 * The aliases for this command
@@ -229,20 +203,6 @@ class Command {
 		 * @private
 		 */
 		this.cooldowns = new Map();
-
-		/**
-		 * The file location where this command is stored
-		 * @since 0.0.1
-		 * @type {string[]}
-		 */
-		this.file = file;
-
-		/**
-		 * The directory to where this command piece is stored
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.dir = dir;
 	}
 
 	/**
@@ -337,8 +297,7 @@ class Command {
 	 */
 	toJSON() {
 		return {
-			type: this.type,
-			enabled: this.enabled,
+			...super.toJSON(),
 			runIn: this.runIn.slice(0),
 			bucket: this.bucket,
 			cooldown: this.cooldown,
@@ -347,7 +306,6 @@ class Command {
 			deletable: this.deletable,
 			promptTime: this.promptTime,
 			promptLimit: this.promptLimit,
-			name: this.name,
 			aliases: this.aliases.slice(0),
 			permLevel: this.permLevel,
 			botPerms: this.botPerms.slice(0),
@@ -365,23 +323,10 @@ class Command {
 				usageString: this.usage.usageString,
 				usageDelim: this.usage.usageDelim,
 				nearlyFullUsage: this.usage.nearlyFullUsage
-			},
-			file: this.file,
-			dir: this.dir
+			}
 		};
 	}
 
-	// left for documentation
-	/* eslint-disable no-empty-function */
-	async reload() {}
-	unload() {}
-	disable() {}
-	enable() {}
-	toString() {}
-	/* eslint-enable no-empty-function */
-
 }
-
-Piece.applyToClass(Command, ['toJSON']);
 
 module.exports = Command;

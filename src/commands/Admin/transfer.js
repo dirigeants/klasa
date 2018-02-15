@@ -15,15 +15,14 @@ module.exports = class extends Command {
 
 	async run(msg, [piece]) {
 		const file = piece.type === 'command' ? join(...piece.file) : piece.file;
-		const fileLocation = resolve(this.client.coreBaseDir, `${piece.type}s`, file);
+		const fileLocation = resolve(piece.store.coreDir, file);
 		await fs.access(fileLocation).catch(() => { throw msg.language.get('COMMAND_TRANSFER_ERROR'); });
 		try {
-			const newFileLocation = resolve(this.client.clientBaseDir, `${piece.type}s`);
-			await fs.copy(fileLocation, join(newFileLocation, file));
-			this.client[`${piece.type}s`].load(newFileLocation, piece.file);
+			await fs.copy(fileLocation, join(piece.store.userDir, file));
+			piece.store.load(piece.file);
 			if (this.client.shard) {
 				await this.client.shard.broadcastEval(`
-					if (this.shard.id !== ${this.client.shard.id}) this.${piece.type}s.load('${newFileLocation}', ${JSON.stringify(piece.file)});
+					if (this.shard.id !== ${this.client.shard.id}) this.${piece.type}s.load(${JSON.stringify(piece.file)});
 				`);
 			}
 			return msg.sendMessage(msg.language.get('COMMAND_TRANSFER_SUCCESS', piece.type, piece.name));

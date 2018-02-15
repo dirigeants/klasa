@@ -7,7 +7,7 @@ module.exports = class extends Extendable {
 	}
 
 	extend(attachment, name, content, options = {}) {
-		return this.send({ files: [{ attachment, name }], content, options });
+		return this.send({ ...options, files: [{ attachment, name }], content });
 	}
 
 };

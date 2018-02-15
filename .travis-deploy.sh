@@ -13,7 +13,6 @@ echo -e "Building for a branch push - building and deploying."
 
 REPO=$(git config remote.origin.url)
 SHA=$(git rev-parse --verify HEAD)
-OUTPUT=$(${string//substring/replacement})
 
 #new docs
 

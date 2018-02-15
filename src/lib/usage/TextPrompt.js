@@ -215,36 +215,7 @@ class TextPrompt {
 			return this.finalize();
 		}
 
-		if (this._currentUsage.possibles.length !== 1) return this.multiPossibles(0);
-
-		const possible = this._currentUsage.possibles[0];
-		const custom = this.usage.customResolvers[possible.type];
-
-		if (possible.name in this.flags) this.args.splice(this.params.length, 0, this.flags[possible.name]);
-		if (!this.client.argResolver[possible.type] && !custom) {
-			this.client.emit('warn', `Unknown Argument Type encountered: ${possible.type}`);
-			return this.pushParam(undefined);
-		}
-
-		try {
-			const res = await this.client.argResolver[custom ? 'custom' : possible.type](this.args[this.params.length], possible, this.message, custom);
-			if (typeof res === 'undefined' && this._required === 1) this.args.splice(this.params.length, 0, undefined);
-			return this.pushParam(res);
-		} catch (err) {
-			if (!this._required) {
-				this.args.splice(this.params.length, 0, undefined);
-				return this.pushParam(undefined);
-			}
-
-			const { response } = this._currentUsage;
-			const error = typeof response === 'function' ? response(this.message, possible) : response;
-
-			if (this._required === 1) return this.handleError(error || err);
-			return this.handleError(error || (this.args[this.params.length] === undefined ?
-				this.message.language.get('COMMANDMESSAGE_MISSING_REQUIRED', possible.name) :
-				err)
-			);
-		}
+		return this.multiPossibles(0);
 	}
 
 	/**
@@ -261,6 +232,7 @@ class TextPrompt {
 		if (possible.name in this.flags) this.args.splice(this.params.length, 0, this.flags[possible.name]);
 		if (!this.client.argResolver[possible.type] && !custom) {
 			this.client.emit('warn', `Unknown Argument Type encountered: ${possible.type}`);
+			if (this._currentUsage.possibles.length === 1) return this.pushParam(undefined);
 			return this.multiPossibles(++index);
 		}
 
@@ -279,6 +251,9 @@ class TextPrompt {
 			const error = typeof response === 'function' ? response(this.message, possible) : response;
 
 			if (this._required === 1) return this.handleError(error || err);
+			if (this._currentUsage.possibles.length === 1) {
+				return this.handleError(error || this.args[this.params.length] === undefined ? this.message.language.get('COMMANDMESSAGE_MISSING_REQUIRED', possible.name) : err);
+			}
 			return this.handleError(error || this.message.language.get('COMMANDMESSAGE_NOMATCH', this._currentUsage.possibles.map(poss => poss.name).join(', ')));
 		}
 	}

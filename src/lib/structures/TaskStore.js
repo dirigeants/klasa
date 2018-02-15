@@ -1,14 +1,11 @@
-const { join } = require('path');
-const { Collection } = require('discord.js');
 const Task = require('./Task');
-const Store = require('./interfaces/Store');
+const Store = require('./base/Store');
 
 /**
  * Stores all task pieces for use in Klasa
- * @extends external:Collection
- * @implements {Store}
+ * @extends Store
  */
-class TaskStore extends Collection {
+class TaskStore extends Store {
 
 	/**
 	 * Constructs our TaskStore for use in Klasa
@@ -16,44 +13,7 @@ class TaskStore extends Collection {
 	 * @param {KlasaClient} client The Klasa client
 	 */
 	constructor(client) {
-		super();
-
-		/**
-		 * The client this TaskStore was created with.
-		 * @since 0.5.0
-		 * @name TaskStore#client
-		 * @type {KlasaClient}
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'client', { value: client });
-
-		/**
-		 * The directory of core task pieces in Klasa relative to where its installed.
-		 * @since 0.5.0
-		 * @type {string}
-		 */
-		this.coreDir = join(this.client.coreBaseDir, 'tasks');
-
-		/**
-		 * The directory of local task pieces relative to where you run Klasa from.
-		 * @since 0.5.0
-		 * @type {string}
-		 */
-		this.userDir = join(this.client.clientBaseDir, 'tasks');
-
-		/**
-		 * The type of structure this store holds
-		 * @since 0.5.0
-		 * @type {Task}
-		 */
-		this.holds = Task;
-
-		/**
-		 * The name of what this holds
-		 * @since 0.5.0
-		 * @type {string}
-		 */
-		this.name = 'tasks';
+		super(client, 'tasks', Task);
 	}
 
 	/**
@@ -84,16 +44,6 @@ class TaskStore extends Collection {
 		return task;
 	}
 
-	// left for documentation
-	/* eslint-disable no-empty-function */
-	init() { }
-	load() { }
-	async loadAll() { }
-	resolve() { }
-	/* eslint-enable no-empty-function */
-
 }
-
-Store.applyToClass(TaskStore);
 
 module.exports = TaskStore;
