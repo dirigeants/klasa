@@ -9,6 +9,11 @@ const Piece = require('./base/Piece');
 class Task extends Piece {
 
 	/**
+	 * @typedef {PieceOptions} TaskOptions
+	 * @memberof Task
+	 */
+
+	/**
 	 * The run method to be overwritten in actual Task pieces
 	 * @since 0.5.0
 	 * @param {*} data The data from the ScheduledTask instance
