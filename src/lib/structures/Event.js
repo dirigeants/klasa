@@ -9,13 +9,6 @@ const Piece = require('./base/Piece');
 class Event extends Piece {
 
 	/**
-	 * @typedef {Object} EventOptions
-	 * @property {string} [name=theFileName] The name of the event
-	 * @property {boolean} [enabled=true] Whether the event is enabled or not
-	 * @memberof Event
-	 */
-
-	/**
 	 * A wrapper for the run method, to easily disable/enable events
 	 * @since 0.0.1
 	 * @param {*} param The event parameters emitted

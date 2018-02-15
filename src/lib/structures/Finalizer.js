@@ -9,13 +9,6 @@ const Piece = require('./base/Piece');
 class Finalizer extends Piece {
 
 	/**
-	 * @typedef {Object} FinalizerOptions
-	 * @property {string} [name=theFileName] The name of the finalizer
-	 * @property {boolean} [enabled=true] Whether the finalizer is enabled or not
-	 * @memberof Finalizer
-	 */
-
-	/**
 	 * The run method to be overwritten in actual finalizers
 	 * @since 0.0.1
 	 * @param {KlasaMessage} msg The message used to trigger this finalizer

@@ -9,9 +9,7 @@ const Piece = require('./base/Piece');
 class Provider extends Piece {
 
 	/**
-	 * @typedef {Object} ProviderOptions
-	 * @property {string} [name=theFileName] The name of the provider
-	 * @property {boolean} [enabled=true] Whether the provider is enabled or not
+	 * @typedef {PieceOptions} ProviderOptions
 	 * @property {boolean} [sql=false] If the provider provides to a sql data source
 	 * @memberof Provider
 	 */

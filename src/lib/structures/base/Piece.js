@@ -15,6 +15,13 @@ const { mergeDefault } = require('../../util/util');
 class Piece {
 
 	/**
+	 * @typedef {Object} PieceOptions
+	 * @property {string} [name=theFileName] The name of the event
+	 * @property {boolean} [enabled=true] Whether the event is enabled or not
+	 * @memberof Piece
+	 */
+
+	/**
 	 * @since 0.0.1
 	 * @param {KlasaClient} client The klasa client
 	 * @param {Store} store The store this piece is for

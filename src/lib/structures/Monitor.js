@@ -9,12 +9,11 @@ const Piece = require('./base/Piece');
 class Monitor extends Piece {
 
 	/**
-	 * @typedef {Object} MonitorOptions
-	 * @property {string} [name=theFileName] The name of the monitor
-	 * @property {boolean} [enabled=true] Whether the monitor is enabled or not
+	 * @typedef {PieceOptions} MonitorOptions
 	 * @property {boolean} [ignoreBots=true] Whether the monitor ignores bots or not
 	 * @property {boolean} [ignoreSelf=true] Whether the monitor ignores itself or not
 	 * @property {boolean} [ignoreOthers=true] Whether the monitor ignores others or not
+	 * @property {boolean} [ignoreWebhooks=true] Whether the monitor ignores webhooks or not
 	 * @memberof Monitor
 	 */
 

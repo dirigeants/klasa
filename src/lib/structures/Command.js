@@ -11,9 +11,7 @@ const CommandUsage = require('../usage/CommandUsage');
 class Command extends Piece {
 
 	/**
-	 * @typedef {Object} CommandOptions
-	 * @property {string} [name=theFileName] The name of the command
-	 * @property {boolean} [enabled=true] Whether the command is enabled or not
+	 * @typedef {PieceOptions} CommandOptions
 	 * @property {string[]} [runIn=['text','dm','group']] What channel types the command should run in
 	 * @property {number} [cooldown=0] The amount of time before the user can run the command again in seconds
 	 * @property {number} [bucket=1] The number of times this command can be run before ratelimited by the cooldown

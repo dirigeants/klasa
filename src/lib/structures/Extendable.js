@@ -10,9 +10,7 @@ const Discord = require('discord.js');
 class Extendable extends Piece {
 
 	/**
-	 * @typedef {Object} ExtendableOptions
-	 * @property {string} [name=theFileName] The name of the extendable
-	 * @property {boolean} [enabled=true] If the extendable is enabled or not
+	 * @typedef {PieceOptions} ExtendableOptions
 	 * @property {boolean} [klasa=false] If the extendable is for Klasa instead of Discord.js
 	 * @memberof Extendable
 	 */
