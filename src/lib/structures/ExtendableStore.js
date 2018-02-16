@@ -41,7 +41,7 @@ class ExtendableStore extends Store {
 	 * Sets up an extendable in our store.
 	 * @since 0.0.1
 	 * @param {Extendable} piece The extendable piece we are setting up
-	 * @returns {Extendable}
+	 * @returns {?Extendable}
 	 */
 	set(piece) {
 		const extendable = super.set(piece);

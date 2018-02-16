@@ -42,7 +42,7 @@ class EventStore extends Store {
 	 * Sets up an event in our store.
 	 * @since 0.0.1
 	 * @param {Event} piece The event piece we are setting up
-	 * @returns {Event}
+	 * @returns {?Event}
 	 */
 	set(piece) {
 		const event = super.set(piece);

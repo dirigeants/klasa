@@ -31,7 +31,7 @@ class CommandStore extends Store {
 	 * Returns a command in the store if it exists by its name or by an alias.
 	 * @since 0.0.1
 	 * @param {string} name A command or alias name
-	 * @returns {Command}
+	 * @returns {?Command}
 	 */
 	get(name) {
 		return super.get(name) || this.aliases.get(name);
@@ -86,7 +86,7 @@ class CommandStore extends Store {
 	/**
 	 * Loads all of our commands from both the user and core directories.
 	 * @since 0.0.1
-	 * @returns {number} The number of commands and aliases loaded.
+	 * @returns {number} The number of commands loaded.
 	 */
 	async loadAll() {
 		this.clear();
