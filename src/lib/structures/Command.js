@@ -45,6 +45,8 @@ class Command extends Piece {
 	constructor(client, store, file, core, options = {}) {
 		super(client, store, file, core, options);
 
+		this.name = this.name.toLowerCase();
+
 		/**
 		 * What channels the command should run in
 		 * @since 0.0.1
