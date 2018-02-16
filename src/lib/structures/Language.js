@@ -46,7 +46,7 @@ class Language extends Piece {
 	 * @abstract
 	 */
 	async init() {
-		const loc = join(this.store.coreDir, this.file);
+		const loc = join(this.store.coreDir, ...this.file);
 		if (this.dir !== this.store.coreDir && await pathExists(loc)) {
 			try {
 				const CorePiece = require(loc);
