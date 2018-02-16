@@ -804,6 +804,20 @@ declare module 'klasa' {
 		public cache: boolean;
 		public sql: boolean;
 
+		public abstract hasTable(table: string): Promise<boolean>;
+		public abstract createTable(table: string): Promise<any>;
+		public abstract deleteTable(table: string): Promise<any>;
+		public abstract getAll<T>(table: string): Promise<T[]>;
+		public abstract getKeys(table: string): Promise<string[]>;
+		public abstract get<T>(table: string, entry: string): Promise<T>;
+		public abstract has(table: string, entry: string): Promise<boolean>;
+		public abstract updateValue(table: string, path: string, path: string, newValue: any): Promise<any>;
+		public abstract removeValue(table: string, path: string): Promise<any>;
+		public abstract create(table: string, entry: string, data: any): Promise<any>;
+		public abstract update(table: string, entry: string, data: any): Promise<any>;
+		public abstract replace(table: string, entry: string, data: any): Promise<any>;
+		public abstract delete(table: string, entry: string): Promise<any>;
+
 		public shutdown(): Promise<void>;
 		public toJSON(): PieceProviderJSON;
 	}

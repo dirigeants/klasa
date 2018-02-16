@@ -294,32 +294,32 @@ class Command extends Piece {
 	toJSON() {
 		return {
 			...super.toJSON(),
-			runIn: this.runIn.slice(0),
-			bucket: this.bucket,
-			cooldown: this.cooldown,
-			nsfw: this.nsfw,
-			guarded: this.guarded,
-			deletable: this.deletable,
-			promptTime: this.promptTime,
-			promptLimit: this.promptLimit,
 			aliases: this.aliases.slice(0),
-			permLevel: this.permLevel,
 			botPerms: this.botPerms.slice(0),
-			requiredConfigs: this.requiredConfigs.slice(0),
+			bucket: this.bucket,
+			category: this.category,
+			cooldown: this.cooldown,
+			deletable: this.deletable,
 			description: typeof this.description === 'function' ? this.description({ language: this.client.languages.default }) : this.description,
 			extendedHelp: typeof this.extendedHelp === 'function' ? this.extendedHelp({ language: this.client.languages.default }) : this.extendedHelp,
-			usageString: this.usageString,
-			usageDelim: this.usageDelim,
-			quotedStringSupport: this.quotedStringSupport,
-			subcommands: this.subcommands,
 			fullCategory: this.fullCategory,
-			category: this.category,
+			guarded: this.guarded,
+			nsfw: this.nsfw,
+			permLevel: this.permLevel,
+			promptLimit: this.promptLimit,
+			promptTime: this.promptTime,
+			quotedStringSupport: this.quotedStringSupport,
+			requiredConfigs: this.requiredConfigs.slice(0),
+			runIn: this.runIn.slice(0),
 			subCategory: this.subCategory,
+			subcommands: this.subcommands,
 			usage: {
 				usageString: this.usage.usageString,
 				usageDelim: this.usage.usageDelim,
 				nearlyFullUsage: this.usage.nearlyFullUsage
-			}
+			},
+			usageDelim: this.usageDelim,
+			usageString: this.usageString
 		};
 	}
 
