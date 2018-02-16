@@ -14,7 +14,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [piece]) {
-		const file = piece.type === 'command' ? join(...piece.file) : piece.file;
+		const file = join(...piece.file);
 		const fileLocation = resolve(piece.store.coreDir, file);
 		await fs.access(fileLocation).catch(() => { throw msg.language.get('COMMAND_TRANSFER_ERROR'); });
 		try {
