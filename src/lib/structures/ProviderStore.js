@@ -27,6 +27,14 @@ class ProviderStore extends Store {
 	}
 
 	/**
+	 * Clears the extendable from the store and removes the extensions.
+	 * @since 0.0.1
+	 */
+	clear() {
+		for (const extendable of this.values()) this.delete(extendable);
+	}
+
+	/**
 	 * Deletes a provider from the store
 	 * @since 0.0.1
 	 * @param {Provider|string} name The provider object or a string representing the structure this store caches
