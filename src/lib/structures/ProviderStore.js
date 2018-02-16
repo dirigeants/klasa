@@ -17,7 +17,7 @@ class ProviderStore extends Store {
 	}
 
 	/**
-	 * The default provider set in KlasaClientOptions.providers
+	 * The default provider set in {@link KlasaClientOptions.providers}
 	 * @since 0.5.0
 	 * @type {Provider}
 	 * @readonly
@@ -27,11 +27,11 @@ class ProviderStore extends Store {
 	}
 
 	/**
-	 * Clears the extendable from the store and removes the extensions.
+	 * Clears the providers from the store and waits for them to shutdown.
 	 * @since 0.0.1
 	 */
 	clear() {
-		for (const extendable of this.values()) this.delete(extendable);
+		for (const provider of this.values()) this.delete(provider);
 	}
 
 	/**

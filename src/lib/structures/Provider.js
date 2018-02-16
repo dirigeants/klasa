@@ -57,7 +57,6 @@ class Provider extends Piece {
 	toJSON() {
 		return {
 			...super.toJSON(),
-			enabled: this.enabled,
 			sql: this.sql,
 			cache: this.cache
 		};

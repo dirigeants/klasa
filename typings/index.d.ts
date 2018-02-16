@@ -694,7 +694,7 @@ declare module 'klasa' {
 //#region Pieces
 
 	export class Piece {
-		public constructor(client: KlasaClient, store: Store<string, this>, type: string, file: string | string[], core: boolean, options?: PieceOptions);
+		public constructor(client: KlasaClient, store: Store<string, Piece>, type: string, file: string | string[], core: boolean, options?: PieceOptions);
 		public readonly client: KlasaClient;
 		public readonly core: boolean;
 		public readonly type: string;
@@ -707,47 +707,54 @@ declare module 'klasa' {
 		public unload(): void;
 		public enable(): Piece;
 		public disable(): Piece;
-		public toString(): string;
 		public init(): Promise<any>;
+
+		public toJSON(): PieceJSON;
+		public toString(): string;
 	}
 
 	export abstract class Command extends Piece {
 		public constructor(client: KlasaClient, store: CommandStore, file: string[], core: boolean, options?: CommandOptions);
+		public readonly category: string;
+		public readonly subCategory: string;
+		public readonly usageDelim: string;
+		public readonly usageString: string;
 
 		public aliases: string[];
 		public botPerms: string[];
-		public category: string;
+		public bucket: number;
 		public cooldown: number;
+		public deletable: boolean;
 		public description: string | ((msg: KlasaMessage) => string);
 		public extendedHelp: string | ((msg: KlasaMessage) => string);
+		public fullCategory: string[];
+		public guarded: boolean;
+		public nsfw: boolean;
 		public permLevel: number;
 		public promptLimit: number;
 		public promptTime: number;
 		public quotedStringSupport: boolean;
-		public subcommands: boolean;
 		public requiredConfigs: string[];
 		public runIn: string[];
-		public bucket: number;
-		public subCategory: string;
+		public subcommands: boolean;
 		public usage: CommandUsage;
-		public usageDelim: string;
-		public usageString: string;
 		private cooldowns: Map<Snowflake, number>;
-		private fullCategory: string[];
 
 		public definePrompt(usageString: string, usageDelim: string): Usage;
 		public createCustomResolver(type: string, resolver: ArgResolverCustomMethod): this;
 		public customizeResponse(name: string, response: string | ((msg: KlasaMessage, possible: Possible) => string)): this;
 
 		public run(msg: KlasaMessage, params: any[]): Promise<KlasaMessage | KlasaMessage[]>;
+		public toJSON(): PieceCommandJSON;
 	}
 
 	export abstract class Event extends Piece {
 		public constructor(client: KlasaClient, store: EventStore, file: string, core: boolean, options?: EventOptions);
 
-		private _run(param: any): void;
-
 		public abstract run(...params: any[]): void;
+		public toJSON(): PieceEventJSON;
+
+		private _run(param: any): void;
 	}
 
 	export abstract class Extendable extends Piece {
@@ -757,21 +764,26 @@ declare module 'klasa' {
 		public target: boolean;
 
 		public abstract extend(...params: any[]): any;
+		public toJSON(): PieceExtendableJSON;
 	}
 
 	export abstract class Finalizer extends Piece {
 		public abstract run(msg: KlasaMessage, mes: KlasaMessage, start: Stopwatch): void;
+		public toJSON(): PieceFinalizerJSON;
 	}
 
 	export abstract class Inhibitor extends Piece {
 		public constructor(client: KlasaClient, store: InhibitorStore, file: string, core: boolean, options?: InhibitorOptions);
+		public spamProtection: boolean;
 
 		public abstract run(msg: KlasaMessage, cmd: Command): Promise<void | string>;
+		public toJSON(): PieceInhibitorJSON;
 	}
 
 	export abstract class Language extends Piece {
 		public language: { [key: string]: any };
 		public get(term: string, ...args: any[]): any;
+		public toJSON(): PieceLanguageJSON;
 	}
 
 	export abstract class Monitor extends Piece {
@@ -780,21 +792,25 @@ declare module 'klasa' {
 		public ignoreBots: boolean;
 		public ignoreSelf: boolean;
 		public ignoreOthers: boolean;
+		public ignoreWebhooks: boolean;
 		public abstract run(msg: KlasaMessage): void;
+		public shouldRun(msg: KlasaMessage): boolean;
+		public toJSON(): PieceMonitorJSON;
 	}
 
 	export abstract class Provider extends Piece {
 		public constructor(client: KlasaClient, store: ProviderStore, file: string, core: boolean, options?: ProviderOptions);
 
-		public description: string;
 		public cache: boolean;
 		public sql: boolean;
 
 		public shutdown(): Promise<void>;
+		public toJSON(): PieceProviderJSON;
 	}
 
 	export abstract class Task extends Piece {
 		public abstract run(data: any): Promise<void>;
+		public toJSON(): PieceTaskJSON;
 	}
 
 //#endregion Pieces
@@ -825,10 +841,6 @@ declare module 'klasa' {
 		public set(command: Command): Command;
 		public delete(name: Command | string): boolean;
 		public clear(): void;
-		public load(dir: string, file: string[]): Command;
-		public loadAll(): Promise<number>;
-
-		public static walk(store: CommandStore, core?: boolean): Promise<void>;
 	}
 
 	export class EventStore extends Store<string, Event> {
@@ -852,54 +864,37 @@ declare module 'klasa' {
 	export class FinalizerStore extends Store<string, Finalizer> {
 		public constructor(client: KlasaClient);
 
-		public delete(name: Finalizer | string): boolean;
-		public run(msg: KlasaMessage, mes: KlasaMessage, start: number): void;
-		public set(key: string, value: Finalizer): this;
-		public set(finalizer: Finalizer): Finalizer;
+		public run(msg: KlasaMessage, mes: KlasaMessage, start: number): Promise<void>;
 	}
 
 	export class InhibitorStore extends Store<string, Inhibitor> {
 		public constructor(client: KlasaClient);
 
-		public delete(name: Inhibitor | string): boolean;
-		public run(msg: KlasaMessage, cmd: Command, selective: boolean): void;
-		public set(key: string, value: Inhibitor): this;
-		public set(inhibitor: Inhibitor): Inhibitor;
+		public run(msg: KlasaMessage, cmd: Command, selective: boolean): Promise<void>;
 	}
 
 	export class LanguageStore extends Store<string, Language> {
 		public constructor(client: KlasaClient);
 
 		public readonly default: Language;
-		public delete(name: Language | string): boolean;
-		public set(key: string, value: Language): this;
-		public set(language: Language): Language;
 	}
 
 	export class MonitorStore extends Store<string, Monitor> {
 		public constructor(client: KlasaClient);
 
-		public delete(name: Monitor | string): boolean;
-		public run(msg: KlasaMessage): void;
-		public set(key: string, value: Monitor): this;
-		public set(monitor: Monitor): Monitor;
+		public run(msg: KlasaMessage): Promise<void>;
 	}
 
 	export class ProviderStore extends Store<string, Provider> {
 		public constructor(client: KlasaClient);
 
 		public readonly default: Provider;
+		public clear(): void;
 		public delete(name: Provider | string): boolean;
-		public set(key: string, value: Provider): this;
-		public set(provider: Provider): Provider;
 	}
 
 	export class TaskStore extends Store<string, Task> {
 		public constructor(client: KlasaClient);
-
-		public delete(name: Task | string): boolean;
-		public set(key: string, value: Task): this;
-		public set(task: Task): Task;
 	}
 
 //#endregion Stores
@@ -1523,18 +1518,20 @@ declare module 'klasa' {
 		aliases?: string[];
 		autoAliases?: boolean;
 		botPerms?: string[];
+		bucket?: number;
 		cooldown?: number;
 		deletable?: boolean;
-		promptTime?: number;
-		promptLimit?: number;
 		description?: string | ((msg: KlasaMessage) => string);
 		extendedHelp?: string | ((msg: KlasaMessage) => string);
+		guarded?: boolean;
+		nsfw?: boolean;
 		permLevel?: number;
+		promptLimit?: number;
+		promptTime?: number;
 		quotedStringSupport?: boolean;
-		subcommands?: boolean;
 		requiredConfigs?: string[];
-		runIn?: string[];
-		bucket?: number;
+		runIn?: Array<'text' | 'dm' | 'group'>;
+		subcommands?: boolean;
 		usage?: string;
 		usageDelim?: string;
 	} & PieceOptions;
@@ -1553,7 +1550,7 @@ declare module 'klasa' {
 	} & PieceOptions;
 
 	export type ProviderOptions = {
-		description?: string;
+		cache?: boolean;
 		sql?: boolean;
 	} & PieceOptions;
 
@@ -1561,6 +1558,69 @@ declare module 'klasa' {
 	export type FinalizerOptions = PieceOptions;
 	export type LanguageOptions = PieceOptions;
 	export type TaskOptions = PieceOptions;
+
+	export type PieceJSON = {
+		dir: string;
+		file: string[];
+		name: string;
+		type: string;
+		enabled: boolean;
+	};
+
+	export type PieceCommandJSON = {
+		aliases: string[];
+		botPerms: string[];
+		bucket: number;
+		category: string;
+		cooldown: number;
+		deletable: boolean;
+		description: string | ((msg: KlasaMessage) => string);
+		extendedHelp: string | ((msg: KlasaMessage) => string);
+		fullCategory: string[];
+		guarded: boolean;
+		nsfw: boolean;
+		permLevel: number;
+		promptLimit: number;
+		promptTime: number;
+		quotedStringSupport: boolean;
+		requiredConfigs: string[];
+		runIn: Array<'text' | 'dm' | 'group'>;
+		subCategory: string;
+		subcommands: boolean;
+		usage: {
+			usageString: string;
+			usageDelim: string;
+			nearlyFullUsage: string;
+		};
+		usageDelim: string;
+		usageString: string;
+	} & PieceJSON;
+
+	export type PieceExtendableJSON = {
+		appliesTo: string[];
+		target: string;
+	} & PieceJSON;
+
+	export type PieceInhibitorJSON = {
+		spamProtection: boolean;
+	} & PieceJSON;
+
+	export type PieceMonitorJSON = {
+		ignoreBots: boolean;
+		ignoreSelf: boolean;
+		ignoreOthers: boolean;
+		ignoreWebhooks: boolean;
+	} & PieceJSON;
+
+	export type PieceProviderJSON = {
+		cache: boolean;
+		sql: boolean;
+	} & PieceJSON;
+
+	export type PieceEventJSON = PieceJSON;
+	export type PieceFinalizerJSON = PieceJSON;
+	export type PieceLanguageJSON = PieceJSON;
+	export type PieceTaskJSON = PieceJSON;
 
 	// Usage
 	export type TextPromptOptions = {

@@ -12,25 +12,25 @@ class Command extends Piece {
 
 	/**
 	 * @typedef {PieceOptions} CommandOptions
-	 * @property {string[]} [runIn=['text','dm','group']] What channel types the command should run in
-	 * @property {number} [cooldown=0] The amount of time before the user can run the command again in seconds
-	 * @property {number} [bucket=1] The number of times this command can be run before ratelimited by the cooldown
-	 * @property {boolean} [nsfw=false] If the command should only run in nsfw channels
-	 * @property {boolean} [deletable=false] If the responses should be deleted if the triggering message is deleted
-	 * @property {boolean} [promptTime=30000] The time allowed for re-prompting of this command
-	 * @property {boolean} [promptLimit=0] The number or attempts allowed for re-prompting an argument
-	 * @property {boolean} [guarded=false] If the command can be disabled on a guild level (does not effect global disable)
 	 * @property {string[]} [aliases=[]] Any command aliases
 	 * @property {boolean} [autoAliases=true] If automatic aliases should be added (adds aliases of name and aliases without dashes)
-	 * @property {number} [permLevel=0] The required permission level to use the command
 	 * @property {string[]} [botPerms=[]] The required Discord permissions for the bot to use this command
-	 * @property {string[]} [requiredConfigs=[]] The required guild configs to use this command
+	 * @property {number} [bucket=1] The number of times this command can be run before ratelimited by the cooldown
+	 * @property {number} [cooldown=0] The amount of time before the user can run the command again in seconds
+	 * @property {boolean} [deletable=false] If the responses should be deleted if the triggering message is deleted
 	 * @property {(string|Function)} [description=''] The help description for the command
+	 * @property {(string|Function)} [extendedHelp=msg.language.get('COMMAND_HELP_NO_EXTENDED')] Extended help strings
+	 * @property {boolean} [guarded=false] If the command can be disabled on a guild level (does not effect global disable)
+	 * @property {boolean} [nsfw=false] If the command should only run in nsfw channels
+	 * @property {number} [permLevel=0] The required permission level to use the command
+	 * @property {boolean} [promptLimit=0] The number or attempts allowed for re-prompting an argument
+	 * @property {boolean} [promptTime=30000] The time allowed for re-prompting of this command
+	 * @property {boolean} [quotedStringSupport=false] Whether args for this command should not deliminated inside quotes
+	 * @property {string[]} [requiredConfigs=[]] The required guild configs to use this command
+	 * @property {string[]} [runIn=['text','dm','group']] What channel types the command should run in
+	 * @property {boolean} [subcommands=false] Whether to enable sub commands or not
 	 * @property {string} [usage=''] The usage string for the command
 	 * @property {?string} [usageDelim=undefined] The string to delimit the command input for usage
-	 * @property {boolean} [quotedStringSupport=false] Whether args for this command should not deliminated inside quotes
-	 * @property {boolean} [subcommands=false] Whether to enable sub commands or not
-	 * @property {(string|Function)} [extendedHelp=msg.language.get('COMMAND_HELP_NO_EXTENDED')] Extended help strings
 	 * @memberof Command
 	 */
 
@@ -48,11 +48,22 @@ class Command extends Piece {
 		this.name = this.name.toLowerCase();
 
 		/**
-		 * What channels the command should run in
+		 * The aliases for this command
 		 * @since 0.0.1
 		 * @type {string[]}
 		 */
-		this.runIn = options.runIn;
+		this.aliases = options.aliases;
+		if (options.autoAliases) {
+			if (this.name.includes('-')) this.aliases.push(this.name.replace(/-/g, ''));
+			for (const alias of this.aliases) if (alias.includes('-')) this.aliases.push(alias.replace(/-/g, ''));
+		}
+
+		/**
+		 * The required bot permissions to run this command
+		 * @since 0.0.1
+		 * @type {string[]}
+		 */
+		this.botPerms = options.botPerms;
 
 		/**
 		 * The number of times this command can be run before ratelimited by the cooldown
@@ -69,71 +80,11 @@ class Command extends Piece {
 		this.cooldown = options.cooldown;
 
 		/**
-		 * Whether this command should only run in NSFW channels or not
-		 * @since 0.5.0
-		 * @type {boolean}
-		 */
-		this.nsfw = options.nsfw;
-
-		/**
-		 * Whether this command should not be able to be disabled in a guild or not
-		 * @since 0.5.0
-		 * @type {boolean}
-		 */
-		this.guarded = options.guarded;
-
-		/**
 		 * Whether this command should have it's responses deleted if the triggering message is deleted
 		 * @since 0.5.0
 		 * @type {boolean}
 		 */
 		this.deletable = options.deletable;
-
-		/**
-		 * The time allowed for re-prompting of this command
-		 * @since 0.5.0
-		 * @type {number}
-		 */
-		this.promptTime = options.promptTime;
-
-		/**
-		 * The number or attempts allowed for re-prompting an argument
-		 * @since 0.5.0
-		 * @type {number}
-		 */
-		this.promptLimit = options.promptLimit;
-
-		/**
-		 * The aliases for this command
-		 * @since 0.0.1
-		 * @type {string[]}
-		 */
-		this.aliases = options.aliases;
-		if (options.autoAliases) {
-			if (this.name.includes('-')) this.aliases.push(this.name.replace(/-/g, ''));
-			for (const alias of this.aliases) if (alias.includes('-')) this.aliases.push(alias.replace(/-/g, ''));
-		}
-
-		/**
-		 * The required permLevel to run this command
-		 * @since 0.0.1
-		 * @type {number}
-		 */
-		this.permLevel = options.permLevel;
-
-		/**
-		 * The required bot permissions to run this command
-		 * @since 0.0.1
-		 * @type {string[]}
-		 */
-		this.botPerms = options.botPerms;
-
-		/**
-		 * The required per guild configs to run this command
-		 * @since 0.0.1
-		 * @type {string[]}
-		 */
-		this.requiredConfigs = options.requiredConfigs;
 
 		/**
 		 * The description of the command
@@ -154,6 +105,48 @@ class Command extends Piece {
 		this.extendedHelp = options.extendedHelp || (msg => msg.language.get('COMMAND_HELP_NO_EXTENDED'));
 
 		/**
+		 * The full category for the command
+		 * @since 0.0.1
+		 * @type {string[]}
+		 */
+		this.fullCategory = file.slice(0, -1);
+
+		/**
+		 * Whether this command should not be able to be disabled in a guild or not
+		 * @since 0.5.0
+		 * @type {boolean}
+		 */
+		this.guarded = options.guarded;
+
+		/**
+		 * Whether this command should only run in NSFW channels or not
+		 * @since 0.5.0
+		 * @type {boolean}
+		 */
+		this.nsfw = options.nsfw;
+
+		/**
+		 * The required permLevel to run this command
+		 * @since 0.0.1
+		 * @type {number}
+		 */
+		this.permLevel = options.permLevel;
+
+		/**
+		 * The number or attempts allowed for re-prompting an argument
+		 * @since 0.5.0
+		 * @type {number}
+		 */
+		this.promptLimit = options.promptLimit;
+
+		/**
+		 * The time allowed for re-prompting of this command
+		 * @since 0.5.0
+		 * @type {number}
+		 */
+		this.promptTime = options.promptTime;
+
+		/**
 		 * Whether to use quoted string support for this command or not
 		 * @since 0.2.1
 		 * @type {boolean}
@@ -161,18 +154,26 @@ class Command extends Piece {
 		this.quotedStringSupport = options.quotedStringSupport;
 
 		/**
+		 * The required per guild configs to run this command
+		 * @since 0.0.1
+		 * @type {string[]}
+		 */
+		this.requiredConfigs = options.requiredConfigs;
+
+
+		/**
+		 * What channels the command should run in
+		 * @since 0.0.1
+		 * @type {string[]}
+		 */
+		this.runIn = options.runIn;
+
+		/**
 		 * Whether to enable sub commands or not
 		 * @since 0.5.0
 		 * @type {boolean}
 		 */
 		this.subcommands = options.subcommands;
-
-		/**
-		 * The full category for the command
-		 * @since 0.0.1
-		 * @type {string[]}
-		 */
-		this.fullCategory = file.slice(0, -1);
 
 		/**
 		 * The parsed usage for the command
@@ -184,7 +185,7 @@ class Command extends Piece {
 		/**
 		 * Any active cooldowns for the command
 		 * @since 0.0.1
-		 * @type {Map}
+		 * @type {Map<string, number>}
 		 * @private
 		 */
 		this.cooldowns = new Map();
@@ -211,16 +212,6 @@ class Command extends Piece {
 	}
 
 	/**
-	 * The usage string for the command
-	 * @since 0.0.1
-	 * @type {string}
-	 * @readonly
-	 */
-	get usageString() {
-		return this.usage.usageString;
-	}
-
-	/**
 	 * The usage deliminator for the command input
 	 * @since 0.0.1
 	 * @type {?string}
@@ -228,6 +219,16 @@ class Command extends Piece {
 	 */
 	get usageDelim() {
 		return this.usage.usageDelim;
+	}
+
+	/**
+	 * The usage string for the command
+	 * @since 0.0.1
+	 * @type {string}
+	 * @readonly
+	 */
+	get usageString() {
+		return this.usage.usageString;
 	}
 
 	/**

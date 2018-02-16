@@ -14,6 +14,17 @@ class Event extends Piece {
 	 */
 
 	/**
+	 * The run method to be overwritten in actual event handlers
+	 * @since 0.0.1
+	 * @param {*} param The event parameters emitted
+	 * @returns {void}
+	 * @abstract
+	 */
+	run() {
+		// Defined in extension Classes
+	}
+
+	/**
 	 * A wrapper for the run method, to easily disable/enable events
 	 * @since 0.0.1
 	 * @param {*} param The event parameters emitted
@@ -27,17 +38,6 @@ class Event extends Piece {
 		} catch (err) {
 			this.client.emit('eventError', this, args, err);
 		}
-	}
-
-	/**
-	 * The run method to be overwritten in actual event handlers
-	 * @since 0.0.1
-	 * @param {*} param The event parameters emitted
-	 * @returns {void}
-	 * @abstract
-	 */
-	run() {
-		// Defined in extension Classes
 	}
 
 }
