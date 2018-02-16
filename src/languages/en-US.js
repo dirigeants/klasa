@@ -86,6 +86,7 @@ module.exports = class extends Language {
 			COMMAND_RELOAD_DESCRIPTION: 'Reloads a klasa piece, or all pieces of a klasa store.',
 			COMMAND_REBOOT: 'Rebooting...',
 			COMMAND_REBOOT_DESCRIPTION: 'Reboots the bot.',
+			COMMAND_LOAD: (time, type, name) => `✅ Successfully loaded ${type}: ${name}. (Took: ${time})`,
 			COMMAND_PING: 'Ping?',
 			COMMAND_PING_DESCRIPTION: 'Runs a connection test to Discord.',
 			COMMAND_PINGPONG: (diff, ping) => `Pong! (Roundtrip took: ${diff}ms. Heartbeat: ${ping}ms.)`,
