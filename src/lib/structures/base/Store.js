@@ -129,7 +129,6 @@ class Store extends Collection {
 		if (existing) this.delete(existing);
 		else if (this.client.listenerCount('pieceLoaded')) this.client.emit('pieceLoaded', piece);
 		super.set(piece.name, piece);
-		for (const alias of piece.aliases) this.aliases.set(alias, piece);
 		return piece;
 	}
 
