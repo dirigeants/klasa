@@ -50,15 +50,12 @@ class CommandStore extends Store {
 	/**
 	 * Sets up a command in our store.
 	 * @since 0.0.1
-	 * @param {Command} command The command object we are setting up
-	 * @returns {Command}
+	 * @param {Command} piece The command piece we are setting up
+	 * @returns {?Command}
 	 */
-	set(command) {
-		if (!(command instanceof Command)) return this.client.emit('error', 'Only commands may be stored in the CommandStore.');
-		const existing = this.get(command.name);
-		if (existing) this.delete(existing);
-		else if (this.client.listenerCount('pieceLoaded')) this.client.emit('pieceLoaded', command);
-		super.set(command.name, command);
+	set(piece) {
+		const command = super.set(piece);
+		if (!command) return undefined;
 		for (const alias of command.aliases) this.aliases.set(alias, command);
 		return command;
 	}
@@ -72,9 +69,8 @@ class CommandStore extends Store {
 	delete(name) {
 		const command = this.resolve(name);
 		if (!command) return false;
-		super.delete(command.name);
 		for (const alias of command.aliases) this.aliases.delete(alias);
-		return true;
+		return super.delete(command);
 	}
 
 	/**

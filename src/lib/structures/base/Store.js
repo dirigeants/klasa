@@ -116,6 +116,36 @@ class Store extends Collection {
 		return this.size;
 	}
 
+
+	/**
+	 * Sets up a piece in our store.
+	 * @since 0.0.1
+	 * @param {Piece} piece The peice we are setting up
+	 * @returns {?Piece}
+	 */
+	set(piece) {
+		if (!(piece instanceof this.holds)) return this.client.emit('error', `Only ${this} may be stored in this Store.`);
+		const existing = this.get(piece.name);
+		if (existing) this.delete(existing);
+		else if (this.client.listenerCount('pieceLoaded')) this.client.emit('pieceLoaded', piece);
+		super.set(piece.name, piece);
+		for (const alias of piece.aliases) this.aliases.set(alias, piece);
+		return piece;
+	}
+
+	/**
+	 * Deletes a command from the store.
+	 * @since 0.0.1
+	 * @param {Piece|string} name A command object or a string representing a command or alias name
+	 * @returns {boolean} whether or not the delete was successful.
+	 */
+	delete(name) {
+		const piece = this.resolve(name);
+		if (!piece) return false;
+		super.delete(piece.name);
+		return true;
+	}
+
 	/**
 	 * Resolve a string or piece into a piece object.
 	 * @since 0.0.1

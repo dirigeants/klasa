@@ -36,23 +36,7 @@ class ProviderStore extends Store {
 		const pro = this.resolve(name);
 		if (!pro) return false;
 		pro.shutdown();
-		super.delete(pro.name);
-		return true;
-	}
-
-	/**
-	 * Sets up a provider in our store.
-	 * @since 0.0.1
-	 * @param {Provider} provider The provider object we are setting up
-	 * @returns {Provider}
-	 */
-	set(provider) {
-		if (!(provider instanceof this.holds)) return this.client.emit('error', `Only ${this.name} may be stored in the Store.`);
-		const existing = this.get(provider.name);
-		if (existing) this.delete(existing);
-		else if (this.client.listenerCount('pieceLoaded')) this.client.emit('pieceLoaded', provider);
-		super.set(provider.name, provider);
-		return provider;
+		return super.delete(pro);
 	}
 
 }

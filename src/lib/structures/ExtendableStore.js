@@ -26,8 +26,7 @@ class ExtendableStore extends Store {
 		const extendable = this.resolve(name);
 		if (!extendable) return false;
 		for (const structure of extendable.appliesTo) delete extendable.target[structure].prototype[this.name];
-		super.delete(extendable.name);
-		return true;
+		return super.delete(extendable);
 	}
 
 	/**
@@ -41,14 +40,13 @@ class ExtendableStore extends Store {
 	/**
 	 * Sets up an extendable in our store.
 	 * @since 0.0.1
-	 * @param {Extendable} extendable The extendable object we are setting up
+	 * @param {Extendable} piece The extendable piece we are setting up
 	 * @returns {Extendable}
 	 */
-	set(extendable) {
-		if (!(extendable instanceof Extendable)) return this.client.emit('error', 'Only extendables may be stored in the ExtendableStore.');
+	set(piece) {
+		const extendable = super.set(piece);
+		if (!extendable) return undefined;
 		extendable.init();
-		if (!this.has(extendable.name) && this.client.listenerCount('pieceLoaded')) this.client.emit('pieceLoaded', extendable);
-		super.set(extendable.name, extendable);
 		return extendable;
 	}
 

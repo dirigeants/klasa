@@ -17,19 +17,6 @@ class FinalizerStore extends Store {
 	}
 
 	/**
-	 * Deletes a finalizer from the store
-	 * @since 0.0.1
-	 * @param {Finalizer|string} name The finalizer object or a string representing the structure this store caches
-	 * @returns {boolean} whether or not the delete was successful.
-	 */
-	delete(name) {
-		const finalizer = this.resolve(name);
-		if (!finalizer) return false;
-		super.delete(finalizer.name);
-		return true;
-	}
-
-	/**
 	 * Runs all of our finalizers after a command is ran successfully.
 	 * @since 0.0.1
 	 * @param {KlasaMessage} msg The message that called the command
@@ -47,21 +34,6 @@ class FinalizerStore extends Store {
 				}
 			}
 		}
-	}
-
-	/**
-	 * Sets up a finalizer in our store.
-	 * @since 0.0.1
-	 * @param {Finalizer} finalizer The finalizer object we are setting up
-	 * @returns {Finalizer}
-	 */
-	set(finalizer) {
-		if (!(finalizer instanceof this.holds)) return this.client.emit('error', `Only ${this.name} may be stored in the Store.`);
-		const existing = this.get(finalizer.name);
-		if (existing) this.delete(existing);
-		else if (this.client.listenerCount('pieceLoaded')) this.client.emit('pieceLoaded', finalizer);
-		super.set(finalizer.name, finalizer);
-		return finalizer;
 	}
 
 }
