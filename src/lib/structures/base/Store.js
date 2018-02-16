@@ -87,7 +87,6 @@ class Store extends Collection {
 	load(file, core = false) {
 		const dir = core ? this.coreDir : this.userDir;
 		const loc = join(dir, ...file);
-		if (!loc.endsWith('.js')) return null;
 		let piece = null;
 		try {
 			const Piece = (req => req.default || req)(require(loc));
