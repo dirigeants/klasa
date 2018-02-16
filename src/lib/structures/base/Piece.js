@@ -50,28 +50,28 @@ class Piece {
 		this.client = client;
 
 		/**
-		 * The file location where this event is stored
+		 * The file location where this Piece is stored
 		 * @since 0.0.1
-		 * @type {string|string[]}
+		 * @type {string[]}
 		 */
 		this.file = file;
 
 		/**
-		 * The name of the event
+		 * The name of the Piece
 		 * @since 0.0.1
 		 * @type {string}
 		 */
 		this.name = options.name || (Array.isArray(file) ? file[file.length - 1].toLowerCase() : file).slice(0, -3);
 
 		/**
-		 * If the event is enabled or not
+		 * If the Piece is enabled or not
 		 * @since 0.0.1
 		 * @type {boolean}
 		 */
 		this.enabled = options.enabled;
 
 		/**
-		 * The store this piece is from
+		 * The store this Piece is from
 		 * @since 0.5.0
 		 * @type {Store}
 		 */

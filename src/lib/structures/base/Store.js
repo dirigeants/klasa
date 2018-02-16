@@ -1,4 +1,4 @@
-const { join } = require('path');
+const { join, extname, relative, sep } = require('path');
 const { Collection } = require('discord.js');
 const fs = require('fs-nextra');
 const { isClass } = require('../../util/util');
@@ -101,21 +101,16 @@ class Store extends Collection {
 	}
 
 	/**
-	 * Loads all of our pieces from both the user and core directories.
+	 * Loads all of our Pieces from both the user and core directories.
 	 * @since 0.0.1
-	 * @returns {Promise<number>} The number of pieces loaded.
+	 * @returns {number} The number of Pieces loaded.
 	 */
 	async loadAll() {
 		this.clear();
-		if (this.coreDir) {
-			const coreFiles = await fs.readdir(this.coreDir).catch(() => { fs.ensureDir(this.coreDir).catch(err => this.client.emit('error', err)); });
-			if (coreFiles) await Promise.all(coreFiles.map(file => this.load(file, true)));
-		}
-		const userFiles = await fs.readdir(this.userDir).catch(() => { fs.ensureDir(this.userDir).catch(err => this.client.emit('error', err)); });
-		if (userFiles) await Promise.all(userFiles.map(file => this.load(file)));
+		await Store.walk(this, true);
+		await Store.walk(this);
 		return this.size;
 	}
-
 
 	/**
 	 * Sets up a piece in our store.
@@ -163,6 +158,21 @@ class Store extends Collection {
 	 */
 	toString() {
 		return this.name;
+	}
+
+	/**
+	 * Walks our directory of Pieces for the user and core directories.
+	 * @since 0.0.1
+	 * @param {Store} store The store we're loading into
+	 * @param {boolean} [core=false] If the file is located in the core directory or not
+	 * @returns {void}
+	 */
+	static async walk(store, core = false) {
+		const dir = core ? store.coreDir : store.userDir;
+		const files = await fs.scan(dir, { filter: (stats, path) => stats.isFile() && extname(path) === '.js' }).catch(() => { fs.ensureDir(dir).catch(err => store.client.emit('error', err)); });
+		if (!files) return true;
+
+		return Promise.all(Array.from(files.keys()).map(file => store.load(relative(dir, file).split(sep), core)));
 	}
 
 }

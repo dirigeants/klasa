@@ -173,20 +173,6 @@ class Command extends Piece {
 		this.fullCategory = file.slice(0, -1);
 
 		/**
-		 * The main category for the command
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.category = this.fullCategory[0] || 'General';
-
-		/**
-		 * The sub category for the command
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.subCategory = this.fullCategory[1] || 'General';
-
-		/**
 		 * The parsed usage for the command
 		 * @since 0.0.1
 		 * @type {CommandUsage}
@@ -200,6 +186,26 @@ class Command extends Piece {
 		 * @private
 		 */
 		this.cooldowns = new Map();
+	}
+
+	/**
+	 * The main category for the command
+	 * @since 0.0.1
+	 * @type {string}
+	 * @readonly
+	 */
+	get category() {
+		return this.fullCategory[0] || 'General';
+	}
+
+	/**
+	 * The sub category for the command
+	 * @since 0.0.1
+	 * @type {string}
+	 * @readonly
+	 */
+	get subCategory() {
+		return this.fullCategory[1] || 'General';
 	}
 
 	/**

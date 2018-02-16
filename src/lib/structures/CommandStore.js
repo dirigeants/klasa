@@ -1,6 +1,4 @@
-const { extname, relative, sep } = require('path');
 const { Collection } = require('discord.js');
-const fs = require('fs-nextra');
 const Command = require('./Command');
 const Store = require('./base/Store');
 
@@ -81,33 +79,6 @@ class CommandStore extends Store {
 	clear() {
 		super.clear();
 		this.aliases.clear();
-	}
-
-	/**
-	 * Loads all of our commands from both the user and core directories.
-	 * @since 0.0.1
-	 * @returns {number} The number of commands loaded.
-	 */
-	async loadAll() {
-		this.clear();
-		await CommandStore.walk(this, true);
-		await CommandStore.walk(this);
-		return this.size;
-	}
-
-	/**
-	 * Walks our directory of commands for the user and core directories.
-	 * @since 0.0.1
-	 * @param {CommandStore} store The command store we're loading into
-	 * @param {boolean} [core=false] If the file is located in the core directory or not
-	 * @returns {void}
-	 */
-	static async walk(store, core = false) {
-		const dir = core ? store.coreDir : store.userDir;
-		const files = await fs.scan(dir, { filter: (stats, path) => stats.isFile() && extname(path) === '.js' }).catch(() => { fs.ensureDir(dir).catch(err => store.client.emit('error', err)); });
-		if (!files) return true;
-
-		return Promise.all(Array.from(files.keys()).map(file => store.load(relative(dir, file).split(sep), core)));
 	}
 
 }
