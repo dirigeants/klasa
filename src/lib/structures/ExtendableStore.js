@@ -34,7 +34,7 @@ class ExtendableStore extends Store {
 	 * @since 0.0.1
 	 */
 	clear() {
-		for (const extendable of this.keys()) this.delete(extendable);
+		for (const extendable of this.values()) this.delete(extendable);
 	}
 
 	/**

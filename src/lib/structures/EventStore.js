@@ -22,7 +22,7 @@ class EventStore extends Store {
 	 * @returns {void}
 	 */
 	clear() {
-		for (const event of this.keys()) this.delete(event);
+		for (const event of this.values()) this.delete(event);
 	}
 
 	/**
