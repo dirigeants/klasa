@@ -15,11 +15,12 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [core, store, path]) {
+		if (!path.endsWith('.js')) path += '.js';
 		const timer = new Stopwatch();
 		const piece = store.load(path.split(this.regExp), Boolean(core));
 
 		try {
-			if (!piece) throw msg.language.get('COMMAND_LOAD_FILE_NOTEXISTS');
+			if (!piece) throw msg.language.get('COMMAND_LOAD_FAIL');
 			await piece.init();
 			return msg.sendMessage('COMMAND_LOAD', timer.stop(), store.name, piece.name);
 		} catch (error) {
