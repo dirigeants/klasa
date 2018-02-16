@@ -11,7 +11,7 @@ module.exports = class extends Command {
 			usage: '[core] <Store:store> <path:string>',
 			usageDelim: ' '
 		});
-		this.regExp = /\\|\//g;
+		this.regExp = /\\\\?|\//g;
 	}
 
 	async run(msg, [core, store, path]) {
