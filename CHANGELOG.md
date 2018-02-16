@@ -81,6 +81,9 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#184](https://github.com/dirigeants/klasa/pull/184)] `Piece#file` is now consistent between all pieces and it's type of `string[]`. (bdistin)
+- [[#184](https://github.com/dirigeants/klasa/pull/184)] **[MEM-PERF]** Tweaked `Command` to have category and subCategory properties as getters. (bdistin)
+- [[#184](https://github.com/dirigeants/klasa/pull/184)] Tweaked all stores to be able to load files in deep folders and abstracted it in `Store` for code reduction. (bdistin)
 - [[#182](https://github.com/dirigeants/klasa/pull/182)] **[BREAKING]** Refactored all pieces and stores to extend Piece and Store respectively. (bdistin)
 - [[#176](https://github.com/dirigeants/klasa/pull/176)] Marked several constructors as private (singleton, abstract or discouraged). (kyranet)
 - [[#162](https://github.com/dirigeants/klasa/pull/162)] Modified the built-in conf command to use `dependant arguments`-like arguments using custom arguments and messages. (bdistin)
@@ -155,6 +158,9 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
+- [[#184](https://github.com/dirigeants/klasa/pull/184)] Fixed classes and options missing methods and properties in typings. (kyranet)
+- [[#184](https://github.com/dirigeants/klasa/pull/184)] Fixed `Provider` not having abstract methods in typings. (kyranet)
+- [[#184](https://github.com/dirigeants/klasa/pull/184)] Fixed typings using `Store` without generic parameters, causing the TypeScript compiler to fail. (kyranet)
 - [[#182](https://github.com/dirigeants/klasa/pull/182)] Reduced the amount of data stored per-piece, resulting on a RAM usage decrease. (bdistin)
 - [[#182](https://github.com/dirigeants/klasa/pull/182)] Fixed MessageOptions being not correctly applied to the *send* aliases. (bdistin)
 - [[#176](https://github.com/dirigeants/klasa/pull/176)] Fixed internal parser ignoring `0` as `min` and/or `max` due to falsy value check. (kyranet)
