@@ -3,7 +3,6 @@ Probably one of the most advanced and powerful tools in klasa is making your own
 The most basic store:
 
 ```javascript
-const { join } = require('path');
 const { Store } = require('klasa');
 const Something = require('./Something');
 
@@ -11,23 +10,6 @@ class SomethingStore extends Store {
 
 	constructor(client) {
 		super(client, 'somethings', Something);
-	}
-
-	delete(name) {
-		const piece = this.resolve(name);
-		if (!piece) return false;
-		super.delete(piece.name);
-		return true;
-	}
-
-	set(piece) {
-		if (!(piece instanceof this.holds)) {
-			return this.client.emit('error', `Only ${this.name} may be stored in the Store.`);
-		}
-		const existing = this.get(piece.name);
-		if (existing) this.delete(existing);
-		super.set(piece.name, piece);
-		return piece;
 	}
 
 }
@@ -54,7 +36,6 @@ module.exports = Something;
 Now that probably doesn't give you much idea on what that means or why. But take the following idea: You are making a music bot *gasps* and you want to give it an auto-play feature. Problem is, not everyone likes the same kind of music, so lets make a GenreStore and a Genre piece for guild owners to set the genre of music they might want to listen to automatically.
 
 ```javascript
-const { join } = require('path');
 const { Store } = require('klasa');
 const Something = require('./Something');
 
@@ -62,25 +43,6 @@ class GenreStore extends Store {
 
 	constructor(client) {
 		super(client, 'genres', Something);
-	}
-
-	// We can wrap the delete method with additional teardown actions
-	delete(name) {
-		const piece = this.resolve(name);
-		if (!piece) return false;
-		super.delete(piece.name);
-		return true;
-	}
-
-	// We can wrap the set method with additional setup actions
-	set(piece) {
-		if (!(piece instanceof this.holds)) {
-			return this.client.emit('error', `Only ${this.name} may be stored in the Store.`);
-		}
-		const existing = this.get(piece.name);
-		if (existing) this.delete(existing);
-		super.set(piece.name, piece);
-		return piece;
 	}
 
 }
