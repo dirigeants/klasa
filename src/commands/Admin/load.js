@@ -14,10 +14,9 @@ module.exports = class extends Command {
 		this.regExp = /\\\\?|\//g;
 	}
 
-	async run(msg, [_core, store, _path]) {
-		if (!path.endsWith('.js')) _path += '.js';
-		const path = _path.split(this.regExp);
-		const core = Boolean(_core);
+	async run(msg, [core, store, path]) {
+		path = (path.endsWith('.js') ? path : `${path}.js`).split(this.regExp);
+		core = Boolean(core);
 		const timer = new Stopwatch();
 		const piece = store.load(path, core);
 
