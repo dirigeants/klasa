@@ -171,8 +171,8 @@ module.exports = Structures.extend('Message', Message => {
 			}
 
 			if (Array.isArray(content)) content = content.join('\n');
-
-			content = options && options.split ? splitMessage(content, options.split) : [content];
+			if (options && options.split) content = splitMessage(content, options.split);
+			if (!Array.isArray(content)) content = [content];
 
 			const promises = [];
 			const max = Math.max(content.length, this.responses.length);
