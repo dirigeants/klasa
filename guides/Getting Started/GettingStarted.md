@@ -74,4 +74,4 @@ node app.js
 
 ## What's next?
 
-Klasa will create folders in your directory to make your own custom pieces in. Klasa will automatically check those folders on bootup, or if you reload all of a piece's type. `+reload commands` ect assuming your prefix is `+` like in the example app.js file above.
+Klasa will create folders in your directory to make your own custom pieces in. Klasa will automatically check those folders on bootup, or if you reload all of a piece's type. `+reload commands` etc assuming your prefix is `+` like in the example app.js file above.
