@@ -1,5 +1,7 @@
 const { Collection } = require('discord.js');
 
+const notSet = {};
+
 /**
  * Permission levels. See {@tutorial UnderstandingPermissionLevels} for more information how to use this class
  * to define custom permissions.
@@ -30,9 +32,7 @@ class PermissionLevels extends Collection {
 		 */
 		this.requiredLevels = levels;
 
-		for (let i = 0; i < this.requiredLevels; i++) {
-			this.set(i, { break: false, check: () => false });
-		}
+		for (let i = 0; i < this.requiredLevels; i++) this.set(i, notSet);
 	}
 
 	/**
@@ -67,7 +67,7 @@ class PermissionLevels extends Collection {
 	 * @returns {boolean}
 	 */
 	isValid() {
-		return this.every(level => typeof level === 'object' && typeof level.break === 'boolean' && typeof level.check === 'function');
+		return this.every(level => level === notSet || (typeof level === 'object' && typeof level.break === 'boolean' && typeof level.check === 'function'));
 	}
 
 	/**
@@ -78,6 +78,7 @@ class PermissionLevels extends Collection {
 	debug() {
 		const errors = [];
 		for (const [level, index] of this) {
+			if (level === notSet) continue;
 			if (typeof level !== 'object') errors.push(`Permission level ${index} must be an object`);
 			if (typeof level.break !== 'boolean') errors.push(`"break" in permission level ${index} must be a boolean`);
 			if (typeof level.check !== 'function') errors.push(`"check" in permission level ${index} must be a function`);
@@ -96,8 +97,10 @@ class PermissionLevels extends Collection {
 		const mps = [];
 		let broke = false;
 		for (let i = min; i < this.size; i++) {
-			mps.push(this.get(i).check(msg.client, msg));
-			if (this.get(i).break) {
+			const level = this.get(i);
+			if (level === notSet) continue;
+			mps.push(level.check(msg.client, msg));
+			if (!level.break) {
 				broke = true;
 				break;
 			}
