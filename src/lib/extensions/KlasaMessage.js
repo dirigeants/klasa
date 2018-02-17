@@ -154,30 +154,31 @@ module.exports = Structures.extend('Message', Message => {
 		/**
 		 * Sends a message that will be editable via command editing (if nothing is attached)
 		 * @since 0.0.1
-		 * @param {external:StringResolvable} [content] The content to send
+		 * @param {external:StringResolvable|external:MessageEmbed|external:MessageAttachment} [content] The content to send
 		 * @param {external:MessageOptions} [options] The D.JS message options
 		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
 		 */
 		async sendMessage(content, options) {
-			({ content, ...options }) = this.constructor.handleOptions(content, options);
+			// eslint-disable-next-line prefer-const
+			let { _content, ..._options } = this.constructor.handleOptions(content, options);
 
-			if (!this.responses || typeof options.files !== 'undefined') {
-				const mes = await this.channel.send(content, options);
-				if (typeof options.files === 'undefined') this.responses = Array.isArray(mes) ? mes : [mes];
+			if (!this.responses || typeof _options.files !== 'undefined') {
+				const mes = await this.channel.send(_content, _options);
+				if (typeof _options.files === 'undefined') this.responses = Array.isArray(mes) ? mes : [mes];
 				return mes;
 			}
 
-			if (Array.isArray(content)) content = content.join('\n');
-			if (options && options.split) content = splitMessage(content, options.split);
-			if (!Array.isArray(content)) content = [content];
+			if (Array.isArray(_content)) _content = _content.join('\n');
+			if (_options && _options.split) _content = splitMessage(_content, _options.split);
+			if (!Array.isArray(_content)) _content = [_content];
 
 			const promises = [];
-			const max = Math.max(content.length, this.responses.length);
+			const max = Math.max(_content.length, this.responses.length);
 
 			for (let i = 0; i < max; i++) {
-				if (i >= content.length) this.responses[i].delete();
-				else if (this.responses.length > i) promises.push(this.responses[i].edit(content[i], options));
-				else promises.push(this.channel.send(content[i], options));
+				if (i >= _content.length) this.responses[i].delete();
+				else if (this.responses.length > i) promises.push(this.responses[i].edit(_content[i], _options));
+				else promises.push(this.channel.send(_content[i], _options));
 			}
 
 			this.responses = await Promise.all(promises);
@@ -211,7 +212,7 @@ module.exports = Structures.extend('Message', Message => {
 		/**
 		 * Sends a message that will be editable via command editing (if nothing is attached)
 		 * @since 0.0.1
-		 * @param {external:StringResolvable} [content] The content to send
+		 * @param {external:StringResolvable|external:MessageEmbed|external:MessageAttachment} [content] The content to send
 		 * @param {external:MessageOptions} [options] The D.JS message options
 		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
 		 */
