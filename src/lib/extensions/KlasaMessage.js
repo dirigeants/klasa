@@ -160,7 +160,7 @@ module.exports = Structures.extend('Message', Message => {
 		 */
 		async sendMessage(content, options) {
 			// eslint-disable-next-line prefer-const
-			let { _content, ..._options } = this.constructor.handleOptions(content, options);
+			let { content: _content, ..._options } = this.constructor.handleOptions(content, options);
 
 			if (!this.responses || typeof _options.files !== 'undefined') {
 				const mes = await this.channel.send(_content, _options);
