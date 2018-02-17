@@ -24,7 +24,7 @@ module.exports = Structures.extend('Message', Message => {
 			/**
 			 * The previous responses to this message
 			 * @since 0.5.0
-			 * @type {?(KlasaMessage|KlasaMessage[])}
+			 * @type {?KlasaMessage[]}
 			 */
 			this.responses = null;
 
@@ -158,47 +158,33 @@ module.exports = Structures.extend('Message', Message => {
 		 * @param {external:MessageOptions} [options] The D.JS message options
 		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
 		 */
-		sendMessage(content, options) {
+		async sendMessage(content, options) {
 			options = this.constructor.combineContentOptions(content, options);
 			content = options.content; // eslint-disable-line prefer-destructuring
 			delete options.content;
+			options.embed = options.embed || null;
+
+			if (!this.responses || typeof options.files !== 'undefined') {
+				const mes = await this.channel.send(content, options);
+				if (typeof options.files === 'undefined') this.responses = Array.isArray(mes) ? mes : [mes];
+				return mes;
+			}
+
 			if (Array.isArray(content)) content = content.join('\n');
 
-			options.embed = options.embed || null;
-			if (this.responses && typeof options.files === 'undefined') {
-				if (options && options.split) content = splitMessage(content, options.split);
-				if (Array.isArray(content)) {
-					const promises = [];
-					if (Array.isArray(this.responses)) {
-						/* eslint-disable max-depth */
-						for (let i = 0; i < content.length; i++) {
-							if (this.responses.length > i) promises.push(this.responses[i].edit(content[i], options));
-							else promises.push(this.channel.send(content[i]));
-						}
-						if (this.responses.length > content.length) {
-							for (let i = content.length; i < this.responses.length; i++) this.responses[i].delete();
-						}
-						/* eslint-enable max-depth */
-					} else {
-						promises.push(this.responses.edit(content[0], options));
-						for (let i = 1; i < content.length; i++) promises.push(this.channel.send(content[i]));
-					}
-					return Promise.all(promises)
-						.then(mes => {
-							this.responses = mes;
-							return mes;
-						});
-				} else if (Array.isArray(this.responses)) {
-					for (let i = this.responses.length - 1; i > 0; i--) this.responses[i].delete();
-					[this.responses] = this.responses;
-				}
-				return this.responses.edit(content, options);
+			content = options && options.split ? splitMessage(content, options.split) : [content];
+
+			const promises = [];
+			const max = Math.max(content.length, this.responses.length);
+
+			for (let i = 0; i < max; i++) {
+				if (i >= content.length) this.responses[i].delete();
+				else if (this.responses.length > i) promises.push(this.responses[i].edit(content[i], options));
+				else promises.push(this.channel.send(content[i], options));
 			}
-			return this.channel.send(content, options)
-				.then(mes => {
-					if (typeof options.files === 'undefined') this.responses = mes;
-					return mes;
-				});
+
+			this.responses = await Promise.all(promises);
+			return this.responses.length === 1 ? this.responses[0] : this.responses;
 		}
 
 		/**
