@@ -1,4 +1,4 @@
-const { Structures, splitMessage, Collection } = require('discord.js');
+const { Structures, splitMessage, Collection, MessageAttachment, MessageEmbed } = require('discord.js');
 const { isObject } = require('../util/util');
 
 module.exports = Structures.extend('Message', Message => {
@@ -159,10 +159,7 @@ module.exports = Structures.extend('Message', Message => {
 		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
 		 */
 		async sendMessage(content, options) {
-			options = this.constructor.combineContentOptions(content, options);
-			content = options.content; // eslint-disable-line prefer-destructuring
-			delete options.content;
-			options.embed = options.embed || null;
+			({ content, ...options }) = this.constructor.handleOptions(content, options);
 
 			if (!this.responses || typeof options.files !== 'undefined') {
 				const mes = await this.channel.send(content, options);
@@ -271,6 +268,28 @@ module.exports = Structures.extend('Message', Message => {
 		static combineContentOptions(content, options) {
 			if (!options) return isObject(content) ? content : { content };
 			return { ...options, content };
+		}
+
+		/**
+		 * Handle all send overloads.
+		 * @since 0.5.0
+		 * @param {external:StringResolvable|external:MessageEmbed|external:MessageAttachment} [content] The content to send
+		 * @param {external:MessageOptions} [options={}] The D.JS message options
+		 * @returns {external:MessageOptions}
+		 * @private
+		 */
+		static handleOptions(content, options = {}) {
+			if (content instanceof MessageEmbed) options.embed = content;
+			else if (content instanceof MessageAttachment) options.files = [content];
+			else options = this.combineContentOptions(content, options);
+
+			if (options.split && typeof options.code !== 'undefined' && (typeof options.code !== 'boolean' || options.code === true)) {
+				options.split.prepend = `\`\`\`${typeof options.code !== 'boolean' ? options.code || '' : ''}\n`;
+				options.split.append = '\n```';
+			}
+
+			options.embed = options.embed || null;
+			return options;
 		}
 
 	}
