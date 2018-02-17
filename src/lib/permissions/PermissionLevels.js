@@ -100,7 +100,7 @@ class PermissionLevels extends Collection {
 			const level = this.get(i);
 			if (level === notSet) continue;
 			mps.push(level.check(msg.client, msg));
-			if (!level.break) {
+			if (level.break) {
 				broke = true;
 				break;
 			}
