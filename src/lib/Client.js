@@ -499,7 +499,7 @@ class KlasaClient extends Discord.Client {
 		let commandMessages = 0;
 
 		for (const channel of this.channels.values()) {
-			if (!channel.messages.size) continue;
+			if (!channel.messages) continue;
 			channels++;
 
 			for (const message of channel.messages.values()) {
