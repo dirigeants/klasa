@@ -525,13 +525,15 @@ declare module 'klasa' {
 		public sync(): Promise<this>;
 		public destroy(): Promise<this>;
 
+		public reset(): Promise<ConfigurationUpdateManyList>;
 		public reset(key: string, avoidUnconfigurable?: boolean): Promise<ConfigurationUpdateResult>;
-		public update(key: object, guild?: GatewayGuildResolvable): Promise<ConfigurationUpdateManyResult>;
+		public update(key: object, guild?: GatewayGuildResolvable): Promise<ConfigurationUpdateManyList>;
 		public update(key: string, value?: any, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
 		public update(key: string, value?: any, guild?: GatewayGuildResolvable, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
 		public list(msg: KlasaMessage, path: SchemaFolder | string): string;
 		public resolveString(msg: KlasaMessage, path: SchemaPiece | string): string;
 
+		private _resetAll(schema: SchemaFolder, configs: object, list: ConfigurationUpdateManyList): void;
 		private _updateMany(object: any, guild?: GatewayGuildResolvable): Promise<ConfigurationUpdateManyResult>;
 		private _reset(key: string, guild: GatewayGuildResolvable, avoidUnconfigurable: boolean): Promise<ConfigurationParseResult>;
 		private _parseReset(key: string, guild: KlasaGuild, options: ConfigurationPathResult): Promise<ConfigurationParseResult>;
@@ -1301,6 +1303,7 @@ declare module 'klasa' {
 		public static isObject(input: object): boolean;
 		public static isThenable(input: Promise<any>): boolean;
 		public static makeObject(path: string, value: any): object;
+		public static arraysEqual(arr1: any[], arr2: any[], clone?: boolean): boolean;
 		public static mergeDefault(def: object, given?: object): object;
 		public static mergeObjects(objTarget: object, objSource: object): object;
 		public static regExpEsc(str: string): string;

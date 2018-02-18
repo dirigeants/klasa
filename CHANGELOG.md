@@ -13,6 +13,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Added `util.arraysEqual`. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Added property `Symbol.iterator` to Schedule. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Added `Gateway#toJSON()` and `GatewayDriver#toJSON()`. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Added `GatewayDriver#register` to be able to register new gateways without events (directly in your `app.js`). (kyranet)

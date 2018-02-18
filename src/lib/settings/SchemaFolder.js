@@ -104,7 +104,7 @@ class SchemaFolder extends Schema {
 		if (this.has(key)) throw `The key ${key} already exists in the current schema.`;
 		if (typeof this[key] !== 'undefined') throw `The key ${key} conflicts with a property of Schema.`;
 		if (!options || !isObject(options)) throw `The options object is required.`;
-		if (!options.type || String(options.type).toLowerCase() === 'folder') options.type = 'Folder';
+		if (typeof options.type !== 'string' || options.type.toLowerCase() === 'folder') options.type = 'Folder';
 
 		// Create the piece and save the current schema
 		const piece = options.type === 'Folder' ?

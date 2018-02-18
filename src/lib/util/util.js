@@ -328,6 +328,27 @@ class Util {
 	}
 
 	/**
+	 * Compare if both arrays are equal
+	 * @param {any[]} arr1 The first array to compare
+	 * @param {any[]} arr2 The second array to compare
+	 * @param {boolean} clone Whether this check should clone the second array
+	 * @returns {boolean}
+	 */
+	static arraysEqual(arr1, arr2, clone = false) {
+		if (arr1 === arr2) return true;
+		if (arr1.length !== arr2.length) return false;
+		// Clone the array
+		if (clone) arr2 = arr2.slice(0);
+
+		for (const item of arr1) {
+			const ind = arr2.indexOf(item);
+			if (ind !== -1) arr2.splice(ind, 1);
+		}
+
+		return arr2.length === 0;
+	}
+
+	/**
 	 * Sets default properties on an object that aren't already specified.
 	 * @since 0.5.0
 	 * @param {Object} def Default properties

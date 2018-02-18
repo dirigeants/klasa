@@ -1,6 +1,7 @@
-const { isObject, makeObject, deepClone, tryParse, getIdentifier, toTitleCase } = require('../util/util');
+const { isObject, makeObject, deepClone, tryParse, getIdentifier, toTitleCase, arraysEqual } = require('../util/util');
 const SchemaFolder = require('./SchemaFolder');
 const SchemaPiece = require('./SchemaPiece');
+const invalidValue = Symbol('invalid');
 
 /**
  * <warning>Creating your own Configuration instances if often discouraged and unneeded. SettingGateway handles them internally for you.</warning>
@@ -158,7 +159,7 @@ class Configuration {
 	/**
 	 * Sync the data from the database with the cache.
 	 * @since 0.5.0
-	 * @returns {Promise<this>}
+	 * @returns {this}
 	 */
 	async sync() {
 		this._syncStatus = this.gateway.provider.get(this.gateway.type, this.id);
@@ -174,7 +175,7 @@ class Configuration {
 	/**
 	 * Delete this entry from the database and cache.
 	 * @since 0.5.0
-	 * @returns {Promise<this>}
+	 * @returns {this}
 	 */
 	async destroy() {
 		if (this._existsInDB) {
@@ -190,13 +191,26 @@ class Configuration {
 	 * @since 0.5.0
 	 * @param {string} [resetKey] The key to reset
 	 * @param {boolean} [avoidUnconfigurable] Whether the Gateway should avoid configuring the selected key
-	 * @returns {Promise<ConfigurationUpdateResult>}
+	 * @returns {ConfigurationUpdateResult|ConfigurationUpdateObjectList}
 	 */
 	async reset(resetKey, avoidUnconfigurable) {
 		if (typeof resetKey === 'undefined') {
-			if (this._existsInDB) await this.gateway.provider.delete(this.gateway.type, this.id);
-			for (const [key, value] of this.gateway.schema) this[key] = Configuration._merge(undefined, value);
-			return { value: this, path: '' };
+			// Handle entry creation if it does not exist.
+			if (!this._existsInDB) return { keys: [], values: [] };
+
+			const oldClone = this.client.listenerCount('configUpdateEntry') ? this.clone() : null;
+			const list = { keys: [], values: [] };
+			this._resetAll(this.gateway.schema, this, list);
+
+			if (oldClone !== null) this.client.emit('configUpdateEntry', oldClone, this, list.keys);
+			if (this.gateway.sql) {
+				await this.gateway.provider.update(this.gateway.type, this.id, list.keys, list.values);
+			} else {
+				const updateObject = Object.assign(list.keys.map((key, i) => makeObject(key, list.values[i])));
+				await this.gateway.provider.update(this.gateway.type, this.id, updateObject);
+			}
+
+			return { keys: list.keys, values: list.values };
 		}
 		const { parsedID, parsed, path } = await this._reset(resetKey, typeof avoidUnconfigurable !== 'boolean' ? false : avoidUnconfigurable);
 		await (this.gateway.sql ?
@@ -314,6 +328,31 @@ class Configuration {
 
 		if (piece.array) return `[ ${value.map(resolver).join(' | ')} ]`;
 		return resolver(value);
+	}
+
+	/**
+	 * Resets all keys recursively
+	 * @since 0.5.0
+	 * @param {SchemaFolder} schema The SchemaFolder to iterate
+	 * @param {Object} configs The configs in the selected folder
+	 * @param {ConfigurationUpdateManyList} list The list
+	 * @private
+	 */
+	_resetAll(schema, configs, list) {
+		for (const [key, piece] of schema) {
+			if (piece.type === 'Folder') {
+				this._resetAll(piece, configs[key], list);
+				continue;
+			}
+			const value = (piece.array ? !arraysEqual(configs[key], piece.default, true) : configs[key] !== piece.default) ?
+				deepClone(piece.default) :
+				invalidValue;
+			if (value === invalidValue) continue;
+
+			configs[key] = value;
+			list.keys.push(piece.path);
+			list.values.push(configs[key]);
+		}
 	}
 
 	/**
