@@ -190,3 +190,11 @@ module.exports = {
  * @external ShardingManager
  * @see {@link https://discord.js.org/#/docs/main/master/class/ShardingManager}
  */
+/**
+ * @external Permissions
+ * @see {@link https://discord.js.org/#/docs/main/master/class/Permissions}
+ */
+/**
+ * @external ShardingManager
+ * @see {@link https://discord.js.org/#/docs/main/master/typedef/PermissionResolvable}
+ */

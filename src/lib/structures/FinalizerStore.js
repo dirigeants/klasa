@@ -24,15 +24,24 @@ class FinalizerStore extends Store {
 	 * @param {StopWatch} timer The timer run from start to queue of the command
 	 * @returns {void}
 	 */
-	async run(msg, mes, timer) {
-		for (const finalizer of this.values()) {
-			if (finalizer.enabled) {
-				try {
-					await finalizer.run(msg, mes, timer);
-				} catch (err) {
-					this.client.emit('finalizerError', msg, mes, timer, finalizer, err);
-				}
-			}
+	run(msg, mes, timer) {
+		for (const finalizer of this.values()) if (finalizer.enabled) this._run(finalizer, msg, mes, timer);
+	}
+
+	/**
+	 * Run a finalizer and catch any uncaught promises
+	 * @since 0.5.0
+	 * @param {Finalizer} finalizer The finalizer to run
+	 * @param {KlasaMessage} msg The message that called the command
+	 * @param {KlasaMessage|any} mes The response of the command
+	 * @param {StopWatch} timer The timer run from start to queue of the command
+	 * @private
+	 */
+	async _run(finalizer, msg, mes, timer) {
+		try {
+			await finalizer.run(msg, mes, timer);
+		} catch (err) {
+			this.client.emit('finalizerError', msg, mes, timer, finalizer, err);
 		}
 	}
 

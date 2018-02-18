@@ -1,3 +1,4 @@
+const { Permissions } = require('discord.js');
 const Piece = require('./base/Piece');
 const Usage = require('../usage/Usage');
 const CommandUsage = require('../usage/CommandUsage');
@@ -14,7 +15,7 @@ class Command extends Piece {
 	 * @typedef {PieceOptions} CommandOptions
 	 * @property {string[]} [aliases=[]] Any command aliases
 	 * @property {boolean} [autoAliases=true] If automatic aliases should be added (adds aliases of name and aliases without dashes)
-	 * @property {string[]} [botPerms=[]] The required Discord permissions for the bot to use this command
+	 * @property {external:PermissionResolvable} [botPerms=0] The required Discord permissions for the bot to use this command
 	 * @property {number} [bucket=1] The number of times this command can be run before ratelimited by the cooldown
 	 * @property {number} [cooldown=0] The amount of time before the user can run the command again in seconds
 	 * @property {boolean} [deletable=false] If the responses should be deleted if the triggering message is deleted
@@ -61,9 +62,9 @@ class Command extends Piece {
 		/**
 		 * The required bot permissions to run this command
 		 * @since 0.0.1
-		 * @type {string[]}
+		 * @type {external:Permissions}
 		 */
-		this.botPerms = options.botPerms;
+		this.botPerms = new Permissions(options.botPerms).freeze();
 
 		/**
 		 * The number of times this command can be run before ratelimited by the cooldown
@@ -295,7 +296,7 @@ class Command extends Piece {
 		return {
 			...super.toJSON(),
 			aliases: this.aliases.slice(0),
-			botPerms: this.botPerms.slice(0),
+			botPerms: this.botPerms.toArray(false),
 			bucket: this.bucket,
 			category: this.category,
 			cooldown: this.cooldown,

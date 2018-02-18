@@ -21,14 +21,22 @@ class MonitorStore extends Store {
 	 * @since 0.0.1
 	 * @param {KlasaMessage} msg The message object from Discord.js
 	 */
-	async run(msg) {
-		for (const monitor of this.values()) {
-			if (!monitor.shouldRun(msg)) continue;
-			try {
-				await monitor.run(msg);
-			} catch (err) {
-				this.client.emit('monitorError', msg, monitor, err);
-			}
+	run(msg) {
+		for (const monitor of this.values()) if (monitor.shouldRun(msg)) this._run(msg, monitor);
+	}
+
+	/**
+	 * Run a monitor and catch any uncaught promises
+	 * @since 0.5.0
+	 * @param {KlasaMessage} msg The message object from Discord.js
+	 * @param {Monitor} monitor The monitor to run
+	 * @private
+	 */
+	async _run(msg, monitor) {
+		try {
+			await monitor.run(msg);
+		} catch (err) {
+			this.client.emit('monitorError', msg, monitor, err);
 		}
 	}
 
