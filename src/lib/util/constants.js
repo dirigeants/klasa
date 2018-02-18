@@ -20,7 +20,7 @@ exports.DEFAULTS = {
 		language: 'en-US',
 		prefix: '!',
 		preserveConfigs: true,
-		readyMessage: (client) => `Successfully initialized. Ready to serve ${client.guilds.size} guilds.`,
+		readyMessage: (client) => `Successfully initialized. Ready to serve ${client.guilds.size} guild${client.guilds.size === 1 ? '' : 's'}.`,
 		typing: false,
 		customPromptDefaults: {
 			promptTime: 30000,
