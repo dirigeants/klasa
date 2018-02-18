@@ -257,7 +257,7 @@ class Util {
 	 * @returns {string}
 	 */
 	static getDeepTypeSetOrArray(input, basic = Util.getTypeName(input)) {
-		if (!(input instanceof Array || input instanceof Set || input instanceof WeakSet)) return basic;
+		if (!(Array.isArray(input) || input instanceof Set || input instanceof WeakSet)) return basic;
 		const types = new Set();
 		for (const value of input) {
 			const type = Util.getDeepTypeName(value);

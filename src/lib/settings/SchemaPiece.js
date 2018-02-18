@@ -3,7 +3,7 @@ const Schema = require('./Schema');
 const fs = require('fs-nextra');
 
 /**
- * <info>You should never create an instance of this class. Use {@link SchemaFolder#addKey} instead.</info>
+ * <info>You should never create an instance of this class. Use {@link SchemaFolder#add} instead.</info>
  * The SchemaPiece class that contains the data for a key and several helpers.
  */
 class SchemaPiece extends Schema {

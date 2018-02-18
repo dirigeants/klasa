@@ -4,7 +4,7 @@ const { deepClone, isObject } = require('../util/util');
 const fs = require('fs-nextra');
 
 /**
- * <warning>You should never create an instance of this class. Use {@link SchemaFolder#addFolder} instead.</warning>
+ * <warning>You should never create an instance of this class. Use {@link SchemaFolder#add} instead.</warning>
  * The schema class that stores (nested) folders and keys for SettingGateway usage. This class also implements multiple helpers.
  */
 class SchemaFolder extends Schema {
