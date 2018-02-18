@@ -360,8 +360,8 @@ class Configuration {
 	 * @since 0.5.0
 	 * @param {Object} object A JSON object to iterate and parse
 	 * @param {GuildResolvable} [guild] A guild resolvable
-	 * @returns {Promise<ConfigurationUpdateObjectList>}
-	 * @throws {Promise<ConfigurationUpdateObjectResult>}
+	 * @returns {ConfigurationUpdateObjectList}
+	 * @throws {ConfigurationUpdateObjectResult}
 	 * @private
 	 */
 	async _updateMany(object, guild) {
@@ -387,7 +387,7 @@ class Configuration {
 	 * @since 0.5.0
 	 * @param {string} key The key to reset
 	 * @param {boolean} avoidUnconfigurable Whether the Gateway should avoid configuring the selected key
-	 * @returns {Promise<ConfigurationParseResult>}
+	 * @returns {ConfigurationParseResult}
 	 * @private
 	 */
 	async _reset(key, avoidUnconfigurable) {
@@ -401,7 +401,7 @@ class Configuration {
 	 * @since 0.5.0
 	 * @param {string} key The key to edit
 	 * @param {ConfigurationPathResult} options The options
-	 * @returns {Promise<ConfigurationParseResult>}
+	 * @returns {ConfigurationParseResult}
 	 * @private
 	 */
 	async _parseReset(key, { path, route }) {
@@ -417,7 +417,7 @@ class Configuration {
 	 * @param {*} value The new value
 	 * @param {GuildResolvable} guild The guild to take
 	 * @param {ConfigurationPathResult} options The options
-	 * @returns {Promise<ConfigurationParseResult>}
+	 * @returns {ConfigurationParseResult}
 	 * @private
 	 */
 	async _parseUpdateOne(key, value, guild, { path, route }) {
@@ -438,7 +438,7 @@ class Configuration {
 	 * @param {GuildResolvable} guild The guild to take
 	 * @param {number} arrayPosition The array position to update
 	 * @param {ConfigurationPathResult} options The options
-	 * @returns {Promise<ConfigurationParseResult>}
+	 * @returns {ConfigurationParseResult}
 	 * @private
 	 */
 	async _parseUpdateArray(action, key, value, guild, arrayPosition, { path, route }) {
@@ -487,7 +487,7 @@ class Configuration {
 	 * @param {boolean} [options.avoidUnconfigurable=false] Whether the Gateway should avoid configuring the selected key
 	 * @param {('add'|'remove'|'auto')} [options.action='auto'] Whether the value should be added or removed to the array
 	 * @param {number} [options.arrayPosition=null] The array position to update
-	 * @returns {Promise<ConfigurationUpdateResult>}
+	 * @returns {ConfigurationUpdateResult}
 	 * @private
 	 */
 	async _updateSingle(key, value, guild, { avoidUnconfigurable = false, action = 'auto', arrayPosition = null } = {}) {

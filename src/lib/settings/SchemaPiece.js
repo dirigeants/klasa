@@ -126,7 +126,7 @@ class SchemaPiece extends Schema {
 	 * @since 0.5.0
 	 * @param {string} value The value to parse
 	 * @param {KlasaGuild} guild A Guild instance required for the resolver to work
-	 * @returns {Promise<*>}
+	 * @returns {*}
 	 */
 	async parse(value, guild) {
 		const resolved = await this.gateway.resolver[this.type](value, guild, this.key, { min: this.min, max: this.max });
@@ -138,7 +138,7 @@ class SchemaPiece extends Schema {
 	 * Modify this SchemaPiece's properties.
 	 * @since 0.5.0
 	 * @param {SchemaPieceEditOptions} options The new options
-	 * @returns {Promise<this>}
+	 * @returns {this}
 	 */
 	async edit(options) {
 		// Check if the 'options' parameter is an object.

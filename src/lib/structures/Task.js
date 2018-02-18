@@ -32,17 +32,17 @@ class Task extends Piece {
 	 * The run method to be overwritten in actual Task pieces
 	 * @since 0.5.0
 	 * @param {*} data The data from the ScheduledTask instance
-	 * @returns {Promise<void>}
+	 * @returns {void}
 	 * @abstract
 	 */
-	run() {
+	async run() {
 		// Defined in extension Classes
 	}
 
 	/**
 	 * The init method to be optionally overwritten in actual Task pieces
 	 * @since 0.5.0
-	 * @returns {Promise<void>}
+	 * @returns {void}
 	 * @abstract
 	 */
 	async init() {

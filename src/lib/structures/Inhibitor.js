@@ -41,7 +41,7 @@ class Inhibitor extends Piece {
 	 * @since 0.0.1
 	 * @param {KlasaMessage} msg The message that triggered this inhibitor
 	 * @param {Command} cmd The command to run
-	 * @returns {Promise<(void|string)>}
+	 * @returns {(void|string)}
 	 * @abstract
 	 */
 	async run() {
@@ -52,7 +52,7 @@ class Inhibitor extends Piece {
 	/**
 	 * The init method to be optionally overwritten in actual inhibitors
 	 * @since 0.0.1
-	 * @returns {Promise<void>}
+	 * @returns {void}
 	 * @abstract
 	 */
 	async init() {

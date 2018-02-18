@@ -102,7 +102,7 @@ class ScheduledTask {
 	/**
 	 * Run the current task and bump it if needed
 	 * @since 0.5.0
-	 * @returns {Promise<this>}
+	 * @returns {this}
 	 */
 	async run() {
 		if (!this.task.enabled) return this;
@@ -119,7 +119,7 @@ class ScheduledTask {
 	 * Update the task
 	 * @since 0.5.0
 	 * @param {ScheduledTaskUpdateOptions} options The options to update
-	 * @returns {Promise<this>}
+	 * @returns {this}
 	 * @example
 	 * // Update the data from the current scheduled task. Let's say I want to change the reminder content to remind me
 	 * // another thing

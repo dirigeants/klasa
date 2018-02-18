@@ -113,7 +113,7 @@ module.exports = Structures.extend('Message', Message => {
 		 * Awaits a response from the author.
 		 * @param {string} text The text to prompt the author
 		 * @param {number} [time=30000] The time to wait before giving up
-		 * @returns {Promise<KlasaMessage>}
+		 * @returns {KlasaMessage}
 		 */
 		async prompt(text, time = 30000) {
 			const message = await this.channel.send(text);
@@ -126,7 +126,7 @@ module.exports = Structures.extend('Message', Message => {
 		/**
 		 * The usable commands by the author in this message's context
 		 * @since 0.0.1
-		 * @returns {Promise<Collection<string, Command>>} The filtered CommandStore
+		 * @returns {Collection<string, Command>} The filtered CommandStore
 		 */
 		async usableCommands() {
 			const col = new Collection();
@@ -144,7 +144,7 @@ module.exports = Structures.extend('Message', Message => {
 		 * Checks if the author of this message, has applicable permission in this message's context of at least min
 		 * @since 0.0.1
 		 * @param {number} min The minimum level required
-		 * @returns {Promise<boolean>}
+		 * @returns {boolean}
 		 */
 		async hasAtLeastPermissionLevel(min) {
 			const { permission } = await this.client.permissionLevels.run(this, min);

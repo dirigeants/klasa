@@ -273,7 +273,7 @@ class Command extends Piece {
 	 * @since 0.0.1
 	 * @param {KlasaMessage} msg The command message mapped on top of the message used to trigger this command
 	 * @param {any[]} params The fully resolved parameters based on your usage / usageDelim
-	 * @returns {Promise<KlasaMessage|KlasaMessage[]>} You should return the response message whenever possible
+	 * @returns {KlasaMessage|KlasaMessage[]} You should return the response message whenever possible
 	 * @abstract
 	 */
 	async run(msg) {
@@ -284,7 +284,7 @@ class Command extends Piece {
 	/**
 	 * The init method to be optionally overwritten in actual commands
 	 * @since 0.0.1
-	 * @returns {Promise<*>}
+	 * @returns {*}
 	 * @abstract
 	 */
 	async init() {

@@ -402,7 +402,7 @@ class KlasaClient extends Discord.Client {
 	 * Use this to login to Discord with your bot
 	 * @since 0.0.1
 	 * @param {string} token Your bot token
-	 * @returns {Promise<string>}
+	 * @returns {string}
 	 */
 	async login(token) {
 		const timer = new Stopwatch();

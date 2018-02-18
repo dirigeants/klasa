@@ -135,7 +135,7 @@ class Gateway extends GatewayStorage {
 	 * Create a new entry into the database with an optional content (defaults to this Gateway's defaults).
 	 * @since 0.5.0
 	 * @param {string} input The name of the key to create
-	 * @returns {Promise<Configuration>}
+	 * @returns {Configuration}
 	 */
 	async createEntry(input) {
 		const target = getIdentifier(input);
@@ -168,7 +168,7 @@ class Gateway extends GatewayStorage {
 	 * Delete an entry from the database and cache.
 	 * @since 0.5.0
 	 * @param {string} input The name of the key to fetch and delete
-	 * @returns {Promise<boolean>}
+	 * @returns {boolean}
 	 */
 	async deleteEntry(input) {
 		const configs = this.cache.get(input);
@@ -183,7 +183,7 @@ class Gateway extends GatewayStorage {
 	 * @since 0.0.1
 	 * @param {(Object|string)} [input] An object containing a id property, like discord.js objects, or a string
 	 * @param {boolean} [download] Whether the sync should download data from the database
-	 * @returns {Promise<*>}
+	 * @returns {?Configuration}
 	 */
 	async sync(input, download) {
 		if (typeof input === 'undefined') {
@@ -200,6 +200,7 @@ class Gateway extends GatewayStorage {
 					this.cache.set(entry.id, newEntry);
 				}
 			}
+			return null;
 		}
 		const target = getIdentifier(input);
 		if (!target) throw new TypeError('The selected target could not be resolved to a string.');
@@ -265,7 +266,7 @@ class Gateway extends GatewayStorage {
 	/**
 	 * Readies up all Configuration instances in this gateway
 	 * @since 0.5.0
-	 * @returns {Promise<Array<external:Collection<string, Configuration>>>}
+	 * @returns {Array<external:Collection<string, Configuration>>}
 	 * @private
 	 */
 	async _ready() {

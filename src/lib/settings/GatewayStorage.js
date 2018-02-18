@@ -138,7 +138,7 @@ class GatewayStorage {
 	/**
 	 * Inits the schema, creating a file if it does not exist, and returning the current schema or the default.
 	 * @since 0.5.0
-	 * @returns {Promise<SchemaFolder>}
+	 * @returns {SchemaFolder}
 	 * @private
 	 */
 	async initSchema() {

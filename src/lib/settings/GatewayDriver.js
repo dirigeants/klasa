@@ -239,7 +239,7 @@ class GatewayDriver {
 	/**
 	 * Readies up all Gateways and Configuration instances
 	 * @since 0.5.0
-	 * @returns {Promise<Array<Array<external:Collection<string, Configuration>>>>}
+	 * @returns {Array<Array<external:Collection<string, Configuration>>>}
 	 * @private
 	 */
 	async _ready() {

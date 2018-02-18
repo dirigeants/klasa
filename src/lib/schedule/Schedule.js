@@ -137,7 +137,7 @@ class Schedule {
 	 * @param {string} taskName The name of the task
 	 * @param {(Date|number|string)} time The time or Cron pattern
 	 * @param {ScheduledTaskOptions} options The options for the ScheduleTask instance
-	 * @returns {Promise<ScheduledTask>}
+	 * @returns {ScheduledTask}
 	 * @example
 	 * // Create a new reminder that ends in 2018-03-09T12:30:00.000Z (UTC)
 	 * Schedule.create('reminder', new Date(Date.UTC(2018, 2, 9, 12, 30)), {
@@ -168,7 +168,7 @@ class Schedule {
 	 * Delete a Task by its ID
 	 * @since 0.5.0
 	 * @param {string} id The ID to search for
-	 * @returns {Promise<this>}
+	 * @returns {this}
 	 */
 	async delete(id) {
 		const _task = this._tasks.find(entry => entry.id === id);
