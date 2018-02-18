@@ -9,16 +9,13 @@ A schema works like a diagram or a blueprint, in SettingGateway, the schema defi
 
 ## Adding keys
 
-Adding keys with the schema is like adding a piece into a box, but you can also have boxes inside other boxes. That being said, you get the box you want to modify and insert the new pieces or boxes into it. The methods to achieve that are {@link SchemaFolder#addKey} to add pieces (keys) and {@link SchemaFolder#addFolder} to add boxes (folders).
+Adding keys with the schema is like adding a piece into a box, but you can also have boxes inside other boxes. That being said, you get the box you want to modify and insert the new pieces or boxes into it. The methods to achieve that are {@link SchemaFolder#add} to add pieces (keys) and boxes (folders).
 
 You would normally use these two methods using the following snippet:
 
 ```javascript
-// Add a new key
-this.client.gateways.gatewayName.schema.addKey(name, options, force);
-
-// Add a new folder
-this.client.gateways.gatewayName.schema.addFolder(name, options, force);
+// Add a new key or folder
+this.client.gateways.gatewayName.schema.add(name, options, force);
 ```
 
 The parameters are:
@@ -30,7 +27,7 @@ The parameters are:
 You can also extend any of the three built-in {@link Gateway}s from Klasa. For example, if you want to add a new key called **modlogs** that accepts only text channels, for your guild configs, you would use the following code:
 
 ```javascript
-this.client.gateways.guilds.schema.addKey('modlogs', { type: 'TextChannel' });
+this.client.gateways.guilds.schema.add('modlogs', { type: 'TextChannel' });
 ```
 
 Where you're doing the following steps:
@@ -43,7 +40,7 @@ Where you're doing the following steps:
 And you would have a perfectly configured modlogs key in your configs. However, you can also have an array of the same type. For example, you want to have a configurable array of users blacklisted in a guild, in a key named **userBlacklist**:
 
 ```javascript
-this.client.gateways.guilds.schema.addKey('userBlacklist', { type: 'User', array: true });
+this.client.gateways.guilds.schema.add('userBlacklist', { type: 'User', array: true });
 ```
 
 And now you can have access to any of them in your guild configs like in the following snippet!
@@ -83,8 +80,8 @@ You can create a folder, then create the keys, however, this will iterate over a
 async function init() {
 	const { schema } = this.client.gateways.guilds;
 
-	await schema.addFolder('channels');
-	await schema.channels.addKey('modlogs', { type: 'TextChannel' });
+	await schema.add('channels', {});
+	await schema.channels.add('modlogs', { type: 'TextChannel' });
 	console.log(schema.channels.modlogs.toJSON());
 	// {
 	//  	type: 'textchannel',
@@ -105,7 +102,7 @@ However, it's possible to create a folder with all the sub-keys (and even more n
 async function init() {
 	const { schema } = this.client.gateways.guilds;
 
-	await schema.addFolder('channels', { modlogs: { type: 'TextChannel' } });
+	await schema.add('channels', { modlogs: { type: 'TextChannel' } });
 	console.log(schema.channels.modlogs.toJSON());
 	// {
 	//  	type: 'textchannel',
@@ -133,7 +130,7 @@ async function init() {
 	const { schema } = this.client.gateways.guilds;
 
 	if (!schema.has('modlog')) {
-		await schema.addKey('modlog', { type: 'TextChannel' });
+		await schema.add('modlog', { type: 'TextChannel' });
 	}
 }
 ```

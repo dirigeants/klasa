@@ -651,8 +651,7 @@ declare module 'klasa' {
 
 		public readonly configurableKeys: string[];
 
-		public addKey(key: string, options: SchemaFolderAddOptions, force?: boolean): Promise<SchemaFolder>;
-		public addFolder(key: string, object?: object, force?: boolean): Promise<SchemaFolder>;
+		public add(key: string, options: SchemaFolderAddOptions | { [k: string]: SchemaFolderAddOptions }, force?: boolean): Promise<SchemaFolder>;
 		public has(key: string): boolean;
 		public remove(key: string, force?: boolean): Promise<SchemaFolder>;
 		public force(action: 'add' | 'edit' | 'delete', key: string, piece: SchemaFolder | SchemaPiece): Promise<any>;

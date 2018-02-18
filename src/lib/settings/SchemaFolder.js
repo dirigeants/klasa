@@ -1,6 +1,6 @@
 const SchemaPiece = require('./SchemaPiece');
 const Schema = require('./Schema');
-const { deepClone } = require('../util/util');
+const { deepClone, isObject } = require('../util/util');
 const fs = require('fs-nextra');
 
 /**
@@ -75,28 +75,54 @@ class SchemaFolder extends Schema {
 	 * Create a new nested folder.
 	 * @since 0.5.0
 	 * @param {string} key The name's key for the folder
-	 * @param {Object} [object={}] An object containing all the SchemaFolders/SchemaPieces literals for this folder
+	 * @param {Object} options An object containing the options for the new piece or folder. Check {@tutorial UnderstandingSchemaFolders}
 	 * @param {boolean} [force=true] Whether this function call should modify all entries from the database
-	 * @returns {Promise<SchemaFolder>}
+	 * @returns {SchemaFolder}
+	 * @example
+	 * // Add a new SchemaPiece
+	 * SchemaFolder.add('modlog', {
+	 *     type: 'TextChannel'
+	 * });
+	 *
+	 * // Add an empty new SchemaFolder
+	 * SchemaFolder.add('channels', {});
+	 *
+	 * // Optionally, you can set the type Folder,
+	 * // if no type is set, 'Folder' will be implied.
+	 * SchemaFolder.add('channels', {
+	 *     type: 'Folder'
+	 * });
+	 *
+	 * // Add a new SchemaFolder with a modlog key inside
+	 * SchemaFolder.add('channels', {
+	 *     modlog: {
+	 *         type: 'TextChannel'
+	 *     }
+	 * });
 	 */
-	async addFolder(key, object = {}, force = true) {
+	async add(key, options, force = true) {
 		if (this.has(key)) throw `The key ${key} already exists in the current schema.`;
 		if (typeof this[key] !== 'undefined') throw `The key ${key} conflicts with a property of Schema.`;
+		if (!options || !isObject) throw `The options object is required.`;
+		if (!options.type || String(options.type).toLowerCase() === 'folder') options.type = 'Folder';
 
-		const folder = this._add(key, object, SchemaFolder);
+		// Create the piece and save the current schema
+		const piece = options.type === 'Folder' ?
+			this._add(key, options, SchemaFolder) :
+			this._add(key, this._verifyKeyOptions(key, options), SchemaPiece);
 		await fs.outputJSONAtomic(this.gateway.filePath, this.gateway.schema.toJSON());
 
 		if (this.gateway.sql) {
-			if (folder.keyArray.length > 0) {
-				if (typeof this.gateway.provider.addColumn === 'function') await this.gateway.provider.addColumn(this.gateway.type, folder.getSQL());
-				else throw new Error('The method \'addColumn\' in your provider is required in order to add new columns.');
+			if (piece.type !== 'Folder' || piece.keyArray.length) {
+				await this.gateway.provider.addColumn(this.gateway.type, piece.type === 'Folder' ?
+					piece.getSQL() : piece.sql[1]);
 			}
 		} else if (force || this.gateway.type === 'clientStorage') {
-			await this.force('add', key, folder);
+			await this.force('add', key, piece);
 		}
 
-		await this._shardSyncSchema(folder, 'add', force);
-		if (this.client.listenerCount('schemaKeyAdd')) this.client.emit('schemaKeyAdd', folder);
+		await this._shardSyncSchema(piece, 'add', force);
+		this.client.emit('schemaKeyAdd', piece);
 		return this.gateway.schema;
 	}
 
@@ -105,7 +131,7 @@ class SchemaFolder extends Schema {
 	 * @since 0.5.0
 	 * @param {string} key The key's name to remove
 	 * @param {boolean} [force=true] Whether this function call should modify all entries from the database
-	 * @returns {Promise<SchemaFolder>}
+	 * @returns {SchemaFolder}
 	 */
 	async remove(key, force = true) {
 		if (!this.has(key)) throw new Error(`The key ${key} does not exist in the current schema.`);
@@ -127,7 +153,7 @@ class SchemaFolder extends Schema {
 		}
 
 		await this._shardSyncSchema(piece, 'delete', force);
-		if (this.client.listenerCount('schemaKeyRemove')) this.client.emit('schemaKeyRemove', piece);
+		this.client.emit('schemaKeyRemove', piece);
 		return this.gateway.schema;
 	}
 
@@ -139,30 +165,6 @@ class SchemaFolder extends Schema {
 	 */
 	has(key) {
 		return this.keyArray.includes(key);
-	}
-
-	/**
-	 * Add a new key to this folder.
-	 * @since 0.5.0
-	 * @param {string} key The name for the key
-	 * @param {SchemaFolderAddOptions} options The key's options to apply
-	 * @param {boolean} [force=true] Whether this function call should modify all entries from the database
-	 * @returns {Promise<SchemaFolder>}
-	 */
-	async addKey(key, options, force = true) {
-		this._add(key, this._verifyKeyOptions(key, options), SchemaPiece);
-		await fs.outputJSONAtomic(this.gateway.filePath, this.gateway.schema.toJSON());
-
-		if (this.gateway.sql) {
-			if (typeof this.gateway.provider.addColumn === 'function') await this.gateway.provider.addColumn(this.gateway.type, key, this[key].sql[1]);
-			else throw new Error('The method \'addColumn\' in your provider is required in order to add new columns.');
-		} else if (force || this.gateway.type === 'clientStorage') {
-			await this.force('add', key, this[key]);
-		}
-
-		await this._shardSyncSchema(this[key], 'add', force);
-		if (this.client.listenerCount('schemaKeyAdd')) this.client.emit('schemaKeyAdd', this[key]);
-		return this.gateway.schema;
 	}
 
 	/**

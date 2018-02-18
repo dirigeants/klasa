@@ -142,6 +142,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Removed
 
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] **[BREAKING]** Removed `SchemaFolder#addKey` and `SchemaFolder#addFolder` in favor to a more consistent `Schema#add`. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] **[BREAKING]** Removed `Configuration#resetConfiguration()`. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] **[PERF-MEM]** Removed `Configuration#type`. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] **[BREAKING]** Removed `SchemaFolder#removeKey` and `SchemaFolder#removeFolder` in favor to a more consistent `Schema#remove`. (kyranet)
