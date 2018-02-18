@@ -1,5 +1,4 @@
 const Piece = require('./base/Piece');
-const { mergeDefault } = require('../util/util');
 
 /**
  * Base class for all Klasa Inhibitors. See {@tutorial CreatingInhibitors} for more information how to use this class
@@ -10,9 +9,7 @@ const { mergeDefault } = require('../util/util');
 class Inhibitor extends Piece {
 
 	/**
-	 * @typedef {Object} InhibitorOptions
-	 * @property {string} [name=theFileName] The name of the inhibitor
-	 * @property {boolean} [enabled=true] Whether the inhibitor is enabled or not
+	 * @typedef {PieceOptions} InhibitorOptions
 	 * @property {boolean} [spamProtection=false] If this inhibitor is meant for spamProtection (disables the inhibitor while generating help)
 	 * @memberof Inhibitor
 	 */
@@ -20,13 +17,13 @@ class Inhibitor extends Piece {
 	/**
 	 * @since 0.0.1
 	 * @param {KlasaClient} client The Klasa client
+	 * @param {InhibitorStore} store The Inhibitor Store
 	 * @param {string} file The path from the pieces folder to the inhibitor file
 	 * @param {boolean} core If the piece is in the core directory or not
 	 * @param {InhibitorOptions} [options={}] Optional Inhibitor settings
 	 */
-	constructor(client, file, core, options = {}) {
-		options = mergeDefault(client.options.pieceDefaults.inhibitors, options);
-		super(client, 'inhibitor', file, core, options);
+	constructor(client, store, file, core, options = {}) {
+		super(client, store, file, core, options);
 
 		/**
 		 * If this inhibitor is meant for spamProtection (disables the inhibitor while generating help)
@@ -47,16 +44,6 @@ class Inhibitor extends Piece {
 	async run() {
 		// Defined in extension Classes
 		return;
-	}
-
-	/**
-	 * The init method to be optionally overwritten in actual inhibitors
-	 * @since 0.0.1
-	 * @returns {void}
-	 * @abstract
-	 */
-	async init() {
-		// Optionally defined in extension Classes
 	}
 
 	/**

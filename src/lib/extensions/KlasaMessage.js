@@ -1,4 +1,4 @@
-const { Structures, splitMessage, Collection } = require('discord.js');
+const { Structures, splitMessage, Collection, MessageAttachment, MessageEmbed } = require('discord.js');
 const { isObject } = require('../util/util');
 
 module.exports = Structures.extend('Message', Message => {
@@ -24,7 +24,7 @@ module.exports = Structures.extend('Message', Message => {
 			/**
 			 * The previous responses to this message
 			 * @since 0.5.0
-			 * @type {?(KlasaMessage|KlasaMessage[])}
+			 * @type {?KlasaMessage[]}
 			 */
 			this.responses = null;
 
@@ -154,51 +154,35 @@ module.exports = Structures.extend('Message', Message => {
 		/**
 		 * Sends a message that will be editable via command editing (if nothing is attached)
 		 * @since 0.0.1
-		 * @param {external:StringResolvable} [content] The content to send
+		 * @param {external:StringResolvable|external:MessageEmbed|external:MessageAttachment} [content] The content to send
 		 * @param {external:MessageOptions} [options] The D.JS message options
 		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
 		 */
-		sendMessage(content, options) {
-			options = this.constructor.combineContentOptions(content, options);
-			content = options.content; // eslint-disable-line prefer-destructuring
-			delete options.content;
-			if (Array.isArray(content)) content = content.join('\n');
+		async sendMessage(content, options) {
+			// eslint-disable-next-line prefer-const
+			let { content: _content, ..._options } = this.constructor.handleOptions(content, options);
 
-			options.embed = options.embed || null;
-			if (this.responses && typeof options.files === 'undefined') {
-				if (options && options.split) content = splitMessage(content, options.split);
-				if (Array.isArray(content)) {
-					const promises = [];
-					if (Array.isArray(this.responses)) {
-						/* eslint-disable max-depth */
-						for (let i = 0; i < content.length; i++) {
-							if (this.responses.length > i) promises.push(this.responses[i].edit(content[i], options));
-							else promises.push(this.channel.send(content[i]));
-						}
-						if (this.responses.length > content.length) {
-							for (let i = content.length; i < this.responses.length; i++) this.responses[i].delete();
-						}
-						/* eslint-enable max-depth */
-					} else {
-						promises.push(this.responses.edit(content[0], options));
-						for (let i = 1; i < content.length; i++) promises.push(this.channel.send(content[i]));
-					}
-					return Promise.all(promises)
-						.then(mes => {
-							this.responses = mes;
-							return mes;
-						});
-				} else if (Array.isArray(this.responses)) {
-					for (let i = this.responses.length - 1; i > 0; i--) this.responses[i].delete();
-					[this.responses] = this.responses;
-				}
-				return this.responses.edit(content, options);
+			if (!this.responses || typeof _options.files !== 'undefined') {
+				const mes = await this.channel.send(_content, _options);
+				if (typeof _options.files === 'undefined') this.responses = Array.isArray(mes) ? mes : [mes];
+				return mes;
 			}
-			return this.channel.send(content, options)
-				.then(mes => {
-					if (typeof options.files === 'undefined') this.responses = mes;
-					return mes;
-				});
+
+			if (Array.isArray(_content)) _content = _content.join('\n');
+			if (_options && _options.split) _content = splitMessage(_content, _options.split);
+			if (!Array.isArray(_content)) _content = [_content];
+
+			const promises = [];
+			const max = Math.max(_content.length, this.responses.length);
+
+			for (let i = 0; i < max; i++) {
+				if (i >= _content.length) this.responses[i].delete();
+				else if (this.responses.length > i) promises.push(this.responses[i].edit(_content[i], _options));
+				else promises.push(this.channel.send(_content[i], _options));
+			}
+
+			this.responses = await Promise.all(promises);
+			return this.responses.length === 1 ? this.responses[0] : this.responses;
 		}
 
 		/**
@@ -228,7 +212,7 @@ module.exports = Structures.extend('Message', Message => {
 		/**
 		 * Sends a message that will be editable via command editing (if nothing is attached)
 		 * @since 0.0.1
-		 * @param {external:StringResolvable} [content] The content to send
+		 * @param {external:StringResolvable|external:MessageEmbed|external:MessageAttachment} [content] The content to send
 		 * @param {external:MessageOptions} [options] The D.JS message options
 		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
 		 */
@@ -285,6 +269,29 @@ module.exports = Structures.extend('Message', Message => {
 		static combineContentOptions(content, options) {
 			if (!options) return isObject(content) ? content : { content };
 			return { ...options, content };
+		}
+
+		/**
+		 * Handle all send overloads.
+		 * @since 0.5.0
+		 * @param {external:StringResolvable|external:MessageEmbed|external:MessageAttachment} [content] The content to send
+		 * @param {external:MessageOptions} [options={}] The D.JS message options
+		 * @returns {external:MessageOptions}
+		 * @private
+		 */
+		static handleOptions(content, options = {}) {
+			if (content instanceof MessageEmbed) options.embed = content;
+			else if (content instanceof MessageAttachment) options.files = [content];
+			else if (isObject(content)) options = content;
+			else options = this.combineContentOptions(content, options);
+
+			if (options.split && typeof options.code !== 'undefined' && (typeof options.code !== 'boolean' || options.code === true)) {
+				options.split.prepend = `\`\`\`${typeof options.code !== 'boolean' ? options.code || '' : ''}\n`;
+				options.split.append = '\n```';
+			}
+
+			options.embed = options.embed || null;
+			return options;
 		}
 
 	}

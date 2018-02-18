@@ -1,5 +1,4 @@
 const Piece = require('./base/Piece');
-const { mergeDefault } = require('../util/util');
 const Discord = require('discord.js');
 
 /**
@@ -11,9 +10,7 @@ const Discord = require('discord.js');
 class Extendable extends Piece {
 
 	/**
-	 * @typedef {Object} ExtendableOptions
-	 * @property {string} [name=theFileName] The name of the extendable
-	 * @property {boolean} [enabled=true] If the extendable is enabled or not
+	 * @typedef {PieceOptions} ExtendableOptions
 	 * @property {boolean} [klasa=false] If the extendable is for Klasa instead of Discord.js
 	 * @memberof Extendable
 	 */
@@ -21,14 +18,14 @@ class Extendable extends Piece {
 	/**
 	 * @since 0.0.1
 	 * @param {KlasaClient} client The klasa client
+	 * @param {ExtendableStore} store The extendable store
 	 * @param {string} file The path from the pieces folder to the extendable file
 	 * @param {boolean} core If the piece is in the core directory or not
 	 * @param {string[]} appliesTo The discord classes this extendable applies to
 	 * @param {ExtendableOptions} options The options for this extendable
 	 */
-	constructor(client, file, core, appliesTo = [], options = {}) {
-		options = mergeDefault(client.options.pieceDefaults.extendables, options);
-		super(client, 'extendable', file, core, options);
+	constructor(client, store, file, core, appliesTo = [], options = {}) {
+		super(client, store, file, core, options);
 
 		/**
 		 * The discord classes this extendable applies to
@@ -58,7 +55,7 @@ class Extendable extends Piece {
 	/**
 	 * The init method to apply the extend method to the Discord.js Class
 	 * @since 0.0.1
-	 * @returns {void}
+	 * @returns {Promise<void>}
 	 */
 	async init() {
 		if (this.enabled) this.enable(true);
@@ -97,11 +94,7 @@ class Extendable extends Piece {
 	 */
 	toJSON() {
 		return {
-			dir: this.dir,
-			file: this.file,
-			name: this.name,
-			type: this.type,
-			enabled: this.enabled,
+			...super.toJSON(),
 			appliesTo: this.appliesTo.slice(0),
 			target: this.target === Discord ? 'discord.js' : 'klasa'
 		};

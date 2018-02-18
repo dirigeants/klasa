@@ -17,19 +17,6 @@ class FinalizerStore extends Store {
 	}
 
 	/**
-	 * Deletes a finalizer from the store
-	 * @since 0.0.1
-	 * @param {Finalizer|string} name The finalizer object or a string representing the structure this store caches
-	 * @returns {boolean} whether or not the delete was successful.
-	 */
-	delete(name) {
-		const finalizer = this.resolve(name);
-		if (!finalizer) return false;
-		super.delete(finalizer.name);
-		return true;
-	}
-
-	/**
 	 * Runs all of our finalizers after a command is ran successfully.
 	 * @since 0.0.1
 	 * @param {KlasaMessage} msg The message that called the command
@@ -37,31 +24,25 @@ class FinalizerStore extends Store {
 	 * @param {StopWatch} timer The timer run from start to queue of the command
 	 * @returns {void}
 	 */
-	async run(msg, mes, timer) {
-		for (const finalizer of this.values()) {
-			if (finalizer.enabled) {
-				try {
-					await finalizer.run(msg, mes, timer);
-				} catch (err) {
-					this.client.emit('finalizerError', msg, mes, timer, finalizer, err);
-				}
-			}
-		}
+	run(msg, mes, timer) {
+		for (const finalizer of this.values()) if (finalizer.enabled) this._run(finalizer, msg, mes, timer);
 	}
 
 	/**
-	 * Sets up a finalizer in our store.
-	 * @since 0.0.1
-	 * @param {Finalizer} finalizer The finalizer object we are setting up
-	 * @returns {Finalizer}
+	 * Run a finalizer and catch any uncaught promises
+	 * @since 0.5.0
+	 * @param {Finalizer} finalizer The finalizer to run
+	 * @param {KlasaMessage} msg The message that called the command
+	 * @param {KlasaMessage|any} mes The response of the command
+	 * @param {StopWatch} timer The timer run from start to queue of the command
+	 * @private
 	 */
-	set(finalizer) {
-		if (!(finalizer instanceof this.holds)) return this.client.emit('error', `Only ${this.name} may be stored in the Store.`);
-		const existing = this.get(finalizer.name);
-		if (existing) this.delete(existing);
-		else if (this.client.listenerCount('pieceLoaded')) this.client.emit('pieceLoaded', finalizer);
-		super.set(finalizer.name, finalizer);
-		return finalizer;
+	async _run(finalizer, msg, mes, timer) {
+		try {
+			await finalizer.run(msg, mes, timer);
+		} catch (err) {
+			this.client.emit('finalizerError', msg, mes, timer, finalizer, err);
+		}
 	}
 
 }
