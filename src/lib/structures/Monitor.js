@@ -1,5 +1,4 @@
 const Piece = require('./base/Piece');
-const { mergeDefault } = require('../util/util');
 
 /**
  * Base class for all Klasa Monitors. See {@tutorial CreatingMonitors} for more information how to use this class
@@ -10,25 +9,24 @@ const { mergeDefault } = require('../util/util');
 class Monitor extends Piece {
 
 	/**
-	 * @typedef {Object} MonitorOptions
-	 * @property {string} [name=theFileName] The name of the monitor
-	 * @property {boolean} [enabled=true] Whether the monitor is enabled or not
+	 * @typedef {PieceOptions} MonitorOptions
 	 * @property {boolean} [ignoreBots=true] Whether the monitor ignores bots or not
 	 * @property {boolean} [ignoreSelf=true] Whether the monitor ignores itself or not
 	 * @property {boolean} [ignoreOthers=true] Whether the monitor ignores others or not
+	 * @property {boolean} [ignoreWebhooks=true] Whether the monitor ignores webhooks or not
 	 * @memberof Monitor
 	 */
 
 	/**
 	 * @since 0.0.1
 	 * @param {KlasaClient} client The Klasa client
+	 * @param {MonitorStore} store The Monitor Store
 	 * @param {string} file The path from the pieces folder to the monitor file
 	 * @param {boolean} core If the piece is in the core directory or not
 	 * @param {MonitorOptions} [options={}] Optional Monitor settings
 	 */
-	constructor(client, file, core, options = {}) {
-		options = mergeDefault(client.options.pieceDefaults.monitors, options);
-		super(client, 'monitor', file, core, options);
+	constructor(client, store, file, core, options = {}) {
+		super(client, store, file, core, options);
 
 		/**
 		 * Whether the monitor ignores bots or not
@@ -68,16 +66,6 @@ class Monitor extends Piece {
 	 */
 	run() {
 		// Defined in extension Classes
-	}
-
-	/**
-	 * The init method to be optionally overwritten in actual monitor pieces
-	 * @since 0.0.1
-	 * @returns {void}
-	 * @abstract
-	 */
-	async init() {
-		// Optionally defined in extension Classes
 	}
 
 	/**

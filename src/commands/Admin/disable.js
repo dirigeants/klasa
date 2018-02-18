@@ -18,7 +18,7 @@ module.exports = class extends Command {
 		piece.disable();
 		if (this.client.shard) {
 			await this.client.shard.broadcastEval(`
-				if (this.shard.id !== ${this.client.shard.id}) this.${piece.type}s.get('${piece.name}').disable();
+				if (this.shard.id !== ${this.client.shard.id}) this.${piece.store}.get('${piece.name}').disable();
 			`);
 		}
 		return msg.sendCode('diff', msg.language.get('COMMAND_DISABLE', piece.type, piece.name));

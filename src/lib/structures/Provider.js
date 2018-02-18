@@ -1,5 +1,4 @@
 const Piece = require('./base/Piece');
-const { mergeDefault } = require('../util/util');
 
 /**
  * Base class for all Klasa Providers. See {@tutorial CreatingProviders} for more information how to use this class
@@ -10,9 +9,7 @@ const { mergeDefault } = require('../util/util');
 class Provider extends Piece {
 
 	/**
-	 * @typedef {Object} ProviderOptions
-	 * @property {string} [name=theFileName] The name of the provider
-	 * @property {boolean} [enabled=true] Whether the provider is enabled or not
+	 * @typedef {PieceOptions} ProviderOptions
 	 * @property {boolean} [sql=false] If the provider provides to a sql data source
 	 * @memberof Provider
 	 */
@@ -20,13 +17,13 @@ class Provider extends Piece {
 	/**
 	 * @since 0.0.1
 	 * @param {KlasaClient} client The Klasa client
+	 * @param {ProviderStore} store The Provider Store
 	 * @param {string} file The path from the pieces folder to the provider file
 	 * @param {boolean} core If the piece is in the core directory or not
 	 * @param {ProviderOptions} [options={}] Optional Provider settings
 	 */
-	constructor(client, file, core, options = {}) {
-		options = mergeDefault(client.options.pieceDefaults.providers, options);
-		super(client, 'provider', file, core, options);
+	constructor(client, store, file, core, options = {}) {
+		super(client, store, file, core, options);
 
 		/**
 		 * If the provider provides to a sql data source
@@ -41,16 +38,6 @@ class Provider extends Piece {
 		 * @type {boolean}
 		 */
 		this.cache = options.cache;
-	}
-
-	/**
-	 * The init method to be optionally overwritten in actual provider pieces
-	 * @since 0.0.1
-	 * @returns {Promise<void>}
-	 * @abstract
-	 */
-	async init() {
-		// Optionally defined in extension Classes
 	}
 
 	/**
@@ -70,7 +57,6 @@ class Provider extends Piece {
 	toJSON() {
 		return {
 			...super.toJSON(),
-			enabled: this.enabled,
 			sql: this.sql,
 			cache: this.cache
 		};

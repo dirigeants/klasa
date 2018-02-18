@@ -136,10 +136,10 @@ module.exports = class extends Provider {
 	/**
 	 * Remove a value or object from all entries.
 	 * @param {string} table The name of the directory
-	 * @param {string} [path=false] The key's path to update
+	 * @param {string} [path=''] The key's path to update
 	 * @param {boolean} nice Whether the provider should update all entries at the same time or politely update them sequentially
 	 */
-	async removeValue(table, path, nice = false) {
+	async removeValue(table, path = '', nice = false) {
 		const route = path.split('.');
 		if (nice) {
 			const values = await this.getAll(table, true);

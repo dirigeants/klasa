@@ -17,13 +17,21 @@ class ProviderStore extends Store {
 	}
 
 	/**
-	 * The default provider set in KlasaClientOptions.providers
+	 * The default provider set in {@link KlasaClientOptions.providers}
 	 * @since 0.5.0
 	 * @type {Provider}
 	 * @readonly
 	 */
 	get default() {
 		return this.get(this.client.options.providers.default);
+	}
+
+	/**
+	 * Clears the providers from the store and waits for them to shutdown.
+	 * @since 0.0.1
+	 */
+	clear() {
+		for (const provider of this.values()) this.delete(provider);
 	}
 
 	/**
@@ -36,23 +44,7 @@ class ProviderStore extends Store {
 		const pro = this.resolve(name);
 		if (!pro) return false;
 		pro.shutdown();
-		super.delete(pro.name);
-		return true;
-	}
-
-	/**
-	 * Sets up a provider in our store.
-	 * @since 0.0.1
-	 * @param {Provider} provider The provider object we are setting up
-	 * @returns {Provider}
-	 */
-	set(provider) {
-		if (!(provider instanceof this.holds)) return this.client.emit('error', `Only ${this.name} may be stored in the Store.`);
-		const existing = this.get(provider.name);
-		if (existing) this.delete(existing);
-		else if (this.client.listenerCount('pieceLoaded')) this.client.emit('pieceLoaded', provider);
-		super.set(provider.name, provider);
-		return provider;
+		return super.delete(pro);
 	}
 
 }

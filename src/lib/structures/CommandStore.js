@@ -1,6 +1,4 @@
-const { extname, relative, sep } = require('path');
 const { Collection } = require('discord.js');
-const fs = require('fs-nextra');
 const Command = require('./Command');
 const Store = require('./base/Store');
 
@@ -31,7 +29,7 @@ class CommandStore extends Store {
 	 * Returns a command in the store if it exists by its name or by an alias.
 	 * @since 0.0.1
 	 * @param {string} name A command or alias name
-	 * @returns {Command}
+	 * @returns {?Command}
 	 */
 	get(name) {
 		return super.get(name) || this.aliases.get(name);
@@ -50,15 +48,12 @@ class CommandStore extends Store {
 	/**
 	 * Sets up a command in our store.
 	 * @since 0.0.1
-	 * @param {Command} command The command object we are setting up
-	 * @returns {Command}
+	 * @param {Command} piece The command piece we are setting up
+	 * @returns {?Command}
 	 */
-	set(command) {
-		if (!(command instanceof Command)) return this.client.emit('error', 'Only commands may be stored in the CommandStore.');
-		const existing = this.get(command.name);
-		if (existing) this.delete(existing);
-		else if (this.client.listenerCount('pieceLoaded')) this.client.emit('pieceLoaded', command);
-		super.set(command.name, command);
+	set(piece) {
+		const command = super.set(piece);
+		if (!command) return undefined;
 		for (const alias of command.aliases) this.aliases.set(alias, command);
 		return command;
 	}
@@ -72,9 +67,8 @@ class CommandStore extends Store {
 	delete(name) {
 		const command = this.resolve(name);
 		if (!command) return false;
-		super.delete(command.name);
 		for (const alias of command.aliases) this.aliases.delete(alias);
-		return true;
+		return super.delete(command);
 	}
 
 	/**
@@ -85,33 +79,6 @@ class CommandStore extends Store {
 	clear() {
 		super.clear();
 		this.aliases.clear();
-	}
-
-	/**
-	 * Loads all of our commands from both the user and core directories.
-	 * @since 0.0.1
-	 * @returns {number} The number of commands and aliases loaded.
-	 */
-	async loadAll() {
-		this.clear();
-		await CommandStore.walk(this, true);
-		await CommandStore.walk(this);
-		return this.size;
-	}
-
-	/**
-	 * Walks our directory of commands for the user and core directories.
-	 * @since 0.0.1
-	 * @param {CommandStore} store The command store we're loading into
-	 * @param {boolean} [core=false] If the file is located in the core directory or not
-	 * @returns {void}
-	 */
-	static async walk(store, core = false) {
-		const dir = core ? store.coreDir : store.userDir;
-		const files = await fs.scan(dir, { filter: (stats, path) => stats.isFile() && extname(path) === '.js' }).catch(() => { fs.ensureDir(dir).catch(err => store.client.emit('error', err)); });
-		if (!files) return true;
-
-		return Promise.all(Array.from(files.keys()).map(file => store.load(relative(dir, file).split(sep), core)));
 	}
 
 }

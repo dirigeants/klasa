@@ -1,4 +1,4 @@
-const { Command, Stopwatch } = require('klasa');
+const { Command, Store, Stopwatch } = require('klasa');
 
 module.exports = class extends Command {
 
@@ -13,7 +13,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [piece]) {
-		if (piece instanceof this.client.methods.Collection) {
+		if (piece instanceof Store) {
 			const timer = new Stopwatch();
 			await piece.loadAll();
 			await piece.init();
@@ -29,12 +29,12 @@ module.exports = class extends Command {
 			const itm = await piece.reload();
 			if (this.client.shard) {
 				await this.client.shard.broadcastEval(`
-					if (this.shard.id !== ${this.client.shard.id}) this.${piece.type}s.get('${piece.name}').reload();
+					if (this.shard.id !== ${this.client.shard.id}) this.${piece.store}.get('${piece.name}').reload();
 				`);
 			}
 			return msg.sendMessage(msg.language.get('COMMAND_RELOAD', itm.type, itm.name));
 		} catch (err) {
-			this.client[`${piece.type}s`].set(piece);
+			piece.store.set(piece);
 			return msg.sendMessage(`❌ ${err}`);
 		}
 	}

@@ -17,19 +17,6 @@ class InhibitorStore extends Store {
 	}
 
 	/**
-	 * Deletes a inhibitor from the store
-	 * @since 0.0.1
-	 * @param {Inhibitor|string} name The inhibitor object or a string representing the structure this store caches
-	 * @returns {boolean} whether or not the delete was successful.
-	 */
-	delete(name) {
-		const inhibitor = this.resolve(name);
-		if (!inhibitor) return false;
-		super.delete(inhibitor.name);
-		return true;
-	}
-
-	/**
 	 * Runs our inhibitors on the command.
 	 * @since 0.0.1
 	 * @param {KlasaMessage} msg The message object from Discord.js
@@ -44,21 +31,6 @@ class InhibitorStore extends Store {
 		if (results.includes(true)) throw undefined;
 		if (results.length > 0) throw results.join('\n');
 		return undefined;
-	}
-
-	/**
-	 * Sets up a inhibitor in our store.
-	 * @since 0.0.1
-	 * @param {Inhibitor} inhibitor The inhibitor object we are setting up
-	 * @returns {Inhibitor}
-	 */
-	set(inhibitor) {
-		if (!(inhibitor instanceof this.holds)) return this.client.emit('error', `Only ${this.name} may be stored in the Store.`);
-		const existing = this.get(inhibitor.name);
-		if (existing) this.delete(existing);
-		else if (this.client.listenerCount('pieceLoaded')) this.client.emit('pieceLoaded', inhibitor);
-		super.set(inhibitor.name, inhibitor);
-		return inhibitor;
 	}
 
 }
