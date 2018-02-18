@@ -282,6 +282,7 @@ module.exports = Structures.extend('Message', Message => {
 		static handleOptions(content, options = {}) {
 			if (content instanceof MessageEmbed) options.embed = content;
 			else if (content instanceof MessageAttachment) options.files = [content];
+			else if (isObject(content)) options = content;
 			else options = this.combineContentOptions(content, options);
 
 			if (options.split && typeof options.code !== 'undefined' && (typeof options.code !== 'boolean' || options.code === true)) {
