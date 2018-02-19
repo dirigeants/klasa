@@ -4,7 +4,7 @@ const Piece = require('./base/Piece');
  * Base class for all Klasa Providers. See {@tutorial CreatingProviders} for more information how to use this class
  * to build custom providers.
  * @tutorial CreatingProviders
- * @implements {Piece}
+ * @extends {Piece}
  */
 class Provider extends Piece {
 

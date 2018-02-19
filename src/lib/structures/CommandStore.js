@@ -5,7 +5,7 @@ const Store = require('./base/Store');
 /**
  * Stores all the commands usable in Klasa
  * @extends external:Collection
- * @implements {Store}
+ * @extends {Store}
  */
 class CommandStore extends Store {
 
