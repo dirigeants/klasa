@@ -657,8 +657,8 @@ class Configuration {
 			// Some SQL databases are unable to store Arrays...
 			if (data === null) return deepClone(schema.default);
 			if (typeof data === 'string') return tryParse(data);
-			this.client.emit('wtf',
-				new TypeError(`${this} - ${schema.path} | Expected an array, null, or undefined. Got: ${Object.prototype.toString.call(data)}`));
+			schema.client.emit('wtf',
+				new TypeError(`${schema.path} | Expected an array, null, or undefined. Got: ${Object.prototype.toString.call(data)}`));
 		}
 
 		return data;
