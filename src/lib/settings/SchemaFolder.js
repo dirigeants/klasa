@@ -301,7 +301,7 @@ class SchemaFolder extends Schema {
 		if (!options) throw 'You must pass an options argument to this method.';
 		if (typeof options.type !== 'string') throw 'The option type is required and must be a string.';
 		options.type = options.type.toLowerCase();
-		if (!this.client.gateways.types.includes(options.type)) throw `The type ${options.type} is not supported.`;
+		if (!this.client.gateways.types.has(options.type)) throw `The type ${options.type} is not supported.`;
 		if (typeof options.min !== 'undefined' && isNaN(options.min)) throw 'The option min must be a number.';
 		if (typeof options.max !== 'undefined' && isNaN(options.max)) throw 'The option max must be a number.';
 		if (typeof options.array !== 'undefined' && typeof options.array !== 'boolean') throw 'The option array must be a boolean.';
