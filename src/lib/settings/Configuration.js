@@ -189,18 +189,27 @@ class Configuration {
 	/**
 	 * Reset a value from an entry.
 	 * @since 0.5.0
-	 * @param {string} [resetKey] The key to reset
+	 * @param {(string|string[])} [resetKey] The key to reset
 	 * @param {boolean} [avoidUnconfigurable] Whether the Gateway should avoid configuring the selected key
 	 * @returns {ConfigurationUpdateResult|ConfigurationUpdateObjectList}
+	 * // Reset all keys for this instance
+	 * Configuration#reset();
+	 *
+	 * // Reset multiple keys for this instance
+	 * Configuration#reset(['prefix', 'channels.modlog']);
+	 *
+	 * // Reset a key
+	 * Configuration#reset('prefix');
 	 */
 	async reset(resetKey, avoidUnconfigurable) {
-		if (typeof resetKey === 'undefined') {
+		if (typeof resetKey === 'undefined') resetKey = [...this.gateway.schema.keys(true)];
+		if (Array.isArray(resetKey)) {
 			// Handle entry creation if it does not exist.
 			if (!this._existsInDB) return { keys: [], values: [] };
 
 			const oldClone = this.client.listenerCount('configUpdateEntry') ? this.clone() : null;
 			const list = { keys: [], values: [] };
-			this._resetAll(this.gateway.schema, this, list);
+			this._resetKeys(resetKey, list);
 
 			if (list.keys.length) {
 				if (oldClone !== null) this.client.emit('configUpdateEntry', oldClone, this, list.keys);
@@ -335,25 +344,27 @@ class Configuration {
 	/**
 	 * Resets all keys recursively
 	 * @since 0.5.0
-	 * @param {SchemaFolder} schema The SchemaFolder to iterate
-	 * @param {Object} configs The configs in the selected folder
+	 * @param {string[]} schema The SchemaFolder to iterate
 	 * @param {ConfigurationUpdateManyList} list The list
 	 * @private
 	 */
-	_resetAll(schema, configs, list) {
-		for (const [key, piece] of schema) {
-			if (piece.type === 'Folder') {
-				this._resetAll(piece, configs[key], list);
-				continue;
-			}
-			const value = (piece.array ? !arraysEqual(configs[key], piece.default, true) : configs[key] !== piece.default) ?
-				deepClone(piece.default) :
+	_resetKeys(keys, list) {
+		for (const key of keys) {
+			const { path, route } = this.gateway.getPath(key, { piece: true });
+
+			let self = this; // eslint-disable-line consistent-this
+			for (let i = 0; i < route.length - 1; i++) self = self[route[i]] || {};
+			const currentValue = self[route[route.length - 1]];
+
+			const value = (path.array ? !arraysEqual(currentValue, path.default, true) : currentValue !== path.default) ?
+				deepClone(path.default) :
 				invalidValue;
 			if (value === invalidValue) continue;
 
-			configs[key] = value;
-			list.keys.push(piece.path);
-			list.values.push(configs[key]);
+			self[route[route.length - 1]] = value;
+
+			list.keys.push(path.path);
+			list.values.push(value);
 		}
 	}
 

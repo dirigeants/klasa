@@ -13,6 +13,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Added support for `Configuration#reset(string[]);` to reset multiple keys. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Added `util.arraysEqual`. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Added property `Symbol.iterator` to Schedule. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Added `Gateway#toJSON()` and `GatewayDriver#toJSON()`. (kyranet)

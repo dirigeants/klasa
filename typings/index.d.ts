@@ -525,7 +525,7 @@ declare module 'klasa' {
 		public sync(): Promise<this>;
 		public destroy(): Promise<this>;
 
-		public reset(): Promise<ConfigurationUpdateManyList>;
+		public reset(keys?: string[]): Promise<ConfigurationUpdateManyList>;
 		public reset(key: string, avoidUnconfigurable?: boolean): Promise<ConfigurationUpdateResult>;
 		public update(key: object, guild?: GatewayGuildResolvable): Promise<ConfigurationUpdateManyList>;
 		public update(key: string, value?: any, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
@@ -533,7 +533,7 @@ declare module 'klasa' {
 		public list(msg: KlasaMessage, path: SchemaFolder | string): string;
 		public resolveString(msg: KlasaMessage, path: SchemaPiece | string): string;
 
-		private _resetAll(schema: SchemaFolder, configs: object, list: ConfigurationUpdateManyList): void;
+		private _resetKeys(keys: string[], list: ConfigurationUpdateManyList): void;
 		private _updateMany(object: any, guild?: GatewayGuildResolvable): Promise<ConfigurationUpdateManyResult>;
 		private _reset(key: string, guild: GatewayGuildResolvable, avoidUnconfigurable: boolean): Promise<ConfigurationParseResult>;
 		private _parseReset(key: string, guild: KlasaGuild, options: ConfigurationPathResult): Promise<ConfigurationParseResult>;
