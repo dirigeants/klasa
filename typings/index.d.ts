@@ -688,6 +688,7 @@ declare module 'klasa' {
 		public parse(value: any, guild: KlasaGuild): Promise<any>;
 		public modify(options: SchemaPieceEditOptions): Promise<this>;
 
+		private _generateDefault(): [] | false | null;
 		private _schemaCheckType(type: string): void;
 		private _schemaCheckArray(array: boolean): void;
 		private _schemaCheckDefault(options: SchemaFolderAddOptions): void;

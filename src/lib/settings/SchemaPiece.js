@@ -63,7 +63,7 @@ class SchemaPiece extends Schema {
 		 * @type {*}
 		 * @name SchemaPiece#default
 		 */
-		this.default = typeof options.default !== 'undefined' ? options.default : this.type === 'boolean' ? false : null;
+		this.default = typeof options.default !== 'undefined' ? options.default : this._generateDefault();
 
 		/**
 		 * The minimum value for this key.
@@ -184,6 +184,18 @@ class SchemaPiece extends Schema {
 	}
 
 	/**
+	 * Generate a default value if none is given
+	 * @since 0.5.0
+	 * @returns {(Array<*>|false|null)}
+	 * @private
+	 */
+	_generateDefault() {
+		if (this.array) return [];
+		if (this.type === 'boolean') return false;
+		return null;
+	}
+
+	/**
 	 * Checks if options.type is valid.
 	 * @since 0.5.0
 	 * @param {string} type The parameter to validate
@@ -285,6 +297,8 @@ class SchemaPiece extends Schema {
 	 */
 	_init(options) {
 		if (this._inited) throw new TypeError(`[INIT] ${this} - Is already init. Aborting re-init.`);
+		this._inited = true;
+
 		// Check if the 'options' parameter is an object.
 		if (!isObject(options)) throw new TypeError(`SchemaPiece#init expected an object as a parameter. Got: ${typeof options}`);
 		this._schemaCheckType(this.type);
@@ -294,7 +308,6 @@ class SchemaPiece extends Schema {
 		this._schemaCheckConfigurable(this.configurable);
 
 		this.sql[1] = this._generateSQLDatatype(options.sql);
-		this._inited = true;
 
 		return true;
 	}
