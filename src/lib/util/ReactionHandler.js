@@ -8,7 +8,7 @@ class ReactionHandler extends ReactionCollector {
 
 	/**
 	 * A single unicode character
-	 * @typedef {string} emoji
+	 * @typedef {string} Emoji
 	 * @memberof ReactionHandler
 	 */
 
@@ -32,7 +32,7 @@ class ReactionHandler extends ReactionCollector {
 	 * @param {Function} filter A filter function to determine which emoji reactions should be handled
 	 * @param {ReactionHandlerOptions} options The options for this ReactionHandler
 	 * @param {(RichDisplay|RichMenu)} display The RichDisplay or RichMenu that this handler is for
-	 * @param {emoji[]} emojis The emojis which should be used in this handler
+	 * @param {Emoji[]} emojis The emojis which should be used in this handler
 	 */
 	constructor(msg, filter, options, display, emojis) {
 		super(msg, filter, options);
@@ -47,7 +47,7 @@ class ReactionHandler extends ReactionCollector {
 		/**
 		 * An emoji to method map, to map custom emojis to static method names
 		 * @since 0.4.0
-		 * @type {Map<string,emoji>}
+		 * @type {Map<string, Emoji>}
 		 */
 		this.methodMap = new Map(Object.entries(this.display.emojis).map(([key, value]) => [value, key]));
 
@@ -324,7 +324,7 @@ class ReactionHandler extends ReactionCollector {
 	/**
 	 * The action to take when the "first" emoji is reacted
 	 * @since 0.4.0
-	 * @param {emoji[]} emojis The remaining emojis to react
+	 * @param {Emoji[]} emojis The remaining emojis to react
 	 * @returns {null}
 	 * @private
 	 */
