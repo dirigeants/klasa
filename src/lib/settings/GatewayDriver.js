@@ -217,7 +217,8 @@ class GatewayDriver {
 	 * @param {boolean} [download=true] Whether this Gateway should download the data from the database at init
 	 * @returns {Gateway}
 	 * @example
-	 * // Add a new SettingGateway instance, called 'users', which input takes users, and stores a quote which is a string between 2 and 140 characters.
+	 * // Add a new SettingGateway instance, called 'users', which input takes users,
+	 * and stores a quote which is a string between 2 and 140 characters.
 	 * const schema = {
 	 *	 quote: {
 	 *		 type: 'String',
