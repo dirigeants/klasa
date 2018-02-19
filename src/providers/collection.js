@@ -66,7 +66,7 @@ module.exports = class extends Provider {
 	 * @returns {string[]}
 	 */
 	getKeys(table) {
-		return Array.from(this.getTable(table).keys());
+		return [...this.getTable(table).keys()];
 	}
 
 	/**
@@ -75,7 +75,7 @@ module.exports = class extends Provider {
 	 * @returns {any[]}
 	 */
 	getValues(table) {
-		return Array.from(this.getTable(table).values());
+		return [...this.getTable(table).values()];
 	}
 
 	/**
