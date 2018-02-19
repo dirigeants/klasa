@@ -427,6 +427,7 @@ class SchemaFolder extends Schema {
 	}
 
 	/**
+	 * Stringify a value or the instance itself.
 	 * @since 0.5.0
 	 * @returns {string}
 	 */

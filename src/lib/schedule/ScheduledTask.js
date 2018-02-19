@@ -42,6 +42,7 @@ class ScheduledTask {
 		const [_time, _recurring] = this.constructor._resolveTime(time);
 
 		/**
+		 * The Client instance that initialized this instance
 		 * @since 0.5.0
 		 * @name ScheduledTask#client
 		 * @type {KlasaClient}
@@ -50,38 +51,35 @@ class ScheduledTask {
 		Object.defineProperty(this, 'client', { value: client });
 
 		/**
-		 * @since 0.5.0
-		 * @name ScheduledTask#store
-		 * @type {Schedule}
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'store', { value: client.schedule });
-
-		/**
+		 * The name of the Task this scheduled task will run
 		 * @since 0.5.0
 		 * @type {string}
 		 */
 		this.taskName = taskName;
 
 		/**
+		 * Whether this scheduled task is scheduled with the {@link Cron} pattern
 		 * @since 0.5.0
 		 * @type {?Cron}
 		 */
 		this.recurring = _recurring;
 
 		/**
+		 * The Date when this scheduled task ends
 		 * @since 0.5.0
 		 * @type {?Date}
 		 */
 		this.time = 'time' in options ? new Date(options.time) : _time;
 
 		/**
+		 * The id for this scheduled task
 		 * @since 0.5.0
 		 * @type {string}
 		 */
 		this.id = options.id || this.constructor._generateID(this.client);
 
 		/**
+		 * The stored metadata to send to the Task
 		 * @since 0.5.0
 		 * @type {*}
 		 */
@@ -91,6 +89,18 @@ class ScheduledTask {
 	}
 
 	/**
+	 * The Schedule class that manages all scheduled tasks
+	 * @since 0.5.0
+	 * @name ScheduledTask#store
+	 * @type {Schedule}
+	 * @readonly
+	 */
+	get store() {
+		return this.client.schedule;
+	}
+
+	/**
+	 * The Task instance this scheduled task will run
 	 * @since 0.5.0
 	 * @type {Task}
 	 * @readonly
