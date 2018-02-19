@@ -643,10 +643,10 @@ class Configuration {
 	 */
 	static _merge(data, schema) {
 		if (schema.type === 'Folder') {
-			if (typeof data === 'undefined') data = {};
-			for (let i = 0; i < schema.keyArray.length; i++) {
-				const key = schema.keyArray[i];
-				data[key] = Configuration._merge(data[key], schema[key]);
+			if (!data) data = {};
+			for (const [key, piece] of schema.entries()) {
+				if (!data[key]) data[key] = {};
+				Configuration._merge(data[key], schema[key]);
 			}
 		} else if (typeof data === 'undefined') {
 			// It's a SchemaPiece instance, so it has a property of 'key'.
@@ -691,9 +691,8 @@ class Configuration {
 	 * @param {SchemaFolder} schema A SchemaFolder instance
 	 * @private
 	 */
-	static _patch(inst = {}, data, schema) {
-		for (let i = 0; i < schema.keyArray.length; i++) {
-			const key = schema.keyArray[i];
+	static _patch(inst, data, schema) {
+		for (const key of schema.keys()) {
 			if (typeof data[key] === 'undefined') continue;
 			inst[key] = schema[key].type === 'Folder' ?
 				Configuration._patch(inst[key], data[key], schema[key]) :
