@@ -344,7 +344,7 @@ class Configuration {
 	/**
 	 * Resets all keys recursively
 	 * @since 0.5.0
-	 * @param {string[]} schema The SchemaFolder to iterate
+	 * @param {string[]} keys The SchemaFolder to iterate
 	 * @param {ConfigurationUpdateManyList} list The list
 	 * @private
 	 */
@@ -610,8 +610,9 @@ class Configuration {
 		for (let i = 0; i < schema.keyArray.length; i++) {
 			const key = schema.keyArray[i];
 			if (typeof data[key] === 'undefined') continue;
-			if (schema[key].type === 'Folder') Configuration._patch(this[key], data[key], schema[key]);
-			else this[key] = data[key];
+			this[key] = schema[key].type === 'Folder' ?
+				Configuration._patch(this[key], data[key], schema[key]) :
+				data[key];
 		}
 	}
 
@@ -646,7 +647,7 @@ class Configuration {
 			if (!data) data = {};
 			for (const [key, piece] of schema.entries()) {
 				if (!data[key]) data[key] = {};
-				Configuration._merge(data[key], schema[key]);
+				Configuration._merge(data[key], piece);
 			}
 		} else if (typeof data === 'undefined') {
 			// It's a SchemaPiece instance, so it has a property of 'key'.
@@ -689,6 +690,7 @@ class Configuration {
 	 * @param {Object} inst The reference of the Configuration instance
 	 * @param {Object} data The original object
 	 * @param {SchemaFolder} schema A SchemaFolder instance
+	 * @returns {Object}
 	 * @private
 	 */
 	static _patch(inst, data, schema) {
@@ -698,6 +700,8 @@ class Configuration {
 				Configuration._patch(inst[key], data[key], schema[key]) :
 				data[key];
 		}
+
+		return inst;
 	}
 
 }

@@ -180,6 +180,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Fixed `Configuration._patch` not patching after the second nested folder. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Fixed SettingResolver's return types. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Fixed Gateway syncing keys even when it's unused. (kyranet)
 - [[#184](https://github.com/dirigeants/klasa/pull/184)] Fixed classes and options missing methods and properties in typings. (kyranet)
