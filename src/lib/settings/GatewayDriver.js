@@ -218,17 +218,19 @@ class GatewayDriver {
 	 * @returns {Gateway}
 	 * @example
 	 * // Add a new SettingGateway instance, called 'users', which input takes users,
-	 * and stores a quote which is a string between 2 and 140 characters.
-	 * const schema = {
-	 *	 quote: {
-	 *		 type: 'String',
-	 *		 default: null,
-	 *		 array: false,
-	 *		 min: 2,
-	 *		 max: 140,
-	 *	 },
-	 * };
-	 * GatewayDriver.add('users', schema);
+	 * // and stores a quote which is a string between 2 and 140 characters.
+	 * GatewayDriver.add('channels', {
+	 *     disabledCommands: {
+	 *         type: 'Command',
+	 *         default: []
+	 *     },
+	 *     commandThrottle: {
+	 *         type: 'Integer',
+	 *         default: 5,
+	 *         min: 0,
+	 *         max: 60
+	 *     }
+	 * });
 	 */
 	async add(name, schema = {}, options = {}, download = true) {
 		const gateway = this._register(name, schema, options);
