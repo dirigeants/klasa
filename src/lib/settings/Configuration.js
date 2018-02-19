@@ -182,7 +182,7 @@ class Configuration {
 			await this.gateway.provider.delete(this.gateway.type, this.id);
 			if (this.client.listenerCount('configDeleteEntry')) this.client.emit('configDeleteEntry', this);
 		}
-		this.gateway.cache.delete(this.gateway.type, this.id);
+		this.gateway.cache.delete(this.id);
 		return this;
 	}
 

@@ -179,13 +179,11 @@ class SchemaFolder extends Schema {
 	force(action, key, piece) {
 		if (!(piece instanceof SchemaPiece) && !(piece instanceof SchemaFolder)) throw new TypeError(`'schemaPiece' must be an instance of 'SchemaPiece' or an instance of 'SchemaFolder'.`);
 
-		const values = this.gateway.cache.getValues(this.gateway.type);
 		const path = piece.path.split('.');
 
 		if (action === 'add' || action === 'edit') {
 			const defValue = this.defaults[key];
-			for (let i = 0; i < values.length; i++) {
-				let value = values[i];
+			for (let value of this.gateway.cache.values()) {
 				for (let j = 0; j < path.length - 1; j++) value = value[path[j]];
 				value[path[path.length - 1]] = deepClone(defValue);
 			}
@@ -193,8 +191,7 @@ class SchemaFolder extends Schema {
 		}
 
 		if (action === 'delete') {
-			for (let i = 0; i < values.length; i++) {
-				let value = values[i];
+			for (let value of this.gateway.cache.values()) {
 				for (let j = 0; j < path.length - 1; j++) value = value[path[j]];
 				delete value[path[path.length - 1]];
 			}
