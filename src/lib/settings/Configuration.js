@@ -202,12 +202,14 @@ class Configuration {
 			const list = { keys: [], values: [] };
 			this._resetAll(this.gateway.schema, this, list);
 
-			if (oldClone !== null) this.client.emit('configUpdateEntry', oldClone, this, list.keys);
-			if (this.gateway.sql) {
-				await this.gateway.provider.update(this.gateway.type, this.id, list.keys, list.values);
-			} else {
-				const updateObject = Object.assign(list.keys.map((key, i) => makeObject(key, list.values[i])));
-				await this.gateway.provider.update(this.gateway.type, this.id, updateObject);
+			if (list.keys.length) {
+				if (oldClone !== null) this.client.emit('configUpdateEntry', oldClone, this, list.keys);
+				if (this.gateway.sql) {
+					await this.gateway.provider.update(this.gateway.type, this.id, list.keys, list.values);
+				} else {
+					const updateObject = Object.assign({}, ...list.keys.map((key, i) => makeObject(key, list.values[i])));
+					await this.gateway.provider.update(this.gateway.type, this.id, updateObject);
+				}
 			}
 
 			return { keys: list.keys, values: list.values };
