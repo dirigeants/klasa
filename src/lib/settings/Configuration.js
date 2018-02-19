@@ -434,7 +434,7 @@ class Configuration {
 	 * @private
 	 */
 	async _parseUpdateOne(key, value, guild, { path, route }) {
-		if (path.array === true) throw 'This key is array type.';
+		if (path.array === true) throw new Error('This key is array type.');
 
 		const parsed = await path.parse(value, guild);
 		const parsedID = getIdentifier(parsed);

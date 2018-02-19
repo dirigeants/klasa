@@ -55,7 +55,7 @@ class SchemaPiece extends Schema {
 		 * @type {boolean}
 		 * @name SchemaPiece#array
 		 */
-		this.array = typeof options.array !== 'undefined' ? options.array : false;
+		this.array = 'array' in options ? options.array : Array.isArray(options.default);
 
 		/**
 		 * What this key should provide by default.
@@ -63,7 +63,7 @@ class SchemaPiece extends Schema {
 		 * @type {*}
 		 * @name SchemaPiece#default
 		 */
-		this.default = typeof options.default !== 'undefined' ? options.default : this._generateDefault();
+		this.default = 'default' in options ? options.default : this._generateDefault();
 
 		/**
 		 * The minimum value for this key.
@@ -71,7 +71,7 @@ class SchemaPiece extends Schema {
 		 * @type {?number}
 		 * @name SchemaPiece#min
 		 */
-		this.min = typeof options.min !== 'undefined' && isNaN(options.min) === false ? options.min : null;
+		this.min = 'min' in options ? options.min : null;
 
 		/**
 		 * The maximum value for this key.
@@ -79,7 +79,7 @@ class SchemaPiece extends Schema {
 		 * @type {?number}
 		 * @name SchemaPiece#max
 		 */
-		this.max = typeof options.max !== 'undefined' && isNaN(options.max) === false ? options.max : null;
+		this.max = 'max' in options ? options.max : null;
 
 		/**
 		 * A tuple of strings containing the path and the datatype.
@@ -87,7 +87,7 @@ class SchemaPiece extends Schema {
 		 * @type {string[]}
 		 * @name SchemaPiece#sql
 		 */
-		this.sql = [this.path];
+		this.sql = [this.path, null];
 
 		/**
 		 * Whether this key should be configureable by the config command. When type is any, this key defaults to false.
@@ -95,7 +95,7 @@ class SchemaPiece extends Schema {
 		 * @type {boolean}
 		 * @name SchemaPiece#configurable
 		 */
-		this.configurable = typeof options.configurable !== 'undefined' ? options.configurable : this.type !== 'any';
+		this.configurable = 'configurable' in options ? options.configurable : this.type !== 'any';
 
 		/**
 		 * The validator function for this instance.
@@ -130,7 +130,7 @@ class SchemaPiece extends Schema {
 	 */
 	async parse(value, guild) {
 		const resolved = await this.gateway.resolver[this.type](value, guild, this.key, { min: this.min, max: this.max });
-		if (this.validator) this.validator(resolved, guild);
+		if (this.validator) await this.validator(resolved, guild);
 		return resolved;
 	}
 
@@ -301,12 +301,6 @@ class SchemaPiece extends Schema {
 
 		// Check if the 'options' parameter is an object.
 		if (!isObject(options)) throw new TypeError(`SchemaPiece#init expected an object as a parameter. Got: ${typeof options}`);
-		this._schemaCheckType(this.type);
-		this._schemaCheckArray(this.array);
-		this._schemaCheckDefault(this);
-		this._schemaCheckLimits(this.min, this.max);
-		this._schemaCheckConfigurable(this.configurable);
-
 		this.sql[1] = this._generateSQLDatatype(options.sql);
 
 		return true;

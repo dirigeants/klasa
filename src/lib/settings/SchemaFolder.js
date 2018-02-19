@@ -1,6 +1,6 @@
 const SchemaPiece = require('./SchemaPiece');
 const Schema = require('./Schema');
-const { deepClone, isObject } = require('../util/util');
+const { deepClone, isObject, isNumber } = require('../util/util');
 const fs = require('fs-nextra');
 
 /**
@@ -85,7 +85,7 @@ class SchemaFolder extends Schema {
 	 * });
 	 *
 	 * // Add an empty new SchemaFolder
-	 * SchemaFolder.add('channels', {});
+	 * SchemaFolder.add('channels');
 	 *
 	 * // Optionally, you can set the type Folder,
 	 * // if no type is set, 'Folder' will be implied.
@@ -100,10 +100,10 @@ class SchemaFolder extends Schema {
 	 *     }
 	 * });
 	 */
-	async add(key, options, force = true) {
-		if (this.has(key)) throw `The key ${key} already exists in the current schema.`;
-		if (typeof this[key] !== 'undefined') throw `The key ${key} conflicts with a property of Schema.`;
-		if (!options || !isObject(options)) throw `The options object is required.`;
+	async add(key, options = {}, force = true) {
+		if (this.has(key)) throw new Error(`The key ${key} already exists in the current schema.`);
+		if (typeof this[key] !== 'undefined') throw new Error(`The key ${key} conflicts with a property of Schema.`);
+		if (!options || !isObject(options)) throw new Error(`The options object is required.`);
 		if (typeof options.type !== 'string' || options.type.toLowerCase() === 'folder') options.type = 'Folder';
 
 		// Create the piece and save the current schema
@@ -293,22 +293,22 @@ class SchemaFolder extends Schema {
 	 * @private
 	 */
 	_verifyKeyOptions(key, options) {
-		if (this.has(key)) throw `The key ${key} already exists in the current schema.`;
-		if (typeof this[key] !== 'undefined') throw `The key ${key} conflicts with a property of Schema.`;
-		if (!options) throw 'You must pass an options argument to this method.';
-		if (typeof options.type !== 'string') throw 'The option type is required and must be a string.';
+		if (!options) throw new Error('You must pass an options argument to this method.');
+		if (typeof options.type !== 'string') throw new TypeError('The option type is required and must be a string.');
 		options.type = options.type.toLowerCase();
-		if (!this.client.gateways.types.has(options.type)) throw `The type ${options.type} is not supported.`;
-		if (typeof options.min !== 'undefined' && isNaN(options.min)) throw 'The option min must be a number.';
-		if (typeof options.max !== 'undefined' && isNaN(options.max)) throw 'The option max must be a number.';
-		if (typeof options.array !== 'undefined' && typeof options.array !== 'boolean') throw 'The option array must be a boolean.';
-		if (typeof options.configurable !== 'undefined' && typeof options.configurable !== 'boolean') throw 'The option configurable must be a boolean.';
+		if (!this.client.gateways.types.has(options.type)) throw new TypeError(`The type ${options.type} is not supported.`);
+		if ('min' in options && options.min !== null && !isNumber(options.min)) throw new TypeError('The option min must be a number or null.');
+		if ('max' in options && options.max !== null && !isNumber(options.max)) throw new TypeError('The option max must be a number or null.');
+		if ('array' in options && typeof options.array !== 'boolean') throw new TypeError('The option array must be a boolean.');
+		if ('configurable' in options && typeof options.configurable !== 'boolean') throw new TypeError('The option configurable must be a boolean.');
+		if (!('array' in options)) options.array = Array.isArray(options.default);
+
 		if (options.array) {
-			if (typeof options.default === 'undefined') options.default = [];
-			else if (!Array.isArray(options.default)) throw 'The option default must be an array if the array option is set to true.';
+			if (!('default' in options)) options.default = [];
+			else if (!Array.isArray(options.default)) throw new TypeError('The option default must be an array if the array option is set to true.');
 		} else {
-			if (typeof options.default === 'undefined') options.default = options.type === 'boolean' ? false : null;
-			options.array = false;
+			if (!('default' in options)) options.default = options.type === 'boolean' ? false : null;
+			if (Array.isArray(options.default)) throw new TypeError('The option default must not be an array if the array option is set to false.');
 		}
 		return options;
 	}
