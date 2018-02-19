@@ -180,6 +180,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Fixed the **configUpdateEntry** event (used to sync configuration instances across shards) running in non-sharded bots, now it will be disabled if the bot is not sharded. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Fixed `Configuration._patch` not patching after the second nested folder. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Fixed SettingResolver's return types. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Fixed Gateway syncing keys even when it's unused. (kyranet)

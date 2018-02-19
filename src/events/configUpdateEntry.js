@@ -20,4 +20,8 @@ module.exports = class extends Event {
 		}
 	}
 
+	init() {
+		if (!this.client.shard) this.disable();
+	}
+
 };
