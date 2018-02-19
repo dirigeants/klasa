@@ -691,7 +691,7 @@ class Configuration {
 	 * @param {SchemaFolder} schema A SchemaFolder instance
 	 * @private
 	 */
-	static _patch(inst, data, schema) {
+	static _patch(inst = {}, data, schema) {
 		for (let i = 0; i < schema.keyArray.length; i++) {
 			const key = schema.keyArray[i];
 			if (typeof data[key] === 'undefined') continue;
