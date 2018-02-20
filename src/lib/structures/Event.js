@@ -70,6 +70,7 @@ class Event extends Piece {
 	async _runOnce(...args) {
 		if (!this.enabled) return;
 		await this._run(...args);
+		this.store._onceEvents.add(this.file[this.file.length - 1]);
 		this.unload();
 	}
 

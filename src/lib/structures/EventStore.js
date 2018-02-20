@@ -32,11 +32,8 @@ class EventStore extends Store {
 	 * @returns {?Piece}
 	 */
 	load(file, core) {
-		const fileName = file[file.length - 1];
-		if (this._onceEvents.has(fileName)) return undefined;
-		const event = super.load(file, core);
-		if (event.once) this._onceEvents.add(fileName);
-		return event;
+		if (this._onceEvents.has(file[file.length - 1])) return undefined;
+		return super.load(file, core);
 	}
 
 	/**
