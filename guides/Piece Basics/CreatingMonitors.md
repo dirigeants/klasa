@@ -19,7 +19,8 @@ module.exports = class extends Monitor {
 			enabled: true,
 			ignoreBots: true,
 			ignoreSelf: true,
-			ignoreOthers: true
+			ignoreOthers: true,
+			ignoreEdits: true
 		});
 	}
 
@@ -46,6 +47,7 @@ module.exports = class extends Monitor {
 | **ignoreBots**   | `true`        | boolean | Whether the monitor ignores bots or not   |
 | **ignoreSelf**   | `true`        | boolean | Whether the monitor ignores itself or not |
 | **ignoreOthers** | `true`        | boolean | Whether the monitor ignores others or not |
+| **ignoreEdits**  | `true`        | boolean | Whether the monitor ignores edits or not  |
 
 >As with all other pieces, you can omit any optional Configuration that match the default values.
 

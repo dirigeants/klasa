@@ -7,7 +7,7 @@ Extendables have the following syntax:
 ```javascript
 const { Extendable } = require('klasa');
 
-module.exports = class extends Extendable {
+class MyExtendable extends Extendable {
 
 	constructor(...args) {
 		super(...args, ['Message'], {
@@ -32,10 +32,22 @@ module.exports = class extends Extendable {
 	// Methods
 
 	extend() {
-		// Make a methods
+		// Make a method
+	}
+
+	// Static Methods
+
+	static extend() {
+		// Make a static method
 	}
 
 };
+
+// Static Properties
+
+MyExtendable.extend = 'wew'; // Make a static property
+
+module.exports = MyExtendable;
 ```
 
 <!-- eslint-enable no-dupe-class-members -->
@@ -69,7 +81,7 @@ module.exports = class extends Extendable {
 
 ## Understanding extend
 
-The extend method can only be a setter, getter, or method. You cannot define multiple in one file as the above example may imply.
+The extend method can only be a setter, getter, method, or static methods/properties. You cannot define multiple in one file as the above example may imply.
 
 ## Examples
 
