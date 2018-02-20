@@ -58,7 +58,6 @@ exports.DEFAULTS = {
 			events: { enabled: true },
 			extendables: {
 				enabled: true,
-				static: false,
 				klasa: false
 			},
 			finalizers: { enabled: true },
