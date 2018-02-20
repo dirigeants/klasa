@@ -751,6 +751,8 @@ declare module 'klasa' {
 	export abstract class Event extends Piece {
 		public constructor(client: KlasaClient, store: EventStore, file: string, core: boolean, options?: EventOptions);
 
+		public once: boolean;
+
 		public abstract run(...params: any[]): void;
 		public toJSON(): PieceEventJSON;
 
@@ -1565,6 +1567,9 @@ declare module 'klasa' {
 	export type MonitorOptions = {
 		ignoreBots?: boolean;
 		ignoreSelf?: boolean;
+		ignoreOthers?: boolean;
+		ignoreWebhooks?: boolean;
+		ignoreEdits?: boolean;
 	} & PieceOptions;
 
 	export type ProviderOptions = {
@@ -1572,7 +1577,10 @@ declare module 'klasa' {
 		sql?: boolean;
 	} & PieceOptions;
 
-	export type EventOptions = PieceOptions;
+	export type EventOptions = {
+		once?: boolean;
+	} & PieceOptions;
+
 	export type FinalizerOptions = PieceOptions;
 	export type LanguageOptions = PieceOptions;
 	export type TaskOptions = PieceOptions;
@@ -1628,6 +1636,7 @@ declare module 'klasa' {
 		ignoreSelf: boolean;
 		ignoreOthers: boolean;
 		ignoreWebhooks: boolean;
+		ignoreEdits: boolean;
 	} & PieceJSON;
 
 	export type PieceProviderJSON = {
@@ -1635,7 +1644,10 @@ declare module 'klasa' {
 		sql: boolean;
 	} & PieceJSON;
 
-	export type PieceEventJSON = PieceJSON;
+	export type PieceEventJSON = {
+		once?: boolean;
+	} & PieceJSON;
+
 	export type PieceFinalizerJSON = PieceJSON;
 	export type PieceLanguageJSON = PieceJSON;
 	export type PieceTaskJSON = PieceJSON;

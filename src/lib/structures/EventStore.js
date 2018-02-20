@@ -47,7 +47,8 @@ class EventStore extends Store {
 	set(piece) {
 		const event = super.set(piece);
 		if (!event) return undefined;
-		this.client.on(event.name, event._run.bind(event));
+		if (event.once) this.client.once(event.name, event._runOnce.bind(event));
+		else this.client.on(event.name, event._run.bind(event));
 		return event;
 	}
 

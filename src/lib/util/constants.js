@@ -55,7 +55,10 @@ exports.DEFAULTS = {
 				quotedStringSupport: false,
 				deletable: false
 			},
-			events: { enabled: true },
+			events: {
+				enabled: true,
+				once: false
+			},
 			extendables: {
 				enabled: true,
 				klasa: false

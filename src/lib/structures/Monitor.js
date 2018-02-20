@@ -102,7 +102,8 @@ class Monitor extends Piece {
 			ignoreBots: this.ignoreBots,
 			ignoreSelf: this.ignoreSelf,
 			ignoreOthers: this.ignoreOthers,
-			ignoreWebhooks: this.ignoreWebhooks
+			ignoreWebhooks: this.ignoreWebhooks,
+			ignoreEdits: this.ignoreEdits
 		};
 	}
 
