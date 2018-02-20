@@ -762,6 +762,7 @@ declare module 'klasa' {
 
 		public appliesTo: string[];
 		public target: boolean;
+		public static: boolean;
 
 		public abstract extend(...params: any[]): any;
 		public toJSON(): PieceExtendableJSON;
@@ -793,8 +794,9 @@ declare module 'klasa' {
 		public ignoreSelf: boolean;
 		public ignoreOthers: boolean;
 		public ignoreWebhooks: boolean;
+		public ignoreEdits: boolean;
 		public abstract run(msg: KlasaMessage): void;
-		public shouldRun(msg: KlasaMessage): boolean;
+		public shouldRun(msg: KlasaMessage, edit: boolean): boolean;
 		public toJSON(): PieceMonitorJSON;
 	}
 
@@ -896,7 +898,9 @@ declare module 'klasa' {
 	export class MonitorStore extends Store<string, Monitor> {
 		public constructor(client: KlasaClient);
 
-		public run(msg: KlasaMessage): Promise<void>;
+		public run(msg: KlasaMessage, edit: boolean): Promise<void>;
+
+		private _run(msg: KlasaMessage, monitor: Monitor);
 	}
 
 	export class ProviderStore extends Store<string, Provider> {

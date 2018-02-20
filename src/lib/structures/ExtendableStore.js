@@ -25,7 +25,7 @@ class ExtendableStore extends Store {
 	delete(name) {
 		const extendable = this.resolve(name);
 		if (!extendable) return false;
-		for (const structure of extendable.appliesTo) delete extendable.target[structure].prototype[this.name];
+		extendable.disable();
 		return super.delete(extendable);
 	}
 

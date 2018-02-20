@@ -11,6 +11,7 @@ class Extendable extends Piece {
 
 	/**
 	 * @typedef {PieceOptions} ExtendableOptions
+	 * @property {boolean} [static=false] If the extendable is meant to be statically applied
 	 * @property {boolean} [klasa=false] If the extendable is for Klasa instead of Discord.js
 	 * @memberof Extendable
 	 */
@@ -33,6 +34,13 @@ class Extendable extends Piece {
 		 * @type {string[]}
 		 */
 		this.appliesTo = appliesTo;
+
+		/**
+		 * If the extendable should be statically applied
+		 * @since 0.5.0
+		 * @type {boolean}
+		 */
+		this.static = options.static;
 
 		/**
 		 * The target library to apply this extendable to
@@ -70,7 +78,8 @@ class Extendable extends Piece {
 	disable() {
 		if (this.client.listenerCount('pieceDisabled')) this.client.emit('pieceDisabled', this);
 		this.enabled = false;
-		for (const structure of this.appliesTo) delete this.target[structure].prototype[this.name];
+		if (this.static) for (const structure of this.appliesTo) delete this.target[structure][this.name];
+		else for (const structure of this.appliesTo) delete this.target[structure].prototype[this.name];
 		return this;
 	}
 
@@ -84,7 +93,8 @@ class Extendable extends Piece {
 	enable(init = false) {
 		if (!init && this.client.listenerCount('pieceEnabled')) this.client.emit('pieceEnabled', this);
 		this.enabled = true;
-		for (const structure of this.appliesTo) Object.defineProperty(this.target[structure].prototype, this.name, Object.getOwnPropertyDescriptor(this.constructor.prototype, 'extend'));
+		if (this.static) for (const structure of this.appliesTo) Object.defineProperty(this.target[structure], this.name, { value: this.extend });
+		else for (const structure of this.appliesTo) Object.defineProperty(this.target[structure].prototype, this.name, Object.getOwnPropertyDescriptor(this.constructor.prototype, 'extend'));
 		return this;
 	}
 

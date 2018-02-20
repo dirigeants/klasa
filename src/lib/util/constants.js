@@ -58,6 +58,7 @@ exports.DEFAULTS = {
 			events: { enabled: true },
 			extendables: {
 				enabled: true,
+				static: false,
 				klasa: false
 			},
 			finalizers: { enabled: true },
@@ -71,7 +72,8 @@ exports.DEFAULTS = {
 				ignoreBots: true,
 				ignoreSelf: true,
 				ignoreOthers: true,
-				ignoreWebhooks: true
+				ignoreWebhooks: true,
+				ignoreEdits: true
 			},
 			providers: {
 				enabled: true,
