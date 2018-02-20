@@ -759,10 +759,10 @@ declare module 'klasa' {
 
 	export abstract class Extendable extends Piece {
 		public constructor(client: KlasaClient, store: ExtendableStore, file: string, core: boolean, options?: ExtendableOptions);
+		public readonly static: boolean;
 
 		public appliesTo: string[];
 		public target: boolean;
-		public static: boolean;
 
 		public abstract extend(...params: any[]): any;
 		public toJSON(): PieceExtendableJSON;
