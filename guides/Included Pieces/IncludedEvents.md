@@ -8,7 +8,7 @@ Handles command errors.
 
 ## commandInhibited
 
-Replies the reason why the command was inhibited.
+Replies with the reason why the command was inhibited.
 
 **Source:**
 

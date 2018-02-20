@@ -39,7 +39,7 @@ new Client({
 | **cmdEditing**             | `false`                   | boolean            | Whether the bot should update responses if the command is edited                    |
 | **cmdLogging**             | `false`                   | boolean            | Whether the bot should log command usage                                            |
 | **cmdPrompt**              | `false`                   | boolean            | Whether the bot should prompt missing parameters                                    |
-| **commandMessageLifetime** | `1800`                    | number             | The threshold for when comand messages should be sweeped in seconds since last edit |
+| **commandMessageLifetime** | `1800`                    | number             | The threshold for when command messages should be sweeped in seconds since last edit |
 | **ignoreBots**             | `true`                    | boolean            | Whether or not this bot should ignore other bots                                    |
 | **ignoreSelf**             | `client.user.bot`         | boolean            | Whether or not this bot should ignore itself (true for bots, false for selfbots)    |
 | **language**               | `en-US`                   | string             | The default language Klasa should opt-in for the commands                           |
