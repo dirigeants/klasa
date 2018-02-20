@@ -80,7 +80,7 @@ msg.language.get('SomeKeyThatExistsOnlyInEnglish');
  */
 ```
 
-Also, if a language is disabled, and a guild has it configured, the default language will be used exclusivly until either that language is no-longer disabled, or the guild configures another enabled language.
+Also, if a language is disabled, and a guild has it configured, the default language will be used exclusively until either that language is no-longer disabled, or the guild configures another enabled language.
 
 ## Further Reading:
 
