@@ -1,6 +1,6 @@
 ## Admin / blacklist
 
-Allows bot owners to blacklist users from the bot.
+Allows bot owners to blacklist users and guilds from the bot.
 
 **Source:**
 
@@ -16,7 +16,7 @@ Allows authorized members to set per guild configuration.
 
 ## Admin / disable
 
-Temporarly global disable any piece except for extendables. (reverts to the in file settings upon reboot.)
+Temporarily global disable any piece except for extendables. (reverts to the in file settings upon reboot.)
 
 **Source:**
 
@@ -24,7 +24,7 @@ Temporarly global disable any piece except for extendables. (reverts to the in f
 
 ## Admin / enable
 
-Temporarly global enable any piece except for extendables. (reverts to the in file settings upon reboot.)
+Temporarily global enable any piece except for extendables. (reverts to the in file settings upon reboot.)
 
 **Source:**
 
@@ -64,7 +64,7 @@ Provides an up to date invite link, taking into consideration all of the bot per
 
 ## General / Chat Bot Info / ping
 
-Simple ping pong, measure the time between the two command.
+Simple ping pong, measure the time between the two commands.
 
 **Source:**
 
@@ -88,7 +88,7 @@ Reloads any piece, or all pieces of a specific category.
 
 ## General / Chat Bot Info / stats
 
-Info about the resources this bot is using
+Info about the resources this bot is using.
 
 **Source:**
 
