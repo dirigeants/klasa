@@ -1,6 +1,6 @@
 ## json
 
-The basic data storage provider for klasa. Uses atomic methods from [fs-nextra](https://fs-nextra.js.org) to virtually eliminate the possiblity of data corruption. (Similar to what node-localstorage does, without bloat/a ton of dependencies)
+The basic data storage provider for klasa. Uses atomic methods from [fs-nextra](https://fs-nextra.js.org) to virtually eliminate the possibility of data corruption. (Similar to what node-localstorage does, without bloat/a ton of dependencies)
 
 **Source:**
 

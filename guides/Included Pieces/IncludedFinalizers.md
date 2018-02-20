@@ -1,6 +1,6 @@
 ## commandCooldown
 
-Puts users on cooldown for the specific used command globaly, based on the cooldown configuration of the command.
+Puts users on cooldown for the specific command used globally, based on the cooldown configuration of the command.
 
 **Source:**
 

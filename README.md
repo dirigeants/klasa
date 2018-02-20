@@ -10,7 +10,7 @@
 
 > Let's stop reinventing the wheel, and start coding the bots of our dreams!
 
-Klasa is an OOP discord.js bot framework which aims to be the most feature complete, while feeling like a consistant extension of [discord.js](https://github.com/discordjs/discord.js).
+Klasa is an OOP discord.js bot framework which aims to be the most feature complete, while feeling like a consistent extension of [discord.js](https://github.com/discordjs/discord.js).
 
 Originally based on [Komada](https://github.com/dirigeants/komada), Klasa has become a [ship of Theseus](https://en.wikipedia.org/wiki/Ship_of_Theseus), keeping many similarities with the former framework but with many enhancements and extra features.
 
@@ -36,8 +36,8 @@ Following suit from Komada (the Croatian word for "pieces"), Klasa is the Croati
     - Extendables: Easily extend Klasa or discord.js.
     - Finalizers: Structures that run after successful command run.
     - Inhibitors: Middleware that can stop a command from running (blacklist, permissions...).
-    - Languages: Easy internacionalization support for your bot!
-    - Monitors: Watch every single message your bot receives! They're perfect for no-mention-spam, sweardword filter, and so on!
+    - Languages: Easy internationalization support for your bot!
+    - Monitors: Watch every single message your bot receives! They're perfect for no-mention-spam, swear word filter, and so on!
     - Providers: You can have one, or more, they're interfaces for the configs system and ensures the data is written correctly!
     - Tasks: The newest addition to Klasa, they're pieces that handles scheduled tasks.
 
