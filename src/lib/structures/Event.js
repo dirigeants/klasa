@@ -17,10 +17,10 @@ class Event extends Piece {
 	/**
 	 * @since 0.0.1
 	 * @param {KlasaClient} client The Klasa client
-	 * @param {MonitorStore} store The Monitor Store
-	 * @param {string} file The path from the pieces folder to the monitor file
+	 * @param {EventStore} store The Event Store
+	 * @param {string} file The path from the pieces folder to the event file
 	 * @param {boolean} core If the piece is in the core directory or not
-	 * @param {MonitorOptions} [options={}] Optional Monitor settings
+	 * @param {EventOptions} [options={}] Optional Event settings
 	 */
 	constructor(client, store, file, core, options = {}) {
 		super(client, store, file, core, options);
