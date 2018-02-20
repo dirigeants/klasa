@@ -1,4 +1,4 @@
-There's no included {@Task} piece in Klasa, however, they are available in the [Klasa-Pieces](https://github.com/dirigeants/klasa-pieces) repository.
+There's no included {@link Task} piece in Klasa, however, they are available in the [Klasa-Pieces](https://github.com/dirigeants/klasa-pieces) repository.
 
 ## Further Reading:
 
