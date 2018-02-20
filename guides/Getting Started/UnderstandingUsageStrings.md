@@ -49,7 +49,7 @@ ___
 
 # Using arguments in your command.
 
-Now, after we understand how to configurate the command, we'll start writting it:
+Now, after we understand how to configure the command, we'll start writing it:
 
 ```javascript
 module.exports = class extends Command {
