@@ -14,6 +14,29 @@ class EventStore extends Store {
 	 */
 	constructor(client) {
 		super(client, 'events', Event);
+
+		/**
+		 * Once events that have already run (so once means once)
+		 * @since 0.5.0
+		 * @type {Set<string>}
+		 * @private
+		 */
+		this._onceEvents = new Set();
+	}
+
+	/**
+	 * Loads a piece into Klasa so it can be saved in this store.
+	 * @since 0.0.1
+	 * @param {string|string[]} file A string or array of strings showing where the file is located.
+	 * @param {boolean} [core=false] If the file is located in the core directory or not
+	 * @returns {?Piece}
+	 */
+	load(file, core) {
+		const fileName = file[file.length - 1];
+		if (this._onceEvents.has(fileName)) return undefined;
+		const event = super.load(file, core);
+		if (event.once) this._onceEvents.add(fileName);
+		return event;
 	}
 
 	/**
