@@ -120,8 +120,7 @@ class Configuration {
 		Object.defineProperty(this, '_syncStatus', { value: null, writable: true });
 
 		const { schema } = this.gateway;
-		for (let i = 0; i < schema.keyArray.length; i++) {
-			const key = schema.keyArray[i];
+		for (const key of schema.keyArray) {
 			this[key] = Configuration._merge(data[key], schema[key]);
 		}
 	}
@@ -643,22 +642,18 @@ class Configuration {
 	 * @private
 	 */
 	static _merge(data, schema) {
-		if (schema.type === 'Folder') {
-			if (!data) data = {};
-			for (const [key, piece] of schema.entries()) {
+		for (const [key, piece] of schema) {
+			if (piece.type === 'Folder') {
 				if (!data[key]) data[key] = {};
-				Configuration._merge(data[key], piece);
+				data[key] = Configuration._merge(data[key], piece);
+			} else if (typeof data[key] === 'undefined' || data[key] === null) {
+				data[key] = deepClone(piece.default);
+			} else if (piece.array) {
+				if (typeof data[key] === 'string') data[key] = tryParse(data[key]);
+				if (Array.isArray(data[key])) continue;
+				piece.client.emit('wtf',
+					new TypeError(`${piece.path} | Expected an array, null, or undefined. Got: ${Object.prototype.toString.call(data[key])}`));
 			}
-		} else if (typeof data === 'undefined') {
-			// It's a SchemaPiece instance, so it has a property of 'key'.
-			data = deepClone(schema.default);
-		} else if (schema.array) {
-			if (Array.isArray(data)) return data;
-			// Some SQL databases are unable to store Arrays...
-			if (data === null) return deepClone(schema.default);
-			if (typeof data === 'string') return tryParse(data);
-			schema.client.emit('wtf',
-				new TypeError(`${schema.path} | Expected an array, null, or undefined. Got: ${Object.prototype.toString.call(data)}`));
 		}
 
 		return data;

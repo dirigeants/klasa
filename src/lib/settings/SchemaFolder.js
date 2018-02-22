@@ -42,14 +42,6 @@ class SchemaFolder extends Schema {
 		Object.defineProperty(this, 'type', { value: 'Folder' });
 
 		/**
-		 * The default values for this schema instance and children.
-		 * @since 0.5.0
-		 * @type {Object}
-		 * @name SchemaFolder#defaults
-		 */
-		Object.defineProperty(this, 'defaults', { value: {}, writable: true });
-
-		/**
 		 * A pre-processed array with all keys' names.
 		 * @since 0.5.0
 		 * @type {string[]}
@@ -69,6 +61,20 @@ class SchemaFolder extends Schema {
 	get configurableKeys() {
 		if (this.keyArray.length === 0) return [];
 		return this.keyArray.filter(key => this[key].type === 'Folder' || this[key].configurable);
+	}
+
+	/**
+	 * The default values for this schema instance and children.
+	 * @since 0.5.0
+	 * @type {Object}
+	 * @readonly
+	 */
+	get defaults() {
+		const defaults = {};
+		for (const [key, value] of this) {
+			defaults[key] = value.type === 'Folder' ? value.defaults() : value.default;
+		}
+		return defaults;
 	}
 
 	/**
@@ -117,7 +123,7 @@ class SchemaFolder extends Schema {
 				await this.gateway.provider.addColumn(this.gateway.type, piece.type === 'Folder' ?
 					piece.getSQL() : piece.sql[1]);
 			}
-		} else if (force || this.gateway.type === 'clientStorage') {
+		} else if (force || (this.gateway.type === 'clientStorage' && this.client.shard)) {
 			await this.force('add', key, piece);
 		}
 
@@ -137,8 +143,7 @@ class SchemaFolder extends Schema {
 		if (!this.has(key)) throw new Error(`The key ${key} does not exist in the current schema.`);
 
 		// Get the key, remove it from the configs and update the persistent schema
-		const piece = this[key];
-		this._remove(key);
+		const piece = this._remove(key);
 		await fs.outputJSONAtomic(this.gateway.filePath, this.gateway.schema.toJSON());
 
 		// A SQL database has the advantage of being able to update all keys along the schema, so force is ignored
@@ -147,7 +152,7 @@ class SchemaFolder extends Schema {
 				await this.gateway.provider.removeColumn(this.gateway.type, piece.type === 'Folder' ?
 					[...piece.keys(true)] : key);
 			}
-		} else if (force || this.gateway.type === 'clientStorage') {
+		} else if (force || (this.gateway.type === 'clientStorage' && this.client.shard)) {
 			// If force, or if the gateway is clientStorage, it should update all entries
 			await this.force('delete', key, piece);
 		}
@@ -177,7 +182,9 @@ class SchemaFolder extends Schema {
 	 * @private
 	 */
 	force(action, key, piece) {
-		if (!(piece instanceof SchemaPiece) && !(piece instanceof SchemaFolder)) throw new TypeError(`'schemaPiece' must be an instance of 'SchemaPiece' or an instance of 'SchemaFolder'.`);
+		if (!(piece instanceof SchemaPiece) && !(piece instanceof SchemaFolder)) {
+			throw new TypeError(`'schemaPiece' must be an instance of 'SchemaPiece' or an instance of 'SchemaFolder'.`);
+		}
 
 		const path = piece.path.split('.');
 
@@ -241,20 +248,20 @@ class SchemaFolder extends Schema {
 	 */
 	_add(key, options, Piece) {
 		if (this.has(key)) throw new Error(`The key '${key}' already exists.`);
-		const piece = new Piece(this.client, this.gateway, options, this, key);
-		this[key] = piece;
-		this.defaults[key] = piece.type === 'Folder' ? piece.defaults : options.default;
+		this[key] = new Piece(this.client, this.gateway, options, this, key);
 
-		this.keyArray.push(key);
-		this.keyArray.sort((a, b) => a.localeCompare(b));
+		const index = this.keyArray.findIndex(entry => entry.localeCompare(key));
+		if (index === -1) this.keyArray.push(key);
+		else this.keyArray.splice(index, 0, key);
 
-		return piece;
+		return this[key];
 	}
 
 	/**
 	 * Remove a key from the instance.
 	 * @since 0.5.0
 	 * @param {string} key The name of the key
+	 * @returns {(SchemaFolder|SchemaPiece)}
 	 * @private
 	 */
 	_remove(key) {
@@ -262,8 +269,10 @@ class SchemaFolder extends Schema {
 		if (index === -1) throw new Error(`The key '${key}' does not exist.`);
 
 		this.keyArray.splice(index, 1);
+		const piece = this[key];
 		delete this[key];
-		delete this.defaults[key];
+
+		return piece;
 	}
 
 	/**
@@ -303,13 +312,12 @@ class SchemaFolder extends Schema {
 		if ('configurable' in options && typeof options.configurable !== 'boolean') throw new TypeError('The option configurable must be a boolean.');
 		if (!('array' in options)) options.array = Array.isArray(options.default);
 
-		if (options.array) {
-			if (!('default' in options)) options.default = [];
-			else if (!Array.isArray(options.default)) throw new TypeError('The option default must be an array if the array option is set to true.');
-		} else {
-			if (!('default' in options)) options.default = options.type === 'boolean' ? false : null;
-			if (Array.isArray(options.default)) throw new TypeError('The option default must not be an array if the array option is set to false.');
+		if ('default' in options && Array.isArray(options) !== options.array) {
+			throw new TypeError(options.array ?
+				'The option default must be an array if the array option is set to true.' :
+				'The option default must not be an array if the array option is set to false.');
 		}
+
 		return options;
 	}
 
