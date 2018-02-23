@@ -140,6 +140,7 @@ class Configuration {
 	 * Reset a value from an entry.
 	 * @since 0.5.0
 	 * @param {(string|string[])} [keys] The key to reset
+	 * @param {KlasaGuild} [guild] A KlasaGuild instance for multilanguage support
 	 * @param {boolean} [avoidUnconfigurable] Whether the Gateway should avoid configuring the selected key
 	 * @returns {ConfigurationUpdateResult}
 	 * // Reset all keys for this instance
@@ -151,7 +152,12 @@ class Configuration {
 	 * // Reset a key
 	 * Configuration#reset('prefix');
 	 */
-	async reset(keys, avoidUnconfigurable = false) {
+	async reset(keys, guild, avoidUnconfigurable = false) {
+		if (typeof guild === 'boolean') {
+			avoidUnconfigurable = guild;
+			guild = undefined;
+		}
+
 		// If the entry does not exist in the DB, it'll never be able to reset a key
 		if (!this._existsInDB) return { errors: [], updated: [] };
 
@@ -164,7 +170,9 @@ class Configuration {
 			for (const [key, value] of entries) {
 				const path = this.gateway.getPath(key, { piece: true, avoidUnconfigurable, errors: false });
 				if (!path) {
-					result.errors.push(`The path ${key} does not exist in the current schema, or does not correspond to a piece.`);
+					result.errors.push(guild && guild.language ?
+						guild.language.get('COMMAND_CONF_GET_NOEXT', key) :
+						`The path ${key} does not exist in the current schema, or does not correspond to a piece.`);
 					continue;
 				}
 				const newValue = value === null ? deepClone(path.piece.default) : value;
@@ -388,7 +396,9 @@ class Configuration {
 	async _parseSingle(key, value, guild, { avoidUnconfigurable = false, action = 'auto', arrayPosition = null }, list) {
 		const path = this.gateway.getPath(key, { piece: true, avoidUnconfigurable, errors: false });
 		if (!path) {
-			list.errors.push(`The path ${key} does not exist in the current schema, or does not correspond to a piece.`);
+			list.errors.push(guild && guild.language ?
+				guild.language.get('COMMAND_CONF_GET_NOEXT', key) :
+				`The path ${key} does not exist in the current schema, or does not correspond to a piece.`);
 			return;
 		}
 		const { piece, route } = path;

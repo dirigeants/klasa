@@ -28,18 +28,24 @@ module.exports = class extends Command {
 	}
 
 	async set(msg, [key, ...valueToSet]) {
-		const { piece } = await msg.author.configs.update(key, valueToSet.join(' '), msg.guild, { avoidUnconfigurable: true, action: 'add' });
-		return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', piece.path, msg.author.configs.resolveString(msg, piece)));
+		const { errors, updated } = await msg.author.configs.update(key, valueToSet.join(' '), msg.guild, { avoidUnconfigurable: true, action: 'add' });
+		if (errors.length) return msg.sendMessage(errors[0]);
+		if (!updated.length) return msg.sendMessage(msg.language.get('COMMAND_CONF_NOCHANGE', key));
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', key, msg.author.configs.resolveString(msg, updated[0].piece)));
 	}
 
 	async remove(msg, [key, ...valueToRemove]) {
-		const { piece } = await msg.author.configs.update(key, valueToRemove.join(' '), msg.guild, { avoidUnconfigurable: true, action: 'remove' });
-		return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', piece.path, msg.author.configs.resolveString(msg, piece)));
+		const { errors, updated } = await msg.author.configs.update(key, valueToRemove.join(' '), msg.guild, { avoidUnconfigurable: true, action: 'remove' });
+		if (errors.length) return msg.sendMessage(errors[0]);
+		if (!updated.length) return msg.sendMessage(msg.language.get('COMMAND_CONF_NOCHANGE', key));
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', key, msg.author.configs.resolveString(msg, updated[0].piece)));
 	}
 
 	async reset(msg, [key]) {
-		const { piece } = await msg.author.configs.reset(key, true);
-		return msg.sendMessage(msg.language.get('COMMAND_CONF_RESET', piece.path, msg.author.configs.resolveString(msg, piece)));
+		const { errors, updated } = await msg.author.configs.reset(key, true);
+		if (errors.length) return msg.sendMessage(errors[0]);
+		if (!updated.length) return msg.sendMessage(msg.language.get('COMMAND_CONF_NOCHANGE', key));
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_RESET', key, msg.author.configs.resolveString(msg, updated[0].piece)));
 	}
 
 	list(msg, [key]) {

@@ -526,6 +526,7 @@ declare module 'klasa' {
 		public destroy(): Promise<this>;
 
 		public reset(key?: string | string[], avoidUnconfigurable?: boolean): Promise<ConfigurationUpdateResult>;
+		public reset(key?: string | string[], guild: KlasaGuild, avoidUnconfigurable?: boolean): Promise<ConfigurationUpdateResult>;
 		public update(key: object, guild?: GatewayGuildResolvable): Promise<ConfigurationUpdateResult>;
 		public update(key: string, value: any, guild?: GatewayGuildResolvable, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
 		public update(key: string[], value: any[], guild?: GatewayGuildResolvable, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
