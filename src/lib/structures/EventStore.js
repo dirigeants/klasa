@@ -54,7 +54,7 @@ class EventStore extends Store {
 	delete(name) {
 		const event = this.resolve(name);
 		if (!event) return false;
-		this.client.removeAllListeners(event.name);
+		event._unlisten();
 		return super.delete(event);
 	}
 
@@ -67,8 +67,7 @@ class EventStore extends Store {
 	set(piece) {
 		const event = super.set(piece);
 		if (!event) return undefined;
-		if (event.once) this.client.once(event.name, event._runOnce.bind(event));
-		else this.client.on(event.name, event._run.bind(event));
+		event._listen();
 		return event;
 	}
 
