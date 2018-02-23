@@ -12,6 +12,7 @@ class Extendable extends Piece {
 	/**
 	 * @typedef {PieceOptions} ExtendableOptions
 	 * @property {boolean} [klasa=false] If the extendable is for Klasa instead of Discord.js
+	 * @property {string[]} [appliesTo=[]] What classes this extendable is for
 	 * @memberof Extendable
 	 */
 
@@ -21,10 +22,9 @@ class Extendable extends Piece {
 	 * @param {ExtendableStore} store The extendable store
 	 * @param {string} file The path from the pieces folder to the extendable file
 	 * @param {boolean} core If the piece is in the core directory or not
-	 * @param {string[]} appliesTo The discord classes this extendable applies to
 	 * @param {ExtendableOptions} options The options for this extendable
 	 */
-	constructor(client, store, file, core, appliesTo = [], options = {}) {
+	constructor(client, store, file, core, options = {}) {
 		super(client, store, file, core, options);
 
 		/**
@@ -32,7 +32,7 @@ class Extendable extends Piece {
 		 * @since 0.0.1
 		 * @type {string[]}
 		 */
-		this.appliesTo = appliesTo;
+		this.appliesTo = options.appliesTo;
 
 		/**
 		 * The target library to apply this extendable to
