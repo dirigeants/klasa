@@ -377,7 +377,12 @@ class Configuration {
 	 * @private
 	 */
 	async _parseSingle(key, value, guild, { avoidUnconfigurable = false, action = 'auto', arrayPosition = null }, list) {
-		const { piece, route } = this.gateway.getPath(key, { avoidUnconfigurable, piece: true });
+		const path = this.gateway.getPath(key, { piece: false, avoidUnconfigurable, errors: false });
+		if (!path) {
+			list.errors.push(`The path ${key} does not exist in the current schema, or does not correspond to a piece.`);
+			return;
+		}
+		const { piece, route } = path;
 		let parsed, parsedID;
 		if (value === null) {
 			parsed = parsedID = deepClone(piece.default);
