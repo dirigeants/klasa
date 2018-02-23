@@ -320,6 +320,12 @@ class Configuration {
 		return piece && refSchema.type !== 'Folder' ? refCache : undefined;
 	}
 
+	/**
+	 * Save the data to the database.
+	 * @since 0.5.0
+	 * @param {ConfigurationUpdateResult} result The data to save
+	 * @private
+	 */
 	async _save({ updated }) {
 		if (!updated.length) return;
 		if (!this._existsInDB) {
@@ -334,7 +340,7 @@ class Configuration {
 			await this.gateway.provider.update(this.gateway.type, this.id, keys, values);
 		} else {
 			const updateObject = {};
-			for (const [key, value] of updated) mergeObjects(updateObject, makeObject(key, value));
+			for (const entry of updated) mergeObjects(updateObject, makeObject(entry.data[0], entry.data[1]));
 			await this.gateway.provider.update(this.gateway.type, this.id, updateObject);
 		}
 
