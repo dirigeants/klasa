@@ -72,7 +72,7 @@ class SchemaFolder extends Schema {
 	get defaults() {
 		const defaults = {};
 		for (const [key, value] of this) {
-			defaults[key] = value.type === 'Folder' ? value.defaults() : value.default;
+			defaults[key] = value.type === 'Folder' ? value.defaults : value.default;
 		}
 		return defaults;
 	}
