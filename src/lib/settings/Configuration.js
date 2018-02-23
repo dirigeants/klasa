@@ -82,10 +82,8 @@ class Configuration {
 		 */
 		Object.defineProperty(this, '_syncStatus', { value: null, writable: true });
 
-		const { schema } = this.gateway;
-		for (const key of schema.keyArray) {
-			this[key] = Configuration._merge(data[key], schema[key]);
-		}
+		Configuration._merge(data, this.gateway.schema);
+		for (const key of this.gateway.schema.keys()) this[key] = data[key];
 	}
 
 	/**
