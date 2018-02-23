@@ -652,7 +652,7 @@ declare module 'klasa' {
 		public add(key: string, options: SchemaFolderAddOptions | { [k: string]: SchemaFolderAddOptions }, force?: boolean): Promise<SchemaFolder>;
 		public has(key: string): boolean;
 		public remove(key: string, force?: boolean): Promise<SchemaFolder>;
-		public force(action: 'add' | 'edit' | 'delete', key: string, piece: SchemaFolder | SchemaPiece): Promise<any>;
+		public force(action: 'add' | 'delete', key: string, piece: SchemaFolder | SchemaPiece): Promise<any>;
 		public getDefaults(data?: object): object;
 		public getSQL(array?: string[]): string[];
 

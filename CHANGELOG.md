@@ -181,6 +181,8 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Fixed `Util.deepClone` not cloning full objects. (kyranet)
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Fixed `SchemaFolder#_shardSyncSchema` not passing the action as string. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Fixed `null` values in *updateMany*'s pattern not updating nested keys plus individual queries. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Fixed update/reset methods in Configuration not emitting `configEntryCreate` when the entry does not exist. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Fixed the updateMany pattern in Configuration not accepting a guild. (kyranet)

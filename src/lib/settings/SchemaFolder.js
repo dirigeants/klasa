@@ -60,7 +60,7 @@ class SchemaFolder extends Schema {
 	 */
 	get configurableKeys() {
 		if (this.keyArray.length === 0) return [];
-		return this.keyArray.filter(key => this[key].type === 'Folder' || this[key].configurable);
+		return this.keyArray.filter(key => this[key].type === 'Folder' ? this[key].configurableKeys.length : this[key].configurable);
 	}
 
 	/**
@@ -173,7 +173,7 @@ class SchemaFolder extends Schema {
 	/**
 	 * Modifies all entries from the database.
 	 * @since 0.5.0
-	 * @param {('add'|'edit'|'delete')} action The action to perform
+	 * @param {('add'|'delete')} action The action to perform
 	 * @param {string} key The key
 	 * @param {(SchemaPiece|SchemaFolder)} piece The SchemaPiece instance to handle
 	 * @returns {Promise<*>}
@@ -186,8 +186,8 @@ class SchemaFolder extends Schema {
 
 		const path = piece.path.split('.');
 
-		if (action === 'add' || action === 'edit') {
-			const defValue = this.defaults[key];
+		if (action === 'add') {
+			const defValue = piece.type === 'Folder' ? piece.defaults : piece.default;
 			for (let value of this.gateway.cache.values()) {
 				for (let j = 0; j < path.length - 1; j++) value = value[path[j]];
 				value[path[path.length - 1]] = deepClone(defValue);
@@ -286,7 +286,7 @@ class SchemaFolder extends Schema {
 		await this.client.shard.broadcastEval(`
 			if (this.shard.id !== ${this.client.shard.id}) {
 				this.gateways.${this.gateway.type}._shardSync(
-					${JSON.stringify(piece.path.split('.'))}, ${JSON.stringify(piece)}, ${action}, ${force});
+					${JSON.stringify(piece.path.split('.'))}, ${JSON.stringify(piece)}, '${action}', ${force});
 			}
 		`);
 	}
@@ -308,11 +308,9 @@ class SchemaFolder extends Schema {
 			if (object[key].type === 'Folder') {
 				const folder = new SchemaFolder(this.client, this.gateway, object[key], this, key);
 				this[key] = folder;
-				this.defaults[key] = folder.defaults;
 			} else {
 				const piece = new SchemaPiece(this.client, this.gateway, object[key], this, key);
 				this[key] = piece;
-				this.defaults[key] = piece.default;
 			}
 			this.keyArray.push(key);
 		}

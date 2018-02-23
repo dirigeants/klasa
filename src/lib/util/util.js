@@ -103,7 +103,7 @@ class Util {
 		}
 		if (Util.isObject(source)) {
 			const output = {};
-			for (const key in source) output[key] = source[key];
+			for (const key in source) output[key] = Util.deepClone(source[key]);
 			return output;
 		}
 		if (source instanceof Map || source instanceof WeakMap) {
