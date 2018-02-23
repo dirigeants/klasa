@@ -6,7 +6,8 @@ module.exports = class extends Command {
 		super(...args, {
 			runIn: ['text'],
 			guarded: true,
-			description: (msg) => msg.language.get('COMMAND_INVITE_DESCRIPTION')
+			description: (msg) => msg.language.get('COMMAND_INVITE_DESCRIPTION'),
+			sendReturn: true
 		});
 	}
 
