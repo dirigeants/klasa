@@ -8,6 +8,7 @@ class ScheduledTask {
 	/**
 	 * @typedef  {Object} ScheduledTaskOptions
 	 * @property {string} [id] The ID for the task. By default, it generates one in base36
+	 * @property {boolean} [catchUp=true] If the task should try to catch up if the bot is down
 	 * @property {*} [data] The data to pass to the Task piece when the ScheduledTask is ready for execution
 	 * @memberof ScheduledTask
 	 */
@@ -16,6 +17,7 @@ class ScheduledTask {
 	 * @typedef  {Object} ScheduledTaskUpdateOptions
 	 * @property {string} [repeat] The {@link Cron} pattern
 	 * @property {Date} [time] The time the current task ends at
+	 * @property {boolean} [catchUp] If the task should try to catch up if the bot is down
 	 * @property {*} [data] The data to pass to the Task piece when the ScheduledTask is ready for execution
 	 * @memberof ScheduledTask
 	 */
@@ -25,6 +27,7 @@ class ScheduledTask {
 	 * @property {string} id The task's ID
 	 * @property {string} taskName The name of the Task piece this will execute
 	 * @property {number} time The UNIX timestamp for when this task ends at
+	 * @property {boolean} catchUp If the task should try to catch up if the bot is down
 	 * @property {string} [repeat] The {@link Cron} pattern
 	 * @property {*} [data] The data to pass to the Task piece when the ScheduledTask is ready for execution
 	 * @memberof ScheduledTask
@@ -79,6 +82,13 @@ class ScheduledTask {
 		this.id = options.id || this.constructor._generateID(this.client);
 
 		/**
+		 * If the task should catch up in the event the bot is down
+		 * @since 0.5.0
+		 * @type {string}
+		 */
+		this.catchUp = 'catchUp' in options ? options.catchUp : true;
+
+		/**
 		 * The stored metadata to send to the Task
 		 * @since 0.5.0
 		 * @type {*}
@@ -115,7 +125,7 @@ class ScheduledTask {
 	 * @returns {this}
 	 */
 	async run() {
-		if (!this.task.enabled) return this;
+		if (!this.task || !this.task.enabled) return this;
 		try {
 			await this.task.run(this.data);
 		} catch (err) {
@@ -175,7 +185,7 @@ class ScheduledTask {
 	 * @returns {ScheduledTaskJSON}
 	 */
 	toJSON() {
-		const object = { id: this.id, taskName: this.taskName, time: this.time.getTime() };
+		const object = { id: this.id, taskName: this.taskName, time: this.time.getTime(), catchUp: this.catchUp };
 		if (this.recurring) object.repeat = this.recurring.cron;
 		if (typeof this.data !== 'undefined') object.data = this.data;
 
@@ -221,7 +231,6 @@ class ScheduledTask {
 		if (!st.task) throw new Error('invalid task');
 		if (!st.time) throw new Error('time or repeat option required');
 	}
-
 
 }
 
