@@ -220,26 +220,26 @@ class Gateway extends GatewayStorage {
 	 * @param {GatewayGetPathOptions} [options={}] Whether the Gateway should avoid configuring the selected key
 	 * @returns {?GatewayGetPathResult}
 	 */
-	getPath(key = '', { avoidUnconfigurable = false, piece = true, errors = false } = {}) {
+	getPath(key = '', { avoidUnconfigurable = false, piece = true, errors = true } = {}) {
 		if (key === '') return { piece: this.schema, route: [] };
 		const route = key.split('.');
-		let path = this.schema;
+		let { schema } = this;
 
 		for (let i = 0; i < route.length; i++) {
 			const currKey = route[i];
-			if (typeof piece[currKey] === 'undefined' || !piece.has(currKey)) {
+			if (typeof schema[currKey] === 'undefined' || !schema.has(currKey)) {
 				if (errors) throw `The key ${route.slice(0, i + 1).join('.')} does not exist in the current schema.`;
 				return null;
 			}
 
-			if (path[currKey].type === 'Folder') {
-				path = path[currKey];
+			if (schema[currKey].type === 'Folder') {
+				schema = schema[currKey];
 			} else if (piece) {
 				if (avoidUnconfigurable && !piece[currKey].configurable) {
-					if (errors) throw `The key ${piece[currKey].path} is not configurable in the current schema.`;
+					if (errors) throw `The key ${schema[currKey].path} is not configurable in the current schema.`;
 					return null;
 				}
-				return { piece: path[currKey], route: path[currKey].path.split('.') };
+				return { piece: schema[currKey], route: schema[currKey].path.split('.') };
 			}
 		}
 
