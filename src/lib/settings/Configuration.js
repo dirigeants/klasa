@@ -204,7 +204,7 @@ class Configuration {
 	 * // Updating multiple keys (with arrays):
 	 * Configuration#update(['prefix', 'language'], ['k!', 'es-ES']);
 	 */
-	async update(key, value, guild, options) {
+	async update(key, value, guild, options = {}) {
 		if (typeof options === 'undefined' && isObject(guild)) {
 			options = guild;
 			guild = undefined;
@@ -477,7 +477,7 @@ class Configuration {
 		let cache = this; // eslint-disable-line consistent-this
 		for (const key of path) cache = cache[key] || {};
 		const old = cache[lastKey];
-		if (piece.array ? !arraysEqual(old, piece.default, true) : old !== piece.default) {
+		if (piece.array ? !arraysEqual(old, parsedID, true) : old !== parsedID) {
 			cache[lastKey] = parsedID;
 			return { updated: true, old };
 		}
