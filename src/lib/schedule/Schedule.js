@@ -96,8 +96,7 @@ class Schedule {
 	 * @since 0.5.0
 	 */
 	async execute() {
-		// Do not execute if the Client is not available
-		if (this.client.status !== 0) return;
+		if (!this.client.ready) return;
 		if (this.tasks.length) {
 			// Process the active tasks, they're sorted by the time they end
 			const now = Date.now();
