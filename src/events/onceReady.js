@@ -29,7 +29,7 @@ module.exports = class extends Event {
 		if (typeof this.client.options.readyMessage === 'undefined') {
 			this.client.emit('log', `Successfully initialized. Ready to serve ${this.client.guilds.size} guilds.`);
 		} else if (this.client.options.readyMessage !== null) {
-			this.client.emit('log', util.isFunction(this.client.options.readyMessage) ? this.client.options.readyMessage(this) : this.client.options.readyMessage);
+			this.client.emit('log', util.isFunction(this.client.options.readyMessage) ? this.client.options.readyMessage(this.client) : this.client.options.readyMessage);
 		}
 
 		this.client.emit('klasaReady');
