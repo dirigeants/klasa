@@ -180,20 +180,6 @@ class GatewayStorage {
 	}
 
 	/**
-	 * Make an error that can or not have a valid Guild.
-	 * @since 0.5.0
-	 * @param {KlasaGuild} guild The guild to get the language from
-	 * @param {(string|number)} code The code of the error
-	 * @param {(string|Error)} error The error
-	 * @returns {string}
-	 * @private
-	 */
-	static throwError(guild, code, error) {
-		if (guild && guild.language && typeof guild.language.get === 'function') return guild.language.get(code);
-		return `ERROR: [${code}]: ${error}`;
-	}
-
-	/**
 	 * Parse SQL values.
 	 * @since 0.5.0
 	 * @param {*} value The value to parse

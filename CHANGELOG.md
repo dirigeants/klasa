@@ -89,6 +89,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Refactored Configuration's internals for maximum consistency and reduced code duplication. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Changed the type for `GatewayDriver#types` from `string[]` to `Set<string>`. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Renamed `SchemaPiece#modify()` to `SchemaPiece#edit()`. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Renamed `Gateway#getKeys()` and `Gateway#getValues()` to `Gateway#keys(true)` and `Gateway#values(true)` respectively, which return iterators. (kyranet)
@@ -180,6 +181,8 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Fixed update/reset methods in Configuration not emitting `configEntryCreate` when the entry does not exist. (kyranet)
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Fixed the updateMany pattern in Configuration not accepting a guild. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Fixed the **configUpdateEntry** event (used to sync configuration instances across shards) running in non-sharded bots, now it will be disabled if the bot is not sharded. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Fixed `Configuration._patch` not patching after the second nested folder. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Fixed SettingResolver's return types. (kyranet)

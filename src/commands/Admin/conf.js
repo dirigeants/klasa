@@ -25,29 +25,29 @@ module.exports = class extends Command {
 	}
 
 	get(msg, [key]) {
-		const { path } = this.client.gateways.guilds.getPath(key, { avoidUnconfigurable: true, piece: true });
-		return msg.sendMessage(msg.language.get('COMMAND_CONF_GET', path.path, msg.guild.configs.resolveString(msg, path)));
+		const { piece } = this.client.gateways.guilds.getPath(key, { avoidUnconfigurable: true, piece: true });
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_GET', piece.path, msg.guild.configs.resolveString(msg, piece)));
 	}
 
 	async set(msg, [key, ...valueToSet]) {
-		const { path } = await msg.guild.configs.update(key, valueToSet.join(' '), msg.guild, { avoidUnconfigurable: true, action: 'add' });
-		return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', path.path, msg.guild.configs.resolveString(msg, path)));
+		const { piece } = await msg.guild.configs.update(key, valueToSet.join(' '), msg.guild, { avoidUnconfigurable: true, action: 'add' });
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', piece.path, msg.guild.configs.resolveString(msg, piece)));
 	}
 
 	async remove(msg, [key, ...valueToRemove]) {
-		const { path } = await msg.guild.configs.update(key, valueToRemove.join(' '), msg.guild, { avoidUnconfigurable: true, action: 'remove' });
-		return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', path.path, msg.guild.configs.resolveString(msg, path)));
+		const { piece } = await msg.guild.configs.update(key, valueToRemove.join(' '), msg.guild, { avoidUnconfigurable: true, action: 'remove' });
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_UPDATED', piece.path, msg.guild.configs.resolveString(msg, piece)));
 	}
 
 	async reset(msg, [key]) {
-		const { path } = await msg.guild.configs.reset(key, true);
-		return msg.sendMessage(msg.language.get('COMMAND_CONF_RESET', path.path, msg.guild.configs.resolveString(msg, path)));
+		const { piece } = await msg.guild.configs.reset(key, true);
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_RESET', piece.path, msg.guild.configs.resolveString(msg, piece)));
 	}
 
 	list(msg, [key]) {
-		const { path } = this.client.gateways.guilds.getPath(key, { avoidUnconfigurable: true, piece: false });
+		const { piece } = this.client.gateways.guilds.getPath(key, { avoidUnconfigurable: true, piece: false });
 		return msg.sendMessage(msg.language.get('COMMAND_CONF_SERVER', key ? `: ${key.split('.').map(toTitleCase).join('/')}` : '',
-			codeBlock('asciidoc', msg.guild.configs.list(msg, path))));
+			codeBlock('asciidoc', msg.guild.configs.list(msg, piece))));
 	}
 
 };

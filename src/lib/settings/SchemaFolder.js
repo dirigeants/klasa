@@ -1,6 +1,6 @@
 const SchemaPiece = require('./SchemaPiece');
 const Schema = require('./Schema');
-const { deepClone, isObject, isNumber } = require('../util/util');
+const { deepClone, isObject } = require('../util/util');
 const fs = require('fs-nextra');
 
 /**
@@ -113,9 +113,7 @@ class SchemaFolder extends Schema {
 		if (typeof options.type !== 'string' || options.type.toLowerCase() === 'folder') options.type = 'Folder';
 
 		// Create the piece and save the current schema
-		const piece = options.type === 'Folder' ?
-			this._add(key, options, SchemaFolder) :
-			this._add(key, this._verifyKeyOptions(key, options), SchemaPiece);
+		const piece = this._add(key, options, options.type === 'Folder' ? SchemaFolder : SchemaPiece);
 		await fs.outputJSONAtomic(this.gateway.filePath, this.gateway.schema.toJSON());
 
 		if (this.gateway.sql) {
@@ -291,34 +289,6 @@ class SchemaFolder extends Schema {
 					${JSON.stringify(piece.path.split('.'))}, ${JSON.stringify(piece)}, ${action}, ${force});
 			}
 		`);
-	}
-
-	/**
-	 * Verifies the key add options.
-	 * @since 0.5.0
-	 * @param {string} key The name for the key
-	 * @param {SchemaFolderAddOptions} options The key's options to apply
-	 * @returns {SchemaFolderAddOptions}
-	 * @private
-	 */
-	_verifyKeyOptions(key, options) {
-		if (!options) throw new Error('You must pass an options argument to this method.');
-		if (typeof options.type !== 'string') throw new TypeError('The option type is required and must be a string.');
-		options.type = options.type.toLowerCase();
-		if (!this.client.gateways.types.has(options.type)) throw new TypeError(`The type ${options.type} is not supported.`);
-		if ('min' in options && options.min !== null && !isNumber(options.min)) throw new TypeError('The option min must be a number or null.');
-		if ('max' in options && options.max !== null && !isNumber(options.max)) throw new TypeError('The option max must be a number or null.');
-		if ('array' in options && typeof options.array !== 'boolean') throw new TypeError('The option array must be a boolean.');
-		if ('configurable' in options && typeof options.configurable !== 'boolean') throw new TypeError('The option configurable must be a boolean.');
-		if (!('array' in options)) options.array = Array.isArray(options.default);
-
-		if ('default' in options && Array.isArray(options) !== options.array) {
-			throw new TypeError(options.array ?
-				'The option default must be an array if the array option is set to true.' :
-				'The option default must not be an array if the array option is set to false.');
-		}
-
-		return options;
 	}
 
 	/**

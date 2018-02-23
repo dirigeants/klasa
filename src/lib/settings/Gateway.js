@@ -29,7 +29,7 @@ class Gateway extends GatewayStorage {
 
 	/**
 	 * @typedef {Object} GatewayGetPathResult
-	 * @property {SchemaPiece} path The resolved path
+	 * @property {SchemaPiece} piece The piece resolved from the path
 	 * @property {string[]} route The resolved path split by dots
 	 * @memberof Gateway
 	 */
@@ -218,33 +218,41 @@ class Gateway extends GatewayStorage {
 	 * @since 0.5.0
 	 * @param {string} [key=null] A string to resolve
 	 * @param {GatewayGetPathOptions} [options={}] Whether the Gateway should avoid configuring the selected key
-	 * @returns {GatewayPathResult}
+	 * @returns {?GatewayGetPathResult}
 	 */
-	getPath(key = '', { avoidUnconfigurable = false, piece = true } = {}) {
-		if (key === '') return { path: this.schema, route: [] };
-		if (typeof key !== 'string') throw new TypeError('The value for the argument \'key\' must be a string.');
+	getPath(key = '', { avoidUnconfigurable = false, piece = true, errors = false } = {}) {
+		if (key === '') return { piece: this.schema, route: [] };
 		const route = key.split('.');
 		let path = this.schema;
 
 		for (let i = 0; i < route.length; i++) {
 			const currKey = route[i];
-			if (typeof path[currKey] === 'undefined' || !path.has(currKey)) throw `The key ${route.slice(0, i + 1).join('.')} does not exist in the current schema.`;
+			if (typeof piece[currKey] === 'undefined' || !piece.has(currKey)) {
+				if (errors) throw `The key ${route.slice(0, i + 1).join('.')} does not exist in the current schema.`;
+				return null;
+			}
 
 			if (path[currKey].type === 'Folder') {
 				path = path[currKey];
 			} else if (piece) {
-				if (avoidUnconfigurable && !path[currKey].configurable) throw `The key ${path[currKey].path} is not configurable in the current schema.`;
-				return { path: path[currKey], route: path[currKey].path.split('.') };
+				if (avoidUnconfigurable && !piece[currKey].configurable) {
+					if (errors) throw `The key ${piece[currKey].path} is not configurable in the current schema.`;
+					return null;
+				}
+				return { piece: path[currKey], route: path[currKey].path.split('.') };
 			}
 		}
 
 		if (piece && path.type === 'Folder') {
-			const keys = path.configurableKeys;
-			if (keys.length === 0) throw `This group is not configurable.`;
-			throw `Please, choose one of the following keys: '${keys.join('\', \'')}'`;
+			const keys = piece.configurableKeys;
+			if (keys.length === 0) {
+				if (errors) throw `This group is not configurable.`;
+				return null;
+			}
+			if (errors) throw `Please, choose one of the following keys: '${keys.join('\', \'')}'`;
 		}
 
-		return { path, route: path.path.split('.') };
+		return { piece, route: path.path.split('.') };
 	}
 
 	/**
