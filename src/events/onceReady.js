@@ -20,7 +20,7 @@ module.exports = class extends Event {
 
 		// Init all the pieces
 		await Promise.all(this.client.pieceStores.filter(store => !['providers', 'extendables'].includes(store.name)).map(store => store.init()));
-		util.initClean(this);
+		util.initClean(this.client);
 		this.client.ready = true;
 
 		// Init the schedule
