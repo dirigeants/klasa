@@ -243,7 +243,7 @@ class Gateway extends GatewayStorage {
 			}
 		}
 
-		if (piece && path.type === 'Folder') {
+		if (piece && schema.type === 'Folder') {
 			const keys = piece.configurableKeys;
 			if (keys.length === 0) {
 				if (errors) throw `This group is not configurable.`;
@@ -252,7 +252,7 @@ class Gateway extends GatewayStorage {
 			if (errors) throw `Please, choose one of the following keys: '${keys.join('\', \'')}'`;
 		}
 
-		return { piece, route: path.path.split('.') };
+		return { piece, route: schema.path.split('.') };
 	}
 
 	/**
