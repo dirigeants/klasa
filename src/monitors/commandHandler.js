@@ -92,7 +92,8 @@ module.exports = class extends Monitor {
 		timer.stop();
 
 		try {
-			const mes = await commandRun;
+			let mes = await commandRun;
+			if (typeof mes === 'string') mes = msg.sendMessage(mes);
 			await this.client.finalizers.run(msg, mes, timer);
 			return this.client.emit('commandSuccess', msg, msg.command, msg.params, mes);
 		} catch (error) {
