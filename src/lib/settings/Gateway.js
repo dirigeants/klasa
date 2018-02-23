@@ -252,7 +252,7 @@ class Gateway extends GatewayStorage {
 			if (errors) throw `Please, choose one of the following keys: '${keys.join('\', \'')}'`;
 		}
 
-		return { piece, route: schema.path.split('.') };
+		return { piece: schema, route: schema.path.split('.') };
 	}
 
 	/**

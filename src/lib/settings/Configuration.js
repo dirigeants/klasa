@@ -151,7 +151,7 @@ class Configuration {
 	 * // Reset a key
 	 * Configuration#reset('prefix');
 	 */
-	async reset(keys, avoidUnconfigurable = true) {
+	async reset(keys, avoidUnconfigurable = false) {
 		// If the entry does not exist in the DB, it'll never be able to reset a key
 		if (!this._existsInDB) return { errors: [], updated: [] };
 
@@ -162,7 +162,7 @@ class Configuration {
 			const entries = new Array(keys.length);
 			for (let i = 0; i < keys.length; i++) entries[i] = [keys[i], null];
 			for (const [key, value] of entries) {
-				const path = this.gateway.getPath(key, { piece: false, avoidUnconfigurable, errors: false });
+				const path = this.gateway.getPath(key, { piece: true, avoidUnconfigurable, errors: false });
 				if (!path) {
 					result.errors.push(`The path ${key} does not exist in the current schema, or does not correspond to a piece.`);
 					continue;
