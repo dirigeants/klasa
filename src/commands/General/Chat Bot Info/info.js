@@ -7,7 +7,7 @@ module.exports = class extends Command {
 			aliases: ['details', 'what'],
 			guarded: true,
 			description: (msg) => msg.language.get('COMMAND_INFO_DESCRIPTION'),
-			sendReturn: 'apply'
+			sendReturn: true
 		});
 	}
 

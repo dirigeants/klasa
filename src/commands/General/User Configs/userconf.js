@@ -8,7 +8,8 @@ module.exports = class extends Command {
 			description: (msg) => msg.language.get('COMMAND_CONF_USER_DESCRIPTION'),
 			subcommands: true,
 			usage: '<get|set|remove|reset|list> (key:key) (value:value) [...]',
-			usageDelim: ' '
+			usageDelim: ' ',
+			sendReturn: true
 		});
 
 		this
