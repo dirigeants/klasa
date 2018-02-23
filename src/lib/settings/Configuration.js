@@ -477,7 +477,7 @@ class Configuration {
 		let cache = this; // eslint-disable-line consistent-this
 		for (const key of path) cache = cache[key] || {};
 		const old = cache[lastKey];
-		if (piece.array ? !arraysEqual(old, path.default, true) : old !== piece.default) {
+		if (piece.array ? !arraysEqual(old, piece.default, true) : old !== piece.default) {
 			cache[lastKey] = parsedID;
 			return { updated: true, old };
 		}
