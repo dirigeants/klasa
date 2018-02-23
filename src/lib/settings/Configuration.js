@@ -168,7 +168,7 @@ class Configuration {
 					continue;
 				}
 				const newValue = value === null ? deepClone(path.piece.default) : value;
-				const { updated } = this._setValueByPath(path.piece, newValue, path.piece.path);
+				const { updated } = this._setValueByPath(path.piece, newValue);
 				if (updated) result.updated.push({ data: [path.piece.path, newValue], piece: path.piece });
 			}
 			if (result.updated.length) await this._save(result);
@@ -308,6 +308,14 @@ class Configuration {
 		return resolver(value);
 	}
 
+	/**
+	 * Get a value from the cache.
+	 * @since 0.5.0
+	 * @param {(string|string[])} route The route to get
+	 * @param {boolean} piece Whether the get should resolve a piece or a folder
+	 * @returns {*}
+	 * @private
+	 */
 	_get(route, piece = true) {
 		if (typeof route === 'string') route = route.split('.');
 		let refCache = this, refSchema = this.gateway.schema; // eslint-disable-line consistent-this
@@ -336,7 +344,7 @@ class Configuration {
 
 		if (this.gateway.sql) {
 			const keys = new Array(updated.length), values = new Array(updated.length);
-			for (let i = 0; i < updated.length; i++)[keys[i], values[i]] = updated[i];
+			for (let i = 0; i < updated.length; i++) [keys[i], values[i]] = updated[i];
 			await this.gateway.provider.update(this.gateway.type, this.id, keys, values);
 		} else {
 			const updateObject = {};
@@ -356,25 +364,20 @@ class Configuration {
 	 * @private
 	 */
 	async _updateMany(object, guild) {
-		const list = { errors: [], promises: [], keys: [], values: [] };
+		const result = { errors: [], updated: [], promises: [] };
 
-		// Handle entry creation if it does not exist.
-		if (!this._existsInDB) await this.gateway.createEntry(this.id);
+		this._parseUpdateMany(this, object, this.gateway.schema, guild, result);
+		await Promise.all(result.promises);
+		delete result.promises;
 
-		const oldClone = this.client.listenerCount('configUpdateEntry') ? this.clone() : null;
-		const updateObject = {};
-		this._parseUpdateMany(this, object, this.gateway.schema, guild, list, updateObject);
-		await Promise.all(list.promises);
-
-		if (oldClone !== null) this.client.emit('configUpdateEntry', oldClone, this, list.keys);
-		if (this.gateway.sql) await this.gateway.provider.update(this.gateway.type, this.id, list.keys, list.values);
-		else await this.gateway.provider.update(this.gateway.type, this.id, updateObject);
-		if (list.errors.length) throw { updated: { keys: list.keys, values: list.values }, errors: list.errors };
-		return { keys: list.keys, values: list.values };
+		// If at least one key updated, save it to the database
+		if (result.updated.length) await this._save(result);
+		return result;
 	}
 
 	/**
 	 * Parse a single value
+	 * @since 0.5.0
 	 * @param {string} key The key to update
 	 * @param {*} value The new value for the key
 	 * @param {?KlasaGuild} guild The Guild instance for key resolving
@@ -415,7 +418,7 @@ class Configuration {
 			}
 			list.updated.push({ data: [piece.path, parsedID], piece: piece });
 		} else {
-			const { updated } = this._setValueByPath(piece, parsedID, piece.path);
+			const { updated } = this._setValueByPath(piece, parsedID);
 			if (updated) list.updated.push({ data: [piece.path, parsedID], piece: piece });
 		}
 	}
@@ -427,63 +430,49 @@ class Configuration {
 	 * @param {Object} object The key to edit
 	 * @param {SchemaFolder} schema The new value
 	 * @param {GuildResolvable} guild The guild to take
-	 * @param {ConfigurationUpdateResult} list The options
-	 * @param {*} updateObject The object to update
+	 * @param {ConfigurationUpdateResult} result The options
 	 * @private
 	 */
-	_parseUpdateMany(cache, object, schema, guild, list, updateObject) {
+	_parseUpdateMany(cache, object, schema, guild, result) {
 		for (const key of Object.keys(object)) {
 			if (!schema.has(key)) continue;
-			// Check if it's a folder, and recursively iterate over it
 			if (schema[key].type === 'Folder') {
-				if (!(key in updateObject)) updateObject = updateObject[key] = {};
-				this._parseUpdateMany(cache[key], object[key], schema[key], guild, list, updateObject);
-				// If the value is null, reset it
+				// Check if it's a folder, and recursively iterate over it
+				this._parseUpdateMany(cache[key], object[key], schema[key], guild, result);
 			} else if (object[key] === null) {
-				list.promises.push(this.reset(key)
-					.then(({ value, path }) => {
-						updateObject[key] = cache[key] = value;
-						list.keys.push(path);
-						list.values.push(value);
-					})
-					.catch(error => list.errors.push([schema.path, error])));
+				// If the value is null, reset it
+				const defaultValue = deepClone(schema[key].default);
+				if (this._setValueByPath(schema[key], defaultValue).updated) {
+					result.updated.push({ data: [schema[key].path, defaultValue], piece: schema[key] });
+				}
 				// Throw an error if it's not array (nor type any) but an array was given
-			} else if (!schema[key].array && schema[key].type !== 'any' && Array.isArray(object[key])) {
-				list.errors.push([schema[key].path, new Error(`${schema[key].path} does not expect an array as value.`)]);
-				// Throw an error if the key requests an array and none is given
-			} else if (schema[key].array && !Array.isArray(object[key])) {
-				list.errors.push([schema[key].path, new Error(`${schema[key].path} expects an array as value.`)]);
+			} else if (schema[key].array !== Array.isArray(object[key])) {
+				result.errors.push(new TypeError(schema[key].array ?
+					`${schema[key].path} expects an array as value.` :
+					`${schema[key].path} does not expect an array as value.`));
 			} else {
-				const promise = schema[key].array && schema[key].type !== 'any' ?
-					Promise.all(object[key].map(entry => schema[key].parse(entry, guild)
-						.then(getIdentifier)
-						.catch(error => list.errors.push([schema[key].path, error])))) :
-					schema[key].parse(object[key], guild);
-
-				list.promises.push(promise
-					.then(parsed => {
-						const parsedID = schema[key].array ?
-							parsed.filter(entry => typeof entry !== 'undefined') :
-							getIdentifier(parsed);
-						updateObject[key] = cache[key] = parsedID;
-						list.keys.push(schema[key].path);
-						list.values.push(parsedID);
-					})
-					.catch(error => list.errors.push([schema.path, error])));
+				const getID = schema[key].type !== 'any' ? getIdentifier : entry => entry;
+				result.promises.push((schema[key].array ?
+					Promise.all(object[key].map(entry => schema[key].parse(entry, guild).then(getID))) :
+					schema[key].parse(object[key], guild)).then(parsed => {
+					if (this._setValueByPath(schema[key], parsed).updated) {
+						result.updated.push({ data: [schema[key].path, parsed], piece: schema[key] });
+					}
+				}).catch(error => { result.errors.push(error); }));
 			}
 		}
 	}
 
 	/**
 	 * Set a value by its path
+	 * @since 0.5.0
 	 * @param {SchemaPiece} piece The piece that manages the key
 	 * @param {*} parsedID The parsed ID value
-	 * @param {(string|string[])} path The path of the key
 	 * @returns {{ updated: boolean, old: any }}
 	 * @private
 	 */
-	_setValueByPath(piece, parsedID, path) {
-		if (typeof path === 'string') path = path.split('.');
+	_setValueByPath(piece, parsedID) {
+		const path = piece.path.split('.');
 		const lastKey = path.pop();
 		let cache = this; // eslint-disable-line consistent-this
 		for (const key of path) cache = cache[key] || {};

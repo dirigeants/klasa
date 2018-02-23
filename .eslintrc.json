@@ -1,3 +1,10 @@
 {
+	"parserOptions": {
+		"ecmaFeatures": {
+			"globalReturn": true,
+			"experimentalObjectRestSpread": true
+		},
+		"ecmaVersion": 2017
+	},
 	"extends": "klasa"
 }

@@ -535,10 +535,10 @@ declare module 'klasa' {
 		private _get(route: string | string[], piece?: boolean): object;
 		private _get<T>(route: string | string[], piece?: boolean): T;
 		private _save(data: ConfigurationUpdateResult): Promise<void>;
-		private _updateMany(object: any, guild?: GatewayGuildResolvable): Promise<ConfigurationUpdateManyResult>;
+		private _updateMany(object: any, guild?: GatewayGuildResolvable): Promise<ConfigurationUpdateResult>;
 		private _parseSingle(key: string, value: any, guild: KlasaGuild | null, options: ConfigurationUpdateOptions, list: ConfigurationUpdateResult): Promise<void>;
-		private _parseUpdateMany(cache: any, object: any, schema: SchemaFolder, guild: KlasaGuild, list: ConfigurationUpdateManyResult, updateObject: object): void;
-		private _setValueByPath(piece: SchemaPiece, parsedID: any, path: string | string[]): { updated: boolean, old: any };
+		private _parseUpdateMany(cache: any, object: any, schema: SchemaFolder, guild: KlasaGuild, list: ConfigurationUpdateResult): void;
+		private _setValueByPath(piece: SchemaPiece, parsedID: any): { updated: boolean, old: any };
 		private _patch(data: any): void;
 
 		public toJSON(): object;

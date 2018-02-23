@@ -181,6 +181,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Fixed `null` values in *updateMany*'s pattern not updating nested keys plus individual queries. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Fixed update/reset methods in Configuration not emitting `configEntryCreate` when the entry does not exist. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Fixed the updateMany pattern in Configuration not accepting a guild. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Fixed the **configUpdateEntry** event (used to sync configuration instances across shards) running in non-sharded bots, now it will be disabled if the bot is not sharded. (kyranet)
