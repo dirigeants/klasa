@@ -313,8 +313,6 @@ class KlasaClient extends Discord.Client {
 		 * @type {boolean}
 		 */
 		this.ready = false;
-
-		this.once('ready', this._ready.bind(this));
 	}
 
 	/**
@@ -444,33 +442,6 @@ class KlasaClient extends Discord.Client {
 
 		this.emit('log', `Loaded in ${timer.stop()}.`);
 		return super.login(token);
-	}
-
-	/**
-	 * The once ready function for the client to init all pieces
-	 * @since 0.0.1
-	 * @private
-	 */
-	async _ready() {
-		await this.gateways._ready();
-		if (this.user.bot) this.application = await super.fetchApplication();
-		if (!this.options.ownerID) this.options.ownerID = this.user.bot ? this.application.owner.id : this.user.id;
-
-		// Client-wide settings
-		this.configs = this.gateways.clientStorage.cache.get('clientStorage', this.user.id) || this.gateways.clientStorage.insertEntry(this.user.id);
-		await this.configs.sync().then(() => this.gateways.clientStorage.cache.set(this.type, this.user.id, this.configs));
-
-		// Init all the pieces
-		await Promise.all(this.pieceStores.filter(store => !['providers', 'extendables'].includes(store.name)).map(store => store.init()));
-		util.initClean(this);
-		this.ready = true;
-
-		// Init the schedule
-		await this.schedule.init();
-
-		if (typeof this.options.readyMessage === 'undefined') this.emit('log', `Successfully initialized. Ready to serve ${this.guilds.size} guilds.`);
-		else if (this.options.readyMessage !== null) this.emit('log', util.isFunction(this.options.readyMessage) ? this.options.readyMessage(this) : this.options.readyMessage);
-		this.emit('klasaReady');
 	}
 
 	/**
