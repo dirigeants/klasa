@@ -377,7 +377,7 @@ class Configuration {
 	 * @private
 	 */
 	async _parseSingle(key, value, guild, { avoidUnconfigurable = false, action = 'auto', arrayPosition = null }, list) {
-		const path = this.gateway.getPath(key, { piece: false, avoidUnconfigurable, errors: false });
+		const path = this.gateway.getPath(key, { piece: true, avoidUnconfigurable, errors: false });
 		if (!path) {
 			list.errors.push(`The path ${key} does not exist in the current schema, or does not correspond to a piece.`);
 			return;
