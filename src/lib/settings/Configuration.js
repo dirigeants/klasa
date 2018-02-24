@@ -159,7 +159,7 @@ class Configuration {
 		if (!this._existsInDB) return { errors: [], updated: [] };
 
 		if (typeof keys === 'string') keys = [keys];
-		else if (typeof keys === 'undefined') keys = [...this.gateway.schema.keys(true)];
+		else if (typeof keys === 'undefined') keys = [...this.gateway.schema.values(true)].map(piece => piece.path);
 		if (Array.isArray(keys)) {
 			const result = { errors: [], updated: [] };
 			const entries = new Array(keys.length);
