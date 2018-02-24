@@ -134,6 +134,13 @@ class KlasaClient extends Discord.Client {
 		super(config);
 
 		/**
+		 * The options for this guild instance.
+		 * @since 0.5.0
+		 * @name KlasaClient#options
+		 * @type {KlasaClientOptions}
+		 */
+
+		/**
 		 * The directory to the node_modules folder where Klasa exists
 		 * @since 0.0.1
 		 * @type {string}
@@ -638,12 +645,12 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  */
 
 /**
- * Emitted when {@link Configuration#update} is run.
+ * Emitted when {@link Configuration#update} or {@link Configuration#reset} is run.
  * @event KlasaClient#configUpdateEntry
  * @since 0.5.0
  * @param {Configuration} oldEntry The old configuration entry
  * @param {Configuration} newEntry The new configuration entry
- * @param {string[]} path The path of the key which changed
+ * @param {ConfigurationUpdateResultEntry[]} path The path of the key which changed
  */
 
 /**
@@ -654,8 +661,8 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  */
 
 /**
- * Emitted when {@link Gateway#createEntry} is run or when {@link Gateway#getEntry}
- * with the create parameter set to true creates the entry.
+ * Emitted when {@link Gateway#createEntry} is run, when {@link Gateway#getEntry}
+ * with the create parameter set to true creates the entry, or an entry with no persistence gets updated.
  * @event KlasaClient#configCreateEntry
  * @since 0.5.0
  * @param {Configuration} entry The entry which got created
