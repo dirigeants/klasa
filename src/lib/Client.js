@@ -134,7 +134,7 @@ class KlasaClient extends Discord.Client {
 		super(config);
 
 		/**
-		 * The options for this guild instance.
+		 * The options the client was instantiated with.
 		 * @since 0.5.0
 		 * @name KlasaClient#options
 		 * @type {KlasaClientOptions}
