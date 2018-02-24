@@ -148,15 +148,16 @@ class ScheduledTask {
 	 * // But you can also update the time this will end at, for example, to change it so it ends in 1 hour:
 	 * ScheduledTask.update({ time: Date.now() + 60000 * 60 });
 	 */
-	async update({ time, data } = {}) {
-		const [_time, _cron] = time ? this.constructor._resolveTime(time) : [null, null];
-		if (_time) {
+	async update({ time, data, catchUp } = {}) {
+		if (time) {
+			const [_time, _cron] = this.constructor._resolveTime(time);
 			this.time = _time;
 			this.store.tasks.splice(this.store.tasks.indexOf(this), 1);
 			this.store._insert(this);
+			this.recurring = _cron;
 		}
-		this.recurring = _cron;
 		if (data) this.data = data;
+		if (typeof catchUp !== 'undefined') this.catchUp = catchUp;
 
 		// Sync the database if some of the properties changed or the time changed manually
 		// (recurring tasks bump the time automatically)

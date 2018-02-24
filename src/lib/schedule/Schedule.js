@@ -82,9 +82,7 @@ class Schedule {
 
 		for (const task of tasks) {
 			try {
-				if (!task.catchUp && task.time < Date.now()) delete task.time;
-				const time = task.repeat || task.time;
-				if (time) this._add(task.taskName, time, task);
+				await this._add(task.taskName, task.repeat || task.time, task);
 			} catch (error) {
 				this.client.emit('warn', `Task ${task.taskName} [${task.id}] was not queued: ${error}`);
 			}
@@ -138,7 +136,7 @@ class Schedule {
 	 * @param {string} taskName The name of the task
 	 * @param {(Date|number|string)} time The time or Cron pattern
 	 * @param {ScheduledTaskOptions} options The options for the ScheduleTask instance
-	 * @returns {Promise<ScheduledTask>}
+	 * @returns {?ScheduledTask}
 	 * @example
 	 * // Create a new reminder that ends in 2018-03-09T12:30:00.000Z (UTC)
 	 * Schedule.create('reminder', new Date(Date.UTC(2018, 2, 9, 12, 30)), {
@@ -160,7 +158,8 @@ class Schedule {
 	 * @see https://en.wikipedia.org/wiki/Cron For more details
 	 */
 	async create(taskName, time, options) {
-		const task = this._add(taskName, time, options);
+		const task = await this._add(taskName, time, options);
+		if (!task) return undefined;
 		await this.client.configs.update('schedules', task.toJSON(), { action: 'add' });
 		return task;
 	}
@@ -200,11 +199,18 @@ class Schedule {
 	 * @param {string} taskName The name of the task
 	 * @param {(Date|number|string)} time The time or Cron pattern
 	 * @param {ScheduledTaskOptions} options The options for the ScheduledTask instance
-	 * @returns {ScheduledTask}
+	 * @returns {?ScheduledTask}
 	 * @private
 	 */
-	_add(taskName, time, options) {
+	async _add(taskName, time, options) {
 		const task = new ScheduledTask(this.client, taskName, time, options);
+		if (!task.catchUp && task.time < Date.now()) {
+			if (!task.recurring) {
+				await task.delete();
+				return undefined;
+			}
+			await task.update({ time: task.recurring });
+		}
 		this._insert(task);
 		this._checkInterval();
 		return task;
