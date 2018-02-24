@@ -246,14 +246,14 @@ class Configuration {
 	 * @returns {string}
 	 */
 	list(msg, path) {
-		const folder = path instanceof SchemaFolder ? path : this.gateway.getPath(path, { piece: false }).path;
+		const folder = path instanceof SchemaFolder ? path : this.gateway.getPath(path, { piece: false }).piece;
 		const array = [];
 		const folders = [];
 		const keys = {};
 		let longest = 0;
 		for (const [key, value] of folder.entries()) {
 			if (value.type === 'Folder') {
-				folders.push(`// ${key}`);
+				if (value.configurableKeys.length) folders.push(`// ${key}`);
 			} else if (value.configurable) {
 				if (!(value.type in keys)) keys[value.type] = [];
 				if (key.length > longest) longest = key.length;

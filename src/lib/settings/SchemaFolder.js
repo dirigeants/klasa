@@ -325,7 +325,9 @@ class SchemaFolder extends Schema {
 	 * @since 0.5.0
 	 * @param {boolean} recursive Whether the iteration should be recursive
 	 * @yields {Array<string|SchemaFolder|SchemaPiece>}
+	 * @returns {Iterator<Array<string|SchemaFolder|SchemaPiece>}
 	 */
+
 	*entries(recursive = false) {
 		if (recursive) {
 			for (const key of this.keyArray) {
@@ -343,7 +345,9 @@ class SchemaFolder extends Schema {
 	 * @since 0.5.0
 	 * @param {boolean} recursive Whether the iteration should be recursive
 	 * @yields {(SchemaFolder|SchemaPiece)}
+	 * @returns {Iterator<SchemaFolder|SchemaPiece>}
 	 */
+
 	*values(recursive = false) {
 		if (recursive) {
 			for (const key of this.keyArray) {
@@ -361,7 +365,9 @@ class SchemaFolder extends Schema {
 	 * @since 0.5.0
 	 * @param {boolean} recursive Whether the iteration should be recursive
 	 * @yields {string}
+	 * @returns {Iterator<string>}
 	 */
+
 	*keys(recursive = false) {
 		if (recursive) {
 			for (const key of this.keyArray) {
