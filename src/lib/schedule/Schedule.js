@@ -82,8 +82,9 @@ class Schedule {
 
 		for (const task of tasks) {
 			try {
-				// will remove first check after a week of being live, so that all ScheduledTasks will be updated
-				if (!('catchUp' in task) || task.catchUp || task.time >= Date.now()) this._add(task.taskName, task.repeat || task.time, task);
+				if (!task.catchUp && task.time < Date.now()) delete task.time;
+				const time = task.repeat || task.time;
+				if (time) this._add(task.taskName, time, task);
 			} catch (error) {
 				this.client.emit('warn', `Task ${task.taskName} [${task.id}] was not queued: ${error}`);
 			}
