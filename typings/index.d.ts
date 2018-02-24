@@ -526,7 +526,7 @@ declare module 'klasa' {
 		public destroy(): Promise<this>;
 
 		public reset(key?: string | string[], avoidUnconfigurable?: boolean): Promise<ConfigurationUpdateResult>;
-		public reset(key?: string | string[], guild: KlasaGuild, avoidUnconfigurable?: boolean): Promise<ConfigurationUpdateResult>;
+		public reset(key?: string | string[], guild?: KlasaGuild, avoidUnconfigurable?: boolean): Promise<ConfigurationUpdateResult>;
 		public update(key: object, guild?: GatewayGuildResolvable): Promise<ConfigurationUpdateResult>;
 		public update(key: string, value: any, guild?: GatewayGuildResolvable, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
 		public update(key: string[], value: any[], guild?: GatewayGuildResolvable, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
@@ -686,7 +686,7 @@ declare module 'klasa' {
 		public parse(value: any, guild: KlasaGuild): Promise<any>;
 		public modify(options: SchemaPieceEditOptions): Promise<this>;
 
-		private _generateDefault(): [] | false | null;
+		private _generateDefault(): Array<any> | false | null;
 		private _schemaCheckType(type: string): void;
 		private _schemaCheckArray(array: boolean): void;
 		private _schemaCheckDefault(options: SchemaFolderAddOptions): void;
