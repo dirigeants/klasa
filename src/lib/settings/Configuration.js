@@ -91,7 +91,7 @@ class Configuration {
 	 */
 	get(key) {
 		if (!key.includes('.')) return this.gateway.schema.has(key) ? this[key] : undefined;
-		return this.get(key.split('.'), true);
+		return this._get(key.split('.'), true);
 	}
 
 	/**
