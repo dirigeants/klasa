@@ -811,7 +811,7 @@ declare module 'klasa' {
 		public abstract getKeys(table: string): Promise<string[]>;
 		public abstract get<T>(table: string, entry: string): Promise<T>;
 		public abstract has(table: string, entry: string): Promise<boolean>;
-		public abstract updateValue(table: string, path: string, path: string, newValue: any): Promise<any>;
+		public abstract updateValue(table: string, path: string, newValue: any): Promise<any>;
 		public abstract removeValue(table: string, path: string): Promise<any>;
 		public abstract create(table: string, entry: string, data: any): Promise<any>;
 		public abstract update(table: string, entry: string, data: any): Promise<any>;
@@ -1157,10 +1157,10 @@ declare module 'klasa' {
 		public groupCollapsed(groupTitle?: string, ...optionalParameters: any[]): void;
 		public groupEnd(): void;
 		public info(message?: string, ...optionalParameters: any[]): void;
-		public msIsIndependentlyComposed(element: Element): boolean;
+		public msIsIndependentlyComposed(element: any): boolean;
 		public profile(reportName?: string): void;
 		public profileEnd(): void;
-		public select(element: Element): void;
+		public select(element: any): void;
 		public table(...data: any[]): void;
 		public time(timerName?: string): void;
 		public timeEnd(timerName?: string): void;
@@ -1352,15 +1352,13 @@ declare module 'klasa' {
 
 	export type KlasaProvidersOptions = {
 		default?: string;
-		[key: string]: string | object;
-	};
+	} & object;
 
 	export type KlasaGatewaysOptions = {
 		clientStorage?: GatewayDriverAddOptions;
 		guilds?: GatewayDriverAddOptions;
 		users?: GatewayDriverAddOptions;
-		[key: string]: string | object;
-	};
+	} & object;
 
 	export type ExecOptions = {
 		cwd?: string;
