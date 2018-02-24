@@ -91,7 +91,7 @@ class Configuration {
 	 */
 	get(key) {
 		if (!key.includes('.')) return this.gateway.schema.has(key) ? this[key] : undefined;
-		return this.get(key.split('.'), false);
+		return this.get(key.split('.'), true);
 	}
 
 	/**
@@ -283,7 +283,7 @@ class Configuration {
 	 * @private
 	 */
 	resolveString(msg, path) {
-		const piece = path instanceof SchemaPiece ? path : this.gateway.getPath(path, { piece: true }).path;
+		const piece = path instanceof SchemaPiece ? path : this.gateway.getPath(path, { piece: true }).piece;
 		const value = this.get(piece.path);
 		if (value === null) return 'Not set';
 		if (piece.array && value.length === 0) return 'None';
