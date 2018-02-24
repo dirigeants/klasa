@@ -7,12 +7,6 @@ const RichDisplay = require('./RichDisplay');
 class RichMenu extends RichDisplay {
 
 	/**
-	 * A single unicode character
-	 * @typedef {string} Emoji
-	 * @memberof RichMenu
-	 */
-
-	/**
 	 * @typedef {RichDisplayEmojisObject} RichMenuEmojisObject
 	 * @property {Emoji} zero The emoji for the 'zero' button
 	 * @property {Emoji} one The emoji for the 'one' button
@@ -24,7 +18,6 @@ class RichMenu extends RichDisplay {
 	 * @property {Emoji} seven The emoji for the 'seven' button
 	 * @property {Emoji} eight The emoji for the 'eight' button
 	 * @property {Emoji} nine The emoji for the 'nine' button
-	 * @memberof RichMenu
 	 */
 
 	/**
@@ -32,7 +25,6 @@ class RichMenu extends RichDisplay {
 	 * @property {string} name The name of the option
 	 * @property {string} body The description of the option
 	 * @property {boolean} [inline=false] Whether the option should be inline
-	 * @memberof RichMenu
 	 */
 
 	/**
@@ -45,7 +37,6 @@ class RichMenu extends RichDisplay {
 	 * @property {number} [maxEmojis] The maximum number of emojis to collect
 	 * @property {number} [maxUsers] The maximum number of users to react
 	 * @property {number} [time] The maximum amount of time before this RichMenu should expire
-	 * @memberof RichMenu
 	 */
 
 	/**

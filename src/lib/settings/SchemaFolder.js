@@ -18,7 +18,6 @@ class SchemaFolder extends Schema {
 	 * @property {boolean} [array] Whether the key should be stored as Array or not
 	 * @property {string} [sql] The datatype of the key
 	 * @property {boolean} [configurable] Whether the key should be configurable by the config command or not
-	 * @memberof SchemaFolder
 	 */
 
 	/**
@@ -383,7 +382,6 @@ class SchemaFolder extends Schema {
 	 * @instance
 	 * @generator
 	 * @returns {Iterator<Array<string|SchemaFolder|SchemaPiece>>}
-	 * @memberof SchemaFolder
 	 */
 
 	[Symbol.iterator]() {

@@ -9,7 +9,6 @@ class ReactionHandler extends ReactionCollector {
 	/**
 	 * A single unicode character
 	 * @typedef {string} Emoji
-	 * @memberof ReactionHandler
 	 */
 
 	/**
@@ -22,7 +21,6 @@ class ReactionHandler extends ReactionCollector {
 	 * @property {number} [maxEmojis] The maximum number of emojis to collect
 	 * @property {number} [maxUsers] The maximum number of users to react
 	 * @property {number} [time] The maximum amount of time before this RichMenu should expire
-	 * @memberof RichMenu
 	 */
 
 	/**

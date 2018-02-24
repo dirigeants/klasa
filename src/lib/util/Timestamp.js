@@ -9,7 +9,6 @@ class Timestamp {
 	 * @typedef {Object} TimestampObject
 	 * @property {string} type The type of the current variable
 	 * @property {string} [content] The content of the type. Only accessible if the type is 'literal'
-	 * @memberof Timestamp
 	 */
 
 	/**

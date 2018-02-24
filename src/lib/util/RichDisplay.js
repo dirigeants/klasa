@@ -7,12 +7,6 @@ const ReactionHandler = require('./ReactionHandler');
 class RichDisplay {
 
 	/**
-	 * A single unicode character
-	 * @typedef {string} Emoji
-	 * @memberof RichDisplay
-	 */
-
-	/**
 	 * @typedef {Object} RichDisplayEmojisObject
 	 * @property {Emoji} first The emoji for the 'first' button
 	 * @property {Emoji} back The emoji for the 'back' button
@@ -21,7 +15,6 @@ class RichDisplay {
 	 * @property {Emoji} jump The emoji for the 'jump' button
 	 * @property {Emoji} info The emoji for the 'info' button
 	 * @property {Emoji} stop The emoji for the 'stop' button
-	 * @memberof RichDisplay
 	 */
 
 	/**
@@ -36,7 +29,6 @@ class RichDisplay {
 	 * @property {number} [maxEmojis] The maximum number of emojis to collect
 	 * @property {number} [maxUsers] The maximum number of users to react
 	 * @property {number} [time] The maximum amount of time before this RichDisplay should expire
-	 * @memberof RichDisplay
 	 */
 
 	/**

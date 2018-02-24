@@ -11,7 +11,6 @@ class Provider extends Piece {
 	/**
 	 * @typedef {PieceOptions} ProviderOptions
 	 * @property {boolean} [sql=false] If the provider provides to a sql data source
-	 * @memberof Provider
 	 */
 
 	/**

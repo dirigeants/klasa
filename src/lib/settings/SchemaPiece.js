@@ -15,7 +15,6 @@ class SchemaPiece extends Schema {
 	 * @property {number} [max] The new maximum range value
 	 * @property {boolean} [configurable] The new configurable value
 	 * @property {string} [sql] The new sql datatype
-	 * @memberof SchemaPiece
 	 */
 
 	/**
@@ -27,7 +26,6 @@ class SchemaPiece extends Schema {
 	 * @property {string} sql A tuple containing the name of the column and its data type
 	 * @property {boolean} array Whether the key should be stored as Array or not
 	 * @property {boolean} configurable Whether the key should be configurable by the config command or not
-	 * @memberof SchemaPiece
 	 */
 
 	/**

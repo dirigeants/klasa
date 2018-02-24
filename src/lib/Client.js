@@ -58,19 +58,16 @@ class KlasaClient extends Discord.Client {
 	 * @property {(string|Function)} [readyMessage=`Successfully initialized. Ready to serve ${this.guilds.size} guilds.`] readyMessage to be passed throughout Klasa's ready event
 	 * @property {RegExp} [regexPrefix] The regular expression prefix if one is provided
 	 * @property {boolean} [typing=false] Whether the bot should type while processing commands
-	 * @memberof KlasaClient
 	 */
 
 	/**
 	 * @typedef {Object} KlasaProvidersOptions
 	 * @property {string} [default] The default provider to use
-	 * @memberof KlasaClient
 	 */
 
 	/**
 	 * @typedef {Object} KlasaClientOptionsClock
 	 * @property {number} [interval] The interval in milliseconds for the clock to check the tasks
-	 * @memberof KlasaClient
 	 */
 
 	/**
@@ -78,7 +75,6 @@ class KlasaClient extends Discord.Client {
 	 * @property {GatewayDriverAddOptions} [clientStorage] The options for clientStorage's gateway
 	 * @property {GatewayDriverAddOptions} [guilds] The options for guilds' gateway
 	 * @property {GatewayDriverAddOptions} [users] The options for users' gateway
-	 * @memberof KlasaClient
 	 */
 
 	/**
@@ -88,7 +84,6 @@ class KlasaClient extends Discord.Client {
 	 * @property {boolean} [useColor=false] Whether the client console should use colors
 	 * @property {Colors} [colors] Color formats to use
 	 * @property {(boolean|string)} [timestamps=true] Whether to use timestamps or not, or the Timestamp format of the timestamp you want to use
-	 * @memberof KlasaClient
 	 */
 
 	/**
@@ -99,7 +94,6 @@ class KlasaClient extends Discord.Client {
 	 * @property {boolean} [verbose=false] If the verbose event should be enabled by default
 	 * @property {boolean} [warn=true] If the warn event should be enabled by default
 	 * @property {boolean} [wtf=true] If the wtf event should be enabled by default
-	 * @memberof KlasaClient
 	 */
 
 	/**
@@ -112,7 +106,6 @@ class KlasaClient extends Discord.Client {
 	 * @property {LanguageOptions} [languages={}] The default language options
 	 * @property {MonitorOptions} [monitors={}] The default monitor options
 	 * @property {ProviderOptions} [providers={}] The default provider options
-	 * @memberof KlasaClient
 	 */
 
 	/**
@@ -120,7 +113,6 @@ class KlasaClient extends Discord.Client {
 	 * @property {number} [promptLimit=Infinity] The number of re-prompts before custom prompt gives up
 	 * @property {number} [promptTime=30000] The time-limit for re-prompting custom prompts
 	 * @property {boolean} [quotedStringSupport=false] Whether the custom prompt should respect quoted strings
-	 * @memberof KlasaClient
 	 */
 
 	/**

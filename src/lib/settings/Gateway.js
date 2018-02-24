@@ -14,37 +14,26 @@ const { getIdentifier } = require('../util/util');
 class Gateway extends GatewayStorage {
 
 	/**
-	 * @typedef {Object} GatewayOptions
-	 * @property {Provider} [provider] The provider to use
-	 * @property {boolean} [nice=false] Whether the JSON provider should use sequential or burst mode
-	 * @memberof Gateway
-	 */
-
-	/**
 	 * @typedef {Object} GatewayGetPathOptions
 	 * @property {boolean} [avoidUnconfigurable=false] Whether the getPath should avoid unconfigurable keys
 	 * @property {boolean} [piece=true] Whether the getPath should return pieces or folders
-	 * @memberof Gateway
 	 */
 
 	/**
 	 * @typedef {Object} GatewayGetPathResult
 	 * @property {SchemaPiece} piece The piece resolved from the path
 	 * @property {string[]} route The resolved path split by dots
-	 * @memberof Gateway
 	 */
 
 	/**
 	 * @typedef {(KlasaGuild|KlasaMessage|external:TextChannel|external:VoiceChannel|external:CategoryChannel|external:GuildMember|external:Role)} GuildResolvable
-	 * @memberof Gateway
 	 */
 
 	/**
 	 * @typedef {Object} GatewayJSON
 	 * @property {string} type The name of this gateway
-	 * @property {GatewayOptions} options The options for this gateway
+	 * @property {GatewayDriverAddOptions} options The options for this gateway
 	 * @property {Object} schema The current schema
-	 * @memberof Gateway
 	 */
 
 	/**
@@ -52,7 +41,7 @@ class Gateway extends GatewayStorage {
 	 * @param {GatewayDriver} store The GatewayDriver instance which initiated this instance
 	 * @param {string} type The name of this Gateway
 	 * @param {Object} schema The initial schema for this instance
-	 * @param {GatewayOptions} options The options for this schema
+	 * @param {GatewayDriverAddOptions} options The options for this schema
 	 */
 	constructor(store, type, schema, options) {
 		super(store.client, type, options.provider);
@@ -65,7 +54,7 @@ class Gateway extends GatewayStorage {
 
 		/**
 		 * @since 0.5.0
-		 * @type {GatewayOptions}
+		 * @type {GatewayDriverAddOptions}
 		 */
 		this.options = options;
 

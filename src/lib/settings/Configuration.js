@@ -12,14 +12,12 @@ class Configuration {
 	 * @typedef {Object} ConfigurationUpdateResult
 	 * @property {Error[]} errors The errors caught from parsing
 	 * @property {ConfigurationUpdateResultEntry[]} updated The updated keys
-	 * @memberof Configuration
 	 */
 
 	/**
 	 * @typedef {Object} ConfigurationUpdateResultEntry
 	 * @property {any[]} data A tuple containing the path of the updated key and the new value
 	 * @property {SchemaPiece} piece The SchemaPiece instance that manages the updated key
-	 * @memberof Configuration
 	 */
 
 	/**
@@ -28,7 +26,6 @@ class Configuration {
 	 * @property {('add'|'remove'|'auto')} [action='auto'] Whether the update (when using arrays) should add or remove,
 	 * leave it as 'auto' to add or remove depending on the existence of the key in the array
 	 * @property {number} [arrayPosition] The position of the array to replace
-	 * @memberof Configuration
 	 */
 
 	/**

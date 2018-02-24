@@ -11,7 +11,6 @@ class Schedule {
 	 * @property {string} [id] The ID for the task. By default, it generates one in base36
 	 * @property {string} [repeat] The {@link Cron} pattern
 	 * @property {*} [data] The data to pass to the Task piece when the ScheduledTask is ready for execution
-	 * @memberof Schedule
 	 */
 
 	/**
@@ -250,7 +249,6 @@ class Schedule {
 	 * @instance
 	 * @generator
 	 * @returns {Iterator<ScheduledTask>}
-	 * @memberof Schedule
 	 */
 
 	*[Symbol.iterator]() {

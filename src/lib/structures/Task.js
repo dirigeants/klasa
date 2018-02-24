@@ -10,7 +10,6 @@ class Task extends Piece {
 
 	/**
 	 * @typedef {PieceOptions} TaskOptions
-	 * @memberof Task
 	 */
 
 	/**

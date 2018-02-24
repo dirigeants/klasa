@@ -11,7 +11,6 @@ class TextPrompt {
 	 * @property {number} [promptLimit=Infinity] The number of re-prompts before this TextPrompt gives up
 	 * @property {number} [promptTime=30000] The time-limit for re-prompting
 	 * @property {boolean} [quotedStringSupport=false] Whether this prompt should respect quoted strings
-	 * @memberof TextPrompt
 	 */
 
 	/**

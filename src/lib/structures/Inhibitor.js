@@ -11,7 +11,6 @@ class Inhibitor extends Piece {
 	/**
 	 * @typedef {PieceOptions} InhibitorOptions
 	 * @property {boolean} [spamProtection=false] If this inhibitor is meant for spamProtection (disables the inhibitor while generating help)
-	 * @memberof Inhibitor
 	 */
 
 	/**

@@ -382,7 +382,6 @@ class Util {
  * @property {string|number} [killSignal='SIGTERM'] The kill signal
  * @property {number} [uid] Sets the user identity of the process
  * @property {number} [gid] Sets the group identity of the process
- * @memberof Util
  */
 
 /**

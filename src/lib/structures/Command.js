@@ -32,7 +32,6 @@ class Command extends Piece {
 	 * @property {boolean} [subcommands=false] Whether to enable sub commands or not
 	 * @property {string} [usage=''] The usage string for the command
 	 * @property {?string} [usageDelim=undefined] The string to delimit the command input for usage
-	 * @memberof Command
 	 */
 
 	/**
