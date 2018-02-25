@@ -62,7 +62,7 @@ class Util {
 	 * @returns {string}
 	 */
 	static toTitleCase(str) {
-		return str.replace(/[A-Za-zÀ-ÖØ-öø-ÿ]\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+		return str.replace(/[A-Za-zÀ-ÖØ-öø-ÿ]\S*/g, (txt) => Util.titleCaseVariants[txt] || txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
 	}
 
 	/**
@@ -370,5 +370,13 @@ Util.exec = promisify(exec);
  * @static
  */
 Util.sleep = promisify(setTimeout);
+
+/**
+ * Object with certain title case variants for words
+ * @since 0.5.0
+ * @type {Object<string, string>}
+ * @static
+ */
+Util.titleCaseVariants = { textchannel: 'TextChannel' };
 
 module.exports = Util;
