@@ -1921,11 +1921,11 @@ declare module 'klasa' {
 	};
 
 	export type TitleCaseVariants = {
-		[key: string]: string;
 		textchannel: 'TextChannel';
 		voicechannel: 'VoiceChannel';
 		categorychannel: 'CategoryChannel';
 		guildmember: 'GuildMember';
+		[key: string]: string;
 	};
 
 //#endregion
