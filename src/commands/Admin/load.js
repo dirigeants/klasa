@@ -31,7 +31,7 @@ module.exports = class extends Command {
 					}
 				`);
 			}
-			return msg.sendMessage('COMMAND_LOAD', timer.stop(), store.name, piece.name);
+			return msg.sendMessage(msg.language.get('COMMAND_LOAD', timer.stop(), store.name, piece.name));
 		} catch (error) {
 			timer.stop();
 			throw msg.language.get('COMMAND_LOAD_ERROR', store.name, piece ? piece.name : path.join('/'), error);
