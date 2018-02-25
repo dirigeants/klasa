@@ -13,7 +13,6 @@ class Extendable extends Piece {
 	 * @typedef {PieceOptions} ExtendableOptions
 	 * @property {boolean} [klasa=false] If the extendable is for Klasa instead of Discord.js
 	 * @property {string[]} [appliesTo=[]] What classes this extendable is for
-	 * @memberof Extendable
 	 */
 
 	/**

@@ -7,31 +7,17 @@ const RichDisplay = require('./RichDisplay');
 class RichMenu extends RichDisplay {
 
 	/**
-	 * A single unicode character
-	 * @typedef {string} emoji
-	 * @memberof RichMenu
-	 */
-
-	/**
-	 * @typedef {Object} RichMenuEmojisObject
-	 * @property {emoji} first The emoji for the 'first' button
-	 * @property {emoji} back The emoji for the 'back' button
-	 * @property {emoji} forward The emoji for the 'forward' button
-	 * @property {emoji} last The emoji for the 'last' button
-	 * @property {emoji} jump The emoji for the 'jump' button
-	 * @property {emoji} info The emoji for the 'info' button
-	 * @property {emoji} stop The emoji for the 'stop' button
-	 * @property {emoji} zero The emoji for the 'zero' button
-	 * @property {emoji} one The emoji for the 'one' button
-	 * @property {emoji} two The emoji for the 'two' button
-	 * @property {emoji} three The emoji for the 'three' button
-	 * @property {emoji} four The emoji for the 'four' button
-	 * @property {emoji} five The emoji for the 'five' button
-	 * @property {emoji} six The emoji for the 'six' button
-	 * @property {emoji} seven The emoji for the 'seven' button
-	 * @property {emoji} eight The emoji for the 'eight' button
-	 * @property {emoji} nine The emoji for the 'nine' button
-	 * @memberof RichMenu
+	 * @typedef {RichDisplayEmojisObject} RichMenuEmojisObject
+	 * @property {Emoji} zero The emoji for the 'zero' button
+	 * @property {Emoji} one The emoji for the 'one' button
+	 * @property {Emoji} two The emoji for the 'two' button
+	 * @property {Emoji} three The emoji for the 'three' button
+	 * @property {Emoji} four The emoji for the 'four' button
+	 * @property {Emoji} five The emoji for the 'five' button
+	 * @property {Emoji} six The emoji for the 'six' button
+	 * @property {Emoji} seven The emoji for the 'seven' button
+	 * @property {Emoji} eight The emoji for the 'eight' button
+	 * @property {Emoji} nine The emoji for the 'nine' button
 	 */
 
 	/**
@@ -39,7 +25,6 @@ class RichMenu extends RichDisplay {
 	 * @property {string} name The name of the option
 	 * @property {string} body The description of the option
 	 * @property {boolean} [inline=false] Whether the option should be inline
-	 * @memberof RichMenu
 	 */
 
 	/**
@@ -52,7 +37,6 @@ class RichMenu extends RichDisplay {
 	 * @property {number} [maxEmojis] The maximum number of emojis to collect
 	 * @property {number} [maxUsers] The maximum number of users to react
 	 * @property {number} [time] The maximum amount of time before this RichMenu should expire
-	 * @memberof RichMenu
 	 */
 
 	/**
@@ -134,11 +118,11 @@ class RichMenu extends RichDisplay {
 	/**
 	 * Determines the emojis to use in this menu
 	 * @since 0.4.0
-	 * @param {emoji[]} emojis An array of emojis to use
+	 * @param {Emoji[]} emojis An array of emojis to use
 	 * @param {boolean} stop Whether the stop emoji should be included
 	 * @param {boolean} jump Whether the jump emoji should be included
 	 * @param {boolean} firstLast Whether the first & last emojis should be included
-	 * @returns {emoji[]}
+	 * @returns {Emoji[]}
 	 * @private
 	 */
 	_determineEmojis(emojis, stop, jump, firstLast) {

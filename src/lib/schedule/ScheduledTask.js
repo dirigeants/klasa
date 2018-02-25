@@ -10,7 +10,6 @@ class ScheduledTask {
 	 * @property {string} [id] The ID for the task. By default, it generates one in base36
 	 * @property {boolean} [catchUp=true] If the task should try to catch up if the bot is down
 	 * @property {*} [data] The data to pass to the Task piece when the ScheduledTask is ready for execution
-	 * @memberof ScheduledTask
 	 */
 
 	/**
@@ -19,7 +18,6 @@ class ScheduledTask {
 	 * @property {Date} [time] The time the current task ends at
 	 * @property {boolean} [catchUp] If the task should try to catch up if the bot is down
 	 * @property {*} [data] The data to pass to the Task piece when the ScheduledTask is ready for execution
-	 * @memberof ScheduledTask
 	 */
 
 	/**
@@ -30,7 +28,6 @@ class ScheduledTask {
 	 * @property {boolean} catchUp If the task should try to catch up if the bot is down
 	 * @property {string} [repeat] The {@link Cron} pattern
 	 * @property {*} [data] The data to pass to the Task piece when the ScheduledTask is ready for execution
-	 * @memberof ScheduledTask
 	 */
 
 	/**

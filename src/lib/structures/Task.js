@@ -10,17 +10,16 @@ class Task extends Piece {
 
 	/**
 	 * @typedef {PieceOptions} TaskOptions
-	 * @memberof Task
 	 */
 
 	/**
 	 * The run method to be overwritten in actual Task pieces
 	 * @since 0.5.0
 	 * @param {*} data The data from the ScheduledTask instance
-	 * @returns {Promise<void>}
+	 * @returns {void}
 	 * @abstract
 	 */
-	run() {
+	async run() {
 		// Defined in extension Classes
 	}
 

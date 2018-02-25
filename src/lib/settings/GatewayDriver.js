@@ -11,7 +11,6 @@ class GatewayDriver {
 	 * @typedef {Object} GatewayDriverAddOptions
 	 * @property {string} [provider] The name of the provider to use
 	 * @property {boolean} [nice=false] Whether the JSON provider should use sequential or burst mode
-	 * @memberof GatewayDriver
 	 */
 
 	/**
@@ -20,7 +19,6 @@ class GatewayDriver {
 	 * @property {SchemaPieceJSON} language The per-guild's configurable language key
 	 * @property {SchemaPieceJSON} disableNaturalPrefix The per-guild's configurable disableNaturalPrefix key
 	 * @property {SchemaPieceJSON} disabledCommands The per-guild's configurable disabledCommands key
-	 * @memberof GatewayDriver
 	 * @private
 	 */
 
@@ -29,7 +27,6 @@ class GatewayDriver {
 	 * @property {SchemaPieceJSON} userBlacklist The client's configurable user blacklist key
 	 * @property {SchemaPieceJSON} guildBlacklist The client's configurable guild blacklist key
 	 * @property {SchemaPieceJSON} schedules The schedules where {@link ScheduledTask}s are stored at
-	 * @memberof GatewayDriver
 	 * @private
 	 */
 
@@ -48,6 +45,16 @@ class GatewayDriver {
 		Object.defineProperty(this, 'client', { value: client });
 
 		/**
+		 * The register creation queue.
+		 * @since 0.5.0
+		 * @name GatewayDriver#_queue
+		 * @type {Map<string, Function>}
+		 * @readonly
+		 * @private
+		 */
+		Object.defineProperty(this, '_queue', { value: new Map() });
+
+		/**
 		 * The resolver instance this Gateway uses to parse the data.
 		 * @type {SettingResolver}
 		 */
@@ -55,15 +62,15 @@ class GatewayDriver {
 
 		/**
 		 * All the types accepted for the Gateway.
-		 * @type {string[]}
+		 * @type {Set<string>}
 		 */
-		this.types = Object.getOwnPropertyNames(SettingResolver.prototype).slice(1);
+		this.types = new Set(Object.getOwnPropertyNames(SettingResolver.prototype).slice(1));
 
 		/**
-		 * All the caches added
-		 * @type {string[]}
+		 * All the gateways added
+		 * @type {Set<string>}
 		 */
-		this.caches = [];
+		this.keys = new Set();
 
 		/**
 		 * If the driver is ready
@@ -176,49 +183,55 @@ class GatewayDriver {
 	}
 
 	/**
-	 * Add a new instance of SettingGateway, with its own validateFunction and schema.
+	 * Registers a new Gateway.
+	 * @since 0.5.0
+	 * @param {string} name The name for the new gateway
+	 * @param {Object} [schema={}] The schema for use in this gateway
+	 * @param {GatewayDriverAddOptions} [options={}] The options for the new gateway
+	 * @chainable
+	 * @returns {this}
+	 */
+	register(name, schema = {}, options = {}) {
+		if (!this.ready) {
+			if (this._queue.has(name)) throw new Error(`There is already a Gateway with the name '${name}'.`);
+			this._queue.set(name, () => {
+				this._register(name, schema, options);
+				this._queue.delete(name);
+			});
+		} else {
+			this._register(name, schema, options);
+		}
+
+		return this;
+	}
+
+	/**
+	 * Registers a new Gateway and inits it.
 	 * @since 0.3.0
 	 * @param {string} name The name for the new instance
-	 * @param {Function} validateFunction The function that validates the input
 	 * @param {Object} [schema={}] The schema
 	 * @param {GatewayDriverAddOptions} [options={}] A provider to use. If not specified it'll use the one in the client
 	 * @param {boolean} [download=true] Whether this Gateway should download the data from the database at init
 	 * @returns {Gateway}
 	 * @example
-	 * // Add a new SettingGateway instance, called 'users', which input takes users, and stores a quote which is a string between 2 and 140 characters.
-	 * const validate = async function(resolver, user) {
-	 *	 const result = await resolver.user(user);
-	 *	 if (!result) throw 'The parameter <User> expects either a User ID or a User Object.';
-	 *	 return result;
-	 * };
-	 * const schema = {
-	 *	 quote: {
-	 *		 type: 'String',
-	 *		 default: null,
-	 *		 array: false,
-	 *		 min: 2,
-	 *		 max: 140,
-	 *	 },
-	 * };
-	 * GatewayDriver.add('users', validate, schema);
+	 * // Add a new SettingGateway instance, called 'channels', that stores
+	 * // disabled commands and a command throttle for custom ratelimits.
+	 * this.client.gateways.add('channels', {
+	 *     disabledCommands: {
+	 *         type: 'Command',
+	 *         default: []
+	 *     },
+	 *     commandThrottle: {
+	 *         type: 'Integer',
+	 *         default: 5,
+	 *         min: 0,
+	 *         max: 60
+	 *     }
+	 * });
 	 */
-	async add(name, validateFunction, schema = {}, options = {}, download = true) {
-		if (typeof name !== 'string') throw 'You must pass a name for your new gateway and it must be a string.';
-
-		if (this[name] !== undefined && this[name] !== null) throw 'There is already a Gateway with that name.';
-		if (typeof validateFunction !== 'function') throw 'You must pass a validate function.';
-		validateFunction = validateFunction.bind(this);
-		if (!this.client.methods.util.isObject(schema)) throw 'Schema must be a valid object or left undefined for an empty object.';
-
-		options.provider = this._checkProvider(options.provider || this.client.options.providers.default);
-		const provider = this.client.providers.get(options.provider);
-		if (provider.cache) throw `The provider ${provider.name} is designed for caching, not persistent data. Please try again with another.`;
-		options.cache = this._checkProvider('collection');
-
-		const gateway = new Gateway(this, name, validateFunction, schema, options);
+	async add(name, schema = {}, options = {}, download = true) {
+		const gateway = this._register(name, schema, options);
 		await gateway.init(download);
-		this.caches.push(name);
-		this[name] = gateway;
 
 		return gateway;
 	}
@@ -226,18 +239,46 @@ class GatewayDriver {
 	/**
 	 * Readies up all Gateways and Configuration instances
 	 * @since 0.5.0
-	 * @returns {Promise<Array<Array<external:Collection<string, Configuration>>>>}
+	 * @returns {Array<Array<external:Collection<string, Configuration>>>}
 	 * @private
 	 */
-	_ready() {
-		if (this.ready) throw 'Configuration has already run the ready method.';
+	async _ready() {
+		if (this.ready) throw new Error('Configuration has already run the ready method.');
 		this.ready = true;
 		const promises = [];
-		for (const cache of this.caches) {
-			this[cache].ready = true;
-			promises.push(this[cache]._ready());
+		for (const register of this._queue.values()) register();
+		for (const key of this.keys) {
+			// If the gateway did not init yet, init it now
+			if (!this[key].ready) await this[key].init();
+			promises.push(this[key]._ready());
 		}
 		return Promise.all(promises);
+	}
+
+	/**
+	 * Registers a new Gateway
+	 * @since 0.5.0
+	 * @param {string} name The name for the new gateway
+	 * @param {Object} schema The schema for use in this gateway
+	 * @param {GatewayDriverAddOptions} options The options for the new gateway
+	 * @returns {Gateway}
+	 * @private
+	 */
+	_register(name, schema, options) {
+		if (typeof name !== 'string') throw new Error('You must pass a name for your new gateway and it must be a string.');
+
+		if (this[name] !== undefined && this[name] !== null) throw new Error(`There is already a Gateway with the name '${name}'.`);
+		if (!this.client.methods.util.isObject(schema)) throw new Error('Schema must be a valid object or left undefined for an empty object.');
+
+		options.provider = this._checkProvider(options.provider || this.client.options.providers.default);
+		const provider = this.client.providers.get(options.provider);
+		if (provider.cache) throw new Error(`The provider ${provider.name} is designed for caching, not persistent data. Please try again with another.`);
+
+		const gateway = new Gateway(this, name, schema, options);
+		this.keys.add(name);
+		this[name] = gateway;
+
+		return gateway;
 	}
 
 	/**
@@ -249,7 +290,32 @@ class GatewayDriver {
 	 */
 	_checkProvider(engine) {
 		if (this.client.providers.has(engine)) return engine;
-		throw `This provider (${engine}) does not exist in your system.`;
+		throw new Error(`This provider (${engine}) does not exist in your system.`);
+	}
+
+	/**
+	 * The GatewayDriver with all gateways, types and keys as JSON.
+	 * @since 0.5.0
+	 * @returns {Object}
+	 */
+	toJSON() {
+		const object = {
+			types: [...this.types],
+			keys: [...this.keys],
+			ready: this.ready
+		};
+		for (const key of this.keys) object[key] = this[key].toJSON();
+
+		return object;
+	}
+
+	/**
+	 * The stringified GatewayDriver with all the managed gateways.
+	 * @since 0.5.0
+	 * @returns {string}
+	 */
+	toString() {
+		return `GatewayDriver(${[...this.keys].join(', ')})`;
 	}
 
 }

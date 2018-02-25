@@ -138,7 +138,7 @@ class GatewayStorage {
 	/**
 	 * Inits the schema, creating a file if it does not exist, and returning the current schema or the default.
 	 * @since 0.5.0
-	 * @returns {Promise<SchemaFolder>}
+	 * @returns {SchemaFolder}
 	 * @private
 	 */
 	async initSchema() {
@@ -177,20 +177,6 @@ class GatewayStorage {
 		}
 
 		return object;
-	}
-
-	/**
-	 * Make an error that can or not have a valid Guild.
-	 * @since 0.5.0
-	 * @param {KlasaGuild} guild The guild to get the language from
-	 * @param {(string|number)} code The code of the error
-	 * @param {(string|Error)} error The error
-	 * @returns {string}
-	 * @private
-	 */
-	static throwError(guild, code, error) {
-		if (guild && guild.language && typeof guild.language.get === 'function') return guild.language.get(code);
-		return `ERROR: [${code}]: ${error}`;
 	}
 
 	/**

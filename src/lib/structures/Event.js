@@ -13,7 +13,6 @@ class Event extends Piece {
 	 * @property {boolean} [once=false] If this event should only be run once and then unloaded
 	 * @property {EventEmitter|string} [emitter=this.client] The emitter this event should be for (string indicates a client property)
 	 * @property {string} [event=this.name] The event that should be listened to
-	 * @memberof Event
 	 */
 
 	/**

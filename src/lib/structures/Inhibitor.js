@@ -11,7 +11,6 @@ class Inhibitor extends Piece {
 	/**
 	 * @typedef {PieceOptions} InhibitorOptions
 	 * @property {boolean} [spamProtection=false] If this inhibitor is meant for spamProtection (disables the inhibitor while generating help)
-	 * @memberof Inhibitor
 	 */
 
 	/**
@@ -38,7 +37,7 @@ class Inhibitor extends Piece {
 	 * @since 0.0.1
 	 * @param {KlasaMessage} msg The message that triggered this inhibitor
 	 * @param {Command} cmd The command to run
-	 * @returns {Promise<(void|string)>}
+	 * @returns {(void|string)}
 	 * @abstract
 	 */
 	async run() {

@@ -3,19 +3,18 @@ const Schema = require('./Schema');
 const fs = require('fs-nextra');
 
 /**
- * <info>You should never create an instance of this class. Use {@link SchemaFolder#addKey} instead.</info>
+ * <info>You should never create an instance of this class. Use {@link SchemaFolder#add} instead.</info>
  * The SchemaPiece class that contains the data for a key and several helpers.
  */
 class SchemaPiece extends Schema {
 
 	/**
-	 * @typedef {Object} SchemaPieceModifyOptions
+	 * @typedef {Object} SchemaPieceEditOptions
 	 * @property {*} [default] The new default value
 	 * @property {number} [min] The new minimum range value
 	 * @property {number} [max] The new maximum range value
 	 * @property {boolean} [configurable] The new configurable value
 	 * @property {string} [sql] The new sql datatype
-	 * @memberof SchemaPiece
 	 */
 
 	/**
@@ -27,14 +26,13 @@ class SchemaPiece extends Schema {
 	 * @property {string} sql A tuple containing the name of the column and its data type
 	 * @property {boolean} array Whether the key should be stored as Array or not
 	 * @property {boolean} configurable Whether the key should be configurable by the config command or not
-	 * @memberof SchemaPiece
 	 */
 
 	/**
 	 * @since 0.5.0
 	 * @param {KlasaClient} client The client which initialized this instance
 	 * @param {Gateway} gateway The Gateway that manages this schema instance
-	 * @param {AddOptions} options The object containing the properties for this schema instance
+	 * @param {SchemaFolderAddOptions} options The object containing the properties for this schema instance
 	 * @param {SchemaFolder} parent The parent which holds this instance
 	 * @param {string} key The name of the key
 	 */
@@ -55,7 +53,7 @@ class SchemaPiece extends Schema {
 		 * @type {boolean}
 		 * @name SchemaPiece#array
 		 */
-		this.array = typeof options.array !== 'undefined' ? options.array : false;
+		this.array = 'array' in options ? options.array : Array.isArray(options.default);
 
 		/**
 		 * What this key should provide by default.
@@ -63,7 +61,7 @@ class SchemaPiece extends Schema {
 		 * @type {*}
 		 * @name SchemaPiece#default
 		 */
-		this.default = typeof options.default !== 'undefined' ? options.default : this.type === 'boolean' ? false : null;
+		this.default = 'default' in options ? options.default : this._generateDefault();
 
 		/**
 		 * The minimum value for this key.
@@ -71,7 +69,7 @@ class SchemaPiece extends Schema {
 		 * @type {?number}
 		 * @name SchemaPiece#min
 		 */
-		this.min = typeof options.min !== 'undefined' && isNaN(options.min) === false ? options.min : null;
+		this.min = 'min' in options ? options.min : null;
 
 		/**
 		 * The maximum value for this key.
@@ -79,7 +77,7 @@ class SchemaPiece extends Schema {
 		 * @type {?number}
 		 * @name SchemaPiece#max
 		 */
-		this.max = typeof options.max !== 'undefined' && isNaN(options.max) === false ? options.max : null;
+		this.max = 'max' in options ? options.max : null;
 
 		/**
 		 * A tuple of strings containing the path and the datatype.
@@ -87,7 +85,7 @@ class SchemaPiece extends Schema {
 		 * @type {string[]}
 		 * @name SchemaPiece#sql
 		 */
-		this.sql = [this.path];
+		this.sql = [this.path, null];
 
 		/**
 		 * Whether this key should be configureable by the config command. When type is any, this key defaults to false.
@@ -95,7 +93,7 @@ class SchemaPiece extends Schema {
 		 * @type {boolean}
 		 * @name SchemaPiece#configurable
 		 */
-		this.configurable = typeof options.configurable !== 'undefined' ? options.configurable : this.type !== 'any';
+		this.configurable = 'configurable' in options ? options.configurable : this.type !== 'any';
 
 		/**
 		 * The validator function for this instance.
@@ -126,56 +124,23 @@ class SchemaPiece extends Schema {
 	 * @since 0.5.0
 	 * @param {string} value The value to parse
 	 * @param {KlasaGuild} guild A Guild instance required for the resolver to work
-	 * @returns {Promise<*>}
+	 * @returns {*}
 	 */
 	async parse(value, guild) {
 		const resolved = await this.gateway.resolver[this.type](value, guild, this.key, { min: this.min, max: this.max });
-		if (this.validator) this.validator(resolved, guild);
+		if (this.validator) await this.validator(resolved, guild);
 		return resolved;
-	}
-
-	/**
-	 * Resolve a string.
-	 * @since 0.5.0
-	 * @param {KlasaMessage} msg The Message to use
-	 * @returns {string}
-	 */
-	resolveString(msg) {
-		const value = this.constructor._resolveConfigs(this.gateway.type, msg).get(this.path);
-		if (value === null) return 'Not set';
-
-		let resolver = (val) => val;
-		switch (this.type) {
-			case 'Folder': resolver = () => 'Folder';
-				break;
-			case 'user': resolver = (val) => (this.client.users.get(val) || { username: val && val.username ? val.username : val }).username;
-				break;
-			case 'textchannel':
-			case 'voicechannel':
-			case 'channel': resolver = (val) => (msg.guild.channels.get(val) || { name: val && val.name ? val.name : val }).name;
-				break;
-			case 'role': resolver = (val) => (msg.guild.roles.get(val) || { name: val && val.name ? val.name : val }).name;
-				break;
-			case 'guild': resolver = (val) => val && val.name ? val.name : val;
-				break;
-			case 'boolean': resolver = (val) => val === true ? 'Enabled' : 'Disabled';
-				break;
-			// no default
-		}
-
-		if (this.array && Array.isArray(value)) return value.length > 0 ? `[ ${value.map(resolver).join(' | ')} ]` : 'None';
-		return resolver(value);
 	}
 
 	/**
 	 * Modify this SchemaPiece's properties.
 	 * @since 0.5.0
-	 * @param {SchemaPieceModifyOptions} options The new options
-	 * @returns {Promise<this>}
+	 * @param {SchemaPieceEditOptions} options The new options
+	 * @returns {this}
 	 */
-	async modify(options) {
+	async edit(options) {
 		// Check if the 'options' parameter is an object.
-		if (!isObject(options)) throw new TypeError(`SchemaPiece#modify expected an object as a parameter. Got: ${typeof options}`);
+		if (!isObject(options)) throw new TypeError(`SchemaPiece#edit expected an object as a parameter. Got: ${typeof options}`);
 
 		const edited = new Set();
 		if (typeof options.sql === 'string' && this.sql[1] !== options.sql) {
@@ -217,6 +182,18 @@ class SchemaPiece extends Schema {
 	}
 
 	/**
+	 * Generate a default value if none is given
+	 * @since 0.5.0
+	 * @returns {(Array<*>|false|null)}
+	 * @private
+	 */
+	_generateDefault() {
+		if (this.array) return [];
+		if (this.type === 'boolean') return false;
+		return null;
+	}
+
+	/**
 	 * Checks if options.type is valid.
 	 * @since 0.5.0
 	 * @param {string} type The parameter to validate
@@ -225,7 +202,7 @@ class SchemaPiece extends Schema {
 	 */
 	_schemaCheckType(type) {
 		if (typeof type !== 'string') throw new TypeError(`[KEY] ${this} - Parameter type must be a string.`);
-		if (!this.client.gateways.types.includes(type)) throw new TypeError(`[KEY] ${this} - ${type} is not a valid type.`);
+		if (!this.client.gateways.types.has(type)) throw new TypeError(`[KEY] ${this} - ${type} is not a valid type.`);
 	}
 
 	/**
@@ -242,7 +219,7 @@ class SchemaPiece extends Schema {
 	/**
 	 * Checks if options.default is valid.
 	 * @since 0.5.0
-	 * @param {AddOptions} options The options to validate
+	 * @param {SchemaFolderAddOptions} options The options to validate
 	 * @throws {TypeError}
 	 * @private
 	 */
@@ -311,23 +288,18 @@ class SchemaPiece extends Schema {
 	/**
 	 * Check if the key is properly configured.
 	 * @since 0.5.0
-	 * @param {AddOptions} options The options to parse
+	 * @param {SchemaFolderAddOptions} options The options to parse
 	 * @returns {true}
 	 * @throws {TypeError}
 	 * @private
 	 */
 	_init(options) {
 		if (this._inited) throw new TypeError(`[INIT] ${this} - Is already init. Aborting re-init.`);
+		this._inited = true;
+
 		// Check if the 'options' parameter is an object.
 		if (!isObject(options)) throw new TypeError(`SchemaPiece#init expected an object as a parameter. Got: ${typeof options}`);
-		this._schemaCheckType(this.type);
-		this._schemaCheckArray(this.array);
-		this._schemaCheckDefault(this);
-		this._schemaCheckLimits(this.min, this.max);
-		this._schemaCheckConfigurable(this.configurable);
-
 		this.sql[1] = this._generateSQLDatatype(options.sql);
-		this._inited = true;
 
 		return true;
 	}
@@ -371,23 +343,6 @@ class SchemaPiece extends Schema {
 		if (type === 'string') return `'${value.replace(/'/g, "''")}'`;
 		if (type === 'object') return `'${JSON.stringify(value).replace(/'/g, "''")}'`;
 		return '';
-	}
-
-	/**
-	 * Gets a configuration instance from KlasaMessage depending on the schema.gateway type.
-	 * @since 0.5.0
-	 * @param {string} type The type of gateway
-	 * @param {KlasaMessage} msg The message context to resolve from
-	 * @returns {Configuration}
-	 * @private
-	 */
-	static _resolveConfigs(type, msg) {
-		switch (type) {
-			case 'users': return msg.author.configs;
-			case 'guilds': return msg.guildConfigs;
-			case 'clientStorage': return msg.client.configs;
-			default: return null;
-		}
 	}
 
 }
