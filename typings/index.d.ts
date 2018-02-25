@@ -1289,7 +1289,7 @@ declare module 'klasa' {
 		public static getDeepTypeName(input: any): string;
 		public static getDeepTypeProxy(input: Proxy<any>): string;
 		public static getDeepTypeSetOrMap(input: Array<any> | Set<any> | WeakSet<any>, basic?: string): string;
-		public static getIdentifier(value: any): string;
+		public static getIdentifier(value: PrimitiveType | { id?: PrimitiveType, name?: PrimitiveType }): PrimitiveType | null;
 		public static getTypeName(input: any): string;
 		public static isClass(input: Function): boolean;
 		public static isFunction(input: Function): boolean;
@@ -1925,6 +1925,8 @@ declare module 'klasa' {
 		get(): T;
 		set(value: T): void;
 	};
+
+	export type PrimitiveType = string | number | boolean;
 
 	export type TitleCaseVariants = {
 		textchannel: 'TextChannel';
