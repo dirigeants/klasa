@@ -374,9 +374,14 @@ Util.sleep = promisify(setTimeout);
 /**
  * Object with certain title case variants for words
  * @since 0.5.0
- * @type {Object<string, string>}
+ * @type {Object}
  * @static
  */
-Util.titleCaseVariants = { textchannel: 'TextChannel' };
+Util.titleCaseVariants = {
+	textchannel: 'TextChannel',
+	voicechannel: 'VoiceChannel',
+	categorychannel: 'CategoryChannel',
+	guildmember: 'GuildMember',
+};
 
 module.exports = Util;
