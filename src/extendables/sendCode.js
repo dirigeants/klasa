@@ -7,7 +7,7 @@ module.exports = class extends Extendable {
 	}
 
 	extend(lang, content, options = {}) {
-		return this.sendMessage(content, { ...options, code: lang });
+		return this.send({ ...options, content, code: lang });
 	}
 
 };

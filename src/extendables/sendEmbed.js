@@ -6,14 +6,12 @@ module.exports = class extends Extendable {
 		super(...args, { appliesTo: ['TextChannel', 'DMChannel', 'GroupDMChannel', 'User'] });
 	}
 
-	extend(embed, content, options) {
-		if (!options && typeof content === 'object') {
+	extend(embed, content, options = {}) {
+		if (typeof content === 'object') {
 			options = content;
 			content = '';
-		} else if (!options) {
-			options = {};
 		}
-		return this.sendMessage(content, { ...options, embed });
+		return this.send({ content, ...options, embed });
 	}
 
 };
