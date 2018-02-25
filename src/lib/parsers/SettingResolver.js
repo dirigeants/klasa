@@ -148,7 +148,7 @@ class SettingResolver extends Resolver {
 	 */
 	async integer(data, guild, name, { min, max } = {}) {
 		const result = await super.integer(data);
-		if (!result) throw (guild ? guild.language : this.client.languages.default).get('RESOLVER_INVALID_INT', name);
+		if (result === null) throw (guild ? guild.language : this.client.languages.default).get('RESOLVER_INVALID_INT', name);
 		if (SettingResolver.maxOrMin(this.client, guild, result, min, max, name)) return result;
 		return null;
 	}
@@ -166,7 +166,7 @@ class SettingResolver extends Resolver {
 	 */
 	async float(data, guild, name, { min, max } = {}) {
 		const result = await super.float(data);
-		if (!result) throw (guild ? guild.language : this.client.languages.default).get('RESOLVER_INVALID_FLOAT', name);
+		if (result === null) throw (guild ? guild.language : this.client.languages.default).get('RESOLVER_INVALID_FLOAT', name);
 		if (SettingResolver.maxOrMin(this.client, guild, result, min, max, name)) return result;
 		return null;
 	}
