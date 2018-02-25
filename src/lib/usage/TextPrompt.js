@@ -11,7 +11,6 @@ class TextPrompt {
 	 * @property {number} [promptLimit=Infinity] The number of re-prompts before this TextPrompt gives up
 	 * @property {number} [promptTime=30000] The time-limit for re-prompting
 	 * @property {boolean} [quotedStringSupport=false] Whether this prompt should respect quoted strings
-	 * @memberof TextPrompt
 	 */
 
 	/**
@@ -132,7 +131,7 @@ class TextPrompt {
 	 * Runs the custom prompt.
 	 * @since 0.5.0
 	 * @param {string} prompt The message to initially prompt with
-	 * @returns {Promise<any[]>} The parameters resolved
+	 * @returns {any[]} The parameters resolved
 	 */
 	async run(prompt) {
 		const message = await this.message.prompt(prompt, this.promptTime);
@@ -144,7 +143,7 @@ class TextPrompt {
 	 * Collects missing required arguments.
 	 * @since 0.5.0
 	 * @param {string} prompt The reprompt error
-	 * @returns {Promise<any[]>}
+	 * @returns {any[]}
 	 * @private
 	 */
 	async reprompt(prompt) {
@@ -171,7 +170,7 @@ class TextPrompt {
 	/**
 	 * Collects repeating arguments.
 	 * @since 0.5.0
-	 * @returns {Promise<any[]>}
+	 * @returns {any[]}
 	 * @private
 	 */
 	async repeatingPrompt() {
@@ -199,7 +198,7 @@ class TextPrompt {
 	/**
 	 * Validates and resolves args into parameters
 	 * @since 0.0.1
-	 * @returns {Promise<any[]>} The resolved parameters
+	 * @returns {any[]} The resolved parameters
 	 * @private
 	 */
 	async validateArgs() {
@@ -222,7 +221,7 @@ class TextPrompt {
 	 * Validates and resolves args into parameters, when multiple types of usage is defined
 	 * @since 0.0.1
 	 * @param {number} index The id of the possible usage currently being checked
-	 * @returns {Promise<any[]>} The resolved parameters
+	 * @returns {any[]} The resolved parameters
 	 * @private
 	 */
 	async multiPossibles(index) {
@@ -275,7 +274,7 @@ class TextPrompt {
 	 * Decides if the prompter should reprompt or throw the error found while validating.
 	 * @since 0.5.0
 	 * @param {string} err The error found while validating
-	 * @returns {Promise<any[]>}
+	 * @returns {any[]}
 	 * @private
 	 */
 	async handleError(err) {

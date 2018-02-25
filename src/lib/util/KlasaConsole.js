@@ -17,7 +17,6 @@ class KlasaConsole extends Console {
 	 * @property {NodeJS.WritableStream} [stderr] The WritableStrwam for the error logs
 	 * @property {(boolean|string)} [timestamps] If false, it won't use timestamps. Otherwise it will use 'YYYY-MM-DD HH:mm:ss' if true or custom if string is given
 	 * @property {boolean} [useColor] Whether the timestamps should use colours
-	 * @memberof KlasaConsole
 	 */
 
 	/**
@@ -28,7 +27,6 @@ class KlasaConsole extends Console {
 	 * @property {KlasaConsoleColorObjects} verbose An object containing a message and time color object
 	 * @property {KlasaConsoleColorObjects} warn An object containing a message and time color object
 	 * @property {KlasaConsoleColorObjects} wtf An object containing a message and time Color Object
-	 * @memberof KlasaConsole
 	 */
 
 	/**
@@ -36,7 +34,6 @@ class KlasaConsole extends Console {
 	 * @property {string} [type='log'] The method from Console this color object should call
 	 * @property {KlasaConsoleMessageObject} message A message object containing colors and styles
 	 * @property {KlasaConsoleTimeObject} time A time object containing colors and styles
-	 * @memberof KlasaConsole
 	 */
 
 	/**
@@ -44,7 +41,6 @@ class KlasaConsole extends Console {
 	 * @property {KlasaConsoleColorTypes} background The background color. Can be a basic string like "red", a hex string, or a RGB array
 	 * @property {KlasaConsoleColorTypes} text The text color. Can be a basic string like "red", a hex string, or a RGB array
 	 * @property {KlasaConsoleStyleTypes} style A style string from KlasaConsoleStyleTypes
-	 * @memberof KlasaConsole
 	 */
 
 	/**
@@ -52,7 +48,6 @@ class KlasaConsole extends Console {
 	 * @property {KlasaConsoleColorTypes} background The background color. Can be a basic string like "red", a hex string, or a RGB array
 	 * @property {KlasaConsoleColorTypes} text The text color. Can be a basic string like "red", a hex string, a RGB array, or HSL array
 	 * @property {KlasaConsoleStyleTypes} style A style string from KlasaConsoleStyleTypes
-	 * @memberof KlasaConsole
 	 */
 
 	/**
@@ -75,7 +70,6 @@ class KlasaConsole extends Console {
 	 * @property {string} lightmagenta The light magenta colour
 	 * @property {string} lightcyan The light cyan colour
 	 * @property {string} white The white colour
-	 * @memberof KlasaConsole
 	 */
 
 	/**
@@ -88,7 +82,6 @@ class KlasaConsole extends Console {
 	 * @property {string} inverse Inverse colours style
 	 * @property {string} hidden Hidden text style
 	 * @property {string} strikethrough Strikethrough text style
-	 * @memberof KlasaConsole
 	 */
 
 	/**

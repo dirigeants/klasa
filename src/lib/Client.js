@@ -58,19 +58,16 @@ class KlasaClient extends Discord.Client {
 	 * @property {(string|Function)} [readyMessage=`Successfully initialized. Ready to serve ${this.guilds.size} guilds.`] readyMessage to be passed throughout Klasa's ready event
 	 * @property {RegExp} [regexPrefix] The regular expression prefix if one is provided
 	 * @property {boolean} [typing=false] Whether the bot should type while processing commands
-	 * @memberof KlasaClient
 	 */
 
 	/**
 	 * @typedef {Object} KlasaProvidersOptions
 	 * @property {string} [default] The default provider to use
-	 * @memberof KlasaClient
 	 */
 
 	/**
 	 * @typedef {Object} KlasaClientOptionsClock
 	 * @property {number} [interval] The interval in milliseconds for the clock to check the tasks
-	 * @memberof KlasaClient
 	 */
 
 	/**
@@ -78,7 +75,6 @@ class KlasaClient extends Discord.Client {
 	 * @property {GatewayDriverAddOptions} [clientStorage] The options for clientStorage's gateway
 	 * @property {GatewayDriverAddOptions} [guilds] The options for guilds' gateway
 	 * @property {GatewayDriverAddOptions} [users] The options for users' gateway
-	 * @memberof KlasaClient
 	 */
 
 	/**
@@ -88,7 +84,6 @@ class KlasaClient extends Discord.Client {
 	 * @property {boolean} [useColor=false] Whether the client console should use colors
 	 * @property {Colors} [colors] Color formats to use
 	 * @property {(boolean|string)} [timestamps=true] Whether to use timestamps or not, or the Timestamp format of the timestamp you want to use
-	 * @memberof KlasaClient
 	 */
 
 	/**
@@ -99,7 +94,6 @@ class KlasaClient extends Discord.Client {
 	 * @property {boolean} [verbose=false] If the verbose event should be enabled by default
 	 * @property {boolean} [warn=true] If the warn event should be enabled by default
 	 * @property {boolean} [wtf=true] If the wtf event should be enabled by default
-	 * @memberof KlasaClient
 	 */
 
 	/**
@@ -112,7 +106,6 @@ class KlasaClient extends Discord.Client {
 	 * @property {LanguageOptions} [languages={}] The default language options
 	 * @property {MonitorOptions} [monitors={}] The default monitor options
 	 * @property {ProviderOptions} [providers={}] The default provider options
-	 * @memberof KlasaClient
 	 */
 
 	/**
@@ -120,15 +113,6 @@ class KlasaClient extends Discord.Client {
 	 * @property {number} [promptLimit=Infinity] The number of re-prompts before custom prompt gives up
 	 * @property {number} [promptTime=30000] The time-limit for re-prompting custom prompts
 	 * @property {boolean} [quotedStringSupport=false] Whether the custom prompt should respect quoted strings
-	 * @memberof KlasaClient
-	 */
-
-	/**
-	 * @typedef {Object} ConfigUpdateEntryMany
-	 * @property {'MANY'} type The type for config updates made with the updateMany pattern
-	 * @property {string[]} keys The keys changed
-	 * @property {Array<*>} values The values changed
-	 * @memberof KlasaClient
 	 */
 
 	/**
@@ -140,6 +124,13 @@ class KlasaClient extends Discord.Client {
 		if (typeof config !== 'object') throw new TypeError('Configuration for Klasa must be an object.');
 		config = util.mergeDefault(constants.DEFAULTS.CLIENT, config);
 		super(config);
+
+		/**
+		 * The options the client was instantiated with.
+		 * @since 0.5.0
+		 * @name KlasaClient#options
+		 * @type {KlasaClientOptions}
+		 */
 
 		/**
 		 * The directory to the node_modules folder where Klasa exists
@@ -410,7 +401,7 @@ class KlasaClient extends Discord.Client {
 	 * Use this to login to Discord with your bot
 	 * @since 0.0.1
 	 * @param {string} token Your bot token
-	 * @returns {Promise<string>}
+	 * @returns {string}
 	 */
 	async login(token) {
 		const timer = new Stopwatch();
@@ -426,19 +417,20 @@ class KlasaClient extends Discord.Client {
 
 		// Add the gateways
 		await Promise.all([
-			this.gateways.add('guilds', constants.GATEWAY_RESOLVERS.GUILDS, this.gateways.guildsSchema, this.options.gateways.guilds, false),
-			this.gateways.add('users', constants.GATEWAY_RESOLVERS.USERS, undefined, this.options.gateways.users, false),
-			this.gateways.add('clientStorage', constants.GATEWAY_RESOLVERS.CLIENT_STORAGE, this.gateways.clientStorageSchema, this.options.gateways.clientStorage, false)
+			this.gateways.add('guilds', this.gateways.guildsSchema, this.options.gateways.guilds, false),
+			this.gateways.add('users', undefined, this.options.gateways.users, false),
+			this.gateways.add('clientStorage', this.gateways.clientStorageSchema, this.options.gateways.clientStorage, false)
 		]);
 
 		// Automatic Prefix editing detection.
 		if (typeof this.options.prefix === 'string' && this.options.prefix !== this.gateways.guilds.schema.prefix.default) {
-			await this.gateways.guilds.schema.prefix.modify({ default: this.options.prefix });
+			await this.gateways.guilds.schema.prefix.edit({ default: this.options.prefix });
 		}
-		if (this.gateways.guilds.schema.hasKey('disabledCommands')) {
+		if (this.gateways.guilds.schema.has('disabledCommands')) {
 			const languageStore = this.languages;
+			const commandStore = this.commands;
 			this.gateways.guilds.schema.disabledCommands.setValidator(function (command, guild) { // eslint-disable-line
-				if (command && command.guarded) throw (guild ? guild.language : languageStore.default).language.get('COMMAND_CONF_GUARDED', command.name);
+				if ((cmd => cmd && cmd.guarded)(commandStore.get(command))) throw (guild ? guild.language : languageStore.default).get('COMMAND_CONF_GUARDED', command);
 			});
 		}
 
@@ -457,8 +449,8 @@ class KlasaClient extends Discord.Client {
 		if (!this.options.ownerID) this.options.ownerID = this.user.bot ? this.application.owner.id : this.user.id;
 
 		// Client-wide settings
-		this.configs = this.gateways.clientStorage.cache.get('clientStorage', this.user.id) || this.gateways.clientStorage.insertEntry(this.user.id);
-		await this.configs.sync().then(() => this.gateways.clientStorage.cache.set(this.type, this.user.id, this.configs));
+		this.configs = this.gateways.clientStorage.cache.get(this.user.id) || this.gateways.clientStorage.insertEntry(this.user.id);
+		await this.configs.sync();
 
 		// Init all the pieces
 		await Promise.all(this.pieceStores.filter(store => !['providers', 'extendables'].includes(store.name)).map(store => store.init()));
@@ -645,25 +637,24 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  */
 
 /**
- * Emitted when {@link Configuration.update} is run, the parameter path will be an object with the following format:
- * `{ type: 'MANY', keys: string[], values: Array<*> }`
+ * Emitted when {@link Configuration#update} or {@link Configuration#reset} is run.
  * @event KlasaClient#configUpdateEntry
  * @since 0.5.0
  * @param {Configuration} oldEntry The old configuration entry
  * @param {Configuration} newEntry The new configuration entry
- * @param {(string|ConfigUpdateEntryMany)} path The path of the key which changed
+ * @param {ConfigurationUpdateResultEntry[]} path The path of the key which changed
  */
 
 /**
- * Emitted when {@link Gateway.deleteEntry} is run.
+ * Emitted when {@link Gateway#deleteEntry} is run.
  * @event KlasaClient#configDeleteEntry
  * @since 0.5.0
  * @param {Configuration} entry The entry which got deleted
  */
 
 /**
- * Emitted when {@link Gateway.createEntry} is run or when {@link Gateway.getEntry}
- * with the create parameter set to true creates the entry.
+ * Emitted when {@link Gateway#createEntry} is run, when {@link Gateway#getEntry}
+ * with the create parameter set to true creates the entry, or an entry with no persistence gets updated.
  * @event KlasaClient#configCreateEntry
  * @since 0.5.0
  * @param {Configuration} entry The entry which got created

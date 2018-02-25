@@ -13,7 +13,6 @@ class Language extends Piece {
 
 	/**
 	 * @typedef {PieceOptions} LanguageOptions
-	 * @memberof Language
 	 */
 
 	/**

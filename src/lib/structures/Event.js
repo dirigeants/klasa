@@ -10,7 +10,6 @@ class Event extends Piece {
 
 	/**
 	 * @typedef {PieceOptions} EventOptions
-	 * @memberof Event
 	 */
 
 	/**

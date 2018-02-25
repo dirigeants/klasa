@@ -14,7 +14,6 @@ class Monitor extends Piece {
 	 * @property {boolean} [ignoreSelf=true] Whether the monitor ignores itself or not
 	 * @property {boolean} [ignoreOthers=true] Whether the monitor ignores others or not
 	 * @property {boolean} [ignoreWebhooks=true] Whether the monitor ignores webhooks or not
-	 * @memberof Monitor
 	 */
 
 	/**
