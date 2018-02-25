@@ -1289,7 +1289,7 @@ declare module 'klasa' {
 		public static getDeepTypeName(input: any): string;
 		public static getDeepTypeProxy(input: Proxy<any>): string;
 		public static getDeepTypeSetOrMap(input: Array<any> | Set<any> | WeakSet<any>, basic?: string): string;
-		public static getIdentifier(value: any): string;
+		public static getIdentifier(value: string | number | null | { id?: string | number, name?: string | number }): string | number | null;
 		public static getTypeName(input: any): string;
 		public static isClass(input: Function): boolean;
 		public static isFunction(input: Function): boolean;
