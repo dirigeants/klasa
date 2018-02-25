@@ -286,6 +286,7 @@ module.exports = Structures.extend('Message', Message => {
 			else options = this.combineContentOptions(content, options);
 
 			if (options.split && typeof options.code !== 'undefined' && (typeof options.code !== 'boolean' || options.code === true)) {
+				if (typeof options.split === 'boolean') options.split = {};
 				options.split.prepend = `\`\`\`${typeof options.code !== 'boolean' ? options.code || '' : ''}\n`;
 				options.split.append = '\n```';
 			}

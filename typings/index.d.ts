@@ -1306,6 +1306,8 @@ declare module 'klasa' {
 		public static toTitleCase(str: string): string;
 		public static tryParse(value: string): object;
 		private static initClean(client: KlasaClient): void;
+
+		public static titleCaseVariants: TitleCaseVariants;
 	}
 
 	export { Util as util };
@@ -1922,6 +1924,14 @@ declare module 'klasa' {
 	export type Proxy<T> = {
 		get(): T;
 		set(value: T): void;
+	};
+
+	export type TitleCaseVariants = {
+		textchannel: 'TextChannel';
+		voicechannel: 'VoiceChannel';
+		categorychannel: 'CategoryChannel';
+		guildmember: 'GuildMember';
+		[key: string]: string;
 	};
 
 //#endregion

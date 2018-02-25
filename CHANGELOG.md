@@ -21,6 +21,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Added `GatewayDriver#register` to be able to register new gateways without events (directly in your `app.js`). (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Added `util.getIdentifier` as a replacement for the function validator. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Added `SchemaFolder#keys()`, `SchemaFolder#values()`, `SchemaFolder#entries()` and `SchemaFolder#[@@iterator]()`. Identical to Map's respective methods. (kyranet)
+- [[#201](https://github.com/dirigeants/klasa/pull/201)] Improve `util.toTitleCase`. (KingDGrizzle)
 - [[#186](https://github.com/dirigeants/klasa/pull/186)] Added a **load** command. (kyranet)
 - [[#176](https://github.com/dirigeants/klasa/pull/176)] Added `categorychannel` type to `ArgResolver`. (kyranet)
 - [[#166](https://github.com/dirigeants/klasa/pull/166)] Added support for TypeScript's `export default` in the loader. (kyranet)
