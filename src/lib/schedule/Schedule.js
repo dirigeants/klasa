@@ -11,7 +11,6 @@ class Schedule {
 	 * @property {string} [id] The ID for the task. By default, it generates one in base36
 	 * @property {string} [repeat] The {@link Cron} pattern
 	 * @property {*} [data] The data to pass to the Task piece when the ScheduledTask is ready for execution
-	 * @memberof Schedule
 	 */
 
 	/**
@@ -65,8 +64,8 @@ class Schedule {
 	 */
 	async init() {
 		const { schema } = this.client.gateways.clientStorage;
-		if (!schema.hasKey('schedules')) {
-			await schema.addKey('schedules', {
+		if (!schema.has('schedules')) {
+			await schema.add('schedules', {
 				type: 'any',
 				default: [],
 				min: null,
@@ -136,7 +135,7 @@ class Schedule {
 	 * @param {string} taskName The name of the task
 	 * @param {(Date|number|string)} time The time or Cron pattern
 	 * @param {ScheduledTaskOptions} options The options for the ScheduleTask instance
-	 * @returns {Promise<ScheduledTask>}
+	 * @returns {ScheduledTask}
 	 * @example
 	 * // Create a new reminder that ends in 2018-03-09T12:30:00.000Z (UTC)
 	 * Schedule.create('reminder', new Date(Date.UTC(2018, 2, 9, 12, 30)), {
@@ -167,7 +166,7 @@ class Schedule {
 	 * Delete a Task by its ID
 	 * @since 0.5.0
 	 * @param {string} id The ID to search for
-	 * @returns {Promise<this>}
+	 * @returns {this}
 	 */
 	async delete(id) {
 		const _task = this._tasks.find(entry => entry.id === id);
@@ -240,6 +239,20 @@ class Schedule {
 	_checkInterval() {
 		if (this.tasks.length === 0) this._clearInterval();
 		else if (!this._interval) this._interval = this.client.setInterval(this.execute.bind(this), this.timeInterval);
+	}
+
+	/**
+	 * Returns a new Iterator object that contains the values for each element contained in the task queue.
+	 * @name @@iterator
+	 * @since 0.5.0
+	 * @method
+	 * @instance
+	 * @generator
+	 * @returns {Iterator<ScheduledTask>}
+	 */
+
+	*[Symbol.iterator]() {
+		for (let i = 0; i < this.tasks.length; i++) yield this.tasks[i];
 	}
 
 }

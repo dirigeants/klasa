@@ -1,10 +1,10 @@
 const SchemaPiece = require('./SchemaPiece');
 const Schema = require('./Schema');
-const { toTitleCase, deepClone } = require('../util/util');
+const { deepClone, isObject } = require('../util/util');
 const fs = require('fs-nextra');
 
 /**
- * <warning>You should never create an instance of this class. Use {@link SchemaFolder#addFolder} instead.</warning>
+ * <warning>You should never create an instance of this class. Use {@link SchemaFolder#add} instead.</warning>
  * The schema class that stores (nested) folders and keys for SettingGateway usage. This class also implements multiple helpers.
  */
 class SchemaFolder extends Schema {
@@ -18,7 +18,6 @@ class SchemaFolder extends Schema {
 	 * @property {boolean} [array] Whether the key should be stored as Array or not
 	 * @property {string} [sql] The datatype of the key
 	 * @property {boolean} [configurable] Whether the key should be configurable by the config command or not
-	 * @memberof SchemaFolder
 	 */
 
 	/**
@@ -42,22 +41,6 @@ class SchemaFolder extends Schema {
 		Object.defineProperty(this, 'type', { value: 'Folder' });
 
 		/**
-		 * The default values for this schema instance and children.
-		 * @since 0.5.0
-		 * @type {Object}
-		 * @name SchemaFolder#defaults
-		 */
-		Object.defineProperty(this, 'defaults', { value: {}, writable: true });
-
-		/**
-		 * A Set containing all keys' names which value is either a SchemaFolder or a SchemaPiece instance.
-		 * @since 0.5.0
-		 * @type {Set<string>}
-		 * @name SchemaFolder#keys
-		 */
-		Object.defineProperty(this, 'keys', { value: new Set(), writable: true });
-
-		/**
 		 * A pre-processed array with all keys' names.
 		 * @since 0.5.0
 		 * @type {string[]}
@@ -76,64 +59,103 @@ class SchemaFolder extends Schema {
 	 */
 	get configurableKeys() {
 		if (this.keyArray.length === 0) return [];
-		return this.keyArray.filter(key => this[key].type === 'Folder' || this[key].configurable);
+		return this.keyArray.filter(key => this[key].type === 'Folder' ? this[key].configurableKeys.length : this[key].configurable);
+	}
+
+	/**
+	 * The default values for this schema instance and children.
+	 * @since 0.5.0
+	 * @type {Object}
+	 * @readonly
+	 */
+	get defaults() {
+		const defaults = {};
+		for (const [key, value] of this) {
+			defaults[key] = value.type === 'Folder' ? value.defaults : value.default;
+		}
+		return defaults;
 	}
 
 	/**
 	 * Create a new nested folder.
 	 * @since 0.5.0
 	 * @param {string} key The name's key for the folder
-	 * @param {Object} [object={}] An object containing all the SchemaFolders/SchemaPieces literals for this folder
+	 * @param {Object} options An object containing the options for the new piece or folder. Check {@tutorial UnderstandingSchemaFolders}
 	 * @param {boolean} [force=true] Whether this function call should modify all entries from the database
-	 * @returns {Promise<SchemaFolder>}
+	 * @returns {SchemaFolder}
+	 * @example
+	 * // Add a new SchemaPiece
+	 * SchemaFolder.add('modlog', {
+	 *     type: 'TextChannel'
+	 * });
+	 *
+	 * // Add an empty new SchemaFolder
+	 * SchemaFolder.add('channels');
+	 *
+	 * // Optionally, you can set the type Folder,
+	 * // if no type is set, 'Folder' will be implied.
+	 * SchemaFolder.add('channels', {
+	 *     type: 'Folder'
+	 * });
+	 *
+	 * // Add a new SchemaFolder with a modlog key inside
+	 * SchemaFolder.add('channels', {
+	 *     modlog: {
+	 *         type: 'TextChannel'
+	 *     }
+	 * });
 	 */
-	async addFolder(key, object = {}, force = true) {
-		if (this.hasKey(key)) throw `The key ${key} already exists in the current schema.`;
-		if (typeof this[key] !== 'undefined') throw `The key ${key} conflicts with a property of Schema.`;
+	async add(key, options = {}, force = true) {
+		if (this.has(key)) throw new Error(`The key ${key} already exists in the current schema.`);
+		if (typeof this[key] !== 'undefined') throw new Error(`The key ${key} conflicts with a property of Schema.`);
+		if (!options || !isObject(options)) throw new Error(`The options object is required.`);
+		if (typeof options.type !== 'string' || options.type.toLowerCase() === 'folder') options.type = 'Folder';
 
-		const folder = this._addKey(key, object, SchemaFolder);
+		// Create the piece and save the current schema
+		const piece = this._add(key, options, options.type === 'Folder' ? SchemaFolder : SchemaPiece);
 		await fs.outputJSONAtomic(this.gateway.filePath, this.gateway.schema.toJSON());
 
 		if (this.gateway.sql) {
-			if (folder.keyArray.length > 0) {
-				if (typeof this.gateway.provider.addColumn === 'function') await this.gateway.provider.addColumn(this.gateway.type, folder.getSQL());
-				else throw new Error('The method \'addColumn\' in your provider is required in order to add new columns.');
+			if (piece.type !== 'Folder' || piece.keyArray.length) {
+				await this.gateway.provider.addColumn(this.gateway.type, piece.type === 'Folder' ?
+					piece.getSQL() : piece.sql[1]);
 			}
-		} else if (force || this.gateway.type === 'clientStorage') {
-			await this.force('add', key, folder);
+		} else if (force || (this.gateway.type === 'clientStorage' && this.client.shard)) {
+			await this.force('add', key, piece);
 		}
 
-		await this._shardSyncSchema(folder, 'add', force);
-		if (this.client.listenerCount('schemaKeyAdd')) this.client.emit('schemaKeyAdd', folder);
+		await this._shardSyncSchema(piece, 'add', force);
+		this.client.emit('schemaKeyAdd', piece);
 		return this.gateway.schema;
 	}
 
 	/**
-	 * Remove a nested folder.
+	 * Remove a key
 	 * @since 0.5.0
-	 * @param {string} key The folder's name to remove
+	 * @param {string} key The key's name to remove
 	 * @param {boolean} [force=true] Whether this function call should modify all entries from the database
-	 * @returns {Promise<SchemaFolder>}
+	 * @returns {SchemaFolder}
 	 */
-	async removeFolder(key, force = true) {
-		if (this.hasKey(key) === false) throw new Error(`The key ${key} does not exist in the current schema.`);
-		if (this[key].type !== 'Folder') throw new Error(`The key ${key} is not Folder type.`);
+	async remove(key, force = true) {
+		if (!this.has(key)) throw new Error(`The key ${key} does not exist in the current schema.`);
 
-		const folder = this[key];
-		this._removeKey(key);
+		// Get the key, remove it from the configs and update the persistent schema
+		const piece = this._remove(key);
 		await fs.outputJSONAtomic(this.gateway.filePath, this.gateway.schema.toJSON());
 
+		// A SQL database has the advantage of being able to update all keys along the schema, so force is ignored
 		if (this.gateway.sql) {
-			if (folder.keyArray.length > 0) {
-				if (typeof this.gateway.provider.removeColumn === 'function') await this.gateway.provider.removeColumn(this.gateway.type, folder.getKeys());
-				else throw new Error('The method \'removeColumn\' in your provider is required in order to remove columns.');
+			if (piece.type !== 'Folder' || (piece.type === 'Folder' && piece.keyArray.length > 0)) {
+				await this.gateway.provider.removeColumn(this.gateway.type, piece.type === 'Folder' ?
+					[...piece.keys(true)] : key);
 			}
-		} else if (force || this.gateway.type === 'clientStorage') {
-			await this.force('delete', key, folder);
+		} else if (force || (this.gateway.type === 'clientStorage' && this.client.shard)) {
+			// If force, or if the gateway is clientStorage, it should update all entries
+			await this.force('delete', key, piece);
 		}
 
-		await this._shardSyncSchema(folder, 'delete', force);
-		if (this.client.listenerCount('schemaKeyRemove')) this.client.emit('schemaKeyRemove', folder);
+		await this._shardSyncSchema(piece, 'delete', force);
+		this.client.emit('schemaKeyRemove', piece);
 		return this.gateway.schema;
 	}
 
@@ -143,78 +165,29 @@ class SchemaFolder extends Schema {
 	 * @param {string} key The key to check
 	 * @returns {boolean}
 	 */
-	hasKey(key) {
-		return this.keys.has(key);
-	}
-
-	/**
-	 * Add a new key to this folder.
-	 * @since 0.5.0
-	 * @param {string} key The name for the key
-	 * @param {SchemaFolderAddOptions} options The key's options to apply
-	 * @param {boolean} [force=true] Whether this function call should modify all entries from the database
-	 * @returns {Promise<SchemaFolder>}
-	 */
-	async addKey(key, options, force = true) {
-		this._addKey(key, this._verifyKeyOptions(key, options), SchemaPiece);
-		await fs.outputJSONAtomic(this.gateway.filePath, this.gateway.schema.toJSON());
-
-		if (this.gateway.sql) {
-			if (typeof this.gateway.provider.addColumn === 'function') await this.gateway.provider.addColumn(this.gateway.type, key, this[key].sql[1]);
-			else throw new Error('The method \'addColumn\' in your provider is required in order to add new columns.');
-		} else if (force || this.gateway.type === 'clientStorage') {
-			await this.force('add', key, this[key]);
-		}
-
-		await this._shardSyncSchema(this[key], 'add', force);
-		if (this.client.listenerCount('schemaKeyAdd')) this.client.emit('schemaKeyAdd', this[key]);
-		return this.gateway.schema;
-	}
-
-	/**
-	 * Remove a key from this folder.
-	 * @since 0.5.0
-	 * @param {string} key The key's name to remove
-	 * @param {boolean} [force=true] Whether this function call should modify all entries from the database
-	 * @returns {Promise<SchemaFolder>}
-	 */
-	async removeKey(key, force = true) {
-		if (this.hasKey(key) === false) throw `The key ${key} does not exist in the current schema.`;
-		const schemaPiece = this[key];
-		this._removeKey(key);
-		await fs.outputJSONAtomic(this.gateway.filePath, this.gateway.schema.toJSON());
-
-		if (this.gateway.sql) {
-			if (typeof this.gateway.provider.removeColumn === 'function') await this.gateway.provider.removeColumn(this.gateway.type, key);
-			else throw new Error('The method \'removeColumn\' in your provider is required in order to remove columns.');
-		} else if (force) {
-			await this.force('delete', key, schemaPiece);
-		}
-
-		await this._shardSyncSchema(schemaPiece, 'delete', force);
-		if (this.client.listenerCount('schemaKeyRemove')) this.client.emit('schemaKeyRemove', schemaPiece);
-		return this.gateway.schema;
+	has(key) {
+		return this.keyArray.includes(key);
 	}
 
 	/**
 	 * Modifies all entries from the database.
 	 * @since 0.5.0
-	 * @param {('add'|'edit'|'delete')} action The action to perform
+	 * @param {('add'|'delete')} action The action to perform
 	 * @param {string} key The key
 	 * @param {(SchemaPiece|SchemaFolder)} piece The SchemaPiece instance to handle
 	 * @returns {Promise<*>}
 	 * @private
 	 */
 	force(action, key, piece) {
-		if (!(piece instanceof SchemaPiece) && !(piece instanceof SchemaFolder)) throw new TypeError(`'schemaPiece' must be an instance of 'SchemaPiece' or an instance of 'SchemaFolder'.`);
+		if (!(piece instanceof SchemaPiece) && !(piece instanceof SchemaFolder)) {
+			throw new TypeError(`'schemaPiece' must be an instance of 'SchemaPiece' or an instance of 'SchemaFolder'.`);
+		}
 
-		const values = this.gateway.cache.getValues(this.gateway.type);
 		const path = piece.path.split('.');
 
-		if (action === 'add' || action === 'edit') {
-			const defValue = this.defaults[key];
-			for (let i = 0; i < values.length; i++) {
-				let value = values[i];
+		if (action === 'add') {
+			const defValue = piece.type === 'Folder' ? piece.defaults : piece.default;
+			for (let value of this.gateway.cache.values()) {
 				for (let j = 0; j < path.length - 1; j++) value = value[path[j]];
 				value[path[path.length - 1]] = deepClone(defValue);
 			}
@@ -222,8 +195,7 @@ class SchemaFolder extends Schema {
 		}
 
 		if (action === 'delete') {
-			for (let i = 0; i < values.length; i++) {
-				let value = values[i];
+			for (let value of this.gateway.cache.values()) {
 				for (let j = 0; j < path.length - 1; j++) value = value[path[j]];
 				delete value[path[path.length - 1]];
 			}
@@ -231,40 +203,6 @@ class SchemaFolder extends Schema {
 		}
 
 		throw new TypeError(`Action must be either 'add' or 'delete'. Got: ${action}`);
-	}
-
-	/**
-	 * Get a list.
-	 * @since 0.5.0
-	 * @param {KlasaMessage} msg The Message instance
-	 * @returns {string}
-	 */
-	getList(msg) {
-		const array = [];
-		const folders = [];
-		const keys = {};
-		let longest = 0;
-		for (const key of this.keyArray) {
-			if (this[key].type === 'Folder') {
-				folders.push(`// ${key}`);
-			} else if (this[key].configurable) {
-				if (!(this[key].type in keys)) keys[this[key].type] = [];
-				if (key.length > longest) longest = key.length;
-				keys[this[key].type].push(key);
-			}
-		}
-		const keysTypes = Object.keys(keys);
-		if (folders.length === 0 && keysTypes.length === 0) return '';
-		if (folders.length) array.push('= Folders =', ...folders.sort(), '');
-		if (keysTypes.length) {
-			for (const keyType of keysTypes.sort()) {
-				keys[keyType].sort();
-				array.push(`= ${toTitleCase(keyType)}s =`);
-				for (let i = 0; i < keys[keyType].length; i++) array.push(`${keys[keyType][i].padEnd(longest)} :: ${this[keys[keyType][i]].resolveString(msg)}`);
-				array.push('');
-			}
-		}
-		return array.join('\n');
 	}
 
 	/**
@@ -297,42 +235,6 @@ class SchemaFolder extends Schema {
 	}
 
 	/**
-	 * Get all the pathes from this schema's children.
-	 * @since 0.5.0
-	 * @param {string[]} [array=[]] The array to push.
-	 * @returns {string[]}
-	 */
-	getKeys(array = []) {
-		for (const key of this.keyArray) {
-			if (this[key].type === 'Folder') this[key].getKeys(array);
-			else array.push(this[key].path);
-		}
-		return array;
-	}
-
-	/**
-	 * Get all the SchemaPieces instances from this schema's children. Used for SQL.
-	 * @since 0.5.0
-	 * @param {string[]} [array=[]] The array to push.
-	 * @returns {SchemaPiece[]}
-	 */
-	getValues(array = []) {
-		for (const key of this.keyArray) {
-			if (this[key].type === 'Folder') this[key].getValues(array);
-			else array.push(this[key]);
-		}
-		return array;
-	}
-
-	/**
-	 * @since 0.5.0
-	 * @returns {string}
-	 */
-	resolveString() {
-		return this.toString();
-	}
-
-	/**
 	 * Add a key to the instance.
 	 * @since 0.5.0
 	 * @param {string} key The name of the key
@@ -341,33 +243,33 @@ class SchemaFolder extends Schema {
 	 * @returns {(SchemaFolder|SchemaPiece)}
 	 * @private
 	 */
-	_addKey(key, options, Piece) {
-		if (this.hasKey(key)) throw new Error(`The key '${key}' already exists.`);
-		const piece = new Piece(this.client, this.gateway, options, this, key);
-		this[key] = piece;
-		this.defaults[key] = piece.type === 'Folder' ? piece.defaults : options.default;
+	_add(key, options, Piece) {
+		if (this.has(key)) throw new Error(`The key '${key}' already exists.`);
+		this[key] = new Piece(this.client, this.gateway, options, this, key);
 
-		this.keys.add(key);
-		this.keyArray.push(key);
-		this.keyArray.sort((a, b) => a.localeCompare(b));
+		const index = this.keyArray.findIndex(entry => entry.localeCompare(key));
+		if (index === -1) this.keyArray.push(key);
+		else this.keyArray.splice(index, 0, key);
 
-		return piece;
+		return this[key];
 	}
 
 	/**
 	 * Remove a key from the instance.
 	 * @since 0.5.0
 	 * @param {string} key The name of the key
+	 * @returns {(SchemaFolder|SchemaPiece)}
 	 * @private
 	 */
-	_removeKey(key) {
+	_remove(key) {
 		const index = this.keyArray.indexOf(key);
 		if (index === -1) throw new Error(`The key '${key}' does not exist.`);
 
-		this.keys.delete(key);
 		this.keyArray.splice(index, 1);
+		const piece = this[key];
 		delete this[key];
-		delete this.defaults[key];
+
+		return piece;
 	}
 
 	/**
@@ -383,38 +285,9 @@ class SchemaFolder extends Schema {
 		await this.client.shard.broadcastEval(`
 			if (this.shard.id !== ${this.client.shard.id}) {
 				this.gateways.${this.gateway.type}._shardSync(
-					${JSON.stringify(piece.path.split('.'))}, ${JSON.stringify(piece)}, ${action}, ${force});
+					${JSON.stringify(piece.path.split('.'))}, ${JSON.stringify(piece)}, '${action}', ${force});
 			}
 		`);
-	}
-
-	/**
-	 * Verifies the key add options.
-	 * @since 0.5.0
-	 * @param {string} key The name for the key
-	 * @param {SchemaFolderAddOptions} options The key's options to apply
-	 * @returns {addOptions}
-	 * @private
-	 */
-	_verifyKeyOptions(key, options) {
-		if (this.hasKey(key)) throw `The key ${key} already exists in the current schema.`;
-		if (typeof this[key] !== 'undefined') throw `The key ${key} conflicts with a property of Schema.`;
-		if (!options) throw 'You must pass an options argument to this method.';
-		if (typeof options.type !== 'string') throw 'The option type is required and must be a string.';
-		options.type = options.type.toLowerCase();
-		if (!this.client.gateways.types.includes(options.type)) throw `The type ${options.type} is not supported.`;
-		if (typeof options.min !== 'undefined' && isNaN(options.min)) throw 'The option min must be a number.';
-		if (typeof options.max !== 'undefined' && isNaN(options.max)) throw 'The option max must be a number.';
-		if (typeof options.array !== 'undefined' && typeof options.array !== 'boolean') throw 'The option array must be a boolean.';
-		if (typeof options.configurable !== 'undefined' && typeof options.configurable !== 'boolean') throw 'The option configurable must be a boolean.';
-		if (options.array) {
-			if (typeof options.default === 'undefined') options.default = [];
-			else if (!Array.isArray(options.default)) throw 'The option default must be an array if the array option is set to true.';
-		} else {
-			if (typeof options.default === 'undefined') options.default = options.type === 'boolean' ? false : null;
-			options.array = false;
-		}
-		return options;
 	}
 
 	/**
@@ -434,13 +307,10 @@ class SchemaFolder extends Schema {
 			if (object[key].type === 'Folder') {
 				const folder = new SchemaFolder(this.client, this.gateway, object[key], this, key);
 				this[key] = folder;
-				this.defaults[key] = folder.defaults;
 			} else {
 				const piece = new SchemaPiece(this.client, this.gateway, object[key], this, key);
 				this[key] = piece;
-				this.defaults[key] = piece.default;
 			}
-			this.keys.add(key);
 			this.keyArray.push(key);
 		}
 		this.keyArray.sort((a, b) => a.localeCompare(b));
@@ -450,9 +320,78 @@ class SchemaFolder extends Schema {
 	}
 
 	/**
+	 * Returns a new Iterator object that contains the `[key, value]` pairs for each element contained in this folder.
+	 * Identical to [Map.entries()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/entries)
+	 * @since 0.5.0
+	 * @param {boolean} recursive Whether the iteration should be recursive
+	 * @yields {Array<string|SchemaFolder|SchemaPiece>}
+	 */
+	*entries(recursive = false) {
+		if (recursive) {
+			for (const key of this.keyArray) {
+				if (this[key].type === 'Folder') yield* this[key].entries(true);
+				else yield [key, this[key]];
+			}
+		} else {
+			for (const key of this.keyArray) yield [key, this[key]];
+		}
+	}
+
+	/**
+	 * Returns a new Iterator object that contains the values for each element contained in this folder.
+	 * Identical to [Map.values()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/values)
+	 * @since 0.5.0
+	 * @param {boolean} recursive Whether the iteration should be recursive
+	 * @yields {(SchemaFolder|SchemaPiece)}
+	 */
+	*values(recursive = false) {
+		if (recursive) {
+			for (const key of this.keyArray) {
+				if (this[key].type === 'Folder') yield* this[key].values(true);
+				else yield this[key];
+			}
+		} else {
+			for (const key of this.keyArray) yield this[key];
+		}
+	}
+
+	/**
+	 * Returns a new Iterator object that contains the keys for each element contained in this folder.
+	 * Identical to [Map.keys()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/keys)
+	 * @since 0.5.0
+	 * @param {boolean} recursive Whether the iteration should be recursive
+	 * @yields {string}
+	 */
+	*keys(recursive = false) {
+		if (recursive) {
+			for (const key of this.keyArray) {
+				if (this[key].type === 'Folder') yield* this[key].keys(true);
+				else yield key;
+			}
+		} else {
+			for (const key of this.keyArray) yield key;
+		}
+	}
+
+	/**
+	 * Returns a new Iterator object that contains the `[key, value]` pairs for each element contained in this folder.
+	 * Identical to [Map.entries()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/entries)
+	 * @name @@iterator
+	 * @since 0.5.0
+	 * @method
+	 * @instance
+	 * @generator
+	 * @returns {Iterator<Array<string|SchemaFolder|SchemaPiece>>}
+	 */
+
+	[Symbol.iterator]() {
+		return this.entries();
+	}
+
+	/**
 	 * Get a JSON object containing all the objects from this schema's children.
 	 * @since 0.5.0
-	 * @returns {any}
+	 * @returns {Object}
 	 */
 	toJSON() {
 		return Object.assign({ type: 'Folder' }, ...this.keyArray.map(key => ({ [key]: this[key].toJSON() })));

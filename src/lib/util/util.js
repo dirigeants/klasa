@@ -62,7 +62,7 @@ class Util {
 	 * @returns {string}
 	 */
 	static toTitleCase(str) {
-		return str.replace(/[A-Za-zÀ-ÖØ-öø-ÿ]\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+		return str.replace(/[A-Za-zÀ-ÖØ-öø-ÿ]\S*/g, (txt) => Util.titleCaseVariants[txt] || txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
 	}
 
 	/**
@@ -103,7 +103,7 @@ class Util {
 		}
 		if (Util.isObject(source)) {
 			const output = {};
-			for (const key in source) output[key] = source[key];
+			for (const key in source) output[key] = Util.deepClone(source[key]);
 			return output;
 		}
 		if (source instanceof Map || source instanceof WeakMap) {
@@ -257,7 +257,7 @@ class Util {
 	 * @returns {string}
 	 */
 	static getDeepTypeSetOrArray(input, basic = Util.getTypeName(input)) {
-		if (!(input instanceof Array || input instanceof Set || input instanceof WeakSet)) return basic;
+		if (!(Array.isArray(input) || input instanceof Set || input instanceof WeakSet)) return basic;
 		const types = new Set();
 		for (const value of input) {
 			const type = Util.getDeepTypeName(value);
@@ -295,6 +295,21 @@ class Util {
 	}
 
 	/**
+	 * Get the identifier of a value.
+	 * @since 0.5.0
+	 * @param {*} value The value to get the identifier from
+	 * @returns {?(string|number|boolean)}
+	 */
+	static getIdentifier(value) {
+		if (['string', 'number', 'boolean'].includes(typeof value)) return value;
+		if (Util.isObject(value)) {
+			if ('id' in value) return value.id;
+			if ('name' in value) return value.name;
+		}
+		return null;
+	}
+
+	/**
 	 * Turn a dotted path into a json object.
 	 * @since 0.5.0
 	 * @param {string} path The dotted path
@@ -310,6 +325,27 @@ class Util {
 		for (const key of route) reference = reference[key] = {};
 		reference[lastKey] = value;
 		return object;
+	}
+
+	/**
+	 * Compare if both arrays are equal
+	 * @param {any[]} arr1 The first array to compare
+	 * @param {any[]} arr2 The second array to compare
+	 * @param {boolean} clone Whether this check should clone the second array
+	 * @returns {boolean}
+	 */
+	static arraysEqual(arr1, arr2, clone = false) {
+		if (arr1 === arr2) return true;
+		if (arr1.length !== arr2.length) return false;
+		// Clone the array
+		if (clone) arr2 = arr2.slice(0);
+
+		for (const item of arr1) {
+			const ind = arr2.indexOf(item);
+			if (ind !== -1) arr2.splice(ind, 1);
+		}
+
+		return arr2.length === 0;
 	}
 
 	/**
@@ -346,7 +382,6 @@ class Util {
  * @property {string|number} [killSignal='SIGTERM'] The kill signal
  * @property {number} [uid] Sets the user identity of the process
  * @property {number} [gid] Sets the group identity of the process
- * @memberof Util
  */
 
 /**
@@ -370,5 +405,18 @@ Util.exec = promisify(exec);
  * @static
  */
 Util.sleep = promisify(setTimeout);
+
+/**
+ * Object with certain title case variants for words
+ * @since 0.5.0
+ * @type {Object}
+ * @static
+ */
+Util.titleCaseVariants = {
+	textchannel: 'TextChannel',
+	voicechannel: 'VoiceChannel',
+	categorychannel: 'CategoryChannel',
+	guildmember: 'GuildMember'
+};
 
 module.exports = Util;

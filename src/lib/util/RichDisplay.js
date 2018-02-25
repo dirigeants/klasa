@@ -7,21 +7,14 @@ const ReactionHandler = require('./ReactionHandler');
 class RichDisplay {
 
 	/**
-	 * A single unicode character
-	 * @typedef {string} emoji
-	 * @memberof RichDisplay
-	 */
-
-	/**
 	 * @typedef {Object} RichDisplayEmojisObject
-	 * @property {emoji} first The emoji for the 'first' button
-	 * @property {emoji} back The emoji for the 'back' button
-	 * @property {emoji} forward The emoji for the 'forward' button
-	 * @property {emoji} last The emoji for the 'last' button
-	 * @property {emoji} jump The emoji for the 'jump' button
-	 * @property {emoji} info The emoji for the 'info' button
-	 * @property {emoji} stop The emoji for the 'stop' button
-	 * @memberof RichDisplay
+	 * @property {Emoji} first The emoji for the 'first' button
+	 * @property {Emoji} back The emoji for the 'back' button
+	 * @property {Emoji} forward The emoji for the 'forward' button
+	 * @property {Emoji} last The emoji for the 'last' button
+	 * @property {Emoji} jump The emoji for the 'jump' button
+	 * @property {Emoji} info The emoji for the 'info' button
+	 * @property {Emoji} stop The emoji for the 'stop' button
 	 */
 
 	/**
@@ -36,7 +29,6 @@ class RichDisplay {
 	 * @property {number} [maxEmojis] The maximum number of emojis to collect
 	 * @property {number} [maxUsers] The maximum number of users to react
 	 * @property {number} [time] The maximum amount of time before this RichDisplay should expire
-	 * @memberof RichDisplay
 	 */
 
 	/**
@@ -226,11 +218,11 @@ class RichDisplay {
 	/**
 	 * Determines the emojis to use in this display
 	 * @since 0.4.0
-	 * @param {emoji[]} emojis An array of emojis to use
+	 * @param {Emoji[]} emojis An array of emojis to use
 	 * @param {boolean} stop Whether the stop emoji should be included
 	 * @param {boolean} jump Whether the jump emoji should be included
 	 * @param {boolean} firstLast Whether the first & last emojis should be included
-	 * @returns {emoji[]}
+	 * @returns {Emoji[]}
 	 * @private
 	 */
 	_determineEmojis(emojis, stop, jump, firstLast) {

@@ -33,7 +33,6 @@ class Command extends Piece {
 	 * @property {(false|string)} [sendReturn=false] Whether to send the return value as a message; use "apply" if you return an array of args for KlasaMessage#sendMessage
 	 * @property {string} [usage=''] The usage string for the command
 	 * @property {?string} [usageDelim=undefined] The string to delimit the command input for usage
-	 * @memberof Command
 	 */
 
 	/**
@@ -288,7 +287,7 @@ class Command extends Piece {
 	 * @since 0.0.1
 	 * @param {KlasaMessage} msg The command message mapped on top of the message used to trigger this command
 	 * @param {any[]} params The fully resolved parameters based on your usage / usageDelim
-	 * @returns {Promise<KlasaMessage|KlasaMessage[]>} You should return the response message whenever possible
+	 * @returns {KlasaMessage|KlasaMessage[]} You should return the response message whenever possible
 	 * @abstract
 	 */
 	async run(msg) {

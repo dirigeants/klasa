@@ -14,7 +14,7 @@ class ArgResolver extends Resolver {
 	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @param {Function} custom The custom resolver
-	 * @returns {Promise<any>}
+	 * @returns {*}
 	 */
 	async custom(arg, possible, msg, custom) {
 		try {
@@ -32,7 +32,7 @@ class ArgResolver extends Resolver {
 	 * @param {string} arg The argument to parse
 	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {Promise<Piece>}
+	 * @returns {Piece}
 	 */
 	async piece(arg, possible, msg) {
 		for (const store of this.client.pieceStores.values()) {
@@ -48,7 +48,7 @@ class ArgResolver extends Resolver {
 	 * @param {string} arg The argument to parse
 	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {Promise<Store>}
+	 * @returns {Store}
 	 */
 	async store(arg, possible, msg) {
 		const store = this.client.pieceStores.get(arg);
@@ -64,7 +64,7 @@ class ArgResolver extends Resolver {
 	 * @param {KlasaMessage} msg The message that triggered the command
 	 * @returns {Promise<Command>}
 	 */
-	async command(...args) {
+	command(...args) {
 		return this.cmd(...args);
 	}
 
@@ -74,7 +74,7 @@ class ArgResolver extends Resolver {
 	 * @param {string} arg The argument to parse
 	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {Promise<Command>}
+	 * @returns {Command}
 	 */
 	async cmd(arg, possible, msg) {
 		const command = this.client.commands.get(arg);
@@ -88,7 +88,7 @@ class ArgResolver extends Resolver {
 	 * @param {string} arg The argument to parse
 	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {Promise<Event>}
+	 * @returns {Event}
 	 */
 	async event(arg, possible, msg) {
 		const event = this.client.events.get(arg);
@@ -102,7 +102,7 @@ class ArgResolver extends Resolver {
 	 * @param {string} arg The argument to parse
 	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {Promise<Extendable>}
+	 * @returns {Extendable}
 	 */
 	async extendable(arg, possible, msg) {
 		const extendable = this.client.extendables.get(arg);
@@ -116,7 +116,7 @@ class ArgResolver extends Resolver {
 	 * @param {string} arg The argument to parse
 	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {Promise<Finalizer>}
+	 * @returns {Finalizer}
 	 */
 	async finalizer(arg, possible, msg) {
 		const finalizer = this.client.finalizers.get(arg);
@@ -130,7 +130,7 @@ class ArgResolver extends Resolver {
 	 * @param {string} arg The argument to parse
 	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {Promise<Inhibitor>}
+	 * @returns {Inhibitor}
 	 */
 	async inhibitor(arg, possible, msg) {
 		const inhibitor = this.client.inhibitors.get(arg);
@@ -144,7 +144,7 @@ class ArgResolver extends Resolver {
 	 * @param {string} arg The argument to parse
 	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {Promise<Monitor>}
+	 * @returns {Monitor}
 	 */
 	async monitor(arg, possible, msg) {
 		const monitor = this.client.monitors.get(arg);
@@ -158,7 +158,7 @@ class ArgResolver extends Resolver {
 	 * @param {string} arg The argument to parse
 	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {Promise<Language>}
+	 * @returns {Language}
 	 */
 	async language(arg, possible, msg) {
 		const language = this.client.languages.get(arg);
@@ -172,7 +172,7 @@ class ArgResolver extends Resolver {
 	 * @param {string} arg The argument to parse
 	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {Promise<Provider>}
+	 * @returns {Provider}
 	 */
 	async provider(arg, possible, msg) {
 		const provider = this.client.providers.get(arg);
@@ -186,7 +186,7 @@ class ArgResolver extends Resolver {
 	 * @param {string} arg The argument to parse
 	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {Promise<Task>}
+	 * @returns {Task}
 	 */
 	async task(arg, possible, msg) {
 		const task = this.client.tasks.get(arg);
@@ -212,7 +212,7 @@ class ArgResolver extends Resolver {
 	 * @param {string} arg The argument to parse
 	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {Promise<KlasaMessage>}
+	 * @returns {KlasaMessage}
 	 */
 	async msg(arg, possible, msg) {
 		const message = await super.msg(arg, msg.channel);
@@ -238,7 +238,7 @@ class ArgResolver extends Resolver {
 	 * @param {string} arg The argument to parse
 	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {Promise<KlasaUser>}
+	 * @returns {KlasaUser}
 	 */
 	async user(arg, possible, msg) {
 		const user = await super.user(arg);
@@ -252,7 +252,7 @@ class ArgResolver extends Resolver {
 	 * @param {string} arg The argument to parse
 	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {Promise<external:GuildMember>}
+	 * @returns {external:GuildMember}
 	 */
 	async member(arg, possible, msg) {
 		const member = await super.member(arg, msg.guild);
@@ -266,7 +266,7 @@ class ArgResolver extends Resolver {
 	 * @param {string} arg The argument to parse
 	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {Promise<external:Channel>}
+	 * @returns {external:Channel}
 	 */
 	async channel(arg, possible, msg) {
 		const channel = await super.channel(arg);
@@ -280,7 +280,7 @@ class ArgResolver extends Resolver {
 	 * @param {string} arg The argument to parse
 	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {Promise<external:Emoji>}
+	 * @returns {external:Emoji}
 	 */
 	async emoji(arg, possible, msg) {
 		const emoji = await super.emoji(arg);
@@ -294,7 +294,7 @@ class ArgResolver extends Resolver {
 	 * @param {string} arg The argument to parse
 	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {Promise<KlasaGuild>}
+	 * @returns {KlasaGuild}
 	 */
 	async guild(arg, possible, msg) {
 		const guild = await super.guild(arg);
@@ -308,7 +308,7 @@ class ArgResolver extends Resolver {
 	 * @param {string} arg The argument to parse
 	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {Promise<external:Role>}
+	 * @returns {external:Role}
 	 */
 	async role(arg, possible, msg) {
 		const role = await super.role(arg, msg.guild);
@@ -322,7 +322,7 @@ class ArgResolver extends Resolver {
 	 * @param {string} arg The argument to parse
 	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {Promise<string>}
+	 * @returns {string}
 	 */
 	async literal(arg, possible, msg) {
 		arg = arg.toLowerCase();
@@ -348,7 +348,7 @@ class ArgResolver extends Resolver {
 	 * @param {string} arg The argument to parse
 	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {Promise<boolean>}
+	 * @returns {boolean}
 	 */
 	async bool(arg, possible, msg) {
 		const boolean = await super.boolean(arg);
@@ -374,7 +374,7 @@ class ArgResolver extends Resolver {
 	 * @param {string} arg The argument to parse
 	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {Promise<string>}
+	 * @returns {string}
 	 */
 	async str(arg, possible, msg) {
 		const { min, max } = possible;
@@ -401,7 +401,7 @@ class ArgResolver extends Resolver {
 	 * @param {string} arg The argument to parse
 	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {Promise<number>}
+	 * @returns {number}
 	 */
 	async int(arg, possible, msg) {
 		const { min, max } = possible;
@@ -442,7 +442,7 @@ class ArgResolver extends Resolver {
 	 * @param {string} arg The argument to parse
 	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {Promise<number>}
+	 * @returns {number}
 	 */
 	async float(arg, possible, msg) {
 		const { min, max } = possible;
@@ -460,7 +460,7 @@ class ArgResolver extends Resolver {
 	 * @param {string} arg The argument to parse
 	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {Promise<RegExpExecArray>}
+	 * @returns {RegExpExecArray}
 	 */
 	async reg(arg, possible, msg) {
 		const results = possible.regex.exec(arg);
@@ -499,7 +499,7 @@ class ArgResolver extends Resolver {
 	 * @param {string} arg The argument to parse
 	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {Promise<string>}
+	 * @returns {string}
 	 */
 	async url(arg, possible, msg) {
 		const hyperlink = await super.url(arg);
@@ -513,7 +513,7 @@ class ArgResolver extends Resolver {
 	 * @param {string} arg The argument to parse
 	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {Promise<Date>}
+	 * @returns {Date}
 	 */
 	async date(arg, possible, msg) {
 		const date = new Date(arg);
@@ -527,7 +527,7 @@ class ArgResolver extends Resolver {
 	 * @param {string} arg The argument to parse
 	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {Promise<Date>}
+	 * @returns {Date}
 	 */
 	async duration(arg, possible, msg) {
 		const date = new Duration(arg).fromNow;
@@ -541,7 +541,7 @@ class ArgResolver extends Resolver {
 	 * @param {string} arg The argument to parse
 	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} msg The message that triggered the command
-	 * @returns {Promise<Date>}
+	 * @returns {Date}
 	 */
 	async time(arg, possible, msg) {
 		const date = await Promise.all([

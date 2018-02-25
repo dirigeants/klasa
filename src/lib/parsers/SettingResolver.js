@@ -141,14 +141,14 @@ class SettingResolver extends Resolver {
 	 * @param {*} data The data to resolve
 	 * @param {KlasaGuild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
-	 * @param {Object} minMax The minimum and maximum
+	 * @param {Object} [minMax={}] The minimum and maximum
 	 * @param {?number} minMax.min The minimum value
 	 * @param {?number} minMax.max The maximum value
 	 * @returns {number}
 	 */
 	async integer(data, guild, name, { min, max } = {}) {
 		const result = await super.integer(data);
-		if (!result) throw (guild ? guild.language : this.client.languages.default).get('RESOLVER_INVALID_INT', name);
+		if (result === null) throw (guild ? guild.language : this.client.languages.default).get('RESOLVER_INVALID_INT', name);
 		if (SettingResolver.maxOrMin(this.client, guild, result, min, max, name)) return result;
 		return null;
 	}
@@ -159,14 +159,14 @@ class SettingResolver extends Resolver {
 	 * @param {*} data The data to resolve
 	 * @param {KlasaGuild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
-	 * @param {Object} minMax The minimum and maximum
+	 * @param {Object} [minMax={}] The minimum and maximum
 	 * @param {?number} minMax.min The minimum value
 	 * @param {?number} minMax.max The maximum value
 	 * @returns {number}
 	 */
 	async float(data, guild, name, { min, max } = {}) {
 		const result = await super.float(data);
-		if (!result) throw (guild ? guild.language : this.client.languages.default).get('RESOLVER_INVALID_FLOAT', name);
+		if (result === null) throw (guild ? guild.language : this.client.languages.default).get('RESOLVER_INVALID_FLOAT', name);
 		if (SettingResolver.maxOrMin(this.client, guild, result, min, max, name)) return result;
 		return null;
 	}
@@ -217,10 +217,10 @@ class SettingResolver extends Resolver {
 	 * Resolves anything, even objects.
 	 * @since 0.5.0
 	 * @param {*} data Raw content to pass
-	 * @returns {Promise<*>}
+	 * @returns {*}
 	 */
-	any(data) {
-		return Promise.resolve(data);
+	async any(data) {
+		return data;
 	}
 
 	/**

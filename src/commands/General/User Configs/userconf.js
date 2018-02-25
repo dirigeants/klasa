@@ -24,28 +24,35 @@ module.exports = class extends Command {
 	}
 
 	get(msg, [key]) {
-		const { path } = this.client.gateways.users.getPath(key, { avoidUnconfigurable: true, piece: true });
-		return msg.language.get('COMMAND_CONF_GET', path.path, path.resolveString(msg));
+		const { piece } = this.client.gateways.users.getPath(key, { avoidUnconfigurable: true, piece: true });
+		return msg.language.get('COMMAND_CONF_GET', piece.path, msg.author.configs.resolveString(msg, piece));
 	}
 
 	async set(msg, [key, ...valueToSet]) {
-		const { path } = await msg.author.configs.update(key, valueToSet.join(' '), msg.guild, { avoidUnconfigurable: true, action: 'add' });
-		return msg.language.get('COMMAND_CONF_UPDATED', path.path, path.resolveString(msg));
+		const { errors, updated } = await msg.author.configs.update(key, valueToSet.join(' '), msg.guild, { avoidUnconfigurable: true, action: 'add' });
+		if (errors.length) return errors[0];
+		if (!updated.length) return msg.language.get('COMMAND_CONF_NOCHANGE', key);
+		return msg.language.get('COMMAND_CONF_UPDATED', key, msg.author.configs.resolveString(msg, updated[0].piece));
 	}
 
 	async remove(msg, [key, ...valueToRemove]) {
-		const { path } = await msg.author.configs.update(key, valueToRemove.join(' '), msg.guild, { avoidUnconfigurable: true, action: 'remove' });
-		return msg.language.get('COMMAND_CONF_UPDATED', path.path, path.resolveString(msg));
+		const { errors, updated } = await msg.author.configs.update(key, valueToRemove.join(' '), msg.guild, { avoidUnconfigurable: true, action: 'remove' });
+		if (errors.length) return errors[0];
+		if (!updated.length) return msg.language.get('COMMAND_CONF_NOCHANGE', key);
+		return msg.language.get('COMMAND_CONF_UPDATED', key, msg.author.configs.resolveString(msg, updated[0].piece));
 	}
 
 	async reset(msg, [key]) {
-		const { path } = await msg.author.configs.reset(key, true);
-		return msg.language.get('COMMAND_CONF_RESET', path.path, path.resolveString(msg));
+		const { errors, updated } = await msg.author.configs.reset(key, true);
+		if (errors.length) return errors[0];
+		if (!updated.length) return msg.language.get('COMMAND_CONF_NOCHANGE', key);
+		return msg.language.get('COMMAND_CONF_RESET', key, msg.author.configs.resolveString(msg, updated[0].piece));
 	}
 
 	list(msg, [key]) {
-		const { path } = this.client.gateways.users.getPath(key, { avoidUnconfigurable: true, piece: false });
-		return msg.language.get('COMMAND_CONF_USER', key ? `: ${key.split('.').map(toTitleCase).join('/')}` : '', codeBlock('asciidoc', path.getList(msg)));
+		const { piece } = this.client.gateways.users.getPath(key, { avoidUnconfigurable: true, piece: false });
+		return msg.language.get('COMMAND_CONF_USER', key ? `: ${key.split('.').map(toTitleCase).join('/')}` : '',
+			codeBlock('asciidoc', msg.author.configs.list(msg, piece)));
 	}
 
 };

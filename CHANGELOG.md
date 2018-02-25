@@ -13,6 +13,15 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Added the key `COMMAND_CONF_NOCHANGE` to the **en-US** language file. (kyranet)
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Added support for `Configuration#reset(string[]);` to reset multiple keys. (kyranet)
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Added `util.arraysEqual`. (kyranet)
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Added property `Symbol.iterator` to Schedule. (kyranet)
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Added `Gateway#toJSON()` and `GatewayDriver#toJSON()`. (kyranet)
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Added `GatewayDriver#register` to be able to register new gateways without events (directly in your `app.js`). (kyranet)
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Added `util.getIdentifier` as a replacement for the function validator. (kyranet)
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Added `SchemaFolder#keys()`, `SchemaFolder#values()`, `SchemaFolder#entries()` and `SchemaFolder#[@@iterator]()`. Identical to Map's respective methods. (kyranet)
+- [[#201](https://github.com/dirigeants/klasa/pull/201)] Improve `util.toTitleCase`. (KingDGrizzle)
 - [[#186](https://github.com/dirigeants/klasa/pull/186)] Added a **load** command. (kyranet)
 - [[#176](https://github.com/dirigeants/klasa/pull/176)] Added `categorychannel` type to `ArgResolver`. (kyranet)
 - [[#166](https://github.com/dirigeants/klasa/pull/166)] Added support for TypeScript's `export default` in the loader. (kyranet)
@@ -82,6 +91,10 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Refactored Configuration's internals for maximum consistency and reduced code duplication. (kyranet)
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Changed the type for `GatewayDriver#types` from `string[]` to `Set<string>`. (kyranet)
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Renamed `SchemaPiece#modify()` to `SchemaPiece#edit()`. (kyranet)
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Renamed `Gateway#getKeys()` and `Gateway#getValues()` to `Gateway#keys(true)` and `Gateway#values(true)` respectively, which return iterators. (kyranet)
 - [[#184](https://github.com/dirigeants/klasa/pull/184)] `Piece#file` is now consistent between all pieces and it's type of `string[]`. (bdistin)
 - [[#184](https://github.com/dirigeants/klasa/pull/184)] **[MEM-PERF]** Tweaked `Command` to have category and subCategory properties as getters. (bdistin)
 - [[#184](https://github.com/dirigeants/klasa/pull/184)] Tweaked all stores to be able to load files in deep folders and abstracted it in `Store` for code reduction. (bdistin)
@@ -138,6 +151,17 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Removed
 
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] **[BREAKING]** Removed `SchemaFolder#addKey` and `SchemaFolder#addFolder` in favor to a more consistent `Schema#add`. (kyranet)
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] **[BREAKING]** Removed `Configuration#resetConfiguration()`. (kyranet)
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] **[PERF-MEM]** Removed `Configuration#type`. (kyranet)
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] **[BREAKING]** Removed `SchemaFolder#removeKey` and `SchemaFolder#removeFolder` in favor to a more consistent `Schema#remove`. (kyranet)
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Removed the abstract method `resolveString()` from SchemaFolder and SchemaPiece. (kyranet)
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Removed `SchemaFolder#getList` and replaced it to `Configuration#list`. (kyranet)
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Removed the `ConfigUpdateEntryMany` typedef in favor of a more constant type. (kyranet)
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Removed the resolver functions from constants. (kyranet)
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Removed `SchemaFolder#keys` (`Map<string>`) to reduce RAM usage and key caching duplication. (kyranet)
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Removed SettingGateway function validators. (kyranet)
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Removed Collection cache provider (will be moved to klasa-pieces). (kyranet)
 - [[#159](https://github.com/dirigeants/klasa/pull/159)] Removed deprecated property `GatewayOptions.cache` to be locked to `'collection'`. (kyranet)
 - [[#158](https://github.com/dirigeants/klasa/pull/158)] `Configuration#updateMany` is now under `Configuration#update`, in favor of a much less confusing naming. (kyranet)
 - [[`5b0c468362`](https://github.com/dirigeants/klasa/commit/5b0c46836200a57577bbd4aaa5cd463089a3bff0)] Removed `KlasaClient.sharded` as `Client.shard` is now fixed. (bdistin)
@@ -159,6 +183,17 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
+- [[#204](https://github.com/dirigeants/klasa/pull/204)] Fixed `Util.getIdentifier` nullifying numbers and booleans. (kyranet)
+- [[#203](https://github.com/dirigeants/klasa/pull/203)] Fixed `SettingResolver#integer` and `SettingResolver#float` not accepting `0` as input. (kyranet)
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Fixed `Util.deepClone` not cloning full objects. (kyranet)
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Fixed `SchemaFolder#_shardSyncSchema` not passing the action as string. (kyranet)
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Fixed `null` values in *updateMany*'s pattern not updating nested keys plus individual queries. (kyranet)
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Fixed update/reset methods in Configuration not emitting `configEntryCreate` when the entry does not exist. (kyranet)
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Fixed the updateMany pattern in Configuration not accepting a guild. (kyranet)
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Fixed the **configUpdateEntry** event (used to sync configuration instances across shards) running in non-sharded bots, now it will be disabled if the bot is not sharded. (kyranet)
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Fixed `Configuration._patch` not patching after the second nested folder. (kyranet)
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Fixed SettingResolver's return types. (kyranet)
+- [[#179](https://github.com/dirigeants/klasa/pull/179)] Fixed Gateway syncing keys even when it's unused. (kyranet)
 - [[#184](https://github.com/dirigeants/klasa/pull/184)] Fixed classes and options missing methods and properties in typings. (kyranet)
 - [[#184](https://github.com/dirigeants/klasa/pull/184)] Fixed `Provider` not having abstract methods in typings. (kyranet)
 - [[#184](https://github.com/dirigeants/klasa/pull/184)] Fixed typings using `Store` without generic parameters, causing the TypeScript compiler to fail. (kyranet)

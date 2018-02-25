@@ -9,7 +9,6 @@ class ScheduledTask {
 	 * @typedef  {Object} ScheduledTaskOptions
 	 * @property {string} [id] The ID for the task. By default, it generates one in base36
 	 * @property {*} [data] The data to pass to the Task piece when the ScheduledTask is ready for execution
-	 * @memberof ScheduledTask
 	 */
 
 	/**
@@ -17,7 +16,6 @@ class ScheduledTask {
 	 * @property {string} [repeat] The {@link Cron} pattern
 	 * @property {Date} [time] The time the current task ends at
 	 * @property {*} [data] The data to pass to the Task piece when the ScheduledTask is ready for execution
-	 * @memberof ScheduledTask
 	 */
 
 	/**
@@ -27,7 +25,6 @@ class ScheduledTask {
 	 * @property {number} time The UNIX timestamp for when this task ends at
 	 * @property {string} [repeat] The {@link Cron} pattern
 	 * @property {*} [data] The data to pass to the Task piece when the ScheduledTask is ready for execution
-	 * @memberof ScheduledTask
 	 */
 
 	/**

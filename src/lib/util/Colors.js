@@ -11,19 +11,16 @@ class Colors {
 	 * @property {(string|string[])} style The style or styles to apply
 	 * @property {ColorsFormatType} background The format for the background
 	 * @property {ColorsFormatType} text The format for the text
-	 * @memberof Colors
 	 */
 
 	/**
 	 * @typedef {(string|number|string[]|number[])} ColorsFormatType
-	 * @memberof Colors
 	 */
 
 	/**
 	 * @typedef {Object} ColorsFormatData
 	 * @property {string[]} opening The opening format data styles
 	 * @property {string[]} closing The closing format data styles
-	 * @memberof Colors
 	 * @private
 	 */
 

@@ -10,7 +10,6 @@ class Finalizer extends Piece {
 
 	/**
 	 * @typedef {PieceOptions} FinalizerOptions
-	 * @memberof Finalizer
 	 */
 
 	/**
