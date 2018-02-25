@@ -15,8 +15,8 @@ module.exports = class extends Event {
 		if (!this.client.options.ownerID) this.client.options.ownerID = this.client.user.bot ? this.client.application.owner.id : this.client.user.id;
 
 		// Client-wide settings
-		this.client.configs = this.gateways.clientStorage.cache.get(this.user.id) || this.gateways.clientStorage.insertEntry(this.user.id);
-		await this.configs.sync();
+		this.client.configs = this.client.gateways.clientStorage.cache.get(this.client.user.id) || this.client.gateways.clientStorage.insertEntry(this.client.user.id);
+		await this.client.configs.sync();
 
 		// Init all the pieces
 		await Promise.all(this.client.pieceStores.filter(store => !['providers', 'extendables'].includes(store.name)).map(store => store.init()));
