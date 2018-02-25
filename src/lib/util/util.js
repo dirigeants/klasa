@@ -301,7 +301,7 @@ class Util {
 	 * @returns {string}
 	 */
 	static getIdentifier(value) {
-		if (typeof value === 'string') return value;
+		if (['string', 'number'].includes(typeof value)) return value;
 		if (Util.isObject(value)) {
 			if ('id' in value) return value.id;
 			if ('name' in value) return value.name;
