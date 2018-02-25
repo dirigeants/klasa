@@ -298,7 +298,7 @@ class Util {
 	 * Get the identifier of a value.
 	 * @since 0.5.0
 	 * @param {*} value The value to get the identifier from
-	 * @returns {?(string|number)}
+	 * @returns {?(string|number|boolean)}
 	 */
 	static getIdentifier(value) {
 		if (['string', 'number', 'boolean'].includes(typeof value)) return value;
