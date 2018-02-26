@@ -50,6 +50,7 @@ exports.DEFAULTS = {
 				requiredConfigs: [],
 				runIn: ['text', 'dm', 'group'],
 				subcommands: false,
+				sendReturn: false,
 				usage: '',
 				quotedStringSupport: false,
 				deletable: false

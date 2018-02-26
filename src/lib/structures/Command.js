@@ -30,6 +30,7 @@ class Command extends Piece {
 	 * @property {string[]} [requiredConfigs=[]] The required guild configs to use this command
 	 * @property {string[]} [runIn=['text','dm','group']] What channel types the command should run in
 	 * @property {boolean} [subcommands=false] Whether to enable sub commands or not
+	 * @property {(false|string)} [sendReturn=false] Whether to send the return value as a message; use "apply" if you return an array of args for KlasaMessage#sendMessage
 	 * @property {string} [usage=''] The usage string for the command
 	 * @property {?string} [usageDelim=undefined] The string to delimit the command input for usage
 	 */
@@ -174,6 +175,13 @@ class Command extends Piece {
 		 * @type {boolean}
 		 */
 		this.subcommands = options.subcommands;
+
+		/**
+		 * Whether to send the return value as a message; use "apply" if you return an array of args for KlasaMessage#sendMessage
+		 * @since 0.5.0
+		 * @type {(false|string)}
+		 */
+		this.sendReturn = options.sendReturn === true ? 'call' : options.sendReturn;
 
 		/**
 		 * The parsed usage for the command

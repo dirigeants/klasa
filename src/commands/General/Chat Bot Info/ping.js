@@ -5,15 +5,14 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			guarded: true,
-			description: (msg) => msg.language.get('COMMAND_PING_DESCRIPTION')
+			description: (msg) => msg.language.get('COMMAND_PING_DESCRIPTION'),
+			sendReturn: true
 		});
 	}
 
 	async run(msg) {
 		const message = await msg.sendMessage(msg.language.get('COMMAND_PING'));
-		return msg.sendMessage(
-			msg.language.get('COMMAND_PINGPONG', (message.editedTimestamp || message.createdTimestamp) - (msg.editedTimestamp || msg.createdTimestamp), Math.round(this.client.ping))
-		);
+		return msg.language.get('COMMAND_PINGPONG', (message.editedTimestamp || message.createdTimestamp) - (msg.editedTimestamp || msg.createdTimestamp), Math.round(this.client.ping));
 	}
 
 };
