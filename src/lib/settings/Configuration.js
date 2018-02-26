@@ -210,7 +210,7 @@ class Configuration {
 	 * Configuration#update(['prefix', 'language'], ['k!', 'es-ES']);
 	 */
 	async update(key, value, guild, options) {
-		if (typeof options === 'undefined' && guild && guild.prototype.name === 'Object') {
+		if (typeof options === 'undefined' && guild && guild.constructor.name === 'Object') {
 			options = guild;
 			guild = undefined;
 		}
