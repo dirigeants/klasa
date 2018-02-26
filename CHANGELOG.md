@@ -183,6 +183,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
+- [[#207](https://github.com/dirigeants/klasa/pull/207)] Fixed `Configuration#_parseSingle` not returning the modified array but the updated element. (kyranet)
 - [[#204](https://github.com/dirigeants/klasa/pull/204)] Fixed `Util.getIdentifier` nullifying numbers and booleans. (kyranet)
 - [[#203](https://github.com/dirigeants/klasa/pull/203)] Fixed `SettingResolver#integer` and `SettingResolver#float` not accepting `0` as input. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Fixed `Util.deepClone` not cloning full objects. (kyranet)

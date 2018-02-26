@@ -423,7 +423,7 @@ class Configuration {
 					array.splice(index, 1);
 				}
 			}
-			list.updated.push({ data: [piece.path, parsedID], piece: piece });
+			list.updated.push({ data: [piece.path, array], piece: piece });
 		} else {
 			const { updated } = this._setValueByPath(piece, parsedID);
 			if (updated) list.updated.push({ data: [piece.path, parsedID], piece: piece });
