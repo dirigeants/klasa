@@ -764,11 +764,17 @@ declare module 'klasa' {
 		public constructor(client: KlasaClient, store: EventStore, file: string, core: boolean, options?: EventOptions);
 
 		public once: boolean;
+		public emitter: NodeJS.EventEmitter;
+		public event: string;
+		private _listener: Function;
 
 		public abstract run(...params: any[]): void;
 		public toJSON(): PieceEventJSON;
 
 		private _run(param: any): void;
+		private _runOnce(...args: any[]): Promise<void>;
+		private _listen(): void;
+		private _unlisten(): void;
 	}
 
 	export abstract class Extendable extends Piece {
@@ -778,7 +784,8 @@ declare module 'klasa' {
 		public appliesTo: string[];
 		public target: boolean;
 
-		public abstract extend(...params: any[]): any;
+		public extend(...params: any[]): any;
+		public static extend(...params: any[]): any;
 		public toJSON(): PieceExtendableJSON;
 	}
 
@@ -810,7 +817,7 @@ declare module 'klasa' {
 		public ignoreWebhooks: boolean;
 		public ignoreEdits: boolean;
 		public abstract run(msg: KlasaMessage): void;
-		public shouldRun(msg: KlasaMessage, edit: boolean): boolean;
+		public shouldRun(msg: KlasaMessage, edit?: boolean): boolean;
 		public toJSON(): PieceMonitorJSON;
 	}
 
@@ -875,6 +882,7 @@ declare module 'klasa' {
 
 	export class EventStore extends Store<string, Event> {
 		public constructor(client: KlasaClient);
+		private _onceEvents: Set<string>;
 
 		public clear(): void;
 		public delete(name: Event | string): boolean;
@@ -912,7 +920,7 @@ declare module 'klasa' {
 	export class MonitorStore extends Store<string, Monitor> {
 		public constructor(client: KlasaClient);
 
-		public run(msg: KlasaMessage, edit: boolean): Promise<void>;
+		public run(msg: KlasaMessage, edit?: boolean): Promise<void>;
 
 		private _run(msg: KlasaMessage, monitor: Monitor);
 	}
@@ -1407,6 +1415,7 @@ declare module 'klasa' {
 	export type ScheduledTaskOptions = {
 		id?: string;
 		data?: any;
+		catchUp?: boolean;
 	};
 
 	export type ScheduledTaskJSON = {
@@ -1414,12 +1423,14 @@ declare module 'klasa' {
 		taskName: string;
 		time: number;
 		data?: any;
+		catchUp: boolean;
 	};
 
 	export type ScheduledTaskUpdateOptions = {
 		repeat?: string;
 		time?: Date;
 		data?: any;
+		catchUp?: boolean;
 	};
 
 	// Settings
@@ -1563,6 +1574,7 @@ declare module 'klasa' {
 	} & PieceOptions;
 
 	export type ExtendableOptions = {
+		appliesTo: string[];
 		klasa?: boolean;
 	} & PieceOptions;
 
@@ -1584,6 +1596,8 @@ declare module 'klasa' {
 	} & PieceOptions;
 
 	export type EventOptions = {
+		emitter?: NodeJS.EventEmitter;
+		event?: string;
 		once?: boolean;
 	} & PieceOptions;
 
@@ -1651,7 +1665,9 @@ declare module 'klasa' {
 	} & PieceJSON;
 
 	export type PieceEventJSON = {
-		once?: boolean;
+		once: boolean;
+		event: string;
+		emitter: string;
 	} & PieceJSON;
 
 	export type PieceFinalizerJSON = PieceJSON;
