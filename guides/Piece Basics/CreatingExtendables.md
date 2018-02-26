@@ -10,7 +10,8 @@ const { Extendable } = require('klasa');
 class MyExtendable extends Extendable {
 
 	constructor(...args) {
-		super(...args, ['Message'], {
+		super(...args, {
+			appliesTo: [],
 			name: 'nameOfExtendable',
 			enabled: true,
 			klasa: false
@@ -60,7 +61,8 @@ const { Extendable } = require('klasa');
 module.exports = class extends Extendable {
 
 	constructor(...args) {
-		super(...args, appliesTo, {
+		super(...args, {
+			appliesTo: [],
 			name: 'nameOfExtendable',
 			enabled: true,
 			klasa: false
@@ -100,7 +102,7 @@ const prompt = require('../../prompt');
 module.exports = class extends Extendable {
 
 	constructor(...args) {
-		super(...args, ['Message'], { name: 'prompt' });
+		super(...args, { appliesTo: ['Message'], name: 'prompt' });
 	}
 
 	extend() {

@@ -39,7 +39,9 @@ this.client.schedule.create('reminder', Date.now() + (1000 * 60), {
 		user: msg.author.id,
 		text: 'This is a reminder',
 		channel: msg.channel.id
-	}
+	},
+	catchUp: true
+	// This task will try to run again (catch up) if the bot was off when it was meant to fire
 });
 ```
 

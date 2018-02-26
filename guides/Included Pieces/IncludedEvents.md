@@ -126,6 +126,14 @@ Handles the errors thrown by any of the monitors.
 
 [events/monitorError.js](https://github.com/dirigeants/klasa/blob/master/src/events/monitorError.js)
 
+## onceReady
+
+The internal once ready handler.
+
+**Source:**
+
+[events/onceReady.js](https://github.com/dirigeants/klasa/blob/master/src/events/onceReady.js)
+
 ## taskError
 
 Handles the errors thrown by any of the tasks.
