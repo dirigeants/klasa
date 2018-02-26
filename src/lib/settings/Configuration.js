@@ -209,7 +209,7 @@ class Configuration {
 	 * // Updating multiple keys (with arrays):
 	 * Configuration#update(['prefix', 'language'], ['k!', 'es-ES']);
 	 */
-	async update(key, value, guild, options = {}) {
+	async update(key, value, guild, options) {
 		if (typeof options === 'undefined' && isObject(guild)) {
 			options = guild;
 			guild = undefined;
@@ -390,7 +390,7 @@ class Configuration {
 	 * @param {ConfigurationUpdateResult} list The list to update
 	 * @private
 	 */
-	async _parseSingle(key, value, guild, { avoidUnconfigurable = false, action = 'auto', arrayPosition = null }, list) {
+	async _parseSingle(key, value, guild, { avoidUnconfigurable = false, action = 'auto', arrayPosition = null } = {}, list) {
 		const path = this.gateway.getPath(key, { piece: true, avoidUnconfigurable, errors: false });
 		if (!path) {
 			list.errors.push(guild && guild.language ?
