@@ -8,7 +8,13 @@ const { Event } = require('klasa');
 module.exports = class extends Event {
 
 	constructor(...args) {
-		super(...args, { name: 'yourEventName', enabled: true });
+		super(...args, {
+			name: 'yourEventName',
+			enabled: true,
+			event: 'theEventToListenTo',
+			emitter: client,
+			once: false
+		});
 	}
 
 	run(...params) {
@@ -29,10 +35,13 @@ Where `...params` are arguments you would *normally* get from those events. For 
 
 ## Configuration
 
-| Name        | Default       | Type    | Description                         |
-| ----------- | ------------- | ------- | ----------------------------------- |
-| **name**    | `theFileName` | string  | The name of the event               |
-| **enabled** | `true`        | boolean | Whether the event is enabled or not |
+| Name        | Default       | Type         | Description                         |
+| ----------- | ------------- | ------------ | ----------------------------------- |
+| **name**    | `theFileName` | string       | The name of the event               |
+| **enabled** | `true`        | boolean      | Whether the event is enabled or not |
+| **event**   | `theFileName` | string       | The event to listen to              |
+| **emitter** | `this.client` | EventEmitter | The emitter the event belongs to    |
+| **once**    | `false`       | boolean      | If the event should only run once   |
 
 ## Further Reading:
 

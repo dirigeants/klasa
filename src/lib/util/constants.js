@@ -54,10 +54,14 @@ exports.DEFAULTS = {
 				quotedStringSupport: false,
 				deletable: false
 			},
-			events: { enabled: true },
+			events: {
+				enabled: true,
+				once: false
+			},
 			extendables: {
 				enabled: true,
-				klasa: false
+				klasa: false,
+				appliesTo: []
 			},
 			finalizers: { enabled: true },
 			inhibitors: {
@@ -70,7 +74,8 @@ exports.DEFAULTS = {
 				ignoreBots: true,
 				ignoreSelf: true,
 				ignoreOthers: true,
-				ignoreWebhooks: true
+				ignoreWebhooks: true,
+				ignoreEdits: true
 			},
 			providers: {
 				enabled: true,

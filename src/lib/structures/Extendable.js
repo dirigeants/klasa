@@ -12,6 +12,7 @@ class Extendable extends Piece {
 	/**
 	 * @typedef {PieceOptions} ExtendableOptions
 	 * @property {boolean} [klasa=false] If the extendable is for Klasa instead of Discord.js
+	 * @property {string[]} [appliesTo=[]] What classes this extendable is for
 	 */
 
 	/**
@@ -20,10 +21,9 @@ class Extendable extends Piece {
 	 * @param {ExtendableStore} store The extendable store
 	 * @param {string} file The path from the pieces folder to the extendable file
 	 * @param {boolean} core If the piece is in the core directory or not
-	 * @param {string[]} appliesTo The discord classes this extendable applies to
 	 * @param {ExtendableOptions} options The options for this extendable
 	 */
-	constructor(client, store, file, core, appliesTo = [], options = {}) {
+	constructor(client, store, file, core, options = {}) {
 		super(client, store, file, core, options);
 
 		/**
@@ -31,7 +31,7 @@ class Extendable extends Piece {
 		 * @since 0.0.1
 		 * @type {string[]}
 		 */
-		this.appliesTo = appliesTo;
+		this.appliesTo = options.appliesTo;
 
 		/**
 		 * The target library to apply this extendable to
@@ -39,6 +39,15 @@ class Extendable extends Piece {
 		 * @type {boolean}
 		 */
 		this.target = options.klasa ? require('klasa') : Discord;
+	}
+
+	/**
+	 * If the extendable should be statically applied
+	 * @since 0.5.0
+	 * @type {boolean}
+	 */
+	get static() {
+		return Boolean(this.constructor.extend);
 	}
 
 	/**
@@ -69,7 +78,8 @@ class Extendable extends Piece {
 	disable() {
 		if (this.client.listenerCount('pieceDisabled')) this.client.emit('pieceDisabled', this);
 		this.enabled = false;
-		for (const structure of this.appliesTo) delete this.target[structure].prototype[this.name];
+		if (this.static) for (const structure of this.appliesTo) delete this.target[structure][this.name];
+		else for (const structure of this.appliesTo) delete this.target[structure].prototype[this.name];
 		return this;
 	}
 
@@ -83,7 +93,8 @@ class Extendable extends Piece {
 	enable(init = false) {
 		if (!init && this.client.listenerCount('pieceEnabled')) this.client.emit('pieceEnabled', this);
 		this.enabled = true;
-		for (const structure of this.appliesTo) Object.defineProperty(this.target[structure].prototype, this.name, Object.getOwnPropertyDescriptor(this.constructor.prototype, 'extend'));
+		if (this.static) for (const structure of this.appliesTo) Object.defineProperty(this.target[structure], this.name, { value: this.constructor.extend, writable: true,	configurable: true });
+		else for (const structure of this.appliesTo) Object.defineProperty(this.target[structure].prototype, this.name, Object.getOwnPropertyDescriptor(this.constructor.prototype, 'extend'));
 		return this;
 	}
 

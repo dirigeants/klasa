@@ -3,7 +3,7 @@ const { Extendable } = require('klasa');
 module.exports = class extends Extendable {
 
 	constructor(...args) {
-		super(...args, ['GroupDMChannel', 'DMChannel', 'TextChannel']);
+		super(...args, { appliesTo: ['GroupDMChannel', 'DMChannel', 'TextChannel'] });
 	}
 
 	get extend() {

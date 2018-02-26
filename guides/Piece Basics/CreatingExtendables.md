@@ -2,15 +2,16 @@ Extendables are functions that extend current Discord.js classes by adding metho
 
 Extendables have the following syntax:
 
-<!-- eslint-disable no-dupe-class-members -->
+<!-- eslint-disable no-dupe-class-members, no-inline-comments -->
 
 ```javascript
 const { Extendable } = require('klasa');
 
-module.exports = class extends Extendable {
+class MyExtendable extends Extendable {
 
 	constructor(...args) {
-		super(...args, ['Message'], {
+		super(...args, {
+			appliesTo: [],
 			name: 'nameOfExtendable',
 			enabled: true,
 			klasa: false
@@ -32,13 +33,25 @@ module.exports = class extends Extendable {
 	// Methods
 
 	extend() {
-		// Make a methods
+		// Make a method
 	}
 
-};
+	// Static Methods
+
+	static extend() {
+		// Make a static method
+	}
+
+}
+
+// Static Properties
+
+MyExtendable.extend = 'wew'; // Make a static property
+
+module.exports = MyExtendable;
 ```
 
-<!-- eslint-enable no-dupe-class-members -->
+<!-- eslint-enable no-dupe-class-members, no-inline-comments -->
 
 ## Understanding extendable settings
 
@@ -48,7 +61,8 @@ const { Extendable } = require('klasa');
 module.exports = class extends Extendable {
 
 	constructor(...args) {
-		super(...args, appliesTo, {
+		super(...args, {
+			appliesTo: [],
 			name: 'nameOfExtendable',
 			enabled: true,
 			klasa: false
@@ -69,7 +83,7 @@ module.exports = class extends Extendable {
 
 ## Understanding extend
 
-The extend method can only be a setter, getter, or method. You cannot define multiple in one file as the above example may imply.
+The extend method can only be a setter, getter, method, or static methods/properties. You cannot define multiple in one file as the above example may imply.
 
 ## Examples
 
@@ -88,7 +102,7 @@ const prompt = require('../../prompt');
 module.exports = class extends Extendable {
 
 	constructor(...args) {
-		super(...args, ['Message'], { name: 'prompt' });
+		super(...args, { appliesTo: ['Message'], name: 'prompt' });
 	}
 
 	extend() {
