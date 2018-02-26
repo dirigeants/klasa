@@ -8,7 +8,7 @@ const { Extendable } = require('klasa');
 module.exports = class extends Extendable {
 
 	constructor(...args) {
-		super(...args, ['ArgResolver'], { klasa: true });
+		super(...args, { appliesTo: ['ArgResolver'], klasa: true });
 	}
 
 	extend() {
@@ -35,7 +35,7 @@ const REGEX_EMOJI = /^(?:<a?:\w{2,32}:)?(\d{17,19})>?$/;
 module.exports = class extends Extendable {
 
 	constructor(...args) {
-		super(...args, ['ArgResolver'], { klasa: true });
+		super(...args, { appliesTo: ['ArgResolver'], klasa: true });
 	}
 
 	async extend(arg, possible, msg) {
