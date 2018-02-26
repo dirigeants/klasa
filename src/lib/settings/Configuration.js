@@ -210,7 +210,7 @@ class Configuration {
 	 * Configuration#update(['prefix', 'language'], ['k!', 'es-ES']);
 	 */
 	async update(key, value, guild, options) {
-		if (typeof options === 'undefined' && isObject(guild)) {
+		if (typeof options === 'undefined' && guild && guild.prototype.name === 'Object') {
 			options = guild;
 			guild = undefined;
 		}
@@ -423,7 +423,7 @@ class Configuration {
 					array.splice(index, 1);
 				}
 			}
-			list.updated.push({ data: [piece.path, parsedID], piece: piece });
+			list.updated.push({ data: [piece.path, array], piece: piece });
 		} else {
 			const { updated } = this._setValueByPath(piece, parsedID);
 			if (updated) list.updated.push({ data: [piece.path, parsedID], piece: piece });
