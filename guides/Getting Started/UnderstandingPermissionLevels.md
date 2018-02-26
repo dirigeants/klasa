@@ -104,7 +104,7 @@ new Client(config).login(config.token);
 
 ## What's different from Komada?
 
-Permission levels are fairly close to the same as Komada Permission levels, with a few exceptions.
+Permission levels are fairly close to Komada's Permission levels, with a few exceptions.
 
 ### The default permission level structure is different: {@link KlasaClient.defaultPermissionLevels}
 
