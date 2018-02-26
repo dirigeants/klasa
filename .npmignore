@@ -19,6 +19,6 @@ tslint.json
 .travis-deploy.sh
 .travis.yml
 package-lock.json
-tutorials
+guides
 docs
 .github

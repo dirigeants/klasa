@@ -209,8 +209,8 @@ class Configuration {
 	 * // Updating multiple keys (with arrays):
 	 * Configuration#update(['prefix', 'language'], ['k!', 'es-ES']);
 	 */
-	async update(key, value, guild, options = {}) {
-		if (typeof options === 'undefined' && isObject(guild)) {
+	async update(key, value, guild, options) {
+		if (typeof options === 'undefined' && guild && guild.constructor.name === 'Object') {
 			options = guild;
 			guild = undefined;
 		}
@@ -390,7 +390,7 @@ class Configuration {
 	 * @param {ConfigurationUpdateResult} list The list to update
 	 * @private
 	 */
-	async _parseSingle(key, value, guild, { avoidUnconfigurable = false, action = 'auto', arrayPosition = null }, list) {
+	async _parseSingle(key, value, guild, { avoidUnconfigurable = false, action = 'auto', arrayPosition = null } = {}, list) {
 		const path = this.gateway.getPath(key, { piece: true, avoidUnconfigurable, errors: false });
 		if (!path) {
 			list.errors.push(guild && guild.language ?
@@ -423,7 +423,7 @@ class Configuration {
 					array.splice(index, 1);
 				}
 			}
-			list.updated.push({ data: [piece.path, parsedID], piece: piece });
+			list.updated.push({ data: [piece.path, array], piece: piece });
 		} else {
 			const { updated } = this._setValueByPath(piece, parsedID);
 			if (updated) list.updated.push({ data: [piece.path, parsedID], piece: piece });
