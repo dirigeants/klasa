@@ -13,6 +13,11 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#196](https://github.com/dirigeants/klasa/pull/196)] Added property of `ignoreEdits` in monitors for whether a monitor should run in edited messages. (bdistin)
+- [[#196](https://github.com/dirigeants/klasa/pull/196)] Added property of `catchUp` in `ScheduledTask`, making the scheduled task not execute if the bot was offline when it was supposed to run, if this option is set to false. (bdistin)
+- [[#196](https://github.com/dirigeants/klasa/pull/196)] Added support for static methods and properties in extendables. (bdistin)
+- [[#196](https://github.com/dirigeants/klasa/pull/196)] Added the options and properties `event`, `emitter` and `once` to all events. (bdistin)
+- [[#196](https://github.com/dirigeants/klasa/pull/196)] Added `onceReady` piece event. (bdistin)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Added the key `COMMAND_CONF_NOCHANGE` to the **en-US** language file. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Added support for `Configuration#reset(string[]);` to reset multiple keys. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Added `util.arraysEqual`. (kyranet)
@@ -91,6 +96,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#196](https://github.com/dirigeants/klasa/pull/196)] **[BREAKING]** Moved the array for the argument `appliesTo` in extendables to be an option in `ExtendableOptions`. (bdistin)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Refactored Configuration's internals for maximum consistency and reduced code duplication. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Changed the type for `GatewayDriver#types` from `string[]` to `Set<string>`. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Renamed `SchemaPiece#modify()` to `SchemaPiece#edit()`. (kyranet)

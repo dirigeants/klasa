@@ -731,7 +731,6 @@ declare module 'klasa' {
 		public readonly subCategory: string;
 		public readonly usageDelim: string;
 		public readonly usageString: string;
-
 		public aliases: string[];
 		public botPerms: string[];
 		public bucket: number;
@@ -762,10 +761,9 @@ declare module 'klasa' {
 
 	export abstract class Event extends Piece {
 		public constructor(client: KlasaClient, store: EventStore, file: string, core: boolean, options?: EventOptions);
-
-		public once: boolean;
 		public emitter: NodeJS.EventEmitter;
 		public event: string;
+		public once: boolean;
 		private _listener: Function;
 
 		public abstract run(...params: any[]): void;
@@ -780,7 +778,6 @@ declare module 'klasa' {
 	export abstract class Extendable extends Piece {
 		public constructor(client: KlasaClient, store: ExtendableStore, file: string, core: boolean, options?: ExtendableOptions);
 		public readonly static: boolean;
-
 		public appliesTo: string[];
 		public target: boolean;
 
@@ -804,6 +801,7 @@ declare module 'klasa' {
 
 	export abstract class Language extends Piece {
 		public language: { [key: string]: any };
+
 		public get(term: string, ...args: any[]): any;
 		public toJSON(): PieceLanguageJSON;
 	}
@@ -812,10 +810,10 @@ declare module 'klasa' {
 		public constructor(client: KlasaClient, store: MonitorStore, file: string, core: boolean, options?: MonitorOptions);
 
 		public ignoreBots: boolean;
-		public ignoreSelf: boolean;
-		public ignoreOthers: boolean;
-		public ignoreWebhooks: boolean;
 		public ignoreEdits: boolean;
+		public ignoreOthers: boolean;
+		public ignoreSelf: boolean;
+		public ignoreWebhooks: boolean;
 		public abstract run(msg: KlasaMessage): void;
 		public shouldRun(msg: KlasaMessage, edit?: boolean): boolean;
 		public toJSON(): PieceMonitorJSON;
@@ -1413,42 +1411,42 @@ declare module 'klasa' {
 
 	// Schedule
 	export type ScheduledTaskOptions = {
-		id?: string;
-		data?: any;
 		catchUp?: boolean;
+		data?: any;
+		id?: string;
 	};
 
 	export type ScheduledTaskJSON = {
+		catchUp: boolean;
+		data?: any;
 		id: string;
 		taskName: string;
 		time: number;
-		data?: any;
-		catchUp: boolean;
 	};
 
 	export type ScheduledTaskUpdateOptions = {
+		catchUp?: boolean;
+		data?: any;
 		repeat?: string;
 		time?: Date;
-		data?: any;
-		catchUp?: boolean;
 	};
 
 	// Settings
 	export type GatewayOptions = {
-		provider: Provider;
 		nice?: boolean;
+		provider: Provider;
 	};
 
 	export type GatewayJSON = {
-		type: string;
 		options: GatewayOptions;
 		schema: SchemaFolderJSON;
+		type: string;
 	};
 
 	export type GatewayGetPathOptions = {
 		avoidUnconfigurable?: boolean;
-		piece?: boolean;
 		errors?: boolean;
+		piece?: boolean;
 	};
 
 	export type GatewayGetPathResult = {
@@ -1465,9 +1463,9 @@ declare module 'klasa' {
 		| Role;
 
 	export type ConfigurationUpdateOptions = {
-		avoidUnconfigurable?: boolean;
-		arrayPosition?: number;
 		action?: 'add' | 'remove' | 'auto';
+		arrayPosition?: number;
+		avoidUnconfigurable?: boolean;
 	};
 
 	export type ConfigurationUpdateResult = {
@@ -1481,9 +1479,9 @@ declare module 'klasa' {
 	};
 
 	export type GatewayGuildResolvable = KlasaGuild
+		| KlasaMessage
 		| KlasaTextChannel
 		| KlasaVoiceChannel
-		| KlasaMessage
 		| Role
 		| Snowflake;
 
@@ -1498,36 +1496,36 @@ declare module 'klasa' {
 	};
 
 	export type GatewayDriverAddOptions = {
-		provider?: string;
 		nice?: boolean;
+		provider?: string;
 	};
 
 	export type SchemaFolderAddOptions = {
-		type: string;
-		default?: any;
-		min?: number;
-		max?: number;
 		array?: boolean;
-		sql?: string;
 		configurable?: boolean;
+		default?: any;
+		max?: number;
+		min?: number;
+		sql?: string;
+		type: string;
 	};
 
 	export type SchemaPieceEditOptions = {
-		default?: any;
-		min?: number;
-		max?: number;
 		configurable?: boolean;
+		default?: any;
+		max?: number;
+		min?: number;
 		sql?: string;
 	};
 
 	export type SchemaPieceJSON = {
-		type: string;
 		array: boolean;
-		default: any;
-		min?: number;
-		max?: number;
-		sql: string;
 		configurable: boolean;
+		default: any;
+		max?: number;
+		min?: number;
+		sql: string;
+		type: string;
 	};
 
 	export type SchemaFolderJSON = {
@@ -1536,19 +1534,19 @@ declare module 'klasa' {
 	};
 
 	export type GatewayDriverJSON = {
-		types: string[];
-		keys: string[];
-		ready: boolean;
+		clientStorage: GatewayJSON;
 		guilds: GatewayJSON;
 		users: GatewayJSON;
-		clientStorage: GatewayJSON;
+		keys: string[];
+		ready: boolean;
+		types: string[];
 		[k: string]: GatewayJSON | any;
 	};
 
 	// Structures
 	export type PieceOptions = {
-		name?: string,
 		enabled?: boolean
+		name?: string,
 	};
 
 	export type CommandOptions = {
@@ -1584,10 +1582,10 @@ declare module 'klasa' {
 
 	export type MonitorOptions = {
 		ignoreBots?: boolean;
-		ignoreSelf?: boolean;
-		ignoreOthers?: boolean;
-		ignoreWebhooks?: boolean;
 		ignoreEdits?: boolean;
+		ignoreOthers?: boolean;
+		ignoreSelf?: boolean;
+		ignoreWebhooks?: boolean;
 	} & PieceOptions;
 
 	export type ProviderOptions = {
@@ -1607,10 +1605,10 @@ declare module 'klasa' {
 
 	export type PieceJSON = {
 		dir: string;
+		enabled: boolean;
 		file: string[];
 		name: string;
 		type: string;
-		enabled: boolean;
 	};
 
 	export type PieceCommandJSON = {
@@ -1653,10 +1651,10 @@ declare module 'klasa' {
 
 	export type PieceMonitorJSON = {
 		ignoreBots: boolean;
-		ignoreSelf: boolean;
-		ignoreOthers: boolean;
-		ignoreWebhooks: boolean;
 		ignoreEdits: boolean;
+		ignoreOthers: boolean;
+		ignoreSelf: boolean;
+		ignoreWebhooks: boolean;
 	} & PieceJSON;
 
 	export type PieceProviderJSON = {
@@ -1665,9 +1663,9 @@ declare module 'klasa' {
 	} & PieceJSON;
 
 	export type PieceEventJSON = {
-		once: boolean;
-		event: string;
 		emitter: string;
+		event: string;
+		once: boolean;
 	} & PieceJSON;
 
 	export type PieceFinalizerJSON = PieceJSON;
