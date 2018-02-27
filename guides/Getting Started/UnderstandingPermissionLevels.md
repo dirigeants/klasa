@@ -1,6 +1,6 @@
 Permission Levels are what defines who has permission to use what command. They cascade up to a permission level break, so guild owners can do everything the lower levels can do, and so on.
 
-For instace the conf command requires level 6 to run, by default this is how it works:
+For instance the conf command requires level 6 to run, by default this is how it works:
 
 - level 6 requires 'MANAGE_GUILD' Permission: true/false
 - level 7 is the guild Owner: true/false
@@ -116,7 +116,7 @@ Permission levels are fairly close to Komada's Permission levels, with a few exc
 | 9     | true  | false | Bot Owner                                             |
 | 10    | false | false | Bot Owner (silent)                                    |
 
->This gives the bot creator a cleaner slate to work with when first creating a bot. (Not all bots are mod bots, so mod/admin roles were largly unneeded. Also there is infinitely more that you would want to put between 0 and administrative users, than between Guild Owner and Bot Owner). This helps keep bot creators from having to completely "remake the wheel" of permissions in almost all cases, without preventing that if wanted. (This fixes most cases of those who perpetually had to transfer/modify core commands to match their custom permissionLevels.)
+>This gives the bot creator a cleaner slate to work with when first creating a bot. (Not all bots are mod bots, so mod/admin roles were largely unneeded. Also there is infinitely more that you would want to put between 0 and administrative users, than between Guild Owner and Bot Owner). This helps keep bot creators from having to completely "remake the wheel" of permissions in almost all cases, without preventing that if wanted. (This fixes most cases of those who perpetually had to transfer/modify core commands to match their custom permissionLevels.)
 
 ### Since inhibitors are async in Klasa, check functions may be async
 
