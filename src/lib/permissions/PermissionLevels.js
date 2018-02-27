@@ -14,6 +14,11 @@ class PermissionLevels extends Collection {
 	 * @typedef {Object} PermissionLevelsData
 	 * @property {boolean} broke Whether the loop broke execution of higher levels
 	 * @property {boolean} permission Whether the permission level check passed or not
+	 */
+
+	/**
+	 * @typedef {Object} PermissionLevelOptions
+	 * @property {boolean} break Whether the loop breaks execution of higher levels
 	 * @property {boolean} fetch Whether the permission level should autofetch a member or not
 	 */
 
@@ -39,13 +44,12 @@ class PermissionLevels extends Collection {
 	 * Adds levels to the levels cache to be converted to valid permission structure
 	 * @since 0.2.1
 	 * @param {number} level The permission number for the level you are defining
-	 * @param {boolean} brk Whether the level should break (stop processing higher levels, and inhibit a no permission error)
 	 * @param {Function} check The permission checking function
-	 * @param {boolean} [fetch=false] If the permission should auto fetch members
+	 * @param {PermissionLevelOptions} [options={}] If the permission should auto fetch members
 	 * @returns {PermissionLevels} This permission levels
 	 */
-	addLevel(level, brk, check, fetch = false) {
-		return this.set(level, { break: brk, check, fetch });
+	add(level, check, options = {}) {
+		return this.set(level, { check, break: Boolean(options.break), fetch: Boolean(options.fetch) });
 	}
 
 	/**
