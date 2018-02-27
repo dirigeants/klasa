@@ -30,7 +30,7 @@ class PermissionLevels extends Collection {
 	constructor(levels = 11) {
 		super();
 
-		for (let i = 0; i < levels; i++) this.set(i, notSet);
+		for (let i = 0; i < levels; i++) super.set(i, notSet);
 	}
 
 	/**
