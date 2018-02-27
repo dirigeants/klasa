@@ -30,14 +30,7 @@ class PermissionLevels extends Collection {
 	constructor(levels = 11) {
 		super();
 
-		/**
-		 * The amount of permission levels
-		 * @since 0.2.1
-		 * @type {number}
-		 */
-		this.requiredLevels = levels;
-
-		for (let i = 0; i < this.requiredLevels; i++) this.set(i, notSet);
+		for (let i = 0; i < levels; i++) this.set(i, notSet);
 	}
 
 	/**
@@ -62,7 +55,7 @@ class PermissionLevels extends Collection {
 	 */
 	set(level, obj) {
 		if (level < 0) throw new Error(`Cannot set permission level ${level}. Permission levels start at 0.`);
-		if (level > (this.requiredLevels - 1)) throw new Error(`Cannot set permission level ${level}. Permission levels stop at ${this.requiredLevels - 1}.`);
+		if (level > (this.size - 1)) throw new Error(`Cannot set permission level ${level}. Permission levels stop at ${this.size - 1}.`);
 		return super.set(level, obj);
 	}
 
