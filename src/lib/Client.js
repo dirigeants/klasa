@@ -489,8 +489,8 @@ class KlasaClient extends Discord.Client {
  */
 KlasaClient.defaultPermissionLevels = new PermLevels()
 	.addLevel(0, false, () => true)
-	.addLevel(6, false, (client, msg) => msg.guild && msg.member.permissions.has('MANAGE_GUILD'))
-	.addLevel(7, false, (client, msg) => msg.guild && msg.member === msg.guild.owner)
+	.addLevel(6, false, (client, msg) => msg.guild && msg.member.permissions.has('MANAGE_GUILD'), true)
+	.addLevel(7, false, (client, msg) => msg.guild && msg.member === msg.guild.owner, true)
 	.addLevel(9, true, (client, msg) => msg.author === client.owner)
 	.addLevel(10, false, (client, msg) => msg.author === client.owner);
 

@@ -14,6 +14,7 @@ class PermissionLevels extends Collection {
 	 * @typedef {Object} PermissionLevelsData
 	 * @property {boolean} broke Whether the loop broke execution of higher levels
 	 * @property {boolean} permission Whether the permission level check passed or not
+	 * @property {boolean} fetch Whether the permission level should autofetch a member or not
 	 */
 
 	/**
@@ -40,10 +41,11 @@ class PermissionLevels extends Collection {
 	 * @param {number} level The permission number for the level you are defining
 	 * @param {boolean} brk Whether the level should break (stop processing higher levels, and inhibit a no permission error)
 	 * @param {Function} check The permission checking function
+	 * @param {boolean} [fetch=false] If the permission should auto fetch members
 	 * @returns {PermissionLevels} This permission levels
 	 */
-	addLevel(level, brk, check) {
-		return this.set(level, { break: brk, check });
+	addLevel(level, brk, check, fetch = false) {
+		return this.set(level, { break: brk, check, fetch });
 	}
 
 	/**
@@ -66,7 +68,7 @@ class PermissionLevels extends Collection {
 	 * @returns {boolean}
 	 */
 	isValid() {
-		return this.every(level => level === notSet || (typeof level === 'object' && typeof level.break === 'boolean' && typeof level.check === 'function'));
+		return this.every(level => level === notSet || (typeof level === 'object' && typeof level.break === 'boolean' && typeof level.fetch === 'boolean' && typeof level.check === 'function'));
 	}
 
 	/**
@@ -80,6 +82,7 @@ class PermissionLevels extends Collection {
 			if (level === notSet) continue;
 			if (typeof level !== 'object') errors.push(`Permission level ${index} must be an object`);
 			if (typeof level.break !== 'boolean') errors.push(`"break" in permission level ${index} must be a boolean`);
+			if (typeof level.fetch !== 'boolean') errors.push(`"fetch" in permission level ${index} must be a boolean`);
 			if (typeof level.check !== 'function') errors.push(`"check" in permission level ${index} must be a function`);
 		}
 		return errors.join('\n');
@@ -93,20 +96,15 @@ class PermissionLevels extends Collection {
 	 * @returns {PermissionLevelsData}
 	 */
 	async run(msg, min) {
-		const mps = [];
-		let broke = false;
 		for (let i = min; i < this.size; i++) {
 			const level = this.get(i);
 			if (level === notSet) continue;
-			mps.push(level.check(msg.client, msg));
-			if (level.break) {
-				broke = true;
-				break;
-			}
+			if (level.fetch && !msg.member && msg.guild) await msg.guild.members.fetch(msg.author);
+			const res = await level.check(msg.client, msg);
+			if (res) return { broke: false, permission: true };
+			if (level.break) return { broke: true, permission: false };
 		}
-		const responses = await Promise.all(mps);
-		const permission = responses.includes(true);
-		return { broke, permission };
+		return { broke: false, permission: false };
 	}
 
 }
