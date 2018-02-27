@@ -18,8 +18,8 @@ class PermissionLevels extends Collection {
 
 	/**
 	 * @typedef {Object} PermissionLevelOptions
-	 * @property {boolean} break Whether the loop breaks execution of higher levels
-	 * @property {boolean} fetch Whether the permission level should autofetch a member or not
+	 * @property {boolean} [break=false] Whether the loop breaks execution of higher levels
+	 * @property {boolean} [fetch=false] Whether the permission level should autofetch a member or not
 	 */
 
 	/**
