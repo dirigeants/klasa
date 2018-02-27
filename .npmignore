@@ -23,3 +23,6 @@ guides
 docs
 .github
 CHANGELOG.md
+.eslintignore
+.eslintrcmd.json
+.markdownlint.json
