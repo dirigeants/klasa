@@ -209,18 +209,25 @@ class Configuration {
 	 * // Updating multiple keys (with arrays):
 	 * Configuration#update(['prefix', 'language'], ['k!', 'es-ES']);
 	 */
-	async update(key, value, guild, options) {
-		if (typeof options === 'undefined' && guild && guild.constructor.name === 'Object') {
-			options = guild;
-			guild = undefined;
+	async update(key, ...args) {
+		if (isObject(key)) {
+			// Overload update(object, GuildResolvable);
+			return this._updateMany(key, args[0] ? this.gateway._resolveGuild(args[0]) : null);
 		}
-		if (guild) guild = this.gateway._resolveGuild(guild);
+
+		// Overload update(string|string[], any|any[], ...any[]);
+		let value = args[0];
 		if (typeof key === 'string') {
 			key = [key];
 			value = [value];
-		} else if (isObject(key)) {
-			return this._updateMany(key, guild);
 		}
+
+		// Overload update(string|string[], any|any[], ConfigurationUpdateOptions);
+		// Overload update(string|string[], any|any[], GuildResolvable, ConfigurationUpdateOptions);
+		// If the third argument is undefined and the second is an object literal, swap the variables.
+		const [guild, options] = typeof args[2] === 'undefined' && args[1] && args[1].constructor.name === 'Object' ?
+			[undefined, args[1]] :
+			[args[1] ? this.gateway._resolveGuild(args[1]) : null, args[2]];
 
 		if (Array.isArray(key)) {
 			if (!Array.isArray(value) || key.length !== value.length) throw new Error(`Expected an array of ${key.length} entries. Got: ${value.length}.`);
