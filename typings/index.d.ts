@@ -449,10 +449,9 @@ declare module 'klasa' {
 
 	export class PermissionLevels extends Collection<number, PermissionLevel> {
 		public constructor(levels?: number);
-		public requiredLevels: number;
 
-		public addLevel(level: number, brk: boolean, check: (client: KlasaClient, msg: KlasaMessage) => boolean): this;
-		public set(level: number, obj: PermissionLevel): this;
+		public add(level: number, check: (client: KlasaClient, msg: KlasaMessage) => boolean, options?: PermissionLevelOptions): this;
+		public set(level: number, obj: PermissionLevelOptions): this;
 		public isValid(): boolean;
 		public debug(): string;
 
@@ -1402,6 +1401,12 @@ declare module 'klasa' {
 	export type PermissionLevel = {
 		break: boolean;
 		check: (client: KlasaClient, msg: KlasaMessage) => boolean;
+		fetch: boolean;
+	};
+
+	export type PermissionLevelOptions = {
+		break?: boolean;
+		fetch?: boolean;
 	};
 
 	export type PermissionLevelsData = {
