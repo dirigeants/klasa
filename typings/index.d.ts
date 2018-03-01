@@ -451,9 +451,10 @@ declare module 'klasa' {
 		public constructor(levels?: number);
 
 		public add(level: number, check: (client: KlasaClient, msg: KlasaMessage) => boolean, options?: PermissionLevelOptions): this;
-		public set(level: number, obj: PermissionLevelOptions): this;
-		public isValid(): boolean;
 		public debug(): string;
+		public isValid(): boolean;
+		public remove(level: number): this;
+		public set(level: number, obj: PermissionLevelOptions | symbol): this;
 
 		public run(msg: KlasaMessage, min: number): PermissionLevelsData;
 	}
