@@ -47,6 +47,6 @@ See the following [tutorial](https://klasa.js.org/#/docs/main/stable/Getting%20S
 
 ## See also:
 
-- [Documentation for klasa](https://klasa.js.org)
+- [Documentation for Klasa](https://klasa.js.org)
 - [Example premade pieces](https://github.com/dirigeants/klasa-pieces)
 - [VS Code extension for rapid development](https://marketplace.visualstudio.com/items?itemName=bdistin.klasa-vscode)
