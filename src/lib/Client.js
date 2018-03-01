@@ -5,7 +5,7 @@ const path = require('path');
 const ArgResolver = require('./parsers/ArgResolver');
 
 // lib/permissions
-const PermLevels = require('./permissions/PermissionLevels');
+const PermissionLevels = require('./permissions/PermissionLevels');
 
 // lib/schedule
 const Schedule = require('./schedule/Schedule');
@@ -336,7 +336,7 @@ class KlasaClient extends Discord.Client {
 	 */
 	validatePermissionLevels() {
 		const permLevels = this.options.permissionLevels || KlasaClient.defaultPermissionLevels;
-		if (!(permLevels instanceof PermLevels)) throw new Error('permissionLevels must be an instance of the PermissionLevels class');
+		if (!(permLevels instanceof PermissionLevels)) throw new Error('permissionLevels must be an instance of the PermissionLevels class');
 		if (permLevels.isValid()) return permLevels;
 		throw new Error(permLevels.debug());
 	}
@@ -487,12 +487,12 @@ class KlasaClient extends Discord.Client {
  * @since 0.2.1
  * @type {PermissionLevels}
  */
-KlasaClient.defaultPermissionLevels = new PermLevels()
-	.addLevel(0, false, () => true)
-	.addLevel(6, false, (client, msg) => msg.guild && msg.member.permissions.has('MANAGE_GUILD'))
-	.addLevel(7, false, (client, msg) => msg.guild && msg.member === msg.guild.owner)
-	.addLevel(9, true, (client, msg) => msg.author === client.owner)
-	.addLevel(10, false, (client, msg) => msg.author === client.owner);
+KlasaClient.defaultPermissionLevels = new PermissionLevels()
+	.add(0, () => true)
+	.add(6, (client, msg) => msg.guild && msg.member.permissions.has('MANAGE_GUILD'), { fetch: true })
+	.add(7, (client, msg) => msg.guild && msg.member === msg.guild.owner, { fetch: true })
+	.add(9, (client, msg) => msg.author === client.owner, { break: true })
+	.add(10, (client, msg) => msg.author === client.owner);
 
 
 /**

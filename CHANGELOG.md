@@ -13,6 +13,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#210](https://github.com/dirigeants/klasa/pull/210)] Added `PermissionLevelsOptions.fetch` to autofetch uncached members. (bdistin)
 - [[#196](https://github.com/dirigeants/klasa/pull/196)] Added property of `ignoreEdits` in monitors for whether a monitor should run in edited messages. (bdistin)
 - [[#196](https://github.com/dirigeants/klasa/pull/196)] Added property of `catchUp` in `ScheduledTask`, making the scheduled task not execute if the bot was offline when it was supposed to run, if this option is set to false. (bdistin)
 - [[#196](https://github.com/dirigeants/klasa/pull/196)] Added support for static methods and properties in extendables. (bdistin)
@@ -96,6 +97,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#210](https://github.com/dirigeants/klasa/pull/210)] **[BREAKING]** Changed the level adding to a more consistent format with the rest of the library: replaced `addLevel` to `add` and moved the `break` boolean to `PermissionLevelOptions.break`, which is taken as third parameter. (bdistin)
 - [[#196](https://github.com/dirigeants/klasa/pull/196)] **[BREAKING]** Moved the array for the argument `appliesTo` in extendables to be an option in `ExtendableOptions`. (bdistin)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Refactored Configuration's internals for maximum consistency and reduced code duplication. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] Changed the type for `GatewayDriver#types` from `string[]` to `Set<string>`. (kyranet)
@@ -157,6 +159,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Removed
 
+- [[#210](https://github.com/dirigeants/klasa/pull/210)] Removed PermissionLevels#requiredLevels as it's unnecessary do to inherited size parameter. (bdistin)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] **[BREAKING]** Removed `SchemaFolder#addKey` and `SchemaFolder#addFolder` in favor to a more consistent `Schema#add`. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] **[BREAKING]** Removed `Configuration#resetConfiguration()`. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] **[PERF-MEM]** Removed `Configuration#type`. (kyranet)
