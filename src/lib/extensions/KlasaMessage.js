@@ -292,6 +292,7 @@ module.exports = Structures.extend('Message', Message => {
 			}
 
 			options.embed = options.embed || null;
+			options.content = options.content || null;
 			return options;
 		}
 
