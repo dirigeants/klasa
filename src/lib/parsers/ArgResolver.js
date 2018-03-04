@@ -77,7 +77,7 @@ class ArgResolver extends Resolver {
 	 * @returns {Command}
 	 */
 	async cmd(arg, possible, msg) {
-		const command = this.client.commands.get(arg);
+		const command = this.client.commands.get(arg.toLowerCase());
 		if (command) return command;
 		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_PIECE', possible.name, 'command');
 	}
