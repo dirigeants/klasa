@@ -470,7 +470,7 @@ class KlasaClient extends Discord.Client {
 				else if (!message.command && now - (message.editedTimestamp || message.createdTimestamp) > lifetimeMs) messages++;
 				else continue;
 				if (message.member && message.member.lastMessage === message) message.member.lastMessage = null;
-				if (message.user.lastMessage === message) message.user.lastMessage = null;
+				if (message.author.lastMessage === message) message.author.lastMessage = null;
 				if (message.channel.lastMessage === message) message.channel.lastMessage = null;
 				channel.messages.delete(message.id);
 			}
