@@ -85,7 +85,7 @@ class PermissionLevels extends Collection {
 	 */
 	debug() {
 		const errors = [];
-		for (const [level, index] of this) {
+		for (const [index, level] of this) {
 			if (level === empty) continue;
 			if (typeof level !== 'object') errors.push(`Permission level ${index} must be an object`);
 			if (typeof level.break !== 'boolean') errors.push(`"break" in permission level ${index} must be a boolean`);
