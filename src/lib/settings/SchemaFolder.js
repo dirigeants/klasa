@@ -382,6 +382,7 @@ class SchemaFolder extends Schema {
 	 * @instance
 	 * @generator
 	 * @returns {Iterator<Array<string|SchemaFolder|SchemaPiece>>}
+	 * @memberof SchemaFolder
 	 */
 
 	[Symbol.iterator]() {

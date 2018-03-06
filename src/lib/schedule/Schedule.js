@@ -257,6 +257,7 @@ class Schedule {
 	 * @instance
 	 * @generator
 	 * @returns {Iterator<ScheduledTask>}
+	 * @memberof Schedule
 	 */
 
 	*[Symbol.iterator]() {
