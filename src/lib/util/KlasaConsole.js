@@ -17,6 +17,7 @@ class KlasaConsole extends Console {
 	 * @property {NodeJS.WritableStream} [stderr] The WritableStrwam for the error logs
 	 * @property {(boolean|string)} [timestamps] If false, it won't use timestamps. Otherwise it will use 'YYYY-MM-DD HH:mm:ss' if true or custom if string is given
 	 * @property {boolean} [useColor] Whether the timestamps should use colours
+	 * @property {boolean} [utc] If the timestamps should be in utc
 	 */
 
 	/**
@@ -125,7 +126,7 @@ class KlasaConsole extends Console {
 		/**
 		 * Whether or not timestamps should be enabled for this console.
 		 * @since 0.5.0
-		 * @type {Timestamp}
+		 * @type {?Timestamp}
 		 */
 		this.template = options.timestamps !== false ? new Timestamp(options.timestamps === true ? 'YYYY-MM-DD HH:mm:ss' : options.timestamps) : null;
 
@@ -139,10 +140,16 @@ class KlasaConsole extends Console {
 		/**
 		 * The colors for this console.
 		 * @since 0.4.0
-		 * @name KlasaConsole#colors
 		 * @type {(boolean|KlasaConsoleColorStyles)}
 		 */
 		this.colors = options.colors;
+
+		/**
+		 * Whether the timestamp should be in utc or not
+		 * @since 0.5.0
+		 * @type {boolean}
+		 */
+		this.utc = options.utc;
 	}
 
 
@@ -155,7 +162,7 @@ class KlasaConsole extends Console {
 	write(data, type = 'log') {
 		data = KlasaConsole._flatten(data, this.useColors);
 		const color = this.colors[type.toLowerCase()] || {};
-		const timestamp = this.template ? `${this.timestamp(`[${this.template}]`, color.time || {})} ` : '';
+		const timestamp = this.template ? `${this.timestamp(`[${this.utc ? this.template : this.template.displayUTC()}]`, color.time || {})} ` : '';
 		const shard = this.client.shard ? `${this.shard(`[${this.client.shard.id}]`, color.shard)} ` : '';
 		super[color.type || 'log'](data.split('\n').map(str => `${timestamp}${shard}${this.messages(str, color.message)}`).join('\n'));
 	}

@@ -78,15 +78,6 @@ class KlasaClient extends Discord.Client {
 	 */
 
 	/**
-	 * @typedef {Object} KlasaConsoleConfig
-	 * @property {WritableStream} [stdout=process.stdout] Output stream
-	 * @property {WritableStream} [stderr=process.stderr] Error stream
-	 * @property {boolean} [useColor=false] Whether the client console should use colors
-	 * @property {Colors} [colors] Color formats to use
-	 * @property {(boolean|string)} [timestamps=true] Whether to use timestamps or not, or the Timestamp format of the timestamp you want to use
-	 */
-
-	/**
 	 * @typedef {Object} KlasaConsoleEvents
 	 * @property {boolean} [debug=false] If the debug event should be enabled by default
 	 * @property {boolean} [error=true] If the error event should be enabled by default

@@ -1150,6 +1150,7 @@ declare module 'klasa' {
 		public template?: Timestamp;
 		public useColors: boolean;
 		public colors: boolean | KlasaConsoleColorStyles;
+		public utc: boolean;
 
 		public write(data: any, type?: string): void;
 		public log(...data: any[]): void;
