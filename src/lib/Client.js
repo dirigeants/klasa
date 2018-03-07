@@ -321,11 +321,11 @@ class KlasaClient extends Discord.Client {
 	/**
 	 * The owner for this bot
 	 * @since 0.1.1
-	 * @type {KlasaUser}
+	 * @type {?KlasaUser}
 	 * @readonly
 	 */
 	get owner() {
-		return this.users.get(this.options.ownerID);
+		return this.users.get(this.options.ownerID) || null;
 	}
 
 	/**

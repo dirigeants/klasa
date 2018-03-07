@@ -96,11 +96,11 @@ class GatewayStorage {
 	/**
 	 * Get the provider that manages the persistent data.
 	 * @since 0.5.0
-	 * @type {Provider}
+	 * @type {?Provider}
 	 * @readonly
 	 */
 	get provider() {
-		return this.client.providers.get(this.providerName);
+		return this.client.providers.get(this.providerName) || null;
 	}
 
 	/**
