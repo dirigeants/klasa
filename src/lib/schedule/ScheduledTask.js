@@ -109,11 +109,11 @@ class ScheduledTask {
 	/**
 	 * The Task instance this scheduled task will run
 	 * @since 0.5.0
-	 * @type {Task}
+	 * @type {?Task}
 	 * @readonly
 	 */
 	get task() {
-		return this.client.tasks.get(this.taskName);
+		return this.client.tasks.get(this.taskName) || null;
 	}
 
 	/**

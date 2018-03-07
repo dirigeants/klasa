@@ -71,7 +71,7 @@ declare module 'klasa' {
 		public ready: boolean;
 
 		public readonly invite: string;
-		public readonly owner: KlasaUser;
+		public readonly owner?: KlasaUser;
 		public validatePermissionLevels(): PermissionLevels;
 		public registerStore<K, V>(store: Store<K, V>): KlasaClient;
 		public unregisterStore<K, V>(store: Store<K, V>): KlasaClient;
@@ -220,7 +220,7 @@ declare module 'klasa' {
 
 	export class KlasaGuild extends DiscordGuild {
 		public configs: Configuration;
-		public readonly language: Language;
+		public readonly language?: Language;
 	}
 
 	export class KlasaMessage extends DiscordMessage {
@@ -496,7 +496,7 @@ declare module 'klasa' {
 		public id: string;
 		public data: any;
 
-		public readonly task: Task;
+		public readonly task?: Task;
 		public run(): Promise<this>;
 		public update(options?: ScheduledTaskUpdateOptions): Promise<this>;
 		public delete(): Promise<Schedule>;
@@ -622,7 +622,7 @@ declare module 'klasa' {
 		public ready: boolean;
 
 		public readonly sqlSchema: string[][];
-		public readonly provider: Provider;
+		public readonly provider?: Provider;
 		public readonly defaults: any;
 
 		private initTable(): Promise<void>;
@@ -926,7 +926,7 @@ declare module 'klasa' {
 	export class ProviderStore extends Store<string, Provider> {
 		public constructor(client: KlasaClient);
 
-		public readonly default: Provider;
+		public readonly default?: Provider;
 		public clear(): void;
 		public delete(name: Provider | string): boolean;
 	}
