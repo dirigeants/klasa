@@ -83,42 +83,6 @@ class Timestamp {
 	}
 
 	/**
-	 * Shows the user friendly duration of time between a period and now.
-	 * @since 0.5.0
-	 * @param {(Date|number|string)} earlier The time to compare
-	 * @param {boolean} [showIn] Whether the output should be prefixed
-	 * @returns {string}
-	 */
-	static toNow(earlier, showIn) {
-		if (!(earlier instanceof Date)) earlier = new Date(earlier);
-		const returnString = showIn ? 'in ' : '';
-		let duration = (Date.now() - earlier) / 1000;
-
-		// Compare the duration in seconds
-		if (duration < 45) return `${returnString}seconds`;
-		else if (duration < 90) return `${returnString}a minute`;
-
-		// Compare the duration in minutes
-		duration /= 60;
-		if (duration < 45) return `${returnString + Math.round(duration)} minutes`;
-		else if (duration < 90) return `${returnString}an hour`;
-
-		// Compare the duration in hours
-		duration /= 60;
-		if (duration < 22) return `${returnString + Math.round(duration)} hours`;
-		else if (duration < 36) return `${returnString}a day`;
-
-		// Compare the duration in days
-		duration /= 24;
-		if (duration < 26) return `${returnString + Math.round(duration)} days`;
-		else if (duration < 46) return `${returnString}a month`;
-		else if (duration < 320) return `${returnString + Math.round(duration / 30)} months`;
-		else if (duration < 548) return `${returnString}a year`;
-
-		return `${returnString + Math.floor(duration / 365)} years`;
-	}
-
-	/**
 	 * Creates a UTC Date object to work with.
 	 * @since 0.5.0
 	 * @param {(Date|number|string)} [time=new Date()] The date to convert to utc

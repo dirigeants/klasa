@@ -1115,6 +1115,8 @@ declare module 'klasa' {
 
 		public dateFrom(date: Date): Date;
 
+		public static toNow(earlier: Date | number | string, showIn?: boolean): string;
+
 		private static regex: RegExp;
 		private static nanosecond: number;
 		private static ns: number;
@@ -1285,7 +1287,6 @@ declare module 'klasa' {
 		public edit(pattern: string): this;
 
 		public static displayArbitrary(pattern: string, time?: Date | number | string): string;
-		public static toNow(earlier: Date | number | string, showIn?: boolean): string;
 
 		private static _display(template: string, time: Date | number | string): string;
 		private static _parse(type: string, time: Date): string;
