@@ -206,37 +206,6 @@ class GatewayDriver {
 	}
 
 	/**
-	 * Registers a new Gateway and inits it.
-	 * @since 0.3.0
-	 * @param {string} name The name for the new instance
-	 * @param {Object} [schema={}] The schema
-	 * @param {GatewayDriverAddOptions} [options={}] A provider to use. If not specified it'll use the one in the client
-	 * @param {boolean} [download=true] Whether this Gateway should download the data from the database at init
-	 * @returns {Gateway}
-	 * @example
-	 * // Add a new SettingGateway instance, called 'channels', that stores
-	 * // disabled commands and a command throttle for custom ratelimits.
-	 * this.client.gateways.add('channels', {
-	 *     disabledCommands: {
-	 *         type: 'Command',
-	 *         default: []
-	 *     },
-	 *     commandThrottle: {
-	 *         type: 'Integer',
-	 *         default: 5,
-	 *         min: 0,
-	 *         max: 60
-	 *     }
-	 * });
-	 */
-	async add(name, schema = {}, options = {}, download = true) {
-		const gateway = this._register(name, schema, options);
-		await gateway.init(download);
-
-		return gateway;
-	}
-
-	/**
 	 * Readies up all Gateways and Configuration instances
 	 * @since 0.5.0
 	 * @returns {Array<Array<external:Collection<string, Configuration>>>}
