@@ -162,7 +162,7 @@ class KlasaConsole extends Console {
 	write(data, type = 'log') {
 		data = KlasaConsole._flatten(data, this.useColors);
 		const color = this.colors[type.toLowerCase()] || {};
-		const timestamp = this.template ? `${this.timestamp(`[${this.utc ? this.template : this.template.displayUTC()}]`, color.time || {})} ` : '';
+		const timestamp = this.template ? `${this.timestamp(`[${this.utc ? this.template.displayUTC() : this.template}]`, color.time || {})} ` : '';
 		const shard = this.client.shard ? `${this.shard(`[${this.client.shard.id}]`, color.shard)} ` : '';
 		super[color.type || 'log'](data.split('\n').map(str => `${timestamp}${shard}${this.messages(str, color.message)}`).join('\n'));
 	}
