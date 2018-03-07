@@ -1,4 +1,4 @@
-const { Command, version: klasaVersion, Timestamp } = require('klasa');
+const { Command, version: klasaVersion, Duration } = require('klasa');
 const { version: discordVersion } = require('discord.js');
 
 module.exports = class extends Command {
@@ -25,7 +25,7 @@ module.exports = class extends Command {
 
 		return msg.sendCode('asciidoc', msg.language.get('COMMAND_STATS',
 			(memory || process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2),
-			Timestamp.toNow(Date.now() - (process.uptime() * 1000)),
+			Duration.toNow(Date.now() - (process.uptime() * 1000)),
 			(users || this.client.users.size).toLocaleString(),
 			(guilds || this.client.guilds.size).toLocaleString(),
 			(channels || this.client.channels.size).toLocaleString(),

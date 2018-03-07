@@ -19,11 +19,11 @@ class LanguageStore extends Store {
 	/**
 	 * The default language set in KlasaClientOptions.language
 	 * @since 0.2.1
-	 * @type {Language}
+	 * @type {?Language}
 	 * @readonly
 	 */
 	get default() {
-		return this.get(this.client.options.language);
+		return this.get(this.client.options.language) || null;
 	}
 
 }

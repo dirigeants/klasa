@@ -91,6 +91,7 @@ exports.DEFAULTS = {
 		stdout: process.stdout,
 		stderr: process.stderr,
 		timestamps: true,
+		utc: false,
 		colors: {
 			debug: {
 				type: 'log',

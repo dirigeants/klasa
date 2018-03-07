@@ -19,11 +19,11 @@ class ProviderStore extends Store {
 	/**
 	 * The default provider set in {@link KlasaClientOptions.providers}
 	 * @since 0.5.0
-	 * @type {Provider}
+	 * @type {?Provider}
 	 * @readonly
 	 */
 	get default() {
-		return this.get(this.client.options.providers.default);
+		return this.get(this.client.options.providers.default) || null;
 	}
 
 	/**
