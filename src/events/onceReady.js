@@ -10,7 +10,6 @@ module.exports = class extends Event {
 	}
 
 	async run() {
-		await this.client.gateways._ready();
 		if (this.client.user.bot) this.client.application = await this.client.fetchApplication();
 		if (!this.client.options.ownerID) this.client.options.ownerID = this.client.user.bot ? this.client.application.owner.id : this.client.user.id;
 

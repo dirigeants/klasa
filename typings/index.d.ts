@@ -601,7 +601,6 @@ declare module 'klasa' {
 		public clientStorage: Gateway;
 
 		public register(name: string, schema?: object, options?: GatewayDriverAddOptions): this;
-		public add(name: string, schema?: object, options?: GatewayDriverAddOptions, download?: boolean): Promise<Gateway>;
 		private _register(name: string, schema?: object, options?: GatewayDriverAddOptions): Gateway;
 		private _ready(): Promise<Array<Array<Collection<string, Configuration>>>>;
 		private _checkProvider(engine: string): string;
