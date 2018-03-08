@@ -20,14 +20,14 @@ module.exports = class extends Command {
 	}
 
 	async run(msg) {
-		const collector = await menu.run(await msg.send('Loading commands...'));
+		const collector = await this.menu.run(await msg.send('Loading commands...'));
 
 		const choice = await collector.selection;
 		if (choice === null) {
 			return collector.message.delete();
 		}
 
-		const command = this.client.commands.get(menu.options[choice].name);
+		const command = this.client.commands.get(this.menu.options[choice].name);
 		const info = new this.client.methods.Embed()
 			.setTitle(`Command \`${msg.guild.configs.prefix}${command.name}\``)
 			.setDescription(typeof command.description === 'function' ? command.description(msg) : command.description)
