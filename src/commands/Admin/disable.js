@@ -12,7 +12,7 @@ module.exports = class extends Command {
 	}
 
 	async run(msg, [piece]) {
-		if ((piece.type === 'event' && piece.name === 'Message') || (piece.type === 'monitor' && piece.name === 'commandHandler')) {
+		if ((piece.type === 'event' && piece.name === 'message') || (piece.type === 'monitor' && piece.name === 'commandHandler')) {
 			return msg.sendMessage(msg.language.get('COMMAND_DISABLE_WARN'));
 		}
 		piece.disable();
