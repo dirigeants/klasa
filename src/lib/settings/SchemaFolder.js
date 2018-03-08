@@ -113,7 +113,7 @@ class SchemaFolder extends Schema {
 
 		// Create the piece and save the current schema
 		const piece = this._add(key, options, options.type === 'Folder' ? SchemaFolder : SchemaPiece);
-		await fs.outputJSONAtomic(this.gateway.filePath, this.gateway.schema.toJSON());
+		await fs.outputJSONAtomic(this.gateway.filePath, this.gateway.schema);
 
 		if (this.gateway.sql) {
 			if (piece.type !== 'Folder' || piece.keyArray.length) {
@@ -141,7 +141,7 @@ class SchemaFolder extends Schema {
 
 		// Get the key, remove it from the configs and update the persistent schema
 		const piece = this._remove(key);
-		await fs.outputJSONAtomic(this.gateway.filePath, this.gateway.schema.toJSON());
+		await fs.outputJSONAtomic(this.gateway.filePath, this.gateway.schema);
 
 		// A SQL database has the advantage of being able to update all keys along the schema, so force is ignored
 		if (this.gateway.sql) {

@@ -1,4 +1,12 @@
 const { dirname } = require('path');
+const { mergeDefault } = require('./util');
+
+const colorBase = {
+	type: 'log',
+	shard: { background: 'cyan', text: 'black', style: null },
+	message: { background: null, text: null, style: null },
+	time: { background: null, text: null, style: null }
+};
 
 exports.DEFAULTS = {
 
@@ -93,42 +101,12 @@ exports.DEFAULTS = {
 		timestamps: true,
 		utc: false,
 		colors: {
-			debug: {
-				type: 'log',
-				shard: { background: 'cyan', text: 'black', style: null },
-				message: { background: null, text: null, style: null },
-				time: { background: 'magenta', text: null, style: null }
-			},
-			error: {
-				type: 'error',
-				shard: { background: 'cyan', text: 'black', style: null },
-				message: { background: null, text: null, style: null },
-				time: { background: 'red', text: null, style: null }
-			},
-			log: {
-				type: 'log',
-				shard: { background: 'cyan', text: 'black', style: null },
-				message: { background: null, text: null, style: null },
-				time: { background: 'blue', text: null, style: null }
-			},
-			verbose: {
-				type: 'log',
-				shard: { background: 'cyan', text: 'black', style: null },
-				message: { background: null, text: 'gray', style: null },
-				time: { background: null, text: 'gray', style: null }
-			},
-			warn: {
-				type: 'warn',
-				shard: { background: 'cyan', text: 'black', style: null },
-				message: { background: null, text: null, style: null },
-				time: { background: 'lightyellow', text: 'black', style: null }
-			},
-			wtf: {
-				type: 'error',
-				shard: { background: 'cyan', text: 'black', style: null },
-				message: { background: null, text: 'red', style: null },
-				time: { background: 'red', text: null, style: null }
-			}
+			debug: mergeDefault(colorBase, { time: { background: 'magenta' } }),
+			error: mergeDefault(colorBase, { type: 'error', time: { background: 'red' } }),
+			log: mergeDefault(colorBase, { time: { background: 'blue' } }),
+			verbose: mergeDefault(colorBase, { time: { text: 'gray' } }),
+			warn: mergeDefault(colorBase, { type: 'warn', time: { background: 'lightyellow', text: 'black' } }),
+			wtf: mergeDefault(colorBase, { type: 'error', message: { text: 'red' }, time: { background: 'red' } })
 		}
 	}
 
