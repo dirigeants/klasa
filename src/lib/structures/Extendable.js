@@ -63,7 +63,7 @@ class Extendable extends Piece {
 	/**
 	 * The init method to apply the extend method to the Discord.js Class
 	 * @since 0.0.1
-	 * @returns {Promise<void>}
+	 * @returns {void}
 	 */
 	async init() {
 		if (this.enabled) this.enable(true);

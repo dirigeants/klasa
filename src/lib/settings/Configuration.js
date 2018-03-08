@@ -137,7 +137,7 @@ class Configuration {
 	 * Reset a value from an entry.
 	 * @since 0.5.0
 	 * @param {(string|string[])} [keys] The key to reset
-	 * @param {KlasaGuild} [guild] A KlasaGuild instance for multilanguage support
+	 * @param {KlasaGuild} [guild] A KlasaGuild instance for multilingual support
 	 * @param {boolean} [avoidUnconfigurable] Whether the Gateway should avoid configuring the selected key
 	 * @returns {ConfigurationUpdateResult}
 	 * // Reset all keys for this instance

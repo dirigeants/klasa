@@ -114,7 +114,7 @@ class Store extends Collection {
 	/**
 	 * Sets up a piece in our store.
 	 * @since 0.0.1
-	 * @param {Piece} piece The peice we are setting up
+	 * @param {Piece} piece The piece we are setting up
 	 * @returns {?Piece}
 	 */
 	set(piece) {

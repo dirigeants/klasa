@@ -88,7 +88,7 @@ class SchemaPiece extends Schema {
 		this.sql = [this.path, null];
 
 		/**
-		 * Whether this key should be configureable by the config command. When type is any, this key defaults to false.
+		 * Whether this key should be configurable by the config command. When type is any, this key defaults to false.
 		 * @since 0.5.0
 		 * @type {boolean}
 		 * @name SchemaPiece#configurable

@@ -84,7 +84,7 @@ class Resolver {
 	/**
 	 * Resolve an Emoji Object by it's instance of Emoji, or by it's Snowflake/mention.
 	 * @since 0.5.0
-	 * @param {(Emoji|Snowflake)} emoji The emoji to validat/find
+	 * @param {(Emoji|Snowflake)} emoji The emoji to validate/find
 	 * @returns {?Emoji}
 	 */
 	async emoji(emoji) {
