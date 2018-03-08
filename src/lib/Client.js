@@ -257,6 +257,11 @@ class KlasaClient extends Discord.Client {
 		 */
 		this.gateways = new GatewayDriver(this);
 
+		// Register default gateways
+		this.gateways.register('guilds', this.gateways.guildsSchema, this.options.gateways.guilds, false);
+		this.gateways.register('users', undefined, this.options.gateways.users, false);
+		this.gateways.register('clientStorage', this.gateways.clientStorageSchema, this.options.gateways.clientStorage, false);
+
 		/**
 		 * The Configuration instance that handles this client's configuration
 		 * @since 0.5.0
@@ -403,13 +408,7 @@ class KlasaClient extends Discord.Client {
 
 		// Providers must be init before configs, and those before all other stores.
 		await this.providers.init();
-
-		// Add the gateways
-		await Promise.all([
-			this.gateways.add('guilds', this.gateways.guildsSchema, this.options.gateways.guilds, false),
-			this.gateways.add('users', undefined, this.options.gateways.users, false),
-			this.gateways.add('clientStorage', this.gateways.clientStorageSchema, this.options.gateways.clientStorage, false)
-		]);
+		await this.gateways._ready();
 
 		// Automatic Prefix editing detection.
 		if (typeof this.options.prefix === 'string' && this.options.prefix !== this.gateways.guilds.schema.prefix.default) {
