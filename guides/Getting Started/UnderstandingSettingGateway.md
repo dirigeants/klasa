@@ -33,7 +33,7 @@ And now, you're using rethinkdb's provider to store the data from SettingGateway
 
 Another advantage of using this interface is that it can handle multiple databases simultaneously, for example, Klasa handles 3 gateways at the same time: `clientStorage` for Client, `guilds` for Guild and `users` for User. Plus, there's the possibility to add a new {@link Gateway} by using {@link KlasaClient#gateways}:
 
-Let's say I want to add a new Gateway instance called `channels` that stores data to complement our permissions, and I want the **postgresql** provider to handle it.
+Let's say I want to add a new Gateway instance called `channels` that stores data to complement our permissions, and I want the **postgresql** provider to handle it but **rethinkdb** as the default provider.
 
 ```javascript
 const { KlasaClient } = require('klasa');
