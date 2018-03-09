@@ -524,7 +524,7 @@ KlasaClient.defaultPermissionLevels = new PermissionLevels()
  * @since 0.3.0
  * @param {KlasaMessage} message The message that triggered the command
  * @param {Command} command The command triggered
- * @param {?string} response The reason why it was inhibited if not silent
+ * @param {?string[]} response The reason why it was inhibited if not silent
  */
 
 /**
