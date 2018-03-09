@@ -234,7 +234,7 @@ class Gateway extends GatewayStorage {
 
 		if (piece && schema.type === 'Folder') {
 			const keys = schema.configurableKeys;
-			if (keys.length === 0) {
+			if (!keys.length) {
 				if (errors) throw `This group is not configurable.`;
 				return null;
 			}

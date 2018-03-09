@@ -31,11 +31,11 @@ class Language extends Piece {
 				`${this.language.DEFAULT(term)}`,
 				'',
 				`**${this.language.DEFAULT_LANGUAGE}:**`,
-				`${(args.length > 0 ? this.store.default.language[term](...args) : this.store.default.language[term]) || this.store.default.language.DEFAULT(term)}`
+				`${(args.length ? this.store.default.language[term](...args) : this.store.default.language[term]) || this.store.default.language.DEFAULT(term)}`
 			].join('\n');
 		}
 		/* eslint-enable new-cap */
-		return args.length > 0 ? this.language[term](...args) : this.language[term];
+		return args.length ? this.language[term](...args) : this.language[term];
 	}
 
 	/**

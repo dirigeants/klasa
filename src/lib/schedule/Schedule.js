@@ -106,7 +106,7 @@ class Schedule {
 			}
 
 			// Check if the Schedule has a task to run and run them if they exist
-			if (execute.length === 0) return;
+			if (!execute.length) return;
 			await Promise.all(execute);
 		}
 		this._checkInterval();
@@ -245,7 +245,7 @@ class Schedule {
 	 * @private
 	 */
 	_checkInterval() {
-		if (this.tasks.length === 0) this._clearInterval();
+		if (!this.tasks.length) this._clearInterval();
 		else if (!this._interval) this._interval = this.client.setInterval(this.execute.bind(this), this.timeInterval);
 	}
 

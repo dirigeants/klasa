@@ -268,7 +268,7 @@ class Configuration {
 			}
 		}
 		const keysTypes = Object.keys(keys);
-		if (folders.length === 0 && keysTypes.length === 0) return '';
+		if (!folders.length && !keysTypes.length) return '';
 		if (folders.length) array.push('= Folders =', ...folders.sort(), '');
 		if (keysTypes.length) {
 			for (const keyType of keysTypes.sort()) {
@@ -293,7 +293,7 @@ class Configuration {
 		const piece = path instanceof SchemaPiece ? path : this.gateway.getPath(path, { piece: true }).piece;
 		const value = this.get(piece.path);
 		if (value === null) return 'Not set';
-		if (piece.array && value.length === 0) return 'None';
+		if (piece.array && !value.length) return 'None';
 
 		let resolver;
 		switch (piece.type) {

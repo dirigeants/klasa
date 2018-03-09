@@ -345,7 +345,7 @@ class Util {
 			if (ind !== -1) arr2.splice(ind, 1);
 		}
 
-		return arr2.length === 0;
+		return !arr2.length;
 	}
 
 	/**

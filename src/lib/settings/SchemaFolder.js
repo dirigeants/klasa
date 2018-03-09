@@ -58,7 +58,7 @@ class SchemaFolder extends Schema {
 	 * @readonly
 	 */
 	get configurableKeys() {
-		if (this.keyArray.length === 0) return [];
+		if (!this.keyArray.length) return [];
 		return this.keyArray.filter(key => this[key].type === 'Folder' ? this[key].configurableKeys.length : this[key].configurable);
 	}
 
@@ -145,7 +145,7 @@ class SchemaFolder extends Schema {
 
 		// A SQL database has the advantage of being able to update all keys along the schema, so force is ignored
 		if (this.gateway.sql) {
-			if (piece.type !== 'Folder' || (piece.type === 'Folder' && piece.keyArray.length > 0)) {
+			if (piece.type !== 'Folder' || (piece.type === 'Folder' && piece.keyArray.length)) {
 				await this.gateway.provider.removeColumn(this.gateway.type, piece.type === 'Folder' ?
 					[...piece.keys(true)] : key);
 			}
@@ -404,7 +404,7 @@ class SchemaFolder extends Schema {
 	 * @returns {string}
 	 */
 	toString() {
-		return this.configurableKeys.length !== 0 ? '{ Folder }' : '{ Empty Folder }';
+		return this.configurableKeys.length ? '{ Folder }' : '{ Empty Folder }';
 	}
 
 }
