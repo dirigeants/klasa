@@ -33,7 +33,7 @@ module.exports = class extends Monitor {
 		super(...args, {
 			enabled: true,
 			ignoreBots: true,
-			ignoreSelf: true
+			ignoreSelf: true,
 			ignoreOthers: false
 		});
 	}
@@ -80,27 +80,35 @@ Math.floor(0.1 * Math.sqrt(POINTS + 1));
 Then inside our monitor's run method:
 
 ```javascript
-async run(msg) {
-	// If the message was not sent in a TextChannel, ignore it.
-	if (!msg.guild) return;
+class extends Monitor {
 
-	// Calculate the next value for experience.
-	const nextValue = msg.author.configs.experience + 1;
+	// Constructor
 
-	// Cache the current level.
-	const currLevel = msg.author.configs.level;
+	async run(msg) {
+		// If the message was not sent in a TextChannel, ignore it.
+		if (!msg.guild) return;
 
-	// Calculate the next level.
-	const nextLevel = Math.floor(0.1 * Math.sqrt(nextValue + 1));
+		// Calculate the next value for experience.
+		const nextValue = msg.author.configs.experience + 1;
 
-	// Update the user's configuration entry by adding 1 to it, and update the level aswell.
-	await msg.author.configs.update(['experience', 'level'], [nextValue, nextLevel]);
+		// Cache the current level.
+		const currLevel = msg.author.configs.level;
 
-	// If the current level and the next level do not equal, then it has increased, and you can send the message.
-	if (currLevel !== nextLevel) {
-		// Send the message to the channel congratulating the user.
-		await msg.send(`Congratulations! You leveled up to level **${currLevel}**!`);
+		// Calculate the next level.
+		const nextLevel = Math.floor(0.1 * Math.sqrt(nextValue + 1));
+
+		// Update the user's configuration entry by adding 1 to it, and update the level aswell.
+		await msg.author.configs.update(['experience', 'level'], [nextValue, nextLevel]);
+
+		// If the current level and the next level do not equal, then it has increased, and you can send the message.
+		if (currLevel !== nextLevel) {
+			// Send the message to the channel congratulating the user.
+			await msg.send(`Congratulations! You leveled up to level **${currLevel}**!`);
+		}
 	}
+
+	// Init
+
 }
 ```
 
