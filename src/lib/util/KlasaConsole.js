@@ -144,7 +144,7 @@ class KlasaConsole extends Console {
 		 */
 		this.colors = {};
 
-		for (const [name, format] of options.colors.entries()) this.colors[name] = new Colors(format);
+		for (const [name, format] of Object.entries(options.colors)) this.colors[name] = new Colors(format);
 
 		/**
 		 * Whether the timestamp should be in utc or not
