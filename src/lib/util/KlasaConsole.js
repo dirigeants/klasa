@@ -173,7 +173,7 @@ class KlasaConsole extends Console {
 		const { shard, message, time } = this.colors[type];
 		const timestamp = this.template ? time.format(`[${this.timestamp}]`, this.useColors) : '';
 		const shd = this.client.shard ? shard.format(`[${this.client.shard.id}]`, this.useColors) : '';
-		super[constants.DEFAULTS.CONSOLE.types[type] || 'log'](data.split('\n').map(str => `${timestamp}${shd}${message.format(str, this.useColors)}`).join('\n'));
+		super[constants.DEFAULTS.CONSOLE.types[type] || 'log'](data.split('\n').map(str => `${timestamp}${shd} ${message.format(str, this.useColors)}`).join('\n'));
 	}
 
 	/**
