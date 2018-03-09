@@ -23,7 +23,7 @@ module.exports = class extends Finalizer {
 			`${msg.command.name}(${msg.args.join(', ')})`,
 			this.colors[msg.reprompted ? 'prompted' : 'notPrompted'].format(`[${timer.stop()}]`, useColors),
 			this.colors.user.format(`${msg.author.username}[${msg.author.id}]`, useColors),
-			this.colors[type].format(this[type](msg), useColors)
+			this.colors.channel[type].format(this[type](msg), useColors)
 		].join(' '));
 	}
 
