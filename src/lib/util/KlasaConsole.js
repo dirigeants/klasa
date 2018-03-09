@@ -140,9 +140,11 @@ class KlasaConsole extends Console {
 		/**
 		 * The colors for this console.
 		 * @since 0.4.0
-		 * @type {(boolean|KlasaConsoleColorStyles)}
+		 * @type {object}
 		 */
-		this.colors = options.colors;
+		this.colors = {};
+
+		for (const [name, format] of options.colors.entries()) this.colors[name] = new Colors(format);
 
 		/**
 		 * Whether the timestamp should be in utc or not
@@ -152,6 +154,9 @@ class KlasaConsole extends Console {
 		this.utc = options.utc;
 	}
 
+	get timestamp() {
+		return this.utc ? this.template.displayUTC() : this.template.display();
+	}
 
 	/**
 	 * Logs everything to the console/writable stream.
@@ -160,11 +165,12 @@ class KlasaConsole extends Console {
 	 * @param {string} [type="log"] The type of log, particularly useful for coloring
 	 */
 	write(data, type = 'log') {
+		type = type.toLowerCase();
 		data = KlasaConsole._flatten(data, this.useColors);
-		const color = this.colors[type.toLowerCase()] || {};
-		const timestamp = this.template ? `${this.timestamp(`[${this.utc ? this.template.displayUTC() : this.template}]`, color.time || {})} ` : '';
-		const shard = this.client.shard ? `${this.shard(`[${this.client.shard.id}]`, color.shard)} ` : '';
-		super[color.type || 'log'](data.split('\n').map(str => `${timestamp}${shard}${this.messages(str, color.message)}`).join('\n'));
+		const { shard, message, time } = this.colors[type];
+		const timestamp = this.template ? time.format(`[${this.timestamp}]`, this.useColors) : '';
+		const shd = this.client.shard ? shard.format(`[${this.client.shard.id}]`, this.useColors) : '';
+		super[constants.DEFAULTS.CONSOLE.types[type] || 'log'](data.split('\n').map(str => `${timestamp}${shd}${message.format(str, this.useColors)}`).join('\n'));
 	}
 
 	/**
@@ -225,42 +231,6 @@ class KlasaConsole extends Console {
 	 */
 	wtf(...data) {
 		this.write(data, 'wtf');
-	}
-
-	/**
-	 * Logs everything to the console/writable stream.
-	 * @since 0.4.0
-	 * @param {string} input The timestamp to maybe format
-	 * @param {ColorsFormatOptions} time The time format used for coloring
-	 * @returns {string}
-	 */
-	timestamp(input, time) {
-		if (!this.useColors) return input;
-		return Colors.format(input, time);
-	}
-
-	/**
-	 * Logs everything to the console/writable stream.
-	 * @since 0.5.0
-	 * @param {string} input The shard string to maybe format
-	 * @param {ColorsFormatOptions} shard The shard format used for coloring
-	 * @returns {string}
-	 */
-	shard(input, shard) {
-		if (!this.useColors) return input;
-		return Colors.format(input, shard);
-	}
-
-	/**
-	 * Logs everything to the console/writable stream.
-	 * @since 0.4.0
-	 * @param {string} input The data we want to print
-	 * @param {ColorsFormatOptions} message The message format used for coloring
-	 * @returns {string}
-	 */
-	messages(input, message) {
-		if (!this.useColors) return input;
-		return Colors.format(input, message);
 	}
 
 	/**
