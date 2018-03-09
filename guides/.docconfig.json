@@ -105,6 +105,10 @@
         "path": "PieceStores.md"
     },
     {
+        "name": "Creating a Points System",
+        "path": "CreatingPointsSystems.md"
+    },
+    {
         "name": "Rich Display",
         "path": "RichDisplay.md"
     },
