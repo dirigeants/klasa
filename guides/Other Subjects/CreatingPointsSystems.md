@@ -111,7 +111,7 @@ module.exports = class extends Monitor {
 
 	// Init
 
-}
+};
 ```
 
 Optionally, you can check if `nextLevel === msg.author.configs.level` is true and update a single key instead, but the speed difference is negligible and since [SettingGateway v2.1](https://github.com/dirigeants/klasa/pull/179), the key `level` will not be updated if it did not change. As well, this overload is much faster than the JSON object overload, previously used as the only way to update multiple values.
