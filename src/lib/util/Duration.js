@@ -88,7 +88,7 @@ class Duration {
 		else if (duration < 320) return `${returnString + Math.round(duration / 30)} months`;
 		else if (duration < 548) return `${returnString}a year`;
 
-		return `${returnString + Math.floor(duration / 365)} years`;
+		return `${returnString + Math.round(duration / 365)} years`;
 	}
 
 }
