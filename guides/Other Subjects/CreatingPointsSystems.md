@@ -16,13 +16,13 @@ async function init() {
 }
 ```
 
-Where we'd check if the schema has the key `experience`. If it doesn't, we add it as a new key, with type `integer` (doubtfully we'll use `float` on this) and make it unconfigurable for the built-in userconf command so the end users do not cheat by modifying their stats.
+In this function, we are checking if the schema has the key `experience`. If it doesn't, we add it as a new key, with type `integer` (doubtfully we'll use `float` on this) and make it unconfigurable for the built-in userconf command so the end users do not cheat by modifying their stats.
 
-> **Note**: The name of the key can be any, can be `xp`, `points`... but we will use this one for this guide.
+> **Note**: The name of the key can be anything, can be `xp`, `points`... but we will use this one for the guide.
 
 ## Setting the monitor
 
-Now that we have set up the schema, we will want to create a monitor
+Now that we have set up the schema, we will want to create a monitor:
 
 ```javascript
 const { Monitor } = require('klasa');
@@ -54,9 +54,9 @@ Alternatively, we can create the `init` method and ensure the users' schema alwa
 
 ## Level up!
 
-Some social bots have level up messages, but, how do we set it up? There are two ways to achieve this:
+Some social bots have level up messages. How do we set it up? There are two ways to achieve this:
 
-1. We calculate the current level and the next level on the fly. This system is, however, harder to implement and it processes a lot of maths, but it's also RAM friendly for massive bots. We won't cover this in this guide.
+1. We calculate the current level and the next level on the fly. This system is, however, harder to implement and it processes a lot of maths, but it's also RAM friendly for massive bots. We won't cover this in the guide.
 1. We add a level field. This makes the configuration update slower by nature as it will need to update two values. First, we will create the key:
 
 ```javascript
@@ -80,7 +80,9 @@ Math.floor(0.1 * Math.sqrt(POINTS + 1));
 Then inside our monitor's run method:
 
 ```javascript
-class extends Monitor {
+const { Command } = require('klasa');
+
+module.exports = class extends Monitor {
 
 	// Constructor
 
@@ -97,10 +99,10 @@ class extends Monitor {
 		// Calculate the next level.
 		const nextLevel = Math.floor(0.1 * Math.sqrt(nextValue + 1));
 
-		// Update the user's configuration entry by adding 1 to it, and update the level aswell.
+		// Update the user's configuration entry by adding 1 to it, and update the level also.
 		await msg.author.configs.update(['experience', 'level'], [nextValue, nextLevel]);
 
-		// If the current level and the next level do not equal, then it has increased, and you can send the message.
+		// If the current level and the next level are not the same, then it has increased, and you can send the message.
 		if (currLevel !== nextLevel) {
 			// Send the message to the channel congratulating the user.
 			await msg.send(`Congratulations! You leveled up to level **${currLevel}**!`);
@@ -112,11 +114,11 @@ class extends Monitor {
 }
 ```
 
-Optionally, you can check if `nextLevel === msg.author.configs.level` is true and update a single key instead, but the speed difference is negligible and since [SettingGateway v2.1](https://github.com/dirigeants/klasa/pull/179), the key `level` will not be updated if it did not change. As well as this overload is much faster than the JSON object overload, previously used as the only way to update multiple values.
+Optionally, you can check if `nextLevel === msg.author.configs.level` is true and update a single key instead, but the speed difference is negligible and since [SettingGateway v2.1](https://github.com/dirigeants/klasa/pull/179), the key `level` will not be updated if it did not change. As well, this overload is much faster than the JSON object overload, previously used as the only way to update multiple values.
 
 ## Creating Our Commands
 
-To allow users know their current amount of points and level, we will create two commands:
+To allow users to know their current amount of points and level, we will create two commands:
 
 ### Points Command
 
@@ -128,7 +130,7 @@ const { Command } = require('klasa');
 module.exports = class extends Command {
 
 	constructor(...args) {
-		super(...args, { description: 'Check your amount of points' });
+		super(...args, { description: 'Check how many points you have.' });
 	}
 
 	async run(msg) {
@@ -149,7 +151,7 @@ const { Command } = require('klasa');
 module.exports = class extends Command {
 
 	constructor(...args) {
-		super(...args, { description: 'Check your amount of points' });
+		super(...args, { description: 'Check your current level.' });
 	}
 
 	async run(msg) {
