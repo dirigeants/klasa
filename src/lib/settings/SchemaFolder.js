@@ -118,7 +118,7 @@ class SchemaFolder extends Schema {
 		if (this.gateway.sql) {
 			if (piece.type !== 'Folder' || piece.keyArray.length) {
 				await this.gateway.provider.addColumn(this.gateway.type, piece.type === 'Folder' ?
-					piece.getSQL() : piece.sql[1]);
+					piece.getSQL() : piece.sql);
 			}
 		} else if (force || (this.gateway.type === 'clientStorage' && this.client.shard)) {
 			await this.force('add', key, piece);
@@ -229,8 +229,9 @@ class SchemaFolder extends Schema {
 	getSQL(array = []) {
 		if (!this.sql) return array;
 		for (const key of this.keyArray) {
-			if (this[key].type === 'Folder') this[key].getSQL(array);
-			else array.push(this[key].sql);
+			const piece = this[key];
+			if (piece.type === 'Folder') piece.getSQL(array);
+			else array.push([key.path, piece.sql]);
 		}
 		return array;
 	}

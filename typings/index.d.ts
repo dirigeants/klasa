@@ -701,7 +701,7 @@ declare module 'klasa' {
 		public default: any;
 		public min?: number;
 		public max?: number;
-		public sql: [string, string];
+		public sql: string;
 		public configurable: boolean;
 		public validator?: (resolved: any, guild?: KlasaGuild) => void;
 

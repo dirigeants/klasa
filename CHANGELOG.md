@@ -99,6 +99,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#228](https://github.com/dirigeants/klasa/pull/228)] `SchemaPiece#sql` is now type of `string` instead of `[string, string]`. (kyranet)
 - [[#228](https://github.com/dirigeants/klasa/pull/228)] Refactored `GatewayDriver` for optimized and better readability. (kyranet)
 - [[#228](https://github.com/dirigeants/klasa/pull/228)] Improved performance in `Gateway#_ready()` by caching the structure instead of getting it for each entry. (kyranet)
 - [[#213](https://github.com/dirigeants/klasa/pull/213)] Converted the not-set empty object instance to a Symbol for checking empty entries in PermissionLevels. (bdistin)

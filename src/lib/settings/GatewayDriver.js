@@ -112,14 +112,14 @@ class GatewayDriver {
 				default: this.client.options.prefix,
 				min: null,
 				max: 10,
-				array: this.client.options.prefix.constructor.name === 'Array',
+				array: Array.isArray(this.client.options.prefix),
 				configurable: true,
 				sql: qb ? qb.create()
 					.setType(['VARCHAR', 'TEXT'], 10)
 					.setNotNull()
-					.setDefault(this.client.options.prefix.constructor.name === 'Array' ?
+					.setDefault(Array.isArray(this.client.options.prefix) ?
 						JSON.stringify(this.client.options.prefix) :
-						this.client.options.prefix)
+						String(this.client.options.prefix))
 					.toString() : null
 			},
 			language: {
@@ -155,8 +155,7 @@ class GatewayDriver {
 				max: null,
 				array: true,
 				configurable: true,
-				sql: qb ? qb.create()
-					.setType('TEXT') : null
+				sql: null
 			}
 		};
 	}
@@ -168,8 +167,6 @@ class GatewayDriver {
 	 * @type {GatewayDriverClientStorageSchema}
 	 */
 	get clientStorageSchema() {
-		const provider = this.client.providers.get(this.client.options.gateways.guilds);
-		const qb = (provider && provider.qb) || null;
 		return {
 			userBlacklist: {
 				type: 'user',
@@ -178,8 +175,7 @@ class GatewayDriver {
 				max: null,
 				array: true,
 				configurable: true,
-				sql: qb ? qb.create()
-					.setType('TEXT') : null
+				sql: null
 			},
 			guildBlacklist: {
 				type: 'string',
@@ -188,8 +184,7 @@ class GatewayDriver {
 				max: 19,
 				array: true,
 				configurable: true,
-				sql: qb ? qb.create()
-					.setType('TEXT') : null
+				sql: null
 			},
 			schedules: {
 				type: 'any',
@@ -198,8 +193,7 @@ class GatewayDriver {
 				max: null,
 				array: true,
 				configurable: false,
-				sql: qb ? qb.create()
-					.setType('TEXT') : null
+				sql: null
 			}
 		};
 	}
