@@ -111,14 +111,12 @@ exports.DEFAULTS = {
 	},
 
 	SQL: {
-		BOOLEAN: { name: 'BOOL', default: ['false', 'true'] },
-		SMALLINT: { name: 'SMALLINT', default: '0' },
-		INTEGER: { name: 'INTEGER', default: '0' },
-		BIGINT: { name: 'BIGINT', default: '0' },
-		REAL: { name: 'BIGINT', default: '0' },
-		FLOAT: { name: 'BIGINT', default: '0' },
-		TEXT: { name: 'TEXT', default: '' },
-		VARCHAR: { name: 'TEXT', default: '' }
+		BOOLEAN: { name: 'BOOL', default: ['false', 'true'], size: false },
+		FLOAT: { name: 'BIGINT', default: '0', size: false },
+		INTEGER: { name: 'INTEGER', default: '0', size: false },
+		REAL: { name: 'BIGINT', default: '0', size: false },
+		TEXT: { name: 'TEXT', default: '', size: false },
+		VARCHAR: { name: 'VARCHAR', default: '', size: true }
 	}
 
 };

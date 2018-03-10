@@ -644,11 +644,12 @@ declare module 'klasa' {
 		public constructor(queryBuilder: QueryBuilder);
 		public queryBuilder: QueryBuilder;
 		public type?: QueryBuilderType;
+		public size?: number;
 		public notNull: boolean;
 		public unique: boolean;
 		public default: any;
 
-		public setType(type: string | string[]): this;
+		public setType(type: string | string[], size?: number): this;
 		public setNotNull(notNull?: boolean): this;
 		public setUnique(unique?: boolean): this;
 		public setDefault(value: any): this;
@@ -1497,6 +1498,7 @@ declare module 'klasa' {
 	export type QueryBuilderType = {
 		name: string;
 		default: any;
+		size: boolean;
 	};
 
 	export type QueryBuilderOptions = {
@@ -1819,11 +1821,9 @@ declare module 'klasa' {
 
 	export type KlasaSQLConstants = {
 		BOOLEAN: QueryBuilderType;
-		SMALLINT: QueryBuilderType;
-		INTEGER: QueryBuilderType;
-		BIGINT: QueryBuilderType;
-		REAL: QueryBuilderType;
 		FLOAT: QueryBuilderType;
+		INTEGER: QueryBuilderType;
+		REAL: QueryBuilderType;
 		TEXT: QueryBuilderType;
 		VARCHAR: QueryBuilderType;
 	};
