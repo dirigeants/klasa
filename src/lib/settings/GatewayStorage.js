@@ -158,7 +158,7 @@ class GatewayStorage {
 	 */
 	parseEntry(entry) {
 		const object = {};
-		for (const piece of this.schema.getValues()) {
+		for (const piece of this.schema.getValues(true)) {
 			// If the key does not exist in the schema, ignore it.
 			if (typeof entry[piece.path] === 'undefined') continue;
 
