@@ -52,14 +52,14 @@ module.exports = class extends Provider {
 	/**
 	 * Get all documents from a directory.
 	 * @param {string} table The name of the directory to fetch from
-	 * @param {boolean} [nice=false] Whether the provider should update all entries at the same time or politely update them sequentially
+	 * @param {boolean} [sequential = false] Whether the provider should update all entries at the same time or politely update them sequentially
 	 * @returns {Promise<Object[]>}
 	 */
-	async getAll(table, nice = false) {
+	async getAll(table, sequential = false) {
 		const dir = resolve(this.baseDir, table);
 		const files = await fs.readdir(dir);
 
-		if (nice) {
+		if (sequential) {
 			const documents = [];
 			for (let i = 0; i < files.length; i++) {
 				if (files[i].endsWith('.json')) await fs.readJSON(resolve(dir, files[i])).then(documents.push);
@@ -120,11 +120,11 @@ module.exports = class extends Provider {
 	 * @param {string} table The name of the directory
 	 * @param {string} path The key's path to update
 	 * @param {*} newValue The new value for the key
-	 * @param {boolean} [nice=false] Whether the provider should update all entries at the same time or politely update them sequentially
+	 * @param {boolean} [sequential = false] Whether the provider should update all entries at the same time or politely update them sequentially
 	 */
-	async updateValue(table, path, newValue, nice = false) {
+	async updateValue(table, path, newValue, sequential = false) {
 		const route = path.split('.');
-		if (nice) {
+		if (sequential) {
 			const values = await this.getAll(table, true);
 			for (let i = 0; i < values.length; i++) await this._updateValue(table, route, values[i], newValue);
 		} else {
@@ -136,12 +136,12 @@ module.exports = class extends Provider {
 	/**
 	 * Remove a value or object from all entries.
 	 * @param {string} table The name of the directory
-	 * @param {string} [path=''] The key's path to update
-	 * @param {boolean} nice Whether the provider should update all entries at the same time or politely update them sequentially
+	 * @param {string} [path = ''] The key's path to update
+	 * @param {boolean} [sequential = false] Whether the provider should update all entries at the same time or politely update them sequentially
 	 */
-	async removeValue(table, path = '', nice = false) {
+	async removeValue(table, path = '', sequential = false) {
 		const route = path.split('.');
-		if (nice) {
+		if (sequential) {
 			const values = await this.getAll(table, true);
 			for (let i = 0; i < values.length; i++) await this._removeValue(table, route, values[i]);
 		} else {

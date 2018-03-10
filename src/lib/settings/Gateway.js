@@ -40,29 +40,16 @@ class Gateway extends GatewayStorage {
 	 * @since 0.0.1
 	 * @param {GatewayDriver} store The GatewayDriver instance which initiated this instance
 	 * @param {string} type The name of this Gateway
-	 * @param {Object} schema The initial schema for this instance
 	 * @param {GatewayDriverAddOptions} options The options for this schema
 	 */
-	constructor(store, type, schema, options) {
-		super(store.client, type, options.provider);
+	constructor(store, type, { provider }) {
+		super(store.client, type, provider);
 
 		/**
 		 * @since 0.0.1
 		 * @type {GatewayDriver}
 		 */
 		this.store = store;
-
-		/**
-		 * @since 0.5.0
-		 * @type {GatewayDriverAddOptions}
-		 */
-		this.options = options;
-
-		/**
-		 * @since 0.3.0
-		 * @type {Object}
-		 */
-		this.defaultSchema = schema;
 
 		/**
 		 * @since 0.0.1
@@ -250,14 +237,10 @@ class Gateway extends GatewayStorage {
 	 * @param {boolean} [download=true] Whether this Gateway should download the data from the database
 	 * @private
 	 */
-	async init(download = true) {
-		if (this.ready) throw new Error(`[INIT] ${this} has already initialized.`);
-
-		await this.initSchema();
-		await this.initTable();
-
+	async init({ download = true, defaultSchema = {} } = {}) {
+		await super.init(defaultSchema);
 		if (download) await this.sync();
-		this.ready = true;
+		await this._ready();
 	}
 
 	/**
@@ -270,8 +253,9 @@ class Gateway extends GatewayStorage {
 		if (!this.schema.keyArray.length || typeof this.client[this.type] === 'undefined') return null;
 		const promises = [];
 		const keys = await this.provider.getKeys(this.type);
+		const store = this.client[this.type];
 		for (let i = 0; i < keys.length; i++) {
-			const structure = this.client[this.type].get(keys[i]);
+			const structure = store.get(keys[i]);
 			if (structure) promises.push(structure.configs.sync().then(() => this.cache.set(keys[i], structure.configs)));
 		}
 		const results = await Promise.all(promises);
@@ -335,7 +319,7 @@ class Gateway extends GatewayStorage {
 	toJSON() {
 		return {
 			type: this.type,
-			options: this.options,
+			options: { provider: this.providerName },
 			schema: this.schema.toJSON()
 		};
 	}

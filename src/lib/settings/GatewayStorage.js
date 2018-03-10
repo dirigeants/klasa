@@ -116,13 +116,14 @@ class GatewayStorage {
 	/**
 	 * Inits the current Gateway.
 	 * @since 0.5.0
+	 * @param {Object} defaultSchema The default schema
 	 */
-	async init() {
+	async init(defaultSchema) {
 		if (this.ready) throw new Error(`[INIT] ${this} has already initialized.`);
-		await this.initSchema();
-		await this.initTable();
-
 		this.ready = true;
+
+		await this.initSchema(defaultSchema);
+		await this.initTable();
 	}
 
 	/**
@@ -139,12 +140,13 @@ class GatewayStorage {
 	 * Inits the schema, creating a file if it does not exist, and returning the current schema or the default.
 	 * @since 0.5.0
 	 * @returns {SchemaFolder}
+	 * @param {Object} defaultSchema The default schema
 	 * @private
 	 */
-	async initSchema() {
+	async initSchema(defaultSchema) {
 		await fs.ensureDir(this.baseDir);
 		const schema = await fs.readJSON(this.filePath)
-			.catch(() => fs.outputJSONAtomic(this.filePath, this.defaultSchema).then(() => this.defaultSchema));
+			.catch(() => fs.outputJSONAtomic(this.filePath, defaultSchema).then(() => defaultSchema));
 		this.schema = new SchemaFolder(this.client, this, schema, null, '');
 		return this.schema;
 	}

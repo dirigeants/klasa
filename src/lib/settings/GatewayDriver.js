@@ -10,7 +10,6 @@ class GatewayDriver {
 	/**
 	 * @typedef {Object} GatewayDriverAddOptions
 	 * @property {string} [provider] The name of the provider to use
-	 * @property {boolean} [nice=false] Whether the JSON provider should use sequential or burst mode
 	 */
 
 	/**
@@ -186,20 +185,23 @@ class GatewayDriver {
 	 * Registers a new Gateway.
 	 * @since 0.5.0
 	 * @param {string} name The name for the new gateway
-	 * @param {Object} [schema={}] The schema for use in this gateway
-	 * @param {GatewayDriverAddOptions} [options={}] The options for the new gateway
+	 * @param {Object} [defaultSchema = {}] The schema for use in this gateway
+	 * @param {GatewayDriverAddOptions} [options = {}] The options for the new gateway
 	 * @chainable
 	 * @returns {this}
 	 */
-	register(name, schema = {}, options = {}) {
+	register(name, defaultSchema = {}, { download = false, provider = this.client.options.providers.default } = {}) {
+		if (typeof name !== 'string') throw new TypeError('You must pass a name for your new gateway and it must be a string.');
+		if (!this.client.methods.util.isObject(defaultSchema)) throw new TypeError('Schema must be a valid object or left undefined for an empty object.');
+		if (name in this) throw new Error(`The key '${name}' is either taken by another Gateway or reserved for GatewayDriver's functionality.`);
 		if (!this.ready) {
-			if (this._queue.has(name)) throw new Error(`There is already a Gateway with the name '${name}'.`);
-			this._queue.set(name, () => {
-				this._register(name, schema, options);
+			if (this._queue.has(name)) throw new Error(`There is already a Gateway with the name '${name}' in the queue.`);
+			this._queue.set(name, async () => {
+				await this._register(name, { provider }).init({ download, defaultSchema });
 				this._queue.delete(name);
 			});
 		} else {
-			this._register(name, schema, options);
+			this._register(name, { provider });
 		}
 
 		return this;
@@ -212,54 +214,25 @@ class GatewayDriver {
 	 * @private
 	 */
 	async _ready() {
-		if (this.ready) throw new Error('Configuration has already run the ready method.');
+		if (this.ready) throw new Error('The GatewayDriver has already been inited.');
 		this.ready = true;
-		const promises = [];
-		for (const register of this._queue.values()) register();
-		for (const key of this.keys) {
-			// If the gateway did not init yet, init it now
-			if (!this[key].ready) await this[key].init();
-			promises.push(this[key]._ready());
-		}
-		return Promise.all(promises);
+		return Promise.all([...this._queue.values()].map(register => register()));
 	}
 
 	/**
 	 * Registers a new Gateway
 	 * @since 0.5.0
 	 * @param {string} name The name for the new gateway
-	 * @param {Object} schema The schema for use in this gateway
 	 * @param {GatewayDriverAddOptions} options The options for the new gateway
 	 * @returns {Gateway}
 	 * @private
 	 */
-	_register(name, schema, options) {
-		if (typeof name !== 'string') throw new Error('You must pass a name for your new gateway and it must be a string.');
+	_register(name, options) {
+		if (!this.client.providers.has(options.provider)) throw new Error(`This provider (${options.provider}) does not exist in your system.`);
 
-		if (this[name] !== undefined && this[name] !== null) throw new Error(`There is already a Gateway with the name '${name}'.`);
-		if (!this.client.methods.util.isObject(schema)) throw new Error('Schema must be a valid object or left undefined for an empty object.');
-
-		options.provider = this._checkProvider(options.provider || this.client.options.providers.default);
-		const provider = this.client.providers.get(options.provider);
-		if (provider.cache) throw new Error(`The provider ${provider.name} is designed for caching, not persistent data. Please try again with another.`);
-
-		const gateway = new Gateway(this, name, schema, options);
 		this.keys.add(name);
-		this[name] = gateway;
-
-		return gateway;
-	}
-
-	/**
-	 * Check if a provider exists.
-	 * @since 0.5.0
-	 * @param {string} engine Check if a provider exists
-	 * @returns {string}
-	 * @private
-	 */
-	_checkProvider(engine) {
-		if (this.client.providers.has(engine)) return engine;
-		throw new Error(`This provider (${engine}) does not exist in your system.`);
+		this[name] = new Gateway(this, name, options);
+		return this[name];
 	}
 
 	/**

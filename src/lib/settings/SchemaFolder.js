@@ -191,7 +191,7 @@ class SchemaFolder extends Schema {
 				for (let j = 0; j < path.length - 1; j++) value = value[path[j]];
 				value[path[path.length - 1]] = deepClone(defValue);
 			}
-			return this.gateway.provider.updateValue(this.gateway.type, piece.path, defValue, this.gateway.options.nice);
+			return this.gateway.provider.updateValue(this.gateway.type, piece.path, defValue);
 		}
 
 		if (action === 'delete') {
@@ -199,7 +199,7 @@ class SchemaFolder extends Schema {
 				for (let j = 0; j < path.length - 1; j++) value = value[path[j]];
 				delete value[path[path.length - 1]];
 			}
-			return this.gateway.provider.removeValue(this.gateway.type, piece.path, this.gateway.options.nice);
+			return this.gateway.provider.removeValue(this.gateway.type, piece.path);
 		}
 
 		throw new TypeError(`Action must be either 'add' or 'delete'. Got: ${action}`);
