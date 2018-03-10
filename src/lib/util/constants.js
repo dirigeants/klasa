@@ -108,6 +108,17 @@ exports.DEFAULTS = {
 			warn: mergeDefault(colorBase, { type: 'warn', time: { background: 'lightyellow', text: 'black' } }),
 			wtf: mergeDefault(colorBase, { type: 'error', message: { text: 'red' }, time: { background: 'red' } })
 		}
+	},
+
+	SQL: {
+		BOOLEAN: { name: 'BOOL', default: ['false', 'true'] },
+		SMALLINT: { name: 'SMALLINT', default: '0' },
+		INTEGER: { name: 'INTEGER', default: '0' },
+		BIGINT: { name: 'BIGINT', default: '0' },
+		REAL: { name: 'BIGINT', default: '0' },
+		FLOAT: { name: 'BIGINT', default: '0' },
+		TEXT: { name: 'TEXT', default: '' },
+		VARCHAR: { name: 'TEXT', default: '' }
 	}
 
 };

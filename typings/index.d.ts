@@ -629,6 +629,32 @@ declare module 'klasa' {
 		private static _parseSQLValue(value: any, schemaPiece: SchemaPiece): any;
 	}
 
+	export class QueryBuilder {
+		public constructor(client: KlasaClient, types: { [k: string]: QueryBuilderType } & KlasaSQLConstants, options: QueryBuilderOptions);
+		public client: KlasaClient;
+		public types: { [k: string]: QueryBuilderType } & KlasaSQLConstants;
+		public customResolvers: Map<string, (qs: QueryBuilder, value: any) => string>;
+		public create(): QueryType;
+		public valueOf(): { [k: string]: QueryBuilderType };
+
+		private _parseValue(value: any): string;
+	}
+
+	export class QueryType {
+		public constructor(queryBuilder: QueryBuilder);
+		public queryBuilder: QueryBuilder;
+		public type?: QueryBuilderType;
+		public notNull: boolean;
+		public unique: boolean;
+		public default: any;
+
+		public setType(string: string): this;
+		public setNotNull(notNull?: boolean): this;
+		public setUnique(unique?: boolean): this;
+		public setDefault(value: any): this;
+		public toString(): string;
+	}
+
 	export abstract class Schema {
 		public constructor(client: KlasaClient, gateway: Gateway, object: any, parent: SchemaFolder, key: string);
 		public readonly client: KlasaClient;
@@ -1057,7 +1083,8 @@ declare module 'klasa' {
 	export type constants = {
 		DEFAULTS: {
 			CLIENT: KlasaConstantsClient,
-			CONSOLE: KlasaConsoleConfig
+			CONSOLE: KlasaConsoleConfig,
+			SQL: KlasaSQLConstants
 		};
 		CRON: {
 			allowedNum: number[][];
@@ -1467,6 +1494,15 @@ declare module 'klasa' {
 		| GuildMember
 		| Role;
 
+	export type QueryBuilderType = {
+		name: string;
+		default: any;
+	};
+
+	export type QueryBuilderOptions = {
+		makeStringLiteral: (str: string) => string;
+	};
+
 	export type ConfigurationUpdateOptions = {
 		action?: 'add' | 'remove' | 'auto';
 		arrayPosition?: number;
@@ -1779,6 +1815,17 @@ declare module 'klasa' {
 		verbose?: boolean;
 		warn?: boolean;
 		wtf?: boolean;
+	};
+
+	export type KlasaSQLConstants = {
+		BOOLEAN: QueryBuilderType;
+		SMALLINT: QueryBuilderType;
+		INTEGER: QueryBuilderType;
+		BIGINT: QueryBuilderType;
+		REAL: QueryBuilderType;
+		FLOAT: QueryBuilderType;
+		TEXT: QueryBuilderType;
+		VARCHAR: QueryBuilderType;
 	};
 
 	export type KlasaConsoleColorStyles = {

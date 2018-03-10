@@ -13,6 +13,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#228](https://github.com/dirigeants/klasa/pull/228)] Added the classes `QueryBuilder` and `QueryType` to abstract SQL queries from SettingGateway. (kyranet)
 - [[#213](https://github.com/dirigeants/klasa/pull/213)] Added `PermissionLevels#remove()`. (bdistin)
 - [[#210](https://github.com/dirigeants/klasa/pull/210)] Added `PermissionLevelsOptions.fetch` to autofetch uncached members. (bdistin)
 - [[#196](https://github.com/dirigeants/klasa/pull/196)] Added property of `ignoreEdits` in monitors for whether a monitor should run in edited messages. (bdistin)
