@@ -228,11 +228,7 @@ class SchemaFolder extends Schema {
 	 */
 	getSQL(array = []) {
 		if (!this.sql) return array;
-		for (const key of this.keyArray) {
-			const piece = this[key];
-			if (piece.type === 'Folder') piece.getSQL(array);
-			else array.push([key.path, piece.sql]);
-		}
+		for (const piece of this.values(true)) array.push([piece.path, piece.sql]);
 		return array;
 	}
 
@@ -331,8 +327,9 @@ class SchemaFolder extends Schema {
 	*entries(recursive = false) {
 		if (recursive) {
 			for (const key of this.keyArray) {
-				if (this[key].type === 'Folder') yield* this[key].entries(true);
-				else yield [key, this[key]];
+				const piece = this[key];
+				if (piece.type === 'Folder') yield* piece.entries(true);
+				else yield [key, piece];
 			}
 		} else {
 			for (const key of this.keyArray) yield [key, this[key]];
@@ -349,8 +346,9 @@ class SchemaFolder extends Schema {
 	*values(recursive = false) {
 		if (recursive) {
 			for (const key of this.keyArray) {
-				if (this[key].type === 'Folder') yield* this[key].values(true);
-				else yield this[key];
+				const piece = this[key];
+				if (piece.type === 'Folder') yield* piece.values(true);
+				else yield piece;
 			}
 		} else {
 			for (const key of this.keyArray) yield this[key];
@@ -371,7 +369,7 @@ class SchemaFolder extends Schema {
 				else yield key;
 			}
 		} else {
-			for (const key of this.keyArray) yield key;
+			yield* this.keyArray;
 		}
 	}
 
