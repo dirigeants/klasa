@@ -648,7 +648,7 @@ declare module 'klasa' {
 		public unique: boolean;
 		public default: any;
 
-		public setType(type: string): this;
+		public setType(type: string | string[]): this;
 		public setNotNull(notNull?: boolean): this;
 		public setUnique(unique?: boolean): this;
 		public setDefault(value: any): this;

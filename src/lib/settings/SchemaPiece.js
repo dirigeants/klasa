@@ -266,8 +266,26 @@ class SchemaPiece extends Schema {
 	 * @private
 	 */
 	_generateSQLDatatype(sql) {
-		return typeof sql === 'string' ? sql : (this.type === 'integer' || this.type === 'float' ? 'INTEGER' :
-			this.max !== null ? `VARCHAR(${this.max})` : 'TEXT') + (this.default !== null ? ` DEFAULT ${SchemaPiece._parseSQLValue(this.default)}` : '');
+		if (typeof sql === 'string') return sql;
+
+		const { provider } = this.gateway;
+		if (!provider.sql || !provider.qb) return null;
+
+		const qb = provider.qb.create();
+		switch (this.type) {
+			case 'integer': qb.setType(['INTEGER', 'INT'], this.max).setNotNull();
+				break;
+			case 'float': qb.setType(['FLOAT', 'REAL'], this.max).setNotNull();
+				break;
+			case 'boolean': qb.setType('BOOLEAN').setNotNull();
+				break;
+			case 'string': qb.setType(['VARCHAR', 'TEXT'], this.max);
+				break;
+			default: qb.setType('TEXT', this.max);
+				break;
+		}
+		return qb.setDefault(SchemaPiece._parseSQLValue(this.default))
+			.toString();
 	}
 
 	/**
@@ -339,9 +357,9 @@ class SchemaPiece extends Schema {
 	 */
 	static _parseSQLValue(value) {
 		const type = typeof value;
+		if (type === 'string') return value;
 		if (type === 'boolean' || type === 'number' || value === null) return String(value);
-		if (type === 'string') return `'${value.replace(/'/g, "''")}'`;
-		if (type === 'object') return `'${JSON.stringify(value).replace(/'/g, "''")}'`;
+		if (type === 'object') return JSON.stringify(value);
 		return '';
 	}
 

@@ -104,6 +104,8 @@ class GatewayDriver {
 	 * @type {GatewayDriverGuildsSchema}
 	 */
 	get guildsSchema() {
+		const provider = this.client.providers.get(this.client.options.gateways.guilds);
+		const qb = (provider && provider.qb) || null;
 		return {
 			prefix: {
 				type: 'string',
@@ -112,7 +114,13 @@ class GatewayDriver {
 				max: 10,
 				array: this.client.options.prefix.constructor.name === 'Array',
 				configurable: true,
-				sql: `VARCHAR(10) NOT NULL DEFAULT '${this.client.options.prefix.constructor.name === 'Array' ? JSON.stringify(this.client.options.prefix) : this.client.options.prefix}'`
+				sql: qb ? qb.create()
+					.setType(['VARCHAR', 'TEXT'], 10)
+					.setNotNull()
+					.setDefault(this.client.options.prefix.constructor.name === 'Array' ?
+						JSON.stringify(this.client.options.prefix) :
+						this.client.options.prefix)
+					.toString() : null
 			},
 			language: {
 				type: 'language',
@@ -121,7 +129,11 @@ class GatewayDriver {
 				max: null,
 				array: false,
 				configurable: true,
-				sql: `VARCHAR(5) NOT NULL DEFAULT '${this.client.options.language}'`
+				sql: qb ? qb.create()
+					.setType(['VARCHAR', 'TEXT'], 5)
+					.setNotNull()
+					.setDefault(this.client.options.language)
+					.toString() : null
 			},
 			disableNaturalPrefix: {
 				type: 'boolean',
@@ -130,7 +142,11 @@ class GatewayDriver {
 				max: null,
 				array: false,
 				configurable: Boolean(this.client.options.regexPrefix),
-				sql: `BIT(1) NOT NULL DEFAULT 0`
+				sql: qb ? qb.create()
+					.setType(['BOOLEAN'])
+					.setNotNull()
+					.setDefault(Boolean(this.client.options.regexPrefix))
+					.toString() : null
 			},
 			disabledCommands: {
 				type: 'command',
@@ -139,7 +155,8 @@ class GatewayDriver {
 				max: null,
 				array: true,
 				configurable: true,
-				sql: 'TEXT'
+				sql: qb ? qb.create()
+					.setType('TEXT') : null
 			}
 		};
 	}
@@ -151,6 +168,8 @@ class GatewayDriver {
 	 * @type {GatewayDriverClientStorageSchema}
 	 */
 	get clientStorageSchema() {
+		const provider = this.client.providers.get(this.client.options.gateways.guilds);
+		const qb = (provider && provider.qb) || null;
 		return {
 			userBlacklist: {
 				type: 'user',
@@ -159,7 +178,8 @@ class GatewayDriver {
 				max: null,
 				array: true,
 				configurable: true,
-				sql: 'TEXT'
+				sql: qb ? qb.create()
+					.setType('TEXT') : null
 			},
 			guildBlacklist: {
 				type: 'string',
@@ -168,7 +188,8 @@ class GatewayDriver {
 				max: 19,
 				array: true,
 				configurable: true,
-				sql: 'TEXT'
+				sql: qb ? qb.create()
+					.setType('TEXT') : null
 			},
 			schedules: {
 				type: 'any',
@@ -177,7 +198,8 @@ class GatewayDriver {
 				max: null,
 				array: true,
 				configurable: false,
-				sql: 'TEXT'
+				sql: qb ? qb.create()
+					.setType('TEXT') : null
 			}
 		};
 	}

@@ -21,6 +21,13 @@ class QueryType {
 		this.type = null;
 
 		/**
+		 * The size or length for the type in fixed-variable types
+		 * @type {?number}
+		 * @since 0.5.0
+		 */
+		this.size = null;
+
+		/**
 		 * Whether this constraint is nullable
 		 * @type {boolean}
 		 * @since 0.5.0
@@ -45,14 +52,26 @@ class QueryType {
 	/**
 	 * Set the datatype.
 	 * @since 0.5.0
-	 * @param {string} type The type to set
+	 * @param {string|string[]} type The type to set
+	 * @param {number} [size] The size for variable-length types
 	 * @returns {this}
 	 * @chainable
 	 */
-	setType(type) {
+	setType(type, size = null) {
+		if (Array.isArray(type)) {
+			for (let i = 0; i < type.length; i++) {
+				const typename = type[i].toUpperCase();
+				if (!(typename in this.queryBuilder.types)) continue;
+				this.type = this.queryBuilder.types[typename];
+				if (this.type.size !== null) this.size = size;
+				return this;
+			}
+			throw new TypeError(`None of the datatypes (${type.join(' | ')}) are supported.`);
+		}
 		type = type.toUpperCase();
-		if (!(type in this.queryBuilder.types)) throw new TypeError('The type does not exist in this QueryBuilder.');
-		this.type = type;
+		if (!(type in this.queryBuilder.types)) throw new TypeError(`The datatype ${type} is not supported by this QueryBuilder.`);
+		this.type = this.queryBuilder.types[type];
+		if (this.type.size !== null) this.size = size;
 		return this;
 	}
 
@@ -95,6 +114,7 @@ class QueryType {
 	toString() {
 		if (!this.type) throw new TypeError('You cannot construct the QueryType without setting up the type.');
 		return this.type.name +
+			(this.size !== null ? `(${this.size}) ` : ' ') +
 			(this.notNull ? 'NOT NULL ' : '') +
 			(this.unique ? 'UNIQUE ' : '') +
 			(this.default !== null && !this.notNull ? `DEFAULT ${this.queryBuilder._parseValue(this.default)}` : '');
