@@ -32,7 +32,7 @@ class Gateway extends GatewayStorage {
 	/**
 	 * @typedef {Object} GatewayJSON
 	 * @property {string} type The name of this gateway
-	 * @property {GatewayDriverAddOptions} options The options for this gateway
+	 * @property {GatewayDriverRegisterOptions} options The options for this gateway
 	 * @property {Object} schema The current schema
 	 */
 
@@ -40,7 +40,7 @@ class Gateway extends GatewayStorage {
 	 * @since 0.0.1
 	 * @param {GatewayDriver} store The GatewayDriver instance which initiated this instance
 	 * @param {string} type The name of this Gateway
-	 * @param {GatewayDriverAddOptions} options The options for this schema
+	 * @param {GatewayDriverRegisterOptions} options The options for this schema
 	 */
 	constructor(store, type, { provider }) {
 		super(store.client, type, provider);

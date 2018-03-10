@@ -98,6 +98,8 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#228](https://github.com/dirigeants/klasa/pull/228)] Refactored `GatewayDriver` for optimized and better readability. (kyranet)
+- [[#228](https://github.com/dirigeants/klasa/pull/228)] Improved performance in `Gateway#_ready()` by caching the structure instead of getting it for each entry. (kyranet)
 - [[#213](https://github.com/dirigeants/klasa/pull/213)] Converted the not-set empty object instance to a Symbol for checking empty entries in PermissionLevels. (bdistin)
 - [[#210](https://github.com/dirigeants/klasa/pull/210)] **[BREAKING]** Changed the level adding to a more consistent format with the rest of the library: replaced `addLevel` to `add` and moved the `break` boolean to `PermissionLevelOptions.break`, which is taken as third parameter. (bdistin)
 - [[#196](https://github.com/dirigeants/klasa/pull/196)] **[BREAKING]** Moved the array for the argument `appliesTo` in extendables to be an option in `ExtendableOptions`. (bdistin)
@@ -161,6 +163,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Removed
 
+- [[#228](https://github.com/dirigeants/klasa/pull/228)] `Gateway#options` and `Gateway#defaultSchema` to improve RAM usage. (kyranet)
 - [[#210](https://github.com/dirigeants/klasa/pull/210)] Removed PermissionLevels#requiredLevels as it's unnecessary do to inherited size parameter. (bdistin)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] **[BREAKING]** Removed `SchemaFolder#addKey` and `SchemaFolder#addFolder` in favor to a more consistent `Schema#add`. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] **[BREAKING]** Removed `Configuration#resetConfiguration()`. (kyranet)
@@ -194,6 +197,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
+- [[#228](https://github.com/dirigeants/klasa/pull/228)] Several checks in GatewayDriver being done right after init, instead of in register. (kyranet)
 - [[#207](https://github.com/dirigeants/klasa/pull/207)] Fixed `Configuration#_parseSingle` not returning the modified array but the updated element. (kyranet)
 - [[#204](https://github.com/dirigeants/klasa/pull/204)] Fixed `Util.getIdentifier` nullifying numbers and booleans. (kyranet)
 - [[#203](https://github.com/dirigeants/klasa/pull/203)] Fixed `SettingResolver#integer` and `SettingResolver#float` not accepting `0` as input. (kyranet)

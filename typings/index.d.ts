@@ -551,10 +551,8 @@ declare module 'klasa' {
 	}
 
 	export class Gateway extends GatewayStorage {
-		private constructor(store: GatewayDriver, type: string, schema: object, options: GatewayOptions);
+		private constructor(store: GatewayDriver, type: string, options: GatewayOptions);
 		public store: GatewayDriver;
-		public options: GatewayOptions;
-		public defaultSchema: object;
 		public readonly resolver: SettingResolver;
 		public readonly cache: Collection<string, Configuration>;
 
@@ -565,7 +563,7 @@ declare module 'klasa' {
 		public sync(input?: object | string, download?: boolean): Promise<any>;
 		public getPath(key?: string, options?: GatewayGetPathOptions): GatewayGetPathResult | null;
 
-		private init(download?: boolean): Promise<void>;
+		private init(options: { download?: boolean, defaultSchema?: object }): Promise<void>;
 		private _ready(): Promise<Array<Collection<string, Configuration>>>;
 		private _resolveGuild(guild: GatewayGuildResolvable): KlasaGuild;
 		private _shardSync(path: string[], data: any, action: 'add' | 'delete' | 'update', force: boolean): Promise<void>;
@@ -581,7 +579,7 @@ declare module 'klasa' {
 		public types: Set<string>;
 		public keys: Set<string>;
 		public ready: boolean;
-		private _queue: Map<string, (() => Gateway)>;
+		private _queue: Map<string, (() => Promise<Gateway>)>;
 
 		public readonly guildsSchema: {
 			prefix: SchemaPieceJSON,
@@ -600,16 +598,15 @@ declare module 'klasa' {
 		public users: Gateway;
 		public clientStorage: Gateway;
 
-		public register(name: string, schema?: object, options?: GatewayDriverAddOptions): this;
-		private _register(name: string, schema?: object, options?: GatewayDriverAddOptions): Gateway;
+		public register(name: string, defaultSchema?: object, options?: GatewayDriverRegisterOptions): this;
+		private _register(name: string, options?: GatewayDriverRegisterOptions): Gateway;
 		private _ready(): Promise<Array<Array<Collection<string, Configuration>>>>;
-		private _checkProvider(engine: string): string;
 
 		public toJSON(): GatewayDriverJSON;
 		public toString(): string;
 	}
 
-	export abstract class GatewayStorage {
+	export class GatewayStorage {
 		public constructor(client: KlasaClient, type: string, provider?: string);
 		public readonly client: KlasaClient;
 		public readonly type: string;
@@ -620,12 +617,13 @@ declare module 'klasa' {
 		public schema?: SchemaFolder;
 		public ready: boolean;
 
-		public readonly sqlSchema: string[][];
+		public readonly sqlSchema: [string, string][];
 		public readonly provider?: Provider;
 		public readonly defaults: any;
 
+		public init(defaultSchema: object): Promise<void>;
 		private initTable(): Promise<void>;
-		private initSchema(): Promise<SchemaFolder>;
+		private initSchema(defaultSchema: object): Promise<SchemaFolder>;
 		private parseEntry(entry: any): any;
 
 		private static _parseSQLValue(value: any, schemaPiece: SchemaPiece): any;
@@ -1379,9 +1377,9 @@ declare module 'klasa' {
 	} & object;
 
 	export type KlasaGatewaysOptions = {
-		clientStorage?: GatewayDriverAddOptions;
-		guilds?: GatewayDriverAddOptions;
-		users?: GatewayDriverAddOptions;
+		clientStorage?: GatewayDriverRegisterOptions;
+		guilds?: GatewayDriverRegisterOptions;
+		users?: GatewayDriverRegisterOptions;
 	} & object;
 
 	export type ExecOptions = {
@@ -1445,7 +1443,7 @@ declare module 'klasa' {
 	};
 
 	export type GatewayJSON = {
-		options: GatewayOptions;
+		options: { provider: string };
 		schema: SchemaFolderJSON;
 		type: string;
 	};
@@ -1502,8 +1500,8 @@ declare module 'klasa' {
 		route: string[];
 	};
 
-	export type GatewayDriverAddOptions = {
-		nice?: boolean;
+	export type GatewayDriverRegisterOptions = {
+		download?: boolean;
 		provider?: string;
 	};
 

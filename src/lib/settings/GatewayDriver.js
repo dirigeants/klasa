@@ -8,8 +8,9 @@ const Gateway = require('./Gateway');
 class GatewayDriver {
 
 	/**
-	 * @typedef {Object} GatewayDriverAddOptions
+	 * @typedef {Object} GatewayDriverRegisterOptions
 	 * @property {string} [provider] The name of the provider to use
+	 * @property {boolean} [download = true] Whether the Gateway should download all entries or not
 	 */
 
 	/**
@@ -186,11 +187,11 @@ class GatewayDriver {
 	 * @since 0.5.0
 	 * @param {string} name The name for the new gateway
 	 * @param {Object} [defaultSchema = {}] The schema for use in this gateway
-	 * @param {GatewayDriverAddOptions} [options = {}] The options for the new gateway
+	 * @param {GatewayDriverRegisterOptions} [options = {}] The options for the new gateway
 	 * @chainable
 	 * @returns {this}
 	 */
-	register(name, defaultSchema = {}, { download = false, provider = this.client.options.providers.default } = {}) {
+	register(name, defaultSchema = {}, { download = true, provider = this.client.options.providers.default } = {}) {
 		if (typeof name !== 'string') throw new TypeError('You must pass a name for your new gateway and it must be a string.');
 		if (!this.client.methods.util.isObject(defaultSchema)) throw new TypeError('Schema must be a valid object or left undefined for an empty object.');
 		if (name in this) throw new Error(`The key '${name}' is either taken by another Gateway or reserved for GatewayDriver's functionality.`);
@@ -223,7 +224,7 @@ class GatewayDriver {
 	 * Registers a new Gateway
 	 * @since 0.5.0
 	 * @param {string} name The name for the new gateway
-	 * @param {GatewayDriverAddOptions} options The options for the new gateway
+	 * @param {GatewayDriverRegisterOptions} options The options for the new gateway
 	 * @returns {Gateway}
 	 * @private
 	 */

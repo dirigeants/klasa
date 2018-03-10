@@ -72,9 +72,9 @@ class KlasaClient extends Discord.Client {
 
 	/**
 	 * @typedef {Object} KlasaGatewaysOptions
-	 * @property {GatewayDriverAddOptions} [clientStorage] The options for clientStorage's gateway
-	 * @property {GatewayDriverAddOptions} [guilds] The options for guilds' gateway
-	 * @property {GatewayDriverAddOptions} [users] The options for users' gateway
+	 * @property {GatewayDriverRegisterOptions} [clientStorage] The options for clientStorage's gateway
+	 * @property {GatewayDriverRegisterOptions} [guilds] The options for guilds' gateway
+	 * @property {GatewayDriverRegisterOptions} [users] The options for users' gateway
 	 */
 
 	/**
@@ -258,9 +258,9 @@ class KlasaClient extends Discord.Client {
 		this.gateways = new GatewayDriver(this);
 
 		// Register default gateways
-		this.gateways.register('guilds', this.gateways.guildsSchema, this.options.gateways.guilds, false);
-		this.gateways.register('users', undefined, this.options.gateways.users, false);
-		this.gateways.register('clientStorage', this.gateways.clientStorageSchema, this.options.gateways.clientStorage, false);
+		this.gateways.register('guilds', this.gateways.guildsSchema, { download: false, ...this.options.gateways.guilds });
+		this.gateways.register('users', {}, { download: false, ...this.options.gateways.users });
+		this.gateways.register('clientStorage', this.gateways.clientStorageSchema, { download: false, ...this.options.gateways.clientStorage });
 
 		/**
 		 * The Configuration instance that handles this client's configuration
