@@ -227,6 +227,7 @@ class SchemaFolder extends Schema {
 	 * @returns {string[]}
 	 */
 	getSQL(array = []) {
+		if (!this.sql) return array;
 		for (const key of this.keyArray) {
 			if (this[key].type === 'Folder') this[key].getSQL(array);
 			else array.push(this[key].sql);

@@ -617,7 +617,7 @@ declare module 'klasa' {
 		public schema?: SchemaFolder;
 		public ready: boolean;
 
-		public readonly sqlSchema: [string, string][];
+		public readonly sqlSchema?: [string, string][];
 		public readonly provider?: Provider;
 		public readonly defaults: any;
 

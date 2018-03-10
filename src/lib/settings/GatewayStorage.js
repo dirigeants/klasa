@@ -84,10 +84,11 @@ class GatewayStorage {
 	/**
 	 * Get this gateway's SQL schema.
 	 * @since 0.0.1
-	 * @type {Array<string[]>}
+	 * @type {?Array<string[]>}
 	 * @readonly
 	 */
 	get sqlSchema() {
+		if (!this.sql) return null;
 		const schema = [['id', 'VARCHAR(19) NOT NULL UNIQUE PRIMARY KEY']];
 		this.schema.getSQL(schema);
 		return schema;
