@@ -36,26 +36,24 @@ class Colors {
 		 * @type {string}
 		 * @since 0.5.0
 		 */
-		this.opening = opening.join(';');
+		this.opening = this.constructor.useColors ? `\u001B[${opening.join(';')}m` : '';
 
 		/**
 		 * The closing tags
 		 * @type {string}
 		 * @since 0.5.0
 		 */
-		this.closing = closing.join(';');
+		this.closing = this.constructor.useColors ? `\u001B[${closing.join(';')}m` : '';
 	}
-
 
 	/**
 	 * Format a string
 	 * @since 0.4.0
 	 * @param {string} string The string to format
-	 * @param {boolean} [useColors=true] Whether to actually apply colors or not
 	 * @returns {string}
 	 */
-	format(string, useColors = true) {
-		return useColors ? `\u001B[${this.opening}m${string}\u001B[${this.closing}m` : string;
+	format(string) {
+		return this.opening + string + this.closing;
 	}
 
 	/**
@@ -206,6 +204,8 @@ class Colors {
 	}
 
 }
+
+Colors.useColors = null;
 
 Colors.CLOSE = {
 	normal: 0,

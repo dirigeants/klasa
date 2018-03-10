@@ -123,19 +123,14 @@ class KlasaConsole extends Console {
 		 */
 		Object.defineProperty(this, 'stderr', { value: options.stderr });
 
+		Colors.useColors = typeof options.useColor === 'undefined' ? this.stdout.isTTY || false : options.useColor;
+
 		/**
 		 * Whether or not timestamps should be enabled for this console.
 		 * @since 0.5.0
 		 * @type {?Timestamp}
 		 */
 		this.template = options.timestamps !== false ? new Timestamp(options.timestamps === true ? 'YYYY-MM-DD HH:mm:ss' : options.timestamps) : null;
-
-		/**
-		 * Whether or not this console should use colors.
-		 * @since 0.4.0
-		 * @type {boolean}
-		 */
-		this.useColors = typeof options.useColor === 'undefined' ? this.stdout.isTTY || false : options.useColor;
 
 		/**
 		 * The colors for this console.
@@ -170,10 +165,9 @@ class KlasaConsole extends Console {
 	write(data, type = 'log') {
 		type = type.toLowerCase();
 		data = KlasaConsole._flatten(data, this.useColors);
-		const { shard, message, time } = this.colors[type];
-		const timestamp = this.template ? time.format(`[${this.timestamp}]`, this.useColors) : '';
-		const shd = this.client.shard ? shard.format(`[${this.client.shard.id}]`, this.useColors) : '';
-		super[constants.DEFAULTS.CONSOLE.types[type] || 'log'](data.split('\n').map(str => `${timestamp}${shd} ${message.format(str, this.useColors)}`).join('\n'));
+		const timestamp = this.template ? this.colors.time.format(`[${this.timestamp}]`) : '';
+		const shd = this.client.shard ? this.colors.shard.format(`[${this.client.shard.id}]`) : '';
+		super[constants.DEFAULTS.CONSOLE.types[type] || 'log'](data.split('\n').map(str => `${timestamp}${shd} ${this.colors.message.format(str)}`).join('\n'));
 	}
 
 	/**
@@ -240,16 +234,15 @@ class KlasaConsole extends Console {
 	 * Flattens our data into a readable string.
 	 * @since 0.4.0
 	 * @param {*} data Some data to flatten
-	 * @param {boolean} useColors Whether or not the inspection should color the output
 	 * @returns {string}
 	 * @private
 	 */
-	static _flatten(data, useColors) {
+	static _flatten(data) {
 		if (typeof data === 'undefined' || typeof data === 'number' || data === null) return String(data);
 		if (typeof data === 'string') return data;
 		if (typeof data === 'object') {
 			if (Array.isArray(data)) return data.join('\n');
-			return data.stack || data.message || inspect(data, { depth: 0, colors: useColors });
+			return data.stack || data.message || inspect(data, { depth: 0, colors: Colors.useColors });
 		}
 		return String(data);
 	}
