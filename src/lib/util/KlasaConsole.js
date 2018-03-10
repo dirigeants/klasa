@@ -152,6 +152,11 @@ class KlasaConsole extends Console {
 		this.utc = options.utc;
 	}
 
+	/**
+	 * The timestamp to use
+	 * @type {string}
+	 * @private
+	 */
 	get timestamp() {
 		return this.utc ? this.template.displayUTC() : this.template.display();
 	}

@@ -205,8 +205,20 @@ class Colors {
 
 }
 
+/**
+ * Deterimines if this class should be constructed with colors or not
+ * @type {?boolean}
+ * @static
+ * @private
+ */
 Colors.useColors = null;
 
+/**
+ * The close codes
+ * @type {object}
+ * @static
+ * @private
+ */
 Colors.CLOSE = {
 	normal: 0,
 	bold: 22,
@@ -220,6 +232,12 @@ Colors.CLOSE = {
 	background: 49
 };
 
+/**
+ * The style codes
+ * @type {object}
+ * @static
+ * @private
+ */
 Colors.STYLES = {
 	normal: 0,
 	bold: 1,
@@ -231,6 +249,12 @@ Colors.STYLES = {
 	strikethrough: 9
 };
 
+/**
+ * The text codes
+ * @type {object}
+ * @static
+ * @private
+ */
 Colors.TEXTS = {
 	black: 30,
 	red: 31,
@@ -252,6 +276,12 @@ Colors.TEXTS = {
 	white: 97
 };
 
+/**
+ * The background codes
+ * @type {object}
+ * @static
+ * @private
+ */
 Colors.BACKGROUNDS = {
 	black: 40,
 	red: 41,
