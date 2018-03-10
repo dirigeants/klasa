@@ -164,10 +164,11 @@ class KlasaConsole extends Console {
 	 */
 	write(data, type = 'log') {
 		type = type.toLowerCase();
-		data = KlasaConsole._flatten(data, this.useColors);
-		const timestamp = this.template ? this.colors.time.format(`[${this.timestamp}]`) : '';
-		const shd = this.client.shard ? this.colors.shard.format(`[${this.client.shard.id}]`) : '';
-		super[constants.DEFAULTS.CONSOLE.types[type] || 'log'](data.split('\n').map(str => `${timestamp}${shd} ${this.colors.message.format(str)}`).join('\n'));
+		data = KlasaConsole._flatten(data);
+		const { time, shard, message } = this.colors[type];
+		const timestamp = this.template ? time.format(`[${this.timestamp}]`) : '';
+		const shd = this.client.shard ? shard.format(`[${this.client.shard.id}]`) : '';
+		super[constants.DEFAULTS.CONSOLE.types[type] || 'log'](data.split('\n').map(str => `${timestamp}${shd} ${message.format(str)}`).join('\n'));
 	}
 
 	/**
