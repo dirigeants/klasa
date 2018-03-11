@@ -357,7 +357,10 @@ class Configuration {
 		if (this.gateway.sql) {
 			const keys = new Array(updated.length), values = new Array(updated.length);
 			console.log(updated)
-			for (let i = 0; i < updated.length; i++) { console.log(updated[i]) }
+			for (let i = 0; i < updated.length; i++) {
+    				console.log(updated[i]);
+    				[keys[i], values[i]] = updated[i];
+			}
 			await this.gateway.provider.update(this.gateway.type, this.id, keys, values);
 		} else {
 			const updateObject = {};
