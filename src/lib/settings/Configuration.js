@@ -359,7 +359,7 @@ class Configuration {
 			console.log(updated)
 			for (let i = 0; i < updated.length; i++) {
     				console.log(updated[i]);
-    				[keys[i], values[i]] = updated[i];
+    				[keys[i], values[i]] = updated[i].data;
 			}
 			await this.gateway.provider.update(this.gateway.type, this.id, keys, values);
 		} else {
