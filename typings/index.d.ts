@@ -1039,21 +1039,25 @@ declare module 'klasa' {
 //#region Util
 
 	export class Colors {
-		public constructor();
-		public CLOSE: ColorsClose;
-		public STYLES: ColorsStyles;
-		public TEXTS: ColorsTexts;
-		public BACKGROUNDS: ColorsBackgrounds;
+		public constructor(options?: ColorsFormatOptions);
+		public opening: string;
+		public closing: string;
 
+		public format(input: string, type?: ColorsFormatOptions): string;
+		public static useColors?: boolean;
+		public static CLOSE: ColorsClose;
+		public static STYLES: ColorsStyles;
+		public static TEXTS: ColorsTexts;
+		public static BACKGROUNDS: ColorsBackgrounds;
 		public static hexToRGB(hex: string): number[];
 		public static hueToRGB(p: number, q: number, t: number): number;
 		public static hslToRGB([h, s, l]: [number | string, number | string, number | string]): number[];
 		public static formatArray([pos1, pos2, pos3]: [number | string, number | string, number | string]): string;
 
-		public format(input: string, type?: ColorsFormatOptions): string;
-		private style(style: string | string[], data?: ColorsFormatData): ColorsFormatData;
-		private background(style: ColorsFormatType, data?: ColorsFormatData): ColorsFormatData;
-		private text(style: ColorsFormatType, data?: ColorsFormatData): ColorsFormatData;
+		private static style(styles: string | string[], data?: ColorsFormatData): ColorsFormatData;
+		private static background(style: ColorsFormatType, data?: ColorsFormatData): ColorsFormatData;
+		private static text(style: ColorsFormatType, data?: ColorsFormatData): ColorsFormatData;
+
 	}
 
 	export type constants = {
@@ -1149,10 +1153,10 @@ declare module 'klasa' {
 		public readonly stdout: NodeJS.WritableStream;
 		public readonly stderr: NodeJS.WritableStream;
 		public template?: Timestamp;
-		public useColors: boolean;
-		public colors: boolean | KlasaConsoleColorStyles;
+		public colors: object;
 		public utc: boolean;
 
+		private readonly timestamp: string;
 		public write(data: any, type?: string): void;
 		public log(...data: any[]): void;
 		public warn(...data: any[]): void;
@@ -1160,10 +1164,6 @@ declare module 'klasa' {
 		public debug(...data: any[]): void;
 		public verbose(...data: any[]): void;
 		public wtf(...data: any[]): void;
-
-		public timestamp(timestamp: string, time: ColorsFormatOptions): string;
-		public shard(input: string, shard: ColorsFormatOptions): string;
-		public messages(input: string, message: ColorsFormatOptions): string;
 
 		// Console methods
 		// tslint:disable-next-line
@@ -1188,7 +1188,7 @@ declare module 'klasa' {
 		public trace(message?: string, ...optionalParameters: any[]): void;
 		// End of Console methods
 
-		private static _flatten(data: any, useColors: boolean): string;
+		private static _flatten(data: any): string;
 	}
 
 	export class ReactionHandler extends ReactionCollector {
@@ -1333,7 +1333,6 @@ declare module 'klasa' {
 
 	export type KlasaClientOptions = {
 		clientBaseDir?: string;
-		clock?: KlasaClientOptionsClock;
 		cmdEditing?: boolean;
 		cmdLogging?: boolean;
 		commandMessageLifetime?: number;
@@ -1350,10 +1349,11 @@ declare module 'klasa' {
 		providers?: KlasaProvidersOptions;
 		readyMessage?: (client: KlasaClient) => string;
 		regexPrefix?: RegExp;
+		schedule?: KlasaClientOptionsSchedule;
 		typing?: boolean;
 	} & ClientOptions;
 
-	export type KlasaClientOptionsClock = {
+	export type KlasaClientOptionsSchedule = {
 		interval?: number;
 	};
 
@@ -1767,6 +1767,14 @@ declare module 'klasa' {
 	};
 
 	export type KlasaConsoleConfig = {
+		types?: {
+			debug?: string;
+			error?: string;
+			log?: string;
+			verbose?: string;
+			warn?: string;
+			wtf?: string;
+		};
 		colors?: KlasaConsoleColorStyles;
 		stderr?: NodeJS.WritableStream;
 		stdout?: NodeJS.WritableStream;

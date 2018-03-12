@@ -98,6 +98,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#227](https://github.com/dirigeants/klasa/pull/227)] Rewritten the Colors class to be constructable following a design similar to Timestamp's. (bdistin)
 - [[#213](https://github.com/dirigeants/klasa/pull/213)] Converted the not-set empty object instance to a Symbol for checking empty entries in PermissionLevels. (bdistin)
 - [[#210](https://github.com/dirigeants/klasa/pull/210)] **[BREAKING]** Changed the level adding to a more consistent format with the rest of the library: replaced `addLevel` to `add` and moved the `break` boolean to `PermissionLevelOptions.break`, which is taken as third parameter. (bdistin)
 - [[#196](https://github.com/dirigeants/klasa/pull/196)] **[BREAKING]** Moved the array for the argument `appliesTo` in extendables to be an option in `ExtendableOptions`. (bdistin)
