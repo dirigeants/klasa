@@ -677,11 +677,6 @@ declare module 'klasa' {
 		public remove(key: string): Promise<SchemaFolder>;
 		public getDefaults(data?: object): object;
 
-		private _add(key: string, options: SchemaFolderAddOptions, type: typeof SchemaPiece | typeof SchemaFolder): void;
-		private _remove(key: string): void;
-		private _shardSyncSchema(piece: SchemaFolder | SchemaPiece, action: 'add' | 'delete' | 'update'): Promise<void>;
-		private _init(options: object): true;
-
 		public entries(recursive?: boolean): Iterator<[string, SchemaFolder | SchemaPiece]>;
 		public values(recursive?: boolean): Iterator<SchemaFolder | SchemaPiece>;
 		public keys(recursive?: boolean): Iterator<string>;
@@ -690,6 +685,10 @@ declare module 'klasa' {
 		public toJSON(): any;
 		public toString(): string;
 
+		private _add(key: string, options: SchemaFolderAddOptions, type: typeof SchemaPiece | typeof SchemaFolder): void;
+		private _remove(key: string): void;
+		private _shardSyncSchema(piece: SchemaFolder | SchemaPiece, action: 'add' | 'delete' | 'update'): Promise<void>;
+		private _init(options: object): true;
 		private force(action: 'add' | 'delete', piece: SchemaFolder | SchemaPiece): Promise<any>;
 	}
 
@@ -864,6 +863,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class SQLProvider extends Provider {
+		public abstract qb: QueryBuilder;
 		public parseGatewayInput(updated: ConfigurationUpdateResultEntry[]): [string[], any[]];
 		public parseEntry<T>(gateway: string | Gateway, entry: object): T;
 		public parseValue<T>(value: any, schemaPiece: SchemaPiece): T;
