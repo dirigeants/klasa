@@ -134,7 +134,7 @@ class GatewayStorage {
 	 */
 	async initTable() {
 		const hasTable = await this.provider.hasTable(this.type);
-		if (!hasTable) await this.provider.createTable(this.type, this.sql ? this.sqlSchema.map(([k, v]) => `${k} ${v}`).join(', ') : undefined);
+		if (!hasTable) await this.provider.createTable(this.type, this.sql ? this.sqlSchema : undefined);
 	}
 
 	/**
@@ -161,7 +161,7 @@ class GatewayStorage {
 	 */
 	parseEntry(entry) {
 		const object = {};
-		for (const piece of this.schema.getValues()) {
+		for (const piece of this.schema.values(true)) {
 			// If the key does not exist in the schema, ignore it.
 			if (typeof entry[piece.path] === 'undefined') continue;
 

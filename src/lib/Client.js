@@ -40,7 +40,6 @@ class KlasaClient extends Discord.Client {
 	/**
 	 * @typedef {external:DiscordJSConfig} KlasaClientOptions
 	 * @property {string} [clientBaseDir=path.dirname(require.main.filename)] The directory where all piece folders can be found
-	 * @property {KlasaClientOptionsClock} [clock] The options for the internal clock module that runs Schedule
 	 * @property {boolean} [cmdEditing=false] Whether the bot should update responses if the command is edited
 	 * @property {boolean} [cmdLogging=false] Whether the bot should log command usage
 	 * @property {number} [commandMessageLifetime=1800] The threshold for how old command messages can be before sweeping since the last edit in seconds
@@ -57,6 +56,7 @@ class KlasaClient extends Discord.Client {
 	 * @property {KlasaProvidersOptions} [providers] The provider options
 	 * @property {(string|Function)} [readyMessage=`Successfully initialized. Ready to serve ${this.guilds.size} guilds.`] readyMessage to be passed throughout Klasa's ready event
 	 * @property {RegExp} [regexPrefix] The regular expression prefix if one is provided
+	 * @property {KlasaClientOptionsSchedule} [schedule] The options for the internal clock module that runs Schedule
 	 * @property {boolean} [typing=false] Whether the bot should type while processing commands
 	 */
 
@@ -66,7 +66,7 @@ class KlasaClient extends Discord.Client {
 	 */
 
 	/**
-	 * @typedef {Object} KlasaClientOptionsClock
+	 * @typedef {Object} KlasaClientOptionsSchedule
 	 * @property {number} [interval] The interval in milliseconds for the clock to check the tasks
 	 */
 

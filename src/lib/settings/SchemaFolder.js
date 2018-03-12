@@ -118,7 +118,7 @@ class SchemaFolder extends Schema {
 		if (this.gateway.sql) {
 			if (piece.type !== 'Folder' || piece.keyArray.length) {
 				await this.gateway.provider.addColumn(this.gateway.type, piece.type === 'Folder' ?
-					piece.getSQL() : piece.sql);
+					piece.getSQL() : [piece.sql]);
 			}
 		} else if (force || (this.gateway.type === 'clientStorage' && this.client.shard)) {
 			await this.force('add', key, piece);

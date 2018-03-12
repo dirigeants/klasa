@@ -2,10 +2,9 @@ const { dirname } = require('path');
 const { mergeDefault } = require('./util');
 
 const colorBase = {
-	type: 'log',
-	shard: { background: 'cyan', text: 'black', style: null },
-	message: { background: null, text: null, style: null },
-	time: { background: null, text: null, style: null }
+	shard: { background: 'cyan', text: 'black' },
+	message: {},
+	time: {}
 };
 
 exports.DEFAULTS = {
@@ -100,13 +99,21 @@ exports.DEFAULTS = {
 		stderr: process.stderr,
 		timestamps: true,
 		utc: false,
+		types: {
+			debug: 'log',
+			error: 'error',
+			log: 'log',
+			verbose: 'log',
+			warn: 'warn',
+			wtf: 'error'
+		},
 		colors: {
 			debug: mergeDefault(colorBase, { time: { background: 'magenta' } }),
-			error: mergeDefault(colorBase, { type: 'error', time: { background: 'red' } }),
+			error: mergeDefault(colorBase, { time: { background: 'red' } }),
 			log: mergeDefault(colorBase, { time: { background: 'blue' } }),
 			verbose: mergeDefault(colorBase, { time: { text: 'gray' } }),
-			warn: mergeDefault(colorBase, { type: 'warn', time: { background: 'lightyellow', text: 'black' } }),
-			wtf: mergeDefault(colorBase, { type: 'error', message: { text: 'red' }, time: { background: 'red' } })
+			warn: mergeDefault(colorBase, { time: { background: 'lightyellow', text: 'black' } }),
+			wtf: mergeDefault(colorBase, { message: { text: 'red' }, time: { background: 'red' } })
 		}
 	},
 
