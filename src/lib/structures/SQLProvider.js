@@ -30,7 +30,7 @@ class SQLProvider extends Provider {
 
 		const object = {};
 		for (const piece of gateway.schema.values(true)) {
-			if (piece.path in entry[piece.path]) makeObject(piece.path, SQLProvider.parseValue(entry[piece.path], piece), object);
+			if (piece.path in entry[piece.path]) makeObject(piece.path, this.parseValue(entry[piece.path], piece), object);
 		}
 
 		return object;
@@ -44,12 +44,12 @@ class SQLProvider extends Provider {
 	 * @returns {*}
 	 * @private
 	 */
-	static parseValue(value, schemaPiece) {
+	parseValue(value, schemaPiece) {
 		if (typeof value === 'undefined') return deepClone(schemaPiece.default);
 		if (schemaPiece.array) {
 			if (value === null) return deepClone(schemaPiece.default);
 			if (typeof value === 'string') value = tryParse(value);
-			if (Array.isArray(value)) return value.map(val => SQLProvider.parseValue(val, schemaPiece));
+			if (Array.isArray(value)) return value.map(val => this.parseValue(val, schemaPiece));
 		} else {
 			switch (schemaPiece.type) {
 				case 'any':
@@ -80,7 +80,7 @@ class SQLProvider extends Provider {
 	 * @returns {string}
 	 * @private
 	 */
-	static stringifyValue(value) {
+	stringifyValue(value) {
 		switch (typeof value) {
 			case 'string':
 				return value;

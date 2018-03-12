@@ -130,7 +130,7 @@ class SchemaFolder extends Schema {
 		await this.force('add', key, piece);
 
 		await this._shardSyncSchema(piece, 'add', force);
-		this.client.emit('schemaKeyAdd', piece);
+		if (this.client.listenerCount('schemaKeyAdd')) this.client.emit('schemaKeyAdd', piece);
 		return this.gateway.schema;
 	}
 
@@ -152,7 +152,7 @@ class SchemaFolder extends Schema {
 		await this.force('delete', key, piece);
 
 		await this._shardSyncSchema(piece, 'delete', force);
-		this.client.emit('schemaKeyRemove', piece);
+		if (this.client.listenerCount('schemaKeyRemove')) this.client.emit('schemaKeyRemove', piece);
 		return this.gateway.schema;
 	}
 
