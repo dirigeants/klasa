@@ -80,7 +80,7 @@ Math.floor(0.1 * Math.sqrt(POINTS + 1));
 Then inside our monitor's run method:
 
 ```javascript
-const { Command } = require('klasa');
+const { Monitor } = require('klasa');
 
 module.exports = class extends Monitor {
 
