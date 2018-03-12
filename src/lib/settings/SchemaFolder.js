@@ -52,6 +52,17 @@ class SchemaFolder extends Schema {
 	}
 
 	/**
+	 * Get this gateway's SQL schema.
+	 * @since 0.0.1
+	 * @type {?Array<Array<string>>}
+	 * @readonly
+	 */
+	get sqlSchema() {
+		if (!this.gateway.sql) return null;
+		return this.values(true).map(piece => piece.sqlSchema);
+	}
+
+	/**
 	 * Get all configurable keys from this schema.
 	 * @since 0.5.0
 	 * @type {string[]}
@@ -115,14 +126,8 @@ class SchemaFolder extends Schema {
 		const piece = this._add(key, options, options.type === 'Folder' ? SchemaFolder : SchemaPiece);
 		await fs.outputJSONAtomic(this.gateway.filePath, this.gateway.schema);
 
-		if (this.gateway.sql) {
-			if (piece.type !== 'Folder' || piece.keyArray.length) {
-				await this.gateway.provider.addColumn(this.gateway.type, piece.type === 'Folder' ?
-					piece.getSQL() : [piece.sql]);
-			}
-		} else if (force || (this.gateway.type === 'clientStorage' && this.client.shard)) {
-			await this.force('add', key, piece);
-		}
+		if (piece.type !== 'Folder' || piece.keyArray.length) await this.gateway.provider.addColumn(this.gateway.type, piece.sqlSchema);
+		await this.force('add', key, piece);
 
 		await this._shardSyncSchema(piece, 'add', force);
 		this.client.emit('schemaKeyAdd', piece);
@@ -143,16 +148,8 @@ class SchemaFolder extends Schema {
 		const piece = this._remove(key);
 		await fs.outputJSONAtomic(this.gateway.filePath, this.gateway.schema);
 
-		// A SQL database has the advantage of being able to update all keys along the schema, so force is ignored
-		if (this.gateway.sql) {
-			if (piece.type !== 'Folder' || (piece.type === 'Folder' && piece.keyArray.length)) {
-				await this.gateway.provider.removeColumn(this.gateway.type, piece.type === 'Folder' ?
-					[...piece.keys(true)] : key);
-			}
-		} else if (force || (this.gateway.type === 'clientStorage' && this.client.shard)) {
-			// If force, or if the gateway is clientStorage, it should update all entries
-			await this.force('delete', key, piece);
-		}
+		await this.gateway.provider.removeColumn(this.gateway.type, piece.type === 'Folder' ? [...piece.keys(true)] : key);
+		await this.force('delete', key, piece);
 
 		await this._shardSyncSchema(piece, 'delete', force);
 		this.client.emit('schemaKeyRemove', piece);
@@ -218,18 +215,6 @@ class SchemaFolder extends Schema {
 			else data[key] = deepClone(this[key].default);
 		}
 		return data;
-	}
-
-	/**
-	 * Get all the SQL schemas from this schema's children.
-	 * @since 0.5.0
-	 * @param {string[]} [array=[]] The array to push.
-	 * @returns {string[]}
-	 */
-	getSQL(array = []) {
-		if (!this.sql) return array;
-		for (const piece of this.values(true)) array.push([piece.path, piece.sql]);
-		return array;
 	}
 
 	/**

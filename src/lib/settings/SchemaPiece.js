@@ -97,6 +97,15 @@ class SchemaPiece extends Schema {
 
 		this._init(options);
 	}
+	/**
+	 * Get this gateway's SQL schema.
+	 * @since 0.0.1
+	 * @type {?Array<string>}
+	 * @readonly
+	 */
+	get sqlSchema() {
+		return this.sql ? [this.path, this.sql] : null;
+	}
 
 	/**
 	 * Set a validator function for this instance.
@@ -281,7 +290,7 @@ class SchemaPiece extends Schema {
 					break;
 			}
 		}
-		return qb.setDefault(SchemaPiece._parseSQLValue(this.default))
+		return qb.setDefault(provider.stringifyValue(this.default))
 			.toString();
 	}
 
@@ -343,21 +352,6 @@ class SchemaPiece extends Schema {
 	 */
 	toString() {
 		return `SchemaPiece(${this.gateway.type}:${this.path})`;
-	}
-
-	/**
-	 * Parses a value to a valid string that can be used for SQL input.
-	 * @since 0.5.0
-	 * @param {*} value The value to parse
-	 * @returns {string}
-	 * @private
-	 */
-	static _parseSQLValue(value) {
-		const type = typeof value;
-		if (type === 'string') return value;
-		if (type === 'boolean' || type === 'number' || value === null) return String(value);
-		if (type === 'object') return JSON.stringify(value);
-		return '';
 	}
 
 }

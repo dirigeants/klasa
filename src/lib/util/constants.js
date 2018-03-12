@@ -86,7 +86,6 @@ exports.DEFAULTS = {
 			},
 			providers: {
 				enabled: true,
-				sql: false,
 				cache: false
 			},
 			tasks: { enabled: true }

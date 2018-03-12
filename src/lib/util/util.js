@@ -314,17 +314,20 @@ class Util {
 	 * @since 0.5.0
 	 * @param {string} path The dotted path
 	 * @param {*} value The value
+	 * @param {Object<string, *>} [obj = {}] The object to edit
 	 * @returns {*}
 	 */
-	static makeObject(path, value) {
-		if (path.indexOf('.') === -1) return { [path]: value };
-		const object = {};
-		const route = path.split('.');
-		const lastKey = route.pop();
-		let reference = object;
-		for (const key of route) reference = reference[key] = {};
-		reference[lastKey] = value;
-		return object;
+	static makeObject(path, value, obj = {}) {
+		if (path.indexOf('.') === -1) {
+			obj[path] = value;
+		} else {
+			const route = path.split('.');
+			const lastKey = route.pop();
+			let reference = obj;
+			for (const key of route) reference = reference[key] = {};
+			reference[lastKey] = value;
+		}
+		return obj;
 	}
 
 	/**

@@ -63,7 +63,7 @@ class Schedule {
 	 * @since 0.5.0
 	 */
 	async init() {
-		const { schema } = this.client.gateways.clientStorage;
+		const { schema, provider } = this.client.gateways.clientStorage;
 		if (!schema.has('schedules')) {
 			await schema.add('schedules', {
 				type: 'any',
@@ -72,7 +72,7 @@ class Schedule {
 				max: null,
 				array: true,
 				configurable: false,
-				sql: 'TEXT'
+				sql: (provider.qb && provider.qb.create().setType(['JSON', 'TEXT']).toString()) || null
 			});
 		}
 

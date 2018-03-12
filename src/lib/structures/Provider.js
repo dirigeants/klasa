@@ -10,7 +10,6 @@ class Provider extends Piece {
 
 	/**
 	 * @typedef {PieceOptions} ProviderOptions
-	 * @property {boolean} [sql=false] If the provider provides to a sql data source
 	 */
 
 	/**
@@ -23,13 +22,6 @@ class Provider extends Piece {
 	 */
 	constructor(client, store, file, core, options = {}) {
 		super(client, store, file, core, options);
-
-		/**
-		 * If the provider provides to a sql data source
-		 * @since 0.0.1
-		 * @type {boolean}
-		 */
-		this.sql = options.sql;
 
 		/**
 		 * If the provider is designed to handle cache operations
@@ -56,7 +48,6 @@ class Provider extends Piece {
 	toJSON() {
 		return {
 			...super.toJSON(),
-			sql: this.sql,
 			cache: this.cache
 		};
 	}
