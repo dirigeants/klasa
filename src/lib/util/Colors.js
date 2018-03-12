@@ -137,8 +137,8 @@ class Colors {
 			for (let style in styles) {
 				style = style.toLowerCase();
 				if (!(style in Colors.STYLES)) continue;
-				opening.push(`${Colors.STYLES[style]}`);
-				closing.push(`${Colors.CLOSE[style]}`);
+				opening.push(Colors.STYLES[style]);
+				closing.push(Colors.CLOSE[style]);
 			}
 		}
 		return { opening, closing };
@@ -163,14 +163,14 @@ class Colors {
 
 				if (number !== null) {
 					opening.push(`48;5;${background}`);
-					closing.push(`${Colors.CLOSE.background}`);
+					closing.push(Colors.CLOSE.background);
 				}
 			} else if (Array.isArray(background)) {
 				opening.push(Colors.formatArray([background[0], background[1], background[2]]));
 				closing.push(`\u001B[${Colors.CLOSE.background}`);
 			} else if (typeof background === 'string' && background.toLowerCase() in Colors.BACKGROUNDS) {
-				opening.push(`${Colors.BACKGROUNDS[background.toLowerCase()]}`);
-				closing.push(`${Colors.CLOSE.background}`);
+				opening.push(Colors.BACKGROUNDS[background.toLowerCase()]);
+				closing.push(Colors.CLOSE.background);
 			}
 		}
 		return { opening, closing };
@@ -189,13 +189,13 @@ class Colors {
 			if (typeof text === 'number') {
 				if (!Number.isInteger(text)) text = Math.round(text);
 				opening.push(`38;5;${text}`);
-				closing.push(`${Colors.CLOSE.text}`);
+				closing.push(Colors.CLOSE.text);
 			} else if (Array.isArray(text)) {
 				opening.push(Colors.formatArray([text[0], text[1], text[2]]));
-				closing.push(`${Colors.CLOSE.text}`);
+				closing.push(Colors.CLOSE.text);
 			} else if (typeof text === 'string' && text.toLowerCase() in Colors.TEXTS) {
-				opening.push(`${Colors.TEXTS[text.toLowerCase()]}`);
-				closing.push(`${Colors.CLOSE.text}`);
+				opening.push(Colors.TEXTS[text.toLowerCase()]);
+				closing.push(Colors.CLOSE.text);
 			}
 		}
 		return { opening, closing };
