@@ -105,10 +105,6 @@
         "path": "PieceStores.md"
     },
     {
-        "name": "Creating a Points System",
-        "path": "CreatingPointsSystems.md"
-    },
-    {
         "name": "Rich Display",
         "path": "RichDisplay.md"
     },
@@ -155,4 +151,13 @@
         "name": "Included Tasks",
         "path": "IncludedTasks.md"
     }]
+},
+{
+    "name": "Building Your Bot",
+    "files": [
+        {
+            "name": "Creating a Points System",
+            "path": "CreatingPointsSystems.md"
+        }
+    ]
 }]
