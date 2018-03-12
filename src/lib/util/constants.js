@@ -3,8 +3,8 @@ const { mergeDefault } = require('./util');
 
 const colorBase = {
 	shard: { background: 'cyan', text: 'black' },
-	message: { },
-	time: { }
+	message: {},
+	time: {}
 };
 
 exports.DEFAULTS = {

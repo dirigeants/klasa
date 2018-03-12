@@ -126,21 +126,19 @@ class Colors {
 	/**
 	 * Apply the style
 	 * @since 0.5.0
-	 * @param {(string|string[])} style The style to apply
+	 * @param {(string|string[])} styles The style or styles to apply
 	 * @param {ColorsFormatData} [data={}] The data
 	 * @returns {ColorsFormatData}
 	 * @private
 	 */
-	static style(style, { opening = [], closing = [] } = {}) {
-		if (style) {
-			if (Array.isArray(style)) {
-				for (let i = 0; i < style.length; i++) {
-					opening.push(`${Colors.STYLES[style[i].toLowerCase()]}`);
-					closing.push(`${Colors.CLOSE[style[i].toLowerCase()]}`);
-				}
-			} else if (typeof style === 'string' && style.toLowerCase() in Colors.STYLES) {
-				opening.push(`${Colors.STYLES[style.toLowerCase()]}`);
-				closing.push(`${Colors.CLOSE[style.toLowerCase()]}`);
+	static style(styles, { opening = [], closing = [] } = {}) {
+		if (styles) {
+			if (!Array.isArray(styles)) styles = [styles];
+			for (let style in styles) {
+				style = style.toLowerCase();
+				if (!(style in Colors.STYLES)) continue;
+				opening.push(`${Colors.STYLES[style]}`);
+				closing.push(`${Colors.CLOSE[style]}`);
 			}
 		}
 		return { opening, closing };
@@ -206,7 +204,7 @@ class Colors {
 }
 
 /**
- * Deterimines if this class should be constructed with colors or not
+ * Determines if this class should be constructed with colors or not
  * @type {?boolean}
  * @static
  * @private
