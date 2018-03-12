@@ -566,7 +566,7 @@ declare module 'klasa' {
 		private init(options: { download?: boolean, defaultSchema?: object }): Promise<void>;
 		private _ready(): Promise<Array<Collection<string, Configuration>>>;
 		private _resolveGuild(guild: GatewayGuildResolvable): KlasaGuild;
-		private _shardSync(path: string[], data: any, action: 'add' | 'delete' | 'update', force: boolean): Promise<void>;
+		private _shardSync(path: string[], data: any, action: 'add' | 'delete' | 'update'): Promise<void>;
 
 		public toJSON(): GatewayJSON;
 		public toString(): string;
@@ -614,19 +614,16 @@ declare module 'klasa' {
 		public readonly baseDir: string;
 		public readonly filePath: string;
 		public readonly sql: boolean;
-		public schema?: SchemaFolder;
-		public ready: boolean;
-
 		public readonly sqlSchema?: [string, string][];
 		public readonly provider?: Provider;
 		public readonly defaults: any;
+		public schema?: SchemaFolder;
+		public ready: boolean;
+
 
 		public init(defaultSchema: object): Promise<void>;
 		private initTable(): Promise<void>;
 		private initSchema(defaultSchema: object): Promise<SchemaFolder>;
-		private parseEntry(entry: any): any;
-
-		private static _parseSQLValue(value: any, schemaPiece: SchemaPiece): any;
 	}
 
 	export class QueryBuilder {
@@ -669,21 +666,20 @@ declare module 'klasa' {
 	export class SchemaFolder extends Schema {
 		private constructor(client: KlasaClient, gateway: Gateway, object: any, parent: SchemaFolder, key: string);
 		public readonly type: 'Folder';
+		public readonly sqlSchema?: [string, string][];
 		public defaults: object;
 		public keyArray: string[];
 
 		public readonly configurableKeys: string[];
 
-		public add(key: string, options: SchemaFolderAddOptions | { [k: string]: SchemaFolderAddOptions }, force?: boolean): Promise<SchemaFolder>;
+		public add(key: string, options: SchemaFolderAddOptions | { [k: string]: SchemaFolderAddOptions }): Promise<SchemaFolder>;
 		public has(key: string): boolean;
-		public remove(key: string, force?: boolean): Promise<SchemaFolder>;
-		public force(action: 'add' | 'delete', key: string, piece: SchemaFolder | SchemaPiece): Promise<any>;
+		public remove(key: string): Promise<SchemaFolder>;
 		public getDefaults(data?: object): object;
-		public getSQL(array?: string[]): string[];
 
-		private _add(key: string, options: SchemaFolderAddOptions, type: typeof Schema | typeof SchemaFolder): void;
+		private _add(key: string, options: SchemaFolderAddOptions, type: typeof SchemaPiece | typeof SchemaFolder): void;
 		private _remove(key: string): void;
-		private _shardSyncSchema(piece: SchemaFolder | SchemaPiece, action: 'add' | 'delete' | 'update', force: boolean): Promise<void>;
+		private _shardSyncSchema(piece: SchemaFolder | SchemaPiece, action: 'add' | 'delete' | 'update'): Promise<void>;
 		private _init(options: object): true;
 
 		public entries(recursive?: boolean): Iterator<[string, SchemaFolder | SchemaPiece]>;
@@ -693,6 +689,8 @@ declare module 'klasa' {
 
 		public toJSON(): any;
 		public toString(): string;
+
+		private force(action: 'add' | 'delete', piece: SchemaFolder | SchemaPiece): Promise<any>;
 	}
 
 	export class SchemaPiece extends Schema {
@@ -705,6 +703,7 @@ declare module 'klasa' {
 		public sql: string;
 		public configurable: boolean;
 		public validator?: (resolved: any, guild?: KlasaGuild) => void;
+		public readonly sqlSchema?: [string, string];
 
 		public setValidator(fn: Function): this;
 		public parse(value: any, guild: KlasaGuild): Promise<any>;
@@ -721,8 +720,6 @@ declare module 'klasa' {
 
 		public toJSON(): SchemaPieceJSON;
 		public toString(): string;
-
-		private static _parseSQLValue(value: any): string;
 	}
 
 //#endregion Settings
@@ -847,7 +844,6 @@ declare module 'klasa' {
 		public constructor(client: KlasaClient, store: ProviderStore, file: string, core: boolean, options?: ProviderOptions);
 
 		public cache: boolean;
-		public sql: boolean;
 
 		public abstract hasTable(table: string): Promise<boolean>;
 		public abstract createTable(table: string): Promise<any>;
@@ -865,6 +861,13 @@ declare module 'klasa' {
 
 		public shutdown(): Promise<void>;
 		public toJSON(): PieceProviderJSON;
+	}
+
+	export abstract class SQLProvider extends Provider {
+		public parseGatewayInput(updated: ConfigurationUpdateResultEntry[]): [string[], any[]];
+		public parseEntry<T>(gateway: string | Gateway, entry: object): T;
+		public parseValue<T>(value: any, schemaPiece: SchemaPiece): T;
+		public stringifyValue(value: any): string;
 	}
 
 	export abstract class Task extends Piece {
@@ -1335,7 +1338,7 @@ declare module 'klasa' {
 		public static isNumber(input: number): boolean;
 		public static isObject(input: object): boolean;
 		public static isThenable(input: Promise<any>): boolean;
-		public static makeObject(path: string, value: any): object;
+		public static makeObject(path: string, value: any, obj?: object): object;
 		public static arraysEqual(arr1: any[], arr2: any[], clone?: boolean): boolean;
 		public static mergeDefault(def: object, given?: object): object;
 		public static mergeObjects(objTarget: object, objSource: object): object;
@@ -1633,7 +1636,6 @@ declare module 'klasa' {
 
 	export type ProviderOptions = {
 		cache?: boolean;
-		sql?: boolean;
 	} & PieceOptions;
 
 	export type EventOptions = {

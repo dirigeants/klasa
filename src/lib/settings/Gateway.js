@@ -289,10 +289,9 @@ class Gateway extends GatewayStorage {
 	 * @param {string[]} path The key's path
 	 * @param {Object} data The data to insert
 	 * @param {('add'|'delete'|'update')} action Whether the piece got added or removed
-	 * @param {boolean} force Whether the key got added with force or not
 	 * @private
 	 */
-	async _shardSync(path, data, action, force) {
+	async _shardSync(path, data, action) {
 		if (!this.client.shard) return;
 		const parsed = typeof data === 'string' ? JSON.parse(data) : data;
 		let route = this.schema;
@@ -300,15 +299,14 @@ class Gateway extends GatewayStorage {
 		for (const pt of path) route = route[pt];
 		let piece;
 		if (action === 'add') {
-			if (parsed.type === 'Folder') piece = route[key] = new SchemaFolder(this.client, this, parsed, route, key);
-			else piece = route[key] = new SchemaPiece(this.client, this, parsed, route, key);
+			piece = route._add(key, parsed, parsed.type === 'Folder' ? SchemaFolder : SchemaPiece);
 		} else if (action === 'delete') {
 			piece = route[key];
 			delete route[key];
 		} else {
 			route[key]._patch(parsed);
 		}
-		if (force) await route.force(action, key, piece);
+		await route.force(action, piece);
 	}
 
 	/**

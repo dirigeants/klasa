@@ -22,7 +22,6 @@ class SQLProvider extends Provider {
 	 * @param {(string|Gateway)} gateway The gateway with the schema to parse
 	 * @param {Object} entry An entry to parse
 	 * @returns {Object}
-	 * @private
 	 */
 	parseEntry(gateway, entry) {
 		if (typeof gateway === 'string') gateway = this.client.gateways[gateway];
@@ -42,7 +41,6 @@ class SQLProvider extends Provider {
 	 * @param {*} value The value to parse
 	 * @param {SchemaPiece} schemaPiece The SchemaPiece which manages this value
 	 * @returns {*}
-	 * @private
 	 */
 	parseValue(value, schemaPiece) {
 		if (typeof value === 'undefined') return deepClone(schemaPiece.default);
@@ -78,7 +76,6 @@ class SQLProvider extends Provider {
 	 * @since 0.5.0
 	 * @param {*} value The value to parse
 	 * @returns {string}
-	 * @private
 	 */
 	stringifyValue(value) {
 		switch (typeof value) {
