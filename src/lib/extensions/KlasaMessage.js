@@ -178,18 +178,12 @@ module.exports = Structures.extend('Message', Message => {
 			// eslint-disable-next-line prefer-const
 			let { content: _content, ..._options } = this.constructor.handleOptions(content, options);
 
-			const { responses } = this;
-
-			if (!responses.length || typeof _options.files !== 'undefined') {
-				const mes = await this.channel.send(_content, _options);
-				if (typeof _options.files === 'undefined') this._responses = Array.isArray(mes) ? mes.map(ms => ms.id) : [mes.id];
-				return mes;
-			}
-
+			if (typeof _options.files !== 'undefined') return this.channel.send(_content, _options);
 			if (Array.isArray(_content)) _content = _content.join('\n');
 			if (_options && _options.split) _content = splitMessage(_content, _options.split);
 			if (!Array.isArray(_content)) _content = [_content];
 
+			const { responses } = this;
 			const promises = [];
 			const max = Math.max(_content.length, responses.length);
 
