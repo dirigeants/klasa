@@ -51,7 +51,7 @@ module.exports = Structures.extend('Message', Message => {
 			this.prompter = null;
 
 			/**
-			 * The id's of the responses to this message
+			 * The ids of the responses to this message
 			 * @since 0.5.0
 			 * @type {string[]}
 			 * @private
