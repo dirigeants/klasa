@@ -22,13 +22,6 @@ module.exports = Structures.extend('Message', Message => {
 			this.guildConfigs = this.guild ? this.guild.configs : this.client.gateways.guilds.defaults;
 
 			/**
-			 * The previous responses to this message
-			 * @since 0.5.0
-			 * @type {?KlasaMessage[]}
-			 */
-			this.responses = null;
-
-			/**
 			 * The command being run
 			 * @since 0.0.1
 			 * @type {?Command}
@@ -56,6 +49,28 @@ module.exports = Structures.extend('Message', Message => {
 			 * @private
 			 */
 			this.prompter = null;
+
+			/**
+			 * The id's of the responses to this message
+			 * @since 0.5.0
+			 * @type {string[]}
+			 * @private
+			 */
+			this._responses = [];
+		}
+
+		/**
+		 * The previous responses to this message
+		 * @since 0.5.0
+		 * @type {KlasaMessage[]}
+		 */
+		get responses() {
+			const responses = [];
+			for (const id of this._responses) {
+				const response = this.channel.get(id);
+				if (response) responses.push(response);
+			}
+			return responses;
 		}
 
 		/**
@@ -162,9 +177,11 @@ module.exports = Structures.extend('Message', Message => {
 			// eslint-disable-next-line prefer-const
 			let { content: _content, ..._options } = this.constructor.handleOptions(content, options);
 
-			if (!this.responses || typeof _options.files !== 'undefined') {
+			const { responses } = this;
+
+			if (!responses.length || typeof _options.files !== 'undefined') {
 				const mes = await this.channel.send(_content, _options);
-				if (typeof _options.files === 'undefined') this.responses = Array.isArray(mes) ? mes : [mes];
+				if (typeof _options.files === 'undefined') this._responses = Array.isArray(mes) ? mes.map(ms => ms.id) : [mes.id];
 				return mes;
 			}
 
@@ -173,16 +190,17 @@ module.exports = Structures.extend('Message', Message => {
 			if (!Array.isArray(_content)) _content = [_content];
 
 			const promises = [];
-			const max = Math.max(_content.length, this.responses.length);
+			const max = Math.max(_content.length, responses.length);
 
 			for (let i = 0; i < max; i++) {
-				if (i >= _content.length) this.responses[i].delete();
-				else if (this.responses.length > i) promises.push(this.responses[i].edit(_content[i], _options));
+				if (i >= _content.length) responses[i].delete();
+				else if (responses.length > i) promises.push(responses[i].edit(_content[i], _options));
 				else promises.push(this.channel.send(_content[i], _options));
 			}
 
-			this.responses = await Promise.all(promises);
-			return this.responses.length === 1 ? this.responses[0] : this.responses;
+			const newResponses = await Promise.all(promises);
+			this._responses = newResponses.map(res => res.id);
+			return newResponses.length === 1 ? newResponses[0] : newResponses;
 		}
 
 		/**
