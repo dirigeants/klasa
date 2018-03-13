@@ -324,7 +324,10 @@ class Util {
 			const route = path.split('.');
 			const lastKey = route.pop();
 			let reference = obj;
-			for (const key of route) reference = reference[key] = {};
+			for (const key of route) {
+				if (!(key in reference)) reference[key] = {};
+				reference = reference[key];
+			}
 			reference[lastKey] = value;
 		}
 		return obj;
