@@ -876,7 +876,7 @@ declare module 'klasa' {
 
 //#region Stores
 
-	export class Store<K, V, VConstructor = Constructable<V>> extends Collection<K, V> {
+	export class Store<K, V extends Piece, VConstructor = Constructable<V>> extends Collection<K, V> {
 		public readonly client: KlasaClient;
 		public readonly coreDir: string;
 		public readonly holds: VConstructor;
@@ -884,7 +884,7 @@ declare module 'klasa' {
 		public readonly userDir: string;
 
 		public delete(name: K | V): boolean;
-		public set(command: V): Command;
+		public set(piece: V): V;
 		public set(key: K, value: V): this;
 		public init(): Promise<any[]>;
 		public load(file: string | string[], core?: boolean): Piece;
