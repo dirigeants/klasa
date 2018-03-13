@@ -63,6 +63,7 @@ module.exports = Structures.extend('Message', Message => {
 		 * The previous responses to this message
 		 * @since 0.5.0
 		 * @type {KlasaMessage[]}
+		 * @readonly
 		 */
 		get responses() {
 			const responses = [];
