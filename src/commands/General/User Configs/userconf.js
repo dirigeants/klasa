@@ -23,9 +23,9 @@ module.exports = class extends Command {
 	}
 
 	get(msg, [key]) {
-		const a = this.client.gateways.guilds.getPath(key, { avoidUnconfigurable: true, piece: true, errors: false });
-		if (!a) return msg.sendMessage(msg.language.get('COMMAND_CONF_GET_NOEXT', key));
-		return msg.sendMessage(msg.language.get('COMMAND_CONF_GET', a.piece.path, msg.guild.configs.resolveString(msg, a.piece)));
+		const path = this.client.gateways.guilds.getPath(key, { avoidUnconfigurable: true, piece: true, errors: false });
+		if (!path) return msg.sendMessage(msg.language.get('COMMAND_CONF_GET_NOEXT', key));
+		return msg.sendMessage(msg.language.get('COMMAND_CONF_GET', path.piece.path, msg.guild.configs.resolveString(msg, path.piece)));
 	}
 
 	async set(msg, [key, ...valueToSet]) {
