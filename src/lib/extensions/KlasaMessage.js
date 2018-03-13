@@ -53,7 +53,7 @@ module.exports = Structures.extend('Message', Message => {
 			/**
 			 * The ids of the responses to this message
 			 * @since 0.5.0
-			 * @type {string[]}
+			 * @type {external:Snowflake[]}
 			 * @private
 			 */
 			this._responses = [];
