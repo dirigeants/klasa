@@ -62,9 +62,9 @@ class GatewayDriver {
 
 		/**
 		 * All the types accepted for the Gateway.
-		 * @type {Set<string>}
+		 * @type {?Set<string>}
 		 */
-		this.types = new Set(Object.getOwnPropertyNames(SettingResolver.prototype).slice(1));
+		this.types = null;
 
 		/**
 		 * All the gateways added
@@ -154,8 +154,7 @@ class GatewayDriver {
 				min: null,
 				max: null,
 				array: true,
-				configurable: true,
-				sql: null
+				configurable: true
 			}
 		};
 	}
@@ -174,8 +173,7 @@ class GatewayDriver {
 				min: null,
 				max: null,
 				array: true,
-				configurable: true,
-				sql: null
+				configurable: true
 			},
 			guildBlacklist: {
 				type: 'string',
@@ -183,8 +181,7 @@ class GatewayDriver {
 				min: 17,
 				max: 19,
 				array: true,
-				configurable: true,
-				sql: null
+				configurable: true
 			},
 			schedules: {
 				type: 'any',
@@ -192,8 +189,7 @@ class GatewayDriver {
 				min: null,
 				max: null,
 				array: true,
-				configurable: false,
-				sql: null
+				configurable: false
 			}
 		};
 	}
@@ -210,7 +206,7 @@ class GatewayDriver {
 	register(name, defaultSchema = {}, { download = true, provider = this.client.options.providers.default } = {}) {
 		if (typeof name !== 'string') throw new TypeError('You must pass a name for your new gateway and it must be a string.');
 		if (!this.client.methods.util.isObject(defaultSchema)) throw new TypeError('Schema must be a valid object or left undefined for an empty object.');
-		if (name in this) throw new Error(`The key '${name}' is either taken by another Gateway or reserved for GatewayDriver's functionality.`);
+		if (this.name !== undefined && this.name !== null) throw new Error(`The key '${name}' is either taken by another Gateway or reserved for GatewayDriver's functionality.`);
 		if (!this.ready) {
 			if (this._queue.has(name)) throw new Error(`There is already a Gateway with the name '${name}' in the queue.`);
 			this._queue.set(name, async () => {
@@ -232,6 +228,7 @@ class GatewayDriver {
 	 */
 	async _ready() {
 		if (this.ready) throw new Error('The GatewayDriver has already been inited.');
+		this.types = new Set(Object.getOwnPropertyNames(SettingResolver.prototype).slice(1));
 		this.ready = true;
 		return Promise.all([...this._queue.values()].map(register => register()));
 	}

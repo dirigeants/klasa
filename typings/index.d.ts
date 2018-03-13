@@ -556,14 +556,12 @@ declare module 'klasa' {
 		public readonly resolver: SettingResolver;
 		public readonly cache: Collection<string, Configuration>;
 
-		public getEntry(input: string, create?: boolean): object | Configuration;
-		public createEntry(input: string): Promise<Configuration>;
-		public insertEntry(id: string, data?: object): Configuration;
-		public deleteEntry(input: string): Promise<boolean>;
+		public get(input: string | number, create?: boolean): Configuration;
 		public sync(input?: object | string, download?: boolean): Promise<any>;
 		public getPath(key?: string, options?: GatewayGetPathOptions): GatewayGetPathResult | null;
 
 		private init(options: { download?: boolean, defaultSchema?: object }): Promise<void>;
+		private _download(): Promise<void>;
 		private _ready(): Promise<Array<Collection<string, Configuration>>>;
 		private _resolveGuild(guild: GatewayGuildResolvable): KlasaGuild;
 		private _shardSync(path: string[], data: any, action: 'add' | 'delete' | 'update'): Promise<void>;
@@ -576,7 +574,7 @@ declare module 'klasa' {
 		private constructor(client: KlasaClient);
 		public readonly client: KlasaClient;
 		public resolver: SettingResolver;
-		public types: Set<string>;
+		public types?: Set<string>;
 		public keys: Set<string>;
 		public ready: boolean;
 		private _queue: Map<string, (() => Promise<Gateway>)>;

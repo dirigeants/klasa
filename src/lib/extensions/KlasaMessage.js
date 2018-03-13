@@ -147,8 +147,7 @@ module.exports = Structures.extend('Message', Message => {
 		 * @returns {boolean}
 		 */
 		async hasAtLeastPermissionLevel(min) {
-			const { permission } = await this.client.permissionLevels.run(this, min);
-			return permission;
+			return (await this.client.permissionLevels.run(this, min)).permission;
 		}
 
 		/**
@@ -230,7 +229,7 @@ module.exports = Structures.extend('Message', Message => {
 			super._patch(data);
 
 			/**
-			 * The language in this setting
+			 * The language configured by the guild's configuration or default language if the message is sent in DMs
 			 * @since 0.3.0
 			 * @type {Language}
 			 */

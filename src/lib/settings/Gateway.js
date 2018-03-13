@@ -82,76 +82,20 @@ class Gateway extends GatewayStorage {
 	/**
 	 * Get an entry from the cache.
 	 * @since 0.5.0
-	 * @param {string} input The key to get from the cache
-	 * @param {boolean} [create=false] Whether SG should create a new instance of Configuration in the background
-	 * @returns {(Configuration|Object)}
+	 * @param {string} id The key to get from the cache
+	 * @param {boolean} [create = false] Whether SG should create a new instance of Configuration in the background
+	 * @returns {?Configuration}
 	 */
-	getEntry(input, create = false) {
-		if (input === 'default') return this.defaults;
+	get(id, create = false) {
+		const entry = this.cache.get(id);
+		if (entry) return entry;
 		if (create) {
-			const entry = this.cache.get(input);
-			if (!entry) {
-				const configs = new this.Configuration(this, { id: input });
-				this.cache.set(input, configs);
-				// Silently create a new entry. The new data does not matter as Configuration default all the keys.
-				this.provider.create(this.type, input)
-					.then(() => {
-						configs.existsInDB = true;
-						if (this.client.listenerCount('configCreateEntry')) this.client.emit('configCreateEntry', configs);
-					})
-					.catch(error => this.client.emit('error', error));
-				return configs;
-			}
-			return entry;
+			const configs = new this.Configuration(this, { id });
+			this.cache.set(id, configs);
+			if (this.ready && this.schema.keyArray.length) configs.sync().catch(err => this.client.emit('error', err));
+			return configs;
 		}
-		return this.cache.get(input) || this.defaults;
-	}
-
-	/**
-	 * Create a new entry into the database with an optional content (defaults to this Gateway's defaults).
-	 * @since 0.5.0
-	 * @param {string} input The name of the key to create
-	 * @returns {Configuration}
-	 */
-	async createEntry(input) {
-		const target = getIdentifier(input);
-		if (!target) throw new TypeError('The selected target could not be resolved to a string.');
-		const cache = this.cache.get(target);
-		if (cache && cache.existsInDB) return cache;
-		await this.provider.create(this.type, target);
-		const configs = cache || new this.Configuration(this, { id: target });
-		configs.existsInDB = true;
-		if (!cache) this.cache.set(target, configs);
-		if (this.client.listenerCount('configCreateEntry')) this.client.emit('configCreateEntry', configs);
-		return configs;
-	}
-
-	/**
-	 * Generate a new entry and add it to the cache.
-	 * @since 0.5.0
-	 * @param {string} id The ID of the entry
-	 * @param {*} data The data to insert
-	 * @returns {Configuration}
-	 */
-	insertEntry(id, data = {}) {
-		const configs = new this.Configuration(this, { ...data, id });
-		this.cache.set(id, configs);
-		if (this.ready && this.schema.keyArray.length) configs.sync().catch(err => this.client.emit('error', err));
-		return configs;
-	}
-
-	/**
-	 * Delete an entry from the database and cache.
-	 * @since 0.5.0
-	 * @param {string} input The name of the key to fetch and delete
-	 * @returns {boolean}
-	 */
-	async deleteEntry(input) {
-		const configs = this.cache.get(input);
-		if (!configs) return false;
-
-		await configs.destroy();
-		return true;
+		return null;
 	}
 
 	/**
@@ -163,19 +107,8 @@ class Gateway extends GatewayStorage {
 	 */
 	async sync(input, download) {
 		if (typeof input === 'undefined') {
-			if (!download) return Promise.all(this.cache.map(entry => entry.sync()));
-			const entries = await this.provider.getAll(this.type);
-			for (const entry of entries) {
-				const cache = this.cache.get(entry);
-				if (cache) {
-					if (!cache.existsInDB) cache.existsInDB = true;
-					cache._patch(entry);
-				} else {
-					const newEntry = new this.Configuration(this, entry);
-					newEntry.existsInDB = true;
-					this.cache.set(entry.id, newEntry);
-				}
-			}
+			if (download) await this._download();
+			else await Promise.all(this.cache.map(entry => entry.sync()));
 			return null;
 		}
 		const target = getIdentifier(input);
@@ -239,8 +172,28 @@ class Gateway extends GatewayStorage {
 	 */
 	async init({ download = true, defaultSchema = {} } = {}) {
 		await super.init(defaultSchema);
-		if (download) await this.sync();
+		if (download) await this._download();
 		await this._ready();
+	}
+
+	/**
+	 * Download all entries for this database
+	 * @since 0.5.0
+	 * @private
+	 */
+	async _download() {
+		const entries = await this.provider.getAll(this.type);
+		for (const entry of entries) {
+			const cache = this.cache.get(entry);
+			if (cache) {
+				if (!cache.existsInDB) cache.existsInDB = true;
+				cache._patch(entry);
+			} else {
+				const configs = new this.Configuration(this, entry);
+				configs.existsInDB = true;
+				this.cache.set(entry.id, configs);
+			}
+		}
 	}
 
 	/**

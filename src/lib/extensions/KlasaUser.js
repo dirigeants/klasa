@@ -14,11 +14,11 @@ module.exports = Structures.extend('User', User => {
 			super(...args);
 
 			/**
-			 * The user level configs for this context (user || default)
+			 * The user level configs for this context
 			 * @since 0.5.0
 			 * @type {Configuration}
 			 */
-			this.configs = this.client.gateways.users.cache.get(this.id) || this.client.gateways.users.insertEntry(this.id);
+			this.configs = this.client.gateways.users.get(this.id, true);
 		}
 
 	}

@@ -99,6 +99,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#228](https://github.com/dirigeants/klasa/pull/228)] `Gateway#getEntry` -> `Gateway#get`. (kyranet)
 - [[#228](https://github.com/dirigeants/klasa/pull/228)] `SchemaPiece#sql` is now type of `string` instead of `[string, string]`. (kyranet)
 - [[#228](https://github.com/dirigeants/klasa/pull/228)] Refactored `GatewayDriver` for optimized and better readability. (kyranet)
 - [[#228](https://github.com/dirigeants/klasa/pull/228)] Improved performance in `Gateway#_ready()` by caching the structure instead of getting it for each entry. (kyranet)
@@ -166,6 +167,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Removed
 
+- [[#228](https://github.com/dirigeants/klasa/pull/228)] Removed `Gateway#insertEntry`, `Gateway#createEntry` and `Gateway#deleteEntry` in favor to the OOP paradigm. (kyranet)
 - [[#228](https://github.com/dirigeants/klasa/pull/228)] `Gateway#options` and `Gateway#defaultSchema` to improve RAM usage. (kyranet)
 - [[#210](https://github.com/dirigeants/klasa/pull/210)] Removed PermissionLevels#requiredLevels as it's unnecessary do to inherited size parameter. (bdistin)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] **[BREAKING]** Removed `SchemaFolder#addKey` and `SchemaFolder#addFolder` in favor to a more consistent `Schema#add`. (kyranet)
