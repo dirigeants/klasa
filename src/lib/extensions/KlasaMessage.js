@@ -67,7 +67,7 @@ module.exports = Structures.extend('Message', Message => {
 		get responses() {
 			const responses = [];
 			for (const id of this._responses) {
-				const response = this.channel.get(id);
+				const response = this.channel.messages.get(id);
 				if (response) responses.push(response);
 			}
 			return responses;
