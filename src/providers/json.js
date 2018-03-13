@@ -178,7 +178,7 @@ module.exports = class extends Provider {
 	 */
 	async update(table, document, data) {
 		const existent = await this.get(table, document);
-		return fs.outputJSONAtomic(resolve(this.baseDir, table, `${document}.json`), util.mergeObjects(existent || { id: document }, data));
+		return fs.outputJSONAtomic(resolve(this.baseDir, table, `${document}.json`), util.mergeObjects(existent || { id: document }, this.parseInput(data)));
 	}
 
 	/**
@@ -189,7 +189,7 @@ module.exports = class extends Provider {
 	 * @returns {Promise<void>}
 	 */
 	replace(table, document, data) {
-		return fs.outputJSONAtomic(resolve(this.baseDir, table, `${document}.json`), data);
+		return fs.outputJSONAtomic(resolve(this.baseDir, table, `${document}.json`), this.parseInput(data));
 	}
 
 	/**

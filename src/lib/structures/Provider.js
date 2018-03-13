@@ -1,4 +1,5 @@
 const Piece = require('./base/Piece');
+const { isObject, makeObject, getDeepTypeName } = require('../util/util');
 
 /**
  * Base class for all Klasa Providers. See {@tutorial CreatingProviders} for more information how to use this class
@@ -39,6 +40,35 @@ class Provider extends Piece {
 	 */
 	async shutdown() {
 		// Optionally defined in extension Classes
+	}
+
+	/**
+	 * Helper method to abstract the overload parsing to JSON for all NoSQL databases.
+	 * @since 0.5.0
+	 * @param {ConfigurationUpdateResultEntry[]|Array<Array<string>>|Object<string, *>} data The data to parse
+	 * @returns {Object<string, *>}
+	 */
+	parseInput(data) {
+		if (Array.isArray(data)) {
+			const [first] = data;
+			const output = {};
+			if (first.data && first.piece) {
+				// [{ data: [string, *], piece: SchemaPiece }, ...]
+				for (const entry of data) makeObject(entry.data[0], entry.data[1], output);
+				return output;
+			}
+
+			if (Array.isArray(first) && first.length === 2) {
+				// [[string, *], ...]
+				for (const entry of data) makeObject(entry[0], entry[1], output);
+				return output;
+			}
+		} else if (isObject(data)) {
+			// Object
+			return data;
+		}
+
+		throw new TypeError(`The type ${getDeepTypeName(data)} is unsupported. The supported types are ConfigurationUpdateResultEntry[], [string, *][] or Object.`);
 	}
 
 	/**
