@@ -189,7 +189,7 @@ class Configuration {
 	 * @param {*} [value] The value to parse and save
 	 * @param {GuildResolvable} [guild] A guild resolvable
 	 * @param {ConfigurationUpdateOptions} [options={}] The options for the update
-	 * @returns {Promise<ConfigurationUpdateResult>}
+	 * @returns {ConfigurationUpdateResult}
 	 * @example
 	 * // Updating the value of a key
 	 * Configuration#update('roles.administrator', '339943234405007361', msg.guild);
