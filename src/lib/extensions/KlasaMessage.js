@@ -172,7 +172,7 @@ module.exports = Structures.extend('Message', Message => {
 		 * @since 0.0.1
 		 * @param {external:StringResolvable|external:MessageEmbed|external:MessageAttachment} [content] The content to send
 		 * @param {external:MessageOptions} [options] The D.JS message options
-		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
+		 * @returns {KlasaMessage|KlasaMessage[]}
 		 */
 		async sendMessage(content, options) {
 			// eslint-disable-next-line prefer-const
