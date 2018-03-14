@@ -227,12 +227,13 @@ declare module 'klasa' {
 		public readonly guild: KlasaGuild;
 		public guildConfigs: Configuration;
 		public language: Language;
-		public responses?: KlasaMessage | KlasaMessage[];
 		public command?: Command;
 		public prefix?: RegExp;
 		public prefixLength?: number;
 		private prompter?: CommandPrompt;
+		private _responses: Snowflake[];
 
+		public readonly responses: KlasaMessage[];
 		public readonly args: string[];
 		public readonly params: any[];
 		public readonly flags: ObjectLiteral<string, string>;

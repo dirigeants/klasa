@@ -22,13 +22,6 @@ module.exports = Structures.extend('Message', Message => {
 			this.guildConfigs = this.guild ? this.guild.configs : this.client.gateways.guilds.defaults;
 
 			/**
-			 * The previous responses to this message
-			 * @since 0.5.0
-			 * @type {?KlasaMessage[]}
-			 */
-			this.responses = null;
-
-			/**
 			 * The command being run
 			 * @since 0.0.1
 			 * @type {?Command}
@@ -56,6 +49,29 @@ module.exports = Structures.extend('Message', Message => {
 			 * @private
 			 */
 			this.prompter = null;
+
+			/**
+			 * The ids of the responses to this message
+			 * @since 0.5.0
+			 * @type {external:Snowflake[]}
+			 * @private
+			 */
+			this._responses = [];
+		}
+
+		/**
+		 * The previous responses to this message
+		 * @since 0.5.0
+		 * @type {KlasaMessage[]}
+		 * @readonly
+		 */
+		get responses() {
+			const responses = [];
+			for (const id of this._responses) {
+				const response = this.channel.messages.get(id);
+				if (response) responses.push(response);
+			}
+			return responses;
 		}
 
 		/**
@@ -155,33 +171,30 @@ module.exports = Structures.extend('Message', Message => {
 		 * @since 0.0.1
 		 * @param {external:StringResolvable|external:MessageEmbed|external:MessageAttachment} [content] The content to send
 		 * @param {external:MessageOptions} [options] The D.JS message options
-		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
+		 * @returns {KlasaMessage|KlasaMessage[]}
 		 */
 		async sendMessage(content, options) {
 			// eslint-disable-next-line prefer-const
 			let { content: _content, ..._options } = this.constructor.handleOptions(content, options);
 
-			if (!this.responses || typeof _options.files !== 'undefined') {
-				const mes = await this.channel.send(_content, _options);
-				if (typeof _options.files === 'undefined') this.responses = Array.isArray(mes) ? mes : [mes];
-				return mes;
-			}
-
+			if (typeof _options.files !== 'undefined') return this.channel.send(_content, _options);
 			if (Array.isArray(_content)) _content = _content.join('\n');
 			if (_options && _options.split) _content = splitMessage(_content, _options.split);
 			if (!Array.isArray(_content)) _content = [_content];
 
+			const { responses } = this;
 			const promises = [];
-			const max = Math.max(_content.length, this.responses.length);
+			const max = Math.max(_content.length, responses.length);
 
 			for (let i = 0; i < max; i++) {
-				if (i >= _content.length) this.responses[i].delete();
-				else if (this.responses.length > i) promises.push(this.responses[i].edit(_content[i], _options));
+				if (i >= _content.length) responses[i].delete();
+				else if (responses.length > i) promises.push(responses[i].edit(_content[i], _options));
 				else promises.push(this.channel.send(_content[i], _options));
 			}
 
-			this.responses = await Promise.all(promises);
-			return this.responses.length === 1 ? this.responses[0] : this.responses;
+			const newResponses = await Promise.all(promises);
+			this._responses = newResponses.map(res => res.id);
+			return newResponses.length === 1 ? newResponses[0] : newResponses;
 		}
 
 		/**

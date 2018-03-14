@@ -456,7 +456,7 @@ class KlasaClient extends Discord.Client {
 			channels++;
 
 			for (const message of channel.messages.values()) {
-				if (message.command && now - (message.editedTimestamp || message.createdTimestamp) > commandLifetimeMs) commandMessages++;
+				if ((message.command || (!message.command && message.author === this.user)) && now - (message.editedTimestamp || message.createdTimestamp) > commandLifetimeMs) commandMessages++;
 				else if (!message.command && now - (message.editedTimestamp || message.createdTimestamp) > lifetimeMs) messages++;
 				else continue;
 				channel.messages.delete(message.id);

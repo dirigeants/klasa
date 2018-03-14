@@ -100,7 +100,7 @@ class Piece {
 	/**
 	 * Reloads this piece
 	 * @since 0.0.1
-	 * @returns {Promise<Piece>} The newly loaded piece
+	 * @returns {Piece} The newly loaded piece
 	 */
 	async reload() {
 		const piece = this.store.load(this.file, this.core);
@@ -147,7 +147,7 @@ class Piece {
 	/**
 	 * The init method to be optionally overwritten in actual commands
 	 * @since 0.0.1
-	 * @returns {Promise<*>}
+	 * @returns {*}
 	 * @abstract
 	 */
 	async init() {
