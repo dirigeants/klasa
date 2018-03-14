@@ -861,6 +861,8 @@ declare module 'klasa' {
 
 	export abstract class SQLProvider extends Provider {
 		public abstract qb: QueryBuilder;
+
+		public parseInput<T>(data: ConfigurationUpdateResultEntry[] | [string, T][] | { [k: string]: T }): [string, T][];
 		public parseGatewayInput(updated: ConfigurationUpdateResultEntry[]): [string[], any[]];
 		public parseEntry<T extends ObjectLiteral<any>>(gateway: string | Gateway, entry: object): T;
 		public parseValue<T extends ObjectLiteral<any>>(value: any, schemaPiece: SchemaPiece): T;
@@ -1305,7 +1307,7 @@ declare module 'klasa' {
 		public static isObject(input: object): boolean;
 		public static isThenable(input: Promise<any>): boolean;
 		public static makeObject(path: string, value: any, obj?: object): object;
-		public static arrayFromObject<T = any>(obj: ObjectLiteral<T>): Array<string, T>
+		public static arrayFromObject<T = any>(obj: ObjectLiteral<T>): Array<string, T>;
 		public static arraysEqual(arr1: any[], arr2: any[], clone?: boolean): boolean;
 		public static mergeDefault(def: object, given?: object): object;
 		public static mergeObjects(objTarget: object, objSource: object): object;
