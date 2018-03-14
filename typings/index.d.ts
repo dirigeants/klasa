@@ -543,9 +543,9 @@ declare module 'klasa' {
 		public toJSON<T extends ObjectLiteral<PrimitiveType | PrimitiveType[]>>(): T;
 		public toString(): string;
 
-		private static _merge(data: any, folder: SchemaFolder | SchemaPiece): any;
-		private static _clone(data: any, schema: SchemaFolder): any;
-		private static _patch(inst: any, data: any, schema: SchemaFolder): void;
+		private static _merge<T extends ObjectLiteral<any>>(data: any, folder: SchemaFolder | SchemaPiece): T;
+		private static _clone<T extends ObjectLiteral<any>>(data: any, schema: SchemaFolder): T;
+		private static _patch<T extends ObjectLiteral<any>>(inst: any, data: any, schema: SchemaFolder): T;
 	}
 
 	export class Gateway extends GatewayStorage {
@@ -604,17 +604,16 @@ declare module 'klasa' {
 
 	export class GatewayStorage {
 		public constructor(client: KlasaClient, type: string, provider?: string);
-		public readonly client: KlasaClient;
-		public readonly type: string;
-		public readonly providerName: string;
 		public readonly baseDir: string;
-		public readonly filePath: string;
-		public readonly sql: boolean;
-		public readonly sqlSchema?: [string, string][];
-		public readonly provider?: Provider;
+		public readonly client: KlasaClient;
 		public readonly defaults: any;
-		public schema?: SchemaFolder;
+		public readonly filePath: string;
+		public readonly provider?: Provider;
+		public readonly providerName: string;
+		public readonly sqlSchema?: [string, string][];
+		public readonly type: string;
 		public ready: boolean;
+		public schema?: SchemaFolder;
 
 
 		public init(defaultSchema: object): Promise<void>;
@@ -623,12 +622,13 @@ declare module 'klasa' {
 	}
 
 	export class QueryBuilder {
-		public constructor(client: KlasaClient, types: { [k: string]: QueryBuilderType } & KlasaSQLConstants, options: QueryBuilderOptions);
+		public constructor(client: KlasaClient, types: ObjectLiteral<QueryBuilderType> & KlasaSQLConstants, options: QueryBuilderOptions);
 		public client: KlasaClient;
-		public types: { [k: string]: QueryBuilderType } & KlasaSQLConstants;
+		public types: ObjectLiteral<QueryBuilderType> & KlasaSQLConstants;
 		public customResolvers: Map<string, (qs: QueryBuilder, value: any) => string>;
+
 		public create(): QueryType;
-		public valueOf(): { [k: string]: QueryBuilderType };
+		public valueOf(): ObjectLiteral<QueryBuilderType>;
 
 		private _parseValue(value: any): string;
 	}
@@ -661,14 +661,13 @@ declare module 'klasa' {
 
 	export class SchemaFolder extends Schema {
 		private constructor(client: KlasaClient, gateway: Gateway, object: any, parent: SchemaFolder, key: string);
-		public readonly type: 'Folder';
-		public readonly sqlSchema?: [string, string][];
 		public defaults: object;
 		public keyArray: string[];
-
 		public readonly configurableKeys: string[];
+		public readonly sqlSchema?: [string, string][];
+		public readonly type: 'Folder';
 
-		public add(key: string, options: SchemaFolderAddOptions | { [k: string]: SchemaFolderAddOptions }): Promise<SchemaFolder>;
+		public add(key: string, options: SchemaFolderAddOptions | ObjectLiteral<SchemaFolderAddOptions>): Promise<SchemaFolder>;
 		public has(key: string): boolean;
 		public remove(key: string): Promise<SchemaFolder>;
 		public getDefaults(data?: object): object;
@@ -678,7 +677,7 @@ declare module 'klasa' {
 		public keys(recursive?: boolean): Iterator<string>;
 		public [Symbol.iterator](): Iterator<[string, SchemaFolder | SchemaPiece]>;
 
-		public toJSON(): any;
+		public toJSON(): ObjectLiteral<SchemaFolderAddOptions>;
 		public toString(): string;
 
 		private _add(key: string, options: SchemaFolderAddOptions, type: typeof SchemaPiece | typeof SchemaFolder): void;
@@ -695,13 +694,13 @@ declare module 'klasa' {
 		public default: any;
 		public min?: number;
 		public max?: number;
-		public sql: string;
+		public sql?: string;
 		public configurable: boolean;
 		public validator?: (resolved: any, guild?: KlasaGuild) => void;
 		public readonly sqlSchema?: [string, string];
 
 		public setValidator(fn: Function): this;
-		public parse(value: any, guild: KlasaGuild): Promise<any>;
+		public parse<T = any>(value: any, guild: KlasaGuild): Promise<T>;
 		public modify(options: SchemaPieceEditOptions): Promise<this>;
 
 		private _generateDefault(): Array<any> | false | null;
@@ -731,12 +730,11 @@ declare module 'klasa' {
 		public enabled: boolean;
 		public store: Store<string, this>;
 
-		public reload(): Promise<Piece>;
+		public reload(): Promise<this>;
 		public unload(): void;
-		public enable(): Piece;
-		public disable(): Piece;
+		public enable(): this;
+		public disable(): this;
 		public init(): Promise<any>;
-
 		public toJSON(): PieceJSON;
 		public toString(): string;
 	}
@@ -767,10 +765,9 @@ declare module 'klasa' {
 		public usage: CommandUsage;
 		private cooldowns: Map<Snowflake, number>;
 
-		public definePrompt(usageString: string, usageDelim: string): Usage;
 		public createCustomResolver(type: string, resolver: ArgResolverCustomMethod): this;
 		public customizeResponse(name: string, response: string | ((msg: KlasaMessage, possible: Possible) => string)): this;
-
+		public definePrompt(usageString: string, usageDelim: string): Usage;
 		public run(msg: KlasaMessage, params: any[]): Promise<KlasaMessage | KlasaMessage[]>;
 		public toJSON(): PieceCommandJSON;
 	}
@@ -816,20 +813,20 @@ declare module 'klasa' {
 	}
 
 	export abstract class Language extends Piece {
-		public language: { [key: string]: any };
+		public language: ObjectLiteral<string | string[]>;
 
-		public get(term: string, ...args: any[]): any;
+		public get<T = string>(term: string, ...args: any[]): T;
 		public toJSON(): PieceLanguageJSON;
 	}
 
 	export abstract class Monitor extends Piece {
 		public constructor(client: KlasaClient, store: MonitorStore, file: string, core: boolean, options?: MonitorOptions);
-
 		public ignoreBots: boolean;
 		public ignoreEdits: boolean;
 		public ignoreOthers: boolean;
 		public ignoreSelf: boolean;
 		public ignoreWebhooks: boolean;
+
 		public abstract run(msg: KlasaMessage): void;
 		public shouldRun(msg: KlasaMessage, edit?: boolean): boolean;
 		public toJSON(): PieceMonitorJSON;
@@ -840,20 +837,20 @@ declare module 'klasa' {
 
 		public cache: boolean;
 
-		public parseInput<T extends ObjectLiteral<any>>(data: ConfigurationUpdateResultEntry[] | [string, any][] | { [k: string]: any }): T;
-		public abstract hasTable(table: string): Promise<boolean>;
+		protected parseInput<T extends ObjectLiteral<any>>(data: ConfigurationUpdateResultEntry[] | [string, any][] | ObjectLiteral<any>): T;
+		public abstract create(table: string, entry: string, data: any): Promise<any>;
 		public abstract createTable(table: string): Promise<any>;
+		public abstract delete(table: string, entry: string): Promise<any>;
 		public abstract deleteTable(table: string): Promise<any>;
+		public abstract get<T extends ObjectLiteral<any>>(table: string, entry: string): Promise<T>;
 		public abstract getAll<T extends ObjectLiteral<any>>(table: string): Promise<T[]>;
 		public abstract getKeys(table: string): Promise<string[]>;
-		public abstract get<T extends ObjectLiteral<any>>(table: string, entry: string): Promise<T>;
 		public abstract has(table: string, entry: string): Promise<boolean>;
-		public abstract updateValue(table: string, path: string, newValue: any): Promise<any>;
+		public abstract hasTable(table: string): Promise<boolean>;
 		public abstract removeValue(table: string, path: string): Promise<any>;
-		public abstract create(table: string, entry: string, data: any): Promise<any>;
-		public abstract update(table: string, entry: string, data: ConfigurationUpdateResultEntry[] | [string, any][] | { [k: string]: any }): Promise<any>;
-		public abstract replace(table: string, entry: string, data: ConfigurationUpdateResultEntry[] | [string, any][] | { [k: string]: any }): Promise<any>;
-		public abstract delete(table: string, entry: string): Promise<any>;
+		public abstract replace(table: string, entry: string, data: ConfigurationUpdateResultEntry[] | [string, any][] | ObjectLiteral<any>): Promise<any>;
+		public abstract update(table: string, entry: string, data: ConfigurationUpdateResultEntry[] | [string, any][] | ObjectLiteral<any>): Promise<any>;
+		public abstract updateValue(table: string, path: string, newValue: any): Promise<any>;
 
 		public shutdown(): Promise<void>;
 		public toJSON(): PieceProviderJSON;
@@ -862,11 +859,11 @@ declare module 'klasa' {
 	export abstract class SQLProvider extends Provider {
 		public abstract qb: QueryBuilder;
 
-		public parseInput<T>(data: ConfigurationUpdateResultEntry[] | [string, T][] | { [k: string]: T }): [string, T][];
-		public parseGatewayInput(updated: ConfigurationUpdateResultEntry[]): [string[], any[]];
-		public parseEntry<T extends ObjectLiteral<any>>(gateway: string | Gateway, entry: object): T;
-		public parseValue<T extends ObjectLiteral<any>>(value: any, schemaPiece: SchemaPiece): T;
-		public stringifyValue(value: any): string;
+		protected parseInput<T = any>(data: ConfigurationUpdateResultEntry[] | [string, T][] | ObjectLiteral<T>): [string, T][];
+		protected parseEntry<T extends ObjectLiteral<any>>(gateway: string | Gateway, entry: object): T;
+		protected parseGatewayInput(updated: ConfigurationUpdateResultEntry[]): [string[], any[]];
+		protected parseValue<T extends ObjectLiteral<any>>(value: any, schemaPiece: SchemaPiece): T;
+		protected stringifyValue(value: any): string;
 	}
 
 	export abstract class Task extends Piece {
@@ -1293,7 +1290,7 @@ declare module 'klasa' {
 		public static applyToClass(base: object, structure: object, skips?: string[]): void;
 		public static clean(text: string): string;
 		public static codeBlock(lang: string, expression: string): string;
-		public static deepClone(source: any): any;
+		public static deepClone<T = any>(source: T): T;
 		public static exec(exec: string, options?: ExecOptions): Promise<{ stdout: string, stderr: string }>;
 		public static getDeepTypeMap(input: Map<any, any> | WeakMap<object, any> | Collection<any, any>, basic?: string): string;
 		public static getDeepTypeName(input: any): string;
@@ -1312,8 +1309,7 @@ declare module 'klasa' {
 		public static mergeDefault(def: object, given?: object): object;
 		public static mergeObjects(objTarget: object, objSource: object): object;
 		public static regExpEsc(str: string): string;
-		public static sleep(delay: number, args?: any): Promise<any>;
-		public static sleep<T>(delay: number, args?: T): Promise<T>;
+		public static sleep<T = any>(delay: number, args?: T): Promise<T>;
 		public static toTitleCase(str: string): string;
 		public static tryParse(value: string): object;
 		private static initClean(client: KlasaClient): void;

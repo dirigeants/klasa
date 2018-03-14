@@ -9,6 +9,7 @@ class SQLProvider extends Provider {
 	 * @since 0.5.0
 	 * @param {ConfigurationUpdateResultEntry[]} updated The raw SG's output
 	 * @returns {Array<Array<*>>}
+	 * @protected
 	 */
 	parseGatewayInput(updated) {
 		const keys = new Array(updated.length), values = new Array(updated.length);
@@ -21,15 +22,14 @@ class SQLProvider extends Provider {
 	 * @since 0.5.0
 	 * @param {ConfigurationUpdateResultEntry[]|Array<Array<string>>|Object<string, *>} data The data to parse
 	 * @returns {Array<string, *>}
+	 * @protected
 	 */
 	parseInput(data) {
 		if (Array.isArray(data)) {
-			const output = [];
 			const [first] = data;
 			if (first.data && first.piece) {
 				// [{ data: [string, *], piece: SchemaPiece }, ...]
-				for (const entry of data) output.push([entry.data[0], entry.data[1]]);
-				return output;
+				return this.parseGatewayInput(data);
 			}
 
 			if (Array.isArray(first) && first.length === 2) {
@@ -50,6 +50,7 @@ class SQLProvider extends Provider {
 	 * @param {(string|Gateway)} gateway The gateway with the schema to parse
 	 * @param {Object} entry An entry to parse
 	 * @returns {Object}
+	 * @protected
 	 */
 	parseEntry(gateway, entry) {
 		if (typeof gateway === 'string') gateway = this.client.gateways[gateway];
@@ -69,6 +70,7 @@ class SQLProvider extends Provider {
 	 * @param {*} value The value to parse
 	 * @param {SchemaPiece} schemaPiece The SchemaPiece which manages this value
 	 * @returns {*}
+	 * @protected
 	 */
 	parseValue(value, schemaPiece) {
 		if (typeof value === 'undefined') return deepClone(schemaPiece.default);
@@ -104,6 +106,7 @@ class SQLProvider extends Provider {
 	 * @since 0.5.0
 	 * @param {*} value The value to parse
 	 * @returns {string}
+	 * @protected
 	 */
 	stringifyValue(value) {
 		switch (typeof value) {
