@@ -2,7 +2,21 @@ const Provider = require('./Provider');
 const { deepClone, tryParse, makeObject, isObject, getDeepTypeName, arrayFromObject } = require('../util/util');
 const Gateway = require('../settings/Gateway');
 
+/**
+ * Base class for all Klasa SQL Providers. See {@tutorial CreatingSQLProviders} for more information how to use this class
+ * to build custom providers.
+ * @tutorial CreatingProviders
+ * @extends {Provider}
+ */
 class SQLProvider extends Provider {
+
+	/**
+	 * The QueryBuilder instance that builds the compatible SQL datatypes for this provider.
+	 * @since 0.5.0
+	 * @type {QueryBuilder}
+	 * @name SQLProvider#qb
+	 * @abstract
+	 */
 
 	/**
 	 * Parse the raw SG's output into a tuple of keys values.
