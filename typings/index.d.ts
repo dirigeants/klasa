@@ -73,10 +73,10 @@ declare module 'klasa' {
 		public readonly invite: string;
 		public readonly owner?: KlasaUser;
 		public validatePermissionLevels(): PermissionLevels;
-		public registerStore<K, V>(store: Store<K, V>): KlasaClient;
-		public unregisterStore<K, V>(store: Store<K, V>): KlasaClient;
+		public registerStore<K, V extends Piece>(store: Store<K, V>): KlasaClient;
+		public unregisterStore<K, V extends Piece>(store: Store<K, V>): KlasaClient;
 
-		public registerPiece<K, V>(pieceName: string, store: Store<K, V>): KlasaClient;
+		public registerPiece<K, V extends Piece>(pieceName: string, store: Store<K, V>): KlasaClient;
 		public unregisterPiece(pieceName: string): KlasaClient;
 
 		public login(token: string): Promise<string>;
@@ -227,16 +227,15 @@ declare module 'klasa' {
 		public readonly guild: KlasaGuild;
 		public guildConfigs: Configuration;
 		public language: Language;
+		public responses?: KlasaMessage | KlasaMessage[];
 		public command?: Command;
 		public prefix?: RegExp;
 		public prefixLength?: number;
 		private prompter?: CommandPrompt;
-		private _responses: Snowflake[];
 
-		public readonly responses: KlasaMessage[];
 		public readonly args: string[];
 		public readonly params: any[];
-		public readonly flags: ObjectLiteral<string, string>;
+		public readonly flags: ObjectLiteral<string>;
 		public readonly reprompted: boolean;
 		public readonly reactable: boolean;
 		public prompt(text: string, time?: number): Promise<KlasaMessage>;
@@ -328,7 +327,7 @@ declare module 'klasa' {
 
 		public custom(arg: string, possible: Possible, msg: KlasaMessage, custom: ArgResolverCustomMethod): Promise<any>;
 		public piece(arg: string, possible: Possible, msg: KlasaMessage): Promise<Piece>;
-		public store<K, V>(arg: string, possible: Possible, msg: KlasaMessage): Promise<Store<K, V>>;
+		public store<K, V extends Piece>(arg: string, possible: Possible, msg: KlasaMessage): Promise<Store<K, V>>;
 
 		public cmd(arg: string, possible: Possible, msg: KlasaMessage): Promise<Command>;
 		public command(arg: string, possible: Possible, msg: KlasaMessage): Promise<Command>;
@@ -527,7 +526,7 @@ declare module 'klasa' {
 
 		public reset(key?: string | string[], avoidUnconfigurable?: boolean): Promise<ConfigurationUpdateResult>;
 		public reset(key?: string | string[], guild?: KlasaGuild, avoidUnconfigurable?: boolean): Promise<ConfigurationUpdateResult>;
-		public update(key: ObjectLiteral<string, any>, guild?: GatewayGuildResolvable): Promise<ConfigurationUpdateResult>;
+		public update(key: ObjectLiteral<any>, guild?: GatewayGuildResolvable): Promise<ConfigurationUpdateResult>;
 		public update(key: string, value: any, guild?: GatewayGuildResolvable, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
 		public update(key: string[], value: any[], guild?: GatewayGuildResolvable, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
 		public list(msg: KlasaMessage, path: SchemaFolder | string): string;
@@ -541,7 +540,7 @@ declare module 'klasa' {
 		private _setValueByPath(piece: SchemaPiece, parsedID: any): { updated: boolean, old: any };
 		private _patch(data: any): void;
 
-		public toJSON<T extends ObjectLiteral<string, PrimitiveType>>(): T;
+		public toJSON<T extends ObjectLiteral<PrimitiveType | PrimitiveType[]>>(): T;
 		public toString(): string;
 
 		private static _merge(data: any, folder: SchemaFolder | SchemaPiece): any;
@@ -558,8 +557,8 @@ declare module 'klasa' {
 		public get(input: string | number, create?: boolean): Configuration;
 		public sync(input?: object | string, download?: boolean): Promise<any>;
 		public getPath(key?: string, options?: GatewayGetPathOptions): GatewayGetPathResult | null;
+		public init(options: { download?: boolean, defaultSchema?: object }): Promise<void>;
 
-		private init(options: { download?: boolean, defaultSchema?: object }): Promise<void>;
 		private _download(): Promise<void>;
 		private _ready(): Promise<Array<Collection<string, Configuration>>>;
 		private _resolveGuild(guild: GatewayGuildResolvable): KlasaGuild;
@@ -722,8 +721,8 @@ declare module 'klasa' {
 
 //#region Pieces
 
-	export class Piece {
-		public constructor(client: KlasaClient, store: Store<string, Piece>, type: string, file: string | string[], core: boolean, options?: PieceOptions);
+	export abstract class Piece {
+		public constructor(client: KlasaClient, store: Store<string, Piece, typeof Piece>, type: string, file: string | string[], core: boolean, options?: PieceOptions);
 		public readonly client: KlasaClient;
 		public readonly core: boolean;
 		public readonly type: string;
@@ -841,13 +840,13 @@ declare module 'klasa' {
 
 		public cache: boolean;
 
-		public parseInput<T extends ObjectLiteral<string, any>>(data: ConfigurationUpdateResultEntry[] | [string, any][] | { [k: string]: any }): T;
+		public parseInput<T extends ObjectLiteral<any>>(data: ConfigurationUpdateResultEntry[] | [string, any][] | { [k: string]: any }): T;
 		public abstract hasTable(table: string): Promise<boolean>;
 		public abstract createTable(table: string): Promise<any>;
 		public abstract deleteTable(table: string): Promise<any>;
-		public abstract getAll<T extends ObjectLiteral<string, any>>(table: string): Promise<T[]>;
+		public abstract getAll<T extends ObjectLiteral<any>>(table: string): Promise<T[]>;
 		public abstract getKeys(table: string): Promise<string[]>;
-		public abstract get<T extends ObjectLiteral<string, any>>(table: string, entry: string): Promise<T>;
+		public abstract get<T extends ObjectLiteral<any>>(table: string, entry: string): Promise<T>;
 		public abstract has(table: string, entry: string): Promise<boolean>;
 		public abstract updateValue(table: string, path: string, newValue: any): Promise<any>;
 		public abstract removeValue(table: string, path: string): Promise<any>;
@@ -863,8 +862,8 @@ declare module 'klasa' {
 	export abstract class SQLProvider extends Provider {
 		public abstract qb: QueryBuilder;
 		public parseGatewayInput(updated: ConfigurationUpdateResultEntry[]): [string[], any[]];
-		public parseEntry<T extends ObjectLiteral<string, any>>(gateway: string | Gateway, entry: object): T;
-		public parseValue<T extends ObjectLiteral<string, any>>(value: any, schemaPiece: SchemaPiece): T;
+		public parseEntry<T extends ObjectLiteral<any>>(gateway: string | Gateway, entry: object): T;
+		public parseValue<T extends ObjectLiteral<any>>(value: any, schemaPiece: SchemaPiece): T;
 		public stringifyValue(value: any): string;
 	}
 
@@ -885,12 +884,14 @@ declare module 'klasa' {
 		public readonly userDir: string;
 
 		public delete(name: K | V): boolean;
-		public set(piece: V): V;
-		public set(key: K, value: V): this;
+		public get(key: K): V;
+		public get<T extends V>(key: K): T;
 		public init(): Promise<any[]>;
-		public load(file: string | string[], core?: boolean): Piece;
+		public load(file: string | string[], core?: boolean): V;
 		public loadAll(): Promise<number>;
-		public resolve(name: Piece | string): Piece;
+		public resolve(name: V | string): V;
+		public set<T extends V>(key: K, value: T): this;
+		public set(piece: V): V;
 		public toString(): string;
 	}
 
@@ -1381,7 +1382,7 @@ declare module 'klasa' {
 	export type ExecOptions = {
 		cwd?: string;
 		encoding?: string;
-		env?: StringMappedType<string>;
+		env?: ObjectLiteral<string>;
 		gid?: number;
 		killSignal?: string | number;
 		maxBuffer?: number;
@@ -1971,19 +1972,17 @@ declare module 'klasa' {
 		time?: number;
 	};
 
-	type StringMappedType<T> = { [key: string]: T };
+	type ObjectLiteral<T> = { [key: string]: T };
 
-	export type GuildSettings = StringMappedType<any>;
-	export type SchemaObject = StringMappedType<SchemaPiece>;
-	export type SchemaDefaults = StringMappedType<any>;
+	export type GuildSettings = ObjectLiteral<any>;
+	export type SchemaObject = ObjectLiteral<SchemaPiece>;
+	export type SchemaDefaults = ObjectLiteral<any>;
 
 	// TypeScript lacks of Proxy
 	export type Proxy<T> = {
 		get(): T;
 		set(value: T): void;
 	};
-
-	type ObjectLiteral<K, V> = { [key: K]: V };
 
 	type Constructable<T> = new (...args: any[]) => T;
 
