@@ -51,6 +51,7 @@ module.exports = {
 	Monitor: require('./lib/structures/Monitor'),
 	MonitorStore: require('./lib/structures/MonitorStore'),
 	Provider: require('./lib/structures/Provider'),
+	SQLProvider: require('./lib/structures/SQLProvider'),
 	ProviderStore: require('./lib/structures/ProviderStore'),
 	Task: require('./lib/structures/Task'),
 	TaskStore: require('./lib/structures/TaskStore'),
