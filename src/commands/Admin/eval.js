@@ -19,15 +19,14 @@ module.exports = class extends Command {
 		const footer = this.client.methods.util.codeBlock('ts', type);
 		const output = msg.language.get(success ? 'COMMAND_EVAL_OUTPUT' : 'COMMAND_EVAL_ERROR',
 			time, this.client.methods.util.codeBlock('js', result), footer);
-		const silent = 'silent' in msg.flags;
 
 		// Handle errors
 		if (!success) {
 			if (result && result.stack) this.client.emit('error', result.stack);
-			if (!silent) return msg.sendMessage(output);
+			if (!msg.flags.silent) return msg.sendMessage(output);
 		}
 
-		if (silent) return null;
+		if (msg.flags.silent) return null;
 
 		// Handle too-long-messages
 		if (output.length > 2000) {
@@ -44,37 +43,43 @@ module.exports = class extends Command {
 
 	// Eval the input
 	async eval(msg, code) {
-		const stopwatch = new Stopwatch();
+		if (msg.flags.async) code = `(async () => {\n${code}\n})();`;
+
 		let success, syncTime, asyncTime, result;
 		let thenable = false;
 		let type = '';
+		const stopwatch = new Stopwatch();
+
 		try {
-			if (msg.flags.async) code = `(async () => {\n${code}\n})();`;
 			result = eval(code);
-			syncTime = stopwatch.friendlyDuration;
+			syncTime = `${stopwatch}`;
+
 			if (this.client.methods.util.isThenable(result)) {
 				thenable = true;
 				type += this.client.methods.util.getTypeName(result);
 				stopwatch.restart();
 				result = await result;
-				asyncTime = stopwatch.friendlyDuration;
+				asyncTime = `${stopwatch}`;
 			}
+
 			success = true;
 		} catch (error) {
-			if (!syncTime) syncTime = stopwatch.friendlyDuration;
-			if (thenable && !asyncTime) asyncTime = stopwatch.friendlyDuration;
+			if (!syncTime) syncTime = `${stopwatch}`;
+			if (thenable && !asyncTime) asyncTime = `${stopwatch}`;
+
 			result = error;
 			success = false;
 		}
 
-		stopwatch.stop();
 		type += thenable ? `<${this.client.methods.util.getDeepTypeName(result)}>` : this.client.methods.util.getDeepTypeName(result);
+
 		if (success && typeof result !== 'string') {
 			result = inspect(result, {
 				depth: msg.flags.depth ? parseInt(msg.flags.depth) || 0 : 0,
 				showHidden: Boolean(msg.flags.showHidden)
 			});
 		}
+
 		return { success, type, time: this.formatTime(syncTime, asyncTime), result: this.client.methods.util.clean(result) };
 	}
 
