@@ -198,3 +198,7 @@ module.exports = {
  * @external PermissionResolvable
  * @see {@link https://discord.js.org/#/docs/main/master/typedef/PermissionResolvable}
  */
+/**
+ * @external Snowflake
+ * @see {@link https://discord.js.org/#/docs/main/stable/typedef/Snowflake}
+ */

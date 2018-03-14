@@ -53,7 +53,7 @@ module.exports = class extends Provider {
 	 * Get all documents from a directory.
 	 * @param {string} table The name of the directory to fetch from
 	 * @param {boolean} [nice=false] Whether the provider should update all entries at the same time or politely update them sequentially
-	 * @returns {Promise<Object[]>}
+	 * @returns {Object[]}
 	 */
 	async getAll(table, nice = false) {
 		const dir = resolve(this.baseDir, table);
@@ -73,7 +73,7 @@ module.exports = class extends Provider {
 	/**
 	 * Get all document names from a directory, filter by json.
 	 * @param {string} table The name of the directory to fetch from
-	 * @returns {Promise<string[]>}
+	 * @returns {string[]}
 	 */
 	async getKeys(table) {
 		const dir = resolve(this.baseDir, table);
@@ -174,7 +174,7 @@ module.exports = class extends Provider {
 	 * @param {string} table The name of the directory
 	 * @param {string} document The document name
 	 * @param {Object} data The object with all the properties you want to update
-	 * @returns {Promise<void>}
+	 * @returns {void}
 	 */
 	async update(table, document, data) {
 		const existent = await this.get(table, document);
