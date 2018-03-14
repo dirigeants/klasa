@@ -1,5 +1,5 @@
 const Provider = require('./Provider');
-const { deepClone, tryParse, makeObject } = require('../util/util');
+const { deepClone, tryParse, makeObject, isObject, getDeepTypeName, arrayFromObject } = require('../util/util');
 const Gateway = require('../settings/Gateway');
 
 class SQLProvider extends Provider {
@@ -14,6 +14,34 @@ class SQLProvider extends Provider {
 		const keys = new Array(updated.length), values = new Array(updated.length);
 		for (let i = 0; i < updated.length; i++)[keys[i], values[i]] = updated[i].data;
 		return [keys, values];
+	}
+
+	/**
+	 * Helper method to abstract the overload parsing to Arrays for all SQL databases.
+	 * @since 0.5.0
+	 * @param {ConfigurationUpdateResultEntry[]|Array<Array<string>>|Object<string, *>} data The data to parse
+	 * @returns {Array<string, *>}
+	 */
+	parseInput(data) {
+		if (Array.isArray(data)) {
+			const output = [];
+			const [first] = data;
+			if (first.data && first.piece) {
+				// [{ data: [string, *], piece: SchemaPiece }, ...]
+				for (const entry of data) output.push([entry.data[0], entry.data[1]]);
+				return output;
+			}
+
+			if (Array.isArray(first) && first.length === 2) {
+				// [[string, *], ...]
+				return data;
+			}
+		} else if (isObject(data)) {
+			// Object
+			return arrayFromObject(data);
+		}
+
+		throw new TypeError(`The type ${getDeepTypeName(data)} is unsupported. The supported types are ConfigurationUpdateResultEntry[], [string, *][] or Object.`);
 	}
 
 	/**

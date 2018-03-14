@@ -334,6 +334,21 @@ class Util {
 	}
 
 	/**
+	 * Convert an object to an array of tuples
+	 * @since 0.5.0
+	 * @param {Object<string, *>} obj The object to convert to tuples
+	 * @returns {*[]}
+	 */
+	static arrayFromObject(obj) {
+		const output = [];
+		for (const key of Object.keys(obj)) {
+			if (Util.isObject(obj[key])) Array.prototype.push.apply(output, Util.arrayFromObject(obj[key]));
+			else output.push([key, obj[key]]);
+		}
+		return output;
+	}
+
+	/**
 	 * Compare if both arrays are equal
 	 * @param {any[]} arr1 The first array to compare
 	 * @param {any[]} arr2 The second array to compare
