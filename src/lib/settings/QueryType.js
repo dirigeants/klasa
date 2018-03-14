@@ -47,6 +47,13 @@ class QueryType {
 		 * @since 0.5.0
 		 */
 		this.default = null;
+
+		/**
+		 * Set this type to store an array
+		 * @type {boolean}
+		 * @since 0.5.0
+		 */
+		this.array = false;
 	}
 
 	/**
@@ -111,9 +118,20 @@ class QueryType {
 		return this;
 	}
 
+	/**
+	 * Set whether this datatype should be stored as an array.
+	 * @since 0.5.0
+	 * @returns {this}
+	 * @chainable
+	 */
+	setArray() {
+		this.array = Boolean(this.queryBuilder.arrayWrap);
+		return this;
+	}
+
 	toString() {
 		if (!this.type) throw new TypeError('You cannot construct the QueryType without setting up the type.');
-		return this.type.name +
+		return this.array ? this.queryBuilder.arrayWrap(this.type.name) : this.type.name +
 			(this.size !== null ? `(${this.size}) ` : ' ') +
 			(this.notNull ? 'NOT NULL ' : '') +
 			(this.unique ? 'UNIQUE ' : '') +

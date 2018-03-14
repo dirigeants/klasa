@@ -20,7 +20,7 @@ class QueryBuilder {
 	 * @param {Object<string, QueryBuilderType>} types The custom types for this instance
 	 * @param {Object} options The options for this instance
 	 */
-	constructor(client, types, { makeStringLiteral = DEFAULT_MAKESTRING_LITERAL }) {
+	constructor(client, types, { makeStringLiteral = DEFAULT_MAKESTRING_LITERAL, arrayWrap = null }) {
 		/**
 		 * The Client that manages this instance
 		 * @since 0.5.0
@@ -43,7 +43,14 @@ class QueryBuilder {
 		this.makeStringLiteral = makeStringLiteral;
 
 		/**
-		 * The Map that holds custom resolvers
+		 * A function that wraps the type to an array.
+		 * @since 0.5.0
+		 * @type {?Function}
+		 */
+		this.arrayWrap = arrayWrap;
+
+		/**
+		 * The Map that holds custom resolvers.
 		 * @since 0.5.0
 		 * @type {Map<string, Function>}
 		 */
@@ -57,7 +64,7 @@ class QueryBuilder {
 	 * @example
 	 * // Create a datatype with the contraints NOT NULL
 	 * // and DEFAULT 10 for a key with type INTEGER.
-	 * const query = this.providers.default.qs
+	 * const query = this.providers.default.qb
 	 *     // Create a new instance of QueryType
 	 *     .create()
 	 *     // Set the type to INTEGER
@@ -66,18 +73,16 @@ class QueryBuilder {
 	 *     .setNotNull()
 	 *     // Set default to 10
 	 *     .default(10)
+	 *     // Set the key as an array of integers
+	 *     .setArray()
 	 *     // Parse the QueryType into a string
 	 *     .toString();
 	 *
 	 * console.log(query);
-	 * // ➡️ 'INTEGER NOT NULL DEFAULT 10'
+	 * // -> 'INTEGER NOT NULL DEFAULT 10'
 	 */
 	create() {
 		return new QueryType(this);
-	}
-
-	valueOf() {
-		return this.types;
 	}
 
 	/**

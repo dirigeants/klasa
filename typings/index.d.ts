@@ -624,11 +624,12 @@ declare module 'klasa' {
 	export class QueryBuilder {
 		public constructor(client: KlasaClient, types: ObjectLiteral<QueryBuilderType> & KlasaSQLConstants, options: QueryBuilderOptions);
 		public client: KlasaClient;
-		public types: ObjectLiteral<QueryBuilderType> & KlasaSQLConstants;
-		public customResolvers: Map<string, (qs: QueryBuilder, value: any) => string>;
+		protected types: ObjectLiteral<QueryBuilderType> & KlasaSQLConstants;
+		protected makeStringLiteral: (str: string) => string;
+		protected arrayWrap?: (str: string) => string;
+		protected customResolvers: Map<string, (qs: QueryBuilder, value: any) => string>;
 
 		public create(): QueryType;
-		public valueOf(): ObjectLiteral<QueryBuilderType>;
 
 		private _parseValue(value: any): string;
 	}
@@ -641,11 +642,13 @@ declare module 'klasa' {
 		public notNull: boolean;
 		public unique: boolean;
 		public default: any;
+		public array: boolean;
 
 		public setType(type: string | string[], size?: number): this;
 		public setNotNull(notNull?: boolean): this;
 		public setUnique(unique?: boolean): this;
 		public setDefault(value: any): this;
+		public setArray(): this;
 		public toString(): string;
 	}
 
@@ -1470,7 +1473,8 @@ declare module 'klasa' {
 	};
 
 	export type QueryBuilderOptions = {
-		makeStringLiteral: (str: string) => string;
+		makeStringLiteral?: (str: string) => string;
+		arrayWrap?: (str: string) => string;
 	};
 
 	export type ConfigurationUpdateOptions = {
