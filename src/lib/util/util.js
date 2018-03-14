@@ -337,13 +337,18 @@ class Util {
 	 * Convert an object to an array of tuples
 	 * @since 0.5.0
 	 * @param {Object<string, *>} obj The object to convert to tuples
+	 * @param {string} [prefix = ''] The prefix to append for nested entries
 	 * @returns {Array<*>}
 	 */
-	static arrayFromObject(obj) {
+	static arrayFromObject(obj, prefix = '') {
 		const output = [];
 		for (const key of Object.keys(obj)) {
-			if (Util.isObject(obj[key])) Array.prototype.push.apply(output, Util.arrayFromObject(obj[key]));
-			else output.push([key, obj[key]]);
+			const prefixedKey = prefix + key;
+			if (Util.isObject(obj[key])) {
+				Array.prototype.push.apply(output, Util.arrayFromObject(obj[key], `${prefixedKey}.`));
+			} else {
+				output.push([prefixedKey, obj[key]]);
+			}
 		}
 		return output;
 	}
