@@ -337,7 +337,7 @@ class Util {
 	 * Convert an object to an array of tuples
 	 * @since 0.5.0
 	 * @param {Object<string, *>} obj The object to convert to tuples
-	 * @returns {*[]}
+	 * @returns {Array<*>}
 	 */
 	static arrayFromObject(obj) {
 		const output = [];
