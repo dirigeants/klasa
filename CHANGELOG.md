@@ -99,6 +99,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#228](https://github.com/dirigeants/klasa/pull/228)] **[PERF]** Refactored `Util.isClass` and `Util.isObject` for a 5x performance jump. (kyranet)
 - [[#228](https://github.com/dirigeants/klasa/pull/228)] `Gateway#getEntry` -> `Gateway#get`. (kyranet)
 - [[#228](https://github.com/dirigeants/klasa/pull/228)] `SchemaPiece#sql` is now type of `string` instead of `[string, string]`. (kyranet)
 - [[#228](https://github.com/dirigeants/klasa/pull/228)] Refactored `GatewayDriver` for optimized and better readability. (kyranet)
@@ -202,6 +203,8 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
+- [[#228](https://github.com/dirigeants/klasa/pull/228)] Fixed `Util.getDeepTypeSetOrArray` trying to get the type of a `WeakSet`. (kyranet)
+- [[#228](https://github.com/dirigeants/klasa/pull/228)] Fixed `Util.deepClone` trying to clone `WeakMap` and `WeakSet`, as they're not clonable, they're now removed. (kyranet)
 - [[#228](https://github.com/dirigeants/klasa/pull/228)] Several checks in GatewayDriver being done right after init, instead of in register. (kyranet)
 - [[#207](https://github.com/dirigeants/klasa/pull/207)] Fixed `Configuration#_parseSingle` not returning the modified array but the updated element. (kyranet)
 - [[#204](https://github.com/dirigeants/klasa/pull/204)] Fixed `Util.getIdentifier` nullifying numbers and booleans. (kyranet)
