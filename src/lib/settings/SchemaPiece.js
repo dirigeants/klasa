@@ -15,7 +15,6 @@ class SchemaPiece extends Schema {
 	 * @property {number} [min] The new minimum range value
 	 * @property {number} [max] The new maximum range value
 	 * @property {boolean} [configurable] The new configurable value
-	 * @property {string} [sql] The new sql datatype
 	 */
 
 	/**
@@ -24,7 +23,6 @@ class SchemaPiece extends Schema {
 	 * @property {*} default The default value for the key
 	 * @property {number} min The min value for the key (String.length for String, value for number)
 	 * @property {number} max The max value for the key (String.length for String, value for number)
-	 * @property {string} sql A tuple containing the name of the column and its data type
 	 * @property {boolean} array Whether the key should be stored as Array or not
 	 * @property {boolean} configurable Whether the key should be configurable by the config command or not
 	 */
