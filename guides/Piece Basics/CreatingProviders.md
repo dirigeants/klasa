@@ -105,8 +105,6 @@ The example above is the JSON provider used in klasa, and interfacing with the {
 | **name**        | `theFileName` | string  | The name of the provider                     |
 | **enabled**     | `true`        | boolean | Whether the provider is enabled or not       |
 | **description** | `''`          | string  | The provider description                     |
-| **sql**         | `false`       | boolean | If the provider provides to a sql datasource |
-| **cache**       | `false`       | boolean | Whether the provider is meant for caching    |
 
 ## Accessing Providers
 
