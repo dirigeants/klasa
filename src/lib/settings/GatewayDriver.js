@@ -104,8 +104,6 @@ class GatewayDriver {
 	 * @type {GatewayDriverGuildsSchema}
 	 */
 	get guildsSchema() {
-		const provider = this.client.providers.get(this.client.options.gateways.guilds);
-		const qb = (provider && provider.qb) || null;
 		return {
 			prefix: {
 				type: 'string',
@@ -113,14 +111,7 @@ class GatewayDriver {
 				min: null,
 				max: 10,
 				array: Array.isArray(this.client.options.prefix),
-				configurable: true,
-				sql: qb ? qb.create()
-					.setType(['VARCHAR', 'TEXT'], 10)
-					.setNotNull()
-					.setDefault(Array.isArray(this.client.options.prefix) ?
-						JSON.stringify(this.client.options.prefix) :
-						String(this.client.options.prefix))
-					.toString() : null
+				configurable: true
 			},
 			language: {
 				type: 'language',
@@ -128,12 +119,7 @@ class GatewayDriver {
 				min: null,
 				max: null,
 				array: false,
-				configurable: true,
-				sql: qb ? qb.create()
-					.setType(['VARCHAR', 'TEXT'], 5)
-					.setNotNull()
-					.setDefault(this.client.options.language)
-					.toString() : null
+				configurable: true
 			},
 			disableNaturalPrefix: {
 				type: 'boolean',
@@ -141,12 +127,7 @@ class GatewayDriver {
 				min: null,
 				max: null,
 				array: false,
-				configurable: Boolean(this.client.options.regexPrefix),
-				sql: qb ? qb.create()
-					.setType(['BOOLEAN'])
-					.setNotNull()
-					.setDefault(Boolean(this.client.options.regexPrefix))
-					.toString() : null
+				configurable: Boolean(this.client.options.regexPrefix)
 			},
 			disabledCommands: {
 				type: 'command',

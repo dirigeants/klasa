@@ -146,15 +146,9 @@ class SchemaPiece extends Schema {
 		if (!isObject(options)) throw new TypeError(`SchemaPiece#edit expected an object as a parameter. Got: ${typeof options}`);
 
 		const edited = new Set();
-		if (typeof options.sql === 'string' && this.sql !== options.sql) {
-			this.sql = options.sql;
-			edited.add('SQL');
-			if (this.gateway.sql) await this.gateway.provider.updateColumn(this.gateway.type, this.path, options.sql);
-		}
 		if (typeof options.default !== 'undefined' && this.default !== options.default) {
 			this._schemaCheckDefault({ ...this.toJSON(), ...options });
 			this.default = options.default;
-			if (!edited.has('SQL')) this.sql = this._generateSQLDatatype(options.sql);
 			edited.add('DEFAULT');
 		}
 		if (typeof options.min !== 'undefined' && this.min !== options.min) {
@@ -174,8 +168,10 @@ class SchemaPiece extends Schema {
 		}
 		if (edited.size > 0) {
 			await fs.outputJSONAtomic(this.gateway.filePath, this.gateway.schema.toJSON());
-			if (this.gateway.sql && this.gateway.provider.updateColumn === 'function') {
-				this.gateway.provider.updateColumn(this.gateway.type, this.key, this._generateSQLDatatype(options.sql));
+			const old = this.sql;
+			if (edited.has('DEFAULT')) this._generateSQLDatatype();
+			if (old !== this.sql) {
+				this.gateway.provider.updateColumn(this.gateway.type, this.key, this.sql);
 			}
 			await this.parent._shardSyncSchema(this, 'update', false);
 			if (this.client.listenerCount('schemaKeyUpdate')) this.client.emit('schemaKeyUpdate', this);
@@ -264,34 +260,27 @@ class SchemaPiece extends Schema {
 	/**
 	 * Generate a new SQL datatype.
 	 * @since 0.5.0
-	 * @param {string} [sql] The new SQL datatype
-	 * @returns {string}
 	 * @private
 	 */
-	_generateSQLDatatype(sql) {
-		if (typeof sql === 'string') return sql;
-
+	_generateSQLDatatype() {
 		const { provider } = this.gateway;
-		if (!provider.sql || !provider.qb) return null;
+		if (!provider.qb) return;
 
 		const qb = provider.qb.create();
-		if (this.array) {
-			qb.setType(['JSON', 'TEXT']);
-		} else {
-			switch (this.type) {
-				case 'integer': qb.setType(['INTEGER', 'INT'], this.max).setNotNull();
-					break;
-				case 'float': qb.setType(['FLOAT', 'REAL'], this.max).setNotNull();
-					break;
-				case 'boolean': qb.setType('BOOLEAN').setNotNull();
-					break;
-				case 'string': qb.setType(['VARCHAR', 'TEXT'], this.max);
-					break;
-				default: qb.setType('TEXT', this.max);
-					break;
-			}
+		switch (this.type) {
+			case 'integer': qb.setType(['INTEGER', 'INT'], this.max).setNotNull();
+				break;
+			case 'float': qb.setType(['FLOAT', 'REAL'], this.max).setNotNull();
+				break;
+			case 'boolean': qb.setType('BOOLEAN').setNotNull();
+				break;
+			case 'string': qb.setType(['VARCHAR', 'TEXT'], this.max);
+				break;
+			default: qb.setType('TEXT', this.max);
+				break;
 		}
-		return qb.setDefault(provider.stringifyValue(this.default))
+		if (this.array) qb.setArray();
+		this.sql = qb.setDefault(provider.stringifyValue(this.default))
 			.toString();
 	}
 
@@ -306,7 +295,6 @@ class SchemaPiece extends Schema {
 		if (typeof object.default !== 'undefined') this.default = object.default;
 		if (typeof object.min === 'number') this.min = object.min;
 		if (typeof object.max === 'number') this.max = object.max;
-		if (typeof object.sql === 'string') this.sql = object.sql;
 		if (typeof object.configurable === 'boolean') this.configurable = object.configurable;
 	}
 
@@ -324,7 +312,7 @@ class SchemaPiece extends Schema {
 
 		// Check if the 'options' parameter is an object.
 		if (!isObject(options)) throw new TypeError(`SchemaPiece#init expected an object as a parameter. Got: ${typeof options}`);
-		this.sql = this._generateSQLDatatype(options.sql);
+		this._generateSQLDatatype();
 
 		return true;
 	}
@@ -341,7 +329,6 @@ class SchemaPiece extends Schema {
 			default: this.default,
 			min: this.min,
 			max: this.max,
-			sql: this.sql,
 			configurable: this.configurable
 		};
 	}

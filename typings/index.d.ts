@@ -615,7 +615,6 @@ declare module 'klasa' {
 		public ready: boolean;
 		public schema?: SchemaFolder;
 
-
 		public init(defaultSchema: object): Promise<void>;
 		private initTable(): Promise<void>;
 		private initSchema(defaultSchema: object): Promise<SchemaFolder>;
@@ -712,7 +711,7 @@ declare module 'klasa' {
 		private _schemaCheckDefault(options: SchemaFolderAddOptions): void;
 		private _schemaCheckLimits(min: number, max: number): void;
 		private _schemaCheckConfigurable(configurable: boolean): void;
-		private _generateSQLDatatype(sql?: string): string;
+		private _generateSQLDatatype(): void;
 		private _init(options: SchemaFolderAddOptions): true;
 
 		public toJSON(): SchemaPieceJSON;
@@ -1521,7 +1520,6 @@ declare module 'klasa' {
 		default?: any;
 		max?: number;
 		min?: number;
-		sql?: string;
 		type: string;
 	};
 
@@ -1530,7 +1528,6 @@ declare module 'klasa' {
 		default?: any;
 		max?: number;
 		min?: number;
-		sql?: string;
 	};
 
 	export type SchemaPieceJSON = {
@@ -1539,7 +1536,6 @@ declare module 'klasa' {
 		default: any;
 		max?: number;
 		min?: number;
-		sql: string;
 		type: string;
 	};
 
@@ -1673,7 +1669,6 @@ declare module 'klasa' {
 
 	export type PieceProviderJSON = {
 		cache: boolean;
-		sql: boolean;
 	} & PieceJSON;
 
 	export type PieceEventJSON = {

@@ -59,7 +59,7 @@ class SchemaFolder extends Schema {
 	 * @readonly
 	 */
 	get sqlSchema() {
-		if (!this.gateway.sql) return null;
+		if (!this.gateway.provider.qb) return null;
 		return this.values(true).map(piece => piece.sqlSchema);
 	}
 

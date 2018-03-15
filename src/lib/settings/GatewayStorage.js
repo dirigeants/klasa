@@ -1,5 +1,4 @@
 const SchemaFolder = require('./SchemaFolder');
-const SQLProvider = require('../structures/SQLProvider');
 const { resolve } = require('path');
 const fs = require('fs-nextra');
 
@@ -73,25 +72,13 @@ class GatewayStorage {
 	}
 
 	/**
-	 * Check if this Gateway manages a SQL provider
-	 * @since 0.5.0
-	 * @type {boolean}
-	 * @readonly
-	 */
-	get sql() {
-		const provider = this.client.providers.get(this.providerName);
-		if (!provider) return false;
-		return provider instanceof SQLProvider;
-	}
-
-	/**
 	 * Get this gateway's SQL schema.
 	 * @since 0.0.1
 	 * @type {?Array<Array<string>>}
 	 * @readonly
 	 */
 	get sqlSchema() {
-		if (!this.sql) return null;
+		if (!this.provider.qb) return null;
 		const schema = [['id', 'VARCHAR(19) NOT NULL UNIQUE PRIMARY KEY']];
 		for (const piece of this.schema.values(true)) schema.push([piece.path, piece.sql]);
 		return schema;
