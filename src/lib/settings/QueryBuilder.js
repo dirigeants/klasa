@@ -5,6 +5,29 @@ const QueryType = require('./QueryType');
 const QUOTE_REGEXP = /'/g;
 const DEFAULT_MAKESTRING_LITERAL = (str) => `'${str.replace(QUOTE_REGEXP, "''")}'`;
 
+/**
+ * The QueryBuilder manager that abstracts SQL datatype creation per-provider
+ * @example
+ * // Create a QueryBuilder for PostgreSQL
+ * new QueryBuilder(this.client, {
+ *     // Declare the boolean type, with the datatype name as "BOOL"
+ *     // and defaults false and true
+ *     BOOLEAN: { name: 'BOOL', default: [false, true] },
+ *     // Declare the float type, defaults to 0
+ *     FLOAT: { name: 'DOUBLE PRECISION', default: 0 },
+ *     // Declare the integer type, defaults to 0
+ *     INTEGER: { name: 'INTEGER', default: 0 },
+ *     // Declare the text type, defaults to NULL
+ *     TEXT: { name: 'TEXT' },
+ *     // Declare the varchar type, defaults to NULL, the property of
+ *     // size tells QB to use VARCHAR(MAX_LENGTH)
+ *     VARCHAR: { name: 'VARCHAR', size: true }
+ * }, {
+ *     // When using arrays, PG converts INTEGER to INTEGER[]. So we want
+ *     // to append '[]' at the end of the type
+ *     arrayWrap: (type) => `${type}[]`
+ * });
+ */
 class QueryBuilder {
 
 	/**
@@ -14,13 +37,19 @@ class QueryBuilder {
 	 */
 
 	/**
+	 * @typedef {Object} QueryBuilderOptions
+	 * @property {Function} [makeStringLiteral] The function to make literal strings
+	 * @property {Function} [arrayWrap] The function to turn a primitive datatype into an array of such datatype
+	 */
+
+	/**
 	 * Create a new instance of QueryBuilder to manage QueryTypes for a specific SQL database to improve cross-compatibility.
 	 * @since 0.5.0
 	 * @param {KlasaClient} client The Client that manages this instance
 	 * @param {Object<string, QueryBuilderType>} types The custom types for this instance
-	 * @param {Object} options The options for this instance
+	 * @param {QueryBuilderOptions} [options = {}] The options for this instance
 	 */
-	constructor(client, types, { makeStringLiteral = DEFAULT_MAKESTRING_LITERAL, arrayWrap = null }) {
+	constructor(client, types, { makeStringLiteral = DEFAULT_MAKESTRING_LITERAL, arrayWrap = null } = {}) {
 		/**
 		 * The Client that manages this instance
 		 * @since 0.5.0
