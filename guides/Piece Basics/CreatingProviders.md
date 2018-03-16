@@ -91,7 +91,7 @@ The example above is a boilerplate code for a Klasa Provider, interfacing with t
 
 The {@link Provider} class provides several resources to help the developer reduce the code duplication:
 
-- `{@link Provider#parseInput Provider#parseInput()}`: Abstracts all three overloads and returns a JSON object.
+- {@link Provider#parseInput `Provider#parseInput()`}: Abstracts all three overloads and returns a JSON object.
 
 ## Configuration
 

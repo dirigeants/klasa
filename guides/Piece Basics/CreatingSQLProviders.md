@@ -44,11 +44,11 @@ The example above is a boilerplate code for a Klasa SQL Provider, complementing 
 
 The {@link SQLProvider} class provides several resources to help the developer reduce the code duplication:
 
-- `{@link SQLProvider#parseGatewayInput SQLProvider#parseGatewayInput()}`: Converts {@link Gateway SettingGateway}'s raw input into an array of tuples being keyed as `[column, value]`.
-- `{@link SQLProvider#parseInput SQLProvider#parseInput()}`: Abstracts all three overloads and returns an array of tuples being keyed as `[column, value]`.
-- `{@link SQLProvider#parseValue SQLProvider#parseValue()}`: Converts a value into standard JavaScript objects, useful for SQL databases that do not cover all JavaScript primitives.
-- `{@link SQLProvider#parseEntry SQLProvider#parseEntry()}`: Converts plain dotted objects into parsed objects with nested object support. Uses the helper above to parse entries, and is powered by {@link SettingGateway UnderstandingSettingGateway} to improve security and parsing speed.
-- `{@link SQLProvider#stringifyValue SQLProvider#stringifyValue()}`: Stringifies any JavaScript object or primitive for later SQL parsing.
+- {@link SQLProvider#parseGatewayInput `SQLProvider#parseGatewayInput()`}: Converts {@link Gateway SettingGateway}'s raw input into an array of tuples being keyed as `[column, value]`.
+- {@link SQLProvider#parseInput `SQLProvider#parseInput()`}: Abstracts all three overloads and returns an array of tuples being keyed as `[column, value]`.
+- {@link SQLProvider#parseValue `SQLProvider#parseValue()`}: Converts a value into standard JavaScript objects, useful for SQL databases that do not cover all JavaScript primitives.
+- {@link SQLProvider#parseEntry `SQLProvider#parseEntry()`}: Converts plain dotted objects into parsed objects with nested object support. Uses the helper above to parse entries, and is powered by {@link SettingGateway UnderstandingSettingGateway} to improve security and parsing speed.
+- {@link SQLProvider#stringifyValue `SQLProvider#stringifyValue()`}: Stringifies any JavaScript object or primitive for later SQL parsing.
 
 ## Configuration
 
