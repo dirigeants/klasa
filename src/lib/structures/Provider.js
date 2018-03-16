@@ -37,10 +37,6 @@ class Provider extends Piece {
 	}
 
 	/**
-	 * Table Operations
-	 */
-
-	/**
 	 * The createTable method which inserts/creates a new table to the database.
 	 * @since 0.0.1
 	 * @param {string} table The table to check against
@@ -72,7 +68,6 @@ class Provider extends Piece {
 	async hasTable() {
 		throw new Error(`[PROVIDERS] ${this.dir}/${this.file.join('/')} | Missing method 'hasTable' of ${this.constructor.name}`);
 	}
-
 
 	/**
 	 * Entry Operations
@@ -237,17 +232,6 @@ class Provider extends Piece {
 		}
 
 		throw new TypeError(`The type ${getDeepTypeName(data)} is unsupported. The supported types are ConfigurationUpdateResultEntry[], [string, *][] or Object.`);
-	}
-
-	/**
-	 * Defines the JSON.stringify behavior of this provider.
-	 * @returns {Object}
-	 */
-	toJSON() {
-		return {
-			...super.toJSON(),
-			cache: this.cache
-		};
 	}
 
 }
