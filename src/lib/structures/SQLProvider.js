@@ -19,14 +19,6 @@ class SQLProvider extends Provider {
 	 */
 
 	/**
-	 * The init method to be optionally overwritten in actual providers pieces.
-	 * @since 0.0.1
-	 * @returns {Promise<*>}
-	 * @name SQLProvider#init
-	 * @abstract
-	 */
-
-	/**
 	 * Parse the raw SG's output into a tuple of keys values.
 	 * @since 0.5.0
 	 * @param {ConfigurationUpdateResultEntry[]} updated The raw SG's output

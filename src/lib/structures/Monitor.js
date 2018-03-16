@@ -92,14 +92,6 @@ class Monitor extends Piece {
 	}
 
 	/**
-	 * The init method to be optionally overwritten in actual monitor pieces.
-	 * @since 0.0.1
-	 * @returns {Promise<*>}
-	 * @name Monitor#init
-	 * @abstract
-	 */
-
-	/**
 	 * Defines the JSON.stringify behavior of this monitor.
 	 * @returns {Object}
 	 */

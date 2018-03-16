@@ -9,10 +9,6 @@ const Piece = require('./base/Piece');
 class Finalizer extends Piece {
 
 	/**
-	 * @typedef {PieceOptions} FinalizerOptions
-	 */
-
-	/**
 	 * The run method to be overwritten in actual finalizers
 	 * @since 0.0.1
 	 * @param {KlasaMessage} msg The message used to trigger this finalizer
@@ -24,14 +20,6 @@ class Finalizer extends Piece {
 	async run() {
 		// Defined in extension Classes
 	}
-
-	/**
-	 * The init method to be optionally overwritten in actual finalizer pieces.
-	 * @since 0.0.1
-	 * @returns {Promise<*>}
-	 * @name Finalizer#init
-	 * @abstract
-	 */
 
 }
 
