@@ -181,8 +181,8 @@ class GatewayDriver {
 	 * @param {string} name The name for the new gateway
 	 * @param {Object} [defaultSchema = {}] The schema for use in this gateway
 	 * @param {GatewayDriverRegisterOptions} [options = {}] The options for the new gateway
-	 * @chainable
 	 * @returns {this}
+	 * @chainable
 	 */
 	register(name, defaultSchema = {}, { download = true, provider = this.client.options.providers.default } = {}) {
 		if (typeof name !== 'string') throw new TypeError('You must pass a name for your new gateway and it must be a string.');

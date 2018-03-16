@@ -23,6 +23,14 @@ class Task extends Piece {
 		// Defined in extension Classes
 	}
 
+	/**
+	 * The init method to be optionally overwritten in actual task pieces.
+	 * @since 0.0.1
+	 * @returns {Promise<*>}
+	 * @name Task#init
+	 * @abstract
+	 */
+
 }
 
 module.exports = Task;

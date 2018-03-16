@@ -21,9 +21,17 @@ class Finalizer extends Piece {
 	 * @returns {void}
 	 * @abstract
 	 */
-	run() {
+	async run() {
 		// Defined in extension Classes
 	}
+
+	/**
+	 * The init method to be optionally overwritten in actual finalizer pieces.
+	 * @since 0.0.1
+	 * @returns {Promise<*>}
+	 * @name Finalizer#init
+	 * @abstract
+	 */
 
 }
 

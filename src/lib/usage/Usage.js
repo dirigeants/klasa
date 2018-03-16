@@ -62,11 +62,11 @@ class Usage {
 
 	/**
 	 * Registers a one-off custom resolver
+	 * @since 0.5.0
 	 * @param {string} type The type of the usage argument
 	 * @param {Function} resolver The one-off custom resolver
 	 * @returns {this}
 	 * @chainable
-	 * @since 0.5.0
 	 */
 	createCustomResolver(type, resolver) {
 		this.customResolvers[type] = resolver;
@@ -75,11 +75,11 @@ class Usage {
 
 	/**
 	 * Customizes the response of an argument if it fails resolution.
+	 * @since 0.5.0
 	 * @param {string} name The name of the usage argument
 	 * @param {(string|Function)} response The custom response or i18n function
 	 * @returns {this}
 	 * @chainable
-	 * @since 0.5.0
 	 */
 	customizeResponse(name, response) {
 		this.parsedUsage.some(tag => tag.register(name, response));

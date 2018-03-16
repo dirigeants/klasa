@@ -68,6 +68,14 @@ class Event extends Piece {
 	}
 
 	/**
+	 * The init method to be optionally overwritten in actual event pieces.
+	 * @since 0.0.1
+	 * @returns {Promise<*>}
+	 * @name Event#init
+	 * @abstract
+	 */
+
+	/**
 	 * Disables this Event
 	 * @since 0.0.1
 	 * @returns {this}
