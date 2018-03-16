@@ -1,7 +1,6 @@
 const { isNumber, isObject } = require('../util/util');
-const { mergeDefault } = require('../util/util');
-const constants = require('../util/constants');
 const QueryType = require('./QueryType');
+
 const QUOTE_REGEXP = /'/g;
 const DEFAULT_MAKESTRING_LITERAL = (str) => `'${str.replace(QUOTE_REGEXP, "''")}'`;
 
@@ -14,6 +13,7 @@ class QueryBuilder {
 	 * @typedef {Object} QueryBuilderType
 	 * @property {string} name The name of the datatype
 	 * @property {*} default The default(s) values for the datatype
+	 * @property {boolean} [size] Whether the datatype supports variable numbers
 	 */
 
 	/**
@@ -62,7 +62,7 @@ class QueryBuilder {
 		 * @since 0.5.0
 		 * @type {Object<string, QueryBuilderType>} The types for this instance
 		 */
-		this.types = mergeDefault(constants.DEFAULTS.SQL, types);
+		this.types = types;
 
 		/**
 		 * The function to make string literals with the character escaping

@@ -1468,7 +1468,7 @@ declare module 'klasa' {
 	export type QueryBuilderType = {
 		name: string;
 		default: any;
-		size: boolean;
+		size?: boolean;
 	};
 
 	export type QueryBuilderOptions = {
