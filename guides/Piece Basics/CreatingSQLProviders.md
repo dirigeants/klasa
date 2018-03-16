@@ -60,7 +60,7 @@ The {@link QueryBuilder} class is a very special class. It was added in [PR#228 
 
 ```javascript
 // Create a QueryBuilder for PostgreSQL
-new QueryBuilder(this.client, {
+this.qb = new QueryBuilder(this.client, {
 	// Declare the boolean type, with the datatype name as "BOOL"
 	// and defaults false and true
 	BOOLEAN: { name: 'BOOL', default: [false, true] },
