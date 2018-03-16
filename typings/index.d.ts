@@ -1030,9 +1030,9 @@ declare module 'klasa' {
 		public toString(): string;
 
 		private static parseUsage(usageString: string): Tag[];
-		private static tagOpen(usage: object, char: string): object;
-		private static tagClose(usage: object, char: string): object;
-		private static tagSpace(usage: object, char: string): object;
+		private static tagOpen(usage: object, char: string): void;
+		private static tagClose(usage: object, char: string): void;
+		private static tagSpace(usage: object, char: string): void;
 	}
 
 //#endregion Usage
