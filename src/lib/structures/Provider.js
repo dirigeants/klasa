@@ -55,7 +55,7 @@ class Provider extends Piece {
 	 * The create method which inserts new entries to a table from the database.
 	 * @since 0.0.1
 	 * @param {string} table The table to update
-	 * @param {string} entry The entry to create
+	 * @param {string} entryID The entry's ID to create
 	 * @param {ProviderResolvable} data The data to insert
 	 * @returns {*}
 	 * @abstract
@@ -65,10 +65,10 @@ class Provider extends Piece {
 	}
 
 	/**
-	 * The create method which removes an entries from a table.
+	 * The delete method which removes an entries from a table.
 	 * @since 0.0.1
 	 * @param {string} table The table to update
-	 * @param {string} entry The entry to delete
+	 * @param {string} entryID The entry's ID to delete
 	 * @returns {*}
 	 * @abstract
 	 */
@@ -80,7 +80,7 @@ class Provider extends Piece {
 	 * The get method which retrieves an entry from a table.
 	 * @since 0.0.1
 	 * @param {string} table The table to update
-	 * @param {string} entry The entry to retrieve
+	 * @param {string} entryID The entry's ID to retrieve
 	 * @returns {Object<string, *>}
 	 * @abstract
 	 */
@@ -114,7 +114,7 @@ class Provider extends Piece {
 	 * The has method which checks if an entry exists in a table.
 	 * @since 0.0.1
 	 * @param {string} table The table to update
-	 * @param {string} entry The entry to check against
+	 * @param {string} entryID The entry's ID to check against
 	 * @returns {boolean}
 	 * @abstract
 	 */
@@ -138,7 +138,7 @@ class Provider extends Piece {
 	 * The replace method which overwrites the data from an entry.
 	 * @since 0.0.1
 	 * @param {string} table The table to update
-	 * @param {string} entry The entry to update
+	 * @param {string} entryID The entry's ID to update
 	 * @param {ProviderResolvable} data The new data for the entry
 	 * @returns {*}
 	 * @abstract
@@ -151,7 +151,7 @@ class Provider extends Piece {
 	 * The update method which updates an entry from a table.
 	 * @since 0.0.1
 	 * @param {string} table The table to update
-	 * @param {string} entry The entry to update
+	 * @param {string} entryID The entry's ID to update
 	 * @param {ProviderResolvable} data The data to update
 	 * @returns {*}
 	 * @abstract
