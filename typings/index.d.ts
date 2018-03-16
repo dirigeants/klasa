@@ -861,6 +861,9 @@ declare module 'klasa' {
 	export abstract class SQLProvider extends Provider {
 		public abstract qb: QueryBuilder;
 
+		public abstract addColumn(table: string, columns: [string, string][]): Promise<any>;
+		public abstract removeColumn(table: string, columns: string[]): Promise<any>;
+
 		protected parseInput<T = any>(data: ConfigurationUpdateResultEntry[] | [string, T][] | ObjectLiteral<T>): [string, T][];
 		protected parseEntry<T extends ObjectLiteral<any>>(gateway: string | Gateway, entry: object): T;
 		protected parseGatewayInput(updated: ConfigurationUpdateResultEntry[]): [string[], any[]];

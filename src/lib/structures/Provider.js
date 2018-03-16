@@ -212,6 +212,14 @@ class Provider extends Piece {
 		throw new TypeError(`The type ${getDeepTypeName(data)} is unsupported. The supported types are ConfigurationUpdateResultEntry[], [string, *][] or Object.`);
 	}
 
+	async addColumn() {
+		// Reserved for SQL databases
+	}
+
+	async removeColumn() {
+		// Reserved for SQL databases
+	}
+
 }
 
 module.exports = Provider;

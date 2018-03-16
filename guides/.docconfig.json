@@ -56,6 +56,10 @@
         "path": "CreatingProviders.md"
     },
     {
+        "name": "Creating SQL Providers",
+        "path": "CreatingSQLProviders"
+    },
+    {
         "name": "Creating Tasks",
         "path": "CreatingTasks.md"
     }]

@@ -1,6 +1,7 @@
 const Provider = require('./Provider');
 const { deepClone, tryParse, makeObject, isObject, getDeepTypeName, arrayFromObject } = require('../util/util');
 const Gateway = require('../settings/Gateway');
+const { join } = require('path');
 
 /**
  * Base class for all Klasa SQL Providers. See {@tutorial CreatingSQLProviders} for more information how to use this class
@@ -17,6 +18,30 @@ class SQLProvider extends Provider {
 	 * @name SQLProvider#qb
 	 * @abstract
 	 */
+
+	/**
+	 * The addColumn method which inserts/creates a new table to the database.
+	 * @since 0.5.0
+	 * @param {string} table The table to check against
+	 * @param {Array<string[]>} columns An array of tuples keyed by [key, datatype] specifying the new columns
+	 * @returns {*}
+	 * @abstract
+	 */
+	async addColumn() {
+		throw new Error(`[PROVIDERS] ${join(this.dir, ...this.file)} | Missing method 'addColumn' of ${this.constructor.name}`);
+	}
+
+	/**
+	 * The removeColumn method which inserts/creates a new table to the database.
+	 * @since 0.5.0
+	 * @param {string} table The table to check against
+	 * @param {string[]} columns The column names to remove
+	 * @returns {*}
+	 * @abstract
+	 */
+	async removeColumn() {
+		throw new Error(`[PROVIDERS] ${join(this.dir, ...this.file)} | Missing method 'removeColumn' of ${this.constructor.name}`);
+	}
 
 	/**
 	 * Parse the raw SG's output into a tuple of keys values.

@@ -146,7 +146,7 @@ class SchemaFolder extends Schema {
 		const piece = this._remove(key);
 		await fs.outputJSONAtomic(this.gateway.filePath, this.gateway.schema);
 
-		await this.gateway.provider.removeColumn(this.gateway.type, piece.type === 'Folder' ? [...piece.keys(true)] : key);
+		await this.gateway.provider.removeColumn(this.gateway.type, piece.type === 'Folder' ? [...piece.keys(true)] : [key]);
 		await this.force('delete', piece);
 
 		await this._shardSyncSchema(piece, 'delete');
