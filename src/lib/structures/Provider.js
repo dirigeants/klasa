@@ -1,5 +1,6 @@
 const Piece = require('./base/Piece');
 const { isObject, makeObject, getDeepTypeName } = require('../util/util');
+const { join } = require('path');
 
 /**
  * Base class for all Klasa Providers. See {@tutorial CreatingProviders} for more information how to use this class
@@ -10,31 +11,8 @@ const { isObject, makeObject, getDeepTypeName } = require('../util/util');
 class Provider extends Piece {
 
 	/**
-	 * @typedef {PieceOptions} ProviderOptions
-	 */
-
-	/**
 	 * @typedef {ConfigurationUpdateResultEntry[]|Array<Array<string|*>>|Object<string, *>} ProviderResolvable
 	 */
-
-	/**
-	 * @since 0.0.1
-	 * @param {KlasaClient} client The Klasa client
-	 * @param {ProviderStore} store The Provider Store
-	 * @param {string} file The path from the pieces folder to the provider file
-	 * @param {boolean} core If the piece is in the core directory or not
-	 * @param {ProviderOptions} [options={}] Optional Provider settings
-	 */
-	constructor(client, store, file, core, options = {}) {
-		super(client, store, file, core, options);
-
-		/**
-		 * If the provider is designed to handle cache operations
-		 * @since 0.5.0
-		 * @type {boolean}
-		 */
-		this.cache = options.cache;
-	}
 
 	/**
 	 * The createTable method which inserts/creates a new table to the database.
@@ -44,7 +22,7 @@ class Provider extends Piece {
 	 * @abstract
 	 */
 	async createTable() {
-		throw new Error(`[PROVIDERS] ${this.dir}/${this.file.join('/')} | Missing method 'createTable' of ${this.constructor.name}`);
+		throw new Error(`[PROVIDERS] ${join(this.dir, ...this.file)} | Missing method 'createTable' of ${this.constructor.name}`);
 	}
 
 	/**
@@ -55,7 +33,7 @@ class Provider extends Piece {
 	 * @abstract
 	 */
 	async deleteTable() {
-		throw new Error(`[PROVIDERS] ${this.dir}/${this.file.join('/')} | Missing method 'deleteTable' of ${this.constructor.name}`);
+		throw new Error(`[PROVIDERS] ${join(this.dir, ...this.file)} | Missing method 'deleteTable' of ${this.constructor.name}`);
 	}
 
 	/**
@@ -66,7 +44,7 @@ class Provider extends Piece {
 	 * @abstract
 	 */
 	async hasTable() {
-		throw new Error(`[PROVIDERS] ${this.dir}/${this.file.join('/')} | Missing method 'hasTable' of ${this.constructor.name}`);
+		throw new Error(`[PROVIDERS] ${join(this.dir, ...this.file)} | Missing method 'hasTable' of ${this.constructor.name}`);
 	}
 
 	/**
@@ -83,7 +61,7 @@ class Provider extends Piece {
 	 * @abstract
 	 */
 	async create() {
-		throw new Error(`[PROVIDERS] ${this.dir}/${this.file.join('/')} | Missing method 'create' of ${this.constructor.name}`);
+		throw new Error(`[PROVIDERS] ${join(this.dir, ...this.file)} | Missing method 'create' of ${this.constructor.name}`);
 	}
 
 	/**
@@ -95,7 +73,7 @@ class Provider extends Piece {
 	 * @abstract
 	 */
 	async delete() {
-		throw new Error(`[PROVIDERS] ${this.dir}/${this.file.join('/')} | Missing method 'delete' of ${this.constructor.name}`);
+		throw new Error(`[PROVIDERS] ${join(this.dir, ...this.file)} | Missing method 'delete' of ${this.constructor.name}`);
 	}
 
 	/**
@@ -107,7 +85,7 @@ class Provider extends Piece {
 	 * @abstract
 	 */
 	async get() {
-		throw new Error(`[PROVIDERS] ${this.dir}/${this.file.join('/')} | Missing method 'get' of ${this.constructor.name}`);
+		throw new Error(`[PROVIDERS] ${join(this.dir, ...this.file)} | Missing method 'get' of ${this.constructor.name}`);
 	}
 
 	/**
@@ -118,7 +96,7 @@ class Provider extends Piece {
 	 * @abstract
 	 */
 	async getAll() {
-		throw new Error(`[PROVIDERS] ${this.dir}/${this.file.join('/')} | Missing method 'getAll' of ${this.constructor.name}`);
+		throw new Error(`[PROVIDERS] ${join(this.dir, ...this.file)} | Missing method 'getAll' of ${this.constructor.name}`);
 	}
 
 	/**
@@ -129,7 +107,7 @@ class Provider extends Piece {
 	 * @abstract
 	 */
 	async getKeys() {
-		throw new Error(`[PROVIDERS] ${this.dir}/${this.file.join('/')} | Missing method 'getKeys' of ${this.constructor.name}`);
+		throw new Error(`[PROVIDERS] ${join(this.dir, ...this.file)} | Missing method 'getKeys' of ${this.constructor.name}`);
 	}
 
 	/**
@@ -141,7 +119,7 @@ class Provider extends Piece {
 	 * @abstract
 	 */
 	async has() {
-		throw new Error(`[PROVIDERS] ${this.dir}/${this.file.join('/')} | Missing method 'has' of ${this.constructor.name}`);
+		throw new Error(`[PROVIDERS] ${join(this.dir, ...this.file)} | Missing method 'has' of ${this.constructor.name}`);
 	}
 
 	/**
@@ -153,7 +131,7 @@ class Provider extends Piece {
 	 * @abstract
 	 */
 	async removeValue() {
-		throw new Error(`[PROVIDERS] ${this.dir}/${this.file.join('/')} | Missing method 'removeValue' of ${this.constructor.name}`);
+		throw new Error(`[PROVIDERS] ${join(this.dir, ...this.file)} | Missing method 'removeValue' of ${this.constructor.name}`);
 	}
 
 	/**
@@ -166,7 +144,7 @@ class Provider extends Piece {
 	 * @abstract
 	 */
 	async replace() {
-		throw new Error(`[PROVIDERS] ${this.dir}/${this.file.join('/')} | Missing method 'replace' of ${this.constructor.name}`);
+		throw new Error(`[PROVIDERS] ${join(this.dir, ...this.file)} | Missing method 'replace' of ${this.constructor.name}`);
 	}
 
 	/**
@@ -179,7 +157,7 @@ class Provider extends Piece {
 	 * @abstract
 	 */
 	async update() {
-		throw new Error(`[PROVIDERS] ${this.dir}/${this.file.join('/')} | Missing method 'update' of ${this.constructor.name}`);
+		throw new Error(`[PROVIDERS] ${join(this.dir, ...this.file)} | Missing method 'update' of ${this.constructor.name}`);
 	}
 
 	/**
@@ -192,7 +170,7 @@ class Provider extends Piece {
 	 * @abstract
 	 */
 	async updateValue() {
-		throw new Error(`[PROVIDERS] ${this.dir}/${this.file.join('/')} | Missing method 'updateValue' of ${this.constructor.name}`);
+		throw new Error(`[PROVIDERS] ${join(this.dir, ...this.file)} | Missing method 'updateValue' of ${this.constructor.name}`);
 	}
 
 	/**
