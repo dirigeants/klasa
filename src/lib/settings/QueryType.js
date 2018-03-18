@@ -135,7 +135,7 @@ class QueryType {
 			(this.size !== null ? `(${this.size}) ` : ' ') +
 			(this.notNull ? 'NOT NULL ' : '') +
 			(this.unique ? 'UNIQUE ' : '') +
-			(this.default !== null && !this.notNull ? `DEFAULT ${this.queryBuilder._parseValue.bind(this)(this.default)}` : '');
+			(this.default !== null && !this.notNull ? `DEFAULT ${this.queryBuilder._parseValue(this.default, this.type)}` : '');
 	}
 
 }

@@ -98,12 +98,13 @@ class QueryBuilder {
 	 * Parse a value.
 	 * @since 0.5.0
 	 * @param {*} value The value to parse
+	 * @param {*} type The type of the Query
 	 * @returns {string}
 	 * @private
 	 */
-	_parseValue(value) { // eslint-disable-line complexity
+	_parseValue(value, type) { // eslint-disable-line complexity
 		const type = typeof value;
-		switch (this.type) {
+		switch (type) {
 			case 'BOOLEAN':
 				if (type === 'boolean') return this.types.BOOLEAN.default[Number(value)];
 				if (type === 'string') return this.types.BOOLEAN.default[Number(value === 'true')];
