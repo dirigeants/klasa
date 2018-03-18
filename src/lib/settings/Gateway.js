@@ -109,7 +109,7 @@ class Gateway extends GatewayStorage {
 				// Silently create a new entry. The new data does not matter as Configuration default all the keys.
 				this.provider.create(this.type, input)
 					.then(() => {
-						configs.existsInDB = true;
+						configs._existsInDB = true;
 						if (this.client.listenerCount('configCreateEntry')) this.client.emit('configCreateEntry', configs);
 					})
 					.catch(error => this.client.emit('error', error));
@@ -130,10 +130,10 @@ class Gateway extends GatewayStorage {
 		const target = getIdentifier(input);
 		if (!target) throw new TypeError('The selected target could not be resolved to a string.');
 		const cache = this.cache.get(target);
-		if (cache && cache.existsInDB) return cache;
+		if (cache && cache._existsInDB) return cache;
 		await this.provider.create(this.type, target);
 		const configs = cache || new this.Configuration(this, { id: target });
-		configs.existsInDB = true;
+		configs._existsInDB = true;
 		if (!cache) this.cache.set(target, configs);
 		if (this.client.listenerCount('configCreateEntry')) this.client.emit('configCreateEntry', configs);
 		return configs;
@@ -181,11 +181,11 @@ class Gateway extends GatewayStorage {
 			for (const entry of entries) {
 				const cache = this.cache.get(entry);
 				if (cache) {
-					if (!cache.existsInDB) cache.existsInDB = true;
+					if (!cache._existsInDB) cache._existsInDB = true;
 					cache._patch(entry);
 				} else {
 					const newEntry = new this.Configuration(this, entry);
-					newEntry.existsInDB = true;
+					newEntry._existsInDB = true;
 					this.cache.set(entry.id, newEntry);
 				}
 			}
