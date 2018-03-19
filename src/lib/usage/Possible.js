@@ -1,4 +1,5 @@
 const minMaxTypes = ['str', 'string', 'num', 'number', 'float', 'int', 'integer'];
+const intMinMaxTypes = ['str', 'string', 'int', 'integer'];
 const regexTypes = ['reg', 'regex', 'regexp'];
 
 /**
@@ -60,7 +61,7 @@ class Possible {
 	static resolveLimit(limit, type) {
 		if (isNaN(limit)) throw `${type} must be a number`;
 		const tempMin = parseFloat(limit);
-		if (['str', 'string', 'int', 'integer'].includes(type) && tempMin % 1 !== 0) throw `${type} must be an integer for this type.`;
+		if (intMinMaxTypes.includes(type) && tempMin % 1 !== 0) throw `${type} must be an integer for this type.`;
 		return tempMin;
 	}
 
