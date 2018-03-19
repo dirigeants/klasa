@@ -1,7 +1,4 @@
-// The types towards the beginning require integer min/max limits
 const minMaxTypes = ['str', 'string', 'int', 'integer', 'num', 'number', 'float'];
-// The index of the last type in minMaxTypes that requires integer min/max
-minMaxTypes.intLimitLastIndex = 3;
 const regexTypes = ['reg', 'regex', 'regexp'];
 
 /**
@@ -64,7 +61,7 @@ class Possible {
 	static resolveLimit(limit, type, limitType) {
 		if (isNaN(limit)) throw `${limitType} must be a number`;
 		const tempLimit = parseFloat(limit);
-		if (minMaxTypes.indexOf(type) <= minMaxTypes.intLimitLastIndex && tempLimit % 1 !== 0) throw `${limitType} must be an integer for this type.`;
+		if (minMaxTypes.indexOf(type) <= 3 && tempLimit % 1 !== 0) throw `${limitType} must be an integer for this type.`;
 		return tempLimit;
 	}
 
