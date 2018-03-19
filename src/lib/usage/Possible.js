@@ -54,7 +54,7 @@ class Possible {
 	 * Resolves a limit
 	 * @since 0.2.1
 	 * @param {string} limit The limit to evaluate
-	 * @param {"min"|"max"} limitType The type of limit
+	 * @param {string} limitType The type of limit
 	 * @returns {number}
 	 * @private
 	 */
