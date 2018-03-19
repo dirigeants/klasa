@@ -53,7 +53,7 @@ class Possible {
 	 * Resolves a limit
 	 * @since 0.2.1
 	 * @param {string} limit The limit to evaluate
-	 * @param {string} type The type of the usage Tag
+	 * @param {string} type The type of the usage Possible
 	 * @param {string} limitType The type of limit
 	 * @returns {number}
 	 * @private
