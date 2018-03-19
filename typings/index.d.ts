@@ -965,7 +965,7 @@ declare module 'klasa' {
 		public max: number;
 		public regex: RegExp;
 
-		private static resolveLimit(limit: string, type: string): number;
+		private resolveLimit(limit: string, limitType: "min" | "max"): number;
 	}
 
 	export class Tag {

@@ -31,14 +31,14 @@ class Possible {
 		 * @since 0.2.1
 		 * @type {?number}
 		 */
-		this.min = minMaxTypes.includes(this.type) && min ? Possible.resolveLimit(min, 'min') : undefined;
+		this.min = minMaxTypes.includes(this.type) && min ? this.resolveLimit(min, 'min') : undefined;
 
 		/**
 		 * The max of this possible
 		 * @since 0.2.1
 		 * @type {?number}
 		 */
-		this.max = minMaxTypes.includes(this.type) && max ? Possible.resolveLimit(max, 'max') : undefined;
+		this.max = minMaxTypes.includes(this.type) && max ? this.resolveLimit(max, 'max') : undefined;
 
 		/**
 		 * The regex of this possible
@@ -54,14 +54,14 @@ class Possible {
 	 * Resolves a limit
 	 * @since 0.2.1
 	 * @param {string} limit The limit to evaluate
-	 * @param {string} type The type of limit
+	 * @param {"min"|"max"} limitType The type of limit
 	 * @returns {number}
 	 * @private
 	 */
-	static resolveLimit(limit, type) {
-		if (isNaN(limit)) throw `${type} must be a number`;
+	resolveLimit(limit, limitType) {
+		if (isNaN(limit)) throw `${limitType} must be a number`;
 		const tempMin = parseFloat(limit);
-		if (intMinMaxTypes.includes(type) && tempMin % 1 !== 0) throw `${type} must be an integer for this type.`;
+		if (intMinMaxTypes.includes(this.type) && tempMin % 1 !== 0) throw `${limitType} must be an integer for this type.`;
 		return tempMin;
 	}
 
