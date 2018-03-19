@@ -969,7 +969,7 @@ declare module 'klasa' {
 	}
 
 	export class Tag {
-		public constructor(members: string, count: number, required: boolean);
+		public constructor(members: string, count: number, required: number);
 		public required: number;
 		public possibles: Possible[];
 		public response: string | ((msg: KlasaMessage) => string);
