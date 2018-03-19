@@ -61,7 +61,7 @@ class Possible {
 	static resolveLimit(limit, type, limitType) {
 		if (isNaN(limit)) throw `${limitType} must be a number`;
 		const tempLimit = parseFloat(limit);
-		if (minMaxTypes.indexOf(type) <= 3 && tempMin % 1 !== 0) throw `${limitType} must be an integer for this type.`;
+		if (minMaxTypes.indexOf(type) <= 3 && tempLimit % 1 !== 0) throw `${limitType} must be an integer for this type.`;
 		return tempLimit;
 	}
 
