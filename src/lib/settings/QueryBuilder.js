@@ -98,8 +98,8 @@ class QueryBuilder {
 	 * Parse a value.
 	 * @since 0.5.0
 	 * @param {*} value The value to parse
-	 * @param {*} type The type of the Query
-	 * @returns {string}
+	 * @param {string} type The type of the Query
+	 * @returns {*}
 	 * @private
 	 */
 	_parseValue(value, type) { // eslint-disable-line complexity
