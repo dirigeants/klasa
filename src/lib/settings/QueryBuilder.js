@@ -98,22 +98,23 @@ class QueryBuilder {
 	 * Parse a value.
 	 * @since 0.5.0
 	 * @param {*} value The value to parse
-	 * @returns {string}
+	 * @param {string} type The type of the Query
+	 * @returns {*}
 	 * @private
 	 */
-	_parseValue(value) { // eslint-disable-line complexity
-		const type = typeof value;
-		switch (this.type) {
+	_parseValue(value, type) { // eslint-disable-line complexity
+		const valueType = typeof value;
+		switch (type) {
 			case 'BOOLEAN':
-				if (type === 'boolean') return this.types.BOOLEAN.default[Number(value)];
-				if (type === 'string') return this.types.BOOLEAN.default[Number(value === 'true')];
-				if (type === 'number') return this.types.BOOLEAN.default[Number(value !== 0)];
+				if (valueType === 'boolean') return this.types.BOOLEAN.default[Number(value)];
+				if (valueType === 'string') return this.types.BOOLEAN.default[Number(value === 'true')];
+				if (valueType === 'number') return this.types.BOOLEAN.default[Number(value !== 0)];
 				return this.types.BOOLEAN.default[0];
 			case 'SMALLINT':
 			case 'INTEGER':
 			case 'BIGINT':
-				if (type === 'number') return Number.isInteger(value) ? value : Math.floor(value);
-				if (type === 'string') return Number(value) || 0;
+				if (valueType === 'number') return Number.isInteger(value) ? value : Math.floor(value);
+				if (valueType === 'string') return Number(value) || 0;
 				return 0;
 			case 'REAL':
 			case 'FLOAT':
@@ -122,11 +123,11 @@ class QueryBuilder {
 				return this.makeStringLiteral(isObject(value) ? JSON.stringify(value) : '{}');
 			case 'TEXT':
 			case 'VARCHAR':
-				if (type === 'string') return this.makeStringLiteral(value);
-				if (type === 'object') return this.makeStringLiteral(JSON.stringify(value));
+				if (valueType === 'string') return this.makeStringLiteral(value);
+				if (valueType === 'object') return this.makeStringLiteral(JSON.stringify(value));
 				return this.makeStringLiteral(String(value));
 			default: {
-				const customResolver = this.customResolvers.get(this.type);
+				const customResolver = this.customResolvers.get(type);
 				return customResolver ? customResolver(this, value) : value;
 			}
 		}
