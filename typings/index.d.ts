@@ -962,11 +962,11 @@ declare module 'klasa' {
 		public max: number;
 		public regex: RegExp;
 
-		private static resolveLimit(limit: string, type: string): number;
+		private static resolveLimit(limit: string, type: string, limitType: string): number;
 	}
 
 	export class Tag {
-		public constructor(members: string, count: number, required: boolean);
+		public constructor(members: string, count: number, required: number);
 		public required: number;
 		public possibles: Possible[];
 		public response: string | ((msg: KlasaMessage) => string);
@@ -1027,9 +1027,9 @@ declare module 'klasa' {
 		public toString(): string;
 
 		private static parseUsage(usageString: string): Tag[];
-		private static tagOpen(usage: object, char: string): object;
-		private static tagClose(usage: object, char: string): object;
-		private static tagSpace(usage: object, char: string): object;
+		private static tagOpen(usage: object, char: string): void;
+		private static tagClose(usage: object, char: string): void;
+		private static tagSpace(usage: object, char: string): void;
 	}
 
 //#endregion Usage
