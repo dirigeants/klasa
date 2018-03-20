@@ -9,7 +9,7 @@ class Tag {
 	 * @since 0.2.1
 	 * @param {string} members The tag contents to parse
 	 * @param {number} count The position of the tag in the usage string
-	 * @param {boolean} required The type of tag (required or optional)
+	 * @param {number} required The type of tag (0 optional, 1 semi-required, 2 required)
 	 */
 	constructor(members, count, required) {
 		/**
