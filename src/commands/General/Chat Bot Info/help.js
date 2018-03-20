@@ -32,10 +32,10 @@ module.exports = class extends Command {
 		const categories = Object.keys(help);
 		const helpMessage = [];
 		for (let cat = 0; cat < categories.length; cat++) {
-			helpMessage.push(`**${categories[cat]} Commands**: \`\`\`asciidoc`, '');
+			helpMessage.push(`**${categories[cat]} Commands**:`, '```asciidoc');
 			const subCategories = Object.keys(help[categories[cat]]);
 			for (let subCat = 0; subCat < subCategories.length; subCat++) helpMessage.push(`= ${subCategories[subCat]} =`, `${help[categories[cat]][subCategories[subCat]].join('\n')}\n`);
-			helpMessage.push('```\n\u200b');
+			helpMessage.push('```', '\u200b');
 		}
 
 		return msg[method].send(helpMessage, { split: { char: '\u200b' } })
