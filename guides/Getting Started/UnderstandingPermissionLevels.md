@@ -49,7 +49,7 @@ This does mean that you can design permission levels where guild owners, and eve
 
 ## Creating Completely Custom PermissionLevels
 
-Each level consists of a number (the level), a function (the check function that returns true or false), and an options object with break (if the level is breaking) and fetch (if the level should autofetch member when appropriate). Check: {@link PermissionLevels#addLevel}
+Each level consists of a number (the level), a function (the check function that returns true or false), and an options object with break (if the level is breaking) and fetch (if the level should autofetch member when appropriate). Check: {@link PermissionLevels#add}
 
 Example:
 
