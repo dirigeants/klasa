@@ -160,10 +160,7 @@ class TextPrompt {
 		this.args[this.args.lastIndexOf(null)] = message.content;
 		this.reprompted = true;
 
-		if (this.usage.parsedUsage[this.params.length + 1] && this.usage.parsedUsage[this.params.length + 1].type === 'repeat') {
-			return this.repeatingPrompt(prompt);
-		}
-
+		if (this.usage.parsedUsage[this.params.length].repeat) return this.repeatingPrompt(prompt);
 		return this.validateArgs();
 	}
 
