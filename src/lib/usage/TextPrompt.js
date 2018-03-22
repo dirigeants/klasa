@@ -211,6 +211,7 @@ class TextPrompt {
 			return this.finalize();
 		}
 
+		this._prompted = 0;
 		return this.multiPossibles(0);
 	}
 
@@ -239,8 +240,8 @@ class TextPrompt {
 		} catch (err) {
 			if (index < this._currentUsage.possibles.length - 1) return this.multiPossibles(++index);
 			if (!this._required) {
-				this.args.splice(this.params.length, 0, undefined);
-				return this.pushParam(undefined);
+				this.args.splice(...(this._repeat ? [this.params.length, 1] : [this.params.length, 0, undefined]));
+				return this._repeat ? this.validateArgs() : this.pushParam(undefined);
 			}
 
 			const { response } = this._currentUsage;
@@ -262,7 +263,6 @@ class TextPrompt {
 	 * @private
 	 */
 	pushParam(param) {
-		this._prompted = 0;
 		this.params.push(param);
 		return this.validateArgs();
 	}
