@@ -240,7 +240,7 @@ class TextPrompt {
 		} catch (err) {
 			if (index < this._currentUsage.possibles.length - 1) return this.multiPossibles(++index);
 			if (!this._required) {
-				this.args.splice.apply(null, this._repeat ? [this.params.length, 1] : [this.params.length, 0, undefined]);
+				this.args.splice.apply(this.args, this._repeat ? [this.params.length, 1] : [this.params.length, 0, undefined]);
 				return this._repeat ? this.validateArgs() : this.pushParam(undefined);
 			}
 
