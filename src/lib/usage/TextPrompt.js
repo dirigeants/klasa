@@ -320,7 +320,7 @@ class TextPrompt {
 		content = content.replace(TextPrompt.flagRegex, (match, fl, ...quote) => {
 			flags[fl] = (quote.slice(0, -2).find(el => el) || fl).replace(/\\/g, '');
 			return '';
-		}).replace(new RegExp(`(?:(\\s)\\s+|(${delim})(?:${delim})+)`, 'g'), '$1').trim();
+		}).replace(new RegExp(`(${delim})(?:${delim})+`, 'g'), '$1').trim();
 		return { content, flags };
 	}
 
@@ -333,7 +333,7 @@ class TextPrompt {
 	 * @private
 	 */
 	static getArgs(content, delim) {
-		const args = content.replace(new RegExp(`(${delim})(?:${delim})+`, 'g'), '$1').split(delim !== '' ? delim : undefined);
+		const args = content.split(delim !== '' ? delim : undefined);
 		return args.length === 1 && args[0] === '' ? [] : args;
 	}
 
