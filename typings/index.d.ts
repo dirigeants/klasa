@@ -853,7 +853,7 @@ declare module 'klasa' {
 //#region Stores
 
 	export class Store<K, V> extends Collection<K, V> {
-		public constructor(client: KlasaClient, name: string, holds: any)
+		public constructor(client: KlasaClient, name: string, holds: V);
 
 		public readonly client: KlasaClient;
 		public readonly name: string;
