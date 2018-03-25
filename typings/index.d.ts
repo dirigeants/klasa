@@ -138,7 +138,7 @@ declare module 'klasa' {
 		public on(event: 'schemaKeyUpdate', listener: (key: SchemaPiece) => void): this;
 
 		// Klasa Console Custom Events
-		public on(event: 'log', listener: (data: any, type: string) => void): this;
+		public on(event: 'log', listener: (data: any) => void): this;
 		public on(event: 'verbose', listener: (data: any) => void): this;
 		public on(event: 'wtf', listener: (failure: Error) => void): this;
 
@@ -202,7 +202,7 @@ declare module 'klasa' {
 		public once(event: 'schemaKeyUpdate', listener: (key: SchemaPiece) => void): this;
 
 		// Klasa Console Custom Events
-		public once(event: 'log', listener: (data: any, type: string) => void): this;
+		public once(event: 'log', listener: (data: any) => void): this;
 		public once(event: 'verbose', listener: (data: any) => void): this;
 		public once(event: 'wtf', listener: (failure: Error) => void): this;
 
@@ -1158,7 +1158,9 @@ declare module 'klasa' {
 		public utc: boolean;
 
 		private readonly timestamp: string;
-		public write(data: any, type?: string): void;
+
+		private write(data: any[], type?: string): void;
+
 		public log(...data: any[]): void;
 		public warn(...data: any[]): void;
 		public error(...data: any[]): void;

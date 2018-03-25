@@ -493,7 +493,6 @@ KlasaClient.defaultPermissionLevels = new PermissionLevels()
  * @event KlasaClient#log
  * @since 0.3.0
  * @param {(string|Object)} data The data to log
- * @param {string} [type='log'] The type of log: 'log', 'debug', 'warn', or 'error'
  */
 
 /**

@@ -164,12 +164,13 @@ class KlasaConsole extends Console {
 	/**
 	 * Logs everything to the console/writable stream.
 	 * @since 0.4.0
-	 * @param {*} data The data we want to print
+	 * @param {Array<*>} data The data we want to print
 	 * @param {string} [type="log"] The type of log, particularly useful for coloring
+	 * @private
 	 */
 	write(data, type = 'log') {
 		type = type.toLowerCase();
-		data = KlasaConsole._flatten(data);
+		data = data.map(this.constructor._flatten).join('\n');
 		const { time, shard, message } = this.colors[type];
 		const timestamp = this.template ? time.format(`[${this.timestamp}]`) : '';
 		const shd = this.client.shard ? shard.format(`[${this.client.shard.id}]`) : '';
@@ -247,8 +248,9 @@ class KlasaConsole extends Console {
 		if (typeof data === 'undefined' || typeof data === 'number' || data === null) return String(data);
 		if (typeof data === 'string') return data;
 		if (typeof data === 'object') {
-			if (Array.isArray(data)) return data.join('\n');
-			return data.stack || data.message || inspect(data, { depth: 0, colors: Colors.useColors });
+			const isArray = Array.isArray(data);
+			if (isArray && data.every(datum => typeof datum === 'string')) return data.join('\n');
+			return data.stack || data.message || inspect(data, { depth: Number(isArray), colors: Colors.useColors });
 		}
 		return String(data);
 	}
