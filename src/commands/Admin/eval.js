@@ -55,10 +55,10 @@ module.exports = class extends Command {
 			type = new Type(result);
 			if (this.client.methods.util.isThenable(result)) {
 				thenable = true;
+				await type;
 				stopwatch.restart();
 				result = await result;
 				asyncTime = stopwatch.friendlyDuration;
-				await type;
 			}
 			success = true;
 		} catch (error) {
