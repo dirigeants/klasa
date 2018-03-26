@@ -12,15 +12,13 @@ class Type {
 	}
 
 	async then(cb) {
-		console.log(this.value);
 		if (util.isThenable(this.value)) {
 			try {
-				await this.value.then(this.addValue);
+				await this.value.then(this.addValue.bind(this));
 			} catch (err) {
 				this.addValue(err);
 			}
 		}
-		console.log(this.childValues);
 		return cb(this.toString());
 	}
 
