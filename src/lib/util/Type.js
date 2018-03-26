@@ -11,7 +11,7 @@ class Type {
 		this._getDeepTypeName();
 	}
 
-	async then() {
+	async then(cb) {
 		if (util.isThenable(this.value)) {
 			try {
 				await this.value.then(this.addValue.bind(this));
@@ -19,6 +19,7 @@ class Type {
 				this.addValue(err);
 			}
 		}
+		return cb(undefined);
 	}
 
 	get childTypes() {
