@@ -19,7 +19,7 @@ class Type {
 				this.addValue(err);
 			}
 		}
-		return cb(this);
+		return cb(this.toString());
 	}
 
 	get childTypes() {
