@@ -76,27 +76,11 @@ class Type {
 	 * @private
 	 */
 	_getDeepTypeName() {
-		if (typeof this.value === 'object' && this.isCircular()) {
-			this.is = `[circular:${this.is}]`;
-		} else {
-			switch (this.is) {
-				case 'Map':
-				case 'Collection':
-				case 'WeakMap':
-					this._getDeepTypeMap();
-					break;
-				case 'Set':
-				case 'Array':
-				case 'WeakSet':
-					this._getDeepTypeSetOrArray();
-					break;
-				case 'Proxy':
-					this._getDeepTypeProxy();
-					break;
-				case 'Object':
-					this.is = 'any';
-			}
-		}
+		if (typeof this.value === 'object' && this.isCircular()) this.is = `[circular:${this.is}]`;
+		else if (this.value instanceof Map || this.value instanceof WeakMap) this._getDeepTypeMap();
+		else if (Array.isArray(this.value) || this.value instanceof Set || this.value instanceof WeakSet) this._getDeepTypeSetOrArray();
+		else if (this.is === 'Proxy') this._getDeepTypeProxy();
+		else if (this.is === 'Object') this.is = 'any';
 	}
 
 	/**
@@ -105,7 +89,6 @@ class Type {
 	 * @private
 	 */
 	_getDeepTypeMap() {
-		if (!(this.value instanceof Map || this.value instanceof WeakMap)) return;
 		for (const [key, value] of this.value) {
 			this.addKey(key);
 			this.addValue(value);
@@ -118,7 +101,6 @@ class Type {
 	 * @private
 	 */
 	_getDeepTypeSetOrArray() {
-		if (!(Array.isArray(this.value) || this.value instanceof Set || this.value instanceof WeakSet)) return;
 		for (const value of this.value) this.addValue(value);
 	}
 
