@@ -9,7 +9,7 @@ class Type {
 		this.childKeys = new Map();
 		this.childValues = new Map();
 
-		if (util.isThenable(this.instance)) this.value.then(this.add);
+		if (util.isThenable(this.instance)) this.value.then(this.addValue);
 		else this._getDeepTypeName();
 	}
 
