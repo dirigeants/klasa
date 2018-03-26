@@ -12,6 +12,7 @@ class Type {
 	}
 
 	async then(cb) {
+		console.log(this.value);
 		if (util.isThenable(this.value)) {
 			try {
 				await this.value.then(this.addValue);
@@ -19,6 +20,7 @@ class Type {
 				this.addValue(err);
 			}
 		}
+		console.log(this.childValues);
 		return cb(this.toString());
 	}
 
