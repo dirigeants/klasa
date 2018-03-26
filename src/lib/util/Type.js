@@ -79,7 +79,6 @@ class Type {
 		if (typeof this.value === 'object' && this.isCircular()) this.is = `[circular:${this.is}]`;
 		else if (this.value instanceof Map || this.value instanceof WeakMap) this._getDeepTypeMap();
 		else if (Array.isArray(this.value) || this.value instanceof Set || this.value instanceof WeakSet) this._getDeepTypeSetOrArray();
-		else if (this.is === 'Proxy') this._getDeepTypeProxy();
 		else if (this.is === 'Object') this.is = 'any';
 	}
 
@@ -102,17 +101,6 @@ class Type {
 	 */
 	_getDeepTypeSetOrArray() {
 		for (const value of this.value) this.addValue(value);
-	}
-
-	/**
-	 * Get the deep type name that defines a Proxy.
-	 * @since 0.5.0
-	 * @private
-	 */
-	_getDeepTypeProxy() {
-		const proxy = process.binding('util').getProxyDetails(this.value);
-		if (proxy) this.addValue(proxy);
-		else this.is = 'any';
 	}
 
 	static list(values) {
