@@ -76,7 +76,7 @@ class Type {
 	 * @private
 	 */
 	_getDeepTypeName() {
-		if (this.isCircular()) {
+		if (typeof this.value === 'object' && this.isCircular()) {
 			this.is = `[circular:${this.is}]`;
 		} else {
 			switch (this.is) {
