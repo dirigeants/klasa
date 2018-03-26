@@ -110,7 +110,7 @@ class Type {
 	 */
 	_getDeepTypeSetOrArray() {
 		if (!(Array.isArray(this.value) || this.value instanceof Set || this.value instanceof WeakSet)) return;
-		for (const value of this.value) this.add(value);
+		for (const value of this.value) this.addValue(value);
 	}
 
 	/**
@@ -121,7 +121,7 @@ class Type {
 	 */
 	_getDeepTypeProxy(input) {
 		const proxy = process.binding('util').getProxyDetails(input);
-		if (proxy) this.add(proxy);
+		if (proxy) this.addValue(proxy);
 		else this.is = 'any';
 	}
 
