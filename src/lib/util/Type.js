@@ -107,11 +107,10 @@ class Type {
 	/**
 	 * Get the deep type name that defines a Proxy.
 	 * @since 0.5.0
-	 * @param {Proxy} input The value to get the deep type from
 	 * @private
 	 */
-	_getDeepTypeProxy(input) {
-		const proxy = process.binding('util').getProxyDetails(input);
+	_getDeepTypeProxy() {
+		const proxy = process.binding('util').getProxyDetails(this.value);
 		if (proxy) this.addValue(proxy);
 		else this.is = 'any';
 	}
