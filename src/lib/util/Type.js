@@ -42,7 +42,7 @@ class Type {
 	}
 
 	toString() {
-		if (this.values.size) return `${this.is}<${this.childTypes}>`;
+		if (this.childValues.size) return `${this.is}<${this.childTypes}>`;
 		return this.is;
 	}
 
