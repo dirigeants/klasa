@@ -37,7 +37,7 @@ class Type {
 	}
 
 	isCircular() {
-		for (const parent of this.parents()) if (parent.value === this.value) return true;
+		for (const parent of this.parents()) if (parent && parent.value === this.value) return true;
 		return false;
 	}
 
