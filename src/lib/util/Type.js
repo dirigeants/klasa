@@ -38,6 +38,11 @@ class Type {
 		this.childKeys.set(child.is, child);
 	}
 
+	addEntry([key, value]) {
+		this.addKey(key);
+		this.addValue(value);
+	}
+
 	*parents() {
 		// eslint-disable-next-line consistent-this
 		let current = this;
@@ -77,30 +82,9 @@ class Type {
 	 */
 	_getDeepTypeName() {
 		if (typeof this.value === 'object' && this.isCircular()) this.is = `[circular:${this.is}]`;
-		else if (this.value instanceof Map || this.value instanceof WeakMap) this._getDeepTypeMap();
-		else if (Array.isArray(this.value) || this.value instanceof Set || this.value instanceof WeakSet) this._getDeepTypeSetOrArray();
+		else if (this.value instanceof Map || this.value instanceof WeakMap) for (const entry of this.value) this.addEntry(entry);
+		else if (Array.isArray(this.value) || this.value instanceof Set || this.value instanceof WeakSet) for (const value of this.value) this.addValue(value);
 		else if (this.is === 'Object') this.is = 'any';
-	}
-
-	/**
-	 * Get the deep type name that defines a Map, WeakMap, or a discord.js' Collection.
-	 * @since 0.5.0
-	 * @private
-	 */
-	_getDeepTypeMap() {
-		for (const [key, value] of this.value) {
-			this.addKey(key);
-			this.addValue(value);
-		}
-	}
-
-	/**
-	 * Get the deep type name that defines an Array, Set, or a WeakSet.
-	 * @since 0.5.0
-	 * @private
-	 */
-	_getDeepTypeSetOrArray() {
-		for (const value of this.value) this.addValue(value);
 	}
 
 	static list(values) {
