@@ -58,6 +58,7 @@ module.exports = class extends Command {
 				stopwatch.restart();
 				result = await result;
 				asyncTime = stopwatch.friendlyDuration;
+				await type;
 			}
 			success = true;
 		} catch (error) {

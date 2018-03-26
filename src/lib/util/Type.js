@@ -8,9 +8,18 @@ class Type {
 		this.is = this._getTypeName();
 		this.childKeys = new Map();
 		this.childValues = new Map();
+		this._getDeepTypeName();
+	}
 
-		if (util.isThenable(this.instance)) this.value.then(this.addValue);
-		else this._getDeepTypeName();
+	async then(cb) {
+		if (util.isThenable(this.value)) {
+			try {
+				await this.value.then(this.addValue);
+			} catch (err) {
+				this.addValue(err);
+			}
+		}
+		return cb(this);
 	}
 
 	get childTypes() {
