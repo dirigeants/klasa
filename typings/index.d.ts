@@ -946,6 +946,8 @@ declare module 'klasa' {
 		private typing: boolean;
 
 		public run(): Promise<any[]>;
+		private static generateNewDelim(delim: string): RegExp;
+		private static delims: Map<string, RegExp>;
 	}
 
 	export class CommandUsage extends Usage {
