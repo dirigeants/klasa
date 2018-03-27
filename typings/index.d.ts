@@ -1297,7 +1297,7 @@ declare module 'klasa' {
 		private static _patch(pattern: string): TimestampObject[];
 	}
 
-	class Type {
+	export class Type {
 		public constructor(value: any, parent: ?type);
 
 		public value: any;
