@@ -36,6 +36,7 @@ class Type {
 
 		/**
 		 * The child values of this Type
+		 * @type {Map}
 		 */
 		this.childValues = new Map();
 
@@ -117,7 +118,7 @@ class Type {
 		// eslint-disable-next-line consistent-this
 		let current = this;
 		// eslint-disable-next-line no-cond-assign
-		while (current = current.parent) yield current.parent;
+		while (current = current.parent && current) yield current.parent;
 	}
 
 	/**
