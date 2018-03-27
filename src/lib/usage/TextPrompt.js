@@ -393,6 +393,7 @@ class TextPrompt {
  * @since 0.5.0
  * @type {Map<string, RegExp>}
  * @static
+ * @private
  */
 TextPrompt.delims = new Map();
 
