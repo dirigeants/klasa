@@ -1306,10 +1306,11 @@ declare module 'klasa' {
 		private parent: ?Type;
 		private childKeys: Map;
 		private childValues: Map;
+
 		private readonly childTypes: string;
 
 		public toString(): string;
-		
+
 		private addValue(value: any): void;
 		private addEntry(entry: [string, any]): void;
 		private parents(): Iterator<Type>;
