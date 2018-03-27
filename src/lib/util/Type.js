@@ -3,13 +3,13 @@ const { getPromiseDetails } = process.binding('util');
 
 /**
  * The class for checking Types
- * <info>To get proper Promise deep types, resolve the promise instance before creating a new Type<info>
+ * <info>To get proper Promise deep types, resolve the promise instance before creating a new Type</info>
  */
 class Type {
 
 	/**
 	 * @param {*} value The value to generate a deep Type of
-	 * @param {Type} [parent] The parent value used in recursion
+	 * @param {Type} [parent=null] The parent value used in recursion
 	 */
 	constructor(value, parent = null) {
 		/**
