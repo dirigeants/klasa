@@ -116,8 +116,9 @@ class Type {
 	 * @private
 	 */
 	check() {
+		const promise = util.isThenable(this.value) && getPromiseDetails(this.value);
 		if (typeof this.value === 'object' && this.isCircular()) this.is = `[circular:${this.is}]`;
-		else if (util.isThenable(this.value) && getPromiseDetails(this.value)[0]) this.addValue(getPromiseDetails(this.value)[1]);
+		else if (promise && promise[0]) this.addValue(promise[1]);
 		else if (this.value instanceof Map || this.value instanceof WeakMap) for (const entry of this.value) this.addEntry(entry);
 		else if (Array.isArray(this.value) || this.value instanceof Set || this.value instanceof WeakSet) for (const value of this.value) this.addValue(value);
 		else if (this.is === 'Object') this.is = 'any';
