@@ -2,7 +2,7 @@ const util = require('./util');
 const { getPromiseDetails } = process.binding('util');
 
 /**
- * <info>To get proper Promise deep types, resolve the promise instance before creating a new Type</info>
+ * <info>To get proper Promise deep types, resolve the promise instance before creating a new Type with the instance.</info>
  * The class for checking Types
  */
 class Type {
@@ -20,13 +20,6 @@ class Type {
 		this.value = value;
 
 		/**
-		 * The parent of this type
-		 * @since 0.5.0
-		 * @type {?Type}
-		 */
-		this.parent = parent;
-
-		/**
 		 * The shallow type of this
 		 * @since 0.5.0
 		 * @type {string}
@@ -34,9 +27,18 @@ class Type {
 		this.is = this.constructor.resolve(value);
 
 		/**
+		 * The parent of this type
+		 * @since 0.5.0
+		 * @type {?Type}
+		 * @private
+		 */
+		this.parent = parent;
+
+		/**
 		 * The child keys of this Type
 		 * @since 0.5.0
 		 * @type {Map}
+		 * @private
 		 */
 		this.childKeys = new Map();
 
@@ -44,10 +46,11 @@ class Type {
 		 * The child values of this Type
 		 * @since 0.5.0
 		 * @type {Map}
+		 * @private
 		 */
 		this.childValues = new Map();
 
-		this._getDeepTypeName();
+		this.check();
 	}
 
 	/**
@@ -60,6 +63,15 @@ class Type {
 	get childTypes() {
 		if (!this.childValues.size) return '';
 		return `<${(this.childKeys.size ? `${this.constructor.list(this.childKeys)}, ` : '') + this.constructor.list(this.childValues)}>`;
+	}
+
+	/**
+	 * Defines the toString behavior of Type.
+	 * @since 0.5.0
+	 * @returns {string}
+	 */
+	toString() {
+		return this.is + this.childTypes;
 	}
 
 	/**
@@ -86,25 +98,6 @@ class Type {
 	}
 
 	/**
-	 * Checks if the value of this Type is a circular reference to any parent.
-	 * @since 0.5.0
-	 * @returns {boolean}
-	 */
-	isCircular() {
-		for (const parent of this.parents()) if (parent.value === this.value) return true;
-		return false;
-	}
-
-	/**
-	 * Defines the toString behavior of Type.
-	 * @since 0.5.0
-	 * @returns {string}
-	 */
-	toString() {
-		return this.is + this.childTypes;
-	}
-
-	/**
 	 * Walks the linked list backwards, for checking circulars.
 	 * @since 0.5.0
 	 * @yields {?Type}
@@ -122,12 +115,23 @@ class Type {
 	 * @since 0.5.0
 	 * @private
 	 */
-	_getDeepTypeName() {
+	check() {
 		if (typeof this.value === 'object' && this.isCircular()) this.is = `[circular:${this.is}]`;
 		else if (util.isThenable(this.value) && getPromiseDetails(this.value)[0]) this.addValue(getPromiseDetails(this.value)[1]);
 		else if (this.value instanceof Map || this.value instanceof WeakMap) for (const entry of this.value) this.addEntry(entry);
 		else if (Array.isArray(this.value) || this.value instanceof Set || this.value instanceof WeakSet) for (const value of this.value) this.addValue(value);
 		else if (this.is === 'Object') this.is = 'any';
+	}
+
+	/**
+	 * Checks if the value of this Type is a circular reference to any parent.
+	 * @since 0.5.0
+	 * @returns {boolean}
+	 * @private
+	 */
+	isCircular() {
+		for (const parent of this.parents()) if (parent.value === this.value) return true;
+		return false;
 	}
 
 	/**
