@@ -1,4 +1,5 @@
 const util = require('./util');
+const { getPromiseDetails } = process.binding('util');
 
 /**
  * The class for checking Types
@@ -46,11 +47,6 @@ class Type {
 		this.childValues = new Map();
 
 		this._getDeepTypeName();
-	}
-
-	async then(cb) {
-		if (util.isThenable(this.value)) await this.value.then(this.addValue.bind(this)).catch(this.addValue.bind(this));
-		return cb(undefined);
 	}
 
 	/**
@@ -127,6 +123,7 @@ class Type {
 	 */
 	_getDeepTypeName() {
 		if (typeof this.value === 'object' && this.isCircular()) this.is = `[circular:${this.is}]`;
+		else if (util.isThenable(this.value) && getPromiseDetails(this.value)[0]) this.addValue(getPromiseDetails(this.value)[1]);
 		else if (this.value instanceof Map || this.value instanceof WeakMap) for (const entry of this.value) this.addEntry(entry);
 		else if (Array.isArray(this.value) || this.value instanceof Set || this.value instanceof WeakSet) for (const value of this.value) this.addValue(value);
 		else if (this.is === 'Object') this.is = 'any';

@@ -50,16 +50,15 @@ module.exports = class extends Command {
 		let type;
 		try {
 			if (msg.flags.async) code = `(async () => {\n${code}\n})();`;
-			result = eval(code);
+			const raw = result = eval(code);
 			syncTime = stopwatch.friendlyDuration;
-			type = new Type(result);
-			if (this.client.methods.util.isThenable(result)) {
+			if (this.client.methods.util.isThenable(raw)) {
 				thenable = true;
-				await type;
 				stopwatch.restart();
-				result = await result;
+				result = await raw;
 				asyncTime = stopwatch.friendlyDuration;
 			}
+			type = new Type(raw);
 			success = true;
 		} catch (error) {
 			if (!syncTime) syncTime = stopwatch.friendlyDuration;
