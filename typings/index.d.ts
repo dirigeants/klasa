@@ -1297,16 +1297,36 @@ declare module 'klasa' {
 		private static _patch(pattern: string): TimestampObject[];
 	}
 
+	class Type {
+		public constructor(value: any, parent: ?type);
+
+		public value: any;
+		public is: string;
+
+		private parent: ?Type;
+		private childKeys: Map;
+		private childValues: Map;
+		private readonly childTypes: string;
+
+		public toString(): string;
+		
+		private addValue(value: any): void;
+		private addEntry(entry: [string, any]): void;
+		private parents(): Iterator<Type>;
+		private check(): void;
+		private isCircular(): boolean;
+
+		public static resolve(value: any): string;
+
+		private static list(values: Map): string;
+	}
+
 	class Util {
 		public static applyToClass(base: object, structure: object, skips?: string[]): void;
 		public static clean(text: string): string;
 		public static codeBlock(lang: string, expression: string): string;
 		public static deepClone(source: any): any;
 		public static exec(exec: string, options?: ExecOptions): Promise<{ stdout: string, stderr: string }>;
-		public static getDeepTypeMap(input: Map<any, any> | WeakMap<object, any> | Collection<any, any>, basic?: string): string;
-		public static getDeepTypeName(input: any): string;
-		public static getDeepTypeProxy(input: Proxy<any>): string;
-		public static getDeepTypeSetOrMap(input: Array<any> | Set<any> | WeakSet<any>, basic?: string): string;
 		public static getIdentifier(value: PrimitiveType | { id?: PrimitiveType, name?: PrimitiveType }): PrimitiveType | null;
 		public static getTypeName(input: any): string;
 		public static isClass(input: Function): boolean;
