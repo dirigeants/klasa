@@ -2,8 +2,8 @@ const util = require('./util');
 const { getPromiseDetails } = process.binding('util');
 
 /**
- * The class for checking Types
  * <info>To get proper Promise deep types, resolve the promise instance before creating a new Type</info>
+ * The class for checking Types
  */
 class Type {
 
