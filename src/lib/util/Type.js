@@ -9,33 +9,38 @@ class Type {
 	 * @param {*} value The value to generate a deep Type of
 	 * @param {Type} [parent] The parent value used in recursion
 	 */
-	constructor(value, parent) {
+	constructor(value, parent = null) {
 		/**
 		 * The value to generate a deep Type of
+		 * @since 0.5.0
 		 * @type {*}
 		 */
 		this.value = value;
 
 		/**
 		 * The parent of this type
+		 * @since 0.5.0
 		 * @type {?Type}
 		 */
 		this.parent = parent;
 
 		/**
 		 * The shallow type of this
+		 * @since 0.5.0
 		 * @type {string}
 		 */
 		this.is = this.constructor.resolve(value);
 
 		/**
 		 * The child keys of this Type
+		 * @since 0.5.0
 		 * @type {Map}
 		 */
 		this.childKeys = new Map();
 
 		/**
 		 * The child values of this Type
+		 * @since 0.5.0
 		 * @type {Map}
 		 */
 		this.childValues = new Map();
@@ -44,21 +49,15 @@ class Type {
 	}
 
 	async then(cb) {
-		if (util.isThenable(this.value)) {
-			try {
-				await this.value.then(this.addValue.bind(this));
-			} catch (err) {
-				this.addValue(err);
-			}
-		}
+		if (util.isThenable(this.value)) await this.value.then(this.addValue.bind(this)).catch(this.addValue.bind(this));
 		return cb(undefined);
 	}
 
 	/**
 	 * The type string for the children of this Type.
-	 * @param {*} value The sub value
-	 * @returns {string}
 	 * @since 0.5.0
+	 * @type {string}
+	 * @readonly
 	 * @private
 	 */
 	get childTypes() {
@@ -68,8 +67,8 @@ class Type {
 
 	/**
 	 * The subtype to create based on this.value's sub value.
-	 * @param {*} value The sub value
 	 * @since 0.5.0
+	 * @param {*} value The sub value
 	 * @private
 	 */
 	addValue(value) {
@@ -79,8 +78,8 @@ class Type {
 
 	/**
 	 * The subtype to create based on this.value's entries.
-	 * @param {Array<string, *>} entry the entry
 	 * @since 0.5.0
+	 * @param {Array<string, *>} entry the entry
 	 * @private
 	 */
 	addEntry([key, value]) {
@@ -91,8 +90,8 @@ class Type {
 
 	/**
 	 * Checks if the value of this Type is a circular reference to any parent.
-	 * @returns {boolean}
 	 * @since 0.5.0
+	 * @returns {boolean}
 	 */
 	isCircular() {
 		for (const parent of this.parents()) if (parent.value === this.value) return true;
@@ -101,8 +100,8 @@ class Type {
 
 	/**
 	 * Defines the toString behavior of Type.
-	 * @returns {string}
 	 * @since 0.5.0
+	 * @returns {string}
 	 */
 	toString() {
 		return this.is + this.childTypes;
@@ -110,8 +109,8 @@ class Type {
 
 	/**
 	 * Walks the linked list backwards, for checking circulars.
-	 * @yields {?Type}
 	 * @since 0.5.0
+	 * @yields {?Type}
 	 * @private
 	 */
 	*parents() {
@@ -140,11 +139,12 @@ class Type {
 	 * @returns {string}
 	 */
 	static resolve(value) {
-		switch (typeof value) {
+		const type = typeof value;
+		switch (type) {
 			case 'object': return value === null ? 'null' : value.constructor ? value.constructor.name : 'any';
 			case 'function': return `${value.constructor.name}(${value.length}-arity)`;
 			case 'undefined': return 'void';
-			default: return typeof value;
+			default: return type;
 		}
 	}
 
