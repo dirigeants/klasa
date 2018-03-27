@@ -2,7 +2,6 @@ const util = require('./util');
 const { getPromiseDetails } = process.binding('util');
 
 /**
- * <info>To get proper Promise deep types, resolve the promise instance before creating a new Type with the instance.</info>
  * The class for deep checking Types
  */
 class Type {
@@ -49,8 +48,6 @@ class Type {
 		 * @private
 		 */
 		this.childValues = new Map();
-
-		this.check();
 	}
 
 	/**
@@ -71,6 +68,7 @@ class Type {
 	 * @returns {string}
 	 */
 	toString() {
+		this.check();
 		return this.is + this.childTypes;
 	}
 
