@@ -137,7 +137,7 @@ class Type {
 	/**
 	 * Resolves the type name that defines the input.
 	 * @since 0.5.0
-	 * @param {*} value The value to get the type name of.
+	 * @param {*} value The value to get the type name of
 	 * @returns {string}
 	 */
 	static resolve(value) {
@@ -153,7 +153,7 @@ class Type {
 	/**
 	 * Joins the list of child types.
 	 * @since 0.5.0
-	 * @param {Map} values The values to list.
+	 * @param {Map} values The values to list
 	 * @returns {string}
 	 * @private
 	 */
