@@ -1,13 +1,44 @@
 const util = require('./util');
 
+/**
+ * The class for checking Types
+ */
 class Type {
 
-	constructor(value, parent = null) {
+	/**
+	 * @param {*} value The value to generate a deep Type of
+	 * @param {Type} [parent] The parent value used in recursion
+	 */
+	constructor(value, parent) {
+		/**
+		 * The value to generate a deep Type of
+		 * @type {*}
+		 */
 		this.value = value;
+
+		/**
+		 * The parent of this type
+		 * @type {?Type}
+		 */
 		this.parent = parent;
-		this.is = this._getTypeName();
+
+		/**
+		 * The shallow type of this
+		 * @type {string}
+		 */
+		this.is = this.constructor.resolve(value);
+
+		/**
+		 * The child keys of this Type
+		 * @type {Map}
+		 */
 		this.childKeys = new Map();
+
+		/**
+		 * The child values of this Type
+		 */
 		this.childValues = new Map();
+
 		this._getDeepTypeName();
 	}
 
@@ -22,57 +53,71 @@ class Type {
 		return cb(undefined);
 	}
 
+	/**
+	 * The type string for the children of this Type.
+	 * @param {*} value The sub value
+	 * @returns {string}
+	 * @since 0.5.0
+	 * @private
+	 */
 	get childTypes() {
-		let retVal = '';
-		if (this.childKeys.size) retVal += `${this.constructor.list(this.childKeys)}, `;
-		return retVal + this.constructor.list(this.childValues);
+		if (!this.childValues.size) return '';
+		return `<${(this.childKeys.size ? `${this.constructor.list(this.childKeys)}, ` : '') + this.constructor.list(this.childValues)}>`;
 	}
 
+	/**
+	 * The subtype to create based on this.value's sub value.
+	 * @param {*} value The sub value
+	 * @since 0.5.0
+	 * @private
+	 */
 	addValue(value) {
 		const child = new this.constructor(value, this);
 		this.childValues.set(child.is, child);
 	}
 
-	addKey(key) {
+	/**
+	 * The subtype to create based on this.value's entries.
+	 * @param {Array<string, *>} entry the entry
+	 * @since 0.5.0
+	 * @private
+	 */
+	addEntry([key, value]) {
 		const child = new this.constructor(key, this);
 		this.childKeys.set(child.is, child);
-	}
-
-	addEntry([key, value]) {
-		this.addKey(key);
 		this.addValue(value);
 	}
 
+	/**
+	 * Checks if the value of this Type is a circular reference to any parent.
+	 * @returns {boolean}
+	 * @since 0.5.0
+	 */
+	isCircular() {
+		for (const parent of this.parents()) if (parent.value === this.value) return true;
+		return false;
+	}
+
+	/**
+	 * Defines the toString behavior of Type.
+	 * @returns {string}
+	 * @since 0.5.0
+	 */
+	toString() {
+		return this.is + this.childTypes;
+	}
+
+	/**
+	 * Walks the linked list backwards, for checking circulars.
+	 * @yields {?Type}
+	 * @since 0.5.0
+	 * @private
+	 */
 	*parents() {
 		// eslint-disable-next-line consistent-this
 		let current = this;
 		// eslint-disable-next-line no-cond-assign
 		while (current = current.parent) yield current.parent;
-	}
-
-	isCircular() {
-		for (const parent of this.parents()) if (parent && parent.value === this.value) return true;
-		return false;
-	}
-
-	toString() {
-		if (this.childValues.size) return `${this.is}<${this.childTypes}>`;
-		return this.is;
-	}
-
-	/**
-	 * Get the type name that defines the input.
-	 * @since 0.5.0
-	 * @returns {string}
-	 * @private
-	 */
-	_getTypeName() {
-		switch (typeof this.value) {
-			case 'object': return this.value === null ? 'null' : this.value.constructor ? this.value.constructor.name : 'any';
-			case 'function': return `${this.value.constructor.name}(${this.value.length}-arity)`;
-			case 'undefined': return 'void';
-			default: return typeof this.value;
-		}
 	}
 
 	/**
@@ -87,6 +132,28 @@ class Type {
 		else if (this.is === 'Object') this.is = 'any';
 	}
 
+	/**
+	 * Resolves the type name that defines the input.
+	 * @since 0.5.0
+	 * @param {*} value The value to get the type name of.
+	 * @returns {string}
+	 */
+	static resolve(value) {
+		switch (typeof value) {
+			case 'object': return value === null ? 'null' : value.constructor ? value.constructor.name : 'any';
+			case 'function': return `${value.constructor.name}(${value.length}-arity)`;
+			case 'undefined': return 'void';
+			default: return typeof value;
+		}
+	}
+
+	/**
+	 * Joins the list of child types.
+	 * @since 0.5.0
+	 * @param {Map} values The values to list.
+	 * @returns {string}
+	 * @private
+	 */
 	static list(values) {
 		return values.has('any') ? 'any' : [...values.values()].sort().join(' | ');
 	}
