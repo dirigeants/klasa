@@ -247,7 +247,7 @@ class KlasaConsole extends Console {
 		if (typeof data === 'undefined' || typeof data === 'number' || data === null) return String(data);
 		if (typeof data === 'string') return data;
 		if (typeof data === 'object') {
-			if (Array.isArray(data)) return data.join('\n');
+			if (Array.isArray(data)) return data.map(arrData => KlasaConsole._flatten(arrData)).join('\n');
 			return data.stack || data.message || inspect(data, { depth: 0, colors: Colors.useColors });
 		}
 		return String(data);
