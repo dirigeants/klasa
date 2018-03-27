@@ -3,7 +3,7 @@ const { getPromiseDetails } = process.binding('util');
 
 /**
  * <info>To get proper Promise deep types, resolve the promise instance before creating a new Type with the instance.</info>
- * The class for checking Types
+ * The class for deep checking Types
  */
 class Type {
 
@@ -54,7 +54,7 @@ class Type {
 	}
 
 	/**
-	 * The type string for the children of this Type.
+	 * The type string for the children of this Type
 	 * @since 0.5.0
 	 * @type {string}
 	 * @readonly
@@ -66,7 +66,7 @@ class Type {
 	}
 
 	/**
-	 * Defines the toString behavior of Type.
+	 * The full type string generated.
 	 * @since 0.5.0
 	 * @returns {string}
 	 */
