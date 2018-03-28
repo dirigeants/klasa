@@ -39,6 +39,7 @@ exports.DEFAULTS = {
 			users: {},
 			clientStorage: {}
 		},
+		production: false,
 		providers: { default: 'json' },
 		pieceDefaults: {
 			commands: {
