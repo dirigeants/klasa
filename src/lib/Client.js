@@ -67,7 +67,7 @@ class KlasaClient extends Discord.Client {
 
 	/**
 	 * @typedef {Object} KlasaClientOptionsSchedule
-	 * @property {number} [interval] The interval in milliseconds for the clock to check the tasks
+	 * @property {number} [interval=60000] The interval in milliseconds for the clock to check the tasks
 	 */
 
 	/**
@@ -493,7 +493,6 @@ KlasaClient.defaultPermissionLevels = new PermissionLevels()
  * @event KlasaClient#log
  * @since 0.3.0
  * @param {(string|Object)} data The data to log
- * @param {string} [type='log'] The type of log: 'log', 'debug', 'warn', or 'error'
  */
 
 /**

@@ -138,7 +138,7 @@ declare module 'klasa' {
 		public on(event: 'schemaKeyUpdate', listener: (key: SchemaPiece) => void): this;
 
 		// Klasa Console Custom Events
-		public on(event: 'log', listener: (data: any, type: string) => void): this;
+		public on(event: 'log', listener: (data: any) => void): this;
 		public on(event: 'verbose', listener: (data: any) => void): this;
 		public on(event: 'wtf', listener: (failure: Error) => void): this;
 
@@ -202,7 +202,7 @@ declare module 'klasa' {
 		public once(event: 'schemaKeyUpdate', listener: (key: SchemaPiece) => void): this;
 
 		// Klasa Console Custom Events
-		public once(event: 'log', listener: (data: any, type: string) => void): this;
+		public once(event: 'log', listener: (data: any) => void): this;
 		public once(event: 'verbose', listener: (data: any) => void): this;
 		public once(event: 'wtf', listener: (failure: Error) => void): this;
 
@@ -853,6 +853,8 @@ declare module 'klasa' {
 //#region Stores
 
 	export class Store<K, V> extends Collection<K, V> {
+		public constructor(client: KlasaClient, name: string, holds: V);
+
 		public readonly client: KlasaClient;
 		public readonly name: string;
 		public readonly holds: V;
@@ -1158,7 +1160,9 @@ declare module 'klasa' {
 		public utc: boolean;
 
 		private readonly timestamp: string;
-		public write(data: any, type?: string): void;
+
+		private write(data: any[], type?: string): void;
+
 		public log(...data: any[]): void;
 		public warn(...data: any[]): void;
 		public error(...data: any[]): void;
@@ -1293,16 +1297,37 @@ declare module 'klasa' {
 		private static _patch(pattern: string): TimestampObject[];
 	}
 
+	export class Type {
+		public constructor(value: any, parent: ?type);
+
+		public value: any;
+		public is: string;
+
+		private parent: ?Type;
+		private childKeys: Map;
+		private childValues: Map;
+
+		private readonly childTypes: string;
+
+		public toString(): string;
+
+		private addValue(value: any): void;
+		private addEntry(entry: [string, any]): void;
+		private parents(): Iterator<Type>;
+		private check(): void;
+		private isCircular(): boolean;
+
+		public static resolve(value: any): string;
+
+		private static list(values: Map): string;
+	}
+
 	class Util {
 		public static applyToClass(base: object, structure: object, skips?: string[]): void;
 		public static clean(text: string): string;
 		public static codeBlock(lang: string, expression: string): string;
 		public static deepClone(source: any): any;
 		public static exec(exec: string, options?: ExecOptions): Promise<{ stdout: string, stderr: string }>;
-		public static getDeepTypeMap(input: Map<any, any> | WeakMap<object, any> | Collection<any, any>, basic?: string): string;
-		public static getDeepTypeName(input: any): string;
-		public static getDeepTypeProxy(input: Proxy<any>): string;
-		public static getDeepTypeSetOrMap(input: Array<any> | Set<any> | WeakSet<any>, basic?: string): string;
 		public static getIdentifier(value: PrimitiveType | { id?: PrimitiveType, name?: PrimitiveType }): PrimitiveType | null;
 		public static getTypeName(input: any): string;
 		public static isClass(input: Function): boolean;
