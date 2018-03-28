@@ -75,6 +75,7 @@ module.exports = {
 	RichMenu: require('./lib/util/RichMenu'),
 	Stopwatch: require('./lib/util/Stopwatch'),
 	Timestamp: require('./lib/util/Timestamp'),
+	Type: require('./lib/util/Type'),
 	util: require('./lib/util/util'),
 
 	// version

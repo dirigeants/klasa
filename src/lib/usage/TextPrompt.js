@@ -160,10 +160,7 @@ class TextPrompt {
 		this.args[this.args.lastIndexOf(null)] = message.content;
 		this.reprompted = true;
 
-		if (this.usage.parsedUsage[this.params.length + 1] && this.usage.parsedUsage[this.params.length + 1].type === 'repeat') {
-			return this.repeatingPrompt(prompt);
-		}
-
+		if (this.usage.parsedUsage[this.params.length].repeat) return this.repeatingPrompt(prompt);
 		return this.validateArgs();
 	}
 
@@ -214,6 +211,7 @@ class TextPrompt {
 			return this.finalize();
 		}
 
+		this._prompted = 0;
 		return this.multiPossibles(0);
 	}
 
@@ -242,8 +240,8 @@ class TextPrompt {
 		} catch (err) {
 			if (index < this._currentUsage.possibles.length - 1) return this.multiPossibles(++index);
 			if (!this._required) {
-				this.args.splice(this.params.length, 0, undefined);
-				return this.pushParam(undefined);
+				this.args.splice(...this._repeat ? [this.params.length, 1] : [this.params.length, 0, undefined]);
+				return this._repeat ? this.validateArgs() : this.pushParam(undefined);
 			}
 
 			const { response } = this._currentUsage;
@@ -265,7 +263,6 @@ class TextPrompt {
 	 * @private
 	 */
 	pushParam(param) {
-		this._prompted = 0;
 		this.params.push(param);
 		return this.validateArgs();
 	}
@@ -323,7 +320,8 @@ class TextPrompt {
 		content = content.replace(TextPrompt.flagRegex, (match, fl, ...quote) => {
 			flags[fl] = (quote.slice(0, -2).find(el => el) || fl).replace(/\\/g, '');
 			return '';
-		}).replace(new RegExp(`(?:(\\s)\\s+|(${delim})(?:${delim})+)`, 'g'), '$1').trim();
+		});
+		if (delim) content = content.replace(TextPrompt.delims.get(delim) || TextPrompt.generateNewDelim(delim), '$1').trim();
 		return { content, flags };
 	}
 
@@ -336,7 +334,7 @@ class TextPrompt {
 	 * @private
 	 */
 	static getArgs(content, delim) {
-		const args = content.replace(new RegExp(`(${delim})(?:${delim})+`, 'g'), '$1').split(delim !== '' ? delim : undefined);
+		const args = content.split(delim !== '' ? delim : undefined);
 		return args.length === 1 && args[0] === '' ? [] : args;
 	}
 
@@ -375,7 +373,29 @@ class TextPrompt {
 		return args.length === 1 && args[0] === '' ? [] : args;
 	}
 
+	/**
+	 * Generate a new delimiter's RegExp and cache it
+	 * @since 0.5.0
+	 * @param {string} delim The delimiter
+	 * @returns {RegExp}
+	 * @private
+	 */
+	static generateNewDelim(delim) {
+		const regex = new RegExp(`(${delim})(?:${delim})+`, 'g');
+		TextPrompt.delims.set(delim, regex);
+		return regex;
+	}
+
 }
+
+/**
+ * Map of RegExps caching usageDelim's RegExps.
+ * @since 0.5.0
+ * @type {Map<string, RegExp>}
+ * @static
+ * @private
+ */
+TextPrompt.delims = new Map();
 
 /**
  * Regular Expression to match flags with quoted string support.
