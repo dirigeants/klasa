@@ -39,7 +39,8 @@ exports.DEFAULTS = {
 			users: {},
 			clientStorage: {}
 		},
-		production: false,
+		// eslint-disable-next-line no-process-env
+		production: process.env.NODE_ENV === 'production',
 		providers: { default: 'json' },
 		pieceDefaults: {
 			commands: {

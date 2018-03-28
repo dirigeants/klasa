@@ -53,7 +53,7 @@ class KlasaClient extends Discord.Client {
 	 * @property {KlasaPieceDefaults} [pieceDefaults={}] Overrides the defaults for all pieces
 	 * @property {string} [prefix] The default prefix the bot should respond to
 	 * @property {boolean} [preserveConfigs=true] Whether the bot should preserve (non-default) configs when removed from a guild
-	 * @property {boolean} [production=false] Whether the bot should handle unhandled promise rejections automatically (handles when false)
+	 * @property {boolean} [production=false] Whether the bot should handle unhandled promise rejections automatically (handles when false) (also can be configured with process.env.NODE_ENV)
 	 * @property {KlasaProvidersOptions} [providers] The provider options
 	 * @property {(string|Function)} [readyMessage=`Successfully initialized. Ready to serve ${this.guilds.size} guilds.`] readyMessage to be passed throughout Klasa's ready event
 	 * @property {RegExp} [regexPrefix] The regular expression prefix if one is provided
