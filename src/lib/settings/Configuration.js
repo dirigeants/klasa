@@ -206,8 +206,8 @@ class Configuration {
 	update(keys, values, guild, options) {
 		// Overload update(object, GuildResolvable);
 		if (isObject(keys)) {
-			[keys, values] = objectToTuples(keys);
 			[guild, options] = [values, guild];
+			[keys, values] = objectToTuples(keys);
 		} else if (typeof keys === 'string') {
 			// Overload update(string|string[], any|any[], ...any[]);
 			keys = [keys];
