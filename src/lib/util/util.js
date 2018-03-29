@@ -244,14 +244,15 @@ class Util {
 	 * @since 0.5.0
 	 * @param {Object<string, *>} object The object to convert
 	 * @param {{ keys: string[], values: any[] }} [entries={}] The initial entries
+	 * @param {string} [prefix=''] The prefix for the key
 	 * @returns {Array<Array<*>>}
 	 */
-	static objectToTuples(object, { keys = [], values = [] } = {}) {
+	static objectToTuples(object, { keys = [], values = [] } = {}, prefix = '') {
 		for (const key of Object.keys(object)) {
 			if (Util.isObject(object[key])) {
-				Util.objectToTuples(object[key], { keys, values });
+				Util.objectToTuples(object[key], { keys, values }, `${prefix}${key}.`);
 			} else {
-				keys.push(key);
+				keys.push(`${prefix}${key}`);
 				values.push(object[key]);
 			}
 		}

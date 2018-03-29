@@ -1268,14 +1268,14 @@ declare module 'klasa' {
 	}
 
 	export class Type {
-		public constructor(value: any, parent: ?type);
+		public constructor(value: any, parent?: Type);
 
 		public value: any;
 		public is: string;
 
-		private parent: ?Type;
-		private childKeys: Map;
-		private childValues: Map;
+		private parent?: Type;
+		private childKeys: Map<string, Type>;
+		private childValues: Map<string, Type>;
 
 		private readonly childTypes: string;
 
@@ -1289,7 +1289,7 @@ declare module 'klasa' {
 
 		public static resolve(value: any): string;
 
-		private static list(values: Map): string;
+		private static list(values: Map<string, Type>): string;
 	}
 
 	class Util {
@@ -1307,7 +1307,7 @@ declare module 'klasa' {
 		public static isThenable(input: Promise<any>): boolean;
 		public static objectToTuples(obj: ObjectLiteral<any>, entries?: { keys: string[], values: any[] }): [string[], any[]];
 		public static makeObject(path: string, value: any, obj?: object): object;
-		public static arrayFromObject<T = any>(obj: ObjectLiteral<T>, prefix?: string): Array<string, T>;
+		public static arrayFromObject<T = any>(obj: ObjectLiteral<T>, prefix?: string): Array<T>;
 		public static arraysEqual(arr1: any[], arr2: any[], clone?: boolean): boolean;
 		public static mergeDefault(def: object, given?: object): object;
 		public static mergeObjects(objTarget: object, objSource: object): object;
