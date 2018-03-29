@@ -119,7 +119,7 @@ class SchemaFolder extends Schema {
 		if (this.gateway.sql) {
 			if (piece.type !== 'Folder' || piece.keyArray.length) {
 				await this.gateway.provider.addColumn(this.gateway.type, piece.type === 'Folder' ?
-					piece.getSQL() : [piece.sql]);
+					piece.sqlSchema : [piece.path, piece.sql]);
 			}
 		} else if (force || (this.gateway.type === 'clientStorage' && this.client.shard)) {
 			await this.force('add', key, piece);
@@ -148,7 +148,7 @@ class SchemaFolder extends Schema {
 		if (this.gateway.sql) {
 			if (piece.type !== 'Folder' || (piece.type === 'Folder' && piece.keyArray.length)) {
 				await this.gateway.provider.removeColumn(this.gateway.type, piece.type === 'Folder' ?
-					[...piece.keys(true)] : key);
+					[...piece.keys(true)] : [key]);
 			}
 		} else if (force || (this.gateway.type === 'clientStorage' && this.client.shard)) {
 			// If force, or if the gateway is clientStorage, it should update all entries
@@ -222,17 +222,15 @@ class SchemaFolder extends Schema {
 	}
 
 	/**
-	 * Get all the SQL schemas from this schema's children.
+	 * Get all SQL datatypes from this SchemaFolder's children.
 	 * @since 0.5.0
-	 * @param {string[]} [array=[]] The array to push.
-	 * @returns {string[]}
+	 * @type {Array<Array<string>>}
+	 * @readonly
 	 */
-	getSQL(array = []) {
-		for (const key of this.keyArray) {
-			if (this[key].type === 'Folder') this[key].getSQL(array);
-			else array.push(this[key].sql);
-		}
-		return array;
+	get sqlSchema() {
+		const schema = [];
+		for (const piece of this.schema.values(true)) schema.push([piece.path, piece.sql]);
+		return schema;
 	}
 
 	/**

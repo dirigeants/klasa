@@ -232,6 +232,18 @@ class Util {
 		return object;
 	}
 
+	static objectToTuples(object, { keys = [], values = [] } = {}) {
+		for (const key of Object.keys(object)) {
+			if (Util.isObject(object[key])) {
+				Util.objectToTuples(object[key], { keys, values });
+			} else {
+				keys.push(key);
+				values.push(object[key]);
+			}
+		}
+		return [keys, values];
+	}
+
 	/**
 	 * Compare if both arrays are equal
 	 * @param {any[]} arr1 The first array to compare
