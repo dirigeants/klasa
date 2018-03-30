@@ -30,7 +30,7 @@ Following suit from Komada (the Croatian word for "pieces"), Klasa is the Croati
 - Full OOP and hot-reloadable pieces.
 - Full personalizable configuration system that can serve for much more than just guilds.
 - Incredibly fast loading (~100ms) with deep loading for commands.
-- Per-command cooldowns with budget support and easy to configure.
+- Per-command cooldowns with bucket support and easy to configure.
 - Many different pieces and standalone utils to help you build the bot of your dreams!
     - Commands: The most basic piece, they run when somebody types the prefix and the command name or any of its aliases.
     - Events: Hot-reloadable structures for events, with internal error handling.
