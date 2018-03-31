@@ -512,12 +512,10 @@ class Configuration {
 	_patch(data) {
 		if (this.gateway.sql) data = this.gateway.parseEntry(data);
 		const { schema } = this.gateway;
-		for (let i = 0; i < schema.keyArray.length; i++) {
-			const key = schema.keyArray[i];
-			if (typeof data[key] === 'undefined') continue;
-			this[key] = schema[key].type === 'Folder' ?
-				Configuration._patch(this[key], data[key], schema[key]) :
-				data[key];
+		for (const [key, piece] of schema) {
+			const value = data[key];
+			if (value === undefined || value === null) continue;
+			this[key] = piece.type === 'Folder' ? Configuration._patch(this[key], value, piece) : value;
 		}
 	}
 
