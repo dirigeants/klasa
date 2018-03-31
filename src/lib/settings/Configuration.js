@@ -594,10 +594,9 @@ class Configuration {
 	 */
 	static _patch(inst, data, schema) {
 		for (const [key, piece] of schema) {
-			if (typeof data[key] === 'undefined') continue;
-			inst[key] = piece.type === 'Folder' ?
-				Configuration._patch(inst[key], data[key], piece) :
-				data[key];
+			const value = data[key];
+			if (value === undefined || value === null) continue;
+			inst[key] = piece.type === 'Folder' ? Configuration._patch(inst[key], value, piece) : value;
 		}
 
 		return inst;
