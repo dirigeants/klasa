@@ -35,7 +35,6 @@ new Client({
 | Name                       | Default                   | Type               | Description                                                                         |
 | -------------------------- | ------------------------- | ------------------ | ----------------------------------------------------------------------------------- |
 | **clientBaseDir**          | see below¹                | string             | The directory where all piece folders can be found                                  |
-| **cmdDeleting**            | `false`                   | boolean            | Whether the bot should delete responses if the command is deleted                   |
 | **cmdEditing**             | `false`                   | boolean            | Whether the bot should update responses if the command is edited                    |
 | **cmdLogging**             | `false`                   | boolean            | Whether the bot should log command usage                                            |
 | **cmdPrompt**              | `false`                   | boolean            | Whether the bot should prompt missing parameters                                    |
