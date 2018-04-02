@@ -11,7 +11,6 @@ exports.DEFAULTS = {
 
 	CLIENT: {
 		clientBaseDir: dirname(require.main.filename),
-		cmdDeleting: false,
 		cmdEditing: false,
 		cmdLogging: false,
 		commandMessageLifetime: 1800,
