@@ -402,7 +402,7 @@ class Configuration {
 		if (piece.array && !Array.isArray(value)) {
 			this._parseArraySingle(piece, route, parsedID, options, result);
 		} else if (this._setValueByPath(piece, parsedID).updated) {
-			result.updated.push({ data: [piece.path, parsedID], piece: piece });
+			result.updated.push({ data: [piece.path, parsedID], piece });
 		}
 	}
 
@@ -447,8 +447,8 @@ class Configuration {
 		const lengthErrors = errors.length;
 		const array = this._get(route, true);
 		if (typeof arrayPosition === 'number') {
-			if (arrayPosition >= array.length) throw new Error(`The option arrayPosition should be a number between 0 and ${array.length - 1}`);
-			array[arrayPosition] = parsedID;
+			if (arrayPosition >= array.length) errors.push(new Error(`The option arrayPosition should be a number between 0 and ${array.length - 1}`));
+			else array[arrayPosition] = parsedID;
 		} else {
 			if (action === 'auto') action = array.includes(parsedID) ? 'remove' : 'add';
 			if (action === 'add') {
@@ -460,7 +460,7 @@ class Configuration {
 				else array.splice(index, 1);
 			}
 		}
-		if (errors.length === lengthErrors) updated.push({ data: [piece.path, array], piece: piece });
+		if (errors.length === lengthErrors) updated.push({ data: [piece.path, array], piece });
 	}
 
 	/**
