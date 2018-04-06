@@ -1300,7 +1300,7 @@ declare module 'klasa' {
 	}
 
 	export class Type {
-		public constructor(value: any, parent?: ?type);
+		public constructor(value: any, parent?: Type);
 
 		public value: any;
 		public is: string;
