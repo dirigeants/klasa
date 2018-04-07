@@ -1152,7 +1152,7 @@ declare module 'klasa' {
 		private static _parse(pattern: string): number;
 	}
 
-	export class KlasaConsole implements Console {
+	export class KlasaConsole {
 		private constructor(client: KlasaClient, options: KlasaConsoleConfig);
 		public readonly client: KlasaClient;
 		public readonly stdout: NodeJS.WritableStream;
