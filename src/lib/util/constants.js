@@ -1,4 +1,3 @@
-const { dirname } = require('path');
 const { mergeDefault } = require('./util');
 
 const colorBase = {
@@ -10,7 +9,6 @@ const colorBase = {
 exports.DEFAULTS = {
 
 	CLIENT: {
-		clientBaseDir: dirname(require.main.filename),
 		cmdEditing: false,
 		cmdLogging: false,
 		commandMessageLifetime: 1800,
