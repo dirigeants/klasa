@@ -125,7 +125,6 @@ class TextPrompt {
 		 * @type {Tag}
 		 * @private
 		 */
-
 		this._currentUsage = {};
 
 		/**
