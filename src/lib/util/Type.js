@@ -154,7 +154,7 @@ class Type {
 	/**
 	 * Joins the list of child types.
 	 * @since 0.5.0
-	 * @param {Map} values The values to list
+	 * @param {Map<string, Type>} values The values to list
 	 * @returns {string}
 	 * @private
 	 */

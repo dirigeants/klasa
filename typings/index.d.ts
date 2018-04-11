@@ -1298,7 +1298,7 @@ declare module 'klasa' {
 
 		public static resolve(value: any): string;
 
-		private static list(values: Map): string;
+		private static list(values: Map<string, Type>): string;
 	}
 
 	class Util {
