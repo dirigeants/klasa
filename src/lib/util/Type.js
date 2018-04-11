@@ -36,7 +36,7 @@ class Type {
 		/**
 		 * The child keys of this Type
 		 * @since 0.5.0
-		 * @type {Map}
+		 * @type {Map<string, Type>}
 		 * @private
 		 */
 		this.childKeys = new Map();
@@ -44,7 +44,7 @@ class Type {
 		/**
 		 * The child values of this Type
 		 * @since 0.5.0
-		 * @type {Map}
+		 * @type {Map<string, Type>}
 		 * @private
 		 */
 		this.childValues = new Map();

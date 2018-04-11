@@ -1282,9 +1282,9 @@ declare module 'klasa' {
 		public value: any;
 		public is: string;
 
-		private parent: ?Type;
-		private childKeys: Map;
-		private childValues: Map;
+		private parent: Type | null;
+		private childKeys: Map<string, Type>;
+		private childValues: Map<string, Type>;
 
 		private readonly childTypes: string;
 
