@@ -13,7 +13,6 @@ There are multiple options that configure the piece, they are:
 | default      | The default value for this key                                             |
 | max          | The maximum value for this key, only applies for string and numbers        |
 | min          | The minimum value for this key, only applies for string and numbers        |
-| sql          | The SQL datatype for this key                                              |
 | type         | The type for this key                                                      |
 
 > Check {@tutorial SettingGatewayKeyTypes} for the supported types and how to extend them.
@@ -28,7 +27,7 @@ The default option is one of the last options to default, **array** defaults to 
 - If **type** is boolean, default will be `false`.
 - In any other case, it will be `null`.
 
-After default, the sql type is calculated with a valid datatype. Keep in mind that it uses standard SQL types, but may work better for PostgreSQL. In any case, if you want to use a type that is very specific to your database, consider including this option.
+After default, the sql type is calculated with a valid datatype thanks to the providers' {@link QueryBuilder}s.
 
 ## Editing key options
 

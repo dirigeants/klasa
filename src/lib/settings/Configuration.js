@@ -1,4 +1,4 @@
-const { isObject, makeObject, deepClone, tryParse, getIdentifier, toTitleCase, arraysEqual, mergeObjects, getDeepTypeName } = require('../util/util');
+const { isObject, deepClone, tryParse, getIdentifier, toTitleCase, arraysEqual, getDeepTypeName } = require('../util/util');
 const SchemaFolder = require('./SchemaFolder');
 const SchemaPiece = require('./SchemaPiece');
 
@@ -349,21 +349,12 @@ class Configuration {
 	async _save({ updated }) {
 		if (!updated.length) return;
 		if (!this._existsInDB) {
-			await this.gateway.createEntry(this.id);
+			await this.gateway.get(this.id, true);
 			if (this.client.listenerCount('configCreateEntry')) this.client.emit('configCreateEntry', this);
 		}
 		const oldClone = this.client.listenerCount('configUpdateEntry') ? this.clone() : null;
 
-		if (this.gateway.sql) {
-			const keys = new Array(updated.length), values = new Array(updated.length);
-			for (let i = 0; i < updated.length; i++) [keys[i], values[i]] = updated[i].data;
-			await this.gateway.provider.update(this.gateway.type, this.id, keys, values);
-		} else {
-			const updateObject = {};
-			for (const entry of updated) mergeObjects(updateObject, makeObject(entry.data[0], entry.data[1]));
-			await this.gateway.provider.update(this.gateway.type, this.id, updateObject);
-		}
-
+		await this.gateway.provider.update(this.gateway.type, this.id, updated);
 		if (oldClone !== null) this.client.emit('configUpdateEntry', oldClone, this, updated);
 	}
 
@@ -505,7 +496,6 @@ class Configuration {
 	 * @private
 	 */
 	_patch(data) {
-		if (this.gateway.sql) data = this.gateway.parseEntry(data);
 		const { schema } = this.gateway;
 		for (let i = 0; i < schema.keyArray.length; i++) {
 			const key = schema.keyArray[i];

@@ -40,6 +40,7 @@ class PermissionLevels extends Collection {
 	 * @param {Function} check The permission checking function
 	 * @param {PermissionLevelOptions} [options={}] If the permission should auto fetch members
 	 * @returns {this}
+	 * @chainable
 	 */
 	add(level, check, options = {}) {
 		return this.set(level, { check, break: Boolean(options.break), fetch: Boolean(options.fetch) });
@@ -50,6 +51,7 @@ class PermissionLevels extends Collection {
 	 * @since 0.5.0
 	 * @param {number} level The permission number for the level you are removing
 	 * @returns {this}
+	 * @chainable
 	 */
 	remove(level) {
 		return this.set(level, empty);
@@ -61,6 +63,7 @@ class PermissionLevels extends Collection {
 	 * @param {number} level The permission number for the level you are defining
 	 * @param {PermissionLevelOptions|symbol} obj Whether the level should break (stop processing higher levels, and inhibit a no permission error)
 	 * @returns {this}
+	 * @chainable
 	 * @private
 	 */
 	set(level, obj) {

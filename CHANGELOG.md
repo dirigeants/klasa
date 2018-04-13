@@ -13,6 +13,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#228](https://github.com/dirigeants/klasa/pull/228)] Added the classes `QueryBuilder` and `QueryType` to abstract SQL queries from SettingGateway. (kyranet)
 - [[#213](https://github.com/dirigeants/klasa/pull/213)] Added `PermissionLevels#remove()`. (bdistin)
 - [[#210](https://github.com/dirigeants/klasa/pull/210)] Added `PermissionLevelsOptions.fetch` to autofetch uncached members. (bdistin)
 - [[#196](https://github.com/dirigeants/klasa/pull/196)] Added property of `ignoreEdits` in monitors for whether a monitor should run in edited messages. (bdistin)
@@ -98,6 +99,11 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#228](https://github.com/dirigeants/klasa/pull/228)] **[PERF]** Refactored `Util.isClass` and `Util.isObject` for a 5x performance jump. (kyranet)
+- [[#228](https://github.com/dirigeants/klasa/pull/228)] `Gateway#getEntry` -> `Gateway#get`. (kyranet)
+- [[#228](https://github.com/dirigeants/klasa/pull/228)] `SchemaPiece#sql` is now type of `string` instead of `[string, string]`. (kyranet)
+- [[#228](https://github.com/dirigeants/klasa/pull/228)] Refactored `GatewayDriver` for optimized and better readability. (kyranet)
+- [[#228](https://github.com/dirigeants/klasa/pull/228)] Improved performance in `Gateway#_ready()` by caching the structure instead of getting it for each entry. (kyranet)
 - [[#227](https://github.com/dirigeants/klasa/pull/227)] Rewritten the Colors class to be constructable following a design similar to Timestamp's. (bdistin)
 - [[#213](https://github.com/dirigeants/klasa/pull/213)] Converted the not-set empty object instance to a Symbol for checking empty entries in PermissionLevels. (bdistin)
 - [[#210](https://github.com/dirigeants/klasa/pull/210)] **[BREAKING]** Changed the level adding to a more consistent format with the rest of the library: replaced `addLevel` to `add` and moved the `break` boolean to `PermissionLevelOptions.break`, which is taken as third parameter. (bdistin)
@@ -162,6 +168,8 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Removed
 
+- [[#228](https://github.com/dirigeants/klasa/pull/228)] Removed `Gateway#insertEntry`, `Gateway#createEntry` and `Gateway#deleteEntry` in favor to the OOP paradigm. (kyranet)
+- [[#228](https://github.com/dirigeants/klasa/pull/228)] `Gateway#options` and `Gateway#defaultSchema` to improve RAM usage. (kyranet)
 - [[#210](https://github.com/dirigeants/klasa/pull/210)] Removed PermissionLevels#requiredLevels as it's unnecessary do to inherited size parameter. (bdistin)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] **[BREAKING]** Removed `SchemaFolder#addKey` and `SchemaFolder#addFolder` in favor to a more consistent `Schema#add`. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] **[BREAKING]** Removed `Configuration#resetConfiguration()`. (kyranet)
@@ -195,6 +203,9 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
+- [[#228](https://github.com/dirigeants/klasa/pull/228)] Fixed `Util.getDeepTypeSetOrArray` trying to get the type of a `WeakSet`. (kyranet)
+- [[#228](https://github.com/dirigeants/klasa/pull/228)] Fixed `Util.deepClone` trying to clone `WeakMap` and `WeakSet`, as they're not clonable, they're now removed. (kyranet)
+- [[#228](https://github.com/dirigeants/klasa/pull/228)] Several checks in GatewayDriver being done right after init, instead of in register. (kyranet)
 - [[#207](https://github.com/dirigeants/klasa/pull/207)] Fixed `Configuration#_parseSingle` not returning the modified array but the updated element. (kyranet)
 - [[#204](https://github.com/dirigeants/klasa/pull/204)] Fixed `Util.getIdentifier` nullifying numbers and booleans. (kyranet)
 - [[#203](https://github.com/dirigeants/klasa/pull/203)] Fixed `SettingResolver#integer` and `SettingResolver#float` not accepting `0` as input. (kyranet)

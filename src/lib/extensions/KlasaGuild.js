@@ -14,15 +14,16 @@ module.exports = Structures.extend('Guild', Guild => {
 			super(...args);
 
 			/**
-			 * The guild level configs for this context (guild || default)
+			 * The guild level configs for this context
 			 * @since 0.5.0
 			 * @type {Configuration}
 			 */
-			this.configs = this.client.gateways.guilds.cache.get(this.id) || this.client.gateways.guilds.insertEntry(this.id);
+			this.configs = this.client.gateways.guilds.get(this.id, true);
 		}
 
 		/**
 		 * The language configured for this guild
+		 * @since 0.2.1
 		 * @type {?Language}
 		 */
 		get language() {

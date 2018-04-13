@@ -71,8 +71,7 @@ class Schedule {
 				min: null,
 				max: null,
 				array: true,
-				configurable: false,
-				sql: 'TEXT'
+				configurable: false
 			});
 		}
 

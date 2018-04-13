@@ -145,7 +145,7 @@ class Piece {
 
 
 	/**
-	 * The init method to be optionally overwritten in actual commands
+	 * The init method to be optionally overwritten in actual pieces
 	 * @since 0.0.1
 	 * @returns {*}
 	 * @abstract
