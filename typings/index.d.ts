@@ -781,7 +781,7 @@ declare module 'klasa' {
 		public appliesTo: string[];
 		public target: boolean;
 
-		public extend(...params: any[]): any;
+		public extend: any;
 		public static extend(...params: any[]): any;
 		public toJSON(): PieceExtendableJSON;
 	}
