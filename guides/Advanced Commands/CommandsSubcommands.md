@@ -38,8 +38,8 @@ module.exports = class extends Command {
 		});
 	}
 
-	run(msg, [type, ...params]) {
-		return this[type](msg, params);
+	run(message, [type, ...params]) {
+		return this[type](message, params);
 	}
 
 	async get(message, params) {}
