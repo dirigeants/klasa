@@ -996,6 +996,7 @@ declare module 'klasa' {
 		public promptTime: number;
 		public promptLimit: number;
 		public quotedStringSupport: boolean;
+		public responses: Collection<string, KlasaMessage>;
 		private _repeat: boolean;
 		private _required: number;
 		private _prompted: number;
