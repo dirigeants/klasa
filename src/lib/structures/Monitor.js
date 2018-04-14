@@ -67,7 +67,7 @@ class Monitor extends Piece {
 	/**
 	 * The run method to be overwritten in actual monitor pieces
 	 * @since 0.0.1
-	 * @param {KlasaMessage} msg The discord message
+	 * @param {KlasaMessage} message The discord message
 	 * @returns {void}
 	 * @abstract
 	 */
