@@ -1300,7 +1300,7 @@ declare module 'klasa' {
 	}
 
 	export class Type {
-		public constructor(value: any, parent: ?type);
+		public constructor(value: any, parent?: Type);
 
 		public value: any;
 		public is: string;
@@ -1388,7 +1388,7 @@ declare module 'klasa' {
 	export type KlasaCustomPromptDefaults = {
 		promptLimit?: number;
 		promptTime?: number;
-		quotedStringSupport?: number;
+		quotedStringSupport?: boolean;
 	};
 
 	export type KlasaPieceDefaults = {
@@ -1711,7 +1711,7 @@ declare module 'klasa' {
 	export type TextPromptOptions = {
 		promptLimit?: number;
 		promptTime?: number;
-		quotedStringSupport?: number;
+		quotedStringSupport?: boolean;
 	};
 
 	// Util

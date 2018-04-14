@@ -29,6 +29,15 @@ module.exports = Structures.extend('Guild', Guild => {
 			return this.client.languages.get(this.configs.language) || null;
 		}
 
+		/**
+		 * Returns the JSON-compatible object of this instance.
+		 * @since 0.5.0
+		 * @returns {Object}
+		 */
+		toJSON() {
+			return { ...super.toJSON(), configs: this.configs };
+		}
+
 	}
 
 	return KlasaGuild;
