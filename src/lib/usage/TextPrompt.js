@@ -1,4 +1,5 @@
 const { mergeDefault } = require('../util/util');
+const { Collection } = require('discord.js');
 const quotes = ['"', "'", '“”', '‘’'];
 
 /**
@@ -125,6 +126,13 @@ class TextPrompt {
 		 * @private
 		 */
 		this._currentUsage = {};
+
+		/**
+		 * A cache of the users responses
+		 * @since 0.5.0
+		 * @type external:Collection
+		 */
+		this.responses = new Collection();
 	}
 
 	/**
@@ -135,6 +143,7 @@ class TextPrompt {
 	 */
 	async run(prompt) {
 		const message = await this.message.prompt(prompt, this.promptTime);
+		this.responses.set(message.id, message);
 		this._setup(message.content);
 		return this.validateArgs();
 	}
@@ -153,6 +162,8 @@ class TextPrompt {
 			this.message.language.get('MONITOR_COMMAND_HANDLER_REPROMPT', `<@!${this.message.author.id}>`, prompt, this.promptTime / 1000),
 			this.promptTime
 		);
+
+		this.responses.set(message.id, message);
 
 		if (message.content.toLowerCase() === 'abort') throw this.message.language.get('MONITOR_COMMAND_HANDLER_ABORTED');
 
@@ -179,6 +190,7 @@ class TextPrompt {
 				this.message.language.get('MONITOR_COMMAND_HANDLER_REPEATING_REPROMPT', `<@!${this.message.author.id}>`, this._currentUsage.possibles[0].name, this.promptTime / 1000),
 				this.promptTime
 			);
+			this.responses.set(message.id, message);
 		} catch (err) {
 			return this.validateArgs();
 		}
