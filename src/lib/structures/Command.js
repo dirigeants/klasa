@@ -266,8 +266,8 @@ class Command extends Piece {
 	 * this.customizeResponse('targetUser', 'You did not give me a user...');
 	 *
 	 * // Or also using functions to have multilingual support:
-	 * this.customizeResponse('targetUser', (msg) =>
-	 *     msg.language.get('COMMAND_REQUIRED_USER_FRIENDLY'));
+	 * this.customizeResponse('targetUser', (message) =>
+	 *     message.language.get('COMMAND_REQUIRED_USER_FRIENDLY'));
 	 */
 	customizeResponse(name, response) {
 		this.usage.customizeResponse(name, response);
