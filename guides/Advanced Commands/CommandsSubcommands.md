@@ -17,11 +17,11 @@ module.exports = class extends Command {
 		});
 	}
 
-	async get(msg, params) {}
-	async set(msg, params) {}
-	async remove(msg, params) {}
-	async reset(msg, params) {}
-	async list(msg, params) {}
+	async get(message, params) {}
+	async set(message, params) {}
+	async remove(message, params) {}
+	async reset(message, params) {}
+	async list(message, params) {}
 
 };
 ```
@@ -42,11 +42,11 @@ module.exports = class extends Command {
 		return this[type](msg, params);
 	}
 
-	async get(msg, params) {}
-	async set(msg, params) {}
-	async remove(msg, params) {}
-	async reset(msg, params) {}
-	async list(msg, params) {}
+	async get(message, params) {}
+	async set(message, params) {}
+	async remove(message, params) {}
+	async reset(message, params) {}
+	async list(message, params) {}
 
 };
 ```
