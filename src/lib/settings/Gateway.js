@@ -154,11 +154,12 @@ class Gateway extends GatewayStorage {
 
 		if (piece && schema.type === 'Folder') {
 			const keys = schema.configurableKeys;
-			if (!keys.length) {
-				if (errors) throw `This group is not configurable.`;
+			if (keys.length) {
+				if (errors) throw `Please, choose one of the following keys: '${keys.join('\', \'')}'`;
 				return null;
 			}
-			if (errors) throw `Please, choose one of the following keys: '${keys.join('\', \'')}'`;
+			if (errors) throw `This group is not configurable.`;
+			return null;
 		}
 
 		return { piece: schema, route: schema.path.split('.') };
