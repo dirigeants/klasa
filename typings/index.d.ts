@@ -1357,7 +1357,7 @@ declare module 'klasa' {
 	export type KlasaCustomPromptDefaults = {
 		promptLimit?: number;
 		promptTime?: number;
-		quotedStringSupport?: number;
+		quotedStringSupport?: boolean;
 	};
 
 	export type KlasaPieceDefaults = {
@@ -1680,7 +1680,7 @@ declare module 'klasa' {
 	export type TextPromptOptions = {
 		promptLimit?: number;
 		promptTime?: number;
-		quotedStringSupport?: number;
+		quotedStringSupport?: boolean;
 	};
 
 	// Util

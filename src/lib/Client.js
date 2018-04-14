@@ -39,7 +39,6 @@ class KlasaClient extends Discord.Client {
 
 	/**
 	 * @typedef {external:DiscordJSConfig} KlasaClientOptions
-	 * @property {string} [clientBaseDir=path.dirname(require.main.filename)] The directory where all piece folders can be found
 	 * @property {boolean} [cmdEditing=false] Whether the bot should update responses if the command is edited
 	 * @property {boolean} [cmdLogging=false] Whether the bot should log command usage
 	 * @property {number} [commandMessageLifetime=1800] The threshold for how old command messages can be before sweeping since the last edit in seconds
@@ -136,7 +135,7 @@ class KlasaClient extends Discord.Client {
 		 * @since 0.0.1
 		 * @type {string}
 		 */
-		this.clientBaseDir = config.clientBaseDir ? path.resolve(config.clientBaseDir) : path.dirname(require.main.filename);
+		this.clientBaseDir = path.dirname(require.main.filename);
 
 		/**
 		 * The console for this instance of klasa. You can disable timestamps, colors, and add writable streams as config options to configure this.

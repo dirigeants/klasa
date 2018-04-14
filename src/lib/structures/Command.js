@@ -24,8 +24,8 @@ class Command extends Piece {
 	 * @property {boolean} [guarded=false] If the command can be disabled on a guild level (does not effect global disable)
 	 * @property {boolean} [nsfw=false] If the command should only run in nsfw channels
 	 * @property {number} [permLevel=0] The required permission level to use the command
-	 * @property {boolean} [promptLimit=0] The number or attempts allowed for re-prompting an argument
-	 * @property {boolean} [promptTime=30000] The time allowed for re-prompting of this command
+	 * @property {number} [promptLimit=0] The number or attempts allowed for re-prompting an argument
+	 * @property {number} [promptTime=30000] The time allowed for re-prompting of this command
 	 * @property {boolean} [quotedStringSupport=false] Whether args for this command should not deliminated inside quotes
 	 * @property {string[]} [requiredConfigs=[]] The required guild configs to use this command
 	 * @property {string[]} [runIn=['text','dm','group']] What channel types the command should run in
