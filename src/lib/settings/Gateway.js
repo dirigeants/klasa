@@ -136,30 +136,26 @@ class Gateway extends GatewayStorage {
 
 		for (let i = 0; i < route.length; i++) {
 			const currKey = route[i];
-			if (typeof schema[currKey] === 'undefined' || !schema.has(currKey)) {
+			if (!schema.has(currKey)) {
 				if (errors) throw `The key ${route.slice(0, i + 1).join('.')} does not exist in the current schema.`;
 				return null;
 			}
 
-			if (schema[currKey].type === 'Folder') {
-				schema = schema[currKey];
-			} else if (piece) {
-				if (avoidUnconfigurable && !schema[currKey].configurable) {
-					if (errors) throw `The key ${schema[currKey].path} is not configurable in the current schema.`;
-					return null;
-				}
-				return { piece: schema[currKey], route: schema[currKey].path.split('.') };
-			}
+			schema = schema[currKey];
+
+			// There is no more to iterate if the current piece is not a SchemaFolder
+			if (schema.type !== 'Folder') break;
 		}
 
-		if (piece && schema.type === 'Folder') {
-			const keys = schema.configurableKeys;
-			if (keys.length) {
-				if (errors) throw `Please, choose one of the following keys: '${keys.join('\', \'')}'`;
-				return null;
-			}
-			if (errors) throw `This group is not configurable.`;
-			return null;
+		// The boolean check is to allow null to be passed (conf commands)
+		if (piece === true && schema.type === 'Folder') {
+			if (errors) return null;
+			const keys = avoidUnconfigurable ? schema.configurableKeys : [...schema.keys()];
+			throw keys.length ? `Please, choose one of the following keys: '${keys.join('\', \'')}'` : `This group is not configurable.`;
+		}
+
+		if (piece === false && schema.type !== 'Folder') {
+			schema = schema.parent;
 		}
 
 		return { piece: schema, route: schema.path.split('.') };

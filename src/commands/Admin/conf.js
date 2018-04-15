@@ -25,7 +25,7 @@ module.exports = class extends Command {
 	}
 
 	show(msg, [key]) {
-		const path = this.client.gateways.guilds.getPath(key, { avoidUnconfigurable: true, errors: false });
+		const path = this.client.gateways.guilds.getPath(key, { avoidUnconfigurable: true, errors: false, piece: null });
 		if (!path) return msg.sendMessage(msg.language.get('COMMAND_CONF_GET_NOEXT', key));
 		if (path.piece.type === 'Folder') {
 			return msg.sendMessage(msg.language.get('COMMAND_CONF_SERVER', key ? `: ${key.split('.').map(toTitleCase).join('/')}` : '',
