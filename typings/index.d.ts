@@ -706,7 +706,7 @@ declare module 'klasa' {
 //#region Pieces
 
 	export class Piece {
-		public constructor(client: KlasaClient, store: Store<string, Piece>, type: string, file: string | string[], core: boolean, options?: PieceOptions);
+		public constructor(client: KlasaClient, store: Store<string, Piece>, file: string | string[], core: boolean, options?: PieceOptions);
 		public readonly client: KlasaClient;
 		public readonly core: boolean;
 		public readonly type: string;
@@ -781,7 +781,7 @@ declare module 'klasa' {
 		public appliesTo: string[];
 		public target: boolean;
 
-		public extend(...params: any[]): any;
+		public extend: any;
 		public static extend(...params: any[]): any;
 		public toJSON(): PieceExtendableJSON;
 	}
@@ -1153,7 +1153,7 @@ declare module 'klasa' {
 		private static _parse(pattern: string): number;
 	}
 
-	export class KlasaConsole implements Console {
+	export class KlasaConsole {
 		private constructor(client: KlasaClient, options: KlasaConsoleConfig);
 		public readonly client: KlasaClient;
 		public readonly stdout: NodeJS.WritableStream;
@@ -1172,29 +1172,6 @@ declare module 'klasa' {
 		public debug(...data: any[]): void;
 		public verbose(...data: any[]): void;
 		public wtf(...data: any[]): void;
-
-		// Console methods
-		// tslint:disable-next-line
-		public Console: NodeJS.ConsoleConstructor;
-		public assert(test?: boolean, message?: string, ...optionalParameters: any[]): void;
-		public clear(): void;
-		public count(countTitle?: string): void;
-		public dir(value?: any, ...optionalParameters: any[]): void;
-		public dirxml(value?: any): void;
-		public exception(message?: string, ...optionalParameters: any[]): void;
-		public group(groupTitle?: string, ...optionalParameters: any[]): void;
-		public groupCollapsed(groupTitle?: string, ...optionalParameters: any[]): void;
-		public groupEnd(): void;
-		public info(message?: string, ...optionalParameters: any[]): void;
-		public msIsIndependentlyComposed(element: any): boolean;
-		public profile(reportName?: string): void;
-		public profileEnd(): void;
-		public select(element: any): void;
-		public table(...data: any[]): void;
-		public time(timerName?: string): void;
-		public timeEnd(timerName?: string): void;
-		public trace(message?: string, ...optionalParameters: any[]): void;
-		// End of Console methods
 
 		private static _flatten(data: any): string;
 	}
@@ -1306,9 +1283,9 @@ declare module 'klasa' {
 		public value: any;
 		public is: string;
 
-		private parent: ?Type;
-		private childKeys: Map;
-		private childValues: Map;
+		private parent?: Type;
+		private childKeys: Map<string, Type>;
+		private childValues: Map<string, Type>;
 
 		private readonly childTypes: string;
 
@@ -1322,7 +1299,7 @@ declare module 'klasa' {
 
 		public static resolve(value: any): string;
 
-		private static list(values: Map): string;
+		private static list(values: Map<string, Type>): string;
 	}
 
 	class Util {
