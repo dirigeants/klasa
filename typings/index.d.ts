@@ -779,7 +779,7 @@ declare module 'klasa' {
 		public appliesTo: string[];
 		public target: boolean;
 
-		public extend(...params: any[]): any;
+		public extend: any;
 		public static extend(...params: any[]): any;
 		public toJSON(): PieceExtendableJSON;
 	}
@@ -964,6 +964,7 @@ declare module 'klasa' {
 		public promptTime: number;
 		public promptLimit: number;
 		public quotedStringSupport: boolean;
+		public responses: Collection<string, KlasaMessage>;
 		private _repeat: boolean;
 		private _required: number;
 		private _prompted: number;
@@ -1120,7 +1121,7 @@ declare module 'klasa' {
 		private static _parse(pattern: string): number;
 	}
 
-	export class KlasaConsole implements Console {
+	export class KlasaConsole {
 		private constructor(client: KlasaClient, options: KlasaConsoleConfig);
 		public readonly client: KlasaClient;
 		public readonly stdout: NodeJS.WritableStream;
@@ -1139,29 +1140,6 @@ declare module 'klasa' {
 		public debug(...data: any[]): void;
 		public verbose(...data: any[]): void;
 		public wtf(...data: any[]): void;
-
-		// Console methods
-		// tslint:disable-next-line
-		public Console: NodeJS.ConsoleConstructor;
-		public assert(test?: boolean, message?: string, ...optionalParameters: any[]): void;
-		public clear(): void;
-		public count(countTitle?: string): void;
-		public dir(value?: any, ...optionalParameters: any[]): void;
-		public dirxml(value?: any): void;
-		public exception(message?: string, ...optionalParameters: any[]): void;
-		public group(groupTitle?: string, ...optionalParameters: any[]): void;
-		public groupCollapsed(groupTitle?: string, ...optionalParameters: any[]): void;
-		public groupEnd(): void;
-		public info(message?: string, ...optionalParameters: any[]): void;
-		public msIsIndependentlyComposed(element: any): boolean;
-		public profile(reportName?: string): void;
-		public profileEnd(): void;
-		public select(element: any): void;
-		public table(...data: any[]): void;
-		public time(timerName?: string): void;
-		public timeEnd(timerName?: string): void;
-		public trace(message?: string, ...optionalParameters: any[]): void;
-		// End of Console methods
 
 		private static _flatten(data: any): string;
 	}
