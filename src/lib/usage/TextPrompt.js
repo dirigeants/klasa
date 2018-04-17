@@ -9,8 +9,8 @@ class TextPrompt {
 
 	/**
 	 * @typedef {Object} TextPromptOptions
-	 * @property {number} [promptLimit=Infinity] The number of re-prompts before this TextPrompt gives up
-	 * @property {number} [promptTime=30000] The time-limit for re-prompting
+	 * @property {number} [limit=Infinity] The number of re-prompts before this TextPrompt gives up
+	 * @property {number} [time=30000] The time-limit for re-prompting
 	 * @property {boolean} [quotedStringSupport=false] Whether this prompt should respect quoted strings
 	 */
 
@@ -79,14 +79,14 @@ class TextPrompt {
 		 * @since 0.5.0
 		 * @type {number}
 		 */
-		this.promptTime = options.promptTime;
+		this.time = options.time;
 
 		/**
 		 * The number of re-prompts before this TextPrompt gives up
 		 * @since 0.5.0
 		 * @type {number}
 		 */
-		this.promptLimit = options.promptLimit;
+		this.limit = options.limit;
 
 		/**
 		 * Whether this prompt should respect quoted strings
@@ -142,7 +142,7 @@ class TextPrompt {
 	 * @returns {any[]} The parameters resolved
 	 */
 	async run(prompt) {
-		const message = await this.message.prompt(prompt, this.promptTime);
+		const message = await this.message.prompt(prompt, this.time);
 		this.responses.set(message.id, message);
 		this._setup(message.content);
 		return this.validateArgs();
@@ -159,8 +159,8 @@ class TextPrompt {
 		this._prompted++;
 		if (this.typing) this.message.channel.stopTyping();
 		const message = await this.message.prompt(
-			this.message.language.get('MONITOR_COMMAND_HANDLER_REPROMPT', `<@!${this.message.author.id}>`, prompt, this.promptTime / 1000),
-			this.promptTime
+			this.message.language.get('MONITOR_COMMAND_HANDLER_REPROMPT', `<@!${this.message.author.id}>`, prompt, this.time / 1000),
+			this.time
 		);
 
 		this.responses.set(message.id, message);
@@ -187,8 +187,8 @@ class TextPrompt {
 
 		try {
 			message = await this.message.prompt(
-				this.message.language.get('MONITOR_COMMAND_HANDLER_REPEATING_REPROMPT', `<@!${this.message.author.id}>`, this._currentUsage.possibles[0].name, this.promptTime / 1000),
-				this.promptTime
+				this.message.language.get('MONITOR_COMMAND_HANDLER_REPEATING_REPROMPT', `<@!${this.message.author.id}>`, this._currentUsage.possibles[0].name, this.time / 1000),
+				this.time
 			);
 			this.responses.set(message.id, message);
 		} catch (err) {
@@ -288,7 +288,7 @@ class TextPrompt {
 	 */
 	async handleError(err) {
 		this.args.splice(this.params.length, 1, null);
-		if (this.promptLimit && this._prompted < this.promptLimit) return this.reprompt(err);
+		if (this.limit && this._prompted < this.limit) return this.reprompt(err);
 		throw err;
 	}
 

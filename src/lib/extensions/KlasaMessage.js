@@ -265,8 +265,8 @@ module.exports = Structures.extend('Message', Message => {
 			this.prefixLength = prefixLength;
 			this.prompter = this.command.usage.createPrompt(this, {
 				quotedStringSupport: this.command.quotedStringSupport,
-				promptTime: this.command.promptTime,
-				promptLimit: this.command.promptLimit
+				time: this.command.promptTime,
+				limit: this.command.promptLimit
 			});
 			this.client.emit('commandRun', this, this.command, this.args);
 		}

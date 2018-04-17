@@ -101,8 +101,8 @@ class KlasaClient extends Discord.Client {
 
 	/**
 	 * @typedef {Object} KlasaCustomPromptDefaults
-	 * @property {number} [promptLimit=Infinity] The number of re-prompts before custom prompt gives up
-	 * @property {number} [promptTime=30000] The time-limit for re-prompting custom prompts
+	 * @property {number} [limit=Infinity] The number of re-prompts before custom prompt gives up
+	 * @property {number} [time=30000] The time-limit for re-prompting custom prompts
 	 * @property {boolean} [quotedStringSupport=false] Whether the custom prompt should respect quoted strings
 	 */
 

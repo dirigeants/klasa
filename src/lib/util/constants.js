@@ -27,8 +27,8 @@ exports.DEFAULTS = {
 		readyMessage: (client) => `Successfully initialized. Ready to serve ${client.guilds.size} guild${client.guilds.size === 1 ? '' : 's'}.`,
 		typing: false,
 		customPromptDefaults: {
-			promptTime: 30000,
-			promptLimit: Infinity,
+			time: 30000,
+			limit: Infinity,
 			quotedStringSupport: false
 		},
 		gateways: {
