@@ -39,8 +39,8 @@ class KlasaClient extends Discord.Client {
 
 	/**
 	 * @typedef {external:DiscordJSConfig} KlasaClientOptions
-	 * @property {boolean} [cmdEditing=false] Whether the bot should update responses if the command is edited
-	 * @property {boolean} [cmdLogging=false] Whether the bot should log command usage
+	 * @property {boolean} [commandEditing=false] Whether the bot should update responses if the command is edited
+	 * @property {boolean} [commandLogging=false] Whether the bot should log command usage
 	 * @property {number} [commandMessageLifetime=1800] The threshold for how old command messages can be before sweeping since the last edit in seconds
 	 * @property {KlasaConsoleConfig} [console={}] Config options to pass to the client console
 	 * @property {KlasaConsoleEvents} [consoleEvents={}] Config options to pass to the client console
@@ -371,10 +371,10 @@ class KlasaClient extends Discord.Client {
 	 */
 	registerPiece(pieceName, store) {
 		// eslint-disable-next-line func-names
-		ArgResolver.prototype[pieceName] = async function (arg, possible, msg) {
+		ArgResolver.prototype[pieceName] = async function (arg, possible, message) {
 			const piece = store.get(arg);
 			if (piece) return piece;
-			throw (msg ? msg.language : this.language).get('RESOLVER_INVALID_PIECE', possible.name, pieceName);
+			throw (message ? message.language : this.language).get('RESOLVER_INVALID_PIECE', possible.name, pieceName);
 		};
 		return this;
 	}
@@ -476,10 +476,10 @@ class KlasaClient extends Discord.Client {
  */
 KlasaClient.defaultPermissionLevels = new PermissionLevels()
 	.add(0, () => true)
-	.add(6, (client, msg) => msg.guild && msg.member.permissions.has('MANAGE_GUILD'), { fetch: true })
-	.add(7, (client, msg) => msg.guild && msg.member === msg.guild.owner, { fetch: true })
-	.add(9, (client, msg) => msg.author === client.owner, { break: true })
-	.add(10, (client, msg) => msg.author === client.owner);
+	.add(6, (client, message) => message.guild && message.member.permissions.has('MANAGE_GUILD'), { fetch: true })
+	.add(7, (client, message) => message.guild && message.member === message.guild.owner, { fetch: true })
+	.add(9, (client, message) => message.author === client.owner, { break: true })
+	.add(10, (client, message) => message.author === client.owner);
 
 
 /**

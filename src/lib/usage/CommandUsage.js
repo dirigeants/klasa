@@ -42,23 +42,23 @@ class CommandUsage extends Usage {
 	/**
 	 * Creates a CommandPrompt instance to collect and resolve arguments with
 	 * @since 0.5.0
-	 * @param {KlasaMessage} msg The message context from the prompt
+	 * @param {KlasaMessage} message The message context from the prompt
 	 * @param {TextPromptOptions} options The options for the prompt
 	 * @returns {CommandPrompt}
 	 */
-	createPrompt(msg, options = {}) {
-		return new CommandPrompt(msg, this, options);
+	createPrompt(message, options = {}) {
+		return new CommandPrompt(message, this, options);
 	}
 
 	/**
 	 * Creates a full usage string including prefix and commands/aliases for documentation/help purposes
 	 * @since 0.0.1
-	 * @param {KlasaMessage} msg The message context for which to generate usage for
+	 * @param {KlasaMessage} message The message context for which to generate usage for
 	 * @returns {string}
 	 */
-	fullUsage(msg) {
-		let { prefix } = msg.guildConfigs;
-		if (Array.isArray(prefix)) prefix = prefix.find(pre => msg.prefix.test(pre)) || prefix[0];
+	fullUsage(message) {
+		let { prefix } = message.guildConfigs;
+		if (Array.isArray(prefix)) prefix = prefix.find(pre => message.prefix.test(pre)) || prefix[0];
 		return `${prefix.length !== 1 ? `${prefix} ` : prefix}${this.nearlyFullUsage}`;
 	}
 

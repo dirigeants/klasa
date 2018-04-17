@@ -98,16 +98,16 @@ class PermissionLevels extends Collection {
 	/**
 	 * Runs the defined permLevels
 	 * @since 0.2.1
-	 * @param {KlasaMessage} msg The message to pass to perm level functions
+	 * @param {KlasaMessage} message The message to pass to perm level functions
 	 * @param {number} min The minimum permissionLevel ok to pass
 	 * @returns {PermissionLevelsData}
 	 */
-	async run(msg, min) {
+	async run(message, min) {
 		for (let i = min; i < this.size; i++) {
 			const level = this.get(i);
 			if (level === empty) continue;
-			if (level.fetch && !msg.member && msg.guild) await msg.guild.members.fetch(msg.author);
-			const res = await level.check(msg.client, msg);
+			if (level.fetch && !message.member && message.guild) await message.guild.members.fetch(message.author);
+			const res = await level.check(message.client, message);
 			if (res) return { broke: false, permission: true };
 			if (level.break) return { broke: true, permission: false };
 		}

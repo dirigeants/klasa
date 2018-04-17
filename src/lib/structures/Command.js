@@ -20,7 +20,7 @@ class Command extends Piece {
 	 * @property {number} [cooldown=0] The amount of time before the user can run the command again in seconds
 	 * @property {boolean} [deletable=false] If the responses should be deleted if the triggering message is deleted
 	 * @property {(string|Function)} [description=''] The help description for the command
-	 * @property {(string|Function)} [extendedHelp=msg.language.get('COMMAND_HELP_NO_EXTENDED')] Extended help strings
+	 * @property {(string|Function)} [extendedHelp=message.language.get('COMMAND_HELP_NO_EXTENDED')] Extended help strings
 	 * @property {boolean} [guarded=false] If the command can be disabled on a guild level (does not effect global disable)
 	 * @property {boolean} [nsfw=false] If the command should only run in nsfw channels
 	 * @property {number} [permLevel=0] The required permission level to use the command
@@ -90,7 +90,7 @@ class Command extends Piece {
 		 * The description of the command
 		 * @since 0.0.1
 		 * @type {(string|Function)}
-		 * @param {KlasaMessage} msg The message used to trigger this command
+		 * @param {KlasaMessage} message The message used to trigger this command
 		 * @returns {string}
 		 */
 		this.description = options.description;
@@ -99,10 +99,10 @@ class Command extends Piece {
 		 * The extended help for the command
 		 * @since 0.0.1
 		 * @type {(string|Function)}
-		 * @param {KlasaMessage} msg The message used to trigger this command
+		 * @param {KlasaMessage} message The message used to trigger this command
 		 * @returns {string}
 		 */
-		this.extendedHelp = options.extendedHelp || (msg => msg.language.get('COMMAND_HELP_NO_EXTENDED'));
+		this.extendedHelp = options.extendedHelp || (message => message.language.get('COMMAND_HELP_NO_EXTENDED'));
 
 		/**
 		 * The full category for the command

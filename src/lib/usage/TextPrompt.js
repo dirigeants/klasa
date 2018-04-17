@@ -16,12 +16,12 @@ class TextPrompt {
 
 	/**
 	 * @since 0.5.0
-	 * @param {KlasaMessage} msg The message this prompt is for
+	 * @param {KlasaMessage} message The message this prompt is for
 	 * @param {Usage} usage The usage for this prompt
 	 * @param {TextPromptOptions} options The options of this prompt
 	 */
-	constructor(msg, usage, options) {
-		options = mergeDefault(msg.client.options.customPromptDefaults, options);
+	constructor(message, usage, options) {
+		options = mergeDefault(message.client.options.customPromptDefaults, options);
 
 		/**
 		 * The client this TextPrompt was created with
@@ -30,14 +30,14 @@ class TextPrompt {
 		 * @type {KlasaClient}
 		 * @readonly
 		 */
-		Object.defineProperty(this, 'client', { value: msg.client });
+		Object.defineProperty(this, 'client', { value: message.client });
 
 		/**
 		 * The message this prompt is for
 		 * @since 0.5.0
 		 * @type {KlasaMessage}
 		 */
-		this.message = msg;
+		this.message = message;
 
 		/**
 		 * The usage for this prompt

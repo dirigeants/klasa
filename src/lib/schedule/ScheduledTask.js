@@ -125,7 +125,7 @@ class ScheduledTask {
 		if (!this.task || !this.task.enabled) return this;
 		try {
 			this.task.disable();
-			await this.task.run({ id: this.id, ...(this.data || {}) });
+			await this.task.run({ id: this.id, ...this.data || {} });
 			this.task.enable();
 		} catch (err) {
 			this.client.emit('taskError', this, this.task, err);

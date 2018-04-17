@@ -9,8 +9,8 @@ const colorBase = {
 exports.DEFAULTS = {
 
 	CLIENT: {
-		cmdEditing: false,
-		cmdLogging: false,
+		commandEditing: false,
+		commandLogging: false,
 		commandMessageLifetime: 1800,
 		console: {},
 		consoleEvents: {
