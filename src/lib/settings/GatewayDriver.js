@@ -1,5 +1,6 @@
 const SettingResolver = require('../parsers/SettingResolver');
 const Gateway = require('./Gateway');
+const util = require('../util/util');
 
 /**
  * <warning>GatewayDriver is a singleton, use {@link KlasaClient#gateways} instead.</warning>
@@ -141,6 +142,16 @@ class GatewayDriver {
 	}
 
 	/**
+	 * The data schema Klasa uses for user configs.
+	 * @since 0.5.0
+	 * @readonly
+	 * @type {GatewayDriverGuildsSchema}
+	 */
+	get usersSchema() {
+		return {};
+	}
+
+	/**
 	 * The data schema Klasa uses for client-wide configs.
 	 * @since 0.5.0
 	 * @readonly
@@ -186,7 +197,7 @@ class GatewayDriver {
 	 */
 	register(name, defaultSchema = {}, { download = true, provider = this.client.options.providers.default } = {}) {
 		if (typeof name !== 'string') throw new TypeError('You must pass a name for your new gateway and it must be a string.');
-		if (!this.client.methods.util.isObject(defaultSchema)) throw new TypeError('Schema must be a valid object or left undefined for an empty object.');
+		if (!util.isObject(defaultSchema)) throw new TypeError('Schema must be a valid object or left undefined for an empty object.');
 		if (this.name !== undefined && this.name !== null) throw new Error(`The key '${name}' is either taken by another Gateway or reserved for GatewayDriver's functionality.`);
 		if (!this.ready) {
 			if (this._queue.has(name)) throw new Error(`There is already a Gateway with the name '${name}' in the queue.`);

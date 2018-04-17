@@ -101,13 +101,12 @@ class Gateway extends GatewayStorage {
 	/**
 	 * Sync either all entries from the cache with the persistent database, or a single one.
 	 * @since 0.0.1
-	 * @param {(Object|string)} [input] An object containing a id property, like discord.js objects, or a string
-	 * @param {boolean} [download] Whether the sync should download data from the database
+	 * @param {(Object|string|boolean)} [input=false] An object containing a id property, like discord.js objects, or a string
 	 * @returns {?Configuration}
 	 */
-	async sync(input, download) {
-		if (typeof input === 'undefined') {
-			if (download) await this._download();
+	async sync(input = false) {
+		if (typeof input === 'boolean') {
+			if (input) await this._download();
 			else await Promise.all(this.cache.map(entry => entry.sync()));
 			return null;
 		}
@@ -224,10 +223,10 @@ class Gateway extends GatewayStorage {
 	_resolveGuild(guild) {
 		if (typeof guild === 'object') {
 			if (guild instanceof Guild) return guild;
-			if (guild instanceof GuildChannel ||
-				guild instanceof Message ||
-				guild instanceof Role ||
-				guild instanceof GuildMember) return guild.guild;
+			if ((guild instanceof GuildChannel) ||
+				(guild instanceof Message) ||
+				(guild instanceof Role) ||
+				(guild instanceof GuildMember)) return guild.guild;
 		}
 		if (typeof guild === 'string' && /^\d{17,19}$/.test(guild)) return this.client.guilds.get(guild);
 		return null;

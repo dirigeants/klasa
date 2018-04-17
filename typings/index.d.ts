@@ -561,7 +561,8 @@ declare module 'klasa' {
 		public readonly cache: Collection<string, Configuration>;
 
 		public get(input: string | number, create?: boolean): Configuration;
-		public sync(input?: object | string, download?: boolean): Promise<any>;
+		public sync(input?: object | string): Promise<Configuration>;
+		public sync(download: boolean): Promise<null>;
 		public getPath(key?: string, options?: GatewayGetPathOptions): GatewayGetPathResult | null;
 
 		public init(options: { download?: boolean, defaultSchema?: object }): Promise<void>;
@@ -589,6 +590,8 @@ declare module 'klasa' {
 			disableNaturalPrefix: SchemaPieceJSON,
 			disabledCommands: SchemaPieceJSON
 		};
+
+		public readonly guildsSchema: {};
 
 		public readonly clientStorageSchema: {
 			userBlacklist: SchemaPieceJSON,
