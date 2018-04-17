@@ -993,8 +993,8 @@ declare module 'klasa' {
 		public flags: object;
 		public args: string[];
 		public params: any[];
-		public promptTime: number;
-		public promptLimit: number;
+		public time: number;
+		public limit: number;
 		public quotedStringSupport: boolean;
 		public responses: Collection<string, KlasaMessage>;
 		private _repeat: boolean;
@@ -1364,8 +1364,8 @@ declare module 'klasa' {
 	};
 
 	export type KlasaCustomPromptDefaults = {
-		promptLimit?: number;
-		promptTime?: number;
+		limit?: number;
+		time?: number;
 		quotedStringSupport?: boolean;
 	};
 
@@ -1687,8 +1687,8 @@ declare module 'klasa' {
 
 	// Usage
 	export type TextPromptOptions = {
-		promptLimit?: number;
-		promptTime?: number;
+		limit?: number;
+		time?: number;
 		quotedStringSupport?: boolean;
 	};
 
@@ -1883,13 +1883,12 @@ declare module 'klasa' {
 			providers: ProviderOptions
 		};
 		preserveConfigs: true;
-		promptTime: 30000;
 		provider: {};
 		readyMessage: (client: KlasaClient) => string;
 		typing: false;
 		customPromptDefaults: {
-			promptTime: 30000,
-			promptLimit: number,
+			time: 30000,
+			limit: number,
 			quotedStringSupport: false
 		};
 	};

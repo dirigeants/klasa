@@ -52,7 +52,7 @@ module.exports = class extends Extendable {
 
 How does the new extendable or custom argument work?
 
-1. Let's consider arg is `<:klasa:354702113147846666>`. The result of `exec`uting `REGEX_EMOJI` on that string gives an array-like object: `['<:klasa:354702113147846666>', '354702113147846666', index: 0, input: '<:klasa:354702113147846666>']`.
+1. Let's consider arg is `<:klasa:354702113147846666>`. The result of `exec`ing `REGEX_EMOJI` on that string gives an array-like object: `['<:klasa:354702113147846666>', '354702113147846666', index: 0, input: '<:klasa:354702113147846666>']`.
 1. There are cases the argument does not match, in that case, `results` would be `null`. So we verify its existence and get the first grouping match: `(\d{17,19})`, which gets the **id** of the emoji, and as we see in the result, it is in the second index: `'354702113147846666'`, and we get the emoji with said id.
 1. If `results` was null, `emoji` would be `null` too due to the ternary condition, but there is also the possibility of emoji being undefined: when the client does not have the Emoji instance cached or is in a guild the bot is not in. The case is, **if the emoji is valid and found, we should return it**.
 1. If the emoji was valid and found, we do not run the two next steps, 4 and 5. The fourth line of code inside `extend` handles optional arguments: if it's optional and it's not a repeating tag, it should not throw, but return null.
