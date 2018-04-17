@@ -53,7 +53,7 @@ This finalizer applies the cooldown from the commands' `Command.cooldown` (if ex
 ### commandlogging
 
 This finalizer, unlike commandCooldown, it's only run if the property `commandLogging` of
-your Klasa's client configs is set to `true`. It prints in the cmd prompt the command run, where,
+your Klasa's client configs is set to `true`. It prints in the command prompt the command run, where,
 the user who ran it, and the time it took to process the command.
 
 ## Further Reading:

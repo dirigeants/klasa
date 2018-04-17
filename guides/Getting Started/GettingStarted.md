@@ -24,7 +24,7 @@ const { Client } = require('klasa');
 new Client({
 	fetchAllMembers: false,
 	prefix: '+',
-	cmdEditing: true,
+	commandEditing: true,
 	typing: true,
 	readyMessage: (client) => `Successfully initialized. Ready to serve ${client.guilds.size} guilds.`
 }).login('your-bot-token');
@@ -34,8 +34,8 @@ new Client({
 
 | Name                       | Default                   | Type               | Description                                                                         |
 | -------------------------- | ------------------------- | ------------------ | ----------------------------------------------------------------------------------- |
-| **cmdEditing**             | `false`                   | boolean            | Whether the bot should update responses if the command is edited                    |
-| **cmdLogging**             | `false`                   | boolean            | Whether the bot should log command usage                                            |
+| **commandEditing**             | `false`                   | boolean            | Whether the bot should update responses if the command is edited                    |
+| **commandLogging**             | `false`                   | boolean            | Whether the bot should log command usage                                            |
 | **commandMessageLifetime** | `1800`                    | number             | The threshold for when command messages should be sweeped in seconds since last edit |
 | **ignoreBots**             | `true`                    | boolean            | Whether or not this bot should ignore other bots                                    |
 | **ignoreSelf**             | `client.user.bot`         | boolean            | Whether or not this bot should ignore itself (true for bots, false for selfbots)    |

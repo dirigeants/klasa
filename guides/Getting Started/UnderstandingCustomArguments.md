@@ -26,7 +26,7 @@ Each method in {@link ArgResolver} takes 3 parameters:
 | ---------------- | -------------------- | -------------------------------------- |
 | **arg**          | string               | The parameter given to parse           |
 | **possible**     | {@link Possible}     | The Possible instance that is running  |
-| **msg**          | {@link KlasaMessage} | The message that triggered the command |
+| **message**          | {@link KlasaMessage} | The message that triggered the command |
 
 ```javascript
 const { Extendable } = require('klasa');
@@ -38,11 +38,11 @@ module.exports = class extends Extendable {
 		super(...args, { appliesTo: ['ArgResolver'], klasa: true });
 	}
 
-	async extend(arg, possible, msg) {
+	async extend(arg, possible, message) {
 		const results = REGEX_EMOJI.exec(arg);
 		const emoji = results ? this.client.emojis.get(results[1]) : null;
 		if (emoji) return emoji;
-		throw (msg ? msg.language : this.client.languages.default).get('RESOLVER_INVALID_EMOJI', possible.name);
+		throw (message ? message.language : this.client.languages.default).get('RESOLVER_INVALID_EMOJI', possible.name);
 	}
 
 };
@@ -72,8 +72,8 @@ module.exports = class extends Command {
 		});
 	}
 
-	run(msg, [emoji]) {
-		return msg.sendMessage(`The name of the emoji ${emoji} is: ${emoji.name}`);
+	run(message, [emoji]) {
+		return message.sendMessage(`The name of the emoji ${emoji} is: ${emoji.name}`);
 	}
 
 };

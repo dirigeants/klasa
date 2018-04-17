@@ -24,7 +24,7 @@ module.exports = class extends Command {
 		});
 	}
 
-	async run(msg, [...params]) {
+	async run(message, [...params]) {
 		// This is where you place the code you want to run for your command
 	}
 
