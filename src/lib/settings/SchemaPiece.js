@@ -224,8 +224,6 @@ class SchemaPiece extends Schema {
 			throw new TypeError(`[DEFAULT] ${this} - Default key must be a boolean if the key stores a boolean.`);
 		} else if (options.type === 'string' && typeof options.default !== 'string' && options.default !== null) {
 			throw new TypeError(`[DEFAULT] ${this} - Default key must be either a string or null if the key stores a string.`);
-		} else if (options.type !== 'any' && typeof options.default === 'object' && options.default !== null) {
-			throw new TypeError(`[DEFAULT] ${this} - Default key must not be type of object unless it is type any or null.`);
 		}
 	}
 
@@ -297,6 +295,7 @@ class SchemaPiece extends Schema {
 		this._schemaCheckArray(this.array);
 		this._schemaCheckLimits(this.min, this.max);
 		this._schemaCheckConfigurable(this.configurable);
+		this._schemaCheckDefault(this);
 		this.sql = this._generateSQLDatatype(options.sql);
 
 		return true;
