@@ -13,6 +13,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#256](https://github.com/dirigeants/klasa/pull/256)] Added `Util.objectToTuples` for object overload -> array overload in `Configuration#update`. (kyranet)
 - [[#213](https://github.com/dirigeants/klasa/pull/213)] Added `PermissionLevels#remove()`. (bdistin)
 - [[#210](https://github.com/dirigeants/klasa/pull/210)] Added `PermissionLevelsOptions.fetch` to autofetch uncached members. (bdistin)
 - [[#196](https://github.com/dirigeants/klasa/pull/196)] Added property of `ignoreEdits` in monitors for whether a monitor should run in edited messages. (bdistin)
@@ -98,6 +99,19 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#256](https://github.com/dirigeants/klasa/pull/256)] **[BREAKING]** Modified all SettingResolvers to resolve to primitives (string, number, boolean...) or storable data. (kyranet)
+- [[#256](https://github.com/dirigeants/klasa/pull/256)] Added value array overload to `Configuration#update`. (kyranet)
+- [[#256](https://github.com/dirigeants/klasa/pull/256)] Changed `SchemaFolder#getSQL` to `SchemaFolder#sqlSchema`. (kyranet)
+- [[#256](https://github.com/dirigeants/klasa/pull/256)] Changed `SchemaPiece#sql`'s type from `[string, string]` to `string`. (kyranet)
+- [[#256](https://github.com/dirigeants/klasa/pull/256)] Changed ScheduledTask's default value for the property `data` from `null` to `{}`, allowing object spread to attach the id of the executed task in `Task#run`. (kyranet)
+- [[#256](https://github.com/dirigeants/klasa/pull/256)] Improved performance in `Configuration#update`. (kyranet)
+- [[#256](https://github.com/dirigeants/klasa/pull/256)] Refactored `Gateway#getPath` to take `piece: null` as an option for mixed output. (kyranet)
+- [[#256](https://github.com/dirigeants/klasa/pull/256)] Refactored `GatewayStorage` to not depend on being inherited. (kyranet)
+- [[#256](https://github.com/dirigeants/klasa/pull/256)] Refactored `Util.isClass` and `Util.isObject` for a ~5 times performance boost. (kyranet)
+- [[#256](https://github.com/dirigeants/klasa/pull/256)] Refactored `Util.makeObject` to take an object as third parameter, allowing SettingGateway's internals to append properties without `Object.assign`. (kyranet)
+- [[#256](https://github.com/dirigeants/klasa/pull/256)] Refactored several utils for memory performance. (kyranet)
+- [[#256](https://github.com/dirigeants/klasa/pull/256)] Refactored typings to have less code duplication. (kyranet)
+- [[#256](https://github.com/dirigeants/klasa/pull/256)] Unified `[p]conf list` and `[p]conf get` (and `[p]userconf`) subcommands to `[p]conf show`. (kyranet)
 - [[#227](https://github.com/dirigeants/klasa/pull/227)] Rewritten the Colors class to be constructable following a design similar to Timestamp's. (bdistin)
 - [[#213](https://github.com/dirigeants/klasa/pull/213)] Converted the not-set empty object instance to a Symbol for checking empty entries in PermissionLevels. (bdistin)
 - [[#210](https://github.com/dirigeants/klasa/pull/210)] **[BREAKING]** Changed the level adding to a more consistent format with the rest of the library: replaced `addLevel` to `add` and moved the `break` boolean to `PermissionLevelOptions.break`, which is taken as third parameter. (bdistin)
@@ -162,6 +176,9 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Removed
 
+- [[#256](https://github.com/dirigeants/klasa/pull/256)] Removed `Gateway#getEntry` (mixed getEntry and insertEntry into `Gateway#get`), `Gateway#createEntry`, and `Gateway#insertEntry`. (kyranet)
+- [[#256](https://github.com/dirigeants/klasa/pull/256)] Removed `Gateway#options` and `Gateway#defaultSchema`. (kyranet)
+- [[#256](https://github.com/dirigeants/klasa/pull/256)] Removed `Provider`'s nice option. As it was only used by the JSON provider. Should use a better system instead. (kyranet)
 - [[#210](https://github.com/dirigeants/klasa/pull/210)] Removed PermissionLevels#requiredLevels as it's unnecessary do to inherited size parameter. (bdistin)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] **[BREAKING]** Removed `SchemaFolder#addKey` and `SchemaFolder#addFolder` in favor to a more consistent `Schema#add`. (kyranet)
 - [[#179](https://github.com/dirigeants/klasa/pull/179)] **[BREAKING]** Removed `Configuration#resetConfiguration()`. (kyranet)
@@ -195,6 +212,10 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
+- [[#256](https://github.com/dirigeants/klasa/pull/256)] Fixed `Util.deepClone` trying to iterate over `WeakMap`s and `WeakSet`s. (kyranet)
+- [[#256](https://github.com/dirigeants/klasa/pull/256)] Fixed a critical sync issue where `Configuration#_syncStatus` resolved too early. (kyranet)
+- [[#256](https://github.com/dirigeants/klasa/pull/256)] Fixed many typings bugs. (kyranet)
+- [[#256](https://github.com/dirigeants/klasa/pull/256)] Fixed multiple bugs in `GatewayDriver#register` and improved performance. (kyranet)
 - [[#207](https://github.com/dirigeants/klasa/pull/207)] Fixed `Configuration#_parseSingle` not returning the modified array but the updated element. (kyranet)
 - [[#204](https://github.com/dirigeants/klasa/pull/204)] Fixed `Util.getIdentifier` nullifying numbers and booleans. (kyranet)
 - [[#203](https://github.com/dirigeants/klasa/pull/203)] Fixed `SettingResolver#integer` and `SettingResolver#float` not accepting `0` as input. (kyranet)
