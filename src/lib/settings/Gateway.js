@@ -146,21 +146,20 @@ class Gateway extends GatewayStorage {
 			if (schema.type !== 'Folder') break;
 		}
 
-		// The boolean check is to allow null to be passed (conf commands)
-		if (piece === true) {
-			// If this must resolve to a piece, but the path resolves to a folder, always throw
-			if (schema.type === 'Folder') {
+		if (schema.type === 'Folder') {
+			// If it's a Folder and a Piece is requested, throw
+			if (piece === true) {
 				if (!errors) return null;
 				const keys = avoidUnconfigurable ? schema.configurableKeys : [...schema.keys()];
 				throw keys.length ? `Please, choose one of the following keys: '${keys.join('\', \'')}'` : `This group is not configurable.`;
 			}
-			// Else it will always be a piece, if it is not configurable, throw
-			if (avoidUnconfigurable && !piece.configurable) {
-				if (!errors) return null;
-				throw `The key ${piece.path} is not configurable.`;
-			}
-		} else if (piece === false && schema.type !== 'Folder') {
+		} else if (piece === false) {
+			// Else it will always be a Piece, if a folder is requested, get parent
 			schema = schema.parent;
+		} else if (avoidUnconfigurable && !piece.configurable) {
+			// If the Piece is unconfigurable and avoidUnconfigurable is requested, throw
+			if (!errors) return null;
+			throw `The key ${piece.path} is not configurable.`;
 		}
 
 		return { piece: schema, route: schema.path.split('.') };
