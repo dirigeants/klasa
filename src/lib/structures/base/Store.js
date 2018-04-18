@@ -106,7 +106,7 @@ class Store extends Collection {
 	 */
 	async loadAll() {
 		this.clear();
-		await Store.walk(this, true);
+		if (!this.client.options.disabledCorePieces.includes(this.name)) await Store.walk(this, true);
 		await Store.walk(this);
 		return this.size;
 	}

@@ -21,6 +21,7 @@ exports.DEFAULTS = {
 			warn: true,
 			wtf: true
 		},
+		disabledCorePieces: [],
 		language: 'en-US',
 		prefix: '!',
 		preserveConfigs: true,
@@ -40,6 +41,10 @@ exports.DEFAULTS = {
 		production: process.env.NODE_ENV === 'production',
 		providers: { default: 'json' },
 		pieceDefaults: {
+			arguments: {
+				enabled: true,
+				aliases: []
+			},
 			commands: {
 				aliases: [],
 				autoAliases: true,

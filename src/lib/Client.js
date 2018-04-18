@@ -1,9 +1,6 @@
 const Discord = require('discord.js');
 const path = require('path');
 
-// lib/parsers
-const ArgResolver = require('./parsers/ArgResolver');
-
 // lib/permissions
 const PermissionLevels = require('./permissions/PermissionLevels');
 
@@ -14,6 +11,7 @@ const Schedule = require('./schedule/Schedule');
 const GatewayDriver = require('./settings/GatewayDriver');
 
 // lib/structures
+const ArgumentStore = require('./structures/ArgumentStore');
 const CommandStore = require('./structures/CommandStore');
 const EventStore = require('./structures/EventStore');
 const ExtendableStore = require('./structures/ExtendableStore');
@@ -45,6 +43,7 @@ class KlasaClient extends Discord.Client {
 	 * @property {KlasaConsoleConfig} [console={}] Config options to pass to the client console
 	 * @property {KlasaConsoleEvents} [consoleEvents={}] Config options to pass to the client console
 	 * @property {KlasaCustomPromptDefaults} [customPromptDefaults={}] The defaults for custom prompts
+	 * @property {string[]} [disabledCorePieces=[]] An array of disabled core piece types, e.g., ['commands', 'arguments']
 	 * @property {KlasaGatewaysOptions} [gateways={}] The options for each built-in gateway
 	 * @property {string} [language='en-US'] The default language Klasa should opt-in for the commands
 	 * @property {string} [ownerID] The discord user id for the user the bot should respect as the owner (gotten from Discord api if not provided)
@@ -145,11 +144,11 @@ class KlasaClient extends Discord.Client {
 		this.console = new KlasaConsole(this, this.options.console);
 
 		/**
-		 * The argument resolver
-		 * @since 0.0.1
-		 * @type {ArgResolver}
+		 * The cache where argument resolvers are stored
+		 * @since 0.5.0
+		 * @type {ArgumentStore}
 		 */
-		this.argResolver = new ArgResolver(this);
+		this.arguments = new ArgumentStore(this);
 
 		/**
 		 * The cache where commands are stored
@@ -284,8 +283,8 @@ class KlasaClient extends Discord.Client {
 			.registerStore(this.providers)
 			.registerStore(this.events)
 			.registerStore(this.extendables)
-			.registerStore(this.tasks);
-		// Core pieces already have ArgResolver entries for the purposes of documentation.
+			.registerStore(this.tasks)
+			.registerStore(this.arguments);
 
 		/**
 		 * The Schedule that runs the tasks
@@ -358,36 +357,6 @@ class KlasaClient extends Discord.Client {
 	 */
 	unregisterStore(storeName) {
 		this.pieceStores.delete(storeName);
-		return this;
-	}
-
-	/**
-	 * Registers a custom piece to the client
-	 * @since 0.3.0
-	 * @param {string} pieceName The name of the piece, if you want to register an arg resolver for this piece
-	 * @param {Store} store The store that pieces will be stored in
-	 * @returns {this}
-	 * @chainable
-	 */
-	registerPiece(pieceName, store) {
-		// eslint-disable-next-line func-names
-		ArgResolver.prototype[pieceName] = async function (arg, possible, msg) {
-			const piece = store.get(arg);
-			if (piece) return piece;
-			throw (msg ? msg.language : this.language).get('RESOLVER_INVALID_PIECE', possible.name, pieceName);
-		};
-		return this;
-	}
-
-	/**
-	 * Un-registers a custom piece from the client
-	 * @since 0.3.0
-	 * @param {string} pieceName The name of the piece
-	 * @returns {this}
-	 * @chainable
-	 */
-	unregisterPiece(pieceName) {
-		delete ArgResolver.prototype[pieceName];
 		return this;
 	}
 
