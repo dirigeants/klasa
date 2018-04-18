@@ -14,6 +14,7 @@ const { isClass } = require('../../util/util');
  * @see MonitorStore
  * @see ProviderStore
  * @see TaskStore
+ * @extends external:Collection
  */
 class Store extends Collection {
 
