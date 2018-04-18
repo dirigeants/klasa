@@ -129,7 +129,7 @@ class Gateway extends GatewayStorage {
 	 * @returns {?GatewayGetPathResult}
 	 */
 	getPath(key = '', { avoidUnconfigurable = false, piece: requestPiece = true, errors = true } = {}) {
-		if (key === '') return { piece: this.schema, route: [] };
+		if (key === '' || key === '.') return { piece: this.schema, route: [] };
 		const route = key.split('.');
 		let piece = this.schema;
 
