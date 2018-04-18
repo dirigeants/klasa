@@ -76,6 +76,18 @@ class SchemaFolder extends Schema {
 		}
 		return defaults;
 	}
+	
+	/**
+	 * Get all SQL datatypes from this SchemaFolder's children.
+	 * @since 0.5.0
+	 * @type {Array<Array<string>>}
+	 * @readonly
+	 */
+	get sqlSchema() {
+		const schema = [];
+		for (const piece of this.values(true)) schema.push([piece.path, piece.sql]);
+		return schema;
+	}
 
 	/**
 	 * Create a new nested folder.
@@ -219,18 +231,6 @@ class SchemaFolder extends Schema {
 			else data[key] = deepClone(this[key].default);
 		}
 		return data;
-	}
-
-	/**
-	 * Get all SQL datatypes from this SchemaFolder's children.
-	 * @since 0.5.0
-	 * @type {Array<Array<string>>}
-	 * @readonly
-	 */
-	get sqlSchema() {
-		const schema = [];
-		for (const piece of this.schema.values(true)) schema.push([piece.path, piece.sql]);
-		return schema;
 	}
 
 	/**
