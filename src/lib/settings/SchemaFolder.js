@@ -76,7 +76,7 @@ class SchemaFolder extends Schema {
 		}
 		return defaults;
 	}
-	
+
 	/**
 	 * Get all SQL datatypes from this SchemaFolder's children.
 	 * @since 0.5.0
