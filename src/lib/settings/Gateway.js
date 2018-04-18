@@ -128,41 +128,41 @@ class Gateway extends GatewayStorage {
 	 * @param {GatewayGetPathOptions} [options={}] Whether the Gateway should avoid configuring the selected key
 	 * @returns {?GatewayGetPathResult}
 	 */
-	getPath(key = '', { avoidUnconfigurable = false, piece = true, errors = true } = {}) {
+	getPath(key = '', { avoidUnconfigurable = false, piece: requestPiece = true, errors = true } = {}) {
 		if (key === '') return { piece: this.schema, route: [] };
 		const route = key.split('.');
-		let { schema } = this;
+		let piece = this.schema;
 
 		for (let i = 0; i < route.length; i++) {
 			const currKey = route[i];
-			if (!schema.has(currKey)) {
+			if (!piece.has(currKey)) {
 				if (!errors) return null;
 				throw `The key ${route.slice(0, i + 1).join('.')} does not exist in the current schema.`;
 			}
 
-			schema = schema[currKey];
+			piece = piece[currKey];
 
 			// There is no more to iterate if the current piece is not a SchemaFolder
-			if (schema.type !== 'Folder') break;
+			if (piece.type !== 'Folder') break;
 		}
 
-		if (schema.type === 'Folder') {
+		if (piece.type === 'Folder') {
 			// If it's a Folder and a Piece is requested, throw
-			if (piece === true) {
+			if (requestPiece === true) {
 				if (!errors) return null;
-				const keys = avoidUnconfigurable ? schema.configurableKeys : [...schema.keys()];
+				const keys = avoidUnconfigurable ? piece.configurableKeys : [...piece.keys()];
 				throw keys.length ? `Please, choose one of the following keys: '${keys.join('\', \'')}'` : `This group is not configurable.`;
 			}
-		} else if (piece === false) {
+		} else if (requestPiece === false) {
 			// Else it will always be a Piece, if a folder is requested, get parent
-			schema = schema.parent;
+			piece = piece.parent;
 		} else if (avoidUnconfigurable && !piece.configurable) {
 			// If the Piece is unconfigurable and avoidUnconfigurable is requested, throw
 			if (!errors) return null;
 			throw `The key ${piece.path} is not configurable.`;
 		}
 
-		return { piece: schema, route: schema.path.split('.') };
+		return { piece, route: piece.path.split('.') };
 	}
 
 	/**
