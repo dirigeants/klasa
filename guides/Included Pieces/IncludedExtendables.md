@@ -126,6 +126,7 @@ A shortcut to channel.send.
 
 ## Further Reading:
 
+- {@tutorial IncludedArguments}
 - {@tutorial IncludedCommands}
 - {@tutorial IncludedEvents}
 - {@tutorial IncludedFinalizers}

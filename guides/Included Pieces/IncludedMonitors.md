@@ -8,6 +8,7 @@ The command handler for Klasa.
 
 ## Further Reading:
 
+- {@tutorial IncludedArguments}
 - {@tutorial IncludedCommands}
 - {@tutorial IncludedEvents}
 - {@tutorial IncludedExtendables}
