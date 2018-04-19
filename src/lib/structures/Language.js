@@ -24,18 +24,16 @@ class Language extends Piece {
 	 */
 	get(term, ...args) {
 		if (!this.enabled && this !== this.store.default) return this.store.default.get(term, ...args);
+		const value = this.language[term];
 		/* eslint-disable new-cap */
-		if (!this.language[term]) {
-			if (this === this.store.default) return this.language.DEFAULT(term);
-			return [
-				`${this.language.DEFAULT(term)}`,
-				'',
-				`**${this.language.DEFAULT_LANGUAGE}:**`,
-				`${(args.length ? this.store.default.language[term](...args) : this.store.default.language[term]) || this.store.default.language.DEFAULT(term)}`
-			].join('\n');
+		switch (typeof value) {
+			case 'function': return value(...args);
+			case 'undefined':
+				if (this === this.store.default) return this.language.DEFAULT(term);
+				return `${this.language.DEFAULT(term)}\n\n**${this.language.DEFAULT_LANGUAGE}:**\n${this.store.default.get(term, ...args)}`;
+			default: return value;
 		}
 		/* eslint-enable new-cap */
-		return args.length ? this.language[term](...args) : this.language[term];
 	}
 
 	/**
