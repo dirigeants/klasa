@@ -3,6 +3,8 @@ const { exec } = require('child_process');
 const zws = String.fromCharCode(8203);
 const has = (ob, ke) => Object.prototype.hasOwnProperty.call(ob, ke);
 let sensitivePattern;
+const TOTITLECASE = /[A-Za-zÀ-ÖØ-öø-ÿ]\S*/g;
+const REGEXPESC = /[-/\\^$*+?.()|[\]{}]/g;
 
 /**
  * Contains static methods to be used throughout klasa
@@ -62,7 +64,7 @@ class Util {
 	 * @returns {string}
 	 */
 	static toTitleCase(str) {
-		return str.replace(/[A-Za-zÀ-ÖØ-öø-ÿ]\S*/g, (txt) => Util.titleCaseVariants[txt] || txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+		return str.replace(TOTITLECASE, (txt) => Util.titleCaseVariants[txt] || txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
 	}
 
 	/**
@@ -72,7 +74,7 @@ class Util {
 	 * @returns {string}
 	 */
 	static regExpEsc(str) {
-		return str.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
+		return str.replace(REGEXPESC, '\\$&');
 	}
 
 	/**
@@ -106,12 +108,12 @@ class Util {
 			for (const key in source) output[key] = Util.deepClone(source[key]);
 			return output;
 		}
-		if (source instanceof Map || source instanceof WeakMap) {
+		if (source instanceof Map) {
 			const output = new source.constructor();
 			for (const [key, value] of source.entries()) output.set(key, Util.deepClone(value));
 			return output;
 		}
-		if (source instanceof Set || source instanceof WeakSet) {
+		if (source instanceof Set) {
 			const output = new source.constructor();
 			for (const value of source.values()) output.add(Util.deepClone(value));
 			return output;
@@ -150,9 +152,8 @@ class Util {
 	 */
 	static isClass(input) {
 		return typeof input === 'function' &&
-			typeof input.constructor !== 'undefined' &&
-			typeof input.constructor.constructor.toString === 'function' &&
-			input.prototype.constructor.toString().substring(0, 5) === 'class';
+			typeof input.prototype === 'object' &&
+			input.toString().substring(0, 5) === 'class';
 	}
 
 	/**
@@ -162,7 +163,7 @@ class Util {
 	 * @returns {boolean}
 	 */
 	static isObject(input) {
-		return Object.prototype.toString.call(input) === '[object Object]';
+		return input && input.constructor === Object;
 	}
 
 	/**
@@ -219,17 +220,43 @@ class Util {
 	 * @since 0.5.0
 	 * @param {string} path The dotted path
 	 * @param {*} value The value
+	 * @param {Object<string, *>} [obj = {}] The object to edit
 	 * @returns {*}
 	 */
-	static makeObject(path, value) {
-		if (path.indexOf('.') === -1) return { [path]: value };
-		const object = {};
-		const route = path.split('.');
-		const lastKey = route.pop();
-		let reference = object;
-		for (const key of route) reference = reference[key] = {};
-		reference[lastKey] = value;
-		return object;
+	static makeObject(path, value, obj = {}) {
+		if (path.indexOf('.') === -1) {
+			obj[path] = value;
+		} else {
+			const route = path.split('.');
+			const lastKey = route.pop();
+			let reference = obj;
+			for (const key of route) {
+				if (!(key in reference)) reference[key] = {};
+				reference = reference[key];
+			}
+			reference[lastKey] = value;
+		}
+		return obj;
+	}
+
+	/**
+	 * Convert an object to a tuple
+	 * @since 0.5.0
+	 * @param {Object<string, *>} object The object to convert
+	 * @param {{ keys: string[], values: any[] }} [entries={}] The initial entries
+	 * @param {string} [prefix=''] The prefix for the key
+	 * @returns {Array<Array<*>>}
+	 */
+	static objectToTuples(object, { keys = [], values = [] } = {}, prefix = '') {
+		for (const key of Object.keys(object)) {
+			if (Util.isObject(object[key])) {
+				Util.objectToTuples(object[key], { keys, values }, `${prefix}${key}.`);
+			} else {
+				keys.push(`${prefix}${key}`);
+				values.push(object[key]);
+			}
+		}
+		return [keys, values];
 	}
 
 	/**

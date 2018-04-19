@@ -14,7 +14,7 @@ module.exports = class extends Event {
 		if (!this.client.options.ownerID) this.client.options.ownerID = this.client.user.bot ? this.client.application.owner.id : this.client.user.id;
 
 		// Client-wide settings
-		this.client.configs = this.client.gateways.clientStorage.cache.get(this.client.user.id) || this.client.gateways.clientStorage.insertEntry(this.client.user.id);
+		this.client.configs = this.client.gateways.clientStorage.get(this.client.user.id, true);
 		await this.client.configs.sync();
 
 		// Init all the pieces

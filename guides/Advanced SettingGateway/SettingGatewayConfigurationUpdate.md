@@ -8,6 +8,11 @@ Once we have our schema done with all the keys, folders and types needed, we may
 // to pass a GuildResolvable.
 message.guild.configs.update('roles.administrator', '339943234405007361', message.guild);
 
+// For retrocompatibility, the object overload is still available, however, this is much slower.
+// If you store objects literals in keys that do not take an array, this may break, prefer the
+// other overload or use nested SchemaPieces for full consistency.
+msg.guild.configs.update({ roles: { administrator: '339943234405007361' } }, msg.guild);
+
 // Updating an array
 // userBlacklist, as mentioned in another tutorial, it's a piece with an array of users. Using
 // the following code will add or remove it, depending on the existence of the key in the configuration.
@@ -19,12 +24,8 @@ message.guild.configs.update('userBlacklist', '272689325521502208', { action: 'a
 // Ensuring the function call removes (error if it doesn't exist)
 message.guild.configs.update('userBlacklist', '272689325521502208', { action: 'remove' });
 
-// Updating it with a json object
-// It's the same as the first code snippet. However, this pattern is slower.
-message.guild.configs.update({ roles: { administrator: '339943234405007361' } }, message.guild);
-
-// Updating multiple keys (only possible with json object)
-message.guild.configs.update({ prefix: 'k!', language: 'es-ES' });
+// Updating multiple keys
+message.guild.configs.update(['prefix', 'language'], ['k!', 'en-ES']);
 ```
 
 > **Note**: Some types require a Guild instance to work, for example, *channels*, *roles* and *members*.

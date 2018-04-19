@@ -7,13 +7,13 @@ module.exports = class extends Command {
 			guarded: true,
 			description: (message) => message.language.get('COMMAND_CONF_USER_DESCRIPTION'),
 			subcommands: true,
-			usage: '<get|set|remove|reset|list> (key:key) (value:value) [...]',
+			usage: '<set|show|remove|reset> (key:key) (value:value) [...]',
 			usageDelim: ' '
 		});
 
 		this
 			.createCustomResolver('key', (arg, possible, message, [action]) => {
-				if (action === 'list' || arg) return arg;
+				if (action === 'show' || arg) return arg;
 				throw message.language.get('COMMAND_CONF_NOKEY');
 			})
 			.createCustomResolver('value', (arg, possible, message, [action]) => {
@@ -22,9 +22,13 @@ module.exports = class extends Command {
 			});
 	}
 
-	get(message, [key]) {
-		const path = this.client.gateways.guilds.getPath(key, { avoidUnconfigurable: true, piece: true, errors: false });
+	show(message, [key]) {
+		const path = this.client.gateways.users.getPath(key, { avoidUnconfigurable: true, errors: false, piece: null });
 		if (!path) return message.sendMessage(message.language.get('COMMAND_CONF_GET_NOEXT', key));
+		if (path.piece.type === 'Folder') {
+			return msg.sendMessage(message.language.get('COMMAND_CONF_SERVER', key ? `: ${key.split('.').map(toTitleCase).join('/')}` : '',
+				codeBlock('asciidoc', message.guild.configs.list(message, path.piece))));
+		}
 		return message.sendMessage(message.language.get('COMMAND_CONF_GET', path.piece.path, message.guild.configs.resolveString(message, path.piece)));
 	}
 
@@ -47,12 +51,6 @@ module.exports = class extends Command {
 		if (errors.length) return message.sendMessage(errors[0]);
 		if (!updated.length) return message.sendMessage(message.language.get('COMMAND_CONF_NOCHANGE', key));
 		return message.sendMessage(message.language.get('COMMAND_CONF_RESET', key, message.author.configs.resolveString(message, updated[0].piece)));
-	}
-
-	list(message, [key]) {
-		const { piece } = this.client.gateways.users.getPath(key, { avoidUnconfigurable: true, piece: false });
-		return message.sendMessage(message.language.get('COMMAND_CONF_USER', key ? `: ${key.split('.').map(toTitleCase).join('/')}` : '',
-			codeBlock('asciidoc', message.author.configs.list(message, piece))));
 	}
 
 };

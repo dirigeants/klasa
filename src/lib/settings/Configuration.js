@@ -1,4 +1,4 @@
-const { isObject, makeObject, deepClone, tryParse, getIdentifier, toTitleCase, arraysEqual, mergeObjects, getDeepTypeName } = require('../util/util');
+const { isObject, makeObject, deepClone, tryParse, toTitleCase, arraysEqual, mergeObjects, getDeepTypeName, objectToTuples } = require('../util/util');
 const SchemaFolder = require('./SchemaFolder');
 const SchemaPiece = require('./SchemaPiece');
 
@@ -109,14 +109,8 @@ class Configuration {
 	 * @returns {this}
 	 */
 	async sync() {
-		this._syncStatus = this.gateway.provider.get(this.gateway.type, this.id);
-		this._syncStatus.then(() => { this._syncStatus = null; });
-		const data = await this._syncStatus.catch(() => null);
-		if (data) {
-			if (!this._existsInDB) this._existsInDB = true;
-			this._patch(data);
-		}
-		return this;
+		if (!this._syncStatus) this._syncStatus = this._sync();
+		return this._syncStatus;
 	}
 
 	/**
@@ -140,6 +134,7 @@ class Configuration {
 	 * @param {KlasaGuild} [guild] A KlasaGuild instance for multilingual support
 	 * @param {boolean} [avoidUnconfigurable] Whether the Gateway should avoid configuring the selected key
 	 * @returns {ConfigurationUpdateResult}
+	 * @example
 	 * // Reset all keys for this instance
 	 * Configuration#reset();
 	 *
@@ -173,8 +168,7 @@ class Configuration {
 					continue;
 				}
 				const newValue = value === null ? deepClone(path.piece.default) : value;
-				const { updated } = this._setValueByPath(path.piece, newValue);
-				if (updated) result.updated.push({ data: [path.piece.path, newValue], piece: path.piece });
+				if (this._setValueByPath(path.piece, newValue).updated) result.updated.push({ data: [path.piece.path, newValue], piece: path.piece });
 			}
 			if (result.updated.length) await this._save(result);
 			return result;
@@ -185,9 +179,9 @@ class Configuration {
 	/**
 	 * Update a value from an entry.
 	 * @since 0.5.0
-	 * @param {(string|Object)} key The key to modify
-	 * @param {*} [value] The value to parse and save
-	 * @param {GuildResolvable} [guild] A guild resolvable
+	 * @param {(string|Object)} keys The key to modify
+	 * @param {*} [values] The value to parse and save
+	 * @param {GuildResolvable} [guild=null] A guild resolvable
 	 * @param {ConfigurationUpdateOptions} [options={}] The options for the update
 	 * @returns {ConfigurationUpdateResult}
 	 * @example
@@ -209,40 +203,35 @@ class Configuration {
 	 * // Updating multiple keys (with arrays):
 	 * Configuration#update(['prefix', 'language'], ['k!', 'es-ES']);
 	 */
-	async update(key, ...args) {
-		if (isObject(key)) {
-			// Overload update(object, GuildResolvable);
-			return this._updateMany(key, args[0] ? this.gateway._resolveGuild(args[0]) : null);
-		}
-
-		// Overload update(string|string[], any|any[], ...any[]);
-		let value = args[0];
-		if (typeof key === 'string') {
-			key = [key];
-			value = [value];
+	update(keys, values, guild, options) {
+		// Overload update(object, GuildResolvable);
+		if (isObject(keys)) {
+			[guild, options] = [values, guild];
+			[keys, values] = objectToTuples(keys);
+		} else if (typeof keys === 'string') {
+			// Overload update(string|string[], any|any[], ...any[]);
+			keys = [keys];
+			values = [values];
+		} else if (!Array.isArray(keys)) {
+			throw new TypeError(`Invalid value. Expected object, string or Array<string>. Got: ${getDeepTypeName(keys)}`);
 		}
 
 		// Overload update(string|string[], any|any[], ConfigurationUpdateOptions);
 		// Overload update(string|string[], any|any[], GuildResolvable, ConfigurationUpdateOptions);
 		// If the third argument is undefined and the second is an object literal, swap the variables.
-		const [guild, options] = typeof args[2] === 'undefined' && args[1] && args[1].constructor.name === 'Object' ?
-			[undefined, args[1]] :
-			[args[1] ? this.gateway._resolveGuild(args[1]) : null, args[2]];
+		if (typeof options === 'undefined' && guild && guild.constructor.name === 'Object') [guild, options] = [null, guild];
+		if (guild) guild = this.gateway._resolveGuild(guild);
+		if (!options) options = {};
 
-		if (Array.isArray(key)) {
-			if (!Array.isArray(value) || key.length !== value.length) throw new Error(`Expected an array of ${key.length} entries. Got: ${value.length}.`);
+		// Do a length check on both keys and values before trying to update
+		if (keys.length !== values.length) throw new Error(`Expected an array of ${keys.length} entries. Got: ${values.length}.`);
 
-			// Create the result with all the promises to resolve
-			const result = { errors: [], updated: [] };
-			const mps = new Array(key.length);
-			for (let i = 0; i < key.length; i++) mps[i] = this._parseSingle(key[i], value[i], guild, options, result);
-			await Promise.all(mps);
-
-			// If at least one key updated, save it to the database
-			if (result.updated.length) await this._save(result);
-			return result;
-		}
-		throw new TypeError(`Invalid value. Expected object, string or Array<string>. Got: ${getDeepTypeName(key)}`);
+		const updateOptions = {
+			avoidUnconfigurable: 'avoidUnconfigurable' in options ? options.avoidUnconfigurable : false,
+			action: 'action' in options ? options.action : 'auto',
+			arrayPosition: 'arrayPosition' in options ? options.arrayPosition : null
+		};
+		return this._update(keys, values, guild, updateOptions);
 	}
 
 	/**
@@ -321,6 +310,22 @@ class Configuration {
 	}
 
 	/**
+	 * Sync the entry with the database
+	 * @since 0.5.0
+	 * @returns {this}
+	 */
+	async _sync() {
+		const data = await this.gateway.provider.get(this.gateway.type, this.id);
+		if (data) {
+			if (!this._existsInDB) this._existsInDB = true;
+			this._patch(data);
+		}
+
+		this._syncStatus = null;
+		return this;
+	}
+
+	/**
 	 * Get a value from the cache.
 	 * @since 0.5.0
 	 * @param {(string|string[])} route The route to get
@@ -341,6 +346,67 @@ class Configuration {
 	}
 
 	/**
+	 * Update this Configuration instance
+	 * @since 0.5.0
+	 * @param {string[]} keys The keys to update
+	 * @param {Array<*>} values The values to update
+	 * @param {?KlasaGuild} guild The KlasaGuild for context in SchemaPiece#parse
+	 * @param {ConfigurationUpdateOptions} options The parse options
+	 * @returns {ConfigurationUpdateResult}
+	 * @private
+	 */
+	async _update(keys, values, guild, options) {
+		const result = { errors: [], updated: [] };
+		const pathOptions = { piece: true, avoidUnconfigurable: options.avoidUnconfigurable, errors: false };
+		const promises = [];
+		for (let i = 0; i < keys.length; i++) {
+			const key = keys[i], value = values[i];
+			const path = this.gateway.getPath(key, pathOptions);
+			if (!path) {
+				result.errors.push(guild && guild.language ?
+					guild.language.get('COMMAND_CONF_GET_NOEXT', key) :
+					`The path ${key} does not exist in the current schema, or does not correspond to a piece.`);
+				continue;
+			}
+			if (!path.piece.array && Array.isArray(value)) {
+				result.errors.push(guild && guild.language ?
+					guild.language.get('SETTING_GATEWAY_KEY_NOT_ARRAY', key) :
+					`The path ${key} does not store multiple values.`);
+				continue;
+			}
+			promises.push(this._parse(value, guild, options, result, path));
+		}
+		if (promises.length) {
+			await Promise.all(promises);
+			await this._save(result);
+		}
+
+		return result;
+	}
+
+	/**
+	 * Parse a value
+	 * @since 0.5.0
+	 * @param {*} value The value to parse
+	 * @param {?KlasaGuild} guild The KlasaGuild for context in SchemaPiece#parse
+	 * @param {ConfigurationUpdateOptions} options The parse options
+	 * @param {ConfigurationUpdateResult} result The updated result
+	 * @param {GatewayGetPathResult} path The path result
+	 * @private
+	 */
+	async _parse(value, guild, options, result, { piece, route }) {
+		const parsedID = value !== null ?
+			await (Array.isArray(value) ? this._parseAll(piece, value, guild, result.errors) : piece.parse(value, guild)) :
+			deepClone(piece.default);
+
+		if (piece.array && !Array.isArray(value)) {
+			this._parseArraySingle(piece, route, parsedID, options, result);
+		} else if (this._setValueByPath(piece, parsedID).updated) {
+			result.updated.push({ data: [piece.path, parsedID], piece });
+		}
+	}
+
+	/**
 	 * Save the data to the database.
 	 * @since 0.5.0
 	 * @param {ConfigurationUpdateResult} result The data to save
@@ -349,7 +415,7 @@ class Configuration {
 	async _save({ updated }) {
 		if (!updated.length) return;
 		if (!this._existsInDB) {
-			await this.gateway.createEntry(this.id);
+			await this.gateway.provider.create(this.gateway.type, this.id);
 			if (this.client.listenerCount('configCreateEntry')) this.client.emit('configCreateEntry', this);
 		}
 		const oldClone = this.client.listenerCount('configUpdateEntry') ? this.clone() : null;
@@ -368,113 +434,52 @@ class Configuration {
 	}
 
 	/**
-	 * Update multiple keys given a JSON object.
+	 * Parse a single value for an array
 	 * @since 0.5.0
-	 * @param {Object} object A JSON object to iterate and parse
-	 * @param {GuildResolvable} [guild] A guild resolvable
-	 * @returns {ConfigurationUpdateResult}
+	 * @param {SchemaPiece} piece The SchemaPiece pointer that parses this entry
+	 * @param {string[]} route The path bits for property accessment
+	 * @param {*} parsedID The parsed value
+	 * @param {ConfigurationUpdateOptions} options The parse options
+	 * @param {ConfigurationUpdateResult} result The updated result
 	 * @private
 	 */
-	async _updateMany(object, guild) {
-		const result = { errors: [], updated: [], promises: [] };
-
-		this._parseUpdateMany(this, object, this.gateway.schema, guild, result);
-		await Promise.all(result.promises);
-		delete result.promises;
-
-		// If at least one key updated, save it to the database
-		if (result.updated.length) await this._save(result);
-		return result;
+	_parseArraySingle(piece, route, parsedID, { action, arrayPosition }, { updated, errors }) {
+		const lengthErrors = errors.length;
+		const array = this._get(route, true);
+		if (typeof arrayPosition === 'number') {
+			if (arrayPosition >= array.length) errors.push(new Error(`The option arrayPosition should be a number between 0 and ${array.length - 1}`));
+			else array[arrayPosition] = parsedID;
+		} else {
+			if (action === 'auto') action = array.includes(parsedID) ? 'remove' : 'add';
+			if (action === 'add') {
+				if (array.includes(parsedID)) errors.push(new Error(`The value ${parsedID} for the key ${piece.path} already exists.`));
+				else array.push(parsedID);
+			} else {
+				const index = array.indexOf(parsedID);
+				if (index === -1) errors.push(new Error(`The value ${parsedID} for the key ${piece.path} does not exist.`));
+				else array.splice(index, 1);
+			}
+		}
+		if (errors.length === lengthErrors) updated.push({ data: [piece.path, array], piece });
 	}
 
 	/**
-	 * Parse a single value
+	 * Parse all values from an array
 	 * @since 0.5.0
-	 * @param {string} key The key to update
-	 * @param {*} value The new value for the key
-	 * @param {?KlasaGuild} guild The Guild instance for key resolving
-	 * @param {ConfigurationUpdateOptions} options The options for parsing this value
-	 * @param {ConfigurationUpdateResult} list The list to update
+	 * @param {SchemaPiece} piece The SchemaPiece pointer that parses this entry
+	 * @param {Array<*>} values The values to parse
+	 * @param {?KlasaGuild} guild The KlasaGuild for context in SchemaPiece#parse
+	 * @param {Error[]} errors The Errors array
+	 * @returns {Array<number|string>}
 	 * @private
 	 */
-	async _parseSingle(key, value, guild, { avoidUnconfigurable = false, action = 'auto', arrayPosition = null } = {}, list) {
-		const path = this.gateway.getPath(key, { piece: true, avoidUnconfigurable, errors: false });
-		if (!path) {
-			list.errors.push(guild && guild.language ?
-				guild.language.get('COMMAND_CONF_GET_NOEXT', key) :
-				`The path ${key} does not exist in the current schema, or does not correspond to a piece.`);
-			return;
-		}
-		const { piece, route } = path;
-		let parsed, parsedID;
-		if (value === null) {
-			parsed = parsedID = deepClone(piece.default);
-		} else {
-			parsed = await piece.parse(value, guild);
-			parsedID = piece.type === 'any' ? parsed : getIdentifier(parsed);
-		}
+	async _parseAll(piece, values, guild, errors) {
+		const output = [];
+		await Promise.all(values.map(value => piece.parse(value, guild)
+			.then(parsed => output.push(parsed))
+			.catch(error => errors.push(error))));
 
-		if (piece.array) {
-			const array = this._get(route, true);
-			if (typeof arrayPosition === 'number') {
-				if (arrayPosition >= array.length) throw new Error(`The option arrayPosition should be a number between 0 and ${array.length - 1}`);
-				array[arrayPosition] = parsedID;
-			} else {
-				if (action === 'auto') action = array.includes(parsedID) ? 'remove' : 'add';
-				if (action === 'add') {
-					if (array.includes(parsedID)) throw `The value ${parsedID} for the key ${piece.path} already exists.`;
-					array.push(parsedID);
-				} else {
-					const index = array.indexOf(parsedID);
-					if (index === -1) throw `The value ${parsedID} for the key ${piece.path} does not exist.`;
-					array.splice(index, 1);
-				}
-			}
-			list.updated.push({ data: [piece.path, array], piece: piece });
-		} else {
-			const { updated } = this._setValueByPath(piece, parsedID);
-			if (updated) list.updated.push({ data: [piece.path, parsedID], piece: piece });
-		}
-	}
-
-	/**
-	 * Update many keys in a single query.
-	 * @since 0.5.0
-	 * @param {Object} cache The key target
-	 * @param {Object} object The key to edit
-	 * @param {SchemaFolder} schema The new value
-	 * @param {GuildResolvable} guild The guild to take
-	 * @param {ConfigurationUpdateResult} result The options
-	 * @private
-	 */
-	_parseUpdateMany(cache, object, schema, guild, result) {
-		for (const key of Object.keys(object)) {
-			if (!schema.has(key)) continue;
-			if (schema[key].type === 'Folder') {
-				// Check if it's a folder, and recursively iterate over it
-				this._parseUpdateMany(cache[key], object[key], schema[key], guild, result);
-			} else if (object[key] === null) {
-				// If the value is null, reset it
-				const defaultValue = deepClone(schema[key].default);
-				if (this._setValueByPath(schema[key], defaultValue).updated) {
-					result.updated.push({ data: [schema[key].path, defaultValue], piece: schema[key] });
-				}
-				// Throw an error if it's not array (nor type any) but an array was given
-			} else if (schema[key].array !== Array.isArray(object[key])) {
-				result.errors.push(new TypeError(schema[key].array ?
-					`${schema[key].path} expects an array as value.` :
-					`${schema[key].path} does not expect an array as value.`));
-			} else {
-				const getID = schema[key].type !== 'any' ? getIdentifier : entry => entry;
-				result.promises.push((schema[key].array ?
-					Promise.all(object[key].map(entry => schema[key].parse(entry, guild).then(getID))) :
-					schema[key].parse(object[key], guild)).then(parsed => {
-					if (this._setValueByPath(schema[key], parsed).updated) {
-						result.updated.push({ data: [schema[key].path, parsed], piece: schema[key] });
-					}
-				}).catch(error => { result.errors.push(error); }));
-			}
-		}
+		return output;
 	}
 
 	/**
@@ -507,12 +512,10 @@ class Configuration {
 	_patch(data) {
 		if (this.gateway.sql) data = this.gateway.parseEntry(data);
 		const { schema } = this.gateway;
-		for (let i = 0; i < schema.keyArray.length; i++) {
-			const key = schema.keyArray[i];
-			if (typeof data[key] === 'undefined') continue;
-			this[key] = schema[key].type === 'Folder' ?
-				Configuration._patch(this[key], data[key], schema[key]) :
-				data[key];
+		for (const [key, piece] of schema) {
+			const value = data[key];
+			if (value === undefined || value === null) continue;
+			this[key] = piece.type === 'Folder' ? Configuration._patch(this[key], value, piece) : value;
 		}
 	}
 
@@ -588,11 +591,10 @@ class Configuration {
 	 * @private
 	 */
 	static _patch(inst, data, schema) {
-		for (const key of schema.keys()) {
-			if (typeof data[key] === 'undefined') continue;
-			inst[key] = schema[key].type === 'Folder' ?
-				Configuration._patch(inst[key], data[key], schema[key]) :
-				data[key];
+		for (const [key, piece] of schema) {
+			const value = data[key];
+			if (value === undefined || value === null) continue;
+			inst[key] = piece.type === 'Folder' ? Configuration._patch(inst[key], value, piece) : value;
 		}
 
 		return inst;

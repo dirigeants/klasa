@@ -19,7 +19,7 @@ By default, there are several built-in types that the developer can use, and wit
 | **role**            | A {@link external:Role} instance or id            | Resolves a Role                                                                          |
 | **string**          | A {@link external:StringResolvable}               | Resolves a string                                                                        |
 | **textchannel**     | A {@link external:TextChannel} instance or id     | Resolves a TextChannel                                                                   |
-| **url**             | An URL resolvable                                 | Resolves a URL with Node.js' URL parser                                                  |
+| **url**             | A URL resolvable                                  | Resolves a URL with Node.js' URL parser                                                  |
 | **user**            | A {@link KlasaUser} instance or id                | Resolves a KlasaUser (which extends User)                                                |
 | **voicechannel**    | A {@link external:VoiceChannel} instance or id    | Resolves a VoiceChannel                                                                  |
 
@@ -33,7 +33,8 @@ const { Extendable } = require('klasa');
 module.exports = class extends Extendable {
 
 	constructor(...args) {
-		super(...args, ['SettingResolver'], {
+		super(...args, {
+			appliesTo: ['SettingResolver'],
 			name: 'typeName',
 			klasa: true
 		});
@@ -57,7 +58,9 @@ module.exports = class extends Extendable {
 };
 ```
 
-> **Note**: If a type does not load, you can add the type name to {@link GatewayDriver#types}, but it must be before the {@link SchemaPiece}s init as they check if the type is included in that Set.
+**All settings resolvers must resolve values into primitives or storable plain objects, otherwise, the provider may have issues with storing the value.**
+
+> **Note**: If a type does not load, you can add the type name to {@link GatewayDriver#types}, but it must be before the {@link SchemaPiece}s init as they check if the type is included in said Set.
 
 ## Further Reading:
 
