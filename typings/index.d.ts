@@ -732,7 +732,7 @@ declare module 'klasa' {
 		public readonly usageDelim: string;
 		public readonly usageString: string;
 		public aliases: string[];
-		public botPerms: string[];
+		public requiredPermissions: string[];
 		public bucket: number;
 		public cooldown: number;
 		public deletable: boolean;
@@ -1565,7 +1565,7 @@ declare module 'klasa' {
 	export type CommandOptions = {
 		aliases?: string[];
 		autoAliases?: boolean;
-		botPerms?: string[];
+		requiredPermissions?: string[];
 		bucket?: number;
 		cooldown?: number;
 		deletable?: boolean;
@@ -1626,7 +1626,7 @@ declare module 'klasa' {
 
 	export type PieceCommandJSON = {
 		aliases: string[];
-		botPerms: string[];
+		requiredPermissions: string[];
 		bucket: number;
 		category: string;
 		cooldown: number;

@@ -5,7 +5,7 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			aliases: ['l'],
-			permLevel: 10,
+			permissionLevel: 10,
 			guarded: true,
 			description: (message) => message.language.get('COMMAND_LOAD_DESCRIPTION'),
 			usage: '[core] <Store:store> <path:string>',

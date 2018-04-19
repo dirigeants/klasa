@@ -4,7 +4,7 @@ module.exports = class extends Command {
 
 	constructor(...args) {
 		super(...args, {
-			permLevel: 10,
+			permissionLevel: 10,
 			guarded: true,
 			description: (message) => message.language.get('COMMAND_DISABLE_DESCRIPTION'),
 			usage: '<Piece:piece>'

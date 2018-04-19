@@ -310,7 +310,7 @@ class KlasaClient extends Discord.Client {
 	 */
 	get invite() {
 		if (!this.user.bot) throw 'Why would you need an invite link for a selfbot...';
-		const permissions = Discord.Permissions.resolve(this.commands.reduce((a, b) => a.add(b.botPerms), new Discord.Permissions(['VIEW_CHANNEL', 'SEND_MESSAGES'])));
+		const permissions = Discord.Permissions.resolve(this.commands.reduce((a, b) => a.add(b.requiredPermissions), new Discord.Permissions(['VIEW_CHANNEL', 'SEND_MESSAGES'])));
 		return `https://discordapp.com/oauth2/authorize?client_id=${this.application.id}&permissions=${permissions}&scope=bot`;
 	}
 
@@ -331,10 +331,10 @@ class KlasaClient extends Discord.Client {
 	 * @private
 	 */
 	validatePermissionLevels() {
-		const permLevels = this.options.permissionLevels || KlasaClient.defaultPermissionLevels;
-		if (!(permLevels instanceof PermissionLevels)) throw new Error('permissionLevels must be an instance of the PermissionLevels class');
-		if (permLevels.isValid()) return permLevels;
-		throw new Error(permLevels.debug());
+		const permissionLevels = this.options.permissionLevels || KlasaClient.defaultPermissionLevels;
+		if (!(permissionLevels instanceof PermissionLevels)) throw new Error('permissionLevels must be an instance of the PermissionLevels class');
+		if (permissionLevels.isValid()) return permissionLevels;
+		throw new Error(permissionLevels.debug());
 	}
 
 	/**

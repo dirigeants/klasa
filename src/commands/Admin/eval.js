@@ -6,7 +6,7 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			aliases: ['ev'],
-			permLevel: 10,
+			permissionLevel: 10,
 			guarded: true,
 			description: (message) => message.language.get('COMMAND_EVAL_DESCRIPTION'),
 			extendedHelp: (message) => message.language.get('COMMAND_EVAL_EXTENDEDHELP'),

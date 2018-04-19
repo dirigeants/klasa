@@ -5,7 +5,7 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			aliases: ['r'],
-			permLevel: 10,
+			permissionLevel: 10,
 			guarded: true,
 			description: (message) => message.language.get('COMMAND_RELOAD_DESCRIPTION'),
 			usage: '<Store:store|Piece:piece>'

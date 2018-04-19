@@ -15,7 +15,7 @@ class Command extends Piece {
 	 * @typedef {PieceOptions} CommandOptions
 	 * @property {string[]} [aliases=[]] Any command aliases
 	 * @property {boolean} [autoAliases=true] If automatic aliases should be added (adds aliases of name and aliases without dashes)
-	 * @property {external:PermissionResolvable} [botPerms=0] The required Discord permissions for the bot to use this command
+	 * @property {external:PermissionResolvable} [requiredPermissions=0] The required Discord permissions for the bot to use this command
 	 * @property {number} [bucket=1] The number of times this command can be run before ratelimited by the cooldown
 	 * @property {number} [cooldown=0] The amount of time before the user can run the command again in seconds
 	 * @property {boolean} [deletable=false] If the responses should be deleted if the triggering message is deleted
@@ -23,7 +23,7 @@ class Command extends Piece {
 	 * @property {(string|Function)} [extendedHelp=message.language.get('COMMAND_HELP_NO_EXTENDED')] Extended help strings
 	 * @property {boolean} [guarded=false] If the command can be disabled on a guild level (does not effect global disable)
 	 * @property {boolean} [nsfw=false] If the command should only run in nsfw channels
-	 * @property {number} [permLevel=0] The required permission level to use the command
+	 * @property {number} [permissionLevel=0] The required permission level to use the command
 	 * @property {number} [promptLimit=0] The number or attempts allowed for re-prompting an argument
 	 * @property {number} [promptTime=30000] The time allowed for re-prompting of this command
 	 * @property {boolean} [quotedStringSupport=false] Whether args for this command should not deliminated inside quotes
@@ -63,7 +63,7 @@ class Command extends Piece {
 		 * @since 0.0.1
 		 * @type {external:Permissions}
 		 */
-		this.botPerms = new Permissions(options.botPerms).freeze();
+		this.requiredPermissions = new Permissions(options.requiredPermissions).freeze();
 
 		/**
 		 * The number of times this command can be run before ratelimited by the cooldown
@@ -126,11 +126,11 @@ class Command extends Piece {
 		this.nsfw = options.nsfw;
 
 		/**
-		 * The required permLevel to run this command
+		 * The required permissionLevel to run this command
 		 * @since 0.0.1
 		 * @type {number}
 		 */
-		this.permLevel = options.permLevel;
+		this.permissionLevel = options.permissionLevel;
 
 		/**
 		 * The number or attempts allowed for re-prompting an argument
@@ -295,7 +295,7 @@ class Command extends Piece {
 		return {
 			...super.toJSON(),
 			aliases: this.aliases.slice(0),
-			botPerms: this.botPerms.toArray(false),
+			requiredPermissions: this.requiredPermissions.toArray(false),
 			bucket: this.bucket,
 			category: this.category,
 			cooldown: this.cooldown,
@@ -305,7 +305,7 @@ class Command extends Piece {
 			fullCategory: this.fullCategory,
 			guarded: this.guarded,
 			nsfw: this.nsfw,
-			permLevel: this.permLevel,
+			permissionLevel: this.permissionLevel,
 			promptLimit: this.promptLimit,
 			promptTime: this.promptTime,
 			quotedStringSupport: this.quotedStringSupport,
