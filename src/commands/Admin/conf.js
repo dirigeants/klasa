@@ -9,13 +9,13 @@ module.exports = class extends Command {
 			guarded: true,
 			subcommands: true,
 			description: (msg) => msg.language.get('COMMAND_CONF_SERVER_DESCRIPTION'),
-			usage: '<get|set|remove|reset|list> (key:key) (value:value) [...]',
+			usage: '<set|show|remove|reset> (key:key) (value:value) [...]',
 			usageDelim: ' '
 		});
 
 		this
 			.createCustomResolver('key', (arg, possible, msg, [action]) => {
-				if (action === 'list' || arg) return arg;
+				if (action === 'show' || arg) return arg;
 				throw msg.language.get('COMMAND_CONF_NOKEY');
 			})
 			.createCustomResolver('value', (arg, possible, msg, [action]) => {
@@ -24,9 +24,13 @@ module.exports = class extends Command {
 			});
 	}
 
-	get(msg, [key]) {
-		const path = this.client.gateways.guilds.getPath(key, { avoidUnconfigurable: true, piece: true, errors: false });
+	show(msg, [key]) {
+		const path = this.client.gateways.guilds.getPath(key, { avoidUnconfigurable: true, errors: false, piece: null });
 		if (!path) return msg.sendMessage(msg.language.get('COMMAND_CONF_GET_NOEXT', key));
+		if (path.piece.type === 'Folder') {
+			return msg.sendMessage(msg.language.get('COMMAND_CONF_SERVER', key ? `: ${key.split('.').map(toTitleCase).join('/')}` : '',
+				codeBlock('asciidoc', msg.guild.configs.list(msg, path.piece))));
+		}
 		return msg.sendMessage(msg.language.get('COMMAND_CONF_GET', path.piece.path, msg.guild.configs.resolveString(msg, path.piece)));
 	}
 
@@ -49,12 +53,6 @@ module.exports = class extends Command {
 		if (errors.length) return msg.sendMessage(errors[0]);
 		if (!updated.length) return msg.sendMessage(msg.language.get('COMMAND_CONF_NOCHANGE', key));
 		return msg.sendMessage(msg.language.get('COMMAND_CONF_RESET', key, msg.guild.configs.resolveString(msg, updated[0].piece)));
-	}
-
-	list(msg, [key]) {
-		const { piece } = this.client.gateways.guilds.getPath(key, { avoidUnconfigurable: true, piece: false });
-		return msg.sendMessage(msg.language.get('COMMAND_CONF_SERVER', key ? `: ${key.split('.').map(toTitleCase).join('/')}` : '',
-			codeBlock('asciidoc', msg.guild.configs.list(msg, piece))));
 	}
 
 };

@@ -1,4 +1,5 @@
 const Cron = require('../util/Cron');
+const { isObject } = require('../util/util');
 
 /**
  * The structure for future tasks to be run
@@ -90,7 +91,7 @@ class ScheduledTask {
 		 * @since 0.5.0
 		 * @type {*}
 		 */
-		this.data = 'data' in options ? options.data : null;
+		this.data = 'data' in options && isObject(options.data) ? options.data : {};
 
 		this.constructor._validate(this);
 	}
@@ -125,7 +126,7 @@ class ScheduledTask {
 		if (!this.task || !this.task.enabled) return this;
 		try {
 			this.task.disable();
-			await this.task.run({ id: this.id, ...this.data || {} });
+			await this.task.run({ id: this.id, ...this.data });
 			this.task.enable();
 		} catch (err) {
 			this.client.emit('taskError', this, this.task, err);

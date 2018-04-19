@@ -1,5 +1,6 @@
 const SettingResolver = require('../parsers/SettingResolver');
 const Gateway = require('./Gateway');
+const util = require('../util/util');
 
 /**
  * <warning>GatewayDriver is a singleton, use {@link KlasaClient#gateways} instead.</warning>
@@ -8,9 +9,9 @@ const Gateway = require('./Gateway');
 class GatewayDriver {
 
 	/**
-	 * @typedef {Object} GatewayDriverAddOptions
+	 * @typedef {Object} GatewayDriverRegisterOptions
 	 * @property {string} [provider] The name of the provider to use
-	 * @property {boolean} [nice=false] Whether the JSON provider should use sequential or burst mode
+	 * @property {boolean} [download=true] Whether the Gateway should download all entries or not
 	 */
 
 	/**
@@ -62,9 +63,9 @@ class GatewayDriver {
 
 		/**
 		 * All the types accepted for the Gateway.
-		 * @type {Set<string>}
+		 * @type {?Set<string>}
 		 */
-		this.types = new Set(Object.getOwnPropertyNames(SettingResolver.prototype).slice(1));
+		this.types = null;
 
 		/**
 		 * All the gateways added
@@ -110,9 +111,8 @@ class GatewayDriver {
 				default: this.client.options.prefix,
 				min: null,
 				max: 10,
-				array: this.client.options.prefix.constructor.name === 'Array',
-				configurable: true,
-				sql: `VARCHAR(10) NOT NULL DEFAULT '${this.client.options.prefix.constructor.name === 'Array' ? JSON.stringify(this.client.options.prefix) : this.client.options.prefix}'`
+				array: Array.isArray(this.client.options.prefix),
+				configurable: true
 			},
 			language: {
 				type: 'language',
@@ -120,8 +120,7 @@ class GatewayDriver {
 				min: null,
 				max: null,
 				array: false,
-				configurable: true,
-				sql: `VARCHAR(5) NOT NULL DEFAULT '${this.client.options.language}'`
+				configurable: true
 			},
 			disableNaturalPrefix: {
 				type: 'boolean',
@@ -129,8 +128,7 @@ class GatewayDriver {
 				min: null,
 				max: null,
 				array: false,
-				configurable: Boolean(this.client.options.regexPrefix),
-				sql: `BIT(1) NOT NULL DEFAULT 0`
+				configurable: Boolean(this.client.options.regexPrefix)
 			},
 			disabledCommands: {
 				type: 'command',
@@ -138,10 +136,19 @@ class GatewayDriver {
 				min: null,
 				max: null,
 				array: true,
-				configurable: true,
-				sql: 'TEXT'
+				configurable: true
 			}
 		};
+	}
+
+	/**
+	 * The data schema Klasa uses for user configs.
+	 * @since 0.5.0
+	 * @readonly
+	 * @type {GatewayDriverGuildsSchema}
+	 */
+	get usersSchema() {
+		return {};
 	}
 
 	/**
@@ -158,8 +165,7 @@ class GatewayDriver {
 				min: null,
 				max: null,
 				array: true,
-				configurable: true,
-				sql: 'TEXT'
+				configurable: true
 			},
 			guildBlacklist: {
 				type: 'string',
@@ -167,8 +173,7 @@ class GatewayDriver {
 				min: 17,
 				max: 19,
 				array: true,
-				configurable: true,
-				sql: 'TEXT'
+				configurable: true
 			},
 			schedules: {
 				type: 'any',
@@ -176,8 +181,7 @@ class GatewayDriver {
 				min: null,
 				max: null,
 				array: true,
-				configurable: false,
-				sql: 'TEXT'
+				configurable: false
 			}
 		};
 	}
@@ -186,20 +190,23 @@ class GatewayDriver {
 	 * Registers a new Gateway.
 	 * @since 0.5.0
 	 * @param {string} name The name for the new gateway
-	 * @param {Object} [schema={}] The schema for use in this gateway
-	 * @param {GatewayDriverAddOptions} [options={}] The options for the new gateway
-	 * @chainable
+	 * @param {Object} [defaultSchema = {}] The schema for use in this gateway
+	 * @param {GatewayDriverRegisterOptions} [options = {}] The options for the new gateway
 	 * @returns {this}
+	 * @chainable
 	 */
-	register(name, schema = {}, options = {}) {
+	register(name, defaultSchema = {}, { download = true, provider = this.client.options.providers.default } = {}) {
+		if (typeof name !== 'string') throw new TypeError('You must pass a name for your new gateway and it must be a string.');
+		if (!util.isObject(defaultSchema)) throw new TypeError('Schema must be a valid object or left undefined for an empty object.');
+		if (this.name !== undefined && this.name !== null) throw new Error(`The key '${name}' is either taken by another Gateway or reserved for GatewayDriver's functionality.`);
 		if (!this.ready) {
-			if (this._queue.has(name)) throw new Error(`There is already a Gateway with the name '${name}'.`);
-			this._queue.set(name, () => {
-				this._register(name, schema, options);
+			if (this._queue.has(name)) throw new Error(`There is already a Gateway with the name '${name}' in the queue.`);
+			this._queue.set(name, async () => {
+				await this._register(name, { provider }).init({ download, defaultSchema });
 				this._queue.delete(name);
 			});
 		} else {
-			this._register(name, schema, options);
+			this._register(name, { provider });
 		}
 
 		return this;
@@ -212,54 +219,26 @@ class GatewayDriver {
 	 * @private
 	 */
 	async _ready() {
-		if (this.ready) throw new Error('Configuration has already run the ready method.');
+		if (this.ready) throw new Error('The GatewayDriver has already been inited.');
+		this.types = new Set(Object.getOwnPropertyNames(SettingResolver.prototype).slice(1));
 		this.ready = true;
-		const promises = [];
-		for (const register of this._queue.values()) register();
-		for (const key of this.keys) {
-			// If the gateway did not init yet, init it now
-			if (!this[key].ready) await this[key].init();
-			promises.push(this[key]._ready());
-		}
-		return Promise.all(promises);
+		return Promise.all([...this._queue.values()].map(register => register()));
 	}
 
 	/**
 	 * Registers a new Gateway
 	 * @since 0.5.0
 	 * @param {string} name The name for the new gateway
-	 * @param {Object} schema The schema for use in this gateway
-	 * @param {GatewayDriverAddOptions} options The options for the new gateway
+	 * @param {GatewayDriverRegisterOptions} options The options for the new gateway
 	 * @returns {Gateway}
 	 * @private
 	 */
-	_register(name, schema, options) {
-		if (typeof name !== 'string') throw new Error('You must pass a name for your new gateway and it must be a string.');
+	_register(name, options) {
+		if (!this.client.providers.has(options.provider)) throw new Error(`This provider (${options.provider}) does not exist in your system.`);
 
-		if (this[name] !== undefined && this[name] !== null) throw new Error(`There is already a Gateway with the name '${name}'.`);
-		if (!this.client.methods.util.isObject(schema)) throw new Error('Schema must be a valid object or left undefined for an empty object.');
-
-		options.provider = this._checkProvider(options.provider || this.client.options.providers.default);
-		const provider = this.client.providers.get(options.provider);
-		if (provider.cache) throw new Error(`The provider ${provider.name} is designed for caching, not persistent data. Please try again with another.`);
-
-		const gateway = new Gateway(this, name, schema, options);
 		this.keys.add(name);
-		this[name] = gateway;
-
-		return gateway;
-	}
-
-	/**
-	 * Check if a provider exists.
-	 * @since 0.5.0
-	 * @param {string} engine Check if a provider exists
-	 * @returns {string}
-	 * @private
-	 */
-	_checkProvider(engine) {
-		if (this.client.providers.has(engine)) return engine;
-		throw new Error(`This provider (${engine}) does not exist in your system.`);
+		this[name] = new Gateway(this, name, options);
+		return this[name];
 	}
 
 	/**
