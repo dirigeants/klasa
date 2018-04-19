@@ -668,7 +668,7 @@ declare module 'klasa' {
 			snowflake: RegExp;
 		};
 
-		public abstract run(): any;
+		public abstract run(arg: string, possible: Possible, msg: KlasaMessage): any;
 		public toJSON(): PieceArgumentJSON;
 		private static minOrMax(client: KlasaClient, value: number, min: number, max: number, possible: Possible, msg: KlasaMessage, suffix: string): boolean;
 	}

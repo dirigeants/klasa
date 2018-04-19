@@ -64,6 +64,7 @@ Checks if the command can be run in the channel type this is. (based on {@link C
 
 ## Further Reading:
 
+- {@tutorial IncludedArguments}
 - {@tutorial IncludedCommands}
 - {@tutorial IncludedEvents}
 - {@tutorial IncludedExtendables}
