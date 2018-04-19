@@ -44,7 +44,6 @@ class SchemaPiece extends Schema {
 		 * The type of this key.
 		 * @since 0.5.0
 		 * @type {string}
-		 * @name SchemaPiece#type
 		 */
 		this.type = options.type.toLowerCase();
 
@@ -52,7 +51,6 @@ class SchemaPiece extends Schema {
 		 * Whether this key should store multiple or a single value.
 		 * @since 0.5.0
 		 * @type {boolean}
-		 * @name SchemaPiece#array
 		 */
 		this.array = 'array' in options ? options.array : Array.isArray(options.default);
 
@@ -60,7 +58,6 @@ class SchemaPiece extends Schema {
 		 * What this key should provide by default.
 		 * @since 0.5.0
 		 * @type {*}
-		 * @name SchemaPiece#default
 		 */
 		this.default = 'default' in options ? options.default : this._generateDefault();
 
@@ -68,7 +65,6 @@ class SchemaPiece extends Schema {
 		 * The minimum value for this key.
 		 * @since 0.5.0
 		 * @type {?number}
-		 * @name SchemaPiece#min
 		 */
 		this.min = 'min' in options ? options.min : null;
 
@@ -76,23 +72,20 @@ class SchemaPiece extends Schema {
 		 * The maximum value for this key.
 		 * @since 0.5.0
 		 * @type {?number}
-		 * @name SchemaPiece#max
 		 */
 		this.max = 'max' in options ? options.max : null;
 
 		/**
 		 * A tuple of strings containing the path and the datatype.
 		 * @since 0.5.0
-		 * @type {string[]}
-		 * @name SchemaPiece#sql
+		 * @type {string}
 		 */
-		this.sql = [this.path, null];
+		this.sql = null;
 
 		/**
 		 * Whether this key should be configurable by the config command. When type is any, this key defaults to false.
 		 * @since 0.5.0
 		 * @type {boolean}
-		 * @name SchemaPiece#configurable
 		 */
 		this.configurable = 'configurable' in options ? options.configurable : this.type !== 'any';
 
@@ -144,15 +137,15 @@ class SchemaPiece extends Schema {
 		if (!isObject(options)) throw new TypeError(`SchemaPiece#edit expected an object as a parameter. Got: ${typeof options}`);
 
 		const edited = new Set();
-		if (typeof options.sql === 'string' && this.sql[1] !== options.sql) {
-			this.sql[1] = options.sql;
+		if (typeof options.sql === 'string' && this.sql !== options.sql) {
+			this.sql = options.sql;
 			edited.add('SQL');
 			if (this.gateway.sql) await this.gateway.provider.updateColumn(this.gateway.type, this.path, options.sql);
 		}
 		if (typeof options.default !== 'undefined' && this.default !== options.default) {
 			this._schemaCheckDefault({ ...this.toJSON(), ...options });
 			this.default = options.default;
-			if (!edited.has('SQL')) this.sql[1] = this._generateSQLDatatype(options.sql);
+			if (!edited.has('SQL')) this.sql = this._generateSQLDatatype(options.sql);
 			edited.add('DEFAULT');
 		}
 		if (typeof options.min !== 'undefined' && this.min !== options.min) {
@@ -172,7 +165,7 @@ class SchemaPiece extends Schema {
 		}
 		if (edited.size > 0) {
 			await fs.outputJSONAtomic(this.gateway.filePath, this.gateway.schema.toJSON());
-			if (this.gateway.sql && this.gateway.provider.updateColumn === 'function') {
+			if (this.gateway.sql && typeof this.gateway.provider.updateColumn === 'function') {
 				this.gateway.provider.updateColumn(this.gateway.type, this.key, this._generateSQLDatatype(options.sql));
 			}
 			await this.parent._shardSyncSchema(this, 'update', false);
@@ -231,8 +224,6 @@ class SchemaPiece extends Schema {
 			throw new TypeError(`[DEFAULT] ${this} - Default key must be a boolean if the key stores a boolean.`);
 		} else if (options.type === 'string' && typeof options.default !== 'string' && options.default !== null) {
 			throw new TypeError(`[DEFAULT] ${this} - Default key must be either a string or null if the key stores a string.`);
-		} else if (options.type !== 'any' && typeof options.default === 'object' && options.default !== null) {
-			throw new TypeError(`[DEFAULT] ${this} - Default key must not be type of object unless it is type any or null.`);
 		}
 	}
 
@@ -282,7 +273,7 @@ class SchemaPiece extends Schema {
 		if (typeof object.default !== 'undefined') this.default = object.default;
 		if (typeof object.min === 'number') this.min = object.min;
 		if (typeof object.max === 'number') this.max = object.max;
-		if (typeof object.sql === 'string') this.sql[1] = object.sql;
+		if (typeof object.sql === 'string') this.sql = object.sql;
 		if (typeof object.configurable === 'boolean') this.configurable = object.configurable;
 	}
 
@@ -300,7 +291,12 @@ class SchemaPiece extends Schema {
 
 		// Check if the 'options' parameter is an object.
 		if (!isObject(options)) throw new TypeError(`SchemaPiece#init expected an object as a parameter. Got: ${typeof options}`);
-		this.sql[1] = this._generateSQLDatatype(options.sql);
+		this._schemaCheckType(this.type);
+		this._schemaCheckArray(this.array);
+		this._schemaCheckLimits(this.min, this.max);
+		this._schemaCheckConfigurable(this.configurable);
+		this._schemaCheckDefault(this);
+		this.sql = this._generateSQLDatatype(options.sql);
 
 		return true;
 	}
@@ -317,7 +313,7 @@ class SchemaPiece extends Schema {
 			default: this.default,
 			min: this.min,
 			max: this.max,
-			sql: this.sql[1],
+			sql: this.sql,
 			configurable: this.configurable
 		};
 	}

@@ -78,6 +78,18 @@ class SchemaFolder extends Schema {
 	}
 
 	/**
+	 * Get all SQL datatypes from this SchemaFolder's children.
+	 * @since 0.5.0
+	 * @type {Array<Array<string>>}
+	 * @readonly
+	 */
+	get sqlSchema() {
+		const schema = [];
+		for (const piece of this.values(true)) schema.push([piece.path, piece.sql]);
+		return schema;
+	}
+
+	/**
 	 * Create a new nested folder.
 	 * @since 0.5.0
 	 * @param {string} key The name's key for the folder
@@ -119,7 +131,7 @@ class SchemaFolder extends Schema {
 		if (this.gateway.sql) {
 			if (piece.type !== 'Folder' || piece.keyArray.length) {
 				await this.gateway.provider.addColumn(this.gateway.type, piece.type === 'Folder' ?
-					piece.getSQL() : [piece.sql]);
+					piece.sqlSchema : [piece.path, piece.sql]);
 			}
 		} else if (force || (this.gateway.type === 'clientStorage' && this.client.shard)) {
 			await this.force('add', key, piece);
@@ -148,7 +160,7 @@ class SchemaFolder extends Schema {
 		if (this.gateway.sql) {
 			if (piece.type !== 'Folder' || (piece.type === 'Folder' && piece.keyArray.length)) {
 				await this.gateway.provider.removeColumn(this.gateway.type, piece.type === 'Folder' ?
-					[...piece.keys(true)] : key);
+					[...piece.keys(true)] : [key]);
 			}
 		} else if (force || (this.gateway.type === 'clientStorage' && this.client.shard)) {
 			// If force, or if the gateway is clientStorage, it should update all entries
@@ -192,7 +204,7 @@ class SchemaFolder extends Schema {
 				for (let j = 0; j < path.length - 1; j++) value = value[path[j]];
 				value[path[path.length - 1]] = deepClone(defValue);
 			}
-			return this.gateway.provider.updateValue(this.gateway.type, piece.path, defValue, this.gateway.options.nice);
+			return this.gateway.provider.updateValue(this.gateway.type, piece.path, defValue);
 		}
 
 		if (action === 'delete') {
@@ -200,7 +212,7 @@ class SchemaFolder extends Schema {
 				for (let j = 0; j < path.length - 1; j++) value = value[path[j]];
 				delete value[path[path.length - 1]];
 			}
-			return this.gateway.provider.removeValue(this.gateway.type, piece.path, this.gateway.options.nice);
+			return this.gateway.provider.removeValue(this.gateway.type, piece.path);
 		}
 
 		throw new TypeError(`Action must be either 'add' or 'delete'. Got: ${action}`);
@@ -219,20 +231,6 @@ class SchemaFolder extends Schema {
 			else data[key] = deepClone(this[key].default);
 		}
 		return data;
-	}
-
-	/**
-	 * Get all the SQL schemas from this schema's children.
-	 * @since 0.5.0
-	 * @param {string[]} [array=[]] The array to push.
-	 * @returns {string[]}
-	 */
-	getSQL(array = []) {
-		for (const key of this.keyArray) {
-			if (this[key].type === 'Folder') this[key].getSQL(array);
-			else array.push(this[key].sql);
-		}
-		return array;
 	}
 
 	/**
