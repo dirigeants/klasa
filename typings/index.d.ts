@@ -1487,7 +1487,7 @@ declare module 'klasa' {
 	};
 
 	export type ArgumentOptions = {
-		aliases: string[];
+		aliases?: string[];
 	} & PieceOptions;
 
 	export type CommandOptions = {
