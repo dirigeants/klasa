@@ -4,7 +4,7 @@ Resolves any {@link Argument}.
 
 **Source:**
 
-[argument.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/argument.js)
+[arguments/argument.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/argument.js)
 
 ## Boolean
 
@@ -16,7 +16,7 @@ Resolves any boolean.
 
 **Source:**
 
-[boolean.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/boolean.js)
+[arguments/boolean.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/boolean.js)
 
 ## Channel
 
@@ -24,7 +24,7 @@ Resolves any {@link external:Channel}.
 
 **Source:**
 
-[channel.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/channel.js)
+[arguments/channel.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/channel.js)
 
 ## Command
 
@@ -36,7 +36,7 @@ Resolves any {@link Command}.
 
 **Source:**
 
-[command.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/command.js)
+[arguments/command.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/command.js)
 
 ## Custom
 
@@ -44,7 +44,7 @@ Resolves any custom argument resolver.
 
 **Source:**
 
-[custom.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/custom.js)
+[arguments/custom.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/custom.js)
 
 ## Date
 
@@ -52,7 +52,7 @@ Resolves any [date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refe
 
 **Source:**
 
-[date.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/date.js)
+[arguments/date.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/date.js)
 
 ## Duration
 
@@ -60,7 +60,7 @@ Resolves any [date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refe
 
 **Source:**
 
-[duration.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/duration.js)
+[arguments/duration.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/duration.js)
 
 ## Emoji
 
@@ -68,7 +68,7 @@ Resolves any {@link external:Emoji}.
 
 **Source:**
 
-[emoji.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/emoji.js)
+[arguments/emoji.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/emoji.js)
 
 ## Event
 
@@ -76,7 +76,7 @@ Resolves any {@link Event}.
 
 **Source:**
 
-[event.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/event.js)
+[arguments/event.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/event.js)
 
 ## Extendable
 
@@ -84,7 +84,7 @@ Resolves any {@link Extendable}.
 
 **Source:**
 
-[extendable.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/extendable.js)
+[arguments/extendable.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/extendable.js)
 
 ## Finalizer
 
@@ -92,7 +92,7 @@ Resolves any {@link Finalizer}.
 
 **Source:**
 
-[finalizer.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/finalizer.js)
+[arguments/finalizer.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/finalizer.js)
 
 ## Float
 
@@ -105,7 +105,7 @@ Resolves any float number.
 
 **Source:**
 
-[float.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/float.js)
+[arguments/float.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/float.js)
 
 ## Guild
 
@@ -113,7 +113,7 @@ Resolves any {@link external:Guild}.
 
 **Source:**
 
-[guild.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/guild.js)
+[arguments/guild.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/guild.js)
 
 ## Hyperlink
 
@@ -125,7 +125,7 @@ Resolves any valid URL as a plain string.
 
 **Source:**
 
-[hyperlink.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/hyperlink.js)
+[arguments/hyperlink.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/hyperlink.js)
 
 ## Inhibitor
 
@@ -133,7 +133,7 @@ Resolves any {@link Inhibitor}.
 
 **Source:**
 
-[inhibitor.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/inhibitor.js)
+[arguments/inhibitor.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/inhibitor.js)
 
 ## Integer
 
@@ -145,7 +145,7 @@ Resolves any integer.
 
 **Source:**
 
-[integer.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/integer.js)
+[arguments/integer.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/integer.js)
 
 ## Language
 
@@ -153,7 +153,7 @@ Resolves any {@link Language}.
 
 **Source:**
 
-[language.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/language.js)
+[arguments/language.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/language.js)
 
 ## Literal
 
@@ -161,7 +161,7 @@ Resolves any literal string.
 
 **Source:**
 
-[literal.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/literal.js)
+[arguments/literal.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/literal.js)
 
 ## Member
 
@@ -169,7 +169,7 @@ Resolves any {@link external:GuildMember}.
 
 **Source:**
 
-[member.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/member.js)
+[arguments/member.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/member.js)
 
 ## Message
 
@@ -181,7 +181,7 @@ Resolves any {@link external:Message}.
 
 **Source:**
 
-[message.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/message.js)
+[arguments/message.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/message.js)
 
 ## Monitor
 
@@ -189,7 +189,7 @@ Resolves any {@link Monitor}.
 
 **Source:**
 
-[monitor.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/monitor.js)
+[arguments/monitor.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/monitor.js)
 
 ## Piece
 
@@ -197,7 +197,7 @@ Resolves any {@link Piece}.
 
 **Source:**
 
-[piece.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/piece.js)
+[arguments/piece.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/piece.js)
 
 ## Provider
 
@@ -205,7 +205,7 @@ Resolves any {@link Provider}.
 
 **Source:**
 
-[provider.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/provider.js)
+[arguments/provider.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/provider.js)
 
 ## RegExp
 
@@ -218,7 +218,7 @@ Resolves a `RegExpExecArray`.
 
 **Source:**
 
-[regexp.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/regexp.js)
+[arguments/regexp.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/regexp.js)
 
 ## Role
 
@@ -226,7 +226,7 @@ Resolves any {@link Role}.
 
 **Source:**
 
-[role.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/role.js)
+[arguments/role.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/role.js)
 
 ## Store
 
@@ -234,7 +234,7 @@ Resolves any {@link Store}.
 
 **Source:**
 
-[store.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/store.js)
+[arguments/store.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/store.js)
 
 ## String
 
@@ -246,7 +246,7 @@ Resolves any string.
 
 **Source:**
 
-[string.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/string.js)
+[arguments/string.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/string.js)
 
 ## Task
 
@@ -254,7 +254,7 @@ Resolves any {@link Task}.
 
 **Source:**
 
-[task.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/task.js)
+[arguments/task.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/task.js)
 
 ## Time
 
@@ -262,7 +262,7 @@ Resolves any [date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refe
 
 **Source:**
 
-[time.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/time.js)
+[arguments/time.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/time.js)
 
 ## User
 
@@ -274,7 +274,7 @@ Resolves any {@link external:User}.
 
 **Source:**
 
-[user.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/user.js)
+[arguments/user.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/user.js)
 
 ## Further Reading:
 
