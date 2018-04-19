@@ -172,13 +172,7 @@ class MySwankyMusicBot extends Client {
 		// to be used as an arg to be looked up in commands
 		this.registerStore(this.genres);
 
-		// Registers genres themselves to be able to be used as an
-		// arg to be looked up in commands,
-		// for reload/enable/disable ect.
-		this.registerPiece('genre', this.genres);
-
-		// Optionally we can add more aliases for the piece
-		this.registerPiece('musicgenre', this.genres);
+		// Note: You will likely want to make a custom Argument for this new piece type
 	}
 
 }
