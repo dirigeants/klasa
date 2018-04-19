@@ -35,8 +35,8 @@ class Util {
 	/**
 	 * Cleans sensitive info from strings
 	 * @since 0.0.1
-	 * @param {string} text The text to clean
-	 * @returns {string}
+	 * @param {*} text The text to clean
+	 * @returns {*}
 	 */
 	static clean(text) {
 		if (typeof text === 'string') return text.replace(sensitivePattern, '「ｒｅｄａｃｔｅｄ」').replace(/`/g, `\`${zws}`).replace(/@/g, `@${zws}`);
