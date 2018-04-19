@@ -63,4 +63,5 @@ module.exports = class extends Command {
 
 };
 ```
+
 >**note:** An Emoji argument already comes included with Klasa.
