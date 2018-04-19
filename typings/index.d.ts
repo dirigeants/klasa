@@ -1862,12 +1862,6 @@ declare module 'klasa' {
 	export type SchemaObject = ObjectLiteral<SchemaPiece>;
 	export type SchemaDefaults = ObjectLiteral<any>;
 
-	// TypeScript lacks of Proxy
-	export type Proxy<T> = {
-		get(): T;
-		set(value: T): void;
-	};
-
 	type Constructable<T> = new (...args: any[]) => T;
 
 	export type PrimitiveType = string | number | boolean;
