@@ -79,16 +79,15 @@ class Monitor extends Piece {
 	 * If the monitor should run based on the filter options
 	 * @since 0.5.0
 	 * @param {KlasaMessage} msg The message to check
-	 * @param {boolean} [edit=false] If the message is an edit
 	 * @returns {boolean}
 	 */
-	shouldRun(msg, edit = false) {
+	shouldRun(msg) {
 		return this.enabled &&
 			!(this.ignoreBots && msg.author.bot) &&
 			!(this.ignoreSelf && this.client.user === msg.author) &&
 			!(this.ignoreOthers && this.client.user !== msg.author) &&
 			!(this.ignoreWebhooks && msg.webhookID) &&
-			!(this.ignoreEdits && edit);
+			!(this.ignoreEdits && msg.edits.length);
 	}
 
 	/**

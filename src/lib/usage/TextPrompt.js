@@ -237,16 +237,17 @@ class TextPrompt {
 	async multiPossibles(index) {
 		const possible = this._currentUsage.possibles[index];
 		const custom = this.usage.customResolvers[possible.type];
+		const resolver = this.client.arguments.get(custom ? 'custom' : possible.type);
 
 		if (possible.name in this.flags) this.args.splice(this.params.length, 0, this.flags[possible.name]);
-		if (!this.client.argResolver[possible.type] && !custom) {
+		if (!resolver) {
 			this.client.emit('warn', `Unknown Argument Type encountered: ${possible.type}`);
 			if (this._currentUsage.possibles.length === 1) return this.pushParam(undefined);
 			return this.multiPossibles(++index);
 		}
 
 		try {
-			const res = await this.client.argResolver[custom ? 'custom' : possible.type](this.args[this.params.length], possible, this.message, custom);
+			const res = await resolver.run(this.args[this.params.length], possible, this.message, custom);
 			if (typeof res === 'undefined' && this._required === 1) this.args.splice(this.params.length, 0, undefined);
 			return this.pushParam(res);
 		} catch (err) {
