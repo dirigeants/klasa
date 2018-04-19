@@ -12,7 +12,7 @@ module.exports = class extends Command {
 
 		this.createCustomResolver('command', (arg, possible, message) => {
 			if (!arg || arg === '') return undefined;
-			return this.client.argResolver.command(arg, possible, message);
+			return this.client.arguments.get('command').run(arg, possible, message);
 		});
 	}
 

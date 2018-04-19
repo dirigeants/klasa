@@ -20,10 +20,9 @@ class MonitorStore extends Store {
 	 * Runs our monitors on the message.
 	 * @since 0.0.1
 	 * @param {KlasaMessage} message The message object from Discord.js
-	 * @param {boolean} [edit=false] If the run is a message edit
 	 */
-	run(message, edit = false) {
-		for (const monitor of this.values()) if (monitor.shouldRun(message, edit)) this._run(message, monitor);
+	run(message) {
+		for (const monitor of this.values()) if (monitor.shouldRun(message)) this._run(message, monitor);
 	}
 
 	/**

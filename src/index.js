@@ -9,7 +9,6 @@ module.exports = {
 	KlasaUser: require('./lib/extensions/KlasaUser'),
 
 	// lib/parsers
-	ArgResolver: require('./lib/parsers/ArgResolver'),
 	Resolver: require('./lib/parsers/Resolver'),
 	SettingResolver: require('./lib/parsers/SettingResolver'),
 
@@ -34,6 +33,8 @@ module.exports = {
 	Store: require('./lib/structures/base/Store'),
 
 	// lib/structures
+	Argument: require('./lib/structures/Argument'),
+	ArgumentStore: require('./lib/structures/ArgumentStore'),
 	Command: require('./lib/structures/Command'),
 	CommandStore: require('./lib/structures/CommandStore'),
 	Event: require('./lib/structures/Event'),
