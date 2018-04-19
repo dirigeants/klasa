@@ -33,13 +33,6 @@ class Schedule {
 		this.tasks = [];
 
 		/**
-		 * The time in milliseconds for the delay between interval executions
-		 * @since 0.5.0
-		 * @type {number}
-		 */
-		this.timeInterval = this.client.options.schedule.interval;
-
-		/**
 		 * The current interval that runs the tasks
 		 * @since 0.5.0
 		 * @type {NodeJS.Timer}
@@ -71,8 +64,7 @@ class Schedule {
 				min: null,
 				max: null,
 				array: true,
-				configurable: false,
-				sql: 'TEXT'
+				configurable: false
 			});
 		}
 
@@ -246,7 +238,7 @@ class Schedule {
 	 */
 	_checkInterval() {
 		if (!this.tasks.length) this._clearInterval();
-		else if (!this._interval) this._interval = this.client.setInterval(this.execute.bind(this), this.timeInterval);
+		else if (!this._interval) this._interval = this.client.setInterval(this.execute.bind(this), this.client.options.schedule.interval);
 	}
 
 	/**

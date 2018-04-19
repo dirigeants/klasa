@@ -12,11 +12,11 @@ class SettingResolver extends Resolver {
 	 * @param {*} data The data to resolve
 	 * @param {KlasaGuild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
-	 * @returns {KlasaUser}
+	 * @returns {string}
 	 */
 	async user(data, guild, name) {
 		const result = await super.user(data);
-		if (result) return result;
+		if (result) return result.id;
 		throw (guild ? guild.language : this.client.languages.default).get('RESOLVER_INVALID_USER', name);
 	}
 
@@ -26,11 +26,11 @@ class SettingResolver extends Resolver {
 	 * @param {*} data The data to resolve
 	 * @param {KlasaGuild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
-	 * @returns {external:Channel}
+	 * @returns {string}
 	 */
 	async channel(data, guild, name) {
 		const result = await super.channel(data);
-		if (result) return result;
+		if (result) return result.id;
 		throw (guild ? guild.language : this.client.languages.default).get('RESOLVER_INVALID_CHANNEL', name);
 	}
 
@@ -40,11 +40,11 @@ class SettingResolver extends Resolver {
 	 * @param {*} data The data to resolve
 	 * @param {KlasaGuild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
-	 * @returns {external:TextChannel}
+	 * @returns {string}
 	 */
 	async textchannel(data, guild, name) {
 		const result = await super.channel(data);
-		if (result && result.type === 'text') return result;
+		if (result && result.type === 'text') return result.id;
 		throw (guild ? guild.language : this.client.languages.default).get('RESOLVER_INVALID_CHANNEL', name);
 	}
 
@@ -54,11 +54,11 @@ class SettingResolver extends Resolver {
 	 * @param {*} data The data to resolve
 	 * @param {KlasaGuild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
-	 * @returns {external:VoiceChannel}
+	 * @returns {string}
 	 */
 	async voicechannel(data, guild, name) {
 		const result = await super.channel(data);
-		if (result && result.type === 'voice') return result;
+		if (result && result.type === 'voice') return result.id;
 		throw (guild ? guild.language : this.client.languages.default).get('RESOLVER_INVALID_CHANNEL', name);
 	}
 
@@ -68,11 +68,11 @@ class SettingResolver extends Resolver {
 	 * @param {*} data The data to resolve
 	 * @param {KlasaGuild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
-	 * @returns {external:CategoryChannel}
+	 * @returns {string}
 	 */
 	async categorychannel(data, guild, name) {
 		const result = await super.channel(data);
-		if (result && result.type === 'category') return result;
+		if (result && result.type === 'category') return result.id;
 		throw (guild ? guild.language : this.client.languages.default).get('RESOLVER_INVALID_CHANNEL', name);
 	}
 
@@ -82,11 +82,11 @@ class SettingResolver extends Resolver {
 	 * @param {*} data The data to resolve
 	 * @param {KlasaGuild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
-	 * @returns {KlasaGuild}
+	 * @returns {string}
 	 */
 	async guild(data, guild, name) {
 		const result = await super.guild(data);
-		if (result) return result;
+		if (result) return result.id;
 		throw (guild ? guild.language : this.client.languages.default).get('RESOLVER_INVALID_GUILD', name);
 	}
 
@@ -96,11 +96,11 @@ class SettingResolver extends Resolver {
 	 * @param {*} data The data to resolve
 	 * @param {KlasaGuild} guild The guild to resolve for
 	 * @param {string} name The name of the key being resolved
-	 * @returns {external:Role}
+	 * @returns {string}
 	 */
 	async role(data, guild, name) {
 		const result = await super.role(data, guild) || (guild ? guild.roles.find('name', data) : null);
-		if (result) return result;
+		if (result) return result.id;
 		throw (guild ? guild.language : this.client.languages.default).get('RESOLVER_INVALID_ROLE', name);
 	}
 

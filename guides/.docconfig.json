@@ -15,15 +15,16 @@
     {
         "name": "Understanding Usage Strings",
         "path": "UnderstandingUsageStrings.md"
-    },
-    {
-        "name": "Understanding Custom Arguments",
-        "path": "UnderstandingCustomArguments.md"
     }]
 },
 {
     "name": "Piece Basics",
-    "files": [{
+    "files": [
+    {
+        "name": "Creating Arguments",
+        "path": "CreatingArguments.md"
+    },
+    {
         "name": "Creating Commands",
         "path": "CreatingCommands.md"
     },
@@ -116,6 +117,9 @@
 {
     "name": "Included Pieces",
     "files": [{
+        "name": "Included Arguments",
+        "path": "IncludedArguments.md"
+    },{
         "name": "Included Commands",
         "path": "IncludedCommands.md"
     },
