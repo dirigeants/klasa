@@ -755,7 +755,7 @@ declare module 'klasa' {
 		public createCustomResolver(type: string, resolver: ArgResolverCustomMethod): this;
 		public customizeResponse(name: string, response: string | ((msg: KlasaMessage, possible: Possible) => string)): this;
 
-		public run(msg: KlasaMessage, params: any[]): Promise<KlasaMessage | KlasaMessage[]>;
+		public run(msg: KlasaMessage, params: any[]): Promise<KlasaMessage | KlasaMessage[] | null>;
 		public toJSON(): PieceCommandJSON;
 	}
 
@@ -787,7 +787,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class Finalizer extends Piece {
-		public abstract run(msg: KlasaMessage, mes: KlasaMessage, start: Stopwatch): void;
+		public abstract run(msg: KlasaMessage, mes: KlasaMessage | KlasaMessage[] | null, start: Stopwatch): void;
 		public toJSON(): PieceFinalizerJSON;
 	}
 
