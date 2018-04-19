@@ -13,7 +13,10 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#272](https://github.com/dirigeants/klasa/pull/272)] Added `disabledCorePieces` option in `KlasaClientOptions`. (bdistin)
+- [[#272](https://github.com/dirigeants/klasa/pull/272)] Added `Argument` and `ArgumentStore` classes for argument resolving in `Usage`. (bdistin)
 - [[#256](https://github.com/dirigeants/klasa/pull/256)] Added `Util.objectToTuples` for object overload -> array overload in `Configuration#update`. (kyranet)
+- [[#260](https://github.com/dirigeants/klasa/pull/260)] Added support for functions with no arguments in `Language` to be called with a single argument in `Language#get`. (kyranet)
 - [[#213](https://github.com/dirigeants/klasa/pull/213)] Added `PermissionLevels#remove()`. (bdistin)
 - [[#210](https://github.com/dirigeants/klasa/pull/210)] Added `PermissionLevelsOptions.fetch` to autofetch uncached members. (bdistin)
 - [[#196](https://github.com/dirigeants/klasa/pull/196)] Added property of `ignoreEdits` in monitors for whether a monitor should run in edited messages. (bdistin)
@@ -99,6 +102,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#272](https://github.com/dirigeants/klasa/pull/272)] Changed `Monitor#shouldRun` to accept a single argument. (bdistin)
 - [[#256](https://github.com/dirigeants/klasa/pull/256)] **[BREAKING]** Modified all SettingResolvers to resolve to primitives (string, number, boolean...) or storable data. (kyranet)
 - [[#256](https://github.com/dirigeants/klasa/pull/256)] Added value array overload to `Configuration#update`. (kyranet)
 - [[#256](https://github.com/dirigeants/klasa/pull/256)] Changed `SchemaFolder#getSQL` to `SchemaFolder#sqlSchema`. (kyranet)
@@ -112,6 +116,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 - [[#256](https://github.com/dirigeants/klasa/pull/256)] Refactored several utils for memory performance. (kyranet)
 - [[#256](https://github.com/dirigeants/klasa/pull/256)] Refactored typings to have less code duplication. (kyranet)
 - [[#256](https://github.com/dirigeants/klasa/pull/256)] Unified `[p]conf list` and `[p]conf get` (and `[p]userconf`) subcommands to `[p]conf show`. (kyranet)
+- [[#260](https://github.com/dirigeants/klasa/pull/260)] Refactored `Language#get`. (kyranet)
 - [[#227](https://github.com/dirigeants/klasa/pull/227)] Rewritten the Colors class to be constructable following a design similar to Timestamp's. (bdistin)
 - [[#213](https://github.com/dirigeants/klasa/pull/213)] Converted the not-set empty object instance to a Symbol for checking empty entries in PermissionLevels. (bdistin)
 - [[#210](https://github.com/dirigeants/klasa/pull/210)] **[BREAKING]** Changed the level adding to a more consistent format with the rest of the library: replaced `addLevel` to `add` and moved the `break` boolean to `PermissionLevelOptions.break`, which is taken as third parameter. (bdistin)
@@ -176,6 +181,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Removed
 
+- [[#272](https://github.com/dirigeants/klasa/pull/272)] Removed `ArgResolver` class. (bdistin)
 - [[#256](https://github.com/dirigeants/klasa/pull/256)] Removed `Gateway#getEntry` (mixed getEntry and insertEntry into `Gateway#get`), `Gateway#createEntry`, and `Gateway#insertEntry`. (kyranet)
 - [[#256](https://github.com/dirigeants/klasa/pull/256)] Removed `Gateway#options` and `Gateway#defaultSchema`. (kyranet)
 - [[#256](https://github.com/dirigeants/klasa/pull/256)] Removed `Provider`'s nice option. As it was only used by the JSON provider. Should use a better system instead. (kyranet)
