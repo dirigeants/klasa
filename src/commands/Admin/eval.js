@@ -51,18 +51,18 @@ module.exports = class extends Command {
 		try {
 			if (message.flags.async) code = `(async () => {\n${code}\n})();`;
 			result = eval(code);
-			syncTime = stopwatch.friendlyDuration;
+			syncTime = stopwatch.toString();
 			type = new Type(result);
 			if (this.client.methods.util.isThenable(result)) {
 				thenable = true;
 				stopwatch.restart();
 				result = await result;
-				asyncTime = stopwatch.friendlyDuration;
+				asyncTime = stopwatch.toString();
 			}
 			success = true;
 		} catch (error) {
-			if (!syncTime) syncTime = stopwatch.friendlyDuration;
-			if (thenable && !asyncTime) asyncTime = stopwatch.friendlyDuration;
+			if (!syncTime) syncTime = stopwatch.toString();
+			if (thenable && !asyncTime) asyncTime = stopwatch.toString();
 			result = error;
 			success = false;
 		}

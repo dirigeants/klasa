@@ -1224,7 +1224,6 @@ declare module 'klasa' {
 		private _end?: number;
 
 		public readonly duration: number;
-		public readonly friendlyDuration: string;
 		public readonly running: boolean;
 		public restart(): this;
 		public reset(): this;
