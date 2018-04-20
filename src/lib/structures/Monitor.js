@@ -73,6 +73,7 @@ class Monitor extends Piece {
 	 */
 	run() {
 		// Defined in extension Classes
+		throw new Error(`The run method has not been implemented by ${this.type}:${this.name}.`);
 	}
 
 	/**
@@ -87,7 +88,7 @@ class Monitor extends Piece {
 			!(this.ignoreSelf && this.client.user === message.author) &&
 			!(this.ignoreOthers && this.client.user !== message.author) &&
 			!(this.ignoreWebhooks && message.webhookID) &&
-			!(this.ignoreEdits && message.edits.length);
+			!(this.ignoreEdits && message._edits.length);
 	}
 
 	/**

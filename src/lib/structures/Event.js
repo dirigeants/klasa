@@ -65,6 +65,7 @@ class Event extends Piece {
 	 */
 	run() {
 		// Defined in extension Classes
+		throw new Error(`The run method has not been implemented by ${this.type}:${this.name}.`);
 	}
 
 	/**
