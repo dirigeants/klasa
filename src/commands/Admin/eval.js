@@ -16,16 +16,10 @@ module.exports = class extends Command {
 
 	async run(msg, [code]) {
 		const { success, result, time, type } = await this.eval(msg, code);
-		const footer = this.client.methods.util.codeBlock('ts', type);
+		const footer = this.client.methods.util.codeBlock('ts', type ? type.toString() : '');
 		const output = msg.language.get(success ? 'COMMAND_EVAL_OUTPUT' : 'COMMAND_EVAL_ERROR',
 			time, this.client.methods.util.codeBlock('js', result), footer);
 		const silent = 'silent' in msg.flags;
-
-		// Handle errors
-		if (!success) {
-			if (result && result.stack) this.client.emit('error', result.stack);
-			if (!silent) return msg.sendMessage(output);
-		}
 
 		if (silent) return null;
 
@@ -44,12 +38,13 @@ module.exports = class extends Command {
 
 	// Eval the input
 	async eval(msg, code) {
+		const { flags } = msg;
 		const stopwatch = new Stopwatch();
 		let success, syncTime, asyncTime, result;
 		let thenable = false;
 		let type;
 		try {
-			if (msg.flags.async) code = `(async () => {\n${code}\n})();`;
+			if (flags.async) code = `(async () => {\n${code}\n})();`;
 			result = eval(code);
 			syncTime = stopwatch.friendlyDuration;
 			type = new Type(result);
@@ -63,15 +58,16 @@ module.exports = class extends Command {
 		} catch (error) {
 			if (!syncTime) syncTime = stopwatch.friendlyDuration;
 			if (thenable && !asyncTime) asyncTime = stopwatch.friendlyDuration;
+			if (error && error.stack) this.client.emit('error', error.stack);
 			result = error;
 			success = false;
 		}
 
 		stopwatch.stop();
-		if (success && typeof result !== 'string') {
+		if (typeof result !== 'string') {
 			result = inspect(result, {
-				depth: msg.flags.depth ? parseInt(msg.flags.depth) || 0 : 0,
-				showHidden: Boolean(msg.flags.showHidden)
+				depth: flags.depth ? parseInt(flags.depth) || 0 : 0,
+				showHidden: Boolean(flags.showHidden)
 			});
 		}
 		return { success, type, time: this.formatTime(syncTime, asyncTime), result: this.client.methods.util.clean(result) };
