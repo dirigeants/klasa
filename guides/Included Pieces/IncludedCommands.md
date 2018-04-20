@@ -120,6 +120,7 @@ Allows users to change their configurations.
 
 ## Further Reading:
 
+- {@tutorial IncludedArguments}
 - {@tutorial IncludedEvents}
 - {@tutorial IncludedExtendables}
 - {@tutorial IncludedFinalizers}

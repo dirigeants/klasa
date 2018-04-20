@@ -117,6 +117,9 @@
 {
     "name": "Included Pieces",
     "files": [{
+        "name": "Included Arguments",
+        "path": "IncludedArguments.md"
+    },{
         "name": "Included Commands",
         "path": "IncludedCommands.md"
     },
