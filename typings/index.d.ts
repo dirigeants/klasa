@@ -639,7 +639,7 @@ declare module 'klasa' {
 //#region Pieces
 
 	export abstract class Piece {
-		public constructor(client: KlasaClient, store: Store<string, Piece, typeof Piece>, type: string, file: string | string[], core: boolean, options?: PieceOptions);
+		public constructor(client: KlasaClient, store: Store<string, Piece, typeof Piece>, file: string | string[], core: boolean, options?: PieceOptions);
 		public readonly client: KlasaClient;
 		public readonly core: boolean;
 		public readonly type: string;
