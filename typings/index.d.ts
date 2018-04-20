@@ -747,7 +747,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class Language extends Piece {
-		public language: ObjectLiteral<string | string[] | ((...args) => string | string[])>;
+		public language: ObjectLiteral<string | string[] | ((...args: any[]) => string | string[])>;
 
 		public get<T = string>(term: string, ...args: any[]): T;
 		public toJSON(): PieceLanguageJSON;
