@@ -87,7 +87,7 @@ class Monitor extends Piece {
 			!(this.ignoreSelf && this.client.user === msg.author) &&
 			!(this.ignoreOthers && this.client.user !== msg.author) &&
 			!(this.ignoreWebhooks && msg.webhookID) &&
-			!(this.ignoreEdits && msg.edits.length);
+			!(this.ignoreEdits && msg._edits.length);
 	}
 
 	/**
