@@ -16,7 +16,7 @@ module.exports = class extends Command {
 
 	async run(msg, [code]) {
 		const { success, result, time, type } = await this.eval(msg, code);
-		const footer = this.client.methods.util.codeBlock('ts', type ? type.toString() : '');
+		const footer = this.client.methods.util.codeBlock('ts', type.toString());
 		const output = msg.language.get(success ? 'COMMAND_EVAL_OUTPUT' : 'COMMAND_EVAL_ERROR',
 			time, this.client.methods.util.codeBlock('js', result), footer);
 		const silent = 'silent' in msg.flags;
@@ -57,6 +57,7 @@ module.exports = class extends Command {
 			success = true;
 		} catch (error) {
 			if (!syncTime) syncTime = stopwatch.friendlyDuration;
+			if (!type) type = new Type(result);
 			if (thenable && !asyncTime) asyncTime = stopwatch.friendlyDuration;
 			if (error && error.stack) this.client.emit('error', error.stack);
 			result = error;
