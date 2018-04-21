@@ -57,7 +57,7 @@ module.exports = class extends Command {
 			success = true;
 		} catch (error) {
 			if (!syncTime) syncTime = stopwatch.friendlyDuration;
-			if (!type) type = new Type(result);
+			if (!type) type = new Type(error);
 			if (thenable && !asyncTime) asyncTime = stopwatch.friendlyDuration;
 			if (error && error.stack) this.client.emit('error', error.stack);
 			result = error;
