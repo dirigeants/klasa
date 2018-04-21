@@ -42,7 +42,7 @@ class Inhibitor extends Piece {
 	 */
 	async run() {
 		// Defined in extension Classes
-		return;
+		throw new Error(`The run method has not been implemented by ${this.type}:${this.name}.`);
 	}
 
 	/**
