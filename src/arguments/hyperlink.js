@@ -9,7 +9,7 @@ module.exports = class extends Argument {
 
 	run(arg, possible, msg) {
 		const res = parse(arg);
-		const hyperlink = res.protocol && res.hostname ? hyperlink : null;
+		const hyperlink = res.protocol && res.hostname ? arg : null;
 		if (hyperlink !== null) return hyperlink;
 		throw (msg.language || this.client.languages.default).get('RESOLVER_INVALID_URL', possible.name);
 	}

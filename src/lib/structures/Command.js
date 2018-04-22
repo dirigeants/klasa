@@ -282,9 +282,9 @@ class Command extends Piece {
 	 * @returns {KlasaMessage|KlasaMessage[]} You should return the response message whenever possible
 	 * @abstract
 	 */
-	async run(msg) {
+	async run() {
 		// Defined in extension Classes
-		return msg;
+		throw new Error(`The run method has not been implemented by ${this.type}:${this.name}.`);
 	}
 
 	/**
