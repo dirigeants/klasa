@@ -10,7 +10,7 @@ module.exports = class extends Argument {
 		const { min, max } = possible;
 		const number = parseFloat(arg);
 		if (isNaN(number)) throw (msg.language || this.client.languages.default).get('RESOLVER_INVALID_FLOAT', possible.name);
-		return this.constructor.minOrMax(this.client, arg, min, max, possible, msg) ? arg : null;
+		return this.constructor.minOrMax(this.client, number, min, max, possible, msg) ? number : null;
 	}
 
 };
