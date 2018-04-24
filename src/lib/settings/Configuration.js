@@ -100,7 +100,9 @@ class Configuration {
 	 * @returns {Configuration}
 	 */
 	clone() {
-		return new this.gateway.Configuration(this.gateway, this.gateway.Configuration._clone(this, this.gateway.schema));
+		const clone = this.gateway.Configuration._clone(this, this.gateway.schema);
+		clone.id = this.id;
+		return new this.gateway.Configuration(this.gateway, clone);
 	}
 
 	/**
@@ -213,18 +215,18 @@ class Configuration {
 			keys = [keys];
 			values = [values];
 		} else if (!Array.isArray(keys)) {
-			throw new TypeError(`Invalid value. Expected object, string or Array<string>. Got: ${getDeepTypeName(keys)}`);
+			return Promise.reject(new TypeError(`Invalid value. Expected object, string or Array<string>. Got: ${getDeepTypeName(keys)}`));
 		}
 
 		// Overload update(string|string[], any|any[], ConfigurationUpdateOptions);
 		// Overload update(string|string[], any|any[], GuildResolvable, ConfigurationUpdateOptions);
 		// If the third argument is undefined and the second is an object literal, swap the variables.
-		if (typeof options === 'undefined' && guild && guild.constructor.name === 'Object') [guild, options] = [null, guild];
+		if (typeof options === 'undefined' && guild && guild.constructor === Object) [guild, options] = [null, guild];
 		if (guild) guild = this.gateway._resolveGuild(guild);
 		if (!options) options = {};
 
 		// Do a length check on both keys and values before trying to update
-		if (keys.length !== values.length) throw new Error(`Expected an array of ${keys.length} entries. Got: ${values.length}.`);
+		if (keys.length !== values.length) return Promise.reject(new Error(`Expected an array of ${keys.length} entries. Got: ${values.length}.`));
 
 		const updateOptions = {
 			avoidUnconfigurable: 'avoidUnconfigurable' in options ? options.avoidUnconfigurable : false,
