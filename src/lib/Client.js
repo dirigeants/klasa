@@ -228,28 +228,6 @@ class KlasaClient extends Discord.Client {
 		this.permissionLevels = this.validatePermissionLevels();
 
 		/**
-		 * Additional methods to be used elsewhere in the bot
-		 * @since 0.0.1
-		 * @type {Object}
-		 * @property {class} Collection A discord.js collection
-		 * @property {class} Embed A discord.js Message Embed
-		 * @property {class} MessageCollector A discord.js MessageCollector
-		 * @property {class} Webhook A discord.js WebhookClient
-		 * @property {function} escapeMarkdown A discord.js escape markdown function
-		 * @property {function} splitMessage A discord.js split message function
-		 * @property {Util} util A collection of static methods to be used throughout the bot
-		 */
-		this.methods = {
-			Collection: Discord.Collection,
-			Embed: Discord.MessageEmbed,
-			escapeMarkdown: Discord.escapeMarkdown,
-			MessageCollector: Discord.MessageCollector,
-			splitMessage: Discord.splitMessage,
-			Webhook: Discord.WebhookClient,
-			util
-		};
-
-		/**
 		 * The GatewayDriver instance where the gateways are stored
 		 * @since 0.5.0
 		 * @type {GatewayDriver}

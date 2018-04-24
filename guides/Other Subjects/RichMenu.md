@@ -11,7 +11,7 @@ module.exports = class extends Command {
 
 	constructor(...args) {
 		super(...args);
-		this.menu = new RichMenu(new this.client.methods.Embed()
+		this.menu = new RichMenu(new MessageEmbed()
 			.setColor(0x673AB7)
 			.setAuthor(this.client.user.username, this.client.user.avatarURL())
 			.setTitle('Advanced Commands Help:')
@@ -28,7 +28,7 @@ module.exports = class extends Command {
 		}
 
 		const command = this.client.commands.get(this.menu.options[choice].name);
-		const info = new this.client.methods.Embed()
+		const info = new MessageEmbed()
 			.setTitle(`Command \`${message.guild.configs.prefix}${command.name}\``)
 			.setDescription(typeof command.description === 'function' ? command.description(message) : command.description)
 			.addField('Usage:', command.usageString);
@@ -102,7 +102,7 @@ const command = this.client.commands.get(menu.options[choice].name);
 Finally, we show the user the selected command by editing the original [`MessageEmbed`](https://discord.js.org/#/docs/main/master/class/MessageEmbed):
 
 ```javascript
-const info = new this.client.methods.Embed()
+const info = new MessageEmbed()
 	.setTitle(`Command \`${message.guild.configs.prefix}${command.name}\``)
 	.setDescription(typeof command.description === 'function' ? command.description(message) : command.description)
 	.addField('Usage:', command.usageString);

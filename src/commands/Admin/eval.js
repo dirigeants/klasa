@@ -1,4 +1,4 @@
-const { Command, Stopwatch, Type } = require('klasa');
+const { Command, Stopwatch, Type, util } = require('klasa');
 const { inspect } = require('util');
 
 module.exports = class extends Command {
@@ -16,9 +16,9 @@ module.exports = class extends Command {
 
 	async run(message, [code]) {
 		const { success, result, time, type } = await this.eval(message, code);
-		const footer = this.client.methods.util.codeBlock('ts', type);
+		const footer = util.codeBlock('ts', type);
 		const output = message.language.get(success ? 'COMMAND_EVAL_OUTPUT' : 'COMMAND_EVAL_ERROR',
-			time, this.client.methods.util.codeBlock('js', result), footer);
+			time, util.codeBlock('js', result), footer);
 		const silent = 'silent' in message.flags;
 
 		// Handle errors
@@ -53,7 +53,7 @@ module.exports = class extends Command {
 			result = eval(code);
 			syncTime = stopwatch.toString();
 			type = new Type(result);
-			if (this.client.methods.util.isThenable(result)) {
+			if (util.isThenable(result)) {
 				thenable = true;
 				stopwatch.restart();
 				result = await result;
@@ -74,7 +74,7 @@ module.exports = class extends Command {
 				showHidden: Boolean(message.flags.showHidden)
 			});
 		}
-		return { success, type, time: this.formatTime(syncTime, asyncTime), result: this.client.methods.util.clean(result) };
+		return { success, type, time: this.formatTime(syncTime, asyncTime), result: util.clean(result) };
 	}
 
 	formatTime(syncTime, asyncTime) {

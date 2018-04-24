@@ -56,14 +56,6 @@ declare module 'klasa' {
 		public pieceStores: Collection<string, any>;
 		public permissionLevels: PermissionLevels;
 		public sharded: boolean;
-		public methods: {
-			Collection: typeof Collection;
-			Embed: typeof MessageEmbed;
-			KlasaMessage: typeof KlasaMessage;
-			MessageCollector: typeof MessageCollector;
-			Webhook: typeof WebhookClient;
-			util: typeof Util;
-		};
 		public gateways: GatewayDriver;
 		public configs?: Configuration;
 		public application: ClientApplication;

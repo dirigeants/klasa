@@ -4,6 +4,7 @@ An extremely simple working example can achieved by this code:
 
 ```javascript
 const { Command, RichDisplay } = require('klasa');
+const { MessageEmbed } = require('discord.js')
 
 module.exports = class extends Command {
 
@@ -13,8 +14,8 @@ module.exports = class extends Command {
 
 	async run(message) {
 		return new RichDisplay()
-			.addPage(new this.client.methods.Embed().setDescription('First page'))
-			.addPage(new this.client.methods.Embed().setDescription('Second page'))
+			.addPage(new MessageEmbed().setDescription('First page'))
+			.addPage(new MessageEmbed().setDescription('Second page'))
 			.run(await message.sendMessage('Loading...'));
 	}
 
@@ -33,7 +34,7 @@ const images = [
 module.exports = class extends Command {
 
 	async run(message) {
-		const display = new RichDisplay(new this.client.methods.Embed()
+		const display = new RichDisplay(new MessageEmbed()
 			.setColor(0x673AB7)
 			.setAuthor(this.client.user.name, this.client.user.avatarURL())
 			.setTitle('Norway Pictures Slideshow')
@@ -57,7 +58,7 @@ module.exports = class extends Command {
 First we create a new {@link RichDisplay} instance, but this time we pass in a [`MessageEmbed`](https://discord.js.org/#/docs/main/master/class/MessageEmbed) instance, which will represent our template, from which we will be able to extend upon to create our pages later on:
 
 ```javascript
-const display = new RichDisplay(new this.client.methods.Embed()
+const display = new RichDisplay(new MessageEmbed()
 	/* ... */
 );
 ```
