@@ -4,7 +4,7 @@ An extremely simple working example can achieved by this code:
 
 ```javascript
 const { Command, RichDisplay } = require('klasa');
-const { MessageEmbed } = require('discord.js')
+const { MessageEmbed } = require('discord.js');
 
 module.exports = class extends Command {
 
