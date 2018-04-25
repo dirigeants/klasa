@@ -1,4 +1,4 @@
-const { isObject, makeObject, deepClone, tryParse, toTitleCase, arraysEqual, mergeObjects, getDeepTypeName, objectToTuples } = require('../util/util');
+const { isObject, makeObject, deepClone, tryParse, toTitleCase, arraysStrictEquals, mergeObjects, getDeepTypeName, objectToTuples } = require('../util/util');
 const SchemaFolder = require('./SchemaFolder');
 const SchemaPiece = require('./SchemaPiece');
 
@@ -498,7 +498,7 @@ class Configuration {
 		let cache = this; // eslint-disable-line consistent-this
 		for (const key of path) cache = cache[key] || {};
 		const old = cache[lastKey];
-		if (piece.array ? !arraysEqual(old, parsedID, true) : old !== parsedID) {
+		if (piece.array ? !arraysStrictEquals(old, parsedID) : old !== parsedID) {
 			cache[lastKey] = parsedID;
 			return { updated: true, old };
 		}
