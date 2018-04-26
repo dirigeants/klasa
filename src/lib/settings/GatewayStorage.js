@@ -133,9 +133,25 @@ class GatewayStorage {
 	 */
 	async initSchema(defaultSchema) {
 		await fs.ensureDir(this.baseDir);
-		const schema = await fs.readJSON(this.filePath)
-			.catch(() => fs.outputJSONAtomic(this.filePath, defaultSchema).then(() => defaultSchema));
+		let schema;
+		try {
+			schema = await fs.readJSON(this.filePath);
+		} catch (error) {
+			// Make the schema the default one
+			schema = defaultSchema;
+
+			// Check if the file exists
+			const fileWritten = await fs.pathExists(this.filePath);
+
+			// If the file is written, there must be an issue with the file, emit an
+			// error instead of overwritting it (which would result to data loss). If
+			// the file does not exist, write the default schema.
+			if (fileWritten) this.client.emit('error', error);
+			else await fs.outputJSONAtomic(this.filePath, defaultSchema);
+		}
+
 		this.schema = new SchemaFolder(this.client, this, schema, null, '');
+
 		return this.schema;
 	}
 

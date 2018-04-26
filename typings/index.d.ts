@@ -1240,6 +1240,7 @@ declare module 'klasa' {
 		public static makeObject(path: string, value: any, obj?: object): object;
 		public static arrayFromObject<T = any>(obj: ObjectLiteral<T>, prefix?: string): Array<T>;
 		public static arraysEqual(arr1: any[], arr2: any[], clone?: boolean): boolean;
+		public static arraysStrictEquals(arr1: any[], arr2: any[]): boolean;
 		public static mergeDefault(def: object, given?: object): object;
 		public static mergeObjects(objTarget: object, objSource: object): object;
 		public static regExpEsc(str: string): string;
