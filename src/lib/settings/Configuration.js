@@ -513,7 +513,6 @@ class Configuration {
 	 * @private
 	 */
 	_patch(data) {
-		if (this.gateway.sql) data = this.gateway.parseEntry(data);
 		const { schema } = this.gateway;
 		for (const [key, piece] of schema) {
 			const value = data[key];

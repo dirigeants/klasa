@@ -100,6 +100,16 @@ class SchemaPiece extends Schema {
 	}
 
 	/**
+	 * Get this piece's SQL schema.
+	 * @since 0.5.0
+	 * @type {Array<string>}
+	 * @readonly
+	 */
+	get sqlSchema() {
+		return [this.path, this.sql];
+	}
+
+	/**
 	 * Set a validator function for this instance.
 	 * @since 0.5.0
 	 * @param {Function} fn The validator function

@@ -558,11 +558,6 @@ declare module 'klasa' {
 		public readonly defaults: any;
 
 		public init(defaultSchema: object): Promise<void>;
-		private initTable(): Promise<void>;
-		private initSchema(defaultSchema: object): Promise<SchemaFolder>;
-		private parseEntry(entry: any): any;
-
-		private static _parseSQLValue(value: any, schemaPiece: SchemaPiece): any;
 	}
 
 	export abstract class Schema {
@@ -578,40 +573,38 @@ declare module 'klasa' {
 	export class SchemaFolder extends Schema {
 		private constructor(client: KlasaClient, gateway: Gateway, object: any, parent: SchemaFolder, key: string);
 		public readonly type: 'Folder';
+		public readonly configurableKeys: string[];
 		public defaults: object;
 		public keyArray: string[];
 
-		public readonly configurableKeys: string[];
-
-		public add(key: string, options: SchemaFolderAddOptions | { [k: string]: SchemaFolderAddOptions }, force?: boolean): Promise<SchemaFolder>;
+		public add(key: string, options: SchemaFolderAddOptions | { [k: string]: SchemaFolderAddOptions }): Promise<SchemaFolder>;
 		public has(key: string): boolean;
-		public remove(key: string, force?: boolean): Promise<SchemaFolder>;
-		public force(action: 'add' | 'delete', key: string, piece: SchemaFolder | SchemaPiece): Promise<any>;
+		public remove(key: string): Promise<SchemaFolder>;
 		public getDefaults(data?: object): object;
 		public getSQL(array?: string[]): string[];
-
-		private _add(key: string, options: SchemaFolderAddOptions, type: typeof Schema | typeof SchemaFolder): void;
-		private _remove(key: string): void;
-		private _shardSyncSchema(piece: SchemaFolder | SchemaPiece, action: 'add' | 'delete' | 'update', force: boolean): Promise<void>;
-		private _init(options: object): true;
-
 		public entries(recursive?: boolean): Iterator<[string, SchemaFolder | SchemaPiece]>;
 		public values(recursive?: boolean): Iterator<SchemaFolder | SchemaPiece>;
 		public keys(recursive?: boolean): Iterator<string>;
 		public [Symbol.iterator](): Iterator<[string, SchemaFolder | SchemaPiece]>;
-
 		public toJSON(): ObjectLiteral<SchemaFolderAddOptions>;
 		public toString(): string;
+
+		private _add(key: string, options: SchemaFolderAddOptions, type: typeof Schema | typeof SchemaFolder): void;
+		private _remove(key: string): void;
+		private _shardSyncSchema(piece: SchemaFolder | SchemaPiece, action: 'add' | 'delete' | 'update'): Promise<void>;
+		private _init(options: object): true;
+		private force(action: 'add' | 'delete', piece: SchemaFolder | SchemaPiece): Promise<any>;
 	}
 
 	export class SchemaPiece extends Schema {
 		private constructor(client: KlasaClient, gateway: Gateway, options: SchemaFolderAddOptions, parent: SchemaFolder, key: string);
+		public readonly sqlSchema: [string, string];
 		public type: string;
 		public array: boolean;
 		public default: any;
 		public min?: number;
 		public max?: number;
-		public sql: [string, string];
+		public sql: string;
 		public configurable: boolean;
 		public validator?: (resolved: any, guild?: KlasaGuild) => void;
 
@@ -768,11 +761,8 @@ declare module 'klasa' {
 
 	export abstract class Provider extends Piece {
 		public constructor(client: KlasaClient, store: ProviderStore, file: string, core: boolean, options?: ProviderOptions);
+		public readonly sql: boolean;
 
-		public cache: boolean;
-		public sql: boolean;
-
-		protected parseInput<T extends ObjectLiteral<any>>(data: ConfigurationUpdateResultEntry[] | [string, any][] | ObjectLiteral<any>): T;
 		public abstract create(table: string, entry: string, data: any): Promise<any>;
 		public abstract createTable(table: string): Promise<any>;
 		public abstract delete(table: string, entry: string): Promise<any>;
@@ -789,6 +779,13 @@ declare module 'klasa' {
 
 		public shutdown(): Promise<void>;
 		public toJSON(): PieceProviderJSON;
+	}
+
+	export abstract class SQLProvider extends Provider {
+		public abstract addColumn(table: string, columns: string[][]): Promise<any>;
+		public abstract removeColumn(table: string, columns: string | string[]): Promise<any>;
+		protected parseEntry<T = ObjectLiteral<any>>(gateway: string | Gateway, entry: ObjectLiteral<any>): T;
+		protected parseValue<T = any>(value: any, schemaPiece: SchemaPiece): T;
 	}
 
 	export abstract class Task extends Piece {
@@ -1530,10 +1527,6 @@ declare module 'klasa' {
 		ignoreWebhooks?: boolean;
 	} & PieceOptions;
 
-	export type ProviderOptions = {
-		cache?: boolean;
-		sql?: boolean;
-	} & PieceOptions;
 
 	export type EventOptions = {
 		emitter?: NodeJS.EventEmitter;
@@ -1541,6 +1534,7 @@ declare module 'klasa' {
 		once?: boolean;
 	} & PieceOptions;
 
+	export type ProviderOptions = PieceOptions;
 	export type FinalizerOptions = PieceOptions;
 	export type LanguageOptions = PieceOptions;
 	export type TaskOptions = PieceOptions;

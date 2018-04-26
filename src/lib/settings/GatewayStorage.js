@@ -110,28 +110,7 @@ class GatewayStorage {
 		if (this.ready) throw new Error(`[INIT] ${this} has already initialized.`);
 		this.ready = true;
 
-		await this.initSchema(defaultSchema);
-		await this.initTable();
-	}
-
-	/**
-	 * Inits the table for its use in this gateway.
-	 * @since 0.5.0
-	 * @private
-	 */
-	async initTable() {
-		const hasTable = await this.provider.hasTable(this.type);
-		if (!hasTable) await this.provider.createTable(this.type, this.sqlSchema);
-	}
-
-	/**
-	 * Inits the schema, creating a file if it does not exist, and returning the current schema or the default.
-	 * @since 0.5.0
-	 * @returns {SchemaFolder}
-	 * @param {Object} defaultSchema The default schema
-	 * @private
-	 */
-	async initSchema(defaultSchema) {
+		// Init the Schema
 		await fs.ensureDir(this.baseDir);
 		let schema;
 		try {
@@ -152,7 +131,9 @@ class GatewayStorage {
 
 		this.schema = new SchemaFolder(this.client, this, schema, null, '');
 
-		return this.schema;
+		// Init the table
+		const hasTable = await this.provider.hasTable(this.type);
+		if (!hasTable) await this.provider.createTable(this.type, this.sqlSchema);
 	}
 
 }
