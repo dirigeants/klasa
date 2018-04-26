@@ -521,8 +521,6 @@ declare module 'klasa' {
 			disabledCommands: SchemaPieceJSON
 		};
 
-		public readonly guildsSchema: {};
-
 		public readonly clientStorageSchema: {
 			userBlacklist: SchemaPieceJSON,
 			guildBlacklist: SchemaPieceJSON,
