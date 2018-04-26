@@ -265,7 +265,7 @@ class SchemaFolder extends Schema {
 	async _shardSyncSchema(piece, action) {
 		if (!this.client.shard) return;
 		await this.client.shard.broadcastEval(`
-			if (this.shard.id !== '${this.client.shard.id}') {
+			if (this.shard.id !== ${this.client.shard.id}) {
 				this.gateways.${this.gateway.type}._shardSync(
 					${JSON.stringify(piece.path.split('.'))}, ${JSON.stringify(piece)}, '${action}');
 			}
