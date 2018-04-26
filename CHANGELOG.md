@@ -13,6 +13,8 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#284](https://github.com/dirigeants/klasa/pull/284)] Added `SQLProvider`. (kyranet)
+- [[#284](https://github.com/dirigeants/klasa/pull/284)] Added `SchemaPiece#sqlSchema` for consistency with `SchemaFolder#sqlSchema`. (kyranet)
 - [[#272](https://github.com/dirigeants/klasa/pull/272)] Added `disabledCorePieces` option in `KlasaClientOptions`. (bdistin)
 - [[#272](https://github.com/dirigeants/klasa/pull/272)] Added `Argument` and `ArgumentStore` classes for argument resolving in `Usage`. (bdistin)
 - [[#256](https://github.com/dirigeants/klasa/pull/256)] Added `Util.objectToTuples` for object overload -> array overload in `Configuration#update`. (kyranet)
@@ -181,6 +183,9 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Removed
 
+- [[#284](https://github.com/dirigeants/klasa/pull/284)] Removed `GatewayStorage#initTable` and `GatewayStorage#initSchema`, they're now unified in `GatewayStorage#init`. (kyranet)
+- [[#284](https://github.com/dirigeants/klasa/pull/284)] Removed `force` options in SettingGateway operations. (kyranet)
+- [[#284](https://github.com/dirigeants/klasa/pull/284)] Removed `ProviderOptions.cache` and `ProviderOptions.sql` options. (kyranet)
 - [[#272](https://github.com/dirigeants/klasa/pull/272)] Removed `ArgResolver` class. (bdistin)
 - [[#256](https://github.com/dirigeants/klasa/pull/256)] Removed `Gateway#getEntry` (mixed getEntry and insertEntry into `Gateway#get`), `Gateway#createEntry`, and `Gateway#insertEntry`. (kyranet)
 - [[#256](https://github.com/dirigeants/klasa/pull/256)] Removed `Gateway#options` and `Gateway#defaultSchema`. (kyranet)
@@ -218,6 +223,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
+- [[#284](https://github.com/dirigeants/klasa/pull/284)] Fixed `Gateway#parseEntry` not being a function. (kyranet)
 - [[#256](https://github.com/dirigeants/klasa/pull/256)] Fixed `Util.deepClone` trying to iterate over `WeakMap`s and `WeakSet`s. (kyranet)
 - [[#256](https://github.com/dirigeants/klasa/pull/256)] Fixed a critical sync issue where `Configuration#_syncStatus` resolved too early. (kyranet)
 - [[#256](https://github.com/dirigeants/klasa/pull/256)] Fixed many typings bugs. (kyranet)

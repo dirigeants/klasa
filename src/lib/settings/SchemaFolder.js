@@ -259,7 +259,7 @@ class SchemaFolder extends Schema {
 	 * Sync all shards' schemas.
 	 * @since 0.5.0
 	 * @param {(SchemaFolder|SchemaPiece)} piece The piece to send
-	 * @param {('add'|'delete'|'update')} action Whether the piece got added or removed
+	 * @param {('add'|'delete')} action Whether the piece got added or removed
 	 * @private
 	 */
 	async _shardSyncSchema(piece, action) {

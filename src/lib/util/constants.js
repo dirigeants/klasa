@@ -88,10 +88,7 @@ exports.DEFAULTS = {
 				ignoreWebhooks: true,
 				ignoreEdits: true
 			},
-			providers: {
-				enabled: true,
-				sql: false
-			},
+			providers: { enabled: true },
 			tasks: { enabled: true }
 		},
 		schedule: { interval: 60000 }
