@@ -186,6 +186,7 @@ class Configuration {
 	 * @param {GuildResolvable} [guild=null] A guild resolvable
 	 * @param {ConfigurationUpdateOptions} [options={}] The options for the update
 	 * @returns {ConfigurationUpdateResult}
+	 * @async
 	 * @example
 	 * // Updating the value of a key
 	 * Configuration#update('roles.administrator', '339943234405007361', msg.guild);
