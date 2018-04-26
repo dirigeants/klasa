@@ -24,13 +24,13 @@
 | `channel`                  | A [TextChannel](https://discord.js.org/#/docs/main/master/class/TextChannel) instance returned from the channel ID or channel tag. |
 | `guild`                    | A [Guild](https://discord.js.org/#/docs/main/master/class/Guild) instance returned from the guild ID.                              |
 | `member`                   | A [GuildMember](https://discord.js.org/#/docs/main/master/class/GuildMember) instance returned from the member ID or mention.      |
-| `message` , `message`          | A [Message](https://discord.js.org/#/docs/main/master/class/Message) instance returned from the message ID.                        |
+| `msg` , `message`          | A [Message](https://discord.js.org/#/docs/main/master/class/Message) instance returned from the message ID.                        |
 | `role`                     | A [Role](https://discord.js.org/#/docs/main/master/class/Role) instance returned from the role ID or mention.                      |
 | `user` , `mention`         | A [User](https://discord.js.org/#/docs/main/master/class/User) instance returned from the user ID or mention.                      |
 | `custom`                   | A custom argument resolver, takes a custom method as fourth parameter.                                                             |
 | `store`                    | Any store, whichever resolves first in order of store types alphabetically.                                                        |
 | `piece`                    | Any piece, whichever resolves first in order of piece types alphabetically.                                                        |
-| `command` , `command`          | A {@link Command} instance returned from the command name or alias.                                                                |
+| `cmd` , `command`          | A {@link Command} instance returned from the command name or alias.                                                                |
 | `event`                    | An {@link Event} instance returned from the event name.                                                                            |
 | `extendable`               | An {@link Extendable} instance returned from the extendable name.                                                                  |
 | `finalizer`                | A {@link Finalizer} instance returned from the finalizer name.                                                                     |
