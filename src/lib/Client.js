@@ -527,7 +527,7 @@ KlasaClient.defaultPermissionLevels = new PermissionLevels()
  * @event KlasaClient#finalizerError
  * @since 0.5.0
  * @param {KlasaMessage} message The message that triggered the finalizer
- * @param {KlasaMessage|any} mes The response from the command
+ * @param {KlasaMessage|any} response The response from the command
  * @param {Stopwatch} timer The timer run from start to queue of the command
  * @param {Finalizer} finalizer The finalizer run
  * @param {(Error|string)} error The finalizer error

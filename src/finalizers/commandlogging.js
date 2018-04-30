@@ -13,7 +13,7 @@ module.exports = class extends Finalizer {
 		};
 	}
 
-	run(message, mes, timer) {
+	run(message, response, timer) {
 		const { type } = message.channel;
 		this.client.emit('log', [
 			`${message.command.name}(${message.args.join(', ')})`,

@@ -168,10 +168,10 @@ class ReactionHandler extends ReactionCollector {
 	async jump(user) {
 		if (this.awaiting) return;
 		this.awaiting = true;
-		const mes = await this.message.channel.send(this.prompt);
+		const message = await this.message.channel.send(this.prompt);
 		const collected = await this.message.channel.awaitMessages(mess => mess.author === user, { max: 1, time: this.time });
 		this.awaiting = false;
-		await mes.delete();
+		await message.delete();
 		if (!collected.size) return;
 		const newPage = parseInt(collected.first().content);
 		collected.first().delete();

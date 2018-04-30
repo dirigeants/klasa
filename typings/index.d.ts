@@ -39,6 +39,8 @@ declare module 'klasa' {
 
 	export class KlasaClient extends Client {
 		public constructor(options?: KlasaClientOptions & ClientOptions);
+		public readonly invite: string;
+		public readonly owner?: KlasaUser;
 		public options: KlasaClientOptions & ClientOptions;
 		public coreBaseDir: string;
 		public clientBaseDir: string;
@@ -55,15 +57,12 @@ declare module 'klasa' {
 		public extendables: ExtendableStore;
 		public pieceStores: Collection<string, any>;
 		public permissionLevels: PermissionLevels;
-		public sharded: boolean;
 		public gateways: GatewayDriver;
 		public configs?: Configuration;
 		public application: ClientApplication;
 		public schedule: Schedule;
 		public ready: boolean;
 
-		public readonly invite: string;
-		public readonly owner?: KlasaUser;
 		public validatePermissionLevels(): PermissionLevels;
 		public registerStore<K, V extends Piece>(store: Store<K, V>): KlasaClient;
 		public unregisterStore<K, V extends Piece>(store: Store<K, V>): KlasaClient;
@@ -113,7 +112,7 @@ declare module 'klasa' {
 		public on(event: 'commandUnknown', listener: (message: KlasaMessage, command: string) => void): this;
 
 		public on(event: 'monitorError', listener: (message: KlasaMessage, monitor: Monitor, error: Error | string) => void): this;
-		public on(event: 'finalizerError', listener: (message: KlasaMessage, mes: KlasaMessage, timer: Timestamp, finalizer: Finalizer, error: Error | string) => void): this;
+		public on(event: 'finalizerError', listener: (message: KlasaMessage, response: KlasaMessage, runTime: Timestamp, finalizer: Finalizer, error: Error | string) => void): this;
 		public on(event: 'taskError', listener: (scheduledTask: ScheduledTask, task: Task, error: Error) => void): this;
 
 		// SettingGateway Events
@@ -177,7 +176,7 @@ declare module 'klasa' {
 		public once(event: 'commandUnknown', listener: (message: KlasaMessage, command: string) => void): this;
 
 		public once(event: 'monitorError', listener: (message: KlasaMessage, monitor: Monitor, error: Error | string) => void): this;
-		public once(event: 'finalizerError', listener: (message: KlasaMessage, mes: KlasaMessage, timer: Timestamp, finalizer: Finalizer, error: Error | string) => void): this;
+		public once(event: 'finalizerError', listener: (message: KlasaMessage, response: KlasaMessage, runTime: Timestamp, finalizer: Finalizer, error: Error | string) => void): this;
 		public once(event: 'taskError', listener: (scheduledTask: ScheduledTask, task: Task, error: Error) => void): this;
 
 		// SettingGateway Events
@@ -660,9 +659,9 @@ declare module 'klasa' {
 			snowflake: RegExp;
 		};
 
-		public abstract run(arg: string, possible: Possible, msg: KlasaMessage): any;
+		public abstract run(arg: string, possible: Possible, message: KlasaMessage): any;
 		public toJSON(): PieceArgumentJSON;
-		private static minOrMax(client: KlasaClient, value: number, min: number, max: number, possible: Possible, msg: KlasaMessage, suffix: string): boolean;
+		private static minOrMax(client: KlasaClient, value: number, min: number, max: number, possible: Possible, message: KlasaMessage, suffix: string): boolean;
 	}
 
 	export abstract class Command extends Piece {
@@ -681,7 +680,7 @@ declare module 'klasa' {
 		public fullCategory: string[];
 		public guarded: boolean;
 		public nsfw: boolean;
-		public permLevel: number;
+		public permissionLevel: number;
 		public promptLimit: number;
 		public promptTime: number;
 		public quotedStringSupport: boolean;
@@ -726,7 +725,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class Finalizer extends Piece {
-		public abstract run(message: KlasaMessage, mes: KlasaMessage, start: Stopwatch): void;
+		public abstract run(message: KlasaMessage, response: KlasaMessage, runTime: Stopwatch): void;
 		public toJSON(): PieceFinalizerJSON;
 	}
 
@@ -1493,7 +1492,7 @@ declare module 'klasa' {
 		extendedHelp?: string | ((message: KlasaMessage) => string);
 		guarded?: boolean;
 		nsfw?: boolean;
-		permLevel?: number;
+		permissionLevel?: number;
 		promptLimit?: number;
 		promptTime?: number;
 		quotedStringSupport?: boolean;
@@ -1560,7 +1559,7 @@ declare module 'klasa' {
 		fullCategory: string[];
 		guarded: boolean;
 		nsfw: boolean;
-		permLevel: number;
+		permissionLevel: number;
 		promptLimit: number;
 		promptTime: number;
 		quotedStringSupport: boolean;
