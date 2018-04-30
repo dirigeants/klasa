@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const { Permissions, Permissions: { FLAGS } } = Discord;
 const path = require('path');
 
 // lib/permissions
@@ -288,7 +289,8 @@ class KlasaClient extends Discord.Client {
 	 */
 	get invite() {
 		if (!this.user.bot) throw 'Why would you need an invite link for a selfbot...';
-		const permissions = Discord.Permissions.resolve(this.commands.reduce((a, b) => a.add(b.requiredPermissions), new Discord.Permissions(['VIEW_CHANNEL', 'SEND_MESSAGES'])));
+		const permissions = new Permissions(3072).add(...this.commands.map(command => command.requiredPermissions)).bitfield;
+		// VIEW_CHANNEL, SEND_MESSAGES
 		return `https://discordapp.com/oauth2/authorize?client_id=${this.application.id}&permissions=${permissions}&scope=bot`;
 	}
 
@@ -424,11 +426,10 @@ class KlasaClient extends Discord.Client {
  */
 KlasaClient.defaultPermissionLevels = new PermissionLevels()
 	.add(0, () => true)
-	.add(6, (client, message) => message.guild && message.member.permissions.has('MANAGE_GUILD'), { fetch: true })
+	.add(6, (client, message) => message.guild && message.member.permissions.has(FLAGS.MANAGE_GUILD), { fetch: true })
 	.add(7, (client, message) => message.guild && message.member === message.guild.owner, { fetch: true })
 	.add(9, (client, message) => message.author === client.owner, { break: true })
 	.add(10, (client, message) => message.author === client.owner);
-
 
 /**
  * Emitted when Klasa is fully ready and initialized.
