@@ -261,6 +261,7 @@ class Util {
 
 	/**
 	 * Compare if both arrays are equal
+	 * @since 0.5.0
 	 * @param {any[]} arr1 The first array to compare
 	 * @param {any[]} arr2 The second array to compare
 	 * @param {boolean} clone Whether this check should clone the second array
@@ -278,6 +279,23 @@ class Util {
 		}
 
 		return !arr2.length;
+	}
+
+	/**
+	 * Compare if both arrays are strictly equal
+	 * @since 0.5.0
+	 * @param {any[]} arr1 The first array to compare
+	 * @param {any[]} arr2 The second array to compare
+	 * @returns {boolean}
+	 */
+	static arraysStrictEquals(arr1, arr2) {
+		if (arr1 === arr2) return true;
+		if (arr1.length !== arr2.length) return false;
+
+		for (let i = 0; i < arr1.length; i++) {
+			if (arr1[i] !== arr2[i]) return false;
+		}
+		return true;
 	}
 
 	/**
