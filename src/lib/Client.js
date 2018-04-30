@@ -311,7 +311,7 @@ class KlasaClient extends Discord.Client {
 	 */
 	get invite() {
 		if (!this.user.bot) throw 'Why would you need an invite link for a selfbot...';
-		const permissions = Permissions.resolve(this.commands.reduce((a, b) => a.add(b.botPerms), new Permissions(3072)));
+		const permissions = new Permissions(3072).add(...this.commands.map(command => command.botPerms)).bitfield;
 		// VIEW_CHANNEL, SEND_MESSAGES
 		return `https://discordapp.com/oauth2/authorize?client_id=${this.application.id}&permissions=${permissions}&scope=bot`;
 	}
