@@ -15,8 +15,7 @@ class ScheduledTask {
 
 	/**
 	 * @typedef  {Object} ScheduledTaskUpdateOptions
-	 * @property {string} [repeat] The {@link Cron} pattern
-	 * @property {Date} [time] The time the current task ends at
+	 * @property {(Date|number|Cron|string)} [time] The time or {@link Cron} pattern
 	 * @property {boolean} [catchUp] If the task should try to catch up if the bot is down
 	 * @property {*} [data] The data to pass to the Task piece when the ScheduledTask is ready for execution
 	 */
