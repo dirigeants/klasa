@@ -1,4 +1,4 @@
-const { Structures, splitMessage, Collection, MessageAttachment, MessageEmbed } = require('discord.js');
+const { Structures, splitMessage, Collection, MessageAttachment, MessageEmbed, Permissions: { FLAGS } } = require('discord.js');
 const { isObject } = require('../util/util');
 
 module.exports = Structures.extend('Message', Message => {
@@ -122,7 +122,7 @@ module.exports = Structures.extend('Message', Message => {
 		 */
 		get reactable() {
 			if (!this.guild) return true;
-			return this.channel.readable && this.permissionsFor(this.guild.me).has('ADD_REACTIONS');
+			return this.channel.readable && this.channel.permissionsFor(this.guild.me).has(FLAGS.ADD_REACTIONS);
 		}
 
 		/**

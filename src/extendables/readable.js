@@ -1,4 +1,5 @@
 const { Extendable } = require('klasa');
+const { Permissions: { FLAGS } } = require('discord.js');
 
 module.exports = class extends Extendable {
 
@@ -7,7 +8,7 @@ module.exports = class extends Extendable {
 	}
 
 	get extend() {
-		return !this.guild || this.permissionsFor(this.guild.me).has('VIEW_CHANNEL');
+		return !this.guild || this.permissionsFor(this.guild.me).has(FLAGS.VIEW_CHANNEL);
 	}
 
 };
