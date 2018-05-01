@@ -134,7 +134,7 @@ module.exports = class extends Command {
 	}
 
 	async run(message) {
-		return message.sendMessage(`You have a total of ${message.author.configs.experience} experience points!`);
+		return message.send(`You have a total of ${message.author.configs.experience} experience points!`);
 	}
 
 };
@@ -155,7 +155,7 @@ module.exports = class extends Command {
 	}
 
 	async run(message) {
-		return message.sendMessage(`You are currently level ${message.author.configs.level}!`);
+		return message.send(`You are currently level ${message.author.configs.level}!`);
 	}
 
 };
