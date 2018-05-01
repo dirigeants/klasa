@@ -1225,7 +1225,7 @@ declare module 'klasa' {
 
 	class Util {
 		public static applyToClass(base: object, structure: object, skips?: string[]): void;
-		public static clean<T>(text: T): T;
+		public static clean(text: string): string;
 		public static codeBlock(lang: string, expression: string): string;
 		public static deepClone<T = any>(source: T): T;
 		public static exec(exec: string, options?: ExecOptions): Promise<{ stdout: string, stderr: string }>;
