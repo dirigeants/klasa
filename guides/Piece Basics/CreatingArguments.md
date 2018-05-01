@@ -18,7 +18,7 @@ The run method in {@link Argument} takes 3 parameters:
 | ---------------- | -------------------- | -------------------------------------- |
 | **arg**          | string               | The parameter given to parse           |
 | **possible**     | {@link Possible}     | The Possible instance that is running  |
-| **message**          | {@link KlasaMessage} | The message that triggered the command |
+| **message**      | {@link KlasaMessage} | The message that triggered the command |
 
 ```javascript
 const { Argument } = require('klasa');
