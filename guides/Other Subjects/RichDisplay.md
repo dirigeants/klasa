@@ -16,7 +16,7 @@ module.exports = class extends Command {
 		return new RichDisplay()
 			.addPage(new MessageEmbed().setDescription('First page'))
 			.addPage(new MessageEmbed().setDescription('Second page'))
-			.run(await message.sendMessage('Loading...'));
+			.run(await message.send('Loading...'));
 	}
 
 };
@@ -45,7 +45,7 @@ module.exports = class extends Command {
 			display.addPage(template => template.setImage(images[i]));
 		}
 
-		return display.run(await message.sendMessage('Loading slideshow...'));
+		return display.run(await message.send('Loading slideshow...'));
 	}
 
 };
@@ -90,13 +90,13 @@ module.exports = class extends Command {
 
 	async run(message) {
 		// ...
-		return display.run(await message.sendMessage('Loading slideshow...'));
+		return display.run(await message.send('Loading slideshow...'));
 	}
 
 };
 ```
 
-The message will show the content we defined in {@link KlasaMessage.sendMessage} initially, then, when our {@link RichDisplay} will be ready it will replace the content with the first page we defined.
+The message will show the content we defined in {@link KlasaMessage#send} initially, then, when our {@link RichDisplay} will be ready it will replace the content with the first page we defined.
 
 ## Info Page
 
@@ -122,7 +122,7 @@ module.exports = class extends Command {
 
 	async run(message) {
 		// ...
-		display.run(await message.sendMessage('Loading slideshow...'), { filter: (reaction, user) => user === message.author });
+		display.run(await message.send('Loading slideshow...'), { filter: (reaction, user) => user === message.author });
 	}
 
 };
