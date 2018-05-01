@@ -11,7 +11,7 @@ message.guild.configs.update('roles.administrator', '339943234405007361', messag
 // For retrocompatibility, the object overload is still available, however, this is much slower.
 // If you store objects literals in keys that do not take an array, this may break, prefer the
 // other overload or use nested SchemaPieces for full consistency.
-msg.guild.configs.update({ roles: { administrator: '339943234405007361' } }, message.guild);
+message.guild.configs.update({ roles: { administrator: '339943234405007361' } }, message.guild);
 
 // Updating an array
 // userBlacklist, as mentioned in another tutorial, it's a piece with an array of users. Using
