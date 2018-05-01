@@ -1,5 +1,6 @@
 const { promisify } = require('util');
 const { exec } = require('child_process');
+const DiscordUtil = require('discord.js').Util;
 const zws = String.fromCharCode(8203);
 const has = (ob, ke) => Object.prototype.hasOwnProperty.call(ob, ke);
 let sensitivePattern;
@@ -25,11 +26,15 @@ class Util {
 	 * Makes a codeblock markup string
 	 * @since 0.0.1
 	 * @param {string} lang The codeblock language
-	 * @param {string} expression The expression to be wrapped in the codeblock
+	 * @param {StringResolvable} expression The expression to be wrapped in the codeblock
 	 * @returns {string}
 	 */
 	static codeBlock(lang, expression) {
-		return `\`\`\`${lang}\n${expression || zws}\`\`\``;
+		// The resolved string form of expression, but never empty
+		const resolved = expression ?
+			DiscordUtil.resolveString(expression) || zws :
+			zws;
+		return `\`\`\`${lang}\n${resolved}\`\`\``;
 	}
 
 	/**
