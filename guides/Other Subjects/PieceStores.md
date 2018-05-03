@@ -59,7 +59,7 @@ class RawEvent extends Piece {
 	constructor(client, store, file, core, options = {}) {
 		super(client, store, file, core, options);
 
-        // not a lot of options, but im keeping it simple for the sake of the guide
+        	// not a lot of options, but im keeping it simple for the sake of the guide
 		this.enabled = options.enabled || true;
 	}
 
