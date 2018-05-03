@@ -65,7 +65,7 @@ class Argument extends Piece {
 	 * @param {?number} min The minimum value
 	 * @param {?number} max The maximum value
 	 * @param {Possible} possible The id of the current possible usage
-	 * @param {KlasaMessage} msg The message that triggered the command
+	 * @param {KlasaMessage} message The message that triggered the command
 	 * @param {string} suffix An error suffix
 	 * @returns {boolean}
 	 * @private
