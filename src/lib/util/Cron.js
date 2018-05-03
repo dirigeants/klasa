@@ -24,7 +24,9 @@ class Cron {
 	 * @returns {Date}
 	 */
 	next(outset = new Date(), origin = true) {
-		if (!this.days.includes(outset.getUTCDate()) || !this.months.includes(outset.getUTCMonth() + 1) || !this.dows.includes(outset.getUTCDay())) return this.next(new Date(outset.getTime() + DAY), false);
+		if (!this.days.includes(outset.getUTCDate()) || !this.months.includes(outset.getUTCMonth() + 1) || !this.dows.includes(outset.getUTCDay())) {
+        		return this.next(new Date(outset.getTime() + DAY), false);
+		}
 		if (!origin) return new Date(Date.UTC(outset.getUTCFullYear(), outset.getUTCMonth(), outset.getUTCDate(), this.hours[0], this.minutes[0]));
 
 		const now = new Date(outset.getTime() + 60000);
