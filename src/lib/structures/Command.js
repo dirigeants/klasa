@@ -169,7 +169,7 @@ class Command extends Piece {
 		this.runIn = options.runIn;
 
 		/**
-		 * Whether to enable sub commands or not
+		 * Whether to enable subcommands or not
 		 * @since 0.5.0
 		 * @type {boolean}
 		 */
