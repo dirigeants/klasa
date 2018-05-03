@@ -330,8 +330,8 @@ class KlasaClient extends Discord.Client {
 	 * Obtains the OAuth Application of the bot from Discord.
 	 * If you are fetching this bot's application, {@link KlasaClient#application} will be updated.
 	 * @since 0.0.1
-	 * @param {Snowflake} [id='@me'] ID of application to fetch
-	 * @returns {ClientApplication}
+	 * @param {external:Snowflake} [id='@me'] ID of application to fetch
+	 * @returns {external:ClientApplication}
 	 */
 	async fetchApplication(id = '@me') {
 		if (id !== '@me') return super.fetchApplication(id);
