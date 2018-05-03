@@ -46,7 +46,7 @@ class PermissionLevels extends Collection {
 	}
 
 	/**
-	 * Removes levels to the levels cache
+	 * Removes levels from the levels cache
 	 * @since 0.5.0
 	 * @param {number} level The permission number for the level you are removing
 	 * @returns {this}
@@ -59,7 +59,7 @@ class PermissionLevels extends Collection {
 	 * Adds levels to the levels cache to be converted to valid permission structure
 	 * @since 0.2.1
 	 * @param {number} level The permission number for the level you are defining
-	 * @param {PermissionLevelOptions|symbol} obj Whether the level should break (stop processing higher levels, and inhibit a no permission error)
+	 * @param {PermissionLevelOptions|symbol} obj whether the level should break (stop processing higher levels, and inhibit a no permission error)
 	 * @returns {this}
 	 * @private
 	 */
