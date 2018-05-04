@@ -59,7 +59,7 @@ class RawEvent extends Piece {
 	constructor(client, store, file, core, options = {}) {
 		super(client, store, file, core, options);
 
-        	// not a lot of options, but im keeping it simple for the sake of the guide
+		// not a lot of options, but im keeping it simple for the sake of the guide
 		this.enabled = options.enabled || true;
 	}
 
@@ -78,6 +78,7 @@ module.exports = class extends RawEvent {
 	async run(data) {
 
 	}
+
 };
 ```
 
@@ -121,7 +122,6 @@ module.exports = class extends Event {
 		}
 	}
 
-
 };
 ```
 
@@ -132,8 +132,10 @@ const RawEvent = require('../RawEvent');
 
 module.exports = class extends RawEvent {
 
+	/* eslint-disable camelcase */
 	async run({ channel_id, message_id, user_id }) {
 		console.log(channel_id, message_id, user_id);
 	}
+
 };
 ```
