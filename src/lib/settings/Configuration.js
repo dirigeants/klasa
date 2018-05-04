@@ -106,6 +106,16 @@ class Configuration {
 	}
 
 	/**
+	 * Wait for the sync
+	 * @since 0.5.0
+	 * @returns {this}
+	 */
+	async waitSync() {
+		if (this._syncStatus) await this._syncStatus;
+		return this;
+	}
+
+	/**
 	 * Sync the data from the database with the cache.
 	 * @since 0.5.0
 	 * @returns {this}

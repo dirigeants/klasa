@@ -13,6 +13,8 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#284](https://github.com/dirigeants/klasa/pull/284)] Added `Configuration#waitSync()` to wait for the sync to finish. (kyranet)
+- [[#284](https://github.com/dirigeants/klasa/pull/284)] Added `GatewayDriverRegisterOptions.waitForDownload`, to sync the data in the background without blocking the load. (kyranet)
 - [[#284](https://github.com/dirigeants/klasa/pull/284)] Added `SQLProvider`. (kyranet)
 - [[#284](https://github.com/dirigeants/klasa/pull/284)] Added `SchemaPiece#sqlSchema` for consistency with `SchemaFolder#sqlSchema`. (kyranet)
 - [[#272](https://github.com/dirigeants/klasa/pull/272)] Added `disabledCorePieces` option in `KlasaClientOptions`. (bdistin)
@@ -223,6 +225,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
+- [[#284](https://github.com/dirigeants/klasa/pull/284)] Fixed a bug where SG's cache would download twice when `GatewayDriverRegisterOptions.download` is true. (kyranet)
 - [[#284](https://github.com/dirigeants/klasa/pull/284)] Fixed `Gateway#parseEntry` not being a function. (kyranet)
 - [[#256](https://github.com/dirigeants/klasa/pull/256)] Fixed `Util.deepClone` trying to iterate over `WeakMap`s and `WeakSet`s. (kyranet)
 - [[#256](https://github.com/dirigeants/klasa/pull/256)] Fixed a critical sync issue where `Configuration#_syncStatus` resolved too early. (kyranet)
