@@ -495,9 +495,9 @@ declare module 'klasa' {
 		public sync(download: boolean): Promise<null>;
 		public getPath(key?: string, options?: GatewayGetPathOptions): GatewayGetPathResult | null;
 
-		public init(options: { download?: boolean, defaultSchema?: object }): Promise<void>;
+		public init(options: GatewayDriverRegisterOptions): Promise<void>;
 		private _download(): Promise<void>;
-		private _ready(): Promise<Array<Collection<string, Configuration>>>;
+		private _ready(waitForDownload: boolean): Promise<Array<Collection<string, Configuration>>>;
 		private _resolveGuild(guild: GatewayGuildResolvable): KlasaGuild;
 		private _shardSync(path: string[], data: any, action: 'add' | 'delete' | 'update'): Promise<void>;
 
@@ -533,8 +533,8 @@ declare module 'klasa' {
 		public users: Gateway;
 		public clientStorage: Gateway;
 
-		public register(name: string, schema?: object, options?: GatewayDriverAddOptions): this;
-		private _register(name: string, schema?: object, options?: GatewayDriverAddOptions): Gateway;
+		public register(name: string, schema?: object, options?: GatewayDriverRegisterOptions): this;
+		private _register(name: string, schema?: object, options?: GatewayDriverRegisterOptions): Gateway;
 		private _ready(): Promise<Array<Array<Collection<string, Configuration>>>>;
 		private _checkProvider(engine: string): string;
 
@@ -1307,9 +1307,9 @@ declare module 'klasa' {
 	} & object;
 
 	export type KlasaGatewaysOptions = {
-		clientStorage?: GatewayDriverAddOptions;
-		guilds?: GatewayDriverAddOptions;
-		users?: GatewayDriverAddOptions;
+		clientStorage?: GatewayDriverRegisterOptions;
+		guilds?: GatewayDriverRegisterOptions;
+		users?: GatewayDriverRegisterOptions;
 	} & object;
 
 	export type ExecOptions = {
@@ -1430,9 +1430,10 @@ declare module 'klasa' {
 		route: string[];
 	};
 
-	export type GatewayDriverAddOptions = {
-		nice?: boolean;
+	export type GatewayDriverRegisterOptions = {
 		provider?: string;
+		download?: boolean;
+		waitForDownload?: boolean;
 	};
 
 	export type SchemaFolderAddOptions = {

@@ -168,13 +168,14 @@ class Gateway extends GatewayStorage {
 	/**
 	 * Inits the table and the schema for its use in this gateway.
 	 * @since 0.0.1
-	 * @param {boolean} [download=true] Whether this Gateway should download the data from the database
+	 * @param {GatewayDriverRegisterOptions} GatewayInitOptions The options for init
 	 * @private
 	 */
-	async init({ download = true, defaultSchema = {} } = {}) {
+	async init({ download = true, defaultSchema = {}, waitForDownload = true } = {}) {
 		await super.init(defaultSchema);
 		if (download) await this._download();
-		await this._ready();
+		else await this._ready(waitForDownload);
+		if (!this.ready) this.ready = true;
 	}
 
 	/**
@@ -200,10 +201,11 @@ class Gateway extends GatewayStorage {
 	/**
 	 * Readies up all Configuration instances in this gateway
 	 * @since 0.5.0
+	 * @param {boolean} [waitForDownload] Whether this Gateway should wait for all the data from the gateway to be downloaded
 	 * @returns {Array<external:Collection<string, Configuration>>}
 	 * @private
 	 */
-	async _ready() {
+	async _ready(waitForDownload) {
 		if (!this.schema.keyArray.length || typeof this.client[this.type] === 'undefined') return null;
 		const promises = [];
 		const keys = await this.provider.getKeys(this.type);
@@ -212,10 +214,8 @@ class Gateway extends GatewayStorage {
 			const structure = store.get(keys[i]);
 			if (structure) promises.push(structure.configs.sync().then(() => this.cache.set(keys[i], structure.configs)));
 		}
-		const results = await Promise.all(promises);
-		if (!this.ready) this.ready = true;
 
-		return results;
+		return waitForDownload ? await Promise.all(promises) : [];
 	}
 
 	/**
