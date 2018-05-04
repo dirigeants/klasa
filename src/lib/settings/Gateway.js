@@ -201,21 +201,17 @@ class Gateway extends GatewayStorage {
 	/**
 	 * Readies up all Configuration instances in this gateway
 	 * @since 0.5.0
-	 * @param {boolean} [waitForDownload] Whether this Gateway should wait for all the data from the gateway to be downloaded
-	 * @returns {Array<external:Collection<string, Configuration>>}
+	 * @param {boolean} waitForDownload Whether this Gateway should wait for all the data from the gateway to be downloaded
+	 * @returns {Promise<Array<external:Collection<string, Configuration>>>}
 	 * @private
 	 */
-	async _ready(waitForDownload) {
-		if (!this.schema.keyArray.length || typeof this.client[this.type] === 'undefined') return null;
-		const promises = [];
-		const keys = await this.provider.getKeys(this.type);
-		const store = this.client[this.type];
-		for (let i = 0; i < keys.length; i++) {
-			const structure = store.get(keys[i]);
-			if (structure) promises.push(structure.configs.sync().then(() => this.cache.set(keys[i], structure.configs)));
-		}
+	_ready(waitForDownload) {
+		if (!this.schema.keyArray.length) return Promise.resolve(null);
 
-		return waitForDownload ? await Promise.all(promises) : [];
+		if (waitForDownload) return Promise.all(this.cache.map(entry => entry.sync()));
+
+		for (const entry of this.cache.values()) entry.sync();
+		return Promise.resolve([]);
 	}
 
 	/**

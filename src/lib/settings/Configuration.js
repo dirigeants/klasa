@@ -108,11 +108,11 @@ class Configuration {
 	/**
 	 * Wait for the sync
 	 * @since 0.5.0
-	 * @returns {this}
+	 * @returns {Promise<this>}
 	 */
-	async waitSync() {
-		if (this._syncStatus) await this._syncStatus;
-		return this;
+	waitSync() {
+		if (this._syncStatus) return this._syncStatus;
+		return Promise.resolve(this);
 	}
 
 	/**
