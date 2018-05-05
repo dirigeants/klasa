@@ -6,11 +6,11 @@ module.exports = class extends Argument {
 		super(...args, { aliases: ['num', 'number'] });
 	}
 
-	run(arg, possible, msg) {
+	run(arg, possible, message) {
 		const { min, max } = possible;
 		const number = parseFloat(arg);
-		if (isNaN(number)) throw (msg.language || this.client.languages.default).get('RESOLVER_INVALID_FLOAT', possible.name);
-		return this.constructor.minOrMax(this.client, number, min, max, possible, msg) ? number : null;
+		if (isNaN(number)) throw (message.language || this.client.languages.default).get('RESOLVER_INVALID_FLOAT', possible.name);
+		return this.constructor.minOrMax(this.client, number, min, max, possible, message) ? number : null;
 	}
 
 };

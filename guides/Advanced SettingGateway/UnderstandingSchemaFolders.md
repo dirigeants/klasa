@@ -45,9 +45,9 @@ this.client.gateways.guilds.schema.add('userBlacklist', { type: 'User', array: t
 And now you can have access to any of them in your guild configs like in the following snippet!
 
 ```javascript
-msg.guild.configs.modlogs;
+message.guild.configs.modlogs;
 // null
-msg.guild.configs.userBlacklist;
+message.guild.configs.userBlacklist;
 // []
 ```
 

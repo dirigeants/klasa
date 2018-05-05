@@ -4,6 +4,7 @@ An extremely simple working example can achieved by this code:
 
 ```javascript
 const { Command, RichDisplay } = require('klasa');
+const { MessageEmbed } = require('discord.js');
 
 module.exports = class extends Command {
 
@@ -11,11 +12,11 @@ module.exports = class extends Command {
 		super(...args, { description: 'Test RichDisplay' });
 	}
 
-	async run(msg) {
+	async run(message) {
 		return new RichDisplay()
-			.addPage(new this.client.methods.Embed().setDescription('First page'))
-			.addPage(new this.client.methods.Embed().setDescription('Second page'))
-			.run(await msg.sendMessage('Loading...'));
+			.addPage(new MessageEmbed().setDescription('First page'))
+			.addPage(new MessageEmbed().setDescription('Second page'))
+			.run(await message.send('Loading...'));
 	}
 
 };
@@ -32,8 +33,8 @@ const images = [
 
 module.exports = class extends Command {
 
-	async run(msg) {
-		const display = new RichDisplay(new this.client.methods.Embed()
+	async run(message) {
+		const display = new RichDisplay(new MessageEmbed()
 			.setColor(0x673AB7)
 			.setAuthor(this.client.user.name, this.client.user.avatarURL())
 			.setTitle('Norway Pictures Slideshow')
@@ -44,20 +45,20 @@ module.exports = class extends Command {
 			display.addPage(template => template.setImage(images[i]));
 		}
 
-		return display.run(await msg.sendMessage('Loading slideshow...'));
+		return display.run(await message.send('Loading slideshow...'));
 	}
 
 };
 ```
 
-> The code is contained in the block of the aforementioned command, inside the `async run(msg)` method but the display or its pages can easily be reused by placing its initialization in the command's constructor method.
+> The code is contained in the block of the aforementioned command, inside the `async run(message)` method but the display or its pages can easily be reused by placing its initialization in the command's constructor method.
 
 ## Code Analysis
 
 First we create a new {@link RichDisplay} instance, but this time we pass in a [`MessageEmbed`](https://discord.js.org/#/docs/main/master/class/MessageEmbed) instance, which will represent our template, from which we will be able to extend upon to create our pages later on:
 
 ```javascript
-const display = new RichDisplay(new this.client.methods.Embed()
+const display = new RichDisplay(new MessageEmbed()
 	/* ... */
 );
 ```
@@ -87,15 +88,15 @@ Then, after the {@link RichDisplay} is setup, we return, executing it on a new m
 ```javascript
 module.exports = class extends Command {
 
-	async run(msg) {
+	async run(message) {
 		// ...
-		return display.run(await msg.sendMessage('Loading slideshow...'));
+		return display.run(await message.send('Loading slideshow...'));
 	}
 
 };
 ```
 
-The message will show the content we defined in {@link KlasaMessage.sendMessage} initially, then, when our {@link RichDisplay} will be ready it will replace the content with the first page we defined.
+The message will show the content we defined in {@link KlasaMessage#send} initially, then, when our {@link RichDisplay} will be ready it will replace the content with the first page we defined.
 
 ## Info Page
 
@@ -119,9 +120,9 @@ A simple example for this would be a filter that only allows the user who execut
 ```javascript
 module.exports = class extends Command {
 
-	async run(msg) {
+	async run(message) {
 		// ...
-		display.run(await msg.sendMessage('Loading slideshow...'), { filter: (reaction, user) => user === msg.author });
+		display.run(await message.send('Loading slideshow...'), { filter: (reaction, user) => user === message.author });
 	}
 
 };

@@ -13,30 +13,30 @@ module.exports = class extends Finalizer {
 		};
 	}
 
-	run(msg, mes, timer) {
-		const { type } = msg.channel;
+	run(message, response, timer) {
+		const { type } = message.channel;
 		this.client.emit('log', [
-			`${msg.command.name}(${msg.args.join(', ')})`,
-			this.reprompted[Number(msg.reprompted)].format(`[${timer.stop()}]`),
-			this.user.format(`${msg.author.username}[${msg.author.id}]`),
-			this.channel[type].format(this[type](msg))
+			`${message.command.name}(${message.args.join(', ')})`,
+			this.reprompted[Number(message.reprompted)].format(`[${timer.stop()}]`),
+			this.user.format(`${message.author.username}[${message.author.id}]`),
+			this.channel[type].format(this[type](message))
 		].join(' '));
 	}
 
 	init() {
-		this.enabled = this.client.options.cmdLogging;
+		this.enabled = this.client.options.commandLogging;
 	}
 
-	text(msg) {
-		return `${msg.guild.name}[${msg.guild.id}]`;
+	text(message) {
+		return `${message.guild.name}[${message.guild.id}]`;
 	}
 
 	dm() {
 		return 'Direct Messages';
 	}
 
-	group(msg) {
-		return `Group DM => ${msg.channel.owner.username}[${msg.channel.owner.id}]`;
+	group(message) {
+		return `Group DM => ${message.channel.owner.username}[${message.channel.owner.id}]`;
 	}
 
 };

@@ -7,7 +7,7 @@
 ```
 
 <!--
-If you issue is a proposal, you can provide its use case showing code.
+If your issue is a proposal, you can provide its use case showing code.
 Make sure to explain everything well and comment the code, so we can
 follow up.
 -->

@@ -36,9 +36,9 @@ this.client.schedule.create('reminder', Date.now() + (1000 * 60), {
 	data: {
 		// This is the metadata. In one minute after the creation of this scheduled
 		// task, Schedule will call your new task with this object.
-		user: msg.author.id,
+		user: message.author.id,
 		text: 'This is a reminder',
-		channel: msg.channel.id
+		channel: message.channel.id
 	},
 	catchUp: true
 	// This task will try to run again (catch up) if the bot was off when it was meant to fire

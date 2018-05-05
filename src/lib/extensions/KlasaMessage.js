@@ -1,4 +1,4 @@
-const { Structures, splitMessage, Collection, MessageAttachment, MessageEmbed } = require('discord.js');
+const { Structures, splitMessage, Collection, MessageAttachment, MessageEmbed, Permissions: { FLAGS } } = require('discord.js');
 const { isObject } = require('../util/util');
 
 module.exports = Structures.extend('Message', Message => {
@@ -122,7 +122,7 @@ module.exports = Structures.extend('Message', Message => {
 		 */
 		get reactable() {
 			if (!this.guild) return true;
-			return this.channel.readable && this.permissionsFor(this.guild.me).has('ADD_REACTIONS');
+			return this.channel.readable && this.channel.permissionsFor(this.guild.me).has(FLAGS.ADD_REACTIONS);
 		}
 
 		/**
@@ -133,7 +133,7 @@ module.exports = Structures.extend('Message', Message => {
 		 */
 		async prompt(text, time = 30000) {
 			const message = await this.channel.send(text);
-			const responses = await this.channel.awaitMessages(mes => mes.author === this.author, { time, max: 1 });
+			const responses = await this.channel.awaitMessages(msg => msg.author === this.author, { time, max: 1 });
 			message.delete();
 			if (responses.size === 0) throw this.language.get('MESSAGE_PROMPT_TIMEOUT');
 			return responses.first();
@@ -234,6 +234,17 @@ module.exports = Structures.extend('Message', Message => {
 		}
 
 		/**
+		 * Since d.js is dumb and has 2 patch methods, this is for edits
+		 * @since 0.5.0
+		 * @param {*} data The data passed from the original constructor
+		 * @private
+		 */
+		patch(data) {
+			super.patch(data);
+			this.language = this.guild ? this.guild.language : this.client.languages.default;
+		}
+
+		/**
 		 * Extends the patch method from D.JS to attach and update the language to this instance
 		 * @since 0.5.0
 		 * @param {*} data The data passed from the original constructor
@@ -265,8 +276,8 @@ module.exports = Structures.extend('Message', Message => {
 			this.prefixLength = prefixLength;
 			this.prompter = this.command.usage.createPrompt(this, {
 				quotedStringSupport: this.command.quotedStringSupport,
-				promptTime: this.command.promptTime,
-				promptLimit: this.command.promptLimit
+				time: this.command.promptTime,
+				limit: this.command.promptLimit
 			});
 			this.client.emit('commandRun', this, this.command, this.args);
 		}
