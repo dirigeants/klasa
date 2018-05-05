@@ -63,7 +63,7 @@ class SettingResolver extends Resolver {
 	}
 
 	/**
-	 * Resolves a VoiceChannel
+	 * Resolves a CategoryChannel
 	 * @since 0.3.0
 	 * @param {*} data The data to resolve
 	 * @param {KlasaGuild} guild The guild to resolve for

@@ -46,19 +46,6 @@ class Stopwatch {
 	}
 
 	/**
-	 * The duration formatted in a friendly string
-	 * @since 0.4.0
-	 * @type {string}
-	 * @readonly
-	 */
-	get friendlyDuration() {
-		const time = this.duration;
-		if (time >= 1000) return `${(time / 1000).toFixed(this.digits)}s`;
-		if (time >= 1) return `${time.toFixed(this.digits)}ms`;
-		return `${(time * 1000).toFixed(this.digits)}μs`;
-	}
-
-	/**
 	 * If the stopwatch is running or not
 	 * @since 0.4.0
 	 * @type {boolean}
@@ -118,12 +105,15 @@ class Stopwatch {
 	}
 
 	/**
-	 * Defines toString behavior to return the friendlyDuration
+	 * Defines toString behavior
 	 * @since 0.4.0
 	 * @returns {string}
 	 */
 	toString() {
-		return this.friendlyDuration;
+		const time = this.duration;
+		if (time >= 1000) return `${(time / 1000).toFixed(this.digits)}s`;
+		if (time >= 1) return `${time.toFixed(this.digits)}ms`;
+		return `${(time * 1000).toFixed(this.digits)}μs`;
 	}
 
 }

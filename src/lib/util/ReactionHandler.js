@@ -15,7 +15,7 @@ class ReactionHandler extends ReactionCollector {
 	 * @typedef {Object} ReactionHandlerOptions
 	 * @property {Function} [filter] A filter function to add to the ReactionHandler
 	 * @property {boolean} [stop=true] If a stop reaction should be included
-	 * @property {string} [prompt=msg.language.get('REACTIONHANDLER_PROMPT')] The prompt to be used when awaiting user input on a page to jump to
+	 * @property {string} [prompt=message.language.get('REACTIONHANDLER_PROMPT')] The prompt to be used when awaiting user input on a page to jump to
 	 * @property {number} [startPage=0] The page to start the RichMenu on
 	 * @property {number} [max] The maximum total amount of reactions to collect
 	 * @property {number} [maxEmojis] The maximum number of emojis to collect
@@ -26,14 +26,14 @@ class ReactionHandler extends ReactionCollector {
 	/**
 	 * Constructs our ReactionHandler instance
 	 * @since 0.4.0
-	 * @param {KlasaMessage} msg A message this ReactionHandler should handle reactions
+	 * @param {KlasaMessage} message A message this ReactionHandler should handle reactions
 	 * @param {Function} filter A filter function to determine which emoji reactions should be handled
 	 * @param {ReactionHandlerOptions} options The options for this ReactionHandler
 	 * @param {(RichDisplay|RichMenu)} display The RichDisplay or RichMenu that this handler is for
 	 * @param {Emoji[]} emojis The emojis which should be used in this handler
 	 */
-	constructor(msg, filter, options, display, emojis) {
-		super(msg, filter, options);
+	constructor(message, filter, options, display, emojis) {
+		super(message, filter, options);
 
 		/**
 		 * The RichDisplay/RichMenu this Handler is for
@@ -61,7 +61,7 @@ class ReactionHandler extends ReactionCollector {
 		 * @since 0.4.0
 		 * @type {string}
 		 */
-		this.prompt = this.options.prompt || msg.language.get('REACTIONHANDLER_PROMPT');
+		this.prompt = this.options.prompt || message.language.get('REACTIONHANDLER_PROMPT');
 
 		/**
 		 * The time until the reaction collector closes automatically
@@ -168,10 +168,10 @@ class ReactionHandler extends ReactionCollector {
 	async jump(user) {
 		if (this.awaiting) return;
 		this.awaiting = true;
-		const mes = await this.message.channel.send(this.prompt);
+		const message = await this.message.channel.send(this.prompt);
 		const collected = await this.message.channel.awaitMessages(mess => mess.author === user, { max: 1, time: this.time });
 		this.awaiting = false;
-		await mes.delete();
+		await message.delete();
 		if (!collected.size) return;
 		const newPage = parseInt(collected.first().content);
 		collected.first().delete();

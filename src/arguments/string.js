@@ -6,9 +6,9 @@ module.exports = class extends Argument {
 		super(...args, { aliases: ['str'] });
 	}
 
-	run(arg, possible, msg) {
+	run(arg, possible, message) {
 		const { min, max } = possible;
-		return this.constructor.minOrMax(this.client, arg.length, min, max, possible, msg, 'RESOLVER_STRING_SUFFIX') ? arg : null;
+		return this.constructor.minOrMax(this.client, arg.length, min, max, possible, message, 'RESOLVER_STRING_SUFFIX') ? arg : null;
 	}
 
 };

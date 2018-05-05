@@ -38,8 +38,8 @@ class KlasaClient extends Discord.Client {
 
 	/**
 	 * @typedef {external:DiscordJSConfig} KlasaClientOptions
-	 * @property {boolean} [cmdEditing=false] Whether the bot should update responses if the command is edited
-	 * @property {boolean} [cmdLogging=false] Whether the bot should log command usage
+	 * @property {boolean} [commandEditing=false] Whether the bot should update responses if the command is edited
+	 * @property {boolean} [commandLogging=false] Whether the bot should log command usage
 	 * @property {number} [commandMessageLifetime=1800] The threshold for how old command messages can be before sweeping since the last edit in seconds
 	 * @property {KlasaConsoleConfig} [console={}] Config options to pass to the client console
 	 * @property {KlasaConsoleEvents} [consoleEvents={}] Config options to pass to the client console
@@ -101,8 +101,8 @@ class KlasaClient extends Discord.Client {
 
 	/**
 	 * @typedef {Object} KlasaCustomPromptDefaults
-	 * @property {number} [promptLimit=Infinity] The number of re-prompts before custom prompt gives up
-	 * @property {number} [promptTime=30000] The time-limit for re-prompting custom prompts
+	 * @property {number} [limit=Infinity] The number of re-prompts before custom prompt gives up
+	 * @property {number} [time=30000] The time-limit for re-prompting custom prompts
 	 * @property {boolean} [quotedStringSupport=false] Whether the custom prompt should respect quoted strings
 	 */
 
@@ -229,28 +229,6 @@ class KlasaClient extends Discord.Client {
 		this.permissionLevels = this.validatePermissionLevels();
 
 		/**
-		 * Additional methods to be used elsewhere in the bot
-		 * @since 0.0.1
-		 * @type {Object}
-		 * @property {class} Collection A discord.js collection
-		 * @property {class} Embed A discord.js Message Embed
-		 * @property {class} MessageCollector A discord.js MessageCollector
-		 * @property {class} Webhook A discord.js WebhookClient
-		 * @property {function} escapeMarkdown A discord.js escape markdown function
-		 * @property {function} splitMessage A discord.js split message function
-		 * @property {Util} util A collection of static methods to be used throughout the bot
-		 */
-		this.methods = {
-			Collection: Discord.Collection,
-			Embed: Discord.MessageEmbed,
-			escapeMarkdown: Discord.escapeMarkdown,
-			MessageCollector: Discord.MessageCollector,
-			splitMessage: Discord.splitMessage,
-			Webhook: Discord.WebhookClient,
-			util
-		};
-
-		/**
 		 * The GatewayDriver instance where the gateways are stored
 		 * @since 0.5.0
 		 * @type {GatewayDriver}
@@ -311,7 +289,7 @@ class KlasaClient extends Discord.Client {
 	 */
 	get invite() {
 		if (!this.user.bot) throw 'Why would you need an invite link for a selfbot...';
-		const permissions = new Permissions(3072).add(...this.commands.map(command => command.botPerms)).bitfield;
+		const permissions = new Permissions(3072).add(...this.commands.map(command => command.requiredPermissions)).bitfield;
 		// VIEW_CHANNEL, SEND_MESSAGES
 		return `https://discordapp.com/oauth2/authorize?client_id=${this.application.id}&permissions=${permissions}&scope=bot`;
 	}
@@ -333,10 +311,10 @@ class KlasaClient extends Discord.Client {
 	 * @private
 	 */
 	validatePermissionLevels() {
-		const permLevels = this.options.permissionLevels || KlasaClient.defaultPermissionLevels;
-		if (!(permLevels instanceof PermissionLevels)) throw new Error('permissionLevels must be an instance of the PermissionLevels class');
-		if (permLevels.isValid()) return permLevels;
-		throw new Error(permLevels.debug());
+		const permissionLevels = this.options.permissionLevels || KlasaClient.defaultPermissionLevels;
+		if (!(permissionLevels instanceof PermissionLevels)) throw new Error('permissionLevels must be an instance of the PermissionLevels class');
+		if (permissionLevels.isValid()) return permissionLevels;
+		throw new Error(permissionLevels.debug());
 	}
 
 	/**
@@ -448,11 +426,10 @@ class KlasaClient extends Discord.Client {
  */
 KlasaClient.defaultPermissionLevels = new PermissionLevels()
 	.add(0, () => true)
-	.add(6, (client, msg) => msg.guild && msg.member.permissions.has(FLAGS.MANAGE_GUILD), { fetch: true })
-	.add(7, (client, msg) => msg.guild && msg.member === msg.guild.owner, { fetch: true })
-	.add(9, (client, msg) => msg.author === client.owner, { break: true })
-	.add(10, (client, msg) => msg.author === client.owner);
-
+	.add(6, (client, message) => message.guild && message.member.permissions.has(FLAGS.MANAGE_GUILD), { fetch: true })
+	.add(7, (client, message) => message.guild && message.member === message.guild.owner, { fetch: true })
+	.add(9, (client, message) => message.author === client.owner, { break: true })
+	.add(10, (client, message) => message.author === client.owner);
 
 /**
  * Emitted when Klasa is fully ready and initialized.
@@ -550,7 +527,7 @@ KlasaClient.defaultPermissionLevels = new PermissionLevels()
  * @event KlasaClient#finalizerError
  * @since 0.5.0
  * @param {KlasaMessage} message The message that triggered the finalizer
- * @param {KlasaMessage|any} mes The response from the command
+ * @param {KlasaMessage|any} response The response from the command
  * @param {Stopwatch} timer The timer run from start to queue of the command
  * @param {Finalizer} finalizer The finalizer run
  * @param {(Error|string)} error The finalizer error

@@ -1,4 +1,4 @@
-Creating a points system (also known as **Social Module**) in your bot is quite easy in Klasa, as we will use our configuration system: **SettingGateway**. You do NOT need to rewrite any of your code to change the provider, but we also suggest to **NOT** use the JSON provider for this in production, as you may reach the limit of files you can open simultaneously in your [OS](https://en.wikipedia.org/wiki/Operating_system).
+Creating a points system (also known as a **Social Module**) in your bot is quite easy in Klasa, as we will use our configuration system: **SettingGateway**. You do NOT need to rewrite any of your code to change the provider, but we also suggest to **NOT** use the JSON provider for this in production, as you may reach the limit of files you can open simultaneously in your [OS](https://en.wikipedia.org/wiki/Operating_system).
 
 ## Setting the schema
 
@@ -38,12 +38,12 @@ module.exports = class extends Monitor {
 		});
 	}
 
-	async run(msg) {
+	async run(message) {
 		// If the message was not sent in a TextChannel, ignore it.
-		if (!msg.guild) return;
+		if (!message.guild) return;
 
 		// Update the user's configuration entry by adding 1 to it.
-		await msg.author.configs.update('experience', msg.author.configs.experience + 1);
+		await message.author.configs.update('experience', message.author.configs.experience + 1);
 	}
 
 };
@@ -86,26 +86,26 @@ module.exports = class extends Monitor {
 
 	// Constructor
 
-	async run(msg) {
+	async run(message) {
 		// If the message was not sent in a TextChannel, ignore it.
-		if (!msg.guild) return;
+		if (!message.guild) return;
 
 		// Calculate the next value for experience.
-		const nextValue = msg.author.configs.experience + 1;
+		const nextValue = message.author.configs.experience + 1;
 
 		// Cache the current level.
-		const currLevel = msg.author.configs.level;
+		const currLevel = message.author.configs.level;
 
 		// Calculate the next level.
 		const nextLevel = Math.floor(0.1 * Math.sqrt(nextValue + 1));
 
 		// Update the user's configuration entry by adding 1 to it, and update the level also.
-		await msg.author.configs.update(['experience', 'level'], [nextValue, nextLevel]);
+		await message.author.configs.update(['experience', 'level'], [nextValue, nextLevel]);
 
 		// If the current level and the next level are not the same, then it has increased, and you can send the message.
 		if (currLevel !== nextLevel) {
 			// Send the message to the channel congratulating the user.
-			await msg.send(`Congratulations! You leveled up to level **${currLevel}**!`);
+			await message.send(`Congratulations! You leveled up to level **${currLevel}**!`);
 		}
 	}
 
@@ -114,7 +114,7 @@ module.exports = class extends Monitor {
 };
 ```
 
-Optionally, you can check if `nextLevel === msg.author.configs.level` is true and update a single key instead, but the speed difference is negligible and since [SettingGateway v2.1](https://github.com/dirigeants/klasa/pull/179), the key `level` will not be updated if it did not change. As well, this overload is much faster than the JSON object overload, previously used as the only way to update multiple values.
+Optionally, you can check if `nextLevel === message.author.configs.level` is true and update a single key instead, but the speed difference is negligible and since [SettingGateway v2.1](https://github.com/dirigeants/klasa/pull/179), the key `level` will not be updated if it did not change. As well, this overload is much faster than the JSON object overload, previously used as the only way to update multiple values.
 
 ## Creating Our Commands
 
@@ -133,8 +133,8 @@ module.exports = class extends Command {
 		super(...args, { description: 'Check how many points you have.' });
 	}
 
-	async run(msg) {
-		return msg.sendMessage(`You have a total of ${msg.author.configs.experience} experience points!`);
+	async run(message) {
+		return message.send(`You have a total of ${message.author.configs.experience} experience points!`);
 	}
 
 };
@@ -154,8 +154,8 @@ module.exports = class extends Command {
 		super(...args, { description: 'Check your current level.' });
 	}
 
-	async run(msg) {
-		return msg.sendMessage(`You are currently level ${msg.author.configs.level}!`);
+	async run(message) {
+		return message.send(`You are currently level ${message.author.configs.level}!`);
 	}
 
 };
