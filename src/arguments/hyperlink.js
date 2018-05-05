@@ -7,11 +7,11 @@ module.exports = class extends Argument {
 		super(...args, { aliases: ['url'] });
 	}
 
-	run(arg, possible, msg) {
+	run(arg, possible, message) {
 		const res = parse(arg);
 		const hyperlink = res.protocol && res.hostname ? arg : null;
 		if (hyperlink !== null) return hyperlink;
-		throw (msg.language || this.client.languages.default).get('RESOLVER_INVALID_URL', possible.name);
+		throw (message.language || this.client.languages.default).get('RESOLVER_INVALID_URL', possible.name);
 	}
 
 };

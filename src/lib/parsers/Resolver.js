@@ -27,7 +27,7 @@ class Resolver {
 	 * @param {Channel} channel The Channel object in which the message can be found
 	 * @returns {?KlasaMessage}
 	 */
-	async msg(message, channel) {
+	async message(message, channel) {
 		if (message instanceof Message) return message;
 		return this.constructor.regex.snowflake.test(message) ? channel.messages.fetch(message).catch(() => null) : undefined;
 	}

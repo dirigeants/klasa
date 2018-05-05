@@ -23,7 +23,7 @@ class RichDisplay {
 	 * @property {boolean} [stop=true] If a stop reaction should be included
 	 * @property {boolean} [jump=true] If a jump reaction should be included
 	 * @property {boolean} [firstLast=true] If a first and last reaction should be included
-	 * @property {string} [prompt=msg.language.get('REACTIONHANDLER_PROMPT')] The prompt to be used when awaiting user input on a page to jump to
+	 * @property {string} [prompt=message.language.get('REACTIONHANDLER_PROMPT')] The prompt to be used when awaiting user input on a page to jump to
 	 * @property {number} [startPage=0] The page to start the RichDisplay on
 	 * @property {number} [max] The maximum total amount of reactions to collect
 	 * @property {number} [maxEmojis] The maximum number of emojis to collect
@@ -181,11 +181,11 @@ class RichDisplay {
 	/**
 	 * Runs the RichDisplay
 	 * @since 0.4.0
-	 * @param {KlasaMessage} msg A message to either edit, or use to send a new message for this RichDisplay
+	 * @param {KlasaMessage} message A message to either edit, or use to send a new message for this RichDisplay
 	 * @param {RichDisplayRunOptions} [options={}] The options to use while running this RichDisplay
 	 * @returns {ReactionHandler}
 	 */
-	async run(msg, options = {}) {
+	async run(message, options = {}) {
 		if (!this.footered) this._footer();
 		if (!options.filter) options.filter = () => true;
 		const emojis = this._determineEmojis(
@@ -194,10 +194,10 @@ class RichDisplay {
 			!('jump' in options) || ('jump' in options && options.jump),
 			!('firstLast' in options) || ('firstLast' in options && options.firstLast),
 		);
-		const message = msg.editable ? await msg.edit('', { embed: this.pages[options.startPage || 0] }) : await msg.channel.send(this.pages[options.startPage || 0]);
+		const msg = message.editable ? await message.edit('', { embed: this.pages[options.startPage || 0] }) : await message.channel.send(this.pages[options.startPage || 0]);
 		return new ReactionHandler(
-			message,
-			(reaction, user) => emojis.includes(reaction.emoji.name) && user !== msg.client.user && options.filter(reaction, user),
+			msg,
+			(reaction, user) => emojis.includes(reaction.emoji.name) && user !== message.client.user && options.filter(reaction, user),
 			options,
 			this,
 			emojis

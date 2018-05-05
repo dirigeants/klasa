@@ -91,12 +91,12 @@ class Usage {
 	/**
 	 * Creates a TextPrompt instance to collect and resolve arguments with.
 	 * @since 0.5.0
-	 * @param {KlasaMessage} msg The message context from the prompt
+	 * @param {KlasaMessage} message The message context from the prompt
 	 * @param {TextPromptOptions} [options] The options for the prompt
 	 * @returns {TextPrompt}
 	 */
-	createPrompt(msg, options = {}) {
-		return new TextPrompt(msg, this, options);
+	createPrompt(message, options = {}) {
+		return new TextPrompt(message, this, options);
 	}
 
 	/**

@@ -133,7 +133,7 @@ module.exports = Structures.extend('Message', Message => {
 		 */
 		async prompt(text, time = 30000) {
 			const message = await this.channel.send(text);
-			const responses = await this.channel.awaitMessages(mes => mes.author === this.author, { time, max: 1 });
+			const responses = await this.channel.awaitMessages(msg => msg.author === this.author, { time, max: 1 });
 			message.delete();
 			if (responses.size === 0) throw this.language.get('MESSAGE_PROMPT_TIMEOUT');
 			return responses.first();
@@ -265,8 +265,8 @@ module.exports = Structures.extend('Message', Message => {
 			this.prefixLength = prefixLength;
 			this.prompter = this.command.usage.createPrompt(this, {
 				quotedStringSupport: this.command.quotedStringSupport,
-				promptTime: this.command.promptTime,
-				promptLimit: this.command.promptLimit
+				time: this.command.promptTime,
+				limit: this.command.promptLimit
 			});
 			this.client.emit('commandRun', this, this.command, this.args);
 		}
