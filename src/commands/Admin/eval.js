@@ -15,7 +15,7 @@ module.exports = class extends Command {
 	}
 
 	async run(message, [code]) {
-		const { success, result, time, type } = await this.eval(msg, code);
+		const { success, result, time, type } = await this.eval(message, code);
 		const footer = util.codeBlock('ts', type.toString());
 		const output = message.language.get(success ? 'COMMAND_EVAL_OUTPUT' : 'COMMAND_EVAL_ERROR',
 			time, util.codeBlock('js', result), footer);
