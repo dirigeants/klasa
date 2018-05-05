@@ -65,7 +65,7 @@ class Duration {
 	static toNow(earlier, showIn) {
 		if (!(earlier instanceof Date)) earlier = new Date(earlier);
 		const returnString = showIn ? 'in ' : '';
-		let duration = (Date.now() - earlier) / 1000;
+		let duration = Math.abs((Date.now() - earlier) / 1000);
 
 		// Compare the duration in seconds
 		if (duration < 45) return `${returnString}seconds`;
