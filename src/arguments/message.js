@@ -6,10 +6,10 @@ module.exports = class extends Argument {
 		super(...args, { aliases: ['msg'] });
 	}
 
-	async run(arg, possible, msg) {
-		const message = this.constructor.regex.snowflake.test(arg) ? await msg.channel.messages.fetch(arg).catch(() => null) : undefined;
-		if (message) return message;
-		throw (msg.language || this.client.languages.default).get('RESOLVER_INVALID_MSG', possible.name);
+	async run(arg, possible, message) {
+		const msg = this.constructor.regex.snowflake.test(arg) ? await message.channel.messages.fetch(arg).catch(() => null) : undefined;
+		if (msg) return msg;
+		throw (message.language || this.client.languages.default).get('RESOLVER_INVALID_message', possible.name);
 	}
 
 };

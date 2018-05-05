@@ -46,7 +46,7 @@ class PermissionLevels extends Collection {
 	}
 
 	/**
-	 * Removes levels to the levels cache
+	 * Removes levels from the levels cache
 	 * @since 0.5.0
 	 * @param {number} level The permission number for the level you are removing
 	 * @returns {this}
@@ -96,18 +96,18 @@ class PermissionLevels extends Collection {
 	}
 
 	/**
-	 * Runs the defined permLevels
+	 * Runs the defined permissionLevels
 	 * @since 0.2.1
-	 * @param {KlasaMessage} msg The message to pass to perm level functions
+	 * @param {KlasaMessage} message The message to pass to perm level functions
 	 * @param {number} min The minimum permissionLevel ok to pass
 	 * @returns {PermissionLevelsData}
 	 */
-	async run(msg, min) {
+	async run(message, min) {
 		for (let i = min; i < this.size; i++) {
 			const level = this.get(i);
 			if (level === empty) continue;
-			if (level.fetch && !msg.member && msg.guild) await msg.guild.members.fetch(msg.author);
-			const res = await level.check(msg.client, msg);
+			if (level.fetch && !message.member && message.guild) await message.guild.members.fetch(message.author);
+			const res = await level.check(message.client, message);
 			if (res) return { broke: false, permission: true };
 			if (level.break) return { broke: true, permission: false };
 		}

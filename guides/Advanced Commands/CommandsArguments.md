@@ -42,7 +42,7 @@ Unlike normal arguments, a repeating one can resolve into one or more parameters
 As mentioned before, a `Tag` is a **parsed argument tag** (`<>`, `()` or `[]`) that contains an array of **multiple Possible**s. But what is their format? Generally, they're written as `name:type`, where `name` is the name of the argument, and `type` is the type. However, depending on the type you can use the options or not.
 
 - **name** is the name of the argument, they're used to identify an argument by giving it a name, a good name should be self explanatory and easy to read for the end user.
-- **type** is the name of the type, they're not arbitrary but depends on the methods {@link ArgResolver} has. By default, there are many of them, such as `string`, `integer`, `msg`, `user`, `member`. You can also extend ArgResolver to implement extra methods, check this tutorial: {@tutorial CreatingCustomArguments}, however, if no type is given, the parser will assume them as **literal**.
+- **type** is the name of the type, they're not arbitrary but depends on the methods {@link ArgResolver} has. By default, there are many of them, such as `string`, `integer`, `message`, `user`, `member`. You can also extend ArgResolver to implement extra methods, check this tutorial: {@tutorial CreatingCustomArguments}, however, if no type is given, the parser will assume them as **literal**.
 - **options** always have the format `{min,max}`, taking two integers, both optional (you can specify `{,max}` for an argument with no minimum, or `{min}` for an argument with a minimum but not a maximum), and they're used mostly in the `string`, `number` (float) and `integer`, being the string length and the number the variables to handle, respectively.
 
 ## Examples

@@ -2,13 +2,13 @@ const { Argument } = require('klasa');
 
 module.exports = class extends Argument {
 
-	async run(arg, possible, msg, custom) {
+	async run(arg, possible, message, custom) {
 		try {
-			const resolved = await custom(arg, possible, msg, msg.params);
+			const resolved = await custom(arg, possible, message, message.params);
 			return resolved;
 		} catch (err) {
 			if (err) throw err;
-			throw (msg.language || this.client.languages.default).get('RESOLVER_INVALID_CUSTOM', possible.name, possible.type);
+			throw (message.language || this.client.languages.default).get('RESOLVER_INVALID_CUSTOM', possible.name, possible.type);
 		}
 	}
 

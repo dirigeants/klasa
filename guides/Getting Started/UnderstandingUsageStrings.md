@@ -8,7 +8,7 @@
 - **Regex, Flags** A regular expression with double escaped `\` to match against the argument. It is only valid for regex types of arguments, but gives you great flexibility on custom argument parsing. Flags are regex flags to apply to the regex pattern.
 - **Special Repeat Tag** `[...]` will repeat the last usage optionally until you run out of arguments. Useful for doing something like `<SearchTerm:str> [...]` which will allow you to take as many search terms as you want, per your Usage Delimiter.
 
-> Note: You can set multiple options in an argument by writting `|`. For example: `<Message:msg|Content:string{4,16}>` will work when you provide a message ID or a string with a length between 4 and 16 (including both limits).
+> Note: You can set multiple options in an argument by writing `|`. For example: `<Message:message|Content:string{4,16}>` will work when you provide a message ID or a string with a length between 4 and 16 (including both limits).
 
 ### Usage Types
 
@@ -54,7 +54,7 @@ Now, after we understand how to configure the command, we'll start writing it:
 ```javascript
 module.exports = class extends Command {
 
-	async run(msg, [...params]) {
+	async run(message, [...params]) {
 		// This is where you place the code you want to run when your command is called
 	}
 
@@ -65,19 +65,19 @@ module.exports = class extends Command {
 
 > Note that the commands' parameters are an array. This is a trick called [Destructuring assignment](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment).
 
-For example, when you have: `"<Message:msg> <delete|edit> [newContent:string]"` as your usage, and `"|"` as your usageDelim, then the following code block is an example of how it would look like, and how we would work with them.
+For example, when you have: `"<msg:message> <delete|edit> [newContent:string]"` as your usage, and `"|"` as your usageDelim, then the following code block is an example of how it would look like, and how we would work with them.
 
 ```javascript
 module.exports = class extends Command {
 
-	async run(msg, [message, action, newContent]) {
+	async run(message, [msg, action, newContent]) {
 		// code
 	}
 
 };
 ```
 
-In which `message` is the argument assigned to the message object as provided in `<Message:msg>` argument from usage. Same does `action` for `<delete|edit>` and respectively.
+In which `message` is the argument assigned to the message object as provided in `<Message:message>` argument from usage. Same does `action` for `<delete|edit>` and respectively.
 
 > Keep in mind that we declared `newContent` as an optional argument, if it's not provided, it'll return undefined.
 
@@ -96,7 +96,7 @@ So we can do the following destructuring to get the first matching group of the 
 ```javascript
 module.exports = class extends Command {
 
-	async run(msg, [[, hexColor]]) {
+	async run(message, [[, hexColor]]) {
 		// code
 	}
 
