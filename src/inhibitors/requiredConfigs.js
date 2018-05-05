@@ -2,15 +2,15 @@ const { Inhibitor } = require('klasa');
 
 module.exports = class extends Inhibitor {
 
-	async run(msg, cmd) {
-		if (!cmd.requiredConfigs.length) return;
-		if (msg.channel.type !== 'text') return;
-		const configs = msg.guildConfigs;
-		const requiredConfigs = cmd.requiredConfigs.filter(config => {
+	async run(message, command) {
+		if (!command.requiredConfigs.length) return;
+		if (message.channel.type !== 'text') return;
+		const configs = message.guildConfigs;
+		const requiredConfigs = command.requiredConfigs.filter(config => {
 			const thisConfig = configs.get(config);
 			return thisConfig === undefined || thisConfig === null;
 		});
-		if (requiredConfigs.length) throw msg.language.get('INHIBITOR_REQUIRED_CONFIGS', requiredConfigs);
+		if (requiredConfigs.length) throw message.language.get('INHIBITOR_REQUIRED_CONFIGS', requiredConfigs);
 	}
 
 };

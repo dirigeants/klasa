@@ -5,15 +5,15 @@ module.exports = class extends Command {
 
 	constructor(...args) {
 		super(...args, {
-			permLevel: 10,
-			description: (msg) => msg.language.get('COMMAND_BLACKLIST_DESCRIPTION'),
+			permissionLevel: 10,
+			description: (message) => message.language.get('COMMAND_BLACKLIST_DESCRIPTION'),
 			usage: '<User:user|Guild:guild|guild:str> [...]',
 			usageDelim: ' ',
 			guarded: true
 		});
 	}
 
-	async run(msg, usersAndGuilds) {
+	async run(message, usersAndGuilds) {
 		usersAndGuilds = new Set(usersAndGuilds);
 		const usersAdded = [];
 		const usersRemoved = [];
@@ -23,7 +23,7 @@ module.exports = class extends Command {
 		for (const userOrGuild of usersAndGuilds) {
 			const type = userOrGuild instanceof User ? 'user' : 'guild';
 
-			await this.client.configs.update(`${type}Blacklist`, userOrGuild.id || userOrGuild, msg.guild);
+			await this.client.configs.update(`${type}Blacklist`, userOrGuild.id || userOrGuild, message.guild);
 
 			if (type === 'guild' && this.client.configs.guildBlacklist.includes(userOrGuild.id || userOrGuild)) guildsAdded.push(userOrGuild.name || userOrGuild);
 			else if (type === 'guild') guildsRemoved.push(userOrGuild.name || userOrGuild);
@@ -31,7 +31,7 @@ module.exports = class extends Command {
 			else usersRemoved.push(userOrGuild.username);
 		}
 
-		return msg.sendMessage(msg.language.get('COMMAND_BLACKLIST_SUCCESS', usersAdded, usersRemoved, guildsAdded, guildsRemoved));
+		return message.sendMessage(message.language.get('COMMAND_BLACKLIST_SUCCESS', usersAdded, usersRemoved, guildsAdded, guildsRemoved));
 	}
 
 };

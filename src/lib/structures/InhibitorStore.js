@@ -19,14 +19,14 @@ class InhibitorStore extends Store {
 	/**
 	 * Runs our inhibitors on the command.
 	 * @since 0.0.1
-	 * @param {KlasaMessage} msg The message object from Discord.js
-	 * @param {Command} cmd The command being ran.
+	 * @param {KlasaMessage} message The message object from Discord.js
+	 * @param {Command} command The command being ran.
 	 * @param {boolean} [selective=false] Whether or not we should ignore certain inhibitors to prevent spam.
 	 * @returns {void}
 	 */
-	async run(msg, cmd, selective = false) {
+	async run(message, command, selective = false) {
 		const mps = [];
-		for (const inhibitor of this.values()) if (inhibitor.enabled && (!selective || !inhibitor.spamProtection)) mps.push(inhibitor.run(msg, cmd).catch(err => err));
+		for (const inhibitor of this.values()) if (inhibitor.enabled && (!selective || !inhibitor.spamProtection)) mps.push(inhibitor.run(message, command).catch(err => err));
 		const results = (await Promise.all(mps)).filter(res => res);
 		if (results.includes(true)) throw undefined;
 		if (results.length) throw results;

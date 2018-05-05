@@ -65,23 +65,23 @@ class Argument extends Piece {
 	 * @param {?number} min The minimum value
 	 * @param {?number} max The maximum value
 	 * @param {Possible} possible The id of the current possible usage
-	 * @param {KlasaMessage} msg The message that triggered the command
+	 * @param {KlasaMessage} message The message that triggered the command
 	 * @param {string} suffix An error suffix
 	 * @returns {boolean}
 	 * @private
 	 */
-	static minOrMax(client, value, min = null, max = null, possible, msg, suffix) {
-		suffix = suffix ? (msg ? msg.language : client.languages.default).get(suffix) : '';
+	static minOrMax(client, value, min = null, max = null, possible, message, suffix) {
+		suffix = suffix ? (message ? message.language : client.languages.default).get(suffix) : '';
 		if (min !== null && max !== null) {
 			if (value >= min && value <= max) return true;
-			if (min === max) throw (msg ? msg.language : client.languages.default).get('RESOLVER_MINMAX_EXACTLY', possible.name, min, suffix);
-			throw (msg ? msg.language : client.languages.default).get('RESOLVER_MINMAX_BOTH', possible.name, min, max, suffix);
+			if (min === max) throw (message ? message.language : client.languages.default).get('RESOLVER_MINMAX_EXACTLY', possible.name, min, suffix);
+			throw (message ? message.language : client.languages.default).get('RESOLVER_MINMAX_BOTH', possible.name, min, max, suffix);
 		} else if (min !== null) {
 			if (value >= min) return true;
-			throw (msg ? msg.language : client.languages.default).get('RESOLVER_MINMAX_MIN', possible.name, min, suffix);
+			throw (message ? message.language : client.languages.default).get('RESOLVER_MINMAX_MIN', possible.name, min, suffix);
 		} else if (max !== null) {
 			if (value <= max) return true;
-			throw (msg ? msg.language : client.languages.default).get('RESOLVER_MINMAX_MAX', possible.name, max, suffix);
+			throw (message ? message.language : client.languages.default).get('RESOLVER_MINMAX_MAX', possible.name, max, suffix);
 		}
 		return true;
 	}

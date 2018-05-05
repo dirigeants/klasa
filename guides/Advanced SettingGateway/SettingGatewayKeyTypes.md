@@ -15,7 +15,7 @@ By default, there are several built-in types that the developer can use, and wit
 | **integer**         | An integer number                                 | Resolves an [integer](https://en.wikipedia.org/wiki/Integer) number                      |
 | **language**        | A {@link Language} instance or name               | Resolves a language                                                                      |
 | **member**          | A {@link external:GuildMember} instance or id     | Resolves a GuildMember                                                                   |
-| **msg**             | A {@link KlasaMessage} instance or id             | Resolves a KlasaMessage (which extends Message)                                          |
+| **message**             | A {@link KlasaMessage} instance or id             | Resolves a KlasaMessage (which extends Message)                                          |
 | **role**            | A {@link external:Role} instance or id            | Resolves a Role                                                                          |
 | **string**          | A {@link external:StringResolvable}               | Resolves a string                                                                        |
 | **textchannel**     | A {@link external:TextChannel} instance or id     | Resolves a TextChannel                                                                   |

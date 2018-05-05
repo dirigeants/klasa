@@ -19,29 +19,29 @@ class FinalizerStore extends Store {
 	/**
 	 * Runs all of our finalizers after a command is ran successfully.
 	 * @since 0.0.1
-	 * @param {KlasaMessage} msg The message that called the command
-	 * @param {KlasaMessage|any} mes The response of the command
+	 * @param {KlasaMessage} message The message that called the command
+	 * @param {KlasaMessage|any} response The response of the command
 	 * @param {StopWatch} timer The timer run from start to queue of the command
 	 * @returns {void}
 	 */
-	run(msg, mes, timer) {
-		for (const finalizer of this.values()) if (finalizer.enabled) this._run(finalizer, msg, mes, timer);
+	run(message, response, timer) {
+		for (const finalizer of this.values()) if (finalizer.enabled) this._run(finalizer, message, response, timer);
 	}
 
 	/**
 	 * Run a finalizer and catch any uncaught promises
 	 * @since 0.5.0
 	 * @param {Finalizer} finalizer The finalizer to run
-	 * @param {KlasaMessage} msg The message that called the command
-	 * @param {KlasaMessage|any} mes The response of the command
+	 * @param {KlasaMessage} message The message that called the command
+	 * @param {KlasaMessage|any} response The response of the command
 	 * @param {StopWatch} timer The timer run from start to queue of the command
 	 * @private
 	 */
-	async _run(finalizer, msg, mes, timer) {
+	async _run(finalizer, message, response, timer) {
 		try {
-			await finalizer.run(msg, mes, timer);
+			await finalizer.run(message, response, timer);
 		} catch (err) {
-			this.client.emit('finalizerError', msg, mes, timer, finalizer, err);
+			this.client.emit('finalizerError', message, response, timer, finalizer, err);
 		}
 	}
 

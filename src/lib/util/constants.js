@@ -9,8 +9,8 @@ const colorBase = {
 exports.DEFAULTS = {
 
 	CLIENT: {
-		cmdEditing: false,
-		cmdLogging: false,
+		commandEditing: false,
+		commandLogging: false,
 		commandMessageLifetime: 1800,
 		console: {},
 		consoleEvents: {
@@ -28,8 +28,8 @@ exports.DEFAULTS = {
 		readyMessage: (client) => `Successfully initialized. Ready to serve ${client.guilds.size} guild${client.guilds.size === 1 ? '' : 's'}.`,
 		typing: false,
 		customPromptDefaults: {
-			promptTime: 30000,
-			promptLimit: Infinity,
+			time: 30000,
+			limit: Infinity,
 			quotedStringSupport: false
 		},
 		gateways: {
@@ -48,17 +48,17 @@ exports.DEFAULTS = {
 			commands: {
 				aliases: [],
 				autoAliases: true,
-				botPerms: 0,
 				bucket: 1,
 				cooldown: 0,
 				description: '',
 				enabled: true,
 				guarded: false,
 				nsfw: false,
-				permLevel: 0,
+				permissionLevel: 0,
 				promptLimit: 0,
 				promptTime: 30000,
 				requiredConfigs: [],
+				requiredPermissions: 0,
 				runIn: ['text', 'dm', 'group'],
 				subcommands: false,
 				usage: '',

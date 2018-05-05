@@ -11,7 +11,7 @@ module.exports = class extends Command {
 
 	constructor(...args) {
 		super(...args);
-		this.menu = new RichMenu(new this.client.methods.Embed()
+		this.menu = new RichMenu(new MessageEmbed()
 			.setColor(0x673AB7)
 			.setAuthor(this.client.user.username, this.client.user.avatarURL())
 			.setTitle('Advanced Commands Help:')
@@ -19,8 +19,8 @@ module.exports = class extends Command {
 		);
 	}
 
-	async run(msg) {
-		const collector = await this.menu.run(await msg.send('Loading commands...'));
+	async run(message) {
+		const collector = await this.menu.run(await message.send('Loading commands...'));
 
 		const choice = await collector.selection;
 		if (choice === null) {
@@ -28,17 +28,17 @@ module.exports = class extends Command {
 		}
 
 		const command = this.client.commands.get(this.menu.options[choice].name);
-		const info = new this.client.methods.Embed()
-			.setTitle(`Command \`${msg.guild.configs.prefix}${command.name}\``)
-			.setDescription(typeof command.description === 'function' ? command.description(msg) : command.description)
+		const info = new MessageEmbed()
+			.setTitle(`Command \`${message.guild.configs.prefix}${command.name}\``)
+			.setDescription(typeof command.description === 'function' ? command.description(message) : command.description)
 			.addField('Usage:', command.usageString);
 
 		if (command.extendedHelp && command.extendedHelp !== '') {
-			const extendHelp = typeof command.extendedHelp === 'function' ? command.extendedHelp(msg) : command.extendedHelp;
+			const extendHelp = typeof command.extendedHelp === 'function' ? command.extendedHelp(message) : command.extendedHelp;
 			info.addField('Help:', extendHelp);
 		}
 
-		return msg.sendEmbed(info);
+		return message.sendEmbed(info);
 	}
 
 	init() {
@@ -50,7 +50,7 @@ module.exports = class extends Command {
 };
 ```
 
-> The code is designed to be placed in a command, inside the `async run(msg)` method but the menu or its options can easily be initialized within the constructor method or the {@link Command.init} method of the command.
+> The code is designed to be placed in a command, inside the `async run(message)` method but the menu or its options can easily be initialized within the constructor method or the {@link Command.init} method of the command.
 
 ## Code Analysis
 
@@ -70,9 +70,9 @@ We will store the resulting {@link ReactionHandler} to later access the selected
 ```javascript
 module.exports = class extends Command {
 
-	async run(msg) {
+	async run(message) {
 		// ...
-		const collector = await menu.run(await msg.send('Loading Commands...'));
+		const collector = await menu.run(await message.send('Loading Commands...'));
 		// ...
 	}
 
@@ -84,7 +84,7 @@ We will also need to [`await`](https://developer.mozilla.org/en-US/docs/Web/Java
 ```javascript
 module.exports = class extends Command {
 
-	async run(msg) {
+	async run(message) {
 		// ...
 		const choice = await collector.selection;
 		// ...
@@ -102,9 +102,9 @@ const command = this.client.commands.get(menu.options[choice].name);
 Finally, we show the user the selected command by editing the original [`MessageEmbed`](https://discord.js.org/#/docs/main/master/class/MessageEmbed):
 
 ```javascript
-const info = new this.client.methods.Embed()
-	.setTitle(`Command \`${msg.guild.configs.prefix}${command.name}\``)
-	.setDescription(typeof command.description === 'function' ? command.description(msg) : command.description)
+const info = new MessageEmbed()
+	.setTitle(`Command \`${message.guild.configs.prefix}${command.name}\``)
+	.setDescription(typeof command.description === 'function' ? command.description(message) : command.description)
 	.addField('Usage:', command.usageString);
 
 collector.message.edit(info);
