@@ -8,7 +8,7 @@ module.exports = class extends Argument {
 		if (this.client.user.bot && this.constructor.regex.userOrMember.test(arg)) {
 			const user = await this.client.users.fetch(this.constructor.regex.userOrMember.exec(arg)[1]).catch(() => null);
 			if (user) {
-				member = message.guild.members.fetch(user).catch(() => null);
+				member = await message.guild.members.fetch(user).catch(() => null);
 				if (member) return member;
 			}
 		}
