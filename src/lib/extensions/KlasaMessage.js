@@ -234,6 +234,17 @@ module.exports = Structures.extend('Message', Message => {
 		}
 
 		/**
+		 * Since d.js is dumb and has 2 patch methods, this is for edits
+		 * @since 0.5.0
+		 * @param {*} data The data passed from the original constructor
+		 * @private
+		 */
+		patch(data) {
+			super.patch(data);
+			this.language = this.guild ? this.guild.language : this.client.languages.default;
+		}
+
+		/**
 		 * Extends the patch method from D.JS to attach and update the language to this instance
 		 * @since 0.5.0
 		 * @param {*} data The data passed from the original constructor
