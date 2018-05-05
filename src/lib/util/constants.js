@@ -48,7 +48,6 @@ exports.DEFAULTS = {
 			commands: {
 				aliases: [],
 				autoAliases: true,
-				requiredPermissions: 0,
 				bucket: 1,
 				cooldown: 0,
 				description: '',
@@ -59,6 +58,7 @@ exports.DEFAULTS = {
 				promptLimit: 0,
 				promptTime: 30000,
 				requiredConfigs: [],
+				requiredPermissions: 0,
 				runIn: ['text', 'dm', 'group'],
 				subcommands: false,
 				usage: '',
