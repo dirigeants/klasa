@@ -189,7 +189,7 @@ class Configuration {
 	 * @async
 	 * @example
 	 * // Updating the value of a key
-	 * Configuration#update('roles.administrator', '339943234405007361', msg.guild);
+	 * Configuration#update('roles.administrator', '339943234405007361', message.guild);
 	 *
 	 * // Updating an array:
 	 * Configuration#update('userBlacklist', '272689325521502208');
@@ -198,10 +198,10 @@ class Configuration {
 	 * Configuration#update('userBlacklist', '272689325521502208', { action: 'add' });
 	 *
 	 * // Updating it with a json object:
-	 * Configuration#update({ roles: { administrator: '339943234405007361' } }, msg.guild);
+	 * Configuration#update({ roles: { administrator: '339943234405007361' } }, message.guild);
 	 *
 	 * // Updating multiple keys (with json object):
-	 * Configuration#update({ prefix: 'k!', language: 'es-ES' }, msg.guild);
+	 * Configuration#update({ prefix: 'k!', language: 'es-ES' }, message.guild);
 	 *
 	 * // Updating multiple keys (with arrays):
 	 * Configuration#update(['prefix', 'language'], ['k!', 'es-ES']);
@@ -240,11 +240,11 @@ class Configuration {
 	/**
 	 * Get a list.
 	 * @since 0.5.0
-	 * @param {KlasaMessage} msg The Message instance
+	 * @param {KlasaMessage} message The Message instance
 	 * @param {(SchemaFolder|string)} path The path to resolve
 	 * @returns {string}
 	 */
-	list(msg, path) {
+	list(message, path) {
 		const folder = path instanceof SchemaFolder ? path : this.gateway.getPath(path, { piece: false }).piece;
 		const array = [];
 		const folders = [];
@@ -266,7 +266,7 @@ class Configuration {
 			for (const keyType of keysTypes.sort()) {
 				keys[keyType].sort();
 				array.push(`= ${toTitleCase(keyType)}s =`);
-				for (const key of keys[keyType]) array.push(`${key.padEnd(longest)} :: ${this.resolveString(msg, folder[key])}`);
+				for (const key of keys[keyType]) array.push(`${key.padEnd(longest)} :: ${this.resolveString(message, folder[key])}`);
 				array.push('');
 			}
 		}
@@ -276,12 +276,12 @@ class Configuration {
 	/**
 	 * Resolve a string.
 	 * @since 0.5.0
-	 * @param {KlasaMessage} msg The Message to use
+	 * @param {KlasaMessage} message The Message to use
 	 * @param {(SchemaPiece|string)} path The path to resolve
 	 * @returns {string}
 	 * @private
 	 */
-	resolveString(msg, path) {
+	resolveString(message, path) {
 		const piece = path instanceof SchemaPiece ? path : this.gateway.getPath(path, { piece: true }).piece;
 		const value = this.get(piece.path);
 		if (value === null) return 'Not set';
@@ -296,9 +296,9 @@ class Configuration {
 			case 'categorychannel':
 			case 'textchannel':
 			case 'voicechannel':
-			case 'channel': resolver = (val) => (msg.guild.channels.get(val) || { name: (val && val.name) || val }).name;
+			case 'channel': resolver = (val) => (message.guild.channels.get(val) || { name: (val && val.name) || val }).name;
 				break;
-			case 'role': resolver = (val) => (msg.guild.roles.get(val) || { name: (val && val.name) || val }).name;
+			case 'role': resolver = (val) => (message.guild.roles.get(val) || { name: (val && val.name) || val }).name;
 				break;
 			case 'guild': resolver = (val) => (val && val.name) || val;
 				break;

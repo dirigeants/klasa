@@ -13,8 +13,8 @@ module.exports = class extends Command {
 			cooldown: 0,
 			bucket: 1,
 			aliases: [],
-			permLevel: 0,
-			botPerms: [],
+			permissionLevel: 0,
+			requiredPermissions: [],
 			requiredConfigs: [],
 			description: '',
 			quotedStringSupport: false,
@@ -24,7 +24,7 @@ module.exports = class extends Command {
 		});
 	}
 
-	async run(msg, [...params]) {
+	async run(message, [...params]) {
 		// This is where you place the code you want to run for your command
 	}
 
@@ -48,8 +48,8 @@ module.exports = class extends Command {
 | **cooldown**            | `0`                              | number  | The amount of time before the user can run the command again in seconds     |
 | **bucket**              | `1`                              | number  | The amount of successful command runs required before applying ratelimits   |
 | **aliases**             | `[]`                             | Array   | Any command aliases                                                         |
-| **permLevel**           | `0`                              | number  | The required permission level to use the command                            |
-| **botPerms**            | `[]`                             | Array   | The required Discord permissions for the bot to use this command            |
+| **permissionLevel**           | `0`                              | number  | The required permission level to use the command                            |
+| **requiredPermissions**            | `[]`                             | Array   | The required Discord permissions for the bot to use this command            |
 | **requiredConfigs**     | `[]`                             | Array   | The required guild configs to use this command                              |
 | **description**         | `''`                             | string  | The help description for the command                                        |
 | **usage**               | `''`                             | string  | The usage string for the command - See {@tutorial UnderstandingUsageStrings}|

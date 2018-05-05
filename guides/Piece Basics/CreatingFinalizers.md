@@ -15,7 +15,7 @@ module.exports = class extends Finalizer {
 		});
 	}
 
-	run(msg, mes, start) {
+	run(message, response, runTime) {
 		// This is where you place the code you want to run for your finalizer
 	}
 
@@ -38,9 +38,9 @@ module.exports = class extends Finalizer {
 
 ## Arguments:
 
-- **msg**: The message object.
-- **mes**: The value the command returns.
-- **start**: The time in which the command has been run, by `performance.now()`, ideal for benchmarking.
+- **message**: The message object.
+- **response**: The value the command returns.
+- **runTime**: The time it took to run the command.
 
 ## Existing finalizers
 
@@ -52,8 +52,8 @@ This finalizer applies the cooldown from the commands' `Command.cooldown` (if ex
 
 ### commandlogging
 
-This finalizer, unlike commandCooldown, it's only run if the property `cmdLogging` of
-your Klasa's client configs is set to `true`. It prints in the cmd prompt the command run, where,
+This finalizer, unlike commandCooldown, it's only run if the property `commandLogging` of
+your Klasa's client configs is set to `true`. It prints in the command prompt the command run, where,
 the user who ran it, and the time it took to process the command.
 
 ## Further Reading:

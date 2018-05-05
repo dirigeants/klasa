@@ -2,8 +2,8 @@ const { Event } = require('klasa');
 
 module.exports = class extends Event {
 
-	run(msg) {
-		if (this.client.ready) this.client.monitors.run(msg);
+	run(message) {
+		if (this.client.ready) this.client.monitors.run(message);
 	}
 
 };

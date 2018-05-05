@@ -24,7 +24,7 @@ Checks if the command is globally or locally disabled.
 
 ## missingBotPermissions
 
-Checks to make sure the bot has all permissions needed (based on {@link Command#botPerms}) in the channel to run the command.
+Checks to make sure the bot has all permissions needed (based on {@link Command#requiredPermissions}) in the channel to run the command.
 
 **Source:**
 
@@ -40,7 +40,7 @@ Checks if the command and the channel are both NSFW. Check {@link Command#nsfw} 
 
 ## permissions
 
-Checks if the author/member has permission to use the command. (based on {@link Command#permLevel})
+Checks if the author/member has permission to use the command. (based on {@link Command#permissionLevel})
 
 **Source:**
 

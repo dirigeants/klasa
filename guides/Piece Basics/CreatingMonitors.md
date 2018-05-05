@@ -24,7 +24,7 @@ module.exports = class extends Monitor {
 		});
 	}
 
-	run(msg) {
+	run(message) {
 		// This is where you place the code you want to run for your monitor
 	}
 

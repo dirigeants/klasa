@@ -21,7 +21,7 @@ module.exports = class extends Inhibitor {
 		});
 	}
 
-	async run(msg, cmd) {
+	async run(message, command) {
 		// This is where you place the code you want to run for your inhibitor
 	}
 
