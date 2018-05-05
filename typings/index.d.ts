@@ -512,7 +512,7 @@ declare module 'klasa' {
 			disabledCommands: SchemaPieceJSON
 		};
 
-		public readonly guildsSchema: {};
+		public readonly usersSchema: {};
 
 		public readonly clientStorageSchema: {
 			userBlacklist: SchemaPieceJSON,
@@ -623,7 +623,7 @@ declare module 'klasa' {
 //#region Pieces
 
 	export abstract class Piece {
-		public constructor(client: KlasaClient, store: Store<string, Piece, typeof Piece>, type: string, file: string | string[], core: boolean, options?: PieceOptions);
+		public constructor(client: KlasaClient, store: Store<string, Piece, typeof Piece>, file: string | string[], core: boolean, options?: PieceOptions);
 		public readonly client: KlasaClient;
 		public readonly core: boolean;
 		public readonly type: string;
@@ -686,7 +686,7 @@ declare module 'klasa' {
 		public createCustomResolver(type: string, resolver: ArgResolverCustomMethod): this;
 		public customizeResponse(name: string, response: string | ((message: KlasaMessage, possible: Possible) => string)): this;
 		public definePrompt(usageString: string, usageDelim: string): Usage;
-		public run(message: KlasaMessage, params: any[]): Promise<KlasaMessage | KlasaMessage[]>;
+		public run(message: KlasaMessage, params: any[]): Promise<KlasaMessage | KlasaMessage[] | null>;
 		public toJSON(): PieceCommandJSON;
 	}
 
@@ -718,7 +718,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class Finalizer extends Piece {
-		public abstract run(message: KlasaMessage, response: KlasaMessage, runTime: Stopwatch): void;
+		public abstract run(message: KlasaMessage, response: KlasaMessage | KlasaMessage[] | null, runTime: Stopwatch): void;
 		public toJSON(): PieceFinalizerJSON;
 	}
 
@@ -731,7 +731,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class Language extends Piece {
-		public language: ObjectLiteral<string | string[] | ((...args) => string | string[])>;
+		public language: ObjectLiteral<string | string[] | ((...args: any[]) => string | string[])>;
 
 		public get<T = string>(term: string, ...args: any[]): T;
 		public toJSON(): PieceLanguageJSON;
@@ -1847,12 +1847,6 @@ declare module 'klasa' {
 	export type GuildSettings = ObjectLiteral<any>;
 	export type SchemaObject = ObjectLiteral<SchemaPiece>;
 	export type SchemaDefaults = ObjectLiteral<any>;
-
-	// TypeScript lacks of Proxy
-	export type Proxy<T> = {
-		get(): T;
-		set(value: T): void;
-	};
 
 	type Constructable<T> = new (...args: any[]) => T;
 
