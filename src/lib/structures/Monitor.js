@@ -67,7 +67,7 @@ class Monitor extends Piece {
 	/**
 	 * The run method to be overwritten in actual monitor pieces
 	 * @since 0.0.1
-	 * @param {KlasaMessage} msg The discord message
+	 * @param {KlasaMessage} message The discord message
 	 * @returns {void}
 	 * @abstract
 	 */
@@ -79,16 +79,16 @@ class Monitor extends Piece {
 	/**
 	 * If the monitor should run based on the filter options
 	 * @since 0.5.0
-	 * @param {KlasaMessage} msg The message to check
+	 * @param {KlasaMessage} message The message to check
 	 * @returns {boolean}
 	 */
-	shouldRun(msg) {
+	shouldRun(message) {
 		return this.enabled &&
-			!(this.ignoreBots && msg.author.bot) &&
-			!(this.ignoreSelf && this.client.user === msg.author) &&
-			!(this.ignoreOthers && this.client.user !== msg.author) &&
-			!(this.ignoreWebhooks && msg.webhookID) &&
-			!(this.ignoreEdits && msg._edits.length);
+			!(this.ignoreBots && message.author.bot) &&
+			!(this.ignoreSelf && this.client.user === message.author) &&
+			!(this.ignoreOthers && this.client.user !== message.author) &&
+			!(this.ignoreWebhooks && message.webhookID) &&
+			!(this.ignoreEdits && message._edits.length);
 	}
 
 	/**

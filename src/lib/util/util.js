@@ -39,8 +39,7 @@ class Util {
 	 * @returns {string}
 	 */
 	static clean(text) {
-		if (typeof text === 'string') return text.replace(sensitivePattern, '「ｒｅｄａｃｔｅｄ」').replace(/`/g, `\`${zws}`).replace(/@/g, `@${zws}`);
-		return text;
+		return text.replace(sensitivePattern, '「ｒｅｄａｃｔｅｄ」').replace(/`/g, `\`${zws}`).replace(/@/g, `@${zws}`);
 	}
 
 	/**
