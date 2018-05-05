@@ -10,19 +10,19 @@ module.exports = class extends Argument {
 		return this.store.get('duration');
 	}
 
-	run(arg, possible, msg) {
+	run(arg, possible, message) {
 		let date;
 		try {
-			date = this.date.run(arg, possible, msg);
+			date = this.date.run(arg, possible, message);
 		} catch (err) {
 			try {
-				date = this.duration.run(arg, possible, msg);
+				date = this.duration.run(arg, possible, message);
 			} catch (error) {
 				// noop
 			}
 		}
 		if (date && !isNaN(date.getTime()) && date.getTime() > Date.now()) return date;
-		throw (msg.language || this.client.languages.default).get('RESOLVER_INVALID_TIME', possible.name);
+		throw (message.language || this.client.languages.default).get('RESOLVER_INVALID_TIME', possible.name);
 	}
 
 };

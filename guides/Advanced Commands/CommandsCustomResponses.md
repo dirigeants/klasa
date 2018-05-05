@@ -2,7 +2,7 @@
 
 ## Custom Responses
 
-This is one of the most requested features for Klasa: the ability to translate and/or customize the error messages when a parameter is missing. This is now achievable thanks to {@link Command.customizeResponse}, which takes the name of the key of the possible (remember the {@tutorial CommandsArguments} tutorial) and either a `string` or a `function` that takes one parameter: `msg` being a `KlasaMessage` instance, that you can use to get the Language instance from (check {@link KlasaMessage.language}).
+This is one of the most requested features for Klasa: the ability to translate and/or customize the error messages when a parameter is missing. This is now achievable thanks to {@link Command.customizeResponse}, which takes the name of the key of the possible (remember the {@tutorial CommandsArguments} tutorial) and either a `string` or a `function` that takes one parameter: `message` being a `KlasaMessage` instance, that you can use to get the Language instance from (check {@link KlasaMessage.language}).
 
 ## Configuring/Creating a custom response
 
@@ -20,7 +20,7 @@ module.exports = class extends Command {
 		});
 	}
 
-	async run(msg, [battletag]) {}
+	async run(message, [battletag]) {}
 
 };
 ```
@@ -42,18 +42,18 @@ module.exports = class extends Command {
 			'You must insert a valid battletag with the format username#0000');
 	}
 
-	async run(msg, [battletag]) {}
+	async run(message, [battletag]) {}
 
 };
 ```
 
 And when you miss that argument or you input something that doesn't match the RegExp pattern (triggering the required arguments' error message), it'll send the string you used instead of `'battletag is a required parameter.'`.
 
-For multilanguage purposes, you can also pass a function with the parameters msg ({@link KlasaMessage}) and possible ({@link Possible}), and if you have a `COMMAND_INVALID_BATTLETAG` key in your language files, you can do:
+For multilanguage purposes, you can also pass a function with the parameters message ({@link KlasaMessage}) and possible ({@link Possible}), and if you have a `COMMAND_INVALID_BATTLETAG` key in your language files, you can do:
 
 ```javascript
-this.customizeResponse('battletag', msg =>
-	msg.language.get('COMMAND_INVALID_BATTLETAG'));
+this.customizeResponse('battletag', message =>
+	message.language.get('COMMAND_INVALID_BATTLETAG'));
 ```
 
 In a side note, `Command#customizeResponse` returns the command instance, meaning that you can chain it, for example:

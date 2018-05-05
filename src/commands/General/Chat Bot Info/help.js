@@ -6,29 +6,29 @@ module.exports = class extends Command {
 		super(...args, {
 			aliases: ['commands'],
 			guarded: true,
-			description: (msg) => msg.language.get('COMMAND_HELP_DESCRIPTION'),
-			usage: '(Command:cmd)'
+			description: (message) => message.language.get('COMMAND_HELP_DESCRIPTION'),
+			usage: '(Command:command)'
 		});
 
-		this.createCustomResolver('cmd', (arg, possible, msg) => {
+		this.createCustomResolver('command', (arg, possible, message) => {
 			if (!arg || arg === '') return undefined;
-			return this.client.arguments.get('cmd').run(arg, possible, msg);
+			return this.client.arguments.get('command').run(arg, possible, message);
 		});
 	}
 
-	async run(msg, [cmd]) {
+	async run(message, [command]) {
 		const method = this.client.user.bot ? 'author' : 'channel';
-		if (cmd) {
+		if (command) {
 			const info = [
-				`= ${cmd.name} = `,
-				util.isFunction(cmd.description) ? cmd.description(msg) : cmd.description,
-				msg.language.get('COMMAND_HELP_USAGE', cmd.usage.fullUsage(msg)),
-				msg.language.get('COMMAND_HELP_EXTENDED'),
-				util.isFunction(cmd.extendedHelp) ? cmd.extendedHelp(msg) : cmd.extendedHelp
+				`= ${command.name} = `,
+				util.isFunction(command.description) ? command.description(message) : command.description,
+				message.language.get('COMMAND_HELP_USAGE', command.usage.fullUsage(message)),
+				message.language.get('COMMAND_HELP_EXTENDED'),
+				util.isFunction(command.extendedHelp) ? command.extendedHelp(message) : command.extendedHelp
 			].join('\n');
-			return msg.sendMessage(info, { code: 'asciidoc' });
+			return message.sendMessage(info, { code: 'asciidoc' });
 		}
-		const help = await this.buildHelp(msg);
+		const help = await this.buildHelp(message);
 		const categories = Object.keys(help);
 		const helpMessage = [];
 		for (let cat = 0; cat < categories.length; cat++) {
@@ -38,24 +38,24 @@ module.exports = class extends Command {
 			helpMessage.push('```', '\u200b');
 		}
 
-		return msg[method].send(helpMessage, { split: { char: '\u200b' } })
-			.then(() => { if (msg.channel.type !== 'dm' && this.client.user.bot) msg.sendMessage(msg.language.get('COMMAND_HELP_DM')); })
-			.catch(() => { if (msg.channel.type !== 'dm' && this.client.user.bot) msg.sendMessage(msg.language.get('COMMAND_HELP_NODM')); });
+		return message[method].send(helpMessage, { split: { char: '\u200b' } })
+			.then(() => { if (message.channel.type !== 'dm' && this.client.user.bot) message.sendMessage(message.language.get('COMMAND_HELP_DM')); })
+			.catch(() => { if (message.channel.type !== 'dm' && this.client.user.bot) message.sendMessage(message.language.get('COMMAND_HELP_NODM')); });
 	}
 
-	async buildHelp(msg) {
+	async buildHelp(message) {
 		const help = {};
 
 		const commandNames = [...this.client.commands.keys()];
 		const longest = commandNames.reduce((long, str) => Math.max(long, str.length), 0);
 
 		await Promise.all(this.client.commands.map((command) =>
-			this.client.inhibitors.run(msg, command, true)
+			this.client.inhibitors.run(message, command, true)
 				.then(() => {
 					if (!help.hasOwnProperty(command.category)) help[command.category] = {};
 					if (!help[command.category].hasOwnProperty(command.subCategory)) help[command.category][command.subCategory] = [];
-					const description = typeof command.description === 'function' ? command.description(msg) : command.description;
-					help[command.category][command.subCategory].push(`${msg.guildConfigs.prefix}${command.name.padEnd(longest)} :: ${description}`);
+					const description = typeof command.description === 'function' ? command.description(message) : command.description;
+					help[command.category][command.subCategory].push(`${message.guildConfigs.prefix}${command.name.padEnd(longest)} :: ${description}`);
 				})
 				.catch(() => {
 					// noop

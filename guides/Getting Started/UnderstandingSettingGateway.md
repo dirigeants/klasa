@@ -2,7 +2,7 @@
 
 What is SettingGateway? It is an interface that connects your Discord bot with a database and ensures maximum performance by using a very refined cache system that is always up to date with the database. In a point of view, SettingGateway can be understood as an abstracted [ORM](https://en.wikipedia.org/wiki/Object-relational_mapping) as it's able to run any kind database (with a compatible {@link Provider}) and manage the data efficiently.
 
-By default, Klasa uses the [json](https://github.com/dirigeants/klasa/blob/master/src/providers/json.js) provider. Do not be fooled and insta-replace with SQLite, Klasa's JSON provider writes the data [atomically](https://en.wikipedia.org/wiki/Atomicity_%28database_systems%29). In other words, it is very rare for the data to corrupt.
+By default, Klasa uses the [JSON](https://github.com/dirigeants/klasa/blob/master/src/providers/json.js) provider. Do not be fooled and insta-replace with SQLite, Klasa's JSON provider writes the data [atomically](https://en.wikipedia.org/wiki/Atomicity_%28database_systems%29). In other words, it is very rare for the data to corrupt.
 
 Thanks to the abstraction of SettingGateway, the developer has many options, for example, if you want to change the database that manages the data, you just change one line of code, without needing to rewrite everything that relies on it, nor you need to rewrite the interface itself in order to be able to work with a different database.
 

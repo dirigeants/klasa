@@ -15,10 +15,11 @@ module.exports = class extends Inhibitor {
 		}, {});
 	}
 
-	async run(msg, cmd) {
-		const missing = msg.channel.type === 'text' ? msg.channel.permissionsFor(this.client.user).missing(cmd.botPerms) : this.impliedPermissions.missing(cmd.botPerms);
-		if (missing.length) throw msg.language.get('INHIBITOR_MISSING_BOT_PERMS', missing.map(key => this.friendlyPerms[key]).join(', '));
-		return;
+	async run(message, command) {
+		const missing = message.channel.type === 'text' ?
+			message.channel.permissionsFor(this.client.user).missing(command.requiredPermissions) :
+			this.impliedPermissions.missing(command.requiredPermissions);
+		if (missing.length) throw message.language.get('INHIBITOR_MISSING_BOT_PERMS', missing.map(key => this.friendlyPerms[key]).join(', '));
 	}
 
 };

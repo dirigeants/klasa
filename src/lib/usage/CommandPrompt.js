@@ -8,12 +8,12 @@ class CommandPrompt extends TextPrompt {
 
 	/**
 	 * @since 0.5.0
-	 * @param {KlasaMessage} msg The message for the command
+	 * @param {KlasaMessage} message The message for the command
 	 * @param {CommandUsage} usage The usage of the command
 	 * @param {TextPromptOptions} options The options for this CommandPrompt
 	 */
-	constructor(msg, usage, options) {
-		super(msg, usage, options);
+	constructor(message, usage, options) {
+		super(message, usage, options);
 
 		/**
 		 * The typing state of this CommandPrompt

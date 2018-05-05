@@ -31,7 +31,7 @@ class RichMenu extends RichDisplay {
 	 * @typedef {Object} RichMenuRunOptions
 	 * @property {Function} [filter] A filter function to add to the ReactionHandler (Receives: Reaction, User)
 	 * @property {boolean} [stop=true] If a stop reaction should be included
-	 * @property {string} [prompt=msg.language.get('REACTIONHANDLER_PROMPT')] The prompt to be used when awaiting user input on a page to jump to
+	 * @property {string} [prompt=message.language.get('REACTIONHANDLER_PROMPT')] The prompt to be used when awaiting user input on a page to jump to
 	 * @property {number} [startPage=0] The page to start the RichMenu on
 	 * @property {number} [max] The maximum total amount of reactions to collect
 	 * @property {number} [maxEmojis] The maximum number of emojis to collect
@@ -106,13 +106,13 @@ class RichMenu extends RichDisplay {
 	/**
 	 * Runs this RichMenu
 	 * @since 0.4.0
-	 * @param {KlasaMessage} msg A message to edit or use to send a new message with
+	 * @param {KlasaMessage} message A message to edit or use to send a new message with
 	 * @param {RichMenuRunOptions} options The options to use with this RichMenu
 	 * @returns {ReactionHandler}
 	 */
-	async run(msg, options = {}) {
+	async run(message, options = {}) {
 		if (!this.paginated) this._paginate();
-		return super.run(msg, options);
+		return super.run(message, options);
 	}
 
 	/**

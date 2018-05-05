@@ -10,7 +10,7 @@ module.exports = class extends Event {
 	}
 
 	async run() {
-		if (this.client.user.bot) this.client.application = await this.client.fetchApplication();
+		if (this.client.user.bot) await this.client.fetchApplication();
 		if (!this.client.options.ownerID) this.client.options.ownerID = this.client.user.bot ? this.client.application.owner.id : this.client.user.id;
 
 		// Client-wide settings
