@@ -1,6 +1,5 @@
 const { promisify } = require('util');
 const { exec } = require('child_process');
-const DiscordUtil = require('discord.js').Util;
 const zws = String.fromCharCode(8203);
 const has = (ob, ke) => Object.prototype.hasOwnProperty.call(ob, ke);
 let sensitivePattern;
@@ -11,6 +10,10 @@ const REGEXPESC = /[-/\\^$*+?.()|[\]{}]/g;
  * Contains static methods to be used throughout klasa
  */
 class Util {
+
+	/**
+	 * @typedef {(string|*)} Stringable
+	 */
 
 	/**
 	 * This class may not be initiated with new
@@ -26,15 +29,11 @@ class Util {
 	 * Makes a codeblock markup string
 	 * @since 0.0.1
 	 * @param {string} lang The codeblock language
-	 * @param {StringResolvable} expression The expression to be wrapped in the codeblock
+	 * @param {Stringable} expression The expression to be wrapped in the codeblock
 	 * @returns {string}
 	 */
 	static codeBlock(lang, expression) {
-		// The resolved string form of expression, but never empty
-		const resolved = expression ?
-			DiscordUtil.resolveString(expression) || zws :
-			zws;
-		return `\`\`\`${lang}\n${resolved}\`\`\``;
+		return `\`\`\`${lang}\n${expression || zws}\`\`\``;
 	}
 
 	/**
