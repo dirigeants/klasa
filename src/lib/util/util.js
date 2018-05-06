@@ -12,6 +12,10 @@ const REGEXPESC = /[-/\\^$*+?.()|[\]{}]/g;
 class Util {
 
 	/**
+	 * @typedef {(string|*)} Stringable
+	 */
+
+	/**
 	 * This class may not be initiated with new
 	 * @since 0.0.1
 	 * @throws {Error}
@@ -25,7 +29,7 @@ class Util {
 	 * Makes a codeblock markup string
 	 * @since 0.0.1
 	 * @param {string} lang The codeblock language
-	 * @param {string} expression The expression to be wrapped in the codeblock
+	 * @param {Stringable} expression The expression to be wrapped in the codeblock
 	 * @returns {string}
 	 */
 	static codeBlock(lang, expression) {
