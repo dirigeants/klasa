@@ -1213,7 +1213,7 @@ declare module 'klasa' {
 	class Util {
 		public static applyToClass(base: object, structure: object, skips?: string[]): void;
 		public static clean(text: string): string;
-		public static codeBlock(lang: string, expression: string): string;
+		public static codeBlock(lang: string, expression: Stringable): string;
 		public static deepClone<T = any>(source: T): T;
 		public static exec(exec: string, options?: ExecOptions): Promise<{ stdout: string, stderr: string }>;
 		public static getIdentifier(value: PrimitiveType | { id?: PrimitiveType, name?: PrimitiveType }): PrimitiveType | null;
@@ -1841,6 +1841,8 @@ declare module 'klasa' {
 		stop?: boolean;
 		time?: number;
 	};
+
+	export type Stringable = string | any;
 
 	type ObjectLiteral<T> = { [key: string]: T };
 
