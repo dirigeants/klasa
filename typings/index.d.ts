@@ -1846,7 +1846,7 @@ declare module 'klasa' {
 		stop?: boolean;
 		time?: number;
 	};
-	
+
 	export type Stringable = string | any;
 
 	type ObjectLiteral<T> = { [key: string]: T };
