@@ -37,6 +37,8 @@ module.exports = class extends Command {
 
 	// Eval the input
 	async eval(message, code) {
+		// eslint-disable-next-line no-unused-vars
+		const msg = message;
 		const { flags } = message;
 		const stopwatch = new Stopwatch();
 		let success, syncTime, asyncTime, result;
