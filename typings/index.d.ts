@@ -752,7 +752,7 @@ declare module 'klasa' {
 
 	export abstract class Provider extends Piece {
 		public constructor(client: KlasaClient, store: ProviderStore, file: string, core: boolean, options?: ProviderOptions);
-		public readonly sql: boolean;
+		private readonly sql: boolean;
 
 		public abstract create(table: string, entry: string, data: any): Promise<any>;
 		public abstract createTable(table: string): Promise<any>;

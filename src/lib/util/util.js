@@ -210,7 +210,7 @@ class Util {
 	 * @returns {?(string|number|boolean)}
 	 */
 	static getIdentifier(value) {
-		if (['string', 'number', 'boolean'].includes(typeof value)) return value;
+		if (['string', 'bigint', 'number', 'boolean'].includes(typeof value)) return value;
 		if (Util.isObject(value)) {
 			if ('id' in value) return value.id;
 			if ('name' in value) return value.name;

@@ -1,6 +1,5 @@
 const Piece = require('./base/Piece');
 const { join } = require('path');
-let SQLProvider;
 
 /**
  * Base class for all Klasa Providers. See {@tutorial CreatingProviders} for more information how to use this class
@@ -13,17 +12,18 @@ class Provider extends Piece {
 	/**
 	 * @typedef {PieceOptions} ProviderOptions
 	 */
+	constructor(...args) {
+		super(...args);
 
-	/**
-	 * If the provider provides to a sql data source
-	 * @since 0.0.1
-	 * @type {boolean}
-	 * @readonly
-	 */
-	get sql() {
-		// To solve circular issues
-		if (!SQLProvider) SQLProvider = require('./SQLProvider');
-		return this instanceof SQLProvider;
+		/**
+		 * If the provider provides to a sql data source
+		 * @since 0.0.1
+		 * @name Provider#sql
+		 * @type {boolean}
+		 * @readonly
+		 * @private
+		 */
+		Object.defineProperty(this, 'sql', { configurable: true, value: false });
 	}
 
 	/**

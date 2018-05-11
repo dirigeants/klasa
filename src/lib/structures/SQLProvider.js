@@ -11,6 +11,12 @@ const { join } = require('path');
  */
 class SQLProvider extends Provider {
 
+	constructor(...args) {
+		super(...args);
+
+		Object.defineProperty(this, 'sql', { value: true });
+	}
+
 	/**
 	 * The addColumn method which inserts/creates a new table to the database.
 	 * @since 0.5.0
