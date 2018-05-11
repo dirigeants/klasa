@@ -104,8 +104,12 @@ class Piece {
 	 */
 	async reload() {
 		const piece = this.store.load(this.file, this.core);
-		await piece.init();
-		if (this.client.listenerCount('pieceReloaded')) this.client.emit('pieceReloaded', piece);
+
+		// piece is null when there is an error during load
+		if (piece) {
+			await piece.init();
+			if (this.client.listenerCount('pieceReloaded')) this.client.emit('pieceReloaded', piece);
+		}
 		return piece;
 	}
 
