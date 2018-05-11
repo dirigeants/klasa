@@ -27,6 +27,7 @@ module.exports = class extends Command {
 
 		try {
 			const itm = await piece.reload();
+			if (!itm) throw message.language.get('COMMAND_LOAD_FAIL');
 			if (this.client.shard) {
 				await this.client.shard.broadcastEval(`
 					if (this.shard.id !== ${this.client.shard.id}) this.${piece.store}.get('${piece.name}').reload();
