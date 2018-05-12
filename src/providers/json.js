@@ -158,7 +158,7 @@ module.exports = class extends Provider {
 	 * @returns {Promise<void>}
 	 */
 	create(table, document, data = {}) {
-		return fs.outputJSONAtomic(resolve(this.baseDir, table, `${document}.json`), util.mergeObjects({ id: document }, this.parseGatewayInput(data)));
+		return fs.outputJSONAtomic(resolve(this.baseDir, table, `${document}.json`), util.mergeObjects({ id: document }, data));
 	}
 
 	/**
