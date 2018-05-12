@@ -761,7 +761,7 @@ declare module 'klasa' {
 		public abstract replace(table: string, entry: string, data: ConfigurationUpdateResultEntry[] | [string, any][] | ObjectLiteral<any>): Promise<any>;
 		public abstract update(table: string, entry: string, data: ConfigurationUpdateResultEntry[] | [string, any][] | ObjectLiteral<any>): Promise<any>;
 		public abstract updateValue(table: string, path: string, newValue: any): Promise<any>;
-		protected parseGatewayInput<T = ObjectLiteral<any>>(updated: ConfigurationUpdateResult): T;
+		protected parseGatewayInput<T = ObjectLiteral<any>>(updated: T | ConfigurationUpdateResult): T;
 
 		public shutdown(): Promise<void>;
 		public toJSON(): PieceProviderJSON;

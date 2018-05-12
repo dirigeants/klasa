@@ -1,5 +1,5 @@
 const Piece = require('./base/Piece');
-const { mergeObjects, makeObject } = require('../util/util');
+const { isObject, mergeObjects, makeObject } = require('../util/util');
 const { join } = require('path');
 
 /**
@@ -194,11 +194,12 @@ class Provider extends Piece {
 	/**
 	 * Parse the gateway input for easier operation
 	 * @since 0.5.0
-	 * @param {ConfigurationUpdateResult} updated The updated entries
+	 * @param {(Object<*>|ConfigurationUpdateResult)} updated The updated entries
 	 * @returns {Object<*>}
 	 * @protected
 	 */
 	parseGatewayInput(updated) {
+		if (isObject(updated)) return updated;
 		const updateObject = {};
 		for (const entry of updated) mergeObjects(updateObject, makeObject(entry.data[0], entry.data[1]));
 		return updateObject;
