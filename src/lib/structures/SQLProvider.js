@@ -140,7 +140,7 @@ class SQLProvider extends Provider {
 	 * Parse the ConfigurationUpdateResultEntry[] overload
 	 * @param {ConfigurationUpdateResultEntry[]} updated The updated keys
 	 * @param {string[]} keys The keys to update
-	 * @param {*} values The values to update
+	 * @param {any[]} values The values to update
 	 * @param {boolean} [resolve = true] Whether this should resolve the values using QueryBuider#resolve or not
 	 * @private
 	 */

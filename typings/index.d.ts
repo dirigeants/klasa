@@ -771,9 +771,10 @@ declare module 'klasa' {
 		public abstract addColumn<T = any>(table: string, columns: SchemaFolder | SchemaPiece): Promise<T>;
 		public abstract removeColumn<T = any>(table: string, columns: string | string[]): Promise<T>;
 		public abstract updateColumn<T = any>(table: string, piece: SchemaPiece): Promise<T>;
-		protected parseUpdateInput<T =[string, any]>(updated: ConfigurationUpdateResultEntry[] | [string, any][] | ObjectLiteral<any>): T;
+		protected parseUpdateInput<T = [string, any]>(updated: ConfigurationUpdateResultEntry[] | [string, any][] | ObjectLiteral<any>): T;
 		protected parseEntry<T = ObjectLiteral<any>>(gateway: string | Gateway, entry: ObjectLiteral<any>): T;
 		protected parseValue<T = any>(value: any, schemaPiece: SchemaPiece): T;
+		private _parseGatewayInput(updated: ConfigurationUpdateResultEntry[], keys: string[], values: string[], boolean?: boolean): void;
 	}
 
 	export abstract class Task extends Piece {
