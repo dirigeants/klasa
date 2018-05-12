@@ -63,7 +63,7 @@ class SQLProvider extends Provider {
 			for (let i = 0; i < updated.length; i++) {
 				const entry = updated[i];
 				[keys[i]] = entry.data;
-				values[i] = this.qb.resolve(entry.piece);
+				values[i] = this.qb.resolve(entry.piece, entry.data[1]);
 			}
 		} else {
 			for (let i = 0; i < updated.length; i++) [keys[i], values[i]] = updated[i].data;
