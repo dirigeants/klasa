@@ -1,6 +1,7 @@
 const Provider = require('./Provider');
-const { deepClone, tryParse, makeObject } = require('../util/util');
+const { deepClone, tryParse, makeObject, isObject, objectToTuples } = require('../util/util');
 const Gateway = require('../settings/Gateway');
+const Type = require('../util/Type');
 const { join } = require('path');
 
 /**
@@ -50,25 +51,30 @@ class SQLProvider extends Provider {
 	/**
 	 * Parse the gateway input for easier operation
 	 * @since 0.5.0
-	 * @param {ConfigurationUpdateResult} updated The updated entries
+	 * @param {(ConfigurationUpdateResultEntry[]|Array<Array<string>>|Object<string, *>)} updated The updated entries
 	 * @param {boolean} [resolve=true] Whether this should resolve the values using QueryBuider#resolve or not
 	 * @returns {Array<any[]>}
 	 * @protected
 	 */
-	parseGatewayInput(updated, resolve = true) {
-		const keys = new Array(updated.length), values = new Array(updated.length);
+	parseUpdateInput(updated, resolve) {
+		if (Array.isArray(updated)) {
+			const keys = new Array(updated.length), values = new Array(updated.length);
+			const [first] = updated;
 
-		// If QueryBuilder is available, try to resolve the data
-		if (resolve && this.qb) {
-			for (let i = 0; i < updated.length; i++) {
-				const entry = updated[i];
-				[keys[i]] = entry.data;
-				values[i] = this.qb.resolve(entry.piece, entry.data[1]);
-			}
-		} else {
-			for (let i = 0; i < updated.length; i++) [keys[i], values[i]] = updated[i].data;
+			// [[k1, v1], [k2, v2], ...]
+			if (Array.isArray(first) && first.length === 2) for (let i = 0; i < updated.length; i++) [keys[i], values[i]] = updated[i];
+
+			// [{ data: [k1, v1], piece: SchemaPiece1 }, { data: [k2, v2], piece: SchemaPiece2 }, ...]
+			else if (first.data && first.piece) this._parseGatewayInput(updated, keys, values, resolve);
+
+			// Unknown overload, throw
+			else throw new TypeError(`Expected [k, v][], ConfigurationUpdateResult[], or an object literal. Got: ${new Type(updated)}`);
+
+			return [keys, values];
 		}
-		return [keys, values];
+		if (!isObject(updated)) throw new TypeError(`Expected [k, v][], ConfigurationUpdateResult[], or an object literal. Got: ${new Type(updated)}`);
+
+		return objectToTuples(updated);
 	}
 
 	/**
@@ -85,7 +91,7 @@ class SQLProvider extends Provider {
 
 		const object = {};
 		for (const piece of gateway.schema.values(true)) {
-			if (piece.path in entry[piece.path]) makeObject(piece.path, this.parseValue(entry[piece.path], piece), object);
+			if (entry[piece.path]) makeObject(piece.path, this.parseValue(entry[piece.path], piece), object);
 		}
 
 		return object;
@@ -128,6 +134,27 @@ class SQLProvider extends Provider {
 		}
 
 		return value;
+	}
+
+	/**
+	 * Parse the ConfigurationUpdateResultEntry[] overload
+	 * @param {ConfigurationUpdateResultEntry[]} updated The updated keys
+	 * @param {string[]} keys The keys to update
+	 * @param {*} values The values to update
+	 * @param {boolean} [resolve = true] Whether this should resolve the values using QueryBuider#resolve or not
+	 * @private
+	 */
+	_parseGatewayInput(updated, keys, values, resolve = true) {
+		// If QueryBuilder is available, try to resolve the data
+		if (resolve && this.qb) {
+			for (let i = 0; i < updated.length; i++) {
+				const entry = updated[i];
+				[keys[i]] = entry.data;
+				values[i] = this.qb.resolve(entry.piece, entry.data[1]);
+			}
+		} else {
+			for (let i = 0; i < updated.length; i++) [keys[i], values[i]] = updated[i].data;
+		}
 	}
 
 }

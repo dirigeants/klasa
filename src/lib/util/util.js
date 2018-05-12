@@ -234,7 +234,7 @@ class Util {
 			const lastKey = route.pop();
 			let reference = obj;
 			for (const key of route) {
-				if (!(key in reference)) reference[key] = {};
+				if (!reference[key]) reference[key] = {};
 				reference = reference[key];
 			}
 			reference[lastKey] = value;

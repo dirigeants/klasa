@@ -194,11 +194,11 @@ class Provider extends Piece {
 	/**
 	 * Parse the gateway input for easier operation
 	 * @since 0.5.0
-	 * @param {(Object<*>|ConfigurationUpdateResult)} updated The updated entries
-	 * @returns {Object<*>}
+	 * @param {(Object<string, *>|ConfigurationUpdateResult[])} updated The updated entries
+	 * @returns {Object<string, *>}
 	 * @protected
 	 */
-	parseGatewayInput(updated) {
+	parseUpdateInput(updated) {
 		if (isObject(updated)) return updated;
 		const updateObject = {};
 		for (const entry of updated) mergeObjects(updateObject, makeObject(entry.data[0], entry.data[1]));

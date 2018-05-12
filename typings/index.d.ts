@@ -748,30 +748,30 @@ declare module 'klasa' {
 	}
 
 	export abstract class Provider extends Piece {
-		public abstract create(table: string, entry: string, data: any): Promise<any>;
-		public abstract createTable(table: string): Promise<any>;
-		public abstract delete(table: string, entry: string): Promise<any>;
-		public abstract deleteTable(table: string): Promise<any>;
+		public abstract create<T = any>(table: string, entry: string, data: any): Promise<T>;
+		public abstract createTable<T = any>(table: string): Promise<T>;
+		public abstract delete<T = any>(table: string, entry: string): Promise<T>;
+		public abstract deleteTable<T = any>(table: string): Promise<T>;
 		public abstract get<T extends ObjectLiteral<any>>(table: string, entry: string): Promise<T>;
 		public abstract getAll<T extends ObjectLiteral<any>>(table: string): Promise<T[]>;
 		public abstract getKeys(table: string): Promise<string[]>;
 		public abstract has(table: string, entry: string): Promise<boolean>;
 		public abstract hasTable(table: string): Promise<boolean>;
-		public abstract removeValue(table: string, path: string): Promise<any>;
-		public abstract replace(table: string, entry: string, data: ConfigurationUpdateResultEntry[] | [string, any][] | ObjectLiteral<any>): Promise<any>;
-		public abstract update(table: string, entry: string, data: ConfigurationUpdateResultEntry[] | [string, any][] | ObjectLiteral<any>): Promise<any>;
-		public abstract updateValue(table: string, path: string, newValue: any): Promise<any>;
-		protected parseGatewayInput<T = ObjectLiteral<any>>(updated: T | ConfigurationUpdateResult): T;
+		public abstract removeValue<T = any>(table: string, path: string): Promise<T>;
+		public abstract replace<T = any>(table: string, entry: string, data: ConfigurationUpdateResultEntry[] | [string, any][] | ObjectLiteral<any>): Promise<T>;
+		public abstract update<T = any>(table: string, entry: string, data: ConfigurationUpdateResultEntry[] | [string, any][] | ObjectLiteral<any>): Promise<T>;
+		public abstract updateValue<T = any>(table: string, path: string, newValue: any): Promise<T>;
+		protected parseUpdateInput<T = ObjectLiteral<any>>(updated: T | ConfigurationUpdateResult): T;
 
 		public shutdown(): Promise<void>;
 		public toJSON(): PieceProviderJSON;
 	}
 
 	export abstract class SQLProvider extends Provider {
-		public abstract addColumn(table: string, columns: SchemaFolder | SchemaPiece): Promise<any>;
-		public abstract removeColumn(table: string, columns: string | string[]): Promise<any>;
-		public abstract updateColumn(table: string, piece: SchemaPiece): Promise<any>;
-		protected parseGatewayInput<T = [string, any]>(updated: ConfigurationUpdateResult): T;
+		public abstract addColumn<T = any>(table: string, columns: SchemaFolder | SchemaPiece): Promise<T>;
+		public abstract removeColumn<T = any>(table: string, columns: string | string[]): Promise<T>;
+		public abstract updateColumn<T = any>(table: string, piece: SchemaPiece): Promise<T>;
+		protected parseUpdateInput<T =[string, any]>(updated: ConfigurationUpdateResultEntry[] | [string, any][] | ObjectLiteral<any>): T;
 		protected parseEntry<T = ObjectLiteral<any>>(gateway: string | Gateway, entry: ObjectLiteral<any>): T;
 		protected parseValue<T = any>(value: any, schemaPiece: SchemaPiece): T;
 	}
@@ -908,7 +908,7 @@ declare module 'klasa' {
 		private _prompted: number;
 		private _currentUsage: Tag;
 
-		public run(prompt: string): Promise<any[]>;
+		public run<T = any[]>(prompt: string): Promise<T>;
 		private reprompt(prompt: string): Promise<any[]>;
 		private repeatingPrompt(): Promise<any[]>;
 		private validateArgs(): Promise<any[]>;
