@@ -761,6 +761,7 @@ declare module 'klasa' {
 		public abstract replace(table: string, entry: string, data: ConfigurationUpdateResultEntry[] | [string, any][] | ObjectLiteral<any>): Promise<any>;
 		public abstract update(table: string, entry: string, data: ConfigurationUpdateResultEntry[] | [string, any][] | ObjectLiteral<any>): Promise<any>;
 		public abstract updateValue(table: string, path: string, newValue: any): Promise<any>;
+		protected parseGatewayInput<T = ObjectLiteral<any>>(updated: ConfigurationUpdateResult): T;
 
 		public shutdown(): Promise<void>;
 		public toJSON(): PieceProviderJSON;
@@ -770,6 +771,7 @@ declare module 'klasa' {
 		public abstract addColumn(table: string, columns: SchemaFolder | SchemaPiece): Promise<any>;
 		public abstract removeColumn(table: string, columns: string | string[]): Promise<any>;
 		public abstract updateColumn(table: string, piece: SchemaPiece): Promise<any>;
+		protected parseGatewayInput<T = [string, any]>(updated: ConfigurationUpdateResult): T;
 		protected parseEntry<T = ObjectLiteral<any>>(gateway: string | Gateway, entry: ObjectLiteral<any>): T;
 		protected parseValue<T = any>(value: any, schemaPiece: SchemaPiece): T;
 	}

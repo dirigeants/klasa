@@ -195,7 +195,7 @@ class Provider extends Piece {
 	 * Parse the gateway input for easier operation
 	 * @since 0.5.0
 	 * @param {ConfigurationUpdateResult} updated The updated entries
-	 * @returns {Array<any[]>}
+	 * @returns {Object<*>}
 	 * @protected
 	 */
 	parseGatewayInput(updated) {
