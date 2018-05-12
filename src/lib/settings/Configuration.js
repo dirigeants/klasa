@@ -1,4 +1,4 @@
-const { isObject, makeObject, deepClone, tryParse, toTitleCase, arraysStrictEquals, mergeObjects, getDeepTypeName, objectToTuples } = require('../util/util');
+const { isObject, deepClone, tryParse, toTitleCase, arraysStrictEquals, getDeepTypeName, objectToTuples } = require('../util/util');
 const SchemaFolder = require('./SchemaFolder');
 const SchemaPiece = require('./SchemaPiece');
 
@@ -433,16 +433,7 @@ class Configuration {
 		}
 		const oldClone = this.client.listenerCount('configUpdateEntry') ? this.clone() : null;
 
-		if (this.gateway.sql) {
-			const keys = new Array(updated.length), values = new Array(updated.length);
-			for (let i = 0; i < updated.length; i++) [keys[i], values[i]] = updated[i].data;
-			await this.gateway.provider.update(this.gateway.type, this.id, keys, values);
-		} else {
-			const updateObject = {};
-			for (const entry of updated) mergeObjects(updateObject, makeObject(entry.data[0], entry.data[1]));
-			await this.gateway.provider.update(this.gateway.type, this.id, updateObject);
-		}
-
+		await this.gateway.provider.update(this.gateway.type, this.id, updated);
 		if (oldClone !== null) this.client.emit('configUpdateEntry', oldClone, this, updated);
 	}
 

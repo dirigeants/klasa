@@ -24,6 +24,7 @@ module.exports = {
 	Gateway: require('./lib/settings/Gateway'),
 	GatewayDriver: require('./lib/settings/GatewayDriver'),
 	GatewayStorage: require('./lib/settings/GatewayStorage'),
+	QueryBuilder: require('./lib/settings/QueryBuilder'),
 	Schema: require('./lib/settings/Schema'),
 	SchemaFolder: require('./lib/settings/SchemaFolder'),
 	SchemaPiece: require('./lib/settings/SchemaPiece'),

@@ -11,17 +11,11 @@ const { join } = require('path');
  */
 class SQLProvider extends Provider {
 
-	constructor(...args) {
-		super(...args);
-
-		Object.defineProperty(this, 'sql', { value: true });
-	}
-
 	/**
 	 * The addColumn method which inserts/creates a new table to the database.
 	 * @since 0.5.0
 	 * @param {string} table The table to check against
-	 * @param {Array<string[]>} columns An array of tuples keyed by [key, datatype] specifying the new columns
+	 * @param {(SchemaFolder | SchemaPiece)} piece The SchemaFolder or SchemaPiece added to the schema
 	 * @returns {*}
 	 * @abstract
 	 */
@@ -39,6 +33,42 @@ class SQLProvider extends Provider {
 	 */
 	async removeColumn() {
 		throw new Error(`[PROVIDERS] ${join(this.dir, ...this.file)} | Missing method 'removeColumn' of ${this.constructor.name}`);
+	}
+
+	/**
+	 * The updateColumn method which alters the datatype from a column.
+	 * @since 0.5.0
+	 * @param {string} table The table to check against
+	 * @param {SchemaPiece} piece The modified SchemaPiece
+	 * @returns {*}
+	 * @abstract
+	 */
+	async updateColumn() {
+		throw new Error(`[PROVIDERS] ${join(this.dir, ...this.file)} | Missing method 'updateColumn' of ${this.constructor.name}`);
+	}
+
+	/**
+	 * Parse the gateway input for easier operation
+	 * @since 0.5.0
+	 * @param {ConfigurationUpdateResult} updated The updated entries
+	 * @param {boolean} [resolve=true] Whether this should resolve the values using QueryBuider#resolve or not
+	 * @returns {Array<any[]>}
+	 * @protected
+	 */
+	parseGatewayInput(updated, resolve = true) {
+		const keys = new Array(updated.length), values = new Array(updated.length);
+
+		// If QueryBuilder is available, try to resolve the data
+		if (resolve && this.qb) {
+			for (let i = 0; i < updated.length; i++) {
+				const entry = updated[i];
+				[keys[i]] = entry.data;
+				values[i] = this.qb.resolve(entry.piece, entry.data[1]);
+			}
+		} else {
+			for (let i = 0; i < updated.length; i++) [keys[i], values[i]] = updated[i].data;
+		}
+		return [keys, values];
 	}
 
 	/**

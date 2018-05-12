@@ -1,4 +1,5 @@
 const Piece = require('./base/Piece');
+const { mergeObjects, makeObject } = require('../util/util');
 const { join } = require('path');
 
 /**
@@ -8,23 +9,6 @@ const { join } = require('path');
  * @extends {Piece}
  */
 class Provider extends Piece {
-
-	/**
-	 * @typedef {PieceOptions} ProviderOptions
-	 */
-	constructor(...args) {
-		super(...args);
-
-		/**
-		 * If the provider provides to a sql data source
-		 * @since 0.0.1
-		 * @name Provider#sql
-		 * @type {boolean}
-		 * @readonly
-		 * @private
-		 */
-		Object.defineProperty(this, 'sql', { configurable: true, value: false });
-	}
 
 	/**
 	 * The createTable method which inserts/creates a new table to the database.
@@ -203,15 +187,21 @@ class Provider extends Piece {
 		// Reserved for SQL databases
 	}
 
+	async updateColumn() {
+		// Reserved for SQL databases
+	}
+
 	/**
-	 * Defines the JSON.stringify behavior of this provider.
-	 * @returns {Object}
+	 * Parse the gateway input for easier operation
+	 * @since 0.5.0
+	 * @param {ConfigurationUpdateResult} updated The updated entries
+	 * @returns {Object<*>}
+	 * @protected
 	 */
-	toJSON() {
-		return {
-			...super.toJSON(),
-			sql: this.sql
-		};
+	parseGatewayInput(updated) {
+		const updateObject = {};
+		for (const entry of updated) mergeObjects(updateObject, makeObject(entry.data[0], entry.data[1]));
+		return updateObject;
 	}
 
 }
