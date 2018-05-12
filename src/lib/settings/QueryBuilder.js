@@ -42,6 +42,7 @@ class QueryBuilder {
 
 		/**
 		 * The datatype formatter for the SQL database
+		 * @type {Function}
 		 * @param {string} name The column's name
 		 * @param {string} datatype The column's datatype
 		 * @param {string} [def = null] The default value for the column
