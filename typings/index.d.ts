@@ -774,7 +774,7 @@ declare module 'klasa' {
 		protected parseUpdateInput<T = [string, any]>(updated: ConfigurationUpdateResultEntry[] | [string, any][] | ObjectLiteral<any>): T;
 		protected parseEntry<T = ObjectLiteral<any>>(gateway: string | Gateway, entry: ObjectLiteral<any>): T;
 		protected parseValue<T = any>(value: any, schemaPiece: SchemaPiece): T;
-		private _parseGatewayInput(updated: ConfigurationUpdateResultEntry[], keys: string[], values: string[], boolean?: boolean): void;
+		private _parseGatewayInput(updated: ConfigurationUpdateResultEntry[], keys: string[], values: string[], resolve?: boolean): void;
 	}
 
 	export abstract class Task extends Piece {
