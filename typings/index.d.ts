@@ -976,7 +976,7 @@ declare module 'klasa' {
 		DEFAULTS: {
 			CLIENT: KlasaClientOptions,
 			CONSOLE: KlasaConsoleConfig,
-			DATATYPES: ObjectLiteral<QueryBuilderDatatype>;
+			DATATYPES: ObjectLiteral<QueryBuilderDatatype>
 		};
 		CRON: {
 			allowedNum: number[][];
