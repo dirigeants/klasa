@@ -4,7 +4,6 @@ A schema works like a diagram or a blueprint, in SettingGateway, the schema defi
 
 1. Define what keys the {@link Gateway} manages and their properties.
 1. Define what type the keys must hold.
-1. Define the SQL schema when using a SQL database.
 1. Speed up performance when iterating over keys.
 
 ## Adding keys

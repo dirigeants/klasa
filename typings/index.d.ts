@@ -474,7 +474,7 @@ declare module 'klasa' {
 	}
 
 	export class Gateway extends GatewayStorage {
-		private constructor(store: GatewayDriver, type: string, schema: object, options: GatewayOptions);
+		public constructor(store: GatewayDriver, type: string, schema: object, options: GatewayOptions);
 		public store: GatewayDriver;
 		public options: GatewayOptions;
 		public defaultSchema: object;
@@ -494,6 +494,12 @@ declare module 'klasa' {
 
 		public toJSON(): GatewayJSON;
 		public toString(): string;
+	}
+
+	export class QueryBuilder {
+		public constructor(datatypes: ObjectLiteral<QueryBuilderDatatype>, options?: QueryBuilderOptions);
+		private formatDatatype: (name: string, datatype: string, def?: string) => string;
+		private readonly _datatypes: ObjectLiteral<QueryBuilderDatatype>;
 	}
 
 	export class GatewayDriver {
@@ -535,18 +541,15 @@ declare module 'klasa' {
 
 	export abstract class GatewayStorage {
 		public constructor(client: KlasaClient, type: string, provider?: string);
-		public readonly client: KlasaClient;
-		public readonly type: string;
-		public readonly providerName: string;
 		public readonly baseDir: string;
-		public readonly filePath: string;
-		public readonly sql: boolean;
-		public schema?: SchemaFolder;
-		public ready: boolean;
-
-		public readonly sqlSchema: string[][];
-		public readonly provider?: Provider;
+		public readonly client: KlasaClient;
 		public readonly defaults: any;
+		public readonly filePath: string;
+		public readonly provider?: Provider;
+		public readonly providerName: string;
+		public readonly type: string;
+		public ready: boolean;
+		public schema?: SchemaFolder;
 
 		public init(defaultSchema: object): Promise<void>;
 	}
@@ -572,7 +575,6 @@ declare module 'klasa' {
 		public has(key: string): boolean;
 		public remove(key: string): Promise<SchemaFolder>;
 		public getDefaults(data?: object): object;
-		public getSQL(array?: string[]): string[];
 		public entries(recursive?: boolean): Iterator<[string, SchemaFolder | SchemaPiece]>;
 		public values(recursive?: boolean): Iterator<SchemaFolder | SchemaPiece>;
 		public keys(recursive?: boolean): Iterator<string>;
@@ -589,13 +591,11 @@ declare module 'klasa' {
 
 	export class SchemaPiece extends Schema {
 		private constructor(client: KlasaClient, gateway: Gateway, options: SchemaFolderAddOptions, parent: SchemaFolder, key: string);
-		public readonly sqlSchema: [string, string];
 		public type: string;
 		public array: boolean;
 		public default: any;
 		public min?: number;
 		public max?: number;
-		public sql: string;
 		public configurable: boolean;
 		public validator?: (resolved: any, guild?: KlasaGuild) => void;
 
@@ -609,13 +609,10 @@ declare module 'klasa' {
 		private _schemaCheckDefault(options: SchemaFolderAddOptions): void;
 		private _schemaCheckLimits(min: number, max: number): void;
 		private _schemaCheckConfigurable(configurable: boolean): void;
-		private _generateSQLDatatype(sql?: string): string;
 		private _init(options: SchemaFolderAddOptions): true;
 
 		public toJSON(): SchemaPieceJSON;
 		public toString(): string;
-
-		private static _parseSQLValue(value: any): string;
 	}
 
 //#endregion Settings
@@ -751,9 +748,6 @@ declare module 'klasa' {
 	}
 
 	export abstract class Provider extends Piece {
-		public constructor(client: KlasaClient, store: ProviderStore, file: string, core: boolean, options?: ProviderOptions);
-		private readonly sql: boolean;
-
 		public abstract create(table: string, entry: string, data: any): Promise<any>;
 		public abstract createTable(table: string): Promise<any>;
 		public abstract delete(table: string, entry: string): Promise<any>;
@@ -773,8 +767,9 @@ declare module 'klasa' {
 	}
 
 	export abstract class SQLProvider extends Provider {
-		public abstract addColumn(table: string, columns: string[][]): Promise<any>;
+		public abstract addColumn(table: string, columns: SchemaFolder | SchemaPiece): Promise<any>;
 		public abstract removeColumn(table: string, columns: string | string[]): Promise<any>;
+		public abstract updateColumn(table: string, piece: SchemaPiece): Promise<any>;
 		protected parseEntry<T = ObjectLiteral<any>>(gateway: string | Gateway, entry: ObjectLiteral<any>): T;
 		protected parseValue<T = any>(value: any, schemaPiece: SchemaPiece): T;
 	}
@@ -1379,6 +1374,16 @@ declare module 'klasa' {
 		route: string[];
 	};
 
+	export type QueryBuilderDatatype = {
+		array?: (piece: SchemaPiece) => string;
+		resolver?: <T = any>(input: any) => T;
+		type: string;
+	};
+
+	export type QueryBuilderOptions = {
+		formatDatatype?: (name: string, datatype: string, def?: string) => string;
+	} & QueryBuilderDatatype;
+
 	export type GuildResolvable = KlasaGuild
 		| KlasaMessage
 		| KlasaTextChannel
@@ -1432,7 +1437,6 @@ declare module 'klasa' {
 		default?: any;
 		max?: number;
 		min?: number;
-		sql?: string;
 		type: string;
 	};
 
@@ -1441,7 +1445,6 @@ declare module 'klasa' {
 		default?: any;
 		max?: number;
 		min?: number;
-		sql?: string;
 	};
 
 	export type SchemaPieceJSON = {
@@ -1450,7 +1453,6 @@ declare module 'klasa' {
 		default: any;
 		max?: number;
 		min?: number;
-		sql: string;
 		type: string;
 	};
 
@@ -1588,17 +1590,13 @@ declare module 'klasa' {
 		ignoreWebhooks: boolean;
 	} & PieceJSON;
 
-	export type PieceProviderJSON = {
-		cache: boolean;
-		sql: boolean;
-	} & PieceJSON;
-
 	export type PieceEventJSON = {
 		emitter: string;
 		event: string;
 		once: boolean;
 	} & PieceJSON;
 
+	export type PieceProviderJSON = PieceJSON;
 	export type PieceFinalizerJSON = PieceJSON;
 	export type PieceLanguageJSON = PieceJSON;
 	export type PieceTaskJSON = PieceJSON;

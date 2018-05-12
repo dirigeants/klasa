@@ -17,7 +17,6 @@ class SchemaFolder extends Schema {
 	 * @property {number} [min] The min value for the key (String.length for String, value for number)
 	 * @property {number} [max] The max value for the key (String.length for String, value for number)
 	 * @property {boolean} [array] Whether the key should be stored as Array or not
-	 * @property {string} [sql] The datatype of the key
 	 * @property {boolean} [configurable] Whether the key should be configurable by the config command or not
 	 */
 
@@ -78,18 +77,6 @@ class SchemaFolder extends Schema {
 	}
 
 	/**
-	 * Get all SQL datatypes from this SchemaFolder's children.
-	 * @since 0.5.0
-	 * @type {Array<Array<string>>}
-	 * @readonly
-	 */
-	get sqlSchema() {
-		const schema = [];
-		for (const piece of this.values(true)) schema.push([piece.path, piece.sql]);
-		return schema;
-	}
-
-	/**
 	 * Create a new nested folder.
 	 * @since 0.5.0
 	 * @param {string} key The name's key for the folder
@@ -127,7 +114,7 @@ class SchemaFolder extends Schema {
 		const piece = this._add(key, options, options.type === 'Folder' ? SchemaFolder : SchemaPiece);
 		await fs.outputJSONAtomic(this.gateway.filePath, this.gateway.schema);
 
-		if (piece.type !== 'Folder' || piece.keyArray.length) await this.gateway.provider.addColumn(this.gateway.type, piece.sqlSchema);
+		if (piece.type !== 'Folder' || piece.keyArray.length) await this.gateway.provider.addColumn(this.gateway.type, piece);
 		await this.force('add', piece);
 
 		await this._shardSyncSchema(piece, 'add');
