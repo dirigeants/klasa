@@ -115,6 +115,25 @@ exports.DEFAULTS = {
 			warn: mergeDefault(colorBase, { time: { background: 'lightyellow', text: 'black' } }),
 			wtf: mergeDefault(colorBase, { message: { text: 'red' }, time: { background: 'red' } })
 		}
+	},
+
+	DATATYPES: {
+		user: { type: 'VARCHAR(18)' },
+		channel: { type: 'VARCHAR(18)' },
+		textchannel: { type: 'VARCHAR(18)' },
+		voicechannel: { type: 'VARCHAR(18)' },
+		categorychannel: { type: 'VARCHAR(18)' },
+		guild: { type: 'VARCHAR(18)' },
+		role: { type: 'VARCHAR(18)' },
+		boolean: { type: 'BOOLEAN' },
+		string: { type: ({ max }) => max ? `VARCHAR(${max})` : 'TEXT', resolver: (value) => `'${String(value).replace(/'/g, "''")}'` },
+		integer: { type: 'INTEGER' },
+		float: { type: 'FLOAT' },
+		url: { type: 'TEXT' },
+		command: { type: 'TEXT' },
+		language: { type: 'VARCHAR(5)' },
+		json: { type: 'JSON' },
+		any: { type: 'TEXT' }
 	}
 
 };

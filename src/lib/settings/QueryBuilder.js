@@ -1,4 +1,5 @@
 const { isObject, mergeDefault } = require('./util');
+const { DEFAULTS: { DATATYPES } } = require('../util/constants');
 const Type = require('./Type');
 
 class QueryBuilder {
@@ -20,10 +21,11 @@ class QueryBuilder {
 	 * @param {Object<QueryBuilderDatatype>} datatypes The datatype to insert
 	 * @param {QueryBuilderOptions} [options = {}] The default options for all datatypes plus formatDatatype
 	 */
-	constructor(datatypes, options = {}) {
+	constructor(datatypes, { array = () => 'TEXT', resolver = null, type = null, formatDatatype } = {}) {
 		if (!isObject(datatypes)) throw `Expected 'datatypes' to be an object literal, got ${new Type(datatypes)}`;
-		mergeDefault({ array: () => 'TEXT', resolver: null, type: null }, options);
-		const { array, resolver, type } = options;
+
+		// Default the options for QueryBuilderDatatype
+		mergeDefault(DATATYPES, datatypes);
 
 		// Merge defaults on all keys
 		for (const key of Object.keys(datatypes)) {
@@ -49,7 +51,7 @@ class QueryBuilder {
 		 * @returns {string}
 		 * @private
 		 */
-		this.formatDatatype = options.formatDatatype || ((name, datatype, def = null) => `${name} ${datatype}${def !== null ? ` NOT NULL DEFAULT ${def}` : ''}`);
+		this.formatDatatype = formatDatatype || ((name, datatype, def = null) => `${name} ${datatype}${def !== null ? ` NOT NULL DEFAULT ${def}` : ''}`);
 	}
 
 	/**

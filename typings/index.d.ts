@@ -975,7 +975,8 @@ declare module 'klasa' {
 	export type constants = {
 		DEFAULTS: {
 			CLIENT: KlasaClientOptions,
-			CONSOLE: KlasaConsoleConfig
+			CONSOLE: KlasaConsoleConfig,
+			DATATYPES: ObjectLiteral<QueryBuilderDatatype>;
 		};
 		CRON: {
 			allowedNum: number[][];
