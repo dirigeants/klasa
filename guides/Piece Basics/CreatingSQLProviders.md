@@ -46,7 +46,6 @@ The {@link SQLProvider} class provides several resources to help the developer r
 - {@link SQLProvider#parseEntry `SQLProvider#parseEntry()`}: Converts plain dotted objects into parsed objects with nested object support. Uses the helper above to parse entries, and is powered by {@link SettingGateway UnderstandingSettingGateway} to improve security and parsing speed.
 - {@link SQLProvider#parseValue `SQLProvider#parseValue()`}: Converts a value into standard JavaScript objects, useful for SQL databases that do not cover all JavaScript primitives.
 
-
 ## Configuration
 
 The configuration is inherited by {@link Provider Providers}, SQL Providers only provide extra tools to convert SQL output to compatible JS objects.
