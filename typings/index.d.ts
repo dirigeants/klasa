@@ -30,7 +30,8 @@ declare module 'klasa' {
 		TextChannel as DiscordTextChannel,
 		VoiceChannel as DiscordVoiceChannel,
 		CategoryChannel as DiscordCategoryChannel,
-		WebhookClient
+		WebhookClient,
+		GuildChannel as DiscordGuildChannel
 	} from 'discord.js';
 
 	export const version: string;
@@ -270,6 +271,10 @@ declare module 'klasa' {
 		public sendMessage(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 	}
 
+	export class KlasaGuildChannel extends DiscordGuildChannel {
+		public readonly guild: KlasaGuild;
+	}
+
 	export class KlasaVoiceChannel extends DiscordVoiceChannel {
 		public readonly guild: KlasaGuild;
 	}
@@ -449,9 +454,9 @@ declare module 'klasa' {
 
 		public reset(key?: string | string[], avoidUnconfigurable?: boolean): Promise<ConfigurationUpdateResult>;
 		public reset(key?: string | string[], guild?: KlasaGuild, avoidUnconfigurable?: boolean): Promise<ConfigurationUpdateResult>;
-		public update(key: ObjectLiteral<any>, guild?: GatewayGuildResolvable): Promise<ConfigurationUpdateResult>;
-		public update(key: string, value: any, guild?: GatewayGuildResolvable, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
-		public update(key: string[], value: any[], guild?: GatewayGuildResolvable, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
+		public update(key: ObjectLiteral<any>, guild?: GuildResolvable): Promise<ConfigurationUpdateResult>;
+		public update(key: string, value: any, guild?: GuildResolvable, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
+		public update(key: string[], value: any[], guild?: GuildResolvable, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
 		public list(message: KlasaMessage, path: SchemaFolder | string): string;
 		public resolveString(message: KlasaMessage, path: SchemaPiece | string): string;
 
@@ -459,7 +464,7 @@ declare module 'klasa' {
 		private _get(route: string | string[], piece?: boolean): object;
 		private _get<T>(route: string | string[], piece?: boolean): T;
 		private _save(data: ConfigurationUpdateResult): Promise<void>;
-		private _updateMany(object: any, guild?: GatewayGuildResolvable): Promise<ConfigurationUpdateResult>;
+		private _updateMany(object: any, guild?: GuildResolvable): Promise<ConfigurationUpdateResult>;
 		private _parseSingle(key: string, value: any, guild: KlasaGuild | null, options: ConfigurationUpdateOptions, list: ConfigurationUpdateResult): Promise<void>;
 		private _parseUpdateMany(cache: any, object: any, schema: SchemaFolder, guild: KlasaGuild, list: ConfigurationUpdateResult): void;
 		private _setValueByPath(piece: SchemaPiece, parsedID: any): { updated: boolean, old: any };
@@ -489,7 +494,7 @@ declare module 'klasa' {
 		public init(options: GatewayDriverRegisterOptions): Promise<void>;
 		private _download(): Promise<void>;
 		private _ready(waitForDownload: boolean): Promise<Array<Collection<string, Configuration>>>;
-		private _resolveGuild(guild: GatewayGuildResolvable): KlasaGuild;
+		private _resolveGuild(guild: GuildResolvable): KlasaGuild;
 		private _shardSync(path: string[], data: any, action: 'add' | 'delete' | 'update'): Promise<void>;
 
 		public toJSON(): GatewayJSON;
@@ -498,6 +503,9 @@ declare module 'klasa' {
 
 	export class QueryBuilder {
 		public constructor(datatypes: ObjectLiteral<QueryBuilderDatatype>, options?: QueryBuilderOptions);
+		public get(type: string): QueryBuilderDatatype;
+		public resolve<T = any>(type: string, input: any): T;
+		public parse(schemaPiece: SchemaPiece): string;
 		private formatDatatype: (name: string, datatype: string, def?: string) => string;
 		private readonly _datatypes: ObjectLiteral<QueryBuilderDatatype>;
 	}
@@ -1379,9 +1387,9 @@ declare module 'klasa' {
 	};
 
 	export type QueryBuilderDatatype = {
-		array?: (piece: SchemaPiece) => string;
+		array?: (datatype: string) => string;
 		resolver?: <T = any>(input: any) => T;
-		type: string;
+		type: string | ((piece: SchemaPiece) => string);
 	};
 
 	export type QueryBuilderOptions = {
@@ -1390,11 +1398,8 @@ declare module 'klasa' {
 
 	export type GuildResolvable = KlasaGuild
 		| KlasaMessage
-		| KlasaTextChannel
-		| KlasaVoiceChannel
-		| KlasaCategoryChannel
-		| GuildMember
-		| Role;
+		| KlasaGuildChannel
+		| Snowflake;
 
 	export type ConfigurationUpdateOptions = {
 		action?: 'add' | 'remove' | 'auto';
@@ -1411,13 +1416,6 @@ declare module 'klasa' {
 		data: [string, any];
 		piece: SchemaPiece;
 	};
-
-	export type GatewayGuildResolvable = KlasaGuild
-		| KlasaMessage
-		| KlasaTextChannel
-		| KlasaVoiceChannel
-		| Role
-		| Snowflake;
 
 	export type ConfigurationPathOptions = {
 		avoidUnconfigurable?: boolean;

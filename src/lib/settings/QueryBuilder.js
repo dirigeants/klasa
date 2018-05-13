@@ -21,7 +21,7 @@ class QueryBuilder {
 	 * @param {Object<QueryBuilderDatatype>} datatypes The datatype to insert
 	 * @param {QueryBuilderOptions} [options = {}] The default options for all datatypes plus formatDatatype
 	 */
-	constructor(datatypes, { array = () => 'TEXT', resolver = null, type = null, formatDatatype } = {}) {
+	constructor(datatypes = {}, { array = () => 'TEXT', resolver = null, type = null, formatDatatype } = {}) {
 		if (!isObject(datatypes)) throw `Expected 'datatypes' to be an object literal, got ${new Type(datatypes)}`;
 
 		// Default the options for QueryBuilderDatatype
@@ -57,13 +57,13 @@ class QueryBuilder {
 	/**
 	 * Get a datatype
 	 * @since 0.5.0
-	 * @param {string} datatype The datatype to get
+	 * @param {string} type The datatype to get
 	 * @returns {QueryBuilderDatatype}
 	 * @example
 	 * this.qb.get('string');
 	 */
-	get(datatype) {
-		return this._datatypes[datatype] || null;
+	get(type) {
+		return this._datatypes[type] || null;
 	}
 
 	/**
@@ -98,9 +98,8 @@ class QueryBuilder {
 		if (!datatype || !datatype.type) throw `The type '${schemaPiece.type}' is unavailable, please set its definition in the constructor.`;
 		if (schemaPiece.array && !datatype.array) throw `The datatype '${datatype.type}' does not support arrays.`;
 
-		const parsedDatatype = schemaPiece.array ?
-			datatype.array(typeof datatype.type === 'function' ? datatype.type(schemaPiece) : datatype.type) :
-			datatype.type;
+		const type = typeof datatype.type === 'function' ? datatype.type(schemaPiece) : datatype.type;
+		const parsedDatatype = schemaPiece.array ? datatype.array(type) : type;
 		return this.format(schemaPiece.path, parsedDatatype, schemaPiece.default);
 	}
 
