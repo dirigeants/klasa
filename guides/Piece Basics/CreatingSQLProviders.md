@@ -107,7 +107,7 @@ exports.DEFAULTS.DATATYPES = {
 	language: { type: 'VARCHAR(5)' },
 	json: { type: 'JSON' },
 	any: { type: 'TEXT' }
-}
+};
 ```
 
 Where the other fields (`array` and `resolver`) are filled by your {@link QueryBuilderOptions} that defaults the other parameters for all keys using `util.mergeDefault`. By default, array support is not provided since not all SQL databases support them.
