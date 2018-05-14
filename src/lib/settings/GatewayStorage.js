@@ -123,7 +123,7 @@ class GatewayStorage {
 
 		// Init the table
 		const hasTable = await this.provider.hasTable(this.type);
-		if (!hasTable) await this.provider.createTable(this.type, this.schema);
+		if (!hasTable) await this.provider.createTable(this.type);
 	}
 
 }
