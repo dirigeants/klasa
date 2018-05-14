@@ -7,7 +7,10 @@ module.exports = class extends Language {
 		this.language = {
 			DEFAULT: (key) => `${key} has not been localized for en-US yet.`,
 			DEFAULT_LANGUAGE: 'Default Language',
-			PREFIX_REMINDER: (prefix) => `The prefix in this guild is set to: ${Array.isArray(prefix) ? prefix.map(pre => `\`${pre}\``).join(', ') : `\`${prefix}\``}`,
+			PREFIX_REMINDER: (prefix) => `The prefix${Array.isArray(prefix) ?
+				`es for this guild are: ${prefix.map(pre => `\`${pre}\``).join(', ')}` :
+				` in this guild is set to: \`${prefix}\``
+			}`,
 			SETTING_GATEWAY_EXPECTS_GUILD: 'The parameter <Guild> expects either a Guild or a Guild Object.',
 			SETTING_GATEWAY_VALUE_FOR_KEY_NOEXT: (data, key) => `The value ${data} for the key ${key} does not exist.`,
 			SETTING_GATEWAY_VALUE_FOR_KEY_ALREXT: (data, key) => `The value ${data} for the key ${key} already exists.`,
@@ -17,7 +20,7 @@ module.exports = class extends Language {
 			SETTING_GATEWAY_INVALID_TYPE: 'The type parameter must be either add or remove.',
 			RESOLVER_INVALID_CUSTOM: (name, type) => `${name} must be a valid ${type}.`,
 			RESOLVER_INVALID_PIECE: (name, piece) => `${name} must be a valid ${piece} name.`,
-			RESOLVER_INVALID_MSG: (name) => `${name} must be a valid message id.`,
+			RESOLVER_INVALID_MESSAGE: (name) => `${name} must be a valid message id.`,
 			RESOLVER_INVALID_USER: (name) => `${name} must be a mention or valid user id.`,
 			RESOLVER_INVALID_MEMBER: (name) => `${name} must be a mention or valid user id.`,
 			RESOLVER_INVALID_CHANNEL: (name) => `${name} must be a channel tag or valid channel id.`,
