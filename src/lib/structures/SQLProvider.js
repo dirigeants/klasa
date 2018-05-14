@@ -51,12 +51,13 @@ class SQLProvider extends Provider {
 	/**
 	 * Parse the gateway input for easier operation
 	 * @since 0.5.0
-	 * @param {(ConfigurationUpdateResultEntry[]|Array<Array<string>>|Object<string, *>)} updated The updated entries
+	 * @param {(ConfigurationUpdateResultEntry[]|Array<Array<string>>|Object<string, *>)} [updated] The updated entries
 	 * @param {boolean} [resolve=true] Whether this should resolve the values using QueryBuider#resolve or not
 	 * @returns {Array<any[]>}
 	 * @protected
 	 */
 	parseUpdateInput(updated, resolve) {
+		if (!updated) return [[], []];
 		if (Array.isArray(updated)) {
 			const keys = new Array(updated.length), values = new Array(updated.length);
 			const [first] = updated;
@@ -68,11 +69,11 @@ class SQLProvider extends Provider {
 			else if (first.data && first.piece) this._parseGatewayInput(updated, keys, values, resolve);
 
 			// Unknown overload, throw
-			else throw new TypeError(`Expected [k, v][], ConfigurationUpdateResult[], or an object literal. Got: ${new Type(updated)}`);
+			else throw new TypeError(`Expected void, [k, v][], ConfigurationUpdateResult[], or an object literal. Got: ${new Type(updated)}`);
 
 			return [keys, values];
 		}
-		if (!isObject(updated)) throw new TypeError(`Expected [k, v][], ConfigurationUpdateResult[], or an object literal. Got: ${new Type(updated)}`);
+		if (!isObject(updated)) throw new TypeError(`Expected void, [k, v][], ConfigurationUpdateResult[], or an object literal. Got: ${new Type(updated)}`);
 
 		return objectToTuples(updated);
 	}
