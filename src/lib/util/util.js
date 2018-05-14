@@ -210,12 +210,22 @@ class Util {
 	 * @returns {?(string|number|boolean)}
 	 */
 	static getIdentifier(value) {
-		if (['string', 'bigint', 'number', 'boolean'].includes(typeof value)) return value;
+		if (Util.isPrimitive(value)) return value;
 		if (Util.isObject(value)) {
 			if ('id' in value) return value.id;
 			if ('name' in value) return value.name;
 		}
 		return null;
+	}
+
+	/**
+	 * Check whether a value is a primitive
+	 * @since 0.5.0
+	 * @param {*} value The value to check
+	 * @returns {boolean}
+	 */
+	static isPrimitive(value) {
+		return ['string', 'bigint', 'number', 'boolean'].includes(typeof value);
 	}
 
 	/**

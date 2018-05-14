@@ -1,4 +1,4 @@
-const { isObject, mergeDefault } = require('./util');
+const { isObject, isPrimitive, mergeDefault } = require('./util');
 const { DEFAULTS: { DATATYPES } } = require('./constants');
 const Type = require('./Type');
 
@@ -100,10 +100,9 @@ class QueryBuilder {
 
 		const type = typeof datatype.type === 'function' ? datatype.type(schemaPiece) : datatype.type;
 		const parsedDatatype = schemaPiece.array ? datatype.array(type) : type;
-		const defaultValue = schemaPiece.default === null ? null : typeof datatype.resolver === 'function' ?
-			datatype.resolver(schemaPiece.default) :
-			schemaPiece.default;
-		return this.formatDatatype(schemaPiece.path, parsedDatatype, defaultValue);
+		const defaultValue = schemaPiece.default === null ? null : isPrimitive(schemaPiece.default) ? schemaPiece.default : JSON.stringify(schemaPiece.default);
+		const parsedDefault = defaultValue === null ? null : typeof datatype.resolver === 'function' ? datatype.resolver(defaultValue) : defaultValue;
+		return this.formatDatatype(schemaPiece.path, parsedDatatype, parsedDefault);
 	}
 
 }

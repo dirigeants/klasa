@@ -1224,6 +1224,7 @@ declare module 'klasa' {
 		public static deepClone<T = any>(source: T): T;
 		public static exec(exec: string, options?: ExecOptions): Promise<{ stdout: string, stderr: string }>;
 		public static getIdentifier(value: PrimitiveType | { id?: PrimitiveType, name?: PrimitiveType }): PrimitiveType | null;
+		public static isPrimitive(value: any): boolean;
 		public static getTypeName(input: any): string;
 		public static isClass(input: Function): boolean;
 		public static isFunction(input: Function): boolean;
