@@ -118,22 +118,22 @@ exports.DEFAULTS = {
 	},
 
 	DATATYPES: {
-		user: { type: 'VARCHAR(18)' },
-		channel: { type: 'VARCHAR(18)' },
-		textchannel: { type: 'VARCHAR(18)' },
-		voicechannel: { type: 'VARCHAR(18)' },
-		categorychannel: { type: 'VARCHAR(18)' },
-		guild: { type: 'VARCHAR(18)' },
-		role: { type: 'VARCHAR(18)' },
+		user: { type: 'VARCHAR(18)', resolver: (value) => `'${value.replace(/'/g, "''")}'` },
+		channel: { type: 'VARCHAR(18)', resolver: (value) => `'${value.replace(/'/g, "''")}'` },
+		textchannel: { type: 'VARCHAR(18)', resolver: (value) => `'${value.replace(/'/g, "''")}'` },
+		voicechannel: { type: 'VARCHAR(18)', resolver: (value) => `'${value.replace(/'/g, "''")}'` },
+		categorychannel: { type: 'VARCHAR(18)', resolver: (value) => `'${value.replace(/'/g, "''")}'` },
+		guild: { type: 'VARCHAR(18)', resolver: (value) => `'${value.replace(/'/g, "''")}'` },
+		role: { type: 'VARCHAR(18)', resolver: (value) => `'${value.replace(/'/g, "''")}'` },
 		boolean: { type: 'BOOLEAN' },
-		string: { type: ({ max }) => max ? `VARCHAR(${max})` : 'TEXT', resolver: (value) => `'${String(value).replace(/'/g, "''")}'` },
+		string: { type: ({ max }) => max ? `VARCHAR(${max})` : 'TEXT', resolver: (value) => `'${value.replace(/'/g, "''")}'` },
 		integer: { type: 'INTEGER' },
 		float: { type: 'FLOAT' },
-		url: { type: 'TEXT' },
-		command: { type: 'TEXT' },
+		url: { type: 'TEXT', resolver: (value) => `'${value.replace(/'/g, "''")}'` },
+		command: { type: 'TEXT', resolver: (value) => `'${value.replace(/'/g, "''")}'` },
 		language: { type: 'VARCHAR(5)' },
 		json: { type: 'JSON' },
-		any: { type: 'TEXT' }
+		any: { type: 'TEXT', resolver: (value) => `'${value.replace(/'/g, "''")}'` }
 	}
 
 };
