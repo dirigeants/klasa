@@ -1,5 +1,5 @@
 const { isObject, mergeDefault } = require('./util');
-const { DEFAULTS: { DATATYPES } } = require('../util/constants');
+const { DEFAULTS: { DATATYPES } } = require('./constants');
 const Type = require('./Type');
 
 class QueryBuilder {

@@ -73,6 +73,9 @@ this.qb = new QueryBuilder({
 	// In PGSQL, arrays are supported, and they have the following notation. If it's not
 	// supported, it's advised to not use this option, it defaults to `() => 'TEXT'`, which
 	// enables the JSON.parse/JSON.stringify mechanism from SQLProvider.
+
+	// The following line converts a datatype, i.e. `INTEGER`, into `INTEGER[]` when the SchemaPiece
+	// takes arrays and they are supported by the SQL database.
 	array: type => `${type}[]`,
 	// The following function wraps the datatype generated with the previous options and the
 	// default value from the SchemaPiece instance, plus the name. In PGSQL, names that have
@@ -81,6 +84,33 @@ this.qb = new QueryBuilder({
 	formatDatatype: (name, datatype, def = null) => `"${name}" ${datatype}${def !== null ? ` NOT NULL DEFAULT ${def}` : ''}`
 });
 ```
+
+## QueryBuilder Defaults
+
+To not have to configure all types, we have a predefined set of datatypes in our constants file:
+
+```javascript
+exports.DEFAULTS.DATATYPES = {
+	user: { type: 'VARCHAR(18)' },
+	channel: { type: 'VARCHAR(18)' },
+	textchannel: { type: 'VARCHAR(18)' },
+	voicechannel: { type: 'VARCHAR(18)' },
+	categorychannel: { type: 'VARCHAR(18)' },
+	guild: { type: 'VARCHAR(18)' },
+	role: { type: 'VARCHAR(18)' },
+	boolean: { type: 'BOOLEAN' },
+	string: { type: ({ max }) => max ? `VARCHAR(${max})` : 'TEXT', resolver: (value) => `'${String(value).replace(/'/g, "''")}'` },
+	integer: { type: 'INTEGER' },
+	float: { type: 'FLOAT' },
+	url: { type: 'TEXT' },
+	command: { type: 'TEXT' },
+	language: { type: 'VARCHAR(5)' },
+	json: { type: 'JSON' },
+	any: { type: 'TEXT' }
+}
+```
+
+Where the other fields (`array` and `resolver`) are filled by your {@link QueryBuilderOptions} that defaults the other parameters for all keys using `util.mergeDefault`. By default, array support is not provided since not all SQL databases support them.
 
 ## Design of QueryBuilder
 
