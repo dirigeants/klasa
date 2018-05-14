@@ -87,6 +87,7 @@ class SQLProvider extends Provider {
 	 * @protected
 	 */
 	parseEntry(gateway, entry) {
+		if (!entry) return null;
 		if (typeof gateway === 'string') gateway = this.client.gateways[gateway];
 		if (!(gateway instanceof Gateway)) return entry;
 
