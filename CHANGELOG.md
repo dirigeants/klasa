@@ -102,6 +102,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#299](https://github.com/dirigeants/klasa/pull/299)] Escape strings from initClean. (KingDGrizzle)
 - [[#272](https://github.com/dirigeants/klasa/pull/272)] Changed `Monitor#shouldRun` to accept a single argument. (bdistin)
 - [[#256](https://github.com/dirigeants/klasa/pull/256)] **[BREAKING]** Modified all SettingResolvers to resolve to primitives (string, number, boolean...) or storable data. (kyranet)
 - [[#256](https://github.com/dirigeants/klasa/pull/256)] Added value array overload to `Configuration#update`. (kyranet)
