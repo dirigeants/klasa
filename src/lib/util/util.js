@@ -54,9 +54,9 @@ class Util {
 	 */
 	static initClean(client) {
 		const patterns = [];
-		if (client.token) patterns.push(client.token);
-		if (client.user.email) patterns.push(client.user.email);
-		if (client.password) patterns.push(client.password);
+		if (client.token) patterns.push(Util.regExpEsc(client.token));
+		if (client.user.email) patterns.push(Util.regExpEsc(client.user.email));
+		if (client.password) patterns.push(Util.regExpEsc(client.password));
 		sensitivePattern = new RegExp(patterns.join('|'), 'gi');
 	}
 
