@@ -134,13 +134,14 @@ class ScheduledTask {
 	 * @returns {this}
 	 */
 	async run() {
-		if (!this.task || !this.task.enabled || this.running) return this;
+		const { task } = this;
+		if (!task || !task.enabled || this.running) return this;
 
 		this.running = true;
 		try {
-			await this.task.run({ id: this.id, ...this.data });
+			await task.run({ id: this.id, ...this.data });
 		} catch (err) {
-			this.client.emit('taskError', this, this.task, err);
+			this.client.emit('taskError', this, task, err);
 		}
 		this.running = false;
 
