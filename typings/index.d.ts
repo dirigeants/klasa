@@ -504,8 +504,9 @@ declare module 'klasa' {
 	export class QueryBuilder {
 		public constructor(datatypes: ObjectLiteral<QueryBuilderDatatype>, options?: QueryBuilderOptions);
 		public get(type: string): QueryBuilderDatatype;
-		public resolve<T = any>(type: string, input: any): T;
 		public parse(schemaPiece: SchemaPiece): string;
+		public parseValue(value: any, schemaPiece: SchemaPiece, datatype?: QueryBuilderDatatype): string;
+		private arrayResolver: (values: Array<any>, piece: SchemaPiece, resolver: Function) => string;
 		private formatDatatype: (name: string, datatype: string, def?: string) => string;
 		private readonly _datatypes: ObjectLiteral<QueryBuilderDatatype>;
 	}
@@ -1394,6 +1395,7 @@ declare module 'klasa' {
 	};
 
 	export type QueryBuilderOptions = {
+		arrayResolver?: (values: Array<any>, piece: SchemaPiece, resolver: Function) => string;
 		formatDatatype?: (name: string, datatype: string, def?: string) => string;
 	} & QueryBuilderDatatype;
 

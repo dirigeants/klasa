@@ -13,7 +13,8 @@ class QueryBuilder {
 
 	/**
 	 * @typedef {QueryBuilderDatatype} QueryBuilderOptions
-	 * @property {Function} formatDatatype The datatype formatter for the SQL database
+	 * @property {Function} [formatDatatype] The datatype formatter for the SQL database
+	 * @property {Function} [arrayResolver] The specialized resolver for array keys
 	 */
 
 	/**
@@ -21,7 +22,7 @@ class QueryBuilder {
 	 * @param {Object<QueryBuilderDatatype>} datatypes The datatype to insert
 	 * @param {QueryBuilderOptions} [options = {}] The default options for all datatypes plus formatDatatype
 	 */
-	constructor(datatypes = {}, { array = () => 'TEXT', resolver = null, type = null, formatDatatype } = {}) {
+	constructor(datatypes = {}, { array = () => 'TEXT', resolver = null, type = null, arrayResolver, formatDatatype } = {}) {
 		if (!isObject(datatypes)) throw `Expected 'datatypes' to be an object literal, got ${new Type(datatypes)}`;
 
 		// Default the options for QueryBuilderDatatype
@@ -41,6 +42,16 @@ class QueryBuilder {
 		 * @private
 		 */
 		Object.defineProperty(this, '_datatypes', { value: Object.seal(datatypes) });
+
+		/**
+		 * The array resolver for the SQL database
+		 * @type {Function}
+		 * @param {Array<*>} values The values to resolve
+		 * @param {Function} resolver The normal resolver
+		 * @returns {string}
+		 * @private
+		 */
+		this.arrayResolver = arrayResolver || ((values) => `'${JSON.stringify(values)}'`);
 
 		/**
 		 * The datatype formatter for the SQL database
@@ -67,23 +78,6 @@ class QueryBuilder {
 	}
 
 	/**
-	 * Resolve data from a configured dedicated resolver for the selected datatype
-	 * @since 0.5.0
-	 * @param {string} type The SchemaPiece's type to try to resolve
-	 * @param {*} input The input to resolve
-	 * @returns {*}
-	 * @example
-	 * this.qb.resolve('boolean', true);
-	 * // -> 1 (MySQL)
-	 * // -> true (PGSQL)
-	 * // -> 'true' (SQLite)
-	 */
-	resolve(type, input) {
-		const datatype = this.get(type);
-		return datatype && typeof datatype.resolver === 'function' ? datatype.resolver(input) : input;
-	}
-
-	/**
 	 * Parse a SchemaPiece for the SQL datatype creation
 	 * @since 0.5.0
 	 * @param {schemaPiece} schemaPiece The SchemaPiece to process
@@ -95,15 +89,30 @@ class QueryBuilder {
 	 */
 	parse(schemaPiece) {
 		const datatype = this.get(schemaPiece.type);
-		if (!datatype || !datatype.type) throw `The type '${schemaPiece.type}' is unavailable, please set its definition in the constructor.`;
-		if (schemaPiece.array && !datatype.array) throw `The datatype '${datatype.type}' does not support arrays.`;
-
+		const parsedDefault = this.parseValue(schemaPiece.default, schemaPiece, datatype);
 		const type = typeof datatype.type === 'function' ? datatype.type(schemaPiece) : datatype.type;
 		const parsedDatatype = schemaPiece.array ? datatype.array(type) : type;
-		const parsedDefault = schemaPiece.default === null ? null : typeof datatype.resolver === 'function' ?
-			datatype.resolver(schemaPiece.default, schemaPiece) :
-			schemaPiece.default;
 		return this.formatDatatype(schemaPiece.path, parsedDatatype, parsedDefault);
+	}
+
+	/**
+	 * Parses the value
+	 * @since 0.5.0
+	 * @param {*} value The value to parse
+	 * @param {schemaPiece} schemaPiece The SchemaPiece instance that manages this instance
+	 * @param {QueryBuilderDatatype} datatype The QueryBuilder datatype
+	 * @returns {string}
+	 */
+	parseValue(value, schemaPiece, datatype = this.get(schemaPiece.type)) {
+		if (!datatype) throw new Error(`The type '${schemaPiece.type}' is unavailable, please set its definition in the constructor.`);
+		if (schemaPiece.array && !datatype.array) throw new Error(`The datatype '${datatype.type}' does not support arrays.`);
+
+		// If value is null, there is nothing to resolve.
+		if (value === null) return null;
+
+		return schemaPiece.array ?
+			this.arrayResolver(value, schemaPiece, datatype.resolver || (() => value)) :
+			typeof datatype.resolver === 'function' ? datatype.resolver(value, schemaPiece) : value;
 	}
 
 }
