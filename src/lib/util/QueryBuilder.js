@@ -100,7 +100,10 @@ class QueryBuilder {
 
 		const type = typeof datatype.type === 'function' ? datatype.type(schemaPiece) : datatype.type;
 		const parsedDatatype = schemaPiece.array ? datatype.array(type) : type;
-		return this.formatDatatype(schemaPiece.path, parsedDatatype, schemaPiece.default);
+		const defaultValue = schemaPiece.default === null ? null : typeof datatype.resolver === 'function' ?
+			datatype.resolver(schemaPiece.default) :
+			schemaPiece.default;
+		return this.formatDatatype(schemaPiece.path, parsedDatatype, defaultValue);
 	}
 
 }
