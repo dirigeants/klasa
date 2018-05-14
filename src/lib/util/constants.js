@@ -131,8 +131,8 @@ exports.DEFAULTS = {
 		float: { type: 'FLOAT' },
 		url: { type: 'TEXT', resolver: (value) => `'${value.replace(/'/g, "''")}'` },
 		command: { type: 'TEXT', resolver: (value) => `'${value.replace(/'/g, "''")}'` },
-		language: { type: 'VARCHAR(5)' },
-		json: { type: 'JSON' },
+		language: { type: 'VARCHAR(5)', resolver: (value) => `'${value.replace(/'/g, "''")}'` },
+		json: { type: 'JSON', resolver: (value) => `'${JSON.stringify(value).replace(/'/g, "''")}'` },
 		any: { type: 'TEXT', resolver: (value) => `'${value.replace(/'/g, "''")}'` }
 	}
 
