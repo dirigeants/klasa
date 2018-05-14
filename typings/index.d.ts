@@ -1389,7 +1389,7 @@ declare module 'klasa' {
 
 	export type QueryBuilderDatatype = {
 		array?: (datatype: string) => string;
-		resolver?: <T = any>(input: any) => T;
+		resolver?: <T = any>(input: any, schemaPiece: SchemaPiece) => T;
 		type: string | ((piece: SchemaPiece) => string);
 	};
 
