@@ -116,6 +116,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 - [[#306](https://github.com/dirigeants/klasa/pull/306)] Made `Gateway`'s constructor public in typings. (kyranet)
 - [[#306](https://github.com/dirigeants/klasa/pull/306)] Made `Configuration#_existsInDB` nullable to denote Configuration instances that have never sync. (kyranet)
 - [[#306](https://github.com/dirigeants/klasa/pull/306)] Tweaked initial synchronization for performance. (kyranet)
+- [[#299](https://github.com/dirigeants/klasa/pull/299)] Escape strings from initClean. (KingDGrizzle)
 - [[#272](https://github.com/dirigeants/klasa/pull/272)] Changed `Monitor#shouldRun` to accept a single argument. (bdistin)
 - [[#256](https://github.com/dirigeants/klasa/pull/256)] **[BREAKING]** Modified all SettingResolvers to resolve to primitives (string, number, boolean...) or storable data. (kyranet)
 - [[#256](https://github.com/dirigeants/klasa/pull/256)] Added value array overload to `Configuration#update`. (kyranet)

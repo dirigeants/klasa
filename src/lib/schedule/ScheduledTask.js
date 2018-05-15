@@ -96,6 +96,14 @@ class ScheduledTask {
 		 */
 		this.data = 'data' in options && isObject(options.data) ? options.data : {};
 
+		/**
+		 * If the ScheduledTask is being run currently
+		 * @since 0.5.0
+		 * @type {boolean}
+		 * @private
+		 */
+		this.running = false;
+
 		this.constructor._validate(this);
 	}
 
@@ -126,14 +134,17 @@ class ScheduledTask {
 	 * @returns {this}
 	 */
 	async run() {
-		if (!this.task || !this.task.enabled) return this;
+		const { task } = this;
+		if (!task || !task.enabled || this.running) return this;
+
+		this.running = true;
 		try {
-			this.task.disable();
-			await this.task.run({ id: this.id, ...this.data });
-			this.task.enable();
+			await task.run({ id: this.id, ...this.data });
 		} catch (err) {
-			this.client.emit('taskError', this, this.task, err);
+			this.client.emit('taskError', this, task, err);
 		}
+		this.running = false;
+
 		if (!this.recurring) return this.delete();
 		return this.update({ time: this.recurring });
 	}
