@@ -423,6 +423,8 @@ declare module 'klasa' {
 		public id: string;
 		public data: any;
 
+		private running: boolean;
+
 		public readonly task?: Task;
 		public run(): Promise<this>;
 		public update(options?: ScheduledTaskUpdateOptions): Promise<this>;

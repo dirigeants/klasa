@@ -26,10 +26,10 @@ module.exports = class extends Command {
 		const path = this.client.gateways.users.getPath(key, { avoidUnconfigurable: true, errors: false, piece: null });
 		if (!path) return message.sendMessage(message.language.get('COMMAND_CONF_GET_NOEXT', key));
 		if (path.piece.type === 'Folder') {
-			return message.sendMessage(message.language.get('COMMAND_CONF_SERVER', key ? `: ${key.split('.').map(toTitleCase).join('/')}` : '',
-				codeBlock('asciidoc', message.guild.configs.list(message, path.piece))));
+			return message.sendMessage(message.language.get('COMMAND_CONF_USER', key ? `: ${key.split('.').map(toTitleCase).join('/')}` : '',
+				codeBlock('asciidoc', message.author.configs.list(message, path.piece))));
 		}
-		return message.sendMessage(message.language.get('COMMAND_CONF_GET', path.piece.path, message.guild.configs.resolveString(message, path.piece)));
+		return message.sendMessage(message.language.get('COMMAND_CONF_GET', path.piece.path, message.author.configs.resolveString(message, path.piece)));
 	}
 
 	async set(message, [key, ...valueToSet]) {
