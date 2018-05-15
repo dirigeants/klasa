@@ -14,7 +14,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 ### Added
 
 - [[#306](https://github.com/dirigeants/klasa/pull/306)] Added `Util.isPrimitive`. (kyranet)
-- [[#306](https://github.com/dirigeants/klasa/pull/306)] Added `constants.DEFAULTS.DATATYPES`. (kyranet)
+- [[#306](https://github.com/dirigeants/klasa/pull/306)] Added `constants.DEFAULTS.QUERYBUILDER`. (kyranet)
 - [[#306](https://github.com/dirigeants/klasa/pull/306)] Added `SQLProvider#updateColumn`. (kyranet)
 - [[#306](https://github.com/dirigeants/klasa/pull/306)] Added `SQLProvider#parseUpdateInput`, `Provider#parseUpdateInput`. (kyranet)
 - [[#306](https://github.com/dirigeants/klasa/pull/306)] Added `QueryBuilder` class util. (kyranet)
