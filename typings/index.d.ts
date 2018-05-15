@@ -1400,7 +1400,7 @@ declare module 'klasa' {
 	export type QueryBuilderOptions = {
 		arrayResolver?: (values: Array<any>, piece: SchemaPiece, resolver: Function) => string;
 		formatDatatype?: (name: string, datatype: string, def?: string) => string;
-	} & ObjectLiteral<QueryBuilderDatatype>;
+	} & ObjectLiteral<string | ((piece: SchemaPiece) => string) | QueryBuilderDatatype>;
 
 	export type GuildResolvable = KlasaGuild
 		| KlasaMessage

@@ -1,6 +1,5 @@
 const { isObject, mergeDefault } = require('./util');
 const { DEFAULTS: { QUERYBUILDER } } = require('./constants');
-const Type = require('./Type');
 
 class QueryBuilder {
 
@@ -25,9 +24,8 @@ class QueryBuilder {
 		const { array, resolver, type, arrayResolver, formatDatatype, ...datatypes } = mergeDefault(options, QUERYBUILDER);
 
 		// Merge defaults on all keys
-		for (const [key, value] of Object.entries(datatypes)) {
-			if (!isObject(value)) throw `Expected 'datatypes.${key}' to be an object literal, got ${new Type(value)}`;
-			mergeDefault(value, { array, resolver, type });
+		for (const value of Object.values(datatypes)) {
+			mergeDefault(isObject(value) ? value : { type: value }, { array, resolver, type });
 		}
 
 		/**

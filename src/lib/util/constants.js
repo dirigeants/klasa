@@ -120,13 +120,13 @@ exports.DEFAULTS = {
 	QUERYBUILDER: {
 		// Datatypes
 		any: { type: 'TEXT', resolver: (value) => `'${value.replace(/'/g, "''")}'` },
-		boolean: { type: 'BOOLEAN' },
+		boolean: 'BOOLEAN',
 		categorychannel: { type: 'VARCHAR(18)', resolver: (value) => `'${value.replace(/'/g, "''")}'` },
 		channel: { type: 'VARCHAR(18)', resolver: (value) => `'${value.replace(/'/g, "''")}'` },
 		command: { type: 'TEXT', resolver: (value) => `'${value.replace(/'/g, "''")}'` },
-		float: { type: 'FLOAT' },
+		float: 'FLOAT',
 		guild: { type: 'VARCHAR(18)', resolver: (value) => `'${value.replace(/'/g, "''")}'` },
-		integer: { type: 'INTEGER' },
+		integer: 'INTEGER',
 		json: { type: 'JSON', resolver: (value) => `'${JSON.stringify(value).replace(/'/g, "''")}'` },
 		language: { type: 'VARCHAR(5)', resolver: (value) => `'${value.replace(/'/g, "''")}'` },
 		role: { type: 'VARCHAR(18)', resolver: (value) => `'${value.replace(/'/g, "''")}'` },

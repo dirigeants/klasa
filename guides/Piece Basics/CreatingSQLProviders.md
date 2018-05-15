@@ -58,8 +58,8 @@ The {@link QueryBuilder} class is a very special class. It was added in [PR#306 
 // Create a QueryBuilder for PostgreSQL
 this.qb = new QueryBuilder({
 	// Declare the boolean type for PGSQL, which is 'BOOL'.
-	boolean: { type: 'BOOL' },
-	float: { type: 'DOUBLE PRECISION' },
+	boolean: 'BOOL',
+	float: 'DOUBLE PRECISION',
 	// Sometimes, you want adaptative datatypes, if it's not going to store
 	// big numbers, you may want to use INTEGER instead of BIGINT. More options
 	// are given with smaller units, but depends on the database. For this case,
@@ -69,7 +69,7 @@ this.qb = new QueryBuilder({
 	// You may want to define extra types for custom argument resolvers.
 	any: { type: 'JSON', resolver: (input) => `'${JSON.stringify(input)}'::json` },
 	json: { type: 'JSON', resolver: (input) => `'${JSON.stringify(input)}'::json` },
-	uuid: { type: 'UUID' },
+	uuid: 'UUID',
 
 	// After the datatype definitions, we can define the following keys:
 
