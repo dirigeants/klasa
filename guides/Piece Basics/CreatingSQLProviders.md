@@ -65,7 +65,7 @@ this.qb = new QueryBuilder({
 	// are given with smaller units, but depends on the database. For this case,
 	// we pass a function instead of a string, said function takes an instance of
 	// SchemaPiece.
-	integer: { type: ({ max }) => max >= 2 ** 32 ? 'BIGINT' : 'INTEGER' },
+	integer: ({ max }) => max >= 2 ** 32 ? 'BIGINT' : 'INTEGER',
 	// You may want to define extra types for custom argument resolvers.
 	any: { type: 'JSON', resolver: (input) => `'${JSON.stringify(input)}'::json` },
 	json: { type: 'JSON', resolver: (input) => `'${JSON.stringify(input)}'::json` },
