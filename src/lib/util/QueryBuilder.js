@@ -12,8 +12,7 @@ class QueryBuilder {
 	 */
 
 	/**
-	 * @typedef {Object} QueryBuilderOptions
-	 * @property {Object<string, QueryBuilderDatatype>} datatypes The datatypes
+	 * @typedef {Object<string, QueryBuilderDatatype>} QueryBuilderOptions
 	 * @property {Function} [formatDatatype] The datatype formatter for the SQL database
 	 * @property {Function} [arrayResolver] The specialized resolver for array keys
 	 */
@@ -23,8 +22,7 @@ class QueryBuilder {
 	 * @param {QueryBuilderOptions} [options = {}] The default options for all datatypes plus formatDatatype
 	 */
 	constructor(options = {}) {
-		const { datatypes, array, resolver, type, arrayResolver, formatDatatype } = mergeDefault(options, QUERYBUILDER);
-		if (!isObject(datatypes)) throw `Expected 'datatypes' to be an object literal, got ${new Type(datatypes)}`;
+		const { array, resolver, type, arrayResolver, formatDatatype, ...datatypes } = mergeDefault(options, QUERYBUILDER);
 
 		// Merge defaults on all keys
 		for (const [key, value] of Object.entries(datatypes)) {

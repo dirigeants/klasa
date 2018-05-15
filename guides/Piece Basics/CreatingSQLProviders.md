@@ -57,21 +57,22 @@ The {@link QueryBuilder} class is a very special class. It was added in [PR#306 
 ```javascript
 // Create a QueryBuilder for PostgreSQL
 this.qb = new QueryBuilder({
-	datatypes: {
-		// Declare the boolean type for PGSQL, which is 'BOOL'.
-		boolean: { type: 'BOOL' },
-		float: { type: 'DOUBLE PRECISION' },
-		// Sometimes, you want adaptative datatypes, if it's not going to store
-		// big numbers, you may want to use INTEGER instead of BIGINT. More options
-		// are given with smaller units, but depends on the database. For this case,
-		// we pass a function instead of a string, said function takes an instance of
-		// SchemaPiece.
-		integer: { type: ({ max }) => max >= 2 ** 32 ? 'BIGINT' : 'INTEGER' },
-		// You may want to define extra types for custom argument resolvers.
-		any: { type: 'JSON', resolver: (input) => `'${JSON.stringify(input)}'::json` },
-		json: { type: 'JSON', resolver: (input) => `'${JSON.stringify(input)}'::json` },
-		uuid: { type: 'UUID' }
-	},
+	// Declare the boolean type for PGSQL, which is 'BOOL'.
+	boolean: { type: 'BOOL' },
+	float: { type: 'DOUBLE PRECISION' },
+	// Sometimes, you want adaptative datatypes, if it's not going to store
+	// big numbers, you may want to use INTEGER instead of BIGINT. More options
+	// are given with smaller units, but depends on the database. For this case,
+	// we pass a function instead of a string, said function takes an instance of
+	// SchemaPiece.
+	integer: { type: ({ max }) => max >= 2 ** 32 ? 'BIGINT' : 'INTEGER' },
+	// You may want to define extra types for custom argument resolvers.
+	any: { type: 'JSON', resolver: (input) => `'${JSON.stringify(input)}'::json` },
+	json: { type: 'JSON', resolver: (input) => `'${JSON.stringify(input)}'::json` },
+	uuid: { type: 'UUID' },
+
+	// After the datatype definitions, we can define the following keys:
+
 	// In PGSQL, arrays are supported, and they have the following notation. If it's not
 	// supported, it's advised to not use this option, it defaults to `() => 'TEXT'`, which
 	// enables the JSON.parse/JSON.stringify mechanism from SQLProvider.
