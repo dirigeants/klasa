@@ -1,7 +1,6 @@
 const { promisify } = require('util');
 const { exec } = require('child_process');
 const zws = String.fromCharCode(8203);
-const has = (ob, ke) => Object.prototype.hasOwnProperty.call(ob, ke);
 let sensitivePattern;
 const TOTITLECASE = /[A-Za-zÀ-ÖØ-öø-ÿ]\S*/g;
 const REGEXPESC = /[-/\\^$*+?.()|[\]{}]/g;
@@ -322,9 +321,9 @@ class Util {
 	static mergeDefault(def, given) {
 		if (!given) return def;
 		for (const key in def) {
-			if (!has(given, key) || given[key] === undefined) {
+			if (typeof given[key] === 'undefined') {
 				given[key] = Array.isArray(def[key]) ? def[key].slice(0) : def[key];
-			} else if (!Array.isArray(given[key]) && given[key] === Object(given[key])) {
+			} else if (Util.isObject(given[key])) {
 				given[key] = Util.mergeDefault(def[key], given[key]);
 			}
 		}
