@@ -64,11 +64,11 @@ class Configuration {
 		/**
 		 * Whether this entry exists in the DB or not.
 		 * @since 0.5.0
-		 * @type {boolean}
+		 * @type {?boolean}
 		 * @name Configuration#_existsInDB
 		 * @private
 		 */
-		Object.defineProperty(this, '_existsInDB', { value: false, writable: true });
+		Object.defineProperty(this, '_existsInDB', { value: null, writable: true });
 
 		/**
 		 * The sync status for this Configuration instance.
@@ -332,6 +332,8 @@ class Configuration {
 		if (data) {
 			if (!this._existsInDB) this._existsInDB = true;
 			this._patch(data);
+		} else {
+			this._existsInDB = false;
 		}
 
 		this._syncStatus = null;
@@ -427,7 +429,8 @@ class Configuration {
 	 */
 	async _save({ updated }) {
 		if (!updated.length) return;
-		if (!this._existsInDB) {
+		if (!this._existsInDB === null) await this.sync();
+		if (!this._existsInDB === false) {
 			await this.gateway.provider.create(this.gateway.type, this.id);
 			if (this.client.listenerCount('configCreateEntry')) this.client.emit('configCreateEntry', this);
 		}

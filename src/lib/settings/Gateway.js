@@ -92,7 +92,7 @@ class Gateway extends GatewayStorage {
 		if (create) {
 			const configs = new this.Configuration(this, { id });
 			this.cache.set(id, configs);
-			if (this.ready && this.schema.keyArray.length) configs.sync().catch(err => this.client.emit('error', err));
+			if (this.schema.keyArray.length) configs.sync().catch(err => this.client.emit('error', err));
 			return configs;
 		}
 		return null;
@@ -210,10 +210,10 @@ class Gateway extends GatewayStorage {
 		if (this.schema.keyArray.length) {
 			// waitForDownload is an option recommended for gateways like clientStorage and guildConfigs, this option delays klasaReady
 			// until all entries are correctly synchronized
-			if (waitForDownload) return Promise.all(this.cache.map(entry => entry._existsInDB ? Promise.resolve(entry) : entry.sync()));
+			if (waitForDownload) return Promise.all(this.cache.map(entry => entry._existsInDB === null ? entry.sync() : Promise.resolve(entry)));
 
 			// Otherwise synchronize them in the background
-			for (const entry of this.cache.values()) if (!entry._existsInDB) entry.sync();
+			for (const entry of this.cache.values()) if (entry._existsInDB === null) entry.sync();
 		}
 
 		return Promise.resolve([]);
