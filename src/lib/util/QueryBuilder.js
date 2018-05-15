@@ -1,5 +1,5 @@
 const { isObject, mergeDefault } = require('./util');
-const { DEFAULTS: { DATATYPES } } = require('./constants');
+const { DEFAULTS: { QUERYBUILDER } } = require('./constants');
 const Type = require('./Type');
 
 class QueryBuilder {
@@ -12,27 +12,24 @@ class QueryBuilder {
 	 */
 
 	/**
-	 * @typedef {QueryBuilderDatatype} QueryBuilderOptions
+	 * @typedef {Object} QueryBuilderOptions
+	 * @property {Object<string, QueryBuilderDatatype>} datatypes The datatypes
 	 * @property {Function} [formatDatatype] The datatype formatter for the SQL database
 	 * @property {Function} [arrayResolver] The specialized resolver for array keys
 	 */
 
 	/**
 	 * @since 0.5.0
-	 * @param {Object<QueryBuilderDatatype>} datatypes The datatype to insert
 	 * @param {QueryBuilderOptions} [options = {}] The default options for all datatypes plus formatDatatype
 	 */
-	constructor(datatypes = {}, { array = () => 'TEXT', resolver = null, type = null, arrayResolver, formatDatatype } = {}) {
+	constructor(options = {}) {
+		const { datatypes, array, resolver, type, arrayResolver, formatDatatype } = mergeDefault(options, QUERYBUILDER);
 		if (!isObject(datatypes)) throw `Expected 'datatypes' to be an object literal, got ${new Type(datatypes)}`;
 
-		// Default the options for QueryBuilderDatatype
-		mergeDefault(DATATYPES, datatypes);
-
 		// Merge defaults on all keys
-		for (const key of Object.keys(datatypes)) {
-			const value = datatypes[key];
+		for (const [key, value] of Object.entries(datatypes)) {
 			if (!isObject(value)) throw `Expected 'datatypes.${key}' to be an object literal, got ${new Type(value)}`;
-			mergeDefault({ array, resolver, type }, value);
+			mergeDefault(value, { array, resolver, type });
 		}
 
 		/**
@@ -51,7 +48,7 @@ class QueryBuilder {
 		 * @returns {string}
 		 * @private
 		 */
-		this.arrayResolver = arrayResolver || ((values) => `'${JSON.stringify(values)}'`);
+		this.arrayResolver = arrayResolver;
 
 		/**
 		 * The datatype formatter for the SQL database
@@ -62,14 +59,14 @@ class QueryBuilder {
 		 * @returns {string}
 		 * @private
 		 */
-		this.formatDatatype = formatDatatype || ((name, datatype, def = null) => `${name} ${datatype}${def !== null ? ` NOT NULL DEFAULT ${def}` : ''}`);
+		this.formatDatatype = formatDatatype;
 	}
 
 	/**
 	 * Get a datatype
 	 * @since 0.5.0
 	 * @param {string} type The datatype to get
-	 * @returns {QueryBuilderDatatype}
+	 * @returns {?QueryBuilderDatatype}
 	 * @example
 	 * this.qb.get('string');
 	 */

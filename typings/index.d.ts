@@ -503,7 +503,7 @@ declare module 'klasa' {
 
 	export class QueryBuilder {
 		public constructor(datatypes: ObjectLiteral<QueryBuilderDatatype>, options?: QueryBuilderOptions);
-		public get(type: string): QueryBuilderDatatype;
+		public get(type: string): QueryBuilderDatatype | null;
 		public parse(schemaPiece: SchemaPiece): string;
 		public parseValue(value: any, schemaPiece: SchemaPiece, datatype?: QueryBuilderDatatype): string;
 		private arrayResolver: (values: Array<any>, piece: SchemaPiece, resolver: Function) => string;
@@ -1246,6 +1246,7 @@ declare module 'klasa' {
 		private static initClean(client: KlasaClient): void;
 
 		public static titleCaseVariants: TitleCaseVariants;
+		public static PRIMITIVE_TYPES: string[];
 	}
 
 	export { Util as util };
@@ -1395,9 +1396,10 @@ declare module 'klasa' {
 	};
 
 	export type QueryBuilderOptions = {
+		datatypes?: ObjectLiteral<QueryBuilderDatatype>;
 		arrayResolver?: (values: Array<any>, piece: SchemaPiece, resolver: Function) => string;
 		formatDatatype?: (name: string, datatype: string, def?: string) => string;
-	} & QueryBuilderDatatype;
+	};
 
 	export type GuildResolvable = KlasaGuild
 		| KlasaMessage

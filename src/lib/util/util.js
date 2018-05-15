@@ -225,7 +225,7 @@ class Util {
 	 * @returns {boolean}
 	 */
 	static isPrimitive(value) {
-		return ['string', 'bigint', 'number', 'boolean'].includes(typeof value);
+		return Util.PRIMITIVE_TYPES.includes(typeof value);
 	}
 
 	/**
@@ -381,5 +381,13 @@ Util.titleCaseVariants = {
 	categorychannel: 'CategoryChannel',
 	guildmember: 'GuildMember'
 };
+
+/**
+ * The primitive types
+ * @since 0.5.0
+ * @type {string[]}
+ * @static
+ */
+Util.PRIMITIVE_TYPES = ['string', 'bigint', 'number', 'boolean'];
 
 module.exports = Util;
