@@ -21,11 +21,22 @@ class QueryBuilder {
 	 * @param {QueryBuilderOptions} [options = {}] The default options for all datatypes plus formatDatatype
 	 */
 	constructor(options = {}) {
-		const { array, resolver, type, arrayResolver, formatDatatype, ...datatypes } = mergeDefault(options, QUERYBUILDER);
+		const datatypes = {};
+		const datatypeOptions = {};
+		const queryBuilderOptions = {};
+
+		// split options and implement type shortcut
+		for (const [key, value] of Object.entries(options)) {
+			if (key in QUERYBUILDER.datatypes) datatypeOptions[key] = isObject(value) ? value : { type: value };
+			else if (key in QUERYBUILDER.queryBuilderOptions) queryBuilderOptions[key] = value;
+		}
+
+		// Merge defaults on queryBuilderOptions
+		const { array, resolver, arrayResolver, formatDatatype } = mergeDefault(QUERYBUILDER.queryBuilderOptions, datatypeOptions);
 
 		// Merge defaults on all keys
-		for (const [key, value] of Object.entries(datatypes)) {
-			datatypes[key] = mergeDefault(isObject(value) ? value : { type: value }, { array, resolver, type });
+		for (const [key, value] of Object.entries(QUERYBUILDER.datatypes)) {
+			datatypes[key] = mergeDefault(value, mergeDefault({ array, resolver }, datatypeOptions[key]));
 		}
 
 		/**
