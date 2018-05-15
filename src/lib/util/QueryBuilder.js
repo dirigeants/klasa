@@ -24,8 +24,8 @@ class QueryBuilder {
 		const { array, resolver, type, arrayResolver, formatDatatype, ...datatypes } = mergeDefault(options, QUERYBUILDER);
 
 		// Merge defaults on all keys
-		for (const value of Object.values(datatypes)) {
-			mergeDefault(isObject(value) ? value : { type: value }, { array, resolver, type });
+		for (const [key, value] of Object.entries(datatypes)) {
+			datatypes[key] = mergeDefault(isObject(value) ? value : { type: value }, { array, resolver, type });
 		}
 
 		/**
