@@ -99,7 +99,7 @@ class SettingResolver extends Resolver {
 	 * @returns {string}
 	 */
 	async role(data, guild, name) {
-		const result = await super.role(data, guild) || (guild ? guild.roles.find('name', data) : null);
+		const result = await super.role(data, guild) || (guild ? guild.roles.find(role => role.name === data) : null);
 		if (result) return result.id;
 		throw (guild ? guild.language : this.client.languages.default).get('RESOLVER_INVALID_ROLE', name);
 	}
