@@ -59,16 +59,17 @@ The {@link QueryBuilder} class is a very special class. It was added in [PR#306 
 this.qb = new QueryBuilder({
 	// Declare the boolean type for PGSQL, which is 'BOOL'.
 	boolean: { type: 'BOOL' },
+	float: { type: 'DOUBLE PRECISION' },
 	// Sometimes, you want adaptative datatypes, if it's not going to store
 	// big numbers, you may want to use INTEGER instead of BIGINT. More options
 	// are given with smaller units, but depends on the database. For this case,
 	// we pass a function instead of a string, said function takes an instance of
 	// SchemaPiece.
 	integer: { type: ({ max }) => max >= 2 ** 32 ? 'BIGINT' : 'INTEGER' },
-	float: { type: 'DOUBLE PRECISION' },
 	// You may want to define extra types for custom argument resolvers.
-	uuid: { type: 'UUID' },
-	any: { type: 'JSON' }
+	any: { type: 'JSON', resolver: (input) => `'${JSON.stringify(input)}'::json` },
+	json: { type: 'JSON', resolver: (input) => `'${JSON.stringify(input)}'::json` },
+	uuid: { type: 'UUID' }
 }, {
 	// In PGSQL, arrays are supported, and they have the following notation. If it's not
 	// supported, it's advised to not use this option, it defaults to `() => 'TEXT'`, which
@@ -77,6 +78,19 @@ this.qb = new QueryBuilder({
 	// The following line converts a datatype, i.e. `INTEGER`, into `INTEGER[]` when the SchemaPiece
 	// takes arrays and they are supported by the SQL database.
 	array: type => `${type}[]`,
+
+	// To reduce code duplication, and due to how similar arrays are in the same database,
+	// we may want to use an arrayResolver if our database supports arrays. This method also
+	// passes the resolver for single arrays, which we can use to map values while reducing code
+	// duplication.
+
+	// In PGSQL, an empty array is interpreted as '{}', and an array with elements, for example, the
+	// datatype is JSON[], then it will map each value with the resolver and wrap them in array[], making
+	// results similar to `array['{"a":true}'::json, '{"b":true}'::json]`, which is valid. Therefore, we
+	// resolve each value from the array with our resolver (look above, we have set up the resolver for json/any)
+	// and wrap each value in array[], or return '{}' if it's empty.
+	arrayResolver: (values, piece, resolver) => values.length ? `array[${values.map(value => resolver(value, piece)).join(', ')}]` : "'{}'",
+
 	// The following function wraps the datatype generated with the previous options and the
 	// default value from the SchemaPiece instance, plus the name. In PGSQL, names that have
 	// uppercase letters are automatically lowercased if they aren't between quotes, giving
@@ -91,22 +105,22 @@ To not have to configure all types, we have a predefined set of datatypes in our
 
 ```javascript
 exports.DEFAULTS.DATATYPES = {
-	user: { type: 'VARCHAR(18)' },
-	channel: { type: 'VARCHAR(18)' },
-	textchannel: { type: 'VARCHAR(18)' },
-	voicechannel: { type: 'VARCHAR(18)' },
-	categorychannel: { type: 'VARCHAR(18)' },
-	guild: { type: 'VARCHAR(18)' },
-	role: { type: 'VARCHAR(18)' },
+	any: { type: 'TEXT', resolver: (value) => `'${value.replace(/'/g, "''")}'` },
 	boolean: { type: 'BOOLEAN' },
-	string: { type: ({ max }) => max ? `VARCHAR(${max})` : 'TEXT', resolver: (value) => `'${String(value).replace(/'/g, "''")}'` },
-	integer: { type: 'INTEGER' },
+	categorychannel: { type: 'VARCHAR(18)', resolver: (value) => `'${value.replace(/'/g, "''")}'` },
+	channel: { type: 'VARCHAR(18)', resolver: (value) => `'${value.replace(/'/g, "''")}'` },
+	command: { type: 'TEXT', resolver: (value) => `'${value.replace(/'/g, "''")}'` },
 	float: { type: 'FLOAT' },
-	url: { type: 'TEXT' },
-	command: { type: 'TEXT' },
-	language: { type: 'VARCHAR(5)' },
-	json: { type: 'JSON' },
-	any: { type: 'TEXT' }
+	guild: { type: 'VARCHAR(18)', resolver: (value) => `'${value.replace(/'/g, "''")}'` },
+	integer: { type: 'INTEGER' },
+	json: { type: 'JSON', resolver: (value) => `'${JSON.stringify(value).replace(/'/g, "''")}'` },
+	language: { type: 'VARCHAR(5)', resolver: (value) => `'${value.replace(/'/g, "''")}'` },
+	role: { type: 'VARCHAR(18)', resolver: (value) => `'${value.replace(/'/g, "''")}'` },
+	string: { type: ({ max }) => max ? `VARCHAR(${max})` : 'TEXT', resolver: (value) => `'${value.replace(/'/g, "''")}'` },
+	textchannel: { type: 'VARCHAR(18)', resolver: (value) => `'${value.replace(/'/g, "''")}'` },
+	url: { type: 'TEXT', resolver: (value) => `'${value.replace(/'/g, "''")}'` },
+	user: { type: 'VARCHAR(18)', resolver: (value) => `'${value.replace(/'/g, "''")}'` },
+	voicechannel: { type: 'VARCHAR(18)', resolver: (value) => `'${value.replace(/'/g, "''")}'` }
 };
 ```
 
