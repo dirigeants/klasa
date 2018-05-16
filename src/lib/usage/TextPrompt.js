@@ -170,7 +170,7 @@ class TextPrompt {
 		}
 
 		if (this.typing) this.message.channel.startTyping();
-		this.args[this.args.lastIndexOf(null)] = message.content.replace(this.message.prefix, '');
+		this.args[this.args.lastIndexOf(null)] = message.content;
 		this.reprompted = true;
 
 		if (this.usage.parsedUsage[this.params.length].repeat) return this.repeatingPrompt(prompt);
