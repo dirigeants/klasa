@@ -165,10 +165,12 @@ class TextPrompt {
 
 		this.responses.set(message.id, message);
 
-		if (message.content.toLowerCase() === 'abort') throw this.message.language.get('MONITOR_COMMAND_HANDLER_ABORTED');
+		if (message.content.toLowerCase() === 'abort' || this.message.prefix.test(message.content)) {
+			throw this.message.language.get('MONITOR_COMMAND_HANDLER_ABORTED');
+		}
 
 		if (this.typing) this.message.channel.startTyping();
-		this.args[this.args.lastIndexOf(null)] = message.content;
+		this.args[this.args.lastIndexOf(null)] = message.content.replace(this.message.prefix, '');
 		this.reprompted = true;
 
 		if (this.usage.parsedUsage[this.params.length].repeat) return this.repeatingPrompt(prompt);
