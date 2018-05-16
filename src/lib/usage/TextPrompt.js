@@ -165,7 +165,7 @@ class TextPrompt {
 
 		this.responses.set(message.id, message);
 
-		if (message.content.toLowerCase() === 'abort' || this.message.prefix.test(message.content)) {
+		if (message.content.toLowerCase() === 'abort' || (this.message.prefix && this.message.prefix.test(message.content))) {
 			throw this.message.language.get('MONITOR_COMMAND_HANDLER_ABORTED');
 		}
 
