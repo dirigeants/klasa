@@ -309,7 +309,7 @@ class Command extends Piece {
 			promptLimit: this.promptLimit,
 			promptTime: this.promptTime,
 			quotedStringSupport: this.quotedStringSupport,
-			requiredConfigs: this.requiredConfigs.slice(0),
+			requiredSettings: this.requiredSettings.slice(0),
 			runIn: this.runIn.slice(0),
 			subCategory: this.subCategory,
 			subcommands: this.subcommands,
