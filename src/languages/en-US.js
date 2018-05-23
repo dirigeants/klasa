@@ -69,7 +69,7 @@ module.exports = class extends Language {
 				'The eval command evaluates code as-in, any error thrown from it will be handled.',
 				'It also uses the flags feature. Write --silent, --depth=number or --async to customize the output.',
 				'The --silent flag will make it output nothing.',
-				"The --depth flag accepts a number, for example, --depth=2, to customize util.inspect's depth.",
+				'The --depth flag accepts a number, for example, --depth=2, to customize util.inspect\'s depth.',
 				'The --async flag will wrap the code into an async function where you can enjoy the use of await, however, if you want to return something, you will need the return keyword',
 				'The --showHidden flag will enable the showHidden option in util.inspect.',
 				'If the output is too large, it\'ll send the output as a file, or in the console if the bot does not have the ATTACH_FILES permission.'
@@ -109,7 +109,7 @@ module.exports = class extends Language {
 			],
 			COMMAND_INVITE_DESCRIPTION: 'Displays the join server link of the bot.',
 			COMMAND_INFO: [
-				"Klasa is a 'plug-and-play' framework built on top of the Discord.js library.",
+				'Klasa is a \'plug-and-play\' framework built on top of the Discord.js library.',
 				'Most of the code is modularized, which allows developers to edit Klasa to suit their needs.',
 				'',
 				'Some features of Klasa include:',
@@ -125,7 +125,7 @@ module.exports = class extends Language {
 				'• ⏲ "Tasks", which can be scheduled to run in the future, optionally repeating',
 				'',
 				'We hope to be a 100% customizable framework that can cater to all audiences. We do frequent updates and bugfixes when available.',
-				"If you're interested in us, check us out at https://klasa.js.org"
+				'If you\'re interested in us, check us out at https://klasa.js.org'
 			],
 			COMMAND_INFO_DESCRIPTION: 'Provides some information about this bot.',
 			COMMAND_HELP_DESCRIPTION: 'Display help for a command.',
