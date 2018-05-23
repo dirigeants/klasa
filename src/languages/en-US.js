@@ -10,7 +10,7 @@ module.exports = class extends Language {
 			PREFIX_REMINDER: (prefix) => `The prefix${Array.isArray(prefix) ?
 				`es for this guild are: ${prefix.map(pre => `\`${pre}\``).join(', ')}` :
 				` in this guild is set to: \`${prefix}\``
-				}`,
+			}`,
 			SETTING_GATEWAY_EXPECTS_GUILD: 'The parameter <Guild> expects either a Guild or a Guild Object.',
 			SETTING_GATEWAY_VALUE_FOR_KEY_NOEXT: (data, key) => `The value ${data} for the key ${key} does not exist.`,
 			SETTING_GATEWAY_VALUE_FOR_KEY_ALREXT: (data, key) => `The value ${data} for the key ${key} already exists.`,
