@@ -440,6 +440,7 @@ class Configuration {
 		if (this._existsInDB === null) await this.sync();
 		if (this._existsInDB === false) {
 			await this.gateway.provider.create(this.gateway.type, this.id);
+			this._existsInDB = true;
 			if (this.client.listenerCount('configCreateEntry')) this.client.emit('configCreateEntry', this);
 		}
 		const oldClone = this.client.listenerCount('configUpdateEntry') ? this.clone() : null;
