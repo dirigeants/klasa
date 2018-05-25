@@ -27,8 +27,8 @@ class QueryBuilder {
 
 		// split options and implement type shortcut
 		for (const [key, value] of Object.entries(options)) {
-			if (key in QUERYBUILDER.datatypes) datatypeOptions[key] = isObject(value) ? value : { type: value };
-			else if (key in QUERYBUILDER.queryBuilderOptions) queryBuilderOptions[key] = value;
+			if (key in QUERYBUILDER.queryBuilderOptions) queryBuilderOptions[key] = value;
+			else datatypeOptions[key] = isObject(value) ? value : { type: value };
 		}
 
 		// Merge defaults on queryBuilderOptions
