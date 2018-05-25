@@ -22,10 +22,17 @@ class Configuration {
 
 	/**
 	 * @typedef {Object} ConfigurationUpdateOptions
-	 * @property {boolean} [avoidUnconfigurable] Whether the update should avoid unconfigurable keys
+	 * @property {boolean} [avoidUnconfigurable=false] Whether the update should avoid unconfigurable keys
 	 * @property {('add'|'remove'|'auto')} [action='auto'] Whether the update (when using arrays) should add or remove,
 	 * leave it as 'auto' to add or remove depending on the existence of the key in the array
-	 * @property {number} [arrayPosition] The position of the array to replace
+	 * @property {number} [arrayPosition=null] The position of the array to replace
+	 * @property {boolean} [force=false] Whether this should skip the equality checks or not
+	 */
+
+	/**
+	 * @typedef {Object} ConfigurationResetOptions
+	 * @property {boolean} [avoidUnconfigurable=false] Whether the update should avoid unconfigurable keys
+	 * @property {boolean} [force=false] Whether this should skip the equality checks or not
 	 */
 
 	/**
@@ -144,7 +151,7 @@ class Configuration {
 	 * @since 0.5.0
 	 * @param {(string|string[])} [keys] The key to reset
 	 * @param {KlasaGuild} [guild] A KlasaGuild instance for multilingual support
-	 * @param {boolean} [avoidUnconfigurable] Whether the Gateway should avoid configuring the selected key
+	 * @param {ConfigurationResetOptions} [options={}] The options for the reset
 	 * @returns {ConfigurationUpdateResult}
 	 * @example
 	 * // Reset all keys for this instance
@@ -156,7 +163,7 @@ class Configuration {
 	 * // Reset a key
 	 * Configuration#reset('prefix');
 	 */
-	async reset(keys, guild, avoidUnconfigurable = false) {
+	async reset(keys, guild, { avoidUnconfigurable = false, force = false } = {}) {
 		if (typeof guild === 'boolean') {
 			avoidUnconfigurable = guild;
 			guild = undefined;
@@ -180,9 +187,9 @@ class Configuration {
 					continue;
 				}
 				const newValue = value === null ? deepClone(path.piece.default) : value;
-				if (this._setValueByPath(path.piece, newValue).updated) result.updated.push({ data: [path.piece.path, newValue], piece: path.piece });
+				if (this._setValueByPath(path.piece, newValue, force).updated) result.updated.push({ data: [path.piece.path, newValue], piece: path.piece });
 			}
-			if (result.updated.length) await this._save(result);
+			await this._save(result);
 			return result;
 		}
 		throw new TypeError(`Invalid value. Expected string or Array<string>. Got: ${getDeepTypeName(keys)}`);
@@ -240,9 +247,10 @@ class Configuration {
 		if (keys.length !== values.length) return Promise.reject(new Error(`Expected an array of ${keys.length} entries. Got: ${values.length}.`));
 
 		const updateOptions = {
-			avoidUnconfigurable: 'avoidUnconfigurable' in options ? options.avoidUnconfigurable : false,
-			action: 'action' in options ? options.action : 'auto',
-			arrayPosition: 'arrayPosition' in options ? options.arrayPosition : null
+			avoidUnconfigurable: typeof options.avoidUnconfigurable === 'boolean' ? options.avoidUnconfigurable : false,
+			action: typeof options.action === 'string' ? options.action : 'auto',
+			arrayPosition: typeof options.arrayPosition === 'number' ? options.arrayPosition : null,
+			force: typeof options.force === 'boolean' ? options.force : false
 		};
 		return this._update(keys, values, guild, updateOptions);
 	}
@@ -416,7 +424,7 @@ class Configuration {
 
 		if (piece.array && !Array.isArray(value)) {
 			this._parseArraySingle(piece, route, parsedID, options, result);
-		} else if (this._setValueByPath(piece, parsedID).updated) {
+		} else if (this._setValueByPath(piece, parsedID, options.force).updated) {
 			result.updated.push({ data: [piece.path, parsedID], piece });
 		}
 	}
@@ -429,8 +437,8 @@ class Configuration {
 	 */
 	async _save({ updated }) {
 		if (!updated.length) return;
-		if (!this._existsInDB === null) await this.sync();
-		if (!this._existsInDB === false) {
+		if (this._existsInDB === null) await this.sync();
+		if (this._existsInDB === false) {
 			await this.gateway.provider.create(this.gateway.type, this.id);
 			if (this.client.listenerCount('configCreateEntry')) this.client.emit('configCreateEntry', this);
 		}
@@ -494,20 +502,22 @@ class Configuration {
 	 * @since 0.5.0
 	 * @param {SchemaPiece} piece The piece that manages the key
 	 * @param {*} parsedID The parsed ID value
+	 * @param {boolean} force Whether this should skip the equality checks or not
 	 * @returns {{ updated: boolean, old: any }}
 	 * @private
 	 */
-	_setValueByPath(piece, parsedID) {
+	_setValueByPath(piece, parsedID, force) {
 		const path = piece.path.split('.');
 		const lastKey = path.pop();
 		let cache = this; // eslint-disable-line consistent-this
 		for (const key of path) cache = cache[key] || {};
 		const old = cache[lastKey];
-		if (piece.array ? !arraysStrictEquals(old, parsedID) : old !== parsedID) {
-			cache[lastKey] = parsedID;
-			return { updated: true, old };
-		}
-		return { updated: false, old };
+
+		// If both parts are equal, don't update
+		if (!force && (piece.array ? arraysStrictEquals(old, parsedID) : old === parsedID)) return { updated: false, old };
+
+		cache[lastKey] = parsedID;
+		return { updated: true, old };
 	}
 
 	/**

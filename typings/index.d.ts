@@ -454,8 +454,8 @@ declare module 'klasa' {
 		public sync(): Promise<this>;
 		public destroy(): Promise<this>;
 
-		public reset(key?: string | string[], avoidUnconfigurable?: boolean): Promise<ConfigurationUpdateResult>;
-		public reset(key?: string | string[], guild?: KlasaGuild, avoidUnconfigurable?: boolean): Promise<ConfigurationUpdateResult>;
+		public reset(key?: string | string[], options?: ConfigurationResetOptions): Promise<ConfigurationUpdateResult>;
+		public reset(key?: string | string[], guild?: KlasaGuild, options: ConfigurationResetOptions): Promise<ConfigurationUpdateResult>;
 		public update(key: ObjectLiteral<any>, guild?: GuildResolvable): Promise<ConfigurationUpdateResult>;
 		public update(key: string, value: any, guild?: GuildResolvable, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
 		public update(key: string[], value: any[], guild?: GuildResolvable, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
@@ -1407,10 +1407,16 @@ declare module 'klasa' {
 		| KlasaGuildChannel
 		| Snowflake;
 
+	export type ConfigurationResetOptions = {
+		avoidUnconfigurable?: boolean;
+		force?: boolean;
+	};
+
 	export type ConfigurationUpdateOptions = {
 		action?: 'add' | 'remove' | 'auto';
 		arrayPosition?: number;
 		avoidUnconfigurable?: boolean;
+		force?: boolean;
 	};
 
 	export type ConfigurationUpdateResult = {
