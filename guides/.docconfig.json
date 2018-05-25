@@ -112,6 +112,10 @@
     {
         "name": "Rich Menu",
         "path": "RichMenu.md"
+    },
+    {
+       "name": "Text Prompts",
+       "path": "TextPrompt.md"
     }]
 },
 {
