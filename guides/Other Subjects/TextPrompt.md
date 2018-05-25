@@ -1,6 +1,6 @@
 TextPrompt allows you to create a prompt that users of your bot will need to respond to by providing some form of text input.
 
-An extremely simple working example can achieved by this code:
+An extremely simple example:
 
 ```javascript
 const { TextPrompt, Usage, Command } = require('klasa');
@@ -29,7 +29,7 @@ module.exports = class extends Command {
 
 ## Breaking It Down
 
-First we create a new {@link Usage} instance, in which ever format you would like. Usage takes three parameters.
+First we create a new {@link Usage} instance, in whichever format you like. Usage takes three parameters.
 
 1. client: The Klasa Client itself, most likely to be `this.client` assuming the Usage is initialized in a Piece.
 2. usageString: The usageString similar to any command `usage` property you will create. For more info: {@link UnderstandUsageStrings]
@@ -40,7 +40,7 @@ First we create a new {@link Usage} instance, in which ever format you would lik
 ```
 > Here we passed in our client, a string *requiring* a response from the user either of `skillz4killz` or `momushanji`, and a empty string for the delim since we did not want multiple arguments. If for example, you wanted a usage like `'<add|remove> <user:user>'` then a usageDelim should be passed in as `' ''`.
 
-Next we will initialize the TextPrompt using the Usage that we just created above. To do this, we need to once again pass in three arguments.
+Next we will initialize the TextPrompt using the Usage that we just created above. To do this, we need to pass in three arguments.
 
 1. message: The user that responds to the message will be the author of the {@link KlasaMessage} provided.
 2. usage: {@link Usage} that we created above is passed in as the second argument.
@@ -52,7 +52,7 @@ Next we will initialize the TextPrompt using the Usage that we just created abov
 
 > It is highly recommended to include a short time interval especially for bigger bots as the more listeners you have open by various users, it may affect your bot's performance a lot.
 
-Now that we have our {@link TextPrompt} initialized, we can go ahead and run the prompt. We pass in a string asking the user a question to respond to. In this case, we are asking the user `Who is your favorite?`. Since running a {@link TextPrompt} returns a Promise of an Array, we destructure that array using [Destructuring Assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment).
+Now that we have our {@link TextPrompt} initialized, we can run the prompt. We pass in a string asking the user a question to respond to. In this case, we are asking the user `Who is your favorite?`. Since running a {@link TextPrompt} returns a Promise of an Array, we destructure that array using [Destructuring Assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment).
 
 ```javascript
     const [response] = await yesOrNoPrompt.run('Yes or No?');
