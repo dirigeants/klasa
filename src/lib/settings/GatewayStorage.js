@@ -56,7 +56,7 @@ class GatewayStorage {
 		 * @type {string}
 		 * @readonly
 		 */
-		Object.defineProperty(this, 'filePath', { value: resolve(this.baseDir, `${this.type}_Schema.json`) });
+		Object.defineProperty(this, 'filePath', { value: resolve(this.baseDir, `${this.type}.schema.json`) });
 
 		/**
 		 * @since 0.5.0
