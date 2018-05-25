@@ -106,23 +106,31 @@ this.qb = new QueryBuilder({
 To not have to configure all types, we have a predefined set of datatypes in our constants file:
 
 ```javascript
-exports.DEFAULTS.DATATYPES = {
-	any: { type: 'TEXT', resolver: (value) => `'${value.replace(/'/g, "''")}'` },
-	boolean: { type: 'BOOLEAN' },
-	categorychannel: { type: 'VARCHAR(18)', resolver: (value) => `'${value.replace(/'/g, "''")}'` },
-	channel: { type: 'VARCHAR(18)', resolver: (value) => `'${value.replace(/'/g, "''")}'` },
-	command: { type: 'TEXT', resolver: (value) => `'${value.replace(/'/g, "''")}'` },
-	float: { type: 'FLOAT' },
-	guild: { type: 'VARCHAR(18)', resolver: (value) => `'${value.replace(/'/g, "''")}'` },
-	integer: { type: 'INTEGER' },
-	json: { type: 'JSON', resolver: (value) => `'${JSON.stringify(value).replace(/'/g, "''")}'` },
-	language: { type: 'VARCHAR(5)', resolver: (value) => `'${value.replace(/'/g, "''")}'` },
-	role: { type: 'VARCHAR(18)', resolver: (value) => `'${value.replace(/'/g, "''")}'` },
-	string: { type: ({ max }) => max ? `VARCHAR(${max})` : 'TEXT', resolver: (value) => `'${value.replace(/'/g, "''")}'` },
-	textchannel: { type: 'VARCHAR(18)', resolver: (value) => `'${value.replace(/'/g, "''")}'` },
-	url: { type: 'TEXT', resolver: (value) => `'${value.replace(/'/g, "''")}'` },
-	user: { type: 'VARCHAR(18)', resolver: (value) => `'${value.replace(/'/g, "''")}'` },
-	voicechannel: { type: 'VARCHAR(18)', resolver: (value) => `'${value.replace(/'/g, "''")}'` }
+exports.DEFAULTS.QUERYBUILDER: {
+	datatypes: {
+		any: { type: 'TEXT' },
+		boolean: { type: 'BOOLEAN', resolver: value => value },
+		categorychannel: { type: 'VARCHAR(18)' },
+		channel: { type: 'VARCHAR(18)' },
+		command: { type: 'TEXT' },
+		float: { type: 'FLOAT', resolver: value => value },
+		guild: { type: 'VARCHAR(18)' },
+		integer: { type: 'INTEGER', resolver: value => value },
+		json: { type: 'JSON', resolver: (value) => `'${JSON.stringify(value).replace(/'/g, "''")}'` },
+		language: { type: 'VARCHAR(5)' },
+		role: { type: 'VARCHAR(18)' },
+		string: { type: ({ max }) => max ? `VARCHAR(${max})` : 'TEXT' },
+		textchannel: { type: 'VARCHAR(18)' },
+		url: { type: 'TEXT' },
+		user: { type: 'VARCHAR(18)' },
+		voicechannel: { type: 'VARCHAR(18)' }
+	},
+	queryBuilderOptions: {
+		array: () => 'TEXT',
+		resolver: (value) => `'${String(value).replace(/'/g, "''")}'`,
+		arrayResolver: (values) => `'${JSON.stringify(values)}'`,
+		formatDatatype: (name, datatype, def = null) => `${name} ${datatype}${def !== null ? ` NOT NULL DEFAULT ${def}` : ''}`
+	}
 };
 ```
 

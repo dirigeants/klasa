@@ -138,7 +138,7 @@ exports.DEFAULTS = {
 		},
 		queryBuilderOptions: {
 			array: () => 'TEXT',
-			resolver: (value) => `'${value.replace(/'/g, "''")}'`,
+			resolver: (value) => `'${String(value).replace(/'/g, "''")}'`,
 			arrayResolver: (values) => `'${JSON.stringify(values)}'`,
 			formatDatatype: (name, datatype, def = null) => `${name} ${datatype}${def !== null ? ` NOT NULL DEFAULT ${def}` : ''}`
 		}
