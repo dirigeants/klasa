@@ -106,7 +106,7 @@ this.qb = new QueryBuilder({
 To not have to configure all types, we have a predefined set of datatypes in our constants file:
 
 ```javascript
-exports.DEFAULTS.QUERYBUILDER: {
+exports.DEFAULTS.QUERYBUILDER = {
 	datatypes: {
 		any: { type: 'TEXT' },
 		boolean: { type: 'BOOLEAN', resolver: value => value },
