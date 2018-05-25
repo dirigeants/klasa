@@ -1,105 +1,111 @@
-const Piece = require('./interfaces/Piece');
+const Piece = require('./base/Piece');
 
 /**
  * Base class for all Klasa Monitors. See {@tutorial CreatingMonitors} for more information how to use this class
  * to build custom monitors.
  * @tutorial CreatingMonitors
+ * @extends Piece
  */
-class Monitor {
+class Monitor extends Piece {
 
 	/**
-	 * @typedef {Object} MonitorOptions
-	 * @memberof Monitor
-	 * @property {string} [name = theFileName] The name of the monitor
-	 * @property {boolean} [enabled=true] Whether the monitor is enabled
+	 * @typedef {PieceOptions} MonitorOptions
 	 * @property {boolean} [ignoreBots=true] Whether the monitor ignores bots or not
 	 * @property {boolean} [ignoreSelf=true] Whether the monitor ignores itself or not
+	 * @property {boolean} [ignoreOthers=true] Whether the monitor ignores others or not
+	 * @property {boolean} [ignoreWebhooks=true] Whether the monitor ignores webhooks or not
+	 * @property {boolean} [ignoreEdits=true] Whether the monitor ignores edits or not
 	 */
 
 	/**
+	 * @since 0.0.1
 	 * @param {KlasaClient} client The Klasa client
-	 * @param {string} dir The path to the core or user monitor pieces folder
+	 * @param {MonitorStore} store The Monitor Store
 	 * @param {string} file The path from the pieces folder to the monitor file
-	 * @param {MonitorOptions} [options = {}] Optional Monitor settings
+	 * @param {boolean} core If the piece is in the core directory or not
+	 * @param {MonitorOptions} [options={}] Optional Monitor settings
 	 */
-	constructor(client, dir, file, options = {}) {
-		/**
-		 * @type {KlasaClient}
-		 */
-		this.client = client;
-
-		/**
-		 * The directory to where this monitor piece is stored
-		 * @type {string}
-		 */
-		this.dir = dir;
-
-		/**
-		 * The file location where this monitor is stored
-		 * @type {string}
-		 */
-		this.file = file;
-
-		/**
-		 * The name of the monitor
-		 * @type {string}
-		 */
-		this.name = options.name || file.slice(0, -3);
-
-		/**
-		 * The type of Klasa piece this is
-		 * @type {string}
-		 */
-		this.type = 'monitor';
-
-		/**
-		 * If the monitor is enabled or not
-		 * @type {boolean}
-		 */
-		this.enabled = 'enabled' in options ? options.enabled : true;
+	constructor(client, store, file, core, options = {}) {
+		super(client, store, file, core, options);
 
 		/**
 		 * Whether the monitor ignores bots or not
+		 * @since 0.0.1
 		 * @type {boolean}
 		 */
-		this.ignoreBots = 'ignoreBots' in options ? options.ignoreBots : true;
+		this.ignoreBots = options.ignoreBots;
 
 		/**
 		 * Whether the monitor ignores itself or not
+		 * @since 0.0.1
 		 * @type {boolean}
 		 */
-		this.ignoreSelf = 'ignoreSelf' in options ? options.ignoreSelf : true;
+		this.ignoreSelf = options.ignoreSelf;
+
+		/**
+		 * Whether the monitor ignores others or not
+		 * @since 0.4.0
+		 * @type {boolean}
+		 */
+		this.ignoreOthers = options.ignoreOthers;
+
+		/**
+		 * Whether the monitor ignores webhooks or not
+		 * @since 0.5.0
+		 * @type {boolean}
+		 */
+		this.ignoreWebhooks = options.ignoreWebhooks;
+
+		/**
+		 * Whether the monitor ignores edits or not
+		 * @since 0.5.0
+		 * @type {boolean}
+		 */
+		this.ignoreEdits = options.ignoreEdits;
 	}
 
 	/**
 	 * The run method to be overwritten in actual monitor pieces
-	 * @param {external:Message} msg The discord message
-	 * @abstract
+	 * @since 0.0.1
+	 * @param {KlasaMessage} message The discord message
 	 * @returns {void}
+	 * @abstract
 	 */
 	run() {
 		// Defined in extension Classes
+		throw new Error(`The run method has not been implemented by ${this.type}:${this.name}.`);
 	}
 
 	/**
-	 * The init method to be optionaly overwritten in actual monitor pieces
-	 * @abstract
-	 * @returns {void}
+	 * If the monitor should run based on the filter options
+	 * @since 0.5.0
+	 * @param {KlasaMessage} message The message to check
+	 * @returns {boolean}
 	 */
-	async init() {
-		// Optionally defined in extension Classes
+	shouldRun(message) {
+		return this.enabled &&
+			!(this.ignoreBots && message.author.bot) &&
+			!(this.ignoreSelf && this.client.user === message.author) &&
+			!(this.ignoreOthers && this.client.user !== message.author) &&
+			!(this.ignoreWebhooks && message.webhookID) &&
+			!(this.ignoreEdits && message._edits.length);
 	}
 
-	// left for documentation
-	/* eslint-disable no-empty-function */
-	async reload() {}
-	unload() {}
-	disable() {}
-	enable() {}
-	/* eslint-enable no-empty-function */
+	/**
+	 * Defines the JSON.stringify behavior of this monitor.
+	 * @returns {Object}
+	 */
+	toJSON() {
+		return {
+			...super.toJSON(),
+			ignoreBots: this.ignoreBots,
+			ignoreSelf: this.ignoreSelf,
+			ignoreOthers: this.ignoreOthers,
+			ignoreWebhooks: this.ignoreWebhooks,
+			ignoreEdits: this.ignoreEdits
+		};
+	}
 
 }
-
-Piece.applyToClass(Monitor);
 
 module.exports = Monitor;

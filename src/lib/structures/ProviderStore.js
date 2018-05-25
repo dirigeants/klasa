@@ -1,90 +1,52 @@
-const { join } = require('path');
-const { Collection } = require('discord.js');
 const Provider = require('./Provider');
-const Store = require('./interfaces/Store');
+const Store = require('./base/Store');
 
 /**
  * Stores all providers for use in Klasa
- * @extends external:Collection
- * @implements {Store}
+ * @extends Store
  */
-class ProviderStore extends Collection {
+class ProviderStore extends Store {
 
 	/**
 	 * Constructs our ProviderStore for use in Klasa
-	 * @param  {KlasaClient} client The Klasa client
+	 * @since 0.0.1
+	 * @param {KlasaClient} client The Klasa client
 	 */
 	constructor(client) {
-		super();
-		/**
-		 * The client this ProviderStore was created with.
-		 * @name ProviderStore#client
-		 * @type {KlasaClient}
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'client', { value: client });
+		super(client, 'providers', Provider);
+	}
 
-		/**
-		* The directory of providers in Klasa relative to where its installed.
-		 * @type {String}
-		 */
-		this.coreDir = join(this.client.coreBaseDir, 'providers');
+	/**
+	 * The default provider set in {@link KlasaClientOptions.providers}
+	 * @since 0.5.0
+	 * @type {?Provider}
+	 * @readonly
+	 */
+	get default() {
+		return this.get(this.client.options.providers.default) || null;
+	}
 
-		/**
-		* The directory of local providers relative to where you run Klasa from.
-		 * @type {String}
-		 */
-		this.userDir = join(this.client.clientBaseDir, 'providers');
-
-		/**
-		 * The type of structure this store holds
-		 * @type {Provider}
-		 */
-		this.holds = Provider;
-
-		/**
-		 * The name of what this holds
-		 * @type {String}
-		 */
-		this.name = 'providers';
+	/**
+	 * Clears the providers from the store and waits for them to shutdown.
+	 * @since 0.0.1
+	 */
+	clear() {
+		for (const provider of this.values()) this.delete(provider);
 	}
 
 	/**
 	 * Deletes a provider from the store
-	 * @param  {Provider|string} name The provider object or a string representing the structure this store caches
-	 * @return {boolean} whether or not the delete was successful.
+	 * @since 0.0.1
+	 * @param {Provider|string} name The provider object or a string representing the structure this store caches
+	 * @returns {boolean} whether or not the delete was successful.
 	 */
 	delete(name) {
 		const pro = this.resolve(name);
 		if (!pro) return false;
 		pro.shutdown();
-		super.delete(pro.name);
-		return true;
+		return super.delete(pro);
 	}
-
-	/**
-	 * Sets up a provider in our store.
-	 * @param {Provider} provider The provider object we are setting up.
-	 * @returns {Provider}
-	 */
-	set(provider) {
-		if (!(provider instanceof this.holds)) return this.client.emit('error', `Only ${this.name} may be stored in the Store.`);
-		const existing = this.get(provider.name);
-		if (existing) this.delete(existing);
-		super.set(provider.name, provider);
-		return provider;
-	}
-
-	// left for documentation
-	/* eslint-disable no-empty-function */
-	init() {}
-	load() {}
-	async loadAll() {}
-	resolve() {}
-	/* eslint-enable no-empty-function */
 
 }
-
-Store.applyToClass(ProviderStore);
 
 module.exports = ProviderStore;

@@ -7,48 +7,32 @@ const RichDisplay = require('./RichDisplay');
 class RichMenu extends RichDisplay {
 
 	/**
-	 * A single unicode character
-	 * @typedef {string} emoji
-	 * @memberof RichMenu
+	 * @typedef {RichDisplayEmojisObject} RichMenuEmojisObject
+	 * @property {Emoji} zero The emoji for the 'zero' button
+	 * @property {Emoji} one The emoji for the 'one' button
+	 * @property {Emoji} two The emoji for the 'two' button
+	 * @property {Emoji} three The emoji for the 'three' button
+	 * @property {Emoji} four The emoji for the 'four' button
+	 * @property {Emoji} five The emoji for the 'five' button
+	 * @property {Emoji} six The emoji for the 'six' button
+	 * @property {Emoji} seven The emoji for the 'seven' button
+	 * @property {Emoji} eight The emoji for the 'eight' button
+	 * @property {Emoji} nine The emoji for the 'nine' button
 	 */
 
 	/**
-	 * @typedef {object} RichMenuEmojisObject
-	 * @memberof RichMenu
-	 * @property {emoji} first
-	 * @property {emoji} back
-	 * @property {emoji} forward
-	 * @property {emoji} last
-	 * @property {emoji} jump
-	 * @property {emoji} info
-	 * @property {emoji} stop
-	 * @property {emoji} zero
-	 * @property {emoji} one
-	 * @property {emoji} two
-	 * @property {emoji} three
-	 * @property {emoji} four
-	 * @property {emoji} five
-	 * @property {emoji} six
-	 * @property {emoji} seven
-	 * @property {emoji} eight
-	 * @property {emoji} nine
-	 */
-
-	/**
-	 * @typedef {object} MenuOption
-	 * @memberof RichMenu
+	 * @typedef {Object} MenuOption
 	 * @property {string} name The name of the option
-	 * @property {string} description The description of the option
-	 * @property {boolean} [inline = false] Whether the option should be inline
+	 * @property {string} body The description of the option
+	 * @property {boolean} [inline=false] Whether the option should be inline
 	 */
 
 	/**
-	 * @typedef {object} RichMenuRunOptions
-	 * @memberof RichMenu
-	 * @property {Function} [filter] A filter function to add to the ReactionHandler
-	 * @property {boolean} [stop = true] If a stop reaction should be included
-	 * @property {string} [prompt = 'Which page would you like to jump to?'] The prompt to be used when awaiting user input on a page to jump to
-	 * @property {number} [startPage = 0] The page to start the RichMenu on
+	 * @typedef {Object} RichMenuRunOptions
+	 * @property {Function} [filter] A filter function to add to the ReactionHandler (Receives: Reaction, User)
+	 * @property {boolean} [stop=true] If a stop reaction should be included
+	 * @property {string} [prompt=message.language.get('REACTIONHANDLER_PROMPT')] The prompt to be used when awaiting user input on a page to jump to
+	 * @property {number} [startPage=0] The page to start the RichMenu on
 	 * @property {number} [max] The maximum total amount of reactions to collect
 	 * @property {number} [maxEmojis] The maximum number of emojis to collect
 	 * @property {number} [maxUsers] The maximum number of users to react
@@ -57,13 +41,15 @@ class RichMenu extends RichDisplay {
 
 	/**
 	 * Constructs our RichMenu instance
-	 * @param  {external:MessageEmbed} [embed=new MessageEmbed()] A Template embed to apply to all pages
+	 * @since 0.4.0
+	 * @param {external:MessageEmbed} [embed=new MessageEmbed()] A Template embed to apply to all pages
 	 */
 	constructor(embed) {
 		super(embed);
 
 		/**
 		 * The default emojis to use for this menu
+		 * @since 0.4.0
 		 * @name RichMenu#emojis
 		 * @type {RichMenuEmojisObject}
 		 */
@@ -82,18 +68,21 @@ class RichMenu extends RichDisplay {
 
 		/**
 		 * If options have been paginated yet
+		 * @since 0.4.0
 		 * @type {boolean}
 		 */
 		this.paginated = false;
 
 		/**
 		 * The options of this Menu
+		 * @since 0.4.0
 		 * @type {MenuOption[]}
 		 */
 		this.options = [];
 	}
 
 	/**
+	 * @since 0.4.0
 	 * @throws You cannot directly add pages in a RichMenu
 	 */
 	addPage() {
@@ -102,10 +91,12 @@ class RichMenu extends RichDisplay {
 
 	/**
 	 * Adds a MenuOption
+	 * @since 0.4.0
 	 * @param {string} name The name of the option
 	 * @param {string} body The description of the option
-	 * @param {boolean} [inline = false] Whether the option should be inline
-	 * @returns {RichMenu} this RichMenu
+	 * @param {boolean} [inline=false] Whether the option should be inline
+	 * @returns {this}
+	 * @chainable
 	 */
 	addOption(name, body, inline = false) {
 		this.options.push({ name, body, inline });
@@ -114,30 +105,35 @@ class RichMenu extends RichDisplay {
 
 	/**
 	 * Runs this RichMenu
-	 * @param {external:Message} msg A message to edit or use to send a new message with
+	 * @since 0.4.0
+	 * @param {KlasaMessage} message A message to edit or use to send a new message with
 	 * @param {RichMenuRunOptions} options The options to use with this RichMenu
 	 * @returns {ReactionHandler}
 	 */
-	async run(msg, options = {}) {
+	async run(message, options = {}) {
 		if (!this.paginated) this._paginate();
-		return super.run(msg, options);
+		return super.run(message, options);
 	}
 
 	/**
-	 * Determins the emojis to use in this menu
-	 * @param {emoji[]} emojis An array of emojis to use
+	 * Determines the emojis to use in this menu
+	 * @since 0.4.0
+	 * @param {Emoji[]} emojis An array of emojis to use
 	 * @param {boolean} stop Whether the stop emoji should be included
-	 * @returns {emoji[]}
+	 * @param {boolean} jump Whether the jump emoji should be included
+	 * @param {boolean} firstLast Whether the first & last emojis should be included
+	 * @returns {Emoji[]}
 	 * @private
 	 */
-	_determineEmojis(emojis, stop) {
+	_determineEmojis(emojis, stop, jump, firstLast) {
 		emojis.push(this.emojis.zero, this.emojis.one, this.emojis.two, this.emojis.three, this.emojis.four, this.emojis.five, this.emojis.six, this.emojis.seven, this.emojis.eight, this.emojis.nine);
 		if (this.options.length < 10) emojis = emojis.slice(0, this.options.length);
-		return super._determineEmojis(emojis, stop);
+		return super._determineEmojis(emojis, stop, jump, firstLast);
 	}
 
 	/**
 	 * Converts MenuOptions into display pages
+	 * @since 0.4.0
 	 * @returns {void}
 	 * @private
 	 */
@@ -150,7 +146,7 @@ class RichMenu extends RichDisplay {
 			}
 			return embed;
 		});
-		if (this.options.length > page * 10) return this._paginate();
+		if (this.options.length > (page + 1) * 10) return this._paginate();
 		this.paginated = true;
 		return null;
 	}

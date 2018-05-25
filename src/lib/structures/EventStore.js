@@ -1,99 +1,76 @@
-const { join } = require('path');
-const { Collection } = require('discord.js');
 const Event = require('./Event');
-const Store = require('./interfaces/Store');
+const Store = require('./base/Store');
 
 /**
  * Stores all the events that a part of Klasa
- * @extends external:Collection
- * @implements {Store}
+ * @extends Store
  */
-class EventStore extends Collection {
+class EventStore extends Store {
 
 	/**
 	 * Constructs our EventStore for use in Klasa
-	 * @param  {KlasaClient} client The klasa client initializing this store.
+	 * @since 0.0.1
+	 * @param {KlasaClient} client The klasa client initializing this store.
 	 */
 	constructor(client) {
-		super();
-		/**
-		 * The client this EventStore was creaated with.
-		 * @name EventStore#client
-		 * @type {KlasaClient}
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'client', { value: client });
+		super(client, 'events', Event);
 
 		/**
-		 * The directory of events in Klasa relative to where its installled.
-		 * @type {String}
+		 * Once events that have already run (so once means once)
+		 * @since 0.5.0
+		 * @type {Set<string>}
+		 * @private
 		 */
-		this.coreDir = join(this.client.coreBaseDir, 'events');
+		this._onceEvents = new Set();
+	}
 
-		/**
-		* The directory of local events relative to where you run Klasa from.
-		 * @type {String}
-		 */
-		this.userDir = join(this.client.clientBaseDir, 'events');
-
-		/**
-		 * The type of structure this store holds
-		 * @type {Event}
-		 */
-		this.holds = Event;
-
-		/**
-		 * The name of what this holds
-		 * @type {String}
-		 */
-		this.name = 'events';
+	/**
+	 * Loads a piece into Klasa so it can be saved in this store.
+	 * @since 0.0.1
+	 * @param {string|string[]} file A string or array of strings showing where the file is located.
+	 * @param {boolean} [core=false] If the file is located in the core directory or not
+	 * @returns {?Piece}
+	 */
+	load(file, core) {
+		if (this._onceEvents.has(file[file.length - 1])) return undefined;
+		return super.load(file, core);
 	}
 
 	/**
 	 * Clears the events from the store and removes the listeners.
-	 * @return {void}
+	 * @since 0.0.1
+	 * @returns {void}
 	 */
 	clear() {
-		for (const event of this.keys()) this.delete(event);
+		for (const event of this.values()) this.delete(event);
 	}
 
 	/**
 	 * Deletes an event from the store.
-	 * @param  {Event|string} name An event object or a string representing the event name.
-	 * @return {boolean} whether or not the delete was successful.
+	 * @since 0.0.1
+	 * @param {Event|string} name An event object or a string representing the event name.
+	 * @returns {boolean} whether or not the delete was successful.
 	 */
 	delete(name) {
 		const event = this.resolve(name);
 		if (!event) return false;
-		this.client.removeAllListeners(event.name);
-		super.delete(event.name);
-		return true;
+		event._unlisten();
+		return super.delete(event);
 	}
 
 	/**
 	 * Sets up an event in our store.
-	 * @param {Event} event The event object we are setting up.
-	 * @returns {Event}
+	 * @since 0.0.1
+	 * @param {Event} piece The event piece we are setting up
+	 * @returns {?Event}
 	 */
-	set(event) {
-		if (!(event instanceof Event)) return this.client.emit('error', 'Only events may be stored in the EventStore.');
-		const existing = this.get(event.name);
-		if (existing) this.delete(existing);
-		this.client.on(event.name, event._run.bind(event));
-		super.set(event.name, event);
+	set(piece) {
+		const event = super.set(piece);
+		if (!event) return undefined;
+		event._listen();
 		return event;
 	}
 
-	// left for documentation
-	/* eslint-disable no-empty-function */
-	init() {}
-	load() {}
-	async loadAll() {}
-	resolve() {}
-	/* eslint-enable no-empty-function */
-
 }
-
-Store.applyToClass(EventStore);
 
 module.exports = EventStore;

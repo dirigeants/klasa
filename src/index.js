@@ -1,41 +1,82 @@
 module.exports = {
+	// KlasaClient
 	Client: require('./lib/Client'),
-	util: require('./lib/util/util'),
-	Colors: require('./lib/util/Colors'),
-	Console: require('./lib/util/Console'),
-	RichDisplay: require('./lib/util/RichDisplay'),
-	RichMenu: require('./lib/util/RichMenu'),
-	ReactionHandler: require('./lib/util/ReactionHandler'),
-	Command: require('./lib/structures/Command'),
-	CommandMessage: require('./lib/structures/CommandMessage'),
-	Event: require('./lib/structures/Event'),
-	Extendable: require('./lib/structures/Extendable'),
-	Finalizer: require('./lib/structures/Finalizer'),
-	Inhibitor: require('./lib/structures/Inhibitor'),
-	Language: require('./lib/structures/Language'),
-	Monitor: require('./lib/structures/Monitor'),
-	PermissionLevels: require('./lib/structures/PermissionLevels'),
-	Provider: require('./lib/structures/Provider'),
-	CommandStore: require('./lib/structures/CommandStore'),
-	EventStore: require('./lib/structures/EventStore'),
-	ExtendableStore: require('./lib/structures/ExtendableStore'),
-	FinalizerStore: require('./lib/structures/FinalizerStore'),
-	InhibitorStore: require('./lib/structures/InhibitorStore'),
-	LanguageStore: require('./lib/structures/LanguageStore'),
-	MonitorStore: require('./lib/structures/MonitorStore'),
-	ProviderStore: require('./lib/structures/ProviderStore'),
-	Piece: require('./lib/structures/interfaces/Piece'),
-	Store: require('./lib/structures/interfaces/Store'),
-	CacheManager: require('./lib/settings/CacheManager'),
-	SchemaManager: require('./lib/settings/SchemaManager'),
-	SettingGateway: require('./lib/settings/SettingGateway'),
-	SQL: require('./lib/settings/SQL'),
-	ArgResolver: require('./lib/parsers/ArgResolver'),
+	KlasaClient: require('./lib/Client'),
+
+	// lib/extensions
+	KlasaGuild: require('./lib/extensions/KlasaGuild'),
+	KlasaMessage: require('./lib/extensions/KlasaMessage'),
+	KlasaUser: require('./lib/extensions/KlasaUser'),
+
+	// lib/parsers
 	Resolver: require('./lib/parsers/Resolver'),
 	SettingResolver: require('./lib/parsers/SettingResolver'),
-	ParsedUsage: require('./lib/usage/ParsedUsage'),
+
+	// lib/permissions
+	PermissionLevels: require('./lib/permissions/PermissionLevels'),
+
+	// lib/schedule
+	Schedule: require('./lib/schedule/Schedule'),
+	ScheduledTask: require('./lib/schedule/ScheduledTask'),
+
+	// lib/settings
+	Configuration: require('./lib/settings/Configuration'),
+	Gateway: require('./lib/settings/Gateway'),
+	GatewayDriver: require('./lib/settings/GatewayDriver'),
+	GatewayStorage: require('./lib/settings/GatewayStorage'),
+	Schema: require('./lib/settings/Schema'),
+	SchemaFolder: require('./lib/settings/SchemaFolder'),
+	SchemaPiece: require('./lib/settings/SchemaPiece'),
+
+	// lib/structures/base
+	Piece: require('./lib/structures/base/Piece'),
+	Store: require('./lib/structures/base/Store'),
+
+	// lib/structures
+	Argument: require('./lib/structures/Argument'),
+	ArgumentStore: require('./lib/structures/ArgumentStore'),
+	Command: require('./lib/structures/Command'),
+	CommandStore: require('./lib/structures/CommandStore'),
+	Event: require('./lib/structures/Event'),
+	EventStore: require('./lib/structures/EventStore'),
+	Extendable: require('./lib/structures/Extendable'),
+	ExtendableStore: require('./lib/structures/ExtendableStore'),
+	Finalizer: require('./lib/structures/Finalizer'),
+	FinalizerStore: require('./lib/structures/FinalizerStore'),
+	Inhibitor: require('./lib/structures/Inhibitor'),
+	InhibitorStore: require('./lib/structures/InhibitorStore'),
+	Language: require('./lib/structures/Language'),
+	LanguageStore: require('./lib/structures/LanguageStore'),
+	Monitor: require('./lib/structures/Monitor'),
+	MonitorStore: require('./lib/structures/MonitorStore'),
+	Provider: require('./lib/structures/Provider'),
+	ProviderStore: require('./lib/structures/ProviderStore'),
+	Task: require('./lib/structures/Task'),
+	TaskStore: require('./lib/structures/TaskStore'),
+
+	// lib/usage
+	CommandPrompt: require('./lib/usage/CommandPrompt'),
+	CommandUsage: require('./lib/usage/CommandUsage'),
+	Usage: require('./lib/usage/Usage'),
 	Possible: require('./lib/usage/Possible'),
 	Tag: require('./lib/usage/Tag'),
+	TextPrompt: require('./lib/usage/TextPrompt'),
+
+	// lib/util
+	Colors: require('./lib/util/Colors'),
+	KlasaConsole: require('./lib/util/KlasaConsole'),
+	constants: require('./lib/util/constants'),
+	Cron: require('./lib/util/Cron'),
+	Duration: require('./lib/util/Duration'),
+	ReactionHandler: require('./lib/util/ReactionHandler'),
+	RichDisplay: require('./lib/util/RichDisplay'),
+	RichMenu: require('./lib/util/RichMenu'),
+	Stopwatch: require('./lib/util/Stopwatch'),
+	Timestamp: require('./lib/util/Timestamp'),
+	Type: require('./lib/util/Type'),
+	util: require('./lib/util/util'),
+
+	// version
 	version: require('../package').version
 };
 
@@ -50,6 +91,10 @@ module.exports = {
 /**
  * @external DiscordJSConfig
  * @see {@link https://discord.js.org/#/docs/main/master/typedef/ClientOptions}
+ */
+/**
+ * @external ClientApplication
+ * @see {@link https://discord.js.org/#/docs/main/master/class/ClientApplication}
  */
 /**
  * @external Collection
@@ -108,6 +153,14 @@ module.exports = {
  * @see {@link https://discord.js.org/#/docs/main/master/class/TextChannel}
  */
 /**
+ * @external VoiceChannel
+ * @see {@link https://discord.js.org/#/docs/main/master/class/VoiceChannel}
+ */
+/**
+ * @external CategoryChannel
+ * @see {@link https://discord.js.org/#/docs/main/master/class/CategoryChannel}
+ */
+/**
  * @external User
  * @see {@link https://discord.js.org/#/docs/main/master/class/User}
  */
@@ -124,6 +177,10 @@ module.exports = {
  * @see {@link https://discord.js.org/#/docs/main/master/class/ReactionEmoji}
  */
 /**
+ * @external ReactionCollector
+ * @see {@link https://discord.js.org/#/docs/main/master/class/ReactionCollector}
+ */
+/**
  * @external Webhook
  * @see {@link https://discord.js.org/#/docs/main/master/class/Webhook}
  */
@@ -134,4 +191,16 @@ module.exports = {
 /**
  * @external ShardingManager
  * @see {@link https://discord.js.org/#/docs/main/master/class/ShardingManager}
+ */
+/**
+ * @external Permissions
+ * @see {@link https://discord.js.org/#/docs/main/master/class/Permissions}
+ */
+/**
+ * @external PermissionResolvable
+ * @see {@link https://discord.js.org/#/docs/main/master/typedef/PermissionResolvable}
+ */
+/**
+ * @external Snowflake
+ * @see {@link https://discord.js.org/#/docs/main/stable/typedef/Snowflake}
  */

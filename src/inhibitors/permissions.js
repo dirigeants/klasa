@@ -2,10 +2,10 @@ const { Inhibitor } = require('klasa');
 
 module.exports = class extends Inhibitor {
 
-	async run(msg, cmd) {
-		const { broke, permission } = await this.client.permissionLevels.run(msg, cmd.permLevel);
+	async run(message, command) {
+		const { broke, permission } = await this.client.permissionLevels.run(message, command.permissionLevel);
 		if (permission) return;
-		throw broke ? msg.language.get('INHIBITOR_PERMISSIONS') : true;
+		throw broke ? message.language.get('INHIBITOR_PERMISSIONS') : true;
 	}
 
 };

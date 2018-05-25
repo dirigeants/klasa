@@ -1,96 +1,111 @@
-const { Monitor, CommandMessage, util: { regExpEsc, newError } } = require('klasa');
-const now = require('performance-now');
+const { Monitor, Stopwatch, util: { regExpEsc } } = require('klasa');
 
 module.exports = class extends Monitor {
 
-	async run(msg) {
-		// Ignore other users if selfbot
-		if (!this.client.user.bot && msg.author.id !== this.client.user.id) return;
-		if (this.client.user.bot && msg.guild && !msg.guild.me) await msg.guild.members.fetch(this.client.user);
-		if (msg.guild && !msg.channel.permissionsFor(msg.guild.me).has('SEND_MESSAGES')) return;
-		const { command, prefix, prefixLength } = this.parseCommand(msg);
-		if (!command) return;
-		const validCommand = this.client.commands.get(command);
-		if (!validCommand) return;
-		const start = now();
-		if (this.client.config.typing) msg.channel.startTyping();
-		this.client.inhibitors.run(msg, validCommand)
-			.then(() => this.runCommand(this.makeProxy(msg, new CommandMessage(msg, validCommand, prefix, prefixLength)), start))
-			.catch((response) => {
-				if (this.client.config.typing) msg.channel.stopTyping();
-				this.client.emit('commandInhibited', msg, validCommand, response);
-			});
+	constructor(...args) {
+		super(...args);
+		this.prefixes = new Map();
+		this.prefixMention = null;
+		this.prefixMentionLength = null;
+		this.nick = new RegExp('^<@!');
 	}
 
-	parseCommand(msg) {
-		const prefix = this.getPrefix(msg);
+	async run(message) {
+		if (this.client.user.bot && message.guild && !message.guild.me) await message.guild.members.fetch(this.client.user);
+		if (message.guild && !message.channel.postable) return;
+		if (message.content === this.client.user.toString() || (message.guild && message.content === message.guild.me.toString())) {
+			message.sendMessage(message.language.get('PREFIX_REMINDER', message.guildConfigs.prefix));
+			return;
+		}
+
+		const { command, prefix, prefixLength } = this.parseCommand(message);
+		if (!command) return;
+
+		const validCommand = this.client.commands.get(command);
+		if (!validCommand) {
+			if (this.client.listenerCount('commandUnknown')) this.client.emit('commandUnknown', message, command);
+			return;
+		}
+
+		const timer = new Stopwatch();
+		if (this.client.options.typing) message.channel.startTyping();
+		message._registerCommand({ command: validCommand, prefix, prefixLength });
+
+		try {
+			await this.client.inhibitors.run(message, validCommand);
+		} catch (response) {
+			if (this.client.options.typing) message.channel.stopTyping();
+			this.client.emit('commandInhibited', message, validCommand, response);
+			return;
+		}
+
+		this.runCommand(message, timer);
+	}
+
+	parseCommand(message) {
+		const { regex: prefix, length: prefixLength } = this.getPrefix(message);
 		if (!prefix) return { command: false };
-		const prefixLength = prefix.exec(msg.content)[0].length;
 		return {
-			command: msg.content.slice(prefixLength).trim().split(' ')[0].toLowerCase(),
+			command: message.content.slice(prefixLength).trim().split(' ')[0].toLowerCase(),
 			prefix,
 			prefixLength
 		};
 	}
 
-	getPrefix(msg) {
-		if (this.client.config.prefixMention.test(msg.content)) return this.client.config.prefixMention;
-		const prefix = msg.guildSettings.prefix || this.client.config.prefix;
-		if (prefix instanceof Array) {
+	getPrefix(message) {
+		if (this.prefixMention.test(message.content)) return { length: this.nick.test(message.content) ? this.prefixMentionLength + 1 : this.prefixMentionLength, regex: this.prefixMention };
+		if (message.guildConfigs.disableNaturalPrefix !== true && this.client.options.regexPrefix) {
+			const results = this.client.options.regexPrefix.exec(message.content);
+			if (results) return { length: results[0].length, regex: this.client.options.regexPrefix };
+		}
+		const prefix = message.guildConfigs.prefix || this.client.options.prefix;
+		if (Array.isArray(prefix)) {
 			for (let i = prefix.length - 1; i >= 0; i--) {
-				if (msg.content.startsWith(prefix[i])) return new RegExp(`^${regExpEsc(prefix[i])}`);
+				const testingPrefix = this.prefixes.get(prefix[i]) || this.generateNewPrefix(prefix[i]);
+				if (testingPrefix.regex.test(message.content)) return testingPrefix;
 			}
-		} else if (prefix && msg.content.startsWith(prefix)) {
-			return new RegExp(`^${regExpEsc(prefix)}`);
+		} else if (prefix) {
+			const testingPrefix = this.prefixes.get(prefix) || this.generateNewPrefix(prefix);
+			if (testingPrefix.regex.test(message.content)) return testingPrefix;
 		}
 		return false;
 	}
 
-	makeProxy(msg, cmdMsg) {
-		return new Proxy(msg, {
-			get: function handler(target, param) {
-				return param in msg ? msg[param] : cmdMsg[param];
-			}
-		});
+	generateNewPrefix(prefix) {
+		const prefixObject = { length: prefix.length, regex: new RegExp(`^${regExpEsc(prefix)}`) };
+		this.prefixes.set(prefix, prefixObject);
+		return prefixObject;
 	}
 
-	runCommand(msg, start) {
-		msg.validateArgs()
-			.then(async (params) => {
-				await msg.cmd.run(msg, params)
-					.then(mes => {
-						this.client.emit('commandRun', msg, msg.cmd, params, mes);
-						return this.client.finalizers.run(msg, mes, start);
-					})
-					.catch(error => this.client.emit('commandError', msg, msg.cmd, msg.params, error));
-				if (this.client.config.typing) msg.channel.stopTyping();
-			})
-			.catch((error) => {
-				if (this.client.config.typing) msg.channel.stopTyping();
-				if (error.code === 1 && this.client.config.cmdPrompt) {
-					return this.awaitMessage(msg, start, error.message)
-						.catch(err => this.client.emit('commandError', msg, msg.cmd, msg.params, err));
-				}
-				return this.client.emit('commandError', msg, msg.cmd, msg.params, error);
-			});
-	}
+	async runCommand(message, timer) {
+		try {
+			await message.prompter.run();
+		} catch (error) {
+			if (this.client.options.typing) message.channel.stopTyping();
+			return this.client.emit('commandError', message, message.command, message.params, error);
+		}
 
-	async awaitMessage(msg, start, error) {
-		const message = await msg.channel.send(msg.language.get('MONITOR_COMMAND_HANDLER_REPROMPT', `<@!${msg.author.id}>`, error))
-			.catch((err) => { throw newError(err); });
+		const subcommand = message.command.subcommands ? message.params.shift() : undefined;
+		const commandRun = subcommand ? message.command[subcommand](message, message.params) : message.command.run(message, message.params);
 
-		const param = await msg.channel.awaitMessages(response => response.author.id === msg.author.id && response.id !== message.id, { max: 1, time: 30000, errors: ['time'] });
-		if (param.first().content.toLowerCase() === 'abort') throw msg.language.get('MONITOR_COMMAND_HANDLER_ABORTED');
-		msg.args[msg.args.lastIndexOf(null)] = param.first().content;
-		msg.reprompted = true;
+		if (this.client.options.typing) message.channel.stopTyping();
+		timer.stop();
 
-		if (message.deletable) message.delete();
-		if (this.client.config.typing) msg.channel.startTyping();
-		return this.runCommand(msg, start);
+		try {
+			const response = await commandRun;
+			await this.client.finalizers.run(message, response, timer);
+			return this.client.emit('commandSuccess', message, message.command, message.params, response);
+		} catch (error) {
+			return this.client.emit('commandError', message, message.command, message.params, error);
+		}
 	}
 
 	init() {
 		this.ignoreSelf = this.client.user.bot;
+		this.ignoreOthers = !this.client.user.bot;
+		this.ignoreEdits = !this.client.options.commandEditing;
+		this.prefixMention = new RegExp(`^<@!?${this.client.user.id}>`);
+		this.prefixMentionLength = this.client.user.id.length + 3;
 	}
 
 };

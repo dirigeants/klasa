@@ -1,104 +1,66 @@
-const Piece = require('./interfaces/Piece');
+const Piece = require('./base/Piece');
 
 /**
  * Base class for all Klasa Providers. See {@tutorial CreatingProviders} for more information how to use this class
  * to build custom providers.
  * @tutorial CreatingProviders
+ * @extends {Piece}
  */
-class Provider {
+class Provider extends Piece {
 
 	/**
-	 * @typedef {Object} ProviderOptions
-	 * @memberof Provider
-	 * @property {string} [name=theFileName] The name of the command
-	 * @property {boolean} [enabled=true] Whether the provider is enabled or not
-	 * @property {string} [description=''] The provider description
-	 * @property {boolean} [sql=false] If the provider provides to a sql datasource
+	 * @typedef {PieceOptions} ProviderOptions
+	 * @property {boolean} [sql=false] If the provider provides to a sql data source
 	 */
 
 	/**
+	 * @since 0.0.1
 	 * @param {KlasaClient} client The Klasa client
-	 * @param {string} dir The path to the core or user provider pieces folder
+	 * @param {ProviderStore} store The Provider Store
 	 * @param {string} file The path from the pieces folder to the provider file
-	 * @param {ProviderOptions} [options = {}] Optional Provider settings
+	 * @param {boolean} core If the piece is in the core directory or not
+	 * @param {ProviderOptions} [options={}] Optional Provider settings
 	 */
-	constructor(client, dir, file, options = {}) {
-		/**
-		 * @type {KlasaClient}
-		 */
-		this.client = client;
+	constructor(client, store, file, core, options = {}) {
+		super(client, store, file, core, options);
 
 		/**
-		 * The directory to where this provider piece is stored
-		 * @type {string}
-		 */
-		this.dir = dir;
-
-		/**
-		 * The file location where this provider is stored
-		 * @type {string}
-		 */
-		this.file = file;
-
-		/**
-		 * The name of the provider
-		 * @type {string}
-		 */
-		this.name = options.name || file.slice(0, -3);
-
-		/**
-		 * The type of Klasa piece this is
-		 * @type {string}
-		 */
-		this.type = 'provider';
-
-		/**
-		 * If the provider is enabled or not
+		 * If the provider provides to a sql data source
+		 * @since 0.0.1
 		 * @type {boolean}
 		 */
-		this.enabled = 'enabled' in options ? options.enabled : true;
+		this.sql = options.sql;
 
 		/**
-		 * The description of the provider
-		 * @type {string}
-		 */
-		this.description = options.description || '';
-
-		/**
-		 * If the provider provides to a sql datasource
+		 * If the provider is designed to handle cache operations
+		 * @since 0.5.0
 		 * @type {boolean}
 		 */
-		this.sql = 'sql' in options ? options.sql : false;
+		this.cache = options.cache;
 	}
 
 	/**
-	 * The init method to be optionaly overwritten in actual provider pieces
-	 * @abstract
+	 * The shutdown method to be optionally overwritten in actual provider pieces
+	 * @since 0.3.0
 	 * @returns {void}
-	 */
-	async init() {
-		// Optionally defined in extension Classes
-	}
-
-	/**
-	 * The shutdown method to be optionaly overwritten in actual provider pieces
 	 * @abstract
-	 * @returns {void}
 	 */
 	async shutdown() {
 		// Optionally defined in extension Classes
 	}
 
-	// left for documentation
-	/* eslint-disable no-empty-function */
-	async reload() {}
-	unload() {}
-	disable() {}
-	enable() {}
-	/* eslint-enable no-empty-function */
+	/**
+	 * Defines the JSON.stringify behavior of this provider.
+	 * @returns {Object}
+	 */
+	toJSON() {
+		return {
+			...super.toJSON(),
+			sql: this.sql,
+			cache: this.cache
+		};
+	}
 
 }
-
-Piece.applyToClass(Provider);
 
 module.exports = Provider;

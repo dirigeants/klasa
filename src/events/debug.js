@@ -2,12 +2,12 @@ const { Event } = require('klasa');
 
 module.exports = class extends Event {
 
-	constructor(client, dir, file) {
-		super(client, dir, file, { enabled: 'debug' in client.config.consoleEvents ? !!client.config.consoleEvents.debug : false });
+	run(warning) {
+		if (this.client.ready) this.client.console.debug(warning);
 	}
 
-	run(warning) {
-		this.client.console.debug(warning);
+	init() {
+		if (!this.client.options.consoleEvents.debug) this.disable();
 	}
 
 };

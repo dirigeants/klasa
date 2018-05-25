@@ -1,14 +1,14 @@
 const { Extendable } = require('klasa');
+const { Permissions: { FLAGS } } = require('discord.js');
 
 module.exports = class extends Extendable {
 
 	constructor(...args) {
-		super(...args, ['GroupDMChannel', 'DMChannel', 'TextChannel']);
+		super(...args, { appliesTo: ['GroupDMChannel', 'DMChannel', 'TextChannel'] });
 	}
 
 	get extend() {
-		if (!this.guild) return true;
-		return this.readable && this.permissionsFor(this.guild.me).has('SEND_MESSAGES');
+		return !this.guild || this.permissionsFor(this.guild.me).has([FLAGS.VIEW_CHANNEL, FLAGS.SEND_MESSAGES]);
 	}
 
 };

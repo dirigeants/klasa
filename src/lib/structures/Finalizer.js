@@ -1,94 +1,31 @@
-const Piece = require('./interfaces/Piece');
+const Piece = require('./base/Piece');
 
 /**
  * Base class for all Klasa Finalizers. See {@tutorial CreatingFinalizers} for more information how to use this class
  * to build custom finalizers.
  * @tutorial CreatingFinalizers
- * @implements {Piece}
+ * @extends {Piece}
  */
-class Finalizer {
+class Finalizer extends Piece {
 
 	/**
-	 * @typedef {Object} FinalizerOptions
-	 * @memberof Finalizer
-	 * @property {string} [name = theFileName] The name of the finalizer
-	 * @property {boolean} [enabled=true] Whether the finalizer is enabled or not
+	 * @typedef {PieceOptions} FinalizerOptions
 	 */
-
-	/**
-	 * @param {KlasaClient} client The Klasa Client
-	 * @param {string} dir The path to the core or user finalizer pieces folder
-	 * @param {string} file The path from the pieces folder to the finalizer file
-	 * @param {FinalizerOptions} [options = {}] Optional Finalizer settings
-	 */
-	constructor(client, dir, file, options = {}) {
-		/**
-		 * @type {KlasaClient}
-		 */
-		this.client = client;
-
-		/**
-		 * The directory to where this finalizer piece is stored
-		 * @type {string}
-		 */
-		this.dir = dir;
-
-		/**
-		 * The file location where this finalizer is stored
-		 * @type {string}
-		 */
-		this.file = file;
-
-		/**
-		 * The name of the finalizer
-		 * @type {string}
-		 */
-		this.name = options.name || file.slice(0, -3);
-
-		/**
-		 * The type of Klasa piece this is
-		 * @type {string}
-		 */
-		this.type = 'finalizer';
-
-		/**
-		 * If the finalizer is enabled or not
-		 * @type {boolean}
-		 */
-		this.enabled = 'enabled' in options ? options.enabled : true;
-	}
 
 	/**
 	 * The run method to be overwritten in actual finalizers
-	 * @param {CommandMessage} msg The command message mapped on top of the message used to trigger this finalizer
-	 * @param {external:Message} mes The bot's response message, if one is returned
-	 * @param {number} start The performance now start time including all command overhead
-	 * @abstract
+	 * @since 0.0.1
+	 * @param {KlasaMessage} message The message used to trigger this finalizer
+	 * @param {KlasaMessage|KlasaMessage[]} response The bot's response message, if one is returned
+	 * @param {Stopwatch} runTime The time it took to generate the command
 	 * @returns {void}
+	 * @abstract
 	 */
 	run() {
 		// Defined in extension Classes
+		throw new Error(`The run method has not been implemented by ${this.type}:${this.name}.`);
 	}
-
-	/**
-	 * The init method to be optionaly overwritten in actual finalizers
-	 * @abstract
-	 * @returns {void}
-	 */
-	async init() {
-		// Optionally defined in extension Classes
-	}
-
-	// left for documentation
-	/* eslint-disable no-empty-function */
-	async reload() {}
-	unload() {}
-	disable() {}
-	enable() {}
-	/* eslint-enable no-empty-function */
 
 }
-
-Piece.applyToClass(Finalizer);
 
 module.exports = Finalizer;
