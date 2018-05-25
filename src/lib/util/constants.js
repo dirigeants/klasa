@@ -1,4 +1,4 @@
-const { mergeDefault } = require('./util');
+const { mergeDefault, isObject } = require('./util');
 
 const colorBase = {
 	shard: { background: 'cyan', text: 'black' },
@@ -138,7 +138,7 @@ exports.DEFAULTS = {
 		},
 		queryBuilderOptions: {
 			array: () => 'TEXT',
-			resolver: (value) => `'${String(value).replace(/'/g, "''")}'`,
+			resolver: (value) => `'${(isObject(value) ? JSON.stringify(value) : String(value)).replace(/'/g, "''")}'`,
 			arrayResolver: (values) => `'${JSON.stringify(values)}'`,
 			formatDatatype: (name, datatype, def = null) => `${name} ${datatype}${def !== null ? ` NOT NULL DEFAULT ${def}` : ''}`
 		}
