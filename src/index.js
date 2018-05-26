@@ -69,6 +69,7 @@ module.exports = {
 	constants: require('./lib/util/constants'),
 	Cron: require('./lib/util/Cron'),
 	Duration: require('./lib/util/Duration'),
+	QueryBuilder: require('./lib/util/QueryBuilder'),
 	ReactionHandler: require('./lib/util/ReactionHandler'),
 	RichDisplay: require('./lib/util/RichDisplay'),
 	RichMenu: require('./lib/util/RichMenu'),

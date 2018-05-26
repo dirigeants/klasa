@@ -45,6 +45,7 @@ Where `...params` are arguments you would *normally* get from those events. For 
 
 ## Further Reading:
 
+- {@tutorial CreatingArguments}
 - {@tutorial CreatingCommands}
 - {@tutorial CreatingExtendables}
 - {@tutorial CreatingFinalizers}
@@ -52,4 +53,5 @@ Where `...params` are arguments you would *normally* get from those events. For 
 - {@tutorial CreatingLanguages}
 - {@tutorial CreatingMonitors}
 - {@tutorial CreatingProviders}
+- {@tutorial CreatingSQLProviders}
 - {@tutorial CreatingTasks}

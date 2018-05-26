@@ -72,16 +72,6 @@ class GatewayStorage {
 	}
 
 	/**
-	 * Get this gateway's SQL schema.
-	 * @since 0.0.1
-	 * @type {Array<Array<string>>}
-	 * @readonly
-	 */
-	get sqlSchema() {
-		return [['id', 'VARCHAR(19) NOT NULL UNIQUE PRIMARY KEY'], ...this.schema.sqlSchema];
-	}
-
-	/**
 	 * Get the provider that manages the persistent data.
 	 * @since 0.5.0
 	 * @type {?Provider}
@@ -133,7 +123,7 @@ class GatewayStorage {
 
 		// Init the table
 		const hasTable = await this.provider.hasTable(this.type);
-		if (!hasTable) await this.provider.createTable(this.type, this.sqlSchema);
+		if (!hasTable) await this.provider.createTable(this.type);
 	}
 
 }
