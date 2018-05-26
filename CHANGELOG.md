@@ -182,6 +182,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Removed
 
+- [[#323](https://github.com/dirigeants/klasa/pull/323)] Removed every check for selfbot users. (KingDGrizzle)
 - [[#272](https://github.com/dirigeants/klasa/pull/272)] Removed `ArgResolver` class. (bdistin)
 - [[#256](https://github.com/dirigeants/klasa/pull/256)] Removed `Gateway#getEntry` (mixed getEntry and insertEntry into `Gateway#get`), `Gateway#createEntry`, and `Gateway#insertEntry`. (kyranet)
 - [[#256](https://github.com/dirigeants/klasa/pull/256)] Removed `Gateway#options` and `Gateway#defaultSchema`. (kyranet)
