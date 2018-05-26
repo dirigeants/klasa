@@ -17,7 +17,6 @@ module.exports = class extends Command {
 	}
 
 	async run(message, [command]) {
-		const method = this.client.user.bot ? 'author' : 'channel';
 		if (command) {
 			const info = [
 				`= ${command.name} = `,
@@ -38,9 +37,9 @@ module.exports = class extends Command {
 			helpMessage.push('```', '\u200b');
 		}
 
-		return message[method].send(helpMessage, { split: { char: '\u200b' } })
-			.then(() => { if (message.channel.type !== 'dm' && this.client.user.bot) message.sendMessage(message.language.get('COMMAND_HELP_DM')); })
-			.catch(() => { if (message.channel.type !== 'dm' && this.client.user.bot) message.sendMessage(message.language.get('COMMAND_HELP_NODM')); });
+		return message.author.send(helpMessage, { split: { char: '\u200b' } })
+			.then(() => { if (message.channel.type !== 'dm') message.sendMessage(message.language.get('COMMAND_HELP_DM')); })
+			.catch(() => { if (message.channel.type !== 'dm') message.sendMessage(message.language.get('COMMAND_HELP_NODM')); });
 	}
 
 	async buildHelp(message) {
