@@ -3,7 +3,10 @@ const { Monitor, Stopwatch, util: { regExpEsc } } = require('klasa');
 module.exports = class extends Monitor {
 
 	constructor(...args) {
-		super(...args);
+		super(...args, {
+			ignoreSelf: true,
+			ignoreOthers: false
+		});
 		this.prefixes = new Map();
 		this.prefixMention = null;
 		this.prefixMentionLength = null;
@@ -101,8 +104,6 @@ module.exports = class extends Monitor {
 	}
 
 	init() {
-		this.ignoreSelf = this.client.user.bot;
-		this.ignoreOthers = !this.client.user.bot;
 		this.ignoreEdits = !this.client.options.commandEditing;
 		this.prefixMention = new RegExp(`^<@!?${this.client.user.id}>`);
 		this.prefixMentionLength = this.client.user.id.length + 3;
