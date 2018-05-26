@@ -455,7 +455,7 @@ declare module 'klasa' {
 		public destroy(): Promise<this>;
 
 		public reset(key?: string | string[], options?: ConfigurationResetOptions): Promise<ConfigurationUpdateResult>;
-		public reset(key?: string | string[], guild?: KlasaGuild, options: ConfigurationResetOptions): Promise<ConfigurationUpdateResult>;
+		public reset(key?: string | string[], guild?: KlasaGuild, options?: ConfigurationResetOptions): Promise<ConfigurationUpdateResult>;
 		public update(key: ObjectLiteral<any>, guild?: GuildResolvable): Promise<ConfigurationUpdateResult>;
 		public update(key: string, value: any, guild?: GuildResolvable, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
 		public update(key: string[], value: any[], guild?: GuildResolvable, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
@@ -760,7 +760,7 @@ declare module 'klasa' {
 
 	export abstract class Provider extends Piece {
 		public abstract create<T = any>(table: string, entry: string, data: any): Promise<T>;
-		public abstract createTable<T = any>(table: string): Promise<T>;
+		public abstract createTable<T = any>(table: string, rows?: any[]): Promise<T>;
 		public abstract delete<T = any>(table: string, entry: string): Promise<T>;
 		public abstract deleteTable<T = any>(table: string): Promise<T>;
 		public abstract get<T extends ObjectLiteral<any>>(table: string, entry: string): Promise<T>;
