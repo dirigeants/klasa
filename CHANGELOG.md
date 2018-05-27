@@ -13,6 +13,15 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#306](https://github.com/dirigeants/klasa/pull/306)] Added `Util.isPrimitive`. (kyranet)
+- [[#306](https://github.com/dirigeants/klasa/pull/306)] Added `constants.DEFAULTS.QUERYBUILDER`. (kyranet)
+- [[#306](https://github.com/dirigeants/klasa/pull/306)] Added `SQLProvider#updateColumn`. (kyranet)
+- [[#306](https://github.com/dirigeants/klasa/pull/306)] Added `SQLProvider#parseUpdateInput`, `Provider#parseUpdateInput`. (kyranet)
+- [[#306](https://github.com/dirigeants/klasa/pull/306)] Added `QueryBuilder` class util. (kyranet)
+- [[#284](https://github.com/dirigeants/klasa/pull/284)] Added `Configuration#waitSync()` to wait for the sync to finish. (kyranet)
+- [[#284](https://github.com/dirigeants/klasa/pull/284)] Added `GatewayDriverRegisterOptions.waitForDownload`, to sync the data in the background without blocking the load. (kyranet)
+- [[#284](https://github.com/dirigeants/klasa/pull/284)] Added `SQLProvider`. (kyranet)
+- [[#284](https://github.com/dirigeants/klasa/pull/284)] Added `SchemaPiece#sqlSchema` for consistency with `SchemaFolder#sqlSchema`. (kyranet)
 - [[#272](https://github.com/dirigeants/klasa/pull/272)] Added `disabledCorePieces` option in `KlasaClientOptions`. (bdistin)
 - [[#272](https://github.com/dirigeants/klasa/pull/272)] Added `Argument` and `ArgumentStore` classes for argument resolving in `Usage`. (bdistin)
 - [[#256](https://github.com/dirigeants/klasa/pull/256)] Added `Util.objectToTuples` for object overload -> array overload in `Configuration#update`. (kyranet)
@@ -103,6 +112,11 @@ NOTE: For the contributors, you add new entries to this document following this 
 ### Changed
 
 - [[#320](https://github.com/dirigeants/klasa/pull/320)] **[BREAKING]** Changed the schema file names. (KingDGrizzle)
+- [[#306](https://github.com/dirigeants/klasa/pull/306)] Changed `SQLProvider#createTable`. SettingGateway will not provide columns, for consistency with JSON providers. Instead, retrieve the columns from `Gateway`. (kyranet)
+- [[#306](https://github.com/dirigeants/klasa/pull/306)] Changed `SQLProvider#addColumn` to have the arguments `table: string, columns: SchemaFolder | SchemaPiece`. (kyranet)
+- [[#306](https://github.com/dirigeants/klasa/pull/306)] Made `Gateway`'s constructor public in typings. (kyranet)
+- [[#306](https://github.com/dirigeants/klasa/pull/306)] Made `Configuration#_existsInDB` nullable to denote Configuration instances that have never sync. (kyranet)
+- [[#306](https://github.com/dirigeants/klasa/pull/306)] Tweaked initial synchronization for performance. (kyranet)
 - [[#299](https://github.com/dirigeants/klasa/pull/299)] Escape strings from initClean. (KingDGrizzle)
 - [[#272](https://github.com/dirigeants/klasa/pull/272)] Changed `Monitor#shouldRun` to accept a single argument. (bdistin)
 - [[#256](https://github.com/dirigeants/klasa/pull/256)] **[BREAKING]** Modified all SettingResolvers to resolve to primitives (string, number, boolean...) or storable data. (kyranet)
@@ -183,6 +197,17 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Removed
 
+- [[#306](https://github.com/dirigeants/klasa/pull/306)] Removed `GatewayGuildResolvable` type from typings. (kyranet)
+- [[#306](https://github.com/dirigeants/klasa/pull/306)] Removed `JSONProvider#set` and `JSONProvider#insert`. (kyranet)
+- [[#306](https://github.com/dirigeants/klasa/pull/306)] Removed `Provider#sql` and `SQLProvider#sql`. (kyranet)
+- [[#306](https://github.com/dirigeants/klasa/pull/306)] Removed `SchemaPiece#_generateSQLDatatype` and `SchemaPiece._parseSQLValue`. (kyranet)
+- [[#306](https://github.com/dirigeants/klasa/pull/306)] Removed `SchemaPiece#sql`. (kyranet)
+- [[#306](https://github.com/dirigeants/klasa/pull/306)] Removed `SchemaFolderAddOptions.sql`. (kyranet)
+- [[#306](https://github.com/dirigeants/klasa/pull/306)] Removed `GatewayStorage#sqlSchema`, `SchemaFolder#sqlSchema`, and `SchemaPiece#sqlSchema`. (kyranet)
+- [[#306](https://github.com/dirigeants/klasa/pull/306)] Removed `Role` and `GuildMember` overloads for `GuildResolvable`. (kyranet)
+- [[#284](https://github.com/dirigeants/klasa/pull/284)] Removed `GatewayStorage#initTable` and `GatewayStorage#initSchema`, they're now unified in `GatewayStorage#init`. (kyranet)
+- [[#284](https://github.com/dirigeants/klasa/pull/284)] Removed `force` options in SettingGateway operations. (kyranet)
+- [[#284](https://github.com/dirigeants/klasa/pull/284)] Removed `ProviderOptions.cache` and `ProviderOptions.sql` options. (kyranet)
 - [[#272](https://github.com/dirigeants/klasa/pull/272)] Removed `ArgResolver` class. (bdistin)
 - [[#256](https://github.com/dirigeants/klasa/pull/256)] Removed `Gateway#getEntry` (mixed getEntry and insertEntry into `Gateway#get`), `Gateway#createEntry`, and `Gateway#insertEntry`. (kyranet)
 - [[#256](https://github.com/dirigeants/klasa/pull/256)] Removed `Gateway#options` and `Gateway#defaultSchema`. (kyranet)
@@ -220,6 +245,8 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
+- [[#284](https://github.com/dirigeants/klasa/pull/284)] Fixed a bug where SG's cache would download twice when `GatewayDriverRegisterOptions.download` is true. (kyranet)
+- [[#284](https://github.com/dirigeants/klasa/pull/284)] Fixed `Gateway#parseEntry` not being a function. (kyranet)
 - [[#256](https://github.com/dirigeants/klasa/pull/256)] Fixed `Util.deepClone` trying to iterate over `WeakMap`s and `WeakSet`s. (kyranet)
 - [[#256](https://github.com/dirigeants/klasa/pull/256)] Fixed a critical sync issue where `Configuration#_syncStatus` resolved too early. (kyranet)
 - [[#256](https://github.com/dirigeants/klasa/pull/256)] Fixed many typings bugs. (kyranet)

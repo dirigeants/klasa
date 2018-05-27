@@ -1,7 +1,6 @@
 const { promisify } = require('util');
 const { exec } = require('child_process');
 const zws = String.fromCharCode(8203);
-const has = (ob, ke) => Object.prototype.hasOwnProperty.call(ob, ke);
 let sensitivePattern;
 const TOTITLECASE = /[A-Za-zÀ-ÖØ-öø-ÿ]\S*/g;
 const REGEXPESC = /[-/\\^$*+?.()|[\]{}]/g;
@@ -100,7 +99,7 @@ class Util {
 	 */
 	static deepClone(source) {
 		// Check if it's a primitive (with exception of function and null, which is typeof object)
-		if (typeof source !== 'object' || source === null) return source;
+		if (source === null || Util.isPrimitive(source)) return source;
 		if (Array.isArray(source)) {
 			const output = new Array(source.length);
 			for (let i = 0; i < source.length; i++) output[i] = Util.deepClone(source[i]);
@@ -180,6 +179,16 @@ class Util {
 	}
 
 	/**
+	 * Check whether a value is a primitive
+	 * @since 0.5.0
+	 * @param {*} value The value to check
+	 * @returns {boolean}
+	 */
+	static isPrimitive(value) {
+		return Util.PRIMITIVE_TYPES.includes(typeof value);
+	}
+
+	/**
 	 * Verify if an object is a promise.
 	 * @since 0.5.0
 	 * @param {Promise} input The promise to verify
@@ -210,7 +219,7 @@ class Util {
 	 * @returns {?(string|number|boolean)}
 	 */
 	static getIdentifier(value) {
-		if (['string', 'number', 'boolean'].includes(typeof value)) return value;
+		if (Util.isPrimitive(value)) return value;
 		if (Util.isObject(value)) {
 			if ('id' in value) return value.id;
 			if ('name' in value) return value.name;
@@ -234,7 +243,7 @@ class Util {
 			const lastKey = route.pop();
 			let reference = obj;
 			for (const key of route) {
-				if (!(key in reference)) reference[key] = {};
+				if (!reference[key]) reference[key] = {};
 				reference = reference[key];
 			}
 			reference[lastKey] = value;
@@ -312,11 +321,8 @@ class Util {
 	static mergeDefault(def, given) {
 		if (!given) return def;
 		for (const key in def) {
-			if (!has(given, key) || given[key] === undefined) {
-				given[key] = Array.isArray(def[key]) ? def[key].slice(0) : def[key];
-			} else if (!Array.isArray(given[key]) && given[key] === Object(given[key])) {
-				given[key] = Util.mergeDefault(def[key], given[key]);
-			}
+			if (typeof given[key] === 'undefined') given[key] = Util.deepClone(def[key]);
+			else if (Util.isObject(given[key])) given[key] = Util.mergeDefault(def[key], given[key]);
 		}
 
 		return given;
@@ -371,5 +377,13 @@ Util.titleCaseVariants = {
 	categorychannel: 'CategoryChannel',
 	guildmember: 'GuildMember'
 };
+
+/**
+ * The primitive types
+ * @since 0.5.0
+ * @type {string[]}
+ * @static
+ */
+Util.PRIMITIVE_TYPES = ['string', 'bigint', 'number', 'boolean'];
 
 module.exports = Util;

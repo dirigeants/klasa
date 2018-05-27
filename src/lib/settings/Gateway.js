@@ -2,7 +2,7 @@ const GatewayStorage = require('./GatewayStorage');
 const Configuration = require('./Configuration');
 const SchemaPiece = require('./SchemaPiece');
 const SchemaFolder = require('./SchemaFolder');
-const { Collection, Guild, GuildChannel, Message, Role, GuildMember } = require('discord.js');
+const { Collection, Guild, GuildChannel, Message } = require('discord.js');
 const { getIdentifier } = require('../util/util');
 
 /**
@@ -26,7 +26,7 @@ class Gateway extends GatewayStorage {
 	 */
 
 	/**
-	 * @typedef {(KlasaGuild|KlasaMessage|external:TextChannel|external:VoiceChannel|external:CategoryChannel|external:GuildMember|external:Role)} GuildResolvable
+	 * @typedef {(KlasaGuild|KlasaMessage|external:GuildChannel)} GuildResolvable
 	 */
 
 	/**
@@ -92,7 +92,7 @@ class Gateway extends GatewayStorage {
 		if (create) {
 			const configs = new this.Configuration(this, { id });
 			this.cache.set(id, configs);
-			if (this.ready && this.schema.keyArray.length) configs.sync().catch(err => this.client.emit('error', err));
+			if (this.schema.keyArray.length) configs.sync().catch(err => this.client.emit('error', err));
 			return configs;
 		}
 		return null;
@@ -168,13 +168,14 @@ class Gateway extends GatewayStorage {
 	/**
 	 * Inits the table and the schema for its use in this gateway.
 	 * @since 0.0.1
-	 * @param {boolean} [download=true] Whether this Gateway should download the data from the database
+	 * @param {GatewayDriverRegisterOptions} GatewayInitOptions The options for init
 	 * @private
 	 */
-	async init({ download = true, defaultSchema = {} } = {}) {
+	async init({ download = true, defaultSchema = {}, waitForDownload = true } = {}) {
 		await super.init(defaultSchema);
 		if (download) await this._download();
-		await this._ready();
+		else await this._ready(waitForDownload);
+		if (!this.ready) this.ready = true;
 	}
 
 	/**
@@ -200,22 +201,22 @@ class Gateway extends GatewayStorage {
 	/**
 	 * Readies up all Configuration instances in this gateway
 	 * @since 0.5.0
-	 * @returns {Array<external:Collection<string, Configuration>>}
+	 * @param {boolean} waitForDownload Whether this Gateway should wait for all the data from the gateway to be downloaded
+	 * @returns {Promise<Array<Configuration>>}
 	 * @private
 	 */
-	async _ready() {
-		if (!this.schema.keyArray.length || typeof this.client[this.type] === 'undefined') return null;
-		const promises = [];
-		const keys = await this.provider.getKeys(this.type);
-		const store = this.client[this.type];
-		for (let i = 0; i < keys.length; i++) {
-			const structure = store.get(keys[i]);
-			if (structure) promises.push(structure.configs.sync().then(() => this.cache.set(keys[i], structure.configs)));
-		}
-		const results = await Promise.all(promises);
-		if (!this.ready) this.ready = true;
+	_ready(waitForDownload) {
+		// If the schema has no keys, there is no point on waiting for them to sync
+		if (this.schema.keyArray.length) {
+			// waitForDownload is an option recommended for gateways like clientStorage and guildConfigs, this option delays klasaReady
+			// until all entries are correctly synchronized
+			if (waitForDownload) return Promise.all(this.cache.map(entry => entry._existsInDB === null ? entry.sync() : Promise.resolve(entry)));
 
-		return results;
+			// Otherwise synchronize them in the background
+			for (const entry of this.cache.values()) if (entry._existsInDB === null) entry.sync();
+		}
+
+		return Promise.resolve([]);
 	}
 
 	/**
@@ -226,14 +227,14 @@ class Gateway extends GatewayStorage {
 	 * @private
 	 */
 	_resolveGuild(guild) {
-		if (typeof guild === 'object') {
+		const type = typeof guild;
+		if (type === 'object' && guild !== null) {
 			if (guild instanceof Guild) return guild;
 			if ((guild instanceof GuildChannel) ||
-				(guild instanceof Message) ||
-				(guild instanceof Role) ||
-				(guild instanceof GuildMember)) return guild.guild;
+				(guild instanceof Message)) return guild.guild;
+		} else if (type === 'string' && /^\d{17,19}$/.test(guild)) {
+			return this.client.guilds.get(guild) || null;
 		}
-		if (typeof guild === 'string' && /^\d{17,19}$/.test(guild)) return this.client.guilds.get(guild);
 		return null;
 	}
 

@@ -51,6 +51,7 @@ module.exports = {
 	MonitorStore: require('./lib/structures/MonitorStore'),
 	Provider: require('./lib/structures/Provider'),
 	ProviderStore: require('./lib/structures/ProviderStore'),
+	SQLProvider: require('./lib/structures/SQLProvider'),
 	Task: require('./lib/structures/Task'),
 	TaskStore: require('./lib/structures/TaskStore'),
 
@@ -68,6 +69,7 @@ module.exports = {
 	constants: require('./lib/util/constants'),
 	Cron: require('./lib/util/Cron'),
 	Duration: require('./lib/util/Duration'),
+	QueryBuilder: require('./lib/util/QueryBuilder'),
 	ReactionHandler: require('./lib/util/ReactionHandler'),
 	RichDisplay: require('./lib/util/RichDisplay'),
 	RichMenu: require('./lib/util/RichMenu'),

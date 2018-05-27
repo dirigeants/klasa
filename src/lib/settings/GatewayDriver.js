@@ -12,6 +12,7 @@ class GatewayDriver {
 	 * @typedef {Object} GatewayDriverRegisterOptions
 	 * @property {string} [provider] The name of the provider to use
 	 * @property {boolean} [download=true] Whether the Gateway should download all entries or not
+	 * @property {boolean} [waitForDownload=true] Whether this Gateway should wait for all the data from the gateway to be downloaded
 	 */
 
 	/**
@@ -195,14 +196,14 @@ class GatewayDriver {
 	 * @returns {this}
 	 * @chainable
 	 */
-	register(name, defaultSchema = {}, { download = true, provider = this.client.options.providers.default } = {}) {
+	register(name, defaultSchema = {}, { download = true, provider = this.client.options.providers.default, waitForDownload = true } = {}) {
 		if (typeof name !== 'string') throw new TypeError('You must pass a name for your new gateway and it must be a string.');
 		if (!util.isObject(defaultSchema)) throw new TypeError('Schema must be a valid object or left undefined for an empty object.');
 		if (this.name !== undefined && this.name !== null) throw new Error(`The key '${name}' is either taken by another Gateway or reserved for GatewayDriver's functionality.`);
 		if (!this.ready) {
 			if (this._queue.has(name)) throw new Error(`There is already a Gateway with the name '${name}' in the queue.`);
 			this._queue.set(name, async () => {
-				await this._register(name, { provider }).init({ download, defaultSchema });
+				await this._register(name, { provider }).init({ download, defaultSchema, waitForDownload });
 				this._queue.delete(name);
 			});
 		} else {

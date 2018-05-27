@@ -10,10 +10,7 @@ const { Provider } = require('klasa');
 module.exports = class extends Provider {
 
 	constructor(...args) {
-		super(...args, {
-			name: 'providerName',
-			description: 'Allows you to use DB functionality throughout Klasa'
-		});
+		super(...args, { name: 'providerName' });
 	}
 
 	init() {
@@ -104,9 +101,6 @@ The example above is the JSON provider used in klasa, and interfacing with the {
 | --------------- | ------------- | ------- | -------------------------------------------- |
 | **name**        | `theFileName` | string  | The name of the provider                     |
 | **enabled**     | `true`        | boolean | Whether the provider is enabled or not       |
-| **description** | `''`          | string  | The provider description                     |
-| **sql**         | `false`       | boolean | If the provider provides to a sql datasource |
-| **cache**       | `false`       | boolean | Whether the provider is meant for caching    |
 
 ## Accessing Providers
 
@@ -116,6 +110,7 @@ for each provider added, based on its `name`. So for example if you have it set 
 
 ## Further Reading:
 
+- {@tutorial CreatingArguments}
 - {@tutorial CreatingCommands}
 - {@tutorial CreatingEvents}
 - {@tutorial CreatingExtendables}
@@ -123,4 +118,5 @@ for each provider added, based on its `name`. So for example if you have it set 
 - {@tutorial CreatingInhibitors}
 - {@tutorial CreatingLanguages}
 - {@tutorial CreatingMonitors}
+- {@tutorial CreatingSQLProviders}
 - {@tutorial CreatingTasks}
