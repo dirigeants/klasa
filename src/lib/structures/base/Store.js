@@ -97,6 +97,7 @@ class Store extends Collection {
 			this.client.emit('wtf', `Failed to load file '${loc}'. Error:\n${error.stack || error}`);
 		}
 		delete require.cache[loc];
+		module.children.pop();
 		return piece;
 	}
 
