@@ -90,9 +90,16 @@ class Store extends Collection {
 		const loc = join(dir, ...file);
 		let piece = null;
 		try {
+			const mod = require.cache[loc];
 			const Piece = (req => req.default || req)(require(loc));
 			if (!isClass(Piece)) throw new TypeError(`Failed to load file '${loc}'. The exported structure is not a class.`);
 			piece = this.set(new Piece(this.client, this, file, core));
+
+			// If the mod was previously loaded (piece reload), remove it from the cache
+			if (mod) {
+				const index = module.children.indexOf(mod);
+				if (index !== -1) module.children.splice(index, 1);
+			}
 		} catch (error) {
 			this.client.emit('wtf', `Failed to load file '${loc}'. Error:\n${error.stack || error}`);
 		}
