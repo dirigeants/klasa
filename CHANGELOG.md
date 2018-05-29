@@ -111,6 +111,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#320](https://github.com/dirigeants/klasa/pull/320)] **[BREAKING]** Changed the schema file names. (KingDGrizzle)
 - [[#306](https://github.com/dirigeants/klasa/pull/306)] Changed `SQLProvider#createTable`. SettingGateway will not provide columns, for consistency with JSON providers. Instead, retrieve the columns from `Gateway`. (kyranet)
 - [[#306](https://github.com/dirigeants/klasa/pull/306)] Changed `SQLProvider#addColumn` to have the arguments `table: string, columns: SchemaFolder | SchemaPiece`. (kyranet)
 - [[#306](https://github.com/dirigeants/klasa/pull/306)] Made `Gateway`'s constructor public in typings. (kyranet)
