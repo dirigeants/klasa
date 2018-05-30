@@ -184,7 +184,7 @@ module.exports = Structures.extend('Message', Message => {
 
 			for (let i = 0; i < max; i++) {
 				if (i >= _content.length) responses[i].delete();
-				else if (responses.length > i) promises.push(responses[i].edit(_content[i], _options));
+				else if (responses.length > i) promises.push(responses[i].edit(_content[i], _options).then(() => responses[i]));
 				else promises.push(this.channel.send(_content[i], _options));
 			}
 
