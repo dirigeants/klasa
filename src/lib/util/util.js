@@ -102,13 +102,13 @@ class Util {
 		// Check if it's a primitive (with exception of function and null, which is typeof object)
 		if (typeof source !== 'object' || source === null) return source;
 		if (Array.isArray(source)) {
-			const output = new Array(source.length);
-			for (let i = 0; i < source.length; i++) output[i] = Util.deepClone(source[i]);
+			const output = [];
+			for (const value of source) output.push(Util.deepClone(value));
 			return output;
 		}
 		if (Util.isObject(source)) {
 			const output = {};
-			for (const key in source) output[key] = Util.deepClone(source[key]);
+			for (const [key, value] of Object.entries(source)) output[key] = Util.deepClone(value);
 			return output;
 		}
 		if (source instanceof Map) {
