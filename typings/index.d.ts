@@ -220,7 +220,7 @@ declare module 'klasa' {
 		public prefix?: RegExp;
 		public prefixLength?: number;
 		private prompter?: CommandPrompt;
-		private _responses: Snowflake[];
+		private _responses: KlasaMessage[];
 
 		public readonly responses: KlasaMessage[];
 		public readonly args: string[];

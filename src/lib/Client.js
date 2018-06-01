@@ -418,12 +418,11 @@ class KlasaClient extends Discord.Client {
 			if (!channel.messages) continue;
 			channels++;
 
-			for (const message of channel.messages.values()) {
-				if ((message.command || message.author === this.user) && now - (message.editedTimestamp || message.createdTimestamp) > commandLifetimeMs) commandMessages++;
-				else if (!message.command && now - (message.editedTimestamp || message.createdTimestamp) > lifetimeMs) messages++;
-				else continue;
-				channel.messages.delete(message.id);
-			}
+			channel.messages.sweep(message => {
+				if ((message.command || message.author === this.user) && now - (message.editedTimestamp || message.createdTimestamp) > commandLifetimeMs) return commandMessages++;
+				if (!message.command && message.author !== this.user && now - (message.editedTimestamp || message.createdTimestamp) > lifetimeMs) return messages++;
+				return false;
+			});
 		}
 
 		this.emit('debug', `Swept ${messages} messages older than ${lifetime} seconds and ${commandMessages} command messages older than ${commandLifetime} seconds in ${channels} text-based channels`);
