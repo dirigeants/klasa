@@ -57,11 +57,8 @@ const { Piece } = require('klasa');
 
 class RawEvent extends Piece {
 
-	constructor(client, store, file, core, options = {}) {
-		super(client, store, file, core, options);
-
-		// Enable this raw event by default if not specifically disabled in the options
-		this.enabled = typeof options.enabled === 'boolean' ? options.enabled : true;
+	run() {
+		// Defined in extension Classes
 	}
 
 }
@@ -105,7 +102,11 @@ class MyClient extends Client {
 
 }
 
-new MyClient().login('token-goes-here');
+new MyClient({
+	pieceDefaults: {
+		rawEvents: { enabled: true }
+	}
+}).login('token-goes-here');
 ```
 
 Now, to make our raw event store actually work, we're going to add this code in `events/raw.js` to run on every raw event received
