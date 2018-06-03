@@ -2,7 +2,6 @@ const Provider = require('./Provider');
 const { deepClone, tryParse, makeObject, isObject, objectToTuples } = require('../util/util');
 const Gateway = require('../settings/Gateway');
 const Type = require('../util/Type');
-const { join } = require('path');
 
 /**
  * Base class for all Klasa SQL Providers. See {@tutorial CreatingSQLProviders} for more information how to use this class
@@ -21,7 +20,7 @@ class SQLProvider extends Provider {
 	 * @abstract
 	 */
 	async addColumn() {
-		throw new Error(`[PROVIDERS] ${join(this.dir, ...this.file)} | Missing method 'addColumn' of ${this.constructor.name}`);
+		throw new Error(`[PROVIDERS] ${this.path} | Missing method 'addColumn' of ${this.constructor.name}`);
 	}
 
 	/**
@@ -33,7 +32,7 @@ class SQLProvider extends Provider {
 	 * @abstract
 	 */
 	async removeColumn() {
-		throw new Error(`[PROVIDERS] ${join(this.dir, ...this.file)} | Missing method 'removeColumn' of ${this.constructor.name}`);
+		throw new Error(`[PROVIDERS] ${this.path} | Missing method 'removeColumn' of ${this.constructor.name}`);
 	}
 
 	/**
@@ -45,7 +44,7 @@ class SQLProvider extends Provider {
 	 * @abstract
 	 */
 	async updateColumn() {
-		throw new Error(`[PROVIDERS] ${join(this.dir, ...this.file)} | Missing method 'updateColumn' of ${this.constructor.name}`);
+		throw new Error(`[PROVIDERS] ${this.path} | Missing method 'updateColumn' of ${this.constructor.name}`);
 	}
 
 	/**
