@@ -182,6 +182,7 @@ class Piece {
 		return {
 			dir: this.dir,
 			file: this.file,
+			path: this.path,
 			name: this.name,
 			type: this.type,
 			enabled: this.enabled
