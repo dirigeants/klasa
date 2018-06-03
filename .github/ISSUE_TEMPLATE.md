@@ -12,7 +12,7 @@ Make sure to explain everything well and comment the code, so we can
 follow up.
 -->
 
-### Expected an actual behaviour
+### Expected and actual behaviour
 
 
 ### Further details
