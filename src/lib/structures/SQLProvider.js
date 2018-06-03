@@ -103,15 +103,16 @@ class SQLProvider extends Provider {
 	 * @since 0.5.0
 	 * @param {*} value The value to parse
 	 * @param {SchemaPiece} schemaPiece The SchemaPiece which manages this value
+	 * @param {boolean} [skipArray=false] Whether this is parsing inner keys or not
 	 * @returns {*}
 	 * @protected
 	 */
-	parseValue(value, schemaPiece) {
+	parseValue(value, schemaPiece, skipArray = false) {
 		if (typeof value === 'undefined') return deepClone(schemaPiece.default);
-		if (schemaPiece.array) {
+		if (!skipArray && schemaPiece.array) {
 			if (value === null) return deepClone(schemaPiece.default);
 			if (typeof value === 'string') value = tryParse(value);
-			if (Array.isArray(value)) return value.map(val => this.parseValue(val, schemaPiece));
+			if (Array.isArray(value)) return value.map(val => this.parseValue(val, schemaPiece, true));
 		} else {
 			const type = typeof value;
 			switch (schemaPiece.type) {
@@ -121,6 +122,7 @@ class SQLProvider extends Provider {
 				case 'integer':
 					if (type === 'number') return value;
 					if (type === 'string') return Number(value);
+					if (value instanceof Buffer) return value[0];
 					break;
 				case 'boolean':
 					if (type === 'boolean') return value;
