@@ -1,4 +1,5 @@
 const { mergeDefault } = require('../../util/util');
+const { join } = require('path');
 
 /**
  * The common class for all pieces
@@ -95,6 +96,16 @@ class Piece {
 	 */
 	get dir() {
 		return this.core ? this.store.coreDir : this.store.userDir;
+	}
+
+	/**
+	 * The absolute path to this piece
+	 * @since 0.5.0
+	 * @type {string}
+	 * @readonly
+	 */
+	get path() {
+		return join(this.dir, ...this.file);
 	}
 
 	/**
