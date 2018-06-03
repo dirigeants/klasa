@@ -18,7 +18,7 @@ class Provider extends Piece {
 	 * @abstract
 	 */
 	async createTable() {
-		throw new Error(`[PROVIDERS] ${join(this.dir, ...this.file)} | Missing method 'createTable' of ${this.constructor.name}`);
+		throw new Error(`[PROVIDERS] ${this.path} | Missing method 'createTable' of ${this.constructor.name}`);
 	}
 
 	/**
@@ -29,7 +29,7 @@ class Provider extends Piece {
 	 * @abstract
 	 */
 	async deleteTable() {
-		throw new Error(`[PROVIDERS] ${join(this.dir, ...this.file)} | Missing method 'deleteTable' of ${this.constructor.name}`);
+		throw new Error(`[PROVIDERS] ${this.path} | Missing method 'deleteTable' of ${this.constructor.name}`);
 	}
 
 	/**
@@ -40,7 +40,7 @@ class Provider extends Piece {
 	 * @abstract
 	 */
 	async hasTable() {
-		throw new Error(`[PROVIDERS] ${join(this.dir, ...this.file)} | Missing method 'hasTable' of ${this.constructor.name}`);
+		throw new Error(`[PROVIDERS] ${this.path} | Missing method 'hasTable' of ${this.constructor.name}`);
 	}
 
 	/**
@@ -57,7 +57,7 @@ class Provider extends Piece {
 	 * @abstract
 	 */
 	async create() {
-		throw new Error(`[PROVIDERS] ${join(this.dir, ...this.file)} | Missing method 'create' of ${this.constructor.name}`);
+		throw new Error(`[PROVIDERS] ${this.path} | Missing method 'create' of ${this.constructor.name}`);
 	}
 
 	/**
@@ -69,7 +69,7 @@ class Provider extends Piece {
 	 * @abstract
 	 */
 	async delete() {
-		throw new Error(`[PROVIDERS] ${join(this.dir, ...this.file)} | Missing method 'delete' of ${this.constructor.name}`);
+		throw new Error(`[PROVIDERS] ${this.path} | Missing method 'delete' of ${this.constructor.name}`);
 	}
 
 	/**
@@ -81,7 +81,7 @@ class Provider extends Piece {
 	 * @abstract
 	 */
 	async get() {
-		throw new Error(`[PROVIDERS] ${join(this.dir, ...this.file)} | Missing method 'get' of ${this.constructor.name}`);
+		throw new Error(`[PROVIDERS] ${this.path} | Missing method 'get' of ${this.constructor.name}`);
 	}
 
 	/**
@@ -92,7 +92,7 @@ class Provider extends Piece {
 	 * @abstract
 	 */
 	async getAll() {
-		throw new Error(`[PROVIDERS] ${join(this.dir, ...this.file)} | Missing method 'getAll' of ${this.constructor.name}`);
+		throw new Error(`[PROVIDERS] ${this.path} | Missing method 'getAll' of ${this.constructor.name}`);
 	}
 
 	/**
@@ -103,7 +103,7 @@ class Provider extends Piece {
 	 * @abstract
 	 */
 	async getKeys() {
-		throw new Error(`[PROVIDERS] ${join(this.dir, ...this.file)} | Missing method 'getKeys' of ${this.constructor.name}`);
+		throw new Error(`[PROVIDERS] ${this.path} | Missing method 'getKeys' of ${this.constructor.name}`);
 	}
 
 	/**
@@ -115,7 +115,7 @@ class Provider extends Piece {
 	 * @abstract
 	 */
 	async has() {
-		throw new Error(`[PROVIDERS] ${join(this.dir, ...this.file)} | Missing method 'has' of ${this.constructor.name}`);
+		throw new Error(`[PROVIDERS] ${this.path} | Missing method 'has' of ${this.constructor.name}`);
 	}
 
 	/**
@@ -127,7 +127,7 @@ class Provider extends Piece {
 	 * @abstract
 	 */
 	async removeValue() {
-		throw new Error(`[PROVIDERS] ${join(this.dir, ...this.file)} | Missing method 'removeValue' of ${this.constructor.name}`);
+		throw new Error(`[PROVIDERS] ${this.path} | Missing method 'removeValue' of ${this.constructor.name}`);
 	}
 
 	/**
@@ -140,7 +140,7 @@ class Provider extends Piece {
 	 * @abstract
 	 */
 	async replace() {
-		throw new Error(`[PROVIDERS] ${join(this.dir, ...this.file)} | Missing method 'replace' of ${this.constructor.name}`);
+		throw new Error(`[PROVIDERS] ${this.path} | Missing method 'replace' of ${this.constructor.name}`);
 	}
 
 	/**
@@ -153,7 +153,7 @@ class Provider extends Piece {
 	 * @abstract
 	 */
 	async update() {
-		throw new Error(`[PROVIDERS] ${join(this.dir, ...this.file)} | Missing method 'update' of ${this.constructor.name}`);
+		throw new Error(`[PROVIDERS] ${this.path} | Missing method 'update' of ${this.constructor.name}`);
 	}
 
 	/**
@@ -166,7 +166,7 @@ class Provider extends Piece {
 	 * @abstract
 	 */
 	async updateValue() {
-		throw new Error(`[PROVIDERS] ${join(this.dir, ...this.file)} | Missing method 'updateValue' of ${this.constructor.name}`);
+		throw new Error(`[PROVIDERS] ${this.path} | Missing method 'updateValue' of ${this.constructor.name}`);
 	}
 
 	/**
