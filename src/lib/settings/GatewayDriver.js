@@ -196,7 +196,7 @@ class GatewayDriver {
 	 * @returns {this}
 	 * @chainable
 	 */
-	register(name, defaultSchema = {}, { download = true, provider = this.client.options.providers.default, waitForDownload = true } = {}) {
+	register(name, defaultSchema = {}, { download = false, provider = this.client.options.providers.default, waitForDownload = true } = {}) {
 		if (typeof name !== 'string') throw new TypeError('You must pass a name for your new gateway and it must be a string.');
 		if (!util.isObject(defaultSchema)) throw new TypeError('Schema must be a valid object or left undefined for an empty object.');
 		if (this.name !== undefined && this.name !== null) throw new Error(`The key '${name}' is either taken by another Gateway or reserved for GatewayDriver's functionality.`);

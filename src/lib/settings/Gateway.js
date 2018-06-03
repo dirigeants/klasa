@@ -171,7 +171,7 @@ class Gateway extends GatewayStorage {
 	 * @param {GatewayDriverRegisterOptions} GatewayInitOptions The options for init
 	 * @private
 	 */
-	async init({ download = true, defaultSchema = {}, waitForDownload = true } = {}) {
+	async init({ download, defaultSchema, waitForDownload } = {}) {
 		await super.init(defaultSchema);
 		if (download) await this._download();
 		else await this._ready(waitForDownload);
