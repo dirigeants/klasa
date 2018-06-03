@@ -103,9 +103,7 @@ class MyClient extends Client {
 }
 
 new MyClient({
-	pieceDefaults: {
-		rawEvents: { enabled: true }
-	}
+	pieceDefaults: { rawEvents: { enabled: true } }
 }).login('token-goes-here');
 ```
 
@@ -117,9 +115,9 @@ const { Event } = require('klasa');
 module.exports = class extends Event {
 
 	async run(packet) {
-		if (this.client.rawEvents.has(packet.t)) {
-			const rawEvent = this.client.rawEvents.get(packet.t);
-			if (rawEvent.enabled) rawEvent.run(packet.d);
+		const rawEvent = this.client.rawEvents.get(packet.t);
+		if (rawEvent && rawEvent.enabled) {
+			rawEvent.run(packet.d);
 		}
 	}
 
