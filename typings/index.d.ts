@@ -635,6 +635,8 @@ declare module 'klasa' {
 		public readonly client: KlasaClient;
 		public readonly core: boolean;
 		public readonly type: string;
+		public readonly dir: string;
+		public readonly path: string;
 		public file: string | string[];
 		public name: string;
 		public enabled: boolean;
@@ -1548,6 +1550,7 @@ declare module 'klasa' {
 
 	export type PieceJSON = {
 		dir: string;
+		path: string;
 		enabled: boolean;
 		file: string[];
 		name: string;
