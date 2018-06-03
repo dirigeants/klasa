@@ -102,9 +102,7 @@ class MyClient extends Client {
 
 }
 
-new MyClient({
-	pieceDefaults: { rawEvents: { enabled: true } }
-}).login('token-goes-here');
+new MyClient({ pieceDefaults: { rawEvents: { enabled: true } } }).login('token-goes-here');
 ```
 
 Now, to make our raw event store actually work, we're going to add this code in `events/raw.js` to run on every raw event received
