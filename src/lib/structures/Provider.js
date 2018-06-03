@@ -1,6 +1,5 @@
 const Piece = require('./base/Piece');
 const { isObject, mergeObjects, makeObject } = require('../util/util');
-const { join } = require('path');
 
 /**
  * Base class for all Klasa Providers. See {@tutorial CreatingProviders} for more information how to use this class
