@@ -161,7 +161,7 @@ class SchemaFolder extends Schema {
 	 * @returns {Promise<*>}
 	 * @private
 	 */
-	force(action, piece) {
+	async force(action, piece) {
 		if (!(piece instanceof SchemaPiece) && !(piece instanceof SchemaFolder)) {
 			throw new TypeError(`'schemaPiece' must be an instance of 'SchemaPiece' or an instance of 'SchemaFolder'.`);
 		}
@@ -175,7 +175,7 @@ class SchemaFolder extends Schema {
 				for (let j = 0; j < path.length; j++) value = value[path[j]];
 				value[key] = deepClone(defValue);
 			}
-			return this.gateway.provider.updateValue(this.gateway.type, piece.path, defValue);
+			return true;
 		}
 
 		if (action === 'delete') {
@@ -183,7 +183,8 @@ class SchemaFolder extends Schema {
 				for (let j = 0; j < path.length; j++) value = value[path[j]];
 				delete value[key];
 			}
-			return this.gateway.provider.removeValue(this.gateway.type, piece.path);
+			await this.gateway.provider.removeValue(this.gateway.type, piece.path);
+			return true;
 		}
 
 		throw new TypeError(`Action must be either 'add' or 'delete'. Got: ${action}`);

@@ -73,10 +73,6 @@ module.exports = class extends Provider {
 		// Update an entry from a table
 	}
 
-	updateValue(table, path, newValue) {
-		// Update the value of an object/column in all entries from a table
-	}
-
 	removeValue(table, path) {
 		// Remove the value of an object/column in all entries from a table
 	}

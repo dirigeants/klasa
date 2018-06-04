@@ -166,25 +166,12 @@ class Gateway extends GatewayStorage {
 	}
 
 	/**
-	 * Inits the table and the schema for its use in this gateway.
-	 * @since 0.0.1
-	 * @param {GatewayDriverRegisterOptions} GatewayInitOptions The options for init
-	 * @private
-	 */
-	async init({ download, defaultSchema, waitForDownload } = {}) {
-		await super.init(defaultSchema);
-		if (download) await this._download();
-		else await this._ready(waitForDownload);
-		if (!this.ready) this.ready = true;
-	}
-
-	/**
 	 * Download all entries for this database
 	 * @since 0.5.0
 	 * @private
 	 */
 	async _download() {
-		const entries = await this.provider.getAll(this.type);
+		const entries = await this.provider.getAll(this.type, [this.cache.keys()]);
 		for (const entry of entries) {
 			const cache = this.cache.get(entry);
 			if (cache) {
@@ -196,27 +183,6 @@ class Gateway extends GatewayStorage {
 				this.cache.set(entry.id, configs);
 			}
 		}
-	}
-
-	/**
-	 * Readies up all Configuration instances in this gateway
-	 * @since 0.5.0
-	 * @param {boolean} waitForDownload Whether this Gateway should wait for all the data from the gateway to be downloaded
-	 * @returns {Promise<Array<Configuration>>}
-	 * @private
-	 */
-	_ready(waitForDownload) {
-		// If the schema has no keys, there is no point on waiting for them to sync
-		if (this.schema.keyArray.length) {
-			// waitForDownload is an option recommended for gateways like clientStorage and guildConfigs, this option delays klasaReady
-			// until all entries are correctly synchronized
-			if (waitForDownload) return Promise.all(this.cache.map(entry => entry._existsInDB === null ? entry.sync() : Promise.resolve(entry)));
-
-			// Otherwise synchronize them in the background
-			for (const entry of this.cache.values()) if (entry._existsInDB === null) entry.sync();
-		}
-
-		return Promise.resolve([]);
 	}
 
 	/**

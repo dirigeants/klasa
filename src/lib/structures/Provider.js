@@ -156,19 +156,6 @@ class Provider extends Piece {
 	}
 
 	/**
-	 * The updateValue method which edits all entries to update or add a property.
-	 * @since 0.5.0
-	 * @param {string} table The table to update
-	 * @param {string} path The path of the property to add/update
-	 * @param {*} newValue The new value for the path
-	 * @returns {*}
-	 * @abstract
-	 */
-	async updateValue() {
-		throw new Error(`[PROVIDERS] ${this.path} | Missing method 'updateValue' of ${this.constructor.name}`);
-	}
-
-	/**
 	 * The shutdown method to be optionally overwritten in actual provider pieces.
 	 * @since 0.3.0
 	 * @returns {*}

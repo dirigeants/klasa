@@ -371,19 +371,7 @@ class KlasaClient extends Discord.Client {
 
 		// Providers must be init before configs, and those before all other stores.
 		await this.providers.init();
-		await this.gateways._ready();
-
-		// Automatic Prefix editing detection.
-		if (typeof this.options.prefix === 'string' && this.options.prefix !== this.gateways.guilds.schema.prefix.default) {
-			await this.gateways.guilds.schema.prefix.edit({ default: this.options.prefix });
-		}
-		if (this.gateways.guilds.schema.has('disabledCommands')) {
-			const languageStore = this.languages;
-			const commandStore = this.commands;
-			this.gateways.guilds.schema.disabledCommands.setValidator(function (command, guild) { // eslint-disable-line
-				if ((cmd => cmd && cmd.guarded)(commandStore.get(command))) throw (guild ? guild.language : languageStore.default).get('COMMAND_CONF_GUARDED', command);
-			});
-		}
+		await this.gateways.init();
 
 		this.emit('log', `Loaded in ${timer.stop()}.`);
 		return super.login(token);

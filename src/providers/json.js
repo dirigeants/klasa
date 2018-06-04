@@ -52,21 +52,21 @@ module.exports = class extends Provider {
 	/**
 	 * Get all documents from a directory.
 	 * @param {string} table The name of the directory to fetch from
-	 * @param {boolean} [nice=false] Whether the provider should update all entries at the same time or politely update them sequentially
+	 * @param {string[]} [entries] The entries to download, defaults to all keys in the directory
 	 * @returns {Object[]}
 	 */
-	async getAll(table, nice = false) {
-		const dir = resolve(this.baseDir, table);
-		const files = await fs.readdir(dir);
-
-		if (nice) {
-			const documents = [];
-			for (let i = 0; i < files.length; i++) {
-				if (files[i].endsWith('.json')) await fs.readJSON(resolve(dir, files[i])).then(documents.push);
-			}
-			return documents;
+	async getAll(table, entries) {
+		if (!entries) entries = await this.getKeys(table);
+		if (entries.length < 5000) {
+			return Promise.all(entries.map(this.get.bind(this, table)));
 		} else {
-			return Promise.all(files.filter(file => file.endsWith('.json')).map(file => fs.readJSON(resolve(dir, file))));
+			const clone = entries.slice();
+			const chunks = [];
+			while (clone.length) chunks.push(clone.splice(0, 5000));
+
+			const output = [];
+			for (const chunk of chunks) output.push(...await chunk.map(this.get.bind(this, table)));
+			return output;
 		}
 	}
 
@@ -79,8 +79,7 @@ module.exports = class extends Provider {
 		const dir = resolve(this.baseDir, table);
 		const filenames = await fs.readdir(dir);
 		const files = [];
-		for (let i = 0; i < filenames.length; i++) {
-			const filename = filenames[i];
+		for (const filename of filenames) {
 			if (filename.endsWith('.json')) files.push(filename.slice(0, filename.length - 5));
 		}
 		return files;
@@ -89,21 +88,21 @@ module.exports = class extends Provider {
 	/**
 	 * Get a document from a directory.
 	 * @param {string} table The name of the directory
-	 * @param {string} document The document name
+	 * @param {string} id The document name
 	 * @returns {Promise<?Object>}
 	 */
-	get(table, document) {
-		return fs.readJSON(resolve(this.baseDir, table, `${document}.json`)).catch(() => null);
+	get(table, id) {
+		return fs.readJSON(resolve(this.baseDir, table, `${id}.json`)).catch(() => null);
 	}
 
 	/**
 	 * Check if the document exists.
 	 * @param {string} table The name of the directory
-	 * @param {string} document The document name
+	 * @param {string} id The document name
 	 * @returns {Promise<boolean>}
 	 */
-	has(table, document) {
-		return fs.pathExists(resolve(this.baseDir, table, `${document}.json`));
+	has(table, id) {
+		return fs.pathExists(resolve(this.baseDir, table, `${id}.json`));
 	}
 
 	/**
@@ -113,24 +112,6 @@ module.exports = class extends Provider {
 	 */
 	getRandom(table) {
 		return this.getAll(table).then(data => data[Math.floor(Math.random() * data.length)]);
-	}
-
-	/**
-	 * Update or insert a new value to all entries.
-	 * @param {string} table The name of the directory
-	 * @param {string} path The key's path to update
-	 * @param {*} newValue The new value for the key
-	 * @param {boolean} [nice=false] Whether the provider should update all entries at the same time or politely update them sequentially
-	 */
-	async updateValue(table, path, newValue, nice = false) {
-		const route = path.split('.');
-		if (nice) {
-			const values = await this.getAll(table, true);
-			for (let i = 0; i < values.length; i++) await this._updateValue(table, route, values[i], newValue);
-		} else {
-			const values = await this.getAll(table);
-			await Promise.all(values.map(object => this._updateValue(table, route, object, newValue)));
-		}
 	}
 
 	/**
@@ -195,25 +176,6 @@ module.exports = class extends Provider {
 	}
 
 	/**
-	 * Update or insert a new value to a specified entry.
-	 * @param {string} table The name of the directory
-	 * @param {string[]} route An array with the path to update
-	 * @param {Object} object The entry to update
-	 * @param {*} newValue The new value for the key
-	 * @returns {Promise<void>}
-	 * @private
-	 */
-	_updateValue(table, route, object, newValue) {
-		let value = object;
-		for (let j = 0; j < route.length - 1; j++) {
-			if (typeof value[route[j]] === 'undefined') value[route[j]] = { [route[j + 1]]: {} };
-			value = value[route[j]];
-		}
-		value[route[route.length - 1]] = newValue;
-		return this.replace(table, object.id, object);
-	}
-
-	/**
 	 * Remove a value from a specified entry.
 	 * @param {string} table The name of the directory
 	 * @param {string[]} route An array with the path to update
@@ -223,8 +185,14 @@ module.exports = class extends Provider {
 	 */
 	_removeValue(table, route, object) {
 		let value = object;
-		for (let j = 0; j < route.length - 1; j++) value = value[route[j]] || {};
-		delete value[route[route.length - 1]];
+		const last = route.pop();
+		for (const piece of route) {
+			if (typeof value[piece] === 'undefined') return null;
+			value = value[piece];
+		}
+		if (typeof value[last] === 'undefined') return null;
+
+		delete value[last];
 		return this.replace(table, object.id, object);
 	}
 
