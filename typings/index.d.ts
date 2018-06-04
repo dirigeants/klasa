@@ -781,7 +781,7 @@ declare module 'klasa' {
 		public abstract updateColumn<T = any>(table: string, piece: SchemaPiece): Promise<T>;
 		protected parseUpdateInput<T = [string, any]>(updated?: ConfigurationUpdateResultEntry[] | [string, any][] | ObjectLiteral<any>, resolve?: boolean): T;
 		protected parseEntry<T = ObjectLiteral<any>>(gateway: string | Gateway, entry: ObjectLiteral<any>): T;
-		protected parseValue<T = any>(value: any, schemaPiece: SchemaPiece, skipArray?: boolean): T;
+		protected parseValue<T = any>(value: any, schemaPiece: SchemaPiece): T;
 		private _parseGatewayInput(updated: ConfigurationUpdateResultEntry[], keys: string[], values: string[], resolve?: boolean): void;
 	}
 
