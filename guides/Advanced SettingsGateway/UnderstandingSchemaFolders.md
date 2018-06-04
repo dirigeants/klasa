@@ -1,6 +1,6 @@
 # Understanding Schema
 
-A schema works like a diagram or a blueprint, in SettingGateway, the schema defines the keys present in the configuration for a specific gateway. This feature serves multiple purposes:
+A schema works like a diagram or a blueprint, in SettingsGateway, the schema defines the keys present in the configuration for a specific gateway. This feature serves multiple purposes:
 
 1. Define what keys the {@link Gateway} manages and their properties.
 1. Define what type the keys must hold.
@@ -136,5 +136,5 @@ async function init() {
 ## Further Reading:
 
 - {@tutorial UnderstandingSchemaPieces}
-- {@tutorial SettingGatewayKeyTypes}
-- {@tutorial SettingGatewayConfigurationUpdate}
+- {@tutorial SettingsGatewayKeyTypes}
+- {@tutorial SettingsGatewayConfigurationUpdate}

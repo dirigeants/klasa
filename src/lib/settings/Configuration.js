@@ -3,8 +3,8 @@ const SchemaFolder = require('./SchemaFolder');
 const SchemaPiece = require('./SchemaPiece');
 
 /**
- * <warning>Creating your own Configuration instances is often discouraged and unneeded. SettingGateway handles them internally for you.</warning>
- * The Configuration class that stores the cache for each entry in SettingGateway.
+ * <warning>Creating your own Configuration instances is often discouraged and unneeded. SettingsGateway handles them internally for you.</warning>
+ * The Configuration class that stores the cache for each entry in SettingsGateway.
  */
 class Configuration {
 

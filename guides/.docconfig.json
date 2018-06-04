@@ -9,8 +9,8 @@
         "path": "UnderstandingPermissionLevels.md"
     },
     {
-        "name": "Understanding SettingGateway",
-        "path": "UnderstandingSettingGateway.md"
+        "name": "Understanding SettingsGateway",
+        "path": "UnderstandingSettingsGateway.md"
     },
     {
         "name": "Understanding Usage Strings",
@@ -85,7 +85,7 @@
     }]
 },
 {
-    "name": "Advanced SettingGateway",
+    "name": "Advanced SettingsGateway",
     "files": [{
         "name": "Understanding SchemaFolders",
         "path": "UnderstandingSchemaFolders.md"
@@ -95,12 +95,12 @@
         "path": "UnderstandingSchemaPieces.md"
     },
     {
-        "name": "SettingGateway's Types",
-        "path": "SettingGatewayKeyTypes.md"
+        "name": "SettingsGateway's Types",
+        "path": "SettingsGatewayKeyTypes.md"
     },
     {
         "name": "Updating your Configuration",
-        "path": "SettingGatewayConfigurationUpdate.md"
+        "path": "SettingsGatewayConfigurationUpdate.md"
     }]
 },
 {

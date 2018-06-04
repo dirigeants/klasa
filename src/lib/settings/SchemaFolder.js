@@ -5,7 +5,7 @@ const fs = require('fs-nextra');
 
 /**
  * <warning>You should never create an instance of this class. Use {@link SchemaFolder#add} instead.</warning>
- * The schema class that stores (nested) folders and keys for SettingGateway usage. This class also implements multiple helpers.
+ * The schema class that stores (nested) folders and keys for SettingsGateway usage. This class also implements multiple helpers.
  * @extends Schema
  */
 class SchemaFolder extends Schema {
