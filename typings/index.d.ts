@@ -1688,9 +1688,9 @@ declare module 'klasa' {
 	};
 
 	export type ColorsFormatOptions = {
-		background: string | number | string[];
-		style: string | string[];
-		text: string | number | string[]
+		background?: string | number | string[];
+		style?: string | string[];
+		text?: string | number | string[]
 	};
 
 	export type ColorsFormatType = string | number | [string, string, string] | [number, number, number];
