@@ -180,9 +180,10 @@ class Gateway extends GatewayStorage {
 	 * @private
 	 */
 	async _download() {
-		const entries = await this.provider.getAll(this.type, [this.cache.keys()]);
+		const entries = await this.provider.getAll(this.type, [...this.cache.keys()]);
 		for (const entry of entries) {
-			const cache = this.cache.get(entry);
+			if (!entry) continue;
+			const cache = this.cache.get(entry.id);
 			if (cache) {
 				if (!cache._existsInDB) cache._existsInDB = true;
 				cache._patch(entry);
@@ -192,6 +193,8 @@ class Gateway extends GatewayStorage {
 				this.cache.set(entry.id, configs);
 			}
 		}
+		// Set all the remaining configs from unknown status in DB to not exists.
+		for (const configs of this.cache.values()) if (configs._existsInDB === null) configs._existsInDB = false;
 	}
 
 	/**
