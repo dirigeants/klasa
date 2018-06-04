@@ -115,6 +115,7 @@ class Gateway extends GatewayStorage {
 		if (typeof input === 'boolean') {
 			if (input) await this._download();
 			else await Promise.all(this.cache.map(entry => entry.sync()));
+			if (!this._synced) this._synced = true;
 			return this;
 		}
 		const target = getIdentifier(input);
