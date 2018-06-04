@@ -11,6 +11,10 @@ const Type = require('../util/Type');
  */
 class SQLProvider extends Provider {
 
+	async removeValue() {
+		// Not used for SQL databases
+	}
+
 	/**
 	 * The addColumn method which inserts/creates a new table to the database.
 	 * @since 0.5.0
@@ -102,17 +106,16 @@ class SQLProvider extends Provider {
 	 * Parse SQL values.
 	 * @since 0.5.0
 	 * @param {*} value The value to parse
-	 * @param {SchemaPiece} schemaPiece The SchemaPiece which manages this value
-	 * @param {boolean} [skipArray=false] Whether this is parsing inner keys or not
+	 * @param {SchemaPiece} schemaPiece The Scher this is parsing inner keys or not
 	 * @returns {*}
 	 * @protected
 	 */
-	parseValue(value, schemaPiece, skipArray = false) {
+	parseValue(value, schemaPiece) {
 		if (typeof value === 'undefined') return deepClone(schemaPiece.default);
-		if (!skipArray && schemaPiece.array) {
+		if (schemaPiece.array) {
 			if (value === null) return deepClone(schemaPiece.default);
 			if (typeof value === 'string') value = tryParse(value);
-			if (Array.isArray(value)) return value.map(val => this.parseValue(val, schemaPiece, true));
+			if (!Array.isArray(value)) throw new Error(`Could not parse ${value} to an array. Returned empty array instead.`);
 		} else {
 			const type = typeof value;
 			switch (schemaPiece.type) {
@@ -122,12 +125,13 @@ class SQLProvider extends Provider {
 				case 'integer':
 					if (type === 'number') return value;
 					if (type === 'string') return Number(value);
-					if (value instanceof Buffer) return value[0];
+					if (value instanceof Buffer) return Number(value[0]);
 					break;
 				case 'boolean':
 					if (type === 'boolean') return value;
 					if (type === 'number') return value === 1;
 					if (type === 'string') return value === 'true';
+					if (value instanceof Buffer) return Boolean(value[0]);
 					break;
 				case 'string':
 					if (type === 'string') return /^\s|\s$/.test(value) ? value.trim() : value;
