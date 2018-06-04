@@ -94,7 +94,7 @@ class SQLProvider extends Provider {
 		if (typeof gateway === 'string') gateway = this.client.gateways[gateway];
 		if (!(gateway instanceof Gateway)) return entry;
 
-		const object = {};
+		const object = { id: entry.id };
 		for (const piece of gateway.schema.values(true)) {
 			if (entry[piece.path]) makeObject(piece.path, this.parseValue(entry[piece.path], piece), object);
 		}
