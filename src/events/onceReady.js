@@ -13,7 +13,8 @@ module.exports = class extends Event {
 		if (this.client.user.bot) await this.client.fetchApplication();
 		if (!this.client.options.ownerID) this.client.options.ownerID = this.client.user.bot ? this.client.application.owner.id : this.client.user.id;
 
-		await this.client.gateways.sync();
+		this.client.configs = this.client.gateways.clientStorage.get(this.client.user.id, true);
+		await this.client.gateways.sync(false);
 
 		// Automatic Prefix editing detection.
 		const { prefix } = this.client.options;
@@ -27,10 +28,6 @@ module.exports = class extends Event {
 				if ((cmd => cmd && cmd.guarded)(commandStore.get(command))) throw (guild ? guild.language : languageStore.default).get('COMMAND_CONF_GUARDED', command);
 			});
 		}
-
-		// Client-wide settings
-		this.client.configs = this.client.gateways.clientStorage.get(this.client.user.id, true);
-		await this.client.configs.sync();
 
 		// Init all the pieces
 		await Promise.all(this.client.pieceStores.filter(store => !['providers', 'extendables'].includes(store.name)).map(store => store.init()));

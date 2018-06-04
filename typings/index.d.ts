@@ -493,9 +493,7 @@ declare module 'klasa' {
 		public sync(download: boolean): Promise<null>;
 		public getPath(key?: string, options?: GatewayGetPathOptions): GatewayGetPathResult | null;
 
-		public init(options: GatewayDriverRegisterOptions): Promise<void>;
 		private _download(): Promise<void>;
-		private _ready(waitForDownload: boolean): Promise<Array<Collection<string, Configuration>>>;
 		private _resolveGuild(guild: GuildResolvable): KlasaGuild;
 		private _shardSync(path: string[], data: any, action: 'add' | 'delete' | 'update'): Promise<void>;
 
@@ -520,7 +518,10 @@ declare module 'klasa' {
 		public types: Set<string>;
 		public keys: Set<string>;
 		public ready: boolean;
-		private _queue: Map<string, (() => Gateway)>;
+		public guilds: Gateway;
+		public users: Gateway;
+		public clientStorage: Gateway;
+		private _queue: Array<(() => Gateway)>;
 
 		public readonly guildsSchema: {
 			prefix: SchemaPieceJSON,
@@ -537,14 +538,9 @@ declare module 'klasa' {
 			schedules: SchemaPieceJSON
 		};
 
-		public guilds: Gateway;
-		public users: Gateway;
-		public clientStorage: Gateway;
-
 		public register(name: string, schema?: object, options?: GatewayDriverRegisterOptions): this;
-		private _register(name: string, schema?: object, options?: GatewayDriverRegisterOptions): Gateway;
-		private _ready(): Promise<Array<Array<Collection<string, Configuration>>>>;
-		private _checkProvider(engine: string): string;
+		public init(): Promise<void>;
+		public sync(): Promise<Array<null>>;
 
 		public toJSON(): GatewayDriverJSON;
 		public toString(): string;
@@ -773,7 +769,6 @@ declare module 'klasa' {
 		public abstract removeValue<T = any>(table: string, path: string): Promise<T>;
 		public abstract replace<T = any>(table: string, entry: string, data: ConfigurationUpdateResultEntry[] | [string, any][] | ObjectLiteral<any>): Promise<T>;
 		public abstract update<T = any>(table: string, entry: string, data: ConfigurationUpdateResultEntry[] | [string, any][] | ObjectLiteral<any>): Promise<T>;
-		public abstract updateValue<T = any>(table: string, path: string, newValue: any): Promise<T>;
 		protected parseUpdateInput<T = ObjectLiteral<any>>(updated: T | ConfigurationUpdateResult): T;
 
 		public shutdown(): Promise<void>;
@@ -1443,8 +1438,6 @@ declare module 'klasa' {
 
 	export type GatewayDriverRegisterOptions = {
 		provider?: string;
-		download?: boolean;
-		waitForDownload?: boolean;
 	};
 
 	export type SchemaFolderAddOptions = {

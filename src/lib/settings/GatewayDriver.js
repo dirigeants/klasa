@@ -208,12 +208,22 @@ class GatewayDriver {
 		return this;
 	}
 
+	/**
+	 * Initialise all gateways from the queue
+	 * @since 0.5.0
+	 */
 	async init() {
 		this.types = new Set(Object.getOwnPropertyNames(SettingResolver.prototype).slice(1));
 		await Promise.all([...this._queue].map(fn => fn()));
 		this._queue.length = 0;
 	}
 
+	/**
+	 * Sync all gateways
+	 * @since 0.5.0
+	 * @param {...*} args The arguments to pass to each Gateway#sync
+	 * @returns {Promise<Array<null>>}
+	 */
 	sync(...args) {
 		return Promise.all([...this.keys].map(key => this[key].sync(...args)));
 	}

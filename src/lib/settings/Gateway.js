@@ -56,6 +56,13 @@ class Gateway extends GatewayStorage {
 		 * @type {external:Collection<string, Configuration>}
 		 */
 		this.cache = new Collection();
+
+		/**
+		 * @since 0.5.0
+		 * @type {boolean}
+		 * @private
+		 */
+		Object.defineProperty(this, '_synced', { value: false, writable: true });
 	}
 
 	/**
@@ -92,7 +99,7 @@ class Gateway extends GatewayStorage {
 		if (create) {
 			const configs = new this.Configuration(this, { id });
 			this.cache.set(id, configs);
-			if (this.schema.keyArray.length) configs.sync().catch(err => this.client.emit('error', err));
+			if (this._synced && this.schema.keyArray.length) configs.sync().catch(err => this.client.emit('error', err));
 			return configs;
 		}
 		return null;
@@ -108,7 +115,7 @@ class Gateway extends GatewayStorage {
 		if (typeof input === 'boolean') {
 			if (input) await this._download();
 			else await Promise.all(this.cache.map(entry => entry.sync()));
-			return null;
+			return this;
 		}
 		const target = getIdentifier(input);
 		if (!target) throw new TypeError('The selected target could not be resolved to a string.');
@@ -118,7 +125,8 @@ class Gateway extends GatewayStorage {
 
 		const configs = new this.Configuration(this, { id: target });
 		this.cache.set(target, configs);
-		return configs.sync();
+		await configs.sync();
+		return this;
 	}
 
 	/**
