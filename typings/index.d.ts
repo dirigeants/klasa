@@ -1232,6 +1232,7 @@ declare module 'klasa' {
 		public static isObject(input: object): boolean;
 		public static isThenable(input: Promise<any>): boolean;
 		public static objectToTuples(obj: ObjectLiteral<any>, entries?: { keys: string[], values: any[] }): [string[], any[]];
+		public static chunk<T>(entries: T[], chunkSize: number): Array<T[]>;
 		public static makeObject(path: string, value: any, obj?: object): object;
 		public static arrayFromObject<T = any>(obj: ObjectLiteral<T>, prefix?: string): Array<T>;
 		public static arraysEqual(arr1: any[], arr2: any[], clone?: boolean): boolean;
