@@ -13,13 +13,13 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#284](https://github.com/dirigeants/klasa/pull/284)] Added `Util.chunk`. (bdistin)
 - [[#306](https://github.com/dirigeants/klasa/pull/306)] Added `Util.isPrimitive`. (kyranet)
 - [[#306](https://github.com/dirigeants/klasa/pull/306)] Added `constants.DEFAULTS.QUERYBUILDER`. (kyranet)
 - [[#306](https://github.com/dirigeants/klasa/pull/306)] Added `SQLProvider#updateColumn`. (kyranet)
 - [[#306](https://github.com/dirigeants/klasa/pull/306)] Added `SQLProvider#parseUpdateInput`, `Provider#parseUpdateInput`. (kyranet)
 - [[#306](https://github.com/dirigeants/klasa/pull/306)] Added `QueryBuilder` class util. (kyranet)
 - [[#284](https://github.com/dirigeants/klasa/pull/284)] Added `Configuration#waitSync()` to wait for the sync to finish. (kyranet)
-- [[#284](https://github.com/dirigeants/klasa/pull/284)] Added `GatewayDriverRegisterOptions.waitForDownload`, to sync the data in the background without blocking the load. (kyranet)
 - [[#284](https://github.com/dirigeants/klasa/pull/284)] Added `SQLProvider`. (kyranet)
 - [[#284](https://github.com/dirigeants/klasa/pull/284)] Added `SchemaPiece#sqlSchema` for consistency with `SchemaFolder#sqlSchema`. (kyranet)
 - [[#272](https://github.com/dirigeants/klasa/pull/272)] Added `disabledCorePieces` option in `KlasaClientOptions`. (bdistin)

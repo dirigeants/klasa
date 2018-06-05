@@ -763,12 +763,13 @@ declare module 'klasa' {
 		public abstract deleteTable<T = any>(table: string): Promise<T>;
 		public abstract get<T extends ObjectLiteral<any>>(table: string, entry: string): Promise<T>;
 		public abstract getAll<T extends ObjectLiteral<any>>(table: string): Promise<T[]>;
-		public abstract getKeys(table: string): Promise<string[]>;
 		public abstract has(table: string, entry: string): Promise<boolean>;
 		public abstract hasTable(table: string): Promise<boolean>;
 		public abstract removeValue<T = any>(table: string, path: string): Promise<T>;
 		public abstract replace<T = any>(table: string, entry: string, data: ConfigurationUpdateResultEntry[] | [string, any][] | ObjectLiteral<any>): Promise<T>;
 		public abstract update<T = any>(table: string, entry: string, data: ConfigurationUpdateResultEntry[] | [string, any][] | ObjectLiteral<any>): Promise<T>;
+		// The following is not required by SettingGateway but might be available in some providers
+		public getKeys(table: string): Promise<string[]>;
 		protected parseUpdateInput<T = ObjectLiteral<any>>(updated: T | ConfigurationUpdateResult): T;
 
 		public shutdown(): Promise<void>;
@@ -779,6 +780,8 @@ declare module 'klasa' {
 		public abstract addColumn<T = any>(table: string, columns: SchemaFolder | SchemaPiece): Promise<T>;
 		public abstract removeColumn<T = any>(table: string, columns: string | string[]): Promise<T>;
 		public abstract updateColumn<T = any>(table: string, piece: SchemaPiece): Promise<T>;
+		// Remove the abstraction from the parent class, as it's not required by SQLProviders (they use removeColumn instead)
+		public removeValue<T = any>(table: string, path: string): Promise<T>;
 		protected parseUpdateInput<T = [string, any]>(updated?: ConfigurationUpdateResultEntry[] | [string, any][] | ObjectLiteral<any>, resolve?: boolean): T;
 		protected parseEntry<T = ObjectLiteral<any>>(gateway: string | Gateway, entry: ObjectLiteral<any>): T;
 		protected parseValue<T = any>(value: any, schemaPiece: SchemaPiece): T;
