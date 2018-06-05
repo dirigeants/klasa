@@ -12,6 +12,7 @@ class GatewayDriver {
 	 * @typedef {Object} GatewayDriverRegisterOptions
 	 * @property {string} [provider] The name of the provider to use
 	 * @property {boolean} [download=true] Whether the Gateway should download all entries or not
+	 * @property {boolean} [waitForDownload=true] Whether this Gateway should wait for all the data from the gateway to be downloaded
 	 */
 
 	/**
@@ -53,7 +54,7 @@ class GatewayDriver {
 		 * @readonly
 		 * @private
 		 */
-		Object.defineProperty(this, '_queue', { value: new Map() });
+		Object.defineProperty(this, '_queue', { value: [] });
 
 		/**
 		 * The resolver instance this Gateway uses to parse the data.
@@ -195,50 +196,36 @@ class GatewayDriver {
 	 * @returns {this}
 	 * @chainable
 	 */
-	register(name, defaultSchema = {}, { download = true, provider = this.client.options.providers.default } = {}) {
+	register(name, defaultSchema = {}, { provider = this.client.options.providers.default } = {}) {
 		if (typeof name !== 'string') throw new TypeError('You must pass a name for your new gateway and it must be a string.');
 		if (!util.isObject(defaultSchema)) throw new TypeError('Schema must be a valid object or left undefined for an empty object.');
 		if (this.name !== undefined && this.name !== null) throw new Error(`The key '${name}' is either taken by another Gateway or reserved for GatewayDriver's functionality.`);
-		if (!this.ready) {
-			if (this._queue.has(name)) throw new Error(`There is already a Gateway with the name '${name}' in the queue.`);
-			this._queue.set(name, async () => {
-				await this._register(name, { provider }).init({ download, defaultSchema });
-				this._queue.delete(name);
-			});
-		} else {
-			this._register(name, { provider });
-		}
 
+		const gateway = new Gateway(this, name, { provider });
+		this.keys.add(name);
+		this[name] = gateway;
+		this._queue.push(gateway.init.bind(gateway, defaultSchema));
 		return this;
 	}
 
 	/**
-	 * Readies up all Gateways and Configuration instances
+	 * Initialise all gateways from the queue
 	 * @since 0.5.0
-	 * @returns {Array<Array<external:Collection<string, Configuration>>>}
-	 * @private
 	 */
-	async _ready() {
-		if (this.ready) throw new Error('The GatewayDriver has already been inited.');
+	async init() {
 		this.types = new Set(Object.getOwnPropertyNames(SettingResolver.prototype).slice(1));
-		this.ready = true;
-		return Promise.all([...this._queue.values()].map(register => register()));
+		await Promise.all([...this._queue].map(fn => fn()));
+		this._queue.length = 0;
 	}
 
 	/**
-	 * Registers a new Gateway
+	 * Sync all gateways
 	 * @since 0.5.0
-	 * @param {string} name The name for the new gateway
-	 * @param {GatewayDriverRegisterOptions} options The options for the new gateway
-	 * @returns {Gateway}
-	 * @private
+	 * @param {...*} args The arguments to pass to each Gateway#sync
+	 * @returns {Promise<Array<null>>}
 	 */
-	_register(name, options) {
-		if (!this.client.providers.has(options.provider)) throw new Error(`This provider (${options.provider}) does not exist in your system.`);
-
-		this.keys.add(name);
-		this[name] = new Gateway(this, name, options);
-		return this[name];
+	sync(...args) {
+		return Promise.all([...this.keys].map(key => this[key].sync(...args)));
 	}
 
 	/**

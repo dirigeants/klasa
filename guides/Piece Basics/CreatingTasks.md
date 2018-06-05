@@ -83,10 +83,13 @@ The pattern above is a **Crontab pattern** that runs every Tuesday and Friday at
 
 ## Further Reading:
 
+- {@tutorial CreatingArguments}
 - {@tutorial CreatingCommands}
+- {@tutorial CreatingEvents}
 - {@tutorial CreatingExtendables}
 - {@tutorial CreatingFinalizers}
 - {@tutorial CreatingInhibitors}
 - {@tutorial CreatingLanguages}
 - {@tutorial CreatingMonitors}
 - {@tutorial CreatingProviders}
+- {@tutorial CreatingSQLProviders}

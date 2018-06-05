@@ -237,9 +237,9 @@ class KlasaClient extends Discord.Client {
 
 		// Register default gateways
 		this.gateways
-			.register('guilds', this.gateways.guildsSchema, { download: false, ...this.options.gateways.guilds })
-			.register('users', this.gateways.usersSchema, { download: false, ...this.options.gateways.users })
-			.register('clientStorage', this.gateways.clientStorageSchema, { download: false, ...this.options.gateways.clientStorage });
+			.register('guilds', this.gateways.guildsSchema, this.options.gateways.guilds)
+			.register('users', this.gateways.usersSchema, this.options.gateways.users)
+			.register('clientStorage', this.gateways.clientStorageSchema, this.options.gateways.clientStorage);
 
 		/**
 		 * The Configuration instance that handles this client's configuration
@@ -371,19 +371,7 @@ class KlasaClient extends Discord.Client {
 
 		// Providers must be init before configs, and those before all other stores.
 		await this.providers.init();
-		await this.gateways._ready();
-
-		// Automatic Prefix editing detection.
-		if (typeof this.options.prefix === 'string' && this.options.prefix !== this.gateways.guilds.schema.prefix.default) {
-			await this.gateways.guilds.schema.prefix.edit({ default: this.options.prefix });
-		}
-		if (this.gateways.guilds.schema.has('disabledCommands')) {
-			const languageStore = this.languages;
-			const commandStore = this.commands;
-			this.gateways.guilds.schema.disabledCommands.setValidator(function (command, guild) { // eslint-disable-line
-				if ((cmd => cmd && cmd.guarded)(commandStore.get(command))) throw (guild ? guild.language : languageStore.default).get('COMMAND_CONF_GUARDED', command);
-			});
-		}
+		await this.gateways.init();
 
 		this.emit('log', `Loaded in ${timer.stop()}.`);
 		return super.login(token);
@@ -418,12 +406,11 @@ class KlasaClient extends Discord.Client {
 			if (!channel.messages) continue;
 			channels++;
 
-			for (const message of channel.messages.values()) {
-				if ((message.command || message.author === this.user) && now - (message.editedTimestamp || message.createdTimestamp) > commandLifetimeMs) commandMessages++;
-				else if (!message.command && now - (message.editedTimestamp || message.createdTimestamp) > lifetimeMs) messages++;
-				else continue;
-				channel.messages.delete(message.id);
-			}
+			channel.messages.sweep(message => {
+				if ((message.command || message.author === this.user) && now - (message.editedTimestamp || message.createdTimestamp) > commandLifetimeMs) return commandMessages++;
+				if (!message.command && message.author !== this.user && now - (message.editedTimestamp || message.createdTimestamp) > lifetimeMs) return messages++;
+				return false;
+			});
 		}
 
 		this.emit('debug', `Swept ${messages} messages older than ${lifetime} seconds and ${commandMessages} command messages older than ${commandLifetime} seconds in ${channels} text-based channels`);

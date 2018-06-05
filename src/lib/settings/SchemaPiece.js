@@ -15,7 +15,6 @@ class SchemaPiece extends Schema {
 	 * @property {number} [min] The new minimum range value
 	 * @property {number} [max] The new maximum range value
 	 * @property {boolean} [configurable] The new configurable value
-	 * @property {string} [sql] The new sql datatype
 	 */
 
 	/**
@@ -24,7 +23,6 @@ class SchemaPiece extends Schema {
 	 * @property {*} default The default value for the key
 	 * @property {number} min The min value for the key (String.length for String, value for number)
 	 * @property {number} max The max value for the key (String.length for String, value for number)
-	 * @property {string} sql A tuple containing the name of the column and its data type
 	 * @property {boolean} array Whether the key should be stored as Array or not
 	 * @property {boolean} configurable Whether the key should be configurable by the config command or not
 	 */
@@ -74,13 +72,6 @@ class SchemaPiece extends Schema {
 		 * @type {?number}
 		 */
 		this.max = 'max' in options ? options.max : null;
-
-		/**
-		 * A tuple of strings containing the path and the datatype.
-		 * @since 0.5.0
-		 * @type {string}
-		 */
-		this.sql = null;
 
 		/**
 		 * Whether this key should be configurable by the config command. When type is any, this key defaults to false.
@@ -137,15 +128,9 @@ class SchemaPiece extends Schema {
 		if (!isObject(options)) throw new TypeError(`SchemaPiece#edit expected an object as a parameter. Got: ${typeof options}`);
 
 		const edited = new Set();
-		if (typeof options.sql === 'string' && this.sql !== options.sql) {
-			this.sql = options.sql;
-			edited.add('SQL');
-			if (this.gateway.sql) await this.gateway.provider.updateColumn(this.gateway.type, this.path, options.sql);
-		}
 		if (typeof options.default !== 'undefined' && this.default !== options.default) {
 			this._schemaCheckDefault({ ...this.toJSON(), ...options });
 			this.default = options.default;
-			if (!edited.has('SQL')) this.sql = this._generateSQLDatatype(options.sql);
 			edited.add('DEFAULT');
 		}
 		if (typeof options.min !== 'undefined' && this.min !== options.min) {
@@ -165,9 +150,7 @@ class SchemaPiece extends Schema {
 		}
 		if (edited.size > 0) {
 			await fs.outputJSONAtomic(this.gateway.filePath, this.gateway.schema.toJSON());
-			if (this.gateway.sql && typeof this.gateway.provider.updateColumn === 'function') {
-				this.gateway.provider.updateColumn(this.gateway.type, this.key, this._generateSQLDatatype(options.sql));
-			}
+			await this.gateway.provider.updateColumn(this.gateway.type, this);
 			await this.parent._shardSyncSchema(this, 'update', false);
 			if (this.client.listenerCount('schemaKeyUpdate')) this.client.emit('schemaKeyUpdate', this);
 		}
@@ -251,18 +234,6 @@ class SchemaPiece extends Schema {
 	}
 
 	/**
-	 * Generate a new SQL datatype.
-	 * @since 0.5.0
-	 * @param {string} [sql] The new SQL datatype
-	 * @returns {string}
-	 * @private
-	 */
-	_generateSQLDatatype(sql) {
-		return typeof sql === 'string' ? sql : (this.type === 'integer' || this.type === 'float' ? 'INTEGER' :
-			this.max !== null ? `VARCHAR(${this.max})` : 'TEXT') + (this.default !== null ? ` DEFAULT ${SchemaPiece._parseSQLValue(this.default)}` : '');
-	}
-
-	/**
 	 * Patch an object applying all its properties to this instance.
 	 * @since 0.5.0
 	 * @param {Object} object The object to patch
@@ -273,7 +244,6 @@ class SchemaPiece extends Schema {
 		if (typeof object.default !== 'undefined') this.default = object.default;
 		if (typeof object.min === 'number') this.min = object.min;
 		if (typeof object.max === 'number') this.max = object.max;
-		if (typeof object.sql === 'string') this.sql = object.sql;
 		if (typeof object.configurable === 'boolean') this.configurable = object.configurable;
 	}
 
@@ -296,7 +266,6 @@ class SchemaPiece extends Schema {
 		this._schemaCheckLimits(this.min, this.max);
 		this._schemaCheckConfigurable(this.configurable);
 		this._schemaCheckDefault(this);
-		this.sql = this._generateSQLDatatype(options.sql);
 
 		return true;
 	}
@@ -313,7 +282,6 @@ class SchemaPiece extends Schema {
 			default: this.default,
 			min: this.min,
 			max: this.max,
-			sql: this.sql,
 			configurable: this.configurable
 		};
 	}
@@ -325,21 +293,6 @@ class SchemaPiece extends Schema {
 	 */
 	toString() {
 		return `SchemaPiece(${this.gateway.type}:${this.path})`;
-	}
-
-	/**
-	 * Parses a value to a valid string that can be used for SQL input.
-	 * @since 0.5.0
-	 * @param {*} value The value to parse
-	 * @returns {string}
-	 * @private
-	 */
-	static _parseSQLValue(value) {
-		const type = typeof value;
-		if (type === 'boolean' || type === 'number' || value === null) return String(value);
-		if (type === 'string') return `'${value.replace(/'/g, "''")}'`;
-		if (type === 'object') return `'${JSON.stringify(value).replace(/'/g, "''")}'`;
-		return '';
 	}
 
 }
