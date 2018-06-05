@@ -60,10 +60,7 @@ module.exports = class extends Provider {
 		if (entries.length < 5000) {
 			return Promise.all(entries.map(this.get.bind(this, table)));
 		} else {
-			const clone = entries.slice();
-			const chunks = [];
-			while (clone.length) chunks.push(clone.splice(0, 5000));
-
+			const chunks = util.chunk(entries, 5000);
 			const output = [];
 			for (const chunk of chunks) output.push(...await chunk.map(this.get.bind(this, table)));
 			return output;

@@ -80,6 +80,22 @@ class Util {
 	}
 
 	/**
+	 * Splits up an array into chunks
+	 * @since 0.5.0
+	 * @param {any[]} entries The object to be merged
+	 * @param {number} chunkSize The object to merge
+	 * @returns {any[]}
+	 */
+	static chunk(entries, chunkSize) {
+		if (!Array.isArray(entries)) throw new TypeError('entries is not an array.');
+		if (!Number.isInteger(chunkSize)) throw new TypeError('chunkSize is not an integer.');
+		const clone = entries.slice();
+		const chunks = [];
+		while (clone.length) chunks.push(clone.splice(0, chunkSize));
+		return chunks;
+	}
+
+	/**
 	 * Merges two objects
 	 * @since 0.5.0
 	 * @param {*} objTarget The object to be merged
