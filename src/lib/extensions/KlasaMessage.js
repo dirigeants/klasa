@@ -51,9 +51,9 @@ module.exports = Structures.extend('Message', Message => {
 			this.prompter = null;
 
 			/**
-			 * The ids of the responses to this message
+			 * The responses to this message
 			 * @since 0.5.0
-			 * @type {external:Snowflake[]}
+			 * @type {external:KlasaMessage[]}
 			 * @private
 			 */
 			this._responses = [];
@@ -66,12 +66,7 @@ module.exports = Structures.extend('Message', Message => {
 		 * @readonly
 		 */
 		get responses() {
-			const responses = [];
-			for (const id of this._responses) {
-				const response = this.channel.messages.get(id);
-				if (response) responses.push(response);
-			}
-			return responses;
+			return this._responses.filter(msg => !msg.deleted);
 		}
 
 		/**
@@ -189,13 +184,12 @@ module.exports = Structures.extend('Message', Message => {
 
 			for (let i = 0; i < max; i++) {
 				if (i >= _content.length) responses[i].delete();
-				else if (responses.length > i) promises.push(responses[i].edit(_content[i], _options));
+				else if (responses.length > i) promises.push(responses[i].edit(_content[i], _options).then(() => responses[i]));
 				else promises.push(this.channel.send(_content[i], _options));
 			}
 
-			const newResponses = await Promise.all(promises);
-			this._responses = newResponses.map(res => res.id);
-			return newResponses.length === 1 ? newResponses[0] : newResponses;
+			this._responses = await Promise.all(promises);
+			return this._responses.length === 1 ? this._responses[0] : this._responses;
 		}
 
 		/**

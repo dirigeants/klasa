@@ -65,3 +65,16 @@ module.exports = class extends Command {
 ```
 
 >**note:** An Emoji argument already comes included with Klasa.
+
+# Further reading
+
+- {@tutorial CreatingCommands}
+- {@tutorial CreatingEvents}
+- {@tutorial CreatingExtendables}
+- {@tutorial CreatingFinalizers}
+- {@tutorial CreatingInhibitors}
+- {@tutorial CreatingLanguages}
+- {@tutorial CreatingMonitors}
+- {@tutorial CreatingProviders}
+- {@tutorial CreatingSQLProviders}
+- {@tutorial CreatingTasks}

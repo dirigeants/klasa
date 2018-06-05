@@ -11,11 +11,15 @@ module.exports = class extends Command {
 			enabled: true,
 			runIn: ['text', 'dm', 'group'],
 			cooldown: 0,
+			deletable: false,
 			bucket: 1,
 			aliases: [],
+			guarded: false,
+			nsfw: false,
 			permissionLevel: 0,
 			requiredPermissions: [],
 			requiredConfigs: [],
+			subcommands: false,
 			description: '',
 			quotedStringSupport: false,
 			usage: '',
@@ -46,11 +50,15 @@ module.exports = class extends Command {
 | **enabled**             | `true`                           | boolean | Whether the command is enabled or not                                       |
 | **runIn**               | `['text', 'dm', 'group']`        | Array   | What channel types the command should run in                                |
 | **cooldown**            | `0`                              | number  | The amount of time before the user can run the command again in seconds     |
+| **deletable**           | `false`                          | boolean | If the responses should be deleted if the triggering message is deleted     |
 | **bucket**              | `1`                              | number  | The amount of successful command runs required before applying ratelimits   |
 | **aliases**             | `[]`                             | Array   | Any command aliases                                                         |
-| **permissionLevel**           | `0`                              | number  | The required permission level to use the command                            |
-| **requiredPermissions**            | `[]`                             | Array   | The required Discord permissions for the bot to use this command            |
+| **permissionLevel**     | `0`                              | number  | The required permission level to use the command                            |
+| **guarded**             | `false`                          | boolean | If the command can be disabled on a guild level                             |
+| **nsfw**                | `false`                          | boolean | If the command should only run in nsfw channels                             |
+| **requiredPermissions** | `[]`                             | Array   | The required Discord permissions for the bot to use this command            |
 | **requiredConfigs**     | `[]`                             | Array   | The required guild configs to use this command                              |
+| **subcommands**         | `false`                          | boolean | Whether to enable sub commands or not                                       |
 | **description**         | `''`                             | string  | The help description for the command                                        |
 | **usage**               | `''`                             | string  | The usage string for the command - See {@tutorial UnderstandingUsageStrings}|
 | **usageDelim**          | `''`                             | string  | The string to deliminate the command input for usage                        |
@@ -65,6 +73,7 @@ module.exports = class extends Command {
 
 ## Further Reading:
 
+- {@tutorial CreatingArguments}
 - {@tutorial CreatingEvents}
 - {@tutorial CreatingExtendables}
 - {@tutorial CreatingFinalizers}
@@ -72,4 +81,5 @@ module.exports = class extends Command {
 - {@tutorial CreatingLanguages}
 - {@tutorial CreatingMonitors}
 - {@tutorial CreatingProviders}
+- {@tutorial CreatingSQLProviders}
 - {@tutorial CreatingTasks}
