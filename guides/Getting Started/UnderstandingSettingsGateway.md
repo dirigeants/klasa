@@ -1,14 +1,14 @@
-# SettingGateway
+# SettingsGateway
 
-What is SettingGateway? It is an interface that connects your Discord bot with a database and ensures maximum performance by using a very refined cache system that is always up to date with the database. In a point of view, SettingGateway can be understood as an abstracted [ORM](https://en.wikipedia.org/wiki/Object-relational_mapping) as it's able to run any kind database (with a compatible {@link Provider}) and manage the data efficiently.
+What is SettingsGateway? It is an interface that connects your Discord bot with a database and ensures maximum performance by using a very refined cache system that is always up to date with the database. In a point of view, SettingsGateway can be understood as an abstracted [ORM](https://en.wikipedia.org/wiki/Object-relational_mapping) as it's able to run any kind database (with a compatible {@link Provider}) and manage the data efficiently.
 
 By default, Klasa uses the [JSON](https://github.com/dirigeants/klasa/blob/master/src/providers/json.js) provider. Do not be fooled and insta-replace with SQLite, Klasa's JSON provider writes the data [atomically](https://en.wikipedia.org/wiki/Atomicity_%28database_systems%29). In other words, it is very rare for the data to corrupt.
 
-Thanks to the abstraction of SettingGateway, the developer has many options, for example, if you want to change the database that manages the data, you just change one line of code, without needing to rewrite everything that relies on it, nor you need to rewrite the interface itself in order to be able to work with a different database.
+Thanks to the abstraction of SettingsGateway, the developer has many options, for example, if you want to change the database that manages the data, you just change one line of code, without needing to rewrite everything that relies on it, nor you need to rewrite the interface itself in order to be able to work with a different database.
 
 ## Database Engine
 
-As mentioned before, SettingGateway is abstracted, it does not rely on a very specific database, but can use any of them. In a production bot, you may want to use a process-based database such as rethinkdb, mongodb or postgresql, you can check and download them from the [klasa-pieces](https://github.com/dirigeants/klasa-pieces/) repository so you don't need to make one from scratch.
+As mentioned before, SettingsGateway is abstracted, it does not rely on a very specific database, but can use any of them. In a production bot, you may want to use a process-based database such as rethinkdb, mongodb or postgresql, you can check and download them from the [klasa-pieces](https://github.com/dirigeants/klasa-pieces/) repository so you don't need to make one from scratch.
 
 Now... how do we update it? Go to your main file, where {@link KlasaClient} is initialized, and add a new option to your {@link KlasaClientOptions}. The following code snippet as an example:
 
@@ -27,7 +27,7 @@ new KlasaClient({
 }).login('A_BEAUTIFUL_TOKEN_AINT_IT?');
 ```
 
-And now, you're using rethinkdb's provider to store the data from SettingGateway.
+And now, you're using rethinkdb's provider to store the data from SettingsGateway.
 
 ## Creating Gateways
 
@@ -96,5 +96,5 @@ Where the *clientStorage* gateway would take the default options (json provider)
 
 - {@tutorial UnderstandingSchemaPieces}
 - {@tutorial UnderstandingSchemaFolders}
-- {@tutorial SettingGatewayKeyTypes}
-- {@tutorial SettingGatewayConfigurationUpdate}
+- {@tutorial SettingsGatewayKeyTypes}
+- {@tutorial SettingsGatewayConfigurationUpdate}
