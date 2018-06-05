@@ -1,5 +1,5 @@
 /**
- * The schema class that stores (nested) folders and keys for SettingGateway usage. This class also implements multiple helpers.
+ * The schema class that stores (nested) folders and keys for SettingsGateway usage. This class also implements multiple helpers.
  * @abstract
  */
 class Schema {

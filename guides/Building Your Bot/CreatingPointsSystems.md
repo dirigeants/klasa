@@ -1,4 +1,4 @@
-Creating a points system (also known as a **Social Module**) in your bot is quite easy in Klasa, as we will use our configuration system: **SettingGateway**. You do NOT need to rewrite any of your code to change the provider, but we also suggest to **NOT** use the JSON provider for this in production, as you may reach the limit of files you can open simultaneously in your [OS](https://en.wikipedia.org/wiki/Operating_system).
+Creating a points system (also known as a **Social Module**) in your bot is quite easy in Klasa, as we will use our configuration system: **SettingsGateway**. You do NOT need to rewrite any of your code to change the provider, but we also suggest to **NOT** use the JSON provider for this in production, as you may reach the limit of files you can open simultaneously in your [OS](https://en.wikipedia.org/wiki/Operating_system).
 
 ## Setting the schema
 
@@ -114,7 +114,7 @@ module.exports = class extends Monitor {
 };
 ```
 
-Optionally, you can check if `nextLevel === message.author.configs.level` is true and update a single key instead, but the speed difference is negligible and since [SettingGateway v2.1](https://github.com/dirigeants/klasa/pull/179), the key `level` will not be updated if it did not change. As well, this overload is much faster than the JSON object overload, previously used as the only way to update multiple values.
+Optionally, you can check if `nextLevel === message.author.configs.level` is true and update a single key instead, but the speed difference is negligible and since [SettingsGateway v2.1](https://github.com/dirigeants/klasa/pull/179), the key `level` will not be updated if it did not change. As well, this overload is much faster than the JSON object overload, previously used as the only way to update multiple values.
 
 ## Creating Our Commands
 
