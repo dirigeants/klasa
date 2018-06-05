@@ -84,6 +84,7 @@ Also, if a language is disabled, and a guild has it configured, the default lang
 
 ## Further Reading:
 
+- {@tutorial CreatingArguments}
 - {@tutorial CreatingCommands}
 - {@tutorial CreatingEvents}
 - {@tutorial CreatingExtendables}
@@ -91,4 +92,5 @@ Also, if a language is disabled, and a guild has it configured, the default lang
 - {@tutorial CreatingInhibitors}
 - {@tutorial CreatingMonitors}
 - {@tutorial CreatingProviders}
+- {@tutorial CreatingSQLProviders}
 - {@tutorial CreatingTasks}

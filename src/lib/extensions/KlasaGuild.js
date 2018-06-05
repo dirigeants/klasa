@@ -35,7 +35,7 @@ module.exports = Structures.extend('Guild', Guild => {
 		 * @returns {Object}
 		 */
 		toJSON() {
-			return { ...super.toJSON(), configs: this.configs };
+			return { ...super.toJSON(), configs: this.configs.toJSON() };
 		}
 
 	}

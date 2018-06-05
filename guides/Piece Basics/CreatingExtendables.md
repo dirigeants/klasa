@@ -116,6 +116,7 @@ Where `prompt()` is your prompt function.
 
 ## Further Reading:
 
+- {@tutorial CreatingArguments}
 - {@tutorial CreatingCommands}
 - {@tutorial CreatingEvents}
 - {@tutorial CreatingFinalizers}
@@ -123,4 +124,5 @@ Where `prompt()` is your prompt function.
 - {@tutorial CreatingLanguages}
 - {@tutorial CreatingMonitors}
 - {@tutorial CreatingProviders}
+- {@tutorial CreatingSQLProviders}
 - {@tutorial CreatingTasks}

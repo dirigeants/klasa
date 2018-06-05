@@ -55,6 +55,7 @@ module.exports = class extends Monitor {
 
 ## Further Reading:
 
+- {@tutorial CreatingArguments}
 - {@tutorial CreatingCommands}
 - {@tutorial CreatingEvents}
 - {@tutorial CreatingExtendables}
@@ -62,4 +63,5 @@ module.exports = class extends Monitor {
 - {@tutorial CreatingInhibitors}
 - {@tutorial CreatingLanguages}
 - {@tutorial CreatingProviders}
+- {@tutorial CreatingSQLProviders}
 - {@tutorial CreatingTasks}
