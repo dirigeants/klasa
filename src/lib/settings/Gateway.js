@@ -2,12 +2,12 @@ const GatewayStorage = require('./GatewayStorage');
 const Configuration = require('./Configuration');
 const SchemaPiece = require('./SchemaPiece');
 const SchemaFolder = require('./SchemaFolder');
-const { Collection, Guild, GuildChannel, Message, Role, GuildMember } = require('discord.js');
+const { Collection, Guild, GuildChannel, Message } = require('discord.js');
 const { getIdentifier } = require('../util/util');
 
 /**
  * <danger>You should never create a Gateway instance by yourself.
- * Please check {@link UnderstandingSettingGateway} about how to construct your own Gateway.</danger>
+ * Please check {@link UnderstandingSettingsGateway} about how to construct your own Gateway.</danger>
  * The Gateway class that manages the data input, parsing, and output, of an entire database, while keeping a cache system sync with the changes.
  * @extends GatewayStorage
  */
@@ -26,7 +26,7 @@ class Gateway extends GatewayStorage {
 	 */
 
 	/**
-	 * @typedef {(KlasaGuild|KlasaMessage|external:TextChannel|external:VoiceChannel|external:CategoryChannel|external:GuildMember|external:Role)} GuildResolvable
+	 * @typedef {(KlasaGuild|KlasaMessage|external:GuildChannel)} GuildResolvable
 	 */
 
 	/**
@@ -56,6 +56,13 @@ class Gateway extends GatewayStorage {
 		 * @type {external:Collection<string, Configuration>}
 		 */
 		this.cache = new Collection();
+
+		/**
+		 * @since 0.5.0
+		 * @type {boolean}
+		 * @private
+		 */
+		Object.defineProperty(this, '_synced', { value: false, writable: true });
 	}
 
 	/**
@@ -92,7 +99,7 @@ class Gateway extends GatewayStorage {
 		if (create) {
 			const configs = new this.Configuration(this, { id });
 			this.cache.set(id, configs);
-			if (this.ready && this.schema.keyArray.length) configs.sync().catch(err => this.client.emit('error', err));
+			if (this._synced && this.schema.keyArray.length) configs.sync().catch(err => this.client.emit('error', err));
 			return configs;
 		}
 		return null;
@@ -108,7 +115,8 @@ class Gateway extends GatewayStorage {
 		if (typeof input === 'boolean') {
 			if (input) await this._download();
 			else await Promise.all(this.cache.map(entry => entry.sync()));
-			return null;
+			if (!this._synced) this._synced = true;
+			return this;
 		}
 		const target = getIdentifier(input);
 		if (!target) throw new TypeError('The selected target could not be resolved to a string.');
@@ -118,7 +126,8 @@ class Gateway extends GatewayStorage {
 
 		const configs = new this.Configuration(this, { id: target });
 		this.cache.set(target, configs);
-		return configs.sync();
+		await configs.sync();
+		return this;
 	}
 
 	/**
@@ -166,26 +175,15 @@ class Gateway extends GatewayStorage {
 	}
 
 	/**
-	 * Inits the table and the schema for its use in this gateway.
-	 * @since 0.0.1
-	 * @param {boolean} [download=true] Whether this Gateway should download the data from the database
-	 * @private
-	 */
-	async init({ download = true, defaultSchema = {} } = {}) {
-		await super.init(defaultSchema);
-		if (download) await this._download();
-		await this._ready();
-	}
-
-	/**
 	 * Download all entries for this database
 	 * @since 0.5.0
 	 * @private
 	 */
 	async _download() {
-		const entries = await this.provider.getAll(this.type);
+		const entries = await this.provider.getAll(this.type, [...this.cache.keys()]);
 		for (const entry of entries) {
-			const cache = this.cache.get(entry);
+			if (!entry) continue;
+			const cache = this.cache.get(entry.id);
 			if (cache) {
 				if (!cache._existsInDB) cache._existsInDB = true;
 				cache._patch(entry);
@@ -195,27 +193,8 @@ class Gateway extends GatewayStorage {
 				this.cache.set(entry.id, configs);
 			}
 		}
-	}
-
-	/**
-	 * Readies up all Configuration instances in this gateway
-	 * @since 0.5.0
-	 * @returns {Array<external:Collection<string, Configuration>>}
-	 * @private
-	 */
-	async _ready() {
-		if (!this.schema.keyArray.length || typeof this.client[this.type] === 'undefined') return null;
-		const promises = [];
-		const keys = await this.provider.getKeys(this.type);
-		const store = this.client[this.type];
-		for (let i = 0; i < keys.length; i++) {
-			const structure = store.get(keys[i]);
-			if (structure) promises.push(structure.configs.sync().then(() => this.cache.set(keys[i], structure.configs)));
-		}
-		const results = await Promise.all(promises);
-		if (!this.ready) this.ready = true;
-
-		return results;
+		// Set all the remaining configs from unknown status in DB to not exists.
+		for (const configs of this.cache.values()) if (configs._existsInDB === null) configs._existsInDB = false;
 	}
 
 	/**
@@ -226,14 +205,14 @@ class Gateway extends GatewayStorage {
 	 * @private
 	 */
 	_resolveGuild(guild) {
-		if (typeof guild === 'object') {
+		const type = typeof guild;
+		if (type === 'object' && guild !== null) {
 			if (guild instanceof Guild) return guild;
 			if ((guild instanceof GuildChannel) ||
-				(guild instanceof Message) ||
-				(guild instanceof Role) ||
-				(guild instanceof GuildMember)) return guild.guild;
+				(guild instanceof Message)) return guild.guild;
+		} else if (type === 'string' && /^\d{17,19}$/.test(guild)) {
+			return this.client.guilds.get(guild) || null;
 		}
-		if (typeof guild === 'string' && /^\d{17,19}$/.test(guild)) return this.client.guilds.get(guild);
 		return null;
 	}
 

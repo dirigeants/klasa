@@ -1,4 +1,4 @@
-# SettingGateway's Types
+# SettingsGateway's Types
 
 By default, there are several built-in types that the developer can use, and with the possibility to add custom types via {@link Extendable}s as explained below. The built-in types are:
 
@@ -66,4 +66,4 @@ module.exports = class extends Extendable {
 
 - {@tutorial UnderstandingSchemaPieces}
 - {@tutorial UnderstandingSchemaFolders}
-- {@tutorial SettingGatewayConfigurationUpdate}
+- {@tutorial SettingsGatewayConfigurationUpdate}

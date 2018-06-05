@@ -1,6 +1,6 @@
 # Understanding Schema's Keys
 
-As mentioned in the previous tutorial, {@tutorial UnderstandingSchema}, SettingGateway's schema is divided in two parts: **folders** and **pieces**. Pieces are contained in folders, but they cannot have keys nor folders. Instead, this holds the key's metadata such as its type, if it's configurable by the configuration command... you can check more information in the documentation: {@link SchemaPiece}.
+As mentioned in the previous tutorial, {@tutorial UnderstandingSchema}, SettingsGateway's schema is divided in two parts: **folders** and **pieces**. Pieces are contained in folders, but they cannot have keys nor folders. Instead, this holds the key's metadata such as its type, if it's configurable by the configuration command... you can check more information in the documentation: {@link SchemaPiece}.
 
 ## Key options
 
@@ -13,10 +13,9 @@ There are multiple options that configure the piece, they are:
 | default      | The default value for this key                                             |
 | max          | The maximum value for this key, only applies for string and numbers        |
 | min          | The minimum value for this key, only applies for string and numbers        |
-| sql          | The SQL datatype for this key                                              |
 | type         | The type for this key                                                      |
 
-> Check {@tutorial SettingGatewayKeyTypes} for the supported types and how to extend them.
+> Check {@tutorial SettingsGatewayKeyTypes} for the supported types and how to extend them.
 
 ## Default option
 
@@ -27,8 +26,6 @@ The default option is one of the last options to default, **array** defaults to 
 - If **array** is true, default will be an empty array: `[]`.
 - If **type** is boolean, default will be `false`.
 - In any other case, it will be `null`.
-
-After default, the sql type is calculated with a valid datatype. Keep in mind that it uses standard SQL types, but may work better for PostgreSQL. In any case, if you want to use a type that is very specific to your database, consider including this option.
 
 ## Editing key options
 
@@ -63,5 +60,5 @@ Changing the value of `array` from a non-string datatype can result on the issue
 ## Further Reading:
 
 - {@tutorial UnderstandingSchemaFolders}
-- {@tutorial SettingGatewayKeyTypes}
-- {@tutorial SettingGatewayConfigurationUpdate}
+- {@tutorial SettingsGatewayKeyTypes}
+- {@tutorial SettingsGatewayConfigurationUpdate}
