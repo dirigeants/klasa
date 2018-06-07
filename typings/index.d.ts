@@ -539,7 +539,7 @@ declare module 'klasa' {
 
 		public register(name: string, schema?: object, options?: GatewayDriverRegisterOptions): this;
 		public init(): Promise<void>;
-		public sync(): Promise<Array<null>>;
+		public sync(input?: string[]): Promise<Array<Gateway>>;
 
 		public toJSON(): GatewayDriverJSON;
 		public toString(): string;
