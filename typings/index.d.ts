@@ -490,10 +490,9 @@ declare module 'klasa' {
 
 		public get(input: string | number, create?: boolean): Configuration;
 		public sync(input?: object | string): Promise<Configuration>;
-		public sync(download: boolean): Promise<null>;
+		public sync(input?: string[]): Promise<Gateway>;
 		public getPath(key?: string, options?: GatewayGetPathOptions): GatewayGetPathResult | null;
 
-		private _download(): Promise<void>;
 		private _resolveGuild(guild: GuildResolvable): KlasaGuild;
 		private _shardSync(path: string[], data: any, action: 'add' | 'delete' | 'update'): Promise<void>;
 

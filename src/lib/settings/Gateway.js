@@ -113,6 +113,7 @@ class Gateway extends GatewayStorage {
 	 */
 	async sync(input = [...this.cache.keys()]) {
 		if (Array.isArray(input)) {
+			if (!this._synced) this._synced = true;
 			const entries = await this.provider.getAll(this.type, input);
 			for (const entry of entries) {
 				if (!entry) continue;
@@ -126,7 +127,6 @@ class Gateway extends GatewayStorage {
 					this.cache.set(entry.id, configs);
 				}
 			}
-			if (!this._synced) this._synced = true;
 
 			// Set all the remaining configs from unknown status in DB to not exists.
 			for (const configs of this.cache.values()) if (configs._existsInDB === null) configs._existsInDB = false;
