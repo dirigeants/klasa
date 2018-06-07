@@ -109,13 +109,11 @@ class Gateway extends GatewayStorage {
 	 * Sync either all entries from the cache with the persistent database, or a single one.
 	 * @since 0.0.1
 	 * @param {(Object|string|boolean)} [input=false] An object containing a id property, like discord.js objects, or a string
-	 * @returns {?Configuration}
+	 * @returns {?Gateway}
 	 */
 	async sync(input = false) {
-		if (typeof input === 'boolean') {
-			if (input) await this._download();
-			else await Promise.all(this.cache.map(entry => entry.sync()));
-			if (!this._synced) this._synced = true;
+		if (input === true) {
+			await this._download();
 			return this;
 		}
 		const target = getIdentifier(input);
@@ -180,7 +178,9 @@ class Gateway extends GatewayStorage {
 	 * @private
 	 */
 	async _download() {
-		const entries = await this.provider.getAll(this.type, [...this.cache.keys()]);
+		const keys = [...this.cache.keys()];
+		if (!this._synced) this._synced = true;
+		const entries = await this.provider.getAll(this.type, keys);
 		for (const entry of entries) {
 			if (!entry) continue;
 			const cache = this.cache.get(entry.id);
