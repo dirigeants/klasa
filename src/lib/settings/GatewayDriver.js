@@ -50,7 +50,7 @@ class GatewayDriver {
 		 * The register creation queue.
 		 * @since 0.5.0
 		 * @name GatewayDriver#_queue
-		 * @type {Map<string, Function>}
+		 * @type {Array<Function>}
 		 * @readonly
 		 * @private
 		 */
