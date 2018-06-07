@@ -489,8 +489,8 @@ declare module 'klasa' {
 		public readonly cache: Collection<string, Configuration>;
 
 		public get(input: string | number, create?: boolean): Configuration;
-		public sync(input?: object | string): Promise<Configuration>;
 		public sync(input?: string[]): Promise<Gateway>;
+		public sync(input: string | { id?: string, name?: string }): Promise<Configuration>;
 		public getPath(key?: string, options?: GatewayGetPathOptions): GatewayGetPathResult | null;
 
 		private _resolveGuild(guild: GuildResolvable): KlasaGuild;
