@@ -140,8 +140,7 @@ class Gateway extends GatewayStorage {
 
 		const configs = new this.Configuration(this, { id: target });
 		this.cache.set(target, configs);
-		await configs.sync();
-		return this;
+		return configs.sync();
 	}
 
 	/**
