@@ -222,7 +222,7 @@ class GatewayDriver {
 	 * Sync all gateways
 	 * @since 0.5.0
 	 * @param {...*} args The arguments to pass to each Gateway#sync
-	 * @returns {Promise<Array<null>>}
+	 * @returns {Promise<Array<Gateway>>}
 	 */
 	sync(...args) {
 		return Promise.all([...this.keys].map(key => this[key].sync(...args)));
