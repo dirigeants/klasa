@@ -126,7 +126,7 @@ class Configuration {
 	 * @since 0.5.0
 	 * @returns {this}
 	 */
-	async sync() {
+	sync() {
 		// Await current sync status from the sync queue
 		const syncStatus = this.gateway.syncQueue.get(this.id);
 		if (syncStatus) return syncStatus;
