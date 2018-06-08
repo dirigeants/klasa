@@ -445,8 +445,8 @@ declare module 'klasa' {
 		public readonly client: KlasaClient;
 		public readonly gateway: Gateway;
 		public readonly id: string;
+		public readonly synchronizing: boolean;
 		private _existsInDB: boolean;
-		private _syncStatus?: Promise<void>;
 
 		public get(key: string): any;
 		public get<T>(key: string): T;
@@ -487,6 +487,7 @@ declare module 'klasa' {
 		public defaultSchema: object;
 		public readonly resolver: SettingResolver;
 		public readonly cache: Collection<string, Configuration>;
+		public readonly syncQueue: Collection<string, Promise<Configuration>>;
 
 		public get(input: string | number, create?: boolean): Configuration;
 		public sync(input?: object | string): Promise<Configuration>;

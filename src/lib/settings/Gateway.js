@@ -46,16 +46,25 @@ class Gateway extends GatewayStorage {
 		super(store.client, type, provider);
 
 		/**
+		 * The GatewayDriver that manages this Gateway
 		 * @since 0.0.1
 		 * @type {GatewayDriver}
 		 */
 		this.store = store;
 
 		/**
+		 * The cached entries for this Gateway
 		 * @since 0.0.1
 		 * @type {external:Collection<string, Configuration>}
 		 */
 		this.cache = new Collection();
+
+		/**
+		 * The synchronization queue for all Configuration instances
+		 * @since 0.5.0
+		 * @type {external:Collection<string, Promise<Configuration>>}
+		 */
+		this.syncQueue = new Collection();
 
 		/**
 		 * @since 0.5.0
