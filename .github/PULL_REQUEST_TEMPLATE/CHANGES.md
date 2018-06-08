@@ -1,6 +1,6 @@
 ---
 name: Add or Remove Methods or Properties
-about: Modifies / removes currently existing functions or adds new functions to the framework
+about: Modifies / removes currently existing functions or adds new functions to the framework.
 
 ---
 

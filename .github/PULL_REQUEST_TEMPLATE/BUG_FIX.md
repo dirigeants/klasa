@@ -1,6 +1,6 @@
 ---
 name: Bug Fix
-about: Fixes a bug or more bugs that showed up
+about: Fixes a bug or more bugs that showed up.
 
 ---
 

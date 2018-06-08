@@ -1,6 +1,6 @@
 ---
 name: Submit an issue
-about: Describe us an issue you've received with Klasa
+about: Describe us an issue you've received with Klasa.
 
 ---
 
