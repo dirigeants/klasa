@@ -443,10 +443,9 @@ class Configuration {
 			this._existsInDB = true;
 			if (this.client.listenerCount('configCreateEntry')) this.client.emit('configCreateEntry', this);
 		}
-		const oldClone = this.client.listenerCount('configUpdateEntry') ? this.clone() : null;
 
 		await this.gateway.provider.update(this.gateway.type, this.id, updated);
-		if (oldClone !== null) this.client.emit('configUpdateEntry', oldClone, this, updated);
+		if (this.client.listenerCount('configUpdateEntry')) this.client.emit('configUpdateEntry', this, updated);
 	}
 
 	/**
