@@ -124,7 +124,7 @@ class Configuration {
 	/**
 	 * Sync the data from the database with the cache.
 	 * @since 0.5.0
-	 * @returns {this}
+	 * @returns {Promise<this>}
 	 */
 	sync() {
 		// Await current sync status from the sync queue
