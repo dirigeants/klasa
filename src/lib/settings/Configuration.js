@@ -118,8 +118,7 @@ class Configuration {
 	 * @returns {Promise<this>}
 	 */
 	waitSync() {
-		const syncStatus = this.gateway.syncQueue.get(this.id);
-		return syncStatus || Promise.resolve(this);
+		return this.gateway.syncQueue.get(this.id) || Promise.resolve(this);
 	}
 
 	/**
