@@ -62,7 +62,7 @@ module.exports = class extends Provider {
 		} else {
 			const chunks = util.chunk(entries, 5000);
 			const output = [];
-			for (const chunk of chunks) output.push(...await chunk.map(this.get.bind(this, table)));
+			for (const chunk of chunks) output.push(...await Promise.all(chunk.map(this.get.bind(this, table))));
 			return output;
 		}
 	}
