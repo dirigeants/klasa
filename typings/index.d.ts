@@ -492,11 +492,10 @@ declare module 'klasa' {
 		public readonly cache: Collection<string, Configuration>;
 
 		public get(input: string | number, create?: boolean): Configuration;
-		public sync(input?: object | string): Promise<Configuration>;
-		public sync(download: boolean): Promise<null>;
+		public sync(input?: string[]): Promise<Gateway>;
+		public sync(input: string | { id?: string, name?: string }): Promise<Configuration>;
 		public getPath(key?: string, options?: GatewayGetPathOptions): GatewayGetPathResult | null;
 
-		private _download(): Promise<void>;
 		private _resolveGuild(guild: GuildResolvable): KlasaGuild;
 		private _shardSync(path: string[], data: any, action: 'add' | 'delete' | 'update'): Promise<void>;
 
@@ -543,7 +542,7 @@ declare module 'klasa' {
 
 		public register(name: string, schema?: object, options?: GatewayDriverRegisterOptions): this;
 		public init(): Promise<void>;
-		public sync(): Promise<Array<null>>;
+		public sync(input?: string[]): Promise<Array<Gateway>>;
 
 		public toJSON(): GatewayDriverJSON;
 		public toString(): string;

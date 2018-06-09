@@ -108,14 +108,28 @@ class Gateway extends GatewayStorage {
 	/**
 	 * Sync either all entries from the cache with the persistent database, or a single one.
 	 * @since 0.0.1
-	 * @param {(Object|string|boolean)} [input=false] An object containing a id property, like discord.js objects, or a string
-	 * @returns {?Configuration}
+	 * @param {(Object|string|boolean)} [input=Array<string>] An object containing a id property, like discord.js objects, or a string
+	 * @returns {?(Gateway|Configuration)}
 	 */
-	async sync(input = false) {
-		if (typeof input === 'boolean') {
-			if (input) await this._download();
-			else await Promise.all(this.cache.map(entry => entry.sync()));
+	async sync(input = [...this.cache.keys()]) {
+		if (Array.isArray(input)) {
 			if (!this._synced) this._synced = true;
+			const entries = await this.provider.getAll(this.type, input);
+			for (const entry of entries) {
+				if (!entry) continue;
+				const cache = this.cache.get(entry.id);
+				if (cache) {
+					if (!cache._existsInDB) cache._existsInDB = true;
+					cache._patch(entry);
+				} else {
+					const configs = new this.Configuration(this, entry);
+					configs._existsInDB = true;
+					this.cache.set(entry.id, configs);
+				}
+			}
+
+			// Set all the remaining configs from unknown status in DB to not exists.
+			for (const configs of this.cache.values()) if (configs._existsInDB === null) configs._existsInDB = false;
 			return this;
 		}
 		const target = getIdentifier(input);
@@ -126,8 +140,7 @@ class Gateway extends GatewayStorage {
 
 		const configs = new this.Configuration(this, { id: target });
 		this.cache.set(target, configs);
-		await configs.sync();
-		return this;
+		return configs.sync();
 	}
 
 	/**
@@ -172,29 +185,6 @@ class Gateway extends GatewayStorage {
 		}
 
 		return { piece, route: piece.path.split('.') };
-	}
-
-	/**
-	 * Download all entries for this database
-	 * @since 0.5.0
-	 * @private
-	 */
-	async _download() {
-		const entries = await this.provider.getAll(this.type, [...this.cache.keys()]);
-		for (const entry of entries) {
-			if (!entry) continue;
-			const cache = this.cache.get(entry.id);
-			if (cache) {
-				if (!cache._existsInDB) cache._existsInDB = true;
-				cache._patch(entry);
-			} else {
-				const configs = new this.Configuration(this, entry);
-				configs._existsInDB = true;
-				this.cache.set(entry.id, configs);
-			}
-		}
-		// Set all the remaining configs from unknown status in DB to not exists.
-		for (const configs of this.cache.values()) if (configs._existsInDB === null) configs._existsInDB = false;
 	}
 
 	/**
