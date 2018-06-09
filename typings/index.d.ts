@@ -461,6 +461,7 @@ declare module 'klasa' {
 		public update(key: string, value: any, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
 		public update(key: string, value: any, guild?: GuildResolvable, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
 		public update(key: string[], value: any[], options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
+		public update(key: string[], value: any[], guild?: GuildResolvable, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
 		public list(message: KlasaMessage, path: SchemaFolder | string): string;
 		public resolveString(message: KlasaMessage, path: SchemaPiece | string): string;
 
