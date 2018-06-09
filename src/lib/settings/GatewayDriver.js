@@ -216,6 +216,7 @@ class GatewayDriver {
 		this.types = new Set(Object.getOwnPropertyNames(SettingResolver.prototype).slice(1));
 		await Promise.all([...this._queue].map(fn => fn()));
 		this._queue.length = 0;
+		this.ready = true;
 	}
 
 	/**
