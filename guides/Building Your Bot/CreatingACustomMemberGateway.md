@@ -25,28 +25,35 @@ And that's it, we now have a built in members gateway, however we have no way of
 
 ## Creating Our Own GuildMember Class
 
-We have the Gateway, so we just need to use a {@link Extendable} to use it properly. Make a new Extendable in /extendables and call it `GuildMember`. Add this in:
+We have the Gateway, so we just need to use [Custom Structures](https://discord.js.org/#/docs/main/master/class/Structures) to use it properly. Make a new file, and add this:
 
 ```javascript
-const { Extendable } = require('klasa');
+const { Structures } = require('discord.js');
 
-module.exports = class extends Extendable {
-
-	constructor(...args) {
-		super(...args, {
-			appliesTo: ['GuildMember'],
-			name: 'configs',
-			enabled: true,
-			klasa: false
-		});
+Structures.extend("GuildMember", GuildMember => class MyMember extends GuildMember {
+	constructor (...args) {
+		super(...args);
+		this.configs = this.client.gateways.members.get(`${this.guild.id}-${this.id}`, true);
 	}
+});
 
-	get extend() {
-		// we pass "true" here to create an entry, if it doesn't exist.
-		return this.client.gateways.members.get(`${this.guild.id}-${this.id}`, true);
+```
+
+Then, you'll need to require it somewhere; I suggest in your entry point. 
+
+```javascript
+require('./path-to/extention');
+
+client.gateways.register('members', {
+	experience: {
+		type: 'Integer',
+		default: 10
+	},
+	level: {
+		type: 'Integer',
+		default: 1
 	}
-
-};
+}, { provider: 'rethinkdb' });
 
 ```
 
