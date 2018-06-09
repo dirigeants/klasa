@@ -75,12 +75,6 @@ class GatewayDriver {
 		this.keys = new Set();
 
 		/**
-		 * If the driver is ready
-		 * @type {boolean}
-		 */
-		this.ready = false;
-
-		/**
 		 * The Gateway that manages per-guild data
 		 * @type {?Gateway}
 		 */
@@ -146,7 +140,7 @@ class GatewayDriver {
 	 * The data schema Klasa uses for user configs.
 	 * @since 0.5.0
 	 * @readonly
-	 * @type {GatewayDriverGuildsSchema}
+	 * @type {GatewayDriverUsersSchema}
 	 */
 	get usersSchema() {
 		return {};
@@ -216,7 +210,6 @@ class GatewayDriver {
 		this.types = new Set(Object.getOwnPropertyNames(SettingResolver.prototype).slice(1));
 		await Promise.all([...this._queue].map(fn => fn()));
 		this._queue.length = 0;
-		this.ready = true;
 	}
 
 	/**
