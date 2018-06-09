@@ -9,7 +9,6 @@ module.exports = {
 	KlasaUser: require('./lib/extensions/KlasaUser'),
 
 	// lib/parsers
-	ArgResolver: require('./lib/parsers/ArgResolver'),
 	Resolver: require('./lib/parsers/Resolver'),
 	SettingResolver: require('./lib/parsers/SettingResolver'),
 
@@ -34,6 +33,8 @@ module.exports = {
 	Store: require('./lib/structures/base/Store'),
 
 	// lib/structures
+	Argument: require('./lib/structures/Argument'),
+	ArgumentStore: require('./lib/structures/ArgumentStore'),
 	Command: require('./lib/structures/Command'),
 	CommandStore: require('./lib/structures/CommandStore'),
 	Event: require('./lib/structures/Event'),
@@ -50,6 +51,7 @@ module.exports = {
 	MonitorStore: require('./lib/structures/MonitorStore'),
 	Provider: require('./lib/structures/Provider'),
 	ProviderStore: require('./lib/structures/ProviderStore'),
+	SQLProvider: require('./lib/structures/SQLProvider'),
 	Task: require('./lib/structures/Task'),
 	TaskStore: require('./lib/structures/TaskStore'),
 
@@ -67,11 +69,13 @@ module.exports = {
 	constants: require('./lib/util/constants'),
 	Cron: require('./lib/util/Cron'),
 	Duration: require('./lib/util/Duration'),
+	QueryBuilder: require('./lib/util/QueryBuilder'),
 	ReactionHandler: require('./lib/util/ReactionHandler'),
 	RichDisplay: require('./lib/util/RichDisplay'),
 	RichMenu: require('./lib/util/RichMenu'),
 	Stopwatch: require('./lib/util/Stopwatch'),
 	Timestamp: require('./lib/util/Timestamp'),
+	Type: require('./lib/util/Type'),
 	util: require('./lib/util/util'),
 
 	// version
@@ -197,4 +201,8 @@ module.exports = {
 /**
  * @external PermissionResolvable
  * @see {@link https://discord.js.org/#/docs/main/master/typedef/PermissionResolvable}
+ */
+/**
+ * @external Snowflake
+ * @see {@link https://discord.js.org/#/docs/main/stable/typedef/Snowflake}
  */

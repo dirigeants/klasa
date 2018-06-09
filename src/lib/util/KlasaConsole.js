@@ -14,9 +14,10 @@ class KlasaConsole extends Console {
 	 * @typedef {Object} KlasaConsoleConfig
 	 * @property {KlasaConsoleColorStyles} [colors] The console color styles
 	 * @property {NodeJS.WritableStream} [stdout] The WritableStream for the output logs
-	 * @property {NodeJS.WritableStream} [stderr] The WritableStrwam for the error logs
+	 * @property {NodeJS.WritableStream} [stderr] The WritableStream for the error logs
 	 * @property {(boolean|string)} [timestamps] If false, it won't use timestamps. Otherwise it will use 'YYYY-MM-DD HH:mm:ss' if true or custom if string is given
 	 * @property {boolean} [useColor] Whether the timestamps should use colours
+	 * @property {boolean} [utc] If the timestamps should be in utc
 	 */
 
 	/**
@@ -122,42 +123,58 @@ class KlasaConsole extends Console {
 		 */
 		Object.defineProperty(this, 'stderr', { value: options.stderr });
 
+		Colors.useColors = typeof options.useColor === 'undefined' ? this.stdout.isTTY || false : options.useColor;
+
 		/**
 		 * Whether or not timestamps should be enabled for this console.
 		 * @since 0.5.0
-		 * @type {Timestamp}
+		 * @type {?Timestamp}
 		 */
 		this.template = options.timestamps !== false ? new Timestamp(options.timestamps === true ? 'YYYY-MM-DD HH:mm:ss' : options.timestamps) : null;
 
 		/**
-		 * Whether or not this console should use colors.
-		 * @since 0.4.0
-		 * @type {boolean}
-		 */
-		this.useColors = typeof options.useColor === 'undefined' ? this.stdout.isTTY || false : options.useColor;
-
-		/**
 		 * The colors for this console.
 		 * @since 0.4.0
-		 * @name KlasaConsole#colors
-		 * @type {(boolean|KlasaConsoleColorStyles)}
+		 * @type {object}
 		 */
-		this.colors = options.colors;
+		this.colors = {};
+
+		for (const [name, formats] of Object.entries(options.colors)) {
+			this.colors[name] = {};
+			for (const [type, format] of Object.entries(formats)) this.colors[name][type] = new Colors(format);
+		}
+
+		/**
+		 * Whether the timestamp should be in utc or not
+		 * @since 0.5.0
+		 * @type {boolean}
+		 */
+		this.utc = options.utc;
 	}
 
+	/**
+	 * The timestamp to use
+	 * @type {string}
+	 * @private
+	 */
+	get timestamp() {
+		return this.utc ? this.template.displayUTC() : this.template.display();
+	}
 
 	/**
 	 * Logs everything to the console/writable stream.
 	 * @since 0.4.0
-	 * @param {*} data The data we want to print
+	 * @param {Array<*>} data The data we want to print
 	 * @param {string} [type="log"] The type of log, particularly useful for coloring
+	 * @private
 	 */
 	write(data, type = 'log') {
-		data = KlasaConsole._flatten(data, this.useColors);
-		const color = this.colors[type.toLowerCase()] || {};
-		const timestamp = this.template ? `${this.timestamp(`[${this.template}]`, color.time || {})} ` : '';
-		const shard = this.client.shard ? `${this.shard(`[${this.client.shard.id}]`, color.shard)} ` : '';
-		super[color.type || 'log'](data.split('\n').map(str => `${timestamp}${shard}${this.messages(str, color.message)}`).join('\n'));
+		type = type.toLowerCase();
+		data = data.map(this.constructor._flatten).join('\n');
+		const { time, shard, message } = this.colors[type];
+		const timestamp = this.template ? time.format(`[${this.timestamp}]`) : '';
+		const shd = this.client.shard ? shard.format(`[${this.client.shard.id}]`) : '';
+		super[constants.DEFAULTS.CONSOLE.types[type] || 'log'](data.split('\n').map(str => `${timestamp}${shd} ${message.format(str)}`).join('\n'));
 	}
 
 	/**
@@ -221,55 +238,19 @@ class KlasaConsole extends Console {
 	}
 
 	/**
-	 * Logs everything to the console/writable stream.
-	 * @since 0.4.0
-	 * @param {string} input The timestamp to maybe format
-	 * @param {ColorsFormatOptions} time The time format used for coloring
-	 * @returns {string}
-	 */
-	timestamp(input, time) {
-		if (!this.useColors) return input;
-		return Colors.format(input, time);
-	}
-
-	/**
-	 * Logs everything to the console/writable stream.
-	 * @since 0.5.0
-	 * @param {string} input The shard string to maybe format
-	 * @param {ColorsFormatOptions} shard The shard format used for coloring
-	 * @returns {string}
-	 */
-	shard(input, shard) {
-		if (!this.useColors) return input;
-		return Colors.format(input, shard);
-	}
-
-	/**
-	 * Logs everything to the console/writable stream.
-	 * @since 0.4.0
-	 * @param {string} input The data we want to print
-	 * @param {ColorsFormatOptions} message The message format used for coloring
-	 * @returns {string}
-	 */
-	messages(input, message) {
-		if (!this.useColors) return input;
-		return Colors.format(input, message);
-	}
-
-	/**
 	 * Flattens our data into a readable string.
 	 * @since 0.4.0
 	 * @param {*} data Some data to flatten
-	 * @param {boolean} useColors Whether or not the inspection should color the output
 	 * @returns {string}
 	 * @private
 	 */
-	static _flatten(data, useColors) {
+	static _flatten(data) {
 		if (typeof data === 'undefined' || typeof data === 'number' || data === null) return String(data);
 		if (typeof data === 'string') return data;
 		if (typeof data === 'object') {
-			if (Array.isArray(data)) return data.join('\n');
-			return data.stack || data.message || inspect(data, { depth: 0, colors: useColors });
+			const isArray = Array.isArray(data);
+			if (isArray && data.every(datum => typeof datum === 'string')) return data.join('\n');
+			return data.stack || data.message || inspect(data, { depth: Number(isArray), colors: Colors.useColors });
 		}
 		return String(data);
 	}

@@ -1,11 +1,11 @@
 Permission Levels are what defines who has permission to use what command. They cascade up to a permission level break, so guild owners can do everything the lower levels can do, and so on.
 
-For instace the conf command requires level 6 to run, by default this is how it works:
+For instance the conf command requires level 6 to run, by default this is how it works:
 
 - level 6 requires 'MANAGE_GUILD' Permission: true/false
-- level 7 is the guild Owner: true/false
+- level 7 is the Guild Owner: true/false
 - level 8 is not defined, and always returns false
-- level 9 is the bot owner, and has break so we will stop checking higher rules: true/false
+- level 9 is the Bot Owner, and has break so we will stop checking higher rules: true/false
 
 If any check from 6-9 returns true, the user will be able to run that command. Also, if no break is encountered, the command will silently fail, instead of telling the user "they don't have permission to use x command"...
 
@@ -16,7 +16,7 @@ Pretend for a moment, that permission levels work like this:
 <!-- eslint-disable no-fallthrough -->
 
 ```javascript
-function permissionLevel(client, msg) {
+function permissionLevel(client, message) {
 	switch (level) {
 		case 0:
 			return true;
@@ -26,15 +26,15 @@ function permissionLevel(client, msg) {
 		case 4:
 		case 5:
 		case 6:
-			if (msg.guild && msg.member.permissions.has('MANAGE_GUILD')) return true;
+			if (message.guild && message.member.permissions.has('MANAGE_GUILD')) return true;
 		case 7:
-			if (msg.guild && msg.member === msg.guild.owner) return true;
+			if (message.guild && message.member === message.guild.owner) return true;
 		case 8:
 		case 9:
-			if (msg.author === client.owner) return true;
+			if (message.author === client.owner) return true;
 			break;
 		case 10:
-			if (msg.author === client.owner) return true;
+			if (message.author === client.owner) return true;
 			return false;
 	}
 	throw 'You don\'t have permission';
@@ -43,13 +43,13 @@ function permissionLevel(client, msg) {
 
 <!-- eslint-enable no-fallthrough -->
 
-Completely ignoring that your check function can be async and returning false is how you progress to the next check if applicable, it works like that. It checks levels starting with the __minimum level__ acceptable for any action. (Usually a {@link Command#permLevel}) And it continues checking higher levels until it __returns true__ or hits a break. And if there is no break when levels run out, it's silent.
+Completely ignoring that your check function can be async and returning false is how you progress to the next check if applicable, it works like that. It checks levels starting with the __minimum level__ acceptable for any action. (Usually a {@link Command#permissionLevel}) And it continues checking higher levels until it __returns true__ or hits a break. And if there is no break when levels run out, it's silent.
 
-This does mean that you can design permission levels where guild owners, and even you the client/bot owner can't access. Say you have a breaking permission level 3 that checks if `msg.author.configs.xp >= 1000`. When a command with a permLevel of 3 is called, if you don't have that much xp, it will return you don't have permission to use that command even though you may satisfy higher levels. It breaks at that level, and won't check anything higher.
+This does mean that you can design permission levels where guild owners, and even you the client/bot owner can't access. Say you have a breaking permission level 3 that checks if `message.author.configs.xp >= 1000`. When a command with a permissionLevel of 3 is called, if you don't have that much xp, it will return you don't have permission to use that command even though you may satisfy higher levels. It breaks at that level, and won't check anything higher.
 
 ## Creating Completely Custom PermissionLevels
 
-Each level consists of a number (the level), a boolean (whether the level is a break or not), and a function (the check function that returns true or false). Check: {@link PermissionLevels#addLevel}
+Each level consists of a number (the level), a function (the check function that returns true or false), and an options object with break (if the level is breaking) and fetch (if the level should autofetch member when appropriate). Check: {@link PermissionLevels#add}
 
 Example:
 
@@ -65,18 +65,18 @@ config.permissionLevels = new PermissionLevels()
 	 * could put your server at risk of malicious users using the core eval command.
 	 */
 	// everyone can use these commands
-	.addLevel(0, false, () => true)
+	.add(0, () => true)
 	// Members of guilds must have 'MANAGE_GUILD' permission
-	.addLevel(6, false, (client, msg) => msg.guild && msg.member.permissions.has('MANAGE_GUILD'))
+	.add(6, (client, message) => message.guild && message.member.permissions.has('MANAGE_GUILD'), { fetch: true })
 	// The member using this command must be the guild owner
-	.addLevel(7, false, (client, msg) => msg.guild && msg.member === msg.guild.owner)
+	.add(7, (client, message) => message.guild && message.member === message.guild.owner, { fetch: true })
 	/*
 	 * Allows the Bot Owner to use any lower commands
 	 * and causes any command with a permission level 9 or lower to return an error if no check passes.
 	 */
-	.addLevel(9, true, (client, msg) => msg.author === client.owner)
+	.add(9, (client, message) => message.author === client.owner, { break: true })
 	// Allows the bot owner to use Bot Owner only commands, which silently fail for other users.
-	.addLevel(10, false, (client, msg) => msg.author === client.owner);
+	.add(10, (client, message) => message.author === client.owner);
 
 new Client(config).login(config.token);
 ```
@@ -93,11 +93,11 @@ const config = require('./config.json');
 
 Client.defaultPermissionLevels
 	// let some group of people who solved some easteregg clues use a special command/some custom non-admin role
-	.addLevel(3, false, (client, msg) => msg.guild.configs.solvers.includes(msg.author.id))
+	.add(3, (client, message) => message.guild.configs.solvers.includes(message.author.id))
 	// Make the requirements to use the conf command stricter than just who can add the bot to the guild
-	.addLevel(6, false, (client, msg) => msg.guild && msg.member.permissions.has('ADMINISTRATOR'))
+	.add(6, (client, message) => message.guild && message.member.permissions.has('ADMINISTRATOR'), { fetch: true })
 	// add a role above guild owners that let your support team help setup/troubleshoot on other guilds.
-	.addLevel(8, false, (client, msg) => client.configs.botSupportTeam.includes(msg.author.id));
+	.add(8, (client, message) => client.configs.botSupportTeam.includes(message.author.id));
 
 new Client(config).login(config.token);
 ```
@@ -108,15 +108,15 @@ Permission levels are fairly close to Komada's Permission levels, with a few exc
 
 ### The default permission level structure is different: {@link KlasaClient.defaultPermissionLevels}
 
-| Level | Break | Description                                           |
-| ----- | ----- | ----------------------------------------------------- |
-| 0     | false | Everyone can use these commands                       |
-| 6     | false | Members of guilds must have 'MANAGE_GUILD' permission |
-| 7     | false | Guild Owner                                           |
-| 9     | true  | Bot Owner                                             |
-| 10    | false | Bot Owner (silent)                                    |
+| Level | Break | Fetch | Description                                           |
+| ----- | ----- | ----- | ----------------------------------------------------- |
+| 0     | false | false | Everyone can use these commands                       |
+| 6     | false | true  | Members of guilds must have 'MANAGE_GUILD' permission |
+| 7     | false | true  | Guild Owner                                           |
+| 9     | true  | false | Bot Owner                                             |
+| 10    | false | false | Bot Owner (silent)                                    |
 
->This gives the bot creator a cleaner slate to work with when first creating a bot. (Not all bots are mod bots, so mod/admin roles were largly unneeded. Also there is infinitely more that you would want to put between 0 and administrative users, than between Guild Owner and Bot Owner). This helps keep bot creators from having to completely "remake the wheel" of permissions in almost all cases, without preventing that if wanted. (This fixes most cases of those who perpetually had to transfer/modify core commands to match their custom permissionLevels.)
+>This gives the bot creator a cleaner slate to work with when first creating a bot. (Not all bots are mod bots, so mod/admin roles were largely unneeded. Also there is infinitely more that you would want to put between 0 and administrative users, than between Guild Owner and Bot Owner). This helps keep bot creators from having to completely "remake the wheel" of permissions in almost all cases, without preventing that if wanted. (This fixes most cases of those who perpetually had to transfer/modify core commands to match their custom permissionLevels.)
 
 ### Since inhibitors are async in Klasa, check functions may be async
 
@@ -124,7 +124,7 @@ So you can have:
 
 ```javascript
 Client.defaultPermissionLevels
-	.addLevel(3, false, async (client, msg) => {
+	.add(3, async (client, message) => {
 		const value = await someAsyncFunction();
 		return value === someOtherValue;
 	});

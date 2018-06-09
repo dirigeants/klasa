@@ -35,14 +35,14 @@ class Inhibitor extends Piece {
 	/**
 	 * The run method to be overwritten in actual inhibitors
 	 * @since 0.0.1
-	 * @param {KlasaMessage} msg The message that triggered this inhibitor
-	 * @param {Command} cmd The command to run
+	 * @param {KlasaMessage} message The message that triggered this inhibitor
+	 * @param {Command} command The command to run
 	 * @returns {(void|string)}
 	 * @abstract
 	 */
 	async run() {
 		// Defined in extension Classes
-		return;
+		throw new Error(`The run method has not been implemented by ${this.type}:${this.name}.`);
 	}
 
 	/**

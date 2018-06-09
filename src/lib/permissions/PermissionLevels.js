@@ -1,6 +1,6 @@
 const { Collection } = require('discord.js');
 
-const notSet = {};
+const empty = Symbol('empty');
 
 /**
  * Permission levels. See {@tutorial UnderstandingPermissionLevels} for more information how to use this class
@@ -17,6 +17,12 @@ class PermissionLevels extends Collection {
 	 */
 
 	/**
+	 * @typedef {Object} PermissionLevelOptions
+	 * @property {boolean} [break=false] Whether the loop breaks execution of higher levels
+	 * @property {boolean} [fetch=false] Whether the permission level should autofetch a member or not
+	 */
+
+	/**
 	 * Creates a new PermissionLevels
 	 * @since 0.2.1
 	 * @param {number} levels How many permission levels there should be
@@ -24,39 +30,42 @@ class PermissionLevels extends Collection {
 	constructor(levels = 11) {
 		super();
 
-		/**
-		 * The amount of permission levels
-		 * @since 0.2.1
-		 * @type {number}
-		 */
-		this.requiredLevels = levels;
-
-		for (let i = 0; i < this.requiredLevels; i++) this.set(i, notSet);
+		for (let i = 0; i < levels; i++) super.set(i, empty);
 	}
 
 	/**
-	 * Adds levels to the levels cache to be converted to valid permission structure
+	 * Adds levels to the levels cache
 	 * @since 0.2.1
 	 * @param {number} level The permission number for the level you are defining
-	 * @param {boolean} brk Whether the level should break (stop processing higher levels, and inhibit a no permission error)
 	 * @param {Function} check The permission checking function
-	 * @returns {PermissionLevels} This permission levels
+	 * @param {PermissionLevelOptions} [options={}] If the permission should auto fetch members
+	 * @returns {this}
 	 */
-	addLevel(level, brk, check) {
-		return this.set(level, { break: brk, check });
+	add(level, check, options = {}) {
+		return this.set(level, { check, break: Boolean(options.break), fetch: Boolean(options.fetch) });
+	}
+
+	/**
+	 * Removes levels from the levels cache
+	 * @since 0.5.0
+	 * @param {number} level The permission number for the level you are removing
+	 * @returns {this}
+	 */
+	remove(level) {
+		return this.set(level, empty);
 	}
 
 	/**
 	 * Adds levels to the levels cache to be converted to valid permission structure
 	 * @since 0.2.1
 	 * @param {number} level The permission number for the level you are defining
-	 * @param {PermissionLevelsData} obj Whether the level should break (stop processing higher levels, and inhibit a no permission error)
-	 * @returns {PermissionLevels} This permission levels
+	 * @param {PermissionLevelOptions|symbol} obj Whether the level should break (stop processing higher levels, and inhibit a no permission error)
+	 * @returns {this}
 	 * @private
 	 */
 	set(level, obj) {
 		if (level < 0) throw new Error(`Cannot set permission level ${level}. Permission levels start at 0.`);
-		if (level > (this.requiredLevels - 1)) throw new Error(`Cannot set permission level ${level}. Permission levels stop at ${this.requiredLevels - 1}.`);
+		if (level > (this.size - 1)) throw new Error(`Cannot set permission level ${level}. Permission levels stop at ${this.size - 1}.`);
 		return super.set(level, obj);
 	}
 
@@ -66,7 +75,7 @@ class PermissionLevels extends Collection {
 	 * @returns {boolean}
 	 */
 	isValid() {
-		return this.every(level => level === notSet || (typeof level === 'object' && typeof level.break === 'boolean' && typeof level.check === 'function'));
+		return this.every(level => level === empty || (typeof level === 'object' && typeof level.break === 'boolean' && typeof level.fetch === 'boolean' && typeof level.check === 'function'));
 	}
 
 	/**
@@ -76,37 +85,33 @@ class PermissionLevels extends Collection {
 	 */
 	debug() {
 		const errors = [];
-		for (const [level, index] of this) {
-			if (level === notSet) continue;
+		for (const [index, level] of this) {
+			if (level === empty) continue;
 			if (typeof level !== 'object') errors.push(`Permission level ${index} must be an object`);
 			if (typeof level.break !== 'boolean') errors.push(`"break" in permission level ${index} must be a boolean`);
+			if (typeof level.fetch !== 'boolean') errors.push(`"fetch" in permission level ${index} must be a boolean`);
 			if (typeof level.check !== 'function') errors.push(`"check" in permission level ${index} must be a function`);
 		}
 		return errors.join('\n');
 	}
 
 	/**
-	 * Runs the defined permLevels
+	 * Runs the defined permissionLevels
 	 * @since 0.2.1
-	 * @param {KlasaMessage} msg The message to pass to perm level functions
+	 * @param {KlasaMessage} message The message to pass to perm level functions
 	 * @param {number} min The minimum permissionLevel ok to pass
 	 * @returns {PermissionLevelsData}
 	 */
-	async run(msg, min) {
-		const mps = [];
-		let broke = false;
+	async run(message, min) {
 		for (let i = min; i < this.size; i++) {
 			const level = this.get(i);
-			if (level === notSet) continue;
-			mps.push(level.check(msg.client, msg));
-			if (level.break) {
-				broke = true;
-				break;
-			}
+			if (level === empty) continue;
+			if (level.fetch && !message.member && message.guild) await message.guild.members.fetch(message.author);
+			const res = await level.check(message.client, message);
+			if (res) return { broke: false, permission: true };
+			if (level.break) return { broke: true, permission: false };
 		}
-		const responses = await Promise.all(mps);
-		const permission = responses.includes(true);
-		return { broke, permission };
+		return { broke: false, permission: false };
 	}
 
 }

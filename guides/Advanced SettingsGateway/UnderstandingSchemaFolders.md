@@ -1,10 +1,9 @@
 # Understanding Schema
 
-A schema works like a diagram or a blueprint, in SettingGateway, the schema defines the keys present in the configuration for a specific gateway. This feature serves multiple purposes:
+A schema works like a diagram or a blueprint, in SettingsGateway, the schema defines the keys present in the configuration for a specific gateway. This feature serves multiple purposes:
 
 1. Define what keys the {@link Gateway} manages and their properties.
 1. Define what type the keys must hold.
-1. Define the SQL schema when using a SQL database.
 1. Speed up performance when iterating over keys.
 
 ## Adding keys
@@ -15,14 +14,13 @@ You would normally use these two methods using the following snippet:
 
 ```javascript
 // Add a new key or folder
-this.client.gateways.gatewayName.schema.add(name, options, force);
+this.client.gateways.gatewayName.schema.add(name, options);
 ```
 
 The parameters are:
 
 - **name**: The name of the new key. If it conflicts with a pre-existent key, this will error.
 - **options**: The options for the new key or folder. Check {@link SchemaFolderAddOptions}.
-- **force**: Whether this change should affect all entries. It requires a lot of processing but ensures the changes are correctly applied in both the cache and database.
 
 You can also extend any of the three built-in {@link Gateway}s from Klasa. For example, if you want to add a new key called **modlogs** that accepts only text channels, for your guild configs, you would use the following code:
 
@@ -46,18 +44,18 @@ this.client.gateways.guilds.schema.add('userBlacklist', { type: 'User', array: t
 And now you can have access to any of them in your guild configs like in the following snippet!
 
 ```javascript
-msg.guild.configs.modlogs;
+message.guild.configs.modlogs;
 // null
-msg.guild.configs.userBlacklist;
+message.guild.configs.userBlacklist;
 // []
 ```
 
 ## Removing keys
 
-Removing keys with the schema is quite easy, as you would have access to the {@link SchemaFolder} that holds it and remove it by its name (remember that `force` is optional and defaults to `true`) using {@link SchemaFolder#remove} as in the following example:
+Removing keys with the schema is quite easy, as you would have access to the {@link SchemaFolder} that holds it and remove it by its name using {@link SchemaFolder#remove} as in the following example:
 
 ```javascript
-this.client.gateways.gatewayName.schema.remove(name, force);
+this.client.gateways.gatewayName.schema.remove(name);
 ```
 
 In case you have a key you do not longer use and you want to get rid of it, for example, the recently created **userBlacklist** key for guild configs, you would run the following code:
@@ -138,5 +136,5 @@ async function init() {
 ## Further Reading:
 
 - {@tutorial UnderstandingSchemaPieces}
-- {@tutorial SettingGatewayKeyTypes}
-- {@tutorial SettingGatewayConfigurationUpdate}
+- {@tutorial SettingsGatewayKeyTypes}
+- {@tutorial SettingsGatewayConfigurationUpdate}

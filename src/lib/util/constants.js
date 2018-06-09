@@ -1,12 +1,16 @@
-const { dirname } = require('path');
+const { mergeDefault, isObject } = require('./util');
+
+const colorBase = {
+	shard: { background: 'cyan', text: 'black' },
+	message: {},
+	time: {}
+};
 
 exports.DEFAULTS = {
 
 	CLIENT: {
-		clientBaseDir: dirname(require.main.filename),
-		cmdDeleting: false,
-		cmdEditing: false,
-		cmdLogging: false,
+		commandEditing: false,
+		commandLogging: false,
 		commandMessageLifetime: 1800,
 		console: {},
 		consoleEvents: {
@@ -17,14 +21,15 @@ exports.DEFAULTS = {
 			warn: true,
 			wtf: true
 		},
+		disabledCorePieces: [],
 		language: 'en-US',
 		prefix: '!',
 		preserveConfigs: true,
 		readyMessage: (client) => `Successfully initialized. Ready to serve ${client.guilds.size} guild${client.guilds.size === 1 ? '' : 's'}.`,
 		typing: false,
 		customPromptDefaults: {
-			promptTime: 30000,
-			promptLimit: Infinity,
+			time: 30000,
+			limit: Infinity,
 			quotedStringSupport: false
 		},
 		gateways: {
@@ -32,22 +37,28 @@ exports.DEFAULTS = {
 			users: {},
 			clientStorage: {}
 		},
+		// eslint-disable-next-line no-process-env
+		production: process.env.NODE_ENV === 'production',
 		providers: { default: 'json' },
 		pieceDefaults: {
+			arguments: {
+				enabled: true,
+				aliases: []
+			},
 			commands: {
 				aliases: [],
 				autoAliases: true,
-				botPerms: 0,
 				bucket: 1,
 				cooldown: 0,
 				description: '',
 				enabled: true,
 				guarded: false,
 				nsfw: false,
-				permLevel: 0,
+				permissionLevel: 0,
 				promptLimit: 0,
 				promptTime: 30000,
 				requiredConfigs: [],
+				requiredPermissions: 0,
 				runIn: ['text', 'dm', 'group'],
 				subcommands: false,
 				usage: '',
@@ -77,11 +88,7 @@ exports.DEFAULTS = {
 				ignoreWebhooks: true,
 				ignoreEdits: true
 			},
-			providers: {
-				enabled: true,
-				sql: false,
-				cache: false
-			},
+			providers: { enabled: true },
 			tasks: { enabled: true }
 		},
 		schedule: { interval: 60000 }
@@ -91,43 +98,49 @@ exports.DEFAULTS = {
 		stdout: process.stdout,
 		stderr: process.stderr,
 		timestamps: true,
+		utc: false,
+		types: {
+			debug: 'log',
+			error: 'error',
+			log: 'log',
+			verbose: 'log',
+			warn: 'warn',
+			wtf: 'error'
+		},
 		colors: {
-			debug: {
-				type: 'log',
-				shard: { background: 'cyan', text: 'black', style: null },
-				message: { background: null, text: null, style: null },
-				time: { background: 'magenta', text: null, style: null }
-			},
-			error: {
-				type: 'error',
-				shard: { background: 'cyan', text: 'black', style: null },
-				message: { background: null, text: null, style: null },
-				time: { background: 'red', text: null, style: null }
-			},
-			log: {
-				type: 'log',
-				shard: { background: 'cyan', text: 'black', style: null },
-				message: { background: null, text: null, style: null },
-				time: { background: 'blue', text: null, style: null }
-			},
-			verbose: {
-				type: 'log',
-				shard: { background: 'cyan', text: 'black', style: null },
-				message: { background: null, text: 'gray', style: null },
-				time: { background: null, text: 'gray', style: null }
-			},
-			warn: {
-				type: 'warn',
-				shard: { background: 'cyan', text: 'black', style: null },
-				message: { background: null, text: null, style: null },
-				time: { background: 'lightyellow', text: 'black', style: null }
-			},
-			wtf: {
-				type: 'error',
-				shard: { background: 'cyan', text: 'black', style: null },
-				message: { background: null, text: 'red', style: null },
-				time: { background: 'red', text: null, style: null }
-			}
+			debug: mergeDefault(colorBase, { time: { background: 'magenta' } }),
+			error: mergeDefault(colorBase, { time: { background: 'red' } }),
+			log: mergeDefault(colorBase, { time: { background: 'blue' } }),
+			verbose: mergeDefault(colorBase, { time: { text: 'gray' } }),
+			warn: mergeDefault(colorBase, { time: { background: 'lightyellow', text: 'black' } }),
+			wtf: mergeDefault(colorBase, { message: { text: 'red' }, time: { background: 'red' } })
+		}
+	},
+
+	QUERYBUILDER: {
+		datatypes: {
+			any: { type: 'TEXT' },
+			boolean: { type: 'BOOLEAN', resolver: value => value },
+			categorychannel: { type: 'VARCHAR(18)' },
+			channel: { type: 'VARCHAR(18)' },
+			command: { type: 'TEXT' },
+			float: { type: 'FLOAT', resolver: value => value },
+			guild: { type: 'VARCHAR(18)' },
+			integer: { type: 'INTEGER', resolver: value => value },
+			json: { type: 'JSON', resolver: (value) => `'${JSON.stringify(value).replace(/'/g, "''")}'` },
+			language: { type: 'VARCHAR(5)' },
+			role: { type: 'VARCHAR(18)' },
+			string: { type: ({ max }) => max ? `VARCHAR(${max})` : 'TEXT' },
+			textchannel: { type: 'VARCHAR(18)' },
+			url: { type: 'TEXT' },
+			user: { type: 'VARCHAR(18)' },
+			voicechannel: { type: 'VARCHAR(18)' }
+		},
+		queryBuilderOptions: {
+			array: () => 'TEXT',
+			resolver: (value) => `'${(isObject(value) ? JSON.stringify(value) : String(value)).replace(/'/g, "''")}'`,
+			arrayResolver: (values) => `'${JSON.stringify(values)}'`,
+			formatDatatype: (name, datatype, def = null) => `${name} ${datatype}${def !== null ? ` NOT NULL DEFAULT ${def}` : ''}`
 		}
 	}
 

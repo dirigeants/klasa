@@ -7,6 +7,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/e7b37b1f57134a5b9e1f43127df64388)](https://www.codacy.com/app/dirigeants/klasa?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=dirigeants/klasa&amp;utm_campaign=Badge_Grade)
 [![Greenkeeper badge](https://badges.greenkeeper.io/dirigeants/klasa.svg)](https://greenkeeper.io/)
 [![David](https://img.shields.io/david/dirigeants/klasa.svg?maxAge=3600)](https://david-dm.org/dirigeants/klasa)
+[![Patreon](https://img.shields.io/badge/donate-patreon-F96854.svg)](https://www.patreon.com/klasa)
 
 > Let's stop reinventing the wheel, and start coding the bots of our dreams!
 
@@ -29,7 +30,7 @@ Following suit from Komada (the Croatian word for "pieces"), Klasa is the Croati
 - Full OOP and hot-reloadable pieces.
 - Full personalizable configuration system that can serve for much more than just guilds.
 - Incredibly fast loading (~100ms) with deep loading for commands.
-- Per-command cooldowns with budget support and easy to configure.
+- Per-command cooldowns with bucket support and easy to configure.
 - Many different pieces and standalone utils to help you build the bot of your dreams!
     - Commands: The most basic piece, they run when somebody types the prefix and the command name or any of its aliases.
     - Events: Hot-reloadable structures for events, with internal error handling.
@@ -47,6 +48,6 @@ See the following [tutorial](https://klasa.js.org/#/docs/main/stable/Getting%20S
 
 ## See also:
 
-- [Documentation for klasa](https://klasa.js.org)
+- [Documentation for Klasa](https://klasa.js.org)
 - [Example premade pieces](https://github.com/dirigeants/klasa-pieces)
 - [VS Code extension for rapid development](https://marketplace.visualstudio.com/items?itemName=bdistin.klasa-vscode)

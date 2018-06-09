@@ -33,13 +33,6 @@ class Schedule {
 		this.tasks = [];
 
 		/**
-		 * The time in milliseconds for the delay between interval executions
-		 * @since 0.5.0
-		 * @type {number}
-		 */
-		this.timeInterval = this.client.options.schedule.interval;
-
-		/**
 		 * The current interval that runs the tasks
 		 * @since 0.5.0
 		 * @type {NodeJS.Timer}
@@ -71,8 +64,7 @@ class Schedule {
 				min: null,
 				max: null,
 				array: true,
-				configurable: false,
-				sql: 'TEXT'
+				configurable: false
 			});
 		}
 
@@ -106,7 +98,7 @@ class Schedule {
 			}
 
 			// Check if the Schedule has a task to run and run them if they exist
-			if (execute.length === 0) return;
+			if (!execute.length) return;
 			await Promise.all(execute);
 		}
 		this._checkInterval();
@@ -245,8 +237,8 @@ class Schedule {
 	 * @private
 	 */
 	_checkInterval() {
-		if (this.tasks.length === 0) this._clearInterval();
-		else if (!this._interval) this._interval = this.client.setInterval(this.execute.bind(this), this.timeInterval);
+		if (!this.tasks.length) this._clearInterval();
+		else if (!this._interval) this._interval = this.client.setInterval(this.execute.bind(this), this.client.options.schedule.interval);
 	}
 
 	/**
@@ -257,6 +249,7 @@ class Schedule {
 	 * @instance
 	 * @generator
 	 * @returns {Iterator<ScheduledTask>}
+	 * @memberof Schedule
 	 */
 
 	*[Symbol.iterator]() {

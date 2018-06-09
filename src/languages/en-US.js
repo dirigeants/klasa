@@ -7,7 +7,10 @@ module.exports = class extends Language {
 		this.language = {
 			DEFAULT: (key) => `${key} has not been localized for en-US yet.`,
 			DEFAULT_LANGUAGE: 'Default Language',
-			PREFIX_REMINDER: (prefix) => `The prefix in this guild is set to: ${Array.isArray(prefix) ? prefix.map(pre => `\`${pre}\``).join(', ') : `\`${prefix}\``}`,
+			PREFIX_REMINDER: (prefix) => `The prefix${Array.isArray(prefix) ?
+				`es for this guild are: ${prefix.map(pre => `\`${pre}\``).join(', ')}` :
+				` in this guild is set to: \`${prefix}\``
+			}`,
 			SETTING_GATEWAY_EXPECTS_GUILD: 'The parameter <Guild> expects either a Guild or a Guild Object.',
 			SETTING_GATEWAY_VALUE_FOR_KEY_NOEXT: (data, key) => `The value ${data} for the key ${key} does not exist.`,
 			SETTING_GATEWAY_VALUE_FOR_KEY_ALREXT: (data, key) => `The value ${data} for the key ${key} already exists.`,
@@ -17,7 +20,7 @@ module.exports = class extends Language {
 			SETTING_GATEWAY_INVALID_TYPE: 'The type parameter must be either add or remove.',
 			RESOLVER_INVALID_CUSTOM: (name, type) => `${name} must be a valid ${type}.`,
 			RESOLVER_INVALID_PIECE: (name, piece) => `${name} must be a valid ${piece} name.`,
-			RESOLVER_INVALID_MSG: (name) => `${name} must be a valid message id.`,
+			RESOLVER_INVALID_MESSAGE: (name) => `${name} must be a valid message id.`,
 			RESOLVER_INVALID_USER: (name) => `${name} must be a mention or valid user id.`,
 			RESOLVER_INVALID_MEMBER: (name) => `${name} must be a mention or valid user id.`,
 			RESOLVER_INVALID_CHANNEL: (name) => `${name} must be a channel tag or valid channel id.`,
@@ -66,7 +69,7 @@ module.exports = class extends Language {
 				'The eval command evaluates code as-in, any error thrown from it will be handled.',
 				'It also uses the flags feature. Write --silent, --depth=number or --async to customize the output.',
 				'The --silent flag will make it output nothing.',
-				'The --depth flag accepts a number, for example, --depth=2, to customize util.inspect\'s depth.',
+				"The --depth flag accepts a number, for example, --depth=2, to customize util.inspect's depth.",
 				'The --async flag will wrap the code into an async function where you can enjoy the use of await, however, if you want to return something, you will need the return keyword',
 				'The --showHidden flag will enable the showHidden option in util.inspect.',
 				'If the output is too large, it\'ll send the output as a file, or in the console if the bot does not have the ATTACH_FILES permission.'
@@ -110,15 +113,16 @@ module.exports = class extends Language {
 				'Most of the code is modularized, which allows developers to edit Klasa to suit their needs.',
 				'',
 				'Some features of Klasa include:',
-				'• Fast Loading times with ES7 Support (Async/Await)',
-				'• Per-server configuration, that can be extended with your own code',
-				'• Customizable Command system with automated usage parsing and easy to use reloading and downloading modules',
-				'• "Monitors" which can watch messages and act on them, like a normal message event (Swear Filters, Spam Protection, etc)',
-				'• "Inhibitors" which can prevent commands from running based on a set of parameters (Permissions, Blacklists, etc)',
-				'• "Providers" which allow you to connect with an outside database of your choosing.',
-				'• "Finalizers" which run on messages after a successful command.',
-				'• "Extendables", code that acts passively. They add properties or methods to existing Discord.js classes.',
-				'• "Languages", which allow you to localize your bot.',
+				'• 🐇💨 Fast loading times with ES2017 support (`async`/`await`)',
+				'• 🎚🎛 Per-client/server/user settings that can be extended with your own fields',
+				'• 💬 Customizable command system with automated parameter resolving and the ability to load/reload commands on-the-fly',
+				'• 👀 "Monitors", which can watch messages and edits (for swear filters, spam protection, etc.)',
+				'• ⛔ "Inhibitors", which can prevent commands from running based on any condition you wish to apply (for permissions, blacklists, etc.)',
+				'• 🗄 "Providers", which simplify usage of any database of your choosing',
+				'• ✅ "Finalizers", which run after successful commands (for logging, collecting stats, cleaning up responses, etc.)',
+				'• ➕ "Extendables", which passively add methods, getters/setters, or static properties to existing Discord.js or Klasa classes',
+				'• 🌐 "Languages", which allow you to localize your bot\'s responses',
+				'• ⏲ "Tasks", which can be scheduled to run in the future, optionally repeating',
 				'',
 				'We hope to be a 100% customizable framework that can cater to all audiences. We do frequent updates and bugfixes when available.',
 				"If you're interested in us, check us out at https://klasa.js.org"
@@ -148,7 +152,7 @@ module.exports = class extends Language {
 			COMMAND_CONF_SERVER: (key, list) => `**Server Configuration${key}**\n${list}`,
 			COMMAND_CONF_USER_DESCRIPTION: 'Define per-user configuration.',
 			COMMAND_CONF_USER: (key, list) => `**User Configuration${key}**\n${list}`,
-			COMMAND_STATS: (memUsage, uptime, users, servers, channels, klasaVersion, discordVersion, processVersion, msg) => [
+			COMMAND_STATS: (memUsage, uptime, users, servers, channels, klasaVersion, discordVersion, processVersion, message) => [
 				'= STATISTICS =',
 				'',
 				`• Mem Usage  :: ${memUsage} MB`,
@@ -159,7 +163,9 @@ module.exports = class extends Language {
 				`• Klasa      :: v${klasaVersion}`,
 				`• Discord.js :: v${discordVersion}`,
 				`• Node.js    :: ${processVersion}`,
-				this.client.options.shardCount ? `• Shard      :: ${((msg.guild ? msg.guild.shardID : msg.channel.shardID) || this.client.options.shardId) + 1} / ${this.client.options.shardCount}` : ''
+				this.client.options.shardCount ?
+					`• Shard      :: ${((message.guild ? message.guild.shardID : message.channel.shardID) || this.client.options.shardId) + 1} / ${this.client.options.shardCount}` :
+					''
 			],
 			COMMAND_STATS_DESCRIPTION: 'Provides some details about the bot and stats.',
 			MESSAGE_PROMPT_TIMEOUT: 'The prompt has timed out.'

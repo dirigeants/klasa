@@ -1,11 +1,9 @@
 const Discord = require('discord.js');
+const { Permissions, Permissions: { FLAGS } } = Discord;
 const path = require('path');
 
-// lib/parsers
-const ArgResolver = require('./parsers/ArgResolver');
-
 // lib/permissions
-const PermLevels = require('./permissions/PermissionLevels');
+const PermissionLevels = require('./permissions/PermissionLevels');
 
 // lib/schedule
 const Schedule = require('./schedule/Schedule');
@@ -14,6 +12,7 @@ const Schedule = require('./schedule/Schedule');
 const GatewayDriver = require('./settings/GatewayDriver');
 
 // lib/structures
+const ArgumentStore = require('./structures/ArgumentStore');
 const CommandStore = require('./structures/CommandStore');
 const EventStore = require('./structures/EventStore');
 const ExtendableStore = require('./structures/ExtendableStore');
@@ -39,14 +38,13 @@ class KlasaClient extends Discord.Client {
 
 	/**
 	 * @typedef {external:DiscordJSConfig} KlasaClientOptions
-	 * @property {string} [clientBaseDir=path.dirname(require.main.filename)] The directory where all piece folders can be found
-	 * @property {KlasaClientOptionsClock} [clock] The options for the internal clock module that runs Schedule
-	 * @property {boolean} [cmdEditing=false] Whether the bot should update responses if the command is edited
-	 * @property {boolean} [cmdLogging=false] Whether the bot should log command usage
+	 * @property {boolean} [commandEditing=false] Whether the bot should update responses if the command is edited
+	 * @property {boolean} [commandLogging=false] Whether the bot should log command usage
 	 * @property {number} [commandMessageLifetime=1800] The threshold for how old command messages can be before sweeping since the last edit in seconds
 	 * @property {KlasaConsoleConfig} [console={}] Config options to pass to the client console
 	 * @property {KlasaConsoleEvents} [consoleEvents={}] Config options to pass to the client console
 	 * @property {KlasaCustomPromptDefaults} [customPromptDefaults={}] The defaults for custom prompts
+	 * @property {string[]} [disabledCorePieces=[]] An array of disabled core piece types, e.g., ['commands', 'arguments']
 	 * @property {KlasaGatewaysOptions} [gateways={}] The options for each built-in gateway
 	 * @property {string} [language='en-US'] The default language Klasa should opt-in for the commands
 	 * @property {string} [ownerID] The discord user id for the user the bot should respect as the owner (gotten from Discord api if not provided)
@@ -54,9 +52,11 @@ class KlasaClient extends Discord.Client {
 	 * @property {KlasaPieceDefaults} [pieceDefaults={}] Overrides the defaults for all pieces
 	 * @property {string} [prefix] The default prefix the bot should respond to
 	 * @property {boolean} [preserveConfigs=true] Whether the bot should preserve (non-default) configs when removed from a guild
+	 * @property {boolean} [production=false] Whether the bot should handle unhandled promise rejections automatically (handles when false) (also can be configured with process.env.NODE_ENV)
 	 * @property {KlasaProvidersOptions} [providers] The provider options
 	 * @property {(string|Function)} [readyMessage=`Successfully initialized. Ready to serve ${this.guilds.size} guilds.`] readyMessage to be passed throughout Klasa's ready event
 	 * @property {RegExp} [regexPrefix] The regular expression prefix if one is provided
+	 * @property {KlasaClientOptionsSchedule} [schedule] The options for the internal clock module that runs Schedule
 	 * @property {boolean} [typing=false] Whether the bot should type while processing commands
 	 */
 
@@ -66,24 +66,15 @@ class KlasaClient extends Discord.Client {
 	 */
 
 	/**
-	 * @typedef {Object} KlasaClientOptionsClock
-	 * @property {number} [interval] The interval in milliseconds for the clock to check the tasks
+	 * @typedef {Object} KlasaClientOptionsSchedule
+	 * @property {number} [interval=60000] The interval in milliseconds for the clock to check the tasks
 	 */
 
 	/**
 	 * @typedef {Object} KlasaGatewaysOptions
-	 * @property {GatewayDriverAddOptions} [clientStorage] The options for clientStorage's gateway
-	 * @property {GatewayDriverAddOptions} [guilds] The options for guilds' gateway
-	 * @property {GatewayDriverAddOptions} [users] The options for users' gateway
-	 */
-
-	/**
-	 * @typedef {Object} KlasaConsoleConfig
-	 * @property {WritableStream} [stdout=process.stdout] Output stream
-	 * @property {WritableStream} [stderr=process.stderr] Error stream
-	 * @property {boolean} [useColor=false] Whether the client console should use colors
-	 * @property {Colors} [colors] Color formats to use
-	 * @property {(boolean|string)} [timestamps=true] Whether to use timestamps or not, or the Timestamp format of the timestamp you want to use
+	 * @property {GatewayDriverRegisterOptions} [clientStorage] The options for clientStorage's gateway
+	 * @property {GatewayDriverRegisterOptions} [guilds] The options for guilds' gateway
+	 * @property {GatewayDriverRegisterOptions} [users] The options for users' gateway
 	 */
 
 	/**
@@ -110,8 +101,8 @@ class KlasaClient extends Discord.Client {
 
 	/**
 	 * @typedef {Object} KlasaCustomPromptDefaults
-	 * @property {number} [promptLimit=Infinity] The number of re-prompts before custom prompt gives up
-	 * @property {number} [promptTime=30000] The time-limit for re-prompting custom prompts
+	 * @property {number} [limit=Infinity] The number of re-prompts before custom prompt gives up
+	 * @property {number} [time=30000] The time-limit for re-prompting custom prompts
 	 * @property {boolean} [quotedStringSupport=false] Whether the custom prompt should respect quoted strings
 	 */
 
@@ -144,7 +135,7 @@ class KlasaClient extends Discord.Client {
 		 * @since 0.0.1
 		 * @type {string}
 		 */
-		this.clientBaseDir = config.clientBaseDir ? path.resolve(config.clientBaseDir) : path.dirname(require.main.filename);
+		this.clientBaseDir = path.dirname(require.main.filename);
 
 		/**
 		 * The console for this instance of klasa. You can disable timestamps, colors, and add writable streams as config options to configure this.
@@ -154,11 +145,11 @@ class KlasaClient extends Discord.Client {
 		this.console = new KlasaConsole(this, this.options.console);
 
 		/**
-		 * The argument resolver
-		 * @since 0.0.1
-		 * @type {ArgResolver}
+		 * The cache where argument resolvers are stored
+		 * @since 0.5.0
+		 * @type {ArgumentStore}
 		 */
-		this.argResolver = new ArgResolver(this);
+		this.arguments = new ArgumentStore(this);
 
 		/**
 		 * The cache where commands are stored
@@ -238,33 +229,17 @@ class KlasaClient extends Discord.Client {
 		this.permissionLevels = this.validatePermissionLevels();
 
 		/**
-		 * Additional methods to be used elsewhere in the bot
-		 * @since 0.0.1
-		 * @type {Object}
-		 * @property {class} Collection A discord.js collection
-		 * @property {class} Embed A discord.js Message Embed
-		 * @property {class} MessageCollector A discord.js MessageCollector
-		 * @property {class} Webhook A discord.js WebhookClient
-		 * @property {function} escapeMarkdown A discord.js escape markdown function
-		 * @property {function} splitMessage A discord.js split message function
-		 * @property {Util} util A collection of static methods to be used throughout the bot
-		 */
-		this.methods = {
-			Collection: Discord.Collection,
-			Embed: Discord.MessageEmbed,
-			escapeMarkdown: Discord.escapeMarkdown,
-			MessageCollector: Discord.MessageCollector,
-			splitMessage: Discord.splitMessage,
-			Webhook: Discord.WebhookClient,
-			util
-		};
-
-		/**
 		 * The GatewayDriver instance where the gateways are stored
 		 * @since 0.5.0
 		 * @type {GatewayDriver}
 		 */
 		this.gateways = new GatewayDriver(this);
+
+		// Register default gateways
+		this.gateways
+			.register('guilds', this.gateways.guildsSchema, this.options.gateways.guilds)
+			.register('users', this.gateways.usersSchema, this.options.gateways.users)
+			.register('clientStorage', this.gateways.clientStorageSchema, this.options.gateways.clientStorage);
 
 		/**
 		 * The Configuration instance that handles this client's configuration
@@ -288,8 +263,8 @@ class KlasaClient extends Discord.Client {
 			.registerStore(this.providers)
 			.registerStore(this.events)
 			.registerStore(this.extendables)
-			.registerStore(this.tasks);
-		// Core pieces already have ArgResolver entries for the purposes of documentation.
+			.registerStore(this.tasks)
+			.registerStore(this.arguments);
 
 		/**
 		 * The Schedule that runs the tasks
@@ -314,18 +289,32 @@ class KlasaClient extends Discord.Client {
 	 */
 	get invite() {
 		if (!this.user.bot) throw 'Why would you need an invite link for a selfbot...';
-		const permissions = Discord.Permissions.resolve(this.commands.reduce((a, b) => a.add(b.botPerms), new Discord.Permissions(['VIEW_CHANNEL', 'SEND_MESSAGES'])));
+		const permissions = new Permissions(3072).add(...this.commands.map(command => command.requiredPermissions)).bitfield;
+		// VIEW_CHANNEL, SEND_MESSAGES
 		return `https://discordapp.com/oauth2/authorize?client_id=${this.application.id}&permissions=${permissions}&scope=bot`;
 	}
 
 	/**
 	 * The owner for this bot
 	 * @since 0.1.1
-	 * @type {KlasaUser}
+	 * @type {?KlasaUser}
 	 * @readonly
 	 */
 	get owner() {
-		return this.users.get(this.options.ownerID);
+		return this.users.get(this.options.ownerID) || null;
+	}
+
+	/**
+	 * Obtains the OAuth Application of the bot from Discord.
+	 * If you are fetching this bot's application, {@link KlasaClient#application} will be updated.
+	 * @since 0.0.1
+	 * @param {external:Snowflake} [id='@me'] ID of application to fetch
+	 * @returns {external:ClientApplication}
+	 */
+	async fetchApplication(id = '@me') {
+		if (id !== '@me') return super.fetchApplication(id);
+		this.application = await super.fetchApplication(id);
+		return this.application;
 	}
 
 	/**
@@ -335,10 +324,10 @@ class KlasaClient extends Discord.Client {
 	 * @private
 	 */
 	validatePermissionLevels() {
-		const permLevels = this.options.permissionLevels || KlasaClient.defaultPermissionLevels;
-		if (!(permLevels instanceof PermLevels)) throw new Error('permissionLevels must be an instance of the PermissionLevels class');
-		if (permLevels.isValid()) return permLevels;
-		throw new Error(permLevels.debug());
+		const permissionLevels = this.options.permissionLevels || KlasaClient.defaultPermissionLevels;
+		if (!(permissionLevels instanceof PermissionLevels)) throw new Error('permissionLevels must be an instance of the PermissionLevels class');
+		if (permissionLevels.isValid()) return permissionLevels;
+		throw new Error(permissionLevels.debug());
 	}
 
 	/**
@@ -366,36 +355,6 @@ class KlasaClient extends Discord.Client {
 	}
 
 	/**
-	 * Registers a custom piece to the client
-	 * @since 0.3.0
-	 * @param {string} pieceName The name of the piece, if you want to register an arg resolver for this piece
-	 * @param {Store} store The store that pieces will be stored in
-	 * @returns {this}
-	 * @chainable
-	 */
-	registerPiece(pieceName, store) {
-		// eslint-disable-next-line func-names
-		ArgResolver.prototype[pieceName] = async function (arg, possible, msg) {
-			const piece = store.get(arg);
-			if (piece) return piece;
-			throw (msg ? msg.language : this.language).get('RESOLVER_INVALID_PIECE', possible.name, pieceName);
-		};
-		return this;
-	}
-
-	/**
-	 * Un-registers a custom piece from the client
-	 * @since 0.3.0
-	 * @param {string} pieceName The name of the piece
-	 * @returns {this}
-	 * @chainable
-	 */
-	unregisterPiece(pieceName) {
-		delete ArgResolver.prototype[pieceName];
-		return this;
-	}
-
-	/**
 	 * Use this to login to Discord with your bot
 	 * @since 0.0.1
 	 * @param {string} token Your bot token
@@ -412,25 +371,7 @@ class KlasaClient extends Discord.Client {
 
 		// Providers must be init before configs, and those before all other stores.
 		await this.providers.init();
-
-		// Add the gateways
-		await Promise.all([
-			this.gateways.add('guilds', this.gateways.guildsSchema, this.options.gateways.guilds, false),
-			this.gateways.add('users', undefined, this.options.gateways.users, false),
-			this.gateways.add('clientStorage', this.gateways.clientStorageSchema, this.options.gateways.clientStorage, false)
-		]);
-
-		// Automatic Prefix editing detection.
-		if (typeof this.options.prefix === 'string' && this.options.prefix !== this.gateways.guilds.schema.prefix.default) {
-			await this.gateways.guilds.schema.prefix.edit({ default: this.options.prefix });
-		}
-		if (this.gateways.guilds.schema.has('disabledCommands')) {
-			const languageStore = this.languages;
-			const commandStore = this.commands;
-			this.gateways.guilds.schema.disabledCommands.setValidator(function (command, guild) { // eslint-disable-line
-				if ((cmd => cmd && cmd.guarded)(commandStore.get(command))) throw (guild ? guild.language : languageStore.default).get('COMMAND_CONF_GUARDED', command);
-			});
-		}
+		await this.gateways.init();
 
 		this.emit('log', `Loaded in ${timer.stop()}.`);
 		return super.login(token);
@@ -465,15 +406,11 @@ class KlasaClient extends Discord.Client {
 			if (!channel.messages) continue;
 			channels++;
 
-			for (const message of channel.messages.values()) {
-				if (message.command && now - (message.editedTimestamp || message.createdTimestamp) > commandLifetimeMs) {
-					channel.messages.delete(message.id);
-					commandMessages++;
-				} else if (!message.command && now - (message.editedTimestamp || message.createdTimestamp) > lifetimeMs) {
-					channel.messages.delete(message.id);
-					messages++;
-				}
-			}
+			channel.messages.sweep(message => {
+				if ((message.command || message.author === this.user) && now - (message.editedTimestamp || message.createdTimestamp) > commandLifetimeMs) return commandMessages++;
+				if (!message.command && message.author !== this.user && now - (message.editedTimestamp || message.createdTimestamp) > lifetimeMs) return messages++;
+				return false;
+			});
 		}
 
 		this.emit('debug', `Swept ${messages} messages older than ${lifetime} seconds and ${commandMessages} command messages older than ${commandLifetime} seconds in ${channels} text-based channels`);
@@ -487,13 +424,12 @@ class KlasaClient extends Discord.Client {
  * @since 0.2.1
  * @type {PermissionLevels}
  */
-KlasaClient.defaultPermissionLevels = new PermLevels()
-	.addLevel(0, false, () => true)
-	.addLevel(6, false, (client, msg) => msg.guild && msg.member.permissions.has('MANAGE_GUILD'))
-	.addLevel(7, false, (client, msg) => msg.guild && msg.member === msg.guild.owner)
-	.addLevel(9, true, (client, msg) => msg.author === client.owner)
-	.addLevel(10, false, (client, msg) => msg.author === client.owner);
-
+KlasaClient.defaultPermissionLevels = new PermissionLevels()
+	.add(0, () => true)
+	.add(6, (client, message) => message.guild && message.member.permissions.has(FLAGS.MANAGE_GUILD), { fetch: true })
+	.add(7, (client, message) => message.guild && message.member === message.guild.owner, { fetch: true })
+	.add(9, (client, message) => message.author === client.owner, { break: true })
+	.add(10, (client, message) => message.author === client.owner);
 
 /**
  * Emitted when Klasa is fully ready and initialized.
@@ -506,7 +442,6 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  * @event KlasaClient#log
  * @since 0.3.0
  * @param {(string|Object)} data The data to log
- * @param {string} [type='log'] The type of log: 'log', 'debug', 'warn', or 'error'
  */
 
 /**
@@ -537,7 +472,7 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  * @since 0.3.0
  * @param {KlasaMessage} message The message that triggered the command
  * @param {Command} command The command triggered
- * @param {?string} response The reason why it was inhibited if not silent
+ * @param {?string[]} response The reason why it was inhibited if not silent
  */
 
 /**
@@ -592,7 +527,7 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  * @event KlasaClient#finalizerError
  * @since 0.5.0
  * @param {KlasaMessage} message The message that triggered the finalizer
- * @param {KlasaMessage|any} mes The response from the command
+ * @param {KlasaMessage|any} response The response from the command
  * @param {Stopwatch} timer The timer run from start to queue of the command
  * @param {Finalizer} finalizer The finalizer run
  * @param {(Error|string)} error The finalizer error
@@ -617,15 +552,14 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  */
 
 /**
- * Emitted when {@link Gateway#deleteEntry} is run.
+ * Emitted when {@link Configuration#destroy} is run.
  * @event KlasaClient#configDeleteEntry
  * @since 0.5.0
  * @param {Configuration} entry The entry which got deleted
  */
 
 /**
- * Emitted when {@link Gateway#createEntry} is run, when {@link Gateway#getEntry}
- * with the create parameter set to true creates the entry, or an entry with no persistence gets updated.
+ * Emitted when a new entry in the database has been created upon update.
  * @event KlasaClient#configCreateEntry
  * @since 0.5.0
  * @param {Configuration} entry The entry which got created
@@ -686,10 +620,5 @@ KlasaClient.defaultPermissionLevels = new PermLevels()
  * @since 0.5.0
  * @param {SchemaPiece} key The piece that was updated
  */
-
-process.on('unhandledRejection', (err) => {
-	if (!err) return;
-	console.error(`Uncaught Promise Error: \n${err.stack || err}`);
-});
 
 module.exports = KlasaClient;

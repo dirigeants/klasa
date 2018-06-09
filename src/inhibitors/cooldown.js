@@ -6,22 +6,22 @@ module.exports = class extends Inhibitor {
 		super(...args, { spamProtection: true });
 	}
 
-	async run(msg, cmd) {
-		if (msg.author === this.client.owner) return;
-		if (!cmd.cooldown || cmd.cooldown <= 0) return;
+	async run(message, command) {
+		if (message.author === this.client.owner) return;
+		if (!command.cooldown || command.cooldown <= 0) return;
 
-		const existing = cmd.cooldowns.get(msg.author.id);
+		const existing = command.cooldowns.get(message.author.id);
 
-		if (!existing || existing.count < cmd.bucket) return;
+		if (!existing || existing.count < command.bucket) return;
 
-		const remaining = ((cmd.cooldown * 1000) - (Date.now() - existing.time)) / 1000;
+		const remaining = ((command.cooldown * 1000) - (Date.now() - existing.time)) / 1000;
 
 		if (remaining < 0) {
-			cmd.cooldowns.delete(msg.author.id);
+			command.cooldowns.delete(message.author.id);
 			return;
 		}
 
-		throw msg.language.get('INHIBITOR_COOLDOWN', Math.ceil(remaining));
+		throw message.language.get('INHIBITOR_COOLDOWN', Math.ceil(remaining));
 	}
 
 };

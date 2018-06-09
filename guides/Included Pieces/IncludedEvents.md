@@ -168,6 +168,7 @@ Stands for '**W**hat a **T**errible **F**ailure'. Logs fatal errors.
 
 ## Further Reading:
 
+- {@tutorial IncludedArguments}
 - {@tutorial IncludedCommands}
 - {@tutorial IncludedExtendables}
 - {@tutorial IncludedFinalizers}

@@ -2,12 +2,12 @@ const GatewayStorage = require('./GatewayStorage');
 const Configuration = require('./Configuration');
 const SchemaPiece = require('./SchemaPiece');
 const SchemaFolder = require('./SchemaFolder');
-const { Collection, Guild, GuildChannel, Message, Role, GuildMember } = require('discord.js');
+const { Collection, Guild, GuildChannel, Message } = require('discord.js');
 const { getIdentifier } = require('../util/util');
 
 /**
  * <danger>You should never create a Gateway instance by yourself.
- * Please check {@link UnderstandingSettingGateway} about how to construct your own Gateway.</danger>
+ * Please check {@link UnderstandingSettingsGateway} about how to construct your own Gateway.</danger>
  * The Gateway class that manages the data input, parsing, and output, of an entire database, while keeping a cache system sync with the changes.
  * @extends GatewayStorage
  */
@@ -26,13 +26,13 @@ class Gateway extends GatewayStorage {
 	 */
 
 	/**
-	 * @typedef {(KlasaGuild|KlasaMessage|external:TextChannel|external:VoiceChannel|external:CategoryChannel|external:GuildMember|external:Role)} GuildResolvable
+	 * @typedef {(KlasaGuild|KlasaMessage|external:GuildChannel)} GuildResolvable
 	 */
 
 	/**
 	 * @typedef {Object} GatewayJSON
 	 * @property {string} type The name of this gateway
-	 * @property {GatewayDriverAddOptions} options The options for this gateway
+	 * @property {GatewayDriverRegisterOptions} options The options for this gateway
 	 * @property {Object} schema The current schema
 	 */
 
@@ -40,35 +40,38 @@ class Gateway extends GatewayStorage {
 	 * @since 0.0.1
 	 * @param {GatewayDriver} store The GatewayDriver instance which initiated this instance
 	 * @param {string} type The name of this Gateway
-	 * @param {Object} schema The initial schema for this instance
-	 * @param {GatewayDriverAddOptions} options The options for this schema
+	 * @param {GatewayDriverRegisterOptions} options The options for this schema
 	 */
-	constructor(store, type, schema, options) {
-		super(store.client, type, options.provider);
+	constructor(store, type, { provider }) {
+		super(store.client, type, provider);
 
 		/**
+		 * The GatewayDriver that manages this Gateway
 		 * @since 0.0.1
 		 * @type {GatewayDriver}
 		 */
 		this.store = store;
 
 		/**
-		 * @since 0.5.0
-		 * @type {GatewayDriverAddOptions}
-		 */
-		this.options = options;
-
-		/**
-		 * @since 0.3.0
-		 * @type {Object}
-		 */
-		this.defaultSchema = schema;
-
-		/**
+		 * The cached entries for this Gateway
 		 * @since 0.0.1
 		 * @type {external:Collection<string, Configuration>}
 		 */
 		this.cache = new Collection();
+
+		/**
+		 * The synchronization queue for all Configuration instances
+		 * @since 0.5.0
+		 * @type {external:Collection<string, Promise<Configuration>>}
+		 */
+		this.syncQueue = new Collection();
+
+		/**
+		 * @since 0.5.0
+		 * @type {boolean}
+		 * @private
+		 */
+		Object.defineProperty(this, '_synced', { value: false, writable: true });
 	}
 
 	/**
@@ -95,101 +98,48 @@ class Gateway extends GatewayStorage {
 	/**
 	 * Get an entry from the cache.
 	 * @since 0.5.0
-	 * @param {string} input The key to get from the cache
-	 * @param {boolean} [create=false] Whether SG should create a new instance of Configuration in the background
-	 * @returns {(Configuration|Object)}
+	 * @param {string} id The key to get from the cache
+	 * @param {boolean} [create = false] Whether SG should create a new instance of Configuration in the background, if the entry does not already exist.
+	 * @returns {?Configuration}
 	 */
-	getEntry(input, create = false) {
-		if (input === 'default') return this.defaults;
+	get(id, create = false) {
+		const entry = this.cache.get(id);
+		if (entry) return entry;
 		if (create) {
-			const entry = this.cache.get(input);
-			if (!entry) {
-				const configs = new this.Configuration(this, { id: input });
-				this.cache.set(input, configs);
-				// Silently create a new entry. The new data does not matter as Configuration default all the keys.
-				this.provider.create(this.type, input)
-					.then(() => {
-						configs.existsInDB = true;
-						if (this.client.listenerCount('configCreateEntry')) this.client.emit('configCreateEntry', configs);
-					})
-					.catch(error => this.client.emit('error', error));
-				return configs;
-			}
-			return entry;
+			const configs = new this.Configuration(this, { id });
+			this.cache.set(id, configs);
+			if (this._synced && this.schema.keyArray.length) configs.sync().catch(err => this.client.emit('error', err));
+			return configs;
 		}
-		return this.cache.get(input) || this.defaults;
-	}
-
-	/**
-	 * Create a new entry into the database with an optional content (defaults to this Gateway's defaults).
-	 * @since 0.5.0
-	 * @param {string} input The name of the key to create
-	 * @returns {Configuration}
-	 */
-	async createEntry(input) {
-		const target = getIdentifier(input);
-		if (!target) throw new TypeError('The selected target could not be resolved to a string.');
-		const cache = this.cache.get(target);
-		if (cache && cache.existsInDB) return cache;
-		await this.provider.create(this.type, target);
-		const configs = cache || new this.Configuration(this, { id: target });
-		configs.existsInDB = true;
-		if (!cache) this.cache.set(target, configs);
-		if (this.client.listenerCount('configCreateEntry')) this.client.emit('configCreateEntry', configs);
-		return configs;
-	}
-
-	/**
-	 * Generate a new entry and add it to the cache.
-	 * @since 0.5.0
-	 * @param {string} id The ID of the entry
-	 * @param {*} data The data to insert
-	 * @returns {Configuration}
-	 */
-	insertEntry(id, data = {}) {
-		const configs = new this.Configuration(this, { ...data, id });
-		this.cache.set(id, configs);
-		if (this.ready && this.schema.keyArray.length) configs.sync().catch(err => this.client.emit('error', err));
-		return configs;
-	}
-
-	/**
-	 * Delete an entry from the database and cache.
-	 * @since 0.5.0
-	 * @param {string} input The name of the key to fetch and delete
-	 * @returns {boolean}
-	 */
-	async deleteEntry(input) {
-		const configs = this.cache.get(input);
-		if (!configs) return false;
-
-		await configs.destroy();
-		return true;
+		return null;
 	}
 
 	/**
 	 * Sync either all entries from the cache with the persistent database, or a single one.
 	 * @since 0.0.1
-	 * @param {(Object|string)} [input] An object containing a id property, like discord.js objects, or a string
-	 * @param {boolean} [download] Whether the sync should download data from the database
-	 * @returns {?Configuration}
+	 * @param {(Object|string|boolean)} [input=Array<string>] An object containing a id property, like discord.js objects, or a string
+	 * @returns {?(Gateway|Configuration)}
 	 */
-	async sync(input, download) {
-		if (typeof input === 'undefined') {
-			if (!download) return Promise.all(this.cache.map(entry => entry.sync()));
-			const entries = await this.provider.getAll(this.type);
+	async sync(input = [...this.cache.keys()]) {
+		if (Array.isArray(input)) {
+			if (!this._synced) this._synced = true;
+			const entries = await this.provider.getAll(this.type, input);
 			for (const entry of entries) {
-				const cache = this.cache.get(entry);
+				if (!entry) continue;
+				const cache = this.cache.get(entry.id);
 				if (cache) {
-					if (!cache.existsInDB) cache.existsInDB = true;
+					if (!cache._existsInDB) cache._existsInDB = true;
 					cache._patch(entry);
 				} else {
-					const newEntry = new this.Configuration(this, entry);
-					newEntry.existsInDB = true;
-					this.cache.set(entry.id, newEntry);
+					const configs = new this.Configuration(this, entry);
+					configs._existsInDB = true;
+					this.cache.set(entry.id, configs);
 				}
 			}
-			return null;
+
+			// Set all the remaining configs from unknown status in DB to not exists.
+			for (const configs of this.cache.values()) if (configs._existsInDB === null) configs._existsInDB = false;
+			return this;
 		}
 		const target = getIdentifier(input);
 		if (!target) throw new TypeError('The selected target could not be resolved to a string.');
@@ -209,75 +159,41 @@ class Gateway extends GatewayStorage {
 	 * @param {GatewayGetPathOptions} [options={}] Whether the Gateway should avoid configuring the selected key
 	 * @returns {?GatewayGetPathResult}
 	 */
-	getPath(key = '', { avoidUnconfigurable = false, piece = true, errors = true } = {}) {
-		if (key === '') return { piece: this.schema, route: [] };
+	getPath(key = '', { avoidUnconfigurable = false, piece: requestPiece = true, errors = true } = {}) {
+		if (key === '' || key === '.') return { piece: this.schema, route: [] };
 		const route = key.split('.');
-		let { schema } = this;
+		let piece = this.schema;
 
 		for (let i = 0; i < route.length; i++) {
 			const currKey = route[i];
-			if (typeof schema[currKey] === 'undefined' || !schema.has(currKey)) {
-				if (errors) throw `The key ${route.slice(0, i + 1).join('.')} does not exist in the current schema.`;
-				return null;
+			if (!piece.has(currKey)) {
+				if (!errors) return null;
+				throw `The key ${route.slice(0, i + 1).join('.')} does not exist in the current schema.`;
 			}
 
-			if (schema[currKey].type === 'Folder') {
-				schema = schema[currKey];
-			} else if (piece) {
-				if (avoidUnconfigurable && !schema[currKey].configurable) {
-					if (errors) throw `The key ${schema[currKey].path} is not configurable in the current schema.`;
-					return null;
-				}
-				return { piece: schema[currKey], route: schema[currKey].path.split('.') };
+			piece = piece[currKey];
+
+			// There is no more to iterate if the current piece is not a SchemaFolder
+			if (piece.type !== 'Folder') break;
+		}
+
+		if (piece.type === 'Folder') {
+			// If it's a Folder and a Piece is requested, throw
+			if (requestPiece === true) {
+				if (!errors) return null;
+				const keys = avoidUnconfigurable ? piece.configurableKeys : [...piece.keys()];
+				throw keys.length ? `Please, choose one of the following keys: '${keys.join('\', \'')}'` : `This group is not configurable.`;
 			}
+		} else if (requestPiece === false) {
+			// Else it will always be a Piece, if a folder is requested, get parent
+			piece = piece.parent;
+		} else if (avoidUnconfigurable && !piece.configurable) {
+			// If the Piece is unconfigurable and avoidUnconfigurable is requested, throw
+			if (!errors) return null;
+			throw `The key ${piece.path} is not configurable.`;
 		}
 
-		if (piece && schema.type === 'Folder') {
-			const keys = schema.configurableKeys;
-			if (keys.length === 0) {
-				if (errors) throw `This group is not configurable.`;
-				return null;
-			}
-			if (errors) throw `Please, choose one of the following keys: '${keys.join('\', \'')}'`;
-		}
-
-		return { piece: schema, route: schema.path.split('.') };
-	}
-
-	/**
-	 * Inits the table and the schema for its use in this gateway.
-	 * @since 0.0.1
-	 * @param {boolean} [download=true] Whether this Gateway should download the data from the database
-	 * @private
-	 */
-	async init(download = true) {
-		if (this.ready) throw new Error(`[INIT] ${this} has already initialized.`);
-
-		await this.initSchema();
-		await this.initTable();
-
-		if (download) await this.sync();
-		this.ready = true;
-	}
-
-	/**
-	 * Readies up all Configuration instances in this gateway
-	 * @since 0.5.0
-	 * @returns {Array<external:Collection<string, Configuration>>}
-	 * @private
-	 */
-	async _ready() {
-		if (!this.schema.keyArray.length || typeof this.client[this.type] === 'undefined') return null;
-		const promises = [];
-		const keys = await this.provider.getKeys(this.type);
-		for (let i = 0; i < keys.length; i++) {
-			const structure = this.client[this.type].get(keys[i]);
-			if (structure) promises.push(structure.configs.sync().then(() => this.cache.set(keys[i], structure.configs)));
-		}
-		const results = await Promise.all(promises);
-		if (!this.ready) this.ready = true;
-
-		return results;
+		return { piece, route: piece.path.split('.') };
 	}
 
 	/**
@@ -288,14 +204,14 @@ class Gateway extends GatewayStorage {
 	 * @private
 	 */
 	_resolveGuild(guild) {
-		if (typeof guild === 'object') {
+		const type = typeof guild;
+		if (type === 'object' && guild !== null) {
 			if (guild instanceof Guild) return guild;
-			if (guild instanceof GuildChannel ||
-				guild instanceof Message ||
-				guild instanceof Role ||
-				guild instanceof GuildMember) return guild.guild;
+			if ((guild instanceof GuildChannel) ||
+				(guild instanceof Message)) return guild.guild;
+		} else if (type === 'string' && /^\d{17,19}$/.test(guild)) {
+			return this.client.guilds.get(guild) || null;
 		}
-		if (typeof guild === 'string' && /^\d{17,19}$/.test(guild)) return this.client.guilds.get(guild);
 		return null;
 	}
 
@@ -305,10 +221,9 @@ class Gateway extends GatewayStorage {
 	 * @param {string[]} path The key's path
 	 * @param {Object} data The data to insert
 	 * @param {('add'|'delete'|'update')} action Whether the piece got added or removed
-	 * @param {boolean} force Whether the key got added with force or not
 	 * @private
 	 */
-	async _shardSync(path, data, action, force) {
+	async _shardSync(path, data, action) {
 		if (!this.client.shard) return;
 		const parsed = typeof data === 'string' ? JSON.parse(data) : data;
 		let route = this.schema;
@@ -316,15 +231,14 @@ class Gateway extends GatewayStorage {
 		for (const pt of path) route = route[pt];
 		let piece;
 		if (action === 'add') {
-			if (parsed.type === 'Folder') piece = route[key] = new SchemaFolder(this.client, this, parsed, route, key);
-			else piece = route[key] = new SchemaPiece(this.client, this, parsed, route, key);
+			piece = route._add(key, parsed, parsed.type === 'Folder' ? SchemaFolder : SchemaPiece);
 		} else if (action === 'delete') {
 			piece = route[key];
 			delete route[key];
 		} else {
 			route[key]._patch(parsed);
 		}
-		if (force) await route.force(action, key, piece);
+		await route.force(action, piece);
 	}
 
 	/**
@@ -335,7 +249,7 @@ class Gateway extends GatewayStorage {
 	toJSON() {
 		return {
 			type: this.type,
-			options: this.options,
+			options: { provider: this.providerName },
 			schema: this.schema.toJSON()
 		};
 	}

@@ -14,6 +14,7 @@ const { isClass } = require('../../util/util');
  * @see MonitorStore
  * @see ProviderStore
  * @see TaskStore
+ * @extends external:Collection
  */
 class Store extends Collection {
 
@@ -96,6 +97,7 @@ class Store extends Collection {
 			this.client.emit('wtf', `Failed to load file '${loc}'. Error:\n${error.stack || error}`);
 		}
 		delete require.cache[loc];
+		module.children.pop();
 		return piece;
 	}
 
@@ -106,7 +108,7 @@ class Store extends Collection {
 	 */
 	async loadAll() {
 		this.clear();
-		await Store.walk(this, true);
+		if (!this.client.options.disabledCorePieces.includes(this.name)) await Store.walk(this, true);
 		await Store.walk(this);
 		return this.size;
 	}
@@ -114,7 +116,7 @@ class Store extends Collection {
 	/**
 	 * Sets up a piece in our store.
 	 * @since 0.0.1
-	 * @param {Piece} piece The peice we are setting up
+	 * @param {Piece} piece The piece we are setting up
 	 * @returns {?Piece}
 	 */
 	set(piece) {

@@ -1,5 +1,5 @@
 /**
- * The schema class that stores (nested) folders and keys for SettingGateway usage. This class also implements multiple helpers.
+ * The schema class that stores (nested) folders and keys for SettingsGateway usage. This class also implements multiple helpers.
  * @abstract
  */
 class Schema {
@@ -47,7 +47,7 @@ class Schema {
 		 * @name Schema#path
 		 * @readonly
 		 */
-		Object.defineProperty(this, 'path', { value: `${parent && parent.path.length > 0 ? `${parent.path}.` : ''}${key}` });
+		Object.defineProperty(this, 'path', { value: `${parent && parent.path.length ? `${parent.path}.` : ''}${key}` });
 
 		/**
 		 * The name of this schema instance.

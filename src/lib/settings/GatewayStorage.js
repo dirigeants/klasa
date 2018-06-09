@@ -1,5 +1,4 @@
 const SchemaFolder = require('./SchemaFolder');
-const { tryParse, deepClone } = require('../util/util');
 const { resolve } = require('path');
 const fs = require('fs-nextra');
 
@@ -57,16 +56,7 @@ class GatewayStorage {
 		 * @type {string}
 		 * @readonly
 		 */
-		Object.defineProperty(this, 'filePath', { value: resolve(this.baseDir, `${this.type}_Schema.json`) });
-
-		/**
-		 * Whether the active provider is SQL or not.
-		 * @since 0.5.0
-		 * @name GatewayStorage#sql
-		 * @type {boolean}
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'sql', { value: this.provider.sql });
+		Object.defineProperty(this, 'filePath', { value: resolve(this.baseDir, `${this.type}.schema.json`) });
 
 		/**
 		 * @since 0.5.0
@@ -82,25 +72,13 @@ class GatewayStorage {
 	}
 
 	/**
-	 * Get this gateway's SQL schema.
-	 * @since 0.0.1
-	 * @type {Array<string[]>}
-	 * @readonly
-	 */
-	get sqlSchema() {
-		const schema = [['id', 'VARCHAR(19) NOT NULL UNIQUE PRIMARY KEY']];
-		this.schema.getSQL(schema);
-		return schema;
-	}
-
-	/**
 	 * Get the provider that manages the persistent data.
 	 * @since 0.5.0
-	 * @type {Provider}
+	 * @type {?Provider}
 	 * @readonly
 	 */
 	get provider() {
-		return this.client.providers.get(this.providerName);
+		return this.client.providers.get(this.providerName) || null;
 	}
 
 	/**
@@ -116,104 +94,37 @@ class GatewayStorage {
 	/**
 	 * Inits the current Gateway.
 	 * @since 0.5.0
+	 * @param {Object} defaultSchema The default schema
 	 */
-	async init() {
+	async init(defaultSchema) {
 		if (this.ready) throw new Error(`[INIT] ${this} has already initialized.`);
-		await this.initSchema();
-		await this.initTable();
-
+		if (!this.provider) throw new Error(`This provider (${this.providerName}) does not exist in your system.`);
 		this.ready = true;
-	}
 
-	/**
-	 * Inits the table for its use in this gateway.
-	 * @since 0.5.0
-	 * @private
-	 */
-	async initTable() {
-		const hasTable = await this.provider.hasTable(this.type);
-		if (!hasTable) await this.provider.createTable(this.type, this.sql ? this.sqlSchema.map(([k, v]) => `${k} ${v}`).join(', ') : undefined);
-	}
-
-	/**
-	 * Inits the schema, creating a file if it does not exist, and returning the current schema or the default.
-	 * @since 0.5.0
-	 * @returns {SchemaFolder}
-	 * @private
-	 */
-	async initSchema() {
+		// Init the Schema
 		await fs.ensureDir(this.baseDir);
-		const schema = await fs.readJSON(this.filePath)
-			.catch(() => fs.outputJSONAtomic(this.filePath, this.defaultSchema).then(() => this.defaultSchema));
+		let schema;
+		try {
+			schema = await fs.readJSON(this.filePath);
+		} catch (error) {
+			// Make the schema the default one
+			schema = defaultSchema;
+
+			// Check if the file exists
+			const fileWritten = await fs.pathExists(this.filePath);
+
+			// If the file is written, there must be an issue with the file, emit an
+			// error instead of overwritting it (which would result to data loss). If
+			// the file does not exist, write the default schema.
+			if (fileWritten) this.client.emit('error', error);
+			else await fs.outputJSONAtomic(this.filePath, defaultSchema);
+		}
+
 		this.schema = new SchemaFolder(this.client, this, schema, null, '');
-		return this.schema;
-	}
 
-	/**
-	 * Parses an entry
-	 * @since 0.5.0
-	 * @param {Object} entry An entry to parse
-	 * @returns {Object}
-	 * @private
-	 */
-	parseEntry(entry) {
-		const object = {};
-		for (const piece of this.schema.getValues()) {
-			// If the key does not exist in the schema, ignore it.
-			if (typeof entry[piece.path] === 'undefined') continue;
-
-			if (piece.path.includes('.')) {
-				const path = piece.path.split('.');
-				let refObject = object;
-				for (let a = 0; a < path.length - 1; a++) {
-					const key = path[a];
-					if (typeof refObject[key] === 'undefined') refObject[path[a]] = {};
-					refObject = refObject[key];
-				}
-				refObject = GatewayStorage._parseSQLValue(entry[path[path.length - 1]], piece);
-			} else {
-				object[piece.path] = GatewayStorage._parseSQLValue(entry[piece.path], piece);
-			}
-		}
-
-		return object;
-	}
-
-	/**
-	 * Parse SQL values.
-	 * @since 0.5.0
-	 * @param {*} value The value to parse
-	 * @param {SchemaPiece} schemaPiece The SchemaPiece which manages this value
-	 * @returns {*}
-	 * @private
-	 */
-	static _parseSQLValue(value, schemaPiece) {
-		if (typeof value === 'undefined') return deepClone(schemaPiece.default);
-		if (schemaPiece.array) {
-			if (value === null) return deepClone(schemaPiece.default);
-			if (typeof value === 'string') value = tryParse(value);
-			if (Array.isArray(value)) return value.map(val => GatewayStorage._parseSQLValue(val, schemaPiece));
-		} else {
-			switch (schemaPiece.type) {
-				case 'any':
-					if (typeof value === 'string') return tryParse(value);
-					break;
-				case 'integer':
-					if (typeof value === 'number') return value;
-					if (typeof value === 'string') return parseInt(value);
-					break;
-				case 'boolean':
-					if (typeof value === 'boolean') return value;
-					if (typeof value === 'number') return value === 1;
-					if (typeof value === 'string') return value === 'true';
-					break;
-				case 'string':
-					if (typeof value === 'string' && /^\s|\s$/.test(value)) return value.trim();
-				// no default
-			}
-		}
-
-		return value;
+		// Init the table
+		const hasTable = await this.provider.hasTable(this.type);
+		if (!hasTable) await this.provider.createTable(this.type);
 	}
 
 }

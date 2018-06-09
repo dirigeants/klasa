@@ -1,46 +1,42 @@
-const { Finalizer } = require('klasa');
+const { Finalizer, Colors } = require('klasa');
 
 module.exports = class extends Finalizer {
 
 	constructor(...args) {
 		super(...args);
-		this.colors = {
-			prompted: { message: { background: 'red' } },
-			notprompted: { message: { background: 'blue' } },
-			user: { message: { background: 'yellow', text: 'black' } },
-			channel: {
-				text: { message: { background: 'green', text: 'black' } },
-				dm: { message: { background: 'magenta' } },
-				group: { message: { background: 'cyan' } }
-			}
+		this.reprompted = [new Colors({ background: 'blue' }), new Colors({ background: 'red' })];
+		this.user = new Colors({ background: 'yellow', text: 'black' });
+		this.channel = {
+			text: new Colors({ background: 'green', text: 'black' }),
+			dm: new Colors({ background: 'magenta' }),
+			group: new Colors({ background: 'cyan' })
 		};
 	}
 
-	run(msg, mes, timer) {
+	run(message, response, timer) {
+		const { type } = message.channel;
 		this.client.emit('log', [
-			`${msg.command.name}(${msg.args.join(', ')})`,
-			msg.reprompted ?
-				this.client.console.messages(`[${timer.stop()}]`, this.colors.prompted.message) :
-				this.client.console.messages(`[${timer.stop()}]`, this.colors.notprompted.message),
-			this.client.console.messages(`${msg.author.username}[${msg.author.id}]`, this.colors.user.message),
-			this[msg.channel.type](msg)
-		].join(' '), 'log');
+			`${message.command.name}(${message.args.join(', ')})`,
+			this.reprompted[Number(message.reprompted)].format(`[${timer.stop()}]`),
+			this.user.format(`${message.author.username}[${message.author.id}]`),
+			this.channel[type].format(this[type](message))
+		].join(' '));
 	}
 
 	init() {
-		this.enabled = this.client.options.cmdLogging;
+		this.enabled = this.client.options.commandLogging;
 	}
 
-	text(msg) {
-		return this.client.console.messages(`${msg.guild.name}[${msg.guild.id}]`, this.colors.channel.text.message);
+	text(message) {
+		return `${message.guild.name}[${message.guild.id}]`;
 	}
 
 	dm() {
-		return this.client.console.messages('Direct Messages', this.colors.channel.dm.message);
+		return 'Direct Messages';
 	}
 
-	group(msg) {
-		return this.client.console.messages(`Group DM => ${msg.channel.owner.username}[${msg.channel.owner.id}]`, this.colors.channel.group.message);
+	group(message) {
+		return `Group DM => ${message.channel.owner.username}[${message.channel.owner.id}]`;
 	}
 
 };

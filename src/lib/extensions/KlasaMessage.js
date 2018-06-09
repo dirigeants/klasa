@@ -1,4 +1,4 @@
-const { Structures, splitMessage, Collection, MessageAttachment, MessageEmbed } = require('discord.js');
+const { Structures, splitMessage, Collection, MessageAttachment, MessageEmbed, Permissions: { FLAGS } } = require('discord.js');
 const { isObject } = require('../util/util');
 
 module.exports = Structures.extend('Message', Message => {
@@ -20,13 +20,6 @@ module.exports = Structures.extend('Message', Message => {
 			 * @type {Configuration}
 			 */
 			this.guildConfigs = this.guild ? this.guild.configs : this.client.gateways.guilds.defaults;
-
-			/**
-			 * The previous responses to this message
-			 * @since 0.5.0
-			 * @type {?KlasaMessage[]}
-			 */
-			this.responses = null;
 
 			/**
 			 * The command being run
@@ -56,6 +49,24 @@ module.exports = Structures.extend('Message', Message => {
 			 * @private
 			 */
 			this.prompter = null;
+
+			/**
+			 * The responses to this message
+			 * @since 0.5.0
+			 * @type {external:KlasaMessage[]}
+			 * @private
+			 */
+			this._responses = [];
+		}
+
+		/**
+		 * The previous responses to this message
+		 * @since 0.5.0
+		 * @type {KlasaMessage[]}
+		 * @readonly
+		 */
+		get responses() {
+			return this._responses.filter(msg => !msg.deleted);
 		}
 
 		/**
@@ -106,7 +117,7 @@ module.exports = Structures.extend('Message', Message => {
 		 */
 		get reactable() {
 			if (!this.guild) return true;
-			return this.channel.readable && this.permissionsFor(this.guild.me).has('ADD_REACTIONS');
+			return this.channel.readable && this.channel.permissionsFor(this.guild.me).has(FLAGS.ADD_REACTIONS);
 		}
 
 		/**
@@ -117,7 +128,7 @@ module.exports = Structures.extend('Message', Message => {
 		 */
 		async prompt(text, time = 30000) {
 			const message = await this.channel.send(text);
-			const responses = await this.channel.awaitMessages(mes => mes.author === this.author, { time, max: 1 });
+			const responses = await this.channel.awaitMessages(msg => msg.author === this.author, { time, max: 1 });
 			message.delete();
 			if (responses.size === 0) throw this.language.get('MESSAGE_PROMPT_TIMEOUT');
 			return responses.first();
@@ -156,33 +167,29 @@ module.exports = Structures.extend('Message', Message => {
 		 * @since 0.0.1
 		 * @param {external:StringResolvable|external:MessageEmbed|external:MessageAttachment} [content] The content to send
 		 * @param {external:MessageOptions} [options] The D.JS message options
-		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
+		 * @returns {KlasaMessage|KlasaMessage[]}
 		 */
 		async sendMessage(content, options) {
 			// eslint-disable-next-line prefer-const
 			let { content: _content, ..._options } = this.constructor.handleOptions(content, options);
 
-			if (!this.responses || typeof _options.files !== 'undefined') {
-				const mes = await this.channel.send(_content, _options);
-				if (typeof _options.files === 'undefined') this.responses = Array.isArray(mes) ? mes : [mes];
-				return mes;
-			}
-
+			if (typeof _options.files !== 'undefined') return this.channel.send(_content, _options);
 			if (Array.isArray(_content)) _content = _content.join('\n');
 			if (_options && _options.split) _content = splitMessage(_content, _options.split);
 			if (!Array.isArray(_content)) _content = [_content];
 
+			const { responses } = this;
 			const promises = [];
-			const max = Math.max(_content.length, this.responses.length);
+			const max = Math.max(_content.length, responses.length);
 
 			for (let i = 0; i < max; i++) {
-				if (i >= _content.length) this.responses[i].delete();
-				else if (this.responses.length > i) promises.push(this.responses[i].edit(_content[i], _options));
+				if (i >= _content.length) responses[i].delete();
+				else if (responses.length > i) promises.push(responses[i].edit(_content[i], _options).then(() => responses[i]));
 				else promises.push(this.channel.send(_content[i], _options));
 			}
 
-			this.responses = await Promise.all(promises);
-			return this.responses.length === 1 ? this.responses[0] : this.responses;
+			this._responses = await Promise.all(promises);
+			return this._responses.length === 1 ? this._responses[0] : this._responses;
 		}
 
 		/**
@@ -221,6 +228,17 @@ module.exports = Structures.extend('Message', Message => {
 		}
 
 		/**
+		 * Since d.js is dumb and has 2 patch methods, this is for edits
+		 * @since 0.5.0
+		 * @param {*} data The data passed from the original constructor
+		 * @private
+		 */
+		patch(data) {
+			super.patch(data);
+			this.language = this.guild ? this.guild.language : this.client.languages.default;
+		}
+
+		/**
 		 * Extends the patch method from D.JS to attach and update the language to this instance
 		 * @since 0.5.0
 		 * @param {*} data The data passed from the original constructor
@@ -252,8 +270,8 @@ module.exports = Structures.extend('Message', Message => {
 			this.prefixLength = prefixLength;
 			this.prompter = this.command.usage.createPrompt(this, {
 				quotedStringSupport: this.command.quotedStringSupport,
-				promptTime: this.command.promptTime,
-				promptLimit: this.command.promptLimit
+				time: this.command.promptTime,
+				limit: this.command.promptLimit
 			});
 			this.client.emit('commandRun', this, this.command, this.args);
 		}
@@ -292,6 +310,7 @@ module.exports = Structures.extend('Message', Message => {
 			}
 
 			options.embed = options.embed || null;
+			options.content = options.content || null;
 			return options;
 		}
 

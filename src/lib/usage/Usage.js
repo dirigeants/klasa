@@ -1,7 +1,9 @@
 const Tag = require('./Tag');
 const TextPrompt = require('./TextPrompt');
+
 const open = ['[', '(', '<'];
 const close = [']', ')', '>'];
+const space = [' ', '\n'];
 
 /**
  * Converts usage strings into objects to compare against later
@@ -89,12 +91,12 @@ class Usage {
 	/**
 	 * Creates a TextPrompt instance to collect and resolve arguments with.
 	 * @since 0.5.0
-	 * @param {KlasaMessage} msg The message context from the prompt
+	 * @param {KlasaMessage} message The message context from the prompt
 	 * @param {TextPromptOptions} [options] The options for the prompt
 	 * @returns {TextPrompt}
 	 */
-	createPrompt(msg, options = {}) {
-		return new TextPrompt(msg, this, options);
+	createPrompt(message, options = {}) {
+		return new TextPrompt(message, this, options);
 	}
 
 	/**
@@ -123,7 +125,7 @@ class Usage {
 	 * @private
 	 */
 	static parseUsage(usageString) {
-		let usage = {
+		const usage = {
 			tags: [],
 			opened: 0,
 			current: '',
@@ -136,8 +138,7 @@ class Usage {
 			fromTo: ''
 		};
 
-		for (let i = 0; i < usageString.length; i++) {
-			const char = usageString[i];
+		for (const [i, char] of Object.entries(usageString)) {
 			usage.char = i + 1;
 			usage.from = usage.char - usage.current.length;
 			usage.at = `at char #${usage.char} '${char}'`;
@@ -152,9 +153,9 @@ class Usage {
 				continue;
 			}
 
-			if (open.includes(char)) usage = Usage.tagOpen(usage, char);
-			else if (close.includes(char)) usage = Usage.tagClose(usage, char);
-			else if ([' ', '\n'].includes(char)) usage = Usage.tagSpace(usage, char);
+			if (open.includes(char)) Usage.tagOpen(usage, char);
+			else if (close.includes(char)) Usage.tagClose(usage, char);
+			else if (space.includes(char)) Usage.tagSpace(usage, char);
 			else usage.current += char;
 		}
 
@@ -169,7 +170,7 @@ class Usage {
 	 * @since 0.0.1
 	 * @param {Object} usage The current usage interim object
 	 * @param {string} char The character that triggered this function
-	 * @returns {Object} The current usage interim object
+	 * @returns {void}
 	 * @private
 	 */
 	static tagOpen(usage, char) {
@@ -177,7 +178,6 @@ class Usage {
 		if (usage.current) throw `${usage.fromTo}: there can't be a literal outside a tag`;
 		usage.opened++;
 		usage.openReq = open.indexOf(char);
-		return usage;
 	}
 
 	/**
@@ -185,7 +185,7 @@ class Usage {
 	 * @since 0.0.1
 	 * @param {Object} usage The current usage interim object
 	 * @param {string} char The character that triggered this function
-	 * @returns {Object} The current usage interim object
+	 * @returns {void}
 	 * @private
 	 */
 	static tagClose(usage, char) {
@@ -203,22 +203,20 @@ class Usage {
 			usage.tags.push(new Tag(usage.current, usage.tags.length + 1, required));
 		}
 		usage.current = '';
-		return usage;
 	}
 
 	/**
 	 * Method responsible for handling tag spacing
 	 * @since 0.0.1
-	 * @param {Object} usage The current usage in the object
+	 * @param {Object} usage The current usage interim object
 	 * @param {string} char The character that triggered this function
-	 * @returns {Object} The current usage in the object
+	 * @returns {void}
 	 * @private
 	 */
 	static tagSpace(usage, char) {
 		if (char === '\n') throw `${usage.at}: there can't be a line break in the usage string`;
 		if (usage.opened) throw `${usage.at}: spaces aren't allowed inside a tag`;
 		if (usage.current) throw `${usage.fromTo}: there can't be a literal outside a tag.`;
-		return usage;
 	}
 
 }

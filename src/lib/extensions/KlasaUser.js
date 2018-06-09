@@ -18,7 +18,16 @@ module.exports = Structures.extend('User', User => {
 			 * @since 0.5.0
 			 * @type {Configuration}
 			 */
-			this.configs = this.client.gateways.users.cache.get(this.id) || this.client.gateways.users.insertEntry(this.id);
+			this.configs = this.client.gateways.users.get(this.id, true);
+		}
+
+		/**
+		 * Returns the JSON-compatible object of this instance.
+		 * @since 0.5.0
+		 * @returns {Object}
+		 */
+		toJSON() {
+			return { ...super.toJSON(), configs: this.configs };
 		}
 
 	}

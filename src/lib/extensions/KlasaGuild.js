@@ -18,15 +18,24 @@ module.exports = Structures.extend('Guild', Guild => {
 			 * @since 0.5.0
 			 * @type {Configuration}
 			 */
-			this.configs = this.client.gateways.guilds.cache.get(this.id) || this.client.gateways.guilds.insertEntry(this.id);
+			this.configs = this.client.gateways.guilds.get(this.id, true);
 		}
 
 		/**
 		 * The language configured for this guild
-		 * @type {Language}
+		 * @type {?Language}
 		 */
 		get language() {
-			return this.client.languages.get(this.configs.language);
+			return this.client.languages.get(this.configs.language) || null;
+		}
+
+		/**
+		 * Returns the JSON-compatible object of this instance.
+		 * @since 0.5.0
+		 * @returns {Object}
+		 */
+		toJSON() {
+			return { ...super.toJSON(), configs: this.configs.toJSON() };
 		}
 
 	}

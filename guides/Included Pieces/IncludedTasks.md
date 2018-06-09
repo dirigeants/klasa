@@ -2,6 +2,7 @@ There's no included {@link Task} piece in Klasa, however, they are available in 
 
 ## Further Reading:
 
+- {@tutorial IncludedArguments}
 - {@tutorial IncludedCommands}
 - {@tutorial IncludedEvents}
 - {@tutorial IncludedExtendables}
