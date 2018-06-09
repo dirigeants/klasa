@@ -176,9 +176,7 @@ class Configuration {
 		else if (typeof keys === 'undefined') keys = [...this.gateway.schema.values(true)].map(piece => piece.path);
 		if (Array.isArray(keys)) {
 			const result = { errors: [], updated: [] };
-			const entries = new Array(keys.length);
-			for (let i = 0; i < keys.length; i++) entries[i] = [keys[i], null];
-			for (const [key, value] of entries) {
+			for (const key of keys) {
 				const path = this.gateway.getPath(key, { piece: true, avoidUnconfigurable, errors: false });
 				if (!path) {
 					result.errors.push(guild && guild.language ?
@@ -186,8 +184,8 @@ class Configuration {
 						`The path ${key} does not exist in the current schema, or does not correspond to a piece.`);
 					continue;
 				}
-				const newValue = value === null ? deepClone(path.piece.default) : value;
-				if (this._setValueByPath(path.piece, newValue, force).updated) result.updated.push({ data: [path.piece.path, newValue], piece: path.piece });
+				const value = deepClone(path.piece.default);
+				if (this._setValueByPath(path.piece, value, force).updated) result.updated.push({ data: [path.piece.path, value], piece: path.piece });
 			}
 			await this._save(result);
 			return result;
