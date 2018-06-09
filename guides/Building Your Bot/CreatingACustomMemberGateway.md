@@ -44,7 +44,7 @@ Structures.extend('GuildMember', GuildMember => class MyMember extends GuildMemb
 Then, you'll need to require it somewhere; I suggest in your entry point. 
 
 ```javascript
-require('./path-to/extention');
+require('./path-to/extension');
 
 client.gateways.register('members', {
 	experience: {
@@ -65,7 +65,7 @@ Alright! Now you have a fully functioning member-gateway. Now, we can create a p
 
 We will be taking code from {@tutorial CreatingPointsSystems}, and modifying it a small bit to work with the newly created member-gateway.
 
-Create a new monitor, and add the follwing code:
+Create a new monitor, and add the following code:
 
 ```javascript
 const { Monitor } = require('klasa');
@@ -82,18 +82,18 @@ module.exports = class extends Monitor {
 		const nextValue = message.member.configs.experience + 1;
 
 		// Cache the current level.
-		const currLevel = message.member.configs.level;
+		const currentLevel = message.member.configs.level;
 
 		// Calculate the next level.
 		const nextLevel = Math.floor(0.1 * Math.sqrt(nextValue + 1));
 
-		// Update the members's configuration entry by adding 1 to it, and update the level also.
+		// Update the members' configuration entry by adding 1 to it, and update the level also.
 		await message.member.configs.update(['experience', 'level'], [nextValue, nextLevel]);
 
 		// If the current level and the next level are not the same, then it has increased, and you can send the message.
-		if (currLevel !== nextLevel) {
+		if (currentLevel !== nextLevel) {
 			// Send the message to the channel congratulating the user.
-			await message.send(`Congratulations! You leveled up to level **${currLevel}**!`);
+			await message.send(`Congratulations! You leveled up to level **${currentLevel}**!`);
 		}
 	}
 
@@ -148,7 +148,7 @@ module.exports = class extends Command {
 
 Klasa has a {@link KlasaClientOptions} for preserving guild configs, in case your bot leaves a guild. This however, would not be reflected in the current member-gateway, although it is easily fixable with a guildRemove event.
 
->Beware! This will delete all member configuration entries if your bot is kicked, you accidently leave, etc.
+>Beware! This will delete all member configuration entries if your bot is kicked, you accidentally leave, etc.
 
 ```javascript
 const { Event } = require('klasa');
