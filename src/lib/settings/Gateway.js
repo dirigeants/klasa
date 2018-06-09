@@ -90,7 +90,7 @@ class Gateway extends GatewayStorage {
 	 * Get an entry from the cache.
 	 * @since 0.5.0
 	 * @param {string} id The key to get from the cache
-	 * @param {boolean} [create = false] Whether SG should create a new instance of Configuration in the background
+	 * @param {boolean} [create = false] Whether SG should create a new instance of Configuration in the background, if the entry does not already exist.
 	 * @returns {?Configuration}
 	 */
 	get(id, create = false) {
