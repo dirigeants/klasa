@@ -65,7 +65,6 @@ Alright! Now you have a fully functioning member-gateway. Now, we can create a p
 
 We will be taking code from {@tutorial CreatingPointsSystems}, and modifying it a small bit to work with the newly created member-gateway.
 
-
 Create a new monitor, and add the follwing code:
 
 ```javascript
@@ -103,7 +102,6 @@ module.exports = class extends Monitor {
 };
 ```
 
-
 ## Creating A Command To Check Level
 
 If the member wants to check there own level or experience, we can do so with two simple commands:
@@ -129,7 +127,6 @@ module.exports = class extends Command {
 
 ### Level Command
 
-
 ```javascript
 const { Command } = require('klasa');
 
@@ -152,7 +149,6 @@ module.exports = class extends Command {
 Klasa has a {@link KlasaClientOptions} for preserving guild configs, in case your bot leaves a guild. This however, would not be reflected in the current member-gateway, although it is easily fixable with a guildRemove event.
 
 >Beware! This will delete all member configuration entries if your bot is kicked, you accidently leave, etc.
-
 
 ```javascript
 const { Event } = require('klasa');
