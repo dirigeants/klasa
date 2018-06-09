@@ -30,11 +30,11 @@ We have the Gateway, so we just need to use [Custom Structures](https://discord.
 ```javascript
 const { Structures } = require('discord.js');
 
-Structures.extend("GuildMember", GuildMember => class MyMember extends GuildMember {
-	constructor (...args) {
+Structures.extend('GuildMember', GuildMember => class MyMember extends GuildMember { 
+	constructor(...args) {
 		super(...args);
 		this.configs = this.client.gateways.members.get(`${this.guild.id}-${this.id}`, true);
-	}
+	} 
 });
 
 ```
