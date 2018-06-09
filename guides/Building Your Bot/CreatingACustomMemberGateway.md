@@ -4,78 +4,59 @@ This is simple to achieve with Klasa's advanced Gateway system. In this example,
 
 > Note: I would not recommend using the default (JSON) provider for this, as you may end up reaching the limit of JSON files your OS can open.
 
-## Creating the Gateway
+## Creating The Gateway
 
 Inside your entry point (Where you define `new Client()`, for example, `index.js`) add this:
 
 ```javascript
 client.gateways.register('members', {
-
-})
+	experience: {
+		type: 'Integer',
+		default: 10
+	},
+	level: {
+		type: 'Integer',
+		default: 1
+	}
+}, { provider: 'rethinkdb' });
 ```
 
-In this function, we are checking if the schema has the key `experience`. If it doesn't, we add it as a new key, with type `integer` (doubtfully we'll use `float` on this) and make it unconfigurable for the built-in userconf command so the end users do not cheat by modifying their stats.
+And that's it, we now have a built in members gateway, however we have no way of accessing them via the [GuildMember](https://discord.js.org/#/docs/main/master/class/GuildMember) class. We'll tackle that next.
 
-> **Note**: The name of the key can be anything, can be `xp`, `points`... but we will use this one for the guide.
+## Creating Our Own GuildMember Class
 
-## Setting the monitor
-
-Now that we have set up the schema, we will want to create a monitor:
+We have the Gateway, so we just need to use a {@link Extendable} to use it properly. Make a new Extendable in /extendables and call it `GuildMember`. Add this in:
 
 ```javascript
-const { Monitor } = require('klasa');
+const { Extendable } = require('klasa');
 
-module.exports = class extends Monitor {
+module.exports = class extends Extendable {
 
 	constructor(...args) {
 		super(...args, {
-			enabled: true,
-			ignoreBots: true,
-			ignoreSelf: true,
-			ignoreOthers: false
+            		appliesTo: ["GuildMember"],
+            		name: 'configs',
+            		enabled: true,
+         	  	klasa: false
 		});
 	}
 
-	async run(message) {
-		// If the message was not sent in a TextChannel, ignore it.
-		if (!message.guild) return;
-
-		// Update the user's configuration entry by adding 1 to it.
-		await message.author.configs.update('experience', message.author.configs.experience + 1);
+	get extend() {
+		return this.client.gateways.members.get(`${this.guild.id}-${this.id}`, true); //we pass "true" here to create an entry, if it doesn't exist.
 	}
 
 };
 
 ```
 
-Alternatively, we can create the `init` method and ensure the users' schema always has our key.
+Alright! Now you have a fully functioning member-gateway. Now, we can create a per guild level system.
 
-## Level up!
+## Level Up!
 
-Some social bots have level up messages. How do we set it up? There are two ways to achieve this:
+We will be taking code from {@tutorial CreatingPointsSystems}, and modifying it a small bit to work with the newly created member-gateway.
 
-1. We calculate the current level and the next level on the fly. This system is, however, harder to implement and it processes a lot of maths, but it's also RAM friendly for massive bots. We won't cover this in the guide.
-1. We add a level field. This makes the configuration update slower by nature as it will need to update two values. First, we will create the key:
 
-```javascript
-async function init() {
-	if (!this.client.gateways.users.schema.has('level')) {
-		this.client.gateways.users.schema.add('level', {
-			type: 'integer',
-			default: 0,
-			configurable: false
-		});
-	}
-}
-```
-
-Then we pick up a level calculation algorithm, the following as an example:
-
-```javascript
-Math.floor(0.1 * Math.sqrt(POINTS + 1));
-```
-
-Then inside our monitor's run method:
+Create a new monitor, and add the follwing code:
 
 ```javascript
 const { Monitor } = require('klasa');
@@ -89,16 +70,16 @@ module.exports = class extends Monitor {
 		if (!message.guild) return;
 
 		// Calculate the next value for experience.
-		const nextValue = message.author.configs.experience + 1;
+		const nextValue = message.member.configs.experience + 1;
 
 		// Cache the current level.
-		const currLevel = message.author.configs.level;
+		const currLevel = message.member.configs.level;
 
 		// Calculate the next level.
 		const nextLevel = Math.floor(0.1 * Math.sqrt(nextValue + 1));
 
-		// Update the user's configuration entry by adding 1 to it, and update the level also.
-		await message.author.configs.update(['experience', 'level'], [nextValue, nextLevel]);
+		// Update the members's configuration entry by adding 1 to it, and update the level also.
+		await message.member.configs.update(['experience', 'level'], [nextValue, nextLevel]);
 
 		// If the current level and the next level are not the same, then it has increased, and you can send the message.
 		if (currLevel !== nextLevel) {
@@ -109,18 +90,15 @@ module.exports = class extends Monitor {
 
 	// Init
 
-};
+}
 ```
 
-Optionally, you can check if `nextLevel === message.author.configs.level` is true and update a single key instead, but the speed difference is negligible and since [SettingsGateway v2.1](https://github.com/dirigeants/klasa/pull/179), the key `level` will not be updated if it did not change. As well, this overload is much faster than the JSON object overload, previously used as the only way to update multiple values.
 
-## Creating Our Commands
+## Creating A Command To Check Level
 
-To allow users to know their current amount of points and level, we will create two commands:
+If the member wants to check there own level or experience, we can do so with two simple commands:
 
 ### Points Command
-
-Let's create a file in `commands/Social/points.js` with the following contents:
 
 ```javascript
 const { Command } = require('klasa');
@@ -128,20 +106,19 @@ const { Command } = require('klasa');
 module.exports = class extends Command {
 
 	constructor(...args) {
-		super(...args, { description: 'Check how many points you have.' });
+		super(...args, { description: 'Check how many points you have in this guild.' });
 	}
 
 	async run(message) {
-		return message.send(`You have a total of ${message.author.configs.experience} experience points!`);
+		return message.send(`You have a total of ${message.member.configs.experience} experience points!`);
 	}
 
-};
+}
 
 ```
 
 ### Level Command
 
-Let's create a file in `commands/Social/level.js` with the following contents:
 
 ```javascript
 const { Command } = require('klasa');
@@ -149,13 +126,47 @@ const { Command } = require('klasa');
 module.exports = class extends Command {
 
 	constructor(...args) {
-		super(...args, { description: 'Check your current level.' });
-	}
+		super(...args, { description: 'Check your current level in this guild.' });
+	};
 
 	async run(message) {
-		return message.send(`You are currently level ${message.author.configs.level}!`);
-	}
+		return message.send(`You are currently level ${message.member.configs.level}!`);
+	};
 
 };
 
 ```
+
+## Preserved Configs
+
+Klasa has a {@link KlasaClientOptions} for preserving guild configs, incase your bot leaves a guild. This however, would not be reflected in the current member-gateway, although it is easily fixable with a guildRemove event.
+
+<aside class="warning">
+    Beware! This will delete all member configuration entries if your bot is kicked, you accidently leave, etc.
+</aside>
+
+```javascript
+
+const { Event } = require('klasa');
+
+module.exports = class extends Event {
+	constructor(...args) {
+		super(...args, { name: 'guildRemove' });
+	}
+	
+	async run(guild) {
+
+		// just incase of an outage, check if the guild is avialable, and also check if we are preserving configs.
+		if(!guild.available || this.client.options.preserveConfigs) return;
+
+		// filter all the entries which start with the guild id (all of the guilds members, which we are storing)
+		const guildMembers = this.client.gateways.members.cache.filter(config => config.id.startsWith(guild.id));
+		if(guildMembers.size) guildMembers.forEach(config => config.destroy());
+	}
+	
+}
+```
+
+## All Done!
+
+And there we have it! Your own custom member gateway, which you can use like any other gateway.
