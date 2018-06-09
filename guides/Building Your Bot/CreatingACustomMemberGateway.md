@@ -156,7 +156,7 @@ module.exports = class extends Event {
 	
 	async run(guild) {
 
-		// just incase of an outage, check if the guild is avialable, and also check if we are preserving configs.
+		// just in case of an outage, check if the guild is available, and also check if we are preserving configs.
 		if (!guild.available || this.client.options.preserveConfigs) return;
 
 		// filter all the entries which start with the guild id (all of the guilds members, which we are storing)
