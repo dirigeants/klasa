@@ -34,15 +34,16 @@ module.exports = class extends Extendable {
 
 	constructor(...args) {
 		super(...args, {
-            		appliesTo: ["GuildMember"],
-            		name: 'configs',
-            		enabled: true,
-         	  	klasa: false
+			appliesTo: ['GuildMember'],
+			name: 'configs',
+			enabled: true,
+			klasa: false
 		});
 	}
 
 	get extend() {
-		return this.client.gateways.members.get(`${this.guild.id}-${this.id}`, true); //we pass "true" here to create an entry, if it doesn't exist.
+		// we pass "true" here to create an entry, if it doesn't exist.
+		return this.client.gateways.members.get(`${this.guild.id}-${this.id}`, true); 
 	}
 
 };
@@ -90,7 +91,7 @@ module.exports = class extends Monitor {
 
 	// Init
 
-}
+};
 ```
 
 
@@ -113,7 +114,7 @@ module.exports = class extends Command {
 		return message.send(`You have a total of ${message.member.configs.experience} experience points!`);
 	}
 
-}
+};
 
 ```
 
@@ -127,11 +128,11 @@ module.exports = class extends Command {
 
 	constructor(...args) {
 		super(...args, { description: 'Check your current level in this guild.' });
-	};
+	}
 
 	async run(message) {
 		return message.send(`You are currently level ${message.member.configs.level}!`);
-	};
+	}
 
 };
 
@@ -156,14 +157,15 @@ module.exports = class extends Event {
 	async run(guild) {
 
 		// just incase of an outage, check if the guild is avialable, and also check if we are preserving configs.
-		if(!guild.available || this.client.options.preserveConfigs) return;
+		if (!guild.available || this.client.options.preserveConfigs) return;
 
 		// filter all the entries which start with the guild id (all of the guilds members, which we are storing)
 		const guildMembers = this.client.gateways.members.cache.filter(config => config.id.startsWith(guild.id));
-		if(guildMembers.size) guildMembers.forEach(config => config.destroy());
+		if (guildMembers.size) guildMembers.forEach(config => config.destroy());
 	}
 	
-}
+};
+
 ```
 
 ## All Done!
