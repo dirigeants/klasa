@@ -140,7 +140,7 @@ module.exports = class extends Command {
 
 ## Preserved Configs
 
-Klasa has a {@link KlasaClientOptions} for preserving guild configs, incase your bot leaves a guild. This however, would not be reflected in the current member-gateway, although it is easily fixable with a guildRemove event.
+Klasa has a {@link KlasaClientOptions} for preserving guild configs, in case your bot leaves a guild. This however, would not be reflected in the current member-gateway, although it is easily fixable with a guildRemove event.
 
 >Beware! This will delete all member configuration entries if your bot is kicked, you accidently leave, etc.
 
