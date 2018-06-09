@@ -43,7 +43,7 @@ module.exports = class extends Extendable {
 
 	get extend() {
 		// we pass "true" here to create an entry, if it doesn't exist.
-		return this.client.gateways.members.get(`${this.guild.id}-${this.id}`, true); 
+		return this.client.gateways.members.get(`${this.guild.id}-${this.id}`, true);
 	}
 
 };
@@ -146,16 +146,15 @@ Klasa has a {@link KlasaClientOptions} for preserving guild configs, in case you
 
 
 ```javascript
-
 const { Event } = require('klasa');
 
 module.exports = class extends Event {
+
 	constructor(...args) {
 		super(...args, { name: 'guildRemove' });
 	}
-	
-	async run(guild) {
 
+	async run(guild) {
 		// just in case of an outage, check if the guild is available, and also check if we are preserving configs.
 		if (!guild.available || this.client.options.preserveConfigs) return;
 
@@ -163,7 +162,7 @@ module.exports = class extends Event {
 		const guildMembers = this.client.gateways.members.cache.filter(config => config.id.startsWith(guild.id));
 		if (guildMembers.size) guildMembers.forEach(config => config.destroy());
 	}
-	
+
 };
 
 ```
