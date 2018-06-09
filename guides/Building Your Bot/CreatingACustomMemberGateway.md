@@ -1,6 +1,6 @@
 Something that is often asked or requested, is a custom member-based gateway; that is per member configs, so you would have different {@link Configuration} values for different guilds.
 
-This is simple to achieve with Klasa's advanced Gateway system. In this example, we will be make a per member gateway with a built in key for points. We will be remaking the {@tutorial CreatingPointsSystems} example, in this tutorial.
+This is simple to achieve with Klasa's advanced Gateway system. In this example, we will be make a per member gateway with a built in key for points. We will be remaking the {@tutorial CreatingPointsSystems} tutorial, for members instead of users.
 
 > Note: I would not recommend using the default (JSON) provider for this, as you may end up reaching the limit of JSON files your OS can open.
 
@@ -59,7 +59,7 @@ client.gateways.register('members', {
 
 ```
 
-Alright! Now you have a fully functioning member-gateway. Now, we can create a per guild level system.
+Alright! Now you have a fully functioning member-gateway. Now, we can create a per-guild level system.
 
 ## Level Up!
 
