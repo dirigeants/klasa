@@ -77,17 +77,17 @@ class Configuration {
 		 */
 		Object.defineProperty(this, '_existsInDB', { value: null, writable: true });
 
-		/**
-		 * The sync status for this Configuration instance.
-		 * @since 0.5.0
-		 * @type {Promise}
-		 * @name Configuration#_syncStatus
-		 * @private
-		 */
-		Object.defineProperty(this, '_syncStatus', { value: null, writable: true });
-
 		Configuration._merge(data, this.gateway.schema);
 		for (const key of this.gateway.schema.keys()) this[key] = data[key];
+	}
+
+	/**
+	 * Check whether this Configuration is being synchronized in the Gateway's sync queue.
+	 * @since 0.5.0
+	 * @type {boolean}
+	 */
+	get synchronizing() {
+		return this.gateway.syncQueue.has(this.id);
 	}
 
 	/**
@@ -118,18 +118,23 @@ class Configuration {
 	 * @returns {Promise<this>}
 	 */
 	waitSync() {
-		if (this._syncStatus) return this._syncStatus;
-		return Promise.resolve(this);
+		return this.gateway.syncQueue.get(this.id) || Promise.resolve(this);
 	}
 
 	/**
 	 * Sync the data from the database with the cache.
 	 * @since 0.5.0
-	 * @returns {this}
+	 * @returns {Promise<this>}
 	 */
-	async sync() {
-		if (!this._syncStatus) this._syncStatus = this._sync();
-		return this._syncStatus;
+	sync() {
+		// Await current sync status from the sync queue
+		const syncStatus = this.gateway.syncQueue.get(this.id);
+		if (syncStatus) return syncStatus;
+
+		// If it's not currently synchronizing, create a new sync status for the sync queue
+		const sync = this._sync();
+		this.gateway.syncQueue.set(this.id, sync);
+		return sync;
 	}
 
 	/**
@@ -342,7 +347,7 @@ class Configuration {
 			this._existsInDB = false;
 		}
 
-		this._syncStatus = null;
+		this.gateway.syncQueue.delete(this.id);
 		return this;
 	}
 
