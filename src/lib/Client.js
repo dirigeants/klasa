@@ -546,9 +546,8 @@ KlasaClient.defaultPermissionLevels = new PermissionLevels()
  * Emitted when {@link Configuration#update} or {@link Configuration#reset} is run.
  * @event KlasaClient#configUpdateEntry
  * @since 0.5.0
- * @param {Configuration} oldEntry The old configuration entry
- * @param {Configuration} newEntry The new configuration entry
- * @param {ConfigurationUpdateResultEntry[]} path The path of the key which changed
+ * @param {Configuration} entry The patched configuration entry
+ * @param {ConfigurationUpdateResultEntry[]} updated The keys that were updated
  */
 
 /**
