@@ -1,20 +1,14 @@
 const { Event } = require('klasa');
+const gateways = ['users', 'clientStorage'];
 
 module.exports = class extends Event {
 
 	run(configs) {
-		if (!this.client.shard) return;
-		if (configs.gateway.type === 'users') {
+		if (this.client.shard && gateways.includes(configs.gateway.type)) {
 			this.client.shard.broadcastEval(`
 				if (this.shard.id !== ${this.client.shard.id}) {
-					const user = this.users.get('${configs.id}');
-					if (user) user.configs.sync();
-				}
-			`);
-		} else if (configs.gateway.type === 'clientStorage') {
-			this.client.shard.broadcastEval(`
-				if (this.shard.id !== ${this.client.shard.id}) {
-					this.configs.sync();
+					const entry = this.gateways.${configs.gateway.type}.cache.get('${configs.id}');
+					if (entry) entry._patch(${JSON.stringify(configs)});
 				}
 			`);
 		}
