@@ -100,7 +100,8 @@ class GatewayStorage {
 	 */
 	async init(defaultSchema) {
 		if (this.ready) throw new Error(`[INIT] ${this} has already initialized.`);
-		if (!this.provider) throw new Error(`This provider (${this.providerName}) does not exist in your system.`);
+		const { provider } = this;
+		if (!provider) throw new Error(`This provider (${this.providerName}) does not exist in your system.`);
 		this.ready = true;
 
 		// Init the Schema
@@ -125,8 +126,8 @@ class GatewayStorage {
 		this.schema = new SchemaFolder(this.client, this, schema, null, '');
 
 		// Init the table
-		const hasTable = await this.provider.hasTable(this.type);
-		if (!hasTable) await this.provider.createTable(this.type);
+		const hasTable = await provider.hasTable(this.type);
+		if (!hasTable) await provider.createTable(this.type);
 	}
 
 }
