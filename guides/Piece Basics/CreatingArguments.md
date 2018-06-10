@@ -6,7 +6,7 @@ const { Argument } = require('klasa');
 module.exports = class extends Argument {
 
 	run(arg, possible, message) {
-		// `this` refers to the parent class, and not this one. You cannot use super
+		// This is where yoy want to validate arg and return a resolved param or throw an error
 	}
 
 };
