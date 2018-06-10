@@ -1,5 +1,5 @@
 const SchemaFolder = require('./SchemaFolder');
-const { resolve } = require('path');
+const { join } = require('path');
 const fs = require('fs-nextra');
 
 class GatewayStorage {
@@ -41,24 +41,6 @@ class GatewayStorage {
 		Object.defineProperty(this, 'providerName', { value: provider || this.client.options.providers.default });
 
 		/**
-		 * Where the bwd folder is located at.
-		 * @since 0.5.0
-		 * @name GatewayStorage#baseDir
-		 * @type {string}
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'baseDir', { value: resolve(this.client.clientBaseDir, 'bwd') });
-
-		/**
-		 * Where the file schema is located at.
-		 * @since 0.5.0
-		 * @name GatewayStorage#filePath
-		 * @type {string}
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'filePath', { value: resolve(this.baseDir, `${this.type}.schema.json`) });
-
-		/**
 		 * @since 0.5.0
 		 * @type {SchemaFolder}
 		 */
@@ -69,6 +51,26 @@ class GatewayStorage {
 		 * @type {boolean}
 		 */
 		this.ready = false;
+	}
+
+	/**
+	 * Where the bwd folder is located at.
+	 * @since 0.5.0
+	 * @type {string}
+	 * @readonly
+	 */
+	get baseDir() {
+		return join(this.client.clientBaseDir, 'bwd');
+	}
+
+	/**
+	 * Where the file schema is located at.
+	 * @since 0.5.0
+	 * @type {string}
+	 * @readonly
+	 */
+	get filePath() {
+		return join(this.client.clientBaseDir, 'bwd', `${this.type}.schema.json`);
 	}
 
 	/**
