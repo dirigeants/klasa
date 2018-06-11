@@ -456,8 +456,8 @@ declare module 'klasa' {
 
 		public reset(key?: string | string[], options?: ConfigurationResetOptions): Promise<ConfigurationUpdateResult>;
 		public reset(key?: string | string[], guild?: KlasaGuild, options?: ConfigurationResetOptions): Promise<ConfigurationUpdateResult>;
-		public update(key: ObjectLiteral<any>, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
-		public update(key: ObjectLiteral<any>, guild?: GuildResolvable, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
+		public update(key: ObjectLiteral, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
+		public update(key: ObjectLiteral, guild?: GuildResolvable, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
 		public update(key: string, value: any, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
 		public update(key: string, value: any, guild?: GuildResolvable, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
 		public update(key: string[], value: any[], options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
@@ -466,28 +466,22 @@ declare module 'klasa' {
 		public resolveString(message: KlasaMessage, path: SchemaPiece | string): string;
 
 		private _sync(): Promise<this>;
-		private _get(route: string | string[], piece?: boolean): object;
-		private _get<T>(route: string | string[], piece?: boolean): T;
+		private _get<T = any>(route: string | string[], piece?: boolean): T;
 		private _save(data: ConfigurationUpdateResult): Promise<void>;
-		private _updateMany(object: any, guild?: GuildResolvable): Promise<ConfigurationUpdateResult>;
-		private _parseSingle(key: string, value: any, guild: KlasaGuild | null, options: ConfigurationUpdateOptions, list: ConfigurationUpdateResult): Promise<void>;
-		private _parseUpdateMany(cache: any, object: any, schema: SchemaFolder, guild: KlasaGuild, list: ConfigurationUpdateResult): void;
 		private _setValueByPath(piece: SchemaPiece, parsedID: any): { updated: boolean, old: any };
 		private _patch(data: any): void;
 
-		public toJSON<T extends ObjectLiteral<PrimitiveType | PrimitiveType[]>>(): T;
+		public toJSON<T extends ObjectLiteral<{}>>(): T;
 		public toString(): string;
 
-		private static _merge<T extends ObjectLiteral<any>>(data: any, folder: SchemaFolder | SchemaPiece): T;
-		private static _clone<T extends ObjectLiteral<any>>(data: any, schema: SchemaFolder): T;
+		private static _merge<T extends ObjectLiteral>(data: any, folder: SchemaFolder | SchemaPiece): T;
+		private static _clone<T extends ObjectLiteral>(data: any, schema: SchemaFolder): T;
 		private static _patch(inst: any, data: any, schema: SchemaFolder): void;
 	}
 
 	export class Gateway extends GatewayStorage {
-		public constructor(store: GatewayDriver, type: string, schema: object, options: GatewayOptions);
+		public constructor(store: GatewayDriver, type: string, schema: ObjectLiteral, options: GatewayOptions);
 		public store: GatewayDriver;
-		public options: GatewayOptions;
-		public defaultSchema: object;
 		public readonly resolver: SettingResolver;
 		public readonly cache: Collection<string, Configuration>;
 		public readonly syncQueue: Collection<string, Promise<Configuration>>;
@@ -541,7 +535,7 @@ declare module 'klasa' {
 			schedules: SchemaPieceJSON
 		};
 
-		public register(name: string, schema?: object, options?: GatewayDriverRegisterOptions): this;
+		public register(name: string, schema?: ObjectLiteral, options?: GatewayDriverRegisterOptions): this;
 		public init(): Promise<void>;
 		public sync(input?: string[]): Promise<Array<Gateway>>;
 
@@ -561,11 +555,11 @@ declare module 'klasa' {
 		public ready: boolean;
 		public schema?: SchemaFolder;
 
-		public init(defaultSchema: object): Promise<void>;
+		public init(defaultSchema: ObjectLiteral): Promise<void>;
 	}
 
 	export abstract class Schema {
-		public constructor(client: KlasaClient, gateway: Gateway, object: any, parent: SchemaFolder, key: string);
+		public constructor(client: KlasaClient, gateway: Gateway, parent: SchemaFolder, key: string);
 		public readonly client: KlasaClient;
 		public readonly gateway: Gateway;
 		public readonly parent?: SchemaFolder;
@@ -575,16 +569,16 @@ declare module 'klasa' {
 	}
 
 	export class SchemaFolder extends Schema {
-		private constructor(client: KlasaClient, gateway: Gateway, object: any, parent: SchemaFolder, key: string);
+		private constructor(client: KlasaClient, gateway: Gateway, options: SchemaFolderAddOptions, parent: SchemaFolder, key: string);
 		public readonly type: 'Folder';
 		public readonly configurableKeys: string[];
-		public defaults: object;
+		public defaults: ObjectLiteral<PrimitiveType>;
 		public keyArray: string[];
 
-		public add(key: string, options: SchemaFolderAddOptions | { [k: string]: SchemaFolderAddOptions }): Promise<SchemaFolder>;
+		public add(key: string, options: SchemaFolderAddOptions | ObjectLiteral<SchemaFolderAddOptions>): Promise<SchemaFolder>;
 		public has(key: string): boolean;
 		public remove(key: string): Promise<SchemaFolder>;
-		public getDefaults(data?: object): object;
+		public getDefaults<T = {}>(data?: ObjectLiteral): T & ObjectLiteral;
 		public entries(recursive?: boolean): Iterator<[string, SchemaFolder | SchemaPiece]>;
 		public values(recursive?: boolean): Iterator<SchemaFolder | SchemaPiece>;
 		public keys(recursive?: boolean): Iterator<string>;
@@ -595,7 +589,7 @@ declare module 'klasa' {
 		private _add(key: string, options: SchemaFolderAddOptions, type: typeof Schema | typeof SchemaFolder): void;
 		private _remove(key: string): void;
 		private _shardSyncSchema(piece: SchemaFolder | SchemaPiece, action: 'add' | 'delete' | 'update'): Promise<void>;
-		private _init(options: object): true;
+		private _init(options: SchemaFolderAddOptions): true;
 		private force(action: 'add' | 'delete', piece: SchemaFolder | SchemaPiece): Promise<any>;
 	}
 
@@ -764,16 +758,16 @@ declare module 'klasa' {
 		public abstract createTable<T = any>(table: string, rows?: any[]): Promise<T>;
 		public abstract delete<T = any>(table: string, entry: string): Promise<T>;
 		public abstract deleteTable<T = any>(table: string): Promise<T>;
-		public abstract get<T extends ObjectLiteral<any>>(table: string, entry: string): Promise<T>;
-		public abstract getAll<T extends ObjectLiteral<any>>(table: string): Promise<T[]>;
+		public abstract get<T extends ObjectLiteral>(table: string, entry: string): Promise<T>;
+		public abstract getAll<T extends ObjectLiteral>(table: string): Promise<T[]>;
 		public abstract has(table: string, entry: string): Promise<boolean>;
 		public abstract hasTable(table: string): Promise<boolean>;
 		public abstract removeValue<T = any>(table: string, path: string): Promise<T>;
-		public abstract replace<T = any>(table: string, entry: string, data: ConfigurationUpdateResultEntry[] | [string, any][] | ObjectLiteral<any>): Promise<T>;
-		public abstract update<T = any>(table: string, entry: string, data: ConfigurationUpdateResultEntry[] | [string, any][] | ObjectLiteral<any>): Promise<T>;
+		public abstract replace<T = any>(table: string, entry: string, data: ConfigurationUpdateResultEntry[] | [string, any][] | ObjectLiteral): Promise<T>;
+		public abstract update<T = any>(table: string, entry: string, data: ConfigurationUpdateResultEntry[] | [string, any][] | ObjectLiteral): Promise<T>;
 		// The following is not required by SettingGateway but might be available in some providers
 		public getKeys(table: string): Promise<string[]>;
-		protected parseUpdateInput<T = ObjectLiteral<any>>(updated: T | ConfigurationUpdateResult): T;
+		protected parseUpdateInput<T = ObjectLiteral>(updated: T | ConfigurationUpdateResult): T;
 
 		public shutdown(): Promise<void>;
 		public toJSON(): PieceProviderJSON;
@@ -785,8 +779,8 @@ declare module 'klasa' {
 		public abstract updateColumn<T = any>(table: string, piece: SchemaPiece): Promise<T>;
 		// Remove the abstraction from the parent class, as it's not required by SQLProviders (they use removeColumn instead)
 		public removeValue<T = any>(table: string, path: string): Promise<T>;
-		protected parseUpdateInput<T = [string, any]>(updated?: ConfigurationUpdateResultEntry[] | [string, any][] | ObjectLiteral<any>, resolve?: boolean): T;
-		protected parseEntry<T = ObjectLiteral<any>>(gateway: string | Gateway, entry: ObjectLiteral<any>): T;
+		protected parseUpdateInput<T = [string, any]>(updated?: ConfigurationUpdateResultEntry[] | [string, any][] | ObjectLiteral, resolve?: boolean): T;
+		protected parseEntry<T = ObjectLiteral>(gateway: string | Gateway, entry: ObjectLiteral): T;
 		protected parseValue<T = any>(value: any, schemaPiece: SchemaPiece): T;
 		private _parseGatewayInput(updated: ConfigurationUpdateResultEntry[], keys: string[], values: string[], resolve?: boolean): void;
 	}
@@ -911,7 +905,7 @@ declare module 'klasa' {
 		public message: KlasaMessage;
 		public usage: Usage | CommandUsage;
 		public reprompted: boolean;
-		public flags: object;
+		public flags: ObjectLiteral<string>;
 		public args: string[];
 		public params: any[];
 		public time: number;
@@ -933,7 +927,7 @@ declare module 'klasa' {
 		private finalize(): any[];
 		private _setup(original: string): void;
 
-		private static getFlags(content: string, delim: string): { content: string; flags: object };
+		private static getFlags(content: string, delim: string): { content: string; flags: ObjectLiteral<string> };
 		private static getArgs(content: string, delim: string): string[];
 		private static getQuotedStringArgs(content: string, delim: string): string[];
 
@@ -956,9 +950,9 @@ declare module 'klasa' {
 		public toString(): string;
 
 		private static parseUsage(usageString: string): Tag[];
-		private static tagOpen(usage: object, char: string): void;
-		private static tagClose(usage: object, char: string): void;
-		private static tagSpace(usage: object, char: string): void;
+		private static tagOpen(usage: ObjectLiteral, char: string): void;
+		private static tagClose(usage: ObjectLiteral, char: string): void;
+		private static tagSpace(usage: ObjectLiteral, char: string): void;
 	}
 
 //#endregion Usage
@@ -1081,7 +1075,7 @@ declare module 'klasa' {
 		public readonly stdout: NodeJS.WritableStream;
 		public readonly stderr: NodeJS.WritableStream;
 		public template?: Timestamp;
-		public colors: object;
+		public colors: KlasaConsoleColorStyles;
 		public utc: boolean;
 
 		private readonly timestamp: string;
@@ -1225,30 +1219,29 @@ declare module 'klasa' {
 
 	class Util {
 		public static applyToClass(base: object, structure: object, skips?: string[]): void;
+		public static arrayFromObject<T = any>(obj: ObjectLiteral<T>, prefix?: string): Array<T>;
+		public static arraysEqual(arr1: any[], arr2: any[], clone?: boolean): boolean;
+		public static arraysStrictEquals(arr1: any[], arr2: any[]): boolean;
+		public static chunk<T>(entries: T[], chunkSize: number): Array<T[]>;
 		public static clean(text: string): string;
 		public static codeBlock(lang: string, expression: Stringable): string;
 		public static deepClone<T = any>(source: T): T;
 		public static exec(exec: string, options?: ExecOptions): Promise<{ stdout: string, stderr: string }>;
 		public static getIdentifier(value: PrimitiveType | { id?: PrimitiveType, name?: PrimitiveType }): PrimitiveType | null;
-		public static isPrimitive(value: any): boolean;
-		public static getTypeName(input: any): string;
-		public static isClass(input: Function): boolean;
-		public static isFunction(input: Function): boolean;
-		public static isNumber(input: number): boolean;
-		public static isObject(input: object): boolean;
-		public static isThenable(input: Promise<any>): boolean;
-		public static objectToTuples(obj: ObjectLiteral<any>, entries?: { keys: string[], values: any[] }): [string[], any[]];
-		public static chunk<T>(entries: T[], chunkSize: number): Array<T[]>;
-		public static makeObject(path: string, value: any, obj?: object): object;
-		public static arrayFromObject<T = any>(obj: ObjectLiteral<T>, prefix?: string): Array<T>;
-		public static arraysEqual(arr1: any[], arr2: any[], clone?: boolean): boolean;
-		public static arraysStrictEquals(arr1: any[], arr2: any[]): boolean;
-		public static mergeDefault(def: object, given?: object): object;
-		public static mergeObjects(objTarget: object, objSource: object): object;
+		public static isClass(input: any): input is Constructable<any>;
+		public static isFunction(input: any): input is Function;
+		public static isNumber(input: any): input is number;
+		public static isObject(input: any): boolean;
+		public static isPrimitive(input: any): input is string | number | boolean;
+		public static isThenable(input: any): boolean;
+		public static makeObject<T = ObjectLiteral>(path: string, value: any, obj?: ObjectLiteral): T;
+		public static mergeDefault(def: ObjectLiteral, given?: ObjectLiteral): objTarget & objSource;
+		public static mergeObjects(objTarget: ObjectLiteral, objSource: ObjectLiteral): objTarget & objSource;
+		public static objectToTuples(obj: ObjectLiteral, entries?: { keys: string[], values: any[] }): [string[], any[]];
 		public static regExpEsc(str: string): string;
 		public static sleep<T = any>(delay: number, args?: T): Promise<T>;
 		public static toTitleCase(str: string): string;
-		public static tryParse(value: string): object;
+		public static tryParse<T = ObjectLiteral>(value: string): T | string;
 		private static initClean(client: KlasaClient): void;
 
 		public static titleCaseVariants: TitleCaseVariants;
@@ -1310,13 +1303,13 @@ declare module 'klasa' {
 
 	export type KlasaProvidersOptions = {
 		default?: string;
-	} & object;
+	} & ObjectLiteral;
 
 	export type KlasaGatewaysOptions = {
 		clientStorage?: GatewayDriverRegisterOptions;
 		guilds?: GatewayDriverRegisterOptions;
 		users?: GatewayDriverRegisterOptions;
-	} & object;
+	} & ObjectLiteral;
 
 	export type ExecOptions = {
 		cwd?: string;
@@ -1374,7 +1367,6 @@ declare module 'klasa' {
 
 	// Settings
 	export type GatewayOptions = {
-		nice?: boolean;
 		provider: Provider;
 	};
 
@@ -1714,6 +1706,7 @@ declare module 'klasa' {
 			warn?: string;
 			wtf?: string;
 		};
+		utc?: boolean;
 		colors?: KlasaConsoleColorStyles;
 		stderr?: NodeJS.WritableStream;
 		stdout?: NodeJS.WritableStream;
@@ -1859,11 +1852,11 @@ declare module 'klasa' {
 
 	export type Stringable = string | any;
 
-	type ObjectLiteral<T> = { [key: string]: T };
+	type ObjectLiteral<T = any> = { [key: string]: T };
 
-	export type GuildSettings = ObjectLiteral<any>;
+	export type GuildSettings = ObjectLiteral;
 	export type SchemaObject = ObjectLiteral<SchemaPiece>;
-	export type SchemaDefaults = ObjectLiteral<any>;
+	export type SchemaDefaults = ObjectLiteral;
 
 	type Constructable<T> = new (...args: any[]) => T;
 

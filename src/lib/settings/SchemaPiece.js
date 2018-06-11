@@ -36,7 +36,7 @@ class SchemaPiece extends Schema {
 	 * @param {string} key The name of the key
 	 */
 	constructor(client, gateway, options, parent, key) {
-		super(client, gateway, options, parent, key);
+		super(client, gateway, parent, key);
 
 		/**
 		 * The type of this key.
