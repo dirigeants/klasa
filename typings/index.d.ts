@@ -1449,18 +1449,18 @@ declare module 'klasa' {
 
 	export type SchemaFolderAddOptions = SchemaFolderOptions | SchemaPieceOptions;
 
-	export interface SchemaPieceOptions {
+	export type SchemaPieceOptions = {
 		type: string;
 		array?: boolean;
 		configurable?: boolean;
 		default?: any;
 		max?: number | null;
 		min?: number | null;
-	}
+	};
 
-	export interface SchemaFolderOptions extends ObjectLiteral<SchemaFolderAddOptions> {
+	export type SchemaFolderOptions = {
 		type?: 'Folder';
-	}
+	} & ObjectLiteral<SchemaFolderAddOptions>;
 
 	export type SchemaPieceEditOptions = {
 		configurable?: boolean;
