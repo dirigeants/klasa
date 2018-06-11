@@ -1,6 +1,6 @@
 ---
 name: Change or Remove Methods or Properties
-about: Modifies / removes currently existing functions
+about: Modifies or removes currently existing functions
 
 ---
 
