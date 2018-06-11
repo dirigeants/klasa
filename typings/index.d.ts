@@ -1277,7 +1277,7 @@ declare module 'klasa' {
 		ownerID?: string;
 		permissionLevels?: PermissionLevels;
 		pieceDefaults?: KlasaPieceDefaults;
-		prefix?: string;
+		prefix?: string | string[];
 		preserveConfigs?: boolean;
 		providers?: KlasaProvidersOptions;
 		readyMessage?: (client: KlasaClient) => string;

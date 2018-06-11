@@ -11,8 +11,6 @@ class GatewayDriver {
 	/**
 	 * @typedef {Object} GatewayDriverRegisterOptions
 	 * @property {string} [provider] The name of the provider to use
-	 * @property {boolean} [download=true] Whether the Gateway should download all entries or not
-	 * @property {boolean} [waitForDownload=true] Whether this Gateway should wait for all the data from the gateway to be downloaded
 	 */
 
 	/**

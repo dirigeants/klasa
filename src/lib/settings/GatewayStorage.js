@@ -100,7 +100,8 @@ class GatewayStorage {
 	 */
 	async init(defaultSchema) {
 		if (this.ready) throw new Error(`[INIT] ${this} has already initialized.`);
-		if (!this.provider) throw new Error(`This provider (${this.providerName}) does not exist in your system.`);
+		const { provider } = this;
+		if (!provider) throw new Error(`This provider (${this.providerName}) does not exist in your system.`);
 		this.ready = true;
 
 		// Init the Schema
@@ -112,21 +113,18 @@ class GatewayStorage {
 			// Make the schema the default one
 			schema = defaultSchema;
 
-			// Check if the file exists
-			const fileWritten = await fs.pathExists(this.filePath);
-
 			// If the file is written, there must be an issue with the file, emit an
 			// error instead of overwritting it (which would result to data loss). If
 			// the file does not exist, write the default schema.
-			if (fileWritten) this.client.emit('error', error);
-			else await fs.outputJSONAtomic(this.filePath, defaultSchema);
+			if (error.code === 'ENOENT') await fs.outputJSONAtomic(this.filePath, defaultSchema);
+			else this.client.emit('error', error);
 		}
 
 		this.schema = new SchemaFolder(this.client, this, schema, null, '');
 
 		// Init the table
-		const hasTable = await this.provider.hasTable(this.type);
-		if (!hasTable) await this.provider.createTable(this.type);
+		const hasTable = await provider.hasTable(this.type);
+		if (!hasTable) await provider.createTable(this.type);
 	}
 
 }
