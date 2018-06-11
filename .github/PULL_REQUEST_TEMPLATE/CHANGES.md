@@ -1,12 +1,12 @@
 ---
-name: Add or Remove Methods or Properties
-about: Modifies / removes currently existing functions or adds new functions to the framework.
+name: Remove or Change Methods or Properties
+about: Modifies / removes currently existing functions
 
 ---
 
 ### Description of the PR
 
-### Changes Proposed in this Pull Request (List changes in CHANGELOG.MD)
+### Changes done in this Pull Request (List changes in CHANGELOG.MD)
 
 -
 
