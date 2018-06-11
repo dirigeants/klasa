@@ -1,5 +1,5 @@
 ---
-name: Remove or Change Methods or Properties
+name: Change or Remove Methods or Properties
 about: Modifies / removes currently existing functions
 
 ---
