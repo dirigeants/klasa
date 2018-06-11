@@ -6,7 +6,7 @@ about: Adds new features or changes current methods or properties to bring in ne
 
 ### Description of the PR
 
-### Changes added in this Pull Request (List changes in CHANGELOG.MD)
+### Changes Proposed in this Pull Request (List changes in CHANGELOG.MD)
 
 -
 
