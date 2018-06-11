@@ -586,7 +586,7 @@ declare module 'klasa' {
 		public values(recursive?: boolean): Iterator<SchemaFolder | SchemaPiece>;
 		public keys(recursive?: boolean): Iterator<string>;
 		public [Symbol.iterator](): Iterator<[string, SchemaFolder | SchemaPiece]>;
-		public toJSON(): SchemaFolderAddOptions;
+		public toJSON(): SchemaFolderOptions;
 		public toString(): string;
 
 		private _add(key: string, options: SchemaFolderAddOptions, type: typeof Schema | typeof SchemaFolder): void;
