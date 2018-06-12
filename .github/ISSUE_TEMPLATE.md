@@ -14,7 +14,6 @@ follow up.
 
 ### Expected and actual behaviour
 
-
 ### Further details
 
 - **discord.js version**:
