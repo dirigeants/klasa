@@ -119,9 +119,6 @@ class KlasaClient extends Discord.Client {
 		config = util.mergeDefault(constants.DEFAULTS.CLIENT, config);
 		super(config);
 
-		// Run all plugin functions in this context
-		for (const plugin of plugins) plugin[this.constructor.plugin].call(this);
-
 		/**
 		 * The options the client was instantiated with.
 		 * @since 0.5.0
@@ -285,6 +282,9 @@ class KlasaClient extends Discord.Client {
 		 * @type {boolean}
 		 */
 		this.ready = false;
+
+		// Run all plugin functions in this context
+		for (const plugin of plugins) plugin[this.constructor.plugin].call(this);
 	}
 
 	/**
