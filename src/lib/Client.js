@@ -442,7 +442,7 @@ class KlasaClient extends Discord.Client {
  * @since 0.5.0
  * @type {Symbol}
  */
-KlasaClient.plugin = new Symbol('KlasaPlugin');
+KlasaClient.plugin = Symbol('KlasaPlugin');
 
 /**
  * The default PermissionLevels
