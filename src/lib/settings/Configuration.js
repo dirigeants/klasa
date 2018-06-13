@@ -421,10 +421,13 @@ class Configuration {
 	 * @private
 	 */
 	async _parse(value, guild, options, result, { piece, route }) {
-		const parsedID = value !== null ?
-			await (Array.isArray(value) ? this._parseAll(piece, value, guild, result.errors) : piece.parse(value, guild)) :
-			deepClone(piece.default);
+		const parsedID = value === null ?
+			deepClone(piece.default) :
+			await (Array.isArray(value) ?
+				this._parseAll(piece, value, guild, result.errors) :
+				piece.parse(value, guild).catch((error) => { result.errors.push(error); }));
 
+		if (parsedID === undefined) return;
 		if (piece.array && !Array.isArray(value)) {
 			this._parseArraySingle(piece, route, parsedID, options, result);
 		} else if (this._setValueByPath(piece, parsedID, options.force).updated) {
