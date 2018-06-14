@@ -478,8 +478,6 @@ declare module 'klasa' {
 		public toJSON<T extends ObjectLiteral<PrimitiveType | PrimitiveType[]>>(): T;
 		public toString(): string;
 
-		private static _merge<T extends ObjectLiteral<any>>(data: any, folder: SchemaFolder | SchemaPiece): T;
-		private static _clone<T extends ObjectLiteral<any>>(data: any, schema: SchemaFolder): T;
 		private static _patch(inst: any, data: any, schema: SchemaFolder): void;
 	}
 
@@ -1224,7 +1222,6 @@ declare module 'klasa' {
 	}
 
 	class Util {
-		public static applyToClass(base: object, structure: object, skips?: string[]): void;
 		public static clean(text: string): string;
 		public static codeBlock(lang: string, expression: Stringable): string;
 		public static deepClone<T = any>(source: T): T;
@@ -1241,7 +1238,6 @@ declare module 'klasa' {
 		public static chunk<T>(entries: T[], chunkSize: number): Array<T[]>;
 		public static makeObject(path: string, value: any, obj?: object): object;
 		public static arrayFromObject<T = any>(obj: ObjectLiteral<T>, prefix?: string): Array<T>;
-		public static arraysEqual(arr1: any[], arr2: any[], clone?: boolean): boolean;
 		public static arraysStrictEquals(arr1: any[], arr2: any[]): boolean;
 		public static mergeDefault(def: object, given?: object): object;
 		public static mergeObjects(objTarget: object, objSource: object): object;
