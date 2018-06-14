@@ -335,7 +335,7 @@ class Util {
 	 * @private
 	 */
 	static mergeDefault(def, given) {
-		if (!given) return def;
+		if (!given) return Util.deepClone(def);
 		for (const key in def) {
 			if (typeof given[key] === 'undefined') given[key] = Util.deepClone(def[key]);
 			else if (Util.isObject(given[key])) given[key] = Util.mergeDefault(def[key], given[key]);
