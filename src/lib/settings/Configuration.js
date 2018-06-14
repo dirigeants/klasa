@@ -1,4 +1,4 @@
-const { isObject, deepClone, tryParse, toTitleCase, arraysStrictEquals, getDeepTypeName, objectToTuples } = require('../util/util');
+const { isObject, deepClone, mergeDefault, toTitleCase, arraysStrictEquals, getDeepTypeName, objectToTuples } = require('../util/util');
 const SchemaFolder = require('./SchemaFolder');
 const SchemaPiece = require('./SchemaPiece');
 
@@ -77,7 +77,7 @@ class Configuration {
 		 */
 		Object.defineProperty(this, '_existsInDB', { value: null, writable: true });
 
-		Configuration._merge(data, this.gateway.schema);
+		mergeDefault(this.gateway.defaults, data);
 		for (const key of this.gateway.schema.keys()) this[key] = data[key];
 	}
 
@@ -107,9 +107,7 @@ class Configuration {
 	 * @returns {Configuration}
 	 */
 	clone() {
-		const clone = this.gateway.Configuration._clone(this, this.gateway.schema);
-		clone.id = this.id;
-		return new this.gateway.Configuration(this.gateway, clone);
+		return new this.constructor(this.gateway, this);
 	}
 
 	/**
@@ -537,7 +535,7 @@ class Configuration {
 		for (const [key, piece] of schema) {
 			const value = data[key];
 			if (value === undefined || value === null) continue;
-			this[key] = piece.type === 'Folder' ? Configuration._patch(this[key], value, piece) : value;
+			this[key] = piece.type === 'Folder' ? this.constructor._patch(this[key], value, piece) : value;
 		}
 	}
 
@@ -547,7 +545,9 @@ class Configuration {
 	 * @returns {Object}
 	 */
 	toJSON() {
-		return Configuration._clone(this, this.gateway.schema);
+		const obj = {};
+		for (const key of this.gateway.schema.keys()) obj[key] = deepClone(this[key]);
+		return obj;
 	}
 
 	/**
@@ -557,50 +557,6 @@ class Configuration {
 	 */
 	toString() {
 		return `Configuration(${this.gateway.type}:${this.id})`;
-	}
-
-	/**
-	 * Assign data to the Configuration.
-	 * @since 0.5.0
-	 * @param {Object} data The data contained in the group
-	 * @param {(SchemaFolder|SchemaPiece)} schema A SchemaFolder or a SchemaPiece instance
-	 * @returns {Object}
-	 * @private
-	 */
-	static _merge(data, schema) {
-		for (const [key, piece] of schema) {
-			if (piece.type === 'Folder') {
-				if (!data[key]) data[key] = {};
-				data[key] = Configuration._merge(data[key], piece);
-			} else if (typeof data[key] === 'undefined' || data[key] === null) {
-				data[key] = deepClone(piece.default);
-			} else if (piece.array) {
-				if (typeof data[key] === 'string') data[key] = tryParse(data[key]);
-				if (Array.isArray(data[key])) continue;
-				piece.client.emit('wtf',
-					new TypeError(`${piece.path} | Expected an array, null, or undefined. Got: ${Object.prototype.toString.call(data[key])}`));
-			}
-		}
-
-		return data;
-	}
-
-	/**
-	 * Clone configs.
-	 * @since 0.5.0
-	 * @param {Object} data The data to clone
-	 * @param {SchemaFolder} schema A SchemaFolder instance
-	 * @returns {Object}
-	 * @private
-	 */
-	static _clone(data, schema) {
-		const clone = {};
-
-		for (const [key, piece] of schema) {
-			clone[key] = piece.type === 'Folder' ? Configuration._clone(data[key], piece) : deepClone(data[key]);
-		}
-
-		return clone;
 	}
 
 	/**
