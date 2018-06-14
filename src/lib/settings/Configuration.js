@@ -1,4 +1,4 @@
-const { isObject, deepClone, mergeDefault, toTitleCase, arraysStrictEquals, getDeepTypeName, objectToTuples } = require('../util/util');
+const { isObject, deepClone, toTitleCase, arraysStrictEquals, getDeepTypeName, objectToTuples } = require('../util/util');
 const SchemaFolder = require('./SchemaFolder');
 const SchemaPiece = require('./SchemaPiece');
 
@@ -77,8 +77,9 @@ class Configuration {
 		 */
 		Object.defineProperty(this, '_existsInDB', { value: null, writable: true });
 
-		mergeDefault(this.gateway.defaults, data);
-		for (const key of this.gateway.schema.keys()) this[key] = data[key];
+		const { defaults } = this.gateway;
+		for (const key of this.gateway.schema.keys()) this[key] = defaults[key];
+		this._patch(data);
 	}
 
 	/**
@@ -531,8 +532,8 @@ class Configuration {
 	 * @private
 	 */
 	_patch(data) {
-		const { schema } = this.gateway;
-		for (const [key, piece] of schema) {
+		if (!isObject(data)) return;
+		for (const [key, piece] of this.gateway.schema.entries()) {
 			const value = data[key];
 			if (value === undefined || value === null) continue;
 			this[key] = piece.type === 'Folder' ? this.constructor._patch(this[key], value, piece) : value;
