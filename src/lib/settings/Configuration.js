@@ -77,17 +77,17 @@ class Configuration {
 		 */
 		Object.defineProperty(this, '_existsInDB', { value: null, writable: true });
 
-		/**
-		 * The sync status for this Configuration instance.
-		 * @since 0.5.0
-		 * @type {Promise}
-		 * @name Configuration#_syncStatus
-		 * @private
-		 */
-		Object.defineProperty(this, '_syncStatus', { value: null, writable: true });
-
 		Configuration._merge(data, this.gateway.schema);
 		for (const key of this.gateway.schema.keys()) this[key] = data[key];
+	}
+
+	/**
+	 * Check whether this Configuration is being synchronized in the Gateway's sync queue.
+	 * @since 0.5.0
+	 * @type {boolean}
+	 */
+	get synchronizing() {
+		return this.gateway.syncQueue.has(this.id);
 	}
 
 	/**
@@ -118,18 +118,23 @@ class Configuration {
 	 * @returns {Promise<this>}
 	 */
 	waitSync() {
-		if (this._syncStatus) return this._syncStatus;
-		return Promise.resolve(this);
+		return this.gateway.syncQueue.get(this.id) || Promise.resolve(this);
 	}
 
 	/**
 	 * Sync the data from the database with the cache.
 	 * @since 0.5.0
-	 * @returns {this}
+	 * @returns {Promise<this>}
 	 */
-	async sync() {
-		if (!this._syncStatus) this._syncStatus = this._sync();
-		return this._syncStatus;
+	sync() {
+		// Await current sync status from the sync queue
+		const syncStatus = this.gateway.syncQueue.get(this.id);
+		if (syncStatus) return syncStatus;
+
+		// If it's not currently synchronizing, create a new sync status for the sync queue
+		const sync = this._sync();
+		this.gateway.syncQueue.set(this.id, sync);
+		return sync;
 	}
 
 	/**
@@ -176,9 +181,7 @@ class Configuration {
 		else if (typeof keys === 'undefined') keys = [...this.gateway.schema.values(true)].map(piece => piece.path);
 		if (Array.isArray(keys)) {
 			const result = { errors: [], updated: [] };
-			const entries = new Array(keys.length);
-			for (let i = 0; i < keys.length; i++) entries[i] = [keys[i], null];
-			for (const [key, value] of entries) {
+			for (const key of keys) {
 				const path = this.gateway.getPath(key, { piece: true, avoidUnconfigurable, errors: false });
 				if (!path) {
 					result.errors.push(guild && guild.language ?
@@ -186,8 +189,8 @@ class Configuration {
 						`The path ${key} does not exist in the current schema, or does not correspond to a piece.`);
 					continue;
 				}
-				const newValue = value === null ? deepClone(path.piece.default) : value;
-				if (this._setValueByPath(path.piece, newValue, force).updated) result.updated.push({ data: [path.piece.path, newValue], piece: path.piece });
+				const value = deepClone(path.piece.default);
+				if (this._setValueByPath(path.piece, value, force).updated) result.updated.push({ data: [path.piece.path, value], piece: path.piece });
 			}
 			await this._save(result);
 			return result;
@@ -344,7 +347,7 @@ class Configuration {
 			this._existsInDB = false;
 		}
 
-		this._syncStatus = null;
+		this.gateway.syncQueue.delete(this.id);
 		return this;
 	}
 
@@ -418,10 +421,13 @@ class Configuration {
 	 * @private
 	 */
 	async _parse(value, guild, options, result, { piece, route }) {
-		const parsedID = value !== null ?
-			await (Array.isArray(value) ? this._parseAll(piece, value, guild, result.errors) : piece.parse(value, guild)) :
-			deepClone(piece.default);
+		const parsedID = value === null ?
+			deepClone(piece.default) :
+			await (Array.isArray(value) ?
+				this._parseAll(piece, value, guild, result.errors) :
+				piece.parse(value, guild).catch((error) => { result.errors.push(error); }));
 
+		if (typeof parsedID === 'undefined') return;
 		if (piece.array && !Array.isArray(value)) {
 			this._parseArraySingle(piece, route, parsedID, options, result);
 		} else if (this._setValueByPath(piece, parsedID, options.force).updated) {
@@ -443,10 +449,9 @@ class Configuration {
 			this._existsInDB = true;
 			if (this.client.listenerCount('configCreateEntry')) this.client.emit('configCreateEntry', this);
 		}
-		const oldClone = this.client.listenerCount('configUpdateEntry') ? this.clone() : null;
 
 		await this.gateway.provider.update(this.gateway.type, this.id, updated);
-		if (oldClone !== null) this.client.emit('configUpdateEntry', oldClone, this, updated);
+		if (this.client.listenerCount('configUpdateEntry')) this.client.emit('configUpdateEntry', this, updated);
 	}
 
 	/**

@@ -14,6 +14,8 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#331](https://github.com/dirigeants/klasa/pull/331)] Added `Gateway#syncQueue` for centralized lazy load cache and memory reduction. (kyranet)
+- [[#331](https://github.com/dirigeants/klasa/pull/331)] Added `Configuration#synchronizing` getter to check whether a Configuration instance is lazy loading or not. (kyranet)
 - [[#284](https://github.com/dirigeants/klasa/pull/284)] Added `Util.chunk`. (bdistin)
 - [[#306](https://github.com/dirigeants/klasa/pull/306)] Added `Util.isPrimitive`. (kyranet)
 - [[#306](https://github.com/dirigeants/klasa/pull/306)] Added `constants.DEFAULTS.QUERYBUILDER`. (kyranet)
@@ -112,6 +114,10 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#333](https://github.com/dirigeants/klasa/pull/333)] Removed cross-shard individual configuration synchronization in favor of patching the current patched `Configuration` instance. (kyranet)
+- [[#333](https://github.com/dirigeants/klasa/pull/333)] Changed `configUpdateEntry` event to take only two parameters (patched `Configuration` instance, and the updated keys as `ConfigurationUpdateResultEntry[]`). (kyranet)
+- [[#332](https://github.com/dirigeants/klasa/pull/332)] Refactored `Configuration#reset`. (kyranet)
+- [[#330](https://github.com/dirigeants/klasa/pull/330)] Changed Gateway#sync to take an array of ids to sync as opposed to full download. (KingDGrizzle)
 - [[#320](https://github.com/dirigeants/klasa/pull/320)] **[BREAKING]** Changed the schema file names. (KingDGrizzle)
 - [[#306](https://github.com/dirigeants/klasa/pull/306)] Changed `SQLProvider#createTable`. SettingsGateway will not provide columns, for consistency with JSON providers. Instead, retrieve the columns from `Gateway`. (kyranet)
 - [[#306](https://github.com/dirigeants/klasa/pull/306)] Changed `SQLProvider#addColumn` to have the arguments `table: string, columns: SchemaFolder | SchemaPiece`. (kyranet)
@@ -198,6 +204,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Removed
 
+- [[#331](https://github.com/dirigeants/klasa/pull/331)] Removed `Configuration#_syncStatus`. (kyranet)
 - [[#323](https://github.com/dirigeants/klasa/pull/323)] Removed every check for selfbot users. (KingDGrizzle)
 - [[#306](https://github.com/dirigeants/klasa/pull/306)] Removed `GatewayGuildResolvable` type from typings. (kyranet)
 - [[#306](https://github.com/dirigeants/klasa/pull/306)] Removed `JSONProvider#set` and `JSONProvider#insert`. (kyranet)

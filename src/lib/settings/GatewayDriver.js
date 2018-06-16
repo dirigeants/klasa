@@ -11,8 +11,6 @@ class GatewayDriver {
 	/**
 	 * @typedef {Object} GatewayDriverRegisterOptions
 	 * @property {string} [provider] The name of the provider to use
-	 * @property {boolean} [download=true] Whether the Gateway should download all entries or not
-	 * @property {boolean} [waitForDownload=true] Whether this Gateway should wait for all the data from the gateway to be downloaded
 	 */
 
 	/**
@@ -50,7 +48,7 @@ class GatewayDriver {
 		 * The register creation queue.
 		 * @since 0.5.0
 		 * @name GatewayDriver#_queue
-		 * @type {Map<string, Function>}
+		 * @type {Array<Function>}
 		 * @readonly
 		 * @private
 		 */
@@ -73,12 +71,6 @@ class GatewayDriver {
 		 * @type {Set<string>}
 		 */
 		this.keys = new Set();
-
-		/**
-		 * If the driver is ready
-		 * @type {boolean}
-		 */
-		this.ready = false;
 
 		/**
 		 * The Gateway that manages per-guild data
@@ -146,7 +138,7 @@ class GatewayDriver {
 	 * The data schema Klasa uses for user configs.
 	 * @since 0.5.0
 	 * @readonly
-	 * @type {GatewayDriverGuildsSchema}
+	 * @type {GatewayDriverUsersSchema}
 	 */
 	get usersSchema() {
 		return {};
@@ -222,7 +214,7 @@ class GatewayDriver {
 	 * Sync all gateways
 	 * @since 0.5.0
 	 * @param {...*} args The arguments to pass to each Gateway#sync
-	 * @returns {Promise<Array<null>>}
+	 * @returns {Promise<Array<Gateway>>}
 	 */
 	sync(...args) {
 		return Promise.all([...this.keys].map(key => this[key].sync(...args)));

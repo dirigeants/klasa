@@ -46,16 +46,25 @@ class Gateway extends GatewayStorage {
 		super(store.client, type, provider);
 
 		/**
+		 * The GatewayDriver that manages this Gateway
 		 * @since 0.0.1
 		 * @type {GatewayDriver}
 		 */
 		this.store = store;
 
 		/**
+		 * The cached entries for this Gateway
 		 * @since 0.0.1
 		 * @type {external:Collection<string, Configuration>}
 		 */
 		this.cache = new Collection();
+
+		/**
+		 * The synchronization queue for all Configuration instances
+		 * @since 0.5.0
+		 * @type {external:Collection<string, Promise<Configuration>>}
+		 */
+		this.syncQueue = new Collection();
 
 		/**
 		 * @since 0.5.0
@@ -90,7 +99,7 @@ class Gateway extends GatewayStorage {
 	 * Get an entry from the cache.
 	 * @since 0.5.0
 	 * @param {string} id The key to get from the cache
-	 * @param {boolean} [create = false] Whether SG should create a new instance of Configuration in the background
+	 * @param {boolean} [create = false] Whether SG should create a new instance of Configuration in the background, if the entry does not already exist.
 	 * @returns {?Configuration}
 	 */
 	get(id, create = false) {
@@ -108,14 +117,28 @@ class Gateway extends GatewayStorage {
 	/**
 	 * Sync either all entries from the cache with the persistent database, or a single one.
 	 * @since 0.0.1
-	 * @param {(Object|string|boolean)} [input=false] An object containing a id property, like discord.js objects, or a string
-	 * @returns {?Configuration}
+	 * @param {(Object|string|boolean)} [input=Array<string>] An object containing a id property, like discord.js objects, or a string
+	 * @returns {?(Gateway|Configuration)}
 	 */
-	async sync(input = false) {
-		if (typeof input === 'boolean') {
-			if (input) await this._download();
-			else await Promise.all(this.cache.map(entry => entry.sync()));
+	async sync(input = [...this.cache.keys()]) {
+		if (Array.isArray(input)) {
 			if (!this._synced) this._synced = true;
+			const entries = await this.provider.getAll(this.type, input);
+			for (const entry of entries) {
+				if (!entry) continue;
+				const cache = this.cache.get(entry.id);
+				if (cache) {
+					if (!cache._existsInDB) cache._existsInDB = true;
+					cache._patch(entry);
+				} else {
+					const configs = new this.Configuration(this, entry);
+					configs._existsInDB = true;
+					this.cache.set(entry.id, configs);
+				}
+			}
+
+			// Set all the remaining configs from unknown status in DB to not exists.
+			for (const configs of this.cache.values()) if (configs._existsInDB === null) configs._existsInDB = false;
 			return this;
 		}
 		const target = getIdentifier(input);
@@ -126,8 +149,7 @@ class Gateway extends GatewayStorage {
 
 		const configs = new this.Configuration(this, { id: target });
 		this.cache.set(target, configs);
-		await configs.sync();
-		return this;
+		return configs.sync();
 	}
 
 	/**
@@ -172,29 +194,6 @@ class Gateway extends GatewayStorage {
 		}
 
 		return { piece, route: piece.path.split('.') };
-	}
-
-	/**
-	 * Download all entries for this database
-	 * @since 0.5.0
-	 * @private
-	 */
-	async _download() {
-		const entries = await this.provider.getAll(this.type, [...this.cache.keys()]);
-		for (const entry of entries) {
-			if (!entry) continue;
-			const cache = this.cache.get(entry.id);
-			if (cache) {
-				if (!cache._existsInDB) cache._existsInDB = true;
-				cache._patch(entry);
-			} else {
-				const configs = new this.Configuration(this, entry);
-				configs._existsInDB = true;
-				this.cache.set(entry.id, configs);
-			}
-		}
-		// Set all the remaining configs from unknown status in DB to not exists.
-		for (const configs of this.cache.values()) if (configs._existsInDB === null) configs._existsInDB = false;
 	}
 
 	/**

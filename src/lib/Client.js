@@ -50,7 +50,7 @@ class KlasaClient extends Discord.Client {
 	 * @property {string} [ownerID] The discord user id for the user the bot should respect as the owner (gotten from Discord api if not provided)
 	 * @property {PermissionLevels} [permissionLevels=KlasaClient.defaultPermissionLevels] The permission levels to use with this bot
 	 * @property {KlasaPieceDefaults} [pieceDefaults={}] Overrides the defaults for all pieces
-	 * @property {string} [prefix] The default prefix the bot should respond to
+	 * @property {string|string[]} [prefix] The default prefix the bot should respond to
 	 * @property {boolean} [preserveConfigs=true] Whether the bot should preserve (non-default) configs when removed from a guild
 	 * @property {boolean} [production=false] Whether the bot should handle unhandled promise rejections automatically (handles when false) (also can be configured with process.env.NODE_ENV)
 	 * @property {KlasaProvidersOptions} [providers] The provider options
@@ -545,9 +545,8 @@ KlasaClient.defaultPermissionLevels = new PermissionLevels()
  * Emitted when {@link Configuration#update} or {@link Configuration#reset} is run.
  * @event KlasaClient#configUpdateEntry
  * @since 0.5.0
- * @param {Configuration} oldEntry The old configuration entry
- * @param {Configuration} newEntry The new configuration entry
- * @param {ConfigurationUpdateResultEntry[]} path The path of the key which changed
+ * @param {Configuration} entry The patched configuration entry
+ * @param {ConfigurationUpdateResultEntry[]} updated The keys that were updated
  */
 
 /**
