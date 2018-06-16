@@ -120,7 +120,9 @@ class Monitor extends Piece {
 			ignoreSelf: this.ignoreSelf,
 			ignoreOthers: this.ignoreOthers,
 			ignoreWebhooks: this.ignoreWebhooks,
-			ignoreEdits: this.ignoreEdits
+			ignoreEdits: this.ignoreEdits,
+			ignoreBlacklistedUsers: this.ignoreBlacklistedUsers,
+			ignoreBlacklistedGuilds: this.ignoreBlacklistedGuilds
 		};
 	}
 
