@@ -15,8 +15,8 @@ class Monitor extends Piece {
 	 * @property {boolean} [ignoreOthers=true] Whether the monitor ignores others or not
 	 * @property {boolean} [ignoreWebhooks=true] Whether the monitor ignores webhooks or not
 	 * @property {boolean} [ignoreEdits=true] Whether the monitor ignores edits or not
-	 * @property {boolean} [ignoreBlacklistedUsers=true] Wether the monitor should ignore blacklisted users
-	 * @property {boolean} [ignoreBlacklistedGuilds=true] Wether the monitor should ignore blacklisted guilds
+	 * @property {boolean} [ignoreBlacklistedUsers=true] Wether the monitor should ignore blacklisted users or not
+	 * @property {boolean} [ignoreBlacklistedGuilds=true] Wether the monitor should ignore blacklisted guilds or not
 	 */
 
 	/**
