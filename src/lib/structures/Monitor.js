@@ -106,7 +106,7 @@ class Monitor extends Piece {
 			!(this.ignoreWebhooks && message.webhookID) &&
 			!(this.ignoreEdits && message._edits.length) &&
 			!(this.ignoreBlacklistedUsers && this.client.configs.blacklistedUser.includes(message.author.id)) &&
-			!(this.ignoreBlacklistedGuilds && this.client.configs.blacklistedGuilds.includes(message.author.id));
+			!(this.ignoreBlacklistedGuilds && this.client.configs.blacklistedGuilds.includes(message.guild.id));
 	}
 
 	/**
