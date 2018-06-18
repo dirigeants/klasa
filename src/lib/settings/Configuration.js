@@ -9,6 +9,10 @@ const SchemaPiece = require('./SchemaPiece');
 class Configuration {
 
 	/**
+	 * @typedef {Object} ConfigurationJSON
+	 */
+
+	/**
 	 * @typedef {Object} ConfigurationUpdateResult
 	 * @property {Error[]} errors The errors caught from parsing
 	 * @property {ConfigurationUpdateResultEntry[]} updated The updated keys
@@ -544,7 +548,7 @@ class Configuration {
 	/**
 	 * Returns the JSON-compatible object of this instance.
 	 * @since 0.5.0
-	 * @returns {Object}
+	 * @returns {ConfigurationJSON}
 	 */
 	toJSON() {
 		return Configuration._clone(this, this.gateway.schema);
