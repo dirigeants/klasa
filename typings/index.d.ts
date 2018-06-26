@@ -751,6 +751,8 @@ declare module 'klasa' {
 		public ignoreOthers: boolean;
 		public ignoreSelf: boolean;
 		public ignoreWebhooks: boolean;
+		public ignoreBlacklistedUsers: boolean;
+		public ignroeBlacklistedGuilds: boolean;
 
 		public abstract run(message: KlasaMessage): void;
 		public shouldRun(message: KlasaMessage): boolean;
@@ -1530,6 +1532,8 @@ declare module 'klasa' {
 		ignoreOthers?: boolean;
 		ignoreSelf?: boolean;
 		ignoreWebhooks?: boolean;
+		ignoreBlacklistedUsers?: boolean;
+		ignroeBlacklistedGuilds?: boolean;
 	} & PieceOptions;
 
 
@@ -1601,6 +1605,8 @@ declare module 'klasa' {
 		ignoreOthers: boolean;
 		ignoreSelf: boolean;
 		ignoreWebhooks: boolean;
+		ignoreBlacklistedUsers: boolean;
+		ignroeBlacklistedGuilds: boolean;
 	} & PieceJSON;
 
 	export type PieceEventJSON = {
