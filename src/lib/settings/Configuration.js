@@ -9,6 +9,10 @@ const SchemaPiece = require('./SchemaPiece');
 class Configuration {
 
 	/**
+	 * @typedef {Object} ConfigurationJSON
+	 */
+
+	/**
 	 * @typedef {Object} ConfigurationUpdateResult
 	 * @property {Error[]} errors The errors caught from parsing
 	 * @property {ConfigurationUpdateResultEntry[]} updated The updated keys
@@ -421,10 +425,13 @@ class Configuration {
 	 * @private
 	 */
 	async _parse(value, guild, options, result, { piece, route }) {
-		const parsedID = value !== null ?
-			await (Array.isArray(value) ? this._parseAll(piece, value, guild, result.errors) : piece.parse(value, guild)) :
-			deepClone(piece.default);
+		const parsedID = value === null ?
+			deepClone(piece.default) :
+			await (Array.isArray(value) ?
+				this._parseAll(piece, value, guild, result.errors) :
+				piece.parse(value, guild).catch((error) => { result.errors.push(error); }));
 
+		if (typeof parsedID === 'undefined') return;
 		if (piece.array && !Array.isArray(value)) {
 			this._parseArraySingle(piece, route, parsedID, options, result);
 		} else if (this._setValueByPath(piece, parsedID, options.force).updated) {
@@ -541,7 +548,7 @@ class Configuration {
 	/**
 	 * Returns the JSON-compatible object of this instance.
 	 * @since 0.5.0
-	 * @returns {Object}
+	 * @returns {ConfigurationJSON}
 	 */
 	toJSON() {
 		return Configuration._clone(this, this.gateway.schema);

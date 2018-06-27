@@ -405,6 +405,7 @@ declare module 'klasa' {
 		public execute(): Promise<void>;
 		public next(): ScheduledTask;
 		public create(taskName: string, time: Date | number | string, options: ScheduledTaskOptions): Promise<ScheduledTask>;
+		public get(id: string): ScheduledTask | void;
 		public delete(id: string): Promise<this>;
 		public clear(): Promise<void>;
 
@@ -750,6 +751,8 @@ declare module 'klasa' {
 		public ignoreOthers: boolean;
 		public ignoreSelf: boolean;
 		public ignoreWebhooks: boolean;
+		public ignoreBlacklistedUsers: boolean;
+		public ignroeBlacklistedGuilds: boolean;
 
 		public abstract run(message: KlasaMessage): void;
 		public shouldRun(message: KlasaMessage): boolean;
@@ -1525,6 +1528,8 @@ declare module 'klasa' {
 		ignoreOthers?: boolean;
 		ignoreSelf?: boolean;
 		ignoreWebhooks?: boolean;
+		ignoreBlacklistedUsers?: boolean;
+		ignroeBlacklistedGuilds?: boolean;
 	} & PieceOptions;
 
 	export type EventOptions = {
@@ -1595,6 +1600,8 @@ declare module 'klasa' {
 		ignoreOthers: boolean;
 		ignoreSelf: boolean;
 		ignoreWebhooks: boolean;
+		ignoreBlacklistedUsers: boolean;
+		ignroeBlacklistedGuilds: boolean;
 	} & PieceJSON;
 
 	export type PieceEventJSON = {
