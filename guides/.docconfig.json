@@ -166,6 +166,9 @@
         {
             "name": "Creating a Points System",
             "path": "CreatingPointsSystems.md"
-        }
-    ]
+        },
+        {
+            "name": "Creating a Custom Member Gateway",
+            "path": "CreatingACustomMemberGateway.md"
+        }]
 }]
