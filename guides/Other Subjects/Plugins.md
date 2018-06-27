@@ -41,7 +41,8 @@ The only requirement for making a plugin is to make sure you export an unbound f
 const { Client: { plugin } } = require('klasa');
 module.exports = {
 	// [plugin] must be typed exactly like this.
-	[plugin]:  function plugin () {
+	// eslint-disable-next-line func-names
+	[plugin]: function () {
 		this.klasaIsCool = true;
 	}
 };
