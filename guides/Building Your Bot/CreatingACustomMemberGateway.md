@@ -23,6 +23,8 @@ client.gateways.register('members', {
 
 And that's it, we now have a built in members gateway, however we have no way of accessing them via the [GuildMember](https://discord.js.org/#/docs/main/master/class/GuildMember) class. We'll tackle that next.
 
+> Note: Gateways must be created before the "Ready" event is emmited. (i.e. before the bot is ready). See [Creating Gateways](https://github.com/dirigeants/klasa/blob/master/guides/Getting%20Started/UnderstandingSettingsGateway.md#creating-gateways) for more details.
+
 ## Creating Our Own GuildMember Class
 
 We have the Gateway, so we just need to use [Custom Structures](https://discord.js.org/#/docs/main/master/class/Structures) to use it properly. Make a new file, and add this:
