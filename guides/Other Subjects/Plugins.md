@@ -11,8 +11,8 @@ It's very easy to get started with using the new plugin system.
 Say we have our main app like so:
 
 ```javascript
-const { Client } = require("klasa");
-const config = require("./config.json");
+const { Client } = require('klasa');
+const config = require('./config.json');
 
 new Client(config).login(config.token);
 ```
@@ -20,10 +20,10 @@ new Client(config).login(config.token);
 If you wanted to use the klasa-dashboard-hooks plugin, you would insert the following code (assuming you installed klasa-dashboard-hooks):
 
 ```javascript
-const { Client } = require("klasa");
-const config = require("./config.json");
+const { Client } = require('klasa');
+const config = require('./config.json');
 
-Client.use(require("klasa-dashboard-hooks"));
+Client.use(require('klasa-dashboard-hooks'));
 
 new Client(config).login(config.token);
 ```
@@ -36,15 +36,15 @@ You can have as many plugins as you want, and they will loaded in the same order
 
 The only requirement for making a plugin is to make sure you export an unbound function as the plugin. Here's a small example of what a plugin could look like:
 
-
 ```javascript
 // index.js
-const { Client : { plugin } } = require("klasa");
+const { Client: { plugin } } = require('klasa');
 module.exports = {
-  [plugin]:  function() { // [plugin] must be typed exactly like this.
-    this.klasaIsCool = true;
-  }
-}
+	// [plugin] must be typed exactly like this.
+	[plugin]:  function plugin () {
+		this.klasaIsCool = true;
+	}
+};
 ```
 
 Accessing `this.client.klasaIsCool` from within your bot would be true here, assuming you followed steps above to insert the plugin into your code with the `use` method.
