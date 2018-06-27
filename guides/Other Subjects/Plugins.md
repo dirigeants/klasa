@@ -2,7 +2,7 @@
 
 Plugins are whatever you want them to be. They can be extensions to the code, or they can be complete modifications of the code. They allow you to build smaller (or bigger) projects that require Klasa, while still maintaining everything that Klasa offers.
 
-An example of Klasa Plugins in work is (klasa-dashboard-hooks)[https://github.com/dirigeants/klasa-dashboard-hooks].
+An example of Klasa Plugins in work is [klasa-dashboard-hooks](https://github.com/dirigeants/klasa-dashboard-hooks).
 
 # To Get Started Using Plugins
 
