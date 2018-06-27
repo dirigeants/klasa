@@ -116,6 +116,10 @@
     {
         "name": "Rich Menu",
         "path": "RichMenu.md"
+    },
+    {
+        "name": "Plugins",
+        "path": "Plugins.md"
     }]
 },
 {
