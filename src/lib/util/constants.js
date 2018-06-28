@@ -86,7 +86,9 @@ exports.DEFAULTS = {
 				ignoreSelf: true,
 				ignoreOthers: true,
 				ignoreWebhooks: true,
-				ignoreEdits: true
+				ignoreEdits: true,
+				ignoreBlacklistedUsers: true,
+				ignoreBlacklistedGuilds: true
 			},
 			providers: { enabled: true },
 			tasks: { enabled: true }
