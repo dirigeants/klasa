@@ -46,7 +46,7 @@ class Timestamp {
 	 * @param {(Date|number|string)} [time=new Date()] The time to display in utc
 	 * @returns {string}
 	 */
-	displayUTC(time = new Date()) {
+	displayUTC(time) {
 		return Timestamp._display(this._template, Timestamp.utc(time));
 	}
 
