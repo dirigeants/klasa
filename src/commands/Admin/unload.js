@@ -13,6 +13,9 @@ module.exports = class extends Command {
 	}
 
 	async run(message, [piece]) {
+		if ((piece.type === 'event' && piece.name === 'message') || (piece.type === 'monitor' && piece.name === 'commandHandler')) {
+			return message.sendMessage(message.language.get('COMMAND_UNLOAD_WARN'));
+		}
 		piece.unload();
 		if (this.client.shard) {
 			await this.client.shard.broadcastEval(`
