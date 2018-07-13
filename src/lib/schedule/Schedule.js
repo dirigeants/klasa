@@ -162,19 +162,13 @@ class Schedule {
 	 * @returns {this}
 	 */
 	async delete(id) {
-		const task = this._tasks.find(entry => entry.id === id);
-		if (!task) {
-			const possibleIndex = this.tasks.findIndex(entry => entry.id === id);
-			if (possibleIndex === -1) throw new Error('This task does not exist.');
-			this.tasks.splice(possibleIndex, 1);
-			return this;
-		}
+		const taskIndex = this.tasks.findIndex(entry => entry.id === id);
+		if (taskIndex === -1) throw new Error('This task does not exist.');
 
+		this.tasks.splice(taskIndex, 1);
 		// Get the task and use it to remove
-		await this.client.configs.update('schedules', task, { action: 'remove' });
-
-		// Remove the task from the current cache if successful
-		this.tasks.splice(this.tasks.findIndex(entry => entry.id === id), 1);
+		const task = this._tasks.find(entry => entry.id === id);
+		if (task) await this.client.configs.update('schedules', task, { action: 'remove' });
 
 		return this;
 	}
