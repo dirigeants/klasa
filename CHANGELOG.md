@@ -13,6 +13,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#362](https://github.com/dirigeants/klasa/pull/362)] Added `GatewayDriverRegisterOptions.syncArg` for custom arguments for `GatewayDriver#sync()`'s call. (kyranet)
 - [[#331](https://github.com/dirigeants/klasa/pull/331)] Added `Gateway#syncQueue` for centralized lazy load cache and memory reduction. (kyranet)
 - [[#331](https://github.com/dirigeants/klasa/pull/331)] Added `Configuration#synchronizing` getter to check whether a Configuration instance is lazy loading or not. (kyranet)
 - [[#284](https://github.com/dirigeants/klasa/pull/284)] Added `Util.chunk`. (bdistin)

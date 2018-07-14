@@ -11,6 +11,7 @@ class GatewayDriver {
 	/**
 	 * @typedef {Object} GatewayDriverRegisterOptions
 	 * @property {string} [provider] The name of the provider to use
+	 * @property {string|string[]|true} [syncArg] The sync args to pass to Gateway#sync during Gateway init
 	 */
 
 	/**
@@ -217,7 +218,7 @@ class GatewayDriver {
 	 * @returns {Promise<Array<Gateway>>}
 	 */
 	sync(...args) {
-		return Promise.all([...this.keys].map(key => this[key].sync(...args)));
+		return Promise.all([...this].map(([key, gateway]) => gateway.sync(...args.length ? args : this.client.options.gateways[key].syncArg)));
 	}
 
 	/**

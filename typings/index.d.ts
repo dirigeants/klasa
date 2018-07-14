@@ -1320,6 +1320,7 @@ declare module 'klasa' {
 		clientStorage?: GatewayDriverRegisterOptions;
 		guilds?: GatewayDriverRegisterOptions;
 		users?: GatewayDriverRegisterOptions;
+		[key: string]: GatewayDriverRegisterOptions;
 	} & object;
 
 	export type ExecOptions = {
@@ -1449,6 +1450,7 @@ declare module 'klasa' {
 
 	export type GatewayDriverRegisterOptions = {
 		provider?: string;
+		syncArg?: string[] | string | true;
 	};
 
 	export type SchemaFolderAddOptions = {
