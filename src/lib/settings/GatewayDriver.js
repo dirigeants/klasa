@@ -241,14 +241,12 @@ class GatewayDriver {
 	 * @returns {Object}
 	 */
 	toJSON() {
-		const object = {
+		return {
 			types: [...this.types],
 			keys: [...this.keys],
-			ready: this.ready
+			ready: this.ready,
+			...Object.assign({}, [...this].map(([key, value]) => ({ [key]: value.toJSON() })))
 		};
-		for (const [key, value] of this) object[key] = value.toJSON();
-
-		return object;
 	}
 
 	/**
