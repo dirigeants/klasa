@@ -494,8 +494,8 @@ declare module 'klasa' {
 		public readonly syncQueue: Collection<string, Promise<Configuration>>;
 
 		public get(input: string | number, create?: boolean): Configuration;
-		public sync(input?: string[]): Promise<Gateway>;
-		public sync(input: string | { id?: string, name?: string }): Promise<Configuration>;
+		public sync(input: string): Promise<Configuration>;
+		public sync(input?: string[] | true): Promise<Gateway>;
 		public getPath(key?: string, options?: GatewayGetPathOptions): GatewayGetPathResult | null;
 
 		private _resolveGuild(guild: GuildResolvable): KlasaGuild;
