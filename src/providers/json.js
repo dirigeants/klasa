@@ -56,7 +56,7 @@ module.exports = class extends Provider {
 	 * @returns {Object[]}
 	 */
 	async getAll(table, entries) {
-		if (!Array.isArray(entries)) entries = await this.getKeys(table);
+		if (!Array.isArray(entries) || !entries.length) entries = await this.getKeys(table);
 		if (entries.length < 5000) {
 			return Promise.all(entries.map(this.get.bind(this, table)));
 		} else {
