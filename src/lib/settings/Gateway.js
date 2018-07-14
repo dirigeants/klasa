@@ -123,7 +123,7 @@ class Gateway extends GatewayStorage {
 	async sync(input = [...this.cache.keys()]) {
 		if (input === true || Array.isArray(input)) {
 			if (!this._synced) this._synced = true;
-			const entries = await this.provider.getAll(this.type, input === true ? null : input);
+			const entries = await this.provider.getAll(this.type, input === true ? undefined : input);
 			for (const entry of entries) {
 				if (!entry) continue;
 				const cache = this.cache.get(entry.id);
