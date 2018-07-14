@@ -221,6 +221,21 @@ class GatewayDriver {
 	}
 
 	/**
+	 * Returns a new Iterator object that contains the values for each gateway contained in this driver.
+	 * @name @@iterator
+	 * @since 0.5.0
+	 * @method
+	 * @instance
+	 * @generator
+	 * @returns {Iterator<Array<string | Gateway>>}
+	 * @memberof GatewayDriver
+	 */
+
+	*[Symbol.iterator]() {
+		for (const key of this.keys) yield [key, this[key]];
+	}
+
+	/**
 	 * The GatewayDriver with all gateways, types and keys as JSON.
 	 * @since 0.5.0
 	 * @returns {Object}
@@ -231,7 +246,7 @@ class GatewayDriver {
 			keys: [...this.keys],
 			ready: this.ready
 		};
-		for (const key of this.keys) object[key] = this[key].toJSON();
+		for (const [key, value] of this) object[key] = value.toJSON();
 
 		return object;
 	}

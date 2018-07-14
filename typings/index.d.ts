@@ -542,6 +542,7 @@ declare module 'klasa' {
 			schedules: SchemaPieceJSON
 		};
 
+		public [Symbol.iterator](): Iterator<[string, Gateway]>;
 		public register(name: string, schema?: object, options?: GatewayDriverRegisterOptions): this;
 		public init(): Promise<void>;
 		public sync(input?: string[]): Promise<Array<Gateway>>;
