@@ -8,8 +8,7 @@ module.exports = class extends Command {
 			permissionLevel: 10,
 			guarded: true,
 			description: (message) => message.language.get('COMMAND_RELOAD_DESCRIPTION'),
-			usage: '<all|Store:store|Piece:piece>',
-			subcommands: true,
+			usage: '<all|Store:store|Piece:piece>'
 		});
 	}
 
