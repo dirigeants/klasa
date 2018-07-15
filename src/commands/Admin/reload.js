@@ -8,11 +8,13 @@ module.exports = class extends Command {
 			permissionLevel: 10,
 			guarded: true,
 			description: (message) => message.language.get('COMMAND_RELOAD_DESCRIPTION'),
-			usage: '<Store:store|Piece:piece>'
+			usage: '<all|Store:store|Piece:piece>',
+			subcommands: true,
 		});
 	}
 
 	async run(message, [piece]) {
+		if (piece === 'all') return this.all(message);
 		if (piece instanceof Store) {
 			const timer = new Stopwatch();
 			await piece.loadAll();
@@ -37,6 +39,15 @@ module.exports = class extends Command {
 			piece.store.set(piece);
 			return message.sendMessage(`❌ ${err}`);
 		}
+	}
+
+	async all(message) {
+		const timer = new Stopwatch();
+		this.client.pieceStores.forEach(async (p) => {
+			await p.loadAll();
+			await p.init();
+		});
+		return message.sendMessage(`Reloaded all stores. (Took: ${timer.stop().toString()})`);
 	}
 
 };
