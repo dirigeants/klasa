@@ -198,6 +198,7 @@ class GatewayDriver {
 		this.keys.add(name);
 		this[name] = gateway;
 		this._queue.push(gateway.init.bind(gateway, defaultSchema));
+		if (!(name in this.client.options.gateways)) this.client.options.gateways[name] = {};
 		return this;
 	}
 
@@ -214,11 +215,11 @@ class GatewayDriver {
 	/**
 	 * Sync all gateways
 	 * @since 0.5.0
-	 * @param {...*} args The arguments to pass to each Gateway#sync
+	 * @param {(string|string[])} input The arguments to pass to each Gateway#sync
 	 * @returns {Promise<Array<Gateway>>}
 	 */
-	sync(...args) {
-		return Promise.all([...this].map(([key, gateway]) => gateway.sync(...args.length ? args : this.client.options.gateways[key].syncArg)));
+	sync(input) {
+		return Promise.all([...this].map(([key, gateway]) => gateway.sync(typeof input === 'undefined' ? this.client.options.gateways[key].syncArg : input)));
 	}
 
 	/**

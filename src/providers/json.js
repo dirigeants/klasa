@@ -108,7 +108,7 @@ module.exports = class extends Provider {
 	 * @returns {Promise<Object>}
 	 */
 	getRandom(table) {
-		return this.getKeys(table).then(data => this.get(table, data[Math.floor(Math.random() * data.length)].id));
+		return this.getKeys(table).then(data => this.get(table, data[Math.floor(Math.random() * data.length)]));
 	}
 
 	/**
