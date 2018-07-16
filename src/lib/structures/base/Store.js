@@ -170,7 +170,8 @@ class Store extends Collection {
 	 */
 	static async walk(store, core = false) {
 		const dir = core ? store.coreDir : store.userDir;
-		const files = await fs.scan(dir, { filter: (stats, path) => stats.isFile() && extname(path) === '.js' }).catch(() => { fs.ensureDir(dir).catch(err => store.client.emit('error', err)); });
+		const files = await fs.scan(dir, { filter: (stats, path) => stats.isFile() && extname(path) === '.js' })
+			.catch(() => { fs.ensureDir(dir).catch(err => store.client.emit('error', err)); });
 		if (!files) return true;
 
 		return Promise.all([...files.keys()].map(file => store.load(relative(dir, file).split(sep), core)));
