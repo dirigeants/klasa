@@ -288,10 +288,9 @@ class Configuration {
 		if (folders.length) array.push('= Folders =', ...folders.sort(), '');
 		if (keysTypes.length) {
 			for (const keyType of keysTypes.sort()) {
-				keys[keyType].sort();
-				array.push(`= ${toTitleCase(keyType)}s =`);
-				for (const key of keys[keyType]) array.push(`${key.padEnd(longest)} :: ${this.resolveString(message, folder[key])}`);
-				array.push('');
+				array.push(`= ${toTitleCase(keyType)}s =`,
+					...keys[keyType].sort().map(key => `${key.padEnd(longest)} :: ${this.resolveString(message, folder[key])}`),
+					'');
 			}
 		}
 		return array.join('\n');
