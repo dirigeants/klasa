@@ -89,14 +89,11 @@ class Colors {
 	/**
 	 * Format HSL to RGB
 	 * @since 0.4.0
-	 * @param {(number[]|string[])} formatArray The array to format
+	 * @param {number[]} formatArray The array to format
 	 * @returns {number[]}
 	 */
 	static hslToRGB([h, s, l]) {
-		if (s === '0%' && typeof l === 'number') return [l, l, l];
-		if (typeof h !== 'number' || typeof s !== 'number' || typeof l !== 'number') {
-			throw new TypeError(`The input for Colors.hslToRGB must be number[], received: [${typeof h}, ${typeof s}, ${typeof l}]`);
-		}
+		if (s === 0) return [l, l, l];
 
 		const q = l < 0.5 ? l * (1 + s) : (l + s) - (l * s);
 		const p = (2 * l) - q;
@@ -106,11 +103,20 @@ class Colors {
 	/**
 	 * Format an array into a string
 	 * @since 0.4.0
-	 * @param {(number[]|string[])} formatArray The array to format
+	 * @param {(number[]|string[])} array The array to format
 	 * @returns {string}
+	 * @example
+	 * Colors.formatArray(['260%', '96', '43']);
+	 * Colors.formatArray([243, 141, 34]);
 	 */
-	static formatArray([pos1, pos2, pos3]) {
-		if (typeof pos1 === 'string' && typeof pos2 === 'string' && pos3 === 'string') {
+	static formatArray(array) {
+		if (array.length !== 3) throw new TypeError('formatArray expects an array with 3 elements.');
+		const [pos1, pos2, pos3] = array;
+
+		const type = typeof pos1;
+		if (type !== 'string' || type !== 'number') throw new TypeError(`Expected string[] | number[], but found an element type ${type}`);
+
+		if (type === 'string') {
 			const exec1 = /(\d{1,3})%?/.exec(pos1);
 			if (exec1 === null) throw new TypeError('Invalid argument parsed at first position. Expected a parsable numeric value.');
 			const exec2 = /(\d{1,3})%?/.exec(pos2);
@@ -118,7 +124,7 @@ class Colors {
 			const exec3 = /(\d{1,3})%?/.exec(pos3);
 			if (exec3 === null) throw new TypeError('Invalid argument parsed at third position. Expected a parsable numeric value.');
 
-			return `38;2;${Colors.hslToRGB([parseInt(exec1[1]), parseInt(exec2[1]), parseInt(exec3[1])]).join(';')}`;
+			return `38;2;${Colors.hslToRGB([Number(exec1[1]) / 360, Number(exec2[1]) / 100, Number(exec3[1]) / 100]).join(';')}`;
 		}
 		return `38;2;${pos1};${pos2};${pos3}`;
 	}

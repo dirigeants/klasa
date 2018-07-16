@@ -18,7 +18,7 @@ class SchemaPiece extends Schema {
 	 */
 
 	/**
-	 * @typedef {Object} SchemaPieceJSON
+	 * @typedef {Object} SchemaPieceOptions
 	 * @property {string} type The type for the key
 	 * @property {*} default The default value for the key
 	 * @property {number} min The min value for the key (String.length for String, value for number)
@@ -36,7 +36,7 @@ class SchemaPiece extends Schema {
 	 * @param {string} key The name of the key
 	 */
 	constructor(client, gateway, options, parent, key) {
-		super(client, gateway, options, parent, key);
+		super(client, gateway, parent, key);
 
 		/**
 		 * The type of this key.
@@ -273,7 +273,7 @@ class SchemaPiece extends Schema {
 	/**
 	 * Get this key's raw data in JSON.
 	 * @since 0.5.0
-	 * @returns {SchemaPieceJSON}
+	 * @returns {SchemaPieceOptions}
 	 */
 	toJSON() {
 		return {
