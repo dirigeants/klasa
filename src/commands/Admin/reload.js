@@ -42,16 +42,19 @@ module.exports = class extends Command {
 
 	async all(message) {
 		const timer = new Stopwatch();
-		await Promise.all(this.client.pieceStores.map(async (p) => {
-			await p.loadAll();
-			await p.init();
+		await Promise.all(this.client.pieceStores.map(async (store) => {
+			await store.loadAll();
+			await store.init();
 		}));
 		if (this.client.shard) {
 			await this.client.shard.broadcastEval(`
-				if (this.shard.id !== ${this.client.shard.id}) this.client.pieceStores.map(async (p) => await p.loadAll());
+				if (this.shard.id !== ${this.client.shard.id}) this.client.pieceStores.map(async (store) => {
+					await store.loadAll();
+					await store.init();
+				});
 			`);
 		}
-		return message.sendMessage(`Reloaded all stores. (Took: ${timer.stop().toString()})`);
+		return message.sendMessage(`Reloaded all stores. (Took: ${timer.stop()})`);
 	}
 
 };
