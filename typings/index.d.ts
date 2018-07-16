@@ -496,8 +496,8 @@ declare module 'klasa' {
 		public readonly syncQueue: Collection<string, Promise<Configuration>>;
 
 		public get(input: string | number, create?: boolean): Configuration;
+		public sync(input: string): Promise<Configuration>;
 		public sync(input?: string[]): Promise<Gateway>;
-		public sync(input: string | { id?: string, name?: string }): Promise<Configuration>;
 		public getPath(key?: string, options?: GatewayGetPathOptions): GatewayGetPathResult | null;
 
 		private _resolveGuild(guild: GuildResolvable): KlasaGuild;
@@ -544,6 +544,7 @@ declare module 'klasa' {
 			schedules: SchemaPieceJSON
 		};
 
+		public [Symbol.iterator](): Iterator<[string, Gateway]>;
 		public register(name: string, schema?: object, options?: GatewayDriverRegisterOptions): this;
 		public init(): Promise<void>;
 		public sync(input?: string[]): Promise<Array<Gateway>>;
@@ -1322,6 +1323,7 @@ declare module 'klasa' {
 		clientStorage?: GatewayDriverRegisterOptions;
 		guilds?: GatewayDriverRegisterOptions;
 		users?: GatewayDriverRegisterOptions;
+		[key: string]: GatewayDriverRegisterOptions;
 	} & object;
 
 	export type ExecOptions = {
@@ -1451,6 +1453,7 @@ declare module 'klasa' {
 
 	export type GatewayDriverRegisterOptions = {
 		provider?: string;
+		syncArg?: string[] | string | true;
 	};
 
 	export type SchemaFolderAddOptions = {

@@ -13,6 +13,8 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#362](https://github.com/dirigeants/klasa/pull/362)] Added `GatewayDriverRegisterOptions.syncArg` for custom arguments for `GatewayDriver#sync()`'s call. (kyranet)
+- [[#362](https://github.com/dirigeants/klasa/pull/362)] Added `GatewayDriver#@@iterator`. (kyranet)
 - [[#331](https://github.com/dirigeants/klasa/pull/331)] Added `Gateway#syncQueue` for centralized lazy load cache and memory reduction. (kyranet)
 - [[#331](https://github.com/dirigeants/klasa/pull/331)] Added `Configuration#synchronizing` getter to check whether a Configuration instance is lazy loading or not. (kyranet)
 - [[#284](https://github.com/dirigeants/klasa/pull/284)] Added `Util.chunk`. (bdistin)
@@ -252,6 +254,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
+- [[#362](https://github.com/dirigeants/klasa/pull/362)] Fixed object mutation in `GatewayDriver#toJSON()`. (kyranet)
 - [[#355](https://github.com/dirigeants/klasa/pull/355)] Fixed Schedule not deleting entries that do not exist in ClientStorage but are still cached in Schedule#tasks. (kyranet)
 - [[#284](https://github.com/dirigeants/klasa/pull/284)] Fixed a bug where SG's cache would download twice when `GatewayDriverRegisterOptions.download` is true. (kyranet)
 - [[#284](https://github.com/dirigeants/klasa/pull/284)] Fixed `Gateway#parseEntry` not being a function. (kyranet)
