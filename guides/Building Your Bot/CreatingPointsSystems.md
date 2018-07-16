@@ -94,7 +94,7 @@ module.exports = class extends Monitor {
 		const nextValue = message.author.configs.experience + 1;
 
 		// Cache the current level.
-		const currLevel = message.author.configs.level;
+		const currentLevel = message.author.configs.level;
 
 		// Calculate the next level.
 		const nextLevel = Math.floor(0.1 * Math.sqrt(nextValue + 1));
@@ -105,7 +105,7 @@ module.exports = class extends Monitor {
 		// If the current level and the next level are not the same, then it has increased, and you can send the message.
 		if (currLevel !== nextLevel) {
 			// Send the message to the channel congratulating the user.
-			await message.send(`Congratulations! You leveled up to level **${currLevel}**!`);
+			await message.send(`Congratulations! You leveled up to level **${currentLevel}**!`);
 		}
 	}
 

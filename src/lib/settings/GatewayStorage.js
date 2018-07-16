@@ -1,5 +1,5 @@
 const SchemaFolder = require('./SchemaFolder');
-const { resolve } = require('path');
+const { join } = require('path');
 const fs = require('fs-nextra');
 
 class GatewayStorage {
@@ -41,24 +41,6 @@ class GatewayStorage {
 		Object.defineProperty(this, 'providerName', { value: provider || this.client.options.providers.default });
 
 		/**
-		 * Where the bwd folder is located at.
-		 * @since 0.5.0
-		 * @name GatewayStorage#baseDir
-		 * @type {string}
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'baseDir', { value: resolve(this.client.clientBaseDir, 'bwd') });
-
-		/**
-		 * Where the file schema is located at.
-		 * @since 0.5.0
-		 * @name GatewayStorage#filePath
-		 * @type {string}
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'filePath', { value: resolve(this.baseDir, `${this.type}.schema.json`) });
-
-		/**
 		 * @since 0.5.0
 		 * @type {SchemaFolder}
 		 */
@@ -69,6 +51,26 @@ class GatewayStorage {
 		 * @type {boolean}
 		 */
 		this.ready = false;
+	}
+
+	/**
+	 * Where the bwd folder is located at.
+	 * @since 0.5.0
+	 * @type {string}
+	 * @readonly
+	 */
+	get baseDir() {
+		return join(this.client.clientBaseDir, 'bwd');
+	}
+
+	/**
+	 * Where the file schema is located at.
+	 * @since 0.5.0
+	 * @type {string}
+	 * @readonly
+	 */
+	get filePath() {
+		return join(this.client.clientBaseDir, 'bwd', `${this.type}.schema.json`);
 	}
 
 	/**
@@ -98,7 +100,8 @@ class GatewayStorage {
 	 */
 	async init(defaultSchema) {
 		if (this.ready) throw new Error(`[INIT] ${this} has already initialized.`);
-		if (!this.provider) throw new Error(`This provider (${this.providerName}) does not exist in your system.`);
+		const { provider } = this;
+		if (!provider) throw new Error(`This provider (${this.providerName}) does not exist in your system.`);
 		this.ready = true;
 
 		// Init the Schema
@@ -110,21 +113,18 @@ class GatewayStorage {
 			// Make the schema the default one
 			schema = defaultSchema;
 
-			// Check if the file exists
-			const fileWritten = await fs.pathExists(this.filePath);
-
 			// If the file is written, there must be an issue with the file, emit an
 			// error instead of overwritting it (which would result to data loss). If
 			// the file does not exist, write the default schema.
-			if (fileWritten) this.client.emit('error', error);
-			else await fs.outputJSONAtomic(this.filePath, defaultSchema);
+			if (error.code === 'ENOENT') await fs.outputJSONAtomic(this.filePath, defaultSchema);
+			else this.client.emit('error', error);
 		}
 
 		this.schema = new SchemaFolder(this.client, this, schema, null, '');
 
 		// Init the table
-		const hasTable = await this.provider.hasTable(this.type);
-		if (!hasTable) await this.provider.createTable(this.type);
+		const hasTable = await provider.hasTable(this.type);
+		if (!hasTable) await provider.createTable(this.type);
 	}
 
 }

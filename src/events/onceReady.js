@@ -14,7 +14,7 @@ module.exports = class extends Event {
 		if (!this.client.options.ownerID) this.client.options.ownerID = this.client.user.bot ? this.client.application.owner.id : this.client.user.id;
 
 		this.client.configs = this.client.gateways.clientStorage.get(this.client.user.id, true);
-		await this.client.gateways.sync(true);
+		await this.client.gateways.sync();
 
 		// Automatic Prefix editing detection.
 		const { prefix } = this.client.options;
