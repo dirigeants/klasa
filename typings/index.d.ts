@@ -480,8 +480,6 @@ declare module 'klasa' {
 		public toJSON<T extends ObjectLiteral>(): T;
 		public toString(): string;
 
-		private static _merge<T extends ObjectLiteral>(data: any, folder: SchemaFolder | SchemaPiece): T;
-		private static _clone<T extends ObjectLiteral>(data: any, schema: SchemaFolder): T;
 		private static _patch(inst: any, data: any, schema: SchemaFolder): void;
 	}
 
@@ -1189,14 +1187,14 @@ declare module 'klasa' {
 
 	class Util {
 		public static arrayFromObject<T = any>(obj: ObjectLiteral<T>, prefix?: string): Array<T>;
-		public static arraysEqual(arr1: any[], arr2: any[], clone?: boolean): boolean;
 		public static arraysStrictEquals(arr1: any[], arr2: any[]): boolean;
-		public static chunk<T>(entries: T[], chunkSize: number): T[][];
+		public static chunk<T>(entries: T[], chunkSize: number): Array<T[]>;
 		public static clean(text: string): string;
 		public static codeBlock(lang: string, expression: string | number | Stringifible): string;
 		public static deepClone<T = any>(source: T): T;
 		public static exec(exec: string, options?: ExecOptions): Promise<{ stdout: string, stderr: string }>;
 		public static getIdentifier(value: PrimitiveType | { id?: PrimitiveType, name?: PrimitiveType }): PrimitiveType | null;
+		public static getTypeName(input: any): string;
 		public static isClass(input: any): input is Constructable<any>;
 		public static isFunction(input: any): input is Function;
 		public static isNumber(input: any): input is number;
@@ -1206,7 +1204,7 @@ declare module 'klasa' {
 		public static makeObject<T = ObjectLiteral, S = ObjectLiteral>(path: string, value: any, obj?: ObjectLiteral): T & S;
 		public static mergeDefault<T = ObjectLiteral, S = ObjectLiteral>(objDefaults: T, objSource: S): T & S;
 		public static mergeObjects<T = ObjectLiteral, S = ObjectLiteral>(objTarget: T, objSource: S): T & S;
-		public static objectToTuples(obj: ObjectLiteral, entries?: { keys: string[], values: any[] }): [string[], any[]];
+		public static objectToTuples(obj: ObjectLiteral<any>, entries?: { keys: string[], values: any[] }): [string[], any[]];
 		public static regExpEsc(str: string): string;
 		public static sleep<T = any>(delay: number, args?: T): Promise<T>;
 		public static toTitleCase(str: string): string;
