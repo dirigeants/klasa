@@ -29,6 +29,9 @@ const constants = require('./util/constants');
 const Stopwatch = require('./util/Stopwatch');
 const util = require('./util/util');
 
+// external plugins
+const plugins = [];
+
 /**
  * The client for handling everything. See {@tutorial GettingStarted} for more information how to get started using this class.
  * @extends external:Client
@@ -56,7 +59,7 @@ class KlasaClient extends Discord.Client {
 	 * @property {KlasaProvidersOptions} [providers] The provider options
 	 * @property {(string|Function)} [readyMessage=`Successfully initialized. Ready to serve ${this.guilds.size} guilds.`] readyMessage to be passed throughout Klasa's ready event
 	 * @property {RegExp} [regexPrefix] The regular expression prefix if one is provided
-	 * @property {KlasaClientOptionsSchedule} [schedule] The options for the internal clock module that runs Schedule
+	 * @property {KlasaClientOptionsSchedule} [schedule={}] The options for the internal clock module that runs Schedule
 	 * @property {boolean} [typing=false] Whether the bot should type while processing commands
 	 */
 
@@ -279,6 +282,9 @@ class KlasaClient extends Discord.Client {
 		 * @type {boolean}
 		 */
 		this.ready = false;
+
+		// Run all plugin functions in this context
+		for (const plugin of plugins) plugin[this.constructor.plugin].call(this);
 	}
 
 	/**
@@ -416,7 +422,26 @@ class KlasaClient extends Discord.Client {
 		return messages;
 	}
 
+	/**
+	 * Caches a plugin module to be used when creating a KlasaClient instance
+	 * @since 0.5.0
+	 * @param {Object} mod The module of the plugin to use
+	 * @returns {this}
+	 * @chainable
+	 */
+	static use(mod) {
+		plugins.push(mod);
+		return this;
+	}
+
 }
+
+/**
+ * The plugin symbol to be used in external packages
+ * @since 0.5.0
+ * @type {Symbol}
+ */
+KlasaClient.plugin = Symbol('KlasaPlugin');
 
 /**
  * The default PermissionLevels
