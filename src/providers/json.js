@@ -56,15 +56,15 @@ module.exports = class extends Provider {
 	 * @returns {Object[]}
 	 */
 	async getAll(table, entries) {
-		if (!entries) entries = await this.getKeys(table);
+		if (!Array.isArray(entries) || !entries.length) entries = await this.getKeys(table);
 		if (entries.length < 5000) {
 			return Promise.all(entries.map(this.get.bind(this, table)));
-		} else {
-			const chunks = util.chunk(entries, 5000);
-			const output = [];
-			for (const chunk of chunks) output.push(...await Promise.all(chunk.map(this.get.bind(this, table))));
-			return output;
 		}
+
+		const chunks = util.chunk(entries, 5000);
+		const output = [];
+		for (const chunk of chunks) output.push(...await Promise.all(chunk.map(this.get.bind(this, table))));
+		return output;
 	}
 
 	/**
@@ -108,7 +108,7 @@ module.exports = class extends Provider {
 	 * @returns {Promise<Object>}
 	 */
 	getRandom(table) {
-		return this.getAll(table).then(data => data[Math.floor(Math.random() * data.length)]);
+		return this.getKeys(table).then(data => this.get(table, data[Math.floor(Math.random() * data.length)]));
 	}
 
 	/**
@@ -136,7 +136,7 @@ module.exports = class extends Provider {
 	 * @returns {Promise<void>}
 	 */
 	create(table, document, data = {}) {
-		return fs.outputJSONAtomic(resolve(this.baseDir, table, `${document}.json`), util.mergeObjects({ id: document }, data));
+		return fs.outputJSONAtomic(resolve(this.baseDir, table, `${document}.json`), { id: document, ...data });
 	}
 
 	/**
@@ -159,7 +159,7 @@ module.exports = class extends Provider {
 	 * @returns {Promise<void>}
 	 */
 	replace(table, document, data) {
-		return fs.outputJSONAtomic(resolve(this.baseDir, table, `${document}.json`), this.parseUpdateInput(data));
+		return fs.outputJSONAtomic(resolve(this.baseDir, table, `${document}.json`), { id: document, ...this.parseUpdateInput(data) });
 	}
 
 	/**

@@ -117,7 +117,7 @@ class Gateway extends GatewayStorage {
 	/**
 	 * Sync either all entries from the cache with the persistent database, or a single one.
 	 * @since 0.0.1
-	 * @param {(Object|string|boolean)} [input=Array<string>] An object containing a id property, like discord.js objects, or a string
+	 * @param {(Array<string>|string)} [input=Array<string>] An object containing a id property, like discord.js objects, or a string
 	 * @returns {?(Gateway|Configuration)}
 	 */
 	async sync(input = [...this.cache.keys()]) {

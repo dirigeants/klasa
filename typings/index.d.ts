@@ -76,6 +76,8 @@ declare module 'klasa' {
 
 		public sweepMessages(lifetime?: number, commandLifeTime?: number): number;
 		public static defaultPermissionLevels: PermissionLevels;
+		public static plugin: Symbol;
+		public static use(mod: { plugin: Symbol, [x: string]: any }): KlasaClient;
 
 		// Discord.js events
 		public on(event: string, listener: Function): this;
@@ -491,8 +493,8 @@ declare module 'klasa' {
 		public readonly syncQueue: Collection<string, Promise<Configuration>>;
 
 		public get(input: string | number, create?: boolean): Configuration;
+		public sync(input: string): Promise<Configuration>;
 		public sync(input?: string[]): Promise<Gateway>;
-		public sync(input: string | { id?: string, name?: string }): Promise<Configuration>;
 		public getPath(key?: string, options?: GatewayGetPathOptions): GatewayGetPathResult | null;
 
 		private _resolveGuild(guild: GuildResolvable): KlasaGuild;
@@ -539,6 +541,7 @@ declare module 'klasa' {
 			schedules: SchemaPieceOptions
 		};
 
+		public [Symbol.iterator](): Iterator<[string, Gateway]>;
 		public register(name: string, schema?: ObjectLiteral, options?: GatewayDriverRegisterOptions): this;
 		public init(): Promise<void>;
 		public sync(input?: string[]): Promise<Array<Gateway>>;
@@ -1449,6 +1452,7 @@ declare module 'klasa' {
 
 	export type GatewayDriverRegisterOptions = {
 		provider?: string;
+		syncArg?: string[] | string | true;
 	};
 
 	export type SchemaFolderAddOptions = SchemaFolderOptions | SchemaPieceOptions;
