@@ -140,19 +140,6 @@ class Util {
 	}
 
 	/**
-	 * Applies an interface to a class
-	 * @since 0.1.1
-	 * @param {Object} base The interface to apply to a structure
-	 * @param {Object} structure The structure to apply the interface to
-	 * @param {string[]} [skips=[]] The methods to skip when applying this interface
-	 */
-	static applyToClass(base, structure, skips = []) {
-		for (const method of Object.getOwnPropertyNames(base.prototype)) {
-			if (!skips.includes(method)) Object.defineProperty(structure.prototype, method, Object.getOwnPropertyDescriptor(base.prototype, method));
-		}
-	}
-
-	/**
 	 * Verify if the input is a function.
 	 * @since 0.5.0
 	 * @param {Function} input The function to verify
