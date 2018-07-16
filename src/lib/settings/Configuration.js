@@ -536,11 +536,7 @@ class Configuration {
 	 */
 	_patch(data) {
 		if (typeof data !== 'object' || data === null) return;
-		for (const [key, piece] of this.gateway.schema.entries()) {
-			const value = data[key];
-			if (value === undefined || value === null) continue;
-			this[key] = piece.type === 'Folder' ? this.constructor._patch(this[key], value, piece) : value;
-		}
+		this.constructor._patch(this, data, this.gateway.schema);
 	}
 
 	/**
@@ -574,7 +570,7 @@ class Configuration {
 		for (const [key, piece] of schema) {
 			const value = data[key];
 			if (value === undefined || value === null) continue;
-			inst[key] = piece.type === 'Folder' ? Configuration._patch(inst[key], value, piece) : value;
+			inst[key] = piece.type === 'Folder' ? this._patch(inst[key], value, piece) : deepClone(value);
 		}
 
 		return inst;
