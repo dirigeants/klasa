@@ -252,6 +252,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
+- [[#355](https://github.com/dirigeants/klasa/pull/355)] Fixed Schedule not deleting entries that do not exist in ClientStorage but are still cached in Schedule#tasks. (kyranet)
 - [[#284](https://github.com/dirigeants/klasa/pull/284)] Fixed a bug where SG's cache would download twice when `GatewayDriverRegisterOptions.download` is true. (kyranet)
 - [[#284](https://github.com/dirigeants/klasa/pull/284)] Fixed `Gateway#parseEntry` not being a function. (kyranet)
 - [[#256](https://github.com/dirigeants/klasa/pull/256)] Fixed `Util.deepClone` trying to iterate over `WeakMap`s and `WeakSet`s. (kyranet)
