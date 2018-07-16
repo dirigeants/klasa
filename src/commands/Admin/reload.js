@@ -8,12 +8,12 @@ module.exports = class extends Command {
 			permissionLevel: 10,
 			guarded: true,
 			description: (message) => message.language.get('COMMAND_RELOAD_DESCRIPTION'),
-			usage: '<all|Store:store|Piece:piece>'
+			usage: '<everything|Store:store|Piece:piece>'
 		});
 	}
 
 	async run(message, [piece]) {
-		if (piece === 'all') return this.all(message);
+		if (piece === 'everything') return this.everything(message);
 		if (piece instanceof Store) {
 			const timer = new Stopwatch();
 			await piece.loadAll();
@@ -40,7 +40,7 @@ module.exports = class extends Command {
 		}
 	}
 
-	async all(message) {
+	async everything(message) {
 		const timer = new Stopwatch();
 		await Promise.all(this.client.pieceStores.map(async (store) => {
 			await store.loadAll();
