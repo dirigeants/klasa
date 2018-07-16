@@ -73,6 +73,8 @@ declare module 'klasa' {
 
 		public sweepMessages(lifetime?: number, commandLifeTime?: number): number;
 		public static defaultPermissionLevels: PermissionLevels;
+		public static plugin: Symbol;
+		public static use(mod: { plugin: Symbol, [x: string]: any }): KlasaClient;
 
 		// Discord.js events
 		public on(event: string, listener: Function): this;
