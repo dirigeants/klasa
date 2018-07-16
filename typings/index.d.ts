@@ -1192,6 +1192,7 @@ declare module 'klasa' {
 		private _template: TimestampObject[];
 
 		public display(time?: Date | number | string): string;
+		public displayUTC(time?: Date | number | string): string;
 		public edit(pattern: string): this;
 
 		public static displayArbitrary(pattern: string, time?: Date | number | string): string;
