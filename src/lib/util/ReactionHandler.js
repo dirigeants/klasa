@@ -107,7 +107,7 @@ class ReactionHandler extends ReactionCollector {
 		 */
 		this.reactionsDone = false;
 
-		if (emojis.length) this._queueEmojiReactions(emojis.slice(0));
+		if (emojis.length) this._queueEmojiReactions(emojis.slice());
 		else return this.stop();
 
 		this.on('collect', (reaction, user) => {
