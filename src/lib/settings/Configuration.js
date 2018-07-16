@@ -550,9 +550,7 @@ class Configuration {
 	 * @returns {ConfigurationJSON}
 	 */
 	toJSON() {
-		const obj = {};
-		for (const key of this.gateway.schema.keys()) obj[key] = deepClone(this[key]);
-		return obj;
+		return Object.assign({}, ...[...this.gateway.schema.keys()].map(key => ({ [key]: deepClone(this[key]) })));
 	}
 
 	/**
