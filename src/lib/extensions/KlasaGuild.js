@@ -8,6 +8,11 @@ module.exports = Structures.extend('Guild', Guild => {
 	class KlasaGuild extends Guild {
 
 		/**
+		 * @typedef {external:GuildJSON} KlasaGuildJSON
+		 * @property {ConfigurationJSON} configs The per guild configs
+		 */
+
+		/**
 		 * @param {...*} args Normal D.JS Guild args
 		 */
 		constructor(...args) {
@@ -32,7 +37,7 @@ module.exports = Structures.extend('Guild', Guild => {
 		/**
 		 * Returns the JSON-compatible object of this instance.
 		 * @since 0.5.0
-		 * @returns {Object}
+		 * @returns {KlasaGuildJSON}
 		 */
 		toJSON() {
 			return { ...super.toJSON(), configs: this.configs.toJSON() };

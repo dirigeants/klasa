@@ -29,6 +29,9 @@ const constants = require('./util/constants');
 const Stopwatch = require('./util/Stopwatch');
 const util = require('./util/util');
 
+// external plugins
+const plugins = [];
+
 /**
  * The client for handling everything. See {@tutorial GettingStarted} for more information how to get started using this class.
  * @extends external:Client
@@ -50,13 +53,13 @@ class KlasaClient extends Discord.Client {
 	 * @property {string} [ownerID] The discord user id for the user the bot should respect as the owner (gotten from Discord api if not provided)
 	 * @property {PermissionLevels} [permissionLevels=KlasaClient.defaultPermissionLevels] The permission levels to use with this bot
 	 * @property {KlasaPieceDefaults} [pieceDefaults={}] Overrides the defaults for all pieces
-	 * @property {string} [prefix] The default prefix the bot should respond to
+	 * @property {string|string[]} [prefix] The default prefix the bot should respond to
 	 * @property {boolean} [preserveConfigs=true] Whether the bot should preserve (non-default) configs when removed from a guild
 	 * @property {boolean} [production=false] Whether the bot should handle unhandled promise rejections automatically (handles when false) (also can be configured with process.env.NODE_ENV)
 	 * @property {KlasaProvidersOptions} [providers] The provider options
 	 * @property {(string|Function)} [readyMessage=`Successfully initialized. Ready to serve ${this.guilds.size} guilds.`] readyMessage to be passed throughout Klasa's ready event
 	 * @property {RegExp} [regexPrefix] The regular expression prefix if one is provided
-	 * @property {KlasaClientOptionsSchedule} [schedule] The options for the internal clock module that runs Schedule
+	 * @property {KlasaClientOptionsSchedule} [schedule={}] The options for the internal clock module that runs Schedule
 	 * @property {boolean} [typing=false] Whether the bot should type while processing commands
 	 */
 
@@ -279,6 +282,9 @@ class KlasaClient extends Discord.Client {
 		 * @type {boolean}
 		 */
 		this.ready = false;
+
+		// Run all plugin functions in this context
+		for (const plugin of plugins) plugin[this.constructor.plugin].call(this);
 	}
 
 	/**
@@ -417,7 +423,26 @@ class KlasaClient extends Discord.Client {
 		return messages;
 	}
 
+	/**
+	 * Caches a plugin module to be used when creating a KlasaClient instance
+	 * @since 0.5.0
+	 * @param {Object} mod The module of the plugin to use
+	 * @returns {this}
+	 * @chainable
+	 */
+	static use(mod) {
+		plugins.push(mod);
+		return this;
+	}
+
 }
+
+/**
+ * The plugin symbol to be used in external packages
+ * @since 0.5.0
+ * @type {Symbol}
+ */
+KlasaClient.plugin = Symbol('KlasaPlugin');
 
 /**
  * The default PermissionLevels
@@ -546,9 +571,8 @@ KlasaClient.defaultPermissionLevels = new PermissionLevels()
  * Emitted when {@link Configuration#update} or {@link Configuration#reset} is run.
  * @event KlasaClient#configUpdateEntry
  * @since 0.5.0
- * @param {Configuration} oldEntry The old configuration entry
- * @param {Configuration} newEntry The new configuration entry
- * @param {ConfigurationUpdateResultEntry[]} path The path of the key which changed
+ * @param {Configuration} entry The patched configuration entry
+ * @param {ConfigurationUpdateResultEntry[]} updated The keys that were updated
  */
 
 /**

@@ -1,11 +1,3 @@
-## blacklist
-
-Checks if a user is on blacklist by the clientStorage's userBlacklist key.
-
-**Source:**
-
-[inhibitors/blacklist.js](https://github.com/dirigeants/klasa/blob/master/src/inhibitors/blacklist.js)
-
 ## cooldown
 
 Checks if a user is on cooldown for the command run.
