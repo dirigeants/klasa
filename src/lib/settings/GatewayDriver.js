@@ -11,22 +11,23 @@ class GatewayDriver {
 	/**
 	 * @typedef {Object} GatewayDriverRegisterOptions
 	 * @property {string} [provider] The name of the provider to use
+	 * @property {string|string[]|true} [syncArg] The sync args to pass to Gateway#sync during Gateway init
 	 */
 
 	/**
 	 * @typedef {Object} GatewayDriverGuildsSchema
-	 * @property {SchemaPieceJSON} prefix The per-guild's configurable prefix key
-	 * @property {SchemaPieceJSON} language The per-guild's configurable language key
-	 * @property {SchemaPieceJSON} disableNaturalPrefix The per-guild's configurable disableNaturalPrefix key
-	 * @property {SchemaPieceJSON} disabledCommands The per-guild's configurable disabledCommands key
+	 * @property {SchemaPieceOptions} prefix The per-guild's configurable prefix key
+	 * @property {SchemaPieceOptions} language The per-guild's configurable language key
+	 * @property {SchemaPieceOptions} disableNaturalPrefix The per-guild's configurable disableNaturalPrefix key
+	 * @property {SchemaPieceOptions} disabledCommands The per-guild's configurable disabledCommands key
 	 * @private
 	 */
 
 	/**
 	 * @typedef {Object} GatewayDriverClientStorageSchema
-	 * @property {SchemaPieceJSON} userBlacklist The client's configurable user blacklist key
-	 * @property {SchemaPieceJSON} guildBlacklist The client's configurable guild blacklist key
-	 * @property {SchemaPieceJSON} schedules The schedules where {@link ScheduledTask}s are stored at
+	 * @property {SchemaPieceOptions} userBlacklist The client's configurable user blacklist key
+	 * @property {SchemaPieceOptions} guildBlacklist The client's configurable guild blacklist key
+	 * @property {SchemaPieceOptions} schedules The schedules where {@link ScheduledTask}s are stored at
 	 * @private
 	 */
 
@@ -197,6 +198,7 @@ class GatewayDriver {
 		this.keys.add(name);
 		this[name] = gateway;
 		this._queue.push(gateway.init.bind(gateway, defaultSchema));
+		if (!(name in this.client.options.gateways)) this.client.options.gateways[name] = {};
 		return this;
 	}
 
@@ -213,11 +215,26 @@ class GatewayDriver {
 	/**
 	 * Sync all gateways
 	 * @since 0.5.0
-	 * @param {...*} args The arguments to pass to each Gateway#sync
+	 * @param {(string|string[])} input The arguments to pass to each Gateway#sync
 	 * @returns {Promise<Array<Gateway>>}
 	 */
-	sync(...args) {
-		return Promise.all([...this.keys].map(key => this[key].sync(...args)));
+	sync(input) {
+		return Promise.all([...this].map(([key, gateway]) => gateway.sync(typeof input === 'undefined' ? this.client.options.gateways[key].syncArg : input)));
+	}
+
+	/**
+	 * Returns a new Iterator object that contains the values for each gateway contained in this driver.
+	 * @name @@iterator
+	 * @since 0.5.0
+	 * @method
+	 * @instance
+	 * @generator
+	 * @returns {Iterator<Array<string | Gateway>>}
+	 * @memberof GatewayDriver
+	 */
+
+	*[Symbol.iterator]() {
+		for (const key of this.keys) yield [key, this[key]];
 	}
 
 	/**
@@ -226,14 +243,12 @@ class GatewayDriver {
 	 * @returns {Object}
 	 */
 	toJSON() {
-		const object = {
+		return {
 			types: [...this.types],
 			keys: [...this.keys],
-			ready: this.ready
+			ready: this.ready,
+			...Object.assign({}, [...this].map(([key, value]) => ({ [key]: value.toJSON() })))
 		};
-		for (const key of this.keys) object[key] = this[key].toJSON();
-
-		return object;
 	}
 
 	/**
