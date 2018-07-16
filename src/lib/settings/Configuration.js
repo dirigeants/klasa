@@ -535,7 +535,7 @@ class Configuration {
 	 * @private
 	 */
 	_patch(data) {
-		if (!isObject(data)) return;
+		if (typeof data !== 'object' || data === null) return;
 		for (const [key, piece] of this.gateway.schema.entries()) {
 			const value = data[key];
 			if (value === undefined || value === null) continue;
