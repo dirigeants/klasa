@@ -52,7 +52,7 @@ class Store extends Collection {
 		 * The core directories pieces of this store can hold
 		 * @since 0.5.0
 		 * @name Store#coreDirectories
-		 * @type {Set<string>]}
+		 * @type {Set<string>}
 		 * @readonly
 		 * @private
 		 */
