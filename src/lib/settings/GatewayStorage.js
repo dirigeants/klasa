@@ -60,7 +60,7 @@ class GatewayStorage {
 	 * @readonly
 	 */
 	get baseDirectory() {
-		return join(this.client.clientBaseDirectory, 'bwd');
+		return join(this.client.userBaseDirectory, 'bwd');
 	}
 
 	/**
@@ -70,7 +70,7 @@ class GatewayStorage {
 	 * @readonly
 	 */
 	get filePath() {
-		return join(this.client.clientBaseDirectory, 'bwd', `${this.type}.schema.json`);
+		return join(this.client.userBaseDirectory, 'bwd', `${this.type}.schema.json`);
 	}
 
 	/**

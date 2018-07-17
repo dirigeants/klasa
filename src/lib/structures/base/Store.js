@@ -65,7 +65,7 @@ class Store extends Collection {
 	 * @readonly
 	 */
 	get userDirectory() {
-		return join(this.client.clientBaseDirectory, this.name);
+		return join(this.client.userBaseDirectory, this.name);
 	}
 
 	/**

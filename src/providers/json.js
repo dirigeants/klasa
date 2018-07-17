@@ -6,7 +6,7 @@ module.exports = class extends Provider {
 
 	constructor(...args) {
 		super(...args);
-		baseDirectory = resolve(this.client.clientBaseDirectory, 'bwd', 'provider', 'json');
+		baseDirectory = resolve(this.client.userBaseDirectory, 'bwd', 'provider', 'json');
 	}
 
 	/**

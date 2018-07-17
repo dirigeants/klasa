@@ -131,7 +131,7 @@ class KlasaClient extends Discord.Client {
 		 * @since 0.0.1
 		 * @type {string}
 		 */
-		this.clientBaseDirectory = path.dirname(require.main.filename);
+		this.userBaseDirectory = path.dirname(require.main.filename);
 
 		/**
 		 * The console for this instance of klasa. You can disable timestamps, colors, and add writable streams as config options to configure this.
