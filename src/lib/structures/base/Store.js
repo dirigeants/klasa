@@ -52,10 +52,11 @@ class Store extends Collection {
 		 * The core directories pieces of this store can hold
 		 * @since 0.5.0
 		 * @name Store#coreDirectories
-		 * @type {string[]}
+		 * @type {Set<string>]}
 		 * @readonly
+		 * @private
 		 */
-		Object.defineProperty(this, 'coreDirectories', { value: [] });
+		Object.defineProperty(this, 'coreDirectories', { value: new Set() });
 	}
 
 	/**
@@ -76,7 +77,7 @@ class Store extends Collection {
 	 * @protected
 	 */
 	registerCoreDirectory(directory) {
-		this.coreDirectories.push(directory + this.name);
+		this.coreDirectories.add(directory + this.name);
 		return this;
 	}
 
@@ -119,7 +120,7 @@ class Store extends Collection {
 	async loadAll() {
 		this.clear();
 		if (!this.client.options.disabledCorePieces.includes(this.name)) {
-			await Promise.all(this.coreDirectories.map(directory => Store.walk(this, directory)));
+			for (const directory of this.coreDirectories) await Store.walk(this, directory);
 		}
 		await Store.walk(this);
 		return this.size;
