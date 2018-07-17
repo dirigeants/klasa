@@ -18,7 +18,7 @@ module.exports = class extends Command {
 		const fileLocation = resolve(piece.dir, file);
 		await fs.access(fileLocation).catch(() => { throw message.language.get('COMMAND_TRANSFER_ERROR'); });
 		try {
-			await fs.copy(fileLocation, join(piece.store.userDir, file));
+			await fs.copy(fileLocation, join(piece.store.userDirectory, file));
 			piece.store.load(piece.store.userDirectory, piece.file);
 			if (this.client.shard) {
 				await this.client.shard.broadcastEval(`
