@@ -1,5 +1,6 @@
 const { Command, Stopwatch } = require('klasa');
 const { pathExists } = require('fs-nextra');
+const { join } = require('path');
 
 module.exports = class extends Command {
 
@@ -18,7 +19,7 @@ module.exports = class extends Command {
 	async run(message, [core, store, path]) {
 		path = (path.endsWith('.js') ? path : `${path}.js`).split(this.regExp);
 		const timer = new Stopwatch();
-		const piece = await (Boolean(core) ? this.tryEach(store, path) : store.load(store.userDirectory, path));
+		const piece = await (core ? this.tryEach(store, path) : store.load(store.userDirectory, path));
 
 		try {
 			if (!piece) throw message.language.get('COMMAND_LOAD_FAIL');
@@ -40,6 +41,7 @@ module.exports = class extends Command {
 
 	async tryEach(store, path) {
 		for (const dir of store.coreDirectories) if (await pathExists(join(dir, ...path))) return store.load(dir, path);
+		return undefined;
 	}
 
 };
