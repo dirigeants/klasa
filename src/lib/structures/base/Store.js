@@ -71,12 +71,12 @@ class Store extends Collection {
 	/**
 	 * Registers a core directory to check for pieces
 	 * @since 0.5.0
-	 * @param {string} dir The directory to check for core pieces
+	 * @param {string} directory The directory to check for core pieces
 	 * @returns {this}
 	 * @protected
 	 */
-	registerCoreDirectory(dir) {
-		this.coreDirectories.push(dir + this.name);
+	registerCoreDirectory(directory) {
+		this.coreDirectories.push(directory + this.name);
 		return this;
 	}
 
@@ -92,17 +92,17 @@ class Store extends Collection {
 	/**
 	 * Loads a piece into Klasa so it can be saved in this store.
 	 * @since 0.0.1
-	 * @param {string} dir The directory the file is located in
+	 * @param {string} directory The directory the file is located in
 	 * @param {string[]} file A string or array of strings showing where the file is located.
 	 * @returns {?Piece}
 	 */
-	load(dir, file) {
-		const loc = join(dir, ...file);
+	load(directory, file) {
+		const loc = join(directory, ...file);
 		let piece = null;
 		try {
 			const Piece = (req => req.default || req)(require(loc));
 			if (!isClass(Piece)) throw new TypeError(`Failed to load file '${loc}'. The exported structure is not a class.`);
-			piece = this.set(new Piece(this.client, this, file, dir));
+			piece = this.set(new Piece(this.client, this, file, directory));
 		} catch (error) {
 			this.client.emit('wtf', `Failed to load file '${loc}'. Error:\n${error.stack || error}`);
 		}
@@ -119,7 +119,7 @@ class Store extends Collection {
 	async loadAll() {
 		this.clear();
 		if (!this.client.options.disabledCorePieces.includes(this.name)) {
-			await Promise.all(this.coreDirectories.map(dir => Store.walk(this, dir)));
+			await Promise.all(this.coreDirectories.map(directory => Store.walk(this, directory)));
 		}
 		await Store.walk(this);
 		return this.size;
@@ -177,16 +177,16 @@ class Store extends Collection {
 	 * Walks our directory of Pieces for the user and core directories.
 	 * @since 0.0.1
 	 * @param {Store} store The store we're loading into
-	 * @param {boolean} [coreDir] If the file is located in the core directory or not
+	 * @param {boolean} [coreDirectory] If the file is located in the core directory or not
 	 * @returns {void}
 	 */
-	static async walk(store, coreDir) {
-		const dir = coreDir || store.userDir;
-		const files = await fs.scan(dir, { filter: (stats, path) => stats.isFile() && extname(path) === '.js' })
-			.catch(() => { fs.ensureDir(dir).catch(err => store.client.emit('error', err)); });
+	static async walk(store, coreDirectory) {
+		const directory = coreDirectory || store.userDirectory;
+		const files = await fs.scan(directory, { filter: (stats, path) => stats.isFile() && extname(path) === '.js' })
+			.catch(() => { fs.ensureDir(directory).catch(err => store.client.emit('error', err)); });
 		if (!files) return true;
 
-		return Promise.all([...files.keys()].map(file => store.load(dir, relative(dir, file).split(sep))));
+		return Promise.all([...files.keys()].map(file => store.load(directory, relative(directory, file).split(sep))));
 	}
 
 }
