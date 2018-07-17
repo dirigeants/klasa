@@ -127,18 +127,11 @@ class KlasaClient extends Discord.Client {
 		 */
 
 		/**
-		 * The directory to the node_modules folder where Klasa exists
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.coreBaseDir = path.join(__dirname, '../');
-
-		/**
 		 * The directory where the user files are at
 		 * @since 0.0.1
 		 * @type {string}
 		 */
-		this.clientBaseDir = path.dirname(require.main.filename);
+		this.clientBaseDirectory = path.dirname(require.main.filename);
 
 		/**
 		 * The console for this instance of klasa. You can disable timestamps, colors, and add writable streams as config options to configure this.
@@ -268,6 +261,9 @@ class KlasaClient extends Discord.Client {
 			.registerStore(this.extendables)
 			.registerStore(this.tasks)
 			.registerStore(this.arguments);
+
+		const coreDir = path.join(__dirname, '../');
+		for (store of this.this.pieceStores) store.registerCoreDirectory(coreDir);
 
 		/**
 		 * The Schedule that runs the tasks
