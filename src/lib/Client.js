@@ -30,7 +30,7 @@ const Stopwatch = require('./util/Stopwatch');
 const util = require('./util/util');
 
 // external plugins
-const plugins = [];
+const plugins = new Set();
 
 /**
  * The client for handling everything. See {@tutorial GettingStarted} for more information how to get started using this class.
@@ -263,7 +263,7 @@ class KlasaClient extends Discord.Client {
 			.registerStore(this.arguments);
 
 		const coreDirectory = path.join(__dirname, '../');
-		for (const store of this.this.pieceStores) store.registerCoreDirectory(coreDirectory);
+		for (const store of this.pieceStores) store.registerCoreDirectory(coreDirectory);
 
 		/**
 		 * The Schedule that runs the tasks
@@ -427,7 +427,7 @@ class KlasaClient extends Discord.Client {
 	 * @chainable
 	 */
 	static use(mod) {
-		plugins.push(mod);
+		plugins.add(mod);
 		return this;
 	}
 
