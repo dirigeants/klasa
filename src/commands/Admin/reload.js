@@ -23,17 +23,18 @@ module.exports = class extends Command {
 					if (this.shard.id !== ${this.client.shard.id}) this.${piece.name}.loadAll().then(() => this.${piece.name}.loadAll());
 				`);
 			}
-			return message.sendMessage(`${message.language.get('COMMAND_RELOAD_ALL', piece)} (Took: ${timer.stop()})`);
+			return message.sendMessage(`${message.language.get('COMMAND_RELOAD_ALL', piece, timer.stop())}`);
 		}
 
 		try {
 			const itm = await piece.reload();
+			const timer = new Stopwatch();
 			if (this.client.shard) {
 				await this.client.shard.broadcastEval(`
 					if (this.shard.id !== ${this.client.shard.id}) this.${piece.store}.get('${piece.name}').reload();
 				`);
 			}
-			return message.sendMessage(message.language.get('COMMAND_RELOAD', itm.type, itm.name));
+			return message.sendMessage(message.language.get('COMMAND_RELOAD', itm.type, itm.name, timer.stop.toString()));
 		} catch (err) {
 			piece.store.set(piece);
 			return message.sendMessage(`❌ ${err}`);
@@ -54,7 +55,7 @@ module.exports = class extends Command {
 				});
 			`);
 		}
-		return message.sendMessage(`Reloaded all stores. (Took: ${timer.stop()})`);
+		return message.sendMessage(`${message.language.get('COMMAND_RELOAD_EVERYTHING', timer.stop())}`);
 	}
 
 };
