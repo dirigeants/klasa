@@ -178,11 +178,11 @@ class Store extends Collection {
 	 * Walks our directory of Pieces for the user and core directories.
 	 * @since 0.0.1
 	 * @param {Store} store The store we're loading into
-	 * @param {boolean} [coreDirectory] If the file is located in the core directory or not
-	 * @returns {void}
+	 * @param {string} [directory=store.userDirectory] The directory to walk in
+	 * @returns {Array<Piece>}
+	 * @private
 	 */
-	static async walk(store, coreDirectory) {
-		const directory = coreDirectory || store.userDirectory;
+	static async walk(store, directory = store.userDirectory) {
 		const files = await fs.scan(directory, { filter: (stats, path) => stats.isFile() && extname(path) === '.js' })
 			.catch(() => { fs.ensureDir(directory).catch(err => store.client.emit('error', err)); });
 		if (!files) return true;
