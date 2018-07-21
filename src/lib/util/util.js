@@ -52,9 +52,7 @@ class Util {
 	 * @param {KlasaClient} client The Klasa client
 	 */
 	static initClean(client) {
-		const patterns = [];
-		if (client.token) patterns.push(Util.regExpEsc(client.token));
-		sensitivePattern = new RegExp(patterns.join('|'), 'gi');
+		sensitivePattern = new RegExp(Util.regExpEsc(client.token), 'gi');
 	}
 
 	/**
