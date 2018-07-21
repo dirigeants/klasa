@@ -256,8 +256,8 @@ class SchemaPiece extends Schema {
 	 * @private
 	 */
 	_init(options) {
-		if (this._inited) throw new TypeError(`[INIT] ${this} - Is already init. Aborting re-init.`);
-		this._inited = true;
+		if (this._initialized) throw new TypeError(`[INIT] ${this} - Is already init. Aborting re-init.`);
+		this._initialized = true;
 
 		// Check if the 'options' parameter is an object.
 		if (!isObject(options)) throw new TypeError(`SchemaPiece#init expected an object as a parameter. Got: ${typeof options}`);

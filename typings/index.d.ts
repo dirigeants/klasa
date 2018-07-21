@@ -454,8 +454,7 @@ declare module 'klasa' {
 		public readonly synchronizing: boolean;
 		private _existsInDB: boolean;
 
-		public get(key: string): any;
-		public get<T>(key: string): T;
+		public get<T = any>(path: string): T;
 		public clone(): Configuration;
 		public sync(): Promise<this>;
 		public destroy(): Promise<this>;
@@ -471,16 +470,12 @@ declare module 'klasa' {
 		public list(message: KlasaMessage, path: SchemaFolder | string): string;
 		public resolveString(message: KlasaMessage, path: SchemaPiece | string): string;
 
-		private _sync(): Promise<this>;
-		private _get<T = any>(route: string | string[], piece?: boolean): T;
 		private _save(data: ConfigurationUpdateResult): Promise<void>;
 		private _setValueByPath(piece: SchemaPiece, parsedID: any): { updated: boolean, old: any };
-		private _patch(data: any): void;
+		private _patch(data: ObjectLiteral, instance?: object, schema?: SchemaFolder): void;
 
 		public toJSON<T extends ObjectLiteral>(): T;
 		public toString(): string;
-
-		private static _patch(inst: any, data: any, schema: SchemaFolder): void;
 	}
 
 	export class Gateway extends GatewayStorage {
@@ -570,7 +565,7 @@ declare module 'klasa' {
 		public readonly parent: SchemaFolder | null;
 		public readonly path: string;
 		public readonly key: string;
-		private readonly _inited: true;
+		private readonly _initialized: true;
 	}
 
 	export class SchemaFolder extends Schema {
@@ -1204,7 +1199,7 @@ declare module 'klasa' {
 		public static makeObject<T = ObjectLiteral, S = ObjectLiteral>(path: string, value: any, obj?: ObjectLiteral): T & S;
 		public static mergeDefault<T = ObjectLiteral, S = ObjectLiteral>(objDefaults: T, objSource: S): T & S;
 		public static mergeObjects<T = ObjectLiteral, S = ObjectLiteral>(objTarget: T, objSource: S): T & S;
-		public static objectToTuples(obj: ObjectLiteral<any>, entries?: { keys: string[], values: any[] }): [string[], any[]];
+		public static objectToTuples(obj: ObjectLiteral, entries?: { keys: string[], values: any[] }): [string[], any[]];
 		public static regExpEsc(str: string): string;
 		public static sleep<T = any>(delay: number, args?: T): Promise<T>;
 		public static toTitleCase(str: string): string;

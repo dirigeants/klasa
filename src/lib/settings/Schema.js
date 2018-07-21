@@ -61,10 +61,10 @@ class Schema {
 		 * Whether the schema instance is initialized or not.
 		 * @since 0.5.0
 		 * @type {boolean}
-		 * @name Schema#_inited
+		 * @name Schema#_initialized
 		 * @private
 		 */
-		Object.defineProperty(this, '_inited', { value: false, writable: true });
+		Object.defineProperty(this, '_initialized', { value: false, writable: true });
 	}
 
 }
