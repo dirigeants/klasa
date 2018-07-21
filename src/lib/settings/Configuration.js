@@ -96,9 +96,9 @@ class Configuration {
 	}
 
 	/**
-	 * Get a value from the configuration. Admits nested objects separating by dot.
+	 * Get a value from the configuration. Accepts nested objects separating by dot.
 	 * @since 0.5.0
-	 * @param {string} path The key to get from this instance
+	 * @param {string} path The path of the key's value to get from this instance
 	 * @returns {*}
 	 */
 	get(path) {
