@@ -206,6 +206,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Removed
 
+- [[#343](https://github.com/dirigeants/klasa/pull/343)] Removed `Configuration._merge`, `Configuration._clone`, `Util.applyToClass`, and `Util.arraysEqual`. (kyranet)
 - [[#331](https://github.com/dirigeants/klasa/pull/331)] Removed `Configuration#_syncStatus`. (kyranet)
 - [[#323](https://github.com/dirigeants/klasa/pull/323)] Removed every check for selfbot users. (KingDGrizzle)
 - [[#306](https://github.com/dirigeants/klasa/pull/306)] Removed `GatewayGuildResolvable` type from typings. (kyranet)
