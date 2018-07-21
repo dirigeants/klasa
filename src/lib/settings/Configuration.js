@@ -532,16 +532,18 @@ class Configuration {
 	 * Path this Configuration instance.
 	 * @since 0.5.0
 	 * @param {Object} data The data to patch
-	 * @param {Object} [inst=this] The reference of the Configuration instance
+	 * @param {Object} [instance=this] The reference of the Configuration instance
 	 * @param {SchemaFolder} [schema=this.gateway.schema] A SchemaFolder instance
 	 * @private
 	 */
-	_patch(data, inst = this, schema = this.gateway.schema) {
+	_patch(data, instance = this, schema = this.gateway.schema) {
 		if (typeof data !== 'object' || data === null) return;
 		for (const [key, piece] of schema) {
 			const value = data[key];
-			if (value === undefined || value === null) continue;
-			inst[key] = piece.type === 'Folder' ? this._patch(inst[key], value, piece) : deepClone(value);
+			if (value === undefined) continue;
+			if (value === null) instance[key] = deepClone(piece.defaults);
+			else if (piece.type === 'Folder') this._patch(value, instance[key], piece);
+			else instance[key] = value;
 		}
 	}
 
