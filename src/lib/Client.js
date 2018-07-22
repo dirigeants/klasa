@@ -263,7 +263,7 @@ class KlasaClient extends Discord.Client {
 			.registerStore(this.arguments);
 
 		const coreDirectory = path.join(__dirname, '../');
-		for (const store of this.pieceStores) store.registerCoreDirectory(coreDirectory);
+		for (const store of this.pieceStores.values()) store.registerCoreDirectory(coreDirectory);
 
 		/**
 		 * The Schedule that runs the tasks
