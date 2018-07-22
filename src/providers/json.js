@@ -6,7 +6,7 @@ module.exports = class extends Provider {
 
 	constructor(...args) {
 		super(...args);
-		this.baseDir = resolve(this.client.clientBaseDir, 'bwd', 'provider', 'json');
+		this.baseDirectory = resolve(this.client.userBaseDirectory, 'bwd', 'provider', 'json');
 	}
 
 	/**
@@ -14,7 +14,7 @@ module.exports = class extends Provider {
 	 * @private
 	 */
 	async init() {
-		await fs.ensureDir(this.baseDir).catch(err => this.client.emit('error', err));
+		await fs.ensureDir(this.baseDirectory).catch(err => this.client.emit('error', err));
 	}
 
 	/* Table methods */
@@ -25,7 +25,7 @@ module.exports = class extends Provider {
 	 * @returns {Promise<boolean>}
 	 */
 	hasTable(table) {
-		return fs.pathExists(resolve(this.baseDir, table));
+		return fs.pathExists(resolve(this.baseDirectory, table));
 	}
 
 	/**
@@ -34,7 +34,7 @@ module.exports = class extends Provider {
 	 * @returns {Promise<void>}
 	 */
 	createTable(table) {
-		return fs.mkdir(resolve(this.baseDir, table));
+		return fs.mkdir(resolve(this.baseDirectory, table));
 	}
 
 	/**
@@ -44,7 +44,7 @@ module.exports = class extends Provider {
 	 */
 	deleteTable(table) {
 		return this.hasTable(table)
-			.then(exists => exists ? fs.emptyDir(resolve(this.baseDir, table)).then(() => fs.remove(resolve(this.baseDir, table))) : null);
+			.then(exists => exists ? fs.emptyDir(resolve(this.baseDirectory, table)).then(() => fs.remove(resolve(this.baseDirectory, table))) : null);
 	}
 
 	/* Document methods */
@@ -73,7 +73,7 @@ module.exports = class extends Provider {
 	 * @returns {string[]}
 	 */
 	async getKeys(table) {
-		const dir = resolve(this.baseDir, table);
+		const dir = resolve(this.baseDirectory, table);
 		const filenames = await fs.readdir(dir);
 		const files = [];
 		for (const filename of filenames) {
@@ -89,7 +89,7 @@ module.exports = class extends Provider {
 	 * @returns {Promise<?Object>}
 	 */
 	get(table, id) {
-		return fs.readJSON(resolve(this.baseDir, table, `${id}.json`)).catch(() => null);
+		return fs.readJSON(resolve(this.baseDirectory, table, `${id}.json`)).catch(() => null);
 	}
 
 	/**
@@ -99,7 +99,7 @@ module.exports = class extends Provider {
 	 * @returns {Promise<boolean>}
 	 */
 	has(table, id) {
-		return fs.pathExists(resolve(this.baseDir, table, `${id}.json`));
+		return fs.pathExists(resolve(this.baseDirectory, table, `${id}.json`));
 	}
 
 	/**
@@ -136,7 +136,7 @@ module.exports = class extends Provider {
 	 * @returns {Promise<void>}
 	 */
 	create(table, document, data = {}) {
-		return fs.outputJSONAtomic(resolve(this.baseDir, table, `${document}.json`), { id: document, ...data });
+		return fs.outputJSONAtomic(resolve(this.baseDirectory, table, `${document}.json`), { id: document, ...data });
 	}
 
 	/**
@@ -148,7 +148,7 @@ module.exports = class extends Provider {
 	 */
 	async update(table, document, data) {
 		const existent = await this.get(table, document);
-		return fs.outputJSONAtomic(resolve(this.baseDir, table, `${document}.json`), util.mergeObjects(existent || { id: document }, this.parseUpdateInput(data)));
+		return fs.outputJSONAtomic(resolve(this.baseDirectory, table, `${document}.json`), util.mergeObjects(existent || { id: document }, this.parseUpdateInput(data)));
 	}
 
 	/**
@@ -159,7 +159,7 @@ module.exports = class extends Provider {
 	 * @returns {Promise<void>}
 	 */
 	replace(table, document, data) {
-		return fs.outputJSONAtomic(resolve(this.baseDir, table, `${document}.json`), { id: document, ...this.parseUpdateInput(data) });
+		return fs.outputJSONAtomic(resolve(this.baseDirectory, table, `${document}.json`), { id: document, ...this.parseUpdateInput(data) });
 	}
 
 	/**
@@ -169,7 +169,7 @@ module.exports = class extends Provider {
 	 * @returns {Promise<void>}
 	 */
 	delete(table, document) {
-		return fs.unlink(resolve(this.baseDir, table, `${document}.json`));
+		return fs.unlink(resolve(this.baseDirectory, table, `${document}.json`));
 	}
 
 	/**

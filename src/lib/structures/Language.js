@@ -43,15 +43,17 @@ class Language extends Piece {
 	 * @abstract
 	 */
 	async init() {
-		const loc = join(this.store.coreDir, ...this.file);
-		if (this.dir !== this.store.coreDir && await pathExists(loc)) {
-			try {
-				const CorePiece = require(loc);
-				if (!isClass(CorePiece)) return;
-				const coreLang = new CorePiece(this.client, this.store, this.file, true);
-				this.language = mergeDefault(coreLang.language, this.language);
-			} catch (error) {
-				return;
+		for (const core of this.store.coreDirectories) {
+			const loc = join(core, ...this.file);
+			if (this.dir !== core && await pathExists(loc)) {
+				try {
+					const CorePiece = require(loc);
+					if (!isClass(CorePiece)) return;
+					const coreLang = new CorePiece(this.client, this.store, this.file, true);
+					this.language = mergeDefault(coreLang.language, this.language);
+				} catch (error) {
+					return;
+				}
 			}
 		}
 		return;

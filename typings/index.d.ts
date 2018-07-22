@@ -46,8 +46,7 @@ declare module 'klasa' {
 		public readonly invite: string;
 		public readonly owner: KlasaUser | null;
 		public options: KlasaClientOptions & ClientOptions;
-		public coreBaseDir: string;
-		public clientBaseDir: string;
+		public userBaseDirectory: string;
 		public console: KlasaConsole;
 		public arguments: ArgumentStore;
 		public commands: CommandStore;
@@ -545,7 +544,7 @@ declare module 'klasa' {
 
 	export abstract class GatewayStorage {
 		public constructor(client: KlasaClient, type: string, provider?: string);
-		public readonly baseDir: string;
+		public readonly baseDirectory: string;
 		public readonly client: KlasaClient;
 		public readonly defaults: any;
 		public readonly filePath: string;
@@ -624,16 +623,15 @@ declare module 'klasa' {
 //#region Pieces
 
 	export abstract class Piece {
-		public constructor(client: KlasaClient, store: Store<string, Piece, typeof Piece>, file: string | string[], core: boolean, options?: PieceOptions);
+		public constructor(client: KlasaClient, store: Store<string, Piece, typeof Piece>, file: string[], directory: string, options?: PieceOptions);
 		public readonly client: KlasaClient;
-		public readonly core: boolean;
 		public readonly type: string;
-		public readonly dir: string;
 		public readonly path: string;
-		public file: string | string[];
+		public file: string[];
 		public name: string;
 		public enabled: boolean;
 		public store: Store<string, this>;
+		public directory: string;
 
 		public reload(): Promise<this>;
 		public unload(): void;
@@ -645,7 +643,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class Argument extends Piece {
-		public constructor(client: KlasaClient, store: CommandStore, file: string[], core: boolean, options?: ArgumentOptions);
+		public constructor(client: KlasaClient, store: CommandStore, file: string[], directory: string, options?: ArgumentOptions);
 		public aliases: string[];
 		public static regex: {
 			userOrMember: RegExp;
@@ -661,7 +659,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class Command extends Piece {
-		public constructor(client: KlasaClient, store: CommandStore, file: string[], core: boolean, options?: CommandOptions);
+		public constructor(client: KlasaClient, store: CommandStore, file: string[], directory: string, options?: CommandOptions);
 		public readonly category: string;
 		public readonly subCategory: string;
 		public readonly usageDelim: string;
@@ -694,7 +692,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class Event extends Piece {
-		public constructor(client: KlasaClient, store: EventStore, file: string, core: boolean, options?: EventOptions);
+		public constructor(client: KlasaClient, store: EventStore, file: string, directory: string, options?: EventOptions);
 		public emitter: NodeJS.EventEmitter;
 		public event: string;
 		public once: boolean;
@@ -710,7 +708,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class Extendable extends Piece {
-		public constructor(client: KlasaClient, store: ExtendableStore, file: string, core: boolean, options?: ExtendableOptions);
+		public constructor(client: KlasaClient, store: ExtendableStore, file: string, directory: string, options?: ExtendableOptions);
 		public readonly static: boolean;
 		public appliesTo: string[];
 		public target: boolean;
@@ -721,12 +719,13 @@ declare module 'klasa' {
 	}
 
 	export abstract class Finalizer extends Piece {
+		public constructor(client: KlasaClient, store: FinalizerStore, file: string, directory: string, options?: FinalizerOptions);
 		public abstract run(message: KlasaMessage, response: KlasaMessage | KlasaMessage[] | null, runTime: Stopwatch): void;
 		public toJSON(): PieceFinalizerJSON;
 	}
 
 	export abstract class Inhibitor extends Piece {
-		public constructor(client: KlasaClient, store: InhibitorStore, file: string, core: boolean, options?: InhibitorOptions);
+		public constructor(client: KlasaClient, store: InhibitorStore, file: string, directory: string, options?: InhibitorOptions);
 		public spamProtection: boolean;
 
 		public abstract run(message: KlasaMessage, command: Command): Promise<void | string>;
@@ -734,6 +733,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class Language extends Piece {
+		public constructor(client: KlasaClient, store: LanguageStore, file: string, directory: string, options?: LanguageOptions);
 		public language: ObjectLiteral<string | string[] | ((...args: any[]) => string | string[])>;
 
 		public get<T = string>(term: string, ...args: any[]): T;
@@ -741,7 +741,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class Monitor extends Piece {
-		public constructor(client: KlasaClient, store: MonitorStore, file: string, core: boolean, options?: MonitorOptions);
+		public constructor(client: KlasaClient, store: MonitorStore, file: string, directory: string, options?: MonitorOptions);
 		public ignoreBots: boolean;
 		public ignoreEdits: boolean;
 		public ignoreOthers: boolean;
@@ -756,6 +756,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class Provider extends Piece {
+		public constructor(client: KlasaClient, store: ProviderStore, file: string, directory: string, options?: ProviderOptions);
 		public abstract create<T = any>(table: string, entry: string, data: any): Promise<T>;
 		public abstract createTable<T = any>(table: string, rows?: any[]): Promise<T>;
 		public abstract delete<T = any>(table: string, entry: string): Promise<T>;
@@ -788,6 +789,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class Task extends Piece {
+		public constructor(client: KlasaClient, store: TaskStore, file: string, directory: string, options?: TaskOptions);
 		public abstract run(data: any): Promise<void>;
 		public toJSON(): PieceTaskJSON;
 	}
@@ -796,25 +798,27 @@ declare module 'klasa' {
 
 //#region Stores
 
-	export class Store<K, V extends Piece, VConstructor = Constructable<V>> extends Collection<K, V> {
+	export abstract class Store<K, V extends Piece, VConstructor = Constructable<V>> extends Collection<K, V> {
 		public constructor(client: KlasaClient, name: string, holds: V);
-
 		public readonly client: KlasaClient;
-		public readonly coreDir: string;
 		public readonly holds: VConstructor;
 		public readonly name: string;
-		public readonly userDir: string;
+		public readonly userDirectory: string;
+		private readonly coreDirectories: Set<string>;
 
+		protected registerCoreDirectory(directory: string): this;
 		public delete(name: K | V): boolean;
 		public get(key: K): V;
 		public get<T extends V>(key: K): T;
 		public init(): Promise<any[]>;
-		public load(file: string | string[], core?: boolean): V;
+		public load(directory: string, file: string[]): V;
 		public loadAll(): Promise<number>;
 		public resolve(name: V | string): V;
 		public set<T extends V>(key: K, value: T): this;
 		public set(piece: V): V;
 		public toString(): string;
+
+		private static walk<K, V extends Piece, T extends Store<K, V>>(store: T, coreDirectory?: string): Promise<Array<Piece>>;
 	}
 
 	export class ArgumentStore extends Store<string, Argument, typeof Argument> {
@@ -1542,7 +1546,7 @@ declare module 'klasa' {
 	export type TaskOptions = PieceOptions;
 
 	export type PieceJSON = {
-		dir: string;
+		directory: string;
 		path: string;
 		enabled: boolean;
 		file: string[];
