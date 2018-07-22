@@ -104,84 +104,9 @@ class Timestamp {
 	static _display(template, time) {
 		let output = '';
 		const parsedTime = Timestamp._resolveDate(time);
-		for (const entry of template) output += entry.content || Timestamp._parse(entry.type, parsedTime);
-
+		for (const { content, type } of template) output += content || Timestamp[type](parsedTime);
 		return output;
 	}
-
-	/* eslint-disable complexity */
-
-	/**
-	 * Parses the current variable.
-	 * @since 0.5.0
-	 * @param {string} type The type of variable
-	 * @param {Date} time The current time
-	 * @returns {string}
-	 * @private
-	 */
-	static _parse(type, time) {
-		switch (type) {
-			// Dates
-			case 'Y':
-			case 'YY': return String(time.getFullYear()).slice(0, 2);
-			case 'YYY':
-			case 'YYYY': return String(time.getFullYear());
-			case 'Q': return String((time.getMonth() + 1) / 3);
-			case 'M': return String(time.getMonth() + 1);
-			case 'MM': return String(time.getMonth() + 1).padStart(2, '0');
-			case 'MMM':
-			case 'MMMM': return MONTHS[time.getMonth()];
-			case 'D': return String(time.getDate());
-			case 'DD': return String(time.getDate()).padStart(2, '0');
-			case 'DDD':
-			case 'DDDD': {
-				const start = new Date(time.getFullYear(), 0, 0);
-				const diff = ((time.getMilliseconds() - start.getMilliseconds()) + (start.getTimezoneOffset() - time.getTimezoneOffset())) * MINUTE;
-				return String(Math.floor(diff / DAY));
-			}
-			case 'd': {
-				const day = String(time.getDate());
-				if (day !== '11' && day.endsWith('1')) return `${day}st`;
-				if (day !== '12' && day.endsWith('2')) return `${day}nd`;
-				if (day !== '13' && day.endsWith('3')) return `${day}rd`;
-				return `${day}th`;
-			}
-			case 'dd': {
-				return DAYS[time.getDay()].slice(0, 2);
-			}
-			case 'ddd': {
-				return DAYS[time.getDay()].slice(0, 3);
-			}
-			case 'dddd': {
-				return DAYS[time.getDay()];
-			}
-			case 'X': return String(time.valueOf() / SECOND);
-			case 'x': return String(time.valueOf());
-
-			// Times
-			case 'H': return String(time.getHours());
-			case 'HH': return String(time.getHours()).padStart(2, '0');
-			case 'h': return String(time.getHours() % 12);
-			case 'hh': return String(time.getHours() % 12).padStart(2, '0');
-			case 'a': return time.getHours() < 12 ? 'am' : 'pm';
-			case 'A': return time.getHours() < 12 ? 'AM' : 'PM';
-			case 'm': return String(time.getMinutes());
-			case 'mm': return String(time.getMinutes()).padStart(2, '0');
-			case 's': return String(time.getSeconds());
-			case 'ss': return String(time.getSeconds()).padStart(2, '0');
-			case 'S': return String(time.getMilliseconds());
-			case 'SS': return String(time.getMilliseconds()).padStart(2, '0');
-			case 'SSS': return String(time.getMilliseconds()).padStart(3, '0');
-			case 'Z':
-			case 'ZZ': {
-				const offset = time.getTimezoneOffset();
-				return `${offset >= 0 ? '+' : '-'}${String(offset / -60).padStart(2, '0')}:${String(offset % 60).padStart(2, '0')}`;
-			}
-			default: return type;
-		}
-	}
-
-	/* eslint-enable complexity */
 
 	/**
 	 * Parses the pattern.
@@ -198,7 +123,7 @@ class Timestamp {
 			if (currentChar in TOKENS) {
 				current += currentChar;
 				while (pattern[i + 1] === currentChar && current.length < TOKENS[currentChar]) current += pattern[++i];
-				template.push({ type: current });
+				template.push({ type: current, content: null });
 			} else if (currentChar === '[') {
 				while (i + 1 < pattern.length && pattern[i + 1] !== ']') current += pattern[++i];
 				i++;
@@ -225,5 +150,89 @@ class Timestamp {
 	}
 
 }
+
+/* eslint-disable id-length */
+
+// Dates
+
+Timestamp.Y =
+Timestamp.YY = time => String(time.getFullYear()).slice(0, 2);
+
+Timestamp.YYY =
+Timestamp.YYYY = time => String(time.getFullYear());
+
+Timestamp.Q = time => String((time.getMonth() + 1) / 3);
+
+Timestamp.M = time => String(time.getMonth() + 1);
+
+Timestamp.MM = time => String(time.getMonth() + 1).padStart(2, '0');
+
+Timestamp.MMM =
+Timestamp.MMMM = time => MONTHS[time.getMonth()];
+
+Timestamp.D = time => String(time.getDate());
+
+Timestamp.DD = time => String(time.getDate()).padStart(2, '0');
+
+Timestamp.DDD =
+Timestamp.DDDD = time => {
+	const start = new Date(time.getFullYear(), 0, 0);
+	const diff = ((time.getMilliseconds() - start.getMilliseconds()) + (start.getTimezoneOffset() - time.getTimezoneOffset())) * MINUTE;
+	return String(Math.floor(diff / DAY));
+};
+
+Timestamp.d = time => {
+	const day = String(time.getDate());
+	if (day !== '11' && day.endsWith('1')) return `${day}st`;
+	if (day !== '12' && day.endsWith('2')) return `${day}nd`;
+	if (day !== '13' && day.endsWith('3')) return `${day}rd`;
+	return `${day}th`;
+};
+
+Timestamp.dd = time => DAYS[time.getDay()].slice(0, 2);
+
+Timestamp.ddd = time => DAYS[time.getDay()].slice(0, 3);
+
+Timestamp.dddd = time => DAYS[time.getDay()];
+
+Timestamp.X = time => String(time.valueOf() / SECOND);
+
+Timestamp.x = time => String(time.valueOf());
+
+// Times
+
+Timestamp.H = time => String(time.getHours());
+
+Timestamp.HH = time => String(time.getHours()).padStart(2, '0');
+
+Timestamp.h = time => String(time.getHours() % 12);
+
+Timestamp.hh = time => String(time.getHours() % 12).padStart(2, '0');
+
+Timestamp.a = time => time.getHours() < 12 ? 'am' : 'pm';
+
+Timestamp.A = time => time.getHours() < 12 ? 'AM' : 'PM';
+
+Timestamp.m = time => String(time.getMinutes());
+
+Timestamp.mm = time => String(time.getMinutes()).padStart(2, '0');
+
+Timestamp.s = time => String(time.getSeconds());
+
+Timestamp.ss = time => String(time.getSeconds()).padStart(2, '0');
+
+Timestamp.S = time => String(time.getMilliseconds());
+
+Timestamp.SS = time => String(time.getMilliseconds()).padStart(2, '0');
+
+Timestamp.SSS = time => String(time.getMilliseconds()).padStart(3, '0');
+
+Timestamp.Z =
+Timestamp.ZZ = time => {
+	const offset = time.getTimezoneOffset();
+	return `${offset >= 0 ? '+' : '-'}${String(offset / -60).padStart(2, '0')}:${String(offset % 60).padStart(2, '0')}`;
+};
+
+/* eslint-enable id-length */
 
 module.exports = Timestamp;
