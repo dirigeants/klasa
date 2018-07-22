@@ -104,15 +104,7 @@ class Timestamp {
 	static _display(template, time) {
 		let output = '';
 		const parsedTime = Timestamp._resolveDate(time);
-
-		for (const { content, type } of template) {
-			try {
-				output += content || Timestamp[type](parsedTime);
-			} catch (err) {
-				output += type;
-			}
-		}
-
+		for (const { content, type } of template) output += content || Timestamp[type](parsedTime);
 		return output;
 	}
 
