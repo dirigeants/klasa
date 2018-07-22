@@ -1157,10 +1157,46 @@ declare module 'klasa' {
 		public displayUTC(time?: Date | number | string): string;
 		public edit(pattern: string): this;
 
+		public static utc(time?: Date | number | string): Date;
 		public static displayArbitrary(pattern: string, time?: Date | number | string): string;
 
+		private static A(time: Date): string;
+		private static a(time: Date): string;
+		private static d(time: Date): string;
+		private static D(time: Date): string;
+		private static dd(time: Date): string;
+		private static DD(time: Date): string;
+		private static ddd(time: Date): string;
+		private static DDD(time: Date): string;
+		private static dddd(time: Date): string;
+		private static DDDD(time: Date): string;
+		private static h(time: Date): string;
+		private static H(time: Date): string;
+		private static hh(time: Date): string;
+		private static HH(time: Date): string;
+		private static m(time: Date): string;
+		private static M(time: Date): string;
+		private static mm(time: Date): string;
+		private static MM(time: Date): string;
+		private static MMM(time: Date): string;
+		private static MMMM(time: Date): string;
+		private static Q(time: Date): string;
+		private static S(time: Date): string;
+		private static s(time: Date): string;
+		private static ss(time: Date): string;
+		private static SS(time: Date): string;
+		private static SSS(time: Date): string;
+		private static x(time: Date): string;
+		private static X(time: Date): string;
+		private static Y(time: Date): string;
+		private static YY(time: Date): string;
+		private static YYY(time: Date): string;
+		private static YYYY(time: Date): string;
+		private static Z(time: Date): string;
+		private static ZZ(time: Date): string;
+
+		private static _resolveDate(time: Date | number | string): Date;
 		private static _display(template: string, time: Date | number | string): string;
-		private static _parse(type: string, time: Date): string;
 		private static _patch(pattern: string): TimestampObject[];
 	}
 
@@ -1795,7 +1831,7 @@ declare module 'klasa' {
 	};
 
 	export type TimestampObject = {
-		content?: string;
+		content: string | null;
 		type: string;
 	};
 
