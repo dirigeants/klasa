@@ -123,7 +123,7 @@ class Timestamp {
 			if (currentChar in TOKENS) {
 				current += currentChar;
 				while (pattern[i + 1] === currentChar && current.length < TOKENS[currentChar]) current += pattern[++i];
-				template.push({ type: current });
+				template.push({ type: current, content: null });
 			} else if (currentChar === '[') {
 				while (i + 1 < pattern.length && pattern[i + 1] !== ']') current += pattern[++i];
 				i++;
