@@ -17,7 +17,6 @@ module.exports = class extends Command {
 		});
 	}
 
-	async get(message, params) {}
 	async set(message, params) {}
 	async remove(message, params) {}
 	async reset(message, params) {}
@@ -42,7 +41,6 @@ module.exports = class extends Command {
 		return this[type](message, params);
 	}
 
-	async get(message, params) {}
 	async set(message, params) {}
 	async remove(message, params) {}
 	async reset(message, params) {}
