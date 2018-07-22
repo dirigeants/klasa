@@ -12,7 +12,7 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			subcommands: true,
-			usage: '<get|set|remove|reset|list> (key:key) (value:value) [...]',
+			usage: '<get|set|remove|reset|show> (key:key) (value:value) [...]',
 			usageDelim: ' '
 		});
 	}
@@ -21,7 +21,7 @@ module.exports = class extends Command {
 	async set(message, params) {}
 	async remove(message, params) {}
 	async reset(message, params) {}
-	async list(message, params) {}
+	async show(message, params) {}
 
 };
 ```
@@ -33,7 +33,7 @@ module.exports = class extends Command {
 
 	constructor(...args) {
 		super(...args, {
-			usage: '<get|set|remove|reset|list> (key:key) (value:value) [...]',
+			usage: '<get|set|remove|reset|show> (key:key) (value:value) [...]',
 			usageDelim: ' '
 		});
 	}
@@ -46,12 +46,18 @@ module.exports = class extends Command {
 	async set(message, params) {}
 	async remove(message, params) {}
 	async reset(message, params) {}
-	async list(message, params) {}
+	async show(message, params) {}
 
 };
 ```
 
 Both commands are equal, one key difference is that with the subcommands feature you omit the **run** method and Klasa does not call it anymore, saving you from using a "dynamic" usage based on the first (which is problematic for [TypeScript](https://www.typescriptlang.org/) users), and also saves time whilst the command keeps being simple and readable.
+
+## The default Subcommand
+
+You can also define a default subcommand to be run in your usage, without the user having to pass that text (still works if they do though). So say we wanted show to be the default subcommand. We would just set the usage to `<get|set|remove|reset|show:default> (key:key) (value:value) [...]` and then we would be able to run `!conf language` to see the language of the guild that command is run in.
+
+> Please note that the default argument should always be last in your usage. The argument handler will always accept the default argument, as it's gotten to, so say it's first the command would always be run as show and would screw up the key value if passing any other subcommand.
 
 ## The TypeScript issue
 
