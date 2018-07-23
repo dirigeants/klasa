@@ -102,17 +102,16 @@ class Configuration {
 	 * @returns {*}
 	 */
 	get(path) {
-		if (!route.includes('.')) return this.gateway.schema.has(path) ? path : undefined;
-
 		const route = path.split('.');
-		let refCache = this, refSchema = this.gateway.schema; // eslint-disable-line consistent-this
+		let refThis = this; // eslint-disable-line consistent-this
+		let refSchema = this.gateway.schema;
 		for (const key of route) {
 			if (refSchema.type !== 'Folder' || !refSchema.has(key)) return undefined;
-			refCache = refCache[key];
+			refThis = refThis[key];
 			refSchema = refSchema[key];
 		}
 
-		return refCache;
+		return refThis;
 	}
 
 	/**
