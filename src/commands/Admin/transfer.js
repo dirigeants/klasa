@@ -15,7 +15,7 @@ module.exports = class extends Command {
 
 	async run(message, [piece]) {
 		const file = join(...piece.file);
-		const fileLocation = resolve(piece.dir, file);
+		const fileLocation = resolve(piece.directory, file);
 		await fs.access(fileLocation).catch(() => { throw message.language.get('COMMAND_TRANSFER_ERROR'); });
 		try {
 			await fs.copy(fileLocation, join(piece.store.userDirectory, file));
