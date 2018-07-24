@@ -9,6 +9,11 @@ module.exports = Structures.extend('Message', Message => {
 	class KlasaMessage extends Message {
 
 		/**
+		 * @typedef {external:MessageOptions} LocaleMessageOptions
+		 * @property {Array<*>} localeArgs Arguments to pass back to the Language
+		 */
+
+		/**
 		 * @param {...*} args Normal D.JS Message args
 		 */
 		constructor(...args) {
@@ -225,6 +230,17 @@ module.exports = Structures.extend('Message', Message => {
 		 */
 		send(content, options) {
 			return this.sendMessage(content, options);
+		}
+
+		/**
+		 * Sends a message that will be editable via command editing (if nothing is attached)
+		 * @since 0.5.0
+		 * @param {string} [key] The Language key to send
+		 * @param {LocaleMessageOptions} [options] The D.JS message options plus Language arguments
+		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
+		 */
+		sendLocale(key, { localeArgs, ...options } = {}) {
+			return this.sendMessage(this.language.get(key, ...localeArgs), options);
 		}
 
 		/**

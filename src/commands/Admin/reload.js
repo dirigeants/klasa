@@ -32,7 +32,7 @@ module.exports = class extends Command {
 					if (this.shard.id !== ${this.client.shard.id}) this.${piece.store}.get('${piece.name}').reload();
 				`);
 			}
-			return message.sendMessage(message.language.get('COMMAND_RELOAD', itm.type, itm.name));
+			return message.sendLocale('COMMAND_RELOAD', { localeArgs: [itm.type, itm.name] });
 		} catch (err) {
 			piece.store.set(piece);
 			return message.sendMessage(`❌ ${err}`);

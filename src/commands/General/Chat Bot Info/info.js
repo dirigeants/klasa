@@ -11,7 +11,7 @@ module.exports = class extends Command {
 	}
 
 	async run(message) {
-		return message.sendMessage(message.language.get('COMMAND_INFO'));
+		return message.sendLocale('COMMAND_INFO');
 	}
 
 };
