@@ -228,6 +228,22 @@ module.exports = Structures.extend('Message', Message => {
 		}
 
 		/**
+		 * Sends a message that will be editable via command editing (if nothing is attached)
+		 * @since 0.5.0
+		 * @param {string} key The Language key to send
+		 * @param {Array<*>} [localeArgs] The language arguments to pass
+		 * @param {external:MessageOptions} [options] The D.JS message options plus Language arguments
+		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
+		 */
+		sendLocale(key, localeArgs = [], options = {}) {
+			if (!Array.isArray(localeArgs)) {
+				options = localeArgs;
+				localeArgs = [];
+			}
+			return this.sendMessage(this.language.get(key, ...localeArgs), options);
+		}
+
+		/**
 		 * Since d.js is dumb and has 2 patch methods, this is for edits
 		 * @since 0.5.0
 		 * @param {*} data The data passed from the original constructor
