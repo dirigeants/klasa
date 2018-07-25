@@ -8,7 +8,7 @@ module.exports = class extends Command {
 			permissionLevel: 10,
 			guarded: true,
 			description: (message) => message.language.get('COMMAND_RELOAD_DESCRIPTION'),
-			usage: '<everything|Store:store|Piece:piece>'
+			usage: '<Store:store|Piece:piece|everything:default>'
 		});
 	}
 
@@ -23,7 +23,7 @@ module.exports = class extends Command {
 					if (this.shard.id !== ${this.client.shard.id}) this.${piece.name}.loadAll().then(() => this.${piece.name}.loadAll());
 				`);
 			}
-			return message.sendMessage(message.language.get('COMMAND_RELOAD_ALL', piece, timer.stop()));
+			return message.sendLocale('COMMAND_RELOAD_ALL', [piece, timer.stop()]);
 		}
 
 		try {
@@ -55,7 +55,7 @@ module.exports = class extends Command {
 				});
 			`);
 		}
-		return message.sendMessage(message.language.get('COMMAND_RELOAD_EVERYTHING', timer.stop()));
+		return message.sendLocale('COMMAND_RELOAD_EVERYTHING', [timer.stop()]);
 	}
 
 };
