@@ -90,7 +90,7 @@ class Timestamp {
 	 */
 	static utc(time = new Date()) {
 		time = Timestamp._resolveDate(time);
-		return new Date(time.getUTCFullYear(), time.getUTCMonth(), time.getUTCDate(), time.getUTCHours(), time.getUTCMinutes(), time.getUTCSeconds());
+		return new Date(time.valueOf() - Timestamp.timezoneOffset);
 	}
 
 	/**
@@ -152,6 +152,8 @@ class Timestamp {
 }
 
 /* eslint-disable id-length */
+
+Timestamp.timezoneOffset = new Date().getTimezoneOffset() * 60000;
 
 // Dates
 
