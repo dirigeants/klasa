@@ -25,10 +25,10 @@ module.exports = class extends Command {
 					if (this.shard.id !== ${this.client.shard.id}) this.${piece.store}.load(${piece.store.userDirectory}, ${JSON.stringify(piece.file)});
 				`);
 			}
-			return message.sendMessage(message.language.get('COMMAND_TRANSFER_SUCCESS', piece.type, piece.name));
+			return message.sendLocale('COMMAND_TRANSFER_SUCCESS', [piece.type, piece.name]);
 		} catch (err) {
 			this.client.emit('error', err.stack);
-			return message.sendMessage(message.language.get('COMMAND_TRANSFER_FAILED', piece.type, piece.name));
+			return message.sendLocale('COMMAND_TRANSFER_FAILED', [piece.type, piece.name]);
 		}
 	}
 

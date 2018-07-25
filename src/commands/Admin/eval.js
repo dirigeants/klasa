@@ -28,7 +28,7 @@ module.exports = class extends Command {
 				return message.channel.sendFile(Buffer.from(result), 'output.txt', message.language.get('COMMAND_EVAL_SENDFILE', time, footer));
 			}
 			this.client.emit('log', result);
-			return message.sendMessage(message.language.get('COMMAND_EVAL_SENDCONSOLE', time, footer));
+			return message.sendLocale('COMMAND_EVAL_SENDCONSOLE', [time, footer]);
 		}
 
 		// If it's a message that can be sent correctly, send it

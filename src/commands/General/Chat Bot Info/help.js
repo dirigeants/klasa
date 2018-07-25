@@ -39,8 +39,8 @@ module.exports = class extends Command {
 		}
 
 		return message[method].send(helpMessage, { split: { char: '\u200b' } })
-			.then(() => { if (message.channel.type !== 'dm' && this.client.user.bot) message.sendMessage(message.language.get('COMMAND_HELP_DM')); })
-			.catch(() => { if (message.channel.type !== 'dm' && this.client.user.bot) message.sendMessage(message.language.get('COMMAND_HELP_NODM')); });
+			.then(() => { if (message.channel.type !== 'dm' && this.client.user.bot) message.sendLocale('COMMAND_HELP_DM'); })
+			.catch(() => { if (message.channel.type !== 'dm' && this.client.user.bot) message.sendLocale('COMMAND_HELP_NODM'); });
 	}
 
 	async buildHelp(message) {

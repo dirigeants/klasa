@@ -10,10 +10,8 @@ module.exports = class extends Command {
 	}
 
 	async run(message) {
-		const msg = await message.sendMessage(message.language.get('COMMAND_PING'));
-		return message.sendMessage(
-			message.language.get('COMMAND_PINGPONG', (msg.editedTimestamp || msg.createdTimestamp) - (message.editedTimestamp || message.createdTimestamp), Math.round(this.client.ping))
-		);
+		const msg = await message.sendLocale('COMMAND_PING');
+		return message.sendLocale('COMMAND_PINGPONG', [(msg.editedTimestamp || msg.createdTimestamp) - (message.editedTimestamp || message.createdTimestamp), Math.round(this.client.ping)]);
 	}
 
 };
