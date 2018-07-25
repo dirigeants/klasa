@@ -98,9 +98,9 @@ module.exports = class extends Language {
 			COMMAND_PING_DESCRIPTION: 'Runs a connection test to Discord.',
 			COMMAND_PINGPONG: (diff, ping) => `Pong! (Roundtrip took: ${diff}ms. Heartbeat: ${ping}ms.)`,
 			COMMAND_INVITE_SELFBOT: 'Why would you need an invite link for a selfbot...',
-			COMMAND_INVITE: (client) => [
-				`To add ${client.user.username} to your discord guild:`,
-				client.invite,
+			COMMAND_INVITE: () => [
+				`To add ${this.client.user.username} to your discord guild:`,
+				this.client.invite,
 				util.codeBlock('', [
 					'The above link is generated requesting the minimum permissions required to use every command currently.',
 					'I know not all permissions are right for every guild, so don\'t be afraid to uncheck any of the boxes.',
