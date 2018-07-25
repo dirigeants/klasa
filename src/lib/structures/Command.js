@@ -2,6 +2,7 @@ const { Permissions } = require('discord.js');
 const Piece = require('./base/Piece');
 const Usage = require('../usage/Usage');
 const CommandUsage = require('../usage/CommandUsage');
+const { isFunction } = require('../util/util');
 
 /**
  * Base class for all Klasa Commands. See {@tutorial CreatingCommands} for more information how to use this class
@@ -90,19 +91,23 @@ class Command extends Piece {
 		 * The description of the command
 		 * @since 0.0.1
 		 * @type {(string|Function)}
-		 * @param {KlasaMessage} message The message used to trigger this command
+		 * @param {Language} language The language for the description
 		 * @returns {string}
 		 */
-		this.description = options.description;
+		this.description = isFunction(options.description) ?
+			(language = this.client.langauges.default) => options.description(language) :
+			options.description;
 
 		/**
 		 * The extended help for the command
 		 * @since 0.0.1
 		 * @type {(string|Function)}
-		 * @param {KlasaMessage} message The message used to trigger this command
+		 * @param {Language} language The language for the extended help
 		 * @returns {string}
 		 */
-		this.extendedHelp = options.extendedHelp || (message => message.language.get('COMMAND_HELP_NO_EXTENDED'));
+		this.extendedHelp = isFunction(options.extendedHelp) ?
+			(language = this.client.langauges.default) => options.extendedHelp(language) :
+			options.extendedHelp;
 
 		/**
 		 * The full category for the command
@@ -300,8 +305,8 @@ class Command extends Piece {
 			category: this.category,
 			cooldown: this.cooldown,
 			deletable: this.deletable,
-			description: typeof this.description === 'function' ? this.description({ language: this.client.languages.default }) : this.description,
-			extendedHelp: typeof this.extendedHelp === 'function' ? this.extendedHelp({ language: this.client.languages.default }) : this.extendedHelp,
+			description: isFunction(this.description) ? this.description() : this.description,
+			extendedHelp: isFunction(this.extendedHelp) ? this.extendedHelp() : this.extendedHelp,
 			fullCategory: this.fullCategory,
 			guarded: this.guarded,
 			nsfw: this.nsfw,
