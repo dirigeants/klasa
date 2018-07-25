@@ -21,7 +21,7 @@ class Command extends Piece {
 	 * @property {number} [cooldown=0] The amount of time before the user can run the command again in seconds
 	 * @property {boolean} [deletable=false] If the responses should be deleted if the triggering message is deleted
 	 * @property {(string|Function)} [description=''] The help description for the command
-	 * @property {(string|Function)} [extendedHelp=message.language.get('COMMAND_HELP_NO_EXTENDED')] Extended help strings
+	 * @property {(string|Function)} [extendedHelp=language.get('COMMAND_HELP_NO_EXTENDED')] Extended help strings
 	 * @property {boolean} [guarded=false] If the command can be disabled on a guild level (does not effect global disable)
 	 * @property {boolean} [nsfw=false] If the command should only run in nsfw channels
 	 * @property {number} [permissionLevel=0] The required permission level to use the command
