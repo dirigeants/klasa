@@ -1,6 +1,6 @@
 declare module 'klasa' {
 
-	import { ExecOptions, MessageOptions } from 'child_process';
+	import { ExecOptions } from 'child_process';
 
 	import {
 		BufferResolvable,
