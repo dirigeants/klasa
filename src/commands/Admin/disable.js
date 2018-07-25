@@ -21,7 +21,7 @@ module.exports = class extends Command {
 				if (this.shard.id !== ${this.client.shard.id}) this.${piece.store}.get('${piece.name}').disable();
 			`);
 		}
-		return message.sendLocale('COMMAND_DISABLE', { localArgs: [piece.type, piece.name], code: 'diff' });
+		return message.sendLocale('COMMAND_DISABLE', [piece.type, piece.name], { code: 'diff' });
 	}
 
 };

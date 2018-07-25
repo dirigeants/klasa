@@ -14,7 +14,7 @@ module.exports = class extends Monitor {
 		if (this.client.user.bot && message.guild && !message.guild.me) await message.guild.members.fetch(this.client.user);
 		if (!message.channel.postable) return;
 		if (message.content === this.client.user.toString() || (message.guild && message.content === message.guild.me.toString())) {
-			message.sendLocale('PREFIX_REMINDER', { localeArgs: [message.guildConfigs.prefix] });
+			message.sendLocale('PREFIX_REMINDER', [message.guildConfigs.prefix]);
 			return;
 		}
 
