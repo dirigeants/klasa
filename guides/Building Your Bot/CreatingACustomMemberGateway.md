@@ -18,7 +18,7 @@ client.gateways.register('members', {
 		type: 'Integer',
 		default: 1
 	}
-}, { provider: 'rethinkdb' }); 
+}, { provider: 'rethinkdb' });
 // note: You can use any provider for this.
 ```
 
