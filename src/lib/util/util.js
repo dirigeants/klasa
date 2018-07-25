@@ -275,28 +275,6 @@ class Util {
 	}
 
 	/**
-	 * Compare if both arrays are equal
-	 * @since 0.5.0
-	 * @param {any[]} arr1 The first array to compare
-	 * @param {any[]} arr2 The second array to compare
-	 * @param {boolean} clone Whether this check should clone the second array
-	 * @returns {boolean}
-	 */
-	static arraysEqual(arr1, arr2, clone = false) {
-		if (arr1 === arr2) return true;
-		if (arr1.length !== arr2.length) return false;
-		// Clone the array
-		if (clone) arr2 = arr2.slice(0);
-
-		for (const item of arr1) {
-			const ind = arr2.indexOf(item);
-			if (ind !== -1) arr2.splice(ind, 1);
-		}
-
-		return !arr2.length;
-	}
-
-	/**
 	 * Compare if both arrays are strictly equal
 	 * @since 0.5.0
 	 * @param {any[]} arr1 The first array to compare
@@ -322,7 +300,7 @@ class Util {
 	 * @private
 	 */
 	static mergeDefault(def, given) {
-		if (!given) return def;
+		if (!given) return Util.deepClone(def);
 		for (const key in def) {
 			if (typeof given[key] === 'undefined') given[key] = Util.deepClone(def[key]);
 			else if (Util.isObject(given[key])) given[key] = Util.mergeDefault(def[key], given[key]);

@@ -19,6 +19,7 @@ client.gateways.register('members', {
 		default: 1
 	}
 }, { provider: 'rethinkdb' });
+// note: You can use any provider for this.
 ```
 
 And that's it, we now have a built in members gateway, however we have no way of accessing them via the [GuildMember](https://discord.js.org/#/docs/main/master/class/GuildMember) class. We'll tackle that next.

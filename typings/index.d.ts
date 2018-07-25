@@ -46,8 +46,7 @@ declare module 'klasa' {
 		public readonly invite: string;
 		public readonly owner: KlasaUser | null;
 		public options: KlasaClientOptions & ClientOptions;
-		public coreBaseDir: string;
-		public clientBaseDir: string;
+		public userBaseDirectory: string;
 		public console: KlasaConsole;
 		public arguments: ArgumentStore;
 		public commands: CommandStore;
@@ -480,8 +479,6 @@ declare module 'klasa' {
 		public toJSON<T extends ObjectLiteral>(): T;
 		public toString(): string;
 
-		private static _merge<T extends ObjectLiteral>(data: any, folder: SchemaFolder | SchemaPiece): T;
-		private static _clone<T extends ObjectLiteral>(data: any, schema: SchemaFolder): T;
 		private static _patch(inst: any, data: any, schema: SchemaFolder): void;
 	}
 
@@ -552,7 +549,7 @@ declare module 'klasa' {
 
 	export abstract class GatewayStorage {
 		public constructor(client: KlasaClient, type: string, provider?: string);
-		public readonly baseDir: string;
+		public readonly baseDirectory: string;
 		public readonly client: KlasaClient;
 		public readonly defaults: any;
 		public readonly filePath: string;
@@ -631,16 +628,15 @@ declare module 'klasa' {
 //#region Pieces
 
 	export abstract class Piece {
-		public constructor(client: KlasaClient, store: Store<string, Piece, typeof Piece>, file: string | string[], core: boolean, options?: PieceOptions);
+		public constructor(client: KlasaClient, store: Store<string, Piece, typeof Piece>, file: string[], directory: string, options?: PieceOptions);
 		public readonly client: KlasaClient;
-		public readonly core: boolean;
 		public readonly type: string;
-		public readonly dir: string;
 		public readonly path: string;
-		public file: string | string[];
+		public file: string[];
 		public name: string;
 		public enabled: boolean;
 		public store: Store<string, this>;
+		public directory: string;
 
 		public reload(): Promise<this>;
 		public unload(): void;
@@ -652,7 +648,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class Argument extends Piece {
-		public constructor(client: KlasaClient, store: CommandStore, file: string[], core: boolean, options?: ArgumentOptions);
+		public constructor(client: KlasaClient, store: CommandStore, file: string[], directory: string, options?: ArgumentOptions);
 		public aliases: string[];
 		public static regex: {
 			userOrMember: RegExp;
@@ -668,7 +664,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class Command extends Piece {
-		public constructor(client: KlasaClient, store: CommandStore, file: string[], core: boolean, options?: CommandOptions);
+		public constructor(client: KlasaClient, store: CommandStore, file: string[], directory: string, options?: CommandOptions);
 		public readonly category: string;
 		public readonly subCategory: string;
 		public readonly usageDelim: string;
@@ -701,7 +697,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class Event extends Piece {
-		public constructor(client: KlasaClient, store: EventStore, file: string, core: boolean, options?: EventOptions);
+		public constructor(client: KlasaClient, store: EventStore, file: string, directory: string, options?: EventOptions);
 		public emitter: NodeJS.EventEmitter;
 		public event: string;
 		public once: boolean;
@@ -717,7 +713,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class Extendable extends Piece {
-		public constructor(client: KlasaClient, store: ExtendableStore, file: string, core: boolean, options?: ExtendableOptions);
+		public constructor(client: KlasaClient, store: ExtendableStore, file: string, directory: string, options?: ExtendableOptions);
 		public readonly static: boolean;
 		public appliesTo: string[];
 		public target: boolean;
@@ -728,12 +724,13 @@ declare module 'klasa' {
 	}
 
 	export abstract class Finalizer extends Piece {
+		public constructor(client: KlasaClient, store: FinalizerStore, file: string, directory: string, options?: FinalizerOptions);
 		public abstract run(message: KlasaMessage, response: KlasaMessage | KlasaMessage[] | null, runTime: Stopwatch): void;
 		public toJSON(): PieceFinalizerJSON;
 	}
 
 	export abstract class Inhibitor extends Piece {
-		public constructor(client: KlasaClient, store: InhibitorStore, file: string, core: boolean, options?: InhibitorOptions);
+		public constructor(client: KlasaClient, store: InhibitorStore, file: string, directory: string, options?: InhibitorOptions);
 		public spamProtection: boolean;
 
 		public abstract run(message: KlasaMessage, command: Command): Promise<void | string>;
@@ -741,6 +738,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class Language extends Piece {
+		public constructor(client: KlasaClient, store: LanguageStore, file: string, directory: string, options?: LanguageOptions);
 		public language: ObjectLiteral<string | string[] | ((...args: any[]) => string | string[])>;
 
 		public get<T = string>(term: string, ...args: any[]): T;
@@ -748,7 +746,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class Monitor extends Piece {
-		public constructor(client: KlasaClient, store: MonitorStore, file: string, core: boolean, options?: MonitorOptions);
+		public constructor(client: KlasaClient, store: MonitorStore, file: string, directory: string, options?: MonitorOptions);
 		public ignoreBots: boolean;
 		public ignoreEdits: boolean;
 		public ignoreOthers: boolean;
@@ -763,6 +761,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class Provider extends Piece {
+		public constructor(client: KlasaClient, store: ProviderStore, file: string, directory: string, options?: ProviderOptions);
 		public abstract create<T = any>(table: string, entry: string, data: any): Promise<T>;
 		public abstract createTable<T = any>(table: string, rows?: any[]): Promise<T>;
 		public abstract delete<T = any>(table: string, entry: string): Promise<T>;
@@ -795,6 +794,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class Task extends Piece {
+		public constructor(client: KlasaClient, store: TaskStore, file: string, directory: string, options?: TaskOptions);
 		public abstract run(data: any): Promise<void>;
 		public toJSON(): PieceTaskJSON;
 	}
@@ -803,25 +803,27 @@ declare module 'klasa' {
 
 //#region Stores
 
-	export class Store<K, V extends Piece, VConstructor = Constructable<V>> extends Collection<K, V> {
+	export abstract class Store<K, V extends Piece, VConstructor = Constructable<V>> extends Collection<K, V> {
 		public constructor(client: KlasaClient, name: string, holds: V);
-
 		public readonly client: KlasaClient;
-		public readonly coreDir: string;
 		public readonly holds: VConstructor;
 		public readonly name: string;
-		public readonly userDir: string;
+		public readonly userDirectory: string;
+		private readonly coreDirectories: Set<string>;
 
+		protected registerCoreDirectory(directory: string): this;
 		public delete(name: K | V): boolean;
 		public get(key: K): V;
 		public get<T extends V>(key: K): T;
 		public init(): Promise<any[]>;
-		public load(file: string | string[], core?: boolean): V;
+		public load(directory: string, file: string[]): V;
 		public loadAll(): Promise<number>;
 		public resolve(name: V | string): V;
 		public set<T extends V>(key: K, value: T): this;
 		public set(piece: V): V;
 		public toString(): string;
+
+		private static walk<K, V extends Piece, T extends Store<K, V>>(store: T, coreDirectory?: string): Promise<Array<Piece>>;
 	}
 
 	export class ArgumentStore extends Store<string, Argument, typeof Argument> {
@@ -1155,10 +1157,46 @@ declare module 'klasa' {
 		public displayUTC(time?: Date | number | string): string;
 		public edit(pattern: string): this;
 
+		public static utc(time?: Date | number | string): Date;
 		public static displayArbitrary(pattern: string, time?: Date | number | string): string;
 
+		private static A(time: Date): string;
+		private static a(time: Date): string;
+		private static d(time: Date): string;
+		private static D(time: Date): string;
+		private static dd(time: Date): string;
+		private static DD(time: Date): string;
+		private static ddd(time: Date): string;
+		private static DDD(time: Date): string;
+		private static dddd(time: Date): string;
+		private static DDDD(time: Date): string;
+		private static h(time: Date): string;
+		private static H(time: Date): string;
+		private static hh(time: Date): string;
+		private static HH(time: Date): string;
+		private static m(time: Date): string;
+		private static M(time: Date): string;
+		private static mm(time: Date): string;
+		private static MM(time: Date): string;
+		private static MMM(time: Date): string;
+		private static MMMM(time: Date): string;
+		private static Q(time: Date): string;
+		private static S(time: Date): string;
+		private static s(time: Date): string;
+		private static ss(time: Date): string;
+		private static SS(time: Date): string;
+		private static SSS(time: Date): string;
+		private static x(time: Date): string;
+		private static X(time: Date): string;
+		private static Y(time: Date): string;
+		private static YY(time: Date): string;
+		private static YYY(time: Date): string;
+		private static YYYY(time: Date): string;
+		private static Z(time: Date): string;
+		private static ZZ(time: Date): string;
+
+		private static _resolveDate(time: Date | number | string): Date;
 		private static _display(template: string, time: Date | number | string): string;
-		private static _parse(type: string, time: Date): string;
 		private static _patch(pattern: string): TimestampObject[];
 	}
 
@@ -1189,14 +1227,14 @@ declare module 'klasa' {
 
 	class Util {
 		public static arrayFromObject<T = any>(obj: ObjectLiteral<T>, prefix?: string): Array<T>;
-		public static arraysEqual(arr1: any[], arr2: any[], clone?: boolean): boolean;
 		public static arraysStrictEquals(arr1: any[], arr2: any[]): boolean;
-		public static chunk<T>(entries: T[], chunkSize: number): T[][];
+		public static chunk<T>(entries: T[], chunkSize: number): Array<T[]>;
 		public static clean(text: string): string;
 		public static codeBlock(lang: string, expression: string | number | Stringifible): string;
 		public static deepClone<T = any>(source: T): T;
 		public static exec(exec: string, options?: ExecOptions): Promise<{ stdout: string, stderr: string }>;
 		public static getIdentifier(value: PrimitiveType | { id?: PrimitiveType, name?: PrimitiveType }): PrimitiveType | null;
+		public static getTypeName(input: any): string;
 		public static isClass(input: any): input is Constructable<any>;
 		public static isFunction(input: any): input is Function;
 		public static isNumber(input: any): input is number;
@@ -1206,7 +1244,7 @@ declare module 'klasa' {
 		public static makeObject<T = ObjectLiteral, S = ObjectLiteral>(path: string, value: any, obj?: ObjectLiteral): T & S;
 		public static mergeDefault<T = ObjectLiteral, S = ObjectLiteral>(objDefaults: T, objSource: S): T & S;
 		public static mergeObjects<T = ObjectLiteral, S = ObjectLiteral>(objTarget: T, objSource: S): T & S;
-		public static objectToTuples(obj: ObjectLiteral, entries?: { keys: string[], values: any[] }): [string[], any[]];
+		public static objectToTuples(obj: ObjectLiteral<any>, entries?: { keys: string[], values: any[] }): [string[], any[]];
 		public static regExpEsc(str: string): string;
 		public static sleep<T = any>(delay: number, args?: T): Promise<T>;
 		public static toTitleCase(str: string): string;
@@ -1549,7 +1587,7 @@ declare module 'klasa' {
 	export type TaskOptions = PieceOptions;
 
 	export type PieceJSON = {
-		dir: string;
+		directory: string;
 		path: string;
 		enabled: boolean;
 		file: string[];
@@ -1793,7 +1831,7 @@ declare module 'klasa' {
 	};
 
 	export type TimestampObject = {
-		content?: string;
+		content: string | null;
 		type: string;
 	};
 
