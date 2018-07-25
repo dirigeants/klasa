@@ -34,7 +34,7 @@ module.exports = class extends Command {
 					if (this.shard.id !== ${this.client.shard.id}) this.${piece.store}.get('${piece.name}').reload();
 				`);
 			}
-			return message.sendMessage(message.language.get('COMMAND_RELOAD', itm.type, itm.name, timer.stop.toString()));
+			return message.sendMessage(message.language.get('COMMAND_RELOAD', itm.type, itm.name, timer.stop));
 		} catch (err) {
 			piece.store.set(piece);
 			return message.sendMessage(`❌ ${err}`);
