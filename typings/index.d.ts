@@ -1,6 +1,6 @@
 declare module 'klasa' {
 
-	import { ExecOptions } from 'child_process';
+	import { ExecOptions, MessageOptions } from 'child_process';
 
 	import {
 		BufferResolvable,
@@ -236,9 +236,11 @@ declare module 'klasa' {
 		public usableCommands(): Promise<Collection<string, Command>>;
 		public hasAtLeastPermissionLevel(min: number): Promise<boolean>;
 
+		public sendLocale(key: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendLocale(key: string, localeArgs?: Array<any>, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 		public sendMessage(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 		public sendEmbed(embed: MessageEmbed, content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendCode(language: string, content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 		public send(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 
 		private _patch(data: any): void;
