@@ -184,12 +184,14 @@ module.exports = Structures.extend('Message', Message => {
 
 			for (let i = 0; i < max; i++) {
 				if (i >= _content.length) responses[i].delete();
-				else if (responses.length > i) promises.push(responses[i].edit(_content[i], _options).then(() => responses[i]));
+				else if (responses.length > i) promises.push(responses[i].edit(_content[i], _options));
 				else promises.push(this.channel.send(_content[i], _options));
 			}
 
-			this._responses = await Promise.all(promises);
-			return this._responses.length === 1 ? this._responses[0] : this._responses;
+			const newResponses = await Promise.all(promises);
+			this._responses = _content.map((val, i) => responses[i] || newResponses[i]);
+
+			return newResponses.length === 1 ? newResponses[0] : newResponses;
 		}
 
 		/**
