@@ -54,7 +54,7 @@ class KlasaClient extends Discord.Client {
 	 * @property {PermissionLevels} [permissionLevels=KlasaClient.defaultPermissionLevels] The permission levels to use with this bot
 	 * @property {KlasaPieceDefaults} [pieceDefaults={}] Overrides the defaults for all pieces
 	 * @property {string|string[]} [prefix] The default prefix the bot should respond to
-	 * @property {boolean} [preserveConfigs=true] Whether the bot should preserve (non-default) configs when removed from a guild
+	 * @property {boolean} [preserveSettings=true] Whether the bot should preserve (non-default) settings when removed from a guild
 	 * @property {boolean} [production=false] Whether the bot should handle unhandled promise rejections automatically (handles when false) (also can be configured with process.env.NODE_ENV)
 	 * @property {KlasaProvidersOptions} [providers] The provider options
 	 * @property {(string|Function)} [readyMessage=`Successfully initialized. Ready to serve ${this.guilds.size} guilds.`] readyMessage to be passed throughout Klasa's ready event
@@ -242,7 +242,7 @@ class KlasaClient extends Discord.Client {
 		 * @since 0.5.0
 		 * @type {Configuration}
 		 */
-		this.configs = null;
+		this.settings = null;
 
 		/**
 		 * The application info cached from the discord api
@@ -370,7 +370,7 @@ class KlasaClient extends Discord.Client {
 			});
 		this.emit('log', loaded.join('\n'));
 
-		// Providers must be init before configs, and those before all other stores.
+		// Providers must be init before settings, and those before all other stores.
 		await this.providers.init();
 		await this.gateways.init();
 

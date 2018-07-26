@@ -131,7 +131,7 @@ class SchemaFolder extends Schema {
 	async remove(key) {
 		if (!this.has(key)) throw new Error(`The key ${key} does not exist in the current schema.`);
 
-		// Get the key, remove it from the configs and update the persistent schema
+		// Get the key, remove it from the settings and update the persistent schema
 		const piece = this._remove(key);
 		await fs.outputJSONAtomic(this.gateway.filePath, this.gateway.schema);
 

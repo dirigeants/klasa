@@ -9,7 +9,7 @@ module.exports = Structures.extend('User', User => {
 
 		/**
 		 * @typedef {external:UserJSON} KlasaUserJSON
-		 * @property {ConfigurationJSON} configs The per user configs
+		 * @property {ConfigurationJSON} settings The per user settings
 		 */
 
 		/**
@@ -19,11 +19,11 @@ module.exports = Structures.extend('User', User => {
 			super(...args);
 
 			/**
-			 * The user level configs for this context (user || default)
+			 * The user level settings for this context (user || default)
 			 * @since 0.5.0
 			 * @type {Configuration}
 			 */
-			this.configs = this.client.gateways.users.get(this.id, true);
+			this.settings = this.client.gateways.users.get(this.id, true);
 		}
 
 		/**
@@ -32,7 +32,7 @@ module.exports = Structures.extend('User', User => {
 		 * @returns {KlasaUserJSON}
 		 */
 		toJSON() {
-			return { ...super.toJSON(), configs: this.configs };
+			return { ...super.toJSON(), settings: this.settings };
 		}
 
 	}

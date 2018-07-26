@@ -47,9 +47,9 @@ module.exports = class extends Language {
 There are some extendables to help use languages. message.language is a read-only property that gets a language instance depending on the configuration. At the same time. The method `message.language.get` is used to get an value from the language package, if it exists, that can accept one or more parameters, being the first one always the key's name, followed by parameters that are used by keys that may have variables. If a key is constant, they're optional.
 
 ```javascript
-// message.language will fetch the configs for the guild if it's in a guild or the default if it's in DMs.
+// message.language will fetch the settings for the guild if it's in a guild or the default if it's in DMs.
 
-// Will skip the configs fetch and return the language which name is that one.
+// Will skip the settings fetch and return the language which name is that one.
 this.client.languages.get('en-US');
 
 /*

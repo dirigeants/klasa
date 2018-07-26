@@ -16,7 +16,7 @@ Replies with the reason why the command was inhibited.
 
 ## configUpdateEntry
 
-Synchronises the user configs between all shards, if the bot is sharded.
+Synchronises the user settings between all shards, if the bot is sharded.
 
 **Source:**
 
@@ -72,7 +72,7 @@ Checks if the guild is blacklisted for automatic leaving.
 
 ## guildDelete
 
-If `KlasaClientOptions.preserveConfigs` is set to `false` (defaults to `true` if not set), this event deletes entries from the database to free up space.
+If `KlasaClientOptions.preserveSettings` is set to `false` (defaults to `true` if not set), this event deletes entries from the database to free up space.
 
 **Source:**
 

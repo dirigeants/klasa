@@ -9,7 +9,7 @@ module.exports = Structures.extend('Guild', Guild => {
 
 		/**
 		 * @typedef {external:GuildJSON} KlasaGuildJSON
-		 * @property {ConfigurationJSON} configs The per guild configs
+		 * @property {ConfigurationJSON} settings The per guild settings
 		 */
 
 		/**
@@ -19,11 +19,11 @@ module.exports = Structures.extend('Guild', Guild => {
 			super(...args);
 
 			/**
-			 * The guild level configs for this context (guild || default)
+			 * The guild level settings for this context (guild || default)
 			 * @since 0.5.0
 			 * @type {Configuration}
 			 */
-			this.configs = this.client.gateways.guilds.get(this.id, true);
+			this.settings = this.client.gateways.guilds.get(this.id, true);
 		}
 
 		/**
@@ -31,7 +31,7 @@ module.exports = Structures.extend('Guild', Guild => {
 		 * @type {?Language}
 		 */
 		get language() {
-			return this.client.languages.get(this.configs.language) || null;
+			return this.client.languages.get(this.settings.language) || null;
 		}
 
 		/**
@@ -40,7 +40,7 @@ module.exports = Structures.extend('Guild', Guild => {
 		 * @returns {KlasaGuildJSON}
 		 */
 		toJSON() {
-			return { ...super.toJSON(), configs: this.configs.toJSON() };
+			return { ...super.toJSON(), settings: this.settings.toJSON() };
 		}
 
 	}

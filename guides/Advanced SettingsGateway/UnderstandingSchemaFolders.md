@@ -22,7 +22,7 @@ The parameters are:
 - **name**: The name of the new key. If it conflicts with a pre-existent key, this will error.
 - **options**: The options for the new key or folder. Check {@link SchemaFolderAddOptions}.
 
-You can also extend any of the three built-in {@link Gateway}s from Klasa. For example, if you want to add a new key called **modlogs** that accepts only text channels, for your guild configs, you would use the following code:
+You can also extend any of the three built-in {@link Gateway}s from Klasa. For example, if you want to add a new key called **modlogs** that accepts only text channels, for your guild settings, you would use the following code:
 
 ```javascript
 this.client.gateways.guilds.schema.add('modlogs', { type: 'TextChannel' });
@@ -35,18 +35,18 @@ Where you're doing the following steps:
 1. Access to the guilds' schema via {@link Gateway#schema}, which manages the gateway's schema.
 1. Add a new key called **modlogs** in the root of the schema, with a type of **TextChannel**.
 
-And you would have a perfectly configured modlogs key in your configs. However, you can also have an array of the same type. For example, you want to have a configurable array of users blacklisted in a guild, in a key named **userBlacklist**:
+And you would have a perfectly configured modlogs key in your settings. However, you can also have an array of the same type. For example, you want to have a configurable array of users blacklisted in a guild, in a key named **userBlacklist**:
 
 ```javascript
 this.client.gateways.guilds.schema.add('userBlacklist', { type: 'User', array: true });
 ```
 
-And now you can have access to any of them in your guild configs like in the following snippet!
+And now you can have access to any of them in your guild settings like in the following snippet!
 
 ```javascript
-message.guild.configs.modlogs;
+message.guild.settings.modlogs;
 // null
-message.guild.configs.userBlacklist;
+message.guild.settings.userBlacklist;
 // []
 ```
 
@@ -58,13 +58,13 @@ Removing keys with the schema is quite easy, as you would have access to the {@l
 this.client.gateways.gatewayName.schema.remove(name);
 ```
 
-In case you have a key you do not longer use and you want to get rid of it, for example, the recently created **userBlacklist** key for guild configs, you would run the following code:
+In case you have a key you do not longer use and you want to get rid of it, for example, the recently created **userBlacklist** key for guild settings, you would run the following code:
 
 ```javascript
 this.client.gateways.guilds.schema.remove('userBlacklist');
 ```
 
-And the property `userBlacklist` for all guild configs will be deleted.
+And the property `userBlacklist` for all guild settings will be deleted.
 
 ## Adding folders
 

@@ -29,7 +29,7 @@ module.exports = class extends Command {
 
 		const command = this.client.commands.get(this.menu.options[choice].name);
 		const info = new MessageEmbed()
-			.setTitle(`Command \`${message.guild.configs.prefix}${command.name}\``)
+			.setTitle(`Command \`${message.guild.settings.prefix}${command.name}\``)
 			.setDescription(typeof command.description === 'function' ? command.description(message) : command.description)
 			.addField('Usage:', command.usageString);
 
@@ -103,7 +103,7 @@ Finally, we show the user the selected command by editing the original [`Message
 
 ```javascript
 const info = new MessageEmbed()
-	.setTitle(`Command \`${message.guild.configs.prefix}${command.name}\``)
+	.setTitle(`Command \`${message.guild.settings.prefix}${command.name}\``)
 	.setDescription(typeof command.description === 'function' ? command.description(message) : command.description)
 	.addField('Usage:', command.usageString);
 

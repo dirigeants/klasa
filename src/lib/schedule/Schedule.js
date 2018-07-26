@@ -48,7 +48,7 @@ class Schedule {
 	 * @private
 	 */
 	get _tasks() {
-		return this.client.configs.schedules;
+		return this.client.settings.schedules;
 	}
 
 	/**
@@ -151,7 +151,7 @@ class Schedule {
 	async create(taskName, time, options) {
 		const task = await this._add(taskName, time, options);
 		if (!task) return undefined;
-		await this.client.configs.update('schedules', task.toJSON(), { action: 'add' });
+		await this.client.settings.update('schedules', task.toJSON(), { action: 'add' });
 		return task;
 	}
 
@@ -168,7 +168,7 @@ class Schedule {
 		this.tasks.splice(taskIndex, 1);
 		// Get the task and use it to remove
 		const task = this._tasks.find(entry => entry.id === id);
-		if (task) await this.client.configs.update('schedules', task, { action: 'remove' });
+		if (task) await this.client.settings.update('schedules', task, { action: 'remove' });
 
 		return this;
 	}
@@ -179,7 +179,7 @@ class Schedule {
 	 */
 	async clear() {
 		// this._tasks is unedited as Configuration#clear will clear the array
-		await this.client.configs.reset('schedules');
+		await this.client.settings.reset('schedules');
 		this.tasks = [];
 	}
 

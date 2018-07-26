@@ -106,10 +106,10 @@ class Gateway extends GatewayStorage {
 		const entry = this.cache.get(id);
 		if (entry) return entry;
 		if (create) {
-			const configs = new this.Configuration(this, { id });
-			this.cache.set(id, configs);
-			if (this._synced && this.schema.keyArray.length) configs.sync().catch(err => this.client.emit('error', err));
-			return configs;
+			const settings = new this.Configuration(this, { id });
+			this.cache.set(id, settings);
+			if (this._synced && this.schema.keyArray.length) settings.sync().catch(err => this.client.emit('error', err));
+			return settings;
 		}
 		return null;
 	}
@@ -131,14 +131,14 @@ class Gateway extends GatewayStorage {
 					if (!cache._existsInDB) cache._existsInDB = true;
 					cache._patch(entry);
 				} else {
-					const configs = new this.Configuration(this, entry);
-					configs._existsInDB = true;
-					this.cache.set(entry.id, configs);
+					const settings = new this.Configuration(this, entry);
+					settings._existsInDB = true;
+					this.cache.set(entry.id, settings);
 				}
 			}
 
-			// Set all the remaining configs from unknown status in DB to not exists.
-			for (const configs of this.cache.values()) if (configs._existsInDB === null) configs._existsInDB = false;
+			// Set all the remaining settings from unknown status in DB to not exists.
+			for (const settings of this.cache.values()) if (settings._existsInDB === null) settings._existsInDB = false;
 			return this;
 		}
 		const target = getIdentifier(input);
@@ -147,9 +147,9 @@ class Gateway extends GatewayStorage {
 		const cache = this.cache.get(target);
 		if (cache) return cache.sync();
 
-		const configs = new this.Configuration(this, { id: target });
-		this.cache.set(target, configs);
-		return configs.sync();
+		const settings = new this.Configuration(this, { id: target });
+		this.cache.set(target, settings);
+		return settings.sync();
 	}
 
 	/**

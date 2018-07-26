@@ -61,7 +61,7 @@ declare module 'klasa' {
 		public pieceStores: Collection<string, any>;
 		public permissionLevels: PermissionLevels;
 		public gateways: GatewayDriver;
-		public configs: Configuration | null;
+		public settings: Configuration | null;
 		public application: ClientApplication;
 		public schedule: Schedule;
 		public ready: boolean;
@@ -212,13 +212,13 @@ declare module 'klasa' {
 //#region Extensions
 
 	export class KlasaGuild extends DiscordGuild {
-		public configs: Configuration;
+		public settings: Configuration;
 		public readonly language: Language;
 	}
 
 	export class KlasaMessage extends DiscordMessage {
 		public readonly guild: KlasaGuild;
-		public guildConfigs: Configuration;
+		public guildSettings: Configuration;
 		public language: Language;
 		public command: Command | null;
 		public prefix: RegExp | null;
@@ -249,7 +249,7 @@ declare module 'klasa' {
 	}
 
 	export class KlasaUser extends DiscordUser {
-		public configs: Configuration;
+		public settings: Configuration;
 		public send(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 		public send(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 		public sendLocale(key: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
@@ -693,7 +693,7 @@ declare module 'klasa' {
 		public promptLimit: number;
 		public promptTime: number;
 		public quotedStringSupport: boolean;
-		public requiredConfigs: string[];
+		public requiredSettings: string[];
 		public runIn: string[];
 		public subcommands: boolean;
 		public usage: CommandUsage;
@@ -1287,7 +1287,7 @@ declare module 'klasa' {
 		permissionLevels?: PermissionLevels;
 		pieceDefaults?: KlasaPieceDefaults;
 		prefix?: string | string[];
-		preserveConfigs?: boolean;
+		preserveSettings?: boolean;
 		providers?: KlasaProvidersOptions;
 		readyMessage?: (client: KlasaClient) => string;
 		regexPrefix?: RegExp;
@@ -1559,7 +1559,7 @@ declare module 'klasa' {
 		promptLimit?: number;
 		promptTime?: number;
 		quotedStringSupport?: boolean;
-		requiredConfigs?: string[];
+		requiredSettings?: string[];
 		runIn?: Array<'text' | 'dm' | 'group'>;
 		subcommands?: boolean;
 		usage?: string;
@@ -1625,7 +1625,7 @@ declare module 'klasa' {
 		promptLimit: number;
 		promptTime: number;
 		quotedStringSupport: boolean;
-		requiredConfigs: string[];
+		requiredSettings: string[];
 		runIn: Array<'text' | 'dm' | 'group'>;
 		subCategory: string;
 		subcommands: boolean;

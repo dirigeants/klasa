@@ -15,11 +15,11 @@ module.exports = Structures.extend('Message', Message => {
 			super(...args);
 
 			/**
-			 * The guild level configs for this context (guild || default)
+			 * The guild level settings for this context (guild || default)
 			 * @since 0.5.0
 			 * @type {Configuration}
 			 */
-			this.guildConfigs = this.guild ? this.guild.configs : this.client.gateways.guilds.defaults;
+			this.guildSettings = this.guild ? this.guild.settings : this.client.gateways.guilds.defaults;
 
 			/**
 			 * The command being run

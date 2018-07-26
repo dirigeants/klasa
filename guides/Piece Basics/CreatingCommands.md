@@ -18,7 +18,7 @@ module.exports = class extends Command {
 			nsfw: false,
 			permissionLevel: 0,
 			requiredPermissions: [],
-			requiredConfigs: [],
+			requiredSettings: [],
 			subcommands: false,
 			description: '',
 			quotedStringSupport: false,
@@ -57,7 +57,7 @@ module.exports = class extends Command {
 | **guarded**             | `false`                          | boolean | If the command can be disabled on a guild level                             |
 | **nsfw**                | `false`                          | boolean | If the command should only run in nsfw channels                             |
 | **requiredPermissions** | `[]`                             | Array   | The required Discord permissions for the bot to use this command            |
-| **requiredConfigs**     | `[]`                             | Array   | The required guild configs to use this command                              |
+| **requiredSettings**     | `[]`                             | Array   | The required guild settings to use this command                              |
 | **subcommands**         | `false`                          | boolean | Whether to enable sub commands or not                                       |
 | **description**         | `''`                             | string  | The help description for the command                                        |
 | **usage**               | `''`                             | string  | The usage string for the command - See {@tutorial UnderstandingUsageStrings}|
