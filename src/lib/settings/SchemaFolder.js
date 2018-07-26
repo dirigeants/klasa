@@ -17,7 +17,7 @@ class SchemaFolder extends Schema {
 	 * @property {number} [min] The min value for the key (String.length for String, value for number)
 	 * @property {number} [max] The max value for the key (String.length for String, value for number)
 	 * @property {boolean} [array] Whether the key should be stored as Array or not
-	 * @property {boolean} [configurable] Whether the key should be configurable by the config command or not
+	 * @property {boolean} [configurable] Whether the key should be configurable by the configuration command or not
 	 */
 
 	/**

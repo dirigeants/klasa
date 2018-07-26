@@ -167,8 +167,9 @@ module.exports = class extends Event {
 		if (!guild.available || this.client.options.preserveSettings) return;
 
 		// filter all the entries which start with the guild id (all of the guilds members, which we are storing)
-		const guildMembers = this.client.gateways.members.cache.filter(config => config.id.startsWith(guild.id));
-		if (guildMembers.size) guildMembers.forEach(config => config.destroy());
+		for (const settings of this.client.gateways.members.cache.values()) {
+			if (settings.id.startsWith(guild.id)) settings.destroy();
+		}
 	}
 
 };

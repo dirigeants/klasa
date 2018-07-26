@@ -91,7 +91,7 @@ module.exports = {
  * @see {@link https://discord.js.org/#/docs/main/master/class/Client}
  */
 /**
- * @external DiscordJSConfig
+ * @external DiscordClientOptions
  * @see {@link https://discord.js.org/#/docs/main/master/typedef/ClientOptions}
  */
 /**

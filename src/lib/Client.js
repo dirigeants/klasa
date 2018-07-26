@@ -40,7 +40,7 @@ const plugins = new Set();
 class KlasaClient extends Discord.Client {
 
 	/**
-	 * @typedef {external:DiscordJSConfig} KlasaClientOptions
+	 * @typedef {external:DiscordClientOptions} KlasaClientOptions
 	 * @property {boolean} [commandEditing=false] Whether the bot should update responses if the command is edited
 	 * @property {boolean} [commandLogging=false] Whether the bot should log command usage
 	 * @property {number} [commandMessageLifetime=1800] The threshold for how old command messages can be before sweeping since the last edit in seconds
@@ -112,12 +112,12 @@ class KlasaClient extends Discord.Client {
 	/**
 	 * Constructs the klasa client
 	 * @since 0.0.1
-	 * @param {KlasaClientOptions} config The config to pass to the new client
+	 * @param {KlasaClientOptions} [options={}] The config to pass to the new client
 	 */
-	constructor(config = {}) {
-		if (typeof config !== 'object') throw new TypeError('Configuration for Klasa must be an object.');
-		config = util.mergeDefault(constants.DEFAULTS.CLIENT, config);
-		super(config);
+	constructor(options = {}) {
+		if (util.isObject(options)) throw new TypeError('The Client Options for Klasa must be an object.');
+		options = util.mergeDefault(constants.DEFAULTS.CLIENT, options);
+		super(options);
 
 		/**
 		 * The options the client was instantiated with.
@@ -134,7 +134,7 @@ class KlasaClient extends Discord.Client {
 		this.userBaseDirectory = path.dirname(require.main.filename);
 
 		/**
-		 * The console for this instance of klasa. You can disable timestamps, colors, and add writable streams as config options to configure this.
+		 * The console for this instance of klasa. You can disable timestamps, colors, and add writable streams as configuration options to configure this.
 		 * @since 0.4.0
 		 * @type {KlasaConsole}
 		 */
