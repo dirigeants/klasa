@@ -11,8 +11,6 @@ module.exports = class extends Command {
 	}
 
 	async run(message) {
-		if (!this.client.user.bot) return message.sendLocale('COMMAND_INVITE_SELFBOT', { reply: message.author });
-
 		return message.sendLocale('COMMAND_INVITE');
 	}
 

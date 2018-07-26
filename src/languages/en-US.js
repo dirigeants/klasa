@@ -8,8 +8,8 @@ module.exports = class extends Language {
 			DEFAULT: (key) => `${key} has not been localized for en-US yet.`,
 			DEFAULT_LANGUAGE: 'Default Language',
 			PREFIX_REMINDER: (prefix) => `The prefix${Array.isArray(prefix) ?
-				`es for this server are: ${prefix.map(pre => `\`${pre}\``).join(', ')}` :
-				` in this server is set to: \`${prefix}\``
+				`es for this guild are: ${prefix.map(pre => `\`${pre}\``).join(', ')}` :
+				` in this guild is set to: \`${prefix}\``
 			}`,
 			SETTING_GATEWAY_EXPECTS_GUILD: 'The parameter <Guild> expects either a Guild or a Guild Object.',
 			SETTING_GATEWAY_VALUE_FOR_KEY_NOEXT: (data, key) => `The value ${data} for the key ${key} does not exist.`,
@@ -54,7 +54,7 @@ module.exports = class extends Language {
 			INHIBITOR_MISSING_BOT_PERMS: (missing) => `Insufficient permissions, missing: **${missing}**`,
 			INHIBITOR_NSFW: 'You may not use NSFW commands in this channel.',
 			INHIBITOR_PERMISSIONS: 'You do not have permission to use this command.',
-			INHIBITOR_REQUIRED_CONFIGS: (configs) => `The server is missing the **${configs.join(', ')}** server setting${configs.length !== 1 ? 's' : ''} and thus the command cannot run.`,
+			INHIBITOR_REQUIRED_CONFIGS: (configs) => `The guild is missing the **${configs.join(', ')}** guild setting${configs.length !== 1 ? 's' : ''} and thus the command cannot run.`,
 			INHIBITOR_RUNIN: (types) => `This command is only available in ${types} channels.`,
 			INHIBITOR_RUNIN_NONE: (name) => `The ${name} command is not configured to run in any channel.`,
 			COMMAND_BLACKLIST_DESCRIPTION: 'Blacklists or un-blacklists users and guilds from the bot.',
@@ -98,25 +98,24 @@ module.exports = class extends Language {
 			COMMAND_PING: 'Ping?',
 			COMMAND_PING_DESCRIPTION: 'Runs a connection test to Discord.',
 			COMMAND_PINGPONG: (diff, ping) => `Pong! (Roundtrip took: ${diff}ms. Heartbeat: ${ping}ms.)`,
-			COMMAND_INVITE_SELFBOT: 'Why would you need an invite link for a selfbot...',
 			COMMAND_INVITE: () => [
-				`To add ${this.client.user.username} to your discord server:`,
+				`To add ${this.client.user.username} to your discord guild:`,
 				this.client.invite,
 				util.codeBlock('', [
 					'The above link is generated requesting the minimum permissions required to use every command currently.',
-					'I know not all permissions are right for every server, so don\'t be afraid to uncheck any of the boxes.',
+					'I know not all permissions are right for every guild, so don\'t be afraid to uncheck any of the boxes.',
 					'If you try to use a command that requires more permissions than the bot is granted, it will let you know.'
 				].join(' ')),
 				'Please file an issue at <https://github.com/dirigeants/klasa> if you find any bugs.'
 			],
-			COMMAND_INVITE_DESCRIPTION: 'Displays the join server link of the bot.',
+			COMMAND_INVITE_DESCRIPTION: 'Displays the join guild link of the bot.',
 			COMMAND_INFO: [
 				"Klasa is a 'plug-and-play' framework built on top of the Discord.js library.",
 				'Most of the code is modularized, which allows developers to edit Klasa to suit their needs.',
 				'',
 				'Some features of Klasa include:',
 				'• 🐇💨 Fast loading times with ES2017 support (`async`/`await`)',
-				'• 🎚🎛 Per-client/server/user settings that can be extended with your own fields',
+				'• 🎚🎛 Per-client/guild/user settings that can be extended with your own fields',
 				'• 💬 Customizable command system with automated parameter resolving and the ability to load/reload commands on-the-fly',
 				'• 👀 "Monitors", which can watch messages and edits (for swear filters, spam protection, etc.)',
 				'• ⛔ "Inhibitors", which can prevent commands from running based on any condition you wish to apply (for permissions, blacklists, etc.)',
@@ -150,17 +149,17 @@ module.exports = class extends Language {
 			COMMAND_CONF_GET: (key, value) => `The value for the key **${key}** is: \`${value}\``,
 			COMMAND_CONF_RESET: (key, response) => `The key **${key}** has been reset to: \`${response}\``,
 			COMMAND_CONF_NOCHANGE: (key) => `The value for **${key}** was already that value.`,
-			COMMAND_CONF_SERVER_DESCRIPTION: 'Define per-server configuration.',
-			COMMAND_CONF_SERVER: (key, list) => `**server Configuration${key}**\n${list}`,
+			COMMAND_CONF_SERVER_DESCRIPTION: 'Define per-guild configuration.',
+			COMMAND_CONF_SERVER: (key, list) => `**guild Configuration${key}**\n${list}`,
 			COMMAND_CONF_USER_DESCRIPTION: 'Define per-user configuration.',
 			COMMAND_CONF_USER: (key, list) => `**User Configuration${key}**\n${list}`,
-			COMMAND_STATS: (memUsage, uptime, users, servers, channels, klasaVersion, discordVersion, processVersion, message) => [
+			COMMAND_STATS: (memUsage, uptime, users, guilds, channels, klasaVersion, discordVersion, processVersion, message) => [
 				'= STATISTICS =',
 				'',
 				`• Mem Usage  :: ${memUsage} MB`,
 				`• Uptime     :: ${uptime}`,
 				`• Users      :: ${users}`,
-				`• servers    :: ${servers}`,
+				`• guilds    :: ${guilds}`,
 				`• Channels   :: ${channels}`,
 				`• Klasa      :: v${klasaVersion}`,
 				`• Discord.js :: v${discordVersion}`,
