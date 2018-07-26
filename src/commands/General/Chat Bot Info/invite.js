@@ -11,7 +11,7 @@ module.exports = class extends Command {
 	}
 
 	async run(message) {
-		return message.sendMessage(message.language.get('COMMAND_INVITE', this.client));
+		return message.sendLocale('COMMAND_INVITE');
 	}
 
 	async init() {

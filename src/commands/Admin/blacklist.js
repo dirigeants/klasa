@@ -31,7 +31,7 @@ module.exports = class extends Command {
 			else usersRemoved.push(userOrGuild.username);
 		}
 
-		return message.sendMessage(message.language.get('COMMAND_BLACKLIST_SUCCESS', usersAdded, usersRemoved, guildsAdded, guildsRemoved));
+		return message.sendLocale('COMMAND_BLACKLIST_SUCCESS', [usersAdded, usersRemoved, guildsAdded, guildsRemoved]);
 	}
 
 };

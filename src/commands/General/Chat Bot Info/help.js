@@ -38,8 +38,8 @@ module.exports = class extends Command {
 		}
 
 		return message.author.send(helpMessage, { split: { char: '\u200b' } })
-			.then(() => { if (message.channel.type !== 'dm') message.sendMessage(message.language.get('COMMAND_HELP_DM')); })
-			.catch(() => { if (message.channel.type !== 'dm') message.sendMessage(message.language.get('COMMAND_HELP_NODM')); });
+			.then(() => { if (message.channel.type !== 'dm') message.sendLocale('COMMAND_HELP_DM'); })
+			.catch(() => { if (message.channel.type !== 'dm') message.sendLocale('COMMAND_HELP_NODM'); });
 	}
 
 	async buildHelp(message) {
