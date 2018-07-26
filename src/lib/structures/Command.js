@@ -28,7 +28,7 @@ class Command extends Piece {
 	 * @property {number} [promptTime=30000] The time allowed for re-prompting of this command
 	 * @property {boolean} [quotedStringSupport=false] Whether args for this command should not deliminated inside quotes
 	 * @property {string[]} [requiredConfigs=[]] The required guild configs to use this command
-	 * @property {string[]} [runIn=['text','dm','group']] What channel types the command should run in
+	 * @property {string[]} [runIn=['text','dm']] What channel types the command should run in
 	 * @property {boolean} [subcommands=false] Whether to enable sub commands or not
 	 * @property {string} [usage=''] The usage string for the command
 	 * @property {?string} [usageDelim=undefined] The string to delimit the command input for usage

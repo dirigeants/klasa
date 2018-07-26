@@ -43,9 +43,7 @@ class Resolver {
 		if (user instanceof GuildMember) return user.user;
 		if (user instanceof Message) return user.author;
 		if (typeof user === 'string' && this.constructor.regex.userOrMember.test(user)) {
-			return this.client.user.bot ?
-				this.client.users.fetch(this.constructor.regex.userOrMember.exec(user)[1]).catch(() => null) :
-				this.client.users.get(this.constructor.regex.userOrMember.exec(user)[1]);
+			return this.client.users.fetch(this.constructor.regex.userOrMember.exec(user)[1]).catch(() => null);
 		}
 		return null;
 	}
@@ -61,9 +59,7 @@ class Resolver {
 		if (member instanceof GuildMember) return member;
 		if (member instanceof User) return guild.members.fetch(member);
 		if (typeof member === 'string' && this.constructor.regex.userOrMember.test(member)) {
-			const user = this.client.user.bot ?
-				await this.client.users.fetch(this.constructor.regex.userOrMember.exec(member)[1]).catch(() => null) :
-				this.client.users.get(this.constructor.regex.userOrMember.exec(member)[1]);
+			const user = await this.client.users.fetch(this.constructor.regex.userOrMember.exec(member)[1]).catch(() => null);
 			if (user) return guild.members.fetch(user).catch(() => null);
 		}
 		return null;

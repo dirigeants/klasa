@@ -59,7 +59,7 @@ exports.DEFAULTS = {
 				promptTime: 30000,
 				requiredConfigs: [],
 				requiredPermissions: 0,
-				runIn: ['text', 'dm', 'group'],
+				runIn: ['text', 'dm'],
 				subcommands: false,
 				usage: '',
 				quotedStringSupport: false,
