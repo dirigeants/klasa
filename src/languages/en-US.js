@@ -159,7 +159,7 @@ module.exports = class extends Language {
 				`• Mem Usage  :: ${memUsage} MB`,
 				`• Uptime     :: ${uptime}`,
 				`• Users      :: ${users}`,
-				`• guilds    :: ${guilds}`,
+				`• Guilds     :: ${guilds}`,
 				`• Channels   :: ${channels}`,
 				`• Klasa      :: v${klasaVersion}`,
 				`• Discord.js :: v${discordVersion}`,
