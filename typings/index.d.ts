@@ -684,8 +684,8 @@ declare module 'klasa' {
 		public bucket: number;
 		public cooldown: number;
 		public deletable: boolean;
-		public description: string | ((message: KlasaMessage) => string);
-		public extendedHelp: string | ((message: KlasaMessage) => string);
+		public description: string | ((language: Language) => string);
+		public extendedHelp: string | ((language: Language) => string);
 		public fullCategory: string[];
 		public guarded: boolean;
 		public nsfw: boolean;
@@ -1551,8 +1551,8 @@ declare module 'klasa' {
 		bucket?: number;
 		cooldown?: number;
 		deletable?: boolean;
-		description?: string | ((message: KlasaMessage) => string);
-		extendedHelp?: string | ((message: KlasaMessage) => string);
+		description?: string | ((language: Language) => string);
+		extendedHelp?: string | ((language: Language) => string);
 		guarded?: boolean;
 		nsfw?: boolean;
 		permissionLevel?: number;
@@ -1616,8 +1616,8 @@ declare module 'klasa' {
 		category: string;
 		cooldown: number;
 		deletable: boolean;
-		description: string | ((message: KlasaMessage) => string);
-		extendedHelp: string | ((message: KlasaMessage) => string);
+		description: string | ((language: Language) => string);
+		extendedHelp: string | ((language: Language) => string);
 		fullCategory: string[];
 		guarded: boolean;
 		nsfw: boolean;
