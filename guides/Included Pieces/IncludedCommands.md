@@ -40,7 +40,7 @@ Evaluates arbitrary javascript code. Useful for debugging.
 
 ## General / Chat Bot Info / help
 
-The default help command, compiles the help details for all commands and sends them to the user's dm, or the channel if a selfbot.
+The default help command, compiles the help details for all commands and sends them to the user's DMs.
 
 **Source:**
 
