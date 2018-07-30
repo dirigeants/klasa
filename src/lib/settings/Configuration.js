@@ -98,11 +98,11 @@ class Configuration {
 	/**
 	 * Get a value from the configuration. Accepts nested objects separating by dot.
 	 * @since 0.5.0
-	 * @param {string} path The path of the key's value to get from this instance
+	 * @param {string|string[]} path The path of the key's value to get from this instance
 	 * @returns {*}
 	 */
 	get(path) {
-		const route = path.split('.');
+		const route = typeof path === 'string' ? path.split('.') : path;
 		let refThis = this; // eslint-disable-line consistent-this
 		let refSchema = this.gateway.schema;
 		for (const key of route) {

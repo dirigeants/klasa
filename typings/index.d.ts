@@ -463,7 +463,7 @@ declare module 'klasa' {
 		public readonly synchronizing: boolean;
 		private _existsInDB: boolean;
 
-		public get<T = any>(path: string): T;
+		public get<T = any>(path: string | string[]): T;
 		public clone(): Configuration;
 		public sync(): Promise<this>;
 		public destroy(): Promise<this>;
