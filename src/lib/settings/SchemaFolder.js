@@ -268,7 +268,7 @@ class SchemaFolder extends Schema {
 	 * @private
 	 */
 	_init(object) {
-		if (this._inited) throw new Error(`[INIT] ${this} has already initialized.`);
+		if (this._initialized) throw new Error(`[INIT] ${this} has already initialized.`);
 
 		for (const key of Object.keys(object)) {
 			if (typeof object[key] !== 'object') continue;
@@ -284,7 +284,7 @@ class SchemaFolder extends Schema {
 			this.keyArray.push(key);
 		}
 		this.keyArray.sort((a, b) => a.localeCompare(b));
-		this._inited = true;
+		this._initialized = true;
 
 		return true;
 	}

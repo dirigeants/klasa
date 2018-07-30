@@ -96,14 +96,22 @@ class Configuration {
 	}
 
 	/**
-	 * Get a value from the configuration. Admits nested objects separating by comma.
+	 * Get a value from the configuration. Accepts nested objects separating by dot.
 	 * @since 0.5.0
-	 * @param {string} key The key to get from this instance
+	 * @param {string|string[]} path The path of the key's value to get from this instance
 	 * @returns {*}
 	 */
-	get(key) {
-		if (!key.includes('.')) return this.gateway.schema.has(key) ? this[key] : undefined;
-		return this._get(key.split('.'), true);
+	get(path) {
+		const route = typeof path === 'string' ? path.split('.') : path;
+		let refThis = this; // eslint-disable-line consistent-this
+		let refSchema = this.gateway.schema;
+		for (const key of route) {
+			if (refSchema.type !== 'Folder' || !refSchema.has(key)) return undefined;
+			refThis = refThis[key];
+			refSchema = refSchema[key];
+		}
+
+		return refThis;
 	}
 
 	/**
@@ -135,7 +143,18 @@ class Configuration {
 		if (syncStatus) return syncStatus;
 
 		// If it's not currently synchronizing, create a new sync status for the sync queue
-		const sync = this._sync();
+		const sync = this.gateway.provider.get(this.gateway.type, this.id).then(data => {
+			if (data) {
+				if (!this._existsInDB) this._existsInDB = true;
+				this._patch(data);
+			} else {
+				this._existsInDB = false;
+			}
+
+			this.gateway.syncQueue.delete(this.id);
+			return this;
+		});
+
 		this.gateway.syncQueue.set(this.id, sync);
 		return sync;
 	}
@@ -336,44 +355,6 @@ class Configuration {
 	}
 
 	/**
-	 * Sync the entry with the database
-	 * @since 0.5.0
-	 * @returns {this}
-	 */
-	async _sync() {
-		const data = await this.gateway.provider.get(this.gateway.type, this.id);
-		if (data) {
-			if (!this._existsInDB) this._existsInDB = true;
-			this._patch(data);
-		} else {
-			this._existsInDB = false;
-		}
-
-		this.gateway.syncQueue.delete(this.id);
-		return this;
-	}
-
-	/**
-	 * Get a value from the cache.
-	 * @since 0.5.0
-	 * @param {(string|string[])} route The route to get
-	 * @param {boolean} piece Whether the get should resolve a piece or a folder
-	 * @returns {*}
-	 * @private
-	 */
-	_get(route, piece = true) {
-		if (typeof route === 'string') route = route.split('.');
-		let refCache = this, refSchema = this.gateway.schema; // eslint-disable-line consistent-this
-		for (const key of route) {
-			if (refSchema.type !== 'Folder' || !refSchema.has(key)) return undefined;
-			refCache = refCache[key];
-			refSchema = refSchema[key];
-		}
-
-		return piece && refSchema.type !== 'Folder' ? refCache : undefined;
-	}
-
-	/**
 	 * Update this Configuration instance
 	 * @since 0.5.0
 	 * @param {string[]} keys The keys to update
@@ -468,7 +449,7 @@ class Configuration {
 	 */
 	_parseArraySingle(piece, route, parsedID, { action, arrayPosition }, { updated, errors }) {
 		const lengthErrors = errors.length;
-		const array = this._get(route, true);
+		const array = this.get(route);
 		if (typeof arrayPosition === 'number') {
 			if (arrayPosition >= array.length) errors.push(new Error(`The option arrayPosition should be a number between 0 and ${array.length - 1}`));
 			else array[arrayPosition] = parsedID;
@@ -532,11 +513,19 @@ class Configuration {
 	 * Path this Configuration instance.
 	 * @since 0.5.0
 	 * @param {Object} data The data to patch
+	 * @param {Object} [instance=this] The reference of this instance for recursion
+	 * @param {SchemaFolder} [schema=this.gateway.schema] The SchemaFolder that sets the schema for this configuration's gateway
 	 * @private
 	 */
-	_patch(data) {
+	_patch(data, instance = this, schema = this.gateway.schema) {
 		if (typeof data !== 'object' || data === null) return;
-		this.constructor._patch(this, data, this.gateway.schema);
+		for (const [key, piece] of schema) {
+			const value = data[key];
+			if (value === undefined) continue;
+			if (value === null) instance[key] = deepClone(piece.defaults);
+			else if (piece.type === 'Folder') this._patch(value, instance[key], piece);
+			else instance[key] = value;
+		}
 	}
 
 	/**
@@ -555,25 +544,6 @@ class Configuration {
 	 */
 	toString() {
 		return `Configuration(${this.gateway.type}:${this.id})`;
-	}
-
-	/**
-	 * Patch an object.
-	 * @since 0.5.0
-	 * @param {Object} inst The reference of the Configuration instance
-	 * @param {Object} data The original object
-	 * @param {SchemaFolder} schema A SchemaFolder instance
-	 * @returns {Object}
-	 * @private
-	 */
-	static _patch(inst, data, schema) {
-		for (const [key, piece] of schema) {
-			const value = data[key];
-			if (value === undefined || value === null) continue;
-			inst[key] = piece.type === 'Folder' ? this._patch(inst[key], value, piece) : deepClone(value);
-		}
-
-		return inst;
 	}
 
 }

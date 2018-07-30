@@ -51,6 +51,7 @@ exports.DEFAULTS = {
 				bucket: 1,
 				cooldown: 0,
 				description: '',
+				extendedHelp: language => language.get('COMMAND_HELP_NO_EXTENDED'),
 				enabled: true,
 				guarded: false,
 				nsfw: false,
