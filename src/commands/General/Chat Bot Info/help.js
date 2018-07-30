@@ -45,7 +45,7 @@ module.exports = class extends Command {
 	async buildHelp(message) {
 		const help = {};
 
-        const { prefix } = message.guildSettings;
+		const { prefix } = message.guildSettings;
 		const commandNames = [...this.client.commands.keys()];
 		const longest = commandNames.reduce((long, str) => Math.max(long, str.length), 0);
 
