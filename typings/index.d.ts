@@ -61,7 +61,7 @@ declare module 'klasa' {
 		public pieceStores: Collection<string, any>;
 		public permissionLevels: PermissionLevels;
 		public gateways: GatewayDriver;
-		public settings: Configuration | null;
+		public settings: Settings | null;
 		public application: ClientApplication;
 		public schedule: Schedule;
 		public ready: boolean;
@@ -121,9 +121,9 @@ declare module 'klasa' {
 		public on(event: 'taskError', listener: (scheduledTask: ScheduledTask, task: Task, error: Error) => void): this;
 
 		// SettingGateway Events
-		public on(event: 'configCreateEntry', listener: (entry: Configuration) => void): this;
-		public on(event: 'configDeleteEntry', listener: (entry: Configuration) => void): this;
-		public on(event: 'configUpdateEntry', listener: (oldEntry: Configuration, newEntry: Configuration, path: string[]) => void): this;
+		public on(event: 'configCreateEntry', listener: (entry: Settings) => void): this;
+		public on(event: 'configDeleteEntry', listener: (entry: Settings) => void): this;
+		public on(event: 'configUpdateEntry', listener: (oldEntry: Settings, newEntry: Settings, path: string[]) => void): this;
 
 		// Schema Events
 		public on(event: 'schemaKeyAdd', listener: (key: SchemaFolder | SchemaPiece) => void): this;
@@ -185,9 +185,9 @@ declare module 'klasa' {
 		public once(event: 'taskError', listener: (scheduledTask: ScheduledTask, task: Task, error: Error) => void): this;
 
 		// SettingGateway Events
-		public once(event: 'configCreateEntry', listener: (entry: Configuration) => void): this;
-		public once(event: 'configDeleteEntry', listener: (entry: Configuration) => void): this;
-		public once(event: 'configUpdateEntry', listener: (oldEntry: Configuration, newEntry: Configuration, path?: string) => void): this;
+		public once(event: 'configCreateEntry', listener: (entry: Settings) => void): this;
+		public once(event: 'configDeleteEntry', listener: (entry: Settings) => void): this;
+		public once(event: 'configUpdateEntry', listener: (oldEntry: Settings, newEntry: Settings, path?: string) => void): this;
 
 		// Schema Events
 		public once(event: 'schemaKeyAdd', listener: (key: SchemaFolder | SchemaPiece) => void): this;
@@ -212,13 +212,13 @@ declare module 'klasa' {
 //#region Extensions
 
 	export class KlasaGuild extends DiscordGuild {
-		public settings: Configuration;
+		public settings: Settings;
 		public readonly language: Language;
 	}
 
 	export class KlasaMessage extends DiscordMessage {
 		public readonly guild: KlasaGuild;
-		public guildSettings: Configuration;
+		public guildSettings: Settings;
 		public language: Language;
 		public command: Command | null;
 		public prefix: RegExp | null;
@@ -249,7 +249,7 @@ declare module 'klasa' {
 	}
 
 	export class KlasaUser extends DiscordUser {
-		public settings: Configuration;
+		public settings: Settings;
 		public send(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 		public send(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 		public sendLocale(key: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
@@ -455,7 +455,7 @@ declare module 'klasa' {
 
 //#region Settings
 
-	export class Configuration {
+	export class Settings {
 		public constructor(manager: Gateway, data: any);
 		public readonly client: KlasaClient;
 		public readonly gateway: Gateway;
@@ -464,7 +464,7 @@ declare module 'klasa' {
 		private _existsInDB: boolean;
 
 		public get<T = any>(path: string | string[]): T;
-		public clone(): Configuration;
+		public clone(): Settings;
 		public sync(): Promise<this>;
 		public destroy(): Promise<this>;
 
@@ -491,11 +491,11 @@ declare module 'klasa' {
 		public constructor(store: GatewayDriver, type: string, schema: ObjectLiteral, options: GatewayOptions);
 		public store: GatewayDriver;
 		public readonly resolver: SettingResolver;
-		public readonly cache: Collection<string, Configuration>;
-		public readonly syncQueue: Collection<string, Promise<Configuration>>;
+		public readonly cache: Collection<string, Settings>;
+		public readonly syncQueue: Collection<string, Promise<Settings>>;
 
-		public get(input: string | number, create?: boolean): Configuration;
-		public sync(input: string): Promise<Configuration>;
+		public get(input: string | number, create?: boolean): Settings;
+		public sync(input: string): Promise<Settings>;
 		public sync(input?: string[]): Promise<Gateway>;
 		public getPath(key?: string, options?: GatewayGetPathOptions): GatewayGetPathResult | null;
 

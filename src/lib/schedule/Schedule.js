@@ -178,7 +178,7 @@ class Schedule {
 	 * @since 0.5.0
 	 */
 	async clear() {
-		// this._tasks is unedited as Configuration#clear will clear the array
+		// this._tasks is unedited as Settings#clear will clear the array
 		await this.client.settings.reset('schedules');
 		this.tasks = [];
 	}

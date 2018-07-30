@@ -42,7 +42,7 @@ module.exports = class extends Command {
 };
 ```
 
-## Configuration
+## Options
 
 | Name                    | Default                          | Type    | Description                                                                 |
 | ----------------------- | -------------------------------- | ------- | --------------------------------------------------------------------------- |

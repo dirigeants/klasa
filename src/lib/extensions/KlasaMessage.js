@@ -17,7 +17,7 @@ module.exports = Structures.extend('Message', Message => {
 			/**
 			 * The guild level settings for this context (guild || default)
 			 * @since 0.5.0
-			 * @type {Configuration}
+			 * @type {Settings}
 			 */
 			this.guildSettings = this.guild ? this.guild.settings : this.client.gateways.guilds.defaults;
 

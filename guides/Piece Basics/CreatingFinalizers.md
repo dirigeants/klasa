@@ -29,7 +29,7 @@ module.exports = class extends Finalizer {
 };
 ```
 
-## Configuration
+## Options
 
 | Name        | Default       | Type    | Description                             |
 | ----------- | ------------- | ------- | --------------------------------------- |

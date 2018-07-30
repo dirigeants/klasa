@@ -3,10 +3,10 @@ const SchemaFolder = require('./SchemaFolder');
 const SchemaPiece = require('./SchemaPiece');
 
 /**
- * <warning>Creating your own Configuration instances is often discouraged and unneeded. SettingsGateway handles them internally for you.</warning>
- * The Configuration class that stores the cache for each entry in SettingsGateway.
+ * <warning>Creating your own Settings instances is often discouraged and unneeded. SettingsGateway handles them internally for you.</warning>
+ * The Settings class that stores the cache for each entry in SettingsGateway.
  */
-class Configuration {
+class Settings {
 
 	/**
 	 * @typedef {Object} ConfigurationJSON
@@ -41,24 +41,24 @@ class Configuration {
 
 	/**
 	 * @since 0.5.0
-	 * @param {Gateway} manager The Gateway that manages this Configuration instance
-	 * @param {Object} data The data that is cached in this Configuration instance
+	 * @param {Gateway} manager The Gateway that manages this Settings instance
+	 * @param {Object} data The data that is cached in this Settings instance
 	 */
 	constructor(manager, data) {
 		/**
-		 * The client this Configuration was created with.
+		 * The client this Settings was created with.
 		 * @since 0.5.0
 		 * @type {KlasaClient}
-		 * @name Configuration#client
+		 * @name Settings#client
 		 * @readonly
 		 */
 		Object.defineProperty(this, 'client', { value: manager.client });
 
 		/**
-		 * The Gateway that manages this Configuration instance.
+		 * The Gateway that manages this Settings instance.
 		 * @since 0.5.0
 		 * @type {Gateway}
-		 * @name Configuration#gateway
+		 * @name Settings#gateway
 		 * @readonly
 		 */
 		Object.defineProperty(this, 'gateway', { value: manager });
@@ -67,7 +67,7 @@ class Configuration {
 		 * The ID that identifies this instance.
 		 * @since 0.5.0
 		 * @type {string}
-		 * @name Configuration#id
+		 * @name Settings#id
 		 * @readonly
 		 */
 		Object.defineProperty(this, 'id', { value: data.id });
@@ -76,7 +76,7 @@ class Configuration {
 		 * Whether this entry exists in the DB or not.
 		 * @since 0.5.0
 		 * @type {?boolean}
-		 * @name Configuration#_existsInDB
+		 * @name Settings#_existsInDB
 		 * @private
 		 */
 		Object.defineProperty(this, '_existsInDB', { value: null, writable: true });
@@ -87,7 +87,7 @@ class Configuration {
 	}
 
 	/**
-	 * Check whether this Configuration is being synchronized in the Gateway's sync queue.
+	 * Check whether this Settings is being synchronized in the Gateway's sync queue.
 	 * @since 0.5.0
 	 * @type {boolean}
 	 */
@@ -117,7 +117,7 @@ class Configuration {
 	/**
 	 * Clone this instance.
 	 * @since 0.5.0
-	 * @returns {Configuration}
+	 * @returns {Settings}
 	 */
 	clone() {
 		return new this.constructor(this.gateway, this);
@@ -182,13 +182,13 @@ class Configuration {
 	 * @returns {ConfigurationUpdateResult}
 	 * @example
 	 * // Reset all keys for this instance
-	 * Configuration#reset();
+	 * Settings#reset();
 	 *
 	 * // Reset multiple keys for this instance
-	 * Configuration#reset(['prefix', 'channels.modlog']);
+	 * Settings#reset(['prefix', 'channels.modlog']);
 	 *
 	 * // Reset a key
-	 * Configuration#reset('prefix');
+	 * Settings#reset('prefix');
 	 */
 	async reset(keys, guild, { avoidUnconfigurable = false, force = false } = {}) {
 		if (typeof guild === 'boolean') {
@@ -231,22 +231,22 @@ class Configuration {
 	 * @async
 	 * @example
 	 * // Updating the value of a key
-	 * Configuration#update('roles.administrator', '339943234405007361', message.guild);
+	 * Settings#update('roles.administrator', '339943234405007361', message.guild);
 	 *
 	 * // Updating an array:
-	 * Configuration#update('userBlacklist', '272689325521502208');
+	 * Settings#update('userBlacklist', '272689325521502208');
 	 *
 	 * // Ensuring the function call adds (error if it exists):
-	 * Configuration#update('userBlacklist', '272689325521502208', { action: 'add' });
+	 * Settings#update('userBlacklist', '272689325521502208', { action: 'add' });
 	 *
 	 * // Updating it with a json object:
-	 * Configuration#update({ roles: { administrator: '339943234405007361' } }, message.guild);
+	 * Settings#update({ roles: { administrator: '339943234405007361' } }, message.guild);
 	 *
 	 * // Updating multiple keys (with json object):
-	 * Configuration#update({ prefix: 'k!', language: 'es-ES' }, message.guild);
+	 * Settings#update({ prefix: 'k!', language: 'es-ES' }, message.guild);
 	 *
 	 * // Updating multiple keys (with arrays):
-	 * Configuration#update(['prefix', 'language'], ['k!', 'es-ES']);
+	 * Settings#update(['prefix', 'language'], ['k!', 'es-ES']);
 	 */
 	update(keys, values, guild, options) {
 		// Overload update(object, GuildResolvable);
@@ -355,7 +355,7 @@ class Configuration {
 	}
 
 	/**
-	 * Update this Configuration instance
+	 * Update this Settings instance
 	 * @since 0.5.0
 	 * @param {string[]} keys The keys to update
 	 * @param {Array<*>} values The values to update
@@ -510,7 +510,7 @@ class Configuration {
 	}
 
 	/**
-	 * Path this Configuration instance.
+	 * Path this Settings instance.
 	 * @since 0.5.0
 	 * @param {Object} data The data to patch
 	 * @param {Object} [instance=this] The reference of this instance for recursion
@@ -543,9 +543,9 @@ class Configuration {
 	 * @returns {string}
 	 */
 	toString() {
-		return `Configuration(${this.gateway.type}:${this.id})`;
+		return `Settings(${this.gateway.type}:${this.id})`;
 	}
 
 }
 
-module.exports = Configuration;
+module.exports = Settings;

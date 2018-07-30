@@ -21,7 +21,7 @@ module.exports = Structures.extend('User', User => {
 			/**
 			 * The user level settings for this context (user || default)
 			 * @since 0.5.0
-			 * @type {Configuration}
+			 * @type {Settings}
 			 */
 			this.settings = this.client.gateways.users.get(this.id, true);
 		}

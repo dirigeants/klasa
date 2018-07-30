@@ -1,4 +1,4 @@
-Something that is often asked or requested, is a custom member-based gateway; that is per member settings, so you would have different {@link Configuration} values for different guilds.
+Something that is often asked or requested, is a custom member-based gateway; that is per member settings, so you would have different {@link Settings} values for different guilds.
 
 This is simple to achieve with Klasa's advanced Gateway system. In this example, we will be make a per member gateway with a built in key for points. We will be remaking the {@tutorial CreatingPointsSystems} tutorial, for members instead of users.
 

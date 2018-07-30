@@ -150,9 +150,9 @@ module.exports = class extends Language {
 			COMMAND_CONF_RESET: (key, response) => `The key **${key}** has been reset to: \`${response}\``,
 			COMMAND_CONF_NOCHANGE: (key) => `The value for **${key}** was already that value.`,
 			COMMAND_CONF_SERVER_DESCRIPTION: 'Define per-guild configuration.',
-			COMMAND_CONF_SERVER: (key, list) => `**guild Configuration${key}**\n${list}`,
+			COMMAND_CONF_SERVER: (key, list) => `**guild Settings${key}**\n${list}`,
 			COMMAND_CONF_USER_DESCRIPTION: 'Define per-user configuration.',
-			COMMAND_CONF_USER: (key, list) => `**User Configuration${key}**\n${list}`,
+			COMMAND_CONF_USER: (key, list) => `**User Settings${key}**\n${list}`,
 			COMMAND_STATS: (memUsage, uptime, users, guilds, channels, klasaVersion, discordVersion, processVersion, message) => [
 				'= STATISTICS =',
 				'',

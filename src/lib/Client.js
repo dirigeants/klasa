@@ -238,9 +238,9 @@ class KlasaClient extends Discord.Client {
 			.register('clientStorage', this.gateways.clientStorageSchema, this.options.gateways.clientStorage);
 
 		/**
-		 * The Configuration instance that handles this client's configuration
+		 * The Settings instance that handles this client's configuration
 		 * @since 0.5.0
-		 * @type {Configuration}
+		 * @type {Settings}
 		 */
 		this.settings = null;
 
@@ -563,25 +563,25 @@ KlasaClient.defaultPermissionLevels = new PermissionLevels()
  */
 
 /**
- * Emitted when {@link Configuration#update} or {@link Configuration#reset} is run.
+ * Emitted when {@link Settings#update} or {@link Settings#reset} is run.
  * @event KlasaClient#configUpdateEntry
  * @since 0.5.0
- * @param {Configuration} entry The patched configuration entry
+ * @param {Settings} entry The patched configuration entry
  * @param {ConfigurationUpdateResultEntry[]} updated The keys that were updated
  */
 
 /**
- * Emitted when {@link Configuration#destroy} is run.
+ * Emitted when {@link Settings#destroy} is run.
  * @event KlasaClient#configDeleteEntry
  * @since 0.5.0
- * @param {Configuration} entry The entry which got deleted
+ * @param {Settings} entry The entry which got deleted
  */
 
 /**
  * Emitted when a new entry in the database has been created upon update.
  * @event KlasaClient#configCreateEntry
  * @since 0.5.0
- * @param {Configuration} entry The entry which got created
+ * @param {Settings} entry The entry which got created
  */
 
 /**

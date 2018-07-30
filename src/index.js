@@ -20,7 +20,7 @@ module.exports = {
 	ScheduledTask: require('./lib/schedule/ScheduledTask'),
 
 	// lib/settings
-	Configuration: require('./lib/settings/Configuration'),
+	Settings: require('./lib/settings/Settings'),
 	Gateway: require('./lib/settings/Gateway'),
 	GatewayDriver: require('./lib/settings/GatewayDriver'),
 	GatewayStorage: require('./lib/settings/GatewayStorage'),

@@ -21,7 +21,7 @@ module.exports = Structures.extend('Guild', Guild => {
 			/**
 			 * The guild level settings for this context (guild || default)
 			 * @since 0.5.0
-			 * @type {Configuration}
+			 * @type {Settings}
 			 */
 			this.settings = this.client.gateways.guilds.get(this.id, true);
 		}

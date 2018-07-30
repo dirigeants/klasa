@@ -35,7 +35,7 @@ module.exports = class extends Language {
 };
 ```
 
-## Configuration
+## Options
 
 | Name        | Default       | Type    | Description                            |
 | ----------- | ------------- | ------- | -------------------------------------- |
