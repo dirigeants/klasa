@@ -30,7 +30,7 @@ message.guild.settings.update(['prefix', 'language'], ['k!', 'en-ES']);
 
 > **Note**: Some types require a Guild instance to work, for example, *channels*, *roles* and *members*.
 
-> Additionally, if no 'action' option is passed to {@link ConfigurationUpdateOptions}, it'll assume the `auto` mode, which will add or remove depending on the existence of the key.
+> Additionally, if no 'action' option is passed to {@link SettingsUpdateOptions}, it'll assume the `auto` mode, which will add or remove depending on the existence of the key.
 
 ## Further Reading:
 

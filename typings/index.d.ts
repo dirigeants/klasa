@@ -468,18 +468,18 @@ declare module 'klasa' {
 		public sync(): Promise<this>;
 		public destroy(): Promise<this>;
 
-		public reset(key?: string | string[], options?: ConfigurationResetOptions): Promise<ConfigurationUpdateResult>;
-		public reset(key?: string | string[], guild?: KlasaGuild, options?: ConfigurationResetOptions): Promise<ConfigurationUpdateResult>;
-		public update(key: ObjectLiteral, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
-		public update(key: ObjectLiteral, guild?: GuildResolvable, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
-		public update(key: string, value: any, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
-		public update(key: string, value: any, guild?: GuildResolvable, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
-		public update(key: string[], value: any[], options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
-		public update(key: string[], value: any[], guild?: GuildResolvable, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
+		public reset(key?: string | string[], options?: SettingsResetOptions): Promise<SettingsUpdateResult>;
+		public reset(key?: string | string[], guild?: KlasaGuild, options?: SettingsResetOptions): Promise<SettingsUpdateResult>;
+		public update(key: ObjectLiteral, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
+		public update(key: ObjectLiteral, guild?: GuildResolvable, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
+		public update(key: string, value: any, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
+		public update(key: string, value: any, guild?: GuildResolvable, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
+		public update(key: string[], value: any[], options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
+		public update(key: string[], value: any[], guild?: GuildResolvable, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
 		public list(message: KlasaMessage, path: SchemaFolder | string): string;
 		public resolveString(message: KlasaMessage, path: SchemaPiece | string): string;
 
-		private _save(data: ConfigurationUpdateResult): Promise<void>;
+		private _save(data: SettingsUpdateResult): Promise<void>;
 		private _setValueByPath(piece: SchemaPiece, parsedID: any): { updated: boolean, old: any };
 		private _patch(data: ObjectLiteral, instance?: object, schema?: SchemaFolder): void;
 
@@ -776,11 +776,11 @@ declare module 'klasa' {
 		public abstract has(table: string, entry: string): Promise<boolean>;
 		public abstract hasTable(table: string): Promise<boolean>;
 		public abstract removeValue<T = any>(table: string, path: string): Promise<T>;
-		public abstract replace<T = any>(table: string, entry: string, data: ConfigurationUpdateResultEntry[] | [string, any][] | ObjectLiteral): Promise<T>;
-		public abstract update<T = any>(table: string, entry: string, data: ConfigurationUpdateResultEntry[] | [string, any][] | ObjectLiteral): Promise<T>;
+		public abstract replace<T = any>(table: string, entry: string, data: SettingsUpdateResultEntry[] | [string, any][] | ObjectLiteral): Promise<T>;
+		public abstract update<T = any>(table: string, entry: string, data: SettingsUpdateResultEntry[] | [string, any][] | ObjectLiteral): Promise<T>;
 		// The following is not required by SettingGateway but might be available in some providers
 		public getKeys(table: string): Promise<string[]>;
-		protected parseUpdateInput<T = ObjectLiteral>(updated: T | ConfigurationUpdateResult): T;
+		protected parseUpdateInput<T = ObjectLiteral>(updated: T | SettingsUpdateResult): T;
 
 		public shutdown(): Promise<void>;
 		public toJSON(): PieceProviderJSON;
@@ -792,10 +792,10 @@ declare module 'klasa' {
 		public abstract updateColumn<T = any>(table: string, piece: SchemaPiece): Promise<T>;
 		// Remove the abstraction from the parent class, as it's not required by SQLProviders (they use removeColumn instead)
 		public removeValue<T = any>(table: string, path: string): Promise<T>;
-		protected parseUpdateInput<T = [string, any]>(updated?: ConfigurationUpdateResultEntry[] | [string, any][] | ObjectLiteral, resolve?: boolean): T;
+		protected parseUpdateInput<T = [string, any]>(updated?: SettingsUpdateResultEntry[] | [string, any][] | ObjectLiteral, resolve?: boolean): T;
 		protected parseEntry<T = ObjectLiteral>(gateway: string | Gateway, entry: ObjectLiteral): T;
 		protected parseValue<T = any>(value: any, schemaPiece: SchemaPiece): T;
-		private _parseGatewayInput(updated: ConfigurationUpdateResultEntry[], keys: string[], values: string[], resolve?: boolean): void;
+		private _parseGatewayInput(updated: SettingsUpdateResultEntry[], keys: string[], values: string[], resolve?: boolean): void;
 	}
 
 	export abstract class Task extends Piece {
@@ -1471,24 +1471,24 @@ declare module 'klasa' {
 		| KlasaGuildChannel
 		| Snowflake;
 
-	export type ConfigurationResetOptions = {
+	export type SettingsResetOptions = {
 		avoidUnconfigurable?: boolean;
 		force?: boolean;
 	};
 
-	export type ConfigurationUpdateOptions = {
+	export type SettingsUpdateOptions = {
 		action?: 'add' | 'remove' | 'auto';
 		arrayPosition?: number;
 		avoidUnconfigurable?: boolean;
 		force?: boolean;
 	};
 
-	export type ConfigurationUpdateResult = {
+	export type SettingsUpdateResult = {
 		errors: Error[];
-		updated: ConfigurationUpdateResultEntry[];
+		updated: SettingsUpdateResultEntry[];
 	};
 
-	export type ConfigurationUpdateResultEntry = {
+	export type SettingsUpdateResultEntry = {
 		data: [string, any];
 		piece: SchemaPiece;
 	};

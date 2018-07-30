@@ -75,7 +75,7 @@ class Gateway extends GatewayStorage {
 	}
 
 	/**
-	 * The configuration that this class should make.
+	 * The Settings that this class should make.
 	 * @since 0.5.0
 	 * @type {Settings}
 	 * @readonly

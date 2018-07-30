@@ -61,4 +61,4 @@ Changing the value of `array` from a non-string datatype can result on the issue
 
 - {@tutorial UnderstandingSchemaFolders}
 - {@tutorial SettingsGatewayKeyTypes}
-- {@tutorial SettingsGatewayConfigurationUpdate}
+- {@tutorial SettingsGatewaySettingsUpdate}

@@ -9,23 +9,23 @@ const SchemaPiece = require('./SchemaPiece');
 class Settings {
 
 	/**
-	 * @typedef {Object} ConfigurationJSON
+	 * @typedef {Object} SettingsJSON
 	 */
 
 	/**
-	 * @typedef {Object} ConfigurationUpdateResult
+	 * @typedef {Object} SettingsUpdateResult
 	 * @property {Error[]} errors The errors caught from parsing
-	 * @property {ConfigurationUpdateResultEntry[]} updated The updated keys
+	 * @property {SettingsUpdateResultEntry[]} updated The updated keys
 	 */
 
 	/**
-	 * @typedef {Object} ConfigurationUpdateResultEntry
+	 * @typedef {Object} SettingsUpdateResultEntry
 	 * @property {any[]} data A tuple containing the path of the updated key and the new value
 	 * @property {SchemaPiece} piece The SchemaPiece instance that manages the updated key
 	 */
 
 	/**
-	 * @typedef {Object} ConfigurationUpdateOptions
+	 * @typedef {Object} SettingsUpdateOptions
 	 * @property {boolean} [avoidUnconfigurable=false] Whether the update should avoid unconfigurable keys
 	 * @property {('add'|'remove'|'auto')} [action='auto'] Whether the update (when using arrays) should add or remove,
 	 * leave it as 'auto' to add or remove depending on the existence of the key in the array
@@ -34,7 +34,7 @@ class Settings {
 	 */
 
 	/**
-	 * @typedef {Object} ConfigurationResetOptions
+	 * @typedef {Object} SettingsResetOptions
 	 * @property {boolean} [avoidUnconfigurable=false] Whether the update should avoid unconfigurable keys
 	 * @property {boolean} [force=false] Whether this should skip the equality checks or not
 	 */
@@ -96,7 +96,7 @@ class Settings {
 	}
 
 	/**
-	 * Get a value from the configuration. Accepts nested objects separating by dot.
+	 * Get a value from this instance. Accepts nested objects separating by dot.
 	 * @since 0.5.0
 	 * @param {string|string[]} path The path of the key's value to get from this instance
 	 * @returns {*}
@@ -178,8 +178,8 @@ class Settings {
 	 * @since 0.5.0
 	 * @param {(string|string[])} [keys] The key to reset
 	 * @param {KlasaGuild} [guild] A KlasaGuild instance for multilingual support
-	 * @param {ConfigurationResetOptions} [options={}] The options for the reset
-	 * @returns {ConfigurationUpdateResult}
+	 * @param {SettingsResetOptions} [options={}] The options for the reset
+	 * @returns {SettingsUpdateResult}
 	 * @example
 	 * // Reset all keys for this instance
 	 * Settings#reset();
@@ -226,8 +226,8 @@ class Settings {
 	 * @param {(string|Object)} keys The key to modify
 	 * @param {*} [values] The value to parse and save
 	 * @param {GuildResolvable} [guild=null] A guild resolvable
-	 * @param {ConfigurationUpdateOptions} [options={}] The options for the update
-	 * @returns {ConfigurationUpdateResult}
+	 * @param {SettingsUpdateOptions} [options={}] The options for the update
+	 * @returns {SettingsUpdateResult}
 	 * @async
 	 * @example
 	 * // Updating the value of a key
@@ -261,8 +261,8 @@ class Settings {
 			return Promise.reject(new TypeError(`Invalid value. Expected object, string or Array<string>. Got: ${getDeepTypeName(keys)}`));
 		}
 
-		// Overload update(string|string[], any|any[], ConfigurationUpdateOptions);
-		// Overload update(string|string[], any|any[], GuildResolvable, ConfigurationUpdateOptions);
+		// Overload update(string|string[], any|any[], SettingsUpdateOptions);
+		// Overload update(string|string[], any|any[], GuildResolvable, SettingsUpdateOptions);
 		// If the third argument is undefined and the second is an object literal, swap the variables.
 		if (typeof options === 'undefined' && guild && guild.constructor === Object) [guild, options] = [null, guild];
 		if (guild) guild = this.gateway._resolveGuild(guild);
@@ -360,8 +360,8 @@ class Settings {
 	 * @param {string[]} keys The keys to update
 	 * @param {Array<*>} values The values to update
 	 * @param {?KlasaGuild} guild The KlasaGuild for context in SchemaPiece#parse
-	 * @param {ConfigurationUpdateOptions} options The parse options
-	 * @returns {ConfigurationUpdateResult}
+	 * @param {SettingsUpdateOptions} options The parse options
+	 * @returns {SettingsUpdateResult}
 	 * @private
 	 */
 	async _update(keys, values, guild, options) {
@@ -398,8 +398,8 @@ class Settings {
 	 * @since 0.5.0
 	 * @param {*} value The value to parse
 	 * @param {?KlasaGuild} guild The KlasaGuild for context in SchemaPiece#parse
-	 * @param {ConfigurationUpdateOptions} options The parse options
-	 * @param {ConfigurationUpdateResult} result The updated result
+	 * @param {SettingsUpdateOptions} options The parse options
+	 * @param {SettingsUpdateResult} result The updated result
 	 * @param {GatewayGetPathResult} path The path result
 	 * @private
 	 */
@@ -421,7 +421,7 @@ class Settings {
 	/**
 	 * Save the data to the database.
 	 * @since 0.5.0
-	 * @param {ConfigurationUpdateResult} result The data to save
+	 * @param {SettingsUpdateResult} result The data to save
 	 * @private
 	 */
 	async _save({ updated }) {
@@ -443,8 +443,8 @@ class Settings {
 	 * @param {SchemaPiece} piece The SchemaPiece pointer that parses this entry
 	 * @param {string[]} route The path bits for property accessment
 	 * @param {*} parsedID The parsed value
-	 * @param {ConfigurationUpdateOptions} options The parse options
-	 * @param {ConfigurationUpdateResult} result The updated result
+	 * @param {SettingsUpdateOptions} options The parse options
+	 * @param {SettingsUpdateResult} result The updated result
 	 * @private
 	 */
 	_parseArraySingle(piece, route, parsedID, { action, arrayPosition }, { updated, errors }) {
@@ -514,7 +514,7 @@ class Settings {
 	 * @since 0.5.0
 	 * @param {Object} data The data to patch
 	 * @param {Object} [instance=this] The reference of this instance for recursion
-	 * @param {SchemaFolder} [schema=this.gateway.schema] The SchemaFolder that sets the schema for this configuration's gateway
+	 * @param {SchemaFolder} [schema=this.gateway.schema] The SchemaFolder that sets the schema for this settings' gateway
 	 * @private
 	 */
 	_patch(data, instance = this, schema = this.gateway.schema) {
@@ -531,7 +531,7 @@ class Settings {
 	/**
 	 * Returns the JSON-compatible object of this instance.
 	 * @since 0.5.0
-	 * @returns {ConfigurationJSON}
+	 * @returns {SettingsJSON}
 	 */
 	toJSON() {
 		return Object.assign({}, ...[...this.gateway.schema.keys()].map(key => ({ [key]: deepClone(this[key]) })));

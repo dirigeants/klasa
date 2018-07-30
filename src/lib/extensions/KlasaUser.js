@@ -9,7 +9,7 @@ module.exports = Structures.extend('User', User => {
 
 		/**
 		 * @typedef {external:UserJSON} KlasaUserJSON
-		 * @property {ConfigurationJSON} settings The per user settings
+		 * @property {SettingsJSON} settings The per user settings
 		 */
 
 		/**

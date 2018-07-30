@@ -9,7 +9,7 @@ module.exports = Structures.extend('Guild', Guild => {
 
 		/**
 		 * @typedef {external:GuildJSON} KlasaGuildJSON
-		 * @property {ConfigurationJSON} settings The per guild settings
+		 * @property {SettingsJSON} settings The per guild settings
 		 */
 
 		/**

@@ -137,4 +137,4 @@ async function init() {
 
 - {@tutorial UnderstandingSchemaPieces}
 - {@tutorial SettingsGatewayKeyTypes}
-- {@tutorial SettingsGatewayConfigurationUpdate}
+- {@tutorial SettingsGatewaySettingsUpdate}

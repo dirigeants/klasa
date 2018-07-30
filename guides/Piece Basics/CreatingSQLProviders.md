@@ -42,7 +42,7 @@ The example above is a boilerplate code for a Klasa SQL Provider, complementing 
 
 The {@link SQLProvider} class provides several resources to help the developer reduce the code duplication:
 
-- {@link SQLProvider#parseUpdateInput `SQLProvider#parseUpdateInput()`}: Parses SettingsGateway's and other overloads' input into an easier format. The TypeScript type for the overloads accepted are `ConfigurationUpdateResultEntry[] | [string, any][] | Object<string, *>`.
+- {@link SQLProvider#parseUpdateInput `SQLProvider#parseUpdateInput()`}: Parses SettingsGateway's and other overloads' input into an easier format. The TypeScript type for the overloads accepted are `SettingsUpdateResultEntry[] | [string, any][] | Object<string, *>`.
 - {@link SQLProvider#parseEntry `SQLProvider#parseEntry()`}: Converts plain dotted objects into parsed objects with nested object support. Uses the helper above to parse entries, and is powered by {@link SettingsGateway UnderstandingSettingsGateway} to improve security and parsing speed.
 - {@link SQLProvider#parseValue `SQLProvider#parseValue()`}: Converts a value into standard JavaScript objects, useful for SQL databases that do not cover all JavaScript primitives.
 
