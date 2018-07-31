@@ -1283,6 +1283,7 @@ declare module 'klasa' {
 		pieceDefaults?: KlasaPieceDefaults;
 		prefix?: string | string[];
 		preserveConfigs?: boolean;
+		prefixCaseInsensitive?: boolean;
 		providers?: KlasaProvidersOptions;
 		readyMessage?: (client: KlasaClient) => string;
 		regexPrefix?: RegExp;
