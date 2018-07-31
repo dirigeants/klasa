@@ -3,7 +3,7 @@ const { Monitor, Stopwatch, util: { regExpEsc } } = require('klasa');
 module.exports = class extends Monitor {
 
 	constructor(...args) {
-		super(...args);
+		super(...args, { ignoreOthers: false });
 		this.prefixes = new Map();
 		this.prefixMention = null;
 		this.prefixMentionLength = null;
@@ -11,10 +11,10 @@ module.exports = class extends Monitor {
 	}
 
 	async run(message) {
-		if (this.client.user.bot && message.guild && !message.guild.me) await message.guild.members.fetch(this.client.user);
-		if (message.guild && !message.channel.postable) return;
+		if (message.guild && !message.guild.me) await message.guild.members.fetch(this.client.user);
+		if (!message.channel.postable) return;
 		if (message.content === this.client.user.toString() || (message.guild && message.content === message.guild.me.toString())) {
-			message.sendMessage(message.language.get('PREFIX_REMINDER', message.guildConfigs.prefix));
+			message.sendLocale('PREFIX_REMINDER', [message.guildConfigs.prefix]);
 			return;
 		}
 
@@ -101,8 +101,6 @@ module.exports = class extends Monitor {
 	}
 
 	init() {
-		this.ignoreSelf = this.client.user.bot;
-		this.ignoreOthers = !this.client.user.bot;
 		this.ignoreEdits = !this.client.options.commandEditing;
 		this.prefixMention = new RegExp(`^<@!?${this.client.user.id}>`);
 		this.prefixMentionLength = this.client.user.id.length + 3;

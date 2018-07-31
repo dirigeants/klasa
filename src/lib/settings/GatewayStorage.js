@@ -59,8 +59,8 @@ class GatewayStorage {
 	 * @type {string}
 	 * @readonly
 	 */
-	get baseDir() {
-		return join(this.client.clientBaseDir, 'bwd');
+	get baseDirectory() {
+		return join(this.client.userBaseDirectory, 'bwd');
 	}
 
 	/**
@@ -70,7 +70,7 @@ class GatewayStorage {
 	 * @readonly
 	 */
 	get filePath() {
-		return join(this.client.clientBaseDir, 'bwd', `${this.type}.schema.json`);
+		return join(this.client.userBaseDirectory, 'bwd', `${this.type}.schema.json`);
 	}
 
 	/**
@@ -105,7 +105,7 @@ class GatewayStorage {
 		this.ready = true;
 
 		// Init the Schema
-		await fs.ensureDir(this.baseDir);
+		await fs.ensureDir(this.baseDirectory);
 		let schema;
 		try {
 			schema = await fs.readJSON(this.filePath);
@@ -114,7 +114,7 @@ class GatewayStorage {
 			schema = defaultSchema;
 
 			// If the file is written, there must be an issue with the file, emit an
-			// error instead of overwritting it (which would result to data loss). If
+			// error instead of overwriting it (which would result to data loss). If
 			// the file does not exist, write the default schema.
 			if (error.code === 'ENOENT') await fs.outputJSONAtomic(this.filePath, defaultSchema);
 			else this.client.emit('error', error);

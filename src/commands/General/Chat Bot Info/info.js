@@ -6,12 +6,12 @@ module.exports = class extends Command {
 		super(...args, {
 			aliases: ['details', 'what'],
 			guarded: true,
-			description: (message) => message.language.get('COMMAND_INFO_DESCRIPTION')
+			description: language => language.get('COMMAND_INFO_DESCRIPTION')
 		});
 	}
 
 	async run(message) {
-		return message.sendMessage(message.language.get('COMMAND_INFO'));
+		return message.sendLocale('COMMAND_INFO');
 	}
 
 };

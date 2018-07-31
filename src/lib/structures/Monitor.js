@@ -15,8 +15,8 @@ class Monitor extends Piece {
 	 * @property {boolean} [ignoreOthers=true] Whether the monitor ignores others or not
 	 * @property {boolean} [ignoreWebhooks=true] Whether the monitor ignores webhooks or not
 	 * @property {boolean} [ignoreEdits=true] Whether the monitor ignores edits or not
-	 * @property {boolean} [ignoreBlacklistedUsers=true] Wether the monitor should ignore blacklisted users
-	 * @property {boolean} [ignoreBlacklistedGuilds=true] Wether the monitor should ignore blacklisted guilds
+	 * @property {boolean} [ignoreBlacklistedUsers=true] Wether the monitor should ignore blacklisted users or not
+	 * @property {boolean} [ignoreBlacklistedGuilds=true] Wether the monitor should ignore blacklisted guilds or not
 	 */
 
 	/**
@@ -106,7 +106,7 @@ class Monitor extends Piece {
 			!(this.ignoreWebhooks && message.webhookID) &&
 			!(this.ignoreEdits && message._edits.length) &&
 			!(this.ignoreBlacklistedUsers && this.client.configs.userBlacklist.includes(message.author.id)) &&
-			!(this.ignoreBlacklistedGuilds && this.client.configs.guildBlacklist.includes(message.guild.id));
+			!(this.ignoreBlacklistedGuilds && message.guild && this.client.configs.guildBlacklist.includes(message.guild.id));
 	}
 
 	/**

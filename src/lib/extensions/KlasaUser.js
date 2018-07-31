@@ -8,6 +8,11 @@ module.exports = Structures.extend('User', User => {
 	class KlasaUser extends User {
 
 		/**
+		 * @typedef {external:UserJSON} KlasaUserJSON
+		 * @property {ConfigurationJSON} configs The per user configs
+		 */
+
+		/**
 		 * @param {...*} args Normal D.JS User args
 		 */
 		constructor(...args) {
@@ -24,7 +29,7 @@ module.exports = Structures.extend('User', User => {
 		/**
 		 * Returns the JSON-compatible object of this instance.
 		 * @since 0.5.0
-		 * @returns {Object}
+		 * @returns {KlasaUserJSON}
 		 */
 		toJSON() {
 			return { ...super.toJSON(), configs: this.configs };

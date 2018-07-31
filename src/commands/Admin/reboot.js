@@ -6,12 +6,12 @@ module.exports = class extends Command {
 		super(...args, {
 			permissionLevel: 10,
 			guarded: true,
-			description: (message) => message.language.get('COMMAND_REBOOT_DESCRIPTION')
+			description: language => language.get('COMMAND_REBOOT_DESCRIPTION')
 		});
 	}
 
 	async run(message) {
-		await message.sendMessage(message.language.get('COMMAND_REBOOT')).catch(err => this.client.emit('error', err));
+		await message.sendLocale('COMMAND_REBOOT').catch(err => this.client.emit('error', err));
 		process.exit();
 	}
 

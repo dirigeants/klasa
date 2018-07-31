@@ -6,7 +6,7 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			permissionLevel: 10,
-			description: (message) => message.language.get('COMMAND_BLACKLIST_DESCRIPTION'),
+			description: language => language.get('COMMAND_BLACKLIST_DESCRIPTION'),
 			usage: '<User:user|Guild:guild|guild:str> [...]',
 			usageDelim: ' ',
 			guarded: true
@@ -31,7 +31,7 @@ module.exports = class extends Command {
 			else usersRemoved.push(userOrGuild.username);
 		}
 
-		return message.sendMessage(message.language.get('COMMAND_BLACKLIST_SUCCESS', usersAdded, usersRemoved, guildsAdded, guildsRemoved));
+		return message.sendLocale('COMMAND_BLACKLIST_SUCCESS', [usersAdded, usersRemoved, guildsAdded, guildsRemoved]);
 	}
 
 };

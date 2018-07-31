@@ -47,16 +47,16 @@ class Store extends Collection {
 		 * @readonly
 		 */
 		Object.defineProperty(this, 'holds', { value: holds });
-	}
 
-	/**
-	 * The directory of commands in Klasa relative to where its installed.
-	 * @since 0.0.1
-	 * @type {string}
-	 * @readonly
-	 */
-	get coreDir() {
-		return join(this.client.coreBaseDir, this.name);
+		/**
+		 * The core directories pieces of this store can hold
+		 * @since 0.5.0
+		 * @name Store#coreDirectories
+		 * @type {Set<string>}
+		 * @readonly
+		 * @private
+		 */
+		Object.defineProperty(this, 'coreDirectories', { value: new Set() });
 	}
 
 	/**
@@ -65,8 +65,20 @@ class Store extends Collection {
 	 * @type {string}
 	 * @readonly
 	 */
-	get userDir() {
-		return join(this.client.clientBaseDir, this.name);
+	get userDirectory() {
+		return join(this.client.userBaseDirectory, this.name);
+	}
+
+	/**
+	 * Registers a core directory to check for pieces
+	 * @since 0.5.0
+	 * @param {string} directory The directory to check for core pieces
+	 * @returns {this}
+	 * @protected
+	 */
+	registerCoreDirectory(directory) {
+		this.coreDirectories.add(directory + this.name);
+		return this;
 	}
 
 	/**
@@ -81,18 +93,17 @@ class Store extends Collection {
 	/**
 	 * Loads a piece into Klasa so it can be saved in this store.
 	 * @since 0.0.1
-	 * @param {string|string[]} file A string or array of strings showing where the file is located.
-	 * @param {boolean} [core=false] If the file is located in the core directory or not
+	 * @param {string} directory The directory the file is located in
+	 * @param {string[]} file A string or array of strings showing where the file is located.
 	 * @returns {?Piece}
 	 */
-	load(file, core = false) {
-		const dir = core ? this.coreDir : this.userDir;
-		const loc = join(dir, ...file);
+	load(directory, file) {
+		const loc = join(directory, ...file);
 		let piece = null;
 		try {
 			const Piece = (req => req.default || req)(require(loc));
 			if (!isClass(Piece)) throw new TypeError(`Failed to load file '${loc}'. The exported structure is not a class.`);
-			piece = this.set(new Piece(this.client, this, file, core));
+			piece = this.set(new Piece(this.client, this, file, directory));
 		} catch (error) {
 			this.client.emit('wtf', `Failed to load file '${loc}'. Error:\n${error.stack || error}`);
 		}
@@ -108,7 +119,9 @@ class Store extends Collection {
 	 */
 	async loadAll() {
 		this.clear();
-		if (!this.client.options.disabledCorePieces.includes(this.name)) await Store.walk(this, true);
+		if (!this.client.options.disabledCorePieces.includes(this.name)) {
+			for (const directory of this.coreDirectories) await Store.walk(this, directory);
+		}
 		await Store.walk(this);
 		return this.size;
 	}
@@ -165,15 +178,16 @@ class Store extends Collection {
 	 * Walks our directory of Pieces for the user and core directories.
 	 * @since 0.0.1
 	 * @param {Store} store The store we're loading into
-	 * @param {boolean} [core=false] If the file is located in the core directory or not
-	 * @returns {void}
+	 * @param {string} [directory=store.userDirectory] The directory to walk in
+	 * @returns {Array<Piece>}
+	 * @private
 	 */
-	static async walk(store, core = false) {
-		const dir = core ? store.coreDir : store.userDir;
-		const files = await fs.scan(dir, { filter: (stats, path) => stats.isFile() && extname(path) === '.js' }).catch(() => { fs.ensureDir(dir).catch(err => store.client.emit('error', err)); });
+	static async walk(store, directory = store.userDirectory) {
+		const files = await fs.scan(directory, { filter: (stats, path) => stats.isFile() && extname(path) === '.js' })
+			.catch(() => { fs.ensureDir(directory).catch(err => store.client.emit('error', err)); });
 		if (!files) return true;
 
-		return Promise.all([...files.keys()].map(file => store.load(relative(dir, file).split(sep), core)));
+		return Promise.all([...files.keys()].map(file => store.load(directory, relative(directory, file).split(sep))));
 	}
 
 }

@@ -2,6 +2,7 @@ const { Permissions } = require('discord.js');
 const Piece = require('./base/Piece');
 const Usage = require('../usage/Usage');
 const CommandUsage = require('../usage/CommandUsage');
+const { isFunction } = require('../util/util');
 
 /**
  * Base class for all Klasa Commands. See {@tutorial CreatingCommands} for more information how to use this class
@@ -20,7 +21,7 @@ class Command extends Piece {
 	 * @property {number} [cooldown=0] The amount of time before the user can run the command again in seconds
 	 * @property {boolean} [deletable=false] If the responses should be deleted if the triggering message is deleted
 	 * @property {(string|Function)} [description=''] The help description for the command
-	 * @property {(string|Function)} [extendedHelp=message.language.get('COMMAND_HELP_NO_EXTENDED')] Extended help strings
+	 * @property {(string|Function)} [extendedHelp=language.get('COMMAND_HELP_NO_EXTENDED')] Extended help strings
 	 * @property {boolean} [guarded=false] If the command can be disabled on a guild level (does not effect global disable)
 	 * @property {boolean} [nsfw=false] If the command should only run in nsfw channels
 	 * @property {number} [permissionLevel=0] The required permission level to use the command
@@ -28,7 +29,7 @@ class Command extends Piece {
 	 * @property {number} [promptTime=30000] The time allowed for re-prompting of this command
 	 * @property {boolean} [quotedStringSupport=false] Whether args for this command should not deliminated inside quotes
 	 * @property {string[]} [requiredConfigs=[]] The required guild configs to use this command
-	 * @property {string[]} [runIn=['text','dm','group']] What channel types the command should run in
+	 * @property {string[]} [runIn=['text','dm']] What channel types the command should run in
 	 * @property {boolean} [subcommands=false] Whether to enable sub commands or not
 	 * @property {string} [usage=''] The usage string for the command
 	 * @property {?string} [usageDelim=undefined] The string to delimit the command input for usage
@@ -90,19 +91,23 @@ class Command extends Piece {
 		 * The description of the command
 		 * @since 0.0.1
 		 * @type {(string|Function)}
-		 * @param {KlasaMessage} message The message used to trigger this command
+		 * @param {Language} language The language for the description
 		 * @returns {string}
 		 */
-		this.description = options.description;
+		this.description = isFunction(options.description) ?
+			(language = this.client.langauges.default) => options.description(language) :
+			options.description;
 
 		/**
 		 * The extended help for the command
 		 * @since 0.0.1
 		 * @type {(string|Function)}
-		 * @param {KlasaMessage} message The message used to trigger this command
+		 * @param {Language} language The language for the extended help
 		 * @returns {string}
 		 */
-		this.extendedHelp = options.extendedHelp || (message => message.language.get('COMMAND_HELP_NO_EXTENDED'));
+		this.extendedHelp = isFunction(options.extendedHelp) ?
+			(language = this.client.langauges.default) => options.extendedHelp(language) :
+			options.extendedHelp;
 
 		/**
 		 * The full category for the command
@@ -300,8 +305,8 @@ class Command extends Piece {
 			category: this.category,
 			cooldown: this.cooldown,
 			deletable: this.deletable,
-			description: typeof this.description === 'function' ? this.description({ language: this.client.languages.default }) : this.description,
-			extendedHelp: typeof this.extendedHelp === 'function' ? this.extendedHelp({ language: this.client.languages.default }) : this.extendedHelp,
+			description: isFunction(this.description) ? this.description() : this.description,
+			extendedHelp: isFunction(this.extendedHelp) ? this.extendedHelp() : this.extendedHelp,
 			fullCategory: this.fullCategory,
 			guarded: this.guarded,
 			nsfw: this.nsfw,

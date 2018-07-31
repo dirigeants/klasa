@@ -8,11 +8,10 @@ class Schema {
 	 * @since 0.5.0
 	 * @param {KlasaClient} client The client which initialized this instance
 	 * @param {Gateway} gateway The Gateway that manages this schema instance
-	 * @param {Object} options The object containing the properties for this schema instance
 	 * @param {?Schema} parent The parent which holds this instance
 	 * @param {string} key The name of this key
 	 */
-	constructor(client, gateway, options, parent, key) {
+	constructor(client, gateway, parent, key) {
 		/**
 		 * The Klasa client.
 		 * @since 0.5.0
@@ -62,10 +61,10 @@ class Schema {
 		 * Whether the schema instance is initialized or not.
 		 * @since 0.5.0
 		 * @type {boolean}
-		 * @name Schema#_inited
+		 * @name Schema#_initialized
 		 * @private
 		 */
-		Object.defineProperty(this, '_inited', { value: false, writable: true });
+		Object.defineProperty(this, '_initialized', { value: false, writable: true });
 	}
 
 }

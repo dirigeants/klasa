@@ -1,4 +1,4 @@
-const { isObject, deepClone, tryParse, toTitleCase, arraysStrictEquals, getDeepTypeName, objectToTuples } = require('../util/util');
+const { isObject, deepClone, toTitleCase, arraysStrictEquals, getDeepTypeName, objectToTuples } = require('../util/util');
 const SchemaFolder = require('./SchemaFolder');
 const SchemaPiece = require('./SchemaPiece');
 
@@ -7,6 +7,10 @@ const SchemaPiece = require('./SchemaPiece');
  * The Configuration class that stores the cache for each entry in SettingsGateway.
  */
 class Configuration {
+
+	/**
+	 * @typedef {Object} ConfigurationJSON
+	 */
 
 	/**
 	 * @typedef {Object} ConfigurationUpdateResult
@@ -77,8 +81,9 @@ class Configuration {
 		 */
 		Object.defineProperty(this, '_existsInDB', { value: null, writable: true });
 
-		Configuration._merge(data, this.gateway.schema);
-		for (const key of this.gateway.schema.keys()) this[key] = data[key];
+		const { defaults } = this.gateway;
+		for (const key of this.gateway.schema.keys()) this[key] = defaults[key];
+		this._patch(data);
 	}
 
 	/**
@@ -91,14 +96,22 @@ class Configuration {
 	}
 
 	/**
-	 * Get a value from the configuration. Admits nested objects separating by comma.
+	 * Get a value from the configuration. Accepts nested objects separating by dot.
 	 * @since 0.5.0
-	 * @param {string} key The key to get from this instance
+	 * @param {string|string[]} path The path of the key's value to get from this instance
 	 * @returns {*}
 	 */
-	get(key) {
-		if (!key.includes('.')) return this.gateway.schema.has(key) ? this[key] : undefined;
-		return this._get(key.split('.'), true);
+	get(path) {
+		const route = typeof path === 'string' ? path.split('.') : path;
+		let refThis = this; // eslint-disable-line consistent-this
+		let refSchema = this.gateway.schema;
+		for (const key of route) {
+			if (refSchema.type !== 'Folder' || !refSchema.has(key)) return undefined;
+			refThis = refThis[key];
+			refSchema = refSchema[key];
+		}
+
+		return refThis;
 	}
 
 	/**
@@ -107,9 +120,7 @@ class Configuration {
 	 * @returns {Configuration}
 	 */
 	clone() {
-		const clone = this.gateway.Configuration._clone(this, this.gateway.schema);
-		clone.id = this.id;
-		return new this.gateway.Configuration(this.gateway, clone);
+		return new this.constructor(this.gateway, this);
 	}
 
 	/**
@@ -132,7 +143,18 @@ class Configuration {
 		if (syncStatus) return syncStatus;
 
 		// If it's not currently synchronizing, create a new sync status for the sync queue
-		const sync = this._sync();
+		const sync = this.gateway.provider.get(this.gateway.type, this.id).then(data => {
+			if (data) {
+				if (!this._existsInDB) this._existsInDB = true;
+				this._patch(data);
+			} else {
+				this._existsInDB = false;
+			}
+
+			this.gateway.syncQueue.delete(this.id);
+			return this;
+		});
+
 		this.gateway.syncQueue.set(this.id, sync);
 		return sync;
 	}
@@ -285,10 +307,9 @@ class Configuration {
 		if (folders.length) array.push('= Folders =', ...folders.sort(), '');
 		if (keysTypes.length) {
 			for (const keyType of keysTypes.sort()) {
-				keys[keyType].sort();
-				array.push(`= ${toTitleCase(keyType)}s =`);
-				for (const key of keys[keyType]) array.push(`${key.padEnd(longest)} :: ${this.resolveString(message, folder[key])}`);
-				array.push('');
+				array.push(`= ${toTitleCase(keyType)}s =`,
+					...keys[keyType].sort().map(key => `${key.padEnd(longest)} :: ${this.resolveString(message, folder[key])}`),
+					'');
 			}
 		}
 		return array.join('\n');
@@ -331,44 +352,6 @@ class Configuration {
 
 		if (piece.array) return `[ ${value.map(resolver).join(' | ')} ]`;
 		return resolver(value);
-	}
-
-	/**
-	 * Sync the entry with the database
-	 * @since 0.5.0
-	 * @returns {this}
-	 */
-	async _sync() {
-		const data = await this.gateway.provider.get(this.gateway.type, this.id);
-		if (data) {
-			if (!this._existsInDB) this._existsInDB = true;
-			this._patch(data);
-		} else {
-			this._existsInDB = false;
-		}
-
-		this.gateway.syncQueue.delete(this.id);
-		return this;
-	}
-
-	/**
-	 * Get a value from the cache.
-	 * @since 0.5.0
-	 * @param {(string|string[])} route The route to get
-	 * @param {boolean} piece Whether the get should resolve a piece or a folder
-	 * @returns {*}
-	 * @private
-	 */
-	_get(route, piece = true) {
-		if (typeof route === 'string') route = route.split('.');
-		let refCache = this, refSchema = this.gateway.schema; // eslint-disable-line consistent-this
-		for (const key of route) {
-			if (refSchema.type !== 'Folder' || !refSchema.has(key)) return undefined;
-			refCache = refCache[key];
-			refSchema = refSchema[key];
-		}
-
-		return piece && refSchema.type !== 'Folder' ? refCache : undefined;
 	}
 
 	/**
@@ -466,7 +449,7 @@ class Configuration {
 	 */
 	_parseArraySingle(piece, route, parsedID, { action, arrayPosition }, { updated, errors }) {
 		const lengthErrors = errors.length;
-		const array = this._get(route, true);
+		const array = this.get(route);
 		if (typeof arrayPosition === 'number') {
 			if (arrayPosition >= array.length) errors.push(new Error(`The option arrayPosition should be a number between 0 and ${array.length - 1}`));
 			else array[arrayPosition] = parsedID;
@@ -530,24 +513,28 @@ class Configuration {
 	 * Path this Configuration instance.
 	 * @since 0.5.0
 	 * @param {Object} data The data to patch
+	 * @param {Object} [instance=this] The reference of this instance for recursion
+	 * @param {SchemaFolder} [schema=this.gateway.schema] The SchemaFolder that sets the schema for this configuration's gateway
 	 * @private
 	 */
-	_patch(data) {
-		const { schema } = this.gateway;
+	_patch(data, instance = this, schema = this.gateway.schema) {
+		if (typeof data !== 'object' || data === null) return;
 		for (const [key, piece] of schema) {
 			const value = data[key];
-			if (value === undefined || value === null) continue;
-			this[key] = piece.type === 'Folder' ? Configuration._patch(this[key], value, piece) : value;
+			if (value === undefined) continue;
+			if (value === null) instance[key] = deepClone(piece.defaults);
+			else if (piece.type === 'Folder') this._patch(value, instance[key], piece);
+			else instance[key] = value;
 		}
 	}
 
 	/**
 	 * Returns the JSON-compatible object of this instance.
 	 * @since 0.5.0
-	 * @returns {Object}
+	 * @returns {ConfigurationJSON}
 	 */
 	toJSON() {
-		return Configuration._clone(this, this.gateway.schema);
+		return Object.assign({}, ...[...this.gateway.schema.keys()].map(key => ({ [key]: deepClone(this[key]) })));
 	}
 
 	/**
@@ -557,69 +544,6 @@ class Configuration {
 	 */
 	toString() {
 		return `Configuration(${this.gateway.type}:${this.id})`;
-	}
-
-	/**
-	 * Assign data to the Configuration.
-	 * @since 0.5.0
-	 * @param {Object} data The data contained in the group
-	 * @param {(SchemaFolder|SchemaPiece)} schema A SchemaFolder or a SchemaPiece instance
-	 * @returns {Object}
-	 * @private
-	 */
-	static _merge(data, schema) {
-		for (const [key, piece] of schema) {
-			if (piece.type === 'Folder') {
-				if (!data[key]) data[key] = {};
-				data[key] = Configuration._merge(data[key], piece);
-			} else if (typeof data[key] === 'undefined' || data[key] === null) {
-				data[key] = deepClone(piece.default);
-			} else if (piece.array) {
-				if (typeof data[key] === 'string') data[key] = tryParse(data[key]);
-				if (Array.isArray(data[key])) continue;
-				piece.client.emit('wtf',
-					new TypeError(`${piece.path} | Expected an array, null, or undefined. Got: ${Object.prototype.toString.call(data[key])}`));
-			}
-		}
-
-		return data;
-	}
-
-	/**
-	 * Clone configs.
-	 * @since 0.5.0
-	 * @param {Object} data The data to clone
-	 * @param {SchemaFolder} schema A SchemaFolder instance
-	 * @returns {Object}
-	 * @private
-	 */
-	static _clone(data, schema) {
-		const clone = {};
-
-		for (const [key, piece] of schema) {
-			clone[key] = piece.type === 'Folder' ? Configuration._clone(data[key], piece) : deepClone(data[key]);
-		}
-
-		return clone;
-	}
-
-	/**
-	 * Patch an object.
-	 * @since 0.5.0
-	 * @param {Object} inst The reference of the Configuration instance
-	 * @param {Object} data The original object
-	 * @param {SchemaFolder} schema A SchemaFolder instance
-	 * @returns {Object}
-	 * @private
-	 */
-	static _patch(inst, data, schema) {
-		for (const [key, piece] of schema) {
-			const value = data[key];
-			if (value === undefined || value === null) continue;
-			inst[key] = piece.type === 'Folder' ? Configuration._patch(inst[key], value, piece) : value;
-		}
-
-		return inst;
 	}
 
 }

@@ -1,4 +1,4 @@
-const { Command, util } = require('klasa');
+const { Command, util: { isFunction } } = require('klasa');
 
 module.exports = class extends Command {
 
@@ -6,7 +6,7 @@ module.exports = class extends Command {
 		super(...args, {
 			aliases: ['commands'],
 			guarded: true,
-			description: (message) => message.language.get('COMMAND_HELP_DESCRIPTION'),
+			description: language => language.get('COMMAND_HELP_DESCRIPTION'),
 			usage: '(Command:command)'
 		});
 
@@ -17,14 +17,13 @@ module.exports = class extends Command {
 	}
 
 	async run(message, [command]) {
-		const method = this.client.user.bot ? 'author' : 'channel';
 		if (command) {
 			const info = [
 				`= ${command.name} = `,
-				util.isFunction(command.description) ? command.description(message) : command.description,
+				isFunction(command.description) ? command.description(message.language) : command.description,
 				message.language.get('COMMAND_HELP_USAGE', command.usage.fullUsage(message)),
 				message.language.get('COMMAND_HELP_EXTENDED'),
-				util.isFunction(command.extendedHelp) ? command.extendedHelp(message) : command.extendedHelp
+				isFunction(command.extendedHelp) ? command.extendedHelp(message.language) : command.extendedHelp
 			].join('\n');
 			return message.sendMessage(info, { code: 'asciidoc' });
 		}
@@ -38,9 +37,9 @@ module.exports = class extends Command {
 			helpMessage.push('```', '\u200b');
 		}
 
-		return message[method].send(helpMessage, { split: { char: '\u200b' } })
-			.then(() => { if (message.channel.type !== 'dm' && this.client.user.bot) message.sendMessage(message.language.get('COMMAND_HELP_DM')); })
-			.catch(() => { if (message.channel.type !== 'dm' && this.client.user.bot) message.sendMessage(message.language.get('COMMAND_HELP_NODM')); });
+		return message.author.send(helpMessage, { split: { char: '\u200b' } })
+			.then(() => { if (message.channel.type !== 'dm') message.sendLocale('COMMAND_HELP_DM'); })
+			.catch(() => { if (message.channel.type !== 'dm') message.sendLocale('COMMAND_HELP_NODM'); });
 	}
 
 	async buildHelp(message) {
@@ -54,7 +53,7 @@ module.exports = class extends Command {
 				.then(() => {
 					if (!help.hasOwnProperty(command.category)) help[command.category] = {};
 					if (!help[command.category].hasOwnProperty(command.subCategory)) help[command.category][command.subCategory] = [];
-					const description = typeof command.description === 'function' ? command.description(message) : command.description;
+					const description = isFunction(command.description) ? command.description(message.language) : command.description;
 					help[command.category][command.subCategory].push(`${message.guildConfigs.prefix}${command.name.padEnd(longest)} :: ${description}`);
 				})
 				.catch(() => {

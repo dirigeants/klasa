@@ -184,12 +184,14 @@ module.exports = Structures.extend('Message', Message => {
 
 			for (let i = 0; i < max; i++) {
 				if (i >= _content.length) responses[i].delete();
-				else if (responses.length > i) promises.push(responses[i].edit(_content[i], _options).then(() => responses[i]));
+				else if (responses.length > i) promises.push(responses[i].edit(_content[i], _options));
 				else promises.push(this.channel.send(_content[i], _options));
 			}
 
-			this._responses = await Promise.all(promises);
-			return this._responses.length === 1 ? this._responses[0] : this._responses;
+			const newResponses = await Promise.all(promises);
+			this._responses = _content.map((val, i) => responses[i] || newResponses[i]);
+
+			return newResponses.length === 1 ? newResponses[0] : newResponses;
 		}
 
 		/**
@@ -225,6 +227,22 @@ module.exports = Structures.extend('Message', Message => {
 		 */
 		send(content, options) {
 			return this.sendMessage(content, options);
+		}
+
+		/**
+		 * Sends a message that will be editable via command editing (if nothing is attached)
+		 * @since 0.5.0
+		 * @param {string} key The Language key to send
+		 * @param {Array<*>} [localeArgs] The language arguments to pass
+		 * @param {external:MessageOptions} [options] The D.JS message options plus Language arguments
+		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
+		 */
+		sendLocale(key, localeArgs = [], options = {}) {
+			if (!Array.isArray(localeArgs)) {
+				options = localeArgs;
+				localeArgs = [];
+			}
+			return this.sendMessage(this.language.get(key, ...localeArgs), options);
 		}
 
 		/**
