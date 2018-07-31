@@ -59,14 +59,15 @@ module.exports = class extends Monitor {
 			if (results) return { length: results[0].length, regex: this.client.options.regexPrefix };
 		}
 		const prefix = message.guildConfigs.prefix || this.client.options.prefix;
+		const content = this.client.options.prefixCaseInsensitive ? message.content.toLowerCase() : message.content;
 		if (Array.isArray(prefix)) {
 			for (let i = prefix.length - 1; i >= 0; i--) {
 				const testingPrefix = this.prefixes.get(prefix[i]) || this.generateNewPrefix(prefix[i]);
-				if (testingPrefix.regex.test(this.client.options.prefixCaseInsensitive ? message.content.toLowerCase() : message.content)) return testingPrefix;
+				if (testingPrefix.regex.test(content)) return testingPrefix;
 			}
 		} else if (prefix) {
 			const testingPrefix = this.prefixes.get(prefix) || this.generateNewPrefix(prefix);
-			if (testingPrefix.regex.test(this.client.options.prefixCaseInsensitive ? message.content.toLowerCase() : message.content)) return testingPrefix;
+			if (testingPrefix.regex.test(content)) return testingPrefix;
 		}
 		return false;
 	}
