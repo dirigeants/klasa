@@ -61,6 +61,7 @@ class KlasaClient extends Discord.Client {
 	 * @property {RegExp} [regexPrefix] The regular expression prefix if one is provided
 	 * @property {KlasaClientOptionsSchedule} [schedule={}] The options for the internal clock module that runs Schedule
 	 * @property {boolean} [typing=false] Whether the bot should type while processing commands
+	 * @property {boolean} [prefixCaseInsensitive=false] Wether the bot should respond to case insensitive prefix or not
 	 */
 
 	/**
