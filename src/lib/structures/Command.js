@@ -95,7 +95,7 @@ class Command extends Piece {
 		 * @returns {string}
 		 */
 		this.description = isFunction(options.description) ?
-			(language = this.client.langauges.default) => options.description(language) :
+			(language = this.client.languages.default) => options.description(language) :
 			options.description;
 
 		/**
@@ -106,7 +106,7 @@ class Command extends Piece {
 		 * @returns {string}
 		 */
 		this.extendedHelp = isFunction(options.extendedHelp) ?
-			(language = this.client.langauges.default) => options.extendedHelp(language) :
+			(language = this.client.languages.default) => options.extendedHelp(language) :
 			options.extendedHelp;
 
 		/**
