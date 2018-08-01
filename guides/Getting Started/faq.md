@@ -37,7 +37,7 @@ You should never expose your token to anyone for any reason. To hide it from Git
 
  Then, copy your token into the field.
 
-1. In your `.gitignore` file (create one if you don't have it), add `config.json` to it. This will tell Git to ignore it.
+1. In your `.gitignore` file (create one if you don't have it), add `config.json` to it. For information on what the `.gitignore` file is and what it does, visit: https://git-scm.com/docs/gitignore
 
 1. At the top of your `app.js` file, import the token from the `config.json` like so:
 
