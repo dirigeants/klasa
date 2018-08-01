@@ -14,6 +14,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#379](https://github.com/dirigeants/klasa/pull/379)] Added `prefixCaseInsensitive` option in `KlasaClientOptions`. (AdityaTD)
 - [[#362](https://github.com/dirigeants/klasa/pull/362)] Added `GatewayDriverRegisterOptions.syncArg` for custom arguments for `GatewayDriver#sync()`'s call. (kyranet)
 - [[#362](https://github.com/dirigeants/klasa/pull/362)] Added `GatewayDriver#@@iterator`. (kyranet)
 - [[#331](https://github.com/dirigeants/klasa/pull/331)] Added `Gateway#syncQueue` for centralized lazy load cache and memory reduction. (kyranet)

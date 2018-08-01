@@ -39,6 +39,7 @@ exports.DEFAULTS = {
 		},
 		// eslint-disable-next-line no-process-env
 		production: process.env.NODE_ENV === 'production',
+		prefixCaseInsensitive: false,
 		providers: { default: 'json' },
 		pieceDefaults: {
 			arguments: {

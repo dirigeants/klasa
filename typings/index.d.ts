@@ -4,6 +4,7 @@ declare module 'klasa' {
 
 	import {
 		BufferResolvable,
+		CategoryChannel as DiscordCategoryChannel,
 		Channel,
 		Client,
 		ClientApplication,
@@ -14,8 +15,10 @@ declare module 'klasa' {
 		Collection,
 		DMChannel as DiscordDMChannel,
 		Emoji,
+		EmojiResolvable,
 		GroupDMChannel as DiscordGroupDMChannel,
 		Guild as DiscordGuild,
+		GuildChannel as DiscordGuildChannel,
 		GuildMember,
 		Message as DiscordMessage,
 		MessageAttachment,
@@ -23,18 +26,17 @@ declare module 'klasa' {
 		MessageEmbed,
 		MessageOptions,
 		MessageReaction,
+		Permissions,
+		PermissionResolvable,
 		ReactionCollector,
 		Role,
 		Snowflake,
 		StringResolvable,
+		TextChannel as DiscordTextChannel,
 		User as DiscordUser,
 		UserResolvable,
-		TextChannel as DiscordTextChannel,
 		VoiceChannel as DiscordVoiceChannel,
-		CategoryChannel as DiscordCategoryChannel,
-		WebhookClient,
-		GuildChannel as DiscordGuildChannel,
-		EmojiResolvable
+		WebhookClient
 	} from 'discord.js';
 
 	export const version: string;
@@ -675,7 +677,7 @@ declare module 'klasa' {
 		public readonly usageDelim: string;
 		public readonly usageString: string;
 		public aliases: string[];
-		public requiredPermissions: string[];
+		public requiredPermissions: Permissions;
 		public bucket: number;
 		public cooldown: number;
 		public deletable: boolean;
@@ -696,7 +698,7 @@ declare module 'klasa' {
 
 		public createCustomResolver(type: string, resolver: ArgResolverCustomMethod): this;
 		public customizeResponse(name: string, response: string | ((message: KlasaMessage, possible: Possible) => string)): this;
-		public definePrompt(usageString: string, usageDelim: string): Usage;
+		public definePrompt(usageString: string, usageDelim?: string): Usage;
 		public run(message: KlasaMessage, params: any[]): Promise<KlasaMessage | KlasaMessage[] | null>;
 		public toJSON(): PieceCommandJSON;
 	}
@@ -1102,7 +1104,7 @@ declare module 'klasa' {
 	}
 
 	export class RichDisplay {
-		public constructor(embed: MessageEmbed);
+		public constructor(embed?: MessageEmbed);
 		public embedTemplate: MessageEmbed;
 		public pages: MessageEmbed[];
 		public infoPage: MessageEmbed | null;
@@ -1126,7 +1128,7 @@ declare module 'klasa' {
 	}
 
 	export class RichMenu extends RichDisplay {
-		public constructor(embed: MessageEmbed);
+		public constructor(embed?: MessageEmbed);
 		public emojis: RichMenuEmojisObject;
 		public paginated: boolean;
 		public options: MenuOption[];
@@ -1283,6 +1285,7 @@ declare module 'klasa' {
 		pieceDefaults?: KlasaPieceDefaults;
 		prefix?: string | string[];
 		preserveSettings?: boolean;
+		prefixCaseInsensitive?: boolean;
 		providers?: KlasaProvidersOptions;
 		readyMessage?: (client: KlasaClient) => string;
 		regexPrefix?: RegExp;
@@ -1323,7 +1326,7 @@ declare module 'klasa' {
 	} & ObjectLiteral;
 
 	// Parsers
-	type ArgResolverCustomMethod = (arg: string, possible: Possible, message: KlasaMessage, params: string[]) => Promise<any>;
+	type ArgResolverCustomMethod = (arg: string, possible: Possible, message: KlasaMessage, params: string[]) => any;
 
 	type Constants = {
 		DEFAULTS: {
@@ -1542,12 +1545,12 @@ declare module 'klasa' {
 	export type CommandOptions = {
 		aliases?: string[];
 		autoAliases?: boolean;
-		requiredPermissions?: string[];
+		requiredPermissions?: PermissionResolvable;
 		bucket?: number;
 		cooldown?: number;
 		deletable?: boolean;
-		description?: string | ((language: Language) => string);
-		extendedHelp?: string | ((language: Language) => string);
+		description?: string | string[] | ((language: Language) => string | string[]);
+		extendedHelp?: string | string[] | ((language: Language) => string | string[]);
 		guarded?: boolean;
 		nsfw?: boolean;
 		permissionLevel?: number;

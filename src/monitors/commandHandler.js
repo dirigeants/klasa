@@ -8,6 +8,7 @@ module.exports = class extends Monitor {
 		this.prefixMention = null;
 		this.prefixMentionLength = null;
 		this.nick = new RegExp('^<@!');
+		this.prefixFlags = this.client.options.prefixCaseInsensitive ? 'i' : '';
 	}
 
 	async run(message) {
@@ -72,7 +73,7 @@ module.exports = class extends Monitor {
 	}
 
 	generateNewPrefix(prefix) {
-		const prefixObject = { length: prefix.length, regex: new RegExp(`^${regExpEsc(prefix)}`) };
+		const prefixObject = { length: prefix.length, regex: new RegExp(`^${regExpEsc(prefix)}`, this.prefixFlags) };
 		this.prefixes.set(prefix, prefixObject);
 		return prefixObject;
 	}
