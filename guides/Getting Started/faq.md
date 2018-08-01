@@ -61,8 +61,8 @@ require('dotenv').load();
 
 1. Create a file called `.env` next  to your `app.js`, and put this in it:
 
-```
-CLIENT_TOKEN=
+```env
+CLIENT_TOKEN = ""
 ```
 
 Place your token after the `=`.
