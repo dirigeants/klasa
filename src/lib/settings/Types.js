@@ -17,7 +17,8 @@ class SchemaTypes extends Map {
 			.add('role', require('./types/Role'))
 			.add('string', require('./types/String'))
 			.add('url', require('./types/Url'))
-			.add('user', require('./types/User'));
+			.add('user', require('./types/User'))
+			.add('any', require('./types/Type'));
 	}
 
 	add(name, Type) {
