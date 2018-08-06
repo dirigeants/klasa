@@ -2,6 +2,8 @@ const Base = require('./Base');
 
 
 /**
+  * Creates our SchemaFolder instance
+  * @name SchemaFolder2
   * @extends Base
 	* @param {SchemaFolder|Schema} parent The parent folder or schema for this folder instance
 	* @param {string} key The name of this folder instance
