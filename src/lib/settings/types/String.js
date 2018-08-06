@@ -2,9 +2,9 @@ const Type = require('./Type');
 
 module.exports = class extends Type {
 
-	async resolve(data, piece, message) {
+	async resolve(data, piece, guild) {
 		const string = String(data);
-		return this.constructor.maxOrMin(this.client, string, message, piece) ? string : null;
+		return this.constructor.maxOrMin(this.client, string, guild, piece) ? string : null;
 	}
 
 };

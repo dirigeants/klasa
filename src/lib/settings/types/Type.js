@@ -12,18 +12,18 @@ class SchemaType {
 		return this.types.client;
 	}
 
-	static minOrMax(client, value, message, { min, max, key }, suffix) {
-		suffix = suffix ? (message ? message.language : client.languages.default).get(suffix) : '';
+	static minOrMax(client, value, guild, { min, max, key }, suffix) {
+		suffix = suffix ? (guild ? guild.language : client.languages.default).get(suffix) : '';
 		if (min !== null && max !== null) {
 			if (value >= min && value <= max) return true;
-			if (min === max) throw (message ? message.language : client.languages.default).get('RESOLVER_MINMAX_EXACTLY', key, min, suffix);
-			throw (message ? message.language : client.languages.default).get('RESOLVER_MINMAX_BOTH', key, min, max, suffix);
+			if (min === max) throw (guild ? guild.language : client.languages.default).get('RESOLVER_MINMAX_EXACTLY', key, min, suffix);
+			throw (guild ? guild.language : client.languages.default).get('RESOLVER_MINMAX_BOTH', key, min, max, suffix);
 		} else if (min !== null) {
 			if (value >= min) return true;
-			throw (message ? message.language : client.languages.default).get('RESOLVER_MINMAX_MIN', key, min, suffix);
+			throw (guild ? guild.language : client.languages.default).get('RESOLVER_MINMAX_MIN', key, min, suffix);
 		} else if (max !== null) {
 			if (value <= max) return true;
-			throw (message ? message.language : client.languages.default).get('RESOLVER_MINMAX_MAX', key, max, suffix);
+			throw (guild ? guild.language : client.languages.default).get('RESOLVER_MINMAX_MAX', key, max, suffix);
 		}
 		return true;
 	}
