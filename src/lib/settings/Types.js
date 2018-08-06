@@ -33,6 +33,13 @@ class SchemaTypes extends Map {
 		return super.get(name.toLowerCase());
 	}
 
+	get types() {
+		const types = [];
+		for (const key of this.keys()) types.push(key);
+		return types;
+	}
+
+
 }
 
 module.exports = SchemaTypes;
