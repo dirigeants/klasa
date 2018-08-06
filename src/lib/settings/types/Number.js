@@ -1,12 +1,34 @@
 const Type = require('./Type');
 
-module.exports = class extends Type {
+/**
+  * class that resolves numbers
+  * @extends SchemaType
+	* @since 0.5.0
+	* @private
+	*/
+class NumberType extends Type {
 
+	/**
+	  * Resolves our data into a number
+	  * @since 0.5.0
+		* @param {*} data The data to resolve
+		* @param {SchemaPiece} piece The piece this data should be resolving to
+		* @param {?external:Guild} guild The Guild instance that should be used for this piece
+		* @returns {*} The resolved data
+		*/
 	async resolve(data, piece, guild) {
 		const number = this.checkNumber(data, piece, guild);
 		return this.constructor.minOrMax(this.client, number, guild, piece) ? number : true;
 	}
 
+	/**
+	  * Checks what type of numbe we should resolve into
+		* @since 0.5.0
+		* @param {*} data The data to resolve
+		* @param {SchemaPiece} piece The piece this data should be resolving to
+		* @param {?external:Guild} guild The Guild instance that should be used for this piece
+		* @returns {*} The resolved data
+		*/
 	checkNumber(data, piece, guild) {
 		const type = piece.type.toLowerCase();
 		let numb;
@@ -27,4 +49,6 @@ module.exports = class extends Type {
 		return null;
 	}
 
-};
+}
+
+module.exports = NumberType;

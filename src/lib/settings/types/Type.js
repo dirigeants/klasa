@@ -1,9 +1,15 @@
+/**
+  * The base SchemaType class for all other types
+	* @since 0.5.0
+	* @private
+	*/
 class SchemaType {
 
 	constructor(types) {
 		Object.defineProperty(this, 'types', { value: types });
 	}
 
+	// Come back here and add documentation for this class after discussing what to do when a type is used that is not found in storage.
 	resolve(data) {
 		return Promise.resolve(data);
 	}
