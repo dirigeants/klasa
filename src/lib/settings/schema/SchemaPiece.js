@@ -1,5 +1,5 @@
 const { isNumber, mergeDefault } = require('../../util/util');
-const { Types } = require('../../Client');
+const { types } = require('../../Client');
 
 
 /**
@@ -122,7 +122,7 @@ class SchemaPiece {
 	 */
 	_schemaCheckType(type) {
 		if (typeof type !== 'string') throw new TypeError(`[KEY] ${this.path} - Parameter type must be a string.`);
-		if (Types.has(type)) throw new TypeError(`[KEY] ${this.path} - ${type} is not a valid type.`);
+		if (types.has(type)) throw new TypeError(`[KEY] ${this.path} - ${type} is not a valid type.`);
 	}
 
 	/**
