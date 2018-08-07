@@ -17,8 +17,8 @@ class SchemaPiece {
 		 * The parent of this SchemaPiece, either a SchemaFolder instance or Schema instance
 		 * @name SchemaPiece#parent
 		 * @since 0.5.0
-		 * @returns {SchemaFolder|Schema}
 		 * @readonly
+		 * @type {SchemaFolder|Schema}
 		 */
 		Object.defineProperty(this, 'parent', { value: parent });
 
@@ -26,43 +26,43 @@ class SchemaPiece {
 		 * The name of this SchemaPiece instance
 		 * @name SchemaPiece#key
 		 * @since 0.5.0
-		 * @returns {string}
 		 * @readonly
+		 * @type {string}
 		 */
 		Object.defineProperty(this, 'key', { value: key });
 
 		/**
 		 * The type this SchemaPiece instance is for
 		 * @since 0.5.0
-		 * @returns {string}
+		 * @type {string}
 		 */
 		this.type = type.toLowerCase();
 
 		/**
 		 * Whether or not this key should hold an array of data, or a single piece of data
 		 * @since 0.5.0
-		 * @returns {boolean}
+		 * @type {boolean}
 		 */
 		this.array = 'array' in options ? options.array : Array.isArray(options.default);
 
 		/**
 		 * The default data this key will revert back to if reset, or if the key is never set
 		 * @since 0.5.0
-		 * @returns {*}
+		 * @type {*}
 		 */
 		this.default = 'default' in options ? options.default : this._generateDefault();
 
 		/**
 		 * The minimum length or the minimum number a string or number key can be, respectively.
 		 * @since 0.5.0
-		 * @returns {?number}
+		 * @type {?number}
 		 */
 		this.min = 'min' in options ? options.min : null;
 
 		/**
 		 * The maximum length or the maximum number a string or number key can be, respectively.
 		 * @since 0.5.0
-		 * @returns {?number}
+		 * @type {?number}
 		 */
 		this.max = 'max' in options ? options.max : null;
 
@@ -76,9 +76,9 @@ class SchemaPiece {
 
 	/**
 	 * The gateway this SchemaPiece is for
-	 *	@since 0.5.0
-	 * @returns {Gateway}
+	 * @since 0.5.0
 	 * @readonly
+	 * @type {Gateway}
 	 */
 	get gateway() {
 		return this.parent.gateway;
@@ -87,8 +87,8 @@ class SchemaPiece {
 	/**
 	 * The full path of this SchemaPiece starting from the Schema
 	 * @since 0.5.0
-	 * @returns {string}
 	 * @readonly
+	 * @type {string}
 	 */
 	get path() {
 		return `${this.parent.path}.${this.key}`;
@@ -168,6 +168,7 @@ class SchemaPiece {
 	 * @since 0.5.0
 	 * @param {number} min The options.min parameter to validate
 	 * @param {number} max The options.max parameter to validate
+	 * @throws {TypeError}
 	 * @private
 	 */
 	_schemaCheckLimits(min, max) {
@@ -180,6 +181,7 @@ class SchemaPiece {
 	 * Checks if options.configurable is valid.
 	 * @since 0.5.0
 	 * @param {boolean} configurable The parameter to validate
+	 * @throws {TypeError}
 	 * @private
 	 */
 	_schemaCheckConfigurable(configurable) {
