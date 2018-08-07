@@ -10,6 +10,7 @@ const Schedule = require('./schedule/Schedule');
 
 // lib/settings
 const GatewayDriver = require('./settings/GatewayDriver');
+const SchemaTypes = require('./settings/SchemaTypes');
 
 // lib/structures
 const ArgumentStore = require('./structures/ArgumentStore');
@@ -237,6 +238,30 @@ class KlasaClient extends Discord.Client {
 			.register('guilds', this.gateways.guildsSchema, this.options.gateways.guilds)
 			.register('users', this.gateways.usersSchema, this.options.gateways.users)
 			.register('clientStorage', this.gateways.clientStorageSchema, this.options.gateways.clientStorage);
+
+		/**
+		 * The types used for Schema validatation
+		 * @since 0.5.0
+		 * @type {SchemaTypes}
+		 */
+		this.types = new SchemaTypes(this);
+
+		// Register default SchemaTypes
+		this.types
+			.add('boolean', require('./settings/types/Boolean'))
+			.add('channel', require('./settings/types/Channel'))
+			.add('textchannel', require('./settings/types/Channel'))
+			.add('voicechannel', require('./settings/types/Channel'))
+			.add('categorychannel', require('./settings/types/Channel'))
+			.add('guild', require('./settings/types/Guild'))
+			.add('number', require('./settings/types/Number'))
+			.add('integer', require('./settings/types/Number'))
+			.add('float', require('./settings/types/Number'))
+			.add('role', require('./settings/types/Role'))
+			.add('string', require('./settings/types/String'))
+			.add('url', require('./settings/types/Url'))
+			.add('user', require('./settings/types/User'))
+			.add('any', require('./settings/types/Type'));
 
 		/**
 		 * The Configuration instance that handles this client's configuration
