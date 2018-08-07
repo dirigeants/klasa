@@ -92,7 +92,8 @@ class Base extends Map {
 	/**
 	 * Get the configurable keys for the current SchemaFolder or Schema instance
 	 * @since 0.5.0
-	 * @returns {Array<string>}
+	 * @readonly
+	 * @type {Array<string>}
 	 */
 	get configurableKeys() {
 		let keys = [];
@@ -106,7 +107,8 @@ class Base extends Map {
 	/**
 	 * Get the defaults for the current SchemaFolder or Schema instance
 	 * @since 0.5.0
-	 * @returns {Object}
+	 * @readonly
+	 * @type {Object}
 	 */
 	get defaults() {
 		return Object.assign({}, ...[...this.values()].map(piece => ({ [piece.key]: piece.defaults || deepClone(piece.default) })));
@@ -115,7 +117,8 @@ class Base extends Map {
 	/**
 	 * Get the paths for the current SchemaFolder or Schema instance
 	 * @since 0.5.0
-	 * @returns {Array<string>}
+	 * @readonly
+	 * @type {Array<string>}
 	 */
 	get paths() {
 		let paths = [];

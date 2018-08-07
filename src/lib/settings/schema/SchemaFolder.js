@@ -10,7 +10,6 @@ const Base = require('./Base');
  * @param {Object} [options={}] The options for this folder instance
  * @since 0.5.0
  */
-
 class SchemaFolder extends Base {
 
 	constructor(parent, key, type, options = {}) {
@@ -54,7 +53,7 @@ class SchemaFolder extends Base {
 	 * The gateway this SchemaFolder is for
 	 * @since 0.5.0
 	 * @readonly
-	 * @returns {Gateway}
+	 * @type {Gateway}
 	 */
 	get gateway() {
 		return this.parent.gateway;
@@ -64,7 +63,7 @@ class SchemaFolder extends Base {
 	 * Returns the path of this SchemaFolder, starting from the base schema
 	 * @since 0.5.0
 	 * @readonly
-	 * @returns {string}
+	 * @type {string}
 	 */
 	get path() {
 		return `${this.parent.path}.${this.key}`;

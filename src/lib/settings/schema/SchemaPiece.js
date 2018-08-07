@@ -14,56 +14,56 @@ class SchemaPiece {
 	constructor(parent, key, type, options = {}) {
 		options = mergeDefault(parent.defaultOptions, options);
 		/**
-		  * The parent of this SchemaPiece, either a SchemaFolder instance or Schema instance
-			* @name SchemaPiece#parent
-			* @since 0.5.0
-			* @returns {SchemaFolder|Schema}
-			* @readonly
-			*/
+		 * The parent of this SchemaPiece, either a SchemaFolder instance or Schema instance
+		 * @name SchemaPiece#parent
+		 * @since 0.5.0
+		 * @returns {SchemaFolder|Schema}
+		 * @readonly
+		 */
 		Object.defineProperty(this, 'parent', { value: parent });
 
 		/**
-		  * The name of this SchemaPiece instance
-			* @name SchemaPiece#key
-			* @since 0.5.0
-			* @returns {string}
-			* @readonly
-			*/
+		 * The name of this SchemaPiece instance
+		 * @name SchemaPiece#key
+		 * @since 0.5.0
+		 * @returns {string}
+		 * @readonly
+		 */
 		Object.defineProperty(this, 'key', { value: key });
 
 		/**
-		  * The type this SchemaPiece instance is for
-			* @since 0.5.0
-			* @returns {string}
-			*/
+		 * The type this SchemaPiece instance is for
+		 * @since 0.5.0
+		 * @returns {string}
+		 */
 		this.type = type.toLowerCase();
 
 		/**
-		  * Whether or not this key should hold an array of data, or a single piece of data
-			* @since 0.5.0
-			* @returns {boolean}
-			*/
+		 * Whether or not this key should hold an array of data, or a single piece of data
+		 * @since 0.5.0
+		 * @returns {boolean}
+		 */
 		this.array = 'array' in options ? options.array : Array.isArray(options.default);
 
 		/**
-		  * The default data this key will revert back to if reset, or if the key is never set
-			* @since 0.5.0
-			* @returns {*}
-			*/
+		 * The default data this key will revert back to if reset, or if the key is never set
+		 * @since 0.5.0
+		 * @returns {*}
+		 */
 		this.default = 'default' in options ? options.default : this._generateDefault();
 
 		/**
-		  * The minimum length or the minimum number a string or number key can be, respectively.
-			* @since 0.5.0
-			* @returns {?number}
-			*/
+		 * The minimum length or the minimum number a string or number key can be, respectively.
+		 * @since 0.5.0
+		 * @returns {?number}
+		 */
 		this.min = 'min' in options ? options.min : null;
 
 		/**
-		  * The maximum length or the maximum number a string or number key can be, respectively.
-			* @since 0.5.0
-			* @returns {?number}
-			*/
+		 * The maximum length or the maximum number a string or number key can be, respectively.
+		 * @since 0.5.0
+		 * @returns {?number}
+		 */
 		this.max = 'max' in options ? options.max : null;
 
 		/**
@@ -75,11 +75,11 @@ class SchemaPiece {
 	}
 
 	/**
-	  * The gateway this SchemaPiece is for
-		*	@since 0.5.0
-		* @returns {Gateway}
-		* @readonly
-		*/
+	 * The gateway this SchemaPiece is for
+	 *	@since 0.5.0
+	 * @returns {Gateway}
+	 * @readonly
+	 */
 	get gateway() {
 		return this.parent.gateway;
 	}
@@ -95,11 +95,11 @@ class SchemaPiece {
 	}
 
 	/**
-	  * Checks whether or not this SchemaPiece is valid.
-		* @since 0.5.0
-		* @returns {boolean}
-		* @readonly
-		*/
+	 * Checks whether or not this SchemaPiece is valid.
+	 * @since 0.5.0
+	 * @returns {boolean}
+	 * @readonly
+	 */
 	isValid() {
 		this._schemaCheckType(this.type);
 		this._schemaCheckArray(this.array);
