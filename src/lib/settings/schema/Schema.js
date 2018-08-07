@@ -6,28 +6,16 @@ const Base = require('./Base');
  */
 class Schema extends Base {
 
-	// TODO: Not sure if Gateway is needed here, might just be able to remove it. The only thing keeping it here is TypeChecking From settingsResolver
-
 	constructor() {
 		super();
-
 		/**
-		 * The Gateway this Schema is for
+		 * Returns the path for this schema
 		 * @since 0.5.0
-		 * @type {?Gateway}
+		 * @type {string}
+		 * @private
 		 * @readonly
 		 */
-		Object.defineProperty(this, 'gateway', { value: null, writable: true });
-	}
-
-	/**
-	 * Returns the path for this schema, which is just 'schema'
-	 * @since 0.5.0
-	 * @type {string}
-	 * @readonly
-	 */
-	get path() {
-		return 'schema';
+		Object.defineProperty(this, 'path', { value: '' });
 	}
 
 }

@@ -123,7 +123,7 @@ class Base extends Map {
 	get paths() {
 		let paths = [];
 		for (const piece of this.values()) {
-			if (piece.paths) paths = [...paths, ...piece.paths];
+			if (piece.paths) paths = paths.concat(piece.paths);
 			else paths.push(piece.path);
 		}
 		return paths;

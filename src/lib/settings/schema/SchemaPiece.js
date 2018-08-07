@@ -1,4 +1,5 @@
 const { isNumber, mergeDefault } = require('../../util/util');
+const { Client: Types } = require('../../Client');
 
 
 /**
@@ -30,6 +31,15 @@ class SchemaPiece {
 		 * @type {string}
 		 */
 		Object.defineProperty(this, 'key', { value: key });
+
+		/**
+		 * The path of this SchemaPiece instance
+		 * @name SchemaPiece#path
+		 * @since 0.5.0
+		 * @readonly
+		 * @type {string}
+		 */
+		Object.defineProperty(this, 'path', { value: `${this.parent.path}.${this.key}` });
 
 		/**
 		 * The type this SchemaPiece instance is for
@@ -75,26 +85,6 @@ class SchemaPiece {
 	}
 
 	/**
-	 * The gateway this SchemaPiece is for
-	 * @since 0.5.0
-	 * @readonly
-	 * @type {Gateway}
-	 */
-	get gateway() {
-		return this.parent.gateway;
-	}
-
-	/**
-	 * The full path of this SchemaPiece starting from the Schema
-	 * @since 0.5.0
-	 * @readonly
-	 * @type {string}
-	 */
-	get path() {
-		return `${this.parent.path}.${this.key}`;
-	}
-
-	/**
 	 * Checks whether or not this SchemaPiece is valid.
 	 * @since 0.5.0
 	 * @returns {boolean}
@@ -132,7 +122,7 @@ class SchemaPiece {
 	 */
 	_schemaCheckType(type) {
 		if (typeof type !== 'string') throw new TypeError(`[KEY] ${this.path} - Parameter type must be a string.`);
-		if (!this.gateways.types.has(type)) throw new TypeError(`[KEY] ${this.path} - ${type} is not a valid type.`);
+		if (Types.has(type)) throw new TypeError(`[KEY] ${this.path} - ${type} is not a valid type.`);
 	}
 
 	/**

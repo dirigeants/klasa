@@ -2,15 +2,6 @@ const SchemaType = require('../types/Type');
 
 class SchemaTypes extends Map {
 
-	constructor(client) {
-		super();
-		/**
-		 * @since 0.5.0
-		 * @type {KlasaClient}
-		 */
-		Object.defineProperty(this, 'client', { value: client });
-	}
-
 	add(name, Type) {
 		if (!(Type instanceof SchemaType)) throw new TypeError('The type you are trying to add does not extend the SchemaType class');
 		name = name.toLowerCase();

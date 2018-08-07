@@ -41,6 +41,15 @@ class SchemaFolder extends Base {
 		Object.defineProperty(this, 'type', { value: type.toLowerCase() });
 
 		/**
+		 * The path of this SchemaFolder
+		 * @since 0.5.0
+		 * @type {string}
+		 * @readonly
+		 */
+		Object.defineProperty(this, 'path', { value: `${this.parent.path}.${this.key}` });
+
+
+		/**
 		 * The default options that every key that is added to this folder will inherit.
 		 * @since 0.5.0
 		 * @type {Object}
@@ -48,27 +57,6 @@ class SchemaFolder extends Base {
 		 */
 		Object.defineProperty(this, 'defaultOptions', { value: options });
 	}
-
-	/**
-	 * The gateway this SchemaFolder is for
-	 * @since 0.5.0
-	 * @readonly
-	 * @type {Gateway}
-	 */
-	get gateway() {
-		return this.parent.gateway;
-	}
-
-	/**
-	 * Returns the path of this SchemaFolder, starting from the base schema
-	 * @since 0.5.0
-	 * @readonly
-	 * @type {string}
-	 */
-	get path() {
-		return `${this.parent.path}.${this.key}`;
-	}
-
 
 }
 

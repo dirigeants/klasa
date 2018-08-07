@@ -243,30 +243,6 @@ class KlasaClient extends Discord.Client {
 			.register('clientStorage', this.gateways.clientStorageSchema, this.options.gateways.clientStorage);
 
 		/**
-		 * The types used for Schema validatation
-		 * @since 0.5.0
-		 * @type {SchemaTypes}
-		 */
-		this.types = new SchemaTypes(this);
-
-		// Register default SchemaTypes
-		this.types
-			.add('boolean', require('./settings/types/Boolean'))
-			.add('channel', require('./settings/types/Channel'))
-			.add('textchannel', require('./settings/types/Channel'))
-			.add('voicechannel', require('./settings/types/Channel'))
-			.add('categorychannel', require('./settings/types/Channel'))
-			.add('guild', require('./settings/types/Guild'))
-			.add('number', require('./settings/types/Number'))
-			.add('integer', require('./settings/types/Number'))
-			.add('float', require('./settings/types/Number'))
-			.add('role', require('./settings/types/Role'))
-			.add('string', require('./settings/types/String'))
-			.add('url', require('./settings/types/Url'))
-			.add('user', require('./settings/types/User'))
-			.add('any', require('./settings/types/Type'));
-
-		/**
 		 * The Configuration instance that handles this client's configuration
 		 * @since 0.5.0
 		 * @type {Configuration}
@@ -479,6 +455,29 @@ KlasaClient.defaultPermissionLevels = new PermissionLevels()
 	.add(7, (client, message) => message.guild && message.member === message.guild.owner, { fetch: true })
 	.add(9, (client, message) => message.author === client.owner, { break: true })
 	.add(10, (client, message) => message.author === client.owner);
+
+
+/**
+ * The SchemaTypes Storage for Klasa's settings
+ * @since 0.5.0
+ * @type {SchemaTypes}
+ */
+
+KlasaClient.Types = new SchemaTypes()
+	.add('boolean', require('./settings/types/Boolean'))
+	.add('channel', require('./settings/types/Channel'))
+	.add('textchannel', require('./settings/types/Channel'))
+	.add('voicechannel', require('./settings/types/Channel'))
+	.add('categorychannel', require('./settings/types/Channel'))
+	.add('guild', require('./settings/types/Guild'))
+	.add('number', require('./settings/types/Number'))
+	.add('integer', require('./settings/types/Number'))
+	.add('float', require('./settings/types/Number'))
+	.add('role', require('./settings/types/Role'))
+	.add('string', require('./settings/types/String'))
+	.add('url', require('./settings/types/Url'))
+	.add('user', require('./settings/types/User'))
+	.add('any', require('./settings/types/Type'));
 
 /**
  * The default Guild Schema
