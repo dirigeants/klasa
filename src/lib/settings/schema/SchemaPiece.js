@@ -1,5 +1,5 @@
 const { isNumber, mergeDefault } = require('../../util/util');
-const { types } = require('../../Client');
+// const { types } = require('../../Client');
 
 
 /**
@@ -39,7 +39,7 @@ class SchemaPiece {
 		 * @readonly
 		 * @type {string}
 		 */
-		Object.defineProperty(this, 'path', { value: `${this.parent.path}.${this.key}` });
+		Object.defineProperty(this, 'path', { value: `${this.parent.path ? `${this.parent.path}.` : ''}${this.key}` });
 
 		/**
 		 * The type this SchemaPiece instance is for

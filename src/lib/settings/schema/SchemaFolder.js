@@ -46,7 +46,7 @@ class SchemaFolder extends Base {
 		 * @type {string}
 		 * @readonly
 		 */
-		Object.defineProperty(this, 'path', { value: `${this.parent.path}.${this.key}` });
+		Object.defineProperty(this, 'path', { value: `${this.parent.path ? `${this.parent.path}.` : ''}${this.key}` });
 
 
 		/**

@@ -118,13 +118,13 @@ class Base extends Map {
 	 * Get the paths for the current SchemaFolder or Schema instance
 	 * @since 0.5.0
 	 * @readonly
-	 * @type {Array<string>}
+	 * @type {Map<string, SchemaFolder|SchemaPiece>}
 	 */
 	get paths() {
-		let paths = [];
+		const paths = new Map();
 		for (const piece of this.values()) {
-			if (piece.paths) paths = paths.concat(piece.paths);
-			else paths.push(piece.path);
+			if (piece.paths) for (const pie of piece.paths.values()) paths.set(pie.path, pie);
+			else paths.set(piece.path, piece);
 		}
 		return paths;
 	}
