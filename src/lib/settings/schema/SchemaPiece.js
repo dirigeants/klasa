@@ -1,5 +1,5 @@
 const { isNumber, mergeDefault } = require('../../util/util');
-// const { types } = require('../../Client');
+const { types } = require('../../Client');
 
 
 /**
