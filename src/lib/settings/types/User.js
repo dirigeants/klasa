@@ -1,21 +1,21 @@
 const Type = require('./Type');
 
 /**
-  * class that resolves users
-  * @extends SchemaType
-	* @since 0.5.0
-	* @private
-	*/
+ * class that resolves users
+ * @extends SchemaType
+ * @since 0.5.0
+ * @private
+ */
 class UserType extends Type {
 
 	/**
-	  * Resolves our data into an user
-		* @since 0.5.0
-		* @param {*} data The data to resolve
-		* @param {SchemaPiece} piece The piece this data should be resolving to
-		* @param {?external:Guild} guild The Guild instance that should be used for this piece
-		* @returns {*} The resolved data
-		*/
+	 * Resolves our data into an user
+	 * @since 0.5.0
+	 * @param {*} data The data to resolve
+	 * @param {SchemaPiece} piece The piece this data should be resolving to
+	 * @param {?external:Guild} guild The Guild instance that should be used for this piece
+	 * @returns {*} The resolved data
+	 */
 	async resolve(data, piece, guild) {
 		let user = this.client.users.resolve(data);
 		if (user) return user.id;

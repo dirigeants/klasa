@@ -1,23 +1,47 @@
 /**
-  * The base SchemaType class for all other types
-	* @since 0.5.0
-	* @private
-	*/
+ * The base SchemaType class for all other types
+ * @since 0.5.0
+ * @private
+ */
 class SchemaType {
 
 	constructor(types) {
+		/**
+		 * The SchemaTypes storage containing this type.
+		 * @type {SchemaTypes}
+		 * @readonly
+		 */
 		Object.defineProperty(this, 'types', { value: types });
 	}
 
-	// Come back here and add documentation for this class after discussing what to do when a type is used that is not found in storage.
-	resolve(data) {
-		return Promise.resolve(data);
+	/**
+	 * Resolves data
+	 * @param {*} data the data to resolve
+	 * @returns {*}
+	 */
+	async resolve(data) {
+		return data;
 	}
 
+	/**
+	 * The client instance
+	 * @returns {KlasaClient}
+	 */
 	get client() {
 		return this.types.client;
 	}
 
+	/**
+	 * Checks min and max values
+	 * @since 0.5.0
+	 * @param {KlasaClient} client The client of this bot
+	 * @param {number} value The value to check against
+	 * @param {external:Guild} guild The guild to use for this check
+	 * @param {SchemaPiece} piece The SchemaPiece to use to validate this check
+	 * @param {string} suffix An error suffix
+	 * @returns {boolean}
+	 * @private
+	 */
 	static minOrMax(client, value, guild, { min, max, key }, suffix) {
 		suffix = suffix ? (guild ? guild.language : client.languages.default).get(suffix) : '';
 		if (min !== null && max !== null) {

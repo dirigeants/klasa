@@ -29,14 +29,12 @@ class SchemaTypes extends Map {
 		return this;
 	}
 
-	get(name) {
-		return super.get(name.toLowerCase());
+	has(name) {
+		return super.has(name.toLowerCase());
 	}
 
-	get types() {
-		const types = [];
-		for (const key of this.keys()) types.push(key);
-		return types;
+	get(name) {
+		return super.get(name.toLowerCase());
 	}
 
 

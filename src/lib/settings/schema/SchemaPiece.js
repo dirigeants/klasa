@@ -76,6 +76,16 @@ class SchemaPiece {
 	}
 
 	/**
+	  * The gateway this SchemaPiece is for
+		*	@since 0.5.0
+		* @returns {Gateway}
+		* @readonly
+		*/
+	get gateway() {
+		return this.parent.gateway;
+	}
+
+	/**
 	 * The full path of this SchemaPiece starting from the Schema
 	 * @since 0.5.0
 	 * @returns {string}
@@ -123,9 +133,7 @@ class SchemaPiece {
 	 */
 	_schemaCheckType(type) {
 		if (typeof type !== 'string') throw new TypeError(`[KEY] ${this.path} - Parameter type must be a string.`);
-
-		// TODO: Find a replacement for this
-		// if (!this.client.gateways.types.has(type)) throw new TypeError(`[KEY] ${this.path} - ${type} is not a valid type.`);
+		if (!this.gateways.types.has(type)) throw new TypeError(`[KEY] ${this.path} - ${type} is not a valid type.`);
 	}
 
 	/**
