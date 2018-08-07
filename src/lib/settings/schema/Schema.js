@@ -1,7 +1,6 @@
 const Base = require('./Base');
 
 /**
- * @name Schema2
  * @extends Base
  * @since 0.5.0
  */

@@ -3,7 +3,6 @@ const { isNumber, mergeDefault } = require('../../util/util');
 
 /**
 	* Creates our SchemaPiece instance
-	* @name SchemaPiece2
 	* @param {SchemaFolder|Schema} parent The parent folder or schema for this piece instance
 	* @param {string} key The name of this piece instance
 	* @param {string} type The type for this piece instance

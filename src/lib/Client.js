@@ -10,7 +10,10 @@ const Schedule = require('./schedule/Schedule');
 
 // lib/settings
 const GatewayDriver = require('./settings/GatewayDriver');
-const SchemaTypes = require('./settings/SchemaTypes');
+
+// lib/settings/schema
+const SchemaTypes = require('./settings/schema/SchemaTypes');
+const Schema = require('./settings/schema/Schema');
 
 // lib/structures
 const ArgumentStore = require('./structures/ArgumentStore');
@@ -476,6 +479,33 @@ KlasaClient.defaultPermissionLevels = new PermissionLevels()
 	.add(7, (client, message) => message.guild && message.member === message.guild.owner, { fetch: true })
 	.add(9, (client, message) => message.author === client.owner, { break: true })
 	.add(10, (client, message) => message.author === client.owner);
+
+/**
+ * The default Guild Schema
+ * @since 0.5.0
+ * @type {Schema}
+ */
+KlasaClient.defaultGuildSchema = new Schema()
+	.add('disabledCommands', 'command', { array: true, configurable: true });
+
+// TODO: Find replacement for Language and Prefix here
+
+/**
+ * The default User Schema
+ * @since 0.5.0
+ * @type {Schema}
+ */
+KlasaClient.defaultUserSchema = new Schema();
+
+/**
+ * The default Client Schema
+ * @since 0.5.0
+ * @type {Schema}
+ */
+KlasaClient.defaultClientSchema = new Schema()
+	.add('userBlacklist', 'user', { array: true, configurable: true })
+	.add('guildBlacklist', 'guild', { array: true, configurable: true })
+	.add('schedules', 'any', { array: true, configurable: false });
 
 /**
  * Emitted when Klasa is fully ready and initialized.

@@ -1,4 +1,4 @@
-const SchemaType = require('./types/Type');
+const SchemaType = require('../types/Type');
 
 class SchemaTypes extends Map {
 

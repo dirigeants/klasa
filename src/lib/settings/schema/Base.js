@@ -39,8 +39,7 @@ class Base extends Map {
 		if (this.has(key)) throw new Error(`The key ${key} already exists in the current schema.`);
 		if (typeof this[key] !== 'undefined') throw new Error(`The key ${key} conflicts with a property of Schema.`);
 		if (!type) {
-			// eslint-disable-next-line
-			if (type in this.defaultOptions) type = this.defaultOptions.type;
+			if (type in this.defaultOptions) ({ type } = this.defaultOptions);
 			else throw new Error(`The key ${key} must have a type specified as it's first argument.`);
 		}
 		let Piece;
@@ -77,7 +76,9 @@ class Base extends Map {
 	debug() {
 		let errors = [];
 		for (const piece of this.values()) {
-			if (piece.type === 'folder') { errors = [...errors, ...piece.debug()]; } else {
+			if (piece.type === 'folder') {
+				errors = errors.concat(piece.debug());
+			} else {
 				try {
 					piece.isValid();
 				} catch (error) {
@@ -91,12 +92,12 @@ class Base extends Map {
 	/**
 	 * Get the configurable keys for the current SchemaFolder or Schema instance
 	 * @since 0.5.0
-	 * @returns {Array<SchemaPiece>}
+	 * @returns {Array<string>}
 	 */
 	get configurableKeys() {
 		let keys = [];
 		for (const piece of this.values()) {
-			if (piece.configurableKeys) keys = [...keys, ...piece.configurableKeys];
+			if (piece.configurableKeys) keys = keys.concat(piece.configurableKeys);
 			else keys.push(piece.key);
 		}
 		return keys;
@@ -108,12 +109,7 @@ class Base extends Map {
 	 * @returns {Object}
 	 */
 	get defaults() {
-		const defaults = {};
-		for (const piece of this.values()) {
-			if (piece.defaults) defaults[piece.key] = piece.defaults;
-			else defaults[piece.key] = deepClone(piece.default);
-		}
-		return defaults;
+		return Object.assign({}, ...[...this.values()].map(piece => ({ [piece.key]: piece.defaults || deepClone(piece.default) })));
 	}
 
 	/**
@@ -136,11 +132,7 @@ class Base extends Map {
 	 * @returns {Object}
 	 */
 	toJSON() {
-		const json = {};
-		for (const piece of this.values()) {
-			json[piece.key] = piece.toJSON();
-		}
-		return json;
+		return Object.assign({}, ...[...this.values()].map(piece => ({ [piece.key]: piece.toJSON() })));
 	}
 
 
