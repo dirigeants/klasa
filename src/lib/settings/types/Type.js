@@ -25,7 +25,7 @@ class SchemaType {
 
 	/**
 	 * The client instance
-	 * @returns {KlasaClient}
+	 * @type {KlasaClient}
 	 */
 	get client() {
 		return this.types.client;
