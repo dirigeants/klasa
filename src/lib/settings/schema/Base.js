@@ -38,24 +38,37 @@ class Base extends Map {
 	 */
 	add(key, type, options = {}, callback = null) {
 		if (this.has(key)) throw new Error(`The key ${key} already exists in the current schema.`);
-		if (!type) {
-			if ('type' in this.defaultOptions) ({ type } = this.defaultOptions);
-			else throw new Error(`The key ${key} must have a type specified as it's first argument.`);
-		}
+		const { defaultOptions = {} } = this;
 		let Piece;
 
 		if (isFunction(type)) {
+			// add('key', (folder) => {});
 			callback = type;
 			type = 'Folder';
 			Piece = require('./SchemaFolder');
-		} else if (isObject(type) && isFunction(options)) {
-			callback = options;
-			options = type;
-			type = 'Folder';
-			Piece = require('./SchemaFolder');
+		} else if (isObject(type)) {
+			// add('key', { ...options });
+			if (isFunction(options)) {
+				// add('key', { ...options }, (folder) => {})
+				callback = options;
+				options = type;
+				type = 'Folder';
+				Piece = require('./SchemaFolder');
+			} else {
+				// add('key', { type, ...options });
+				type = options.type || defaultOptions.type;
+				Piece = SchemaPiece;
+			}
 		} else if (typeof type === 'string') {
+			// add('key', 'type');
 			Piece = type === 'Folder' ? require('./SchemaFolder') : SchemaPiece;
-		} else {
+		} else if (!type && ('type' in defaultOptions)) {
+			// add('key');
+			({ type } = defaultOptions);
+			Piece = SchemaPiece;
+		}
+
+		if (!type) {
 			throw new Error(`The type for ${key} must be a string for pieces, and a callback for folders`);
 		}
 

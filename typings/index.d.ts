@@ -549,7 +549,8 @@ declare module 'klasa' {
 		public readonly paths: Map<string, SchemaPiece | SchemaFolder>;
 		public add(key: string, callback: (folder: SchemaFolder) => any): this;
 		public add(key: string, options: SchemaPieceOptions, callback: (folder: SchemaFolder) => any): this;
-		public add(key: string, type: string, options?: SchemaPieceOptions): this;
+		public add(key: string, options?: SchemaPieceOptions): this;
+		public add(key: string, type?: string, options?: SchemaPieceOptions): this;
 		public remove(key: string): boolean;
 		public toJSON(): ObjectLiteral;
 
