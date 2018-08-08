@@ -484,7 +484,7 @@ declare module 'klasa' {
 	}
 
 	export class Gateway extends GatewayStorage {
-		public constructor(store: GatewayDriver, type: string, schema: ObjectLiteral, options: GatewayOptions);
+		public constructor(store: GatewayDriver, type: string, schema: Schema, options: GatewayOptions);
 		public store: GatewayDriver;
 		public readonly cache: Collection<string, Configuration>;
 		public readonly syncQueue: Collection<string, Promise<Configuration>>;
@@ -522,7 +522,7 @@ declare module 'klasa' {
 		private _queue: Array<(() => Gateway)>;
 
 		public [Symbol.iterator](): Iterator<[string, Gateway]>;
-		public register(name: string, schema?: ObjectLiteral, options?: GatewayDriverRegisterOptions): this;
+		public register(name: string, schema?: Schema, options?: GatewayDriverRegisterOptions): this;
 		public init(): Promise<void>;
 		public sync(input?: string[]): Promise<Array<Gateway>>;
 
@@ -531,7 +531,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class GatewayStorage {
-		public constructor(client: KlasaClient, type: string, provider?: string);
+		public constructor(client: KlasaClient, type: string, schema: Schema, provider?: string);
 		public readonly client: KlasaClient;
 		public readonly defaults: any;
 		public readonly provider: Provider | null;

@@ -5,10 +5,11 @@ class GatewayStorage {
 	 * @since 0.5.0
 	 * @param {KlasaClient} client The client this GatewayStorage was created with
 	 * @param {string} type The name of this GatewayStorage
+	 * @param {Schema} schema The schema for this gateway
 	 * @param {string} [provider] The provider's name
 	 * @private
 	 */
-	constructor(client, type, provider) {
+	constructor(client, type, schema, provider) {
 		/**
 		 * The client this GatewayStorage was created with.
 		 * @since 0.5.0
@@ -40,7 +41,7 @@ class GatewayStorage {
 		 * @since 0.5.0
 		 * @type {Schema}
 		 */
-		this.schema = null;
+		this.schema = schema;
 
 		/**
 		 * @since 0.5.0

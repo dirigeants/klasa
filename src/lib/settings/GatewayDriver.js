@@ -1,5 +1,5 @@
 const Gateway = require('./Gateway');
-const util = require('../util/util');
+const Schema = require('./schema/Schema');
 
 /**
  * <warning>GatewayDriver is a singleton, use {@link KlasaClient#gateways} instead.</warning>
@@ -9,7 +9,7 @@ class GatewayDriver {
 
 	/**
 	 * @typedef {Object} GatewayDriverRegisterOptions
-	 * @property {string} [provider] The name of the provider to use
+	 * @property {string} [provider = this.client.options.providers.default] The name of the provider to use
 	 * @property {string|string[]|true} [syncArg] The sync args to pass to Gateway#sync during Gateway init
 	 */
 
@@ -84,20 +84,20 @@ class GatewayDriver {
 	 * Registers a new Gateway.
 	 * @since 0.5.0
 	 * @param {string} name The name for the new gateway
-	 * @param {Object} [defaultSchema = {}] The schema for use in this gateway
+	 * @param {Object} [schema = new Schema(this.client)] The schema for use in this gateway
 	 * @param {GatewayDriverRegisterOptions} [options = {}] The options for the new gateway
 	 * @returns {this}
 	 * @chainable
 	 */
-	register(name, defaultSchema = {}, { provider = this.client.options.providers.default } = {}) {
+	register(name, schema = new Schema(), { provider = this.client.options.providers.default } = {}) {
 		if (typeof name !== 'string') throw new TypeError('You must pass a name for your new gateway and it must be a string.');
-		if (!util.isObject(defaultSchema)) throw new TypeError('Schema must be a valid object or left undefined for an empty object.');
+		if (!(schema instanceof Schema)) throw new TypeError('Schema must be a valid Schema instance.');
 		if (this.name !== undefined && this.name !== null) throw new Error(`The key '${name}' is either taken by another Gateway or reserved for GatewayDriver's functionality.`);
 
-		const gateway = new Gateway(this, name, { provider });
+		const gateway = new Gateway(this, name, provider, provider);
 		this.keys.add(name);
 		this[name] = gateway;
-		this._queue.push(gateway.init.bind(gateway, defaultSchema));
+		this._queue.push(gateway.init.bind(gateway));
 		if (!(name in this.client.options.gateways)) this.client.options.gateways[name] = {};
 		return this;
 	}

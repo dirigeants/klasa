@@ -40,10 +40,11 @@ class Gateway extends GatewayStorage {
 	 * @since 0.0.1
 	 * @param {GatewayDriver} store The GatewayDriver instance which initiated this instance
 	 * @param {string} type The name of this Gateway
-	 * @param {GatewayDriverRegisterOptions} options The options for this schema
+	 * @param {Schema} schema The schema for this gateway
+	 * @param {string} provider The provider's name for this gateway
 	 */
-	constructor(store, type, { provider }) {
-		super(store.client, type, provider);
+	constructor(store, type, schema, provider) {
+		super(store.client, type, schema, provider);
 
 		/**
 		 * The GatewayDriver that manages this Gateway
