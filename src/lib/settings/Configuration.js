@@ -104,13 +104,11 @@ class Configuration {
 	 */
 	get(path) {
 		const route = typeof path === 'string' ? path.split('.') : path;
+		const piece = this.gateway.schema.get(route);
+		if (!piece) return undefined;
+
 		let refThis = this; // eslint-disable-line consistent-this
-		let refSchema = this.gateway.schema;
-		for (const key of route) {
-			if (refSchema.type !== 'Folder' || !refSchema.has(key)) return undefined;
-			refThis = refThis[key];
-			refSchema = refSchema[key];
-		}
+		for (const key of route) refThis = refThis[key];
 
 		return refThis;
 	}
