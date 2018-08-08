@@ -236,17 +236,17 @@ class KlasaClient extends Discord.Client {
 		 */
 		this.gateways = new GatewayDriver(this);
 
-		// Register default gateways
-		this.gateways
-			.register('guilds', this.gateways.guildsSchema, this.options.gateways.guilds)
-			.register('users', this.gateways.usersSchema, this.options.gateways.users)
-			.register('clientStorage', this.gateways.clientStorageSchema, this.options.gateways.clientStorage);
-
 		// Update Guild Schema with Keys needed in Klasa
 		this.constructor.defaultGuildSchema
 			.add('prefix', 'string', { default: this.client.options.prefix, configurable: true, max: 10 })
 			.add('language', 'language', { default: this.client.options.language, configurable: true })
 			.add('disableNaturalPrefix', 'boolean', { configurable: Boolean(this.client.options.regexPrefix) });
+
+		// Register default gateways
+		this.gateways
+			.register('guilds', this.constructor.defaultGuildSchema, this.options.gateways.guilds)
+			.register('users', this.constructor.defaultUserSchema, this.options.gateways.users)
+			.register('clientStorage', this.constructor.defaultClientSchema, this.options.gateways.clientStorage);
 
 		/**
 		 * The Configuration instance that handles this client's configuration
