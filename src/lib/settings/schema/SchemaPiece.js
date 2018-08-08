@@ -1,15 +1,14 @@
 const { isNumber, mergeDefault } = require('../../util/util');
-const { types } = require('../../Client');
-
+const Client = require('../../Client');
 
 /**
-	* Creates our SchemaPiece instance
-	* @param {SchemaFolder|Schema} parent The parent folder or schema for this piece instance
-	* @param {string} key The name of this piece instance
-	* @param {string} type The type for this piece instance
-	* @param {Object} [options={}] The options for this SchemaPiece instance
-	* @since 0.5.0
-	*/
+ * Creates our SchemaPiece instance
+ * @param {SchemaFolder|Schema} parent The parent folder or schema for this piece instance
+ * @param {string} key The name of this piece instance
+ * @param {string} type The type for this piece instance
+ * @param {Object} [options={}] The options for this SchemaPiece instance
+ * @since 0.5.0
+ */
 class SchemaPiece {
 
 	constructor(parent, key, type, options = {}) {
@@ -121,7 +120,7 @@ class SchemaPiece {
 	 */
 	_schemaCheckType(type) {
 		if (typeof type !== 'string') throw new TypeError(`[KEY] ${this.path} - Parameter type must be a string.`);
-		if (types.has(type)) throw new TypeError(`[KEY] ${this.path} - ${type} is not a valid type.`);
+		if (!Client.types.has(type)) throw new TypeError(`[KEY] ${this.path} - ${type} is not a valid type.`);
 	}
 
 	/**

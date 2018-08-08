@@ -79,8 +79,6 @@ class GatewayStorage {
 		const { provider } = this;
 		if (!provider) throw new Error(`This provider (${this.providerName}) does not exist in your system.`);
 		this.ready = true;
-		// TODO:  Could Potentially make the Schema here if they choose to not change from json to the schema constructor
-		// their choice if they want slower startup
 
 		const debug = this.schema.debug();
 		if (debug.length) throw new Error(`[SCHEMA] There is an error with your schema. \n ${debug.join('\n')}`);
