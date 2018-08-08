@@ -1,4 +1,4 @@
-const Type = require('./Type');
+const SchemaType = require('./SchemaType');
 const { Guild } = require('discord.js');
 
 /**
@@ -7,7 +7,7 @@ const { Guild } = require('discord.js');
  * @since 0.5.0
  * @private
  */
-class GuildType extends Type {
+class GuildType extends SchemaType {
 
 	/**
 	 * Resolves our data into a guild

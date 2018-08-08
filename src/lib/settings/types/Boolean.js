@@ -1,4 +1,4 @@
-const Type = require('./Type');
+const SchemaType = require('./SchemaType');
 
 /**
  * class that resolves booleans
@@ -6,7 +6,7 @@ const Type = require('./Type');
  * @since 0.5.0
  * @private
  */
-class BooleanType extends Type {
+class BooleanType extends SchemaType {
 
 
 	/**

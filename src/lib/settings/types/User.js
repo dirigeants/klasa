@@ -1,4 +1,4 @@
-const Type = require('./Type');
+const SchemaType = require('./SchemaType');
 
 /**
  * class that resolves users
@@ -6,7 +6,7 @@ const Type = require('./Type');
  * @since 0.5.0
  * @private
  */
-class UserType extends Type {
+class UserType extends SchemaType {
 
 	/**
 	 * Resolves our data into an user

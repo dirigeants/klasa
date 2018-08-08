@@ -1,4 +1,4 @@
-const Type = require('./Type');
+const SchemaType = require('./SchemaType');
 const URL = require('url');
 
 /**
@@ -7,7 +7,7 @@ const URL = require('url');
  * @since 0.5.0
  * @private
  */
-class UrlType extends Type {
+class UrlType extends SchemaType {
 
 	/**
 	 * Resolves our data into an URL

@@ -1,4 +1,4 @@
-const Type = require('./Type');
+const SchemaType = require('./SchemaType');
 
 /**
  * class that resolves Klasa Pieces
@@ -6,7 +6,7 @@ const Type = require('./Type');
  * @since 0.5.0
  * @private
  */
-class PieceType extends Type {
+class PieceType extends SchemaType {
 
 
 	/**

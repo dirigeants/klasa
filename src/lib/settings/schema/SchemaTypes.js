@@ -1,4 +1,4 @@
-const SchemaType = require('../types/Type');
+const SchemaType = require('../types/SchemaType');
 
 /**
  * @since 0.5.0

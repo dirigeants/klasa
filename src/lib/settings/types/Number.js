@@ -1,4 +1,4 @@
-const Type = require('./Type');
+const SchemaType = require('./SchemaType');
 
 /**
  * class that resolves numbers
@@ -6,7 +6,7 @@ const Type = require('./Type');
  * @since 0.5.0
  * @private
  */
-class NumberType extends Type {
+class NumberType extends SchemaType {
 
 	/**
 	 * Resolves our data into a number

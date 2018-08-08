@@ -1,4 +1,4 @@
-const Type = require('./Type');
+const SchemaType = require('./SchemaType');
 const { Channel } = require('discord.js');
 
 /**
@@ -7,7 +7,7 @@ const { Channel } = require('discord.js');
  * @since 0.5.0
  * @private
  */
-class ChannelType extends Type {
+class ChannelType extends SchemaType {
 
 	/**
 	 * Resolves our data into a channel

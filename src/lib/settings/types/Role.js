@@ -1,4 +1,4 @@
-const Type = require('./Type');
+const SchemaType = require('./SchemaType');
 const { Role } = require('discord.js');
 
 /**
@@ -7,7 +7,7 @@ const { Role } = require('discord.js');
 	* @since 0.5.0
 	* @private
 	*/
-class RoleType extends Type {
+class RoleType extends SchemaType {
 
 	/**
 	 * Resolves our data into a role
