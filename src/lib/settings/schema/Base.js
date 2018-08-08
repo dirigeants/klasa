@@ -39,7 +39,7 @@ class Base extends Map {
 	add(key, type, options = {}, callback = null) {
 		if (this.has(key)) throw new Error(`The key ${key} already exists in the current schema.`);
 		if (!type) {
-			if (type in this.defaultOptions) ({ type } = this.defaultOptions);
+			if ('type' in this.defaultOptions) ({ type } = this.defaultOptions);
 			else throw new Error(`The key ${key} must have a type specified as it's first argument.`);
 		}
 		let Piece;
