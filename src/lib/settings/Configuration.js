@@ -1,6 +1,7 @@
-const { isObject, deepClone, toTitleCase, arraysStrictEquals, getDeepTypeName, objectToTuples } = require('../util/util');
-const SchemaFolder = require('./SchemaFolder');
-const SchemaPiece = require('./SchemaPiece');
+const { isObject, deepClone, toTitleCase, arraysStrictEquals, objectToTuples } = require('../util/util');
+const Type = require('../util/Type');
+const SchemaFolder = require('./schema/SchemaFolder');
+const SchemaPiece = require('./schema/SchemaPiece');
 
 /**
  * <warning>Creating your own Configuration instances is often discouraged and unneeded. SettingsGateway handles them internally for you.</warning>
@@ -217,7 +218,7 @@ class Configuration {
 			await this._save(result);
 			return result;
 		}
-		throw new TypeError(`Invalid value. Expected string or Array<string>. Got: ${getDeepTypeName(keys)}`);
+		throw new TypeError(`Invalid value. Expected string or Array<string>. Got: ${new Type(keys)}`);
 	}
 
 	/**
@@ -258,7 +259,7 @@ class Configuration {
 			keys = [keys];
 			values = [values];
 		} else if (!Array.isArray(keys)) {
-			return Promise.reject(new TypeError(`Invalid value. Expected object, string or Array<string>. Got: ${getDeepTypeName(keys)}`));
+			return Promise.reject(new TypeError(`Invalid value. Expected object, string or Array<string>. Got: ${new Type(keys)}`));
 		}
 
 		// Overload update(string|string[], any|any[], ConfigurationUpdateOptions);
