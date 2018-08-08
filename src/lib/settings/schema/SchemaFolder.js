@@ -33,12 +33,12 @@ class SchemaFolder extends Base {
 		// TODO: Maybe remove this type property??? I don't think it's really needed.. other then for like backwards comp.
 
 		/**
-		 * The type of this SchemaFolder (always 'folder')
+		 * The type of this SchemaFolder (always 'Folder')
 		 * @since 0.5.0
 		 * @type {string}
 		 * @readonly
 		 */
-		Object.defineProperty(this, 'type', { value: type.toLowerCase() });
+		Object.defineProperty(this, 'type', { value: 'Folder' });
 
 		/**
 		 * The path of this SchemaFolder

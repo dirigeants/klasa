@@ -56,18 +56,6 @@ class GatewayDriver {
 		Object.defineProperty(this, '_queue', { value: [] });
 
 		/**
-		 * The resolver instance this Gateway uses to parse the data.
-		 * @type {SettingResolver}
-		 */
-		this.resolver = new SettingResolver(client);
-
-		/**
-		 * All the types accepted for the Gateway.
-		 * @type {?Set<string>}
-		 */
-		this.types = null;
-
-		/**
 		 * All the gateways added
 		 * @type {Set<string>}
 		 */
@@ -92,93 +80,6 @@ class GatewayDriver {
 		this.clientStorage = null;
 	}
 
-	/**
-	 * The data schema Klasa uses for guild configs.
-	 * @since 0.5.0
-	 * @readonly
-	 * @type {GatewayDriverGuildsSchema}
-	 */
-	get guildsSchema() {
-		return {
-			prefix: {
-				type: 'string',
-				default: this.client.options.prefix,
-				min: null,
-				max: 10,
-				array: Array.isArray(this.client.options.prefix),
-				configurable: true
-			},
-			language: {
-				type: 'language',
-				default: this.client.options.language,
-				min: null,
-				max: null,
-				array: false,
-				configurable: true
-			},
-			disableNaturalPrefix: {
-				type: 'boolean',
-				default: false,
-				min: null,
-				max: null,
-				array: false,
-				configurable: Boolean(this.client.options.regexPrefix)
-			},
-			disabledCommands: {
-				type: 'command',
-				default: [],
-				min: null,
-				max: null,
-				array: true,
-				configurable: true
-			}
-		};
-	}
-
-	/**
-	 * The data schema Klasa uses for user configs.
-	 * @since 0.5.0
-	 * @readonly
-	 * @type {GatewayDriverUsersSchema}
-	 */
-	get usersSchema() {
-		return {};
-	}
-
-	/**
-	 * The data schema Klasa uses for client-wide configs.
-	 * @since 0.5.0
-	 * @readonly
-	 * @type {GatewayDriverClientStorageSchema}
-	 */
-	get clientStorageSchema() {
-		return {
-			userBlacklist: {
-				type: 'user',
-				default: [],
-				min: null,
-				max: null,
-				array: true,
-				configurable: true
-			},
-			guildBlacklist: {
-				type: 'string',
-				default: [],
-				min: 17,
-				max: 19,
-				array: true,
-				configurable: true
-			},
-			schedules: {
-				type: 'any',
-				default: [],
-				min: null,
-				max: null,
-				array: true,
-				configurable: false
-			}
-		};
-	}
 
 	/**
 	 * Registers a new Gateway.
@@ -207,7 +108,6 @@ class GatewayDriver {
 	 * @since 0.5.0
 	 */
 	async init() {
-		this.types = new Set(Object.getOwnPropertyNames(SettingResolver.prototype).slice(1));
 		await Promise.all([...this._queue].map(fn => fn()));
 		this._queue.length = 0;
 	}
@@ -244,7 +144,6 @@ class GatewayDriver {
 	 */
 	toJSON() {
 		return {
-			types: [...this.types],
 			keys: [...this.keys],
 			ready: this.ready,
 			...Object.assign({}, [...this].map(([key, value]) => ({ [key]: value.toJSON() })))

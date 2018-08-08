@@ -81,8 +81,8 @@ class Configuration {
 		 */
 		Object.defineProperty(this, '_existsInDB', { value: null, writable: true });
 
-		const { defaults } = this.gateway;
-		for (const key of this.gateway.schema.keys()) this[key] = defaults[key];
+		const { defaults, schema } = this.gateway;
+		for (const key of schema.keys()) this[key] = defaults[key];
 		this._patch(data);
 	}
 
@@ -102,16 +102,8 @@ class Configuration {
 	 * @returns {*}
 	 */
 	get(path) {
-		const route = typeof path === 'string' ? path.split('.') : path;
-		let refThis = this; // eslint-disable-line consistent-this
-		let refSchema = this.gateway.schema;
-		for (const key of route) {
-			if (refSchema.type !== 'Folder' || !refSchema.has(key)) return undefined;
-			refThis = refThis[key];
-			refSchema = refSchema[key];
-		}
-
-		return refThis;
+		const piece = this.schema.paths.get(path);
+		return piece || undefined;
 	}
 
 	/**
@@ -200,7 +192,7 @@ class Configuration {
 		if (!this._existsInDB) return { errors: [], updated: [] };
 
 		if (typeof keys === 'string') keys = [keys];
-		else if (typeof keys === 'undefined') keys = [...this.gateway.schema.values(true)].map(piece => piece.path);
+		else if (typeof keys === 'undefined') keys = [...this.gateway.schema.values()].map(piece => piece.path);
 		if (Array.isArray(keys)) {
 			const result = { errors: [], updated: [] };
 			for (const key of keys) {
@@ -519,7 +511,7 @@ class Configuration {
 	 */
 	_patch(data, instance = this, schema = this.gateway.schema) {
 		if (typeof data !== 'object' || data === null) return;
-		for (const [key, piece] of schema) {
+		for (const [key, piece] of schema.entries()) {
 			const value = data[key];
 			if (value === undefined) continue;
 			if (value === null) instance[key] = deepClone(piece.defaults);

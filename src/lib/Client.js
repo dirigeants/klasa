@@ -242,6 +242,12 @@ class KlasaClient extends Discord.Client {
 			.register('users', this.gateways.usersSchema, this.options.gateways.users)
 			.register('clientStorage', this.gateways.clientStorageSchema, this.options.gateways.clientStorage);
 
+		// Update Guild Schema with Keys needed in Klasa
+		this.constructor.defaultGuildSchema
+			.add('prefix', 'string', { default: this.client.options.prefix, configurable: true, max: 10 })
+			.add('language', 'language', { default: this.client.options.language, configurable: true })
+			.add('disableNaturalPrefix', 'boolean', { configurable: Boolean(this.client.options.regexPrefix) });
+
 		/**
 		 * The Configuration instance that handles this client's configuration
 		 * @since 0.5.0
@@ -268,7 +274,10 @@ class KlasaClient extends Discord.Client {
 			.registerStore(this.arguments);
 
 		const coreDirectory = path.join(__dirname, '../');
-		for (const store of this.pieceStores.values()) store.registerCoreDirectory(coreDirectory);
+		for (const store of this.pieceStores.values()) {
+			store.registerCoreDirectory(coreDirectory);
+			this.constructor.types.add(store.name, require('./settings/types/Piece'));
+		}
 
 		/**
 		 * The Schedule that runs the tasks
@@ -463,7 +472,7 @@ KlasaClient.defaultPermissionLevels = new PermissionLevels()
  * @type {SchemaTypes}
  */
 
-KlasaClient.Types = new SchemaTypes()
+KlasaClient.types = new SchemaTypes()
 	.add('boolean', require('./settings/types/Boolean'))
 	.add('channel', require('./settings/types/Channel'))
 	.add('textchannel', require('./settings/types/Channel'))

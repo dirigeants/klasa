@@ -54,26 +54,6 @@ class GatewayStorage {
 	}
 
 	/**
-	 * Where the bwd folder is located at.
-	 * @since 0.5.0
-	 * @type {string}
-	 * @readonly
-	 */
-	get baseDirectory() {
-		return join(this.client.userBaseDirectory, 'bwd');
-	}
-
-	/**
-	 * Where the file schema is located at.
-	 * @since 0.5.0
-	 * @type {string}
-	 * @readonly
-	 */
-	get filePath() {
-		return join(this.client.userBaseDirectory, 'bwd', `${this.type}.schema.json`);
-	}
-
-	/**
 	 * Get the provider that manages the persistent data.
 	 * @since 0.5.0
 	 * @type {?Provider}
@@ -98,30 +78,16 @@ class GatewayStorage {
 	 * @since 0.5.0
 	 * @param {Object} defaultSchema The default schema
 	 */
-	async init(defaultSchema) {
+	async init() {
 		if (this.ready) throw new Error(`[INIT] ${this} has already initialized.`);
 		const { provider } = this;
 		if (!provider) throw new Error(`This provider (${this.providerName}) does not exist in your system.`);
 		this.ready = true;
+		// TODO:  Could Potentially make the Schema here if they choose to not change from json to the schema constructor
+		// their choice if they want slower startup
 
-		// Init the Schema
-		await fs.ensureDir(this.baseDirectory);
-		let schema;
-		try {
-			schema = await fs.readJSON(this.filePath);
-		} catch (error) {
-			// Make the schema the default one
-			schema = defaultSchema;
-
-			// If the file is written, there must be an issue with the file, emit an
-			// error instead of overwriting it (which would result to data loss). If
-			// the file does not exist, write the default schema.
-			if (error.code === 'ENOENT') await fs.outputJSONAtomic(this.filePath, defaultSchema);
-			else this.client.emit('error', error);
-		}
-
-		this.schema = new SchemaFolder(this.client, this, schema, null, '');
-
+		const debug = this.schema.debug();
+		if (debug.length) throw new Error(`[SCHEMA] There is an error with your schema. \n ${debug.join('\n')}`);
 		// Init the table
 		const hasTable = await provider.hasTable(this.type);
 		if (!hasTable) await provider.createTable(this.type);

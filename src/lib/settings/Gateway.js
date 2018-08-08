@@ -85,15 +85,6 @@ class Gateway extends GatewayStorage {
 		return Configuration;
 	}
 
-	/**
-	 * @since 0.0.1
-	 * @type {SettingResolver}
-	 * @name Gateway#resolver
-	 * @readonly
-	 */
-	get resolver() {
-		return this.store.resolver;
-	}
 
 	/**
 	 * Get an entry from the cache.
@@ -108,7 +99,7 @@ class Gateway extends GatewayStorage {
 		if (create) {
 			const configs = new this.Configuration(this, { id });
 			this.cache.set(id, configs);
-			if (this._synced && this.schema.keyArray.length) configs.sync().catch(err => this.client.emit('error', err));
+			if (this._synced && [...this.schema.keys()].length) configs.sync().catch(err => this.client.emit('error', err));
 			return configs;
 		}
 		return null;

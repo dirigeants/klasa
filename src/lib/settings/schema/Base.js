@@ -46,15 +46,15 @@ class Base extends Map {
 
 		if (isFunction(type)) {
 			callback = type;
-			type = 'folder';
+			type = 'Folder';
 			Piece = require('./SchemaFolder');
 		} else if (isObject(type) && isFunction(options)) {
 			callback = options;
 			options = type;
-			type = 'folder';
+			type = 'Folder';
 			Piece = require('./SchemaFolder');
 		} else if (typeof type === 'string') {
-			Piece = type.toLowerCase() === 'folder' ? require('./SchemaFolder') : SchemaPiece;
+			Piece = type === 'Folder' ? require('./SchemaFolder') : SchemaPiece;
 		} else {
 			throw new Error(`The type for ${key} must be a string for pieces, and a callback for folders`);
 		}
@@ -67,6 +67,11 @@ class Base extends Map {
 		this.set(key, piece);
 		return this;
 	}
+
+	remove(key) {
+		return super.delete(key);
+	}
+
 
 	/**
 	 * Debug the current SchemaFolder or Schema instance.
