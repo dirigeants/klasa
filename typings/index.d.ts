@@ -608,7 +608,7 @@ declare module 'klasa' {
 			emoji: RegExp;
 			role: RegExp;
 			snowflake: RegExp;
-		}
+		};
 	}
 
 //#endregion Settings
