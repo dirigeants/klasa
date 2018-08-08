@@ -1,4 +1,3 @@
-const SchemaPiece = require('./SchemaPiece');
 const { isObject, isFunction, deepClone } = require('../../util/util');
 
 /**
@@ -57,15 +56,15 @@ class Base extends Map {
 			} else {
 				// add('key', { type, ...options });
 				type = options.type || defaultOptions.type;
-				Piece = SchemaPiece;
+				Piece = require('./SchemaPiece');
 			}
 		} else if (typeof type === 'string') {
 			// add('key', 'type');
-			Piece = type === 'Folder' ? require('./SchemaFolder') : SchemaPiece;
+			Piece = type === 'Folder' ? require('./SchemaFolder') : require('./SchemaPiece');
 		} else if (!type && ('type' in defaultOptions)) {
 			// add('key');
 			({ type } = defaultOptions);
-			Piece = SchemaPiece;
+			Piece = require('./SchemaPiece');
 		}
 
 		if (!type) {
