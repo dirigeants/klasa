@@ -94,7 +94,7 @@ class GatewayDriver {
 		if (!(schema instanceof Schema)) throw new TypeError('Schema must be a valid Schema instance.');
 		if (this.name !== undefined && this.name !== null) throw new Error(`The key '${name}' is either taken by another Gateway or reserved for GatewayDriver's functionality.`);
 
-		const gateway = new Gateway(this, name, provider, provider);
+		const gateway = new Gateway(this, name, schema, provider);
 		this.keys.add(name);
 		this[name] = gateway;
 		this._queue.push(gateway.init.bind(gateway));
