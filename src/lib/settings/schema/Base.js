@@ -81,7 +81,7 @@ class Base extends Map {
 	debug() {
 		let errors = [];
 		for (const piece of this.values()) {
-			if (piece.type === 'folder') {
+			if (piece.type === 'Folder') {
 				errors = errors.concat(piece.debug());
 			} else {
 				try {
@@ -103,7 +103,7 @@ class Base extends Map {
 	get configurableKeys() {
 		let keys = [];
 		for (const piece of this.values()) {
-			if (piece.configurableKeys) keys = keys.concat(piece.configurableKeys);
+			if (piece.type === 'Folder') keys = keys.concat(piece.configurableKeys);
 			else keys.push(piece.key);
 		}
 		return keys;
@@ -128,7 +128,7 @@ class Base extends Map {
 	get paths() {
 		const paths = new Map();
 		for (const piece of this.values()) {
-			if (piece.paths) for (const pie of piece.paths.values()) paths.set(pie.path, pie);
+			if (piece.type === 'Folder') for (const pie of piece.paths.values()) paths.set(pie.path, pie);
 			else paths.set(piece.path, piece);
 		}
 		return paths;

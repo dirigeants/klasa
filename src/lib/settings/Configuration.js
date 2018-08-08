@@ -102,8 +102,16 @@ class Configuration {
 	 * @returns {*}
 	 */
 	get(path) {
-		const piece = this.schema.paths.get(path);
-		return piece || undefined;
+		const route = typeof path === 'string' ? path.split('.') : path;
+		let refThis = this; // eslint-disable-line consistent-this
+		let refSchema = this.gateway.schema;
+		for (const key of route) {
+			if (refSchema.type !== 'Folder' || !refSchema.has(key)) return undefined;
+			refThis = refThis[key];
+			refSchema = refSchema[key];
+		}
+
+		return refThis;
 	}
 
 	/**
