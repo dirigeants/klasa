@@ -30,8 +30,6 @@ class SchemaFolder extends Base {
 		 */
 		Object.defineProperty(this, 'key', { value: key });
 
-		// TODO: Maybe remove this type property??? I don't think it's really needed.. other then for like backwards comp.
-
 		/**
 		 * The type of this SchemaFolder (always 'Folder')
 		 * @since 0.5.0

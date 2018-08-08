@@ -1,7 +1,3 @@
-const SchemaFolder = require('./SchemaFolder');
-const { join } = require('path');
-const fs = require('fs-nextra');
-
 class GatewayStorage {
 
 	/**
@@ -42,7 +38,7 @@ class GatewayStorage {
 
 		/**
 		 * @since 0.5.0
-		 * @type {SchemaFolder}
+		 * @type {Schema}
 		 */
 		this.schema = null;
 
@@ -76,7 +72,6 @@ class GatewayStorage {
 	/**
 	 * Inits the current Gateway.
 	 * @since 0.5.0
-	 * @param {Object} defaultSchema The default schema
 	 */
 	async init() {
 		if (this.ready) throw new Error(`[INIT] ${this} has already initialized.`);

@@ -2,9 +2,10 @@ const SchemaPiece = require('./SchemaPiece');
 const { isObject, isFunction, deepClone } = require('../../util/util');
 
 /**
- * @private
+ * The base class for Schema and SchemaFolder
  * @since 0.5.0
- * @extends Map<string, SchemaFolder | SchemaPiece>
+ * @extends Map
+ * @private
  */
 class Base extends Map {
 

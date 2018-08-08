@@ -1,4 +1,3 @@
-const SettingResolver = require('../parsers/SettingResolver');
 const Gateway = require('./Gateway');
 const util = require('../util/util');
 
