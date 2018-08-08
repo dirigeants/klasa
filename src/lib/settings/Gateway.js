@@ -1,7 +1,7 @@
 const GatewayStorage = require('./GatewayStorage');
 const Configuration = require('./Configuration');
-const SchemaPiece = require('./SchemaPiece');
-const SchemaFolder = require('./SchemaFolder');
+const SchemaPiece = require('./schema/SchemaPiece');
+const SchemaFolder = require('./schema/SchemaFolder');
 const { Collection, Guild, GuildChannel, Message } = require('discord.js');
 const { getIdentifier } = require('../util/util');
 
