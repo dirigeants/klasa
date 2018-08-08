@@ -15,6 +15,10 @@
     {
         "name": "Understanding Usage Strings",
         "path": "UnderstandingUsageStrings.md"
+    },
+    {
+        "name": "Frequently Asked Questions",
+        "path": "faq.md"
     }]
 },
 {
