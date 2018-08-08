@@ -486,6 +486,8 @@ KlasaClient.types = new SchemaTypes()
 	.add('string', require('./settings/types/String'))
 	.add('url', require('./settings/types/Url'))
 	.add('user', require('./settings/types/User'))
+	.add('command', require('./settings/types/Command'))
+	.add('language', require('./settings/types/Language'))
 	.add('any', require('./settings/types/SchemaType'));
 
 /**
