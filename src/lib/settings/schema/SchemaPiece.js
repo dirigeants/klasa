@@ -88,7 +88,6 @@ class SchemaPiece {
 	 * Checks whether or not this SchemaPiece is valid.
 	 * @since 0.5.0
 	 * @returns {boolean}
-	 * @readonly
 	 */
 	isValid() {
 		this._schemaCheckType(this.type);

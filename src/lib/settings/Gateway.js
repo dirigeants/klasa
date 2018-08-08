@@ -99,7 +99,7 @@ class Gateway extends GatewayStorage {
 		if (create) {
 			const configs = new this.Configuration(this, { id });
 			this.cache.set(id, configs);
-			if (this._synced && [...this.schema.keys()].length) configs.sync().catch(err => this.client.emit('error', err));
+			if (this._synced && this.schema.size) configs.sync().catch(err => this.client.emit('error', err));
 			return configs;
 		}
 		return null;

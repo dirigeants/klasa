@@ -1,5 +1,9 @@
 const SchemaType = require('../types/Type');
 
+/**
+ * @since 0.5.0
+ * @extends Map<string, SchemaType>
+ */
 class SchemaTypes extends Map {
 
 	add(name, Type) {

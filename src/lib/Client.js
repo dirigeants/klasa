@@ -683,25 +683,4 @@ KlasaClient.defaultClientSchema = new Schema()
  * @param {Piece} piece The piece that was disabled
  */
 
-/**
- * Emitted when a new key or folder is added to the Schema.
- * @event KlasaClient#schemaKeyAdd
- * @since 0.5.0
- * @param {(SchemaFolder|SchemaPiece)} key The key that was added
- */
-
-/**
- * Emitted when a key or folder has been removed from the Schema.
- * @event KlasaClient#schemaKeyRemove
- * @since 0.5.0
- * @param {(SchemaFolder|SchemaPiece)} key The key that was removed
- */
-
-/**
- * Emitted when a key's properties are modified.
- * @event KlasaClient#schemaKeyUpdate
- * @since 0.5.0
- * @param {SchemaPiece} key The piece that was updated
- */
-
 module.exports = KlasaClient;

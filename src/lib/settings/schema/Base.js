@@ -4,7 +4,7 @@ const { isObject, isFunction, deepClone } = require('../../util/util');
 /**
  * @private
  * @since 0.5.0
- * @extends Map
+ * @extends Map<string, SchemaFolder | SchemaPiece>
  */
 class Base extends Map {
 
@@ -25,7 +25,7 @@ class Base extends Map {
 	 * Schema.add('folderKey', { type: 'string', max: 100, min: 5 }, () => true);
 	 *
 	 * // If you want to add keys on the new SchemaFolder
-   * Schema.add('folderKey', { type: 'string', max: 100, min: 5 }, (Folder) => {
+	 * Schema.add('folderKey', { type: 'string', max: 100, min: 5 }, (Folder) => {
 	 *		Folder.add('stringKey1') // will inherit type from the Folder, along with min and max
 	 *		      .add('stringKey2', { min: 50 }); // we want this key to have a different minimum, so we'll change it
 	 *	});
@@ -37,7 +37,6 @@ class Base extends Map {
 	 */
 	add(key, type, options = {}, callback = null) {
 		if (this.has(key)) throw new Error(`The key ${key} already exists in the current schema.`);
-		if (typeof this[key] !== 'undefined') throw new Error(`The key ${key} conflicts with a property of Schema.`);
 		if (!type) {
 			if (type in this.defaultOptions) ({ type } = this.defaultOptions);
 			else throw new Error(`The key ${key} must have a type specified as it's first argument.`);
@@ -77,6 +76,7 @@ class Base extends Map {
 	 * Debug the current SchemaFolder or Schema instance.
 	 * @since 0.5.0
 	 * @returns {Array<?string>}
+	 * @private
 	 */
 	debug() {
 		let errors = [];
