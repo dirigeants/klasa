@@ -6,7 +6,7 @@ const SchemaType = require('./SchemaType');
  * @since 0.5.0
  * @private
  */
-class CommandType extends SchemaType {
+class LanguageType extends SchemaType {
 
 	/**
 	 * Resolves our data into a language
@@ -24,4 +24,4 @@ class CommandType extends SchemaType {
 
 }
 
-module.exports = CommandType;
+module.exports = LanguageType;
