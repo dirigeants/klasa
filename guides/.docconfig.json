@@ -15,6 +15,10 @@
     {
         "name": "Understanding Usage Strings",
         "path": "UnderstandingUsageStrings.md"
+    },
+    {
+        "name": "Frequently Asked Questions",
+        "path": "faq.md"
     }]
 },
 {
@@ -116,6 +120,10 @@
     {
         "name": "Rich Menu",
         "path": "RichMenu.md"
+    },
+    {
+        "name": "Plugins",
+        "path": "Plugins.md"
     }]
 },
 {
@@ -166,6 +174,9 @@
         {
             "name": "Creating a Points System",
             "path": "CreatingPointsSystems.md"
-        }
-    ]
+        },
+        {
+            "name": "Creating a Custom Member Gateway",
+            "path": "CreatingACustomMemberGateway.md"
+        }]
 }]

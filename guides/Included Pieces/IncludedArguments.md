@@ -54,6 +54,14 @@ Resolves any [date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refe
 
 [arguments/date.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/date.js)
 
+## Default
+
+Returns the name of the possible as a literal string whether it's passed or not.
+
+**Source:**
+
+[arguments/default.js](https://github.com/dirigeants/klasa/blob/master/src/arguments/default.js)
+
 ## Duration
 
 Resolves any [date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date).

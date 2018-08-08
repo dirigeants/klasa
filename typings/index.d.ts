@@ -1,7 +1,10 @@
 declare module 'klasa' {
 
+	import { ExecOptions } from 'child_process';
+
 	import {
 		BufferResolvable,
+		CategoryChannel as DiscordCategoryChannel,
 		Channel,
 		Client,
 		ClientApplication,
@@ -12,8 +15,10 @@ declare module 'klasa' {
 		Collection,
 		DMChannel as DiscordDMChannel,
 		Emoji,
+		EmojiResolvable,
 		GroupDMChannel as DiscordGroupDMChannel,
 		Guild as DiscordGuild,
+		GuildChannel as DiscordGuildChannel,
 		GuildMember,
 		Message as DiscordMessage,
 		MessageAttachment,
@@ -21,17 +26,17 @@ declare module 'klasa' {
 		MessageEmbed,
 		MessageOptions,
 		MessageReaction,
+		Permissions,
+		PermissionResolvable,
 		ReactionCollector,
 		Role,
 		Snowflake,
 		StringResolvable,
+		TextChannel as DiscordTextChannel,
 		User as DiscordUser,
 		UserResolvable,
-		TextChannel as DiscordTextChannel,
 		VoiceChannel as DiscordVoiceChannel,
-		CategoryChannel as DiscordCategoryChannel,
-		WebhookClient,
-		GuildChannel as DiscordGuildChannel
+		WebhookClient
 	} from 'discord.js';
 
 	export const version: string;
@@ -41,10 +46,9 @@ declare module 'klasa' {
 	export class KlasaClient extends Client {
 		public constructor(options?: KlasaClientOptions & ClientOptions);
 		public readonly invite: string;
-		public readonly owner?: KlasaUser;
+		public readonly owner: KlasaUser | null;
 		public options: KlasaClientOptions & ClientOptions;
-		public coreBaseDir: string;
-		public clientBaseDir: string;
+		public userBaseDirectory: string;
 		public console: KlasaConsole;
 		public arguments: ArgumentStore;
 		public commands: CommandStore;
@@ -59,7 +63,7 @@ declare module 'klasa' {
 		public pieceStores: Collection<string, any>;
 		public permissionLevels: PermissionLevels;
 		public gateways: GatewayDriver;
-		public configs?: Configuration;
+		public configs: Configuration | null;
 		public application: ClientApplication;
 		public schedule: Schedule;
 		public ready: boolean;
@@ -73,6 +77,8 @@ declare module 'klasa' {
 
 		public sweepMessages(lifetime?: number, commandLifeTime?: number): number;
 		public static defaultPermissionLevels: PermissionLevels;
+		public static plugin: Symbol;
+		public static use(mod: { plugin: Symbol, [x: string]: any }): KlasaClient;
 
 		// Discord.js events
 		public on(event: string, listener: Function): this;
@@ -209,17 +215,17 @@ declare module 'klasa' {
 
 	export class KlasaGuild extends DiscordGuild {
 		public configs: Configuration;
-		public readonly language?: Language;
+		public readonly language: Language;
 	}
 
 	export class KlasaMessage extends DiscordMessage {
 		public readonly guild: KlasaGuild;
 		public guildConfigs: Configuration;
 		public language: Language;
-		public command?: Command;
-		public prefix?: RegExp;
-		public prefixLength?: number;
-		private prompter?: CommandPrompt;
+		public command: Command | null;
+		public prefix: RegExp | null;
+		public prefixLength: number | null;
+		private prompter: CommandPrompt | null;
 		private _responses: KlasaMessage[];
 
 		public readonly responses: KlasaMessage[];
@@ -232,9 +238,11 @@ declare module 'klasa' {
 		public usableCommands(): Promise<Collection<string, Command>>;
 		public hasAtLeastPermissionLevel(min: number): Promise<boolean>;
 
+		public sendLocale(key: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendLocale(key: string, localeArgs?: Array<any>, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 		public sendMessage(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 		public sendEmbed(embed: MessageEmbed, content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendCode(language: string, content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 		public send(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 
 		private _patch(data: any): void;
@@ -246,6 +254,8 @@ declare module 'klasa' {
 		public configs: Configuration;
 		public send(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 		public send(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendLocale(key: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendLocale(key: string, localeArgs?: Array<any>, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 		public sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 		public sendEmbed(embed: MessageEmbed, content?: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 		public sendEmbed(embed: MessageEmbed, options?: MessageOptions): Promise<KlasaMessage>;
@@ -262,6 +272,8 @@ declare module 'klasa' {
 		public readonly guild: KlasaGuild;
 		public send(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 		public send(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendLocale(key: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendLocale(key: string, localeArgs?: Array<any>, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 		public sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 		public sendEmbed(embed: MessageEmbed, content?: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 		public sendEmbed(embed: MessageEmbed, options?: MessageOptions): Promise<KlasaMessage>;
@@ -289,6 +301,8 @@ declare module 'klasa' {
 		public readonly postable: boolean;
 		public send(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 		public send(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendLocale(key: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendLocale(key: string, localeArgs?: Array<any>, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 		public sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 		public sendEmbed(embed: MessageEmbed, content?: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 		public sendEmbed(embed: MessageEmbed, options?: MessageOptions): Promise<KlasaMessage>;
@@ -304,6 +318,8 @@ declare module 'klasa' {
 		public readonly postable: boolean;
 		public send(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 		public send(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendLocale(key: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		public sendLocale(key: string, localeArgs?: Array<any>, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 		public sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 		public sendEmbed(embed: MessageEmbed, content?: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 		public sendEmbed(embed: MessageEmbed, options?: MessageOptions): Promise<KlasaMessage>;
@@ -419,8 +435,8 @@ declare module 'klasa' {
 		public readonly client: KlasaClient;
 		public readonly store: Schedule;
 		public taskName: string;
-		public recurring?: Cron;
-		public time?: Date;
+		public recurring: Cron | null;
+		public time: Date;
 		public id: string;
 		public data: any;
 
@@ -449,16 +465,15 @@ declare module 'klasa' {
 		public readonly synchronizing: boolean;
 		private _existsInDB: boolean;
 
-		public get(key: string): any;
-		public get<T>(key: string): T;
+		public get<T = any>(path: string | string[]): T;
 		public clone(): Configuration;
 		public sync(): Promise<this>;
 		public destroy(): Promise<this>;
 
 		public reset(key?: string | string[], options?: ConfigurationResetOptions): Promise<ConfigurationUpdateResult>;
 		public reset(key?: string | string[], guild?: KlasaGuild, options?: ConfigurationResetOptions): Promise<ConfigurationUpdateResult>;
-		public update(key: ObjectLiteral<any>, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
-		public update(key: ObjectLiteral<any>, guild?: GuildResolvable, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
+		public update(key: ObjectLiteral, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
+		public update(key: ObjectLiteral, guild?: GuildResolvable, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
 		public update(key: string, value: any, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
 		public update(key: string, value: any, guild?: GuildResolvable, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
 		public update(key: string[], value: any[], options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
@@ -466,36 +481,24 @@ declare module 'klasa' {
 		public list(message: KlasaMessage, path: SchemaFolder | string): string;
 		public resolveString(message: KlasaMessage, path: SchemaPiece | string): string;
 
-		private _sync(): Promise<this>;
-		private _get(route: string | string[], piece?: boolean): object;
-		private _get<T>(route: string | string[], piece?: boolean): T;
 		private _save(data: ConfigurationUpdateResult): Promise<void>;
-		private _updateMany(object: any, guild?: GuildResolvable): Promise<ConfigurationUpdateResult>;
-		private _parseSingle(key: string, value: any, guild: KlasaGuild | null, options: ConfigurationUpdateOptions, list: ConfigurationUpdateResult): Promise<void>;
-		private _parseUpdateMany(cache: any, object: any, schema: SchemaFolder, guild: KlasaGuild, list: ConfigurationUpdateResult): void;
 		private _setValueByPath(piece: SchemaPiece, parsedID: any): { updated: boolean, old: any };
-		private _patch(data: any): void;
+		private _patch(data: ObjectLiteral, instance?: object, schema?: SchemaFolder): void;
 
-		public toJSON<T extends ObjectLiteral<PrimitiveType | PrimitiveType[]>>(): T;
+		public toJSON<T extends ObjectLiteral>(): T;
 		public toString(): string;
-
-		private static _merge<T extends ObjectLiteral<any>>(data: any, folder: SchemaFolder | SchemaPiece): T;
-		private static _clone<T extends ObjectLiteral<any>>(data: any, schema: SchemaFolder): T;
-		private static _patch(inst: any, data: any, schema: SchemaFolder): void;
 	}
 
 	export class Gateway extends GatewayStorage {
-		public constructor(store: GatewayDriver, type: string, schema: object, options: GatewayOptions);
+		public constructor(store: GatewayDriver, type: string, schema: ObjectLiteral, options: GatewayOptions);
 		public store: GatewayDriver;
-		public options: GatewayOptions;
-		public defaultSchema: object;
 		public readonly resolver: SettingResolver;
 		public readonly cache: Collection<string, Configuration>;
 		public readonly syncQueue: Collection<string, Promise<Configuration>>;
 
 		public get(input: string | number, create?: boolean): Configuration;
+		public sync(input: string): Promise<Configuration>;
 		public sync(input?: string[]): Promise<Gateway>;
-		public sync(input: string | { id?: string, name?: string }): Promise<Configuration>;
 		public getPath(key?: string, options?: GatewayGetPathOptions): GatewayGetPathResult | null;
 
 		private _resolveGuild(guild: GuildResolvable): KlasaGuild;
@@ -528,21 +531,22 @@ declare module 'klasa' {
 		private _queue: Array<(() => Gateway)>;
 
 		public readonly guildsSchema: {
-			prefix: SchemaPieceJSON,
-			language: SchemaPieceJSON,
-			disableNaturalPrefix: SchemaPieceJSON,
-			disabledCommands: SchemaPieceJSON
+			prefix: SchemaPieceOptions,
+			language: SchemaPieceOptions,
+			disableNaturalPrefix: SchemaPieceOptions,
+			disabledCommands: SchemaPieceOptions
 		};
 
 		public readonly usersSchema: {};
 
 		public readonly clientStorageSchema: {
-			userBlacklist: SchemaPieceJSON,
-			guildBlacklist: SchemaPieceJSON,
-			schedules: SchemaPieceJSON
+			userBlacklist: SchemaPieceOptions,
+			guildBlacklist: SchemaPieceOptions,
+			schedules: SchemaPieceOptions
 		};
 
-		public register(name: string, schema?: object, options?: GatewayDriverRegisterOptions): this;
+		public [Symbol.iterator](): Iterator<[string, Gateway]>;
+		public register(name: string, schema?: ObjectLiteral, options?: GatewayDriverRegisterOptions): this;
 		public init(): Promise<void>;
 		public sync(input?: string[]): Promise<Array<Gateway>>;
 
@@ -552,51 +556,51 @@ declare module 'klasa' {
 
 	export abstract class GatewayStorage {
 		public constructor(client: KlasaClient, type: string, provider?: string);
-		public readonly baseDir: string;
+		public readonly baseDirectory: string;
 		public readonly client: KlasaClient;
 		public readonly defaults: any;
 		public readonly filePath: string;
-		public readonly provider?: Provider;
+		public readonly provider: Provider | null;
 		public readonly providerName: string;
 		public readonly type: string;
 		public ready: boolean;
-		public schema?: SchemaFolder;
+		public schema: SchemaFolder | null;
 
-		public init(defaultSchema: object): Promise<void>;
+		public init(defaultSchema: ObjectLiteral): Promise<void>;
 	}
 
 	export abstract class Schema {
-		public constructor(client: KlasaClient, gateway: Gateway, object: any, parent: SchemaFolder, key: string);
+		public constructor(client: KlasaClient, gateway: Gateway, parent: SchemaFolder, key: string);
 		public readonly client: KlasaClient;
 		public readonly gateway: Gateway;
-		public readonly parent?: SchemaFolder;
+		public readonly parent: SchemaFolder | null;
 		public readonly path: string;
 		public readonly key: string;
-		private readonly _inited: true;
+		private readonly _initialized: true;
 	}
 
 	export class SchemaFolder extends Schema {
-		private constructor(client: KlasaClient, gateway: Gateway, object: any, parent: SchemaFolder, key: string);
+		private constructor(client: KlasaClient, gateway: Gateway, options: SchemaFolderAddOptions, parent: SchemaFolder, key: string);
 		public readonly type: 'Folder';
 		public readonly configurableKeys: string[];
-		public defaults: object;
+		public defaults: ObjectLiteral<PrimitiveType>;
 		public keyArray: string[];
 
-		public add(key: string, options: SchemaFolderAddOptions | { [k: string]: SchemaFolderAddOptions }): Promise<SchemaFolder>;
+		public add(key: string, options: SchemaFolderAddOptions): Promise<SchemaFolder>;
 		public has(key: string): boolean;
 		public remove(key: string): Promise<SchemaFolder>;
-		public getDefaults(data?: object): object;
+		public getDefaults<T = {}>(data?: ObjectLiteral): T & ObjectLiteral;
 		public entries(recursive?: boolean): Iterator<[string, SchemaFolder | SchemaPiece]>;
 		public values(recursive?: boolean): Iterator<SchemaFolder | SchemaPiece>;
 		public keys(recursive?: boolean): Iterator<string>;
 		public [Symbol.iterator](): Iterator<[string, SchemaFolder | SchemaPiece]>;
-		public toJSON(): ObjectLiteral<SchemaFolderAddOptions>;
+		public toJSON(): SchemaFolderOptions;
 		public toString(): string;
 
 		private _add(key: string, options: SchemaFolderAddOptions, type: typeof Schema | typeof SchemaFolder): void;
 		private _remove(key: string): void;
 		private _shardSyncSchema(piece: SchemaFolder | SchemaPiece, action: 'add' | 'delete' | 'update'): Promise<void>;
-		private _init(options: object): true;
+		private _init(options: SchemaFolderAddOptions): true;
 		private force(action: 'add' | 'delete', piece: SchemaFolder | SchemaPiece): Promise<any>;
 	}
 
@@ -605,8 +609,8 @@ declare module 'klasa' {
 		public type: string;
 		public array: boolean;
 		public default: any;
-		public min?: number;
-		public max?: number;
+		public min: number | null;
+		public max: number | null;
 		public configurable: boolean;
 		public validator?: (resolved: any, guild?: KlasaGuild) => void;
 
@@ -622,7 +626,7 @@ declare module 'klasa' {
 		private _schemaCheckConfigurable(configurable: boolean): void;
 		private _init(options: SchemaFolderAddOptions): true;
 
-		public toJSON(): SchemaPieceJSON;
+		public toJSON(): SchemaPieceOptions;
 		public toString(): string;
 	}
 
@@ -631,16 +635,15 @@ declare module 'klasa' {
 //#region Pieces
 
 	export abstract class Piece {
-		public constructor(client: KlasaClient, store: Store<string, Piece, typeof Piece>, file: string | string[], core: boolean, options?: PieceOptions);
+		public constructor(client: KlasaClient, store: Store<string, Piece, typeof Piece>, file: string[], directory: string, options?: PieceOptions);
 		public readonly client: KlasaClient;
-		public readonly core: boolean;
 		public readonly type: string;
-		public readonly dir: string;
 		public readonly path: string;
-		public file: string | string[];
+		public file: string[];
 		public name: string;
 		public enabled: boolean;
 		public store: Store<string, this>;
+		public directory: string;
 
 		public reload(): Promise<this>;
 		public unload(): void;
@@ -652,7 +655,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class Argument extends Piece {
-		public constructor(client: KlasaClient, store: CommandStore, file: string[], core: boolean, options?: ArgumentOptions);
+		public constructor(client: KlasaClient, store: CommandStore, file: string[], directory: string, options?: ArgumentOptions);
 		public aliases: string[];
 		public static regex: {
 			userOrMember: RegExp;
@@ -668,18 +671,18 @@ declare module 'klasa' {
 	}
 
 	export abstract class Command extends Piece {
-		public constructor(client: KlasaClient, store: CommandStore, file: string[], core: boolean, options?: CommandOptions);
+		public constructor(client: KlasaClient, store: CommandStore, file: string[], directory: string, options?: CommandOptions);
 		public readonly category: string;
 		public readonly subCategory: string;
 		public readonly usageDelim: string;
 		public readonly usageString: string;
 		public aliases: string[];
-		public requiredPermissions: string[];
+		public requiredPermissions: Permissions;
 		public bucket: number;
 		public cooldown: number;
 		public deletable: boolean;
-		public description: string | ((message: KlasaMessage) => string);
-		public extendedHelp: string | ((message: KlasaMessage) => string);
+		public description: string | ((language: Language) => string);
+		public extendedHelp: string | ((language: Language) => string);
 		public fullCategory: string[];
 		public guarded: boolean;
 		public nsfw: boolean;
@@ -695,13 +698,13 @@ declare module 'klasa' {
 
 		public createCustomResolver(type: string, resolver: ArgResolverCustomMethod): this;
 		public customizeResponse(name: string, response: string | ((message: KlasaMessage, possible: Possible) => string)): this;
-		public definePrompt(usageString: string, usageDelim: string): Usage;
+		public definePrompt(usageString: string, usageDelim?: string): Usage;
 		public run(message: KlasaMessage, params: any[]): Promise<KlasaMessage | KlasaMessage[] | null>;
 		public toJSON(): PieceCommandJSON;
 	}
 
 	export abstract class Event extends Piece {
-		public constructor(client: KlasaClient, store: EventStore, file: string, core: boolean, options?: EventOptions);
+		public constructor(client: KlasaClient, store: EventStore, file: string, directory: string, options?: EventOptions);
 		public emitter: NodeJS.EventEmitter;
 		public event: string;
 		public once: boolean;
@@ -717,7 +720,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class Extendable extends Piece {
-		public constructor(client: KlasaClient, store: ExtendableStore, file: string, core: boolean, options?: ExtendableOptions);
+		public constructor(client: KlasaClient, store: ExtendableStore, file: string, directory: string, options?: ExtendableOptions);
 		public readonly static: boolean;
 		public appliesTo: string[];
 		public target: boolean;
@@ -728,12 +731,13 @@ declare module 'klasa' {
 	}
 
 	export abstract class Finalizer extends Piece {
+		public constructor(client: KlasaClient, store: FinalizerStore, file: string, directory: string, options?: FinalizerOptions);
 		public abstract run(message: KlasaMessage, response: KlasaMessage | KlasaMessage[] | null, runTime: Stopwatch): void;
 		public toJSON(): PieceFinalizerJSON;
 	}
 
 	export abstract class Inhibitor extends Piece {
-		public constructor(client: KlasaClient, store: InhibitorStore, file: string, core: boolean, options?: InhibitorOptions);
+		public constructor(client: KlasaClient, store: InhibitorStore, file: string, directory: string, options?: InhibitorOptions);
 		public spamProtection: boolean;
 
 		public abstract run(message: KlasaMessage, command: Command): Promise<void | string>;
@@ -741,6 +745,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class Language extends Piece {
+		public constructor(client: KlasaClient, store: LanguageStore, file: string, directory: string, options?: LanguageOptions);
 		public language: ObjectLiteral<string | string[] | ((...args: any[]) => string | string[])>;
 
 		public get<T = string>(term: string, ...args: any[]): T;
@@ -748,7 +753,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class Monitor extends Piece {
-		public constructor(client: KlasaClient, store: MonitorStore, file: string, core: boolean, options?: MonitorOptions);
+		public constructor(client: KlasaClient, store: MonitorStore, file: string, directory: string, options?: MonitorOptions);
 		public ignoreBots: boolean;
 		public ignoreEdits: boolean;
 		public ignoreOthers: boolean;
@@ -763,20 +768,21 @@ declare module 'klasa' {
 	}
 
 	export abstract class Provider extends Piece {
+		public constructor(client: KlasaClient, store: ProviderStore, file: string, directory: string, options?: ProviderOptions);
 		public abstract create<T = any>(table: string, entry: string, data: any): Promise<T>;
 		public abstract createTable<T = any>(table: string, rows?: any[]): Promise<T>;
 		public abstract delete<T = any>(table: string, entry: string): Promise<T>;
 		public abstract deleteTable<T = any>(table: string): Promise<T>;
-		public abstract get<T extends ObjectLiteral<any>>(table: string, entry: string): Promise<T>;
-		public abstract getAll<T extends ObjectLiteral<any>>(table: string): Promise<T[]>;
+		public abstract get<T extends ObjectLiteral>(table: string, entry: string): Promise<T>;
+		public abstract getAll<T extends ObjectLiteral>(table: string): Promise<T[]>;
 		public abstract has(table: string, entry: string): Promise<boolean>;
 		public abstract hasTable(table: string): Promise<boolean>;
 		public abstract removeValue<T = any>(table: string, path: string): Promise<T>;
-		public abstract replace<T = any>(table: string, entry: string, data: ConfigurationUpdateResultEntry[] | [string, any][] | ObjectLiteral<any>): Promise<T>;
-		public abstract update<T = any>(table: string, entry: string, data: ConfigurationUpdateResultEntry[] | [string, any][] | ObjectLiteral<any>): Promise<T>;
+		public abstract replace<T = any>(table: string, entry: string, data: ConfigurationUpdateResultEntry[] | [string, any][] | ObjectLiteral): Promise<T>;
+		public abstract update<T = any>(table: string, entry: string, data: ConfigurationUpdateResultEntry[] | [string, any][] | ObjectLiteral): Promise<T>;
 		// The following is not required by SettingGateway but might be available in some providers
 		public getKeys(table: string): Promise<string[]>;
-		protected parseUpdateInput<T = ObjectLiteral<any>>(updated: T | ConfigurationUpdateResult): T;
+		protected parseUpdateInput<T = ObjectLiteral>(updated: T | ConfigurationUpdateResult): T;
 
 		public shutdown(): Promise<void>;
 		public toJSON(): PieceProviderJSON;
@@ -788,13 +794,14 @@ declare module 'klasa' {
 		public abstract updateColumn<T = any>(table: string, piece: SchemaPiece): Promise<T>;
 		// Remove the abstraction from the parent class, as it's not required by SQLProviders (they use removeColumn instead)
 		public removeValue<T = any>(table: string, path: string): Promise<T>;
-		protected parseUpdateInput<T = [string, any]>(updated?: ConfigurationUpdateResultEntry[] | [string, any][] | ObjectLiteral<any>, resolve?: boolean): T;
-		protected parseEntry<T = ObjectLiteral<any>>(gateway: string | Gateway, entry: ObjectLiteral<any>): T;
+		protected parseUpdateInput<T = [string, any]>(updated?: ConfigurationUpdateResultEntry[] | [string, any][] | ObjectLiteral, resolve?: boolean): T;
+		protected parseEntry<T = ObjectLiteral>(gateway: string | Gateway, entry: ObjectLiteral): T;
 		protected parseValue<T = any>(value: any, schemaPiece: SchemaPiece): T;
 		private _parseGatewayInput(updated: ConfigurationUpdateResultEntry[], keys: string[], values: string[], resolve?: boolean): void;
 	}
 
 	export abstract class Task extends Piece {
+		public constructor(client: KlasaClient, store: TaskStore, file: string, directory: string, options?: TaskOptions);
 		public abstract run(data: any): Promise<void>;
 		public toJSON(): PieceTaskJSON;
 	}
@@ -803,25 +810,27 @@ declare module 'klasa' {
 
 //#region Stores
 
-	export class Store<K, V extends Piece, VConstructor = Constructable<V>> extends Collection<K, V> {
+	export abstract class Store<K, V extends Piece, VConstructor = Constructable<V>> extends Collection<K, V> {
 		public constructor(client: KlasaClient, name: string, holds: V);
-
 		public readonly client: KlasaClient;
-		public readonly coreDir: string;
 		public readonly holds: VConstructor;
 		public readonly name: string;
-		public readonly userDir: string;
+		public readonly userDirectory: string;
+		private readonly coreDirectories: Set<string>;
 
+		protected registerCoreDirectory(directory: string): this;
 		public delete(name: K | V): boolean;
 		public get(key: K): V;
 		public get<T extends V>(key: K): T;
 		public init(): Promise<any[]>;
-		public load(file: string | string[], core?: boolean): V;
+		public load(directory: string, file: string[]): V;
 		public loadAll(): Promise<number>;
 		public resolve(name: V | string): V;
 		public set<T extends V>(key: K, value: T): this;
 		public set(piece: V): V;
 		public toString(): string;
+
+		private static walk<K, V extends Piece, T extends Store<K, V>>(store: T, coreDirectory?: string): Promise<Array<Piece>>;
 	}
 
 	export class ArgumentStore extends Store<string, Argument, typeof Argument> {
@@ -856,7 +865,7 @@ declare module 'klasa' {
 	}
 
 	export class ProviderStore extends Store<string, Provider, typeof Provider> {
-		public readonly default?: Provider;
+		public readonly default: Provider;
 	}
 
 	export class TaskStore extends Store<string, Task, typeof Task> { }
@@ -914,7 +923,7 @@ declare module 'klasa' {
 		public message: KlasaMessage;
 		public usage: Usage | CommandUsage;
 		public reprompted: boolean;
-		public flags: object;
+		public flags: ObjectLiteral<string>;
 		public args: string[];
 		public params: any[];
 		public time: number;
@@ -936,7 +945,7 @@ declare module 'klasa' {
 		private finalize(): any[];
 		private _setup(original: string): void;
 
-		private static getFlags(content: string, delim: string): { content: string; flags: object };
+		private static getFlags(content: string, delim: string): { content: string; flags: ObjectLiteral<string> };
 		private static getArgs(content: string, delim: string): string[];
 		private static getQuotedStringArgs(content: string, delim: string): string[];
 
@@ -950,7 +959,7 @@ declare module 'klasa' {
 		public usageString: string;
 		public usageDelim: string;
 		public parsedUsage: Tag[];
-		public customResolvers: { [K: string]: ArgResolverCustomMethod };
+		public customResolvers: ObjectLiteral<ArgResolverCustomMethod>;
 
 		public createCustomResolver(type: string, resolver: ArgResolverCustomMethod): this;
 		public customizeResponse(name: string, response: ((message: KlasaMessage) => string)): this;
@@ -959,9 +968,9 @@ declare module 'klasa' {
 		public toString(): string;
 
 		private static parseUsage(usageString: string): Tag[];
-		private static tagOpen(usage: object, char: string): void;
-		private static tagClose(usage: object, char: string): void;
-		private static tagSpace(usage: object, char: string): void;
+		private static tagOpen(usage: ObjectLiteral, char: string): void;
+		private static tagClose(usage: ObjectLiteral, char: string): void;
+		private static tagSpace(usage: ObjectLiteral, char: string): void;
 	}
 
 //#endregion Usage
@@ -973,8 +982,8 @@ declare module 'klasa' {
 		public opening: string;
 		public closing: string;
 
-		public format(input: string, type?: ColorsFormatOptions): string;
-		public static useColors?: boolean;
+		public format(input: string): string;
+		public static useColors: boolean | null;
 		public static CLOSE: ColorsClose;
 		public static STYLES: ColorsStyles;
 		public static TEXTS: ColorsTexts;
@@ -990,47 +999,7 @@ declare module 'klasa' {
 
 	}
 
-	export type constants = {
-		DEFAULTS: {
-			CLIENT: KlasaClientOptions,
-			CONSOLE: KlasaConsoleConfig,
-			DATATYPES: ObjectLiteral<QueryBuilderDatatype>
-		};
-		CRON: {
-			allowedNum: number[][];
-			partRegex: RegExp;
-			day: number;
-			predefined: {
-				'@yearly': '0 0 0 1 1 *',
-				'@monthly': '0 0 0 1 * *',
-				'@weekly': '0 0 0 * * 0',
-				'@daily': '0 0 0 * * *',
-				'@hourly': '0 0 * * * *'
-			};
-			tokens: {
-				jan: 1,
-				feb: 2,
-				mar: 3,
-				apr: 4,
-				may: 5,
-				jun: 6,
-				jul: 7,
-				aug: 8,
-				sep: 9,
-				oct: 10,
-				nov: 11,
-				dec: 12,
-				sun: 0,
-				mon: 1,
-				tue: 2,
-				wed: 3,
-				thu: 4,
-				fri: 5,
-				sat: 6
-			};
-			tokensRegex: RegExp;
-		};
-	};
+	export const constants: Constants;
 
 	export class Cron {
 		public constructor(cron: string);
@@ -1083,8 +1052,8 @@ declare module 'klasa' {
 		public readonly client: KlasaClient;
 		public readonly stdout: NodeJS.WritableStream;
 		public readonly stderr: NodeJS.WritableStream;
-		public template?: Timestamp;
-		public colors: object;
+		public template: Timestamp | null;
+		public colors: KlasaConsoleColorStyles;
 		public utc: boolean;
 
 		private readonly timestamp: string;
@@ -1102,9 +1071,9 @@ declare module 'klasa' {
 	}
 
 	export class ReactionHandler extends ReactionCollector {
-		public constructor(message: KlasaMessage, filter: Function, options: ReactionHandlerOptions, display: RichDisplay | RichMenu, emojis: emoji[]);
+		public constructor(message: KlasaMessage, filter: Function, options: ReactionHandlerOptions, display: RichDisplay | RichMenu, emojis: EmojiResolvable[]);
 		public display: RichDisplay | RichMenu;
-		public methodMap: Map<string, emoji>;
+		public methodMap: Map<string, EmojiResolvable>;
 		public currentPage: number;
 		public prompt: string;
 		public time: number;
@@ -1131,14 +1100,14 @@ declare module 'klasa' {
 		public nine(): void;
 		public update(): void;
 
-		private _queueEmojiReactions(emojis: emoji[]): Promise<null>;
+		private _queueEmojiReactions(emojis: EmojiResolvable[]): Promise<null>;
 	}
 
 	export class RichDisplay {
-		public constructor(embed: MessageEmbed);
+		public constructor(embed?: MessageEmbed);
 		public embedTemplate: MessageEmbed;
 		public pages: MessageEmbed[];
-		public infoPage?: MessageEmbed;
+		public infoPage: MessageEmbed | null;
 		public emojis: RichDisplayEmojisObject;
 		public footered: boolean;
 		public footerPrefix: string;
@@ -1153,13 +1122,13 @@ declare module 'klasa' {
 		public setInfoPage(embed: MessageEmbed): RichDisplay;
 		public run(message: KlasaMessage, options?: RichDisplayRunOptions): Promise<ReactionHandler>;
 
-		protected _determineEmojis(emojis: emoji[], stop: boolean, jump: boolean, firstLast: boolean): emoji[];
+		protected _determineEmojis(emojis: EmojiResolvable[], stop: boolean, jump: boolean, firstLast: boolean): EmojiResolvable[];
 		private _footer(): void;
 		private _handlePageGeneration(cb: Function | MessageEmbed): MessageEmbed;
 	}
 
 	export class RichMenu extends RichDisplay {
-		public constructor(embed: MessageEmbed);
+		public constructor(embed?: MessageEmbed);
 		public emojis: RichMenuEmojisObject;
 		public paginated: boolean;
 		public options: MenuOption[];
@@ -1167,7 +1136,7 @@ declare module 'klasa' {
 		public addOption(name: string, body: string, inline?: boolean): RichMenu;
 		public run(message: KlasaMessage, options?: RichMenuRunOptions): Promise<ReactionHandler>;
 
-		protected _determineEmojis(emojis: emoji[], stop: boolean): emoji[];
+		protected _determineEmojis(emojis: EmojiResolvable[], stop: boolean): EmojiResolvable[];
 		private _paginate(): void;
 	}
 
@@ -1175,7 +1144,7 @@ declare module 'klasa' {
 		public constructor(digits?: number);
 		public digits: number;
 		private _start: number;
-		private _end?: number;
+		private _end: number | null;
 
 		public readonly duration: number;
 		public readonly running: boolean;
@@ -1192,12 +1161,49 @@ declare module 'klasa' {
 		private _template: TimestampObject[];
 
 		public display(time?: Date | number | string): string;
+		public displayUTC(time?: Date | number | string): string;
 		public edit(pattern: string): this;
 
+		public static utc(time?: Date | number | string): Date;
 		public static displayArbitrary(pattern: string, time?: Date | number | string): string;
 
+		private static A(time: Date): string;
+		private static a(time: Date): string;
+		private static d(time: Date): string;
+		private static D(time: Date): string;
+		private static dd(time: Date): string;
+		private static DD(time: Date): string;
+		private static ddd(time: Date): string;
+		private static DDD(time: Date): string;
+		private static dddd(time: Date): string;
+		private static DDDD(time: Date): string;
+		private static h(time: Date): string;
+		private static H(time: Date): string;
+		private static hh(time: Date): string;
+		private static HH(time: Date): string;
+		private static m(time: Date): string;
+		private static M(time: Date): string;
+		private static mm(time: Date): string;
+		private static MM(time: Date): string;
+		private static MMM(time: Date): string;
+		private static MMMM(time: Date): string;
+		private static Q(time: Date): string;
+		private static S(time: Date): string;
+		private static s(time: Date): string;
+		private static ss(time: Date): string;
+		private static SS(time: Date): string;
+		private static SSS(time: Date): string;
+		private static x(time: Date): string;
+		private static X(time: Date): string;
+		private static Y(time: Date): string;
+		private static YY(time: Date): string;
+		private static YYY(time: Date): string;
+		private static YYYY(time: Date): string;
+		private static Z(time: Date): string;
+		private static ZZ(time: Date): string;
+
+		private static _resolveDate(time: Date | number | string): Date;
 		private static _display(template: string, time: Date | number | string): string;
-		private static _parse(type: string, time: Date): string;
 		private static _patch(pattern: string): TimestampObject[];
 	}
 
@@ -1207,7 +1213,7 @@ declare module 'klasa' {
 		public value: any;
 		public is: string;
 
-		private parent?: Type;
+		private parent: Type | null;
 		private childKeys: Map<string, Type>;
 		private childValues: Map<string, Type>;
 
@@ -1227,31 +1233,29 @@ declare module 'klasa' {
 	}
 
 	class Util {
-		public static applyToClass(base: object, structure: object, skips?: string[]): void;
+		public static arrayFromObject<T = any>(obj: ObjectLiteral<T>, prefix?: string): Array<T>;
+		public static arraysStrictEquals(arr1: any[], arr2: any[]): boolean;
+		public static chunk<T>(entries: T[], chunkSize: number): Array<T[]>;
 		public static clean(text: string): string;
-		public static codeBlock(lang: string, expression: Stringable): string;
+		public static codeBlock(lang: string, expression: string | number | Stringifible): string;
 		public static deepClone<T = any>(source: T): T;
 		public static exec(exec: string, options?: ExecOptions): Promise<{ stdout: string, stderr: string }>;
 		public static getIdentifier(value: PrimitiveType | { id?: PrimitiveType, name?: PrimitiveType }): PrimitiveType | null;
-		public static isPrimitive(value: any): boolean;
 		public static getTypeName(input: any): string;
-		public static isClass(input: Function): boolean;
-		public static isFunction(input: Function): boolean;
-		public static isNumber(input: number): boolean;
-		public static isObject(input: object): boolean;
-		public static isThenable(input: Promise<any>): boolean;
-		public static objectToTuples(obj: ObjectLiteral<any>, entries?: { keys: string[], values: any[] }): [string[], any[]];
-		public static chunk<T>(entries: T[], chunkSize: number): Array<T[]>;
-		public static makeObject(path: string, value: any, obj?: object): object;
-		public static arrayFromObject<T = any>(obj: ObjectLiteral<T>, prefix?: string): Array<T>;
-		public static arraysEqual(arr1: any[], arr2: any[], clone?: boolean): boolean;
-		public static arraysStrictEquals(arr1: any[], arr2: any[]): boolean;
-		public static mergeDefault(def: object, given?: object): object;
-		public static mergeObjects(objTarget: object, objSource: object): object;
+		public static isClass(input: any): input is Constructable<any>;
+		public static isFunction(input: any): input is Function;
+		public static isNumber(input: any): input is number;
+		public static isObject(input: any): boolean;
+		public static isPrimitive(input: any): input is string | number | boolean;
+		public static isThenable(input: any): boolean;
+		public static makeObject<T = ObjectLiteral, S = ObjectLiteral>(path: string, value: any, obj?: ObjectLiteral): T & S;
+		public static mergeDefault<T = ObjectLiteral, S = ObjectLiteral>(objDefaults: T, objSource: S): T & S;
+		public static mergeObjects<T = ObjectLiteral, S = ObjectLiteral>(objTarget: T, objSource: S): T & S;
+		public static objectToTuples(obj: ObjectLiteral, entries?: { keys: string[], values: any[] }): [string[], any[]];
 		public static regExpEsc(str: string): string;
 		public static sleep<T = any>(delay: number, args?: T): Promise<T>;
 		public static toTitleCase(str: string): string;
-		public static tryParse(value: string): object;
+		public static tryParse<T = ObjectLiteral>(value: string): T | string;
 		private static initClean(client: KlasaClient): void;
 
 		public static titleCaseVariants: TitleCaseVariants;
@@ -1267,7 +1271,6 @@ declare module 'klasa' {
 //#region Typedefs
 
 	export type KlasaClientOptions = {
-		clientBaseDir?: string;
 		commandEditing?: boolean;
 		commandLogging?: boolean;
 		commandMessageLifetime?: number;
@@ -1282,6 +1285,7 @@ declare module 'klasa' {
 		pieceDefaults?: KlasaPieceDefaults;
 		prefix?: string | string[];
 		preserveConfigs?: boolean;
+		prefixCaseInsensitive?: boolean;
 		providers?: KlasaProvidersOptions;
 		readyMessage?: (client: KlasaClient) => string;
 		regexPrefix?: RegExp;
@@ -1313,33 +1317,90 @@ declare module 'klasa' {
 
 	export type KlasaProvidersOptions = {
 		default?: string;
-	} & object;
+	} & ObjectLiteral;
 
 	export type KlasaGatewaysOptions = {
 		clientStorage?: GatewayDriverRegisterOptions;
 		guilds?: GatewayDriverRegisterOptions;
 		users?: GatewayDriverRegisterOptions;
-	} & object;
-
-	export type ExecOptions = {
-		cwd?: string;
-		encoding?: string;
-		env?: ObjectLiteral<string>;
-		gid?: number;
-		killSignal?: string | number;
-		maxBuffer?: number;
-		shell?: string;
-		timeout?: number;
-		uid?: number;
-	};
+	} & ObjectLiteral;
 
 	// Parsers
-	type ArgResolverCustomMethod = (arg: string, possible: Possible, message: KlasaMessage, params: string[]) => Promise<any>;
+	type ArgResolverCustomMethod = (arg: string, possible: Possible, message: KlasaMessage, params: string[]) => any;
+
+	type Constants = {
+		DEFAULTS: {
+			CLIENT: KlasaClientOptions,
+			CONSOLE: KlasaConsoleConfig,
+			DATATYPES: ObjectLiteral<QueryBuilderDatatype>
+		};
+		TIME: {
+			SECOND: number;
+			MINUTE: number;
+			HOUR: number;
+			DAY: number;
+			DAYS: string[];
+			MONTHS: string[];
+			TIMESTAMP: {
+				TOKENS: {
+					Y: number;
+					Q: number;
+					M: number;
+					D: number;
+					d: number;
+					X: number;
+					x: number;
+					H: number;
+					h: number;
+					a: number;
+					A: number;
+					m: number;
+					s: number;
+					S: number;
+					Z: number;
+				};
+			};
+			CRON: {
+				partRegex: RegExp;
+				allowedNum: number[][];
+				predefined: {
+					'@annually': string;
+					'@yearly': string;
+					'@monthly': string;
+					'@weekly': string;
+					'@daily': string;
+					'@hourly': string;
+				};
+				tokens: {
+					jan: number;
+					feb: number;
+					mar: number;
+					apr: number;
+					may: number;
+					jun: number;
+					jul: number;
+					aug: number;
+					sep: number;
+					oct: number;
+					nov: number;
+					dec: number;
+					sun: number;
+					mon: number;
+					tue: number;
+					wed: number;
+					thu: number;
+					fri: number;
+					sat: number;
+				};
+				tokensRegex: RegExp;
+			}
+		};
+	};
 
 	// Permissions
 	export type PermissionLevel = {
 		break: boolean;
-		check: (client: KlasaClient, message: KlasaMessage) => boolean;
+		check: (client: KlasaClient, message: KlasaMessage) => Promise<boolean> | boolean;
 		fetch: boolean;
 	};
 
@@ -1362,7 +1423,7 @@ declare module 'klasa' {
 
 	export type ScheduledTaskJSON = {
 		catchUp: boolean;
-		data?: any;
+		data: ObjectLiteral;
 		id: string;
 		taskName: string;
 		time: number;
@@ -1377,13 +1438,12 @@ declare module 'klasa' {
 
 	// Settings
 	export type GatewayOptions = {
-		nice?: boolean;
-		provider: Provider;
+		provider: string;
 	};
 
 	export type GatewayJSON = {
 		options: GatewayOptions;
-		schema: SchemaFolderJSON;
+		schema: SchemaFolderAddOptions;
 		type: string;
 	};
 
@@ -1436,48 +1496,31 @@ declare module 'klasa' {
 		piece: SchemaPiece;
 	};
 
-	export type ConfigurationPathOptions = {
-		avoidUnconfigurable?: boolean;
-		piece?: boolean;
-	};
-
-	export type ConfigurationPathResult = {
-		path: SchemaPiece;
-		route: string[];
-	};
-
 	export type GatewayDriverRegisterOptions = {
 		provider?: string;
+		syncArg?: string[] | string | true;
 	};
 
-	export type SchemaFolderAddOptions = {
+	export type SchemaFolderAddOptions = SchemaFolderOptions | SchemaPieceOptions;
+
+	export type SchemaPieceOptions = {
+		type: string;
 		array?: boolean;
 		configurable?: boolean;
 		default?: any;
-		max?: number;
-		min?: number;
-		type: string;
+		max?: number | null;
+		min?: number | null;
 	};
+
+	export type SchemaFolderOptions = {
+		type?: 'Folder';
+	} & ObjectLiteral<SchemaPieceOptions>;
 
 	export type SchemaPieceEditOptions = {
 		configurable?: boolean;
 		default?: any;
 		max?: number;
 		min?: number;
-	};
-
-	export type SchemaPieceJSON = {
-		array: boolean;
-		configurable: boolean;
-		default: any;
-		max?: number;
-		min?: number;
-		type: string;
-	};
-
-	export type SchemaFolderJSON = {
-		type: 'Folder';
-		[k: string]: SchemaPieceJSON | SchemaFolderJSON | string;
 	};
 
 	export type GatewayDriverJSON = {
@@ -1487,8 +1530,7 @@ declare module 'klasa' {
 		keys: string[];
 		ready: boolean;
 		types: string[];
-		[k: string]: GatewayJSON | any;
-	};
+	} & ObjectLiteral<GatewayJSON>;
 
 	// Structures
 	export type PieceOptions = {
@@ -1503,12 +1545,12 @@ declare module 'klasa' {
 	export type CommandOptions = {
 		aliases?: string[];
 		autoAliases?: boolean;
-		requiredPermissions?: string[];
+		requiredPermissions?: PermissionResolvable;
 		bucket?: number;
 		cooldown?: number;
 		deletable?: boolean;
-		description?: string | ((message: KlasaMessage) => string);
-		extendedHelp?: string | ((message: KlasaMessage) => string);
+		description?: string | string[] | ((language: Language) => string | string[]);
+		extendedHelp?: string | string[] | ((language: Language) => string | string[]);
 		guarded?: boolean;
 		nsfw?: boolean;
 		permissionLevel?: number;
@@ -1541,7 +1583,6 @@ declare module 'klasa' {
 		ignroeBlacklistedGuilds?: boolean;
 	} & PieceOptions;
 
-
 	export type EventOptions = {
 		emitter?: NodeJS.EventEmitter;
 		event?: string;
@@ -1554,7 +1595,7 @@ declare module 'klasa' {
 	export type TaskOptions = PieceOptions;
 
 	export type PieceJSON = {
-		dir: string;
+		directory: string;
 		path: string;
 		enabled: boolean;
 		file: string[];
@@ -1573,8 +1614,8 @@ declare module 'klasa' {
 		category: string;
 		cooldown: number;
 		deletable: boolean;
-		description: string | ((message: KlasaMessage) => string);
-		extendedHelp: string | ((message: KlasaMessage) => string);
+		description: string | ((language: Language) => string);
+		extendedHelp: string | ((language: Language) => string);
 		fullCategory: string[];
 		guarded: boolean;
 		nsfw: boolean;
@@ -1597,7 +1638,7 @@ declare module 'klasa' {
 
 	export type PieceExtendableJSON = {
 		appliesTo: string[];
-		target: string;
+		target: 'discord.js' | 'klasa';
 	} & PieceJSON;
 
 	export type PieceInhibitorJSON = {
@@ -1713,14 +1754,7 @@ declare module 'klasa' {
 	};
 
 	export type KlasaConsoleConfig = {
-		types?: {
-			debug?: string;
-			error?: string;
-			log?: string;
-			verbose?: string;
-			warn?: string;
-			wtf?: string;
-		};
+		utc?: boolean;
 		colors?: KlasaConsoleColorStyles;
 		stderr?: NodeJS.WritableStream;
 		stdout?: NodeJS.WritableStream;
@@ -1805,7 +1839,7 @@ declare module 'klasa' {
 	};
 
 	export type TimestampObject = {
-		content?: string;
+		content: string | null;
 		type: string;
 	};
 
@@ -1822,29 +1856,27 @@ declare module 'klasa' {
 		time?: number;
 	};
 
-	export type emoji = string;
-
 	export type RichDisplayEmojisObject = {
-		first: emoji;
-		back: emoji;
-		forward: emoji;
-		last: emoji;
-		jump: emoji;
-		info: emoji;
-		stop: emoji;
-	};
+		first: EmojiResolvable;
+		back: EmojiResolvable;
+		forward: EmojiResolvable;
+		last: EmojiResolvable;
+		jump: EmojiResolvable;
+		info: EmojiResolvable;
+		stop: EmojiResolvable;
+	} & ObjectLiteral<EmojiResolvable>;
 
 	export type RichMenuEmojisObject = {
-		zero: emoji;
-		one: emoji;
-		two: emoji;
-		three: emoji;
-		four: emoji;
-		five: emoji;
-		six: emoji;
-		seven: emoji;
-		eight: emoji;
-		nine: emoji;
+		zero: EmojiResolvable;
+		one: EmojiResolvable;
+		two: EmojiResolvable;
+		three: EmojiResolvable;
+		four: EmojiResolvable;
+		five: EmojiResolvable;
+		six: EmojiResolvable;
+		seven: EmojiResolvable;
+		eight: EmojiResolvable;
+		nine: EmojiResolvable;
 	} & RichDisplayEmojisObject;
 
 	export type MenuOption = {
@@ -1864,13 +1896,17 @@ declare module 'klasa' {
 		time?: number;
 	};
 
-	export type Stringable = string | any;
+	interface Stringifible {
+		toString(): string;
+	}
 
-	type ObjectLiteral<T> = { [key: string]: T };
+	interface ObjectLiteral<T = any> {
+		[k: string]: T;
+	}
 
-	export type GuildSettings = ObjectLiteral<any>;
+	export type GuildSettings = ObjectLiteral;
 	export type SchemaObject = ObjectLiteral<SchemaPiece>;
-	export type SchemaDefaults = ObjectLiteral<any>;
+	export type SchemaDefaults = ObjectLiteral;
 
 	type Constructable<T> = new (...args: any[]) => T;
 
@@ -1881,8 +1917,7 @@ declare module 'klasa' {
 		voicechannel: 'VoiceChannel';
 		categorychannel: 'CategoryChannel';
 		guildmember: 'GuildMember';
-		[key: string]: string;
-	};
+	} & ObjectLiteral<string>;
 
 //#endregion
 

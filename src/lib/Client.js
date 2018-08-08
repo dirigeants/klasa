@@ -29,6 +29,9 @@ const constants = require('./util/constants');
 const Stopwatch = require('./util/Stopwatch');
 const util = require('./util/util');
 
+// external plugins
+const plugins = new Set();
+
 /**
  * The client for handling everything. See {@tutorial GettingStarted} for more information how to get started using this class.
  * @extends external:Client
@@ -56,8 +59,9 @@ class KlasaClient extends Discord.Client {
 	 * @property {KlasaProvidersOptions} [providers] The provider options
 	 * @property {(string|Function)} [readyMessage=`Successfully initialized. Ready to serve ${this.guilds.size} guilds.`] readyMessage to be passed throughout Klasa's ready event
 	 * @property {RegExp} [regexPrefix] The regular expression prefix if one is provided
-	 * @property {KlasaClientOptionsSchedule} [schedule] The options for the internal clock module that runs Schedule
+	 * @property {KlasaClientOptionsSchedule} [schedule={}] The options for the internal clock module that runs Schedule
 	 * @property {boolean} [typing=false] Whether the bot should type while processing commands
+	 * @property {boolean} [prefixCaseInsensitive=false] Wether the bot should respond to case insensitive prefix or not
 	 */
 
 	/**
@@ -124,18 +128,11 @@ class KlasaClient extends Discord.Client {
 		 */
 
 		/**
-		 * The directory to the node_modules folder where Klasa exists
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.coreBaseDir = path.join(__dirname, '../');
-
-		/**
 		 * The directory where the user files are at
 		 * @since 0.0.1
 		 * @type {string}
 		 */
-		this.clientBaseDir = path.dirname(require.main.filename);
+		this.userBaseDirectory = path.dirname(require.main.filename);
 
 		/**
 		 * The console for this instance of klasa. You can disable timestamps, colors, and add writable streams as config options to configure this.
@@ -266,6 +263,9 @@ class KlasaClient extends Discord.Client {
 			.registerStore(this.tasks)
 			.registerStore(this.arguments);
 
+		const coreDirectory = path.join(__dirname, '../');
+		for (const store of this.pieceStores.values()) store.registerCoreDirectory(coreDirectory);
+
 		/**
 		 * The Schedule that runs the tasks
 		 * @since 0.5.0
@@ -279,6 +279,9 @@ class KlasaClient extends Discord.Client {
 		 * @type {boolean}
 		 */
 		this.ready = false;
+
+		// Run all plugin functions in this context
+		for (const plugin of plugins) plugin[this.constructor.plugin].call(this);
 	}
 
 	/**
@@ -288,9 +291,8 @@ class KlasaClient extends Discord.Client {
 	 * @readonly
 	 */
 	get invite() {
-		if (!this.user.bot) throw 'Why would you need an invite link for a selfbot...';
-		const permissions = new Permissions(3072).add(...this.commands.map(command => command.requiredPermissions)).bitfield;
 		// VIEW_CHANNEL, SEND_MESSAGES
+		const permissions = new Permissions(3072).add(...this.commands.map(command => command.requiredPermissions)).bitfield;
 		return `https://discordapp.com/oauth2/authorize?client_id=${this.application.id}&permissions=${permissions}&scope=bot`;
 	}
 
@@ -417,7 +419,26 @@ class KlasaClient extends Discord.Client {
 		return messages;
 	}
 
+	/**
+	 * Caches a plugin module to be used when creating a KlasaClient instance
+	 * @since 0.5.0
+	 * @param {Object} mod The module of the plugin to use
+	 * @returns {this}
+	 * @chainable
+	 */
+	static use(mod) {
+		plugins.add(mod);
+		return this;
+	}
+
 }
+
+/**
+ * The plugin symbol to be used in external packages
+ * @since 0.5.0
+ * @type {Symbol}
+ */
+KlasaClient.plugin = Symbol('KlasaPlugin');
 
 /**
  * The default PermissionLevels
