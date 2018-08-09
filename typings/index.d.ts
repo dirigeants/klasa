@@ -551,7 +551,8 @@ declare module 'klasa' {
 		public add(key: string, options: SchemaPieceOptions, callback: (folder: SchemaFolder) => any): this;
 		public add(key: string, options?: SchemaPieceOptions): this;
 		public add(key: string, type?: string, options?: SchemaPieceOptions): this;
-		public remove(key: string): boolean;
+		public remove(key: string): this;
+		public get<T = SchemaPiece | SchemaFolder>(key: string | Array<string>): T;
 		public toJSON(): ObjectLiteral;
 
 		private debug(): Array<string>;

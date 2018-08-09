@@ -154,38 +154,42 @@ class Gateway extends GatewayStorage {
 	getPath(key = '', { avoidUnconfigurable = false, piece: requestPiece = true, errors = true } = {}) {
 		if (key === '' || key === '.') return { piece: this.schema, route: [] };
 		const route = key.split('.');
-		let piece = this.schema;
+		const piece = this.schema.get(route);
 
-		for (let i = 0; i < route.length; i++) {
-			const currKey = route[i];
-			if (!piece.has(currKey)) {
-				if (!errors) return null;
-				throw `The key ${route.slice(0, i + 1).join('.')} does not exist in the current schema.`;
-			}
-
-			piece = piece[currKey];
-
-			// There is no more to iterate if the current piece is not a SchemaFolder
-			if (piece.type !== 'Folder') break;
-		}
-
-		if (piece.type === 'Folder') {
-			// If it's a Folder and a Piece is requested, throw
-			if (requestPiece === true) {
-				if (!errors) return null;
-				const keys = avoidUnconfigurable ? piece.configurableKeys : [...piece.keys()];
-				throw keys.length ? `Please, choose one of the following keys: '${keys.join('\', \'')}'` : `This group is not configurable.`;
-			}
-		} else if (requestPiece === false) {
-			// Else it will always be a Piece, if a folder is requested, get parent
-			piece = piece.parent;
-		} else if (avoidUnconfigurable && !piece.configurable) {
-			// If the Piece is unconfigurable and avoidUnconfigurable is requested, throw
+		// The piece does not exist (invalid or non-existant path)
+		if (!piece) {
 			if (!errors) return null;
-			throw `The key ${piece.path} is not configurable.`;
+			throw `The key ${key} does not exist in the schema.`;
 		}
 
-		return { piece, route: piece.path.split('.') };
+		if (requestPiece === null) requestPiece = piece.type !== 'Folder';
+
+		// GetPath expects a piece
+		if (requestPiece) {
+			// The piece is a key
+			if (piece.type !== 'Folder') {
+				// If the Piece is unconfigurable and avoidUnconfigurable is requested, throw
+				if (avoidUnconfigurable && !piece.configurable) {
+					if (!errors) return null;
+					throw `The key ${piece.path} is not configurable.`;
+				}
+				return { piece, route };
+			}
+
+			// The piece is a folder
+			if (!errors) return null;
+			const keys = avoidUnconfigurable ? piece.configurableKeys : [...piece.keys()];
+			throw keys.length ? `Please, choose one of the following keys: '${keys.join('\', \'')}'` : 'This group is not configurable.';
+		}
+
+		// GetPath does not expect a piece
+		if (piece.type !== 'Folder') {
+			// Remove leading key from the path
+			route.pop();
+			return { piece: piece.parent, route };
+		}
+
+		return { piece, route };
 	}
 
 	/**
