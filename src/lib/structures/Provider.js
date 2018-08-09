@@ -177,6 +177,11 @@ class Provider extends Piece {
 		// Reserved for SQL databases
 	}
 
+	async getColumns() {
+		// Reserved for SQL databases
+		return [];
+	}
+
 	/**
 	 * Parse the gateway input for easier operation
 	 * @since 0.5.0

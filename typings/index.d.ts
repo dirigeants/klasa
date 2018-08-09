@@ -493,12 +493,10 @@ declare module 'klasa' {
 		public sync(input: string): Promise<Configuration>;
 		public sync(input?: string[]): Promise<Gateway>;
 		public getPath(key?: string, options?: GatewayGetPathOptions): GatewayGetPathResult | null;
-
-		private _resolveGuild(guild: GuildResolvable): KlasaGuild;
-		private _shardSync(path: string[], data: any, action: 'add' | 'delete' | 'update'): Promise<void>;
-
 		public toJSON(): GatewayJSON;
 		public toString(): string;
+
+		private _resolveGuild(guild: GuildResolvable): KlasaGuild;
 	}
 
 	export class QueryBuilder {
@@ -775,6 +773,7 @@ declare module 'klasa' {
 		public abstract addColumn<T = any>(table: string, columns: SchemaFolder | SchemaPiece): Promise<T>;
 		public abstract removeColumn<T = any>(table: string, columns: string | string[]): Promise<T>;
 		public abstract updateColumn<T = any>(table: string, piece: SchemaPiece): Promise<T>;
+		public abstract getColumns(table: string): Promise<Array<string>>;
 		// Remove the abstraction from the parent class, as it's not required by SQLProviders (they use removeColumn instead)
 		public removeValue<T = any>(table: string, path: string): Promise<T>;
 		protected parseUpdateInput<T = [string, any]>(updated?: ConfigurationUpdateResultEntry[] | [string, any][] | ObjectLiteral, resolve?: boolean): T;

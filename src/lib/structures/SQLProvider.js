@@ -52,6 +52,17 @@ class SQLProvider extends Provider {
 	}
 
 	/**
+	 * The getColumns method which gets the name of all columns.
+	 * @since 0.5.0
+	 * @param {string} table The table to check against
+	 * @returns {string[]}
+	 * @abstract
+	 */
+	async getColumns() {
+		throw new Error(`[PROVIDERS] ${this.path} | Missing method 'updateColumn' of ${this.constructor.name}`);
+	}
+
+	/**
 	 * Parse the gateway input for easier operation
 	 * @since 0.5.0
 	 * @param {(ConfigurationUpdateResultEntry[]|Array<Array<string>>|Object<string, *>)} [updated] The updated entries
