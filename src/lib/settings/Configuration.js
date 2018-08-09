@@ -307,7 +307,7 @@ class Configuration {
 		if (keysTypes.length) {
 			for (const keyType of keysTypes.sort()) {
 				array.push(`= ${toTitleCase(keyType)}s =`,
-					...keys[keyType].sort().map(key => `${key.padEnd(longest)} :: ${this.resolveString(message, folder[key])}`),
+					...keys[keyType].sort().map(key => `${key.padEnd(longest)} :: ${this.resolveString(message, folder.get(key))}`),
 					'');
 			}
 		}
