@@ -287,7 +287,7 @@ class Configuration {
 	 * @returns {string}
 	 */
 	list(message, path) {
-		const folder = path instanceof Schema ? path : this.gateway.getPath(path, { piece: false }).piece;
+		const folder = typeof path === 'string' ? this.gateway.getPath(path, { piece: false }).piece : path;
 		const array = [];
 		const folders = [];
 		const keys = {};
