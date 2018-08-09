@@ -75,16 +75,29 @@ class GatewayStorage {
 	 * @since 0.5.0
 	 */
 	async init() {
+		// A gateway must not init twice
 		if (this.ready) throw new Error(`[INIT] ${this} has already initialized.`);
+
+		// Check the provider's existence
 		const { provider } = this;
 		if (!provider) throw new Error(`This provider (${this.providerName}) does not exist in your system.`);
 		this.ready = true;
 
+		// Check for errors in the schema
 		const debug = this.schema.debug();
-		if (debug.length) throw new Error(`[SCHEMA] There is an error with your schema. \n ${debug.join('\n')}`);
+		if (debug.length) throw new Error(`[SCHEMA] There is an error with your schema.\n${debug.join('\n')}`);
+
 		// Init the table
 		const hasTable = await provider.hasTable(this.type);
 		if (!hasTable) await provider.createTable(this.type);
+
+		// Add any missing columns (NoSQL providers return empty array)
+		const columns = await provider.getColumns(this.type);
+		if (columns.length) {
+			const promises = [];
+			for (const [key, piece] of this.schema.paths) if (!columns.includes(key)) promises.push(provider.addColumn(key, piece));
+			await Promise.all(promises);
+		}
 	}
 
 }
