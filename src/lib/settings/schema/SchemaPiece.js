@@ -190,7 +190,7 @@ class SchemaPiece {
 	/**
 	 * Check if options.filter is valid.
 	 * @since 0.5.0
-	 * @param {Function} filter The parameter to validatePermissionLevels
+	 * @param {boolean} configurable The paramter to validate
 	 * @throws {TypeError}
 	 * @private
 	 */
@@ -201,7 +201,7 @@ class SchemaPiece {
 	/**
 	 * Check if options.filter is valid.
 	 * @since 0.5.0
-	 * @param {Function} filter The parameter to validatePermissionLevels
+	 * @param {Function} filter The parameter to validate
 	 * @throws {TypeError}
 	 * @private
 	 */
