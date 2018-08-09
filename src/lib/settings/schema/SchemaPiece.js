@@ -76,10 +76,18 @@ class SchemaPiece {
 		 */
 		this.default = 'default' in options ? options.default : this._generateDefault();
 
+
 		/**
-		 * The filter to use for this key when resolving.
+		 * The minimum value for this key.
 		 * @since 0.5.0
-		 * @type {Function}
+		 * @type {?number}
+		 */
+		this.min = 'min' in options ? options.min : null;
+
+		/**
+		 * The maximum value for this key.
+		 * @since 0.5.0
+		 * @type {?number}
 		 */
 		this.max = 'max' in options ? options.max : null;
 
@@ -180,7 +188,13 @@ class SchemaPiece {
 		}
 	}
 
-
+	/**
+	 * Checks if options.min and options.max are valid.
+	 * @since 0.5.0
+	 * @param {number} min The options.min parameter to validate
+	 * @param {number} max The options.max parameter to validate
+	 * @private
+	 */
 	_checkLimits(min, max) {
 		if (min !== null && !isNumber(min)) throw new TypeError(`[KEY] ${this.path} - Parameter min must be a number or null.`);
 		if (max !== null && !isNumber(max)) throw new TypeError(`[KEY] ${this.path} - Parameter max must be a number or null.`);
