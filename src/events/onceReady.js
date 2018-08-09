@@ -16,15 +16,6 @@ module.exports = class extends Event {
 		this.client.settings = this.client.gateways.clientStorage.get(this.client.user.id, true);
 		await this.client.gateways.sync();
 
-		// TODO(UnseenFaith): Implement custom resolvers so users cannot disable guarded commands
-		// if (this.client.gateways.guilds.schema.has('disabledCommands')) {
-		// 	const languageStore = this.client.languages;
-		// 	const commandStore = this.client.commands;
-		// 	this.client.gateways.guilds.schema.disabledCommands.setValidator(function (command, guild) { // eslint-disable-line
-		// 		if ((cmd => cmd && cmd.guarded)(commandStore.get(command))) throw (guild ? guild.language : languageStore.default).get('COMMAND_CONF_GUARDED', command);
-		// 	});
-		// }
-
 		// Init all the pieces
 		await Promise.all(this.client.pieceStores.filter(store => !['providers', 'extendables'].includes(store.name)).map(store => store.init()));
 		util.initClean(this.client);
