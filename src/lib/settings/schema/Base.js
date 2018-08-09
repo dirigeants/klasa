@@ -173,6 +173,13 @@ class Base extends Map {
 		return Object.assign({}, ...[...this.values()].map(piece => ({ [piece.key]: piece.toJSON() })));
 	}
 
+	/**
+	 * Returns a new Iterator object that contains the keys for each element contained in this folder.
+	 * Identical to [Map.keys()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/keys)
+	 * @since 0.5.0
+	 * @param {boolean} recursive Whether the iteration should be recursive
+	 * @yields {string}
+	 */
 	*keys(recursive = false) {
 		if (recursive) {
 			for (const [key, value] of super.entries()) {
@@ -184,6 +191,13 @@ class Base extends Map {
 		}
 	}
 
+	/**
+	 * Returns a new Iterator object that contains the values for each element contained in this folder.
+	 * Identical to [Map.values()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/values)
+	 * @since 0.5.0
+	 * @param {boolean} recursive Whether the iteration should be recursive
+	 * @yields {(SchemaFolder|SchemaPiece)}
+	 */
 	*values(recursive = false) {
 		if (recursive) {
 			for (const value of super.values()) {
@@ -195,6 +209,13 @@ class Base extends Map {
 		}
 	}
 
+	/**
+	 * Returns a new Iterator object that contains the `[key, value]` pairs for each element contained in this folder.
+	 * Identical to [Map.entries()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/entries)
+	 * @since 0.5.0
+	 * @param {boolean} recursive Whether the iteration should be recursive
+	 * @yields {Array<string|SchemaFolder|SchemaPiece>}
+	 */
 	*entries(recursive = false) {
 		if (recursive) {
 			for (const [key, value] of super.entries()) {
