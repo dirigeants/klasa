@@ -165,7 +165,7 @@ class Settings {
 	async destroy() {
 		if (this._existsInDB) {
 			await this.gateway.provider.delete(this.gateway.type, this.id);
-			if (this.client.listenerCount('configDeleteEntry')) this.client.emit('configDeleteEntry', this);
+			if (this.client.listenerCount('settingsDeleteEntry')) this.client.emit('settingsDeleteEntry', this);
 		}
 		this.gateway.cache.delete(this.id);
 		return this;
@@ -428,11 +428,11 @@ class Settings {
 		if (this._existsInDB === false) {
 			await this.gateway.provider.create(this.gateway.type, this.id);
 			this._existsInDB = true;
-			if (this.client.listenerCount('configCreateEntry')) this.client.emit('configCreateEntry', this);
+			this.client.emit('settingsCreateEntry', this);
 		}
 
 		await this.gateway.provider.update(this.gateway.type, this.id, updated);
-		if (this.client.listenerCount('configUpdateEntry')) this.client.emit('configUpdateEntry', this, updated);
+		this.client.emit('settingsUpdateEntry', this, updated);
 	}
 
 	/**
