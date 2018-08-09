@@ -274,10 +274,7 @@ class KlasaClient extends Discord.Client {
 			.registerStore(this.arguments);
 
 		const coreDirectory = path.join(__dirname, '../');
-		for (const store of this.pieceStores.values()) {
-			store.registerCoreDirectory(coreDirectory);
-			KlasaClient.types.add(store.name, require('./settings/types/Piece'));
-		}
+		for (const store of this.pieceStores.values()) store.registerCoreDirectory(coreDirectory);
 
 		/**
 		 * The Schedule that runs the tasks
@@ -486,8 +483,8 @@ KlasaClient.types = new SchemaTypes()
 	.add('string', require('./settings/types/String'))
 	.add('url', require('./settings/types/Url'))
 	.add('user', require('./settings/types/User'))
-	.add('command', require('./settings/types/Command'))
-	.add('language', require('./settings/types/Language'))
+	.add('command', require('./settings/types/Piece'))
+	.add('language', require('./settings/types/Piece'))
 	.add('any', require('./settings/types/SchemaType'));
 
 /**
