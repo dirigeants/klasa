@@ -11,10 +11,6 @@ const Type = require('../util/Type');
  */
 class SQLProvider extends Provider {
 
-	async removeValue() {
-		// Not used for SQL databases
-	}
-
 	/**
 	 * The addColumn method which inserts/creates a new table to the database.
 	 * @since 0.5.0

@@ -112,23 +112,6 @@ module.exports = class extends Provider {
 	}
 
 	/**
-	 * Remove a value or object from all entries.
-	 * @param {string} table The name of the directory
-	 * @param {string} [path=''] The key's path to update
-	 * @param {boolean} nice Whether the provider should update all entries at the same time or politely update them sequentially
-	 */
-	async removeValue(table, path = '', nice = false) {
-		const route = path.split('.');
-		if (nice) {
-			const values = await this.getAll(table, true);
-			for (let i = 0; i < values.length; i++) await this._removeValue(table, route, values[i]);
-		} else {
-			const values = await this.getAll(table);
-			await Promise.all(values.map(object => this._removeValue(table, route, object)));
-		}
-	}
-
-	/**
 	 * Insert a new document into a directory.
 	 * @param {string} table The name of the directory
 	 * @param {string} document The document name
@@ -170,27 +153,6 @@ module.exports = class extends Provider {
 	 */
 	delete(table, document) {
 		return fs.unlink(resolve(this.baseDirectory, table, `${document}.json`));
-	}
-
-	/**
-	 * Remove a value from a specified entry.
-	 * @param {string} table The name of the directory
-	 * @param {string[]} route An array with the path to update
-	 * @param {Object} object The entry to update
-	 * @returns {Promise<void>}
-	 * @private
-	 */
-	_removeValue(table, route, object) {
-		let value = object;
-		const last = route.pop();
-		for (const piece of route) {
-			if (typeof value[piece] === 'undefined') return null;
-			value = value[piece];
-		}
-		if (typeof value[last] === 'undefined') return null;
-
-		delete value[last];
-		return this.replace(table, object.id, object);
 	}
 
 };
