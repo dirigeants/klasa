@@ -57,7 +57,7 @@ class CommandUsage extends Usage {
 	 * @returns {string}
 	 */
 	fullUsage(message) {
-		let { prefix } = message.guildConfigs;
+		let { prefix } = message.guildSettings;
 		if (Array.isArray(prefix)) prefix = prefix.find(pre => message.prefix.test(pre)) || prefix[0];
 		return `${prefix.length !== 1 ? `${prefix} ` : prefix}${this.nearlyFullUsage}`;
 	}

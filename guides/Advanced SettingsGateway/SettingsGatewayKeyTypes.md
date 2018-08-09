@@ -66,4 +66,4 @@ module.exports = class extends Extendable {
 
 - {@tutorial UnderstandingSchemaPieces}
 - {@tutorial UnderstandingSchemaFolders}
-- {@tutorial SettingsGatewayConfigurationUpdate}
+- {@tutorial SettingsGatewaySettingsUpdate}

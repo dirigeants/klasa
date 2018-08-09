@@ -43,7 +43,7 @@ module.exports = class extends Monitor {
 		if (!message.guild) return;
 
 		// Update the user's configuration entry by adding 1 to it.
-		await message.author.configs.update('experience', message.author.configs.experience + 1);
+		await message.author.settings.update('experience', message.author.settings.experience + 1);
 	}
 
 };
@@ -91,16 +91,16 @@ module.exports = class extends Monitor {
 		if (!message.guild) return;
 
 		// Calculate the next value for experience.
-		const nextValue = message.author.configs.experience + 1;
+		const nextValue = message.author.settings.experience + 1;
 
 		// Cache the current level.
-		const currentLevel = message.author.configs.level;
+		const currentLevel = message.author.settings.level;
 
 		// Calculate the next level.
 		const nextLevel = Math.floor(0.1 * Math.sqrt(nextValue + 1));
 
 		// Update the user's configuration entry by adding 1 to it, and update the level also.
-		await message.author.configs.update(['experience', 'level'], [nextValue, nextLevel]);
+		await message.author.settings.update(['experience', 'level'], [nextValue, nextLevel]);
 
 		// If the current level and the next level are not the same, then it has increased, and you can send the message.
 		if (currLevel !== nextLevel) {
@@ -114,7 +114,7 @@ module.exports = class extends Monitor {
 };
 ```
 
-Optionally, you can check if `nextLevel === message.author.configs.level` is true and update a single key instead, but the speed difference is negligible and since [SettingsGateway v2.1](https://github.com/dirigeants/klasa/pull/179), the key `level` will not be updated if it did not change. As well, this overload is much faster than the JSON object overload, previously used as the only way to update multiple values.
+Optionally, you can check if `nextLevel === message.author.settings.level` is true and update a single key instead, but the speed difference is negligible and since [SettingsGateway v2.1](https://github.com/dirigeants/klasa/pull/179), the key `level` will not be updated if it did not change. As well, this overload is much faster than the JSON object overload, previously used as the only way to update multiple values.
 
 ## Creating Our Commands
 
@@ -134,7 +134,7 @@ module.exports = class extends Command {
 	}
 
 	async run(message) {
-		return message.send(`You have a total of ${message.author.configs.experience} experience points!`);
+		return message.send(`You have a total of ${message.author.settings.experience} experience points!`);
 	}
 
 };
@@ -155,7 +155,7 @@ module.exports = class extends Command {
 	}
 
 	async run(message) {
-		return message.send(`You are currently level ${message.author.configs.level}!`);
+		return message.send(`You are currently level ${message.author.settings.level}!`);
 	}
 
 };

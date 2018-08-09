@@ -93,7 +93,7 @@ class GatewayDriver {
 	}
 
 	/**
-	 * The data schema Klasa uses for guild configs.
+	 * The data schema Klasa uses for guild settings.
 	 * @since 0.5.0
 	 * @readonly
 	 * @type {GatewayDriverGuildsSchema}
@@ -136,7 +136,7 @@ class GatewayDriver {
 	}
 
 	/**
-	 * The data schema Klasa uses for user configs.
+	 * The data schema Klasa uses for user settings.
 	 * @since 0.5.0
 	 * @readonly
 	 * @type {GatewayDriverUsersSchema}
@@ -146,7 +146,7 @@ class GatewayDriver {
 	}
 
 	/**
-	 * The data schema Klasa uses for client-wide configs.
+	 * The data schema Klasa uses for client-wide settings.
 	 * @since 0.5.0
 	 * @readonly
 	 * @type {GatewayDriverClientStorageSchema}

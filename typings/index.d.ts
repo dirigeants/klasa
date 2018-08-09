@@ -63,7 +63,7 @@ declare module 'klasa' {
 		public pieceStores: Collection<string, any>;
 		public permissionLevels: PermissionLevels;
 		public gateways: GatewayDriver;
-		public configs: Configuration | null;
+		public settings: Settings | null;
 		public application: ClientApplication;
 		public schedule: Schedule;
 		public ready: boolean;
@@ -123,9 +123,9 @@ declare module 'klasa' {
 		public on(event: 'taskError', listener: (scheduledTask: ScheduledTask, task: Task, error: Error) => void): this;
 
 		// SettingGateway Events
-		public on(event: 'configCreateEntry', listener: (entry: Configuration) => void): this;
-		public on(event: 'configDeleteEntry', listener: (entry: Configuration) => void): this;
-		public on(event: 'configUpdateEntry', listener: (oldEntry: Configuration, newEntry: Configuration, path: string[]) => void): this;
+		public on(event: 'configCreateEntry', listener: (entry: Settings) => void): this;
+		public on(event: 'configDeleteEntry', listener: (entry: Settings) => void): this;
+		public on(event: 'configUpdateEntry', listener: (oldEntry: Settings, newEntry: Settings, path: string[]) => void): this;
 
 		// Schema Events
 		public on(event: 'schemaKeyAdd', listener: (key: SchemaFolder | SchemaPiece) => void): this;
@@ -187,9 +187,9 @@ declare module 'klasa' {
 		public once(event: 'taskError', listener: (scheduledTask: ScheduledTask, task: Task, error: Error) => void): this;
 
 		// SettingGateway Events
-		public once(event: 'configCreateEntry', listener: (entry: Configuration) => void): this;
-		public once(event: 'configDeleteEntry', listener: (entry: Configuration) => void): this;
-		public once(event: 'configUpdateEntry', listener: (oldEntry: Configuration, newEntry: Configuration, path?: string) => void): this;
+		public once(event: 'configCreateEntry', listener: (entry: Settings) => void): this;
+		public once(event: 'configDeleteEntry', listener: (entry: Settings) => void): this;
+		public once(event: 'configUpdateEntry', listener: (oldEntry: Settings, newEntry: Settings, path?: string) => void): this;
 
 		// Schema Events
 		public once(event: 'schemaKeyAdd', listener: (key: SchemaFolder | SchemaPiece) => void): this;
@@ -214,13 +214,13 @@ declare module 'klasa' {
 //#region Extensions
 
 	export class KlasaGuild extends DiscordGuild {
-		public configs: Configuration;
+		public settings: Settings;
 		public readonly language: Language;
 	}
 
 	export class KlasaMessage extends DiscordMessage {
 		public readonly guild: KlasaGuild;
-		public guildConfigs: Configuration;
+		public guildSettings: Settings;
 		public language: Language;
 		public command: Command | null;
 		public prefix: RegExp | null;
@@ -251,7 +251,7 @@ declare module 'klasa' {
 	}
 
 	export class KlasaUser extends DiscordUser {
-		public configs: Configuration;
+		public settings: Settings;
 		public send(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 		public send(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 		public sendLocale(key: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
@@ -457,7 +457,7 @@ declare module 'klasa' {
 
 //#region Settings
 
-	export class Configuration {
+	export class Settings {
 		public constructor(manager: Gateway, data: any);
 		public readonly client: KlasaClient;
 		public readonly gateway: Gateway;
@@ -466,22 +466,22 @@ declare module 'klasa' {
 		private _existsInDB: boolean;
 
 		public get<T = any>(path: string | string[]): T;
-		public clone(): Configuration;
+		public clone(): Settings;
 		public sync(): Promise<this>;
 		public destroy(): Promise<this>;
 
-		public reset(key?: string | string[], options?: ConfigurationResetOptions): Promise<ConfigurationUpdateResult>;
-		public reset(key?: string | string[], guild?: KlasaGuild, options?: ConfigurationResetOptions): Promise<ConfigurationUpdateResult>;
-		public update(key: ObjectLiteral, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
-		public update(key: ObjectLiteral, guild?: GuildResolvable, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
-		public update(key: string, value: any, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
-		public update(key: string, value: any, guild?: GuildResolvable, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
-		public update(key: string[], value: any[], options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
-		public update(key: string[], value: any[], guild?: GuildResolvable, options?: ConfigurationUpdateOptions): Promise<ConfigurationUpdateResult>;
+		public reset(key?: string | string[], options?: SettingsResetOptions): Promise<SettingsUpdateResult>;
+		public reset(key?: string | string[], guild?: KlasaGuild, options?: SettingsResetOptions): Promise<SettingsUpdateResult>;
+		public update(key: ObjectLiteral, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
+		public update(key: ObjectLiteral, guild?: GuildResolvable, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
+		public update(key: string, value: any, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
+		public update(key: string, value: any, guild?: GuildResolvable, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
+		public update(key: string[], value: any[], options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
+		public update(key: string[], value: any[], guild?: GuildResolvable, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
 		public list(message: KlasaMessage, path: SchemaFolder | string): string;
 		public resolveString(message: KlasaMessage, path: SchemaPiece | string): string;
 
-		private _save(data: ConfigurationUpdateResult): Promise<void>;
+		private _save(data: SettingsUpdateResult): Promise<void>;
 		private _setValueByPath(piece: SchemaPiece, parsedID: any): { updated: boolean, old: any };
 		private _patch(data: ObjectLiteral, instance?: object, schema?: SchemaFolder): void;
 
@@ -493,11 +493,11 @@ declare module 'klasa' {
 		public constructor(store: GatewayDriver, type: string, schema: ObjectLiteral, options: GatewayOptions);
 		public store: GatewayDriver;
 		public readonly resolver: SettingResolver;
-		public readonly cache: Collection<string, Configuration>;
-		public readonly syncQueue: Collection<string, Promise<Configuration>>;
+		public readonly cache: Collection<string, Settings>;
+		public readonly syncQueue: Collection<string, Promise<Settings>>;
 
-		public get(input: string | number, create?: boolean): Configuration;
-		public sync(input: string): Promise<Configuration>;
+		public get(input: string | number, create?: boolean): Settings;
+		public sync(input: string): Promise<Settings>;
 		public sync(input?: string[]): Promise<Gateway>;
 		public getPath(key?: string, options?: GatewayGetPathOptions): GatewayGetPathResult | null;
 
@@ -690,7 +690,7 @@ declare module 'klasa' {
 		public promptLimit: number;
 		public promptTime: number;
 		public quotedStringSupport: boolean;
-		public requiredConfigs: string[];
+		public requiredSettings: string[];
 		public runIn: string[];
 		public subcommands: boolean;
 		public usage: CommandUsage;
@@ -778,11 +778,11 @@ declare module 'klasa' {
 		public abstract has(table: string, entry: string): Promise<boolean>;
 		public abstract hasTable(table: string): Promise<boolean>;
 		public abstract removeValue<T = any>(table: string, path: string): Promise<T>;
-		public abstract replace<T = any>(table: string, entry: string, data: ConfigurationUpdateResultEntry[] | [string, any][] | ObjectLiteral): Promise<T>;
-		public abstract update<T = any>(table: string, entry: string, data: ConfigurationUpdateResultEntry[] | [string, any][] | ObjectLiteral): Promise<T>;
+		public abstract replace<T = any>(table: string, entry: string, data: SettingsUpdateResultEntry[] | [string, any][] | ObjectLiteral): Promise<T>;
+		public abstract update<T = any>(table: string, entry: string, data: SettingsUpdateResultEntry[] | [string, any][] | ObjectLiteral): Promise<T>;
 		// The following is not required by SettingGateway but might be available in some providers
 		public getKeys(table: string): Promise<string[]>;
-		protected parseUpdateInput<T = ObjectLiteral>(updated: T | ConfigurationUpdateResult): T;
+		protected parseUpdateInput<T = ObjectLiteral>(updated: T | SettingsUpdateResult): T;
 
 		public shutdown(): Promise<void>;
 		public toJSON(): PieceProviderJSON;
@@ -794,10 +794,10 @@ declare module 'klasa' {
 		public abstract updateColumn<T = any>(table: string, piece: SchemaPiece): Promise<T>;
 		// Remove the abstraction from the parent class, as it's not required by SQLProviders (they use removeColumn instead)
 		public removeValue<T = any>(table: string, path: string): Promise<T>;
-		protected parseUpdateInput<T = [string, any]>(updated?: ConfigurationUpdateResultEntry[] | [string, any][] | ObjectLiteral, resolve?: boolean): T;
+		protected parseUpdateInput<T = [string, any]>(updated?: SettingsUpdateResultEntry[] | [string, any][] | ObjectLiteral, resolve?: boolean): T;
 		protected parseEntry<T = ObjectLiteral>(gateway: string | Gateway, entry: ObjectLiteral): T;
 		protected parseValue<T = any>(value: any, schemaPiece: SchemaPiece): T;
-		private _parseGatewayInput(updated: ConfigurationUpdateResultEntry[], keys: string[], values: string[], resolve?: boolean): void;
+		private _parseGatewayInput(updated: SettingsUpdateResultEntry[], keys: string[], values: string[], resolve?: boolean): void;
 	}
 
 	export abstract class Task extends Piece {
@@ -1284,7 +1284,7 @@ declare module 'klasa' {
 		permissionLevels?: PermissionLevels;
 		pieceDefaults?: KlasaPieceDefaults;
 		prefix?: string | string[];
-		preserveConfigs?: boolean;
+		preserveSettings?: boolean;
 		prefixCaseInsensitive?: boolean;
 		providers?: KlasaProvidersOptions;
 		readyMessage?: (client: KlasaClient) => string;
@@ -1474,24 +1474,24 @@ declare module 'klasa' {
 		| KlasaGuildChannel
 		| Snowflake;
 
-	export type ConfigurationResetOptions = {
+	export type SettingsResetOptions = {
 		avoidUnconfigurable?: boolean;
 		force?: boolean;
 	};
 
-	export type ConfigurationUpdateOptions = {
+	export type SettingsUpdateOptions = {
 		action?: 'add' | 'remove' | 'auto';
 		arrayPosition?: number;
 		avoidUnconfigurable?: boolean;
 		force?: boolean;
 	};
 
-	export type ConfigurationUpdateResult = {
+	export type SettingsUpdateResult = {
 		errors: Error[];
-		updated: ConfigurationUpdateResultEntry[];
+		updated: SettingsUpdateResultEntry[];
 	};
 
-	export type ConfigurationUpdateResultEntry = {
+	export type SettingsUpdateResultEntry = {
 		data: [string, any];
 		piece: SchemaPiece;
 	};
@@ -1557,7 +1557,7 @@ declare module 'klasa' {
 		promptLimit?: number;
 		promptTime?: number;
 		quotedStringSupport?: boolean;
-		requiredConfigs?: string[];
+		requiredSettings?: string[];
 		runIn?: Array<'text' | 'dm' | 'group'>;
 		subcommands?: boolean;
 		usage?: string;
@@ -1623,7 +1623,7 @@ declare module 'klasa' {
 		promptLimit: number;
 		promptTime: number;
 		quotedStringSupport: boolean;
-		requiredConfigs: string[];
+		requiredSettings: string[];
 		runIn: Array<'text' | 'dm' | 'group'>;
 		subCategory: string;
 		subcommands: boolean;

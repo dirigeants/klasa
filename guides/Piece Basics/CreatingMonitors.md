@@ -41,7 +41,7 @@ module.exports = class extends Monitor {
 };
 ```
 
-## Configuration
+## Options
 
 | Name                        | Default       | Type    | Description                                           |
 | --------------------------- | ------------- | ------- | ----------------------------------------------------- |
@@ -55,7 +55,7 @@ module.exports = class extends Monitor {
 | **ignoreBlacklistedUsers**  | `true`        | boolean | Whether the monitor ignores blacklisted users or not  |
 | **ignoreBlacklistedGuilds** | `true`        | boolean | Whether the monitor ignores blacklisted guilds or not |
 
->As with all other pieces, you can omit any optional Configuration that match the default values.
+>As with all other pieces, you can omit any optional option that match the default values.
 
 ## Further Reading:
 

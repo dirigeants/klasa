@@ -24,7 +24,7 @@ class SchemaPiece extends Schema {
 	 * @property {number} min The min value for the key (String.length for String, value for number)
 	 * @property {number} max The max value for the key (String.length for String, value for number)
 	 * @property {boolean} array Whether the key should be stored as Array or not
-	 * @property {boolean} configurable Whether the key should be configurable by the config command or not
+	 * @property {boolean} configurable Whether the key should be configurable by the configuration command or not
 	 */
 
 	/**
@@ -74,7 +74,7 @@ class SchemaPiece extends Schema {
 		this.max = 'max' in options ? options.max : null;
 
 		/**
-		 * Whether this key should be configurable by the config command. When type is any, this key defaults to false.
+		 * Whether this key should be configurable by the configuration command. When type is any, this key defaults to false.
 		 * @since 0.5.0
 		 * @type {boolean}
 		 */
