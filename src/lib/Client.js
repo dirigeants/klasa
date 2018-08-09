@@ -243,10 +243,11 @@ class KlasaClient extends Discord.Client {
 			.add('disableNaturalPrefix', 'boolean', { configurable: Boolean(this.options.regexPrefix) });
 
 		// Register default gateways
+		const { guilds, users, clientStorage } = this.options.gateways;
 		this.gateways
-			.register('guilds', KlasaClient.defaultGuildSchema, this.options.gateways.guilds)
-			.register('users', KlasaClient.defaultUserSchema, this.options.gateways.users)
-			.register('clientStorage', KlasaClient.defaultClientSchema, this.options.gateways.clientStorage);
+			.register('guilds', { ...guilds, schema: 'schema' in guilds ? guilds.schema : this.constructor.defaultGuildSchema })
+			.register('users', { ...users, schema: 'schema' in users ? users.schema : this.constructor.defaultUserSchema })
+			.register('clientStorage', { ...clientStorage, schema: 'schema' in clientStorage ? clientStorage.schema : this.constructor.defaultClientSchema });
 
 		/**
 		 * The Configuration instance that handles this client's configuration
