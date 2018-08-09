@@ -1,7 +1,6 @@
 const { isObject, deepClone, toTitleCase, arraysStrictEquals, objectToTuples } = require('../util/util');
 const Type = require('../util/Type');
 const SchemaPiece = require('./schema/SchemaPiece');
-const Schema = require('./schema/Schema');
 
 /**
  * <warning>Creating your own Configuration instances is often discouraged and unneeded. SettingsGateway handles them internally for you.</warning>
