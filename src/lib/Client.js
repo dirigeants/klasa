@@ -237,7 +237,7 @@ class KlasaClient extends Discord.Client {
 		this.gateways = new GatewayDriver(this);
 
 		// Update Guild Schema with Keys needed in Klasa
-		KlasaClient.defaultGuildSchema
+		this.constructor.defaultGuildSchema
 			.add('prefix', 'string', { default: this.options.prefix, configurable: true, max: 10 })
 			.add('language', 'language', { default: this.options.language, configurable: true })
 			.add('disableNaturalPrefix', 'boolean', { configurable: Boolean(this.options.regexPrefix) });
@@ -337,7 +337,7 @@ class KlasaClient extends Discord.Client {
 	 * @private
 	 */
 	validatePermissionLevels() {
-		const permissionLevels = this.options.permissionLevels || KlasaClient.defaultPermissionLevels;
+		const permissionLevels = this.options.permissionLevels || this.constructor.defaultPermissionLevels;
 		if (!(permissionLevels instanceof PermissionLevels)) throw new Error('permissionLevels must be an instance of the PermissionLevels class');
 		if (permissionLevels.isValid()) return permissionLevels;
 		throw new Error(permissionLevels.debug());
