@@ -116,7 +116,7 @@ class KlasaClient extends Discord.Client {
 	 * @param {KlasaClientOptions} [options={}] The config to pass to the new client
 	 */
 	constructor(options = {}) {
-		if (util.isObject(options)) throw new TypeError('The Client Options for Klasa must be an object.');
+		if (!util.isObject(options)) throw new TypeError('The Client Options for Klasa must be an object.');
 		options = util.mergeDefault(constants.DEFAULTS.CLIENT, options);
 		super(options);
 
