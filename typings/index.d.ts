@@ -520,7 +520,7 @@ declare module 'klasa' {
 		private _queue: Array<(() => Gateway)>;
 
 		public [Symbol.iterator](): Iterator<[string, Gateway]>;
-		public register(name: string, schema?: Schema, options?: GatewayDriverRegisterOptions): this;
+		public register(name: string, options?: GatewayDriverRegisterOptions): this;
 		public init(): Promise<void>;
 		public sync(input?: string[]): Promise<Array<Gateway>>;
 
@@ -1478,6 +1478,7 @@ declare module 'klasa' {
 
 	export type GatewayDriverRegisterOptions = {
 		provider?: string;
+		schema?: Schema;
 		syncArg?: string[] | string | true;
 	};
 
