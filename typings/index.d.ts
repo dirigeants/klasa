@@ -545,10 +545,7 @@ declare module 'klasa' {
 		public readonly configurableKeys: Array<string>;
 		public readonly defaults: ObjectLiteral;
 		public readonly paths: Map<string, SchemaPiece | SchemaFolder>;
-		public add(key: string, callback: (folder: SchemaFolder) => any): this;
-		public add(key: string, options: SchemaPieceOptions, callback: (folder: SchemaFolder) => any): this;
-		public add(key: string, options?: SchemaPieceOptions): this;
-		public add(key: string, type?: string, options?: SchemaPieceOptions): this;
+		public add(key: string, typeOrCallback: string | ((folder: SchemaFolder) => any), options?: SchemaPieceOptions): this;
 		public remove(key: string): this;
 		public get<T = SchemaPiece | SchemaFolder>(key: string | Array<string>): T;
 		public toJSON(): ObjectLiteral;
@@ -561,12 +558,11 @@ declare module 'klasa' {
 	}
 
 	export class SchemaFolder extends SchemaBase {
-		public constructor(parent: Schema | SchemaFolder, key: string, type: 'Folder', options: SchemaFolderOptions);
+		public constructor(parent: Schema | SchemaFolder, key: string, type: 'Folder');
 		public readonly parent: Schema | SchemaFolder;
 		public readonly key: string;
 		public readonly type: 'Folder';
 		public readonly path: string;
-		public readonly defaultOptions: SchemaFolderOptions;
 	}
 
 	export class SchemaPiece {
@@ -576,20 +572,20 @@ declare module 'klasa' {
 		public readonly type: string;
 		public readonly path: string;
 		public array: boolean;
-		public default: any;
-		public min: number | null;
-		public max: number | null;
 		public configurable: boolean;
+		public default: any;
+		public filter: <T>(value: T, guild: KlasaGuild) => void;
+		public parse<T>(value: any, guild?: KlasaGuild): T;
 		public toJSON(): SchemaPieceOptions;
 
 		private isValid(): boolean;
 		private _generateDefault(): Array<any> | false | null;
 		// any is supplied since the following methods do type checks
-		private _schemaCheckType(type: any): void;
-		private _schemaCheckArray(array: any): void;
-		private _schemaCheckDefault(options: any): void;
-		private _schemaCheckLimits(min: any, max: any): void;
-		private _schemaCheckConfigurable(configurable: any): void;
+		private _checkType(value: any): void;
+		private _checkArray(value: any): void;
+		private _checkConfigurable(value: any): void;
+		private _checkFilter(value: any): void;
+		private _checkDefault(value: any): void;
 	}
 
 	export class SchemaTypes extends Map<string, SchemaType> {
@@ -601,7 +597,6 @@ declare module 'klasa' {
 		public readonly types: SchemaTypes;
 		public readonly client: KlasaClient;
 		public resolve(data: any): Promise<any>;
-		public static minOrMax(client: KlasaClient, value: number, guild: KlasaGuild | null, options: SchemaPiece, suffix: string): boolean;
 		public static regex: {
 			userOrMember: RegExp;
 			channel: RegExp;
@@ -1484,12 +1479,10 @@ declare module 'klasa' {
 	export type SchemaFolderAddOptions = SchemaFolderOptions | SchemaPieceOptions;
 
 	export type SchemaPieceOptions = {
-		type: string;
 		array?: boolean;
 		configurable?: boolean;
 		default?: any;
-		max?: number | null;
-		min?: number | null;
+		filter: (value: any, guild?: KlasaGuild) => void;
 	};
 
 	export type SchemaFolderOptions = {
