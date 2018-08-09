@@ -160,10 +160,7 @@ class Base extends Map {
 	 */
 	get paths() {
 		const paths = new Map();
-		for (const piece of this.values()) {
-			if (piece.type === 'Folder') for (const pie of piece.paths.values()) paths.set(pie.path, pie);
-			else paths.set(piece.path, piece);
-		}
+		for (const piece of this.values(true)) paths.set(piece.path, piece);
 		return paths;
 	}
 
@@ -176,6 +173,38 @@ class Base extends Map {
 		return Object.assign({}, ...[...this.values()].map(piece => ({ [piece.key]: piece.toJSON() })));
 	}
 
+	*keys(recursive = false) {
+		if (recursive) {
+			for (const [key, value] of super.entries()) {
+				if (value.type === 'Folder') yield* value.keys(recursive);
+				else yield key;
+			}
+		} else {
+			yield* super.keys();
+		}
+	}
+
+	*values(recursive = false) {
+		if (recursive) {
+			for (const value of super.values()) {
+				if (value.type === 'Folder') yield* value.values(recursive);
+				else yield value;
+			}
+		} else {
+			yield* super.values();
+		}
+	}
+
+	*entries(recursive = false) {
+		if (recursive) {
+			for (const [key, value] of super.entries()) {
+				if (value.type === 'Folder') yield* value.entries(recursive);
+				else yield [key, value];
+			}
+		} else {
+			yield* super.entries();
+		}
+	}
 
 }
 
