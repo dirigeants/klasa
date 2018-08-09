@@ -769,6 +769,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class SQLProvider extends Provider {
+		public abstract qb: QueryBuilder;
 		public abstract addColumn<T = any>(table: string, columns: SchemaFolder | SchemaPiece): Promise<T>;
 		public abstract removeColumn<T = any>(table: string, columns: string | string[]): Promise<T>;
 		public abstract updateColumn<T = any>(table: string, piece: SchemaPiece): Promise<T>;
@@ -1441,7 +1442,7 @@ declare module 'klasa' {
 		array?: (datatype: string) => string;
 		resolver?: <T = any>(input: any, schemaPiece: SchemaPiece) => T;
 		type: string | ((piece: SchemaPiece) => string);
-	};
+	} | string;
 
 	export type QueryBuilderOptions = {
 		arrayResolver?: (values: Array<any>, piece: SchemaPiece, resolver: Function) => string;
