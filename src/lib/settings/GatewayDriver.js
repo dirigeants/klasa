@@ -10,6 +10,7 @@ class GatewayDriver {
 	/**
 	 * @typedef {Object} GatewayDriverRegisterOptions
 	 * @property {string} [provider = this.client.options.providers.default] The name of the provider to use
+	 * @property {Schema} [schema] The schema to use for this gateway.
 	 * @property {string|string[]|true} [syncArg] The sync args to pass to Gateway#sync during Gateway init
 	 */
 
@@ -84,12 +85,11 @@ class GatewayDriver {
 	 * Registers a new Gateway.
 	 * @since 0.5.0
 	 * @param {string} name The name for the new gateway
-	 * @param {Object} [schema = new Schema(this.client)] The schema for use in this gateway
 	 * @param {GatewayDriverRegisterOptions} [options = {}] The options for the new gateway
 	 * @returns {this}
 	 * @chainable
 	 */
-	register(name, schema = new Schema(), { provider = this.client.options.providers.default } = {}) {
+	register(name, { provider = this.client.options.providers.default, schema = new Schema() } = {}) {
 		if (typeof name !== 'string') throw new TypeError('You must pass a name for your new gateway and it must be a string.');
 		if (!(schema instanceof Schema)) throw new TypeError('Schema must be a valid Schema instance.');
 		if (this.name !== undefined && this.name !== null) throw new Error(`The key '${name}' is either taken by another Gateway or reserved for GatewayDriver's functionality.`);
