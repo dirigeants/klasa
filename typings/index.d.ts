@@ -583,7 +583,7 @@ declare module 'klasa' {
 		public toJSON(): SchemaPieceOptions;
 
 		private isValid(): boolean;
-		private _generateDefault(): [] | false | null;
+		private _generateDefault(): Array<any> | false | null;
 		// any is supplied since the following methods do type checks
 		private _schemaCheckType(type: any): void;
 		private _schemaCheckArray(array: any): void;
