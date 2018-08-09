@@ -17,8 +17,7 @@ class NumberType extends SchemaType {
 	 * @returns {*} The resolved data
 	 */
 	async resolve(data, piece, guild) {
-		const number = this.checkNumber(data, piece, guild);
-		return this.constructor.minOrMax(this.client, number, guild, piece) ? number : true;
+		return this.checkNumber(data, piece, guild);
 	}
 
 	/**
@@ -46,6 +45,7 @@ class NumberType extends SchemaType {
 				if (!isNaN(numb)) return numb;
 				throw (guild ? guild.languauge : this.client.languages.default).get('RESOLVER_INVALID_FLOAT', piece.key);
 		}
+		// noop
 		return null;
 	}
 

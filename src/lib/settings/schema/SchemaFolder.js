@@ -6,13 +6,12 @@ const Base = require('./Base');
  * @extends Base
  * @param {SchemaFolder|Schema} parent The parent folder or schema for this folder instance
  * @param {string} key The name of this folder instance
- * @param {string} type The type for this folder instance (always 'folder')
- * @param {Object} [options={}] The options for this folder instance
+ * @param {string} type The type for this folder instance (always 'Folder')
  * @since 0.5.0
  */
 class SchemaFolder extends Base {
 
-	constructor(parent, key, type, options = {}) {
+	constructor(parent, key, type) {
 		super();
 		/**
 		 * The parent of this SchemaFolder
@@ -45,15 +44,6 @@ class SchemaFolder extends Base {
 		 * @readonly
 		 */
 		Object.defineProperty(this, 'path', { value: `${this.parent.path ? `${this.parent.path}.` : ''}${this.key}` });
-
-
-		/**
-		 * The default options that every key that is added to this folder will inherit.
-		 * @since 0.5.0
-		 * @type {Object}
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'defaultOptions', { value: options });
 	}
 
 }

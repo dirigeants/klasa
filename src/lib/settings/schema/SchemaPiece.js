@@ -1,4 +1,4 @@
-const { isNumber, mergeDefault } = require('../../util/util');
+const { isFunction } = require('../../util/util');
 
 /**
  * Creates our SchemaPiece instance
@@ -8,10 +8,19 @@ const { isNumber, mergeDefault } = require('../../util/util');
  * @param {Object} [options={}] The options for this SchemaPiece instance
  * @since 0.5.0
  */
+
+/**
+  * @typedef {Object} SchemaPieceOptions
+  * @property {*} default The default value for the key
+	* @property {Function} filter The filter to use when resolving this key. The function is passed the resolved value from the resolver, and a guild.
+  * @property {boolean} array Whether the key should be stored as Array or not
+  * @property {boolean} configurable Whether the key should be configurable by the configuration command or not
+  */
+
+
 class SchemaPiece {
 
 	constructor(parent, key, type, options = {}) {
-		options = mergeDefault(parent.defaultOptions, options);
 		/**
 		 * The parent of this SchemaPiece, either a SchemaFolder instance or Schema instance
 		 * @name SchemaPiece#parent
@@ -54,6 +63,13 @@ class SchemaPiece {
 		this.array = 'array' in options ? options.array : Array.isArray(options.default);
 
 		/**
+		 * Whether this key should be configurable by the config command. When type is any, this key defaults to false.
+		 * @since 0.5.0
+		 * @type {boolean}
+		 */
+		this.configurable = 'configurable' in options ? options.configurable : this.type !== 'any';
+
+		/**
 		 * The default data this key will revert back to if reset, or if the key is never set
 		 * @since 0.5.0
 		 * @type {*}
@@ -61,25 +77,11 @@ class SchemaPiece {
 		this.default = 'default' in options ? options.default : this._generateDefault();
 
 		/**
-		 * The minimum length or the minimum number a string or number key can be, respectively.
+		 * The filter to use for this key when resolving.
 		 * @since 0.5.0
-		 * @type {?number}
+		 * @type {Function}
 		 */
-		this.min = 'min' in options ? options.min : null;
-
-		/**
-		 * The maximum length or the maximum number a string or number key can be, respectively.
-		 * @since 0.5.0
-		 * @type {?number}
-		 */
-		this.max = 'max' in options ? options.max : null;
-
-		/**
-		 * Whether this key should be configurable by the config command. When type is any, this key defaults to false.
-		 * @since 0.5.0
-		 * @type {boolean}
-		 */
-		this.configurable = 'configurable' in options ? options.configurable : this.type !== 'any';
+		this.filter = 'filter' in options ? options.filter : null;
 	}
 
 	/**
@@ -88,13 +90,26 @@ class SchemaPiece {
 	 * @returns {boolean}
 	 */
 	isValid() {
-		this._schemaCheckType(this.type);
-		this._schemaCheckArray(this.array);
-		this._schemaCheckLimits(this.min, this.max);
-		this._schemaCheckConfigurable(this.configurable);
-		this._schemaCheckDefault(this);
+		this._checkType(this.type);
+		this._checkArray(this.array);
+		this._checkConfigurable(this.configurable);
+		this._checkFilter(this.filter);
+		this._checkDefault(this);
 
 		return true;
+	}
+
+	/**
+	  * parses a value into a resolved format for Settings
+		* @since 0.5.0
+		* @param {*} value A value to parse
+		* @param {external:Guild} [guild] A guild to use during parsing.
+		* @returns {*}
+		*/
+	async parse(value, guild) {
+		value = await require('../../Client').types.get(this.type).resolve(value, this, guild);
+		if (this.filter) this.filter(value, guild);
+		return value;
 	}
 
 	/**
@@ -151,20 +166,6 @@ class SchemaPiece {
 	}
 
 	/**
-	 * Checks if options.min and options.max are valid.
-	 * @since 0.5.0
-	 * @param {number} min The options.min parameter to validate
-	 * @param {number} max The options.max parameter to validate
-	 * @throws {TypeError}
-	 * @private
-	 */
-	_schemaCheckLimits(min, max) {
-		if (min !== null && !isNumber(min)) throw new TypeError(`[KEY] ${this.path} - Parameter min must be a number or null.`);
-		if (max !== null && !isNumber(max)) throw new TypeError(`[KEY] ${this.path} - Parameter max must be a number or null.`);
-		if (min !== null && max !== null && min > max) throw new TypeError(`[KEY] ${this.path} - Parameter min must contain a value lower than the parameter max.`);
-	}
-
-	/**
 	 * Checks if options.configurable is valid.
 	 * @since 0.5.0
 	 * @param {boolean} configurable The parameter to validate
@@ -173,6 +174,17 @@ class SchemaPiece {
 	 */
 	_schemaCheckConfigurable(configurable) {
 		if (typeof configurable !== 'boolean') throw new TypeError(`[KEY] ${this.path} - Parameter configurable must be a boolean.`);
+	}
+
+	/**
+	 * Check if options.filter is valid.
+	 * @since 0.5.0
+	 * @param {Function} filter The parameter to validatePermissionLevels
+	 * @throws {TypeError}
+	 * @private
+	 */
+	checkFilter(filter) {
+		if (!isFunction(filter)) throw new TypeError(`[KEY] ${this.path} - Paramter filter must be a function`);
 	}
 
 	/**
@@ -185,8 +197,6 @@ class SchemaPiece {
 			type: this.type,
 			array: this.array,
 			default: this.default,
-			min: this.min,
-			max: this.max,
 			configurable: this.configurable
 		};
 	}

@@ -9,67 +9,40 @@ const { isObject, isFunction, deepClone } = require('../../util/util');
 class Base extends Map {
 
 	/**
+	 * @since 0.5.0
 	 * Adds a Folder or Piece instance to the current SchemaFolder or Schema instance
 	 * @param {string} key The name of this new piece you are trying to add.
-	 * @param {Function|Object|string} type A function, object, or string. See examples for usage.
-	 * @param {Function|Object} [options={}] An object of options to pass to the folder or piece.
-	 * @param {Function} [callback=null] A function to add more keys to a newly created SchemaFolder
-	 * @since 0.5.0
-	 * @returns {SchemaFolder|Schema}
+	 * @param {string|Function} typeOrCallback A function to add a folder or a string to add a new SchemaPiece
+	 * @param {Object} [options] An object of options used for SchemaPieces
+	 * @chainable
+	 * @returns {this}
 	 * @example
-	 * // Add a new SchemaFolder with no defaults
-	 * Schema.add('folderKey', () => true);
-	 *
-	 * // Add a new SchemaFolder with defaults for added keys
-	 * // All keys added to this SchemaFolder will inherit SchemaFolder options
-	 * Schema.add('folderKey', { type: 'string', max: 100, min: 5 }, () => true);
-	 *
-	 * // If you want to add keys on the new SchemaFolder
-	 * Schema.add('folderKey', { type: 'string', max: 100, min: 5 }, (Folder) => {
-	 *		Folder.add('stringKey1') // will inherit type from the Folder, along with min and max
-	 *		      .add('stringKey2', { min: 50 }); // we want this key to have a different minimum, so we'll change it
-	 *	});
-	 *
-	 * // If you want to add a key that doesn't have defaultOptions
-	 * SchemaFolder.add('pieceKey', 'textchannel', {})
+	 * // callback is always passed the created folder to encourage chaining
+	 * Schema.add('folder', (folder) => folder.add('piece', 'textchannel'));
 	 * // or
-	 * Schema.add('pieceKey', 'textchannel', {});
+	 * Schema.add('piece', 'string', { default: 'klasa!' });
 	 */
-	add(key, type, options = {}, callback = null) {
+	add(key, typeOrCallback, options = {}) {
 		if (this.has(key)) throw new Error(`The key ${key} already exists in the current schema.`);
-		const { defaultOptions = {} } = this;
-		let Piece;
-
-		if (isFunction(type)) {
-			// add('key', (folder) => {});
-			callback = type;
-			type = 'Folder';
-			Piece = require('./SchemaFolder');
-		} else if (isObject(type)) {
-			// add('key', { ...options });
-			if (isFunction(options)) {
-				// add('key', { ...options }, (folder) => {})
-				callback = options;
-				options = type;
-				type = 'Folder';
-				Piece = require('./SchemaFolder');
-			} else {
-				// add('key', { type, ...options });
-				type = options.type || defaultOptions.type;
-				Piece = require('./SchemaPiece');
-			}
-		} else if (typeof type === 'string') {
-			// add('key', 'type');
-			Piece = type === 'Folder' ? require('./SchemaFolder') : require('./SchemaPiece');
-		} else if (!type && ('type' in defaultOptions)) {
-			// add('key');
-			({ type } = defaultOptions);
-			Piece = require('./SchemaPiece');
-		}
-
-		if (!type) {
+		if (!typeOrCallback) {
 			throw new Error(`The type for ${key} must be a string for pieces, and a callback for folders`);
 		}
+
+		let Piece;
+		let type;
+		let callback;
+		if (isFunction(typeOrCallback)) {
+			// .add('folder', (folder) => ());
+			callback = typeOrCallback;
+			type = 'Folder';
+			Piece = require('./SchemaFolder');
+		} else if (typeof typeOrCallback === 'string') {
+			// .add('piece', 'string', { optional options });
+			Piece = require('./SchemaPiece');
+			type = typeOrCallback;
+			callback = null;
+		}
+
 
 		const piece = new Piece(this, key, type, options);
 

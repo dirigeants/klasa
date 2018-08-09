@@ -16,9 +16,8 @@ class StringType extends SchemaType {
 	 * @param {?external:Guild} guild The Guild instance that should be used for this piece
 	 * @returns {*} The resolved data
 	 */
-	async resolve(data, piece, guild) {
-		const string = String(data);
-		return this.constructor.maxOrMin(this.client, string, guild, piece, 'RESOLVER_STRING_SUFFIX') ? string : null;
+	async resolve(data) {
+		return String(data);
 	}
 
 }
