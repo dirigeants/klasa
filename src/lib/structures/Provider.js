@@ -173,7 +173,7 @@ class Provider extends Piece {
 	/**
 	 * Parse the gateway input for easier operation
 	 * @since 0.5.0
-	 * @param {(Object<string, *>|ConfigurationUpdateResult[])} updated The updated entries
+	 * @param {(Object<string, *>|SettingsUpdateResult[])} updated The updated entries
 	 * @returns {Object<string, *>}
 	 * @protected
 	 */

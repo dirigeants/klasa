@@ -97,4 +97,4 @@ Where the *clientStorage* gateway would take the default options (json provider)
 - {@tutorial UnderstandingSchemaPieces}
 - {@tutorial UnderstandingSchemaFolders}
 - {@tutorial SettingsGatewayKeyTypes}
-- {@tutorial SettingsGatewayConfigurationUpdate}
+- {@tutorial SettingsGatewaySettingsUpdate}

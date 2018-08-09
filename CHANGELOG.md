@@ -117,6 +117,9 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#374](https://github.com/dirigeants/klasa/pull/374)] **[BREAKING]** Renamed `Configuration` to `Settings`. (kyranet)
+- [[#374](https://github.com/dirigeants/klasa/pull/374)] Renamed `INHIBITOR_REQUIRED_CONFIGS` to `INHIBITOR_REQUIRED_SETTINGS`. (kyranet)
+- [[#374](https://github.com/dirigeants/klasa/pull/374)] **[BREAKING]** Renamed `KlasaMessage#guildConfigs` to `KlasaMessage#guildSettings`, `KlasaGuild#configs` to `KlasaGuild#settings`, `KlasaClientOptions.preserveConfigs` to `KlasaClientOptions.preserveSettings`, and `Command#requiredConfigs` to `Command#requiredSettings`. (kyranet)
 - [[#333](https://github.com/dirigeants/klasa/pull/333)] Removed cross-shard individual configuration synchronization in favor of patching the current patched `Configuration` instance. (kyranet)
 - [[#333](https://github.com/dirigeants/klasa/pull/333)] Changed `configUpdateEntry` event to take only two parameters (patched `Configuration` instance, and the updated keys as `ConfigurationUpdateResultEntry[]`). (kyranet)
 - [[#332](https://github.com/dirigeants/klasa/pull/332)] Refactored `Configuration#reset`. (kyranet)

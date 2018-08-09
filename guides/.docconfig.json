@@ -103,8 +103,8 @@
         "path": "SettingsGatewayKeyTypes.md"
     },
     {
-        "name": "Updating your Configuration",
-        "path": "SettingsGatewayConfigurationUpdate.md"
+        "name": "Updating your Settings",
+        "path": "SettingsGatewaySettingsUpdate.md"
     }]
 },
 {

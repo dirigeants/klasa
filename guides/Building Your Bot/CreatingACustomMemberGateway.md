@@ -1,4 +1,4 @@
-Something that is often asked or requested, is a custom member-based gateway; that is per member configs, so you would have different {@link Configuration} values for different guilds.
+Something that is often asked or requested, is a custom member-based gateway; that is per member settings, so you would have different {@link Settings} values for different guilds.
 
 This is simple to achieve with Klasa's advanced Gateway system. In this example, we will be make a per member gateway with a built in key for points. We will be remaking the {@tutorial CreatingPointsSystems} tutorial, for members instead of users.
 
@@ -37,14 +37,14 @@ Structures.extend('GuildMember', GuildMember => class MyMember extends GuildMemb
 
 	constructor(...args) {
 		super(...args);
-		this.configs = this.client.gateways.members.get(`${this.guild.id}-${this.id}`, true);
+		this.settings = this.client.gateways.members.get(`${this.guild.id}-${this.id}`, true);
 	}
 
 });
 
 ```
 
-Then, you'll need to require it somewhere; I suggest in your entry point. 
+Then, you'll need to require it somewhere; I suggest in your entry point.
 
 ```javascript
 require('./path-to/extension');
@@ -82,16 +82,16 @@ module.exports = class extends Monitor {
 		if (!message.guild) return;
 
 		// Calculate the next value for experience.
-		const nextValue = message.member.configs.experience + 1;
+		const nextValue = message.member.settings.experience + 1;
 
 		// Cache the current level.
-		const currentLevel = message.member.configs.level;
+		const currentLevel = message.member.settings.level;
 
 		// Calculate the next level.
 		const nextLevel = Math.floor(0.1 * Math.sqrt(nextValue + 1));
 
 		// Update the members' configuration entry by adding 1 to it, and update the level also.
-		await message.member.configs.update(['experience', 'level'], [nextValue, nextLevel]);
+		await message.member.settings.update(['experience', 'level'], [nextValue, nextLevel]);
 
 		// If the current level and the next level are not the same, then it has increased, and you can send the message.
 		if (currentLevel !== nextLevel) {
@@ -121,7 +121,7 @@ module.exports = class extends Command {
 	}
 
 	async run(message) {
-		return message.send(`You have a total of ${message.member.configs.experience} experience points!`);
+		return message.send(`You have a total of ${message.member.settings.experience} experience points!`);
 	}
 
 };
@@ -140,16 +140,16 @@ module.exports = class extends Command {
 	}
 
 	async run(message) {
-		return message.send(`You are currently level ${message.member.configs.level}!`);
+		return message.send(`You are currently level ${message.member.settings.level}!`);
 	}
 
 };
 
 ```
 
-## Preserved Configs
+## Preserved Settings
 
-Klasa has a {@link KlasaClientOptions} for preserving guild configs, in case your bot leaves a guild. This however, would not be reflected in the current member-gateway, although it is easily fixable with a guildRemove event.
+Klasa has a {@link KlasaClientOptions} for preserving guild settings, in case your bot leaves a guild. This however, would not be reflected in the current member-gateway, although it is easily fixable with a guildRemove event.
 
 >Beware! This will delete all member configuration entries if your bot is kicked, you accidentally leave, etc.
 
@@ -163,12 +163,13 @@ module.exports = class extends Event {
 	}
 
 	async run(guild) {
-		// just in case of an outage, check if the guild is available, and also check if we are preserving configs.
-		if (!guild.available || this.client.options.preserveConfigs) return;
+		// just in case of an outage, check if the guild is available, and also check if we are preserving settings.
+		if (!guild.available || this.client.options.preserveSettings) return;
 
 		// filter all the entries which start with the guild id (all of the guilds members, which we are storing)
-		const guildMembers = this.client.gateways.members.cache.filter(config => config.id.startsWith(guild.id));
-		if (guildMembers.size) guildMembers.forEach(config => config.destroy());
+		for (const settings of this.client.gateways.members.cache.values()) {
+			if (settings.id.startsWith(guild.id)) settings.destroy();
+		}
 	}
 
 };

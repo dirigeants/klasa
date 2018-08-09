@@ -13,7 +13,7 @@ module.exports = class extends Event {
 		await this.client.fetchApplication();
 		if (!this.client.options.ownerID) this.client.options.ownerID = this.client.application.owner.id;
 
-		this.client.configs = this.client.gateways.clientStorage.get(this.client.user.id, true);
+		this.client.settings = this.client.gateways.clientStorage.get(this.client.user.id, true);
 		await this.client.gateways.sync();
 
 		// TODO(UnseenFaith): Implement custom resolvers so users cannot disable guarded commands

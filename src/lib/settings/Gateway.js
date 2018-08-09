@@ -1,5 +1,5 @@
 const GatewayStorage = require('./GatewayStorage');
-const Configuration = require('./Configuration');
+const Settings = require('./Settings');
 const { Collection, Guild, GuildChannel, Message } = require('discord.js');
 const { getIdentifier } = require('../util/util');
 
@@ -54,14 +54,14 @@ class Gateway extends GatewayStorage {
 		/**
 		 * The cached entries for this Gateway
 		 * @since 0.0.1
-		 * @type {external:Collection<string, Configuration>}
+		 * @type {external:Collection<string, Settings>}
 		 */
 		this.cache = new Collection();
 
 		/**
-		 * The synchronization queue for all Configuration instances
+		 * The synchronization queue for all Settings instances
 		 * @since 0.5.0
-		 * @type {external:Collection<string, Promise<Configuration>>}
+		 * @type {external:Collection<string, Promise<Settings>>}
 		 */
 		this.syncQueue = new Collection();
 
@@ -74,14 +74,14 @@ class Gateway extends GatewayStorage {
 	}
 
 	/**
-	 * The configuration that this class should make.
+	 * The Settings that this class should make.
 	 * @since 0.5.0
-	 * @type {Configuration}
+	 * @type {Settings}
 	 * @readonly
 	 * @private
 	 */
-	get Configuration() {
-		return Configuration;
+	get Settings() {
+		return Settings;
 	}
 
 
@@ -89,17 +89,17 @@ class Gateway extends GatewayStorage {
 	 * Get an entry from the cache.
 	 * @since 0.5.0
 	 * @param {string} id The key to get from the cache
-	 * @param {boolean} [create = false] Whether SG should create a new instance of Configuration in the background, if the entry does not already exist.
-	 * @returns {?Configuration}
+	 * @param {boolean} [create = false] Whether SG should create a new instance of Settings in the background, if the entry does not already exist.
+	 * @returns {?Settings}
 	 */
 	get(id, create = false) {
 		const entry = this.cache.get(id);
 		if (entry) return entry;
 		if (create) {
-			const configs = new this.Configuration(this, { id });
-			this.cache.set(id, configs);
-			if (this._synced && this.schema.size) configs.sync().catch(err => this.client.emit('error', err));
-			return configs;
+			const settings = new this.Settings(this, { id });
+			this.cache.set(id, settings);
+			if (this._synced && this.schema.keyArray.length) settings.sync().catch(err => this.client.emit('error', err));
+			return settings;
 		}
 		return null;
 	}
@@ -108,7 +108,7 @@ class Gateway extends GatewayStorage {
 	 * Sync either all entries from the cache with the persistent database, or a single one.
 	 * @since 0.0.1
 	 * @param {(Array<string>|string)} [input=Array<string>] An object containing a id property, like discord.js objects, or a string
-	 * @returns {?(Gateway|Configuration)}
+	 * @returns {?(Gateway|Settings)}
 	 */
 	async sync(input = [...this.cache.keys()]) {
 		if (Array.isArray(input)) {
@@ -121,14 +121,14 @@ class Gateway extends GatewayStorage {
 					if (!cache._existsInDB) cache._existsInDB = true;
 					cache._patch(entry);
 				} else {
-					const configs = new this.Configuration(this, entry);
-					configs._existsInDB = true;
-					this.cache.set(entry.id, configs);
+					const settings = new this.Settings(this, entry);
+					settings._existsInDB = true;
+					this.cache.set(entry.id, settings);
 				}
 			}
 
-			// Set all the remaining configs from unknown status in DB to not exists.
-			for (const configs of this.cache.values()) if (configs._existsInDB === null) configs._existsInDB = false;
+			// Set all the remaining settings from unknown status in DB to not exists.
+			for (const settings of this.cache.values()) if (settings._existsInDB === null) settings._existsInDB = false;
 			return this;
 		}
 		const target = getIdentifier(input);
@@ -137,9 +137,9 @@ class Gateway extends GatewayStorage {
 		const cache = this.cache.get(target);
 		if (cache) return cache.sync();
 
-		const configs = new this.Configuration(this, { id: target });
-		this.cache.set(target, configs);
-		return configs.sync();
+		const settings = new this.Settings(this, { id: target });
+		this.cache.set(target, settings);
+		return settings.sync();
 	}
 
 	/**

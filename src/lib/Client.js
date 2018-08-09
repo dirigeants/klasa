@@ -44,7 +44,7 @@ const plugins = new Set();
 class KlasaClient extends Discord.Client {
 
 	/**
-	 * @typedef {external:DiscordJSConfig} KlasaClientOptions
+	 * @typedef {external:DiscordClientOptions} KlasaClientOptions
 	 * @property {boolean} [commandEditing=false] Whether the bot should update responses if the command is edited
 	 * @property {boolean} [commandLogging=false] Whether the bot should log command usage
 	 * @property {number} [commandMessageLifetime=1800] The threshold for how old command messages can be before sweeping since the last edit in seconds
@@ -58,7 +58,7 @@ class KlasaClient extends Discord.Client {
 	 * @property {PermissionLevels} [permissionLevels=KlasaClient.defaultPermissionLevels] The permission levels to use with this bot
 	 * @property {KlasaPieceDefaults} [pieceDefaults={}] Overrides the defaults for all pieces
 	 * @property {string|string[]} [prefix] The default prefix the bot should respond to
-	 * @property {boolean} [preserveConfigs=true] Whether the bot should preserve (non-default) configs when removed from a guild
+	 * @property {boolean} [preserveSettings=true] Whether the bot should preserve (non-default) settings when removed from a guild
 	 * @property {boolean} [production=false] Whether the bot should handle unhandled promise rejections automatically (handles when false) (also can be configured with process.env.NODE_ENV)
 	 * @property {KlasaProvidersOptions} [providers] The provider options
 	 * @property {(string|Function)} [readyMessage=`Successfully initialized. Ready to serve ${this.guilds.size} guilds.`] readyMessage to be passed throughout Klasa's ready event
@@ -117,12 +117,12 @@ class KlasaClient extends Discord.Client {
 	/**
 	 * Constructs the klasa client
 	 * @since 0.0.1
-	 * @param {KlasaClientOptions} config The config to pass to the new client
+	 * @param {KlasaClientOptions} [options={}] The config to pass to the new client
 	 */
-	constructor(config = {}) {
-		if (typeof config !== 'object') throw new TypeError('Configuration for Klasa must be an object.');
-		config = util.mergeDefault(constants.DEFAULTS.CLIENT, config);
-		super(config);
+	constructor(options = {}) {
+		if (util.isObject(options)) throw new TypeError('The Client Options for Klasa must be an object.');
+		options = util.mergeDefault(constants.DEFAULTS.CLIENT, options);
+		super(options);
 
 		/**
 		 * The options the client was instantiated with.
@@ -139,7 +139,7 @@ class KlasaClient extends Discord.Client {
 		this.userBaseDirectory = path.dirname(require.main.filename);
 
 		/**
-		 * The console for this instance of klasa. You can disable timestamps, colors, and add writable streams as config options to configure this.
+		 * The console for this instance of klasa. You can disable timestamps, colors, and add writable streams as configuration options to configure this.
 		 * @since 0.4.0
 		 * @type {KlasaConsole}
 		 */
@@ -250,11 +250,11 @@ class KlasaClient extends Discord.Client {
 			.register('clientStorage', { ...clientStorage, schema: 'schema' in clientStorage ? clientStorage.schema : this.constructor.defaultClientSchema });
 
 		/**
-		 * The Configuration instance that handles this client's configuration
+		 * The Settings instance that handles this client's settings
 		 * @since 0.5.0
-		 * @type {Configuration}
+		 * @type {Settings}
 		 */
-		this.configs = null;
+		this.settings = null;
 
 		/**
 		 * The application info cached from the discord api
@@ -382,7 +382,7 @@ class KlasaClient extends Discord.Client {
 			});
 		this.emit('log', loaded.join('\n'));
 
-		// Providers must be init before configs, and those before all other stores.
+		// Providers must be init before settings, and those before all other stores.
 		await this.providers.init();
 		await this.gateways.init();
 
@@ -625,25 +625,25 @@ KlasaClient.defaultClientSchema = new Schema()
  */
 
 /**
- * Emitted when {@link Configuration#update} or {@link Configuration#reset} is run.
+ * Emitted when {@link Settings#update} or {@link Settings#reset} is run.
  * @event KlasaClient#configUpdateEntry
  * @since 0.5.0
- * @param {Configuration} entry The patched configuration entry
- * @param {ConfigurationUpdateResultEntry[]} updated The keys that were updated
+ * @param {Settings} entry The patched Settings instance
+ * @param {SettingsUpdateResultEntry[]} updated The keys that were updated
  */
 
 /**
- * Emitted when {@link Configuration#destroy} is run.
+ * Emitted when {@link Settings#destroy} is run.
  * @event KlasaClient#configDeleteEntry
  * @since 0.5.0
- * @param {Configuration} entry The entry which got deleted
+ * @param {Settings} entry The entry which got deleted
  */
 
 /**
  * Emitted when a new entry in the database has been created upon update.
  * @event KlasaClient#configCreateEntry
  * @since 0.5.0
- * @param {Configuration} entry The entry which got created
+ * @param {Settings} entry The entry which got created
  */
 
 /**

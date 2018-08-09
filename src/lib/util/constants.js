@@ -24,7 +24,7 @@ exports.DEFAULTS = {
 		disabledCorePieces: [],
 		language: 'en-US',
 		prefix: '!',
-		preserveConfigs: true,
+		preserveSettings: true,
 		readyMessage: (client) => `Successfully initialized. Ready to serve ${client.guilds.size} guild${client.guilds.size === 1 ? '' : 's'}.`,
 		typing: false,
 		customPromptDefaults: {
@@ -59,7 +59,7 @@ exports.DEFAULTS = {
 				permissionLevel: 0,
 				promptLimit: 0,
 				promptTime: 30000,
-				requiredConfigs: [],
+				requiredSettings: [],
 				requiredPermissions: 0,
 				runIn: ['text', 'dm'],
 				subcommands: false,
