@@ -558,7 +558,7 @@ declare module 'klasa' {
 	}
 
 	export class SchemaFolder extends SchemaBase {
-		public constructor(parent: Schema | SchemaFolder, key: string, type: 'Folder');
+		public constructor(parent: Schema | SchemaFolder, key: string);
 		public readonly parent: Schema | SchemaFolder;
 		public readonly key: string;
 		public readonly type: 'Folder';
@@ -574,7 +574,9 @@ declare module 'klasa' {
 		public array: boolean;
 		public configurable: boolean;
 		public default: any;
-		public filter: <T>(value: T, guild: KlasaGuild) => void;
+		public min: number | null;
+		public max: number | null;
+		public filter: (value: any, guild: KlasaGuild) => void;
 		public parse<T>(value: any, guild?: KlasaGuild): T;
 		public toJSON(): SchemaPieceOptions;
 
@@ -584,6 +586,7 @@ declare module 'klasa' {
 		private _checkType(value: any): void;
 		private _checkArray(value: any): void;
 		private _checkConfigurable(value: any): void;
+		private _checkLimits(min: any, max: any): void;
 		private _checkFilter(value: any): void;
 		private _checkDefault(value: any): void;
 	}
@@ -1482,6 +1485,8 @@ declare module 'klasa' {
 		array?: boolean;
 		configurable?: boolean;
 		default?: any;
+		min?: number;
+		max?: number;
 		filter: (value: any, guild?: KlasaGuild) => void;
 	};
 
