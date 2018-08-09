@@ -8,10 +8,6 @@ module.exports = {
 	KlasaMessage: require('./lib/extensions/KlasaMessage'),
 	KlasaUser: require('./lib/extensions/KlasaUser'),
 
-	// lib/parsers
-	Resolver: require('./lib/parsers/Resolver'),
-	SettingResolver: require('./lib/parsers/SettingResolver'),
-
 	// lib/permissions
 	PermissionLevels: require('./lib/permissions/PermissionLevels'),
 
