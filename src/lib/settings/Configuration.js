@@ -1,7 +1,7 @@
 const { isObject, deepClone, toTitleCase, arraysStrictEquals, objectToTuples } = require('../util/util');
 const Type = require('../util/Type');
-const SchemaFolder = require('./schema/SchemaFolder');
 const SchemaPiece = require('./schema/SchemaPiece');
+const Schema = require('./schema/Schema');
 
 /**
  * <warning>Creating your own Configuration instances is often discouraged and unneeded. SettingsGateway handles them internally for you.</warning>
@@ -283,11 +283,11 @@ class Configuration {
 	 * Get a list.
 	 * @since 0.5.0
 	 * @param {KlasaMessage} message The Message instance
-	 * @param {(SchemaFolder|string)} path The path to resolve
+	 * @param {(Schema|string)} path The path to resolve
 	 * @returns {string}
 	 */
 	list(message, path) {
-		const folder = path instanceof SchemaFolder ? path : this.gateway.getPath(path, { piece: false }).piece;
+		const folder = path instanceof Schema ? path : this.gateway.getPath(path, { piece: false }).piece;
 		const array = [];
 		const folders = [];
 		const keys = {};
@@ -513,7 +513,7 @@ class Configuration {
 	 * @since 0.5.0
 	 * @param {Object} data The data to patch
 	 * @param {Object} [instance=this] The reference of this instance for recursion
-	 * @param {SchemaFolder} [schema=this.gateway.schema] The SchemaFolder that sets the schema for this configuration's gateway
+	 * @param {Schema} [schema=this.gateway.schema] The Schema that sets the schema for this configuration's gateway
 	 * @private
 	 */
 	_patch(data, instance = this, schema = this.gateway.schema) {
