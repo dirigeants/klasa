@@ -1,4 +1,4 @@
-const { isObject, isFunction, deepClone } = require('../../util/util');
+const { isFunction, deepClone } = require('../../util/util');
 
 /**
  * The base class for Schema and SchemaFolder

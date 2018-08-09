@@ -11,7 +11,7 @@ const Base = require('./Base');
  */
 class SchemaFolder extends Base {
 
-	constructor(parent, key, type) {
+	constructor(parent, key) {
 		super();
 		/**
 		 * The parent of this SchemaFolder

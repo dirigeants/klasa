@@ -1,4 +1,4 @@
-const { isFunction } = require('../../util/util');
+const { isFunction, isNumber } = require('../../util/util');
 
 /**
  * Creates our SchemaPiece instance
@@ -81,6 +81,20 @@ class SchemaPiece {
 		 * @since 0.5.0
 		 * @type {Function}
 		 */
+		this.max = 'max' in options ? options.max : null;
+
+		/**
+		 * Whether this key should be configurable by the config command. When type is any, this key defaults to false.
+		 * @since 0.5.0
+		 * @type {boolean}
+		 */
+		this.configurable = 'configurable' in options ? options.configurable : this.type !== 'any';
+
+		/**
+   	 * The filter to use for this key when resolving.
+		 * @since 0.5.0
+		 * @type {Function}
+		 */
 		this.filter = 'filter' in options ? options.filter : null;
 	}
 
@@ -93,6 +107,7 @@ class SchemaPiece {
 		this._checkType(this.type);
 		this._checkArray(this.array);
 		this._checkConfigurable(this.configurable);
+		this._checkLimits(this.min, this.max);
 		this._checkFilter(this.filter);
 		this._checkDefault(this);
 
@@ -132,7 +147,7 @@ class SchemaPiece {
 	 * @throws {TypeError}
 	 * @private
 	 */
-	_schemaCheckType(type) {
+	_checkType(type) {
 		if (typeof type !== 'string') throw new TypeError(`[KEY] ${this.path} - Parameter type must be a string.`);
 		if (!require('../../Client').types.has(type)) throw new TypeError(`[KEY] ${this.path} - ${type} is not a valid type.`);
 	}
@@ -144,7 +159,7 @@ class SchemaPiece {
 	 * @throws {TypeError}
 	 * @private
 	 */
-	_schemaCheckArray(array) {
+	_checkArray(array) {
 		if (typeof array !== 'boolean') throw new TypeError(`[KEY] ${this.path} - Parameter array must be a boolean.`);
 	}
 
@@ -155,7 +170,7 @@ class SchemaPiece {
 	 * @throws {TypeError}
 	 * @private
 	 */
-	_schemaCheckDefault(options) {
+	_checkDefault(options) {
 		if (options.array === true) {
 			if (!Array.isArray(options.default)) throw new TypeError(`[DEFAULT] ${this.path} - Default key must be an array if the key stores an array.`);
 		} else if (options.type === 'boolean' && typeof options.default !== 'boolean') {
@@ -165,14 +180,21 @@ class SchemaPiece {
 		}
 	}
 
+
+	_checkLimits(min, max) {
+		if (min !== null && !isNumber(min)) throw new TypeError(`[KEY] ${this.path} - Parameter min must be a number or null.`);
+		if (max !== null && !isNumber(max)) throw new TypeError(`[KEY] ${this.path} - Parameter max must be a number or null.`);
+		if (min !== null && max !== null && min > max) throw new TypeError(`[KEY] ${this.path} - Parameter min must contain a value lower than the parameter max.`);
+	}
+
 	/**
-	 * Checks if options.configurable is valid.
+	 * Check if options.filter is valid.
 	 * @since 0.5.0
-	 * @param {boolean} configurable The parameter to validate
+	 * @param {Function} filter The parameter to validatePermissionLevels
 	 * @throws {TypeError}
 	 * @private
 	 */
-	_schemaCheckConfigurable(configurable) {
+	_checkConfigurable(configurable) {
 		if (typeof configurable !== 'boolean') throw new TypeError(`[KEY] ${this.path} - Parameter configurable must be a boolean.`);
 	}
 
@@ -183,7 +205,7 @@ class SchemaPiece {
 	 * @throws {TypeError}
 	 * @private
 	 */
-	checkFilter(filter) {
+	_checkFilter(filter) {
 		if (!isFunction(filter)) throw new TypeError(`[KEY] ${this.path} - Paramter filter must be a function`);
 	}
 
