@@ -212,32 +212,6 @@ class Gateway extends GatewayStorage {
 	}
 
 	/**
-	 * Sync this shard's schema.
-	 * @since 0.5.0
-	 * @param {string[]} path The key's path
-	 * @param {Object} data The data to insert
-	 * @param {('add'|'delete'|'update')} action Whether the piece got added or removed
-	 * @private
-	 */
-	async _shardSync(path, data, action) {
-		if (!this.client.shard) return;
-		const parsed = typeof data === 'string' ? JSON.parse(data) : data;
-		let route = this.schema;
-		const key = path.pop();
-		for (const pt of path) route = route[pt];
-		let piece;
-		if (action === 'add') {
-			piece = route._add(key, parsed, parsed.type === 'Folder' ? SchemaFolder : SchemaPiece);
-		} else if (action === 'delete') {
-			piece = route[key];
-			delete route[key];
-		} else {
-			route[key]._patch(parsed);
-		}
-		await route.force(action, piece);
-	}
-
-	/**
 	 * Get a JSON object containing the schema and options.
 	 * @since 0.5.0
 	 * @returns {GatewayJSON}
