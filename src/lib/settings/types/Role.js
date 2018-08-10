@@ -2,11 +2,11 @@ const SchemaType = require('./SchemaType');
 const { Role } = require('discord.js');
 
 /**
-	* class that resolves roles
-  * @extends SchemaType
-	* @since 0.5.0
-	* @private
-	*/
+ * class that resolves roles
+ * @extends SchemaType
+ * @since 0.5.0
+ * @private
+ */
 class RoleType extends SchemaType {
 
 	/**

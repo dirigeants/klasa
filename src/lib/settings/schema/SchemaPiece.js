@@ -10,13 +10,12 @@ const { isFunction, isNumber } = require('../../util/util');
  */
 
 /**
-  * @typedef {Object} SchemaPieceOptions
-  * @property {*} default The default value for the key
-	* @property {Function} filter The filter to use when resolving this key. The function is passed the resolved value from the resolver, and a guild.
-  * @property {boolean} array Whether the key should be stored as Array or not
-  * @property {boolean} configurable Whether the key should be configurable by the configuration command or not
-  */
-
+ * @typedef {Object} SchemaPieceOptions
+ * @property {*} default The default value for the key
+ * @property {Function} filter The filter to use when resolving this key. The function is passed the resolved value from the resolver, and a guild.
+ * @property {boolean} array Whether the key should be stored as Array or not
+ * @property {boolean} configurable Whether the key should be configurable by the configuration command or not
+ */
 
 class SchemaPiece {
 
@@ -76,7 +75,6 @@ class SchemaPiece {
 		 */
 		this.default = 'default' in options ? options.default : this._generateDefault();
 
-
 		/**
 		 * The minimum value for this key.
 		 * @since 0.5.0
@@ -99,7 +97,7 @@ class SchemaPiece {
 		this.configurable = 'configurable' in options ? options.configurable : this.type !== 'any';
 
 		/**
-   	 * The filter to use for this key when resolving.
+		 * The filter to use for this key when resolving.
 		 * @since 0.5.0
 		 * @type {Function}
 		 */
@@ -123,15 +121,15 @@ class SchemaPiece {
 	}
 
 	/**
-	  * parses a value into a resolved format for Settings
-		* @since 0.5.0
-		* @param {KlasaClient} client The KlasaClient
-		* @param {*} value A value to parse
-		* @param {external:Guild} [guild] A guild to use during parsing.
-		* @returns {*}
-		*/
+	 * Parses a value into a resolved format for Settings
+	 * @since 0.5.0
+	 * @param {KlasaClient} client The KlasaClient
+	 * @param {*} value A value to parse
+	 * @param {external:Guild} [guild] A guild to use during parsing.
+	 * @returns {*}
+	 */
 	async parse(client, value, guild) {
-		value = await client.constructor.types.get(this.type).resolve(value, this, guild);
+		value = await client.constructor.types.get(this.type).resolve(client, value, guild);
 		if (this.filter) this.filter(client, value, guild);
 		return value;
 	}
@@ -231,10 +229,12 @@ class SchemaPiece {
 	 */
 	toJSON() {
 		return {
-			type: this.type,
 			array: this.array,
+			configurable: this.configurable,
 			default: this.default,
-			configurable: this.configurable
+			max: this.max,
+			min: this.min,
+			type: this.type
 		};
 	}
 
