@@ -36,7 +36,7 @@ Another advantage of using this interface is that it can handle multiple databas
 Let's say I want to add a new Gateway instance called `channels` that stores data to complement our permissions, and I want the **postgresql** provider to handle it but **rethinkdb** as the default provider.
 
 ```javascript
-const { KlasaClient } = require('klasa');
+const { KlasaClient, Schema } = require('klasa');
 
 const client = new KlasaClient({
 	prefix: 'k!',
