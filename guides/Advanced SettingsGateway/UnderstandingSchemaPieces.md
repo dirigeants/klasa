@@ -43,37 +43,6 @@ const filter = (client, command, piece, guild) => {
 
 In this case, `client` is the {@link KlasaClient} instance, `command` the resolved command (the output from the command's SchemaType), `piece` is a {@link SchemaPiece} instance, and guild is a {@link Guild} instance, which may be null.
 
-<!-- TODO(kyranet): Adding the pieces again overwrite the pieces -->
-<!-- ## Editing key options
-
-Once created, it's possible since 0.5.0 to edit a {@link SchemaPiece}'s options, it's as simple as running {@link SchemaPiece#edit} which takes the same options for adding a key with {@link SchemaFolder#addKey} but with one exception: `array` and `type` can't change. The syntax is the following:
-
-```javascript
-this.client.gateways.gatewayName.schema.keyName.edit(options);
-```
-
-For example, let's say we dislike the current prefix and we want to change it to `s!` for the next entries, then you can simply do:
-
-```javascript
-this.client.gateways.guilds.schema.prefix.edit({ default: 's!' });
-```
-
-Where you're doing the following steps:
-
-1. Access to {@link KlasaClient#gateways}, type of {@link GatewayDriver}, which holds all gateways.
-1. Access to the guilds' {@link Gateway}, which manages the per-guild configuration.
-1. Access to the guilds' schema via {@link Gateway#schema}, which manages the gateway's schema.
-1. Access to the key we want to edit, in this case, the **prefix** key, which is type of {@link SchemaPiece}.
-1. Call {@link SchemaPiece#edit} with the option `default` and the new value: `'s!'`.
-
-### The Type Issue
-
-The main reason for why we don't support editing the options `array` and `type` is:
-
-> Changing the type is very complex. For example, in SQL, if we changed the type from `TEXT`, `VARCHAR`, or any other string type to a numeric one such as `INTEGER`, we could risk the database potentially throwing an error or setting them to null, which would result in data loss. We would then need to download all of the data first, and insert them back with the new type. The same thing happens in NoSQL.
-
-Changing the value of `array` from a non-string datatype can result on the issue above, and it's a very slow process. Therefore, it's much better to just remove the key and add it back. -->
-
 ## Further Reading:
 
 - {@tutorial UnderstandingSchemaFolders}
