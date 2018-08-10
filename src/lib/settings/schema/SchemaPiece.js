@@ -1,30 +1,30 @@
 const { isFunction, isNumber } = require('../../util/util');
 
-/**
- * @typedef {Object} SchemaPieceOptions
- * @property {*} [default] The default value for the key
- * @property {Function} [filter] The filter to use when resolving this key. The function is passed the resolved value from the resolver, and a guild.
- * @property {boolean} [array] Whether the key should be stored as Array or not
- * @property {boolean} [configurable] Whether the key should be configurable by the configuration command or not
- * @property {number} [min] The minimum value for this piece
- * @property {number} [max] The maximum value for this piece
- */
-
-/**
- * @typedef {SchemaPieceOptions} SchemaPieceEditOptions
- * @property {string} [type]
- */
-
-/**
- * Creates our SchemaPiece instance
- * @param {SchemaFolder|Schema} parent The parent folder or schema for this piece instance
- * @param {string} key The name of this piece instance
- * @param {string} type The type for this piece instance
- * @param {SchemaPieceOptions} [options={}] The options for this SchemaPiece instance
- * @since 0.5.0
- */
 class SchemaPiece {
 
+	/**
+	 * @typedef {Object} SchemaPieceOptions
+	 * @property {*} [default] The default value for the key
+	 * @property {Function} [filter] The filter to use when resolving this key. The function is passed the resolved value from the resolver, and a guild.
+	 * @property {boolean} [array] Whether the key should be stored as Array or not
+	 * @property {boolean} [configurable] Whether the key should be configurable by the configuration command or not
+	 * @property {number} [min] The minimum value for this piece
+	 * @property {number} [max] The maximum value for this piece
+	 */
+
+	/**
+	 * @typedef {SchemaPieceOptions} SchemaPieceEditOptions
+	 * @property {string} [type] The new type for this SchemaPiece
+	 */
+
+	/**
+	 * Creates our SchemaPiece instance
+	 * @param {SchemaFolder|Schema} parent The parent folder or schema for this piece instance
+	 * @param {string} key The name of this piece instance
+	 * @param {string} type The type for this piece instance
+	 * @param {SchemaPieceOptions} [options={}] The options for this SchemaPiece instance
+	 * @since 0.5.0
+	 */
 	constructor(parent, key, type, options = {}) {
 		/**
 		 * The parent of this SchemaPiece, either a SchemaFolder instance or Schema instance
@@ -66,13 +66,6 @@ class SchemaPiece {
 		 * @type {boolean}
 		 */
 		this.array = 'array' in options ? options.array : Array.isArray(options.default);
-
-		/**
-		 * Whether this key should be configurable by the config command. When type is any, this key defaults to false.
-		 * @since 0.5.0
-		 * @type {boolean}
-		 */
-		this.configurable = 'configurable' in options ? options.configurable : this.type !== 'any';
 
 		/**
 		 * The default data this key will revert back to if reset, or if the key is never set
