@@ -45,24 +45,12 @@ const client = new KlasaClient({
 
 // Now, we create it:
 client.gateways.register('channels', {
-	disabledCommands: {
-		type: 'Command',
-		default: [],
-		array: true
-	},
-	commandThrottle: {
-		type: 'Integer',
-		default: 5,
-		min: 0,
-		max: 60
-	},
-	commandReset: {
-		type: 'Integer',
-		default: 2,
-		min: 0,
-		max: 30
-	}
-}, { provider: 'postgresql' });
+	provider: 'postgresql',
+	schema: new Schema()
+		.add('disabledCommands', 'Command', { array: true })
+		.add('commandThrottle', 'Integer', { default: 5, min: 0, max: 60 })
+		.add('commandReset', 'Integer', { default: 2, min: 0, max: 30 })
+});
 
 client.login('A_BEAUTIFUL_TOKEN_AINT_IT?');
 ```

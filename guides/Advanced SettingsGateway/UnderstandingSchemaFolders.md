@@ -83,12 +83,8 @@ KlasaClient.defaultGuildSchema.remove('disabledChannels');
 In [klasa pieces](https://github.com/dirigeants/klasa-pieces/) specially, some pieces require a key in the schema to work, however, the creator of the pieces does not know if the user who downloads the piece has it, so this function becomes useful in this case.
 
 ```javascript
-async function init() {
-	const { schema } = this.client.gateways.guilds;
-
-	if (!schema.has('modlog')) {
-		await schema.add('modlog', 'TextChannel');
-	}
+if (!KlasaClient.defaultGuildSchema.has('modlogs')) {
+	KlasaClient.defaultGuildSchema.add('modlogs', 'TextChannel');
 }
 ```
 
