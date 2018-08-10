@@ -1,16 +1,15 @@
 const Base = require('./Base');
 
-
-/**
- * Creates our SchemaFolder instance
- * @extends Base
- * @param {SchemaFolder|Schema} parent The parent folder or schema for this folder instance
- * @param {string} key The name of this folder instance
- * @param {string} type The type for this folder instance (always 'Folder')
- * @since 0.5.0
- */
 class SchemaFolder extends Base {
 
+	/**
+	 * Creates our SchemaFolder instance
+	 * @extends Base
+	 * @param {SchemaFolder|Schema} parent The parent folder or schema for this folder instance
+	 * @param {string} key The name of this folder instance
+	 * @param {string} type The type for this folder instance (always 'Folder')
+	 * @since 0.5.0
+	 */
 	constructor(parent, key) {
 		super();
 		/**

@@ -579,6 +579,7 @@ declare module 'klasa' {
 		public max: number | null;
 		public filter: (client: KlasaClient, value: any, guild: KlasaGuild) => void;
 		public parse<T>(client: KlasaClient, value: any, guild?: KlasaGuild): T;
+		public edit(options?: SchemaPieceEditOptions): this;
 		public toJSON(): SchemaPieceOptions;
 
 		private isValid(): boolean;
@@ -1489,6 +1490,10 @@ declare module 'klasa' {
 		max?: number;
 		filter: (value: any, guild?: KlasaGuild) => void;
 	};
+
+	export type SchemaPieceEditOptions = {
+		type?: string;
+	} & SchemaPieceOptions;
 
 	export type SchemaFolderOptions = {
 		type?: 'Folder';

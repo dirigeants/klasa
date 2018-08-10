@@ -1,24 +1,30 @@
 const { isFunction, isNumber } = require('../../util/util');
 
-/**
- * Creates our SchemaPiece instance
- * @param {SchemaFolder|Schema} parent The parent folder or schema for this piece instance
- * @param {string} key The name of this piece instance
- * @param {string} type The type for this piece instance
- * @param {Object} [options={}] The options for this SchemaPiece instance
- * @since 0.5.0
- */
-
-/**
- * @typedef {Object} SchemaPieceOptions
- * @property {*} default The default value for the key
- * @property {Function} filter The filter to use when resolving this key. The function is passed the resolved value from the resolver, and a guild.
- * @property {boolean} array Whether the key should be stored as Array or not
- * @property {boolean} configurable Whether the key should be configurable by the configuration command or not
- */
-
 class SchemaPiece {
 
+	/**
+	 * @typedef {Object} SchemaPieceOptions
+	 * @property {*} [default] The default value for the key
+	 * @property {Function} [filter] The filter to use when resolving this key. The function is passed the resolved value from the resolver, and a guild.
+	 * @property {boolean} [array] Whether the key should be stored as Array or not
+	 * @property {boolean} [configurable] Whether the key should be configurable by the configuration command or not
+	 * @property {number} [min] The minimum value for this piece
+	 * @property {number} [max] The maximum value for this piece
+	 */
+
+	/**
+	 * @typedef {SchemaPieceOptions} SchemaPieceEditOptions
+	 * @property {string} [type]
+	 */
+
+	/**
+	 * Creates our SchemaPiece instance
+	 * @param {SchemaFolder|Schema} parent The parent folder or schema for this piece instance
+	 * @param {string} key The name of this piece instance
+	 * @param {string} type The type for this piece instance
+	 * @param {Object} [options={}] The options for this SchemaPiece instance
+	 * @since 0.5.0
+	 */
 	constructor(parent, key, type, options = {}) {
 		/**
 		 * The parent of this SchemaPiece, either a SchemaFolder instance or Schema instance
@@ -102,6 +108,43 @@ class SchemaPiece {
 		 * @type {Function}
 		 */
 		this.filter = 'filter' in options ? options.filter : null;
+	}
+
+	/**
+	 * Edit this SchemaPiece's properties
+	 * @since 0.5.0
+	 * @param {SchemaPieceEditOptions} [options={}] The options for this SchemaPiece
+	 * @returns {this}
+	 */
+	edit(options = {}) {
+		if ('type' in options) {
+			this._checkType(options.type);
+			this.type = options.type;
+		}
+		if ('array' in options) {
+			this._checkArray(options.array);
+			this.array = options.array;
+		}
+		if ('configurable' in options) {
+			this._checkConfigurable(options.configurable);
+			this.configurable = options.configurable;
+		}
+		if (('min' in options) || ('max' in options)) {
+			const { min = null, max = null } = options;
+			this._checkLimits(min, max);
+			this.min = min;
+			this.max = max;
+		}
+		if ('filter' in options) {
+			this._checkFilter(options.filter);
+			this.filter = options.filter;
+		}
+		if ('default' in options) {
+			this._checkDefault(options);
+			this.default = options.default;
+		}
+
+		return this;
 	}
 
 	/**

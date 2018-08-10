@@ -88,6 +88,13 @@ if (!KlasaClient.defaultGuildSchema.has('modlogs')) {
 }
 ```
 
+## Key conflict
+
+When adding keys, specially when developing plugins, you may enter in conflict while adding them. To solve the issue of having to check too much, Schema merges the pre-existent and the new pieces in one, given the following conditions:
+
+- When adding a SchemaFolder over another SchemaFolder, the callback will be called with the pre-existent folder (pieces will be added to the old folder, "merging" them). If the previous was not a SchemaFolder, this operation will throw.
+- When adding a SchemaPiece over another SchemaPiece, {@link SchemaPiece#edit} will be called instead, merging all the options with the previous. If the previous was not a SchemaPiece, or any of the options were wrong, this operation will throw.
+
 ## Further Reading:
 
 - {@tutorial UnderstandingSchemaPieces}
