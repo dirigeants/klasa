@@ -11,24 +11,26 @@ class NumberType extends SchemaType {
 	/**
 	 * Resolves our data into a number
 	 * @since 0.5.0
+	 * @param {KlasaClient} client The KlasaClient
 	 * @param {*} data The data to resolve
 	 * @param {SchemaPiece} piece The piece this data should be resolving to
 	 * @param {?external:Guild} guild The Guild instance that should be used for this piece
 	 * @returns {*} The resolved data
 	 */
-	async resolve(data, piece, guild) {
-		return this.checkNumber(data, piece, guild);
+	async resolve(client, data, piece, guild) {
+		return this.checkNumber(client, data, piece, guild);
 	}
 
 	/**
 	 * Checks what type of numbe we should resolve into
 	 * @since 0.5.0
+	 * @param {KlasaClient} client The KlasaClient
 	 * @param {*} data The data to resolve
 	 * @param {SchemaPiece} piece The piece this data should be resolving to
 	 * @param {?external:Guild} guild The Guild instance that should be used for this piece
 	 * @returns {*} The resolved data
 	 */
-	checkNumber(data, piece, guild) {
+	checkNumber(client, data, piece, guild) {
 		const type = piece.type.toLowerCase();
 		let numb;
 		switch (type) {

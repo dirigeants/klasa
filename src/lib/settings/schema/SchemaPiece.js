@@ -125,13 +125,14 @@ class SchemaPiece {
 	/**
 	  * parses a value into a resolved format for Settings
 		* @since 0.5.0
+		* @param {KlasaClient} client The KlasaClient
 		* @param {*} value A value to parse
 		* @param {external:Guild} [guild] A guild to use during parsing.
 		* @returns {*}
 		*/
-	async parse(value, guild) {
-		value = await require('../../Client').types.get(this.type).resolve(value, this, guild);
-		if (this.filter) this.filter(value, guild);
+	async parse(client, value, guild) {
+		value = await client.constructor.types.get(this.type).resolve(value, this, guild);
+		if (this.filter) this.filter(client, value, guild);
 		return value;
 	}
 

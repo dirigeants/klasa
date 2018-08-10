@@ -16,19 +16,12 @@ class SchemaType {
 
 	/**
 	 * Resolves data
+	 * @param {KlasaClient} client The KlasaClient
 	 * @param {*} data the data to resolve
 	 * @returns {*}
 	 */
-	async resolve(data) {
+	async resolve(client, data) {
 		return data;
-	}
-
-	/**
-	 * The client instance
-	 * @type {KlasaClient}
-	 */
-	get client() {
-		return this.types.client;
 	}
 
 

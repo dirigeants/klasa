@@ -406,7 +406,7 @@ class Settings {
 			deepClone(piece.default) :
 			await (Array.isArray(value) ?
 				this._parseAll(piece, value, guild, result.errors) :
-				piece.parse(value, guild).catch((error) => { result.errors.push(error); }));
+				piece.parse(this.client, value, guild).catch((error) => { result.errors.push(error); }));
 
 		if (typeof parsedID === 'undefined') return;
 		if (piece.array && !Array.isArray(value)) {
@@ -477,7 +477,7 @@ class Settings {
 	 */
 	async _parseAll(piece, values, guild, errors) {
 		const output = [];
-		await Promise.all(values.map(value => piece.parse(value, guild)
+		await Promise.all(values.map(value => piece.parse(this.client, value, guild)
 			.then(parsed => output.push(parsed))
 			.catch(error => errors.push(error))));
 
