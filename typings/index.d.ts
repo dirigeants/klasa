@@ -576,8 +576,8 @@ declare module 'klasa' {
 		public default: any;
 		public min: number | null;
 		public max: number | null;
-		public filter: (value: any, guild: KlasaGuild) => void;
-		public parse<T>(value: any, guild?: KlasaGuild): T;
+		public filter: (client: KlasaClient, value: any, guild: KlasaGuild) => void;
+		public parse<T>(client: KlasaClient, value: any, guild?: KlasaGuild): T;
 		public toJSON(): SchemaPieceOptions;
 
 		private isValid(): boolean;
@@ -592,14 +592,13 @@ declare module 'klasa' {
 	}
 
 	export class SchemaTypes extends Map<string, SchemaType> {
-		public add(name: string, type: SchemaType): this;
+		public add(name: string, type: typeof SchemaType): this;
 	}
 
 	export class SchemaType {
 		public constructor(types: SchemaTypes);
 		public readonly types: SchemaTypes;
-		public readonly client: KlasaClient;
-		public resolve(data: any): Promise<any>;
+		public resolve(client: KlasaClient, data: any, guild?: KlasaGuild): Promise<any>;
 		public static regex: {
 			userOrMember: RegExp;
 			channel: RegExp;
