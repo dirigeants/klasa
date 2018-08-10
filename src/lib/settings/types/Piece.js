@@ -25,7 +25,7 @@ class PieceType extends SchemaType {
 		const store = client.pieceStores.get(piece.type);
 		if (store) pie = store.get(data);
 		if (pie) return pie;
-		throw (guild ? guild.languauge : client.languages.default).get('RESOLVER_INVALID_PIECE', piece.key, piece.type);
+		throw (guild ? guild.language : client.languages.default).get('RESOLVER_INVALID_PIECE', piece.key, piece.type);
 	}
 
 }

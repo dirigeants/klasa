@@ -22,7 +22,7 @@ class ChannelType extends SchemaType {
 		if (data instanceof Channel) return this.checkChannel(client, data, piece, guild);
 		const channel = this.constructor.regex.channel.test(data) ? client.channels.get(this.constructor.regex.channel.exec(data)[1]) : null;
 		if (channel) return this.checkChannel(client, data, piece, guild);
-		throw (guild ? guild.languauge : client.languages.default).get('RESOLVER_INVALID_CHANNEL', piece.key);
+		throw (guild ? guild.language : client.languages.default).get('RESOLVER_INVALID_CHANNEL', piece.key);
 	}
 
 	/**
@@ -40,13 +40,13 @@ class ChannelType extends SchemaType {
 			case 'channel': return data.id;
 			case 'textchannel':
 				if (data.type === 'text') return data.id;
-				throw (guild ? guild.languauge : client.languages.default).get('RESOLVER_INVALID_CHANNEL', piece.key);
+				throw (guild ? guild.language : client.languages.default).get('RESOLVER_INVALID_CHANNEL', piece.key);
 			case 'voicechannel':
 				if (data.type === 'voice') return data.id;
-				throw (guild ? guild.languauge : client.languages.default).get('RESOLVER_INVALID_CHANNEL', piece.key);
+				throw (guild ? guild.language : client.languages.default).get('RESOLVER_INVALID_CHANNEL', piece.key);
 			case 'categorychannel':
 				if (data.type === 'category') return data.id;
-				throw (guild ? guild.languauge : client.languages.default).get('RESOLVER_INVALID_CHANNEL', piece.key);
+				throw (guild ? guild.language : client.languages.default).get('RESOLVER_INVALID_CHANNEL', piece.key);
 		}
 		return null;
 	}

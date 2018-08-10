@@ -23,7 +23,7 @@ class RoleType extends SchemaType {
 		if (data instanceof Role) return data.id;
 		const role = this.constructor.regex.role.test(data) ? guild.roles.get(data) : guild.roles.find(rol => rol.name === data) || null;
 		if (role) return role.id;
-		throw (guild ? guild.languauge : client.languages.default).get('RESOLVER_INVALID_ROLE', piece.key);
+		throw (guild ? guild.language : client.languages.default).get('RESOLVER_INVALID_ROLE', piece.key);
 	}
 
 }

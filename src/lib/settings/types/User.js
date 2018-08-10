@@ -22,7 +22,7 @@ class UserType extends SchemaType {
 		if (user) return user.id;
 		if (this.constructor.regex.userOrMember.test(data)) user = await client.users.fetch(this.constructor.regex.userOrMember.exec(data)[1]).catch(() => null);
 		if (user) return user.id;
-		throw (guild ? guild.languauge : client.languages.default).get('RESOLVER_INVALID_USER', piece.key);
+		throw (guild ? guild.language : client.languages.default).get('RESOLVER_INVALID_USER', piece.key);
 	}
 
 }
