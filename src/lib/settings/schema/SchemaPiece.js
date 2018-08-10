@@ -219,7 +219,7 @@ class SchemaPiece {
 	 * @private
 	 */
 	_checkFilter(filter) {
-		if (!isFunction(filter)) throw new TypeError(`[KEY] ${this.path} - Paramter filter must be a function`);
+		if (filter !== null && !isFunction(filter)) throw new TypeError(`[KEY] ${this.path} - Parameter filter must be a function`);
 	}
 
 	/**
