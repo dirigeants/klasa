@@ -129,7 +129,7 @@ class SchemaPiece {
 	 * @returns {*}
 	 */
 	async parse(client, value, guild) {
-		value = await client.constructor.types.get(this.type).resolve(client, value, guild);
+		value = await client.constructor.types.get(this.type).resolve(client, value, this, guild);
 		if (this.filter) this.filter(client, value, guild);
 		return value;
 	}
