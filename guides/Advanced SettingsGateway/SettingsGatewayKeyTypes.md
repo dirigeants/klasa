@@ -28,39 +28,31 @@ By default, there are several built-in types that the developer can use, and wit
 To add new types, you use an {@link Extendable} extending {@link SettingResolver}. If you don't know how to create an extendable, check the following tutorial: {@tutorial CreatingExtendables}. The following extendable is a template for this:
 
 ```javascript
-const { Extendable } = require('klasa');
+const { SchemaType, Client } = require('klasa');
 
-module.exports = class extends Extendable {
-
-	constructor(...args) {
-		super(...args, {
-			appliesTo: ['SettingResolver'],
-			name: 'typeName',
-			klasa: true
-		});
-	}
+// Extend SchemaType to add your own resolver
+class MySchemaType extends SchemaType {
 
 	/**
 	 * Resolves my custom type!
-	 * @param {*} data The data to resolve
-	 * @param {KlasaGuild} guild The guild to resolve for
-	 * @param {string} name The name of the key being resolved
-	 * @param {Object} [minMax={}] The minimum and maximum
-	 * @param {?number} minMax.min The minimum value
-	 * @param {?number} minMax.max The maximum value
-	 * @returns {Promise<*>}
+	 * @param {KlasaClient} client The KlasaClient instance
+	 * @param {*} data the data to resolve
+	 * @param {SchemaPiece} piece The SchemaPiece instance that manages this data
+	 * @param {external:Guild} [guild] A guild instance, it may not exist
+	 * @returns {*}
 	 */
-	async extend(data, guild, name, { min, max } = {}) {
+	async extend(client, data, piece, guild) {
 		// The content
 		return data;
 	}
 
-};
+}
+
+// Register the type to Klasa's SchemaTypes
+Client.types.add('mytype', MySchemaType);
 ```
 
 **All settings resolvers must resolve values into primitives or storable plain objects, otherwise, the provider may have issues with storing the value.**
-
-> **Note**: If a type does not load, you can add the type name to {@link GatewayDriver#types}, but it must be before the {@link SchemaPiece}s init as they check if the type is included in said Set.
 
 ## Further Reading:
 

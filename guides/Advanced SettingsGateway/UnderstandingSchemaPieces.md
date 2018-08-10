@@ -13,7 +13,7 @@ There are multiple options that configure the piece, they are:
 | default      | The default value for this key                                             |
 | max          | The maximum value for this key, only applies for string and numbers        |
 | min          | The minimum value for this key, only applies for string and numbers        |
-| type         | The type for this key                                                      |
+| filter       | The filter function for this key                                           |
 
 > Check {@tutorial SettingsGatewayKeyTypes} for the supported types and how to extend them.
 
@@ -27,7 +27,24 @@ The default option is one of the last options to default, **array** defaults to 
 - If **type** is boolean, default will be `false`.
 - In any other case, it will be `null`.
 
-## Editing key options
+## Filter option
+
+The filter option serves to blacklist certain values, it's output is not used, but any thrown error will be handled by SettingsGateway's internals and displayed to the caller (for example in the conf command, it'd display the message to the user). It also may not be asynchronous.
+
+Internally, we use this option to avoid users from disabling guarded commands (check {@link Command#guard}):
+
+```javascript
+const filter = (client, command, piece, guild) => {
+	if (client.commands.get(command).guarded) {
+		throw (guild ? guild.language : client.languages.default).get('COMMAND_CONF_GUARDED', command);
+	}
+}
+```
+
+Where `client` is the {@link KlasaClient} instance, `command` the resolved name's command (the output from the command's SchemaType), `piece` is a {@link SchemaPiece} instance, and guild is a {@link Guild} instance, which it may or may not exist.
+
+<!-- TODO(UnseenFaith): Decide what to do with editing SchemaPieces -->
+<!-- ## Editing key options
 
 Once created, it's possible since 0.5.0 to edit a {@link SchemaPiece}'s options, it's as simple as running {@link SchemaPiece#edit} which takes the same options for adding a key with {@link SchemaFolder#addKey} but with one exception: `array` and `type` can't change. The syntax is the following:
 
@@ -55,7 +72,7 @@ The main reason for why we don't support editing the options `array` and `type` 
 
 > Changing the type is very complex. For example, in SQL, if we changed the type from `TEXT`, `VARCHAR`, or any other string type to a numeric one such as `INTEGER`, we could risk the database potentially throwing an error or setting them to null, which would result in data loss. We would then need to download all of the data first, and insert them back with the new type. The same thing happens in NoSQL.
 
-Changing the value of `array` from a non-string datatype can result on the issue above, and it's a very slow process. Therefore, it's much better to just remove the key and add it back.
+Changing the value of `array` from a non-string datatype can result on the issue above, and it's a very slow process. Therefore, it's much better to just remove the key and add it back. -->
 
 ## Further Reading:
 

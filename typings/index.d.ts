@@ -595,10 +595,10 @@ declare module 'klasa' {
 		public add(name: string, type: typeof SchemaType): this;
 	}
 
-	export class SchemaType {
+	export abstract class SchemaType {
 		public constructor(types: SchemaTypes);
 		public readonly types: SchemaTypes;
-		public resolve(client: KlasaClient, data: any, guild?: KlasaGuild): Promise<any>;
+		public abstract resolve(client: KlasaClient, data: any, piece: SchemaPiece, guild?: KlasaGuild): Promise<any>;
 		public static regex: {
 			userOrMember: RegExp;
 			channel: RegExp;
