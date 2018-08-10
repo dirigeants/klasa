@@ -11,6 +11,10 @@ const Schedule = require('./schedule/Schedule');
 // lib/settings
 const GatewayDriver = require('./settings/GatewayDriver');
 
+// lib/settings/schema
+const SchemaTypes = require('./settings/schema/SchemaTypes');
+const Schema = require('./settings/schema/Schema');
+
 // lib/structures
 const ArgumentStore = require('./structures/ArgumentStore');
 const CommandStore = require('./structures/CommandStore');
@@ -232,11 +236,18 @@ class KlasaClient extends Discord.Client {
 		 */
 		this.gateways = new GatewayDriver(this);
 
+		// Update Guild Schema with Keys needed in Klasa
+		this.constructor.defaultGuildSchema
+			.add('prefix', 'string', { default: this.options.prefix, configurable: true, max: 10 })
+			.add('language', 'language', { default: this.options.language, configurable: true })
+			.add('disableNaturalPrefix', 'boolean', { configurable: Boolean(this.options.regexPrefix) });
+
 		// Register default gateways
+		const { guilds, users, clientStorage } = this.options.gateways;
 		this.gateways
-			.register('guilds', this.gateways.guildsSchema, this.options.gateways.guilds)
-			.register('users', this.gateways.usersSchema, this.options.gateways.users)
-			.register('clientStorage', this.gateways.clientStorageSchema, this.options.gateways.clientStorage);
+			.register('guilds', { ...guilds, schema: 'schema' in guilds ? guilds.schema : this.constructor.defaultGuildSchema })
+			.register('users', { ...users, schema: 'schema' in users ? users.schema : this.constructor.defaultUserSchema })
+			.register('clientStorage', { ...clientStorage, schema: 'schema' in clientStorage ? clientStorage.schema : this.constructor.defaultClientSchema });
 
 		/**
 		 * The Settings instance that handles this client's settings
@@ -326,7 +337,7 @@ class KlasaClient extends Discord.Client {
 	 * @private
 	 */
 	validatePermissionLevels() {
-		const permissionLevels = this.options.permissionLevels || KlasaClient.defaultPermissionLevels;
+		const permissionLevels = this.options.permissionLevels || this.constructor.defaultPermissionLevels;
 		if (!(permissionLevels instanceof PermissionLevels)) throw new Error('permissionLevels must be an instance of the PermissionLevels class');
 		if (permissionLevels.isValid()) return permissionLevels;
 		throw new Error(permissionLevels.debug());
@@ -452,6 +463,58 @@ KlasaClient.defaultPermissionLevels = new PermissionLevels()
 	.add(9, (client, message) => message.author === client.owner, { break: true })
 	.add(10, (client, message) => message.author === client.owner);
 
+
+/**
+ * The SchemaTypes Storage for Klasa's settings
+ * @since 0.5.0
+ * @type {SchemaTypes}
+ */
+
+KlasaClient.types = new SchemaTypes()
+	.add('boolean', require('./settings/types/Boolean'))
+	.add('channel', require('./settings/types/Channel'))
+	.add('textchannel', require('./settings/types/Channel'))
+	.add('voicechannel', require('./settings/types/Channel'))
+	.add('categorychannel', require('./settings/types/Channel'))
+	.add('guild', require('./settings/types/Guild'))
+	.add('number', require('./settings/types/Number'))
+	.add('integer', require('./settings/types/Number'))
+	.add('float', require('./settings/types/Number'))
+	.add('role', require('./settings/types/Role'))
+	.add('string', require('./settings/types/String'))
+	.add('url', require('./settings/types/Url'))
+	.add('user', require('./settings/types/User'))
+	.add('command', require('./settings/types/Piece'))
+	.add('language', require('./settings/types/Piece'))
+	.add('any', require('./settings/types/SchemaType'));
+
+/**
+ * The default Guild Schema
+ * @since 0.5.0
+ * @type {Schema}
+ */
+KlasaClient.defaultGuildSchema = new Schema()
+	.add('disabledCommands', 'command', { array: true, configurable: true, filter: (client, command, guild) => {
+		if (client.commands.get(command)) throw (guild ? guild.lanauge : client.languages.default).get('COMMAND_CONF_GUARDED', command);
+	} });
+
+/**
+ * The default User Schema
+ * @since 0.5.0
+ * @type {Schema}
+ */
+KlasaClient.defaultUserSchema = new Schema();
+
+/**
+ * The default Client Schema
+ * @since 0.5.0
+ * @type {Schema}
+ */
+KlasaClient.defaultClientSchema = new Schema()
+	.add('userBlacklist', 'user', { array: true, configurable: true })
+	.add('guildBlacklist', 'guild', { array: true, configurable: true })
+	.add('schedules', 'any', { array: true, configurable: false });
+
 /**
  * Emitted when Klasa is fully ready and initialized.
  * @event KlasaClient#klasaReady
@@ -565,7 +628,7 @@ KlasaClient.defaultPermissionLevels = new PermissionLevels()
 
 /**
  * Emitted when {@link Settings#update} or {@link Settings#reset} is run.
- * @event KlasaClient#configUpdateEntry
+ * @event KlasaClient#settingsUpdateEntry
  * @since 0.5.0
  * @param {Settings} entry The patched Settings instance
  * @param {SettingsUpdateResultEntry[]} updated The keys that were updated
@@ -573,14 +636,14 @@ KlasaClient.defaultPermissionLevels = new PermissionLevels()
 
 /**
  * Emitted when {@link Settings#destroy} is run.
- * @event KlasaClient#configDeleteEntry
+ * @event KlasaClient#settingsDeleteEntry
  * @since 0.5.0
  * @param {Settings} entry The entry which got deleted
  */
 
 /**
  * Emitted when a new entry in the database has been created upon update.
- * @event KlasaClient#configCreateEntry
+ * @event KlasaClient#settingsCreateEntry
  * @since 0.5.0
  * @param {Settings} entry The entry which got created
  */
@@ -618,27 +681,6 @@ KlasaClient.defaultPermissionLevels = new PermissionLevels()
  * @event KlasaClient#pieceDisabled
  * @since 0.4.0
  * @param {Piece} piece The piece that was disabled
- */
-
-/**
- * Emitted when a new key or folder is added to the Schema.
- * @event KlasaClient#schemaKeyAdd
- * @since 0.5.0
- * @param {(SchemaFolder|SchemaPiece)} key The key that was added
- */
-
-/**
- * Emitted when a key or folder has been removed from the Schema.
- * @event KlasaClient#schemaKeyRemove
- * @since 0.5.0
- * @param {(SchemaFolder|SchemaPiece)} key The key that was removed
- */
-
-/**
- * Emitted when a key's properties are modified.
- * @event KlasaClient#schemaKeyUpdate
- * @since 0.5.0
- * @param {SchemaPiece} key The piece that was updated
  */
 
 module.exports = KlasaClient;

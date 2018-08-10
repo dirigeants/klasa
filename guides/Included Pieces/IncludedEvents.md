@@ -14,13 +14,13 @@ Replies with the reason why the command was inhibited.
 
 [events/commandInhibited.js](https://github.com/dirigeants/klasa/blob/master/src/events/commandInhibited.js)
 
-## configUpdateEntry
+## settingsUpdateEntry
 
 Synchronises the user settings between all shards, if the bot is sharded.
 
 **Source:**
 
-[events/configUpdateEntry.js](https://github.com/dirigeants/klasa/blob/master/src/events/configUpdateEntry.js)
+[events/settingsUpdateEntry.js](https://github.com/dirigeants/klasa/blob/master/src/events/settingsUpdateEntry.js)
 
 ## debug
 

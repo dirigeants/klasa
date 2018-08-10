@@ -33,6 +33,10 @@ module.exports = class extends SQLProvider {
 		// The updateColumn method which updates a column's datatype from a table from the database.
 	}
 
+	async getColumns() {
+		// The getColumns method which gets the name of all columns from a table from the database.
+	}
+
 };
 ```
 

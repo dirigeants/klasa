@@ -1,6 +1,6 @@
-const { isObject, deepClone, toTitleCase, arraysStrictEquals, getDeepTypeName, objectToTuples } = require('../util/util');
-const SchemaFolder = require('./SchemaFolder');
-const SchemaPiece = require('./SchemaPiece');
+const { isObject, deepClone, toTitleCase, arraysStrictEquals, objectToTuples } = require('../util/util');
+const Type = require('../util/Type');
+const SchemaPiece = require('./schema/SchemaPiece');
 
 /**
  * <warning>Creating your own Settings instances is often discouraged and unneeded. SettingsGateway handles them internally for you.</warning>
@@ -81,8 +81,8 @@ class Settings {
 		 */
 		Object.defineProperty(this, '_existsInDB', { value: null, writable: true });
 
-		const { defaults } = this.gateway;
-		for (const key of this.gateway.schema.keys()) this[key] = defaults[key];
+		const { defaults, schema } = this.gateway;
+		for (const key of schema.keys()) this[key] = defaults[key];
 		this._patch(data);
 	}
 
@@ -96,20 +96,18 @@ class Settings {
 	}
 
 	/**
-	 * Get a value from this instance. Accepts nested objects separating by dot.
+	 * Get a value from the configuration. Accepts nested objects separating by dot.
 	 * @since 0.5.0
 	 * @param {string|string[]} path The path of the key's value to get from this instance
 	 * @returns {*}
 	 */
 	get(path) {
 		const route = typeof path === 'string' ? path.split('.') : path;
+		const piece = this.gateway.schema.get(route);
+		if (!piece) return undefined;
+
 		let refThis = this; // eslint-disable-line consistent-this
-		let refSchema = this.gateway.schema;
-		for (const key of route) {
-			if (refSchema.type !== 'Folder' || !refSchema.has(key)) return undefined;
-			refThis = refThis[key];
-			refSchema = refSchema[key];
-		}
+		for (const key of route) refThis = refThis[key];
 
 		return refThis;
 	}
@@ -167,7 +165,7 @@ class Settings {
 	async destroy() {
 		if (this._existsInDB) {
 			await this.gateway.provider.delete(this.gateway.type, this.id);
-			if (this.client.listenerCount('configDeleteEntry')) this.client.emit('configDeleteEntry', this);
+			if (this.client.listenerCount('settingsDeleteEntry')) this.client.emit('settingsDeleteEntry', this);
 		}
 		this.gateway.cache.delete(this.id);
 		return this;
@@ -200,7 +198,7 @@ class Settings {
 		if (!this._existsInDB) return { errors: [], updated: [] };
 
 		if (typeof keys === 'string') keys = [keys];
-		else if (typeof keys === 'undefined') keys = [...this.gateway.schema.values(true)].map(piece => piece.path);
+		else if (typeof keys === 'undefined') keys = [...this.gateway.schema.values()].map(piece => piece.path);
 		if (Array.isArray(keys)) {
 			const result = { errors: [], updated: [] };
 			for (const key of keys) {
@@ -217,7 +215,7 @@ class Settings {
 			await this._save(result);
 			return result;
 		}
-		throw new TypeError(`Invalid value. Expected string or Array<string>. Got: ${getDeepTypeName(keys)}`);
+		throw new TypeError(`Invalid value. Expected string or Array<string>. Got: ${new Type(keys)}`);
 	}
 
 	/**
@@ -258,7 +256,7 @@ class Settings {
 			keys = [keys];
 			values = [values];
 		} else if (!Array.isArray(keys)) {
-			return Promise.reject(new TypeError(`Invalid value. Expected object, string or Array<string>. Got: ${getDeepTypeName(keys)}`));
+			return Promise.reject(new TypeError(`Invalid value. Expected object, string or Array<string>. Got: ${new Type(keys)}`));
 		}
 
 		// Overload update(string|string[], any|any[], SettingsUpdateOptions);
@@ -284,11 +282,11 @@ class Settings {
 	 * Get a list.
 	 * @since 0.5.0
 	 * @param {KlasaMessage} message The Message instance
-	 * @param {(SchemaFolder|string)} path The path to resolve
+	 * @param {(Schema|string)} path The path to resolve
 	 * @returns {string}
 	 */
 	list(message, path) {
-		const folder = path instanceof SchemaFolder ? path : this.gateway.getPath(path, { piece: false }).piece;
+		const folder = typeof path === 'string' ? this.gateway.getPath(path, { piece: false }).piece : path;
 		const array = [];
 		const folders = [];
 		const keys = {};
@@ -308,7 +306,7 @@ class Settings {
 		if (keysTypes.length) {
 			for (const keyType of keysTypes.sort()) {
 				array.push(`= ${toTitleCase(keyType)}s =`,
-					...keys[keyType].sort().map(key => `${key.padEnd(longest)} :: ${this.resolveString(message, folder[key])}`),
+					...keys[keyType].sort().map(key => `${key.padEnd(longest)} :: ${this.resolveString(message, folder.get(key))}`),
 					'');
 			}
 		}
@@ -408,7 +406,7 @@ class Settings {
 			deepClone(piece.default) :
 			await (Array.isArray(value) ?
 				this._parseAll(piece, value, guild, result.errors) :
-				piece.parse(value, guild).catch((error) => { result.errors.push(error); }));
+				piece.parse(this.client, value, guild).catch((error) => { result.errors.push(error); }));
 
 		if (typeof parsedID === 'undefined') return;
 		if (piece.array && !Array.isArray(value)) {
@@ -430,11 +428,11 @@ class Settings {
 		if (this._existsInDB === false) {
 			await this.gateway.provider.create(this.gateway.type, this.id);
 			this._existsInDB = true;
-			if (this.client.listenerCount('configCreateEntry')) this.client.emit('configCreateEntry', this);
+			this.client.emit('settingsCreateEntry', this);
 		}
 
 		await this.gateway.provider.update(this.gateway.type, this.id, updated);
-		if (this.client.listenerCount('configUpdateEntry')) this.client.emit('configUpdateEntry', this, updated);
+		this.client.emit('settingsUpdateEntry', this, updated);
 	}
 
 	/**
@@ -479,7 +477,7 @@ class Settings {
 	 */
 	async _parseAll(piece, values, guild, errors) {
 		const output = [];
-		await Promise.all(values.map(value => piece.parse(value, guild)
+		await Promise.all(values.map(value => piece.parse(this.client, value, guild)
 			.then(parsed => output.push(parsed))
 			.catch(error => errors.push(error))));
 
@@ -514,12 +512,12 @@ class Settings {
 	 * @since 0.5.0
 	 * @param {Object} data The data to patch
 	 * @param {Object} [instance=this] The reference of this instance for recursion
-	 * @param {SchemaFolder} [schema=this.gateway.schema] The SchemaFolder that sets the schema for this settings' gateway
+	 * @param {Schema} [schema=this.gateway.schema] The Schema that sets the schema for this configuration's gateway
 	 * @private
 	 */
 	_patch(data, instance = this, schema = this.gateway.schema) {
 		if (typeof data !== 'object' || data === null) return;
-		for (const [key, piece] of schema) {
+		for (const [key, piece] of schema.entries()) {
 			const value = data[key];
 			if (value === undefined) continue;
 			if (value === null) instance[key] = deepClone(piece.defaults);

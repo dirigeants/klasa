@@ -76,6 +76,10 @@ declare module 'klasa' {
 		private _ready(): Promise<void>;
 
 		public sweepMessages(lifetime?: number, commandLifeTime?: number): number;
+		public static types: SchemaTypes;
+		public static defaultGuildSchema: Schema;
+		public static defaultUserSchema: Schema;
+		public static defaultClientSchema: Schema;
 		public static defaultPermissionLevels: PermissionLevels;
 		public static plugin: Symbol;
 		public static use(mod: { plugin: Symbol, [x: string]: any }): KlasaClient;
@@ -123,14 +127,9 @@ declare module 'klasa' {
 		public on(event: 'taskError', listener: (scheduledTask: ScheduledTask, task: Task, error: Error) => void): this;
 
 		// SettingGateway Events
-		public on(event: 'configCreateEntry', listener: (entry: Settings) => void): this;
-		public on(event: 'configDeleteEntry', listener: (entry: Settings) => void): this;
-		public on(event: 'configUpdateEntry', listener: (oldEntry: Settings, newEntry: Settings, path: string[]) => void): this;
-
-		// Schema Events
-		public on(event: 'schemaKeyAdd', listener: (key: SchemaFolder | SchemaPiece) => void): this;
-		public on(event: 'schemaKeyRemove', listener: (key: SchemaFolder | SchemaPiece) => void): this;
-		public on(event: 'schemaKeyUpdate', listener: (key: SchemaPiece) => void): this;
+		public on(event: 'settingsCreateEntry', listener: (entry: Settings) => void): this;
+		public on(event: 'settingsDeleteEntry', listener: (entry: Settings) => void): this;
+		public on(event: 'settingsUpdateEntry', listener: (oldEntry: Settings, newEntry: Settings, path: string[]) => void): this;
 
 		// Klasa Console Custom Events
 		public on(event: 'log', listener: (data: any) => void): this;
@@ -187,14 +186,9 @@ declare module 'klasa' {
 		public once(event: 'taskError', listener: (scheduledTask: ScheduledTask, task: Task, error: Error) => void): this;
 
 		// SettingGateway Events
-		public once(event: 'configCreateEntry', listener: (entry: Settings) => void): this;
-		public once(event: 'configDeleteEntry', listener: (entry: Settings) => void): this;
-		public once(event: 'configUpdateEntry', listener: (oldEntry: Settings, newEntry: Settings, path?: string) => void): this;
-
-		// Schema Events
-		public once(event: 'schemaKeyAdd', listener: (key: SchemaFolder | SchemaPiece) => void): this;
-		public once(event: 'schemaKeyRemove', listener: (key: SchemaFolder | SchemaPiece) => void): this;
-		public once(event: 'schemaKeyUpdate', listener: (key: SchemaPiece) => void): this;
+		public once(event: 'settingsCreateEntry', listener: (entry: Settings) => void): this;
+		public once(event: 'settingsDeleteEntry', listener: (entry: Settings) => void): this;
+		public once(event: 'settingsUpdateEntry', listener: (oldEntry: Settings, newEntry: Settings, path?: string) => void): this;
 
 		// Klasa Console Custom Events
 		public once(event: 'log', listener: (data: any) => void): this;
@@ -490,9 +484,8 @@ declare module 'klasa' {
 	}
 
 	export class Gateway extends GatewayStorage {
-		public constructor(store: GatewayDriver, type: string, schema: ObjectLiteral, options: GatewayOptions);
+		public constructor(store: GatewayDriver, type: string, schema: Schema, options: GatewayOptions);
 		public store: GatewayDriver;
-		public readonly resolver: SettingResolver;
 		public readonly cache: Collection<string, Settings>;
 		public readonly syncQueue: Collection<string, Promise<Settings>>;
 
@@ -500,12 +493,10 @@ declare module 'klasa' {
 		public sync(input: string): Promise<Settings>;
 		public sync(input?: string[]): Promise<Gateway>;
 		public getPath(key?: string, options?: GatewayGetPathOptions): GatewayGetPathResult | null;
-
-		private _resolveGuild(guild: GuildResolvable): KlasaGuild;
-		private _shardSync(path: string[], data: any, action: 'add' | 'delete' | 'update'): Promise<void>;
-
 		public toJSON(): GatewayJSON;
 		public toString(): string;
+
+		private _resolveGuild(guild: GuildResolvable): KlasaGuild;
 	}
 
 	export class QueryBuilder {
@@ -521,8 +512,6 @@ declare module 'klasa' {
 	export class GatewayDriver {
 		private constructor(client: KlasaClient);
 		public readonly client: KlasaClient;
-		public resolver: SettingResolver;
-		public types: Set<string>;
 		public keys: Set<string>;
 		public ready: boolean;
 		public guilds: Gateway;
@@ -530,23 +519,8 @@ declare module 'klasa' {
 		public clientStorage: Gateway;
 		private _queue: Array<(() => Gateway)>;
 
-		public readonly guildsSchema: {
-			prefix: SchemaPieceOptions,
-			language: SchemaPieceOptions,
-			disableNaturalPrefix: SchemaPieceOptions,
-			disabledCommands: SchemaPieceOptions
-		};
-
-		public readonly usersSchema: {};
-
-		public readonly clientStorageSchema: {
-			userBlacklist: SchemaPieceOptions,
-			guildBlacklist: SchemaPieceOptions,
-			schedules: SchemaPieceOptions
-		};
-
 		public [Symbol.iterator](): Iterator<[string, Gateway]>;
-		public register(name: string, schema?: ObjectLiteral, options?: GatewayDriverRegisterOptions): this;
+		public register(name: string, options?: GatewayDriverRegisterOptions): this;
 		public init(): Promise<void>;
 		public sync(input?: string[]): Promise<Array<Gateway>>;
 
@@ -555,79 +529,84 @@ declare module 'klasa' {
 	}
 
 	export abstract class GatewayStorage {
-		public constructor(client: KlasaClient, type: string, provider?: string);
-		public readonly baseDirectory: string;
+		public constructor(client: KlasaClient, type: string, schema: Schema, provider?: string);
 		public readonly client: KlasaClient;
 		public readonly defaults: any;
-		public readonly filePath: string;
 		public readonly provider: Provider | null;
 		public readonly providerName: string;
 		public readonly type: string;
 		public ready: boolean;
 		public schema: SchemaFolder | null;
 
-		public init(defaultSchema: ObjectLiteral): Promise<void>;
+		public init(): Promise<void>;
 	}
 
-	export abstract class Schema {
-		public constructor(client: KlasaClient, gateway: Gateway, parent: SchemaFolder, key: string);
-		public readonly client: KlasaClient;
-		public readonly gateway: Gateway;
-		public readonly parent: SchemaFolder | null;
+	abstract class SchemaBase extends Map<string, SchemaPiece | SchemaFolder> {
+		public readonly configurableKeys: Array<string>;
+		public readonly defaults: ObjectLiteral;
+		public readonly paths: Map<string, SchemaPiece | SchemaFolder>;
+		public add(key: string, typeOrCallback: string | ((folder: SchemaFolder) => any), options?: SchemaPieceOptions): this;
+		public remove(key: string): this;
+		public get<T = SchemaPiece | SchemaFolder>(key: string | Array<string>): T;
+		public toJSON(): ObjectLiteral;
+
+		private debug(): Array<string>;
+	}
+
+	export class Schema extends SchemaBase {
 		public readonly path: string;
+	}
+
+	export class SchemaFolder extends SchemaBase {
+		public constructor(parent: Schema | SchemaFolder, key: string);
+		public readonly parent: Schema | SchemaFolder;
 		public readonly key: string;
-		private readonly _initialized: true;
-	}
-
-	export class SchemaFolder extends Schema {
-		private constructor(client: KlasaClient, gateway: Gateway, options: SchemaFolderAddOptions, parent: SchemaFolder, key: string);
 		public readonly type: 'Folder';
-		public readonly configurableKeys: string[];
-		public defaults: ObjectLiteral<PrimitiveType>;
-		public keyArray: string[];
-
-		public add(key: string, options: SchemaFolderAddOptions): Promise<SchemaFolder>;
-		public has(key: string): boolean;
-		public remove(key: string): Promise<SchemaFolder>;
-		public getDefaults<T = {}>(data?: ObjectLiteral): T & ObjectLiteral;
-		public entries(recursive?: boolean): Iterator<[string, SchemaFolder | SchemaPiece]>;
-		public values(recursive?: boolean): Iterator<SchemaFolder | SchemaPiece>;
-		public keys(recursive?: boolean): Iterator<string>;
-		public [Symbol.iterator](): Iterator<[string, SchemaFolder | SchemaPiece]>;
-		public toJSON(): SchemaFolderOptions;
-		public toString(): string;
-
-		private _add(key: string, options: SchemaFolderAddOptions, type: typeof Schema | typeof SchemaFolder): void;
-		private _remove(key: string): void;
-		private _shardSyncSchema(piece: SchemaFolder | SchemaPiece, action: 'add' | 'delete' | 'update'): Promise<void>;
-		private _init(options: SchemaFolderAddOptions): true;
-		private force(action: 'add' | 'delete', piece: SchemaFolder | SchemaPiece): Promise<any>;
+		public readonly path: string;
 	}
 
-	export class SchemaPiece extends Schema {
-		private constructor(client: KlasaClient, gateway: Gateway, options: SchemaFolderAddOptions, parent: SchemaFolder, key: string);
-		public type: string;
+	export class SchemaPiece {
+		public constructor(parent: Schema | SchemaFolder, key: string, type: string, options: SchemaPieceOptions);
+		public readonly parent: Schema | SchemaFolder;
+		public readonly key: string;
+		public readonly type: string;
+		public readonly path: string;
 		public array: boolean;
+		public configurable: boolean;
 		public default: any;
 		public min: number | null;
 		public max: number | null;
-		public configurable: boolean;
-		public validator?: (resolved: any, guild?: KlasaGuild) => void;
-
-		public setValidator(fn: Function): this;
-		public parse<T = any>(value: any, guild: KlasaGuild): Promise<T>;
-		public modify(options: SchemaPieceEditOptions): Promise<this>;
-
-		private _generateDefault(): Array<any> | false | null;
-		private _schemaCheckType(type: string): void;
-		private _schemaCheckArray(array: boolean): void;
-		private _schemaCheckDefault(options: SchemaFolderAddOptions): void;
-		private _schemaCheckLimits(min: number, max: number): void;
-		private _schemaCheckConfigurable(configurable: boolean): void;
-		private _init(options: SchemaFolderAddOptions): true;
-
+		public filter: (value: any, guild: KlasaGuild) => void;
+		public parse<T>(value: any, guild?: KlasaGuild): T;
 		public toJSON(): SchemaPieceOptions;
-		public toString(): string;
+
+		private isValid(): boolean;
+		private _generateDefault(): Array<any> | false | null;
+		// any is supplied since the following methods do type checks
+		private _checkType(value: any): void;
+		private _checkArray(value: any): void;
+		private _checkConfigurable(value: any): void;
+		private _checkLimits(min: any, max: any): void;
+		private _checkFilter(value: any): void;
+		private _checkDefault(value: any): void;
+	}
+
+	export class SchemaTypes extends Map<string, SchemaType> {
+		public add(name: string, type: SchemaType): this;
+	}
+
+	export class SchemaType {
+		public constructor(types: SchemaTypes);
+		public readonly types: SchemaTypes;
+		public readonly client: KlasaClient;
+		public resolve(data: any): Promise<any>;
+		public static regex: {
+			userOrMember: RegExp;
+			channel: RegExp;
+			emoji: RegExp;
+			role: RegExp;
+			snowflake: RegExp;
+		};
 	}
 
 //#endregion Settings
@@ -777,9 +756,8 @@ declare module 'klasa' {
 		public abstract getAll<T extends ObjectLiteral>(table: string): Promise<T[]>;
 		public abstract has(table: string, entry: string): Promise<boolean>;
 		public abstract hasTable(table: string): Promise<boolean>;
-		public abstract removeValue<T = any>(table: string, path: string): Promise<T>;
-		public abstract replace<T = any>(table: string, entry: string, data: SettingsUpdateResultEntry[] | [string, any][] | ObjectLiteral): Promise<T>;
 		public abstract update<T = any>(table: string, entry: string, data: SettingsUpdateResultEntry[] | [string, any][] | ObjectLiteral): Promise<T>;
+		public abstract replace<T = any>(table: string, entry: string, data: SettingsUpdateResultEntry[] | [string, any][] | ObjectLiteral): Promise<T>;
 		// The following is not required by SettingGateway but might be available in some providers
 		public getKeys(table: string): Promise<string[]>;
 		protected parseUpdateInput<T = ObjectLiteral>(updated: T | SettingsUpdateResult): T;
@@ -789,11 +767,10 @@ declare module 'klasa' {
 	}
 
 	export abstract class SQLProvider extends Provider {
+		public abstract qb: QueryBuilder;
 		public abstract addColumn<T = any>(table: string, columns: SchemaFolder | SchemaPiece): Promise<T>;
 		public abstract removeColumn<T = any>(table: string, columns: string | string[]): Promise<T>;
 		public abstract updateColumn<T = any>(table: string, piece: SchemaPiece): Promise<T>;
-		// Remove the abstraction from the parent class, as it's not required by SQLProviders (they use removeColumn instead)
-		public removeValue<T = any>(table: string, path: string): Promise<T>;
 		protected parseUpdateInput<T = [string, any]>(updated?: SettingsUpdateResultEntry[] | [string, any][] | ObjectLiteral, resolve?: boolean): T;
 		protected parseEntry<T = ObjectLiteral>(gateway: string | Gateway, entry: ObjectLiteral): T;
 		protected parseValue<T = any>(value: any, schemaPiece: SchemaPiece): T;
@@ -1462,7 +1439,7 @@ declare module 'klasa' {
 		array?: (datatype: string) => string;
 		resolver?: <T = any>(input: any, schemaPiece: SchemaPiece) => T;
 		type: string | ((piece: SchemaPiece) => string);
-	};
+	} | string;
 
 	export type QueryBuilderOptions = {
 		arrayResolver?: (values: Array<any>, piece: SchemaPiece, resolver: Function) => string;
@@ -1498,30 +1475,24 @@ declare module 'klasa' {
 
 	export type GatewayDriverRegisterOptions = {
 		provider?: string;
+		schema?: Schema;
 		syncArg?: string[] | string | true;
 	};
 
 	export type SchemaFolderAddOptions = SchemaFolderOptions | SchemaPieceOptions;
 
 	export type SchemaPieceOptions = {
-		type: string;
 		array?: boolean;
 		configurable?: boolean;
 		default?: any;
-		max?: number | null;
-		min?: number | null;
+		min?: number;
+		max?: number;
+		filter: (value: any, guild?: KlasaGuild) => void;
 	};
 
 	export type SchemaFolderOptions = {
 		type?: 'Folder';
 	} & ObjectLiteral<SchemaPieceOptions>;
-
-	export type SchemaPieceEditOptions = {
-		configurable?: boolean;
-		default?: any;
-		max?: number;
-		min?: number;
-	};
 
 	export type GatewayDriverJSON = {
 		clientStorage: GatewayJSON;
@@ -1529,7 +1500,6 @@ declare module 'klasa' {
 		users: GatewayJSON;
 		keys: string[];
 		ready: boolean;
-		types: string[];
 	} & ObjectLiteral<GatewayJSON>;
 
 	// Structures
@@ -1903,10 +1873,6 @@ declare module 'klasa' {
 	interface ObjectLiteral<T = any> {
 		[k: string]: T;
 	}
-
-	export type GuildSettings = ObjectLiteral;
-	export type SchemaObject = ObjectLiteral<SchemaPiece>;
-	export type SchemaDefaults = ObjectLiteral;
 
 	type Constructable<T> = new (...args: any[]) => T;
 
