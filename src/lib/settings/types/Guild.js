@@ -22,7 +22,7 @@ class GuildType extends SchemaType {
 		if (data instanceof Guild) return data.id;
 		const guil = this.constructor.regex.snowflake.test(data) ? client.guilds.get(data) : null;
 		if (guil) return guil.id;
-		throw (guild ? guild.languauge : client.languages.default).get('RESOLVER_INVALID_GUILD', piece.key);
+		throw (guild ? guild.language : client.languages.default).get('RESOLVER_INVALID_GUILD', piece.key);
 	}
 
 }

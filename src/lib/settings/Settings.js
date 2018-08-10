@@ -165,7 +165,7 @@ class Settings {
 	async destroy() {
 		if (this._existsInDB) {
 			await this.gateway.provider.delete(this.gateway.type, this.id);
-			if (this.client.listenerCount('settingsDeleteEntry')) this.client.emit('settingsDeleteEntry', this);
+			this.client.emit('settingsDeleteEntry', this);
 		}
 		this.gateway.cache.delete(this.id);
 		return this;

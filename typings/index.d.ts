@@ -545,7 +545,8 @@ declare module 'klasa' {
 		public readonly configurableKeys: Array<string>;
 		public readonly defaults: ObjectLiteral;
 		public readonly paths: Map<string, SchemaPiece | SchemaFolder>;
-		public add(key: string, typeOrCallback: string | ((folder: SchemaFolder) => any), options?: SchemaPieceOptions): this;
+		public add(key: string, type: string, options?: SchemaPieceOptions): this;
+		public add(key: string, callback: (folder: SchemaFolder) => any): this;
 		public remove(key: string): this;
 		public get<T = SchemaPiece | SchemaFolder>(key: string | Array<string>): T;
 		public toJSON(): ObjectLiteral;
@@ -576,8 +577,9 @@ declare module 'klasa' {
 		public default: any;
 		public min: number | null;
 		public max: number | null;
-		public filter: (value: any, guild: KlasaGuild) => void;
-		public parse<T>(value: any, guild?: KlasaGuild): T;
+		public filter: (client: KlasaClient, value: any, guild: KlasaGuild) => void;
+		public parse<T>(client: KlasaClient, value: any, guild?: KlasaGuild): T;
+		public edit(options?: SchemaPieceEditOptions): this;
 		public toJSON(): SchemaPieceOptions;
 
 		private isValid(): boolean;
@@ -592,14 +594,13 @@ declare module 'klasa' {
 	}
 
 	export class SchemaTypes extends Map<string, SchemaType> {
-		public add(name: string, type: SchemaType): this;
+		public add(name: string, type: typeof SchemaType): this;
 	}
 
-	export class SchemaType {
+	export abstract class SchemaType {
 		public constructor(types: SchemaTypes);
 		public readonly types: SchemaTypes;
-		public readonly client: KlasaClient;
-		public resolve(data: any): Promise<any>;
+		public abstract resolve(client: KlasaClient, data: any, piece: SchemaPiece, guild?: KlasaGuild): Promise<any>;
 		public static regex: {
 			userOrMember: RegExp;
 			channel: RegExp;
@@ -1489,6 +1490,10 @@ declare module 'klasa' {
 		max?: number;
 		filter: (value: any, guild?: KlasaGuild) => void;
 	};
+
+	export type SchemaPieceEditOptions = {
+		type?: string;
+	} & SchemaPieceOptions;
 
 	export type SchemaFolderOptions = {
 		type?: 'Folder';

@@ -5,15 +5,10 @@ Creating a points system (also known as a **Social Module**) in your bot is quit
 Before we work with the social module, we need to update the built-in {@link GatewayDriver#users users' gateway} to implement a new key:
 
 ```javascript
-async function init() {
-	if (!this.client.gateways.users.schema.has('experience')) {
-		this.client.gateways.users.schema.add('experience', {
-			type: 'integer',
-			default: 0,
-			configurable: false
-		});
-	}
-}
+KlasaClient.defaultUserSchema.add('experience', 'Integer', {
+	default: 0,
+	configurable: false
+});
 ```
 
 In this function, we are checking if the schema has the key `experience`. If it doesn't, we add it as a new key, with type `integer` (doubtfully we'll use `float` on this) and make it unconfigurable for the built-in userconf command so the end users do not cheat by modifying their stats.
@@ -30,12 +25,7 @@ const { Monitor } = require('klasa');
 module.exports = class extends Monitor {
 
 	constructor(...args) {
-		super(...args, {
-			enabled: true,
-			ignoreBots: true,
-			ignoreSelf: true,
-			ignoreOthers: false
-		});
+		super(...args, { ignoreOthers: false });
 	}
 
 	async run(message) {
@@ -47,10 +37,7 @@ module.exports = class extends Monitor {
 	}
 
 };
-
 ```
-
-Alternatively, we can create the `init` method and ensure the users' schema always has our key.
 
 ## Level up!
 
@@ -60,15 +47,10 @@ Some social bots have level up messages. How do we set it up? There are two ways
 1. We add a level field. This makes the configuration update slower by nature as it will need to update two values. First, we will create the key:
 
 ```javascript
-async function init() {
-	if (!this.client.gateways.users.schema.has('level')) {
-		this.client.gateways.users.schema.add('level', {
-			type: 'integer',
-			default: 0,
-			configurable: false
-		});
-	}
-}
+KlasaClient.defaultUserSchema.add('level', 'Integer', {
+	default: 0,
+	configurable: false
+});
 ```
 
 Then we pick up a level calculation algorithm, the following as an example:
@@ -133,7 +115,7 @@ module.exports = class extends Command {
 		super(...args, { description: 'Check how many points you have.' });
 	}
 
-	async run(message) {
+	run(message) {
 		return message.send(`You have a total of ${message.author.settings.experience} experience points!`);
 	}
 
@@ -154,7 +136,7 @@ module.exports = class extends Command {
 		super(...args, { description: 'Check your current level.' });
 	}
 
-	async run(message) {
+	run(message) {
 		return message.send(`You are currently level ${message.author.settings.level}!`);
 	}
 

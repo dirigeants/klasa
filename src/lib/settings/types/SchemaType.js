@@ -1,7 +1,6 @@
 /**
  * The base SchemaType class for all other types
  * @since 0.5.0
- * @private
  */
 class SchemaType {
 
@@ -16,9 +15,12 @@ class SchemaType {
 
 	/**
 	 * Resolves data
-	 * @param {KlasaClient} client The KlasaClient
+	 * @param {KlasaClient} client The KlasaClient instance
 	 * @param {*} data the data to resolve
+	 * @param {SchemaPiece} piece The SchemaPiece instance that manages this data
+	 * @param {external:Guild} [guild] A guild instance, it may be null
 	 * @returns {*}
+	 * @abstract
 	 */
 	async resolve(client, data) {
 		return data;

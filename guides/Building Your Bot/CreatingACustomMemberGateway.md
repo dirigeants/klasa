@@ -10,21 +10,17 @@ Inside your entry point (Where you define `new Client()`, for example, `index.js
 
 ```javascript
 client.gateways.register('members', {
-	experience: {
-		type: 'Integer',
-		default: 10
-	},
-	level: {
-		type: 'Integer',
-		default: 1
-	}
-}, { provider: 'rethinkdb' });
-// note: You can use any provider for this.
+	provider: 'rethinkdb',
+	schema: new Schema()
+		.add('experience', 'Integer', { default: 10 })
+		.add('level', 'Integer', { default: 1 })
+});
+// Note: You can use any provider for this.
 ```
 
 And that's it, we now have a built in members gateway, however we have no way of accessing them via the [GuildMember](https://discord.js.org/#/docs/main/master/class/GuildMember) class. We'll tackle that next.
 
-> Note: Gateways must be created before the "Ready" event is emmited. (i.e. before the bot is ready). See [Creating Gateways](https://github.com/dirigeants/klasa/blob/master/guides/Getting%20Started/UnderstandingSettingsGateway.md#creating-gateways) for more details.
+> Note: Gateways must be created before the "Ready" event is emmited. (i.e. before the bot is ready). See {@tutorial UnderstandingSettingsGateway#creating-gateways} for more details.
 
 ## Creating Our Own GuildMember Class
 
@@ -50,15 +46,11 @@ Then, you'll need to require it somewhere; I suggest in your entry point.
 require('./path-to/extension');
 
 client.gateways.register('members', {
-	experience: {
-		type: 'Integer',
-		default: 10
-	},
-	level: {
-		type: 'Integer',
-		default: 1
-	}
-}, { provider: 'rethinkdb' });
+	provider: 'rethinkdb',
+	schema: new Schema()
+		.add('experience', 'Integer', { default: 10 })
+		.add('level', 'Integer', { default: 1 })
+});
 
 ```
 

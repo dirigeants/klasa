@@ -9,13 +9,13 @@ const { isFunction, deepClone } = require('../../util/util');
 class Base extends Map {
 
 	/**
-	 * @since 0.5.0
 	 * Adds a Folder or Piece instance to the current SchemaFolder or Schema instance
+	 * @since 0.5.0
 	 * @param {string} key The name of this new piece you are trying to add.
 	 * @param {string|Function} typeOrCallback A function to add a folder or a string to add a new SchemaPiece
 	 * @param {Object} [options] An object of options used for SchemaPieces
-	 * @chainable
 	 * @returns {this}
+	 * @chainable
 	 * @example
 	 * // callback is always passed the created folder to encourage chaining
 	 * Schema.add('folder', (folder) => folder.add('piece', 'textchannel'));
@@ -23,7 +23,6 @@ class Base extends Map {
 	 * Schema.add('piece', 'string', { default: 'klasa!' });
 	 */
 	add(key, typeOrCallback, options = {}) {
-		if (this.has(key)) throw new Error(`The key ${key} already exists in the current schema.`);
 		if (!typeOrCallback) {
 			throw new Error(`The type for ${key} must be a string for pieces, and a callback for folders`);
 		}
@@ -43,13 +42,29 @@ class Base extends Map {
 			callback = null;
 		}
 
+		// Get previous key and merge the new with the pre-existent if it exists
+		const previous = super.get(key);
+		if (previous) {
+			if (type === 'Folder') {
+				// If the type of the new piece is a Folder, the previous must also be a Folder.
+				if (previous.type !== 'Folder') throw new Error(`The type for ${key} conflicts with the previous value, expected type Folder, got ${previous.type}.`);
+				// Call the callback with the pre-existent Folder
+				callback(previous); // eslint-disable-line callback-return
+			} else {
+				// If the type of the new piece is not a Folder, the previous must also not be a Folder.
+				if (previous.type === 'Folder') throw new Error(`The type for ${key} conflicts with the previous value, expected a non-Folder, got ${previous.type}.`);
+				// Edit the previous key
+				previous.edit({ type, ...options });
+			}
+		} else {
+			const piece = new Piece(this, key, type, options);
 
-		const piece = new Piece(this, key, type, options);
+			// eslint-disable-next-line callback-return
+			if (callback) callback(piece);
 
-		// eslint-disable-next-line callback-return
-		if (callback) callback(piece);
+			this.set(key, piece);
+		}
 
-		this.set(key, piece);
 		return this;
 	}
 

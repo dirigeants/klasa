@@ -1,25 +1,30 @@
 const { isFunction, isNumber } = require('../../util/util');
 
-/**
- * Creates our SchemaPiece instance
- * @param {SchemaFolder|Schema} parent The parent folder or schema for this piece instance
- * @param {string} key The name of this piece instance
- * @param {string} type The type for this piece instance
- * @param {Object} [options={}] The options for this SchemaPiece instance
- * @since 0.5.0
- */
-
-/**
-  * @typedef {Object} SchemaPieceOptions
-  * @property {*} default The default value for the key
-	* @property {Function} filter The filter to use when resolving this key. The function is passed the resolved value from the resolver, and a guild.
-  * @property {boolean} array Whether the key should be stored as Array or not
-  * @property {boolean} configurable Whether the key should be configurable by the configuration command or not
-  */
-
-
 class SchemaPiece {
 
+	/**
+	 * @typedef {Object} SchemaPieceOptions
+	 * @property {*} [default] The default value for the key
+	 * @property {Function} [filter] The filter to use when resolving this key. The function is passed the resolved value from the resolver, and a guild.
+	 * @property {boolean} [array] Whether the key should be stored as Array or not
+	 * @property {boolean} [configurable] Whether the key should be configurable by the configuration command or not
+	 * @property {number} [min] The minimum value for this piece
+	 * @property {number} [max] The maximum value for this piece
+	 */
+
+	/**
+	 * @typedef {SchemaPieceOptions} SchemaPieceEditOptions
+	 * @property {string} [type] The new type for this SchemaPiece
+	 */
+
+	/**
+	 * Creates our SchemaPiece instance
+	 * @param {SchemaFolder|Schema} parent The parent folder or schema for this piece instance
+	 * @param {string} key The name of this piece instance
+	 * @param {string} type The type for this piece instance
+	 * @param {SchemaPieceOptions} [options={}] The options for this SchemaPiece instance
+	 * @since 0.5.0
+	 */
 	constructor(parent, key, type, options = {}) {
 		/**
 		 * The parent of this SchemaPiece, either a SchemaFolder instance or Schema instance
@@ -63,19 +68,11 @@ class SchemaPiece {
 		this.array = 'array' in options ? options.array : Array.isArray(options.default);
 
 		/**
-		 * Whether this key should be configurable by the config command. When type is any, this key defaults to false.
-		 * @since 0.5.0
-		 * @type {boolean}
-		 */
-		this.configurable = 'configurable' in options ? options.configurable : this.type !== 'any';
-
-		/**
 		 * The default data this key will revert back to if reset, or if the key is never set
 		 * @since 0.5.0
 		 * @type {*}
 		 */
 		this.default = 'default' in options ? options.default : this._generateDefault();
-
 
 		/**
 		 * The minimum value for this key.
@@ -99,11 +96,48 @@ class SchemaPiece {
 		this.configurable = 'configurable' in options ? options.configurable : this.type !== 'any';
 
 		/**
-   	 * The filter to use for this key when resolving.
+		 * The filter to use for this key when resolving.
 		 * @since 0.5.0
 		 * @type {Function}
 		 */
 		this.filter = 'filter' in options ? options.filter : null;
+	}
+
+	/**
+	 * Edit this SchemaPiece's properties
+	 * @since 0.5.0
+	 * @param {SchemaPieceEditOptions} [options={}] The options for this SchemaPiece
+	 * @returns {this}
+	 */
+	edit(options = {}) {
+		if ('type' in options) {
+			this._checkType(options.type);
+			this.type = options.type;
+		}
+		if ('array' in options) {
+			this._checkArray(options.array);
+			this.array = options.array;
+		}
+		if ('configurable' in options) {
+			this._checkConfigurable(options.configurable);
+			this.configurable = options.configurable;
+		}
+		if (('min' in options) || ('max' in options)) {
+			const { min = null, max = null } = options;
+			this._checkLimits(min, max);
+			this.min = min;
+			this.max = max;
+		}
+		if ('filter' in options) {
+			this._checkFilter(options.filter);
+			this.filter = options.filter;
+		}
+		if ('default' in options) {
+			this._checkDefault(options);
+			this.default = options.default;
+		}
+
+		return this;
 	}
 
 	/**
@@ -123,15 +157,15 @@ class SchemaPiece {
 	}
 
 	/**
-	  * parses a value into a resolved format for Settings
-		* @since 0.5.0
-		* @param {KlasaClient} client The KlasaClient
-		* @param {*} value A value to parse
-		* @param {external:Guild} [guild] A guild to use during parsing.
-		* @returns {*}
-		*/
+	 * Parses a value into a resolved format for Settings
+	 * @since 0.5.0
+	 * @param {KlasaClient} client The KlasaClient
+	 * @param {*} value A value to parse
+	 * @param {external:Guild} [guild] A guild to use during parsing.
+	 * @returns {*}
+	 */
 	async parse(client, value, guild) {
-		value = await client.constructor.types.get(this.type).resolve(value, this, guild);
+		value = await client.constructor.types.get(this.type).resolve(client, value, this, guild);
 		if (this.filter) this.filter(client, value, guild);
 		return value;
 	}
@@ -221,7 +255,7 @@ class SchemaPiece {
 	 * @private
 	 */
 	_checkFilter(filter) {
-		if (!isFunction(filter)) throw new TypeError(`[KEY] ${this.path} - Paramter filter must be a function`);
+		if (filter !== null && !isFunction(filter)) throw new TypeError(`[KEY] ${this.path} - Parameter filter must be a function`);
 	}
 
 	/**
@@ -231,10 +265,12 @@ class SchemaPiece {
 	 */
 	toJSON() {
 		return {
-			type: this.type,
 			array: this.array,
+			configurable: this.configurable,
 			default: this.default,
-			configurable: this.configurable
+			max: this.max,
+			min: this.min,
+			type: this.type
 		};
 	}
 

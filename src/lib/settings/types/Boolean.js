@@ -24,7 +24,7 @@ class BooleanType extends SchemaType {
 		if (['1', 'true', '+', 't', 'yes', 'y'].includes(bool)) bool = true;
 		if (['0', 'false', '-', 'f', 'no', 'n'].includes(bool)) bool = false;
 		if (typeof bool === 'boolean') return bool;
-		throw (guild ? guild.languauge : client.languages.default).get('RESOLVER_INVALID_BOOL', piece.key);
+		throw (guild ? guild.language : client.languages.default).get('RESOLVER_INVALID_BOOL', piece.key);
 	}
 
 }

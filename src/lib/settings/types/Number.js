@@ -37,15 +37,15 @@ class NumberType extends SchemaType {
 			case 'number':
 				numb = Number(data);
 				if (!isNaN(numb)) return numb;
-				throw (guild ? guild.languauge : this.client.languages.default).get('RESOLVER_INVALID_FLOAT', piece.key);
+				throw (guild ? guild.language : client.languages.default).get('RESOLVER_INVALID_FLOAT', piece.key);
 			case 'integer':
 				numb = parseInt(data);
 				if (Number.isInteger(numb)) return numb;
-				throw (guild ? guild.language : this.client.languages.default).get('RESOLVER_INVALID_INT', piece.key);
+				throw (guild ? guild.language : client.languages.default).get('RESOLVER_INVALID_INT', piece.key);
 			case 'float':
 				numb = parseFloat(data);
 				if (!isNaN(numb)) return numb;
-				throw (guild ? guild.languauge : this.client.languages.default).get('RESOLVER_INVALID_FLOAT', piece.key);
+				throw (guild ? guild.language : client.languages.default).get('RESOLVER_INVALID_FLOAT', piece.key);
 		}
 		// noop
 		return null;

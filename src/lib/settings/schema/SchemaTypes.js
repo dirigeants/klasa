@@ -7,9 +7,17 @@ const { isClass } = require('../../util/util');
  */
 class SchemaTypes extends Map {
 
+	/**
+	 * Add a new SchemaType to this map
+	 * @since 0.5.0
+	 * @param {string} name The name of the schema type to add
+	 * @param {Function} Type A class that extends SchemaType to build
+	 * @returns {this}
+	 * @chainable
+	 */
 	add(name, Type) {
 		name = name.toLowerCase();
-		if (this.has(name)) throw new Error(`The type ${name} has already been added.`);
+		if (super.has(name)) throw new Error(`The type ${name} has already been added.`);
 
 		// TypeScript compatibility
 		if ('default' in Type) Type = Type.default;
@@ -22,10 +30,22 @@ class SchemaTypes extends Map {
 		return this;
 	}
 
+	/**
+	 * Check the existence of the type in this map
+	 * @since 0.5.0
+	 * @param {string} name The name of the type to look for
+	 * @returns {boolean}
+	 */
 	has(name) {
 		return super.has(name.toLowerCase());
 	}
 
+	/**
+	 * Get a type from this map
+	 * @since 0.5.0
+	 * @param {string} name The name of the type to get
+	 * @returns {?SchemaType}
+	 */
 	get(name) {
 		return super.get(name.toLowerCase());
 	}
