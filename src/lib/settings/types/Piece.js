@@ -19,12 +19,9 @@ class PieceType extends SchemaType {
 	 * @returns {*} The resolved data
 	 */
 	async resolve(client, data, piece, guild) {
-		const Piece = require('klasa')[piece.type];
-		if (Piece && data instanceof Piece) return data;
-		let pie;
-		const store = client.pieceStores.get(piece.type);
-		if (store) pie = store.get(data);
-		if (pie) return pie;
+		const store = client[`${piece.type}s`];
+		const parsed = typeof data === 'string' ? store.get(data) : data;
+		if (parsed && parsed instanceof store.holds) return parsed.name;
 		throw (guild ? guild.language : client.languages.default).get('RESOLVER_INVALID_PIECE', piece.key, piece.type);
 	}
 
