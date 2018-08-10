@@ -1,3 +1,7 @@
+# Warning: This is an experimental version of Klasa
+
+Running this version requires Node v10 and for now `--experimental-modules`. This will not merge until the feature is no-longer under a flag.
+
 ## Installing Klasa
 
 Time to take the plunge! Klasa is on NPM and can be easily installed.

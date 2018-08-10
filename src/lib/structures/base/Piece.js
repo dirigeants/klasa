@@ -1,3 +1,4 @@
+const { basename, extname } = require('path');
 const { mergeDefault } = require('../../util/util');
 const { join } = require('path');
 
@@ -52,7 +53,7 @@ class Piece {
 		 * @since 0.0.1
 		 * @type {string}
 		 */
-		this.name = options.name || file[file.length - 1].slice(0, -3);
+		this.name = options.name || basename(file[file.length - 1], extname(file[file.length - 1]));
 
 		/**
 		 * If the Piece is enabled or not
@@ -102,7 +103,7 @@ class Piece {
 	 * @returns {Piece} The newly loaded piece
 	 */
 	async reload() {
-		const piece = this.store.load(this.directory, this.file);
+		const piece = await this.store.load(this.directory, this.file);
 		await piece.init();
 		if (this.client.listenerCount('pieceReloaded')) this.client.emit('pieceReloaded', piece);
 		return piece;

@@ -8,7 +8,7 @@
   },
   "license": "MIT",
   "author": "BDistin",
-  "main": "src/index.js",
+  "main": "src/index",
   "types": "typings/index.d.ts",
   "repository": {
     "type": "git",
