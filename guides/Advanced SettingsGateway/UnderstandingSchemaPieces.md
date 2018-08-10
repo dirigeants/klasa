@@ -29,7 +29,7 @@ The default option is one of the last options to default, **array** defaults to 
 
 ## Filter option
 
-The filter option serves to blacklist certain values, it's output is not used, but any thrown error will be handled by SettingsGateway's internals and displayed to the caller (for example in the conf command, it'd display the message to the user). It also may not be asynchronous.
+The filter option serves to blacklist certain values. It's output is not used, but any thrown error will be handled by SettingsGateway's internals and displayed to the caller (for example in the conf command, it would display the message to the user). It also must be synchronous.
 
 Internally, we use this option to avoid users from disabling guarded commands (check {@link Command#guard}):
 
@@ -41,9 +41,9 @@ const filter = (client, command, piece, guild) => {
 };
 ```
 
-Where `client` is the {@link KlasaClient} instance, `command` the resolved name's command (the output from the command's SchemaType), `piece` is a {@link SchemaPiece} instance, and guild is a {@link Guild} instance, which it may or may not exist.
+In this case, `client` is the {@link KlasaClient} instance, `command` the resolved command (the output from the command's SchemaType), `piece` is a {@link SchemaPiece} instance, and guild is a {@link Guild} instance, which may be null.
 
-<!-- TODO(UnseenFaith): Decide what to do with editing SchemaPieces -->
+<!-- TODO(kyranet): Adding the pieces again overwrite the pieces -->
 <!-- ## Editing key options
 
 Once created, it's possible since 0.5.0 to edit a {@link SchemaPiece}'s options, it's as simple as running {@link SchemaPiece#edit} which takes the same options for adding a key with {@link SchemaFolder#addKey} but with one exception: `array` and `type` can't change. The syntax is the following:

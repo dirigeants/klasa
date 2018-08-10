@@ -18,7 +18,7 @@ class SchemaType {
 	 * @param {KlasaClient} client The KlasaClient instance
 	 * @param {*} data the data to resolve
 	 * @param {SchemaPiece} piece The SchemaPiece instance that manages this data
-	 * @param {external:Guild} [guild] A guild instance, it may not exist
+	 * @param {external:Guild} [guild] A guild instance, it may be null
 	 * @returns {*}
 	 * @abstract
 	 */

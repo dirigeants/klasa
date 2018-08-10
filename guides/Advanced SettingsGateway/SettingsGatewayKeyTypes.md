@@ -25,10 +25,10 @@ By default, there are several built-in types that the developer can use, and wit
 
 ## Adding new types
 
-To add new types, you use an {@link Extendable} extending {@link SettingResolver}. If you don't know how to create an extendable, check the following tutorial: {@tutorial CreatingExtendables}. The following extendable is a template for this:
+To add new types, you make a class, extending {@link SchemaType}. The following extendable is a template for this:
 
 ```javascript
-const { SchemaType, Client } = require('klasa');
+const { Client, SchemaType } = require('klasa');
 
 // Extend SchemaType to add your own resolver
 class MySchemaType extends SchemaType {
@@ -38,10 +38,10 @@ class MySchemaType extends SchemaType {
 	 * @param {KlasaClient} client The KlasaClient instance
 	 * @param {*} data the data to resolve
 	 * @param {SchemaPiece} piece The SchemaPiece instance that manages this data
-	 * @param {external:Guild} [guild] A guild instance, it may not exist
+	 * @param {external:Guild} [guild] A guild instance, it may be null
 	 * @returns {*}
 	 */
-	async extend(client, data, piece, guild) {
+	async resolve(client, data, piece, guild) {
 		// The content
 		return data;
 	}

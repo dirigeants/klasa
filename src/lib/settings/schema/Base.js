@@ -23,7 +23,6 @@ class Base extends Map {
 	 * Schema.add('piece', 'string', { default: 'klasa!' });
 	 */
 	add(key, typeOrCallback, options = {}) {
-		if (this.has(key)) throw new Error(`The key ${key} already exists in the current schema.`);
 		if (!typeOrCallback) {
 			throw new Error(`The type for ${key} must be a string for pieces, and a callback for folders`);
 		}
