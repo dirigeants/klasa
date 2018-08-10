@@ -38,7 +38,7 @@ const filter = (client, command, piece, guild) => {
 	if (client.commands.get(command).guarded) {
 		throw (guild ? guild.language : client.languages.default).get('COMMAND_CONF_GUARDED', command);
 	}
-}
+};
 ```
 
 Where `client` is the {@link KlasaClient} instance, `command` the resolved name's command (the output from the command's SchemaType), `piece` is a {@link SchemaPiece} instance, and guild is a {@link Guild} instance, which it may or may not exist.

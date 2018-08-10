@@ -55,7 +55,7 @@ KlasaClient.defaultGuildSchema
 	.add('channels', folder => folder
 		.add('log', 'TextChannel')
 		.add('announcement', 'TextChannel'))
-	.add('roles', folder =>
+	.add('roles', folder => folder
 		.add('administrator', 'Role')
 		.add('moderator', 'Role'))
 	.add('disabledChannels', 'TextChannel', { array: true });
