@@ -16,6 +16,7 @@ class SchemaFolder extends Base {
 		/**
 		 * The parent of this SchemaFolder
 		 * @since 0.5.0
+		 * @name SchemaFolder#parent
 		 * @type {Schema|SchemaFolder}
 		 * @readonly
 		 */
@@ -24,6 +25,7 @@ class SchemaFolder extends Base {
 		/**
 		 * The name of this SchemaFolder
 		 * @since 0.5.0
+		 * @name SchemaFolder#key
 		 * @type {string}
 		 * @readonly
 		 */
@@ -32,6 +34,7 @@ class SchemaFolder extends Base {
 		/**
 		 * The type of this SchemaFolder (always 'Folder')
 		 * @since 0.5.0
+		 * @name SchemaFolder#type
 		 * @type {string}
 		 * @readonly
 		 */
@@ -39,6 +42,7 @@ class SchemaFolder extends Base {
 
 		/**
 		 * The path of this SchemaFolder
+		 * @name SchemaFolder#path
 		 * @since 0.5.0
 		 * @type {string}
 		 * @readonly

@@ -11,8 +11,8 @@ class Schema extends Base {
 		/**
 		 * Returns the path for this schema
 		 * @since 0.5.0
+		 * @name Schema#path
 		 * @type {string}
-		 * @private
 		 * @readonly
 		 */
 		Object.defineProperty(this, 'path', { value: '' });

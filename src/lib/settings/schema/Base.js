@@ -9,8 +9,8 @@ const { isFunction, deepClone } = require('../../util/util');
 class Base extends Map {
 
 	/**
-	 * @since 0.5.0
 	 * Adds a Folder or Piece instance to the current SchemaFolder or Schema instance
+	 * @since 0.5.0
 	 * @param {string} key The name of this new piece you are trying to add.
 	 * @param {string|Function} typeOrCallback A function to add a folder or a string to add a new SchemaPiece
 	 * @param {Object} [options] An object of options used for SchemaPieces
