@@ -555,15 +555,15 @@ declare module 'klasa' {
 	}
 
 	export class Schema extends SchemaBase {
+		public constructor(path?: string);
 		public readonly path: string;
 	}
 
-	export class SchemaFolder extends SchemaBase {
+	export class SchemaFolder extends Schema {
 		public constructor(parent: Schema | SchemaFolder, key: string);
 		public readonly parent: Schema | SchemaFolder;
 		public readonly key: string;
 		public readonly type: 'Folder';
-		public readonly path: string;
 	}
 
 	export class SchemaPiece {
