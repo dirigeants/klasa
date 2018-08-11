@@ -236,18 +236,29 @@ class KlasaClient extends Discord.Client {
 		 */
 		this.gateways = new GatewayDriver(this);
 
+		const { guilds, users, clientStorage } = this.options.gateways;
+		const guildSchema = 'schema' in guilds ? guilds.schema : this.constructor.defaultGuildSchema;
+		const userSchema = 'schema' in users ? users.schema : this.constructor.defaultUserSchema;
+		const clientSchema = 'schema' in clientStorage ? clientStorage.schema : this.constructor.defaultClientSchema;
+
 		// Update Guild Schema with Keys needed in Klasa
-		this.constructor.defaultGuildSchema
-			.add('prefix', 'string', { default: this.options.prefix, configurable: true, max: 10 })
-			.add('language', 'language', { default: this.options.language, configurable: true })
-			.add('disableNaturalPrefix', 'boolean', { configurable: Boolean(this.options.regexPrefix) });
+		const prefixKey = this.constructor.defaultGuildSchema.get('prefix');
+		if (!prefixKey || prefixKey.default === null) {
+			this.constructor.defaultGuildSchema.add('prefix', 'string', { default: this.options.prefix });
+		}
+
+		const languageKey = this.constructor.defaultGuildSchema.get('language');
+		if (!languageKey || languageKey.default === null) {
+			this.constructor.defaultGuildSchema.add('language', 'language', { default: this.options.language });
+		}
+
+		this.constructor.defaultGuildSchema.add('disableNaturalPrefix', 'boolean', { configurable: Boolean(this.options.regexPrefix) });
 
 		// Register default gateways
-		const { guilds, users, clientStorage } = this.options.gateways;
 		this.gateways
-			.register('guilds', { ...guilds, schema: 'schema' in guilds ? guilds.schema : this.constructor.defaultGuildSchema })
-			.register('users', { ...users, schema: 'schema' in users ? users.schema : this.constructor.defaultUserSchema })
-			.register('clientStorage', { ...clientStorage, schema: 'schema' in clientStorage ? clientStorage.schema : this.constructor.defaultClientSchema });
+			.register('guilds', { ...guilds, schema: guildSchema })
+			.register('users', { ...users, schema: userSchema })
+			.register('clientStorage', { ...clientStorage, schema: clientSchema });
 
 		/**
 		 * The Settings instance that handles this client's settings
@@ -477,6 +488,9 @@ KlasaClient.types = new SchemaTypes(Object.entries(require('./settings/schema/ty
  * @type {Schema}
  */
 KlasaClient.defaultGuildSchema = new Schema()
+	.add('prefix', 'string')
+	.add('language', 'language')
+	.add('disableNaturalPrefix', 'boolean')
 	.add('disabledCommands', 'command', { array: true, configurable: true, filter: (client, command, piece, guild) => {
 		if (client.commands.get(command).guarded) throw (guild ? guild.language : client.languages.default).get('COMMAND_CONF_GUARDED', command);
 	} });
