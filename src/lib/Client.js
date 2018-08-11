@@ -8,13 +8,6 @@ const PermissionLevels = require('./permissions/PermissionLevels');
 // lib/schedule
 const Schedule = require('./schedule/Schedule');
 
-// lib/settings
-const GatewayDriver = require('./settings/GatewayDriver');
-
-// lib/settings/schema
-const SchemaTypes = require('./settings/schema/types/base/SchemaTypes');
-const Schema = require('./settings/schema/Schema');
-
 // lib/structures
 const ArgumentStore = require('./structures/ArgumentStore');
 const CommandStore = require('./structures/CommandStore');
@@ -458,6 +451,13 @@ class KlasaClient extends Discord.Client {
 }
 
 module.exports = KlasaClient;
+
+// lib/settings
+const GatewayDriver = require('./settings/GatewayDriver');
+
+// lib/settings/schema
+const SchemaTypes = require('./settings/schema/types/base/SchemaTypes');
+const Schema = require('./settings/schema/Schema');
 
 /**
  * The plugin symbol to be used in external packages
