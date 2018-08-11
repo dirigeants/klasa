@@ -8,7 +8,6 @@ const SchemaType = require('./base/SchemaType');
  */
 class PieceType extends SchemaType {
 
-
 	/**
 	 * Resolves our data into a Klasa Piece
 	 * @since 0.5.0

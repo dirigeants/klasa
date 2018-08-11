@@ -1,17 +1,19 @@
-const Base = require('./Base');
+const Schema = require('./Schema');
 
-class SchemaFolder extends Base {
+/**
+ * A Folder for organizing {@link SchemaPieces}
+ * @extends Schema
+ * @since 0.5.0
+ */
+class SchemaFolder extends Schema {
 
 	/**
-	 * Creates our SchemaFolder instance
-	 * @extends Base
 	 * @param {SchemaFolder|Schema} parent The parent folder or schema for this folder instance
 	 * @param {string} key The name of this folder instance
-	 * @param {string} type The type for this folder instance (always 'Folder')
-	 * @since 0.5.0
 	 */
 	constructor(parent, key) {
-		super();
+		super(`${parent.path ? `${parent.path}.` : ''}${key}`);
+
 		/**
 		 * The parent of this SchemaFolder
 		 * @since 0.5.0
@@ -38,15 +40,6 @@ class SchemaFolder extends Base {
 		 * @readonly
 		 */
 		Object.defineProperty(this, 'type', { value: 'Folder' });
-
-		/**
-		 * The path of this SchemaFolder
-		 * @name SchemaFolder#path
-		 * @since 0.5.0
-		 * @type {string}
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'path', { value: `${this.parent.path ? `${this.parent.path}.` : ''}${this.key}` });
 	}
 
 }

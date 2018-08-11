@@ -26,7 +26,6 @@ class SchemaType {
 		return data;
 	}
 
-
 }
 
 /**

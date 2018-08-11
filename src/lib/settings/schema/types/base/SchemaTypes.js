@@ -58,7 +58,6 @@ class SchemaTypes extends Map {
 		return super.get(name.toLowerCase());
 	}
 
-
 }
 
 module.exports = SchemaTypes;

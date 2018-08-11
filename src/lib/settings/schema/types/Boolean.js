@@ -8,7 +8,6 @@ const SchemaType = require('./base/SchemaType');
  */
 class BooleanType extends SchemaType {
 
-
 	/**
 	 * Resolves our data into a boolean
 	 * @since 0.5.0
