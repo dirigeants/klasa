@@ -778,6 +778,7 @@ declare module 'klasa' {
 		public abstract addColumn<T = any>(table: string, columns: SchemaFolder | SchemaPiece): Promise<T>;
 		public abstract removeColumn<T = any>(table: string, columns: string | string[]): Promise<T>;
 		public abstract updateColumn<T = any>(table: string, piece: SchemaPiece): Promise<T>;
+		public abstract getColumns(table: string): Promise<Array<string>>;
 		protected parseUpdateInput<T = [string, any]>(updated?: SettingsUpdateResultEntry[] | [string, any][] | ObjectLiteral, resolve?: boolean): T;
 		protected parseEntry<T = ObjectLiteral>(gateway: string | Gateway, entry: ObjectLiteral): T;
 		protected parseValue<T = any>(value: any, schemaPiece: SchemaPiece): T;
@@ -1494,7 +1495,7 @@ declare module 'klasa' {
 		default?: any;
 		min?: number;
 		max?: number;
-		filter: (value: any, guild?: KlasaGuild) => void;
+		filter?: (value: any, guild?: KlasaGuild) => void;
 	};
 
 	export type SchemaPieceEditOptions = {
