@@ -1,6 +1,6 @@
-## Frequently Asked Questions
+# Frequently Asked Questions
 
-### Why doesn't my [reboot](https://github.com/dirigeants/klasa/blob/master/src/commands/Admin/reboot.js) command work?
+## Why doesn't my [reboot](https://github.com/dirigeants/klasa/blob/master/src/commands/Admin/reboot.js) command work?
 
 The reboot command calls [process.exit()](https://nodejs.org/api/process.html#process_process_exit_code), which terminates the process of your bot. For it to automatically turn back on, you need to install a process manager.
 
@@ -11,7 +11,7 @@ A commonly used process manager is [PM2](http://pm2.keymetrics.io/), to set it u
 
 For more information on PM2, check out their [documentation](http://pm2.keymetrics.io/docs/usage/quick-start/) or for a very quick summary, the [Cheat Sheet](http://pm2.keymetrics.io/docs/usage/quick-start/#cheatsheet)
 
-### How do I remove or change a command that's included in Klasa?
+## How do I remove or change a command that's included in Klasa?
 
 If you want to disable or modify a piece (commands included) which is built into Klasa, you can use the [transfer](https://github.com/dirigeants/klasa/blob/master/src/commands/Admin/transfer.js) command.
 
@@ -21,7 +21,7 @@ This will create a copy of the piece into your directory which will override the
 
 To disable it, you can set the [enabled option](https://klasa.js.org/#/docs/klasa/master/search?q=enabled) to `false`.
 
-### How do I hide my token from Github?
+## How do I hide my token from Github?
 
 You should never expose your token to anyone for any reason. To hide it from Github, you can set it as an [environment variable](https://www.twilio.com/blog/2017/08/working-with-environment-variables-in-node-js.html), or place it in a JSON file.
 
@@ -47,7 +47,7 @@ const { token } = require('./config.json');
 
 1. Finally, **remove your token** from your `app.js` file, and replace it with the `token` variable.
 
-#### Environment Variable
+### Environment Variable
 
 For a tutorial
 
