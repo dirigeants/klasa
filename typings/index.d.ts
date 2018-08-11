@@ -579,7 +579,7 @@ declare module 'klasa' {
 		public default: any;
 		public min: number | null;
 		public max: number | null;
-		public filter(client: KlasaClient, value: any, guild?: KlasaGuild): void;
+		public filter: ((client: KlasaClient, value: any, guild?: KlasaGuild) => boolean) | null;
 		public parse<T>(value: any, guild?: KlasaGuild): T;
 		public edit(options?: SchemaPieceEditOptions): this;
 		public toJSON(): SchemaPieceOptions;
@@ -605,7 +605,7 @@ declare module 'klasa' {
 		public constructor(types: SchemaTypes);
 		public readonly client: KlasaClient | null;
 		public readonly types: SchemaTypes;
-		public abstract resolve(data: any, piece: SchemaPiece, guild?: KlasaGuild): Promise<any>;
+		public abstract resolve(data: any, piece: SchemaPiece, language: Language, guild?: KlasaGuild): Promise<any>;
 		public abstract resolveString(value: any): string;
 		public static regex: {
 			userOrMember: RegExp;

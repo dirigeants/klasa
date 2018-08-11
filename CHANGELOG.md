@@ -14,6 +14,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#383](https://github.com/dirigeants/klasa/pull/383)] Added the `SETTING_GATEWAY_INVALID_FILTERED_VALUE` language key. (bdistin)
 - [[#383](https://github.com/dirigeants/klasa/pull/383)] Added `Base` class for schemas, extending `Map`. (Unseenfaith)
 - [[#383](https://github.com/dirigeants/klasa/pull/383)] Added `SchemaType` and `SchemaTypes` classes. (Unseenfaith)
 - [[#383](https://github.com/dirigeants/klasa/pull/383)] Added `SchemaPieceOptions.filter`. (kyranet)
