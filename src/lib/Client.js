@@ -495,9 +495,12 @@ KlasaClient.defaultGuildSchema = new Schema()
 	.add('prefix', 'string')
 	.add('language', 'language')
 	.add('disableNaturalPrefix', 'boolean')
-	.add('disabledCommands', 'command', { array: true, configurable: true, filter: (client, command, piece, language) => {
-		if (client.commands.get(command).guarded) throw language.get('COMMAND_CONF_GUARDED', command);
-	} });
+	.add('disabledCommands', 'command', {
+		array: true,
+		filter: (client, command, piece, language) => {
+			if (client.commands.get(command).guarded) throw language.get('COMMAND_CONF_GUARDED', command);
+		}
+	});
 
 /**
  * The default User Schema
