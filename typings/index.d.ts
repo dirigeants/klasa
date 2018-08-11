@@ -594,6 +594,7 @@ declare module 'klasa' {
 	}
 
 	export class SchemaTypes extends Map<string, SchemaType> {
+		public constructor(types: Array<[string, SchemaType]>);
 		public add(name: string, type: typeof SchemaType): this;
 	}
 
