@@ -11,13 +11,12 @@ class StringType extends SchemaType {
 	/**
 	 * Resolves our data into a string
 	 * @since 0.5.0
-	 * @param {KlasaClient} client The KlasaClient
 	 * @param {*} data The data to resolve
 	 * @param {SchemaPiece} piece The piece this data should be resolving to
 	 * @param {?external:Guild} guild The Guild instance that should be used for this piece
 	 * @returns {*} The resolved data
 	 */
-	async resolve(client, data) {
+	async resolve(data) {
 		return String(data);
 	}
 

@@ -1,3 +1,4 @@
+const Client = require('../../Client');
 const { isFunction, isNumber } = require('../../util/util');
 
 class SchemaPiece {
@@ -101,6 +102,22 @@ class SchemaPiece {
 		 * @type {Function}
 		 */
 		this.filter = 'filter' in options ? options.filter : null;
+
+		/**
+		 * The resolver for this type
+		 * @since 0.5.0
+		 * @type {SchemaType}
+		 */
+		this.resolver = Client.types.get(this.type);
+	}
+
+	/**
+	 * The KlasaClient
+	 * @since 0.5.0
+	 * @type {?KlasaClient}
+	 */
+	get client() {
+		return Client.types.client;
 	}
 
 	/**
@@ -159,14 +176,13 @@ class SchemaPiece {
 	/**
 	 * Parses a value into a resolved format for Settings
 	 * @since 0.5.0
-	 * @param {KlasaClient} client The KlasaClient
 	 * @param {*} value A value to parse
 	 * @param {external:Guild} [guild] A guild to use during parsing.
 	 * @returns {*}
 	 */
-	async parse(client, value, guild) {
-		value = await client.constructor.types.get(this.type).resolve(client, value, this, guild);
-		if (this.filter) this.filter(client, value, guild);
+	async parse(value, guild) {
+		value = await this.resolver.resolve(value, this, guild);
+		if (this.filter) this.filter(this.client, value, this, guild);
 		return value;
 	}
 

@@ -12,6 +12,16 @@ class SchemaTypes extends Map {
 	 */
 	constructor(types) {
 		super();
+
+		/**
+		 * @since 0.5.0
+		 * @type {?KlasaClient}
+		 */
+		Object.defineProperty(this, 'client', {
+			value: null,
+			writable: true
+		});
+
 		for (const [name, Type] of types) this.add(name, Type);
 	}
 

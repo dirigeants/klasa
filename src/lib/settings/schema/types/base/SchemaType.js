@@ -14,6 +14,16 @@ class SchemaType {
 	}
 
 	/**
+	 * The current KlasaClient
+	 * @since 0.5.0
+	 * @type {KlasaClient}
+	 * @readonly
+	 */
+	get client() {
+		return this.types.client;
+	}
+
+	/**
 	 * Resolves data
 	 * @param {KlasaClient} client The KlasaClient instance
 	 * @param {*} data the data to resolve
@@ -24,6 +34,16 @@ class SchemaType {
 	 */
 	async resolve(client, data) {
 		return data;
+	}
+
+	/**
+	 * Resolves a string
+	 * @param {*} value the value to resolve
+	 * @returns {string}
+	 * @abstract
+	 */
+	resolveString(value) {
+		return String(value);
 	}
 
 }

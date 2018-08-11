@@ -326,30 +326,8 @@ class Settings {
 		const value = this.get(piece.path);
 		if (value === null) return 'Not set';
 		if (piece.array && !value.length) return 'None';
-
-		let resolver;
-		switch (piece.type) {
-			case 'Folder': resolver = () => 'Folder';
-				break;
-			case 'user': resolver = (val) => (this.client.users.get(val) || { username: (val && val.username) || val }).username;
-				break;
-			case 'categorychannel':
-			case 'textchannel':
-			case 'voicechannel':
-			case 'channel': resolver = (val) => (message.guild.channels.get(val) || { name: (val && val.name) || val }).name;
-				break;
-			case 'role': resolver = (val) => (message.guild.roles.get(val) || { name: (val && val.name) || val }).name;
-				break;
-			case 'guild': resolver = (val) => (val && val.name) || val;
-				break;
-			case 'boolean': resolver = (val) => val ? 'Enabled' : 'Disabled';
-				break;
-			default:
-				resolver = (val) => val;
-		}
-
-		if (piece.array) return `[ ${value.map(resolver).join(' | ')} ]`;
-		return resolver(value);
+		if (piece.array) return `[ ${value.map(val => piece.resolver.resolveString(val, message)).join(' | ')} ]`;
+		return piece.resolver.resolveString(value, message);
 	}
 
 	/**
@@ -406,7 +384,7 @@ class Settings {
 			deepClone(piece.default) :
 			await (Array.isArray(value) ?
 				this._parseAll(piece, value, guild, result.errors) :
-				piece.parse(this.client, value, guild).catch((error) => { result.errors.push(error); }));
+				piece.parse(value, guild).catch((error) => { result.errors.push(error); }));
 
 		if (typeof parsedID === 'undefined') return;
 		if (piece.array && !Array.isArray(value)) {
@@ -477,7 +455,7 @@ class Settings {
 	 */
 	async _parseAll(piece, values, guild, errors) {
 		const output = [];
-		await Promise.all(values.map(value => piece.parse(this.client, value, guild)
+		await Promise.all(values.map(value => piece.parse(value, guild)
 			.then(parsed => output.push(parsed))
 			.catch(error => errors.push(error))));
 
