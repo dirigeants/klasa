@@ -22,7 +22,7 @@ class NumberType extends SchemaType {
 	}
 
 	/**
-	 * Checks what type of numbe we should resolve into
+	 * Checks what type of number we should resolve into
 	 * @since 0.5.0
 	 * @param {KlasaClient} client The KlasaClient
 	 * @param {*} data The data to resolve

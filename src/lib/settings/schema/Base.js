@@ -23,9 +23,7 @@ class Base extends Map {
 	 * Schema.add('piece', 'string', { default: 'klasa!' });
 	 */
 	add(key, typeOrCallback, options = {}) {
-		if (!typeOrCallback) {
-			throw new Error(`The type for ${key} must be a string for pieces, and a callback for folders`);
-		}
+		if (!typeOrCallback) throw new Error(`The type for ${key} must be a string for pieces, and a callback for folders`);
 
 		let Piece;
 		let type;
@@ -50,20 +48,20 @@ class Base extends Map {
 				if (previous.type !== 'Folder') throw new Error(`The type for ${key} conflicts with the previous value, expected type Folder, got ${previous.type}.`);
 				// Call the callback with the pre-existent Folder
 				callback(previous); // eslint-disable-line callback-return
-			} else {
-				// If the type of the new piece is not a Folder, the previous must also not be a Folder.
-				if (previous.type === 'Folder') throw new Error(`The type for ${key} conflicts with the previous value, expected a non-Folder, got ${previous.type}.`);
-				// Edit the previous key
-				previous.edit({ type, ...options });
+				return this;
 			}
-		} else {
-			const piece = new Piece(this, key, type, options);
-
-			// eslint-disable-next-line callback-return
-			if (callback) callback(piece);
-
-			this.set(key, piece);
+			// If the type of the new piece is not a Folder, the previous must also not be a Folder.
+			if (previous.type === 'Folder') throw new Error(`The type for ${key} conflicts with the previous value, expected a non-Folder, got ${previous.type}.`);
+			// Edit the previous key
+			previous.edit({ type, ...options });
+			return this;
 		}
+		const piece = new Piece(this, key, type, options);
+
+		// eslint-disable-next-line callback-return
+		if (callback) callback(piece);
+
+		this.set(key, piece);
 
 		return this;
 	}
@@ -100,16 +98,16 @@ class Base extends Map {
 	 * @private
 	 */
 	debug() {
-		let errors = [];
+		const errors = [];
 		for (const piece of this.values()) {
 			if (piece.type === 'Folder') {
-				errors = errors.concat(piece.debug());
-			} else {
-				try {
-					piece.isValid();
-				} catch (error) {
-					errors.push(error.message);
-				}
+				errors.push(...piece.debug());
+				continue;
+			}
+			try {
+				piece.isValid();
+			} catch (error) {
+				errors.push(error.message);
 			}
 		}
 		return errors;
@@ -122,9 +120,9 @@ class Base extends Map {
 	 * @type {Array<string>}
 	 */
 	get configurableKeys() {
-		let keys = [];
+		const keys = [];
 		for (const piece of this.values()) {
-			if (piece.type === 'Folder') keys = keys.concat(piece.configurableKeys);
+			if (piece.type === 'Folder') keys.push(...piece.configurableKeys);
 			else keys.push(piece.key);
 		}
 		return keys;
