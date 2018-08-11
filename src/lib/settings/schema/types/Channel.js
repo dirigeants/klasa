@@ -14,14 +14,15 @@ class ChannelType extends SchemaType {
 	 * @since 0.5.0
 	 * @param {*} data The data to resolve
 	 * @param {SchemaPiece} piece The piece this data should be resolving to
+	 * @param {Language} language The language to throw from
 	 * @param {?external:Guild} guild The Guild instance that should be used for this piece
 	 * @returns {*} The resolved data
 	 */
-	async resolve(data, piece, guild) {
-		if (data instanceof Channel) return this.checkChannel(this.client, data, piece, guild);
-		const channel = this.constructor.regex.channel.test(data) ? this.client.channels.get(this.constructor.regex.channel.exec(data)[1]) : null;
-		if (channel) return this.checkChannel(data, piece, guild);
-		throw (guild ? guild.language : this.client.languages.default).get('RESOLVER_INVALID_CHANNEL', piece.key);
+	async resolve(data, piece, language, guild) {
+		if (data instanceof Channel) return this.checkChannel(data, piece, language);
+		const channel = this.constructor.regex.channel.test(data) ? (guild || this.client).channels.get(this.constructor.regex.channel.exec(data)[1]) : null;
+		if (channel) return this.checkChannel(channel, piece, language);
+		throw language.get('RESOLVER_INVALID_CHANNEL', piece.key);
 	}
 
 	/**
@@ -33,12 +34,11 @@ class ChannelType extends SchemaType {
 	 * @returns {*} The resolved data
 	 */
 	checkChannel(data, piece, language) {
-		const type = piece.type.toLowerCase();
 		if (
-			type === 'channel' ||
-			(type === 'textchannel' && data.type === 'text') ||
-			(type === 'voicechannel' && data.type === 'voice') ||
-			(type === 'categorychannel' && data.type === 'category')
+			piece.type === 'channel' ||
+			(piece.type === 'textchannel' && data.type === 'text') ||
+			(piece.type === 'voicechannel' && data.type === 'voice') ||
+			(piece.type === 'categorychannel' && data.type === 'category')
 		) return data.id;
 		throw language.get('RESOLVER_INVALID_CHANNEL', piece.key);
 	}
