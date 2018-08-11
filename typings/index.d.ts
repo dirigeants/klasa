@@ -568,17 +568,19 @@ declare module 'klasa' {
 
 	export class SchemaPiece {
 		public constructor(parent: Schema | SchemaFolder, key: string, type: string, options: SchemaPieceOptions);
+		public readonly client: KlasaClient | null;
 		public readonly parent: Schema | SchemaFolder;
 		public readonly key: string;
 		public readonly type: string;
 		public readonly path: string;
+		public resolver: SchemaType;
 		public array: boolean;
 		public configurable: boolean;
 		public default: any;
 		public min: number | null;
 		public max: number | null;
-		public filter: (client: KlasaClient, value: any, guild: KlasaGuild) => void;
-		public parse<T>(client: KlasaClient, value: any, guild?: KlasaGuild): T;
+		public filter(client: KlasaClient, value: any, guild?: KlasaGuild): void;
+		public parse<T>(value: any, guild?: KlasaGuild): T;
 		public edit(options?: SchemaPieceEditOptions): this;
 		public toJSON(): SchemaPieceOptions;
 
@@ -595,13 +597,16 @@ declare module 'klasa' {
 
 	export class SchemaTypes extends Map<string, SchemaType> {
 		public constructor(types: Array<[string, SchemaType]>);
+		public client: KlasaClient | null;
 		public add(name: string, type: typeof SchemaType): this;
 	}
 
 	export abstract class SchemaType {
 		public constructor(types: SchemaTypes);
+		public readonly client: KlasaClient | null;
 		public readonly types: SchemaTypes;
-		public abstract resolve(client: KlasaClient, data: any, piece: SchemaPiece, guild?: KlasaGuild): Promise<any>;
+		public abstract resolve(data: any, piece: SchemaPiece, guild?: KlasaGuild): Promise<any>;
+		public abstract resolveString(value: any): string;
 		public static regex: {
 			userOrMember: RegExp;
 			channel: RegExp;
