@@ -23,8 +23,8 @@ module.exports = {
 	Schema: require('./lib/settings/schema/Schema'),
 	SchemaFolder: require('./lib/settings/schema/SchemaFolder'),
 	SchemaPiece: require('./lib/settings/schema/SchemaPiece'),
-	SchemaTypes: require('./lib/settings/schema/SchemaTypes'),
-	SchemaType: require('./lib/settings/types/SchemaType'),
+	SchemaTypes: require('./lib/settings/schema/types/base/SchemaTypes'),
+	SchemaType: require('./lib/settings/schema/types/base/SchemaType'),
 
 	// lib/structures/base
 	Piece: require('./lib/structures/base/Piece'),

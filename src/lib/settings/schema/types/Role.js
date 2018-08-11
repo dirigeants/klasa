@@ -1,4 +1,4 @@
-const SchemaType = require('./SchemaType');
+const SchemaType = require('./base/SchemaType');
 const { Role } = require('discord.js');
 
 /**

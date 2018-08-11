@@ -1,11 +1,19 @@
-const SchemaType = require('../types/SchemaType');
-const { isClass } = require('../../util/util');
+const SchemaType = require('./SchemaType');
+const { isClass } = require('../../../../util/util');
 
 /**
  * @since 0.5.0
  * @extends Map
  */
 class SchemaTypes extends Map {
+
+	/**
+	 * @param {Array<Array<string, SchemaType>>} types Types to initialize this with
+	 */
+	constructor(types) {
+		super();
+		for (const [name, Type] of types) this.add(name, Type);
+	}
 
 	/**
 	 * Add a new SchemaType to this map

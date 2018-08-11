@@ -12,7 +12,7 @@ const Schedule = require('./schedule/Schedule');
 const GatewayDriver = require('./settings/GatewayDriver');
 
 // lib/settings/schema
-const SchemaTypes = require('./settings/schema/SchemaTypes');
+const SchemaTypes = require('./settings/schema/types/base/SchemaTypes');
 const Schema = require('./settings/schema/Schema');
 
 // lib/structures
@@ -469,24 +469,7 @@ KlasaClient.defaultPermissionLevels = new PermissionLevels()
  * @since 0.5.0
  * @type {SchemaTypes}
  */
-
-KlasaClient.types = new SchemaTypes()
-	.add('boolean', require('./settings/types/Boolean'))
-	.add('channel', require('./settings/types/Channel'))
-	.add('textchannel', require('./settings/types/Channel'))
-	.add('voicechannel', require('./settings/types/Channel'))
-	.add('categorychannel', require('./settings/types/Channel'))
-	.add('guild', require('./settings/types/Guild'))
-	.add('number', require('./settings/types/Number'))
-	.add('integer', require('./settings/types/Number'))
-	.add('float', require('./settings/types/Number'))
-	.add('role', require('./settings/types/Role'))
-	.add('string', require('./settings/types/String'))
-	.add('url', require('./settings/types/Url'))
-	.add('user', require('./settings/types/User'))
-	.add('command', require('./settings/types/Piece'))
-	.add('language', require('./settings/types/Piece'))
-	.add('any', require('./settings/types/SchemaType'));
+KlasaClient.types = new SchemaTypes(Object.entries(require('./settings/schema/types')));
 
 /**
  * The default Guild Schema
