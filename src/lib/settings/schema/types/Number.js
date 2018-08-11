@@ -13,10 +13,10 @@ class NumberType extends SchemaType {
 	 * @since 0.5.0
 	 * @param {*} data The data to resolve
 	 * @param {SchemaPiece} piece The piece this data should be resolving to
-	 * @param {?external:Guild} guild The Guild instance that should be used for this piece
+	 * @param {Language} language The language to throw from
 	 * @returns {*} The resolved data
 	 */
-	async resolve(data, piece, guild) {
+	async resolve(data, piece, language) {
 		const type = piece.type.toLowerCase();
 
 		let numb;
@@ -24,12 +24,12 @@ class NumberType extends SchemaType {
 			case 'integer':
 				numb = parseInt(data);
 				if (Number.isInteger(numb)) return numb;
-				throw (guild ? guild.language : this.client.languages.default).get('RESOLVER_INVALID_INT', piece.key);
+				throw language.get('RESOLVER_INVALID_INT', piece.key);
 			case 'number':
 			case 'float':
 				numb = parseFloat(data);
 				if (!isNaN(numb)) return numb;
-				throw (guild ? guild.language : this.client.languages.default).get('RESOLVER_INVALID_FLOAT', piece.key);
+				throw language.get('RESOLVER_INVALID_FLOAT', piece.key);
 		}
 		// noop
 		return null;

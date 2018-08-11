@@ -29,10 +29,10 @@ class ChannelType extends SchemaType {
 	 * @since 0.5.0
 	 * @param {*} data The data to resolve
 	 * @param {SchemaPiece} piece The piece this data should be resolving to
-	 * @param {?external:Guild} guild The Guild instance that should be used for this piece
+	 * @param {Language} language The language to throw from
 	 * @returns {*} The resolved data
 	 */
-	checkChannel(data, piece, guild) {
+	checkChannel(data, piece, language) {
 		const type = piece.type.toLowerCase();
 		if (
 			type === 'channel' ||
@@ -40,7 +40,7 @@ class ChannelType extends SchemaType {
 			(type === 'voicechannel' && data.type === 'voice') ||
 			(type === 'categorychannel' && data.type === 'category')
 		) return data.id;
-		throw (guild ? guild.language : this.client.languages.default).get('RESOLVER_INVALID_CHANNEL', piece.key);
+		throw language.get('RESOLVER_INVALID_CHANNEL', piece.key);
 	}
 
 	/**

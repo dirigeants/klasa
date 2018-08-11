@@ -13,15 +13,15 @@ class UserType extends SchemaType {
 	 * @since 0.5.0
 	 * @param {*} data The data to resolve
 	 * @param {SchemaPiece} piece The piece this data should be resolving to
-	 * @param {?external:Guild} guild The Guild instance that should be used for this piece
+	 * @param {Language} language The language to throw from
 	 * @returns {*} The resolved data
 	 */
-	async resolve(data, piece, guild) {
+	async resolve(data, piece, language) {
 		let user = this.client.users.resolve(data);
 		if (user) return user.id;
 		if (this.constructor.regex.userOrMember.test(data)) user = await this.client.users.fetch(this.constructor.regex.userOrMember.exec(data)[1]).catch(() => null);
 		if (user) return user.id;
-		throw (guild ? guild.language : this.client.languages.default).get('RESOLVER_INVALID_USER', piece.key);
+		throw language.get('RESOLVER_INVALID_USER', piece.key);
 	}
 
 	/**

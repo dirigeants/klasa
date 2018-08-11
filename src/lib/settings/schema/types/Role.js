@@ -14,15 +14,16 @@ class RoleType extends SchemaType {
 	 * @since 0.5.0
 	 * @param {*} data The data to resolve
 	 * @param {SchemaPiece} piece The piece this data should be resolving to
-	 * @param {?external:Guild} guild The Guild instance that should be used for this piece
+	 * @param {Language} language The language to throw from
+	 * @param {external:Guild} guild The guild to use for this resolver
 	 * @returns {*} The resolved data
 	 */
-	async resolve(data, piece, guild) {
+	async resolve(data, piece, language, guild) {
 		if (!guild) throw this.client.languages.default.get('RESOLVER_INVALID_GUILD', piece.key);
 		if (data instanceof Role) return data.id;
 		const role = this.constructor.regex.role.test(data) ? guild.roles.get(data) : guild.roles.find(rol => rol.name === data) || null;
 		if (role) return role.id;
-		throw (guild ? guild.language : this.client.languages.default).get('RESOLVER_INVALID_ROLE', piece.key);
+		throw language.get('RESOLVER_INVALID_ROLE', piece.key);
 	}
 
 	/**
