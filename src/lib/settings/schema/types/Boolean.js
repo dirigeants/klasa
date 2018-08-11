@@ -1,4 +1,7 @@
 const SchemaType = require('./base/SchemaType');
+const truths = ['1', 'true', '+', 't', 'yes', 'y'];
+const falses = ['0', 'false', '-', 'f', 'no', 'n'];
+
 
 /**
  * class that resolves booleans
@@ -18,10 +21,9 @@ class BooleanType extends SchemaType {
 	 */
 	async resolve(data, piece, guild) {
 		if (typeof data === 'boolean') return data;
-		let bool = String(data).toLowerCase();
-		if (['1', 'true', '+', 't', 'yes', 'y'].includes(bool)) bool = true;
-		if (['0', 'false', '-', 'f', 'no', 'n'].includes(bool)) bool = false;
-		if (typeof bool === 'boolean') return bool;
+		const bool = String(data).toLowerCase();
+		if (truths.includes(bool)) return true;
+		if (falses.includes(bool)) return false;
 		throw (guild ? guild.language : this.client.languages.default).get('RESOLVER_INVALID_BOOL', piece.key);
 	}
 
