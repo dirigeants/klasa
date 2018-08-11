@@ -1748,12 +1748,12 @@ declare module 'klasa' {
 	};
 
 	export type KlasaConsoleColorStyles = {
-		debug: KlasaConsoleColorObjects;
-		error: KlasaConsoleColorObjects;
-		log: KlasaConsoleColorObjects;
-		verbose: KlasaConsoleColorObjects;
-		warn: KlasaConsoleColorObjects;
-		wtf: KlasaConsoleColorObjects;
+		debug?: KlasaConsoleColorObjects;
+		error?: KlasaConsoleColorObjects;
+		log?: KlasaConsoleColorObjects;
+		verbose?: KlasaConsoleColorObjects;
+		warn?: KlasaConsoleColorObjects;
+		wtf?: KlasaConsoleColorObjects;
 	};
 
 	export type KlasaConsoleColorObjects = {

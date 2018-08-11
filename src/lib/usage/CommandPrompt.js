@@ -10,7 +10,7 @@ class CommandPrompt extends TextPrompt {
 	 * @since 0.5.0
 	 * @param {KlasaMessage} message The message for the command
 	 * @param {CommandUsage} usage The usage of the command
-	 * @param {TextPromptOptions} options The options for this CommandPrompt
+	 * @param {TextPromptOptions} [options={}] The options for this CommandPrompt
 	 */
 	constructor(message, usage, options) {
 		super(message, usage, options);

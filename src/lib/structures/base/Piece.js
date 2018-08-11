@@ -27,7 +27,7 @@ class Piece {
 	 * @param {Store} store The store this piece is for
 	 * @param {string[]} file The path from the pieces folder to the extendable file
 	 * @param {string} directory The base directory to the pieces folder
-	 * @param {PieceOptions} options The options for this piece
+	 * @param {PieceOptions} [options={}] The options for this piece
 	 */
 	constructor(client, store, file, directory, options = {}) {
 		const defaults = client.options.pieceDefaults[store.name];
