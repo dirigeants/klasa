@@ -1,7 +1,7 @@
 const Schema = require('./Schema');
 
 /**
- * A Folder for organizing {@link SchemaPieces}
+ * A Folder for organizing {@link SchemaPiece}s
  * @extends Schema
  * @since 0.5.0
  */
