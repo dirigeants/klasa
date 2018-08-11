@@ -242,17 +242,17 @@ class KlasaClient extends Discord.Client {
 		const clientSchema = 'schema' in clientStorage ? clientStorage.schema : this.constructor.defaultClientSchema;
 
 		// Update Guild Schema with Keys needed in Klasa
-		const prefixKey = this.constructor.defaultGuildSchema.get('prefix');
+		const prefixKey = guildSchema.get('prefix');
 		if (!prefixKey || prefixKey.default === null) {
-			this.constructor.defaultGuildSchema.add('prefix', 'string', { default: this.options.prefix });
+			guildSchema.add('prefix', 'string', { default: this.options.prefix });
 		}
 
-		const languageKey = this.constructor.defaultGuildSchema.get('language');
+		const languageKey = guildSchema.get('language');
 		if (!languageKey || languageKey.default === null) {
-			this.constructor.defaultGuildSchema.add('language', 'language', { default: this.options.language });
+			guildSchema.add('language', 'language', { default: this.options.language });
 		}
 
-		this.constructor.defaultGuildSchema.add('disableNaturalPrefix', 'boolean', { configurable: Boolean(this.options.regexPrefix) });
+		guildSchema.add('disableNaturalPrefix', 'boolean', { configurable: Boolean(this.options.regexPrefix) });
 
 		// Register default gateways
 		this.gateways
