@@ -325,8 +325,7 @@ class Settings {
 		const piece = path instanceof SchemaPiece ? path : this.gateway.getPath(path, { piece: true }).piece;
 		const value = this.get(piece.path);
 		if (value === null) return 'Not set';
-		if (piece.array && !value.length) return 'None';
-		if (piece.array) return `[ ${value.map(val => piece.resolver.resolveString(val, message)).join(' | ')} ]`;
+		if (piece.array) return value.length ? `[ ${value.map(val => piece.resolver.resolveString(val, message)).join(' | ')} ]` : 'None';
 		return piece.resolver.resolveString(value, message);
 	}
 
