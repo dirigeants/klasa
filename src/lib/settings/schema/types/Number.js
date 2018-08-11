@@ -17,18 +17,16 @@ class NumberType extends SchemaType {
 	 * @returns {*} The resolved data
 	 */
 	async resolve(data, piece, language) {
-		const type = piece.type.toLowerCase();
-
-		let numb;
-		switch (type) {
+		let number;
+		switch (piece.type) {
 			case 'integer':
-				numb = parseInt(data);
-				if (Number.isInteger(numb)) return numb;
+				number = parseInt(data);
+				if (Number.isInteger(number)) return number;
 				throw language.get('RESOLVER_INVALID_INT', piece.key);
 			case 'number':
 			case 'float':
-				numb = parseFloat(data);
-				if (!isNaN(numb)) return numb;
+				number = parseFloat(data);
+				if (!isNaN(number)) return number;
 				throw language.get('RESOLVER_INVALID_FLOAT', piece.key);
 		}
 		// noop
