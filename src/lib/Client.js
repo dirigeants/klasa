@@ -457,6 +457,8 @@ class KlasaClient extends Discord.Client {
 
 }
 
+module.exports = KlasaClient;
+
 /**
  * The plugin symbol to be used in external packages
  * @since 0.5.0
@@ -681,5 +683,3 @@ KlasaClient.defaultClientSchema = new Schema()
  * @since 0.4.0
  * @param {Piece} piece The piece that was disabled
  */
-
-module.exports = KlasaClient;
