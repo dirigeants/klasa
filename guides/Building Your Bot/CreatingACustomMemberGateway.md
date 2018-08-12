@@ -30,14 +30,14 @@ We have the Gateway, so we just need to use [Custom Structures](https://discord.
 
 ```javascript
 const { Structures } = require('discord.js');
-const { SatelliteStore } = require('klasa');
+const { SettingsStore } = require('klasa');
 
 // Extend Guild to register a satellite
 Structures.extend('Guild', Guild => class MyGuild extends Guild {
 
 	constructor(...args) {
 		super(...args);
-		this.satellite = new SatelliteStore();
+		this.satellite = new SettingsStore(this.members);
 	}
 
 });
