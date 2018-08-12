@@ -101,7 +101,11 @@ class Gateway extends GatewayStorage {
 	 * @returns {Settings}
 	 */
 	create(id, data = {}) {
-		const settings = new this.Settings(this, { id: typeof id === 'string' ? id : id.join('.'), ...data });
+		id = typeof id === 'string' ? id : id.join('.');
+		const previous = this.cache.get(id);
+		if (previous) return previous;
+
+		const settings = new this.Settings(this, { id, ...data });
 		if (this._synced) settings.sync();
 		return settings;
 	}
