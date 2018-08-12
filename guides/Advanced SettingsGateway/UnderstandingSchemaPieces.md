@@ -48,3 +48,4 @@ In this case, `client` is the {@link KlasaClient} instance, `command` the resolv
 - {@tutorial UnderstandingSchemaFolders}
 - {@tutorial SettingsGatewayKeyTypes}
 - {@tutorial SettingsGatewaySettingsUpdate}
+- {@tutorial UnderstandingSatellites}

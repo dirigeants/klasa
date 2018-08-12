@@ -25,6 +25,9 @@ module.exports = {
 	SchemaPiece: require('./lib/settings/schema/SchemaPiece'),
 	SchemaTypes: require('./lib/settings/schema/types/base/SchemaTypes'),
 	SchemaType: require('./lib/settings/schema/types/base/SchemaType'),
+	CacheStore: require('./lib/settings/cache/CacheStore'),
+	SatelliteStore: require('./lib/settings/cache/SatelliteStore'),
+	SettingsStore: require('./lib/settings/cache/SettingsStore'),
 
 	// lib/structures/base
 	Piece: require('./lib/structures/base/Piece'),

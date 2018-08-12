@@ -14,6 +14,8 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#389](https://github.com/dirigeants/klasa/pull/389)] Added ability for Gateway to outsource the cache via external SatelliteStores or DataStores. (kyranet)
+- [[#389](https://github.com/dirigeants/klasa/pull/389)] Added `CacheStore`, `SatelliteStore`, and `SettingsStore` classes to proxy external datastores. (kyranet)
 - [[#383](https://github.com/dirigeants/klasa/pull/383)] Added the `SETTING_GATEWAY_INVALID_FILTERED_VALUE` language key. (bdistin)
 - [[#383](https://github.com/dirigeants/klasa/pull/383)] Added `Base` class for schemas, extending `Map`. (Unseenfaith)
 - [[#383](https://github.com/dirigeants/klasa/pull/383)] Added `SchemaType` and `SchemaTypes` classes. (Unseenfaith)
@@ -122,6 +124,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#389](https://github.com/dirigeants/klasa/pull/389)] Changed `Gateway#cache` to be either a `SatelliteStore` or a `SettingsStore` instance. (kyranet)
 - [[#383](https://github.com/dirigeants/klasa/pull/383)] **[BREAKING]** Changed SchemaFolder to extend Schema, which extends Map. All keys are now stored inside the map as opposed to being properties. (Unseenfaith)
 - [[#383](https://github.com/dirigeants/klasa/pull/383)] **[BREAKING]** Changed `Schema#add` and `Schema#remove` to be synchronous. They must be called before ready. (Unseenfaith)
 - [[#383](https://github.com/dirigeants/klasa/pull/383)] **[BREAKING]** Changed `GatewayDriver#register`'s arguments to move `schema`'s argument to `GatewayDriverRegisterOptions`. (kyranet)
@@ -224,6 +227,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Removed
 
+- [[#389](https://github.com/dirigeants/klasa/pull/389)] **[BREAKING]** Removed `Gateway#get`. (kyranet)
 - [[#383](https://github.com/dirigeants/klasa/pull/383)] **[BREAKING]** Removed `bwd/*.schema.json` files. (Unseenfaith)
 - [[#383](https://github.com/dirigeants/klasa/pull/383)] **[BREAKING]** Removed `Resolver` and `SettingsResolver` classes. (Unseenfaith)
 - [[#383](https://github.com/dirigeants/klasa/pull/383)] Removed `GatewayDriver#resolver` and `GatewayStorage#resolver`. (kyranet)

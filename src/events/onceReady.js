@@ -13,7 +13,7 @@ module.exports = class extends Event {
 		await this.client.fetchApplication();
 		if (!this.client.options.ownerID) this.client.options.ownerID = this.client.application.owner.id;
 
-		this.client.settings = this.client.gateways.clientStorage.get(this.client.user.id, true);
+		this.client.settings = this.client.gateways.clientStorage.create(this.client.user.id);
 		await this.client.gateways.sync();
 
 		// Init all the pieces

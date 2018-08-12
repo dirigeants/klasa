@@ -10,6 +10,8 @@ Inside your entry point (Where you define `new Client()`, for example, `index.js
 
 ```javascript
 client.gateways.register('members', {
+	satellite: true,
+	datastore: client.guilds,
 	provider: 'rethinkdb',
 	schema: new Schema()
 		.add('experience', 'Integer', { default: 10 })
@@ -28,16 +30,27 @@ We have the Gateway, so we just need to use [Custom Structures](https://discord.
 
 ```javascript
 const { Structures } = require('discord.js');
+const { SatelliteStore } = require('klasa');
 
-Structures.extend('GuildMember', GuildMember => class MyMember extends GuildMember {
+// Extend Guild to register a satellite
+Structures.extend('Guild', Guild => class MyGuild extends Guild {
 
 	constructor(...args) {
 		super(...args);
-		this.settings = this.client.gateways.members.get(`${this.guild.id}-${this.id}`, true);
+		this.satellite = new SatelliteStore();
 	}
 
 });
 
+// Extend GuildMember to register the member's settings
+Structures.extend('GuildMember', GuildMember => class MyMember extends GuildMember {
+
+	constructor(...args) {
+		super(...args);
+		this.settings = this.client.gateways.members.create([this.guild.id, this.id]);
+	}
+
+});
 ```
 
 Then, you'll need to require it somewhere; I suggest in your entry point.
@@ -45,13 +58,7 @@ Then, you'll need to require it somewhere; I suggest in your entry point.
 ```javascript
 require('./path-to/extension');
 
-client.gateways.register('members', {
-	provider: 'rethinkdb',
-	schema: new Schema()
-		.add('experience', 'Integer', { default: 10 })
-		.add('level', 'Integer', { default: 1 })
-});
-
+// KlasaClient instantiation and login...
 ```
 
 Alright! Now you have a fully functioning member-gateway. Now, we can create a per-guild level system.

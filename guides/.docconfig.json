@@ -105,6 +105,10 @@
     {
         "name": "Updating your Settings",
         "path": "SettingsGatewaySettingsUpdate.md"
+    },
+    {
+        "name": "Understanding Satellites",
+        "path": "UnderstandingSatellites.md"
     }]
 },
 {
