@@ -2,9 +2,9 @@
 
 SettingsGateway serves a [reverse-proxy](https://en.wikipedia.org/wiki/Reverse_proxy)-like caching, which accesses discord.js' [DataStore][DataStore]s such as [`Client#users`](https://discord.js.org/#/docs/main/master/class/Client?scrollTo=users) or [`Client#guilds`](https://discord.js.org/#/docs/main/master/class/Client?scrollTo=guilds). A Gateway's cache can be either a {@link SettingsStore}, of which the get method will attempt to do `DataStore#get(id).settings`, or a {@link SatelliteStore}, which get method will attempt to access to the property `satellite` of the entry instead.
 
-This works because in two of the built-in gateways, `this.client.users.get(id).settings` was identical to `this.client.gateways.users.cache.get(id)`, and so is for guilds. For this, a {@link SettingsStore} is used to remove the double caching layer, as we can access to any of users' or guilds' settings via their [DataStore][DataStore]s.
+This works because in two of the built-in gateways, `this.client.users.get(id).settings` was identical to `this.client.gateways.users.cache.get(id)`, and so is for guilds. For this, a {@link SettingsStore} is used to remove the double caching layer, as we can access to any of users' or guilds' settings via their DataStores.
 
-What are {@link SatelliteStore}s for? A satellite "sits" in an entry of the [DataStore][DataStore], and once {@link Gateway#cache} is used to get an entry, it will access the desired satellite and this will try to proxy the next [DataStore][DataStore] until it reaches the {@link Settings} instance.
+What are {@link SatelliteStore}s for? A satellite "sits" in an entry of the DataStore, and once {@link Gateway#cache} is used to get an entry, it will access the desired satellite and this will try to proxy the next DataStore until it reaches the {@link Settings} instance.
 
 One of the most common use cases of {@link SatelliteStore gateway satellites} are to make per-member settings.
 
