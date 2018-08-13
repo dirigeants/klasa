@@ -14,6 +14,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#392](https://github.com/dirigeants/klasa/pull/392)] Added support for empty prefixes. (kyranet)
 - [[#383](https://github.com/dirigeants/klasa/pull/383)] Added the `SETTING_GATEWAY_INVALID_FILTERED_VALUE` language key. (bdistin)
 - [[#383](https://github.com/dirigeants/klasa/pull/383)] Added `Base` class for schemas, extending `Map`. (Unseenfaith)
 - [[#383](https://github.com/dirigeants/klasa/pull/383)] Added `SchemaType` and `SchemaTypes` classes. (Unseenfaith)
@@ -122,6 +123,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#392](https://github.com/dirigeants/klasa/pull/392)] Changed default prefix from `'!'` to `''`. (kyranet)
 - [[#383](https://github.com/dirigeants/klasa/pull/383)] **[BREAKING]** Changed SchemaFolder to extend Schema, which extends Map. All keys are now stored inside the map as opposed to being properties. (Unseenfaith)
 - [[#383](https://github.com/dirigeants/klasa/pull/383)] **[BREAKING]** Changed `Schema#add` and `Schema#remove` to be synchronous. They must be called before ready. (Unseenfaith)
 - [[#383](https://github.com/dirigeants/klasa/pull/383)] **[BREAKING]** Changed `GatewayDriver#register`'s arguments to move `schema`'s argument to `GatewayDriverRegisterOptions`. (kyranet)
