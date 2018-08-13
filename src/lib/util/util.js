@@ -212,21 +212,6 @@ class Util {
 	}
 
 	/**
-	 * Get the identifier of a value.
-	 * @since 0.5.0
-	 * @param {*} value The value to get the identifier from
-	 * @returns {?(string|number|boolean)}
-	 */
-	static getIdentifier(value) {
-		if (Util.isPrimitive(value)) return value;
-		if (Util.isObject(value)) {
-			if ('id' in value) return value.id;
-			if ('name' in value) return value.name;
-		}
-		return null;
-	}
-
-	/**
 	 * Turn a dotted path into a json object.
 	 * @since 0.5.0
 	 * @param {string} path The dotted path
