@@ -143,7 +143,7 @@ class Settings {
 		// If it's not currently synchronizing, create a new sync status for the sync queue
 		const sync = this.gateway.provider.get(this.gateway.type, this.id).then(data => {
 			if (data) {
-				if (!this._existsInDB) this._existsInDB = true;
+				this._existsInDB = true;
 				this._patch(data);
 			} else {
 				this._existsInDB = false;
@@ -151,6 +151,9 @@ class Settings {
 
 			this.gateway.syncQueue.delete(this.id);
 			return this;
+		}).catch((error) => {
+			this.gateway.syncQueue.delete(this.id);
+			throw error;
 		});
 
 		this.gateway.syncQueue.set(this.id, sync);

@@ -100,3 +100,4 @@ When adding keys, specially when developing plugins, you may enter in conflict w
 - {@tutorial UnderstandingSchemaPieces}
 - {@tutorial SettingsGatewayKeyTypes}
 - {@tutorial SettingsGatewaySettingsUpdate}
+- {@tutorial UnderstandingSatellites}

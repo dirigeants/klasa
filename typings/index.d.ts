@@ -484,19 +484,38 @@ declare module 'klasa' {
 	}
 
 	export class Gateway extends GatewayStorage {
-		public constructor(store: GatewayDriver, type: string, schema: Schema, options: GatewayOptions);
+		public constructor(store: GatewayDriver, type: string, schema: Schema, provider: string, options?: GatewayOptions);
 		public store: GatewayDriver;
-		public readonly cache: Collection<string, Settings>;
+		public cache: SatelliteStore | SettingsStore;
 		public readonly syncQueue: Collection<string, Promise<Settings>>;
 
-		public get(input: string | number, create?: boolean): Settings;
-		public sync(input: string): Promise<Settings>;
+		public sync(input: string): Promise<Settings | null>;
 		public sync(input?: string[]): Promise<Gateway>;
 		public getPath(key?: string, options?: GatewayGetPathOptions): GatewayGetPathResult | null;
 		public toJSON(): GatewayJSON;
 		public toString(): string;
 
 		private _resolveGuild(guild: GuildResolvable): KlasaGuild;
+	}
+
+	export abstract class CacheStore {
+		public constructor(collection: Collection<string, any>);
+		public collection: Collection<string, any>;
+		public abstract get(path: string | Array<string>): SatelliteStore | Settings;
+		public abstract has(path: string | Array<string>): boolean;
+		public keys(): Iterator<string>;
+		public values(): Iterator<Settings>;
+		public entries(): Iterator<[string, Settings]>;
+		public [Symbol.iterator]: Iterator<[string, Settings]>;
+	}
+
+	export class SatelliteStore extends CacheStore {
+		public get(path: string | Array<string>): SatelliteStore | Settings;
+		public has(path: string | Array<string>): boolean;
+	}
+	export class SettingsStore extends CacheStore  {
+		public get(path: string | Array<string>): Settings;
+		public has(path: string | Array<string>): boolean;
 	}
 
 	export class QueryBuilder {
@@ -1423,11 +1442,13 @@ declare module 'klasa' {
 
 	// Settings
 	export type GatewayOptions = {
-		provider: string;
+		satellite?: boolean;
+		datastore?: Map<string, any>;
 	};
 
 	export type GatewayJSON = {
-		options: GatewayOptions;
+		provider: string;
+		cache: string;
 		schema: SchemaFolderAddOptions;
 		type: string;
 	};
@@ -1485,7 +1506,7 @@ declare module 'klasa' {
 		provider?: string;
 		schema?: Schema;
 		syncArg?: string[] | string | true;
-	};
+	} & GatewayOptions;
 
 	export type SchemaFolderAddOptions = SchemaFolderOptions | SchemaPieceOptions;
 

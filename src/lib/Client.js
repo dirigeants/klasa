@@ -251,8 +251,8 @@ class KlasaClient extends Discord.Client {
 
 		// Register default gateways
 		this.gateways
-			.register('guilds', { ...guilds, schema: guildSchema })
-			.register('users', { ...users, schema: userSchema })
+			.register('guilds', { ...guilds, schema: guildSchema, datastore: this.guilds })
+			.register('users', { ...users, schema: userSchema, datastore: this.users })
 			.register('clientStorage', { ...clientStorage, schema: clientSchema });
 
 		/**

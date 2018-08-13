@@ -37,3 +37,4 @@ message.guild.settings.update(['prefix', 'language'], ['k!', 'en-ES']);
 - {@tutorial UnderstandingSchemaPieces}
 - {@tutorial UnderstandingSchemaFolders}
 - {@tutorial SettingsGatewayKeyTypes}
+- {@tutorial UnderstandingSatellites}

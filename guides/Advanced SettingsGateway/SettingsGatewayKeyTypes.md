@@ -57,3 +57,4 @@ Client.types.add('mytype', MySchemaType);
 - {@tutorial UnderstandingSchemaPieces}
 - {@tutorial UnderstandingSchemaFolders}
 - {@tutorial SettingsGatewaySettingsUpdate}
+- {@tutorial UnderstandingSatellites}

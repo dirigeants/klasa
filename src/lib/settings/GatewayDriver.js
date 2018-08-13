@@ -12,6 +12,8 @@ class GatewayDriver {
 	 * @property {string} [provider = this.client.options.providers.default] The name of the provider to use
 	 * @property {Schema} [schema] The schema to use for this gateway.
 	 * @property {string|string[]|true} [syncArg] The sync args to pass to Gateway#sync during Gateway init
+	 * @property {boolean} [satellite=false] Whether this Gateway's first cache level should be a SatelliteStore or not
+	 * @property {Map} [datastore=new Collection()] The datastore to proxy
 	 */
 
 	/**
@@ -89,12 +91,12 @@ class GatewayDriver {
 	 * @returns {this}
 	 * @chainable
 	 */
-	register(name, { provider = this.client.options.providers.default, schema = new Schema() } = {}) {
+	register(name, { provider = this.client.options.providers.default, schema = new Schema(), satellite, datastore } = {}) {
 		if (typeof name !== 'string') throw new TypeError('You must pass a name for your new gateway and it must be a string.');
 		if (!(schema instanceof Schema)) throw new TypeError('Schema must be a valid Schema instance.');
 		if (this.name !== undefined && this.name !== null) throw new Error(`The key '${name}' is either taken by another Gateway or reserved for GatewayDriver's functionality.`);
 
-		const gateway = new Gateway(this, name, schema, provider);
+		const gateway = new Gateway(this, name, schema, provider, { satellite, datastore });
 		this.keys.add(name);
 		this[name] = gateway;
 		this._queue.push(gateway.init.bind(gateway));
