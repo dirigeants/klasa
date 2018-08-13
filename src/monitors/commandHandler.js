@@ -4,6 +4,7 @@ module.exports = class extends Monitor {
 
 	constructor(...args) {
 		super(...args, { ignoreOthers: false });
+		this.noPrefix = { length: 0, regex: null };
 		this.prefixes = new Map();
 		this.prefixMention = null;
 		this.prefixMentionLength = null;
@@ -69,7 +70,7 @@ module.exports = class extends Monitor {
 			const testingPrefix = this.prefixes.get(prefix) || this.generateNewPrefix(prefix);
 			if (testingPrefix.regex.test(message.content)) return testingPrefix;
 		}
-		return false;
+		return this.client.options.noPrefixDM && message.channel.type === 'dm' ? this.noPrefix : false;
 	}
 
 	generateNewPrefix(prefix) {

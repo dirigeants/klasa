@@ -40,6 +40,7 @@ new Client({
 | **ignoreBots**             | `true`                    | boolean            | Whether or not this bot should ignore other bots                                    |
 | **ignoreSelf**             | `client.user.bot`         | boolean            | Whether or not this bot should ignore itself (true for bots, false for selfbots)    |
 | **language**               | `en-US`                   | string             | The default language Klasa should opt-in for the commands                           |
+| **noPrefixDM**             | `false`                   | boolean            | Whether the bot should allow prefixless messages in DMs                     |
 | **ownerID**                | see below¹                | string             | The Discord ID for the user the bot should respect as the owner                     |
 | **permissionLevels**       | `defaultPermissionLevels` | PermissionLevels   | The permission levels to use with this bot                                          |
 | **prefix**                 | `undefined`               | string/array       | The default prefix(es) when the bot first boots up.²                                |

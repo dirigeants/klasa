@@ -23,6 +23,7 @@ exports.DEFAULTS = {
 		},
 		disabledCorePieces: [],
 		language: 'en-US',
+		noPrefixDM: false,
 		prefix: '',
 		preserveSettings: true,
 		readyMessage: (client) => `Successfully initialized. Ready to serve ${client.guilds.size} guild${client.guilds.size === 1 ? '' : 's'}.`,
