@@ -25,14 +25,14 @@ class SchemaType {
 
 	/**
 	 * Resolves data
-	 * @param {KlasaClient} client The KlasaClient instance
 	 * @param {*} data the data to resolve
 	 * @param {SchemaPiece} piece The SchemaPiece instance that manages this data
 	 * @param {Language} language The language to throw from
+	 * @param {KlasaGuild} [guild] The guild for context in resolve
 	 * @returns {*}
 	 * @abstract
 	 */
-	async resolve(client, data) {
+	async resolve(data) {
 		return data;
 	}
 
