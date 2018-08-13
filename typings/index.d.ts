@@ -36,11 +36,7 @@ declare module 'klasa' {
 		User as DiscordUser,
 		UserResolvable,
 		VoiceChannel as DiscordVoiceChannel,
-		WebhookClient,
-		GuildStore,
-		UserStore,
-		ChannelStore,
-		PresenceStore
+		WebhookClient
 	} from 'discord.js';
 
 	export const version: string;
@@ -490,8 +486,8 @@ declare module 'klasa' {
 	export class Gateway extends GatewayStorage {
 		public constructor(store: GatewayDriver, type: string, schema: Schema, options: GatewayOptions);
 		public store: GatewayDriver;
-		public readonly syncQueue: Collection<string, Promise<Settings>>;
-		private readonly cache: Collection<string, Settings> | GuildStore | UserStore | ChannelStore | PresenceStore;
+		public syncQueue: Collection<string, Promise<Settings>>;
+		private cache: Collection<string, { settings: Settings}>;
 
 		public get(input: string | number, create?: boolean): Settings;
 		public sync(input: string): Promise<Settings>;
