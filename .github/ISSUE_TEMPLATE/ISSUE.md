@@ -18,7 +18,7 @@ This issue tracker is only for issue reports and proposals. You won't receive an
 
 ```
 
-### Expected and actual behavior
+### Expected and actual behaviour
 
 <!--
 Fill in any of the values that are applicable to your issue.

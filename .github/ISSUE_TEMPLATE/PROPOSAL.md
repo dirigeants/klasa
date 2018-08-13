@@ -6,8 +6,8 @@ about: Suggest enhancements or improvements to existing features.
 
 ### Describe your proposal
 
-### Use-Cases for your proposal
+### Usecases for your proposal
 
-### Expected and actual behavior
+### Expected and actual behaviour
 
 ### Further details
