@@ -21,7 +21,7 @@ export { default as Schedule } from './lib/schedule/Schedule';
 export { default as ScheduledTask } from './lib/schedule/ScheduledTask';
 
 // lib/settings
-export { default as Configuration } from './lib/settings/Configuration';
+export { default as Configuration } from './lib/settings/Settings';
 export { default as Gateway } from './lib/settings/Gateway';
 export { default as GatewayDriver } from './lib/settings/GatewayDriver';
 export { default as GatewayStorage } from './lib/settings/GatewayStorage';
