@@ -224,6 +224,8 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Removed
 
+- [[#391](https://github.com/dirigeants/klasa/pull/391)] Removed `Util.getIdentifier()`. (kyranet)
+- [[#391](https://github.com/dirigeants/klasa/pull/391)] Removed Gateways' second caching layer. (kyranet)
 - [[#383](https://github.com/dirigeants/klasa/pull/383)] **[BREAKING]** Removed `bwd/*.schema.json` files. (Unseenfaith)
 - [[#383](https://github.com/dirigeants/klasa/pull/383)] **[BREAKING]** Removed `Resolver` and `SettingsResolver` classes. (Unseenfaith)
 - [[#383](https://github.com/dirigeants/klasa/pull/383)] Removed `GatewayDriver#resolver` and `GatewayStorage#resolver`. (kyranet)
