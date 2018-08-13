@@ -492,7 +492,7 @@ KlasaClient.types = new SchemaTypes(Object.entries(require('./settings/schema/ty
  * @type {Schema}
  */
 KlasaClient.defaultGuildSchema = new Schema()
-	.add('prefix', 'string', { default: '' })
+	.add('prefix', 'string')
 	.add('language', 'language')
 	.add('disableNaturalPrefix', 'boolean')
 	.add('disabledCommands', 'command', {
