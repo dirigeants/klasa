@@ -23,10 +23,6 @@ class Gateway extends GatewayStorage {
 	 */
 
 	/**
-	 * @typedef {(KlasaGuild|KlasaMessage|external:GuildChannel)} GuildResolvable
-	 */
-
-	/**
 	 * @since 0.0.1
 	 * @param {GatewayDriver} store The GatewayDriver instance which initiated this instance
 	 * @param {string} type The name of this Gateway

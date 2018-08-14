@@ -13,6 +13,10 @@ const REGEXPESC = /[-/\\^$*+?.()|[\]{}]/g;
 class Util {
 
 	/**
+	 * @typedef {(KlasaGuild|KlasaMessage|external:GuildChannel)} GuildResolvable
+	 */
+
+	/**
 	 * @typedef {(string|*)} Stringable
 	 */
 
