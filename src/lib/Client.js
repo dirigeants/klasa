@@ -47,6 +47,7 @@ class KlasaClient extends Discord.Client {
 	 * @property {string[]} [disabledCorePieces=[]] An array of disabled core piece types, e.g., ['commands', 'arguments']
 	 * @property {KlasaGatewaysOptions} [gateways={}] The options for each built-in gateway
 	 * @property {string} [language='en-US'] The default language Klasa should opt-in for the commands
+	 * @property {boolean} [noPrefixDM=false] Whether the bot should allow prefixless messages in DMs
 	 * @property {string} [ownerID] The discord user id for the user the bot should respect as the owner (gotten from Discord api if not provided)
 	 * @property {PermissionLevels} [permissionLevels=KlasaClient.defaultPermissionLevels] The permission levels to use with this bot
 	 * @property {KlasaPieceDefaults} [pieceDefaults={}] Overrides the defaults for all pieces

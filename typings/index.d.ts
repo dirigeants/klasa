@@ -1265,12 +1265,13 @@ declare module 'klasa' {
 		disabledCorePieces?: string[];
 		gateways?: KlasaGatewaysOptions;
 		language?: string;
+		noPrefixDM?: boolean;
 		ownerID?: string;
 		permissionLevels?: PermissionLevels;
 		pieceDefaults?: KlasaPieceDefaults;
 		prefix?: string | string[];
-		preserveSettings?: boolean;
 		prefixCaseInsensitive?: boolean;
+		preserveSettings?: boolean;
 		providers?: KlasaProvidersOptions;
 		readyMessage?: (client: KlasaClient) => string;
 		regexPrefix?: RegExp;
