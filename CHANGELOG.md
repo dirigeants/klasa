@@ -14,6 +14,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#398](https://github.com/dirigeants/klasa/pull/398)] Added the `Settings#update(entries: Array<[string, any]>);` overload. (kyranet)
 - [[#392](https://github.com/dirigeants/klasa/pull/392)] Added support for empty prefixes. (kyranet)
 - [[#383](https://github.com/dirigeants/klasa/pull/383)] Added the `SETTING_GATEWAY_INVALID_FILTERED_VALUE` language key. (bdistin)
 - [[#383](https://github.com/dirigeants/klasa/pull/383)] Added `Base` class for schemas, extending `Map`. (Unseenfaith)
@@ -226,6 +227,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Removed
 
+- [[#398](https://github.com/dirigeants/klasa/pull/398)] Removed the `Settings#update(keys: string[], values: any[])` overload. (kyranet)
 - [[#391](https://github.com/dirigeants/klasa/pull/391)] Removed `Util.getIdentifier()`. (kyranet)
 - [[#391](https://github.com/dirigeants/klasa/pull/391)] Removed Gateways' second caching layer. (kyranet)
 - [[#383](https://github.com/dirigeants/klasa/pull/383)] **[BREAKING]** Removed `bwd/*.schema.json` files. (Unseenfaith)

@@ -245,20 +245,20 @@ class Util {
 	 * Convert an object to a tuple
 	 * @since 0.5.0
 	 * @param {Object<string, *>} object The object to convert
-	 * @param {{ keys: string[], values: any[] }} [entries={}] The initial entries
 	 * @param {string} [prefix=''] The prefix for the key
 	 * @returns {Array<Array<*>>}
 	 */
-	static objectToTuples(object, { keys = [], values = [] } = {}, prefix = '') {
-		for (const key of Object.keys(object)) {
-			if (Util.isObject(object[key])) {
-				Util.objectToTuples(object[key], { keys, values }, `${prefix}${key}.`);
+	static objectToTuples(object, prefix = '') {
+		const entries = [];
+		for (const [key, value] of Object.entries(object)) {
+			if (Util.isObject(value)) {
+				entries.concat(Util.objectToTuples(value, `${prefix}${key}.`));
 			} else {
-				keys.push(`${prefix}${key}`);
-				values.push(object[key]);
+				entries.push([`${prefix}${key}`, value]);
 			}
 		}
-		return [keys, values];
+
+		return entries;
 	}
 
 	/**
