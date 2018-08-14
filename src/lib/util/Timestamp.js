@@ -153,7 +153,7 @@ class Timestamp {
 
 /* eslint-disable id-length */
 
-Timestamp.timezoneOffset = new Date().getTimezoneOffset() * 60000;
+Timestamp.timezoneOffset = (new Date().getTimezoneOffset() * 60000) * -1;
 
 // Dates
 
