@@ -16,7 +16,7 @@ module.exports = class extends Monitor {
 		if (message.guild && !message.guild.me) await message.guild.members.fetch(this.client.user);
 		if (!message.channel.postable) return;
 		if (message.content === this.client.user.toString() || (message.guild && message.content === message.guild.me.toString())) {
-			message.sendLocale('PREFIX_REMINDER', [message.guildSettings.prefix]);
+			await message.sendLocale('PREFIX_REMINDER', [message.guildSettings.prefix || undefined]);
 			return;
 		}
 
@@ -45,8 +45,9 @@ module.exports = class extends Monitor {
 	}
 
 	parseCommand(message) {
-		const { regex: prefix, length: prefixLength } = this.getPrefix(message);
-		if (!prefix) return { command: false };
+		const result = this.getPrefix(message);
+		if (!result) return { command: false };
+		const { regex: prefix, length: prefixLength } = result;
 		return {
 			command: message.content.slice(prefixLength).trim().split(' ')[0].toLowerCase(),
 			prefix,
