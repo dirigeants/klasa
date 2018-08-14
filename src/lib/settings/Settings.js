@@ -252,7 +252,7 @@ class Settings {
 		if (isObject(key)) {
 			[guild, options] = [value, guild];
 			entries = objectToTuples(key);
-		} else if (typeof keys === 'string') {
+		} else if (typeof key === 'string') {
 			// Overload update(string, any, ...any[]);
 			entries = [key, value];
 		} else if (!Array.isArray(key) || key.some(entry => !Array.isArray(entry) || entry.length !== 2)) {
