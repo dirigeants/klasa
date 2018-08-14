@@ -487,6 +487,7 @@ declare module 'klasa' {
 		public constructor(store: GatewayDriver, type: string, schema: Schema, options: GatewayOptions);
 		public store: GatewayDriver;
 		public syncQueue: Collection<string, Promise<Settings>>;
+		public readonly Settings: Settings;
 		private cache: Collection<string, { settings: Settings, [k: string]: any }>;
 
 		public get(input: string | number, create?: boolean): Settings;
