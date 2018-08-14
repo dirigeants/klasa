@@ -414,7 +414,7 @@ class Settings {
 	 * Parse a single value for an array
 	 * @since 0.5.0
 	 * @param {SchemaPiece} piece The SchemaPiece pointer that parses this entry
-	 * @param {string[]} route The path bits for property accessment
+	 * @param {string[]} route The path bits for property accesses
 	 * @param {*} parsed The parsed value
 	 * @param {SettingsUpdateOptions} options The parse options
 	 * @param {SettingsUpdateResult} result The updated result
