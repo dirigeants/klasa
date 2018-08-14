@@ -1,5 +1,7 @@
 const { promisify } = require('util');
 const { exec } = require('child_process');
+const { Guild, GuildChannel, Message } = require('discord.js');
+
 const zws = String.fromCharCode(8203);
 let sensitivePattern;
 const TOTITLECASE = /[A-Za-zÀ-ÖØ-öø-ÿ]\S*/g;
@@ -288,6 +290,26 @@ class Util {
 		}
 
 		return given;
+	}
+
+	/**
+	 * Resolves a guild
+	 * @since 0.5.0
+	 * @param {KlasaClient} client The KlasaClient
+	 * @param {GuildResolvable} guild A guild resolvable
+	 * @returns {?KlasaGuild}
+	 * @private
+	 */
+	static resolveGuild(client, guild) {
+		const type = typeof guild;
+		if (type === 'object' && guild !== null) {
+			if (guild instanceof Guild) return guild;
+			if ((guild instanceof GuildChannel) ||
+				(guild instanceof Message)) return guild.guild;
+		} else if (type === 'string' && /^\d{17,19}$/.test(guild)) {
+			return client.guilds.get(guild) || null;
+		}
+		return null;
 	}
 
 }

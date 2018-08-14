@@ -1,6 +1,6 @@
 const GatewayStorage = require('./GatewayStorage');
 const Settings = require('./Settings');
-const { Collection, Guild, GuildChannel, Message } = require('discord.js');
+const { Collection } = require('discord.js');
 
 /**
  * <danger>You should never create a Gateway instance by yourself.
@@ -24,13 +24,6 @@ class Gateway extends GatewayStorage {
 
 	/**
 	 * @typedef {(KlasaGuild|KlasaMessage|external:GuildChannel)} GuildResolvable
-	 */
-
-	/**
-	 * @typedef {Object} GatewayJSON
-	 * @property {string} type The name of this gateway
-	 * @property {GatewayDriverRegisterOptions} options The options for this gateway
-	 * @property {Object} schema The current schema
 	 */
 
 	/**
@@ -178,47 +171,6 @@ class Gateway extends GatewayStorage {
 		}
 
 		return { piece, route };
-	}
-
-	/**
-	 * Resolves a guild
-	 * @since 0.5.0
-	 * @param {GuildResolvable} guild A guild resolvable
-	 * @returns {?KlasaGuild}
-	 * @private
-	 */
-	_resolveGuild(guild) {
-		const type = typeof guild;
-		if (type === 'object' && guild !== null) {
-			if (guild instanceof Guild) return guild;
-			if ((guild instanceof GuildChannel) ||
-				(guild instanceof Message)) return guild.guild;
-		} else if (type === 'string' && /^\d{17,19}$/.test(guild)) {
-			return this.client.guilds.get(guild) || null;
-		}
-		return null;
-	}
-
-	/**
-	 * Get a JSON object containing the schema and options.
-	 * @since 0.5.0
-	 * @returns {GatewayJSON}
-	 */
-	toJSON() {
-		return {
-			type: this.type,
-			options: { provider: this.providerName },
-			schema: this.schema.toJSON()
-		};
-	}
-
-	/**
-	 * Stringify a value or the instance itself.
-	 * @since 0.5.0
-	 * @returns {string}
-	 */
-	toString() {
-		return `Gateway(${this.type})`;
 	}
 
 }

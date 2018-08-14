@@ -1,6 +1,13 @@
 class GatewayStorage {
 
 	/**
+	 * @typedef {Object} GatewayJSON
+	 * @property {string} type The name of this gateway
+	 * @property {GatewayDriverRegisterOptions} options The options for this gateway
+	 * @property {Object} schema The current schema
+	 */
+
+	/**
 	 * <warning>You should never create an instance of this class as it's abstract.</warning>
 	 * @since 0.5.0
 	 * @param {KlasaClient} client The client this GatewayStorage was created with
@@ -98,6 +105,28 @@ class GatewayStorage {
 			for (const [key, piece] of this.schema.paths) if (!columns.includes(key)) promises.push(provider.addColumn(key, piece));
 			await Promise.all(promises);
 		}
+	}
+
+	/**
+	 * Get a JSON object containing the schema and options.
+	 * @since 0.5.0
+	 * @returns {GatewayJSON}
+	 */
+	toJSON() {
+		return {
+			type: this.type,
+			options: { provider: this.providerName },
+			schema: this.schema.toJSON()
+		};
+	}
+
+	/**
+	 * Stringify a value or the instance itself.
+	 * @since 0.5.0
+	 * @returns {string}
+	 */
+	toString() {
+		return `Gateway(${this.type})`;
 	}
 
 }

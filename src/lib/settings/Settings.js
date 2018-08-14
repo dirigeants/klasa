@@ -1,4 +1,4 @@
-const { isObject, deepClone, toTitleCase, arraysStrictEquals, objectToTuples } = require('../util/util');
+const { isObject, deepClone, toTitleCase, arraysStrictEquals, objectToTuples, resolveGuild } = require('../util/util');
 const Type = require('../util/Type');
 const SchemaPiece = require('./schema/SchemaPiece');
 
@@ -263,7 +263,7 @@ class Settings {
 		// Overload update(string|string[], any|any[], GuildResolvable, SettingsUpdateOptions);
 		// If the third argument is undefined and the second is an object literal, swap the variables.
 		if (typeof options === 'undefined' && guild && guild.constructor === Object) [guild, options] = [null, guild];
-		if (guild) guild = this.gateway._resolveGuild(guild);
+		if (guild) guild = resolveGuild(this.client, guild);
 		if (!options) options = {};
 
 		// Do a length check on both keys and values before trying to update
