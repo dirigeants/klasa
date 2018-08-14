@@ -486,8 +486,8 @@ declare module 'klasa' {
 	export class Gateway extends GatewayStorage {
 		public constructor(store: GatewayDriver, type: string, schema: Schema, options: GatewayOptions);
 		public store: GatewayDriver;
-		public readonly cache: Collection<string, Settings>;
-		public readonly syncQueue: Collection<string, Promise<Settings>>;
+		public syncQueue: Collection<string, Promise<Settings>>;
+		private cache: Collection<string, { settings: Settings, [k: string]: any }>;
 
 		public get(input: string | number, create?: boolean): Settings;
 		public sync(input: string): Promise<Settings>;
@@ -1225,7 +1225,6 @@ declare module 'klasa' {
 		public static codeBlock(lang: string, expression: string | number | Stringifible): string;
 		public static deepClone<T = any>(source: T): T;
 		public static exec(exec: string, options?: ExecOptions): Promise<{ stdout: string, stderr: string }>;
-		public static getIdentifier(value: PrimitiveType | { id?: PrimitiveType, name?: PrimitiveType }): PrimitiveType | null;
 		public static getTypeName(input: any): string;
 		public static isClass(input: any): input is Constructable<any>;
 		public static isFunction(input: any): input is Function;

@@ -14,6 +14,8 @@ module.exports = class extends Event {
 		if (!this.client.options.ownerID) this.client.options.ownerID = this.client.application.owner.id;
 
 		this.client.settings = this.client.gateways.clientStorage.get(this.client.user.id, true);
+		// Added for consistency with other datastores, Client#clients does not exist
+		this.client.gateways.clientStorage.cache.set(this.client.user.id, this.client);
 		await this.client.gateways.sync();
 
 		// Init all the pieces

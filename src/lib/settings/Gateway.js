@@ -1,7 +1,6 @@
 const GatewayStorage = require('./GatewayStorage');
 const Settings = require('./Settings');
 const { Collection, Guild, GuildChannel, Message } = require('discord.js');
-const { getIdentifier } = require('../util/util');
 
 /**
  * <danger>You should never create a Gateway instance by yourself.
@@ -52,11 +51,11 @@ class Gateway extends GatewayStorage {
 		this.store = store;
 
 		/**
-		 * The cached entries for this Gateway
+		 * The cached entries for this Gateway or the external datastore to get the settings from
 		 * @since 0.0.1
-		 * @type {external:Collection<string, Settings>}
+		 * @type {external:Collection<string, Settings>|external:DataStore}
 		 */
-		this.cache = new Collection();
+		this.cache = (type in this.client) && this.client[type] instanceof Map ? this.client[type] : new Collection();
 
 		/**
 		 * The synchronization queue for all Settings instances
@@ -94,10 +93,9 @@ class Gateway extends GatewayStorage {
 	 */
 	get(id, create = false) {
 		const entry = this.cache.get(id);
-		if (entry) return entry;
+		if (entry) return entry.settings;
 		if (create) {
 			const settings = new this.Settings(this, { id });
-			this.cache.set(id, settings);
 			if (this._synced && this.schema.keyArray.length) settings.sync().catch(err => this.client.emit('error', err));
 			return settings;
 		}
@@ -116,30 +114,22 @@ class Gateway extends GatewayStorage {
 			const entries = await this.provider.getAll(this.type, input);
 			for (const entry of entries) {
 				if (!entry) continue;
-				const cache = this.cache.get(entry.id);
+				const cache = this.get(entry.id);
 				if (cache) {
 					if (!cache._existsInDB) cache._existsInDB = true;
 					cache._patch(entry);
-				} else {
-					const settings = new this.Settings(this, entry);
-					settings._existsInDB = true;
-					this.cache.set(entry.id, settings);
 				}
 			}
 
 			// Set all the remaining settings from unknown status in DB to not exists.
-			for (const settings of this.cache.values()) if (settings._existsInDB === null) settings._existsInDB = false;
+			for (const entry of this.cache.values()) {
+				if (entry.settings._existsInDB === null) entry.settings._existsInDB = false;
+			}
 			return this;
 		}
-		const target = getIdentifier(input);
-		if (!target) throw new TypeError('The selected target could not be resolved to a string.');
 
-		const cache = this.cache.get(target);
-		if (cache) return cache.sync();
-
-		const settings = new this.Settings(this, { id: target });
-		this.cache.set(target, settings);
-		return settings.sync();
+		const cache = this.get((input && input.id) || input);
+		return cache ? cache.sync() : null;
 	}
 
 	/**
