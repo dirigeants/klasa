@@ -428,33 +428,28 @@ class Settings {
 			}
 			return;
 		}
-		const lengthErrors = errors.length;
 		const array = this.get(route);
-		const clone = array.slice();
 		if (typeof arrayPosition === 'number') {
-			if (arrayPosition >= clone.length) errors.push(new Error(`The option arrayPosition should be a number between 0 and ${clone.length - 1}`));
-			else clone[arrayPosition] = parsed;
+			if (arrayPosition >= array.length) errors.push(new Error(`The option arrayPosition should be a number between 0 and ${array.length - 1}`));
+			else array[arrayPosition] = parsed;
 		} else {
 			for (const value of Array.isArray(parsed) ? parsed : [parsed]) {
-				const index = clone.indexOf(value);
+				const index = array.indexOf(value);
 				if (action === 'auto') {
-					if (index === -1) clone.push(value);
-					else clone.splice(index, 1);
+					if (index === -1) array.push(value);
+					else array.splice(index, 1);
 				} else if (action === 'add') {
 					if (index !== -1) errors.push(new Error(`The value ${parsed} for the key ${piece.path} already exists.`));
-					else clone.push(parsed);
+					else array.push(parsed);
 				} else if (index === -1) {
 					errors.push(new Error(`The value ${parsed} for the key ${piece.path} does not exist.`));
 				} else {
-					clone.splice(index, 1);
+					array.splice(index, 1);
 				}
 			}
 		}
 
-		if (errors.length === lengthErrors) {
-			this._setValueByPath(piece, clone, true);
-			updated.push({ data: [piece.path, clone], piece });
-		}
+		updated.push({ data: [piece.path, array], piece });
 	}
 
 	/**
