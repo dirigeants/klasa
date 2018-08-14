@@ -25,7 +25,7 @@ message.guild.settings.update('userBlacklist', '272689325521502208', { action: '
 message.guild.settings.update('userBlacklist', '272689325521502208', { action: 'remove' });
 
 // Updating multiple keys
-message.guild.settings.update(['prefix', 'language'], ['k!', 'en-ES']);
+message.guild.settings.update([['prefix', 'k!'], ['language', 'es-ES']]);
 ```
 
 > **Note**: Some types require a Guild instance to work, for example, *channels*, *roles* and *members*.

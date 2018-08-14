@@ -470,8 +470,8 @@ declare module 'klasa' {
 		public update(key: ObjectLiteral, guild?: GuildResolvable, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
 		public update(key: string, value: any, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
 		public update(key: string, value: any, guild?: GuildResolvable, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
-		public update(key: string[], value: any[], options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
-		public update(key: string[], value: any[], guild?: GuildResolvable, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
+		public update(entries: Array<[string, any]>, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
+		public update(entries: Array<[string, any]>, guild?: GuildResolvable, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
 		public list(message: KlasaMessage, path: SchemaFolder | string): string;
 		public resolveString(message: KlasaMessage, path: SchemaPiece | string): string;
 
@@ -1234,7 +1234,7 @@ declare module 'klasa' {
 		public static makeObject<T = ObjectLiteral, S = ObjectLiteral>(path: string, value: any, obj?: ObjectLiteral): T & S;
 		public static mergeDefault<T = ObjectLiteral, S = ObjectLiteral>(objDefaults: T, objSource: S): T & S;
 		public static mergeObjects<T = ObjectLiteral, S = ObjectLiteral>(objTarget: T, objSource: S): T & S;
-		public static objectToTuples(obj: ObjectLiteral, entries?: { keys: string[], values: any[] }): [string[], any[]];
+		public static objectToTuples(obj: ObjectLiteral): Array<[string, any]>;
 		public static regExpEsc(str: string): string;
 		public static sleep<T = any>(delay: number, args?: T): Promise<T>;
 		public static toTitleCase(str: string): string;
@@ -1465,7 +1465,7 @@ declare module 'klasa' {
 	};
 
 	export type SettingsUpdateOptions = {
-		action?: 'add' | 'remove' | 'auto';
+		action?: 'add' | 'remove' | 'auto' | 'overwrite';
 		arrayPosition?: number;
 		avoidUnconfigurable?: boolean;
 		force?: boolean;

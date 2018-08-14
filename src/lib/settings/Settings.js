@@ -27,7 +27,7 @@ class Settings {
 	/**
 	 * @typedef {Object} SettingsUpdateOptions
 	 * @property {boolean} [avoidUnconfigurable=false] Whether the update should avoid unconfigurable keys
-	 * @property {('add'|'remove'|'auto')} [action='auto'] Whether the update (when using arrays) should add or remove,
+	 * @property {('add'|'remove'|'auto'|'overwrite')} [action='auto'] Whether the update (when using arrays) should add or remove,
 	 * leave it as 'auto' to add or remove depending on the existence of the key in the array
 	 * @property {number} [arrayPosition=null] The position of the array to replace
 	 * @property {boolean} [force=false] Whether this should skip the equality checks or not
@@ -221,8 +221,8 @@ class Settings {
 	/**
 	 * Update a value from an entry.
 	 * @since 0.5.0
-	 * @param {(string|Object)} keys The key to modify
-	 * @param {*} [values] The value to parse and save
+	 * @param {(string|Object)} key The key to modify
+	 * @param {*} [value] The value to parse and save
 	 * @param {GuildResolvable} [guild=null] A guild resolvable
 	 * @param {SettingsUpdateOptions} [options={}] The options for the update
 	 * @returns {SettingsUpdateResult}
@@ -244,38 +244,37 @@ class Settings {
 	 * Settings#update({ prefix: 'k!', language: 'es-ES' }, message.guild);
 	 *
 	 * // Updating multiple keys (with arrays):
-	 * Settings#update(['prefix', 'language'], ['k!', 'es-ES']);
+	 * Settings#update([['prefix', 'k!'], ['language', 'es-ES']]);
 	 */
-	update(keys, values, guild, options) {
+	update(key, value, guild, options) {
+		let entries;
 		// Overload update(object, GuildResolvable);
-		if (isObject(keys)) {
-			[guild, options] = [values, guild];
-			[keys, values] = objectToTuples(keys);
+		if (isObject(key)) {
+			[guild, options] = [value, guild];
+			entries = objectToTuples(key);
 		} else if (typeof keys === 'string') {
-			// Overload update(string|string[], any|any[], ...any[]);
-			keys = [keys];
-			values = [values];
-		} else if (!Array.isArray(keys)) {
-			return Promise.reject(new TypeError(`Invalid value. Expected object, string or Array<string>. Got: ${new Type(keys)}`));
+			// Overload update(string, any, ...any[]);
+			entries = [key, value];
+		} else if (!Array.isArray(key) || key.some(entry => !Array.isArray(entry) || entry.length !== 2)) {
+			return Promise.reject(new TypeError(`Invalid value. Expected object, string or Array<[string, any]>. Got: ${new Type(key)}`));
+		} else {
+			// Overload update(Array<[string, any]>)
+			entries = key;
 		}
 
 		// Overload update(string|string[], any|any[], SettingsUpdateOptions);
 		// Overload update(string|string[], any|any[], GuildResolvable, SettingsUpdateOptions);
 		// If the third argument is undefined and the second is an object literal, swap the variables.
-		if (typeof options === 'undefined' && guild && guild.constructor === Object) [guild, options] = [null, guild];
+		if (typeof options === 'undefined' && isObject(guild)) [guild, options] = [null, guild];
 		if (guild) guild = resolveGuild(this.client, guild);
 		if (!options) options = {};
 
-		// Do a length check on both keys and values before trying to update
-		if (keys.length !== values.length) return Promise.reject(new Error(`Expected an array of ${keys.length} entries. Got: ${values.length}.`));
-
-		const updateOptions = {
+		return this._update(entries, guild, {
 			avoidUnconfigurable: typeof options.avoidUnconfigurable === 'boolean' ? options.avoidUnconfigurable : false,
 			action: typeof options.action === 'string' ? options.action : 'auto',
 			arrayPosition: typeof options.arrayPosition === 'number' ? options.arrayPosition : null,
 			force: typeof options.force === 'boolean' ? options.force : false
-		};
-		return this._update(keys, values, guild, updateOptions);
+		});
 	}
 
 	/**
@@ -332,34 +331,33 @@ class Settings {
 	/**
 	 * Update this Settings instance
 	 * @since 0.5.0
-	 * @param {string[]} keys The keys to update
-	 * @param {Array<*>} values The values to update
+	 * @param {Array<Array<*>>} entries The entries to update
 	 * @param {?KlasaGuild} guild The KlasaGuild for context in SchemaPiece#parse
 	 * @param {SettingsUpdateOptions} options The parse options
 	 * @returns {SettingsUpdateResult}
 	 * @private
 	 */
-	async _update(keys, values, guild, options) {
+	async _update(entries, guild, options) {
 		const result = { errors: [], updated: [] };
 		const pathOptions = { piece: true, avoidUnconfigurable: options.avoidUnconfigurable, errors: false };
 		const promises = [];
-		for (let i = 0; i < keys.length; i++) {
-			const key = keys[i], value = values[i];
+		for (const [key, value] of entries) {
 			const path = this.gateway.getPath(key, pathOptions);
 			if (!path) {
-				result.errors.push(guild && guild.language ?
+				result.errors.push(guild ?
 					guild.language.get('COMMAND_CONF_GET_NOEXT', key) :
 					`The path ${key} does not exist in the current schema, or does not correspond to a piece.`);
 				continue;
 			}
 			if (!path.piece.array && Array.isArray(value)) {
-				result.errors.push(guild && guild.language ?
+				result.errors.push(guild ?
 					guild.language.get('SETTING_GATEWAY_KEY_NOT_ARRAY', key) :
 					`The path ${key} does not store multiple values.`);
 				continue;
 			}
 			promises.push(this._parse(value, guild, options, result, path));
 		}
+
 		if (promises.length) {
 			await Promise.all(promises);
 			await this._save(result);
@@ -386,8 +384,8 @@ class Settings {
 				piece.parse(value, guild).catch((error) => { result.errors.push(error); }));
 
 		if (typeof parsedID === 'undefined') return;
-		if (piece.array && !Array.isArray(value)) {
-			this._parseArraySingle(piece, route, parsedID, options, result);
+		if (piece.array) {
+			this._parseArray(piece, route, parsedID, options, result);
 		} else if (this._setValueByPath(piece, parsedID, options.force).updated) {
 			result.updated.push({ data: [piece.path, parsedID], piece });
 		}
@@ -417,29 +415,46 @@ class Settings {
 	 * @since 0.5.0
 	 * @param {SchemaPiece} piece The SchemaPiece pointer that parses this entry
 	 * @param {string[]} route The path bits for property accessment
-	 * @param {*} parsedID The parsed value
+	 * @param {*} parsed The parsed value
 	 * @param {SettingsUpdateOptions} options The parse options
 	 * @param {SettingsUpdateResult} result The updated result
 	 * @private
 	 */
-	_parseArraySingle(piece, route, parsedID, { action, arrayPosition }, { updated, errors }) {
+	_parseArray(piece, route, parsed, { force, action, arrayPosition }, { updated, errors }) {
+		if (action === 'overwrite') {
+			if (!Array.isArray(parsed)) parsed = [parsed];
+			if (this._setValueByPath(piece, parsed, force).updated) {
+				updated.push({ data: [piece.path, parsed], piece });
+			}
+			return;
+		}
 		const lengthErrors = errors.length;
 		const array = this.get(route);
+		const clone = array.slice();
 		if (typeof arrayPosition === 'number') {
-			if (arrayPosition >= array.length) errors.push(new Error(`The option arrayPosition should be a number between 0 and ${array.length - 1}`));
-			else array[arrayPosition] = parsedID;
+			if (arrayPosition >= clone.length) errors.push(new Error(`The option arrayPosition should be a number between 0 and ${clone.length - 1}`));
+			else clone[arrayPosition] = parsed;
 		} else {
-			if (action === 'auto') action = array.includes(parsedID) ? 'remove' : 'add';
-			if (action === 'add') {
-				if (array.includes(parsedID)) errors.push(new Error(`The value ${parsedID} for the key ${piece.path} already exists.`));
-				else array.push(parsedID);
-			} else {
-				const index = array.indexOf(parsedID);
-				if (index === -1) errors.push(new Error(`The value ${parsedID} for the key ${piece.path} does not exist.`));
-				else array.splice(index, 1);
+			for (const value of Array.isArray(parsed) ? parsed : [parsed]) {
+				const index = clone.indexOf(value);
+				if (action === 'auto') {
+					if (index === -1) clone.push(value);
+					else clone.splice(index, 1);
+				} else if (action === 'add') {
+					if (index !== -1) errors.push(new Error(`The value ${parsed} for the key ${piece.path} already exists.`));
+					else clone.push(parsed);
+				} else if (index === -1) {
+					errors.push(new Error(`The value ${parsed} for the key ${piece.path} does not exist.`));
+				} else {
+					clone.splice(index, 1);
+				}
 			}
 		}
-		if (errors.length === lengthErrors) updated.push({ data: [piece.path, array], piece });
+
+		if (errors.length === lengthErrors) {
+			this._setValueByPath(piece, clone, true);
+			updated.push({ data: [piece.path, clone], piece });
+		}
 	}
 
 	/**
