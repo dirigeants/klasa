@@ -492,11 +492,6 @@ declare module 'klasa' {
 		public get(input: string | number, create?: boolean): Settings;
 		public sync(input: string): Promise<Settings>;
 		public sync(input?: string[]): Promise<Gateway>;
-		public getPath(key?: string, options?: GatewayGetPathOptions): GatewayGetPathResult | null;
-		public toJSON(): GatewayJSON;
-		public toString(): string;
-
-		private _resolveGuild(guild: GuildResolvable): KlasaGuild;
 	}
 
 	export class QueryBuilder {
@@ -538,7 +533,10 @@ declare module 'klasa' {
 		public ready: boolean;
 		public schema: SchemaFolder | null;
 
+		public getPath(key?: string, options?: GatewayGetPathOptions): GatewayGetPathResult | null;
 		public init(): Promise<void>;
+		public toJSON(): GatewayJSON;
+		public toString(): string;
 	}
 
 	abstract class SchemaBase extends Map<string, SchemaPiece | SchemaFolder> {
@@ -1240,6 +1238,7 @@ declare module 'klasa' {
 		public static sleep<T = any>(delay: number, args?: T): Promise<T>;
 		public static toTitleCase(str: string): string;
 		public static tryParse<T = ObjectLiteral>(value: string): T | string;
+		public static resolveGuild(client: KlasaClient, guild: GuildResolvable): KlasaGuild;
 		private static initClean(client: KlasaClient): void;
 
 		public static titleCaseVariants: TitleCaseVariants;
