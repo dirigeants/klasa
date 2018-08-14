@@ -254,7 +254,7 @@ class Settings {
 			entries = objectToTuples(key);
 		} else if (typeof key === 'string') {
 			// Overload update(string, any, ...any[]);
-			entries = [key, value];
+			entries = [[key, value]];
 		} else if (!Array.isArray(key) || key.some(entry => !Array.isArray(entry) || entry.length !== 2)) {
 			return Promise.reject(new TypeError(`Invalid value. Expected object, string or Array<[string, any]>. Got: ${new Type(key)}`));
 		} else {
