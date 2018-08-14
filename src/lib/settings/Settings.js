@@ -440,7 +440,7 @@ class Settings {
 					else array.splice(index, 1);
 				} else if (action === 'add') {
 					if (index !== -1) errors.push(new Error(`The value ${parsed} for the key ${piece.path} already exists.`));
-					else array.push(parsed);
+					else array.push(...parsed);
 				} else if (index === -1) {
 					errors.push(new Error(`The value ${parsed} for the key ${piece.path} does not exist.`));
 				} else {
