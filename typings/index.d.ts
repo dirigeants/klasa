@@ -461,8 +461,7 @@ declare module 'klasa' {
 
 		public get<T = any>(path: string | string[]): T;
 		public clone(): Settings;
-		public sync(): Promise<this>;
-		public waitSync(): Promise<this>;
+		public sync(force?: boolean): Promise<this>;
 		public destroy(): Promise<this>;
 
 		public reset(key?: string | string[], options?: SettingsResetOptions): Promise<SettingsUpdateResult>;

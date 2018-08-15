@@ -227,6 +227,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Removed
 
+- [[#401](https://github.com/dirigeants/klasa/pull/401)] Removed `Settings#waitSync` in favor of `Settings#sync(?false);`. (kyranet)
 - [[#398](https://github.com/dirigeants/klasa/pull/398)] Removed the `Settings#update(keys: string[], values: any[])` overload. (kyranet)
 - [[#391](https://github.com/dirigeants/klasa/pull/391)] Removed `Util.getIdentifier()`. (kyranet)
 - [[#391](https://github.com/dirigeants/klasa/pull/391)] Removed Gateways' second caching layer. (kyranet)

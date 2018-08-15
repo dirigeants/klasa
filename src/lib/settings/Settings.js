@@ -122,23 +122,15 @@ class Settings {
 	}
 
 	/**
-	 * Wait for the sync
-	 * @since 0.5.0
-	 * @returns {Promise<this>}
-	 */
-	waitSync() {
-		return this.gateway.syncQueue.get(this.id) || Promise.resolve(this);
-	}
-
-	/**
 	 * Sync the data from the database with the cache.
 	 * @since 0.5.0
+	 * @param {boolean} [force=false] Whether the sync should download from the database
 	 * @returns {Promise<this>}
 	 */
-	sync() {
+	sync(force = false) {
 		// Await current sync status from the sync queue
 		const syncStatus = this.gateway.syncQueue.get(this.id);
-		if (syncStatus) return syncStatus;
+		if (!force || syncStatus) return syncStatus || Promise.resolve(this);
 
 		// If it's not currently synchronizing, create a new sync status for the sync queue
 		const sync = this.gateway.provider.get(this.gateway.type, this.id).then(data => {
@@ -399,7 +391,7 @@ class Settings {
 	 */
 	async _save({ updated }) {
 		if (!updated.length) return;
-		if (this._existsInDB === null) await this.sync();
+		if (this._existsInDB === null) await this.sync(true);
 		if (this._existsInDB === false) {
 			await this.gateway.provider.create(this.gateway.type, this.id);
 			this._existsInDB = true;
