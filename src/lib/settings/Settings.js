@@ -516,7 +516,7 @@ class Settings {
 	 * @returns {SettingsJSON}
 	 */
 	toJSON() {
-		return Object.assign({}, ...[...this.gateway.schema.keys()].map(key => ({ [key]: deepClone(this[key]) })));
+		return Object.assign({}, ...[...this.gateway.schema.keys()].map(key => ({ [key]: deepClone(this[key].id || this[key]) })));
 	}
 
 	/**
