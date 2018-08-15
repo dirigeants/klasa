@@ -233,8 +233,7 @@ class ScheduledTask {
 	 * @private
 	 */
 	static _generateID(client) {
-		i = i < 46656 ? i + 1 : 0;
-		return Date.now().toString(36) + (client.shard ? client.shard.id.toString(36) : '') + i.toString(36);
+		return Date.now().toString(36) + (client.shard ? client.shard.id.toString(36) : '');
 	}
 
 	/**
@@ -252,5 +251,3 @@ class ScheduledTask {
 }
 
 module.exports = ScheduledTask;
-
-let i = 0;
