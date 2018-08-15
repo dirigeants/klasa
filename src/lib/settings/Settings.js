@@ -255,7 +255,7 @@ class Settings {
 		} else if (typeof key === 'string') {
 			// Overload update(string, any, ...any[]);
 			entries = [[key, value]];
-		} else if (Array.isArray(key) && key.some(entry => Array.isArray(entry) && entry.length === 2)) {
+		} else if (Array.isArray(key) && key.every(entry => Array.isArray(entry) && entry.length === 2)) {
 			// Overload update(Array<[string, any]>)
 			entries = key;
 		} else {
