@@ -439,10 +439,10 @@ class Settings {
 					if (index === -1) array.push(value);
 					else array.splice(index, 1);
 				} else if (action === 'add') {
-					if (index !== -1) errors.push(new Error(`The value ${parsed} for the key ${piece.path} already exists.`));
+					if (index !== -1) errors.push(new Error(`The value ${value} for the key ${piece.path} already exists.`));
 					else array.push(value);
 				} else if (index === -1) {
-					errors.push(new Error(`The value ${parsed} for the key ${piece.path} does not exist.`));
+					errors.push(new Error(`The value ${value} for the key ${piece.path} does not exist.`));
 				} else {
 					array.splice(index, 1);
 				}
