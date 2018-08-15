@@ -11,10 +11,6 @@ const Type = require('../util/Type');
  */
 class SQLProvider extends Provider {
 
-	async removeValue() {
-		// Not used for SQL databases
-	}
-
 	/**
 	 * The addColumn method which inserts/creates a new table to the database.
 	 * @since 0.5.0
@@ -48,6 +44,17 @@ class SQLProvider extends Provider {
 	 * @abstract
 	 */
 	async updateColumn() {
+		throw new Error(`[PROVIDERS] ${this.path} | Missing method 'updateColumn' of ${this.constructor.name}`);
+	}
+
+	/**
+	 * The getColumns method which gets the name of all columns.
+	 * @since 0.5.0
+	 * @param {string} table The table to check against
+	 * @returns {string[]}
+	 * @abstract
+	 */
+	async getColumns() {
 		throw new Error(`[PROVIDERS] ${this.path} | Missing method 'updateColumn' of ${this.constructor.name}`);
 	}
 

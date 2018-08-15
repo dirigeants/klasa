@@ -8,10 +8,6 @@ module.exports = {
 	KlasaMessage: require('./lib/extensions/KlasaMessage'),
 	KlasaUser: require('./lib/extensions/KlasaUser'),
 
-	// lib/parsers
-	Resolver: require('./lib/parsers/Resolver'),
-	SettingResolver: require('./lib/parsers/SettingResolver'),
-
 	// lib/permissions
 	PermissionLevels: require('./lib/permissions/PermissionLevels'),
 
@@ -24,9 +20,11 @@ module.exports = {
 	Gateway: require('./lib/settings/Gateway'),
 	GatewayDriver: require('./lib/settings/GatewayDriver'),
 	GatewayStorage: require('./lib/settings/GatewayStorage'),
-	Schema: require('./lib/settings/Schema'),
-	SchemaFolder: require('./lib/settings/SchemaFolder'),
-	SchemaPiece: require('./lib/settings/SchemaPiece'),
+	Schema: require('./lib/settings/schema/Schema'),
+	SchemaFolder: require('./lib/settings/schema/SchemaFolder'),
+	SchemaPiece: require('./lib/settings/schema/SchemaPiece'),
+	SchemaTypes: require('./lib/settings/schema/types/base/SchemaTypes'),
+	SchemaType: require('./lib/settings/schema/types/base/SchemaType'),
 
 	// lib/structures/base
 	Piece: require('./lib/structures/base/Piece'),

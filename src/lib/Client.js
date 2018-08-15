@@ -8,9 +8,6 @@ const PermissionLevels = require('./permissions/PermissionLevels');
 // lib/schedule
 const Schedule = require('./schedule/Schedule');
 
-// lib/settings
-const GatewayDriver = require('./settings/GatewayDriver');
-
 // lib/structures
 const ArgumentStore = require('./structures/ArgumentStore');
 const CommandStore = require('./structures/CommandStore');
@@ -50,6 +47,7 @@ class KlasaClient extends Discord.Client {
 	 * @property {string[]} [disabledCorePieces=[]] An array of disabled core piece types, e.g., ['commands', 'arguments']
 	 * @property {KlasaGatewaysOptions} [gateways={}] The options for each built-in gateway
 	 * @property {string} [language='en-US'] The default language Klasa should opt-in for the commands
+	 * @property {boolean} [noPrefixDM=false] Whether the bot should allow prefixless messages in DMs
 	 * @property {string} [ownerID] The discord user id for the user the bot should respect as the owner (gotten from Discord api if not provided)
 	 * @property {PermissionLevels} [permissionLevels=KlasaClient.defaultPermissionLevels] The permission levels to use with this bot
 	 * @property {KlasaPieceDefaults} [pieceDefaults={}] Overrides the defaults for all pieces
@@ -126,6 +124,8 @@ class KlasaClient extends Discord.Client {
 		 * @name KlasaClient#options
 		 * @type {KlasaClientOptions}
 		 */
+
+		this.constructor.types.client = this;
 
 		/**
 		 * The directory where the user files are at
@@ -232,11 +232,29 @@ class KlasaClient extends Discord.Client {
 		 */
 		this.gateways = new GatewayDriver(this);
 
+		const { guilds, users, clientStorage } = this.options.gateways;
+		const guildSchema = 'schema' in guilds ? guilds.schema : this.constructor.defaultGuildSchema;
+		const userSchema = 'schema' in users ? users.schema : this.constructor.defaultUserSchema;
+		const clientSchema = 'schema' in clientStorage ? clientStorage.schema : this.constructor.defaultClientSchema;
+
+		// Update Guild Schema with Keys needed in Klasa
+		const prefixKey = guildSchema.get('prefix');
+		if (!prefixKey || prefixKey.default === null) {
+			guildSchema.add('prefix', 'string', { default: this.options.prefix });
+		}
+
+		const languageKey = guildSchema.get('language');
+		if (!languageKey || languageKey.default === null) {
+			guildSchema.add('language', 'language', { default: this.options.language });
+		}
+
+		guildSchema.add('disableNaturalPrefix', 'boolean', { configurable: Boolean(this.options.regexPrefix) });
+
 		// Register default gateways
 		this.gateways
-			.register('guilds', this.gateways.guildsSchema, this.options.gateways.guilds)
-			.register('users', this.gateways.usersSchema, this.options.gateways.users)
-			.register('clientStorage', this.gateways.clientStorageSchema, this.options.gateways.clientStorage);
+			.register('guilds', { ...guilds, schema: guildSchema })
+			.register('users', { ...users, schema: userSchema })
+			.register('clientStorage', { ...clientStorage, schema: clientSchema });
 
 		/**
 		 * The Settings instance that handles this client's settings
@@ -326,7 +344,7 @@ class KlasaClient extends Discord.Client {
 	 * @private
 	 */
 	validatePermissionLevels() {
-		const permissionLevels = this.options.permissionLevels || KlasaClient.defaultPermissionLevels;
+		const permissionLevels = this.options.permissionLevels || this.constructor.defaultPermissionLevels;
 		if (!(permissionLevels instanceof PermissionLevels)) throw new Error('permissionLevels must be an instance of the PermissionLevels class');
 		if (permissionLevels.isValid()) return permissionLevels;
 		throw new Error(permissionLevels.debug());
@@ -433,6 +451,15 @@ class KlasaClient extends Discord.Client {
 
 }
 
+module.exports = KlasaClient;
+
+// lib/settings
+const GatewayDriver = require('./settings/GatewayDriver');
+
+// lib/settings/schema
+const SchemaTypes = require('./settings/schema/types/base/SchemaTypes');
+const Schema = require('./settings/schema/Schema');
+
 /**
  * The plugin symbol to be used in external packages
  * @since 0.5.0
@@ -451,6 +478,47 @@ KlasaClient.defaultPermissionLevels = new PermissionLevels()
 	.add(7, (client, message) => message.guild && message.member === message.guild.owner, { fetch: true })
 	.add(9, (client, message) => message.author === client.owner, { break: true })
 	.add(10, (client, message) => message.author === client.owner);
+
+
+/**
+ * The SchemaTypes Storage for Klasa's settings
+ * @since 0.5.0
+ * @type {SchemaTypes}
+ */
+KlasaClient.types = new SchemaTypes(Object.entries(require('./settings/schema/types')));
+
+/**
+ * The default Guild Schema
+ * @since 0.5.0
+ * @type {Schema}
+ */
+KlasaClient.defaultGuildSchema = new Schema()
+	.add('prefix', 'string')
+	.add('language', 'language')
+	.add('disableNaturalPrefix', 'boolean')
+	.add('disabledCommands', 'command', {
+		array: true,
+		filter: (client, command, piece, language) => {
+			if (client.commands.get(command).guarded) throw language.get('COMMAND_CONF_GUARDED', command);
+		}
+	});
+
+/**
+ * The default User Schema
+ * @since 0.5.0
+ * @type {Schema}
+ */
+KlasaClient.defaultUserSchema = new Schema();
+
+/**
+ * The default Client Schema
+ * @since 0.5.0
+ * @type {Schema}
+ */
+KlasaClient.defaultClientSchema = new Schema()
+	.add('userBlacklist', 'user', { array: true, configurable: true })
+	.add('guildBlacklist', 'guild', { array: true, configurable: true })
+	.add('schedules', 'any', { array: true, configurable: false });
 
 /**
  * Emitted when Klasa is fully ready and initialized.
@@ -565,7 +633,7 @@ KlasaClient.defaultPermissionLevels = new PermissionLevels()
 
 /**
  * Emitted when {@link Settings#update} or {@link Settings#reset} is run.
- * @event KlasaClient#configUpdateEntry
+ * @event KlasaClient#settingsUpdateEntry
  * @since 0.5.0
  * @param {Settings} entry The patched Settings instance
  * @param {SettingsUpdateResultEntry[]} updated The keys that were updated
@@ -573,14 +641,14 @@ KlasaClient.defaultPermissionLevels = new PermissionLevels()
 
 /**
  * Emitted when {@link Settings#destroy} is run.
- * @event KlasaClient#configDeleteEntry
+ * @event KlasaClient#settingsDeleteEntry
  * @since 0.5.0
  * @param {Settings} entry The entry which got deleted
  */
 
 /**
  * Emitted when a new entry in the database has been created upon update.
- * @event KlasaClient#configCreateEntry
+ * @event KlasaClient#settingsCreateEntry
  * @since 0.5.0
  * @param {Settings} entry The entry which got created
  */
@@ -619,26 +687,3 @@ KlasaClient.defaultPermissionLevels = new PermissionLevels()
  * @since 0.4.0
  * @param {Piece} piece The piece that was disabled
  */
-
-/**
- * Emitted when a new key or folder is added to the Schema.
- * @event KlasaClient#schemaKeyAdd
- * @since 0.5.0
- * @param {(SchemaFolder|SchemaPiece)} key The key that was added
- */
-
-/**
- * Emitted when a key or folder has been removed from the Schema.
- * @event KlasaClient#schemaKeyRemove
- * @since 0.5.0
- * @param {(SchemaFolder|SchemaPiece)} key The key that was removed
- */
-
-/**
- * Emitted when a key's properties are modified.
- * @event KlasaClient#schemaKeyUpdate
- * @since 0.5.0
- * @param {SchemaPiece} key The piece that was updated
- */
-
-module.exports = KlasaClient;

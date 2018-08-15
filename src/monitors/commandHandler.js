@@ -4,6 +4,7 @@ module.exports = class extends Monitor {
 
 	constructor(...args) {
 		super(...args, { ignoreOthers: false });
+		this.noPrefix = { length: 0, regex: null };
 		this.prefixes = new Map();
 		this.prefixMention = null;
 		this.prefixMentionLength = null;
@@ -15,7 +16,7 @@ module.exports = class extends Monitor {
 		if (message.guild && !message.guild.me) await message.guild.members.fetch(this.client.user);
 		if (!message.channel.postable) return;
 		if (message.content === this.client.user.toString() || (message.guild && message.content === message.guild.me.toString())) {
-			message.sendLocale('PREFIX_REMINDER', [message.guildSettings.prefix]);
+			await message.sendLocale('PREFIX_REMINDER', [message.guildSettings.prefix || undefined]);
 			return;
 		}
 
@@ -44,8 +45,9 @@ module.exports = class extends Monitor {
 	}
 
 	parseCommand(message) {
-		const { regex: prefix, length: prefixLength } = this.getPrefix(message);
-		if (!prefix) return { command: false };
+		const result = this.getPrefix(message);
+		if (!result) return { command: false };
+		const { regex: prefix, length: prefixLength } = result;
 		return {
 			command: message.content.slice(prefixLength).trim().split(' ')[0].toLowerCase(),
 			prefix,
@@ -55,21 +57,21 @@ module.exports = class extends Monitor {
 
 	getPrefix(message) {
 		if (this.prefixMention.test(message.content)) return { length: this.nick.test(message.content) ? this.prefixMentionLength + 1 : this.prefixMentionLength, regex: this.prefixMention };
-		if (message.guildSettings.disableNaturalPrefix !== true && this.client.options.regexPrefix) {
+		if (!message.guildSettings.disableNaturalPrefix && this.client.options.regexPrefix) {
 			const results = this.client.options.regexPrefix.exec(message.content);
 			if (results) return { length: results[0].length, regex: this.client.options.regexPrefix };
 		}
-		const prefix = message.guildSettings.prefix || this.client.options.prefix;
+		const { prefix } = message.guildSettings;
 		if (Array.isArray(prefix)) {
-			for (let i = prefix.length - 1; i >= 0; i--) {
-				const testingPrefix = this.prefixes.get(prefix[i]) || this.generateNewPrefix(prefix[i]);
+			for (const prf of prefix) {
+				const testingPrefix = this.prefixes.get(prf) || this.generateNewPrefix(prf);
 				if (testingPrefix.regex.test(message.content)) return testingPrefix;
 			}
 		} else if (prefix) {
 			const testingPrefix = this.prefixes.get(prefix) || this.generateNewPrefix(prefix);
 			if (testingPrefix.regex.test(message.content)) return testingPrefix;
 		}
-		return false;
+		return this.client.options.noPrefixDM && message.channel.type === 'dm' ? this.noPrefix : false;
 	}
 
 	generateNewPrefix(prefix) {

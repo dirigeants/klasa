@@ -1,6 +1,6 @@
-const { isObject, deepClone, toTitleCase, arraysStrictEquals, getDeepTypeName, objectToTuples } = require('../util/util');
-const SchemaFolder = require('./SchemaFolder');
-const SchemaPiece = require('./SchemaPiece');
+const { isObject, deepClone, toTitleCase, arraysStrictEquals, objectToTuples, resolveGuild } = require('../util/util');
+const Type = require('../util/Type');
+const SchemaPiece = require('./schema/SchemaPiece');
 
 /**
  * <warning>Creating your own Settings instances is often discouraged and unneeded. SettingsGateway handles them internally for you.</warning>
@@ -27,7 +27,7 @@ class Settings {
 	/**
 	 * @typedef {Object} SettingsUpdateOptions
 	 * @property {boolean} [avoidUnconfigurable=false] Whether the update should avoid unconfigurable keys
-	 * @property {('add'|'remove'|'auto')} [action='auto'] Whether the update (when using arrays) should add or remove,
+	 * @property {('add'|'remove'|'auto'|'overwrite')} [action='auto'] Whether the update (when using arrays) should add or remove,
 	 * leave it as 'auto' to add or remove depending on the existence of the key in the array
 	 * @property {number} [arrayPosition=null] The position of the array to replace
 	 * @property {boolean} [force=false] Whether this should skip the equality checks or not
@@ -81,8 +81,8 @@ class Settings {
 		 */
 		Object.defineProperty(this, '_existsInDB', { value: null, writable: true });
 
-		const { defaults } = this.gateway;
-		for (const key of this.gateway.schema.keys()) this[key] = defaults[key];
+		const { defaults, schema } = this.gateway;
+		for (const key of schema.keys()) this[key] = defaults[key];
 		this._patch(data);
 	}
 
@@ -96,20 +96,18 @@ class Settings {
 	}
 
 	/**
-	 * Get a value from this instance. Accepts nested objects separating by dot.
+	 * Get a value from the configuration. Accepts nested objects separating by dot.
 	 * @since 0.5.0
 	 * @param {string|string[]} path The path of the key's value to get from this instance
 	 * @returns {*}
 	 */
 	get(path) {
 		const route = typeof path === 'string' ? path.split('.') : path;
+		const piece = this.gateway.schema.get(route);
+		if (!piece) return undefined;
+
 		let refThis = this; // eslint-disable-line consistent-this
-		let refSchema = this.gateway.schema;
-		for (const key of route) {
-			if (refSchema.type !== 'Folder' || !refSchema.has(key)) return undefined;
-			refThis = refThis[key];
-			refSchema = refSchema[key];
-		}
+		for (const key of route) refThis = refThis[key];
 
 		return refThis;
 	}
@@ -167,7 +165,7 @@ class Settings {
 	async destroy() {
 		if (this._existsInDB) {
 			await this.gateway.provider.delete(this.gateway.type, this.id);
-			if (this.client.listenerCount('configDeleteEntry')) this.client.emit('configDeleteEntry', this);
+			this.client.emit('settingsDeleteEntry', this);
 		}
 		this.gateway.cache.delete(this.id);
 		return this;
@@ -200,7 +198,7 @@ class Settings {
 		if (!this._existsInDB) return { errors: [], updated: [] };
 
 		if (typeof keys === 'string') keys = [keys];
-		else if (typeof keys === 'undefined') keys = [...this.gateway.schema.values(true)].map(piece => piece.path);
+		else if (typeof keys === 'undefined') keys = [...this.gateway.schema.values()].map(piece => piece.path);
 		if (Array.isArray(keys)) {
 			const result = { errors: [], updated: [] };
 			for (const key of keys) {
@@ -217,14 +215,14 @@ class Settings {
 			await this._save(result);
 			return result;
 		}
-		throw new TypeError(`Invalid value. Expected string or Array<string>. Got: ${getDeepTypeName(keys)}`);
+		throw new TypeError(`Invalid value. Expected string or Array<string>. Got: ${new Type(keys)}`);
 	}
 
 	/**
 	 * Update a value from an entry.
 	 * @since 0.5.0
-	 * @param {(string|Object)} keys The key to modify
-	 * @param {*} [values] The value to parse and save
+	 * @param {(string|Object)} key The key to modify
+	 * @param {*} [value] The value to parse and save
 	 * @param {GuildResolvable} [guild=null] A guild resolvable
 	 * @param {SettingsUpdateOptions} [options={}] The options for the update
 	 * @returns {SettingsUpdateResult}
@@ -246,49 +244,48 @@ class Settings {
 	 * Settings#update({ prefix: 'k!', language: 'es-ES' }, message.guild);
 	 *
 	 * // Updating multiple keys (with arrays):
-	 * Settings#update(['prefix', 'language'], ['k!', 'es-ES']);
+	 * Settings#update([['prefix', 'k!'], ['language', 'es-ES']]);
 	 */
-	update(keys, values, guild, options) {
+	update(key, value, guild, options) {
+		let entries;
 		// Overload update(object, GuildResolvable);
-		if (isObject(keys)) {
-			[guild, options] = [values, guild];
-			[keys, values] = objectToTuples(keys);
-		} else if (typeof keys === 'string') {
-			// Overload update(string|string[], any|any[], ...any[]);
-			keys = [keys];
-			values = [values];
-		} else if (!Array.isArray(keys)) {
-			return Promise.reject(new TypeError(`Invalid value. Expected object, string or Array<string>. Got: ${getDeepTypeName(keys)}`));
+		if (isObject(key)) {
+			[guild, options] = [value, guild];
+			entries = objectToTuples(key);
+		} else if (typeof key === 'string') {
+			// Overload update(string, any, ...any[]);
+			entries = [[key, value]];
+		} else if (Array.isArray(key) && key.every(entry => Array.isArray(entry) && entry.length === 2)) {
+			// Overload update(Array<[string, any]>)
+			entries = key;
+		} else {
+			return Promise.reject(new TypeError(`Invalid value. Expected object, string or Array<[string, any]>. Got: ${new Type(key)}`));
 		}
 
 		// Overload update(string|string[], any|any[], SettingsUpdateOptions);
 		// Overload update(string|string[], any|any[], GuildResolvable, SettingsUpdateOptions);
 		// If the third argument is undefined and the second is an object literal, swap the variables.
-		if (typeof options === 'undefined' && guild && guild.constructor === Object) [guild, options] = [null, guild];
-		if (guild) guild = this.gateway._resolveGuild(guild);
+		if (typeof options === 'undefined' && isObject(guild)) [guild, options] = [null, guild];
+		if (guild) guild = resolveGuild(this.client, guild);
 		if (!options) options = {};
 
-		// Do a length check on both keys and values before trying to update
-		if (keys.length !== values.length) return Promise.reject(new Error(`Expected an array of ${keys.length} entries. Got: ${values.length}.`));
-
-		const updateOptions = {
+		return this._update(entries, guild, {
 			avoidUnconfigurable: typeof options.avoidUnconfigurable === 'boolean' ? options.avoidUnconfigurable : false,
 			action: typeof options.action === 'string' ? options.action : 'auto',
 			arrayPosition: typeof options.arrayPosition === 'number' ? options.arrayPosition : null,
 			force: typeof options.force === 'boolean' ? options.force : false
-		};
-		return this._update(keys, values, guild, updateOptions);
+		});
 	}
 
 	/**
 	 * Get a list.
 	 * @since 0.5.0
 	 * @param {KlasaMessage} message The Message instance
-	 * @param {(SchemaFolder|string)} path The path to resolve
+	 * @param {(Schema|string)} path The path to resolve
 	 * @returns {string}
 	 */
 	list(message, path) {
-		const folder = path instanceof SchemaFolder ? path : this.gateway.getPath(path, { piece: false }).piece;
+		const folder = typeof path === 'string' ? this.gateway.getPath(path, { piece: false }).piece : path;
 		const array = [];
 		const folders = [];
 		const keys = {};
@@ -308,7 +305,7 @@ class Settings {
 		if (keysTypes.length) {
 			for (const keyType of keysTypes.sort()) {
 				array.push(`= ${toTitleCase(keyType)}s =`,
-					...keys[keyType].sort().map(key => `${key.padEnd(longest)} :: ${this.resolveString(message, folder[key])}`),
+					...keys[keyType].sort().map(key => `${key.padEnd(longest)} :: ${this.resolveString(message, folder.get(key))}`),
 					'');
 			}
 		}
@@ -327,64 +324,40 @@ class Settings {
 		const piece = path instanceof SchemaPiece ? path : this.gateway.getPath(path, { piece: true }).piece;
 		const value = this.get(piece.path);
 		if (value === null) return 'Not set';
-		if (piece.array && !value.length) return 'None';
-
-		let resolver;
-		switch (piece.type) {
-			case 'Folder': resolver = () => 'Folder';
-				break;
-			case 'user': resolver = (val) => (this.client.users.get(val) || { username: (val && val.username) || val }).username;
-				break;
-			case 'categorychannel':
-			case 'textchannel':
-			case 'voicechannel':
-			case 'channel': resolver = (val) => (message.guild.channels.get(val) || { name: (val && val.name) || val }).name;
-				break;
-			case 'role': resolver = (val) => (message.guild.roles.get(val) || { name: (val && val.name) || val }).name;
-				break;
-			case 'guild': resolver = (val) => (val && val.name) || val;
-				break;
-			case 'boolean': resolver = (val) => val ? 'Enabled' : 'Disabled';
-				break;
-			default:
-				resolver = (val) => val;
-		}
-
-		if (piece.array) return `[ ${value.map(resolver).join(' | ')} ]`;
-		return resolver(value);
+		if (piece.array) return value.length ? `[ ${value.map(val => piece.resolver.resolveString(val, message)).join(' | ')} ]` : 'None';
+		return piece.resolver.resolveString(value, message);
 	}
 
 	/**
 	 * Update this Settings instance
 	 * @since 0.5.0
-	 * @param {string[]} keys The keys to update
-	 * @param {Array<*>} values The values to update
+	 * @param {Array<Array<*>>} entries The entries to update
 	 * @param {?KlasaGuild} guild The KlasaGuild for context in SchemaPiece#parse
 	 * @param {SettingsUpdateOptions} options The parse options
 	 * @returns {SettingsUpdateResult}
 	 * @private
 	 */
-	async _update(keys, values, guild, options) {
+	async _update(entries, guild, options) {
 		const result = { errors: [], updated: [] };
 		const pathOptions = { piece: true, avoidUnconfigurable: options.avoidUnconfigurable, errors: false };
 		const promises = [];
-		for (let i = 0; i < keys.length; i++) {
-			const key = keys[i], value = values[i];
+		for (const [key, value] of entries) {
 			const path = this.gateway.getPath(key, pathOptions);
 			if (!path) {
-				result.errors.push(guild && guild.language ?
+				result.errors.push(guild ?
 					guild.language.get('COMMAND_CONF_GET_NOEXT', key) :
 					`The path ${key} does not exist in the current schema, or does not correspond to a piece.`);
 				continue;
 			}
 			if (!path.piece.array && Array.isArray(value)) {
-				result.errors.push(guild && guild.language ?
+				result.errors.push(guild ?
 					guild.language.get('SETTING_GATEWAY_KEY_NOT_ARRAY', key) :
 					`The path ${key} does not store multiple values.`);
 				continue;
 			}
 			promises.push(this._parse(value, guild, options, result, path));
 		}
+
 		if (promises.length) {
 			await Promise.all(promises);
 			await this._save(result);
@@ -411,8 +384,8 @@ class Settings {
 				piece.parse(value, guild).catch((error) => { result.errors.push(error); }));
 
 		if (typeof parsedID === 'undefined') return;
-		if (piece.array && !Array.isArray(value)) {
-			this._parseArraySingle(piece, route, parsedID, options, result);
+		if (piece.array) {
+			this._parseArray(piece, route, parsedID, options, result);
 		} else if (this._setValueByPath(piece, parsedID, options.force).updated) {
 			result.updated.push({ data: [piece.path, parsedID], piece });
 		}
@@ -430,41 +403,53 @@ class Settings {
 		if (this._existsInDB === false) {
 			await this.gateway.provider.create(this.gateway.type, this.id);
 			this._existsInDB = true;
-			if (this.client.listenerCount('configCreateEntry')) this.client.emit('configCreateEntry', this);
+			this.client.emit('settingsCreateEntry', this);
 		}
 
 		await this.gateway.provider.update(this.gateway.type, this.id, updated);
-		if (this.client.listenerCount('configUpdateEntry')) this.client.emit('configUpdateEntry', this, updated);
+		this.client.emit('settingsUpdateEntry', this, updated);
 	}
 
 	/**
 	 * Parse a single value for an array
 	 * @since 0.5.0
 	 * @param {SchemaPiece} piece The SchemaPiece pointer that parses this entry
-	 * @param {string[]} route The path bits for property accessment
-	 * @param {*} parsedID The parsed value
+	 * @param {string[]} route The path bits for property accesses
+	 * @param {*} parsed The parsed value
 	 * @param {SettingsUpdateOptions} options The parse options
 	 * @param {SettingsUpdateResult} result The updated result
 	 * @private
 	 */
-	_parseArraySingle(piece, route, parsedID, { action, arrayPosition }, { updated, errors }) {
-		const lengthErrors = errors.length;
+	_parseArray(piece, route, parsed, { force, action, arrayPosition }, { updated, errors }) {
+		if (action === 'overwrite') {
+			if (!Array.isArray(parsed)) parsed = [parsed];
+			if (this._setValueByPath(piece, parsed, force).updated) {
+				updated.push({ data: [piece.path, parsed], piece });
+			}
+			return;
+		}
 		const array = this.get(route);
 		if (typeof arrayPosition === 'number') {
 			if (arrayPosition >= array.length) errors.push(new Error(`The option arrayPosition should be a number between 0 and ${array.length - 1}`));
-			else array[arrayPosition] = parsedID;
+			else array[arrayPosition] = parsed;
 		} else {
-			if (action === 'auto') action = array.includes(parsedID) ? 'remove' : 'add';
-			if (action === 'add') {
-				if (array.includes(parsedID)) errors.push(new Error(`The value ${parsedID} for the key ${piece.path} already exists.`));
-				else array.push(parsedID);
-			} else {
-				const index = array.indexOf(parsedID);
-				if (index === -1) errors.push(new Error(`The value ${parsedID} for the key ${piece.path} does not exist.`));
-				else array.splice(index, 1);
+			for (const value of Array.isArray(parsed) ? parsed : [parsed]) {
+				const index = array.indexOf(value);
+				if (action === 'auto') {
+					if (index === -1) array.push(value);
+					else array.splice(index, 1);
+				} else if (action === 'add') {
+					if (index !== -1) errors.push(new Error(`The value ${value} for the key ${piece.path} already exists.`));
+					else array.push(value);
+				} else if (index === -1) {
+					errors.push(new Error(`The value ${value} for the key ${piece.path} does not exist.`));
+				} else {
+					array.splice(index, 1);
+				}
 			}
 		}
-		if (errors.length === lengthErrors) updated.push({ data: [piece.path, array], piece });
+
+		updated.push({ data: [piece.path, array], piece });
 	}
 
 	/**
@@ -514,12 +499,12 @@ class Settings {
 	 * @since 0.5.0
 	 * @param {Object} data The data to patch
 	 * @param {Object} [instance=this] The reference of this instance for recursion
-	 * @param {SchemaFolder} [schema=this.gateway.schema] The SchemaFolder that sets the schema for this settings' gateway
+	 * @param {Schema} [schema=this.gateway.schema] The Schema that sets the schema for this configuration's gateway
 	 * @private
 	 */
 	_patch(data, instance = this, schema = this.gateway.schema) {
 		if (typeof data !== 'object' || data === null) return;
-		for (const [key, piece] of schema) {
+		for (const [key, piece] of schema.entries()) {
 			const value = data[key];
 			if (value === undefined) continue;
 			if (value === null) instance[key] = deepClone(piece.defaults);

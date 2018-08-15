@@ -1,6 +1,5 @@
-const SettingResolver = require('../parsers/SettingResolver');
 const Gateway = require('./Gateway');
-const util = require('../util/util');
+const Schema = require('./schema/Schema');
 
 /**
  * <warning>GatewayDriver is a singleton, use {@link KlasaClient#gateways} instead.</warning>
@@ -10,7 +9,8 @@ class GatewayDriver {
 
 	/**
 	 * @typedef {Object} GatewayDriverRegisterOptions
-	 * @property {string} [provider] The name of the provider to use
+	 * @property {string} [provider = this.client.options.providers.default] The name of the provider to use
+	 * @property {Schema} [schema] The schema to use for this gateway.
 	 * @property {string|string[]|true} [syncArg] The sync args to pass to Gateway#sync during Gateway init
 	 */
 
@@ -56,18 +56,6 @@ class GatewayDriver {
 		Object.defineProperty(this, '_queue', { value: [] });
 
 		/**
-		 * The resolver instance this Gateway uses to parse the data.
-		 * @type {SettingResolver}
-		 */
-		this.resolver = new SettingResolver(client);
-
-		/**
-		 * All the types accepted for the Gateway.
-		 * @type {?Set<string>}
-		 */
-		this.types = null;
-
-		/**
 		 * All the gateways added
 		 * @type {Set<string>}
 		 */
@@ -92,112 +80,24 @@ class GatewayDriver {
 		this.clientStorage = null;
 	}
 
-	/**
-	 * The data schema Klasa uses for guild settings.
-	 * @since 0.5.0
-	 * @readonly
-	 * @type {GatewayDriverGuildsSchema}
-	 */
-	get guildsSchema() {
-		return {
-			prefix: {
-				type: 'string',
-				default: this.client.options.prefix,
-				min: null,
-				max: 10,
-				array: Array.isArray(this.client.options.prefix),
-				configurable: true
-			},
-			language: {
-				type: 'language',
-				default: this.client.options.language,
-				min: null,
-				max: null,
-				array: false,
-				configurable: true
-			},
-			disableNaturalPrefix: {
-				type: 'boolean',
-				default: false,
-				min: null,
-				max: null,
-				array: false,
-				configurable: Boolean(this.client.options.regexPrefix)
-			},
-			disabledCommands: {
-				type: 'command',
-				default: [],
-				min: null,
-				max: null,
-				array: true,
-				configurable: true
-			}
-		};
-	}
-
-	/**
-	 * The data schema Klasa uses for user settings.
-	 * @since 0.5.0
-	 * @readonly
-	 * @type {GatewayDriverUsersSchema}
-	 */
-	get usersSchema() {
-		return {};
-	}
-
-	/**
-	 * The data schema Klasa uses for client-wide settings.
-	 * @since 0.5.0
-	 * @readonly
-	 * @type {GatewayDriverClientStorageSchema}
-	 */
-	get clientStorageSchema() {
-		return {
-			userBlacklist: {
-				type: 'user',
-				default: [],
-				min: null,
-				max: null,
-				array: true,
-				configurable: true
-			},
-			guildBlacklist: {
-				type: 'string',
-				default: [],
-				min: 17,
-				max: 19,
-				array: true,
-				configurable: true
-			},
-			schedules: {
-				type: 'any',
-				default: [],
-				min: null,
-				max: null,
-				array: true,
-				configurable: false
-			}
-		};
-	}
 
 	/**
 	 * Registers a new Gateway.
 	 * @since 0.5.0
 	 * @param {string} name The name for the new gateway
-	 * @param {Object} [defaultSchema = {}] The schema for use in this gateway
 	 * @param {GatewayDriverRegisterOptions} [options = {}] The options for the new gateway
 	 * @returns {this}
 	 * @chainable
 	 */
-	register(name, defaultSchema = {}, { provider = this.client.options.providers.default } = {}) {
+	register(name, { provider = this.client.options.providers.default, schema = new Schema() } = {}) {
 		if (typeof name !== 'string') throw new TypeError('You must pass a name for your new gateway and it must be a string.');
-		if (!util.isObject(defaultSchema)) throw new TypeError('Schema must be a valid object or left undefined for an empty object.');
+		if (!(schema instanceof Schema)) throw new TypeError('Schema must be a valid Schema instance.');
 		if (this.name !== undefined && this.name !== null) throw new Error(`The key '${name}' is either taken by another Gateway or reserved for GatewayDriver's functionality.`);
 
-		const gateway = new Gateway(this, name, { provider });
+		const gateway = new Gateway(this, name, schema, provider);
 		this.keys.add(name);
 		this[name] = gateway;
-		this._queue.push(gateway.init.bind(gateway, defaultSchema));
+		this._queue.push(gateway.init.bind(gateway));
 		if (!(name in this.client.options.gateways)) this.client.options.gateways[name] = {};
 		return this;
 	}
@@ -207,7 +107,6 @@ class GatewayDriver {
 	 * @since 0.5.0
 	 */
 	async init() {
-		this.types = new Set(Object.getOwnPropertyNames(SettingResolver.prototype).slice(1));
 		await Promise.all([...this._queue].map(fn => fn()));
 		this._queue.length = 0;
 	}
@@ -244,7 +143,6 @@ class GatewayDriver {
 	 */
 	toJSON() {
 		return {
-			types: [...this.types],
 			keys: [...this.keys],
 			ready: this.ready,
 			...Object.assign({}, [...this].map(([key, value]) => ({ [key]: value.toJSON() })))
