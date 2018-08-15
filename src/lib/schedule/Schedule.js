@@ -56,18 +56,6 @@ class Schedule {
 	 * @since 0.5.0
 	 */
 	async init() {
-		const { schema } = this.client.gateways.clientStorage;
-		if (!schema.has('schedules')) {
-			await schema.add('schedules', {
-				type: 'any',
-				default: [],
-				min: null,
-				max: null,
-				array: true,
-				configurable: false
-			});
-		}
-
 		const tasks = this._tasks;
 		if (!tasks || !Array.isArray(tasks)) return;
 
@@ -150,7 +138,7 @@ class Schedule {
 	 */
 	async create(taskName, time, options) {
 		const task = await this._add(taskName, time, options);
-		if (!task) return undefined;
+		if (!task) return null;
 		await this.client.settings.update('schedules', task.toJSON(), { action: 'add' });
 		return task;
 	}
@@ -194,10 +182,12 @@ class Schedule {
 	 */
 	async _add(taskName, time, options) {
 		const task = new ScheduledTask(this.client, taskName, time, options);
+
+		// If the task were due of time before the bot's intialization, delete if not recurring, else update for next period
 		if (!task.catchUp && task.time < Date.now()) {
 			if (!task.recurring) {
 				await task.delete();
-				return undefined;
+				return null;
 			}
 			await task.update({ time: task.recurring });
 		}
@@ -252,7 +242,7 @@ class Schedule {
 	 */
 
 	*[Symbol.iterator]() {
-		for (let i = 0; i < this.tasks.length; i++) yield this.tasks[i];
+		yield* this.tasks;
 	}
 
 }
