@@ -255,11 +255,11 @@ class Settings {
 		} else if (typeof key === 'string') {
 			// Overload update(string, any, ...any[]);
 			entries = [[key, value]];
-		} else if (!Array.isArray(key) || key.some(entry => !Array.isArray(entry) || entry.length !== 2)) {
-			return Promise.reject(new TypeError(`Invalid value. Expected object, string or Array<[string, any]>. Got: ${new Type(key)}`));
-		} else {
+		} else if (Array.isArray(key) && key.some(entry => Array.isArray(entry) && entry.length === 2)) {
 			// Overload update(Array<[string, any]>)
 			entries = key;
+		} else {
+			return Promise.reject(new TypeError(`Invalid value. Expected object, string or Array<[string, any]>. Got: ${new Type(key)}`));
 		}
 
 		// Overload update(string|string[], any|any[], SettingsUpdateOptions);
@@ -440,7 +440,7 @@ class Settings {
 					else array.splice(index, 1);
 				} else if (action === 'add') {
 					if (index !== -1) errors.push(new Error(`The value ${parsed} for the key ${piece.path} already exists.`));
-					else array.push(...parsed);
+					else array.push(value);
 				} else if (index === -1) {
 					errors.push(new Error(`The value ${parsed} for the key ${piece.path} does not exist.`));
 				} else {
