@@ -119,8 +119,9 @@ class Base extends Map {
 	 * @readonly
 	 * @returns {boolean}
 	 */
-	shouldResolve() {
-		return [...this.values()].some(piece => piece.type === 'Folder' ? piece.shouldResolve() : piece.resolve);
+	get shouldResolve() {
+		for (const piece of this.values(true)) if (piece.resolve) return true;
+		return false;
 	}
 
 	/**

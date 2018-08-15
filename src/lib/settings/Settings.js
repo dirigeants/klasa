@@ -136,7 +136,7 @@ class Settings {
 		const sync = this.gateway.provider.get(this.gateway.type, this.id).then(async data => {
 			if (data) {
 				if (!this._existsInDB) this._existsInDB = true;
-				if (this.gateway.schema.shouldResolve()) {
+				if (this.gateway.schema.shouldResolve) {
 					const resolved = await this.gateway.schema.resolve(data);
 					this._patch(resolved);
 				} else {
