@@ -71,7 +71,7 @@ class ScheduledTask {
 		/**
 		 * The Date when this scheduled task ends
 		 * @since 0.5.0
-		 * @type {?Date}
+		 * @type {Date}
 		 */
 		this.time = 'time' in options ? new Date(options.time) : _time;
 
@@ -233,7 +233,8 @@ class ScheduledTask {
 	 * @private
 	 */
 	static _generateID(client) {
-		return Date.now().toString(36) + (client.shard ? client.shard.id.toString(36) : '') + String.fromCharCode((1 % 26) + 97);
+		i = i < 46656 ? i + 1 : 0;
+		return Date.now().toString(36) + (client.shard ? client.shard.id.toString(36) : '') + i.toString(36);
 	}
 
 	/**
@@ -245,8 +246,11 @@ class ScheduledTask {
 	static _validate(st) {
 		if (!st.task) throw new Error('invalid task');
 		if (!st.time) throw new Error('time or repeat option required');
+		if (Number.isNaN(st.time.getTime())) throw new Error('invalid time passed');
 	}
 
 }
 
 module.exports = ScheduledTask;
+
+let i = 0;
