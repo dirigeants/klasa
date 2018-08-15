@@ -384,7 +384,7 @@ class Settings {
 		if (piece.array) {
 			this._parseArray(piece, route, parsedID, options, result);
 		} else if (this._setValueByPath(piece, parsedID, options.force).updated) {
-			result.updated.push({ data: [piece.path, parsedID.id || parsedID], piece });
+			result.updated.push({ data: [piece.path, parsedID.id || parsedID.name || parsedID], piece });
 		}
 	}
 
@@ -421,7 +421,7 @@ class Settings {
 		if (action === 'overwrite') {
 			if (!Array.isArray(parsed)) parsed = [parsed];
 			if (this._setValueByPath(piece, parsed, force).updated) {
-				updated.push({ data: [piece.path, parsed.id || parsed], piece });
+				updated.push({ data: [piece.path, parsed.id || parsed.name || parsed], piece });
 			}
 			return;
 		}
@@ -431,7 +431,7 @@ class Settings {
 			else array[arrayPosition] = parsed;
 		} else {
 			for (let value of Array.isArray(parsed) ? parsed : [parsed]) {
-				value = piece.resolve ? value : value.id;
+				value = piece.resolve ? value : value.id || value.name || value;
 				const index = array.indexOf(value);
 				if (action === 'auto') {
 					if (index === -1) array.push(value);
@@ -447,8 +447,8 @@ class Settings {
 			}
 		}
 
-		// Flatten array down to id where possible so that database only stores the array here
-		updated.push({ data: [piece.path, array.map(value => value.id || value)], piece });
+		// Flatten array down to id/name where possible so that database only stores the array here
+		updated.push({ data: [piece.path, array.map(value => value.id || value.name || value)], piece });
 	}
 
 	/**
@@ -489,7 +489,7 @@ class Settings {
 		// If both parts are equal, don't update
 		if (!force && (piece.array ? arraysStrictEquals(old, parsedID) : old === parsedID)) return { updated: false, old };
 
-		cache[lastKey] = piece.resolve ? parsedID : parsedID.id;
+		cache[lastKey] = piece.resolve ? parsedID : parsedID.id || parsedID.name;
 		return { updated: true, old };
 	}
 
@@ -518,7 +518,7 @@ class Settings {
 	 * @returns {SettingsJSON}
 	 */
 	toJSON() {
-		return Object.assign({}, ...[...this.gateway.schema.keys()].map(key => ({ [key]: deepClone(this[key].id || this[key]) })));
+		return Object.assign({}, ...[...this.gateway.schema.keys()].map(key => ({ [key]: deepClone(this[key].id || this[key].name || this[key]) })));
 	}
 
 	/**
