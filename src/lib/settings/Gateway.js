@@ -72,7 +72,7 @@ class Gateway extends GatewayStorage {
 		if (entry) return entry.settings;
 		if (create) {
 			const settings = new this.Settings(this, { id });
-			if (this._synced && this.schema.size) settings.sync().catch(err => this.client.emit('error', err));
+			if (this._synced && this.schema.size) settings.sync(true).catch(err => this.client.emit('error', err));
 			return settings;
 		}
 		return null;
@@ -105,7 +105,7 @@ class Gateway extends GatewayStorage {
 		}
 
 		const cache = this.get((input && input.id) || input);
-		return cache ? cache.sync() : null;
+		return cache ? cache.sync(true) : null;
 	}
 
 }
