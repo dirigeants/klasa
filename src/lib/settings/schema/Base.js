@@ -117,7 +117,7 @@ class Base extends Map {
 	 * Whether or not this SchemaFolder or Schema instance should be resolved
 	 * @since 0.5.0
 	 * @readonly
-	 * @returns {boolean}
+	 * @type {boolean}
 	 */
 	get shouldResolve() {
 		for (const piece of this.values(true)) if (piece.resolve) return true;
