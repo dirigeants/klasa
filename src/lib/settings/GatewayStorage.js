@@ -162,7 +162,7 @@ class GatewayStorage {
 		const columns = await provider.getColumns(this.type);
 		if (columns.length) {
 			const promises = [];
-			for (const [key, piece] of this.schema.paths) if (!columns.includes(key)) promises.push(provider.addColumn(key, piece));
+			for (const [key, piece] of this.schema.paths) if (!columns.includes(key)) promises.push(provider.addColumn(this.type, piece));
 			await Promise.all(promises);
 		}
 	}
