@@ -384,7 +384,7 @@ class Settings {
 		if (piece.array) {
 			this._parseArray(piece, route, parsedID, options, result);
 		} else if (this._setValueByPath(piece, parsedID, options.force).updated) {
-			result.updated.push({ data: [piece.path, parsedID], piece });
+			result.updated.push({ data: [piece.path, parsedID.id || parsedID], piece });
 		}
 	}
 
@@ -421,7 +421,7 @@ class Settings {
 		if (action === 'overwrite') {
 			if (!Array.isArray(parsed)) parsed = [parsed];
 			if (this._setValueByPath(piece, parsed, force).updated) {
-				updated.push({ data: [piece.path, parsed], piece });
+				updated.push({ data: [piece.path, parsed.id || parsed], piece });
 			}
 			return;
 		}
@@ -430,7 +430,8 @@ class Settings {
 			if (arrayPosition >= array.length) errors.push(new Error(`The option arrayPosition should be a number between 0 and ${array.length - 1}`));
 			else array[arrayPosition] = parsed;
 		} else {
-			for (const value of Array.isArray(parsed) ? parsed : [parsed]) {
+			for (let value of Array.isArray(parsed) ? parsed : [parsed]) {
+				value = piece.resolve ? value : value.id;
 				const index = array.indexOf(value);
 				if (action === 'auto') {
 					if (index === -1) array.push(value);
@@ -446,7 +447,8 @@ class Settings {
 			}
 		}
 
-		updated.push({ data: [piece.path, array], piece });
+		// Flatten array down to id where possible so that database only stores the array here
+		updated.push({ data: [piece.path, array.map(value => value.id || value)], piece });
 	}
 
 	/**
@@ -487,7 +489,7 @@ class Settings {
 		// If both parts are equal, don't update
 		if (!force && (piece.array ? arraysStrictEquals(old, parsedID) : old === parsedID)) return { updated: false, old };
 
-		cache[lastKey] = parsedID;
+		cache[lastKey] = piece.resolve ? parsedID : parsedID.id;
 		return { updated: true, old };
 	}
 
