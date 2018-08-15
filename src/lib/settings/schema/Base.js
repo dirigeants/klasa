@@ -114,6 +114,36 @@ class Base extends Map {
 	}
 
 	/**
+	 * Whether or not this SchemaFolder or Schema instance should be resolved
+	 * @since 0.5.0
+	 * @readonly
+	 * @returns {boolean}
+	 */
+	shouldResolve() {
+		return [...this.values()].some(piece => piece.type === 'Folder' ? piece.shouldResolve() : piece.resolve);
+	}
+
+	/**
+	 * Resolve all Pieces of the SchemaFolder or Schema instance
+	 * @since 0.5.0
+	 * @param {Object} entry The database entry to resolve values for
+	 * @returns {Object}
+	 */
+	async resolve(entry) {
+		const guild = this.client.guilds.get(entry.id);
+		const resolved = await Promise.all(Object.entries(entry)
+			.filter(([key]) => key !== 'id')
+			.map(async ([key, data]) => {
+				const piece = this.get(this.path ? `${this.path}.${key}` : key);
+				if (piece.type === 'Folder') return { [key]: await piece.resolve(data) };
+				if (!piece.resolve) return data;
+				if (piece.array) return { [key]: await Promise.all(data.map(dat => piece.parse(dat, guild))) };
+				return { [key]: await piece.parse(data, guild) };
+			}));
+		return Object.assign({}, ...resolved);
+	}
+
+	/**
 	 * Get the configurable keys for the current SchemaFolder or Schema instance
 	 * @since 0.5.0
 	 * @readonly

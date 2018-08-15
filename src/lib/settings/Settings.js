@@ -133,10 +133,15 @@ class Settings {
 		if (!force || syncStatus) return syncStatus || Promise.resolve(this);
 
 		// If it's not currently synchronizing, create a new sync status for the sync queue
-		const sync = this.gateway.provider.get(this.gateway.type, this.id).then(data => {
+		const sync = this.gateway.provider.get(this.gateway.type, this.id).then(async data => {
 			if (data) {
 				if (!this._existsInDB) this._existsInDB = true;
-				this._patch(data);
+				if (this.gateway.schema.shouldResolve()) {
+					const resolved = await this.gateway.schema.resolve(data);
+					this._patch(resolved);
+				} else {
+					this._patch(data);
+				}
 			} else {
 				this._existsInDB = false;
 			}

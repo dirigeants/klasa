@@ -7,10 +7,11 @@ class SchemaPiece {
 	 * @typedef {Object} SchemaPieceOptions
 	 * @property {*} [default] The default value for the key
 	 * @property {Function} [filter] The filter to use when resolving this key. The function is passed the resolved value from the resolver, and a guild.
-	 * @property {boolean} [array] Whether the key should be stored as Array or not
-	 * @property {boolean} [configurable] Whether the key should be configurable by the configuration command or not
+	 * @property {boolean} [array] Whether or not the key should be treated as an Array
+	 * @property {boolean} [configurable] Whether or not the key should be configurable by the configuration command
 	 * @property {number} [min] The minimum value for this piece
 	 * @property {number} [max] The maximum value for this piece
+	 * @property {boolean} resolve Whether or not this piece should be auto-resolved
 	 */
 
 	/**
@@ -104,6 +105,13 @@ class SchemaPiece {
 		this.filter = 'filter' in options ? options.filter : null;
 
 		/**
+		 * Whether or not this key should be resolved into it's full data.
+		 * @since 0.5.0
+		 * @type {boolean}
+		 */
+		this.resolve = 'resolve' in options ? options.resolve : false;
+
+		/**
 		 * The resolver for this type
 		 * @since 0.5.0
 		 * @type {SchemaType}
@@ -183,6 +191,19 @@ class SchemaPiece {
 	async parse(value, guild) {
 		const language = guild ? guild.language : this.client.languages.default;
 		const val = await this.resolver.resolve(value, this, language, guild);
+		if (this.filter && this.filter(this.client, val, this, language)) throw language.get('SETTING_GATEWAY_INVALID_FILTERED_VALUE', this, value);
+		return val;
+	}
+
+	async autoResolve(value, guild) {
+		const language = guild ? guild.language : this.client.languages.default;
+		let val;
+		try {
+			val = await this.resolver.resolve(value, this, language, guild);
+		} catch (error) {
+			val = null;
+		}
+		if (val === null) return null;
 		if (this.filter && this.filter(this.client, val, this, language)) throw language.get('SETTING_GATEWAY_INVALID_FILTERED_VALUE', this, value);
 		return val;
 	}
@@ -272,7 +293,18 @@ class SchemaPiece {
 	 * @private
 	 */
 	_checkFilter(filter) {
-		if (filter !== null && !isFunction(filter)) throw new TypeError(`[KEY] ${this.path} - Parameter filter must be a function`);
+		if (filter !== null && !isFunction(filter)) throw new TypeError(`[KEY] ${this.path} - Parameter filter must be a function.`);
+	}
+
+	/**
+	 * Check if options.resolve is valid.
+	 * @since 0.5.0
+	 * @param {boolean} resolve The parameter to validate
+	 * @throws {TypeError}
+	 * @private
+	 */
+	_checkResolve(resolve) {
+		if (typeof resolve !== 'boolean') throw new TypeError(`[KEY] ${this.path} - Parameter resolve must be a boolean.`);
 	}
 
 	/**
@@ -287,7 +319,8 @@ class SchemaPiece {
 			default: this.default,
 			max: this.max,
 			min: this.min,
-			type: this.type
+			type: this.type,
+			resolve: this.resolve
 		};
 	}
 
