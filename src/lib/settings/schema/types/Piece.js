@@ -19,7 +19,7 @@ class PieceType extends SchemaType {
 	async resolve(data, piece, language) {
 		const store = this.client[`${piece.type}s`];
 		const parsed = typeof data === 'string' ? store.get(data) : data;
-		if (parsed && parsed instanceof store.holds) return piece.resolve ? parsed : parsed.name;
+		if (parsed && parsed instanceof store.holds) return parsed;
 		throw language.get('RESOLVER_INVALID_PIECE', piece.key, piece.type);
 	}
 

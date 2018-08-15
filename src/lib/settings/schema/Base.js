@@ -138,8 +138,8 @@ class Base extends Map {
 				const piece = this.get(this.path ? `${this.path}.${key}` : key);
 				if (piece.type === 'Folder') return { [key]: await piece.resolve(data) };
 				if (!piece.resolve) return data;
-				if (piece.array) return { [key]: await Promise.all(data.map(dat => piece.parse(dat, guild))) };
-				return { [key]: await piece.parse(data, guild) };
+				if (piece.array) return { [key]: await Promise.all(data.map(dat => piece.autoResolve(dat, guild))) };
+				return { [key]: await piece.autoResolve(data, guild) };
 			}));
 		return Object.assign({}, ...resolved);
 	}
