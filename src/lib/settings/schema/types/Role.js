@@ -20,9 +20,9 @@ class RoleType extends SchemaType {
 	 */
 	async resolve(data, piece, language, guild) {
 		if (!guild) throw this.client.languages.default.get('RESOLVER_INVALID_GUILD', piece.key);
-		if (data instanceof Role) return data.id;
+		if (data instanceof Role) return data;
 		const role = this.constructor.regex.role.test(data) ? guild.roles.get(data) : guild.roles.find(rol => rol.name === data) || null;
-		if (role) return role.id;
+		if (role) return role;
 		throw language.get('RESOLVER_INVALID_ROLE', piece.key);
 	}
 

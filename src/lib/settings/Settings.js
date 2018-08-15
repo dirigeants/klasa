@@ -133,10 +133,15 @@ class Settings {
 		if (!force || syncStatus) return syncStatus || Promise.resolve(this);
 
 		// If it's not currently synchronizing, create a new sync status for the sync queue
-		const sync = this.gateway.provider.get(this.gateway.type, this.id).then(data => {
+		const sync = this.gateway.provider.get(this.gateway.type, this.id).then(async data => {
 			if (data) {
 				if (!this._existsInDB) this._existsInDB = true;
-				this._patch(data);
+				if (this.gateway.schema.shouldResolve) {
+					const resolved = await this.gateway.schema.resolve(data);
+					this._patch(resolved);
+				} else {
+					this._patch(data);
+				}
 			} else {
 				this._existsInDB = false;
 			}
@@ -379,7 +384,7 @@ class Settings {
 		if (piece.array) {
 			this._parseArray(piece, route, parsedID, options, result);
 		} else if (this._setValueByPath(piece, parsedID, options.force).updated) {
-			result.updated.push({ data: [piece.path, parsedID], piece });
+			result.updated.push({ data: [piece.path, parsedID.id || parsedID.name || parsedID], piece });
 		}
 	}
 
@@ -416,7 +421,7 @@ class Settings {
 		if (action === 'overwrite') {
 			if (!Array.isArray(parsed)) parsed = [parsed];
 			if (this._setValueByPath(piece, parsed, force).updated) {
-				updated.push({ data: [piece.path, parsed], piece });
+				updated.push({ data: [piece.path, parsed.id || parsed.name || parsed], piece });
 			}
 			return;
 		}
@@ -425,7 +430,8 @@ class Settings {
 			if (arrayPosition >= array.length) errors.push(new Error(`The option arrayPosition should be a number between 0 and ${array.length - 1}`));
 			else array[arrayPosition] = parsed;
 		} else {
-			for (const value of Array.isArray(parsed) ? parsed : [parsed]) {
+			for (let value of Array.isArray(parsed) ? parsed : [parsed]) {
+				value = piece.resolve ? value : value.id || value.name || value;
 				const index = array.indexOf(value);
 				if (action === 'auto') {
 					if (index === -1) array.push(value);
@@ -441,7 +447,8 @@ class Settings {
 			}
 		}
 
-		updated.push({ data: [piece.path, array], piece });
+		// Flatten array down to id/name where possible so that database only stores the array here
+		updated.push({ data: [piece.path, array.map(value => value.id || value.name || value)], piece });
 	}
 
 	/**
@@ -482,7 +489,7 @@ class Settings {
 		// If both parts are equal, don't update
 		if (!force && (piece.array ? arraysStrictEquals(old, parsedID) : old === parsedID)) return { updated: false, old };
 
-		cache[lastKey] = parsedID;
+		cache[lastKey] = piece.resolve ? parsedID : parsedID.id || parsedID.name;
 		return { updated: true, old };
 	}
 
@@ -511,7 +518,7 @@ class Settings {
 	 * @returns {SettingsJSON}
 	 */
 	toJSON() {
-		return Object.assign({}, ...[...this.gateway.schema.keys()].map(key => ({ [key]: deepClone(this[key]) })));
+		return Object.assign({}, ...[...this.gateway.schema.keys()].map(key => ({ [key]: deepClone(this[key].id || this[key].name || this[key]) })));
 	}
 
 	/**

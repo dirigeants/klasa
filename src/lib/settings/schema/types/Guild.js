@@ -20,7 +20,7 @@ class GuildType extends SchemaType {
 	async resolve(data, piece, language) {
 		if (data instanceof Guild) return data.id;
 		const guild = this.constructor.regex.snowflake.test(data) ? this.client.guilds.get(data) : null;
-		if (guild) return guild.id;
+		if (guild) return guild;
 		throw language.get('RESOLVER_INVALID_GUILD', piece.key);
 	}
 
