@@ -29,7 +29,7 @@ class GuildType extends SchemaType {
 	}
 
 	deserialize(data) {
-		return this.client.guilds.get(data) || null;
+		return Promise.resolve(this.client.guilds.get(data) || null);
 	}
 
 	/**

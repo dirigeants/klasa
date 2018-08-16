@@ -32,7 +32,7 @@ class ScheduledTaskType extends SchemaType {
 	}
 
 	deserialize(data) {
-		return new ScheduledTask(this.client, data.taskName, data.time, data);
+		return Promise.resolve(new ScheduledTask(this.client, data.taskName, data.time, data));
 	}
 
 }

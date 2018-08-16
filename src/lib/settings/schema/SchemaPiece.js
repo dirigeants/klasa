@@ -195,9 +195,9 @@ class SchemaPiece {
 	 */
 	async parse(value, guild) {
 		const language = guild ? guild.language : this.client.languages.default;
-		const val = await this.resolver.resolve(value, this, language, guild);
-		if (this.filter && this.filter(this.client, val, this, language)) throw language.get('SETTING_GATEWAY_INVALID_FILTERED_VALUE', this, value);
-		return val;
+		const parsed = this.resolver.serialize(await this.resolver.resolve(value, this, language, guild));
+		if (this.filter && this.filter(this.client, parsed, this, language)) throw language.get('SETTING_GATEWAY_INVALID_FILTERED_VALUE', this, value);
+		return parsed;
 	}
 
 	autoResolve(value, guild) {

@@ -31,7 +31,7 @@ class RoleType extends SchemaType {
 	}
 
 	deserialize(data, piece, guild) {
-		return (guild ? guild.roles.get(data) : this.client.guilds.find(gd => gd.roles.get(data))) || null;
+		return Promise.resolve((guild && guild.roles.get(data)) || null);
 	}
 
 	/**

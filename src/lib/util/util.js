@@ -374,4 +374,26 @@ Util.titleCaseVariants = {
  */
 Util.PRIMITIVE_TYPES = ['string', 'bigint', 'number', 'boolean'];
 
+/**
+ * Identical to Object.fromEntries, uses Object.fromEntries if available, otherwise it uses its polyfill
+ * @since 0.5.0
+ * @param {Array<*>} iter The array to convert to object
+ * @returns {Object<string, *>}
+ * @see {@url https://github.com/tc39/proposal-object-from-entries}
+ */
+Util.fromEntries = Object.fromEntries || function fromEntries(iter) {
+	const object = {};
+
+	for (const [key, value] of iter) {
+		Object.defineProperty(object, key, {
+			configurable: true,
+			enumerable: true,
+			writable: true,
+			value: value
+		});
+	}
+
+	return object;
+};
+
 module.exports = Util;

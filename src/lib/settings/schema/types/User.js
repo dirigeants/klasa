@@ -29,7 +29,7 @@ class UserType extends SchemaType {
 	}
 
 	deserialize(data) {
-		return this.client.users.get(data) || null;
+		return this.client.users.fetch(data).catch(() => null);
 	}
 
 	/**

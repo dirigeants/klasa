@@ -30,7 +30,7 @@ class ChannelType extends SchemaType {
 	}
 
 	deserialize(data, piece, guild) {
-		return (guild ? guild.channels.get(data) : this.client.channels.get(data)) || null;
+		return Promise.resolve((guild || this.client).channels.get(data) || null);
 	}
 
 	/**

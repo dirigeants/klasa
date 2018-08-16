@@ -41,7 +41,7 @@ class SchemaType {
 	}
 
 	deserialize(data) {
-		return data;
+		return Promise.resolve(data);
 	}
 
 	/**

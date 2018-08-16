@@ -29,7 +29,7 @@ class PieceType extends SchemaType {
 
 	deserialize(data, piece) {
 		const store = this.client[`${piece.type}s`];
-		return (store && store.get(data)) || null;
+		return Promise.resolve((store && store.get(data)) || null);
 	}
 
 }
