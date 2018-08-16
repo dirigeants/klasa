@@ -107,7 +107,7 @@ class GatewayStorage {
 			throw `The key ${key} does not exist in the schema.`;
 		}
 
-		if (requestPiece === null) requestPiece = piece.type !== 'Folder';
+		if (requestPiece === null) requestPiece = piece.path || piece.type !== 'Folder';
 
 		// GetPath expects a piece
 		if (requestPiece) {
