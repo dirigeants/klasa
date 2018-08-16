@@ -33,6 +33,10 @@ module.exports = class extends SQLProvider {
 		// The updateColumn method which updates a column's datatype from a table from the database.
 	}
 
+	async getColumns() {
+		// The getColumns method which gets the name of all columns from a table from the database.
+	}
+
 };
 ```
 
@@ -42,11 +46,11 @@ The example above is a boilerplate code for a Klasa SQL Provider, complementing 
 
 The {@link SQLProvider} class provides several resources to help the developer reduce the code duplication:
 
-- {@link SQLProvider#parseUpdateInput `SQLProvider#parseUpdateInput()`}: Parses SettingsGateway's and other overloads' input into an easier format. The TypeScript type for the overloads accepted are `ConfigurationUpdateResultEntry[] | [string, any][] | Object<string, *>`.
+- {@link SQLProvider#parseUpdateInput `SQLProvider#parseUpdateInput()`}: Parses SettingsGateway's and other overloads' input into an easier format. The TypeScript type for the overloads accepted are `SettingsUpdateResultEntry[] | [string, any][] | Object<string, *>`.
 - {@link SQLProvider#parseEntry `SQLProvider#parseEntry()`}: Converts plain dotted objects into parsed objects with nested object support. Uses the helper above to parse entries, and is powered by {@link SettingsGateway UnderstandingSettingsGateway} to improve security and parsing speed.
 - {@link SQLProvider#parseValue `SQLProvider#parseValue()`}: Converts a value into standard JavaScript objects, useful for SQL databases that do not cover all JavaScript primitives.
 
-## Configuration
+## Options
 
 The configuration is inherited by {@link Provider Providers}, SQL Providers only provide extra tools to convert SQL output to compatible JS objects.
 

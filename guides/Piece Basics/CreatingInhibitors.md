@@ -36,7 +36,7 @@ module.exports = class extends Inhibitor {
 
 ```
 
-## Configuration
+## Options
 
 | Name               | Default       | Type    | Description                                                                                  |
 | ------------------ | ------------- | ------- | -------------------------------------------------------------------------------------------- |

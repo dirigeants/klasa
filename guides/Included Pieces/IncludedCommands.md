@@ -40,7 +40,7 @@ Evaluates arbitrary javascript code. Useful for debugging.
 
 ## General / Chat Bot Info / help
 
-The default help command, compiles the help details for all commands and sends them to the user's dm, or the channel if a selfbot.
+The default help command, compiles the help details for all commands and sends them to the user's DMs.
 
 **Source:**
 
@@ -110,13 +110,13 @@ Unloads any piece except extendables.
 
 [commands/Admin/unload.js](https://github.com/dirigeants/klasa/blob/master/src/commands/Admin/unload.js)
 
-## General / User Configs / userconf
+## General / User Settings / userconf
 
 Allows users to change their configurations.
 
 **Source:**
 
-[commands/General/User Configs/userconf.js](https://github.com/dirigeants/klasa/blob/master/src/commands/General/User%20Configs/userconf.js)
+[commands/General/User Settings/userconf.js](https://github.com/dirigeants/klasa/blob/master/src/commands/General/User%20Settings/userconf.js)
 
 ## Further Reading:
 

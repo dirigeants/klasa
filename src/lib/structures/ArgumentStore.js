@@ -4,8 +4,7 @@ const Store = require('./base/Store');
 
 /**
  * Stores all the commands usable in Klasa
- * @extends external:Collection
- * @extends {Store}
+ * @extends Store
  */
 class ArgumentStore extends Store {
 

@@ -15,6 +15,10 @@
     {
         "name": "Understanding Usage Strings",
         "path": "UnderstandingUsageStrings.md"
+    },
+    {
+        "name": "Frequently Asked Questions",
+        "path": "faq.md"
     }]
 },
 {
@@ -99,8 +103,8 @@
         "path": "SettingsGatewayKeyTypes.md"
     },
     {
-        "name": "Updating your Configuration",
-        "path": "SettingsGatewayConfigurationUpdate.md"
+        "name": "Updating your Settings",
+        "path": "SettingsGatewaySettingsUpdate.md"
     }]
 },
 {
@@ -166,13 +170,8 @@
 },
 {
     "name": "Building Your Bot",
-    "files": [
-        {
-            "name": "Creating a Points System",
-            "path": "CreatingPointsSystems.md"
-        },
-        {
-            "name": "Creating a Custom Member Gateway",
-            "path": "CreatingACustomMemberGateway.md"
-        }]
+    "files": [{
+        "name": "Creating a Points System",
+        "path": "CreatingPointsSystems.md"
+    }]
 }]

@@ -5,15 +5,10 @@ Creating a points system (also known as a **Social Module**) in your bot is quit
 Before we work with the social module, we need to update the built-in {@link GatewayDriver#users users' gateway} to implement a new key:
 
 ```javascript
-async function init() {
-	if (!this.client.gateways.users.schema.has('experience')) {
-		this.client.gateways.users.schema.add('experience', {
-			type: 'integer',
-			default: 0,
-			configurable: false
-		});
-	}
-}
+KlasaClient.defaultUserSchema.add('experience', 'Integer', {
+	default: 0,
+	configurable: false
+});
 ```
 
 In this function, we are checking if the schema has the key `experience`. If it doesn't, we add it as a new key, with type `integer` (doubtfully we'll use `float` on this) and make it unconfigurable for the built-in userconf command so the end users do not cheat by modifying their stats.
@@ -30,12 +25,7 @@ const { Monitor } = require('klasa');
 module.exports = class extends Monitor {
 
 	constructor(...args) {
-		super(...args, {
-			enabled: true,
-			ignoreBots: true,
-			ignoreSelf: true,
-			ignoreOthers: false
-		});
+		super(...args, { ignoreOthers: false });
 	}
 
 	async run(message) {
@@ -43,14 +33,11 @@ module.exports = class extends Monitor {
 		if (!message.guild) return;
 
 		// Update the user's configuration entry by adding 1 to it.
-		await message.author.configs.update('experience', message.author.configs.experience + 1);
+		await message.author.settings.update('experience', message.author.settings.experience + 1);
 	}
 
 };
-
 ```
-
-Alternatively, we can create the `init` method and ensure the users' schema always has our key.
 
 ## Level up!
 
@@ -60,15 +47,10 @@ Some social bots have level up messages. How do we set it up? There are two ways
 1. We add a level field. This makes the configuration update slower by nature as it will need to update two values. First, we will create the key:
 
 ```javascript
-async function init() {
-	if (!this.client.gateways.users.schema.has('level')) {
-		this.client.gateways.users.schema.add('level', {
-			type: 'integer',
-			default: 0,
-			configurable: false
-		});
-	}
-}
+KlasaClient.defaultUserSchema.add('level', 'Integer', {
+	default: 0,
+	configurable: false
+});
 ```
 
 Then we pick up a level calculation algorithm, the following as an example:
@@ -91,16 +73,16 @@ module.exports = class extends Monitor {
 		if (!message.guild) return;
 
 		// Calculate the next value for experience.
-		const nextValue = message.author.configs.experience + 1;
+		const nextValue = message.author.settings.experience + 1;
 
 		// Cache the current level.
-		const currentLevel = message.author.configs.level;
+		const currentLevel = message.author.settings.level;
 
 		// Calculate the next level.
 		const nextLevel = Math.floor(0.1 * Math.sqrt(nextValue + 1));
 
 		// Update the user's configuration entry by adding 1 to it, and update the level also.
-		await message.author.configs.update(['experience', 'level'], [nextValue, nextLevel]);
+		await message.author.settings.update(['experience', 'level'], [nextValue, nextLevel]);
 
 		// If the current level and the next level are not the same, then it has increased, and you can send the message.
 		if (currLevel !== nextLevel) {
@@ -114,7 +96,7 @@ module.exports = class extends Monitor {
 };
 ```
 
-Optionally, you can check if `nextLevel === message.author.configs.level` is true and update a single key instead, but the speed difference is negligible and since [SettingsGateway v2.1](https://github.com/dirigeants/klasa/pull/179), the key `level` will not be updated if it did not change. As well, this overload is much faster than the JSON object overload, previously used as the only way to update multiple values.
+Optionally, you can check if `nextLevel === message.author.settings.level` is true and update a single key instead, but the speed difference is negligible and since [SettingsGateway v2.1](https://github.com/dirigeants/klasa/pull/179), the key `level` will not be updated if it did not change. As well, this overload is much faster than the JSON object overload, previously used as the only way to update multiple values.
 
 ## Creating Our Commands
 
@@ -133,8 +115,8 @@ module.exports = class extends Command {
 		super(...args, { description: 'Check how many points you have.' });
 	}
 
-	async run(message) {
-		return message.send(`You have a total of ${message.author.configs.experience} experience points!`);
+	run(message) {
+		return message.send(`You have a total of ${message.author.settings.experience} experience points!`);
 	}
 
 };
@@ -154,8 +136,8 @@ module.exports = class extends Command {
 		super(...args, { description: 'Check your current level.' });
 	}
 
-	async run(message) {
-		return message.send(`You are currently level ${message.author.configs.level}!`);
+	run(message) {
+		return message.send(`You are currently level ${message.author.settings.level}!`);
 	}
 
 };

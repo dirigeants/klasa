@@ -21,7 +21,7 @@ class Extendable extends Piece {
 	 * @param {ExtendableStore} store The extendable store
 	 * @param {string} file The path from the pieces folder to the extendable file
 	 * @param {boolean} core If the piece is in the core directory or not
-	 * @param {ExtendableOptions} options The options for this extendable
+	 * @param {ExtendableOptions} [options={}] The options for this extendable
 	 */
 	constructor(client, store, file, core, options = {}) {
 		super(client, store, file, core, options);

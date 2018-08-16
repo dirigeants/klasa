@@ -23,8 +23,9 @@ exports.DEFAULTS = {
 		},
 		disabledCorePieces: [],
 		language: 'en-US',
-		prefix: '!',
-		preserveConfigs: true,
+		noPrefixDM: false,
+		prefix: '',
+		preserveSettings: true,
 		readyMessage: (client) => `Successfully initialized. Ready to serve ${client.guilds.size} guild${client.guilds.size === 1 ? '' : 's'}.`,
 		typing: false,
 		customPromptDefaults: {
@@ -39,6 +40,7 @@ exports.DEFAULTS = {
 		},
 		// eslint-disable-next-line no-process-env
 		production: process.env.NODE_ENV === 'production',
+		prefixCaseInsensitive: false,
 		providers: { default: 'json' },
 		pieceDefaults: {
 			arguments: {
@@ -51,15 +53,16 @@ exports.DEFAULTS = {
 				bucket: 1,
 				cooldown: 0,
 				description: '',
+				extendedHelp: language => language.get('COMMAND_HELP_NO_EXTENDED'),
 				enabled: true,
 				guarded: false,
 				nsfw: false,
 				permissionLevel: 0,
 				promptLimit: 0,
 				promptTime: 30000,
-				requiredConfigs: [],
+				requiredSettings: [],
 				requiredPermissions: 0,
-				runIn: ['text', 'dm', 'group'],
+				runIn: ['text', 'dm'],
 				subcommands: false,
 				usage: '',
 				quotedStringSupport: false,

@@ -73,10 +73,6 @@ module.exports = class extends Provider {
 		// Update an entry from a table
 	}
 
-	removeValue(table, path) {
-		// Remove the value of an object/column in all entries from a table
-	}
-
 	replace(table, entryID, data) {
 		// Perform a destructive write, where the previous data gets overwritten by the new one
 	}
@@ -91,7 +87,7 @@ module.exports = class extends Provider {
 
 The example above is the JSON provider used in klasa, and interfacing with the {@link SettingsGateway}.
 
-## Configuration
+## Options
 
 | Name            | Default       | Type    | Description                                  |
 | --------------- | ------------- | ------- | -------------------------------------------- |

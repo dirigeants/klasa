@@ -48,7 +48,7 @@ class Schedule {
 	 * @private
 	 */
 	get _tasks() {
-		return this.client.configs.schedules;
+		return this.client.settings.schedules;
 	}
 
 	/**
@@ -56,18 +56,6 @@ class Schedule {
 	 * @since 0.5.0
 	 */
 	async init() {
-		const { schema } = this.client.gateways.clientStorage;
-		if (!schema.has('schedules')) {
-			await schema.add('schedules', {
-				type: 'any',
-				default: [],
-				min: null,
-				max: null,
-				array: true,
-				configurable: false
-			});
-		}
-
 		const tasks = this._tasks;
 		if (!tasks || !Array.isArray(tasks)) return;
 
@@ -150,8 +138,8 @@ class Schedule {
 	 */
 	async create(taskName, time, options) {
 		const task = await this._add(taskName, time, options);
-		if (!task) return undefined;
-		await this.client.configs.update('schedules', task.toJSON(), { action: 'add' });
+		if (!task) return null;
+		await this.client.settings.update('schedules', task.toJSON(), { action: 'add' });
 		return task;
 	}
 
@@ -168,7 +156,7 @@ class Schedule {
 		this.tasks.splice(taskIndex, 1);
 		// Get the task and use it to remove
 		const task = this._tasks.find(entry => entry.id === id);
-		if (task) await this.client.configs.update('schedules', task, { action: 'remove' });
+		if (task) await this.client.settings.update('schedules', task, { action: 'remove' });
 
 		return this;
 	}
@@ -178,8 +166,8 @@ class Schedule {
 	 * @since 0.5.0
 	 */
 	async clear() {
-		// this._tasks is unedited as Configuration#clear will clear the array
-		await this.client.configs.reset('schedules');
+		// this._tasks is unedited as Settings#clear will clear the array
+		await this.client.settings.reset('schedules');
 		this.tasks = [];
 	}
 
@@ -194,10 +182,12 @@ class Schedule {
 	 */
 	async _add(taskName, time, options) {
 		const task = new ScheduledTask(this.client, taskName, time, options);
+
+		// If the task were due of time before the bot's intialization, delete if not recurring, else update for next period
 		if (!task.catchUp && task.time < Date.now()) {
 			if (!task.recurring) {
 				await task.delete();
-				return undefined;
+				return null;
 			}
 			await task.update({ time: task.recurring });
 		}
@@ -252,7 +242,7 @@ class Schedule {
 	 */
 
 	*[Symbol.iterator]() {
-		for (let i = 0; i < this.tasks.length; i++) yield this.tasks[i];
+		yield* this.tasks;
 	}
 
 }

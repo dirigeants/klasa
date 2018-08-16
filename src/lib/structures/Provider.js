@@ -118,18 +118,6 @@ class Provider extends Piece {
 	}
 
 	/**
-	 * The removeValue method which edits all entries to remove a property.
-	 * @since 0.5.0
-	 * @param {string} table The table to update
-	 * @param {string} path The path of the property to remove
-	 * @returns {*}
-	 * @abstract
-	 */
-	async removeValue() {
-		throw new Error(`[PROVIDERS] ${this.path} | Missing method 'removeValue' of ${this.constructor.name}`);
-	}
-
-	/**
 	 * The replace method which overwrites the data from an entry.
 	 * @since 0.0.1
 	 * @param {string} table The table to update
@@ -177,10 +165,15 @@ class Provider extends Piece {
 		// Reserved for SQL databases
 	}
 
+	async getColumns() {
+		// Reserved for SQL databases
+		return [];
+	}
+
 	/**
 	 * Parse the gateway input for easier operation
 	 * @since 0.5.0
-	 * @param {(Object<string, *>|ConfigurationUpdateResult[])} updated The updated entries
+	 * @param {(Object<string, *>|SettingsUpdateResult[])} updated The updated entries
 	 * @returns {Object<string, *>}
 	 * @protected
 	 */

@@ -36,7 +36,7 @@ Another advantage of using this interface is that it can handle multiple databas
 Let's say I want to add a new Gateway instance called `channels` that stores data to complement our permissions, and I want the **postgresql** provider to handle it but **rethinkdb** as the default provider.
 
 ```javascript
-const { KlasaClient } = require('klasa');
+const { KlasaClient, Schema } = require('klasa');
 
 const client = new KlasaClient({
 	prefix: 'k!',
@@ -45,24 +45,12 @@ const client = new KlasaClient({
 
 // Now, we create it:
 client.gateways.register('channels', {
-	disabledCommands: {
-		type: 'Command',
-		default: [],
-		array: true
-	},
-	commandThrottle: {
-		type: 'Integer',
-		default: 5,
-		min: 0,
-		max: 60
-	},
-	commandReset: {
-		type: 'Integer',
-		default: 2,
-		min: 0,
-		max: 30
-	}
-}, { provider: 'postgresql' });
+	provider: 'postgresql',
+	schema: new Schema()
+		.add('disabledCommands', 'Command', { array: true })
+		.add('commandThrottle', 'Integer', { default: 5, min: 0, max: 60 })
+		.add('commandReset', 'Integer', { default: 2, min: 0, max: 30 })
+});
 
 client.login('A_BEAUTIFUL_TOKEN_AINT_IT?');
 ```
@@ -97,4 +85,4 @@ Where the *clientStorage* gateway would take the default options (json provider)
 - {@tutorial UnderstandingSchemaPieces}
 - {@tutorial UnderstandingSchemaFolders}
 - {@tutorial SettingsGatewayKeyTypes}
-- {@tutorial SettingsGatewayConfigurationUpdate}
+- {@tutorial SettingsGatewaySettingsUpdate}

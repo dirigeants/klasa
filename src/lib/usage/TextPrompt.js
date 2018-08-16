@@ -18,9 +18,9 @@ class TextPrompt {
 	 * @since 0.5.0
 	 * @param {KlasaMessage} message The message this prompt is for
 	 * @param {Usage} usage The usage for this prompt
-	 * @param {TextPromptOptions} options The options of this prompt
+	 * @param {TextPromptOptions} [options={}] The options of this prompt
 	 */
-	constructor(message, usage, options) {
+	constructor(message, usage, options = {}) {
 		options = mergeDefault(message.client.options.customPromptDefaults, options);
 
 		/**

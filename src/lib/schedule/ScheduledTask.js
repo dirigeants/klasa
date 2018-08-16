@@ -71,7 +71,7 @@ class ScheduledTask {
 		/**
 		 * The Date when this scheduled task ends
 		 * @since 0.5.0
-		 * @type {?Date}
+		 * @type {Date}
 		 */
 		this.time = 'time' in options ? new Date(options.time) : _time;
 
@@ -176,7 +176,7 @@ class ScheduledTask {
 		// Sync the database if some of the properties changed or the time changed manually
 		// (recurring tasks bump the time automatically)
 		const _index = this.store._tasks.findIndex(entry => entry.id === this.id);
-		if (_index !== -1) await this.client.configs.update('schedules', this.toJSON(), { arrayPosition: _index });
+		if (_index !== -1) await this.client.settings.update('schedules', this.toJSON(), { arrayPosition: _index });
 
 		return this;
 	}
@@ -233,7 +233,7 @@ class ScheduledTask {
 	 * @private
 	 */
 	static _generateID(client) {
-		return Date.now().toString(36) + (client.shard ? client.shard.id.toString(36) : '') + String.fromCharCode((1 % 26) + 97);
+		return Date.now().toString(36) + (client.shard ? client.shard.id.toString(36) : '');
 	}
 
 	/**
@@ -245,6 +245,7 @@ class ScheduledTask {
 	static _validate(st) {
 		if (!st.task) throw new Error('invalid task');
 		if (!st.time) throw new Error('time or repeat option required');
+		if (Number.isNaN(st.time.getTime())) throw new Error('invalid time passed');
 	}
 
 }
