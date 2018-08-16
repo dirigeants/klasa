@@ -121,10 +121,7 @@ class Base extends Map {
 	 */
 	get configurableKeys() {
 		const keys = [];
-		for (const piece of this.values()) {
-			if (piece.type === 'Folder') keys.push(...piece.configurableKeys);
-			else keys.push(piece.key);
-		}
+		for (const piece of this.values(true)) if (piece.configurable) keys.push(piece.path);
 		return keys;
 	}
 
