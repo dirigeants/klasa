@@ -11,7 +11,7 @@ class SchemaPiece {
 	 * @property {boolean} [configurable] Whether or not the key should be configurable by the configuration command
 	 * @property {number} [min] The minimum value for this piece
 	 * @property {number} [max] The maximum value for this piece
-	 * @property {boolean} resolve Whether or not this piece should be auto-resolved
+	 * @property {boolean} [resolve] Whether or not this piece should be auto-resolved
 	 */
 
 	/**
@@ -157,8 +157,12 @@ class SchemaPiece {
 			this._checkFilter(options.filter);
 			this.filter = options.filter;
 		}
+		if ('resolve' in options) {
+			this._checkResolve(options.resolve);
+			this.resolve = options.resolve;
+		}
 		if ('default' in options) {
-			this._checkDefault(options);
+			this._checkDefault({ ...this, ...options });
 			this.default = options.default;
 		}
 
@@ -177,6 +181,7 @@ class SchemaPiece {
 		this._checkLimits(this.min, this.max);
 		this._checkFilter(this.filter);
 		this._checkDefault(this);
+		this._checkResolve(this.resolve);
 
 		return true;
 	}
