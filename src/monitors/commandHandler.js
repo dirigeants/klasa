@@ -63,9 +63,11 @@ module.exports = class extends Monitor {
 		}
 		const { prefix } = message.guildSettings;
 
-		for (const prf of Array.isArray(prefix) ? prefix : [prefix]) {
-			const testingPrefix = this.prefixes.get(prf) || this.generateNewPrefix(prf);
-			if (testingPrefix.regex.test(message.content)) return testingPrefix;
+		if (prefix) {
+			for (const prf of Array.isArray(prefix) ? prefix : [prefix]) {
+				const testingPrefix = this.prefixes.get(prf) || this.generateNewPrefix(prf);
+				if (testingPrefix.regex.test(message.content)) return testingPrefix;
+			}
 		}
 
 		return this.client.options.noPrefixDM && message.channel.type === 'dm' ? this.noPrefix : false;
