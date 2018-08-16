@@ -62,15 +62,12 @@ module.exports = class extends Monitor {
 			if (results) return { length: results[0].length, regex: this.client.options.regexPrefix };
 		}
 		const { prefix } = message.guildSettings;
-		if (Array.isArray(prefix)) {
-			for (const prf of prefix) {
-				const testingPrefix = this.prefixes.get(prf) || this.generateNewPrefix(prf);
-				if (testingPrefix.regex.test(message.content)) return testingPrefix;
-			}
-		} else if (prefix) {
-			const testingPrefix = this.prefixes.get(prefix) || this.generateNewPrefix(prefix);
+
+		for (const prf of Array.isArray(prefix) ? prefix : [prefix]) {
+			const testingPrefix = this.prefixes.get(prf) || this.generateNewPrefix(prf);
 			if (testingPrefix.regex.test(message.content)) return testingPrefix;
 		}
+
 		return this.client.options.noPrefixDM && message.channel.type === 'dm' ? this.noPrefix : false;
 	}
 
