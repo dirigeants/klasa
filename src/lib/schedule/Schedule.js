@@ -26,13 +26,6 @@ class Schedule {
 		this.client = client;
 
 		/**
-		 * An array of all processed ScheduledTask instances
-		 * @since 0.5.0
-		 * @type {ScheduledTask[]}
-		 */
-		this.tasks = [];
-
-		/**
 		 * The current interval that runs the tasks
 		 * @since 0.5.0
 		 * @type {NodeJS.Timer}
@@ -44,11 +37,14 @@ class Schedule {
 	/**
 	 * Get all the tasks from the cache
 	 * @since 0.5.0
-	 * @type {ScheduledTaskOptions[]}
-	 * @private
+	 * @type {ScheduledTask[]}
 	 */
-	get _tasks() {
+	get tasks() {
 		return this.client.settings.schedules;
+	}
+
+	set tasks(value) {
+		this.client.settings.schedules = value;
 	}
 
 	/**
@@ -56,14 +52,16 @@ class Schedule {
 	 * @since 0.5.0
 	 */
 	async init() {
-		const tasks = this._tasks;
-		if (!tasks || !Array.isArray(tasks)) return;
+		this.tasks = this.tasks.sort((a, b) => a.time - b.time);
 
-		for (const task of tasks) {
-			try {
-				await this._add(task.taskName, task.repeat || task.time, task);
-			} catch (error) {
-				this.client.emit('warn', `Task ${task.taskName} [${task.id}] was not queued: ${error}`);
+		for (const task of this.tasks) {
+			// If the task were due of time before the bot's intialization, delete if not recurring, else update for next period
+			if (!task.catchUp && task.time < Date.now()) {
+				if (!task.recurring) {
+					await task.delete();
+					continue;
+				}
+				await task.update({ time: task.recurring });
 			}
 		}
 
@@ -75,20 +73,20 @@ class Schedule {
 	 * @since 0.5.0
 	 */
 	async execute() {
-		if (!this.client.ready) return;
-		if (this.tasks.length) {
-			// Process the active tasks, they're sorted by the time they end
-			const now = Date.now();
-			const execute = [];
-			for (const task of this.tasks) {
-				if (task.time.getTime() > now) break;
-				execute.push(task.run());
-			}
+		if (!this.client.ready || !this.tasks.length) return;
 
-			// Check if the Schedule has a task to run and run them if they exist
-			if (!execute.length) return;
-			await Promise.all(execute);
+		// Process the active tasks, they're sorted by the time they end
+		const now = Date.now();
+		const execute = [];
+		for (const task of this.tasks) {
+			if (task.time.getTime() > now) break;
+			execute.push(task.run());
 		}
+
+		// Check if the Schedule has a task to run and run them if they exist
+		if (!execute.length) return;
+		await Promise.all(execute);
+
 		this._checkInterval();
 	}
 
@@ -137,9 +135,16 @@ class Schedule {
 	 * @see https://en.wikipedia.org/wiki/Cron For more details
 	 */
 	async create(taskName, time, options) {
-		const task = await this._add(taskName, time, options);
+		const task = new ScheduledTask(this.client, taskName, time, options);
+
+		const index = this.tasks.findIndex(entry => entry.time > task.time);
+		if (index === -1) this.tasks.push(task);
+		else this.tasks.splice(index, 0, task);
+
+		this._checkInterval();
+
 		if (!task) return null;
-		await this.client.settings.update('schedules', task.toJSON(), { action: 'add' });
+		await this.client.settings.update('schedules', this.tasks, { action: 'override', force: true });
 		return task;
 	}
 
@@ -150,64 +155,19 @@ class Schedule {
 	 * @returns {this}
 	 */
 	async delete(id) {
-		const taskIndex = this.tasks.findIndex(entry => entry.id === id);
-		if (taskIndex === -1) throw new Error('This task does not exist.');
-
-		this.tasks.splice(taskIndex, 1);
-		// Get the task and use it to remove
-		const task = this._tasks.find(entry => entry.id === id);
+		const task = this.tasks.find(entry => entry.id === id);
 		if (task) await this.client.settings.update('schedules', task, { action: 'remove' });
-
 		return this;
 	}
 
 	/**
 	 * Clear all the ScheduledTasks
 	 * @since 0.5.0
+	 * @returns {this}
 	 */
 	async clear() {
-		// this._tasks is unedited as Settings#clear will clear the array
 		await this.client.settings.reset('schedules');
-		this.tasks = [];
-	}
-
-	/**
-	 * Adds a task to the cache
-	 * @since 0.5.0
-	 * @param {string} taskName The name of the task
-	 * @param {(Date|number|string)} time The time or Cron pattern
-	 * @param {ScheduledTaskOptions} options The options for the ScheduledTask instance
-	 * @returns {?ScheduledTask}
-	 * @private
-	 */
-	async _add(taskName, time, options) {
-		const task = new ScheduledTask(this.client, taskName, time, options);
-
-		// If the task were due of time before the bot's intialization, delete if not recurring, else update for next period
-		if (!task.catchUp && task.time < Date.now()) {
-			if (!task.recurring) {
-				await task.delete();
-				return null;
-			}
-			await task.update({ time: task.recurring });
-		}
-		this._insert(task);
-		this._checkInterval();
-		return task;
-	}
-
-	/**
-	 * Inserts the ScheduledTask instance in its sorted position for optimization
-	 * @since 0.5.0
-	 * @param {ScheduledTask} task The ScheduledTask instance to insert
-	 * @returns {ScheduledTask}
-	 * @private
-	 */
-	_insert(task) {
-		const index = this.tasks.findIndex(entry => entry.time > task.time);
-		if (index === -1) this.tasks.push(task);
-		else this.tasks.splice(index, 0, task);
-		return task;
+		return this;
 	}
 
 	/**
@@ -216,7 +176,7 @@ class Schedule {
 	 * @private
 	 */
 	_clearInterval() {
-		clearInterval(this._interval);
+		this.client.clearInterval(this._interval);
 		this._interval = null;
 	}
 
