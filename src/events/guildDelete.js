@@ -3,7 +3,7 @@ const { Event } = require('klasa');
 module.exports = class extends Event {
 
 	run(guild) {
-		if (guild.available && !this.client.settings.preserveSettings) guild.settings.destroy().catch(() => null);
+		if (this.client.ready && guild.available && !this.client.options.preserveSettings) guild.settings.destroy().catch(() => null);
 	}
 
 };
