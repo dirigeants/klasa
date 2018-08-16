@@ -1,4 +1,4 @@
-const { isFunction, deepClone } = require('../../util/util');
+const { isFunction, deepClone, fromEntries } = require('../../util/util');
 
 /**
  * The base class for Schema and SchemaFolder
@@ -128,20 +128,22 @@ class Base extends Map {
 	 * Resolve all Pieces of the SchemaFolder or Schema instance
 	 * @since 0.5.0
 	 * @param {Object} entry The database entry to resolve values for
+	 * @param {KlasaGuild} [guild] The guild to use for resolving values
 	 * @returns {Object}
 	 */
-	async resolve(entry) {
-		const guild = this.client.guilds.get(entry.id);
-		const resolved = await Promise.all(Object.entries(entry)
-			.filter(([key]) => key !== 'id')
-			.map(async ([key, data]) => {
-				const piece = this.get(this.path ? `${this.path}.${key}` : key);
-				if (piece.type === 'Folder') return { [key]: await piece.resolve(data) };
-				if (!piece.resolve) return data;
-				if (piece.array) return { [key]: await Promise.all(data.map(dat => piece.autoResolve(dat, guild))) };
-				return { [key]: await piece.autoResolve(data, guild) };
-			}));
-		return Object.assign({}, ...resolved);
+	async resolve(entry, guild = this.client.guilds.get(entry.id)) {
+		const promises = [];
+		for (const [key, piece] of super.entries()) {
+			if (piece.type === 'Folder') {
+				promises.push(piece.resolve(entry[key], guild).then(value => [key, value]));
+			} else {
+				promises.push((piece.resolve ?
+					piece.array ? Promise.all(entry[key].map(value => piece.autoResolve(value, guild))) : piece.autoResolve(entry[key], guild) :
+					Promise.resolve(entry[key])).then(value => [key, value]));
+			}
+		}
+
+		return fromEntries(await Promise.all(promises));
 	}
 
 	/**
@@ -152,10 +154,7 @@ class Base extends Map {
 	 */
 	get configurableKeys() {
 		const keys = [];
-		for (const piece of this.values()) {
-			if (piece.type === 'Folder') keys.push(...piece.configurableKeys);
-			else keys.push(piece.key);
-		}
+		for (const piece of this.values(true)) if (piece.configurable) keys.push(piece.path);
 		return keys;
 	}
 

@@ -36,6 +36,14 @@ class SchemaType {
 		return data;
 	}
 
+	serialize(data) {
+		return Promise.resolve(typeof data !== 'object' || !data ? data : data.id || data.name || data);
+	}
+
+	deserialize(data) {
+		return Promise.resolve(data);
+	}
+
 	/**
 	 * Resolves a string
 	 * @param {*} value the value to resolve
