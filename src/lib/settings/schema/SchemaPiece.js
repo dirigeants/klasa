@@ -200,12 +200,8 @@ class SchemaPiece {
 		return val;
 	}
 
-	async autoResolve(value, guild) {
-		const language = guild ? guild.language : this.client.languages.default;
-		const val = await this.resolver.resolve(value, this, language, guild).catch(() => null);
-		if (val === null) return null;
-		if (this.filter && this.filter(this.client, val, this, language)) throw language.get('SETTING_GATEWAY_INVALID_FILTERED_VALUE', this, value);
-		return val;
+	autoResolve(value, guild) {
+		return this.resolver.deserialize(value, this, guild);
 	}
 
 	/**

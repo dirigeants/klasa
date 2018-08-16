@@ -207,6 +207,10 @@ class ScheduledTask {
 		return object;
 	}
 
+	toString() {
+		return `ScheduledTask(id: ${this.id})`;
+	}
+
 	/**
 	 * Resolve the time and cron
 	 * @since 0.5.0

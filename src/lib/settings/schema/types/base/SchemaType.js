@@ -36,6 +36,14 @@ class SchemaType {
 		return data;
 	}
 
+	serialize(data) {
+		return data;
+	}
+
+	deserialize(data) {
+		return data;
+	}
+
 	/**
 	 * Resolves a string
 	 * @param {*} value the value to resolve

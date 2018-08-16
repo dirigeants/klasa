@@ -132,15 +132,14 @@ class Base extends Map {
 	 */
 	async resolve(entry) {
 		const guild = this.client.guilds.get(entry.id);
-		const resolved = await Promise.all(Object.entries(entry)
-			.filter(([key]) => key !== 'id')
-			.map(async ([key, data]) => {
-				const piece = this.get(this.path ? `${this.path}.${key}` : key);
-				if (piece.type === 'Folder') return { [key]: await piece.resolve(data) };
-				if (!piece.resolve) return data;
-				if (piece.array) return { [key]: await Promise.all(data.map(dat => piece.autoResolve(dat, guild))) };
-				return { [key]: await piece.autoResolve(data, guild) };
-			}));
+		const resolved = [];
+		for (const [key, piece] of super.entries()) {
+			if (piece.type === 'Folder') {
+				resolved.push({ [key]: piece.resolve(entry[key]) });
+			} else {
+				resolved.push({ [key]: piece.resolve ? piece.array ? entry[key].map(value => piece.autoResolve(value, guild)) : piece.autoResolve(entry[key], guild) : entry[key] });
+			}
+		}
 		return Object.assign({}, ...resolved);
 	}
 

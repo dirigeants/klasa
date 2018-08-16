@@ -23,6 +23,15 @@ class PieceType extends SchemaType {
 		throw language.get('RESOLVER_INVALID_PIECE', piece.key, piece.type);
 	}
 
+	serialize(data) {
+		return data.name;
+	}
+
+	deserialize(data, piece) {
+		const store = this.client[`${piece.type}s`];
+		return (store && store.get(data)) || null;
+	}
+
 }
 
 module.exports = PieceType;

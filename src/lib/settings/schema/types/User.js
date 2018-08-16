@@ -24,6 +24,14 @@ class UserType extends SchemaType {
 		throw language.get('RESOLVER_INVALID_USER', piece.key);
 	}
 
+	serialize(data) {
+		return data.id;
+	}
+
+	deserialize(data) {
+		return this.client.users.get(data) || null;
+	}
+
 	/**
 	 * Resolves a string
 	 * @param {*} value the value to resolve

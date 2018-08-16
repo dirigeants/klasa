@@ -26,6 +26,14 @@ class RoleType extends SchemaType {
 		throw language.get('RESOLVER_INVALID_ROLE', piece.key);
 	}
 
+	serialize(data) {
+		return data.id;
+	}
+
+	deserialize(data, piece, guild) {
+		return (guild ? guild.roles.get(data) : this.client.guilds.find(gd => gd.roles.get(data))) || null;
+	}
+
 	/**
 	 * Resolves a string
 	 * @param {*} value the value to resolve

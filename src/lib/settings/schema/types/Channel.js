@@ -25,6 +25,14 @@ class ChannelType extends SchemaType {
 		throw language.get('RESOLVER_INVALID_CHANNEL', piece.key);
 	}
 
+	serialize(data) {
+		return data.id;
+	}
+
+	deserialize(data, piece, guild) {
+		return (guild ? guild.channels.get(data) : this.client.channels.get(data)) || null;
+	}
+
 	/**
 	 * Checks what kind of channel we should resolve into
 	 * @since 0.5.0

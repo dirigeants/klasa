@@ -14,5 +14,6 @@ module.exports = {
 	user: require('./User'),
 	command: require('./Piece'),
 	language: require('./Piece'),
+	scheduledTask: require('./ScheduledTask'),
 	any: require('./base/SchemaType')
 };

@@ -24,6 +24,14 @@ class GuildType extends SchemaType {
 		throw language.get('RESOLVER_INVALID_GUILD', piece.key);
 	}
 
+	serialize(data) {
+		return data.id;
+	}
+
+	deserialize(data) {
+		return this.client.guilds.get(data) || null;
+	}
+
 	/**
 	 * Resolves a string
 	 * @param {*} value the value to resolve
