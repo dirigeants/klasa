@@ -379,6 +379,8 @@ Util.PRIMITIVE_TYPES = ['string', 'bigint', 'number', 'boolean'];
  * @since 0.5.0
  * @param {Array<*>} iter The array to convert to object
  * @returns {Object<string, *>}
+ * @method
+ * @static
  * @see {@url https://github.com/tc39/proposal-object-from-entries}
  */
 Util.fromEntries = Object.fromEntries || function fromEntries(iter) {
