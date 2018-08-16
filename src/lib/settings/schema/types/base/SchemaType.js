@@ -37,7 +37,7 @@ class SchemaType {
 	}
 
 	serialize(data) {
-		return data;
+		return Promise.resolve(typeof data !== 'object' || !data ? data : data.id || data.name || data);
 	}
 
 	deserialize(data) {

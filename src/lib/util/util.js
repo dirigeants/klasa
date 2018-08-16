@@ -391,7 +391,7 @@ Util.fromEntries = Object.fromEntries || function fromEntries(iter) {
 			configurable: true,
 			enumerable: true,
 			writable: true,
-			value: value
+			value
 		});
 	}
 
