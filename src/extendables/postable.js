@@ -8,7 +8,7 @@ module.exports = class extends Extendable {
 	}
 
 	get extend() {
-		return !this.guild || this.permissionsFor(this.guild.me).has([FLAGS.VIEW_CHANNEL, FLAGS.SEND_MESSAGES]);
+		return !this.guild || this.permissionsFor(this.guild.me).has([FLAGS.VIEW_CHANNEL, FLAGS.SEND_MESSAGES], false);
 	}
 
 };
