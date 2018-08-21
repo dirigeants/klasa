@@ -252,7 +252,7 @@ class Util {
 		const entries = [];
 		for (const [key, value] of Object.entries(object)) {
 			if (Util.isObject(value)) {
-				entries.concat(Util.objectToTuples(value, `${prefix}${key}.`));
+				entries.push(...Util.objectToTuples(value, `${prefix}${key}.`));
 			} else {
 				entries.push([`${prefix}${key}`, value]);
 			}
