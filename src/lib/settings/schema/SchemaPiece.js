@@ -109,6 +109,8 @@ class SchemaPiece {
 		 * @type {SchemaType}
 		 */
 		this.resolver = Client.types.get(this.type);
+
+		if (!this.resolver) throw new TypeError('Unknown Schema Type used: You need to define your custom SchemaType first');
 	}
 
 	/**
