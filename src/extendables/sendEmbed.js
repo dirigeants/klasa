@@ -1,3 +1,4 @@
+const { APIMessage } = require('discord.js');
 const { Extendable } = require('klasa');
 
 module.exports = class extends Extendable {
@@ -7,11 +8,7 @@ module.exports = class extends Extendable {
 	}
 
 	extend(embed, content, options = {}) {
-		if (typeof content === 'object') {
-			options = content;
-			content = '';
-		}
-		return this.send({ content, ...options, embed });
+		return this.send(APIMessage.transformOptions(content, options, { embed }));
 	}
 
 };

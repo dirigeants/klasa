@@ -1,5 +1,4 @@
-const { Structures, splitMessage, Collection, MessageAttachment, MessageEmbed, Permissions: { FLAGS } } = require('discord.js');
-const { isObject } = require('../util/util');
+const { Structures, Collection, APIMessage, Permissions: { FLAGS } } = require('discord.js');
 
 module.exports = Structures.extend('Message', Message => {
 	/**
@@ -182,26 +181,32 @@ module.exports = Structures.extend('Message', Message => {
 		 * @returns {KlasaMessage|KlasaMessage[]}
 		 */
 		async sendMessage(content, options) {
-			// eslint-disable-next-line prefer-const
-			let { content: _content, ..._options } = this.constructor.handleOptions(content, options);
+			const combinedOptions = APIMessage.transformOptions(content, options);
 
-			if (typeof _options.files !== 'undefined') return this.channel.send(_content, _options);
-			if (Array.isArray(_content)) _content = _content.join('\n');
-			if (_options && _options.split) _content = splitMessage(_content, _options.split);
-			if (!Array.isArray(_content)) _content = [_content];
+			if ('files' in combinedOptions) return this.channel.send(combinedOptions);
+
+			const newMessages = new APIMessage(this.channel, combinedOptions).resolveData().split()
+				.map(mes => {
+					// Command editing should always remove embeds and content if none is provided
+					mes.data.embed = mes.data.embed || null;
+					mes.data.content = mes.data.content || null;
+					return mes;
+				});
 
 			const { responses } = this;
 			const promises = [];
-			const max = Math.max(_content.length, responses.length);
+			const max = Math.max(newMessages.length, responses.length);
 
 			for (let i = 0; i < max; i++) {
-				if (i >= _content.length) responses[i].delete();
-				else if (responses.length > i) promises.push(responses[i].edit(_content[i], _options));
-				else promises.push(this.channel.send(_content[i], _options));
+				if (i >= newMessages.length) responses[i].delete();
+				else if (responses.length > i) promises.push(responses[i].edit(newMessages[i]));
+				else promises.push(this.channel.send(newMessages[i]));
 			}
 
 			const newResponses = await Promise.all(promises);
-			this._responses = _content.map((val, i) => responses[i] || newResponses[i]);
+
+			// Can't store the clones because deleted will never be true
+			this._responses = newMessages.map((val, i) => responses[i] || newResponses[i]);
 
 			return newResponses.length === 1 ? newResponses[0] : newResponses;
 		}
@@ -215,19 +220,19 @@ module.exports = Structures.extend('Message', Message => {
 		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
 		 */
 		sendEmbed(embed, content, options) {
-			return this.sendMessage({ ...this.constructor.combineContentOptions(content, options), embed });
+			return this.sendMessage(APIMessage.transformOptions(content, options, { embed }));
 		}
 
 		/**
 		 * Sends a codeblock message that will be editable via command editing (if nothing is attached)
 		 * @since 0.0.1
-		 * @param {string} lang The language of the codeblock
+		 * @param {string} code The language of the codeblock
 		 * @param {external:StringResolvable} content The content to send
 		 * @param {external:MessageOptions} [options] The D.JS message options
 		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
 		 */
-		sendCode(lang, content, options) {
-			return this.sendMessage({ ...this.constructor.combineContentOptions(content, options), code: lang });
+		sendCode(code, content, options) {
+			return this.sendMessage(APIMessage.transformOptions(content, options, { code }));
 		}
 
 		/**
@@ -304,44 +309,6 @@ module.exports = Structures.extend('Message', Message => {
 				limit: this.command.promptLimit
 			});
 			this.client.emit('commandRun', this, this.command, this.args);
-		}
-
-		/**
-		 * Merge the content with the options.
-		 * @since 0.5.0
-		 * @param {external:StringResolvable} [content] The content to send
-		 * @param {external:MessageOptions} [options] The D.JS message options
-		 * @returns {external:MessageOptions}
-		 * @private
-		 */
-		static combineContentOptions(content, options) {
-			if (!options) return isObject(content) ? content : { content };
-			return { ...options, content };
-		}
-
-		/**
-		 * Handle all send overloads.
-		 * @since 0.5.0
-		 * @param {external:StringResolvable|external:MessageEmbed|external:MessageAttachment} [content] The content to send
-		 * @param {external:MessageOptions} [options={}] The D.JS message options
-		 * @returns {external:MessageOptions}
-		 * @private
-		 */
-		static handleOptions(content, options = {}) {
-			if (content instanceof MessageEmbed) options.embed = content;
-			else if (content instanceof MessageAttachment) options.files = [content];
-			else if (isObject(content)) options = content;
-			else options = this.combineContentOptions(content, options);
-
-			if (options.split && typeof options.code !== 'undefined' && (typeof options.code !== 'boolean' || options.code === true)) {
-				if (typeof options.split === 'boolean') options.split = {};
-				options.split.prepend = `\`\`\`${typeof options.code !== 'boolean' ? options.code || '' : ''}\n`;
-				options.split.append = '\n```';
-			}
-
-			options.embed = options.embed || null;
-			options.content = options.content || null;
-			return options;
 		}
 
 	}
