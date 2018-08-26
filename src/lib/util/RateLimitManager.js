@@ -59,7 +59,7 @@ class RateLimitManager extends Collection {
 	 * @private
 	 */
 	set(id, rateLimit) {
-		if (rateLimit instanceof RateLimit) throw new TypeError('Invalid RateLimit');
+		if (!(rateLimit instanceof RateLimit)) throw new TypeError('Invalid RateLimit');
 		if (!this.sweepInterval) this.sweepInterval = setInterval(this.sweep.bind(this), 30000);
 		return super.set(id, rateLimit);
 	}
