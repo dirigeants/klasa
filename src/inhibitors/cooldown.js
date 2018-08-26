@@ -8,20 +8,18 @@ module.exports = class extends Inhibitor {
 
 	async run(message, command) {
 		if (message.author === this.client.owner) return;
-		if (!command.cooldown || command.cooldown <= 0) return;
+		if (command.cooldown <= 0) return;
 
-		const existing = command.cooldowns.get(message.author.id);
+		const level = command.cooldownLevel === 'guild' && message.channel.type === 'dm' ? 'channel' : command.cooldownLevel;
+		const { id } = message[level];
+		const existing = command.cooldowns.get(id);
 
-		if (!existing || existing.count < command.bucket) return;
-
-		const remaining = ((command.cooldown * 1000) - (Date.now() - existing.time)) / 1000;
-
-		if (remaining < 0) {
-			command.cooldowns.delete(message.author.id);
-			return;
+		try {
+			if (existing) existing.drip();
+			else message.command.cooldowns.create(id).drip();
+		} catch (err) {
+			throw message.language.get('INHIBITOR_COOLDOWN', Math.ceil(existing.reset / 1000));
 		}
-
-		throw message.language.get('INHIBITOR_COOLDOWN', Math.ceil(remaining));
 	}
 
 };
