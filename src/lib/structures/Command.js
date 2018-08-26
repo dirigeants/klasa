@@ -196,6 +196,8 @@ class Command extends Piece {
 		 */
 		this.cooldownLevel = options.cooldownLevel;
 
+		if (!['author', 'channel', 'guild'].includes(this.cooldownLevel)) throw new Error('Invalid cooldownLevel');
+
 		/**
 		 * Any active cooldowns for the command
 		 * @since 0.0.1
