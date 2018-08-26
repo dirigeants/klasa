@@ -18,7 +18,7 @@ class RateLimitManager extends Collection {
 		/**
 		 * The sweep interval for this RateLimitManager
 		 * @since 0.5.0
-		 * @type {?interval}
+		 * @type {?NodeJS.Timer}
 		 * @private
 		 */
 		this.sweepInterval = null;
