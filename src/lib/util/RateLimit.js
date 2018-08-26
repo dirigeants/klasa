@@ -45,7 +45,7 @@ class RateLimit {
 	 * @readonly
 	 */
 	get remainingTime() {
-		return Date.now() - this.resetTime;
+		return this.resetTime - Date.now();
 	}
 
 	/**
