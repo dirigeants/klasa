@@ -19,23 +19,34 @@ class RateLimit {
 	}
 
 	/**
+	 * If this RateLimit is expired or not, allowing the bucket to be reset
+	 * @since 0.5.0
+	 * @type {boolean}
+	 * @readonly
+	 */
+	get expired() {
+		return Date.now() >= this.resetTime;
+	}
+
+	/**
 	 * If this RateLimit is limited or not
 	 * @since 0.5.0
 	 * @type {boolean}
+	 * @readonly
 	 */
 	get limited() {
 		return !(this.remaining > 0 || this.expired);
 	}
 
 	/**
-	 * If this RateLimit is expired or not, allowing the bucket to be reset
+	 * The remaining time before the RateLimit is reset
 	 * @since 0.5.0
-	 * @type {boolean}
+	 * @type {number}
+	 * @readonly
 	 */
-	get expired() {
-		return Date.now() >= this.resetTime;
+	get remainingTime() {
+		return Date.now() - this.resetTime;
 	}
-
 
 	/**
 	 * Drips the RateLimit bucket

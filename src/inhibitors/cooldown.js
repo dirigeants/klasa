@@ -17,7 +17,7 @@ module.exports = class extends Inhibitor {
 			if (existing) existing.drip();
 			else message.command.cooldowns.create(id).drip();
 		} catch (err) {
-			throw message.language.get('INHIBITOR_COOLDOWN', Math.ceil(existing.reset / 1000));
+			throw message.language.get('INHIBITOR_COOLDOWN', Math.ceil(existing.remainingTime / 1000));
 		}
 	}
 
