@@ -658,14 +658,14 @@ declare module 'klasa' {
 
 	export abstract class Command extends Piece {
 		public constructor(client: KlasaClient, store: CommandStore, file: string[], directory: string, options?: CommandOptions);
+		public readonly bucket: number;
 		public readonly category: string;
+		public readonly cooldown: number;
 		public readonly subCategory: string;
 		public readonly usageDelim: string;
 		public readonly usageString: string;
 		public aliases: string[];
 		public requiredPermissions: Permissions;
-		public bucket: number;
-		public cooldown: number;
 		public cooldownLevel: 'author' | 'channel' | 'guild';
 		public deletable: boolean;
 		public description: string | ((language: Language) => string);

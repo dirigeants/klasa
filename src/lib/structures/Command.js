@@ -176,20 +176,6 @@ class Command extends Piece {
 		this.usage = new CommandUsage(client, options.usage, options.usageDelim, this);
 
 		/**
-		 * The number of times this command can be run before ratelimited by the cooldown
-		 * @since 0.5.0
-		 * @type {number}
-		 */
-		this.bucket = options.bucket;
-
-		/**
-		 * The cooldown in seconds this command has
-		 * @since 0.0.1
-		 * @type {number}
-		 */
-		this.cooldown = options.cooldown;
-
-		/**
 		 * The level at which cooldowns should apply
 		 * @since 0.5.0
 		 * @type {string}
@@ -204,7 +190,26 @@ class Command extends Piece {
 		 * @type {RateLimitManager}
 		 * @private
 		 */
-		this.cooldowns = new RateLimitManager(this.bucket, this.cooldown);
+		this.cooldowns = new RateLimitManager(options.bucket, options.cooldown);
+	}
+
+	/**
+	 * The number of times this command can be run before ratelimited by the cooldown
+	 * @since 0.5.0
+	 * @type {number}
+	 * @readonly
+	 */
+	get bucket() {
+		return this.cooldowns.bucket;
+	}
+	/**
+	 * The cooldown in seconds this command has
+	 * @since 0.0.1
+	 * @type {number}
+	 * @readonly
+	 */
+	get cooldown() {
+		return this.cooldowns.cooldown;
 	}
 
 	/**
