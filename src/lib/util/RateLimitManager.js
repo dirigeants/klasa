@@ -40,6 +40,7 @@ class RateLimitManager extends Collection {
 
 	/**
 	 * Creates a {@link RateLimit} for this manager
+	 * @since 0.5.0
 	 * @param {string} id The id the RateLimit belongs to
 	 * @returns {RateLimit}
 	 */
@@ -51,6 +52,7 @@ class RateLimitManager extends Collection {
 
 	/**
 	 * Wraps {@link external:Collection}'s set method to set interval to sweep inactive RateLimits
+	 * @since 0.5.0
 	 * @param {string} id The id the RateLimit belongs to
 	 * @param {RateLimit} rateLimit The this for the sweep
 	 * @returns {number}
@@ -64,6 +66,7 @@ class RateLimitManager extends Collection {
 
 	/**
 	 * Wraps {@link external:Collection}'s sweep method to clear the interval when this manager is empty
+	 * @since 0.5.0
 	 * @param {Function} fn The filter function
 	 * @param {any} thisArg The this for the sweep
 	 * @returns {number}

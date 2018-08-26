@@ -121,7 +121,7 @@ module.exports = Structures.extend('Message', Message => {
 		}
 
 		/**
-		 * Get's the level id of this message (with resepect to @{link Command#cooldownLevel})
+		 * Get's the level id of this message (with respect to @{link Command#cooldownLevel})
 		 * @since 0.5.0
 		 * @type {?string}
 		 * @readonly

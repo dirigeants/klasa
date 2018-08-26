@@ -50,6 +50,7 @@ class RateLimit {
 
 	/**
 	 * Drips the RateLimit bucket
+	 * @since 0.5.0
 	 * @returns {this}
 	 */
 	drip() {
@@ -62,6 +63,7 @@ class RateLimit {
 
 	/**
 	 * Resets the RateLimit back to it's full state
+	 * @since 0.5.0
 	 * @returns {this}
 	 */
 	reset() {
@@ -86,6 +88,7 @@ class RateLimit {
 
 	/**
 	 * Returns a drip back into the RateLimit bucket
+	 * @since 0.5.0
 	 * @returns {this}
 	 */
 	undrip() {
