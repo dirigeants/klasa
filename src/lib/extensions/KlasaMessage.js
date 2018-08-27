@@ -121,6 +121,18 @@ module.exports = Structures.extend('Message', Message => {
 		}
 
 		/**
+		 * Get's the level id of this message (with respect to @{link Command#cooldownLevel})
+		 * @since 0.5.0
+		 * @type {?string}
+		 * @readonly
+		 * @private
+		 */
+		get levelID() {
+			if (!this.command) return null;
+			return this.guild ? this[this.command.cooldownLevel].id : this.author.id;
+		}
+
+		/**
 		 * Awaits a response from the author.
 		 * @param {string} text The text to prompt the author
 		 * @param {number} [time=30000] The time to wait before giving up

@@ -68,6 +68,8 @@ module.exports = {
 	Cron: require('./lib/util/Cron'),
 	Duration: require('./lib/util/Duration'),
 	QueryBuilder: require('./lib/util/QueryBuilder'),
+	RateLimit: require('./lib/util/RateLimit'),
+	RateLimitManager: require('./lib/util/RateLimitManager'),
 	ReactionHandler: require('./lib/util/ReactionHandler'),
 	RichDisplay: require('./lib/util/RichDisplay'),
 	RichMenu: require('./lib/util/RichMenu'),

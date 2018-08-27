@@ -219,6 +219,7 @@ declare module 'klasa' {
 		public command: Command | null;
 		public prefix: RegExp | null;
 		public prefixLength: number | null;
+		private levelID: Snowflake | null;
 		private prompter: CommandPrompt | null;
 		private _responses: KlasaMessage[];
 
@@ -657,14 +658,15 @@ declare module 'klasa' {
 
 	export abstract class Command extends Piece {
 		public constructor(client: KlasaClient, store: CommandStore, file: string[], directory: string, options?: CommandOptions);
+		public readonly bucket: number;
 		public readonly category: string;
+		public readonly cooldown: number;
 		public readonly subCategory: string;
 		public readonly usageDelim: string;
 		public readonly usageString: string;
 		public aliases: string[];
 		public requiredPermissions: Permissions;
-		public bucket: number;
-		public cooldown: number;
+		public cooldownLevel: 'author' | 'channel' | 'guild';
 		public deletable: boolean;
 		public description: string | ((language: Language) => string);
 		public extendedHelp: string | ((language: Language) => string);
@@ -679,7 +681,7 @@ declare module 'klasa' {
 		public runIn: string[];
 		public subcommands: boolean;
 		public usage: CommandUsage;
-		private cooldowns: Map<Snowflake, number>;
+		private cooldowns: RateLimitManager;
 
 		public createCustomResolver(type: string, resolver: ArgResolverCustomMethod): this;
 		public customizeResponse(name: string, response: string | ((message: KlasaMessage, possible: Possible) => string)): this;
@@ -1052,6 +1054,26 @@ declare module 'klasa' {
 		public wtf(...data: any[]): void;
 
 		private static _flatten(data: any): string;
+	}
+
+	export class RateLimit {
+		public constructor(manager: RateLimitManager);
+		public manager: RateLimitManager;
+		public readonly expired: boolean;
+		public readonly limited: boolean;
+		public readonly remainingTime: number;
+		private remaining: number;
+		private resetTime: number;
+		public drip(): this;
+		public reset(): this;
+	}
+
+	export class RateLimitManager extends Collection<Snowflake, RateLimit> {
+		public constructor(bucket: number, cooldown: number);
+		public bucket: number;
+		public cooldown: number;
+		private sweepInterval: NodeJS.Timer | null;
+		public create(id: Snowflake): RateLimit;
 	}
 
 	export class ReactionHandler extends ReactionCollector {
@@ -1530,6 +1552,7 @@ declare module 'klasa' {
 		requiredPermissions?: PermissionResolvable;
 		bucket?: number;
 		cooldown?: number;
+		cooldownLevel?: 'author' | 'channel' | 'guild';
 		deletable?: boolean;
 		description?: string | string[] | ((language: Language) => string | string[]);
 		extendedHelp?: string | string[] | ((language: Language) => string | string[]);
