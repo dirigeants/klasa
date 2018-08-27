@@ -92,7 +92,7 @@ class RateLimit {
 	 * @returns {this}
 	 */
 	undrip() {
-		this.count = Math.min(this.remaining + 1, this.manager.bucket);
+		this.remaining = Math.min(this.remaining + 1, this.manager.bucket);
 		return this;
 	}
 
