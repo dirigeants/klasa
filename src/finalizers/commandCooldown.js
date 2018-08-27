@@ -8,10 +8,10 @@ module.exports = class extends Finalizer {
 
 		const id = message.levelID;
 
-		const existing = message.command.cooldowns.get(id) || message.command.cooldowns.create(id);
+		const rateLimit = message.command.cooldowns.get(id) || message.command.cooldowns.create(id);
 
 		try {
-			existing.drip();
+			rateLimit.drip();
 		} catch (err) {
 			this.client.console.emit('error', `${message.author.username}[${message.author.id}] has exceeded the RateLimit for ${message.command}`);
 		}
