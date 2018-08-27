@@ -45,6 +45,7 @@ module.exports = class extends Command {
 	async buildHelp(message) {
 		const help = {};
 
+		const { prefix } = message.guildSettings;
 		const commandNames = [...this.client.commands.keys()];
 		const longest = commandNames.reduce((long, str) => Math.max(long, str.length), 0);
 
@@ -54,7 +55,7 @@ module.exports = class extends Command {
 					if (!help.hasOwnProperty(command.category)) help[command.category] = {};
 					if (!help[command.category].hasOwnProperty(command.subCategory)) help[command.category][command.subCategory] = [];
 					const description = isFunction(command.description) ? command.description(message.language) : command.description;
-					help[command.category][command.subCategory].push(`${message.guildConfigs.prefix}${command.name.padEnd(longest)} :: ${description}`);
+					help[command.category][command.subCategory].push(`${prefix}${command.name.padEnd(longest)} :: ${description}`);
 				})
 				.catch(() => {
 					// noop

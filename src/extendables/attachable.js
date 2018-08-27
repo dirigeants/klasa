@@ -8,7 +8,7 @@ module.exports = class extends Extendable {
 	}
 
 	get extend() {
-		return !this.guild || (this.postable && this.permissionsFor(this.guild.me).has(FLAGS.ATTACH_FILES));
+		return !this.guild || (this.postable && this.permissionsFor(this.guild.me).has(FLAGS.ATTACH_FILES, false));
 	}
 
 };

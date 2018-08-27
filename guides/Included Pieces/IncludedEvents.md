@@ -14,13 +14,13 @@ Replies with the reason why the command was inhibited.
 
 [events/commandInhibited.js](https://github.com/dirigeants/klasa/blob/master/src/events/commandInhibited.js)
 
-## configUpdateEntry
+## settingsUpdateEntry
 
-Synchronises the user configs between all shards, if the bot is sharded.
+Synchronises the user settings between all shards, if the bot is sharded.
 
 **Source:**
 
-[events/configUpdateEntry.js](https://github.com/dirigeants/klasa/blob/master/src/events/configUpdateEntry.js)
+[events/settingsUpdateEntry.js](https://github.com/dirigeants/klasa/blob/master/src/events/settingsUpdateEntry.js)
 
 ## debug
 
@@ -72,7 +72,7 @@ Checks if the guild is blacklisted for automatic leaving.
 
 ## guildDelete
 
-If `KlasaClientOptions.preserveConfigs` is set to `false` (defaults to `true` if not set), this event deletes entries from the database to free up space.
+If `KlasaClientOptions.preserveSettings` is set to `false` (defaults to `true` if not set), this event deletes entries from the database to free up space.
 
 **Source:**
 

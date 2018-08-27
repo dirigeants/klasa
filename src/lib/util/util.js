@@ -1,5 +1,7 @@
 const { promisify } = require('util');
 const { exec } = require('child_process');
+const { Guild, GuildChannel, Message } = require('discord.js');
+
 const zws = String.fromCharCode(8203);
 let sensitivePattern;
 const TOTITLECASE = /[A-Za-zÀ-ÖØ-öø-ÿ]\S*/g;
@@ -9,6 +11,10 @@ const REGEXPESC = /[-/\\^$*+?.()|[\]{}]/g;
  * Contains static methods to be used throughout klasa
  */
 class Util {
+
+	/**
+	 * @typedef {(KlasaGuild|KlasaMessage|external:GuildChannel)} GuildResolvable
+	 */
 
 	/**
 	 * @typedef {(string|*)} Stringable
@@ -212,21 +218,6 @@ class Util {
 	}
 
 	/**
-	 * Get the identifier of a value.
-	 * @since 0.5.0
-	 * @param {*} value The value to get the identifier from
-	 * @returns {?(string|number|boolean)}
-	 */
-	static getIdentifier(value) {
-		if (Util.isPrimitive(value)) return value;
-		if (Util.isObject(value)) {
-			if ('id' in value) return value.id;
-			if ('name' in value) return value.name;
-		}
-		return null;
-	}
-
-	/**
 	 * Turn a dotted path into a json object.
 	 * @since 0.5.0
 	 * @param {string} path The dotted path
@@ -254,20 +245,20 @@ class Util {
 	 * Convert an object to a tuple
 	 * @since 0.5.0
 	 * @param {Object<string, *>} object The object to convert
-	 * @param {{ keys: string[], values: any[] }} [entries={}] The initial entries
 	 * @param {string} [prefix=''] The prefix for the key
 	 * @returns {Array<Array<*>>}
 	 */
-	static objectToTuples(object, { keys = [], values = [] } = {}, prefix = '') {
-		for (const key of Object.keys(object)) {
-			if (Util.isObject(object[key])) {
-				Util.objectToTuples(object[key], { keys, values }, `${prefix}${key}.`);
+	static objectToTuples(object, prefix = '') {
+		const entries = [];
+		for (const [key, value] of Object.entries(object)) {
+			if (Util.isObject(value)) {
+				entries.push(...Util.objectToTuples(value, `${prefix}${key}.`));
 			} else {
-				keys.push(`${prefix}${key}`);
-				values.push(object[key]);
+				entries.push([`${prefix}${key}`, value]);
 			}
 		}
-		return [keys, values];
+
+		return entries;
 	}
 
 	/**
@@ -303,6 +294,26 @@ class Util {
 		}
 
 		return given;
+	}
+
+	/**
+	 * Resolves a guild
+	 * @since 0.5.0
+	 * @param {KlasaClient} client The KlasaClient
+	 * @param {GuildResolvable} guild A guild resolvable
+	 * @returns {?KlasaGuild}
+	 * @private
+	 */
+	static resolveGuild(client, guild) {
+		const type = typeof guild;
+		if (type === 'object' && guild !== null) {
+			if (guild instanceof Guild) return guild;
+			if ((guild instanceof GuildChannel) ||
+				(guild instanceof Message)) return guild.guild;
+		} else if (type === 'string' && /^\d{17,19}$/.test(guild)) {
+			return client.guilds.get(guild) || null;
+		}
+		return null;
 	}
 
 }

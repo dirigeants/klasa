@@ -74,7 +74,7 @@ this.client.schedule.create('backup', '0 0 * * tue,fri');
 
 The pattern above is a **Crontab pattern** that runs every Tuesday and Friday at 00:00 UTC, and will execute the task `backup` every time it ends.
 
-## Configuration
+## Options
 
 | Name        | Default       | Type    | Description                        |
 | ----------- | ------------- | ------- | ---------------------------------- |

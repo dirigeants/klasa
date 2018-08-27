@@ -14,6 +14,13 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#398](https://github.com/dirigeants/klasa/pull/398)] Added the `Settings#update(entries: Array<[string, any]>);` overload. (kyranet)
+- [[#392](https://github.com/dirigeants/klasa/pull/392)] Added support for empty prefixes. (kyranet)
+- [[#383](https://github.com/dirigeants/klasa/pull/383)] Added the `SETTING_GATEWAY_INVALID_FILTERED_VALUE` language key. (bdistin)
+- [[#383](https://github.com/dirigeants/klasa/pull/383)] Added `Base` class for schemas, extending `Map`. (Unseenfaith)
+- [[#383](https://github.com/dirigeants/klasa/pull/383)] Added `SchemaType` and `SchemaTypes` classes. (Unseenfaith)
+- [[#383](https://github.com/dirigeants/klasa/pull/383)] Added `SchemaPieceOptions.filter`. (kyranet)
+- [[#383](https://github.com/dirigeants/klasa/pull/383)] Added abstract method `SQLProvider#getColumns`. (kyranet)
 - [[#379](https://github.com/dirigeants/klasa/pull/379)] Added `prefixCaseInsensitive` option in `KlasaClientOptions`. (AdityaTD)
 - [[#362](https://github.com/dirigeants/klasa/pull/362)] Added `GatewayDriverRegisterOptions.syncArg` for custom arguments for `GatewayDriver#sync()`'s call. (kyranet)
 - [[#362](https://github.com/dirigeants/klasa/pull/362)] Added `GatewayDriver#@@iterator`. (kyranet)
@@ -117,6 +124,19 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#392](https://github.com/dirigeants/klasa/pull/392)] Changed default prefix from `'!'` to `''`. (kyranet)
+- [[#383](https://github.com/dirigeants/klasa/pull/383)] **[BREAKING]** Changed SchemaFolder to extend Schema, which extends Map. All keys are now stored inside the map as opposed to being properties. (Unseenfaith)
+- [[#383](https://github.com/dirigeants/klasa/pull/383)] **[BREAKING]** Changed `Schema#add` and `Schema#remove` to be synchronous. They must be called before ready. (Unseenfaith)
+- [[#383](https://github.com/dirigeants/klasa/pull/383)] **[BREAKING]** Changed `GatewayDriver#register`'s arguments to move `schema`'s argument to `GatewayDriverRegisterOptions`. (kyranet)
+- [[#383](https://github.com/dirigeants/klasa/pull/383)] **[BREAKING]** Changed schemas' root to be a `Schema` instance instead of a `SchemaFolder` instance. (Unseenfaith)
+- [[#383](https://github.com/dirigeants/klasa/pull/383)] **[BREAKING]** Changed `GatewayStorage`'s schema argument to take a Schema instance. (kyranet)
+- [[#383](https://github.com/dirigeants/klasa/pull/383)] **[BREAKING]** Renamed events `configCreateEntry`, `configDeleteEntry`, and `configUpdateEntry` to `settingsCreateEntry`, `settingsDeleteEntry`, and `settingsUpdateEntry` respectively. (kyranet)
+- [[#383](https://github.com/dirigeants/klasa/pull/383)] **[SEMVER-MAJOR]** `SchemaFolder#add` will not longer throw on conflict, but edit the SchemaPiece or update the SchemaFolder. (kyranet)
+- [[#383](https://github.com/dirigeants/klasa/pull/383)] `SchemaPiece#edit` is now able to change any of the SchemaPiece's metadata. (kyranet)
+- [[#383](https://github.com/dirigeants/klasa/pull/383)] `Schema#get` (which `SchemaFolder` inherits) now supports paths or arrays. (kyranet)
+- [[#374](https://github.com/dirigeants/klasa/pull/374)] **[BREAKING]** Renamed `Configuration` to `Settings`. (kyranet)
+- [[#374](https://github.com/dirigeants/klasa/pull/374)] Renamed `INHIBITOR_REQUIRED_CONFIGS` to `INHIBITOR_REQUIRED_SETTINGS`. (kyranet)
+- [[#374](https://github.com/dirigeants/klasa/pull/374)] **[BREAKING]** Renamed `KlasaMessage#guildConfigs` to `KlasaMessage#guildSettings`, `KlasaGuild#configs` to `KlasaGuild#settings`, `KlasaClientOptions.preserveConfigs` to `KlasaClientOptions.preserveSettings`, and `Command#requiredConfigs` to `Command#requiredSettings`. (kyranet)
 - [[#333](https://github.com/dirigeants/klasa/pull/333)] Removed cross-shard individual configuration synchronization in favor of patching the current patched `Configuration` instance. (kyranet)
 - [[#333](https://github.com/dirigeants/klasa/pull/333)] Changed `configUpdateEntry` event to take only two parameters (patched `Configuration` instance, and the updated keys as `ConfigurationUpdateResultEntry[]`). (kyranet)
 - [[#332](https://github.com/dirigeants/klasa/pull/332)] Refactored `Configuration#reset`. (kyranet)
@@ -207,6 +227,18 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Removed
 
+- [[#401](https://github.com/dirigeants/klasa/pull/401)] Removed `Settings#waitSync` in favor of `Settings#sync(?false);`. (kyranet)
+- [[#398](https://github.com/dirigeants/klasa/pull/398)] Removed the `Settings#update(keys: string[], values: any[])` overload. (kyranet)
+- [[#391](https://github.com/dirigeants/klasa/pull/391)] Removed `Util.getIdentifier()`. (kyranet)
+- [[#391](https://github.com/dirigeants/klasa/pull/391)] Removed Gateways' second caching layer. (kyranet)
+- [[#383](https://github.com/dirigeants/klasa/pull/383)] **[BREAKING]** Removed `bwd/*.schema.json` files. (Unseenfaith)
+- [[#383](https://github.com/dirigeants/klasa/pull/383)] **[BREAKING]** Removed `Resolver` and `SettingsResolver` classes. (Unseenfaith)
+- [[#383](https://github.com/dirigeants/klasa/pull/383)] Removed `GatewayDriver#resolver` and `GatewayStorage#resolver`. (kyranet)
+- [[#383](https://github.com/dirigeants/klasa/pull/383)] Removed `GatewayStorage#baseDirectory` and `GatewayStorage#filePath`. (kyranet)
+- [[#383](https://github.com/dirigeants/klasa/pull/383)] Removed `guildsSchema`, `usersSchema`, and `clientStorageSchema` from `GatewayDriver`. (Unseenfaith)
+- [[#383](https://github.com/dirigeants/klasa/pull/383)] Removed abstracted methods `Provider#removeValue` and `SQLProvider#removeValue`. (kyranet)
+- [[#383](https://github.com/dirigeants/klasa/pull/383)] Removed `schemaKeyAdd`, `schemaKeyRemove`, and `schemaKeyUpdate` events. (kyranet)
+- [[#383](https://github.com/dirigeants/klasa/pull/383)] Removed types `GuildSettings`, `SchemaObject`, and `SchemaDefaults` from typings. (kyranet)
 - [[#343](https://github.com/dirigeants/klasa/pull/343)] Removed `Configuration._merge`, `Configuration._clone`, `Util.applyToClass`, and `Util.arraysEqual`. (kyranet)
 - [[#331](https://github.com/dirigeants/klasa/pull/331)] Removed `Configuration#_syncStatus`. (kyranet)
 - [[#323](https://github.com/dirigeants/klasa/pull/323)] Removed every check for selfbot users. (KingDGrizzle)
@@ -258,6 +290,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
+- [[#383](https://github.com/dirigeants/klasa/pull/383)] Fixed abstract `SQLProvider#qb` property being missing in typings. (kyranet)
 - [[#362](https://github.com/dirigeants/klasa/pull/362)] Fixed object mutation in `GatewayDriver#toJSON()`. (kyranet)
 - [[#355](https://github.com/dirigeants/klasa/pull/355)] Fixed Schedule not deleting entries that do not exist in ClientStorage but are still cached in Schedule#tasks. (kyranet)
 - [[#284](https://github.com/dirigeants/klasa/pull/284)] Fixed a bug where SG's cache would download twice when `GatewayDriverRegisterOptions.download` is true. (kyranet)

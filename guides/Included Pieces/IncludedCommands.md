@@ -110,13 +110,13 @@ Unloads any piece except extendables.
 
 [commands/Admin/unload.js](https://github.com/dirigeants/klasa/blob/master/src/commands/Admin/unload.js)
 
-## General / User Configs / userconf
+## General / User Settings / userconf
 
 Allows users to change their configurations.
 
 **Source:**
 
-[commands/General/User Configs/userconf.js](https://github.com/dirigeants/klasa/blob/master/src/commands/General/User%20Configs/userconf.js)
+[commands/General/User Settings/userconf.js](https://github.com/dirigeants/klasa/blob/master/src/commands/General/User%20Settings/userconf.js)
 
 ## Further Reading:
 

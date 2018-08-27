@@ -7,7 +7,7 @@ module.exports = class extends Language {
 		this.language = {
 			DEFAULT: (key) => `${key} has not been localized for en-US yet.`,
 			DEFAULT_LANGUAGE: 'Default Language',
-			PREFIX_REMINDER: (prefix) => `The prefix${Array.isArray(prefix) ?
+			PREFIX_REMINDER: (prefix = `@${this.client.user.tag}`) => `The prefix${Array.isArray(prefix) ?
 				`es for this guild are: ${prefix.map(pre => `\`${pre}\``).join(', ')}` :
 				` in this guild is set to: \`${prefix}\``
 			}`,
@@ -18,6 +18,7 @@ module.exports = class extends Language {
 			SETTING_GATEWAY_KEY_NOT_ARRAY: (key) => `The key ${key} is not an Array.`,
 			SETTING_GATEWAY_KEY_NOEXT: (key) => `The key ${key} does not exist in the current data schema.`,
 			SETTING_GATEWAY_INVALID_TYPE: 'The type parameter must be either add or remove.',
+			SETTING_GATEWAY_INVALID_FILTERED_VALUE: (piece, value) => `${piece.key} doesn't accept the value: ${value}`,
 			RESOLVER_INVALID_CUSTOM: (name, type) => `${name} must be a valid ${type}.`,
 			RESOLVER_INVALID_PIECE: (name, piece) => `${name} must be a valid ${piece} name.`,
 			RESOLVER_INVALID_MESSAGE: (name) => `${name} must be a valid message id.`,
@@ -54,7 +55,7 @@ module.exports = class extends Language {
 			INHIBITOR_MISSING_BOT_PERMS: (missing) => `Insufficient permissions, missing: **${missing}**`,
 			INHIBITOR_NSFW: 'You may not use NSFW commands in this channel.',
 			INHIBITOR_PERMISSIONS: 'You do not have permission to use this command.',
-			INHIBITOR_REQUIRED_CONFIGS: (configs) => `The guild is missing the **${configs.join(', ')}** guild setting${configs.length !== 1 ? 's' : ''} and thus the command cannot run.`,
+			INHIBITOR_REQUIRED_SETTINGS: (settings) => `The guild is missing the **${settings.join(', ')}** guild setting${settings.length !== 1 ? 's' : ''} and thus the command cannot run.`,
 			INHIBITOR_RUNIN: (types) => `This command is only available in ${types} channels.`,
 			INHIBITOR_RUNIN_NONE: (name) => `The ${name} command is not configured to run in any channel.`,
 			COMMAND_BLACKLIST_DESCRIPTION: 'Blacklists or un-blacklists users and guilds from the bot.',
@@ -133,7 +134,7 @@ module.exports = class extends Language {
 			COMMAND_HELP_NO_EXTENDED: 'No extended help available.',
 			COMMAND_HELP_DM: '📥 | The list of commands you have access to has been sent to your DMs.',
 			COMMAND_HELP_NODM: '❌ | You have DMs disabled, I couldn\'t send you the commands in DMs.',
-			COMMAND_HELP_USAGE: (usage) => `usage :: ${usage}`,
+			COMMAND_HELP_USAGE: (usage) => `Usage :: ${usage}`,
 			COMMAND_HELP_EXTENDED: 'Extended Help ::',
 			COMMAND_ENABLE: (type, name) => `+ Successfully enabled ${type}: ${name}`,
 			COMMAND_ENABLE_DESCRIPTION: 'Re-enables or temporarily enables a command/inhibitor/monitor/finalizer. Default state restored on reboot.',
@@ -149,10 +150,10 @@ module.exports = class extends Language {
 			COMMAND_CONF_GET: (key, value) => `The value for the key **${key}** is: \`${value}\``,
 			COMMAND_CONF_RESET: (key, response) => `The key **${key}** has been reset to: \`${response}\``,
 			COMMAND_CONF_NOCHANGE: (key) => `The value for **${key}** was already that value.`,
-			COMMAND_CONF_SERVER_DESCRIPTION: 'Define per-guild configuration.',
-			COMMAND_CONF_SERVER: (key, list) => `**guild Configuration${key}**\n${list}`,
-			COMMAND_CONF_USER_DESCRIPTION: 'Define per-user configuration.',
-			COMMAND_CONF_USER: (key, list) => `**User Configuration${key}**\n${list}`,
+			COMMAND_CONF_SERVER_DESCRIPTION: 'Define per-guild settings.',
+			COMMAND_CONF_SERVER: (key, list) => `**guild Settings${key}**\n${list}`,
+			COMMAND_CONF_USER_DESCRIPTION: 'Define per-user settings.',
+			COMMAND_CONF_USER: (key, list) => `**User Settings${key}**\n${list}`,
 			COMMAND_STATS: (memUsage, uptime, users, guilds, channels, klasaVersion, discordVersion, processVersion, message) => [
 				'= STATISTICS =',
 				'',

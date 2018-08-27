@@ -11,10 +11,6 @@ const Type = require('../util/Type');
  */
 class SQLProvider extends Provider {
 
-	async removeValue() {
-		// Not used for SQL databases
-	}
-
 	/**
 	 * The addColumn method which inserts/creates a new table to the database.
 	 * @since 0.5.0
@@ -52,9 +48,20 @@ class SQLProvider extends Provider {
 	}
 
 	/**
+	 * The getColumns method which gets the name of all columns.
+	 * @since 0.5.0
+	 * @param {string} table The table to check against
+	 * @returns {string[]}
+	 * @abstract
+	 */
+	async getColumns() {
+		throw new Error(`[PROVIDERS] ${this.path} | Missing method 'updateColumn' of ${this.constructor.name}`);
+	}
+
+	/**
 	 * Parse the gateway input for easier operation
 	 * @since 0.5.0
-	 * @param {(ConfigurationUpdateResultEntry[]|Array<Array<string>>|Object<string, *>)} [updated] The updated entries
+	 * @param {(SettingsUpdateResultEntry[]|Array<Array<string>>|Object<string, *>)} [updated] The updated entries
 	 * @param {boolean} [resolve=true] Whether this should resolve the values using QueryBuider#resolve or not
 	 * @returns {Array<any[]>}
 	 * @protected
@@ -72,11 +79,11 @@ class SQLProvider extends Provider {
 			else if (first.data && first.piece) this._parseGatewayInput(updated, keys, values, resolve);
 
 			// Unknown overload, throw
-			else throw new TypeError(`Expected void, [k, v][], ConfigurationUpdateResult[], or an object literal. Got: ${new Type(updated)}`);
+			else throw new TypeError(`Expected void, [k, v][], SettingsUpdateResult[], or an object literal. Got: ${new Type(updated)}`);
 
 			return [keys, values];
 		}
-		if (!isObject(updated)) throw new TypeError(`Expected void, [k, v][], ConfigurationUpdateResult[], or an object literal. Got: ${new Type(updated)}`);
+		if (!isObject(updated)) throw new TypeError(`Expected void, [k, v][], SettingsUpdateResult[], or an object literal. Got: ${new Type(updated)}`);
 
 		return objectToTuples(updated);
 	}
@@ -144,8 +151,8 @@ class SQLProvider extends Provider {
 	}
 
 	/**
-	 * Parse the ConfigurationUpdateResultEntry[] overload
-	 * @param {ConfigurationUpdateResultEntry[]} updated The updated keys
+	 * Parse the SettingsUpdateResultEntry[] overload
+	 * @param {SettingsUpdateResultEntry[]} updated The updated keys
 	 * @param {string[]} keys The keys to update
 	 * @param {any[]} values The values to update
 	 * @param {boolean} [resolve = true] Whether this should resolve the values using QueryBuider#resolve or not

@@ -190,6 +190,10 @@ class Store extends Collection {
 		return Promise.all([...files.keys()].map(file => store.load(directory, relative(directory, file).split(sep))));
 	}
 
+	static get [Symbol.species]() {
+		return Collection;
+	}
+
 }
 
 module.exports = Store;
