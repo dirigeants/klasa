@@ -2,6 +2,7 @@ const { Permissions } = require('discord.js');
 const Piece = require('./base/Piece');
 const Usage = require('../usage/Usage');
 const CommandUsage = require('../usage/CommandUsage');
+const RateLimitManager = require('../util/RateLimitManager');
 const { isFunction } = require('../util/util');
 
 /**
@@ -19,6 +20,7 @@ class Command extends Piece {
 	 * @property {external:PermissionResolvable} [requiredPermissions=0] The required Discord permissions for the bot to use this command
 	 * @property {number} [bucket=1] The number of times this command can be run before ratelimited by the cooldown
 	 * @property {number} [cooldown=0] The amount of time before the user can run the command again in seconds
+	 * @property {string} [cooldownLevel='author'] The level the cooldown applies to (valid options are 'author', 'channel', 'guild')
 	 * @property {boolean} [deletable=false] If the responses should be deleted if the triggering message is deleted
 	 * @property {(string|Function)} [description=''] The help description for the command
 	 * @property {(string|Function)} [extendedHelp=language.get('COMMAND_HELP_NO_EXTENDED')] Extended help strings
@@ -66,19 +68,6 @@ class Command extends Piece {
 		 */
 		this.requiredPermissions = new Permissions(options.requiredPermissions).freeze();
 
-		/**
-		 * The number of times this command can be run before ratelimited by the cooldown
-		 * @since 0.5.0
-		 * @type {number}
-		 */
-		this.bucket = options.bucket;
-
-		/**
-		 * The cooldown in seconds this command has
-		 * @since 0.0.1
-		 * @type {number}
-		 */
-		this.cooldown = options.cooldown;
 
 		/**
 		 * Whether this command should have it's responses deleted if the triggering message is deleted
@@ -165,7 +154,6 @@ class Command extends Piece {
 		 */
 		this.requiredSettings = options.requiredSettings;
 
-
 		/**
 		 * What channels the command should run in
 		 * @since 0.0.1
@@ -188,12 +176,40 @@ class Command extends Piece {
 		this.usage = new CommandUsage(client, options.usage, options.usageDelim, this);
 
 		/**
+		 * The level at which cooldowns should apply
+		 * @since 0.5.0
+		 * @type {string}
+		 */
+		this.cooldownLevel = options.cooldownLevel;
+
+		if (!['author', 'channel', 'guild'].includes(this.cooldownLevel)) throw new Error('Invalid cooldownLevel');
+
+		/**
 		 * Any active cooldowns for the command
 		 * @since 0.0.1
-		 * @type {Map<string, number>}
+		 * @type {RateLimitManager}
 		 * @private
 		 */
-		this.cooldowns = new Map();
+		this.cooldowns = new RateLimitManager(options.bucket, options.cooldown * 1000);
+	}
+
+	/**
+	 * The number of times this command can be run before ratelimited by the cooldown
+	 * @since 0.5.0
+	 * @type {number}
+	 * @readonly
+	 */
+	get bucket() {
+		return this.cooldowns.bucket;
+	}
+	/**
+	 * The cooldown in seconds this command has
+	 * @since 0.0.1
+	 * @type {number}
+	 * @readonly
+	 */
+	get cooldown() {
+		return this.cooldowns.cooldown / 1000;
 	}
 
 	/**
