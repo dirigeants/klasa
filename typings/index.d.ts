@@ -1066,7 +1066,6 @@ declare module 'klasa' {
 		private resetTime: number;
 		public drip(): this;
 		public reset(): this;
-		public undrip(): this;
 	}
 
 	export class RateLimitManager extends Collection<Snowflake, RateLimit> {

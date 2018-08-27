@@ -86,16 +86,6 @@ class RateLimit {
 		return this;
 	}
 
-	/**
-	 * Returns a drip back into the RateLimit bucket
-	 * @since 0.5.0
-	 * @returns {this}
-	 */
-	undrip() {
-		this.remaining = Math.min(this.remaining + 1, this.manager.bucket);
-		return this;
-	}
-
 }
 
 module.exports = RateLimit;

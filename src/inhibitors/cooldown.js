@@ -10,15 +10,9 @@ module.exports = class extends Inhibitor {
 		if (message.author === this.client.owner) return;
 		if (command.cooldown <= 0) return;
 
-		const id = message.levelID;
-		const existing = command.cooldowns.get(id);
+		const existing = command.cooldowns.get(message.levelID);
 
-		try {
-			if (existing) existing.drip();
-			else message.command.cooldowns.create(id).drip();
-		} catch (err) {
-			throw message.language.get('INHIBITOR_COOLDOWN', Math.ceil(existing.remainingTime / 1000));
-		}
+		if (existing && existing.limited) throw message.language.get('INHIBITOR_COOLDOWN', Math.ceil(existing.remainingTime / 1000));
 	}
 
 };
