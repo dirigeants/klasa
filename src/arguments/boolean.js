@@ -1,4 +1,6 @@
 const { Argument } = require('klasa');
+const truths = ['1', 'true', '+', 't', 'yes', 'y'];
+const falses = ['0', 'false', '-', 'f', 'no', 'n'];
 
 module.exports = class extends Argument {
 
@@ -8,8 +10,8 @@ module.exports = class extends Argument {
 
 	run(arg, possible, message) {
 		const boolean = String(arg).toLowerCase();
-		if (['1', 'true', '+', 't', 'yes', 'y'].includes(boolean)) return true;
-		if (['0', 'false', '-', 'f', 'no', 'n'].includes(boolean)) return false;
+		if (truths.includes(boolean)) return true;
+		if (falses.includes(boolean)) return false;
 		throw (message.language || this.client.languages.default).get('RESOLVER_INVALID_BOOL', possible.name);
 	}
 

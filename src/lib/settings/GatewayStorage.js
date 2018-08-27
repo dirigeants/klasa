@@ -101,7 +101,7 @@ class GatewayStorage {
 		const route = key.split('.');
 		const piece = this.schema.get(route);
 
-		// The piece does not exist (invalid or non-existant path)
+		// The piece does not exist (invalid or non-existent path)
 		if (!piece) {
 			if (!errors) return null;
 			throw `The key ${key} does not exist in the schema.`;

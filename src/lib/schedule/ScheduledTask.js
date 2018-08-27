@@ -7,7 +7,7 @@ const { isObject } = require('../util/util');
 class ScheduledTask {
 
 	/**
-	 * @typedef  {(Date|number|Cron|string)} TimeResolveable
+	 * @typedef  {(Date|number|Cron|string)} TimeResolvable
 	 */
 
 	/**
@@ -19,7 +19,7 @@ class ScheduledTask {
 
 	/**
 	 * @typedef  {Object} ScheduledTaskUpdateOptions
-	 * @property {TimeResolveable} [time] The time or {@link Cron} pattern
+	 * @property {TimeResolvable} [time] The time or {@link Cron} pattern
 	 * @property {boolean} [catchUp] If the task should try to catch up if the bot is down
 	 * @property {*} [data] The data to pass to the Task piece when the ScheduledTask is ready for execution
 	 */
@@ -39,7 +39,7 @@ class ScheduledTask {
 	 * @since 0.5.0
 	 * @param {KlasaClient} client The client that initialized this instance
 	 * @param {string} taskName The name of the task this ScheduledTask is for
-	 * @param {TimeResolveable} time The time or {@link Cron} pattern
+	 * @param {TimeResolvable} time The time or {@link Cron} pattern
 	 * @param {ScheduledTaskOptions} [options={}] The options for this ScheduledTask instance
 	 */
 	constructor(client, taskName, time, options = {}) {
@@ -210,7 +210,7 @@ class ScheduledTask {
 	/**
 	 * Resolve the time and cron
 	 * @since 0.5.0
-	 * @param {TimeResolveable} time The time or {@link Cron} pattern
+	 * @param {TimeResolvable} time The time or {@link Cron} pattern
 	 * @returns {any[]}
 	 * @private
 	 */

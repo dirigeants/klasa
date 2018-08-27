@@ -62,7 +62,7 @@ class SQLProvider extends Provider {
 	 * Parse the gateway input for easier operation
 	 * @since 0.5.0
 	 * @param {(SettingsUpdateResultEntry[]|Array<Array<string>>|Object<string, *>)} [updated] The updated entries
-	 * @param {boolean} [resolve=true] Whether this should resolve the values using QueryBuider#resolve or not
+	 * @param {boolean} [resolve=true] Whether this should resolve the values using QueryBuilder#resolve or not
 	 * @returns {Array<any[]>}
 	 * @protected
 	 */
@@ -113,7 +113,7 @@ class SQLProvider extends Provider {
 	 * Parse SQL values.
 	 * @since 0.5.0
 	 * @param {*} value The value to parse
-	 * @param {SchemaPiece} schemaPiece The Scher this is parsing inner keys or not
+	 * @param {SchemaPiece} schemaPiece The SchemaPiece this is parsing inner keys for
 	 * @returns {*}
 	 * @protected
 	 */
@@ -155,7 +155,7 @@ class SQLProvider extends Provider {
 	 * @param {SettingsUpdateResultEntry[]} updated The updated keys
 	 * @param {string[]} keys The keys to update
 	 * @param {any[]} values The values to update
-	 * @param {boolean} [resolve = true] Whether this should resolve the values using QueryBuider#resolve or not
+	 * @param {boolean} [resolve = true] Whether this should resolve the values using QueryBuilder#resolve or not
 	 * @private
 	 */
 	_parseGatewayInput(updated, keys, values, resolve = true) {

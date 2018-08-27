@@ -1,15 +1,15 @@
 /**
- * Handels generic ratelimits such as for {@link Command#cooldown}s
+ * Handles generic RateLimits such as for {@link Command#cooldown}s
  */
 class RateLimit {
 
 	/**
 	 * @since 0.5.0
-	 * @param {RateLimitManager} manager The RateLimitManager for this Ratelimit
+	 * @param {RateLimitManager} manager The RateLimitManager for this RateLimit
 	 */
 	constructor(manager) {
 		/**
-		 * The RateLimitManager for this Ratelimit
+		 * The RateLimitManager for this RateLimit
 		 * @since 0.5.0
 		 * @type {RateLimitManager}
 		 */
