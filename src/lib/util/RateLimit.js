@@ -5,15 +5,23 @@ class RateLimit {
 
 	/**
 	 * @since 0.5.0
-	 * @param {RateLimitManager} manager The RateLimitManager for this RateLimit
+	 * @param {number} bucket The number of requests before this is limited
+	 * @param {number} cooldown The amount of time for each bucket
 	 */
-	constructor(manager) {
+	constructor(bucket, cooldown) {
 		/**
-		 * The RateLimitManager for this RateLimit
+		 * The number of requests before this is limited
 		 * @since 0.5.0
-		 * @type {RateLimitManager}
+		 * @type {number}
 		 */
-		this.manager = manager;
+		this.bucket = bucket;
+
+		/**
+		 * The number of requests before this is limited
+		 * @since 0.5.0
+		 * @type {number}
+		 */
+		this.cooldown = cooldown;
 
 		this.reset();
 	}
@@ -73,7 +81,7 @@ class RateLimit {
 		 * @type {number}
 		 * @private
 		 */
-		this.remaining = this.manager.bucket;
+		this.remaining = this.bucket;
 
 		/**
 		 * When this RateLimit is reset back to a full state
@@ -81,7 +89,7 @@ class RateLimit {
 		 * @type {number}
 		 * @private
 		 */
-		this.resetTime = Date.now() + this.manager.cooldown;
+		this.resetTime = Date.now() + this.cooldown;
 
 		return this;
 	}

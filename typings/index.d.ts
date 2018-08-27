@@ -1057,11 +1057,12 @@ declare module 'klasa' {
 	}
 
 	export class RateLimit {
-		public constructor(manager: RateLimitManager);
-		public manager: RateLimitManager;
+		public constructor(bucket: number, cooldown: number);
 		public readonly expired: boolean;
 		public readonly limited: boolean;
 		public readonly remainingTime: number;
+		public bucket: number;
+		public cooldown: number;
 		private remaining: number;
 		private resetTime: number;
 		public drip(): this;

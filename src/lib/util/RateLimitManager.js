@@ -45,7 +45,7 @@ class RateLimitManager extends Collection {
 	 * @returns {RateLimit}
 	 */
 	create(id) {
-		const rateLimit = new RateLimit(this);
+		const rateLimit = new RateLimit(this.bucket, this.cooldown);
 		this.set(id, rateLimit);
 		return rateLimit;
 	}
