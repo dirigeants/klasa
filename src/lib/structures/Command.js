@@ -190,7 +190,7 @@ class Command extends Piece {
 		 * @type {RateLimitManager}
 		 * @private
 		 */
-		this.cooldowns = new RateLimitManager(options.bucket, options.cooldown);
+		this.cooldowns = new RateLimitManager(options.bucket, options.cooldown * 1000);
 	}
 
 	/**
@@ -209,7 +209,7 @@ class Command extends Piece {
 	 * @readonly
 	 */
 	get cooldown() {
-		return this.cooldowns.cooldown;
+		return this.cooldowns.cooldown / 1000;
 	}
 
 	/**

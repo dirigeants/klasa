@@ -31,11 +31,11 @@ class RateLimitManager extends Collection {
 		this.bucket = bucket;
 
 		/**
-		 * The amount of time in seconds for a RateLimit from this manager to reset
+		 * The amount of time in ms for a RateLimit from this manager to reset
 		 * @since 0.5.0
 		 * @type {number}
 		 */
-		this.cooldown = cooldown * 1000;
+		this.cooldown = cooldown;
 	}
 
 	/**
