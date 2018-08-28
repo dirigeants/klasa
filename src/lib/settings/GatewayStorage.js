@@ -150,6 +150,9 @@ class GatewayStorage {
 		if (!provider) throw new Error(`This provider (${this.providerName}) does not exist in your system.`);
 		this.ready = true;
 
+		// Assign Client to all Pieces for Serializers && Type Checking
+		for (const piece of this.schema.values(true)) piece.client = this.client;
+
 		// Check for errors in the schema
 		const debug = this.schema.debug();
 		if (debug.length) throw new Error(`[SCHEMA] There is an error with your schema.\n${debug.join('\n')}`);

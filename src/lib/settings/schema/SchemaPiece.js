@@ -1,4 +1,3 @@
-const Client = require('../../Client');
 const { isFunction, isNumber } = require('../../util/util');
 
 class SchemaPiece {
@@ -27,6 +26,15 @@ class SchemaPiece {
 	 * @since 0.5.0
 	 */
 	constructor(parent, key, type, options = {}) {
+		/**
+		 * The KlasaClient for this SchemaPiece
+		 * @name SchemaPiece#Client
+		 * @since 0.5.0
+		 * @readonly
+		 * @type {KlasaClient}
+		 */
+		Object.defineProperty(this, 'client', { value: null, writable: true });
+
 		/**
 		 * The parent of this SchemaPiece, either a SchemaFolder instance or Schema instance
 		 * @name SchemaPiece#parent
@@ -102,24 +110,16 @@ class SchemaPiece {
 		 * @type {Function}
 		 */
 		this.filter = 'filter' in options ? options.filter : null;
-
-		/**
-		 * The resolver for this type
-		 * @since 0.5.0
-		 * @type {SchemaType}
-		 */
-		this.resolver = Client.types.get(this.type);
-
-		if (!this.resolver) throw new TypeError('Unknown Schema Type used: You need to define your custom SchemaType first');
 	}
 
 	/**
-	 * The KlasaClient
+	 * The serializer for this SchemaPiece
 	 * @since 0.5.0
-	 * @type {?KlasaClient}
+	 * @type {Serializer}
+	 * @readonly
 	 */
-	get client() {
-		return Client.types.client;
+	get serializer() {
+		return this.client.serializers.get(this.type);
 	}
 
 	/**
@@ -184,7 +184,7 @@ class SchemaPiece {
 	 */
 	async parse(value, guild) {
 		const language = guild ? guild.language : this.client.languages.default;
-		const val = await this.resolver.resolve(value, this, language, guild);
+		const val = await this.serializer.serialize(value, this, language, guild);
 		if (this.filter && this.filter(this.client, val, this, language)) throw language.get('SETTING_GATEWAY_INVALID_FILTERED_VALUE', this, value);
 		return val;
 	}
@@ -211,7 +211,7 @@ class SchemaPiece {
 	 */
 	_checkType(type) {
 		if (typeof type !== 'string') throw new TypeError(`[KEY] ${this.path} - Parameter type must be a string.`);
-		if (!require('../../Client').types.has(type)) throw new TypeError(`[KEY] ${this.path} - ${type} is not a valid type.`);
+		if (!this.client.seriralizers.has(type)) throw new TypeError(`[KEY] ${this.path} - ${type} is not a valid type.`);
 	}
 
 	/**

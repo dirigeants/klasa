@@ -18,7 +18,14 @@ const InhibitorStore = require('./structures/InhibitorStore');
 const LanguageStore = require('./structures/LanguageStore');
 const MonitorStore = require('./structures/MonitorStore');
 const ProviderStore = require('./structures/ProviderStore');
+const SerializerStore = require('./structures/SerializerStore');
 const TaskStore = require('./structures/TaskStore');
+
+// lib/settings
+const GatewayDriver = require('./settings/GatewayDriver');
+
+// lib/settings/schema
+const Schema = require('./settings/schema/Schema');
 
 // lib/util
 const KlasaConsole = require('./util/KlasaConsole');
@@ -212,6 +219,13 @@ class KlasaClient extends Discord.Client {
 		this.tasks = new TaskStore(this);
 
 		/**
+		 * The Serializers where serializers are stored
+		 * @since 0.5.0
+		 * @type {SerializerStore}
+		 */
+		 this.serializers = new SerializerStore(this);
+
+		/**
 		 * A Store registry
 		 * @since 0.3.0
 		 * @type {external:Collection}
@@ -279,7 +293,8 @@ class KlasaClient extends Discord.Client {
 			.registerStore(this.events)
 			.registerStore(this.extendables)
 			.registerStore(this.tasks)
-			.registerStore(this.arguments);
+			.registerStore(this.arguments)
+			.registerStore(this.serializers);
 
 		const coreDirectory = path.join(__dirname, '../');
 		for (const store of this.pieceStores.values()) store.registerCoreDirectory(coreDirectory);
@@ -453,13 +468,6 @@ class KlasaClient extends Discord.Client {
 
 module.exports = KlasaClient;
 
-// lib/settings
-const GatewayDriver = require('./settings/GatewayDriver');
-
-// lib/settings/schema
-const SchemaTypes = require('./settings/schema/types/base/SchemaTypes');
-const Schema = require('./settings/schema/Schema');
-
 /**
  * The plugin symbol to be used in external packages
  * @since 0.5.0
@@ -479,13 +487,6 @@ KlasaClient.defaultPermissionLevels = new PermissionLevels()
 	.add(9, (client, message) => message.author === client.owner, { break: true })
 	.add(10, (client, message) => message.author === client.owner);
 
-
-/**
- * The SchemaTypes Storage for Klasa's settings
- * @since 0.5.0
- * @type {SchemaTypes}
- */
-KlasaClient.types = new SchemaTypes(Object.entries(require('./settings/schema/types')));
 
 /**
  * The default Guild Schema
