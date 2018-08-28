@@ -41,7 +41,6 @@ class Serializer extends Piece {
 	 * @param {Language} language The language to use when responding.
 	 * @abstract
 	 */
-
 	async serialize() {
 		// Defined in extension Classes
 		throw new Error(`The serialize method has not been implemented by ${this.type}:${this.name}`);
@@ -65,7 +64,6 @@ class Serializer extends Piece {
 	 * @returns {*}
 	 * @abstract
 	 */
-
 	stringify(data) {
 		return data;
 	}
