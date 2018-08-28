@@ -51,7 +51,6 @@ class Serializer extends Piece {
 	 * @since 0.5.0
 	 * @param {*} data The data to deserialize
 	 * @returns {*}
-	 * @abstract
 	 */
 	deserialize(data) {
 		return data;
@@ -62,7 +61,6 @@ class Serializer extends Piece {
 	 * @since 0.5.0
 	 * @param {*} data The data to stringify
 	 * @returns {*}
-	 * @abstract
 	 */
 	stringify(data) {
 		return data;
