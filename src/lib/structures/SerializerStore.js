@@ -4,7 +4,7 @@ const Store = require('./base/Store');
 
 /**
  * Stores all the serializers usable in Klasa
- * @extends Store
+ * @extends {Store}
  */
 class SerializerStore extends Store {
 
@@ -19,7 +19,7 @@ class SerializerStore extends Store {
 		/**
 		 * The different aliases that represent the serializers in this store.
 		 * @since 0.5.0
-		 * @type external:Collection
+		 * @type {external:Collection}
 		 */
 		this.aliases = new Collection();
 	}

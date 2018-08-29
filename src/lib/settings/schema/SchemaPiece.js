@@ -211,7 +211,7 @@ class SchemaPiece {
 	 */
 	_checkType(type) {
 		if (typeof type !== 'string') throw new TypeError(`[KEY] ${this.path} - Parameter type must be a string.`);
-		if (!this.client.seriralizers.has(type)) throw new TypeError(`[KEY] ${this.path} - ${type} is not a valid type.`);
+		if (!this.client.serializers.has(type)) throw new TypeError(`[KEY] ${this.path} - ${type} is not a valid type.`);
 	}
 
 	/**

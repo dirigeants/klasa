@@ -4,7 +4,7 @@ const Piece = require('./base/Piece');
  * Base class for all Klasa Serializers. See {@tutorial CreatingSerializers} for more information how to use this class
  * to build custom serializers.
  * @tutorial CreatingSerializers
- * @extends Piece
+ * @extends {Piece}
  */
 class Serializer extends Piece {
 
@@ -37,9 +37,9 @@ class Serializer extends Piece {
 	 * The serialize method to be overwritten in actual Serializers
 	 * @since 0.5.0
 	 * @param {*} data The data to serialize
-
+	 * @returns {string|number|boolean}
 	 */
-	async serialize(data) {
+	serialize(data) {
 		return data;
 	}
 
@@ -53,7 +53,7 @@ class Serializer extends Piece {
 	 * @returns {*}
 	 * @abstract
 	 */
-	deserialize() {
+	async deserialize() {
 		throw new Error(`The deserialize method has not been implemented by ${this.type}:${this.name}`);
 	}
 
@@ -61,7 +61,7 @@ class Serializer extends Piece {
 	 * The stringify method to be overwritten in actual Serializers
 	 * @since 0.5.0
 	 * @param {*} data The data to stringify
-	 * @returns {*}
+	 * @returns {string}
 	 */
 	stringify(data) {
 		return data;
@@ -84,7 +84,7 @@ class Serializer extends Piece {
 /**
  * Standard regular expressions for matching mentions and snowflake ids
  * @since 0.5.0
- * @type {Object}
+ * @type {Object<string,RegExp>}
  * @property {RegExp} userOrMember Regex for users or members
  * @property {RegExp} channel Regex for channels
  * @property {RegExp} emoji Regex for custom emojis
