@@ -64,7 +64,7 @@ class Serializer extends Piece {
 	 * @returns {string}
 	 */
 	stringify(data) {
-		return data;
+		return String(data);
 	}
 
 	/**
