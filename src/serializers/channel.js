@@ -17,14 +17,14 @@ module.exports = class extends Serializer {
 		throw language.get('RESOLVER_INVALID_CHANNEL', piece.key);
 	}
 
-	serialize(data, piece, language, guild) {
+	deserialize(data, piece, language, guild) {
 		if (data instanceof Channel) return this.checkChannel(data, piece, language);
 		const channel = this.constructor.regex.channel.test(data) ? (guild || this.client).channels.get(this.constructor.regex.channel.exec(data)[1]) : null;
 		if (channel) return this.checkChannel(channel, piece, language);
 		throw language.get('RESOLVER_INVALID_CHANNEL', piece.key);
 	}
 
-	deserialize(value) {
+	serialize(value) {
 		return value.id;
 	}
 

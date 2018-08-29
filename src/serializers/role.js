@@ -3,7 +3,7 @@ const { Role } = require('discord.js');
 
 module.exports = class extends Serializer {
 
-	serialize(data, piece, language, guild) {
+	deserialize(data, piece, language, guild) {
 		if (!guild) throw this.client.languages.default.get('RESOLVER_INVALID_GUILD', piece.key);
 		if (data instanceof Role) return data;
 		const role = this.constructor.regex.role.test(data) ? guild.roles.get(data) : guild.roles.find(rol => rol.name === data) || null;
@@ -11,7 +11,7 @@ module.exports = class extends Serializer {
 		throw language.get('RESOLVER_INVALID_ROLE', piece.key);
 	}
 
-	deserialize(value) {
+	serialize(value) {
 		return value.id;
 	}
 

@@ -7,7 +7,7 @@ module.exports = class extends Serializer {
 	}
 
 
-	serialize(data, piece, language) {
+	deserialize(data, piece, language) {
 		let number;
 		switch (piece.type) {
 			case 'integer':

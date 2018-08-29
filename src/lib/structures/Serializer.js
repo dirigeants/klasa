@@ -37,23 +37,24 @@ class Serializer extends Piece {
 	 * The serialize method to be overwritten in actual Serializers
 	 * @since 0.5.0
 	 * @param {*} data The data to serialize
-	 * @param {SchemaPiece} piece The SchemaPiece we are serializing for.
-	 * @param {Language} language The language to use when responding.
-	 * @abstract
+
 	 */
-	async serialize() {
-		// Defined in extension Classes
-		throw new Error(`The serialize method has not been implemented by ${this.type}:${this.name}`);
+	async serialize(data) {
+		return data;
 	}
 
 	/**
 	 * The deserialize method to be overwritten in actual Serializers
 	 * @since 0.5.0
 	 * @param {*} data The data to deserialize
+	 * @param {SchemaPiece} piece The SchemaPiece we are deserializing for.
+	 * @param {Language} language The language to use when responding.
+	 * @param {external:Guild} [guild] The guild that will help deserialize
 	 * @returns {*}
+	 * @abstract
 	 */
-	deserialize(data) {
-		return data;
+	deserialize() {
+		throw new Error(`The deserialize method has not been implemented by ${this.type}:${this.name}`);
 	}
 
 	/**

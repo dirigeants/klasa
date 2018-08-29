@@ -375,7 +375,7 @@ class Settings {
 				this._parseAll(piece, value, guild, result.errors) :
 				piece.parse(value, guild).catch((error) => { result.errors.push(error); }));
 		if (typeof parsed === 'undefined') return;
-		const parsedID = Array.isArray(parsed) ? parsed.map(val => piece.serializer.deserialize(val)) : piece.serializer.deserialize(parsed);
+		const parsedID = Array.isArray(parsed) ? parsed.map(val => piece.serializer.serialize(val)) : piece.serializer.serialize(parsed);
 		if (piece.array) {
 			this._parseArray(piece, route, parsedID, options, result);
 		} else if (this._setValueByPath(piece, parsedID, options.force).updated) {

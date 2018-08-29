@@ -223,7 +223,7 @@ class KlasaClient extends Discord.Client {
 		 * @since 0.5.0
 		 * @type {SerializerStore}
 		 */
-		 this.serializers = new SerializerStore(this);
+		this.serializers = new SerializerStore(this);
 
 		/**
 		 * A Store registry
@@ -519,7 +519,7 @@ KlasaClient.defaultUserSchema = new Schema();
 KlasaClient.defaultClientSchema = new Schema()
 	.add('userBlacklist', 'user', { array: true, configurable: true })
 	.add('guildBlacklist', 'guild', { array: true, configurable: true })
-	.add('schedules', 'any', { array: true, configurable: false });
+	.add('schedules', 'task', { array: true, configurable: false });
 
 /**
  * Emitted when Klasa is fully ready and initialized.
