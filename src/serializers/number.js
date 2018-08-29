@@ -2,10 +2,9 @@ const { Serializer } = require('klasa');
 
 module.exports = class extends Serializer {
 
-	constructor(args) {
+	constructor(...args) {
 		super(...args, { aliases: ['integer', 'float'] });
 	}
-
 
 	deserialize(data, piece, language) {
 		let number;
