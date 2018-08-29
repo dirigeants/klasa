@@ -15,7 +15,7 @@ module.exports = class extends Serializer {
 	}
 
 	stringify(value) {
-		return (value && value.name) || value;
+		return (this.client.guilds.get(value) || { name: value }).name;
 	}
 
 };
