@@ -27,7 +27,7 @@ module.exports = class extends Command {
 			if (this.client.shard) {
 				await this.client.shard.broadcastEval(`
 					if (this.shard.id !== ${this.client.shard.id}) {
-						const piece = this.${piece.store}.load(${piece.directory}, ${JSON.stringify(path)});
+						const piece = this.${piece.store}.load('${piece.directory}', ${JSON.stringify(path)});
 						if (piece) piece.init();
 					}
 				`);
