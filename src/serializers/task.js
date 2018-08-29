@@ -3,7 +3,7 @@ const { Serializer, ScheduledTask, Type, util: { isObject } } = require('klasa')
 module.exports = class extends Serializer {
 
 	constructor(...args) {
-		super(...args, { aliases: ['schelduledtask'] });
+		super(...args, { aliases: ['scheduledtask'] });
 	}
 
 	deserialize(data) {
