@@ -129,31 +129,15 @@ class SchemaPiece {
 	 * @returns {this}
 	 */
 	edit(options = {}) {
-		if ('type' in options) {
-			this._checkType(options.type);
-			this.type = options.type;
-		}
-		if ('array' in options) {
-			this._checkArray(options.array);
-			this.array = options.array;
-		}
-		if ('configurable' in options) {
-			this._checkConfigurable(options.configurable);
-			this.configurable = options.configurable;
-		}
+		if ('type' in options) this.type = options.type;
+		if ('array' in options) this.array = options.array;
+		if ('configurable' in options) this.configurable = options.configurable;
+		if ('filter' in options) this.filter = options.filter;
+		if ('default' in options) this.default = options.default;
 		if (('min' in options) || ('max' in options)) {
 			const { min = null, max = null } = options;
-			this._checkLimits(min, max);
 			this.min = min;
 			this.max = max;
-		}
-		if ('filter' in options) {
-			this._checkFilter(options.filter);
-			this.filter = options.filter;
-		}
-		if ('default' in options) {
-			this._checkDefault(options);
-			this.default = options.default;
 		}
 
 		return this;
