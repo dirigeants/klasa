@@ -550,8 +550,6 @@ declare module 'klasa' {
 		public remove(key: string): this;
 		public get<T = SchemaPiece | SchemaFolder>(key: string | Array<string>): T;
 		public toJSON(): ObjectLiteral;
-
-		private debug(): Array<string>;
 	}
 
 	export class Schema extends SchemaBase {
