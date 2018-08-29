@@ -132,8 +132,6 @@ class KlasaClient extends Discord.Client {
 		 * @type {KlasaClientOptions}
 		 */
 
-		this.constructor.types.client = this;
-
 		/**
 		 * The directory where the user files are at
 		 * @since 0.0.1
