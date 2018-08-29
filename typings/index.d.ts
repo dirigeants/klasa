@@ -1595,7 +1595,9 @@ declare module 'klasa' {
 		once?: boolean;
 	} & PieceOptions;
 
-	export type SerializerOptions = {} & PieceOptions;
+	export type SerializerOptions = {
+		aliases?: Array<string>;
+	} & PieceOptions;
 
 	export type ProviderOptions = PieceOptions;
 	export type FinalizerOptions = PieceOptions;
