@@ -47,6 +47,8 @@ module.exports = {
 	MonitorStore: require('./lib/structures/MonitorStore'),
 	Provider: require('./lib/structures/Provider'),
 	ProviderStore: require('./lib/structures/ProviderStore'),
+	Serializer: require('./lib/structures/Serializer'),
+	SerializerStore: require('./lib/structures/SerializerStore'),
 	SQLProvider: require('./lib/structures/SQLProvider'),
 	Task: require('./lib/structures/Task'),
 	TaskStore: require('./lib/structures/TaskStore'),
