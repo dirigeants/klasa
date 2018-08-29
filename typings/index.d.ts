@@ -586,13 +586,6 @@ declare module 'klasa' {
 
 		private isValid(): boolean;
 		private _generateDefault(): Array<any> | false | null;
-		// any is supplied since the following methods do type checks
-		private _checkType(value: any): void;
-		private _checkArray(value: any): void;
-		private _checkConfigurable(value: any): void;
-		private _checkLimits(min: any, max: any): void;
-		private _checkFilter(value: any): void;
-		private _checkDefault(value: any): void;
 	}
 
 //#endregion Settings
