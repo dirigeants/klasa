@@ -13,7 +13,7 @@ module.exports = class extends Serializer {
 			(piece.type === 'textchannel' && data.type === 'text') ||
 			(piece.type === 'voicechannel' && data.type === 'voice') ||
 			(piece.type === 'categorychannel' && data.type === 'category')
-		) return data.id;
+		) return data;
 		throw language.get('RESOLVER_INVALID_CHANNEL', piece.key);
 	}
 
