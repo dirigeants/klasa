@@ -2,7 +2,7 @@ const { Serializer } = require('klasa');
 
 module.exports = class extends Serializer {
 
-	constructor(args) {
+	constructor(...args) {
 		super(...args, { aliases: ['command', 'language'] });
 	}
 
