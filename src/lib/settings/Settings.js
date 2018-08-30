@@ -134,13 +134,8 @@ class Settings {
 
 		// If it's not currently synchronizing, create a new sync status for the sync queue
 		const sync = this.gateway.provider.get(this.gateway.type, this.id).then(data => {
-			if (data) {
-				if (!this._existsInDB) this._existsInDB = true;
-				this._patch(data);
-			} else {
-				this._existsInDB = false;
-			}
-
+			this._existsInDB = Boolean(data);
+			if (data) this._patch(data);
 			this.gateway.syncQueue.delete(this.id);
 			return this;
 		});
@@ -159,7 +154,6 @@ class Settings {
 			await this.gateway.provider.delete(this.gateway.type, this.id);
 			this.client.emit('settingsDeleteEntry', this);
 		}
-		this.gateway.cache.delete(this.id);
 		return this;
 	}
 
