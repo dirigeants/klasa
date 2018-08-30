@@ -330,11 +330,11 @@ class TextPrompt {
 	 */
 	static getFlags(content, delim) {
 		const flags = {};
-		content = content.replace(TextPrompt.flagRegex, (match, fl, ...quote) => {
+		content = content.replace(this.flagRegex, (match, fl, ...quote) => {
 			flags[fl] = (quote.slice(0, -2).find(el => el) || fl).replace(/\\/g, '');
 			return '';
 		});
-		if (delim) content = content.replace(TextPrompt.delims.get(delim) || TextPrompt.generateNewDelim(delim), '$1').trim();
+		if (delim) content = content.replace(this.delims.get(delim) || this.generateNewDelim(delim), '$1').trim();
 		return { content, flags };
 	}
 
@@ -395,7 +395,7 @@ class TextPrompt {
 	 */
 	static generateNewDelim(delim) {
 		const regex = new RegExp(`(${delim})(?:${delim})+`, 'g');
-		TextPrompt.delims.set(delim, regex);
+		this.delims.set(delim, regex);
 		return regex;
 	}
 
