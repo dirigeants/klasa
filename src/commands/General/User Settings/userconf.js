@@ -35,24 +35,24 @@ module.exports = class extends Command {
 	}
 
 	async set(message, [key, ...valueToSet]) {
-		const { errors, updated } = await message.author.settings.update(key, valueToSet.join(' '), message.guild, { avoidUnconfigurable: true, action: 'add' });
-		if (errors.length) return message.sendMessage(errors[0]);
-		if (!updated.length) return message.sendLocale('COMMAND_CONF_NOCHANGE', [key]);
-		return message.sendLocale('COMMAND_CONF_UPDATED', [key, message.author.settings.resolveString(message, updated[0].piece)]);
+		const status = await message.author.settings.update(key, valueToSet.join(' '), message.guild, { avoidUnconfigurable: true, action: 'add' });
+		return this.check(message, key, status) || message.sendLocale('COMMAND_CONF_UPDATED', [key, message.author.settings.resolveString(message, status.updated[0].piece)]);
 	}
 
 	async remove(message, [key, ...valueToRemove]) {
-		const { errors, updated } = await message.author.settings.update(key, valueToRemove.join(' '), message.guild, { avoidUnconfigurable: true, action: 'remove' });
-		if (errors.length) return message.sendMessage(errors[0]);
-		if (!updated.length) return message.sendLocale('COMMAND_CONF_NOCHANGE', [key]);
-		return message.sendLocale('COMMAND_CONF_UPDATED', [key, message.author.settings.resolveString(message, updated[0].piece)]);
+		const status = await message.author.settings.update(key, valueToRemove.join(' '), message.guild, { avoidUnconfigurable: true, action: 'remove' });
+		return this.check(message, key, status) || message.sendLocale('COMMAND_CONF_UPDATED', [key, message.author.settings.resolveString(message, status.updated[0].piece)]);
 	}
 
 	async reset(message, [key]) {
-		const { errors, updated } = await message.author.settings.reset(key, true);
+		const status = await message.author.settings.reset(key, true);
+		return this.check(message, key, status) || message.sendLocale('COMMAND_CONF_RESET', [key, message.author.settings.resolveString(message, status.updated[0].piece)]);
+	}
+
+	check(message, key, { errors, updated }) {
 		if (errors.length) return message.sendMessage(errors[0]);
 		if (!updated.length) return message.sendLocale('COMMAND_CONF_NOCHANGE', [key]);
-		return message.sendLocale('COMMAND_CONF_RESET', [key, message.author.settings.resolveString(message, updated[0].piece)]);
+		return null;
 	}
 
 };
