@@ -249,6 +249,7 @@ class Settings {
 			entries = [[key, value]];
 		} else if (Array.isArray(key) && key.every(entry => Array.isArray(entry) && entry.length === 2)) {
 			// Overload update(Array<[string, any]>)
+			[guild, options] = [value, guild];
 			entries = key;
 		} else {
 			return Promise.reject(new TypeError(`Invalid value. Expected object, string or Array<[string, any]>. Got: ${new Type(key)}`));
