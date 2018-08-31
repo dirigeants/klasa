@@ -292,6 +292,7 @@ module.exports = Structures.extend('Message', Message => {
 		 * @property {Command} command The command run
 		 * @property {RegExp} prefix The prefix used
 		 * @property {number} prefixLength The length of the prefix used
+		 * @returns {this}
 		 * @private
 		 */
 		_registerCommand({ command, prefix, prefixLength }) {
@@ -304,6 +305,7 @@ module.exports = Structures.extend('Message', Message => {
 				limit: this.command.promptLimit
 			});
 			this.client.emit('commandRun', this, this.command, this.args);
+			return this;
 		}
 
 		/**

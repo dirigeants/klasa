@@ -7,15 +7,14 @@ module.exports = class extends Monitor {
 		this.ignoreEdits = !this.client.options.commandEditing;
 		this.prefixes = new Map();
 		this.prefixMention = null;
+		this.mentionOnly = null;
 		this.prefixFlags = this.client.options.prefixCaseInsensitive ? 'i' : '';
 	}
 
 	async run(message) {
 		if (message.guild && !message.guild.me) await message.guild.members.fetch(this.client.user);
 		if (!message.channel.postable) return undefined;
-		if (message.content === this.client.user.toString() || (message.guild && message.content === message.guild.me.toString())) {
-			return message.sendLocale('PREFIX_REMINDER', [message.guildSettings.prefix || undefined]);
-		}
+		if (this.mentionOnly.test(message.content)) return message.sendLocale('PREFIX_REMINDER', [message.guildSettings.prefix || undefined]);
 
 		const { commandText, prefix, prefixLength } = this.parseCommand(message);
 		if (!commandText) return undefined;
@@ -23,17 +22,7 @@ module.exports = class extends Monitor {
 		const command = this.client.commands.get(commandText);
 		if (!command) return this.client.emit('commandUnknown', message, commandText);
 
-		const timer = new Stopwatch();
-		if (this.client.options.typing) message.channel.startTyping();
-		message._registerCommand({ command, prefix, prefixLength });
-		try {
-			await this.client.inhibitors.run(message, command);
-			await this.runCommand(message, timer).catch(err => this.client.emit('error', err));
-		} catch (response) {
-			this.client.emit('commandInhibited', message, command, response);
-		}
-		if (this.client.options.typing) message.channel.stopTyping();
-		return undefined;
+		return this.runCommand(message._registerCommand({ command, prefix, prefixLength }));
 	}
 
 	parseCommand(message) {
@@ -75,22 +64,31 @@ module.exports = class extends Monitor {
 		return prefixObject;
 	}
 
-	async runCommand(message, timer) {
+	async runCommand(message) {
+		const timer = new Stopwatch();
+		if (this.client.options.typing) message.channel.startTyping();
 		try {
-			await message.prompter.run();
-			const subcommand = message.command.subcommands ? message.params.shift() : undefined;
-			const commandRun = subcommand ? message.command[subcommand](message, message.params) : message.command.run(message, message.params);
-			timer.stop();
-			const response = await commandRun;
-			this.client.finalizers.run(message, response, timer).catch(err => this.client.emit('error', err));
-			this.client.emit('commandSuccess', message, message.command, message.params, response);
-		} catch (error) {
-			this.client.emit('commandError', message, message.command, message.params, error);
+			await this.client.inhibitors.run(message, message.command);
+			try {
+				await message.prompter.run();
+				const subcommand = message.command.subcommands ? message.params.shift() : undefined;
+				const commandRun = subcommand ? message.command[subcommand](message, message.params) : message.command.run(message, message.params);
+				timer.stop();
+				const response = await commandRun;
+				this.client.finalizers.run(message, response, timer).catch(err => this.client.emit('error', err));
+				this.client.emit('commandSuccess', message, message.command, message.params, response);
+			} catch (error) {
+				this.client.emit('commandError', message, message.command, message.params, error);
+			}
+		} catch (response) {
+			this.client.emit('commandInhibited', message, message.command, response);
 		}
+		if (this.client.options.typing) message.channel.stopTyping();
 	}
 
 	init() {
 		this.prefixMention = new RegExp(`^<@!?${this.client.user.id}>`);
+		this.mentionOnly = new RegExp(`^<@!?${this.client.user.id}>$`);
 	}
 
 };
