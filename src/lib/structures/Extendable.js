@@ -82,10 +82,13 @@ class Extendable extends Piece {
 	enable(init = false) {
 		if (!init && this.client.listenerCount('pieceEnabled')) this.client.emit('pieceEnabled', this);
 		this.enabled = true;
+		const staticPropertyDescriptors = Object.assign({}, ...this.staticPropertyNames
+			.map(name => ({ [name]: { ...Object.getOwnPropertyDescriptor(this.constructor, name), writable: true, configurable: true } })));
+		const instancePropertyDescriptors = Object.assign({}, ...this.instancePropertyNames
+			.map(name => ({ [name]: Object.getOwnPropertyDescriptor(this.constructor.prototype, name) })));
 		for (const structure of this.appliesTo) {
-			const target = this.target[structure];
-			for (const name of this.staticPropertyNames) Object.defineProperty(target, name, Object.getOwnPropertyDescriptor(this.constructor, name));
-			for (const name of this.instancePropertyNames) Object.defineProperty(target.prototype, name, Object.getOwnPropertyDescriptor(this.constructor.prototype, name));
+			Object.defineProperties(this.target[structure], staticPropertyDescriptors);
+			Object.defineProperties(this.target[structure].prototype, instancePropertyDescriptors);
 		}
 		return this;
 	}
