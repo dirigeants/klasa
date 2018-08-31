@@ -184,7 +184,7 @@ class Settings {
 		if (!this._existsInDB) return { errors: [], updated: [] };
 
 		if (typeof keys === 'string') keys = [keys];
-		else if (typeof keys === 'undefined') keys = [...this.gateway.schema.values()].map(piece => piece.path);
+		else if (typeof keys === 'undefined') keys = [...this.gateway.schema.values(true)].map(piece => piece.path);
 		if (Array.isArray(keys)) {
 			const result = { errors: [], updated: [] };
 			for (const key of keys) {
@@ -243,6 +243,7 @@ class Settings {
 			entries = [[key, value]];
 		} else if (Array.isArray(key) && key.every(entry => Array.isArray(entry) && entry.length === 2)) {
 			// Overload update(Array<[string, any]>)
+			[guild, options] = [value, guild];
 			entries = key;
 		} else {
 			return Promise.reject(new TypeError(`Invalid value. Expected object, string or Array<[string, any]>. Got: ${new Type(key)}`));
