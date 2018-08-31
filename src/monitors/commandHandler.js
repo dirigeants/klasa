@@ -5,7 +5,6 @@ module.exports = class extends Monitor {
 	constructor(...args) {
 		super(...args, { ignoreOthers: false });
 		this.ignoreEdits = !this.client.options.commandEditing;
-		this.noPrefix = { length: 0, regex: null };
 		this.prefixes = new Map();
 		this.prefixMention = null;
 		this.prefixFlags = this.client.options.prefixCaseInsensitive ? 'i' : '';
@@ -38,7 +37,7 @@ module.exports = class extends Monitor {
 	}
 
 	parseCommand(message) {
-		const result = this.getPrefix(message);
+		const result = this.customPrefix(message) || this.mentionPrefix(message) || this.naturalPrefix(message) || this.prefixLess(message);
 		return result ? {
 			command: message.content.slice(result.length).trim().split(' ')[0].toLowerCase(),
 			prefix: result.regex,
@@ -46,24 +45,28 @@ module.exports = class extends Monitor {
 		} : { command: false };
 	}
 
-	getPrefix(message) {
-		const prefixMention = this.prefixMention.exec(message.content);
-		if (prefixMention) return { length: prefixMention[0].length, regex: this.prefixMention };
-
-		if (!message.guildSettings.disableNaturalPrefix && this.client.options.regexPrefix) {
-			const results = this.client.options.regexPrefix.exec(message.content);
-			if (results) return { length: results[0].length, regex: this.client.options.regexPrefix };
+	customPrefix({ content, guildSettings: { prefix } }) {
+		if (!prefix) return null;
+		for (const prf of Array.isArray(prefix) ? prefix : [prefix]) {
+			const testingPrefix = this.prefixes.get(prf) || this.generateNewPrefix(prf);
+			if (testingPrefix.regex.test(content)) return testingPrefix;
 		}
+		return null;
+	}
 
-		const { prefix } = message.guildSettings;
-		if (prefix) {
-			for (const prf of Array.isArray(prefix) ? prefix : [prefix]) {
-				const testingPrefix = this.prefixes.get(prf) || this.generateNewPrefix(prf);
-				if (testingPrefix.regex.test(message.content)) return testingPrefix;
-			}
-		}
+	mentionPrefix({ content }) {
+		const prefixMention = this.prefixMention.exec(content);
+		return prefixMention ? { length: prefixMention[0].length, regex: this.prefixMention } : null;
+	}
 
-		return this.client.options.noPrefixDM && message.channel.type === 'dm' ? this.noPrefix : false;
+	naturalPrefix({ content, guildSettings: { disableNaturalPrefix } }) {
+		if (disableNaturalPrefix || !this.client.options.regexPrefix) return null;
+		const results = this.client.options.regexPrefix.exec(content);
+		return results ? { length: results[0].length, regex: this.client.options.regexPrefix } : null;
+	}
+
+	prefixLess({ channel: { type } }) {
+		return this.client.options.noPrefixDM && type === 'dm' ? { length: 0, regex: null } : null;
 	}
 
 	generateNewPrefix(prefix) {
