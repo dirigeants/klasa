@@ -39,25 +39,11 @@ class Extendable extends Piece {
 		 * @type {boolean}
 		 */
 		this.target = options.klasa ? require('klasa') : Discord;
-	}
 
-	/**
-	 * If the extendable should be statically applied
-	 * @since 0.5.0
-	 * @type {boolean}
-	 */
-	get static() {
-		return Boolean(this.constructor.extend);
-	}
-
-	/**
-	 * The extend method to be overwritten in actual extend pieces
-	 * @since 0.0.1
-	 * @param {*} params Any parameters you want
-	 * @abstract
-	 */
-	extend() {
-		// Defined in extension Classes
+		this.staticPropertyNames = Object.getOwnPropertyNames(this.constructor)
+			.filter(name => !['length', 'prototype', 'name'].includes(name));
+		this.instancePropertyNames = Object.getOwnPropertyNames(this.constructor.prototype)
+			.filter(name => name !== 'constructor');
 	}
 
 	/**
@@ -78,8 +64,11 @@ class Extendable extends Piece {
 	disable() {
 		if (this.client.listenerCount('pieceDisabled')) this.client.emit('pieceDisabled', this);
 		this.enabled = false;
-		if (this.static) for (const structure of this.appliesTo) delete this.target[structure][this.name];
-		else for (const structure of this.appliesTo) delete this.target[structure].prototype[this.name];
+		for (const structure of this.appliesTo) {
+			const target = this.target[structure];
+			for (const name of this.staticPropertyNames) delete target[name];
+			for (const name of this.instancePropertyNames) delete target.prototype[name];
+		}
 		return this;
 	}
 
@@ -93,8 +82,11 @@ class Extendable extends Piece {
 	enable(init = false) {
 		if (!init && this.client.listenerCount('pieceEnabled')) this.client.emit('pieceEnabled', this);
 		this.enabled = true;
-		if (this.static) for (const structure of this.appliesTo) Object.defineProperty(this.target[structure], this.name, { value: this.constructor.extend, writable: true,	configurable: true });
-		else for (const structure of this.appliesTo) Object.defineProperty(this.target[structure].prototype, this.name, Object.getOwnPropertyDescriptor(this.constructor.prototype, 'extend'));
+		for (const structure of this.appliesTo) {
+			const target = this.target[structure];
+			for (const name of this.staticPropertyNames) Object.defineProperty(target, name, Object.getOwnPropertyDescriptor(this.constructor, name));
+			for (const name of this.instancePropertyNames) Object.defineProperty(target.prototype, name, Object.getOwnPropertyDescriptor(this.constructor.prototype, name));
+		}
 		return this;
 	}
 
