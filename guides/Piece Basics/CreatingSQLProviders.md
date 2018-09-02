@@ -157,4 +157,5 @@ Another issue with the old design was portability: you can move from NoSQL to No
 - {@tutorial CreatingLanguages}
 - {@tutorial CreatingMonitors}
 - {@tutorial CreatingProviders}
+- {@tutorial CreatingSerializers}
 - {@tutorial CreatingTasks}

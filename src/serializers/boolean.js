@@ -4,6 +4,10 @@ const falses = ['0', 'false', '-', 'f', 'no', 'n'];
 
 module.exports = class extends Serializer {
 
+	constructor(...args) {
+		super(...args, { aliases: ['bool'] });
+	}
+
 	deserialize(data, piece, language) {
 		const boolean = String(data).toLowerCase();
 		if (truths.includes(boolean)) return true;
