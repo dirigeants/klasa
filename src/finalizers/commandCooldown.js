@@ -11,7 +11,7 @@ module.exports = class extends Finalizer {
 		try {
 			rateLimit.drip();
 		} catch (err) {
-			this.client.console.emit('error', `${message.author.username}[${message.author.id}] has exceeded the RateLimit for ${message.command}`);
+			this.client.emit('error', `${message.author.username}[${message.author.id}] has exceeded the RateLimit for ${message.command}`);
 		}
 	}
 
