@@ -60,7 +60,7 @@ class Store extends Collection {
 	}
 
 	/**
-	 * The directory of local commands relative to where you run Klasa from.
+	 * The directory of local pieces relative to where you run Klasa from.
 	 * @since 0.0.1
 	 * @type {string}
 	 * @readonly
