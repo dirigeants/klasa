@@ -176,4 +176,5 @@ Stands for '**W**hat a **T**errible **F**ailure'. Logs fatal errors.
 - {@tutorial IncludedLanguages}
 - {@tutorial IncludedMonitors}
 - {@tutorial IncludedProviders}
+- {@tutorial IncludedSerializers}
 - {@tutorial IncludedTasks}
