@@ -58,6 +58,7 @@ declare module 'klasa' {
 		public languages: LanguageStore;
 		public providers: ProviderStore;
 		public tasks: TaskStore;
+		public serializers: SerializerStore;
 		public events: EventStore;
 		public extendables: ExtendableStore;
 		public pieceStores: Collection<string, any>;
@@ -76,7 +77,6 @@ declare module 'klasa' {
 		private _ready(): Promise<void>;
 
 		public sweepMessages(lifetime?: number, commandLifeTime?: number): number;
-		public static types: SchemaTypes;
 		public static defaultGuildSchema: Schema;
 		public static defaultUserSchema: Schema;
 		public static defaultClientSchema: Schema;
@@ -550,8 +550,6 @@ declare module 'klasa' {
 		public remove(key: string): this;
 		public get<T = SchemaPiece | SchemaFolder>(key: string | Array<string>): T;
 		public toJSON(): ObjectLiteral;
-
-		private debug(): Array<string>;
 	}
 
 	export class Schema extends SchemaBase {
@@ -571,9 +569,9 @@ declare module 'klasa' {
 		public readonly client: KlasaClient | null;
 		public readonly parent: Schema | SchemaFolder;
 		public readonly key: string;
+		public readonly serializer: Serializer;
 		public readonly type: string;
 		public readonly path: string;
-		public resolver: SchemaType;
 		public array: boolean;
 		public configurable: boolean;
 		public default: any;
@@ -586,34 +584,6 @@ declare module 'klasa' {
 
 		private isValid(): boolean;
 		private _generateDefault(): Array<any> | false | null;
-		// any is supplied since the following methods do type checks
-		private _checkType(value: any): void;
-		private _checkArray(value: any): void;
-		private _checkConfigurable(value: any): void;
-		private _checkLimits(min: any, max: any): void;
-		private _checkFilter(value: any): void;
-		private _checkDefault(value: any): void;
-	}
-
-	export class SchemaTypes extends Map<string, SchemaType> {
-		public constructor(types: Array<[string, SchemaType]>);
-		public client: KlasaClient | null;
-		public add(name: string, type: typeof SchemaType): this;
-	}
-
-	export abstract class SchemaType {
-		public constructor(types: SchemaTypes);
-		public readonly client: KlasaClient | null;
-		public readonly types: SchemaTypes;
-		public abstract resolve(data: any, piece: SchemaPiece, language: Language, guild?: KlasaGuild): Promise<any>;
-		public abstract resolveString(value: any): string;
-		public static regex: {
-			userOrMember: RegExp;
-			channel: RegExp;
-			emoji: RegExp;
-			role: RegExp;
-			snowflake: RegExp;
-		};
 	}
 
 //#endregion Settings
@@ -792,6 +762,22 @@ declare module 'klasa' {
 		public toJSON(): PieceTaskJSON;
 	}
 
+	export abstract class Serializer extends Piece {
+		public constructor(client: KlasaClient, store: SerializerStore, file: string, directory: string, options?: SerializerOptions);
+		public aliases: Array<string>;
+		public serialize(data: any): PrimitiveType;
+		public stringify(data: any): string;
+		public toJSON(): PieceSerializerJSON;
+		public abstract deserialize<T = any>(data: any, piece: SchemaPiece, language: Language, guild?: KlasaGuild): Promise<T>;
+		public static regex: {
+			userOrMember: RegExp;
+			channel: RegExp;
+			emoji: RegExp;
+			role: RegExp;
+			snowflake: RegExp;
+		};
+	}
+
 //#endregion Pieces
 
 //#region Stores
@@ -855,6 +841,10 @@ declare module 'klasa' {
 	}
 
 	export class TaskStore extends Store<string, Task, typeof Task> { }
+
+	export class SerializerStore extends Store<string, Serializer, typeof Serializer> {
+		public aliases: Collection<string, Serializer>;
+	}
 
 //#endregion Stores
 
@@ -1322,6 +1312,7 @@ declare module 'klasa' {
 		languages?: LanguageOptions;
 		monitors?: MonitorOptions;
 		providers?: ProviderOptions;
+		serializers?: SerializerOptions;
 	};
 
 	export type KlasaProvidersOptions = {
@@ -1596,6 +1587,10 @@ declare module 'klasa' {
 		once?: boolean;
 	} & PieceOptions;
 
+	export type SerializerOptions = {
+		aliases?: Array<string>;
+	} & PieceOptions;
+
 	export type ProviderOptions = PieceOptions;
 	export type FinalizerOptions = PieceOptions;
 	export type LanguageOptions = PieceOptions;
@@ -1666,6 +1661,10 @@ declare module 'klasa' {
 		emitter: string;
 		event: string;
 		once: boolean;
+	} & PieceJSON;
+
+	export type PieceSerializerJSON = {
+		aliases: Array<string>;
 	} & PieceJSON;
 
 	export type PieceProviderJSON = PieceJSON;

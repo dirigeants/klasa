@@ -1,4 +1,3 @@
-const Client = require('../../Client');
 const { isFunction, isNumber } = require('../../util/util');
 
 class SchemaPiece {
@@ -27,6 +26,15 @@ class SchemaPiece {
 	 * @since 0.5.0
 	 */
 	constructor(parent, key, type, options = {}) {
+		/**
+		 * The KlasaClient for this SchemaPiece
+		 * @name SchemaPiece#Client
+		 * @since 0.5.0
+		 * @readonly
+		 * @type {KlasaClient}
+		 */
+		Object.defineProperty(this, 'client', { value: null, writable: true });
+
 		/**
 		 * The parent of this SchemaPiece, either a SchemaFolder instance or Schema instance
 		 * @name SchemaPiece#parent
@@ -102,24 +110,16 @@ class SchemaPiece {
 		 * @type {Function}
 		 */
 		this.filter = 'filter' in options ? options.filter : null;
-
-		/**
-		 * The resolver for this type
-		 * @since 0.5.0
-		 * @type {SchemaType}
-		 */
-		this.resolver = Client.types.get(this.type);
-
-		if (!this.resolver) throw new TypeError('Unknown Schema Type used: You need to define your custom SchemaType first');
 	}
 
 	/**
-	 * The KlasaClient
+	 * The serializer for this SchemaPiece
 	 * @since 0.5.0
-	 * @type {?KlasaClient}
+	 * @type {Serializer}
+	 * @readonly
 	 */
-	get client() {
-		return Client.types.client;
+	get serializer() {
+		return this.client.serializers.get(this.type);
 	}
 
 	/**
@@ -129,31 +129,15 @@ class SchemaPiece {
 	 * @returns {this}
 	 */
 	edit(options = {}) {
-		if ('type' in options) {
-			this._checkType(options.type);
-			this.type = options.type;
-		}
-		if ('array' in options) {
-			this._checkArray(options.array);
-			this.array = options.array;
-		}
-		if ('configurable' in options) {
-			this._checkConfigurable(options.configurable);
-			this.configurable = options.configurable;
-		}
+		if ('type' in options) this.type = options.type;
+		if ('array' in options) this.array = options.array;
+		if ('configurable' in options) this.configurable = options.configurable;
+		if ('filter' in options) this.filter = options.filter;
+		if ('default' in options) this.default = options.default;
 		if (('min' in options) || ('max' in options)) {
 			const { min = null, max = null } = options;
-			this._checkLimits(min, max);
 			this.min = min;
 			this.max = max;
-		}
-		if ('filter' in options) {
-			this._checkFilter(options.filter);
-			this.filter = options.filter;
-		}
-		if ('default' in options) {
-			this._checkDefault(options);
-			this.default = options.default;
 		}
 
 		return this;
@@ -165,12 +149,30 @@ class SchemaPiece {
 	 * @returns {boolean}
 	 */
 	isValid() {
-		this._checkType(this.type);
-		this._checkArray(this.array);
-		this._checkConfigurable(this.configurable);
-		this._checkLimits(this.min, this.max);
-		this._checkFilter(this.filter);
-		this._checkDefault(this);
+		// Check type
+		if (typeof this.type !== 'string') throw new TypeError(`[KEY] ${this.path} - Parameter type must be a string.`);
+		if (!this.client.serializers.has(this.type)) throw new TypeError(`[KEY] ${this.path} - ${this.type} is not a valid type.`);
+
+		// Check array
+		if (typeof this.array !== 'boolean') throw new TypeError(`[KEY] ${this.path} - Parameter array must be a boolean.`);
+
+		// Check configurable
+		if (typeof this.configurable !== 'boolean') throw new TypeError(`[KEY] ${this.path} - Parameter configurable must be a boolean.`);
+
+		// Check limits
+		if (this.min !== null && !isNumber(this.min)) throw new TypeError(`[KEY] ${this.path} - Parameter min must be a number or null.`);
+		if (this.max !== null && !isNumber(this.max)) throw new TypeError(`[KEY] ${this.path} - Parameter max must be a number or null.`);
+		if (this.min !== null && this.max !== null && this.min > this.max) throw new TypeError(`[KEY] ${this.path} - Parameter min must contain a value lower than the parameter max.`);
+
+		// Check filter
+		if (this.filter !== null && !isFunction(this.filter)) throw new TypeError(`[KEY] ${this.path} - Parameter filter must be a function`);
+
+		// Check default
+		if (this.array) {
+			if (!Array.isArray(this.default)) throw new TypeError(`[DEFAULT] ${this.path} - Default key must be an array if the key stores an array.`);
+		} else if (this.default !== null) {
+			if (['boolean', 'string'].includes(this.type) && typeof this.default !== this.type) throw new TypeError(`[DEFAULT] ${this.path} - Default key must be a ${this.type}.`);
+		}
 
 		return true;
 	}
@@ -184,7 +186,7 @@ class SchemaPiece {
 	 */
 	async parse(value, guild) {
 		const language = guild ? guild.language : this.client.languages.default;
-		const val = await this.resolver.resolve(value, this, language, guild);
+		const val = await this.serializer.deserialize(value, this, language, guild);
 		if (this.filter && this.filter(this.client, val, this, language)) throw language.get('SETTING_GATEWAY_INVALID_FILTERED_VALUE', this, value);
 		return val;
 	}
@@ -199,82 +201,6 @@ class SchemaPiece {
 		if (this.array) return [];
 		if (this.type === 'boolean') return false;
 		return null;
-	}
-
-
-	/**
-	 * Checks if options.type is valid.
-	 * @since 0.5.0
-	 * @param {string} type The parameter to validate
-	 * @throws {TypeError}
-	 * @private
-	 */
-	_checkType(type) {
-		if (typeof type !== 'string') throw new TypeError(`[KEY] ${this.path} - Parameter type must be a string.`);
-		if (!require('../../Client').types.has(type)) throw new TypeError(`[KEY] ${this.path} - ${type} is not a valid type.`);
-	}
-
-	/**
-	 * Checks if options.array is valid.
-	 * @since 0.5.0
-	 * @param {boolean} array The parameter to validate
-	 * @throws {TypeError}
-	 * @private
-	 */
-	_checkArray(array) {
-		if (typeof array !== 'boolean') throw new TypeError(`[KEY] ${this.path} - Parameter array must be a boolean.`);
-	}
-
-	/**
-	 * Checks if options.default is valid.
-	 * @since 0.5.0
-	 * @param {SchemaFolderAddOptions} options The options to validate
-	 * @throws {TypeError}
-	 * @private
-	 */
-	_checkDefault(options) {
-		if (options.array === true) {
-			if (!Array.isArray(options.default)) throw new TypeError(`[DEFAULT] ${this.path} - Default key must be an array if the key stores an array.`);
-		} else if (options.type === 'boolean' && typeof options.default !== 'boolean') {
-			throw new TypeError(`[DEFAULT] ${this.path} - Default key must be a boolean if the key stores a boolean.`);
-		} else if (options.type === 'string' && typeof options.default !== 'string' && options.default !== null) {
-			throw new TypeError(`[DEFAULT] ${this.path} - Default key must be either a string or null if the key stores a string.`);
-		}
-	}
-
-	/**
-	 * Checks if options.min and options.max are valid.
-	 * @since 0.5.0
-	 * @param {number} min The options.min parameter to validate
-	 * @param {number} max The options.max parameter to validate
-	 * @private
-	 */
-	_checkLimits(min, max) {
-		if (min !== null && !isNumber(min)) throw new TypeError(`[KEY] ${this.path} - Parameter min must be a number or null.`);
-		if (max !== null && !isNumber(max)) throw new TypeError(`[KEY] ${this.path} - Parameter max must be a number or null.`);
-		if (min !== null && max !== null && min > max) throw new TypeError(`[KEY] ${this.path} - Parameter min must contain a value lower than the parameter max.`);
-	}
-
-	/**
-	 * Check if options.filter is valid.
-	 * @since 0.5.0
-	 * @param {boolean} configurable The paramter to validate
-	 * @throws {TypeError}
-	 * @private
-	 */
-	_checkConfigurable(configurable) {
-		if (typeof configurable !== 'boolean') throw new TypeError(`[KEY] ${this.path} - Parameter configurable must be a boolean.`);
-	}
-
-	/**
-	 * Check if options.filter is valid.
-	 * @since 0.5.0
-	 * @param {Function} filter The parameter to validate
-	 * @throws {TypeError}
-	 * @private
-	 */
-	_checkFilter(filter) {
-		if (filter !== null && !isFunction(filter)) throw new TypeError(`[KEY] ${this.path} - Parameter filter must be a function`);
 	}
 
 	/**

@@ -66,5 +66,6 @@ the user who ran it, and the time it took to process the command.
 - {@tutorial CreatingLanguages}
 - {@tutorial CreatingMonitors}
 - {@tutorial CreatingProviders}
+- {@tutorial CreatingSerializers}
 - {@tutorial CreatingSQLProviders}
 - {@tutorial CreatingTasks}
