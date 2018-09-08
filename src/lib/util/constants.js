@@ -21,6 +21,7 @@ exports.DEFAULTS = {
 			warn: true,
 			wtf: true
 		},
+		createPiecesFolders: true,
 		disabledCorePieces: [],
 		language: 'en-US',
 		noPrefixDM: false,

@@ -44,7 +44,7 @@ declare module 'klasa' {
 //#region Classes
 
 	export class KlasaClient extends Client {
-		public constructor(options?: KlasaClientOptions & ClientOptions);
+		public constructor(options?: KlasaClientOptions);
 		public readonly invite: string;
 		public readonly owner: KlasaUser | null;
 		public options: KlasaClientOptions & ClientOptions;
@@ -1273,6 +1273,7 @@ declare module 'klasa' {
 		commandMessageLifetime?: number;
 		console?: KlasaConsoleConfig;
 		consoleEvents?: KlasaConsoleEvents;
+		createPiecesFolders?: boolean;
 		customPromptDefaults?: KlasaCustomPromptDefaults;
 		disabledCorePieces?: string[];
 		gateways?: KlasaGatewaysOptions;
