@@ -125,5 +125,6 @@ After loading this extendable, `Message.prototype.prompt` will be available as a
 - {@tutorial CreatingLanguages}
 - {@tutorial CreatingMonitors}
 - {@tutorial CreatingProviders}
+- {@tutorial CreatingSerializers}
 - {@tutorial CreatingSQLProviders}
 - {@tutorial CreatingTasks}

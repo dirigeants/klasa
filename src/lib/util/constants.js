@@ -21,6 +21,7 @@ exports.DEFAULTS = {
 			warn: true,
 			wtf: true
 		},
+		createPiecesFolders: true,
 		disabledCorePieces: [],
 		language: 'en-US',
 		noPrefixDM: false,
@@ -95,6 +96,10 @@ exports.DEFAULTS = {
 				ignoreBlacklistedGuilds: true
 			},
 			providers: { enabled: true },
+			serializers: {
+				enabled: true,
+				aliases: []
+			},
 			tasks: { enabled: true }
 		},
 		schedule: { interval: 60000 }

@@ -17,7 +17,7 @@ class LanguageStore extends Store {
 	}
 
 	/**
-	 * The default language set in KlasaClientOptions.language
+	 * The default language set in {@link KlasaClientOptions.language}
 	 * @since 0.2.1
 	 * @type {?Language}
 	 * @readonly
