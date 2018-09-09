@@ -1,5 +1,4 @@
 const Piece = require('./base/Piece');
-const Discord = require('discord.js');
 
 /**
  * Base class for all Klasa Extendables. See {@tutorial CreatingExtendables} for more information how to use this class
@@ -11,34 +10,26 @@ class Extendable extends Piece {
 
 	/**
 	 * @typedef {PieceOptions} ExtendableOptions
-	 * @property {boolean} [klasa=false] If the extendable is for Klasa instead of Discord.js
-	 * @property {string[]} [appliesTo=[]] What classes this extendable is for
+	 * @property {any[]} [appliesTo=[]] What classes this extendable is for
 	 */
 
 	/**
 	 * @since 0.0.1
 	 * @param {KlasaClient} client The klasa client
 	 * @param {ExtendableStore} store The extendable store
-	 * @param {string} file The path from the pieces folder to the extendable file
-	 * @param {boolean} core If the piece is in the core directory or not
+	 * @param {string[]} file The path from the pieces folder to the extendable file
+	 * @param {string} directory The base directory to the pieces folder
 	 * @param {ExtendableOptions} [options={}] The options for this extendable
 	 */
-	constructor(client, store, file, core, options = {}) {
-		super(client, store, file, core, options);
+	constructor(client, store, file, directory, options = {}) {
+		super(client, store, file, directory, options);
 
 		/**
 		 * The discord classes this extendable applies to
 		 * @since 0.0.1
-		 * @type {string[]}
+		 * @type {any[]}
 		 */
 		this.appliesTo = options.appliesTo;
-
-		/**
-		 * The target library to apply this extendable to
-		 * @since 0.0.1
-		 * @type {boolean}
-		 */
-		this.target = options.klasa ? require('klasa') : Discord;
 
 		this.staticPropertyNames = Object.getOwnPropertyNames(this.constructor)
 			.filter(name => !['length', 'prototype', 'name'].includes(name));
@@ -65,9 +56,8 @@ class Extendable extends Piece {
 		if (this.client.listenerCount('pieceDisabled')) this.client.emit('pieceDisabled', this);
 		this.enabled = false;
 		for (const structure of this.appliesTo) {
-			const target = this.target[structure];
-			for (const name of this.staticPropertyNames) delete target[name];
-			for (const name of this.instancePropertyNames) delete target.prototype[name];
+			for (const name of this.staticPropertyNames) delete structure[name];
+			for (const name of this.instancePropertyNames) delete structure.prototype[name];
 		}
 		return this;
 	}
@@ -87,8 +77,8 @@ class Extendable extends Piece {
 		const instancePropertyDescriptors = Object.assign({}, ...this.instancePropertyNames
 			.map(name => ({ [name]: Object.getOwnPropertyDescriptor(this.constructor.prototype, name) })));
 		for (const structure of this.appliesTo) {
-			Object.defineProperties(this.target[structure], staticPropertyDescriptors);
-			Object.defineProperties(this.target[structure].prototype, instancePropertyDescriptors);
+			Object.defineProperties(structure, staticPropertyDescriptors);
+			Object.defineProperties(structure.prototype, instancePropertyDescriptors);
 		}
 		return this;
 	}
@@ -100,8 +90,7 @@ class Extendable extends Piece {
 	toJSON() {
 		return {
 			...super.toJSON(),
-			appliesTo: this.appliesTo.slice(0),
-			target: this.target === Discord ? 'discord.js' : 'klasa'
+			appliesTo: this.appliesTo.map(fn => fn.name)
 		};
 	}
 

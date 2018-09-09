@@ -678,10 +678,9 @@ declare module 'klasa' {
 
 	export abstract class Extendable extends Piece {
 		public constructor(client: KlasaClient, store: ExtendableStore, file: string, directory: string, options?: ExtendableOptions);
-		public appliesTo: string[];
+		public appliesTo: Array<Constructable<any>>;
 		public instancePropertyNames: Array<string>;
 		public staticPropertyNames: Array<string>;
-		public target: boolean;
 		public toJSON(): PieceExtendableJSON;
 	}
 
@@ -1561,8 +1560,7 @@ declare module 'klasa' {
 	} & PieceOptions;
 
 	export type ExtendableOptions = {
-		appliesTo: string[];
-		klasa?: boolean;
+		appliesTo: Array<Constructable<any>>;
 	} & PieceOptions;
 
 	export type InhibitorOptions = {
@@ -1638,7 +1636,6 @@ declare module 'klasa' {
 
 	export type PieceExtendableJSON = {
 		appliesTo: string[];
-		target: 'discord.js' | 'klasa';
 	} & PieceJSON;
 
 	export type PieceInhibitorJSON = {

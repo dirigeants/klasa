@@ -1,9 +1,10 @@
 const { Extendable } = require('klasa');
+const { TextChannel, DMChannel, GroupDMChannel, User } = require('discord.js');
 
 module.exports = class extends Extendable {
 
 	constructor(...args) {
-		super(...args, { appliesTo: ['TextChannel', 'DMChannel', 'GroupDMChannel', 'User'] });
+		super(...args, { appliesTo: [TextChannel, DMChannel, GroupDMChannel, User] });
 	}
 
 	sendCode(lang, content, options = {}) {
