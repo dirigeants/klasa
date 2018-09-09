@@ -13,8 +13,7 @@ class MyExtendable extends Extendable {
 		super(...args, {
 			appliesTo: [],
 			name: 'nameOfExtendable',
-			enabled: true,
-			klasa: false
+			enabled: true
 		});
 	}
 
@@ -64,22 +63,18 @@ module.exports = class extends Extendable {
 		super(...args, {
 			appliesTo: [],
 			name: 'nameOfExtendable',
-			enabled: true,
-			klasa: false
+			enabled: true
 		});
 	}
 
 };
 ```
 
-| Name          | Default       | Type     | Description                                            |
-| ------------- | ------------- | -------- | ------------------------------------------------------ |
-| **name**      | `theFileName` | string   | The name of the method/property                        |
-| **enabled**   | `true`        | boolean  | If the extendable is enabled or not                    |
-| **klasa**     | `false`       | boolean  | If the extendable is for Klasa instead of Discord.js   |
-| **appliesTo** | `[]`          | string[] | An array of affected classes from Discord.js or Klasa. |
-
-> You can find all extendable classes for [Discord.js](https://github.com/discordjs/discord.js/blob/master/src/index.js) and [Klasa](https://github.com/dirigeants/klasa/blob/master/src/index.js) in those respective links.
+| Name          | Default       | Type    | Description                          |
+| ------------- | ------------- | ------- | ------------------------------------ |
+| **name**      | `theFileName` | string  | The name of the method/property.     |
+| **enabled**   | `true`        | boolean | If the extendable is enabled or not. |
+| **appliesTo** | `[]`          | class[] | An array of classes to extend.       |
 
 ## Understanding extendables
 
@@ -97,12 +92,13 @@ and Message has both properties of `author` and `channel`.
 
 ```js
 const { Extendable } = require('klasa');
+const { Message } = require('discord.js');
 const makePrompt = require('../lib/util/Prompt');
 
 module.exports = class extends Extendable {
 
 	constructor(...args) {
-		super(...args, { appliesTo: ['Message'] });
+		super(...args, { appliesTo: [Message] });
 	}
 
 	prompt() {
