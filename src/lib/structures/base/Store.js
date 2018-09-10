@@ -102,7 +102,7 @@ class Store extends Collection {
 		let piece = null;
 		try {
 			const Piece = (req => req.default || req)(require(loc));
-			if (!isClass(Piece)) throw new TypeError(`Failed to load file '${loc}'. The exported structure is not a class.`);
+			if (!isClass(Piece)) throw new TypeError('The exported structure is not a class.');
 			piece = this.set(new Piece(this.client, this, file, directory));
 		} catch (error) {
 			this.client.emit('wtf', `Failed to load file '${loc}'. Error:\n${error.stack || error}`);
