@@ -2,7 +2,7 @@ const { isFunction, deepClone } = require('../../util/util');
 
 /**
  * The base Schema for {@link Gateway}s
- * @extends Base
+ * @extends Map
  * @since 0.5.0
  */
 class Schema extends Map {
