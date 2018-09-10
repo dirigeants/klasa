@@ -19,7 +19,7 @@ module.exports = class extends Inhibitor {
 		try {
 			rateLimit.drip();
 		} catch (err) {
-			if (this.aggressive) rateLimit.resetTime = Date.now() + rateLimit.cooldown;
+			if (this.aggressive) rateLimit.resetTime();
 			throw true;
 		}
 	}
