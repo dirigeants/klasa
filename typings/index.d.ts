@@ -47,7 +47,7 @@ declare module 'klasa' {
 		public constructor(options?: KlasaClientOptions);
 		public readonly invite: string;
 		public readonly owner: KlasaUser | null;
-		public options: KlasaClientOptions & ClientOptions;
+		public options: KlasaClientOptions;
 		public userBaseDirectory: string;
 		public console: KlasaConsole;
 		public arguments: ArgumentStore;
@@ -1289,6 +1289,8 @@ declare module 'klasa' {
 		readyMessage?: (client: KlasaClient) => string;
 		regexPrefix?: RegExp;
 		schedule?: KlasaClientOptionsSchedule;
+		slowmode?: number;
+		slowmodeAggressive?: boolean;
 		typing?: boolean;
 	} & ClientOptions;
 
