@@ -6,6 +6,8 @@ module.exports = class extends Inhibitor {
 		super(...args, { spamProtection: true });
 		this.slowmode = new RateLimitManager(1, this.client.options.slowmode);
 		this.aggressive = this.client.options.slowmodeAggressive;
+
+		if (!this.client.options.slowmode) this.disable();
 	}
 
 	async run(message) {
@@ -20,10 +22,6 @@ module.exports = class extends Inhibitor {
 			if (this.aggressive) rateLimit.resetTime = Date.now() + rateLimit.cooldown;
 			throw true;
 		}
-	}
-
-	init() {
-		if (!this.client.options.slowmode) this.disable();
 	}
 
 };
