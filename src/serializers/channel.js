@@ -4,7 +4,7 @@ const { Channel } = require('discord.js');
 module.exports = class extends Serializer {
 
 	constructor(...args) {
-		super(...args, { aliases: ['textchannel', 'voicechannnel', 'categorychannel'] });
+		super(...args, { aliases: ['textchannel', 'voicechannel', 'categorychannel'] });
 	}
 
 	checkChannel(data, piece, language) {
