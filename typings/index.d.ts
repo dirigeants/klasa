@@ -1054,9 +1054,11 @@ declare module 'klasa' {
 		public bucket: number;
 		public cooldown: number;
 		private remaining: number;
-		private resetTime: number;
+		private time: number;
 		public drip(): this;
 		public reset(): this;
+		public resetRemaining(): this;
+		public resetTime(): this;
 	}
 
 	export class RateLimitManager extends Collection<Snowflake, RateLimit> {
