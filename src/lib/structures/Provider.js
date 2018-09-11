@@ -43,10 +43,6 @@ class Provider extends Piece {
 	}
 
 	/**
-	 * Entry Operations
-	 */
-
-	/**
 	 * The create method which inserts new entries to a table from the database.
 	 * @since 0.0.1
 	 * @param {string} table The table to update

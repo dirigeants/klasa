@@ -22,7 +22,7 @@ class AliasPiece extends Piece {
 	 * @param {AliasPieceOptions} [options={}] The options for this piece
 	 */
 	constructor(client, store, file, directory, options = {}) {
-		super(client, store, file, directory, options = {});
+		super(client, store, file, directory, options);
 
 		/**
 		 * The aliases for this piece
