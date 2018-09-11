@@ -33,6 +33,40 @@ class Schema extends Map {
 	}
 
 	/**
+	 * Get the configurable keys for the current SchemaFolder or Schema instance
+	 * @since 0.5.0
+	 * @readonly
+	 * @type {Array<string>}
+	 */
+	get configurableKeys() {
+		const keys = [];
+		for (const piece of this.values(true)) if (piece.configurable) keys.push(piece.path);
+		return keys;
+	}
+
+	/**
+	 * Get the defaults for the current SchemaFolder or Schema instance
+	 * @since 0.5.0
+	 * @readonly
+	 * @type {Object}
+	 */
+	get defaults() {
+		return Object.assign({}, ...[...this.values()].map(piece => ({ [piece.key]: piece.defaults || deepClone(piece.default) })));
+	}
+
+	/**
+	 * Get the paths for the current SchemaFolder or Schema instance
+	 * @since 0.5.0
+	 * @readonly
+	 * @type {Map<string, SchemaFolder|SchemaPiece>}
+	 */
+	get paths() {
+		const paths = new Map();
+		for (const piece of this.values(true)) paths.set(piece.path, piece);
+		return paths;
+	}
+
+	/**
 	 * Adds a Folder or Piece instance to the current SchemaFolder or Schema instance
 	 * @since 0.5.0
 	 * @param {string} key The name of this new piece you are trying to add.
@@ -116,49 +150,6 @@ class Schema extends Map {
 	}
 
 	/**
-	 * Get the configurable keys for the current SchemaFolder or Schema instance
-	 * @since 0.5.0
-	 * @readonly
-	 * @type {Array<string>}
-	 */
-	get configurableKeys() {
-		const keys = [];
-		for (const piece of this.values(true)) if (piece.configurable) keys.push(piece.path);
-		return keys;
-	}
-
-	/**
-	 * Get the defaults for the current SchemaFolder or Schema instance
-	 * @since 0.5.0
-	 * @readonly
-	 * @type {Object}
-	 */
-	get defaults() {
-		return Object.assign({}, ...[...this.values()].map(piece => ({ [piece.key]: piece.defaults || deepClone(piece.default) })));
-	}
-
-	/**
-	 * Get the paths for the current SchemaFolder or Schema instance
-	 * @since 0.5.0
-	 * @readonly
-	 * @type {Map<string, SchemaFolder|SchemaPiece>}
-	 */
-	get paths() {
-		const paths = new Map();
-		for (const piece of this.values(true)) paths.set(piece.path, piece);
-		return paths;
-	}
-
-	/**
-	 * Get a JSON object containing data from this SchemaFolder
-	 * @since 0.5.0
-	 * @returns {Object}
-	 */
-	toJSON() {
-		return Object.assign({}, ...[...this.values()].map(piece => ({ [piece.key]: piece.toJSON() })));
-	}
-
-	/**
 	 * Returns a new Iterator object that contains the keys for each element contained in this folder.
 	 * Identical to [Map.keys()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/keys)
 	 * @since 0.5.0
@@ -210,6 +201,15 @@ class Schema extends Map {
 		} else {
 			yield* super.entries();
 		}
+	}
+
+	/**
+	 * Get a JSON object containing data from this SchemaFolder
+	 * @since 0.5.0
+	 * @returns {Object}
+	 */
+	toJSON() {
+		return Object.assign({}, ...[...this.values()].map(piece => ({ [piece.key]: piece.toJSON() })));
 	}
 
 }
