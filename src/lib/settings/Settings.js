@@ -311,8 +311,8 @@ class Settings {
 		const piece = path instanceof SchemaPiece ? path : this.gateway.getPath(path, { piece: true }).piece;
 		const value = this.get(piece.path);
 		if (value === null) return 'Not set';
-		if (piece.array) return value.length ? `[ ${value.map(val => piece.resolver.resolveString(val, message)).join(' | ')} ]` : 'None';
-		return piece.resolver.resolveString(value, message);
+		if (piece.array) return value.length ? `[ ${value.map(val => piece.serializer.stringify(val, message)).join(' | ')} ]` : 'None';
+		return piece.serializer.stringify(value, message);
 	}
 
 	/**
@@ -364,13 +364,13 @@ class Settings {
 	 * @private
 	 */
 	async _parse(value, guild, options, result, { piece, route }) {
-		const parsedID = value === null ?
+		const parsed = value === null ?
 			deepClone(piece.default) :
 			await (Array.isArray(value) ?
 				this._parseAll(piece, value, guild, result.errors) :
 				piece.parse(value, guild).catch((error) => { result.errors.push(error); }));
-
-		if (typeof parsedID === 'undefined') return;
+		if (typeof parsed === 'undefined') return;
+		const parsedID = Array.isArray(parsed) ? parsed.map(val => piece.serializer.serialize(val)) : piece.serializer.serialize(parsed);
 		if (piece.array) {
 			this._parseArray(piece, route, parsedID, options, result);
 		} else if (this._setValueByPath(piece, parsedID, options.force).updated) {

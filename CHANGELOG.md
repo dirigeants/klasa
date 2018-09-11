@@ -14,6 +14,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#416](https://github.com/dirigeants/klasa/pull/416)] Added `KlasaClientOptions.createPiecesFolders` to not create pieces' folders if they do not exist. (kyranet)
 - [[#398](https://github.com/dirigeants/klasa/pull/398)] Added the `Settings#update(entries: Array<[string, any]>);` overload. (kyranet)
 - [[#392](https://github.com/dirigeants/klasa/pull/392)] Added support for empty prefixes. (kyranet)
 - [[#383](https://github.com/dirigeants/klasa/pull/383)] Added the `SETTING_GATEWAY_INVALID_FILTERED_VALUE` language key. (bdistin)

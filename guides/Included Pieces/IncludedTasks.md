@@ -11,3 +11,4 @@ There's no included {@link Task} piece in Klasa, however, they are available in 
 - {@tutorial IncludedLanguages}
 - {@tutorial IncludedMonitors}
 - {@tutorial IncludedProviders}
+- {@tutorial IncludedSerializers}

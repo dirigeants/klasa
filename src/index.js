@@ -23,8 +23,6 @@ module.exports = {
 	Schema: require('./lib/settings/schema/Schema'),
 	SchemaFolder: require('./lib/settings/schema/SchemaFolder'),
 	SchemaPiece: require('./lib/settings/schema/SchemaPiece'),
-	SchemaTypes: require('./lib/settings/schema/types/base/SchemaTypes'),
-	SchemaType: require('./lib/settings/schema/types/base/SchemaType'),
 
 	// lib/structures/base
 	Piece: require('./lib/structures/base/Piece'),
@@ -49,6 +47,8 @@ module.exports = {
 	MonitorStore: require('./lib/structures/MonitorStore'),
 	Provider: require('./lib/structures/Provider'),
 	ProviderStore: require('./lib/structures/ProviderStore'),
+	Serializer: require('./lib/structures/Serializer'),
+	SerializerStore: require('./lib/structures/SerializerStore'),
 	SQLProvider: require('./lib/structures/SQLProvider'),
 	Task: require('./lib/structures/Task'),
 	TaskStore: require('./lib/structures/TaskStore'),

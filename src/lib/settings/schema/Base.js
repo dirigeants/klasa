@@ -92,28 +92,6 @@ class Base extends Map {
 	}
 
 	/**
-	 * Debug the current SchemaFolder or Schema instance.
-	 * @since 0.5.0
-	 * @returns {Array<?string>}
-	 * @private
-	 */
-	debug() {
-		const errors = [];
-		for (const piece of this.values()) {
-			if (piece.type === 'Folder') {
-				errors.push(...piece.debug());
-				continue;
-			}
-			try {
-				piece.isValid();
-			} catch (error) {
-				errors.push(error.message);
-			}
-		}
-		return errors;
-	}
-
-	/**
 	 * Get the configurable keys for the current SchemaFolder or Schema instance
 	 * @since 0.5.0
 	 * @readonly
