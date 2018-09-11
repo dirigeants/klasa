@@ -66,6 +66,8 @@ class KlasaClient extends Discord.Client {
 	 * @property {(string|Function)} [readyMessage=`Successfully initialized. Ready to serve ${this.guilds.size} guilds.`] readyMessage to be passed throughout Klasa's ready event
 	 * @property {RegExp} [regexPrefix] The regular expression prefix if one is provided
 	 * @property {KlasaClientOptionsSchedule} [schedule={}] The options for the internal clock module that runs Schedule
+	 * @property {number} [slowmode=0] Amount of time in ms before the bot will respond to a users command since the last command that user has run
+	 * @property {boolean} [slowmodeAggressive=false] If the slowmode time should reset if a user spams commands faster than the slowmode allows for
 	 * @property {boolean} [typing=false] Whether the bot should type while processing commands
 	 * @property {boolean} [prefixCaseInsensitive=false] Wether the bot should respond to case insensitive prefix or not
 	 */

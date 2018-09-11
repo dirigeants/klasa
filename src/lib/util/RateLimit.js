@@ -33,7 +33,7 @@ class RateLimit {
 	 * @readonly
 	 */
 	get expired() {
-		return Date.now() >= this.resetTime;
+		return this.remainingTime === 0;
 	}
 
 	/**
@@ -53,7 +53,7 @@ class RateLimit {
 	 * @readonly
 	 */
 	get remainingTime() {
-		return this.resetTime - Date.now();
+		return Math.min(this.time - Date.now(), 0);
 	}
 
 	/**
@@ -75,6 +75,15 @@ class RateLimit {
 	 * @returns {this}
 	 */
 	reset() {
+		return this.resetRemaining().resetTime();
+	}
+
+	/**
+	 * Resets the RateLimit's remaining-uses back to full state
+	 * @since 0.5.0
+	 * @returns {this}
+	 */
+	resetRemaining() {
 		/**
 		 * The remaining times this RateLimit can be dripped before the RateLimit bucket is empty
 		 * @since 0.5.0
@@ -83,13 +92,22 @@ class RateLimit {
 		 */
 		this.remaining = this.bucket;
 
+		return this;
+	}
+
+	/**
+	 * Resets the RateLimit's reset-time back to full state
+	 * @since 0.5.0
+	 * @returns {this}
+	 */
+	resetTime() {
 		/**
 		 * When this RateLimit is reset back to a full state
 		 * @since 0.5.0
 		 * @type {number}
 		 * @private
 		 */
-		this.resetTime = Date.now() + this.cooldown;
+		this.time = Date.now() + this.cooldown;
 
 		return this;
 	}
