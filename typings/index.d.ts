@@ -76,7 +76,7 @@ declare module 'klasa' {
 		public registerStore<K, V extends Piece>(store: Store<K, V>): KlasaClient;
 		public unregisterStore<K, V extends Piece>(store: Store<K, V>): KlasaClient;
 
-		public login(token: string): Promise<string>;
+		public login(token?: string): Promise<string>;
 		private _ready(): Promise<void>;
 
 		public sweepMessages(lifetime?: number, commandLifeTime?: number): number;
