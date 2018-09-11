@@ -3,6 +3,7 @@ const { join } = require('path');
 
 /**
  * The common class for all pieces
+ * @see Argument
  * @see Command
  * @see Event
  * @see Extendable
@@ -11,6 +12,8 @@ const { join } = require('path');
  * @see Language
  * @see Monitor
  * @see Provider
+ * @see SqlProvider
+ * @see Serializer
  * @see Task
  */
 class Piece {

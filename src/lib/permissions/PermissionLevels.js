@@ -114,6 +114,10 @@ class PermissionLevels extends Collection {
 		return { broke: false, permission: false };
 	}
 
+	static get [Symbol.species]() {
+		return Collection;
+	}
+
 }
 
 module.exports = PermissionLevels;

@@ -1,36 +1,12 @@
-const Piece = require('./base/Piece');
+const AliasPiece = require('./base/AliasPiece');
 
 /**
  * Base class for all Klasa Arguments. See {@tutorial CreatingArguments} for more information how to use this class
  * to build custom arguments.
  * @tutorial CreatingArguments
- * @extends Piece
+ * @extends AliasPiece
  */
-class Argument extends Piece {
-
-	/**
-	 * @typedef {PieceOptions} ArgumentOptions
-	 * @property {string[]} [aliases=[]] Any argument aliases
-	 */
-
-	/**
-	 * @since 0.0.1
-	 * @param {KlasaClient} client The Klasa Client
-	 * @param {ArgumentStore} store The Argument store
-	 * @param {Array} file The path from the pieces folder to the argument file
-	 * @param {boolean} core If the piece is in the core directory or not
-	 * @param {ArgumentOptions} [options={}] Optional Argument settings
-	 */
-	constructor(client, store, file, core, options = {}) {
-		super(client, store, file, core, options);
-
-		/**
-		 * The aliases for this argument
-		 * @since 0.5.0
-		 * @type {string[]}
-		 */
-		this.aliases = options.aliases;
-	}
+class Argument extends AliasPiece {
 
 	/**
 	 * The run method to be overwritten in actual Arguments
@@ -43,18 +19,6 @@ class Argument extends Piece {
 	async run() {
 		// Defined in extension Classes
 		throw new Error(`The run method has not been implemented by ${this.type}:${this.name}.`);
-	}
-
-	/**
-	 * Defines the JSON.stringify behavior of this argument.
-	 * @since 0.5.0
-	 * @returns {Object}
-	 */
-	toJSON() {
-		return {
-			...super.toJSON(),
-			aliases: this.aliases.slice(0)
-		};
 	}
 
 	/**
