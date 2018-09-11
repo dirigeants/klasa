@@ -1,4 +1,5 @@
 const AliasPiece = require('./base/AliasPiece');
+const { MENTION_REGEX } = require('../util/constants');
 
 /**
  * Base class for all Klasa Serializers. See {@tutorial CreatingSerializers} for more information how to use this class
@@ -55,12 +56,6 @@ class Serializer extends AliasPiece {
  * @property {RegExp} snowflake Regex for simple snowflake ids
  * @static
  */
-Serializer.regex = {
-	userOrMember: /^(?:<@!?)?(\d{17,19})>?$/,
-	channel: /^(?:<#)?(\d{17,19})>?$/,
-	emoji: /^(?:<a?:\w{2,32}:)?(\d{17,19})>?$/,
-	role: /^(?:<@&)?(\d{17,19})>?$/,
-	snowflake: /^(\d{17,19})$/
-};
+Serializer.regex = MENTION_REGEX;
 
 module.exports = Serializer;
