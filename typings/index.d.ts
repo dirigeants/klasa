@@ -241,7 +241,7 @@ declare module 'klasa' {
 		public send(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 
 		private _patch(data: any): void;
-		private _registerCommand(commandInfo: { command: Command, prefix: RegExp, prefixLength: number }): void;
+		private _registerCommand(commandInfo: { command: Command, prefix: RegExp, prefixLength: number }): this;
 		private static combineContentOptions(content?: StringResolvable, options?: MessageOptions): MessageOptions;
 	}
 
@@ -395,6 +395,7 @@ declare module 'klasa' {
 		public set(level: number, obj: PermissionLevelOptions | symbol): this;
 
 		public run(message: KlasaMessage, min: number): PermissionLevelsData;
+		public static [Symbol.species](): Collection;
 	}
 
 //#endregion Permissions
@@ -610,23 +611,21 @@ declare module 'klasa' {
 		public toString(): string;
 	}
 
-	export abstract class Argument extends Piece {
-		public constructor(client: KlasaClient, store: CommandStore, file: string[], directory: string, options?: ArgumentOptions);
-		public aliases: string[];
-		public static regex: {
-			userOrMember: RegExp;
-			channel: RegExp;
-			emoji: RegExp;
-			role: RegExp;
-			snowflake: RegExp;
-		};
+	export abstract class AliasPiece extends Piece {
+		public constructor(client: KlasaClient, store: Store<string, Piece, typeof Piece>, file: string[], directory: string, options?: AliasPieceOptions);
+		public aliases: Array<string>;
+		public toJSON(): AliasPieceJSON;
+	}
 
+	export abstract class Argument extends AliasPiece {
+		public constructor(client: KlasaClient, store: ArgumentStore, file: string[], directory: string, options?: ArgumentOptions);
+		public aliases: string[];
 		public abstract run(arg: string, possible: Possible, message: KlasaMessage): any;
-		public toJSON(): PieceArgumentJSON;
+		public static regex: MentionRegex;
 		private static minOrMax(client: KlasaClient, value: number, min: number, max: number, possible: Possible, message: KlasaMessage, suffix: string): boolean;
 	}
 
-	export abstract class Command extends Piece {
+	export abstract class Command extends AliasPiece {
 		public constructor(client: KlasaClient, store: CommandStore, file: string[], directory: string, options?: CommandOptions);
 		public readonly bucket: number;
 		public readonly category: string;
@@ -762,20 +761,13 @@ declare module 'klasa' {
 		public toJSON(): PieceTaskJSON;
 	}
 
-	export abstract class Serializer extends Piece {
+	export abstract class Serializer extends AliasPiece {
 		public constructor(client: KlasaClient, store: SerializerStore, file: string, directory: string, options?: SerializerOptions);
-		public aliases: Array<string>;
 		public serialize(data: any): PrimitiveType;
 		public stringify(data: any): string;
 		public toJSON(): PieceSerializerJSON;
 		public abstract deserialize<T = any>(data: any, piece: SchemaPiece, language: Language, guild?: KlasaGuild): Promise<T>;
-		public static regex: {
-			userOrMember: RegExp;
-			channel: RegExp;
-			emoji: RegExp;
-			role: RegExp;
-			snowflake: RegExp;
-		};
+		public static regex: MentionRegex;
 	}
 
 //#endregion Pieces
@@ -805,13 +797,13 @@ declare module 'klasa' {
 		private static walk<K, V extends Piece, T extends Store<K, V>>(store: T, coreDirectory?: string): Promise<Array<Piece>>;
 	}
 
-	export class ArgumentStore extends Store<string, Argument, typeof Argument> {
-		public aliases: string[];
+	export abstract class AliasStore<K, V extends Piece, VConstructor = Constructable<V>> extends Store<K, V, VConstructor> {
+		public aliases: Collection<K, V>;
 	}
 
-	export class CommandStore extends Store<string, Command, typeof Command> {
-		public aliases: Collection<string, Command>;
-	}
+	export class ArgumentStore extends AliasStore<string, Argument, typeof Argument> { }
+
+	export class CommandStore extends AliasStore<string, Command, typeof Command> { }
 
 	export class EventStore extends Store<string, Event, typeof Event> {
 		private _onceEvents: Set<string>;
@@ -842,9 +834,7 @@ declare module 'klasa' {
 
 	export class TaskStore extends Store<string, Task, typeof Task> { }
 
-	export class SerializerStore extends Store<string, Serializer, typeof Serializer> {
-		public aliases: Collection<string, Serializer>;
-	}
+	export class SerializerStore extends AliasStore<string, Serializer, typeof Serializer> { }
 
 //#endregion Stores
 
@@ -1399,6 +1389,7 @@ declare module 'klasa' {
 				tokensRegex: RegExp;
 			}
 		};
+		MENTION_REGEX: MentionRegex;
 	};
 
 	// Permissions
@@ -1544,7 +1535,6 @@ declare module 'klasa' {
 	} & PieceOptions;
 
 	export type CommandOptions = {
-		aliases?: string[];
 		autoAliases?: boolean;
 		requiredPermissions?: PermissionResolvable;
 		bucket?: number;
@@ -1564,7 +1554,7 @@ declare module 'klasa' {
 		subcommands?: boolean;
 		usage?: string;
 		usageDelim?: string;
-	} & PieceOptions;
+	} & AliasPieceOptions;
 
 	export type ExtendableOptions = {
 		appliesTo: string[];
@@ -1591,14 +1581,19 @@ declare module 'klasa' {
 		once?: boolean;
 	} & PieceOptions;
 
-	export type SerializerOptions = {
-		aliases?: Array<string>;
-	} & PieceOptions;
-
+	export type SerializerOptions = AliasPieceOptions;
 	export type ProviderOptions = PieceOptions;
 	export type FinalizerOptions = PieceOptions;
 	export type LanguageOptions = PieceOptions;
 	export type TaskOptions = PieceOptions;
+
+	type AliasPieceOptions = {
+		aliases?: Array<string>;
+	} & PieceOptions;
+
+	type AliasPieceJSON = {
+		aliases: Array<string>;
+	} & PieceJSON;
 
 	export type PieceJSON = {
 		directory: string;
@@ -1609,12 +1604,8 @@ declare module 'klasa' {
 		type: string;
 	};
 
-	export type PieceArgumentJSON = {
-		aliases: string[];
-	} & PieceJSON;
 
 	export type PieceCommandJSON = {
-		aliases: string[];
 		requiredPermissions: string[];
 		bucket: number;
 		category: string;
@@ -1640,7 +1631,7 @@ declare module 'klasa' {
 		};
 		usageDelim: string;
 		usageString: string;
-	} & PieceJSON;
+	} & AliasPieceJSON;
 
 	export type PieceExtendableJSON = {
 		appliesTo: string[];
@@ -1667,10 +1658,8 @@ declare module 'klasa' {
 		once: boolean;
 	} & PieceJSON;
 
-	export type PieceSerializerJSON = {
-		aliases: Array<string>;
-	} & PieceJSON;
-
+	export type PieceArgumentJSON = AliasPieceJSON;
+	export type PieceSerializerJSON = AliasPieceJSON;
 	export type PieceProviderJSON = PieceJSON;
 	export type PieceFinalizerJSON = PieceJSON;
 	export type PieceLanguageJSON = PieceJSON;
@@ -1904,6 +1893,14 @@ declare module 'klasa' {
 		startPage?: number;
 		stop?: boolean;
 		time?: number;
+	};
+
+	type MentionRegex = {
+		userOrMember: RegExp;
+		channel: RegExp;
+		emoji: RegExp;
+		role: RegExp;
+		snowflake: RegExp;
 	};
 
 	interface Stringifible {
