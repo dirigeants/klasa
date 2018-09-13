@@ -1559,7 +1559,7 @@ declare module 'klasa' {
 		usageDelim?: string;
 	} & AliasPieceOptions;
 
-	export type ExtendableOptions = {
+	type ExtendableOptions = {
 		appliesTo: Array<Constructable<any>>;
 	} & PieceOptions;
 
