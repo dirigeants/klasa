@@ -47,7 +47,7 @@ declare module 'klasa' {
 		public constructor(options?: KlasaClientOptions);
 		public readonly invite: string;
 		public readonly owner: KlasaUser | null;
-		public options: KlasaClientOptions & ClientOptions;
+		public options: KlasaClientOptions;
 		public userBaseDirectory: string;
 		public console: KlasaConsole;
 		public arguments: ArgumentStore;
@@ -1051,9 +1051,11 @@ declare module 'klasa' {
 		public bucket: number;
 		public cooldown: number;
 		private remaining: number;
-		private resetTime: number;
+		private time: number;
 		public drip(): this;
 		public reset(): this;
+		public resetRemaining(): this;
+		public resetTime(): this;
 	}
 
 	export class RateLimitManager extends Collection<Snowflake, RateLimit> {
@@ -1286,6 +1288,8 @@ declare module 'klasa' {
 		readyMessage?: (client: KlasaClient) => string;
 		regexPrefix?: RegExp;
 		schedule?: KlasaClientOptionsSchedule;
+		slowmode?: number;
+		slowmodeAggressive?: boolean;
 		typing?: boolean;
 	} & ClientOptions;
 
