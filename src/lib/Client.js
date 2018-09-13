@@ -255,7 +255,7 @@ class KlasaClient extends Discord.Client {
 		// Update Guild Schema with Keys needed in Klasa
 		const prefixKey = guildSchema.get('prefix');
 		if (!prefixKey || prefixKey.default === null) {
-			guildSchema.add('prefix', 'string', { default: this.options.prefix });
+			guildSchema.add('prefix', 'string', { array: Array.isArray(this.options.prefix), default: this.options.prefix });
 		}
 
 		const languageKey = guildSchema.get('language');
