@@ -99,19 +99,24 @@ class Store extends Collection {
 	 * @param {string[]} file A string or array of strings showing where the file is located.
 	 * @returns {?Piece}
 	 */
-	load(directory, file) {
+	async load(directory, file) {
 		const loc = join(directory, ...file);
 		let piece = null;
 		try {
-			const Piece = (req => req.default || req)(require(loc));
-			if (!isClass(Piece)) throw new TypeError('The exported structure is not a class.');
+			let Piece;
+			if (extname(loc) === '.mjs') {
+				Piece = (await import(`file://${loc}?query=${Date.now()}`)).default;
+			} else {
+				Piece = (req => req.default || req)(require(loc));
+				delete require.cache[loc];
+				module.children.pop();
+			}
+			if (!isClass(Piece)) throw new TypeError(`Failed to load file '${loc}'. The exported structure is not a class.`);
 			piece = this.set(new Piece(this.client, this, file, directory));
 		} catch (error) {
 			if (this.client.listenerCount('wtf')) this.client.emit('wtf', `Failed to load file '${loc}'. Error:\n${error.stack || error}`);
 			else this.client.console.wtf(`Failed to load file '${loc}'. Error:\n${error.stack || error}`);
 		}
-		delete require.cache[loc];
-		module.children.pop();
 		return piece;
 	}
 
@@ -186,7 +191,7 @@ class Store extends Collection {
 	 * @private
 	 */
 	static async walk(store, directory = store.userDirectory) {
-		const files = await fs.scan(directory, { filter: (stats, path) => stats.isFile() && extname(path) === '.js' })
+		const files = await fs.scan(directory, { filter: (stats, path) => stats.isFile() && ['.js', '.mjs'].includes(extname(path)) })
 			.catch(() => { if (store.client.options.createPiecesFolders) fs.ensureDir(directory).catch(err => store.client.emit('error', err)); });
 		if (!files) return true;
 

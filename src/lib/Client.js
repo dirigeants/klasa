@@ -36,6 +36,14 @@ const util = require('./util/util');
 // external plugins
 const plugins = new Set();
 
+// Dev's package.json
+let main;
+try {
+	({ main } = require(path.join(process.cwd(), 'package.json')));
+} catch (error) {
+	// noop
+}
+
 /**
  * The client for handling everything. See {@tutorial GettingStarted} for more information how to get started using this class.
  * @extends external:Client
@@ -150,7 +158,8 @@ class KlasaClient extends Discord.Client {
 		 * @since 0.0.1
 		 * @type {string}
 		 */
-		this.userBaseDirectory = path.dirname(require.main.filename);
+		this.userBaseDirectory = main ? path.resolve(process.cwd(), path.dirname(main)) : path.join(process.cwd(), 'src');
+
 
 		/**
 		 * The console for this instance of klasa. You can disable timestamps, colors, and add writable streams as configuration options to configure this.

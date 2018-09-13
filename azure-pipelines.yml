@@ -6,7 +6,7 @@ resources:
       endpoint: dirigeants
 
 jobs:
-  - template: lint.yml@templates
+  #- template: lint.yml@templates
 
   - template: docs.yml@templates
     parameters:

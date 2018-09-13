@@ -1,4 +1,6 @@
-# Welcome to the klasa#{@branch} documentation
+# Warning: This is an experimental version of Klasa
+
+Running this version requires Node v10 and for now `--experimental-modules`. This will not merge until the feature is no-longer under a flag.
 
 ## Installing Klasa
 
