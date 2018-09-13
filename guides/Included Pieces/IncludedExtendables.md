@@ -1,20 +1,11 @@
-## get attachable
+## MessageExtendable
 
-A getter to check and see if you can attach files in the channel.
-
-**Applies to:**
-
-- {@link external:GroupDMChannel}
-- {@link external:DMChannel}
-- {@link external:TextChannel}
-
-**Source:**
-
-[extendables/attachable.js](https://github.com/dirigeants/klasa/blob/master/src/extendables/attachable.js)
-
-## get embedable
-
-A getter to check and see if you can embed links in the channel.
+| Name           | Description                                                        |
+| :------------: | ------------------------------------------------------------------ |
+| get attachable | A getter to check and see if you can attach files in the channel.  |
+| get embedable  | A getter to check and see if you can embed links in the channel.   |
+| get postable   | A getter to check and see if you can send messages in the channel. |
+| get readable   | A getter to check and see if you can read in the channel.          |
 
 **Applies to:**
 
@@ -24,25 +15,18 @@ A getter to check and see if you can embed links in the channel.
 
 **Source:**
 
-[extendables/embedable.js](https://github.com/dirigeants/klasa/blob/master/src/extendables/embedable.js)
+[extendables/MessageExtendable.js](https://github.com/dirigeants/klasa/blob/master/src/extendables/MessageExtendable.js)
 
-## get postable
+## SendAliases
 
-A getter to check and see if you can send messages in the channel.
-
-**Applies to:**
-
-- {@link external:GroupDMChannel}
-- {@link external:DMChannel}
-- {@link external:TextChannel}
-
-**Source:**
-
-[extendables/postable.js](https://github.com/dirigeants/klasa/blob/master/src/extendables/postable.js)
-
-## get readable
-
-A getter to check and see if you can read in the channel.
+| Name        | Description                                          |
+| :---------: | ---------------------------------------------------- |
+| sendCode    | A shortcut to `channel.send` for codeblocks.         |
+| sendEmbed   | A shortcut to `channel.send` for embeds.             |
+| sendFile    | A shortcut to `channel.send` for a single file.      |
+| sendFiles   | A shortcut to `channel.send` for multiple files.     |
+| sendLocale  | A shortcut to `channel.send` for localized messages. |
+| sendMessage | Alias of `channel.send`                              |
 
 **Applies to:**
 
@@ -52,77 +36,7 @@ A getter to check and see if you can read in the channel.
 
 **Source:**
 
-[extendables/readable.js](https://github.com/dirigeants/klasa/blob/master/src/extendables/readable.js)
-
-## sendCode
-
-A shortcut to channel.send.
-
-**Applies to:**
-
-- {@link external:GroupDMChannel}
-- {@link external:DMChannel}
-- {@link external:TextChannel}
-
-**Source:**
-
-[extendables/sendCode.js](https://github.com/dirigeants/klasa/blob/master/src/extendables/sendCode.js)
-
-## sendEmbed
-
-A shortcut to channel.send.
-
-**Applies to:**
-
-- {@link external:GroupDMChannel}
-- {@link external:DMChannel}
-- {@link external:TextChannel}
-
-**Source:**
-
-[extendables/sendEmbed.js](https://github.com/dirigeants/klasa/blob/master/src/extendables/sendEmbed.js)
-
-## sendFile
-
-A alias to channel.send({files:{file:....
-
-**Applies to:**
-
-- {@link external:GroupDMChannel}
-- {@link external:DMChannel}
-- {@link external:TextChannel}
-
-**Source:**
-
-[extendables/sendFile.js](https://github.com/dirigeants/klasa/blob/master/src/extendables/sendFile.js)
-
-## sendFiles
-
-A alias to channel.send({files:...
-
-**Applies to:**
-
-- {@link external:GroupDMChannel}
-- {@link external:DMChannel}
-- {@link external:TextChannel}
-
-**Source:**
-
-[extendables/sendFiles.js](https://github.com/dirigeants/klasa/blob/master/src/extendables/sendFiles.js)
-
-## sendMessage
-
-A shortcut to channel.send.
-
-**Applies to:**
-
-- {@link external:GroupDMChannel}
-- {@link external:DMChannel}
-- {@link external:TextChannel}
-
-**Source:**
-
-[extendables/sendMessage.js](https://github.com/dirigeants/klasa/blob/master/src/extendables/sendMessage.js)
+[extendables/SendAliases.js](https://github.com/dirigeants/klasa/blob/master/src/extendables/SendAliases.js)
 
 ## Further Reading:
 

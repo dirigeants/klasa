@@ -13,32 +13,31 @@ class MyExtendable extends Extendable {
 		super(...args, {
 			appliesTo: [],
 			name: 'nameOfExtendable',
-			enabled: true,
-			klasa: false
+			enabled: true
 		});
 	}
 
 	// Getters
 
-	get extend() {
+	get myProperty() {
 		// Make a getter
 	}
 
 	// Setters
 
-	set extend(value) {
+	set myProperty(value) {
 		// Make a setter
 	}
 
 	// Methods
 
-	extend() {
+	myMethod() {
 		// Make a method
 	}
 
 	// Static Methods
 
-	static extend() {
+	static myMethod() {
 		// Make a static method
 	}
 
@@ -46,7 +45,7 @@ class MyExtendable extends Extendable {
 
 // Static Properties
 
-MyExtendable.extend = 'wew'; // Make a static property
+MyExtendable.myStaticProperty = 'wew'; // Make a static property
 
 module.exports = MyExtendable;
 ```
@@ -64,26 +63,22 @@ module.exports = class extends Extendable {
 		super(...args, {
 			appliesTo: [],
 			name: 'nameOfExtendable',
-			enabled: true,
-			klasa: false
+			enabled: true
 		});
 	}
 
 };
 ```
 
-| Name          | Default       | Type          | Description                                            |
-| ------------- | ------------- | ------------- | ------------------------------------------------------ |
-| **name**      | `theFileName` | string        | The name of the method/property                        |
-| **enabled**   | `true`        | boolean       | If the extendable is enabled or not                    |
-| **klasa**     | `false`       | boolean       | If the extendable is for Klasa instead of Discord.js   |
-| **appliesTo** | `[]`          | Array<string> | An array of affected classes from Discord.js or Klasa. |
+| Name          | Default       | Type    | Description                          |
+| ------------- | ------------- | ------- | ------------------------------------ |
+| **name**      | `theFileName` | string  | The name of the method/property.     |
+| **enabled**   | `true`        | boolean | If the extendable is enabled or not. |
+| **appliesTo** | `[]`          | class[] | An array of classes to extend.       |
 
-> You can find all extendable classes for [Discord.js](https://github.com/discordjs/discord.js/blob/master/src/index.js) and [Klasa](https://github.com/dirigeants/klasa/blob/master/src/index.js) in those respective links.
+## Understanding extendables
 
-## Understanding extend
-
-The extend method can only be a setter, getter, method, or static methods/properties. You cannot define multiple in one file as the above example may imply.
+Understanding classes like a blueprint, and all its members (instance and static setters, getters, properties, and methods) as pieces of it, an Extendable would copy all the pieces into all the targetted structures with their respective names. You can define multiple members with different names inside the extended class.
 
 ## Examples
 
@@ -97,22 +92,24 @@ and Message has both properties of `author` and `channel`.
 
 ```js
 const { Extendable } = require('klasa');
-const prompt = require('../../prompt');
+const { Message } = require('discord.js');
+const makePrompt = require('../lib/util/Prompt');
 
 module.exports = class extends Extendable {
 
 	constructor(...args) {
-		super(...args, { appliesTo: ['Message'], name: 'prompt' });
+		super(...args, { appliesTo: [Message] });
 	}
 
-	extend() {
-		return prompt();
+	prompt() {
+		// `this` is an instance of Message
+		return makePrompt(this);
 	}
 
 };
 ```
 
-Where `prompt()` is your prompt function.
+After loading this extendable, `Message.prototype.prompt` will be available as a method that calls and returns `makePrompt`.
 
 ## Further Reading:
 
