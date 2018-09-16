@@ -1626,7 +1626,7 @@ declare module 'klasa' {
 		subcommands: boolean;
 		usage: {
 			usageString: string;
-			delims: string[];
+			delimiters: string[];
 			nearlyFullUsage: string;
 		};
 		usageString: string;

@@ -130,7 +130,6 @@ class Usage {
 			current: '',
 			openRegex: false,
 			openReq: false,
-			first: true,
 			last: false,
 			char: 0,
 			from: 0,
@@ -141,7 +140,7 @@ class Usage {
 		};
 
 		for (const [i, char] of Object.entries(usageString)) {
-			currentUsage.char = i + 1;
+			currentUsage.char = Number(i) + 1;
 			currentUsage.from = currentUsage.char - currentUsage.current.length;
 			currentUsage.at = `at char #${currentUsage.char} '${char}'`;
 			currentUsage.fromTo = `from char #${currentUsage.from} to #${currentUsage.char} '${currentUsage.current}'`;
@@ -183,12 +182,9 @@ class Usage {
 	 */
 	static tagOpen(usage, char) {
 		if (usage.opened) throw `${usage.at}: you may not open a tag inside another tag.`;
-		if (usage.first) {
-			// First usage, cannot have a delimiter
-			usage.first = false;
-		} else if (!usage.current) {
+		if (usage.char !== 1 && !usage.current) {
 			throw `${usage.at}: you need to provide a delimiter between two tags.`;
-		} else {
+		} else if (usage.char !== 1) {
 			usage.delimiters.push(usage.current);
 			usage.current = '';
 		}
