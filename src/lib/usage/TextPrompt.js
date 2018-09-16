@@ -316,8 +316,8 @@ class TextPrompt {
 		const { content, flags } = this.constructor.getFlags(original, this.usage.usageDelim);
 		this.flags = flags;
 		this.args = this.quotedStringSupport ?
-			this.constructor.getQuotedStringArgs(content, this.usage.usageDelim).map(arg => arg.trim()) :
-			this.constructor.getArgs(content, this.usage.usageDelim).map(arg => arg.trim());
+			this.constructor.getQuotedStringArgs(content, this).map(arg => arg.trim()) :
+			this.constructor.getArgs(content, this).map(arg => arg.trim());
 	}
 
 	/**
@@ -342,27 +342,44 @@ class TextPrompt {
 	 * Parses a message into string args
 	 * @since 0.0.1
 	 * @param {string} content The remaining content
-	 * @param {string} delim The delimiter
+	 * @param {Usage} usage The usage
 	 * @returns {string[]}
 	 * @private
 	 */
-	static getArgs(content, delim) {
-		const args = content.split(delim !== '' ? delim : undefined);
-		return args.length === 1 && args[0] === '' ? [] : args;
+	static getArgs(content, usage) {
+		if (!usage.delimiters.length) return content ? [content] : [];
+		let positionCurrent = null;
+		let positionNext = -1;
+
+		const args = [];
+		const lastIndex = usage.parsedUsage.length - 1;
+		for (let i = 0; i < usage.parsedUsage.length; i++) {
+			positionCurrent = positionNext + 1;
+			positionNext = i < lastIndex ? content.indexOf(usage.delimiters[i], positionCurrent) : content.length;
+			if (positionNext === -1) {
+				positionNext = positionCurrent - 1;
+				args.push('');
+			} else {
+				args.push(content.slice(positionCurrent, positionNext).trim());
+			}
+		}
+		return args;
 	}
 
 	/**
 	 * Parses a message into string args taking into account quoted strings
 	 * @since 0.0.1
 	 * @param {string} content The remaining content
-	 * @param {string} delim The delimiter
+	 * @param {Usage} usage The usage
 	 * @returns {string[]}
 	 * @private
 	 */
-	static getQuotedStringArgs(content, delim) {
-		if (!delim || delim === '') return [content];
+	static getQuotedStringArgs(content, usage) {
+		if (!usage.delimiters.length) return content ? [content] : [];
 
 		const args = [];
+		let delimiterIndex = 0;
+		let delim = usage.delimiters[0];
 
 		for (let i = 0; i < content.length; i++) {
 			let current = '';
@@ -376,10 +393,12 @@ class TextPrompt {
 				while (i + 1 < content.length && (content[i] === '\\' || !qts.includes(content[i + 1]))) current += content[++i] !== '\\' ? content[i] : '';
 				i++;
 				args.push(current);
+				if (delimiterIndex < usage.delimiters.length) delim = usage.delimiters[++delimiterIndex];
 			} else {
 				current += content[i];
 				while (i + 1 < content.length && content.slice(i + 1, i + delim.length + 1) !== delim) current += content[++i];
 				args.push(current);
+				if (delimiterIndex < usage.delimiters.length) delim = usage.delimiters[++delimiterIndex];
 			}
 		}
 
