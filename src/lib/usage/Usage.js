@@ -52,7 +52,7 @@ class Usage {
 		this.lastRepeating = false;
 
 		/**
-		 * The usage object to compare against later
+		 * The parsed usage to compare against later
 		 * @since 0.0.1
 		 * @type {Tag[]}
 		 */

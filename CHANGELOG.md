@@ -125,6 +125,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[422](https://github.com/dirigeants/klasa/pull/422)] **[BREAKING]** Completely change the way usage is parsed, remove `usageDelim`, and change how arguments are returned in the run function.
 - [[#392](https://github.com/dirigeants/klasa/pull/392)] Changed default prefix from `'!'` to `''`. (kyranet)
 - [[#383](https://github.com/dirigeants/klasa/pull/383)] **[BREAKING]** Changed SchemaFolder to extend Schema, which extends Map. All keys are now stored inside the map as opposed to being properties. (Unseenfaith)
 - [[#383](https://github.com/dirigeants/klasa/pull/383)] **[BREAKING]** Changed `Schema#add` and `Schema#remove` to be synchronous. They must be called before ready. (Unseenfaith)
