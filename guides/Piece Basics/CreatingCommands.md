@@ -23,7 +23,6 @@ module.exports = class extends Command {
 			description: '',
 			quotedStringSupport: false,
 			usage: '',
-			usageDelim: undefined,
 			extendedHelp: 'No extended help available.'
 		});
 	}
@@ -61,7 +60,6 @@ module.exports = class extends Command {
 | **subcommands**         | `false`                          | boolean | Whether to enable sub commands or not                                       |
 | **description**         | `''`                             | string  | The help description for the command                                        |
 | **usage**               | `''`                             | string  | The usage string for the command - See {@tutorial UnderstandingUsageStrings}|
-| **usageDelim**          | `''`                             | string  | The string to deliminate the command input for usage                        |
 | **quotedStringSupport** | `false`                          | boolean | Whether args for this command should not deliminated inside quotes          |
 | **extendedHelp**        | `'No extended help available.'`  | string  | Extended help strings                                                       |
 

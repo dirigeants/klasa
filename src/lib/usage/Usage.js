@@ -14,9 +14,8 @@ class Usage {
 	 * @since 0.0.1
 	 * @param {KlasaClient} client The klasa client
 	 * @param {string} usageString The raw usage string
-	 * @param {string} usageDelim The deliminator for this usage
 	 */
-	constructor(client, usageString, usageDelim) {
+	constructor(client, usageString) {
 		/**
 		 * The client this Usage was created with
 		 * @since 0.0.1
@@ -27,13 +26,6 @@ class Usage {
 		Object.defineProperty(this, 'client', { value: client });
 
 		/**
-		 * The usage string re-deliminated with the usageDelim
-		 * @since 0.0.1
-		 * @type {string}
-		 */
-		this.deliminatedUsage = usageString !== '' ? ` ${usageString.split(' ').join(usageDelim)}` : '';
-
-		/**
 		 * The usage string
 		 * @since 0.0.1
 		 * @type {string}
@@ -41,18 +33,10 @@ class Usage {
 		this.usageString = usageString;
 
 		/**
-		 * The usage delim
-		 * @since 0.5.0
-		 * @type {string}
+		 * The usage delimiters
+		 * @type {string[]}
 		 */
-		this.usageDelim = usageDelim;
-
-		/**
-		 * The usage object to compare against later
-		 * @since 0.0.1
-		 * @type {Tag[]}
-		 */
-		this.parsedUsage = this.constructor.parseUsage(this.usageString);
+		this.delimiters = [];
 
 		/**
 		 * Stores one-off custom resolvers for use with the custom type arg
@@ -60,6 +44,19 @@ class Usage {
 		 * @type {Object}
 		 */
 		this.customResolvers = {};
+
+		/**
+		 * If the last tag should be repeating
+		 * @type {boolean}
+		 */
+		this.lastRepeating = false;
+
+		/**
+		 * The usage object to compare against later
+		 * @since 0.0.1
+		 * @type {Tag[]}
+		 */
+		this.parsedUsage = this.constructor.parseUsage(this);
 	}
 
 	/**
@@ -114,55 +111,66 @@ class Usage {
 	 * @returns {string}
 	 */
 	toString() {
-		return this.deliminatedUsage;
+		return this.usageString;
 	}
 
 	/**
 	 * Method responsible for building the usage object to check against
 	 * @since 0.0.1
-	 * @param {string} usageString The usage string to parse
+	 * @param {Usage} usage The usage to parse its string
 	 * @returns {Tag[]}
 	 * @private
 	 */
-	static parseUsage(usageString) {
-		const usage = {
+	static parseUsage(usage) {
+		const { delimiters, usageString } = usage;
+
+		const currentUsage = {
 			tags: [],
 			opened: 0,
 			current: '',
 			openRegex: false,
 			openReq: false,
+			first: true,
 			last: false,
 			char: 0,
 			from: 0,
 			at: '',
-			fromTo: ''
+			fromTo: '',
+			delimiters,
+			currentTag: null
 		};
 
 		for (const [i, char] of Object.entries(usageString)) {
-			usage.char = i + 1;
-			usage.from = usage.char - usage.current.length;
-			usage.at = `at char #${usage.char} '${char}'`;
-			usage.fromTo = `from char #${usage.from} to #${usage.char} '${usage.current}'`;
+			currentUsage.char = i + 1;
+			currentUsage.from = currentUsage.char - currentUsage.current.length;
+			currentUsage.at = `at char #${currentUsage.char} '${char}'`;
+			currentUsage.fromTo = `from char #${currentUsage.from} to #${currentUsage.char} '${currentUsage.current}'`;
 
-			if (usage.last && char !== ' ') throw `${usage.at}: there can't be anything else after the repeat tag.`;
+			if (currentUsage.last && char !== ' ') throw `${currentUsage.at}: there can't be anything else after the repeat tag.`;
 
-			if (char === '/' && usage.current[usage.current.length - 1] !== '\\') usage.openRegex = !usage.openRegex;
+			if (char === '/' && currentUsage.current[currentUsage.current.length - 1] !== '\\') currentUsage.openRegex = !currentUsage.openRegex;
 
-			if (usage.openRegex) {
-				usage.current += char;
+			if (currentUsage.openRegex) {
+				currentUsage.current += char;
 				continue;
 			}
 
-			if (open.includes(char)) Usage.tagOpen(usage, char);
-			else if (close.includes(char)) Usage.tagClose(usage, char);
-			else if (space.includes(char)) Usage.tagSpace(usage, char);
-			else usage.current += char;
+			if (open.includes(char)) Usage.tagOpen(currentUsage, char);
+			else if (close.includes(char)) Usage.tagClose(currentUsage, char);
+			else if (space.includes(char)) Usage.tagSpace(currentUsage, char);
+			else currentUsage.current += char;
 		}
 
-		if (usage.opened) throw `from char #${usageString.length - usage.current.length} '${usageString.substr(-usage.current.length - 1)}' to end: a tag was left open`;
-		if (usage.current) throw `from char #${(usageString.length + 1) - usage.current.length} to end '${usage.current}' a literal was found outside a tag.`;
+		if (currentUsage.opened) throw `from char #${usageString.length - currentUsage.current.length} '${usageString.substr(-currentUsage.current.length - 1)}' to end: a tag was left open`;
+		if (currentUsage.current) {
+			throw `from char #${(usageString.length + 1) - currentUsage.current.length} to end '${currentUsage.current}' a literal was found outside a tag, and it doesn't have any other tag afterwards.`;
+		}
 
-		return usage.tags;
+		const { currentTag } = currentUsage;
+
+		if (currentTag && currentTag.repeat) usage.lastRepeating = true;
+
+		return currentUsage.tags;
 	}
 
 	/**
@@ -175,7 +183,15 @@ class Usage {
 	 */
 	static tagOpen(usage, char) {
 		if (usage.opened) throw `${usage.at}: you may not open a tag inside another tag.`;
-		if (usage.current) throw `${usage.fromTo}: there can't be a literal outside a tag`;
+		if (usage.first) {
+			// First usage, cannot have a delimiter
+			usage.first = false;
+		} else if (!usage.current) {
+			throw `${usage.at}: you need to provide a delimiter between two tags.`;
+		} else {
+			usage.delimiters.push(usage.current);
+			usage.current = '';
+		}
 		usage.opened++;
 		usage.openReq = open.indexOf(char);
 	}
@@ -200,7 +216,9 @@ class Usage {
 			usage.tags[usage.tags.length - 1].repeat = true;
 			usage.last = true;
 		} else {
-			usage.tags.push(new Tag(usage.current, usage.tags.length + 1, required));
+			const tag = new Tag(usage.current, usage.tags.length + 1, required);
+			usage.tags.push(tag);
+			usage.currentTag = tag;
 		}
 		usage.current = '';
 	}
@@ -216,7 +234,7 @@ class Usage {
 	static tagSpace(usage, char) {
 		if (char === '\n') throw `${usage.at}: there can't be a line break in the usage string`;
 		if (usage.opened) throw `${usage.at}: spaces aren't allowed inside a tag`;
-		if (usage.current) throw `${usage.fromTo}: there can't be a literal outside a tag.`;
+		usage.current += char;
 	}
 
 }

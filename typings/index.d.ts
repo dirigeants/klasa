@@ -629,7 +629,6 @@ declare module 'klasa' {
 		public readonly category: string;
 		public readonly cooldown: number;
 		public readonly subCategory: string;
-		public readonly usageDelim: string;
 		public readonly usageString: string;
 		public aliases: string[];
 		public requiredPermissions: Permissions;
@@ -652,7 +651,7 @@ declare module 'klasa' {
 
 		public createCustomResolver(type: string, resolver: ArgResolverCustomMethod): this;
 		public customizeResponse(name: string, response: string | ((message: KlasaMessage, possible: Possible) => string)): this;
-		public definePrompt(usageString: string, usageDelim?: string): Usage;
+		public definePrompt(usageString: string): Usage;
 		public run(message: KlasaMessage, params: any[]): Promise<KlasaMessage | KlasaMessage[] | null>;
 		public toJSON(): PieceCommandJSON;
 	}
@@ -923,13 +922,13 @@ declare module 'klasa' {
 	}
 
 	export class Usage {
-		public constructor(client: KlasaClient, usageString: string, usageDelim: string);
+		public constructor(client: KlasaClient, usageString: string);
 		public readonly client: KlasaClient;
-		public deliminatedUsage: string;
 		public usageString: string;
-		public usageDelim: string;
-		public parsedUsage: Tag[];
+		public delimiters: string[];
 		public customResolvers: ObjectLiteral<ArgResolverCustomMethod>;
+		public lastRepeating: boolean;
+		public parsedUsage: Tag[];
 
 		public createCustomResolver(type: string, resolver: ArgResolverCustomMethod): this;
 		public customizeResponse(name: string, response: ((message: KlasaMessage) => string)): this;
@@ -937,7 +936,7 @@ declare module 'klasa' {
 		public toJSON(): Tag[];
 		public toString(): string;
 
-		private static parseUsage(usageString: string): Tag[];
+		private static parseUsage(usage: Usage): Tag[];
 		private static tagOpen(usage: ObjectLiteral, char: string): void;
 		private static tagClose(usage: ObjectLiteral, char: string): void;
 		private static tagSpace(usage: ObjectLiteral, char: string): void;
@@ -1557,7 +1556,6 @@ declare module 'klasa' {
 		runIn?: Array<'text' | 'dm' | 'group'>;
 		subcommands?: boolean;
 		usage?: string;
-		usageDelim?: string;
 	} & PieceOptions;
 
 	export type ExtendableOptions = {
@@ -1628,10 +1626,9 @@ declare module 'klasa' {
 		subcommands: boolean;
 		usage: {
 			usageString: string;
-			usageDelim: string;
+			delims: string[];
 			nearlyFullUsage: string;
 		};
-		usageDelim: string;
 		usageString: string;
 	} & PieceJSON;
 

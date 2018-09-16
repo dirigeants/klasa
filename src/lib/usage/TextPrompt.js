@@ -61,7 +61,7 @@ class TextPrompt {
 		this.flags = {};
 
 		/**
-		 * The string arguments derived from the usageDelim of the command
+		 * The string arguments derived from the usage of the command
 		 * @since 0.0.1
 		 * @type {string[]}
 		 */
@@ -402,7 +402,7 @@ class TextPrompt {
 }
 
 /**
- * Map of RegExps caching usageDelim's RegExps.
+ * Map of RegExps caching delimiter's RegExps.
  * @since 0.5.0
  * @type {Map<string, RegExp>}
  * @static

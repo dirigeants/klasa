@@ -10,7 +10,6 @@ module.exports = class extends Command {
 			subcommands: true,
 			description: language => language.get('COMMAND_CONF_SERVER_DESCRIPTION'),
 			usage: '<set|show|remove|reset> (key:key) (value:value) [...]',
-			usageDelim: ' '
 		});
 
 		this
