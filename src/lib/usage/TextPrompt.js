@@ -434,7 +434,7 @@ class TextPrompt {
 			}
 		}
 
-		this.flags[name] = openedValue ? value : name;
+		this.flags[name] = openedValue && value ? value : name;
 		return { index, content: '' };
 	}
 
