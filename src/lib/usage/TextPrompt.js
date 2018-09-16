@@ -1,6 +1,20 @@
 const { mergeDefault } = require('../util/util');
 const { Collection } = require('discord.js');
-const quotes = ['"', "'", '“”', '‘’'];
+
+const CODEPOINTS = {
+	DASH: '-'.charCodeAt(0),
+	LONG_DASH: '—'.charCodeAt(0),
+	EQUAL_SIGN: '='.charCodeAt(0),
+	SPACE: ' '.charCodeAt(0),
+	BACKSLASH: '\\'.charCodeAt(0)
+};
+
+const QUOTES = [
+	['"'.charCodeAt(0), '"'.charCodeAt(0)],
+	["'".charCodeAt(0), "'".charCodeAt(0)],
+	['“'.charCodeAt(0), '”'.charCodeAt(0)],
+	['‘'.charCodeAt(0), '’'.charCodeAt(0)]
+];
 
 /**
  * A class to handle argument collection and parameter resolution
@@ -75,6 +89,22 @@ class TextPrompt {
 		this.params = [];
 
 		/**
+		 * The content to parse
+		 * @since 0.5.0
+		 * @type {?string}
+		 * @private
+		 */
+		this.content = null;
+
+		/**
+		 * The current index for the parser
+		 * @since 0.5.0
+		 * @type {number}
+		 * @private
+		 */
+		this.index = -1;
+
+		/**
 		 * The time-limit for re-prompting
 		 * @since 0.5.0
 		 * @type {number}
@@ -96,6 +126,13 @@ class TextPrompt {
 		this.quotedStringSupport = options.quotedStringSupport;
 
 		/**
+		 * Whether typing is enabled for this prompt or not
+		 * @since 0.5.0
+		 * @type {boolean}
+		 */
+		this.typing = this.client.options.typing;
+
+		/**
 		 * Whether the current usage is a repeating arg
 		 * @since 0.0.1
 		 * @type {boolean}
@@ -114,7 +151,7 @@ class TextPrompt {
 		/**
 		 * How many time this class has reprompted
 		 * @since 0.0.1
-		 * @type {boolean}
+		 * @type {number}
 		 * @private
 		 */
 		this._prompted = 0;
@@ -313,128 +350,113 @@ class TextPrompt {
 	 * @private
 	 */
 	_setup(original) {
-		const { content, flags } = this.constructor.getFlags(original, this.usage.usageDelim);
-		this.flags = flags;
-		this.args = this.quotedStringSupport ?
-			this.constructor.getQuotedStringArgs(content, this).map(arg => arg.trim()) :
-			this.constructor.getArgs(content, this).map(arg => arg.trim());
-	}
+		this.content = original;
 
-	/**
-	 * Parses a message into string args
-	 * @since 0.5.0
-	 * @param {string} content The remaining content
-	 * @param {string} delim The delimiter
-	 * @returns {Object}
-	 * @private
-	 */
-	static getFlags(content, delim) {
-		const flags = {};
-		content = content.replace(TextPrompt.flagRegex, (match, fl, ...quote) => {
-			flags[fl] = (quote.slice(0, -2).find(el => el) || fl).replace(/\\/g, '');
-			return '';
-		});
-		if (delim) content = content.replace(TextPrompt.delims.get(delim) || TextPrompt.generateNewDelim(delim), '$1').trim();
-		return { content, flags };
-	}
-
-	/**
-	 * Parses a message into string args
-	 * @since 0.0.1
-	 * @param {string} content The remaining content
-	 * @param {Usage} usage The usage
-	 * @returns {string[]}
-	 * @private
-	 */
-	static getArgs(content, usage) {
-		if (!usage.delimiters.length) return content ? [content] : [];
-		let positionCurrent = null;
-		let positionNext = -1;
-
-		const args = [];
-		const lastIndex = usage.parsedUsage.length - 1;
-		for (let i = 0; i < usage.parsedUsage.length; i++) {
-			positionCurrent = positionNext + 1;
-			positionNext = i < lastIndex ? content.indexOf(usage.delimiters[i], positionCurrent) : content.length;
-			if (positionNext === -1) {
-				positionNext = positionCurrent - 1;
-				args.push('');
-			} else {
-				args.push(content.slice(positionCurrent, positionNext).trim());
-			}
-		}
-		return args;
-	}
-
-	/**
-	 * Parses a message into string args taking into account quoted strings
-	 * @since 0.0.1
-	 * @param {string} content The remaining content
-	 * @param {Usage} usage The usage
-	 * @returns {string[]}
-	 * @private
-	 */
-	static getQuotedStringArgs(content, usage) {
-		if (!usage.delimiters.length) return content ? [content] : [];
-
-		const args = [];
+		let code;
+		let content = '';
 		let delimiterIndex = 0;
-		let delim = usage.delimiters[0];
-
-		for (let i = 0; i < content.length; i++) {
-			let current = '';
-			if (content.slice(i, i + delim.length) === delim) {
-				i += delim.length - 1;
-				continue;
-			}
-			const quote = quotes.find(qt => qt.includes(content[i]));
-			if (quote) {
-				const qts = quote.split('');
-				while (i + 1 < content.length && (content[i] === '\\' || !qts.includes(content[i + 1]))) current += content[++i] !== '\\' ? content[i] : '';
-				i++;
-				args.push(current);
-				if (delimiterIndex < usage.delimiters.length) delim = usage.delimiters[++delimiterIndex];
+		let delimiter = this.usage.delimiters[delimiterIndex];
+		const lastIndex = this.usage.delimiters.length - 1;
+		while (++this.index < this.content.length) {
+			code = this.content.charCodeAt(this.index);
+			if (code === CODEPOINTS.DASH || code === CODEPOINTS.LONG_DASH) {
+				// Handle flags
+				const parsed = this._parseFlag(this.index);
+				this.index = parsed.index;
+				if (parsed.content) content += parsed.content;
+			} else if (this.quotedStringSupport && QUOTES.some(pair => code === pair[0])) {
+				// Handle quoted strings
+				if (content) {
+					this.args.push(content.trim());
+					content = '';
+				}
+				const parsed = this._parseQuoteString(this.index, QUOTES.find(pair => code === pair[0]));
+				this.index = parsed.index;
+				this.args.push(parsed.content.trim());
+			} else if (this.content.substr(this.index, delimiter.length) === delimiter) {
+				if (content) {
+					this.args.push(content.trim());
+					content = '';
+				}
+				this.index += delimiter.length - 1;
+				if (lastIndex === delimiterIndex) {
+					if (this.usage.lastRepeating) continue;
+					break;
+				} else {
+					delimiter = this.usage.delimiters[++delimiterIndex];
+				}
 			} else {
-				current += content[i];
-				while (i + 1 < content.length && content.slice(i + 1, i + delim.length + 1) !== delim) current += content[++i];
-				args.push(current);
-				if (delimiterIndex < usage.delimiters.length) delim = usage.delimiters[++delimiterIndex];
+				content += String.fromCharCode(code);
 			}
 		}
+		if (content) this.args.push(content.trim());
 
-		return args.length === 1 && args[0] === '' ? [] : args;
+		// Cleanup
+		this.index = -1;
+		this.content = null;
 	}
 
 	/**
-	 * Generate a new delimiter's RegExp and cache it
+	 * Parse a flag, if valid
 	 * @since 0.5.0
-	 * @param {string} delim The delimiter
-	 * @returns {RegExp}
-	 * @private
+	 * @param {number} index The index to start from
+	 * @returns {Object}
 	 */
-	static generateNewDelim(delim) {
-		const regex = new RegExp(`(${delim})(?:${delim})+`, 'g');
-		TextPrompt.delims.set(delim, regex);
-		return regex;
+	_parseFlag(index) {
+		if (this.content.charCodeAt(index) === CODEPOINTS.DASH) index++;
+
+		let code;
+		let name = '', value = '';
+		let openedValue = false;
+		while (++index < this.content.length) {
+			code = this.content.charCodeAt(index);
+			if (code === CODEPOINTS.EQUAL_SIGN) {
+				// case for ==
+				if (openedValue) return { index, content: this.content.slice(this.index, index) };
+				openedValue = true;
+			} else if (code === CODEPOINTS.SPACE) {
+				if (openedValue && !value) return { index, content: this.content.slice(this.index, index) };
+				break;
+			} else if (QUOTES.some(pair => code === pair[0])) {
+				const parsed = this._parseQuoteString(index, QUOTES.find(pair => code === pair[0]));
+				({ index } = parsed);
+				value = parsed.content;
+				break;
+			} else if (openedValue) {
+				value += String.fromCharCode(code);
+			} else {
+				name += String.fromCharCode(code);
+			}
+		}
+
+		this.flags[name] = openedValue ? value : name;
+		return { index, content: '' };
+	}
+
+	/**
+	 * Parse a quote string
+	 * @since 0.5.0
+	 * @param {number} index The index to start from
+	 * @param {number[]} pair The pair of quotes
+	 * @returns {Object}
+	 */
+	_parseQuoteString(index, pair) {
+		let code;
+		let content = '';
+		while (++index < this.content.length) {
+			code = this.content.charCodeAt(index);
+			if (code === CODEPOINTS.BACKSLASH) {
+				index++;
+			} else if (code === pair[1]) {
+				return { index: index, content };
+			} else {
+				content += String.fromCharCode(code);
+			}
+		}
+
+		return { index, content };
 	}
 
 }
-
-/**
- * Map of RegExps caching delimiter's RegExps.
- * @since 0.5.0
- * @type {Map<string, RegExp>}
- * @static
- * @private
- */
-TextPrompt.delims = new Map();
-
-/**
- * Regular Expression to match flags with quoted string support.
- * @since 0.5.0
- * @type {RegExp}
- * @static
- */
-TextPrompt.flagRegex = new RegExp(`(?:--|—)(\\w[\\w-]+)(?:=(?:${quotes.map(qu => `[${qu}]((?:[^${qu}\\\\]|\\\\.)*)[${qu}]`).join('|')}|([\\w-]+)))?`, 'g');
 
 module.exports = TextPrompt;
