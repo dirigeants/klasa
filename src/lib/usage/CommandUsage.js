@@ -35,7 +35,7 @@ class CommandUsage extends Usage {
 		 * @since 0.0.1
 		 * @type {string}
 		 */
-		this.nearlyFullUsage = `${this.commands}${this.usageString}`;
+		this.nearlyFullUsage = `${this.commands} ${this.usageString}`;
 	}
 
 	/**
