@@ -350,6 +350,11 @@ class TextPrompt {
 	 * @private
 	 */
 	_setup(original) {
+		if (!this.usage.delimiters.length) {
+			this.args = original ? [original] : [];
+			return;
+		}
+
 		this.content = original;
 
 		let code;
