@@ -11,11 +11,10 @@ class CommandUsage extends Usage {
 	 * @since 0.0.1
 	 * @param {KlasaClient} client The klasa client
 	 * @param {usageString} usageString The usage string for this command
-	 * @param {usageDelim} usageDelim The usage deliminator for this command
 	 * @param {Command} command The command this parsed usage is for
 	 */
-	constructor(client, usageString, usageDelim, command) {
-		super(client, usageString, usageDelim);
+	constructor(client, usageString, command) {
+		super(client, usageString);
 
 		/**
 		 * All names and aliases for the command
@@ -36,7 +35,7 @@ class CommandUsage extends Usage {
 		 * @since 0.0.1
 		 * @type {string}
 		 */
-		this.nearlyFullUsage = `${this.commands}${this.deliminatedUsage}`;
+		this.nearlyFullUsage = `${this.commands} ${this.usageString}`;
 	}
 
 	/**

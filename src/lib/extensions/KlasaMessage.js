@@ -70,7 +70,7 @@ module.exports = Structures.extend('Message', Message => {
 		}
 
 		/**
-		 * The string arguments derived from the usageDelim of the command
+		 * The string arguments derived from the usage of the command
 		 * @since 0.0.1
 		 * @type {string[]}
 		 * @readonly

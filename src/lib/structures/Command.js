@@ -34,7 +34,6 @@ class Command extends Piece {
 	 * @property {string[]} [runIn=['text','dm']] What channel types the command should run in
 	 * @property {boolean} [subcommands=false] Whether to enable sub commands or not
 	 * @property {string} [usage=''] The usage string for the command
-	 * @property {?string} [usageDelim=undefined] The string to delimit the command input for usage
 	 */
 
 	/**
@@ -173,7 +172,7 @@ class Command extends Piece {
 		 * @since 0.0.1
 		 * @type {CommandUsage}
 		 */
-		this.usage = new CommandUsage(client, options.usage, options.usageDelim, this);
+		this.usage = new CommandUsage(client, options.usage, this);
 
 		/**
 		 * The level at which cooldowns should apply
@@ -233,16 +232,6 @@ class Command extends Piece {
 	}
 
 	/**
-	 * The usage deliminator for the command input
-	 * @since 0.0.1
-	 * @type {?string}
-	 * @readonly
-	 */
-	get usageDelim() {
-		return this.usage.usageDelim;
-	}
-
-	/**
 	 * The usage string for the command
 	 * @since 0.0.1
 	 * @type {string}
@@ -255,11 +244,10 @@ class Command extends Piece {
 	/**
 	 * Creates a Usage to run custom prompts off of
 	 * @param {string} usageString The string designating all parameters expected
-	 * @param {string} usageDelim The string to delimit the input
 	 * @returns {Usage}
 	 */
-	definePrompt(usageString, usageDelim) {
-		return new Usage(this.client, usageString, usageDelim);
+	definePrompt(usageString) {
+		return new Usage(this.client, usageString);
 	}
 
 	/**
@@ -299,7 +287,7 @@ class Command extends Piece {
 	 * The run method to be overwritten in actual commands
 	 * @since 0.0.1
 	 * @param {KlasaMessage} message The command message mapped on top of the message used to trigger this command
-	 * @param {any[]} params The fully resolved parameters based on your usage / usageDelim
+	 * @param {any[]} params The fully resolved parameters based on your usage
 	 * @returns {KlasaMessage|KlasaMessage[]} You should return the response message whenever possible
 	 * @abstract
 	 */
@@ -336,10 +324,9 @@ class Command extends Piece {
 			subcommands: this.subcommands,
 			usage: {
 				usageString: this.usage.usageString,
-				usageDelim: this.usage.usageDelim,
+				delimiters: this.usage.delimiters,
 				nearlyFullUsage: this.usage.nearlyFullUsage
 			},
-			usageDelim: this.usageDelim,
 			usageString: this.usageString
 		};
 	}
