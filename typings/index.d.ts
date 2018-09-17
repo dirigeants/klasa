@@ -81,8 +81,8 @@ declare module 'klasa' {
 		public static defaultUserSchema: Schema;
 		public static defaultClientSchema: Schema;
 		public static defaultPermissionLevels: PermissionLevels;
-		public static plugin: Symbol;
-		public static use(mod: { plugin: Symbol, [x: string]: any }): KlasaClient;
+		public static plugin: symbol;
+		public static use(mod: any): KlasaClient;
 
 		// Discord.js events
 		public on(event: string, listener: Function): this;
