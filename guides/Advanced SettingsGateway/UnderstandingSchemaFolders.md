@@ -84,7 +84,9 @@ Ensuring that a key exists is as simple as checking if the Schema.has() the key 
 
 ```javascript
 const { Client } = require('klasa');
-Client.defaultGuildSchema.has('prefix') // True or false, depending on if the Schema has the prefix key.
+
+// Returns true or false, depending on if the Schema has the prefix key.
+Client.defaultGuildSchema.has('prefix');
 ```
 
 > **NOTE**: In the past it was possible to add keys using the init function from the Piece. This is no longer the case and the only way to add new keys to schema is to do it in your entry file(index.js, app.js, etc.). You can also use plugins to insert more keys into your schema.
