@@ -396,6 +396,11 @@ class TextPrompt {
 		}
 		if (content) this.args.push(content.trim());
 
+		// Get all the remaining flags from the content, if the parse was partial
+		if (this.index < this.content.length) {
+			this.content.slice(this.index, this.content.length).replace(/—|--/g, (__, index) => this.parseFlag(index + this.index));
+		}
+
 		// Cleanup
 		this.index = -1;
 		this.content = null;
