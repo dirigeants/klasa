@@ -89,14 +89,6 @@ class TextPrompt {
 		this.params = [];
 
 		/**
-		 * The content to parse
-		 * @since 0.5.0
-		 * @type {?string}
-		 * @private
-		 */
-		this.content = null;
-
-		/**
 		 * The current index for the parser
 		 * @since 0.5.0
 		 * @type {number}
@@ -355,18 +347,16 @@ class TextPrompt {
 			return;
 		}
 
-		this.content = original;
-
 		let code;
 		let content = '';
 		let delimiterIndex = 0;
 		let delimiter = this.usage.delimiters[delimiterIndex];
 		const lastIndex = this.usage.delimiters.length - 1;
-		while (++this.index < this.content.length) {
-			code = this.content.charCodeAt(this.index);
+		while (++this.index < original.length) {
+			code = original.charCodeAt(this.index);
 			if (code === CODEPOINTS.DASH || code === CODEPOINTS.LONG_DASH) {
 				// Handle flags
-				const parsed = this._parseFlag(this.index);
+				const parsed = this._parseFlag(this.index, original);
 				this.index = parsed.index;
 				if (parsed.content) content += parsed.content;
 			} else if (this.quotedStringSupport && QUOTES.some(pair => code === pair[0])) {
@@ -375,10 +365,10 @@ class TextPrompt {
 					this.args.push(content.trim());
 					content = '';
 				}
-				const parsed = this._parseQuoteString(this.index, QUOTES.find(pair => code === pair[0]));
+				const parsed = this._parseQuoteString(this.index, original, QUOTES.find(pair => code === pair[0])[1]);
 				this.index = parsed.index;
 				this.args.push(parsed.content.trim());
-			} else if (this.content.substr(this.index, delimiter.length) === delimiter) {
+			} else if (original.substr(this.index, delimiter.length) === delimiter) {
 				if (content) {
 					this.args.push(content.trim());
 					content = '';
@@ -397,13 +387,13 @@ class TextPrompt {
 		if (content) this.args.push(content.trim());
 
 		// Get all the remaining flags from the content, if the parse was partial
-		if (this.index < this.content.length) {
-			this.content.slice(this.index, this.content.length).replace(/—|--/g, (__, index) => this.parseFlag(index + this.index));
+		if (this.index < original.length) {
+			const sliced = original.slice(this.index, original.length);
+			sliced.replace(/—|--/g, (__, index) => this.parseFlag(index, sliced));
 		}
 
 		// Cleanup
 		this.index = -1;
-		this.content = null;
 	}
 
 	/**
@@ -412,23 +402,23 @@ class TextPrompt {
 	 * @param {number} index The index to start from
 	 * @returns {Object}
 	 */
-	_parseFlag(index) {
-		if (this.content.charCodeAt(index) === CODEPOINTS.DASH) index++;
+	_parseFlag(index, original) {
+		if (original.charCodeAt(index) === CODEPOINTS.DASH) index++;
 
 		let code;
 		let name = '', value = '';
 		let openedValue = false;
-		while (++index < this.content.length) {
-			code = this.content.charCodeAt(index);
+		while (++index < original.length) {
+			code = original.charCodeAt(index);
 			if (code === CODEPOINTS.EQUAL_SIGN) {
 				// case for ==
-				if (openedValue) return { index, content: this.content.slice(this.index, index) };
+				if (openedValue) return { index, content: original.slice(this.index, index) };
 				openedValue = true;
 			} else if (code === CODEPOINTS.SPACE) {
-				if (openedValue && !value) return { index, content: this.content.slice(this.index, index) };
+				if (openedValue && !value) return { index, content: original.slice(this.index, index) };
 				break;
 			} else if (QUOTES.some(pair => code === pair[0])) {
-				const parsed = this._parseQuoteString(index, QUOTES.find(pair => code === pair[0]));
+				const parsed = this._parseQuoteString(index, original, QUOTES.find(pair => code === pair[0])[1]);
 				({ index } = parsed);
 				value = parsed.content;
 				break;
@@ -450,14 +440,14 @@ class TextPrompt {
 	 * @param {number[]} pair The pair of quotes
 	 * @returns {Object}
 	 */
-	_parseQuoteString(index, pair) {
+	_parseQuoteString(index, original, quote) {
 		let code;
 		let content = '';
-		while (++index < this.content.length) {
-			code = this.content.charCodeAt(index);
+		while (++index < original.length) {
+			code = original.charCodeAt(index);
 			if (code === CODEPOINTS.BACKSLASH) {
 				index++;
-			} else if (code === pair[1]) {
+			} else if (code === quote) {
 				return { index: index, content };
 			} else {
 				content += String.fromCharCode(code);
