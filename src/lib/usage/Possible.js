@@ -29,14 +29,14 @@ class Possible {
 		 * @since 0.2.1
 		 * @type {?number}
 		 */
-		this.min = min ? this.constructor.resolveLimit(min, this.type, 'min') : undefined;
+		this.min = min ? this.constructor.resolveLimit(min, 'min') : undefined;
 
 		/**
 		 * The max of this possible
 		 * @since 0.2.1
 		 * @type {?number}
 		 */
-		this.max = max ? this.constructor.resolveLimit(max, this.type, 'max') : undefined;
+		this.max = max ? this.constructor.resolveLimit(max, 'max') : undefined;
 
 		/**
 		 * The regex of this possible
