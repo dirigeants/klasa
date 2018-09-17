@@ -342,15 +342,10 @@ class TextPrompt {
 	 * @private
 	 */
 	_setup(original) {
-		if (!this.usage.delimiters.length) {
-			this.args = original ? [original] : [];
-			return;
-		}
-
 		let code;
 		let content = '';
 		let delimiterIndex = 0;
-		let delimiter = this.usage.delimiters[delimiterIndex];
+		let delimiter = this.usage.delimiters.length ? this.usage.delimiters[delimiterIndex] : null;
 		const lastIndex = this.usage.delimiters.length - 1;
 		while (++this.index < original.length) {
 			code = original.charCodeAt(this.index);
@@ -368,7 +363,7 @@ class TextPrompt {
 				const parsed = this._parseQuoteString(this.index, original, QUOTES.find(pair => code === pair[0])[1]);
 				this.index = parsed.index;
 				this.args.push(parsed.content.trim());
-			} else if (original.substr(this.index, delimiter.length) === delimiter) {
+			} else if (delimiter && original.substr(this.index, delimiter.length) === delimiter) {
 				if (content) {
 					this.args.push(content.trim());
 					content = '';
@@ -389,7 +384,7 @@ class TextPrompt {
 		// Get all the remaining flags from the content, if the parse was partial
 		if (this.index < original.length) {
 			const sliced = original.slice(this.index, original.length);
-			sliced.replace(/—|--/g, (__, index) => this.parseFlag(index, sliced));
+			sliced.replace(/—|--/g, (__, index) => this._parseFlag(index, sliced));
 		}
 
 		// Cleanup
@@ -400,6 +395,7 @@ class TextPrompt {
 	 * Parse a flag, if valid
 	 * @since 0.5.0
 	 * @param {number} index The index to start from
+	 * @param {string} original The original text
 	 * @returns {Object}
 	 */
 	_parseFlag(index, original) {
@@ -437,7 +433,8 @@ class TextPrompt {
 	 * Parse a quote string
 	 * @since 0.5.0
 	 * @param {number} index The index to start from
-	 * @param {number[]} pair The pair of quotes
+	 * @param {string} original The original text
+	 * @param {number} quote The quotes to find
 	 * @returns {Object}
 	 */
 	_parseQuoteString(index, original, quote) {
