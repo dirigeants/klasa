@@ -1277,6 +1277,7 @@ declare module 'klasa' {
 		prefix?: string | string[];
 		prefixCaseInsensitive?: boolean;
 		preserveSettings?: boolean;
+		production?: boolean;
 		providers?: KlasaProvidersOptions;
 		readyMessage?: (client: KlasaClient) => string;
 		regexPrefix?: RegExp;
