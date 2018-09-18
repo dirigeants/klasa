@@ -1,6 +1,7 @@
-const { isObject, deepClone, toTitleCase, arraysStrictEquals, objectToTuples, resolveGuild } = require('../util/util');
+const { isObject, deepClone, toTitleCase, arraysStrictEquals, objectToTuples, resolveGuild, mergeDefault } = require('../util/util');
 const Type = require('../util/Type');
 const SchemaPiece = require('./schema/SchemaPiece');
+const { DEFAULTS: { SETTINGS } } = require('../util/constants');
 
 /**
  * <warning>Creating your own Settings instances is often discouraged and unneeded. SettingsGateway handles them internally for you.</warning>
@@ -238,36 +239,16 @@ class Settings {
 	 * // Updating multiple keys (with arrays):
 	 * Settings#update([['prefix', 'k!'], ['language', 'es-ES']]);
 	 */
-	update(key, value, guild, options) {
-		let entries;
-		// Overload update(object, GuildResolvable);
-		if (isObject(key)) {
-			[guild, options] = [value, guild];
-			entries = objectToTuples(key);
-		} else if (typeof key === 'string') {
-			// Overload update(string, any, ...any[]);
-			entries = [[key, value]];
-		} else if (Array.isArray(key) && key.every(entry => Array.isArray(entry) && entry.length === 2)) {
-			// Overload update(Array<[string, any]>)
-			[guild, options] = [value, guild];
-			entries = key;
-		} else {
-			return Promise.reject(new TypeError(`Invalid value. Expected object, string or Array<[string, any]>. Got: ${new Type(key)}`));
+	async update(...args) {
+		const { entries, options, result } = this._resolveUpdateOverloads(...args);
+
+		const promises = entries.map(([key, value]) => this._parse(key, value, options, result));
+		if (promises.length) {
+			await Promise.all(promises);
+			await this._save(result);
 		}
 
-		// Overload update(string|string[], any|any[], SettingsUpdateOptions);
-		// Overload update(string|string[], any|any[], GuildResolvable, SettingsUpdateOptions);
-		// If the third argument is undefined and the second is an object literal, swap the variables.
-		if (typeof options === 'undefined' && isObject(guild)) [guild, options] = [null, guild];
-		if (guild) guild = resolveGuild(this.client, guild);
-		if (!options) options = {};
-
-		return this._update(entries, guild, {
-			avoidUnconfigurable: typeof options.avoidUnconfigurable === 'boolean' ? options.avoidUnconfigurable : false,
-			action: typeof options.action === 'string' ? options.action : 'auto',
-			arrayPosition: typeof options.arrayPosition === 'number' ? options.arrayPosition : null,
-			force: typeof options.force === 'boolean' ? options.force : false
-		});
+		return result;
 	}
 
 	/**
@@ -321,42 +302,51 @@ class Settings {
 		return piece.serializer.stringify(value, message);
 	}
 
-	/**
-	 * Update this Settings instance
-	 * @since 0.5.0
-	 * @param {Array<Array<*>>} entries The entries to update
-	 * @param {?KlasaGuild} guild The KlasaGuild for context in SchemaPiece#parse
-	 * @param {SettingsUpdateOptions} options The parse options
-	 * @returns {SettingsUpdateResult}
-	 * @private
-	 */
-	async _update(entries, guild, options) {
+	_resolveUpdateOverloads(key, value, options) {
+		let rawEntries;
+		// Overload update(object, GuildResolvable);
+		if (isObject(key)) {
+			value = options;
+			rawEntries = objectToTuples(key);
+		} else if (typeof key === 'string') {
+			// Overload update(string, any, ...any[]);
+			rawEntries = [[key, value]];
+		} else if (Array.isArray(key) && key.every(entry => Array.isArray(entry) && entry.length === 2)) {
+			// Overload update(Array<[string, any]>)
+			value = options;
+			rawEntries = key;
+		} else {
+			throw new TypeError(`Invalid value. Expected object, string or Array<[string, any]>. Got: ${new Type(key)}`);
+		}
+
+		if (typeof options === 'undefined') options = { guild: null };
+		else if (!isObject(options)) throw new TypeError(`Invalid options. Expected object or undefined. Got: ${new Type(options)}`);
+
+		if (options.guild) options.guild = resolveGuild(this.client, options.guild);
+		else if (this.gateway.type === 'guilds') options.guild = this.client.guilds.get(this.id);
+
+		options = mergeDefault(SETTINGS, options);
+
 		const result = { errors: [], updated: [] };
 		const pathOptions = { piece: true, avoidUnconfigurable: options.avoidUnconfigurable, errors: false };
-		const promises = [];
-		for (const [key, value] of entries) {
-			const path = this.gateway.getPath(key, pathOptions);
+		const handleError = options.rejectOnError ? (error) => { throw error; } : result.errors.push.bind(result.errors);
+		const entries = [];
+		for (const entry of rawEntries) {
+			const path = this.gateway.getPath(entry[0], pathOptions);
 			if (!path) {
-				result.errors.push(guild ?
-					guild.language.get('COMMAND_CONF_GET_NOEXT', key) :
-					`The path ${key} does not exist in the current schema, or does not correspond to a piece.`);
-				continue;
+				handleError(options.guild ?
+					options.guild.language.get('COMMAND_CONF_GET_NOEXT', entry[0]) :
+					`The path ${entry[0]} does not exist in the current schema, or does not correspond to a piece.`);
+			} else if (!path.piece.array && Array.isArray(entry[1])) {
+				handleError(options.guild ?
+					options.guild.language.get('SETTING_GATEWAY_KEY_NOT_ARRAY', entry[0]) :
+					`The path ${entry[0]} does not store multiple values.`);
+			} else {
+				entries.push([path, entry[1]]);
 			}
-			if (!path.piece.array && Array.isArray(value)) {
-				result.errors.push(guild ?
-					guild.language.get('SETTING_GATEWAY_KEY_NOT_ARRAY', key) :
-					`The path ${key} does not store multiple values.`);
-				continue;
-			}
-			promises.push(this._parse(value, guild, options, result, path));
 		}
 
-		if (promises.length) {
-			await Promise.all(promises);
-			await this._save(result);
-		}
-
-		return result;
+		return { entries, options, result };
 	}
 
 	/**

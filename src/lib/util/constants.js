@@ -130,6 +130,16 @@ exports.DEFAULTS = {
 		}
 	},
 
+	SETTINGS: {
+		update: {
+			action: 'auto',
+			arrayPosition: null,
+			avoidUnconfigurable: false,
+			force: false,
+			rejectOnError: false
+		}
+	},
+
 	QUERYBUILDER: {
 		datatypes: {
 			any: { type: 'TEXT' },
