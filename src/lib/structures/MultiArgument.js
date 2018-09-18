@@ -7,11 +7,11 @@ const Argument = require('./Argument');
 class MultiArgument extends Argument {
 
 	/**
-     * A getter for the base argument
+	 * A getter for the base argument
 	 * @since 0.5.0
-     * @type {Argument}
+	 * @type {Argument}
 	 * @abstract
-     */
+	 */
 	get base() {
 		throw new Error('A "base" getter must be implimented in extended classes.');
 	}
