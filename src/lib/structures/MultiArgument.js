@@ -10,6 +10,7 @@ class MultiArgument extends Argument {
 	 * A getter for the base argument
 	 * @since 0.5.0
 	 * @type {Argument}
+	 * @readonly
 	 * @abstract
 	 */
 	get base() {
