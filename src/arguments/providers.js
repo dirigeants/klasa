@@ -3,7 +3,7 @@ const { MultiArgument } = require('klasa');
 module.exports = class extends MultiArgument {
 
 	constructor(...args) {
-		super(...args, { aliases: '...provider' });
+		super(...args, { aliases: ['...provider'] });
 	}
 
 	get base() {
