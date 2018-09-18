@@ -119,7 +119,7 @@ class KlasaClient extends Discord.Client {
 	 */
 
 	/**
-	 * Constructs the klasa client
+	 * Constructs the Klasa client
 	 * @since 0.0.1
 	 * @param {KlasaClientOptions} [options={}] The config to pass to the new client
 	 */
@@ -342,14 +342,12 @@ class KlasaClient extends Discord.Client {
 
 	/**
 	 * Obtains the OAuth Application of the bot from Discord.
-	 * If you are fetching this bot's application, {@link KlasaClient#application} will be updated.
+	 * When ran, this function will update {@link KlasaClient#application}.
 	 * @since 0.0.1
-	 * @param {external:Snowflake} [id='@me'] ID of application to fetch
 	 * @returns {external:ClientApplication}
 	 */
-	async fetchApplication(id = '@me') {
-		if (id !== '@me') return super.fetchApplication(id);
-		this.application = await super.fetchApplication(id);
+	async fetchApplication() {
+		this.application = await super.fetchApplication();
 		return this.application;
 	}
 

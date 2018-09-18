@@ -27,7 +27,7 @@ module.exports = class extends Command {
 	show(message, [key]) {
 		const path = this.client.gateways.guilds.getPath(key, { avoidUnconfigurable: true, errors: false, piece: null });
 		if (!path) return message.sendLocale('COMMAND_CONF_GET_NOEXT', [key]);
-		if (!path.piece.path || path.piece.type === 'Folder') {
+		if (path.piece.type === 'Folder') {
 			return message.sendLocale('COMMAND_CONF_SERVER', [
 				key ? `: ${key.split('.').map(toTitleCase).join('/')}` : '',
 				codeBlock('asciidoc', message.guild.settings.list(message, path.piece))

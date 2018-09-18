@@ -53,7 +53,7 @@ class RateLimit {
 	 * @readonly
 	 */
 	get remainingTime() {
-		return Math.min(this.time - Date.now(), 0);
+		return Math.max(this.time - Date.now(), 0);
 	}
 
 	/**

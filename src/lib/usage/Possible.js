@@ -1,4 +1,3 @@
-const minMaxTypes = ['str', 'string', 'int', 'integer', 'num', 'number', 'float'];
 const regexTypes = ['reg', 'regex', 'regexp'];
 
 /**
@@ -30,14 +29,14 @@ class Possible {
 		 * @since 0.2.1
 		 * @type {?number}
 		 */
-		this.min = minMaxTypes.includes(this.type) && min ? this.constructor.resolveLimit(min, this.type, 'min') : undefined;
+		this.min = min ? this.constructor.resolveLimit(min, 'min') : undefined;
 
 		/**
 		 * The max of this possible
 		 * @since 0.2.1
 		 * @type {?number}
 		 */
-		this.max = minMaxTypes.includes(this.type) && max ? this.constructor.resolveLimit(max, this.type, 'max') : undefined;
+		this.max = max ? this.constructor.resolveLimit(max, 'max') : undefined;
 
 		/**
 		 * The regex of this possible
@@ -53,16 +52,13 @@ class Possible {
 	 * Resolves a limit
 	 * @since 0.2.1
 	 * @param {string} limit The limit to evaluate
-	 * @param {string} type The type of the usage Possible
 	 * @param {string} limitType The type of limit
 	 * @returns {number}
 	 * @private
 	 */
-	static resolveLimit(limit, type, limitType) {
+	static resolveLimit(limit, limitType) {
 		if (isNaN(limit)) throw `${limitType} must be a number`;
-		const tempLimit = parseFloat(limit);
-		if (minMaxTypes.indexOf(type) <= 3 && tempLimit % 1 !== 0) throw `${limitType} must be an integer for this type.`;
-		return tempLimit;
+		return parseFloat(limit);
 	}
 
 }

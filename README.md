@@ -5,7 +5,7 @@
 [![npm](https://img.shields.io/npm/dt/klasa.svg?maxAge=3600)](https://www.npmjs.com/package/klasa)
 [![Build Status](https://travis-ci.org/dirigeants/klasa.svg?branch=master)](https://travis-ci.org/dirigeants/klasa)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/e7b37b1f57134a5b9e1f43127df64388)](https://www.codacy.com/app/dirigeants/klasa?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=dirigeants/klasa&amp;utm_campaign=Badge_Grade)
-[![Greenkeeper badge](https://badges.greenkeeper.io/dirigeants/klasa.svg)](https://greenkeeper.io/)
+[![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=dirigeants/klasa)](https://dependabot.com)
 [![David](https://img.shields.io/david/dirigeants/klasa.svg?maxAge=3600)](https://david-dm.org/dirigeants/klasa)
 [![Patreon](https://img.shields.io/badge/donate-patreon-F96854.svg)](https://www.patreon.com/klasa)
 
