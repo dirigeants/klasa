@@ -1259,7 +1259,7 @@ declare module 'klasa' {
 
 //#region Typedefs
 
-	type KlasaClientOptions = {
+	export type KlasaClientOptions = {
 		commandEditing?: boolean;
 		commandLogging?: boolean;
 		commandMessageLifetime?: number;
@@ -1286,17 +1286,17 @@ declare module 'klasa' {
 		typing?: boolean;
 	} & ClientOptions;
 
-	type KlasaClientOptionsSchedule = {
+	export type KlasaClientOptionsSchedule = {
 		interval?: number;
 	};
 
-	type KlasaCustomPromptDefaults = {
+	export type KlasaCustomPromptDefaults = {
 		limit?: number;
 		time?: number;
 		quotedStringSupport?: boolean;
 	};
 
-	type KlasaPieceDefaults = {
+	export type KlasaPieceDefaults = {
 		arguments?: ArgumentOptions;
 		commands?: CommandOptions;
 		events?: EventOptions;
@@ -1309,20 +1309,20 @@ declare module 'klasa' {
 		serializers?: SerializerOptions;
 	};
 
-	type KlasaProvidersOptions = {
+	export type KlasaProvidersOptions = {
 		default?: string;
 	} & ObjectLiteral;
 
-	type KlasaGatewaysOptions = {
+	export type KlasaGatewaysOptions = {
 		clientStorage?: GatewayDriverRegisterOptions;
 		guilds?: GatewayDriverRegisterOptions;
 		users?: GatewayDriverRegisterOptions;
 	} & ObjectLiteral;
 
 	// Parsers
-	type ArgResolverCustomMethod = (arg: string, possible: Possible, message: KlasaMessage, params: string[]) => any;
+	export type ArgResolverCustomMethod = (arg: string, possible: Possible, message: KlasaMessage, params: string[]) => any;
 
-	type Constants = {
+	export type Constants = {
 		DEFAULTS: {
 			CLIENT: KlasaClientOptions,
 			CONSOLE: KlasaConsoleConfig,
@@ -1393,30 +1393,30 @@ declare module 'klasa' {
 	};
 
 	// Permissions
-	type PermissionLevel = {
+	export type PermissionLevel = {
 		break: boolean;
 		check: (client: KlasaClient, message: KlasaMessage) => Promise<boolean> | boolean;
 		fetch: boolean;
 	};
 
-	type PermissionLevelOptions = {
+	export type PermissionLevelOptions = {
 		break?: boolean;
 		fetch?: boolean;
 	};
 
-	type PermissionLevelsData = {
+	export type PermissionLevelsData = {
 		broke: boolean;
 		permission: boolean;
 	};
 
 	// Schedule
-	type ScheduledTaskOptions = {
+	export type ScheduledTaskOptions = {
 		catchUp?: boolean;
 		data?: any;
 		id?: string;
 	};
 
-	type ScheduledTaskJSON = {
+	export type ScheduledTaskJSON = {
 		catchUp: boolean;
 		data: ObjectLiteral;
 		id: string;
@@ -1424,7 +1424,7 @@ declare module 'klasa' {
 		time: number;
 	};
 
-	type ScheduledTaskUpdateOptions = {
+	export type ScheduledTaskUpdateOptions = {
 		catchUp?: boolean;
 		data?: any;
 		repeat?: string;
@@ -1432,74 +1432,74 @@ declare module 'klasa' {
 	};
 
 	// Settings
-	type GatewayOptions = {
+	export type GatewayOptions = {
 		provider: string;
 	};
 
-	type GatewayJSON = {
+	export type GatewayJSON = {
 		options: GatewayOptions;
 		schema: SchemaFolderAddOptions;
 		type: string;
 	};
 
-	type GatewayGetPathOptions = {
+	export type GatewayGetPathOptions = {
 		avoidUnconfigurable?: boolean;
 		errors?: boolean;
 		piece?: boolean;
 	};
 
-	type GatewayGetPathResult = {
+	export type GatewayGetPathResult = {
 		piece: SchemaPiece;
 		route: string[];
 	};
 
-	type QueryBuilderDatatype = {
+	export type QueryBuilderDatatype = {
 		array?: (datatype: string) => string;
 		resolver?: <T = any>(input: any, schemaPiece: SchemaPiece) => T;
 		type: string | ((piece: SchemaPiece) => string);
 	} | string;
 
-	type QueryBuilderOptions = {
+	export type QueryBuilderOptions = {
 		arrayResolver?: (values: Array<any>, piece: SchemaPiece, resolver: Function) => string;
 		formatDatatype?: (name: string, datatype: string, def?: string) => string;
 	} & ObjectLiteral<string | ((piece: SchemaPiece) => string) | QueryBuilderDatatype>;
 
-	type GuildResolvable = KlasaGuild
+	export type GuildResolvable = KlasaGuild
 		| KlasaMessage
 		| KlasaGuildChannel
 		| Snowflake;
 
-	type SettingsResetOptions = {
+	export type SettingsResetOptions = {
 		avoidUnconfigurable?: boolean;
 		force?: boolean;
 	};
 
-	type SettingsUpdateOptions = {
+	export type SettingsUpdateOptions = {
 		action?: 'add' | 'remove' | 'auto' | 'overwrite';
 		arrayPosition?: number;
 		avoidUnconfigurable?: boolean;
 		force?: boolean;
 	};
 
-	type SettingsUpdateResult = {
+	export type SettingsUpdateResult = {
 		errors: Error[];
 		updated: SettingsUpdateResultEntry[];
 	};
 
-	type SettingsUpdateResultEntry = {
+	export type SettingsUpdateResultEntry = {
 		data: [string, any];
 		piece: SchemaPiece;
 	};
 
-	type GatewayDriverRegisterOptions = {
+	export type GatewayDriverRegisterOptions = {
 		provider?: string;
 		schema?: Schema;
 		syncArg?: string[] | string | true;
 	};
 
-	type SchemaFolderAddOptions = SchemaFolderOptions | SchemaPieceOptions;
+	export type SchemaFolderAddOptions = SchemaFolderOptions | SchemaPieceOptions;
 
-	type SchemaPieceOptions = {
+	export type SchemaPieceOptions = {
 		array?: boolean;
 		configurable?: boolean;
 		default?: any;
@@ -1508,15 +1508,15 @@ declare module 'klasa' {
 		filter?: (value: any, guild?: KlasaGuild) => void;
 	};
 
-	type SchemaPieceEditOptions = {
+	export type SchemaPieceEditOptions = {
 		type?: string;
 	} & SchemaPieceOptions;
 
-	type SchemaFolderOptions = {
+	export type SchemaFolderOptions = {
 		type?: 'Folder';
 	} & ObjectLiteral<SchemaPieceOptions>;
 
-	type GatewayDriverJSON = {
+	export type GatewayDriverJSON = {
 		clientStorage: GatewayJSON;
 		guilds: GatewayJSON;
 		users: GatewayJSON;
@@ -1525,16 +1525,16 @@ declare module 'klasa' {
 	} & ObjectLiteral<GatewayJSON>;
 
 	// Structures
-	type PieceOptions = {
+	export type PieceOptions = {
 		enabled?: boolean
 		name?: string,
 	};
 
-	type ArgumentOptions = {
+	export type ArgumentOptions = {
 		aliases?: string[];
 	} & PieceOptions;
 
-	type CommandOptions = {
+	export type CommandOptions = {
 		autoAliases?: boolean;
 		requiredPermissions?: PermissionResolvable;
 		bucket?: number;
@@ -1556,15 +1556,15 @@ declare module 'klasa' {
 		usageDelim?: string;
 	} & AliasPieceOptions;
 
-	type ExtendableOptions = {
+	export type ExtendableOptions = {
 		appliesTo: Array<Constructable<any>>;
 	} & PieceOptions;
 
-	type InhibitorOptions = {
+	export type InhibitorOptions = {
 		spamProtection?: boolean;
 	} & PieceOptions;
 
-	type MonitorOptions = {
+	export type MonitorOptions = {
 		ignoreBots?: boolean;
 		ignoreEdits?: boolean;
 		ignoreOthers?: boolean;
@@ -1574,27 +1574,27 @@ declare module 'klasa' {
 		ignroeBlacklistedGuilds?: boolean;
 	} & PieceOptions;
 
-	type EventOptions = {
+	export type EventOptions = {
 		emitter?: NodeJS.EventEmitter;
 		event?: string;
 		once?: boolean;
 	} & PieceOptions;
 
-	type SerializerOptions = AliasPieceOptions;
-	type ProviderOptions = PieceOptions;
-	type FinalizerOptions = PieceOptions;
-	type LanguageOptions = PieceOptions;
-	type TaskOptions = PieceOptions;
+	export type SerializerOptions = AliasPieceOptions;
+	export type ProviderOptions = PieceOptions;
+	export type FinalizerOptions = PieceOptions;
+	export type LanguageOptions = PieceOptions;
+	export type TaskOptions = PieceOptions;
 
-	type AliasPieceOptions = {
+	export type AliasPieceOptions = {
 		aliases?: Array<string>;
 	} & PieceOptions;
 
-	type AliasPieceJSON = {
+	export type AliasPieceJSON = {
 		aliases: Array<string>;
 	} & PieceJSON;
 
-	type PieceJSON = {
+	export type PieceJSON = {
 		directory: string;
 		path: string;
 		enabled: boolean;
@@ -1604,7 +1604,7 @@ declare module 'klasa' {
 	};
 
 
-	type PieceCommandJSON = {
+	export type PieceCommandJSON = {
 		requiredPermissions: string[];
 		bucket: number;
 		category: string;
@@ -1632,15 +1632,15 @@ declare module 'klasa' {
 		usageString: string;
 	} & AliasPieceJSON;
 
-	type PieceExtendableJSON = {
+	export type PieceExtendableJSON = {
 		appliesTo: string[];
 	} & PieceJSON;
 
-	type PieceInhibitorJSON = {
+	export type PieceInhibitorJSON = {
 		spamProtection: boolean;
 	} & PieceJSON;
 
-	type PieceMonitorJSON = {
+	export type PieceMonitorJSON = {
 		ignoreBots: boolean;
 		ignoreEdits: boolean;
 		ignoreOthers: boolean;
@@ -1650,28 +1650,28 @@ declare module 'klasa' {
 		ignroeBlacklistedGuilds: boolean;
 	} & PieceJSON;
 
-	type PieceEventJSON = {
+	export type PieceEventJSON = {
 		emitter: string;
 		event: string;
 		once: boolean;
 	} & PieceJSON;
 
-	type PieceArgumentJSON = AliasPieceJSON;
-	type PieceSerializerJSON = AliasPieceJSON;
-	type PieceProviderJSON = PieceJSON;
-	type PieceFinalizerJSON = PieceJSON;
-	type PieceLanguageJSON = PieceJSON;
-	type PieceTaskJSON = PieceJSON;
+	export type PieceArgumentJSON = AliasPieceJSON;
+	export type PieceSerializerJSON = AliasPieceJSON;
+	export type PieceProviderJSON = PieceJSON;
+	export type PieceFinalizerJSON = PieceJSON;
+	export type PieceLanguageJSON = PieceJSON;
+	export type PieceTaskJSON = PieceJSON;
 
 	// Usage
-	type TextPromptOptions = {
+	export type TextPromptOptions = {
 		limit?: number;
 		time?: number;
 		quotedStringSupport?: boolean;
 	};
 
 	// Util
-	type ColorsClose = {
+	export type ColorsClose = {
 		normal: 0;
 		bold: 22;
 		dim: 22;
@@ -1684,7 +1684,7 @@ declare module 'klasa' {
 		background: 49;
 	};
 
-	type ColorsStyles = {
+	export type ColorsStyles = {
 		normal: 0;
 		bold: 1;
 		dim: 2;
@@ -1695,7 +1695,7 @@ declare module 'klasa' {
 		strikethrough: 9;
 	};
 
-	type ColorsTexts = {
+	export type ColorsTexts = {
 		black: 30;
 		red: 31;
 		green: 32;
@@ -1716,7 +1716,7 @@ declare module 'klasa' {
 		white: 97;
 	};
 
-	type ColorsBackgrounds = {
+	export type ColorsBackgrounds = {
 		black: 40;
 		red: 41;
 		green: 42;
@@ -1737,20 +1737,20 @@ declare module 'klasa' {
 		white: 107;
 	};
 
-	type ColorsFormatOptions = {
+	export type ColorsFormatOptions = {
 		background?: string | number | string[];
 		style?: string | string[];
 		text?: string | number | string[]
 	};
 
-	type ColorsFormatType = string | number | [string, string, string] | [number, number, number];
+	export type ColorsFormatType = string | number | [string, string, string] | [number, number, number];
 
-	type ColorsFormatData = {
+	export type ColorsFormatData = {
 		opening: string[];
 		closing: string[];
 	};
 
-	type KlasaConsoleConfig = {
+	export type KlasaConsoleConfig = {
 		utc?: boolean;
 		colors?: KlasaConsoleColorStyles;
 		stderr?: NodeJS.WritableStream;
@@ -1759,7 +1759,7 @@ declare module 'klasa' {
 		useColor?: boolean;
 	};
 
-	type KlasaConsoleEvents = {
+	export type KlasaConsoleEvents = {
 		debug?: boolean;
 		error?: boolean;
 		log?: boolean;
@@ -1768,7 +1768,7 @@ declare module 'klasa' {
 		wtf?: boolean;
 	};
 
-	type KlasaConsoleColorStyles = {
+	export type KlasaConsoleColorStyles = {
 		debug?: KlasaConsoleColorObjects;
 		error?: KlasaConsoleColorObjects;
 		log?: KlasaConsoleColorObjects;
@@ -1777,25 +1777,25 @@ declare module 'klasa' {
 		wtf?: KlasaConsoleColorObjects;
 	};
 
-	type KlasaConsoleColorObjects = {
+	export type KlasaConsoleColorObjects = {
 		log?: string;
 		message?: KlasaConsoleMessageObject;
 		time?: KlasaConsoleTimeObject;
 	};
 
-	type KlasaConsoleMessageObject = {
+	export type KlasaConsoleMessageObject = {
 		background?: KlasaConsoleColorTypes;
 		style?: KlasaConsoleStyleTypes;
 		text?: KlasaConsoleColorTypes;
 	};
 
-	type KlasaConsoleTimeObject = {
+	export type KlasaConsoleTimeObject = {
 		background?: KlasaConsoleColorTypes;
 		style?: KlasaConsoleStyleTypes;
 		text?: KlasaConsoleColorTypes;
 	};
 
-	type KlasaConsoleColorTypes = 'black'
+	export type KlasaConsoleColorTypes = 'black'
 		| 'blue'
 		| 'cyan'
 		| 'gray'
@@ -1815,7 +1815,7 @@ declare module 'klasa' {
 		| number[]
 		| string[];
 
-	type KlasaConsoleStyleTypes = 'normal'
+	export type KlasaConsoleStyleTypes = 'normal'
 		| 'bold'
 		| 'dim'
 		| 'italic'
@@ -1824,7 +1824,7 @@ declare module 'klasa' {
 		| 'hidden'
 		| 'strikethrough';
 
-	type ReactionHandlerOptions = {
+	export type ReactionHandlerOptions = {
 		filter?: Function;
 		max?: number;
 		maxEmojis?: number;
@@ -1835,12 +1835,12 @@ declare module 'klasa' {
 		time?: number;
 	};
 
-	type TimestampObject = {
+	export type TimestampObject = {
 		content: string | null;
 		type: string;
 	};
 
-	type RichDisplayRunOptions = {
+	export type RichDisplayRunOptions = {
 		filter?: ((reaction: MessageReaction, user: KlasaUser) => boolean);
 		firstLast?: boolean;
 		jump?: boolean;
@@ -1853,7 +1853,7 @@ declare module 'klasa' {
 		time?: number;
 	};
 
-	type RichDisplayEmojisObject = {
+	export type RichDisplayEmojisObject = {
 		first: EmojiResolvable;
 		back: EmojiResolvable;
 		forward: EmojiResolvable;
@@ -1863,7 +1863,7 @@ declare module 'klasa' {
 		stop: EmojiResolvable;
 	} & ObjectLiteral<EmojiResolvable>;
 
-	type RichMenuEmojisObject = {
+	export type RichMenuEmojisObject = {
 		zero: EmojiResolvable;
 		one: EmojiResolvable;
 		two: EmojiResolvable;
@@ -1876,13 +1876,13 @@ declare module 'klasa' {
 		nine: EmojiResolvable;
 	} & RichDisplayEmojisObject;
 
-	type MenuOption = {
+	export type MenuOption = {
 		name: string;
 		body: string;
 		inline?: boolean;
 	};
 
-	type RichMenuRunOptions = {
+	export type RichMenuRunOptions = {
 		filter?: Function;
 		max?: number;
 		maxEmojis?: number;
@@ -1893,7 +1893,7 @@ declare module 'klasa' {
 		time?: number;
 	};
 
-	type MentionRegex = {
+	export type MentionRegex = {
 		userOrMember: RegExp;
 		channel: RegExp;
 		emoji: RegExp;
@@ -1913,7 +1913,7 @@ declare module 'klasa' {
 
 	type PrimitiveType = string | number | boolean;
 
-	type TitleCaseVariants = {
+	export type TitleCaseVariants = {
 		textchannel: 'TextChannel';
 		voicechannel: 'VoiceChannel';
 		categorychannel: 'CategoryChannel';
