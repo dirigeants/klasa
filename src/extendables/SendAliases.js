@@ -1,3 +1,4 @@
+const { APIMessage } = require('discord.js');
 const { Extendable } = require('klasa');
 const { TextChannel, DMChannel, GroupDMChannel, User } = require('discord.js');
 
@@ -7,24 +8,20 @@ module.exports = class extends Extendable {
 		super(...args, { appliesTo: [TextChannel, DMChannel, GroupDMChannel, User] });
 	}
 
-	sendCode(lang, content, options = {}) {
-		return this.send({ ...options, content, code: lang });
+	sendCode(code, content, options = {}) {
+		return this.send(APIMessage.transformOptions(content, options, { code }));
 	}
 
 	sendEmbed(embed, content, options = {}) {
-		if (typeof content === 'object') {
-			options = content;
-			content = '';
-		}
-		return this.send({ content, ...options, embed });
+		return this.send(APIMessage.transformOptions(content, options, { embed }));
 	}
 
 	sendFile(attachment, name, content, options = {}) {
-		return this.send({ ...options, files: [{ attachment, name }], content });
+		return this.send(APIMessage.transformOptions(content, options, { files: [{ attachment, name }] }));
 	}
 
 	sendFiles(files, content, options = {}) {
-		return this.send(content, { ...options, files });
+		return this.send(APIMessage.transformOptions(content, options, { files }));
 	}
 
 	sendLocale(key, args = [], options = {}) {
