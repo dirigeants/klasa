@@ -315,7 +315,7 @@ class KlasaClient extends Discord.Client {
 		this.ready = false;
 
 		// Run all plugin functions in this context
-		for (const plugin of plugins) plugin[this.constructor.plugin].call(this);
+		for (const plugin of plugins) plugin.call(this);
 	}
 
 	/**
@@ -459,7 +459,9 @@ class KlasaClient extends Discord.Client {
 	 * @chainable
 	 */
 	static use(mod) {
-		plugins.add(mod);
+		const plugin = mod[this.plugin];
+		if (!plugin || typeof plugin !== 'function') throw new TypeError('The provided module does not include a plugin function');
+		plugins.add(plugin);
 		return this;
 	}
 
