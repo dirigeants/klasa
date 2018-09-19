@@ -81,8 +81,8 @@ declare module 'klasa' {
 		public static defaultUserSchema: Schema;
 		public static defaultClientSchema: Schema;
 		public static defaultPermissionLevels: PermissionLevels;
-		public static plugin: Symbol;
-		public static use(mod: { plugin: Symbol, [x: string]: any }): KlasaClient;
+		public static plugin: symbol;
+		public static use(mod: any): KlasaClient;
 
 		// Discord.js events
 		public on(event: string, listener: Function): this;
@@ -540,27 +540,24 @@ declare module 'klasa' {
 		public toString(): string;
 	}
 
-	abstract class SchemaBase extends Map<string, SchemaPiece | SchemaFolder> {
+	export class Schema extends Map<string, SchemaPiece | SchemaFolder> {
+		public constructor(path?: string);
 		public readonly configurableKeys: Array<string>;
 		public readonly defaults: ObjectLiteral;
+		public readonly path: string;
 		public readonly paths: Map<string, SchemaPiece | SchemaFolder>;
+		public readonly type: 'Folder';
 		public add(key: string, type: string, options?: SchemaPieceOptions): this;
 		public add(key: string, callback: (folder: SchemaFolder) => any): this;
 		public remove(key: string): this;
-		public get<T = SchemaPiece | SchemaFolder>(key: string | Array<string>): T;
+		public get<T = Schema | SchemaPiece | SchemaFolder>(key: string | Array<string>): T;
 		public toJSON(): ObjectLiteral;
-	}
-
-	export class Schema extends SchemaBase {
-		public constructor(path?: string);
-		public readonly path: string;
 	}
 
 	export class SchemaFolder extends Schema {
 		public constructor(parent: Schema | SchemaFolder, key: string);
-		public readonly parent: Schema | SchemaFolder;
 		public readonly key: string;
-		public readonly type: 'Folder';
+		public readonly parent: Schema | SchemaFolder;
 	}
 
 	export class SchemaPiece {
@@ -677,12 +674,9 @@ declare module 'klasa' {
 
 	export abstract class Extendable extends Piece {
 		public constructor(client: KlasaClient, store: ExtendableStore, file: string, directory: string, options?: ExtendableOptions);
-		public readonly static: boolean;
-		public appliesTo: string[];
-		public target: boolean;
-
-		public extend: any;
-		public static extend(...params: any[]): any;
+		public appliesTo: Array<Constructable<any>>;
+		public instancePropertyNames: Array<string>;
+		public staticPropertyNames: Array<string>;
 		public toJSON(): PieceExtendableJSON;
 	}
 
@@ -721,6 +715,11 @@ declare module 'klasa' {
 		public abstract run(message: KlasaMessage): void;
 		public shouldRun(message: KlasaMessage): boolean;
 		public toJSON(): PieceMonitorJSON;
+	}
+
+	export abstract class MultiArgument extends Argument {
+		public abstract readonly base: Argument;
+		public run<T = any>(argument: string, possible: Possible, message: KlasaMessage): Promise<Array<T>>;
 	}
 
 	export abstract class Provider extends Piece {
@@ -1566,8 +1565,7 @@ declare module 'klasa' {
 	} & PieceOptions;
 
 	export type ExtendableOptions = {
-		appliesTo: string[];
-		klasa?: boolean;
+		appliesTo: Array<Constructable<any>>;
 	} & PieceOptions;
 
 	export type InhibitorOptions = {
@@ -1643,7 +1641,6 @@ declare module 'klasa' {
 
 	export type PieceExtendableJSON = {
 		appliesTo: string[];
-		target: 'discord.js' | 'klasa';
 	} & PieceJSON;
 
 	export type PieceInhibitorJSON = {

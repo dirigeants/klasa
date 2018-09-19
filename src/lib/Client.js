@@ -119,7 +119,7 @@ class KlasaClient extends Discord.Client {
 	 */
 
 	/**
-	 * Constructs the klasa client
+	 * Constructs the Klasa client
 	 * @since 0.0.1
 	 * @param {KlasaClientOptions} [options={}] The config to pass to the new client
 	 */
@@ -255,7 +255,7 @@ class KlasaClient extends Discord.Client {
 		// Update Guild Schema with Keys needed in Klasa
 		const prefixKey = guildSchema.get('prefix');
 		if (!prefixKey || prefixKey.default === null) {
-			guildSchema.add('prefix', 'string', { default: this.options.prefix });
+			guildSchema.add('prefix', 'string', { array: Array.isArray(this.options.prefix), default: this.options.prefix });
 		}
 
 		const languageKey = guildSchema.get('language');
@@ -315,7 +315,7 @@ class KlasaClient extends Discord.Client {
 		this.ready = false;
 
 		// Run all plugin functions in this context
-		for (const plugin of plugins) plugin[this.constructor.plugin].call(this);
+		for (const plugin of plugins) plugin.call(this);
 	}
 
 	/**
@@ -342,14 +342,12 @@ class KlasaClient extends Discord.Client {
 
 	/**
 	 * Obtains the OAuth Application of the bot from Discord.
-	 * If you are fetching this bot's application, {@link KlasaClient#application} will be updated.
+	 * When ran, this function will update {@link KlasaClient#application}.
 	 * @since 0.0.1
-	 * @param {external:Snowflake} [id='@me'] ID of application to fetch
 	 * @returns {external:ClientApplication}
 	 */
-	async fetchApplication(id = '@me') {
-		if (id !== '@me') return super.fetchApplication(id);
-		this.application = await super.fetchApplication(id);
+	async fetchApplication() {
+		this.application = await super.fetchApplication();
 		return this.application;
 	}
 
@@ -461,7 +459,9 @@ class KlasaClient extends Discord.Client {
 	 * @chainable
 	 */
 	static use(mod) {
-		plugins.add(mod);
+		const plugin = mod[this.plugin];
+		if (typeof plugin !== 'function') throw new TypeError('The provided module does not include a plugin function');
+		plugins.add(plugin);
 		return this;
 	}
 
