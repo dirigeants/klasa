@@ -2,7 +2,7 @@ const Extendable = require('./Extendable');
 const Store = require('./base/Store');
 
 /**
- * Stores all of our extendables that extend Discord.js
+ * Stores all of our extendables that extend Discord.js and Klasa structures
  * @extends Store
  */
 class ExtendableStore extends Store {
