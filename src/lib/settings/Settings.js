@@ -27,11 +27,12 @@ class Settings {
 
 	/**
 	 * @typedef {Object} SettingsUpdateOptions
-	 * @property {boolean} [avoidUnconfigurable=false] Whether the update should avoid unconfigurable keys
 	 * @property {('add'|'remove'|'auto'|'overwrite')} [action='auto'] Whether the update (when using arrays) should add or remove,
 	 * leave it as 'auto' to add or remove depending on the existence of the key in the array
 	 * @property {number} [arrayPosition=null] The position of the array to replace
+	 * @property {boolean} [avoidUnconfigurable=false] Whether the update should avoid unconfigurable keys
 	 * @property {boolean} [force=false] Whether this should skip the equality checks or not
+	 * @property {boolean} [rejectOnError=false] Whether this call should reject on error
 	 */
 
 	/**
@@ -242,9 +243,8 @@ class Settings {
 	async update(...args) {
 		const { entries, options, result } = this._resolveUpdateOverloads(...args);
 
-		const promises = entries.map(([key, value]) => this._parse(key, value, options, result));
-		if (promises.length) {
-			await Promise.all(promises);
+		if (entries.length) {
+			await Promise.all(entries.map(([key, value]) => this._parse(key, value, options, result)));
 			await this._save(result);
 		}
 
@@ -352,19 +352,18 @@ class Settings {
 	/**
 	 * Parse a value
 	 * @since 0.5.0
+	 * @param {GatewayGetPathResult} key The path result
 	 * @param {*} value The value to parse
-	 * @param {?KlasaGuild} guild The KlasaGuild for context in SchemaPiece#parse
 	 * @param {SettingsUpdateOptions} options The parse options
 	 * @param {SettingsUpdateResult} result The updated result
-	 * @param {GatewayGetPathResult} path The path result
 	 * @private
 	 */
-	async _parse(value, guild, options, result, { piece, route }) {
+	async _parse({ piece, route }, value, options, result) {
 		const parsed = value === null ?
 			deepClone(piece.default) :
 			await (Array.isArray(value) ?
-				this._parseAll(piece, value, guild, result.errors) :
-				piece.parse(value, guild).catch((error) => { result.errors.push(error); }));
+				this._parseAll(piece, value, options.guild, result.errors) :
+				piece.parse(value, options.guild).catch((error) => { result.errors.push(error); }));
 		if (typeof parsed === 'undefined') return;
 		const parsedID = Array.isArray(parsed) ? parsed.map(val => piece.serializer.serialize(val)) : piece.serializer.serialize(parsed);
 		if (piece.array) {
