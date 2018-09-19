@@ -8,12 +8,13 @@ module.exports = class extends Command {
 			permissionLevel: 10,
 			guarded: true,
 			description: language => language.get('COMMAND_RELOAD_DESCRIPTION'),
-			usage: '<Store:store|Piece:piece|everything:default>'
+			usage: '<Store:store|Piece:piece|path:str|everything:default>'
 		});
 	}
 
 	async run(message, [piece]) {
 		if (piece === 'everything') return this.everything(message);
+		if (typeof piece === 'string') return this.nonPieces(message, piece);
 		if (piece instanceof Store) {
 			const timer = new Stopwatch();
 			await piece.loadAll();
@@ -56,6 +57,39 @@ module.exports = class extends Command {
 			`);
 		}
 		return message.sendLocale('COMMAND_RELOAD_EVERYTHING', [timer.stop()]);
+	}
+	
+	async nonPieces(message, path) {
+		const msg = await message.sendMessage('Reloading non-piece files...');
+		const userModules = [];
+
+		for (const key of Object.keys(require.cache)) {
+			if (key.includes('node_modules')) continue;
+			userModules.push(key);
+		}
+		
+		if (path !== 'all') {
+			userModules = userModules.filter(modulePath => modulePath.includes(path));
+			if (!userModules.length) return msg.edit(`No modules found matching \`${path}\`.`);
+		}
+		
+		const watch = new Stopwatch().start();
+
+		for (const key of userModules) delete require.cache[require.resolve(key)];
+
+		this.client.commands.get('reload').run(message, ['everything']);
+
+		if (this.client.shard) {
+			await this.client.shard.broadcastEval(`
+				if (this.shard.id === ${this.client.shard.id}) return;
+
+				for (const key of ${userModules}) delete require.cache[require.resolve(key)];
+
+				this.commands.get('reload').run(${message}, ['everything']);
+			`);
+		}
+
+		return msg.edit(`Done. All modules reloaded ${this.client.shard ? 'on all shards in' : 'in'} ${watch.stop()}.`);
 	}
 
 };
