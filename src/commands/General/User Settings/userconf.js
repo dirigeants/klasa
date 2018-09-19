@@ -5,8 +5,8 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			guarded: true,
-			description: language => language.get('COMMAND_CONF_USER_DESCRIPTION'),
 			subcommands: true,
+			description: language => language.get('COMMAND_CONF_USER_DESCRIPTION'),
 			usage: '<set|show|remove|reset> (key:key) (value:value) [...]',
 			usageDelim: ' '
 		});

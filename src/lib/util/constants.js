@@ -21,6 +21,7 @@ exports.DEFAULTS = {
 			warn: true,
 			wtf: true
 		},
+		createPiecesFolders: true,
 		disabledCorePieces: [],
 		language: 'en-US',
 		noPrefixDM: false,
@@ -52,6 +53,7 @@ exports.DEFAULTS = {
 				autoAliases: true,
 				bucket: 1,
 				cooldown: 0,
+				cooldownLevel: 'author',
 				description: '',
 				extendedHelp: language => language.get('COMMAND_HELP_NO_EXTENDED'),
 				enabled: true,
@@ -94,9 +96,15 @@ exports.DEFAULTS = {
 				ignoreBlacklistedGuilds: true
 			},
 			providers: { enabled: true },
+			serializers: {
+				enabled: true,
+				aliases: []
+			},
 			tasks: { enabled: true }
 		},
-		schedule: { interval: 60000 }
+		schedule: { interval: 60000 },
+		slowmode: 0,
+		slowmodeAggressive: false
 	},
 
 	CONSOLE: {

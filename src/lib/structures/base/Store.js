@@ -60,7 +60,7 @@ class Store extends Collection {
 	}
 
 	/**
-	 * The directory of local commands relative to where you run Klasa from.
+	 * The directory of local pieces relative to where you run Klasa from.
 	 * @since 0.0.1
 	 * @type {string}
 	 * @readonly
@@ -184,7 +184,7 @@ class Store extends Collection {
 	 */
 	static async walk(store, directory = store.userDirectory) {
 		const files = await fs.scan(directory, { filter: (stats, path) => stats.isFile() && extname(path) === '.js' })
-			.catch(() => { fs.ensureDir(directory).catch(err => store.client.emit('error', err)); });
+			.catch(() => { if (store.client.options.createPiecesFolders) fs.ensureDir(directory).catch(err => store.client.emit('error', err)); });
 		if (!files) return true;
 
 		return Promise.all([...files.keys()].map(file => store.load(directory, relative(directory, file).split(sep))));

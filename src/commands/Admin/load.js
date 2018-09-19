@@ -10,13 +10,14 @@ module.exports = class extends Command {
 			permissionLevel: 10,
 			guarded: true,
 			description: language => language.get('COMMAND_LOAD_DESCRIPTION'),
-			usage: '[core] <Store:store> <path:string>',
+			usage: '[core] <Store:store> <path:string> [...]',
 			usageDelim: ' '
 		});
 		this.regExp = /\\\\?|\//g;
 	}
 
-	async run(message, [core, store, path]) {
+	async run(message, [core, store, ...path]) {
+		path = path.join(this.usageDelim);
 		path = (path.endsWith('.js') ? path : `${path}.js`).split(this.regExp);
 		const timer = new Stopwatch();
 		const piece = await (core ? this.tryEach(store, path) : store.load(store.userDirectory, path));
@@ -27,7 +28,7 @@ module.exports = class extends Command {
 			if (this.client.shard) {
 				await this.client.shard.broadcastEval(`
 					if (this.shard.id !== ${this.client.shard.id}) {
-						const piece = this.${piece.store}.load(${piece.directory}, ${JSON.stringify(path)});
+						const piece = this.${piece.store}.load('${piece.directory}', ${JSON.stringify(path)});
 						if (piece) piece.init();
 					}
 				`);

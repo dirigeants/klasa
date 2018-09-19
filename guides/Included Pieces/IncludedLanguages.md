@@ -16,4 +16,5 @@ English/United States
 - {@tutorial IncludedInhibitors}
 - {@tutorial IncludedMonitors}
 - {@tutorial IncludedProviders}
+- {@tutorial IncludedSerializers}
 - {@tutorial IncludedTasks}

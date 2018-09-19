@@ -54,5 +54,6 @@ module.exports = class extends Inhibitor {
 - {@tutorial CreatingLanguages}
 - {@tutorial CreatingMonitors}
 - {@tutorial CreatingProviders}
+- {@tutorial CreatingSerializers}
 - {@tutorial CreatingSQLProviders}
 - {@tutorial CreatingTasks}

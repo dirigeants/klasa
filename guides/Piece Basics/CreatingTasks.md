@@ -92,4 +92,5 @@ The pattern above is a **Crontab pattern** that runs every Tuesday and Friday at
 - {@tutorial CreatingLanguages}
 - {@tutorial CreatingMonitors}
 - {@tutorial CreatingProviders}
+- {@tutorial CreatingSerializers}
 - {@tutorial CreatingSQLProviders}

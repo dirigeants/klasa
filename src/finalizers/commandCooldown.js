@@ -4,17 +4,16 @@ module.exports = class extends Finalizer {
 
 	run(message) {
 		if (message.author === this.client.owner) return;
-		if (!message.command.cooldown || message.command.cooldown <= 0) return;
+		if (message.command.cooldown <= 0) return;
 
-		const existing = message.command.cooldowns.get(message.author.id);
-		if (existing) {
-			existing.count++;
-			message.command.cooldowns.set(message.author.id, existing);
-			return;
+		const id = message.levelID;
+		const rateLimit = message.command.cooldowns.get(id) || message.command.cooldowns.create(id);
+
+		try {
+			rateLimit.drip();
+		} catch (err) {
+			this.client.emit('error', `${message.author.username}[${message.author.id}] has exceeded the RateLimit for ${message.command}`);
 		}
-
-		message.command.cooldowns.set(message.author.id, { count: 1, time: Date.now() });
-		this.client.setTimeout(() => message.command.cooldowns.delete(message.author.id), message.command.cooldown * 1000);
 	}
 
 };

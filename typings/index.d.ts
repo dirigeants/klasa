@@ -44,10 +44,10 @@ declare module 'klasa' {
 //#region Classes
 
 	export class KlasaClient extends Client {
-		public constructor(options?: KlasaClientOptions & ClientOptions);
+		public constructor(options?: KlasaClientOptions);
 		public readonly invite: string;
 		public readonly owner: KlasaUser | null;
-		public options: KlasaClientOptions & ClientOptions;
+		public options: KlasaClientOptions;
 		public userBaseDirectory: string;
 		public console: KlasaConsole;
 		public arguments: ArgumentStore;
@@ -58,6 +58,7 @@ declare module 'klasa' {
 		public languages: LanguageStore;
 		public providers: ProviderStore;
 		public tasks: TaskStore;
+		public serializers: SerializerStore;
 		public events: EventStore;
 		public extendables: ExtendableStore;
 		public pieceStores: Collection<string, any>;
@@ -76,13 +77,12 @@ declare module 'klasa' {
 		private _ready(): Promise<void>;
 
 		public sweepMessages(lifetime?: number, commandLifeTime?: number): number;
-		public static types: SchemaTypes;
 		public static defaultGuildSchema: Schema;
 		public static defaultUserSchema: Schema;
 		public static defaultClientSchema: Schema;
 		public static defaultPermissionLevels: PermissionLevels;
-		public static plugin: Symbol;
-		public static use(mod: { plugin: Symbol, [x: string]: any }): KlasaClient;
+		public static plugin: symbol;
+		public static use(mod: any): KlasaClient;
 
 		// Discord.js events
 		public on(event: string, listener: Function): this;
@@ -219,6 +219,7 @@ declare module 'klasa' {
 		public command: Command | null;
 		public prefix: RegExp | null;
 		public prefixLength: number | null;
+		private levelID: Snowflake | null;
 		private prompter: CommandPrompt | null;
 		private _responses: KlasaMessage[];
 
@@ -540,29 +541,24 @@ declare module 'klasa' {
 		public toString(): string;
 	}
 
-	abstract class SchemaBase extends Map<string, SchemaPiece | SchemaFolder> {
+	export class Schema extends Map<string, SchemaPiece | SchemaFolder> {
+		public constructor(path?: string);
 		public readonly configurableKeys: Array<string>;
 		public readonly defaults: ObjectLiteral;
+		public readonly path: string;
 		public readonly paths: Map<string, SchemaPiece | SchemaFolder>;
+		public readonly type: 'Folder';
 		public add(key: string, type: string, options?: SchemaPieceOptions): this;
 		public add(key: string, callback: (folder: SchemaFolder) => any): this;
 		public remove(key: string): this;
-		public get<T = SchemaPiece | SchemaFolder>(key: string | Array<string>): T;
+		public get<T = Schema | SchemaPiece | SchemaFolder>(key: string | Array<string>): T;
 		public toJSON(): ObjectLiteral;
-
-		private debug(): Array<string>;
-	}
-
-	export class Schema extends SchemaBase {
-		public constructor(path?: string);
-		public readonly path: string;
 	}
 
 	export class SchemaFolder extends Schema {
 		public constructor(parent: Schema | SchemaFolder, key: string);
-		public readonly parent: Schema | SchemaFolder;
 		public readonly key: string;
-		public readonly type: 'Folder';
+		public readonly parent: Schema | SchemaFolder;
 	}
 
 	export class SchemaPiece {
@@ -570,9 +566,9 @@ declare module 'klasa' {
 		public readonly client: KlasaClient | null;
 		public readonly parent: Schema | SchemaFolder;
 		public readonly key: string;
+		public readonly serializer: Serializer;
 		public readonly type: string;
 		public readonly path: string;
-		public resolver: SchemaType;
 		public array: boolean;
 		public configurable: boolean;
 		public default: any;
@@ -585,34 +581,6 @@ declare module 'klasa' {
 
 		private isValid(): boolean;
 		private _generateDefault(): Array<any> | false | null;
-		// any is supplied since the following methods do type checks
-		private _checkType(value: any): void;
-		private _checkArray(value: any): void;
-		private _checkConfigurable(value: any): void;
-		private _checkLimits(min: any, max: any): void;
-		private _checkFilter(value: any): void;
-		private _checkDefault(value: any): void;
-	}
-
-	export class SchemaTypes extends Map<string, SchemaType> {
-		public constructor(types: Array<[string, SchemaType]>);
-		public client: KlasaClient | null;
-		public add(name: string, type: typeof SchemaType): this;
-	}
-
-	export abstract class SchemaType {
-		public constructor(types: SchemaTypes);
-		public readonly client: KlasaClient | null;
-		public readonly types: SchemaTypes;
-		public abstract resolve(data: any, piece: SchemaPiece, language: Language, guild?: KlasaGuild): Promise<any>;
-		public abstract resolveString(value: any): string;
-		public static regex: {
-			userOrMember: RegExp;
-			channel: RegExp;
-			emoji: RegExp;
-			role: RegExp;
-			snowflake: RegExp;
-		};
 	}
 
 //#endregion Settings
@@ -657,14 +625,15 @@ declare module 'klasa' {
 
 	export abstract class Command extends Piece {
 		public constructor(client: KlasaClient, store: CommandStore, file: string[], directory: string, options?: CommandOptions);
+		public readonly bucket: number;
 		public readonly category: string;
+		public readonly cooldown: number;
 		public readonly subCategory: string;
 		public readonly usageDelim: string;
 		public readonly usageString: string;
 		public aliases: string[];
 		public requiredPermissions: Permissions;
-		public bucket: number;
-		public cooldown: number;
+		public cooldownLevel: 'author' | 'channel' | 'guild';
 		public deletable: boolean;
 		public description: string | ((language: Language) => string);
 		public extendedHelp: string | ((language: Language) => string);
@@ -679,7 +648,7 @@ declare module 'klasa' {
 		public runIn: string[];
 		public subcommands: boolean;
 		public usage: CommandUsage;
-		private cooldowns: Map<Snowflake, number>;
+		private cooldowns: RateLimitManager;
 
 		public createCustomResolver(type: string, resolver: ArgResolverCustomMethod): this;
 		public customizeResponse(name: string, response: string | ((message: KlasaMessage, possible: Possible) => string)): this;
@@ -706,12 +675,9 @@ declare module 'klasa' {
 
 	export abstract class Extendable extends Piece {
 		public constructor(client: KlasaClient, store: ExtendableStore, file: string, directory: string, options?: ExtendableOptions);
-		public readonly static: boolean;
-		public appliesTo: string[];
-		public target: boolean;
-
-		public extend: any;
-		public static extend(...params: any[]): any;
+		public appliesTo: Array<Constructable<any>>;
+		public instancePropertyNames: Array<string>;
+		public staticPropertyNames: Array<string>;
 		public toJSON(): PieceExtendableJSON;
 	}
 
@@ -752,6 +718,11 @@ declare module 'klasa' {
 		public toJSON(): PieceMonitorJSON;
 	}
 
+	export abstract class MultiArgument extends Argument {
+		public abstract readonly base: Argument;
+		public run<T = any>(argument: string, possible: Possible, message: KlasaMessage): Promise<Array<T>>;
+	}
+
 	export abstract class Provider extends Piece {
 		public constructor(client: KlasaClient, store: ProviderStore, file: string, directory: string, options?: ProviderOptions);
 		public abstract create<T = any>(table: string, entry: string, data: any): Promise<T>;
@@ -788,6 +759,22 @@ declare module 'klasa' {
 		public constructor(client: KlasaClient, store: TaskStore, file: string, directory: string, options?: TaskOptions);
 		public abstract run(data: any): Promise<void>;
 		public toJSON(): PieceTaskJSON;
+	}
+
+	export abstract class Serializer extends Piece {
+		public constructor(client: KlasaClient, store: SerializerStore, file: string, directory: string, options?: SerializerOptions);
+		public aliases: Array<string>;
+		public serialize(data: any): PrimitiveType;
+		public stringify(data: any): string;
+		public toJSON(): PieceSerializerJSON;
+		public abstract deserialize<T = any>(data: any, piece: SchemaPiece, language: Language, guild?: KlasaGuild): Promise<T>;
+		public static regex: {
+			userOrMember: RegExp;
+			channel: RegExp;
+			emoji: RegExp;
+			role: RegExp;
+			snowflake: RegExp;
+		};
 	}
 
 //#endregion Pieces
@@ -853,6 +840,10 @@ declare module 'klasa' {
 	}
 
 	export class TaskStore extends Store<string, Task, typeof Task> { }
+
+	export class SerializerStore extends Store<string, Serializer, typeof Serializer> {
+		public aliases: Collection<string, Serializer>;
+	}
 
 //#endregion Stores
 
@@ -1052,6 +1043,29 @@ declare module 'klasa' {
 		public wtf(...data: any[]): void;
 
 		private static _flatten(data: any): string;
+	}
+
+	export class RateLimit {
+		public constructor(bucket: number, cooldown: number);
+		public readonly expired: boolean;
+		public readonly limited: boolean;
+		public readonly remainingTime: number;
+		public bucket: number;
+		public cooldown: number;
+		private remaining: number;
+		private time: number;
+		public drip(): this;
+		public reset(): this;
+		public resetRemaining(): this;
+		public resetTime(): this;
+	}
+
+	export class RateLimitManager extends Collection<Snowflake, RateLimit> {
+		public constructor(bucket: number, cooldown: number);
+		public bucket: number;
+		public cooldown: number;
+		private sweepInterval: NodeJS.Timer | null;
+		public create(id: Snowflake): RateLimit;
 	}
 
 	export class ReactionHandler extends ReactionCollector {
@@ -1260,6 +1274,7 @@ declare module 'klasa' {
 		commandMessageLifetime?: number;
 		console?: KlasaConsoleConfig;
 		consoleEvents?: KlasaConsoleEvents;
+		createPiecesFolders?: boolean;
 		customPromptDefaults?: KlasaCustomPromptDefaults;
 		disabledCorePieces?: string[];
 		gateways?: KlasaGatewaysOptions;
@@ -1275,6 +1290,8 @@ declare module 'klasa' {
 		readyMessage?: (client: KlasaClient) => string;
 		regexPrefix?: RegExp;
 		schedule?: KlasaClientOptionsSchedule;
+		slowmode?: number;
+		slowmodeAggressive?: boolean;
 		typing?: boolean;
 	} & ClientOptions;
 
@@ -1298,6 +1315,7 @@ declare module 'klasa' {
 		languages?: LanguageOptions;
 		monitors?: MonitorOptions;
 		providers?: ProviderOptions;
+		serializers?: SerializerOptions;
 	};
 
 	export type KlasaProvidersOptions = {
@@ -1530,6 +1548,7 @@ declare module 'klasa' {
 		requiredPermissions?: PermissionResolvable;
 		bucket?: number;
 		cooldown?: number;
+		cooldownLevel?: 'author' | 'channel' | 'guild';
 		deletable?: boolean;
 		description?: string | string[] | ((language: Language) => string | string[]);
 		extendedHelp?: string | string[] | ((language: Language) => string | string[]);
@@ -1547,8 +1566,7 @@ declare module 'klasa' {
 	} & PieceOptions;
 
 	export type ExtendableOptions = {
-		appliesTo: string[];
-		klasa?: boolean;
+		appliesTo: Array<Constructable<any>>;
 	} & PieceOptions;
 
 	export type InhibitorOptions = {
@@ -1569,6 +1587,10 @@ declare module 'klasa' {
 		emitter?: NodeJS.EventEmitter;
 		event?: string;
 		once?: boolean;
+	} & PieceOptions;
+
+	export type SerializerOptions = {
+		aliases?: Array<string>;
 	} & PieceOptions;
 
 	export type ProviderOptions = PieceOptions;
@@ -1620,7 +1642,6 @@ declare module 'klasa' {
 
 	export type PieceExtendableJSON = {
 		appliesTo: string[];
-		target: 'discord.js' | 'klasa';
 	} & PieceJSON;
 
 	export type PieceInhibitorJSON = {
@@ -1641,6 +1662,10 @@ declare module 'klasa' {
 		emitter: string;
 		event: string;
 		once: boolean;
+	} & PieceJSON;
+
+	export type PieceSerializerJSON = {
+		aliases: Array<string>;
 	} & PieceJSON;
 
 	export type PieceProviderJSON = PieceJSON;
