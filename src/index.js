@@ -47,6 +47,7 @@ module.exports = {
 	LanguageStore: require('./lib/structures/LanguageStore'),
 	Monitor: require('./lib/structures/Monitor'),
 	MonitorStore: require('./lib/structures/MonitorStore'),
+	MultiArgument: require('./lib/structures/MultiArgument'),
 	Provider: require('./lib/structures/Provider'),
 	ProviderStore: require('./lib/structures/ProviderStore'),
 	Serializer: require('./lib/structures/Serializer'),

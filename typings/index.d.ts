@@ -723,6 +723,11 @@ declare module 'klasa' {
 		public toJSON(): PieceMonitorJSON;
 	}
 
+	export abstract class MultiArgument extends Argument {
+		public abstract readonly base: Argument;
+		public run<T = any>(argument: string, possible: Possible, message: KlasaMessage): Promise<Array<T>>;
+	}
+
 	export abstract class Provider extends Piece {
 		public constructor(client: KlasaClient, store: ProviderStore, file: string, directory: string, options?: ProviderOptions);
 		public abstract create<T = any>(table: string, entry: string, data: any): Promise<T>;
