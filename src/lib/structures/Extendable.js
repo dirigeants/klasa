@@ -50,7 +50,7 @@ class Extendable extends Piece {
 		 * @private
 		 */
 		this.staticPropertyDescriptors = Object.assign({}, ...staticPropertyNames
-			.map(name => ({ [name]: { ...Object.getOwnPropertyDescriptor(this.constructor, name), writable: true, configurable: true } })));
+			.map(name => ({ [name]: Object.getOwnPropertyDescriptor(this.constructor, name) })));
 
 		/**
 		 * The discord classes this extendable applies to
@@ -71,9 +71,9 @@ class Extendable extends Piece {
 
 		for (const [structure, originals] of this.originals) {
 			originals.staticPropertyDescriptors = Object.assign({}, ...staticPropertyNames
-				.map(name => ({ [name]: Object.getOwnPropertyDescriptor(structure, name) || { value: undefined, enumerable: false } })));
+				.map(name => ({ [name]: Object.getOwnPropertyDescriptor(structure, name) || { value: undefined } })));
 			originals.instancePropertyDescriptors = Object.assign({}, ...instancePropertyNames
-				.map(name => ({ [name]: Object.getOwnPropertyDescriptor(structure.prototype, name) || { value: undefined, enumerable: false } })));
+				.map(name => ({ [name]: Object.getOwnPropertyDescriptor(structure.prototype, name) || { value: undefined } })));
 		}
 	}
 
