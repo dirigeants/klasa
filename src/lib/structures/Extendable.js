@@ -31,13 +31,6 @@ class Extendable extends Piece {
 	constructor(client, store, file, directory, options = {}) {
 		super(client, store, file, directory, options);
 
-		/**
-		 * The discord classes this extendable applies to
-		 * @since 0.0.1
-		 * @type {any[]}
-		 */
-		this.appliesTo = options.appliesTo;
-
 		const staticPropertyNames = Object.getOwnPropertyNames(this.constructor)
 			.filter(name => !['length', 'prototype', 'name'].includes(name));
 		const instancePropertyNames = Object.getOwnPropertyNames(this.constructor.prototype)
@@ -67,12 +60,22 @@ class Extendable extends Piece {
 		 * @type {Map<any, OriginalPropertyDescriptors>}
 		 * @private
 		 */
-		this.originals = new Map(this.appliesTo.map(structure => [structure, {
+		this.originals = new Map(options.appliesTo.map(structure => [structure, {
 			staticPropertyDescriptors: Object.assign({}, ...staticPropertyNames
 				.map(name => ({ [name]: Object.getOwnPropertyDescriptor(structure, name) || { value: undefined } }))),
 			instancePropertyDescriptors: Object.assign({}, ...instancePropertyNames
 				.map(name => ({ [name]: Object.getOwnPropertyDescriptor(structure.prototype, name) || { value: undefined } })))
 		}]));
+	}
+
+	/**
+	 * The discord classes this extendable applies to
+	 * @since 0.0.1
+	 * @type {any[]}
+	 * @readonly
+	 */
+	get appliesTo() {
+		return [...this.originals.keys()];
 	}
 
 	/**
@@ -110,7 +113,7 @@ class Extendable extends Piece {
 	enable(init = false) {
 		if (!init && this.client.listenerCount('pieceEnabled')) this.client.emit('pieceEnabled', this);
 		this.enabled = true;
-		for (const structure of this.appliesTo) {
+		for (const structure of this.originals.keys()) {
 			Object.defineProperties(structure, this.staticPropertyDescriptors);
 			Object.defineProperties(structure.prototype, this.instancePropertyDescriptors);
 		}
