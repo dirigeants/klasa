@@ -674,7 +674,7 @@ declare module 'klasa' {
 
 	export abstract class Extendable extends Piece {
 		public constructor(client: KlasaClient, store: ExtendableStore, file: string, directory: string, options?: ExtendableOptions);
-		public appliesTo: Array<Constructable<any>>;
+		public readonly appliesTo: Array<Constructable<any>>;
 		private staticPropertyDescriptors: PropertyDescriptorMap;
 		private instancePropertyDescriptors: PropertyDescriptorMap;
 		private originals: Map<Constructable<any>, PropertyDescriptorMap>;
