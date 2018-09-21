@@ -15,8 +15,8 @@ class Extendable extends Piece {
 
 	/**
 	 * @typedef {OriginalPropertyDescriptors} Object
-	 * @property {any} staticPropertyDescriptors What classes this extendable is for
-	 * @property {any} instancePropertyDescriptors What classes this extendable is for
+	 * @property {any} staticPropertyDescriptors The original static property descriptors for the class
+	 * @property {any} instancePropertyDescriptors The original instance property descriptors for the class
 	 * @private
 	 */
 
@@ -67,14 +67,12 @@ class Extendable extends Piece {
 		 * @type {Map<any, OriginalPropertyDescriptors>}
 		 * @private
 		 */
-		this.originals = new Map(this.appliesTo.map(structure => [structure, { staticPropertyDescriptors: null, instancePropertyDescriptors: null }]));
-
-		for (const [structure, originals] of this.originals) {
-			originals.staticPropertyDescriptors = Object.assign({}, ...staticPropertyNames
-				.map(name => ({ [name]: Object.getOwnPropertyDescriptor(structure, name) || { value: undefined } })));
-			originals.instancePropertyDescriptors = Object.assign({}, ...instancePropertyNames
-				.map(name => ({ [name]: Object.getOwnPropertyDescriptor(structure.prototype, name) || { value: undefined } })));
-		}
+		this.originals = new Map(this.appliesTo.map(structure => [structure, {
+			staticPropertyDescriptors: Object.assign({}, ...staticPropertyNames
+				.map(name => ({ [name]: Object.getOwnPropertyDescriptor(structure, name) || { value: undefined } }))),
+			instancePropertyDescriptors: Object.assign({}, ...instancePropertyNames
+				.map(name => ({ [name]: Object.getOwnPropertyDescriptor(structure.prototype, name) || { value: undefined } })))
+		}]));
 	}
 
 	/**
