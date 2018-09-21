@@ -44,7 +44,7 @@ class Extendable extends Piece {
 			.filter(name => name !== 'constructor');
 
 		/**
-		 * The discord classes this extendable applies to
+		 * The static property descriptors of this extendable
 		 * @since 0.5.0
 		 * @type {any}
 		 * @private
@@ -53,7 +53,7 @@ class Extendable extends Piece {
 			.map(name => ({ [name]: Object.getOwnPropertyDescriptor(this.constructor, name) })));
 
 		/**
-		 * The discord classes this extendable applies to
+		 * The instance property descriptors of this extendable
 		 * @since 0.5.0
 		 * @type {any}
 		 * @private
@@ -62,7 +62,7 @@ class Extendable extends Piece {
 			.map(name => ({ [name]: Object.getOwnPropertyDescriptor(this.constructor.prototype, name) })));
 
 		/**
-		 * The discord classes this extendable applies to
+		 * The original property descriptors for each of the original classes
 		 * @since 0.5.0
 		 * @type {Map<any, OriginalPropertyDescriptors>}
 		 * @private
