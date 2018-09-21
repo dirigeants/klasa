@@ -95,9 +95,9 @@ class Extendable extends Piece {
 	disable() {
 		if (this.client.listenerCount('pieceDisabled')) this.client.emit('pieceDisabled', this);
 		this.enabled = false;
-		for (const structure of this.appliesTo) {
-			Object.defineProperties(structure, this.originals.get(structure).staticPropertyDescriptors);
-			Object.defineProperties(structure.prototype, this.originals.get(structure).instancePropertyDescriptors);
+		for (const [structure, originals] of this.originals) {
+			Object.defineProperties(structure, originals.staticPropertyDescriptors);
+			Object.defineProperties(structure.prototype, originals.instancePropertyDescriptors);
 		}
 		return this;
 	}
