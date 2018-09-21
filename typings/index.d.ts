@@ -676,8 +676,9 @@ declare module 'klasa' {
 	export abstract class Extendable extends Piece {
 		public constructor(client: KlasaClient, store: ExtendableStore, file: string, directory: string, options?: ExtendableOptions);
 		public appliesTo: Array<Constructable<any>>;
-		public instancePropertyNames: Array<string>;
-		public staticPropertyNames: Array<string>;
+		private staticPropertyDescriptors: PropertyDescriptorMap;
+		private instancePropertyDescriptors: PropertyDescriptorMap;
+		private originals: Map<Constructable<any>, PropertyDescriptorMap>;
 		public toJSON(): PieceExtendableJSON;
 	}
 
@@ -1597,6 +1598,11 @@ declare module 'klasa' {
 	export type FinalizerOptions = PieceOptions;
 	export type LanguageOptions = PieceOptions;
 	export type TaskOptions = PieceOptions;
+
+	export type OriginalPropertyDescriptors = {
+		staticPropertyDescriptors: PropertyDescriptorMap;
+		instancePropertyDescriptors: PropertyDescriptorMap;
+	};
 
 	export type PieceJSON = {
 		directory: string;
