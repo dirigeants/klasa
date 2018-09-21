@@ -71,9 +71,9 @@ class Extendable extends Piece {
 
 		for (const [structure, originals] of this.originals) {
 			originals.staticPropertyDescriptors = Object.assign({}, ...staticPropertyNames
-				.map(name => ({ [name]: Object.getOwnPropertyDescriptor(structure, name) || {} })));
+				.map(name => ({ [name]: Object.getOwnPropertyDescriptor(structure, name) || { value: undefined, enumerable: false } })));
 			originals.instancePropertyDescriptors = Object.assign({}, ...instancePropertyNames
-				.map(name => ({ [name]: Object.getOwnPropertyDescriptor(structure.prototype, name) || {} })));
+				.map(name => ({ [name]: Object.getOwnPropertyDescriptor(structure.prototype, name) || { value: undefined, enumerable: false } })));
 		}
 	}
 
