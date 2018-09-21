@@ -14,7 +14,7 @@ class Extendable extends Piece {
 	 */
 
 	/**
-	 * @typedef {OriginalPropertyDescriptors} Object
+	 * @typedef {Object} OriginalPropertyDescriptors
 	 * @property {any} staticPropertyDescriptors The original static property descriptors for the class
 	 * @property {any} instancePropertyDescriptors The original instance property descriptors for the class
 	 * @private
