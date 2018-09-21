@@ -10,7 +10,7 @@ const { isObject, mergeObjects, makeObject } = require('../util/util');
 class Provider extends Piece {
 
 	/**
-	 * The createTable method which inserts/creates a new table to the database.
+	 * Inserts or creates a table in the database.
 	 * @since 0.0.1
 	 * @param {string} table The table to check against
 	 * @returns {*}
@@ -21,7 +21,7 @@ class Provider extends Piece {
 	}
 
 	/**
-	 * The deleteTable method which deletes/drops a table from the database.
+	 * Deletes or drops a table from the database.
 	 * @since 0.0.1
 	 * @param {string} table The table to check against
 	 * @returns {*}
@@ -32,7 +32,7 @@ class Provider extends Piece {
 	}
 
 	/**
-	 * The hasTable method which checks if a table exists in the database.
+	 * Checks if a table exists in the database.
 	 * @since 0.0.1
 	 * @param {string} table The table to check against
 	 * @returns {boolean}
@@ -43,7 +43,7 @@ class Provider extends Piece {
 	}
 
 	/**
-	 * The create method which inserts new entries to a table from the database.
+	 * Inserts new entries into a table.
 	 * @since 0.0.1
 	 * @param {string} table The table to update
 	 * @param {string} entryID The entry's ID to create
@@ -56,10 +56,10 @@ class Provider extends Piece {
 	}
 
 	/**
-	 * The delete method which removes an entries from a table.
+	 * Removes entries from a table.
 	 * @since 0.0.1
 	 * @param {string} table The table to update
-	 * @param {string} entryID The entry's ID to delete
+	 * @param {string} entryID The ID of the entry to delete
 	 * @returns {*}
 	 * @abstract
 	 */
@@ -68,10 +68,10 @@ class Provider extends Piece {
 	}
 
 	/**
-	 * The get method which retrieves an entry from a table.
+	 * Retrive a single entry from a table.
 	 * @since 0.0.1
-	 * @param {string} table The table to update
-	 * @param {string} entryID The entry's ID to retrieve
+	 * @param {string} table The table to query
+	 * @param {string} entryID The ID of the entry to retrieve
 	 * @returns {Object<string, *>}
 	 * @abstract
 	 */
@@ -80,9 +80,9 @@ class Provider extends Piece {
 	}
 
 	/**
-	 * The getAll method which retrieves all entries from a table.
+	 * Retrieve all entries from a table.
 	 * @since 0.0.1
-	 * @param {string} table The table to update
+	 * @param {string} table The table to query
 	 * @returns {Array<Object<string, *>>}
 	 * @abstract
 	 */
@@ -91,9 +91,9 @@ class Provider extends Piece {
 	}
 
 	/**
-	 * The getKeys method which retrieves all entries' keys from a table.
+	 * Retrieves all entries' keys from a table.
 	 * @since 0.5.0
-	 * @param {string} table The table to update
+	 * @param {string} table The table to query
 	 * @returns {string[]}
 	 * @abstract
 	 */
@@ -102,7 +102,7 @@ class Provider extends Piece {
 	}
 
 	/**
-	 * The has method which checks if an entry exists in a table.
+	 * Check if an entry exists in a table.
 	 * @since 0.0.1
 	 * @param {string} table The table to update
 	 * @param {string} entryID The entry's ID to check against
@@ -114,7 +114,7 @@ class Provider extends Piece {
 	}
 
 	/**
-	 * The replace method which overwrites the data from an entry.
+	 * Overwrites the data from an entry in a table.
 	 * @since 0.0.1
 	 * @param {string} table The table to update
 	 * @param {string} entryID The entry's ID to update
@@ -127,7 +127,7 @@ class Provider extends Piece {
 	}
 
 	/**
-	 * The update method which updates an entry from a table.
+	 * Updates an entry from a table.
 	 * @since 0.0.1
 	 * @param {string} table The table to update
 	 * @param {string} entryID The entry's ID to update

@@ -249,7 +249,6 @@ declare module 'klasa' {
 
 		private _patch(data: any): void;
 		private _registerCommand(commandInfo: { command: Command, prefix: RegExp, prefixLength: number }): this;
-		private static combineContentOptions(content?: StringResolvable, options?: MessageOptions): MessageOptions;
 	}
 
 	export class KlasaUser extends DiscordUser {
