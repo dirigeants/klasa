@@ -120,7 +120,7 @@ module.exports = Structures.extend('Message', Message => {
 		}
 
 		/**
-		 * Get's the level id of this message (with respect to @{link Command#cooldownLevel})
+		 * Gets the level id of this message (with respect to @{link Command#cooldownLevel})
 		 * @since 0.5.0
 		 * @type {?string}
 		 * @readonly
@@ -255,10 +255,7 @@ module.exports = Structures.extend('Message', Message => {
 		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
 		 */
 		sendLocale(key, localeArgs = [], options = {}) {
-			if (!Array.isArray(localeArgs)) {
-				options = localeArgs;
-				localeArgs = [];
-			}
+			if (!Array.isArray(localeArgs)) [options, localeArgs] = [localeArgs, []];
 			return this.sendMessage(this.language.get(key, ...localeArgs), options);
 		}
 

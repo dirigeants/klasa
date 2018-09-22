@@ -10,14 +10,13 @@ module.exports = class extends Command {
 			permissionLevel: 10,
 			guarded: true,
 			description: language => language.get('COMMAND_LOAD_DESCRIPTION'),
-			usage: '[core] <Store:store> <path:string> [...]',
+			usage: '[core] <Store:store> <path:...string>',
 			usageDelim: ' '
 		});
 		this.regExp = /\\\\?|\//g;
 	}
 
-	async run(message, [core, store, ...path]) {
-		path = path.join(this.usageDelim);
+	async run(message, [core, store, path]) {
 		path = (path.endsWith('.js') ? path : `${path}.js`).split(this.regExp);
 		const timer = new Stopwatch();
 		const piece = await (core ? this.tryEach(store, path) : store.load(store.userDirectory, path));

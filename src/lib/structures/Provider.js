@@ -68,7 +68,7 @@ class Provider extends Piece {
 	}
 
 	/**
-	 * Retrive a single entry from a table.
+	 * Retrieve a single entry from a table.
 	 * @since 0.0.1
 	 * @param {string} table The table to query
 	 * @param {string} entryID The ID of the entry to retrieve

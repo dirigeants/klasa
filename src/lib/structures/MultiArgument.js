@@ -14,11 +14,11 @@ class MultiArgument extends Argument {
 	 * @abstract
 	 */
 	get base() {
-		throw new Error('A "base" getter must be implimented in extended classes.');
+		throw new Error('A "base" getter must be implemented in extended classes.');
 	}
 
 	/**
-	 * The run method for handling MultiArguments (not to be implimented in extended classes)
+	 * The run method for handling MultiArguments (not to be implemented in extended classes)
 	 * @since 0.5.0
 	 * @param {string} argument The string argument string to resolve
 	 * @param {Possible} possible This current usage possible
