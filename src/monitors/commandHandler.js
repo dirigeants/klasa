@@ -28,10 +28,10 @@ module.exports = class extends Monitor {
 	parseCommand(message) {
 		const result = this.customPrefix(message) || this.mentionPrefix(message) || this.naturalPrefix(message) || this.prefixLess(message);
 		return result ? {
-			command: message.content.slice(result.length).trim().split(' ')[0].toLowerCase(),
+			commandText: message.content.slice(result.length).trim().split(' ')[0].toLowerCase(),
 			prefix: result.regex,
 			prefixLength: result.length
-		} : { command: false };
+		} : { commandText: false };
 	}
 
 	customPrefix({ content, guildSettings: { prefix } }) {
