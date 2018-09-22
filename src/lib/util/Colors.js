@@ -63,9 +63,9 @@ class Colors {
 			if (!Array.isArray(styles)) styles = [styles];
 			for (let style in styles) {
 				style = style.toLowerCase();
-				if (!(style in Colors.STYLES)) continue;
-				opening.push(Colors.STYLES[style]);
-				closing.push(Colors.CLOSE[style]);
+				if (!(style in this.STYLES)) continue;
+				opening.push(this.STYLES[style]);
+				closing.push(this.CLOSE[style]);
 			}
 		}
 		return { opening, closing };
