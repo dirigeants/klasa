@@ -677,7 +677,7 @@ declare module 'klasa' {
 		public readonly appliesTo: Array<Constructable<any>>;
 		private staticPropertyDescriptors: PropertyDescriptorMap;
 		private instancePropertyDescriptors: PropertyDescriptorMap;
-		private originals: Map<Constructable<any>, PropertyDescriptorMap>;
+		private originals: Map<Constructable<any>, OriginalPropertyDescriptors>;
 		public toJSON(): PieceExtendableJSON;
 	}
 
