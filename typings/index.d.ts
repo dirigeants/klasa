@@ -226,6 +226,7 @@ declare module 'klasa' {
 		public command: Command | null;
 		public prefix: RegExp | null;
 		public prefixLength: number | null;
+		public author: KlasaUser;
 		private levelID: Snowflake | null;
 		private prompter: CommandPrompt | null;
 		private _responses: KlasaMessage[];
