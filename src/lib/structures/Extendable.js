@@ -14,6 +14,13 @@ class Extendable extends Piece {
 	 */
 
 	/**
+	 * @typedef {Object} OriginalPropertyDescriptors
+	 * @property {any} staticPropertyDescriptors The original static property descriptors for the class
+	 * @property {any} instancePropertyDescriptors The original instance property descriptors for the class
+	 * @private
+	 */
+
+	/**
 	 * @since 0.0.1
 	 * @param {KlasaClient} client The klasa client
 	 * @param {ExtendableStore} store The extendable store
@@ -24,17 +31,51 @@ class Extendable extends Piece {
 	constructor(client, store, file, directory, options = {}) {
 		super(client, store, file, directory, options);
 
-		/**
-		 * The discord classes this extendable applies to
-		 * @since 0.0.1
-		 * @type {any[]}
-		 */
-		this.appliesTo = options.appliesTo;
-
-		this.staticPropertyNames = Object.getOwnPropertyNames(this.constructor)
+		const staticPropertyNames = Object.getOwnPropertyNames(this.constructor)
 			.filter(name => !['length', 'prototype', 'name'].includes(name));
-		this.instancePropertyNames = Object.getOwnPropertyNames(this.constructor.prototype)
+		const instancePropertyNames = Object.getOwnPropertyNames(this.constructor.prototype)
 			.filter(name => name !== 'constructor');
+
+		/**
+		 * The static property descriptors of this extendable
+		 * @since 0.5.0
+		 * @type {any}
+		 * @private
+		 */
+		this.staticPropertyDescriptors = Object.assign({}, ...staticPropertyNames
+			.map(name => ({ [name]: Object.getOwnPropertyDescriptor(this.constructor, name) })));
+
+		/**
+		 * The instance property descriptors of this extendable
+		 * @since 0.5.0
+		 * @type {any}
+		 * @private
+		 */
+		this.instancePropertyDescriptors = Object.assign({}, ...instancePropertyNames
+			.map(name => ({ [name]: Object.getOwnPropertyDescriptor(this.constructor.prototype, name) })));
+
+		/**
+		 * The original property descriptors for each of the original classes
+		 * @since 0.5.0
+		 * @type {Map<any, OriginalPropertyDescriptors>}
+		 * @private
+		 */
+		this.originals = new Map(options.appliesTo.map(structure => [structure, {
+			staticPropertyDescriptors: Object.assign({}, ...staticPropertyNames
+				.map(name => ({ [name]: Object.getOwnPropertyDescriptor(structure, name) || { value: undefined } }))),
+			instancePropertyDescriptors: Object.assign({}, ...instancePropertyNames
+				.map(name => ({ [name]: Object.getOwnPropertyDescriptor(structure.prototype, name) || { value: undefined } })))
+		}]));
+	}
+
+	/**
+	 * The discord classes this extendable applies to
+	 * @since 0.0.1
+	 * @type {any[]}
+	 * @readonly
+	 */
+	get appliesTo() {
+		return [...this.originals.keys()];
 	}
 
 	/**
@@ -55,9 +96,9 @@ class Extendable extends Piece {
 	disable() {
 		if (this.client.listenerCount('pieceDisabled')) this.client.emit('pieceDisabled', this);
 		this.enabled = false;
-		for (const structure of this.appliesTo) {
-			for (const name of this.staticPropertyNames) delete structure[name];
-			for (const name of this.instancePropertyNames) delete structure.prototype[name];
+		for (const [structure, originals] of this.originals) {
+			Object.defineProperties(structure, originals.staticPropertyDescriptors);
+			Object.defineProperties(structure.prototype, originals.instancePropertyDescriptors);
 		}
 		return this;
 	}
@@ -72,13 +113,9 @@ class Extendable extends Piece {
 	enable(init = false) {
 		if (!init && this.client.listenerCount('pieceEnabled')) this.client.emit('pieceEnabled', this);
 		this.enabled = true;
-		const staticPropertyDescriptors = Object.assign({}, ...this.staticPropertyNames
-			.map(name => ({ [name]: { ...Object.getOwnPropertyDescriptor(this.constructor, name), writable: true, configurable: true } })));
-		const instancePropertyDescriptors = Object.assign({}, ...this.instancePropertyNames
-			.map(name => ({ [name]: Object.getOwnPropertyDescriptor(this.constructor.prototype, name) })));
-		for (const structure of this.appliesTo) {
-			Object.defineProperties(structure, staticPropertyDescriptors);
-			Object.defineProperties(structure.prototype, instancePropertyDescriptors);
+		for (const structure of this.originals.keys()) {
+			Object.defineProperties(structure, this.staticPropertyDescriptors);
+			Object.defineProperties(structure.prototype, this.instancePropertyDescriptors);
 		}
 		return this;
 	}
