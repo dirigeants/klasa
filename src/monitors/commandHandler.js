@@ -75,7 +75,7 @@ module.exports = class extends Monitor {
 				const commandRun = subcommand ? message.command[subcommand](message, message.params) : message.command.run(message, message.params);
 				timer.stop();
 				const response = await commandRun;
-				this.client.finalizers.run(message, response, timer).catch(err => this.client.emit('error', err));
+				this.client.finalizers.run(message, response, timer);
 				this.client.emit('commandSuccess', message, message.command, message.params, response);
 			} catch (error) {
 				this.client.emit('commandError', message, message.command, message.params, error);
