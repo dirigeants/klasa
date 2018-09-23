@@ -192,6 +192,7 @@ exports.TIME = {
 
 	CRON: {
 		partRegex: /^(?:(\*)|(\d+)(?:-(\d+))?)(?:\/(\d+))?$/,
+		wildcardRegex: /\bh\b|\B\?\B/g,
 		allowedNum: [[0, 59], [0, 23], [1, 31], [1, 12], [0, 6]],
 		predefined: {
 			'@annually': '0 0 1 1 *',
