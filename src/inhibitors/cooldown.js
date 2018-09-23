@@ -7,8 +7,7 @@ module.exports = class extends Inhibitor {
 	}
 
 	async run(message, command) {
-		if (message.author === this.client.owner) return;
-		if (command.cooldown <= 0) return;
+		if (message.author === this.client.owner || command.cooldown <= 0) return;
 
 		const existing = command.cooldowns.get(message.levelID);
 

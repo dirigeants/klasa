@@ -1,37 +1,13 @@
-const Piece = require('./base/Piece');
+const AliasPiece = require('./base/AliasPiece');
+const { MENTION_REGEX } = require('../util/constants');
 
 /**
  * Base class for all Klasa Serializers. See {@tutorial CreatingSerializers} for more information how to use this class
  * to build custom serializers.
  * @tutorial CreatingSerializers
- * @extends {Piece}
+ * @extends AliasPiece
  */
-class Serializer extends Piece {
-
-	/**
-	 * @typedef {PieceOptions} SerializerOptions
-	 * @property {string[]} [aliases=[]] Any serializer aliases
-	 */
-
-	/**
-	 * @since 0.5.0
-	 * @param {KlasaClient} client The Klasa Client
-	 * @param {SerializereStore} store The Serializer store
-	 * @param {Array} file The path from the pieces folder to the serializer file
-	 * @param {boolean} core If the piece is in the core directory or not
-	 * @param {SerializerOptions} [options={}] Optional serializer settings
-	 */
-	constructor(client, store, file, core, options = {}) {
-		super(client, store, file, core, options);
-
-		/**
-	 	 * The aliases for this serializer
-	 	 * @since 0.5.0
-	 	 * @type {string[]}
-	 	 */
-		this.aliases = options.aliases;
-	}
-
+class Serializer extends AliasPiece {
 
 	/**
 	 * The serialize method to be overwritten in actual Serializers
@@ -67,18 +43,6 @@ class Serializer extends Piece {
 		return String(data);
 	}
 
-	/**
-	 * Defines the JSON.stringify behavior of this serializer.
-	 * @since 0.5.0
-	 * @returns {Object}
-	 */
-	toJSON() {
-		return {
-			...super.toJSON(),
-			aliases: this.aliases.slice(0)
-		};
-	}
-
 }
 
 /**
@@ -92,12 +56,6 @@ class Serializer extends Piece {
  * @property {RegExp} snowflake Regex for simple snowflake ids
  * @static
  */
-Serializer.regex = {
-	userOrMember: /^(?:<@!?)?(\d{17,19})>?$/,
-	channel: /^(?:<#)?(\d{17,19})>?$/,
-	emoji: /^(?:<a?:\w{2,32}:)?(\d{17,19})>?$/,
-	role: /^(?:<@&)?(\d{17,19})>?$/,
-	snowflake: /^(\d{17,19})$/
-};
+Serializer.regex = MENTION_REGEX;
 
 module.exports = Serializer;
