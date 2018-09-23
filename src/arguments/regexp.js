@@ -9,7 +9,7 @@ module.exports = class extends Argument {
 	run(arg, possible, message) {
 		const results = possible.regex.exec(arg);
 		if (results !== null) return results;
-		throw (message.language || this.client.languages.default).get('RESOLVER_INVALID_REGEX_MATCH', possible.name, possible.regex.toString());
+		throw message.language.get('RESOLVER_INVALID_REGEX_MATCH', possible.name, possible.regex.toString());
 	}
 
 };
