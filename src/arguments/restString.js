@@ -11,6 +11,7 @@ module.exports = class extends Argument {
 	}
 
 	run(arg, possible, message) {
+		if (!arg) throw message.language.get('RESOLVER_INVALID_STRING', possible.name);
 		const { args, usage: { usageDelim } } = message.prompter;
 		const index = args.indexOf(arg);
 		const rest = args.splice(index, args.length - index).join(usageDelim);
