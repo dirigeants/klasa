@@ -83,6 +83,10 @@ class RateLimitManager extends Collection {
 		return amount;
 	}
 
+	static get [Symbol.species]() {
+		return Collection;
+	}
+
 }
 
 module.exports = RateLimitManager;

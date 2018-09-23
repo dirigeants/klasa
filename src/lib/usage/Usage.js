@@ -153,9 +153,9 @@ class Usage {
 				continue;
 			}
 
-			if (open.includes(char)) Usage.tagOpen(usage, char);
-			else if (close.includes(char)) Usage.tagClose(usage, char);
-			else if (space.includes(char)) Usage.tagSpace(usage, char);
+			if (open.includes(char)) this.tagOpen(usage, char);
+			else if (close.includes(char)) this.tagClose(usage, char);
+			else if (space.includes(char)) this.tagSpace(usage, char);
 			else usage.current += char;
 		}
 
