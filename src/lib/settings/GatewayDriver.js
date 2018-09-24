@@ -103,7 +103,7 @@ class GatewayDriver {
 	}
 
 	/**
-	 * Initialise all gateways from the queue
+	 * Initializes all gateways from the queue
 	 * @since 0.5.0
 	 */
 	async init() {

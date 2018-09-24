@@ -8,7 +8,7 @@ module.exports = class extends Argument {
 			return resolved;
 		} catch (err) {
 			if (err) throw err;
-			throw (message.language || this.client.languages.default).get('RESOLVER_INVALID_CUSTOM', possible.name, possible.type);
+			throw message.language.get('RESOLVER_INVALID_CUSTOM', possible.name, possible.type);
 		}
 	}
 

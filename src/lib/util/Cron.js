@@ -1,4 +1,4 @@
-const { TIME: { DAY, CRON: { allowedNum, partRegex, predefined, tokens, tokensRegex } } } = require('./constants');
+const { TIME: { DAY, CRON: { allowedNum, partRegex, wildcardRegex, predefined, tokens, tokensRegex } } } = require('./constants');
 
 /**
  * Handles Cron strings and generates dates based on the cron string provided.
@@ -52,9 +52,9 @@ class Cron {
 	static _normalize(cron) {
 		if (cron in predefined) return predefined[cron];
 		const now = new Date();
-		cron = cron.split(' ').map((val, i) => {
-			if (val === 'h') return Math.floor(Math.random() * (allowedNum[i][1] + 1));
-			if (val === '?') {
+		cron = cron.split(' ').map((val, i) => val.replace(wildcardRegex, match => {
+			if (match === 'h') return Math.floor(Math.random() * (allowedNum[i][1] + 1));
+			if (match === '?') {
 				switch (i) {
 					case 0: return now.getUTCMinutes();
 					case 1: return now.getUTCHours();
@@ -63,8 +63,8 @@ class Cron {
 					case 4: return now.getUTCDay();
 				}
 			}
-			return val;
-		}).join(' ');
+			return match;
+		})).join(' ');
 		return cron.replace(tokensRegex, match => tokens[match]);
 	}
 

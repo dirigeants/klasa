@@ -31,15 +31,6 @@ class SchemaFolder extends Schema {
 		 * @readonly
 		 */
 		Object.defineProperty(this, 'key', { value: key });
-
-		/**
-		 * The type of this SchemaFolder (always 'Folder')
-		 * @since 0.5.0
-		 * @name SchemaFolder#type
-		 * @type {string}
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'type', { value: 'Folder' });
 	}
 
 }

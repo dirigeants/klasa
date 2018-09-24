@@ -101,7 +101,7 @@ class GatewayStorage {
 		const route = key.split('.');
 		const piece = this.schema.get(route);
 
-		// The piece does not exist (invalid or non-existant path)
+		// The piece does not exist (invalid or non-existent path)
 		if (!piece) {
 			if (!errors) return null;
 			throw `The key ${key} does not exist in the schema.`;
@@ -150,9 +150,22 @@ class GatewayStorage {
 		if (!provider) throw new Error(`This provider (${this.providerName}) does not exist in your system.`);
 		this.ready = true;
 
-		// Check for errors in the schema
-		const debug = this.schema.debug();
-		if (debug.length) throw new Error(`[SCHEMA] There is an error with your schema.\n${debug.join('\n')}`);
+		const errors = [];
+		for (const piece of this.schema.values(true)) {
+			// Assign Client to all Pieces for Serializers && Type Checking
+			piece.client = this.client;
+
+			Object.freeze(piece);
+
+			// Check if the piece is valid
+			try {
+				piece.isValid();
+			} catch (error) {
+				errors.push(error.message);
+			}
+		}
+
+		if (errors.length) throw new Error(`[SCHEMA] There is an error with your schema.\n${errors.join('\n')}`);
 
 		// Init the table
 		const hasTable = await provider.hasTable(this.type);

@@ -12,7 +12,7 @@ module.exports = class extends Argument {
 				if (member) return member;
 			}
 		}
-		throw (message.language || this.client.languages.default).get('RESOLVER_INVALID_MEMBER', possible.name);
+		throw message.language.get('RESOLVER_INVALID_MEMBER', possible.name);
 	}
 
 };

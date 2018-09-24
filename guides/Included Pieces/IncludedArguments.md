@@ -293,4 +293,5 @@ Resolves any {@link external:User}.
 - {@tutorial IncludedLanguages}
 - {@tutorial IncludedMonitors}
 - {@tutorial IncludedProviders}
+- {@tutorial IncludedSerializers}
 - {@tutorial IncludedTasks}

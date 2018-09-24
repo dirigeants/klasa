@@ -64,4 +64,5 @@ Checks if the command can be run in the channel type this is. (based on {@link C
 - {@tutorial IncludedLanguages}
 - {@tutorial IncludedMonitors}
 - {@tutorial IncludedProviders}
+- {@tutorial IncludedSerializers}
 - {@tutorial IncludedTasks}

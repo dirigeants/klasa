@@ -139,7 +139,7 @@ class Schedule {
 	async create(taskName, time, options) {
 		const task = await this._add(taskName, time, options);
 		if (!task) return null;
-		await this.client.settings.update('schedules', task.toJSON(), { action: 'add' });
+		await this.client.settings.update('schedules', task, { action: 'add' });
 		return task;
 	}
 
