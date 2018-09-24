@@ -50,7 +50,7 @@ declare module 'klasa' {
 		public constructor(options?: KlasaClientOptions);
 		public readonly invite: string;
 		public readonly owner: KlasaUser | null;
-		public options: KlasaClientOptions;
+		public options: Required<KlasaClientOptions>;
 		public userBaseDirectory: string;
 		public console: KlasaConsole;
 		public arguments: ArgumentStore;
@@ -680,10 +680,10 @@ declare module 'klasa' {
 
 	export abstract class Extendable extends Piece {
 		public constructor(client: KlasaClient, store: ExtendableStore, file: string, directory: string, options?: ExtendableOptions);
-		public readonly appliesTo: Array<Constructable<any>>;
+		public readonly appliesTo: Array<Constructor<any>>;
 		private staticPropertyDescriptors: PropertyDescriptorMap;
 		private instancePropertyDescriptors: PropertyDescriptorMap;
-		private originals: Map<Constructable<any>, OriginalPropertyDescriptors>;
+		private originals: Map<Constructor<any>, OriginalPropertyDescriptors>;
 		public toJSON(): PieceExtendableJSON;
 	}
 
@@ -731,16 +731,16 @@ declare module 'klasa' {
 
 	export abstract class Provider extends Piece {
 		public constructor(client: KlasaClient, store: ProviderStore, file: string, directory: string, options?: ProviderOptions);
-		public abstract create<T = any>(table: string, entry: string, data: any): Promise<T>;
-		public abstract createTable<T = any>(table: string, rows?: any[]): Promise<T>;
-		public abstract delete<T = any>(table: string, entry: string): Promise<T>;
-		public abstract deleteTable<T = any>(table: string): Promise<T>;
+		public abstract create(table: string, entry: string, data: any): Promise<any>;
+		public abstract createTable(table: string, rows?: any[]): Promise<any>;
+		public abstract delete(table: string, entry: string): Promise<any>;
+		public abstract deleteTable(table: string): Promise<any>;
 		public abstract get<T extends ObjectLiteral>(table: string, entry: string): Promise<T>;
 		public abstract getAll<T extends ObjectLiteral>(table: string): Promise<T[]>;
 		public abstract has(table: string, entry: string): Promise<boolean>;
 		public abstract hasTable(table: string): Promise<boolean>;
-		public abstract update<T = any>(table: string, entry: string, data: SettingsUpdateResultEntry[] | [string, any][] | ObjectLiteral): Promise<T>;
-		public abstract replace<T = any>(table: string, entry: string, data: SettingsUpdateResultEntry[] | [string, any][] | ObjectLiteral): Promise<T>;
+		public abstract update(table: string, entry: string, data: SettingsUpdateResultEntry[] | [string, any][] | ObjectLiteral): Promise<any>;
+		public abstract replace(table: string, entry: string, data: SettingsUpdateResultEntry[] | [string, any][] | ObjectLiteral): Promise<any>;
 		// The following is not required by SettingGateway but might be available in some providers
 		public getKeys(table: string): Promise<string[]>;
 		protected parseUpdateInput<T = ObjectLiteral>(updated: T | SettingsUpdateResult): T;
@@ -780,7 +780,7 @@ declare module 'klasa' {
 
 //#region Stores
 
-	export abstract class Store<K, V extends Piece, VConstructor = Constructable<V>> extends Collection<K, V> {
+	export abstract class Store<K, V extends Piece, VConstructor = Constructor<V>> extends Collection<K, V> {
 		public constructor(client: KlasaClient, name: string, holds: V);
 		public readonly client: KlasaClient;
 		public readonly holds: VConstructor;
@@ -803,7 +803,7 @@ declare module 'klasa' {
 		private static walk<K, V extends Piece, T extends Store<K, V>>(store: T, coreDirectory?: string): Promise<Array<Piece>>;
 	}
 
-	export abstract class AliasStore<K, V extends Piece, VConstructor = Constructable<V>> extends Store<K, V, VConstructor> {
+	export abstract class AliasStore<K, V extends Piece, VConstructor = Constructor<V>> extends Store<K, V, VConstructor> {
 		public aliases: Collection<K, V>;
 	}
 
@@ -1236,7 +1236,7 @@ declare module 'klasa' {
 		public static deepClone<T = any>(source: T): T;
 		public static exec(exec: string, options?: ExecOptions): Promise<{ stdout: string, stderr: string }>;
 		public static getTypeName(input: any): string;
-		public static isClass(input: any): input is Constructable<any>;
+		public static isClass(input: any): input is Constructor<any>;
 		public static isFunction(input: any): input is Function;
 		public static isNumber(input: any): input is number;
 		public static isObject(input: any): boolean;
@@ -1564,7 +1564,7 @@ declare module 'klasa' {
 	} & AliasPieceOptions;
 
 	export type ExtendableOptions = {
-		appliesTo: Array<Constructable<any>>;
+		appliesTo: Array<Constructor<any>>;
 	} & PieceOptions;
 
 	export type InhibitorOptions = {
@@ -1921,7 +1921,9 @@ declare module 'klasa' {
 		[k: string]: T;
 	}
 
-	type Constructable<T> = new (...args: any[]) => T;
+	interface Constructor<C> {
+		new(...args: any[]): C;
+	}
 
 	type PrimitiveType = string | number | boolean;
 
