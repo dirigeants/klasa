@@ -7,7 +7,7 @@ module.exports = class extends Inhibitor {
 		
 		// eslint-disable-next-line eqeqeq
 		const requiredSettings = command.requiredSettings.filter(setting => message[setting[0]].settings.get(setting[1]) == null);
-		if (requiredSettings.length) throw message.language.get('INHIBITOR_REQUIRED_SETTINGS', requiredSettings, guildOrAuthor);
+		if (requiredSettings.length) throw message.language.get('INHIBITOR_REQUIRED_SETTINGS', requiredSettings);
 	}
 
 };
