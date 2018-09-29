@@ -229,6 +229,30 @@ Timestamp.SS = time => String(time.getMilliseconds()).padStart(2, '0');
 
 Timestamp.SSS = time => String(time.getMilliseconds()).padStart(3, '0');
 
+// Locales
+
+/* eslint-disable max-len */
+
+Timestamp.LT = time => `${String(time.getHours() % 12)}:${String(time.getMinutes()).padStart(2, '0')} ${time.getHours() < 12 ? 'AM' : 'PM'}`;
+
+Timestamp.LTS = time => `${String(time.getHours() % 12)}:${String(time.getMinutes()).padStart(2, '0')}:${String(time.getSeconds()).padStart(2, '0')} ${time.getHours() < 12 ? 'AM' : 'PM'}`;
+
+Timestamp.L = time => `${String(time.getMonth() + 1).padStart(2, '0')}/${String(time.getDate()).padStart(2, '0')}/${String(time.getFullYear())}`;
+
+Timestamp.l = time => `${String(time.getMonth() + 1)}/${String(time.getDate()).padStart(2, '0')}/${String(time.getFullYear())}`;
+
+Timestamp.LL = time => `${MONTHS[time.getMonth()]} ${String(time.getDate()).padStart(2, '0')}, ${String(time.getFullYear())}`;
+
+Timestamp.ll = time => `${MONTHS[time.getMonth()].slice(0, 3)} ${String(time.getDate()).padStart(2, '0')}, ${String(time.getFullYear())}`;
+
+Timestamp.LLL = time => `${MONTHS[time.getMonth()]} ${String(time.getDate()).padStart(2, '0')}, ${String(time.getFullYear())} ${String(time.getHours() % 12)}:${String(time.getMinutes()).padStart(2, '0')} ${time.getHours() < 12 ? 'AM' : 'PM'}`;
+
+Timestamp.lll = time => `${MONTHS[time.getMonth()].slice(0, 3)} ${String(time.getDate()).padStart(2, '0')}, ${String(time.getFullYear())} ${String(time.getHours() % 12)}:${String(time.getMinutes()).padStart(2, '0')} ${time.getHours() < 12 ? 'AM' : 'PM'}`;
+
+Timestamp.LLLL = time => `${DAYS[time.getDay()]}, ${MONTHS[time.getMonth()]} ${String(time.getDate()).padStart(2, '0')}, ${String(time.getFullYear())} ${String(time.getHours() % 12)}:${String(time.getMinutes()).padStart(2, '0')} ${time.getHours() < 12 ? 'AM' : 'PM'}`;
+
+Timestamp.llll = time => `${DAYS[time.getDay()].slice(0, 3)}, ${MONTHS[time.getMonth()].slice(0, 3)} ${String(time.getDate()).padStart(2, '0')}, ${String(time.getFullYear())} ${String(time.getHours() % 12)}:${String(time.getMinutes()).padStart(2, '0')} ${time.getHours() < 12 ? 'AM' : 'PM'}`;
+
 Timestamp.Z =
 Timestamp.ZZ = time => {
 	const offset = time.getTimezoneOffset();
