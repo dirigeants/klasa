@@ -233,9 +233,9 @@ Timestamp.SSS = time => String(time.getMilliseconds()).padStart(3, '0');
 
 /* eslint-disable max-len */
 
-Timestamp.LT = time => `${String(time.getHours() % 12)}:${String(time.getMinutes()).padStart(2, '0')} ${time.getHours() < 12 ? 'AM' : 'PM'}`;
+Timestamp.T = time => `${String(time.getHours() % 12)}:${String(time.getMinutes()).padStart(2, '0')} ${time.getHours() < 12 ? 'AM' : 'PM'}`;
 
-Timestamp.LTS = time => `${String(time.getHours() % 12)}:${String(time.getMinutes()).padStart(2, '0')}:${String(time.getSeconds()).padStart(2, '0')} ${time.getHours() < 12 ? 'AM' : 'PM'}`;
+Timestamp.t = time => `${String(time.getHours() % 12)}:${String(time.getMinutes()).padStart(2, '0')}:${String(time.getSeconds()).padStart(2, '0')} ${time.getHours() < 12 ? 'AM' : 'PM'}`;
 
 Timestamp.L = time => `${String(time.getMonth() + 1).padStart(2, '0')}/${String(time.getDate()).padStart(2, '0')}/${String(time.getFullYear())}`;
 
