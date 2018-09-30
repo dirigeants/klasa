@@ -85,7 +85,7 @@ declare module 'klasa' {
 		public static defaultClientSchema: Schema;
 		public static defaultPermissionLevels: PermissionLevels;
 		public static plugin: symbol;
-		public static use(mod: any): KlasaClient;
+		public static use(mod: any): typeof KlasaClient;
 
 		// Discord.js events
 		public on(event: 'channelCreate' | 'channelDelete', listener: (channel: Channel) => void): this;
