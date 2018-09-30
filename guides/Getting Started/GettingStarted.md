@@ -48,7 +48,14 @@ new Client({
 | **quotedStringSupport**    | `false`                   | boolean            | Whether the bot should default to using quoted string support³                      |
 | **readyMessage**           | see below⁴                | string/function    | readyMessage to be passed through to Klasa's ready event.                           |
 | **regexPrefix**            | `null`                    | regex              | The regular expression prefix if one is provided                                    |
-| **typing**                 | `false`                   | boolean            | Whether the bot should type while processing commands.                              |
+| **typing**                 | `false`                   | boolean            | Whether the bot should type while processing commands. 
+
+| **defaultClientSchema**                 | `KlasaClient.defaultClientSchema`                   | Schema            | The default client schema to use.
+
+| **defaultUserSchema**                 | `KlasaClient.defaultUserSchema`                   | Schema            | The default user schema to use.
+
+| **defaultGuildSchema**                 | `KlasaClient.defaultGuildSchema`                   | Schema            | The default guild schema to use.
+			   |
 
 >1. ID gotten from the Discord API if not provided: `client.application.owner.id`
 >1. You can pass an array to accept multiple prefixes.
