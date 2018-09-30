@@ -38,25 +38,25 @@ const { Client } = require('klasa');
 
 class SomeExtendedClient extends Client {
 
-    constructor(options) {
-        super(options);
-        // Define some properties here
-        this.isSomeProperty = true;
-    }
+	constructor(options) {
+		super(options);
+		// Define some properties here
+		this.isSomeProperty = true;
+	}
 
 	// You can add methods if you wish
-	    thisIsSomeMethod() {
+	thisIsSomeMethod() {
 		return true;
 	}
 
 }
 
 new SomeExtendedClient({
-    fetchAllMembers: false,
-    prefix: '+',
-    commandEditing: true,
-    typing: true,
-    readyMessage: (client) => `Successfully initialized. Ready to serve ${client.guilds.size} guilds.`
+	fetchAllMembers: false,
+	prefix: '+',
+	commandEditing: true,
+	typing: true,
+	readyMessage: (client) => `Successfully initialized. Ready to serve ${client.guilds.size} guilds.`
 }).login('your-bot-token');
 ```
 
