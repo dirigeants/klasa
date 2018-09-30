@@ -38,7 +38,7 @@ new Client({
 | **commandLogging**         | `false`                   | boolean            | Whether the bot should log command usage                                            |
 | **commandMessageLifetime** | `1800`                    | number             | The threshold for when command messages should be swept in seconds since last edit  |
 | **ignoreBots**             | `true`                    | boolean            | Whether or not this bot should ignore other bots                                    |
-| **ignoreSelf**             | `client.user.bot`         | boolean            | Whether or not this bot should ignore itself (true for bots, false for selfbots)    |
+| **ignoreSelf**             | `client.user.bot`         | boolean            | Whether or not this bot should ignore itself (true for bots, false for selfbots)  |
 | **language**               | `en-US`                   | string             | The default language Klasa should opt-in for the commands                           |
 | **noPrefixDM**             | `false`                   | boolean            | Whether the bot should allow prefixless messages in DMs                             |
 | **ownerID**                | see below¹                | string             | The Discord ID for the user the bot should respect as the owner                     |
@@ -49,13 +49,13 @@ new Client({
 | **readyMessage**           | see below⁴                | string/function    | readyMessage to be passed through to Klasa's ready event.                           |
 | **regexPrefix**            | `null`                    | regex              | The regular expression prefix if one is provided                                    |
 | **typing**                 | `false`                   | boolean            | Whether the bot should type while processing commands. 
-                           |
-| **defaultClientSchema**    | `KlasaClient.defaultClientSchema`                   | Schema            | The default client schema to use.
-                           |
-| **defaultUserSchema**      | `KlasaClient.defaultUserSchema`                   | Schema            | The default user schema to use.
-                           |
-| **defaultGuildSchema**     |`KlasaClient.defaultGuildSchema`                   | Schema            | The default guild schema to use.
-                           |
+           |
+| **defaultClientSchema**    | `defaultClientSchema`     | Schema             | The default client schema to use.
+           |
+| **defaultUserSchema**      | `defaultUserSchema`       | Schema             | The default user schema to use.
+           |
+| **defaultGuildSchema**     | `defaultGuildSchema`      | Schema             | The default guild schema to use.
+           |
 
 >1. ID gotten from the Discord API if not provided: `client.application.owner.id`
 >1. You can pass an array to accept multiple prefixes.
