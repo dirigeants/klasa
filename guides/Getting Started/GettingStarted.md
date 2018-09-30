@@ -31,6 +31,7 @@ new Client({
 ```
 
 ### Extending the client
+
 Here is an example of extending the normal client.
 
 ```javascript
