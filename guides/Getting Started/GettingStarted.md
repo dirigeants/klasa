@@ -58,6 +58,7 @@ new SomeExtendedClient({
     typing: true,
     readyMessage: (client) => `Successfully initialized. Ready to serve ${client.guilds.size} guilds.`
 }).login('your-bot-token');
+```
 
 ### Client Options: {@link KlasaClientOptions}
 
