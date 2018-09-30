@@ -40,14 +40,14 @@ class SomeExtendedClient extends Client {
 
     constructor(options) {
         super(options);
-	// Define some properties here
-	this.isSomeProperty = true;
+        // Define some properties here
+        this.isSomeProperty = true;
     }
-    
-    // You can add methods if you wish
-    thisIsSomeMethod() {
-        return true;
-    }
+
+	// You can add methods if you wish
+	    thisIsSomeMethod() {
+		return true;
+	}
 
 }
 
