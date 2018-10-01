@@ -1824,9 +1824,7 @@ declare module 'klasa' {
 		| 'magenta'
 		| 'red'
 		| 'white'
-		| 'transparent'
-		| number[]
-		| string[];
+		| 'transparent';
 
 	export type KlasaConsoleStyleTypes = 'normal'
 		| 'bold'
