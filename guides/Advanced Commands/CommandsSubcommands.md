@@ -2,7 +2,7 @@
 
 It is called **subcommand** to the special behaviour when a command takes multiple **Possible**s of literals as the first parameter, and the command has {@link CommandOptions.subcommands} set to true. An example is the [built-in conf](https://github.com/dirigeants/klasa/blob/master/src/commands/Admin/conf.js) command, which unlike any other command, it does not have a `Command#run` method.
 
-How do subcommands work? The concept may be quite hard to *get* but it's very powerful. We will take the conf command as an example:
+How do subcommands work? The concept may be quite hard to *understand* however it's very powerful. We will take the conf command as an example:
 
 ```javascript
 const { Command } = require('klasa');
@@ -25,7 +25,7 @@ module.exports = class extends Command {
 };
 ```
 
-As you may notice it, the command does not have a `Command#run` method, but it has one method for each literal that is taken as first parameter, all of them lowercased. That is, to simplify the following pattern used in many commands:
+As you may notice it, the command does not have a `Command#run` method, but it has one method for each literal that is taken as the first parameter, all of them lowercased. That is, to simplify the following pattern used in many commands:
 
 ```javascript
 module.exports = class extends Command {
