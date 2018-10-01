@@ -81,7 +81,7 @@ module.exports = class extends Monitor {
 				this.client.emit('commandError', message, message.command, message.params, error);
 			}
 		} catch (response) {
-			this.client.emit('commandInhibited', message, message.command, response);
+			this.client.emit('commandInhibited', message, response);
 		}
 		if (this.client.options.typing) message.channel.stopTyping();
 	}
