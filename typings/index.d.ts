@@ -1824,6 +1824,7 @@ declare module 'klasa' {
 		| 'magenta'
 		| 'red'
 		| 'white'
+		| 'transparent'
 		| number[]
 		| string[];
 
