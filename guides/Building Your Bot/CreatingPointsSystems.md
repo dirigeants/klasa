@@ -43,7 +43,7 @@ module.exports = class extends Monitor {
 
 Some social bots have level up messages. How do we set it up? There are two ways to achieve this:
 
-1. We calculate the current level and the next level on the fly. This system is, however, harder to implement and it requires more arithmatic calculations, but it's also RAM friendly for massive bots. We won't cover this in the guide.
+1. We calculate the current level and the next level on the fly. This system is, however, harder to implement and it requires more arithmetic calculations, but it's also RAM friendly for massive bots. We won't cover this in the guide.
 1. We add a level field. This makes the configuration update slower by nature as it will need to update two values. First, we will create the key:
 
 ```javascript
