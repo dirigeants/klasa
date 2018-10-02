@@ -233,25 +233,25 @@ Timestamp.SSS = time => String(time.getMilliseconds()).padStart(3, '0');
 
 /* eslint-disable max-len */
 
-Timestamp.T = time => `${String(time.getHours() % 12)}:${String(time.getMinutes()).padStart(2, '0')} ${time.getHours() < 12 ? 'AM' : 'PM'}`;
+Timestamp.T = `${Timestamp.h}:${Timestamp.mm} ${Timestamp.A}`;
 
-Timestamp.t = time => `${String(time.getHours() % 12)}:${String(time.getMinutes()).padStart(2, '0')}:${String(time.getSeconds()).padStart(2, '0')} ${time.getHours() < 12 ? 'AM' : 'PM'}`;
+Timestamp.t = `${Timestamp.h}:${Timestamp.mm}:${Timestamp.ss} ${Timestamp.A}`;
 
-Timestamp.L = time => `${String(time.getMonth() + 1).padStart(2, '0')}/${String(time.getDate()).padStart(2, '0')}/${String(time.getFullYear())}`;
+Timestamp.L = `${Timestamp.MM}/${Timestamp.DD}/${Timestamp.YYYY}`;
 
-Timestamp.l = time => `${String(time.getMonth() + 1)}/${String(time.getDate()).padStart(2, '0')}/${String(time.getFullYear())}`;
+Timestamp.l = `${Timestamp.M}/${Timestamp.DD}/${Timestamp.YYYY}`;
 
-Timestamp.LL = time => `${MONTHS[time.getMonth()]} ${String(time.getDate()).padStart(2, '0')}, ${String(time.getFullYear())}`;
+Timestamp.LL = `${Timestamp.MMMM} ${Timestamp.DD}, ${Timestamp.YYYY}`;
 
-Timestamp.ll = time => `${MONTHS[time.getMonth()].slice(0, 3)} ${String(time.getDate()).padStart(2, '0')}, ${String(time.getFullYear())}`;
+Timestamp.ll = `${Timestamp.MMMM.slice(0, 3)} ${Timestamp.DD}, ${Timestamp.YYYY}`;
 
-Timestamp.LLL = time => `${MONTHS[time.getMonth()]} ${String(time.getDate()).padStart(2, '0')}, ${String(time.getFullYear())} ${String(time.getHours() % 12)}:${String(time.getMinutes()).padStart(2, '0')} ${time.getHours() < 12 ? 'AM' : 'PM'}`;
+Timestamp.LLL = `${Timestamp.LL} ${Timestamp.T}`;
 
-Timestamp.lll = time => `${MONTHS[time.getMonth()].slice(0, 3)} ${String(time.getDate()).padStart(2, '0')}, ${String(time.getFullYear())} ${String(time.getHours() % 12)}:${String(time.getMinutes()).padStart(2, '0')} ${time.getHours() < 12 ? 'AM' : 'PM'}`;
+Timestamp.lll = `${Timestamp.ll} ${Timestamp.T}`;
 
-Timestamp.LLLL = time => `${DAYS[time.getDay()]}, ${MONTHS[time.getMonth()]} ${String(time.getDate()).padStart(2, '0')}, ${String(time.getFullYear())} ${String(time.getHours() % 12)}:${String(time.getMinutes()).padStart(2, '0')} ${time.getHours() < 12 ? 'AM' : 'PM'}`;
+Timestamp.LLLL = `${Timestamp.dddd}, ${Timestamp.LLL}`;
 
-Timestamp.llll = time => `${DAYS[time.getDay()].slice(0, 3)}, ${MONTHS[time.getMonth()].slice(0, 3)} ${String(time.getDate()).padStart(2, '0')}, ${String(time.getFullYear())} ${String(time.getHours() % 12)}:${String(time.getMinutes()).padStart(2, '0')} ${time.getHours() < 12 ? 'AM' : 'PM'}`;
+Timestamp.llll = `${Timestamp.ddd} ${Timestamp.lll}`;
 
 Timestamp.Z =
 Timestamp.ZZ = time => {
