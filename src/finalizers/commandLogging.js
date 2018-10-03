@@ -13,10 +13,10 @@ module.exports = class extends Finalizer {
 		};
 	}
 
-	run(message, response, timer) {
+	run(message, command, response, timer) {
 		const { type } = message.channel;
 		this.client.emit('log', [
-			`${message.command.name}(${message.args.join(', ')})`,
+			`${command.name}(${message.args ? '' : message.args.join(', ')})`,
 			this.reprompted[Number(message.reprompted)].format(`[${timer.stop()}]`),
 			this.user.format(`${message.author.username}[${message.author.id}]`),
 			this.channel[type].format(this[type](message))
