@@ -231,27 +231,27 @@ Timestamp.SSS = time => String(time.getMilliseconds()).padStart(3, '0');
 
 // Locales
 
-/* eslint-disable max-len */
+/* eslint max-len:0 new-cap:0 */
 
-Timestamp.T = `${Timestamp.h}:${Timestamp.mm} ${Timestamp.A}`;
+Timestamp.T = (time) => `${Timestamp.h(time)}:${Timestamp.mm(time)} ${Timestamp.A(time)}`;
 
-Timestamp.t = `${Timestamp.h}:${Timestamp.mm}:${Timestamp.ss} ${Timestamp.A}`;
+Timestamp.t = (time) => `${Timestamp.h(time)}:${Timestamp.mm(time)}:${Timestamp.ss(time)} ${Timestamp.A(time)}`;
 
-Timestamp.L = `${Timestamp.MM}/${Timestamp.DD}/${Timestamp.YYYY}`;
+Timestamp.L = (time) => `${Timestamp.MM(time)}/${Timestamp.DD(time)}/${Timestamp.YYYY(time)}`;
 
-Timestamp.l = `${Timestamp.M}/${Timestamp.DD}/${Timestamp.YYYY}`;
+Timestamp.l = (time) => `${Timestamp.M(time)}/${Timestamp.DD(time)}/${Timestamp.YYYY(time)}`;
 
-Timestamp.LL = `${Timestamp.MMMM} ${Timestamp.DD}, ${Timestamp.YYYY}`;
+Timestamp.LL = (time) => `${Timestamp.MMMM(time)} ${Timestamp.DD(time)}, ${Timestamp.YYYY(time)}`;
 
-Timestamp.ll = `${Timestamp.MMMM.slice(0, 3)} ${Timestamp.DD}, ${Timestamp.YYYY}`;
+Timestamp.ll = (time) => `${Timestamp.MMMM(time).slice(0, 3)} ${Timestamp.DD(time)}, ${Timestamp.YYYY(time)}`;
 
-Timestamp.LLL = `${Timestamp.LL} ${Timestamp.T}`;
+Timestamp.LLL = (time) => `${Timestamp.LL(time)} ${Timestamp.T(time)}`;
 
-Timestamp.lll = `${Timestamp.ll} ${Timestamp.T}`;
+Timestamp.lll = (time) => `${Timestamp.ll(time)} ${Timestamp.T(time)}`;
 
-Timestamp.LLLL = `${Timestamp.dddd}, ${Timestamp.LLL}`;
+Timestamp.LLLL = (time) => `${Timestamp.dddd(time)}, ${Timestamp.LLL(time)}`;
 
-Timestamp.llll = `${Timestamp.ddd} ${Timestamp.lll}`;
+Timestamp.llll = (time) => `${Timestamp.ddd(time)} ${Timestamp.lll(time)}`;
 
 Timestamp.Z =
 Timestamp.ZZ = time => {
