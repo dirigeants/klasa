@@ -39,14 +39,22 @@ class RateLimitManager extends Collection {
 	}
 
 	/**
+	 * Gets a {@link RateLimit} from this manager or creates it if it does not exist
+	 * @since 0.5.0
+	 * @param {string} id The id for the RateLimit
+	 * @returns {RateLimit}
+	 */
+	acquire(id) {
+		return this.get(id) || this.create(id);
+	}
+
+	/**
 	 * Creates a {@link RateLimit} for this manager
 	 * @since 0.5.0
 	 * @param {string} id The id the RateLimit belongs to
 	 * @returns {RateLimit}
 	 */
 	create(id) {
-		const previous = this.get(id);
-		if (previous) return previous;
 		const rateLimit = new RateLimit(this.bucket, this.cooldown);
 		this.set(id, rateLimit);
 		return rateLimit;
@@ -57,7 +65,7 @@ class RateLimitManager extends Collection {
 	 * @since 0.5.0
 	 * @param {string} id The id the RateLimit belongs to
 	 * @param {RateLimit} rateLimit The this for the sweep
-	 * @returns {number}
+	 * @returns {this}
 	 * @private
 	 */
 	set(id, rateLimit) {

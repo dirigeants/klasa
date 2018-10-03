@@ -1062,6 +1062,7 @@ declare module 'klasa' {
 		public bucket: number;
 		public cooldown: number;
 		private sweepInterval: NodeJS.Timer | null;
+		public acquire(id: string): RateLimit;
 		public create(id: Snowflake): RateLimit;
 	}
 
