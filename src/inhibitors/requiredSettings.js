@@ -7,7 +7,7 @@ module.exports = class extends Inhibitor {
 		if (!gateways.length) return;
 
 		const missingSettings = [];
-		
+
 		for (const [gateway, settings] of Object.entries(command.requiredSettings)) {
 			for (const setting of settings) {
 				// eslint-disable-next-line eqeqeq
