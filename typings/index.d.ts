@@ -1059,8 +1059,8 @@ declare module 'klasa' {
 
 	export class RateLimitManager extends Collection<Snowflake, RateLimit> {
 		public constructor(bucket: number, cooldown: number);
-		public bucket: number;
-		public cooldown: number;
+		public readonly bucket: number;
+		public readonly cooldown: number;
 		private sweepInterval: NodeJS.Timer | null;
 		public acquire(id: string): RateLimit;
 		public create(id: Snowflake): RateLimit;

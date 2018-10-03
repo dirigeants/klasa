@@ -18,24 +18,27 @@ class RateLimitManager extends Collection {
 		/**
 		 * The sweep interval for this RateLimitManager
 		 * @since 0.5.0
+		 * @name RateLimitManager#sweepInterval
 		 * @type {?NodeJS.Timer}
 		 * @private
 		 */
-		this.sweepInterval = null;
+		Object.defineProperty(this, 'sweepInterval', { value: null, writable: true });
 
 		/**
 		 * The amount of times a RateLimit from this manager can drip before it's limited
 		 * @since 0.5.0
+		 * @name RateLimitManager#bucket
 		 * @type {number}
 		 */
-		this.bucket = bucket;
+		Object.defineProperty(this, 'bucket', { value: bucket });
 
 		/**
 		 * The amount of time in ms for a RateLimit from this manager to reset
 		 * @since 0.5.0
+		 * @name RateLimitManager#cooldown
 		 * @type {number}
 		 */
-		this.cooldown = cooldown;
+		Object.defineProperty(this, 'cooldown', { value: cooldown });
 	}
 
 	/**
