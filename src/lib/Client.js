@@ -596,15 +596,6 @@ KlasaClient.defaultClientSchema = new Schema()
  */
 
 /**
- * Emitted when a command's {@link RateLimit} has been emptied.
- * @event KlasaClient#commandRateLimit
- * @since 0.5.0
- * @param {KlasaMessage} message The message that triggered the command
- * @param {Command} command The command run
- * @param {any[]} params The resolved parameters of the command
- */
-
-/**
  * Emitted when an event has encountered an error.
  * @event KlasaClient#eventError
  * @since 0.5.0

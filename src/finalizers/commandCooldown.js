@@ -8,7 +8,7 @@ module.exports = class extends Finalizer {
 		try {
 			message.command.cooldowns.acquire(message.levelID).drip();
 		} catch (err) {
-			this.client.emit('commandRateLimit', message, message.command, message.params);
+			this.client.emit('error', `${message.author.username}[${message.author.id}] has exceeded the RateLimit for ${message.command}`);
 		}
 	}
 
