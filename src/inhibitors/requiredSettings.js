@@ -10,6 +10,7 @@ module.exports = class extends Inhibitor {
 
 		for (const gateway of gateways) {
 			for (const setting of command.requireSettings[gateway]) {
+				// eslint-disable-next-line eqeqeq
 				if (message[gateway].settings.get(setting) == null) missingSettings.push([gateway, setting]);
 			}
 		}
