@@ -29,6 +29,7 @@ class RateLimitManager extends Collection {
 		 * @since 0.5.0
 		 * @name RateLimitManager#bucket
 		 * @type {number}
+		 * @readonly
 		 */
 		Object.defineProperty(this, 'bucket', { value: bucket });
 
@@ -37,6 +38,7 @@ class RateLimitManager extends Collection {
 		 * @since 0.5.0
 		 * @name RateLimitManager#cooldown
 		 * @type {number}
+		 * @readonly
 		 */
 		Object.defineProperty(this, 'cooldown', { value: cooldown });
 	}
