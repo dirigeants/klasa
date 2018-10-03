@@ -57,7 +57,7 @@ module.exports = class extends Language {
 			INHIBITOR_MISSING_BOT_PERMS: (missing) => `Insufficient permissions, missing: **${missing}**`,
 			INHIBITOR_NSFW: 'You may not use NSFW commands in this channel.',
 			INHIBITOR_PERMISSIONS: 'You do not have permission to use this command.',
-			// eslint-disable-line max-len
+			// eslint-disable-next-line max-len
 			INHIBITOR_REQUIRED_SETTINGS: (settings) => settings.length === 1 ? `The ${settings[0][0]} is missing the ${settings[0][1]} setting.` : `The command was unable to be run because the following settings are missing:\n\n${settings.map(setting => `${setting[0]}: ${settings[1]}`)}`,
 			INHIBITOR_RUNIN: (types) => `This command is only available in ${types} channels.`,
 			INHIBITOR_RUNIN_NONE: (name) => `The ${name} command is not configured to run in any channel.`,
