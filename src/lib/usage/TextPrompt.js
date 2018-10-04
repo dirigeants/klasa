@@ -158,14 +158,17 @@ class TextPrompt {
 	async reprompt(prompt) {
 		this._prompted++;
 		if (this.typing) this.message.channel.stopTyping();
+		const possibleAbortOptions = this.message.language.get('MONITOR_COMMAND_HANDLER_POSSIBILITIES');
 		const message = await this.message.prompt(
-			this.message.language.get('MONITOR_COMMAND_HANDLER_REPROMPT', `<@!${this.message.author.id}>`, prompt, this.time / 1000),
+			this.message.language.get('MONITOR_COMMAND_HANDLER_REPROMPT', `<@!${this.message.author.id}>`, prompt, this.time / 1000, possibleAbortOptions),
 			this.time
 		);
 
 		this.responses.set(message.id, message);
 
-		if (message.content.toLowerCase() === 'abort') throw this.message.language.get('MONITOR_COMMAND_HANDLER_ABORTED');
+		if (possibleAbortOptions.includes(message.content.toLowerCase())) {
+			throw this.message.language.get('MONITOR_COMMAND_HANDLER_ABORTED');
+		}
 
 		if (this.typing) this.message.channel.startTyping();
 		this.args[this.args.lastIndexOf(null)] = message.content;
