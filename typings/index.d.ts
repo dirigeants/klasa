@@ -271,6 +271,7 @@ declare module 'klasa' {
 		public readonly attachable: boolean;
 		public readonly embedable: boolean;
 		public readonly postable: boolean;
+		public readonly readable: boolean;
 		public readonly guild: KlasaGuild;
 		public send(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 		public send(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
@@ -301,6 +302,7 @@ declare module 'klasa' {
 		public readonly attachable: boolean;
 		public readonly embedable: boolean;
 		public readonly postable: boolean;
+		public readonly readable: boolean;
 		public send(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 		public send(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 		public sendLocale(key: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
@@ -318,6 +320,7 @@ declare module 'klasa' {
 		public readonly attachable: boolean;
 		public readonly embedable: boolean;
 		public readonly postable: boolean;
+		public readonly readable: boolean;
 		public send(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 		public send(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 		public sendLocale(key: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
