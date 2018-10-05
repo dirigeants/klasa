@@ -1,6 +1,6 @@
 # Updating your configuration
 
-Once we have our schema done with all the keys, folders and types needed, we may want to update our configuration via SettingsGateway, all of this is done via {@link Settings#update}. However, how can I update it? Use any of the following code snippets:
+Once we have our schema completed with all the keys, folders and types needed, we may want to update our configuration via SettingsGateway, all of this is done via {@link Settings#update}. However, how can I update it? Use any of the following code snippets:
 
 ```javascript
 // Updating the value of a key
