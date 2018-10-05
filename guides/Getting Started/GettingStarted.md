@@ -30,37 +30,6 @@ new Client({
 }).login('your-bot-token');
 ```
 
-### Extending the client
-
-Here is an example of extending the normal client.
-
-```javascript
-const { Client } = require('klasa');
-
-class SomeExtendedClient extends Client {
-
-	constructor(options) {
-		super(options);
-		// Define some properties here
-		this.isSomeProperty = true;
-	}
-
-	// You can add methods if you wish
-	thisIsSomeMethod() {
-		return true;
-	}
-
-}
-
-new SomeExtendedClient({
-	fetchAllMembers: false,
-	prefix: '+',
-	commandEditing: true,
-	typing: true,
-	readyMessage: (client) => `Successfully initialized. Ready to serve ${client.guilds.size} guilds.`
-}).login('your-bot-token');
-```
-
 ### Client Options: {@link KlasaClientOptions}
 
 | Name                       | Default                   | Type               | Description                                                                         |
