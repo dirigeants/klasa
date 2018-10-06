@@ -30,6 +30,13 @@ class Inhibitor extends Piece {
 		 * @type {boolean}
 		 */
 		this.spamProtection = options.spamProtection;
+
+		/**
+		 * The permission level to ignore this inhibitor
+		 * @since 0.5.0
+		 * @type {boolean}
+		 */
+		this.ignoreAtLeastPermissionLevel = options.ignoreAtLeastPermissionLevel;
 	}
 
 	/**
@@ -43,6 +50,19 @@ class Inhibitor extends Piece {
 	async run() {
 		// Defined in extension Classes
 		throw new Error(`The run method has not been implemented by ${this.type}:${this.name}.`);
+	}
+
+	/**
+	 * If the inhibitor should run based on the filter options
+	 * @since 0.5.0
+	 * @param {KlasaMessage} message The message to check
+	 * @param {boolean} [selective=false] Whether or not we should ignore certain inhibitors to prevent spam.
+	 * @returns {boolean}
+	 */
+	shouldRun(message, selective) {
+		return this.enabled &&
+		(!selective || !this.spamProtection) &&
+		!(this.ignoreAtLeastPermissionLevel && message.hasAtLeastPermissionLevel(this.ignoreAtLeastPermissionLevel));
 	}
 
 	/**
