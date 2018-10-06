@@ -82,7 +82,8 @@ exports.DEFAULTS = {
 			finalizers: { enabled: true },
 			inhibitors: {
 				enabled: true,
-				spamProtection: false
+				spamProtection: false,
+				ignoreAtLeastPermissionLevel: 0
 			},
 			languages: { enabled: true },
 			monitors: {
