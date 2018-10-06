@@ -825,7 +825,7 @@ declare module 'klasa' {
 	}
 
 	export class InhibitorStore extends Store<string, Inhibitor, typeof Inhibitor> {
-		public run(message: KlasaMessage, command: Command, selective: boolean): Promise<void>;
+		public run(message: KlasaMessage, command: Command, selective?: boolean): Promise<void>;
 	}
 
 	export class LanguageStore extends Store<string, Language, typeof Language> {
