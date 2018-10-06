@@ -37,7 +37,7 @@ module.exports = class extends Command {
 			return message.sendLocale('COMMAND_RELOAD', [itm.type, itm.name, timer.stop()]);
 		} catch (err) {
 			piece.store.set(piece);
-			return message.sendMessage(`❌ ${err}`);
+			return message.sendLocale('COMMAND_RELOAD_FAILED', [piece.type, piece.name]);
 		}
 	}
 

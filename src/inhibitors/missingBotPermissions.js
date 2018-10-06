@@ -17,8 +17,9 @@ module.exports = class extends Inhibitor {
 
 	async run(message, command) {
 		const missing = message.channel.type === 'text' ?
-			message.channel.permissionsFor(this.client.user).missing(command.requiredPermissions) :
-			this.impliedPermissions.missing(command.requiredPermissions);
+			message.channel.permissionsFor(this.client.user).missing(command.requiredPermissions, false) :
+			this.impliedPermissions.missing(command.requiredPermissions, false);
+
 		if (missing.length) throw message.language.get('INHIBITOR_MISSING_BOT_PERMS', missing.map(key => this.friendlyPerms[key]).join(', '));
 	}
 

@@ -61,6 +61,10 @@
         "path": "CreatingProviders.md"
     },
     {
+        "name": "Creating Serializers",
+        "path": "CreatingSerializers.md"
+    },
+    {
         "name": "Creating SQL Providers",
         "path": "CreatingSQLProviders.md"
     },
@@ -162,6 +166,10 @@
     {
         "name": "Included Providers",
         "path": "IncludedProviders.md"
+    },
+    {
+        "name": "Included Serializers",
+        "path": "IncludedSerializers.md"
     },
     {
         "name": "Included Tasks",

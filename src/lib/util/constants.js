@@ -21,6 +21,7 @@ exports.DEFAULTS = {
 			warn: true,
 			wtf: true
 		},
+		createPiecesFolders: true,
 		disabledCorePieces: [],
 		language: 'en-US',
 		noPrefixDM: false,
@@ -52,6 +53,7 @@ exports.DEFAULTS = {
 				autoAliases: true,
 				bucket: 1,
 				cooldown: 0,
+				cooldownLevel: 'author',
 				description: '',
 				extendedHelp: language => language.get('COMMAND_HELP_NO_EXTENDED'),
 				enabled: true,
@@ -94,9 +96,15 @@ exports.DEFAULTS = {
 				ignoreBlacklistedGuilds: true
 			},
 			providers: { enabled: true },
+			serializers: {
+				enabled: true,
+				aliases: []
+			},
 			tasks: { enabled: true }
 		},
-		schedule: { interval: 60000 }
+		schedule: { interval: 60000 },
+		slowmode: 0,
+		slowmodeAggressive: false
 	},
 
 	CONSOLE: {
@@ -184,6 +192,7 @@ exports.TIME = {
 
 	CRON: {
 		partRegex: /^(?:(\*)|(\d+)(?:-(\d+))?)(?:\/(\d+))?$/,
+		wildcardRegex: /\bh\b|\B\?\B/g,
 		allowedNum: [[0, 59], [0, 23], [1, 31], [1, 12], [0, 6]],
 		predefined: {
 			'@annually': '0 0 1 1 *',
@@ -219,3 +228,11 @@ exports.TIME = {
 };
 
 exports.TIME.CRON.tokensRegex = new RegExp(Object.keys(exports.TIME.CRON.tokens).join('|'), 'g');
+
+exports.MENTION_REGEX = {
+	userOrMember: /^(?:<@!?)?(\d{17,19})>?$/,
+	channel: /^(?:<#)?(\d{17,19})>?$/,
+	emoji: /^(?:<a?:\w{2,32}:)?(\d{17,19})>?$/,
+	role: /^(?:<@&)?(\d{17,19})>?$/,
+	snowflake: /^(\d{17,19})$/
+};

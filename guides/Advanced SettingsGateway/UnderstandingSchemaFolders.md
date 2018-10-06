@@ -80,13 +80,16 @@ KlasaClient.defaultGuildSchema.remove('disabledChannels');
 
 ## Ensuring the existence of a key.
 
-In [the klasa pieces repository](https://github.com/dirigeants/klasa-pieces/) specially, some pieces require a key in the schema to work, however, the creator of the pieces does not know if the user who downloads the piece has it, so this function becomes useful in this case.
+Ensuring that a key exists is as simple as checking if the Schema.has() the key name.
 
 ```javascript
-if (!KlasaClient.defaultGuildSchema.has('modlogs')) {
-	KlasaClient.defaultGuildSchema.add('modlogs', 'TextChannel');
-}
+const { Client } = require('klasa');
+
+// Returns true or false, depending on if the Schema has the prefix key.
+Client.defaultGuildSchema.has('prefix');
 ```
+
+> **NOTE**: In the past it was possible to add keys using the init function from the Piece. This is no longer the case and the only way to add new keys to schema is to do it in your entry file(index.js, app.js, etc.). You can also use plugins to insert more keys into your schema.
 
 ## Key conflict
 

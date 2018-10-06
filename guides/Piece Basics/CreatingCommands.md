@@ -81,5 +81,6 @@ module.exports = class extends Command {
 - {@tutorial CreatingLanguages}
 - {@tutorial CreatingMonitors}
 - {@tutorial CreatingProviders}
+- {@tutorial CreatingSerializers}
 - {@tutorial CreatingSQLProviders}
 - {@tutorial CreatingTasks}

@@ -5,6 +5,7 @@ const { isClass } = require('../../util/util');
 
 /**
  * The common base for all stores
+ * @see ArgumentStore
  * @see CommandStore
  * @see EventStore
  * @see ExtendableStore
@@ -13,6 +14,7 @@ const { isClass } = require('../../util/util');
  * @see LanguageStore
  * @see MonitorStore
  * @see ProviderStore
+ * @see SerializerStore
  * @see TaskStore
  * @extends external:Collection
  */
@@ -60,7 +62,7 @@ class Store extends Collection {
 	}
 
 	/**
-	 * The directory of local commands relative to where you run Klasa from.
+	 * The directory of local pieces relative to where you run Klasa from.
 	 * @since 0.0.1
 	 * @type {string}
 	 * @readonly
@@ -102,7 +104,7 @@ class Store extends Collection {
 		let piece = null;
 		try {
 			const Piece = (req => req.default || req)(require(loc));
-			if (!isClass(Piece)) throw new TypeError(`Failed to load file '${loc}'. The exported structure is not a class.`);
+			if (!isClass(Piece)) throw new TypeError('The exported structure is not a class.');
 			piece = this.set(new Piece(this.client, this, file, directory));
 		} catch (error) {
 			this.client.emit('wtf', `Failed to load file '${loc}'. Error:\n${error.stack || error}`);
@@ -184,7 +186,7 @@ class Store extends Collection {
 	 */
 	static async walk(store, directory = store.userDirectory) {
 		const files = await fs.scan(directory, { filter: (stats, path) => stats.isFile() && extname(path) === '.js' })
-			.catch(() => { fs.ensureDir(directory).catch(err => store.client.emit('error', err)); });
+			.catch(() => { if (store.client.options.createPiecesFolders) fs.ensureDir(directory).catch(err => store.client.emit('error', err)); });
 		if (!files) return true;
 
 		return Promise.all([...files.keys()].map(file => store.load(directory, relative(directory, file).split(sep))));

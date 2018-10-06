@@ -134,13 +134,8 @@ class Settings {
 
 		// If it's not currently synchronizing, create a new sync status for the sync queue
 		const sync = this.gateway.provider.get(this.gateway.type, this.id).then(data => {
-			if (data) {
-				if (!this._existsInDB) this._existsInDB = true;
-				this._patch(data);
-			} else {
-				this._existsInDB = false;
-			}
-
+			this._existsInDB = Boolean(data);
+			if (data) this._patch(data);
 			this.gateway.syncQueue.delete(this.id);
 			return this;
 		});
@@ -159,7 +154,6 @@ class Settings {
 			await this.gateway.provider.delete(this.gateway.type, this.id);
 			this.client.emit('settingsDeleteEntry', this);
 		}
-		this.gateway.cache.delete(this.id);
 		return this;
 	}
 
@@ -190,7 +184,7 @@ class Settings {
 		if (!this._existsInDB) return { errors: [], updated: [] };
 
 		if (typeof keys === 'string') keys = [keys];
-		else if (typeof keys === 'undefined') keys = [...this.gateway.schema.values()].map(piece => piece.path);
+		else if (typeof keys === 'undefined') keys = [...this.gateway.schema.values(true)].map(piece => piece.path);
 		if (Array.isArray(keys)) {
 			const result = { errors: [], updated: [] };
 			for (const key of keys) {
@@ -249,6 +243,7 @@ class Settings {
 			entries = [[key, value]];
 		} else if (Array.isArray(key) && key.every(entry => Array.isArray(entry) && entry.length === 2)) {
 			// Overload update(Array<[string, any]>)
+			[guild, options] = [value, guild];
 			entries = key;
 		} else {
 			return Promise.reject(new TypeError(`Invalid value. Expected object, string or Array<[string, any]>. Got: ${new Type(key)}`));
@@ -316,8 +311,8 @@ class Settings {
 		const piece = path instanceof SchemaPiece ? path : this.gateway.getPath(path, { piece: true }).piece;
 		const value = this.get(piece.path);
 		if (value === null) return 'Not set';
-		if (piece.array) return value.length ? `[ ${value.map(val => piece.resolver.resolveString(val, message)).join(' | ')} ]` : 'None';
-		return piece.resolver.resolveString(value, message);
+		if (piece.array) return value.length ? `[ ${value.map(val => piece.serializer.stringify(val, message)).join(' | ')} ]` : 'None';
+		return piece.serializer.stringify(value, message);
 	}
 
 	/**
@@ -369,13 +364,13 @@ class Settings {
 	 * @private
 	 */
 	async _parse(value, guild, options, result, { piece, route }) {
-		const parsedID = value === null ?
+		const parsed = value === null ?
 			deepClone(piece.default) :
 			await (Array.isArray(value) ?
 				this._parseAll(piece, value, guild, result.errors) :
 				piece.parse(value, guild).catch((error) => { result.errors.push(error); }));
-
-		if (typeof parsedID === 'undefined') return;
+		if (typeof parsed === 'undefined') return;
+		const parsedID = Array.isArray(parsed) ? parsed.map(val => piece.serializer.serialize(val)) : piece.serializer.serialize(parsed);
 		if (piece.array) {
 			this._parseArray(piece, route, parsedID, options, result);
 		} else if (this._setValueByPath(piece, parsedID, options.force).updated) {

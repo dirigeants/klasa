@@ -11,27 +11,23 @@ module.exports = class extends Command {
 			usageDelim: ' ',
 			guarded: true
 		});
+
+		this.terms = ['usersAdded', 'usersRemoved', 'guildsAdded', 'guildsRemoved'];
 	}
 
 	async run(message, usersAndGuilds) {
 		usersAndGuilds = new Set(usersAndGuilds);
-		const usersAdded = [];
-		const usersRemoved = [];
-		const guildsAdded = [];
-		const guildsRemoved = [];
+		const changes = [[], [], [], []];
 
 		for (const userOrGuild of usersAndGuilds) {
 			const type = userOrGuild instanceof User ? 'user' : 'guild';
-
 			await this.client.settings.update(`${type}Blacklist`, userOrGuild.id || userOrGuild, message.guild);
 
-			if (type === 'guild' && this.client.settings.guildBlacklist.includes(userOrGuild.id || userOrGuild)) guildsAdded.push(userOrGuild.name || userOrGuild);
-			else if (type === 'guild') guildsRemoved.push(userOrGuild.name || userOrGuild);
-			else if (type === 'user' && this.client.settings.userBlacklist.includes(userOrGuild.id)) usersAdded.push(userOrGuild.username);
-			else usersRemoved.push(userOrGuild.username);
+			if (this.client.settings[`${type}Blacklist`].includes(userOrGuild.id || userOrGuild)) changes[this.terms.indexOf(`${type}sAdded`)].push(userOrGuild.name || userOrGuild.username || userOrGuild);
+			else changes[this.terms.indexOf(`${type}sRemoved`)].push(userOrGuild.name || userOrGuild.username || userOrGuild);
 		}
 
-		return message.sendLocale('COMMAND_BLACKLIST_SUCCESS', [usersAdded, usersRemoved, guildsAdded, guildsRemoved]);
+		return message.sendLocale('COMMAND_BLACKLIST_SUCCESS', changes);
 	}
 
 };

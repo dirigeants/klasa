@@ -23,10 +23,10 @@ module.exports = {
 	Schema: require('./lib/settings/schema/Schema'),
 	SchemaFolder: require('./lib/settings/schema/SchemaFolder'),
 	SchemaPiece: require('./lib/settings/schema/SchemaPiece'),
-	SchemaTypes: require('./lib/settings/schema/types/base/SchemaTypes'),
-	SchemaType: require('./lib/settings/schema/types/base/SchemaType'),
 
 	// lib/structures/base
+	AliasPiece: require('./lib/structures/base/AliasPiece'),
+	AliasStore: require('./lib/structures/base/AliasStore'),
 	Piece: require('./lib/structures/base/Piece'),
 	Store: require('./lib/structures/base/Store'),
 
@@ -47,8 +47,11 @@ module.exports = {
 	LanguageStore: require('./lib/structures/LanguageStore'),
 	Monitor: require('./lib/structures/Monitor'),
 	MonitorStore: require('./lib/structures/MonitorStore'),
+	MultiArgument: require('./lib/structures/MultiArgument'),
 	Provider: require('./lib/structures/Provider'),
 	ProviderStore: require('./lib/structures/ProviderStore'),
+	Serializer: require('./lib/structures/Serializer'),
+	SerializerStore: require('./lib/structures/SerializerStore'),
 	SQLProvider: require('./lib/structures/SQLProvider'),
 	Task: require('./lib/structures/Task'),
 	TaskStore: require('./lib/structures/TaskStore'),
@@ -68,6 +71,8 @@ module.exports = {
 	Cron: require('./lib/util/Cron'),
 	Duration: require('./lib/util/Duration'),
 	QueryBuilder: require('./lib/util/QueryBuilder'),
+	RateLimit: require('./lib/util/RateLimit'),
+	RateLimitManager: require('./lib/util/RateLimitManager'),
 	ReactionHandler: require('./lib/util/ReactionHandler'),
 	RichDisplay: require('./lib/util/RichDisplay'),
 	RichMenu: require('./lib/util/RichMenu'),
