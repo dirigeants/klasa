@@ -17,10 +17,10 @@ module.exports = class extends Monitor {
 		if (this.mentionOnly.test(message.content)) return message.sendLocale('PREFIX_REMINDER', [message.guildSettings.prefix || undefined]);
 
 		const { commandText, prefix, prefixLength } = this.parseCommand(message);
-		if (!commandText) return undefined;
+		if (!commandText) return this.client.emit('commandlessMessage', message, prefix, prefixLength);
 
 		const command = this.client.commands.get(commandText);
-		if (!command) return this.client.emit('commandUnknown', message, commandText);
+		if (!command) return this.client.emit('commandUnknown', message, commandText, prefix, prefixLength);
 
 		return this.runCommand(message._registerCommand({ command, prefix, prefixLength }));
 	}
