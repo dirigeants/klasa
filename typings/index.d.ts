@@ -1513,7 +1513,7 @@ declare module 'klasa' {
 		default?: any;
 		min?: number;
 		max?: number;
-		filter?: (value: any, guild?: KlasaGuild) => void;
+		filter?: (client: KlasaClient, value: any, schemaPiece: SchemaPiece, language: Language) => void;
 	};
 
 	export type SchemaPieceEditOptions = {
