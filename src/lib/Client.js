@@ -518,8 +518,8 @@ KlasaClient.defaultUserSchema = new Schema();
  * @type {Schema}
  */
 KlasaClient.defaultClientSchema = new Schema()
-	.add('userBlacklist', 'any', { array: true, configurable: true })
-	.add('guildBlacklist', 'any', { array: true, configurable: true })
+	.add('userBlacklist', 'string', { array: true, configurable: true })
+	.add('guildBlacklist', 'string', { array: true, configurable: true })
 	.add('schedules', 'any', { array: true, configurable: false });
 
 /**
