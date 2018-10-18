@@ -7,7 +7,7 @@ module.exports = class extends Command {
 		super(...args, {
 			permissionLevel: 10,
 			description: language => language.get('COMMAND_BLACKLIST_DESCRIPTION'),
-			usage: '<User:user|Guild:guild|guild:str> [...]',
+			usage: '<user|guild> <User:user|Guild:guild|guild:str> [...]',
 			usageDelim: ' ',
 			guarded: true
 		});
@@ -15,14 +15,12 @@ module.exports = class extends Command {
 		this.terms = ['usersAdded', 'usersRemoved', 'guildsAdded', 'guildsRemoved'];
 	}
 
-	async run(message, usersAndGuilds) {
-		usersAndGuilds = new Set(usersAndGuilds);
+	async run(message, [type, ...usersAndGuilds]) {
+		const blacklistType = `${type}Blacklist`;
+		await this.client.settings.update(usersAndGuilds.map(item => [blacklistType, item.id || item]), message.guild);
+
 		const changes = [[], [], [], []];
-
 		for (const userOrGuild of usersAndGuilds) {
-			const type = userOrGuild instanceof User ? 'user' : 'guild';
-			await this.client.settings.update(`${type}Blacklist`, userOrGuild.id || userOrGuild, message.guild);
-
 			if (this.client.settings[`${type}Blacklist`].includes(userOrGuild.id || userOrGuild)) changes[this.terms.indexOf(`${type}sAdded`)].push(userOrGuild.name || userOrGuild.username || userOrGuild);
 			else changes[this.terms.indexOf(`${type}sRemoved`)].push(userOrGuild.name || userOrGuild.username || userOrGuild);
 		}
