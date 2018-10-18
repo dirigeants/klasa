@@ -1,13 +1,27 @@
-const AliasPiece = require('./base/AliasPiece');
+const Piece = require('./base/Piece');
+const { aliasPiece } = require('./base/AliasPiece');
 const { MENTION_REGEX } = require('../util/constants');
 
 /**
  * Base class for all Klasa Serializers. See {@tutorial CreatingSerializers} for more information how to use this class
  * to build custom serializers.
  * @tutorial CreatingSerializers
- * @extends AliasPiece
+ * @extends Piece
  */
-class Serializer extends AliasPiece {
+class Serializer extends Piece {
+
+	/**
+	 * @param {KlasaClient} client The Klasa client
+	 * @param {SerializerStore} store The Serializer Store
+	 * @param {string} file The path from the pieces folder to the serializer file
+	 * @param {boolean} core If the piece is in the core directory or not
+	 * @param {AliasPieceOptions} [options={}] Optional Serializer settings
+	 */
+	constructor(client, store, file, core, options = {}) {
+		super(client, store, file, core, options);
+
+		aliasPiece(this, options);
+	}
 
 	/**
 	 * The serialize method to be overwritten in actual Serializers

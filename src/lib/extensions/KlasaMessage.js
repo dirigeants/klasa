@@ -42,6 +42,12 @@ module.exports = Structures.extend('Message', Message => {
 			this.prefixLength = null;
 
 			/**
+			 * The timer for the command being run
+			 * @type {?Stopwatch}
+			 */
+			this.timer = null;
+
+			/**
 			 * A command prompt/argument handler
 			 * @since 0.5.0
 			 * @type {CommandPrompt}
@@ -288,19 +294,29 @@ module.exports = Structures.extend('Message', Message => {
 		}
 
 		/**
-		 * Register's this message as a Command Message
-		 * @since 0.5.0
-		 * @param {Object} commandInfo The info about the command and prefix used
-		 * @property {Command} command The command run
-		 * @property {RegExp} prefix The prefix used
-		 * @property {number} prefixLength The length of the prefix used
+		 * Registers prefix, if any
+		 * @param {RegExp} prefix The prefix used
+		 * @param {number} prefixLength The length of the prefix used
 		 * @returns {this}
 		 * @private
 		 */
-		_registerCommand({ command, prefix, prefixLength }) {
-			this.command = command;
+		_registerPrefix(prefix, prefixLength) {
 			this.prefix = prefix;
 			this.prefixLength = prefixLength;
+			return this;
+		}
+
+		/**
+		 * Register's this message as a Command Message
+		 * @since 0.5.0
+		 * @param {Command} command The command run
+		 * @param {Stopwatch} timer The timer for the command
+		 * @returns {this}
+		 * @private
+		 */
+		_registerCommand(command, timer) {
+			this.command = command;
+			this.timer = timer;
 			this.prompter = this.command.usage.createPrompt(this, {
 				quotedStringSupport: this.command.quotedStringSupport,
 				time: this.command.promptTime,

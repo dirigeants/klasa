@@ -1,12 +1,11 @@
-const Piece = require('./Piece');
-
 /**
- * The common class for all pieces with aliases
+ * Contains static methods for pieces with aliases
+ * @see Piece
  * @see Command
  * @see Argument
  * @see Serializer
  */
-class AliasPiece extends Piece {
+class AliasPiece {
 
 	/**
 	 * @typedef {PieceOptions} AliasPieceOptions
@@ -14,34 +13,49 @@ class AliasPiece extends Piece {
 	 */
 
 	/**
-	 * @since 0.0.1
-	 * @param {KlasaClient} client The klasa client
-	 * @param {Store} store The store this piece is for
-	 * @param {string[]} file The path from the pieces folder to the extendable file
-	 * @param {string} directory The base directory to the pieces folder
-	 * @param {AliasPieceOptions} [options={}] The options for this piece
+	 * This class may not be initiated with new
+	 * @throws {Error}
+	 * @private
 	 */
-	constructor(client, store, file, directory, options = {}) {
-		super(client, store, file, directory, options);
+	constructor() {
+		throw new Error('This class may not be initiated with new');
+	}
 
+	/**
+	 * Install aliases in a piece
+	 * @param {Piece} piece The piece to alias
+	 * @param {AliasPieceOptions} options The options for this piece
+	 */
+	static aliasPiece(piece, options) {
 		/**
 		 * The aliases for this piece
 		 * @since 0.5.0
 		 * @type {string[]}
 		 */
-		this.aliases = options.aliases;
+		piece.aliases = options.aliases;
+
+		piece.toJSON = AliasPiece.patchToJSON(piece.toJSON);
 	}
 
 	/**
-	 * Defines the JSON.stringify behavior of this argument.
-	 * @since 0.5.0
-	 * @returns {Object}
+	 * Returns a method that can be patched into a piece's toJSON method.
+	 * @param {function():Object} superToJSON The class's native toJSON method
+	 * @returns {function():Object} A function to patch with
 	 */
-	toJSON() {
-		return {
-			...super.toJSON(),
-			aliases: this.aliases.slice(0)
-		};
+	static patchToJSON(superToJSON) {
+		/**
+		 * Defines the JSON.stringify behavior of this argument.
+		 * @since 0.5.0
+		 * @this Piece
+		 * @returns {Object}
+		 */
+		function toJSON() {
+			return {
+				...superToJSON(),
+				aliases: this.aliases.slice(0)
+			};
+		}
+		return toJSON;
 	}
 
 }

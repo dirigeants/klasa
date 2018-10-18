@@ -1,20 +1,22 @@
 const { Permissions } = require('discord.js');
-const AliasPiece = require('./base/AliasPiece');
+const Monitor = require('./Monitor');
+const { aliasPiece } = require('./base/AliasPiece');
 const Usage = require('../usage/Usage');
 const CommandUsage = require('../usage/CommandUsage');
 const RateLimitManager = require('../util/RateLimitManager');
-const { isFunction } = require('../util/util');
+const Stopwatch = require('../util/Stopwatch');
+const { isFunction, mergeDefault } = require('../util/util');
 
 /**
  * Base class for all Klasa Commands. See {@tutorial CreatingCommands} for more information how to use this class
  * to build custom commands.
  * @tutorial CreatingCommands
- * @extends AliasPiece
+ * @extends Monitor
  */
-class Command extends AliasPiece {
+class Command extends Monitor {
 
 	/**
-	 * @typedef {AliasPieceOptions} CommandOptions
+	 * @typedef {MonitorOptions} CommandOptions
 	 * @property {boolean} [autoAliases=true] If automatic aliases should be added (adds aliases of name and aliases without dashes)
 	 * @property {external:PermissionResolvable} [requiredPermissions=0] The required Discord permissions for the bot to use this command
 	 * @property {number} [bucket=1] The number of times this command can be run before ratelimited by the cooldown
@@ -45,9 +47,13 @@ class Command extends AliasPiece {
 	 * @param {CommandOptions} [options={}] Optional Command settings
 	 */
 	constructor(client, store, file, core, options = {}) {
+		options = mergeDefault(Command.defaultOptions, options);
 		super(client, store, file, core, options);
 
 		this.name = this.name.toLowerCase();
+		aliasPiece(this, options);
+
+		if (typeof options.ignoreEdits === 'undefined') this.ignoreEdits = !this.client.options.commandEditing;
 
 		if (options.autoAliases) {
 			if (this.name.includes('-')) this.aliases.push(this.name.replace(/-/g, ''));
@@ -60,7 +66,6 @@ class Command extends AliasPiece {
 		 * @type {external:Permissions}
 		 */
 		this.requiredPermissions = new Permissions(options.requiredPermissions).freeze();
-
 
 		/**
 		 * Whether this command should have it's responses deleted if the triggering message is deleted
@@ -296,9 +301,63 @@ class Command extends AliasPiece {
 	 * @returns {KlasaMessage|KlasaMessage[]} You should return the response message whenever possible
 	 * @abstract
 	 */
-	async run() {
-		// Defined in extension Classes
-		throw new Error(`The run method has not been implemented by ${this.type}:${this.name}.`);
+	async run(message, params) {
+		// Redefined in extension Classes that aren't subcommands
+		const subcommand = this.subcommands ? params.shift() : undefined;
+		if (subcommand) return this[subcommand](message, params);
+		else throw new Error(`The run method has not been implemented by ${this.type}:${this.name}.`);
+	}
+
+	/**
+	 * Gathers parameters before the actual running of the command, to pass to it
+	 * @param {KlasaMessage} message The command message mapped on top of the message used to trigger this command
+	 * @returns {*[]} The parameters resolved in the message
+	 */
+	async preRun(message) {
+		try {
+			await message.prompter.run();
+			message.timer.stop();
+			return message.params;
+		} catch (error) {
+			this.client.emit('commandError', message, this, message.params, error);
+			if (this.client.options.typing) message.channel.stopTyping();
+			throw error;
+		}
+	}
+
+	/**
+	 * Runs finalizers and stuff
+	 * @param {KlasaMessage} message The command message mapped on top of the message used to trigger this command
+	 * @param {KlasaMessage|KlasaMessage[]} response The value returned from this.run
+	 */
+	async postRun(message, response) {
+		this.client.finalizers.run(message, response, message.timer);
+		this.client.emit('commandSuccess', message, this, message.params, response);
+		if (this.client.options.typing) message.channel.stopTyping();
+	}
+
+	/**
+	 * If the command should run based on the filter options and inhibitors
+	 * @since 0.5.0
+	 * @param {KlasaMessage} message The message to check
+	 * @returns {boolean}
+	 */
+	async shouldRun(message) {
+		if (!super.shouldRun(message)) return false;
+		const commandText = message.content.slice(message.prefixLength).trim().split(' ')[0].toLowerCase();
+		if (!(commandText && (commandText === this.name || this.aliases.includes(commandText)))) return false;
+
+		message._registerCommand(this, new Stopwatch());
+		if (this.client.options.typing) message.channel.startTyping();
+		try {
+			await this.client.inhibitors.run(message, this);
+		} catch (response) {
+			this.client.emit('commandInhibited', message, this, response);
+			if (this.client.options.typing) message.channel.stopTyping();
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
@@ -337,5 +396,15 @@ class Command extends AliasPiece {
 	}
 
 }
+
+/**
+ * The default monitor options for commands.
+ * @type {MonitorOptions}
+ * @static
+ */
+Command.defaultOptions = {
+	ignoreOthers: false,
+	ignorePrefixed: false
+};
 
 module.exports = Command;

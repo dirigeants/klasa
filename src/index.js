@@ -25,7 +25,7 @@ module.exports = {
 	SchemaPiece: require('./lib/settings/schema/SchemaPiece'),
 
 	// lib/structures/base
-	AliasPiece: require('./lib/structures/base/AliasPiece'),
+	aliasPiece: require('./lib/structures/base/AliasPiece').aliasPiece,
 	AliasStore: require('./lib/structures/base/AliasStore'),
 	Piece: require('./lib/structures/base/Piece'),
 	Store: require('./lib/structures/base/Store'),

@@ -15,6 +15,8 @@ class Monitor extends Piece {
 	 * @property {boolean} [ignoreOthers=true] Whether the monitor ignores others or not
 	 * @property {boolean} [ignoreWebhooks=true] Whether the monitor ignores webhooks or not
 	 * @property {boolean} [ignoreEdits=true] Whether the monitor ignores edits or not
+	 * @property {boolean} [ignorePrefixed=true] Whether the monitor ignores messages that start with a valid prefix or not
+	 * @property {boolean} [ignoreUnprefixed=true] Whether the monitor ignores messages that don't start with a prefix or not
 	 * @property {boolean} [ignoreBlacklistedUsers=true] Wether the monitor should ignore blacklisted users or not
 	 * @property {boolean} [ignoreBlacklistedGuilds=true] Wether the monitor should ignore blacklisted guilds or not
 	 */
@@ -66,6 +68,18 @@ class Monitor extends Piece {
 		this.ignoreEdits = options.ignoreEdits;
 
 		/**
+		 * Whether the monitor ignores messages that start with a valid prefix or not
+		 * @type {boolean}
+		 */
+		this.ignorePrefixed = options.ignorePrefixed;
+
+		/**
+		 * Whether the monitor ignores messages that don't start with a prefix or not
+		 * @type {boolean}
+		 */
+		this.ignoreUnprefixed = options.ignoreUnprefixed;
+
+		/**
 		 * Wether the monitor should ignore blacklisted users
 		 * @since 0.5.0
 		 * @type {boolean}
@@ -84,12 +98,35 @@ class Monitor extends Piece {
 	 * The run method to be overwritten in actual monitor pieces
 	 * @since 0.0.1
 	 * @param {KlasaMessage} message The discord message
-	 * @returns {void}
+	 * @returns {*} Anything returned will be passed to this.postRun
 	 * @abstract
 	 */
-	run() {
+	async run() {
 		// Defined in extension Classes
 		throw new Error(`The run method has not been implemented by ${this.type}:${this.name}.`);
+	}
+
+	/**
+	 * Prepares any parameters before running the monitor
+	 *
+	 * Returns no extra parameters, by default.
+	 * @param {KlasaMessage} message The discord message
+	 * @returns {*}
+	 */
+	async preRun() {
+		return undefined;
+	}
+
+	/**
+	 * Does whatever after running the monitor
+	 *
+	 * Does nothing, by default.
+	 * @param {KlasaMessage} message The discord message
+	 * @param {*} response The value returned from this.run
+	 * @returns {void}
+	 */
+	async postRun() {
+		// noop
 	}
 
 	/**
@@ -105,6 +142,8 @@ class Monitor extends Piece {
 			!(this.ignoreOthers && this.client.user !== message.author) &&
 			!(this.ignoreWebhooks && message.webhookID) &&
 			!(this.ignoreEdits && message._edits.length) &&
+			!(this.ignorePrefixed && message.prefix) &&
+			!(this.ignoreUnprefixed && !message.prefix) &&
 			!(this.ignoreBlacklistedUsers && this.client.settings.userBlacklist.includes(message.author.id)) &&
 			!(this.ignoreBlacklistedGuilds && message.guild && this.client.settings.guildBlacklist.includes(message.guild.id));
 	}

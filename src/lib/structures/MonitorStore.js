@@ -21,8 +21,8 @@ class MonitorStore extends Store {
 	 * @since 0.0.1
 	 * @param {KlasaMessage} message The message object from Discord.js
 	 */
-	run(message) {
-		for (const monitor of this.values()) if (monitor.shouldRun(message)) this._run(message, monitor);
+	async run(message) {
+		for (const monitor of this.values()) if (await monitor.shouldRun(message)) this._run(message, monitor);
 	}
 
 	/**
@@ -34,7 +34,7 @@ class MonitorStore extends Store {
 	 */
 	async _run(message, monitor) {
 		try {
-			await monitor.run(message);
+			await monitor.postRun(message, await monitor.run(message, await monitor.preRun(message)));
 		} catch (err) {
 			this.client.emit('monitorError', message, monitor, err);
 		}
