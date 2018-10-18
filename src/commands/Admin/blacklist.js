@@ -23,7 +23,7 @@ module.exports = class extends Command {
 			const type = userOrGuild instanceof User ? 'user' : 'guild';
 			if (this.client.settings[`${type}Blacklist`].includes(userOrGuild.id || userOrGuild)) changes[this.terms.indexOf(`${type}sAdded`)].push(userOrGuild.name || userOrGuild.username || userOrGuild);
 			else changes[this.terms.indexOf(`${type}sRemoved`)].push(userOrGuild.name || userOrGuild.username || userOrGuild);
-			queries[Number(type === 'user')].push(userOrGuild.id || userOrGuild);
+			queries[Number(type === 'guild')].push(userOrGuild.id || userOrGuild);
 		}
 
 		const { errors } = await this.client.settings.update([['userBlacklist', queries[0]], ['guildBlacklist', queries[1]]]);
