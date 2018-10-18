@@ -518,9 +518,9 @@ KlasaClient.defaultUserSchema = new Schema();
  * @type {Schema}
  */
 KlasaClient.defaultClientSchema = new Schema()
-	.add('userBlacklist', 'user', { array: true, configurable: true })
-	.add('guildBlacklist', 'string', { array: true, configurable: true })
-	.add('schedules', 'any', { array: true, configurable: false });
+	.add('userBlacklist', 'user', { array: true })
+	.add('guildBlacklist', 'string', { array: true, filter: (__, value) => !/^\d{17,18}$/.test(value) })
+	.add('schedules', 'any', { array: true });
 
 /**
  * Emitted when Klasa is fully ready and initialized.
