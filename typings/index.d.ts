@@ -675,7 +675,7 @@ declare module 'klasa' {
 //#region Stores
 
 	export abstract class Store<K, V extends Piece, VConstructor = Constructor<V>> extends Collection<K, V> {
-		public constructor(client: KlasaClient, name: string, holds: V);
+		public constructor(client: KlasaClient, name: string, holds: VConstructor);
 		public readonly client: KlasaClient;
 		public readonly holds: VConstructor;
 		public readonly name: string;
