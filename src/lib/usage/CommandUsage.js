@@ -57,14 +57,11 @@ class CommandUsage extends Usage {
 	 * @returns {string}
 	 */
 	fullUsage(message) {
-		let prefix;
-		if (message.prefixLength) {
-			prefix = message.content.slice(0, message.prefixLength);
-			if (this.client.monitors.get('commandHandler').mentionOnly.test(prefix)) prefix = `@${this.client.user.tag}`;
-		} else {
-			({ prefix } = message.guildSettings);
-			if (Array.isArray(prefix)) [prefix] = prefix;
-		}
+		let prefix = message.prefixLength ?
+			message.content.slice(0, message.prefixLength) :
+			message.guildSettings.prefix;
+		if (Array.isArray(prefix)) [prefix] = prefix;
+		if (prefix === this.client.monitors.get('commandHandler').prefixMention) prefix = `@${this.client.user.tag}`;
 		return `${prefix.length !== 1 ? `${prefix} ` : prefix}${this.nearlyFullUsage}`;
 	}
 
