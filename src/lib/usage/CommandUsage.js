@@ -61,7 +61,7 @@ class CommandUsage extends Usage {
 			message.content.slice(0, message.prefixLength) :
 			message.guildSettings.prefix;
 		if (Array.isArray(prefix)) [prefix] = prefix;
-		if (prefix === this.client.monitors.get('commandHandler').prefixMention) prefix = `@${this.client.user.tag}`;
+		if (message.prefix === this.client.monitors.get('commandHandler').prefixMention) prefix = `@${this.client.user.tag}`;
 		return `${prefix.length !== 1 ? `${prefix} ` : prefix}${this.nearlyFullUsage}`;
 	}
 
