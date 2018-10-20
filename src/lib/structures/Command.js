@@ -346,6 +346,7 @@ class Command extends Monitor {
 	 */
 	async shouldRun(message) {
 		if (!super.shouldRun(message)) return false;
+		this.client.console.log(`Command#shouldRun: going to check for ${this.name}`);
 		const commandText = message.content.slice(message.prefixLength).trim().split(' ')[0].toLowerCase();
 		if (!(commandText && (commandText === this.name || this.aliases.includes(commandText)))) return false;
 

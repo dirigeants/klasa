@@ -136,6 +136,7 @@ class Monitor extends Piece {
 	 * @returns {boolean}
 	 */
 	shouldRun(message) {
+		this.client.console.log(Object.entries(this).filter(([k]) => k.startsWith('ignore')));
 		return this.enabled &&
 			!(this.ignoreBots && message.author.bot) &&
 			!(this.ignoreSelf && this.client.user === message.author) &&
