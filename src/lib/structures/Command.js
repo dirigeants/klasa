@@ -47,11 +47,11 @@ class Command extends Monitor {
 	 * @param {CommandOptions} [options={}] Optional Command settings
 	 */
 	constructor(client, store, file, directory, options = {}) {
+		const defaults = client.options.pieceDefaults.commands;
+		if (defaults) options = mergeDefault(defaults, options);
 		super(client, store, file, directory, options);
 
 		aliasPiece(this, options);
-		const defaults = client.options.pieceDefaults.commands;
-		if (defaults) options = mergeDefault(defaults, options);
 
 		this.name = this.name.toLowerCase();
 
