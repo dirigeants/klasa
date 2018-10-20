@@ -93,6 +93,8 @@ exports.DEFAULTS = {
 				ignoreOthers: true,
 				ignoreWebhooks: true,
 				ignoreEdits: true,
+				ignorePrefixed: true,
+				ignoreUnprefixed: true,
 				ignoreBlacklistedUsers: true,
 				ignoreBlacklistedGuilds: true
 			},
