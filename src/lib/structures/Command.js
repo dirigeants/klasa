@@ -43,12 +43,11 @@ class Command extends Monitor {
 	 * @param {KlasaClient} client The Klasa Client
 	 * @param {CommandStore} store The Command store
 	 * @param {Array} file The path from the pieces folder to the command file
-	 * @param {boolean} core If the piece is in the core directory or not
+	 * @param {string} directory The base directory to the pieces folder
 	 * @param {CommandOptions} [options={}] Optional Command settings
 	 */
-	constructor(client, store, file, core, options = {}) {
-		options = mergeDefault(Command.defaultOptions, options);
-		super(client, store, file, core, options);
+	constructor(client, store, file, directory, options = {}) {
+		super(client, store, file, directory, options);
 
 		this.name = this.name.toLowerCase();
 		aliasPiece(this, options);
