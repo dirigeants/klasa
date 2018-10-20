@@ -1,3 +1,5 @@
+const { mergeDefault } = require('../../util/util');
+
 /**
  * Contains static methods for pieces with aliases
  * @see Piece
@@ -27,6 +29,9 @@ class AliasPiece {
 	 * @param {AliasPieceOptions} options The options for this piece
 	 */
 	static aliasPiece(piece, options) {
+		const defaults = piece.client.options.pieceDefaults.aliasedPieces;
+		if (defaults) options = mergeDefault(defaults, options);
+
 		/**
 		 * The aliases for this piece
 		 * @since 0.5.0

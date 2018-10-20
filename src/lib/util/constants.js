@@ -44,12 +44,13 @@ exports.DEFAULTS = {
 		prefixCaseInsensitive: false,
 		providers: { default: 'json' },
 		pieceDefaults: {
-			arguments: {
-				enabled: true,
+			aliasedPieces: {
 				aliases: []
 			},
+			arguments: {
+				enabled: true
+			},
 			commands: {
-				aliases: [],
 				autoAliases: true,
 				bucket: 1,
 				cooldown: 0,

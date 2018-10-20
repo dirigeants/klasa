@@ -49,8 +49,11 @@ class Command extends Monitor {
 	constructor(client, store, file, directory, options = {}) {
 		super(client, store, file, directory, options);
 
-		this.name = this.name.toLowerCase();
 		aliasPiece(this, options);
+		const defaults = client.options.pieceDefaults.commands;
+		if (defaults) options = mergeDefault(defaults, options);
+
+		this.name = this.name.toLowerCase();
 
 		if (typeof options.ignoreEdits === 'undefined') this.ignoreEdits = !this.client.options.commandEditing;
 
