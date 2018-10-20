@@ -51,6 +51,8 @@ exports.DEFAULTS = {
 				enabled: true
 			},
 			commands: {
+				ignoreOthers: false,
+				ignorePrefixed: false,
 				autoAliases: true,
 				bucket: 1,
 				cooldown: 0,

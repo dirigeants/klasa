@@ -399,14 +399,4 @@ class Command extends Monitor {
 
 }
 
-/**
- * The default monitor options for commands.
- * @type {MonitorOptions}
- * @static
- */
-Command.defaultOptions = {
-	ignoreOthers: false,
-	ignorePrefixed: false
-};
-
 module.exports = Command;
