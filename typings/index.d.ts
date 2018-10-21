@@ -72,7 +72,6 @@ declare module 'klasa' {
 		public schedule: Schedule;
 		public ready: boolean;
 
-		public validatePermissionLevels(): PermissionLevels;
 		public registerStore<K, V extends Piece>(store: Store<K, V>): KlasaClient;
 		public unregisterStore<K, V extends Piece>(store: Store<K, V>): KlasaClient;
 
@@ -90,6 +89,7 @@ declare module 'klasa' {
 		public removeListener(event: string | symbol, listener: Function): this;
 
 		public login(token?: string): Promise<string>;
+		private validatePermissionLevels(): PermissionLevels;
 		private _ready(): Promise<void>;
 
 		public sweepMessages(lifetime?: number, commandLifeTime?: number): number;
@@ -666,7 +666,7 @@ declare module 'klasa' {
 		public serialize(data: any): PrimitiveType;
 		public stringify(data: any): string;
 		public toJSON(): PieceSerializerJSON;
-		public abstract deserialize<T = any>(data: any, piece: SchemaPiece, language: Language, guild?: KlasaGuild): Promise<T>;
+		public abstract deserialize(data: any, piece: SchemaPiece, language: Language, guild?: KlasaGuild): Promise<any>;
 		public static regex: MentionRegex;
 	}
 
@@ -1795,6 +1795,7 @@ declare module 'klasa' {
 		| 'magenta'
 		| 'red'
 		| 'white'
+		| null
 		| number[]
 		| string[];
 
