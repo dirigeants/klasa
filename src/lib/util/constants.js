@@ -102,8 +102,7 @@ exports.DEFAULTS = {
 			},
 			providers: { enabled: true },
 			serializers: {
-				enabled: true,
-				aliases: []
+				enabled: true
 			},
 			tasks: { enabled: true }
 		},
