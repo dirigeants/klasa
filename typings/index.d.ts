@@ -73,7 +73,7 @@ declare module 'klasa' {
 		public ready: boolean;
 
 		public registerStore<K, V extends Piece, VConstructor = Constructor<V>>(store: Store<K, V, VConstructor>): KlasaClient;
-		public unregisterStore<K, V extends Piece>(store: Store<K, V>): KlasaClient;
+		public unregisterStore<K, V extends Piece, VConstructor = Constructor<V>>(store: Store<K, V, VConstructor>): KlasaClient;
 
 		public addListener<K extends keyof ClientEvents>(event: K, listener: ClientEvents[K]): this;
 		public addListener(event: string | symbol, listener: Function): this;
