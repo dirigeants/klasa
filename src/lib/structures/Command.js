@@ -48,14 +48,13 @@ class Command extends Monitor {
 	 */
 	constructor(client, store, file, directory, options = {}) {
 		const defaults = client.options.pieceDefaults.commands;
+		if (typeof defaults.ignoreEdits === 'undefined') defaults.ignoreEdits = !client.options.commandEditing;
 		if (defaults) options = mergeDefault(defaults, options);
 		super(client, store, file, directory, options);
 
 		aliasPiece(this, options);
 
 		this.name = this.name.toLowerCase();
-
-		if (typeof options.ignoreEdits === 'undefined') this.ignoreEdits = !this.client.options.commandEditing;
 
 		if (options.autoAliases) {
 			if (this.name.includes('-')) this.aliases.push(this.name.replace(/-/g, ''));
