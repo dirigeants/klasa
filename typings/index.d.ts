@@ -1057,7 +1057,7 @@ declare module 'klasa' {
 		public resetTime(): this;
 	}
 
-	export class RateLimitManager<K> extends Collection<K, RateLimit> {
+	export class RateLimitManager<K = Snowflake> extends Collection<K, RateLimit> {
 		public constructor(bucket: number, cooldown: number);
 		public bucket: number;
 		public cooldown: number;
