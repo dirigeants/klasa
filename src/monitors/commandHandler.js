@@ -14,7 +14,7 @@ module.exports = class extends Monitor {
 	async run(message) {
 		if (message.guild && !message.guild.me) await message.guild.members.fetch(this.client.user);
 		if (!message.channel.postable) return undefined;
-		if (this.mentionOnly.test(message.content)) return message.sendLocale('PREFIX_REMINDER', [message.guildSettings.prefix || undefined]);
+		if (this.mentionOnly.test(message.content)) return message.sendLocale('PREFIX_REMINDER', [message.guildSettings.prefix.length ? message.guildSettings.prefix : undefined]);
 
 		const { commandText, prefix, prefixLength } = this.parseCommand(message);
 		if (!commandText) return undefined;
