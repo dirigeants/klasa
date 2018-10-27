@@ -183,22 +183,18 @@ class Settings {
 	 * // Reset a key
 	 * Settings#reset('prefix');
 	 */
-	async reset(keys, guild, { avoidUnconfigurable = false, force = false, rejectOnError = false } = {}) {
+	async reset(keys = [...this.gateway.schema.values(true)], ...args) {
+		const { parsedEntries, options: { avoidUnconfigurable = false, force = false, rejectOnError = false } } = this._resolveUpdateOverloads(keys, ...args);
+
 		// If the entry does not exist in the DB, it'll never be able to reset a key
 		if (!this._existsInDB) return { errors: [], updated: [] };
-
-		if (typeof keys === 'string') keys = [keys];
-		else if (typeof keys === 'undefined') keys = [...this.gateway.schema.values(true)];
-
-		// If keys is not an iterable, throw
-		if (!(Symbol.iterator in keys)) throw new TypeError(`Invalid value. Expected string or Array<string>. Got: ${new Type(keys)}`);
 
 		const result = { errors: [], updated: [] };
 		const handleError = rejectOnError ? (error) => { throw error; } : result.errors.push.bind(result.errors);
 
 		// Resolve all keys into SchemaPieces, including parsing SchemaFolders into all its children
 		const resolvedKeys = [];
-		for (const key of keys) {
+		for (const key of parsedEntries) {
 			try {
 				const piece = this._resolvePath(key, avoidUnconfigurable, true);
 				if (piece.type === 'Folder') resolvedKeys.push(...avoidUnconfigurable ? piece.configurableValues : piece.values(true));
@@ -245,6 +241,10 @@ class Settings {
 	 */
 	async update(...args) {
 		const { parsedEntries, options } = this._resolveUpdateOverloads(...args);
+
+		if (parsedEntries.some(entry => !Array.isArray(entry) || entry.length !== 2)) {
+			throw new TypeError(`Invalid value. Expected object, string or Array<[string, Schema | SchemaPiece | string]>. Got: ${new Type(parsedEntries)}`);
+		}
 
 		const result = { errors: [], updated: [] };
 		const handleError = options.rejectOnError ? (error) => { throw error; } : result.errors.push.bind(result.errors);
@@ -349,12 +349,12 @@ class Settings {
 		} else if (typeof key === 'string') {
 			// Overload update(string, any, ...any[]);
 			parsedEntries = [[key, value]];
-		} else if (Array.isArray(key) && key.every(entry => Array.isArray(entry) && entry.length === 2)) {
+		} else if (Array.isArray(key)) {
 			// Overload update(Array<[string, any]>)
 			value = options;
 			parsedEntries = key;
 		} else {
-			throw new TypeError(`Invalid value. Expected object, string or Array<[string, any]>. Got: ${new Type(key)}`);
+			throw new TypeError(`Invalid value. Expected object, string or Array<any>. Got: ${new Type(key)}`);
 		}
 
 		if (typeof options === 'undefined') options = { guild: null };
