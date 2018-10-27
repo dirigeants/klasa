@@ -473,8 +473,7 @@ declare module 'klasa' {
 		public update(key: string, value: any, guild?: GuildResolvable, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
 		public update(entries: Array<[string, any]>, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
 		public update(entries: Array<[string, any]>, guild?: GuildResolvable, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
-		public list(message: KlasaMessage, path: SchemaFolder | string): string;
-		public resolveString(message: KlasaMessage, path: SchemaPiece | string): string;
+		public display(message: KlasaMessage, path: Schema | SchemaPiece | string): string;
 
 		private _save(data: SettingsUpdateResult): Promise<void>;
 		private _setValueByPath(piece: SchemaPiece, parsedID: any): { updated: boolean, old: any };

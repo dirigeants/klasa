@@ -280,48 +280,38 @@ class Settings {
 	 * @param {(Schema|string)} path The path to resolve
 	 * @returns {string}
 	 */
-	list(message, path) {
-		const folder = typeof path === 'string' ? this._resolvePath(path, true, true).piece : path;
+	display(message, path) {
+		const piece = this._resolvePath(path, true, true);
+		if (piece.type !== 'Folder') {
+			const value = this.get(piece.path);
+			if (value === null) return 'Not set';
+			if (piece.array) return value.length ? `[ ${value.map(val => piece.serializer.stringify(val, message)).join(' | ')} ]` : 'None';
+			return piece.serializer.stringify(value, message);
+		}
+
 		const array = [];
 		const folders = [];
-		const keys = {};
+		const keys = new Map();
 		let longest = 0;
-		for (const [key, value] of folder.entries()) {
+		for (const [key, value] of piece.entries()) {
 			if (value.type === 'Folder') {
 				if (value.configurableKeys.length) folders.push(`// ${key}`);
 			} else if (value.configurable) {
-				if (!(value.type in keys)) keys[value.type] = [];
 				if (key.length > longest) longest = key.length;
-				keys[value.type].push(key);
+				const values = keys.get(value.type) || [];
+				if (!values.length) keys.set(value.type, values);
+				values.push(key);
 			}
 		}
-		const keysTypes = Object.keys(keys);
-		if (!folders.length && !keysTypes.length) return '';
 		if (folders.length) array.push('= Folders =', ...folders.sort(), '');
-		if (keysTypes.length) {
-			for (const keyType of keysTypes.sort()) {
+		if (keys.size) {
+			for (const keyType of [...keys.keys()].sort()) {
 				array.push(`= ${toTitleCase(keyType)}s =`,
-					...keys[keyType].sort().map(key => `${key.padEnd(longest)} :: ${this.resolveString(message, folder.get(key))}`),
+					...keys[keyType].sort().map(key => `${key.padEnd(longest)} :: ${this.display(message, piece.get(key))}`),
 					'');
 			}
 		}
 		return array.join('\n');
-	}
-
-	/**
-	 * Resolve a string.
-	 * @since 0.5.0
-	 * @param {KlasaMessage} message The Message to use
-	 * @param {(SchemaPiece|string)} path The path to resolve
-	 * @returns {string}
-	 * @private
-	 */
-	resolveString(message, path) {
-		const piece = this._resolvePath(path, false, false);
-		const value = this.get(piece.path);
-		if (value === null) return 'Not set';
-		if (piece.array) return value.length ? `[ ${value.map(val => piece.serializer.stringify(val, message)).join(' | ')} ]` : 'None';
-		return piece.serializer.stringify(value, message);
 	}
 
 	_resolvePath(key, avoidUnconfigurable, acceptFolders) {
@@ -341,7 +331,6 @@ class Settings {
 		}
 
 		const piece = this.gateway.schema.get(key);
-
 		if (piece) return this._resolvePath(piece, avoidUnconfigurable, acceptFolders);
 
 		// The piece does not exist (invalid or non-existent path)

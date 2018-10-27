@@ -30,31 +30,31 @@ module.exports = class extends Command {
 		if (piece.type === 'Folder') {
 			return message.sendLocale('COMMAND_CONF_SERVER', [
 				key ? `: ${key.split('.').map(toTitleCase).join('/')}` : '',
-				codeBlock('asciidoc', message.guild.settings.list(message, piece))
+				codeBlock('asciidoc', message.guild.settings.display(message, piece))
 			]);
 		}
-		return message.sendLocale('COMMAND_CONF_GET', [piece.path, message.guild.settings.resolveString(message, piece)]);
+		return message.sendLocale('COMMAND_CONF_GET', [piece.path, message.guild.settings.display(message, piece)]);
 	}
 
 	async set(message, [key, ...valueToSet]) {
 		const { errors, updated } = await message.guild.settings.update(key, valueToSet.join(' '), message.guild, { avoidUnconfigurable: true, action: 'add' });
 		if (errors.length) return message.sendMessage(errors[0]);
 		if (!updated.length) return message.sendLocale('COMMAND_CONF_NOCHANGE', [key]);
-		return message.sendLocale('COMMAND_CONF_UPDATED', [key, message.guild.settings.resolveString(message, updated[0].piece)]);
+		return message.sendLocale('COMMAND_CONF_UPDATED', [key, message.guild.settings.display(message, updated[0].piece)]);
 	}
 
 	async remove(message, [key, ...valueToRemove]) {
 		const { errors, updated } = await message.guild.settings.update(key, valueToRemove.join(' '), message.guild, { avoidUnconfigurable: true, action: 'remove' });
 		if (errors.length) return message.sendMessage(errors[0]);
 		if (!updated.length) return message.sendLocale('COMMAND_CONF_NOCHANGE', [key]);
-		return message.sendLocale('COMMAND_CONF_UPDATED', [key, message.guild.settings.resolveString(message, updated[0].piece)]);
+		return message.sendLocale('COMMAND_CONF_UPDATED', [key, message.guild.settings.display(message, updated[0].piece)]);
 	}
 
 	async reset(message, [key]) {
 		const { errors, updated } = await message.guild.settings.reset(key, message.guild, true);
 		if (errors.length) return message.sendMessage(errors[0]);
 		if (!updated.length) return message.sendLocale('COMMAND_CONF_NOCHANGE', [key]);
-		return message.sendLocale('COMMAND_CONF_RESET', [key, message.guild.settings.resolveString(message, updated[0].piece)]);
+		return message.sendLocale('COMMAND_CONF_RESET', [key, message.guild.settings.display(message, updated[0].piece)]);
 	}
 
 };
