@@ -1761,9 +1761,9 @@ declare module 'klasa' {
 	};
 
 	export type KlasaConsoleColorObjects = {
-		log?: string;
 		message?: KlasaConsoleMessageObject;
 		time?: KlasaConsoleTimeObject;
+		shard?: KlasaConsoleShardObject;
 	};
 
 	export type KlasaConsoleMessageObject = {
@@ -1773,6 +1773,12 @@ declare module 'klasa' {
 	};
 
 	export type KlasaConsoleTimeObject = {
+		background?: KlasaConsoleColorTypes;
+		style?: KlasaConsoleStyleTypes;
+		text?: KlasaConsoleColorTypes;
+	};
+
+	export type KlasaConsoleShardObject = {
 		background?: KlasaConsoleColorTypes;
 		style?: KlasaConsoleStyleTypes;
 		text?: KlasaConsoleColorTypes;
