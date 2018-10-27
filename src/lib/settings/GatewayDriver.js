@@ -61,7 +61,7 @@ class GatewayDriver extends Collection {
 	register(name, { provider = this.client.options.providers.default, schema = new Schema() } = {}) {
 		if (typeof name !== 'string') throw new TypeError('You must pass a name for your new gateway and it must be a string.');
 		if (!(schema instanceof Schema)) throw new TypeError('Schema must be a valid Schema instance.');
-		if (this.has(name)) throw new Error(`The key '${name}' is either taken by another Gateway or reserved for GatewayDriver's functionality.`);
+		if (this.has(name)) throw new Error(`The key '${name}' is taken by another Gateway.`);
 
 		if (!(name in this.client.options.gateways)) this.client.options.gateways[name] = {};
 		const gateway = new Gateway(this, name, schema, provider);
