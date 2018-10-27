@@ -18,24 +18,53 @@ class RateLimitManager extends Collection {
 		/**
 		 * The sweep interval for this RateLimitManager
 		 * @since 0.5.0
+		 * @name RateLimitManager#sweepInterval
 		 * @type {?NodeJS.Timer}
 		 * @private
 		 */
-		this.sweepInterval = null;
+		Object.defineProperty(this, 'sweepInterval', { value: null, writable: true });
+		Object.defineProperty(this, '_bucket', { value: bucket, writable: true });
+		Object.defineProperty(this, '_cooldown', { value: cooldown, writable: true });
+	}
 
-		/**
-		 * The amount of times a RateLimit from this manager can drip before it's limited
-		 * @since 0.5.0
-		 * @type {number}
-		 */
-		this.bucket = bucket;
+	/**
+	 * The amount of times a RateLimit from this manager can drip before it's limited
+	 * @since 0.5.0
+	 * @type {number}
+	 */
+	get bucket() {
+		return this._bucket;
+	}
 
-		/**
-		 * The amount of time in ms for a RateLimit from this manager to reset
-		 * @since 0.5.0
-		 * @type {number}
-		 */
-		this.cooldown = cooldown;
+	set bucket(value) {
+		for (const ratelimit of this.values()) ratelimit.bucket = value;
+		this._bucket = value;
+		return value;
+	}
+
+	/**
+	 * The amount of time in ms for a RateLimit from this manager to reset
+	 * @since 0.5.0
+	 * @type {number}
+	 */
+	get cooldown() {
+		return this._cooldown;
+	}
+
+	set cooldown(value) {
+		for (const ratelimit of this.values()) ratelimit.cooldown = value;
+		this._cooldown = value;
+		return value;
+	}
+
+	/**
+	 * Gets a {@link RateLimit} from this manager or creates it if it does not exist
+	 * @since 0.5.0
+	 * @param {string} id The id for the RateLimit
+	 * @returns {RateLimit}
+	 */
+	acquire(id) {
+		return this.get(id) || this.create(id);
 	}
 
 	/**
@@ -45,7 +74,7 @@ class RateLimitManager extends Collection {
 	 * @returns {RateLimit}
 	 */
 	create(id) {
-		const rateLimit = new RateLimit(this.bucket, this.cooldown);
+		const rateLimit = new RateLimit(this._bucket, this._cooldown);
 		this.set(id, rateLimit);
 		return rateLimit;
 	}
@@ -55,7 +84,7 @@ class RateLimitManager extends Collection {
 	 * @since 0.5.0
 	 * @param {string} id The id the RateLimit belongs to
 	 * @param {RateLimit} rateLimit The this for the sweep
-	 * @returns {number}
+	 * @returns {this}
 	 * @private
 	 */
 	set(id, rateLimit) {

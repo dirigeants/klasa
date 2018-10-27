@@ -1057,12 +1057,15 @@ declare module 'klasa' {
 		public resetTime(): this;
 	}
 
-	export class RateLimitManager extends Collection<Snowflake, RateLimit> {
+	export class RateLimitManager<K = Snowflake> extends Collection<K, RateLimit> {
 		public constructor(bucket: number, cooldown: number);
 		public bucket: number;
 		public cooldown: number;
+		private _bucket: number;
+		private _cooldown: number;
 		private sweepInterval: NodeJS.Timer | null;
-		public create(id: Snowflake): RateLimit;
+		public acquire(id: K): RateLimit;
+		public create(id: K): RateLimit;
 	}
 
 	export class ReactionHandler extends ReactionCollector {
