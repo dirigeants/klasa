@@ -291,23 +291,23 @@ class Settings {
 
 		const array = [];
 		const folders = [];
-		const keys = new Map();
+		const sections = new Map();
 		let longest = 0;
 		for (const [key, value] of piece.entries()) {
 			if (value.type === 'Folder') {
 				if (value.configurableKeys.length) folders.push(`// ${key}`);
 			} else if (value.configurable) {
 				if (key.length > longest) longest = key.length;
-				const values = keys.get(value.type) || [];
-				if (!values.length) keys.set(value.type, values);
+				const values = sections.get(value.type) || [];
+				if (!values.length) sections.set(value.type, values);
 				values.push(key);
 			}
 		}
 		if (folders.length) array.push('= Folders =', ...folders.sort(), '');
-		if (keys.size) {
-			for (const keyType of [...keys.keys()].sort()) {
+		if (sections.size) {
+			for (const keyType of [...sections.keys()].sort()) {
 				array.push(`= ${toTitleCase(keyType)}s =`,
-					...keys[keyType].sort().map(key => `${key.padEnd(longest)} :: ${this.display(message, piece.get(key))}`),
+					...sections[keyType].sort().map(key => `${key.padEnd(longest)} :: ${this.display(message, piece.get(key))}`),
 					'');
 			}
 		}
