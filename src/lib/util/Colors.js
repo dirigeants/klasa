@@ -61,7 +61,7 @@ class Colors {
 	static style(styles, { opening = [], closing = [] } = {}) {
 		if (styles) {
 			if (!Array.isArray(styles)) styles = [styles];
-			for (let style in styles) {
+			for (let style of styles) {
 				style = style.toLowerCase();
 				if (!(style in this.STYLES)) continue;
 				opening.push(this.STYLES[style]);
