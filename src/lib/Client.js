@@ -29,7 +29,7 @@ const Schema = require('./settings/schema/Schema');
 
 // lib/util
 const KlasaConsole = require('./util/KlasaConsole');
-const constants = require('./util/constants');
+const { DEFAULTS, MENTION_REGEX } = require('./util/constants');
 const Stopwatch = require('./util/Stopwatch');
 const util = require('./util/util');
 
@@ -125,7 +125,7 @@ class KlasaClient extends Discord.Client {
 	 */
 	constructor(options = {}) {
 		if (!util.isObject(options)) throw new TypeError('The Client Options for Klasa must be an object.');
-		options = util.mergeDefault(constants.DEFAULTS.CLIENT, options);
+		options = util.mergeDefault(DEFAULTS.CLIENT, options);
 		super(options);
 
 		/**
@@ -518,9 +518,9 @@ KlasaClient.defaultUserSchema = new Schema();
  * @type {Schema}
  */
 KlasaClient.defaultClientSchema = new Schema()
-	.add('userBlacklist', 'user', { array: true, configurable: true })
-	.add('guildBlacklist', 'guild', { array: true, configurable: true })
-	.add('schedules', 'any', { array: true, configurable: false });
+	.add('userBlacklist', 'user', { array: true })
+	.add('guildBlacklist', 'string', { array: true, filter: (__, value) => !MENTION_REGEX.snowflake.test(value) })
+	.add('schedules', 'any', { array: true });
 
 /**
  * Emitted when Klasa is fully ready and initialized.

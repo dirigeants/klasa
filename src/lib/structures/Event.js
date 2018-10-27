@@ -20,11 +20,11 @@ class Event extends Piece {
 	 * @param {KlasaClient} client The Klasa client
 	 * @param {EventStore} store The Event Store
 	 * @param {string} file The path from the pieces folder to the event file
-	 * @param {boolean} core If the piece is in the core directory or not
+	 * @param {string} directory The base directory to the pieces folder
 	 * @param {EventOptions} [options={}] Optional Event settings
 	 */
-	constructor(client, store, file, core, options = {}) {
-		super(client, store, file, core, options);
+	constructor(client, store, file, directory, options = {}) {
+		super(client, store, file, directory, options);
 
 		/**
 		 * If this event should only be run once and then unloaded
