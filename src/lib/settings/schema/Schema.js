@@ -45,6 +45,18 @@ class Schema extends Map {
 	}
 
 	/**
+	 * Get the configurable value for the current SchemaFolder or Schema instance
+	 * @since 0.5.0
+	 * @readonly
+	 * @type {Array<SchemaPiece>}
+	 */
+	get configurableValues() {
+		const values = [];
+		for (const piece of this.values(true)) if (piece.configurable) values.push(piece);
+		return values;
+	}
+
+	/**
 	 * Get the defaults for the current SchemaFolder or Schema instance
 	 * @since 0.5.0
 	 * @readonly

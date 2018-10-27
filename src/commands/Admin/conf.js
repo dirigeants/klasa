@@ -25,15 +25,15 @@ module.exports = class extends Command {
 	}
 
 	show(message, [key]) {
-		const path = this.client.gateways.guilds.getPath(key, { avoidUnconfigurable: true, errors: false, piece: null });
-		if (!path) return message.sendLocale('COMMAND_CONF_GET_NOEXT', [key]);
-		if (path.piece.type === 'Folder') {
+		const piece = this.client.gateways.guilds.schema.get(key);
+		if (!piece || piece.type === 'Folder' ? !piece.configurableKeys.length : !piece.configurable) return message.sendLocale('COMMAND_CONF_GET_NOEXT', [key]);
+		if (piece.type === 'Folder') {
 			return message.sendLocale('COMMAND_CONF_SERVER', [
 				key ? `: ${key.split('.').map(toTitleCase).join('/')}` : '',
-				codeBlock('asciidoc', message.guild.settings.list(message, path.piece))
+				codeBlock('asciidoc', message.guild.settings.list(message, piece))
 			]);
 		}
-		return message.sendLocale('COMMAND_CONF_GET', [path.piece.path, message.guild.settings.resolveString(message, path.piece)]);
+		return message.sendLocale('COMMAND_CONF_GET', [piece.path, message.guild.settings.resolveString(message, piece)]);
 	}
 
 	async set(message, [key, ...valueToSet]) {

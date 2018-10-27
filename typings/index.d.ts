@@ -535,7 +535,6 @@ declare module 'klasa' {
 		public ready: boolean;
 		public schema: SchemaFolder | null;
 
-		public getPath(key?: string, options?: GatewayGetPathOptions): GatewayGetPathResult | null;
 		public init(): Promise<void>;
 		public toJSON(): GatewayJSON;
 		public toString(): string;
@@ -1443,17 +1442,6 @@ declare module 'klasa' {
 		options: GatewayOptions;
 		schema: SchemaFolderAddOptions;
 		type: string;
-	};
-
-	export type GatewayGetPathOptions = {
-		avoidUnconfigurable?: boolean;
-		errors?: boolean;
-		piece?: boolean;
-	};
-
-	export type GatewayGetPathResult = {
-		piece: SchemaPiece;
-		route: string[];
 	};
 
 	export type QueryBuilderDatatype = {

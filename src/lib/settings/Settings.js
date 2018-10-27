@@ -1,6 +1,7 @@
 const { isObject, deepClone, toTitleCase, arraysStrictEquals, objectToTuples, resolveGuild, mergeDefault } = require('../util/util');
 const Type = require('../util/Type');
 const SchemaPiece = require('./schema/SchemaPiece');
+const Schema = require('./schema/Schema');
 const { DEFAULTS: { SETTINGS } } = require('../util/constants');
 
 /**
@@ -182,34 +183,36 @@ class Settings {
 	 * // Reset a key
 	 * Settings#reset('prefix');
 	 */
-	async reset(keys, guild, { avoidUnconfigurable = false, force = false } = {}) {
-		if (typeof guild === 'boolean') {
-			avoidUnconfigurable = guild;
-			guild = undefined;
-		}
-
+	async reset(keys, guild, { avoidUnconfigurable = false, force = false, rejectOnError = false } = {}) {
 		// If the entry does not exist in the DB, it'll never be able to reset a key
 		if (!this._existsInDB) return { errors: [], updated: [] };
 
 		if (typeof keys === 'string') keys = [keys];
-		else if (typeof keys === 'undefined') keys = [...this.gateway.schema.values(true)].map(piece => piece.path);
-		if (Array.isArray(keys)) {
-			const result = { errors: [], updated: [] };
-			for (const key of keys) {
-				const path = this.gateway.getPath(key, { piece: true, avoidUnconfigurable, errors: false });
-				if (!path) {
-					result.errors.push(guild && guild.language ?
-						guild.language.get('COMMAND_CONF_GET_NOEXT', key) :
-						`The path ${key} does not exist in the current schema, or does not correspond to a piece.`);
-					continue;
-				}
-				const value = deepClone(path.piece.default);
-				if (this._setValueByPath(path.piece, value, force).updated) result.updated.push({ data: [path.piece.path, value], piece: path.piece });
+		else if (typeof keys === 'undefined') keys = [...this.gateway.schema.values(true)];
+
+		// If keys is not an iterable, throw
+		if (!(Symbol.iterator in keys)) throw new TypeError(`Invalid value. Expected string or Array<string>. Got: ${new Type(keys)}`);
+
+		const result = { errors: [], updated: [] };
+		const handleError = rejectOnError ? (error) => { throw error; } : result.errors.push.bind(result.errors);
+
+		// Resolve all keys into SchemaPieces, including parsing SchemaFolders into all its children
+		const resolvedKeys = [];
+		for (const key of keys) {
+			try {
+				const piece = this._resolvePath(key, avoidUnconfigurable, true);
+				if (piece.type === 'Folder') resolvedKeys.push(...avoidUnconfigurable ? piece.configurableValues : piece.values(true));
+				else resolvedKeys.push(piece);
+			} catch (error) {
+				handleError(error);
 			}
-			await this._save(result);
-			return result;
 		}
-		throw new TypeError(`Invalid value. Expected string or Array<string>. Got: ${new Type(keys)}`);
+		for (const schemaPiece of resolvedKeys) {
+			const value = deepClone(schemaPiece.default);
+			if (this._setValueByPath(schemaPiece, value, force).updated) result.updated.push({ data: [schemaPiece.path, value], piece: schemaPiece });
+		}
+		await this._save(result);
+		return result;
 	}
 
 	/**
@@ -241,7 +244,26 @@ class Settings {
 	 * Settings#update([['prefix', 'k!'], ['language', 'es-ES']]);
 	 */
 	async update(...args) {
-		const { entries, options, result } = this._resolveUpdateOverloads(...args);
+		const { parsedEntries, options } = this._resolveUpdateOverloads(...args);
+
+		const result = { errors: [], updated: [] };
+		const handleError = options.rejectOnError ? (error) => { throw error; } : result.errors.push.bind(result.errors);
+		const entries = [];
+		for (const [entryKey, entryValue] of parsedEntries) {
+			try {
+				const schemaPiece = this._resolvePath(entryKey, options.avoidUnconfigurable, false);
+
+				if (!schemaPiece.array && Array.isArray(entryValue)) {
+					throw options.guild ?
+						options.guild.language.get('SETTING_GATEWAY_KEY_NOT_ARRAY', entryKey) :
+						`The path ${entryKey} does not store multiple values.`;
+				}
+
+				entries.push([schemaPiece, entryValue]);
+			} catch (error) {
+				handleError(error);
+			}
+		}
 
 		if (entries.length) {
 			await Promise.all(entries.map(([key, value]) => this._parse(key, value, options, result)));
@@ -259,7 +281,7 @@ class Settings {
 	 * @returns {string}
 	 */
 	list(message, path) {
-		const folder = typeof path === 'string' ? this.gateway.getPath(path, { piece: false }).piece : path;
+		const folder = typeof path === 'string' ? this._resolvePath(path, true, true).piece : path;
 		const array = [];
 		const folders = [];
 		const keys = {};
@@ -295,26 +317,53 @@ class Settings {
 	 * @private
 	 */
 	resolveString(message, path) {
-		const piece = path instanceof SchemaPiece ? path : this.gateway.getPath(path, { piece: true }).piece;
+		const piece = this._resolvePath(path, false, false);
 		const value = this.get(piece.path);
 		if (value === null) return 'Not set';
 		if (piece.array) return value.length ? `[ ${value.map(val => piece.serializer.stringify(val, message)).join(' | ')} ]` : 'None';
 		return piece.serializer.stringify(value, message);
 	}
 
+	_resolvePath(key, avoidUnconfigurable, acceptFolders) {
+		if (!key || key === '.') return { piece: this.schema, route: [] };
+		if (key instanceof Schema || key instanceof SchemaPiece) {
+			// The piece is a Folder
+			if (key.type === 'Folder') {
+				if (acceptFolders) return key;
+
+				// Does not accept a folder, throw
+				const keys = avoidUnconfigurable ? key.configurableKeys : [...key.keys()];
+				throw keys.length ? `Please, choose one of the following keys: '${keys.join('\', \'')}'` : 'This group is not configurable.';
+			}
+
+			if (avoidUnconfigurable && !key.configurable) throw `The key ${key.path} is not configurable.`;
+			return key;
+		}
+
+		const piece = this.gateway.schema.get(key);
+
+		if (piece) return this._resolvePath(piece, avoidUnconfigurable, acceptFolders);
+
+		// The piece does not exist (invalid or non-existent path)
+		throw `The key ${key} does not exist in the schema.`;
+	}
+
 	_resolveUpdateOverloads(key, value, options) {
-		let rawEntries;
+		// Resolve iterators into an array
+		if (!Array.isArray(key) && Symbol.iterator in key) key = [...key];
+
+		let parsedEntries;
 		// Overload update(object, GuildResolvable);
 		if (isObject(key)) {
 			value = options;
-			rawEntries = objectToTuples(key);
+			parsedEntries = objectToTuples(key);
 		} else if (typeof key === 'string') {
 			// Overload update(string, any, ...any[]);
-			rawEntries = [[key, value]];
+			parsedEntries = [[key, value]];
 		} else if (Array.isArray(key) && key.every(entry => Array.isArray(entry) && entry.length === 2)) {
 			// Overload update(Array<[string, any]>)
 			value = options;
-			rawEntries = key;
+			parsedEntries = key;
 		} else {
 			throw new TypeError(`Invalid value. Expected object, string or Array<[string, any]>. Got: ${new Type(key)}`);
 		}
@@ -327,38 +376,19 @@ class Settings {
 
 		options = mergeDefault(SETTINGS, options);
 
-		const result = { errors: [], updated: [] };
-		const pathOptions = { piece: true, avoidUnconfigurable: options.avoidUnconfigurable, errors: false };
-		const handleError = options.rejectOnError ? (error) => { throw error; } : result.errors.push.bind(result.errors);
-		const entries = [];
-		for (const entry of rawEntries) {
-			const path = this.gateway.getPath(entry[0], pathOptions);
-			if (!path) {
-				handleError(options.guild ?
-					options.guild.language.get('COMMAND_CONF_GET_NOEXT', entry[0]) :
-					`The path ${entry[0]} does not exist in the current schema, or does not correspond to a piece.`);
-			} else if (!path.piece.array && Array.isArray(entry[1])) {
-				handleError(options.guild ?
-					options.guild.language.get('SETTING_GATEWAY_KEY_NOT_ARRAY', entry[0]) :
-					`The path ${entry[0]} does not store multiple values.`);
-			} else {
-				entries.push([path, entry[1]]);
-			}
-		}
-
-		return { entries, options, result };
+		return { parsedEntries, options };
 	}
 
 	/**
 	 * Parse a value
 	 * @since 0.5.0
-	 * @param {GatewayGetPathResult} key The path result
+	 * @param {SchemaPiece} piece The path result
 	 * @param {*} value The value to parse
 	 * @param {SettingsUpdateOptions} options The parse options
 	 * @param {SettingsUpdateResult} result The updated result
 	 * @private
 	 */
-	async _parse({ piece, route }, value, options, result) {
+	async _parse(piece, value, options, result) {
 		const parsed = value === null ?
 			deepClone(piece.default) :
 			await (Array.isArray(value) ?
@@ -367,7 +397,7 @@ class Settings {
 		if (typeof parsed === 'undefined') return;
 		const parsedID = Array.isArray(parsed) ? parsed.map(val => piece.serializer.serialize(val)) : piece.serializer.serialize(parsed);
 		if (piece.array) {
-			this._parseArray(piece, route, parsedID, options, result);
+			this._parseArray(piece, parsedID, options, result);
 		} else if (this._setValueByPath(piece, parsedID, options.force).updated) {
 			result.updated.push({ data: [piece.path, parsedID], piece });
 		}
@@ -396,13 +426,12 @@ class Settings {
 	 * Parse a single value for an array
 	 * @since 0.5.0
 	 * @param {SchemaPiece} piece The SchemaPiece pointer that parses this entry
-	 * @param {string[]} route The path bits for property accesses
 	 * @param {*} parsed The parsed value
 	 * @param {SettingsUpdateOptions} options The parse options
 	 * @param {SettingsUpdateResult} result The updated result
 	 * @private
 	 */
-	_parseArray(piece, route, parsed, { force, action, arrayPosition }, { updated, errors }) {
+	_parseArray(piece, parsed, { force, action, arrayPosition }, { updated, errors }) {
 		if (action === 'overwrite') {
 			if (!Array.isArray(parsed)) parsed = [parsed];
 			if (this._setValueByPath(piece, parsed, force).updated) {
@@ -410,7 +439,8 @@ class Settings {
 			}
 			return;
 		}
-		const array = this.get(route);
+
+		const array = this.get(piece.path);
 		if (typeof arrayPosition === 'number') {
 			if (arrayPosition >= array.length) errors.push(new Error(`The option arrayPosition should be a number between 0 and ${array.length - 1}`));
 			else array[arrayPosition] = parsed;
