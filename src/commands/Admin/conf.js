@@ -9,7 +9,7 @@ module.exports = class extends Command {
 			guarded: true,
 			subcommands: true,
 			description: language => language.get('COMMAND_CONF_SERVER_DESCRIPTION'),
-			usage: '<set|show|remove|reset> (key:key) (value:value) [...]',
+			usage: '<set|show|remove|reset> (key:key) (value:value)',
 			usageDelim: ' '
 		});
 
@@ -19,7 +19,7 @@ module.exports = class extends Command {
 				throw message.language.get('COMMAND_CONF_NOKEY');
 			})
 			.createCustomResolver('value', (arg, possible, message, [action]) => {
-				if (!['set', 'remove'].includes(action) || arg) return arg;
+				if (!['set', 'remove'].includes(action) || arg) return this.client.arguments.get('...string').run(arg, possible, message);
 				throw message.language.get('COMMAND_CONF_NOVALUE');
 			});
 	}
@@ -36,18 +36,18 @@ module.exports = class extends Command {
 		return message.sendLocale('COMMAND_CONF_GET', [piece.path, message.guild.settings.display(message, piece)]);
 	}
 
-	async set(message, [key, ...valueToSet]) {
-		const piece = this.check(await message.guild.settings.update(key, valueToSet.join(' '), message.guild, { avoidUnconfigurable: true, action: 'add' }));
+	async set(message, [key, valueToSet]) {
+		const piece = this.check(await message.guild.settings.update(key, valueToSet, { avoidUnconfigurable: true, action: 'add', guild: message.guild }));
 		return message.sendLocale('COMMAND_CONF_UPDATED', [key, message.guild.settings.display(message, piece)]);
 	}
 
-	async remove(message, [key, ...valueToRemove]) {
-		const piece = this.check(await message.guild.settings.update(key, valueToRemove.join(' '), message.guild, { avoidUnconfigurable: true, action: 'remove' }));
+	async remove(message, [key, valueToRemove]) {
+		const piece = this.check(await message.guild.settings.update(key, valueToRemove, { avoidUnconfigurable: true, action: 'remove', guild: message.guild }));
 		return message.sendLocale('COMMAND_CONF_UPDATED', [key, message.guild.settings.display(message, piece)]);
 	}
 
 	async reset(message, [key]) {
-		const piece = this.check(await message.guild.settings.reset(key, message.guild, true));
+		const piece = this.check(await message.guild.settings.reset(key, { guild: message.guild }));
 		return message.sendLocale('COMMAND_CONF_RESET', [key, message.guild.settings.display(message, piece)]);
 	}
 

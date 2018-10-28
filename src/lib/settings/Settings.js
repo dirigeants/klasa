@@ -33,6 +33,7 @@ class Settings {
 	 * @property {number} [arrayPosition=null] The position of the array to replace
 	 * @property {boolean} [avoidUnconfigurable=false] Whether the update should avoid unconfigurable keys
 	 * @property {boolean} [force=false] Whether this should skip the equality checks or not
+	 * @property {GuildResolvable} [guild=null] A KlasaGuild resolvable for multilingual support
 	 * @property {boolean} [rejectOnError=false] Whether this call should reject on error
 	 */
 
@@ -40,6 +41,7 @@ class Settings {
 	 * @typedef {Object} SettingsResetOptions
 	 * @property {boolean} [avoidUnconfigurable=false] Whether the update should avoid unconfigurable keys
 	 * @property {boolean} [force=false] Whether this should skip the equality checks or not
+	 * @property {boolean} [rejectOnError=false] Whether this call should reject on error
 	 */
 
 	/**
@@ -165,7 +167,6 @@ class Settings {
 	 * Reset a value from an entry.
 	 * @since 0.5.0
 	 * @param {(string|string[])} [keys] The key to reset
-	 * @param {KlasaGuild} [guild] A KlasaGuild instance for multilingual support
 	 * @param {SettingsResetOptions} [options={}] The options for the reset
 	 * @returns {SettingsUpdateResult}
 	 * @example
@@ -212,13 +213,12 @@ class Settings {
 	 * @since 0.5.0
 	 * @param {(string|Object)} key The key to modify
 	 * @param {*} [value] The value to parse and save
-	 * @param {GuildResolvable} [guild=null] A guild resolvable
 	 * @param {SettingsUpdateOptions} [options={}] The options for the update
 	 * @returns {SettingsUpdateResult}
 	 * @async
 	 * @example
 	 * // Updating the value of a key
-	 * Settings#update('roles.administrator', '339943234405007361', message.guild);
+	 * Settings#update('roles.administrator', '339943234405007361', { guild: message.guild });
 	 *
 	 * // Updating an array:
 	 * Settings#update('userBlacklist', '272689325521502208');
@@ -227,10 +227,10 @@ class Settings {
 	 * Settings#update('userBlacklist', '272689325521502208', { action: 'add' });
 	 *
 	 * // Updating it with a json object:
-	 * Settings#update({ roles: { administrator: '339943234405007361' } }, message.guild);
+	 * Settings#update({ roles: { administrator: '339943234405007361' } }, { guild: message.guild });
 	 *
 	 * // Updating multiple keys (with json object):
-	 * Settings#update({ prefix: 'k!', language: 'es-ES' }, message.guild);
+	 * Settings#update({ prefix: 'k!', language: 'es-ES' }, { guild: message.guild });
 	 *
 	 * // Updating multiple keys (with arrays):
 	 * Settings#update([['prefix', 'k!'], ['language', 'es-ES']]);
@@ -369,7 +369,7 @@ class Settings {
 		if (options.guild) options.guild = resolveGuild(this.client, options.guild);
 		else if (this.gateway.type === 'guilds') options.guild = this.client.guilds.get(this.id);
 
-		options = mergeDefault(SETTINGS, options);
+		options = mergeDefault(isReset ? SETTINGS.reset : SETTINGS.update, options);
 
 		return { parsedEntries, options };
 	}
