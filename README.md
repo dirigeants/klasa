@@ -40,7 +40,8 @@ Following suit from Komada (the Croatian word for "pieces"), Klasa is the Croati
     - Languages: Easy internationalization support for your bot!
     - Monitors: Watch every single message your bot receives! They're perfect for no-mention-spam, swear word filter, and so on!
     - Providers: You can have one, or more, they're interfaces for the settings system and ensures the data is written correctly!
-    - Tasks: The newest addition to Klasa, they're pieces that handles scheduled tasks.
+    - Serializers: These allow you to change how the Settings system reads, writes, and displays information.
+    - Tasks: Pieces that handle scheduled tasks.
 
 ## Time to get started!
 

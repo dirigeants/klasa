@@ -48,7 +48,10 @@ new Client({
 | **quotedStringSupport**    | `false`                   | boolean            | Whether the bot should default to using quoted string support³                      |
 | **readyMessage**           | see below⁴                | string/function    | readyMessage to be passed through to Klasa's ready event.                           |
 | **regexPrefix**            | `null`                    | regex              | The regular expression prefix if one is provided                                    |
+| **slowmode**               | `0`                       | number             | The number of ms when the bot should respond to a users command.                    |
+| **slowmodeAggressive**     | `false`                   | boolean            | If the slowmode time should reset if a user spams the command over and over again   |
 | **typing**                 | `false`                   | boolean            | Whether the bot should type while processing commands.                              |
+| **prefixCaseInsensitive**  | `false`                   | boolean            | Whether the bot should respond if the prefix is incase sensitive or not             |
 
 >1. ID acquired from the Discord API if not provided: `client.application.owner.id`
 >1. You can pass an array to accept multiple prefixes.
