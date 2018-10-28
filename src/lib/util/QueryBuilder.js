@@ -90,7 +90,7 @@ class QueryBuilder {
 	 * @param {schemaPiece} schemaPiece The SchemaPiece to process
 	 * @returns {string}
 	 * @example
-	 * this.qb.parse(this.client.gateways.guilds.schema.prefix);
+	 * this.qb.parse(this.client.gateways.get('guilds').schema.prefix);
 	 * // type: 'string', array: true, max: 10
 	 * // -> prefix VARCHAR(10)[]
 	 */
