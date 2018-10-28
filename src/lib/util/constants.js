@@ -131,6 +131,21 @@ exports.DEFAULTS = {
 		}
 	},
 
+	SETTINGS: {
+		reset: {
+			avoidUnconfigurable: false,
+			force: false,
+			rejectOnError: false
+		},
+		update: {
+			action: 'auto',
+			arrayPosition: null,
+			avoidUnconfigurable: false,
+			force: false,
+			rejectOnError: false
+		}
+	},
+
 	QUERYBUILDER: {
 		datatypes: {
 			any: { type: 'TEXT' },

@@ -214,24 +214,24 @@ declare module 'klasa' {
 		public readonly gateway: Gateway;
 		public readonly id: string;
 		public readonly synchronizing: boolean;
-		private _existsInDB: boolean;
+		private _existsInDB: boolean | null;
 
 		public get<T = any>(path: string | string[]): T;
 		public clone(): Settings;
 		public sync(force?: boolean): Promise<this>;
 		public destroy(): Promise<this>;
 
-		public reset(key?: string | string[], options?: SettingsResetOptions): Promise<SettingsUpdateResult>;
-		public reset(key?: string | string[], guild?: KlasaGuild, options?: SettingsResetOptions): Promise<SettingsUpdateResult>;
-		public update(key: Record<string, any>, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
-		public update(key: Record<string, any>, guild?: GuildResolvable, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
-		public update(key: string, value: any, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
-		public update(key: string, value: any, guild?: GuildResolvable, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
-		public update(entries: Array<[string, any]>, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
-		public update(entries: Array<[string, any]>, guild?: GuildResolvable, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
-		public list(message: KlasaMessage, path: SchemaFolder | string): string;
-		public resolveString(message: KlasaMessage, path: SchemaPiece | string): string;
+		public reset(key?: string | Schema | SchemaPiece | Iterable<string | Schema | SchemaPiece>, options?: SettingsResetOptions): Promise<SettingsUpdateResult>;
+		public update(key: ObjectLiteral, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
+		public update(key: string | SchemaPiece, value: any, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
+		public update(entries: Iterable<[string | SchemaPiece, any]>, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
+		public display(message: KlasaMessage, path: Schema | SchemaPiece | string): string;
 
+		private _resolvePath(key: string | Schema | SchemaPiece | Iterable<string | Schema | SchemaPiece>, avoidUnconfigurable: boolean, acceptFolders: boolean): Schema | SchemaPiece;
+		private _resolveUpdateOverloads(isReset: true, key: ObjectLiteral | Iterable<string | SchemaPiece>, options?: SettingsResetOptions): { parsedEntries: string[]; options: Required<SettingsResetOptions> };
+		private _resolveUpdateOverloads(isReset: false, key: ObjectLiteral | Iterable<[string | SchemaPiece, any]>, options?: SettingsUpdateOptions): { parsedEntries: string[]; options: Required<SettingsUpdateOptions> };
+		private _parse(piece: SchemaPiece, value: any, options: SettingsUpdateOptions, result: SettingsUpdateResult): Promise<void>;
+		private _parseArray(piece: SchemaPiece, value: any, options: SettingsUpdateOptions, result: SettingsUpdateResult): void;
 		private _save(data: SettingsUpdateResult): Promise<void>;
 		private _setValueByPath(piece: SchemaPiece, parsedID: any): { updated: boolean, old: any };
 		private _patch(data: Record<string, any>, instance?: object, schema?: SchemaFolder): void;
@@ -253,13 +253,13 @@ declare module 'klasa' {
 	}
 
 	export class QueryBuilder {
-		public constructor(datatypes: Record<string, QueryBuilderDatatype>, options?: QueryBuilderOptions);
-		public get(type: string): QueryBuilderDatatype | null;
+		public constructor(datatypes: ObjectLiteral<string | QueryBuilderDatatypeOptions>, options?: QueryBuilderDefaultOptions);
+		public get(type: string): Required<QueryBuilderDatatypeOptions> | null;
 		public parse(schemaPiece: SchemaPiece): string;
-		public parseValue(value: any, schemaPiece: SchemaPiece, datatype?: QueryBuilderDatatype): string;
+		public parseValue(value: any, schemaPiece: SchemaPiece, datatype?: Required<QueryBuilderDatatypeOptions>): string;
 		private arrayResolver: (values: Array<any>, piece: SchemaPiece, resolver: Function) => string;
 		private formatDatatype: (name: string, datatype: string, def?: string) => string;
-		private readonly _datatypes: Record<string, QueryBuilderDatatype>;
+		private readonly _datatypes: ObjectLiteral<Required<QueryBuilderDatatypeOptions>>;
 	}
 
 	export class GatewayDriver extends Collection<string, Gateway> {
@@ -285,7 +285,6 @@ declare module 'klasa' {
 		public ready: boolean;
 		public schema: SchemaFolder | null;
 
-		public getPath(key?: string, options?: GatewayGetPathOptions): GatewayGetPathResult | null;
 		public init(): Promise<void>;
 		public toJSON(): GatewayJSON;
 		public toString(): string;
@@ -293,6 +292,7 @@ declare module 'klasa' {
 
 	export class Schema extends Map<string, SchemaPiece | SchemaFolder> {
 		public constructor(path?: string);
+		public readonly configurableValues: Array<SchemaPiece>;
 		public readonly configurableKeys: Array<string>;
 		public readonly defaults: Record<string, any>;
 		public readonly path: string;
@@ -1060,42 +1060,16 @@ declare module 'klasa' {
 		(arg: string, possible: Possible, message: KlasaMessage, params: any[]): any;
 	}
 
-	export interface Constants {
-		DEFAULTS: ConstantsDefaults;
-		TIME: ConstantsTime;
-		MENTION_REGEX: MentionRegex;
-	}
-
-	export interface ConstantsDefaults {
-		CLIENT: Required<KlasaClientOptions>;
-		CONSOLE: Required<ConsoleOptions>;
-		DATATYPES: Record<string, QueryBuilderDatatype>;
-	}
-
-	export interface ConstantsTime {
-		SECOND: number;
-		MINUTE: number;
-		HOUR: number;
-		DAY: number;
-		DAYS: string[];
-		MONTHS: string[];
-		TIMESTAMP: {
-			TOKENS: {
-				Y: number;
-				Q: number;
-				M: number;
-				D: number;
-				d: number;
-				X: number;
-				x: number;
-				H: number;
-				h: number;
-				a: number;
-				A: number;
-				m: number;
-				s: number;
-				S: number;
-				Z: number;
+	export type Constants = {
+		DEFAULTS: {
+			CLIENT: Required<KlasaClientOptions>;
+			CONSOLE: Required<KlasaConsoleOptions>,
+			QUERYBUILDER: {
+				datatypes: {
+					datatypes?: ObjectLiteral<QueryBuilderDatatypeOptions>;
+					queryBuilderOptions?: QueryBuilderDefaultOptions;
+				};
+				queryBuilderOptions: Required<QueryBuilderDefaultOptions>;
 			};
 		};
 		CRON: {
@@ -1178,27 +1152,14 @@ declare module 'klasa' {
 		type: string;
 	}
 
-	export interface GatewayGetPathOptions {
-		avoidUnconfigurable?: boolean;
-		errors?: boolean;
-		piece?: boolean;
-	}
-
-	export interface GatewayGetPathResult {
-		piece: SchemaPiece;
-		route: string[];
-	}
-
-	export type QueryBuilderDatatype = string | {
-		array?: (datatype: string) => string;
+	export type QueryBuilderDatatypeOptions = {
+		type: string;
 		resolver?: <T = any>(input: any, schemaPiece: SchemaPiece) => T;
-		type: string | ((piece: SchemaPiece) => string);
+		arrayResolver?: (values: Array<any>, piece: SchemaPiece, resolver: Function) => string;
 	};
 
-	export type QueryBuilderOptions = {
-		arrayResolver?: (values: Array<any>, piece: SchemaPiece, resolver: Function) => string;
-		formatDatatype?: (name: string, datatype: string, def?: string) => string;
-	} & Filter<Record<string, QueryBuilderDatatype | ((piece: SchemaPiece) => string)>, 'arrayResolver' | 'formatDatatype'>;
+	export type QueryBuilderOptions = QueryBuilderDefaultOptions
+		& ObjectLiteral<string | QueryBuilderDatatypeOptions>;
 
 	export type GuildResolvable = KlasaGuild
 		| KlasaMessage
@@ -1208,14 +1169,18 @@ declare module 'klasa' {
 	export interface SettingsResetOptions {
 		avoidUnconfigurable?: boolean;
 		force?: boolean;
-	}
+		guild?: KlasaGuild;
+		rejectOnError?: boolean;
+	};
 
 	export interface SettingsUpdateOptions {
 		action?: 'add' | 'remove' | 'auto' | 'overwrite';
 		arrayPosition?: number;
 		avoidUnconfigurable?: boolean;
 		force?: boolean;
-	}
+		guild?: KlasaGuild;
+		rejectOnError?: boolean;
+	};
 
 	export interface SettingsUpdateResult {
 		errors: Error[];
@@ -1465,7 +1430,19 @@ declare module 'klasa' {
 		useColor?: boolean;
 	}
 
-	export interface ConsoleEvents {
+	export type KlasaSettingsOptions = {
+		reset?: SettingsResetOptions;
+		update?: SettingsUpdateOptions;
+	};
+
+	export type QueryBuilderDefaultOptions = {
+		array?: (datatype: string) => string;
+		arrayResolver?: (values: Array<any>, piece: SchemaPiece, resolver: Function) => string;
+		formatDatatype?: (name: string, datatype: string, def?: string) => string;
+		resolver?: <T = any>(input: any, schemaPiece: SchemaPiece) => T;
+	};
+
+	export type KlasaConsoleEvents = {
 		debug?: boolean;
 		error?: boolean;
 		log?: boolean;
