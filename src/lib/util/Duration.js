@@ -48,8 +48,10 @@ class Duration {
 		let result = 0;
 		// ignore commas
 		pattern = pattern.replace(/(\d),(\d)/g, '$1$2');
+		// a / an = 1
+		pattern = pattern.replace(/\s(?:a|an)\s/g, '1');
 		pattern.replace(Duration.regex, (match, i, units) => {
-			units = Duration[units] || Duration[units.toLowerCase().replace(/s$/, '')] || 1;
+			units = Duration[units] || Duration[units.toLowerCase().replace(/s$/, '')] || 0;
 			result += parseFloat(i, 10) * units;
 		});
 		return result;
