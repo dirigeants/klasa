@@ -130,7 +130,7 @@ class Settings {
 	 * @param {boolean} [force=false] Whether the sync should download from the database
 	 * @returns {Promise<this>}
 	 */
-	sync(force = false) {
+	sync(force = this._existsInDB === null) {
 		// Await current sync status from the sync queue
 		const syncStatus = this.gateway.syncQueue.get(this.id);
 		if (!force || syncStatus) return syncStatus || Promise.resolve(this);
@@ -153,6 +153,7 @@ class Settings {
 	 * @returns {this}
 	 */
 	async destroy() {
+		await this.sync();
 		if (this._existsInDB) {
 			await this.gateway.provider.delete(this.gateway.type, this.id);
 			this.client.emit('settingsDeleteEntry', this);
@@ -179,6 +180,7 @@ class Settings {
 	 */
 	async reset(keys = [...this.gateway.schema.values(true)], ...args) {
 		const { parsedEntries, options: { avoidUnconfigurable = false, force = false, rejectOnError = false } } = this._resolveUpdateOverloads(true, keys, ...args);
+		await this.sync();
 
 		// If the entry does not exist in the DB, it'll never be able to reset a key
 		if (!this._existsInDB) return { errors: [], updated: [] };
@@ -240,6 +242,7 @@ class Settings {
 			throw new TypeError(`Invalid value. Expected object, string or Array<[string, Schema | SchemaPiece | string]>. Got: ${new Type(parsedEntries)}`);
 		}
 
+		await this.sync();
 		const result = { errors: [], updated: [] };
 		const handleError = options.rejectOnError ? (error) => { throw error; } : result.errors.push.bind(result.errors);
 		const entries = [];
@@ -403,7 +406,6 @@ class Settings {
 	 */
 	async _save({ updated }) {
 		if (!updated.length) return;
-		if (this._existsInDB === null) await this.sync(true);
 		if (this._existsInDB === false) {
 			await this.gateway.provider.create(this.gateway.type, this.id);
 			this._existsInDB = true;
