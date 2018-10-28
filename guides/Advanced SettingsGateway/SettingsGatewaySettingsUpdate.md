@@ -6,12 +6,12 @@ Once we have our schema completed with all the keys, folders and types needed, w
 // Updating the value of a key
 // This key is contained in the roles folder, and the second value is a role id, we also need
 // to pass a GuildResolvable.
-message.guild.settings.update('roles.administrator', '339943234405007361', message.guild);
+message.guild.settings.update('roles.administrator', '339943234405007361');
 
 // For retrocompatibility, the object overload is still available, however, this is much slower.
 // If you store objects literals in keys that do not take an array, this may break, prefer the
 // other overload or use nested SchemaPieces for full consistency.
-message.guild.settings.update({ roles: { administrator: '339943234405007361' } }, message.guild);
+message.guild.settings.update({ roles: { administrator: '339943234405007361' } });
 
 // Updating an array
 // userBlacklist, as mentioned in another tutorial, it's a piece with an array of users. Using
