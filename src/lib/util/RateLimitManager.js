@@ -23,24 +23,38 @@ class RateLimitManager extends Collection {
 		 * @private
 		 */
 		Object.defineProperty(this, 'sweepInterval', { value: null, writable: true });
+		Object.defineProperty(this, '_bucket', { value: bucket, writable: true });
+		Object.defineProperty(this, '_cooldown', { value: cooldown, writable: true });
+	}
 
-		/**
-		 * The amount of times a RateLimit from this manager can drip before it's limited
-		 * @since 0.5.0
-		 * @name RateLimitManager#bucket
-		 * @type {number}
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'bucket', { value: bucket });
+	/**
+	 * The amount of times a RateLimit from this manager can drip before it's limited
+	 * @since 0.5.0
+	 * @type {number}
+	 */
+	get bucket() {
+		return this._bucket;
+	}
 
-		/**
-		 * The amount of time in ms for a RateLimit from this manager to reset
-		 * @since 0.5.0
-		 * @name RateLimitManager#cooldown
-		 * @type {number}
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'cooldown', { value: cooldown });
+	set bucket(value) {
+		for (const ratelimit of this.values()) ratelimit.bucket = value;
+		this._bucket = value;
+		return value;
+	}
+
+	/**
+	 * The amount of time in ms for a RateLimit from this manager to reset
+	 * @since 0.5.0
+	 * @type {number}
+	 */
+	get cooldown() {
+		return this._cooldown;
+	}
+
+	set cooldown(value) {
+		for (const ratelimit of this.values()) ratelimit.cooldown = value;
+		this._cooldown = value;
+		return value;
 	}
 
 	/**
@@ -60,7 +74,7 @@ class RateLimitManager extends Collection {
 	 * @returns {RateLimit}
 	 */
 	create(id) {
-		const rateLimit = new RateLimit(this.bucket, this.cooldown);
+		const rateLimit = new RateLimit(this._bucket, this._cooldown);
 		this.set(id, rateLimit);
 		return rateLimit;
 	}
