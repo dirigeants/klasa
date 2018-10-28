@@ -49,7 +49,7 @@ class Duration {
 		// ignore commas
 		pattern = pattern.replace(/(\d),(\d)/g, '$1$2');
 		// a / an = 1
-		pattern = pattern.replace(/\ban?\b/g, '1');
+		pattern = pattern.replace(/\ban?\b/ig, '1');
 		pattern.replace(Duration.regex, (match, i, units) => {
 			units = Duration[units] || Duration[units.toLowerCase().replace(/s$/, '')] || 0;
 			result += parseFloat(i, 10) * units;
