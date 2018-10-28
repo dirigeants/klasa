@@ -31,7 +31,7 @@ class Tag {
 		 * @since 0.2.1
 		 * @type {Possible[]}
 		 */
-		this.possibles = Tag.parseMembers(members, count);
+		this.possibles = this.constructor.parseMembers(members, count);
 
 		/**
 		 * The custom response defined for this possible
@@ -69,12 +69,12 @@ class Tag {
 	static parseMembers(members, count) {
 		const literals = [];
 		const types = [];
-		members = Tag.parseTrueMembers(members);
+		members = this.parseTrueMembers(members);
 		return members.map((member, i) => {
 			const current = `${members}: at tag #${count} at bound #${i + 1}`;
 			let possible;
 			try {
-				possible = new Possible(Tag.pattern.exec(member));
+				possible = new Possible(this.pattern.exec(member));
 			} catch (err) {
 				if (typeof err === 'string') throw `${current}: ${err}`;
 				throw `${current}: invalid syntax, non specific`;
@@ -124,6 +124,6 @@ class Tag {
  * @static
  * @private
  */
-Tag.pattern = /^([^:]+)(?::([^{}/]+))?(?:{([^,]+)?(?:,(.+))?})?(?:\/(.+)\/(\w+)?)?$/i;
+Tag.pattern = /^([^:]+)(?::([^{}/]+))?(?:{([^,]+)?,?([^}]+)?})?(?:\/(.+)\/(\w+)?)?$/i;
 
 module.exports = Tag;

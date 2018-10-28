@@ -115,7 +115,7 @@ class ReactionHandler extends ReactionCollector {
 			this[this.methodMap.get(reaction.emoji.name)](user);
 		});
 		this.on('end', () => {
-			if (this.reactionsDone) this.message.reactions.removeAll();
+			if (this.reactionsDone && !this.message.deleted) this.message.reactions.removeAll();
 		});
 	}
 
@@ -329,6 +329,7 @@ class ReactionHandler extends ReactionCollector {
 	 * @private
 	 */
 	async _queueEmojiReactions(emojis) {
+		if (this.message.deleted) return this.stop();
 		if (this.ended) return this.message.reactions.removeAll();
 		await this.message.react(emojis.shift());
 		if (emojis.length) return this._queueEmojiReactions(emojis);
