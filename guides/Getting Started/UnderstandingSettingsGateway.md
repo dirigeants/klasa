@@ -60,7 +60,7 @@ client.login('A_BEAUTIFUL_TOKEN_AINT_IT?');
 And then, you can access to it by:
 
 ```javascript
-client.gateways.channels;
+client.gateways.get('channels');
 ```
 
 ## Customizing the options for each built-in gateway

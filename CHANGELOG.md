@@ -132,6 +132,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 - [[#426](https://github.com/dirigeants/klasa/pull/426)] Tweaked conf and userconf commands to use restString for values. (kyranet)
 - [[#426](https://github.com/dirigeants/klasa/pull/426)] Guild Settings will not longer need guild. (kyranet)
 - [[#426](https://github.com/dirigeants/klasa/pull/426)] **[BREAKING]** Moved the guild parameter in Settings#update to `SettingsUpdateOptions`. (kyranet)
+- [[#467](https://github.com/dirigeants/klasa/pull/467)] **[BREAKING]** Changed `GatewayDriver` to extend `Collection<string, Gateway>` as opposed to being a dictionary type. (kyranet)
 - [[#392](https://github.com/dirigeants/klasa/pull/392)] Changed default prefix from `'!'` to `''`. (kyranet)
 - [[#383](https://github.com/dirigeants/klasa/pull/383)] **[BREAKING]** Changed SchemaFolder to extend Schema, which extends Map. All keys are now stored inside the map as opposed to being properties. (Unseenfaith)
 - [[#383](https://github.com/dirigeants/klasa/pull/383)] **[BREAKING]** Changed `Schema#add` and `Schema#remove` to be synchronous. They must be called before ready. (Unseenfaith)

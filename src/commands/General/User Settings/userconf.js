@@ -24,7 +24,7 @@ module.exports = class extends Command {
 	}
 
 	show(message, [key]) {
-		const piece = this.client.gateways.users.schema.get(key);
+		const piece = this.client.gateways.get('users').schema.get(key);
 		if (!piece || piece.type === 'Folder' ? !piece.configurableKeys.length : !piece.configurable) return message.sendLocale('COMMAND_CONF_GET_NOEXT', [key]);
 		if (piece.type === 'Folder') {
 			return message.sendLocale('COMMAND_CONF_USER', [
