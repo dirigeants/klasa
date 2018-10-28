@@ -322,7 +322,7 @@ class Settings {
 	 * @returns {Schema|SchemaPiece}
 	 */
 	_resolvePath(key, avoidUnconfigurable, acceptFolders) {
-		if (!key || key === '.') return this.schema;
+		if (!key || key === '.') return this.gateway.schema;
 		if (key instanceof Schema || key instanceof SchemaPiece) {
 			// The piece is a Folder
 			if (key.type === 'Folder') {
@@ -373,7 +373,7 @@ class Settings {
 		} else if (typeof key === 'string') {
 			// Overload update(string, any, ...any[]);
 			// Overload reset(string, options);
-			parsedEntries = isReset ? key : [[key, value]];
+			parsedEntries = isReset ? [key] : [[key, value]];
 			if (!isReset) value = options;
 		} else if (Array.isArray(key)) {
 			// Overload update(Array<any>);

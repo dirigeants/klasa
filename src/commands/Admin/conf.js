@@ -53,8 +53,8 @@ module.exports = class extends Command {
 	}
 
 	check(message, key, { errors, updated }) {
-		if (errors.length) return message.sendMessage(String(errors[0]));
-		if (!updated.length) return message.sendLocale('COMMAND_CONF_NOCHANGE', [key]);
+		if (errors.length) throw String(errors[0]);
+		if (!updated.length) throw message.language.get('COMMAND_CONF_NOCHANGE', key);
 		return updated[0].piece;
 	}
 
