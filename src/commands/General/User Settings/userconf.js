@@ -36,17 +36,17 @@ module.exports = class extends Command {
 	}
 
 	async set(message, [key, valueToSet]) {
-		const piece = this.check(await message.author.settings.update(key, valueToSet, { avoidUnconfigurable: true, action: 'add', guild: message.guild }));
+		const piece = this.check(message, key, await message.author.settings.update(key, valueToSet, { avoidUnconfigurable: true, action: 'add', guild: message.guild }));
 		return message.sendLocale('COMMAND_CONF_UPDATED', [key, message.author.settings.display(message, piece)]);
 	}
 
 	async remove(message, [key, valueToRemove]) {
-		const piece = this.check(await message.author.settings.update(key, valueToRemove, { avoidUnconfigurable: true, action: 'remove', guild: message.guild }));
+		const piece = this.check(message, key, await message.author.settings.update(key, valueToRemove, { avoidUnconfigurable: true, action: 'remove', guild: message.guild }));
 		return message.sendLocale('COMMAND_CONF_UPDATED', [key, message.author.settings.display(message, piece)]);
 	}
 
 	async reset(message, [key]) {
-		const piece = this.check(await message.author.settings.reset(key));
+		const piece = this.check(message, key, await message.author.settings.reset(key));
 		return message.sendLocale('COMMAND_CONF_RESET', [key, message.author.settings.display(message, piece)]);
 	}
 
