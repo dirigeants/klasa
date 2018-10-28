@@ -107,14 +107,16 @@ class Settings {
 	 * @returns {*}
 	 */
 	get(path) {
-		const route = typeof path === 'string' ? path.split('.') : path;
-		const piece = this.gateway.schema.get(route);
-		if (!piece) return undefined;
+		try {
+			const piece = this._resolvePath(path, false, true);
 
-		let refThis = this; // eslint-disable-line consistent-this
-		for (const key of route) refThis = refThis[key];
+			let value = this; // eslint-disable-line consistent-this
+			for (const key of piece.path.split('.')) value = value[key];
 
-		return refThis;
+			return value;
+		} catch (__) {
+			return undefined;
+		}
 	}
 
 	/**
@@ -311,8 +313,16 @@ class Settings {
 		return array.join('\n');
 	}
 
+	/**
+	 * Resolve a string or Schema.
+	 * @since 0.5.0
+	 * @param {string|Schema|SchemaPiece} key The path to resolve
+	 * @param {boolean} avoidUnconfigurable Whether this should avoid unconfigurable keys
+	 * @param {boolean} acceptFolders Whether this should accept folders
+	 * @returns {Schema|SchemaPiece}
+	 */
 	_resolvePath(key, avoidUnconfigurable, acceptFolders) {
-		if (!key || key === '.') return { piece: this.schema, route: [] };
+		if (!key || key === '.') return this.schema;
 		if (key instanceof Schema || key instanceof SchemaPiece) {
 			// The piece is a Folder
 			if (key.type === 'Folder') {
@@ -334,6 +344,14 @@ class Settings {
 		throw `The key ${key} does not exist in the schema.`;
 	}
 
+	/**
+	 * Resolves the update overloads
+	 * @param {boolean} isReset Whether or not this is resolving the overloads for reset
+	 * @param {string|Schema|SchemaPiece|Iterable<string|Schema|SchemaPiece>|Object<string,*>} key The key/s to resolve
+	 * @param {*} [value] The values to parse
+	 * @param {SettingsUpdateOptions|SettingsResetOptions} [options] The options to parse
+	 * @returns {Array<string|Schema|SchemaPiece>|Array<Array<*>>}
+	 */
 	_resolveUpdateOverloads(isReset, key, value, options) {
 		// Reset only takes 2 arguments
 		if (isReset) value = options;
