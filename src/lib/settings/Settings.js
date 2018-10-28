@@ -352,12 +352,15 @@ class Settings {
 	 * @param {SettingsUpdateOptions|SettingsResetOptions} [options] The options to parse
 	 * @returns {Array<string|Schema|SchemaPiece>|Array<Array<*>>}
 	 */
+	// eslint-disable-next-line complexity
 	_resolveUpdateOverloads(isReset, key, value, options) {
+		if (!key) throw new TypeError(`Expected a key value. Got: ${new Type(key)}`);
+
 		// Reset only takes 2 arguments
 		if (isReset) value = options;
 
 		// Resolve iterators into an array
-		if (!Array.isArray(key)) {
+		if (typeof key === 'object' && !Array.isArray(key)) {
 			if (isReset && typeof key.keys === 'function') key = [...key.keys()];
 			else if (!isReset && Symbol.iterator in key) key = [...key];
 		}
@@ -381,11 +384,9 @@ class Settings {
 			throw new TypeError(`Invalid value. Expected object, string or Array<any>. Got: ${new Type(key)}`);
 		}
 
-		if (typeof options === 'undefined') options = { guild: null };
+		if (typeof options === 'undefined') options = { guild: this.gateway.type === 'guilds' ? this.client.guilds.get(this.id) : null };
 		else if (!isObject(options)) throw new TypeError(`Invalid options. Expected object or undefined. Got: ${new Type(options)}`);
-
-		if (options.guild) options.guild = resolveGuild(this.client, options.guild);
-		else if (this.gateway.type === 'guilds') options.guild = this.client.guilds.get(this.id);
+		else if (options.guild) options.guild = resolveGuild(this.client, options.guild);
 
 		options = mergeDefault(isReset ? SETTINGS.reset : SETTINGS.update, options);
 
