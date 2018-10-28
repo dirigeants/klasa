@@ -7,7 +7,7 @@ module.exports = class extends Event {
 		if (this.client.shard && gateways.includes(settings.gateway.type)) {
 			this.client.shard.broadcastEval(`
 				if (this.shard.id !== ${this.client.shard.id}) {
-					const entry = this.gateways.${settings.gateway.type}.get('${settings.id}');
+					const entry = this.gateways.get('${settings.gateway.type}').get('${settings.id}');
 					if (entry) entry._patch(${JSON.stringify(settings)});
 				}
 			`);
