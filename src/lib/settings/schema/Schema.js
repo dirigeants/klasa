@@ -45,6 +45,18 @@ class Schema extends Map {
 	}
 
 	/**
+	 * Get the configurable value for the current SchemaFolder or Schema instance
+	 * @since 0.5.0
+	 * @readonly
+	 * @type {Array<SchemaPiece>}
+	 */
+	get configurableValues() {
+		const values = [];
+		for (const piece of this.values(true)) if (piece.configurable) values.push(piece);
+		return values;
+	}
+
+	/**
 	 * Get the defaults for the current SchemaFolder or Schema instance
 	 * @since 0.5.0
 	 * @readonly
@@ -138,15 +150,26 @@ class Schema extends Map {
 	/**
 	 * Get a SchemaPiece or a SchemaFolder given a path
 	 * @since 0.5.0
-	 * @param {string|string[]} key The key to get from the schema
+	 * @param {string} key The key to get from the schema
 	 * @returns {?SchemaPiece|SchemaFolder}
 	 */
 	get(key) {
-		const path = typeof key === 'string' ? key.split('.') : key;
-		const [now, ...next] = path;
-		const piece = super.get(now);
+		if (!key || key === '.') return this;
+		const index = key.indexOf('.');
+
+		// If end of dots, assume this will be the last element in path
+		if (index === -1) return super.get(key);
+		const piece = super.get(key.slice(0, index));
+
+		// If the piece does not exist, return undefined
 		if (!piece) return undefined;
-		return next.length && piece.type === 'Folder' ? piece.get(next) : piece;
+		const next = key.slice(index + 1);
+
+		// If there is nothing else after the dot, return the piece
+		if (!next) return piece;
+
+		// Returns undefined when piece.type is not Folder because pieces don't have children
+		return piece.type === 'Folder' ? piece.get(next) : undefined;
 	}
 
 	/**
