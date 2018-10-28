@@ -306,7 +306,7 @@ class Settings {
 		if (sections.size) {
 			for (const keyType of [...sections.keys()].sort()) {
 				array.push(`= ${toTitleCase(keyType)}s =`,
-					...sections[keyType].sort().map(key => `${key.padEnd(longest)} :: ${this.display(message, piece.get(key))}`),
+					...sections.get(keyType).sort().map(key => `${key.padEnd(longest)} :: ${this.display(message, piece.get(key))}`),
 					'');
 			}
 		}
