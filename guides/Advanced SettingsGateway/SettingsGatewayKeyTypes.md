@@ -1,6 +1,6 @@
 # SettingsGateway's Types
 
-By default, there are several built-in types that the developer can use, and with the possibility to add custom types via {@link SchemaType}s as explained below. The built-in types are:
+By default, there are several built-in types that the developer can use, and with the possibility to add custom types via {@link Serializer}s as explained below. The built-in types are:
 
 | Name                | Type                                              | Description                                                                              |
 | ------------------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -23,34 +23,44 @@ By default, there are several built-in types that the developer can use, and wit
 
 ## Adding new types
 
-To add new types, you make a class, extending {@link SchemaType}. The following extendable is a template for this:
+To add new types, you make a class, extending {@link Serializer}. The following extendable is a template for this:
 
 ```javascript
-const { Client, SchemaType } = require('klasa');
+const { Serializer } = require('klasa');
 
-// Extend SchemaType to add your own resolver
-class MySchemaType extends SchemaType {
+// Extend Serializer to create your own. These are loaded from  the Serializers folder.
+module.exports = class Date extends Serializer {
 
-	/**
-	 * Resolves my custom type!
-	 * @param {KlasaClient} client The KlasaClient instance
-	 * @param {*} data the data to resolve
-	 * @param {SchemaPiece} piece The SchemaPiece instance that manages this data
-	 * @param {external:Guild} [guild] A guild instance, it may be null
-	 * @returns {*}
-	 */
-	async resolve(client, data, piece, guild) {
-		// The content
-		return data;
+	constructor(...args) {
+		// If you want aliases for this, you can set them here.
+		super(...args, { aliases: [] });
 	}
 
-}
+	// This function is used to tell Settings what this data is actually representing
+	deserialize(data) {
+		// Assuming data is stored in milliseconds
+		// We can turn this date, given from your database, into a readable date.
+		// new Date Object with our specified data
+		return new Date(data);
+	}
 
-// Register the type to Klasa's SchemaTypes
-Client.types.add('mytype', MySchemaType);
+	// This function is used to tell Settings what this data should be stored as
+	serialize(value) {
+		// Convert Date Object back into milliseconds so it can be stored by the database.
+		// Value here is our Date Object from deserialized.
+		return value.getTime();
+	}
+
+	// This function is used to tell Settings what we should display the deserialized data as.
+	stringify(value) {
+		// Value here is our Date Object from deserialized
+		return value.toDateString();
+	}
+
+};
 ```
 
-**All settings resolvers must resolve values into primitives or storable plain objects, otherwise, the provider may have issues with storing the value.**
+**All serializers must resolve values into primitives or storable plain objects, otherwise, the provider may have issues with storing the value.**
 
 ## Further Reading:
 
