@@ -14,6 +14,8 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#426](https://github.com/dirigeants/klasa/pull/426)] Added `Schema#configurableValues`, similar to `Schema#configurableKeys`. (kyranet)
+- [[#426](https://github.com/dirigeants/klasa/pull/426)] Added `SettingsUpdateOptions.rejectOnError` to make `Settings#update` reject when any of the keys are invalid or the parse turns out wrong. (kyranet)
 - [[#416](https://github.com/dirigeants/klasa/pull/416)] Added `KlasaClientOptions.createPiecesFolders` to not create pieces' folders if they do not exist. (kyranet)
 - [[#398](https://github.com/dirigeants/klasa/pull/398)] Added the `Settings#update(entries: Array<[string, any]>);` overload. (kyranet)
 - [[#392](https://github.com/dirigeants/klasa/pull/392)] Added support for empty prefixes. (kyranet)
@@ -125,6 +127,11 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#426](https://github.com/dirigeants/klasa/pull/426)] Made schema resolving much faster and reliable. (kyranet)
+- [[#426](https://github.com/dirigeants/klasa/pull/426)] **[BREAKING]** `Settings#{list,resolveString}` -> `Settings#display`. (kyranet)
+- [[#426](https://github.com/dirigeants/klasa/pull/426)] Tweaked conf and userconf commands to use restString for values. (kyranet)
+- [[#426](https://github.com/dirigeants/klasa/pull/426)] Guild Settings will not longer need guild. (kyranet)
+- [[#426](https://github.com/dirigeants/klasa/pull/426)] **[BREAKING]** Moved the guild parameter in Settings#update to `SettingsUpdateOptions`. (kyranet)
 - [[#467](https://github.com/dirigeants/klasa/pull/467)] **[BREAKING]** Changed `GatewayDriver` to extend `Collection<string, Gateway>` as opposed to being a dictionary type. (kyranet)
 - [[#392](https://github.com/dirigeants/klasa/pull/392)] Changed default prefix from `'!'` to `''`. (kyranet)
 - [[#383](https://github.com/dirigeants/klasa/pull/383)] **[BREAKING]** Changed SchemaFolder to extend Schema, which extends Map. All keys are now stored inside the map as opposed to being properties. (Unseenfaith)
@@ -229,6 +236,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Removed
 
+- [[#426](https://github.com/dirigeants/klasa/pull/426)] Removed `Gateway#getPath`. They're now resolved inside Settings. (kyranet)
 - [[#401](https://github.com/dirigeants/klasa/pull/401)] Removed `Settings#waitSync` in favor of `Settings#sync(?false);`. (kyranet)
 - [[#398](https://github.com/dirigeants/klasa/pull/398)] Removed the `Settings#update(keys: string[], values: any[])` overload. (kyranet)
 - [[#391](https://github.com/dirigeants/klasa/pull/391)] Removed `Util.getIdentifier()`. (kyranet)
@@ -292,6 +300,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
+- [[#426](https://github.com/dirigeants/klasa/pull/426)] Fixed typings for QueryBuilder. (kyranet)
 - [[#383](https://github.com/dirigeants/klasa/pull/383)] Fixed abstract `SQLProvider#qb` property being missing in typings. (kyranet)
 - [[#362](https://github.com/dirigeants/klasa/pull/362)] Fixed object mutation in `GatewayDriver#toJSON()`. (kyranet)
 - [[#355](https://github.com/dirigeants/klasa/pull/355)] Fixed Schedule not deleting entries that do not exist in ClientStorage but are still cached in Schedule#tasks. (kyranet)

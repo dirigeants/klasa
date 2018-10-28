@@ -1,18 +1,6 @@
 class GatewayStorage {
 
 	/**
-	 * @typedef {Object} GatewayGetPathOptions
-	 * @property {boolean} [avoidUnconfigurable=false] Whether the getPath should avoid unconfigurable keys
-	 * @property {boolean} [piece=true] Whether the getPath should return pieces or folders
-	 */
-
-	/**
-	 * @typedef {Object} GatewayGetPathResult
-	 * @property {SchemaPiece} piece The piece resolved from the path
-	 * @property {string[]} route The resolved path split by dots
-	 */
-
-	/**
 	 * @typedef {Object} GatewayJSON
 	 * @property {string} type The name of this gateway
 	 * @property {GatewayDriverRegisterOptions} options The options for this gateway
@@ -87,54 +75,6 @@ class GatewayStorage {
 	 */
 	get defaults() {
 		return { ...this.schema.defaults, default: true };
-	}
-
-	/**
-	 * Resolve a path from a string.
-	 * @since 0.5.0
-	 * @param {string} [key=null] A string to resolve
-	 * @param {GatewayGetPathOptions} [options={}] Whether the Gateway should avoid configuring the selected key
-	 * @returns {?GatewayGetPathResult}
-	 */
-	getPath(key = '', { avoidUnconfigurable = false, piece: requestPiece = true, errors = true } = {}) {
-		if (key === '' || key === '.') return { piece: this.schema, route: [] };
-		const route = key.split('.');
-		const piece = this.schema.get(route);
-
-		// The piece does not exist (invalid or non-existent path)
-		if (!piece) {
-			if (!errors) return null;
-			throw `The key ${key} does not exist in the schema.`;
-		}
-
-		if (requestPiece === null) requestPiece = piece.type !== 'Folder';
-
-		// GetPath expects a piece
-		if (requestPiece) {
-			// The piece is a key
-			if (piece.type !== 'Folder') {
-				// If the Piece is unconfigurable and avoidUnconfigurable is requested, throw
-				if (avoidUnconfigurable && !piece.configurable) {
-					if (!errors) return null;
-					throw `The key ${piece.path} is not configurable.`;
-				}
-				return { piece, route };
-			}
-
-			// The piece is a folder
-			if (!errors) return null;
-			const keys = avoidUnconfigurable ? piece.configurableKeys : [...piece.keys()];
-			throw keys.length ? `Please, choose one of the following keys: '${keys.join('\', \'')}'` : 'This group is not configurable.';
-		}
-
-		// GetPath does not expect a piece
-		if (piece.type !== 'Folder') {
-			// Remove leading key from the path
-			route.pop();
-			return { piece: piece.parent, route };
-		}
-
-		return { piece, route };
 	}
 
 	/**
