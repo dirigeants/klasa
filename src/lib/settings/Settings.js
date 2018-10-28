@@ -184,7 +184,7 @@ class Settings {
 	 * Settings#reset('prefix');
 	 */
 	async reset(keys = [...this.gateway.schema.values(true)], ...args) {
-		const { parsedEntries, options: { avoidUnconfigurable = false, force = false, rejectOnError = false } } = this._resolveUpdateOverloads(keys, ...args);
+		const { parsedEntries, options: { avoidUnconfigurable = false, force = false, rejectOnError = false } } = this._resolveUpdateOverloads(true, keys, ...args);
 
 		// If the entry does not exist in the DB, it'll never be able to reset a key
 		if (!this._existsInDB) return { errors: [], updated: [] };
@@ -240,7 +240,7 @@ class Settings {
 	 * Settings#update([['prefix', 'k!'], ['language', 'es-ES']]);
 	 */
 	async update(...args) {
-		const { parsedEntries, options } = this._resolveUpdateOverloads(...args);
+		const { parsedEntries, options } = this._resolveUpdateOverloads(false, ...args);
 
 		if (parsedEntries.some(entry => !Array.isArray(entry) || entry.length !== 2)) {
 			throw new TypeError(`Invalid value. Expected object, string or Array<[string, Schema | SchemaPiece | string]>. Got: ${new Type(parsedEntries)}`);
@@ -337,22 +337,31 @@ class Settings {
 		throw `The key ${key} does not exist in the schema.`;
 	}
 
-	_resolveUpdateOverloads(key, value, options) {
+	_resolveUpdateOverloads(isReset, key, value, options) {
+		// Reset only takes 2 arguments
+		if (isReset) value = options;
+
 		// Resolve iterators into an array
-		if (!Array.isArray(key) && Symbol.iterator in key) key = [...key];
+		if (!Array.isArray(key)) {
+			if (isReset && typeof key.keys === 'function') key = [...key.keys()];
+			else if (!isReset && Symbol.iterator in key) key = [...key];
+		}
 
 		let parsedEntries;
 		// Overload update(object, GuildResolvable);
 		if (isObject(key)) {
-			value = options;
 			parsedEntries = objectToTuples(key);
+			if (isReset) parsedEntries = parsedEntries.map(tuple => tuple[0]);
 		} else if (typeof key === 'string') {
 			// Overload update(string, any, ...any[]);
-			parsedEntries = [[key, value]];
+			// Overload reset(string, options);
+			parsedEntries = isReset ? key : [[key, value]];
+			if (!isReset) value = options;
 		} else if (Array.isArray(key)) {
-			// Overload update(Array<[string, any]>)
-			value = options;
+			// Overload update(Array<any>);
+			// Overload reset(Array<string>);
 			parsedEntries = key;
+			if (!isReset) value = options;
 		} else {
 			throw new TypeError(`Invalid value. Expected object, string or Array<any>. Got: ${new Type(key)}`);
 		}
