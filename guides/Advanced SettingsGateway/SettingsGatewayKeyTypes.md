@@ -30,27 +30,34 @@ const { Serializer } = require('klasa');
 
 // Extend Serializer to create your own. These are loaded from  the Serializers folder.
 module.exports = class Date extends Serializer {
-    constructor(...args) {
-        super(...args, { aliases: [] }); // If you want aliases for this, you can set them here.
-    }
-    // This function is used to tell Settings what this data is actually representing
-    deserialize(data) {
-    	// Assuming data is stored in milliseconds
-	// We can turn this date, given from your database, into a readable date.
-        return new Date(data); // new Date Object with our specified data
-    }
-    
-    // This function is used to tell Settings what this data should be stored as
-    serialize(value) {
-        // Convert Date Object back into milliseconds so it can be stored by the database.
-    	return value.getTime(); // Value here is our Date Object from deserialized.
-    }
-    
-    // This function is used to tell Settings what we should display the deserialized data as.
-    stringify(value) {
-    	return value.toDateString(); // Value here is our Date Object from deserialized
-    }
-}
+
+	constructor(...args) {
+		// If you want aliases for this, you can set them here.
+		super(...args, { aliases: [] });
+	}
+
+	// This function is used to tell Settings what this data is actually representing
+	deserialize(data) {
+		// Assuming data is stored in milliseconds
+		// We can turn this date, given from your database, into a readable date.
+		// new Date Object with our specified data
+		return new Date(data);
+	}
+
+	// This function is used to tell Settings what this data should be stored as
+	serialize(value) {
+		// Convert Date Object back into milliseconds so it can be stored by the database.
+		// Value here is our Date Object from deserialized.
+		return value.getTime();
+	}
+
+	// This function is used to tell Settings what we should display the deserialized data as.
+	stringify(value) {
+		// Value here is our Date Object from deserialized
+		return value.toDateString();
+	}
+
+};
 ```
 
 **All serializers must resolve values into primitives or storable plain objects, otherwise, the provider may have issues with storing the value.**
