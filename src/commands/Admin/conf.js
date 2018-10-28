@@ -19,7 +19,8 @@ module.exports = class extends Command {
 				throw message.language.get('COMMAND_CONF_NOKEY');
 			})
 			.createCustomResolver('value', (arg, possible, message, [action]) => {
-				if (!['set', 'remove'].includes(action) || arg) return this.client.arguments.get('...string').run(arg, possible, message);
+				if (!['set', 'remove'].includes(action)) return null;
+				if (arg) return this.client.arguments.get('...string').run(arg, possible, message);
 				throw message.language.get('COMMAND_CONF_NOVALUE');
 			});
 	}
