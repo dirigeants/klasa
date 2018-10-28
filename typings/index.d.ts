@@ -262,20 +262,14 @@ declare module 'klasa' {
 		private readonly _datatypes: Record<string, QueryBuilderDatatype>;
 	}
 
-	export class GatewayDriver {
+	export class GatewayDriver extends Collection<string, Gateway> {
 		private constructor(client: KlasaClient);
 		public readonly client: KlasaClient;
-		public keys: Set<string>;
 		public ready: boolean;
-		public guilds: Gateway;
-		public users: Gateway;
-		public clientStorage: Gateway;
-		private _queue: Array<(() => Gateway)>;
 
-		public [Symbol.iterator](): Iterator<[string, Gateway]>;
 		public register(name: string, options?: GatewayDriverRegisterOptions): this;
 		public init(): Promise<void>;
-		public sync(input?: string[]): Promise<Array<Gateway>>;
+		public sync(input?: string[] | string): Promise<Array<Gateway>>;
 
 		public toJSON(): GatewayDriverJSON;
 		public toString(): string;
