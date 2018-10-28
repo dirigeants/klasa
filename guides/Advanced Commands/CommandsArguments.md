@@ -1,4 +1,4 @@
-This is an in-depth tutorial for the **Klasa's Usage**. Unlike many other frameworks, Klasa and Komada use a system called **usage string** to improve simplicity, in the next three pages, you will learn how to use it correctly.
+This is an in-depth tutorial for **Klasa's Usage**. Unlike many other frameworks, Klasa and Komada use a system called **usage string** to improve simplicity, in the next three pages, you will learn how to use it correctly.
 
 ## Command Arguments
 

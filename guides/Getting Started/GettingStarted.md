@@ -8,7 +8,7 @@ Time to take the plunge! Klasa is on NPM and can be easily installed.
 npm install --save discordjs/discord.js klasa
 ```
 
-optionally if you want to use the bleeding edge development version (not guaranteed to be stable):
+Optionally if you want to use the bleeding edge development version (not guaranteed to be stable):
 
 ```sh
 npm install --save discordjs/discord.js dirigeants/klasa
@@ -48,9 +48,12 @@ new Client({
 | **quotedStringSupport**    | `false`                   | boolean            | Whether the bot should default to using quoted string support³                      |
 | **readyMessage**           | see below⁴                | string/function    | readyMessage to be passed through to Klasa's ready event.                           |
 | **regexPrefix**            | `null`                    | regex              | The regular expression prefix if one is provided                                    |
+| **slowmode**               | `0`                       | number             | The number of ms when the bot should respond to a users command.                    |
+| **slowmodeAggressive**     | `false`                   | boolean            | If the slowmode time should reset if a user spams the command over and over again   |
 | **typing**                 | `false`                   | boolean            | Whether the bot should type while processing commands.                              |
+| **prefixCaseInsensitive**  | `false`                   | boolean            | Whether the bot should respond if the prefix is incase sensitive or not             |
 
->1. ID gotten from the Discord API if not provided: `client.application.owner.id`
+>1. ID acquired from the Discord API if not provided: `client.application.owner.id`
 >1. You can pass an array to accept multiple prefixes.
 >1. quotedStringSupport is overridable per command.
 >1. `Successfully initialized. Ready to serve ${client.guilds.size} guilds.`

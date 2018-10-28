@@ -24,11 +24,11 @@ class Monitor extends Piece {
 	 * @param {KlasaClient} client The Klasa client
 	 * @param {MonitorStore} store The Monitor Store
 	 * @param {string} file The path from the pieces folder to the monitor file
-	 * @param {boolean} core If the piece is in the core directory or not
+	 * @param {string} directory The base directory to the pieces folder
 	 * @param {MonitorOptions} [options={}] Optional Monitor settings
 	 */
-	constructor(client, store, file, core, options = {}) {
-		super(client, store, file, core, options);
+	constructor(client, store, file, directory, options = {}) {
+		super(client, store, file, directory, options);
 
 		/**
 		 * Whether the monitor ignores bots or not

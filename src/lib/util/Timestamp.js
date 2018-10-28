@@ -229,6 +229,30 @@ Timestamp.SS = time => String(time.getMilliseconds()).padStart(2, '0');
 
 Timestamp.SSS = time => String(time.getMilliseconds()).padStart(3, '0');
 
+// Locales
+
+/* eslint max-len:0 new-cap:0 */
+
+Timestamp.T = (time) => `${Timestamp.h(time)}:${Timestamp.mm(time)} ${Timestamp.A(time)}`;
+
+Timestamp.t = (time) => `${Timestamp.h(time)}:${Timestamp.mm(time)}:${Timestamp.ss(time)} ${Timestamp.A(time)}`;
+
+Timestamp.L = (time) => `${Timestamp.MM(time)}/${Timestamp.DD(time)}/${Timestamp.YYYY(time)}`;
+
+Timestamp.l = (time) => `${Timestamp.M(time)}/${Timestamp.DD(time)}/${Timestamp.YYYY(time)}`;
+
+Timestamp.LL = (time) => `${Timestamp.MMMM(time)} ${Timestamp.DD(time)}, ${Timestamp.YYYY(time)}`;
+
+Timestamp.ll = (time) => `${Timestamp.MMMM(time).slice(0, 3)} ${Timestamp.DD(time)}, ${Timestamp.YYYY(time)}`;
+
+Timestamp.LLL = (time) => `${Timestamp.LL(time)} ${Timestamp.T(time)}`;
+
+Timestamp.lll = (time) => `${Timestamp.ll(time)} ${Timestamp.T(time)}`;
+
+Timestamp.LLLL = (time) => `${Timestamp.dddd(time)}, ${Timestamp.LLL(time)}`;
+
+Timestamp.llll = (time) => `${Timestamp.ddd(time)} ${Timestamp.lll(time)}`;
+
 Timestamp.Z =
 Timestamp.ZZ = time => {
 	const offset = time.getTimezoneOffset();

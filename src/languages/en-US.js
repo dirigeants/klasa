@@ -104,7 +104,7 @@ module.exports = class extends Language {
 			COMMAND_PINGPONG: (diff, ping) => `Pong! (Roundtrip took: ${diff}ms. Heartbeat: ${ping}ms.)`,
 			COMMAND_INVITE: () => [
 				`To add ${this.client.user.username} to your discord guild:`,
-				this.client.invite,
+				`<${this.client.invite}>`,
 				util.codeBlock('', [
 					'The above link is generated requesting the minimum permissions required to use every command currently.',
 					'I know not all permissions are right for every guild, so don\'t be afraid to uncheck any of the boxes.',
@@ -154,7 +154,7 @@ module.exports = class extends Language {
 			COMMAND_CONF_RESET: (key, response) => `The key **${key}** has been reset to: \`${response}\``,
 			COMMAND_CONF_NOCHANGE: (key) => `The value for **${key}** was already that value.`,
 			COMMAND_CONF_SERVER_DESCRIPTION: 'Define per-guild settings.',
-			COMMAND_CONF_SERVER: (key, list) => `**guild Settings${key}**\n${list}`,
+			COMMAND_CONF_SERVER: (key, list) => `**Guild Settings${key}**\n${list}`,
 			COMMAND_CONF_USER_DESCRIPTION: 'Define per-user settings.',
 			COMMAND_CONF_USER: (key, list) => `**User Settings${key}**\n${list}`,
 			COMMAND_STATS: (memUsage, uptime, users, guilds, channels, klasaVersion, discordVersion, processVersion, message) => [
