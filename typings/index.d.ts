@@ -993,28 +993,8 @@ declare module 'klasa' {
 		public static toNow(earlier: Date | number | string, showIn?: boolean): string;
 
 		private static regex: RegExp;
-		private static nanosecond: number;
-		private static ns: number;
-		private static microsecond: number;
-		private static μs: number;
-		private static millisecond: number;
-		private static ms: number;
-		private static second: number;
-		private static sec: number;
-		private static s: number;
-		private static minute: number;
-		private static min: number;
-		private static m: number;
-		private static hour: number;
-		private static hr: number;
-		private static h: number;
-		private static day: number;
-		private static d: number;
-		private static month: number;
-		private static b: number;
-		private static year: number;
-		private static yr: number;
-		private static y: number;
+		private static commas: RegExp;
+		private static aan: RegExp;
 
 		private static _parse(pattern: string): number;
 	}
