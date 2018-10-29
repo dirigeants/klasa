@@ -5,9 +5,9 @@ class Colors {
 
 	/**
 	 * @typedef {Object} ColorsFormatOptions
-	 * @property {(string|string[])} style The style or styles to apply
-	 * @property {string} background The format for the background
-	 * @property {string} text The format for the text
+	 * @property {(string|string[])} [style] The style or styles to apply
+	 * @property {string} [background] The format for the background
+	 * @property {string} [text] The format for the text
 	 */
 
 	/**
