@@ -74,7 +74,7 @@ class Colors {
 	/**
 	 * Apply the background
 	 * @since 0.5.0
-	 * @param {?string} background The background to apply
+	 * @param {string} [background] The background to apply
 	 * @param {ColorsFormatData} [data={}] The data
 	 * @returns {ColorsFormatData}
 	 * @private
