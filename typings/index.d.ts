@@ -1753,9 +1753,9 @@ declare module 'klasa' {
 	};
 
 	export type ColorsFormatOptions = {
-		background?: string | number | string[];
+		background?: string;
 		style?: string | string[];
-		text?: string | number | string[]
+		text?: string;
 	};
 
 	export type ColorsFormatType = string | number | [string, string, string] | [number, number, number];
@@ -1826,9 +1826,7 @@ declare module 'klasa' {
 		| 'lightyellow'
 		| 'magenta'
 		| 'red'
-		| 'white'
-		| number[]
-		| string[];
+		| 'white';
 
 	export type KlasaConsoleStyleTypes = 'normal'
 		| 'bold'
