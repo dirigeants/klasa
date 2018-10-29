@@ -1,4 +1,3 @@
-/* eslint-disable id-length */
 const tokens = new Map([
 	['nanosecond', 1 / 1e6],
 	['nanoseconds', 1 / 1e6],
@@ -46,7 +45,6 @@ const tokens = new Map([
 	['yrs', 1000 * 60 * 60 * 24 * 365.25],
 	['y', 1000 * 60 * 60 * 24 * 365.25]
 ]);
-/* eslint-enable id-length */
 
 /**
  * Converts duration strings into ms and future dates
