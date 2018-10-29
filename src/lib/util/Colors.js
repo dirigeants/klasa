@@ -90,7 +90,7 @@ class Colors {
 	/**
 	 * Apply the text format
 	 * @since 0.5.0
-	 * @param {?string} text The text format to apply
+	 * @param {string} [text] The text format to apply
 	 * @param {ColorsFormatData} [data={}] The data
 	 * @returns {ColorsFormatData}
 	 * @private
