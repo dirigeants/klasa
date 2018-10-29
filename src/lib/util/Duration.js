@@ -174,4 +174,4 @@ Duration.commas = /,/g;
  * @static
  * @private
  */
-Duration.aan = /,|\ban?\b/ig;
+Duration.aan = /\ban?\b/ig;
