@@ -53,7 +53,7 @@ class Colors {
 	/**
 	 * Apply the style
 	 * @since 0.5.0
-	 * @param {?(string|string[])} styles The style or styles to apply
+	 * @param {(string|string[])} [styles] The style or styles to apply
 	 * @param {ColorsFormatData} [data={}] The data
 	 * @returns {ColorsFormatData}
 	 * @private
