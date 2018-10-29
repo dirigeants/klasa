@@ -103,7 +103,8 @@ class Duration {
 			// do math
 			.replace(this.regex, (match, i, units) => {
 				units = tokens.get(units) || 0;
-				result += parseFloat(i, 10) * units;
+				result += Number(i) * units;
+				return '';
 			});
 
 		return result;
