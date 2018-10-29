@@ -156,6 +156,7 @@ module.exports = Duration;
  * @since 0.5.0
  * @type {RegExp}
  * @static
+ * @private
  */
 Duration.regex = /(-?\d*\.?\d+(?:e[-+]?\d+)?)\s*([a-zμ]*)/ig;
 
