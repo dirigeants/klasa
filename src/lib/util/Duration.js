@@ -1,3 +1,53 @@
+/* eslint-disable id-length */
+const tokens = new Map([
+	['nanosecond', 1 / 1e6],
+	['nanoseconds', 1 / 1e6],
+	['ns', 1 / 1e6],
+
+	['millisecond', 1],
+	['milliseconds', 1],
+	['ms', 1],
+
+	['second', 1000],
+	['seconds', 1000],
+	['sec', 1000],
+	['secs', 1000],
+	['s', 1000],
+
+	['minute', 1000 * 60],
+	['minutes', 1000 * 60],
+	['min', 1000 * 60],
+	['mins', 1000 * 60],
+	['m', 1000 * 60],
+
+	['hour', 1000 * 60 * 60],
+	['hours', 1000 * 60 * 60],
+	['hr', 1000 * 60 * 60],
+	['hrs', 1000 * 60 * 60],
+	['h', 1000 * 60 * 60],
+
+	['day', 1000 * 60 * 60 * 24],
+	['days', 1000 * 60 * 60 * 24],
+	['d', 1000 * 60 * 60 * 24],
+
+	['week', 1000 * 60 * 60 * 24 * 7],
+	['weeks', 1000 * 60 * 60 * 24 * 7],
+	['wk', 1000 * 60 * 60 * 24 * 7],
+	['wks', 1000 * 60 * 60 * 24 * 7],
+	['w', 1000 * 60 * 60 * 24 * 7],
+
+	['month', 1000 * 60 * 60 * 24 * (365.25 / 12)],
+	['months', 1000 * 60 * 60 * 24 * (365.25 / 12)],
+	['b', 1000 * 60 * 60 * 24 * (365.25 / 12)],
+
+	['year', 1000 * 60 * 60 * 24 * 365.25],
+	['years', 1000 * 60 * 60 * 24 * 365.25],
+	['yr', 1000 * 60 * 60 * 24 * 365.25],
+	['yrs', 1000 * 60 * 60 * 24 * 365.25],
+	['y', 1000 * 60 * 60 * 24 * 365.25]
+]);
+/* eslint-enable id-length */
+
 /**
  * Converts duration strings into ms and future dates
  */
@@ -14,7 +64,7 @@ class Duration {
 		 * @since 0.5.0
 		 * @type {number}
 		 */
-		this.offset = Duration._parse(pattern.toLowerCase());
+		this.offset = this.constructor._parse(pattern.toLowerCase());
 	}
 
 	/**
@@ -54,7 +104,7 @@ class Duration {
 			.replace(this.aan, '1')
 			// do math
 			.replace(this.regex, (match, i, units) => {
-				units = this[units] || 0;
+				units = tokens.get(units) || 0;
 				result += parseFloat(i, 10) * units;
 			});
 
@@ -106,7 +156,6 @@ module.exports = Duration;
  * @since 0.5.0
  * @type {RegExp}
  * @static
- * @private
  */
 Duration.regex = /(-?\d*\.?\d+(?:e[-+]?\d+)?)\s*([a-zμ]*)/ig;
 
@@ -127,61 +176,3 @@ Duration.commas = /,/g;
  * @private
  */
 Duration.aan = /,|\ban?\b/ig;
-
-/**
- * conversion ratios
- */
-
-/* eslint-disable id-length */
-
-Duration.nanosecond =
-Duration.nanoseconds =
-Duration.ns = 1 / 1e6;
-
-Duration.microsecond =
-Duration.microseconds =
-Duration.μs = 1 / 1e3;
-
-Duration.millisecond =
-Duration.milliseconds =
-Duration.ms = 1;
-
-Duration.second =
-Duration.seconds =
-Duration.sec =
-Duration.secs =
-Duration.s = Duration.ms * 1000;
-
-Duration.minute =
-Duration.minutes =
-Duration.min =
-Duration.mins =
-Duration.m = Duration.s * 60;
-
-Duration.hour =
-Duration.hours =
-Duration.hr =
-Duration.hrs =
-Duration.h = Duration.m * 60;
-
-Duration.day =
-Duration.days =
-Duration.d = Duration.h * 24;
-
-Duration.week =
-Duration.weeks =
-Duration.wk =
-Duration.wks =
-Duration.w = Duration.d * 7;
-
-Duration.month =
-Duration.months =
-Duration.b = Duration.d * (365.25 / 12);
-
-Duration.year =
-Duration.years =
-Duration.yr =
-Duration.yrs =
-Duration.y = Duration.d * 365.25;
-
-/* eslint-enable id-length */
