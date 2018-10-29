@@ -14,7 +14,7 @@ class Duration {
 		 * @since 0.5.0
 		 * @type {number}
 		 */
-		this.offset = Duration._parse(pattern);
+		this.offset = Duration._parse(pattern.toLowerCase());
 	}
 
 	/**
@@ -46,14 +46,18 @@ class Duration {
 	 */
 	static _parse(pattern) {
 		let result = 0;
-		// ignore commas
-		pattern = pattern.replace(/(\d),(\d)/g, '$1$2');
-		// a / an = 1
-		pattern = pattern.replace(/\ban?\b/ig, '1');
-		pattern.replace(Duration.regex, (match, i, units) => {
-			units = Duration[units] || Duration[units.toLowerCase().replace(/s$/, '')] || 0;
-			result += parseFloat(i, 10) * units;
-		});
+
+		pattern
+			// ignore commas
+			.replace(this.commas, '')
+			// a / an = 1
+			.replace(this.aan, '1')
+			// do math
+			.replace(this.regex, (match, i, units) => {
+				units = this[units] || 0;
+				result += parseFloat(i, 10) * units;
+			});
+
 		return result;
 	}
 
@@ -102,8 +106,27 @@ module.exports = Duration;
  * @since 0.5.0
  * @type {RegExp}
  * @static
+ * @private
  */
 Duration.regex = /(-?\d*\.?\d+(?:e[-+]?\d+)?)\s*([a-zμ]*)/ig;
+
+/**
+ * The RegExp used for removing commas
+ * @since 0.5.0
+ * @type {RegExp}
+ * @static
+ * @private
+ */
+Duration.commas = /,/g;
+
+/**
+ * The RegExp used for replacing a/an with 1
+ * @since 0.5.0
+ * @type {RegExp}
+ * @static
+ * @private
+ */
+Duration.aan = /,|\ban?\b/ig;
 
 /**
  * conversion ratios
@@ -112,38 +135,53 @@ Duration.regex = /(-?\d*\.?\d+(?:e[-+]?\d+)?)\s*([a-zμ]*)/ig;
 /* eslint-disable id-length */
 
 Duration.nanosecond =
+Duration.nanoseconds =
 Duration.ns = 1 / 1e6;
 
 Duration.microsecond =
+Duration.microseconds =
 Duration.μs = 1 / 1e3;
 
 Duration.millisecond =
+Duration.milliseconds =
 Duration.ms = 1;
 
 Duration.second =
+Duration.seconds =
 Duration.sec =
+Duration.secs =
 Duration.s = Duration.ms * 1000;
 
 Duration.minute =
+Duration.minutes =
 Duration.min =
+Duration.mins =
 Duration.m = Duration.s * 60;
 
 Duration.hour =
+Duration.hours =
 Duration.hr =
+Duration.hrs =
 Duration.h = Duration.m * 60;
 
 Duration.day =
+Duration.days =
 Duration.d = Duration.h * 24;
 
 Duration.week =
+Duration.weeks =
 Duration.wk =
+Duration.wks =
 Duration.w = Duration.d * 7;
 
 Duration.month =
+Duration.months =
 Duration.b = Duration.d * (365.25 / 12);
 
 Duration.year =
+Duration.years =
 Duration.yr =
+Duration.yrs =
 Duration.y = Duration.d * 365.25;
 
 /* eslint-enable id-length */
