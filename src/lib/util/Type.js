@@ -1,9 +1,5 @@
-const { runInThisContext } = require('vm');
-const { setFlagsFromString } = require('v8');
-
-setFlagsFromString('--allow-natives-syntax');
-
-const getPromiseDetails = runInThisContext('p => p instanceof Promise ? { status: %PromiseStatus(p), result: %PromiseResult(p) } : null');
+require('v8').setFlagsFromString('--allow-natives-syntax');
+const getPromiseDetails = require('vm').runInThisContext('p => p instanceof Promise ? { status: %PromiseStatus(p), result: %PromiseResult(p) } : null');
 
 /**
  * The class for deep checking Types
