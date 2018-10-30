@@ -1,6 +1,5 @@
 const { runInThisContext } = require('vm');
 const { setFlagsFromString } = require('v8');
-const util = require('./util');
 
 setFlagsFromString('--allow-natives-syntax');
 
@@ -120,7 +119,7 @@ class Type {
 	 */
 	check() {
 		if (Object.isFrozen(this)) return;
-		const promise = util.isThenable(this.value) && getPromiseDetails(this.value);
+		const promise = getPromiseDetails(this.value);
 		if (typeof this.value === 'object' && this.isCircular()) this.is = `[Circular:${this.is}]`;
 		else if (promise && promise.status) this.addValue(promise.result);
 		else if (this.value instanceof Map) for (const entry of this.value) this.addEntry(entry);
