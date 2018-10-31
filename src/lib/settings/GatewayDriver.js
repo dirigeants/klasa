@@ -1,6 +1,6 @@
 const Gateway = require('./Gateway');
 const Schema = require('./schema/Schema');
-const Collection = require('discord.js');
+const { Collection } = require('discord.js');
 
 /**
  * <warning>GatewayDriver is a singleton, use {@link KlasaClient#gateways} instead.</warning>
