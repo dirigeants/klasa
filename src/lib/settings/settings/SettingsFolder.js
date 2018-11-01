@@ -102,8 +102,13 @@ class SettingsFolder extends Map {
 		const { schema } = this;
 		for (const path of paths) {
 			try {
-				const piece = schema.get(path);
-				if (!piece) throw `The key ${path} does not exist in the schema.`;
+				let piece;
+				try {
+					piece = schema.get(path);
+					if (!piece) throw undefined;
+				} catch (__) {
+					throw `The key ${path} does not exist in the schema.`;
+				}
 				if (piece.type === 'Folder') {
 					const valuesLength = values.length;
 					const prefixLength = this.schema.path ? this.schema.path.length + 1 : 0;
@@ -166,6 +171,7 @@ class SettingsFolder extends Map {
 	 * // Updating multiple keys (with arrays):
 	 * Settings#update([['prefix', 'k!'], ['language', 'es-ES']]);
 	 */
+	// eslint-disable-next-line complexity
 	async update(paths, ...args) {
 		let options;
 		if (typeof paths === 'string') [paths, options] = [[paths, args[0]], args[1]];
@@ -183,8 +189,14 @@ class SettingsFolder extends Map {
 		for (const value of paths) {
 			try {
 				if (value.length !== 2) throw new TypeError(`Invalid value. Expected object, string or Array<[string, Schema | SchemaPiece | string]>. Got: ${new Type(value)}`);
-				const piece = schema.get(value[0]);
-				if (!piece) throw `The key ${piece} does not exist in the schema.`;
+
+				let piece;
+				try {
+					piece = schema.get(value[0]);
+					if (!piece) throw undefined;
+				} catch (__) {
+					throw `The key ${value[0]} does not exist in the schema.`;
+				}
 				if (piece.type === 'Folder') {
 					const keys = options.onlyConfigurable ? piece.configurableKeys : [...piece.keys()];
 					throw keys.length ? `Please, choose one of the following keys: '${keys.join('\', \'')}'` : 'This group is not configurable.';
