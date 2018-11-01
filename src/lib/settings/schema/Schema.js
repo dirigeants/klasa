@@ -154,7 +154,7 @@ class Schema extends Map {
 	 * @returns {?SchemaPiece|SchemaFolder}
 	 */
 	get(path) {
-		return path.split('.').reduce((folder, key) => folder.get(key), this);
+		return path.split('.').reduce((folder, key) => Map.prototype.get.call(folder, key), this);
 	}
 
 	/**
