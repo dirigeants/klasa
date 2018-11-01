@@ -42,7 +42,7 @@ class SettingsFolder extends Map {
 		 * @type {?Settings}
 		 * @private
 		 */
-		this.base = null;
+		Object.defineProperty(this, 'base', { value: null, writable: true });
 
 		/**
 		 * The schema that manages this folder's structure.

@@ -18,7 +18,7 @@ class Settings extends SettingsFolder {
 		 * @name Settings#id
 		 * @readonly
 		 */
-		Object.defineProperty(this, 'id', { value: id, enumerable: true });
+		Object.defineProperty(this, 'id', { value: id });
 
 		/**
 		 * The Gateway that manages this Settings instance.
