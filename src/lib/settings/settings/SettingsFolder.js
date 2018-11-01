@@ -88,6 +88,20 @@ class SettingsFolder extends Map {
 	}
 
 	/**
+	 * Extract the relative path from an absolute one or a piece
+	 * @since 0.5.0
+	 * @param {string|Schema|SchemaPiece} pathOrPiece The path or piece to substract the path from
+	 * @returns {string}
+	 */
+	relative(pathOrPiece) {
+		if (typeof pathOrPiece === 'string') {
+			return this.schema.path && pathOrPiece.startsWith(this.schema.path) ? pathOrPiece.slice(this.schema.path + 1) : pathOrPiece;
+		}
+
+		return this.relative(pathOrPiece.path);
+	}
+
+	/**
 	 * Reset a value from an entry.
 	 * @since 0.5.0
 	 * @param {(string|string[])} [keys] The key to reset
@@ -121,9 +135,10 @@ class SettingsFolder extends Map {
 		const { schema } = this;
 		for (const path of paths) {
 			try {
+				const key = this.relative(path);
 				let piece;
 				try {
-					piece = schema.get(path);
+					piece = schema.get(key);
 					if (!piece) throw undefined;
 				} catch (__) {
 					throw `The key ${path} does not exist in the schema.`;
@@ -140,7 +155,7 @@ class SettingsFolder extends Map {
 				} else if (onlyConfigurable && !piece.configurable) {
 					throw 'This group is not configurable.';
 				} else {
-					values.push([path, piece]);
+					values.push([key, piece]);
 				}
 			} catch (error) {
 				if (throwOnError) throw typeof error === 'string' ? new Error(error) : error;
@@ -207,9 +222,10 @@ class SettingsFolder extends Map {
 			try {
 				if (value.length !== 2) throw new TypeError(`Invalid value. Expected object, string or Array<[string, Schema | SchemaPiece | string]>. Got: ${new Type(value)}`);
 
+				const key = this.relative(value[0]);
 				let piece;
 				try {
-					piece = schema.get(value[0]);
+					piece = schema.get(key);
 					if (!piece) throw undefined;
 				} catch (__) {
 					throw `The key ${value[0]} does not exist in the schema.`;
@@ -220,11 +236,11 @@ class SettingsFolder extends Map {
 				}
 				if (!piece.array && Array.isArray(value[1])) {
 					throw options.guild ?
-						options.guild.language.get('SETTING_GATEWAY_KEY_NOT_ARRAY', value[0]) :
-						`The path ${value[0]} does not store multiple values.`;
+						options.guild.language.get('SETTING_GATEWAY_KEY_NOT_ARRAY', key) :
+						`The path ${key} does not store multiple values.`;
 				}
 
-				promises.push(this._parse(piece, value[0], value[1], options)
+				promises.push(this._parse(piece, key, value[1], options)
 					.then((parsed) => values.push([piece.path, parsed, piece]))
 					.catch(onError));
 			} catch (error) {
@@ -240,7 +256,7 @@ class SettingsFolder extends Map {
 		const results = [];
 		for (const [path, value, piece] of values) {
 			if (piece.array ? arraysStrictEquals(value, piece.default) : value === piece.default) continue;
-			results.push({ key: path, value, piece });
+			results.push({ key: path, value: piece.serializer.serialize(value), piece });
 		}
 
 		if (results.length) await this._save(results);
@@ -255,7 +271,7 @@ class SettingsFolder extends Map {
 	 * @returns {string}
 	 */
 	display(message, path) {
-		const piece = path ? typeof path === 'string' ? this.schema.get(path) : path : this.schema;
+		const piece = path ? typeof path === 'string' ? this.schema.get(this.relative(path)) : path : this.schema;
 
 		if (piece.type !== 'Folder') {
 			const value = path ? this.get(this.schema.path ? piece.path.slice(this.schema.path + 1) : piece.path) : this;
@@ -309,7 +325,7 @@ class SettingsFolder extends Map {
 		}
 
 		const updateObject = {};
-		for (const entry of results) mergeObjects(updateObject, makeObject(entry.key, entry.piece.serializer.serialize(entry.value)));
+		for (const entry of results) mergeObjects(updateObject, makeObject(entry.key, entry.value));
 		this._patch(updateObject);
 	}
 
@@ -373,8 +389,6 @@ class SettingsFolder extends Map {
 	 * Path this Settings instance.
 	 * @since 0.5.0
 	 * @param {Object} data The data to patch
-	 * @param {Object} [instance=this] The reference of this instance for recursion
-	 * @param {Schema} [schema=this.gateway.schema] The Schema that sets the schema for this configuration's gateway
 	 * @private
 	 */
 	_patch(data) {

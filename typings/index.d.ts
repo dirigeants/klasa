@@ -474,6 +474,7 @@ declare module 'klasa' {
 		public pluck<T extends string>(...paths: T[]): Partial<Record<T, any>>;
 		public toJSON(): any;
 		public toString(): string;
+		private relative(pathOrPiece: string | Schema | SchemaPiece): string;
 		private _save(results: Array<SettingsFolderUpdateResultEntry>): Promise<void>;
 		private _parse(piece: SchemaPiece, key: string, value: any, options: SettingsFolderUpdateOptions): Promise<any>;
 		private _patch(data: Record<string, any>): void;
