@@ -238,11 +238,11 @@ class SettingsFolder extends Map {
 	 * Get a list.
 	 * @since 0.5.0
 	 * @param {KlasaMessage} message The Message instance
-	 * @param {string} [path] The path to resolve
+	 * @param {string|Schema|SchemaPiece} [path] The path to resolve
 	 * @returns {string}
 	 */
 	display(message, path) {
-		const piece = path ? this.schema.get(path) : this;
+		const piece = path ? typeof path === 'string' ? this.schema.get(path) : path : this.schema;
 
 		if (piece.type !== 'Folder') {
 			const value = path ? this.get(path) : this;
