@@ -309,10 +309,10 @@ class SettingsFolder extends Map {
 		if (status === false) {
 			await this.gateway.provider.create(this.gateway.name, this.base.id, results);
 			this.base.existenceStatus = true;
-			this.client.emit('settingsCreateEntry', this.base);
+			this.base.gateway.client.emit('settingsCreateEntry', this.base);
 		} else {
 			await this.gateway.provider.update(this.gateway.name, this.id, results);
-			this.client.emit('settingsUpdateEntry', this, results);
+			this.base.gateway.client.emit('settingsUpdateEntry', this, results);
 		}
 
 		this._patch(Object.assign({}, ...results.map(res => ({ [res.key]: res.value }))));

@@ -90,7 +90,7 @@ class Settings extends SettingsFolder {
 		await this.sync();
 		if (this.existenceStatus) {
 			await this.gateway.provider.delete(this.gateway.name, this.id);
-			this.client.emit('settingsDeleteEntry', this);
+			this.gateway.client.emit('settingsDeleteEntry', this);
 		}
 		return this;
 	}
