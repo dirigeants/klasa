@@ -193,9 +193,11 @@ class SettingsFolder extends Map {
 	// eslint-disable-next-line complexity
 	async update(paths, ...args) {
 		let options;
-		if (typeof paths === 'string') [paths, options] = [[paths, args[0]], args[1]];
+		if (typeof paths === 'string') [paths, options] = [[[paths, args[0]]], args[1]];
 		else if (isObject(paths)) [paths, options] = [objectToTuples(paths), args[0]];
 		else [options] = args;
+
+		if (!options) options = { throwOnError: false, onlyConfigurable: true };
 
 		const errors = [];
 
