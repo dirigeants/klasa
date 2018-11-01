@@ -155,7 +155,7 @@ class SettingsFolder extends Map {
 	 * Settings#update('userBlacklist', '272689325521502208');
 	 *
 	 * // Ensuring the function call adds (error if it exists):
-	 * Settings#update('userBlacklist', '272689325521502208', { action: 'add' });
+	 * Settings#update('userBlacklist', '272689325521502208', { arrayAction: 'add' });
 	 *
 	 * // Updating it with a json object:
 	 * Settings#update({ roles: { administrator: '339943234405007361' } }, { guild: message.guild });

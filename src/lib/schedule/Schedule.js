@@ -139,7 +139,7 @@ class Schedule {
 	async create(taskName, time, options) {
 		const task = await this._add(taskName, time, options);
 		if (!task) return null;
-		await this.client.settings.update('schedules', task, { action: 'add' });
+		await this.client.settings.update('schedules', task, { arrayAction: 'add' });
 		return task;
 	}
 
@@ -156,7 +156,7 @@ class Schedule {
 		this.tasks.splice(taskIndex, 1);
 		// Get the task and use it to remove
 		const task = this._tasks.find(entry => entry.id === id);
-		if (task) await this.client.settings.update('schedules', task, { action: 'remove' });
+		if (task) await this.client.settings.update('schedules', task, { arrayAction: 'remove' });
 
 		return this;
 	}
