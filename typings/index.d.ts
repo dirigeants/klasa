@@ -471,14 +471,14 @@ declare module 'klasa' {
 		public update(entries: Iterable<[string, any]>, options?: SettingsFolderUpdateOptions): Promise<SettingsFolderUpdateResult>;
 		public update(object: Record<string, any>, options?: SettingsFolderUpdateOptions): Promise<SettingsFolderUpdateResult>;
 		public display(message: KlasaMessage, path?: string): string;
-		public toJSON(): Record<string, any>;
+		public toJSON(): any;
 		public toString(): string;
 		private _save(results: Array<SettingsFolderUpdateResultEntry>): Promise<void>;
 		private _parse(piece: SchemaPiece, key: string, value: any, options: SettingsFolderUpdateOptions): Promise<any>;
 		private _patch(data: Record<string, any>): void;
 	}
 
-	export class Settings {
+	export class Settings extends SettingsFolder {
 		public constructor(manager: Gateway, id: string);
 		public readonly id: string;
 		public readonly gateway: Gateway;
