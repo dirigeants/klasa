@@ -1,12 +1,13 @@
+const { deepClone } = require('../../util/util');
 const SettingsFolder = require('./SettingsFolder');
 
 class Settings extends SettingsFolder {
 
 	constructor(gateway, id) {
 		super(gateway.schema);
-		this.base = this;
 		Object.defineProperty(this, 'id', { value: id, enumerable: true });
 		Object.defineProperty(this, 'gateway', { value: gateway });
+		this.init(this, this.schema);
 	}
 
 	/**
@@ -51,6 +52,19 @@ class Settings extends SettingsFolder {
 			this.client.emit('settingsDeleteEntry', this);
 		}
 		return this;
+	}
+
+	init(folder, schema) {
+		folder.base = this;
+		for (const [key, value] of schema.entries()) {
+			if (value.type === 'Folder') {
+				const settings = new SettingsFolder(value);
+				folder.set(key, settings);
+				this.init(settings, value);
+			} else {
+				folder.set(key, deepClone(value));
+			}
+		}
 	}
 
 }
