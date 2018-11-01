@@ -48,7 +48,7 @@ class Schedule {
 	 * @private
 	 */
 	get _tasks() {
-		return this.client.settings.schedules;
+		return this.client.settings.get('schedules');
 	}
 
 	/**

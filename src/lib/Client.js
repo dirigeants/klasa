@@ -274,7 +274,7 @@ class KlasaClient extends Discord.Client {
 		/**
 		 * The Settings instance that handles this client's settings
 		 * @since 0.5.0
-		 * @type {Settings}
+		 * @type {?Settings}
 		 */
 		this.settings = null;
 
