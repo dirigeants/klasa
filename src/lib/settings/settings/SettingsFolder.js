@@ -246,7 +246,7 @@ class SettingsFolder extends Map {
 		const piece = path ? typeof path === 'string' ? this.schema.get(path) : path : this.schema;
 
 		if (piece.type !== 'Folder') {
-			const value = path ? this.get(path) : this;
+			const value = path ? this.get(this.schema.path ? piece.path.slice(this.schema.path + 1) : piece.path) : this;
 			if (value === null) return 'Not set';
 			if (piece.array) return value.length ? `[ ${value.map(val => piece.serializer.stringify(val, message)).join(' | ')} ]` : 'None';
 			return piece.serializer.stringify(value, message);
