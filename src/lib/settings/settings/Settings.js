@@ -109,7 +109,7 @@ class Settings extends SettingsFolder {
 				folder.set(key, settings);
 				this.init(settings, value);
 			} else {
-				folder.set(key, deepClone(value));
+				folder.set(key, deepClone(value.default));
 			}
 		}
 	}
