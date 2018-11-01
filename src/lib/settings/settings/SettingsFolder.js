@@ -65,6 +65,7 @@ class SettingsFolder extends Map {
 	 * @returns {*}
 	 */
 	get(path) {
+		// Map.prototype.get.call was used to avoid infinite recursion
 		return path.split('.').reduce((folder, key) => Map.prototype.get.call(folder, key), this);
 	}
 

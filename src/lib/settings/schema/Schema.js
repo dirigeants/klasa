@@ -154,6 +154,7 @@ class Schema extends Map {
 	 * @returns {?SchemaPiece|SchemaFolder}
 	 */
 	get(path) {
+		// Map.prototype.get.call was used to avoid infinite recursion
 		return path.split('.').reduce((folder, key) => Map.prototype.get.call(folder, key), this);
 	}
 
