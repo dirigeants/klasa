@@ -16,6 +16,7 @@ module.exports = class extends Monitor {
 		if (!message.channel.postable) return undefined;
 		if (this.mentionOnly.test(message.content)) {
 			const prefix = message.guildSettings.get('prefix');
+			// We check for length in case of empty array prefixes
 			return message.sendLocale('PREFIX_REMINDER', [prefix.length ? prefix : undefined]);
 		}
 
