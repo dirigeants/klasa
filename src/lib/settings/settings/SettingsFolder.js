@@ -3,10 +3,10 @@ const Type = require('../../util/Type');
 
 class SettingsFolder extends Map {
 
-	constructor(path) {
+	constructor(schema) {
 		super();
 		this.base = null;
-		Object.defineProperty(this, 'path', { value: path });
+		Object.defineProperty(this, 'schema', { value: schema });
 	}
 
 	get existenceStatus() {
@@ -17,34 +17,21 @@ class SettingsFolder extends Map {
 		return this.base.gateway.existenceMap.set(this.base, value);
 	}
 
-	get schema() {
-		return this.base.gateway.schema.get(this.path);
-	}
-
 	get gateway() {
 		return this.base.gateway;
 	}
 
 	get(path) {
 		if (!path) return this;
-		if (path === '*') return this.toJSON();
 
-		const dotIndex = path.indexOf('.');
-		if (dotIndex === -1) return super.get(path);
-
-		const value = super.get(path.slice(0, dotIndex));
-		if (typeof value === 'undefined') return value;
-		return value instanceof SettingsFolder ? value.get(path.slice(dotIndex + 1)) : value;
+		// eslint-disable-next-line consistent-this
+		let value = this;
+		for (const key of path.split('.')) value = value.get(key);
+		return value;
 	}
 
 	has(path) {
-		if (!path || path === '*') return true;
-		const dotIndex = path.indexOf('.');
-		if (dotIndex === -1) return super.has(path);
-
-		const value = super.get(path.slice(0, dotIndex));
-		if (typeof value === 'undefined') return false;
-		return value instanceof SettingsFolder ? value.has(path.slice(dotIndex + 1)) : true;
+		return typeof this.get(path) !== 'undefined';
 	}
 
 	// eslint-disable-next-line complexity

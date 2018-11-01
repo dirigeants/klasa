@@ -2,8 +2,8 @@ const SettingsFolder = require('./SettingsFolder');
 
 class Settings extends SettingsFolder {
 
-	constructor(id, gateway) {
-		super('');
+	constructor(gateway, id) {
+		super(gateway.schema);
 		this.base = this;
 		Object.defineProperty(this, 'id', { value: id, enumerable: true });
 		Object.defineProperty(this, 'gateway', { value: gateway });
@@ -24,7 +24,7 @@ class Settings extends SettingsFolder {
 	 * @returns {Settings}
 	 */
 	clone() {
-		return new this.constructor(this.gateway, this);
+		return new this.constructor(this.gateway, this.id);
 	}
 
 	sync(force = this.existenceStatus === null) {
