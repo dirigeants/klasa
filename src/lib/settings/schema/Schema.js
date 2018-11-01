@@ -150,26 +150,11 @@ class Schema extends Map {
 	/**
 	 * Get a SchemaPiece or a SchemaFolder given a path
 	 * @since 0.5.0
-	 * @param {string} key The key to get from the schema
+	 * @param {string} path The key to get from the schema
 	 * @returns {?SchemaPiece|SchemaFolder}
 	 */
-	get(key) {
-		if (!key || key === '.') return this;
-		const index = key.indexOf('.');
-
-		// If end of dots, assume this will be the last element in path
-		if (index === -1) return super.get(key);
-		const piece = super.get(key.slice(0, index));
-
-		// If the piece does not exist, return undefined
-		if (!piece) return undefined;
-		const next = key.slice(index + 1);
-
-		// If there is nothing else after the dot, return the piece
-		if (!next) return piece;
-
-		// Returns undefined when piece.type is not Folder because pieces don't have children
-		return piece.type === 'Folder' ? piece.get(next) : undefined;
+	get(path) {
+		return path.split('.').reduce((folder, key) => folder.get(key), this);
 	}
 
 	/**
