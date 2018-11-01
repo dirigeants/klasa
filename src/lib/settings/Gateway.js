@@ -13,12 +13,12 @@ class Gateway extends GatewayStorage {
 	/**
 	 * @since 0.0.1
 	 * @param {GatewayDriver} store The GatewayDriver instance which initiated this instance
-	 * @param {string} type The name of this Gateway
+	 * @param {string} name The name of this Gateway
 	 * @param {Schema} schema The schema for this gateway
 	 * @param {string} provider The provider's name for this gateway
 	 */
-	constructor(store, type, schema, provider) {
-		super(store.client, type, schema, provider);
+	constructor(store, name, schema, provider) {
+		super(store.client, name, schema, provider);
 
 		/**
 		 * The GatewayDriver that manages this Gateway
@@ -32,7 +32,7 @@ class Gateway extends GatewayStorage {
 		 * @since 0.0.1
 		 * @type {external:Collection<string, Settings>|external:DataStore}
 		 */
-		this.cache = (type in this.client) && this.client[type] instanceof Map ? this.client[type] : new Collection();
+		this.cache = (name in this.client) && this.client[name] instanceof Map ? this.client[name] : new Collection();
 
 		/**
 		 * The synchronization queue for all Settings instances
@@ -87,7 +87,7 @@ class Gateway extends GatewayStorage {
 	async sync(input = [...this.cache.keys()]) {
 		if (Array.isArray(input)) {
 			this._synced = true;
-			const entries = await this.provider.getAll(this.type, input);
+			const entries = await this.provider.getAll(this.name, input);
 			for (const entry of entries) {
 				if (!entry) continue;
 				const cache = this.get(entry.id);

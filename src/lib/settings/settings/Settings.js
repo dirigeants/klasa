@@ -70,7 +70,7 @@ class Settings extends SettingsFolder {
 		if (!force || syncStatus) return syncStatus || Promise.resolve(this);
 
 		// If it's not currently synchronizing, create a new sync status for the sync queue
-		const sync = this.gateway.provider.get(this.gateway.type, this.id).then(data => {
+		const sync = this.gateway.provider.get(this.gateway.name, this.id).then(data => {
 			this.existenceStatus = Boolean(data);
 			if (data) this._patch(data);
 			this.gateway.syncMap.delete(this);
@@ -89,7 +89,7 @@ class Settings extends SettingsFolder {
 	async destroy() {
 		await this.sync();
 		if (this.existenceStatus) {
-			await this.gateway.provider.delete(this.gateway.type, this.id);
+			await this.gateway.provider.delete(this.gateway.name, this.id);
 			this.client.emit('settingsDeleteEntry', this);
 		}
 		return this;

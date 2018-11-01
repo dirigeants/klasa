@@ -278,7 +278,7 @@ class SettingsFolder extends Map {
 			this.base.existenceStatus = true;
 			this.client.emit('settingsCreateEntry', this.base);
 		} else {
-			await this.gateway.provider.update(this.gateway.type, this.id, results);
+			await this.gateway.provider.update(this.gateway.name, this.id, results);
 			this.client.emit('settingsUpdateEntry', this, results);
 		}
 
