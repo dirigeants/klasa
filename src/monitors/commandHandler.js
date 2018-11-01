@@ -14,7 +14,7 @@ module.exports = class extends Monitor {
 	async run(message) {
 		if (message.guild && !message.guild.me) await message.guild.members.fetch(this.client.user);
 		if (!message.channel.postable) return undefined;
-		if (this.mentionOnly.test(message.content)) return message.sendLocale('PREFIX_REMINDER', [message.guildSettings.prefix.length ? message.guildSettings.prefix : undefined]);
+		if (this.mentionOnly.test(message.content)) return message.sendLocale('PREFIX_REMINDER', [message.guildSettings.get('prefix') || undefined]);
 
 		const { commandText, prefix, prefixLength } = this.parseCommand(message);
 		if (!commandText) return undefined;
@@ -34,7 +34,8 @@ module.exports = class extends Monitor {
 		} : { commandText: false };
 	}
 
-	customPrefix({ content, guildSettings: { prefix } }) {
+	customPrefix({ content, guildSettings }) {
+		const prefix = guildSettings.get('prefix');
 		if (!prefix) return null;
 		for (const prf of Array.isArray(prefix) ? prefix : [prefix]) {
 			const testingPrefix = this.prefixes.get(prf) || this.generateNewPrefix(prf);
@@ -48,7 +49,8 @@ module.exports = class extends Monitor {
 		return prefixMention ? { length: prefixMention[0].length, regex: this.prefixMention } : null;
 	}
 
-	naturalPrefix({ content, guildSettings: { disableNaturalPrefix } }) {
+	naturalPrefix({ content, guildSettings }) {
+		const disableNaturalPrefix = guildSettings.get('disableNaturalPrefix');
 		if (disableNaturalPrefix || !this.client.options.regexPrefix) return null;
 		const results = this.client.options.regexPrefix.exec(content);
 		return results ? { length: results[0].length, regex: this.client.options.regexPrefix } : null;
