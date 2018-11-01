@@ -471,6 +471,7 @@ declare module 'klasa' {
 		public update(entries: Iterable<[string, any]>, options?: SettingsFolderUpdateOptions): Promise<SettingsFolderUpdateResult>;
 		public update(object: Record<string, any>, options?: SettingsFolderUpdateOptions): Promise<SettingsFolderUpdateResult>;
 		public display(message: KlasaMessage, path?: string | Schema | SchemaFolder): string;
+		public pluck<T extends string>(...paths: T[]): Partial<Record<T, any>>;
 		public toJSON(): any;
 		public toString(): string;
 		private _save(results: Array<SettingsFolderUpdateResultEntry>): Promise<void>;
