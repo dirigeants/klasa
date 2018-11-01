@@ -22,12 +22,7 @@ class SettingsFolder extends Map {
 	}
 
 	get(path) {
-		if (!path) return this;
-
-		// eslint-disable-next-line consistent-this
-		let value = this;
-		for (const key of path.split('.')) value = value.get(key);
-		return value;
+		return path.split('.').reduce((folder, key) => folder.get(key), this);
 	}
 
 	has(path) {
