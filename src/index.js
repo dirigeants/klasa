@@ -16,7 +16,8 @@ module.exports = {
 	ScheduledTask: require('./lib/schedule/ScheduledTask'),
 
 	// lib/settings
-	Settings: require('./lib/settings/Settings'),
+	Settings: require('./lib/settings/settings/Settings'),
+	SettingsFolder: require('./lib/settings/settings/SettingsFolder'),
 	Gateway: require('./lib/settings/Gateway'),
 	GatewayDriver: require('./lib/settings/GatewayDriver'),
 	GatewayStorage: require('./lib/settings/GatewayStorage'),
