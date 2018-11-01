@@ -491,7 +491,7 @@ declare module 'klasa' {
 	}
 
 	export class Gateway extends GatewayStorage {
-		public constructor(store: GatewayDriver, type: string, schema: Schema, options: GatewayOptions);
+		public constructor(store: GatewayDriver, name: string, schema: Schema, options: GatewayOptions);
 		public store: GatewayDriver;
 		public syncQueue: WeakMap<Settings, Promise<Settings>>;
 		public readonly Settings: Settings;
@@ -526,12 +526,12 @@ declare module 'klasa' {
 	}
 
 	export abstract class GatewayStorage {
-		public constructor(client: KlasaClient, type: string, schema: Schema, provider?: string);
+		public constructor(client: KlasaClient, name: string, schema: Schema, provider?: string);
 		public readonly client: KlasaClient;
 		public readonly defaults: any;
 		public readonly provider: Provider | null;
 		public readonly providerName: string;
-		public readonly type: string;
+		public readonly name: string;
 		public ready: boolean;
 		public schema: SchemaFolder | null;
 
@@ -1452,7 +1452,7 @@ declare module 'klasa' {
 	export type GatewayJSON = {
 		options: GatewayOptions;
 		schema: SchemaFolderAddOptions;
-		type: string;
+		name: string;
 	};
 
 	export type QueryBuilderDatatypeOptions = {
