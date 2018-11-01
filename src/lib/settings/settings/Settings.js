@@ -7,6 +7,7 @@ class Settings extends SettingsFolder {
 		super(gateway.schema);
 		Object.defineProperty(this, 'id', { value: id, enumerable: true });
 		Object.defineProperty(this, 'gateway', { value: gateway });
+		Object.defineProperty(this, 'existenceStatus', { value: null, writable: true });
 		this.init(this, this.schema);
 	}
 

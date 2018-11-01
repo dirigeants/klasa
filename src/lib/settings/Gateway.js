@@ -1,5 +1,5 @@
 const GatewayStorage = require('./GatewayStorage');
-const Settings = require('./Settings');
+const Settings = require('./settings/Settings');
 const { Collection } = require('discord.js');
 
 /**
@@ -37,9 +37,9 @@ class Gateway extends GatewayStorage {
 		/**
 		 * The synchronization queue for all Settings instances
 		 * @since 0.5.0
-		 * @type {external:Collection<string, Promise<Settings>>}
+		 * @type {WeakMap<string, Promise<Settings>>}
 		 */
-		this.syncQueue = new Collection();
+		this.syncMap = new WeakMap();
 
 		/**
 		 * @since 0.5.0
@@ -71,7 +71,7 @@ class Gateway extends GatewayStorage {
 		const entry = this.cache.get(id);
 		if (entry) return entry.settings;
 		if (create) {
-			const settings = new this.Settings(this, { id });
+			const settings = new this.Settings(this, id);
 			if (this._synced && this.schema.size) settings.sync(true).catch(err => this.client.emit('error', err));
 			return settings;
 		}
@@ -86,20 +86,20 @@ class Gateway extends GatewayStorage {
 	 */
 	async sync(input = [...this.cache.keys()]) {
 		if (Array.isArray(input)) {
-			if (!this._synced) this._synced = true;
+			this._synced = true;
 			const entries = await this.provider.getAll(this.type, input);
 			for (const entry of entries) {
 				if (!entry) continue;
 				const cache = this.get(entry.id);
 				if (cache) {
-					if (!cache._existsInDB) cache._existsInDB = true;
+					cache.existenceStatus = true;
 					cache._patch(entry);
 				}
 			}
 
 			// Set all the remaining settings from unknown status in DB to not exists.
 			for (const entry of this.cache.values()) {
-				if (entry.settings._existsInDB === null) entry.settings._existsInDB = false;
+				if (entry.settings.existenceStatus === null) entry.settings.existenceStatus = false;
 			}
 			return this;
 		}

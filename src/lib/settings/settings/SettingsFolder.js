@@ -9,14 +9,6 @@ class SettingsFolder extends Map {
 		Object.defineProperty(this, 'schema', { value: schema });
 	}
 
-	get existenceStatus() {
-		return this.base.gateway.existenceMap.get(this.base);
-	}
-
-	set existenceStatus(value) {
-		return this.base.gateway.existenceMap.set(this.base, value);
-	}
-
 	get gateway() {
 		return this.base.gateway;
 	}
@@ -31,7 +23,7 @@ class SettingsFolder extends Map {
 
 	// eslint-disable-next-line complexity
 	async reset(paths, { throwOnError, onlyConfigurable } = {}) {
-		const status = this.existenceStatus;
+		const status = this.base.existenceStatus;
 		// If this entry is out of sync, sync it first
 		if (status === null) await this.base.sync();
 		// If this entry does not exist, it is not possible for it to have an entry reset
@@ -176,11 +168,11 @@ class SettingsFolder extends Map {
 	}
 
 	async _save(results) {
-		const status = this.existenceStatus;
+		const status = this.base.existenceStatus;
 		if (status === null) throw new Error('Cannot update out of sync.');
 		if (status === false) {
 			await this.gateway.provider.create(this.gateway.name, this.base.id, results);
-			this.existenceStatus = true;
+			this.base.existenceStatus = true;
 			this.client.emit('settingsCreateEntry', this.base);
 		} else {
 			await this.gateway.provider.update(this.gateway.type, this.id, results);

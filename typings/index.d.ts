@@ -463,7 +463,6 @@ declare module 'klasa' {
 		public constructor(schema: SchemaFolder);
 		public readonly schema: SchemaFolder;
 		public readonly base: Settings | null;
-		public existenceStatus: boolean | null;
 		public readonly gateway: Gateway;
 		public reset(path: string, options?: SettingsFolderResetOptions): Promise<SettingsFolderUpdateResult>;
 		public reset(paths: Iterable<string>, options?: SettingsFolderResetOptions): Promise<SettingsFolderUpdateResult>;
@@ -484,6 +483,7 @@ declare module 'klasa' {
 		public readonly id: string;
 		public readonly gateway: Gateway;
 		public readonly synchronizing: boolean;
+		private existenceStatus: boolean | null;
 		public clone(): Settings;
 		public sync(force?: boolean): Promise<this>;
 		public destroy(): Promise<this>;
@@ -493,9 +493,9 @@ declare module 'klasa' {
 	export class Gateway extends GatewayStorage {
 		public constructor(store: GatewayDriver, type: string, schema: Schema, options: GatewayOptions);
 		public store: GatewayDriver;
-		public syncQueue: Collection<string, Promise<Settings>>;
+		public syncQueue: WeakMap<Settings, Promise<Settings>>;
 		public readonly Settings: Settings;
-		private cache: Collection<string, { settings: Settings, [k: string]: any }>;
+		private cache: Collection<string, Record<string, any> & { settings: Settings }>;
 
 		public get(input: string | number, create?: boolean): Settings;
 		public sync(input: string): Promise<Settings>;
