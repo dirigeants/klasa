@@ -298,13 +298,14 @@ class SettingsFolder extends Map {
 	async _save(results) {
 		const status = this.base.existenceStatus;
 		if (status === null) throw new Error('Cannot update out of sync.');
+
 		if (status === false) {
 			await this.gateway.provider.create(this.gateway.name, this.base.id, results);
 			this.base.existenceStatus = true;
 			this.base.gateway.client.emit('settingsCreateEntry', this.base);
 		} else {
 			await this.gateway.provider.update(this.gateway.name, this.id, results);
-			this.base.gateway.client.emit('settingsUpdateEntry', this, results);
+			this.base.gateway.client.emit('settingsUpdateEntry', this.base, results.slice());
 		}
 
 		const updateObject = {};
