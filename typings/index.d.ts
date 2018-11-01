@@ -465,10 +465,10 @@ declare module 'klasa' {
 		public readonly base: Settings | null;
 		public readonly gateway: Gateway;
 		public reset(path: string, options?: SettingsFolderResetOptions): Promise<SettingsFolderUpdateResult>;
-		public reset(paths: Iterable<string>, options?: SettingsFolderResetOptions): Promise<SettingsFolderUpdateResult>;
+		public reset(paths: IterableIterator<string>, options?: SettingsFolderResetOptions): Promise<SettingsFolderUpdateResult>;
 		public reset(object: Record<string, any>, options?: SettingsFolderResetOptions): Promise<SettingsFolderUpdateResult>;
 		public update(key: string, value: any, options?: SettingsFolderUpdateOptions): Promise<SettingsFolderUpdateResult>;
-		public update(entries: Iterable<[string, any]>, options?: SettingsFolderUpdateOptions): Promise<SettingsFolderUpdateResult>;
+		public update(entries: IterableIterator<[string, any]>, options?: SettingsFolderUpdateOptions): Promise<SettingsFolderUpdateResult>;
 		public update(object: Record<string, any>, options?: SettingsFolderUpdateOptions): Promise<SettingsFolderUpdateResult>;
 		public display(message: KlasaMessage, path?: string): string;
 		public toJSON(): any;
