@@ -1,4 +1,4 @@
-const { isObject, objectToTuples, arraysStrictEquals, deepClone } = require('../../util/util');
+const { isObject, objectToTuples, arraysStrictEquals, deepClone, toTitleCase } = require('../../util/util');
 const Type = require('../../util/Type');
 
 class SettingsFolder extends Map {
@@ -51,7 +51,7 @@ class SettingsFolder extends Map {
 				if (!piece) throw `The key ${path} does not exist in the schema.`;
 				if (piece.type === 'Folder') {
 					const valuesLength = values.length;
-					const prefixLength = this.path.length ? this.path + 1 : 0;
+					const prefixLength = this.schema.path ? this.schema.path.length + 1 : 0;
 					// Recurse to all sub-pieces
 					for (const value of piece.values(true)) {
 						if (onlyConfigurable && !value.configurable) continue;
@@ -138,6 +138,41 @@ class SettingsFolder extends Map {
 
 		if (results.length) await this._save(results);
 		return { errors, updated: results };
+	}
+
+	display(message, path) {
+		const piece = path ? this.schema.get(path) : this;
+
+		if (piece.type !== 'Folder') {
+			const value = path ? this.get(path) : this;
+			if (value === null) return 'Not set';
+			if (piece.array) return value.length ? `[ ${value.map(val => piece.serializer.stringify(val, message)).join(' | ')} ]` : 'None';
+			return piece.serializer.stringify(value, message);
+		}
+
+		const array = [];
+		const folders = [];
+		const sections = new Map();
+		let longest = 0;
+		for (const [key, value] of piece.entries()) {
+			if (value.type === 'Folder') {
+				if (value.configurableKeys.length) folders.push(`// ${key}`);
+			} else if (value.configurable) {
+				if (key.length > longest) longest = key.length;
+				const values = sections.get(value.type) || [];
+				if (!values.length) sections.set(value.type, values);
+				values.push(key);
+			}
+		}
+		if (folders.length) array.push('= Folders =', ...folders.sort(), '');
+		if (sections.size) {
+			for (const keyType of [...sections.keys()].sort()) {
+				array.push(`= ${toTitleCase(keyType)}s =`,
+					...sections.get(keyType).sort().map(key => `${key.padEnd(longest)} :: ${this.display(message, piece.get(key))}`),
+					'');
+			}
+		}
+		return array.join('\n');
 	}
 
 	async _save(results) {
