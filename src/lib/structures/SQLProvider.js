@@ -76,16 +76,15 @@ class SQLProvider extends Provider {
 			if (Array.isArray(first) && first.length === 2) for (let i = 0; i < updated.length; i++) [keys[i], values[i]] = updated[i];
 
 			// [{ data: [k1, v1], piece: SchemaPiece1 }, { data: [k2, v2], piece: SchemaPiece2 }, ...]
-			else if (first.data && first.piece) this._parseGatewayInput(updated, keys, values, resolve);
+			else if ('key' in first && 'value' in first && 'piece' in first) this._parseGatewayInput(updated, keys, values, resolve);
 
 			// Unknown overload, throw
-			else throw new TypeError(`Expected void, [k, v][], SettingsUpdateResult[], or an object literal. Got: ${new Type(updated)}`);
+			else throw new TypeError(`Expected void, [k, v][], SettingsFolderUpdateResultEntry[], or an object literal. Got: ${new Type(updated)}`);
 
 			return [keys, values];
 		}
-		if (!isObject(updated)) throw new TypeError(`Expected void, [k, v][], SettingsUpdateResult[], or an object literal. Got: ${new Type(updated)}`);
-
-		return objectToTuples(updated);
+		if (isObject(updated)) return objectToTuples(updated);
+		throw new TypeError(`Expected void, [k, v][], SettingsFolderUpdateResultEntry[], or an object literal. Got: ${new Type(updated)}`);
 	}
 
 	/**
@@ -163,11 +162,11 @@ class SQLProvider extends Provider {
 		if (resolve && this.qb) {
 			for (let i = 0; i < updated.length; i++) {
 				const entry = updated[i];
-				[keys[i]] = entry.data;
-				values[i] = this.qb.resolve(entry.piece, entry.data[1]);
+				keys[i] = entry.piece.path;
+				values[i] = this.qb.resolve(entry.piece, entry.value);
 			}
 		} else {
-			for (let i = 0; i < updated.length; i++) [keys[i], values[i]] = updated[i].data;
+			for (let i = 0; i < updated.length; i++) [keys[i], values[i]] = [updated[i].piece.path, updated[i].value];
 		}
 	}
 
