@@ -3,9 +3,54 @@ const Type = require('../../util/Type');
 
 class SettingsFolder extends Map {
 
+	/**
+	 * @typedef {Object} SettingsFolderResetOptions
+	 * @property {boolean} [throwOnError = false] Whether the update should throw on first failure
+	 * @property {Boolean} [onlyConfigurable = false] Whether the update should ignore non-configureable keys
+	 */
+
+	/**
+	 * @typedef {SettingsFolderResetOptions} SettingsFolderUpdateOptions
+	 * @property {GuildResolvable} [guild = null] The guild for context in this update
+	 * @property {('add'|'remove'|'auto'|'overwrite')} [arrayAction = 'auto'] The array action to take when updating an array
+	 * @property {number} [arrayIndex = null] The array index to insert the new element in
+	 */
+
+	/**
+	 * @typedef {Object} SettingsFolderUpdateResultEntry
+	 * @property {string} key The key that got updated relative from this folder
+	 * @property {*} value The new value for said key
+	 * @property {SchemaPiece} piece The Schema piece that manages the updated key
+	 */
+
+	/**
+	 * @typedef {Object} SettingsFolderUpdateResult
+	 * @property {Error[]} errors The errors thrown, only filled if throwOnError is set to true
+	 * @property {SettingsFolderUpdateResultEntry[]} updated The updates entries, empty if all errored or no changes were made
+	 */
+
+	/**
+	 * @since 0.5.0
+	 * @param {SchemaFolder} schema The schema that manages this folder's structure
+	 */
 	constructor(schema) {
 		super();
+
+		/**
+		 * The reference to the base Settings instance
+		 * @since 0.5.0
+		 * @type {?Settings}
+		 * @private
+		 */
 		this.base = null;
+
+		/**
+		 * The schema that manages this folder's structure.
+		 * @since 0.5.0
+		 * @type {Gateway}
+		 * @name Settings#schema
+		 * @readonly
+		 */
 		Object.defineProperty(this, 'schema', { value: schema });
 	}
 
@@ -13,16 +58,34 @@ class SettingsFolder extends Map {
 		return this.base.gateway;
 	}
 
+	/**
+	 * Get a value from the configuration. Accepts nested objects separating by dot.
+	 * @since 0.5.0
+	 * @param {string} path The path of the key's value to get from this instance
+	 * @returns {*}
+	 */
 	get(path) {
 		return path.split('.').reduce((folder, key) => folder.get(key), this);
 	}
 
-	has(path) {
-		return typeof this.get(path) !== 'undefined';
-	}
-
+	/**
+	 * Reset a value from an entry.
+	 * @since 0.5.0
+	 * @param {(string|string[])} [keys] The key to reset
+	 * @param {SettingsFolderResetOptions} [options={}] The options for the reset
+	 * @returns {SettingsFolderUpdateResult}
+	 * @example
+	 * // Reset all keys for this instance
+	 * Settings#reset();
+	 *
+	 * // Reset multiple keys for this instance
+	 * Settings#reset(['prefix', 'channels.modlog']);
+	 *
+	 * // Reset a key
+	 * Settings#reset('prefix');
+	 */
 	// eslint-disable-next-line complexity
-	async reset(paths, { throwOnError, onlyConfigurable } = {}) {
+	async reset(paths = [...this.keys()], { throwOnError, onlyConfigurable } = {}) {
 		const status = this.base.existenceStatus;
 		// If this entry is out of sync, sync it first
 		if (status === null) await this.base.sync();
@@ -76,6 +139,33 @@ class SettingsFolder extends Map {
 		return { errors, updated: results };
 	}
 
+	/**
+	 * Update a value from an entry.
+	 * @since 0.5.0
+	 * @param {(string|Object)} paths The key to modify
+	 * @param {*} [value] The value to parse and save
+	 * @param {SettingsFolderUpdateOptions} [options={}] The options for the update
+	 * @returns {SettingsFolderUpdateResult}
+	 * @async
+	 * @example
+	 * // Updating the value of a key
+	 * Settings#update('roles.administrator', '339943234405007361', { guild: message.guild });
+	 *
+	 * // Updating an array:
+	 * Settings#update('userBlacklist', '272689325521502208');
+	 *
+	 * // Ensuring the function call adds (error if it exists):
+	 * Settings#update('userBlacklist', '272689325521502208', { action: 'add' });
+	 *
+	 * // Updating it with a json object:
+	 * Settings#update({ roles: { administrator: '339943234405007361' } }, { guild: message.guild });
+	 *
+	 * // Updating multiple keys (with json object):
+	 * Settings#update({ prefix: 'k!', language: 'es-ES' }, { guild: message.guild });
+	 *
+	 * // Updating multiple keys (with arrays):
+	 * Settings#update([['prefix', 'k!'], ['language', 'es-ES']]);
+	 */
 	async update(paths, ...args) {
 		let options;
 		if (typeof paths === 'string') [paths, options] = [[paths, args[0]], args[1]];
@@ -132,6 +222,13 @@ class SettingsFolder extends Map {
 		return { errors, updated: results };
 	}
 
+	/**
+	 * Get a list.
+	 * @since 0.5.0
+	 * @param {KlasaMessage} message The Message instance
+	 * @param {string} [path] The path to resolve
+	 * @returns {string}
+	 */
 	display(message, path) {
 		const piece = path ? this.schema.get(path) : this;
 
@@ -167,6 +264,12 @@ class SettingsFolder extends Map {
 		return array.join('\n');
 	}
 
+	/**
+	 * Save the data to the database and patch the data.
+	 * @since 0.5.0
+	 * @param {SettingsFolderUpdateResultEntry[]} results The data to save
+	 * @private
+	 */
 	async _save(results) {
 		const status = this.base.existenceStatus;
 		if (status === null) throw new Error('Cannot update out of sync.');
@@ -182,6 +285,15 @@ class SettingsFolder extends Map {
 		this._patch(Object.assign({}, ...results.map(res => ({ [res.key]: res.value }))));
 	}
 
+	/**
+	 * Parse a value
+	 * @since 0.5.0
+	 * @param {SchemaPiece} piece The path result
+	 * @param {string} key The key that updates
+	 * @param {*} value The value to parse
+	 * @param {SettingsFolderUpdateOptions} options The parse options
+	 * @private
+	 */
 	async _parse(piece, key, value, options) {
 		if (value === null) return deepClone(piece.default);
 
@@ -229,6 +341,14 @@ class SettingsFolder extends Map {
 		return clone;
 	}
 
+	/**
+	 * Path this Settings instance.
+	 * @since 0.5.0
+	 * @param {Object} data The data to patch
+	 * @param {Object} [instance=this] The reference of this instance for recursion
+	 * @param {Schema} [schema=this.gateway.schema] The Schema that sets the schema for this configuration's gateway
+	 * @private
+	 */
 	_patch(data) {
 		if (!isObject(data)) return;
 		for (const [key, value] of Object.entries(data)) {
