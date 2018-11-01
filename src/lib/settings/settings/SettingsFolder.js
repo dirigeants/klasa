@@ -1,4 +1,4 @@
-const { isObject, objectToTuples, arraysStrictEquals, deepClone, toTitleCase } = require('../../util/util');
+const { isObject, objectToTuples, arraysStrictEquals, deepClone, toTitleCase, mergeObjects, makeObject } = require('../../util/util');
 const Type = require('../../util/Type');
 
 class SettingsFolder extends Map {
@@ -152,11 +152,7 @@ class SettingsFolder extends Map {
 		const results = [];
 		for (const [path, piece] of values) {
 			if (piece.array ? arraysStrictEquals(this.get(path), piece.default) : this.get(path) === piece.default) continue;
-			results.push({
-				key: path,
-				value: deepClone(piece.default),
-				piece
-			});
+			results.push({ key: path, value: deepClone(piece.default), piece });
 		}
 
 		if (results.length) await this._save(results);
@@ -197,7 +193,7 @@ class SettingsFolder extends Map {
 		else if (isObject(paths)) [paths, options] = [objectToTuples(paths), args[0]];
 		else [options] = args;
 
-		if (!options) options = { throwOnError: false, onlyConfigurable: true };
+		if (!options) options = { throwOnError: false, onlyConfigurable: false };
 
 		const errors = [];
 
@@ -244,11 +240,7 @@ class SettingsFolder extends Map {
 		const results = [];
 		for (const [path, value, piece] of values) {
 			if (piece.array ? arraysStrictEquals(value, piece.default) : value === piece.default) continue;
-			results.push({
-				key: path,
-				value: deepClone(piece.default),
-				piece
-			});
+			results.push({ key: path, value, piece });
 		}
 
 		if (results.length) await this._save(results);
@@ -315,7 +307,9 @@ class SettingsFolder extends Map {
 			this.base.gateway.client.emit('settingsUpdateEntry', this, results);
 		}
 
-		this._patch(Object.assign({}, ...results.map(res => ({ [res.key]: res.value }))));
+		const updateObject = {};
+		for (const entry of results) mergeObjects(updateObject, makeObject(entry.key, entry.piece.serializer.serialize(entry.value)));
+		this._patch(updateObject);
 	}
 
 	/**

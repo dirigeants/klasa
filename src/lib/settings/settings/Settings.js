@@ -91,6 +91,7 @@ class Settings extends SettingsFolder {
 		if (this.existenceStatus) {
 			await this.gateway.provider.delete(this.gateway.name, this.id);
 			this.gateway.client.emit('settingsDeleteEntry', this);
+			this._patch(this.gateway.defaults);
 		}
 		return this;
 	}
