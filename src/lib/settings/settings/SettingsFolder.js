@@ -1,6 +1,5 @@
 const { isObject, objectToTuples, arraysStrictEquals, deepClone, toTitleCase, mergeObjects, makeObject, resolveGuild } = require('../../util/util');
 const Type = require('../../util/Type');
-const { Guild } = require('discord.js');
 
 class SettingsFolder extends Map {
 
@@ -129,7 +128,7 @@ class SettingsFolder extends Map {
 		if (typeof paths === 'string') paths = [paths];
 		else if (isObject(paths)) paths = objectToTuples(paths).map(tuple => tuple[0]);
 
-		guild = this.base.target instanceof Guild ? this.base.target : resolveGuild(guild);
+		guild = resolveGuild(typeof guild !== 'undefined' ? guild : this.base.target);
 		const language = guild ? guild.language : this.base.client.languages.default;
 
 		const errors = [];
@@ -213,7 +212,7 @@ class SettingsFolder extends Map {
 		else [options] = args;
 
 		if (!options) options = { throwOnError: false, onlyConfigurable: false, guild: null };
-		options.guild = this.base.target instanceof Guild ? this.base.target : resolveGuild(options.guild);
+		options.guild = resolveGuild('guild' in options ? options.guild : this.base.target);
 		const language = options.guild ? options.guild.language : this.base.client.languages.default;
 
 		const errors = [];
