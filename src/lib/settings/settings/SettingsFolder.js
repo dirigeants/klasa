@@ -1,5 +1,6 @@
-const { isObject, objectToTuples, arraysStrictEquals, deepClone, toTitleCase, mergeObjects, makeObject } = require('../../util/util');
+const { isObject, objectToTuples, arraysStrictEquals, deepClone, toTitleCase, mergeObjects, makeObject, resolveGuild } = require('../../util/util');
 const Type = require('../../util/Type');
+const { Guild } = require('discord.js');
 
 class SettingsFolder extends Map {
 
@@ -118,7 +119,7 @@ class SettingsFolder extends Map {
 	 * Settings#reset('prefix');
 	 */
 	// eslint-disable-next-line complexity
-	async reset(paths = [...this.keys()], { throwOnError, onlyConfigurable } = {}) {
+	async reset(paths = [...this.keys()], { throwOnError, onlyConfigurable, guild } = {}) {
 		const status = this.base.existenceStatus;
 		// If this entry is out of sync, sync it first
 		if (status === null) await this.base.sync();
@@ -127,6 +128,9 @@ class SettingsFolder extends Map {
 
 		if (typeof paths === 'string') paths = [paths];
 		else if (isObject(paths)) paths = objectToTuples(paths).map(tuple => tuple[0]);
+
+		guild = this.base.target instanceof Guild ? this.base.target : resolveGuild(guild);
+		const language = guild ? guild.language : this.base.client.languages.default;
 
 		const errors = [];
 
@@ -141,7 +145,7 @@ class SettingsFolder extends Map {
 					piece = schema.get(key);
 					if (!piece) throw undefined;
 				} catch (__) {
-					throw `The key ${path} does not exist in the schema.`;
+					throw language.get('SETTING_GATEWAY_KEY_NOEXT', path);
 				}
 				if (piece.type === 'Folder') {
 					const valuesLength = values.length;
@@ -151,9 +155,9 @@ class SettingsFolder extends Map {
 						if (onlyConfigurable && !value.configurable) continue;
 						values.push([value.path.slice(prefixLength), piece]);
 					}
-					if (values.length === valuesLength) throw 'This group is not configurable.';
+					if (values.length === valuesLength) throw language.get('SETTING_GATEWAY_UNCONFIGURABLE_FOLDER');
 				} else if (onlyConfigurable && !piece.configurable) {
-					throw 'This group is not configurable.';
+					throw language.get('SETTING_GATEWAY_UNCONFIGURABLE_FOLDER');
 				} else {
 					values.push([key, piece]);
 				}
@@ -208,7 +212,9 @@ class SettingsFolder extends Map {
 		else if (isObject(paths)) [paths, options] = [objectToTuples(paths), args[0]];
 		else [options] = args;
 
-		if (!options) options = { throwOnError: false, onlyConfigurable: false };
+		if (!options) options = { throwOnError: false, onlyConfigurable: false, guild: null };
+		options.guild = this.base.target instanceof Guild ? this.base.target : resolveGuild(options.guild);
+		const language = options.guild ? options.guild.language : this.base.client.languages.default;
 
 		const errors = [];
 
@@ -228,16 +234,14 @@ class SettingsFolder extends Map {
 					piece = schema.get(key);
 					if (!piece) throw undefined;
 				} catch (__) {
-					throw `The key ${value[0]} does not exist in the schema.`;
+					throw language.get('SETTING_GATEWAY_KEY_NOEXT', value[0]);
 				}
 				if (piece.type === 'Folder') {
 					const keys = options.onlyConfigurable ? piece.configurableKeys : [...piece.keys()];
-					throw keys.length ? `Please, choose one of the following keys: '${keys.join('\', \'')}'` : 'This group is not configurable.';
+					throw keys.length ? language.get('SETTING_GATEWAY_CHOOSE_KEY', keys.join('\', \'')) : language.get('SETTING_GATEWAY_UNCONFIGURABLE_FOLDER');
 				}
 				if (!piece.array && Array.isArray(value[1])) {
-					throw options.guild ?
-						options.guild.language.get('SETTING_GATEWAY_KEY_NOT_ARRAY', key) :
-						`The path ${key} does not store multiple values.`;
+					throw language.get('SETTING_GATEWAY_KEY_NOT_ARRAY', key);
 				}
 
 				promises.push(this._parse(piece, key, value[1], options)
