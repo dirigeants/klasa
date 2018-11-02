@@ -6,9 +6,10 @@ class Settings extends SettingsFolder {
 	/**
 	 * @since 0.5.0
 	 * @param {Gateway} gateway The gateway that manages this settings instance
+	 * @param {*} target The target that holds this instance
 	 * @param {string} id The id of this entry
 	 */
-	constructor(gateway, id) {
+	constructor(gateway, target, id) {
 		super(gateway.schema);
 
 		/**
@@ -28,6 +29,15 @@ class Settings extends SettingsFolder {
 		 * @readonly
 		 */
 		Object.defineProperty(this, 'gateway', { value: gateway });
+
+		/**
+		 * The object that holds this instance
+		 * @since 0.5.0
+		 * @type {*}
+		 * @name Settings#target
+		 * @readonly
+		 */
+		Object.defineProperty(this, 'target', { value: target });
 
 		/**
 		 * Whether this entry exists in the DB or not, null if it's not synchronized.

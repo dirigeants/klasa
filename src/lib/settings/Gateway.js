@@ -61,21 +61,38 @@ class Gateway extends GatewayStorage {
 	}
 
 	/**
+	 * Gets an entry from the cache or creates one if it does not exist
+	 * @since 0.5.0
+	 * @param {*} target The target that holds a Settings instance of the holder for the new one
+	 * @param {string|number} [id = target.id] The settings' identificator
+	 * @returns {Settings}
+	 */
+	acquire(target, id = target.id) {
+		return this.get(id) || this.create(target, id);
+	}
+
+	/**
 	 * Get an entry from the cache.
 	 * @since 0.5.0
-	 * @param {string} id The key to get from the cache
-	 * @param {boolean} [create = false] Whether SG should create a new instance of Settings in the background, if the entry does not already exist.
+	 * @param {string|number} id The key to get from the cache
 	 * @returns {?Settings}
 	 */
-	get(id, create = false) {
+	get(id) {
 		const entry = this.cache.get(id);
-		if (entry) return entry.settings;
-		if (create) {
-			const settings = new this.Settings(this, id);
-			if (this._synced && this.schema.size) settings.sync(true).catch(err => this.client.emit('error', err));
-			return settings;
-		}
-		return null;
+		return (entry && entry.settings) || null;
+	}
+
+	/**
+	 * Create a new Settings instance for this gateway.
+	 * @since 0.5.0
+	 * @param {*} target The target that will hold this instance alive
+	 * @param {string|number} [id = target.id] The settings' identificator
+	 * @returns {Settings}
+	 */
+	create(target, id = target.id) {
+		const settings = new this.Settings(this, target, id);
+		if (this._synced && this.schema.size) settings.sync(true).catch(err => this.client.emit('error', err));
+		return settings;
 	}
 
 	/**

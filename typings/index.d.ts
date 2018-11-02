@@ -498,8 +498,9 @@ declare module 'klasa' {
 		public syncQueue: WeakMap<Settings, Promise<Settings>>;
 		public readonly Settings: Settings;
 		private cache: Collection<string, Record<string, any> & { settings: Settings }>;
-
-		public get(input: string | number, create?: boolean): Settings;
+		public acquire(target: any, id?: string | number): Settings;
+		public create(target: any, id?: string | number): Settings;
+		public get(id: string | number): Settings | null;
 		public sync(input: string): Promise<Settings>;
 		public sync(input?: string[]): Promise<Gateway>;
 	}
