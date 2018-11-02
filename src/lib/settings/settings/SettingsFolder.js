@@ -128,7 +128,7 @@ class SettingsFolder extends Map {
 		if (typeof paths === 'string') paths = [paths];
 		else if (isObject(paths)) paths = objectToTuples(paths).map(tuple => tuple[0]);
 
-		guild = resolveGuild(typeof guild !== 'undefined' ? guild : this.base.target);
+		guild = resolveGuild(this.base.client, typeof guild !== 'undefined' ? guild : this.base.target);
 		const language = guild ? guild.language : this.base.client.languages.default;
 
 		const errors = [];
@@ -212,7 +212,7 @@ class SettingsFolder extends Map {
 		else [options] = args;
 
 		if (!options) options = { throwOnError: false, onlyConfigurable: false, guild: null };
-		options.guild = resolveGuild('guild' in options ? options.guild : this.base.target);
+		options.guild = resolveGuild(this.base.client, 'guild' in options ? options.guild : this.base.target);
 		const language = options.guild ? options.guild.language : this.base.client.languages.default;
 
 		const errors = [];
