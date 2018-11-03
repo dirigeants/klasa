@@ -20,7 +20,7 @@ class ReactionHandler extends ReactionCollector {
 	 * @property {number} [max] The maximum total amount of reactions to collect
 	 * @property {number} [maxEmojis] The maximum number of emojis to collect
 	 * @property {number} [maxUsers] The maximum number of users to react
-	 * @property {number} [time] The maximum amount of time before this RichMenu should expire
+	 * @property {number} [time=30000] The maximum amount of time before this RichMenu should expire
 	 */
 
 	/**
@@ -33,6 +33,7 @@ class ReactionHandler extends ReactionCollector {
 	 * @param {Emoji[]} emojis The emojis which should be used in this handler
 	 */
 	constructor(message, filter, options, display, emojis) {
+		if (!options.time) options.time = 30000;
 		super(message, filter, options);
 
 		/**
@@ -62,13 +63,6 @@ class ReactionHandler extends ReactionCollector {
 		 * @type {string}
 		 */
 		this.prompt = this.options.prompt || message.language.get('REACTIONHANDLER_PROMPT');
-
-		/**
-		 * The time until the reaction collector closes automatically
-		 * @since 0.4.0
-		 * @type {number}
-		 */
-		this.time = typeof this.options.time === 'number' ? this.options.time : 30000;
 
 		/**
 		 * Whether the menu is awaiting a response of a prompt, to block all other jump reactions
