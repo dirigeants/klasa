@@ -97,7 +97,7 @@ class SQLProvider extends Provider {
 	 */
 	parseEntry(gateway, entry) {
 		if (!entry) return null;
-		if (typeof gateway === 'string') gateway = this.client.gateways[gateway];
+		if (typeof gateway === 'string') gateway = this.client.gateways.get(gateway);
 		if (!(gateway instanceof Gateway)) return entry;
 
 		const object = { id: entry.id };
