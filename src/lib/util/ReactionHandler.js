@@ -51,6 +51,13 @@ class ReactionHandler extends ReactionCollector {
 		this.methodMap = new Map(Object.entries(this.display.emojis).map(([key, value]) => [value, key]));
 
 		/**
+		 * The time until the reaction collector closes automatically
+		 * @since 0.4.0
+		 * @type {number}
+		 */
+		this.time = this.options.time;
+
+		/**
 		 * The current page the display is on
 		 * @since 0.4.0
 		 * @type {number}
