@@ -65,7 +65,9 @@ class Settings extends SettingsFolder {
 	 * @returns {Settings}
 	 */
 	clone() {
-		return new this.constructor(this.gateway, this.id);
+		const clone = new this.constructor(this.gateway, this.target, this.id);
+		clone._patch(this.toJSON());
+		return clone;
 	}
 
 	/**
