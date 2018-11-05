@@ -28,10 +28,10 @@ class SchemaPiece {
 	constructor(parent, key, type, options = {}) {
 		/**
 		 * The KlasaClient for this SchemaPiece
-		 * @name SchemaPiece#Client
+		 * @name SchemaPiece#client
 		 * @since 0.5.0
-		 * @readonly
 		 * @type {KlasaClient}
+		 * @readonly
 		 */
 		Object.defineProperty(this, 'client', { value: null, writable: true });
 
@@ -39,8 +39,8 @@ class SchemaPiece {
 		 * The parent of this SchemaPiece, either a SchemaFolder instance or Schema instance
 		 * @name SchemaPiece#parent
 		 * @since 0.5.0
-		 * @readonly
 		 * @type {SchemaFolder|Schema}
+		 * @readonly
 		 */
 		Object.defineProperty(this, 'parent', { value: parent });
 
@@ -48,8 +48,8 @@ class SchemaPiece {
 		 * The name of this SchemaPiece instance
 		 * @name SchemaPiece#key
 		 * @since 0.5.0
-		 * @readonly
 		 * @type {string}
+		 * @readonly
 		 */
 		Object.defineProperty(this, 'key', { value: key });
 
@@ -57,8 +57,8 @@ class SchemaPiece {
 		 * The path of this SchemaPiece instance
 		 * @name SchemaPiece#path
 		 * @since 0.5.0
-		 * @readonly
 		 * @type {string}
+		 * @readonly
 		 */
 		Object.defineProperty(this, 'path', { value: `${this.parent.path ? `${this.parent.path}.` : ''}${this.key}` });
 
