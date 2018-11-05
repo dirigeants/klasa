@@ -406,7 +406,7 @@ class SettingsFolder extends Map {
 
 			// Patch recursively if the key is a folder, set otherwise
 			if (subkey instanceof SettingsFolder) subkey._patch(value);
-			else super.set(key, value);
+			else super.set(key, deepClone(value));
 		}
 	}
 

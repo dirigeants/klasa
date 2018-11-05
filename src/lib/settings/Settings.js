@@ -1,4 +1,3 @@
-const { deepClone } = require('../util/util');
 const SettingsFolder = require('./SettingsFolder');
 
 class Settings extends SettingsFolder {
@@ -122,7 +121,7 @@ class Settings extends SettingsFolder {
 				folder.set(key, settings);
 				this.init(settings, value);
 			} else {
-				folder.set(key, deepClone(value.default));
+				folder.set(key, value.default);
 			}
 		}
 	}
