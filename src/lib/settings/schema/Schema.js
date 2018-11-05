@@ -25,7 +25,7 @@ class Schema extends Map {
 		/**
 		 * The type of this SchemaFolder (always 'Folder')
 		 * @since 0.5.0
-		 * @name SchemaFolder#type
+		 * @name Schema#type
 		 * @type {string}
 		 * @readonly
 		 */
@@ -34,8 +34,9 @@ class Schema extends Map {
 		/**
 		 * The defaults for the current SchemaFolder or Schema instance
 		 * @since 0.5.0
-		 * @readonly
+		 * @name Schema#defaults
 		 * @type {Object}
+		 * @readonly
 		 */
 		Object.defineProperty(this, 'defaults', { value: new Map() });
 	}
@@ -53,8 +54,8 @@ class Schema extends Map {
 	/**
 	 * Get the configurable keys for the current SchemaFolder or Schema instance
 	 * @since 0.5.0
-	 * @readonly
 	 * @type {Array<string>}
+	 * @readonly
 	 */
 	get configurableKeys() {
 		const keys = [];
@@ -65,8 +66,8 @@ class Schema extends Map {
 	/**
 	 * Get the configurable value for the current SchemaFolder or Schema instance
 	 * @since 0.5.0
-	 * @readonly
 	 * @type {Array<SchemaPiece>}
+	 * @readonly
 	 */
 	get configurableValues() {
 		const values = [];
@@ -77,8 +78,8 @@ class Schema extends Map {
 	/**
 	 * Get the paths for the current SchemaFolder or Schema instance
 	 * @since 0.5.0
-	 * @readonly
 	 * @type {Map<string, SchemaFolder|SchemaPiece>}
+	 * @readonly
 	 */
 	get paths() {
 		const paths = new Map();
