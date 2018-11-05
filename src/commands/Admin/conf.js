@@ -38,17 +38,17 @@ module.exports = class extends Command {
 	}
 
 	async set(message, [key, valueToSet]) {
-		const piece = this.check(message, key, await message.guild.settings.update(key, valueToSet, { onlyConfigurable: true, arrayAction: 'add', guild: message.guild }));
+		const piece = this.check(message, key, await message.guild.settings.update(key, valueToSet, { onlyConfigurable: true, arrayAction: 'add' }));
 		return message.sendLocale('COMMAND_CONF_UPDATED', [key, message.guild.settings.display(message, piece)]);
 	}
 
 	async remove(message, [key, valueToRemove]) {
-		const piece = this.check(message, key, await message.guild.settings.update(key, valueToRemove, { onlyConfigurable: true, arrayAction: 'remove', guild: message.guild }));
+		const piece = this.check(message, key, await message.guild.settings.update(key, valueToRemove, { onlyConfigurable: true, arrayAction: 'remove' }));
 		return message.sendLocale('COMMAND_CONF_UPDATED', [key, message.guild.settings.display(message, piece)]);
 	}
 
 	async reset(message, [key]) {
-		const piece = this.check(message, key, await message.guild.settings.reset(key, { guild: message.guild }));
+		const piece = this.check(message, key, await message.guild.settings.reset(key));
 		return message.sendLocale('COMMAND_CONF_RESET', [key, message.guild.settings.display(message, piece)]);
 	}
 
