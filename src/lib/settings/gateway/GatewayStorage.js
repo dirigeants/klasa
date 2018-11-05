@@ -2,7 +2,7 @@ class GatewayStorage {
 
 	/**
 	 * @typedef {Object} GatewayJSON
-	 * @property {string} type The name of this gateway
+	 * @property {string} name The name of this gateway
 	 * @property {GatewayDriverRegisterOptions} options The options for this gateway
 	 * @property {Object} schema The current schema
 	 */
@@ -11,12 +11,12 @@ class GatewayStorage {
 	 * <warning>You should never create an instance of this class as it's abstract.</warning>
 	 * @since 0.5.0
 	 * @param {KlasaClient} client The client this GatewayStorage was created with
-	 * @param {string} type The name of this GatewayStorage
+	 * @param {string} name The name of this GatewayStorage
 	 * @param {Schema} schema The schema for this gateway
 	 * @param {string} [provider] The provider's name
 	 * @private
 	 */
-	constructor(client, type, schema, provider) {
+	constructor(client, name, schema, provider) {
 		/**
 		 * The client this GatewayStorage was created with.
 		 * @since 0.5.0
@@ -27,13 +27,13 @@ class GatewayStorage {
 		Object.defineProperty(this, 'client', { value: client });
 
 		/**
-		 * The type of this GatewayStorage.
+		 * The name of this GatewayStorage.
 		 * @since 0.5.0
-		 * @name GatewayStorage#type
+		 * @name GatewayStorage#name
 		 * @type {string}
 		 * @readonly
 		 */
-		Object.defineProperty(this, 'type', { value: type });
+		Object.defineProperty(this, 'name', { value: name });
 
 		/**
 		 * The name of this instance's provider.
@@ -68,16 +68,6 @@ class GatewayStorage {
 	}
 
 	/**
-	 * Get this gateway's defaults.
-	 * @since 0.5.0
-	 * @type {Object}
-	 * @readonly
-	 */
-	get defaults() {
-		return { ...this.schema.defaults, default: true };
-	}
-
-	/**
 	 * Inits the current Gateway.
 	 * @since 0.5.0
 	 */
@@ -108,14 +98,14 @@ class GatewayStorage {
 		if (errors.length) throw new Error(`[SCHEMA] There is an error with your schema.\n${errors.join('\n')}`);
 
 		// Init the table
-		const hasTable = await provider.hasTable(this.type);
-		if (!hasTable) await provider.createTable(this.type);
+		const hasTable = await provider.hasTable(this.name);
+		if (!hasTable) await provider.createTable(this.name);
 
 		// Add any missing columns (NoSQL providers return empty array)
-		const columns = await provider.getColumns(this.type);
+		const columns = await provider.getColumns(this.name);
 		if (columns.length) {
 			const promises = [];
-			for (const [key, piece] of this.schema.paths) if (!columns.includes(key)) promises.push(provider.addColumn(this.type, piece));
+			for (const [key, piece] of this.schema.paths) if (!columns.includes(key)) promises.push(provider.addColumn(this.name, piece));
 			await Promise.all(promises);
 		}
 	}
@@ -127,7 +117,7 @@ class GatewayStorage {
 	 */
 	toJSON() {
 		return {
-			type: this.type,
+			name: this.name,
 			options: { provider: this.providerName },
 			schema: this.schema.toJSON()
 		};
@@ -139,7 +129,7 @@ class GatewayStorage {
 	 * @returns {string}
 	 */
 	toString() {
-		return `Gateway(${this.type})`;
+		return `Gateway(${this.name})`;
 	}
 
 }

@@ -23,7 +23,7 @@ module.exports = Structures.extend('User', User => {
 			 * @since 0.5.0
 			 * @type {Settings}
 			 */
-			this.settings = this.client.gateways.get('users').get(this.id, true);
+			this.settings = this.client.gateways.get('users').acquire(this);
 		}
 
 		/**
