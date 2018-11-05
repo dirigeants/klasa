@@ -101,7 +101,10 @@ class Gateway extends GatewayStorage {
 	 * @param {(Array<string>|string)} [input=Array<string>] An object containing a id property, like discord.js objects, or a string
 	 * @returns {?(Gateway|Settings)}
 	 */
-	async sync(input = [...this.cache.keys()]) {
+	async sync(input) {
+		// If the schema is empty, there's no point on running any operation
+		if (!this.schema.size) return this;
+		if (typeof input === 'undefined') input = [...this.cache.keys()];
 		if (Array.isArray(input)) {
 			this._synced = true;
 			const entries = await this.provider.getAll(this.name, input);
