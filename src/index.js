@@ -17,9 +17,10 @@ module.exports = {
 
 	// lib/settings
 	Settings: require('./lib/settings/Settings'),
-	Gateway: require('./lib/settings/Gateway'),
-	GatewayDriver: require('./lib/settings/GatewayDriver'),
-	GatewayStorage: require('./lib/settings/GatewayStorage'),
+	SettingsFolder: require('./lib/settings/SettingsFolder'),
+	Gateway: require('./lib/settings/gateway/Gateway'),
+	GatewayDriver: require('./lib/settings/gateway/GatewayDriver'),
+	GatewayStorage: require('./lib/settings/gateway/GatewayStorage'),
 	Schema: require('./lib/settings/schema/Schema'),
 	SchemaFolder: require('./lib/settings/schema/SchemaFolder'),
 	SchemaPiece: require('./lib/settings/schema/SchemaPiece'),

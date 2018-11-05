@@ -1,5 +1,5 @@
 const Gateway = require('./Gateway');
-const Schema = require('./schema/Schema');
+const Schema = require('../schema/Schema');
 const { Collection } = require('discord.js');
 
 /**

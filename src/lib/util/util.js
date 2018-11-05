@@ -1,6 +1,6 @@
 const { promisify } = require('util');
 const { exec } = require('child_process');
-const { Guild, GuildChannel, Message } = require('discord.js');
+const { Guild, GuildMember, GuildChannel, Message } = require('discord.js');
 
 const zws = String.fromCharCode(8203);
 let sensitivePattern;
@@ -144,7 +144,7 @@ class Util {
 	/**
 	 * Verify if the input is a function.
 	 * @since 0.5.0
-	 * @param {Function} input The function to verify
+	 * @param {*} input The function to verify
 	 * @returns {boolean}
 	 */
 	static isFunction(input) {
@@ -154,7 +154,7 @@ class Util {
 	/**
 	 * Verify if the input is a class constructor.
 	 * @since 0.5.0
-	 * @param {Function} input The function to verify
+	 * @param {*} input The function to verify
 	 * @returns {boolean}
 	 */
 	static isClass(input) {
@@ -166,7 +166,7 @@ class Util {
 	/**
 	 * Verify if the input is an object literal (or class).
 	 * @since 0.5.0
-	 * @param {Object} input The object to verify
+	 * @param {*} input The object to verify
 	 * @returns {boolean}
 	 */
 	static isObject(input) {
@@ -176,7 +176,7 @@ class Util {
 	/**
 	 * Verify if a number is a finite number.
 	 * @since 0.5.0
-	 * @param {number} input The number to verify
+	 * @param {*} input The number to verify
 	 * @returns {boolean}
 	 */
 	static isNumber(input) {
@@ -196,7 +196,7 @@ class Util {
 	/**
 	 * Verify if an object is a promise.
 	 * @since 0.5.0
-	 * @param {Promise} input The promise to verify
+	 * @param {*} input The promise to verify
 	 * @returns {boolean}
 	 */
 	static isThenable(input) {
@@ -311,6 +311,7 @@ class Util {
 		if (type === 'object' && guild !== null) {
 			if (guild instanceof Guild) return guild;
 			if ((guild instanceof GuildChannel) ||
+				(guild instanceof GuildMember) ||
 				(guild instanceof Message)) return guild.guild;
 		} else if (type === 'string' && /^\d{17,19}$/.test(guild)) {
 			return client.guilds.get(guild) || null;
