@@ -259,7 +259,7 @@ class SettingsFolder extends Map {
 		const results = [];
 		for (const [path, value, piece] of values) {
 			if (piece.array ? arraysStrictEquals(value, piece.default) : value === piece.default) continue;
-			results.push({ key: path, value: piece.serializer.serialize(value), piece });
+			results.push({ key: path, value, piece });
 		}
 
 		if (results.length) await this._save(results);
@@ -342,11 +342,11 @@ class SettingsFolder extends Map {
 	 * @private
 	 */
 	async _parse(piece, key, value, options) {
-		if (value === null) return deepClone(piece.default);
+		if (value === null) return piece.default;
 
 		const isArray = Array.isArray(value);
-		if (isArray) value = await Promise.all(value.map(val => piece.parse(val, options.guild)));
-		else value = await piece.parse(value, options.guild);
+		if (isArray) value = await Promise.all(value.map(async val => piece.serializer.serialize(await piece.parse(val, options.guild))));
+		else value = piece.serializer.serialize(await piece.parse(value, options.guild));
 
 		if (!piece.array) return value;
 		if (!isArray) value = [value];
