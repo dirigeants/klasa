@@ -68,16 +68,6 @@ class GatewayStorage {
 	}
 
 	/**
-	 * Get this gateway's defaults.
-	 * @since 0.5.0
-	 * @type {Object}
-	 * @readonly
-	 */
-	get defaults() {
-		return { ...this.schema.defaults, default: true };
-	}
-
-	/**
 	 * Inits the current Gateway.
 	 * @since 0.5.0
 	 */
