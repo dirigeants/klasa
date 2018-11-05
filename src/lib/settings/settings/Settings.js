@@ -28,7 +28,7 @@ class Settings extends SettingsFolder {
 		 * @name Settings#gateway
 		 * @readonly
 		 */
-		Object.defineProperty(this, 'gateway', { value: gateway, enumerable: true });
+		Object.defineProperty(this, 'gateway', { value: gateway });
 
 		/**
 		 * The object that holds this instance
@@ -37,7 +37,7 @@ class Settings extends SettingsFolder {
 		 * @name Settings#target
 		 * @readonly
 		 */
-		Object.defineProperty(this, 'target', { value: target, enumerable: true });
+		Object.defineProperty(this, 'target', { value: target });
 
 		/**
 		 * Whether this entry exists in the DB or not, null if it's not synchronized.
