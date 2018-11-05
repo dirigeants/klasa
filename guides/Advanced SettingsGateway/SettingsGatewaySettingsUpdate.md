@@ -19,10 +19,10 @@ message.guild.settings.update({ roles: { administrator: '339943234405007361' } }
 message.guild.settings.update('userBlacklist', '272689325521502208');
 
 // Ensuring the function call adds (error if it exists)
-message.guild.settings.update('userBlacklist', '272689325521502208', { action: 'add' });
+message.guild.settings.update('userBlacklist', '272689325521502208', { arrayAction: 'add' });
 
 // Ensuring the function call removes (error if it doesn't exist)
-message.guild.settings.update('userBlacklist', '272689325521502208', { action: 'remove' });
+message.guild.settings.update('userBlacklist', '272689325521502208', { arrayAction: 'remove' });
 
 // Updating multiple keys
 message.guild.settings.update([['prefix', 'k!'], ['language', 'es-ES']]);
@@ -30,7 +30,7 @@ message.guild.settings.update([['prefix', 'k!'], ['language', 'es-ES']]);
 
 > **Note**: Some types require a Guild instance to work, for example, *channels*, *roles* and *members*.
 
-> Additionally, if no 'action' option is passed to {@link SettingsUpdateOptions}, it'll assume the `auto` mode, which will add or remove depending on the existence of the key.
+> Additionally, if no 'arrayAction' option is passed to {@link SettingsUpdateOptions}, it'll assume the `auto` mode, which will add or remove depending on the existence of the key.
 
 ## Further Reading:
 

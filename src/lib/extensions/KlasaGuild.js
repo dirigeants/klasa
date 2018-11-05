@@ -23,7 +23,7 @@ module.exports = Structures.extend('Guild', Guild => {
 			 * @since 0.5.0
 			 * @type {Settings}
 			 */
-			this.settings = this.client.gateways.get('guilds').get(this.id, true);
+			this.settings = this.client.gateways.get('guilds').acquire(this);
 		}
 
 		/**
@@ -31,7 +31,7 @@ module.exports = Structures.extend('Guild', Guild => {
 		 * @type {?Language}
 		 */
 		get language() {
-			return this.client.languages.get(this.settings.language) || null;
+			return this.client.languages.get(this.settings.get('language')) || null;
 		}
 
 		/**

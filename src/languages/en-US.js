@@ -16,6 +16,8 @@ module.exports = class extends Language {
 			SETTING_GATEWAY_VALUE_FOR_KEY_ALREXT: (data, key) => `The value ${data} for the key ${key} already exists.`,
 			SETTING_GATEWAY_SPECIFY_VALUE: 'You must specify the value to add or filter.',
 			SETTING_GATEWAY_KEY_NOT_ARRAY: (key) => `The key ${key} is not an Array.`,
+			SETTING_GATEWAY_CHOOSE_KEY: (keys) => `Please, choose one of the following keys: '${keys}'`,
+			SETTING_GATEWAY_UNCONFIGURABLE_FOLDER: 'This group is not configurable.',
 			SETTING_GATEWAY_KEY_NOEXT: (key) => `The key ${key} does not exist in the current data schema.`,
 			SETTING_GATEWAY_INVALID_TYPE: 'The type parameter must be either add or remove.',
 			SETTING_GATEWAY_INVALID_FILTERED_VALUE: (piece, value) => `${piece.key} doesn't accept the value: ${value}`,
