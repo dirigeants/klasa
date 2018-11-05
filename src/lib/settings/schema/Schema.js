@@ -1,4 +1,4 @@
-const { isFunction, deepClone } = require('../../util/util');
+const { isFunction } = require('../../util/util');
 
 /**
  * The base Schema for {@link Gateway}s
