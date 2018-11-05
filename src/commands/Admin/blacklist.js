@@ -21,7 +21,7 @@ module.exports = class extends Command {
 
 		for (const userOrGuild of new Set(usersAndGuilds)) {
 			const type = userOrGuild instanceof User ? 'user' : 'guild';
-			if (this.client.settings[`${type}Blacklist`].includes(userOrGuild.id || userOrGuild)) {
+			if (this.client.settings.get(`${type}Blacklist`).includes(userOrGuild.id || userOrGuild)) {
 				changes[this.terms.indexOf(`${type}sRemoved`)].push(userOrGuild.name || userOrGuild.username || userOrGuild);
 			} else {
 				changes[this.terms.indexOf(`${type}sAdded`)].push(userOrGuild.name || userOrGuild.username || userOrGuild);

@@ -22,7 +22,7 @@ const SerializerStore = require('./structures/SerializerStore');
 const TaskStore = require('./structures/TaskStore');
 
 // lib/settings
-const GatewayDriver = require('./settings/GatewayDriver');
+const GatewayDriver = require('./settings/gateway/GatewayDriver');
 
 // lib/settings/schema
 const Schema = require('./settings/schema/Schema');
@@ -284,7 +284,7 @@ class KlasaClient extends Discord.Client {
 		/**
 		 * The Settings instance that handles this client's settings
 		 * @since 0.5.0
-		 * @type {Settings}
+		 * @type {?Settings}
 		 */
 		this.settings = null;
 

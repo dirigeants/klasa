@@ -1,4 +1,5 @@
-const { isFunction, deepClone } = require('../../util/util');
+const { isFunction } = require('../../util/util');
+const SettingsFolder = require('../SettingsFolder');
 
 /**
  * The base Schema for {@link Gateway}s
@@ -25,18 +26,37 @@ class Schema extends Map {
 		/**
 		 * The type of this SchemaFolder (always 'Folder')
 		 * @since 0.5.0
-		 * @name SchemaFolder#type
+		 * @name Schema#type
 		 * @type {string}
 		 * @readonly
 		 */
 		Object.defineProperty(this, 'type', { value: 'Folder' });
+
+		/**
+		 * The defaults for the current SchemaFolder or Schema instance
+		 * @since 0.5.0
+		 * @name Schema#defaults
+		 * @type {SettingsFolder}
+		 * @readonly
+		 */
+		Object.defineProperty(this, 'defaults', { value: new SettingsFolder(this) });
+	}
+
+	set(key, value) {
+		this.defaults.set(key, value instanceof Schema ? value.defaults : value.default);
+		return super.set(key, value);
+	}
+
+	delete(key) {
+		this.defaults.delete(key);
+		return super.delete(key);
 	}
 
 	/**
 	 * Get the configurable keys for the current SchemaFolder or Schema instance
 	 * @since 0.5.0
-	 * @readonly
 	 * @type {Array<string>}
+	 * @readonly
 	 */
 	get configurableKeys() {
 		const keys = [];
@@ -47,8 +67,8 @@ class Schema extends Map {
 	/**
 	 * Get the configurable value for the current SchemaFolder or Schema instance
 	 * @since 0.5.0
-	 * @readonly
 	 * @type {Array<SchemaPiece>}
+	 * @readonly
 	 */
 	get configurableValues() {
 		const values = [];
@@ -57,20 +77,10 @@ class Schema extends Map {
 	}
 
 	/**
-	 * Get the defaults for the current SchemaFolder or Schema instance
-	 * @since 0.5.0
-	 * @readonly
-	 * @type {Object}
-	 */
-	get defaults() {
-		return Object.assign({}, ...[...this.values()].map(piece => ({ [piece.key]: piece.defaults || deepClone(piece.default) })));
-	}
-
-	/**
 	 * Get the paths for the current SchemaFolder or Schema instance
 	 * @since 0.5.0
-	 * @readonly
 	 * @type {Map<string, SchemaFolder|SchemaPiece>}
+	 * @readonly
 	 */
 	get paths() {
 		const paths = new Map();
@@ -143,33 +153,19 @@ class Schema extends Map {
 	 * @returns {this}
 	 */
 	remove(key) {
-		super.delete(key);
+		this.delete(key);
 		return this;
 	}
 
 	/**
 	 * Get a SchemaPiece or a SchemaFolder given a path
 	 * @since 0.5.0
-	 * @param {string} key The key to get from the schema
+	 * @param {string} path The key to get from the schema
 	 * @returns {?SchemaPiece|SchemaFolder}
 	 */
-	get(key) {
-		if (!key || key === '.') return this;
-		const index = key.indexOf('.');
-
-		// If end of dots, assume this will be the last element in path
-		if (index === -1) return super.get(key);
-		const piece = super.get(key.slice(0, index));
-
-		// If the piece does not exist, return undefined
-		if (!piece) return undefined;
-		const next = key.slice(index + 1);
-
-		// If there is nothing else after the dot, return the piece
-		if (!next) return piece;
-
-		// Returns undefined when piece.type is not Folder because pieces don't have children
-		return piece.type === 'Folder' ? piece.get(next) : undefined;
+	get(path) {
+		// Map.prototype.get.call was used to avoid infinite recursion
+		return path.split('.').reduce((folder, key) => Map.prototype.get.call(folder, key), this);
 	}
 
 	/**
