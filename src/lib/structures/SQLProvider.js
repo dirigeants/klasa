@@ -1,5 +1,5 @@
 const Provider = require('./Provider');
-const { deepClone, tryParse, makeObject, isObject, objectToTuples } = require('../util/util');
+const { tryParse, makeObject, isObject, objectToTuples } = require('../util/util');
 const Gateway = require('../settings/gateway/Gateway');
 const Type = require('../util/Type');
 
@@ -117,9 +117,9 @@ class SQLProvider extends Provider {
 	 * @protected
 	 */
 	parseValue(value, schemaPiece) {
-		if (typeof value === 'undefined') return deepClone(schemaPiece.default);
+		if (typeof value === 'undefined') return schemaPiece.default;
 		if (schemaPiece.array) {
-			if (value === null) return deepClone(schemaPiece.default);
+			if (value === null) return schemaPiece.default;
 			if (typeof value === 'string') value = tryParse(value);
 			if (!Array.isArray(value)) throw new Error(`Could not parse ${value} to an array. Returned empty array instead.`);
 		} else {

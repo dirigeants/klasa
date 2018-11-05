@@ -1,4 +1,4 @@
-const { isObject, objectToTuples, arraysStrictEquals, deepClone, toTitleCase, mergeObjects, makeObject, resolveGuild } = require('../util/util');
+const { isObject, objectToTuples, arraysStrictEquals, toTitleCase, mergeObjects, makeObject, resolveGuild } = require('../util/util');
 const Type = require('../util/Type');
 
 class SettingsFolder extends Map {
@@ -170,7 +170,7 @@ class SettingsFolder extends Map {
 		const results = [];
 		for (const [path, piece] of values) {
 			if (piece.array ? arraysStrictEquals(this.get(path), piece.default) : this.get(path) === piece.default) continue;
-			results.push({ key: path, value: deepClone(piece.default), piece });
+			results.push({ key: path, value: piece.default, piece });
 		}
 
 		if (results.length) await this._save(results);
@@ -406,7 +406,7 @@ class SettingsFolder extends Map {
 
 			// Patch recursively if the key is a folder, set otherwise
 			if (subkey instanceof SettingsFolder) subkey._patch(value);
-			else super.set(key, deepClone(value));
+			else super.set(key, value);
 		}
 	}
 
