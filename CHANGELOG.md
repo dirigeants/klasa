@@ -14,6 +14,9 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#471](https://github.com/dirigeants/klasa/pull/471)] Added `Gateway#create` and `Gateway#acquire`. (kyranet)
+- [[#471](https://github.com/dirigeants/klasa/pull/471)] Added `SETTING_GATEWAY_CHOOSE_KEY` and `SETTING_GATEWAY_UNCONFIGURABLE_FOLDER` i18n keys into en-US. (kyranet)
+- [[#471](https://github.com/dirigeants/klasa/pull/471)] Added `SettingsFolder`, with the common operations (update, reset...) for better OOP compliancy. (kyranet)
 - [[#426](https://github.com/dirigeants/klasa/pull/426)] Added `Schema#configurableValues`, similar to `Schema#configurableKeys`. (kyranet)
 - [[#426](https://github.com/dirigeants/klasa/pull/426)] Added `SettingsUpdateOptions.rejectOnError` to make `Settings#update` reject when any of the keys are invalid or the parse turns out wrong. (kyranet)
 - [[#416](https://github.com/dirigeants/klasa/pull/416)] Added `KlasaClientOptions.createPiecesFolders` to not create pieces' folders if they do not exist. (kyranet)
@@ -127,6 +130,18 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#471](https://github.com/dirigeants/klasa/pull/471)] Modified `Schema#defaults` type from Object literal to a `SettingsFolder` instance. (kyranet)
+- [[#471](https://github.com/dirigeants/klasa/pull/471)] Modified `Schema#defaults` to be a property instead of a getter. (kyranet)
+- [[#471](https://github.com/dirigeants/klasa/pull/471)] Modified `Gateway#get` to take only id. For get or create, use `Gateway#acquire` instead. (kyranet)
+- [[#471](https://github.com/dirigeants/klasa/pull/471)] Modified `Settings#{update,reset}` output to return `{ key: string, value: any, piece: Schema | SchemaPiece }` instead of `{ data: [s[[#471](https://github.com/dirigeants/klasa/pull/471)] tring, any], piece: Schema | SchemaPiece }` in the `updated` field. (kyranet)
+- [[#471](https://github.com/dirigeants/klasa/pull/471)] Modified `Settings` completely, they're not longer dictionaries but (nested) `SettingsFolder`s. (kyranet)
+- [[#471](https://github.com/dirigeants/klasa/pull/471)] Modified `Util.resolveGuild` to also resolve members. (kyranet)
+- [[#471](https://github.com/dirigeants/klasa/pull/471)] Modified initialization order to prepare `Schedule` before initializing pieces. (kyranet)
+- [[#471](https://github.com/dirigeants/klasa/pull/471)] Modified Schema#get overload to not check safely to reduce overhead. (kyranet)
+- [[#471](https://github.com/dirigeants/klasa/pull/471)] Modified Settings#sync to force sync if the entry was not synchronized. (kyranet)
+- [[#471](https://github.com/dirigeants/klasa/pull/471)] Renamed `Gateway#syncQueue` to `Gateway#syncMap`, changing also its type from `Collection<string, Promise<Settings>>` to `WeakMap<string,-  Promise<Settings>>`. (kyranet)
+- [[#471](https://github.com/dirigeants/klasa/pull/471)] Renamed `GatewayDriver#type` to `GatewayDriver#name`. (kyranet)
+- [[#471](https://github.com/dirigeants/klasa/pull/471)] Renamed `SettingsUpdateOptions.{action,arrayPosition,avoidUnconfigurable}` to `SettingsUpdateOptions.{arrayAction,arrayIndex,onlyConfigurable}`. (kyranet)
 - [[#426](https://github.com/dirigeants/klasa/pull/426)] Made schema resolving much faster and reliable. (kyranet)
 - [[#426](https://github.com/dirigeants/klasa/pull/426)] **[BREAKING]** `Settings#{list,resolveString}` -> `Settings#display`. (kyranet)
 - [[#426](https://github.com/dirigeants/klasa/pull/426)] Tweaked conf and userconf commands to use restString for values. (kyranet)
@@ -236,6 +251,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Removed
 
+- [[#471](https://github.com/dirigeants/klasa/pull/471)] Removed `Gateway#defaults`. Refer to `Schema#defaults` instead. (kyranet)
 - [[#426](https://github.com/dirigeants/klasa/pull/426)] Removed `Gateway#getPath`. They're now resolved inside Settings. (kyranet)
 - [[#401](https://github.com/dirigeants/klasa/pull/401)] Removed `Settings#waitSync` in favor of `Settings#sync(?false);`. (kyranet)
 - [[#398](https://github.com/dirigeants/klasa/pull/398)] Removed the `Settings#update(keys: string[], values: any[])` overload. (kyranet)

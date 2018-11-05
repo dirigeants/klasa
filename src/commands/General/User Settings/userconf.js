@@ -24,8 +24,8 @@ module.exports = class extends Command {
 	}
 
 	show(message, [key]) {
-		const piece = this.client.gateways.get('users').schema.get(key);
-		if (!piece || piece.type === 'Folder' ? !piece.configurableKeys.length : !piece.configurable) return message.sendLocale('COMMAND_CONF_GET_NOEXT', [key]);
+		const piece = this.getPath(key);
+		if (!piece || (piece.type === 'Folder' ? !piece.configurableKeys.length : !piece.configurable)) return message.sendLocale('COMMAND_CONF_GET_NOEXT', [key]);
 		if (piece.type === 'Folder') {
 			return message.sendLocale('COMMAND_CONF_USER', [
 				key ? `: ${key.split('.').map(toTitleCase).join('/')}` : '',
@@ -36,12 +36,12 @@ module.exports = class extends Command {
 	}
 
 	async set(message, [key, valueToSet]) {
-		const piece = this.check(message, key, await message.author.settings.update(key, valueToSet, { avoidUnconfigurable: true, action: 'add', guild: message.guild }));
+		const piece = this.check(message, key, await message.author.settings.update(key, valueToSet, { onlyConfigurable: true, arrayAction: 'add', guild: message.guild }));
 		return message.sendLocale('COMMAND_CONF_UPDATED', [key, message.author.settings.display(message, piece)]);
 	}
 
 	async remove(message, [key, valueToRemove]) {
-		const piece = this.check(message, key, await message.author.settings.update(key, valueToRemove, { avoidUnconfigurable: true, action: 'remove', guild: message.guild }));
+		const piece = this.check(message, key, await message.author.settings.update(key, valueToRemove, { onlyConfigurable: true, arrayAction: 'remove', guild: message.guild }));
 		return message.sendLocale('COMMAND_CONF_UPDATED', [key, message.author.settings.display(message, piece)]);
 	}
 
@@ -54,6 +54,16 @@ module.exports = class extends Command {
 		if (errors.length) throw String(errors[0]);
 		if (!updated.length) throw message.language.get('COMMAND_CONF_NOCHANGE', key);
 		return updated[0].piece;
+	}
+
+	getPath(key) {
+		const { schema } = this.client.gateways.get('guilds');
+		if (!key) return schema;
+		try {
+			return schema.get(key);
+		} catch (__) {
+			return undefined;
+		}
 	}
 
 };
