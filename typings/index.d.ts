@@ -208,46 +208,48 @@ declare module 'klasa' {
 
 //#region Settings
 
-	export class Settings {
-		public constructor(manager: Gateway, data: any);
-		public readonly client: KlasaClient;
+	export class SettingsFolder extends Map<string, SettingsFolderEntry | SettingsFolder> {
+		public constructor(schema: SchemaFolder);
+		public readonly schema: SchemaFolder;
+		public readonly base: Settings | null;
 		public readonly gateway: Gateway;
-		public readonly id: string;
-		public readonly synchronizing: boolean;
-		private _existsInDB: boolean | null;
+		public reset(path: string, options?: SettingsFolderResetOptions): Promise<SettingsFolderUpdateResult>;
+		public reset(paths: Iterable<string>, options?: SettingsFolderResetOptions): Promise<SettingsFolderUpdateResult>;
+		public reset(object: Record<string, any>, options?: SettingsFolderResetOptions): Promise<SettingsFolderUpdateResult>;
+		public update(key: string, value: any, options?: SettingsFolderUpdateOptions): Promise<SettingsFolderUpdateResult>;
+		public update(entries: Iterable<[string, any]>, options?: SettingsFolderUpdateOptions): Promise<SettingsFolderUpdateResult>;
+		public update(object: Record<string, any>, options?: SettingsFolderUpdateOptions): Promise<SettingsFolderUpdateResult>;
+		public display(message: KlasaMessage, path?: string | Schema | SchemaFolder): string;
+		public pluck<T extends string>(...paths: T[]): Partial<Record<T, any>>;
+		public toJSON(): any;
+		public toString(): string;
+		private relative(pathOrPiece: string | Schema | SchemaPiece): string;
+		private _save(results: Array<SettingsFolderUpdateResultEntry>): Promise<void>;
+		private _parse(piece: SchemaPiece, key: string, value: any, options: SettingsFolderUpdateOptions): Promise<any>;
+		private _patch(data: Record<string, any>): void;
+	}
 
-		public get<T = any>(path: string | string[]): T;
+	export class Settings extends SettingsFolder {
+		public constructor(manager: Gateway, id: string);
+		public readonly id: string;
+		public readonly gateway: Gateway;
+		public readonly synchronizing: boolean;
+		private existenceStatus: boolean | null;
 		public clone(): Settings;
 		public sync(force?: boolean): Promise<this>;
 		public destroy(): Promise<this>;
-
-		public reset(key?: string | Schema | SchemaPiece | Iterable<string | Schema | SchemaPiece>, options?: SettingsResetOptions): Promise<SettingsUpdateResult>;
-		public update(key: ObjectLiteral, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
-		public update(key: string | SchemaPiece, value: any, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
-		public update(entries: Iterable<[string | SchemaPiece, any]>, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
-		public display(message: KlasaMessage, path: Schema | SchemaPiece | string): string;
-
-		private _resolvePath(key: string | Schema | SchemaPiece | Iterable<string | Schema | SchemaPiece>, avoidUnconfigurable: boolean, acceptFolders: boolean): Schema | SchemaPiece;
-		private _resolveUpdateOverloads(isReset: true, key: ObjectLiteral | Iterable<string | SchemaPiece>, options?: SettingsResetOptions): { parsedEntries: string[]; options: Required<SettingsResetOptions> };
-		private _resolveUpdateOverloads(isReset: false, key: ObjectLiteral | Iterable<[string | SchemaPiece, any]>, options?: SettingsUpdateOptions): { parsedEntries: string[]; options: Required<SettingsUpdateOptions> };
-		private _parse(piece: SchemaPiece, value: any, options: SettingsUpdateOptions, result: SettingsUpdateResult): Promise<void>;
-		private _parseArray(piece: SchemaPiece, value: any, options: SettingsUpdateOptions, result: SettingsUpdateResult): void;
-		private _save(data: SettingsUpdateResult): Promise<void>;
-		private _setValueByPath(piece: SchemaPiece, parsedID: any): { updated: boolean, old: any };
-		private _patch(data: Record<string, any>, instance?: object, schema?: SchemaFolder): void;
-
-		public toJSON(): Record<string, any>;
-		public toString(): string;
+		private init(folder: SettingsFolder, schema: SchemaFolder): void;
 	}
 
 	export class Gateway extends GatewayStorage {
-		public constructor(store: GatewayDriver, type: string, schema: Schema, provider: string);
+		public constructor(store: GatewayDriver, name: string, schema: Schema, options: GatewayOptions);
 		public store: GatewayDriver;
-		public syncQueue: Collection<string, Promise<Settings>>;
+		public syncQueue: WeakMap<Settings, Promise<Settings>>;
 		public readonly Settings: Settings;
-		private cache: Collection<string, { settings: Settings, [k: string]: any }>;
-
-		public get(input: string | number, create?: boolean): Settings;
+		private cache: Collection<string, Record<string, any> & { settings: Settings }>;
+		public acquire(target: any, id?: string | number): Settings;
+		public create(target: any, id?: string | number): Settings;
+		public get(id: string | number): Settings | null;
 		public sync(input: string): Promise<Settings>;
 		public sync(input?: string[]): Promise<Gateway>;
 	}
@@ -276,14 +278,13 @@ declare module 'klasa' {
 	}
 
 	export abstract class GatewayStorage {
-		public constructor(client: KlasaClient, type: string, schema: Schema, provider: string);
+		public constructor(client: KlasaClient, name: string, schema: Schema, provider?: string);
 		public readonly client: KlasaClient;
-		public readonly defaults: any;
 		public readonly provider: Provider | null;
 		public readonly providerName: string;
-		public readonly type: string;
+		public readonly name: string;
 		public ready: boolean;
-		public schema: SchemaFolder | null;
+		public schema: SchemaFolder;
 
 		public init(): Promise<void>;
 		public toJSON(): GatewayJSON;
@@ -294,7 +295,7 @@ declare module 'klasa' {
 		public constructor(path?: string);
 		public readonly configurableValues: Array<SchemaPiece>;
 		public readonly configurableKeys: Array<string>;
-		public readonly defaults: Record<string, any>;
+		public readonly defaults: SettingsFolder;
 		public readonly path: string;
 		public readonly paths: Map<string, SchemaPiece | SchemaFolder>;
 		public readonly type: 'Folder';
@@ -489,7 +490,7 @@ declare module 'klasa' {
 		public abstract replace(table: string, entry: string, data: SettingsUpdateResultEntry[] | [string, any][] | Record<string, any>): Promise<any>;
 		// The following is not required by SettingGateway but might be available in some providers
 		public getKeys(table: string): Promise<string[]>;
-		protected parseUpdateInput<T = Record<string, any>>(updated: T | SettingsUpdateResult): T;
+		protected parseUpdateInput<T = ObjectLiteral>(updated: T | Array<SettingsFolderUpdateResultEntry>): T;
 
 		public shutdown(): Promise<void>;
 		public toJSON(): PieceProviderJSON;
@@ -501,10 +502,10 @@ declare module 'klasa' {
 		public abstract removeColumn<T = any>(table: string, columns: string | string[]): Promise<T>;
 		public abstract updateColumn<T = any>(table: string, piece: SchemaPiece): Promise<T>;
 		public abstract getColumns(table: string): Promise<Array<string>>;
-		protected parseUpdateInput<T = [string, any]>(updated?: SettingsUpdateResultEntry[] | [string, any][] | Record<string, any>, resolve?: boolean): T;
-		protected parseEntry<T = Record<string, any>>(gateway: string | Gateway, entry: Record<string, any>): T;
+		protected parseUpdateInput<T = [string, any]>(updated?: SettingsFolderUpdateResultEntry[] | [string, any][] | ObjectLiteral, resolve?: boolean): T;
+		protected parseEntry<T = ObjectLiteral>(gateway: string | Gateway, entry: ObjectLiteral): T;
 		protected parseValue<T = any>(value: any, schemaPiece: SchemaPiece): T;
-		private _parseGatewayInput(updated: SettingsUpdateResultEntry[], keys: string[], values: string[], resolve?: boolean): void;
+		private _parseGatewayInput(updated: SettingsFolderUpdateResultEntry[], keys: string[], values: string[], resolve?: boolean): void;
 	}
 
 	export abstract class Task extends Piece {
@@ -1146,11 +1147,39 @@ declare module 'klasa' {
 	}
 
 	// Settings
-	export interface GatewayJSON {
-		options: { provider: string };
+	export type SettingsFolderEntry = PrimitiveType | object | Array<PrimitiveType | object>;
+
+	export type SettingsFolderResetOptions = {
+		throwOnError?: boolean;
+		onlyConfigurable?: boolean;
+	};
+
+	export type SettingsFolderUpdateOptions = SettingsFolderResetOptions & {
+		guild?: GuildResolvable;
+		arrayAction?: 'add' | 'remove' | 'auto' | 'overwrite';
+		arrayIndex?: number;
+	};
+
+	export type SettingsFolderUpdateResult = {
+		errors: Array<Error>;
+		updated: Array<SettingsFolderUpdateResultEntry>;
+	};
+
+	export type SettingsFolderUpdateResultEntry = {
+		key: string;
+		value: PrimitiveType;
+		piece: SchemaPiece;
+	};
+
+	export type GatewayOptions = {
+		provider: string;
+	};
+
+	export type GatewayJSON = {
+		options: GatewayOptions;
 		schema: SchemaFolderAddOptions;
-		type: string;
-	}
+		name: string;
+	};
 
 	export type QueryBuilderDatatypeOptions = {
 		type: string;
@@ -1166,33 +1195,7 @@ declare module 'klasa' {
 		| GuildChannel
 		| Snowflake;
 
-	export interface SettingsResetOptions {
-		avoidUnconfigurable?: boolean;
-		force?: boolean;
-		guild?: KlasaGuild;
-		rejectOnError?: boolean;
-	};
-
-	export interface SettingsUpdateOptions {
-		action?: 'add' | 'remove' | 'auto' | 'overwrite';
-		arrayPosition?: number;
-		avoidUnconfigurable?: boolean;
-		force?: boolean;
-		guild?: KlasaGuild;
-		rejectOnError?: boolean;
-	};
-
-	export interface SettingsUpdateResult {
-		errors: Error[];
-		updated: SettingsUpdateResultEntry[];
-	}
-
-	export interface SettingsUpdateResultEntry {
-		data: [string, any];
-		piece: SchemaPiece;
-	}
-
-	export interface GatewayDriverRegisterOptions {
+	export type GatewayDriverRegisterOptions = {
 		provider?: string;
 		schema?: Schema;
 		syncArg?: string[] | string | true;
@@ -1429,11 +1432,6 @@ declare module 'klasa' {
 		timestamps?: boolean | string;
 		useColor?: boolean;
 	}
-
-	export type KlasaSettingsOptions = {
-		reset?: SettingsResetOptions;
-		update?: SettingsUpdateOptions;
-	};
 
 	export type QueryBuilderDefaultOptions = {
 		array?: (datatype: string) => string;

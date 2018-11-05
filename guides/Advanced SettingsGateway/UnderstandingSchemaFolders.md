@@ -12,7 +12,7 @@ Adding keys into the schema is similar to adding new levels with {@link Permissi
 
 The built-in gateways (`guilds`, `users`, and `clientStorage`), can access to the pre-set schemas, accessible via {@link KlasaClient.defaultGuildSchema}, {@link KlasaClient.defaultUserSchema}, and {@link KlasaClient.defaultClientSchema}, respectively. However, similarly to {@link PermissionLevels}, you can either modify the default schema, overwrite it with new {@link Schema}, or making a new {@link Schema} and pass it into {@link KlasaClientOptions}.{@link GatewaysOptions gateways}.{@link GatewayDriverRegisterOptions gatewayName}.{@link Schema schema}, for example, `new KlasaClient({ gateways: { guilds: { schema: new Schema() } } });`.
 
-For simplicity, in this guide, we will use the first option. For plugin developers, they may edit it via `this.client.gateways.gatewayName.schema`.
+For simplicity, in this guide, we will use the first option. For plugin developers, they may edit it via `this.client.gateways.get('gatewayName').schema`.
 
 Adding a new key to the guilds' schema would be as simple as doing this:
 
