@@ -30,6 +30,24 @@ class Schema extends Map {
 		 * @readonly
 		 */
 		Object.defineProperty(this, 'type', { value: 'Folder' });
+
+		/**
+		 * The defaults for the current SchemaFolder or Schema instance
+		 * @since 0.5.0
+		 * @readonly
+		 * @type {Object}
+		 */
+		Object.defineProperty(this, 'defaults', { value: new Map() });
+	}
+
+	set(key, value) {
+		this.defaults.set(key, value instanceof Schema ? value.defaults : value.default);
+		return super.set(key, value);
+	}
+
+	delete(key) {
+		this.defaults.delete(key);
+		return super.delete(key);
 	}
 
 	/**
@@ -54,16 +72,6 @@ class Schema extends Map {
 		const values = [];
 		for (const piece of this.values(true)) if (piece.configurable) values.push(piece);
 		return values;
-	}
-
-	/**
-	 * Get the defaults for the current SchemaFolder or Schema instance
-	 * @since 0.5.0
-	 * @readonly
-	 * @type {Object}
-	 */
-	get defaults() {
-		return Object.assign({}, ...[...this.values()].map(piece => ({ [piece.key]: piece.defaults || deepClone(piece.default) })));
 	}
 
 	/**
@@ -143,7 +151,7 @@ class Schema extends Map {
 	 * @returns {this}
 	 */
 	remove(key) {
-		super.delete(key);
+		this.delete(key);
 		return this;
 	}
 
