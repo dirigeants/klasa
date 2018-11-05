@@ -141,7 +141,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 - [[#471](https://github.com/dirigeants/klasa/pull/471)] Modified Settings#sync to force sync if the entry was not synchronized. (kyranet)
 - [[#471](https://github.com/dirigeants/klasa/pull/471)] Renamed `Gateway#syncQueue` to `Gateway#syncMap`, changing also its type from `Collection<string, Promise<Settings>>` to `WeakMap<string,-  Promise<Settings>>`. (kyranet)
 - [[#471](https://github.com/dirigeants/klasa/pull/471)] Renamed `GatewayDriver#type` to `GatewayDriver#name`. (kyranet)
-- [[#471](https://github.com/dirigeants/klasa/pull/471)] Renamed `SettingsUpdateOptions.{action,avoidUnconfigurable}` to `SettingsUpdateOptions.{arrayAction,onlyConfigurable}`. (kyranet)
+- [[#471](https://github.com/dirigeants/klasa/pull/471)] Renamed `SettingsUpdateOptions.{action,arrayPosition,avoidUnconfigurable}` to `SettingsUpdateOptions.{arrayAction,arrayIndex,onlyConfigurable}`. (kyranet)
 - [[#426](https://github.com/dirigeants/klasa/pull/426)] Made schema resolving much faster and reliable. (kyranet)
 - [[#426](https://github.com/dirigeants/klasa/pull/426)] **[BREAKING]** `Settings#{list,resolveString}` -> `Settings#display`. (kyranet)
 - [[#426](https://github.com/dirigeants/klasa/pull/426)] Tweaked conf and userconf commands to use restString for values. (kyranet)
