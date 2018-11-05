@@ -1,6 +1,6 @@
 const Provider = require('./Provider');
 const { deepClone, tryParse, makeObject, isObject, objectToTuples } = require('../util/util');
-const Gateway = require('../settings/Gateway');
+const Gateway = require('../settings/gateway/Gateway');
 const Type = require('../util/Type');
 
 /**

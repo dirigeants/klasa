@@ -1,5 +1,5 @@
 const GatewayStorage = require('./GatewayStorage');
-const Settings = require('./settings/Settings');
+const Settings = require('../Settings');
 const { Collection } = require('discord.js');
 
 /**

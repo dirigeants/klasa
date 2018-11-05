@@ -1,4 +1,4 @@
-const { deepClone } = require('../../util/util');
+const { deepClone } = require('../util/util');
 const SettingsFolder = require('./SettingsFolder');
 
 class Settings extends SettingsFolder {

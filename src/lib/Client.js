@@ -22,7 +22,7 @@ const SerializerStore = require('./structures/SerializerStore');
 const TaskStore = require('./structures/TaskStore');
 
 // lib/settings
-const GatewayDriver = require('./settings/GatewayDriver');
+const GatewayDriver = require('./settings/gateway/GatewayDriver');
 
 // lib/settings/schema
 const Schema = require('./settings/schema/Schema');

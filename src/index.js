@@ -16,11 +16,11 @@ module.exports = {
 	ScheduledTask: require('./lib/schedule/ScheduledTask'),
 
 	// lib/settings
-	Settings: require('./lib/settings/settings/Settings'),
-	SettingsFolder: require('./lib/settings/settings/SettingsFolder'),
-	Gateway: require('./lib/settings/Gateway'),
-	GatewayDriver: require('./lib/settings/GatewayDriver'),
-	GatewayStorage: require('./lib/settings/GatewayStorage'),
+	Settings: require('./lib/settings/Settings'),
+	SettingsFolder: require('./lib/settings/SettingsFolder'),
+	Gateway: require('./lib/settings/gateway/Gateway'),
+	GatewayDriver: require('./lib/settings/gateway/GatewayDriver'),
+	GatewayStorage: require('./lib/settings/gateway/GatewayStorage'),
 	Schema: require('./lib/settings/schema/Schema'),
 	SchemaFolder: require('./lib/settings/schema/SchemaFolder'),
 	SchemaPiece: require('./lib/settings/schema/SchemaPiece'),

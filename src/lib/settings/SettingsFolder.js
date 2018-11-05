@@ -1,5 +1,5 @@
-const { isObject, objectToTuples, arraysStrictEquals, deepClone, toTitleCase, mergeObjects, makeObject, resolveGuild } = require('../../util/util');
-const Type = require('../../util/Type');
+const { isObject, objectToTuples, arraysStrictEquals, deepClone, toTitleCase, mergeObjects, makeObject, resolveGuild } = require('../util/util');
+const Type = require('../util/Type');
 
 class SettingsFolder extends Map {
 
