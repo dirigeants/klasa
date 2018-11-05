@@ -114,45 +114,45 @@ module.exports = class extends Provider {
 	/**
 	 * Insert a new document into a directory.
 	 * @param {string} table The name of the directory
-	 * @param {string} document The document name
+	 * @param {string} id The document name
 	 * @param {Object} data The object with all properties you want to insert into the document
 	 * @returns {Promise<void>}
 	 */
-	create(table, document, data = {}) {
-		return fs.outputJSONAtomic(resolve(this.baseDirectory, table, `${document}.json`), { id: document, ...data });
+	create(table, id, data = {}) {
+		return fs.outputJSONAtomic(resolve(this.baseDirectory, table, `${id}.json`), { id, ...this.parseUpdateInput(data) });
 	}
 
 	/**
 	 * Update a document from a directory.
 	 * @param {string} table The name of the directory
-	 * @param {string} document The document name
+	 * @param {string} id The document name
 	 * @param {Object} data The object with all the properties you want to update
 	 * @returns {void}
 	 */
-	async update(table, document, data) {
-		const existent = await this.get(table, document);
-		return fs.outputJSONAtomic(resolve(this.baseDirectory, table, `${document}.json`), util.mergeObjects(existent || { id: document }, this.parseUpdateInput(data)));
+	async update(table, id, data) {
+		const existent = await this.get(table, id);
+		return fs.outputJSONAtomic(resolve(this.baseDirectory, table, `${id}.json`), util.mergeObjects(existent || { id }, this.parseUpdateInput(data)));
 	}
 
 	/**
 	 * Replace all the data from a document.
 	 * @param {string} table The name of the directory
-	 * @param {string} document The document name
+	 * @param {string} id The document name
 	 * @param {Object} data The new data for the document
 	 * @returns {Promise<void>}
 	 */
-	replace(table, document, data) {
-		return fs.outputJSONAtomic(resolve(this.baseDirectory, table, `${document}.json`), { id: document, ...this.parseUpdateInput(data) });
+	replace(table, id, data) {
+		return fs.outputJSONAtomic(resolve(this.baseDirectory, table, `${id}.json`), { id, ...this.parseUpdateInput(data) });
 	}
 
 	/**
 	 * Delete a document from the table.
 	 * @param {string} table The name of the directory
-	 * @param {string} document The document name
+	 * @param {string} id The document name
 	 * @returns {Promise<void>}
 	 */
-	delete(table, document) {
-		return fs.unlink(resolve(this.baseDirectory, table, `${document}.json`));
+	delete(table, id) {
+		return fs.unlink(resolve(this.baseDirectory, table, `${id}.json`));
 	}
 
 };
