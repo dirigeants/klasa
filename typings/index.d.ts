@@ -546,7 +546,7 @@ declare module 'klasa' {
 		public constructor(path?: string);
 		public readonly configurableValues: Array<SchemaPiece>;
 		public readonly configurableKeys: Array<string>;
-		public readonly defaults: ObjectLiteral;
+		public readonly defaults: SettingsFolder;
 		public readonly path: string;
 		public readonly paths: Map<string, SchemaPiece | SchemaFolder>;
 		public readonly type: 'Folder';

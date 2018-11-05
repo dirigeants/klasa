@@ -1,4 +1,5 @@
 const { isFunction } = require('../../util/util');
+const SettingsFolder = require('../SettingsFolder');
 
 /**
  * The base Schema for {@link Gateway}s
@@ -35,10 +36,10 @@ class Schema extends Map {
 		 * The defaults for the current SchemaFolder or Schema instance
 		 * @since 0.5.0
 		 * @name Schema#defaults
-		 * @type {Object}
+		 * @type {SettingsFolder}
 		 * @readonly
 		 */
-		Object.defineProperty(this, 'defaults', { value: new Map() });
+		Object.defineProperty(this, 'defaults', { value: new SettingsFolder(this) });
 	}
 
 	set(key, value) {
