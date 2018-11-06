@@ -5,9 +5,9 @@ class Colors {
 
 	/**
 	 * @typedef {Object} ColorsFormatOptions
-	 * @property {(string|string[])} style The style or styles to apply
-	 * @property {string} background The format for the background
-	 * @property {string} text The format for the text
+	 * @property {(string|string[])} [style] The style or styles to apply
+	 * @property {string} [background] The format for the background
+	 * @property {string} [text] The format for the text
 	 */
 
 	/**
@@ -53,7 +53,7 @@ class Colors {
 	/**
 	 * Apply the style
 	 * @since 0.5.0
-	 * @param {(string|string[])} styles The style or styles to apply
+	 * @param {(string|string[])} [styles] The style or styles to apply
 	 * @param {ColorsFormatData} [data={}] The data
 	 * @returns {ColorsFormatData}
 	 * @private
@@ -74,7 +74,7 @@ class Colors {
 	/**
 	 * Apply the background
 	 * @since 0.5.0
-	 * @param {ColorsFormatType} background The background to apply
+	 * @param {string} [background] The background to apply
 	 * @param {ColorsFormatData} [data={}] The data
 	 * @returns {ColorsFormatData}
 	 * @private
@@ -90,7 +90,7 @@ class Colors {
 	/**
 	 * Apply the text format
 	 * @since 0.5.0
-	 * @param {ColorsFormatType} text The text format to apply
+	 * @param {string} [text] The text format to apply
 	 * @param {ColorsFormatData} [data={}] The data
 	 * @returns {ColorsFormatData}
 	 * @private
