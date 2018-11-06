@@ -634,6 +634,13 @@ KlasaClient.defaultClientSchema = new Schema()
  */
 
 /**
+ * Emitted when a {@link Settings} instance synchronizes with the database.
+ * @event KlasaClient#settingsSyncEntry
+ * @since 0.5.0
+ * @param {Settings} entry The patched Settings instance
+ */
+
+/**
  * Emitted when {@link Settings#update} or {@link Settings#reset} is run.
  * @event KlasaClient#settingsUpdateEntry
  * @since 0.5.0

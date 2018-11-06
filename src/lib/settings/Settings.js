@@ -83,7 +83,10 @@ class Settings extends SettingsFolder {
 		// If it's not currently synchronizing, create a new sync status for the sync queue
 		const sync = this.gateway.provider.get(this.gateway.name, this.id).then(data => {
 			this.existenceStatus = Boolean(data);
-			if (data) this._patch(data);
+			if (data) {
+				this._patch(data);
+				this.client.emit('settingsSyncEntry', this);
+			}
 			this.gateway.syncMap.delete(this);
 			return this;
 		});
