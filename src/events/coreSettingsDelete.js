@@ -4,7 +4,7 @@ const gateways = ['users', 'clientStorage'];
 module.exports = class extends Event {
 
 	constructor(...args) {
-		super(...args, { event: 'settingsUpdate' });
+		super(...args, { event: 'settingsDelete' });
 	}
 
 	run(settings) {
@@ -12,10 +12,10 @@ module.exports = class extends Event {
 			this.client.shard.broadcastEval(`
 				if (String(this.shard.id) === '${this.client.shard.id}') return;
 				const entry = this.gateways.get('${settings.gateway.name}').get('${settings.id}');
-				if (entry) {
-					entry._patch(${JSON.stringify(settings)});
-					entry.existenceStatus = true;
-					this.emit('settingsSync', settings);
+				if (entry && entry.existenceStatus) {
+					this.emit('settingsDelete', settings);
+					entry.init(entry, entry.schema);
+					entry.existenceStatus = false;
 				}
 			`);
 		}
