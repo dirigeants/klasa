@@ -4,10 +4,7 @@ const gateways = ['users', 'clientStorage'];
 module.exports = class extends Event {
 
 	constructor(...args) {
-		super(...args, {
-			once: true,
-			event: 'settingsUpdate'
-		});
+		super(...args, { event: 'settingsUpdate' });
 	}
 
 	run(settings) {
