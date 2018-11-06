@@ -88,22 +88,12 @@ class KlasaConsole extends Console {
 	/**
 	 * Constructs our KlasaConsole instance
 	 * @since 0.4.0
-	 * @param {KlasaClient} client The client this console is for
 	 * @param {KlasaConsoleConfig} [options] The options for the klasa console
 	 */
-	constructor(client, options = {}) {
+	constructor(options = {}) {
 		options = mergeDefault(constants.DEFAULTS.CONSOLE, options);
 
 		super(options.stdout, options.stderr);
-
-		/**
-		 * The client this Console was created with
-		 * @since 0.5.0
-		 * @name KlasaConsole#client
-		 * @type {KlasaClient}
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'client', { value: client });
 
 		/**
 		 * The standard output stream for this console, defaulted to process.stderr.
@@ -171,10 +161,9 @@ class KlasaConsole extends Console {
 	write(data, type = 'log') {
 		type = type.toLowerCase();
 		data = data.map(this.constructor._flatten).join('\n');
-		const { time, shard, message } = this.colors[type];
+		const { time, message } = this.colors[type];
 		const timestamp = this.template ? time.format(`[${this.timestamp}]`) : '';
-		const shd = this.client.shard ? shard.format(`[${this.client.shard.id}]`) : '';
-		super[constants.DEFAULTS.CONSOLE.types[type] || 'log'](data.split('\n').map(str => `${timestamp}${shd} ${message.format(str)}`).join('\n'));
+		super[constants.DEFAULTS.CONSOLE.types[type] || 'log'](data.split('\n').map(str => `${timestamp} ${message.format(str)}`).join('\n'));
 	}
 
 	/**

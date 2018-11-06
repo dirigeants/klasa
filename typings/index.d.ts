@@ -1000,8 +1000,7 @@ declare module 'klasa' {
 	}
 
 	export class KlasaConsole {
-		private constructor(client: KlasaClient, options: KlasaConsoleConfig);
-		public readonly client: KlasaClient;
+		private constructor(options: KlasaConsoleConfig);
 		public readonly stdout: NodeJS.WritableStream;
 		public readonly stderr: NodeJS.WritableStream;
 		public template: Timestamp | null;
