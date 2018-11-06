@@ -14,6 +14,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#475](https://github.com/dirigeants/klasa/pull/475)] Added `KlasaClient#settingsSync` event. (kyranet)
 - [[#471](https://github.com/dirigeants/klasa/pull/471)] Added `Gateway#create` and `Gateway#acquire`. (kyranet)
 - [[#471](https://github.com/dirigeants/klasa/pull/471)] Added `SETTING_GATEWAY_CHOOSE_KEY` and `SETTING_GATEWAY_UNCONFIGURABLE_FOLDER` i18n keys into en-US. (kyranet)
 - [[#471](https://github.com/dirigeants/klasa/pull/471)] Added `SettingsFolder`, with the common operations (update, reset...) for better OOP compliancy. (kyranet)
@@ -130,6 +131,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#475](https://github.com/dirigeants/klasa/pull/475)] Renamed `KlasaClient#{settingsUpdateEntry,settingsDeleteEntry,settingsCreateEntry}` to `KlasaClient#{settingsUpdate,settingsDelete,settingsCreate}`. (kyranet)
 - [[#471](https://github.com/dirigeants/klasa/pull/471)] Modified `Schema#defaults` type from Object literal to a `SettingsFolder` instance. (kyranet)
 - [[#471](https://github.com/dirigeants/klasa/pull/471)] Modified `Schema#defaults` to be a property instead of a getter. (kyranet)
 - [[#471](https://github.com/dirigeants/klasa/pull/471)] Modified `Gateway#get` to take only id. For get or create, use `Gateway#acquire` instead. (kyranet)
