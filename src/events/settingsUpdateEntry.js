@@ -10,6 +10,7 @@ module.exports = class extends Event {
 					const entry = this.gateways.get('${settings.gateway.name}').get('${settings.id}');
 					if (entry) {
 						entry._patch(${JSON.stringify(settings)});
+						entry.existenceStatus = true;
 						this.emit('settingsSyncEntry', settings);
 					}
 				}
