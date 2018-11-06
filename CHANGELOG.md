@@ -14,6 +14,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#477](https://github.com/dirigeants/klasa/pull/477)] Added core `KlasaClient#settingsDelete` event handler to destroy instances in other shards. (kyranet)
 - [[#475](https://github.com/dirigeants/klasa/pull/475)] Added `KlasaClient#settingsSync` event. (kyranet)
 - [[#471](https://github.com/dirigeants/klasa/pull/471)] Added `Gateway#create` and `Gateway#acquire`. (kyranet)
 - [[#471](https://github.com/dirigeants/klasa/pull/471)] Added `SETTING_GATEWAY_CHOOSE_KEY` and `SETTING_GATEWAY_UNCONFIGURABLE_FOLDER` i18n keys into en-US. (kyranet)
