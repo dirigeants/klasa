@@ -664,7 +664,7 @@ KlasaClient.defaultClientSchema = new Schema()
  * @event KlasaClient#settingsUpdate
  * @since 0.5.0
  * @param {Settings} entry The patched Settings instance
- * @param {SettingsUpdateResultEntry[]} updated The keys that were updated
+ * @param {SettingsUpdateResultEntry[]} changes The keys that were updated
  */
 
 /**
