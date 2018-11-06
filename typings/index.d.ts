@@ -135,7 +135,7 @@ declare module 'klasa' {
 		public on(event: 'settingsSync', listener: (entry: Settings) => void): this;
 		public on(event: 'settingsCreate', listener: (entry: Settings) => void): this;
 		public on(event: 'settingsDelete', listener: (entry: Settings) => void): this;
-		public on(event: 'settingsUpdate', listener: (oldEntry: Settings, newEntry: Settings, path: string[]) => void): this;
+		public on(event: 'settingsUpdate', listener: (entry: Settings, newEntry: SettingsFolderUpdateResultEntry[], path: string[]) => void): this;
 
 		// Klasa Console Custom Events
 		public on(event: 'log', listener: (data: any) => void): this;
@@ -197,7 +197,7 @@ declare module 'klasa' {
 		public once(event: 'settingsSync', listener: (entry: Settings) => void): this;
 		public once(event: 'settingsCreate', listener: (entry: Settings) => void): this;
 		public once(event: 'settingsDelete', listener: (entry: Settings) => void): this;
-		public once(event: 'settingsUpdate', listener: (oldEntry: Settings, newEntry: Settings, path?: string) => void): this;
+		public once(event: 'settingsUpdate', listener: (entry: Settings, newEntry: SettingsFolderUpdateResultEntry[], path: string[]) => void): this;
 
 		// Klasa Console Custom Events
 		public once(event: 'log', listener: (data: any) => void): this;

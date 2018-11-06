@@ -20,7 +20,7 @@ Synchronises the user settings between all shards, if the bot is sharded.
 
 **Source:**
 
-[events/settingsUpdate.js](https://github.com/dirigeants/klasa/blob/master/src/events/settingsUpdate.js)
+[events/coreSettingsUpdate.js](https://github.com/dirigeants/klasa/blob/master/src/events/coreSettingsUpdate.js)
 
 ## debug
 
