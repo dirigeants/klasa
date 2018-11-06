@@ -321,10 +321,10 @@ class SettingsFolder extends Map {
 		if (status === false) {
 			await this.gateway.provider.create(this.gateway.name, this.base.id, results);
 			this.base.existenceStatus = true;
-			this.base.gateway.client.emit('settingsCreateEntry', this.base);
+			this.base.gateway.client.emit('settingsCreate', this.base);
 		} else {
 			await this.gateway.provider.update(this.gateway.name, this.id, results);
-			this.base.gateway.client.emit('settingsUpdateEntry', this.base, results.slice());
+			this.base.gateway.client.emit('settingsUpdate', this.base, results.slice());
 		}
 
 		const updateObject = {};

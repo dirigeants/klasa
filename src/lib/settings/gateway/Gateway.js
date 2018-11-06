@@ -114,7 +114,7 @@ class Gateway extends GatewayStorage {
 				if (cache) {
 					cache.existenceStatus = true;
 					cache._patch(entry);
-					this.client.emit('settingsSyncEntry', cache);
+					this.client.emit('settingsSync', cache);
 				}
 			}
 
