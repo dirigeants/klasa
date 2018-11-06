@@ -653,8 +653,15 @@ KlasaClient.defaultClientSchema = new Schema()
  */
 
 /**
+ * Emitted when a {@link Settings} instance synchronizes with the database.
+ * @event KlasaClient#settingsSync
+ * @since 0.5.0
+ * @param {Settings} entry The patched Settings instance
+ */
+
+/**
  * Emitted when {@link Settings#update} or {@link Settings#reset} is run.
- * @event KlasaClient#settingsUpdateEntry
+ * @event KlasaClient#settingsUpdate
  * @since 0.5.0
  * @param {Settings} entry The patched Settings instance
  * @param {SettingsUpdateResultEntry[]} updated The keys that were updated
@@ -662,14 +669,14 @@ KlasaClient.defaultClientSchema = new Schema()
 
 /**
  * Emitted when {@link Settings#destroy} is run.
- * @event KlasaClient#settingsDeleteEntry
+ * @event KlasaClient#settingsDelete
  * @since 0.5.0
  * @param {Settings} entry The entry which got deleted
  */
 
 /**
  * Emitted when a new entry in the database has been created upon update.
- * @event KlasaClient#settingsCreateEntry
+ * @event KlasaClient#settingsCreate
  * @since 0.5.0
  * @param {Settings} entry The entry which got created
  */
