@@ -1,6 +1,6 @@
 # Klasa
 
-[![Discord](https://discordapp.com/api/guilds/339942739275677727/embed.png)](https://discord.gg/FpEFSyY)
+[![Discord](https://discordapp.com/api/guilds/339942739275677727/embed.png)](https://discordapp.com/invite/h4UYf)
 [![npm](https://img.shields.io/npm/v/klasa.svg?maxAge=3600)](https://www.npmjs.com/package/klasa)
 [![npm](https://img.shields.io/npm/dt/klasa.svg?maxAge=3600)](https://www.npmjs.com/package/klasa)
 [![Build Status](https://travis-ci.org/dirigeants/klasa.svg?branch=master)](https://travis-ci.org/dirigeants/klasa)
