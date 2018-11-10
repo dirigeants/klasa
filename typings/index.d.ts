@@ -508,7 +508,7 @@ declare module 'klasa' {
 	}
 
 	export class Gateway extends GatewayStorage {
-		public constructor(client: KlasaClient, name: string, schema?: Schema, provider?: string);
+		public constructor(client: KlasaClient, name: string, options?: { schema?: Schema, provider?: string });
 		public syncQueue: WeakMap<Settings, Promise<Settings>>;
 		public readonly Settings: Settings;
 		private cache: Collection<string, Record<string, any> & { settings: Settings }>;

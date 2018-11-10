@@ -1,5 +1,3 @@
-const Schema = require('../schema/Schema');
-
 class GatewayStorage {
 
 	/**
@@ -44,7 +42,7 @@ class GatewayStorage {
 		 * @type {string}
 		 * @readonly
 		 */
-		Object.defineProperty(this, 'providerName', { value: provider || this.client.options.providers.default });
+		Object.defineProperty(this, 'providerName', { value: provider });
 
 		/**
 		 * @since 0.5.0
@@ -52,7 +50,7 @@ class GatewayStorage {
 		 * @type {Schema}
 		 * @readonly
 		 */
-		Object.defineProperty(this, 'schema', { value: schema || new Schema(), enumerable: true });
+		Object.defineProperty(this, 'schema', { value: schema, enumerable: true });
 
 		/**
 		 * @since 0.5.0
