@@ -19,7 +19,7 @@ module.exports = class extends Finalizer {
 		const shard = message.guild ? message.guild.shardID : 0;
 		this.client.emit('log', [
 			this.shard.format(`[${shard}]`),
-			`${command.name}(${message.args ? '' : message.args.join(', ')})`,
+			`${command.name}(${message.args ? message.args.join(', ') : ''})`,
 			this.reprompted[Number(message.reprompted)].format(`[${timer.stop()}]`),
 			this.user.format(`${message.author.username}[${message.author.id}]`),
 			this.channel[type].format(this[type](message))
