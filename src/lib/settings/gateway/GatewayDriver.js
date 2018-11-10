@@ -59,8 +59,6 @@ class GatewayDriver extends Collection {
 	 */
 	register(gateway) {
 		if (!(gateway instanceof GatewayStorage)) throw new TypeError(`You must pass a GatewayStorage instance, received: ${new Type(gateway)}`);
-		if (this.has(gateway.name)) throw new Error(`The key '${gateway.name}' is taken by another Gateway.`);
-
 		if (!(gateway.name in this.client.options.gateways)) this.client.options.gateways[gateway.name] = {};
 		this.set(gateway.name, gateway);
 		return this;
