@@ -10,12 +10,13 @@ module.exports = class extends Event {
 	run(settings) {
 		if (gateways.includes(settings.gateway.name)) {
 			this.client.shard.broadcastEval(`
-				if (String(this.shard.id) === '${this.client.shard.id}') return;
-				const entry = this.gateways.get('${settings.gateway.name}').get('${settings.id}');
-				if (entry && entry.existenceStatus) {
-					this.emit('settingsDelete', settings);
-					entry.init(entry, entry.schema);
-					entry.existenceStatus = false;
+				if (String(this.shard.id) !== '${this.client.shard.id}') {
+					const entry = this.gateways.get('${settings.gateway.name}').get('${settings.id}');
+					if (entry && entry.existenceStatus) {
+						this.emit('settingsDelete', settings);
+						entry.init(entry, entry.schema);
+						entry.existenceStatus = false;
+					}
 				}
 			`);
 		}
