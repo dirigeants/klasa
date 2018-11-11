@@ -110,6 +110,13 @@ class SchemaPiece {
 		 * @type {Function}
 		 */
 		this.filter = 'filter' in options ? options.filter : null;
+
+		/**
+		 * Whether or not this value should be resolved when resolving values.
+		 * @since 0.5.0
+		 * @type {boolean}
+		 */
+		this.resolve = 'resolve' in options ? options.resolve : true;
 	}
 
 	/**
