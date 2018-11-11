@@ -3,7 +3,7 @@ class GatewayStorage {
 	/**
 	 * @typedef {Object} GatewayJSON
 	 * @property {string} name The name of this gateway
-	 * @property {GatewayDriverRegisterOptions} options The options for this gateway
+	 * @property {string} provider The provider's name
 	 * @property {Object} schema The current schema
 	 */
 
@@ -42,13 +42,15 @@ class GatewayStorage {
 		 * @type {string}
 		 * @readonly
 		 */
-		Object.defineProperty(this, 'providerName', { value: provider || this.client.options.providers.default });
+		Object.defineProperty(this, 'providerName', { value: provider });
 
 		/**
 		 * @since 0.5.0
+		 * @name GatewayStorage#schema
 		 * @type {Schema}
+		 * @readonly
 		 */
-		this.schema = schema;
+		Object.defineProperty(this, 'schema', { value: schema, enumerable: true });
 
 		/**
 		 * @since 0.5.0
@@ -118,7 +120,7 @@ class GatewayStorage {
 	toJSON() {
 		return {
 			name: this.name,
-			options: { provider: this.providerName },
+			provider: this.providerName,
 			schema: this.schema.toJSON()
 		};
 	}

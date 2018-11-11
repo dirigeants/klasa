@@ -22,7 +22,7 @@ module.exports = class extends Command {
 			piece.store.load(piece.store.userDirectory, piece.file);
 			if (this.client.shard) {
 				await this.client.shard.broadcastEval(`
-					if (String(this.shard.id) !== '${this.client.shard.id}') this.${piece.store}.load(${piece.store.userDirectory}, ${JSON.stringify(piece.file)});
+					if (String(this.shard.id) !== '${this.client.shard.id}') this.${piece.store}.load('${piece.store.userDirectory}', ${JSON.stringify(piece.file)});
 				`);
 			}
 			return message.sendLocale('COMMAND_TRANSFER_SUCCESS', [piece.type, piece.name]);
