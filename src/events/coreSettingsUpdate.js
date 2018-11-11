@@ -15,7 +15,7 @@ module.exports = class extends Event {
 					if (entry) {
 						entry._patch(${JSON.stringify(settings)});
 						entry.existenceStatus = true;
-						this.emit('settingsSync', settings);
+						this.emit('settingsSync', entry);
 					}
 				}
 			`);

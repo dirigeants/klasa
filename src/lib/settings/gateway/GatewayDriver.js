@@ -1,5 +1,5 @@
-const Gateway = require('./Gateway');
-const Schema = require('../schema/Schema');
+const GatewayStorage = require('./GatewayStorage');
+const Type = require('../../util/Type');
 const { Collection } = require('discord.js');
 
 /**
@@ -36,19 +36,14 @@ class GatewayDriver extends Collection {
 	/**
 	 * Registers a new Gateway.
 	 * @since 0.5.0
-	 * @param {string} name The name for the new gateway
-	 * @param {GatewayDriverRegisterOptions} [options = {}] The options for the new gateway
+	 * @param {GatewayStorage} gateway The gateway to register
 	 * @returns {this}
 	 * @chainable
 	 */
-	register(name, { provider = this.client.options.providers.default, schema = new Schema() } = {}) {
-		if (typeof name !== 'string') throw new TypeError('You must pass a name for your new gateway and it must be a string.');
-		if (!(schema instanceof Schema)) throw new TypeError('Schema must be a valid Schema instance.');
-		if (this.has(name)) throw new Error(`The key '${name}' is taken by another Gateway.`);
-
-		if (!(name in this.client.options.gateways)) this.client.options.gateways[name] = {};
-		const gateway = new Gateway(this, name, schema, provider);
-		this.set(name, gateway);
+	register(gateway) {
+		if (!(gateway instanceof GatewayStorage)) throw new TypeError(`You must pass a GatewayStorage instance, received: ${new Type(gateway)}`);
+		if (!(gateway.name in this.client.options.gateways)) this.client.options.gateways[gateway.name] = {};
+		this.set(gateway.name, gateway);
 		return this;
 	}
 
