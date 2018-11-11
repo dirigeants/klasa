@@ -114,7 +114,7 @@ class Schedule {
 	 * @since 0.5.0
 	 * @param {string} taskName The name of the task
 	 * @param {(Date|number|string)} time The time or Cron pattern
-	 * @param {ScheduledTaskOptions} options The options for the ScheduleTask instance
+	 * @param {ScheduledTaskOptions} [options] The options for the ScheduleTask instance
 	 * @returns {?ScheduledTask}
 	 * @example
 	 * // Create a new reminder that ends in 2018-03-09T12:30:00.000Z (UTC)
