@@ -25,6 +25,7 @@ const TaskStore = require('./structures/TaskStore');
 const GatewayDriver = require('./settings/gateway/GatewayDriver');
 
 // lib/settings/schema
+const Gateway = require('./settings/gateway/Gateway');
 const Schema = require('./settings/schema/Schema');
 
 // lib/util
@@ -277,9 +278,9 @@ class KlasaClient extends Discord.Client {
 
 		// Register default gateways
 		this.gateways
-			.register('guilds', { ...guilds, schema: guildSchema })
-			.register('users', { ...users, schema: userSchema })
-			.register('clientStorage', { ...clientStorage, schema: clientSchema });
+			.register(new Gateway(this, 'guilds', { schema: guildSchema, ...this.options.gateways.guilds || {} }))
+			.register(new Gateway(this, 'users', { schema: userSchema, ...this.options.gateways.users || {} }))
+			.register(new Gateway(this, 'clientStorage', { schema: clientSchema, ...this.options.gateways.clientStorage || {} }));
 
 		/**
 		 * The Settings instance that handles this client's settings

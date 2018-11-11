@@ -1,5 +1,6 @@
 const GatewayStorage = require('./GatewayStorage');
 const Settings = require('../Settings');
+const Schema = require('../schema/Schema');
 const { Collection } = require('discord.js');
 
 /**
@@ -12,20 +13,14 @@ class Gateway extends GatewayStorage {
 
 	/**
 	 * @since 0.0.1
-	 * @param {GatewayDriver} store The GatewayDriver instance which initiated this instance
+	 * @param {KlasaClient} client The KlasaClient instance which initiated this instance
 	 * @param {string} name The name of this Gateway
-	 * @param {Schema} schema The schema for this gateway
-	 * @param {string} provider The provider's name for this gateway
+	 * @param {Object} [options = {}] The options for this gateway
+	 * @param {Schema} [options.schema = new Schema()] The schema for this gateway
+	 * @param {string} [options.provider = this.client.options.providers.default] The provider's name for this gateway
 	 */
-	constructor(store, name, schema, provider) {
-		super(store.client, name, schema, provider);
-
-		/**
-		 * The GatewayDriver that manages this Gateway
-		 * @since 0.0.1
-		 * @type {GatewayDriver}
-		 */
-		this.store = store;
+	constructor(client, name, { schema = new Schema(), provider = client.options.providers.default } = {}) {
+		super(client, name, schema, provider);
 
 		/**
 		 * The cached entries for this Gateway or the external datastore to get the settings from
