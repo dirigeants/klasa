@@ -152,7 +152,7 @@ class ScheduledTask {
 	/**
 	 * Update the task
 	 * @since 0.5.0
-	 * @param {ScheduledTaskUpdateOptions} options The options to update
+	 * @param {ScheduledTaskUpdateOptions} [options={}] The options to update
 	 * @returns {this}
 	 * @example
 	 * // Update the data from the current scheduled task. Let's say I want to change the reminder content to remind me

@@ -176,7 +176,7 @@ class Schedule {
 	 * @since 0.5.0
 	 * @param {string} taskName The name of the task
 	 * @param {(Date|number|string)} time The time or Cron pattern
-	 * @param {ScheduledTaskOptions} options The options for the ScheduledTask instance
+	 * @param {ScheduledTaskOptions} [options={}] The options for the ScheduledTask instance
 	 * @returns {?ScheduledTask}
 	 * @private
 	 */
