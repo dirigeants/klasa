@@ -57,7 +57,7 @@ schema.add('management', management => management
 		.add('administrator', 'Role')));
 ```
 
-> **Note**: In practise, you will have {@link KlasaClient.defaultClientSchema}, {@link KlasaClient.defaultGuildSchema}, and {@link KlasaClient.defaultUserSchema}, to edit the client settings' schema, the guild settings' schema, and the user settings' schema, respectively.
+> **Note**: In practise, you will have {@link KlasaClient.defaultClientSchema}, {@link KlasaClient.defaultGuildSchema}, and {@link KlasaClient.defaultUserSchema}, to edit the client settings' schema, the guild settings' schema, and the user settings' schema, respectively. Finally, the schemas are sealed once the bot has logged in successfully.
 
 ## Settings
 
@@ -108,22 +108,57 @@ message.guild.settings.destroy();
 
 ## Gateways
 
+They are the central controllers that manage a table from the database with its own schema and cache. Each gateway is registered in a driver that ensures everything initializes correctly, this driver is called {@link GatewayDriver}, and we will use it to both register, and access to our gateways.
 
+There are three built-in gateways: `clientStorage` (per-client settings), `guilds` (per-guild settings), and `users` (per-user settings). There are more available as plugins, for example: [`klasa-member-gateway`][klasamembergateway] (per-member settings).
+
+```javascript
+const { KlasaClient, Gateway } = require('klasa');
+
+// Create the client
+const client = new KlasaClient();
+
+// Create the gateway
+const gateway = new Gateway(client, 'channels');
+
+// Register the gateway
+client.gateways.register(gateway);
+
+// Access to the gateway
+client.gateways.get('channels');
+
+// Login the bot
+client.login();
+```
+
+Additionally, the schema is accessible as {@link Gateway#schema}:
+
+```javascript
+// Access to our channels gateway's schema
+client.gateways.get('channels').schema;
+```
 
 ## Serializers
 
-
+They are pieces designed to serialize (convert to storable data for a database) and deserialize (convert to an element in memory). Check the guide on {@tutorial CreatingSerializers creating serializers} for how to create them, and the list of {@tutorial IncludedSerializers included serializers} to check all the built-in ones. For example, creating a serializer called `bigint.js` will enable the usage of the type `bigint` in your schema.
 
 ## Providers
 
-They provide full control of the data from a database
+They are pieces designed to interact with the database. Check the guide on {@tutorial CreatingProviders} and {@tutorial CreatingSQLProviders} to check how to make one, only the [json][json] provider is available by default, but there are more in [klasa-piece's providers][klasapieceproviders]. We strongly suggest anyone to use the providers from klasa-pieces as they are updated regularly and tested.
+
+## Further Reading:
+
+- {@tutorial UnderstandingSchemaPieces}
+- {@tutorial UnderstandingSchemaFolders}
+- {@tutorial SettingsGatewayKeyTypes}
+- {@tutorial SettingsGatewaySettingsUpdate}
 
 [json]: https://github.com/dirigeants/klasa/blob/master/src/providers/json.js
 [atomic]: https://en.wikipedia.org/wiki/Atomicity_%28database_systems%29
+[klasamembergateway]: https://github.com/dirigeants/klasa-member-gateway
+[klasapieceproviders]: https://github.com/dirigeants/klasa-pieces/tree/master/providers
 
-
-
-Thanks to the abstraction of SettingsGateway, the developer has many options, for example, if you want to change the database that manages the data, you just change one line of code, without needing to rewrite everything that relies on it, nor you need to rewrite the interface itself in order to be able to work with a different database.
+<!-- Thanks to the abstraction of SettingsGateway, the developer has many options, for example, if you want to change the database that manages the data, you just change one line of code, without needing to rewrite everything that relies on it, nor you need to rewrite the interface itself in order to be able to work with a different database.
 
 ## Database Engine
 
@@ -197,11 +232,4 @@ new Klasa.Client({
 }).login('A_BEAUTIFUL_TOKEN_AINT_IT?');
 ```
 
-Where the *clientStorage* gateway would take the default options (json provider), the *guilds* gateway would use the rethinkdb provider, and finally the *users* one would use the postgresql provider. These options are {@link GatewayDriver.GatewayDriverAddOptions}.
-
-## Further Reading:
-
-- {@tutorial UnderstandingSchemaPieces}
-- {@tutorial UnderstandingSchemaFolders}
-- {@tutorial SettingsGatewayKeyTypes}
-- {@tutorial SettingsGatewaySettingsUpdate}
+Where the *clientStorage* gateway would take the default options (json provider), the *guilds* gateway would use the rethinkdb provider, and finally the *users* one would use the postgresql provider. These options are {@link GatewayDriver.GatewayDriverAddOptions}. -->
