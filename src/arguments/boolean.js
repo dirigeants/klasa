@@ -1,6 +1,6 @@
 const { Argument } = require('klasa');
-const truths = ['1', 'true', '+', 't', 'yes', 'y'];
-const falses = ['0', 'false', '-', 'f', 'no', 'n'];
+const truths = ['1', 'true', '+', 't', 'yes', 'y', 'enable', 'enabled', 'on', 'ye'];
+const falses = ['0', 'false', '-', 'f', 'no', 'n', 'disable', 'disabled', 'off'];
 
 module.exports = class extends Argument {
 
