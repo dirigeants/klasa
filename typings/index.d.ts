@@ -242,9 +242,21 @@ declare module 'klasa' {
 		private init(folder: SettingsFolder, schema: SchemaFolder): void;
 	}
 
+	export class GatewayDriver extends Collection<string, Gateway> {
+		private constructor(client: KlasaClient);
+		public readonly client: KlasaClient;
+		public ready: boolean;
+
+		public register(gateway: GatewayStorage): this;
+		public init(): Promise<void>;
+		public sync(input?: string[] | string): Promise<Array<Gateway>>;
+
+		public toJSON(): GatewayDriverJSON;
+		public toString(): string;
+	}
+
 	export class Gateway extends GatewayStorage {
-		public constructor(store: GatewayDriver, name: string, schema: Schema, options: GatewayOptions);
-		public store: GatewayDriver;
+		public constructor(client: KlasaClient, name: string, options?: { schema?: Schema, provider?: string });
 		public syncQueue: WeakMap<Settings, Promise<Settings>>;
 		public readonly Settings: Settings;
 		private cache: Collection<string, Record<string, any> & { settings: Settings }>;
@@ -265,27 +277,14 @@ declare module 'klasa' {
 		private readonly _datatypes: ObjectLiteral<Required<QueryBuilderDatatypeOptions>>;
 	}
 
-	export class GatewayDriver extends Collection<string, Gateway> {
-		private constructor(client: KlasaClient);
-		public readonly client: KlasaClient;
-		public ready: boolean;
-
-		public register(name: string, options?: GatewayDriverRegisterOptions): this;
-		public init(): Promise<void>;
-		public sync(input?: string[] | string): Promise<Array<Gateway>>;
-
-		public toJSON(): GatewayDriverJSON;
-		public toString(): string;
-	}
-
 	export abstract class GatewayStorage {
-		public constructor(client: KlasaClient, name: string, schema: Schema, provider?: string);
+		public constructor(client: KlasaClient, name: string, schema?: Schema, provider?: string);
 		public readonly client: KlasaClient;
 		public readonly provider: Provider | null;
 		public readonly providerName: string;
 		public readonly name: string;
+		public readonly schema: SchemaFolder;
 		public ready: boolean;
-		public schema: SchemaFolder;
 
 		public init(): Promise<void>;
 		public toJSON(): GatewayJSON;
@@ -1310,11 +1309,7 @@ declare module 'klasa' {
 		default?: string;
 	} & ObjectLiteral;
 
-	export type KlasaGatewaysOptions = {
-		clientStorage?: GatewayDriverRegisterOptions;
-		guilds?: GatewayDriverRegisterOptions;
-		users?: GatewayDriverRegisterOptions;
-	} & ObjectLiteral;
+	export type KlasaGatewaysOptions = Record<string, { provider ?: string }>;
 
 	// Parsers
 	export type ArgResolverCustomMethod = (arg: string, possible: Possible, message: KlasaMessage, params: string[]) => any;
@@ -1464,9 +1459,9 @@ declare module 'klasa' {
 	};
 
 	export type GatewayJSON = {
-		options: GatewayOptions;
-		schema: SchemaFolderAddOptions;
 		name: string;
+		provider: string;
+		schema: SchemaFolderAddOptions;
 	};
 
 	export type QueryBuilderDatatypeOptions = {
@@ -1482,12 +1477,6 @@ declare module 'klasa' {
 		| KlasaMessage
 		| GuildChannel
 		| Snowflake;
-
-	export type GatewayDriverRegisterOptions = {
-		provider?: string;
-		schema?: Schema;
-		syncArg?: string[] | string | true;
-	};
 
 	export type SchemaFolderAddOptions = SchemaFolderOptions | SchemaPieceOptions;
 
@@ -1512,7 +1501,6 @@ declare module 'klasa' {
 		clientStorage: GatewayJSON;
 		guilds: GatewayJSON;
 		users: GatewayJSON;
-		keys: string[];
 		ready: boolean;
 	} & ObjectLiteral<GatewayJSON>;
 

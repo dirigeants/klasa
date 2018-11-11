@@ -13,7 +13,7 @@ module.exports = class extends Event {
 				if (String(this.shard.id) !== '${this.client.shard.id}') {
 					const entry = this.gateways.get('${settings.gateway.name}').get('${settings.id}');
 					if (entry && entry.existenceStatus) {
-						this.emit('settingsDelete', settings);
+						this.emit('settingsDelete', entry);
 						entry.init(entry, entry.schema);
 						entry.existenceStatus = false;
 					}
