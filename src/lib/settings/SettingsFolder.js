@@ -112,7 +112,7 @@ class SettingsFolder extends Map {
 		const guild = resolveGuild(this.base.gateway.client, this.base.target);
 		const language = guild ? guild.language : this.client.languages.default;
 		for (const path of paths) {
-			const piece = this.schema.get(path);
+			const piece = this.schema.get(this.relative(path));
 			resolved[piece.key] = await piece.resolve(this, language, guild);
 		}
 		return resolved;
