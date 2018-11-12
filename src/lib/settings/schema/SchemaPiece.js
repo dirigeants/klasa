@@ -194,12 +194,11 @@ class SchemaPiece {
 	async resolve(settings, language, guild) {
 		const value = settings.get(this.path);
 		if (!this.shouldResolve) return value;
-		try {
-			if (this.array) return Promise.all(value.map(data => this.serializer.deserialize(data, this, language, guild)));
-			return this.serializer.deserialize(value, this, language, guild);
-		} catch (__) {
-			return null;
+		if (this.array) {
+			const resolved = await Promise.all(value.map(data => this.serializer.deserialize(data, this, language, guild).catch(() => null)));
+			return resolved.filter(val => val !== null);
 		}
+		return this.serializer.deserialize(value, this, language, guild).catch(() => null);
 	}
 
 	/**

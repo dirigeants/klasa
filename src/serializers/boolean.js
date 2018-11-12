@@ -8,7 +8,7 @@ module.exports = class extends Serializer {
 		super(...args, { aliases: ['bool'] });
 	}
 
-	deserialize(data, piece, language) {
+	async deserialize(data, piece, language) {
 		const boolean = String(data).toLowerCase();
 		if (truths.includes(boolean)) return true;
 		if (falses.includes(boolean)) return false;
