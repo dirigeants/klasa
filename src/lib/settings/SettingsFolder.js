@@ -102,26 +102,18 @@ class SettingsFolder extends Map {
 	}
 
 	/**
- * Resolves paths into their full objects or values depending on current set value
+ * Resolves paths into their full objects or values depending on the current set value
  * @since 0.5.0
  * @param  {...string} paths The paths to resolve
  * @returns {*}
  */
 	async resolve(...paths) {
-		const plucked = this.pluck(...paths);
 		const resolved = {};
-		const guild = resolveGuild(this.client, this.id);
+		const guild = resolveGuild(this.base.gateway.client, this.base.target);
 		const language = guild.language || this.client.languages.default;
-		for (const [path, value] of Object.entries(plucked)) {
+		for (const path of paths) {
 			const piece = this.schema.get(path);
-			try {
-				if (!piece.resolve) resolved[piece.key] = value;
-				else if (piece.type === 'Folder') Object.assign(resolved, ...await this.resolve(piece.path));
-				else if (piece.array) resolved[piece.key] = value.map(async data => await piece.serializer.deserialize(data, piece, language, guild));
-				else resolved[piece.key] = await value.serializer.deserialize(value, piece, language, guild);
-			} catch (__) {
-				resolved[piece.key] = null;
-			}
+			resolved[piece.key] = await piece.resolve(this, language, guild);
 		}
 		return resolved;
 	}

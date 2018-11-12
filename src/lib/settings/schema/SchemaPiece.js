@@ -116,7 +116,7 @@ class SchemaPiece {
 		 * @since 0.5.0
 		 * @type {boolean}
 		 */
-		this.resolve = 'resolve' in options ? options.resolve : true;
+		this.shouldResolve = 'resolve' in options ? options.resolve : true;
 	}
 
 	/**
@@ -182,6 +182,24 @@ class SchemaPiece {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Resolves this schemapice into it's deserialized object(s).
+	 * @param {Settings} settings The settings object we're resolving for
+	 * @param {Language} language The language to use for this resolve operation
+	 * @param {Guild} guild The guild to use for this resolve operation
+	 * @returns {*}
+	 */
+	async resolve(settings, language, guild) {
+		const value = settings.get(this.path);
+		if (!this.shouldResolve) return value;
+		try {
+			if (this.array) return Promise.all(value.map(data => this.serializer.deserialize(data, this, language, guild)));
+			return this.serializer.deserialize(value, this, language, guild);
+		} catch (__) {
+			return null;
+		}
 	}
 
 	/**
