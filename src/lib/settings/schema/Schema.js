@@ -178,9 +178,9 @@ class Schema extends Map {
 	 * @returns {*}
 	 */
 	async resolve(settings, language, guild) {
-		const resolved = {};
-		for (const piece of this.values(true)) resolved[piece.key] = await piece.resolve(settings, language, guild);
-		return resolved;
+		const promises = [];
+		for (const piece of this.values(true)) promises.push(piece.resolve(settings, language, guild).then(parsed => ({ [piece.key]: parsed })));
+		return Object.assign({}, ...await Promise.all(promises));
 	}
 
 
