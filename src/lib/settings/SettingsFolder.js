@@ -102,11 +102,11 @@ class SettingsFolder extends Map {
 	}
 
 	/**
- * Resolves paths into their full objects or values depending on the current set value
- * @since 0.5.0
- * @param  {...string} paths The paths to resolve
- * @returns {*}
- */
+ 	 * Resolves paths into their full objects or values depending on the current set value
+ 	 * @since 0.5.0
+ 	 * @param  {...string} paths The paths to resolve
+ 	 * @returns {*}
+ 	 */
 	async resolve(...paths) {
 		const resolved = {};
 		const guild = resolveGuild(this.base.gateway.client, this.base.target);
