@@ -10,6 +10,7 @@ class SchemaPiece {
 	 * @property {boolean} [configurable] Whether the key should be configurable by the configuration command or not
 	 * @property {number} [min] The minimum value for this piece
 	 * @property {number} [max] The maximum value for this piece
+	 * @property {boolean} [resolve] Whether or not SG should resolve this value during resolve operations
 	 */
 
 	/**
