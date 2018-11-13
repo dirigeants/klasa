@@ -50,7 +50,7 @@ class GatewayDriver extends Collection {
 		Object.defineProperty(this, 'client', { value: client });
 
 		// Setup default gateways and adjust client options as necessary
-		const { guilds, users, clientStorage } = this.options.gateway;
+		const { guilds, users, clientStorage } = client.options.gateway;
 		guilds.schema = 'schema' in guilds ? guilds.schema : client.constructor.defaultGuildSchema;
 		users.schema = 'schema' in users ? users.schema : client.constructor.defaultUserSchema;
 		clientStorage.schema = 'schema' in clientStorage ? clientStorage.schema : client.constructor.defaultClientSchema;

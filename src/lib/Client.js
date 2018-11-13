@@ -25,7 +25,6 @@ const TaskStore = require('./structures/TaskStore');
 const GatewayDriver = require('./settings/gateway/GatewayDriver');
 
 // lib/settings/schema
-const Gateway = require('./settings/gateway/Gateway');
 const Schema = require('./settings/schema/Schema');
 
 // lib/util
