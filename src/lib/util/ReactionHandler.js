@@ -33,7 +33,6 @@ class ReactionHandler extends ReactionCollector {
 	 * @param {Emoji[]} emojis The emojis which should be used in this handler
 	 */
 	constructor(message, filter, options, display, emojis) {
-		if (!options.time) options.time = 30000;
 		super(message, filter, options);
 
 		/**
@@ -51,13 +50,6 @@ class ReactionHandler extends ReactionCollector {
 		this.methodMap = new Map(Object.entries(this.display.emojis).map(([key, value]) => [value, key]));
 
 		/**
-		 * The time until the reaction collector closes automatically
-		 * @since 0.4.0
-		 * @type {number}
-		 */
-		this.time = this.options.time;
-
-		/**
 		 * The current page the display is on
 		 * @since 0.4.0
 		 * @type {number}
@@ -70,6 +62,13 @@ class ReactionHandler extends ReactionCollector {
 		 * @type {string}
 		 */
 		this.prompt = this.options.prompt || message.language.get('REACTIONHANDLER_PROMPT');
+
+		/**
+		 * The time until the reaction collector closes automatically
+		 * @since 0.4.0
+		 * @type {number}
+		 */
+		this.time = typeof this.options.time === 'number' ? this.options.time : 30000;
 
 		/**
 		 * Whether the menu is awaiting a response of a prompt, to block all other jump reactions
