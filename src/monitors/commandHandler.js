@@ -17,7 +17,7 @@ module.exports = class extends Monitor {
 		if (this.mentionOnly.test(message.content)) return message.sendLocale('PREFIX_REMINDER', [message.guildSettings.prefix.length ? message.guildSettings.prefix : undefined]);
 
 		const { commandText, prefix, prefixLength } = this.parseCommand(message);
-		if (!commandText) return this.client.emit('commandlessMessage', message, prefix, prefixLength);
+		if (!commandText) return undefined;
 
 		const command = this.client.commands.get(commandText);
 		if (!command) return this.client.emit('commandUnknown', message, commandText, prefix, prefixLength);
