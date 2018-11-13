@@ -555,6 +555,8 @@ KlasaClient.defaultClientSchema = new Schema()
  * @since 0.4.0
  * @param {KlasaMessage} message The message that triggered the command
  * @param {string} command The command attempted to run
+ * @param {RegExp} prefix The prefix used
+ * @param {number} prefixLength The length of the prefix used
  */
 
 /**
