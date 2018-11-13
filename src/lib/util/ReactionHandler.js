@@ -20,7 +20,7 @@ class ReactionHandler extends ReactionCollector {
 	 * @property {number} [max] The maximum total amount of reactions to collect
 	 * @property {number} [maxEmojis] The maximum number of emojis to collect
 	 * @property {number} [maxUsers] The maximum number of users to react
-	 * @property {number} [time=30000] The maximum amount of time before this RichMenu should expire
+	 * @property {number} [time=30000] The maximum amount of time before the RichMenu should expire
 	 */
 
 	/**
@@ -64,7 +64,7 @@ class ReactionHandler extends ReactionCollector {
 		this.prompt = this.options.prompt || message.language.get('REACTIONHANDLER_PROMPT');
 
 		/**
-		 * The time until the reaction collector closes automatically
+		 * The maximum amount of time before the RichMenu should expire
 		 * @since 0.4.0
 		 * @type {number}
 		 */
