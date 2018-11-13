@@ -107,7 +107,7 @@ class RichMenu extends RichDisplay {
 	 * Runs this RichMenu
 	 * @since 0.4.0
 	 * @param {KlasaMessage} message A message to edit or use to send a new message with
-	 * @param {RichMenuRunOptions} options The options to use with this RichMenu
+	 * @param {RichMenuRunOptions} [options={}] The options to use with this RichMenu
 	 * @returns {ReactionHandler}
 	 */
 	async run(message, options = {}) {

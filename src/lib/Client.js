@@ -147,7 +147,7 @@ class KlasaClient extends Discord.Client {
 		 * @since 0.4.0
 		 * @type {KlasaConsole}
 		 */
-		this.console = new KlasaConsole(this, this.options.console);
+		this.console = new KlasaConsole(this.options.console);
 
 		/**
 		 * The cache where argument resolvers are stored

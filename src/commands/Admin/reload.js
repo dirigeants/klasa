@@ -20,7 +20,7 @@ module.exports = class extends Command {
 			await piece.init();
 			if (this.client.shard) {
 				await this.client.shard.broadcastEval(`
-					if (this.shard.id !== ${this.client.shard.id}) this.${piece.name}.loadAll().then(() => this.${piece.name}.loadAll());
+					if (String(this.shard.id) !== '${this.client.shard.id}') this.${piece.name}.loadAll().then(() => this.${piece.name}.loadAll());
 				`);
 			}
 			return message.sendLocale('COMMAND_RELOAD_ALL', [piece, timer.stop()]);
@@ -31,7 +31,7 @@ module.exports = class extends Command {
 			const timer = new Stopwatch();
 			if (this.client.shard) {
 				await this.client.shard.broadcastEval(`
-					if (this.shard.id !== ${this.client.shard.id}) this.${piece.store}.get('${piece.name}').reload();
+					if (String(this.shard.id) !== '${this.client.shard.id}') this.${piece.store}.get('${piece.name}').reload();
 				`);
 			}
 			return message.sendLocale('COMMAND_RELOAD', [itm.type, itm.name, timer.stop()]);
@@ -49,7 +49,7 @@ module.exports = class extends Command {
 		}));
 		if (this.client.shard) {
 			await this.client.shard.broadcastEval(`
-				if (this.shard.id !== ${this.client.shard.id}) this.client.pieceStores.map(async (store) => {
+				if (String(this.shard.id) !== '${this.client.shard.id}') this.client.pieceStores.map(async (store) => {
 					await store.loadAll();
 					await store.init();
 				});
