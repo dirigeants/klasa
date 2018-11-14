@@ -2,12 +2,13 @@ const { Event } = require('klasa');
 
 module.exports = class extends Event {
 
-	run(data) {
-		this.client.console.log(data);
+	constructor(...args) {
+		super(...args);
+		if (!this.client.options.consoleEvents.log) this.disable();
 	}
 
-	init() {
-		if (!this.client.options.consoleEvents.log) this.disable();
+	run(data) {
+		this.client.console.log(data);
 	}
 
 };
