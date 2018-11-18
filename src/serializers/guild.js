@@ -3,7 +3,7 @@ const { Guild } = require('discord.js');
 
 module.exports = class extends Serializer {
 
-	deserialize(data, piece, language) {
+	async deserialize(data, piece, language) {
 		if (data instanceof Guild) return data;
 		const guild = this.constructor.regex.channel.test(data) ? this.client.guilds.get(data) : null;
 		if (guild) return guild;

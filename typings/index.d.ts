@@ -222,6 +222,7 @@ declare module 'klasa' {
 		public update(object: Record<string, any>, options?: SettingsFolderUpdateOptions): Promise<SettingsFolderUpdateResult>;
 		public display(message: KlasaMessage, path?: string | Schema | SchemaFolder): string;
 		public pluck<T extends string>(...paths: T[]): Partial<Record<T, any>>;
+		public resolve<T extends string>(...paths: T[]): Partial<Record<T, any>>;
 		public toJSON(): any;
 		public toString(): string;
 		private relative(pathOrPiece: string | Schema | SchemaPiece): string;
@@ -303,6 +304,7 @@ declare module 'klasa' {
 		public add(key: string, callback: (folder: SchemaFolder) => any): this;
 		public remove(key: string): this;
 		public get<T = Schema | SchemaPiece | SchemaFolder>(key: string | Array<string>): T;
+		public resolve(settings: Settings, language: Language, guild: KlasaGuild): Promise<Record<string, any>>;
 		public toJSON(): ObjectLiteral;
 	}
 
@@ -326,8 +328,10 @@ declare module 'klasa' {
 		public min: number | null;
 		public max: number | null;
 		public filter: ((client: KlasaClient, value: any, schema: SchemaPiece, language: Language) => boolean) | null;
+		public shouldResolve: boolean;
 		public parse<T>(value: any, guild?: KlasaGuild): T;
 		public edit(options?: SchemaPieceEditOptions): this;
+		public resolve(settings: Settings, language: Language, guild: KlasaGuild): Promise<any>;
 		public toJSON(): SchemaPieceOptions;
 
 		private isValid(): boolean;
@@ -1488,7 +1492,8 @@ declare module 'klasa' {
 		default?: any;
 		min?: number;
 		max?: number;
-		filter?: ((client: KlasaClient, value: any, schema: SchemaPiece, language: Language) => boolean) | null
+		filter?: ((client: KlasaClient, value: any, schema: SchemaPiece, language: Language) => boolean) | null;
+		resolve?: boolean;
 	};
 
 	export type SchemaPieceEditOptions = {
