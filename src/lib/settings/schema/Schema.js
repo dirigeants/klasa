@@ -71,7 +71,7 @@ class Schema extends Map {
 	 * @since 0.5.0
 	 * @param {string} key The name of this new piece you are trying to add.
 	 * @param {string|Function} typeOrCallback A function to add a folder or a string to add a new SchemaPiece
-	 * @param {Object} [options] An object of options used for SchemaPieces
+	 * @param {SchemaPieceOptions} [options] An object of options used for SchemaPieces
 	 * @returns {this}
 	 * @chainable
 	 * @example

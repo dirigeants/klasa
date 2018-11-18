@@ -81,8 +81,8 @@ class Colors {
 	 */
 	static background(background, { opening = [], closing = [] } = {}) {
 		if (background && background.toLowerCase() in this.BACKGROUNDS) {
-			opening.push(Colors.BACKGROUNDS[background.toLowerCase()]);
-			closing.push(Colors.CLOSE.background);
+			opening.push(this.BACKGROUNDS[background.toLowerCase()]);
+			closing.push(this.CLOSE.background);
 		}
 		return { opening, closing };
 	}
@@ -97,8 +97,8 @@ class Colors {
 	 */
 	static text(text, { opening = [], closing = [] } = {}) {
 		if (text && text.toLowerCase() in this.TEXTS) {
-			opening.push(Colors.TEXTS[text.toLowerCase()]);
-			closing.push(Colors.CLOSE.text);
+			opening.push(this.TEXTS[text.toLowerCase()]);
+			closing.push(this.CLOSE.text);
 		}
 		return { opening, closing };
 	}
