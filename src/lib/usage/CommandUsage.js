@@ -43,7 +43,7 @@ class CommandUsage extends Usage {
 	 * Creates a CommandPrompt instance to collect and resolve arguments with
 	 * @since 0.5.0
 	 * @param {KlasaMessage} message The message context from the prompt
-	 * @param {TextPromptOptions} options The options for the prompt
+	 * @param {TextPromptOptions} [options={}] The options for the prompt
 	 * @returns {CommandPrompt}
 	 */
 	createPrompt(message, options = {}) {
