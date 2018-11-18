@@ -25,7 +25,6 @@ const TaskStore = require('./structures/TaskStore');
 const GatewayDriver = require('./settings/gateway/GatewayDriver');
 
 // lib/settings/schema
-const Gateway = require('./settings/gateway/Gateway');
 const Schema = require('./settings/schema/Schema');
 
 // lib/util
@@ -257,30 +256,6 @@ class KlasaClient extends Discord.Client {
 		 * @type {GatewayDriver}
 		 */
 		this.gateways = new GatewayDriver(this);
-
-		const { guilds, users, clientStorage } = this.options.gateways;
-		const guildSchema = 'schema' in guilds ? guilds.schema : this.constructor.defaultGuildSchema;
-		const userSchema = 'schema' in users ? users.schema : this.constructor.defaultUserSchema;
-		const clientSchema = 'schema' in clientStorage ? clientStorage.schema : this.constructor.defaultClientSchema;
-
-		// Update Guild Schema with Keys needed in Klasa
-		const prefixKey = guildSchema.get('prefix');
-		if (!prefixKey || prefixKey.default === null) {
-			guildSchema.add('prefix', 'string', { array: Array.isArray(this.options.prefix), default: this.options.prefix });
-		}
-
-		const languageKey = guildSchema.get('language');
-		if (!languageKey || languageKey.default === null) {
-			guildSchema.add('language', 'language', { default: this.options.language });
-		}
-
-		guildSchema.add('disableNaturalPrefix', 'boolean', { configurable: Boolean(this.options.regexPrefix) });
-
-		// Register default gateways
-		this.gateways
-			.register(new Gateway(this, 'guilds', { schema: guildSchema, ...this.options.gateways.guilds || {} }))
-			.register(new Gateway(this, 'users', { schema: userSchema, ...this.options.gateways.users || {} }))
-			.register(new Gateway(this, 'clientStorage', { schema: clientSchema, ...this.options.gateways.clientStorage || {} }));
 
 		/**
 		 * The Settings instance that handles this client's settings
