@@ -168,6 +168,22 @@ class Schema extends Map {
 		return path.split('.').reduce((folder, key) => Map.prototype.get.call(folder, key), this);
 	}
 
+
+	/**
+	 * Resolves this schema into it's deserialized objects.
+	 * @since 0.5.0
+	 * @param {Settings} settings The settings object we're resolving for
+	 * @param {Language} language The language to use for this resolve operation
+	 * @param {Guild} guild The guild to use for this resolve operation
+	 * @returns {*}
+	 */
+	async resolve(settings, language, guild) {
+		const promises = [];
+		for (const piece of this.values(true)) promises.push(piece.resolve(settings, language, guild).then(parsed => ({ [piece.key]: parsed })));
+		return Object.assign({}, ...await Promise.all(promises));
+	}
+
+
 	/**
 	 * Returns a new Iterator object that contains the keys for each element contained in this folder.
 	 * Identical to [Map.keys()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/keys)

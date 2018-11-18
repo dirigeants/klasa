@@ -14,6 +14,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#487](https://github.com/dirigeants/klasa/pull/487)] Added Settings#resolve(...paths) (UnseenFaith)
 - [[#477](https://github.com/dirigeants/klasa/pull/477)] Added core `KlasaClient#settingsDelete` event handler to destroy instances in other shards. (kyranet)
 - [[#475](https://github.com/dirigeants/klasa/pull/475)] Added `KlasaClient#settingsSync` event. (kyranet)
 - [[#471](https://github.com/dirigeants/klasa/pull/471)] Added `Gateway#create` and `Gateway#acquire`. (kyranet)
@@ -321,6 +322,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
+- [[#487](https://github.com/dirigeants/klasa/pull/487)] Fixed role deserializer (UnseenFaith)
 - [[#426](https://github.com/dirigeants/klasa/pull/426)] Fixed typings for QueryBuilder. (kyranet)
 - [[#383](https://github.com/dirigeants/klasa/pull/383)] Fixed abstract `SQLProvider#qb` property being missing in typings. (kyranet)
 - [[#362](https://github.com/dirigeants/klasa/pull/362)] Fixed object mutation in `GatewayDriver#toJSON()`. (kyranet)
