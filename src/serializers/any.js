@@ -2,7 +2,7 @@ const { Serializer } = require('klasa');
 
 module.exports = class extends Serializer {
 
-	deserialize(data) {
+	async deserialize(data) {
 		return data;
 	}
 
