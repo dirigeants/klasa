@@ -102,6 +102,23 @@ class SettingsFolder extends Map {
 	}
 
 	/**
+ 	 * Resolves paths into their full objects or values depending on the current set value
+ 	 * @since 0.5.0
+ 	 * @param  {...string} paths The paths to resolve
+ 	 * @returns {*}
+ 	 */
+	async resolve(...paths) {
+		const guild = resolveGuild(this.base.gateway.client, this.base.target);
+		const language = guild ? guild.language : this.client.languages.default;
+		const promises = [];
+		for (const path of paths) {
+			const piece = this.schema.get(this.relative(path));
+			promises.push(piece.resolve(this, language, guild).then(res => ({ [piece.key]: res })));
+		}
+		return Object.assign({}, ...await Promise.all(promises));
+	}
+
+	/**
 	 * Reset a value from an entry.
 	 * @since 0.5.0
 	 * @param {(string|string[])} [keys] The key to reset

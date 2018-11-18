@@ -17,7 +17,7 @@ module.exports = class extends Serializer {
 		throw language.get('RESOLVER_INVALID_CHANNEL', piece.key);
 	}
 
-	deserialize(data, piece, language, guild) {
+	async deserialize(data, piece, language, guild) {
 		if (data instanceof Channel) return this.checkChannel(data, piece, language);
 		const channel = this.constructor.regex.channel.test(data) ? (guild || this.client).channels.get(this.constructor.regex.channel.exec(data)[1]) : null;
 		if (channel) return this.checkChannel(channel, piece, language);
