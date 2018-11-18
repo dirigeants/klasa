@@ -10,6 +10,7 @@ class SchemaPiece {
 	 * @property {boolean} [configurable] Whether the key should be configurable by the configuration command or not
 	 * @property {number} [min] The minimum value for this piece
 	 * @property {number} [max] The maximum value for this piece
+	 * @property {boolean} [resolve] Whether or not SG should resolve this value during resolve operations
 	 */
 
 	/**
@@ -110,6 +111,13 @@ class SchemaPiece {
 		 * @type {Function}
 		 */
 		this.filter = 'filter' in options ? options.filter : null;
+
+		/**
+		 * Whether or not this value should be resolved when resolving values.
+		 * @since 0.5.0
+		 * @type {boolean}
+		 */
+		this.shouldResolve = 'resolve' in options ? options.resolve : true;
 	}
 
 	/**
@@ -175,6 +183,23 @@ class SchemaPiece {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Resolves this schemapice into it's deserialized object(s).
+	 * @param {Settings} settings The settings object we're resolving for
+	 * @param {Language} language The language to use for this resolve operation
+	 * @param {Guild} guild The guild to use for this resolve operation
+	 * @returns {*}
+	 */
+	async resolve(settings, language, guild) {
+		const value = settings.get(this.path);
+		if (!this.shouldResolve) return value;
+		if (this.array) {
+			const resolved = await Promise.all(value.map(data => this.serializer.deserialize(data, this, language, guild).catch(() => null)));
+			return resolved.filter(val => val !== null);
+		}
+		return this.serializer.deserialize(value, this, language, guild).catch(() => null);
 	}
 
 	/**
