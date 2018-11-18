@@ -1,4 +1,5 @@
 const GatewayStorage = require('./GatewayStorage');
+const Gateway = require('./Gateway');
 const Type = require('../../util/Type');
 const { Collection } = require('discord.js');
 
@@ -7,13 +8,6 @@ const { Collection } = require('discord.js');
  * Gateway's driver to make new instances of it, with the purpose to handle different databases simultaneously.
  */
 class GatewayDriver extends Collection {
-
-	/**
-	 * @typedef {Object} GatewayDriverRegisterOptions
-	 * @property {string} [provider = this.client.options.providers.default] The name of the provider to use
-	 * @property {Schema} [schema] The schema to use for this gateway.
-	 * @property {string|string[]|true} [syncArg] The sync args to pass to Gateway#sync during Gateway init
-	 */
 
 	/**
 	 * @since 0.3.0
@@ -30,6 +24,30 @@ class GatewayDriver extends Collection {
 		 * @readonly
 		 */
 		Object.defineProperty(this, 'client', { value: client });
+
+		// Setup default gateways and adjust client options as necessary
+		const { guilds, users, clientStorage } = client.options.gateways;
+		guilds.schema = 'schema' in guilds ? guilds.schema : client.constructor.defaultGuildSchema;
+		users.schema = 'schema' in users ? users.schema : client.constructor.defaultUserSchema;
+		clientStorage.schema = 'schema' in clientStorage ? clientStorage.schema : client.constructor.defaultClientSchema;
+
+		const prefix = guilds.schema.get('prefix');
+		const language = guilds.schema.get('language');
+
+		if (!prefix || prefix.default === null) {
+			guilds.schema.add('prefix', 'string', { array: Array.isArray(client.options.prefix), default: client.options.prefix });
+		}
+
+		if (!language || language.default === null) {
+			guilds.schema.add('language', 'language', { default: client.options.language });
+		}
+
+		guilds.schema.add('disableNaturalPrefix', 'boolean', { configurable: Boolean(client.options.regexPrefix) });
+
+		this
+			.register(new Gateway(client, 'guilds', guilds))
+			.register(new Gateway(client, 'users', users))
+			.register(new Gateway(client, 'clientStorage', clientStorage));
 	}
 
 
