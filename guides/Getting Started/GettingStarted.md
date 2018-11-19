@@ -4,11 +4,7 @@ Time to take the plunge! Klasa is on NPM and can be easily installed.
 
 > I assume you know how to open a command prompt in a folder where you want to install this. Please don't prove me wrong.
 
-```sh
-npm install --save discordjs/discord.js klasa
-```
-
-Optionally if you want to use the bleeding edge development version (not guaranteed to be stable):
+Do not use the stable/npm branch at this time. It is not stable. Instead, install Klasa from GitHub, like so:
 
 ```sh
 npm install --save discordjs/discord.js dirigeants/klasa
