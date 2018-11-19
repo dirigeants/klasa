@@ -24,10 +24,10 @@ module.exports = class extends Extendable {
 		return this.send(APIMessage.transformOptions(content, options, { files }));
 	}
 
-	sendLocale(key, args = [], options) {
+	sendLocale(key, args = [], options = {}) {
 		if (!Array.isArray(args)) [options, args] = [args, []];
 		const language = this.guild ? this.guild.language : this.client.languages.default;
-		return this.send(language.get(key, ...args), options);
+		return this.send(language.get(key, ...args), undefined, options);
 	}
 
 	sendMessage(content, options) {
