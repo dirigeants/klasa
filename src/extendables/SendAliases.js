@@ -27,7 +27,7 @@ module.exports = class extends Extendable {
 	sendLocale(key, args = [], options = {}) {
 		if (!Array.isArray(args)) [options, args] = [args, []];
 		const language = this.guild ? this.guild.language : this.client.languages.default;
-		return this.send({ content: language.get(key, ...args), ...options });
+		return this.send(language.get(key, ...args), options);
 	}
 
 	sendMessage(content, options) {
