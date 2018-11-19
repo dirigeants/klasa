@@ -254,9 +254,9 @@ module.exports = Structures.extend('Message', Message => {
 		 * @param {external:MessageOptions} [options] The D.JS message options plus Language arguments
 		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
 		 */
-		sendLocale(key, localeArgs = [], options) {
+		sendLocale(key, localeArgs = [], options = {}) {
 			if (!Array.isArray(localeArgs)) [options, localeArgs] = [localeArgs, []];
-			return this.sendMessage(this.language.get(key, ...localeArgs), options);
+			return this.sendMessage(this.language.get(key, ...localeArgs), undefined, options);
 		}
 
 		/**
