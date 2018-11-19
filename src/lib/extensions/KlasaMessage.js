@@ -256,7 +256,7 @@ module.exports = Structures.extend('Message', Message => {
 		 */
 		sendLocale(key, localeArgs = [], options = {}) {
 			if (!Array.isArray(localeArgs)) [options, localeArgs] = [localeArgs, []];
-			return this.sendMessage(this.language.get(key, ...localeArgs), undefined, options);
+			return this.sendMessage(APIMessage.transformOptions(this.language.get(key, ...localeArgs), undefined, options));
 		}
 
 		/**
