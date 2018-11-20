@@ -152,7 +152,7 @@ class ScheduledTask {
 	/**
 	 * Update the task
 	 * @since 0.5.0
-	 * @param {ScheduledTaskUpdateOptions} options The options to update
+	 * @param {ScheduledTaskUpdateOptions} [options={}] The options to update
 	 * @returns {this}
 	 * @example
 	 * // Update the data from the current scheduled task. Let's say I want to change the reminder content to remind me
@@ -236,7 +236,8 @@ class ScheduledTask {
 	 * @private
 	 */
 	static _generateID(client) {
-		return Date.now().toString(36) + (client.shard ? client.shard.id.toString(36) : '');
+		const id = client.shard ? (Array.isArray(client.shard.id) ? client.shard.id[0] : client.shard.id).toString(36) : '';
+		return Date.now().toString(36) + id;
 	}
 
 	/**

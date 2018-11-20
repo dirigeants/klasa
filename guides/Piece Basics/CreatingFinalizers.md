@@ -15,7 +15,7 @@ module.exports = class extends Finalizer {
 		});
 	}
 
-	run(message, response, runTime) {
+	run(message, command, response, runTime) {
 		// This is where you place the code you want to run for your finalizer
 	}
 
@@ -39,12 +39,13 @@ module.exports = class extends Finalizer {
 ## Arguments:
 
 - **message**: The message object.
+- **command**: The command used (may not be the same as message.command).
 - **response**: The value the command returns.
 - **runTime**: The time it took to run the command.
 
 ## Existing finalizers
 
-Klasa has two preinstalled finalizers: `commandCooldown` and `commandlogging`.
+Klasa has two pre-installed finalizers: `commandCooldown` and `commandlogging`.
 
 ### commandCooldown
 

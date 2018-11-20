@@ -128,7 +128,7 @@ declare module 'klasa' {
 		public on(event: 'commandUnknown', listener: (message: KlasaMessage, command: string) => void): this;
 
 		public on(event: 'monitorError', listener: (message: KlasaMessage, monitor: Monitor, error: Error | string) => void): this;
-		public on(event: 'finalizerError', listener: (message: KlasaMessage, response: KlasaMessage, runTime: Timestamp, finalizer: Finalizer, error: Error | string) => void): this;
+		public on(event: 'finalizerError', listener: (message: KlasaMessage, command: Command, response: KlasaMessage, runTime: Timestamp, finalizer: Finalizer, error: Error | string) => void): this;
 		public on(event: 'taskError', listener: (scheduledTask: ScheduledTask, task: Task, error: Error) => void): this;
 
 		// SettingGateway Events
@@ -189,7 +189,7 @@ declare module 'klasa' {
 		public once(event: 'commandUnknown', listener: (message: KlasaMessage, command: string) => void): this;
 
 		public once(event: 'monitorError', listener: (message: KlasaMessage, monitor: Monitor, error: Error | string) => void): this;
-		public once(event: 'finalizerError', listener: (message: KlasaMessage, response: KlasaMessage, runTime: Timestamp, finalizer: Finalizer, error: Error | string) => void): this;
+		public once(event: 'finalizerError', listener: (message: KlasaMessage, command: Command, response: KlasaMessage, runTime: Timestamp, finalizer: Finalizer, error: Error | string) => void): this;
 		public once(event: 'taskError', listener: (scheduledTask: ScheduledTask, task: Task, error: Error) => void): this;
 
 		// SettingGateway Events
@@ -689,7 +689,7 @@ declare module 'klasa' {
 
 	export abstract class Finalizer extends Piece {
 		public constructor(client: KlasaClient, store: FinalizerStore, file: string, directory: string, options?: FinalizerOptions);
-		public abstract run(message: KlasaMessage, response: KlasaMessage | KlasaMessage[] | null, runTime: Stopwatch): void;
+		public abstract run(message: KlasaMessage, command: Command, response: KlasaMessage | KlasaMessage[] | null, runTime: Stopwatch): void;
 		public toJSON(): PieceFinalizerJSON;
 	}
 
@@ -818,7 +818,7 @@ declare module 'klasa' {
 	export class ExtendableStore extends Store<string, Extendable, typeof Extendable> { }
 
 	export class FinalizerStore extends Store<string, Finalizer, typeof Finalizer> {
-		public run(message: KlasaMessage, response: KlasaMessage, runTime: Stopwatch): Promise<void>;
+		public run(message: KlasaMessage, command: Command, response: KlasaMessage, runTime: Stopwatch): Promise<void>;
 	}
 
 	export class InhibitorStore extends Store<string, Inhibitor, typeof Inhibitor> {
@@ -993,35 +993,14 @@ declare module 'klasa' {
 		public static toNow(earlier: Date | number | string, showIn?: boolean): string;
 
 		private static regex: RegExp;
-		private static nanosecond: number;
-		private static ns: number;
-		private static microsecond: number;
-		private static μs: number;
-		private static millisecond: number;
-		private static ms: number;
-		private static second: number;
-		private static sec: number;
-		private static s: number;
-		private static minute: number;
-		private static min: number;
-		private static m: number;
-		private static hour: number;
-		private static hr: number;
-		private static h: number;
-		private static day: number;
-		private static d: number;
-		private static month: number;
-		private static b: number;
-		private static year: number;
-		private static yr: number;
-		private static y: number;
+		private static commas: RegExp;
+		private static aan: RegExp;
 
 		private static _parse(pattern: string): number;
 	}
 
 	export class KlasaConsole {
-		private constructor(client: KlasaClient, options: KlasaConsoleConfig);
-		public readonly client: KlasaClient;
+		private constructor(options: KlasaConsoleConfig);
 		public readonly stdout: NodeJS.WritableStream;
 		public readonly stderr: NodeJS.WritableStream;
 		public template: Timestamp | null;
@@ -1057,13 +1036,15 @@ declare module 'klasa' {
 		public resetTime(): this;
 	}
 
-	export class RateLimitManager extends Collection<Snowflake, RateLimit> {
+	export class RateLimitManager<K = Snowflake> extends Collection<K, RateLimit> {
 		public constructor(bucket: number, cooldown: number);
-		public readonly bucket: number;
-		public readonly cooldown: number;
+		public bucket: number;
+		public cooldown: number;
+		private _bucket: number;
+		private _cooldown: number;
 		private sweepInterval: NodeJS.Timer | null;
-		public acquire(id: string): RateLimit;
-		public create(id: Snowflake): RateLimit;
+		public acquire(id: K): RateLimit;
+		public create(id: K): RateLimit;
 	}
 
 	export class ReactionHandler extends ReactionCollector {
@@ -1751,9 +1732,9 @@ declare module 'klasa' {
 	};
 
 	export type ColorsFormatOptions = {
-		background?: string | number | string[];
+		background?: string;
 		style?: string | string[];
-		text?: string | number | string[]
+		text?: string;
 	};
 
 	export type ColorsFormatType = string | number | [string, string, string] | [number, number, number];
@@ -1824,9 +1805,7 @@ declare module 'klasa' {
 		| 'lightyellow'
 		| 'magenta'
 		| 'red'
-		| 'white'
-		| number[]
-		| string[];
+		| 'white';
 
 	export type KlasaConsoleStyleTypes = 'normal'
 		| 'bold'

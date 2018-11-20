@@ -1,5 +1,6 @@
-const util = require('./util');
-const { getPromiseDetails } = process.binding('util');
+require('v8').setFlagsFromString('--allow-natives-syntax');
+const getPromiseDetails = require('vm').runInThisContext(
+	'p => p instanceof Promise ? { status: %PromiseStatus(p), result: %PromiseResult(p) } : null;');
 
 /**
  * The class for deep checking Types
@@ -115,9 +116,9 @@ class Type {
 	 */
 	check() {
 		if (Object.isFrozen(this)) return;
-		const promise = util.isThenable(this.value) && getPromiseDetails(this.value);
+		const promise = getPromiseDetails(this.value);
 		if (typeof this.value === 'object' && this.isCircular()) this.is = `[Circular:${this.is}]`;
-		else if (promise && promise[0]) this.addValue(promise[1]);
+		else if (promise && promise.status) this.addValue(promise.result);
 		else if (this.value instanceof Map) for (const entry of this.value) this.addEntry(entry);
 		else if (Array.isArray(this.value) || this.value instanceof Set) for (const value of this.value) this.addValue(value);
 		else if (this.is === 'Object') this.is = 'any';

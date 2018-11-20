@@ -29,7 +29,7 @@ const Schema = require('./settings/schema/Schema');
 
 // lib/util
 const KlasaConsole = require('./util/KlasaConsole');
-const constants = require('./util/constants');
+const { DEFAULTS, MENTION_REGEX } = require('./util/constants');
 const Stopwatch = require('./util/Stopwatch');
 const util = require('./util/util');
 
@@ -125,7 +125,7 @@ class KlasaClient extends Discord.Client {
 	 */
 	constructor(options = {}) {
 		if (!util.isObject(options)) throw new TypeError('The Client Options for Klasa must be an object.');
-		options = util.mergeDefault(constants.DEFAULTS.CLIENT, options);
+		options = util.mergeDefault(DEFAULTS.CLIENT, options);
 		super(options);
 
 		/**
@@ -147,7 +147,7 @@ class KlasaClient extends Discord.Client {
 		 * @since 0.4.0
 		 * @type {KlasaConsole}
 		 */
-		this.console = new KlasaConsole(this, this.options.console);
+		this.console = new KlasaConsole(this.options.console);
 
 		/**
 		 * The cache where argument resolvers are stored
@@ -518,9 +518,9 @@ KlasaClient.defaultUserSchema = new Schema();
  * @type {Schema}
  */
 KlasaClient.defaultClientSchema = new Schema()
-	.add('userBlacklist', 'user', { array: true, configurable: true })
-	.add('guildBlacklist', 'guild', { array: true, configurable: true })
-	.add('schedules', 'any', { array: true, configurable: false });
+	.add('userBlacklist', 'user', { array: true })
+	.add('guildBlacklist', 'string', { array: true, filter: (__, value) => !MENTION_REGEX.snowflake.test(value) })
+	.add('schedules', 'any', { array: true });
 
 /**
  * Emitted when Klasa is fully ready and initialized.
@@ -618,6 +618,7 @@ KlasaClient.defaultClientSchema = new Schema()
  * @event KlasaClient#finalizerError
  * @since 0.5.0
  * @param {KlasaMessage} message The message that triggered the finalizer
+ * @param {Command} command The command this finalizer is for (may be different than message.command)
  * @param {KlasaMessage|any} response The response from the command
  * @param {Stopwatch} timer The timer run from start to queue of the command
  * @param {Finalizer} finalizer The finalizer run

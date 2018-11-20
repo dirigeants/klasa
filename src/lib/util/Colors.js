@@ -5,9 +5,9 @@ class Colors {
 
 	/**
 	 * @typedef {Object} ColorsFormatOptions
-	 * @property {(string|string[])} style The style or styles to apply
-	 * @property {string} background The format for the background
-	 * @property {string} text The format for the text
+	 * @property {(string|string[])} [style] The style or styles to apply
+	 * @property {string} [background] The format for the background
+	 * @property {string} [text] The format for the text
 	 */
 
 	/**
@@ -53,7 +53,7 @@ class Colors {
 	/**
 	 * Apply the style
 	 * @since 0.5.0
-	 * @param {(string|string[])} styles The style or styles to apply
+	 * @param {(string|string[])} [styles] The style or styles to apply
 	 * @param {ColorsFormatData} [data={}] The data
 	 * @returns {ColorsFormatData}
 	 * @private
@@ -61,7 +61,7 @@ class Colors {
 	static style(styles, { opening = [], closing = [] } = {}) {
 		if (styles) {
 			if (!Array.isArray(styles)) styles = [styles];
-			for (let style in styles) {
+			for (let style of styles) {
 				style = style.toLowerCase();
 				if (!(style in this.STYLES)) continue;
 				opening.push(this.STYLES[style]);
@@ -74,15 +74,15 @@ class Colors {
 	/**
 	 * Apply the background
 	 * @since 0.5.0
-	 * @param {ColorsFormatType} background The background to apply
+	 * @param {string} [background] The background to apply
 	 * @param {ColorsFormatData} [data={}] The data
 	 * @returns {ColorsFormatData}
 	 * @private
 	 */
 	static background(background, { opening = [], closing = [] } = {}) {
 		if (background && background.toLowerCase() in this.BACKGROUNDS) {
-			opening.push(Colors.BACKGROUNDS[background.toLowerCase()]);
-			closing.push(Colors.CLOSE.background);
+			opening.push(this.BACKGROUNDS[background.toLowerCase()]);
+			closing.push(this.CLOSE.background);
 		}
 		return { opening, closing };
 	}
@@ -90,15 +90,15 @@ class Colors {
 	/**
 	 * Apply the text format
 	 * @since 0.5.0
-	 * @param {ColorsFormatType} text The text format to apply
+	 * @param {string} [text] The text format to apply
 	 * @param {ColorsFormatData} [data={}] The data
 	 * @returns {ColorsFormatData}
 	 * @private
 	 */
 	static text(text, { opening = [], closing = [] } = {}) {
 		if (text && text.toLowerCase() in this.TEXTS) {
-			opening.push(Colors.TEXTS[text.toLowerCase()]);
-			closing.push(Colors.CLOSE.text);
+			opening.push(this.TEXTS[text.toLowerCase()]);
+			closing.push(this.CLOSE.text);
 		}
 		return { opening, closing };
 	}

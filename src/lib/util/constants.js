@@ -185,7 +185,11 @@ exports.TIME = {
 			m: 2,
 			s: 2,
 			S: 3,
-			Z: 2
+			Z: 2,
+			l: 4,
+			L: 4,
+			T: 1,
+			t: 1
 			/* eslint-enable id-length */
 		}
 	},
