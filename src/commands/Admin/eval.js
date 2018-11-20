@@ -46,7 +46,7 @@ module.exports = class extends Command {
 		let type;
 		try {
 			if (flags.async) code = `(async () => {\n${code}\n})();`;
-			result = eval(code);
+			result = eval(code.replace(/[“”]/g, '"').replace(/[‘’]/g, "'"));
 			syncTime = stopwatch.toString();
 			type = new Type(result);
 			if (util.isThenable(result)) {
