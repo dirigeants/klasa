@@ -40,13 +40,14 @@ module.exports = class extends Command {
 		// eslint-disable-next-line no-unused-vars
 		const msg = message;
 		const { flags } = message;
+		code = code.replace(/[“”]/g, '"').replace(/[‘’]/g, "'");
 		const stopwatch = new Stopwatch();
 		let success, syncTime, asyncTime, result;
 		let thenable = false;
 		let type;
 		try {
 			if (flags.async) code = `(async () => {\n${code}\n})();`;
-			result = eval(code.replace(/[“”]/g, '"').replace(/[‘’]/g, "'"));
+			result = eval(code);
 			syncTime = stopwatch.toString();
 			type = new Type(result);
 			if (util.isThenable(result)) {
