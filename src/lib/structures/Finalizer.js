@@ -12,6 +12,7 @@ class Finalizer extends Piece {
 	 * The run method to be overwritten in actual finalizers
 	 * @since 0.0.1
 	 * @param {KlasaMessage} message The message used to trigger this finalizer
+	 * @param {Command} command The command this finalizer is for (may be different than message.command)
 	 * @param {KlasaMessage|KlasaMessage[]} response The bot's response message, if one is returned
 	 * @param {Stopwatch} runTime The time it took to generate the command
 	 * @returns {void}

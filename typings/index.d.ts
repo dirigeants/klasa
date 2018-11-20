@@ -583,7 +583,7 @@ declare module 'klasa' {
 
 	export abstract class Finalizer extends Piece {
 		public constructor(client: KlasaClient, store: FinalizerStore, file: string[], directory: string, options?: FinalizerOptions);
-		public abstract run(message: KlasaMessage, response: KlasaMessage | KlasaMessage[] | null, runTime: Stopwatch): void;
+		public abstract run(message: KlasaMessage, command: Command, response: KlasaMessage | KlasaMessage[] | null, runTime: Stopwatch): void;
 		public toJSON(): PieceFinalizerJSON;
 	}
 
@@ -712,7 +712,7 @@ declare module 'klasa' {
 	export class ExtendableStore extends Store<string, Extendable, typeof Extendable> { }
 
 	export class FinalizerStore extends Store<string, Finalizer, typeof Finalizer> {
-		public run(message: KlasaMessage, response: KlasaMessage, runTime: Stopwatch): Promise<void>;
+		public run(message: KlasaMessage, command: Command, response: KlasaMessage, runTime: Stopwatch): Promise<void>;
 	}
 
 	export class InhibitorStore extends Store<string, Inhibitor, typeof Inhibitor> {
@@ -886,37 +886,15 @@ declare module 'klasa' {
 
 		public static toNow(earlier: Date | number | string, showIn?: boolean): string;
 
-		public static nanosecond: number;
-		public static ns: number;
-		public static microsecond: number;
-		public static μs: number;
-		public static millisecond: number;
-		public static ms: number;
-		public static second: number;
-		public static sec: number;
-		public static s: number;
-		public static minute: number;
-		public static min: number;
-		public static m: number;
-		public static hour: number;
-		public static hr: number;
-		public static h: number;
-		public static day: number;
-		public static d: number;
-		public static month: number;
-		public static b: number;
-		public static year: number;
-		public static yr: number;
-		public static y: number;
-
 		private static regex: RegExp;
+		private static commas: RegExp;
+		private static aan: RegExp;
 
 		private static _parse(pattern: string): number;
 	}
 
 	export class KlasaConsole {
-		private constructor(client: KlasaClient, options: KlasaConsoleConfig);
-		public readonly client: KlasaClient;
+		private constructor(options: KlasaConsoleConfig);
 		public readonly stdout: NodeJS.WritableStream;
 		public readonly stderr: NodeJS.WritableStream;
 		public template: Timestamp | null;
@@ -1723,9 +1701,9 @@ declare module 'klasa' {
 	};
 
 	export type ColorsFormatOptions = {
-		background?: string | number | string[];
+		background?: string;
 		style?: string | string[];
-		text?: string | number | string[]
+		text?: string;
 	};
 
 	export type ColorsFormatType = string | number | [string, string, string] | [number, number, number];
@@ -1802,10 +1780,7 @@ declare module 'klasa' {
 		| 'lightyellow'
 		| 'magenta'
 		| 'red'
-		| 'white'
-		| null
-		| number[]
-		| string[];
+		| 'white';
 
 	export type KlasaConsoleStyleTypes = 'normal'
 		| 'bold'

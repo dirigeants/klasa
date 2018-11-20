@@ -147,7 +147,7 @@ class KlasaClient extends Discord.Client {
 		 * @since 0.4.0
 		 * @type {KlasaConsole}
 		 */
-		this.console = new KlasaConsole(this, this.options.console);
+		this.console = new KlasaConsole(this.options.console);
 
 		/**
 		 * The cache where argument resolvers are stored
@@ -618,6 +618,7 @@ KlasaClient.defaultClientSchema = new Schema()
  * @event KlasaClient#finalizerError
  * @since 0.5.0
  * @param {KlasaMessage} message The message that triggered the finalizer
+ * @param {Command} command The command this finalizer is for (may be different than message.command)
  * @param {KlasaMessage|any} response The response from the command
  * @param {Stopwatch} timer The timer run from start to queue of the command
  * @param {Finalizer} finalizer The finalizer run
