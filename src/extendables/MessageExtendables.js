@@ -1,10 +1,10 @@
 const { Extendable } = require('klasa');
-const { Permissions: { FLAGS }, GroupDMChannel, DMChannel, TextChannel } = require('discord.js');
+const { Permissions: { FLAGS }, DMChannel, TextChannel } = require('discord.js');
 
 module.exports = class extends Extendable {
 
 	constructor(...args) {
-		super(...args, { appliesTo: [GroupDMChannel, DMChannel, TextChannel] });
+		super(...args, { appliesTo: [DMChannel, TextChannel] });
 	}
 
 	get attachable() {
