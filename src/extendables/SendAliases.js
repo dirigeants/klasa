@@ -1,6 +1,5 @@
-const { APIMessage } = require('discord.js');
 const { Extendable } = require('klasa');
-const { TextChannel, DMChannel, GroupDMChannel, User } = require('discord.js');
+const { TextChannel, DMChannel, GroupDMChannel, User, APIMessage } = require('discord.js');
 
 module.exports = class extends Extendable {
 
