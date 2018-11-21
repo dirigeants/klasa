@@ -82,8 +82,9 @@ class RichMenu extends RichDisplay {
 	}
 
 	/**
+	 * You cannot directly add pages in a RichMenu
 	 * @since 0.4.0
-	 * @throws You cannot directly add pages in a RichMenu
+	 * @throws 'You cannot directly add pages in a RichMenu'
 	 */
 	addPage() {
 		throw new Error('You cannot directly add pages in a RichMenu');
