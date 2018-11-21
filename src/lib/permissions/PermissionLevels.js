@@ -105,7 +105,7 @@ class PermissionLevels extends Collection {
 	 * @returns {this}
 	 */
 	sort() {
-		const entries = [...this.entries()].sort((a, b) => a[0] - b[0]);
+		const entries = [...this].sort((a, b) => a[0] - b[0]);
 		this.clear();
 		for (const [key, value] of entries) this.set(key, value);
 		return this;
