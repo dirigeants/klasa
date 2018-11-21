@@ -325,8 +325,7 @@ class KlasaClient extends Discord.Client {
 	 * @readonly
 	 */
 	get invite() {
-		// VIEW_CHANNEL, SEND_MESSAGES
-		const permissions = new Permissions(3072).add(...this.commands.map(command => command.requiredPermissions)).bitfield;
+		const permissions = new Permissions(this.constructor.basePermissions).add(...this.commands.map(command => command.requiredPermissions)).bitfield;
 		return `https://discordapp.com/oauth2/authorize?client_id=${this.application.id}&permissions=${permissions}&scope=bot`;
 	}
 
@@ -475,6 +474,13 @@ module.exports = KlasaClient;
  * @type {Symbol}
  */
 KlasaClient.plugin = Symbol('KlasaPlugin');
+
+/**
+ * The base Permissions that the {@link Client#invite} asks for. Defaults to [VIEW_CHANNEL, SEND_MESSAGES]
+ * @since 0.5.0
+ * @type {Permissions}
+ */
+KlasaClient.basePermissions = new Permissions(3072);
 
 /**
  * The default PermissionLevels
