@@ -487,8 +487,8 @@ declare module 'klasa' {
 		public abstract getAll<T extends ObjectLiteral>(table: string): Promise<T[]>;
 		public abstract has(table: string, entry: string): Promise<boolean>;
 		public abstract hasTable(table: string): Promise<boolean>;
-		public abstract update(table: string, entry: string, data: SettingsUpdateResultEntry[] | [string, any][] | ObjectLiteral): Promise<any>;
-		public abstract replace(table: string, entry: string, data: SettingsUpdateResultEntry[] | [string, any][] | ObjectLiteral): Promise<any>;
+		public abstract update(table: string, entry: string, data: SettingsFolderUpdateResult[] | [string, any][] | ObjectLiteral): Promise<any>;
+		public abstract replace(table: string, entry: string, data: SettingsFolderUpdateResult[] | [string, any][] | ObjectLiteral): Promise<any>;
 		// The following is not required by SettingGateway but might be available in some providers
 		public getKeys(table: string): Promise<string[]>;
 		protected parseUpdateInput<T = ObjectLiteral>(updated: T | Array<SettingsFolderUpdateResultEntry>): T;
@@ -1078,9 +1078,10 @@ declare module 'klasa' {
 			on(event: 'monitorError', listener: (message: KlasaMessage, monitor: Monitor, error: Error | string) => void): this;
 			on(event: 'finalizerError', listener: (message: KlasaMessage, response: KlasaMessage, runTime: Timestamp, finalizer: Finalizer, error: Error | string) => void): this;
 			on(event: 'taskError', listener: (scheduledTask: ScheduledTask, task: Task, error: Error) => void): this;
-			on(event: 'settingsCreateEntry', listener: (entry: Settings) => void): this;
-			on(event: 'settingsDeleteEntry', listener: (entry: Settings) => void): this;
-			on(event: 'settingsUpdateEntry', listener: (oldEntry: Settings, newEntry: Settings, path?: string) => void): this;
+			on(event: 'settingsSync', listener: (entry: Settings) => void): this;
+			on(event: 'settingsCreate', listener: (entry: Settings) => void): this;
+			on(event: 'settingsDelete', listener: (entry: Settings) => void): this;
+			on(event: 'settingsUpdate', listener: (entry: Settings, changes: SettingsFolderUpdateResultEntry[]) => void): this;
 			on(event: 'log', listener: (data: any) => void): this;
 			on(event: 'verbose', listener: (data: any) => void): this;
 			on(event: 'wtf', listener: (failure: Error) => void): this;
@@ -1142,9 +1143,10 @@ declare module 'klasa' {
 			once(event: 'monitorError', listener: (message: KlasaMessage, monitor: Monitor, error: Error | string) => void): this;
 			once(event: 'finalizerError', listener: (message: KlasaMessage, response: KlasaMessage, runTime: Timestamp, finalizer: Finalizer, error: Error | string) => void): this;
 			once(event: 'taskError', listener: (scheduledTask: ScheduledTask, task: Task, error: Error) => void): this;
-			once(event: 'settingsCreateEntry', listener: (entry: Settings) => void): this;
-			once(event: 'settingsDeleteEntry', listener: (entry: Settings) => void): this;
-			once(event: 'settingsUpdateEntry', listener: (oldEntry: Settings, newEntry: Settings, path?: string) => void): this;
+			once(event: 'settingsSync', listener: (entry: Settings) => void): this;
+			once(event: 'settingsCreate', listener: (entry: Settings) => void): this;
+			once(event: 'settingsDelete', listener: (entry: Settings) => void): this;
+			once(event: 'settingsUpdate', listener: (entry: Settings, changes: SettingsFolderUpdateResultEntry[]) => void): this;
 			once(event: 'log', listener: (data: any) => void): this;
 			once(event: 'verbose', listener: (data: any) => void): this;
 			once(event: 'wtf', listener: (failure: Error) => void): this;
@@ -1206,9 +1208,10 @@ declare module 'klasa' {
 			off(event: 'monitorError', listener: (message: KlasaMessage, monitor: Monitor, error: Error | string) => void): this;
 			off(event: 'finalizerError', listener: (message: KlasaMessage, response: KlasaMessage, runTime: Timestamp, finalizer: Finalizer, error: Error | string) => void): this;
 			off(event: 'taskError', listener: (scheduledTask: ScheduledTask, task: Task, error: Error) => void): this;
-			off(event: 'settingsCreateEntry', listener: (entry: Settings) => void): this;
-			off(event: 'settingsDeleteEntry', listener: (entry: Settings) => void): this;
-			off(event: 'settingsUpdateEntry', listener: (oldEntry: Settings, newEntry: Settings, path?: string) => void): this;
+			off(event: 'settingsSync', listener: (entry: Settings) => void): this;
+			off(event: 'settingsCreate', listener: (entry: Settings) => void): this;
+			off(event: 'settingsDelete', listener: (entry: Settings) => void): this;
+			off(event: 'settingsUpdate', listener: (entry: Settings, changes: SettingsFolderUpdateResultEntry[]) => void): this;
 			off(event: 'log', listener: (data: any) => void): this;
 			off(event: 'verbose', listener: (data: any) => void): this;
 			off(event: 'wtf', listener: (failure: Error) => void): this;
