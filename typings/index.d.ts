@@ -53,6 +53,7 @@ declare module 'klasa' {
 		private _ready(): Promise<void>;
 
 		public sweepMessages(lifetime?: number, commandLifeTime?: number): number;
+		public static basePermissions: Permissions;
 		public static defaultGuildSchema: Schema;
 		public static defaultUserSchema: Schema;
 		public static defaultClientSchema: Schema;
