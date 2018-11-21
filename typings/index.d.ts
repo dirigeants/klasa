@@ -1003,7 +1003,6 @@ declare module 'klasa' {
 			readonly invite: string;
 			readonly owner: User | null;
 			options: Required<KlasaClientOptions>;
-
 			userBaseDirectory: string;
 			console: KlasaConsole;
 			arguments: ArgumentStore;
@@ -1270,7 +1269,7 @@ declare module 'klasa' {
 
 	}
 
-//#endregion
+//#endregion Augmentations
 
 //#region Typedefs
 
