@@ -1,7 +1,5 @@
 const { Collection } = require('discord.js');
 
-const empty = Symbol('empty');
-
 /**
  * Permission levels. See {@tutorial UnderstandingPermissionLevels} for more information how to use this class
  * to define custom permissions.
@@ -23,17 +21,6 @@ class PermissionLevels extends Collection {
 	 */
 
 	/**
-	 * Creates a new PermissionLevels
-	 * @since 0.2.1
-	 * @param {number} levels How many permission levels there should be
-	 */
-	constructor(levels = 11) {
-		super();
-
-		for (let i = 0; i < levels; i++) super.set(i, empty);
-	}
-
-	/**
 	 * Adds levels to the levels cache
 	 * @since 0.2.1
 	 * @param {number} level The permission number for the level you are defining
@@ -52,21 +39,21 @@ class PermissionLevels extends Collection {
 	 * @returns {this}
 	 */
 	remove(level) {
-		return this.set(level, empty);
+		this.delete(level);
+		return this;
 	}
 
 	/**
 	 * Adds levels to the levels cache to be converted to valid permission structure
 	 * @since 0.2.1
 	 * @param {number} level The permission number for the level you are defining
-	 * @param {PermissionLevelOptions|symbol} obj Whether the level should break (stop processing higher levels, and inhibit a no permission error)
+	 * @param {PermissionLevelOptions} obj Whether the level should break (stop processing higher levels, and inhibit a no permission error)
 	 * @returns {this}
 	 * @private
 	 */
 	set(level, obj) {
 		if (level < 0) throw new Error(`Cannot set permission level ${level}. Permission levels start at 0.`);
-		if (level > (this.size - 1)) throw new Error(`Cannot set permission level ${level}. Permission levels stop at ${this.size - 1}.`);
-		return super.set(level, obj);
+		return super.set(level, obj).sort();
 	}
 
 	/**
@@ -75,7 +62,7 @@ class PermissionLevels extends Collection {
 	 * @returns {boolean}
 	 */
 	isValid() {
-		return this.every(level => level === empty || (typeof level === 'object' && typeof level.break === 'boolean' && typeof level.fetch === 'boolean' && typeof level.check === 'function'));
+		return this.every(level => typeof level === 'object' && typeof level.break === 'boolean' && typeof level.fetch === 'boolean' && typeof level.check === 'function');
 	}
 
 	/**
@@ -86,7 +73,6 @@ class PermissionLevels extends Collection {
 	debug() {
 		const errors = [];
 		for (const [index, level] of this) {
-			if (level === empty) continue;
 			if (typeof level !== 'object') errors.push(`Permission level ${index} must be an object`);
 			if (typeof level.break !== 'boolean') errors.push(`"break" in permission level ${index} must be a boolean`);
 			if (typeof level.fetch !== 'boolean') errors.push(`"fetch" in permission level ${index} must be a boolean`);
@@ -103,15 +89,26 @@ class PermissionLevels extends Collection {
 	 * @returns {PermissionLevelsData}
 	 */
 	async run(message, min) {
-		for (let i = min; i < this.size; i++) {
-			const level = this.get(i);
-			if (level === empty) continue;
+		for (const [index, level] of this) {
+			if (index < min) continue;
 			if (level.fetch && !message.member && message.guild) await message.guild.members.fetch(message.author);
 			const res = await level.check(message);
 			if (res) return { broke: false, permission: true };
 			if (level.break) return { broke: true, permission: false };
 		}
 		return { broke: false, permission: false };
+	}
+
+	/**
+	 * Does an in-place sort
+	 * @since 0.5.0
+	 * @returns {this}
+	 */
+	sort() {
+		const entries = [...this.entries()].sort((a, b) => a[0] - b[0]);
+		this.clear();
+		for (const [key, value] of entries) this.set(key, value);
+		return this;
 	}
 
 	static get [Symbol.species]() {
