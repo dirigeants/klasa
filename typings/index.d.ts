@@ -1225,7 +1225,7 @@ declare module 'klasa' {
 			readonly language: Language;
 		}
 
-		export interface Message extends PartialPostable {
+		export interface Message extends PartialSendAliases {
 			guildSettings: Settings;
 			language: Language;
 			command: Command | null;
@@ -1242,30 +1242,15 @@ declare module 'klasa' {
 			hasAtLeastPermissionLevel(min: number): Promise<boolean>;
 		}
 
-		export interface User extends Postable {
+		export interface User extends SendAliases {
 			settings: Settings;
 		}
 
-		export interface TextChannel extends Postable {
-			readonly attachable: boolean;
-			readonly embedable: boolean;
-			readonly postable: boolean;
-			readonly readable: boolean;
-		}
+		export interface TextChannel extends SendAliases, ChannelExtendables { }
 
-		export interface DMChannel extends Postable {
-			readonly attachable: boolean;
-			readonly embedable: boolean;
-			readonly postable: boolean;
-			readonly readable: boolean;
-		}
+		export interface DMChannel extends SendAliases, ChannelExtendables { }
 
-		export interface GroupDMChannel extends Postable {
-			readonly attachable: boolean;
-			readonly embedable: boolean;
-			readonly postable: boolean;
-			readonly readable: boolean;
-		}
+		export interface GroupDMChannel extends SendAliases, ChannelExtendables { }
 
 	}
 
@@ -1947,7 +1932,7 @@ declare module 'klasa' {
 		guildmember: 'GuildMember';
 	} & ObjectLiteral<string>;
 
-	export interface PartialPostable {
+	export interface PartialSendAliases {
 		sendLocale(key: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 		sendLocale(key: string, localeArgs?: Array<any>, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 		sendMessage(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
@@ -1955,9 +1940,16 @@ declare module 'klasa' {
 		sendCode(language: string, content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 	}
 
-	export interface Postable extends PartialPostable {
+	export interface SendAliases extends PartialSendAliases {
 		sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 		sendFiles(attachments: MessageAttachment[], content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+	}
+
+	export interface ChannelExtendables {
+		readonly attachable: boolean;
+		readonly embedable: boolean;
+		readonly postable: boolean;
+		readonly readable: boolean;
 	}
 
 //#endregion
