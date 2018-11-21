@@ -1076,7 +1076,7 @@ declare module 'klasa' {
 	}
 
 	export class KlasaConsole {
-		private constructor(options: KlasaConsoleConfig);
+		private constructor(options?: KlasaConsoleOptions);
 		public readonly stdout: NodeJS.WritableStream;
 		public readonly stderr: NodeJS.WritableStream;
 		public template: Timestamp | null;
@@ -1327,7 +1327,7 @@ declare module 'klasa' {
 		commandEditing?: boolean;
 		commandLogging?: boolean;
 		commandMessageLifetime?: number;
-		console?: KlasaConsoleConfig;
+		console?: KlasaConsoleOptions;
 		consoleEvents?: KlasaConsoleEvents;
 		createPiecesFolders?: boolean;
 		customPromptDefaults?: KlasaCustomPromptDefaults;
@@ -1389,8 +1389,8 @@ declare module 'klasa' {
 
 	export type Constants = {
 		DEFAULTS: {
-			CLIENT: KlasaClientOptions,
-			CONSOLE: KlasaConsoleConfig,
+			CLIENT: Required<KlasaClientOptions>,
+			CONSOLE: Required<KlasaConsoleOptions>,
 			DATATYPES: ObjectLiteral<QueryBuilderDatatype>
 		};
 		TIME: {
@@ -1820,7 +1820,7 @@ declare module 'klasa' {
 		closing: string[];
 	};
 
-	export type KlasaConsoleConfig = {
+	export type KlasaConsoleOptions = {
 		utc?: boolean;
 		colors?: KlasaConsoleColorStyles;
 		stderr?: NodeJS.WritableStream;
@@ -1841,6 +1841,7 @@ declare module 'klasa' {
 	export type KlasaConsoleColorStyles = {
 		debug?: KlasaConsoleColorObjects;
 		error?: KlasaConsoleColorObjects;
+		info?: KlasaConsoleColorObjects;
 		log?: KlasaConsoleColorObjects;
 		verbose?: KlasaConsoleColorObjects;
 		warn?: KlasaConsoleColorObjects;
