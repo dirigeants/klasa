@@ -16,7 +16,7 @@ Pretend for a moment, that permission levels work like this:
 <!-- eslint-disable no-fallthrough -->
 
 ```javascript
-function permissionLevel(client, message) {
+function permissionLevel(message) {
 	switch (level) {
 		case 0:
 			return true;
@@ -31,10 +31,10 @@ function permissionLevel(client, message) {
 			if (message.guild && message.member === message.guild.owner) return true;
 		case 8:
 		case 9:
-			if (message.author === client.owner) return true;
+			if (message.author === message.client.owner) return true;
 			break;
 		case 10:
-			if (message.author === client.owner) return true;
+			if (message.author === message.client.owner) return true;
 			return false;
 	}
 	throw 'You don\'t have permission';
@@ -67,16 +67,16 @@ config.permissionLevels = new PermissionLevels()
 	// everyone can use these commands
 	.add(0, () => true)
 	// Members of guilds must have 'MANAGE_GUILD' permission
-	.add(6, (client, message) => message.guild && message.member.permissions.has('MANAGE_GUILD'), { fetch: true })
+	.add(6, ({ guild, member }) => guild && member.permissions.has('MANAGE_GUILD'), { fetch: true })
 	// The member using this command must be the guild owner
-	.add(7, (client, message) => message.guild && message.member === message.guild.owner, { fetch: true })
+	.add(7, ({ guild, member }) => guild && member === guild.owner, { fetch: true })
 	/*
 	 * Allows the Bot Owner to use any lower commands
 	 * and causes any command with a permission level 9 or lower to return an error if no check passes.
 	 */
-	.add(9, (client, message) => message.author === client.owner, { break: true })
+	.add(9, ({ author, client }) => author === client.owner, { break: true })
 	// Allows the bot owner to use Bot Owner only commands, which silently fail for other users.
-	.add(10, (client, message) => message.author === client.owner);
+	.add(10, ({ author, client }) => author === client.owner);
 
 new Client(config).login(config.token);
 ```
@@ -93,11 +93,11 @@ const config = require('./config.json');
 
 Client.defaultPermissionLevels
 	// let some group of people who solved some easteregg clues use a special command/some custom non-admin role
-	.add(3, (client, message) => message.guild.settings.solvers.includes(message.author.id))
+	.add(3, ({ guild, author }) => guild && guild.settings.solvers.includes(author.id))
 	// Make the requirements to use the conf command stricter than just who can add the bot to the guild
-	.add(6, (client, message) => message.guild && message.member.permissions.has('ADMINISTRATOR'), { fetch: true })
+	.add(6, ({ guild, member }) => guild && member.permissions.has('ADMINISTRATOR'), { fetch: true })
 	// add a role above guild owners that let your support team help setup/troubleshoot on other guilds.
-	.add(8, (client, message) => client.settings.botSupportTeam.includes(message.author.id));
+	.add(8, ({ client, author }) => client.settings.botSupportTeam.includes(author.id));
 
 new Client(config).login(config.token);
 ```
@@ -124,7 +124,7 @@ So you can have:
 
 ```javascript
 Client.defaultPermissionLevels
-	.add(3, async (client, message) => {
+	.add(3, async (message) => {
 		const value = await someAsyncFunction();
 		return value === someOtherValue;
 	});
