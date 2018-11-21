@@ -489,10 +489,10 @@ KlasaClient.basePermissions = new Permissions(3072);
  */
 KlasaClient.defaultPermissionLevels = new PermissionLevels()
 	.add(0, () => true)
-	.add(6, (client, message) => message.guild && message.member.permissions.has(FLAGS.MANAGE_GUILD), { fetch: true })
-	.add(7, (client, message) => message.guild && message.member === message.guild.owner, { fetch: true })
-	.add(9, (client, message) => message.author === client.owner, { break: true })
-	.add(10, (client, message) => message.author === client.owner);
+	.add(6, ({ guild, member }) => guild && member.permissions.has(FLAGS.MANAGE_GUILD), { fetch: true })
+	.add(7, ({ guild, member }) => guild && member === guild.owner, { fetch: true })
+	.add(9, ({ author, client }) => author === client.owner, { break: true })
+	.add(10, ({ author, client }) => author === client.owner);
 
 
 /**
