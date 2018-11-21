@@ -4,22 +4,22 @@ declare module 'klasa' {
 
 	import {
 		BufferResolvable,
-		CategoryChannel as DiscordCategoryChannel,
+		CategoryChannel,
 		Channel,
 		Client,
 		ClientApplication,
 		ClientOptions,
 		ClientUser,
 		Collection,
-		DMChannel as DiscordDMChannel,
+		DMChannel,
 		Emoji,
 		EmojiResolvable,
-		GroupDMChannel as DiscordGroupDMChannel,
-		Guild as DiscordGuild,
-		GuildChannel as DiscordGuildChannel,
+		GroupDMChannel,
+		Guild,
+		GuildChannel,
 		GuildEmoji,
 		GuildMember,
-		Message as DiscordMessage,
+		Message,
 		MessageAttachment,
 		MessageCollector,
 		MessageEmbed,
@@ -34,10 +34,10 @@ declare module 'klasa' {
 		Snowflake,
 		Speaking,
 		StringResolvable,
-		TextChannel as DiscordTextChannel,
-		User as DiscordUser,
+		TextChannel,
+		User,
 		UserResolvable,
-		VoiceChannel as DiscordVoiceChannel,
+		VoiceChannel,
 		VoiceState,
 		WebhookClient
 	} from 'discord.js';
@@ -48,228 +48,6 @@ declare module 'klasa' {
 
 	export class KlasaClient extends Client {
 		public constructor(options?: KlasaClientOptions);
-		public readonly invite: string;
-		public readonly owner: KlasaUser | null;
-		public options: Required<KlasaClientOptions>;
-		public userBaseDirectory: string;
-		public console: KlasaConsole;
-		public arguments: ArgumentStore;
-		public commands: CommandStore;
-		public inhibitors: InhibitorStore;
-		public finalizers: FinalizerStore;
-		public monitors: MonitorStore;
-		public languages: LanguageStore;
-		public providers: ProviderStore;
-		public tasks: TaskStore;
-		public serializers: SerializerStore;
-		public events: EventStore;
-		public extendables: ExtendableStore;
-		public pieceStores: Collection<string, any>;
-		public permissionLevels: PermissionLevels;
-		public gateways: GatewayDriver;
-		public settings: Settings | null;
-		public application: ClientApplication;
-		public schedule: Schedule;
-		public ready: boolean;
-
-		public registerStore<K, V extends Piece, VConstructor = Constructor<V>>(store: Store<K, V, VConstructor>): KlasaClient;
-		public unregisterStore<K, V extends Piece, VConstructor = Constructor<V>>(store: Store<K, V, VConstructor>): KlasaClient;
-
-		public on(event: string | symbol, listener: Function): this;
-		public on(event: 'channelCreate', listener: (channel: Channel) => void): this;
-		public on(event: 'channelDelete', listener: (channel: Channel) => void): this;
-		public on(event: 'channelPinsUpdate', listener: (channel: Channel, time: Date) => void): this;
-		public on(event: 'channelUpdate', listener: (oldChannel: Channel, newChannel: Channel) => void): this;
-		public on(event: 'debug', listener: (info: string) => void): this;
-		public on(event: 'warn', listener: (info: string) => void): this;
-		public on(event: 'disconnect', listener: (event: any) => void): this;
-		public on(event: 'emojiCreate', listener: (emoji: GuildEmoji) => void): this;
-		public on(event: 'emojiDelete', listener: (emoji: GuildEmoji) => void): this;
-		public on(event: 'emojiUpdate', listener: (oldEmoji: GuildEmoji, newEmoji: GuildEmoji) => void): this;
-		public on(event: 'error', listener: (error: Error) => void): this;
-		public on(event: 'guildBanAdd', listener: (guild: KlasaGuild, user: KlasaUser) => void): this;
-		public on(event: 'guildBanRemove', listener: (guild: KlasaGuild, user: KlasaUser) => void): this;
-		public on(event: 'guildCreate', listener: (guild: KlasaGuild) => void): this;
-		public on(event: 'guildDelete', listener: (guild: KlasaGuild) => void): this;
-		public on(event: 'guildUnavailable', listener: (guild: KlasaGuild) => void): this;
-		public on(event: 'guildMemberAdd', listener: (member: GuildMember) => void): this;
-		public on(event: 'guildMemberAvailable', listener: (member: GuildMember) => void): this;
-		public on(event: 'guildMemberRemove', listener: (member: GuildMember) => void): this;
-		public on(event: 'guildMembersChunk', listener: (members: Collection<Snowflake, GuildMember>, guild: KlasaGuild) => void): this;
-		public on(event: 'guildMemberSpeaking', listener: (member: GuildMember, speaking: Readonly<Speaking>) => void): this;
-		public on(event: 'guildMemberUpdate', listener: (oldMember: GuildMember, newMember: GuildMember) => void): this;
-		public on(event: 'guildUpdate', listener: (oldGuild: KlasaGuild, newGuild: KlasaGuild) => void): this;
-		public on(event: 'guildIntegrationsUpdate', listener: (guild: KlasaGuild) => void): this;
-		public on(event: 'message', listener: (message: KlasaMessage) => void): this;
-		public on(event: 'messageDelete', listener: (message: KlasaMessage) => void): this;
-		public on(event: 'messageReactionRemoveAll', listener: (message: KlasaMessage) => void): this;
-		public on(event: 'messageDeleteBulk', listener: (messages: Collection<Snowflake, KlasaMessage>) => void): this;
-		public on(event: 'messageReactionAdd', listener: (messageReaction: MessageReaction, user: KlasaUser) => void): this;
-		public on(event: 'messageReactionRemove', listener: (messageReaction: MessageReaction, user: KlasaUser) => void): this;
-		public on(event: 'messageUpdate', listener: (oldMessage: KlasaMessage, newMessage: KlasaMessage) => void): this;
-		public on(event: 'presenceUpdate', listener: (oldPresence: Presence | undefined, newPresence: Presence) => void): this;
-		public on(event: 'rateLimit', listener: (rateLimitData: RateLimitData) => void): this;
-		public on(event: 'ready', listener: () => void): this;
-		public on(event: 'reconnecting', listener: () => void): this;
-		public on(event: 'resumed', listener: (replayed: number) => void): this;
-		public on(event: 'roleCreate', listener: (role: Role) => void): this;
-		public on(event: 'roleDelete', listener: (role: Role) => void): this;
-		public on(event: 'roleUpdate', listener: (oldRole: Role, newRole: Role) => void): this;
-		public on(event: 'typingStart', listener: (channel: Channel, user: KlasaUser) => void): this;
-		public on(event: 'typingStop', listener: (channel: Channel, user: KlasaUser) => void): this;
-		public on(event: 'userUpdate', listener: (oldUser: KlasaUser, newUser: KlasaUser) => void): this;
-		public on(event: 'voiceStateUpdate', listener: (oldState: VoiceState, newState: VoiceState) => void): this;
-		public on(event: 'webhookUpdate', listener: (channel: KlasaTextChannel) => void): this;
-		public on(event: 'commandError', listener: (message: KlasaMessage, command: Command, params: any[], error: Error) => void): this;
-		public on(event: 'commandInhibited', listener: (message: KlasaMessage, command: Command, response: string | Error) => void): this;
-		public on(event: 'commandRun', listener: (message: KlasaMessage, command: Command, params: any[], response: any) => void): this;
-		public on(event: 'commandSuccess', listener: (message: KlasaMessage, command: Command, params: any[], response: any) => void): this;
-		public on(event: 'commandUnknown', listener: (message: KlasaMessage, command: string) => void): this;
-		public on(event: 'monitorError', listener: (message: KlasaMessage, monitor: Monitor, error: Error | string) => void): this;
-		public on(event: 'finalizerError', listener: (message: KlasaMessage, response: KlasaMessage, runTime: Timestamp, finalizer: Finalizer, error: Error | string) => void): this;
-		public on(event: 'taskError', listener: (scheduledTask: ScheduledTask, task: Task, error: Error) => void): this;
-		public on(event: 'settingsCreateEntry', listener: (entry: Settings) => void): this;
-		public on(event: 'settingsDeleteEntry', listener: (entry: Settings) => void): this;
-		public on(event: 'settingsUpdateEntry', listener: (oldEntry: Settings, newEntry: Settings, path?: string) => void): this;
-		public on(event: 'log', listener: (data: any) => void): this;
-		public on(event: 'verbose', listener: (data: any) => void): this;
-		public on(event: 'wtf', listener: (failure: Error) => void): this;
-		public on(event: 'pieceDisabled', listener: (piece: Piece) => void): this;
-		public on(event: 'pieceEnabled', listener: (piece: Piece) => void): this;
-		public on(event: 'pieceLoaded', listener: (piece: Piece) => void): this;
-		public on(event: 'pieceReloaded', listener: (piece: Piece) => void): this;
-		public on(event: 'pieceUnloaded', listener: (piece: Piece) => void): this;
-
-		public once(event: string | symbol, listener: Function): this;
-		public once(event: 'channelCreate', listener: (channel: Channel) => void): this;
-		public once(event: 'channelDelete', listener: (channel: Channel) => void): this;
-		public once(event: 'channelPinsUpdate', listener: (channel: Channel, time: Date) => void): this;
-		public once(event: 'channelUpdate', listener: (oldChannel: Channel, newChannel: Channel) => void): this;
-		public once(event: 'debug', listener: (info: string) => void): this;
-		public once(event: 'warn', listener: (info: string) => void): this;
-		public once(event: 'disconnect', listener: (event: any) => void): this;
-		public once(event: 'emojiCreate', listener: (emoji: GuildEmoji) => void): this;
-		public once(event: 'emojiDelete', listener: (emoji: GuildEmoji) => void): this;
-		public once(event: 'emojiUpdate', listener: (oldEmoji: GuildEmoji, newEmoji: GuildEmoji) => void): this;
-		public once(event: 'error', listener: (error: Error) => void): this;
-		public once(event: 'guildBanAdd', listener: (guild: KlasaGuild, user: KlasaUser) => void): this;
-		public once(event: 'guildBanRemove', listener: (guild: KlasaGuild, user: KlasaUser) => void): this;
-		public once(event: 'guildCreate', listener: (guild: KlasaGuild) => void): this;
-		public once(event: 'guildDelete', listener: (guild: KlasaGuild) => void): this;
-		public once(event: 'guildUnavailable', listener: (guild: KlasaGuild) => void): this;
-		public once(event: 'guildMemberAdd', listener: (member: GuildMember) => void): this;
-		public once(event: 'guildMemberAvailable', listener: (member: GuildMember) => void): this;
-		public once(event: 'guildMemberRemove', listener: (member: GuildMember) => void): this;
-		public once(event: 'guildMembersChunk', listener: (members: Collection<Snowflake, GuildMember>, guild: KlasaGuild) => void): this;
-		public once(event: 'guildMemberSpeaking', listener: (member: GuildMember, speaking: Readonly<Speaking>) => void): this;
-		public once(event: 'guildMemberUpdate', listener: (oldMember: GuildMember, newMember: GuildMember) => void): this;
-		public once(event: 'guildUpdate', listener: (oldGuild: KlasaGuild, newGuild: KlasaGuild) => void): this;
-		public once(event: 'guildIntegrationsUpdate', listener: (guild: KlasaGuild) => void): this;
-		public once(event: 'message', listener: (message: KlasaMessage) => void): this;
-		public once(event: 'messageDelete', listener: (message: KlasaMessage) => void): this;
-		public once(event: 'messageReactionRemoveAll', listener: (message: KlasaMessage) => void): this;
-		public once(event: 'messageDeleteBulk', listener: (messages: Collection<Snowflake, KlasaMessage>) => void): this;
-		public once(event: 'messageReactionAdd', listener: (messageReaction: MessageReaction, user: KlasaUser) => void): this;
-		public once(event: 'messageReactionRemove', listener: (messageReaction: MessageReaction, user: KlasaUser) => void): this;
-		public once(event: 'messageUpdate', listener: (oldMessage: KlasaMessage, newMessage: KlasaMessage) => void): this;
-		public once(event: 'presenceUpdate', listener: (oldPresence: Presence | undefined, newPresence: Presence) => void): this;
-		public once(event: 'rateLimit', listener: (rateLimitData: RateLimitData) => void): this;
-		public once(event: 'ready', listener: () => void): this;
-		public once(event: 'reconnecting', listener: () => void): this;
-		public once(event: 'resumed', listener: (replayed: number) => void): this;
-		public once(event: 'roleCreate', listener: (role: Role) => void): this;
-		public once(event: 'roleDelete', listener: (role: Role) => void): this;
-		public once(event: 'roleUpdate', listener: (oldRole: Role, newRole: Role) => void): this;
-		public once(event: 'typingStart', listener: (channel: Channel, user: KlasaUser) => void): this;
-		public once(event: 'typingStop', listener: (channel: Channel, user: KlasaUser) => void): this;
-		public once(event: 'userUpdate', listener: (oldUser: KlasaUser, newUser: KlasaUser) => void): this;
-		public once(event: 'voiceStateUpdate', listener: (oldState: VoiceState, newState: VoiceState) => void): this;
-		public once(event: 'webhookUpdate', listener: (channel: KlasaTextChannel) => void): this;
-		public once(event: 'commandError', listener: (message: KlasaMessage, command: Command, params: any[], error: Error) => void): this;
-		public once(event: 'commandInhibited', listener: (message: KlasaMessage, command: Command, response: string | Error) => void): this;
-		public once(event: 'commandRun', listener: (message: KlasaMessage, command: Command, params: any[], response: any) => void): this;
-		public once(event: 'commandSuccess', listener: (message: KlasaMessage, command: Command, params: any[], response: any) => void): this;
-		public once(event: 'commandUnknown', listener: (message: KlasaMessage, command: string) => void): this;
-		public once(event: 'monitorError', listener: (message: KlasaMessage, monitor: Monitor, error: Error | string) => void): this;
-		public once(event: 'finalizerError', listener: (message: KlasaMessage, response: KlasaMessage, runTime: Timestamp, finalizer: Finalizer, error: Error | string) => void): this;
-		public once(event: 'taskError', listener: (scheduledTask: ScheduledTask, task: Task, error: Error) => void): this;
-		public once(event: 'settingsCreateEntry', listener: (entry: Settings) => void): this;
-		public once(event: 'settingsDeleteEntry', listener: (entry: Settings) => void): this;
-		public once(event: 'settingsUpdateEntry', listener: (oldEntry: Settings, newEntry: Settings, path?: string) => void): this;
-		public once(event: 'log', listener: (data: any) => void): this;
-		public once(event: 'verbose', listener: (data: any) => void): this;
-		public once(event: 'wtf', listener: (failure: Error) => void): this;
-		public once(event: 'pieceDisabled', listener: (piece: Piece) => void): this;
-		public once(event: 'pieceEnabled', listener: (piece: Piece) => void): this;
-		public once(event: 'pieceLoaded', listener: (piece: Piece) => void): this;
-		public once(event: 'pieceReloaded', listener: (piece: Piece) => void): this;
-		public once(event: 'pieceUnloaded', listener: (piece: Piece) => void): this;
-
-		public off(event: string | symbol, listener: Function): this;
-		public off(event: 'channelCreate', listener: (channel: Channel) => void): this;
-		public off(event: 'channelDelete', listener: (channel: Channel) => void): this;
-		public off(event: 'channelPinsUpdate', listener: (channel: Channel, time: Date) => void): this;
-		public off(event: 'channelUpdate', listener: (oldChannel: Channel, newChannel: Channel) => void): this;
-		public off(event: 'debug', listener: (info: string) => void): this;
-		public off(event: 'warn', listener: (info: string) => void): this;
-		public off(event: 'disconnect', listener: (event: any) => void): this;
-		public off(event: 'emojiCreate', listener: (emoji: GuildEmoji) => void): this;
-		public off(event: 'emojiDelete', listener: (emoji: GuildEmoji) => void): this;
-		public off(event: 'emojiUpdate', listener: (oldEmoji: GuildEmoji, newEmoji: GuildEmoji) => void): this;
-		public off(event: 'error', listener: (error: Error) => void): this;
-		public off(event: 'guildBanAdd', listener: (guild: KlasaGuild, user: KlasaUser) => void): this;
-		public off(event: 'guildBanRemove', listener: (guild: KlasaGuild, user: KlasaUser) => void): this;
-		public off(event: 'guildCreate', listener: (guild: KlasaGuild) => void): this;
-		public off(event: 'guildDelete', listener: (guild: KlasaGuild) => void): this;
-		public off(event: 'guildUnavailable', listener: (guild: KlasaGuild) => void): this;
-		public off(event: 'guildMemberAdd', listener: (member: GuildMember) => void): this;
-		public off(event: 'guildMemberAvailable', listener: (member: GuildMember) => void): this;
-		public off(event: 'guildMemberRemove', listener: (member: GuildMember) => void): this;
-		public off(event: 'guildMembersChunk', listener: (members: Collection<Snowflake, GuildMember>, guild: KlasaGuild) => void): this;
-		public off(event: 'guildMemberSpeaking', listener: (member: GuildMember, speaking: Readonly<Speaking>) => void): this;
-		public off(event: 'guildMemberUpdate', listener: (oldMember: GuildMember, newMember: GuildMember) => void): this;
-		public off(event: 'guildUpdate', listener: (oldGuild: KlasaGuild, newGuild: KlasaGuild) => void): this;
-		public off(event: 'guildIntegrationsUpdate', listener: (guild: KlasaGuild) => void): this;
-		public off(event: 'message', listener: (message: KlasaMessage) => void): this;
-		public off(event: 'messageDelete', listener: (message: KlasaMessage) => void): this;
-		public off(event: 'messageReactionRemoveAll', listener: (message: KlasaMessage) => void): this;
-		public off(event: 'messageDeleteBulk', listener: (messages: Collection<Snowflake, KlasaMessage>) => void): this;
-		public off(event: 'messageReactionAdd', listener: (messageReaction: MessageReaction, user: KlasaUser) => void): this;
-		public off(event: 'messageReactionRemove', listener: (messageReaction: MessageReaction, user: KlasaUser) => void): this;
-		public off(event: 'messageUpdate', listener: (oldMessage: KlasaMessage, newMessage: KlasaMessage) => void): this;
-		public off(event: 'presenceUpdate', listener: (oldPresence: Presence | undefined, newPresence: Presence) => void): this;
-		public off(event: 'rateLimit', listener: (rateLimitData: RateLimitData) => void): this;
-		public off(event: 'ready', listener: () => void): this;
-		public off(event: 'reconnecting', listener: () => void): this;
-		public off(event: 'resumed', listener: (replayed: number) => void): this;
-		public off(event: 'roleCreate', listener: (role: Role) => void): this;
-		public off(event: 'roleDelete', listener: (role: Role) => void): this;
-		public off(event: 'roleUpdate', listener: (oldRole: Role, newRole: Role) => void): this;
-		public off(event: 'typingStart', listener: (channel: Channel, user: KlasaUser) => void): this;
-		public off(event: 'typingStop', listener: (channel: Channel, user: KlasaUser) => void): this;
-		public off(event: 'userUpdate', listener: (oldUser: KlasaUser, newUser: KlasaUser) => void): this;
-		public off(event: 'voiceStateUpdate', listener: (oldState: VoiceState, newState: VoiceState) => void): this;
-		public off(event: 'webhookUpdate', listener: (channel: KlasaTextChannel) => void): this;
-		public off(event: 'commandError', listener: (message: KlasaMessage, command: Command, params: any[], error: Error) => void): this;
-		public off(event: 'commandInhibited', listener: (message: KlasaMessage, command: Command, response: string | Error) => void): this;
-		public off(event: 'commandRun', listener: (message: KlasaMessage, command: Command, params: any[], response: any) => void): this;
-		public off(event: 'commandSuccess', listener: (message: KlasaMessage, command: Command, params: any[], response: any) => void): this;
-		public off(event: 'commandUnknown', listener: (message: KlasaMessage, command: string) => void): this;
-		public off(event: 'monitorError', listener: (message: KlasaMessage, monitor: Monitor, error: Error | string) => void): this;
-		public off(event: 'finalizerError', listener: (message: KlasaMessage, response: KlasaMessage, runTime: Timestamp, finalizer: Finalizer, error: Error | string) => void): this;
-		public off(event: 'taskError', listener: (scheduledTask: ScheduledTask, task: Task, error: Error) => void): this;
-		public off(event: 'settingsCreateEntry', listener: (entry: Settings) => void): this;
-		public off(event: 'settingsDeleteEntry', listener: (entry: Settings) => void): this;
-		public off(event: 'settingsUpdateEntry', listener: (oldEntry: Settings, newEntry: Settings, path?: string) => void): this;
-		public off(event: 'log', listener: (data: any) => void): this;
-		public off(event: 'verbose', listener: (data: any) => void): this;
-		public off(event: 'wtf', listener: (failure: Error) => void): this;
-		public off(event: 'pieceDisabled', listener: (piece: Piece) => void): this;
-		public off(event: 'pieceEnabled', listener: (piece: Piece) => void): this;
-		public off(event: 'pieceLoaded', listener: (piece: Piece) => void): this;
-		public off(event: 'pieceReloaded', listener: (piece: Piece) => void): this;
-		public off(event: 'pieceUnloaded', listener: (piece: Piece) => void): this;
-
 		public login(token?: string): Promise<string>;
 		private validatePermissionLevels(): PermissionLevels;
 		private _ready(): Promise<void>;
@@ -287,125 +65,20 @@ declare module 'klasa' {
 
 //#region Extensions
 
-	export class KlasaGuild extends DiscordGuild {
+	export class KlasaGuild extends Guild {
 		public settings: Settings;
 		public readonly language: Language;
 	}
 
-	export class KlasaMessage extends DiscordMessage {
-		public readonly guild: KlasaGuild;
-		public guildSettings: Settings;
-		public language: Language;
-		public command: Command | null;
-		public prefix: RegExp | null;
-		public prefixLength: number | null;
-		public author: KlasaUser;
+	export class KlasaMessage extends Message {
 		private levelID: Snowflake | null;
 		private prompter: CommandPrompt | null;
 		private _responses: KlasaMessage[];
-
-		public readonly responses: KlasaMessage[];
-		public readonly args: string[];
-		public readonly params: any[];
-		public readonly flags: ObjectLiteral<string>;
-		public readonly reprompted: boolean;
-		public readonly reactable: boolean;
-		public prompt(text: string, time?: number): Promise<KlasaMessage>;
-		public usableCommands(): Promise<Collection<string, Command>>;
-		public hasAtLeastPermissionLevel(min: number): Promise<boolean>;
-
-		public sendLocale(key: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendLocale(key: string, localeArgs?: Array<any>, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendMessage(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendEmbed(embed: MessageEmbed, content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendCode(language: string, content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public send(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-
 		private _patch(data: any): void;
 		private _registerCommand(commandInfo: { command: Command, prefix: RegExp, prefixLength: number }): this;
 	}
 
-	export class KlasaUser extends DiscordUser {
-		public settings: Settings;
-		public send(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public send(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendLocale(key: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendLocale(key: string, localeArgs?: Array<any>, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendEmbed(embed: MessageEmbed, content?: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendEmbed(embed: MessageEmbed, options?: MessageOptions): Promise<KlasaMessage>;
-		public sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendFiles(attachments: MessageAttachment[], content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendMessage(content?: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendMessage(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-	}
-
-	export class KlasaTextChannel extends DiscordTextChannel {
-		public readonly attachable: boolean;
-		public readonly embedable: boolean;
-		public readonly postable: boolean;
-		public readonly readable: boolean;
-		public readonly guild: KlasaGuild;
-		public send(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public send(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendLocale(key: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendLocale(key: string, localeArgs?: Array<any>, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendEmbed(embed: MessageEmbed, content?: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendEmbed(embed: MessageEmbed, options?: MessageOptions): Promise<KlasaMessage>;
-		public sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendFiles(attachments: MessageAttachment[], content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendMessage(content?: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendMessage(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-	}
-
-	export class KlasaGuildChannel extends DiscordGuildChannel {
-		public readonly guild: KlasaGuild;
-	}
-
-	export class KlasaVoiceChannel extends DiscordVoiceChannel {
-		public readonly guild: KlasaGuild;
-	}
-
-	export class KlasaCategoryChannel extends DiscordCategoryChannel {
-		public readonly guild: KlasaGuild;
-	}
-
-	export class KlasaDMChannel extends DiscordDMChannel {
-		public readonly attachable: boolean;
-		public readonly embedable: boolean;
-		public readonly postable: boolean;
-		public readonly readable: boolean;
-		public send(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public send(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendLocale(key: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendLocale(key: string, localeArgs?: Array<any>, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendEmbed(embed: MessageEmbed, content?: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendEmbed(embed: MessageEmbed, options?: MessageOptions): Promise<KlasaMessage>;
-		public sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendFiles(attachments: MessageAttachment[], content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendMessage(content?: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendMessage(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-	}
-
-	export class KlasaGroupDMChannel extends DiscordGroupDMChannel {
-		public readonly attachable: boolean;
-		public readonly embedable: boolean;
-		public readonly postable: boolean;
-		public readonly readable: boolean;
-		public send(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public send(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendLocale(key: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendLocale(key: string, localeArgs?: Array<any>, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendCode(lang: string, content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendEmbed(embed: MessageEmbed, content?: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendEmbed(embed: MessageEmbed, options?: MessageOptions): Promise<KlasaMessage>;
-		public sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendFiles(attachments: MessageAttachment[], content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendMessage(content?: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		public sendMessage(options: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-	}
+	export class KlasaUser extends User {}
 
 //#endregion Extensions
 
@@ -453,13 +126,13 @@ declare module 'klasa' {
 		public role(input: Role | Snowflake, guild: KlasaGuild): Promise<Role>;
 		public string(data: any, guild: KlasaGuild, name: string, minMax: { min: number, max: number }): Promise<string>;
 		public string(input: string): Promise<string>;
-		public textchannel(data: any, guild: KlasaGuild, name: string): Promise<KlasaTextChannel>;
+		public textchannel(data: any, guild: KlasaGuild, name: string): Promise<TextChannel>;
 		public url(data: any, guild: KlasaGuild, name: string): Promise<string>;
 		public url(input: string): Promise<string>;
 		public user(data: any, guild: KlasaGuild, name: string): Promise<KlasaUser>;
 		public user(input: KlasaUser | GuildMember | KlasaMessage | Snowflake): Promise<KlasaUser>;
-		public voicechannel(data: any, guild: KlasaGuild, name: string): Promise<KlasaVoiceChannel>;
-		public categorychannel(data: any, guild: KlasaGuild, name: string): Promise<KlasaCategoryChannel>;
+		public voicechannel(data: any, guild: KlasaGuild, name: string): Promise<VoiceChannel>;
+		public categorychannel(data: any, guild: KlasaGuild, name: string): Promise<VoiceChannel>;
 
 		public static maxOrMin(guild: KlasaGuild, value: number, min: number, max: number, name: string, suffix: string): boolean;
 	}
@@ -1321,6 +994,284 @@ declare module 'klasa' {
 
 //#endregion Classes
 
+//#region Augmentations
+
+	module 'discord.js' {
+
+		export interface Client {
+			constructor: typeof KlasaClient;
+			readonly invite: string;
+			readonly owner: User | null;
+			options: Required<KlasaClientOptions>;
+
+			userBaseDirectory: string;
+			console: KlasaConsole;
+			arguments: ArgumentStore;
+			commands: CommandStore;
+			inhibitors: InhibitorStore;
+			finalizers: FinalizerStore;
+			monitors: MonitorStore;
+			languages: LanguageStore;
+			providers: ProviderStore;
+			tasks: TaskStore;
+			serializers: SerializerStore;
+			events: EventStore;
+			extendables: ExtendableStore;
+			pieceStores: Collection<string, any>;
+			permissionLevels: PermissionLevels;
+			gateways: GatewayDriver;
+			settings: Settings | null;
+			application: ClientApplication;
+			schedule: Schedule;
+			ready: boolean;
+			registerStore<K, V extends Piece, VConstructor = Constructor<V>>(store: Store<K, V, VConstructor>): KlasaClient;
+			unregisterStore<K, V extends Piece, VConstructor = Constructor<V>>(store: Store<K, V, VConstructor>): KlasaClient;
+			sweepMessages(lifetime?: number, commandLifeTime?: number): number;
+			on(event: string | symbol, listener: Function): this;
+			on(event: 'channelCreate', listener: (channel: Channel) => void): this;
+			on(event: 'channelDelete', listener: (channel: Channel) => void): this;
+			on(event: 'channelPinsUpdate', listener: (channel: Channel, time: Date) => void): this;
+			on(event: 'channelUpdate', listener: (oldChannel: Channel, newChannel: Channel) => void): this;
+			on(event: 'debug', listener: (info: string) => void): this;
+			on(event: 'warn', listener: (info: string) => void): this;
+			on(event: 'disconnect', listener: (event: any) => void): this;
+			on(event: 'emojiCreate', listener: (emoji: GuildEmoji) => void): this;
+			on(event: 'emojiDelete', listener: (emoji: GuildEmoji) => void): this;
+			on(event: 'emojiUpdate', listener: (oldEmoji: GuildEmoji, newEmoji: GuildEmoji) => void): this;
+			on(event: 'error', listener: (error: Error) => void): this;
+			on(event: 'guildBanAdd', listener: (guild: KlasaGuild, user: KlasaUser) => void): this;
+			on(event: 'guildBanRemove', listener: (guild: KlasaGuild, user: KlasaUser) => void): this;
+			on(event: 'guildCreate', listener: (guild: KlasaGuild) => void): this;
+			on(event: 'guildDelete', listener: (guild: KlasaGuild) => void): this;
+			on(event: 'guildUnavailable', listener: (guild: KlasaGuild) => void): this;
+			on(event: 'guildMemberAdd', listener: (member: GuildMember) => void): this;
+			on(event: 'guildMemberAvailable', listener: (member: GuildMember) => void): this;
+			on(event: 'guildMemberRemove', listener: (member: GuildMember) => void): this;
+			on(event: 'guildMembersChunk', listener: (members: Collection<Snowflake, GuildMember>, guild: KlasaGuild) => void): this;
+			on(event: 'guildMemberSpeaking', listener: (member: GuildMember, speaking: Readonly<Speaking>) => void): this;
+			on(event: 'guildMemberUpdate', listener: (oldMember: GuildMember, newMember: GuildMember) => void): this;
+			on(event: 'guildUpdate', listener: (oldGuild: KlasaGuild, newGuild: KlasaGuild) => void): this;
+			on(event: 'guildIntegrationsUpdate', listener: (guild: KlasaGuild) => void): this;
+			on(event: 'message', listener: (message: KlasaMessage) => void): this;
+			on(event: 'messageDelete', listener: (message: KlasaMessage) => void): this;
+			on(event: 'messageReactionRemoveAll', listener: (message: KlasaMessage) => void): this;
+			on(event: 'messageDeleteBulk', listener: (messages: Collection<Snowflake, KlasaMessage>) => void): this;
+			on(event: 'messageReactionAdd', listener: (messageReaction: MessageReaction, user: KlasaUser) => void): this;
+			on(event: 'messageReactionRemove', listener: (messageReaction: MessageReaction, user: KlasaUser) => void): this;
+			on(event: 'messageUpdate', listener: (oldMessage: KlasaMessage, newMessage: KlasaMessage) => void): this;
+			on(event: 'presenceUpdate', listener: (oldPresence: Presence | undefined, newPresence: Presence) => void): this;
+			on(event: 'rateLimit', listener: (rateLimitData: RateLimitData) => void): this;
+			on(event: 'ready', listener: () => void): this;
+			on(event: 'reconnecting', listener: () => void): this;
+			on(event: 'resumed', listener: (replayed: number) => void): this;
+			on(event: 'roleCreate', listener: (role: Role) => void): this;
+			on(event: 'roleDelete', listener: (role: Role) => void): this;
+			on(event: 'roleUpdate', listener: (oldRole: Role, newRole: Role) => void): this;
+			on(event: 'typingStart', listener: (channel: Channel, user: KlasaUser) => void): this;
+			on(event: 'typingStop', listener: (channel: Channel, user: KlasaUser) => void): this;
+			on(event: 'userUpdate', listener: (oldUser: KlasaUser, newUser: KlasaUser) => void): this;
+			on(event: 'voiceStateUpdate', listener: (oldState: VoiceState, newState: VoiceState) => void): this;
+			on(event: 'webhookUpdate', listener: (channel: TextChannel) => void): this;
+			on(event: 'commandError', listener: (message: KlasaMessage, command: Command, params: any[], error: Error) => void): this;
+			on(event: 'commandInhibited', listener: (message: KlasaMessage, command: Command, response: string | Error) => void): this;
+			on(event: 'commandRun', listener: (message: KlasaMessage, command: Command, params: any[], response: any) => void): this;
+			on(event: 'commandSuccess', listener: (message: KlasaMessage, command: Command, params: any[], response: any) => void): this;
+			on(event: 'commandUnknown', listener: (message: KlasaMessage, command: string) => void): this;
+			on(event: 'monitorError', listener: (message: KlasaMessage, monitor: Monitor, error: Error | string) => void): this;
+			on(event: 'finalizerError', listener: (message: KlasaMessage, response: KlasaMessage, runTime: Timestamp, finalizer: Finalizer, error: Error | string) => void): this;
+			on(event: 'taskError', listener: (scheduledTask: ScheduledTask, task: Task, error: Error) => void): this;
+			on(event: 'settingsCreateEntry', listener: (entry: Settings) => void): this;
+			on(event: 'settingsDeleteEntry', listener: (entry: Settings) => void): this;
+			on(event: 'settingsUpdateEntry', listener: (oldEntry: Settings, newEntry: Settings, path?: string) => void): this;
+			on(event: 'log', listener: (data: any) => void): this;
+			on(event: 'verbose', listener: (data: any) => void): this;
+			on(event: 'wtf', listener: (failure: Error) => void): this;
+			on(event: 'pieceDisabled', listener: (piece: Piece) => void): this;
+			on(event: 'pieceEnabled', listener: (piece: Piece) => void): this;
+			on(event: 'pieceLoaded', listener: (piece: Piece) => void): this;
+			on(event: 'pieceReloaded', listener: (piece: Piece) => void): this;
+			on(event: 'pieceUnloaded', listener: (piece: Piece) => void): this;
+			once(event: string | symbol, listener: Function): this;
+			once(event: 'channelCreate', listener: (channel: Channel) => void): this;
+			once(event: 'channelDelete', listener: (channel: Channel) => void): this;
+			once(event: 'channelPinsUpdate', listener: (channel: Channel, time: Date) => void): this;
+			once(event: 'channelUpdate', listener: (oldChannel: Channel, newChannel: Channel) => void): this;
+			once(event: 'debug', listener: (info: string) => void): this;
+			once(event: 'warn', listener: (info: string) => void): this;
+			once(event: 'disconnect', listener: (event: any) => void): this;
+			once(event: 'emojiCreate', listener: (emoji: GuildEmoji) => void): this;
+			once(event: 'emojiDelete', listener: (emoji: GuildEmoji) => void): this;
+			once(event: 'emojiUpdate', listener: (oldEmoji: GuildEmoji, newEmoji: GuildEmoji) => void): this;
+			once(event: 'error', listener: (error: Error) => void): this;
+			once(event: 'guildBanAdd', listener: (guild: KlasaGuild, user: KlasaUser) => void): this;
+			once(event: 'guildBanRemove', listener: (guild: KlasaGuild, user: KlasaUser) => void): this;
+			once(event: 'guildCreate', listener: (guild: KlasaGuild) => void): this;
+			once(event: 'guildDelete', listener: (guild: KlasaGuild) => void): this;
+			once(event: 'guildUnavailable', listener: (guild: KlasaGuild) => void): this;
+			once(event: 'guildMemberAdd', listener: (member: GuildMember) => void): this;
+			once(event: 'guildMemberAvailable', listener: (member: GuildMember) => void): this;
+			once(event: 'guildMemberRemove', listener: (member: GuildMember) => void): this;
+			once(event: 'guildMembersChunk', listener: (members: Collection<Snowflake, GuildMember>, guild: KlasaGuild) => void): this;
+			once(event: 'guildMemberSpeaking', listener: (member: GuildMember, speaking: Readonly<Speaking>) => void): this;
+			once(event: 'guildMemberUpdate', listener: (oldMember: GuildMember, newMember: GuildMember) => void): this;
+			once(event: 'guildUpdate', listener: (oldGuild: KlasaGuild, newGuild: KlasaGuild) => void): this;
+			once(event: 'guildIntegrationsUpdate', listener: (guild: KlasaGuild) => void): this;
+			once(event: 'message', listener: (message: KlasaMessage) => void): this;
+			once(event: 'messageDelete', listener: (message: KlasaMessage) => void): this;
+			once(event: 'messageReactionRemoveAll', listener: (message: KlasaMessage) => void): this;
+			once(event: 'messageDeleteBulk', listener: (messages: Collection<Snowflake, KlasaMessage>) => void): this;
+			once(event: 'messageReactionAdd', listener: (messageReaction: MessageReaction, user: KlasaUser) => void): this;
+			once(event: 'messageReactionRemove', listener: (messageReaction: MessageReaction, user: KlasaUser) => void): this;
+			once(event: 'messageUpdate', listener: (oldMessage: KlasaMessage, newMessage: KlasaMessage) => void): this;
+			once(event: 'presenceUpdate', listener: (oldPresence: Presence | undefined, newPresence: Presence) => void): this;
+			once(event: 'rateLimit', listener: (rateLimitData: RateLimitData) => void): this;
+			once(event: 'ready', listener: () => void): this;
+			once(event: 'reconnecting', listener: () => void): this;
+			once(event: 'resumed', listener: (replayed: number) => void): this;
+			once(event: 'roleCreate', listener: (role: Role) => void): this;
+			once(event: 'roleDelete', listener: (role: Role) => void): this;
+			once(event: 'roleUpdate', listener: (oldRole: Role, newRole: Role) => void): this;
+			once(event: 'typingStart', listener: (channel: Channel, user: KlasaUser) => void): this;
+			once(event: 'typingStop', listener: (channel: Channel, user: KlasaUser) => void): this;
+			once(event: 'userUpdate', listener: (oldUser: KlasaUser, newUser: KlasaUser) => void): this;
+			once(event: 'voiceStateUpdate', listener: (oldState: VoiceState, newState: VoiceState) => void): this;
+			once(event: 'webhookUpdate', listener: (channel: TextChannel) => void): this;
+			once(event: 'commandError', listener: (message: KlasaMessage, command: Command, params: any[], error: Error) => void): this;
+			once(event: 'commandInhibited', listener: (message: KlasaMessage, command: Command, response: string | Error) => void): this;
+			once(event: 'commandRun', listener: (message: KlasaMessage, command: Command, params: any[], response: any) => void): this;
+			once(event: 'commandSuccess', listener: (message: KlasaMessage, command: Command, params: any[], response: any) => void): this;
+			once(event: 'commandUnknown', listener: (message: KlasaMessage, command: string) => void): this;
+			once(event: 'monitorError', listener: (message: KlasaMessage, monitor: Monitor, error: Error | string) => void): this;
+			once(event: 'finalizerError', listener: (message: KlasaMessage, response: KlasaMessage, runTime: Timestamp, finalizer: Finalizer, error: Error | string) => void): this;
+			once(event: 'taskError', listener: (scheduledTask: ScheduledTask, task: Task, error: Error) => void): this;
+			once(event: 'settingsCreateEntry', listener: (entry: Settings) => void): this;
+			once(event: 'settingsDeleteEntry', listener: (entry: Settings) => void): this;
+			once(event: 'settingsUpdateEntry', listener: (oldEntry: Settings, newEntry: Settings, path?: string) => void): this;
+			once(event: 'log', listener: (data: any) => void): this;
+			once(event: 'verbose', listener: (data: any) => void): this;
+			once(event: 'wtf', listener: (failure: Error) => void): this;
+			once(event: 'pieceDisabled', listener: (piece: Piece) => void): this;
+			once(event: 'pieceEnabled', listener: (piece: Piece) => void): this;
+			once(event: 'pieceLoaded', listener: (piece: Piece) => void): this;
+			once(event: 'pieceReloaded', listener: (piece: Piece) => void): this;
+			once(event: 'pieceUnloaded', listener: (piece: Piece) => void): this;
+			off(event: string | symbol, listener: Function): this;
+			off(event: 'channelCreate', listener: (channel: Channel) => void): this;
+			off(event: 'channelDelete', listener: (channel: Channel) => void): this;
+			off(event: 'channelPinsUpdate', listener: (channel: Channel, time: Date) => void): this;
+			off(event: 'channelUpdate', listener: (oldChannel: Channel, newChannel: Channel) => void): this;
+			off(event: 'debug', listener: (info: string) => void): this;
+			off(event: 'warn', listener: (info: string) => void): this;
+			off(event: 'disconnect', listener: (event: any) => void): this;
+			off(event: 'emojiCreate', listener: (emoji: GuildEmoji) => void): this;
+			off(event: 'emojiDelete', listener: (emoji: GuildEmoji) => void): this;
+			off(event: 'emojiUpdate', listener: (oldEmoji: GuildEmoji, newEmoji: GuildEmoji) => void): this;
+			off(event: 'error', listener: (error: Error) => void): this;
+			off(event: 'guildBanAdd', listener: (guild: KlasaGuild, user: KlasaUser) => void): this;
+			off(event: 'guildBanRemove', listener: (guild: KlasaGuild, user: KlasaUser) => void): this;
+			off(event: 'guildCreate', listener: (guild: KlasaGuild) => void): this;
+			off(event: 'guildDelete', listener: (guild: KlasaGuild) => void): this;
+			off(event: 'guildUnavailable', listener: (guild: KlasaGuild) => void): this;
+			off(event: 'guildMemberAdd', listener: (member: GuildMember) => void): this;
+			off(event: 'guildMemberAvailable', listener: (member: GuildMember) => void): this;
+			off(event: 'guildMemberRemove', listener: (member: GuildMember) => void): this;
+			off(event: 'guildMembersChunk', listener: (members: Collection<Snowflake, GuildMember>, guild: KlasaGuild) => void): this;
+			off(event: 'guildMemberSpeaking', listener: (member: GuildMember, speaking: Readonly<Speaking>) => void): this;
+			off(event: 'guildMemberUpdate', listener: (oldMember: GuildMember, newMember: GuildMember) => void): this;
+			off(event: 'guildUpdate', listener: (oldGuild: KlasaGuild, newGuild: KlasaGuild) => void): this;
+			off(event: 'guildIntegrationsUpdate', listener: (guild: KlasaGuild) => void): this;
+			off(event: 'message', listener: (message: KlasaMessage) => void): this;
+			off(event: 'messageDelete', listener: (message: KlasaMessage) => void): this;
+			off(event: 'messageReactionRemoveAll', listener: (message: KlasaMessage) => void): this;
+			off(event: 'messageDeleteBulk', listener: (messages: Collection<Snowflake, KlasaMessage>) => void): this;
+			off(event: 'messageReactionAdd', listener: (messageReaction: MessageReaction, user: KlasaUser) => void): this;
+			off(event: 'messageReactionRemove', listener: (messageReaction: MessageReaction, user: KlasaUser) => void): this;
+			off(event: 'messageUpdate', listener: (oldMessage: KlasaMessage, newMessage: KlasaMessage) => void): this;
+			off(event: 'presenceUpdate', listener: (oldPresence: Presence | undefined, newPresence: Presence) => void): this;
+			off(event: 'rateLimit', listener: (rateLimitData: RateLimitData) => void): this;
+			off(event: 'ready', listener: () => void): this;
+			off(event: 'reconnecting', listener: () => void): this;
+			off(event: 'resumed', listener: (replayed: number) => void): this;
+			off(event: 'roleCreate', listener: (role: Role) => void): this;
+			off(event: 'roleDelete', listener: (role: Role) => void): this;
+			off(event: 'roleUpdate', listener: (oldRole: Role, newRole: Role) => void): this;
+			off(event: 'typingStart', listener: (channel: Channel, user: KlasaUser) => void): this;
+			off(event: 'typingStop', listener: (channel: Channel, user: KlasaUser) => void): this;
+			off(event: 'userUpdate', listener: (oldUser: KlasaUser, newUser: KlasaUser) => void): this;
+			off(event: 'voiceStateUpdate', listener: (oldState: VoiceState, newState: VoiceState) => void): this;
+			off(event: 'webhookUpdate', listener: (channel: TextChannel) => void): this;
+			off(event: 'commandError', listener: (message: KlasaMessage, command: Command, params: any[], error: Error) => void): this;
+			off(event: 'commandInhibited', listener: (message: KlasaMessage, command: Command, response: string | Error) => void): this;
+			off(event: 'commandRun', listener: (message: KlasaMessage, command: Command, params: any[], response: any) => void): this;
+			off(event: 'commandSuccess', listener: (message: KlasaMessage, command: Command, params: any[], response: any) => void): this;
+			off(event: 'commandUnknown', listener: (message: KlasaMessage, command: string) => void): this;
+			off(event: 'monitorError', listener: (message: KlasaMessage, monitor: Monitor, error: Error | string) => void): this;
+			off(event: 'finalizerError', listener: (message: KlasaMessage, response: KlasaMessage, runTime: Timestamp, finalizer: Finalizer, error: Error | string) => void): this;
+			off(event: 'taskError', listener: (scheduledTask: ScheduledTask, task: Task, error: Error) => void): this;
+			off(event: 'settingsCreateEntry', listener: (entry: Settings) => void): this;
+			off(event: 'settingsDeleteEntry', listener: (entry: Settings) => void): this;
+			off(event: 'settingsUpdateEntry', listener: (oldEntry: Settings, newEntry: Settings, path?: string) => void): this;
+			off(event: 'log', listener: (data: any) => void): this;
+			off(event: 'verbose', listener: (data: any) => void): this;
+			off(event: 'wtf', listener: (failure: Error) => void): this;
+			off(event: 'pieceDisabled', listener: (piece: Piece) => void): this;
+			off(event: 'pieceEnabled', listener: (piece: Piece) => void): this;
+			off(event: 'pieceLoaded', listener: (piece: Piece) => void): this;
+			off(event: 'pieceReloaded', listener: (piece: Piece) => void): this;
+			off(event: 'pieceUnloaded', listener: (piece: Piece) => void): this;
+		}
+
+		export interface Guild {
+			settings: Settings;
+			readonly language: Language;
+		}
+
+		export interface Message extends PartialPostable {
+			guildSettings: Settings;
+			language: Language;
+			command: Command | null;
+			prefix: RegExp | null;
+			prefixLength: number | null;
+			readonly responses: KlasaMessage[];
+			readonly args: string[];
+			readonly params: any[];
+			readonly flags: ObjectLiteral<string>;
+			readonly reprompted: boolean;
+			readonly reactable: boolean;
+			prompt(text: string, time?: number): Promise<KlasaMessage>;
+			usableCommands(): Promise<Collection<string, Command>>;
+			hasAtLeastPermissionLevel(min: number): Promise<boolean>;
+		}
+
+		export interface User extends Postable {
+			settings: Settings;
+		}
+
+		export interface TextChannel extends Postable {
+			readonly attachable: boolean;
+			readonly embedable: boolean;
+			readonly postable: boolean;
+			readonly readable: boolean;
+		}
+
+		export interface DMChannel extends Postable {
+			readonly attachable: boolean;
+			readonly embedable: boolean;
+			readonly postable: boolean;
+			readonly readable: boolean;
+		}
+
+		export interface GroupDMChannel extends Postable {
+			readonly attachable: boolean;
+			readonly embedable: boolean;
+			readonly postable: boolean;
+			readonly readable: boolean;
+		}
+
+	}
+
+//#endregion
+
 //#region Typedefs
 
 	export type KlasaClientOptions = {
@@ -1531,7 +1482,7 @@ declare module 'klasa' {
 
 	export type GuildResolvable = KlasaGuild
 		| KlasaMessage
-		| KlasaGuildChannel
+		| GuildChannel
 		| Snowflake;
 
 	export type SettingsResetOptions = {
@@ -1996,6 +1947,19 @@ declare module 'klasa' {
 		categorychannel: 'CategoryChannel';
 		guildmember: 'GuildMember';
 	} & ObjectLiteral<string>;
+
+	export interface PartialPostable {
+		sendLocale(key: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		sendLocale(key: string, localeArgs?: Array<any>, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		sendMessage(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		sendEmbed(embed: MessageEmbed, content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		sendCode(language: string, content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+	}
+
+	export interface Postable extends PartialPostable {
+		sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+		sendFiles(attachments: MessageAttachment[], content: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
+	}
 
 //#endregion
 
