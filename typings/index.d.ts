@@ -231,9 +231,10 @@ declare module 'klasa' {
 	}
 
 	export class Settings extends SettingsFolder {
-		public constructor(manager: Gateway, id: string);
+		public constructor(manager: Gateway, target: any, id: string);
 		public readonly id: string;
 		public readonly gateway: Gateway;
+		public readonly target: any;
 		public readonly synchronizing: boolean;
 		private existenceStatus: boolean | null;
 		public clone(): Settings;
