@@ -20,6 +20,11 @@ class PermissionLevels extends Collection {
 	 * @property {boolean} [fetch=false] Whether the permission level should autofetch a member or not
 	 */
 
+	constructor() {
+		super();
+		this._keys = [];
+	}
+
 	/**
 	 * Adds levels to the levels cache
 	 * @since 0.2.1
@@ -40,6 +45,7 @@ class PermissionLevels extends Collection {
 	 */
 	remove(level) {
 		this.delete(level);
+		this._keys.splice(this._keys.indexOf(level), 1);
 		return this;
 	}
 
@@ -53,7 +59,9 @@ class PermissionLevels extends Collection {
 	 */
 	set(level, obj) {
 		if (level < 0) throw new Error(`Cannot set permission level ${level}. Permission levels start at 0.`);
-		return super.set(level, obj).sort();
+		this._keys.push(level);
+		this._keys.sort();
+		return super.set(level, obj);
 	}
 
 	/**
@@ -89,26 +97,14 @@ class PermissionLevels extends Collection {
 	 * @returns {PermissionLevelsData}
 	 */
 	async run(message, min) {
-		for (const [index, level] of this) {
-			if (index < min) continue;
+		for (const index of this._keys.slice(this._keys.findIndex(i => i >= min))) {
+			const level = this.get(index);
 			if (level.fetch && !message.member && message.guild) await message.guild.members.fetch(message.author);
 			const res = await level.check(message);
 			if (res) return { broke: false, permission: true };
 			if (level.break) return { broke: true, permission: false };
 		}
 		return { broke: false, permission: false };
-	}
-
-	/**
-	 * Does an in-place sort
-	 * @since 0.5.0
-	 * @returns {this}
-	 */
-	sort() {
-		const entries = [...this].sort((a, b) => a[0] - b[0]);
-		this.clear();
-		for (const [key, value] of entries) super.set(key, value);
-		return this;
 	}
 
 	static get [Symbol.species]() {
