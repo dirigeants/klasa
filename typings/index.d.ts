@@ -82,8 +82,8 @@ declare module 'klasa' {
 //#region Parsers
 
 	export class Resolver {
-		public constructor(client: KlasaClient);
-		public readonly client: KlasaClient;
+		public constructor(client: Client);
+		public readonly client: Client;
 
 		public boolean(input: boolean | string): Promise<boolean>;
 		public channel(input: Channel | Snowflake): Promise<Channel>;
@@ -155,8 +155,8 @@ declare module 'klasa' {
 //#region Schedule
 
 	export class Schedule {
-		public constructor(client: KlasaClient);
-		public client: KlasaClient;
+		public constructor(client: Client);
+		public client: Client;
 		public tasks: ScheduledTask[];
 		public timeInterval: number;
 		private _interval: NodeJS.Timer;
@@ -179,8 +179,8 @@ declare module 'klasa' {
 	}
 
 	export class ScheduledTask {
-		public constructor(client: KlasaClient, taskName: string, time: Date | number | string, options?: ScheduledTaskOptions);
-		public readonly client: KlasaClient;
+		public constructor(client: Client, taskName: string, time: Date | number | string, options?: ScheduledTaskOptions);
+		public readonly client: Client;
 		public readonly store: Schedule;
 		public taskName: string;
 		public recurring: Cron | null;
@@ -197,7 +197,7 @@ declare module 'klasa' {
 		public toJSON(): ScheduledTaskJSON;
 
 		private static _resolveTime(time: Date | number | Cron | string): [Date, Cron];
-		private static _generateID(client: KlasaClient, time: Date | number): string;
+		private static _generateID(client: Client, time: Date | number): string;
 		private static _validate(st: ScheduledTask): void;
 	}
 
@@ -207,7 +207,7 @@ declare module 'klasa' {
 
 	export class Settings {
 		public constructor(manager: Gateway, data: any);
-		public readonly client: KlasaClient;
+		public readonly client: Client;
 		public readonly gateway: Gateway;
 		public readonly id: string;
 		public readonly synchronizing: boolean;
@@ -260,8 +260,8 @@ declare module 'klasa' {
 	}
 
 	export class GatewayDriver {
-		private constructor(client: KlasaClient);
-		public readonly client: KlasaClient;
+		private constructor(client: Client);
+		public readonly client: Client;
 		public keys: Set<string>;
 		public ready: boolean;
 		public guilds: Gateway;
@@ -279,8 +279,8 @@ declare module 'klasa' {
 	}
 
 	export abstract class GatewayStorage {
-		public constructor(client: KlasaClient, type: string, schema: Schema, provider?: string);
-		public readonly client: KlasaClient;
+		public constructor(client: Client, type: string, schema: Schema, provider?: string);
+		public readonly client: Client;
 		public readonly defaults: any;
 		public readonly provider: Provider | null;
 		public readonly providerName: string;
@@ -316,7 +316,7 @@ declare module 'klasa' {
 
 	export class SchemaPiece {
 		public constructor(parent: Schema | SchemaFolder, key: string, type: string, options: SchemaPieceOptions);
-		public readonly client: KlasaClient | null;
+		public readonly client: Client | null;
 		public readonly parent: Schema | SchemaFolder;
 		public readonly key: string;
 		public readonly serializer: Serializer;
@@ -327,7 +327,7 @@ declare module 'klasa' {
 		public default: any;
 		public min: number | null;
 		public max: number | null;
-		public filter: ((client: KlasaClient, value: any, schema: SchemaPiece, language: Language) => boolean) | null;
+		public filter: ((client: Client, value: any, schema: SchemaPiece, language: Language) => boolean) | null;
 		public parse<T>(value: any, guild?: Guild): T;
 		public edit(options?: SchemaPieceEditOptions): this;
 		public toJSON(): SchemaPieceOptions;
@@ -341,8 +341,8 @@ declare module 'klasa' {
 //#region Pieces
 
 	export abstract class Piece {
-		public constructor(client: KlasaClient, store: Store<string, Piece, typeof Piece>, file: string[], directory: string, options?: PieceOptions);
-		public readonly client: KlasaClient;
+		public constructor(client: Client, store: Store<string, Piece, typeof Piece>, file: string[], directory: string, options?: PieceOptions);
+		public readonly client: Client;
 		public readonly type: string;
 		public readonly path: string;
 		public file: string[];
@@ -361,21 +361,21 @@ declare module 'klasa' {
 	}
 
 	export abstract class AliasPiece extends Piece {
-		public constructor(client: KlasaClient, store: Store<string, Piece, typeof Piece>, file: string[], directory: string, options?: AliasPieceOptions);
+		public constructor(client: Client, store: Store<string, Piece, typeof Piece>, file: string[], directory: string, options?: AliasPieceOptions);
 		public aliases: Array<string>;
 		public toJSON(): AliasPieceJSON;
 	}
 
 	export abstract class Argument extends AliasPiece {
-		public constructor(client: KlasaClient, store: ArgumentStore, file: string[], directory: string, options?: ArgumentOptions);
+		public constructor(client: Client, store: ArgumentStore, file: string[], directory: string, options?: ArgumentOptions);
 		public aliases: string[];
 		public abstract run(arg: string, possible: Possible, message: Message): any;
 		public static regex: MentionRegex;
-		private static minOrMax(client: KlasaClient, value: number, min: number, max: number, possible: Possible, message: Message, suffix: string): boolean;
+		private static minOrMax(client: Client, value: number, min: number, max: number, possible: Possible, message: Message, suffix: string): boolean;
 	}
 
 	export abstract class Command extends AliasPiece {
-		public constructor(client: KlasaClient, store: CommandStore, file: string[], directory: string, options?: CommandOptions);
+		public constructor(client: Client, store: CommandStore, file: string[], directory: string, options?: CommandOptions);
 		public readonly bucket: number;
 		public readonly category: string;
 		public readonly cooldown: number;
@@ -409,7 +409,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class Event extends Piece {
-		public constructor(client: KlasaClient, store: EventStore, file: string[], directory: string, options?: EventOptions);
+		public constructor(client: Client, store: EventStore, file: string[], directory: string, options?: EventOptions);
 		public emitter: NodeJS.EventEmitter;
 		public event: string;
 		public once: boolean;
@@ -425,7 +425,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class Extendable extends Piece {
-		public constructor(client: KlasaClient, store: ExtendableStore, file: string[], directory: string, options?: ExtendableOptions);
+		public constructor(client: Client, store: ExtendableStore, file: string[], directory: string, options?: ExtendableOptions);
 		public readonly appliesTo: Array<Constructor<any>>;
 		private staticPropertyDescriptors: PropertyDescriptorMap;
 		private instancePropertyDescriptors: PropertyDescriptorMap;
@@ -434,13 +434,13 @@ declare module 'klasa' {
 	}
 
 	export abstract class Finalizer extends Piece {
-		public constructor(client: KlasaClient, store: FinalizerStore, file: string[], directory: string, options?: FinalizerOptions);
+		public constructor(client: Client, store: FinalizerStore, file: string[], directory: string, options?: FinalizerOptions);
 		public abstract run(message: Message, command: Command, response: Message | Message[] | null, runTime: Stopwatch): void;
 		public toJSON(): PieceFinalizerJSON;
 	}
 
 	export abstract class Inhibitor extends Piece {
-		public constructor(client: KlasaClient, store: InhibitorStore, file: string[], directory: string, options?: InhibitorOptions);
+		public constructor(client: Client, store: InhibitorStore, file: string[], directory: string, options?: InhibitorOptions);
 		public spamProtection: boolean;
 
 		public abstract run(message: Message, command: Command): Promise<void | string>;
@@ -448,7 +448,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class Language extends Piece {
-		public constructor(client: KlasaClient, store: LanguageStore, file: string[], directory: string, options?: LanguageOptions);
+		public constructor(client: Client, store: LanguageStore, file: string[], directory: string, options?: LanguageOptions);
 		public language: ObjectLiteral<string | string[] | ((...args: any[]) => string | string[])>;
 
 		public get<T = string>(term: string, ...args: any[]): T;
@@ -456,7 +456,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class Monitor extends Piece {
-		public constructor(client: KlasaClient, store: MonitorStore, file: string[], directory: string, options?: MonitorOptions);
+		public constructor(client: Client, store: MonitorStore, file: string[], directory: string, options?: MonitorOptions);
 		public ignoreBots: boolean;
 		public ignoreEdits: boolean;
 		public ignoreOthers: boolean;
@@ -476,7 +476,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class Provider extends Piece {
-		public constructor(client: KlasaClient, store: ProviderStore, file: string[], directory: string, options?: ProviderOptions);
+		public constructor(client: Client, store: ProviderStore, file: string[], directory: string, options?: ProviderOptions);
 		public abstract create(table: string, entry: string, data: any): Promise<any>;
 		public abstract createTable(table: string, rows?: any[]): Promise<any>;
 		public abstract delete(table: string, entry: string): Promise<any>;
@@ -508,13 +508,13 @@ declare module 'klasa' {
 	}
 
 	export abstract class Task extends Piece {
-		public constructor(client: KlasaClient, store: TaskStore, file: string[], directory: string, options?: TaskOptions);
+		public constructor(client: Client, store: TaskStore, file: string[], directory: string, options?: TaskOptions);
 		public abstract run(data: any): Promise<void>;
 		public toJSON(): PieceTaskJSON;
 	}
 
 	export abstract class Serializer extends AliasPiece {
-		public constructor(client: KlasaClient, store: SerializerStore, file: string[], directory: string, options?: SerializerOptions);
+		public constructor(client: Client, store: SerializerStore, file: string[], directory: string, options?: SerializerOptions);
 		public serialize(data: any): PrimitiveType;
 		public stringify(data: any): string;
 		public toJSON(): PieceSerializerJSON;
@@ -527,8 +527,8 @@ declare module 'klasa' {
 //#region Stores
 
 	export abstract class Store<K, V extends Piece, VConstructor = Constructor<V>> extends Collection<K, V> {
-		public constructor(client: KlasaClient, name: string, holds: VConstructor);
-		public readonly client: KlasaClient;
+		public constructor(client: Client, name: string, holds: VConstructor);
+		public readonly client: Client;
 		public readonly holds: VConstructor;
 		public readonly name: string;
 		public readonly userDirectory: string;
@@ -602,7 +602,7 @@ declare module 'klasa' {
 	}
 
 	export class CommandUsage extends Usage {
-		public constructor(client: KlasaClient, command: Command);
+		public constructor(client: Client, command: Command);
 		public names: string[];
 		public commands: string;
 		public nearlyFullUsage: string;
@@ -637,7 +637,7 @@ declare module 'klasa' {
 
 	export class TextPrompt {
 		public constructor(message: Message, usage: Usage, options: TextPromptOptions);
-		public readonly client: KlasaClient;
+		public readonly client: Client;
 		public message: Message;
 		public usage: Usage | CommandUsage;
 		public reprompted: boolean;
@@ -671,8 +671,8 @@ declare module 'klasa' {
 	}
 
 	export class Usage {
-		public constructor(client: KlasaClient, usageString: string, usageDelim: string);
-		public readonly client: KlasaClient;
+		public constructor(client: Client, usageString: string, usageDelim: string);
+		public readonly client: Client;
 		public deliminatedUsage: string;
 		public usageString: string;
 		public usageDelim: string;
@@ -978,8 +978,8 @@ declare module 'klasa' {
 		public static sleep<T = any>(delay: number, args?: T): Promise<T>;
 		public static toTitleCase(str: string): string;
 		public static tryParse<T = ObjectLiteral>(value: string): T | string;
-		public static resolveGuild(client: KlasaClient, guild: GuildResolvable): Guild;
-		private static initClean(client: KlasaClient): void;
+		public static resolveGuild(client: Client, guild: GuildResolvable): Guild;
+		private static initClean(client: Client): void;
 
 		public static titleCaseVariants: TitleCaseVariants;
 		public static PRIMITIVE_TYPES: string[];
@@ -1020,8 +1020,8 @@ declare module 'klasa' {
 			application: ClientApplication;
 			schedule: Schedule;
 			ready: boolean;
-			registerStore<K, V extends Piece, VConstructor = Constructor<V>>(store: Store<K, V, VConstructor>): KlasaClient;
-			unregisterStore<K, V extends Piece, VConstructor = Constructor<V>>(store: Store<K, V, VConstructor>): KlasaClient;
+			registerStore<K, V extends Piece, VConstructor = Constructor<V>>(store: Store<K, V, VConstructor>): Client;
+			unregisterStore<K, V extends Piece, VConstructor = Constructor<V>>(store: Store<K, V, VConstructor>): Client;
 			sweepMessages(lifetime?: number, commandLifeTime?: number): number;
 			on(event: string | symbol, listener: Function): this;
 			on(event: 'channelCreate', listener: (channel: Channel) => void): this;
@@ -1218,11 +1218,13 @@ declare module 'klasa' {
 		}
 
 		export interface Guild {
+			constructor: typeof KlasaGuild;
 			settings: Settings;
 			readonly language: Language;
 		}
 
 		export interface Message extends PartialSendAliases {
+			constructor: typeof KlasaMessage;
 			guildSettings: Settings;
 			language: Language;
 			command: Command | null;
@@ -1241,6 +1243,7 @@ declare module 'klasa' {
 		}
 
 		export interface User extends SendAliases {
+			constructor: typeof KlasaUser;
 			settings: Settings;
 		}
 
@@ -1276,7 +1279,7 @@ declare module 'klasa' {
 		preserveSettings?: boolean;
 		production?: boolean;
 		providers?: KlasaProvidersOptions;
-		readyMessage?: (client: KlasaClient) => string;
+		readyMessage?: (client: Client) => string;
 		regexPrefix?: RegExp;
 		schedule?: KlasaClientOptionsSchedule;
 		slowmode?: number;
@@ -1503,7 +1506,7 @@ declare module 'klasa' {
 		default?: any;
 		min?: number;
 		max?: number;
-		filter?: ((client: KlasaClient, value: any, schema: SchemaPiece, language: Language) => boolean) | null
+		filter?: ((client: Client, value: any, schema: SchemaPiece, language: Language) => boolean) | null
 	};
 
 	export type SchemaPieceEditOptions = {
