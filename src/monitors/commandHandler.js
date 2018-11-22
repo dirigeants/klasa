@@ -20,7 +20,7 @@ module.exports = class extends Monitor {
 		if (!commandText) return undefined;
 
 		const command = this.client.commands.get(commandText);
-		if (!command) return this.client.emit('commandUnknown', message, commandText);
+		if (!command) return this.client.emit('commandUnknown', message, commandText, prefix, prefixLength);
 
 		return this.runCommand(message._registerCommand({ command, prefix, prefixLength }));
 	}
