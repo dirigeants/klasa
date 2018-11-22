@@ -219,7 +219,7 @@ declare module 'klasa' {
 		public update(key: string, value: any, options?: SettingsFolderUpdateOptions): Promise<SettingsFolderUpdateResult>;
 		public update(entries: Iterable<[string, any]>, options?: SettingsFolderUpdateOptions): Promise<SettingsFolderUpdateResult>;
 		public update(object: Record<string, any>, options?: SettingsFolderUpdateOptions): Promise<SettingsFolderUpdateResult>;
-		public display(message: KlasaMessage, path?: string | Schema | SchemaFolder): string;
+		public display(message: KlasaMessage, path?: string | Schema | SchemaFolder | SchemaPiece): string;
 		public pluck<T extends string>(...paths: T[]): Partial<Record<T, any>>;
 		public resolve<T extends string>(...paths: T[]): Partial<Record<T, any>>;
 		public toJSON(): any;
