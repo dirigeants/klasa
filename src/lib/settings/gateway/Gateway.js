@@ -45,17 +45,6 @@ class Gateway extends GatewayStorage {
 	}
 
 	/**
-	 * The Settings that this class should make.
-	 * @since 0.5.0
-	 * @type {Settings}
-	 * @readonly
-	 * @private
-	 */
-	get Settings() {
-		return Settings;
-	}
-
-	/**
 	 * Gets an entry from the cache or creates one if it does not exist
 	 * @since 0.5.0
 	 * @param {*} target The target that holds a Settings instance of the holder for the new one
@@ -85,7 +74,7 @@ class Gateway extends GatewayStorage {
 	 * @returns {Settings}
 	 */
 	create(target, id = target.id) {
-		const settings = new this.Settings(this, target, id);
+		const settings = new Settings(this, target, id);
 		if (this._synced && this.schema.size) settings.sync(true).catch(err => this.client.emit('error', err));
 		return settings;
 	}
