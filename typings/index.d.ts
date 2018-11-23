@@ -50,7 +50,6 @@ declare module 'klasa' {
 		public login(token?: string): Promise<string>;
 		private validatePermissionLevels(): PermissionLevels;
 		private _ready(): Promise<void>;
-
 		public sweepMessages(lifetime?: number, commandLifeTime?: number): number;
 		public static basePermissions: Permissions;
 		public static defaultGuildSchema: Schema;
@@ -259,7 +258,6 @@ declare module 'klasa' {
 	export class Gateway extends GatewayStorage {
 		public constructor(client: KlasaClient, name: string, options?: { schema?: Schema, provider?: string });
 		public syncQueue: WeakMap<Settings, Promise<Settings>>;
-		public readonly Settings: Settings;
 		private cache: Collection<string, Record<string, any> & { settings: Settings }>;
 		public acquire(target: any, id?: string | number): Settings;
 		public create(target: any, id?: string | number): Settings;
@@ -1318,7 +1316,7 @@ declare module 'klasa' {
 		default?: string;
 	}
 
-	export type KlasaGatewaysOptions = Record<string, { provider ?: string }>;
+	export type KlasaGatewaysOptions = Record<string, { provider?: string; schema?: Schema }>;
 
 	// Parsers
 	export interface ArgResolverCustomMethod {
