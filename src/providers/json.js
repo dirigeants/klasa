@@ -6,7 +6,10 @@ module.exports = class extends Provider {
 
 	constructor(...args) {
 		super(...args);
-		this.baseDirectory = resolve(this.client.userBaseDirectory, 'bwd', 'provider', 'json');
+
+		const baseDirectory = resolve(this.client.userBaseDirectory, 'bwd', 'provider', 'json');
+		const defaults = util.mergeDefault({ baseDirectory }, this.client.options.providers.json);
+		this.baseDirectory = defaults.baseDirectory;
 	}
 
 	/**
