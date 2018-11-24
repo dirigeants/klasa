@@ -1238,6 +1238,7 @@ declare module 'klasa' {
 			readonly flags: ObjectLiteral<string>;
 			readonly reprompted: boolean;
 			readonly reactable: boolean;
+			send(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
 			prompt(text: string, time?: number): Promise<KlasaMessage>;
 			usableCommands(): Promise<Collection<string, Command>>;
 			hasAtLeastPermissionLevel(min: number): Promise<boolean>;
