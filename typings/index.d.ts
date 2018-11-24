@@ -243,7 +243,7 @@ declare module 'klasa' {
 	}
 
 	export class GatewayDriver extends Collection<string, Gateway> {
-		private constructor(client: KlasaClient);
+		public constructor(client: KlasaClient);
 		public readonly client: KlasaClient;
 		public ready: boolean;
 
@@ -257,8 +257,8 @@ declare module 'klasa' {
 
 	export class Gateway extends GatewayStorage {
 		public constructor(client: KlasaClient, name: string, options?: { schema?: Schema, provider?: string });
-		public syncQueue: WeakMap<Settings, Promise<Settings>>;
-		private cache: Collection<string, Record<string, any> & { settings: Settings }>;
+		protected syncQueue: WeakMap<Settings, Promise<Settings>>;
+		protected cache: Collection<string, Record<string, any> & { settings: Settings }>;
 		public acquire(target: any, id?: string | number): Settings;
 		public create(target: any, id?: string | number): Settings;
 		public get(id: string | number): Settings | null;
