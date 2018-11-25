@@ -1559,7 +1559,7 @@ declare module 'klasa' {
 	} & AliasPieceOptions;
 
 	export type ExtendableOptions = {
-		appliesTo: Array<Constructor<any>>;
+		appliesTo: Array<Constructor<any> | AnyConstructor>;
 	} & PieceOptions;
 
 	export type InhibitorOptions = {
@@ -1924,6 +1924,9 @@ declare module 'klasa' {
 	interface Constructor<C> {
 		new(...args: any[]): C;
 	}
+
+	// Includes abstract classes
+	type AnyConstructor<C> = Function;
 
 	type PrimitiveType = string | number | boolean;
 
