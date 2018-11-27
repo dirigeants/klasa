@@ -4,17 +4,18 @@ This guide will explain anything and everything that there is to know about sett
 # Table of Contents
 <!--lint disable no-inline-padding list-item-indent-->
 
-* [Schema](#schema)
-	 * [Folders](#schema-folders)
-		 * [Adding a Folder](#schema-folders-addfolder)
-		 * [Adding a Piece](#schema-folder-addpiece)
-		 * [Naming Conflicts](#schema-folder-conflicts)
-	 * [Pieces](#schema-pieces)
-	 	 * [Types](#schema-pieces-types)
-	 	 * [Options](#schema-pieces-options)
-		 	 * [Default](#schema-pieces-options-default)
-		 	 * [Filter](#schema-pieces-options-filter)
-		 	 * [Resolve](#schema-pieces-options-resolve)
+* [Schema](./Settings?scrollTo=schema)
+	 * [Folders](./Settings?scrollTo=folders)
+		 * [Adding a Folder](./Settings?scrollTo=adding-a-folder)
+		 * [Adding a Piece](./Settings?scrollTo=adding-a-piece)
+		 * [Naming Conflicts](./Settings?scrollTo=naming-conflicts)
+	 * [Pieces](./Settings?scrollTo=pieces)
+	 	 * [Types](./Settings?scrollTo=types)
+		 	 * [Custom Types](./Settings?scrollTo=custom-types)		 
+	 	 * [Options](./Settings?scrollTo=options)
+		 	 * [Default](./Settings?scrollTo=default-option)
+		 	 * [Filter](./Settings?scrollTo=filter-option)
+		 	 * [Resolve](./Settings?scrollTo=resolve-option)
 * [Settings](#settings)
 	 * [Updating Settings](#settings-updating)
 	 * [Resetting Settings](#settings-resetting)
@@ -29,12 +30,12 @@ This guide will explain anything and everything that there is to know about sett
 
 
 
-# <a name="schema"></a>Schema
+# Schema
 Schemas are the blueprints of how you want your settings setup. They are yours and Klasa's guide for ensuring that any operation done on settings is done correctly.
 
-## <a name="schema-folder"></a>Folders
+## Folders
 
-### <a name="schema-folder-addfolder"></a>Adding a Folder
+### Adding a Folder
 
 When working with schemas, it's very easy for yours to become unorganized or hard to manage. This is where folders come in. You can use Folders to group similar keys together to make it much easier to manage and read. Below is an example of how to add a folder to a schema.
 
@@ -55,7 +56,7 @@ To use both of these newly created keys, you would update `moderation.role` and 
 
 You can also add a folder inside of another folder, allowing you to finely tune your Schema exactly to your likings.
 
-### <a name="schema-folder-addpiece"></a>Adding a Piece
+### Adding a Piece
 
 The function for adding a piece takes three arguments.
 
@@ -87,18 +88,18 @@ Client.defaultGuildSchema
 
 Now this key would be an array, and you could add multiple channels to it.
 
-### <a name="schema-folder-conflicts"></a>Naming Conflicts
+### Naming Conflicts
 
 Whenever adding keys that have the same name, the Schema will automatically edit the requested key with the new properties you want. This allows you to edit core keys to your liking. Possible issues can crop when using this though, such as editing a prefix key to be a channel instead of the string it should be. Caution should be used when editing core keys.
 
 The add function will automatically edit for you when the key is found. You can also get the key directly from the SchemaFolder it is on  and call .edit() on it manually.
 
 
-## <a name="schema-pieces"></a>Pieces
+## Pieces
 
 Pieces are the individual keys that you  will be setting when using Settings. Each key can have multiple different options, and core keys can be overwritten to your liking.
 
-### <a name="schema-piece-types"></a>Types
+### Types
 
 By default, there are several built-in types that the developer can use, and with the possibility to add custom types via {@link Serializer}s as explained below. The built-in types are:
 
@@ -121,7 +122,7 @@ By default, there are several built-in types that the developer can use, and wit
 | **user**            | A {@link KlasaUser} instance or id                | Resolves a KlasaUser (which extends User)                                                |
 | **voicechannel**    | A {@link external:VoiceChannel} instance or id    | Resolves a VoiceChannel                                                                  |
 
-### Custom Types
+#### Custom Types
 
 To add new types, you make a class, extending {@link Serializer}. The following serializer is a template for this:
 
@@ -164,13 +165,13 @@ module.exports = class Date extends Serializer {
 
 
 
-### <a name="schema-piece-options"></a>Options
+### Options
 
 Below is a list of all schema piece options that can be configured when adding or modifying pieces. You can find the full documentation at {@link SchemaPieceOptions}.
 
 {@typedef SchemaPieceOptions}
 
-#### <a name="schema-piece-options-default"></a>Default option
+#### Default option
 
 *The default option is optional, but, what is its default value?*
 
@@ -180,7 +181,7 @@ The default option is one of the last options to default, **array** defaults to 
 -   If **type** is boolean, default will be `false`.
 -   In any other case, it will be `null`.
 
-#### <a name="schema-piece-options-filter"></a>Filter option
+#### Filter option
 
 The filter option serves to blacklist certain values. It's output is not used, but any thrown error will be handled by SettingsGateway's internals and displayed to the caller (for example in the conf command, it would display the message to the user). It also must be synchronous.
 
@@ -196,7 +197,7 @@ const filter = (client, command, piece, guild) => {
 
 In this case, `client` is the {@link KlasaClient} instance, `command` the resolved command (the output from the command's SchemaType), `piece` is a {@link SchemaPiece} instance, and guild is a {@link Guild} instance, which may be null.
 
-#### <a name="schema-piece-options-resolve"></a>Resolve option
+#### Resolve option
 The resolve option allows you to change the behavior of keys that should be resolved when using the resolve method. It is true by default, and will automatically resolve every single object in an array where possible. If a key cannot be resolved, that key will be set to null to ensure that falsy checks still work as intended. Below is an example of how you would use the resolve option.
 
 ```javascript
@@ -205,10 +206,7 @@ const { Client } = require('klasa');
 // Resolve is default by true, here for example purposes
 Client.defaultGuildSchema.add('modRole', 'role', { resolve: true });
 
-// Assuming you're running this command in a guild
-async run(message) {
-	const { modRole } = await message.guild.settings.resolve('modRole');
-	// Asssuming this is set as a valid role id, this will return a full Role Object to be used.
-	console.log(modRole);
+// Assuming you're running this command in a guild, can also be awaited and destructured
+message.guild.settings.resolve('modRole').then(resolved => console.log(resolved));
 }
 ```
