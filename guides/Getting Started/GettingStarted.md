@@ -1,6 +1,7 @@
 # Welcome to the klasa#{branch} docs
 
 [test this](./GettingStarted?scrollTo=installing-klasa)
+[also test just this](?scrollTo=installing-klasa)
 
 ## Installing Klasa
 
