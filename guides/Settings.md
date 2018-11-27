@@ -208,5 +208,4 @@ Client.defaultGuildSchema.add('modRole', 'role', { resolve: true });
 
 // Assuming you're running this command in a guild, can also be awaited and destructured
 message.guild.settings.resolve('modRole').then(resolved => console.log(resolved));
-}
 ```
