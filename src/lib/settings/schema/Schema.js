@@ -147,17 +147,6 @@ class Schema extends Map {
 	}
 
 	/**
-	 * Remove a key from the schema
-	 * @since 0.5.0
-	 * @param {string} key The key to remove
-	 * @returns {this}
-	 */
-	remove(key) {
-		this.delete(key);
-		return this;
-	}
-
-	/**
 	 * Get a SchemaPiece or a SchemaFolder given a path
 	 * @since 0.5.0
 	 * @param {string} path The key to get from the schema
