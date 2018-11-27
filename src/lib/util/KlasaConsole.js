@@ -86,7 +86,7 @@ class KlasaConsole extends Console {
 	 */
 
 	/**
-	 * Constructs our Console instance
+	 * Constructs our KlasaConsole instance
 	 * @since 0.4.0
 	 * @param {ConsoleConfig} [options] The options for the klasa console
 	 */
