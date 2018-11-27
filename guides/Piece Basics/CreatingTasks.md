@@ -76,10 +76,7 @@ The pattern above is a **Crontab pattern** that runs every Tuesday and Friday at
 
 ## Options
 
-| Name        | Default       | Type    | Description                        |
-| ----------- | ------------- | ------- | ---------------------------------- |
-| **name**    | `theFileName` | string  | The name of the task               |
-| **enabled** | `true`        | boolean | Whether the task is enabled or not |
+{@typedef PieceOptions}
 
 ## Further Reading:
 

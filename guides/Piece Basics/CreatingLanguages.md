@@ -37,10 +37,7 @@ module.exports = class extends Language {
 
 ## Options
 
-| Name        | Default       | Type    | Description                            |
-| ----------- | ------------- | ------- | -------------------------------------- |
-| **name**    | `theFileName` | string  | The name of the language               |
-| **enabled** | `true`        | boolean | Whether the language is enabled or not |
+{@typedef PieceOptions}
 
 ## Using Languages:
 

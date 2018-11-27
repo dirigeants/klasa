@@ -89,10 +89,7 @@ The example above is the JSON provider used in klasa, and interfacing with the {
 
 ## Options
 
-| Name            | Default       | Type    | Description                                  |
-| --------------- | ------------- | ------- | -------------------------------------------- |
-| **name**        | `theFileName` | string  | The name of the provider                     |
-| **enabled**     | `true`        | boolean | Whether the provider is enabled or not       |
+{@typedef PieceOptions}
 
 ## Accessing Providers
 
