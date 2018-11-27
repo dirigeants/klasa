@@ -300,7 +300,6 @@ declare module 'klasa' {
 		public readonly type: 'Folder';
 		public add(key: string, type: string, options?: SchemaPieceOptions): this;
 		public add(key: string, callback: (folder: SchemaFolder) => any): this;
-		public remove(key: string): this;
 		public get<T = Schema | SchemaPiece | SchemaFolder>(key: string | Array<string>): T;
 		public resolve(settings: Settings, language: Language, guild: KlasaGuild): Promise<Record<string, any>>;
 		public toJSON(): ObjectLiteral;
