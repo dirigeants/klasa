@@ -50,7 +50,7 @@ class KlasaClient extends Discord.Client {
 
 	/**
 	 * Defaulted to KlasaClient.defaultPermissionLevels
-	 * @typedef {PermissionLevelsOverload} DefaultPermissionLevels
+	 * @typedef {PermissionLevels} PermissionLevelsOverload
 	 */
 
 	/**
