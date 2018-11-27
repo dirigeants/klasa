@@ -1,41 +1,33 @@
-# Settings
 This guide will explain anything and everything that there is to know about settings in Klasa, and will try to explain it in the most simplest terms as possible. You can navigate the guide using the table of contents below.
 
 # Table of Contents
-<!--lint disable no-inline-padding list-item-indent-->
 
-* [Schema](./Settings?scrollTo=schema)
-	 * [Folders](./Settings?scrollTo=folders)
-		 * [Adding a Folder](./Settings?scrollTo=adding-a-folder)
-		 * [Adding a Piece](./Settings?scrollTo=adding-a-piece)
-		 * [Naming Conflicts](./Settings?scrollTo=naming-conflicts)
-	 * [Pieces](./Settings?scrollTo=pieces)
-	 	 * [Types](./Settings?scrollTo=types)
-		 	 * [Custom Types](./Settings?scrollTo=custom-types)		 
-	 	 * [Options](./Settings?scrollTo=options)
-		 	 * [Default](./Settings?scrollTo=default-option)
-		 	 * [Filter](./Settings?scrollTo=filter-option)
-		 	 * [Resolve](./Settings?scrollTo=resolve-option)
-* [Settings](#settings)
-	 * [Updating Settings](#settings-updating)
-	 * [Resetting Settings](#settings-resetting)
-* [Gateway](#gateway)
-	 * [Custom Gateway](#gateway-custom)
-	 * [Gateway Plugins](#gateway-plugins)
+- [Schema](#/docs/klasa/{branch}/Settings/Settings?scrollTo=schema)
+    - [Folders](#/docs/klasa/{branch}/Settings/Settings?scrollTo=folders)
+        - [Adding a Folder](#/docs/klasa/{branch}/Settings/Settings?scrollTo=adding-a-folder)
+        - [Adding a Piece](#/docs/klasa/{branch}/Settings/Settings?scrollTo=adding-a-piece)
+        - [Naming Conflicts](#/docs/klasa/{branch}/Settings/Settings?scrollToo=naming-conflicts)
+    - [Pieces](#/docs/klasa/{branch}/Settings/Settings?scrollTo=pieces)
+        - [Types](#/docs/klasa/{branch}/Settings/Settings?scrollTo=types)
+        - [Custom Types](#/docs/klasa/{branch}/Settings/Settings?scrollTo=custom-types)		 
+    - [Options](#/docs/klasa/{branch}/Settings/Settings?scrollTo=options)
+        - [Default](#/docs/klasa/{branch}/Settings/Settings?scrollTo=default-option)
+        - [Filter](#/docs/klasa/{branch}/Settings/Settings?scrollTo=filter-option)
+        - [Resolve](#/docs/klasa/{branch}/Settings/Settings?scrollTo=resolve-option)
+- [Settings](#/docs/klasa/{branch}/Settings/Settings?scrollTo=settings)
+    - [Updating Settings](#/docs/klasa/{branch}/Settings/Settings?scrollTo=updating-settings)
+    - [Resetting Settings](#/docs/klasa/{branch}/Settings/Settings?scrollTo=resetting-settings)
+- [Gateway](#/docs/klasa/{branch}/Settings/Settings?scrollTo=gateway)
+    - [Custom Gateway](#/docs/klasa/{branch}/Settings/Settings?scrollTo=custom-gateway)
+    - [Gateway Plugins](#/docs/klasa/{branch}/Settings/Settings?scrollTo=gateway-plugins)
 
-<!--lint enable no-inline-padding list-item-indent-->
+## Schema
 
-
-
-
-
-
-# Schema
 Schemas are the blueprints of how you want your settings setup. They are yours and Klasa's guide for ensuring that any operation done on settings is done correctly.
 
-## Folders
+### Folders
 
-### Adding a Folder
+#### Adding a Folder
 
 When working with schemas, it's very easy for yours to become unorganized or hard to manage. This is where folders come in. You can use Folders to group similar keys together to make it much easier to manage and read. Below is an example of how to add a folder to a schema.
 
@@ -56,13 +48,13 @@ To use both of these newly created keys, you would update `moderation.role` and 
 
 You can also add a folder inside of another folder, allowing you to finely tune your Schema exactly to your likings.
 
-### Adding a Piece
+#### Adding a Piece
 
 The function for adding a piece takes three arguments.
 
--   A name for the key
--   A type for the key
--   Options object for the key
+- A name for the key
+- A type for the key
+- Options object for the key
 
 Below is an example of adding a piece. You can find further explanation of Pieces in the next section.
 
@@ -75,6 +67,7 @@ Client.defaultGuildSchema
 	.add('musicChannel', 'textchannel',
 		{ array: false, default: null });
 ```
+
 <!-- Added extra line on options object to remove scrollbar -->
 
 Alternatively, if you wanted multiple channels for music you could set the key as an array instead.
@@ -88,18 +81,17 @@ Client.defaultGuildSchema
 
 Now this key would be an array, and you could add multiple channels to it.
 
-### Naming Conflicts
+#### Naming Conflicts
 
 Whenever adding keys that have the same name, the Schema will automatically edit the requested key with the new properties you want. This allows you to edit core keys to your liking. Possible issues can crop when using this though, such as editing a prefix key to be a channel instead of the string it should be. Caution should be used when editing core keys.
 
 The add function will automatically edit for you when the key is found. You can also get the key directly from the SchemaFolder it is on  and call .edit() on it manually.
 
-
-## Pieces
+### Pieces
 
 Pieces are the individual keys that you  will be setting when using Settings. Each key can have multiple different options, and core keys can be overwritten to your liking.
 
-### Types
+#### Types
 
 By default, there are several built-in types that the developer can use, and with the possibility to add custom types via {@link Serializer}s as explained below. The built-in types are:
 
@@ -122,7 +114,7 @@ By default, there are several built-in types that the developer can use, and wit
 | **user**            | A {@link KlasaUser} instance or id                | Resolves a KlasaUser (which extends User)                                                |
 | **voicechannel**    | A {@link external:VoiceChannel} instance or id    | Resolves a VoiceChannel                                                                  |
 
-#### Custom Types
+##### Custom Types
 
 To add new types, you make a class, extending {@link Serializer}. The following serializer is a template for this:
 
@@ -163,25 +155,23 @@ module.exports = class Date extends Serializer {
 
 **All serializers must resolve values into primitives or storable plain objects, otherwise, the provider may have issues with storing the value.**
 
-
-
-### Options
+#### Options
 
 Below is a list of all schema piece options that can be configured when adding or modifying pieces. You can find the full documentation at {@link SchemaPieceOptions}.
 
 {@typedef SchemaPieceOptions}
 
-#### Default option
+##### Default option
 
 *The default option is optional, but, what is its default value?*
 
 The default option is one of the last options to default, **array** defaults to `false`, **max** and **min** defaults to `null`, **configurable** defaults to either `true` or `false`, the latter if **type** is `any`; and **type** is always obligatory.
 
--   If **array** is true, default will be an empty array: `[]`.
--   If **type** is boolean, default will be `false`.
--   In any other case, it will be `null`.
+- If **array** is true, default will be an empty array: `[]`.
+- If **type** is boolean, default will be `false`.
+- In any other case, it will be `null`.
 
-#### Filter option
+##### Filter option
 
 The filter option serves to blacklist certain values. It's output is not used, but any thrown error will be handled by SettingsGateway's internals and displayed to the caller (for example in the conf command, it would display the message to the user). It also must be synchronous.
 
@@ -197,7 +187,8 @@ const filter = (client, command, piece, guild) => {
 
 In this case, `client` is the {@link KlasaClient} instance, `command` the resolved command (the output from the command's SchemaType), `piece` is a {@link SchemaPiece} instance, and guild is a {@link Guild} instance, which may be null.
 
-#### Resolve option
+##### Resolve option
+
 The resolve option allows you to change the behavior of keys that should be resolved when using the resolve method. It is true by default, and will automatically resolve every single object in an array where possible. If a key cannot be resolved, that key will be set to null to ensure that falsy checks still work as intended. Below is an example of how you would use the resolve option.
 
 ```javascript
