@@ -70,11 +70,7 @@ module.exports = class extends Extendable {
 };
 ```
 
-| Name          | Default       | Type    | Description                          |
-| ------------- | ------------- | ------- | ------------------------------------ |
-| **name**      | `theFileName` | string  | The name of the method/property.     |
-| **enabled**   | `true`        | boolean | If the extendable is enabled or not. |
-| **appliesTo** | `[]`          | class[] | An array of classes to extend.       |
+{@typedef ExtendableOptions}
 
 ## Understanding extendables
 

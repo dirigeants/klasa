@@ -43,17 +43,7 @@ module.exports = class extends Monitor {
 
 ## Options
 
-| Name                        | Default       | Type    | Description                                           |
-| --------------------------- | ------------- | ------- | ----------------------------------------------------- |
-| **name**                    | `theFileName` | string  | The name of the monitor                               |
-| **enabled**                 | `true`        | boolean | Whether the monitor is enabled or not                 |
-| **ignoreBots**              | `true`        | boolean | Whether the monitor ignores bots or not               |
-| **ignoreSelf**              | `true`        | boolean | Whether the monitor ignores itself or not             |
-| **ignoreOthers**            | `true`        | boolean | Whether the monitor ignores others or not             |
-| **ignoreWebhooks**          | `true`        | boolean | Whether the monitor ignores webhooks or not           |
-| **ignoreEdits**             | `true`        | boolean | Whether the monitor ignores edits or not              |
-| **ignoreBlacklistedUsers**  | `true`        | boolean | Whether the monitor ignores blacklisted users or not  |
-| **ignoreBlacklistedGuilds** | `true`        | boolean | Whether the monitor ignores blacklisted guilds or not |
+{@typedef MonitorOptions}
 
 >As with all other pieces, you can omit any optional option that match the default values.
 

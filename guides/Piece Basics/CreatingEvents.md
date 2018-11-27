@@ -35,13 +35,7 @@ Where `...params` are arguments you would *normally* get from those events. For 
 
 ## Options
 
-| Name        | Default       | Type         | Description                         |
-| ----------- | ------------- | ------------ | ----------------------------------- |
-| **name**    | `theFileName` | string       | The name of the event               |
-| **enabled** | `true`        | boolean      | Whether the event is enabled or not |
-| **event**   | `theFileName` | string       | The event to listen to              |
-| **emitter** | `this.client` | EventEmitter | The emitter the event belongs to    |
-| **once**    | `false`       | boolean      | If the event should only run once   |
+{@typedef EventOptions}
 
 ## Further Reading:
 

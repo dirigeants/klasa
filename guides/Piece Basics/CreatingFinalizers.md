@@ -31,10 +31,7 @@ module.exports = class extends Finalizer {
 
 ## Options
 
-| Name        | Default       | Type    | Description                             |
-| ----------- | ------------- | ------- | --------------------------------------- |
-| **name**    | `theFileName` | string  | The name of the finalizer               |
-| **enabled** | `true`        | boolean | Whether the finalizer is enabled or not |
+{@typedef PieceOptions}
 
 ## Arguments:
 
