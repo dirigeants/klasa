@@ -93,23 +93,8 @@
     }]
 },
 {
-    "name": "Advanced SettingsGateway",
-    "files": [{
-        "name": "Understanding SchemaFolders",
-        "path": "UnderstandingSchemaFolders.md"
-    },
-    {
-        "name": "Understanding SchemaPieces",
-        "path": "UnderstandingSchemaPieces.md"
-    },
-    {
-        "name": "SettingsGateway's Types",
-        "path": "SettingsGatewayKeyTypes.md"
-    },
-    {
-        "name": "Updating your Settings",
-        "path": "SettingsGatewaySettingsUpdate.md"
-    }]
+    "name": "Settings",
+    "path": "Settings.md"
 },
 {
     "name": "Other Subjects",
