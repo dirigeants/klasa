@@ -107,7 +107,7 @@ class PermissionLevels extends Collection {
 			const level = this.get(i);
 			if (level === empty) continue;
 			if (level.fetch && !message.member && message.guild) await message.guild.members.fetch(message.author);
-			const res = await level.check(message.client, message);
+			const res = await level.check(message);
 			if (res) return { broke: false, permission: true };
 			if (level.break) return { broke: true, permission: false };
 		}

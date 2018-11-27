@@ -325,8 +325,7 @@ class KlasaClient extends Discord.Client {
 	 * @readonly
 	 */
 	get invite() {
-		// VIEW_CHANNEL, SEND_MESSAGES
-		const permissions = new Permissions(3072).add(...this.commands.map(command => command.requiredPermissions)).bitfield;
+		const permissions = new Permissions(this.constructor.basePermissions).add(...this.commands.map(command => command.requiredPermissions)).bitfield;
 		return `https://discordapp.com/oauth2/authorize?client_id=${this.application.id}&permissions=${permissions}&scope=bot`;
 	}
 
@@ -477,16 +476,23 @@ module.exports = KlasaClient;
 KlasaClient.plugin = Symbol('KlasaPlugin');
 
 /**
+ * The base Permissions that the {@link Client#invite} asks for. Defaults to [VIEW_CHANNEL, SEND_MESSAGES]
+ * @since 0.5.0
+ * @type {Permissions}
+ */
+KlasaClient.basePermissions = new Permissions(3072);
+
+/**
  * The default PermissionLevels
  * @since 0.2.1
  * @type {PermissionLevels}
  */
 KlasaClient.defaultPermissionLevels = new PermissionLevels()
 	.add(0, () => true)
-	.add(6, (client, message) => message.guild && message.member.permissions.has(FLAGS.MANAGE_GUILD), { fetch: true })
-	.add(7, (client, message) => message.guild && message.member === message.guild.owner, { fetch: true })
-	.add(9, (client, message) => message.author === client.owner, { break: true })
-	.add(10, (client, message) => message.author === client.owner);
+	.add(6, ({ guild, member }) => guild && member.permissions.has(FLAGS.MANAGE_GUILD), { fetch: true })
+	.add(7, ({ guild, member }) => guild && member === guild.owner, { fetch: true })
+	.add(9, ({ author, client }) => author === client.owner, { break: true })
+	.add(10, ({ author, client }) => author === client.owner);
 
 
 /**
@@ -555,6 +561,8 @@ KlasaClient.defaultClientSchema = new Schema()
  * @since 0.4.0
  * @param {KlasaMessage} message The message that triggered the command
  * @param {string} command The command attempted to run
+ * @param {RegExp} prefix The prefix used
+ * @param {number} prefixLength The length of the prefix used
  */
 
 /**

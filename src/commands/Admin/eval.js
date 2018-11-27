@@ -40,6 +40,7 @@ module.exports = class extends Command {
 		// eslint-disable-next-line no-unused-vars
 		const msg = message;
 		const { flags } = message;
+		code = code.replace(/[“”]/g, '"').replace(/[‘’]/g, "'");
 		const stopwatch = new Stopwatch();
 		let success, syncTime, asyncTime, result;
 		let thenable = false;
