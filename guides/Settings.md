@@ -43,7 +43,7 @@ const { Client } = require('klasa');
 
 Client.defaultGuildSchema
 	// Let's add a moderation folder
-  .add('moderation', modFolder => {
+	.add('moderation', modFolder => {
 		// Moderation Role
 		modFolder.add('role', 'role');
 		// Moderation channel
@@ -69,10 +69,10 @@ Below is an example of adding a piece. You can find further explanation of Piece
 const { Client } = require('klasa');
 
 Client.defaultGuildSchema
-  // Most of the options are defaulted to what they are here,
-  // but for example purposes we'll leave them.
-  .add('musicChannel', 'textchannel',
-	 { array: false, default: null });
+	// Most of the options are defaulted to what they are here,
+	// but for example purposes we'll leave them.
+	.add('musicChannel', 'textchannel',
+		{ array: false, default: null });
 ```
 <!-- Added extra line on options object to remove scrollbar -->
 
@@ -82,7 +82,7 @@ Alternatively, if you wanted multiple channels for music you could set the key a
 const { Client } = require('klasa');
 
 Client.defaultGuildSchema
-  .add('musicChannel', 'textchannel', { array: true, default: [] });
+	.add('musicChannel', 'textchannel', { array: true, default: [] });
 ```
 
 Now this key would be an array, and you could add multiple channels to it.
@@ -206,8 +206,9 @@ const { Client } = require('klasa');
 Client.defaultGuildSchema.add('modRole', 'role', { resolve: true });
 
 // Assuming you're running this command in a guild
-const { modRole } = await message.guild.settings.resolve('modRole');
-
-// Asssuming this is set as a valid role id, this will return a full Role Object to be used.
-console.log(modRole);
+async run(message) {
+	const { modRole } = await message.guild.settings.resolve('modRole');
+	// Asssuming this is set as a valid role id, this will return a full Role Object to be used.
+	console.log(modRole);
+}
 ```
