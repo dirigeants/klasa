@@ -2,24 +2,24 @@ This guide will explain anything and everything that there is to know about sett
 
 # Table of Contents
 
-- [Schema]({@scrollto Schema})
-    - [Folders]({@scrollto Folders})
-        - [Adding a Folder]({@scrollto Adding a Folder})
-        - [Adding a Piece]({@scrollto Adding a Piece})
-        - [Naming Conflicts]({@scrollto Naming Conflict})
-    - [Pieces]({@scrollto Pieces})
-        - [Types]({@scrollto Types})
-        - [Custom Types]({@scrollto Custom Types})		 
-    - [Options]({@scrollto Options})
-        - [Default]({@scrollto Default option})
-        - [Filter]({@scrollto Filter option})
-        - [Resolve]({@scrollto Resolve option})
-- [Settings]({@scrollto Settings})
-    - [Updating Settings]({@scrollto Updating Settings})
-    - [Resetting Settings]({@scrollto Resetting Settings})
-- [Gateway]({@scrollto Gateway})
-    - [Custom Gateway]({@scrollto Custom Gateway})
-    - [Gateway Plugins]({@scrollto Gateway Plugins})
+- {@scrollto Schema}
+    - {@scrollto Folders}
+        - {@scrollto Adding a Folder}
+        - {@scrollto Adding a Piece})
+        - {@scrollto Naming Conflicts}
+    - {@scrollto Pieces}
+        - {@scrollto Types}
+        - {@scrollto Custom Types} 
+    - {@scrollto Options}
+        - {@scrollto Default Option}
+        - {@scrollto Filter Option}
+        - {@scrollto Resolve Option}
+- {@scrollto Settings}
+    - {@scrollto Updating Settings}
+    - {@scrollto Resetting Settings}
+- {@scrollto Gateway}
+    - {@scrollto Custom Gateway}
+    - {@scrollto Gateway Plugins}
 
 ## Schema
 
