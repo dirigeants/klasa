@@ -34,10 +34,8 @@ new Client({
 
 {@typedef KlasaClientOptions}
 
->1. ID acquired from the Discord API if not provided: `client.application.owner.id`
->1. You can pass an array to accept multiple prefixes.
->1. quotedStringSupport is overridable per command.
->1. `Successfully initialized. Ready to serve ${client.guilds.size} guilds.`
+>1. ownerID is acquired from the Discord API if not provided: `client.application.owner.id`
+>1. quotedStringSupport is can be overridden per command.
 
 > KlasaClientOptions are merged with discord.js' ClientOptions, see [ClientOptions in the discord.js docs](https://discord.js.org/#/docs/main/master/typedef/ClientOptions).
 

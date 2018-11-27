@@ -14,6 +14,11 @@ const { isFunction } = require('../util/util');
 class Command extends AliasPiece {
 
 	/**
+	 * Defaulted to `language.get('COMMAND_HELP_NO_EXTENDED')`
+	 * @typedef {(string|Function)} ExtendedHelp
+	 */
+
+	/**
 	 * @typedef {AliasPieceOptions} CommandOptions
 	 * @property {boolean} [autoAliases=true] If automatic aliases should be added (adds aliases of name and aliases without dashes)
 	 * @property {external:PermissionResolvable} [requiredPermissions=0] The required Discord permissions for the bot to use this command
@@ -22,7 +27,7 @@ class Command extends AliasPiece {
 	 * @property {string} [cooldownLevel='author'] The level the cooldown applies to (valid options are 'author', 'channel', 'guild')
 	 * @property {boolean} [deletable=false] If the responses should be deleted if the triggering message is deleted
 	 * @property {(string|Function)} [description=''] The help description for the command
-	 * @property {(string|Function)} [extendedHelp=language.get('COMMAND_HELP_NO_EXTENDED')] Extended help strings
+	 * @property {ExtendedHelp} [extendedHelp] Extended help strings
 	 * @property {boolean} [guarded=false] If the command can be disabled on a guild level (does not effect global disable)
 	 * @property {boolean} [nsfw=false] If the command should only run in nsfw channels
 	 * @property {number} [permissionLevel=0] The required permission level to use the command
