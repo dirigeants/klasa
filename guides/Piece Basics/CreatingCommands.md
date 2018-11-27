@@ -52,6 +52,10 @@ module.exports = class extends Command {
 
 >`[...params]` represents a variable number of arguments give when the command is run. The name of the arguments in the array (and their count) is determined by the `usage` property and its given arguments.
 
+## Examples
+
+You can take a look at the [included core Commands](https://github.com/dirigeants/klasa/tree/{branch}/src/commands), or see some [prebuilt Commands on klasa-pieces](https://github.com/dirigeants/klasa-pieces/tree/master/commands).
+
 ## Further Reading:
 
 - {@tutorial CreatingArguments}

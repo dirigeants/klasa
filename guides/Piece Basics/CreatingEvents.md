@@ -37,6 +37,10 @@ Where `...params` are arguments you would *normally* get from those events. For 
 
 {@typedef EventOptions}
 
+## Examples
+
+You can take a look at the [included core Events](https://github.com/dirigeants/klasa/tree/{branch}/src/events), or see some [prebuilt Events on klasa-pieces](https://github.com/dirigeants/klasa-pieces/tree/master/events).
+
 ## Further Reading:
 
 - {@tutorial CreatingArguments}

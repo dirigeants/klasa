@@ -40,19 +40,9 @@ module.exports = class extends Finalizer {
 - **response**: The value the command returns.
 - **runTime**: The time it took to run the command.
 
-## Existing finalizers
+## Examples
 
-Klasa has two pre-installed finalizers: `commandCooldown` and `commandlogging`.
-
-### commandCooldown
-
-This finalizer applies the cooldown from the commands' `Command.cooldown` (if exists and its value is above `0`).
-
-### commandlogging
-
-This finalizer, unlike commandCooldown, is only run if the property `commandLogging` of
-your Klasa's client settings is set to `true`. It prints in the command prompt the command run, where,
-the user who ran it, and the time it took to process the command.
+You can take a look at the [included core Finalizers](https://github.com/dirigeants/klasa/tree/{branch}/src/finalizers), or see some [prebuilt Finalizers on klasa-pieces](https://github.com/dirigeants/klasa-pieces/tree/master/finalizers).
 
 ## Further Reading:
 
