@@ -1,3 +1,5 @@
+test {branch}
+
 ## Installing Klasa
 
 Time to take the plunge! Klasa is on NPM and can be easily installed.
