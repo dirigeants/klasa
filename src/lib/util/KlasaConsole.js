@@ -11,8 +11,8 @@ const { mergeDefault } = require('./util');
 class KlasaConsole extends Console {
 
 	/**
-	 * @typedef {Object} KlasaConsoleConfig
-	 * @property {KlasaConsoleColorStyles} [colors] The console color styles
+	 * @typedef {Object} ConsoleConfig
+	 * @property {ConsoleColorStyles} [colors] The console color styles
 	 * @property {NodeJS.WritableStream} [stdout] The WritableStream for the output logs
 	 * @property {NodeJS.WritableStream} [stderr] The WritableStream for the error logs
 	 * @property {(boolean|string)} [timestamps] If false, it won't use timestamps. Otherwise it will use 'YYYY-MM-DD HH:mm:ss' if true or custom if string is given
@@ -21,38 +21,38 @@ class KlasaConsole extends Console {
 	 */
 
 	/**
-	 * @typedef {Object} KlasaConsoleColorStyles Time is for the timestamp of the log, message is for the actual output.
-	 * @property {KlasaConsoleColorObjects} debug An object containing a message and time color object
-	 * @property {KlasaConsoleColorObjects} error An object containing a message and time color object
-	 * @property {KlasaConsoleColorObjects} log An object containing a message and time color object
-	 * @property {KlasaConsoleColorObjects} verbose An object containing a message and time color object
-	 * @property {KlasaConsoleColorObjects} warn An object containing a message and time color object
-	 * @property {KlasaConsoleColorObjects} wtf An object containing a message and time Color Object
+	 * @typedef {Object} ConsoleColorStyles Time is for the timestamp of the log, message is for the actual output.
+	 * @property {ConsoleColorObjects} debug An object containing a message and time color object
+	 * @property {ConsoleColorObjects} error An object containing a message and time color object
+	 * @property {ConsoleColorObjects} log An object containing a message and time color object
+	 * @property {ConsoleColorObjects} verbose An object containing a message and time color object
+	 * @property {ConsoleColorObjects} warn An object containing a message and time color object
+	 * @property {ConsoleColorObjects} wtf An object containing a message and time Color Object
 	 */
 
 	/**
-	 * @typedef {Object} KlasaConsoleColorObjects
+	 * @typedef {Object} ConsoleColorObjects
 	 * @property {string} [type='log'] The method from Console this color object should call
-	 * @property {KlasaConsoleMessageObject} message A message object containing colors and styles
-	 * @property {KlasaConsoleTimeObject} time A time object containing colors and styles
+	 * @property {ConsoleMessageObject} message A message object containing colors and styles
+	 * @property {ConsoleTimeObject} time A time object containing colors and styles
 	 */
 
 	/**
-	 * @typedef {Object} KlasaConsoleMessageObject
-	 * @property {KlasaConsoleColorTypes} background The background color. Can be a basic string like "red", a hex string, or a RGB array
-	 * @property {KlasaConsoleColorTypes} text The text color. Can be a basic string like "red", a hex string, or a RGB array
-	 * @property {KlasaConsoleStyleTypes} style A style string from KlasaConsoleStyleTypes
+	 * @typedef {Object} ConsoleMessageObject
+	 * @property {ConsoleColorTypes} background The background color. Can be a basic string like "red", a hex string, or a RGB array
+	 * @property {ConsoleColorTypes} text The text color. Can be a basic string like "red", a hex string, or a RGB array
+	 * @property {ConsoleStyleTypes} style A style string from KlasaConsoleStyleTypes
 	 */
 
 	/**
-	 * @typedef {Object} KlasaConsoleTimeObject
-	 * @property {KlasaConsoleColorTypes} background The background color. Can be a basic string like "red", a hex string, or a RGB array
-	 * @property {KlasaConsoleColorTypes} text The text color. Can be a basic string like "red", a hex string, a RGB array, or HSL array
-	 * @property {KlasaConsoleStyleTypes} style A style string from KlasaConsoleStyleTypes
+	 * @typedef {Object} ConsoleTimeObject
+	 * @property {ConsoleColorTypes} background The background color. Can be a basic string like "red", a hex string, or a RGB array
+	 * @property {ConsoleColorTypes} text The text color. Can be a basic string like "red", a hex string, a RGB array, or HSL array
+	 * @property {ConsoleStyleTypes} style A style string from KlasaConsoleStyleTypes
 	 */
 
 	/**
-	 * @typedef {Object} KlasaConsoleColorTypes - All the valid color types.
+	 * @typedef {Object} ConsoleColorTypes - All the valid color types.
 	 * @property {string} black The black colour
 	 * @property {string} red The red colour
 	 * @property {string} green The green colour
@@ -74,7 +74,7 @@ class KlasaConsole extends Console {
 	 */
 
 	/**
-	 * @typedef {*} KlasaConsoleStyleTypes
+	 * @typedef {*} ConsoleStyleTypes
 	 * @property {string} normal Default style
 	 * @property {string} bold Bold style. May appear with a lighter colour in many terminals
 	 * @property {string} dim Dim style
@@ -86,9 +86,9 @@ class KlasaConsole extends Console {
 	 */
 
 	/**
-	 * Constructs our KlasaConsole instance
+	 * Constructs our Console instance
 	 * @since 0.4.0
-	 * @param {KlasaConsoleConfig} [options] The options for the klasa console
+	 * @param {ConsoleConfig} [options] The options for the klasa console
 	 */
 	constructor(options = {}) {
 		options = mergeDefault(constants.DEFAULTS.CONSOLE, options);

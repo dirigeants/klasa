@@ -44,28 +44,38 @@ const plugins = new Set();
 class KlasaClient extends Discord.Client {
 
 	/**
+	 * Defaulted as `Successfully initialized. Ready to serve ${this.guilds.size} guilds.`
+	 * @typedef {(string|Function)} ReadyMessage
+	 */
+
+	/**
+	 * Defaulted to KlasaClient.defaultPermissionLevels
+	 * @typedef {PermissionLevelsOverload} DefaultPermissionLevels
+	 */
+
+	/**
 	 * @typedef {external:DiscordClientOptions} KlasaClientOptions
 	 * @property {boolean} [commandEditing=false] Whether the bot should update responses if the command is edited
 	 * @property {boolean} [commandLogging=false] Whether the bot should log command usage
 	 * @property {number} [commandMessageLifetime=1800] The threshold for how old command messages can be before sweeping since the last edit in seconds
-	 * @property {KlasaConsoleConfig} [console={}] Config options to pass to the client console
-	 * @property {KlasaConsoleEvents} [consoleEvents={}] Config options to pass to the client console
+	 * @property {ConsoleConfig} [console={}] Config options to pass to the client console
+	 * @property {ConsoleEvents} [consoleEvents={}] Config options to pass to the client console
 	 * @property {boolean} [createPiecesFolders=true] Whether Klasa should create pieces' folder at start up or not
-	 * @property {KlasaCustomPromptDefaults} [customPromptDefaults={}] The defaults for custom prompts
+	 * @property {CustomPromptDefaults} [customPromptDefaults={}] The defaults for custom prompts
 	 * @property {string[]} [disabledCorePieces=[]] An array of disabled core piece types, e.g., ['commands', 'arguments']
-	 * @property {KlasaGatewaysOptions} [gateways={}] The options for each built-in gateway
+	 * @property {GatewaysOptions} [gateways={}] The options for each built-in gateway
 	 * @property {string} [language='en-US'] The default language Klasa should opt-in for the commands
 	 * @property {boolean} [noPrefixDM=false] Whether the bot should allow prefixless messages in DMs
 	 * @property {string} [ownerID] The discord user id for the user the bot should respect as the owner (gotten from Discord api if not provided)
-	 * @property {PermissionLevels} [permissionLevels=KlasaClient.defaultPermissionLevels] The permission levels to use with this bot
-	 * @property {KlasaPieceDefaults} [pieceDefaults={}] Overrides the defaults for all pieces
+	 * @property {PermissionLevelsOverload} [permissionLevels] The permission levels to use with this bot
+	 * @property {PieceDefaults} [pieceDefaults={}] Overrides the defaults for all pieces
 	 * @property {string|string[]} [prefix] The default prefix the bot should respond to
 	 * @property {boolean} [preserveSettings=true] Whether the bot should preserve (non-default) settings when removed from a guild
 	 * @property {boolean} [production=false] Whether the bot should handle unhandled promise rejections automatically (handles when false) (also can be configured with process.env.NODE_ENV)
-	 * @property {KlasaProvidersOptions} [providers] The provider options
-	 * @property {(string|Function)} [readyMessage=`Successfully initialized. Ready to serve ${this.guilds.size} guilds.`] readyMessage to be passed throughout Klasa's ready event
+	 * @property {ProvidersOptions} [providers] The provider options
+	 * @property {ReadyMessage} [readyMessage] readyMessage to be passed throughout Klasa's ready event
 	 * @property {RegExp} [regexPrefix] The regular expression prefix if one is provided
-	 * @property {KlasaClientOptionsSchedule} [schedule={}] The options for the internal clock module that runs Schedule
+	 * @property {ScheduleOptions} [schedule={}] The options for the internal clock module that runs Schedule
 	 * @property {number} [slowmode=0] Amount of time in ms before the bot will respond to a users command since the last command that user has run
 	 * @property {boolean} [slowmodeAggressive=false] If the slowmode time should reset if a user spams commands faster than the slowmode allows for
 	 * @property {boolean} [typing=false] Whether the bot should type while processing commands
@@ -73,24 +83,24 @@ class KlasaClient extends Discord.Client {
 	 */
 
 	/**
-	 * @typedef {Object} KlasaProvidersOptions
+	 * @typedef {Object} ProvidersOptions
 	 * @property {string} [default] The default provider to use
 	 */
 
 	/**
-	 * @typedef {Object} KlasaClientOptionsSchedule
+	 * @typedef {Object} ScheduleOptions
 	 * @property {number} [interval=60000] The interval in milliseconds for the clock to check the tasks
 	 */
 
 	/**
-	 * @typedef {Object} KlasaGatewaysOptions
+	 * @typedef {Object} GatewaysOptions
 	 * @property {GatewayDriverRegisterOptions} [clientStorage] The options for clientStorage's gateway
 	 * @property {GatewayDriverRegisterOptions} [guilds] The options for guilds' gateway
 	 * @property {GatewayDriverRegisterOptions} [users] The options for users' gateway
 	 */
 
 	/**
-	 * @typedef {Object} KlasaConsoleEvents
+	 * @typedef {Object} ConsoleEvents
 	 * @property {boolean} [debug=false] If the debug event should be enabled by default
 	 * @property {boolean} [error=true] If the error event should be enabled by default
 	 * @property {boolean} [log=true] If the log event should be enabled by default
@@ -100,7 +110,7 @@ class KlasaClient extends Discord.Client {
 	 */
 
 	/**
-	 * @typedef {Object} KlasaPieceDefaults
+	 * @typedef {Object} PieceDefaults
 	 * @property {CommandOptions} [commands={}] The default command options
 	 * @property {EventOptions} [events={}] The default event options
 	 * @property {ExtendableOptions} [extendables={}] The default extendable options
@@ -112,7 +122,7 @@ class KlasaClient extends Discord.Client {
 	 */
 
 	/**
-	 * @typedef {Object} KlasaCustomPromptDefaults
+	 * @typedef {Object} CustomPromptDefaults
 	 * @property {number} [limit=Infinity] The number of re-prompts before custom prompt gives up
 	 * @property {number} [time=30000] The time-limit for re-prompting custom prompts
 	 * @property {boolean} [quotedStringSupport=false] Whether the custom prompt should respect quoted strings
