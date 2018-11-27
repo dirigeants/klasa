@@ -1,5 +1,7 @@
 # Welcome to the klasa#{branch} docs
 
+[test this](./GettingStarted?scrollTo=installing-klasa)
+
 ## Installing Klasa
 
 You can install this branch of klasa with the following command:
