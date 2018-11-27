@@ -5,7 +5,7 @@ This guide will explain anything and everything that there is to know about sett
 - {@scrollto Schema}
     - {@scrollto Folders}
         - {@scrollto Adding a Folder}
-        - {@scrollto Adding a Piece})
+        - {@scrollto Adding a Piece}
         - {@scrollto Naming Conflicts}
     - {@scrollto Pieces}
         - {@scrollto Types}
