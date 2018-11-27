@@ -8,13 +8,9 @@
         "name": "Understanding Permission Levels",
         "path": "UnderstandingPermissionLevels.md"
     },
-    {
-        "name": "Understanding SettingsGateway",
-        "path": "UnderstandingSettingsGateway.md"
-    },
-    {
-        "name": "Understanding Usage Strings",
-        "path": "UnderstandingUsageStrings.md"
+		{
+        "name": "Settings Guide",
+        "path": "Settings.md"
     },
     {
         "name": "Frequently Asked Questions",
@@ -91,10 +87,6 @@
         "name": "Commands IV: Per-Command custom argument resolvers",
         "path": "CommandsCustomResolvers.md"
     }]
-},
-{
-    "name": "Settings",
-    "path": "Settings.md"
 },
 {
     "name": "Other Subjects",
