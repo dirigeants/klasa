@@ -1,4 +1,4 @@
-# Welcome to the klasa#{branch} docs
+# Welcome to the klasa#{branch} documentation
 
 ## Installing Klasa
 
