@@ -2,7 +2,7 @@ This guide extends {@tutorial CreatingProviders} and aims for SQL providers. As 
 
 ## Compatibility
 
-This piece existed during SettingsGateway v1 (from 0.0.1 to 0.4.0) but got unified with normal providers after SettingsGateway v2, although getting a very different behaviour and inconsistency. {@link SQLProvider SQLProviders} came back after [SettingsGateway v2.2.0](https://github.com/dirigeants/klasa/pull/284) aiming to make a more consistent library interface as well as separating the needs from a NoSQL database with SQL databases.
+This piece existed during SettingsGateway v1 (from 0.0.1 to 0.4.0) but got unified with normal providers after SettingsGateway v2, although getting a very different behavior and inconsistency. {@link SQLProvider SQLProviders} came back after [SettingsGateway v2.2.0](https://github.com/dirigeants/klasa/pull/284) aiming to make a more consistent library interface as well as separating the needs from a NoSQL database with SQL databases.
 
 > **NOTE**: This is an **advanced** tutorial, please consider downloading a provider from [klasa-pieces](https://github.com/dirigeants/klasa-pieces/tree/master/providers).
 
