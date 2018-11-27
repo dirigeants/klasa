@@ -9,7 +9,7 @@ module.exports = class extends Command {
 		super(...args, {
 			name: 'yourCommandName',
 			enabled: true,
-			runIn: ['text', 'dm', 'group'],
+			runIn: ['text', 'dm'],
 			cooldown: 0,
 			deletable: false,
 			bucket: 1,
