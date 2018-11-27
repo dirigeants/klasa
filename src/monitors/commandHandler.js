@@ -44,7 +44,7 @@ module.exports = class extends Monitor {
 	getPrefix(msg) {
 		if (this.prefixMention.test(msg.content)) return { length: this.nick.test(msg.content) ? this.prefixMentionLength + 1 : this.prefixMentionLength, regex: this.prefixMention };
 		const prefix = msg.guildSettings.prefix || this.client.config.prefix;
-		if (prefix instanceof Array) {
+		if (Array.isArray(prefix)) {
 			for (let i = prefix.length - 1; i >= 0; i--) {
 				const testingPrefix = this.prefixes.get(prefix[i]) || this.generateNewPrefix(prefix[i]);
 				if (testingPrefix.regex.test(msg.content)) return testingPrefix;
