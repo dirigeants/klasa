@@ -198,7 +198,7 @@ class TextPrompt {
 			return this.validateArgs();
 		}
 
-		if (message.content.toLowerCase() === 'cancel') return this.validateArgs();
+		if (this.message.language.get('MONITOR_COMMAND_HANDLER_REPEATING_POSSIBLITIES').includes(message.content.toLowerCase())) return this.validateArgs();
 
 		if (this.typing) this.message.channel.startTyping();
 		this.args.push(message.content);
