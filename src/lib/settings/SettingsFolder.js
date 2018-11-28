@@ -260,8 +260,9 @@ class SettingsFolder extends Map {
 					throw language.get('SETTING_GATEWAY_KEY_NOT_ARRAY', key);
 				}
 
-				promises.push(this._parse(piece, key, value[1], options)
-					.then((parsed) => values.push([piece.path, parsed, piece]))
+				const previous = this.get(key);
+				promises.push(this._parse(piece, previous, value[1], options)
+					.then((parsed) => values.push([piece.path, previous, parsed, piece]))
 					.catch(onError));
 			} catch (error) {
 				if (options.throwOnError) throw error;
@@ -274,8 +275,8 @@ class SettingsFolder extends Map {
 
 		// Queue updates
 		const results = [];
-		for (const [path, value, piece] of values) {
-			if (piece.array ? arraysStrictEquals(value, piece.default) : value === piece.default) continue;
+		for (const [path, previous, value, piece] of values) {
+			if (piece.array ? arraysStrictEquals(value, previous) : value === previous) continue;
 			results.push({ key: path, value, piece });
 		}
 
@@ -354,47 +355,46 @@ class SettingsFolder extends Map {
 	 * Parse a value
 	 * @since 0.5.0
 	 * @param {SchemaPiece} piece The path result
-	 * @param {string} key The key that updates
-	 * @param {*} value The value to parse
+	 * @param {*} previous The key that updates
+	 * @param {*} next The value to parse
 	 * @param {SettingsFolderUpdateOptions} options The parse options
 	 * @private
 	 */
-	async _parse(piece, key, value, options) {
-		if (value === null) return piece.default;
+	async _parse(piece, previous, next, options) {
+		if (next === null) return piece.default;
 
-		const isArray = Array.isArray(value);
-		if (isArray) value = await Promise.all(value.map(async val => piece.serializer.serialize(await piece.parse(val, options.guild))));
-		else value = piece.serializer.serialize(await piece.parse(value, options.guild));
+		const isArray = Array.isArray(next);
+		if (isArray) next = await Promise.all(next.map(async val => piece.serializer.serialize(await piece.parse(val, options.guild))));
+		else next = piece.serializer.serialize(await piece.parse(next, options.guild));
 
-		if (!piece.array) return value;
-		if (!isArray) value = [value];
+		if (!piece.array) return next;
+		if (!isArray) next = [next];
 
 		const { arrayAction = 'auto', arrayIndex = null } = options;
-		if (arrayAction === 'overwrite') return value;
+		if (arrayAction === 'overwrite') return next;
 
-		const array = this.get(key);
-		const clone = array.slice();
+		const clone = previous.slice();
 		if (arrayIndex !== null) {
-			if (arrayIndex < 0 || arrayIndex > array.length + 1) {
-				throw `The index ${arrayIndex} is bigger than the current array. It must be a value in the range of 0..${array.length + 1}.`;
+			if (arrayIndex < 0 || arrayIndex > previous.length + 1) {
+				throw `The index ${arrayIndex} is bigger than the current array. It must be a value in the range of 0..${previous.length + 1}.`;
 			}
-			[clone[arrayIndex]] = value;
+			[clone[arrayIndex]] = next;
 		} else if (arrayAction === 'auto') {
 			// Array action auto must add or remove values, depending on their existence
-			for (const val of value) {
+			for (const val of next) {
 				const index = clone.indexOf(val);
 				if (index === -1) clone.push(val);
 				else clone.splice(index, 1);
 			}
 		} else if (arrayAction === 'add') {
 			// Array action add must add values, throw on existent
-			for (const val of value) {
+			for (const val of next) {
 				if (clone.includes(val)) throw `The value ${val} for the key ${piece.path} already exists.`;
 				clone.push(val);
 			}
 		} else if (arrayAction === 'remove') {
 			// Array action remove must add values, throw on non-existent
-			for (const val of value) {
+			for (const val of next) {
 				const index = clone.indexOf(val);
 				if (index === -1) throw `The value ${val} for the key ${piece.path} does not exist.`;
 				clone.splice(index, 1);
