@@ -225,7 +225,7 @@ declare module 'klasa' {
 		public toString(): string;
 		private relative(pathOrPiece: string | Schema | SchemaPiece): string;
 		private _save(results: Array<SettingsFolderUpdateResultEntry>): Promise<void>;
-		private _parse(piece: SchemaPiece, key: string, value: any, options: SettingsFolderUpdateOptions): Promise<any>;
+		private _parse(piece: SchemaPiece, previous: any, next: any, options: SettingsFolderUpdateOptions): Promise<any>;
 		private _patch(data: Record<string, any>): void;
 	}
 
