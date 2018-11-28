@@ -42,7 +42,7 @@ module.exports = class extends Inhibitor {
 
 ## Examples
 
-You can take a look at the [included core Inhibitors](https://github.com/dirigeants/klasa/tree/{branch}/src/inhibitors), or see some [prebuilt Inhibitors on klasa-pieces](https://github.com/dirigeants/klasa-pieces/tree/master/inhibitors).
+You can take a look at the [included core Inhibitors](https://github.com/dirigeants/klasa/tree/{@branch}/src/inhibitors), or see some [prebuilt Inhibitors on klasa-pieces](https://github.com/dirigeants/klasa-pieces/tree/master/inhibitors).
 
 ## Further Reading:
 

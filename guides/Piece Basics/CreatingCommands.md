@@ -54,7 +54,7 @@ module.exports = class extends Command {
 
 ## Examples
 
-You can take a look at the [included core Commands](https://github.com/dirigeants/klasa/tree/{branch}/src/commands), or see some [prebuilt Commands on klasa-pieces](https://github.com/dirigeants/klasa-pieces/tree/master/commands).
+You can take a look at the [included core Commands](https://github.com/dirigeants/klasa/tree/{@branch}/src/commands), or see some [prebuilt Commands on klasa-pieces](https://github.com/dirigeants/klasa-pieces/tree/master/commands).
 
 ## Further Reading:
 

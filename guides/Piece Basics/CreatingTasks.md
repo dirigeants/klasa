@@ -80,7 +80,7 @@ The pattern above is a **Crontab pattern** that runs every Tuesday and Friday at
 
 ## Examples
 
-You can take a look at the [included core Tasks](https://github.com/dirigeants/klasa/tree/{branch}/src/tasks), or see some [prebuilt Tasks on klasa-pieces](https://github.com/dirigeants/klasa-pieces/tree/master/tasks).
+You can take a look at the [included core Tasks](https://github.com/dirigeants/klasa/tree/{@branch}/src/tasks), or see some [prebuilt Tasks on klasa-pieces](https://github.com/dirigeants/klasa-pieces/tree/master/tasks).
 
 ## Further Reading:
 

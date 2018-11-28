@@ -1,11 +1,11 @@
-# Welcome to the klasa#{branch} documentation
+# Welcome to the klasa#{@branch} documentation
 
 ## Installing Klasa
 
 You can install this branch of klasa with the following command:
 
 ```sh
-npm install --save discordjs/discord.js dirigeants/klasa#{branch}
+npm install --save discordjs/discord.js dirigeants/klasa#{@branch}
 ```
 
 ### Using Klasa

@@ -42,7 +42,7 @@ module.exports = class extends Finalizer {
 
 ## Examples
 
-You can take a look at the [included core Finalizers](https://github.com/dirigeants/klasa/tree/{branch}/src/finalizers), or see some [prebuilt Finalizers on klasa-pieces](https://github.com/dirigeants/klasa-pieces/tree/master/finalizers).
+You can take a look at the [included core Finalizers](https://github.com/dirigeants/klasa/tree/{@branch}/src/finalizers), or see some [prebuilt Finalizers on klasa-pieces](https://github.com/dirigeants/klasa-pieces/tree/master/finalizers).
 
 ## Further Reading:
 

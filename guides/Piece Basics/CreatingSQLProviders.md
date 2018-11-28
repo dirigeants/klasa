@@ -148,7 +148,7 @@ Another issue with the old design was portability: you can move from NoSQL to No
 
 ## Examples
 
-You can take a look at the [included core Providers](https://github.com/dirigeants/klasa/tree/{branch}/src/providers), or see some [prebuilt Providers on klasa-pieces](https://github.com/dirigeants/klasa-pieces/tree/master/providers).
+You can take a look at the [included core Providers](https://github.com/dirigeants/klasa/tree/{@branch}/src/providers), or see some [prebuilt Providers on klasa-pieces](https://github.com/dirigeants/klasa-pieces/tree/master/providers).
 
 ## Further Reading:
 

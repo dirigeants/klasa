@@ -109,7 +109,7 @@ After loading this extendable, `Message.prototype.prompt` will be available as a
 
 ## Examples
 
-You can take a look at the [included core Extendables](https://github.com/dirigeants/klasa/tree/{branch}/src/extendables), or see some [prebuilt Extendables on klasa-pieces](https://github.com/dirigeants/klasa-pieces/tree/master/extendables).
+You can take a look at the [included core Extendables](https://github.com/dirigeants/klasa/tree/{@branch}/src/extendables), or see some [prebuilt Extendables on klasa-pieces](https://github.com/dirigeants/klasa-pieces/tree/master/extendables).
 
 ## Further Reading:
 

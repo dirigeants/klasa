@@ -49,7 +49,7 @@ module.exports = class extends Monitor {
 
 ## Examples
 
-You can take a look at the [included core Monitors](https://github.com/dirigeants/klasa/tree/{branch}/src/monitors), or see some [prebuilt Monitors on klasa-pieces](https://github.com/dirigeants/klasa-pieces/tree/master/monitors).
+You can take a look at the [included core Monitors](https://github.com/dirigeants/klasa/tree/{@branch}/src/monitors), or see some [prebuilt Monitors on klasa-pieces](https://github.com/dirigeants/klasa-pieces/tree/master/monitors).
 
 ## Further Reading:
 

@@ -68,7 +68,7 @@ module.exports = class extends Command {
 
 ## Examples
 
-You can take a look at the [included core Arguments](https://github.com/dirigeants/klasa/tree/{branch}/src/arguments), or see some [prebuilt Arguments on klasa-pieces](https://github.com/dirigeants/klasa-pieces/tree/master/arguments).
+You can take a look at the [included core Arguments](https://github.com/dirigeants/klasa/tree/{@branch}/src/arguments), or see some [prebuilt Arguments on klasa-pieces](https://github.com/dirigeants/klasa-pieces/tree/master/arguments).
 
 ## Further reading
 

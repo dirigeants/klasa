@@ -81,7 +81,7 @@ Also, if a language is disabled, and a guild has it configured, the default lang
 
 ## Examples
 
-You can take a look at the [included core Languages](https://github.com/dirigeants/klasa/tree/{branch}/src/languages), or see some [prebuilt Languages on klasa-pieces](https://github.com/dirigeants/klasa-pieces/tree/master/languages).
+You can take a look at the [included core Languages](https://github.com/dirigeants/klasa/tree/{@branch}/src/languages), or see some [prebuilt Languages on klasa-pieces](https://github.com/dirigeants/klasa-pieces/tree/master/languages).
 
 ## Further Reading:
 
