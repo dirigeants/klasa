@@ -447,7 +447,7 @@ declare module 'klasa' {
 		public constructor(client: KlasaClient, store: InhibitorStore, file: string[], directory: string, options?: InhibitorOptions);
 		public spamProtection: boolean;
 
-		public abstract run(message: KlasaMessage, command: Command): Promise<boolean | string>;
+		public abstract run(message: KlasaMessage, command: Command): boolean | string | Promise<boolean | string>;
 		public toJSON(): PieceInhibitorJSON;
 	}
 
