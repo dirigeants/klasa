@@ -264,6 +264,7 @@ declare module 'klasa' {
 		public get(id: string | number): Settings | null;
 		public sync(input: string): Promise<Settings>;
 		public sync(input?: string[]): Promise<Gateway>;
+		public sync(input?: string | string[]): Promise<Settings | Gateway>;
 	}
 
 	export class QueryBuilder {
