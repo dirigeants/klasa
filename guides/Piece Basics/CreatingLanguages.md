@@ -79,6 +79,10 @@ message.language.get('SomeKeyThatExistsOnlyInEnglish');
 
 Also, if a language is disabled, and a guild has it configured, the default language will be used exclusively until either that language is no-longer disabled, or the guild configures another enabled language.
 
+## Examples
+
+You can take a look at the [included core Languages](https://github.com/dirigeants/klasa/tree/{@branch}/src/languages), or see some [prebuilt Languages on klasa-pieces](https://github.com/dirigeants/klasa-pieces/tree/master/languages).
+
 ## Further Reading:
 
 - {@tutorial CreatingArguments}

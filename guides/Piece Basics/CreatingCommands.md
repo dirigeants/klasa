@@ -9,7 +9,7 @@ module.exports = class extends Command {
 		super(...args, {
 			name: 'yourCommandName',
 			enabled: true,
-			runIn: ['text', 'dm', 'group'],
+			runIn: ['text', 'dm'],
 			cooldown: 0,
 			deletable: false,
 			bucket: 1,
@@ -51,6 +51,10 @@ module.exports = class extends Command {
 > All {@link CommandOptions command options} are optional, the code above shows all default values. You can delete any line with an optional value that matches the default value.
 
 >`[...params]` represents a variable number of arguments give when the command is run. The name of the arguments in the array (and their count) is determined by the `usage` property and its given arguments.
+
+## Examples
+
+You can take a look at the [included core Commands](https://github.com/dirigeants/klasa/tree/{@branch}/src/commands), or see some [prebuilt Commands on klasa-pieces](https://github.com/dirigeants/klasa-pieces/tree/master/commands).
 
 ## Further Reading:
 

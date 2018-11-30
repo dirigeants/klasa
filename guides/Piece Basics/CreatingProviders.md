@@ -97,6 +97,10 @@ The {@link ProviderStore providers} are stored in the main {@link KlasaClient} o
 for each provider added, based on its `name`. So for example if you have it set as
 `postgresql` , you can access it through `client.providers.get('postgresql');`.
 
+## Examples
+
+You can take a look at the [included core Providers](https://github.com/dirigeants/klasa/tree/{@branch}/src/providers), or see some [prebuilt Providers on klasa-pieces](https://github.com/dirigeants/klasa-pieces/tree/master/providers).
+
 ## Further Reading:
 
 - {@tutorial CreatingArguments}

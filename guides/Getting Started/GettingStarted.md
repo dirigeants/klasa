@@ -1,17 +1,11 @@
+# Welcome to the klasa#{@branch} documentation
+
 ## Installing Klasa
 
-Time to take the plunge! Klasa is on NPM and can be easily installed.
-
-> I assume you know how to open a command prompt in a folder where you want to install this. Please don't prove me wrong.
+You can install this branch of klasa with the following command:
 
 ```sh
-npm install --save discordjs/discord.js klasa
-```
-
-Optionally if you want to use the bleeding edge development version (not guaranteed to be stable):
-
-```sh
-npm install --save discordjs/discord.js dirigeants/klasa
+npm install --save discordjs/discord.js dirigeants/klasa#{@branch}
 ```
 
 ### Using Klasa
@@ -34,10 +28,8 @@ new Client({
 
 {@typedef KlasaClientOptions}
 
->1. ID acquired from the Discord API if not provided: `client.application.owner.id`
->1. You can pass an array to accept multiple prefixes.
->1. quotedStringSupport is overridable per command.
->1. `Successfully initialized. Ready to serve ${client.guilds.size} guilds.`
+>1. ownerID is acquired from the Discord API if not provided: `client.application.owner.id`
+>1. quotedStringSupport is can be overridden per command.
 
 > KlasaClientOptions are merged with discord.js' ClientOptions, see [ClientOptions in the discord.js docs](https://discord.js.org/#/docs/main/master/typedef/ClientOptions).
 

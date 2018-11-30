@@ -131,52 +131,6 @@
     }]
 },
 {
-    "name": "Included Pieces",
-    "files": [{
-        "name": "Included Arguments",
-        "path": "IncludedArguments.md"
-    },{
-        "name": "Included Commands",
-        "path": "IncludedCommands.md"
-    },
-    {
-        "name": "Included Events",
-        "path": "IncludedEvents.md"
-    },
-    {
-        "name": "Included Extendables",
-        "path": "IncludedExtendables.md"
-    },
-    {
-        "name": "Included Finalizers",
-        "path": "IncludedFinalizers.md"
-    },
-    {
-        "name": "Included Inhibitors",
-        "path": "IncludedInhibitors.md"
-    },
-    {
-        "name": "Included Languages",
-        "path": "IncludedLanguages.md"
-    },
-    {
-        "name": "Included Monitors",
-        "path": "IncludedMonitors.md"
-    },
-    {
-        "name": "Included Providers",
-        "path": "IncludedProviders.md"
-    },
-    {
-        "name": "Included Serializers",
-        "path": "IncludedSerializers.md"
-    },
-    {
-        "name": "Included Tasks",
-        "path": "IncludedTasks.md"
-    }]
-},
-{
     "name": "Building Your Bot",
     "files": [{
         "name": "Creating a Points System",
