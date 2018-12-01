@@ -6,7 +6,7 @@ class SchemaPiece {
 	 * @typedef {Object} SchemaPieceOptions
 	 * @property {*} [default] The default value for the key
 	 * @property {Function} [filter] The filter to use when resolving this key. The function is passed the resolved value from the resolver, and a guild.
-	 * @property {boolean} [array] Whether the key should be stored as Array or not
+	 * @property {Dataset} [dataset] The dataset
 	 * @property {boolean} [configurable] Whether the key should be configurable by the configuration command or not
 	 * @property {number} [min] The minimum value for this piece
 	 * @property {number} [max] The maximum value for this piece
@@ -73,9 +73,9 @@ class SchemaPiece {
 		/**
 		 * Whether or not this key should hold an array of data, or a single piece of data
 		 * @since 0.5.0
-		 * @type {boolean}
+		 * @type {string}
 		 */
-		this.array = 'array' in options ? options.array : Array.isArray(options.default);
+		this.datasetName = 'dataset' in options ? options.dataset : null;
 
 		/**
 		 * The default data this key will revert back to if reset, or if the key is never set
@@ -121,6 +121,16 @@ class SchemaPiece {
 	}
 
 	/**
+	 * The dataset for this SchemaPiece
+	 * @since 0.5.0
+	 * @type {Dataset}
+	 * @readonly
+	 */
+	get dataset() {
+		return this.client.datasets.get(this.datasetName);
+	}
+
+	/**
 	 * The serializer for this SchemaPiece
 	 * @since 0.5.0
 	 * @type {Serializer}
@@ -138,7 +148,7 @@ class SchemaPiece {
 	 */
 	edit(options = {}) {
 		if ('type' in options) this.type = options.type;
-		if ('array' in options) this.array = options.array;
+		if ('dataset' in options) this.datasetName = options.dataset;
 		if ('configurable' in options) this.configurable = options.configurable;
 		if ('filter' in options) this.filter = options.filter;
 		if ('default' in options) this.default = options.default;
@@ -161,8 +171,8 @@ class SchemaPiece {
 		if (typeof this.type !== 'string') throw new TypeError(`[KEY] ${this.path} - Parameter type must be a string.`);
 		if (!this.client.serializers.has(this.type)) throw new TypeError(`[KEY] ${this.path} - ${this.type} is not a valid type.`);
 
-		// Check array
-		if (typeof this.array !== 'boolean') throw new TypeError(`[KEY] ${this.path} - Parameter array must be a boolean.`);
+		// Check dataset, if name is not null but dataset is, it's not a valid Dataset
+		if (this.datasetName && !this.dataset) throw new TypeError(`[KEY] ${this.path} - Parameter array must be a boolean.`);
 
 		// Check configurable
 		if (typeof this.configurable !== 'boolean') throw new TypeError(`[KEY] ${this.path} - Parameter configurable must be a boolean.`);
@@ -176,10 +186,13 @@ class SchemaPiece {
 		if (this.filter !== null && !isFunction(this.filter)) throw new TypeError(`[KEY] ${this.path} - Parameter filter must be a function`);
 
 		// Check default
-		if (this.array) {
-			if (!Array.isArray(this.default)) throw new TypeError(`[DEFAULT] ${this.path} - Default key must be an array if the key stores an array.`);
-		} else if (this.default !== null) {
-			if (['boolean', 'string'].includes(this.type) && typeof this.default !== this.type) throw new TypeError(`[DEFAULT] ${this.path} - Default key must be a ${this.type}.`);
+		if (this.default !== null) {
+			// This throws if it's invalid
+			if (this.datasetName) {
+				this.dataset(this.default);
+			} else if (['boolean', 'string'].includes(this.type) && typeof this.default !== this.type) {
+				throw new TypeError(`[DEFAULT] ${this.path} - Default key must be a ${this.type}.`);
+			}
 		}
 
 		return true;
@@ -223,7 +236,7 @@ class SchemaPiece {
 	 * @private
 	 */
 	_generateDefault() {
-		if (this.array) return [];
+		if (this.datasetName) return this.dataset.default;
 		if (this.type === 'boolean') return false;
 		return null;
 	}
@@ -235,7 +248,7 @@ class SchemaPiece {
 	 */
 	toJSON() {
 		return {
-			array: this.array,
+			dataset: this.datasetName ? this.dataset.toJSON() : null,
 			configurable: this.configurable,
 			default: this.default,
 			max: this.max,

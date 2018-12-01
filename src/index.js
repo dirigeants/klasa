@@ -36,6 +36,8 @@ module.exports = {
 	ArgumentStore: require('./lib/structures/ArgumentStore'),
 	Command: require('./lib/structures/Command'),
 	CommandStore: require('./lib/structures/CommandStore'),
+	Dataset: require('./lib/structures/Dataset'),
+	DatasetStore: require('./lib/structures/DatasetStore'),
 	Event: require('./lib/structures/Event'),
 	EventStore: require('./lib/structures/EventStore'),
 	Extendable: require('./lib/structures/Extendable'),

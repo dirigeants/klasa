@@ -11,6 +11,7 @@ const Schedule = require('./schedule/Schedule');
 // lib/structures
 const ArgumentStore = require('./structures/ArgumentStore');
 const CommandStore = require('./structures/CommandStore');
+const DatasetStore = require('./structures/DatasetStore');
 const EventStore = require('./structures/EventStore');
 const ExtendableStore = require('./structures/ExtendableStore');
 const FinalizerStore = require('./structures/FinalizerStore');
@@ -220,11 +221,18 @@ class KlasaClient extends Discord.Client {
 		this.tasks = new TaskStore(this);
 
 		/**
-		 * The Serializers where serializers are stored
+		 * The cache where serializers are stored
 		 * @since 0.5.0
 		 * @type {SerializerStore}
 		 */
 		this.serializers = new SerializerStore(this);
+
+		/**
+		 * The cache where datasets are stored
+		 * @since 0.5.0
+		 * @type {DatasetStore}
+		 */
+		this.datasets = new DatasetStore(this);
 
 		/**
 		 * A Store registry
