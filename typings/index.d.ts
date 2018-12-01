@@ -277,7 +277,7 @@ declare module 'klasa' {
 		private readonly _datatypes: ObjectLiteral<Required<QueryBuilderDatatypeOptions>>;
 	}
 
-	export abstract class GatewayStorage {
+	export class GatewayStorage {
 		public constructor(client: KlasaClient, name: string, schema?: Schema, provider?: string);
 		public readonly client: KlasaClient;
 		public readonly provider: Provider | null;
