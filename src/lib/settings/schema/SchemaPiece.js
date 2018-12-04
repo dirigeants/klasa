@@ -10,6 +10,7 @@ class SchemaPiece {
 	 * @property {boolean} [configurable] Whether the key should be configurable by the configuration command or not
 	 * @property {number} [min] The minimum value for this piece
 	 * @property {number} [max] The maximum value for this piece
+	 /*@property {boolean} [inclusive] Whether the key should check for inclusivity when checking min and max
 	 * @property {boolean} [resolve] Whether or not SG should resolve this value during resolve operations
 	 */
 
@@ -97,6 +98,13 @@ class SchemaPiece {
 		 * @type {?number}
 		 */
 		this.max = 'max' in options ? options.max : null;
+
+		/**
+		 * Whether this key should inclusively or exclusively check min and max
+		 * @since 0.5.0
+		 * @type {boolean}
+		 */
+		this.inclusive = 'inclusive' in options ? options.inclusive : true;
 
 		/**
 		 * Whether this key should be configurable by the config command. When type is any, this key defaults to false.
