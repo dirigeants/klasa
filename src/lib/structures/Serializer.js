@@ -43,6 +43,21 @@ class Serializer extends AliasPiece {
 		return String(data);
 	}
 
+	static minOrMax(value, { min, max, inclusive, name }, language) {
+		if (min && max) {
+			if ((value >= min && value <= max && inclusive) || (value > min && value < max && !inclusive)) return true;
+			if (min === max) throw language.get('RESOLVER_MINMAX_EXACTLY', name, min, inclusive);
+			throw language.get('RESOLVER_MINMAX_BOTH', name, min, max, inclusive);
+		} else if (min) {
+			if ((value >= min && inclusive) || (value > min && !inclusive)) return true;
+			throw language.get('RESOLVER_MINMAX_MIN', name, min, inclusive);
+		} else if (max) {
+			if ((value <= max && inclusive) || (value < max && !inclusive)) return true;
+			throw language.get('RESOLVER_MINMAX_MAX', name, max, inclusive);
+		}
+		return true;
+	}
+
 }
 
 /**
