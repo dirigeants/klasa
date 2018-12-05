@@ -60,6 +60,7 @@ declare module 'klasa' {
 		public static defaultPermissionLevels: PermissionLevels;
 		public static plugin: symbol;
 		public static use(mod: any): typeof KlasaClient;
+		public emit(type: string, value: any): any;
 	}
 
 	export { KlasaClient as Client };
