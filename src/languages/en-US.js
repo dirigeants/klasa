@@ -44,7 +44,7 @@ module.exports = class extends Language {
 			RESOLVER_STRING_SUFFIX: ' characters',
 			RESOLVER_MINMAX_EXACTLY: (name, min) => `${name} must be exactly ${min}.`,
 			RESOLVER_MINMAX_BOTH: (name, min, max, inclusive) => inclusive ? `${name} must be between ${min} and ${max} inclusively.` : `${name} must be between ${min} and ${max} exclusively.`,
-			RESOLVER_MINMAX_MIN: (name, min, inclusive) => inclusive ? `${name} must be greater than  ${min} inclusively.` : `${name} must be greater than ${min} exclusively.`,
+			RESOLVER_MINMAX_MIN: (name, min, inclusive) => inclusive ? `${name} must be greater than ${min} inclusively.` : `${name} must be greater than ${min} exclusively.`,
 			RESOLVER_MINMAX_MAX: (name, max, inclusive) => inclusive ? `${name} must be less than ${max} inclusively` : `${name} must be less than ${max} exclusively.`,
 			REACTIONHANDLER_PROMPT: 'Which page would you like to jump to?',
 			COMMANDMESSAGE_MISSING: 'Missing one or more required arguments after end of input.',
