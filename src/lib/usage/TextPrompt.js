@@ -187,10 +187,10 @@ class TextPrompt {
 	async repeatingPrompt() {
 		if (this.typing) this.message.channel.stopTyping();
 		let message;
-
+		const possibleCancelOptions = this.message.language.get('MONITOR_COMMAND_HANDLER_REPEATING_POSSIBLITIES');
 		try {
 			message = await this.message.prompt(
-				this.message.language.get('MONITOR_COMMAND_HANDLER_REPEATING_REPROMPT', `<@!${this.message.author.id}>`, this._currentUsage.possibles[0].name, this.time / 1000),
+				this.message.language.get('MONITOR_COMMAND_HANDLER_REPEATING_REPROMPT', `<@!${this.message.author.id}>`, this._currentUsage.possibles[0].name, this.time / 1000, possibleCancelOptions),
 				this.time
 			);
 			this.responses.set(message.id, message);
@@ -198,7 +198,7 @@ class TextPrompt {
 			return this.validateArgs();
 		}
 
-		if (this.message.language.get('MONITOR_COMMAND_HANDLER_REPEATING_POSSIBLITIES').includes(message.content.toLowerCase())) return this.validateArgs();
+		if (possibleCancelOptions.includes(message.content.toLowerCase())) return this.validateArgs();
 
 		if (this.typing) this.message.channel.startTyping();
 		this.args.push(message.content);
