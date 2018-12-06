@@ -3,7 +3,7 @@
 
 set -e
 
-if [ -n "$TRAVIS_TAG" -o "$TRAVIS_PULL_REQUEST" != "false" ]; then
+if [ -n "$TRAVIS_TAG" ] || [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
   echo -e "Not building for a non branch push - building without deploying."
   npm run docs
   exit 0
