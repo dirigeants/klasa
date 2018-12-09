@@ -200,7 +200,7 @@ class Settings {
 			}
 			await this._save(result);
 
-			if (result.errors.length) this.client.emit('error', errors.join('\n'));
+			if (result.errors.length) this.client.emit('error', result.errors.join('\n'));
 			return result;
 		}
 		throw new TypeError(`Invalid value. Expected string or Array<string>. Got: ${new Type(keys)}`);
@@ -352,7 +352,7 @@ class Settings {
 			await this._save(result);
 		}
 
-		if (result.errors.length) this.client.emit('error', errors.join('\n'));
+		if (result.errors.length) this.client.emit('error', result.errors.join('\n'));
 
 		return result;
 	}
