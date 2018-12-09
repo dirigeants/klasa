@@ -199,6 +199,8 @@ class Settings {
 				if (this._setValueByPath(path.piece, value, force).updated) result.updated.push({ data: [path.piece.path, value], piece: path.piece });
 			}
 			await this._save(result);
+
+			if (result.errors.length) this.client.emit('error', errors.join('\n'));
 			return result;
 		}
 		throw new TypeError(`Invalid value. Expected string or Array<string>. Got: ${new Type(keys)}`);
@@ -349,6 +351,8 @@ class Settings {
 			await Promise.all(promises);
 			await this._save(result);
 		}
+
+		if (result.errors.length) this.client.emit('error', errors.join('\n'));
 
 		return result;
 	}
