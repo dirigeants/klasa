@@ -45,6 +45,10 @@ The stringify method takes 1 parameter:
 | --------- | --------- | ------------------------------------------- |
 | **value** | Primitive | A primitive value (string, number, boolean) |
 
+## Examples
+
+You can take a look at the [included core Serializers](https://github.com/dirigeants/klasa/tree/{@branch}/src/serializers), or see some [prebuilt Serializers on klasa-pieces](https://github.com/dirigeants/klasa-pieces/tree/master/serializers).
+
 # Further reading
 
 - {@tutorial CreatingCommands}

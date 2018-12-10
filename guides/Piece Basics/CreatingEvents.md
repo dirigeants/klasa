@@ -35,13 +35,11 @@ Where `...params` are arguments you would *normally* get from those events. For 
 
 ## Options
 
-| Name        | Default       | Type         | Description                         |
-| ----------- | ------------- | ------------ | ----------------------------------- |
-| **name**    | `theFileName` | string       | The name of the event               |
-| **enabled** | `true`        | boolean      | Whether the event is enabled or not |
-| **event**   | `theFileName` | string       | The event to listen to              |
-| **emitter** | `this.client` | EventEmitter | The emitter the event belongs to    |
-| **once**    | `false`       | boolean      | If the event should only run once   |
+{@typedef EventOptions}
+
+## Examples
+
+You can take a look at the [included core Events](https://github.com/dirigeants/klasa/tree/{@branch}/src/events), or see some [prebuilt Events on klasa-pieces](https://github.com/dirigeants/klasa-pieces/tree/master/events).
 
 ## Further Reading:
 
