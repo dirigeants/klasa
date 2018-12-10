@@ -11,7 +11,7 @@ const { mergeDefault } = require('./util');
 class KlasaConsole extends Console {
 
 	/**
-	 * @typedef {Object} ConsoleConfig
+	 * @typedef {Object} ConsoleOptions
 	 * @property {ConsoleColorStyles} [colors] The console color styles
 	 * @property {NodeJS.WritableStream} [stdout] The WritableStream for the output logs
 	 * @property {NodeJS.WritableStream} [stderr] The WritableStream for the error logs
@@ -41,14 +41,14 @@ class KlasaConsole extends Console {
 	 * @typedef {Object} ConsoleMessageObject
 	 * @property {ConsoleColorTypes} background The background color. Can be a basic string like "red", a hex string, or a RGB array
 	 * @property {ConsoleColorTypes} text The text color. Can be a basic string like "red", a hex string, or a RGB array
-	 * @property {ConsoleStyleTypes} style A style string from KlasaConsoleStyleTypes
+	 * @property {ConsoleStyleTypes} style A style string from ConsoleStyleTypes
 	 */
 
 	/**
 	 * @typedef {Object} ConsoleTimeObject
 	 * @property {ConsoleColorTypes} background The background color. Can be a basic string like "red", a hex string, or a RGB array
 	 * @property {ConsoleColorTypes} text The text color. Can be a basic string like "red", a hex string, a RGB array, or HSL array
-	 * @property {ConsoleStyleTypes} style A style string from KlasaConsoleStyleTypes
+	 * @property {ConsoleStyleTypes} style A style string from ConsoleStyleTypes
 	 */
 
 	/**
@@ -88,7 +88,7 @@ class KlasaConsole extends Console {
 	/**
 	 * Constructs our KlasaConsole instance
 	 * @since 0.4.0
-	 * @param {ConsoleConfig} [options] The options for the klasa console
+	 * @param {ConsoleOptions} [options] The options for the klasa console
 	 */
 	constructor(options = {}) {
 		options = mergeDefault(constants.DEFAULTS.CONSOLE, options);

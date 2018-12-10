@@ -58,7 +58,7 @@ class KlasaClient extends Discord.Client {
 	 * @property {boolean} [commandEditing=false] Whether the bot should update responses if the command is edited
 	 * @property {boolean} [commandLogging=false] Whether the bot should log command usage
 	 * @property {number} [commandMessageLifetime=1800] The threshold for how old command messages can be before sweeping since the last edit in seconds
-	 * @property {ConsoleConfig} [console={}] Config options to pass to the client console
+	 * @property {ConsoleOptions} [console={}] Config options to pass to the client console
 	 * @property {ConsoleEvents} [consoleEvents={}] Config options to pass to the client console
 	 * @property {boolean} [createPiecesFolders=true] Whether Klasa should create pieces' folder at start up or not
 	 * @property {CustomPromptDefaults} [customPromptDefaults={}] The defaults for custom prompts
