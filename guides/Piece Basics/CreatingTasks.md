@@ -76,10 +76,11 @@ The pattern above is a **Crontab pattern** that runs every Tuesday and Friday at
 
 ## Options
 
-| Name        | Default       | Type    | Description                        |
-| ----------- | ------------- | ------- | ---------------------------------- |
-| **name**    | `theFileName` | string  | The name of the task               |
-| **enabled** | `true`        | boolean | Whether the task is enabled or not |
+{@typedef PieceOptions}
+
+## Examples
+
+You can take a look at the [included core Tasks](https://github.com/dirigeants/klasa/tree/{@branch}/src/tasks), or see some [prebuilt Tasks on klasa-pieces](https://github.com/dirigeants/klasa-pieces/tree/master/tasks).
 
 ## Further Reading:
 

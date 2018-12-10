@@ -66,7 +66,11 @@ module.exports = class extends Command {
 
 >**note:** An Emoji argument already comes included with Klasa.
 
-# Further reading
+## Examples
+
+You can take a look at the [included core Arguments](https://github.com/dirigeants/klasa/tree/{@branch}/src/arguments), or see some [prebuilt Arguments on klasa-pieces](https://github.com/dirigeants/klasa-pieces/tree/master/arguments).
+
+## Further reading
 
 - {@tutorial CreatingCommands}
 - {@tutorial CreatingEvents}

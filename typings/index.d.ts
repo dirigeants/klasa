@@ -169,7 +169,7 @@ declare module 'klasa' {
 		public init(): Promise<void>;
 		public execute(): Promise<void>;
 		public next(): ScheduledTask;
-		public create(taskName: string, time: Date | number | string, options: ScheduledTaskOptions): Promise<ScheduledTask>;
+		public create(taskName: string, time: Date | number | string, options?: ScheduledTaskOptions): Promise<ScheduledTask>;
 		public get(id: string): ScheduledTask | void;
 		public delete(id: string): Promise<this>;
 		public clear(): Promise<void>;
@@ -750,11 +750,11 @@ declare module 'klasa' {
 	}
 
 	export class KlasaConsole {
-		private constructor(options?: KlasaConsoleOptions);
+		private constructor(options?: ConsoleOptions);
 		public readonly stdout: NodeJS.WritableStream;
 		public readonly stderr: NodeJS.WritableStream;
 		public template: Timestamp | null;
-		public colors: KlasaConsoleColorStyles;
+		public colors: ConsoleColorStyles;
 		public utc: boolean;
 
 		private readonly timestamp: string;
@@ -1264,41 +1264,41 @@ declare module 'klasa' {
 		commandEditing?: boolean;
 		commandLogging?: boolean;
 		commandMessageLifetime?: number;
-		console?: KlasaConsoleOptions;
-		consoleEvents?: KlasaConsoleEvents;
+		console?: ConsoleOptions;
+		consoleEvents?: ConsoleEvents;
 		createPiecesFolders?: boolean;
-		customPromptDefaults?: KlasaCustomPromptDefaults;
+		customPromptDefaults?: CustomPromptDefaults;
 		disabledCorePieces?: string[];
-		gateways?: KlasaGatewaysOptions;
+		gateways?: GatewaysOptions;
 		language?: string;
 		noPrefixDM?: boolean;
 		ownerID?: string;
 		permissionLevels?: PermissionLevels;
-		pieceDefaults?: KlasaPieceDefaults;
+		pieceDefaults?: PieceDefaults;
 		prefix?: string | string[];
 		prefixCaseInsensitive?: boolean;
 		preserveSettings?: boolean;
 		production?: boolean;
-		providers?: KlasaProvidersOptions;
+		providers?: ProvidersOptions;
 		readyMessage?: (client: KlasaClient) => string;
 		regexPrefix?: RegExp;
-		schedule?: KlasaClientOptionsSchedule;
+		schedule?: ScheduleOptions;
 		slowmode?: number;
 		slowmodeAggressive?: boolean;
 		typing?: boolean;
 	} & ClientOptions;
 
-	export type KlasaClientOptionsSchedule = {
+	export type ScheduleOptions = {
 		interval?: number;
 	};
 
-	export type KlasaCustomPromptDefaults = {
+	export type CustomPromptDefaults = {
 		limit?: number;
 		time?: number;
 		quotedStringSupport?: boolean;
 	};
 
-	export type KlasaPieceDefaults = {
+	export type PieceDefaults = {
 		arguments?: ArgumentOptions;
 		commands?: CommandOptions;
 		events?: EventOptions;
@@ -1311,11 +1311,13 @@ declare module 'klasa' {
 		serializers?: SerializerOptions;
 	};
 
-	export type KlasaProvidersOptions = {
+	export type ProvidersOptions = {
 		default?: string;
 	} & ObjectLiteral;
 
-	export type KlasaGatewaysOptions = {
+	export type ReadyMessage = string | ((client: Client) => string);
+
+	export type GatewaysOptions = {
 		clientStorage?: GatewayDriverRegisterOptions;
 		guilds?: GatewayDriverRegisterOptions;
 		users?: GatewayDriverRegisterOptions;
@@ -1327,7 +1329,7 @@ declare module 'klasa' {
 	export type Constants = {
 		DEFAULTS: {
 			CLIENT: Required<KlasaClientOptions>,
-			CONSOLE: Required<KlasaConsoleOptions>,
+			CONSOLE: Required<ConsoleOptions>,
 			DATATYPES: ObjectLiteral<QueryBuilderDatatype>
 		};
 		TIME: {
@@ -1757,16 +1759,16 @@ declare module 'klasa' {
 		closing: string[];
 	};
 
-	export type KlasaConsoleOptions = {
+	export type ConsoleOptions = {
 		utc?: boolean;
-		colors?: KlasaConsoleColorStyles;
+		colors?: ConsoleColorStyles;
 		stderr?: NodeJS.WritableStream;
 		stdout?: NodeJS.WritableStream;
 		timestamps?: boolean | string;
 		useColor?: boolean;
 	};
 
-	export type KlasaConsoleEvents = {
+	export type ConsoleEvents = {
 		debug?: boolean;
 		error?: boolean;
 		log?: boolean;
@@ -1775,41 +1777,34 @@ declare module 'klasa' {
 		wtf?: boolean;
 	};
 
-	export type KlasaConsoleColorStyles = {
-		debug?: KlasaConsoleColorObjects;
-		error?: KlasaConsoleColorObjects;
-		info?: KlasaConsoleColorObjects;
-		log?: KlasaConsoleColorObjects;
-		verbose?: KlasaConsoleColorObjects;
-		warn?: KlasaConsoleColorObjects;
-		wtf?: KlasaConsoleColorObjects;
+	export type ConsoleColorStyles = {
+		debug?: ConsoleColorObjects;
+		error?: ConsoleColorObjects;
+		info?: ConsoleColorObjects;
+		log?: ConsoleColorObjects;
+		verbose?: ConsoleColorObjects;
+		warn?: ConsoleColorObjects;
+		wtf?: ConsoleColorObjects;
 	};
 
-	export type KlasaConsoleColorObjects = {
-		message?: KlasaConsoleMessageObject;
-		time?: KlasaConsoleTimeObject;
-		shard?: KlasaConsoleShardObject;
+	export type ConsoleColorObjects = {
+		message?: ConsoleMessageObject;
+		time?: ConsoleTimeObject;
 	};
 
-	export type KlasaConsoleMessageObject = {
-		background?: KlasaConsoleColorTypes;
-		style?: KlasaConsoleStyleTypes;
-		text?: KlasaConsoleColorTypes;
+	export type ConsoleMessageObject = {
+		background?: ConsoleColorTypes;
+		style?: ConsoleStyleTypes;
+		text?: ConsoleColorTypes;
 	};
 
-	export type KlasaConsoleTimeObject = {
-		background?: KlasaConsoleColorTypes;
-		style?: KlasaConsoleStyleTypes;
-		text?: KlasaConsoleColorTypes;
+	export type ConsoleTimeObject = {
+		background?: ConsoleColorTypes;
+		style?: ConsoleStyleTypes;
+		text?: ConsoleColorTypes;
 	};
 
-	export type KlasaConsoleShardObject = {
-		background?: KlasaConsoleColorTypes;
-		style?: KlasaConsoleStyleTypes;
-		text?: KlasaConsoleColorTypes;
-	};
-
-	export type KlasaConsoleColorTypes = 'black'
+	export type ConsoleColorTypes = 'black'
 		| 'blue'
 		| 'cyan'
 		| 'gray'
@@ -1827,7 +1822,7 @@ declare module 'klasa' {
 		| 'red'
 		| 'white';
 
-	export type KlasaConsoleStyleTypes = 'normal'
+	export type ConsoleStyleTypes = 'normal'
 		| 'bold'
 		| 'dim'
 		| 'italic'
