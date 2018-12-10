@@ -1820,7 +1820,8 @@ declare module 'klasa' {
 		| 'lightyellow'
 		| 'magenta'
 		| 'red'
-		| 'white';
+		| 'white'
+		| null;
 
 	export type ConsoleStyleTypes = 'normal'
 		| 'bold'
