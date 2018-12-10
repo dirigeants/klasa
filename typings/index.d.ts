@@ -169,7 +169,7 @@ declare module 'klasa' {
 		public init(): Promise<void>;
 		public execute(): Promise<void>;
 		public next(): ScheduledTask;
-		public create(taskName: string, time: Date | number | string, options: ScheduledTaskOptions): Promise<ScheduledTask>;
+		public create(taskName: string, time: Date | number | string, options?: ScheduledTaskOptions): Promise<ScheduledTask>;
 		public get(id: string): ScheduledTask | void;
 		public delete(id: string): Promise<this>;
 		public clear(): Promise<void>;
