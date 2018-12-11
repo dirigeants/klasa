@@ -38,11 +38,11 @@ module.exports = class extends Inhibitor {
 
 ## Options
 
-| Name               | Default       | Type    | Description                                                                                  |
-| ------------------ | ------------- | ------- | -------------------------------------------------------------------------------------------- |
-| **name**           | `theFileName` | string  | The name of the inhibitor                                                                    |
-| **enabled**        | `true`        | boolean | Whether the inhibitor is enabled or not                                                      |
-| **spamProtection** | `false`       | boolean | If this inhibitor is meant for spamProtection (disables the inhibitor while generating help) |
+{@typedef InhibitorOptions}
+
+## Examples
+
+You can take a look at the [included core Inhibitors](https://github.com/dirigeants/klasa/tree/{@branch}/src/inhibitors), or see some [prebuilt Inhibitors on klasa-pieces](https://github.com/dirigeants/klasa-pieces/tree/master/inhibitors).
 
 ## Further Reading:
 
