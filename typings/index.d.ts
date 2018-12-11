@@ -286,7 +286,7 @@ declare module 'klasa' {
 		public readonly name: string;
 		public readonly schema: SchemaFolder;
 		public ready: boolean;
-
+		public sync(): Promise<this>;
 		public init(): Promise<void>;
 		public toJSON(): GatewayJSON;
 		public toString(): string;
