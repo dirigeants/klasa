@@ -10,7 +10,7 @@ class SchemaEntry {
 	 * @property {boolean} [configurable] Whether the key should be configurable by the configuration command or not
 	 * @property {number} [min] The minimum value for this entry
 	 * @property {number} [max] The maximum value for this entry
-	 /*@property {boolean} [inclusive] Whether the key should check for inclusivity when checking min and max
+	 * @property {boolean} [inclusive] Whether the key should check for inclusivity when checking min and max
 	 * @property {boolean} [resolve] Whether or not SG should resolve this value during resolve operations
 	 */
 
