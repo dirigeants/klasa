@@ -33,6 +33,22 @@ class Inhibitor extends Piece {
 	}
 
 	/**
+	 * The async wrapper for running inhibitors
+	 * @since 0.5.0
+	 * @param {KlasaMessage} message The message that triggered this inhibitor
+	 * @param {Command} command The command to run
+	 * @returns {(void|string)}
+	 * @private
+	 */
+	async _run(message, command) {
+		try {
+			return await this.run(message, command);
+		} catch (err) {
+			return err;
+		}
+	}
+
+	/**
 	 * The run method to be overwritten in actual inhibitors
 	 * @since 0.0.1
 	 * @param {KlasaMessage} message The message that triggered this inhibitor
