@@ -70,17 +70,13 @@ module.exports = class extends Extendable {
 };
 ```
 
-| Name          | Default       | Type    | Description                          |
-| ------------- | ------------- | ------- | ------------------------------------ |
-| **name**      | `theFileName` | string  | The name of the method/property.     |
-| **enabled**   | `true`        | boolean | If the extendable is enabled or not. |
-| **appliesTo** | `[]`          | class[] | An array of classes to extend.       |
+{@typedef ExtendableOptions}
 
 ## Understanding extendables
 
 Understanding classes like a blueprint, and all its members (instance and static setters, getters, properties, and methods) as pieces of it, an Extendable would copy all the pieces into all the targetted structures with their respective names. You can define multiple members with different names inside the extended class.
 
-## Examples
+## For Example
 
 Imagine we want to extend the [Message](https://discord.js.org/#/docs/main/master/class/Message) class
 so it has a method called `prompt` so you can do `Message#prompt("Are you sure you want to continue?")`
@@ -110,6 +106,10 @@ module.exports = class extends Extendable {
 ```
 
 After loading this extendable, `Message.prototype.prompt` will be available as a method that calls and returns `makePrompt`.
+
+## Examples
+
+You can take a look at the [included core Extendables](https://github.com/dirigeants/klasa/tree/{@branch}/src/extendables), or see some [prebuilt Extendables on klasa-pieces](https://github.com/dirigeants/klasa-pieces/tree/master/extendables).
 
 ## Further Reading:
 

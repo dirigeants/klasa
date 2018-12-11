@@ -51,11 +51,14 @@ module.exports = class extends Language {
 			COMMANDMESSAGE_NOMATCH: (possibles) => `Your option didn't match any of the possibilities: (${possibles})`,
 			// eslint-disable-next-line max-len
 			MONITOR_COMMAND_HANDLER_REPROMPT: (tag, error, time, abortOptions) => `${tag} | **${error}** | You have **${time}** seconds to respond to this prompt with a valid argument. Type **${abortOptions.join('**, **')}** to abort this prompt.`,
-			MONITOR_COMMAND_HANDLER_REPEATING_REPROMPT: (tag, name, time) => `${tag} | **${name}** is a repeating argument | You have **${time}** seconds to respond to this prompt with additional valid arguments. Type **"CANCEL"** to cancel this prompt.`, // eslint-disable-line max-len
+			// eslint-disable-next-line max-len
+			MONITOR_COMMAND_HANDLER_REPEATING_REPROMPT: (tag, name, time, cancelOptions) => `${tag} | **${name}** is a repeating argument | You have **${time}** seconds to respond to this prompt with additional valid arguments. Type **${cancelOptions.join('**, **')}** to cancel this prompt.`,
 			MONITOR_COMMAND_HANDLER_ABORTED: 'Aborted',
 			MONITOR_COMMAND_HANDLER_POSSIBILITIES: ['abort', 'stop'],
+			MONITOR_COMMAND_HANDLER_REPEATING_POSSIBLITIES: ['cancel'],
 			INHIBITOR_COOLDOWN: (remaining) => `You have just used this command. You can use this command again in ${remaining} second${remaining === 1 ? '' : 's'}.`,
-			INHIBITOR_DISABLED: 'This command is currently disabled.',
+			INHIBITOR_DISABLED_GUILD: 'This command has been disabled by an admin in this guild.',
+			INHIBITOR_DISABLED_GLOBAL: 'This command has been globally disabled by the bot owner.',
 			INHIBITOR_MISSING_BOT_PERMS: (missing) => `Insufficient permissions, missing: **${missing}**`,
 			INHIBITOR_NSFW: 'This command might post NSFW content, please mark this channel as NSFW to use it here.',
 			INHIBITOR_PERMISSIONS: 'You do not have permission to use this command.',
