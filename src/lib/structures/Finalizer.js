@@ -13,15 +13,15 @@ class Finalizer extends Piece {
 	 * @since 0.5.0
 	 * @param {KlasaMessage} message The message that called the command
 	 * @param {Command} command The command this finalizer is for (may be different than message.command)
-	 * @param {KlasaMessage|any} response The response of the command
-	 * @param {StopWatch} timer The timer run from start to queue of the command
+	 * @param {?KlasaMessage|KlasaMessage[]} response The bot's response message, if one is returned
+	 * @param {Stopwatch} runTime The time it took to generate the command
 	 * @private
 	 */
-	async _run(message, command, response, timer) {
+	async _run(message, command, response, runTime) {
 		try {
-			await this.run(message, command, response, timer);
+			await this.run(message, command, response, runTime);
 		} catch (err) {
-			this.client.emit('finalizerError', message, command, response, timer, this, err);
+			this.client.emit('finalizerError', message, command, response, runTime, this, err);
 		}
 	}
 
@@ -30,7 +30,7 @@ class Finalizer extends Piece {
 	 * @since 0.0.1
 	 * @param {KlasaMessage} message The message used to trigger this finalizer
 	 * @param {Command} command The command this finalizer is for (may be different than message.command)
-	 * @param {KlasaMessage|KlasaMessage[]} response The bot's response message, if one is returned
+	 * @param {?KlasaMessage|KlasaMessage[]} response The bot's response message, if one is returned
 	 * @param {Stopwatch} runTime The time it took to generate the command
 	 * @returns {void}
 	 * @abstract
