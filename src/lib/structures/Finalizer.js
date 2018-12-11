@@ -9,6 +9,23 @@ const Piece = require('./base/Piece');
 class Finalizer extends Piece {
 
 	/**
+	 * Run a finalizer and catch any uncaught promises
+	 * @since 0.5.0
+	 * @param {KlasaMessage} message The message that called the command
+	 * @param {Command} command The command this finalizer is for (may be different than message.command)
+	 * @param {KlasaMessage|any} response The response of the command
+	 * @param {StopWatch} timer The timer run from start to queue of the command
+	 * @private
+	 */
+	async _run(message, command, response, timer) {
+		try {
+			await this.run(message, command, response, timer);
+		} catch (err) {
+			this.client.emit('finalizerError', message, command, response, timer, this, err);
+		}
+	}
+
+	/**
 	 * The run method to be overwritten in actual finalizers
 	 * @since 0.0.1
 	 * @param {KlasaMessage} message The message used to trigger this finalizer
