@@ -2,7 +2,7 @@ const { Inhibitor } = require('klasa');
 
 module.exports = class extends Inhibitor {
 
-	async run(message, command) {
+	run(message, command) {
 		if (!command.requiredSettings.length || message.channel.type !== 'text') return;
 		// eslint-disable-next-line eqeqeq
 		const requiredSettings = command.requiredSettings.filter(setting => message.guild.settings.get(setting) == null);

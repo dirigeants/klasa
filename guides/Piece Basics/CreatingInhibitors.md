@@ -1,12 +1,12 @@
-Inhibitors are only ran on commands. They are used to check a variety of conditions
-before a command is ever ran, such as checking if a user has the right amount of permissions
-to use a command. Inhibitors are loaded as core first, and if your code contains a inhibitor
-of the same name it overrides the core inhibitor.
+Inhibitors are only ran on commands. They are used to check a variety of conditions before a
+command is ever ran, such as checking if a user has the right amount of permissions to use a
+command. Core inhibitors are loaded first, and if your code contains an inhibitor of the same name
+it overrides the core inhibitor.
 
-Their structure is restricted, meaning to work they must be defined exactly like
-the following example. They *must* return an [Object Promise](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise).
-You can accomplish this by adding the `async` identifier, or returning a new promise.
-An inhibitor blocks a command by rejecting the promise, either with a string or `undefined` for silent rejections.
+An inhibitor blocks a command by returning a truthy value (or a promise that fulfills with a
+truthy value): either a string (which is shown to the user) or `true` (for silent rejections). It
+doesn't matter whether you return or throw (or resolve or reject a returned promise); the value is
+treated the same.
 
 ```javascript
 const { Inhibitor } = require('klasa');
@@ -38,11 +38,11 @@ module.exports = class extends Inhibitor {
 
 ## Options
 
-| Name               | Default       | Type    | Description                                                                                  |
-| ------------------ | ------------- | ------- | -------------------------------------------------------------------------------------------- |
-| **name**           | `theFileName` | string  | The name of the inhibitor                                                                    |
-| **enabled**        | `true`        | boolean | Whether the inhibitor is enabled or not                                                      |
-| **spamProtection** | `false`       | boolean | If this inhibitor is meant for spamProtection (disables the inhibitor while generating help) |
+{@typedef InhibitorOptions}
+
+## Examples
+
+You can take a look at the [included core Inhibitors](https://github.com/dirigeants/klasa/tree/{@branch}/src/inhibitors), or see some [prebuilt Inhibitors on klasa-pieces](https://github.com/dirigeants/klasa-pieces/tree/master/inhibitors).
 
 ## Further Reading:
 

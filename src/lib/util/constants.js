@@ -58,6 +58,7 @@ exports.DEFAULTS = {
 				extendedHelp: language => language.get('COMMAND_HELP_NO_EXTENDED'),
 				enabled: true,
 				guarded: false,
+				hidden: false,
 				nsfw: false,
 				permissionLevel: 0,
 				promptLimit: 0,

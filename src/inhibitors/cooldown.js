@@ -6,7 +6,7 @@ module.exports = class extends Inhibitor {
 		super(...args, { spamProtection: true });
 	}
 
-	async run(message, command) {
+	run(message, command) {
 		if (message.author === this.client.owner || command.cooldown <= 0) return;
 
 		const existing = command.cooldowns.get(message.levelID);
