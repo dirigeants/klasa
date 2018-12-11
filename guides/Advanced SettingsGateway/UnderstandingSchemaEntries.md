@@ -6,7 +6,7 @@ As mentioned in the previous tutorial, {@tutorial UnderstandingSchema}, Settings
 
 There are multiple options that configure the entry, they are:
 
-{@typedef 	SchemaPieceOptions}
+{@typedef SchemaEntryOptions}
 
 > Check {@tutorial SettingsGatewayKeyTypes} for the supported types and how to extend them.
 
