@@ -394,6 +394,7 @@ declare module 'klasa' {
 		public extendedHelp: string | ((language: Language) => string);
 		public fullCategory: string[];
 		public guarded: boolean;
+		public hidden: boolean;
 		public nsfw: boolean;
 		public permissionLevel: number;
 		public promptLimit: number;
@@ -447,8 +448,9 @@ declare module 'klasa' {
 		public constructor(client: KlasaClient, store: InhibitorStore, file: string[], directory: string, options?: InhibitorOptions);
 		public spamProtection: boolean;
 
-		public abstract run(message: KlasaMessage, command: Command): Promise<void | string>;
+		public abstract run(message: KlasaMessage, command: Command): void | boolean | string | Promise<void | boolean | string>;
 		public toJSON(): PieceInhibitorJSON;
+		protected _run(message: KlasaMessage, command: Command): Promise<boolean | string>;
 	}
 
 	export abstract class Language extends Piece {
@@ -1548,6 +1550,7 @@ declare module 'klasa' {
 		description?: string | string[] | ((language: Language) => string | string[]);
 		extendedHelp?: string | string[] | ((language: Language) => string | string[]);
 		guarded?: boolean;
+		hidden?: boolean;
 		nsfw?: boolean;
 		permissionLevel?: number;
 		promptLimit?: number;
@@ -1623,6 +1626,7 @@ declare module 'klasa' {
 		extendedHelp: string | ((language: Language) => string);
 		fullCategory: string[];
 		guarded: boolean;
+		hidden: boolean;
 		nsfw: boolean;
 		permissionLevel: number;
 		promptLimit: number;
