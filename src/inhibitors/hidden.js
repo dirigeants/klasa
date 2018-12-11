@@ -2,8 +2,8 @@ const { Inhibitor } = require('klasa');
 
 module.exports = class extends Inhibitor {
 
-	async run(message, command) {
-		if (command.hidden && message.command !== command && message.author !== this.client.owner) throw true;
+	run(message, command) {
+		return command.hidden && message.command !== command && message.author !== this.client.owner;
 	}
 
 };
