@@ -35,6 +35,7 @@ module.exports = class extends Language {
 			RESOLVER_INVALID_MEMBER: (name) => `${name} must be a mention or valid user id.`,
 			RESOLVER_INVALID_MESSAGE: (name) => `${name} must be a valid message id.`,
 			RESOLVER_INVALID_PIECE: (name, piece) => `${name} must be a valid ${piece} name.`,
+			RESOLVER_INVALID_STORE: (store) => `${store} must be a valid store name that is located in client.pieceStores`,
 			RESOLVER_INVALID_REGEX_MATCH: (name, pattern) => `${name} must follow this regex pattern \`${pattern}\`.`,
 			RESOLVER_INVALID_ROLE: (name) => `${name} must be a role mention or role id.`,
 			RESOLVER_INVALID_STRING: (name) => `${name} must be a valid string.`,
