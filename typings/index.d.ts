@@ -448,7 +448,6 @@ declare module 'klasa' {
 	export abstract class Inhibitor extends Piece {
 		public constructor(client: KlasaClient, store: InhibitorStore, file: string[], directory: string, options?: InhibitorOptions);
 		public spamProtection: boolean;
-
 		public abstract run(message: KlasaMessage, command: Command): void | boolean | string | Promise<void | boolean | string>;
 		public toJSON(): PieceInhibitorJSON;
 		protected _run(message: KlasaMessage, command: Command): Promise<boolean | string>;
