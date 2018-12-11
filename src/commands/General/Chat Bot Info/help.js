@@ -18,6 +18,7 @@ module.exports = class extends Command {
 
 	async run(message, [command]) {
 		if (command) {
+			if (message.author != this.client.owner && command.hidden) return;
 			const info = [
 				`= ${command.name} = `,
 				isFunction(command.description) ? command.description(message.language) : command.description,
@@ -50,7 +51,7 @@ module.exports = class extends Command {
 		const longest = commandNames.reduce((long, str) => Math.max(long, str.length), 0);
 
 		await Promise.all(this.client.commands.map((command) =>
-			this.client.inhibitors.run(message, command, true)
+			!command.hidden && this.client.inhibitors.run(message, command, true)
 				.then(() => {
 					if (!help.hasOwnProperty(command.category)) help[command.category] = {};
 					if (!help[command.category].hasOwnProperty(command.subCategory)) help[command.category][command.subCategory] = [];
