@@ -16,6 +16,7 @@ module.exports = class extends Command {
 			aliases: [],
 			guarded: false,
 			nsfw: false,
+			hidden: false,
 			permissionLevel: 0,
 			requiredPermissions: [],
 			requiredSettings: [],
