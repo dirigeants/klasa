@@ -26,19 +26,7 @@ class InhibitorStore extends Store {
 	 */
 	async run(message, command, selective = false) {
 		const mps = [];
-
-		for (const inhibitor of this.values()) {
-			if (inhibitor.enabled && (!selective || !inhibitor.spamProtection)) {
-				mps.push(async () => {
-					try {
-						return await inhibitor.run(message, command);
-					} catch (err) {
-						return err;
-					}
-				});
-			}
-		}
-
+		for (const inhibitor of this.values()) if (inhibitor.enabled && (!selective || !inhibitor.spamProtection)) mps.push(inhibitor._run(message, command));
 		const results = (await Promise.all(mps)).filter(res => res);
 		if (results.includes(true)) throw undefined;
 		if (results.length) throw results;
