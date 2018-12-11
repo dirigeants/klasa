@@ -442,6 +442,7 @@ declare module 'klasa' {
 		public constructor(client: KlasaClient, store: FinalizerStore, file: string[], directory: string, options?: FinalizerOptions);
 		public abstract run(message: KlasaMessage, command: Command, response: KlasaMessage | KlasaMessage[] | null, runTime: Stopwatch): void;
 		public toJSON(): PieceFinalizerJSON;
+		protected _run(message: KlasaMessage, command: Command, response: KlasaMessage | KlasaMessage[] | null, runTime: Stopwatch): Promise<void>;
 	}
 
 	export abstract class Inhibitor extends Piece {
@@ -474,6 +475,7 @@ declare module 'klasa' {
 		public abstract run(message: KlasaMessage): void;
 		public shouldRun(message: KlasaMessage): boolean;
 		public toJSON(): PieceMonitorJSON;
+		protected _run(message: KlasaMessage): Promise<void>;
 	}
 
 	export abstract class MultiArgument extends Argument {
@@ -583,7 +585,6 @@ declare module 'klasa' {
 
 	export class MonitorStore extends Store<string, Monitor, typeof Monitor> {
 		public run(message: KlasaMessage): Promise<void>;
-		private _run(message: KlasaMessage, monitor: Monitor);
 	}
 
 	export class ProviderStore extends Store<string, Provider, typeof Provider> {

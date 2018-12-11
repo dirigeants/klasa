@@ -81,6 +81,20 @@ class Monitor extends Piece {
 	}
 
 	/**
+	 * Run a monitor and catch any uncaught promises
+	 * @since 0.5.0
+	 * @param {KlasaMessage} message The message object from Discord.js
+	 * @private
+	 */
+	async _run(message) {
+		try {
+			await this.run(message);
+		} catch (err) {
+			this.client.emit('monitorError', message, this, err);
+		}
+	}
+
+	/**
 	 * The run method to be overwritten in actual monitor pieces
 	 * @since 0.0.1
 	 * @param {KlasaMessage} message The discord message
