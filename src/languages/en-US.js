@@ -57,7 +57,7 @@ module.exports = class extends Language {
 			MONITOR_COMMAND_HANDLER_POSSIBILITIES: ['abort', 'stop'],
 			MONITOR_COMMAND_HANDLER_REPEATING_POSSIBLITIES: ['cancel'],
 			INHIBITOR_COOLDOWN: (remaining) => `You have just used this command. You can use this command again in ${remaining} second${remaining === 1 ? '' : 's'}.`,
-			INHIBITOR_DISABLED_GUILD: 'This command has been disabled by an admin in this server.',
+			INHIBITOR_DISABLED_GUILD: 'This command has been disabled by an admin in this guild.',
 			INHIBITOR_DISABLED_GLOBAL: 'This command has been globally disabled by the bot owner.',
 			INHIBITOR_MISSING_BOT_PERMS: (missing) => `Insufficient permissions, missing: **${missing}**`,
 			INHIBITOR_NSFW: 'You may not use NSFW commands in this channel.',
