@@ -15,7 +15,7 @@ class SQLProvider extends Provider {
 	 * The addColumn method which inserts/creates a new table to the database.
 	 * @since 0.5.0
 	 * @param {string} table The table to check against
-	 * @param {(SchemaFolder | SchemaPiece)} piece The SchemaFolder or SchemaPiece added to the schema
+	 * @param {(SchemaFolder | SchemaEntry)} entry The SchemaFolder or SchemaEntry added to the schema
 	 * @returns {*}
 	 * @abstract
 	 */
@@ -39,7 +39,7 @@ class SQLProvider extends Provider {
 	 * The updateColumn method which alters the datatype from a column.
 	 * @since 0.5.0
 	 * @param {string} table The table to check against
-	 * @param {SchemaPiece} piece The modified SchemaPiece
+	 * @param {SchemaEntry} entry The modified SchemaEntry
 	 * @returns {*}
 	 * @abstract
 	 */
@@ -75,8 +75,8 @@ class SQLProvider extends Provider {
 			// [[k1, v1], [k2, v2], ...]
 			if (Array.isArray(first) && first.length === 2) for (let i = 0; i < updated.length; i++) [keys[i], values[i]] = updated[i];
 
-			// [{ data: [k1, v1], piece: SchemaPiece1 }, { data: [k2, v2], piece: SchemaPiece2 }, ...]
-			else if ('key' in first && 'value' in first && 'piece' in first) this._parseGatewayInput(updated, keys, values, resolve);
+			// [{ data: [k1, v1], entry: SchemaEntry1 }, { data: [k2, v2], entry: SchemaEntry2 }, ...]
+			else if ('key' in first && 'value' in first && 'entry' in first) this._parseGatewayInput(updated, keys, values, resolve);
 
 			// Unknown overload, throw
 			else throw new TypeError(`Expected void, [k, v][], SettingsFolderUpdateResultEntry[], or an object literal. Got: ${new Type(updated)}`);
@@ -91,18 +91,18 @@ class SQLProvider extends Provider {
 	 * Parses an entry
 	 * @since 0.5.0
 	 * @param {(string|Gateway)} gateway The gateway with the schema to parse
-	 * @param {Object} entry An entry to parse
+	 * @param {Object} raw An entry to parse
 	 * @returns {Object}
 	 * @protected
 	 */
-	parseEntry(gateway, entry) {
-		if (!entry) return null;
+	parseEntry(gateway, raw) {
+		if (!raw) return null;
 		if (typeof gateway === 'string') gateway = this.client.gateways.get(gateway);
-		if (!(gateway instanceof Gateway)) return entry;
+		if (!(gateway instanceof Gateway)) return raw;
 
-		const object = { id: entry.id };
-		for (const piece of gateway.schema.values(true)) {
-			if (entry[piece.path]) makeObject(piece.path, this.parseValue(entry[piece.path], piece), object);
+		const object = { id: raw.id };
+		for (const entry of gateway.schema.values(true)) {
+			if (raw[entry.path]) makeObject(entry.path, this.parseValue(raw[entry.path], entry), object);
 		}
 
 		return object;
@@ -112,19 +112,19 @@ class SQLProvider extends Provider {
 	 * Parse SQL values.
 	 * @since 0.5.0
 	 * @param {*} value The value to parse
-	 * @param {SchemaPiece} schemaPiece The SchemaPiece this is parsing inner keys for
+	 * @param {SchemaEntry} schemaEntry The SchemaEntry this is parsing inner keys for
 	 * @returns {*}
 	 * @protected
 	 */
-	parseValue(value, schemaPiece) {
-		if (typeof value === 'undefined') return schemaPiece.default;
-		if (schemaPiece.array) {
-			if (value === null) return schemaPiece.default;
+	parseValue(value, schemaEntry) {
+		if (typeof value === 'undefined') return schemaEntry.default;
+		if (schemaEntry.array) {
+			if (value === null) return schemaEntry.default;
 			if (typeof value === 'string') value = tryParse(value);
 			if (!Array.isArray(value)) throw new Error(`Could not parse ${value} to an array. Returned empty array instead.`);
 		} else {
 			const type = typeof value;
-			switch (schemaPiece.type) {
+			switch (schemaEntry.type) {
 				case 'any':
 					if (type === 'string') return tryParse(value);
 					break;
@@ -162,11 +162,11 @@ class SQLProvider extends Provider {
 		if (resolve && this.qb) {
 			for (let i = 0; i < updated.length; i++) {
 				const entry = updated[i];
-				keys[i] = entry.piece.path;
-				values[i] = this.qb.resolve(entry.piece, entry.value);
+				keys[i] = entry.entry.path;
+				values[i] = this.qb.resolve(entry.entry, entry.value);
 			}
 		} else {
-			for (let i = 0; i < updated.length; i++) [keys[i], values[i]] = [updated[i].piece.path, updated[i].value];
+			for (let i = 0; i < updated.length; i++) [keys[i], values[i]] = [updated[i].entry.path, updated[i].value];
 		}
 	}
 

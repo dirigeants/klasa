@@ -20,7 +20,7 @@ module.exports = class extends Language {
 			SETTING_GATEWAY_UNCONFIGURABLE_FOLDER: 'This group is not configurable.',
 			SETTING_GATEWAY_KEY_NOEXT: (key) => `The key ${key} does not exist in the current data schema.`,
 			SETTING_GATEWAY_INVALID_TYPE: 'The type parameter must be either add or remove.',
-			SETTING_GATEWAY_INVALID_FILTERED_VALUE: (piece, value) => `${piece.key} doesn't accept the value: ${value}`,
+			SETTING_GATEWAY_INVALID_FILTERED_VALUE: (entry, value) => `${entry.key} doesn't accept the value: ${value}`,
 			RESOLVER_MULTI_TOO_FEW: (name, min = 1) => `Provided too few ${name}s. Atleast ${min} ${min === 1 ? 'is' : 'are'} required.`,
 			RESOLVER_INVALID_BOOL: (name) => `${name} must be true or false.`,
 			RESOLVER_INVALID_CHANNEL: (name) => `${name} must be a channel tag or valid channel id.`,

@@ -40,7 +40,7 @@ KlasaClient.defaultGuildSchema.add('channels', folder => folder
 
 Where the first option would be accessible from `message.guild.settings.channelLog`, and the second from `message.guild.settings.channels.log`. Users would configure them with `[p]conf set channelLog #logs` or `[p]conf set channels.log #logs`, depending on how you structure it. (`[p]` being your bot's prefix).
 
-The schema is also able to store multiple values in a single key, this is used for per-guild-configurable disabled commands, and for the client's {@link Task tasks}. Making a key accept an array only requires the usage of {@link SchemaPieceOptions}. For example, adding a user blacklist in the client schema for your bot (to prevent users from using or inviting your bot):
+The schema is also able to store multiple values in a single key, this is used for per-guild-configurable disabled commands, and for the client's {@link Task tasks}. Making a key accept an array only requires the usage of {@link SchemaEntryOptions}. For example, adding a user blacklist in the client schema for your bot (to prevent users from using or inviting your bot):
 
 ```javascript
 KlasaClient.defaultClientSchema.add('userBlacklist', 'User', { array: true });
@@ -96,10 +96,10 @@ Client.defaultGuildSchema.has('prefix');
 When adding keys, specially when developing plugins, you may enter in conflict while adding them. To solve the issue of having to check too much, Schema merges the pre-existent and the new pieces in one, given the following conditions:
 
 - When adding a SchemaFolder over another SchemaFolder, the callback will be called with the pre-existent folder (pieces will be added to the old folder, "merging" them). If the previous was not a SchemaFolder, this operation will throw.
-- When adding a SchemaPiece over another SchemaPiece, {@link SchemaPiece#edit} will be called instead, merging all the options with the previous. If the previous was not a SchemaPiece, or any of the options were wrong, this operation will throw.
+- When adding a SchemaEntry over another SchemaEntry, {@link SchemaEntry#edit} will be called instead, merging all the options with the previous. If the previous was not a SchemaEntry, or any of the options were wrong, this operation will throw.
 
 ## Further Reading:
 
-- {@tutorial UnderstandingSchemaPieces}
+- {@tutorial UnderstandingSchemaEntries}
 - {@tutorial SettingsGatewayKeyTypes}
 - {@tutorial SettingsGatewaySettingsUpdate}

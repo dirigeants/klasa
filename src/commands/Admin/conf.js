@@ -26,36 +26,36 @@ module.exports = class extends Command {
 	}
 
 	show(message, [key]) {
-		const piece = this.getPath(key);
-		if (!piece || (piece.type === 'Folder' ? !piece.configurableKeys.length : !piece.configurable)) return message.sendLocale('COMMAND_CONF_GET_NOEXT', [key]);
-		if (piece.type === 'Folder') {
+		const entry = this.getPath(key);
+		if (!entry || (entry.type === 'Folder' ? !entry.configurableKeys.length : !entry.configurable)) return message.sendLocale('COMMAND_CONF_GET_NOEXT', [key]);
+		if (entry.type === 'Folder') {
 			return message.sendLocale('COMMAND_CONF_SERVER', [
 				key ? `: ${key.split('.').map(toTitleCase).join('/')}` : '',
-				codeBlock('asciidoc', message.guild.settings.display(message, piece))
+				codeBlock('asciidoc', message.guild.settings.display(message, entry))
 			]);
 		}
-		return message.sendLocale('COMMAND_CONF_GET', [piece.path, message.guild.settings.display(message, piece)]);
+		return message.sendLocale('COMMAND_CONF_GET', [entry.path, message.guild.settings.display(message, entry)]);
 	}
 
 	async set(message, [key, valueToSet]) {
-		const piece = this.check(message, key, await message.guild.settings.update(key, valueToSet, { onlyConfigurable: true, arrayAction: 'add' }));
-		return message.sendLocale('COMMAND_CONF_UPDATED', [key, message.guild.settings.display(message, piece)]);
+		const entry = this.check(message, key, await message.guild.settings.update(key, valueToSet, { onlyConfigurable: true, arrayAction: 'add' }));
+		return message.sendLocale('COMMAND_CONF_UPDATED', [key, message.guild.settings.display(message, entry)]);
 	}
 
 	async remove(message, [key, valueToRemove]) {
-		const piece = this.check(message, key, await message.guild.settings.update(key, valueToRemove, { onlyConfigurable: true, arrayAction: 'remove' }));
-		return message.sendLocale('COMMAND_CONF_UPDATED', [key, message.guild.settings.display(message, piece)]);
+		const entry = this.check(message, key, await message.guild.settings.update(key, valueToRemove, { onlyConfigurable: true, arrayAction: 'remove' }));
+		return message.sendLocale('COMMAND_CONF_UPDATED', [key, message.guild.settings.display(message, entry)]);
 	}
 
 	async reset(message, [key]) {
-		const piece = this.check(message, key, await message.guild.settings.reset(key));
-		return message.sendLocale('COMMAND_CONF_RESET', [key, message.guild.settings.display(message, piece)]);
+		const entry = this.check(message, key, await message.guild.settings.reset(key));
+		return message.sendLocale('COMMAND_CONF_RESET', [key, message.guild.settings.display(message, entry)]);
 	}
 
 	check(message, key, { errors, updated }) {
 		if (errors.length) throw String(errors[0]);
 		if (!updated.length) throw message.language.get('COMMAND_CONF_NOCHANGE', key);
-		return updated[0].piece;
+		return updated[0].entry;
 	}
 
 	getPath(key) {
