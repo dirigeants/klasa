@@ -12,10 +12,10 @@ module.exports = class extends Serializer {
 	async deserialize(data, piece, language) {
 		if (piece.type === 'piece') {
 			for (const store of this.client.pieceStores.values()) {
-				const piece = store.get(data);
-				if (piece) return piece;
+				const pce = store.get(data);
+				if (pce) return pce;
 			}
-		throw language.get('RESOLVER_INVALID_PIECE', piece.key, piece.type);
+			throw language.get('RESOLVER_INVALID_PIECE', piece.key, piece.type);
 		}
 		const store = this.client.pieceStores.get(`${piece.type}s`);
 		if (!store) throw language.get('RESOLVER_INVALID_STORE', piece.type);
