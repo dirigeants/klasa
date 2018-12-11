@@ -326,7 +326,7 @@ declare module 'klasa' {
 		public default: any;
 		public min: number | null;
 		public max: number | null;
-		public filter: ((client: KlasaClient, value: any, schema: SchemaEntry, language: Language) => boolean) | null;
+		public filter: ((client: KlasaClient, value: any, entry: SchemaEntry, language: Language) => boolean) | null;
 		public shouldResolve: boolean;
 		public parse<T>(value: any, guild?: KlasaGuild): T;
 		public edit(options?: SchemaEntryEditOptions): this;
@@ -1494,7 +1494,7 @@ declare module 'klasa' {
 		default?: any;
 		min?: number;
 		max?: number;
-		filter?: ((client: KlasaClient, value: any, schema: SchemaEntry, language: Language) => boolean) | null;
+		filter?: ((client: KlasaClient, value: any, entry: SchemaEntry, language: Language) => boolean) | null;
 		resolve?: boolean;
 	};
 
