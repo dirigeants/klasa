@@ -59,6 +59,7 @@ exports.DEFAULTS = {
 				enabled: true,
 				guarded: false,
 				nsfw: false,
+				hidden: false,
 				permissionLevel: 0,
 				promptLimit: 0,
 				promptTime: 30000,
