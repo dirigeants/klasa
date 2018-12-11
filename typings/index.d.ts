@@ -395,6 +395,7 @@ declare module 'klasa' {
 		public fullCategory: string[];
 		public guarded: boolean;
 		public nsfw: boolean;
+		public hidden: boolean;
 		public permissionLevel: number;
 		public promptLimit: number;
 		public promptTime: number;
@@ -1549,6 +1550,7 @@ declare module 'klasa' {
 		extendedHelp?: string | string[] | ((language: Language) => string | string[]);
 		guarded?: boolean;
 		nsfw?: boolean;
+		hidden?: boolean;
 		permissionLevel?: number;
 		promptLimit?: number;
 		promptTime?: number;
@@ -1624,6 +1626,7 @@ declare module 'klasa' {
 		fullCategory: string[];
 		guarded: boolean;
 		nsfw: boolean;
+		hidden: boolean;
 		permissionLevel: number;
 		promptLimit: number;
 		promptTime: number;
