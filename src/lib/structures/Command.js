@@ -30,6 +30,7 @@ class Command extends AliasPiece {
 	 * @property {ExtendedHelp} [extendedHelp] Extended help strings
 	 * @property {boolean} [guarded=false] If the command can be disabled on a guild level (does not effect global disable)
 	 * @property {boolean} [nsfw=false] If the command should only run in nsfw channels
+	 * @property {boolean} [hidden=false] If the command should be hidden.
 	 * @property {number} [permissionLevel=0] The required permission level to use the command
 	 * @property {number} [promptLimit=0] The number or attempts allowed for re-prompting an argument
 	 * @property {number} [promptTime=30000] The time allowed for re-prompting of this command
@@ -116,6 +117,13 @@ class Command extends AliasPiece {
 		 * @type {boolean}
 		 */
 		this.nsfw = options.nsfw;
+
+		/**
+		 * Whether this command should be hidden or not
+		 * @since 0.5.0
+		 * @type {boolean}
+		 */
+		this.hidden = options.hidden;
 
 		/**
 		 * The required permissionLevel to run this command
@@ -323,6 +331,7 @@ class Command extends AliasPiece {
 			fullCategory: this.fullCategory,
 			guarded: this.guarded,
 			nsfw: this.nsfw,
+			hidden: this.hidden,
 			permissionLevel: this.permissionLevel,
 			promptLimit: this.promptLimit,
 			promptTime: this.promptTime,
