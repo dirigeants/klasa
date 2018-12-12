@@ -4,9 +4,6 @@ const Schema = require('../schema/Schema');
 const { Collection } = require('discord.js');
 
 /**
- * <danger>You should never create a Gateway instance by yourself.
- * Please check {@link UnderstandingSettingsGateway} about how to construct your own Gateway.</danger>
- * The Gateway class that manages the data input, parsing, and output, of an entire database, while keeping a cache system sync with the changes.
  * @extends GatewayStorage
  */
 class Gateway extends GatewayStorage {
@@ -19,8 +16,8 @@ class Gateway extends GatewayStorage {
 	 * @param {Schema} [options.schema = new Schema()] The schema for this gateway
 	 * @param {string} [options.provider = this.client.options.providers.default] The provider's name for this gateway
 	 */
-	constructor(client, name, { schema = new Schema(), provider = client.options.providers.default } = {}) {
-		super(client, name, schema, provider);
+	constructor(client, name, options) {
+		super(client, name, options);
 
 		/**
 		 * The cached entries for this Gateway or the external datastore to get the settings from
