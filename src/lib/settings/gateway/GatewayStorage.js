@@ -21,7 +21,7 @@ class GatewayStorage {
 	 * @param {string} name The name of this GatewayStorage
 	 * @param {GatewayOptions} [options = {}] The options for this gateway
 	 */
-	constructor(client, name, { schema = new Schema(), provider = client.options.providers.default }) {
+	constructor(client, name, { schema = new Schema(), provider = client.options.providers.default } = {}) {
 		/**
 		 * The client this GatewayStorage was created with.
 		 * @since 0.5.0
