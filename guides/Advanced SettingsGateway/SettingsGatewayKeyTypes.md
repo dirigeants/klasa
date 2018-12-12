@@ -64,6 +64,6 @@ module.exports = class Date extends Serializer {
 
 ## Further Reading:
 
-- {@tutorial UnderstandingSchemaPieces}
+- {@tutorial UnderstandingSchemaEntries}
 - {@tutorial UnderstandingSchemaFolders}
 - {@tutorial SettingsGatewaySettingsUpdate}

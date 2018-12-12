@@ -218,14 +218,14 @@ declare module 'klasa' {
 		public update(key: string, value: any, options?: SettingsFolderUpdateOptions): Promise<SettingsFolderUpdateResult>;
 		public update(entries: Iterable<[string, any]>, options?: SettingsFolderUpdateOptions): Promise<SettingsFolderUpdateResult>;
 		public update(object: Record<string, any>, options?: SettingsFolderUpdateOptions): Promise<SettingsFolderUpdateResult>;
-		public display(message: KlasaMessage, path?: string | Schema | SchemaFolder | SchemaPiece): string;
+		public display(message: KlasaMessage, path?: string | Schema | SchemaFolder | SchemaEntry): string;
 		public pluck<T extends string>(...paths: T[]): Partial<Record<T, any>>;
 		public resolve<T extends string>(...paths: T[]): Partial<Record<T, any>>;
 		public toJSON(): any;
 		public toString(): string;
-		private relative(pathOrPiece: string | Schema | SchemaPiece): string;
+		private relative(pathOrPiece: string | Schema | SchemaEntry): string;
 		private _save(results: Array<SettingsFolderUpdateResultEntry>): Promise<void>;
-		private _parse(piece: SchemaPiece, previous: any, next: any, options: SettingsFolderUpdateOptions): Promise<any>;
+		private _parse(entry: SchemaEntry, previous: any, next: any, options: SettingsFolderUpdateOptions): Promise<any>;
 		private _patch(data: Record<string, any>): void;
 	}
 
@@ -270,9 +270,9 @@ declare module 'klasa' {
 	export class QueryBuilder {
 		public constructor(datatypes: ObjectLiteral<string | QueryBuilderDatatypeOptions>, options?: QueryBuilderDefaultOptions);
 		public get(type: string): Required<QueryBuilderDatatypeOptions> | null;
-		public parse(schemaPiece: SchemaPiece): string;
-		public parseValue(value: any, schemaPiece: SchemaPiece, datatype?: Required<QueryBuilderDatatypeOptions>): string;
-		private arrayResolver: (values: Array<any>, piece: SchemaPiece, resolver: Function) => string;
+		public parse(schemaEntry: SchemaEntry): string;
+		public parseValue(value: any, schemaEntry: SchemaEntry, datatype?: Required<QueryBuilderDatatypeOptions>): string;
+		private arrayResolver: (values: Array<any>, entry: SchemaEntry, resolver: Function) => string;
 		private formatDatatype: (name: string, datatype: string, def?: string) => string;
 		private readonly _datatypes: ObjectLiteral<Required<QueryBuilderDatatypeOptions>>;
 	}
@@ -291,17 +291,17 @@ declare module 'klasa' {
 		public toString(): string;
 	}
 
-	export class Schema extends Map<string, SchemaPiece | SchemaFolder> {
+	export class Schema extends Map<string, SchemaEntry | SchemaFolder> {
 		public constructor(path?: string);
-		public readonly configurableValues: Array<SchemaPiece>;
+		public readonly configurableValues: Array<SchemaEntry>;
 		public readonly configurableKeys: Array<string>;
 		public readonly defaults: SettingsFolder;
 		public readonly path: string;
-		public readonly paths: Map<string, SchemaPiece | SchemaFolder>;
+		public readonly paths: Map<string, SchemaEntry | SchemaFolder>;
 		public readonly type: 'Folder';
-		public add(key: string, type: string, options?: SchemaPieceOptions): this;
+		public add(key: string, type: string, options?: SchemaEntryOptions): this;
 		public add(key: string, callback: (folder: SchemaFolder) => any): this;
-		public get<T = Schema | SchemaPiece | SchemaFolder>(key: string | Array<string>): T;
+		public get<T = Schema | SchemaEntry | SchemaFolder>(key: string | Array<string>): T;
 		public resolve(settings: Settings, language: Language, guild: KlasaGuild): Promise<Record<string, any>>;
 		public toJSON(): ObjectLiteral;
 	}
@@ -312,8 +312,8 @@ declare module 'klasa' {
 		public readonly parent: Schema | SchemaFolder;
 	}
 
-	export class SchemaPiece {
-		public constructor(parent: Schema | SchemaFolder, key: string, type: string, options: SchemaPieceOptions);
+	export class SchemaEntry {
+		public constructor(parent: Schema | SchemaFolder, key: string, type: string, options: SchemaEntryOptions);
 		public readonly client: KlasaClient | null;
 		public readonly parent: Schema | SchemaFolder;
 		public readonly key: string;
@@ -325,12 +325,12 @@ declare module 'klasa' {
 		public default: any;
 		public min: number | null;
 		public max: number | null;
-		public filter: ((client: KlasaClient, value: any, schema: SchemaPiece, language: Language) => boolean) | null;
+		public filter: ((client: KlasaClient, value: any, entry: SchemaEntry, language: Language) => boolean) | null;
 		public shouldResolve: boolean;
 		public parse<T>(value: any, guild?: KlasaGuild): T;
-		public edit(options?: SchemaPieceEditOptions): this;
+		public edit(options?: SchemaEntryEditOptions): this;
 		public resolve(settings: Settings, language: Language, guild: KlasaGuild): Promise<any>;
-		public toJSON(): SchemaPieceOptions;
+		public toJSON(): SchemaEntryOptions;
 
 		private isValid(): boolean;
 		private _generateDefault(): Array<any> | false | null;
@@ -500,13 +500,13 @@ declare module 'klasa' {
 
 	export abstract class SQLProvider extends Provider {
 		public abstract qb: QueryBuilder;
-		public abstract addColumn<T = any>(table: string, columns: SchemaFolder | SchemaPiece): Promise<T>;
+		public abstract addColumn<T = any>(table: string, columns: SchemaFolder | SchemaEntry): Promise<T>;
 		public abstract removeColumn<T = any>(table: string, columns: string | string[]): Promise<T>;
-		public abstract updateColumn<T = any>(table: string, piece: SchemaPiece): Promise<T>;
+		public abstract updateColumn<T = any>(table: string, entry: SchemaEntry): Promise<T>;
 		public abstract getColumns(table: string): Promise<Array<string>>;
 		protected parseUpdateInput<T = [string, any]>(updated?: SettingsFolderUpdateResultEntry[] | [string, any][] | ObjectLiteral, resolve?: boolean): T;
 		protected parseEntry<T = ObjectLiteral>(gateway: string | Gateway, entry: ObjectLiteral): T;
-		protected parseValue<T = any>(value: any, schemaPiece: SchemaPiece): T;
+		protected parseValue<T = any>(value: any, schemaEntry: SchemaEntry): T;
 		private _parseGatewayInput(updated: SettingsFolderUpdateResultEntry[], keys: string[], values: string[], resolve?: boolean): void;
 	}
 
@@ -521,7 +521,7 @@ declare module 'klasa' {
 		public serialize(data: any): PrimitiveType;
 		public stringify(data: any): string;
 		public toJSON(): PieceSerializerJSON;
-		public abstract deserialize(data: any, piece: SchemaPiece, language: Language, guild?: KlasaGuild): Promise<any>;
+		public abstract deserialize(data: any, entry: SchemaEntry, language: Language, guild?: KlasaGuild): Promise<any>;
 		public static regex: MentionRegex;
 	}
 
@@ -1430,7 +1430,7 @@ declare module 'klasa' {
 	export type SettingsFolderUpdateResultEntry = {
 		key: string;
 		value: PrimitiveType;
-		piece: SchemaPiece;
+		entry: SchemaEntry;
 	};
 
 	export type GatewayOptions = {
@@ -1445,8 +1445,8 @@ declare module 'klasa' {
 
 	export type QueryBuilderDatatypeOptions = {
 		type: string;
-		resolver?: <T = any>(input: any, schemaPiece: SchemaPiece) => T;
-		arrayResolver?: (values: Array<any>, piece: SchemaPiece, resolver: Function) => string;
+		resolver?: <T = any>(input: any, schemaEntry: SchemaEntry) => T;
+		arrayResolver?: (values: Array<any>, entry: SchemaEntry, resolver: Function) => string;
 	};
 
 	export type QueryBuilderOptions = QueryBuilderDefaultOptions
@@ -1457,25 +1457,25 @@ declare module 'klasa' {
 		| GuildChannel
 		| Snowflake;
 
-	export type SchemaFolderAddOptions = SchemaFolderOptions | SchemaPieceOptions;
+	export type SchemaFolderAddOptions = SchemaFolderOptions | SchemaEntryOptions;
 
-	export interface SchemaPieceOptions {
+	export type SchemaEntryOptions = {
 		array?: boolean;
 		configurable?: boolean;
 		default?: any;
 		min?: number;
 		max?: number;
-		filter?: ((client: KlasaClient, value: any, schema: SchemaPiece, language: Language) => boolean) | null;
+		filter?: ((client: KlasaClient, value: any, entry: SchemaEntry, language: Language) => boolean) | null;
 		resolve?: boolean;
 	};
 
-	export interface SchemaPieceEditOptions extends SchemaPieceOptions {
+	export type SchemaEntryEditOptions = {
 		type?: string;
-	}
+	} & SchemaEntryOptions;
 
 	export type SchemaFolderOptions = {
 		type?: 'Folder';
-	} & Filter<Record<string, SchemaPieceOptions>, 'type'>;
+	} & ObjectLiteral<SchemaEntryOptions>;
 
 	export type GatewayDriverJSON = {
 		clientStorage: GatewayJSON;
@@ -1691,9 +1691,9 @@ declare module 'klasa' {
 
 	export type QueryBuilderDefaultOptions = {
 		array?: (datatype: string) => string;
-		arrayResolver?: (values: Array<any>, piece: SchemaPiece, resolver: Function) => string;
+		arrayResolver?: (values: Array<any>, entry: SchemaEntry, resolver: Function) => string;
 		formatDatatype?: (name: string, datatype: string, def?: string) => string;
-		resolver?: <T = any>(input: any, schemaPiece: SchemaPiece) => T;
+		resolver?: <T = any>(input: any, schemaEntry: SchemaEntry) => T;
 	};
 
 	export type KlasaConsoleEvents = {

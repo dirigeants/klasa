@@ -7,21 +7,21 @@ module.exports = class extends Serializer {
 		super(...args, { aliases: ['textchannel', 'voicechannel', 'categorychannel'] });
 	}
 
-	checkChannel(data, piece, language) {
+	checkChannel(data, entry, language) {
 		if (
-			piece.type === 'channel' ||
-			(piece.type === 'textchannel' && data.type === 'text') ||
-			(piece.type === 'voicechannel' && data.type === 'voice') ||
-			(piece.type === 'categorychannel' && data.type === 'category')
+			entry.type === 'channel' ||
+			(entry.type === 'textchannel' && data.type === 'text') ||
+			(entry.type === 'voicechannel' && data.type === 'voice') ||
+			(entry.type === 'categorychannel' && data.type === 'category')
 		) return data;
-		throw language.get('RESOLVER_INVALID_CHANNEL', piece.key);
+		throw language.get('RESOLVER_INVALID_CHANNEL', entry.key);
 	}
 
-	async deserialize(data, piece, language, guild) {
-		if (data instanceof Channel) return this.checkChannel(data, piece, language);
+	async deserialize(data, entry, language, guild) {
+		if (data instanceof Channel) return this.checkChannel(data, entry, language);
 		const channel = this.constructor.regex.channel.test(data) ? (guild || this.client).channels.get(this.constructor.regex.channel.exec(data)[1]) : null;
-		if (channel) return this.checkChannel(channel, piece, language);
-		throw language.get('RESOLVER_INVALID_CHANNEL', piece.key);
+		if (channel) return this.checkChannel(channel, entry, language);
+		throw language.get('RESOLVER_INVALID_CHANNEL', entry.key);
 	}
 
 	serialize(value) {

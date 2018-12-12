@@ -60,62 +60,62 @@ class Schema extends Map {
 	 */
 	get configurableKeys() {
 		const keys = [];
-		for (const piece of this.values(true)) if (piece.configurable) keys.push(piece.path);
+		for (const entry of this.values(true)) if (entry.configurable) keys.push(entry.path);
 		return keys;
 	}
 
 	/**
 	 * Get the configurable value for the current SchemaFolder or Schema instance
 	 * @since 0.5.0
-	 * @type {Array<SchemaPiece>}
+	 * @type {Array<SchemaEntry>}
 	 * @readonly
 	 */
 	get configurableValues() {
 		const values = [];
-		for (const piece of this.values(true)) if (piece.configurable) values.push(piece);
+		for (const entry of this.values(true)) if (entry.configurable) values.push(entry);
 		return values;
 	}
 
 	/**
 	 * Get the paths for the current SchemaFolder or Schema instance
 	 * @since 0.5.0
-	 * @type {Map<string, SchemaFolder|SchemaPiece>}
+	 * @type {Map<string, SchemaFolder|SchemaEntry>}
 	 * @readonly
 	 */
 	get paths() {
 		const paths = new Map();
-		for (const piece of this.values(true)) paths.set(piece.path, piece);
+		for (const entry of this.values(true)) paths.set(entry.path, entry);
 		return paths;
 	}
 
 	/**
 	 * Adds a Folder or Piece instance to the current SchemaFolder or Schema instance
 	 * @since 0.5.0
-	 * @param {string} key The name of this new piece you are trying to add.
-	 * @param {string|Function} typeOrCallback A function to add a folder or a string to add a new SchemaPiece
-	 * @param {SchemaPieceOptions} [options] An object of options used for SchemaPieces
+	 * @param {string} key The name of the entry you are trying to add.
+	 * @param {string|Function} typeOrCallback A function to add a folder or a string to add a new SchemaEntry
+	 * @param {SchemaEntryOptions} [options] An object of options used for schema entries
 	 * @returns {this}
 	 * @chainable
 	 * @example
 	 * // callback is always passed the created folder to encourage chaining
-	 * Schema.add('folder', (folder) => folder.add('piece', 'textchannel'));
+	 * Schema.add('folder', (folder) => folder.add('name', 'textchannel'));
 	 * // or
-	 * Schema.add('piece', 'string', { default: 'klasa!' });
+	 * Schema.add('name', 'string', { default: 'klasa!' });
 	 */
 	add(key, typeOrCallback, options = {}) {
 		if (!typeOrCallback) throw new Error(`The type for ${key} must be a string for pieces, and a callback for folders`);
 
-		let Piece;
+		let SchemaCtor;
 		let type;
 		let callback;
 		if (isFunction(typeOrCallback)) {
 			// .add('folder', (folder) => ());
 			callback = typeOrCallback;
 			type = 'Folder';
-			Piece = require('./SchemaFolder');
+			SchemaCtor = require('./SchemaFolder');
 		} else if (typeof typeOrCallback === 'string') {
-			// .add('piece', 'string', { optional options });
-			Piece = require('./SchemaPiece');
+			// .add('name', 'string', { optional options });
+			SchemaCtor = require('./SchemaEntry');
 			type = typeOrCallback;
 			callback = null;
 		}
@@ -124,33 +124,33 @@ class Schema extends Map {
 		const previous = super.get(key);
 		if (previous) {
 			if (type === 'Folder') {
-				// If the type of the new piece is a Folder, the previous must also be a Folder.
+				// If the type of the new entry is a Folder, the previous must also be a Folder.
 				if (previous.type !== 'Folder') throw new Error(`The type for ${key} conflicts with the previous value, expected type Folder, got ${previous.type}.`);
 				// Call the callback with the pre-existent Folder
 				callback(previous); // eslint-disable-line callback-return
 				return this;
 			}
-			// If the type of the new piece is not a Folder, the previous must also not be a Folder.
+			// If the type of the new entry is not a Folder, the previous must also not be a Folder.
 			if (previous.type === 'Folder') throw new Error(`The type for ${key} conflicts with the previous value, expected a non-Folder, got ${previous.type}.`);
 			// Edit the previous key
 			previous.edit({ type, ...options });
 			return this;
 		}
-		const piece = new Piece(this, key, type, options);
+		const entry = new SchemaCtor(this, key, type, options);
 
 		// eslint-disable-next-line callback-return
-		if (callback) callback(piece);
+		if (callback) callback(entry);
 
-		this.set(key, piece);
+		this.set(key, entry);
 
 		return this;
 	}
 
 	/**
-	 * Get a SchemaPiece or a SchemaFolder given a path
+	 * Get a SchemaEntry or a SchemaFolder given a path
 	 * @since 0.5.0
 	 * @param {string} path The key to get from the schema
-	 * @returns {?SchemaPiece|SchemaFolder}
+	 * @returns {?SchemaEntry|SchemaFolder}
 	 */
 	get(path) {
 		// Map.prototype.get.call was used to avoid infinite recursion
@@ -168,7 +168,7 @@ class Schema extends Map {
 	 */
 	async resolve(settings, language, guild) {
 		const promises = [];
-		for (const piece of this.values(true)) promises.push(piece.resolve(settings, language, guild).then(parsed => ({ [piece.key]: parsed })));
+		for (const entry of this.values(true)) promises.push(entry.resolve(settings, language, guild).then(parsed => ({ [entry.key]: parsed })));
 		return Object.assign({}, ...await Promise.all(promises));
 	}
 
@@ -196,7 +196,7 @@ class Schema extends Map {
 	 * Identical to [Map.values()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/values)
 	 * @since 0.5.0
 	 * @param {boolean} recursive Whether the iteration should be recursive
-	 * @yields {(SchemaFolder|SchemaPiece)}
+	 * @yields {(SchemaFolder|SchemaEntry)}
 	 */
 	*values(recursive = false) {
 		if (recursive) {
@@ -214,7 +214,7 @@ class Schema extends Map {
 	 * Identical to [Map.entries()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/entries)
 	 * @since 0.5.0
 	 * @param {boolean} recursive Whether the iteration should be recursive
-	 * @yields {Array<string|SchemaFolder|SchemaPiece>}
+	 * @yields {Array<string|SchemaFolder|SchemaEntry>}
 	 */
 	*entries(recursive = false) {
 		if (recursive) {
@@ -233,7 +233,7 @@ class Schema extends Map {
 	 * @returns {Object}
 	 */
 	toJSON() {
-		return Object.assign({}, ...[...this.values()].map(piece => ({ [piece.key]: piece.toJSON() })));
+		return Object.assign({}, ...[...this.values()].map(entry => ({ [entry.key]: entry.toJSON() })));
 	}
 
 }

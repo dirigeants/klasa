@@ -83,15 +83,15 @@ class GatewayStorage {
 		this.ready = true;
 
 		const errors = [];
-		for (const piece of this.schema.values(true)) {
+		for (const entry of this.schema.values(true)) {
 			// Assign Client to all Pieces for Serializers && Type Checking
-			piece.client = this.client;
+			entry.client = this.client;
 
-			Object.freeze(piece);
+			Object.freeze(entry);
 
-			// Check if the piece is valid
+			// Check if the entry is valid
 			try {
-				piece.isValid();
+				entry.isValid();
 			} catch (error) {
 				errors.push(error.message);
 			}
@@ -107,7 +107,7 @@ class GatewayStorage {
 		const columns = await provider.getColumns(this.name);
 		if (columns.length) {
 			const promises = [];
-			for (const [key, piece] of this.schema.paths) if (!columns.includes(key)) promises.push(provider.addColumn(this.name, piece));
+			for (const [key, entry] of this.schema.paths) if (!columns.includes(key)) promises.push(provider.addColumn(this.name, entry));
 			await Promise.all(promises);
 		}
 	}

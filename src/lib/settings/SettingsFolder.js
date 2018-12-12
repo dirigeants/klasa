@@ -20,7 +20,7 @@ class SettingsFolder extends Map {
 	 * @typedef {Object} SettingsFolderUpdateResultEntry
 	 * @property {string} key The key that got updated relative from this folder
 	 * @property {*} value The new value for said key
-	 * @property {SchemaPiece} piece The Schema piece that manages the updated key
+	 * @property {SchemaEntry} entry The SchemaEntry that manages the updated key
 	 */
 
 	/**
@@ -88,9 +88,9 @@ class SettingsFolder extends Map {
 	}
 
 	/**
-	 * Extract the relative path from an absolute one or a piece
+	 * Extract the relative path from an absolute one or an entry
 	 * @since 0.5.0
-	 * @param {string|Schema|SchemaPiece} pathOrPiece The path or piece to substract the path from
+	 * @param {string|Schema|SchemaEntry} pathOrPiece The path or entry to substract the path from
 	 * @returns {string}
 	 */
 	relative(pathOrPiece) {
@@ -112,8 +112,8 @@ class SettingsFolder extends Map {
 		const language = guild ? guild.language : this.client.languages.default;
 		const promises = [];
 		for (const path of paths) {
-			const piece = this.schema.get(this.relative(path));
-			promises.push(piece.resolve(this, language, guild).then(res => ({ [piece.key]: res })));
+			const entry = this.schema.get(this.relative(path));
+			promises.push(entry.resolve(this, language, guild).then(res => ({ [entry.key]: res })));
 		}
 		return Object.assign({}, ...await Promise.all(promises));
 	}
@@ -156,26 +156,26 @@ class SettingsFolder extends Map {
 		for (const path of paths) {
 			try {
 				const key = this.relative(path);
-				let piece;
+				let entry;
 				try {
-					piece = schema.get(key);
-					if (!piece) throw undefined;
+					entry = schema.get(key);
+					if (!entry) throw undefined;
 				} catch (__) {
 					throw language.get('SETTING_GATEWAY_KEY_NOEXT', path);
 				}
-				if (piece.type === 'Folder') {
+				if (entry.type === 'Folder') {
 					const valuesLength = values.length;
 					const prefixLength = this.schema.path ? this.schema.path.length + 1 : 0;
 					// Recurse to all sub-pieces
-					for (const value of piece.values(true)) {
+					for (const value of entry.values(true)) {
 						if (onlyConfigurable && !value.configurable) continue;
-						values.push([value.path.slice(prefixLength), piece]);
+						values.push([value.path.slice(prefixLength), entry]);
 					}
 					if (values.length === valuesLength) throw language.get('SETTING_GATEWAY_UNCONFIGURABLE_FOLDER');
-				} else if (onlyConfigurable && !piece.configurable) {
+				} else if (onlyConfigurable && !entry.configurable) {
 					throw language.get('SETTING_GATEWAY_UNCONFIGURABLE_FOLDER');
 				} else {
-					values.push([key, piece]);
+					values.push([key, entry]);
 				}
 			} catch (error) {
 				if (throwOnError) throw typeof error === 'string' ? new Error(error) : error;
@@ -185,9 +185,9 @@ class SettingsFolder extends Map {
 
 		// Queue updates
 		const results = [];
-		for (const [path, piece] of values) {
-			if (piece.array ? arraysStrictEquals(this.get(path), piece.default) : this.get(path) === piece.default) continue;
-			results.push({ key: path, value: piece.default, piece });
+		for (const [path, entry] of values) {
+			if (entry.array ? arraysStrictEquals(this.get(path), entry.default) : this.get(path) === entry.default) continue;
+			results.push({ key: path, value: entry.default, entry });
 		}
 
 		if (results.length) await this._save(results);
@@ -242,27 +242,27 @@ class SettingsFolder extends Map {
 		const onError = options.throwOnError ? (error) => { throw error; } : (error) => errors.push(error);
 		for (const value of paths) {
 			try {
-				if (value.length !== 2) throw new TypeError(`Invalid value. Expected object, string or Array<[string, Schema | SchemaPiece | string]>. Got: ${new Type(value)}`);
+				if (value.length !== 2) throw new TypeError(`Invalid value. Expected object, string or Array<[string, Schema | SchemaEntry | string]>. Got: ${new Type(value)}`);
 
 				const key = this.relative(value[0]);
-				let piece;
+				let entry;
 				try {
-					piece = schema.get(key);
-					if (!piece) throw undefined;
+					entry = schema.get(key);
+					if (!entry) throw undefined;
 				} catch (__) {
 					throw language.get('SETTING_GATEWAY_KEY_NOEXT', value[0]);
 				}
-				if (piece.type === 'Folder') {
-					const keys = options.onlyConfigurable ? piece.configurableKeys : [...piece.keys()];
+				if (entry.type === 'Folder') {
+					const keys = options.onlyConfigurable ? entry.configurableKeys : [...entry.keys()];
 					throw keys.length ? language.get('SETTING_GATEWAY_CHOOSE_KEY', keys.join('\', \'')) : language.get('SETTING_GATEWAY_UNCONFIGURABLE_FOLDER');
 				}
-				if (!piece.array && Array.isArray(value[1])) {
+				if (!entry.array && Array.isArray(value[1])) {
 					throw language.get('SETTING_GATEWAY_KEY_NOT_ARRAY', key);
 				}
 
 				const previous = this.get(key);
-				promises.push(this._parse(piece, previous, value[1], options)
-					.then((parsed) => values.push([piece.path, previous, parsed, piece]))
+				promises.push(this._parse(entry, previous, value[1], options)
+					.then((parsed) => values.push([entry.path, previous, parsed, entry]))
 					.catch(onError));
 			} catch (error) {
 				if (options.throwOnError) throw error;
@@ -275,9 +275,9 @@ class SettingsFolder extends Map {
 
 		// Queue updates
 		const results = [];
-		for (const [path, previous, value, piece] of values) {
-			if (piece.array ? arraysStrictEquals(value, previous) : value === previous) continue;
-			results.push({ key: path, value, piece });
+		for (const [path, previous, value, entry] of values) {
+			if (entry.array ? arraysStrictEquals(value, previous) : value === previous) continue;
+			results.push({ key: path, value, entry });
 		}
 
 		if (results.length) await this._save(results);
@@ -288,24 +288,24 @@ class SettingsFolder extends Map {
 	 * Get a list.
 	 * @since 0.5.0
 	 * @param {KlasaMessage} message The Message instance
-	 * @param {string|Schema|SchemaPiece} [path] The path to resolve
+	 * @param {string|Schema|SchemaEntry} [path] The path to resolve
 	 * @returns {string}
 	 */
 	display(message, path) {
-		const piece = path ? typeof path === 'string' ? this.schema.get(this.relative(path)) : path : this.schema;
+		const entry = path ? typeof path === 'string' ? this.schema.get(this.relative(path)) : path : this.schema;
 
-		if (piece.type !== 'Folder') {
-			const value = path ? this.get(this.schema.path ? piece.path.slice(this.schema.path + 1) : piece.path) : this;
+		if (entry.type !== 'Folder') {
+			const value = path ? this.get(this.schema.path ? entry.path.slice(this.schema.path + 1) : entry.path) : this;
 			if (value === null) return 'Not set';
-			if (piece.array) return value.length ? `[ ${value.map(val => piece.serializer.stringify(val, message)).join(' | ')} ]` : 'None';
-			return piece.serializer.stringify(value, message);
+			if (entry.array) return value.length ? `[ ${value.map(val => entry.serializer.stringify(val, message)).join(' | ')} ]` : 'None';
+			return entry.serializer.stringify(value, message);
 		}
 
 		const array = [];
 		const folders = [];
 		const sections = new Map();
 		let longest = 0;
-		for (const [key, value] of piece.entries()) {
+		for (const [key, value] of entry.entries()) {
 			if (value.type === 'Folder') {
 				if (value.configurableKeys.length) folders.push(`// ${key}`);
 			} else if (value.configurable) {
@@ -319,7 +319,7 @@ class SettingsFolder extends Map {
 		if (sections.size) {
 			for (const keyType of [...sections.keys()].sort()) {
 				array.push(`= ${toTitleCase(keyType)}s =`,
-					...sections.get(keyType).sort().map(key => `${key.padEnd(longest)} :: ${this.display(message, piece.get(key))}`),
+					...sections.get(keyType).sort().map(key => `${key.padEnd(longest)} :: ${this.display(message, entry.get(key))}`),
 					'');
 			}
 		}
@@ -354,20 +354,20 @@ class SettingsFolder extends Map {
 	/**
 	 * Parse a value
 	 * @since 0.5.0
-	 * @param {SchemaPiece} piece The path result
+	 * @param {SchemaEntry} entry The path result
 	 * @param {*} previous The key that updates
 	 * @param {*} next The value to parse
 	 * @param {SettingsFolderUpdateOptions} options The parse options
 	 * @private
 	 */
-	async _parse(piece, previous, next, options) {
-		if (next === null) return piece.default;
+	async _parse(entry, previous, next, options) {
+		if (next === null) return entry.default;
 
 		const isArray = Array.isArray(next);
-		if (isArray) next = await Promise.all(next.map(async val => piece.serializer.serialize(await piece.parse(val, options.guild))));
-		else next = piece.serializer.serialize(await piece.parse(next, options.guild));
+		if (isArray) next = await Promise.all(next.map(async val => entry.serializer.serialize(await entry.parse(val, options.guild))));
+		else next = entry.serializer.serialize(await entry.parse(next, options.guild));
 
-		if (!piece.array) return next;
+		if (!entry.array) return next;
 		if (!isArray) next = [next];
 
 		const { arrayAction = 'auto', arrayIndex = null } = options;
@@ -389,14 +389,14 @@ class SettingsFolder extends Map {
 		} else if (arrayAction === 'add') {
 			// Array action add must add values, throw on existent
 			for (const val of next) {
-				if (clone.includes(val)) throw `The value ${val} for the key ${piece.path} already exists.`;
+				if (clone.includes(val)) throw `The value ${val} for the key ${entry.path} already exists.`;
 				clone.push(val);
 			}
 		} else if (arrayAction === 'remove') {
 			// Array action remove must add values, throw on non-existent
 			for (const val of next) {
 				const index = clone.indexOf(val);
-				if (index === -1) throw `The value ${val} for the key ${piece.path} does not exist.`;
+				if (index === -1) throw `The value ${val} for the key ${entry.path} does not exist.`;
 				clone.splice(index, 1);
 			}
 		} else {

@@ -99,8 +99,8 @@
         "path": "UnderstandingSchemaFolders.md"
     },
     {
-        "name": "Understanding SchemaPieces",
-        "path": "UnderstandingSchemaPieces.md"
+        "name": "Understanding SchemaEntries",
+        "path": "UnderstandingSchemaEntries.md"
     },
     {
         "name": "SettingsGateway's Types",

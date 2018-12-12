@@ -23,7 +23,7 @@ module.exports = {
 	GatewayStorage: require('./lib/settings/gateway/GatewayStorage'),
 	Schema: require('./lib/settings/schema/Schema'),
 	SchemaFolder: require('./lib/settings/schema/SchemaFolder'),
-	SchemaPiece: require('./lib/settings/schema/SchemaPiece'),
+	SchemaEntry: require('./lib/settings/schema/SchemaEntry'),
 
 	// lib/structures/base
 	AliasPiece: require('./lib/structures/base/AliasPiece'),
