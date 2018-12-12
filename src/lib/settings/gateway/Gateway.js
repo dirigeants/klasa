@@ -11,9 +11,7 @@ class Gateway extends GatewayStorage {
 	 * @since 0.0.1
 	 * @param {KlasaClient} client The KlasaClient instance which initiated this instance
 	 * @param {string} name The name of this Gateway
-	 * @param {Object} [options = {}] The options for this gateway
-	 * @param {Schema} [options.schema = new Schema()] The schema for this gateway
-	 * @param {string} [options.provider = this.client.options.providers.default] The provider's name for this gateway
+	 * @param {GatewayOptions} [options = {}] The options for this gateway
 	 */
 	constructor(client, name, options) {
 		super(client, name, options);

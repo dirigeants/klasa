@@ -10,13 +10,16 @@ class GatewayStorage {
 	 */
 
 	/**
+	 * @typedef {Object} GatewayOptions
+	 * @property {Schema} [schema = new Schema()] The schema for this gateway
+	 * @property {string} [provider = client.options.providers.default] The provider's name for this gateway
+	 */
+
+	/**
 	 * @since 0.5.0
 	 * @param {KlasaClient} client The client this GatewayStorage was created with
 	 * @param {string} name The name of this GatewayStorage
-	 * @param {Object} [options = {}] The options for this gateway
-	 * @param {Schema} [options.schema = new Schema()] The schema for this gateway
-	 * @param {string} [options.provider = this.client.options.providers.default] The provider's name for this gateway
-	 * @private
+	 * @param {GatewayOptions} [options = {}] The options for this gateway
 	 */
 	constructor(client, name, { schema = new Schema(), provider = client.options.providers.default }) {
 		/**
