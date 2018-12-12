@@ -281,9 +281,9 @@ declare module 'klasa' {
 		public constructor(client: KlasaClient, name: string, options?: GatewayOptions);
 		public readonly client: KlasaClient;
 		public readonly provider: Provider | null;
-		public readonly _provider: string;
 		public readonly name: string;
 		public readonly schema: SchemaFolder;
+		private readonly _provider: string;
 		public ready: boolean;
 		public sync(): Promise<this>;
 		public init(): Promise<void>;

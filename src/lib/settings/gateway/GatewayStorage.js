@@ -46,6 +46,7 @@ class GatewayStorage {
 		 * @name GatewayStorage#_provider
 		 * @type {string}
 		 * @readonly
+		 * @private
 		 */
 		Object.defineProperty(this, '_provider', { value: provider });
 
