@@ -68,7 +68,7 @@ this.qb = new QueryBuilder({
 	// big numbers, you may want to use INTEGER instead of BIGINT. More options
 	// are given with smaller units, but depends on the database. For this case,
 	// we pass a function instead of a string, said function takes an instance of
-	// SchemaPiece.
+	// SchemaEntry.
 	integer: ({ max }) => max >= 2 ** 32 ? 'BIGINT' : 'INTEGER',
 	// You may want to define extra types for custom argument resolvers.
 	any: { type: 'JSON', resolver: (input) => `'${JSON.stringify(input)}'::json` },
@@ -81,7 +81,7 @@ this.qb = new QueryBuilder({
 	// supported, it's advised to not use this option, it defaults to `() => 'TEXT'`, which
 	// enables the JSON.parse/JSON.stringify mechanism from SQLProvider.
 
-	// The following line converts a datatype, i.e. `INTEGER`, into `INTEGER[]` when the SchemaPiece
+	// The following line converts a datatype, i.e. `INTEGER`, into `INTEGER[]` when the SchemaEntry
 	// takes arrays and they are supported by the SQL database.
 	array: type => `${type}[]`,
 
@@ -95,10 +95,10 @@ this.qb = new QueryBuilder({
 	// results similar to `array['{"a":true}'::json, '{"b":true}'::json]`, which is valid. Therefore, we
 	// resolve each value from the array with our resolver (look above, we have set up the resolver for json/any)
 	// and wrap each value in array[], or return '{}' if it's empty.
-	arrayResolver: (values, piece, resolver) => values.length ? `array[${values.map(value => resolver(value, piece)).join(', ')}]` : "'{}'",
+	arrayResolver: (values, entry, resolver) => values.length ? `array[${values.map(value => resolver(value, entry)).join(', ')}]` : "'{}'",
 
 	// The following function wraps the datatype generated with the previous options and the
-	// default value from the SchemaPiece instance, plus the name. In PGSQL, names that have
+	// default value from the SchemaEntry instance, plus the name. In PGSQL, names that have
 	// uppercase letters are automatically lowercased if they aren't between quotes, giving
 	// this option a chance. Normally, you don't need to define this.
 	formatDatatype: (name, datatype, def = null) => `"${name}" ${datatype}${def !== null ? ` NOT NULL DEFAULT ${def}` : ''}`

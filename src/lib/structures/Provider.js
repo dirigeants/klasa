@@ -176,7 +176,7 @@ class Provider extends Piece {
 	parseUpdateInput(updated) {
 		if (isObject(updated)) return updated;
 		const updateObject = {};
-		for (const entry of updated) mergeObjects(updateObject, makeObject(entry.piece.path, entry.value));
+		for (const entry of updated) mergeObjects(updateObject, makeObject(entry.entry.path, entry.value));
 		return updateObject;
 	}
 

@@ -10,11 +10,11 @@ message.guild.settings.update('roles.administrator', '339943234405007361');
 
 // For retrocompatibility, the object overload is still available, however, this is much slower.
 // If you store objects literals in keys that do not take an array, this may break, prefer the
-// other overload or use nested SchemaPieces for full consistency.
+// other overload or use nested schema entries for full consistency.
 message.guild.settings.update({ roles: { administrator: '339943234405007361' } });
 
 // Updating an array
-// userBlacklist, as mentioned in another tutorial, it's a piece with an array of users. Using
+// userBlacklist, as mentioned in another tutorial, it's an entry with an array of users. Using
 // the following code will add or remove it, depending on the existence of the key in the configuration.
 message.guild.settings.update('userBlacklist', '272689325521502208');
 
@@ -34,6 +34,6 @@ message.guild.settings.update([['prefix', 'k!'], ['language', 'es-ES']]);
 
 ## Further Reading:
 
-- {@tutorial UnderstandingSchemaPieces}
+- {@tutorial UnderstandingSchemaEntries}
 - {@tutorial UnderstandingSchemaFolders}
 - {@tutorial SettingsGatewayKeyTypes}

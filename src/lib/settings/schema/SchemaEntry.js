@@ -1,36 +1,36 @@
 const { isFunction, isNumber } = require('../../util/util');
 
-class SchemaPiece {
+class SchemaEntry {
 
 	/**
-	 * @typedef {Object} SchemaPieceOptions
+	 * @typedef {Object} SchemaEntryOptions
 	 * @property {*} [default] The default value for the key
 	 * @property {Function} [filter] The filter to use when resolving this key. The function is passed the resolved value from the resolver, and a guild.
 	 * @property {boolean} [array] Whether the key should be stored as Array or not
 	 * @property {boolean} [configurable] Whether the key should be configurable by the configuration command or not
-	 * @property {number} [min] The minimum value for this piece
-	 * @property {number} [max] The maximum value for this piece
-	 /*@property {boolean} [inclusive] Whether the key should check for inclusivity when checking min and max
+	 * @property {number} [min] The minimum value for this entry
+	 * @property {number} [max] The maximum value for this entry
+	 * @property {boolean} [inclusive] Whether the key should check for inclusivity when checking min and max
 	 * @property {boolean} [resolve] Whether or not SG should resolve this value during resolve operations
 	 */
 
 	/**
-	 * @typedef {SchemaPieceOptions} SchemaPieceEditOptions
-	 * @property {string} [type] The new type for this SchemaPiece
+	 * @typedef {SchemaEntryOptions} SchemaEntryEditOptions
+	 * @property {string} [type] The new type for this SchemaEntry
 	 */
 
 	/**
-	 * Creates our SchemaPiece instance
-	 * @param {SchemaFolder|Schema} parent The parent folder or schema for this piece instance
-	 * @param {string} key The name of this piece instance
-	 * @param {string} type The type for this piece instance
-	 * @param {SchemaPieceOptions} [options={}] The options for this SchemaPiece instance
+	 * Creates our SchemaEntry instance
+	 * @param {SchemaFolder|Schema} parent The parent folder or schema for this entry instance
+	 * @param {string} key The name of this entry instance
+	 * @param {string} type The type for this entry instance
+	 * @param {SchemaEntryOptions} [options={}] The options for this SchemaEntry instance
 	 * @since 0.5.0
 	 */
 	constructor(parent, key, type, options = {}) {
 		/**
-		 * The KlasaClient for this SchemaPiece
-		 * @name SchemaPiece#client
+		 * The KlasaClient for this SchemaEntry
+		 * @name SchemaEntry#client
 		 * @since 0.5.0
 		 * @type {KlasaClient}
 		 * @readonly
@@ -38,8 +38,8 @@ class SchemaPiece {
 		Object.defineProperty(this, 'client', { value: null, writable: true });
 
 		/**
-		 * The parent of this SchemaPiece, either a SchemaFolder instance or Schema instance
-		 * @name SchemaPiece#parent
+		 * The parent of this SchemaEntry, either a SchemaFolder instance or Schema instance
+		 * @name SchemaEntry#parent
 		 * @since 0.5.0
 		 * @type {SchemaFolder|Schema}
 		 * @readonly
@@ -47,8 +47,8 @@ class SchemaPiece {
 		Object.defineProperty(this, 'parent', { value: parent });
 
 		/**
-		 * The name of this SchemaPiece instance
-		 * @name SchemaPiece#key
+		 * The name of this SchemaEntry instance
+		 * @name SchemaEntry#key
 		 * @since 0.5.0
 		 * @type {string}
 		 * @readonly
@@ -56,8 +56,8 @@ class SchemaPiece {
 		Object.defineProperty(this, 'key', { value: key });
 
 		/**
-		 * The path of this SchemaPiece instance
-		 * @name SchemaPiece#path
+		 * The path of this SchemaEntry instance
+		 * @name SchemaEntry#path
 		 * @since 0.5.0
 		 * @type {string}
 		 * @readonly
@@ -65,14 +65,14 @@ class SchemaPiece {
 		Object.defineProperty(this, 'path', { value: `${this.parent.path ? `${this.parent.path}.` : ''}${this.key}` });
 
 		/**
-		 * The type this SchemaPiece instance is for
+		 * The type this SchemaEntry instance is for
 		 * @since 0.5.0
 		 * @type {string}
 		 */
 		this.type = type.toLowerCase();
 
 		/**
-		 * Whether or not this key should hold an array of data, or a single piece of data
+		 * Whether or not this key should hold an array of data, or a single entry of data
 		 * @since 0.5.0
 		 * @type {boolean}
 		 */
@@ -129,7 +129,7 @@ class SchemaPiece {
 	}
 
 	/**
-	 * The serializer for this SchemaPiece
+	 * The serializer for this SchemaEntry
 	 * @since 0.5.0
 	 * @type {Serializer}
 	 * @readonly
@@ -139,9 +139,9 @@ class SchemaPiece {
 	}
 
 	/**
-	 * Edit this SchemaPiece's properties
+	 * Edit this SchemaEntry's properties
 	 * @since 0.5.0
-	 * @param {SchemaPieceEditOptions} [options={}] The options for this SchemaPiece
+	 * @param {SchemaEntryEditOptions} [options={}] The options for this SchemaEntry
 	 * @returns {this}
 	 */
 	edit(options = {}) {
@@ -160,7 +160,7 @@ class SchemaPiece {
 	}
 
 	/**
-	 * Checks whether or not this SchemaPiece is valid.
+	 * Checks whether or not this SchemaEntry is valid.
 	 * @since 0.5.0
 	 * @returns {boolean}
 	 */
@@ -237,7 +237,7 @@ class SchemaPiece {
 	}
 
 	/**
-	 * Get a JSON object containing data from this SchemaPiece
+	 * Get a JSON object containing data from this SchemaEntry
 	 * @since 0.5.0
 	 * @returns {Object}
 	 */
@@ -254,4 +254,4 @@ class SchemaPiece {
 
 }
 
-module.exports = SchemaPiece;
+module.exports = SchemaEntry;
