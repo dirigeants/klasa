@@ -9,7 +9,7 @@ module.exports = class extends Serializer {
 		super(...args, { aliases: [] });
 	}
 
-	async deserialize(data, piece, language, guild) {
+	async deserialize(data, entry, language, guild) {
 		// Code to resolve primitives into resolved data for the cache
 	}
 
@@ -29,7 +29,7 @@ The deserialize method in {@link Serializer} takes 4 parameters:
 | Name         | Type                | Description                                           |
 | ------------ | ------------------- | ----------------------------------------------------- |
 | **data**     | any                 | The data to deserialize                               |
-| **piece**    | {@link SchemaPiece} | The piece from the schema that called this serializer |
+| **entry**    | {@link SchemaEntry} | The entry from the schema that called this serializer |
 | **language** | {@link Language}    | The language instance for usage in translated errors  |
 | **guild**    | {@link Guild}       | The guild instance passed in {@link Settings#update}  |
 

@@ -85,41 +85,41 @@ class QueryBuilder {
 	}
 
 	/**
-	 * Parse a SchemaPiece for the SQL datatype creation
+	 * Parse a SchemaEntry for the SQL datatype creation
 	 * @since 0.5.0
-	 * @param {schemaPiece} schemaPiece The SchemaPiece to process
+	 * @param {schemaEntry} schemaEntry The SchemaEntry to process
 	 * @returns {string}
 	 * @example
-	 * this.qb.parse(this.client.gateways.get('guilds').schema.prefix);
+	 * this.qb.parse(this.client.gateways.get('guilds').schema.get('prefix'));
 	 * // type: 'string', array: true, max: 10
 	 * // -> prefix VARCHAR(10)[]
 	 */
-	parse(schemaPiece) {
-		const datatype = this.get(schemaPiece.type);
-		const parsedDefault = this.parseValue(schemaPiece.default, schemaPiece, datatype);
-		const type = typeof datatype.type === 'function' ? datatype.type(schemaPiece) : datatype.type;
-		const parsedDatatype = schemaPiece.array ? datatype.array(type) : type;
-		return this.formatDatatype(schemaPiece.path, parsedDatatype, parsedDefault);
+	parse(schemaEntry) {
+		const datatype = this.get(schemaEntry.type);
+		const parsedDefault = this.parseValue(schemaEntry.default, schemaEntry, datatype);
+		const type = typeof datatype.type === 'function' ? datatype.type(schemaEntry) : datatype.type;
+		const parsedDatatype = schemaEntry.array ? datatype.array(type) : type;
+		return this.formatDatatype(schemaEntry.path, parsedDatatype, parsedDefault);
 	}
 
 	/**
 	 * Parses the value
 	 * @since 0.5.0
 	 * @param {*} value The value to parse
-	 * @param {schemaPiece} schemaPiece The SchemaPiece instance that manages this instance
+	 * @param {schemaEntry} schemaEntry The SchemaEntry instance that manages this instance
 	 * @param {QueryBuilderDatatype} datatype The QueryBuilder datatype
 	 * @returns {string}
 	 */
-	parseValue(value, schemaPiece, datatype = this.get(schemaPiece.type)) {
-		if (!datatype) throw new Error(`The type '${schemaPiece.type}' is unavailable, please set its definition in the constructor.`);
-		if (schemaPiece.array && !datatype.array) throw new Error(`The datatype '${datatype.type}' does not support arrays.`);
+	parseValue(value, schemaEntry, datatype = this.get(schemaEntry.type)) {
+		if (!datatype) throw new Error(`The type '${schemaEntry.type}' is unavailable, please set its definition in the constructor.`);
+		if (schemaEntry.array && !datatype.array) throw new Error(`The datatype '${datatype.type}' does not support arrays.`);
 
 		// If value is null, there is nothing to resolve.
 		if (value === null) return null;
 
-		return schemaPiece.array ?
-			this.arrayResolver(value, schemaPiece, datatype.resolver || (() => value)) :
-			typeof datatype.resolver === 'function' ? datatype.resolver(value, schemaPiece) : value;
+		return schemaEntry.array ?
+			this.arrayResolver(value, schemaEntry, datatype.resolver || (() => value)) :
+			typeof datatype.resolver === 'function' ? datatype.resolver(value, schemaEntry) : value;
 	}
 
 }

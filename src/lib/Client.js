@@ -492,7 +492,7 @@ KlasaClient.defaultGuildSchema = new Schema()
 	.add('disableNaturalPrefix', 'boolean')
 	.add('disabledCommands', 'command', {
 		array: true,
-		filter: (client, command, piece, language) => {
+		filter: (client, command, entry, language) => {
 			if (command.guarded) throw language.get('COMMAND_CONF_GUARDED', command.name);
 		}
 	});
