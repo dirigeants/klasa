@@ -1,3 +1,5 @@
+const Schema = require('../schema/Schema');
+
 class GatewayStorage {
 
 	/**
@@ -8,15 +10,18 @@ class GatewayStorage {
 	 */
 
 	/**
-	 * <warning>You should never create an instance of this class as it's abstract.</warning>
+	 * @typedef {Object} GatewayOptions
+	 * @property {Schema} [schema = new Schema()] The schema for this gateway
+	 * @property {string} [provider = client.options.providers.default] The provider's name for this gateway
+	 */
+
+	/**
 	 * @since 0.5.0
 	 * @param {KlasaClient} client The client this GatewayStorage was created with
 	 * @param {string} name The name of this GatewayStorage
-	 * @param {Schema} schema The schema for this gateway
-	 * @param {string} [provider] The provider's name
-	 * @private
+	 * @param {GatewayOptions} [options = {}] The options for this gateway
 	 */
-	constructor(client, name, schema, provider) {
+	constructor(client, name, { schema = new Schema(), provider = client.options.providers.default } = {}) {
 		/**
 		 * The client this GatewayStorage was created with.
 		 * @since 0.5.0
@@ -38,13 +43,15 @@ class GatewayStorage {
 		/**
 		 * The name of this instance's provider.
 		 * @since 0.5.0
-		 * @name GatewayStorage#providerName
+		 * @name GatewayStorage#_provider
 		 * @type {string}
 		 * @readonly
+		 * @private
 		 */
-		Object.defineProperty(this, 'providerName', { value: provider });
+		Object.defineProperty(this, '_provider', { value: provider });
 
 		/**
+		 * The schema for this instance
 		 * @since 0.5.0
 		 * @name GatewayStorage#schema
 		 * @type {Schema}
@@ -53,6 +60,7 @@ class GatewayStorage {
 		Object.defineProperty(this, 'schema', { value: schema, enumerable: true });
 
 		/**
+		 * Whether or not this gateway is considered ready.
 		 * @since 0.5.0
 		 * @type {boolean}
 		 */
@@ -66,7 +74,16 @@ class GatewayStorage {
 	 * @readonly
 	 */
 	get provider() {
-		return this.client.providers.get(this.providerName) || null;
+		return this.client.providers.get(this._provider) || null;
+	}
+
+	/**
+	 * Sync placeholder to allow GatewayStorage to be registered
+	 * @since 0.5.0
+	 * @returns {this}
+	 */
+	async sync() {
+		return this;
 	}
 
 	/**
@@ -120,7 +137,7 @@ class GatewayStorage {
 	toJSON() {
 		return {
 			name: this.name,
-			provider: this.providerName,
+			provider: this._provider,
 			schema: this.schema.toJSON()
 		};
 	}
