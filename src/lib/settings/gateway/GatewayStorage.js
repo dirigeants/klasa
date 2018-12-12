@@ -133,7 +133,7 @@ class GatewayStorage {
 	toJSON() {
 		return {
 			name: this.name,
-			provider: this.providerName,
+			provider: this._provider,
 			schema: this.schema.toJSON()
 		};
 	}
