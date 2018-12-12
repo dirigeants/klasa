@@ -257,7 +257,6 @@ declare module 'klasa' {
 	}
 
 	export class Gateway extends GatewayStorage {
-		public constructor(client: KlasaClient, name: string, options?: { schema?: Schema, provider?: string });
 		protected syncQueue: WeakMap<Settings, Promise<Settings>>;
 		protected cache: Collection<string, Record<string, any> & { settings: Settings }>;
 		public acquire(target: any, id?: string | number): Settings;
@@ -279,14 +278,14 @@ declare module 'klasa' {
 	}
 
 	export class GatewayStorage {
-		public constructor(client: KlasaClient, name: string, schema?: Schema, provider?: string);
+		public constructor(client: KlasaClient, name: string, options?: GatewayOptions);
 		public readonly client: KlasaClient;
 		public readonly provider: Provider | null;
-		public readonly providerName: string;
 		public readonly name: string;
 		public readonly schema: SchemaFolder;
+		private readonly _provider: string;
 		public ready: boolean;
-
+		public sync(): Promise<this>;
 		public init(): Promise<void>;
 		public toJSON(): GatewayJSON;
 		public toString(): string;
@@ -1317,8 +1316,6 @@ declare module 'klasa' {
 		default?: string;
 	} & ObjectLiteral;
 
-	export type KlasaGatewaysOptions = Record<string, { provider?: string; schema?: Schema }>;
-
 	// Parsers
 	export type ArgResolverCustomMethod = (arg: string, possible: Possible, message: KlasaMessage, params: string[]) => any;
 
@@ -1463,7 +1460,8 @@ declare module 'klasa' {
 	};
 
 	export type GatewayOptions = {
-		provider: string;
+		schema?: Schema;
+		provider?: string;
 	};
 
 	export type GatewayJSON = {

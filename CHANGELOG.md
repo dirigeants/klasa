@@ -14,6 +14,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#525](https://github.com/dirigeants/klasa/pull/525)] Add GatewayStorage#sync so they can be registered. (kyranet)
 - [[#487](https://github.com/dirigeants/klasa/pull/487)] Added Settings#resolve(...paths) (UnseenFaith)
 - [[#477](https://github.com/dirigeants/klasa/pull/477)] Added core `KlasaClient#settingsDelete` event handler to destroy instances in other shards. (kyranet)
 - [[#475](https://github.com/dirigeants/klasa/pull/475)] Added `KlasaClient#settingsSync` event. (kyranet)
