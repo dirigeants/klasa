@@ -208,7 +208,7 @@ declare module 'klasa' {
 
 //#region Settings
 
-	export class SettingsFolder extends Map<string, SettingsFolderEntry | SettingsFolder> {
+	export class SettingsFolder extends Map<string, SettingsFolder | PrimitiveType | object | Array<PrimitiveType | object>> {
 		public constructor(schema: SchemaFolder);
 		public readonly schema: SchemaFolder;
 		public readonly base: Settings | null;
@@ -962,7 +962,7 @@ declare module 'klasa' {
 		public static arraysStrictEquals(arr1: any[], arr2: any[]): boolean;
 		public static chunk<T>(entries: T[], chunkSize: number): Array<T[]>;
 		public static clean(text: string): string;
-		public static codeBlock(lang: string, expression: string | number | Stringifible): string;
+		public static codeBlock(lang: string, expression: StringResolvable): string;
 		public static deepClone<T = any>(source: T): T;
 		public static exec(exec: string, options?: ExecOptions): Promise<{ stdout: string, stderr: string }>;
 		public static getTypeName(input: any): string;
@@ -1413,80 +1413,71 @@ declare module 'klasa' {
 	};
 
 	// Schedule
-	export type ScheduledTaskOptions = {
+	export interface ScheduledTaskOptions {
 		catchUp?: boolean;
 		data?: any;
 		id?: string;
-	};
+	}
 
-	export type ScheduledTaskJSON = {
+	export interface ScheduledTaskJSON {
 		catchUp: boolean;
 		data: ObjectLiteral;
 		id: string;
 		taskName: string;
 		time: number;
-	};
+	}
 
-	export type ScheduledTaskUpdateOptions = {
+	export interface ScheduledTaskUpdateOptions {
 		catchUp?: boolean;
 		data?: any;
 		repeat?: string;
 		time?: Date;
-	};
+	}
 
 	// Settings
-	export type SettingsFolderEntry = PrimitiveType | object | Array<PrimitiveType | object>;
 
-	export type SettingsFolderResetOptions = {
+	export interface SettingsFolderResetOptions {
 		throwOnError?: boolean;
 		onlyConfigurable?: boolean;
-	};
+	}
 
-	export type SettingsFolderUpdateOptions = SettingsFolderResetOptions & {
+	export interface SettingsFolderUpdateOptions extends SettingsFolderResetOptions {
 		guild?: GuildResolvable;
 		arrayAction?: 'add' | 'remove' | 'auto' | 'overwrite';
 		arrayIndex?: number;
-	};
+	}
 
-	export type SettingsFolderUpdateResult = {
+	export interface SettingsFolderUpdateResult {
 		errors: Array<Error>;
 		updated: Array<SettingsFolderUpdateResultEntry>;
-	};
+	}
 
-	export type SettingsFolderUpdateResultEntry = {
+	export interface SettingsFolderUpdateResultEntry {
 		key: string;
 		value: PrimitiveType;
 		entry: SchemaEntry;
-	};
+	}
 
-	export type GatewayOptions = {
+	export interface GatewayOptions {
 		schema?: Schema;
 		provider?: string;
-	};
+	}
 
-	export type GatewayJSON = {
+	export interface GatewayJSON {
 		name: string;
 		provider: string;
-		schema: SchemaFolderAddOptions;
-	};
+		schema: SchemaFolderOptions | SchemaEntryOptions;
+	}
 
-	export type QueryBuilderDatatypeOptions = {
+	export interface QueryBuilderDatatypeOptions {
 		type: string;
 		resolver?: <T = any>(input: any, schemaEntry: SchemaEntry) => T;
 		arrayResolver?: (values: Array<any>, entry: SchemaEntry, resolver: Function) => string;
-	};
+	}
 
-	export type QueryBuilderOptions = QueryBuilderDefaultOptions
-		& ObjectLiteral<string | QueryBuilderDatatypeOptions>;
+	export type QueryBuilderOptions = QueryBuilderDefaultOptions | Record<string, string | QueryBuilderDatatypeOptions>;
 
-	export type GuildResolvable = KlasaGuild
-		| KlasaMessage
-		| GuildChannel
-		| Snowflake;
-
-	export type SchemaFolderAddOptions = SchemaFolderOptions | SchemaEntryOptions;
-
-	export type SchemaEntryOptions = {
+	export interface SchemaEntryOptions {
 		array?: boolean;
 		configurable?: boolean;
 		default?: any;
@@ -1494,22 +1485,22 @@ declare module 'klasa' {
 		max?: number;
 		filter?: ((client: KlasaClient, value: any, entry: SchemaEntry, language: Language) => boolean) | null;
 		resolve?: boolean;
-	};
+	}
 
-	export type SchemaEntryEditOptions = {
+	export interface SchemaEntryEditOptions extends SchemaEntryOptions {
 		type?: string;
-	} & SchemaEntryOptions;
+	}
 
-	export type SchemaFolderOptions = {
+	export interface SchemaFolderOptions extends Record<string, SchemaEntryOptions> {
 		type?: 'Folder';
-	} & ObjectLiteral<SchemaEntryOptions>;
+	}
 
-	export type GatewayDriverJSON = {
+	export interface GatewayDriverJSON extends Record<string, GatewayJSON> {
 		clientStorage: GatewayJSON;
 		guilds: GatewayJSON;
 		users: GatewayJSON;
 		ready: boolean;
-	} & ObjectLiteral<GatewayJSON>;
+	}
 
 	// Structures
 	export type PieceOptions = {
@@ -1901,9 +1892,10 @@ declare module 'klasa' {
 		snowflake: RegExp;
 	};
 
-	interface Stringifible {
-		toString(): string;
-	}
+	export type GuildResolvable = KlasaGuild
+		| KlasaMessage
+		| GuildChannel
+		| Snowflake;
 
 	interface ObjectLiteral<T = any> {
 		[k: string]: T;
@@ -1915,12 +1907,12 @@ declare module 'klasa' {
 
 	type PrimitiveType = string | number | boolean;
 
-	export type TitleCaseVariants = {
+	export interface TitleCaseVariants {
 		textchannel: 'TextChannel';
 		voicechannel: 'VoiceChannel';
 		categorychannel: 'CategoryChannel';
 		guildmember: 'GuildMember';
-	} & ObjectLiteral<string>;
+	}
 
 	export interface PartialSendAliases {
 		sendLocale(key: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
