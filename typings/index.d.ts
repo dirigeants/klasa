@@ -1498,7 +1498,7 @@ declare module 'klasa' {
 
 	export interface QueryBuilderDatatype extends QueryBuilderEntryOptions {
 		type?: QueryBuilderType | string;
-		aliasOf?: string;
+		extends?: string;
 	}
 
 	export interface SchemaEntryOptions {

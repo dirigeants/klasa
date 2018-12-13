@@ -52,7 +52,7 @@ class QueryBuilder extends Map {
 	/**
 	 * @typedef {QueryBuilderEntryOptions} QueryBuilderDatatype
 	 * @property {QueryBuilderType|string} [type] The name of the datatype, e.g. VARCHAR, DATE, or BIT
-	 * @property {string} [aliasOf] The name of the registered datatype from this instance
+	 * @property {string} [extends] The name of the registered datatype from this instance
 	 */
 
 	/**
@@ -110,11 +110,11 @@ class QueryBuilder extends Map {
 	add(name, data) {
 		if (typeof data === 'string') data = { type: data };
 
-		// Resolve aliasOf by pointing to another datatype
-		if (typeof data.aliasOf === 'string') {
-			const datatype = this.get(data.aliasOf);
+		// Resolve extends by pointing to another datatype
+		if (typeof data.extends === 'string') {
+			const datatype = this.get(data.extends);
 			if (datatype) this.set(name, Object.assign(Object.create(datatype), data));
-			throw new Error(`"aliasOf" in datatype ${name} does not point to a registered datatype.`);
+			throw new Error(`"extends" in datatype ${name} does not point to a registered datatype.`);
 		} else {
 			const datatype = this.get(name);
 			if (datatype) Object.assign(datatype, data);
