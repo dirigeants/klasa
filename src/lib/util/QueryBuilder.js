@@ -113,7 +113,7 @@ class QueryBuilder extends Map {
 		// Resolve aliasOf by pointing to another datatype
 		if (typeof data.aliasOf === 'string') {
 			const datatype = this.get(data.aliasOf);
-			if (datatype) this.set(name, { ...Object.create(datatype), ...data });
+			if (datatype) this.set(name, Object.assign(Object.create(datatype), data));
 			throw new Error(`"aliasOf" in datatype ${name} does not point to a registered datatype.`);
 		} else {
 			this.set(name, mergeDefault(this.get(name) || this, data));
