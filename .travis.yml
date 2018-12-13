@@ -1,20 +1,17 @@
 language: node_js
 node_js:
   - "8"
-install: npm install
+before_install:
+  - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.12.3
+  - export PATH=$HOME/.yarn/bin:$PATH
+install: yarn
 jobs:
   include:
     - stage: test
-      script: npm test
+      script: yarn test
     - stage: deploy
       script: bash ./.travis-deploy.sh
 cache:
+  yarn: true
   directories:
     - node_modules
-#notifications:
-#  webhooks:
-#    urls:
-#      - https://webhooks.gitter.im/e/0926b82fc22ea0760ede
-#    on_success: always  # options: [always|never|change] default: always
-#    on_failure: always  # options: [always|never|change] default: always
-#    on_start: never     # options: [always|never|change] default: always

@@ -56,7 +56,6 @@ jspm_packages/
 
 .vscode
 package-lock.json
-yarn.lock
 docs
 
 \.vscode/
