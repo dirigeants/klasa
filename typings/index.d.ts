@@ -263,18 +263,19 @@ declare module 'klasa' {
 		public create(target: any, id?: string | number): Settings;
 		public get(id: string | number): Settings | null;
 		public sync(input: string): Promise<Settings>;
-		public sync(input?: string[]): Promise<Gateway>;
-		public sync(input?: string | string[]): Promise<Settings | Gateway>;
+		public sync(input?: string[]): Promise<this>;
+		public sync(input?: string | string[]): Promise<Settings | this>;
 	}
 
-	export class QueryBuilder {
-		public constructor(datatypes: ObjectLiteral<string | QueryBuilderDatatypeOptions>, options?: QueryBuilderDefaultOptions);
-		public get(type: string): Required<QueryBuilderDatatypeOptions> | null;
-		public parse(schemaEntry: SchemaEntry): string;
-		public parseValue(value: any, schemaEntry: SchemaEntry, datatype?: Required<QueryBuilderDatatypeOptions>): string;
-		private arrayResolver: (values: Array<any>, entry: SchemaEntry, resolver: Function) => string;
-		private formatDatatype: (name: string, datatype: string, def?: string) => string;
-		private readonly _datatypes: ObjectLiteral<Required<QueryBuilderDatatypeOptions>>;
+	export class QueryBuilder extends Map<string, Required<QueryBuilderDatatype>> {
+		public constructor(options?: QueryBuilderEntryOptions);
+		private array: QueryBuilderArray;
+		private arrayResolver: QueryBuilderArrayResolver;
+		private formatDatatype: QueryBuilderFormatDatatype;
+		private resolver: QueryBuilderResolver;
+		public add(name: string, data: QueryBuilderDatatype | string): this;
+		public parseDefault(schemaEntry: SchemaEntry): string;
+		public parseValue(value: any, schemaEntry: SchemaEntry, datatype?: Required<QueryBuilderDatatype>): string;
 	}
 
 	export class GatewayStorage {
@@ -1266,11 +1267,11 @@ declare module 'klasa' {
 		commandLogging?: boolean;
 		commandMessageLifetime?: number;
 		console?: ConsoleOptions;
-		consoleEvents?: ConsoleEvents;
+		consoleEvents?: KlasaConsoleEvents;
 		createPiecesFolders?: boolean;
 		customPromptDefaults?: CustomPromptDefaults;
 		disabledCorePieces?: string[];
-		gateways?: GatewaysOptions;
+		gateways?: GatewayOptions;
 		language?: string;
 		noPrefixDM?: boolean;
 		ownerID?: string;
@@ -1322,13 +1323,10 @@ declare module 'klasa' {
 	export type Constants = {
 		DEFAULTS: {
 			CLIENT: Required<KlasaClientOptions>;
-			CONSOLE: Required<KlasaConsoleOptions>,
+			CONSOLE: Required<ConsoleOptions>,
 			QUERYBUILDER: {
-				datatypes: {
-					datatypes?: ObjectLiteral<QueryBuilderDatatypeOptions>;
-					queryBuilderOptions?: QueryBuilderDefaultOptions;
-				};
-				queryBuilderOptions: Required<QueryBuilderDefaultOptions>;
+				datatypes: [string, QueryBuilderDatatype][];
+				queryBuilderOptions: Required<QueryBuilderEntryOptions>;
 			};
 		};
 		TIME: {
@@ -1469,13 +1467,36 @@ declare module 'klasa' {
 		schema: SchemaFolderOptions | SchemaEntryOptions;
 	}
 
-	export interface QueryBuilderDatatypeOptions {
-		type: string;
-		resolver?: <T = any>(input: any, schemaEntry: SchemaEntry) => T;
-		arrayResolver?: (values: Array<any>, entry: SchemaEntry, resolver: Function) => string;
+	export interface QueryBuilderArray {
+		(entry: SchemaEntry): string;
 	}
 
-	export type QueryBuilderOptions = QueryBuilderDefaultOptions | Record<string, string | QueryBuilderDatatypeOptions>;
+	export interface QueryBuilderArrayResolver {
+		(values: Array<any>, resolver: QueryBuilderResolver): string;
+	}
+
+	export interface QueryBuilderResolver {
+		(value: any, entry: SchemaEntry): string;
+	}
+
+	export interface QueryBuilderFormatDatatype {
+		(name: string, datatype: string, def?: string): string;
+	}
+
+	export interface QueryBuilderType {
+		(entry: SchemaEntry): string;
+	}
+
+	export interface QueryBuilderEntryOptions {
+		array?: QueryBuilderArray;
+		arrayResolver?: QueryBuilderArrayResolver;
+		formatDatatype?: QueryBuilderFormatDatatype;
+		resolver?: QueryBuilderResolver;
+	}
+
+	export interface QueryBuilderDatatype extends QueryBuilderEntryOptions {
+		type: QueryBuilderType | string;
+	}
 
 	export interface SchemaEntryOptions {
 		array?: boolean;
@@ -1491,7 +1512,7 @@ declare module 'klasa' {
 		type?: string;
 	}
 
-	export interface SchemaFolderOptions extends Record<string, SchemaEntryOptions> {
+	export interface SchemaFolderOptions extends Record<string, string | SchemaEntryOptions> {
 		type?: 'Folder';
 	}
 
@@ -1499,7 +1520,6 @@ declare module 'klasa' {
 		clientStorage: GatewayJSON;
 		guilds: GatewayJSON;
 		users: GatewayJSON;
-		ready: boolean;
 	}
 
 	// Structures
@@ -1742,13 +1762,6 @@ declare module 'klasa' {
 		stdout?: NodeJS.WritableStream;
 		timestamps?: boolean | string;
 		useColor?: boolean;
-	};
-
-	export type QueryBuilderDefaultOptions = {
-		array?: (datatype: string) => string;
-		arrayResolver?: (values: Array<any>, entry: SchemaEntry, resolver: Function) => string;
-		formatDatatype?: (name: string, datatype: string, def?: string) => string;
-		resolver?: <T = any>(input: any, schemaEntry: SchemaEntry) => T;
 	};
 
 	export type KlasaConsoleEvents = {
