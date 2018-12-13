@@ -60,7 +60,7 @@ module.exports = class extends Language {
 			INHIBITOR_DISABLED_GUILD: 'This command has been disabled by an admin in this guild.',
 			INHIBITOR_DISABLED_GLOBAL: 'This command has been globally disabled by the bot owner.',
 			INHIBITOR_MISSING_BOT_PERMS: (missing) => `Insufficient permissions, missing: **${missing}**`,
-			INHIBITOR_NSFW: 'You may not use NSFW commands in this channel.',
+			INHIBITOR_NSFW: 'You can only use NSFW commands in NSFW channels.',
 			INHIBITOR_PERMISSIONS: 'You do not have permission to use this command.',
 			INHIBITOR_REQUIRED_SETTINGS: (settings) => `The guild is missing the **${settings.join(', ')}** guild setting${settings.length !== 1 ? 's' : ''} and thus the command cannot run.`,
 			INHIBITOR_RUNIN: (types) => `This command is only available in ${types} channels.`,
