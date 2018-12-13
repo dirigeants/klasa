@@ -217,8 +217,7 @@ class TextPrompt {
 		const possibleCancelOptions = this.message.language.get('TEXT_PROMPT_ABORT_OPTIONS');
 		try {
 			message = await this.prompt(
-				this.message.language.get('MONITOR_COMMAND_HANDLER_REPEATING_REPROMPT', `<@!${this.message.author.id}>`, this._currentUsage.possibles[0].name, this.time / 1000, possibleCancelOptions),
-				this.time
+				this.message.language.get('MONITOR_COMMAND_HANDLER_REPEATING_REPROMPT', `<@!${this.message.author.id}>`, this._currentUsage.possibles[0].name, this.time / 1000, possibleCancelOptions)
 			);
 			this.responses.set(message.id, message);
 		} catch (err) {
