@@ -152,9 +152,9 @@ exports.DEFAULTS = {
 		],
 		queryBuilderOptions: {
 			array: () => 'TEXT',
-			arrayResolver: (values) => `'${JSON.stringify(values)}'`,
+			arraySerializer: (values) => `'${JSON.stringify(values)}'`,
 			formatDatatype: (name, datatype, def = null) => `${name} ${datatype}${def !== null ? ` NOT NULL DEFAULT ${def}` : ''}`,
-			resolver: (value) => `'${(isObject(value) ? JSON.stringify(value) : String(value)).replace(/'/g, "''")}'`
+			serializer: (value) => `'${(isObject(value) ? JSON.stringify(value) : String(value)).replace(/'/g, "''")}'`
 		}
 	}
 

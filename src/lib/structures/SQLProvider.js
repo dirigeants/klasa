@@ -163,7 +163,7 @@ class SQLProvider extends Provider {
 			for (let i = 0; i < updated.length; i++) {
 				const entry = updated[i];
 				keys[i] = entry.entry.path;
-				values[i] = this.qb.parseValue(entry.value, entry.entry);
+				values[i] = this.qb.serialize(entry.value, entry.entry);
 			}
 		} else {
 			for (let i = 0; i < updated.length; i++) [keys[i], values[i]] = [updated[i].entry.path, updated[i].value];

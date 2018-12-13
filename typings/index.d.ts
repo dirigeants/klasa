@@ -270,12 +270,12 @@ declare module 'klasa' {
 	export class QueryBuilder extends Map<string, Required<QueryBuilderDatatype>> {
 		public constructor(options?: QueryBuilderEntryOptions);
 		private array: QueryBuilderArray;
-		private arrayResolver: QueryBuilderArrayResolver;
+		private arraySerializer: QueryBuilderArraySerializer;
 		private formatDatatype: QueryBuilderFormatDatatype;
-		private resolver: QueryBuilderResolver;
+		private serializer: QueryBuilderSerializer;
 		public add(name: string, data: QueryBuilderDatatype | string): this;
 		public generateDatatype(schemaEntry: SchemaEntry): string;
-		public parseValue(value: any, schemaEntry: SchemaEntry, datatype?: Required<QueryBuilderDatatype>): string;
+		public serialize(value: any, schemaEntry: SchemaEntry, datatype?: Required<QueryBuilderDatatype>): string;
 	}
 
 	export class GatewayStorage {
@@ -1471,11 +1471,11 @@ declare module 'klasa' {
 		(entry: SchemaEntry): string;
 	}
 
-	export interface QueryBuilderArrayResolver {
-		(values: Array<any>, resolver: QueryBuilderResolver): string;
+	export interface QueryBuilderArraySerializer {
+		(values: Array<any>, resolver: QueryBuilderSerializer): string;
 	}
 
-	export interface QueryBuilderResolver {
+	export interface QueryBuilderSerializer {
 		(value: any, entry: SchemaEntry): string;
 	}
 
@@ -1489,9 +1489,9 @@ declare module 'klasa' {
 
 	export interface QueryBuilderEntryOptions {
 		array?: QueryBuilderArray;
-		arrayResolver?: QueryBuilderArrayResolver;
+		arraySerializer?: QueryBuilderArraySerializer;
 		formatDatatype?: QueryBuilderFormatDatatype;
-		resolver?: QueryBuilderResolver;
+		serializer?: QueryBuilderSerializer;
 	}
 
 	export interface QueryBuilderDatatype extends QueryBuilderEntryOptions {

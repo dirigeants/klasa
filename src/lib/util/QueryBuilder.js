@@ -13,14 +13,14 @@ class QueryBuilder extends Map {
 	 */
 
 	/**
-	 * @typedef {Function} QueryBuilderArrayResolver
+	 * @typedef {Function} QueryBuilderArraySerializer
 	 * @param {Array<*>} values The values to resolve
-	 * @param {QueryBuilderResolver} resolver The normal resolver
+	 * @param {QueryBuilderSerializer} serializer The single-element serializer
 	 * @returns {string}
 	 */
 
 	/**
-	 * @typedef {Function} QueryBuilderResolver
+	 * @typedef {Function} QueryBuilderSerializer
 	 * @param {*} value The value to resolve
 	 * @param {SchemaEntry} entry The schema entry for context
 	 * @returns {string}
@@ -43,9 +43,9 @@ class QueryBuilder extends Map {
 	/**
 	 * @typedef {Object} QueryBuilderEntryOptions
 	 * @property {QueryBuilderArray} [array] The default array handler for this instance
-	 * @property {QueryBuilderArrayResolver} [arrayResolver] The default array handler for this instance
+	 * @property {QueryBuilderArraySerializer} [arraySerializer] The default array handler for this instance
 	 * @property {QueryBuilderFormatDatatype} [formatDatatype] The default datatype formatter for the SQL database
-	 * @property {QueryBuilderResolver} [resolver] The default resolver for this instance
+	 * @property {QueryBuilderSerializer} [serializer] The default serializer for this instance
 	 */
 
 	/**
@@ -72,10 +72,10 @@ class QueryBuilder extends Map {
 		/**
 		 * The default array handler for this instance
 		 * @since 0.5.0
-		 * @type {QueryBuilderArrayResolver}
+		 * @type {QueryBuilderArraySerializer}
 		 * @private
 		 */
-		this.arrayResolver = options.arrayResolver;
+		this.arraySerializer = options.arraySerializer;
 
 		/**
 		 * The default datatype formatter for the SQL database
@@ -86,12 +86,12 @@ class QueryBuilder extends Map {
 		this.formatDatatype = options.formatDatatype;
 
 		/**
-		 * The default resolver for this instance
+		 * The default serializer for this instance
 		 * @since 0.5.0
-		 * @type {QueryBuilderResolver}
+		 * @type {QueryBuilderSerializer}
 		 * @private
 		 */
-		this.resolver = options.resolver;
+		this.serializer = options.serializer;
 
 		// Register all default datatypes
 		for (const [name, data] of QUERYBUILDER.datatypes) this.add(name, data);
@@ -122,7 +122,7 @@ class QueryBuilder extends Map {
 	 */
 	generateDatatype(schemaEntry) {
 		const datatype = this.get(schemaEntry.type) || null;
-		const parsedDefault = this.parseValue(schemaEntry.default, schemaEntry, datatype);
+		const parsedDefault = this.serialize(schemaEntry.default, schemaEntry, datatype);
 		const type = typeof datatype.type === 'function' ? datatype.type(schemaEntry) : datatype.type;
 		const parsedDatatype = schemaEntry.array ? datatype.array(type) : type;
 		return datatype.formatDatatype(schemaEntry.path, parsedDatatype, parsedDefault);
@@ -136,7 +136,7 @@ class QueryBuilder extends Map {
 	 * @param {Required<QueryBuilderDatatype>} datatype The QueryBuilder datatype
 	 * @returns {string}
 	 */
-	parseValue(value, schemaEntry, datatype = this.get(schemaEntry.type)) {
+	serialize(value, schemaEntry, datatype = this.get(schemaEntry.type)) {
 		if (!datatype) throw new Error(`The type '${schemaEntry.type}' is unavailable, please set its definition.`);
 		if (schemaEntry.array && !datatype.array) throw new Error(`The datatype '${datatype.type}' does not support arrays.`);
 
@@ -144,8 +144,8 @@ class QueryBuilder extends Map {
 		if (value === null) return 'null';
 
 		return schemaEntry.array ?
-			datatype.arrayResolver(value, schemaEntry, datatype.resolver) :
-			datatype.resolver(value, schemaEntry);
+			datatype.arraySerializer(value, schemaEntry, datatype.serializer) :
+			datatype.serializer(value, schemaEntry);
 	}
 
 }
