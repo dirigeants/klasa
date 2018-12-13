@@ -273,7 +273,8 @@ declare module 'klasa' {
 		private arraySerializer: QueryBuilderArraySerializer;
 		private formatDatatype: QueryBuilderFormatDatatype;
 		private serializer: QueryBuilderSerializer;
-		public add(name: string, data: QueryBuilderDatatype | string): this;
+		public add(name: string, data: QueryBuilderDatatype): this;
+		public remove(name: string): this;
 		public generateDatatype(schemaEntry: SchemaEntry): string;
 		public serialize(value: any, schemaEntry: SchemaEntry, datatype?: Required<QueryBuilderDatatype>): string;
 		public debug(): string;

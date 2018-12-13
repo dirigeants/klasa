@@ -61,7 +61,7 @@ class QueryBuilder extends Map {
 	 */
 	constructor(options = {}) {
 		super();
-		mergeDefault(options, QUERYBUILDER.queryBuilderOptions);
+		mergeDefault(QUERYBUILDER.queryBuilderOptions, options);
 
 		/**
 		 * The default array handler for this instance
@@ -103,13 +103,11 @@ class QueryBuilder extends Map {
 	 * Register a datatype to this instance
 	 * @since 0.5.0
 	 * @param {string} name The name for the datatype
-	 * @param {string|QueryBuilderDatatype} data The options for this query builder
+	 * @param {QueryBuilderDatatype} data The options for this query builder
 	 * @returns {this}
 	 * @chainable
 	 */
 	add(name, data) {
-		if (typeof data === 'string') data = { type: data };
-
 		// Resolve extends by pointing to another datatype
 		if (typeof data.extends === 'string') {
 			const datatype = this.get(data.extends);
