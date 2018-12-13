@@ -276,6 +276,7 @@ declare module 'klasa' {
 		public add(name: string, data: QueryBuilderDatatype | string): this;
 		public generateDatatype(schemaEntry: SchemaEntry): string;
 		public serialize(value: any, schemaEntry: SchemaEntry, datatype?: Required<QueryBuilderDatatype>): string;
+		public debug(): string;
 	}
 
 	export class GatewayStorage {
@@ -508,6 +509,7 @@ declare module 'klasa' {
 		protected parseUpdateInput<T = [string, any]>(updated?: SettingsFolderUpdateResultEntry[] | [string, any][] | ObjectLiteral, resolve?: boolean): T;
 		protected parseEntry<T = ObjectLiteral>(gateway: string | Gateway, entry: ObjectLiteral): T;
 		protected parseValue<T = any>(value: any, schemaEntry: SchemaEntry): T;
+		protected validateQueryBuilder(): void;
 		private _parseGatewayInput(updated: SettingsFolderUpdateResultEntry[], keys: string[], values: string[], resolve?: boolean): void;
 	}
 
@@ -1495,7 +1497,8 @@ declare module 'klasa' {
 	}
 
 	export interface QueryBuilderDatatype extends QueryBuilderEntryOptions {
-		type: QueryBuilderType | string;
+		type?: QueryBuilderType | string;
+		aliasOf?: string;
 	}
 
 	export interface SchemaEntryOptions {

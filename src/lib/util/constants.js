@@ -134,21 +134,22 @@ exports.DEFAULTS = {
 	QUERYBUILDER: {
 		datatypes: [
 			['any', { type: 'TEXT' }],
-			['boolean', { type: 'BOOLEAN', resolver: value => value }],
-			['categorychannel', { type: 'VARCHAR(18)' }],
-			['channel', { type: 'VARCHAR(18)' }],
+			['snowflake', { type: 'VARCHAR(19)' }],
+			['boolean', { type: 'BOOLEAN', serializer: value => value }],
+			['categorychannel', { aliasOf: 'snowflake' }],
+			['channel', { aliasOf: 'snowflake' }],
 			['command', { type: 'TEXT' }],
-			['float', { type: 'FLOAT', resolver: value => value }],
-			['guild', { type: 'VARCHAR(18)' }],
-			['integer', { type: 'INTEGER', resolver: value => value }],
-			['json', { type: 'JSON', resolver: (value) => `'${JSON.stringify(value).replace(/'/g, "''")}'` }],
+			['float', { type: 'FLOAT', serializer: value => value }],
+			['guild', { aliasOf: 'snowflake' }],
+			['integer', { type: 'INTEGER', serializer: value => value }],
+			['json', { type: 'JSON', serializer: (value) => `'${JSON.stringify(value).replace(/'/g, "''")}'` }],
 			['language', { type: 'VARCHAR(5)' }],
-			['role', { type: 'VARCHAR(18)' }],
+			['role', { aliasOf: 'snowflake' }],
 			['string', { type: ({ max }) => max ? `VARCHAR(${max})` : 'TEXT' }],
-			['textchannel', { type: 'VARCHAR(18)' }],
+			['textchannel', { aliasOf: 'snowflake' }],
 			['url', { type: 'TEXT' }],
-			['user', { type: 'VARCHAR(18)' }],
-			['voicechannel', { type: 'VARCHAR(18)' }]
+			['user', { aliasOf: 'snowflake' }],
+			['voicechannel', { aliasOf: 'snowflake' }]
 		],
 		queryBuilderOptions: {
 			array: () => 'TEXT',

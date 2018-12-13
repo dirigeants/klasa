@@ -1,5 +1,6 @@
 const { mergeDefault } = require('./util');
 const { DEFAULTS: { QUERYBUILDER } } = require('./constants');
+const Type = require('./Type');
 
 /**
  * @extends {Map<string, Required<QueryBuilderDatatype>>}
@@ -50,7 +51,8 @@ class QueryBuilder extends Map {
 
 	/**
 	 * @typedef {QueryBuilderEntryOptions} QueryBuilderDatatype
-	 * @property {QueryBuilderType|string} type The name of the datatype, e.g. VARCHAR, DATE, or BIT
+	 * @property {QueryBuilderType|string} [type] The name of the datatype, e.g. VARCHAR, DATE, or BIT
+	 * @property {string} [aliasOf] The name of the registered datatype from this instance
 	 */
 
 	/**
@@ -106,7 +108,28 @@ class QueryBuilder extends Map {
 	 * @chainable
 	 */
 	add(name, data) {
-		this.set(name, mergeDefault(this, typeof data === 'string' ? { type: data } : data));
+		if (typeof data === 'string') data = { type: data };
+
+		// Resolve aliasOf by pointing to another datatype
+		if (typeof data.aliasOf === 'string') {
+			const datatype = this.get(data.aliasOf);
+			if (datatype) this.set(name, { ...Object.create(datatype), ...data });
+			throw new Error(`"aliasOf" in datatype ${name} does not point to a registered datatype.`);
+		} else {
+			this.set(name, mergeDefault(this.get(name) || this, data));
+		}
+		return this;
+	}
+
+	/**
+	 * Remove a datatype from this instance
+	 * @since 0.5.0
+	 * @param {string} name The name for the datatype to remove
+	 * @returns {this}
+	 * @chainable
+	 */
+	remove(name) {
+		this.delete(name);
 		return this;
 	}
 
@@ -146,6 +169,23 @@ class QueryBuilder extends Map {
 		return schemaEntry.array ?
 			datatype.arraySerializer(value, schemaEntry, datatype.serializer) :
 			datatype.serializer(value, schemaEntry);
+	}
+
+	/**
+	 * Returns any errors in the query builder
+	 * @since 0.5.0
+	 * @returns {string} Error message(s)
+	 */
+	debug() {
+		const errors = [];
+		for (const [name, datatype] of this) {
+			if (!['string', 'function'].includes(typeof datatype.type)) errors.push(`"type" in datatype ${name} must be a string or a function, got: ${new Type(datatype.type)}`);
+			if (typeof datatype.array !== 'function') errors.push(`"array" in datatype ${name} must be a function, got: ${new Type(datatype.array)}`);
+			if (typeof datatype.arraySerializer !== 'function') errors.push(`"arraySerializer" in datatype ${name} must be a function, got: ${new Type(datatype.array)}`);
+			if (typeof datatype.formatDatatype !== 'function') errors.push(`"formatDatatype" in datatype ${name} must be a function, got: ${new Type(datatype.array)}`);
+			if (typeof datatype.serializer !== 'function') errors.push(`"serializer" in datatype ${name} must be a function, got: ${new Type(datatype.array)}`);
+		}
+		return errors.join('\n');
 	}
 
 }
