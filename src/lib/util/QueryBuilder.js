@@ -116,11 +116,11 @@ class QueryBuilder extends Map {
 	 * @param {SchemaEntry} schemaEntry The SchemaEntry to process
 	 * @returns {string}
 	 * @example
-	 * qb.parseDefault(this.client.gateways.get('guilds').schema.get('prefix'));
+	 * qb.generateDatatype(this.client.gateways.get('guilds').schema.get('prefix'));
 	 * // type: 'string', array: true, max: 10
 	 * // -> prefix VARCHAR(10)[]
 	 */
-	parseDefault(schemaEntry) {
+	generateDatatype(schemaEntry) {
 		const datatype = this.get(schemaEntry.type) || null;
 		const parsedDefault = this.parseValue(schemaEntry.default, schemaEntry, datatype);
 		const type = typeof datatype.type === 'function' ? datatype.type(schemaEntry) : datatype.type;

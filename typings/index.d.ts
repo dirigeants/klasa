@@ -274,7 +274,7 @@ declare module 'klasa' {
 		private formatDatatype: QueryBuilderFormatDatatype;
 		private resolver: QueryBuilderResolver;
 		public add(name: string, data: QueryBuilderDatatype | string): this;
-		public parseDefault(schemaEntry: SchemaEntry): string;
+		public generateDatatype(schemaEntry: SchemaEntry): string;
 		public parseValue(value: any, schemaEntry: SchemaEntry, datatype?: Required<QueryBuilderDatatype>): string;
 	}
 
