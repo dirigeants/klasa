@@ -116,7 +116,9 @@ class QueryBuilder extends Map {
 			if (datatype) this.set(name, Object.assign(Object.create(datatype), data));
 			throw new Error(`"aliasOf" in datatype ${name} does not point to a registered datatype.`);
 		} else {
-			this.set(name, mergeDefault(this.get(name) || this, data));
+			const datatype = this.get(name);
+			if (datatype) Object.assign(datatype, data);
+			else this.set(name, mergeDefault(this, data));
 		}
 		return this;
 	}
