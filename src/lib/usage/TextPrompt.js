@@ -376,7 +376,7 @@ class TextPrompt {
 			const quote = quotes.find(qt => qt.includes(content[i]));
 			if (quote) {
 				const qts = quote.split('');
-				while (i + 1 < content.length && (content[i] === '\\' || !qts.includes(content[i + 1]))) current += content[++i] !== '\\' ? content[i] : '';
+				while (i + 1 < content.length && (content[i] === '\\' || !qts.includes(content[i + 1]))) current += content[++i] === '\\' && qts.includes(content[i + 1]) ? '' : content[i];
 				i++;
 				args.push(current);
 			} else {
