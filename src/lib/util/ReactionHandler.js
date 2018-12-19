@@ -115,7 +115,9 @@ class ReactionHandler extends ReactionCollector {
 			this[this.methodMap.get(reaction.emoji.name)](user);
 		});
 		this.on('end', () => {
-			if (this.reactionsDone && !this.message.deleted) this.message.reactions.removeAll();
+			if (this.reactionsDone &&
+			    !this.message.deleted &&
+			    this.message.channel.permissionsFor(this.message.guild.me).has('MANAGE_MESSAGES')) this.message.reactions.removeAll();
 		});
 	}
 
