@@ -51,18 +51,18 @@ const { token } = require('./config.json');
 
 For a tutorial
 
-1. Set `process.env.CLIENT_TOKEN` equal to your bot's token, you can do this using [dotenv](https://www.npmjs.com/package/dotenv). Run `npm install dotenv --save`
+1. Set `process.env.DISCORD_TOKEN` equal to your bot's token, you can do this using [dotenv](https://www.npmjs.com/package/dotenv). Run `npm install dotenv --save`
 
 1. Put this code at the top of your `app.js` file:
 
 ```js
-require('dotenv').load();
+require('dotenv').config();
 ```
 
 1. Create a file called `.env` next  to your `app.js`, and put this in it:
 
 ```env
-CLIENT_TOKEN = ""
+DISCORD_TOKEN = ""
 ```
 
 Place your token after the `=`.
