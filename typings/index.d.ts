@@ -708,10 +708,10 @@ declare module 'klasa' {
 
 		public format(input: string): string;
 		public static useColors: boolean | null;
-		public static CLOSE: ColorsClose;
-		public static STYLES: ColorsStyles;
-		public static TEXTS: ColorsTexts;
-		public static BACKGROUNDS: ColorsBackgrounds;
+		public static CLOSE: typeof ColorsClose;
+		public static STYLES: typeof ColorsStyles;
+		public static TEXTS: typeof ColorsTexts;
+		public static BACKGROUNDS: typeof ColorsBackgrounds;
 		public static hexToRGB(hex: string): number[];
 		public static hueToRGB(p: number, q: number, t: number): number;
 		public static hslToRGB([h, s, l]: [number | string, number | string, number | string]): number[];
