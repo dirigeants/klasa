@@ -455,7 +455,7 @@ declare module 'klasa' {
 
 	export abstract class Language extends Piece {
 		public constructor(client: KlasaClient, store: LanguageStore, file: string[], directory: string, options?: LanguageOptions);
-		public language: ObjectLiteral<string | string[] | ((...args: any[]) => string | string[])>;
+		public language: Record<string, string | string[] | ((...args: any[]) => string | string[])>;
 
 		public get<T = string>(term: string, ...args: any[]): T;
 		public toJSON(): PieceLanguageJSON;
@@ -469,7 +469,7 @@ declare module 'klasa' {
 		public ignoreSelf: boolean;
 		public ignoreWebhooks: boolean;
 		public ignoreBlacklistedUsers: boolean;
-		public ignroeBlacklistedGuilds: boolean;
+		public ignoreBlacklistedGuilds: boolean;
 
 		public abstract run(message: KlasaMessage): void;
 		public shouldRun(message: KlasaMessage): boolean;
@@ -647,7 +647,7 @@ declare module 'klasa' {
 		public message: KlasaMessage;
 		public usage: Usage | CommandUsage;
 		public reprompted: boolean;
-		public flags: ObjectLiteral<string>;
+		public flags: Record<string, string>;
 		public args: string[];
 		public params: any[];
 		public time: number;
@@ -669,7 +669,7 @@ declare module 'klasa' {
 		private finalize(): any[];
 		private _setup(original: string): void;
 
-		private static getFlags(content: string, delim: string): { content: string; flags: ObjectLiteral<string> };
+		private static getFlags(content: string, delim: string): { content: string; flags: Record<string, string> };
 		private static getArgs(content: string, delim: string): string[];
 		private static getQuotedStringArgs(content: string, delim: string): string[];
 
@@ -683,7 +683,7 @@ declare module 'klasa' {
 		public usageString: string;
 		public usageDelim: string;
 		public parsedUsage: Tag[];
-		public customResolvers: ObjectLiteral<ArgResolverCustomMethod>;
+		public customResolvers: Record<string, ArgResolverCustomMethod>;
 
 		public createCustomResolver(type: string, resolver: ArgResolverCustomMethod): this;
 		public customizeResponse(name: string, response: ((message: KlasaMessage) => string)): this;
@@ -692,9 +692,9 @@ declare module 'klasa' {
 		public toString(): string;
 
 		private static parseUsage(usageString: string): Tag[];
-		private static tagOpen(usage: ObjectLiteral, char: string): void;
-		private static tagClose(usage: ObjectLiteral, char: string): void;
-		private static tagSpace(usage: ObjectLiteral, char: string): void;
+		private static tagOpen(usage: Record<string, any>, char: string): void;
+		private static tagClose(usage: Record<string, any>, char: string): void;
+		private static tagSpace(usage: Record<string, any>, char: string): void;
 	}
 
 //#endregion Usage
@@ -962,7 +962,7 @@ declare module 'klasa' {
 	}
 
 	class Util {
-		public static arrayFromObject<T = any>(obj: ObjectLiteral<T>, prefix?: string): Array<T>;
+		public static arrayFromObject<T = any>(obj: Record<string, any>, prefix?: string): Array<T>;
 		public static arraysStrictEquals(arr1: any[], arr2: any[]): boolean;
 		public static chunk<T>(entries: T[], chunkSize: number): Array<T[]>;
 		public static clean(text: string): string;
@@ -976,14 +976,14 @@ declare module 'klasa' {
 		public static isObject(input: any): boolean;
 		public static isPrimitive(input: any): input is string | number | boolean;
 		public static isThenable(input: any): boolean;
-		public static makeObject<T = ObjectLiteral, S = ObjectLiteral>(path: string, value: any, obj?: ObjectLiteral): T & S;
-		public static mergeDefault<T = ObjectLiteral, S = ObjectLiteral>(objDefaults: T, objSource: S): T & S;
-		public static mergeObjects<T = ObjectLiteral, S = ObjectLiteral>(objTarget: T, objSource: S): T & S;
-		public static objectToTuples(obj: ObjectLiteral): Array<[string, any]>;
+		public static makeObject<T = Record<string, any>, S = Record<string, any>>(path: string, value: any, obj?: Record<string, any>): T & S;
+		public static mergeDefault<T = Record<string, any>, S = Record<string, any>>(objDefaults: T, objSource: S): T & S;
+		public static mergeObjects<T = Record<string, any>, S = Record<string, any>>(objTarget: T, objSource: S): T & S;
+		public static objectToTuples(obj: Record<string, any>): Array<[string, any]>;
 		public static regExpEsc(str: string): string;
 		public static sleep<T = any>(delay: number, args?: T): Promise<T>;
 		public static toTitleCase(str: string): string;
-		public static tryParse<T = ObjectLiteral>(value: string): T | string;
+		public static tryParse<T = Record<string, any>>(value: string): T | string;
 		public static resolveGuild(client: KlasaClient, guild: GuildResolvable): KlasaGuild;
 		private static initClean(client: KlasaClient): void;
 
@@ -1237,7 +1237,7 @@ declare module 'klasa' {
 			readonly responses: KlasaMessage[];
 			readonly args: string[];
 			readonly params: any[];
-			readonly flags: ObjectLiteral<string>;
+			readonly flags: Record<string, string>;
 			readonly reprompted: boolean;
 			readonly reactable: boolean;
 			send(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
@@ -1262,7 +1262,7 @@ declare module 'klasa' {
 
 //#region Typedefs
 
-	export type KlasaClientOptions = {
+	export interface KlasaClientOptions extends ClientOptions {
 		commandEditing?: boolean;
 		commandLogging?: boolean;
 		commandMessageLifetime?: number;
@@ -1288,19 +1288,19 @@ declare module 'klasa' {
 		slowmode?: number;
 		slowmodeAggressive?: boolean;
 		typing?: boolean;
-	} & ClientOptions;
+	}
 
-	export type ScheduleOptions = {
+	export interface ScheduleOptions {
 		interval?: number;
-	};
+	}
 
-	export type CustomPromptDefaults = {
+	export interface CustomPromptDefaults {
 		limit?: number;
 		time?: number;
 		quotedStringSupport?: boolean;
-	};
+	}
 
-	export type PieceDefaults = {
+	export interface PieceDefaults {
 		arguments?: ArgumentOptions;
 		commands?: CommandOptions;
 		events?: EventOptions;
@@ -1311,109 +1311,113 @@ declare module 'klasa' {
 		monitors?: MonitorOptions;
 		providers?: ProviderOptions;
 		serializers?: SerializerOptions;
-	};
+	}
 
-	export type ProvidersOptions = {
+	export interface ProvidersOptions extends Record<string, any> {
 		default?: string;
-	} & ObjectLiteral;
+	}
 
 	export type ReadyMessage = string | ((client: Client) => string);
 
-	export type GatewaysOptions = {
+	export interface GatewaysOptions extends Record<string, GatewayDriverRegisterOptions> {
 		clientStorage?: GatewayDriverRegisterOptions;
 		guilds?: GatewayDriverRegisterOptions;
 		users?: GatewayDriverRegisterOptions;
-	} & ObjectLiteral;
+	}
 
 	// Parsers
-	export type ArgResolverCustomMethod = (arg: string, possible: Possible, message: KlasaMessage, params: string[]) => any;
+	export type ArgResolverCustomMethod = (arg: string, possible: Possible, message: KlasaMessage, params: any[]) => any;
 
-	export type Constants = {
-		DEFAULTS: {
-			CLIENT: Required<KlasaClientOptions>,
-			CONSOLE: Required<ConsoleOptions>,
-			DATATYPES: ObjectLiteral<QueryBuilderDatatype>
-		};
-		TIME: {
-			SECOND: number;
-			MINUTE: number;
-			HOUR: number;
-			DAY: number;
-			DAYS: string[];
-			MONTHS: string[];
-			TIMESTAMP: {
-				TOKENS: {
-					Y: number;
-					Q: number;
-					M: number;
-					D: number;
-					d: number;
-					X: number;
-					x: number;
-					H: number;
-					h: number;
-					a: number;
-					A: number;
-					m: number;
-					s: number;
-					S: number;
-					Z: number;
-				};
-			};
-			CRON: {
-				partRegex: RegExp;
-				allowedNum: number[][];
-				predefined: {
-					'@annually': string;
-					'@yearly': string;
-					'@monthly': string;
-					'@weekly': string;
-					'@daily': string;
-					'@hourly': string;
-				};
-				tokens: {
-					jan: number;
-					feb: number;
-					mar: number;
-					apr: number;
-					may: number;
-					jun: number;
-					jul: number;
-					aug: number;
-					sep: number;
-					oct: number;
-					nov: number;
-					dec: number;
-					sun: number;
-					mon: number;
-					tue: number;
-					wed: number;
-					thu: number;
-					fri: number;
-					sat: number;
-				};
-				tokensRegex: RegExp;
-			}
-		};
+	export interface Constants {
+		DEFAULTS: ConstantsDefaults;
+		TIME: ConstantsTime;
 		MENTION_REGEX: MentionRegex;
-	};
+	}
+
+	export interface ConstantsDefaults {
+		CLIENT: Required<KlasaClientOptions>;
+		CONSOLE: Required<ConsoleOptions>;
+		DATATYPES: Record<string, QueryBuilderDatatype>;
+	}
+
+	export interface ConstantsTime {
+		SECOND: number;
+		MINUTE: number;
+		HOUR: number;
+		DAY: number;
+		DAYS: string[];
+		MONTHS: string[];
+		TIMESTAMP: {
+			TOKENS: {
+				Y: number;
+				Q: number;
+				M: number;
+				D: number;
+				d: number;
+				X: number;
+				x: number;
+				H: number;
+				h: number;
+				a: number;
+				A: number;
+				m: number;
+				s: number;
+				S: number;
+				Z: number;
+			};
+		};
+		CRON: {
+			partRegex: RegExp;
+			allowedNum: number[][];
+			predefined: {
+				'@annually': string;
+				'@yearly': string;
+				'@monthly': string;
+				'@weekly': string;
+				'@daily': string;
+				'@hourly': string;
+			};
+			tokens: {
+				jan: number;
+				feb: number;
+				mar: number;
+				apr: number;
+				may: number;
+				jun: number;
+				jul: number;
+				aug: number;
+				sep: number;
+				oct: number;
+				nov: number;
+				dec: number;
+				sun: number;
+				mon: number;
+				tue: number;
+				wed: number;
+				thu: number;
+				fri: number;
+				sat: number;
+			};
+			tokensRegex: RegExp;
+		}
+	}
 
 	// Permissions
-	export type PermissionLevel = {
+	export interface PermissionLevel {
 		break: boolean;
 		check: (message: KlasaMessage) => Promise<boolean> | boolean;
 		fetch: boolean;
-	};
+	}
 
-	export type PermissionLevelOptions = {
+	export interface PermissionLevelOptions {
 		break?: boolean;
 		fetch?: boolean;
-	};
+	}
 
-	export type PermissionLevelsData = {
+	export interface PermissionLevelsData {
 		broke: boolean;
 		permission: boolean;
-	};
+	}
 
 	// Schedule
 	export type ScheduledTaskOptions = {
@@ -1531,16 +1535,18 @@ declare module 'klasa' {
 	} & ObjectLiteral<GatewayJSON>;
 
 	// Structures
-	export type PieceOptions = {
-		enabled?: boolean
-		name?: string,
-	};
+	export interface PieceOptions {
+		enabled?: boolean;
+		name?: string;
+	}
 
-	export type ArgumentOptions = {
+	export interface AliasPieceOptions {
 		aliases?: string[];
-	} & PieceOptions;
+	}
 
-	export type CommandOptions = {
+	export interface ArgumentOptions extends AliasPieceOptions {}
+
+	export interface CommandOptions extends AliasPieceOptions {
 		autoAliases?: boolean;
 		requiredPermissions?: PermissionResolvable;
 		bucket?: number;
@@ -1561,62 +1567,57 @@ declare module 'klasa' {
 		subcommands?: boolean;
 		usage?: string;
 		usageDelim?: string;
-	} & AliasPieceOptions;
+	}
 
-	export type ExtendableOptions = {
+	export interface ExtendableOptions extends PieceOptions {
 		appliesTo: Array<Constructor<any>>;
-	} & PieceOptions;
+	}
 
-	export type InhibitorOptions = {
+	export interface InhibitorOptions extends PieceOptions {
 		spamProtection?: boolean;
-	} & PieceOptions;
+	}
 
-	export type MonitorOptions = {
+	export interface MonitorOptions extends PieceOptions {
 		ignoreBots?: boolean;
 		ignoreEdits?: boolean;
 		ignoreOthers?: boolean;
 		ignoreSelf?: boolean;
 		ignoreWebhooks?: boolean;
 		ignoreBlacklistedUsers?: boolean;
-		ignroeBlacklistedGuilds?: boolean;
-	} & PieceOptions;
+		ignoreBlacklistedGuilds?: boolean;
+	}
 
-	export type EventOptions = {
+	export interface EventOptions extends PieceOptions {
 		emitter?: NodeJS.EventEmitter;
 		event?: string;
 		once?: boolean;
-	} & PieceOptions;
+	}
 
-	export type SerializerOptions = AliasPieceOptions;
-	export type ProviderOptions = PieceOptions;
-	export type FinalizerOptions = PieceOptions;
-	export type LanguageOptions = PieceOptions;
-	export type TaskOptions = PieceOptions;
+	export interface SerializerOptions extends AliasPieceOptions {}
+	export interface ProviderOptions extends PieceOptions {}
+	export interface FinalizerOptions extends PieceOptions {}
+	export interface LanguageOptions extends PieceOptions {}
+	export interface TaskOptions extends PieceOptions {}
 
-	export type AliasPieceOptions = {
-		aliases?: Array<string>;
-	} & PieceOptions;
-
-	export type AliasPieceJSON = {
-		aliases: Array<string>;
-	} & PieceJSON;
-
-	export type OriginalPropertyDescriptors = {
-		staticPropertyDescriptors: PropertyDescriptorMap;
-		instancePropertyDescriptors: PropertyDescriptorMap;
-	};
-
-	export type PieceJSON = {
+	export interface PieceJSON {
 		directory: string;
 		path: string;
 		enabled: boolean;
 		file: string[];
 		name: string;
 		type: string;
-	};
+	}
 
+	export interface AliasPieceJSON extends PieceJSON {
+		aliases: string[];
+	}
 
-	export type PieceCommandJSON = {
+	export interface OriginalPropertyDescriptors {
+		staticPropertyDescriptors: PropertyDescriptorMap;
+		instancePropertyDescriptors: PropertyDescriptorMap;
+	}
+
+	export interface PieceCommandJSON extends AliasPieceJSON {
 		requiredPermissions: string[];
 		bucket: number;
 		category: string;
@@ -1643,145 +1644,145 @@ declare module 'klasa' {
 		};
 		usageDelim: string;
 		usageString: string;
-	} & AliasPieceJSON;
+	}
 
-	export type PieceExtendableJSON = {
+	export interface PieceExtendableJSON extends PieceJSON {
 		appliesTo: string[];
-	} & PieceJSON;
+	}
 
-	export type PieceInhibitorJSON = {
+	export interface PieceInhibitorJSON extends PieceJSON {
 		spamProtection: boolean;
-	} & PieceJSON;
+	}
 
-	export type PieceMonitorJSON = {
+	export interface PieceMonitorJSON extends PieceJSON {
 		ignoreBots: boolean;
 		ignoreEdits: boolean;
 		ignoreOthers: boolean;
 		ignoreSelf: boolean;
 		ignoreWebhooks: boolean;
 		ignoreBlacklistedUsers: boolean;
-		ignroeBlacklistedGuilds: boolean;
-	} & PieceJSON;
+		ignoreBlacklistedGuilds: boolean;
+	}
 
-	export type PieceEventJSON = {
+	export interface PieceEventJSON extends PieceJSON {
 		emitter: string;
 		event: string;
 		once: boolean;
-	} & PieceJSON;
+	}
 
-	export type PieceArgumentJSON = AliasPieceJSON;
-	export type PieceSerializerJSON = AliasPieceJSON;
-	export type PieceProviderJSON = PieceJSON;
-	export type PieceFinalizerJSON = PieceJSON;
-	export type PieceLanguageJSON = PieceJSON;
-	export type PieceTaskJSON = PieceJSON;
+	export interface PieceArgumentJSON extends AliasPieceJSON {}
+	export interface PieceSerializerJSON extends AliasPieceJSON {}
+	export interface PieceProviderJSON extends PieceJSON {}
+	export interface PieceFinalizerJSON extends PieceJSON {}
+	export interface PieceLanguageJSON extends PieceJSON {}
+	export interface PieceTaskJSON extends PieceJSON {}
 
 	// Usage
-	export type TextPromptOptions = {
+	export interface TextPromptOptions {
 		limit?: number;
 		time?: number;
 		quotedStringSupport?: boolean;
-	};
+	}
 
 	// Util
-	export type ColorsClose = {
-		normal: 0;
-		bold: 22;
-		dim: 22;
-		italic: 23;
-		underline: 24;
-		inverse: 27;
-		hidden: 28;
-		strikethrough: 29;
-		text: 39;
-		background: 49;
-	};
+	export enum ColorsClose {
+		normal = 0,
+		bold = 22,
+		dim = 22,
+		italic = 23,
+		underline = 24,
+		inverse = 27,
+		hidden = 28,
+		strikethrough = 29,
+		text = 39,
+		background = 49
+	}
 
-	export type ColorsStyles = {
-		normal: 0;
-		bold: 1;
-		dim: 2;
-		italic: 3;
-		underline: 4;
-		inverse: 7;
-		hidden: 8;
-		strikethrough: 9;
-	};
+	export enum ColorsStyles {
+		normal = 0,
+		bold = 1,
+		dim = 2,
+		italic = 3,
+		underline = 4,
+		inverse = 7,
+		hidden = 8,
+		strikethrough = 9
+	}
 
-	export type ColorsTexts = {
-		black: 30;
-		red: 31;
-		green: 32;
-		yellow: 33;
-		blue: 34;
-		magenta: 35;
-		cyan: 36;
-		lightgray: 37;
-		lightgrey: 37;
-		gray: 90;
-		grey: 90;
-		lightred: 91;
-		lightgreen: 92;
-		lightyellow: 93;
-		lightblue: 94;
-		lightmagenta: 95;
-		lightcyan: 96;
-		white: 97;
-	};
+	export enum ColorsTexts {
+		black = 30,
+		red = 31,
+		green = 32,
+		yellow = 33,
+		blue = 34,
+		magenta = 35,
+		cyan = 36,
+		lightgray = 37,
+		lightgrey = 37,
+		gray = 90,
+		grey = 90,
+		lightred = 91,
+		lightgreen = 92,
+		lightyellow = 93,
+		lightblue = 94,
+		lightmagenta = 95,
+		lightcyan = 96,
+		white = 97
+	}
 
-	export type ColorsBackgrounds = {
-		black: 40;
-		red: 41;
-		green: 42;
-		yellow: 43;
-		blue: 44;
-		magenta: 45;
-		cyan: 46;
-		gray: 47;
-		grey: 47;
-		lightgray: 100;
-		lightgrey: 100;
-		lightred: 101;
-		lightgreen: 102;
-		lightyellow: 103;
-		lightblue: 104;
-		lightmagenta: 105;
-		lightcyan: 106;
-		white: 107;
-	};
+	export enum ColorsBackgrounds {
+		black = 40,
+		red = 41,
+		green = 42,
+		yellow = 43,
+		blue = 44,
+		magenta = 45,
+		cyan = 46,
+		gray = 47,
+		grey = 47,
+		lightgray = 100,
+		lightgrey = 100,
+		lightred = 101,
+		lightgreen = 102,
+		lightyellow = 103,
+		lightblue = 104,
+		lightmagenta = 105,
+		lightcyan = 106,
+		white = 107
+	}
 
-	export type ColorsFormatOptions = {
+	export interface ColorsFormatOptions {
 		background?: string;
 		style?: string | string[];
 		text?: string;
-	};
+	}
 
 	export type ColorsFormatType = string | number | [string, string, string] | [number, number, number];
 
-	export type ColorsFormatData = {
+	export interface ColorsFormatData {
 		opening: string[];
 		closing: string[];
-	};
+	}
 
-	export type ConsoleOptions = {
+	export interface ConsoleOptions {
 		utc?: boolean;
 		colors?: ConsoleColorStyles;
 		stderr?: NodeJS.WritableStream;
 		stdout?: NodeJS.WritableStream;
 		timestamps?: boolean | string;
 		useColor?: boolean;
-	};
+	}
 
-	export type ConsoleEvents = {
+	export interface ConsoleEvents {
 		debug?: boolean;
 		error?: boolean;
 		log?: boolean;
 		verbose?: boolean;
 		warn?: boolean;
 		wtf?: boolean;
-	};
+	}
 
-	export type ConsoleColorStyles = {
+	export interface ConsoleColorStyles {
 		debug?: ConsoleColorObjects;
 		error?: ConsoleColorObjects;
 		info?: ConsoleColorObjects;
@@ -1789,54 +1790,26 @@ declare module 'klasa' {
 		verbose?: ConsoleColorObjects;
 		warn?: ConsoleColorObjects;
 		wtf?: ConsoleColorObjects;
-	};
+	}
 
-	export type ConsoleColorObjects = {
+	export interface ConsoleColorObjects {
 		message?: ConsoleMessageObject;
 		time?: ConsoleTimeObject;
-	};
+	}
 
-	export type ConsoleMessageObject = {
-		background?: ConsoleColorTypes;
-		style?: ConsoleStyleTypes;
-		text?: ConsoleColorTypes;
-	};
+	export interface ConsoleMessageObject {
+		background?: keyof typeof ColorsBackgrounds | null;
+		style?: keyof typeof ColorsStyles | null;
+		text?: keyof typeof ColorsBackgrounds | null;
+	}
 
-	export type ConsoleTimeObject = {
-		background?: ConsoleColorTypes;
-		style?: ConsoleStyleTypes;
-		text?: ConsoleColorTypes;
-	};
+	export interface ConsoleTimeObject {
+		background?: keyof typeof ColorsBackgrounds | null;
+		style?: keyof typeof ColorsStyles | null;
+		text?: keyof typeof ColorsBackgrounds | null;
+	}
 
-	export type ConsoleColorTypes = 'black'
-		| 'blue'
-		| 'cyan'
-		| 'gray'
-		| 'green'
-		| 'grey'
-		| 'lightblue'
-		| 'lightcyan'
-		| 'lightgray'
-		| 'lightgreen'
-		| 'lightgrey'
-		| 'lightmagenta'
-		| 'lightred'
-		| 'lightyellow'
-		| 'magenta'
-		| 'red'
-		| 'white'
-		| null;
-
-	export type ConsoleStyleTypes = 'normal'
-		| 'bold'
-		| 'dim'
-		| 'italic'
-		| 'underline'
-		| 'inverse'
-		| 'hidden'
-		| 'strikethrough';
-
-	export type ReactionHandlerOptions = {
+	export interface ReactionHandlerOptions {
 		filter?: Function;
 		max?: number;
 		maxEmojis?: number;
@@ -1845,14 +1818,14 @@ declare module 'klasa' {
 		startPage?: number;
 		stop?: boolean;
 		time?: number;
-	};
+	}
 
-	export type TimestampObject = {
+	export interface TimestampObject {
 		content: string | null;
 		type: string;
-	};
+	}
 
-	export type RichDisplayRunOptions = {
+	export interface RichDisplayRunOptions {
 		filter?: ((reaction: MessageReaction, user: KlasaUser) => boolean);
 		firstLast?: boolean;
 		jump?: boolean;
@@ -1863,9 +1836,9 @@ declare module 'klasa' {
 		startPage?: number;
 		stop?: boolean;
 		time?: number;
-	};
+	}
 
-	export type RichDisplayEmojisObject = {
+	export interface RichDisplayEmojisObject extends Record<string, EmojiResolvable> {
 		first: EmojiResolvable;
 		back: EmojiResolvable;
 		forward: EmojiResolvable;
@@ -1873,9 +1846,9 @@ declare module 'klasa' {
 		jump: EmojiResolvable;
 		info: EmojiResolvable;
 		stop: EmojiResolvable;
-	} & ObjectLiteral<EmojiResolvable>;
+	}
 
-	export type RichMenuEmojisObject = {
+	export interface RichMenuEmojisObject extends RichDisplayEmojisObject {
 		zero: EmojiResolvable;
 		one: EmojiResolvable;
 		two: EmojiResolvable;
@@ -1886,15 +1859,15 @@ declare module 'klasa' {
 		seven: EmojiResolvable;
 		eight: EmojiResolvable;
 		nine: EmojiResolvable;
-	} & RichDisplayEmojisObject;
+	}
 
-	export type MenuOption = {
+	export interface MenuOption {
 		name: string;
 		body: string;
 		inline?: boolean;
-	};
+	}
 
-	export type RichMenuRunOptions = {
+	export interface RichMenuRunOptions {
 		filter?: Function;
 		max?: number;
 		maxEmojis?: number;
@@ -1903,23 +1876,21 @@ declare module 'klasa' {
 		startPage?: number;
 		stop?: boolean;
 		time?: number;
-	};
+	}
 
-	export type MentionRegex = {
+	export interface MentionRegex {
 		userOrMember: RegExp;
 		channel: RegExp;
 		emoji: RegExp;
 		role: RegExp;
 		snowflake: RegExp;
-	};
+	}
 
 	interface Stringifible {
 		toString(): string;
 	}
 
-	interface ObjectLiteral<T = any> {
-		[k: string]: T;
-	}
+	interface ObjectLiteral<T = any> extends Record<string, T> {}
 
 	interface Constructor<C> {
 		new(...args: any[]): C;
@@ -1927,12 +1898,12 @@ declare module 'klasa' {
 
 	type PrimitiveType = string | number | boolean;
 
-	export type TitleCaseVariants = {
+	export interface TitleCaseVariants extends Record<string, string> {
 		textchannel: 'TextChannel';
 		voicechannel: 'VoiceChannel';
 		categorychannel: 'CategoryChannel';
 		guildmember: 'GuildMember';
-	} & ObjectLiteral<string>;
+	}
 
 	export interface PartialSendAliases {
 		sendLocale(key: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
