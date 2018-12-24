@@ -1399,7 +1399,7 @@ declare module 'klasa' {
 				sat: number;
 			};
 			tokensRegex: RegExp;
-		}
+		};
 	}
 
 	// Permissions
