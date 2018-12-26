@@ -709,7 +709,7 @@ declare module 'klasa' {
 		public format(input: string): string;
 		public static useColors: boolean | null;
 		public static CLOSE: typeof ColorsClose;
-		public static STYLES: typeof ColorsStyles;
+		public static STYLES: typeof ColorsStyleTypes;
 		public static TEXTS: typeof ColorsTexts;
 		public static BACKGROUNDS: typeof ColorsBackgrounds;
 		public static hexToRGB(hex: string): number[];
@@ -1426,14 +1426,17 @@ declare module 'klasa' {
 		id?: string;
 	}
 
+	export type TimeResolvable = Cron | Date | number | string;
+
 	export interface ScheduledTaskJSON extends Required<ScheduledTaskOptions> {
 		taskName: string;
 		time: number;
 	}
 
 	export interface ScheduledTaskUpdateOptions extends Filter<ScheduledTaskOptions, 'id'> {
+		id: never;
 		repeat?: string;
-		time?: Date | number;
+		time?: TimeResolvable;
 	}
 
 	// Settings
@@ -1655,7 +1658,7 @@ declare module 'klasa' {
 		background = 49
 	}
 
-	export enum ColorsStyles {
+	export enum ColorsStyleTypes {
 		normal = 0,
 		bold = 1,
 		dim = 2,
@@ -1756,13 +1759,13 @@ declare module 'klasa' {
 
 	export interface ConsoleMessageObject {
 		background?: keyof typeof ColorsBackgrounds | null;
-		style?: keyof typeof ColorsStyles | null;
+		style?: keyof typeof ColorsStyleTypes | null;
 		text?: keyof typeof ColorsBackgrounds | null;
 	}
 
 	export interface ConsoleTimeObject {
 		background?: keyof typeof ColorsBackgrounds | null;
-		style?: keyof typeof ColorsStyles | null;
+		style?: keyof typeof ColorsStyleTypes | null;
 		text?: keyof typeof ColorsBackgrounds | null;
 	}
 

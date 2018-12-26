@@ -74,7 +74,7 @@ class KlasaConsole extends Console {
 	 */
 
 	/**
-	 * @typedef {*} ConsoleStyleTypes
+	 * @typedef {Object} ConsoleStyleTypes
 	 * @property {string} normal Default style
 	 * @property {string} bold Bold style. May appear with a lighter colour in many terminals
 	 * @property {string} dim Dim style

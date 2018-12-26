@@ -21,7 +21,7 @@ class RichMenu extends RichDisplay {
 	 */
 
 	/**
-	 * @typedef {Object} MenuOption
+	 * @typedef {Object} MenuOptions
 	 * @property {string} name The name of the option
 	 * @property {string} body The description of the option
 	 * @property {boolean} [inline=false] Whether the option should be inline
@@ -76,7 +76,7 @@ class RichMenu extends RichDisplay {
 		/**
 		 * The options of this Menu
 		 * @since 0.4.0
-		 * @type {MenuOption[]}
+		 * @type {MenuOptions[]}
 		 */
 		this.options = [];
 	}
@@ -91,7 +91,7 @@ class RichMenu extends RichDisplay {
 	}
 
 	/**
-	 * Adds a MenuOption
+	 * Adds a MenuOptions
 	 * @since 0.4.0
 	 * @param {string} name The name of the option
 	 * @param {string} body The description of the option

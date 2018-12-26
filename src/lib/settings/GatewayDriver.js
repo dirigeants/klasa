@@ -15,23 +15,6 @@ class GatewayDriver {
 	 */
 
 	/**
-	 * @typedef {Object} GatewayDriverGuildsSchema
-	 * @property {SchemaPieceOptions} prefix The per-guild's configurable prefix key
-	 * @property {SchemaPieceOptions} language The per-guild's configurable language key
-	 * @property {SchemaPieceOptions} disableNaturalPrefix The per-guild's configurable disableNaturalPrefix key
-	 * @property {SchemaPieceOptions} disabledCommands The per-guild's configurable disabledCommands key
-	 * @private
-	 */
-
-	/**
-	 * @typedef {Object} GatewayDriverClientStorageSchema
-	 * @property {SchemaPieceOptions} userBlacklist The client's configurable user blacklist key
-	 * @property {SchemaPieceOptions} guildBlacklist The client's configurable guild blacklist key
-	 * @property {SchemaPieceOptions} schedules The schedules where {@link ScheduledTask}s are stored at
-	 * @private
-	 */
-
-	/**
 	 * @since 0.3.0
 	 * @param {KlasaClient} client The Klasa client
 	 */
