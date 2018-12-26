@@ -1,5 +1,3 @@
-import { EventEmitter } from 'events';
-
 declare module 'klasa' {
 
 	import { ExecOptions } from 'child_process';
