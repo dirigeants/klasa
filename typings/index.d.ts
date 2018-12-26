@@ -242,7 +242,7 @@ declare module 'klasa' {
 	}
 
 	export class Gateway extends GatewayStorage {
-		public constructor(store: GatewayDriver, type: string, schema: Schema, options: GatewayOptions);
+		public constructor(store: GatewayDriver, type: string, schema: Schema, provider: string);
 		public store: GatewayDriver;
 		public syncQueue: Collection<string, Promise<Settings>>;
 		public readonly Settings: Settings;
@@ -283,7 +283,7 @@ declare module 'klasa' {
 	}
 
 	export abstract class GatewayStorage {
-		public constructor(client: KlasaClient, type: string, schema: Schema, provider?: string);
+		public constructor(client: KlasaClient, type: string, schema: Schema, provider: string);
 		public readonly client: KlasaClient;
 		public readonly defaults: any;
 		public readonly provider: Provider | null;
@@ -1317,7 +1317,7 @@ declare module 'klasa' {
 		default?: string;
 	}
 
-	export type ReadyMessage = string | ((client: Client) => string);
+	export type ReadyMessage = string | ((client: KlasaClient) => string);
 
 	export interface GatewaysOptions extends Record<string, GatewayDriverRegisterOptions> {
 		clientStorage?: GatewayDriverRegisterOptions;
@@ -1420,54 +1420,45 @@ declare module 'klasa' {
 	}
 
 	// Schedule
-	export type ScheduledTaskOptions = {
+	export interface ScheduledTaskOptions {
 		catchUp?: boolean;
 		data?: any;
 		id?: string;
-	};
+	}
 
-	export type ScheduledTaskJSON = {
-		catchUp: boolean;
-		data: any;
-		id: string;
+	export interface ScheduledTaskJSON extends Required<ScheduledTaskOptions> {
 		taskName: string;
 		time: number;
-	};
+	}
 
-	export type ScheduledTaskUpdateOptions = {
-		catchUp?: boolean;
-		data?: any;
+	export interface ScheduledTaskUpdateOptions extends Filter<ScheduledTaskOptions, 'id'> {
 		repeat?: string;
-		time?: Date;
-	};
+		time?: Date | number;
+	}
 
 	// Settings
-	export type GatewayOptions = {
-		provider: string;
-	};
-
-	export type GatewayJSON = {
-		options: GatewayOptions;
+	export interface GatewayJSON {
+		options: { provider: string };
 		schema: SchemaFolderAddOptions;
 		type: string;
-	};
+	}
 
-	export type GatewayGetPathOptions = {
+	export interface GatewayGetPathOptions {
 		avoidUnconfigurable?: boolean;
 		errors?: boolean;
 		piece?: boolean;
-	};
+	}
 
-	export type GatewayGetPathResult = {
+	export interface GatewayGetPathResult {
 		piece: SchemaPiece;
 		route: string[];
-	};
+	}
 
-	export type QueryBuilderDatatype = {
+	export type QueryBuilderDatatype = string | {
 		array?: (datatype: string) => string;
 		resolver?: <T = any>(input: any, schemaPiece: SchemaPiece) => T;
 		type: string | ((piece: SchemaPiece) => string);
-	} | string;
+	};
 
 	export type QueryBuilderOptions = {
 		arrayResolver?: (values: Array<any>, piece: SchemaPiece, resolver: Function) => string;
@@ -1479,48 +1470,48 @@ declare module 'klasa' {
 		| GuildChannel
 		| Snowflake;
 
-	export type SettingsResetOptions = {
+	export interface SettingsResetOptions {
 		avoidUnconfigurable?: boolean;
 		force?: boolean;
-	};
+	}
 
-	export type SettingsUpdateOptions = {
+	export interface SettingsUpdateOptions {
 		action?: 'add' | 'remove' | 'auto' | 'overwrite';
 		arrayPosition?: number;
 		avoidUnconfigurable?: boolean;
 		force?: boolean;
-	};
+	}
 
-	export type SettingsUpdateResult = {
+	export interface SettingsUpdateResult {
 		errors: Error[];
 		updated: SettingsUpdateResultEntry[];
-	};
+	}
 
-	export type SettingsUpdateResultEntry = {
+	export interface SettingsUpdateResultEntry {
 		data: [string, any];
 		piece: SchemaPiece;
-	};
+	}
 
-	export type GatewayDriverRegisterOptions = {
+	export interface GatewayDriverRegisterOptions {
 		provider?: string;
 		schema?: Schema;
 		syncArg?: string[] | string | true;
-	};
+	}
 
 	export type SchemaFolderAddOptions = SchemaFolderOptions | SchemaPieceOptions;
 
-	export type SchemaPieceOptions = {
+	export interface SchemaPieceOptions {
 		array?: boolean;
 		configurable?: boolean;
 		default?: any;
 		min?: number;
 		max?: number;
 		filter?: ((client: KlasaClient, value: any, schema: SchemaPiece, language: Language) => boolean) | null
-	};
+	}
 
-	export type SchemaPieceEditOptions = {
+	export interface SchemaPieceEditOptions extends SchemaPieceOptions {
 		type?: string;
-	} & SchemaPieceOptions;
+	}
 
 	export type SchemaFolderOptions = {
 		type?: 'Folder';
