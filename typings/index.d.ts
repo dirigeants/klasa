@@ -1506,7 +1506,7 @@ declare module 'klasa' {
 		default?: any;
 		min?: number;
 		max?: number;
-		filter?: ((client: KlasaClient, value: any, schema: SchemaPiece, language: Language) => boolean) | null
+		filter?: ((client: KlasaClient, value: any, schema: SchemaPiece, language: Language) => boolean) | null;
 	}
 
 	export interface SchemaPieceEditOptions extends SchemaPieceOptions {
