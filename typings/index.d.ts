@@ -1,3 +1,5 @@
+import { EventEmitter } from 'events';
+
 declare module 'klasa' {
 
 	import { ExecOptions } from 'child_process';
@@ -1617,65 +1619,31 @@ declare module 'klasa' {
 		instancePropertyDescriptors: PropertyDescriptorMap;
 	}
 
-	export interface PieceCommandJSON extends AliasPieceJSON {
+	export interface PieceCommandJSON extends AliasPieceJSON, Filter<Required<CommandOptions>, 'requiredPermissions' | 'usage'> {
 		requiredPermissions: string[];
-		bucket: number;
-		category: string;
-		cooldown: number;
-		deletable: boolean;
-		description: string | ((language: Language) => string);
-		extendedHelp: string | ((language: Language) => string);
-		fullCategory: string[];
-		guarded: boolean;
-		hidden: boolean;
-		nsfw: boolean;
-		permissionLevel: number;
-		promptLimit: number;
-		promptTime: number;
-		quotedStringSupport: boolean;
-		requiredSettings: string[];
-		runIn: Array<'text' | 'dm' | 'group'>;
-		subCategory: string;
-		subcommands: boolean;
 		usage: {
 			usageString: string;
 			usageDelim: string;
 			nearlyFullUsage: string;
 		};
-		usageDelim: string;
-		usageString: string;
 	}
 
-	export interface PieceExtendableJSON extends PieceJSON {
+	export interface PieceExtendableJSON extends PieceJSON, Filter<Required<ExtendableOptions>, 'appliesTo'> {
 		appliesTo: string[];
 	}
 
-	export interface PieceInhibitorJSON extends PieceJSON {
-		spamProtection: boolean;
-	}
-
-	export interface PieceMonitorJSON extends PieceJSON {
-		ignoreBots: boolean;
-		ignoreEdits: boolean;
-		ignoreOthers: boolean;
-		ignoreSelf: boolean;
-		ignoreWebhooks: boolean;
-		ignoreBlacklistedUsers: boolean;
-		ignoreBlacklistedGuilds: boolean;
-	}
-
-	export interface PieceEventJSON extends PieceJSON {
+	export interface PieceEventJSON extends PieceJSON, Filter<Required<EventOptions>, 'emitter'> {
 		emitter: string;
-		event: string;
-		once: boolean;
 	}
 
-	export interface PieceArgumentJSON extends AliasPieceJSON {}
-	export interface PieceSerializerJSON extends AliasPieceJSON {}
-	export interface PieceProviderJSON extends PieceJSON {}
-	export interface PieceFinalizerJSON extends PieceJSON {}
-	export interface PieceLanguageJSON extends PieceJSON {}
-	export interface PieceTaskJSON extends PieceJSON {}
+	export interface PieceInhibitorJSON extends PieceJSON, Required<InhibitorOptions> {}
+	export interface PieceMonitorJSON extends PieceJSON, Required<MonitorOptions> {}
+	export interface PieceArgumentJSON extends AliasPieceJSON, Required<ArgumentOptions> {}
+	export interface PieceSerializerJSON extends AliasPieceJSON, Required<SerializerOptions> {}
+	export interface PieceProviderJSON extends PieceJSON, Required<ProviderOptions> {}
+	export interface PieceFinalizerJSON extends PieceJSON, Required<FinalizerOptions> {}
+	export interface PieceLanguageJSON extends PieceJSON, Required<LanguageOptions> {}
+	export interface PieceTaskJSON extends PieceJSON, Required<TaskOptions> {}
 
 	// Usage
 	export interface TextPromptOptions {
@@ -1897,6 +1865,11 @@ declare module 'klasa' {
 	}
 
 	type PrimitiveType = string | number | boolean;
+
+	// Based on the built-in `Pick<>` generic
+	type Filter<T, K extends keyof T> = {
+		[P in keyof T]: P extends K ? unknown : T[P];
+	};
 
 	export interface TitleCaseVariants extends Record<string, string> {
 		textchannel: 'TextChannel';
