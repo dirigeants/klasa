@@ -224,8 +224,8 @@ declare module 'klasa' {
 
 		public reset(key?: string | string[], options?: SettingsResetOptions): Promise<SettingsUpdateResult>;
 		public reset(key?: string | string[], guild?: KlasaGuild, options?: SettingsResetOptions): Promise<SettingsUpdateResult>;
-		public update(key: ObjectLiteral, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
-		public update(key: ObjectLiteral, guild?: GuildResolvable, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
+		public update(key: Record<string, any>, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
+		public update(key: Record<string, any>, guild?: GuildResolvable, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
 		public update(key: string, value: any, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
 		public update(key: string, value: any, guild?: GuildResolvable, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
 		public update(entries: Array<[string, any]>, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
@@ -235,9 +235,9 @@ declare module 'klasa' {
 
 		private _save(data: SettingsUpdateResult): Promise<void>;
 		private _setValueByPath(piece: SchemaPiece, parsedID: any): { updated: boolean, old: any };
-		private _patch(data: ObjectLiteral, instance?: object, schema?: SchemaFolder): void;
+		private _patch(data: Record<string, any>, instance?: object, schema?: SchemaFolder): void;
 
-		public toJSON<T extends ObjectLiteral>(): T;
+		public toJSON(): Record<string, any>;
 		public toString(): string;
 	}
 
@@ -254,13 +254,13 @@ declare module 'klasa' {
 	}
 
 	export class QueryBuilder {
-		public constructor(datatypes: ObjectLiteral<QueryBuilderDatatype>, options?: QueryBuilderOptions);
+		public constructor(datatypes: Record<string, QueryBuilderDatatype>, options?: QueryBuilderOptions);
 		public get(type: string): QueryBuilderDatatype | null;
 		public parse(schemaPiece: SchemaPiece): string;
 		public parseValue(value: any, schemaPiece: SchemaPiece, datatype?: QueryBuilderDatatype): string;
 		private arrayResolver: (values: Array<any>, piece: SchemaPiece, resolver: Function) => string;
 		private formatDatatype: (name: string, datatype: string, def?: string) => string;
-		private readonly _datatypes: ObjectLiteral<QueryBuilderDatatype>;
+		private readonly _datatypes: Record<string, QueryBuilderDatatype>;
 	}
 
 	export class GatewayDriver {
@@ -301,7 +301,7 @@ declare module 'klasa' {
 	export class Schema extends Map<string, SchemaPiece | SchemaFolder> {
 		public constructor(path?: string);
 		public readonly configurableKeys: Array<string>;
-		public readonly defaults: ObjectLiteral;
+		public readonly defaults: Record<string, any>;
 		public readonly path: string;
 		public readonly paths: Map<string, SchemaPiece | SchemaFolder>;
 		public readonly type: 'Folder';
@@ -309,7 +309,7 @@ declare module 'klasa' {
 		public add(key: string, callback: (folder: SchemaFolder) => any): this;
 		public remove(key: string): this;
 		public get<T = Schema | SchemaPiece | SchemaFolder>(key: string | Array<string>): T;
-		public toJSON(): ObjectLiteral;
+		public toJSON(): Record<string, any>;
 	}
 
 	export class SchemaFolder extends Schema {
@@ -488,15 +488,15 @@ declare module 'klasa' {
 		public abstract createTable(table: string, rows?: any[]): Promise<any>;
 		public abstract delete(table: string, entry: string): Promise<any>;
 		public abstract deleteTable(table: string): Promise<any>;
-		public abstract get<T extends ObjectLiteral>(table: string, entry: string): Promise<T>;
-		public abstract getAll<T extends ObjectLiteral>(table: string): Promise<T[]>;
+		public abstract get(table: string, entry: string): Promise<any>;
+		public abstract getAll(table: string): Promise<any[]>;
 		public abstract has(table: string, entry: string): Promise<boolean>;
 		public abstract hasTable(table: string): Promise<boolean>;
-		public abstract update(table: string, entry: string, data: SettingsUpdateResultEntry[] | [string, any][] | ObjectLiteral): Promise<any>;
-		public abstract replace(table: string, entry: string, data: SettingsUpdateResultEntry[] | [string, any][] | ObjectLiteral): Promise<any>;
+		public abstract update(table: string, entry: string, data: SettingsUpdateResultEntry[] | [string, any][] | Record<string, any>): Promise<any>;
+		public abstract replace(table: string, entry: string, data: SettingsUpdateResultEntry[] | [string, any][] | Record<string, any>): Promise<any>;
 		// The following is not required by SettingGateway but might be available in some providers
 		public getKeys(table: string): Promise<string[]>;
-		protected parseUpdateInput<T = ObjectLiteral>(updated: T | SettingsUpdateResult): T;
+		protected parseUpdateInput<T = Record<string, any>>(updated: T | SettingsUpdateResult): T;
 
 		public shutdown(): Promise<void>;
 		public toJSON(): PieceProviderJSON;
@@ -508,8 +508,8 @@ declare module 'klasa' {
 		public abstract removeColumn<T = any>(table: string, columns: string | string[]): Promise<T>;
 		public abstract updateColumn<T = any>(table: string, piece: SchemaPiece): Promise<T>;
 		public abstract getColumns(table: string): Promise<Array<string>>;
-		protected parseUpdateInput<T = [string, any]>(updated?: SettingsUpdateResultEntry[] | [string, any][] | ObjectLiteral, resolve?: boolean): T;
-		protected parseEntry<T = ObjectLiteral>(gateway: string | Gateway, entry: ObjectLiteral): T;
+		protected parseUpdateInput<T = [string, any]>(updated?: SettingsUpdateResultEntry[] | [string, any][] | Record<string, any>, resolve?: boolean): T;
+		protected parseEntry<T = Record<string, any>>(gateway: string | Gateway, entry: Record<string, any>): T;
 		protected parseValue<T = any>(value: any, schemaPiece: SchemaPiece): T;
 		private _parseGatewayInput(updated: SettingsUpdateResultEntry[], keys: string[], values: string[], resolve?: boolean): void;
 	}
@@ -1428,7 +1428,7 @@ declare module 'klasa' {
 
 	export type ScheduledTaskJSON = {
 		catchUp: boolean;
-		data: ObjectLiteral;
+		data: any;
 		id: string;
 		taskName: string;
 		time: number;
@@ -1472,7 +1472,7 @@ declare module 'klasa' {
 	export type QueryBuilderOptions = {
 		arrayResolver?: (values: Array<any>, piece: SchemaPiece, resolver: Function) => string;
 		formatDatatype?: (name: string, datatype: string, def?: string) => string;
-	} & ObjectLiteral<string | ((piece: SchemaPiece) => string) | QueryBuilderDatatype>;
+	} & Record<string, string | ((piece: SchemaPiece) => string) | QueryBuilderDatatype>;
 
 	export type GuildResolvable = KlasaGuild
 		| KlasaMessage
@@ -1524,7 +1524,7 @@ declare module 'klasa' {
 
 	export type SchemaFolderOptions = {
 		type?: 'Folder';
-	} & ObjectLiteral<SchemaPieceOptions>;
+	} & Record<string, SchemaPieceOptions>;
 
 	export type GatewayDriverJSON = {
 		clientStorage: GatewayJSON;
@@ -1532,7 +1532,7 @@ declare module 'klasa' {
 		users: GatewayJSON;
 		keys: string[];
 		ready: boolean;
-	} & ObjectLiteral<GatewayJSON>;
+	} & Record<string, GatewayJSON>;
 
 	// Structures
 	export interface PieceOptions {
@@ -1855,8 +1855,6 @@ declare module 'klasa' {
 	interface Stringifible {
 		toString(): string;
 	}
-
-	interface ObjectLiteral<T = any> extends Record<string, T> {}
 
 	interface Constructor<C> {
 		new(...args: any[]): C;
