@@ -860,7 +860,7 @@ declare module 'klasa' {
 		public constructor(embed?: MessageEmbed);
 		public emojis: RichMenuEmojisObject;
 		public paginated: boolean;
-		public options: MenuOption[];
+		public options: MenuOptions[];
 
 		public addOption(name: string, body: string, inline?: boolean): RichMenu;
 		public run(message: KlasaMessage, options?: RichMenuRunOptions): Promise<ReactionHandler>;
@@ -1282,7 +1282,7 @@ declare module 'klasa' {
 		preserveSettings?: boolean;
 		production?: boolean;
 		providers?: ProvidersOptions;
-		readyMessage?: (client: KlasaClient) => string;
+		readyMessage?: ReadyMessage;
 		regexPrefix?: RegExp;
 		schedule?: ScheduleOptions;
 		slowmode?: number;
@@ -1818,7 +1818,7 @@ declare module 'klasa' {
 		nine: EmojiResolvable;
 	}
 
-	export interface MenuOption {
+	export interface MenuOptions {
 		name: string;
 		body: string;
 		inline?: boolean;
