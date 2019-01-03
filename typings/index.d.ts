@@ -1471,15 +1471,15 @@ declare module 'klasa' {
 	}
 
 	export interface QueryBuilderArray {
-		(entry: SchemaEntry): string;
+		(entry: string): string;
 	}
 
 	export interface QueryBuilderArraySerializer {
-		(values: Array<any>, resolver: QueryBuilderSerializer): string;
+		(values: Array<any>, schemaEntry: SchemaEntry, resolver: QueryBuilderSerializer): string;
 	}
 
 	export interface QueryBuilderSerializer {
-		(value: any, entry: SchemaEntry): string;
+		(value: any, schemaEntry: SchemaEntry): string;
 	}
 
 	export interface QueryBuilderFormatDatatype {
