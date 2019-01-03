@@ -305,6 +305,11 @@ declare module 'klasa' {
 		public add(key: string, type: string, options?: SchemaEntryOptions): this;
 		public add(key: string, callback: (folder: SchemaFolder) => any): this;
 		public get<T = Schema | SchemaEntry | SchemaFolder>(key: string | Array<string>): T;
+		public keys(recursive?: boolean): IterableIterator<string>;
+		public values(recursive?: false): IterableIterator<SchemaEntry | SchemaFolder>;
+		public values(recursive: true): IterableIterator<SchemaEntry>;
+		public entries(recursive?: false): IterableIterator<[string, SchemaEntry | SchemaFolder]>;
+		public entries(recursive: true): IterableIterator<[string, SchemaEntry]>;
 		public resolve(settings: Settings, language: Language, guild: KlasaGuild): Promise<Record<string, any>>;
 		public toJSON(): ObjectLiteral;
 	}
