@@ -1516,9 +1516,9 @@ declare module 'klasa' {
 		type?: string;
 	}
 
-	export interface SchemaFolderOptions extends Filter<Record<string, string | SchemaEntryOptions>, 'type'> {
+	export type SchemaFolderOptions = {
 		type?: 'Folder';
-	}
+	} & Filter<Record<string, string | SchemaEntryOptions>, 'type'>;
 
 	export interface GatewayDriverJSON extends Record<string, GatewayJSON> {
 		clientStorage: GatewayJSON;
