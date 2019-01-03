@@ -1205,7 +1205,7 @@ declare module 'klasa' {
 	export type QueryBuilderOptions = {
 		arrayResolver?: (values: Array<any>, piece: SchemaPiece, resolver: Function) => string;
 		formatDatatype?: (name: string, datatype: string, def?: string) => string;
-	} & Record<string, string | ((piece: SchemaPiece) => string) | QueryBuilderDatatype>;
+	} & Filter<Record<string, QueryBuilderDatatype | ((piece: SchemaPiece) => string)>, 'arrayResolver' | 'formatDatatype'>;
 
 	export type GuildResolvable = KlasaGuild
 		| KlasaMessage
@@ -1257,7 +1257,7 @@ declare module 'klasa' {
 
 	export type SchemaFolderOptions = {
 		type?: 'Folder';
-	} & Record<string, SchemaPieceOptions>;
+	} & Filter<Record<string, SchemaPieceOptions>, 'type'>;
 
 	export type GatewayDriverJSON = {
 		clientStorage: GatewayJSON;
@@ -1265,7 +1265,7 @@ declare module 'klasa' {
 		users: GatewayJSON;
 		keys: string[];
 		ready: boolean;
-	} & Record<string, GatewayJSON>;
+	} & Filter<Record<string, GatewayJSON>, 'keys' | 'ready'>;
 
 	// Structures
 	export interface PieceOptions {
