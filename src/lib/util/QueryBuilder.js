@@ -112,7 +112,7 @@ class QueryBuilder extends Map {
 		if (typeof data.extends === 'string') {
 			const datatype = this.get(data.extends);
 			if (datatype) this.set(name, Object.assign(Object.create(datatype), data));
-			throw new Error(`"extends" in datatype ${name} does not point to a registered datatype.`);
+			else throw new Error(`"extends" in datatype ${name} does not point to a registered datatype.`);
 		} else {
 			const datatype = this.get(name);
 			if (datatype) Object.assign(datatype, data);
