@@ -1516,7 +1516,7 @@ declare module 'klasa' {
 		type?: string;
 	}
 
-	export interface SchemaFolderOptions extends Record<string, string | SchemaEntryOptions> {
+	export interface SchemaFolderOptions extends Filter<Record<string, string | SchemaEntryOptions>, 'type'> {
 		type?: 'Folder';
 	}
 
@@ -1949,6 +1949,11 @@ declare module 'klasa' {
 		readonly embedable: boolean;
 		readonly postable: boolean;
 		readonly readable: boolean;
+	}
+
+	// Based on the built-in `Pick<>` generic
+	type Filter<T, K extends keyof T> = {
+		[P in keyof T]: P extends K ? unknown : T[P];
 	}
 
 //#endregion
