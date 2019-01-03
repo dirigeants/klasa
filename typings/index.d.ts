@@ -1063,7 +1063,9 @@ declare module 'klasa' {
 	}
 
 	// Parsers
-	export type ArgResolverCustomMethod = (arg: string, possible: Possible, message: KlasaMessage, params: any[]) => any;
+	export interface ArgResolverCustomMethod {
+		(arg: string, possible: Possible, message: KlasaMessage, params: any[]): any;
+	}
 
 	export interface Constants {
 		DEFAULTS: ConstantsDefaults;
