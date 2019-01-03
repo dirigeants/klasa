@@ -1274,7 +1274,7 @@ declare module 'klasa' {
 		createPiecesFolders?: boolean;
 		customPromptDefaults?: CustomPromptDefaults;
 		disabledCorePieces?: string[];
-		gateways?: GatewayOptions;
+		gateways?: Record<string, GatewayOptions>;
 		language?: string;
 		noPrefixDM?: boolean;
 		ownerID?: string;
@@ -1483,7 +1483,7 @@ declare module 'klasa' {
 	}
 
 	export interface QueryBuilderFormatDatatype {
-		(name: string, datatype: string, def?: string): string;
+		(name: string, datatype: string, def?: string | null): string;
 	}
 
 	export interface QueryBuilderType {
