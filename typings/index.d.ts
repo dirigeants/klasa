@@ -1954,7 +1954,7 @@ declare module 'klasa' {
 	// Based on the built-in `Pick<>` generic
 	type Filter<T, K extends keyof T> = {
 		[P in keyof T]: P extends K ? unknown : T[P];
-	}
+	};
 
 //#endregion
 
