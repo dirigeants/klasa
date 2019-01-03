@@ -385,8 +385,8 @@ escape-string-regexp@^1.0.2, escape-string-regexp@^1.0.5, escape-string-regexp@~
   resolved "https://codeload.github.com/dirigeants/klasa-lint/tar.gz/7095d9d809d52c0fbf26e0725d9197ac5b94644e"
 
 eslint-plugin-markdown@^1.0.0-beta.6:
-  version "1.0.0-rc.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-markdown/-/eslint-plugin-markdown-1.0.0-rc.0.tgz#edbc8b3a801b2d026e1211bb0a7ed5ba3bcf400d"
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-markdown/-/eslint-plugin-markdown-1.0.0.tgz#2d381b44fcf367f1bb53ae166eccf111cd4e1174"
   dependencies:
     object-assign "^4.0.1"
     remark-parse "^5.0.0"
