@@ -12,6 +12,27 @@ const Type = require('../util/Type');
 class SQLProvider extends Provider {
 
 	/**
+	 * The QueryBuilder instance for this SQL provider
+	 * @since 0.5.0
+	 * @type {QueryBuilder}
+	 * @name SQLProvider#qb
+	 * @abstract
+	 * @protected
+	 */
+
+	/**
+	 * The query builder debug check for errors in the QueryBuilder, if one exists in the extended SQLProvider instance
+	 * @since 0.5.0
+	 * @returns {void}
+	 * @protected
+	 */
+	validateQueryBuilder() {
+		if (!this.qb) return;
+		const errors = this.qb.debug();
+		if (errors) throw new Error(errors);
+	}
+
+	/**
 	 * The addColumn method which inserts/creates a new table to the database.
 	 * @since 0.5.0
 	 * @param {string} table The table to check against
@@ -163,7 +184,7 @@ class SQLProvider extends Provider {
 			for (let i = 0; i < updated.length; i++) {
 				const entry = updated[i];
 				keys[i] = entry.entry.path;
-				values[i] = this.qb.resolve(entry.entry, entry.value);
+				values[i] = this.qb.serialize(entry.value, entry.entry);
 			}
 		} else {
 			for (let i = 0; i < updated.length; i++) [keys[i], values[i]] = [updated[i].entry.path, updated[i].value];

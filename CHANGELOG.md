@@ -134,12 +134,13 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#545](https://github.com/dirigeants/klasa/pull/545)] Changed the entire API for `QueryBuilder` to extend a Map instead of being a pseudo-map. (kyranet)
 - [[#480](https://github.com/dirigeants/klasa/pull/480)] Changed the entire mechanism for `GatewayDriver#register` to take a `GatewayStorage` instance. (kyranet)
 - [[#475](https://github.com/dirigeants/klasa/pull/475)] Renamed `KlasaClient#{settingsUpdateEntry,settingsDeleteEntry,settingsCreateEntry}` to `KlasaClient#{settingsUpdate,settingsDelete,settingsCreate}`. (kyranet)
 - [[#471](https://github.com/dirigeants/klasa/pull/471)] Modified `Schema#defaults` type from Object literal to a `SettingsFolder` instance. (kyranet)
 - [[#471](https://github.com/dirigeants/klasa/pull/471)] Modified `Schema#defaults` to be a property instead of a getter. (kyranet)
 - [[#471](https://github.com/dirigeants/klasa/pull/471)] Modified `Gateway#get` to take only id. For get or create, use `Gateway#acquire` instead. (kyranet)
-- [[#471](https://github.com/dirigeants/klasa/pull/471)] Modified `Settings#{update,reset}` output to return `{ key: string, value: any, piece: Schema | SchemaPiece }` instead of `{ data: [s[[#471](https://github.com/dirigeants/klasa/pull/471)] tring, any], piece: Schema | SchemaPiece }` in the `updated` field. (kyranet)
+- [[#471](https://github.com/dirigeants/klasa/pull/471)] Modified `Settings#{update,reset}` output to return `{ key: string, value: any, piece: Schema | SchemaPiece }` instead of `{ data: string, any], piece: Schema | SchemaPiece }` in the `updated` field. (kyranet)
 - [[#471](https://github.com/dirigeants/klasa/pull/471)] Modified `Settings` completely, they're not longer dictionaries but (nested) `SettingsFolder`s. (kyranet)
 - [[#471](https://github.com/dirigeants/klasa/pull/471)] Modified `Util.resolveGuild` to also resolve members. (kyranet)
 - [[#471](https://github.com/dirigeants/klasa/pull/471)] Modified initialization order to prepare `Schedule` before initializing pieces. (kyranet)
