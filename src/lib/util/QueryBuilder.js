@@ -164,7 +164,7 @@ class QueryBuilder extends Map {
 		if (schemaEntry.array && !datatype.array) throw new Error(`The datatype '${datatype.type}' does not support arrays.`);
 
 		// If value is null, there is nothing to resolve.
-		if (value === null) return 'null';
+		if (value === null) return null;
 
 		return schemaEntry.array ?
 			datatype.arraySerializer(value, schemaEntry, datatype.serializer) :
