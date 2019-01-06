@@ -96,7 +96,7 @@ class GatewayStorage {
 
 		// Check the provider's existence
 		const { provider } = this;
-		if (!provider) throw new Error(`This provider (${this.providerName}) does not exist in your system.`);
+		if (!provider) throw new Error(`This provider (${this._provider}) does not exist in your system.`);
 		this.ready = true;
 
 		const errors = [];

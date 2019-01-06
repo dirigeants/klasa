@@ -262,18 +262,21 @@ declare module 'klasa' {
 		public create(target: any, id?: string | number): Settings;
 		public get(id: string | number): Settings | null;
 		public sync(input: string): Promise<Settings>;
-		public sync(input?: string[]): Promise<Gateway>;
-		public sync(input?: string | string[]): Promise<Settings | Gateway>;
+		public sync(input?: string[]): Promise<this>;
+		public sync(input?: string | string[]): Promise<Settings | this>;
 	}
 
-	export class QueryBuilder {
-		public constructor(datatypes: ObjectLiteral<string | QueryBuilderDatatypeOptions>, options?: QueryBuilderDefaultOptions);
-		public get(type: string): Required<QueryBuilderDatatypeOptions> | null;
-		public parse(schemaEntry: SchemaEntry): string;
-		public parseValue(value: any, schemaEntry: SchemaEntry, datatype?: Required<QueryBuilderDatatypeOptions>): string;
-		private arrayResolver: (values: Array<any>, entry: SchemaEntry, resolver: Function) => string;
-		private formatDatatype: (name: string, datatype: string, def?: string) => string;
-		private readonly _datatypes: ObjectLiteral<Required<QueryBuilderDatatypeOptions>>;
+	export class QueryBuilder extends Map<string, Required<QueryBuilderDatatype>> {
+		public constructor(options?: QueryBuilderEntryOptions);
+		private array: QueryBuilderArray;
+		private arraySerializer: QueryBuilderArraySerializer;
+		private formatDatatype: QueryBuilderFormatDatatype;
+		private serializer: QueryBuilderSerializer;
+		public add(name: string, data: QueryBuilderDatatype): this;
+		public remove(name: string): this;
+		public generateDatatype(schemaEntry: SchemaEntry): string;
+		public serialize(value: any, schemaEntry: SchemaEntry, datatype?: Required<QueryBuilderDatatype>): string;
+		public debug(): string;
 	}
 
 	export class GatewayStorage {
@@ -301,6 +304,11 @@ declare module 'klasa' {
 		public add(key: string, type: string, options?: SchemaEntryOptions): this;
 		public add(key: string, callback: (folder: SchemaFolder) => any): this;
 		public get<T = Schema | SchemaEntry | SchemaFolder>(key: string | Array<string>): T;
+		public keys(recursive?: boolean): IterableIterator<string>;
+		public values(recursive?: false): IterableIterator<SchemaEntry | SchemaFolder>;
+		public values(recursive: true): IterableIterator<SchemaEntry>;
+		public entries(recursive?: false): IterableIterator<[string, SchemaEntry | SchemaFolder]>;
+		public entries(recursive: true): IterableIterator<[string, SchemaEntry]>;
 		public resolve(settings: Settings, language: Language, guild: KlasaGuild): Promise<Record<string, any>>;
 		public toJSON(): ObjectLiteral;
 	}
@@ -506,6 +514,7 @@ declare module 'klasa' {
 		protected parseUpdateInput<T = [string, any]>(updated?: SettingsFolderUpdateResultEntry[] | [string, any][] | ObjectLiteral, resolve?: boolean): T;
 		protected parseEntry<T = ObjectLiteral>(gateway: string | Gateway, entry: ObjectLiteral): T;
 		protected parseValue<T = any>(value: any, schemaEntry: SchemaEntry): T;
+		protected validateQueryBuilder(): void;
 		private _parseGatewayInput(updated: SettingsFolderUpdateResultEntry[], keys: string[], values: string[], resolve?: boolean): void;
 	}
 
@@ -1265,11 +1274,11 @@ declare module 'klasa' {
 		commandLogging?: boolean;
 		commandMessageLifetime?: number;
 		console?: ConsoleOptions;
-		consoleEvents?: ConsoleEvents;
+		consoleEvents?: KlasaConsoleEvents;
 		createPiecesFolders?: boolean;
 		customPromptDefaults?: CustomPromptDefaults;
 		disabledCorePieces?: string[];
-		gateways?: GatewaysOptions;
+		gateways?: Record<string, GatewayOptions>;
 		language?: string;
 		noPrefixDM?: boolean;
 		ownerID?: string;
@@ -1323,13 +1332,10 @@ declare module 'klasa' {
 	export type Constants = {
 		DEFAULTS: {
 			CLIENT: Required<KlasaClientOptions>;
-			CONSOLE: Required<KlasaConsoleOptions>,
+			CONSOLE: Required<ConsoleOptions>,
 			QUERYBUILDER: {
-				datatypes: {
-					datatypes?: ObjectLiteral<QueryBuilderDatatypeOptions>;
-					queryBuilderOptions?: QueryBuilderDefaultOptions;
-				};
-				queryBuilderOptions: Required<QueryBuilderDefaultOptions>;
+				datatypes: [string, QueryBuilderDatatype][];
+				queryBuilderOptions: Required<QueryBuilderEntryOptions>;
 			};
 		};
 		CRON: {
@@ -1442,13 +1448,37 @@ declare module 'klasa' {
 		schema: SchemaFolderOptions | SchemaEntryOptions;
 	}
 
-	export interface QueryBuilderDatatypeOptions {
-		type: string;
-		resolver?: <T = any>(input: any, schemaEntry: SchemaEntry) => T;
-		arrayResolver?: (values: Array<any>, entry: SchemaEntry, resolver: Function) => string;
+	export interface QueryBuilderArray {
+		(entry: string): string;
 	}
 
-	export type QueryBuilderOptions = QueryBuilderDefaultOptions | Record<string, string | QueryBuilderDatatypeOptions>;
+	export interface QueryBuilderArraySerializer {
+		(values: Array<any>, schemaEntry: SchemaEntry, resolver: QueryBuilderSerializer): string;
+	}
+
+	export interface QueryBuilderSerializer {
+		(value: any, schemaEntry: SchemaEntry): string;
+	}
+
+	export interface QueryBuilderFormatDatatype {
+		(name: string, datatype: string, def?: string | null): string;
+	}
+
+	export interface QueryBuilderType {
+		(entry: SchemaEntry): string;
+	}
+
+	export interface QueryBuilderEntryOptions {
+		array?: QueryBuilderArray;
+		arraySerializer?: QueryBuilderArraySerializer;
+		formatDatatype?: QueryBuilderFormatDatatype;
+		serializer?: QueryBuilderSerializer;
+	}
+
+	export interface QueryBuilderDatatype extends QueryBuilderEntryOptions {
+		type?: QueryBuilderType | string;
+		extends?: string;
+	}
 
 	export interface SchemaEntryOptions {
 		array?: boolean;
@@ -1464,15 +1494,14 @@ declare module 'klasa' {
 		type?: string;
 	}
 
-	export interface SchemaFolderOptions extends Record<string, SchemaEntryOptions> {
+	export type SchemaFolderOptions = {
 		type?: 'Folder';
-	}
+	} & Filter<Record<string, string | SchemaEntryOptions>, 'type'>;
 
 	export interface GatewayDriverJSON extends Record<string, GatewayJSON> {
 		clientStorage: GatewayJSON;
 		guilds: GatewayJSON;
 		users: GatewayJSON;
-		ready: boolean;
 	}
 
 	// Structures
@@ -1679,13 +1708,6 @@ declare module 'klasa' {
 		timestamps?: boolean | string;
 		useColor?: boolean;
 	}
-
-	export type QueryBuilderDefaultOptions = {
-		array?: (datatype: string) => string;
-		arrayResolver?: (values: Array<any>, entry: SchemaEntry, resolver: Function) => string;
-		formatDatatype?: (name: string, datatype: string, def?: string) => string;
-		resolver?: <T = any>(input: any, schemaEntry: SchemaEntry) => T;
-	};
 
 	export type KlasaConsoleEvents = {
 		debug?: boolean;
@@ -1995,8 +2017,11 @@ declare module 'discord.js' {
 		readonly readable: boolean;
 	}
 
-	interface Constructor<C> {
-		new(...args: any[]): C;
-	}
+	// Based on the built-in `Pick<>` generic
+	type Filter<T, K extends keyof T> = {
+		[P in keyof T]: P extends K ? unknown : T[P];
+	};
+
+//#endregion
 
 }

@@ -132,29 +132,32 @@ exports.DEFAULTS = {
 	},
 
 	QUERYBUILDER: {
-		datatypes: {
-			any: { type: 'TEXT' },
-			boolean: { type: 'BOOLEAN', resolver: value => value },
-			categorychannel: { type: 'VARCHAR(18)' },
-			channel: { type: 'VARCHAR(18)' },
-			command: { type: 'TEXT' },
-			float: { type: 'FLOAT', resolver: value => value },
-			guild: { type: 'VARCHAR(18)' },
-			integer: { type: 'INTEGER', resolver: value => value },
-			json: { type: 'JSON', resolver: (value) => `'${JSON.stringify(value).replace(/'/g, "''")}'` },
-			language: { type: 'VARCHAR(5)' },
-			role: { type: 'VARCHAR(18)' },
-			string: { type: ({ max }) => max ? `VARCHAR(${max})` : 'TEXT' },
-			textchannel: { type: 'VARCHAR(18)' },
-			url: { type: 'TEXT' },
-			user: { type: 'VARCHAR(18)' },
-			voicechannel: { type: 'VARCHAR(18)' }
-		},
+		datatypes: [
+			['any', { type: 'TEXT' }],
+			['json', { type: 'JSON', serializer: (value) => `'${JSON.stringify(value).replace(/'/g, "''")}'` }],
+			['boolean', { type: 'BOOLEAN', serializer: value => value }],
+			['bool', { extends: 'boolean' }],
+			['snowflake', { type: 'VARCHAR(19)' }],
+			['channel', { extends: 'snowflake' }],
+			['textchannel', { extends: 'channel' }],
+			['voicechannel', { extends: 'channel' }],
+			['categorychannel', { extends: 'channel' }],
+			['guild', { extends: 'snowflake' }],
+			['number', { type: 'FLOAT', serializer: value => value }],
+			['float', { extends: 'number' }],
+			['integer', { extends: 'number', type: 'INTEGER' }],
+			['command', { type: 'TEXT' }],
+			['language', { type: 'VARCHAR(5)' }],
+			['role', { extends: 'snowflake' }],
+			['string', { type: ({ max }) => max ? `VARCHAR(${max})` : 'TEXT' }],
+			['url', { type: 'TEXT' }],
+			['user', { extends: 'snowflake' }]
+		],
 		queryBuilderOptions: {
 			array: () => 'TEXT',
-			resolver: (value) => `'${(isObject(value) ? JSON.stringify(value) : String(value)).replace(/'/g, "''")}'`,
-			arrayResolver: (values) => `'${JSON.stringify(values)}'`,
-			formatDatatype: (name, datatype, def = null) => `${name} ${datatype}${def !== null ? ` NOT NULL DEFAULT ${def}` : ''}`
+			arraySerializer: (values) => `'${JSON.stringify(values)}'`,
+			formatDatatype: (name, datatype, def = null) => `${name} ${datatype}${def !== null ? ` NOT NULL DEFAULT ${def}` : ''}`,
+			serializer: (value) => `'${(isObject(value) ? JSON.stringify(value) : String(value)).replace(/'/g, "''")}'`
 		}
 	}
 
