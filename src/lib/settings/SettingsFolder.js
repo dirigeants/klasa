@@ -228,7 +228,7 @@ class SettingsFolder extends Map {
 		else if (isObject(paths)) [paths, options] = [objectToTuples(paths), args[0]];
 		else [options] = args;
 
-		if (!options) options = { throwOnError: false, onlyConfigurable: false, guild: null };
+		if (!options) options = { throwOnError: false, onlyConfigurable: false };
 		options.guild = resolveGuild(this.base.gateway.client, 'guild' in options ? options.guild : this.base.target);
 		const language = options.guild ? options.guild.language : this.base.gateway.client.languages.default;
 
