@@ -6,7 +6,7 @@ module.exports = class extends Command {
 		super(...args, {
 			guarded: true,
 			subcommands: true,
-			description: language => language.get('COMMAND_CONF_USER_DESCRIPTION'),
+			description: ({ language }) => language.get('COMMAND_CONF_USER_DESCRIPTION'),
 			usage: '<set|show|remove|reset> (key:key) (value:value) [...]',
 			usageDelim: ' '
 		});
