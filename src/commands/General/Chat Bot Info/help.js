@@ -20,7 +20,7 @@ module.exports = class extends Command {
 		if (command) {
 			const info = [
 				`= ${command.name} = `,
-				isFunction(command.description) ? command.description(message.language) : command.description,
+				isFunction(command.description) ? command.description(message) : command.description,
 				message.language.get('COMMAND_HELP_USAGE', command.usage.fullUsage(message)),
 				message.language.get('COMMAND_HELP_EXTENDED'),
 				isFunction(command.extendedHelp) ? command.extendedHelp(message) : command.extendedHelp
