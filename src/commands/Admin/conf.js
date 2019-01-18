@@ -8,7 +8,7 @@ module.exports = class extends Command {
 			permissionLevel: 6,
 			guarded: true,
 			subcommands: true,
-			description: language => language.get('COMMAND_CONF_SERVER_DESCRIPTION'),
+			description: ({ language }) => language.get('COMMAND_CONF_SERVER_DESCRIPTION'),
 			usage: '<set|show|remove|reset> (key:key) (value:value) [...]',
 			usageDelim: ' '
 		});
