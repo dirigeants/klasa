@@ -7,7 +7,7 @@ module.exports = class extends Command {
 			aliases: ['u'],
 			permissionLevel: 10,
 			guarded: true,
-			description: language => language.get('COMMAND_UNLOAD_DESCRIPTION'),
+			description: ({ language }) => language.get('COMMAND_UNLOAD_DESCRIPTION'),
 			usage: '<Piece:piece>'
 		});
 	}
