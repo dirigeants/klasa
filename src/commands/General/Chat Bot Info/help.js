@@ -6,7 +6,7 @@ module.exports = class extends Command {
 		super(...args, {
 			aliases: ['commands'],
 			guarded: true,
-			description: language => language.get('COMMAND_HELP_DESCRIPTION'),
+			description: ({ language }) => language.get('COMMAND_HELP_DESCRIPTION'),
 			usage: '(Command:command)'
 		});
 
@@ -23,7 +23,7 @@ module.exports = class extends Command {
 				isFunction(command.description) ? command.description(message.language) : command.description,
 				message.language.get('COMMAND_HELP_USAGE', command.usage.fullUsage(message)),
 				message.language.get('COMMAND_HELP_EXTENDED'),
-				isFunction(command.extendedHelp) ? command.extendedHelp(message.language) : command.extendedHelp
+				isFunction(command.extendedHelp) ? command.extendedHelp(message) : command.extendedHelp
 			].join('\n');
 			return message.sendMessage(info, { code: 'asciidoc' });
 		}
