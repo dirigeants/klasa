@@ -85,7 +85,7 @@ module.exports = class extends Monitor {
 		await message.author.settings.update(['experience', 'level'], [nextValue, nextLevel]);
 
 		// If the current level and the next level are not the same, then it has increased, and you can send the message.
-		if (currLevel !== nextLevel) {
+		if (currentLevel !== nextLevel) {
 			// Send the message to the channel congratulating the user.
 			await message.send(`Congratulations! You leveled up to level **${currentLevel}**!`);
 		}
