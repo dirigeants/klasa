@@ -82,7 +82,7 @@ module.exports = class extends Monitor {
 		const nextLevel = Math.floor(0.1 * Math.sqrt(nextValue + 1));
 
 		// Update the user's configuration entry by adding 1 to it, and update the level also.
-		await message.author.settings.update(['experience', 'level'], [nextValue, nextLevel]);
+		await message.author.settings.update([["experience", nextValue], ["level", nextLevel]]);
 
 		// If the current level and the next level are not the same, then it has increased, and you can send the message.
 		if (currentLevel !== nextLevel) {
