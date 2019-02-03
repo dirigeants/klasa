@@ -85,7 +85,7 @@ class Settings extends SettingsFolder {
 			this.existenceStatus = Boolean(data);
 			if (data) {
 				this._patch(data);
-				this.client.emit('settingsSync', this);
+				this.gateway.client.emit('settingsSync', this);
 			}
 			this.gateway.syncMap.delete(this);
 			return this;

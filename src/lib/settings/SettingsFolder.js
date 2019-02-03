@@ -109,7 +109,7 @@ class SettingsFolder extends Map {
  	 */
 	async resolve(...paths) {
 		const guild = resolveGuild(this.base.gateway.client, this.base.target);
-		const language = guild ? guild.language : this.client.languages.default;
+		const language = guild ? guild.language : this.base.gateway.client.languages.default;
 		const promises = [];
 		for (const path of paths) {
 			const entry = this.schema.get(this.relative(path));
