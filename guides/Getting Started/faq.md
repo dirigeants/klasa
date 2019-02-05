@@ -37,21 +37,25 @@ You should never expose your token to anyone for any reason. To hide it from Git
 
  Then, copy your token into the field.
 
-1. In your `.gitignore` file (create one if you don't have it), add `config.json` to it. For information on what the `.gitignore` file is and what it does, visit: <https://git-scm.com/docs/gitignore>.
+2. In your `.gitignore` file (create one if you don't have it), add `config.json` to it. For information on what the `.gitignore` file is and what it does, visit: <https://git-scm.com/docs/gitignore>.
 
-1. At the top of your `app.js` file, import the token from the `config.json` like so:
+3. At the top of your `app.js` file, import the token from the `config.json` like so:
 
 ```js
 const { token } = require('./config.json');
 ```
 
-1. Finally, **remove your token** from your `app.js` file, and replace it with the `token` variable.
+4. Finally, **remove your token** from your `app.js` file, and replace it with the `token` variable.
 
 ### Environment Variable
 
 For a tutorial
 
-1. Set `process.env.DISCORD_TOKEN` equal to your bot's token, you can do this using [dotenv](https://www.npmjs.com/package/dotenv). Run `npm install dotenv --save`
+Set `process.env.DISCORD_TOKEN` equal to your bot's token, you can do this by either
+
+* using the console to set the environment variable every time you run the bot, by doing `set DISCORD_TOKEN=token` 
+
+* using the [dotenv](https://www.npmjs.com/package/dotenv) package. Run `npm install dotenv --save`
 
 1. Put this code at the top of your `app.js` file:
 
@@ -59,7 +63,7 @@ For a tutorial
 require('dotenv').config();
 ```
 
-1. Create a file called `.env` next  to your `app.js`, and put this in it:
+2. Create a file called `.env` next  to your `app.js`, and put this in it:
 
 ```env
 DISCORD_TOKEN = ""
@@ -67,7 +71,7 @@ DISCORD_TOKEN = ""
 
 Place your token after the `=`.
 
-1. Finally, **remove your token** from your `app.js` file, so nothing is passed to the login method, discord.js will [automatically use](https://github.com/discordjs/discord.js/blob/master/src/client/Client.js#L112) the token in the environment variable.
+3. Finally, **remove your token** from your `app.js` file, so nothing is passed to the login method, discord.js will [automatically use](https://github.com/discordjs/discord.js/blob/master/src/client/Client.js#L112) the token in the environment variable.
 
 ```js
 client.login();
