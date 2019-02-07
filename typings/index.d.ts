@@ -1056,7 +1056,7 @@ declare module 'klasa' {
 
 	export type ReadyMessage = string | ((client: KlasaClient) => string);
 
-	export interface GatewaysOptions extends Record<string, GatewayDriverRegisterOptions> {
+	export interface GatewaysOptions extends Partial<Record<string, GatewayDriverRegisterOptions>> {
 		clientStorage?: GatewayDriverRegisterOptions;
 		guilds?: GatewayDriverRegisterOptions;
 		users?: GatewayDriverRegisterOptions;
