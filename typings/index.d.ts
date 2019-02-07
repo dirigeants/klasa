@@ -1273,7 +1273,7 @@ declare module 'klasa' {
 		name?: string;
 	}
 
-	export interface AliasPieceOptions {
+	export interface AliasPieceOptions extends PieceOptions {
 		aliases?: string[];
 	}
 
