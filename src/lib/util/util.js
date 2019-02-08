@@ -17,7 +17,7 @@ class Util {
 	 */
 
 	/**
-	 * @typedef {(string|*)} Stringable
+	 * @typedef {(string|*)} Stringifible
 	 */
 
 	/**
@@ -34,7 +34,7 @@ class Util {
 	 * Makes a codeblock markup string
 	 * @since 0.0.1
 	 * @param {string} lang The codeblock language
-	 * @param {Stringable} expression The expression to be wrapped in the codeblock
+	 * @param {Stringifible} expression The expression to be wrapped in the codeblock
 	 * @returns {string}
 	 */
 	static codeBlock(lang, expression) {
