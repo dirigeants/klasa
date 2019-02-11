@@ -1172,7 +1172,7 @@ declare module 'klasa' {
 	}
 
 	export interface ScheduledTaskUpdateOptions extends Filter<ScheduledTaskOptions, 'id'> {
-		id: never;
+		id?: never;
 		repeat?: string;
 		time?: TimeResolvable;
 	}
