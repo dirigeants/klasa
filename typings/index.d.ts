@@ -14,7 +14,6 @@ declare module 'klasa' {
 		DMChannel,
 		Emoji,
 		EmojiResolvable,
-		GroupDMChannel,
 		Guild,
 		GuildChannel,
 		GuildEmoji,
@@ -1296,7 +1295,7 @@ declare module 'klasa' {
 		promptTime?: number;
 		quotedStringSupport?: boolean;
 		requiredSettings?: string[];
-		runIn?: Array<'text' | 'dm' | 'group'>;
+		runIn?: Array<'text' | 'dm'>;
 		subcommands?: boolean;
 		usage?: string;
 		usageDelim?: string;
@@ -1763,8 +1762,6 @@ declare module 'discord.js' {
 	export interface TextChannel extends SendAliases, ChannelExtendables { }
 
 	export interface DMChannel extends SendAliases, ChannelExtendables { }
-
-	export interface GroupDMChannel extends SendAliases, ChannelExtendables { }
 
 	interface PartialSendAliases {
 		sendLocale(key: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
