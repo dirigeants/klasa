@@ -408,7 +408,7 @@ declare module 'klasa' {
 		public createCustomResolver(type: string, resolver: ArgResolverCustomMethod): this;
 		public customizeResponse(name: string, response: string | ((message: KlasaMessage, possible: Possible) => string)): this;
 		public definePrompt(usageString: string, usageDelim?: string): Usage;
-		public run(message: KlasaMessage, params: any[]): Promise<KlasaMessage | KlasaMessage[] | null>;
+		public run(message: KlasaMessage, params: any[]): Promise<any> | any;
 		public toJSON(): PieceCommandJSON;
 	}
 
@@ -439,9 +439,9 @@ declare module 'klasa' {
 
 	export abstract class Finalizer extends Piece {
 		public constructor(client: KlasaClient, store: FinalizerStore, file: string[], directory: string, options?: FinalizerOptions);
-		public abstract run(message: KlasaMessage, command: Command, response: KlasaMessage | KlasaMessage[] | null, runTime: Stopwatch): void;
+		public abstract run(message: KlasaMessage, command: Command, response: any, runTime: Stopwatch): void;
 		public toJSON(): PieceFinalizerJSON;
-		protected _run(message: KlasaMessage, command: Command, response: KlasaMessage | KlasaMessage[] | null, runTime: Stopwatch): Promise<void>;
+		protected _run(message: KlasaMessage, command: Command, response: any, runTime: Stopwatch): Promise<void>;
 	}
 
 	export abstract class Inhibitor extends Piece {
@@ -1302,7 +1302,7 @@ declare module 'klasa' {
 	}
 
 	export interface ExtendableOptions extends PieceOptions {
-		appliesTo: Array<Constructor<any>>;
+		appliesTo: any[];
 	}
 
 	export interface InhibitorOptions extends PieceOptions {
