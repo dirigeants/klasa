@@ -9,8 +9,7 @@ module.exports = class extends Finalizer {
 		this.shard = new Colors({ background: 'cyan', text: 'black' });
 		this.channel = {
 			text: new Colors({ background: 'green', text: 'black' }),
-			dm: new Colors({ background: 'magenta' }),
-			group: new Colors({ background: 'cyan' })
+			dm: new Colors({ background: 'magenta' })
 		};
 	}
 
@@ -36,10 +35,6 @@ module.exports = class extends Finalizer {
 
 	dm() {
 		return 'Direct Messages';
-	}
-
-	group(message) {
-		return `Group DM => ${message.channel.owner.username}[${message.channel.owner.id}]`;
 	}
 
 };
