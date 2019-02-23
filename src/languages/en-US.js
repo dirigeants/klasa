@@ -54,8 +54,6 @@ module.exports = class extends Language {
 			// eslint-disable-next-line max-len
 			MONITOR_COMMAND_HANDLER_REPEATING_REPROMPT: (tag, name, time, cancelOptions) => `${tag} | **${name}** is a repeating argument | You have **${time}** seconds to respond to this prompt with additional valid arguments. Type **${cancelOptions.join('**, **')}** to cancel this prompt.`,
 			MONITOR_COMMAND_HANDLER_ABORTED: 'Aborted',
-			MONITOR_COMMAND_HANDLER_POSSIBILITIES: ['abort', 'stop'],
-			MONITOR_COMMAND_HANDLER_REPEATING_POSSIBLITIES: ['cancel'],
 			INHIBITOR_COOLDOWN: (remaining) => `You have just used this command. You can use this command again in ${remaining} second${remaining === 1 ? '' : 's'}.`,
 			INHIBITOR_DISABLED_GUILD: 'This command has been disabled by an admin in this guild.',
 			INHIBITOR_DISABLED_GLOBAL: 'This command has been globally disabled by the bot owner.',
@@ -176,7 +174,8 @@ module.exports = class extends Language {
 				`• Shard      :: ${(message.guild ? message.guild.shardID : 0) + 1} / ${this.client.options.totalShardCount}`
 			],
 			COMMAND_STATS_DESCRIPTION: 'Provides some details about the bot and stats.',
-			MESSAGE_PROMPT_TIMEOUT: 'The prompt has timed out.'
+			MESSAGE_PROMPT_TIMEOUT: 'The prompt has timed out.',
+			TEXT_PROMPT_ABORT_OPTIONS: ['abort', 'stop', 'cancel']
 		};
 	}
 
