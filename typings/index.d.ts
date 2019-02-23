@@ -645,7 +645,7 @@ declare module 'klasa' {
 		public readonly client: KlasaClient;
 		public message: KlasaMessage;
 		public target: KlasaUser;
-		public channel: TextChannel | GroupDMChannel | DMChannel;
+		public channel: TextChannel | DMChannel;
 		public usage: Usage | CommandUsage;
 		public reprompted: boolean;
 		public flags: Record<string, string>;
@@ -1380,7 +1380,7 @@ declare module 'klasa' {
 
 	// Usage
 	export interface TextPromptOptions {
-		channel?: TextChannel | GroupDMChannel | DMChannel;
+		channel?: TextChannel | DMChannel;
 		limit?: number;
 		quotedStringSupport?: boolean;
 		target?: KlasaUser;
