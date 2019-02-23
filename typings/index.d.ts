@@ -14,7 +14,6 @@ declare module 'klasa' {
 		DMChannel,
 		Emoji,
 		EmojiResolvable,
-		GroupDMChannel,
 		Guild,
 		GuildChannel,
 		GuildEmoji,
@@ -1173,7 +1172,7 @@ declare module 'klasa' {
 	}
 
 	export interface ScheduledTaskUpdateOptions extends Filter<ScheduledTaskOptions, 'id'> {
-		id: never;
+		id?: never;
 		repeat?: string;
 		time?: TimeResolvable;
 	}
@@ -1296,14 +1295,14 @@ declare module 'klasa' {
 		promptTime?: number;
 		quotedStringSupport?: boolean;
 		requiredSettings?: string[];
-		runIn?: Array<'text' | 'dm' | 'group'>;
+		runIn?: Array<'text' | 'dm'>;
 		subcommands?: boolean;
 		usage?: string;
 		usageDelim?: string;
 	}
 
 	export interface ExtendableOptions extends PieceOptions {
-		appliesTo: Array<Constructor<any>>;
+		appliesTo: any[];
 	}
 
 	export interface InhibitorOptions extends PieceOptions {
@@ -1763,8 +1762,6 @@ declare module 'discord.js' {
 	export interface TextChannel extends SendAliases, ChannelExtendables { }
 
 	export interface DMChannel extends SendAliases, ChannelExtendables { }
-
-	export interface GroupDMChannel extends SendAliases, ChannelExtendables { }
 
 	interface PartialSendAliases {
 		sendLocale(key: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;

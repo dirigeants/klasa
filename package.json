@@ -20,13 +20,13 @@
     "docs": "npx dg --source src --custom guides/.docconfig.json --output docs/docs.json --logging"
   },
   "dependencies": {
-    "fs-nextra": "^0.3.2"
+    "fs-nextra": "^0.4.3"
   },
   "peerDependencies": {
     "discord.js": "github:discordjs/discord.js#master"
   },
   "devDependencies": {
-    "@types/node": "^10.0.3",
+    "@types/node": "^11.9.0",
     "docgen": "github:dirigeants/docsgen",
     "eslint": "^5.0.1",
     "eslint-config-klasa": "github:dirigeants/klasa-lint",
@@ -36,6 +36,6 @@
     "typescript": "^3.0.3"
   },
   "engines": {
-    "node": ">=8.6.0"
+    "node": ">=10.1.0"
   }
 }
