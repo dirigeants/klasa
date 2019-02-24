@@ -6,7 +6,7 @@ class RateLimit {
 	/**
 	 * @since 0.5.0
 	 * @param {number} bucket The number of requests before this is limited
-	 * @param {number} cooldown The amount of time in milliseconds for this to reset
+	 * @param {number} cooldown The amount of milliseconds for the ratelimit to expire
 	 */
 	constructor(bucket, cooldown) {
 		/**
@@ -17,7 +17,7 @@ class RateLimit {
 		this.bucket = bucket;
 
 		/**
-		 * The amount of time in milliseconds for this to reset
+		 * The amount of milliseconds for the ratelimit to expire
 		 * @since 0.5.0
 		 * @type {number}
 		 */
