@@ -441,6 +441,25 @@ class SettingsFolder extends Map {
 		return `Settings[${this.gateway.name}:${this.base.id}]`;
 	}
 
+	/**
+	 * Init all the maps
+	 * @param {SettingsFolder} folder The folder to initialize
+	 * @param {SchemaFolder} schema The schema to guide the initialization
+	 * @private
+	 */
+	init(folder, schema) {
+		folder.base = this;
+		for (const [key, value] of schema.entries()) {
+			if (value.type === 'Folder') {
+				const settings = new SettingsFolder(value);
+				folder.set(key, settings);
+				this.init(settings, value);
+			} else {
+				folder.set(key, value.default);
+			}
+		}
+	}
+
 }
 
 module.exports = SettingsFolder;

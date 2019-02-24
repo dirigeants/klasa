@@ -115,6 +115,7 @@ class GatewayStorage {
 		}
 
 		if (errors.length) throw new Error(`[SCHEMA] There is an error with your schema.\n${errors.join('\n')}`);
+		this.schema.defaults.init(this.schema.defaults, this.schema);
 
 		// Init the table
 		const hasTable = await provider.hasTable(this.name);

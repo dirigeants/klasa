@@ -228,6 +228,7 @@ declare module 'klasa' {
 		private _save(results: Array<SettingsFolderUpdateResultEntry>): Promise<void>;
 		private _parse(entry: SchemaEntry, previous: any, next: any, options: SettingsFolderUpdateOptions): Promise<any>;
 		private _patch(data: Record<string, any>): void;
+		private init(folder: SettingsFolder, schema: SchemaFolder): void;
 	}
 
 	export class Settings extends SettingsFolder {
@@ -240,7 +241,6 @@ declare module 'klasa' {
 		public clone(): Settings;
 		public sync(force?: boolean): Promise<this>;
 		public destroy(): Promise<this>;
-		private init(folder: SettingsFolder, schema: SchemaFolder): void;
 	}
 
 	export class GatewayDriver extends Collection<string, Gateway> {
@@ -511,7 +511,7 @@ declare module 'klasa' {
 		public abstract removeColumn<T = any>(table: string, columns: string | string[]): Promise<T>;
 		public abstract updateColumn<T = any>(table: string, entry: SchemaEntry): Promise<T>;
 		public abstract getColumns(table: string): Promise<Array<string>>;
-		protected parseUpdateInput<T =[string, any]>(updated?: SettingsFolderUpdateResultEntry[] | [string, any][] | Record<string, any>, resolve?: boolean): T;
+		protected parseUpdateInput<T = [string, any]>(updated?: SettingsFolderUpdateResultEntry[] | [string, any][] | Record<string, any>, resolve?: boolean): T;
 		protected parseEntry<T = Record<string, any>>(gateway: string | Gateway, entry: Record<string, any>): T;
 		protected parseValue<T = any>(value: any, schemaEntry: SchemaEntry): T;
 		protected validateQueryBuilder(): void;
