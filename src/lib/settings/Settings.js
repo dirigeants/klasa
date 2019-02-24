@@ -110,25 +110,6 @@ class Settings extends SettingsFolder {
 		return this;
 	}
 
-	/**
-	 * Init all the maps
-	 * @param {SettingsFolder} folder The folder to initialize
-	 * @param {SchemaFolder} schema The schema to guide the initialization
-	 * @private
-	 */
-	init(folder, schema) {
-		folder.base = this;
-		for (const [key, value] of schema.entries()) {
-			if (value.type === 'Folder') {
-				const settings = new SettingsFolder(value);
-				folder.set(key, settings);
-				this.init(settings, value);
-			} else {
-				folder.set(key, value.default);
-			}
-		}
-	}
-
 }
 
 module.exports = Settings;
