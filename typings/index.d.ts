@@ -228,6 +228,7 @@ declare module 'klasa' {
 		private _save(results: Array<SettingsFolderUpdateResultEntry>): Promise<void>;
 		private _parse(entry: SchemaEntry, previous: any, next: any, options: SettingsFolderUpdateOptions): Promise<any>;
 		private _patch(data: Record<string, any>): void;
+		private init(folder: SettingsFolder, schema: SchemaFolder): void;
 	}
 
 	export class Settings extends SettingsFolder {
@@ -240,7 +241,6 @@ declare module 'klasa' {
 		public clone(): Settings;
 		public sync(force?: boolean): Promise<this>;
 		public destroy(): Promise<this>;
-		private init(folder: SettingsFolder, schema: SchemaFolder): void;
 	}
 
 	export class GatewayDriver extends Collection<string, Gateway> {
