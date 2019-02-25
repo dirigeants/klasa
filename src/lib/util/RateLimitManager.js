@@ -10,7 +10,7 @@ class RateLimitManager extends Collection {
 	/**
 	 * @since 0.5.0
 	 * @param {number} bucket The amount of times a RateLimit can drip before it's limited
-	 * @param {number} cooldown The amount of time in seconds for the RateLimit to reset
+	 * @param {number} cooldown The amount of milliseconds for the ratelimits from this manager to expire
 	 */
 	constructor(bucket, cooldown) {
 		super();
@@ -43,7 +43,7 @@ class RateLimitManager extends Collection {
 	}
 
 	/**
-	 * The amount of time in ms for a RateLimit from this manager to reset
+	 * The amount of milliseconds for the ratelimits from this manager to expire
 	 * @since 0.5.0
 	 * @type {number}
 	 */
