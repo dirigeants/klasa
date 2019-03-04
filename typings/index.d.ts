@@ -37,6 +37,7 @@ declare module 'klasa' {
 		TextChannel,
 		User,
 		UserResolvable,
+		UserStore,
 		VoiceChannel,
 		VoiceState,
 		WebhookClient
@@ -597,6 +598,8 @@ declare module 'klasa' {
 	export class TaskStore extends Store<string, Task, typeof Task> { }
 
 	export class SerializerStore extends AliasStore<string, Serializer, typeof Serializer> { }
+
+	export class KlasaUserStore extends UserStore { }
 
 //#endregion Stores
 
@@ -1646,6 +1649,7 @@ declare module 'discord.js' {
 		KlasaGuild,
 		KlasaMessage,
 		KlasaUser,
+		KlasaUserStore,
 		Language,
 		LanguageStore,
 		Monitor,
@@ -1657,11 +1661,11 @@ declare module 'discord.js' {
 		ScheduledTask,
 		SerializerStore,
 		Settings,
+		SettingsFolderUpdateResultEntry,
 		Store,
 		Task,
 		TaskStore,
-		Timestamp,
-		SettingsFolderUpdateResultEntry
+		Timestamp
 	} from 'klasa';
 
 	export interface Client {
@@ -1671,6 +1675,7 @@ declare module 'discord.js' {
 		options: Required<KlasaClientOptions>;
 		userBaseDirectory: string;
 		console: KlasaConsole;
+		users: KlasaUserStore;
 		arguments: ArgumentStore;
 		commands: CommandStore;
 		inhibitors: InhibitorStore;
