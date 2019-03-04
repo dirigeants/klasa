@@ -167,6 +167,10 @@ module.exports = {
  * @see {@link https://discord.js.org/#/docs/main/master/class/User}
  */
 /**
+ * @external UserStore
+ * @see {@link https://discord.js.org/#/docs/main/master/class/UserStore}
+ */
+/**
  * @external UserResolvable
  * @see {@link https://discord.js.org/#/docs/main/master/class/UserResolvable}
  */

@@ -21,6 +21,9 @@ const ProviderStore = require('./structures/ProviderStore');
 const SerializerStore = require('./structures/SerializerStore');
 const TaskStore = require('./structures/TaskStore');
 
+// lib/extensions
+const KlasaUserStore = require('./extensions/KlasaUserStore');
+
 // lib/settings
 const GatewayDriver = require('./settings/gateway/GatewayDriver');
 
@@ -144,6 +147,13 @@ class KlasaClient extends Discord.Client {
 		 * @name KlasaClient#options
 		 * @type {KlasaClientOptions}
 		 */
+
+		/**
+		 * The KlasaUser cache
+		 * @since 0.5.0
+		 * @type {KlasaUserStore}
+		 */
+		this.users = new KlasaUserStore();
 
 		/**
 		 * The directory where the user files are at
