@@ -196,7 +196,7 @@ class RichDisplay {
 		);
 		let msg;
 		if (message.editable) {
-			await message.edit('', { embed: this.pages[options.startPage || 0] });
+			await message.edit({ embed: this.pages[options.startPage || 0] });
 			msg = message;
 		} else {
 			msg = await message.channel.send(this.pages[options.startPage || 0]);
