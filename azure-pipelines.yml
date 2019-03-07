@@ -3,7 +3,7 @@ resources:
     - repository: templates
       type: github
       name: dirigeants/pipelines
-      endpoint: bdistin
+      endpoint: dirigeants
 
 trigger:
 - master
