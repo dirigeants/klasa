@@ -5,9 +5,6 @@ resources:
       name: dirigeants/pipelines
       endpoint: dirigeants
 
-trigger:
-- master
-
 jobs:
   - template: lint.yml@templates
 
