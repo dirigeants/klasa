@@ -7,6 +7,7 @@ module.exports = {
 	KlasaGuild: require('./lib/extensions/KlasaGuild'),
 	KlasaMessage: require('./lib/extensions/KlasaMessage'),
 	KlasaUser: require('./lib/extensions/KlasaUser'),
+	KlasaUserStore: require('./lib/extensions/KlasaUserStore'),
 
 	// lib/permissions
 	PermissionLevels: require('./lib/permissions/PermissionLevels'),
@@ -165,6 +166,10 @@ module.exports = {
 /**
  * @external User
  * @see {@link https://discord.js.org/#/docs/main/master/class/User}
+ */
+/**
+ * @external UserStore
+ * @see {@link https://discord.js.org/#/docs/main/master/class/UserStore}
  */
 /**
  * @external UserResolvable
