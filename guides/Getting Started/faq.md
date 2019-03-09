@@ -53,9 +53,9 @@ For a tutorial
 
 Set `process.env.DISCORD_TOKEN` equal to your bot's token, you can do this by either
 
-* using the console to set the environment variable every time you run the bot, by doing `set DISCORD_TOKEN=token` 
+1. using the console to set the environment variable every time you run the bot, by doing `set DISCORD_TOKEN=token` 
 
-* using the [dotenv](https://www.npmjs.com/package/dotenv) package. Run `npm install dotenv --save`
+1. using the [dotenv](https://www.npmjs.com/package/dotenv) package. Run `npm install dotenv --save`
 
 1. Put this code at the top of your `app.js` file:
 
