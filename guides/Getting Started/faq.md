@@ -51,7 +51,7 @@ const { token } = require('./config.json');
 
 For a tutorial
 
-Set `process.env.DISCORD_TOKEN` equal to your bot's token, you can do this by either
+1. Set `process.env.DISCORD_TOKEN` equal to your bot's token, you can do this by either
 
 1. using the console to set the environment variable every time you run the bot, by doing `set DISCORD_TOKEN=token` 
 
