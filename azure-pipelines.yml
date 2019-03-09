@@ -12,4 +12,5 @@ jobs:
     parameters:
       ghRef: 'github.com/dirigeants/klasa'
       targetBranch: 'docs'
+      sync: 'false'
       dependsOn: Lint
