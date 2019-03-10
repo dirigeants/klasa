@@ -65,7 +65,7 @@ For a tutorial
 
 1. Create a file called `.env` next  to your `app.js`, and put this in it:
 
-    ```env
+    ```TOML
     DISCORD_TOKEN = ""
     ```
 
