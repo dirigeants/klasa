@@ -59,20 +59,20 @@ For a tutorial
 
 1. Put this code at the top of your `app.js` file:
 
-```js
-require('dotenv').config();
-```
+    ```js
+    require('dotenv').config();
+    ```
 
 1. Create a file called `.env` next  to your `app.js`, and put this in it:
 
-```env
-DISCORD_TOKEN = ""
-```
+    ```env
+    DISCORD_TOKEN = ""
+    ```
 
-Place your token after the `=`.
+    > Place your token after the `=`.
 
 1. Finally, **remove your token** from your `app.js` file, so nothing is passed to the login method, discord.js will [automatically use](https://github.com/discordjs/discord.js/blob/master/src/client/Client.js#L112) the token in the environment variable.
 
-```js
-client.login();
-```
+    ```js
+    client.login();
+    ```
