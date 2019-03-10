@@ -607,7 +607,7 @@ declare module 'klasa' {
 	}
 
 	export class CommandUsage extends Usage {
-		public constructor(client: KlasaClient, command: Command);
+		public constructor(client: KlasaClient, usageString: string, usageDelim: string, command: Command);
 		public names: string[];
 		public commands: string;
 		public nearlyFullUsage: string;
