@@ -51,24 +51,28 @@ const { token } = require('./config.json');
 
 For a tutorial
 
-1. Set `process.env.DISCORD_TOKEN` equal to your bot's token, you can do this using [dotenv](https://www.npmjs.com/package/dotenv). Run `npm install dotenv --save`
+1. Set `process.env.DISCORD_TOKEN` equal to your bot's token, you can do this by either
+
+    * using the console to set the environment variable every time you run the bot, by doing `set DISCORD_TOKEN=token` 
+
+    * using the [dotenv](https://www.npmjs.com/package/dotenv) package. Run `npm install dotenv --save`
 
 1. Put this code at the top of your `app.js` file:
 
-```js
-require('dotenv').config();
-```
+    ```js
+    require('dotenv').config();
+    ```
 
 1. Create a file called `.env` next  to your `app.js`, and put this in it:
 
-```env
-DISCORD_TOKEN = ""
-```
+    ```toml
+    DISCORD_TOKEN = ""
+    ```
 
-Place your token after the `=`.
+    > Place your token after the `=`.
 
 1. Finally, **remove your token** from your `app.js` file, so nothing is passed to the login method, discord.js will [automatically use](https://github.com/discordjs/discord.js/blob/master/src/client/Client.js#L112) the token in the environment variable.
 
-```js
-client.login();
-```
+    ```js
+    client.login();
+    ```
