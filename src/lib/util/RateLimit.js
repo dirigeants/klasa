@@ -6,7 +6,7 @@ class RateLimit {
 	/**
 	 * @since 0.5.0
 	 * @param {number} bucket The number of requests before this is limited
-	 * @param {number} cooldown The amount of time for each bucket
+	 * @param {number} cooldown The amount of milliseconds for the ratelimit to expire
 	 */
 	constructor(bucket, cooldown) {
 		/**
@@ -17,7 +17,7 @@ class RateLimit {
 		this.bucket = bucket;
 
 		/**
-		 * The number of requests before this is limited
+		 * The amount of milliseconds for the ratelimit to expire
 		 * @since 0.5.0
 		 * @type {number}
 		 */
@@ -27,7 +27,7 @@ class RateLimit {
 	}
 
 	/**
-	 * If this RateLimit is expired or not, allowing the bucket to be reset
+	 * Whether this RateLimit is expired or not, allowing the bucket to be reset
 	 * @since 0.5.0
 	 * @type {boolean}
 	 * @readonly
@@ -37,7 +37,7 @@ class RateLimit {
 	}
 
 	/**
-	 * If this RateLimit is limited or not
+	 * Whether this RateLimit is limited or not
 	 * @since 0.5.0
 	 * @type {boolean}
 	 * @readonly
@@ -47,7 +47,7 @@ class RateLimit {
 	}
 
 	/**
-	 * The remaining time before the RateLimit is reset
+	 * The remaining time in milliseconds before this RateLimit instance is reset
 	 * @since 0.5.0
 	 * @type {number}
 	 * @readonly
@@ -79,7 +79,7 @@ class RateLimit {
 	}
 
 	/**
-	 * Resets the RateLimit's remaining-uses back to full state
+	 * Resets the RateLimit's remaining uses back to full state
 	 * @since 0.5.0
 	 * @returns {this}
 	 */
@@ -96,7 +96,7 @@ class RateLimit {
 	}
 
 	/**
-	 * Resets the RateLimit's reset-time back to full state
+	 * Resets the RateLimit's reset time back to full state
 	 * @since 0.5.0
 	 * @returns {this}
 	 */

@@ -16,8 +16,8 @@
   },
   "scripts": {
     "lint": "npx eslint --fix src && npx eslint --fix --config .eslintrcmd.json --ext md guides && npx tslint --fix 'typings/*.ts'",
-    "test": "npx eslint src && npx tslint 'typings/*.ts' && npx eslint --config .eslintrcmd.json --ext md guides && npx markdownlint guides README.md",
-    "docs": "npx dg --source src --custom guides/.docconfig.json --output docs/docs.json --logging"
+    "test:lint": "npx eslint src && npx tslint 'typings/*.ts' && npx eslint --config .eslintrcmd.json --ext md guides && npx markdownlint guides README.md",
+    "docs": "npx dg --source src --custom guides/.docconfig.json --output dist/docs.json --logging"
   },
   "dependencies": {
     "fs-nextra": "^0.4.3"
@@ -31,7 +31,7 @@
     "eslint": "^5.0.1",
     "eslint-config-klasa": "github:dirigeants/klasa-lint",
     "eslint-plugin-markdown": "^1.0.0-beta.6",
-    "markdownlint-cli": "^0.13.0",
+    "markdownlint-cli": "^0.14.0",
     "tslint": "^5.9.1",
     "typescript": "^3.0.3"
   },

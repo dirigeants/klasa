@@ -194,7 +194,13 @@ class RichDisplay {
 			!('jump' in options) || ('jump' in options && options.jump),
 			!('firstLast' in options) || ('firstLast' in options && options.firstLast),
 		);
-		const msg = message.editable ? await message.edit('', { embed: this.pages[options.startPage || 0] }) : await message.channel.send(this.pages[options.startPage || 0]);
+		let msg;
+		if (message.editable) {
+			await message.edit({ embed: this.pages[options.startPage || 0] });
+			msg = message;
+		} else {
+			msg = await message.channel.send(this.pages[options.startPage || 0]);
+		}
 		return new ReactionHandler(
 			msg,
 			(reaction, user) => emojis.includes(reaction.emoji.name) && user !== message.client.user && options.filter(reaction, user),

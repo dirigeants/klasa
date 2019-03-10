@@ -3,7 +3,7 @@
 [![Discord](https://discordapp.com/api/guilds/339942739275677727/embed.png)](https://discord.gg/FpEFSyY)
 [![npm](https://img.shields.io/npm/v/klasa.svg?maxAge=3600)](https://www.npmjs.com/package/klasa)
 [![npm](https://img.shields.io/npm/dt/klasa.svg?maxAge=3600)](https://www.npmjs.com/package/klasa)
-[![Build Status](https://travis-ci.org/dirigeants/klasa.svg?branch=master)](https://travis-ci.org/dirigeants/klasa)
+[![Build Status](https://dev.azure.com/dirigeants/klasa/_apis/build/status/dirigeants.klasa?branchName=master)](https://dev.azure.com/dirigeants/klasa/_build/latest?definitionId=1&branchName=master)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/dirigeants/klasa.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/dirigeants/klasa/alerts/)
 [![Dependabot Status](https://api.dependabot.com/badges/status?host=github&repo=dirigeants/klasa)](https://dependabot.com)
 [![David](https://img.shields.io/david/dirigeants/klasa.svg?maxAge=3600)](https://david-dm.org/dirigeants/klasa)

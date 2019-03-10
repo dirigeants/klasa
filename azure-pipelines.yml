@@ -1,0 +1,16 @@
+resources:
+  repositories:
+    - repository: templates
+      type: github
+      name: dirigeants/pipelines
+      endpoint: dirigeants
+
+jobs:
+  - template: lint.yml@templates
+
+  - template: docs.yml@templates
+    parameters:
+      ghRef: 'github.com/dirigeants/klasa'
+      targetBranch: 'docs'
+      sync: 'false'
+      dependsOn: Lint
