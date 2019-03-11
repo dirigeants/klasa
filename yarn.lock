@@ -17,8 +17,8 @@
     js-tokens "^4.0.0"
 
 "@types/node@^11.9.0":
-  version "11.11.0"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-11.11.0.tgz#070e9ce7c90e727aca0e0c14e470f9a93ffe9390"
+  version "11.11.1"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-11.11.1.tgz#9ee55ffce20f72e141863b0036a6e51c6fc09a1f"
 
 acorn-jsx@^5.0.0:
   version "5.0.1"
