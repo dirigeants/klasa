@@ -1762,6 +1762,8 @@ declare module 'discord.js' {
 	export interface TextChannel extends SendAliases, ChannelExtendables { }
 
 	export interface DMChannel extends SendAliases, ChannelExtendables { }
+	
+	export interface GroupDMChannel extends SendAliases, ChannelExtendables { }
 
 	interface PartialSendAliases {
 		sendLocale(key: string, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
