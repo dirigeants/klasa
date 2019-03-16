@@ -112,7 +112,7 @@ class ReactionHandler extends ReactionCollector {
 
 		this.on('collect', (reaction, user) => {
 			reaction.users.remove(user);
-			this[this.methodMap.get(reaction.emoji.name)](user);
+			this[this.methodMap.get(reaction.emoji.id || reaction.emoji.name)](user);
 		});
 		this.on('end', () => {
 			if (this.reactionsDone && !this.message.deleted) this.message.reactions.removeAll();

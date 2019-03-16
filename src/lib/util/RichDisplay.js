@@ -203,7 +203,7 @@ class RichDisplay {
 		}
 		return new ReactionHandler(
 			msg,
-			(reaction, user) => emojis.includes(reaction.emoji.name) && user !== message.client.user && options.filter(reaction, user),
+			(reaction, user) => emojis.includes(reaction.emoji.id || reaction.emoji.name) && user !== message.client.user && options.filter(reaction, user),
 			options,
 			this,
 			emojis
