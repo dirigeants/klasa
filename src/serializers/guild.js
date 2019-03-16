@@ -7,7 +7,7 @@ module.exports = class extends Serializer {
 		if (data instanceof Guild) return data;
 		const guild = this.constructor.regex.channel.test(data) ? this.client.guilds.get(data) : null;
 		if (guild) return guild;
-		throw language.get('RESOLVER_INVALID_CHANNEL', piece.key);
+		throw language.get('RESOLVER_INVALID_GUILD', piece.key);
 	}
 
 	serialize(value) {
