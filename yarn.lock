@@ -560,8 +560,8 @@ fs-nextra@^0.3.2:
   resolved "https://registry.yarnpkg.com/fs-nextra/-/fs-nextra-0.3.8.tgz#2a0c860a7a3c5d4b398548059d481d6155aac3c8"
 
 fs-nextra@^0.4.3:
-  version "0.4.3"
-  resolved "https://registry.yarnpkg.com/fs-nextra/-/fs-nextra-0.4.3.tgz#9afff5435b445a507d16a081399782c3068b0784"
+  version "0.4.5"
+  resolved "https://registry.yarnpkg.com/fs-nextra/-/fs-nextra-0.4.5.tgz#0f44a00dd6c0547adaf59ce875e59941d0c70664"
 
 fs-then-native@^2.0.0:
   version "2.0.0"
