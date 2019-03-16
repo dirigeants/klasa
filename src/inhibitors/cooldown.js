@@ -1,4 +1,5 @@
 const { Inhibitor } = require('klasa');
+const ms = require("ms")
 
 module.exports = class extends Inhibitor {
 
