@@ -71,7 +71,7 @@ For a tutorial
 
     > Place your token after the `=`.
 
-1. Finally, **remove your token** from your `app.js` file, so nothing is passed to the login method, discord.js will [automatically use](https://github.com/discordjs/discord.js/blob/master/src/client/Client.js#L112) the token in the environment variable.
+1. Finally, **remove your token** from your `app.js` file, so nothing is passed to the login method, discord.js will [automatically use](https://github.com/discordjs/discord.js/blob/249673de6ef8da4585e375ba3f0ea6a5800e7055/src/client/Client.js#L129) the token in the environment variable.
 
     ```js
     client.login();
