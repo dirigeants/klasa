@@ -12,7 +12,7 @@ module.exports = class extends Inhibitor {
 
 		const existing = command.cooldowns.get(message.levelID);
 
-		if (existing && existing.limited) throw message.language.get('INHIBITOR_COOLDOWN', ms(existing.remainingTime));
+		if (existing && existing.limited) throw message.language.get('INHIBITOR_COOLDOWN', ms(existing.remainingTime, {long: true}));
 	}
 
 };
