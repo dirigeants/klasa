@@ -340,13 +340,13 @@ class KlasaClient extends Discord.Client {
 	}
 
 	/**
-	 * The owner for this bot
+	 * The owner for this bot, or a partial object if they aren't in the cache
 	 * @since 0.1.1
-	 * @type {?KlasaUser}
+	 * @type {KlasaUser}
 	 * @readonly
 	 */
 	get owner() {
-		return this.users.get(this.options.ownerID) || null;
+		return this.users.get(this.options.ownerID) || this.users.add({ id: this.options.ownerID });
 	}
 
 	/**
