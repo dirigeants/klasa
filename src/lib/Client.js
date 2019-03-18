@@ -153,7 +153,7 @@ class KlasaClient extends Discord.Client {
 		 * @since 0.5.0
 		 * @type {KlasaUserStore}
 		 */
-		this.users = new KlasaUserStore();
+		this.users = new KlasaUserStore(this);
 
 		/**
 		 * The directory where the user files are at
