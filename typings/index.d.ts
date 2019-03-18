@@ -1648,7 +1648,7 @@ declare module 'discord.js' {
 	export interface Client {
 		constructor: typeof KlasaClient;
 		readonly invite: string;
-		readonly owner: User | null;
+		readonly owner: User;
 		options: Required<KlasaClientOptions>;
 		userBaseDirectory: string;
 		console: KlasaConsole;
