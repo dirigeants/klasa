@@ -570,7 +570,7 @@ declare module 'klasa' {
 	export class ExtendableStore extends Store<string, Extendable, typeof Extendable> { }
 
 	export class FinalizerStore extends Store<string, Finalizer, typeof Finalizer> {
-		public run(message: KlasaMessage, command: Command, response: KlasaMessage, runTime: Stopwatch): Promise<void>;
+		public run(message: KlasaMessage, command: Command, response: KlasaMessage | KlasaMessage[], runTime: Stopwatch): Promise<void>;
 	}
 
 	export class InhibitorStore extends Store<string, Inhibitor, typeof Inhibitor> {
