@@ -512,9 +512,9 @@ atob@^2.1.1:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
 
-ava@^1.4.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/ava/-/ava-1.4.0.tgz#acd5149bdf7eadfcc9fb82fb33d2e658d1303ae0"
+ava@^1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/ava/-/ava-1.4.1.tgz#4a59289e0c9728e492ec3a5be21d1072636be172"
   dependencies:
     "@ava/babel-preset-stage-4" "^2.0.0"
     "@ava/babel-preset-transform-test-files" "^5.0.0"
@@ -1195,10 +1195,10 @@ dmd@^3.0.10:
 
 "docgen@github:dirigeants/docsgen":
   version "0.0.1"
-  uid "8f8fd1392ce254badc1982472273d949eea0f76e"
-  resolved "https://codeload.github.com/dirigeants/docsgen/tar.gz/8f8fd1392ce254badc1982472273d949eea0f76e"
+  uid "31514e5ab908eee7e664f53dca76005ea0161595"
+  resolved "https://codeload.github.com/dirigeants/docsgen/tar.gz/31514e5ab908eee7e664f53dca76005ea0161595"
   dependencies:
-    ava "^1.4.0"
+    ava "^1.4.1"
     fs-nextra "^0.4.5"
     jsdoc-to-markdown "^4.0.1"
     yargs "^13.2.2"
