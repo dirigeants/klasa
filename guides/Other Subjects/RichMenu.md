@@ -39,7 +39,7 @@ module.exports = class extends Command {
 	init() {
 		this.menu = new RichMenu(new MessageEmbed()
 			.setColor(0x673AB7)
-			.setAuthor(this.client.user.username, this.client.user.avatarURL())
+			.setAuthor(this.client.user.username, this.client.user.displayAvatarURL())
 			.setTitle('Advanced Commands Help:')
 			.setDescription('Use the arrow reactions to scroll between pages.\nUse number reactions to select an option.')
 		);
