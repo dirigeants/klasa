@@ -20,6 +20,7 @@ class Timestamp {
 		/**
 		 * @since 0.5.0
 		 * @type {string}
+		 * @private
 		 */
 		this.pattern = pattern;
 		/**
