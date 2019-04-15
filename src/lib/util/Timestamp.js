@@ -18,9 +18,9 @@ class Timestamp {
 	 */
 	constructor(pattern) {
 		/**
+		 * The parsed pattern of the timestamp
 		 * @since 0.5.0
 		 * @type {string}
-		 * @private
 		 */
 		this.pattern = pattern;
 		/**
