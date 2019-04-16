@@ -75,5 +75,5 @@ this.customizeResponse('arg1', 'Response for argument 1')
 ## Further Reading:
 
 - {@tutorial CommandsArguments}
-- {@tutorial CommandsCustomResolvers}
 - {@tutorial CommandsSubcommands}
+- {@tutorial CommandsCustomResolvers}
