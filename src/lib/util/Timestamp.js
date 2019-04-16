@@ -18,10 +18,12 @@ class Timestamp {
 	 */
 	constructor(pattern) {
 		/**
+		 * The parsed pattern of the timestamp
 		 * @since 0.5.0
 		 * @type {string}
 		 */
 		this.pattern = pattern;
+
 		/**
 		 * @since 0.5.0
 		 * @type {TimestampObject[]}
