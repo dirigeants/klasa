@@ -23,6 +23,7 @@ class Timestamp {
 		 * @type {string}
 		 */
 		this.pattern = pattern;
+
 		/**
 		 * @since 0.5.0
 		 * @type {TimestampObject[]}
