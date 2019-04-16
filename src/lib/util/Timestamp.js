@@ -18,7 +18,7 @@ class Timestamp {
 	 */
 	constructor(pattern) {
 		/**
-		 * The parsed pattern of the timestamp
+		 * The raw pattern
 		 * @since 0.5.0
 		 * @type {string}
 		 */
