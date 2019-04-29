@@ -103,7 +103,7 @@ class Schema extends Map {
 	 * Schema.add('name', 'string', { default: 'klasa!' });
 	 */
 	add(key, typeOrCallback, options = {}) {
-		if (!typeOrCallback) throw new Error(`The type for ${key} must be a string for pieces, and a callback for folders`);
+		if (!typeOrCallback) throw new Error(`The type for "${key}" must be a string for pieces, and a callback for folders`);
 
 		let SchemaCtor;
 		let type;
@@ -125,13 +125,13 @@ class Schema extends Map {
 		if (previous) {
 			if (type === 'Folder') {
 				// If the type of the new entry is a Folder, the previous must also be a Folder.
-				if (previous.type !== 'Folder') throw new Error(`The type for ${key} conflicts with the previous value, expected type Folder, got ${previous.type}.`);
+				if (previous.type !== 'Folder') throw new Error(`The type for "${key}" conflicts with the previous value, expected type Folder, got ${previous.type}.`);
 				// Call the callback with the pre-existent Folder
 				callback(previous); // eslint-disable-line callback-return
 				return this;
 			}
 			// If the type of the new entry is not a Folder, the previous must also not be a Folder.
-			if (previous.type === 'Folder') throw new Error(`The type for ${key} conflicts with the previous value, expected a non-Folder, got ${previous.type}.`);
+			if (previous.type === 'Folder') throw new Error(`The type for "${key}" conflicts with the previous value, expected a non-Folder, got ${previous.type}.`);
 			// Edit the previous key
 			previous.edit({ type, ...options });
 			return this;
