@@ -21,39 +21,32 @@ module.exports = Structures.extend('Message', Message => {
 			super(...args);
 
 			/**
-			 * The guild level settings for this context (guild || default)
-			 * @since 0.5.0
-			 * @type {Settings}
-			 */
-			this.guildSettings = this.guild ? this.guild.settings : this.client.gateways.guilds.defaults;
-
-			/**
 			 * The command being run
 			 * @since 0.0.1
 			 * @type {?Command}
 			 */
-			this.command = null;
+			this.command = this.command || null;
 
 			/**
 			 * The name of the command being run
 			 * @since 0.5.0
 			 * @type {?string}
 			 */
-			this.commandText = null;
+			this.commandText = this.commandText || null;
 
 			/**
 			 * The prefix used
 			 * @since 0.0.1
 			 * @type {?RegExp}
 			 */
-			this.prefix = null;
+			this.prefix = this.prefix || null;
 
 			/**
 			 * The length of the prefix used
 			 * @since 0.0.1
 			 * @type {?number}
 			 */
-			this.prefixLength = null;
+			this.prefixLength = typeof this.prefixLength === 'number' ? this.prefixLength : null;
 
 			/**
 			 * A command prompt/argument handler
@@ -61,7 +54,7 @@ module.exports = Structures.extend('Message', Message => {
 			 * @type {CommandPrompt}
 			 * @private
 			 */
-			this.prompter = null;
+			this.prompter = this.prompter || null;
 
 			/**
 			 * The responses to this message
@@ -70,6 +63,16 @@ module.exports = Structures.extend('Message', Message => {
 			 * @private
 			 */
 			this._responses = [];
+		}
+
+		/**
+		 * The guild level settings for this context (guild || default)
+		 * @since 0.5.0
+		 * @type {Settings}
+		 * @readonly
+		 */
+		get guildSettings() {
+			return this.guild ? this.guild.settings : this.client.gateways.guilds.defaults;
 		}
 
 		/**
