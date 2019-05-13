@@ -36,7 +36,7 @@ module.exports = Structures.extend('Message', Message => {
 
 			/**
 			 * The name of the command being run
-			 * @since 0.0.1
+			 * @since 0.5.0
 			 * @type {?string}
 			 */
 			this.commandText = null;
