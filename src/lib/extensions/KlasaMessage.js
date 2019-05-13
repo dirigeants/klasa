@@ -326,7 +326,7 @@ module.exports = Structures.extend('Message', Message => {
 		_customPrefix() {
 			if (!this.guildSettings.prefix) return null;
 			for (const prf of Array.isArray(this.guildSettings.prefix) ? this.guildSettings.prefix : [this.guildSettings.prefix]) {
-				const testingPrefix = this.constructor.prefixes.get(prf) || this.constrctor.generateNewPrefix(prf, this.client.options.prefixCaseInsensitive ? 'i' : '');
+				const testingPrefix = this.constructor.prefixes.get(prf) || this.constructor.generateNewPrefix(prf, this.client.options.prefixCaseInsensitive ? 'i' : '');
 				if (testingPrefix.regex.test(this.content)) return testingPrefix;
 			}
 			return null;
