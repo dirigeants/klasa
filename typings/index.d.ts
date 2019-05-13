@@ -641,9 +641,11 @@ declare module 'klasa' {
 	}
 
 	export class TextPrompt {
-		public constructor(message: KlasaMessage, usage: Usage, options: TextPromptOptions);
+		public constructor(message: KlasaMessage, usage: Usage, options?: TextPromptOptions);
 		public readonly client: KlasaClient;
 		public message: KlasaMessage;
+		public target: KlasaUser;
+		public channel: TextChannel | DMChannel;
 		public usage: Usage | CommandUsage;
 		public reprompted: boolean;
 		public flags: Record<string, string>;
@@ -659,6 +661,7 @@ declare module 'klasa' {
 		private _currentUsage: Tag;
 
 		public run<T = any[]>(prompt: string): Promise<T>;
+		private prompt(text: string): Promise<KlasaMessage>;
 		private reprompt(prompt: string): Promise<any[]>;
 		private repeatingPrompt(): Promise<any[]>;
 		private validateArgs(): Promise<any[]>;
@@ -1377,7 +1380,10 @@ declare module 'klasa' {
 
 	// Usage
 	export interface TextPromptOptions {
+		channel?: TextChannel | DMChannel;
 		limit?: number;
+		quotedStringSupport?: boolean;
+		target?: KlasaUser;
 		time?: number;
 		quotedStringSupport?: boolean;
 	}
@@ -1750,7 +1756,6 @@ declare module 'discord.js' {
 		readonly reprompted: boolean;
 		readonly reactable: boolean;
 		send(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		prompt(text: string, time?: number): Promise<KlasaMessage>;
 		usableCommands(): Promise<Collection<string, Command>>;
 		hasAtLeastPermissionLevel(min: number): Promise<boolean>;
 	}

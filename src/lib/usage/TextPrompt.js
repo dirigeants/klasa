@@ -9,6 +9,8 @@ class TextPrompt {
 
 	/**
 	 * @typedef {Object} TextPromptOptions
+	 * @property {KlasaUser} [target=message.author] The intended target of this TextPrompt, if someone other than the author
+	 * @property {external:TextBasedChannel} [channel=message.channel] The channel to prompt in, if other than this channel
 	 * @property {number} [limit=Infinity] The number of re-prompts before this TextPrompt gives up
 	 * @property {number} [time=30000] The time-limit for re-prompting
 	 * @property {boolean} [quotedStringSupport=false] Whether this prompt should respect quoted strings
@@ -38,6 +40,20 @@ class TextPrompt {
 		 * @type {KlasaMessage}
 		 */
 		this.message = message;
+
+		/**
+		 * The target this prompt is for
+		 * @since 0.5.0
+		 * @type {KlasaUser}
+		 */
+		this.target = options.target || message.author;
+
+		/**
+		 * The channel to prompt in
+		 * @since 0.5.0
+		 * @type {external:TextBasedChannel}
+		 */
+		this.channel = options.channel || message.channel;
 
 		/**
 		 * The usage for this prompt
@@ -142,10 +158,24 @@ class TextPrompt {
 	 * @returns {any[]} The parameters resolved
 	 */
 	async run(prompt) {
-		const message = await this.message.prompt(prompt, this.time);
+		const message = await this.prompt(prompt);
 		this.responses.set(message.id, message);
 		this._setup(message.content);
 		return this.validateArgs();
+	}
+
+	/**
+	 * Prompts the target for a response
+	 * @param {string} text The text to prompt
+	 * @returns {KlasaMessage}
+	 * @private
+	 */
+	async prompt(text) {
+		const message = await this.channel.send(text);
+		const responses = await this.channel.awaitMessages(msg => msg.author === this.target, { time: this.time, max: 1 });
+		message.delete();
+		if (responses.size === 0) throw this.language.get('MESSAGE_PROMPT_TIMEOUT');
+		return responses.first();
 	}
 
 	/**
@@ -159,9 +189,8 @@ class TextPrompt {
 		this._prompted++;
 		if (this.typing) this.message.channel.stopTyping();
 		const possibleAbortOptions = this.message.language.get('TEXT_PROMPT_ABORT_OPTIONS');
-		const message = await this.message.prompt(
-			this.message.language.get('MONITOR_COMMAND_HANDLER_REPROMPT', `<@!${this.message.author.id}>`, prompt, this.time / 1000, possibleAbortOptions),
-			this.time
+		const message = await this.prompt(
+			this.message.language.get('MONITOR_COMMAND_HANDLER_REPROMPT', `<@!${this.target.id}>`, prompt, this.time / 1000, possibleAbortOptions)
 		);
 
 		this.responses.set(message.id, message);
@@ -187,9 +216,8 @@ class TextPrompt {
 		let message;
 		const possibleCancelOptions = this.message.language.get('TEXT_PROMPT_ABORT_OPTIONS');
 		try {
-			message = await this.message.prompt(
-				this.message.language.get('MONITOR_COMMAND_HANDLER_REPEATING_REPROMPT', `<@!${this.message.author.id}>`, this._currentUsage.possibles[0].name, this.time / 1000, possibleCancelOptions),
-				this.time
+			message = await this.prompt(
+				this.message.language.get('MONITOR_COMMAND_HANDLER_REPEATING_REPROMPT', `<@!${this.message.author.id}>`, this._currentUsage.possibles[0].name, this.time / 1000, possibleCancelOptions)
 			);
 			this.responses.set(message.id, message);
 		} catch (err) {
