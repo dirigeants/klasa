@@ -381,7 +381,7 @@ module.exports = Structures.extend('Message', Message => {
 	/**
 	 * Cache of RegExp prefixes
 	 * @since 0.5.0
-	 * @type {Map<string, CachedPrefix}
+	 * @type {Map<string, CachedPrefix>}
 	 * @private
 	 */
 	KlasaMessage.prefixes = new Map();
