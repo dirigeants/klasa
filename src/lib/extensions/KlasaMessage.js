@@ -1,4 +1,5 @@
 const { Structures, Collection, APIMessage, Permissions: { FLAGS } } = require('discord.js');
+const { regExpEsc } = require('../util/util');
 
 module.exports = Structures.extend('Message', Message => {
 	/**
@@ -6,6 +7,12 @@ module.exports = Structures.extend('Message', Message => {
 	 * @extends external:Message
 	 */
 	class KlasaMessage extends Message {
+
+		/**
+		 * @typedef {object} CachedPrefix
+		 * @property {number} length The length of the prefix
+		 * @property {RegExp | null} regex The RegExp for the prefix
+		 */
 
 		/**
 		 * @param {...*} args Normal D.JS Message args
@@ -26,6 +33,13 @@ module.exports = Structures.extend('Message', Message => {
 			 * @type {?Command}
 			 */
 			this.command = null;
+
+			/**
+			 * The name of the command being run
+			 * @since 0.0.1
+			 * @type {?string}
+			 */
+			this.commandText = null;
 
 			/**
 			 * The prefix used
@@ -254,6 +268,7 @@ module.exports = Structures.extend('Message', Message => {
 		patch(data) {
 			super.patch(data);
 			this.language = this.guild ? this.guild.language : this.client.languages.default;
+			this._parseCommand();
 		}
 
 		/**
@@ -271,32 +286,105 @@ module.exports = Structures.extend('Message', Message => {
 			 * @type {Language}
 			 */
 			this.language = this.guild ? this.guild.language : this.client.languages.default;
+
+			this._parseCommand();
 		}
 
 		/**
-		 * Register's this message as a Command Message
+		 * Parses this message as a command
 		 * @since 0.5.0
-		 * @param {Object} commandInfo The info about the command and prefix used
-		 * @property {Command} command The command run
-		 * @property {RegExp} prefix The prefix used
-		 * @property {number} prefixLength The length of the prefix used
-		 * @returns {this}
 		 * @private
 		 */
-		_registerCommand({ command, prefix, prefixLength }) {
-			this.command = command;
-			this.prefix = prefix;
-			this.prefixLength = prefixLength;
+		_parseCommand() {
+			const prefix = this._customPrefix() || this._mentionPrefix() || this._naturalPrefix() || this._prefixLess();
+
+			if (!prefix) return;
+
+			this.prefix = prefix.regex;
+			this.prefixLength = prefix.length;
+			this.commandText = this.content.slice(prefix.length).trim().split(' ')[0].toLowerCase();
+			this.command = this.client.commands.get(this.commandText) || null;
+
+			if (!this.command) return;
+
 			this.prompter = this.command.usage.createPrompt(this, {
 				quotedStringSupport: this.command.quotedStringSupport,
 				time: this.command.promptTime,
 				limit: this.command.promptLimit
 			});
-			this.client.emit('commandRun', this, this.command, this.args);
-			return this;
+		}
+
+		/**
+		 * Checks if the per-guild or default prefix is used
+		 * @since 0.5.0
+		 * @returns {CachedPrefix | null}
+		 * @private
+		 */
+		_customPrefix() {
+			if (!this.guildSettings.prefix) return null;
+			for (const prf of Array.isArray(this.guildSettings.prefix) ? this.guildSettings.prefix : [this.guildSettings.prefix]) {
+				const testingPrefix = this.constructor.prefixes.get(prf) || this.constrctor.generateNewPrefix(prf, this.client.options.prefixCaseInsensitive ? 'i' : '');
+				if (testingPrefix.regex.test(this.content)) return testingPrefix;
+			}
+			return null;
+		}
+
+		/**
+		 * Checks if the mention was used as a prefix
+		 * @since 0.5.0
+		 * @returns {CachedPrefix | null}
+		 * @private
+		 */
+		_mentionPrefix() {
+			const mentionPrefix = this.client.mentionPrefix.exec(this.content);
+			return mentionPrefix ? { length: mentionPrefix[0].length, regex: this.client.mentionPrefix } : null;
+		}
+
+		/**
+		 * Checks if the natural prefix is used
+		 * @since 0.5.0
+		 * @returns {CachedPrefix | null}
+		 * @private
+		 */
+		_naturalPrefix() {
+			if (this.guildSettings.disableNaturalPrefix || !this.client.options.regexPrefix) return null;
+			const results = this.client.options.regexPrefix.exec(this.content);
+			return results ? { length: results[0].length, regex: this.client.options.regexPrefix } : null;
+		}
+
+		/**
+		 * Checks if a prefixless scenario is possible
+		 * @since 0.5.0
+		 * @returns {CachedPrefix | null}
+		 * @private
+		 */
+		_prefixLess() {
+			return this.client.options.noPrefixDM && this.channel.type === 'dm' ? { length: 0, regex: null } : null;
+		}
+
+		/**
+		 * Caches a new prefix regexp
+		 * @since 0.5.0
+		 * @param {string} prefix The prefix to store
+		 * @param {string} flags The flags for the RegExp
+		 * @returns {CachedPrefix}
+		 * @private
+		 */
+		static generateNewPrefix(prefix, flags) {
+			const prefixObject = { length: prefix.length, regex: new RegExp(`^${regExpEsc(prefix)}`, flags) };
+			this.prefixes.set(prefix, prefixObject);
+			return prefixObject;
 		}
 
 	}
+
+	/**
+	 * Cache of RegExp prefixes
+	 * @since 0.5.0
+	 * @type {Map<string, CachedPrefix}
+	 * @private
+	 */
+	KlasaMessage.prefixes = new Map();
 
 	return KlasaMessage;
 });

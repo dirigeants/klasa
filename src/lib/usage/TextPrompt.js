@@ -195,7 +195,7 @@ class TextPrompt {
 
 		this.responses.set(message.id, message);
 
-		if (possibleAbortOptions.includes(message.content.toLowerCase())) throw this.message.language.get('MONITOR_COMMAND_HANDLER_ABORTED');
+		if (message.prefix || possibleAbortOptions.includes(message.content.toLowerCase())) throw this.message.language.get('MONITOR_COMMAND_HANDLER_ABORTED');
 
 		if (this.typing) this.message.channel.startTyping();
 		this.args[this.args.lastIndexOf(null)] = message.content;

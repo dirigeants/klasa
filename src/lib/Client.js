@@ -324,6 +324,13 @@ class KlasaClient extends Discord.Client {
 		 */
 		this.ready = false;
 
+		/**
+		 * The regexp for a prefix mention
+		 * @since 0.5.0
+		 * @type {RegExp}
+		 */
+		this.mentionPrefix = null;
+
 		// Run all plugin functions in this context
 		for (const plugin of plugins) plugin.call(this);
 	}
