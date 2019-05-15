@@ -336,6 +336,7 @@ module.exports = Structures.extend('Message', Message => {
 		 * @private
 		 */
 		_mentionPrefix() {
+			if (!this.client.ready) return null;
 			const mentionPrefix = this.client.mentionPrefix.exec(this.content);
 			return mentionPrefix ? { length: mentionPrefix[0].length, regex: this.client.mentionPrefix } : null;
 		}
