@@ -66,16 +66,6 @@ module.exports = Structures.extend('Message', Message => {
 		}
 
 		/**
-		 * The guild level settings for this context (guild || default)
-		 * @since 0.5.0
-		 * @type {Settings}
-		 * @readonly
-		 */
-		get guildSettings() {
-			return this.guild ? this.guild.settings : this.client.gateways.guilds.defaults;
-		}
-
-		/**
 		 * The previous responses to this message
 		 * @since 0.5.0
 		 * @type {KlasaMessage[]}
@@ -289,6 +279,13 @@ module.exports = Structures.extend('Message', Message => {
 			 * @type {Language}
 			 */
 			this.language = this.guild ? this.guild.language : this.client.languages.default;
+
+			/**
+			 * The guild level settings for this context (guild || default)
+			 * @since 0.5.0
+			 * @type {Settings}
+			 */
+			this.guildSettings = this.guild ? this.guild.settings : this.client.gateways.guilds.defaults;
 
 			this._parseCommand();
 		}

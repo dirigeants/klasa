@@ -1756,12 +1756,12 @@ declare module 'discord.js' {
 	}
 
 	export interface Message extends PartialSendAliases {
+		guildSettings: Settings;
 		language: Language;
 		command: Command | null;
 		commandText: string | null;
 		prefix: RegExp | null;
 		prefixLength: number | null;
-		readonly guildSettings: Settings;
 		readonly responses: KlasaMessage[];
 		readonly args: string[];
 		readonly params: any[];
