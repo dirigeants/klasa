@@ -1010,7 +1010,7 @@ declare module 'klasa' {
 		gateways?: GatewaysOptions;
 		language?: string;
 		noPrefixDM?: boolean;
-		ownerID?: string;
+		owners?: string[];
 		permissionLevels?: PermissionLevels;
 		pieceDefaults?: PieceDefaults;
 		prefix?: string | string[];
@@ -1648,7 +1648,7 @@ declare module 'discord.js' {
 	export interface Client {
 		constructor: typeof KlasaClient;
 		readonly invite: string;
-		readonly owner: User | null;
+		readonly owners: Set<User>;
 		options: Required<KlasaClientOptions>;
 		userBaseDirectory: string;
 		console: KlasaConsole;
