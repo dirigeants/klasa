@@ -39,6 +39,7 @@ exports.DEFAULTS = {
 			users: {},
 			clientStorage: {}
 		},
+		owners: [],
 		// eslint-disable-next-line no-process-env
 		production: process.env.NODE_ENV === 'production',
 		prefixCaseInsensitive: false,
