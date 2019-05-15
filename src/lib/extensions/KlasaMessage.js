@@ -296,22 +296,26 @@ module.exports = Structures.extend('Message', Message => {
 		 * @private
 		 */
 		_parseCommand() {
-			const prefix = this._customPrefix() || this._mentionPrefix() || this._naturalPrefix() || this._prefixLess();
+			try {
+				const prefix = this._customPrefix() || this._mentionPrefix() || this._naturalPrefix() || this._prefixLess();
 
-			if (!prefix) return;
+				if (!prefix) return;
 
-			this.prefix = prefix.regex;
-			this.prefixLength = prefix.length;
-			this.commandText = this.content.slice(prefix.length).trim().split(' ')[0].toLowerCase();
-			this.command = this.client.commands.get(this.commandText) || null;
+				this.prefix = prefix.regex;
+				this.prefixLength = prefix.length;
+				this.commandText = this.content.slice(prefix.length).trim().split(' ')[0].toLowerCase();
+				this.command = this.client.commands.get(this.commandText) || null;
 
-			if (!this.command) return;
+				if (!this.command) return;
 
-			this.prompter = this.command.usage.createPrompt(this, {
-				quotedStringSupport: this.command.quotedStringSupport,
-				time: this.command.promptTime,
-				limit: this.command.promptLimit
-			});
+				this.prompter = this.command.usage.createPrompt(this, {
+					quotedStringSupport: this.command.quotedStringSupport,
+					time: this.command.promptTime,
+					limit: this.command.promptLimit
+				});
+			} catch (error) {
+				return;
+			}
 		}
 
 		/**
@@ -336,7 +340,6 @@ module.exports = Structures.extend('Message', Message => {
 		 * @private
 		 */
 		_mentionPrefix() {
-			if (!this.client.ready) return null;
 			const mentionPrefix = this.client.mentionPrefix.exec(this.content);
 			return mentionPrefix ? { length: mentionPrefix[0].length, regex: this.client.mentionPrefix } : null;
 		}
