@@ -309,6 +309,7 @@ module.exports = Structures.extend('Message', Message => {
 				if (!this.command) return;
 
 				this.prompter = this.command.usage.createPrompt(this, {
+					flagSupport: this.command.flagSupport,
 					quotedStringSupport: this.command.quotedStringSupport,
 					time: this.command.promptTime,
 					limit: this.command.promptLimit

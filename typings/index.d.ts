@@ -403,6 +403,7 @@ declare module 'klasa' {
 		public deletable: boolean;
 		public description: string | ((language: Language) => string);
 		public extendedHelp: string | ((language: Language) => string);
+		public flagSupport: boolean;
 		public fullCategory: string[];
 		public guarded: boolean;
 		public hidden: boolean;
@@ -1302,6 +1303,7 @@ declare module 'klasa' {
 		deletable?: boolean;
 		description?: string | string[] | ((language: Language) => string | string[]);
 		extendedHelp?: string | string[] | ((language: Language) => string | string[]);
+		flagSupport?: boolean;
 		guarded?: boolean;
 		hidden?: boolean;
 		nsfw?: boolean;

@@ -14,6 +14,7 @@ class TextPrompt {
 	 * @property {number} [limit=Infinity] The number of re-prompts before this TextPrompt gives up
 	 * @property {number} [time=30000] The time-limit for re-prompting
 	 * @property {boolean} [quotedStringSupport=false] Whether this prompt should respect quoted strings
+	 * @property {boolean} [flagSupport=true] Whether this prompt should respect flags
 	 */
 
 	/**
@@ -110,6 +111,13 @@ class TextPrompt {
 		 * @type {boolean}
 		 */
 		this.quotedStringSupport = options.quotedStringSupport;
+
+		/**
+		 * Whether this prompt should respect flags
+		 * @since 0.5.0
+		 * @type {boolean}
+		 */
+		this.flagSupport = options.flagSupport;
 
 		/**
 		 * Whether the current usage is a repeating arg
@@ -342,7 +350,7 @@ class TextPrompt {
 	 * @private
 	 */
 	_setup(original) {
-		const { content, flags } = this.constructor.getFlags(original, this.usage.usageDelim);
+		const { content, flags } = this.flagSupport ? this.constructor.getFlags(original, this.usage.usageDelim) : { content: original, flags: {} };
 		this.flags = flags;
 		this.args = this.quotedStringSupport ?
 			this.constructor.getQuotedStringArgs(content, this.usage.usageDelim).map(arg => arg.trim()) :
