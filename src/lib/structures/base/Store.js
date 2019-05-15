@@ -186,7 +186,9 @@ class Store extends Collection {
 	 * @private
 	 */
 	static async walk(store, directory = store.userDirectory) {
-		const files = await fs.scan(directory, { filter: (stats, path) => stats.isFile() && extname(path) === '.js' })
+		const extensions = ['.js'];
+		if (require.main.filename.endsWith('.ts')) extensions.push('.ts')
+		const files = await fs.scan(directory, { filter: (stats, path) => stats.isFile() && extensions.includes(extname(path)) && !path.endsWith('.d.ts') })
 			.catch(() => { if (store.client.options.createPiecesFolders) fs.ensureDir(directory).catch(err => store.client.emit('error', err)); });
 		if (!files) return true;
 
