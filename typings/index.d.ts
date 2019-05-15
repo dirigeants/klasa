@@ -70,12 +70,24 @@ declare module 'klasa' {
 		public readonly language: Language;
 	}
 
+	export interface CachedPrefix {
+		regex: RegExp;
+		length: number;
+	}
+
 	export class KlasaMessage extends Message {
 		private levelID: Snowflake | null;
 		private prompter: CommandPrompt | null;
 		private _responses: KlasaMessage[];
 		private _patch(data: any): void;
-		private _registerCommand(commandInfo: { command: Command, prefix: RegExp, prefixLength: number }): this;
+		private _parseCommand(): void;
+		private _customPrefix(): CachedPrefix | null;
+		private _mentionPrefix(): CachedPrefix | null;
+		private _naturalPrefix(): CachedPrefix | null;
+		private _prefixLess(): CachedPrefix | null;
+		private static generateNewPrefix(prefix: string, flags: string): CachedPrefix;
+
+		private static prefixes: Map<string, CachedPrefix>;
 	}
 
 	export class KlasaUser extends User {}
@@ -1744,11 +1756,12 @@ declare module 'discord.js' {
 	}
 
 	export interface Message extends PartialSendAliases {
-		guildSettings: Settings;
 		language: Language;
 		command: Command | null;
+		commandText: string | null;
 		prefix: RegExp | null;
 		prefixLength: number | null;
+		readonly guildSettings: Settings;
 		readonly responses: KlasaMessage[];
 		readonly args: string[];
 		readonly params: any[];
