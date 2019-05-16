@@ -115,7 +115,7 @@ module.exports = class extends Language {
 				].join(' ')),
 				'Please file an issue at <https://github.com/dirigeants/klasa> if you find any bugs.'
 			],
-			COMMAND_INVITE_DESCRIPTION: 'Displays the invite link of the bot, to invite it to your server.',
+			COMMAND_INVITE_DESCRIPTION: 'Displays the invite link of the bot, to invite it to your guild.',
 			COMMAND_INFO: [
 				"Klasa is a 'plug-and-play' framework built on top of the Discord.js library.",
 				'Most of the code is modularized, which allows developers to edit Klasa to suit their needs.',
