@@ -22,14 +22,21 @@ class Monitor extends Piece {
 
 	/**
 	 * @since 0.0.1
-	 * @param {KlasaClient} client The Klasa client
 	 * @param {MonitorStore} store The Monitor Store
 	 * @param {string} file The path from the pieces folder to the monitor file
 	 * @param {string} directory The base directory to the pieces folder
 	 * @param {MonitorOptions} [options={}] Optional Monitor settings
 	 */
-	constructor(client, store, file, directory, options = {}) {
-		super(client, store, file, directory, options);
+	constructor(store, file, directory, options = {}) {
+		super(store, file, directory, options);
+
+		/**
+		 * The types of messages allowed for this monitor
+		 * @see https://discord.js.org/#/docs/main/master/typedef/MessageType
+		 * @since 0.5.0
+		 * @type {string[]}
+		 */
+		this.allowedTypes = options.allowedTypes;
 
 		/**
 		 * The types of messages allowed for this monitor

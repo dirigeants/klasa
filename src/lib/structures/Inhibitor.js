@@ -15,14 +15,13 @@ class Inhibitor extends Piece {
 
 	/**
 	 * @since 0.0.1
-	 * @param {KlasaClient} client The Klasa client
 	 * @param {InhibitorStore} store The Inhibitor Store
 	 * @param {string} file The path from the pieces folder to the inhibitor file
 	 * @param {string} directory The base directory to the pieces folder
 	 * @param {InhibitorOptions} [options={}] Optional Inhibitor settings
 	 */
-	constructor(client, store, file, directory, options = {}) {
-		super(client, store, file, directory, options);
+	constructor(store, file, directory, options = {}) {
+		super(store, file, directory, options);
 
 		/**
 		 * If this inhibitor is meant for spamProtection (disables the inhibitor while generating help)

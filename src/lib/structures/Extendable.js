@@ -22,14 +22,13 @@ class Extendable extends Piece {
 
 	/**
 	 * @since 0.0.1
-	 * @param {KlasaClient} client The klasa client
 	 * @param {ExtendableStore} store The extendable store
 	 * @param {string[]} file The path from the pieces folder to the extendable file
 	 * @param {string} directory The base directory to the pieces folder
 	 * @param {ExtendableOptions} [options={}] The options for this extendable
 	 */
-	constructor(client, store, file, directory, options = {}) {
-		super(client, store, file, directory, options);
+	constructor(store, file, directory, options = {}) {
+		super(store, file, directory, options);
 
 		const staticPropertyNames = Object.getOwnPropertyNames(this.constructor)
 			.filter(name => !['length', 'prototype', 'name'].includes(name));
