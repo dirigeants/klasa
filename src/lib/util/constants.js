@@ -39,6 +39,7 @@ exports.DEFAULTS = {
 			users: {},
 			clientStorage: {}
 		},
+		owners: [],
 		// eslint-disable-next-line no-process-env
 		production: process.env.NODE_ENV === 'production',
 		prefixCaseInsensitive: false,
@@ -94,7 +95,8 @@ exports.DEFAULTS = {
 				ignoreWebhooks: true,
 				ignoreEdits: true,
 				ignoreBlacklistedUsers: true,
-				ignoreBlacklistedGuilds: true
+				ignoreBlacklistedGuilds: true,
+				allowedTypes: ['DEFAULT']
 			},
 			providers: { enabled: true },
 			serializers: {

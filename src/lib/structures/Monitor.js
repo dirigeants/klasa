@@ -17,6 +17,7 @@ class Monitor extends Piece {
 	 * @property {boolean} [ignoreEdits=true] Whether the monitor ignores edits or not
 	 * @property {boolean} [ignoreBlacklistedUsers=true] Wether the monitor should ignore blacklisted users or not
 	 * @property {boolean} [ignoreBlacklistedGuilds=true] Wether the monitor should ignore blacklisted guilds or not
+	 * @property {string[]} [allowedTypes=['DEFAULT']] The types of messages allowed for this monitor
 	 */
 
 	/**
@@ -29,6 +30,14 @@ class Monitor extends Piece {
 	 */
 	constructor(client, store, file, directory, options = {}) {
 		super(client, store, file, directory, options);
+
+		/**
+		 * The types of messages allowed for this monitor
+		 * @see https://discord.js.org/#/docs/main/master/typedef/MessageType
+		 * @since 0.5.0
+		 * @type {string[]}
+		 */
+		this.allowedTypes = options.allowedTypes;
 
 		/**
 		 * Whether the monitor ignores bots or not
@@ -114,6 +123,7 @@ class Monitor extends Piece {
 	 */
 	shouldRun(message) {
 		return this.enabled &&
+			this.allowedTypes.includes(message.type) &&
 			!(this.ignoreBots && message.author.bot) &&
 			!(this.ignoreSelf && this.client.user === message.author) &&
 			!(this.ignoreOthers && this.client.user !== message.author) &&

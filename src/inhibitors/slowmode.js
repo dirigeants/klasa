@@ -11,7 +11,7 @@ module.exports = class extends Inhibitor {
 	}
 
 	run(message) {
-		if (message.author === this.client.owner) return;
+		if (this.client.owners.has(message.author)) return;
 
 		const rateLimit = this.slowmode.acquire(message.author.id);
 
