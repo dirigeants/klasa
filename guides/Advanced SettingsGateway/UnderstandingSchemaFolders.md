@@ -38,7 +38,7 @@ KlasaClient.defaultGuildSchema.add('channels', folder => folder
 	.add('log', 'TextChannel'));
 ```
 
-Where the first option would be accessible from `message.guild.settings.channelLog`, and the second from `message.guild.settings.channels.log`. Users would configure them with `[p]conf set channelLog #logs` or `[p]conf set channels.log #logs`, depending on how you structure it. (`[p]` being your bot's prefix).
+Where the first option would be accessible from `message.guild.settings.get('channelLog')`, and the second from `message.guild.get('channels.log')`. Users would configure them with `[p]conf set channelLog #logs` or `[p]conf set channels.log #logs`, depending on how you structure it. (`[p]` being your bot's prefix).
 
 The schema is also able to store multiple values in a single key, this is used for per-guild-configurable disabled commands, and for the client's {@link Task tasks}. Making a key accept an array only requires the usage of {@link SchemaEntryOptions}. For example, adding a user blacklist in the client schema for your bot (to prevent users from using or inviting your bot):
 
@@ -46,7 +46,7 @@ The schema is also able to store multiple values in a single key, this is used f
 KlasaClient.defaultClientSchema.add('userBlacklist', 'User', { array: true });
 ```
 
-And now in your inhibitor or your guildCreate event, you can access to the array via `this.client.settings.userBlacklist`.
+And now in your inhibitor or your guildCreate event, you can access to the array via `this.client.settings.get('userBlacklist')`.
 
 A full example of a correctly configured schema would be the following:
 

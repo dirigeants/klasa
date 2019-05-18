@@ -45,7 +45,7 @@ function permissionLevel(message) {
 
 Completely ignoring that your check function can be async and returning false is how you progress to the next check if applicable, it works like that. It checks levels starting with the __minimum level__ acceptable for any action. (Usually a {@link Command#permissionLevel}) And it continues checking higher levels until it __returns true__ or hits a break. And if there is no break when levels run out, it's silent.
 
-This does mean that you can design permission levels where guild owners, and even you the client/bot owner can't access. Say you have a breaking permission level 3 that checks if `message.author.settings.xp >= 1000`. When a command with a permissionLevel of 3 is called, if you don't have that much xp, it will return you don't have permission to use that command even though you may satisfy higher levels. It breaks at that level, and won't check anything higher.
+This does mean that you can design permission levels where guild owners, and even you the client/bot owner can't access. Say you have a breaking permission level 3 that checks if `message.author.settings.get('xp') >= 1000`. When a command with a permissionLevel of 3 is called, if you don't have that much xp, it will return you don't have permission to use that command even though you may satisfy higher levels. It breaks at that level, and won't check anything higher.
 
 ## Creating Completely Custom PermissionLevels
 
@@ -93,11 +93,11 @@ const config = require('./config.json');
 
 Client.defaultPermissionLevels
 	// let some group of people who solved some easteregg clues use a special command/some custom non-admin role
-	.add(3, ({ guild, author }) => guild && guild.settings.solvers.includes(author.id))
+	.add(3, ({ guild, author }) => guild && guild.settings.get('solvers').includes(author.id))
 	// Make the requirements to use the conf command stricter than just who can add the bot to the guild
 	.add(6, ({ guild, member }) => guild && member.permissions.has('ADMINISTRATOR'), { fetch: true })
 	// add a role above guild owners that let your support team help setup/troubleshoot on other guilds.
-	.add(8, ({ client, author }) => client.settings.botSupportTeam.includes(author.id));
+	.add(8, ({ client, author }) => client.settings.get('botSupportTeam').includes(author.id));
 
 new Client(config).login(config.token);
 ```
