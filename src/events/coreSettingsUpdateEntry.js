@@ -3,6 +3,10 @@ const gateways = ['users', 'clientStorage'];
 
 module.exports = class extends Event {
 
+	constructor(...args) {
+		super(...args, { event: 'settingsUpdateEntry' });
+	}
+
 	run(settings) {
 		if (gateways.includes(settings.gateway.type)) {
 			this.client.shard.broadcastEval(`
