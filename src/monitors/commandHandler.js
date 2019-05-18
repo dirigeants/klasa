@@ -27,14 +27,18 @@ module.exports = class extends Monitor {
 			await this.client.inhibitors.run(message, message.command);
 			try {
 				await message.prompter.run();
-				const subcommand = message.command.subcommands ? message.params.shift() : undefined;
-				const commandRun = subcommand ? message.command[subcommand](message, message.params) : message.command.run(message, message.params);
-				timer.stop();
-				const response = await commandRun;
-				this.client.finalizers.run(message, message.command, response, timer);
-				this.client.emit('commandSuccess', message, message.command, message.params, response);
-			} catch (error) {
-				this.client.emit('commandError', message, message.command, message.params, error);
+				try {
+					const subcommand = message.command.subcommands ? message.params.shift() : undefined;
+					const commandRun = subcommand ? message.command[subcommand](message, message.params) : message.command.run(message, message.params);
+					timer.stop();
+					const response = await commandRun;
+					this.client.finalizers.run(message, message.command, response, timer);
+					this.client.emit('commandSuccess', message, message.command, message.params, response);
+				} catch (error) {
+					this.client.emit('commandError', message, message.command, message.params, error);
+				}
+			} catch (argumentError) {
+				this.client.emit('argumentError', message, message.command, message.params, argumentError);
 			}
 		} catch (response) {
 			this.client.emit('commandInhibited', message, message.command, response);
