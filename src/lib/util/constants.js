@@ -95,7 +95,8 @@ exports.DEFAULTS = {
 				ignoreWebhooks: true,
 				ignoreEdits: true,
 				ignoreBlacklistedUsers: true,
-				ignoreBlacklistedGuilds: true
+				ignoreBlacklistedGuilds: true,
+				allowedTypes: ['DEFAULT']
 			},
 			providers: { enabled: true },
 			serializers: {
