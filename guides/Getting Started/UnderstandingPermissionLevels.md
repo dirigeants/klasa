@@ -31,10 +31,10 @@ function permissionLevel(message) {
 			if (message.guild && message.member === message.guild.owner) return true;
 		case 8:
 		case 9:
-			if (message.author === message.client.owner) return true;
+			if (message.client.owners.has(author)) return true;
 			break;
 		case 10:
-			if (message.author === message.client.owner) return true;
+			if (message.client.owners.has(author)) return true;
 			return false;
 	}
 	throw 'You don\'t have permission';
@@ -74,9 +74,9 @@ config.permissionLevels = new PermissionLevels()
 	 * Allows the Bot Owner to use any lower commands
 	 * and causes any command with a permission level 9 or lower to return an error if no check passes.
 	 */
-	.add(9, ({ author, client }) => author === client.owner, { break: true })
+	.add(9, ({ author, client }) => client.owners.has(author), { break: true })
 	// Allows the bot owner to use Bot Owner only commands, which silently fail for other users.
-	.add(10, ({ author, client }) => author === client.owner);
+	.add(10, ({ author, client }) => client.owners.has(author));
 
 new Client(config).login(config.token);
 ```

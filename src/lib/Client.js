@@ -66,7 +66,7 @@ class KlasaClient extends Discord.Client {
 	 * @property {GatewaysOptions} [gateways={}] The options for each built-in gateway
 	 * @property {string} [language='en-US'] The default language Klasa should opt-in for the commands
 	 * @property {boolean} [noPrefixDM=false] Whether the bot should allow prefixless messages in DMs
-	 * @property {string} [ownerID] The discord user id for the user the bot should respect as the owner (gotten from Discord api if not provided)
+	 * @property {string[]} [owners] The discord user id for the users the bot should respect as the owner (gotten from Discord api if not provided)
 	 * @property {PermissionLevelsOverload} [permissionLevels] The permission levels to use with this bot
 	 * @property {PieceDefaults} [pieceDefaults={}] Overrides the defaults for all pieces
 	 * @property {string|string[]} [prefix] The default prefix the bot should respond to
@@ -340,13 +340,18 @@ class KlasaClient extends Discord.Client {
 	}
 
 	/**
-	 * The owner for this bot
-	 * @since 0.1.1
-	 * @type {?KlasaUser}
+	 * The owners for this bot
+	 * @since 0.5.0
+	 * @type {Set<KlasaUser>}
 	 * @readonly
 	 */
-	get owner() {
-		return this.users.get(this.options.ownerID) || null;
+	get owners() {
+		const owners = new Set();
+		for (const owner of this.options.owners) {
+			const user = this.users.get(owner);
+			if (user) owners.add(user);
+		}
+		return owners;
 	}
 
 	/**
@@ -501,8 +506,8 @@ KlasaClient.defaultPermissionLevels = new PermissionLevels()
 	.add(0, () => true)
 	.add(6, ({ guild, member }) => guild && member.permissions.has(FLAGS.MANAGE_GUILD), { fetch: true })
 	.add(7, ({ guild, member }) => guild && member === guild.owner, { fetch: true })
-	.add(9, ({ author, client }) => author === client.owner, { break: true })
-	.add(10, ({ author, client }) => author === client.owner);
+	.add(9, ({ author, client }) => client.owners.has(author), { break: true })
+	.add(10, ({ author, client }) => client.owners.has(author));
 
 
 /**

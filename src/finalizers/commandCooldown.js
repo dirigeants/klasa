@@ -3,7 +3,7 @@ const { Finalizer } = require('klasa');
 module.exports = class extends Finalizer {
 
 	run(message, command) {
-		if (command.cooldown <= 0 || message.author === this.client.owner) return;
+		if (command.cooldown <= 0 || this.client.owners.has(message.author)) return;
 
 		try {
 			command.cooldowns.acquire(message.levelID).drip();
