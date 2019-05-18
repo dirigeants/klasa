@@ -11,7 +11,11 @@ module.exports = class extends Event {
 
 	async run() {
 		await this.client.fetchApplication();
-		if (!this.client.options.ownerID) this.client.options.ownerID = this.client.application.owner.id;
+
+		// Single owner for now until Teams Support is truly added
+		if (!this.client.options.owners.length) this.client.options.owners.push(this.client.application.owner.id);
+
+		this.client.mentionPrefix = new RegExp(`^<@!?${this.client.user.id}>`);
 
 		const clientStorage = this.client.gateways.get('clientStorage');
 		// Added for consistency with other datastores, Client#clients does not exist

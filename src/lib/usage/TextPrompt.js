@@ -9,9 +9,12 @@ class TextPrompt {
 
 	/**
 	 * @typedef {Object} TextPromptOptions
+	 * @property {KlasaUser} [target=message.author] The intended target of this TextPrompt, if someone other than the author
+	 * @property {external:TextBasedChannel} [channel=message.channel] The channel to prompt in, if other than this channel
 	 * @property {number} [limit=Infinity] The number of re-prompts before this TextPrompt gives up
 	 * @property {number} [time=30000] The time-limit for re-prompting
 	 * @property {boolean} [quotedStringSupport=false] Whether this prompt should respect quoted strings
+	 * @property {boolean} [flagSupport=true] Whether this prompt should respect flags
 	 */
 
 	/**
@@ -38,6 +41,20 @@ class TextPrompt {
 		 * @type {KlasaMessage}
 		 */
 		this.message = message;
+
+		/**
+		 * The target this prompt is for
+		 * @since 0.5.0
+		 * @type {KlasaUser}
+		 */
+		this.target = options.target || message.author;
+
+		/**
+		 * The channel to prompt in
+		 * @since 0.5.0
+		 * @type {external:TextBasedChannel}
+		 */
+		this.channel = options.channel || message.channel;
 
 		/**
 		 * The usage for this prompt
@@ -96,6 +113,13 @@ class TextPrompt {
 		this.quotedStringSupport = options.quotedStringSupport;
 
 		/**
+		 * Whether this prompt should respect flags
+		 * @since 0.5.0
+		 * @type {boolean}
+		 */
+		this.flagSupport = options.flagSupport;
+
+		/**
 		 * Whether the current usage is a repeating arg
 		 * @since 0.0.1
 		 * @type {boolean}
@@ -142,10 +166,24 @@ class TextPrompt {
 	 * @returns {any[]} The parameters resolved
 	 */
 	async run(prompt) {
-		const message = await this.message.prompt(prompt, this.time);
+		const message = await this.prompt(prompt);
 		this.responses.set(message.id, message);
 		this._setup(message.content);
 		return this.validateArgs();
+	}
+
+	/**
+	 * Prompts the target for a response
+	 * @param {string} text The text to prompt
+	 * @returns {KlasaMessage}
+	 * @private
+	 */
+	async prompt(text) {
+		const message = await this.channel.send(text);
+		const responses = await this.channel.awaitMessages(msg => msg.author === this.target, { time: this.time, max: 1 });
+		message.delete();
+		if (responses.size === 0) throw this.language.get('MESSAGE_PROMPT_TIMEOUT');
+		return responses.first();
 	}
 
 	/**
@@ -159,14 +197,13 @@ class TextPrompt {
 		this._prompted++;
 		if (this.typing) this.message.channel.stopTyping();
 		const possibleAbortOptions = this.message.language.get('TEXT_PROMPT_ABORT_OPTIONS');
-		const message = await this.message.prompt(
-			this.message.language.get('MONITOR_COMMAND_HANDLER_REPROMPT', `<@!${this.message.author.id}>`, prompt, this.time / 1000, possibleAbortOptions),
-			this.time
+		const edits = this.message.edits.length;
+		const message = await this.prompt(
+			this.message.language.get('MONITOR_COMMAND_HANDLER_REPROMPT', `<@!${this.target.id}>`, prompt, this.time / 1000, possibleAbortOptions)
 		);
+		if (this.message.edits.length !== edits || message.prefix || possibleAbortOptions.includes(message.content.toLowerCase())) throw this.message.language.get('MONITOR_COMMAND_HANDLER_ABORTED');
 
 		this.responses.set(message.id, message);
-
-		if (possibleAbortOptions.includes(message.content.toLowerCase())) throw this.message.language.get('MONITOR_COMMAND_HANDLER_ABORTED');
 
 		if (this.typing) this.message.channel.startTyping();
 		this.args[this.args.lastIndexOf(null)] = message.content;
@@ -187,9 +224,8 @@ class TextPrompt {
 		let message;
 		const possibleCancelOptions = this.message.language.get('TEXT_PROMPT_ABORT_OPTIONS');
 		try {
-			message = await this.message.prompt(
-				this.message.language.get('MONITOR_COMMAND_HANDLER_REPEATING_REPROMPT', `<@!${this.message.author.id}>`, this._currentUsage.possibles[0].name, this.time / 1000, possibleCancelOptions),
-				this.time
+			message = await this.prompt(
+				this.message.language.get('MONITOR_COMMAND_HANDLER_REPEATING_REPROMPT', `<@!${this.message.author.id}>`, this._currentUsage.possibles[0].name, this.time / 1000, possibleCancelOptions)
 			);
 			this.responses.set(message.id, message);
 		} catch (err) {
@@ -314,7 +350,7 @@ class TextPrompt {
 	 * @private
 	 */
 	_setup(original) {
-		const { content, flags } = this.constructor.getFlags(original, this.usage.usageDelim);
+		const { content, flags } = this.flagSupport ? this.constructor.getFlags(original, this.usage.usageDelim) : { content: original, flags: {} };
 		this.flags = flags;
 		this.args = this.quotedStringSupport ?
 			this.constructor.getQuotedStringArgs(content, this.usage.usageDelim).map(arg => arg.trim()) :

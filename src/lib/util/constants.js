@@ -32,13 +32,15 @@ exports.DEFAULTS = {
 		customPromptDefaults: {
 			time: 30000,
 			limit: Infinity,
-			quotedStringSupport: false
+			quotedStringSupport: false,
+			flagSupport: true
 		},
 		gateways: {
 			guilds: {},
 			users: {},
 			clientStorage: {}
 		},
+		owners: [],
 		// eslint-disable-next-line no-process-env
 		production: process.env.NODE_ENV === 'production',
 		prefixCaseInsensitive: false,
@@ -57,6 +59,7 @@ exports.DEFAULTS = {
 				description: '',
 				extendedHelp: language => language.get('COMMAND_HELP_NO_EXTENDED'),
 				enabled: true,
+				flagSupport: true,
 				guarded: false,
 				hidden: false,
 				nsfw: false,
