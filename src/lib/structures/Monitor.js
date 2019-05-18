@@ -39,22 +39,6 @@ class Monitor extends Piece {
 		this.allowedTypes = options.allowedTypes;
 
 		/**
-		 * The types of messages allowed for this monitor
-		 * @see https://discord.js.org/#/docs/main/master/typedef/MessageType
-		 * @since 0.5.0
-		 * @type {string[]}
-		 */
-		this.allowedTypes = options.allowedTypes;
-
-		/**
-		 * The types of messages allowed for this monitor
-		 * @see https://discord.js.org/#/docs/main/master/typedef/MessageType
-		 * @since 0.5.0
-		 * @type {string[]}
-		 */
-		this.allowedTypes = options.allowedTypes;
-
-		/**
 		 * Whether the monitor ignores bots or not
 		 * @since 0.0.1
 		 * @type {boolean}
