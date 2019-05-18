@@ -25,6 +25,7 @@ declare module 'klasa' {
 		MessageEmbed,
 		MessageOptions,
 		MessageReaction,
+		MessageType,
 		PermissionResolvable,
 		Permissions,
 		Presence,
@@ -468,6 +469,7 @@ declare module 'klasa' {
 
 	export abstract class Monitor extends Piece {
 		public constructor(client: KlasaClient, store: MonitorStore, file: string[], directory: string, options?: MonitorOptions);
+		public allowedTypes: MessageType[];
 		public ignoreBots: boolean;
 		public ignoreEdits: boolean;
 		public ignoreOthers: boolean;
@@ -1331,6 +1333,7 @@ declare module 'klasa' {
 	}
 
 	export interface MonitorOptions extends PieceOptions {
+		allowedTypes?: MessageType[];
 		ignoreBots?: boolean;
 		ignoreEdits?: boolean;
 		ignoreOthers?: boolean;

@@ -61,3 +61,5 @@ docs
 \.vscode/
 \.idea/
 desktop.ini
+
+pnpm-lock\.yaml
