@@ -324,6 +324,13 @@ class KlasaClient extends Discord.Client {
 		 */
 		this.ready = false;
 
+		/**
+		 * The regexp for a prefix mention
+		 * @since 0.5.0
+		 * @type {RegExp}
+		 */
+		this.mentionPrefix = null;
+
 		// Run all plugin functions in this context
 		for (const plugin of plugins) plugin.call(this);
 	}
@@ -615,7 +622,17 @@ KlasaClient.defaultClientSchema = new Schema()
  * @param {KlasaMessage} message The message that triggered the command
  * @param {Command} command The command run
  * @param {any[]} params The resolved parameters of the command
- * @param {(string|Object)} error The command error
+ * @param {Object} error The command error
+ */
+
+/**
+ * Emitted when an invlaid argument is passed to a command.
+ * @event KlasaClient#argumentError
+ * @since 0.5.0
+ * @param {KlasaMessage} message The message that triggered the command
+ * @param {Command} command The command run
+ * @param {any[]} params The resolved parameters of the command
+ * @param {string} error The argument error
  */
 
 /**

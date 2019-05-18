@@ -15,6 +15,8 @@ module.exports = class extends Event {
 		// Single owner for now until Teams Support is truly added
 		if (!this.client.options.owners.length) this.client.options.owners.push(this.client.application.owner.id);
 
+		this.client.mentionPrefix = new RegExp(`^<@!?${this.client.user.id}>`);
+
 		this.client.settings = this.client.gateways.clientStorage.get(this.client.user.id, true);
 		// Added for consistency with other datastores, Client#clients does not exist
 		this.client.gateways.clientStorage.cache.set(this.client.user.id, this.client);

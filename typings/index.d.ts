@@ -71,12 +71,24 @@ declare module 'klasa' {
 		public readonly language: Language;
 	}
 
+	export interface CachedPrefix {
+		regex: RegExp;
+		length: number;
+	}
+
 	export class KlasaMessage extends Message {
 		private levelID: Snowflake | null;
 		private prompter: CommandPrompt | null;
 		private _responses: KlasaMessage[];
 		private _patch(data: any): void;
-		private _registerCommand(commandInfo: { command: Command, prefix: RegExp, prefixLength: number }): this;
+		private _parseCommand(): void;
+		private _customPrefix(): CachedPrefix | null;
+		private _mentionPrefix(): CachedPrefix | null;
+		private _naturalPrefix(): CachedPrefix | null;
+		private _prefixLess(): CachedPrefix | null;
+		private static generateNewPrefix(prefix: string, flags: string): CachedPrefix;
+
+		private static prefixes: Map<string, CachedPrefix>;
 	}
 
 	export class KlasaUser extends User {}
@@ -392,6 +404,7 @@ declare module 'klasa' {
 		public deletable: boolean;
 		public description: string | ((language: Language) => string);
 		public extendedHelp: string | ((language: Language) => string);
+		public flagSupport: boolean;
 		public fullCategory: string[];
 		public guarded: boolean;
 		public hidden: boolean;
@@ -643,9 +656,11 @@ declare module 'klasa' {
 	}
 
 	export class TextPrompt {
-		public constructor(message: KlasaMessage, usage: Usage, options: TextPromptOptions);
+		public constructor(message: KlasaMessage, usage: Usage, options?: TextPromptOptions);
 		public readonly client: KlasaClient;
 		public message: KlasaMessage;
+		public target: KlasaUser;
+		public channel: TextChannel | DMChannel;
 		public usage: Usage | CommandUsage;
 		public reprompted: boolean;
 		public flags: Record<string, string>;
@@ -661,6 +676,7 @@ declare module 'klasa' {
 		private _currentUsage: Tag;
 
 		public run<T = any[]>(prompt: string): Promise<T>;
+		private prompt(text: string): Promise<KlasaMessage>;
 		private reprompt(prompt: string): Promise<any[]>;
 		private repeatingPrompt(): Promise<any[]>;
 		private validateArgs(): Promise<any[]>;
@@ -1289,6 +1305,7 @@ declare module 'klasa' {
 		deletable?: boolean;
 		description?: string | string[] | ((language: Language) => string | string[]);
 		extendedHelp?: string | string[] | ((language: Language) => string | string[]);
+		flagSupport?: boolean;
 		guarded?: boolean;
 		hidden?: boolean;
 		nsfw?: boolean;
@@ -1380,7 +1397,10 @@ declare module 'klasa' {
 
 	// Usage
 	export interface TextPromptOptions {
+		channel?: TextChannel | DMChannel;
 		limit?: number;
+		quotedStringSupport?: boolean;
+		target?: KlasaUser;
 		time?: number;
 		quotedStringSupport?: boolean;
 	}
@@ -1676,7 +1696,8 @@ declare module 'discord.js' {
 		registerStore<K, V extends Piece, VConstructor = Constructor<V>>(store: Store<K, V, VConstructor>): KlasaClient;
 		unregisterStore<K, V extends Piece, VConstructor = Constructor<V>>(store: Store<K, V, VConstructor>): KlasaClient;
 		sweepMessages(lifetime?: number, commandLifeTime?: number): number;
-		on(event: 'commandError', listener: (message: KlasaMessage, command: Command, params: any[], error: Error) => void): this;
+		on(event: 'argumentError', listener: (message: KlasaMessage, command: Command, params: any[], error: string) => void): this;
+		on(event: 'commandError', listener: (message: KlasaMessage, command: Command, params: any[], error: Error | string) => void): this;
 		on(event: 'commandInhibited', listener: (message: KlasaMessage, command: Command, response: string | Error) => void): this;
 		on(event: 'commandRun', listener: (message: KlasaMessage, command: Command, params: any[], response: any) => void): this;
 		on(event: 'commandSuccess', listener: (message: KlasaMessage, command: Command, params: any[], response: any) => void): this;
@@ -1695,7 +1716,8 @@ declare module 'discord.js' {
 		on(event: 'taskError', listener: (scheduledTask: ScheduledTask, task: Task, error: Error) => void): this;
 		on(event: 'verbose', listener: (data: any) => void): this;
 		on(event: 'wtf', listener: (failure: Error) => void): this;
-		once(event: 'commandError', listener: (message: KlasaMessage, command: Command, params: any[], error: Error) => void): this;
+		once(event: 'argumentError', listener: (message: KlasaMessage, command: Command, params: any[], error: string) => void): this;
+		once(event: 'commandError', listener: (message: KlasaMessage, command: Command, params: any[], error: Error | string) => void): this;
 		once(event: 'commandInhibited', listener: (message: KlasaMessage, command: Command, response: string | Error) => void): this;
 		once(event: 'commandRun', listener: (message: KlasaMessage, command: Command, params: any[], response: any) => void): this;
 		once(event: 'commandSuccess', listener: (message: KlasaMessage, command: Command, params: any[], response: any) => void): this;
@@ -1714,7 +1736,8 @@ declare module 'discord.js' {
 		once(event: 'taskError', listener: (scheduledTask: ScheduledTask, task: Task, error: Error) => void): this;
 		once(event: 'verbose', listener: (data: any) => void): this;
 		once(event: 'wtf', listener: (failure: Error) => void): this;
-		off(event: 'commandError', listener: (message: KlasaMessage, command: Command, params: any[], error: Error) => void): this;
+		off(event: 'argumentError', listener: (message: KlasaMessage, command: Command, params: any[], error: string) => void): this;
+		off(event: 'commandError', listener: (message: KlasaMessage, command: Command, params: any[], error: Error | string) => void): this;
 		off(event: 'commandInhibited', listener: (message: KlasaMessage, command: Command, response: string | Error) => void): this;
 		off(event: 'commandRun', listener: (message: KlasaMessage, command: Command, params: any[], response: any) => void): this;
 		off(event: 'commandSuccess', listener: (message: KlasaMessage, command: Command, params: any[], response: any) => void): this;
@@ -1744,6 +1767,7 @@ declare module 'discord.js' {
 		guildSettings: Settings;
 		language: Language;
 		command: Command | null;
+		commandText: string | null;
 		prefix: RegExp | null;
 		prefixLength: number | null;
 		readonly responses: KlasaMessage[];
@@ -1753,7 +1777,6 @@ declare module 'discord.js' {
 		readonly reprompted: boolean;
 		readonly reactable: boolean;
 		send(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
-		prompt(text: string, time?: number): Promise<KlasaMessage>;
 		usableCommands(): Promise<Collection<string, Command>>;
 		hasAtLeastPermissionLevel(min: number): Promise<boolean>;
 	}
