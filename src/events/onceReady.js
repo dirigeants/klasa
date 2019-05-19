@@ -15,7 +15,7 @@ module.exports = class extends Event {
 			await this.client.fetchApplication();
 		} catch (err) {
 			if (++retries === 3) return process.exit();
-			this.client.emit('warning', `Unable to fetchApllication at this time, waiting 5 seconds and retries left: ${retries - 3}`);
+			this.client.emit('warning', `Unable to fetchApplication at this time, waiting 5 seconds and retrying. Retries left: ${retries - 3}`);
 			await util.sleep(5000);
 			return this.run();
 		}
