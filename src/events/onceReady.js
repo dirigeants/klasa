@@ -1,4 +1,5 @@
 const { Event, util } = require('klasa');
+let retries = 0;
 
 module.exports = class extends Event {
 
@@ -10,7 +11,14 @@ module.exports = class extends Event {
 	}
 
 	async run() {
-		await this.client.fetchApplication();
+		try {
+			await this.client.fetchApplication();
+		} catch (err) {
+			if (++retries === 3) return process.exit();
+			this.client.emit('warning', `Unable to fetchApllication at this time, waiting 5 seconds and retries left: ${retries - 3}`);
+			await util.sleep(5000);
+			return this.run();
+		}
 
 		// Single owner for now until Teams Support is truly added
 		if (!this.client.options.owners.length) this.client.options.owners.push(this.client.application.owner.id);
@@ -34,7 +42,7 @@ module.exports = class extends Event {
 			this.client.emit('log', util.isFunction(this.client.options.readyMessage) ? this.client.options.readyMessage(this.client) : this.client.options.readyMessage);
 		}
 
-		this.client.emit('klasaReady');
+		return this.client.emit('klasaReady');
 	}
 
 };
