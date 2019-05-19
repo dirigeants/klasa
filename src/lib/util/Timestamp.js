@@ -209,9 +209,9 @@ Timestamp.H = time => String(time.getHours());
 
 Timestamp.HH = time => String(time.getHours()).padStart(2, '0');
 
-Timestamp.h = time => String(time.getHours() % 12);
+Timestamp.h = time => String(time.getHours() % 12 || 12);
 
-Timestamp.hh = time => String(time.getHours() % 12).padStart(2, '0');
+Timestamp.hh = time => String(time.getHours() % 12 || 12).padStart(2, '0');
 
 Timestamp.a = time => time.getHours() < 12 ? 'am' : 'pm';
 
