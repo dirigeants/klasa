@@ -428,15 +428,22 @@ class SettingsFolder extends Map {
 		}
 	}
 
+	/**
+	 * Defines the toJSON behavior of this object
+	 * @returns {Object}
+	 */
 	toJSON() {
 		const object = {};
-		for (const [key, value] of this.entries()) {
-			object[key] = value instanceof SettingsFolder ? value.toJSON() : value;
-		}
+
+		for (const [key, value] of this.entries()) object[key] = value instanceof SettingsFolder ? value.toJSON() : value;
 
 		return object;
 	}
 
+	/**
+	 * Defines the toString behavior of this object
+	 * @returns {string}
+	 */
 	toString() {
 		return `Settings[${this.gateway.name}:${this.base.id}]`;
 	}
