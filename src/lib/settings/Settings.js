@@ -1,5 +1,9 @@
 const SettingsFolder = require('./SettingsFolder');
 
+/**
+ * The class that manages Settings
+ * @extends SettingsFolder
+ */
 class Settings extends SettingsFolder {
 
 	/**
