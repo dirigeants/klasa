@@ -1402,7 +1402,6 @@ declare module 'klasa' {
 		quotedStringSupport?: boolean;
 		target?: KlasaUser;
 		time?: number;
-		quotedStringSupport?: boolean;
 	}
 
 	// Util
