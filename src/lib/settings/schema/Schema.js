@@ -4,11 +4,11 @@ const SettingsFolder = require('../SettingsFolder');
 /**
  * The base Schema for {@link Gateway}s
  * @extends Map
- * @since 0.5.0
  */
 class Schema extends Map {
 
 	/**
+	 * @since 0.5.0
 	 * @param {string} [basePath=''] The base schema path
 	 */
 	constructor(basePath = '') {
@@ -42,11 +42,23 @@ class Schema extends Map {
 		Object.defineProperty(this, 'defaults', { value: new SettingsFolder(this) });
 	}
 
+	/**
+	 * Adds or replaces an entry to the schema
+	 * @param {string} key The key of the element to add to this instance
+	 * @param {SchemaFolder | SchemaEntry} value The value of the element to add to this instance
+	 * @returns {this}
+	 * @chainable
+	 */
 	set(key, value) {
 		this.defaults.set(key, value instanceof Schema ? value.defaults : value.default);
 		return super.set(key, value);
 	}
 
+	/**
+	 * Removes an entry from the schema
+	 * @param {string} key The key of the element to remove from this instance
+	 * @returns {boolean}
+	 */
 	delete(key) {
 		this.defaults.delete(key);
 		return super.delete(key);

@@ -3,6 +3,7 @@ const Settings = require('../Settings');
 const { Collection } = require('discord.js');
 
 /**
+ * The Gateway class for persistent data interaction with a cache layer
  * @extends GatewayStorage
  */
 class Gateway extends GatewayStorage {

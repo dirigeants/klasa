@@ -1,5 +1,8 @@
 const Schema = require('../schema/Schema');
 
+/**
+ * The base Gateway class that manages the persistent data from a database
+ */
 class GatewayStorage {
 
 	/**

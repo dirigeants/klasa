@@ -1,5 +1,8 @@
 const { isFunction, isNumber } = require('../../util/util');
 
+/**
+ * The SchemaEntry class that stores the metadata for an entry from the schema
+ */
 class SchemaEntry {
 
 	/**
@@ -21,11 +24,11 @@ class SchemaEntry {
 
 	/**
 	 * Creates our SchemaEntry instance
+	 * @since 0.5.0
 	 * @param {SchemaFolder|Schema} parent The parent folder or schema for this entry instance
 	 * @param {string} key The name of this entry instance
 	 * @param {string} type The type for this entry instance
 	 * @param {SchemaEntryOptions} [options={}] The options for this SchemaEntry instance
-	 * @since 0.5.0
 	 */
 	constructor(parent, key, type, options = {}) {
 		/**

@@ -1,6 +1,10 @@
 const { isObject, objectToTuples, arraysStrictEquals, toTitleCase, mergeObjects, makeObject, resolveGuild } = require('../util/util');
 const Type = require('../util/Type');
 
+/**
+ * The SettingsFolder class that manages the data for an entry from the database
+ * @extends Map
+ */
 class SettingsFolder extends Map {
 
 	/**
@@ -45,7 +49,7 @@ class SettingsFolder extends Map {
 		Object.defineProperty(this, 'base', { value: null, writable: true });
 
 		/**
-		 * The schema that manages this folder's structure.
+		 * The schema that manages this folder's structure
 		 * @since 0.5.0
 		 * @type {Gateway}
 		 * @name Settings#schema
@@ -54,15 +58,26 @@ class SettingsFolder extends Map {
 		Object.defineProperty(this, 'schema', { value: schema });
 	}
 
+	/**
+	 * The gateway that manages this instance
+	 * @since 0.5.0
+	 * @type {Gateway}
+	 */
 	get gateway() {
 		return this.base.gateway;
 	}
 
 	/**
-	 * Get a value from the configuration. Accepts nested objects separating by dot.
+	 * Get a value from the configuration. Accepts nested objects separating by dot
 	 * @since 0.5.0
 	 * @param {string} path The path of the key's value to get from this instance
 	 * @returns {*}
+	 * @example
+	 * // Simple get
+	 * const prefix = message.guild.settings.get('prefix');
+	 *
+	 * // Nested entry
+	 * const channel = message.guild.settings.get('channels.moderation-logs');
 	 */
 	get(path) {
 		// Map.prototype.get.call was used to avoid infinite recursion
@@ -126,13 +141,13 @@ class SettingsFolder extends Map {
 	 * @returns {SettingsFolderUpdateResult}
 	 * @example
 	 * // Reset all keys for this instance
-	 * Settings#reset();
-	 *
-	 * // Reset multiple keys for this instance
-	 * Settings#reset(['prefix', 'channels.modlog']);
+	 * message.guild.settings.reset();
 	 *
 	 * // Reset a key
-	 * Settings#reset('prefix');
+	 * message.guild.settings.reset('prefix');
+	 *
+	 * // Reset multiple keys for this instance
+	 * message.guild.settings.reset(['prefix', 'channels.modlog']);
 	 */
 	// eslint-disable-next-line complexity
 	async reset(paths = [...this.keys()], { throwOnError, onlyConfigurable, guild } = {}) {
@@ -204,22 +219,22 @@ class SettingsFolder extends Map {
 	 * @async
 	 * @example
 	 * // Updating the value of a key
-	 * Settings#update('roles.administrator', '339943234405007361', { guild: message.guild });
+	 * message.guild.settings.update('roles.administrator', '339943234405007361');
 	 *
 	 * // Updating an array:
-	 * Settings#update('userBlacklist', '272689325521502208');
+	 * message.guild.settings.update('userBlacklist', '272689325521502208');
 	 *
 	 * // Ensuring the function call adds (error if it exists):
-	 * Settings#update('userBlacklist', '272689325521502208', { arrayAction: 'add' });
+	 * message.guild.settings.update('userBlacklist', '272689325521502208', { arrayAction: 'add' });
 	 *
 	 * // Updating it with a json object:
-	 * Settings#update({ roles: { administrator: '339943234405007361' } }, { guild: message.guild });
+	 * message.guild.settings.update({ roles: { administrator: '339943234405007361' } });
 	 *
 	 * // Updating multiple keys (with json object):
-	 * Settings#update({ prefix: 'k!', language: 'es-ES' }, { guild: message.guild });
+	 * message.guild.settings.update({ prefix: 'k!', language: 'es-ES' });
 	 *
 	 * // Updating multiple keys (with arrays):
-	 * Settings#update([['prefix', 'k!'], ['language', 'es-ES']]);
+	 * message.guild.settings.update([['prefix', 'k!'], ['language', 'es-ES']]);
 	 */
 	// eslint-disable-next-line complexity
 	async update(paths, ...args) {
@@ -429,8 +444,20 @@ class SettingsFolder extends Map {
 	}
 
 	/**
-	 * Defines the toJSON behavior of this object
+	 * The serializable plain JSON object for this instance
+	 * @since 0.0.1
 	 * @returns {Object}
+	 * @example
+	 * console.log(this.client.settings);
+	 * // Settings [Map] {
+	 * //   'userBlacklist' => [],
+	 * //   'guildBlacklist' => [],
+	 * //   'schedules' => [Array] }
+	 *
+	 * console.log(this.client.settings.toJSON());
+	 * // { userBlacklist: [],
+	 * //   guildBlacklist: [],
+	 * //   schedules: [Array] }
 	 */
 	toJSON() {
 		const object = {};

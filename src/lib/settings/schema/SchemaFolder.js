@@ -3,11 +3,11 @@ const Schema = require('./Schema');
 /**
  * A Folder for organizing {@link SchemaEntry}s
  * @extends Schema
- * @since 0.5.0
  */
 class SchemaFolder extends Schema {
 
 	/**
+	 * @since 0.5.0
 	 * @param {SchemaFolder|Schema} parent The parent folder or schema for this folder instance
 	 * @param {string} key The name of this folder instance
 	 */
