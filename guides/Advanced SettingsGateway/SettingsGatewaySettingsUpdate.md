@@ -4,8 +4,7 @@ Once we have our schema completed with all the keys, folders and types needed, w
 
 ```javascript
 // Updating the value of a key
-// This key is contained in the roles folder, and the second value is a role id, we also need
-// to pass a GuildResolvable.
+// This key is contained in the roles folder, and the second value is a role id.
 message.guild.settings.update('roles.administrator', '339943234405007361');
 
 // For retrocompatibility, the object overload is still available, however, this is much slower.
@@ -27,8 +26,6 @@ message.guild.settings.update('userBlacklist', '272689325521502208', { arrayActi
 // Updating multiple keys
 message.guild.settings.update([['prefix', 'k!'], ['language', 'es-ES']]);
 ```
-
-> **Note**: Some types require a Guild instance to work, for example, *channels*, *roles* and *members*.
 
 > Additionally, if no 'arrayAction' option is passed to {@link SettingsUpdateOptions}, it'll assume the `auto` mode, which will add or remove depending on the existence of the key.
 
