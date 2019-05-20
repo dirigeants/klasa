@@ -16,7 +16,7 @@ This guide will explain anything and everything that there is to know about sett
         - {@scrollto Resolve Option}
 - {@scrollto Settings}
 	- {@scrollto Getting a Value}
-    - {@scrollto Updating or Resetting a Value}
+	- {@scrollto Updating or Resetting a Value}
 - {@scrollto Gateway}
     - {@scrollto Custom Gateway}
 
@@ -220,11 +220,13 @@ message.guild.settings.get('roles.administrator');
 ```
 
 You can use the pluck method to get multiple keys at once. It will return an object keyed by the paths you gave it.
+
 ```javascript
 const { prefix, 'roles.administrator': adminRole } = message.guild.settings.pluck('prefix', 'roles.administrator');
 ```
 
 If you would like resolved values as well, you can use the resolve method instead, it follows the same format as pluck, except that non-resolvable keys will be set to null in the returned object.
+
 ```javascript
 // Can also be awaited and destructured
 // Output: Role Object or null if unresolvable
