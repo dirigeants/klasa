@@ -121,7 +121,7 @@ To add new types, you make a class, extending {@link Serializer}. The following 
 const { Serializer } = require('klasa');
 
 // Extend Serializer to create your own. These are loaded from  the Serializers folder.
-module.exports = class Date extends Serializer {
+module.exports = class extends Serializer {
 
 	constructor(...args) {
 		// If you want aliases for this, you can set them here.
@@ -177,11 +177,10 @@ The filter option serves to blacklist certain values. It's output is not used, b
 Internally, we use this option to avoid users from disabling guarded commands (check {@link Command#guard}):
 
 ```javascript
-const filter = (client, command, piece, guild) => {
-	if (client.commands.get(command).guarded) {
-		throw (guild ? guild.language : client.languages.default).get('COMMAND_CONF_GUARDED', command);
-	}
-};
+const filter = (client, command, entry, language) => {
+    if (command.guarded) throw language.get('COMMAND_CONF_GUARDED', command.name);
+}
+
 ```
 
 In this case, `client` is the {@link KlasaClient} instance, `command` the resolved command (the output from the command's SchemaType), `piece` is a {@link SchemaPiece} instance, and guild is a {@link Guild} instance, which may be null.
@@ -227,10 +226,8 @@ const { prefix, 'roles.administrator': adminRole } = message.guild.settings.pluc
 
 If you would like resolved values as well, you can use the resolve method instead, it follows the same format as pluck, except that non-resolvable keys will be set to null in the returned object.
 ```javascript
-async function() {
-	const { 'roles.administrator': adminRole } = await message.guild.resolve('roles.administrator');
-	console.log(adminRole); // Role Object or null if unresolvable.
-}
+// Can also be awaited and destructured
+message.guild.resolve('roles.administrator').then(resolvedObject => console.log(resolvedObject['roles.administrator'])); // Role Object or null
 ```
 
 ### Updating or Resetting a Value
