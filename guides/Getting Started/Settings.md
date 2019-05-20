@@ -18,7 +18,7 @@ This guide will explain anything and everything that there is to know about sett
     - {@scrollto Getting a Value}
     - {@scrollto Updating or Resetting a Value}
 - {@scrollto Gateway}
-   - {@scrollto Custom Gateway}
+    - {@scrollto Custom Gateway}
 
 ## Schema
 
