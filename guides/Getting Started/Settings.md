@@ -3,22 +3,22 @@ This guide will explain anything and everything that there is to know about sett
 # Table of Contents
 
 - {@scrollto Schema}
-    - {@scrollto Folders}
-        - {@scrollto Adding a Folder}
-        - {@scrollto Adding a Piece}
-        - {@scrollto Naming Conflicts}
-    - {@scrollto Pieces}
-        - {@scrollto Types}
-        - {@scrollto Custom Types} 
-    - {@scrollto Options}
-        - {@scrollto Default Option}
-        - {@scrollto Filter Option}
-        - {@scrollto Resolve Option}
+	- {@scrollto Folders}
+		- {@scrollto Adding a Folder}
+		- {@scrollto Adding a Piece}
+		- {@scrollto Naming Conflicts}
+	- {@scrollto Pieces}
+		- {@scrollto Types}
+		- {@scrollto Custom Types} 
+	- {@scrollto Options}
+		- {@scrollto Default Option}
+		- {@scrollto Filter Option}
+		- {@scrollto Resolve Option}
 - {@scrollto Settings}
 	- {@scrollto Getting a Value}
 	- {@scrollto Updating or Resetting a Value}
 - {@scrollto Gateway}
-    - {@scrollto Custom Gateway}
+	- {@scrollto Custom Gateway}
 
 ## Schema
 
