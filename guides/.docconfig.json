@@ -9,8 +9,8 @@
         "path": "UnderstandingPermissionLevels.md"
     },
     {
-        "name": "Understanding SettingsGateway",
-        "path": "UnderstandingSettingsGateway.md"
+        "name": "Settings Guide",
+        "path": "Settings.md"
     },
     {
         "name": "Understanding Usage Strings",
@@ -90,25 +90,6 @@
     {
         "name": "Commands IV: Per-Command custom argument resolvers",
         "path": "CommandsCustomResolvers.md"
-    }]
-},
-{
-    "name": "Advanced SettingsGateway",
-    "files": [{
-        "name": "Understanding SchemaFolders",
-        "path": "UnderstandingSchemaFolders.md"
-    },
-    {
-        "name": "Understanding SchemaEntries",
-        "path": "UnderstandingSchemaEntries.md"
-    },
-    {
-        "name": "SettingsGateway's Types",
-        "path": "SettingsGatewayKeyTypes.md"
-    },
-    {
-        "name": "Updating your Settings",
-        "path": "SettingsGatewaySettingsUpdate.md"
     }]
 },
 {
