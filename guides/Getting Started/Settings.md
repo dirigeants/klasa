@@ -178,8 +178,8 @@ Internally, we use this option to avoid users from disabling guarded commands (c
 
 ```javascript
 const filter = (client, command, entry, language) => {
-    if (command.guarded) throw language.get('COMMAND_CONF_GUARDED', command.name);
-}
+	if (command.guarded) throw language.get('COMMAND_CONF_GUARDED', command.name);
+};
 
 ```
 
@@ -227,7 +227,8 @@ const { prefix, 'roles.administrator': adminRole } = message.guild.settings.pluc
 If you would like resolved values as well, you can use the resolve method instead, it follows the same format as pluck, except that non-resolvable keys will be set to null in the returned object.
 ```javascript
 // Can also be awaited and destructured
-message.guild.resolve('roles.administrator').then(resolvedObject => console.log(resolvedObject['roles.administrator'])); // Role Object or null
+// Output: Role Object or null if unresolvable
+message.guild.resolve('roles.administrator').then(resolvedObject => console.log(resolvedObject['roles.administrator']));
 ```
 
 ### Updating or Resetting a Value
