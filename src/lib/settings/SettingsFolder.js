@@ -120,17 +120,17 @@ class SettingsFolder extends Map {
  	 * Resolves paths into their full objects or values depending on the current set value
  	 * @since 0.5.0
  	 * @param  {...string} paths The paths to resolve
- 	 * @returns {*}
+ 	 * @returns {Promise<any[]>}
  	 */
 	async resolve(...paths) {
 		const guild = resolveGuild(this.base.gateway.client, this.base.target);
 		const language = guild ? guild.language : this.base.gateway.client.languages.default;
 		const promises = [];
-		for (const path of paths) {
+		const values = await Promise.all(paths.map(path => {
 			const entry = this.schema.get(this.relative(path));
-			promises.push(entry.resolve(this, language, guild).then(res => ({ [entry.key]: res })));
+			return entry.resolve(this, language, guild).then(res => ({ [entry.key]: res }))
 		}
-		return Object.assign({}, ...await Promise.all(promises));
+		return values;
 	}
 
 	/**
