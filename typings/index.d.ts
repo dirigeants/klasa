@@ -234,8 +234,8 @@ declare module 'klasa' {
 		public update(entries: Iterable<[string, any]>, options?: SettingsFolderUpdateOptions): Promise<SettingsFolderUpdateResult>;
 		public update(object: Record<string, any>, options?: SettingsFolderUpdateOptions): Promise<SettingsFolderUpdateResult>;
 		public display(message: KlasaMessage, path?: string | Schema | SchemaFolder | SchemaEntry): string;
-		public pluck<T extends string>(...paths: T[]): Partial<Record<T, any>>;
-		public resolve<T extends string>(...paths: T[]): Partial<Record<T, any>>;
+		public pluck<T extends string>(...paths: T[]): any[];
+		public resolve<T extends string>(...paths: T[]): any[];
 		public toJSON(): any;
 		public toString(): string;
 		private relative(pathOrPiece: string | Schema | SchemaEntry): string;
