@@ -88,18 +88,18 @@ class SettingsFolder extends Map {
 	 * Plucks out one or more attributes from either an object or a sequence of objects
 	 * @since 0.5.0
 	 * @param  {...string} paths The paths to take
-	 * @returns {Object<string,*>}
+	 * @returns {Array<any>}
 	 * @example
-	 * const { x, y } = message.guild.settings.pluck('x', 'y');
+	 * const [x, y] = message.guild.settings.pluck('x', 'y');
 	 * console.log(x, y);
 	 */
 	pluck(...paths) {
-		const object = {};
+		const values = [];
 		for (const path of paths) {
 			const value = this.get(path);
-			if (typeof value !== 'undefined') object[path] = value instanceof SettingsFolder ? value.toJSON() : value;
+			if (typeof value !== 'undefined') values.push(value instanceof SettingsFolder ? value.toJSON() : value);
 		}
-		return object;
+		return values;
 	}
 
 	/**
