@@ -94,12 +94,10 @@ class SettingsFolder extends Map {
 	 * console.log(x, y);
 	 */
 	pluck(...paths) {
-		const values = [];
-		for (const path of paths) {
+		return paths.map(path => {
 			const value = this.get(path);
-			if (typeof value !== 'undefined') values.push(value instanceof SettingsFolder ? value.toJSON() : value);
-		}
-		return values;
+			return typeof value !== 'undefined' ? values.push(value instanceof SettingsFolder ? value.toJSON() : value) : null;
+		})
 	}
 
 	/**
