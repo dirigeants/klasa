@@ -126,8 +126,8 @@ class SettingsFolder extends Map {
 		const promises = [];
 		const values = await Promise.all(paths.map(path => {
 			const entry = this.schema.get(this.relative(path));
-			return entry.resolve(this, language, guild).then(res => ({ [entry.key]: res }))
-		}
+			return entry.resolve(this, language, guild).then(res => res)
+		}));
 		return values;
 	}
 
