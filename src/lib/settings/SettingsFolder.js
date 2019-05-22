@@ -118,7 +118,7 @@ class SettingsFolder extends Map {
  	 * Resolves paths into their full objects or values depending on the current set value
  	 * @since 0.5.0
  	 * @param  {...string} paths The paths to resolve
- 	 * @returns {Promise<any[]>}
+ 	 * @returns {Promise<Array<*>>}
  	 */
 	resolve(...paths) {
 		const guild = resolveGuild(this.base.gateway.client, this.base.target);
