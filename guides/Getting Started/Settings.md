@@ -187,17 +187,35 @@ In this case, `client` is the {@link KlasaClient} instance, `command` the resolv
 
 ### Resolve option
 
-The resolve option allows you to change the behavior of keys that should be resolved when using the resolve method. It is true by default, and will automatically resolve every single object in an array where possible. If a key cannot be resolved, that key will be set to null to ensure that falsy checks still work as intended. Below is an example of how you would use the resolve option.
+The resolve option allows you specify whether or not you want your primitive values turned back into their full objects (where possible, ex: Turning User ID => User Object). When using the resolve method, this option will determine whether or not you get back a primitive or not. This option is true by default, and will automatically resolve every single object in array where possible.
+
+An example: You have a roles array that gives certain roles permissions to use more commands. You want to check if a user has any of the roles in the array.
 
 ```javascript
 const { Client } = require('klasa');
 
 // Resolve is default by true, here for example purposes
-Client.defaultGuildSchema.add('modRole', 'role', { resolve: true });
+Client.defaultGuildSceham.add('roles', 'role', { array: true, resolve: true });
 
-// Assuming you're running this command in a guild, can also be awaited and destructured
-message.guild.settings.resolve('modRole').then(resolved => console.log(resolved));
+// Assuming you're running this command in a guild, can also be awaited and destructured.
+// Using this function you can expect 1 of 2 outcomes
+// 1. You will get a resolved role back from the output which you can use just like any other role object.
+// 2. You will get null back which indicates, for whatever reason, that the key could not be converted back to a role object.
+// Since our key is an array, this will resolve all roles inside that array.
+message.guild.settings.resolve('roles').then(resolved => console.log(resolved));
 ```
+
+The above code is functionally equivalent to this:
+
+```javascript
+const { Client } = require('klasa');
+
+Client.defaultGuildSchema.add('roles', 'role', { array: true });
+
+// Array of Role Objects
+const roles = message.guild.settings.get('roles').map(role => message.guild.roles.get(role));
+```
+
 
 ## Settings
 
