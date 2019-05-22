@@ -235,7 +235,7 @@ declare module 'klasa' {
 		public update(object: Record<string, any>, options?: SettingsFolderUpdateOptions): Promise<SettingsFolderUpdateResult>;
 		public display(message: KlasaMessage, path?: string | Schema | SchemaFolder | SchemaEntry): string;
 		public pluck<T extends string>(...paths: T[]): any[];
-		public resolve<T extends string>(...paths: T[]): any[];
+		public resolve<T extends string>(...paths: T[]): Promise<any[]>;
 		public toJSON(): any;
 		public toString(): string;
 		private relative(pathOrPiece: string | Schema | SchemaEntry): string;
