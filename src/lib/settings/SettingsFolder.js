@@ -88,7 +88,7 @@ class SettingsFolder extends Map {
 	 * Plucks out one or more attributes from either an object or a sequence of objects
 	 * @since 0.5.0
 	 * @param  {...string} paths The paths to take
-	 * @returns {Array<any>}
+	 * @returns {Array<*>}
 	 * @example
 	 * const [x, y] = message.guild.settings.pluck('x', 'y');
 	 * console.log(x, y);
