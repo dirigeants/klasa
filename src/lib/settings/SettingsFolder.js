@@ -96,8 +96,8 @@ class SettingsFolder extends Map {
 	pluck(...paths) {
 		return paths.map(path => {
 			const value = this.get(path);
-			return typeof value !== 'undefined' ? values.push(value instanceof SettingsFolder ? value.toJSON() : value) : null;
-		})
+			return typeof value !== 'undefined' ? value instanceof SettingsFolder ? value.toJSON() : value : null;
+		});
 	}
 
 	/**
@@ -125,7 +125,7 @@ class SettingsFolder extends Map {
 		const language = guild ? guild.language : this.base.gateway.client.languages.default;
 		return Promise.all(paths.map(path => {
 			const entry = this.schema.get(this.relative(path));
-			return entry.resolve(this, language, guild).then(res => res)
+			return entry.resolve(this, language, guild).then(res => res);
 		}));
 	}
 
