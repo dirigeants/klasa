@@ -120,15 +120,13 @@ class SettingsFolder extends Map {
  	 * @param  {...string} paths The paths to resolve
  	 * @returns {Promise<any[]>}
  	 */
-	async resolve(...paths) {
+	resolve(...paths) {
 		const guild = resolveGuild(this.base.gateway.client, this.base.target);
 		const language = guild ? guild.language : this.base.gateway.client.languages.default;
-		const promises = [];
-		const values = await Promise.all(paths.map(path => {
+		return Promise.all(paths.map(path => {
 			const entry = this.schema.get(this.relative(path));
 			return entry.resolve(this, language, guild).then(res => res)
 		}));
-		return values;
 	}
 
 	/**
