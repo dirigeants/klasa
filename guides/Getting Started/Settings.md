@@ -195,7 +195,7 @@ An example: You have a roles array that gives certain roles permissions to use m
 const { Client } = require('klasa');
 
 // Resolve is default by true, here for example purposes
-Client.defaultGuildSceham.add('roles', 'role', { array: true, resolve: true });
+Client.defaultGuildSchema.add('roles', 'role', { array: true, resolve: true });
 
 // Assuming you're running this command in a guild, can also be awaited and destructured.
 // Using this function you can expect 1 of 2 outcomes
