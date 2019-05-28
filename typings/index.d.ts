@@ -1692,6 +1692,7 @@ declare module 'discord.js' {
 		application: ClientApplication;
 		schedule: Schedule;
 		ready: boolean;
+		mentionPrefix: RegExp | null;
 		registerStore<K, V extends Piece, VConstructor = Constructor<V>>(store: Store<K, V, VConstructor>): KlasaClient;
 		unregisterStore<K, V extends Piece, VConstructor = Constructor<V>>(store: Store<K, V, VConstructor>): KlasaClient;
 		sweepMessages(lifetime?: number, commandLifeTime?: number): number;
