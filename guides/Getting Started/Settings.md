@@ -238,7 +238,7 @@ When using nested groups, we separate the groups names by dot:
 message.guild.settings.get('roles.administrator');
 ```
 
-You can use the pluck method to get multiple keys at once. It will return an object keyed by the paths you gave it.
+You can use the pluck method to get multiple keys at once. It will return an array in the same order as the paths you gave it.
 
 ```javascript
 const { prefix, 'roles.administrator': adminRole } = message.guild.settings.pluck('prefix', 'roles.administrator');
