@@ -222,7 +222,8 @@ declare module 'klasa' {
 
 //#region Settings
 
-	export class SettingsFolder extends Map<string, SettingsFolder | PrimitiveType | object | Array<PrimitiveType | object>> {
+
+	export class SettingsFolder extends Map<string, SettingsFolder | SettingsValue | readonly SettingsValue[]> {
 		public constructor(schema: SchemaFolder);
 		public readonly schema: SchemaFolder;
 		public readonly base: Settings | null;
@@ -234,9 +235,9 @@ declare module 'klasa' {
 		public update(entries: Iterable<[string, any]>, options?: SettingsFolderUpdateOptions): Promise<SettingsFolderUpdateResult>;
 		public update(object: Record<string, any>, options?: SettingsFolderUpdateOptions): Promise<SettingsFolderUpdateResult>;
 		public display(message: KlasaMessage, path?: string | Schema | SchemaFolder | SchemaEntry): string;
-		public pluck<T extends string>(...paths: T[]): any[];
-		public resolve<T extends string>(...paths: T[]): Promise<any[]>;
-		public toJSON(): any;
+		public pluck(...paths: readonly string[]): any[];
+		public resolve(...paths: readonly string[]): Promise<any[]>;
+		public toJSON(): Readonly<Record<string, SettingsValue>>;
 		public toString(): string;
 		private relative(pathOrPiece: string | Schema | SchemaEntry): string;
 		private _save(results: Array<SettingsFolderUpdateResultEntry>): Promise<void>;
@@ -1215,6 +1216,8 @@ declare module 'klasa' {
 		schema: SchemaFolderOptions;
 		type: string;
 	}
+
+	export type SettingsValue = PrimitiveType | object;
 
 	export interface SettingsFolderResetOptions {
 		throwOnError?: boolean;
