@@ -22,7 +22,7 @@ class Possible {
 		 * @since 0.2.1
 		 * @type {string}
 		 */
-		this.type = type.toLowerCase();
+		this.type = type;
 
 		/**
 		 * The min of this possible
