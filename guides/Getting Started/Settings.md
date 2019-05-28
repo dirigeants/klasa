@@ -249,7 +249,7 @@ If you would like resolved values as well, you can use the resolve method instea
 ```javascript
 // Can also be awaited and destructured
 // Output: Role Object or null if unresolvable
-message.guild.resolve('roles.administrator').then(resolvedObject => console.log(resolvedObject['roles.administrator']));
+message.guild.resolve('roles.administrator').then(resolvedArray => console.log(resolvedArray[0]));
 ```
 
 ### Updating or Resetting a Value
