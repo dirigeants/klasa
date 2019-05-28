@@ -9,7 +9,7 @@ This guide will explain anything and everything that there is to know about sett
         - {@scrollto Naming Conflicts}
     - {@scrollto Pieces}
         - {@scrollto Types}
-        - {@scrollto Custom Types} 
+        - {@scrollto Custom Types}
     - {@scrollto Options}
         - {@scrollto Default Option}
         - {@scrollto Filter Option}
@@ -156,9 +156,9 @@ module.exports = class extends Serializer {
 
 ## Options
 
-Below is a list of all schema piece options that can be configured when adding or modifying pieces. You can find the full documentation at {@link SchemaPieceOptions}.
+Below is a list of all schema piece options that can be configured when adding or modifying pieces. You can find the full documentation at {@link SchemaEntryOptions}.
 
-{@typedef SchemaPieceOptions}
+{@typedef SchemaEntryOptions}
 
 ### Default option
 
@@ -183,7 +183,7 @@ const filter = (client, command, entry, language) => {
 
 ```
 
-In this case, `client` is the {@link KlasaClient} instance, `command` the resolved command (the output from the command's SchemaType), `piece` is a {@link SchemaPiece} instance, and guild is a {@link Guild} instance, which may be null.
+In this case, `client` is the {@link KlasaClient} instance, `command` the resolved command (the output from the command's SchemaType), `piece` is a {@link SchemaEntry} instance, and guild is a {@link Guild} instance, which may be null.
 
 ### Resolve option
 
