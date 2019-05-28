@@ -244,7 +244,7 @@ You can use the pluck method to get multiple keys at once. It will return an obj
 const { prefix, 'roles.administrator': adminRole } = message.guild.settings.pluck('prefix', 'roles.administrator');
 ```
 
-If you would like resolved values as well, you can use the resolve method instead, it follows the same format as pluck, except that non-resolvable keys will be set to null in the returned object.
+If you would like resolved values as well, you can use the resolve method instead, it follows the same format as pluck, except that non-resolvable keys will be set to null in the returned array.
 
 ```javascript
 // Can also be awaited and destructured
