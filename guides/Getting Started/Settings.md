@@ -241,7 +241,7 @@ message.guild.settings.get('roles.administrator');
 You can use the pluck method to get multiple keys at once. It will return an array in the same order as the paths you gave it.
 
 ```javascript
-const { prefix, 'roles.administrator': adminRole } = message.guild.settings.pluck('prefix', 'roles.administrator');
+const [prefix, adminRole] = message.guild.settings.pluck('prefix', 'roles.administrator');
 ```
 
 If you would like resolved values as well, you can use the resolve method instead, it follows the same format as pluck, except that non-resolvable keys will be set to null in the returned array.
