@@ -70,7 +70,7 @@ module.exports = class extends Command {
 
 Don't worry too much about all the lines and options just yet. We will cover them later when we create our own command. For now we just want to focus on this part:
 
-```js
+```ts
 guarded: true,
 description: language => language.get('COMMAND_INVITE_DESCRIPTION')
 ```
@@ -84,7 +84,7 @@ This is the part that holds the options for each of the commands.
 > Note: Klasa has built in `multi-lingual` support. You can support as many languages as you wish. We will learn more about Languages when we create our own language but for now we just want to see how to customize the command.
 
 Now, we want to add the `aliases` option to it:
-```js
+```ts
 	aliases: [`inv`, `i`],
 	description: language => language.get(`COMMAND_INVITE_DESCRIPTION`)
 	guarded: true,
