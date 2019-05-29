@@ -18,8 +18,6 @@ Up till this point, we have ignored all the folders that Klasa made for us.
 
 Every one of these folders is a `Store` and every file we will create inside them is going to be a `Piece`.
 
-
-
 ## Command Store
 
 The first store we should learn is the `CommandStore`. We have already used this store and we didn't have much need to understand it. Every single command we used so far is a part of this `CommandStore`.
@@ -113,5 +111,3 @@ Once the reload is done, we can try using `+inv` or `+i`.
 <!-- Insert Image Here -->
 
 Nice! You can now customize any of the commands from Klasa as you wish. But for the purposes of this guide we will continue to making our very own command so we can learn about all the options that Klasa gives us when it comes to making commands.
-
-

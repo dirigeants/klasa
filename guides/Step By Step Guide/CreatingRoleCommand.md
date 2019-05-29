@@ -327,6 +327,7 @@ If you wish you can give this a custom name like below or just delete this entir
 For this guide, we will just be deleting this line going forward to keep our file cleaner.
 
 ### Command Enabled
+
 The `enabled` option will be used to tell Klasa whether this command should be enabled or disabled.
 
 In case, you want to disable the command. You can do so
@@ -372,6 +373,7 @@ Once the reload is done, you can try and use the command.
 Once you finish testing, you can go back and delete this option because we want this command to be enabled. By default, commands are always enabled so we don't need this option either.
 
 ### Command Run In
+
 The `runIn` option allows you to tell Klasa where this command should be allowed to run. There are currently, two valid values you can give this option.
 
 - `text`: Allow in guilds
@@ -494,6 +496,7 @@ Notice how I put `r`, `ro`, and `rol` as aliases. This is so if by chance the us
 If you don't want to add any aliases for the command, you can simply remove this entire line.
 
 ### Command Deletable
+
 This option allows you to tell Klasa to delete all the bots responses to a command if the trigger message was deleted. Let's set this to true and see how it works.
 
 ```ts
@@ -526,6 +529,7 @@ Once the bot response, you can delete your message where you typed `+role` and n
 Since, we don't really want to bot deleting this response so we can always tell when the bot gave a role to someone we will remove this option entirely for this guide.
 
 ### Command Guarded
+
 The `guarded` option is something we have seen already in this guide. It tells Klasa that this command should not be allowed to be disabled by servers.
 
 > Note: If you customize the settings and override the default `disabledCommands` guild setting, you must also build the filter for this if you want to use this option. We will go over this in the guild settings part of this guide.
@@ -555,6 +559,7 @@ Let's go ahead and test this out quickly.
 Since this is a guild moderation command, we want to allow servers to be able to choose whether this command should work on their server or not. So we can delete this line from our command.
 
 ### Command NSFW
+
 The `nsfw` options tells Klasa that this is a NSFW command and not to allow this command outside a `nsfw` channel.
 
 > Note: If you make a command nsfw it will not work in Direct Messages. NSFW commands in Direct Messages are against the Terms of Service from discord so Klasa does not support this.
@@ -589,6 +594,7 @@ Then you can try running the command again in a NSFW channel. You will see that 
 Going forward we don't want the role command to be only in NSFW channels so we can delete this line so it defaults to `false`.
 
 ### Command Permission Level
+
 Permission levels are a very complex function in Klasa. It allows you to tell Klasa what level is required for a user to use this function.
 
 > Note: To learn about Permission levels in depth please read this section of the docs. We will also be creating our own custom permission levels later in this guide.
@@ -623,6 +629,7 @@ Since we don't want to allow any user to use the role command, we can tell Klasa
 Now you can reload the bot and have an alternate discord account or a friend try using the command to see how this option works.
 
 ### Command Required Permissions
+
 The `requiredPermissions` options tells Klasa what permissions are necessary to run a command. For example, in order to add or remove roles from someone, we need the `MANAGE_ROLES` permission on the server.
 
 > Note: For good practice, it is recommended to try and use the Permissions.FLAGS from Discord.js. However, you can also provide it as just `MANAGE_ROLES`.
@@ -661,6 +668,7 @@ Now that Klasa knows we need Manage Roles, we can reload the command and try usi
 Next you can give the bot the `MANAGE_ROLES` permission and try it again. This time the command will respond properly.
 
 ### Command Required Settings
+
 The `requiredSettings` option tells Klasa which guild settings are required to run this command. This option can come in handy when you want to make sure that a guild has set up a setting in advance.
 
 Imagine you wanted to make a log channel where the bot would post a message every time someone used the role command. In order to make sure that the guild had set a `channel` to send the log message to we could use this option.
@@ -670,6 +678,7 @@ Imagine you wanted to make a log channel where the bot would post a message ever
 We will add in the log option later in this guide so for now we can just remove this line.
 
 ### Description and Extended Help Options
+
 The `description` and `extendedHelp` are meant to be for the help command. The `description` we have already seen in the `+invite` command but the `extendedHelp` is new.
 
 - description: a short description that is displayed when someone types `+help`
@@ -693,6 +702,7 @@ For now we will be using the first method.
 
 
 ### Usage And Usage Delim Options
+
 The `usage` and `usageDelim` are going to tell our bot how to accept arguments for our command.
 
 > Note: The `usage` is also a very complex part of Klasa. There is an entire page dedicated to understanding Usage and all its details.
@@ -744,6 +754,7 @@ usage: `<add|remove> <role:role> [member:member]`
 Notice, how we made the member here optional. You will see why a little below when we make the commands but for now just remember you can make it `<>` as well. However, for the purpose of this guide we will make it optional with `[]` because we want to allow the user to give themself that role. It also helps give a nice example of an optional argument. 😉
 
 ### Quoted String Support And Subcommands Option
+
 The `quotedStringSupport` is used when you have a need to tell Klasa to ignore the `usageDelim` inside `" "`. Remember the `role` argument from Klasa only accepts a valid role `id` or a role mention `@role`. But if we used the `rolename` argument from **Klasa Pieces**, we would be able to have users provide the name of the role as well.
 
 > Note: Klasa Pieces is the official community built repository that has a bunch of `Pieces` that you can copy and add into your bot. We will explore into this Repository a bit later when we dive into `Providers` or part of this guide.
@@ -785,6 +796,7 @@ So, all we need to do is now set the subcommand to true.
 Nice. Now don't go testing this just yet because you will start having errors right now since we have not actually made the `add` and `remove` subcommands.
 
 ## Making The Subcommands
+
 Alright, now we have every single option on this command set exactly how we want it. Since, we just enabled the `subcommands`, it is time to start making those subcommands. Let's start with the `add` subcommand.
 
 > Note: We won't be adding the functionality just yet so that it easier to understand how to make the subcommands.
@@ -930,6 +942,7 @@ Nice! We even built a default subcommand. Let's give it a try. `+reload role` an
 ```
 
 ## Making A Custom Error Response
+
 One of the best things about Klasa is that it is extremely flexible and customizable. However, there was one part of the command so far, that we were unable to customize. When you don't provide a `role` the response was always the same and we never coded that part. Klasa automatically handles it when a required argument in our usage was not provided by the user. Fear not, Klasa is so amazing that we can even customize this response.
 
 Right under the `super` but inside the `constructor` we can create as many `customizeResponses` as we wish.
@@ -981,6 +994,7 @@ Once again, make sure to `+reload role` and then try out what happens when you t
 Klasa at it's core is always about being as customizable and flexible as possible.
 
 ## The Power Of Classes
+
 There is another really cool benefit of Klasa that we haven't taken advantage of just yet. Since Klasa is centered around `Classes`, we can leverage this to make our code a lot cleaner.
 
 Right now, we have a lot of repetitive code in every single function. So let's go ahead and clean that up. We can make a new function called `checkRequirements` that we can reuse in all the other subcommands we made.
