@@ -8,7 +8,7 @@ new Client({
 	commandLogging: true,
 	prefix: `+`,
 	readyMessage: (client) => `${client.user.tag}, ready to serve ${client.guilds.size} guilds.`
-})
+});
 ```
 
 ## Adding Your Own Default Prefix
@@ -23,8 +23,8 @@ Suppose we want the bot to respond to `+` as the prefix instead of @. To do this
 
 ```js
 new Client({
-	prefix: `+`,
-}).login(`your-bot-token`)
+	prefix: `+`
+}).login(`your-bot-token`);
 ```
 
 > IMPORTANT: We have to restart the bot to make this change since this index file is NOT a Klasa Piece. We will learn more about Klasa Pieces and how easy it is to edit them without restarting the bot when we create our first piece. For now, just remember editing this index file will always require the bot to be restarted.
@@ -46,7 +46,7 @@ Something that you may have noticed already is that when the bot starts it sends
 new Client({
 	prefix: `+`,
 	readyMessage: (client) => `${client.user.tag}, ready to serve ${client.guilds.size} guilds.`
-})
+});
 ```
 > Note: If you are using Typescript, you should do `(client: Client)`
 
@@ -65,7 +65,7 @@ new Client({
 	commandLogging: true,
 	prefix: `+`,
 	readyMessage: (client) => `${client.user.tag}, ready to serve ${client.guilds.size} guilds.`
-})
+});
 ```
 
 Once you have enabled the commandLogging, reboot the bot again and try using another command. This time, we can try using `+stats` command. This is another amazing command that Klasa gives us and we can see cool stats for the bot. Most importantly, we can see how the logging will look.
@@ -82,7 +82,7 @@ new Client({
 	commandLogging: true,
 	prefix: `+`,
 	readyMessage: (client) => `${client.user.tag}, ready to serve ${client.guilds.size} guilds.`
-})
+});
 ```
 
 Now `+reboot` once more and make a **typo** on purpose. For example, let's try using the `invite` command that Klasa gives us. But we will type `+onvite` so we can test the command editing. You will notice nothing happens, because we don't have any command by the name of `onvite`. However, if you edit your message and change it to `+invite` you will see the command run successfully.

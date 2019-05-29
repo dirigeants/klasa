@@ -19,9 +19,9 @@ As the old saying goes, the best way to learn to ride a bicycle is to actually t
 3. Paste the following code in your `index` file.
 
 ```js
-const { Client } = require('klasa')
+const { Client } = require('klasa');
 
-new Client().login(`your-bot-token`)
+new Client().login(`your-bot-token`);
 ```
 
 If you are using Typescript, copy and paste the code below instead.
