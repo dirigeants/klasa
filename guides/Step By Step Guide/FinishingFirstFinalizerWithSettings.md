@@ -12,7 +12,7 @@ const commandNames = message.guild.settings.get('commandTriggersToDelete');
 
 Now we just have to add a bit of functionality to our finalizer. First, we get the values from the guild settings for all the command names that the guild admins want to have deleted. Then we check if the command used was one of those commands and remove it.
 
-```js
+```ts
 const { Finalizer } = require('klasa');
 
 module.exports = class extends Finalizer {
