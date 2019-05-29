@@ -22,7 +22,7 @@ Every one of these folders is a `Store` and every file we will create inside the
 
 The first store we should learn is the `CommandStore`. We have already used this store and we didn't have much need to understand it. Every single command we used so far is a part of this store.
 
-The commands like `reboot`, `invite`, `help`, `ping`, `stats` are all **Command Pieces** in the `CommandStore`.
+The commands like `reboot`, `invite`, `help`, `ping`, `stats` are all **Command Pieces**.
 
 But what happens if we wanted to modify one of these commands? For example, what if we wanted to make it so that `+inv` does the same thing as `+invite`. Let's try and see if we can customize the `invite` command together to give it an alias of `inv`. Each command has an option called `aliases`. This allows users to run that command with different names. For example, we want our users to be able to easily and quickly get the invite link.
 
