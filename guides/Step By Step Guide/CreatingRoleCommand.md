@@ -4,7 +4,7 @@ Let's make a command that will allow server admins to give or take roles from a 
 
 > Note: As always, you can copy and paste this final version snippet or you can follow along the guide step by step to see how we make the command.
 
-```js
+```ts
 const { Command } = require(`klasa`);
 const { Permissions } = require(`discord.js`);
 
@@ -68,9 +68,9 @@ module.exports = class extends Command {
 		const roleUpdated = memberHasRole ? await member.roles.remove(role.id).catch(() => null) : await member.roles.add(role.id).catch(() => null);
 
 		// Send a response on whether or not the role was successfully added
-		return message.send(roleUpdated
-			? `I have ${memberHasRole ? `removed` : `added`} the ${role.name} to ${member.displayName}.`
-			: `I was unable to ${memberHasRole ? `remove` : `add`} the ${role.name} to ${member.displayName}`);
+		return message.send(roleUpdated ?
+			`I have ${memberHasRole ? `removed` : `added`} the ${role.name} to ${member.displayName}.` :
+			`I was unable to ${memberHasRole ? `remove` : `add`} the ${role.name} to ${member.displayName}`);
 	}
 
 	async checkRequirements(message, role, member) {
@@ -197,7 +197,7 @@ Since, we are creating a Moderation command to give or take roles, let's go ahea
 
 Once the file is made, you can paste this following base snippet to make our first command.
 
-```js
+```ts
 const { Command } = require('klasa');
 
 module.exports = class extends Command {
@@ -611,7 +611,7 @@ The `requiredPermissions` options tells Klasa what permissions are necessary to 
 
 > Note: For good practice, it is recommended to try and use the Permissions.FLAGS from Discord.js. However, you can also provide it as just `MANAGE_ROLES`.
 
-```js
+```ts
 const { Command } = require(`klasa`);
 const { Permissions } = require(`discord.js`);
 
@@ -635,6 +635,7 @@ module.exports = class extends Command {
 			usageDelim: undefined,
 		});
 	}
+}
 ```
 
 Now that Klasa knows we need Manage Roles, we can reload the command and try using it. Notice how the command does not work?
@@ -763,14 +764,14 @@ Alright, now we have every single option on this command set exactly how we want
 > Note: We won't be adding the functionality just yet so that it easier to understand how to make the subcommands.
 
 **Add Subcommand**
-```js
+```ts
 async add(message, [role, member = message.member]) {
 	return message.send(`The add subcommand has run for ${this.name} command with Role: ${role.name} and Member: ${member.displayName}.`);
 }
 ```
 
 **Remove Subcommmand**
-```js
+```ts
 async remove(message, [role, member = message.member]) {
 	return message.send(`The remove subcommand has run for ${this.name} command with Role: ${role.name} and Member: ${member.displayName}.`);
 }
@@ -794,7 +795,7 @@ Now let's take a moment to add some functionality into our subcommands.
 
 > Note: Since this is a guide meant for Klasa and not Javascript or Discord.js we are going to leave comments and assume that you can understand what the code is doing.
 
-```js
+```ts
 const { Command } = require('klasa');
 const { Permissions } = require('discord.js')
 
@@ -871,7 +872,7 @@ In order to avoid this error, we can create a default subcommand that can be run
 ```
 Now that we have added the default subcommand in the usage, let's actually create the subcommand as well.
 
-```js
+```ts
 async auto(message, [role, member = message.member]) {
 	// If the member is not manageable, send an error message
 	if (!member.manageable) return message.send(`I do not have a role high enough to remove roles from ${member.displayName}`);
@@ -903,7 +904,7 @@ Right under the `super` but inside the `constructor` we can create as many `cust
 
 Let's go ahead and make a silly error response.
 
-```js
+```ts
 const { Command } = require('klasa');
 const { Permissions } = require('discord.js');
 
@@ -951,7 +952,7 @@ There is another really cool benefit of Klasa that we haven't taken advantage of
 
 Right now, we have a lot of repetitive code in every single function. So let's go ahead and clean that up. We can make a new function called `checkRequirements` that we can reuse in all the other subcommands we made.
 
-```js
+```ts
 const { Command } = require('klasa');
 const { Permissions } = require('discord.js');
 
