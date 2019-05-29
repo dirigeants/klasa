@@ -32,7 +32,7 @@ const BotClient = new Client({
 Klasa made us an amazing `reboot` command so go ahead and type `@bot reboot`
 <!-- Insert Image Here -->
 
-> Note: If you are having trouble with the Reboot command, please see the FAQ.
+> Note: If you are having trouble with the Reboot command, please see the {@tutorial FAQ}.
 
 Now that the bot has restarted, we can try to do `+ping`. Nice! You now know how to give your bot a default prefix!
 
