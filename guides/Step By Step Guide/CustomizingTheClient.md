@@ -90,7 +90,7 @@ Now `+reboot` once more and make a **typo** on purpose. For example, let's try u
 
 ## Final Note On Client Options
 
-There are a lot of client options that we will not cover all of them in this guide. To see all the options, please check XXX. If you need help with any of these options, you can join the discord server and ask for help there anytime.
+There are a lot of client options that we will not cover all of them in this guide. To see all the options, please check {@link KlasaClientOptions}. If you need help with any of these options, you can join the discord server and ask for help there anytime.
 
 > Advanced Tip: A really cool feature of `Client` options is that you can add your own **custom** options so you can use them in other parts of the bot. For example, you could do something like `botDeveloperIDs: []` as a option which holds the Discord IDs of all the bot developers. Then you can use this anywhere you have access to the Client.
 
