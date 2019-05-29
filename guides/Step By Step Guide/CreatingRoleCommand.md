@@ -700,7 +700,6 @@ extendedHelp: language => language.get(`COMMAND_ROLE_EXTENDED`)
 
 For now we will be using the first method.
 
-
 ### Usage And Usage Delim Options
 
 The `usage` and `usageDelim` are going to tell our bot how to accept arguments for our command.
@@ -726,6 +725,7 @@ Now Klasa will know to separate all the arguments by spaces. But how does Klasa 
 ```
 
 A few important things to remember about the usage.
+
 - It must always be a string.
 - <> is a mandatory argument. So if a user doesnt provide it, the command wont run.
 - [] is a option argument. If a user doesnt provide it, it will be `undefined`.
@@ -801,7 +801,7 @@ Alright, now we have every single option on this command set exactly how we want
 
 > Note: We won't be adding the functionality just yet so that it easier to understand how to make the subcommands.
 
-**Add Subcommand**
+### Add Subcommand
 
 ```ts
 async add(message, [role, member = message.member]) {
@@ -809,7 +809,7 @@ async add(message, [role, member = message.member]) {
 }
 ```
 
-**Remove Subcommmand**
+### Remove Subcommmand
 
 ```ts
 async remove(message, [role, member = message.member]) {
@@ -900,7 +900,7 @@ Now reload the command and go try out all the commands you ran before. This time
 
 Everything is working as expected. But, we can use Klasa subcommands to make this even better. The last part of subcommands to understand is what is referred to as the `default` subcommand.
 
-**Default Subcommand**
+### Default Subcommand
 
 The default subcommand is ran when a user does **NOT** provide any of the possible subcommands. For example, if the user typed the command below it would throw an error.
 
