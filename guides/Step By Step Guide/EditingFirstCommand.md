@@ -20,7 +20,7 @@ Every one of these folders is a `Store` and every file we will create inside the
 
 ## Command Store
 
-The first store we should learn is the `CommandStore`. We have already used this store and we didn't have much need to understand it. Every single command we used so far is a part of this `CommandStore`.
+The first store we should learn is the `CommandStore`. We have already used this store and we didn't have much need to understand it. Every single command we used so far is a part of this store.
 
 The commands like `reboot`, `invite`, `help`, `ping`, `stats` are all **Command Pieces** in the `CommandStore`.
 
