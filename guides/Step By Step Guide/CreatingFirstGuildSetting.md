@@ -56,9 +56,9 @@ To make our first custom guild settings schema, let's organize it a little.
 Inside the `guild.js` file, go ahead and copy and paste this snippet below:
 
 ```js
-const { KlasaClient } = require('klasa')
+const { KlasaClient } = require('klasa');
 
-KlasaClient.defaultGuildSchema
+KlasaClient.defaultGuildSchema;
 ```
 
 Now we are ready to start adding our first key.
@@ -68,7 +68,7 @@ Now we are ready to start adding our first key.
 In order to add a key to our guild settings, all we have to do is use the `add` method as shown below.
 
 ```js
-const { KlasaClient } = require('klasa')
+const { KlasaClient } = require('klasa');
 
 KlasaClient.defaultGuildSchema
 	.add(name, typeOrCallback, options);
@@ -99,7 +99,7 @@ For now we want to use the `command` type since we want to store command names.
 const { KlasaClient } = require('klasa');
 
 KlasaClient.defaultGuildSchema
-	.add('commandTriggersToDelete', 'command', options)
+	.add('commandTriggersToDelete', 'command', options);
 ```
 
 The last argument is an **optional** parameter that can accept a few different options.
@@ -110,7 +110,7 @@ If we omit this argument, we will only be able to save one command name. We want
 const { KlasaClient } = require('klasa');
 
 KlasaClient.defaultGuildSchema
-	.add('commandTriggersToDelete', 'command', { array: true })
+	.add('commandTriggersToDelete', 'command', { array: true });
 ```
 
 ## Updating The Schema

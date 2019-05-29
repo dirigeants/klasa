@@ -1,6 +1,6 @@
 Welcome to the Klasa Step by Step Guide! This guide is intended specifically for beginner developers in order to take you from learning about Klasa to being able to use all the other pages on this website with ease. The following is a list of things that this guide will cover:
 
-1. Understanding Klasa And Creating A Bot
+1. {@tutorial CreatingTheBot Understanding Klasa And Creating A Bot}
 	- What is Klasa?
 	- Why should you use Klasa?
 	- How do I start using Klasa?

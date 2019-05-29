@@ -601,50 +601,21 @@ async checkRequirements(message, role, member) {
 }
 ```
 
-Now we can reuse this function in our subcommands by doing `this.checkRequirements(message, role, member)`
+Now we can reuse this function in our subcommands by doing `this.checkRequirements(message, role, member)`. Find all the places that have this code below:
 
 ```ts
-	// This is the add subcommand that will only add a role to the member
-	async add(message, [role, member = message.member]) {
-		// If the user did not meet the requirements cancel out of the command
-		if (!await this.checkRequirements(message, role, member)) return null;
+	// If the member is not manageable, send an error message
+	if (!member.manageable) return message.send(`I do not have a role high enough to remove roles from ${member.displayName}`);
+	// Check if the bot highest role is higher than the role provided so it can assign it
+	const botHasHigherRole = message.guild.me.roles.highest.position > role.position;
+	if (!botHasHigherRole) return message.send(`The role you provided was higher than the bots highest role.`);
+```
 
-		// If the member already has the role then send an error message
-		const memberHasRole = member.roles.has(role.id);
-		if (memberHasRole) return message.send(`I can't add the ${role.name} role to ${member.displayName} because they already have that role.`);
-		// Add the role to the user
-		const roleAdded = await member.roles.add(role.id).catch(() => null);
-		// Send a response on whether or not the role was successfully added
-		return message.send(roleAdded ? `I have added the ${role.name} to ${member.displayName}.` : `I was unable to add the ${role.name} to ${member.displayName}`);
-	}
+Replace it with the following lines:
 
-
-	async remove(message, [role, member = message.author]) {
-		// If the user did not meet the requirements cancel out of the command
-		if (!await this.checkRequirements(message, role, member)) return null;
-
-		// If the member already has the role then send an error message
-		const memberHasRole = member.roles.has(role.id);
-		if (!memberHasRole) return message.send(`I can't remove the ${role.name} role to ${member.displayName} because don't have that role.`);
-		// Add the role to the user
-		const roleAdded = await member.roles.remove(role.id).catch(() => null);
-		// Send a response on whether or not the role was successfully added
-		return message.send(roleAdded ? `I have removed the ${role.name} to ${member.displayName}.` : `I was unable to remove the ${role.name} to ${member.displayName}`);
-	}
-
-	async auto(message, [role, member = message.member]) {
-		// If the user did not meet the requirements cancel out of the command
-		if (!await this.checkRequirements(message, role, member)) return null;
-
-		// If the member already has the role then send an error message
-		const memberHasRole = member.roles.has(role.id);
-
-		// if the member has the role remove it else add the role to the member
-		const roleUpdated = memberHasRole ? await member.roles.remove(role.id).catch(() => null) : await member.roles.add(role.id).catch(() => null);
-
-		// Send a response on whether or not the role was successfully added
-		return message.send(roleUpdated ? `I have ${memberHasRole ? `removed` : `added`} the ${role.name} to ${member.displayName}.` : `I was unable to ${memberHasRole ? `remove` : `add`} the ${role.name} to ${member.displayName}`);
-	}
+```ts
+	// If the user did not meet the requirements cancel out of the command
+	if (!await this.checkRequirements(message, role, member)) return null;
 ```
 
 Woah! We have a fully built functional command with Klasa! This should show how amazing and flexible Klasa allows you to make commands. Now, you can easily go ahead and make as many commands as you like. Commands are actually the most complex part of Klasa. So, now that you have understood this, the rest is going to be much easier.

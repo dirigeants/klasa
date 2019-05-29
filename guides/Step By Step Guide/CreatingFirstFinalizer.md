@@ -38,9 +38,9 @@ module.exports = class extends Finalizer {
 
     async init() {
         /*
-         * You can optionally define this method which will be run when the bot starts
-         * (after login, so discord data is available via this.client)
-         */
+        * You can optionally define this method which will be run when the bot starts
+        * (after login, so discord data is available via this.client)
+        */
     }
 
 };
@@ -117,7 +117,7 @@ Every finalizer has 4 arguments passed to it.
 
 ## Adding The Functionality
 
-```js
+```ts
 run(message, command, response, runTime) {
 	// If the command was used in DM cancel this finalizer since we can't delete users messages in a DM.
 	// OR If the message is not deletable by the bot or it has already been deleted cancel out
@@ -136,12 +136,12 @@ const { Finalizer } = require('klasa');
 module.exports = class extends Finalizer {
 
     run(message) {
-      // If the command was used in DM cancel this finalizer since we can't delete users messages in a DM.
-			// OR If the message is not deletable by the bot or it has already been deleted cancel out
-			if (!message.guild || message.deleted || !message.deletable) return null
+        // If the command was used in DM cancel this finalizer since we can't delete users messages in a DM.
+        // OR If the message is not deletable by the bot or it has already been deleted cancel out
+        if (!message.guild || message.deleted || !message.deletable) return null;
 
-			// Delete the original command trigger message
-			return message.delete()
+        // Delete the original command trigger message
+        return message.delete();
     }
 
 };

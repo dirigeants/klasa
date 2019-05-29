@@ -5,7 +5,7 @@ Amazing! You just got through the most complex part of Klasa. We will slowly go 
 Klasa will automatically help make all Guild Settings available to us in every guild object. To get a value form the settings, we simply use the `settings.get(keyName)` method.
 
 ```js
-const commandNames = message.guild.settings.get('commandTriggersToDelete')
+const commandNames = message.guild.settings.get('commandTriggersToDelete');
 ```
 
 ## Finishing Touches To Finalizer
@@ -17,19 +17,19 @@ const { Finalizer } = require('klasa');
 
 module.exports = class extends Finalizer {
 
-    run(message) {
-      // If the command was used in DM cancel this finalizer since we can't delete users messages in a DM.
-			// OR If the message is not deletable by the bot or it has already been deleted cancel out
-			if (!message.guild || message.deleted || !message.deletable) return null
+	run(message) {
+		// If the command was used in DM cancel this finalizer since we can't delete users messages in a DM.
+		// OR If the message is not deletable by the bot or it has already been deleted cancel out
+		if (!message.guild || message.deleted || !message.deletable) return null;
 
-			// Get the command names that guild admins asked to have deleted on their server
-			const commandNames = message.guild.settings.get('commandTriggersToDelete')
-			// If the command used was not set by guild admins, cancel out
-			if (!commandNames.includes(message.command.name)) return null
+		// Get the command names that guild admins asked to have deleted on their server
+		const commandNames = message.guild.settings.get('commandTriggersToDelete');
+		// If the command used was not set by guild admins, cancel out
+		if (!commandNames.includes(message.command.name)) return null;
 
-			// Delete the original command trigger message
-			return message.delete()
-    }
+		// Delete the original command trigger message
+		return message.delete();
+	}
 
 };
 ```
