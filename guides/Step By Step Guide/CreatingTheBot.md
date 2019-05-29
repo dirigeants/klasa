@@ -75,4 +75,4 @@ Remember how we said Klasa is going to help you make building your bot faster? K
 
 We will dive into these deeper in this guide. Let's take it step by step.
 
-Let's start customizing our bot with a few options like a unique prefix so we don't have to keep @ the bot.
+Let's start customizing our bot with a few options like a unique prefix so we don't have to keep mentioning the bot.
