@@ -4,7 +4,7 @@ Wow! You even got your client customized with some really cool Klasa options! Re
 
 In order to understand how Pieces and Stores work, you would first need to understand Javascript `Classes` and extending classes.
 
-> Note: This guide is meant for beginners so we won't really worry about the details. If you wish to learn the details about the Pieces and Stores, please read them at XXXX
+> Note: This guide is meant for beginners so we won't really worry about the details. If you wish to learn the details about the Pieces and Stores, please read them at {@tutorial PieceStores}.
 
 Let's just try and remember a few details.
 
