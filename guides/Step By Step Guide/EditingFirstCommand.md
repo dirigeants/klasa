@@ -71,10 +71,8 @@ module.exports = class extends Command {
 Don't worry too much about all the lines and options just yet. We will cover them later when we create our own command. For now we just want to focus on this part:
 
 ```js
-super(...args, {
-	guarded: true,
-	description: language => language.get('COMMAND_INVITE_DESCRIPTION')
-});
+guarded: true,
+description: language => language.get('COMMAND_INVITE_DESCRIPTION')
 ```
 
 This is the part that holds the options for each of the commands.
@@ -87,11 +85,9 @@ This is the part that holds the options for each of the commands.
 
 Now, we want to add the `aliases` option to it:
 ```js
-super(...args, {
 	aliases: [`inv`, `i`],
 	description: language => language.get(`COMMAND_INVITE_DESCRIPTION`)
 	guarded: true,
-})
 ```
 
 Notice, I added 2 aliases here. You can add as many aliases as you like. If you see a lot of users, are typing it wrong by accident you can add those typos as aliases as well.

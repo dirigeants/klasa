@@ -3,7 +3,7 @@ Congrats! If you reached this part of the guide, you have successfully created y
 > Note: This guide was intended for beginner developers so we will go step by step. However, if you wish to speed things up you can use this code snippet below so you don't have to keep restarting the bot. Otherwise, just follow along with the guide to understand how each of these options work.
 
 ```js
-new Client({
+const BotClient = new Client({
 	commandEditing: true,
 	commandLogging: true,
 	prefix: `+`,
@@ -22,7 +22,7 @@ Suppose we want the bot to respond to `+` as the prefix instead of @. To do this
 > Note: It is important to remember that this option here is a DEFAULT prefix. This means that this prefix can NOT be customized by servers. This is a prefix that you can have users use when they forget their own custom server prefix.
 
 ```js
-new Client({
+const BotClient = new Client({
 	prefix: `+`
 }).login(`your-bot-token`);
 ```
@@ -43,7 +43,7 @@ Now that the bot has restarted, we can try to do `+ping`. Nice! You now know how
 Something that you may have noticed already is that when the bot starts it sends a message in the console? Klasa gives us a really sweet option of customizing this message when the bot is ready.
 
 ```js
-new Client({
+const BotClient = new Client({
 	prefix: `+`,
 	readyMessage: (client) => `${client.user.tag}, ready to serve ${client.guilds.size} guilds.`
 });
@@ -61,7 +61,7 @@ A really cooly built in feature that Klasa provides is the ability to log every 
 > Note: This will only log commands that are successfully run. If an error occurs, this will not log it.
 
 ```js
-new Client({
+const BotClient = new Client({
 	commandLogging: true,
 	prefix: `+`,
 	readyMessage: (client) => `${client.user.tag}, ready to serve ${client.guilds.size} guilds.`
@@ -77,7 +77,7 @@ Once you have enabled the commandLogging, reboot the bot again and try using ano
 One last thing we can cover in this guide is `Command Editing`. This feature allows users to simply edit their message to run the command again. The best way to understand it, is to see it in action. Let's start by enabling this option:
 
 ```js
-new Client({
+const BotClient = new Client({
 	commandEditing: true,
 	commandLogging: true,
 	prefix: `+`,
