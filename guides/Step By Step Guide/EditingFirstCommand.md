@@ -102,7 +102,7 @@ Let's go ahead and see this in action. Type the following command in a discord c
 +reload invite
 ```
 
-> Note: You can also do `+reload commands` to reload every single command at once if you edited multiple commands.
+> Note: You can also do `+reload commands` to reload all commands at once if you edited multiple commands.
 
 <!-- Insert Image Here -->
 
