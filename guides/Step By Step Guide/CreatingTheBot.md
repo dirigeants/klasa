@@ -12,7 +12,7 @@ As the old saying goes, the best way to learn to ride a bicycle is to actually t
 
 ## Creating The Bot!
 
-> This guide is going to assume you already have the basic requirements to make a bot ready. This includes: Node.js, NPM, and a code editor like Visual Studio Code. If you don't have these yet please install them first before going forward.
+> This guide is going to assume you already have the basic requirements to make a bot ready. This includes: Node.js, npm, and a code editor like Visual Studio Code. If you don't have these yet please install them first before going forward.
 
 1. Create a folder for your bot. In this case, we will call the folder: `KBot`
 2. Create a file inside called `index.js` or `index.ts` if you are using Typescript.
