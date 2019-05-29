@@ -13,7 +13,7 @@ const BotClient = new Client({
 
 ## Adding Your Own Default Prefix
 
-Remember how we used `@bot help` to get the bot to send us the help command. The reason `@bot` worked is because Klasa adds the bots @ as a default prefix.
+Remember how we used `@bot help` to get the bot to send us the help command. The reason `@bot` worked is because Klasa adds the bots mention tag as a default prefix.
 
 > Note: If you don't like this behavior you can remove it, since Klasa is extremely customizable, but let's leave it in for now. You can review the Advanced section of the guide to learn how.
 
