@@ -2,7 +2,7 @@ Welcome to the Klasa Step by Step Guide! This guide is intended specifically for
 
 1. Understanding Klasa And Creating A Bot
 	- What Is Klasa?
-	- Why should anyone use Klasa?
+	- Why should you use Klasa?
 	- How do I start using Klasa?
 	- How to create the bot?
 2. Customizing The Bot Options
