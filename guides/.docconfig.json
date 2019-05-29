@@ -1,139 +1,177 @@
-[{
-    "name": "Getting Started",
-    "files": [{
+[
+    {
         "name": "Getting Started",
-        "path": "GettingStarted.md"
+        "files": [
+            {
+                "name": "Getting Started",
+                "path": "GettingStarted.md"
+            },
+            {
+                "name": "Understanding Permission Levels",
+                "path": "UnderstandingPermissionLevels.md"
+            },
+            {
+                "name": "Understanding SettingsGateway",
+                "path": "UnderstandingSettingsGateway.md"
+            },
+            {
+                "name": "Understanding Usage Strings",
+                "path": "UnderstandingUsageStrings.md"
+            },
+            {
+                "name": "Frequently Asked Questions",
+                "path": "faq.md"
+            }
+        ]
     },
     {
-        "name": "Understanding Permission Levels",
-        "path": "UnderstandingPermissionLevels.md"
+        "name": "Piece Basics",
+        "files": [
+            {
+                "name": "Creating Arguments",
+                "path": "CreatingArguments.md"
+            },
+            {
+                "name": "Creating Commands",
+                "path": "CreatingCommands.md"
+            },
+            {
+                "name": "Creating Events",
+                "path": "CreatingEvents.md"
+            },
+            {
+                "name": "Creating Extendables",
+                "path": "CreatingExtendables.md"
+            },
+            {
+                "name": "Creating Finalizers",
+                "path": "CreatingFinalizers.md"
+            },
+            {
+                "name": "Creating Inhibitors",
+                "path": "CreatingInhibitors.md"
+            },
+            {
+                "name": "Creating Languages",
+                "path": "CreatingLanguages.md"
+            },
+            {
+                "name": "Creating Monitors",
+                "path": "CreatingMonitors.md"
+            },
+            {
+                "name": "Creating Providers",
+                "path": "CreatingProviders.md"
+            },
+            {
+                "name": "Creating Serializers",
+                "path": "CreatingSerializers.md"
+            },
+            {
+                "name": "Creating SQL Providers",
+                "path": "CreatingSQLProviders.md"
+            },
+            {
+                "name": "Creating Tasks",
+                "path": "CreatingTasks.md"
+            }
+        ]
     },
     {
-        "name": "Understanding SettingsGateway",
-        "path": "UnderstandingSettingsGateway.md"
+        "name": "Advanced Commands",
+        "files": [
+            {
+                "name": "Commands I: Arguments",
+                "path": "CommandsArguments.md"
+            },
+            {
+                "name": "Commands II: Subcommands",
+                "path": "CommandsSubcommands.md"
+            },
+            {
+                "name": "Commands III: Per-Command and per-parameter custom responses",
+                "path": "CommandsCustomResponses.md"
+            },
+            {
+                "name": "Commands IV: Per-Command custom argument resolvers",
+                "path": "CommandsCustomResolvers.md"
+            }
+        ]
     },
     {
-        "name": "Understanding Usage Strings",
-        "path": "UnderstandingUsageStrings.md"
+        "name": "Advanced SettingsGateway",
+        "files": [
+            {
+                "name": "Understanding SchemaFolders",
+                "path": "UnderstandingSchemaFolders.md"
+            },
+            {
+                "name": "Understanding SchemaPieces",
+                "path": "UnderstandingSchemaPieces.md"
+            },
+            {
+                "name": "SettingsGateway's Types",
+                "path": "SettingsGatewayKeyTypes.md"
+            },
+            {
+                "name": "Updating your Settings",
+                "path": "SettingsGatewaySettingsUpdate.md"
+            }
+        ]
     },
     {
-        "name": "Frequently Asked Questions",
-        "path": "faq.md"
-    }]
-},
-{
-    "name": "Piece Basics",
-    "files": [
-    {
-        "name": "Creating Arguments",
-        "path": "CreatingArguments.md"
+        "name": "Other Subjects",
+        "files": [
+            {
+                "name": "Piece Stores",
+                "path": "PieceStores.md"
+            },
+            {
+                "name": "Rich Display",
+                "path": "RichDisplay.md"
+            },
+            {
+                "name": "Rich Menu",
+                "path": "RichMenu.md"
+            },
+            {
+                "name": "Plugins",
+                "path": "Plugins.md"
+            }
+        ]
     },
     {
-        "name": "Creating Commands",
-        "path": "CreatingCommands.md"
+        "name": "Building Your Bot",
+        "files": [
+            {
+                "name": "Creating a Points System",
+                "path": "CreatingPointsSystems.md"
+            }
+        ]
     },
     {
-        "name": "Creating Events",
-        "path": "CreatingEvents.md"
-    },
-    {
-        "name": "Creating Extendables",
-        "path": "CreatingExtendables.md"
-    },
-    {
-        "name": "Creating Finalizers",
-        "path": "CreatingFinalizers.md"
-    },
-    {
-        "name": "Creating Inhibitors",
-        "path": "CreatingInhibitors.md"
-    },
-    {
-        "name": "Creating Languages",
-        "path": "CreatingLanguages.md"
-    },
-    {
-        "name": "Creating Monitors",
-        "path": "CreatingMonitors.md"
-    },
-    {
-        "name": "Creating Providers",
-        "path": "CreatingProviders.md"
-    },
-    {
-        "name": "Creating Serializers",
-        "path": "CreatingSerializers.md"
-    },
-    {
-        "name": "Creating SQL Providers",
-        "path": "CreatingSQLProviders.md"
-    },
-    {
-        "name": "Creating Tasks",
-        "path": "CreatingTasks.md"
-    }]
-},
-{
-    "name": "Advanced Commands",
-    "files": [{
-        "name": "Commands I: Arguments",
-        "path": "CommandsArguments.md"
-    },
-    {
-        "name": "Commands II: Subcommands",
-        "path": "CommandsSubcommands.md"
-    },
-    {
-        "name": "Commands III: Per-Command and per-parameter custom responses",
-        "path": "CommandsCustomResponses.md"
-    },
-    {
-        "name": "Commands IV: Per-Command custom argument resolvers",
-        "path": "CommandsCustomResolvers.md"
-    }]
-},
-{
-    "name": "Advanced SettingsGateway",
-    "files": [{
-        "name": "Understanding SchemaFolders",
-        "path": "UnderstandingSchemaFolders.md"
-    },
-    {
-        "name": "Understanding SchemaPieces",
-        "path": "UnderstandingSchemaPieces.md"
-    },
-    {
-        "name": "SettingsGateway's Types",
-        "path": "SettingsGatewayKeyTypes.md"
-    },
-    {
-        "name": "Updating your Settings",
-        "path": "SettingsGatewaySettingsUpdate.md"
-    }]
-},
-{
-    "name": "Other Subjects",
-    "files": [{
-        "name": "Piece Stores",
-        "path": "PieceStores.md"
-    },
-    {
-        "name": "Rich Display",
-        "path": "RichDisplay.md"
-    },
-    {
-        "name": "Rich Menu",
-        "path": "RichMenu.md"
-    },
-    {
-        "name": "Plugins",
-        "path": "Plugins.md"
-    }]
-},
-{
-    "name": "Building Your Bot",
-    "files": [{
-        "name": "Creating a Points System",
-        "path": "CreatingPointsSystems.md"
-    }]
-}]
+        "name": "Step By Step Guide",
+        "files": [
+            {
+                "name": "Table Of Contents",
+                "path": "TableOfContents.md"
+            },
+            {
+                "name": "Creating The Bot",
+                "path": "CreatingTheBot.md"
+            },
+            {
+                "name": "Customizing The Bot",
+                "path": "CustomizingTheClient.md"
+            },
+            {
+                "name": "Editing Our First Command",
+                "path": "EditingFirstCommand.md"
+            },
+            {
+                "name": "Creating A Role Command",
+                "path": "CreatingRoleCommand.md"
+            }
+        ]
+    }
+]

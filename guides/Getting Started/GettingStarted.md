@@ -1,5 +1,11 @@
 # Welcome to the klasa#{@branch} documentation
 
+## Step By Step Guide (For Developers New To Klasa)
+
+We have a step by step walkthrough guide that will help you understand every part of Klasa in a logical order. Get started with the guide at {@tutorial TableOfContents}
+
+> Note: If you are not a beginner developer, you can just skip the guide and go down below to get started.
+
 ## Installing Klasa
 
 You can install this branch of klasa with the following command:
