@@ -252,7 +252,7 @@ Going forward we don't want the role command to be only in NSFW channels so we c
 
 Permission levels are a very complex function in Klasa. It allows you to tell Klasa what level is required for a user to use this function.
 
-> Note: To learn about Permission levels in depth please read this section of the docs. We will also be creating our own custom permission levels later in this guide.
+> Note: To learn about Permission levels in depth please read {@tutorial UnderstandingPermissionLevels}. We will also be creating our own custom permission levels later in this guide.
 
 By default Klasa creates some permissions levels for us.
 
@@ -321,7 +321,7 @@ For now we will be using the first method.
 
 The `usage` and `usageDelim` are going to tell our bot how to accept arguments for our command.
 
-> Note: The `usage` is also a very complex part of Klasa. There is an entire page dedicated to understanding Usage and all its details.
+> Note: The `usage` is also a very complex part of Klasa. There is an entire page dedicated to understanding Usage and all its details. {@tutorial UnderstandingUsageStrings}
 
 The first thing we want to do is to tell Klasa, that the user should split his arguments with spaces. For example:
 
