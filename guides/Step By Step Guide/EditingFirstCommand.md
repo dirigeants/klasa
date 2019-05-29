@@ -80,7 +80,7 @@ This is the part that holds the options for each of the commands.
 
 - `description`: The description option tells Klasa what to show the user when they type `+help`. In that help message, each command has a small description next to it. This is where it comes from. For now don't worry too much about the whole `Language` part. We will cover that when we create our own language in this guide.
 
-> Note: Klasa has built in `multi-lingual` support. You can support as many languages as you wish. We will learn more about Languages when we create our own language but for now we just want to see how to customize the command.
+> Note: Klasa has built in multi-lingual support. You can support as many languages as you wish. We will learn more about languages when we create our own language but for now we just want to see how to customize the command.
 
 Now, we want to add the `aliases` option to it:
 
