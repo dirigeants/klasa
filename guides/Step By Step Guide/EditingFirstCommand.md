@@ -36,7 +36,7 @@ Go ahead and type in a discord channel.
 +transfer invite
 ```
 
-Now, if you go check the `Commands` folder, you will see you have access to Invite command inside a folder called `Chat Bot Info`. Klasa organizes it's commands into Categories and the Invite command is in a Category called `Chat Bot Info`.
+Now, if you go check the `commands` folder, you will see you have access to Invite command inside a folder called `Chat Bot Info`. Klasa organizes it's commands into Categories and the Invite command is in a Category called `Chat Bot Info`.
 
 > Note: You can change the name of this folder if you wish to change the category name. For the purpose of this guide, we will leave it as is.
 
