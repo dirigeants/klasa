@@ -2,7 +2,7 @@ Klasa is a framework for Discord.js, a wrapper for the Discord API, that helps m
 
 ## Who Made Klasa?
 
-The Dirigeants, Diri for short, team create and maintain Klasa. Join the discord server to meet and learn more about the wonderful team!
+The Dirigeants organization create and maintain Klasa. Join the discord server to meet and learn more about the wonderful team!
 
 ## Why You Should Use Klasa?
 
