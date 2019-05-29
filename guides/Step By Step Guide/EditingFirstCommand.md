@@ -90,7 +90,7 @@ Now, we want to add the `aliases` option to it:
 	guarded: true,
 ```
 
-Notice, I added 2 aliases here. You can add as many aliases as you like. If you see a lot of users, are typing it wrong by accident you can add those typos as aliases as well.
+Notice, I added 2 aliases here. You can add as many aliases as you like. If you see a lot of users typing it wrong by accident you can add those typos as aliases as well.
 
 ## The Power Of Pieces: Reloading
 
