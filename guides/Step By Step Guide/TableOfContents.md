@@ -38,3 +38,19 @@ Welcome to the Klasa Step by Step Guide! This guide is intended specifically for
 			- Making The Auto Role Default Subcommand
 		- Usage And Usage Delim
 	- Making A Custom Error Response
+5. Creating Delete Trigger Finalizer
+	- What is a finalizer?
+	- Creating our first finalizer
+	- Understanding options
+	- Understanding run parameters
+	- Adding the functionality
+6. Creating Delete Command Trigger Guild Setting
+	- Types of settings
+	- Conf command
+	- Creating the guild settings schema
+	- Adding our first key
+	- Updating the schema
+7. Finishing Delete Trigger Finalizer
+	- Getting a value from settings
+	- Finishing touches
+
