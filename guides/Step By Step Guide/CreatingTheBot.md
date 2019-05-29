@@ -34,7 +34,7 @@ new Client().login(`your-bot-token`)
 
 > Note: You will actually need to replace the `your-bot-token` with a valid bot token first. Please read xxx to get your bot token.
 
-Now we have to do one more thing before our bot is ready. Open the terminal and make sure you are in the folder for the bot. If you are using Visual Studio Code and open the Integrated Terminal it should automatically have you in the right folder.
+Now we have to do one more thing before our bot is ready. Open the terminal and make sure you are in the folder for the bot. If you are using an integrated terminal from your code editor, it should automatically have you in the right folder.
 
 ```shell
 npm init
