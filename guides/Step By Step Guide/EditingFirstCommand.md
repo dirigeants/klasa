@@ -28,7 +28,7 @@ But what happens if we wanted to modify one of these commands? For example, what
 
 ## Customizing The Invite Command
 
-If you open up the `Commands` folder that Klasa created, you will notice that it is actually empty. All the commands we have used up till now are actually in the core of Klasa. To modify these commands, we will use the `+transfer` command to transfer the command from Klasa to our `Commands` folder.
+If you open up the `commands` folder that Klasa created, you will notice that it is actually empty. All the commands we have used up till now are actually in the core of Klasa. To modify them, we will use the `+transfer` command to transfer core pieces to our folders.
 
 Go ahead and type in a discord channel.
 
