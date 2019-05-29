@@ -19,7 +19,7 @@ Remember how we used `@bot help` to get the bot to send us the help command. The
 
 Suppose we want the bot to respond to `+` as the prefix instead of @. To do this, we go back into the `index` file we made before and add in the prefix we want. You can choose whichever prefix you wish, but for this guide we will be using `+`.
 
-> Note: It is important to remember that this option here is a DEFAULT prefix. This means that this prefix can NOT be customized by servers. This is a prefix that you can have users use when they forget their own custom server prefix.
+> Note: This is the default prefix for all guilds, they may override it by changing the configuration, this will be explained more in depth in a few sections.
 
 ```js
 const BotClient = new Client({
@@ -27,16 +27,16 @@ const BotClient = new Client({
 }).login(`your-bot-token`);
 ```
 
-> IMPORTANT: We have to restart the bot to make this change since this index file is NOT a Klasa Piece. We will learn more about Klasa Pieces and how easy it is to edit them without restarting the bot when we create our first piece. For now, just remember editing this index file will always require the bot to be restarted.
+> IMPORTANT: We have to restart the bot to make this change since this is the index file.
 
 Klasa made us an amazing `reboot` command so go ahead and type `@bot reboot`
 <!-- Insert Image Here -->
 
-> Note: If you are having trouble with the Reboot command, please see the {@tutorial FAQ}.
+> Note: If you are having trouble with the Reboot command, please see the {@tutorial FAQ}
 
 Now that the bot has restarted, we can try to do `+ping`. Nice! You now know how to give your bot a default prefix!
 
-> Note: Klasa has actually already created the ability to have custom prefixes in each server but we will learn how to use those when we get to the `settings` part of this guide.
+> Note: Klasa has actually already created the ability to have custom prefixes in each guild but we will learn how to use those when we get to the `settings` part of this guide.
 
 ## Customizing Our Ready Message
 
@@ -48,8 +48,6 @@ const BotClient = new Client({
 	readyMessage: (client) => `${client.user.tag}, ready to serve ${client.guilds.size} guilds.`
 });
 ```
-
-> Note: If you are using Typescript, you should do `(client: Client)`
 
 Now you can reboot the bot again, this time using `+reboot` and see how the bot will log a message in your console.
 
@@ -90,7 +88,7 @@ Now `+reboot` once more and make a **typo** on purpose. For example, let's try u
 
 ## Final Note On Client Options
 
-There are a lot of client options that we will not cover all of them in this guide. To see all the options, please check {@link KlasaClientOptions}. If you need help with any of these options, you can join the discord server and ask for help there anytime.
+There are a lot of client options that we will not cover all of them in this guide. To see all the options, please check {@link KlasaClientOptions}. If you need help with any of these options, you can join the discord and ask for help there anytime.
 
 > Advanced Tip: A really cool feature of `Client` options is that you can add your own **custom** options so you can use them in other parts of the bot. For example, you could do something like `botDeveloperIDs: []` as a option which holds the Discord IDs of all the bot developers. Then you can use this anywhere you have access to the Client.
 

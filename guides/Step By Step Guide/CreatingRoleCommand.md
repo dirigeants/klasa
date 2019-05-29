@@ -1,201 +1,18 @@
 Excellent! Now that you have managed to understand how to transfer and edit the existing commands that Klasa made for us, it is time to make our very own command.
 
-Let's make a command that will allow server admins to give or take roles from a member.
-
-> Note: As always, you can copy and paste this final version snippet or you can follow along the guide step by step to see how we make the command.
-
-```ts
-const { Command } = require(`klasa`);
-const { Permissions } = require(`discord.js`);
-
-module.exports = class extends Command {
-
-	constructor(...args) {
-		super(...args, {
-			aliases: [`r`, `ro`, `rol`],
-			bucket: 5,
-			cooldown: 60,
-			description: `Adds or removes a role from a member.`,
-			// eslint-disable-next-line
-			extendedHelp: `This command can add or remove a role from a member but it will require the user to have **MANAGE_GUILD** permissions to use. The command can be used in the following ways: **+role add @role**, **+role remove @role**, or **+role @role** if you want the bot to automatically add or remove based on if the member has the role already.`,
-			permissionLevel: 6,
-			requiredPermissions: [Permissions.FLAGS.MANAGE_ROLES],
-			runIn: ['text'],
-			subcommands: true,
-			usage: `<add|remove|auto:default> <role:role> [member:member]`,
-			usageDelim: ` `
-		});
-
-		this.customizeResponse(`role`, `You did not give me any role to give to the member silly!`);
-	}
-
-	// This is the add subcommand that will only add a role to the member
-	async add(message, [role, member = message.member]) {
-		// If the user did not meet the requirements cancel out of the command
-		if (!await this.checkRequirements(message, role, member)) return null;
-
-		// If the member already has the role then send an error message
-		const memberHasRole = member.roles.has(role.id);
-		if (memberHasRole) return message.send(`I can't add the ${role.name} role to ${member.displayName} because they already have that role.`);
-		// Add the role to the user
-		const roleAdded = await member.roles.add(role.id).catch(() => null);
-		// Send a response on whether or not the role was successfully added
-		return message.send(roleAdded ? `I have added the ${role.name} to ${member.displayName}.` : `I was unable to add the ${role.name} to ${member.displayName}`);
-	}
-
-
-	async remove(message, [role, member = message.author]) {
-		// If the user did not meet the requirements cancel out of the command
-		if (!await this.checkRequirements(message, role, member)) return null;
-
-		// If the member already has the role then send an error message
-		const memberHasRole = member.roles.has(role.id);
-		if (!memberHasRole) return message.send(`I can't remove the ${role.name} role to ${member.displayName} because don't have that role.`);
-		// Add the role to the user
-		const roleAdded = await member.roles.remove(role.id).catch(() => null);
-		// Send a response on whether or not the role was successfully added
-		return message.send(roleAdded ? `I have removed the ${role.name} to ${member.displayName}.` : `I was unable to remove the ${role.name} to ${member.displayName}`);
-	}
-
-	async auto(message, [role, member = message.member]) {
-		// If the user did not meet the requirements cancel out of the command
-		if (!await this.checkRequirements(message, role, member)) return null;
-
-		// If the member already has the role then send an error message
-		const memberHasRole = member.roles.has(role.id);
-
-		// if the member has the role remove it else add the role to the member
-		const roleUpdated = memberHasRole ? await member.roles.remove(role.id).catch(() => null) : await member.roles.add(role.id).catch(() => null);
-
-		// Send a response on whether or not the role was successfully added
-		return message.send(roleUpdated ?
-			`I have ${memberHasRole ? `removed` : `added`} the ${role.name} to ${member.displayName}.` :
-			`I was unable to ${memberHasRole ? `remove` : `add`} the ${role.name} to ${member.displayName}`);
-	}
-
-	async checkRequirements(message, role, member) {
-		// If the member is not manageable, send an error message
-		if (!member.manageable) {
-			await message.send(`I do not have a role high enough to remove roles from ${member.displayName}`);
-			return false;
-		}
-		// Check if the bot highest role is higher than the role provided so it can assign it
-		const botHasHigherRole = message.guild.me.roles.highest.position > role.position;
-		if (!botHasHigherRole) {
-			await message.send(`The role you provided was higher than the bots highest role.`);
-			return false;
-		}
-
-		// If all requirements are met we want to return true
-		return true;
-	}
-
-}
-```
-
-For Typescript users:
-
-```ts
-import { Command, CommandStore, KlasaMessage } from 'klasa';
-import { Permissions, Role, GuildMember } from 'discord.js';
-
-export default class extends Command {
-	constructor(store: CommandStore, file: string[], directory: string) {
-		super(store, file, directory, {
-			aliases: [`r`, `ro`, `rol`],
-			bucket: 5,
-			cooldown: 60,
-			description: `Adds or removes a role from a member.`,
-			extendedHelp: `This command can add or remove a role from a member but it will require the user to have **MANAGE_GUILD** permissions to use. The command can be used in the following ways: **+role add @role**, **+role remove @role**, or **+role @role** if you want the bot to automatically add or remove based on if the member has the role already.`,
-			permissionLevel: 6,
-			requiredPermissions: [Permissions.FLAGS.MANAGE_ROLES],
-			runIn: ['text'],
-			subcommands: true,
-			usage: `<add|remove|auto:default> <role:role> [member:member]`,
-			usageDelim: ` `
-		});
-
-		this.customizeResponse(`role`, `You did not give me any role to give to the member silly!`);
-	}
-
-	// This is the add subcommand that will only add a role to the member
-	async add(message: KlasaMessage, [role, member = message.member]: [Role, GuildMember]) {
-		// If the user did not meet the requirements cancel out of the command
-		if (!await this.checkRequirements(message, role, member)) return null;
-
-		// If the member already has the role then send an error message
-		const memberHasRole = member.roles.has(role.id);
-		if (memberHasRole) return message.send(`I can't add the ${role.name} role to ${member.displayName} because they already have that role.`);
-		// Add the role to the user
-		const roleAdded = await member.roles.add(role.id).catch(() => null);
-		// Send a response on whether or not the role was successfully added
-		return message.send(roleAdded ? `I have added the ${role.name} to ${member.displayName}.` : `I was unable to add the ${role.name} to ${member.displayName}`);
-	}
-
-
-	async remove(message: KlasaMessage, [role, member = message.author]: [Role, GuildMember]) {
-		// If the user did not meet the requirements cancel out of the command
-		if (!await this.checkRequirements(message, role, member)) return null;
-
-		// If the member already has the role then send an error message
-		const memberHasRole = member.roles.has(role.id);
-		if (!memberHasRole) return message.send(`I can't remove the ${role.name} role to ${member.displayName} because don't have that role.`);
-		// Add the role to the user
-		const roleAdded = await member.roles.remove(role.id).catch(() => null);
-		// Send a response on whether or not the role was successfully added
-		return message.send(roleAdded ? `I have removed the ${role.name} to ${member.displayName}.` : `I was unable to remove the ${role.name} to ${member.displayName}`);
-	}
-
-	async auto(message: KlasaMessage, [role, member = message.member]: [Role, GuildMember]) {
-		// If the user did not meet the requirements cancel out of the command
-		if (!await this.checkRequirements(message, role, member)) return null;
-
-		// If the member already has the role then send an error message
-		const memberHasRole = member.roles.has(role.id);
-
-		// if the member has the role remove it else add the role to the member
-		const roleUpdated = memberHasRole ? await member.roles.remove(role.id).catch(() => null) : await member.roles.add(role.id).catch(() => null);
-
-		// Send a response on whether or not the role was successfully added
-		return message.send(roleUpdated
-			? `I have ${memberHasRole ? `removed` : `added`} the ${role.name} to ${member.displayName}.`
-			: `I was unable to ${memberHasRole ? `remove` : `add`} the ${role.name} to ${member.displayName}`);
-	}
-
-	async checkRequirements(message: KlasaMessage, role: Role, member: GuildMember) {
-		// If the member is not manageable, send an error message
-		if (!member.manageable) {
-			await message.send(`I do not have a role high enough to remove roles from ${member.displayName}`);
-			// Since the user did not meet the requirements we return false
-			return false;
-		}
-		// Check if the bot highest role is higher than the role provided so it can assign it
-		const botHasHigherRole = message.guild.me.roles.highest.position > role.position;
-		if (!botHasHigherRole) {
-			await message.send(`The role you provided was higher than the bots highest role.`);
-			// Since the user did not meet the requirements we return false
-			return false;
-		}
-
-		// If all requirements are met we want to return true
-		return true;
-	}
-
-}
-```
+Let's make a command that will allow guild admins to give or take roles from a member.
 
 ## VSCode Plugin
 
 One of the coolest things about using Visual Studio Code is that it has a really cool Extension that makes coding bots really easy for Klasa. Go to the Extension store and search for `klasa-vscode` by `bdistin` the creator of Klasa. Once you have, installed it you can follow the steps below to create a command file.
 
 <!-- Insert Image Here -->
-> Note: There is no plugin support for Typescript at the time of writing this guide.
 
 ## Creating Command File
 
 > Note: If you used the VSCode Plugin to create your command file, you can skip this step.
 
-Since, we are creating a Moderation command to give or take roles, let's go ahead and create a `Category` folder called `Moderation` and then create a file called `role.js` or `role.ts` in Typescript.
+Since, we are creating a Moderation command to give or take roles, let's go ahead and create a `Category` folder called `Moderation` and then create a file called `role.js`.
 
 Once the file is made, you can paste this following base snippet to make our first command.
 
@@ -230,50 +47,6 @@ module.exports = class extends Command {
 	async run(message, [...params]) {
 		// This is where you place the code you want to run for your command
 		return message.send(`${this.name} command ran successfully`);
-	}
-
-	async init() {
-		/*
-		 * You can optionally define this method which will be run when the bot starts
-		 * (after login, so discord data is available via this.client)
-		 */
-	}
-
-}
-```
-
-For Typescript users:
-
-```ts
-import { Command, CommandStore, KlasaMessage } from 'klasa';
-
-export default class extends Command {
-	constructor(store: CommandStore, file: string[], directory: string) {
-		super(store, file, directory, {
-			aliases: [],
-			bucket: 1,
-			cooldown: 0,
-			deletable: false,
-			description: '',
-			enabled: true,
-			extendedHelp: 'No extended help available.',
-			guarded: false,
-			name: 'yourCommandName',
-			nsfw: false,
-			permissionLevel: 0,
-			quotedStringSupport: false,
-			requiredPermissions: [],
-			requiredSettings: [],
-			runIn: ['text', 'dm'],
-			subcommands: false,
-			usage: '',
-			usageDelim: undefined,
-		});
-	}
-
-	async run(message: KlasaMessage, [...params]) {
-		// This is where you place the code you want to run for your command
-		return message.send(`${this.name} command ran successfully.`);
 	}
 
 	async init() {
@@ -330,32 +103,10 @@ For this guide, we will just be deleting this line going forward to keep our fil
 
 The `enabled` option will be used to tell Klasa whether this command should be enabled or disabled.
 
-In case, you want to disable the command. You can do so
+In case, you want to disable the command. Just to test how this works, let's go ahead and see if we can make this work. Switch it to `false` as shown below:
 
 ```ts
 	enabled: false
-```
-
-Just to test how this works, let's go ahead and see if we can make this work. Switch it to `false` as shown below:
-
-```ts
-	aliases: [],
-	bucket: 1,
-	cooldown: 0,
-	deletable: false,
-	description: '',
-	enabled: false,
-	extendedHelp: 'No extended help available.',
-	guarded: false,
-	nsfw: false,
-	permissionLevel: 0,
-	quotedStringSupport: false,
-	requiredPermissions: [],
-	requiredSettings: [],
-	runIn: ['text', 'dm'],
-	subcommands: false,
-	usage: '',
-	usageDelim: undefined,
 ```
 
 Go into a discord channel and type the following command:
@@ -387,34 +138,9 @@ Since, roles only exist in guilds, we can tell klasa that this command should on
 	runIn: [`text`],
 ```
 
-Let's go ahead and test this so you can see it in action.
-
-```ts
-	aliases: [],
-	bucket: 1,
-	cooldown: 0,
-	deletable: false,
-	description: '',
-	extendedHelp: 'No extended help available.',
-	guarded: false,
-	nsfw: false,
-	permissionLevel: 0,
-	quotedStringSupport: false,
-	requiredPermissions: [],
-	requiredSettings: [],
-	runIn: ['text'],
-	subcommands: false,
-	usage: '',
-	usageDelim: undefined,
-```
-
 Now you can go to a direct message with your bot, and try to use the role command. It will respond saying it can not run outside text channels. The same would be true if we wanted to only allow a command in `dm`.
 
-We can not delete this line because the default value of this option in to enable the command everywhere. We don't want the `role` command to be used in anything outside a guild. So we are going to leave it as follows:
-
-```ts
-	runIn: [`text`]
-```
+We can not delete this line because the default value of this option in to enable the command everywhere. We don't want the `role` command to be used in anything outside a guild.
 
 ### Command Cooldown And Bucket
 
@@ -430,22 +156,8 @@ Let's use our command as an example. We don't want someone to start spamming the
 Let's test out how this works to get a better understanding.
 
 ```ts
-	aliases: [],
 	bucket: 5,
 	cooldown: 60,
-	deletable: false,
-	description: '',
-	extendedHelp: 'No extended help available.',
-	guarded: false,
-	nsfw: false,
-	permissionLevel: 0,
-	quotedStringSupport: false,
-	requiredPermissions: [],
-	requiredSettings: [],
-	runIn: ['text'],
-	subcommands: false,
-	usage: '',
-	usageDelim: undefined,
 ```
 
 First, we have to reload this command.
@@ -472,21 +184,6 @@ Aliases as we learned earlier are other names that can be used to trigger the co
 
 ```ts
 	aliases: [`r`, `ro`, `rol`],
-	bucket: 5,
-	cooldown: 60,
-	deletable: false,
-	description: '',
-	extendedHelp: 'No extended help available.',
-	guarded: false,
-	nsfw: false,
-	permissionLevel: 0,
-	quotedStringSupport: false,
-	requiredPermissions: [],
-	requiredSettings: [],
-	runIn: ['text'],
-	subcommands: false,
-	usage: '',
-	usageDelim: undefined,
 ```
 
 Notice how I put `r`, `ro`, and `rol` as aliases. This is so if by chance the user forgets to type a letter or two, the command will still work for them. You can choose whatever aliases you like.
@@ -500,22 +197,7 @@ If you don't want to add any aliases for the command, you can simply remove this
 This option allows you to tell Klasa to delete all the bots responses to a command if the trigger message was deleted. Let's set this to true and see how it works.
 
 ```ts
-	aliases: [`r`, `ro`, `rol`],
-	bucket: 5,
-	cooldown: 60,
 	deletable: true,
-	description: '',
-	extendedHelp: 'No extended help available.',
-	guarded: false,
-	nsfw: false,
-	permissionLevel: 0,
-	quotedStringSupport: false,
-	requiredPermissions: [],
-	requiredSettings: [],
-	runIn: ['text'],
-	subcommands: false,
-	usage: '',
-	usageDelim: undefined,
 ```
 
 Now go into a discord channel and reload the command. Once, you have reloaded the command you can type the following command:
@@ -530,33 +212,19 @@ Since, we don't really want to bot deleting this response so we can always tell 
 
 ### Command Guarded
 
-The `guarded` option is something we have seen already in this guide. It tells Klasa that this command should not be allowed to be disabled by servers.
+The `guarded` option is something we have seen already in this guide. It tells Klasa that this command should not be allowed to be disabled by guilds.
 
 > Note: If you customize the settings and override the default `disabledCommands` guild setting, you must also build the filter for this if you want to use this option. We will go over this in the guild settings part of this guide.
 
-Klasa adds some settings per guild by default whenever the bot is added to a guild. One of the settings is called `disabledCommands`. Guild admins can use the Klasa `+conf` command to disable commands on their server. This option tells Klasa to not allow this command to be disabled by the server admins on those servers.
+Klasa adds some settings per guild by default whenever the bot is added to a guild. One of the settings is called `disabledCommands`. Guild admins can use the Klasa `+conf` command to disable commands on their guild. This option tells Klasa to not allow this command to be disabled by the guild admins on those guilds.
 
 Let's go ahead and test this out quickly.
 
 ```ts
-	aliases: [`r`, `ro`, `rol`],
-	bucket: 5,
-	cooldown: 60,
-	description: '',
-	extendedHelp: 'No extended help available.',
 	guarded: true,
-	nsfw: false,
-	permissionLevel: 0,
-	quotedStringSupport: false,
-	requiredPermissions: [],
-	requiredSettings: [],
-	runIn: ['text'],
-	subcommands: false,
-	usage: '',
-	usageDelim: undefined,
 ```
 
-Since this is a guild moderation command, we want to allow servers to be able to choose whether this command should work on their server or not. So we can delete this line from our command.
+Since this is a guild moderation command, we want to allow guilds to be able to choose whether this command should work on their guild or not. So we can delete this line from our command.
 
 ### Command NSFW
 
@@ -567,20 +235,7 @@ The `nsfw` options tells Klasa that this is a NSFW command and not to allow this
 Let's set this to true just to test it out for a bit.
 
 ```ts
-	aliases: [`r`, `ro`, `rol`],
-	bucket: 5,
-	cooldown: 60,
-	description: '',
-	extendedHelp: 'No extended help available.',
 	nsfw: true,
-	permissionLevel: 0,
-	quotedStringSupport: false,
-	requiredPermissions: [],
-	requiredSettings: [],
-	runIn: ['text'],
-	subcommands: false,
-	usage: '',
-	usageDelim: undefined,
 ```
 
 Now make sure to reload the command and then use this command in a channel that is **NOT** a NSFW channel.
@@ -610,55 +265,17 @@ By default Klasa creates some permissions levels for us.
 Since we don't want to allow any user to use the role command, we can tell Klasa to only allow users with `MANAGE_GUILD` permission to use it. This will most likely be a moderator or admin that has this permission so they should be able to give or take roles.
 
 ```ts
-	aliases: [`r`, `ro`, `rol`],
-	bucket: 5,
-	cooldown: 60,
-	description: '',
-	extendedHelp: 'No extended help available.',
-	guarded: true,
 	permissionLevel: 6,
-	quotedStringSupport: false,
-	requiredPermissions: [],
-	requiredSettings: [],
-	runIn: ['text'],
-	subcommands: false,
-	usage: '',
-	usageDelim: undefined,
 ```
 
 Now you can reload the bot and have an alternate discord account or a friend try using the command to see how this option works.
 
 ### Command Required Permissions
 
-The `requiredPermissions` options tells Klasa what permissions are necessary to run a command. For example, in order to add or remove roles from someone, we need the `MANAGE_ROLES` permission on the server.
-
-> Note: For good practice, it is recommended to try and use the Permissions.FLAGS from Discord.js. However, you can also provide it as just `MANAGE_ROLES`.
+The `requiredPermissions` options tells Klasa what permissions are necessary to run a command. For example, in order to add or remove roles from someone, we need the `MANAGE_ROLES` permission on the guild.
 
 ```ts
-const { Command } = require(`klasa`);
-const { Permissions } = require(`discord.js`);
-
-module.exports = class extends Command {
-
-	constructor(...args) {
-		super(...args, {
-			aliases: [`r`, `ro`, `rol`],
-			bucket: 5,
-			cooldown: 60,
-			description: '',
-			extendedHelp: 'No extended help available.',
-			name: 'yourCommandName',
-			permissionLevel: 6,
-			quotedStringSupport: false,
-			requiredPermissions: [Permissions.FLAGS.MANAGE_ROLES],
-			requiredSettings: [],
-			runIn: ['text'],
-			subcommands: false,
-			usage: '',
-			usageDelim: undefined,
-		});
-	}
-}
+	requiredPermissions: ['MANAGE_ROLES'],
 ```
 
 Now that Klasa knows we need Manage Roles, we can reload the command and try using it. Notice how the command does not work?
@@ -778,16 +395,6 @@ usageDelim: ` `,
 So, all we need to do is now set the subcommand to true.
 
 ```ts
-	aliases: [`r`, `ro`, `rol`],
-	bucket: 5,
-	cooldown: 60,
-	description: `Adds or removes a role from a member.`,
-	extendedHelp: `This command can add or remove a role from a member but it will require the user to have **MANAGE_GUILD** permissions to use. The command can be used in the following ways: **+role add @role**, **+role remove @role**, or **+role @role** if you want the bot to automatically add or remove based on if the member has the role already.`,
-	name: 'yourCommandName',
-	permissionLevel: 6,
-	quotedStringSupport: false,
-	requiredPermissions: [Permissions.FLAGS.MANAGE_ROLES],
-	runIn: ['text'],
 	subcommands: true,
 	usage: `<add|remove> <role:role> <member:member>`,
 	usageDelim: ` `,
@@ -836,27 +443,6 @@ Now let's take a moment to add some functionality into our subcommands.
 > Note: Since this is a guide meant for Klasa and not Javascript or Discord.js we are going to leave comments and assume that you can understand what the code is doing.
 
 ```ts
-const { Command } = require('klasa');
-const { Permissions } = require('discord.js')
-
-module.exports = class extends Command {
-
-	constructor(...args) {
-		super(...args, {
-			aliases: [`r`, `ro`, `rol`],
-			bucket: 5,
-			cooldown: 60,
-			description: `Adds or removes a role from a member.`,
-			extendedHelp: `This command can add or remove a role from a member but it will require the user to have **MANAGE_GUILD** permissions to use. The command can be used in the following ways: **+role add @role**, **+role remove @role**, or **+role @role** if you want the bot to automatically add or remove based on if the member has the role already.`,
-			permissionLevel: 6,
-			requiredPermissions: [Permissions.FLAGS.MANAGE_ROLES],
-			runIn: ['text'],
-			subcommands: true,
-			usage: `<add|remove> <role:role> [member:member]`,
-			usageDelim: ` `,
-		});
-	}
-
 	// This is the add subcommand that will only add a role to the member
 	async add(message, [role, member = message.member]) {
 		// If the member is not manageable, send an error message
@@ -874,7 +460,7 @@ module.exports = class extends Command {
 		return message.send(roleAdded ? `I have added the ${role.name} to ${member.displayName}.` : `I was unable to add the ${role.name} to ${member.displayName}`);
 	}
 
-
+	// This is the remove subcommand that will only remove a role from a member
 	async remove(message, [role, member = message.author]) {
 		// If the member is not manageable, send an error message
 		if (!member.manageable) return message.send(`I do not have a role high enough to remove roles from ${member.displayName}`);
@@ -890,8 +476,6 @@ module.exports = class extends Command {
 		// Send a response on whether or not the role was successfully added
 		return message.send(roleAdded ? `I have removed the ${role.name} to ${member.displayName}.` : `I was unable to remove the ${role.name} to ${member.displayName}`);
 	}
-
-}
 ```
 
 > Note: We have deleted the `init` function as we do not require it in this command. We will see the purpose of this function later in the guide once we discuss `Tasks`. The `run` function was also removed because we do not have any use for it. The `run` function is used when you do not have subcommands normally. Although, you can always create a subcommand that is called `run` and use it.
@@ -943,7 +527,7 @@ Nice! We even built a default subcommand. Let's give it a try. `+reload role` an
 
 ## Making A Custom Error Response
 
-One of the best things about Klasa is that it is extremely flexible and customizable. However, there was one part of the command so far, that we were unable to customize. When you don't provide a `role` the response was always the same and we never coded that part. Klasa automatically handles it when a required argument in our usage was not provided by the user. Fear not, Klasa is so amazing that we can even customize this response.
+One of the best things about Klasa is that it is extremely flexible and customizable. However, there was one part of the command so far, that we have not customized yet. When you don't provide a `role` the response was always the same and we never coded that part. Klasa automatically handles it when a required argument in our usage was not provided by the user. Fear not, Klasa is so amazing that we can even customize this response if we want.
 
 Right under the `super` but inside the `constructor` we can create as many `customizeResponses` as we wish.
 
@@ -951,7 +535,6 @@ Let's go ahead and make a silly error response.
 
 ```ts
 const { Command } = require('klasa');
-const { Permissions } = require('discord.js');
 
 module.exports = class extends Command {
 
@@ -963,7 +546,7 @@ module.exports = class extends Command {
 			description: `Adds or removes a role from a member.`,
 			extendedHelp: `This command can add or remove a role from a member but it will require the user to have **MANAGE_GUILD** permissions to use. The command can be used in the following ways: **+role add @role**, **+role remove @role**, or **+role @role** if you want the bot to automatically add or remove based on if the member has the role already.`,
 			permissionLevel: 6,
-			requiredPermissions: [Permissions.FLAGS.MANAGE_ROLES],
+			requiredPermissions: ['MANAGE_ROLES']
 			runIn: ['text'],
 			subcommands: true,
 			usage: `<add|remove|auto:default> <role:role> [member:member]`,
@@ -1000,33 +583,31 @@ There is another really cool benefit of Klasa that we haven't taken advantage of
 Right now, we have a lot of repetitive code in every single function. So let's go ahead and clean that up. We can make a new function called `checkRequirements` that we can reuse in all the other subcommands we made.
 
 ```ts
-const { Command } = require('klasa');
-const { Permissions } = require('discord.js');
-
-module.exports = class extends Command {
-
-	constructor(...args) {
-		super(...args, {
-			aliases: [`r`, `ro`, `rol`],
-			bucket: 5,
-			cooldown: 60,
-			description: `Adds or removes a role from a member.`,
-			extendedHelp: `This command can add or remove a role from a member but it will require the user to have **MANAGE_GUILD** permissions to use. The command can be used in the following ways: **+role add @role**, **+role remove @role**, or **+role @role** if you want the bot to automatically add or remove based on if the member has the role already.`,
-			permissionLevel: 6,
-			requiredPermissions: [Permissions.FLAGS.MANAGE_ROLES],
-			runIn: ['text'],
-			subcommands: true,
-			usage: `<add|remove|auto:default> <role:role> [member:member]`,
-			usageDelim: ` `,
-		});
-
-		this.customizeResponse(`role`, `You did not give me any role to give to the member silly!`);
+async checkRequirements(message, role, member) {
+	// If the member is not manageable, send an error message
+	if (!member.manageable) {
+		await message.send(`I do not have a role high enough to remove roles from ${member.displayName}`);
+		return false;
+	}
+	// Check if the bot highest role is higher than the role provided so it can assign it
+	const botHasHigherRole = message.guild.me.roles.highest.position > role.position;
+	if (!botHasHigherRole) {
+		await message.send(`The role you provided was higher than the bots highest role.`);
+		return false;
 	}
 
+	// If all requirements are met we want to return true
+	return true;
+}
+```
+
+Now we can reuse this function in our subcommands by doing `this.checkRequirements(message, role, member)`
+
+```ts
 	// This is the add subcommand that will only add a role to the member
 	async add(message, [role, member = message.member]) {
 		// If the user did not meet the requirements cancel out of the command
-		if (!(await this.checkRequirements(message, role, member))) return null;
+		if (!await this.checkRequirements(message, role, member)) return null;
 
 		// If the member already has the role then send an error message
 		const memberHasRole = member.roles.has(role.id);
@@ -1040,7 +621,7 @@ module.exports = class extends Command {
 
 	async remove(message, [role, member = message.author]) {
 		// If the user did not meet the requirements cancel out of the command
-		if (!(await this.checkRequirements(message, role, member))) return null;
+		if (!await this.checkRequirements(message, role, member)) return null;
 
 		// If the member already has the role then send an error message
 		const memberHasRole = member.roles.has(role.id);
@@ -1053,7 +634,78 @@ module.exports = class extends Command {
 
 	async auto(message, [role, member = message.member]) {
 		// If the user did not meet the requirements cancel out of the command
-		if (!(await this.checkRequirements(message, role, member))) return null;
+		if (!await this.checkRequirements(message, role, member)) return null;
+
+		// If the member already has the role then send an error message
+		const memberHasRole = member.roles.has(role.id);
+
+		// if the member has the role remove it else add the role to the member
+		const roleUpdated = memberHasRole ? await member.roles.remove(role.id).catch(() => null) : await member.roles.add(role.id).catch(() => null);
+
+		// Send a response on whether or not the role was successfully added
+		return message.send(roleUpdated ? `I have ${memberHasRole ? `removed` : `added`} the ${role.name} to ${member.displayName}.` : `I was unable to ${memberHasRole ? `remove` : `add`} the ${role.name} to ${member.displayName}`);
+	}
+```
+
+Woah! We have a fully built functional command with Klasa! This should show how amazing and flexible Klasa allows you to make commands. Now, you can easily go ahead and make as many commands as you like. Commands are actually the most complex part of Klasa. So, now that you have understood this, the rest is going to be much easier.
+
+Now we can go ahead and create our first `Finalizer`.
+
+Here is the final version of our role command we just created.
+
+```ts
+const { Command } = require('klasa');
+
+module.exports = class extends Command {
+
+	constructor(...args) {
+		super(...args, {
+			aliases: [`r`, `ro`, `rol`],
+			bucket: 5,
+			cooldown: 60,
+			description: `Adds or removes a role from a member.`,
+			extendedHelp: `This command can add or remove a role from a member but it will require the user to have **MANAGE_GUILD** permissions to use. The command can be used in the following ways: **+role add @role**, **+role remove @role**, or **+role @role** if you want the bot to automatically add or remove based on if the member has the role already.`,
+			permissionLevel: 6,
+			requiredPermissions: ['MANAGE_ROLES'],
+			runIn: ['text'],
+			subcommands: true,
+			usage: `<add|remove|auto:default> <role:role> [member:member]`,
+			usageDelim: ` `,
+		});
+
+		this.customizeResponse(`role`, `You did not give me any role to give to the member silly!`);
+	}
+
+	// This is the add subcommand that will only add a role to the member
+	async add(message, [role, member = message.member]) {
+		// If the user did not meet the requirements cancel out of the command
+		if (!await this.checkRequirements(message, role, member)) return null;
+
+		// If the member already has the role then send an error message
+		const memberHasRole = member.roles.has(role.id);
+		if (memberHasRole) return message.send(`I can't add the ${role.name} role to ${member.displayName} because they already have that role.`);
+		// Add the role to the user
+		const roleAdded = await member.roles.add(role.id).catch(() => null);
+		// Send a response on whether or not the role was successfully added
+		return message.send(roleAdded ? `I have added the ${role.name} to ${member.displayName}.` : `I was unable to add the ${role.name} to ${member.displayName}`);
+	}
+
+	async remove(message, [role, member = message.author]) {
+		// If the user did not meet the requirements cancel out of the command
+		if (!await this.checkRequirements(message, role, member)) return null;
+
+		// If the member already has the role then send an error message
+		const memberHasRole = member.roles.has(role.id);
+		if (!memberHasRole) return message.send(`I can't remove the ${role.name} role to ${member.displayName} because don't have that role.`);
+		// Add the role to the user
+		const roleAdded = await member.roles.remove(role.id).catch(() => null);
+		// Send a response on whether or not the role was successfully added
+		return message.send(roleAdded ? `I have removed the ${role.name} to ${member.displayName}.` : `I was unable to remove the ${role.name} to ${member.displayName}`);
+	}
+
+	async auto(message, [role, member = message.member]) {
+		// If the user did not meet the requirements cancel out of the command
+		if (!await this.checkRequirements(message, role, member)) return null;
 
 		// If the member already has the role then send an error message
 		const memberHasRole = member.roles.has(role.id);
@@ -1084,7 +736,3 @@ module.exports = class extends Command {
 
 }
 ```
-
-Woah! We have a fully built functional command with Klasa! This should show how amazing and flexible Klasa allows you to make commands. Now, you can easily go ahead and make as many commands as you like. Commands are actually the most complex part of Klasa. So, now that you have understood this, the rest is going to be much easier.
-
-Now we can go ahead and create our first `Finalizer`.
