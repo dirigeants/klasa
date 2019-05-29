@@ -48,6 +48,7 @@ const BotClient = new Client({
 	readyMessage: (client) => `${client.user.tag}, ready to serve ${client.guilds.size} guilds.`
 });
 ```
+
 > Note: If you are using Typescript, you should do `(client: Client)`
 
 Now you can reboot the bot again, this time using `+reboot` and see how the bot will log a message in your console.

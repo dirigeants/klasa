@@ -94,6 +94,7 @@ module.exports = class extends Command {
 ```
 
 For Typescript users:
+
 ```ts
 import { Command, CommandStore, KlasaMessage } from 'klasa';
 import { Permissions, Role, GuildMember } from 'discord.js';
@@ -182,6 +183,7 @@ export default class extends Command {
 
 }
 ```
+
 ## VSCode Plugin
 
 One of the coolest things about using Visual Studio Code is that it has a really cool Extension that makes coding bots really easy for Klasa. Go to the Extension store and search for `klasa-vscode` by `bdistin` the creator of Klasa. Once you have, installed it you can follow the steps below to create a command file.
@@ -241,6 +243,7 @@ module.exports = class extends Command {
 ```
 
 For Typescript users:
+
 ```ts
 import { Command, CommandStore, KlasaMessage } from 'klasa';
 
@@ -294,6 +297,7 @@ Before, we do anything let's see if the command actually runs. Go into the disco
 ```shell
 +reload commands
 ```
+
 Now that we have reloaded the entire commands Store, this new command we made will be enabled for us. Type the command below to see what it will do!
 
 ```shell
@@ -326,9 +330,11 @@ For this guide, we will just be deleting this line going forward to keep our fil
 The `enabled` option will be used to tell Klasa whether this command should be enabled or disabled.
 
 In case, you want to disable the command. You can do so
+
 ```ts
 	enabled: false
 ```
+
 Just to test how this works, let's go ahead and see if we can make this work. Switch it to `false` as shown below:
 
 ```ts
@@ -356,6 +362,7 @@ Go into a discord channel and type the following command:
 ```shell
 +reload commands
 ```
+
 Once the reload is done, you can try and use the command.
 
 ```shell
@@ -373,6 +380,7 @@ The `runIn` option allows you to tell Klasa where this command should be allowed
 These names refer to the channel types that discord allows messages in.
 
 Since, roles only exist in guilds, we can tell klasa that this command should only be allowed to run in guilds
+
 ```ts
 	runIn: [`text`],
 ```
@@ -397,6 +405,7 @@ Let's go ahead and test this so you can see it in action.
 	usage: '',
 	usageDelim: undefined,
 ```
+
 Now you can go to a direct message with your bot, and try to use the role command. It will respond saying it can not run outside text channels. The same would be true if we wanted to only allow a command in `dm`.
 
 We can not delete this line because the default value of this option in to enable the command everywhere. We don't want the `role` command to be used in anything outside a guild. So we are going to leave it as follows:
@@ -438,6 +447,7 @@ Let's test out how this works to get a better understanding.
 ```
 
 First, we have to reload this command.
+
 ```shell
 +reload role
 ```
@@ -504,7 +514,9 @@ This option allows you to tell Klasa to delete all the bots responses to a comma
 	usage: '',
 	usageDelim: undefined,
 ```
+
 Now go into a discord channel and reload the command. Once, you have reloaded the command you can type the following command:
+
 ```shell
 +role
 ```
@@ -521,6 +533,7 @@ The `guarded` option is something we have seen already in this guide. It tells K
 Klasa adds some settings per guild by default whenever the bot is added to a guild. One of the settings is called `disabledCommands`. Guild admins can use the Klasa `+conf` command to disable commands on their server. This option tells Klasa to not allow this command to be disabled by the server admins on those servers.
 
 Let's go ahead and test this out quickly.
+
 ```ts
 	aliases: [`r`, `ro`, `rol`],
 	bucket: 5,
@@ -547,6 +560,7 @@ The `nsfw` options tells Klasa that this is a NSFW command and not to allow this
 > Note: If you make a command nsfw it will not work in Direct Messages. NSFW commands in Direct Messages are against the Terms of Service from discord so Klasa does not support this.
 
 Let's set this to true just to test it out for a bit.
+
 ```ts
 	aliases: [`r`, `ro`, `rol`],
 	bucket: 5,
@@ -565,9 +579,11 @@ Let's set this to true just to test it out for a bit.
 ```
 
 Now make sure to reload the command and then use this command in a channel that is **NOT** a NSFW channel.
+
 ```shell
 +role
 ```
+
 Then you can try running the command again in a NSFW channel. You will see that now the command will work.
 
 Going forward we don't want the role command to be only in NSFW channels so we can delete this line so it defaults to `false`.
@@ -682,17 +698,23 @@ The `usage` and `usageDelim` are going to tell our bot how to accept arguments f
 > Note: The `usage` is also a very complex part of Klasa. There is an entire page dedicated to understanding Usage and all its details.
 
 The first thing we want to do is to tell Klasa, that the user should split his arguments with spaces. For example:
+
 ```shell
 +role add @role
 ```
+
 This is where the `usageDelim` comes into play. Let's set our usageDelim to a empty space.
+
 ```ts
 	usageDelim: ` `,
 ```
+
 Now Klasa will know to separate all the arguments by spaces. But how does Klasa know that we want `add`, `remove` to determine what to make this command do?
+
 ```ts
 	usage: `<add|remove>`,
 ```
+
 A few important things to remember about the usage.
 - It must always be a string.
 - <> is a mandatory argument. So if a user doesnt provide it, the command wont run.
@@ -708,6 +730,7 @@ Okay, now we also tell Klasa that we want the user to give a `role`.
 ```ts
 usage: `<add|remove> <role:role>
 ```
+
 The left side of the `:` in `<role:role>` is the name we want to give this parameter. The right side is the type of usage we want the user to provide. Klasa comes built in with a `role` argument type. We will learn about `Arguments` in the future when we create our own arguments in this guide.
 
 For now just remember, that to ask a user for a role you can put `<whateverName:role>` in the usage.
@@ -717,6 +740,7 @@ The last thing we want to do on our usage is to tell Klasa that we also need a `
 ```ts
 usage: `<add|remove> <role:role> [member:member]`
 ```
+
 Notice, how we made the member here optional. You will see why a little below when we make the commands but for now just remember you can make it `<>` as well. However, for the purpose of this guide we will make it optional with `[]` because we want to allow the user to give themself that role. It also helps give a nice example of an optional argument. 😉
 
 ### Quoted String Support And Subcommands Option
@@ -732,6 +756,7 @@ The `subcommands` option allows us to tell Klasa that we want to have subcommand
 +role add @role
 +role remove @role
 ```
+
 All of these should work in this file. A user should be able to add a role or remove a role. The options for the subcommands must always be at the start of the usage. Luckily, we have already done this part before:
 
 ```ts
@@ -740,6 +765,7 @@ usageDelim: ` `,
 ```
 
 So, all we need to do is now set the subcommand to true.
+
 ```ts
 	aliases: [`r`, `ro`, `rol`],
 	bucket: 5,
@@ -764,6 +790,7 @@ Alright, now we have every single option on this command set exactly how we want
 > Note: We won't be adding the functionality just yet so that it easier to understand how to make the subcommands.
 
 **Add Subcommand**
+
 ```ts
 async add(message, [role, member = message.member]) {
 	return message.send(`The add subcommand has run for ${this.name} command with Role: ${role.name} and Member: ${member.displayName}.`);
@@ -771,6 +798,7 @@ async add(message, [role, member = message.member]) {
 ```
 
 **Remove Subcommmand**
+
 ```ts
 async remove(message, [role, member = message.member]) {
 	return message.send(`The remove subcommand has run for ${this.name} command with Role: ${role.name} and Member: ${member.displayName}.`);
@@ -853,6 +881,7 @@ module.exports = class extends Command {
 
 }
 ```
+
 > Note: We have deleted the `init` function as we do not require it in this command. We will see the purpose of this function later in the guide once we discuss `Tasks`. The `run` function was also removed because we do not have any use for it. The `run` function is used when you do not have subcommands normally. Although, you can always create a subcommand that is called `run` and use it.
 
 Now reload the command and go try out all the commands you ran before. This time you will notice that the command is actually adding or removing the roles properly.
@@ -862,14 +891,17 @@ Everything is working as expected. But, we can use Klasa subcommands to make thi
 **Default Subcommand**
 
 The default subcommand is ran when a user does **NOT** provide any of the possible subcommands. For example, if the user typed the command below it would throw an error.
+
 ```shell
 +role @role @user
 ```
+
 In order to avoid this error, we can create a default subcommand that can be run when a user does not type `add` or `remove`. We will make this the `auto` command that automatically adds or removes a role from the user based on whether or not that user already has the role. The `default` subcommand is always added at the end of the subcommand portion of the usage with the suffix `:default` after it.
 
 ```ts
 	usage: `<add|remove|auto:default>`
 ```
+
 Now that we have added the default subcommand in the usage, let's actually create the subcommand as well.
 
 ```ts
@@ -935,6 +967,7 @@ The first argument should always be the left side of the usage. In this case `<r
 ```ts
 this.customizeResponse(`role`, message => message.language.get(`COMMAND_ROLE_NO_ROLE_PROVIDED`));
 ```
+
 > Note: We will cover languages in depth later in this guide. For now, we will stick with the first example.
 
 Once again, make sure to `+reload role` and then try out what happens when you try the command without a role.

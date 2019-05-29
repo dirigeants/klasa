@@ -33,6 +33,7 @@ But what happens if we wanted to modify one of these commands? For example, what
 If you open up the `Commands` folder that Klasa created, you will notice that it is actually empty. All the commands we have used up till now are actually in the core of Klasa. To modify these commands, we will use the `+transfer` command to transfer the command from Klasa to our `Commands` folder.
 
 Go ahead and type in a discord channel.
+
 ```shell
 +transfer invite
 ```
@@ -84,6 +85,7 @@ This is the part that holds the options for each of the commands.
 > Note: Klasa has built in `multi-lingual` support. You can support as many languages as you wish. We will learn more about Languages when we create our own language but for now we just want to see how to customize the command.
 
 Now, we want to add the `aliases` option to it:
+
 ```ts
 	aliases: [`inv`, `i`],
 	description: language => language.get(`COMMAND_INVITE_DESCRIPTION`)
@@ -101,6 +103,7 @@ Let's go ahead and see this in action. Type the following command in a discord c
 ```shell
 +reload invite
 ```
+
 > Note: You can also do `+reload commands` to reload every single command at once if you edited multiple commands.
 
 <!-- Insert Image Here -->
