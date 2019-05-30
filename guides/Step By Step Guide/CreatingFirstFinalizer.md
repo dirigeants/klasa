@@ -20,7 +20,7 @@ Remember when we made our `role` command, we made it inside the `commands` folde
 
 Once the file is created, go ahead and paste in this following base snippet of what a finalizer should look like.
 
-```js
+```ts
 const { Finalizer } = require('klasa');
 
 module.exports = class extends Finalizer {
@@ -48,7 +48,7 @@ module.exports = class extends Finalizer {
 
 Right now, we don't need to worry about the `init` function as it won't be used here. We will see how it can be used once we get to the tasks section of this guide.
 
-```js
+```ts
 const { Finalizer } = require('klasa');
 
 module.exports = class extends Finalizer {
@@ -73,7 +73,7 @@ The `name` and `enabled` options for finalizers work the exact same way as how t
 
 Since we want this finalizer enabled, we can remove that line so it stays `true`. Also, we have a nice unique name for our finalizer file already `deleteCommandTrigger` which will assign the name automatically. So let's also remove the `name` option as well.
 
-```js
+```ts
 const { Finalizer } = require('klasa');
 
 module.exports = class extends Finalizer {
@@ -92,7 +92,7 @@ module.exports = class extends Finalizer {
 
 Notice how our constructor does not have any options left to customize it from the default values. In this case, we can actually remove the entire constructor as well to make our code much cleaner.
 
-```js
+```ts
 const { Finalizer } = require('klasa');
 
 module.exports = class extends Finalizer {
@@ -130,7 +130,7 @@ run(message, command, response, runTime) {
 
 Now that we have added all the functionality in this finalizer, we can see that we did not use the `command`, `response`, or `runTime` parameters. So we can remove them and be left with our first complete finalizer.
 
-```js
+```ts
 const { Finalizer } = require('klasa');
 
 module.exports = class extends Finalizer {
