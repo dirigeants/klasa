@@ -20,7 +20,7 @@ module.exports = class extends Command {
 			await piece.init();
 			if (this.client.shard) {
 				await this.client.shard.broadcastEval(`
-					if (String(this.shard.id) !== '${this.client.shard.id}') this.${piece.name}.loadAll().then(() => this.${piece.name}.loadAll());
+					if (String(this.shard.id) !== '${this.client.shard.id}') this.${piece.name}.loadAll().then(() => this.${piece.name}.init());
 				`);
 			}
 			return message.sendLocale('COMMAND_RELOAD_ALL', [piece, timer.stop()]);
