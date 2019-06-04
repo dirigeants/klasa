@@ -28,7 +28,7 @@ class RichDisplay {
 	 * @property {number} [max] The maximum total amount of reactions to collect
 	 * @property {number} [maxEmojis] The maximum number of emojis to collect
 	 * @property {number} [maxUsers] The maximum number of users to react
-	 * @property {number} [time] The maximum amount of time before this RichDisplay should expire
+	 * @property {number} [time] The maximum amount of time in milliseconds before this RichDisplay should expire
 	 */
 
 	/**
