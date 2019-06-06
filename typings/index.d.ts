@@ -392,7 +392,7 @@ declare module 'klasa' {
 	export abstract class Argument extends AliasPiece {
 		public constructor(store: ArgumentStore, file: string[], directory: string, options?: ArgumentOptions);
 		public aliases: string[];
-		public abstract run(arg: string, possible: Possible, message: KlasaMessage): any;
+		public abstract run(arg: string | undefined, possible: Possible, message: KlasaMessage): any;
 		public static regex: MentionRegex;
 		private static minOrMax(client: KlasaClient, value: number, min: number, max: number, possible: Possible, message: KlasaMessage, suffix: string): boolean;
 	}

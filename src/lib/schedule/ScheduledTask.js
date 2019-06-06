@@ -85,7 +85,7 @@ class ScheduledTask {
 		/**
 		 * If the task should catch up in the event the bot is down
 		 * @since 0.5.0
-		 * @type {string}
+		 * @type {boolean}
 		 */
 		this.catchUp = 'catchUp' in options ? options.catchUp : true;
 
