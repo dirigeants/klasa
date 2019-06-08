@@ -29,7 +29,10 @@ module.exports = class extends Monitor {
 				await message.prompter.run();
 				try {
 					const subcommand = message.command.subcommands ? message.params.shift() : undefined;
-					const commandRun = subcommand ? message.command[subcommand](message, message.params) : message.command.run(message, message.params);
+
+					const params = this.client.options.useObjectCommandArgs ? this.createObjectArgs(message) : message.params;
+
+					const commandRun = subcommand ? message.command[subcommand](message, params) : message.command.run(message, params);
 					timer.stop();
 					const response = await commandRun;
 					this.client.finalizers.run(message, message.command, response, timer);
@@ -44,6 +47,25 @@ module.exports = class extends Monitor {
 			this.client.emit('commandInhibited', message, message.command, response);
 		}
 		if (this.client.options.typing) message.channel.stopTyping();
+	}
+
+	async createObjectArgs(message) {
+		const params = {};
+		const possibles = message.command.usage.parsedUsage.map(usage => usage.possibles);
+
+		for (const [index, args] of possibles.entries()) {
+			const param = message.params[index];
+			for (const item of args) {
+				if (item.type === `literal` && param === item.name) {
+					params[item.name] = param;
+					break;
+				}
+
+				params[item.name] = param;
+			}
+		}
+
+		return params;
 	}
 
 };

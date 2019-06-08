@@ -79,6 +79,7 @@ class KlasaClient extends Discord.Client {
 	 * @property {number} [slowmode=0] Amount of time in ms before the bot will respond to a users command since the last command that user has run
 	 * @property {boolean} [slowmodeAggressive=false] If the slowmode time should reset if a user spams commands faster than the slowmode allows for
 	 * @property {boolean} [typing=false] Whether the bot should type while processing commands
+	 * @property {boolean} [useObjectCommandArgs=false] Whether the bot should use an object instead of an array for command args
 	 * @property {boolean} [prefixCaseInsensitive=false] Wether the bot should respond to case insensitive prefix or not
 	 */
 
