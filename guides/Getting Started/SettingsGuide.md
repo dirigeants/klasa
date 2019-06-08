@@ -283,8 +283,7 @@ message.guild.settings.destroy();
 
 They are the central controllers that manage a table from the database with its own schema and cache. Each gateway is registered in a driver that ensures everything initializes correctly, this driver is called {@link GatewayDriver}, and we will use it to both register, and access to our gateways.
 
-There are three built-in gateways: `clientStorage` (per-client settings), `guilds` (per-guild settings), and `users` (per-user settings). There are more available as plugins, for example: [#/docs/klasa-member-gateway/master/Getting%20Started/GettingStarted
-](KlasaMemberGateway  (per-member settings)).
+There are three built-in gateways: `clientStorage` (per-client settings), `guilds` (per-guild settings), and `users` (per-user settings). There are more available as plugins, for example: [/#/docs/klasa-member-gateway/master/Getting%20Started/GettingStarted](KlasaMemberGateway  (per-member settings)).
 
 ### Custom Gateway
 
