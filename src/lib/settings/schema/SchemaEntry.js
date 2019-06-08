@@ -148,7 +148,7 @@ class SchemaEntry {
 	 * @returns {this}
 	 */
 	edit(options = {}) {
-		if ('type' in options) this.type = options.type;
+		if ('type' in options) this.type = options.type.toLowerCase();
 		if ('array' in options) this.array = options.array;
 		if ('configurable' in options) this.configurable = options.configurable;
 		if ('filter' in options) this.filter = options.filter;
