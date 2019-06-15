@@ -56,8 +56,8 @@ class Command extends AliasPiece {
 		this.name = this.name.toLowerCase();
 
 		if (options.autoAliases) {
-			if (this.name.includes('-')) this.aliases.push(this.name.replace(/-/g, ''));
-			for (const alias of this.aliases) if (alias.includes('-')) this.aliases.push(alias.replace(/-/g, ''));
+			if (this.name.includes('-') && !this.aliases.includes(this.name.replace(/-/g, ''))) this.aliases.push(this.name.replace(/-/g, ''));
+			for (const alias of this.aliases) if (alias.includes('-') && !this.aliases.includes(alias.replace(/-/g, ''))) this.aliases.push(alias.replace(/-/g, ''));
 		}
 
 		/**
