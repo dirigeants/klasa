@@ -343,8 +343,8 @@
     arrify "^1.0.1"
 
 "@types/node@^12.0.2":
-  version "12.0.4"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.0.4.tgz#46832183115c904410c275e34cf9403992999c32"
+  version "12.0.8"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.0.8.tgz#551466be11b2adc3f3d47156758f610bd9f6b1d8"
 
 abbrev@1:
   version "1.1.1"
