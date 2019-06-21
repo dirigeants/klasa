@@ -32,7 +32,7 @@ Now we have to do one more thing before our bot is ready. Open the terminal and 
 npm init -y
 ```
 
-Notice, that this command made a `package.json` file. This is important because it will now let you install other packages like Klasa. To save time, we will install both Klasa and Discord.js together.
+Notice, that this command made a `package.json` file. This is important because it will now let you install packages like Klasa. To save time, we will install both Klasa and Discord.js together.
 
 > Reminder: Klasa is a framework for Discord.js so we need to have Discord.js as well.
 

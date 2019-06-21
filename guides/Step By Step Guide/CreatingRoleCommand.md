@@ -87,7 +87,7 @@ Wow, that worked! Interesting right. Well this is happening because of the `name
 
 ### Command Name
 
-By default, the name of a command is derived from the file name. In this case the default name of this cThe name of the command is provided in the `name` option. The name can also be derived from the file name. For example, since our file was named `role.js` the commands name is automatically `role`.
+By default, the name of a command is derived from the file name. In this case, the default name of is `role`. However, the default name is overwritten by the `name` option which is why `+role` did not work.
 
 The name option allows us to override the filename incase we wanted to make a custom file name.
 

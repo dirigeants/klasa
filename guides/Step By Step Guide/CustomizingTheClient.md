@@ -40,7 +40,7 @@ Now that the bot has restarted, we can try to do `+ping`. Nice! You now know how
 
 ## Customizing Our Ready Message
 
-Something that you may have noticed already is that when the bot starts it sends a message in the console? Klasa gives us a really sweet option of customizing this message when the bot is ready.
+Something that you may have noticed already is that when the bot starts it sends a message in the console. Klasa gives us a really sweet option of customizing this message when the bot is ready.
 
 ```js
 const BotClient = new Client({
@@ -55,7 +55,7 @@ Now you can reboot the bot again, this time using `+reboot` and see how the bot 
 
 ## Logging Commands Used
 
-A really cooly built in feature that Klasa provides is the ability to log every command that is used.
+A really cool built in feature that Klasa provides is the ability to log every command that is used.
 
 > Note: This will only log commands that are successfully run. If an error occurs, this will not log it.
 
