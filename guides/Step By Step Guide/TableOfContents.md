@@ -53,4 +53,3 @@ Welcome to the Klasa Step by Step Guide! This guide is intended specifically for
 7. {@tutorial FinishingFirstFinalizerWithSettings Finishing Delete Trigger Finalizer}
 	- Getting a value from settings
 	- Finishing touches
-
