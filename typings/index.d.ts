@@ -1074,6 +1074,7 @@ declare module 'klasa' {
 		monitors?: MonitorOptions;
 		providers?: ProviderOptions;
 		serializers?: SerializerOptions;
+		tasks?: TaskOptions;
 	}
 
 	export interface ProvidersOptions extends Record<string, any> {
