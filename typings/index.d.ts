@@ -1646,7 +1646,7 @@ declare module 'klasa' {
 		[P in keyof T]: P extends K ? unknown : T[P];
 	};
 
-	type DeepFrozen<T> = T extends object ?
+	export type DeepFrozen<T> = T extends object ?
 		T extends Array<infer AT> ? DeepFrozenArray<AT> :
 			T extends Map<infer MK, infer MV> ? DeepFrozenMap<MK, MV> :
 				T extends Set<infer ST> ? DeepFrozenSet<ST> :
