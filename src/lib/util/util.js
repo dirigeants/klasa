@@ -152,10 +152,12 @@ class Util {
 			Object.freeze(source);
 			if (Array.isArray(source)) {
 				for (const value of source) Util.deepFreeze(value);
+			} else if (source instanceof Map) {
+				for (const value of source.values()) Util.deepFreeze(value);
+			} else if (source instanceof Set) {
+				for (const value of source) Util.deepFreeze(value);
 			} else {
-				for (const value of Object.values(source)) {
-					Util.deepFreeze(value);
-				}
+				for (const value of Object.values(source)) Util.deepFreeze(value);
 			}
 		}
 		return source;
