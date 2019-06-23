@@ -468,7 +468,6 @@ declare module 'klasa' {
 
 	export abstract class Language extends Piece {
 		public constructor(store: LanguageStore, file: string[], directory: string, options?: LanguageOptions);
-		public store: LanguageStore;
 		public language: Record<string, string | string[] | ((...args: any[]) => string | string[])>;
 
 		public get<T = string>(term: string, ...args: any[]): T;
