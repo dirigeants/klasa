@@ -223,7 +223,7 @@ declare module 'klasa' {
 //#region Settings
 
 
-	export class SettingsFolder extends Map<string, SettingsFolder | SettingsValue | readonly SettingsValue[]> {
+	export class SettingsFolder extends Map<string, SettingsFolder | DeepFrozen<SettingsValue | SettingsValue[]>> {
 		public constructor(schema: SchemaFolder);
 		public readonly schema: SchemaFolder;
 		public readonly base: Settings | null;
@@ -237,7 +237,7 @@ declare module 'klasa' {
 		public display(message: KlasaMessage, path?: string | Schema | SchemaFolder | SchemaEntry): string;
 		public pluck(...paths: readonly string[]): any[];
 		public resolve(...paths: readonly string[]): Promise<any[]>;
-		public toJSON(): Readonly<Record<string, SettingsValue>>;
+		public toJSON(): Record<string, DeepFrozen<SettingsValue | SettingsValue[]>>;
 		public toString(): string;
 		private relative(pathOrPiece: string | Schema | SchemaEntry): string;
 		private _save(results: Array<SettingsFolderUpdateResultEntry>): Promise<void>;
@@ -994,7 +994,7 @@ declare module 'klasa' {
 		public static clean(text: string): string;
 		public static codeBlock(lang: string, expression: string | number | Stringifible): string;
 		public static deepClone<T = any>(source: T): T;
-		public static deepFreeze<T = any>(source: T): Readonly<T>;
+		public static deepFreeze<T = any>(source: T): DeepFrozen<T>;
 		public static exec(exec: string, options?: ExecOptions): Promise<{ stdout: string, stderr: string }>;
 		public static getTypeName(input: any): string;
 		public static isClass(input: any): input is Constructor<any>;
@@ -1645,6 +1645,17 @@ declare module 'klasa' {
 	type Filter<T, K extends keyof T> = {
 		[P in keyof T]: P extends K ? unknown : T[P];
 	};
+
+	type DeepFrozen<T> = T extends object ?
+		T extends Array<infer AT> ? DeepFrozenArray<AT> :
+			T extends Map<infer MK, infer MV> ? DeepFrozenMap<MK, MV> :
+				T extends Set<infer ST> ? DeepFrozenSet<ST> :
+					{ readonly [K in keyof T]: DeepFrozen<T[K]>; } : T;
+
+	type Box<T> = T;
+	interface DeepFrozenArray<T> extends Box<readonly DeepFrozen<T>[]> { }
+	interface DeepFrozenMap<K, V> extends Map<K, DeepFrozen<V>> { }
+	interface DeepFrozenSet<T> extends Set<DeepFrozen<T>> { }
 
 	export interface TitleCaseVariants extends Record<string, string> {
 		textchannel: 'TextChannel';
