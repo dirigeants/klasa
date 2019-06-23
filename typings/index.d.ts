@@ -1652,10 +1652,9 @@ declare module 'klasa' {
 				T extends Set<infer ST> ? DeepFrozenSet<ST> :
 					{ readonly [K in keyof T]: DeepFrozen<T[K]>; } : T;
 
-	type Box<T> = T;
-	interface DeepFrozenArray<T> extends Box<readonly DeepFrozen<T>[]> { }
-	interface DeepFrozenMap<K, V> extends Map<K, DeepFrozen<V>> { }
-	interface DeepFrozenSet<T> extends Set<DeepFrozen<T>> { }
+	interface DeepFrozenArray<T> extends ReadonlyArray<DeepFrozen<T>> { }
+	interface DeepFrozenMap<K, V> extends ReadonlyMap<K, DeepFrozen<V>> { }
+	interface DeepFrozenSet<T> extends ReadonlySet<DeepFrozen<T>> { }
 
 	export interface TitleCaseVariants extends Record<string, string> {
 		textchannel: 'TextChannel';
