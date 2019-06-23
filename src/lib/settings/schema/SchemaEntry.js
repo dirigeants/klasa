@@ -1,4 +1,4 @@
-const { isFunction, isNumber } = require('../../util/util');
+const { isFunction, isNumber, deepFreeze } = require('../../util/util');
 
 /**
  * The SchemaEntry class that stores the metadata for an entry from the schema
@@ -86,7 +86,7 @@ class SchemaEntry {
 		 * @since 0.5.0
 		 * @type {*}
 		 */
-		this.default = 'default' in options ? Object.freeze(options.default) : this._generateDefault();
+		this.default = 'default' in options ? deepFreeze(options.default) : this._generateDefault();
 
 		/**
 		 * The minimum value for this key.
@@ -152,7 +152,7 @@ class SchemaEntry {
 		if ('array' in options) this.array = options.array;
 		if ('configurable' in options) this.configurable = options.configurable;
 		if ('filter' in options) this.filter = options.filter;
-		if ('default' in options) this.default = Object.freeze(options.default);
+		if ('default' in options) this.default = deepFreeze(options.default);
 		if (('min' in options) || ('max' in options)) {
 			const { min = null, max = null } = options;
 			this.min = min;

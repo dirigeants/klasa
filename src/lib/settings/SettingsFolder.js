@@ -1,4 +1,4 @@
-const { isObject, objectToTuples, arraysStrictEquals, toTitleCase, mergeObjects, makeObject, resolveGuild } = require('../util/util');
+const { isObject, objectToTuples, arraysStrictEquals, toTitleCase, mergeObjects, makeObject, resolveGuild, deepFreeze } = require('../util/util');
 const Type = require('../util/Type');
 
 /**
@@ -435,7 +435,7 @@ class SettingsFolder extends Map {
 
 			// Patch recursively if the key is a folder, set otherwise
 			if (subkey instanceof SettingsFolder) subkey._patch(value);
-			else super.set(key, Object.freeze(value));
+			else super.set(key, deepFreeze(value));
 		}
 	}
 

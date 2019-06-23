@@ -994,6 +994,7 @@ declare module 'klasa' {
 		public static clean(text: string): string;
 		public static codeBlock(lang: string, expression: string | number | Stringifible): string;
 		public static deepClone<T = any>(source: T): T;
+		public static deepFreeze<T = any>(source: T): Readonly<T>;
 		public static exec(exec: string, options?: ExecOptions): Promise<{ stdout: string, stderr: string }>;
 		public static getTypeName(input: any): string;
 		public static isClass(input: any): input is Constructor<any>;

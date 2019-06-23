@@ -142,6 +142,26 @@ class Util {
 	}
 
 	/**
+	 * Deep freeze a value
+	 * @since 0.5.0
+	 * @param {*} source The object to freeze
+	 * @returns {Readonly<*>}
+	 */
+	static deepFreeze(source) {
+		if (typeof source === 'object' && source !== null) {
+			Object.freeze(source);
+			if (Array.isArray(source)) {
+				for (const value of source) Util.deepFreeze(value);
+			} else {
+				for (const value of Object.values(source)) {
+					Util.deepFreeze(value);
+				}
+			}
+		}
+		return source;
+	}
+
+	/**
 	 * Verify if the input is a function.
 	 * @since 0.5.0
 	 * @param {*} input The function to verify
