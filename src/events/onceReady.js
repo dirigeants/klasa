@@ -1,4 +1,5 @@
 const { Event, util } = require('klasa');
+const { Team } = require('discord.js');
 let retries = 0;
 
 module.exports = class extends Event {
@@ -20,8 +21,10 @@ module.exports = class extends Event {
 			return this.run();
 		}
 
-		// Single owner for now until Teams Support is truly added
-		if (!this.client.options.owners.length) this.client.options.owners.push(this.client.application.owner.id);
+		if (!this.client.options.owners.length) {
+			if (this.client.application.owner instanceof Team) this.client.options.owners.push(...this.client.application.owner.members.keys());
+			else this.client.options.owners.push(this.client.application.owner.id);
+		}
 
 		this.client.mentionPrefix = new RegExp(`^<@!?${this.client.user.id}>`);
 
