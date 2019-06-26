@@ -251,6 +251,11 @@ module.exports = Structures.extend('Message', Message => {
 			if (!Array.isArray(localeArgs)) [options, localeArgs] = [localeArgs, []];
 			return this.sendMessage(APIMessage.transformOptions(this.language.get(key, ...localeArgs), undefined, options));
 		}
+		
+		replyLocale(key, localeArgs = [], options = {}) {
+			if (!Array.isArray(localeArgs)) [options, localeArgs] = [localeArgs, []];
+			return this.sendMessage(APIMessage.transformOptions(this.language.get(key, ...localeArgs), options, { reply: this.member || this.author }));
+		}
 
 		/**
 		 * Since d.js is dumb and has 2 patch methods, this is for edits
