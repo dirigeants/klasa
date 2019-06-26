@@ -28,6 +28,12 @@ module.exports = class extends Extendable {
 		const language = this.guild ? this.guild.language : this.client.languages.default;
 		return this.send(APIMessage.transformOptions(language.get(key, ...args), undefined, options));
 	}
+	
+	replyLocale(key, args = [], options = {}) {
+		if (!Array.isArray(args)) [options, args] = [args, []];
+		const language = this.guild ? this.guild.language : this.client.languages.default;
+		return this.send(APIMessage.transformOptions(language.get(key, ...args), options, { reply: this.member || this.author }));
+	}
 
 	sendMessage(content, options) {
 		return this.send(content, options);
