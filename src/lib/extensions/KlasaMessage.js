@@ -252,6 +252,14 @@ module.exports = Structures.extend('Message', Message => {
 			return this.sendMessage(APIMessage.transformOptions(this.language.get(key, ...localeArgs), undefined, options));
 		}
 		
+		/**
+		 * Sends a message with a mention of the user who sent the message that will be editable via command editing (if nothing is attached)
+		 * @since 0.5.0
+		 * @param {string} key The Language key to send
+		 * @param {Array<*>} [localeArgs] The language arguments to pass
+		 * @param {external:MessageOptions} [options] The D.JS message options plus Language arguments
+		 * @returns {Promise<KlasaMessage|KlasaMessage[]>}
+		 */
 		replyLocale(key, localeArgs = [], options = {}) {
 			if (!Array.isArray(localeArgs)) [options, localeArgs] = [localeArgs, []];
 			return this.sendMessage(APIMessage.transformOptions(this.language.get(key, ...localeArgs), options, { reply: this.member || this.author }));
