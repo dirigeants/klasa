@@ -79,7 +79,7 @@ class Store extends Collection {
 	 * @protected
 	 */
 	registerCoreDirectory(directory) {
-		this.coreDirectories.add(directory + this.name);
+		this.coreDirectories.add(join(directory, this.name));
 		return this;
 	}
 
