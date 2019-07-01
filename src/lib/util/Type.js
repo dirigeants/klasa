@@ -143,7 +143,7 @@ class Type {
 	static resolve(value) {
 		const type = typeof value;
 		switch (type) {
-			case 'object': return value === null ? 'null' : value.constructor && value.constructor.name ? value.constructor.name : 'any';
+			case 'object': return value === null ? 'null' : value.constructor && value.constructor.name || 'any';
 			case 'function': return `${value.constructor.name}(${value.length}-arity)`;
 			case 'undefined': return 'void';
 			default: return type;
