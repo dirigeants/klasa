@@ -273,7 +273,7 @@ declare module 'klasa' {
 
 	export class Gateway extends GatewayStorage {
 		protected syncQueue: WeakMap<Settings, Promise<Settings>>;
-		protected cache: Collection<string, Record<string, any> & { settings: Settings }>;
+		public cache: Collection<string, Record<string, any> & { settings: Settings }>;
 		public acquire(target: any, id?: string | number): Settings;
 		public create(target: any, id?: string | number): Settings;
 		public get(id: string | number): Settings | null;
