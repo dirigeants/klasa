@@ -11,7 +11,7 @@ module.exports = class extends Inhibitor {
 
 		const existing = command.cooldowns.get(message.levelID);
 
-		if (existing && existing.limited) throw message.language.get('INHIBITOR_COOLDOWN', Math.ceil(existing.remainingTime / 1000), command.cooldownLevel === 'guild');
+		if (existing && existing.limited) throw message.language.get('INHIBITOR_COOLDOWN', Math.ceil(existing.remainingTime / 1000), command.cooldownLevel !== 'author');
 	}
 
 };
