@@ -1,4 +1,5 @@
 const { Command, util: { isFunction } } = require('klasa');
+const has = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
 
 module.exports = class extends Command {
 
@@ -52,8 +53,8 @@ module.exports = class extends Command {
 		await Promise.all(this.client.commands.map((command) =>
 			this.client.inhibitors.run(message, command, true)
 				.then(() => {
-					if (!help.hasOwnProperty(command.category)) help[command.category] = {};
-					if (!help[command.category].hasOwnProperty(command.subCategory)) help[command.category][command.subCategory] = [];
+					if (!has(help, command.category)) help[command.category] = {};
+					if (!has(help[command.category], command.subCategory)) help[command.category][command.subCategory] = [];
 					const description = isFunction(command.description) ? command.description(message.language) : command.description;
 					help[command.category][command.subCategory].push(`${prefix}${command.name.padEnd(longest)} :: ${description}`);
 				})
