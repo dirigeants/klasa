@@ -192,7 +192,7 @@ class RichDisplay {
 			[],
 			!('stop' in options) || ('stop' in options && options.stop),
 			!('jump' in options) || ('jump' in options && options.jump),
-			!('firstLast' in options) || ('firstLast' in options && options.firstLast),
+			!('firstLast' in options) || ('firstLast' in options && options.firstLast)
 		);
 		let msg;
 		if (message.editable) {
