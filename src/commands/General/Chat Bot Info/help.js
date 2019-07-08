@@ -1,5 +1,5 @@
 const { Command, util: { isFunction } } = require('klasa');
-const has = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
+const has = (obj, key) => Object.prototype.hasOwnProperty.call(obj, key);
 
 module.exports = class extends Command {
 
