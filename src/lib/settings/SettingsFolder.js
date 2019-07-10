@@ -1,4 +1,5 @@
 const { isObject, objectToTuples, arraysStrictEquals, toTitleCase, mergeObjects, makeObject, resolveGuild } = require('../util/util');
+const SettingsArray = require('./group/SettingsArray');
 const Type = require('../util/Type');
 
 /**
@@ -434,7 +435,7 @@ class SettingsFolder extends Map {
 			if (typeof subkey === 'undefined') continue;
 
 			// Patch recursively if the key is a folder, set otherwise
-			if (subkey instanceof SettingsFolder) subkey._patch(value);
+			if (subkey instanceof SettingsFolder || subkey instanceof SettingsArray) subkey._patch(value);
 			else super.set(key, value);
 		}
 	}
@@ -484,6 +485,10 @@ class SettingsFolder extends Map {
 				const settings = new SettingsFolder(value);
 				folder.set(key, settings);
 				this.init(settings, value);
+			} else if (value.array) {
+				const sArray = new SettingsArray(value);
+				sArray.base = this;
+				folder.set(key, sArray);
 			} else {
 				folder.set(key, value.default);
 			}
