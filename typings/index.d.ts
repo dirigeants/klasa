@@ -3,6 +3,7 @@ declare module 'klasa' {
 	import { ExecOptions } from 'child_process';
 
 	import {
+		APIMessage,
 		BufferResolvable,
 		CategoryChannel,
 		Channel,
@@ -19,6 +20,7 @@ declare module 'klasa' {
 		GuildEmoji,
 		GuildMember,
 		Message,
+		MessageAdditions,
 		MessageAttachment,
 		MessageCollector,
 		MessageEmbed,
