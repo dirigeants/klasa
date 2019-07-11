@@ -25,7 +25,7 @@ class SettingsArray {
 	}
 
 	includes(value) {
-		return this.data.slice().includes(value);
+		return this.data.includes(value);
 	}
 
 	async update(values, options) {
@@ -58,9 +58,9 @@ class SettingsArray {
 
 		// Has to be run before to actually catch errors, future error handling will be shoved into _parse() to actually reflect the individual values that error,
 		// rather then just throwing the first error to the top and disgarding the rest
-		const current = await promise;
+		const { errors, current } = await promise;
 
-		if (errors.length) return { errors, updated: [] };
+		if (errors.length) throw { errors, updated: [] };
 
 		// The arrays were already equal.
 		if (arraysStrictEquals(current, previous)) return;
@@ -83,18 +83,21 @@ class SettingsArray {
 		const { action = 'auto' } = options;
 		
 		// Need to change logic behind indexing for this to work properly.
-		if (action === 'overwrite') return next;
+		if (!options.indexing && action === 'overwrite') return next;
 
 		const clone = previous.slice();
+
+		// Errors are given back in the order that values were sent in
+		const errors = [];
 
 		// This value has an index paired with it
 		if (options.indexing) {
 			for (const val of next) {
 				let index = val[0];
 				if (clone.length === 0 && index > 0) {
-					throw `The current array is empty. The index must start at 0.`
+					errors.push({ input: val, message: 'The current array is empty. The index must start at 0.' });
 				} else if (index < 0 || index > clone.length + 1) {
-					throw `The index ${index} is bigger than the current array. It must be a value in the range of 0..${clone.length + 1}.`;
+					errors.push({ input: val, message: `The index ${index} is bigger than the current array. It must be a value in the range of 0..${clone.length + 1}.` });
 				}
 				clone[index] = val[1];
 			}
@@ -106,20 +109,20 @@ class SettingsArray {
 			}
 		} else if (action === 'add') {
 			for (const val of next) {
-				if (clone.includes(val)) throw `The value ${val} for the key ${entry.path} already exists.`;
-				clone.push(val);
+				if (clone.includes(val)) errors.push({ input: val, message: `The value ${val} for the key ${entry.path} already exists.` });
+				else clone.push(val);
 			}
 		} else if (action === 'remove') {
 			for (const val of next) {
 				const index = clone.indexOf(val);
-				if (index === -1) throw `The value ${val} for the key ${entry.path} does not exist.`;
-				clone.splice(index, 1);
+				if (index === -1) errors.push({ input: val, message: `The value ${val} for the key ${entry.path} does not exist.` });
+				else clone.splice(index, 1);
 			}
 		} else {
 			throw `The ${action} array action is not a valid SettingsUpdateArrayAction.`;
 		}
 
-		return clone;
+		return { errors, clone };
 	}
 
 	async _save(results) {
