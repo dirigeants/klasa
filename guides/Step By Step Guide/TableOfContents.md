@@ -1,21 +1,21 @@
 Welcome to the Klasa Step by Step Guide! This guide is intended specifically for beginner developers in order to take you from learning about Klasa to being able to use all the other pages on this website with ease. The following is a list of things that this guide will cover:
 
-1. {@tutorial CreatingTheBot Understanding Klasa And Creating A Bot}
+- {@tutorial CreatingTheBot Understanding Klasa And Creating A Bot}
 	- What is Klasa?
 	- Why should you use Klasa?
 	- How do I start using Klasa?
 	- How to create the bot?
-2. {@tutorial CustomizingTheClient Customizing The Bot Options}
+- {@tutorial CustomizingTheClient Customizing The Bot Options}
 	- Custom Default Prefix
 	- Enabling Command Logging
 	- Enabling Command Editing
 	- Custom Ready Message
-3. {@tutorial EditingFirstCommand Editing Our First Command}
+- {@tutorial EditingFirstCommand Editing Our First Command}
 	- Understanding Pieces And Stores
 	- Transfer Command
 	- Editing A Core Klasa Command
 	- The Power Of Pieces: Reloading
-4. {@tutorial CreatingRoleCommand Creating Role Command}
+- {@tutorial CreatingRoleCommand Creating Role Command}
 	- VSCode Plugin
 	- Creating A Command
 	- Understanding Command Options
@@ -38,18 +38,18 @@ Welcome to the Klasa Step by Step Guide! This guide is intended specifically for
 			- Making The Auto Role Default Subcommand
 		- Usage And Usage Delim
 	- Making A Custom Error Response
-5. {@tutorial CreatingFirstFinalizer Creating Delete Trigger Finalizer}
+- {@tutorial CreatingFirstFinalizer Creating Delete Trigger Finalizer}
 	- What is a finalizer?
 	- Creating our first finalizer
 	- Understanding options
 	- Understanding run parameters
 	- Adding the functionality
-6. {@tutorial CreatingFirstGuildSetting Creating Delete Command Trigger Guild Setting}
+- {@tutorial CreatingFirstGuildSetting Creating Delete Command Trigger Guild Setting}
 	- Types of settings
 	- Conf command
 	- Creating the guild settings schema
 	- Adding our first key
 	- Updating the schema
-7. {@tutorial FinishingFirstFinalizerWithSettings Finishing Delete Trigger Finalizer}
+- {@tutorial FinishingFirstFinalizerWithSettings Finishing Delete Trigger Finalizer}
 	- Getting a value from settings
 	- Finishing touches
