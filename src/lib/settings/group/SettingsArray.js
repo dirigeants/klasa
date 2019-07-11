@@ -61,7 +61,7 @@ class SettingsArray {
 		} else values = await Promise.all(values.map(async val => serialize(await entry.parse(val, guild))));
 
 		const { action = 'auto' } = options;
-		if (!indexing && action === 'overwrite') return values;
+		if (!indexing && action.toLowerCase() === 'overwrite') return values;
 
 		const clone = this.get();
 
@@ -71,33 +71,32 @@ class SettingsArray {
 		// This value has an index paired with it
 		if (indexing) {
 			for (const val of values) {
-				let index = val[0];
+				let [index, value] = val;
 				if (clone.length === 0 && index > 0) {
 					errors.push({ input: val, message: 'The current array is empty. The index must start at 0.' });
 				} else if (index < 0 || index > clone.length + 1) {
 					errors.push({ input: val, message: `The index ${index} is bigger than the current array. It must be a value in the range of 0..${clone.length + 1}.` });
-				}
-				clone[index] = val[1];
+				} else clone[index] = value;
 			}
-		} else if (action === 'auto') {
+		} else if (action.toLowerCase() === 'auto') {
 			for (const val of values) {
 				const index = clone.indexOf(val);
 				if (index === -1) clone.push(val);
 				else clone.splice(index, 1)
 			}
-		} else if (action === 'add') {
+		} else if (action.toLowerCase() === 'add') {
 			for (const val of values) {
 				if (clone.includes(val)) errors.push({ input: val, message: `The value ${val} for the key ${entry.path} already exists.` });
 				else clone.push(val);
 			}
-		} else if (action === 'remove') {
+		} else if (action.toLowerCase() === 'remove') {
 			for (const val of values) {
 				const index = clone.indexOf(val);
 				if (index === -1) errors.push({ input: val, message: `The value ${val} for the key ${entry.path} does not exist.` });
 				else clone.splice(index, 1);
 			}
 		} else {
-			throw `The ${action} array action is not a valid SettingsUpdateArrayAction.`;
+			throw `The "${action}" array action is not a valid SettingsUpdateArrayAction.`;
 		}
 
 		return { errors, clone };
