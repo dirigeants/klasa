@@ -9,8 +9,7 @@ class SettingsArray {
 		// The Entry this SettingArray refers to
 		Object.defineProperty(this, 'entry', { value: entry });
 
-		// The Cached data
-		Object.defineProperty(this, 'data', { value: entry.default, enumerable: true, writable: true });
+		this.data = entry.default;
 	}
 
 	get gateway() {
@@ -19,7 +18,7 @@ class SettingsArray {
 
 	get(index) {
 		if (index !== undefined && index !== null) {
-
+			return this.data[index];
 		}
 		return this.data.slice();
 	}
@@ -29,70 +28,49 @@ class SettingsArray {
 	}
 
 	async update(values, options) {
-		if (!options) options = { throwOnError: false, indexing: false };
-		options.guild = resolveGuild(this.base.gateway.client, 'guild' in options ? options.guild : this.base.target);
-		const language = options.guild ? options.guild.language : this.base.gateway.client.languages.default;
-
 		if (!Array.isArray(values)) values = [values];
 
-		const errors = [];     
-		let promise = null;
+		const guild = resolveGuild(this.base.gateway.client, 'guild' in options ? options.guild : this.base.target);
 		const { entry } = this;
-		
-		const onError = options.throwOnError ? (error) => { throw error; } : (error) => errors.push(error);
+		let indexing = false;
 
-		const previous = this.get();
-
-		try {
-			// Not sure of a better way to do this, come back at a later time
-			if (values.some(checkForIndex)) {
-				if (!(values.every(checkForIndex))) throw "Indexing found. You must only use straight indexing or no indexing, not a mixture of both.";
-				options.indexing = true;
-			}
-			promise = this._parse(entry, previous, values, options)
-				.catch(onError);
-		} catch (error) {
-			if (options.throwOnError) throw error;
-			errors.push(error);
+		// Not sure of a better way to do this, come back at a later time
+		if (values.some(checkForIndex)) {
+			if (!(values.every(checkForIndex))) throw "Indexing found. You must only use straight indexing or no indexing, not a mixture of both.";
+			indexing = true;
 		}
 
-		// Has to be run before to actually catch errors, future error handling will be shoved into _parse() to actually reflect the individual values that error,
-		// rather then just throwing the first error to the top and disgarding the rest
-		const { errors, current } = await promise;
-
+		const { errors, clone } = await this._parse(values, options, guild, indexing);
+		// This might need to be changed/adjusted to give the user better throw behavior.
 		if (errors.length) throw { errors, updated: [] };
-
-		// The arrays were already equal.
-		if (arraysStrictEquals(current, previous)) return;
-
-		const result = [{ key: entry.path, value: current, entry }];
+		if (arraysStrictEquals(this.data, clone)) return { errors: [], updated: [] };
 		
-		// Save to Cache and DB
+		const result = [{ key: entry.path, value: clone, entry }];
 		this._save(result);
 		
 		return { errors, updated: result };
 	}
 
-	async _parse(entry, previous, next, options) {
-		if (options.indexing) {
-			next = await Promise.all(next.map(async ([i, v]) => ([i, entry.serializer.serialize(await entry.parse(v, options.guild))])));
-		} else if (!Array.isArray(next)) {
-			next = entry.serializer.serialize(await entry.parse(next, options.guild));
-		} else next = await Promise.all(next.map(async val => entry.serializer.serialize(await entry.parse(val, options.guild))));
+	async _parse(values, options, guild, indexing) {
+		const { serializer: { serialize } } = this.entry;
+
+		if (indexing) {
+			values = await Promise.all(values.map(async ([i, v]) => ([i, serialize(await entry.parse(v, guild))])));
+		} else if (!Array.isArray(values)) {
+			values = serialize(await entry.parse(values, guild));
+		} else values = await Promise.all(values.map(async val => serialize(await entry.parse(val, guild))));
 
 		const { action = 'auto' } = options;
-		
-		// Need to change logic behind indexing for this to work properly.
-		if (!options.indexing && action === 'overwrite') return next;
+		if (!indexing && action === 'overwrite') return values;
 
-		const clone = previous.slice();
+		const clone = this.get();
 
 		// Errors are given back in the order that values were sent in
 		const errors = [];
 
 		// This value has an index paired with it
-		if (options.indexing) {
-			for (const val of next) {
+		if (indexing) {
+			for (const val of values) {
 				let index = val[0];
 				if (clone.length === 0 && index > 0) {
 					errors.push({ input: val, message: 'The current array is empty. The index must start at 0.' });
@@ -102,18 +80,18 @@ class SettingsArray {
 				clone[index] = val[1];
 			}
 		} else if (action === 'auto') {
-			for (const val of next) {
+			for (const val of values) {
 				const index = clone.indexOf(val);
 				if (index === -1) clone.push(val);
 				else clone.splice(index, 1)
 			}
 		} else if (action === 'add') {
-			for (const val of next) {
+			for (const val of values) {
 				if (clone.includes(val)) errors.push({ input: val, message: `The value ${val} for the key ${entry.path} already exists.` });
 				else clone.push(val);
 			}
 		} else if (action === 'remove') {
-			for (const val of next) {
+			for (const val of values) {
 				const index = clone.indexOf(val);
 				if (index === -1) errors.push({ input: val, message: `The value ${val} for the key ${entry.path} does not exist.` });
 				else clone.splice(index, 1);
