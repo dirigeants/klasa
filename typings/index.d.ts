@@ -422,7 +422,7 @@ declare module 'klasa' {
 		public createCustomResolver(type: string, resolver: ArgResolverCustomMethod): this;
 		public customizeResponse(name: string, response: string | ((message: KlasaMessage, possible: Possible) => string)): this;
 		public definePrompt(usageString: string, usageDelim?: string): Usage;
-		public run(message: KlasaMessage, params: any[]): Promise<KlasaMessage | KlasaMessage[] | null>;
+		public run(message: KlasaMessage, params: any[]): Promise<KlasaMessage | KlasaMessage[] | Message | Message[] | null>;
 		public toJSON(): PieceCommandJSON;
 	}
 
