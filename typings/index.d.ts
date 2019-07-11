@@ -3,6 +3,7 @@ declare module 'klasa' {
 	import { ExecOptions } from 'child_process';
 
 	import {
+		APIMessage,
 		BufferResolvable,
 		CategoryChannel,
 		Channel,
@@ -19,6 +20,7 @@ declare module 'klasa' {
 		GuildEmoji,
 		GuildMember,
 		Message,
+		MessageAdditions,
 		MessageAttachment,
 		MessageCollector,
 		MessageEmbed,
@@ -675,7 +677,7 @@ declare module 'klasa' {
 		private _prompted: number;
 		private _currentUsage: Tag;
 
-		public run<T = any[]>(prompt: string): Promise<T>;
+		public run<T = any[]>(prompt: StringResolvable | MessageOptions | MessageAdditions | APIMessage): Promise<T>;
 		private prompt(text: string): Promise<KlasaMessage>;
 		private reprompt(prompt: string): Promise<any[]>;
 		private repeatingPrompt(): Promise<any[]>;
