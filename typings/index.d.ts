@@ -3,6 +3,7 @@ declare module 'klasa' {
 	import { ExecOptions } from 'child_process';
 
 	import {
+		APIMessage,
 		BufferResolvable,
 		CategoryChannel,
 		Channel,
@@ -20,6 +21,7 @@ declare module 'klasa' {
 		GuildMember,
 		GuildResolvable,
 		Message,
+		MessageAdditions,
 		MessageAttachment,
 		MessageCollector,
 		MessageEmbed,
@@ -403,7 +405,7 @@ declare module 'klasa' {
 		public readonly category: string;
 		public readonly cooldown: number;
 		public readonly subCategory: string;
-		public readonly usageDelim: string;
+		public readonly usageDelim: string | null;
 		public readonly usageString: string;
 		public aliases: string[];
 		public requiredPermissions: Permissions;
@@ -631,7 +633,7 @@ declare module 'klasa' {
 	}
 
 	export class CommandUsage extends Usage {
-		public constructor(client: KlasaClient, usageString: string, usageDelim: string, command: Command);
+		public constructor(client: KlasaClient, usageString: string, usageDelim: string | null, command: Command);
 		public names: string[];
 		public commands: string;
 		public nearlyFullUsage: string;
@@ -684,7 +686,7 @@ declare module 'klasa' {
 		private _prompted: number;
 		private _currentUsage: Tag;
 
-		public run<T = any[]>(prompt: string): Promise<T>;
+		public run<T = any[]>(prompt: StringResolvable | MessageOptions | MessageAdditions | APIMessage): Promise<T>;
 		private prompt(text: string): Promise<KlasaMessage>;
 		private reprompt(prompt: string): Promise<any[]>;
 		private repeatingPrompt(): Promise<any[]>;
@@ -703,11 +705,11 @@ declare module 'klasa' {
 	}
 
 	export class Usage {
-		public constructor(client: KlasaClient, usageString: string, usageDelim: string);
+		public constructor(client: KlasaClient, usageString: string, usageDelim: string | null);
 		public readonly client: KlasaClient;
 		public deliminatedUsage: string;
 		public usageString: string;
-		public usageDelim: string;
+		public usageDelim: string | null;
 		public parsedUsage: Tag[];
 		public customResolvers: Record<string, ArgResolverCustomMethod>;
 
@@ -1398,7 +1400,7 @@ declare module 'klasa' {
 		requiredPermissions: string[];
 		usage: {
 			usageString: string;
-			usageDelim: string;
+			usageDelim: string | null;
 			nearlyFullUsage: string;
 		};
 	}

@@ -23,8 +23,8 @@
   resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.4.4.tgz#5977129431b8fe33471730d255ce8654ae1250b6"
 
 "@types/node@^12.0.2":
-  version "12.0.12"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.0.12.tgz#cc791b402360db1eaf7176479072f91ee6c6c7ca"
+  version "12.6.2"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.6.2.tgz#a5ccec6abb6060d5f20d256fb03ed743e9774999"
 
 acorn-jsx@^5.0.0:
   version "5.0.1"
@@ -363,8 +363,8 @@ dmd@^4.0.0:
 
 "docgen@github:dirigeants/docsgen":
   version "0.0.1"
-  uid "4af3bb90775c59ecdce097716db65a3fe4a7551e"
-  resolved "https://codeload.github.com/dirigeants/docsgen/tar.gz/4af3bb90775c59ecdce097716db65a3fe4a7551e"
+  uid d83f4eff3f50fa4f6ed223f6593040829199498c
+  resolved "https://codeload.github.com/dirigeants/docsgen/tar.gz/d83f4eff3f50fa4f6ed223f6593040829199498c"
   dependencies:
     fs-nextra "^0.4.5"
     jsdoc-to-markdown "^5.0.0"
@@ -1687,8 +1687,8 @@ type-check@~0.3.2:
     prelude-ls "~1.1.2"
 
 typescript@^3.0.3:
-  version "3.5.2"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.5.2.tgz#a09e1dc69bc9551cadf17dba10ee42cf55e5d56c"
+  version "3.5.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.5.3.tgz#c830f657f93f1ea846819e929092f5fe5983e977"
 
 typical@^2.4.2, typical@^2.6.0, typical@^2.6.1:
   version "2.6.1"
