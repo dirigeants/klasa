@@ -1,4 +1,4 @@
-const { resolveGuild, arraysStrictEquals, mergeObjects, makeObject } = require('../../util/util');
+const { resolveGuild, arraysStrictEquals } = require('../../util/util');
 
 const checkForIndex = (value) => Array.isArray(value) && value.length === 2 && typeof value[0] === 'number';
 
