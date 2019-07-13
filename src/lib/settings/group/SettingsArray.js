@@ -3,9 +3,10 @@ const { resolveGuild, arraysStrictEquals } = require('../../util/util');
 const checkForIndex = (value) => Array.isArray(value) && value.length === 2 && typeof value[0] === 'number';
 
 class SettingsArray {
+
 	constructor(entry) {
 		Object.defineProperty(this, 'base', { value: null, writable: true });
-		
+
 		// The Entry this SettingArray refers to
 		Object.defineProperty(this, 'entry', { value: entry });
 
@@ -36,7 +37,7 @@ class SettingsArray {
 
 		// Not sure of a better way to do this, come back at a later time
 		if (values.some(checkForIndex)) {
-			if (!(values.every(checkForIndex))) throw "Indexing found. You must only use straight indexing or no indexing, not a mixture of both.";
+			if (!values.every(checkForIndex)) throw 'Indexing found. You must only use straight indexing or no indexing, not a mixture of both.';
 			indexing = true;
 		}
 
@@ -44,21 +45,24 @@ class SettingsArray {
 		// This might need to be changed/adjusted to give the user better throw behavior.
 		if (errors.length) throw { errors, updated: [] };
 		if (arraysStrictEquals(this.data, clone)) return { errors: [], updated: [] };
-		
+
 		const result = [{ key: entry.path, value: clone, entry }];
 		this._save(result);
-		
+
 		return { errors, updated: result };
 	}
 
 	async _parse(values, options, guild, indexing) {
-		const { serializer: { serialize } } = this.entry;
+		const { entry } = this;
+		const { serializer: { serialize } } = entry;
 
 		if (indexing) {
-			values = await Promise.all(values.map(async ([i, v]) => ([i, serialize(await entry.parse(v, guild))])));
+			values = await Promise.all(values.map(async ([i, v]) => [i, serialize(await entry.parse(v, guild))]));
 		} else if (!Array.isArray(values)) {
 			values = serialize(await entry.parse(values, guild));
-		} else values = await Promise.all(values.map(async val => serialize(await entry.parse(val, guild))));
+		} else {
+			values = await Promise.all(values.map(async val => serialize(await entry.parse(val, guild))));
+		}
 
 		const { action = 'auto' } = options;
 		if (!indexing && action.toLowerCase() === 'overwrite') return values;
@@ -71,18 +75,20 @@ class SettingsArray {
 		// This value has an index paired with it
 		if (indexing) {
 			for (const val of values) {
-				let [index, value] = val;
+				const [index, value] = val;
 				if (clone.length === 0 && index > 0) {
 					errors.push({ input: val, message: 'The current array is empty. The index must start at 0.' });
 				} else if (index < 0 || index > clone.length + 1) {
 					errors.push({ input: val, message: `The index ${index} is bigger than the current array. It must be a value in the range of 0..${clone.length + 1}.` });
-				} else clone[index] = value;
+				} else {
+					clone[index] = value;
+				}
 			}
 		} else if (action.toLowerCase() === 'auto') {
 			for (const val of values) {
 				const index = clone.indexOf(val);
 				if (index === -1) clone.push(val);
-				else clone.splice(index, 1)
+				else clone.splice(index, 1);
 			}
 		} else if (action.toLowerCase() === 'add') {
 			for (const val of values) {
@@ -121,6 +127,7 @@ class SettingsArray {
 		// For now, this will suffice
 		this.data = [...data];
 	}
+
 }
 
 module.exports = SettingsArray;
