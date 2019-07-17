@@ -1,4 +1,5 @@
-const { resolveGuild, arraysStrictEquals } = require('../../util/util');
+const { resolveGuild, arraysStrictEquals, isNumber } = require('../../util/util');
+const Type = require('../../util/Type');
 
 const checkForIndex = (value) => Array.isArray(value) && value.length === 2 && typeof value[0] === 'number';
 
@@ -19,13 +20,18 @@ class SettingsArray {
 
 	get(index) {
 		if (index !== undefined && index !== null) {
-			return this.data[index];
+			if (isNumber(index)) return this.data[index];
+			throw new TypeError(`The value for index must be of type 'number'. Got: ${new Type(index)}`);
 		}
 		return this.data.slice();
 	}
 
 	includes(value) {
 		return this.data.includes(value);
+	}
+
+	find(...args) {
+		return this.data.slice().find(...args);
 	}
 
 	async update(values, options) {
@@ -126,6 +132,22 @@ class SettingsArray {
 		// Will probably be removed for a better option of only patching indexes that are updated or if new values are added (which would be denoted by index === -1)
 		// For now, this will suffice
 		this.data = [...data];
+	}
+
+	*keys() {
+		yield* this.data.keys();
+	}
+
+	*values() {
+		yield* this.data.values();
+	}
+
+	*entries() {
+		yield* this.data.values();
+	}
+
+	*[Symbol.iterator]() {
+		yield* this.values();
 	}
 
 }
