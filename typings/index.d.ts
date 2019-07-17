@@ -1353,6 +1353,8 @@ declare module 'klasa' {
 	}
 
 	export interface PieceCommandJSON extends AliasPieceJSON, Filter<Required<CommandOptions>, 'requiredPermissions' | 'usage'> {
+		category: string;
+		subCategory: string;
 		requiredPermissions: string[];
 		usage: {
 			usageString: string;
