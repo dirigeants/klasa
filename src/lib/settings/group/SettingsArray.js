@@ -85,7 +85,7 @@ class SettingsArray {
 				if (clone.length === 0 && index > 0) {
 					errors.push({ input: val, message: 'The current array is empty. The index must start at 0.' });
 				} else if (index < 0 || index > clone.length + 1) {
-					errors.push({ input: val, message: `The index ${index} is bigger than the current array. It must be a value in the range of 0..${clone.length + 1}.` });
+					errors.push({ input: val, message: `The index "${index}" is bigger than the current array. It must be a value in the range of 0..${clone.length}.` });
 				} else {
 					clone[index] = value;
 				}
@@ -98,13 +98,13 @@ class SettingsArray {
 			}
 		} else if (action.toLowerCase() === 'add') {
 			for (const val of values) {
-				if (clone.includes(val)) errors.push({ input: val, message: `The value ${val} for the key ${entry.path} already exists.` });
+				if (clone.includes(val)) errors.push({ input: val, message: `The value "${val}" for the key "${entry.path}" already exists.` });
 				else clone.push(val);
 			}
 		} else if (action.toLowerCase() === 'remove') {
 			for (const val of values) {
 				const index = clone.indexOf(val);
-				if (index === -1) errors.push({ input: val, message: `The value ${val} for the key ${entry.path} does not exist.` });
+				if (index === -1) errors.push({ input: val, message: `The value "${val}" for the key "${entry.path}" does not exist.` });
 				else clone.splice(index, 1);
 			}
 		} else {
@@ -143,7 +143,7 @@ class SettingsArray {
 	}
 
 	*entries() {
-		yield* this.data.values();
+		yield* this.data.entries();
 	}
 
 	*[Symbol.iterator]() {
