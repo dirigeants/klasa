@@ -1,4 +1,4 @@
-const { Inhibitor } = require('klasa');
+const { Inhibitor, Duration } = require('klasa');
 
 module.exports = class extends Inhibitor {
 
@@ -11,7 +11,7 @@ module.exports = class extends Inhibitor {
 
 		const existing = command.cooldowns.get(message.levelID);
 
-		if (existing && existing.limited) throw message.language.get('INHIBITOR_COOLDOWN', Math.ceil(existing.remainingTime / 1000));
+		if (existing && existing.limited) throw message.language.get('INHIBITOR_COOLDOWN', Duration.toNow(Date.now() + Math.ceil(existing.remainingTime)));
 	}
 
 };
