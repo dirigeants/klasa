@@ -912,6 +912,8 @@ declare module 'klasa' {
 		public displayUTC(time?: Date | number | string): string;
 		public edit(pattern: string): this;
 
+		public static timezoneOffset: number;
+		public static mapTokens: Map<string, (time: Date) => string>;
 		public static utc(time?: Date | number | string): Date;
 		public static displayArbitrary(pattern: string, time?: Date | number | string): string;
 		private static _resolveDate(time: Date | number | string): Date;

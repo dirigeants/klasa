@@ -266,7 +266,20 @@ class Timestamp {
 
 }
 
+/**
+ * The timezone offset in seconds.
+ * @since 0.5.0
+ * @type {number}
+ * @static
+ */
 Timestamp.timezoneOffset = new Date().getTimezoneOffset() * 60000;
+
+/**
+ * The map tokens, mapped from the constants.
+ * @since 0.5.0
+ * @type {Map<string, (time: Date) => string>}
+ * @static
+ */
 Timestamp.mapTokens = new Map(Object.entries(TOKENS));
 
 module.exports = Timestamp;
