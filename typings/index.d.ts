@@ -1071,23 +1071,7 @@ declare module 'klasa' {
 		DAYS: string[];
 		MONTHS: string[];
 		TIMESTAMP: {
-			TOKENS: {
-				Y: number;
-				Q: number;
-				M: number;
-				D: number;
-				d: number;
-				X: number;
-				x: number;
-				H: number;
-				h: number;
-				a: number;
-				A: number;
-				m: number;
-				s: number;
-				S: number;
-				Z: number;
-			};
+			TOKENS: Map<string, number>;
 		};
 		CRON: {
 			partRegex: RegExp;
