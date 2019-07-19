@@ -196,9 +196,9 @@ class Timestamp {
 		for (let i = 0; i < pattern.length; i++) {
 			let current = '';
 			const currentChar = pattern[i];
-			if (tokenRepeatingCounts.has(currentChar)) {
+			const tokenMax = tokenRepeatingCounts.get(currentChar);
+			if (typeof tokenMax === 'number') {
 				current += currentChar;
-				const tokenMax = tokenRepeatingCounts.get(currentChar);
 				while (pattern[i + 1] === currentChar && current.length < tokenMax) current += pattern[++i];
 				template.push({ type: current, content: null });
 			} else if (currentChar === '[') {
