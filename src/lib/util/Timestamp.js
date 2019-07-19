@@ -72,8 +72,6 @@ const tokens = new Map([
 ]);
 /* eslint-enable max-len */
 
-const tokenRepeatingCounts = new Map(Object.entries(TOKENS));
-
 /**
  * Klasa's Timestamp class, parses the pattern once, displays the desired Date or UNIX timestamp with the selected pattern.
  */
@@ -196,7 +194,7 @@ class Timestamp {
 		for (let i = 0; i < pattern.length; i++) {
 			let current = '';
 			const currentChar = pattern[i];
-			const tokenMax = tokenRepeatingCounts.get(currentChar);
+			const tokenMax = TOKENS.get(currentChar);
 			if (typeof tokenMax === 'number') {
 				current += currentChar;
 				while (pattern[i + 1] === currentChar && current.length < tokenMax) current += pattern[++i];
@@ -207,7 +205,7 @@ class Timestamp {
 				template.push({ type: 'literal', content: current });
 			} else {
 				current += currentChar;
-				while (i + 1 < pattern.length && !tokenRepeatingCounts.has(pattern[i + 1]) && pattern[i + 1] !== '[') current += pattern[++i];
+				while (i + 1 < pattern.length && !TOKENS.has(pattern[i + 1]) && pattern[i + 1] !== '[') current += pattern[++i];
 				template.push({ type: 'literal', content: current });
 			}
 		}
