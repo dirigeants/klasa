@@ -122,13 +122,13 @@ class Duration {
 		if (!(earlier instanceof Date)) earlier = new Date(earlier);
 		const returnString = showIn ? 'in ' : '';
 		let duration = Math.abs((Date.now() - earlier) / 1000);
-		
+
 		if (exact) {
-			const days = Math.floor(duration / 86400)
-			const hours = Math.floor(duration / 3600)
-			const minutes = Math.floor(duration / 60)
-			const seconds = Math.floor(duration % 60)
-			return `${days ? `${days}d ` : ''}${hours ? `${hours}h ` : ''}${minutes ? `${minutes}m ` : ''}${seconds ? `${seconds}s ` : ''}`;	
+			const days = Math.floor(duration / 86400);
+			const hours = Math.floor(duration / 3600);
+			const minutes = Math.floor(duration / 60);
+			const seconds = Math.floor(duration % 60);
+			return `${days ? `${days}d ` : ''}${hours ? `${hours}h ` : ''}${minutes ? `${minutes}m ` : ''}${seconds ? `${seconds}s ` : ''}`;
 		}
 
 		// Compare the duration in seconds
@@ -154,7 +154,6 @@ class Duration {
 
 		return `${returnString + Math.round(duration / 365)} years`;
 	}
-	
 
 }
 
