@@ -115,21 +115,12 @@ class Duration {
 	 * @since 0.5.0
 	 * @param {(Date|number|string)} earlier The time to compare
 	 * @param {boolean} [showIn] Whether the output should be prefixed
-	 * @param {boolean} [exact] Whether the output should be exact in DD-HH-MM-SS format
 	 * @returns {string}
 	 */
-	static toNow(earlier, showIn, exact) {
+	static toNow(earlier, showIn) {
 		if (!(earlier instanceof Date)) earlier = new Date(earlier);
 		const returnString = showIn ? 'in ' : '';
 		let duration = Math.abs((Date.now() - earlier) / 1000);
-
-		if (exact) {
-			const days = Math.floor(duration / 86400);
-			const hours = Math.floor(duration / 3600);
-			const minutes = Math.floor(duration / 60);
-			const seconds = Math.floor(duration % 60);
-			return `${days ? `${days}d ` : ''}${hours ? `${hours}h ` : ''}${minutes ? `${minutes}m ` : ''}${seconds ? `${seconds}s ` : ''}`;
-		}
 
 		// Compare the duration in seconds
 		if (duration < 45) return `${returnString}seconds`;
