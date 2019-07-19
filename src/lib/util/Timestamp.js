@@ -234,9 +234,9 @@ class Timestamp {
 		for (let i = 0; i < pattern.length; i++) {
 			let current = '';
 			const currentChar = pattern[i];
-			if (this.mapTokens.has(currentChar)) {
+			if (this.tokenRepeatingCounts.has(currentChar)) {
 				current += currentChar;
-				const tokenMax = this.mapTokens.get(currentChar);
+				const tokenMax = this.tokenRepeatingCounts.get(currentChar);
 				while (pattern[i + 1] === currentChar && current.length < tokenMax) current += pattern[++i];
 				template.push({ type: current, content: null });
 			} else if (currentChar === '[') {
@@ -245,7 +245,7 @@ class Timestamp {
 				template.push({ type: 'literal', content: current });
 			} else {
 				current += currentChar;
-				while (i + 1 < pattern.length && !this.mapTokens.has(pattern[i + 1]) && pattern[i + 1] !== '[') current += pattern[++i];
+				while (i + 1 < pattern.length && !this.tokenRepeatingCounts.has(pattern[i + 1]) && pattern[i + 1] !== '[') current += pattern[++i];
 				template.push({ type: 'literal', content: current });
 			}
 		}
@@ -275,11 +275,11 @@ class Timestamp {
 Timestamp.timezoneOffset = new Date().getTimezoneOffset() * 60000;
 
 /**
- * The map tokens, mapped from the constants.
+ * The repeating counts for each token, mapped from the constants.
  * @since 0.5.0
- * @type {Map<string, Function>}
+ * @type {Map<string, number>}
  * @static
  */
-Timestamp.mapTokens = new Map(Object.entries(TOKENS));
+Timestamp.tokenRepeatingCounts = new Map(Object.entries(TOKENS));
 
 module.exports = Timestamp;
