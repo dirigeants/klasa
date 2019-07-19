@@ -45,7 +45,7 @@ class Language extends Piece {
 				try {
 					const CorePiece = require(loc);
 					if (!isClass(CorePiece)) return;
-					const coreLang = new CorePiece(this.client, this.store, this.file, true);
+					const coreLang = new CorePiece(this.store, this.file, core);
 					this.language = mergeDefault(coreLang.language, this.language);
 				} catch (error) {
 					return;

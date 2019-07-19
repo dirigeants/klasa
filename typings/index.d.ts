@@ -3,6 +3,7 @@ declare module 'klasa' {
 	import { ExecOptions } from 'child_process';
 
 	import {
+		APIMessage,
 		BufferResolvable,
 		CategoryChannel,
 		Channel,
@@ -19,6 +20,7 @@ declare module 'klasa' {
 		GuildEmoji,
 		GuildMember,
 		Message,
+		MessageAdditions,
 		MessageAttachment,
 		MessageCollector,
 		MessageEmbed,
@@ -385,7 +387,7 @@ declare module 'klasa' {
 	export abstract class Argument extends AliasPiece {
 		public constructor(store: ArgumentStore, file: string[], directory: string, options?: ArgumentOptions);
 		public aliases: string[];
-		public abstract run(arg: string, possible: Possible, message: KlasaMessage): any;
+		public abstract run(arg: string | undefined, possible: Possible, message: KlasaMessage): any;
 		public static regex: MentionRegex;
 		private static minOrMax(client: KlasaClient, value: number, min: number, max: number, possible: Possible, message: KlasaMessage, suffix: string): boolean;
 	}
@@ -396,7 +398,7 @@ declare module 'klasa' {
 		public readonly category: string;
 		public readonly cooldown: number;
 		public readonly subCategory: string;
-		public readonly usageDelim: string;
+		public readonly usageDelim: string | null;
 		public readonly usageString: string;
 		public aliases: string[];
 		public requiredPermissions: Permissions;
@@ -530,7 +532,7 @@ declare module 'klasa' {
 
 	export abstract class Task extends Piece {
 		public constructor(store: TaskStore, file: string[], directory: string, options?: TaskOptions);
-		public abstract run(data: any): Promise<void>;
+		public abstract run(data?: any): unknown;
 		public toJSON(): PieceTaskJSON;
 	}
 
@@ -622,7 +624,7 @@ declare module 'klasa' {
 	}
 
 	export class CommandUsage extends Usage {
-		public constructor(client: KlasaClient, usageString: string, usageDelim: string, command: Command);
+		public constructor(client: KlasaClient, usageString: string, usageDelim: string | null, command: Command);
 		public names: string[];
 		public commands: string;
 		public nearlyFullUsage: string;
@@ -675,7 +677,7 @@ declare module 'klasa' {
 		private _prompted: number;
 		private _currentUsage: Tag;
 
-		public run<T = any[]>(prompt: string): Promise<T>;
+		public run<T = any[]>(prompt: StringResolvable | MessageOptions | MessageAdditions | APIMessage): Promise<T>;
 		private prompt(text: string): Promise<KlasaMessage>;
 		private reprompt(prompt: string): Promise<any[]>;
 		private repeatingPrompt(): Promise<any[]>;
@@ -694,11 +696,11 @@ declare module 'klasa' {
 	}
 
 	export class Usage {
-		public constructor(client: KlasaClient, usageString: string, usageDelim: string);
+		public constructor(client: KlasaClient, usageString: string, usageDelim: string | null);
 		public readonly client: KlasaClient;
 		public deliminatedUsage: string;
 		public usageString: string;
-		public usageDelim: string;
+		public usageDelim: string | null;
 		public parsedUsage: Tag[];
 		public customResolvers: Record<string, ArgResolverCustomMethod>;
 
@@ -1370,10 +1372,12 @@ declare module 'klasa' {
 	}
 
 	export interface PieceCommandJSON extends AliasPieceJSON, Filter<Required<CommandOptions>, 'requiredPermissions' | 'usage'> {
+		category: string;
+		subCategory: string;
 		requiredPermissions: string[];
 		usage: {
 			usageString: string;
-			usageDelim: string;
+			usageDelim: string | null;
 			nearlyFullUsage: string;
 		};
 	}
@@ -1692,6 +1696,7 @@ declare module 'discord.js' {
 		application: ClientApplication;
 		schedule: Schedule;
 		ready: boolean;
+		mentionPrefix: RegExp | null;
 		registerStore<K, V extends Piece, VConstructor = Constructor<V>>(store: Store<K, V, VConstructor>): KlasaClient;
 		unregisterStore<K, V extends Piece, VConstructor = Constructor<V>>(store: Store<K, V, VConstructor>): KlasaClient;
 		sweepMessages(lifetime?: number, commandLifeTime?: number): number;
