@@ -1,4 +1,4 @@
-import { mapsStrictEquals } from '../../util/util';
+const { mapsStrictEquals, resolveGuild } = require('../../util/util');
 
 const checkForTuples = (value) => Array.isArray(value) && value.length === 2;
 
@@ -24,7 +24,7 @@ class SettingsMap {
 		if (key !== undefined && key !== null) {
 			return this.data.get(key);
 		}
-		return new Map([...this.data.entries()]);
+		return new Map(this.data);
 	}
 
 	has(key) {
@@ -37,7 +37,7 @@ class SettingsMap {
 			if (!keyOrEntries.every(checkForTuples)) throw `Expected an array of tuples as first argument, but it contains a non-tuple.`;
 			options = valueOrOptions;
 		}
-		const guild = options && 'guild' in options ? options.guild : this.base.target;
+		const guild = resolveGuild(this.base.gateway.client, options && 'guild' in options ? options.guild : this.base.target);
 		const entries = isArray ? entries : [[keyOrEntries, valueOrOptions]];
 
 		const { clone } = await this._parse(clone, entries, guild);
@@ -80,8 +80,24 @@ class SettingsMap {
 		if (Array.isArray(data) && data.every(checkForTuples)) {
 			this.data = data.length ? new Map(data) : this.entry.default;
 		} else if (data instanceof Map) {
-			this.data = data.size ? new Map([...data.entries()]) : this.entry.default;
+			this.data = data.size ? new Map(data) : this.entry.default;
 		}
+	}
+
+	*keys() {
+		yield* this.data.keys();
+	}
+
+	*values() {
+		yield* this.data.values();
+	}
+
+	*entries() {
+		yield* this.data.entries();
+	}
+
+	*[Symbol.iterator]() {
+		yield* this.data[Symbol.iterator]();
 	}
 
 }
