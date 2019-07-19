@@ -277,7 +277,7 @@ Timestamp.timezoneOffset = new Date().getTimezoneOffset() * 60000;
 /**
  * The map tokens, mapped from the constants.
  * @since 0.5.0
- * @type {Map<string, (time: Date) => string>}
+ * @type {Map<string, Function>}
  * @static
  */
 Timestamp.mapTokens = new Map(Object.entries(TOKENS));
