@@ -1342,7 +1342,7 @@ declare module 'klasa' {
 	}
 
 	export interface EventOptions extends PieceOptions {
-		emitter?: NodeJS.EventEmitter | string;
+		emitter?: NodeJS.EventEmitter | FilterKeyInstances<KlasaClient, NodeJS.EventEmitter>;
 		event?: string;
 		once?: boolean;
 	}
@@ -1624,6 +1624,11 @@ declare module 'klasa' {
 	type Filter<T, K extends keyof T> = {
 		[P in keyof T]: P extends K ? unknown : T[P];
 	};
+
+	type ValueOf<T> = T[keyof T];
+	type FilterKeyInstances<O, T> = ValueOf<{
+		[K in keyof O]: O[K] extends T ? K : never
+	}>;
 
 	export interface TitleCaseVariants extends Record<string, string> {
 		textchannel: 'TextChannel';
