@@ -1342,7 +1342,7 @@ declare module 'klasa' {
 	}
 
 	export interface EventOptions extends PieceOptions {
-		emitter?: NodeJS.EventEmitter;
+		emitter?: NodeJS.EventEmitter | string;
 		event?: string;
 		once?: boolean;
 	}
