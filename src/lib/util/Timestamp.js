@@ -1,5 +1,117 @@
 const { TIME: { SECOND, MINUTE, DAY, DAYS, MONTHS, TIMESTAMP: { TOKENS } } } = require('./constants');
 
+/* eslint-disable id-length, new-cap */
+
+// Dates
+
+const Y = time => String(time.getFullYear()).slice(0, 2);
+const YYY = time => String(time.getFullYear());
+const Q = time => String((time.getMonth() + 1) / 3);
+const M = time => String(time.getMonth() + 1);
+const MM = time => M(time).padStart(2, '0');
+const MMM = time => MONTHS[time.getMonth()];
+const D = time => String(time.getDate());
+const DD = time => D(time).padStart(2, '0');
+const DDD = time => {
+	const start = new Date(time.getFullYear(), 0, 0);
+	const diff = ((time.getMilliseconds() - start.getMilliseconds()) + (start.getTimezoneOffset() - time.getTimezoneOffset())) * MINUTE;
+	return String(Math.floor(diff / DAY));
+};
+const d = time => {
+	const day = D(time);
+	if (day !== '11' && day.endsWith('1')) return `${day}st`;
+	if (day !== '12' && day.endsWith('2')) return `${day}nd`;
+	if (day !== '13' && day.endsWith('3')) return `${day}rd`;
+	return `${day}th`;
+};
+const dd = time => DAYS[time.getDay()].slice(0, 2);
+const ddd = time => DAYS[time.getDay()].slice(0, 3);
+const dddd = time => DAYS[time.getDay()];
+const X = time => String(time.valueOf() / SECOND);
+const x = time => String(time.valueOf());
+
+// Times
+
+const H = time => String(time.getHours());
+const HH = time => H(time).padStart(2, '0');
+const h = time => String(time.getHours() % 12 || 12);
+const hh = time => String(time.getHours() % 12 || 12).padStart(2, '0');
+const a = time => time.getHours() < 12 ? 'am' : 'pm';
+const A = time => time.getHours() < 12 ? 'AM' : 'PM';
+const m = time => String(time.getMinutes());
+const mm = time => m(time).padStart(2, '0');
+const s = time => String(time.getSeconds());
+const ss = time => s(time).padStart(2, '0');
+const S = time => String(time.getMilliseconds());
+const SS = time => SS(time).padStart(2, '0');
+const SSS = time => SS(time).padStart(3, '0');
+
+// Locales
+
+const T = (time) => `${h(time)}:${mm(time)} ${A(time)}`;
+const t = (time) => `${h(time)}:${mm(time)}:${ss(time)} ${A(time)}`;
+const L = (time) => `${MM(time)}/${DD(time)}/${YYY(time)}`;
+const l = (time) => `${M(time)}/${DD(time)}/${YYY(time)}`;
+const LL = (time) => `${MMM(time)} ${DD(time)}, ${YYY(time)}`;
+const ll = (time) => `${MMM(time).slice(0, 3)} ${DD(time)}, ${YYY(time)}`;
+const LLL = (time) => `${LL(time)} ${T(time)}`;
+const lll = (time) => `${ll(time)} ${T(time)}`;
+const LLLL = (time) => `${dddd(time)}, ${LLL(time)}`;
+const llll = (time) => `${ddd(time)} ${lll(time)}`;
+const Z = time => {
+	const offset = time.getTimezoneOffset();
+	return `${offset >= 0 ? '+' : '-'}${String(offset / -60).padStart(2, '0')}:${String(offset % 60).padStart(2, '0')}`;
+};
+
+/* eslint-enable id-length, new-cap */
+
+const tokens = new Map([
+	['Y', Y],
+	['YY', Y],
+	['YYY', YYY],
+	['YYYY', YYY],
+	['Q', Q],
+	['M', M],
+	['MM', MM],
+	['MMM', MMM],
+	['MMMM', MMM],
+	['D', D],
+	['DD', DD],
+	['DDD', DDD],
+	['DDDD', DDD],
+	['d', d],
+	['dd', dd],
+	['ddd', ddd],
+	['dddd', dddd],
+	['X', X],
+	['x', x],
+	['H', H],
+	['HH', HH],
+	['h', h],
+	['hh', hh],
+	['a', a],
+	['A', A],
+	['m', m],
+	['mm', mm],
+	['s', s],
+	['ss', ss],
+	['S', S],
+	['SS', SS],
+	['SSS', SSS],
+	['T', T],
+	['t', t],
+	['L', L],
+	['l', l],
+	['LL', LL],
+	['ll', ll],
+	['LLL', LLL],
+	['lll', lll],
+	['LLLL', LLLL],
+	['llll', llll],
+	['Z', Z],
+	['ZZ', Z]
+]);
+
 /**
  * Klasa's Timestamp class, parses the pattern once, displays the desired Date or UNIX timestamp with the selected pattern.
  */
@@ -106,7 +218,7 @@ class Timestamp {
 	static _display(template, time) {
 		let output = '';
 		const parsedTime = Timestamp._resolveDate(time);
-		for (const { content, type } of template) output += content || Timestamp[type](parsedTime);
+		for (const { content, type } of template) output += content || tokens.get(type)(parsedTime);
 		return output;
 	}
 
@@ -122,9 +234,10 @@ class Timestamp {
 		for (let i = 0; i < pattern.length; i++) {
 			let current = '';
 			const currentChar = pattern[i];
-			if (currentChar in TOKENS) {
+			if (this.mapTokens.has(currentChar)) {
 				current += currentChar;
-				while (pattern[i + 1] === currentChar && current.length < TOKENS[currentChar]) current += pattern[++i];
+				const tokenMax = this.mapTokens.get(currentChar);
+				while (pattern[i + 1] === currentChar && current.length < tokenMax) current += pattern[++i];
 				template.push({ type: current, content: null });
 			} else if (currentChar === '[') {
 				while (i + 1 < pattern.length && pattern[i + 1] !== ']') current += pattern[++i];
@@ -132,7 +245,7 @@ class Timestamp {
 				template.push({ type: 'literal', content: current });
 			} else {
 				current += currentChar;
-				while (i + 1 < pattern.length && !(pattern[i + 1] in TOKENS) && pattern[i + 1] !== '[') current += pattern[++i];
+				while (i + 1 < pattern.length && !this.mapTokens.has(pattern[i + 1]) && pattern[i + 1] !== '[') current += pattern[++i];
 				template.push({ type: 'literal', content: current });
 			}
 		}
@@ -153,114 +266,7 @@ class Timestamp {
 
 }
 
-/* eslint-disable id-length */
-
 Timestamp.timezoneOffset = new Date().getTimezoneOffset() * 60000;
-
-// Dates
-
-Timestamp.Y =
-Timestamp.YY = time => String(time.getFullYear()).slice(0, 2);
-
-Timestamp.YYY =
-Timestamp.YYYY = time => String(time.getFullYear());
-
-Timestamp.Q = time => String((time.getMonth() + 1) / 3);
-
-Timestamp.M = time => String(time.getMonth() + 1);
-
-Timestamp.MM = time => String(time.getMonth() + 1).padStart(2, '0');
-
-Timestamp.MMM =
-Timestamp.MMMM = time => MONTHS[time.getMonth()];
-
-Timestamp.D = time => String(time.getDate());
-
-Timestamp.DD = time => String(time.getDate()).padStart(2, '0');
-
-Timestamp.DDD =
-Timestamp.DDDD = time => {
-	const start = new Date(time.getFullYear(), 0, 0);
-	const diff = ((time.getMilliseconds() - start.getMilliseconds()) + (start.getTimezoneOffset() - time.getTimezoneOffset())) * MINUTE;
-	return String(Math.floor(diff / DAY));
-};
-
-Timestamp.d = time => {
-	const day = String(time.getDate());
-	if (day !== '11' && day.endsWith('1')) return `${day}st`;
-	if (day !== '12' && day.endsWith('2')) return `${day}nd`;
-	if (day !== '13' && day.endsWith('3')) return `${day}rd`;
-	return `${day}th`;
-};
-
-Timestamp.dd = time => DAYS[time.getDay()].slice(0, 2);
-
-Timestamp.ddd = time => DAYS[time.getDay()].slice(0, 3);
-
-Timestamp.dddd = time => DAYS[time.getDay()];
-
-Timestamp.X = time => String(time.valueOf() / SECOND);
-
-Timestamp.x = time => String(time.valueOf());
-
-// Times
-
-Timestamp.H = time => String(time.getHours());
-
-Timestamp.HH = time => String(time.getHours()).padStart(2, '0');
-
-Timestamp.h = time => String(time.getHours() % 12 || 12);
-
-Timestamp.hh = time => String(time.getHours() % 12 || 12).padStart(2, '0');
-
-Timestamp.a = time => time.getHours() < 12 ? 'am' : 'pm';
-
-Timestamp.A = time => time.getHours() < 12 ? 'AM' : 'PM';
-
-Timestamp.m = time => String(time.getMinutes());
-
-Timestamp.mm = time => String(time.getMinutes()).padStart(2, '0');
-
-Timestamp.s = time => String(time.getSeconds());
-
-Timestamp.ss = time => String(time.getSeconds()).padStart(2, '0');
-
-Timestamp.S = time => String(time.getMilliseconds());
-
-Timestamp.SS = time => String(time.getMilliseconds()).padStart(2, '0');
-
-Timestamp.SSS = time => String(time.getMilliseconds()).padStart(3, '0');
-
-// Locales
-
-/* eslint max-len:0 new-cap:0 */
-
-Timestamp.T = (time) => `${Timestamp.h(time)}:${Timestamp.mm(time)} ${Timestamp.A(time)}`;
-
-Timestamp.t = (time) => `${Timestamp.h(time)}:${Timestamp.mm(time)}:${Timestamp.ss(time)} ${Timestamp.A(time)}`;
-
-Timestamp.L = (time) => `${Timestamp.MM(time)}/${Timestamp.DD(time)}/${Timestamp.YYYY(time)}`;
-
-Timestamp.l = (time) => `${Timestamp.M(time)}/${Timestamp.DD(time)}/${Timestamp.YYYY(time)}`;
-
-Timestamp.LL = (time) => `${Timestamp.MMMM(time)} ${Timestamp.DD(time)}, ${Timestamp.YYYY(time)}`;
-
-Timestamp.ll = (time) => `${Timestamp.MMMM(time).slice(0, 3)} ${Timestamp.DD(time)}, ${Timestamp.YYYY(time)}`;
-
-Timestamp.LLL = (time) => `${Timestamp.LL(time)} ${Timestamp.T(time)}`;
-
-Timestamp.lll = (time) => `${Timestamp.ll(time)} ${Timestamp.T(time)}`;
-
-Timestamp.LLLL = (time) => `${Timestamp.dddd(time)}, ${Timestamp.LLL(time)}`;
-
-Timestamp.llll = (time) => `${Timestamp.ddd(time)} ${Timestamp.lll(time)}`;
-
-Timestamp.Z =
-Timestamp.ZZ = time => {
-	const offset = time.getTimezoneOffset();
-	return `${offset >= 0 ? '+' : '-'}${String(offset / -60).padStart(2, '0')}:${String(offset % 60).padStart(2, '0')}`;
-};
-
-/* eslint-enable id-length */
+Timestamp.mapTokens = new Map(Object.entries(TOKENS));
 
 module.exports = Timestamp;

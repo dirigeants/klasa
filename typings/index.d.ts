@@ -914,42 +914,6 @@ declare module 'klasa' {
 
 		public static utc(time?: Date | number | string): Date;
 		public static displayArbitrary(pattern: string, time?: Date | number | string): string;
-
-		public static A(time: Date): string;
-		public static a(time: Date): string;
-		public static d(time: Date): string;
-		public static D(time: Date): string;
-		public static dd(time: Date): string;
-		public static DD(time: Date): string;
-		public static ddd(time: Date): string;
-		public static DDD(time: Date): string;
-		public static dddd(time: Date): string;
-		public static DDDD(time: Date): string;
-		public static h(time: Date): string;
-		public static H(time: Date): string;
-		public static hh(time: Date): string;
-		public static HH(time: Date): string;
-		public static m(time: Date): string;
-		public static M(time: Date): string;
-		public static mm(time: Date): string;
-		public static MM(time: Date): string;
-		public static MMM(time: Date): string;
-		public static MMMM(time: Date): string;
-		public static Q(time: Date): string;
-		public static S(time: Date): string;
-		public static s(time: Date): string;
-		public static ss(time: Date): string;
-		public static SS(time: Date): string;
-		public static SSS(time: Date): string;
-		public static x(time: Date): string;
-		public static X(time: Date): string;
-		public static Y(time: Date): string;
-		public static YY(time: Date): string;
-		public static YYY(time: Date): string;
-		public static YYYY(time: Date): string;
-		public static Z(time: Date): string;
-		public static ZZ(time: Date): string;
-
 		private static _resolveDate(time: Date | number | string): Date;
 		private static _display(template: string, time: Date | number | string): string;
 		private static _patch(pattern: string): TimestampObject[];
