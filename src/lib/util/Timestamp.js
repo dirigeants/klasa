@@ -112,6 +112,8 @@ const tokens = new Map([
 	['ZZ', Z]
 ]);
 
+const tokenRepeatingCounts = new Map(Object.entries(TOKENS));
+
 /**
  * Klasa's Timestamp class, parses the pattern once, displays the desired Date or UNIX timestamp with the selected pattern.
  */
@@ -234,9 +236,9 @@ class Timestamp {
 		for (let i = 0; i < pattern.length; i++) {
 			let current = '';
 			const currentChar = pattern[i];
-			if (this.tokenRepeatingCounts.has(currentChar)) {
+			if (tokenRepeatingCounts.has(currentChar)) {
 				current += currentChar;
-				const tokenMax = this.tokenRepeatingCounts.get(currentChar);
+				const tokenMax = tokenRepeatingCounts.get(currentChar);
 				while (pattern[i + 1] === currentChar && current.length < tokenMax) current += pattern[++i];
 				template.push({ type: current, content: null });
 			} else if (currentChar === '[') {
@@ -245,7 +247,7 @@ class Timestamp {
 				template.push({ type: 'literal', content: current });
 			} else {
 				current += currentChar;
-				while (i + 1 < pattern.length && !this.tokenRepeatingCounts.has(pattern[i + 1]) && pattern[i + 1] !== '[') current += pattern[++i];
+				while (i + 1 < pattern.length && !tokenRepeatingCounts.has(pattern[i + 1]) && pattern[i + 1] !== '[') current += pattern[++i];
 				template.push({ type: 'literal', content: current });
 			}
 		}
@@ -273,13 +275,5 @@ class Timestamp {
  * @static
  */
 Timestamp.timezoneOffset = new Date().getTimezoneOffset() * 60000;
-
-/**
- * The repeating counts for each token, mapped from the constants.
- * @since 0.5.0
- * @type {Map<string, number>}
- * @static
- */
-Timestamp.tokenRepeatingCounts = new Map(Object.entries(TOKENS));
 
 module.exports = Timestamp;

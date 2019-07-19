@@ -913,7 +913,6 @@ declare module 'klasa' {
 		public edit(pattern: string): this;
 
 		public static timezoneOffset: number;
-		public static tokenRepeatingCounts: Map<string, number>;
 		public static utc(time?: Date | number | string): Date;
 		public static displayArbitrary(pattern: string, time?: Date | number | string): string;
 		private static _resolveDate(time: Date | number | string): Date;
