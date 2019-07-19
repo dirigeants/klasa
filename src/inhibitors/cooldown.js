@@ -14,11 +14,11 @@ module.exports = class extends Inhibitor {
 		if (existing && existing.limited) throw message.language.get('INHIBITOR_COOLDOWN', this.secondsToFormattedString(Math.ceil(existing.remainingTime / 1000)), command.cooldownLevel !== 'author');
 	}
 	
-	secondsToFormattedString(seconds) {
-		const days = Math.floor(duration / 86400);
-		const hours = Math.floor(duration / 3600);
-		const minutes = Math.floor(duration / 60);
-		const seconds = Math.floor(duration % 60);
+	secondsToFormattedString(time) {
+		const days = Math.floor(time / 86400);
+		const hours = Math.floor(time / 3600);
+		const minutes = Math.floor(time / 60);
+		const seconds = Math.floor(time % 60);
 		return `${days ? `${days}d ` : ''}${hours ? `${hours}h ` : ''}${minutes ? `${minutes}m ` : ''}${seconds ? `${seconds}s ` : ''}`;
 	}
 
