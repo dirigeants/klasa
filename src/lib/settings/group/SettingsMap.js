@@ -1,24 +1,9 @@
 const { mapsStrictEquals, resolveGuild } = require('../../util/util');
+const GroupBase = require('./GroupBase');
 
 const checkForTuples = (value) => Array.isArray(value) && value.length === 2;
 
-class SettingsMap {
-
-	constructor(entry) {
-		Object.defineProperty(this, 'base', { value: null, writable: true });
-		Object.defineProperty(this, 'entry', { value: entry });
-
-		/**
-		 * The data for this map
-		 * @since 0.5.0
-		 * @type {Map<any, any>}
-		 */
-		this.data = entry.default;
-	}
-
-	get gateway() {
-		return this.base.gateway;
-	}
+class SettingsMap extends GroupBase {
 
 	get(key) {
 		if (key !== undefined && key !== null) {
@@ -63,41 +48,12 @@ class SettingsMap {
 		return { clone };
 	}
 
-	async _save(results) {
-		const status = this.base.existenceStatus;
-		if (status === null) throw new Error('Cannot update out of sync.');
-
-		// Update DB
-
-		this._patch(results[0].value);
-	}
-
-	toJSON() {
-		return [...this.data.entries()];
-	}
-
 	_patch(data) {
 		if (Array.isArray(data) && data.every(checkForTuples)) {
 			this.data = data.length ? new Map(data) : this.entry.default;
 		} else if (data instanceof Map) {
 			this.data = data.size ? new Map(data) : this.entry.default;
 		}
-	}
-
-	*keys() {
-		yield* this.data.keys();
-	}
-
-	*values() {
-		yield* this.data.values();
-	}
-
-	*entries() {
-		yield* this.data.entries();
-	}
-
-	*[Symbol.iterator]() {
-		yield* this.data[Symbol.iterator]();
 	}
 
 }

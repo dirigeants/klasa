@@ -1,22 +1,9 @@
-const { resolveGuild, arraysStrictEquals, isNumber } = require('../../util/util');
-const Type = require('../../util/Type');
+const { Type, util: { resolveGuild, arraysStrictEquals, isNumber } } = require('../../util');
+const GroupBase = require('./GroupBase');
 
 const checkForIndex = (value) => Array.isArray(value) && value.length === 2 && typeof value[0] === 'number';
 
-class SettingsArray {
-
-	constructor(entry) {
-		Object.defineProperty(this, 'base', { value: null, writable: true });
-
-		// The Entry this SettingArray refers to
-		Object.defineProperty(this, 'entry', { value: entry });
-
-		this.data = entry.default;
-	}
-
-	get gateway() {
-		return this.base.gateway;
-	}
+class SettingsArray extends GroupBase {
 
 	get(index) {
 		if (index !== undefined && index !== null) {
@@ -60,14 +47,15 @@ class SettingsArray {
 
 	async _parse(values, options, guild, indexing) {
 		const { entry } = this;
-		const { serializer: { serialize } } = entry;
+		const { serializer } = entry;
 
+		// This needs to be changed/discussed. parser errors aren't caught correctly (should they even be?)
 		if (indexing) {
-			values = await Promise.all(values.map(async ([i, v]) => [i, serialize(await entry.parse(v, guild))]));
+			values = await Promise.all(values.map(async ([i, v]) => [i, serializer.serialize(await entry.parse(v, guild))]));
 		} else if (!Array.isArray(values)) {
-			values = serialize(await entry.parse(values, guild));
+			values = serializer.serialize(await entry.parse(values, guild));
 		} else {
-			values = await Promise.all(values.map(async val => serialize(await entry.parse(val, guild))));
+			values = await Promise.all(values.map(async val => serializer.serialize(await entry.parse(val, guild))));
 		}
 
 		const { action = 'auto' } = options;
@@ -114,40 +102,12 @@ class SettingsArray {
 		return { errors, clone };
 	}
 
-	async _save(results) {
-		const status = this.base.existenceStatus;
-		if (status === null) throw new Error('Cannot update out of sync.');
-
-		// Update DB
-
-		this._patch(results[0].value);
-	}
-
 	_patch(data) {
-		if (!Array.isArray(data)) return;
-
-		// Our Array was completely removed, so reset to schema default
-		if (data.length === 0) this.data = this.entry.default;
-
-		// Will probably be removed for a better option of only patching indexes that are updated or if new values are added (which would be denoted by index === -1)
-		// For now, this will suffice
-		this.data = [...data];
-	}
-
-	*keys() {
-		yield* this.data.keys();
-	}
-
-	*values() {
-		yield* this.data.values();
-	}
-
-	*entries() {
-		yield* this.data.entries();
-	}
-
-	*[Symbol.iterator]() {
-		yield* this.values();
+		if (Array.isArray(data)) {
+			// Reset back to default if the array was reset
+			if (data.length === 0) this.data = this.entry.default;
+			else this.data = data;
+		}
 	}
 
 }
