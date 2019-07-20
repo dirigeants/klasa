@@ -52,7 +52,6 @@ declare module 'klasa' {
 		public constructor(options?: KlasaClientOptions);
 		public login(token?: string): Promise<string>;
 		private validatePermissionLevels(): PermissionLevels;
-		private _ready(): Promise<void>;
 
 		public sweepMessages(lifetime?: number, commandLifeTime?: number): number;
 		public static basePermissions: Permissions;
