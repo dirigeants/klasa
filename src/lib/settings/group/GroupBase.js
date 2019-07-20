@@ -136,7 +136,7 @@ class GroupBase {
 	/**
 	 * The serializable JSON array for storage in the database, it uses {@link GroupBase}'s `Symbol.iterator`.
 	 * @since 0.5.0
-	 * @returns {Array<*[]>}
+	 * @returns {Array<any[]>}
 	 */
 	toJSON() {
 		return [...this[Symbol.iterator]()];
