@@ -19,18 +19,18 @@ class SettingsMap extends GroupBase {
 	async update(keyOrEntries, valueOrOptions, options) {
 		const isArray = Array.isArray(keyOrEntries);
 		if (isArray) {
-			if (!keyOrEntries.every(checkForTuples)) throw `Expected an array of tuples as first argument, but it contains a non-tuple.`;
+			if (!keyOrEntries.every(checkForTuples)) throw new TypeError(`Expected an array of tuples as first argument, but it contains a non-tuple.`);
 			options = valueOrOptions;
 		}
 		const guild = resolveGuild(this.base.gateway.client, options && 'guild' in options ? options.guild : this.base.target);
 		const entries = isArray ? entries : [[keyOrEntries, valueOrOptions]];
 
-		const { clone } = await this._parse(clone, entries, guild);
+		const clone = await this._parse(clone, entries, guild);
 
 		// The maps were already equal.
 		if (mapsStrictEquals(this.data, clone)) return { errors: [], updated: [] };
 
-		const updated = [{ key: this.entry.path, value: clone, entry: this.entry }];
+		const updated = [{ key: this.entry.path, value: [...clone.entries()], entry: this.entry }];
 		await this._save(updated);
 		return { errors: [], updated };
 	}
@@ -45,7 +45,7 @@ class SettingsMap extends GroupBase {
 			if (!clone.delete(key)) clone.set(key, value);
 		}
 
-		return { clone };
+		return clone;
 	}
 
 	_patch(data) {
