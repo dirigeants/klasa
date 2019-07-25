@@ -17,8 +17,8 @@ module.exports = class extends Inhibitor {
 	secondsToFormattedString(time) {
 		const days = Math.floor(time / 86400);
 		const hours = Math.floor(time / 3600);
-		const minutes = Math.floor(time / 60);
-		const seconds = Math.floor(time % 60);
+		const minutes = Math.floor(time / 3600 / 60);
+		const seconds = Math.floor(time / 3600 % 60);
 		return `${days ? `${days}d ` : ''}${hours ? `${hours}h ` : ''}${minutes ? `${minutes}m ` : ''}${seconds ? `${seconds}s ` : ''}`;
 	}
 
