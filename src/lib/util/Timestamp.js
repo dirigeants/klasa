@@ -3,8 +3,8 @@ const { TIME: { SECOND, MINUTE, DAY, DAYS, MONTHS, TIMESTAMP: { TOKENS } } } = r
 /* eslint-disable max-len */
 const tokens = new Map([
 	// Dates
-	['Y', time => String(time.getFullYear()).slice(0, 2)],
-	['YY', time => String(time.getFullYear()).slice(0, 2)],
+	['Y', time => String(time.getFullYear()).slice(2)],
+	['YY', time => String(time.getFullYear()).slice(2)],
 	['YYY', time => String(time.getFullYear())],
 	['YYYY', time => String(time.getFullYear())],
 	['Q', time => String((time.getMonth() + 1) / 3)],
