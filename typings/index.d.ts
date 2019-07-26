@@ -77,7 +77,7 @@ declare module 'klasa' {
 	}
 
 	export class KlasaMessage extends Message {
-		private levelID: Snowflake | null;
+		public levelID: Snowflake | null;
 		private prompter: CommandPrompt | null;
 		private _responses: KlasaMessage[];
 		private _patch(data: any): void;
@@ -417,7 +417,7 @@ declare module 'klasa' {
 		public runIn: string[];
 		public subcommands: boolean;
 		public usage: CommandUsage;
-		private cooldowns: RateLimitManager;
+		public cooldowns: RateLimitManager;
 
 		public createCustomResolver(type: string, resolver: ArgResolverCustomMethod): this;
 		public customizeResponse(name: string, response: string | ((message: KlasaMessage, possible: Possible) => string)): this;
