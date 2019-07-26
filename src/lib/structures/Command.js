@@ -2,7 +2,6 @@ const { Permissions } = require('discord.js');
 const AliasPiece = require('./base/AliasPiece');
 const Usage = require('../usage/Usage');
 const CommandUsage = require('../usage/CommandUsage');
-const RateLimitManager = require('../util/RateLimitManager');
 const { isFunction } = require('../util/util');
 
 /**
@@ -198,31 +197,18 @@ class Command extends AliasPiece {
 		if (!['author', 'channel', 'guild'].includes(this.cooldownLevel)) throw new Error('Invalid cooldownLevel');
 
 		/**
-		 * Any active cooldowns for the command
-		 * @since 0.0.1
-		 * @type {RateLimitManager}
-		 * @private
+		 * The number of times this command can be run before ratelimited by the cooldown
+		 * @since 0.5.0
+		 * @type {number}
 		 */
-		this.cooldowns = new RateLimitManager(options.bucket, options.cooldown * 1000);
-	}
+		this.bucket = options.bucket;
 
-	/**
-	 * The number of times this command can be run before ratelimited by the cooldown
-	 * @since 0.5.0
-	 * @type {number}
-	 * @readonly
-	 */
-	get bucket() {
-		return this.cooldowns.bucket;
-	}
-	/**
-	 * The cooldown in seconds this command has
-	 * @since 0.0.1
-	 * @type {number}
-	 * @readonly
-	 */
-	get cooldown() {
-		return this.cooldowns.cooldown / 1000;
+		/**
+		 * The amount of time before the users can run the command again in seconds based on cooldownLevel
+		 * @since 0.5.0
+		 * @type {number}
+		 */
+		this.cooldown = options.cooldown;
 	}
 
 	/**
