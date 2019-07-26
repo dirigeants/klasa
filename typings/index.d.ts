@@ -78,7 +78,6 @@ declare module 'klasa' {
 	}
 
 	export class KlasaMessage extends Message {
-		private levelID: Snowflake | null;
 		private prompter: CommandPrompt | null;
 		private _responses: KlasaMessage[];
 		private _patch(data: any): void;
