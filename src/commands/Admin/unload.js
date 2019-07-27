@@ -19,7 +19,7 @@ module.exports = class extends Command {
 		piece.unload();
 		if (this.client.shard) {
 			await this.client.shard.broadcastEval(`
-				if (String(this.shard.id) !== '${this.client.options.shards}') this.${piece.store}.get('${piece.name}').unload();
+				if (String(this.options.shards) !== '${this.client.options.shards}') this.${piece.store}.get('${piece.name}').unload();
 			`);
 		}
 		return message.sendLocale('COMMAND_UNLOAD', [piece.type, piece.name]);
