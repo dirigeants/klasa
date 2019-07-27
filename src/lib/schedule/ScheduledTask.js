@@ -236,8 +236,7 @@ class ScheduledTask {
 	 * @private
 	 */
 	static _generateID(client) {
-		const id = client.shard ? (Array.isArray(client.shard.id) ? client.shard.id[0] : client.shard.id).toString(36) : '';
-		return Date.now().toString(36) + id;
+		return `${Date.now().toString(36)}${client.options.shards[0].toString(36)}`;
 	}
 
 	/**
