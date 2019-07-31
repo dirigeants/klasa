@@ -1666,6 +1666,7 @@ declare module 'discord.js' {
 		Schedule,
 		ScheduledTask,
 		SerializerStore,
+		Stopwatch,
 		Settings,
 		Store,
 		Task,
