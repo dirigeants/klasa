@@ -284,6 +284,13 @@ module.exports = Structures.extend('Message', Message => {
 		 * @private
 		 */
 		_parseCommand() {
+			// Clear existing command state so edits to non-commands do not re-run commands
+			this.prefix = null;
+			this.prefixLength = null;
+			this.commandText = null;
+			this.command = null;
+			this.prompter = null;
+
 			try {
 				const prefix = this._customPrefix() || this._mentionPrefix() || this._naturalPrefix() || this._prefixLess();
 
