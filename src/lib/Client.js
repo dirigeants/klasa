@@ -626,7 +626,7 @@ KlasaClient.defaultClientSchema = new Schema()
  */
 
 /**
- * Emitted when an invlaid argument is passed to a command.
+ * Emitted when an invalid argument is passed to a command.
  * @event KlasaClient#argumentError
  * @since 0.5.0
  * @param {KlasaMessage} message The message that triggered the command
