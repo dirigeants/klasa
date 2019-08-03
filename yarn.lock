@@ -355,8 +355,8 @@ escape-string-regexp@^2.0.0:
 
 "eslint-config-klasa@github:dirigeants/klasa-lint":
   version "0.0.1"
-  uid b3c519e0cb0a9c93a5d629f4b60bcd2a901c0538
-  resolved "https://codeload.github.com/dirigeants/klasa-lint/tar.gz/b3c519e0cb0a9c93a5d629f4b60bcd2a901c0538"
+  uid "65ad456e8b1b2ba433460686967d1041b56858ff"
+  resolved "https://codeload.github.com/dirigeants/klasa-lint/tar.gz/65ad456e8b1b2ba433460686967d1041b56858ff"
 
 eslint-plugin-markdown@^1.0.0-beta.6:
   version "1.0.0"
