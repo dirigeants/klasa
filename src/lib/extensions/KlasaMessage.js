@@ -298,12 +298,9 @@ module.exports = Structures.extend('Message', Message => {
 		_parseCommand() {
 			try {
 				const prefix = this._customPrefix() || this._mentionPrefix() || this._naturalPrefix() || this._prefixLess();
-
-				if (!prefix) return;
-
-				this.prefix = prefix.regex;
-				this.prefixLength = prefix.length;
-				this.commandText = this.content.slice(prefix.length).trim().split(' ')[0].toLowerCase();
+				this.prefix = prefix ? prefix.regex : null;
+				this.prefixLength = prefix ? prefix.length : null;
+				this.commandText = prefix ? this.content.slice(prefix.length).trim().split(' ')[0].toLowerCase() : null;
 				this.command = this.client.commands.get(this.commandText) || null;
 
 				if (!this.command) return;
