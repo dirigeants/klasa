@@ -157,6 +157,14 @@ class TextPrompt {
 		 * @type external:Collection
 		 */
 		this.responses = new Collection();
+		
+		/**
+		 * The typing state of this CommandPrompt
+		 * @since 0.5.0
+		 * @type {boolean}
+		 * @private
+		 */
+		this.typing = this.client.options.typing;
 	}
 
 	/**
