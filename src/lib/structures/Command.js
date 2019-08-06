@@ -204,6 +204,8 @@ class Command extends AliasPiece {
 		 * @private
 		 */
 		this.cooldowns = new RateLimitManager(options.bucket, options.cooldown * 1000);
+		
+		this.options = options;
 	}
 
 	/**
