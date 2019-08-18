@@ -481,7 +481,7 @@ class KlasaClient extends Discord.Client {
 	 */
 	static use(mod) {
 		const plugin = mod[this.plugin];
-		if (typeof plugin !== 'function') throw new TypeError('The provided module does not include a plugin function');
+		if (!util.isFunction(plugin)) throw new TypeError('The provided module does not include a plugin function');
 		plugins.add(plugin);
 		return this;
 	}
