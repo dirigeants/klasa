@@ -318,12 +318,12 @@ dmd@^4.0.0:
 
 "docgen@github:dirigeants/docsgen":
   version "0.0.1"
-  uid "2758fb558c61e6127a05b89f43a335307345d24e"
-  resolved "https://codeload.github.com/dirigeants/docsgen/tar.gz/2758fb558c61e6127a05b89f43a335307345d24e"
+  uid "5f4dbaab0137df6c598bc26fae65131c17115de8"
+  resolved "https://codeload.github.com/dirigeants/docsgen/tar.gz/5f4dbaab0137df6c598bc26fae65131c17115de8"
   dependencies:
     fs-nextra "^0.4.5"
     jsdoc-to-markdown "^5.0.0"
-    yargs "^13.3.0"
+    yargs "^14.0.0"
 
 doctrine@^3.0.0:
   version "3.0.0"
@@ -1545,11 +1545,12 @@ yargs-parser@^13.1.1:
     camelcase "^5.0.0"
     decamelize "^1.2.0"
 
-yargs@^13.3.0:
-  version "13.3.0"
-  resolved "https://registry.yarnpkg.com/yargs/-/yargs-13.3.0.tgz#4c657a55e07e5f2cf947f8a366567c04a0dedc83"
+yargs@^14.0.0:
+  version "14.0.0"
+  resolved "https://registry.yarnpkg.com/yargs/-/yargs-14.0.0.tgz#ba4cacc802b3c0b3e36a9e791723763d57a85066"
   dependencies:
     cliui "^5.0.0"
+    decamelize "^1.2.0"
     find-up "^3.0.0"
     get-caller-file "^2.0.1"
     require-directory "^2.1.1"
