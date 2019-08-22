@@ -127,18 +127,6 @@ module.exports = Structures.extend('Message', Message => {
 		}
 
 		/**
-		 * Gets the level id of this message (with respect to @{link Command#cooldownLevel})
-		 * @since 0.5.0
-		 * @type {?string}
-		 * @readonly
-		 * @private
-		 */
-		get levelID() {
-			if (!this.command) return null;
-			return this.guild ? this[this.command.cooldownLevel].id : this.author.id;
-		}
-
-		/**
 		 * The usable commands by the author in this message's context
 		 * @since 0.0.1
 		 * @returns {Collection<string, Command>} The filtered CommandStore
@@ -296,6 +284,13 @@ module.exports = Structures.extend('Message', Message => {
 		 * @private
 		 */
 		_parseCommand() {
+			// Clear existing command state so edits to non-commands do not re-run commands
+			this.prefix = null;
+			this.prefixLength = null;
+			this.commandText = null;
+			this.command = null;
+			this.prompter = null;
+
 			try {
 				const prefix = this._customPrefix() || this._mentionPrefix() || this._naturalPrefix() || this._prefixLess();
 

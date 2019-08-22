@@ -54,7 +54,7 @@ declare module 'klasa' {
 		public constructor(options?: KlasaClientOptions);
 		public login(token?: string): Promise<string>;
 		private validatePermissionLevels(): PermissionLevels;
-		private _ready(): Promise<void>;
+
 		public sweepMessages(lifetime?: number, commandLifeTime?: number): number;
 		public static basePermissions: Permissions;
 		public static defaultGuildSchema: Schema;
@@ -80,7 +80,6 @@ declare module 'klasa' {
 	}
 
 	export class KlasaMessage extends Message {
-		private levelID: Snowflake | null;
 		private prompter: CommandPrompt | null;
 		private _responses: KlasaMessage[];
 		private _patch(data: any): void;
@@ -426,7 +425,6 @@ declare module 'klasa' {
 		public runIn: string[];
 		public subcommands: boolean;
 		public usage: CommandUsage;
-		private cooldowns: RateLimitManager;
 
 		public createCustomResolver(type: string, resolver: ArgResolverCustomMethod): this;
 		public customizeResponse(name: string, response: string | ((message: KlasaMessage, possible: Possible) => string)): this;
@@ -921,44 +919,9 @@ declare module 'klasa' {
 		public displayUTC(time?: Date | number | string): string;
 		public edit(pattern: string): this;
 
+		public static timezoneOffset: number;
 		public static utc(time?: Date | number | string): Date;
 		public static displayArbitrary(pattern: string, time?: Date | number | string): string;
-
-		public static A(time: Date): string;
-		public static a(time: Date): string;
-		public static d(time: Date): string;
-		public static D(time: Date): string;
-		public static dd(time: Date): string;
-		public static DD(time: Date): string;
-		public static ddd(time: Date): string;
-		public static DDD(time: Date): string;
-		public static dddd(time: Date): string;
-		public static DDDD(time: Date): string;
-		public static h(time: Date): string;
-		public static H(time: Date): string;
-		public static hh(time: Date): string;
-		public static HH(time: Date): string;
-		public static m(time: Date): string;
-		public static M(time: Date): string;
-		public static mm(time: Date): string;
-		public static MM(time: Date): string;
-		public static MMM(time: Date): string;
-		public static MMMM(time: Date): string;
-		public static Q(time: Date): string;
-		public static S(time: Date): string;
-		public static s(time: Date): string;
-		public static ss(time: Date): string;
-		public static SS(time: Date): string;
-		public static SSS(time: Date): string;
-		public static x(time: Date): string;
-		public static X(time: Date): string;
-		public static Y(time: Date): string;
-		public static YY(time: Date): string;
-		public static YYY(time: Date): string;
-		public static YYYY(time: Date): string;
-		public static Z(time: Date): string;
-		public static ZZ(time: Date): string;
-
 		private static _resolveDate(time: Date | number | string): Date;
 		private static _display(template: string, time: Date | number | string): string;
 		private static _patch(pattern: string): TimestampObject[];
@@ -1116,23 +1079,7 @@ declare module 'klasa' {
 		DAYS: string[];
 		MONTHS: string[];
 		TIMESTAMP: {
-			TOKENS: {
-				Y: number;
-				Q: number;
-				M: number;
-				D: number;
-				d: number;
-				X: number;
-				x: number;
-				H: number;
-				h: number;
-				a: number;
-				A: number;
-				m: number;
-				s: number;
-				S: number;
-				Z: number;
-			};
+			TOKENS: Map<string, number>;
 		};
 		CRON: {
 			partRegex: RegExp;
@@ -1367,7 +1314,7 @@ declare module 'klasa' {
 	}
 
 	export interface EventOptions extends PieceOptions {
-		emitter?: NodeJS.EventEmitter | string;
+		emitter?: NodeJS.EventEmitter | FilterKeyInstances<KlasaClient, NodeJS.EventEmitter>;
 		event?: string;
 		once?: boolean;
 	}
@@ -1650,6 +1597,11 @@ declare module 'klasa' {
 		[P in keyof T]: P extends K ? unknown : T[P];
 	};
 
+	type ValueOf<T> = T[keyof T];
+	type FilterKeyInstances<O, T> = ValueOf<{
+		[K in keyof O]: O[K] extends T ? K : never
+	}>;
+
 	export interface TitleCaseVariants extends Record<string, string> {
 		textchannel: 'TextChannel';
 		voicechannel: 'VoiceChannel';
@@ -1690,6 +1642,7 @@ declare module 'discord.js' {
 		Schedule,
 		ScheduledTask,
 		SerializerStore,
+		Stopwatch,
 		Settings,
 		SettingsFolderUpdateResultEntry,
 		Store,
@@ -1734,7 +1687,7 @@ declare module 'discord.js' {
 		on(event: 'commandRun', listener: (message: KlasaMessage, command: Command, params: any[], response: any) => void): this;
 		on(event: 'commandSuccess', listener: (message: KlasaMessage, command: Command, params: any[], response: any) => void): this;
 		on(event: 'commandUnknown', listener: (message: KlasaMessage, command: string, prefix: RegExp, prefixLength: number) => void): this;
-		on(event: 'finalizerError', listener: (message: KlasaMessage, response: KlasaMessage, runTime: Timestamp, finalizer: Finalizer, error: Error | string) => void): this;
+		on(event: 'finalizerError', listener: (message: KlasaMessage, command: Command, response: KlasaMessage, runTime: Stopwatch, finalizer: Finalizer, error: Error | string) => void): this;
 		on(event: 'log', listener: (data: any) => void): this;
 		on(event: 'monitorError', listener: (message: KlasaMessage, monitor: Monitor, error: Error | string) => void): this;
 		on(event: 'pieceDisabled', listener: (piece: Piece) => void): this;
@@ -1755,7 +1708,7 @@ declare module 'discord.js' {
 		once(event: 'commandRun', listener: (message: KlasaMessage, command: Command, params: any[], response: any) => void): this;
 		once(event: 'commandSuccess', listener: (message: KlasaMessage, command: Command, params: any[], response: any) => void): this;
 		once(event: 'commandUnknown', listener: (message: KlasaMessage, command: string, prefix: RegExp, prefixLength: number) => void): this;
-		once(event: 'finalizerError', listener: (message: KlasaMessage, response: KlasaMessage, runTime: Timestamp, finalizer: Finalizer, error: Error | string) => void): this;
+		once(event: 'finalizerError', listener: (message: KlasaMessage, command: Command, response: KlasaMessage, runTime: Stopwatch, finalizer: Finalizer, error: Error | string) => void): this;
 		once(event: 'log', listener: (data: any) => void): this;
 		once(event: 'monitorError', listener: (message: KlasaMessage, monitor: Monitor, error: Error | string) => void): this;
 		once(event: 'pieceDisabled', listener: (piece: Piece) => void): this;
@@ -1776,7 +1729,7 @@ declare module 'discord.js' {
 		off(event: 'commandRun', listener: (message: KlasaMessage, command: Command, params: any[], response: any) => void): this;
 		off(event: 'commandSuccess', listener: (message: KlasaMessage, command: Command, params: any[], response: any) => void): this;
 		off(event: 'commandUnknown', listener: (message: KlasaMessage, command: string, prefix: RegExp, prefixLength: number) => void): this;
-		off(event: 'finalizerError', listener: (message: KlasaMessage, response: KlasaMessage, runTime: Timestamp, finalizer: Finalizer, error: Error | string) => void): this;
+		off(event: 'finalizerError', listener: (message: KlasaMessage, command: Command, response: KlasaMessage, runTime: Stopwatch, finalizer: Finalizer, error: Error | string) => void): this;
 		off(event: 'log', listener: (data: any) => void): this;
 		off(event: 'monitorError', listener: (message: KlasaMessage, monitor: Monitor, error: Error | string) => void): this;
 		off(event: 'pieceDisabled', listener: (piece: Piece) => void): this;

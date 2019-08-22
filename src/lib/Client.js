@@ -467,7 +467,7 @@ class KlasaClient extends Discord.Client {
 	 */
 	static use(mod) {
 		const plugin = mod[this.plugin];
-		if (typeof plugin !== 'function') throw new TypeError('The provided module does not include a plugin function');
+		if (!util.isFunction(plugin)) throw new TypeError('The provided module does not include a plugin function');
 		plugins.add(plugin);
 		return this;
 	}
@@ -612,7 +612,7 @@ KlasaClient.defaultClientSchema = new Schema()
  */
 
 /**
- * Emitted when an invlaid argument is passed to a command.
+ * Emitted when an invalid argument is passed to a command.
  * @event KlasaClient#argumentError
  * @since 0.5.0
  * @param {KlasaMessage} message The message that triggered the command

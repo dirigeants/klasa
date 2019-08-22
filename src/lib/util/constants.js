@@ -177,29 +177,27 @@ exports.TIME = {
 	MONTHS: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
 
 	TIMESTAMP: {
-		TOKENS: {
-			/* eslint-disable id-length */
-			Y: 4,
-			Q: 1,
-			M: 4,
-			D: 4,
-			d: 4,
-			X: 1,
-			x: 1,
-			H: 2,
-			h: 2,
-			a: 1,
-			A: 1,
-			m: 2,
-			s: 2,
-			S: 3,
-			Z: 2,
-			l: 4,
-			L: 4,
-			T: 1,
-			t: 1
-			/* eslint-enable id-length */
-		}
+		TOKENS: new Map([
+			['Y', 4],
+			['Q', 1],
+			['M', 4],
+			['D', 4],
+			['d', 4],
+			['X', 1],
+			['x', 1],
+			['H', 2],
+			['h', 2],
+			['a', 1],
+			['A', 1],
+			['m', 2],
+			['s', 2],
+			['S', 3],
+			['Z', 2],
+			['l', 4],
+			['L', 4],
+			['T', 1],
+			['t', 1]
+		])
 	},
 
 	CRON: {
