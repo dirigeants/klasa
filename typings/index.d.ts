@@ -1702,6 +1702,7 @@ declare module 'discord.js' {
 		on(event: 'taskError', listener: (scheduledTask: ScheduledTask, task: Task, error: Error) => void): this;
 		on(event: 'verbose', listener: (data: any) => void): this;
 		on(event: 'wtf', listener: (failure: Error) => void): this;
+		on(event: 'klasaReady'): this;
 		once(event: 'argumentError', listener: (message: KlasaMessage, command: Command, params: any[], error: string) => void): this;
 		once(event: 'commandError', listener: (message: KlasaMessage, command: Command, params: any[], error: Error | string) => void): this;
 		once(event: 'commandInhibited', listener: (message: KlasaMessage, command: Command, response: string | Error) => void): this;
@@ -1723,6 +1724,7 @@ declare module 'discord.js' {
 		once(event: 'taskError', listener: (scheduledTask: ScheduledTask, task: Task, error: Error) => void): this;
 		once(event: 'verbose', listener: (data: any) => void): this;
 		once(event: 'wtf', listener: (failure: Error) => void): this;
+		once(event: 'klasaReady'): this;
 		off(event: 'argumentError', listener: (message: KlasaMessage, command: Command, params: any[], error: string) => void): this;
 		off(event: 'commandError', listener: (message: KlasaMessage, command: Command, params: any[], error: Error | string) => void): this;
 		off(event: 'commandInhibited', listener: (message: KlasaMessage, command: Command, response: string | Error) => void): this;
@@ -1744,6 +1746,7 @@ declare module 'discord.js' {
 		off(event: 'taskError', listener: (scheduledTask: ScheduledTask, task: Task, error: Error) => void): this;
 		off(event: 'verbose', listener: (data: any) => void): this;
 		off(event: 'wtf', listener: (failure: Error) => void): this;
+		off(event: 'klasaReady'): this;
 	}
 
 	export interface Guild {
