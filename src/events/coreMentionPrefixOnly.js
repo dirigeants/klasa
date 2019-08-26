@@ -3,7 +3,7 @@ const { Event } = require('klasa');
 module.exports = class extends Event {
 
 	constructor(...args) {
-		super(...args, { event: 'prefixOnly' });
+		super(...args, { event: 'mentionPrefixOnly' });
 	}
 
 	async run(message) {
