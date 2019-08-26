@@ -23,3 +23,4 @@ There are a number of guidelines considered when reviewing Pull Requests to be m
 - Everything should be documented with [jsdocs](http://usejsdoc.org/), whether private or not. __If you see a mistake in the docs, please pr a fix.__
 - Everything should follow OOP paradigms and generally rely on behavior over state where possible. This generally helps methods be predictable, keeps the codebase simple & understandable, reduces code duplication through abstraction, and leads to efficiency and therefore scalability.
 - Everything should follow our ESLint rules as closely as possible, and should pass lint tests even if you must disable a rule for a single line.
+- Core should follow [Discord Bot Best Practices](https://github.com/meew0/discord-bot-best-practices)
