@@ -1006,6 +1006,7 @@ declare module 'klasa' {
 		slowmode?: number;
 		slowmodeAggressive?: boolean;
 		typing?: boolean;
+		prefixReminder?: boolean;
 	}
 
 	export interface ScheduleOptions {

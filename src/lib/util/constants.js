@@ -24,6 +24,7 @@ exports.DEFAULTS = {
 		createPiecesFolders: true,
 		disabledCorePieces: [],
 		language: 'en-US',
+		prefixReminder: true,
 		noPrefixDM: false,
 		prefix: '',
 		preserveSettings: true,
