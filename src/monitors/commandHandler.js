@@ -11,7 +11,7 @@ module.exports = class extends Monitor {
 		if (message.guild && !message.guild.me) await message.guild.members.fetch(this.client.user);
 		if (!message.channel.postable) return undefined;
 		if (message.prefix === this.client.mentionPrefix) {
-			return this.emit('mentionPrefixOnly', message);
+			return this.client.emit('mentionPrefixOnly', message);
 		}
 		if (!message.commandText) return undefined;
 		if (!message.command) return this.client.emit('commandUnknown', message, message.commandText, message.prefix, message.prefixLength);
