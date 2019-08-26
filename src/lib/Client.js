@@ -675,6 +675,13 @@ KlasaClient.defaultClientSchema = new Schema()
  */
 
 /**
+ * Emitted when a message is a mention prefix.
+ * @event KlasaClient#mentionPrefixOnly
+ * @since 0.5.0
+ * @param {KlasaMessage} The message that matched the prefix
+ */
+
+/**
  * Emitted when {@link Settings#update} or {@link Settings#reset} is run.
  * @event KlasaClient#settingsUpdateEntry
  * @since 0.5.0
