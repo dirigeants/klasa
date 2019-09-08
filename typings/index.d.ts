@@ -1352,6 +1352,7 @@ declare module 'klasa' {
 		quotedStringSupport?: boolean;
 		target?: KlasaUser;
 		time?: number;
+		flagSupport?: boolean;
 	}
 
 	// Util
