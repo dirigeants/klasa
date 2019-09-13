@@ -477,7 +477,7 @@ declare module 'klasa' {
 		public constructor(store: LanguageStore, file: string[], directory: string, options?: LanguageOptions);
 		public language: Record<string, string | string[] | ((...args: any[]) => string | string[])>;
 
-		public get<T = string>(term: string, ...args: any[]): T;
+		public get<T = string, A extends readonly unknown[] = readonly unknown[]>(term: string, ...args: A): T;
 		public toJSON(): PieceLanguageJSON;
 	}
 
