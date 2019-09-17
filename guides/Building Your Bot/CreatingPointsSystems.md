@@ -33,7 +33,7 @@ module.exports = class extends Monitor {
 		if (!message.guild) return;
 
 		// Update the user's configuration entry by adding 1 to it.
-		await message.author.settings.update('experience', message.author.get('experience') + 1);
+		await message.author.settings.update('experience', message.author.settings.get('experience') + 1);
 	}
 
 };
