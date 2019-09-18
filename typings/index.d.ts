@@ -165,7 +165,7 @@ declare module 'klasa' {
 		public remove(level: number): this;
 		public set(level: number, obj: PermissionLevelOptions | symbol): this;
 
-		public run(message: KlasaMessage, min: number): PermissionLevelsData;
+		public run(message: KlasaMessage, min: number): Promise<PermissionLevelsData>;
 	}
 
 //#endregion Permissions
