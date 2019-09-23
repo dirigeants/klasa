@@ -1,4 +1,4 @@
-const { isObject, objectToTuples, arraysStrictEquals, toTitleCase, mergeObjects, makeObject, resolveGuild } = require('../util/util');
+const { isObject, objectToTuples, arraysStrictEquals, toTitleCase, mergeObjects, makeObject, resolveGuild, deepClone } = require('../util/util');
 const Type = require('../util/Type');
 
 /**
@@ -81,7 +81,7 @@ class SettingsFolder extends Map {
 	 */
 	get(path) {
 		// Map.prototype.get.call was used to avoid infinite recursion
-		return path.split('.').reduce((folder, key) => Map.prototype.get.call(folder, key), this);
+		return deepClone(path.split('.').reduce((folder, key) => Map.prototype.get.call(folder, key), this));
 	}
 
 	/**
