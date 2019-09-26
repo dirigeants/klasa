@@ -347,19 +347,19 @@ class SettingsFolder extends Map {
 		const status = this.base.existenceStatus;
 		if (status === null) throw new Error('Cannot update out of sync.');
 
-		// Patch before emitting the events or synchronizing other shards
 		const updateObject = {};
 		for (const entry of results) mergeObjects(updateObject, makeObject(entry.key, entry.value));
-		this._patch(updateObject);
 
 		if (status === false) {
 			await this.gateway.provider.create(this.gateway.name, this.base.id, results);
 			this.base.existenceStatus = true;
-			this.base.gateway.client.emit('settingsCreate', this.base);
+			this.base.gateway.client.emit('settingsCreate', this.base, updateObject);
 		} else {
 			await this.gateway.provider.update(this.gateway.name, this.id, results);
-			this.base.gateway.client.emit('settingsUpdate', this.base, results.slice());
+			this.base.gateway.client.emit('settingsUpdate', this.base, updateObject);
 		}
+
+		this._patch(updateObject);
 	}
 
 	/**
