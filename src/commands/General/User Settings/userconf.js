@@ -57,7 +57,7 @@ module.exports = class extends Command {
 	}
 
 	getPath(key) {
-		const { schema } = this.client.gateways.get('guilds');
+		const { schema } = this.client.gateways.get('users');
 		if (!key) return schema;
 		try {
 			return schema.get(key);
