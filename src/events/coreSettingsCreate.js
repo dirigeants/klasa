@@ -8,7 +8,7 @@ module.exports = class extends Event {
 	}
 
 	run(settings, updateObject) {
-		if (gateways.includes(settings.gateway.name)) {
+		if (gateways.includes(settings.gateway.name) && this.client.ready) {
 			this.client.shard.broadcastEval(`
 				if (String(this.options.shards) !== '${this.client.options.shards}') {
 					const entry = this.gateways.get('${settings.gateway.name}').get('${settings.id}');
