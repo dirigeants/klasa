@@ -32,7 +32,7 @@ module.exports = Structures.extend('User', User => {
 		 * @returns {KlasaUserJSON}
 		 */
 		toJSON() {
-			return { ...super.toJSON(), settings: this.settings };
+			return { ...super.toJSON(), settings: this.settings.toJSON() };
 		}
 
 	}
