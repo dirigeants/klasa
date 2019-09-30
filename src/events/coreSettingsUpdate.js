@@ -5,7 +5,7 @@ module.exports = class extends Event {
 
 	constructor(...args) {
 		super(...args, { event: 'settingsUpdate' });
-		this.enabled = Boolean(this.client.shard)
+		this.enabled = Boolean(this.client.shard);
 	}
 
 	run(settings, updateObject) {
