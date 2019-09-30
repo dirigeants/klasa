@@ -5,10 +5,11 @@ module.exports = class extends Event {
 
 	constructor(...args) {
 		super(...args, { event: 'settingsDelete' });
+		this.enabled = Boolean(this.client.shard);
 	}
 
 	run(settings) {
-		if (gateways.includes(settings.gateway.name) && this.client.ready) {
+		if (gateways.includes(settings.gateway.name)) {
 			this.client.shard.broadcastEval(`
 				if (String(this.options.shards) !== '${this.client.options.shards}') {
 					const entry = this.gateways.get('${settings.gateway.name}').get('${settings.id}');
