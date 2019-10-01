@@ -21,7 +21,7 @@ module.exports = class extends Command {
 		const output = message.language.get(success ? 'COMMAND_EVAL_OUTPUT' : 'COMMAND_EVAL_ERROR',
 			time, util.codeBlock('js', result), footer);
 
-		if ('silent' in message.flags) return null;
+		if ('silent' in message.flagArgs) return null;
 
 		// Handle too-long-messages
 		if (output.length > 2000) {
