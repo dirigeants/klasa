@@ -1750,7 +1750,7 @@ declare module 'discord.js' {
 		readonly responses: KlasaMessage[];
 		readonly args: string[];
 		readonly params: any[];
-		readonly flags: Record<string, string>;
+		readonly flagArgs: Record<string, string>;
 		readonly reprompted: boolean;
 		readonly reactable: boolean;
 		send(content?: StringResolvable, options?: MessageOptions): Promise<KlasaMessage | KlasaMessage[]>;
