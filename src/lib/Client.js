@@ -83,7 +83,7 @@ class KlasaClient extends Discord.Client {
 	 * @property {boolean} [slowmodeAggressive=false] If the slowmode time should reset if a user spams commands faster than the slowmode allows for
 	 * @property {boolean} [typing=false] Whether the bot should type while processing commands
 	 * @property {boolean} [prefixCaseInsensitive=false] Wether the bot should respond to case insensitive prefix or not
-	 * @property {boolean} [throwOnError=false] Whether setting's updates should throw their errors or not
+	 * @property {boolean} [throwOnError=false] Whether setting's updates and resets should throw their errors or not
 	 */
 
 	/**
