@@ -101,7 +101,7 @@ module.exports = Structures.extend('Message', Message => {
 		 * @type {Object}
 		 * @readonly
 		 */
-		get flags() {
+		get flagArgs() {
 			return this.prompter ? this.prompter.flags : {};
 		}
 
