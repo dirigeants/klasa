@@ -26,7 +26,6 @@ exports.DEFAULTS = {
 		language: 'en-US',
 		noPrefixDM: false,
 		prefix: '',
-		preserveSettings: true,
 		readyMessage: (client) => `Successfully initialized. Ready to serve ${client.guilds.size} guild${client.guilds.size === 1 ? '' : 's'}.`,
 		typing: false,
 		customPromptDefaults: {
@@ -34,12 +33,6 @@ exports.DEFAULTS = {
 			limit: Infinity,
 			quotedStringSupport: false,
 			flagSupport: true
-		},
-		throwOnError: false,
-		gateways: {
-			guilds: {},
-			users: {},
-			clientStorage: {}
 		},
 		owners: [],
 		// eslint-disable-next-line no-process-env
@@ -110,7 +103,16 @@ exports.DEFAULTS = {
 		},
 		schedule: { interval: 60000 },
 		slowmode: 0,
-		slowmodeAggressive: false
+		slowmodeAggressive: false,
+		settings: {
+			preserve: true,
+			throwOnError: false,
+			gateways: {
+				guilds: {},
+				users: {},
+				clientStorage: {}
+			}
+		}
 	},
 
 	CONSOLE: {

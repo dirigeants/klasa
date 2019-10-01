@@ -66,14 +66,12 @@ class KlasaClient extends Discord.Client {
 	 * @property {boolean} [createPiecesFolders=true] Whether Klasa should create pieces' folder at start up or not
 	 * @property {CustomPromptDefaults} [customPromptDefaults={}] The defaults for custom prompts
 	 * @property {string[]} [disabledCorePieces=[]] An array of disabled core piece types, e.g., ['commands', 'arguments']
-	 * @property {GatewaysOptions} [gateways={}] The options for each built-in gateway
 	 * @property {string} [language='en-US'] The default language Klasa should opt-in for the commands
 	 * @property {boolean} [noPrefixDM=false] Whether the bot should allow prefixless messages in DMs
 	 * @property {string[]} [owners] The discord user id for the users the bot should respect as the owner (gotten from Discord api if not provided)
 	 * @property {PermissionLevelsOverload} [permissionLevels] The permission levels to use with this bot
 	 * @property {PieceDefaults} [pieceDefaults={}] Overrides the defaults for all pieces
 	 * @property {string|string[]} [prefix] The default prefix the bot should respond to
-	 * @property {boolean} [preserveSettings=true] Whether the bot should preserve (non-default) settings when removed from a guild
 	 * @property {boolean} [production=false] Whether the bot should handle unhandled promise rejections automatically (handles when false) (also can be configured with process.env.NODE_ENV)
 	 * @property {ProvidersOptions} [providers] The provider options
 	 * @property {ReadyMessage} [readyMessage] readyMessage to be passed throughout Klasa's ready event
@@ -83,7 +81,7 @@ class KlasaClient extends Discord.Client {
 	 * @property {boolean} [slowmodeAggressive=false] If the slowmode time should reset if a user spams commands faster than the slowmode allows for
 	 * @property {boolean} [typing=false] Whether the bot should type while processing commands
 	 * @property {boolean} [prefixCaseInsensitive=false] Wether the bot should respond to case insensitive prefix or not
-	 * @property {boolean} [throwOnError=false] Whether setting's updates and resets should throw their errors or not
+	 * @property {SettingsOptions} [settings] The setting's options
 	 */
 
 	/**
@@ -92,8 +90,15 @@ class KlasaClient extends Discord.Client {
 	 */
 
 	/**
-	 * @typedef {Object} ScheduleOptions
-	 * @property {number} [interval=60000] The interval in milliseconds for the clock to check the tasks
+		* @typedef {Object} ScheduleOptions
+		* @property {number} [interval=60000] The interval in milliseconds for the clock to check the tasks
+		*/
+
+	/**
+	 * @typedef {Object} SettingsOptions
+	 * @property {boolean} [throwOnError=false] Whether settings updates and resets should throw their errors or not
+	 * @property {boolean} [preserve=true] Whether the bot should preserve (non-default) settings when removed from a guild
+	 * @property {GatewayOptions} [gateways={}] The options for each built-in gateway
 	 */
 
 	/**

@@ -26,7 +26,7 @@ class GatewayDriver extends Collection {
 		Object.defineProperty(this, 'client', { value: client });
 
 		// Setup default gateways and adjust client options as necessary
-		const { guilds, users, clientStorage } = client.options.gateways;
+		const { guilds, users, clientStorage } = client.options.settings.gateways;
 		guilds.schema = 'schema' in guilds ? guilds.schema : client.constructor.defaultGuildSchema;
 		users.schema = 'schema' in users ? users.schema : client.constructor.defaultUserSchema;
 		clientStorage.schema = 'schema' in clientStorage ? clientStorage.schema : client.constructor.defaultClientSchema;
@@ -60,7 +60,7 @@ class GatewayDriver extends Collection {
 	 */
 	register(gateway) {
 		if (!(gateway instanceof GatewayStorage)) throw new TypeError(`You must pass a GatewayStorage instance, received: ${new Type(gateway)}`);
-		if (!(gateway.name in this.client.options.gateways)) this.client.options.gateways[gateway.name] = {};
+		if (!(gateway.name in this.client.options.settings.gateways)) this.client.options.settings.gateways[gateway.name] = {};
 		this.set(gateway.name, gateway);
 		return this;
 	}
@@ -80,7 +80,7 @@ class GatewayDriver extends Collection {
 	 * @returns {Promise<Array<Gateway>>}
 	 */
 	sync(input) {
-		return Promise.all([...this].map(([key, gateway]) => gateway.sync(typeof input === 'undefined' ? this.client.options.gateways[key].syncArg : input)));
+		return Promise.all([...this].map(([key, gateway]) => gateway.sync(typeof input === 'undefined' ? this.client.options.settings.gateways[key].syncArg : input)));
 	}
 
 	/**
