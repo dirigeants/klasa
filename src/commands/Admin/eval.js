@@ -39,7 +39,7 @@ module.exports = class extends Command {
 	async eval(message, code) {
 		// eslint-disable-next-line no-unused-vars
 		const msg = message;
-		const { flags } = message;
+		const { flagArgs: flags } = message;
 		code = code.replace(/[“”]/g, '"').replace(/[‘’]/g, "'");
 		const stopwatch = new Stopwatch();
 		let success, syncTime, asyncTime, result;
