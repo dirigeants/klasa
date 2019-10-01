@@ -5,7 +5,7 @@ module.exports = class extends Event {
 
 	constructor(...args) {
 		super(...args, { event: 'settingsDelete' });
-		this.enabled = Boolean(this.client.shard);
+		if (!this.client.shard) this.disable();
 	}
 
 	run(settings) {
