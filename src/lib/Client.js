@@ -90,9 +90,9 @@ class KlasaClient extends Discord.Client {
 	 */
 
 	/**
-		* @typedef {Object} ScheduleOptions
-		* @property {number} [interval=60000] The interval in milliseconds for the clock to check the tasks
-		*/
+	 * @typedef {Object} ScheduleOptions
+	 * @property {number} [interval=60000] The interval in milliseconds for the clock to check the tasks
+ 	 */
 
 	/**
 	 * @typedef {Object} SettingsOptions
