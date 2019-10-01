@@ -35,6 +35,7 @@ exports.DEFAULTS = {
 			quotedStringSupport: false,
 			flagSupport: true
 		},
+		throwOnError: false,
 		gateways: {
 			guilds: {},
 			users: {},
