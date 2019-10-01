@@ -161,8 +161,8 @@ class SettingsFolder extends Map {
 
 		const errors = [];
 
-		// Function first to allow override, then client option, then default
-		throwOnError = throwOnError || this.client.options.throwOnError || false;
+		// Function first to allow override, then client option
+		throwOnError = throwOnError !== undefined ? throwOnError : this.client.options.throwOnError;
 
 		// Resolve schema values
 		const values = [];
@@ -246,8 +246,8 @@ class SettingsFolder extends Map {
 		options.guild = resolveGuild(this.base.gateway.client, 'guild' in options ? options.guild : this.base.target);
 		const language = options.guild ? options.guild.language : this.base.gateway.client.languages.default;
 
-		// Function first to allow override, then client option, then default
-		options.throwOnError = options.throwOnError || this.client.options.throwOnError || false;
+		// Function first to allow override, then client option
+		options.throwOnError = 'throwOnError' in options ? options.throwOnError : this.client.options.throwOnError;
 
 		const errors = [];
 
