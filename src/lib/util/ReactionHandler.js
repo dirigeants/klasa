@@ -112,7 +112,7 @@ class ReactionHandler extends ReactionCollector {
 
 		this.on('collect', (reaction, user) => {
 			const clientPermissions = reaction.message.channel.permissionsFor(reaction.message.client);
-			if (clientPermissions.has("MANAGE_MESSAGES")) reaction.users.remove(user);
+			if (clientPermissions.has('MANAGE_MESSAGES')) reaction.users.remove(user);
 			this[this.methodMap.get(reaction.emoji.id || reaction.emoji.name)](user);
 		});
 		this.on('end', () => {
