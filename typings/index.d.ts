@@ -999,7 +999,6 @@ declare module 'klasa' {
 		createPiecesFolders?: boolean;
 		customPromptDefaults?: CustomPromptDefaults;
 		disabledCorePieces?: string[];
-		gateways?: GatewaysOptions;
 		language?: string;
 		noPrefixDM?: boolean;
 		owners?: string[];
@@ -1007,7 +1006,6 @@ declare module 'klasa' {
 		pieceDefaults?: PieceDefaults;
 		prefix?: string | string[];
 		prefixCaseInsensitive?: boolean;
-		preserveSettings?: boolean;
 		production?: boolean;
 		providers?: ProvidersOptions;
 		readyMessage?: ReadyMessage;
@@ -1015,11 +1013,18 @@ declare module 'klasa' {
 		schedule?: ScheduleOptions;
 		slowmode?: number;
 		slowmodeAggressive?: boolean;
+		settings?: SettingsOptions;
 		typing?: boolean;
 	}
 
 	export interface ScheduleOptions {
 		interval?: number;
+	}
+
+	export interface SettingsOptions {
+		preserve?: boolean;
+		throwOnError?: boolean;
+		gateways?: GatewaysOptions;
 	}
 
 	export interface CustomPromptDefaults {
