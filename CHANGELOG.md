@@ -134,6 +134,11 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#828](https://github.com/dirigeants/klasa/pull/828)] Moved all SettingsGateway related options into a namespaced `settings` option. (UnseenFaith)
+- [[#814](https://github.com/dirigeants/klasa/pull/814)] Changed `Settings#get` to always deep clone values. (UnseenFaith)
+- [[#807](https://github.com/dirigeants/klasa/pull/807)] Changed `Language#get`'s generic types to include an array of function values. (Favna)
+- [[#698](https://github.com/dirigeants/klasa/pull/698)] Rewritten SettingsGateway's guides. (UnseenFaith)
+- [[#700](https://github.com/dirigeants/klasa/pull/700)] Changed the API for `SettingsFolder#{pluck,resolve}` to return arrays instead of objects. (Skillz4Killz)
 - [[#545](https://github.com/dirigeants/klasa/pull/545)] Changed the entire API for `QueryBuilder` to extend a Map instead of being a pseudo-map. (kyranet)
 - [[#480](https://github.com/dirigeants/klasa/pull/480)] Changed the entire mechanism for `GatewayDriver#register` to take a `GatewayStorage` instance. (kyranet)
 - [[#475](https://github.com/dirigeants/klasa/pull/475)] Renamed `KlasaClient#{settingsUpdateEntry,settingsDeleteEntry,settingsCreateEntry}` to `KlasaClient#{settingsUpdate,settingsDelete,settingsCreate}`. (kyranet)
@@ -324,7 +329,11 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
-- [[#487](https://github.com/dirigeants/klasa/pull/487)] Fixed role deserializer (UnseenFaith)
+- [[#823](https://github.com/dirigeants/klasa/pull/823)] Fixed `KlasaUser#toJSON`. (PyroTechniac)
+- [[#819](https://github.com/dirigeants/klasa/pull/819)] Fixed return type of `Store.walk`. (PyroTechniac)
+- [[#818](https://github.com/dirigeants/klasa/pull/818)] Fixed `userconf` command using the guilds gateway instead of the users one. (UnseenFaith)
+- [[#817](https://github.com/dirigeants/klasa/pull/817)] Fixed sharding broadcast evals. (UnseenFaith)
+- [[#487](https://github.com/dirigeants/klasa/pull/487)] Fixed role deserializer. (UnseenFaith)
 - [[#426](https://github.com/dirigeants/klasa/pull/426)] Fixed typings for QueryBuilder. (kyranet)
 - [[#383](https://github.com/dirigeants/klasa/pull/383)] Fixed abstract `SQLProvider#qb` property being missing in typings. (kyranet)
 - [[#362](https://github.com/dirigeants/klasa/pull/362)] Fixed object mutation in `GatewayDriver#toJSON()`. (kyranet)
