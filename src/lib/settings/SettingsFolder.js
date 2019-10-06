@@ -247,7 +247,7 @@ class SettingsFolder extends Map {
 		const language = options.guild ? options.guild.language : this.base.gateway.client.languages.default;
 
 		// Function first to allow override, then client option
-		options.throwOnError = 'throwOnError' in options ? options.throwOnError : this.client.options.settings.throwOnError;
+		options.throwOnError = 'throwOnError' in options ? options.throwOnError : this.base.gateway.client.options.settings.throwOnError;
 
 		const errors = [];
 
