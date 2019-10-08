@@ -162,7 +162,7 @@ class SettingsFolder extends Map {
 		const errors = [];
 
 		// Function first to allow override, then client option
-		throwOnError = throwOnError !== undefined ? throwOnError : this.client.options.settings.throwOnError;
+		throwOnError = throwOnError !== undefined ? throwOnError : this.base.gateway.client.options.settings.throwOnError;
 
 		// Resolve schema values
 		const values = [];
