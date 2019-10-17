@@ -21,8 +21,8 @@
   resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.5.5.tgz#02f077ac8817d3df4a832ef59de67565e71cca4b"
 
 "@types/node@^12.7.2":
-  version "12.7.8"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.7.8.tgz#cb1bf6800238898bc2ff6ffa5702c3cadd350708"
+  version "12.11.1"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.11.1.tgz#1fd7b821f798b7fa29f667a1be8f3442bb8922a3"
 
 acorn-jsx@^5.0.2:
   version "5.0.2"
@@ -289,9 +289,9 @@ diff@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/diff/-/diff-4.0.1.tgz#0c667cb467ebbb5cea7f14f135cc2dba7780a8ff"
 
-dmd@^4.0.2:
-  version "4.0.3"
-  resolved "https://registry.yarnpkg.com/dmd/-/dmd-4.0.3.tgz#e968b4d6b3735c3349f7a302bacb17da2a5fd9eb"
+dmd@^4.0.4:
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/dmd/-/dmd-4.0.4.tgz#410cfbe9e140ad80b3bcee2ad39cf18304da3e6b"
   dependencies:
     array-back "^4.0.0"
     cache-point "^0.4.1"
@@ -308,12 +308,12 @@ dmd@^4.0.2:
 
 "docgen@github:dirigeants/docsgen":
   version "0.0.1"
-  uid "1992724286ebcdbfc59b9d7fa1baba91cbdd3669"
-  resolved "https://codeload.github.com/dirigeants/docsgen/tar.gz/1992724286ebcdbfc59b9d7fa1baba91cbdd3669"
+  uid "83ca7708c72e29300750d0062d625407ff6a8e08"
+  resolved "https://codeload.github.com/dirigeants/docsgen/tar.gz/83ca7708c72e29300750d0062d625407ff6a8e08"
   dependencies:
     fs-nextra "^0.4.5"
-    jsdoc-to-markdown "^5.0.1"
-    yargs "^14.0.0"
+    jsdoc-to-markdown "^5.0.2"
+    yargs "^14.2.0"
 
 doctrine@^3.0.0:
   version "3.0.0"
@@ -736,14 +736,14 @@ jsdoc-parse@^4.0.1:
     sort-array "^2.0.0"
     test-value "^3.0.0"
 
-jsdoc-to-markdown@^5.0.1:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/jsdoc-to-markdown/-/jsdoc-to-markdown-5.0.1.tgz#3fcc32385c69d2ebb7174cc91ff7e8e27fe01f92"
+jsdoc-to-markdown@^5.0.2:
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/jsdoc-to-markdown/-/jsdoc-to-markdown-5.0.2.tgz#a212ed3c3437ae177c290949989a07a36afab282"
   dependencies:
     array-back "^4.0.0"
     command-line-tool "^0.8.0"
     config-master "^3.1.0"
-    dmd "^4.0.2"
+    dmd "^4.0.4"
     jsdoc-api "^5.0.3"
     jsdoc-parse "^4.0.1"
     walk-back "^3.0.1"
@@ -1376,8 +1376,8 @@ type-fest@^0.5.2:
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.5.2.tgz#d6ef42a0356c6cd45f49485c3b6281fc148e48a2"
 
 typescript@^3.5.3:
-  version "3.6.3"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.6.3.tgz#fea942fabb20f7e1ca7164ff626f1a9f3f70b4da"
+  version "3.6.4"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.6.4.tgz#b18752bb3792bc1a0281335f7f6ebf1bbfc5b91d"
 
 typical@^2.4.2, typical@^2.6.0, typical@^2.6.1:
   version "2.6.1"
@@ -1542,16 +1542,16 @@ y18n@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/y18n/-/y18n-4.0.0.tgz#95ef94f85ecc81d007c264e190a120f0a3c8566b"
 
-yargs-parser@^13.1.1:
-  version "13.1.1"
-  resolved "https://registry.yarnpkg.com/yargs-parser/-/yargs-parser-13.1.1.tgz#d26058532aa06d365fe091f6a1fc06b2f7e5eca0"
+yargs-parser@^15.0.0:
+  version "15.0.0"
+  resolved "https://registry.yarnpkg.com/yargs-parser/-/yargs-parser-15.0.0.tgz#cdd7a97490ec836195f59f3f4dbe5ea9e8f75f08"
   dependencies:
     camelcase "^5.0.0"
     decamelize "^1.2.0"
 
-yargs@^14.0.0:
-  version "14.0.0"
-  resolved "https://registry.yarnpkg.com/yargs/-/yargs-14.0.0.tgz#ba4cacc802b3c0b3e36a9e791723763d57a85066"
+yargs@^14.2.0:
+  version "14.2.0"
+  resolved "https://registry.yarnpkg.com/yargs/-/yargs-14.2.0.tgz#f116a9242c4ed8668790b40759b4906c276e76c3"
   dependencies:
     cliui "^5.0.0"
     decamelize "^1.2.0"
@@ -1563,4 +1563,4 @@ yargs@^14.0.0:
     string-width "^3.0.0"
     which-module "^2.0.0"
     y18n "^4.0.0"
-    yargs-parser "^13.1.1"
+    yargs-parser "^15.0.0"
