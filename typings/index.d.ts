@@ -48,7 +48,7 @@ declare module 'klasa' {
 
 	export const version: string;
 
-	//#region Classes
+//#region Classes
 
 	export class KlasaClient extends Client {
 		public constructor(options?: KlasaClientOptions);
@@ -67,7 +67,7 @@ declare module 'klasa' {
 
 	export { KlasaClient as Client };
 
-	//#region Extensions
+//#region Extensions
 
 	export class KlasaGuild extends Guild {
 		public settings: Settings;
@@ -95,9 +95,9 @@ declare module 'klasa' {
 
 	export class KlasaUser extends User { }
 
-	//#endregion Extensions
+//#endregion Extensions
 
-	//#region Parsers
+//#region Parsers
 
 	export class Resolver {
 		public constructor(client: KlasaClient);
@@ -152,9 +152,9 @@ declare module 'klasa' {
 		public static maxOrMin(guild: KlasaGuild, value: number, min: number, max: number, name: string, suffix: string): boolean;
 	}
 
-	//#endregion Parsers
+//#endregion Parsers
 
-	//#region Permissions
+//#region Permissions
 
 	export class PermissionLevels extends Collection<number, PermissionLevel> {
 		public constructor(levels?: number);
@@ -168,9 +168,9 @@ declare module 'klasa' {
 		public run(message: KlasaMessage, min: number): Promise<PermissionLevelsData>;
 	}
 
-	//#endregion Permissions
+//#endregion Permissions
 
-	//#region Schedule
+//#region Schedule
 
 	export class Schedule {
 		public constructor(client: KlasaClient);
@@ -219,9 +219,9 @@ declare module 'klasa' {
 		private static _validate(st: ScheduledTask): void;
 	}
 
-	//#endregion Schedule
+//#endregion Schedule
 
-	//#region Settings
+//#region Settings
 
 
 	export class SettingsFolder extends Map<string, SettingsFolder | SettingsValue | readonly SettingsValue[]> {
@@ -360,9 +360,9 @@ declare module 'klasa' {
 		private _generateDefault(): Array<any> | false | null;
 	}
 
-	//#endregion Settings
+//#endregion Settings
 
-	//#region Pieces
+//#region Pieces
 
 	export abstract class Piece {
 		public constructor(store: Store<string, Piece, typeof Piece>, file: string[], directory: string, options?: PieceOptions);
@@ -551,9 +551,9 @@ declare module 'klasa' {
 		public static regex: MentionRegex;
 	}
 
-	//#endregion Pieces
+//#endregion Pieces
 
-	//#region Stores
+//#region Stores
 
 	export abstract class Store<K, V extends Piece, VConstructor = Constructor<V>> extends Collection<K, V> {
 		public constructor(client: KlasaClient, name: string, holds: VConstructor);
@@ -618,9 +618,9 @@ declare module 'klasa' {
 
 	export class KlasaUserStore extends UserStore { }
 
-	//#endregion Stores
+//#endregion Stores
 
-	//#region Usage
+//#region Usage
 
 	export class CommandPrompt extends TextPrompt {
 		public constructor(message: KlasaMessage, usage: CommandUsage, options: TextPromptOptions);
@@ -724,9 +724,9 @@ declare module 'klasa' {
 		private static tagSpace(usage: Record<string, any>, char: string): void;
 	}
 
-	//#endregion Usage
+//#endregion Usage
 
-	//#region Util
+//#region Util
 
 	export class Colors {
 		public constructor(options?: ColorsFormatOptions);
@@ -985,11 +985,11 @@ declare module 'klasa' {
 
 	export { Util as util };
 
-	//#endregion Util
+//#endregion Util
 
-	//#endregion Classes
+//#endregion Classes
 
-	//#region Typedefs
+//#region Typedefs
 
 	export interface KlasaClientOptions extends ClientOptions {
 		commandEditing?: boolean;
@@ -1616,7 +1616,7 @@ declare module 'klasa' {
 		guildmember: 'GuildMember';
 	}
 
-	//#endregion
+//#endregion
 
 }
 
