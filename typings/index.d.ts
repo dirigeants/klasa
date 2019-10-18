@@ -48,7 +48,7 @@ declare module 'klasa' {
 
 	export const version: string;
 
-//#region Classes
+	//#region Classes
 
 	export class KlasaClient extends Client {
 		public constructor(options?: KlasaClientOptions);
@@ -67,7 +67,7 @@ declare module 'klasa' {
 
 	export { KlasaClient as Client };
 
-//#region Extensions
+	//#region Extensions
 
 	export class KlasaGuild extends Guild {
 		public settings: Settings;
@@ -95,9 +95,9 @@ declare module 'klasa' {
 
 	export class KlasaUser extends User { }
 
-//#endregion Extensions
+	//#endregion Extensions
 
-//#region Parsers
+	//#region Parsers
 
 	export class Resolver {
 		public constructor(client: KlasaClient);
@@ -152,9 +152,9 @@ declare module 'klasa' {
 		public static maxOrMin(guild: KlasaGuild, value: number, min: number, max: number, name: string, suffix: string): boolean;
 	}
 
-//#endregion Parsers
+	//#endregion Parsers
 
-//#region Permissions
+	//#region Permissions
 
 	export class PermissionLevels extends Collection<number, PermissionLevel> {
 		public constructor(levels?: number);
@@ -168,9 +168,9 @@ declare module 'klasa' {
 		public run(message: KlasaMessage, min: number): Promise<PermissionLevelsData>;
 	}
 
-//#endregion Permissions
+	//#endregion Permissions
 
-//#region Schedule
+	//#region Schedule
 
 	export class Schedule {
 		public constructor(client: KlasaClient);
@@ -219,9 +219,9 @@ declare module 'klasa' {
 		private static _validate(st: ScheduledTask): void;
 	}
 
-//#endregion Schedule
+	//#endregion Schedule
 
-//#region Settings
+	//#region Settings
 
 
 	export class SettingsFolder extends Map<string, SettingsFolder | SettingsValue | readonly SettingsValue[]> {
@@ -360,9 +360,9 @@ declare module 'klasa' {
 		private _generateDefault(): Array<any> | false | null;
 	}
 
-//#endregion Settings
+	//#endregion Settings
 
-//#region Pieces
+	//#region Pieces
 
 	export abstract class Piece {
 		public constructor(store: Store<string, Piece, typeof Piece>, file: string[], directory: string, options?: PieceOptions);
@@ -505,32 +505,33 @@ declare module 'klasa' {
 
 	export abstract class Provider extends Piece {
 		public constructor(store: ProviderStore, file: string[], directory: string, options?: ProviderOptions);
-		public abstract create(table: string, entry: string, data: any): Promise<any>;
-		public abstract createTable(table: string, rows?: any[]): Promise<any>;
-		public abstract delete(table: string, entry: string): Promise<any>;
-		public abstract deleteTable(table: string): Promise<any>;
-		public abstract get(table: string, entry: string): Promise<any>;
-		public abstract getAll(table: string): Promise<any[]>;
+		public abstract create(table: string, entry: string, data: any): Promise<unknown>;
+		public abstract createTable(table: string, rows?: any[]): Promise<unknown>;
+		public abstract delete(table: string, entry: string): Promise<unknown>;
+		public abstract deleteTable(table: string): Promise<unknown>;
+		public abstract get(table: string, entry: string): Promise<unknown>;
+		public abstract getAll(table: string): Promise<unknown[]>;
 		public abstract has(table: string, entry: string): Promise<boolean>;
 		public abstract hasTable(table: string): Promise<boolean>;
-		public abstract update(table: string, entry: string, data: SettingsFolderUpdateResult[] | [string, any][] | Record<string, any>): Promise<any>;
-		public abstract replace(table: string, entry: string, data: SettingsFolderUpdateResult[] | [string, any][] | Record<string, any>): Promise<any>;
+		public abstract update(table: string, entry: string, data: SettingsFolderUpdateResult[] | [string, unknown][] | Record<string, unknown>): Promise<unknown>;
+		public abstract replace(table: string, entry: string, data: SettingsFolderUpdateResult[] | [string, unknown][] | Record<string, unknown>): Promise<unknown>;
 		// The following is not required by SettingGateway but might be available in some providers
 		public getKeys(table: string): Promise<string[]>;
-		protected parseUpdateInput<T = Record<string, any>>(updated: T | Array<SettingsFolderUpdateResultEntry>): T;
-		public shutdown(): Promise<void>;
+		public shutdown(): Promise<unknown>;
 		public toJSON(): PieceProviderJSON;
+		protected parseUpdateInput<T = Record<string, unknown>>(updated: T | Array<SettingsFolderUpdateResultEntry>): T;
 	}
 
 	export abstract class SQLProvider extends Provider {
 		public abstract qb: QueryBuilder;
-		public abstract addColumn<T = any>(table: string, columns: SchemaFolder | SchemaEntry): Promise<T>;
-		public abstract removeColumn<T = any>(table: string, columns: string | string[]): Promise<T>;
-		public abstract updateColumn<T = any>(table: string, entry: SchemaEntry): Promise<T>;
+		public abstract addColumn(table: string, columns: SchemaFolder | SchemaEntry): Promise<unknown>;
+		public abstract removeColumn(table: string, columns: string | string[]): Promise<unknown>;
+		public abstract updateColumn(table: string, entry: SchemaEntry): Promise<unknown>;
 		public abstract getColumns(table: string): Promise<Array<string>>;
-		protected parseUpdateInput<T = [string, any]>(updated?: SettingsFolderUpdateResultEntry[] | [string, any][] | Record<string, any>, resolve?: boolean): T;
-		protected parseEntry<T = Record<string, any>>(gateway: string | Gateway, entry: Record<string, any>): T;
-		protected parseValue<T = any>(value: any, schemaEntry: SchemaEntry): T;
+		// @ts-ignore 2416
+		protected parseUpdateInput(updated?: SettingsFolderUpdateResult[] | [string, unknown][] | Record<string, unknown>, resolve?: boolean): [string[], unknown[]];
+		protected parseEntry(gateway: string | Gateway, entry: Record<string, unknown>): Record<string, unknown>;
+		protected parseValue(value: unknown, schemaEntry: SchemaEntry): unknown;
 		protected validateQueryBuilder(): void;
 		private _parseGatewayInput(updated: SettingsFolderUpdateResultEntry[], keys: string[], values: string[], resolve?: boolean): void;
 	}
@@ -550,9 +551,9 @@ declare module 'klasa' {
 		public static regex: MentionRegex;
 	}
 
-//#endregion Pieces
+	//#endregion Pieces
 
-//#region Stores
+	//#region Stores
 
 	export abstract class Store<K, V extends Piece, VConstructor = Constructor<V>> extends Collection<K, V> {
 		public constructor(client: KlasaClient, name: string, holds: VConstructor);
@@ -617,9 +618,9 @@ declare module 'klasa' {
 
 	export class KlasaUserStore extends UserStore { }
 
-//#endregion Stores
+	//#endregion Stores
 
-//#region Usage
+	//#region Usage
 
 	export class CommandPrompt extends TextPrompt {
 		public constructor(message: KlasaMessage, usage: CommandUsage, options: TextPromptOptions);
@@ -723,9 +724,9 @@ declare module 'klasa' {
 		private static tagSpace(usage: Record<string, any>, char: string): void;
 	}
 
-//#endregion Usage
+	//#endregion Usage
 
-//#region Util
+	//#region Util
 
 	export class Colors {
 		public constructor(options?: ColorsFormatOptions);
@@ -984,11 +985,11 @@ declare module 'klasa' {
 
 	export { Util as util };
 
-//#endregion Util
+	//#endregion Util
 
-//#endregion Classes
+	//#endregion Classes
 
-//#region Typedefs
+	//#region Typedefs
 
 	export interface KlasaClientOptions extends ClientOptions {
 		commandEditing?: boolean;
@@ -1615,7 +1616,7 @@ declare module 'klasa' {
 		guildmember: 'GuildMember';
 	}
 
-//#endregion
+	//#endregion
 
 }
 
