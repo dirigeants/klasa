@@ -505,32 +505,33 @@ declare module 'klasa' {
 
 	export abstract class Provider extends Piece {
 		public constructor(store: ProviderStore, file: string[], directory: string, options?: ProviderOptions);
-		public abstract create(table: string, entry: string, data: any): Promise<any>;
-		public abstract createTable(table: string, rows?: any[]): Promise<any>;
-		public abstract delete(table: string, entry: string): Promise<any>;
-		public abstract deleteTable(table: string): Promise<any>;
-		public abstract get(table: string, entry: string): Promise<any>;
-		public abstract getAll(table: string): Promise<any[]>;
+		public abstract create(table: string, entry: string, data: any): Promise<unknown>;
+		public abstract createTable(table: string, rows?: any[]): Promise<unknown>;
+		public abstract delete(table: string, entry: string): Promise<unknown>;
+		public abstract deleteTable(table: string): Promise<unknown>;
+		public abstract get(table: string, entry: string): Promise<unknown>;
+		public abstract getAll(table: string): Promise<unknown[]>;
 		public abstract has(table: string, entry: string): Promise<boolean>;
 		public abstract hasTable(table: string): Promise<boolean>;
-		public abstract update(table: string, entry: string, data: SettingsFolderUpdateResult[] | [string, any][] | Record<string, any>): Promise<any>;
-		public abstract replace(table: string, entry: string, data: SettingsFolderUpdateResult[] | [string, any][] | Record<string, any>): Promise<any>;
+		public abstract update(table: string, entry: string, data: SettingsFolderUpdateResult[] | [string, unknown][] | Record<string, unknown>): Promise<unknown>;
+		public abstract replace(table: string, entry: string, data: SettingsFolderUpdateResult[] | [string, unknown][] | Record<string, unknown>): Promise<unknown>;
 		// The following is not required by SettingGateway but might be available in some providers
 		public getKeys(table: string): Promise<string[]>;
-		protected parseUpdateInput<T = Record<string, any>>(updated: T | Array<SettingsFolderUpdateResultEntry>): T;
-		public shutdown(): Promise<void>;
+		public shutdown(): Promise<unknown>;
 		public toJSON(): PieceProviderJSON;
+		protected parseUpdateInput<T = Record<string, unknown>>(updated: T | Array<SettingsFolderUpdateResultEntry>): T;
 	}
 
 	export abstract class SQLProvider extends Provider {
 		public abstract qb: QueryBuilder;
-		public abstract addColumn<T = any>(table: string, columns: SchemaFolder | SchemaEntry): Promise<T>;
-		public abstract removeColumn<T = any>(table: string, columns: string | string[]): Promise<T>;
-		public abstract updateColumn<T = any>(table: string, entry: SchemaEntry): Promise<T>;
+		public abstract addColumn(table: string, columns: SchemaFolder | SchemaEntry): Promise<unknown>;
+		public abstract removeColumn(table: string, columns: string | string[]): Promise<unknown>;
+		public abstract updateColumn(table: string, entry: SchemaEntry): Promise<unknown>;
 		public abstract getColumns(table: string): Promise<Array<string>>;
-		protected parseUpdateInput<T = [string, any]>(updated?: SettingsFolderUpdateResultEntry[] | [string, any][] | Record<string, any>, resolve?: boolean): T;
-		protected parseEntry<T = Record<string, any>>(gateway: string | Gateway, entry: Record<string, any>): T;
-		protected parseValue<T = any>(value: any, schemaEntry: SchemaEntry): T;
+		// @ts-ignore 2416
+		protected parseUpdateInput(updated?: SettingsFolderUpdateResult[] | [string, unknown][] | Record<string, unknown>, resolve?: boolean): [string[], unknown[]];
+		protected parseEntry(gateway: string | Gateway, entry: Record<string, unknown>): Record<string, unknown>;
+		protected parseValue(value: unknown, schemaEntry: SchemaEntry): unknown;
 		protected validateQueryBuilder(): void;
 		private _parseGatewayInput(updated: SettingsFolderUpdateResultEntry[], keys: string[], values: string[], resolve?: boolean): void;
 	}
