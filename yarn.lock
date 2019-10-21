@@ -333,6 +333,10 @@ entities@~1.1.1:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/entities/-/entities-1.1.2.tgz#bdfa735299664dfafd34529ed4f8522a275fea56"
 
+entities@~2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/entities/-/entities-2.0.0.tgz#68d6084cab1b079767540d80e56a39b423e4abf4"
+
 escape-string-regexp@^1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-1.0.5.tgz#1b61c0562190a8dff6ae3bb2cf0200ca130b86d4"
@@ -837,12 +841,12 @@ markdown-it-anchor@^5.0.2:
   version "5.2.4"
   resolved "https://registry.yarnpkg.com/markdown-it-anchor/-/markdown-it-anchor-5.2.4.tgz#d39306fe4c199705b4479d3036842cf34dcba24f"
 
-markdown-it@9.0.1:
-  version "9.0.1"
-  resolved "https://registry.yarnpkg.com/markdown-it/-/markdown-it-9.0.1.tgz#aafe363c43718720b6575fd10625cde6e4ff2d47"
+markdown-it@10.0.0:
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/markdown-it/-/markdown-it-10.0.0.tgz#abfc64f141b1722d663402044e43927f1f50a8dc"
   dependencies:
     argparse "^1.0.7"
-    entities "~1.1.1"
+    entities "~2.0.0"
     linkify-it "^2.0.0"
     mdurl "^1.0.1"
     uc.micro "^1.0.5"
@@ -857,9 +861,9 @@ markdown-it@^8.4.2:
     mdurl "^1.0.1"
     uc.micro "^1.0.5"
 
-markdownlint-cli@^0.18.0:
-  version "0.18.0"
-  resolved "https://registry.yarnpkg.com/markdownlint-cli/-/markdownlint-cli-0.18.0.tgz#bd1cee72739049d42dcea5f6db0c0f57c6eb8096"
+markdownlint-cli@^0.19.0:
+  version "0.19.0"
+  resolved "https://registry.yarnpkg.com/markdownlint-cli/-/markdownlint-cli-0.19.0.tgz#70ccd7334d667c94b3259b5dfc1978cf2199a6fd"
   dependencies:
     commander "~2.9.0"
     deep-extend "~0.5.1"
@@ -868,15 +872,20 @@ markdownlint-cli@^0.18.0:
     js-yaml "^3.13.1"
     lodash.differencewith "~4.5.0"
     lodash.flatten "~4.4.0"
-    markdownlint "~0.16.0"
+    markdownlint "~0.17.1"
+    markdownlint-rule-helpers "~0.5.0"
     minimatch "~3.0.4"
     rc "~1.2.7"
 
-markdownlint@~0.16.0:
-  version "0.16.0"
-  resolved "https://registry.yarnpkg.com/markdownlint/-/markdownlint-0.16.0.tgz#69f73cc755a44231fbe5dc7c37a5909cedc0ac6e"
+markdownlint-rule-helpers@~0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/markdownlint-rule-helpers/-/markdownlint-rule-helpers-0.5.0.tgz#316569329f2341b8066817292a6733ef56571301"
+
+markdownlint@~0.17.1:
+  version "0.17.1"
+  resolved "https://registry.yarnpkg.com/markdownlint/-/markdownlint-0.17.1.tgz#6dea34fd5858d16448d0f0cd9956feaa350003c0"
   dependencies:
-    markdown-it "9.0.1"
+    markdown-it "10.0.0"
 
 marked@^0.7.0:
   version "0.7.0"
