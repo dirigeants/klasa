@@ -21,8 +21,8 @@
   resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.5.5.tgz#02f077ac8817d3df4a832ef59de67565e71cca4b"
 
 "@types/node@^12.7.2":
-  version "12.11.1"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.11.1.tgz#1fd7b821f798b7fa29f667a1be8f3442bb8922a3"
+  version "12.11.4"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.11.4.tgz#0677fde59021b19502cf830a91159c2e15b70e04"
 
 acorn-jsx@^5.0.2:
   version "5.0.2"
