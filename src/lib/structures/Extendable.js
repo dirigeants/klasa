@@ -31,8 +31,10 @@ class Extendable extends Piece {
 		super(store, file, directory, options);
 
 		const staticPropertyNames = Object.getOwnPropertyNames(Object.getPrototypeOf(this.constructor))
+			.concat(Object.getOwnPropertyNames(this.constructor)
 			.filter(name => !['length', 'prototype', 'name'].includes(name));
 		const instancePropertyNames = Object.getOwnPropertyNames(Object.getPrototypeOf(this.constructor.prototype))
+			.concat(Object.getOwnPropertyNames(this.constructor.prototype)
 			.filter(name => name !== 'constructor');
 
 		/**
@@ -42,7 +44,7 @@ class Extendable extends Piece {
 		 * @private
 		 */
 		this.staticPropertyDescriptors = Object.assign({}, ...staticPropertyNames
-			.map(name => ({ [name]: Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.constructor), name) })));
+			.map(name => ({ [name]: Object.getOwnPropertyDescriptor(this.constructor, name) || Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.constructor), name) })));
 
 		/**
 		 * The instance property descriptors of this extendable
@@ -51,7 +53,7 @@ class Extendable extends Piece {
 		 * @private
 		 */
 		this.instancePropertyDescriptors = Object.assign({}, ...instancePropertyNames
-			.map(name => ({ [name]: Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.constructor.prototype), name) })));
+			.map(name => ({ [name]: Object.getOwnPropertyDescriptor(this.constructor.prototype, name) || Object.getOwnPropertyDescriptor(Object.getPrototypeOf(this.constructor.prototype), name) })));
 
 		/**
 		 * The original property descriptors for each of the original classes
