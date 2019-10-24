@@ -31,10 +31,10 @@ class Extendable extends Piece {
 		super(store, file, directory, options);
 
 		const staticPropertyNames = Object.getOwnPropertyNames(Object.getPrototypeOf(this.constructor))
-			.concat(Object.getOwnPropertyNames(this.constructor)
+			.concat(Object.getOwnPropertyNames(this.constructor))
 			.filter(name => !['length', 'prototype', 'name'].includes(name));
 		const instancePropertyNames = Object.getOwnPropertyNames(Object.getPrototypeOf(this.constructor.prototype))
-			.concat(Object.getOwnPropertyNames(this.constructor.prototype)
+			.concat(Object.getOwnPropertyNames(this.constructor.prototype))
 			.filter(name => name !== 'constructor');
 
 		/**
