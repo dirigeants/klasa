@@ -565,8 +565,8 @@ declare module 'klasa' {
 
 		protected registerCoreDirectory(directory: string): this;
 		public delete(name: K | V): boolean;
-		public get(key: K): V;
-		public get<T extends V>(key: K): T;
+		public get(key: K): V | undefined;
+		public get<T extends V>(key: K): T | undefined;
 		public init(): Promise<any[]>;
 		public load(directory: string, file: string[]): V;
 		public loadAll(): Promise<number>;
