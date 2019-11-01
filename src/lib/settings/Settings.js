@@ -54,15 +54,6 @@ class Settings extends SettingsFolder {
 	}
 
 	/**
-	 * Check whether this Settings is being synchronized in the Gateway's sync queue.
-	 * @since 0.5.0
-	 * @type {boolean}
-	 */
-	get synchronizing() {
-		return this.gateway.syncMap.has(this);
-	}
-
-	/**
 	 * Clone this instance.
 	 * @since 0.5.0
 	 * @returns {Settings}
@@ -79,24 +70,18 @@ class Settings extends SettingsFolder {
 	 * @param {boolean} [force=false] Whether the sync should download from the database
 	 * @returns {Promise<this>}
 	 */
-	sync(force = this.existenceStatus === null) {
-		// Await current sync status from the sync queue
-		const syncStatus = this.gateway.syncMap.get(this);
-		if (!force || syncStatus) return syncStatus || Promise.resolve(this);
+	async sync(force = this.existenceStatus === null) {
+		// If not force and the instance has already been synchronized with the database, return this
+		if (!force && this.existenceStatus !== null) return this;
 
-		// If it's not currently synchronizing, create a new sync status for the sync queue
-		const sync = this.gateway.provider.get(this.gateway.name, this.id).then(data => {
-			this.existenceStatus = Boolean(data);
-			if (data) {
-				this._patch(data);
-				this.gateway.client.emit('settingsSync', this);
-			}
-			this.gateway.syncMap.delete(this);
-			return this;
-		});
+		// Push a synchronization task to the request handler queue
+		const data = await this.gateway.requestHandler.push(this.id);
+		if (data) {
+			this._patch(data);
+			this.gateway.client.emit('settingsSync', this);
+		}
 
-		this.gateway.syncMap.set(this, sync);
-		return sync;
+		return this;
 	}
 
 	/**

@@ -81,15 +81,6 @@ class GatewayStorage {
 	}
 
 	/**
-	 * Sync placeholder to allow GatewayStorage to be registered
-	 * @since 0.5.0
-	 * @returns {this}
-	 */
-	async sync() {
-		return this;
-	}
-
-	/**
 	 * Inits the current Gateway.
 	 * @since 0.5.0
 	 */

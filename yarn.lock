@@ -20,6 +20,11 @@
   version "7.5.5"
   resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.5.5.tgz#02f077ac8817d3df4a832ef59de67565e71cca4b"
 
+"@klasa/request-handler@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@klasa/request-handler/-/request-handler-0.0.1.tgz#1e484f2e306479cd2e0bfeb75b36e4ed959509a9"
+  integrity sha512-Eq1YHUAcuG5ynl9pZv5JG1uchcfqUolIxapP4tvdJRHT4bS2ZVPVFtqOJ1vGEGscAO9/Po7DDab71hA/ccD2bA==
+
 "@types/node@^12.7.2":
   version "12.7.8"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-12.7.8.tgz#cb1bf6800238898bc2ff6ffa5702c3cadd350708"
@@ -336,7 +341,6 @@ dmd@^4.0.2:
 
 "docgen@github:dirigeants/docsgen":
   version "0.0.1"
-  uid "1992724286ebcdbfc59b9d7fa1baba91cbdd3669"
   resolved "https://codeload.github.com/dirigeants/docsgen/tar.gz/1992724286ebcdbfc59b9d7fa1baba91cbdd3669"
   dependencies:
     fs-nextra "^0.4.5"
@@ -376,7 +380,6 @@ escape-string-regexp@^2.0.0:
 
 "eslint-config-klasa@github:dirigeants/klasa-lint":
   version "0.0.1"
-  uid "28618d5bf851bffdb6775deb5937acfe2a1af25a"
   resolved "https://codeload.github.com/dirigeants/klasa-lint/tar.gz/28618d5bf851bffdb6775deb5937acfe2a1af25a"
 
 eslint-plugin-markdown@^1.0.0:
@@ -731,13 +734,6 @@ is-glob@^4.0.0, is-glob@^4.0.1:
 is-hexadecimal@^1.0.0:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/is-hexadecimal/-/is-hexadecimal-1.0.3.tgz#e8a426a69b6d31470d3a33a47bb825cda02506ee"
-
-is-path-inside@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/is-path-inside/-/is-path-inside-2.1.0.tgz#7c9810587d659a40d27bcdb4d5616eab059494b2"
-  integrity sha512-wiyhTzfDWsvwAW53OBWF5zuvaOGlZ6PwYxAbPVDhpm+gM09xKQGjBq/8uYN12aDvMxnAnq3dxTyoSoRNmg5YFg==
-  dependencies:
-    path-is-inside "^1.0.2"
 
 is-plain-obj@^1.1.0:
   version "1.1.0"

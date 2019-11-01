@@ -32,7 +32,6 @@ module.exports = class extends Event {
 		// Added for consistency with other datastores, Client#clients does not exist
 		clientStorage.cache.set(this.client.user.id, this.client);
 		this.client.settings = clientStorage.create(this.client, this.client.user.id);
-		await this.client.gateways.sync();
 
 		// Init the schedule
 		await this.client.schedule.init();
