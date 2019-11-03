@@ -77,8 +77,11 @@ class Settings extends SettingsFolder {
 		// Push a synchronization task to the request handler queue
 		const data = await this.gateway.requestHandler.push(this.id);
 		if (data) {
+			this.existenceStatus = true;
 			this._patch(data);
 			this.gateway.client.emit('settingsSync', this);
+		} else {
+			this.existenceStatus = false;
 		}
 
 		return this;
