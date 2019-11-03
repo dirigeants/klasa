@@ -20,7 +20,7 @@
     "docs": "npx dg --source src --custom guides/.docconfig.json --output dist/docs.json --logging"
   },
   "dependencies": {
-    "@klasa/request-handler": "^0.0.2",
+    "@klasa/request-handler": "^0.0.3",
     "fs-nextra": "^0.4.5"
   },
   "peerDependencies": {
