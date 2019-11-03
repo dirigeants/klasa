@@ -69,6 +69,16 @@ class Gateway extends GatewayStorage {
 		return settings;
 	}
 
+	/**
+	 * Runs a synchronization task for the gateway.
+	 * @since 0.5.0
+	 * @returns {this}
+	 */
+	async sync() {
+		await this.requestHandler.wait();
+		return this;
+	}
+
 }
 
 module.exports = Gateway;

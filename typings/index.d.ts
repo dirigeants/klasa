@@ -304,6 +304,7 @@ declare module 'klasa' {
 		private readonly _provider: string;
 		public ready: boolean;
 		public init(): Promise<void>;
+		public sync(): Promise<this>;
 		public toJSON(): GatewayJSON;
 		public toString(): string;
 	}

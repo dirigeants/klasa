@@ -125,6 +125,15 @@ class GatewayStorage {
 	}
 
 	/**
+	 * Runs a synchronization task for the gateway.
+	 * @since 0.5.0
+	 * @returns {Promise<this>}
+	 */
+	sync() {
+		return Promise.resolve(this);
+	}
+
+	/**
 	 * Get a JSON object containing the schema and options.
 	 * @since 0.5.0
 	 * @returns {GatewayJSON}
