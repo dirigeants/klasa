@@ -20,10 +20,10 @@
   version "7.5.5"
   resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.5.5.tgz#02f077ac8817d3df4a832ef59de67565e71cca4b"
 
-"@klasa/request-handler@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@klasa/request-handler/-/request-handler-0.0.1.tgz#1e484f2e306479cd2e0bfeb75b36e4ed959509a9"
-  integrity sha512-Eq1YHUAcuG5ynl9pZv5JG1uchcfqUolIxapP4tvdJRHT4bS2ZVPVFtqOJ1vGEGscAO9/Po7DDab71hA/ccD2bA==
+"@klasa/request-handler@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@klasa/request-handler/-/request-handler-0.0.2.tgz#45d43bd287e5c480731cfca597a31d908ea77b4d"
+  integrity sha512-pCc2b9Qdetzb3W5A02HR+4CpLRTmVmnq0hOS0oVI7d6u82JsD9MHQUkpMCfcBEMe3WZ+HPMyXiPFG+7+jo7/VQ==
 
 "@types/node@^12.7.2":
   version "12.7.8"
