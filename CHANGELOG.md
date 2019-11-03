@@ -265,7 +265,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Removed
 
-- [[#862](https://github.com/dirigeants/klasa/pull/862)] Removed `GatewayStorage#sync()`. (kyranet)
+- [[#862](https://github.com/dirigeants/klasa/pull/862)] Removed `GatewayDriver#sync()`. (kyranet)
 - [[#862](https://github.com/dirigeants/klasa/pull/862)] Removed `Settings#synchronizing`. (kyranet)
 - [[#480](https://github.com/dirigeants/klasa/pull/480)] Removed `Gateway#store`. (kyranet)
 - [[#471](https://github.com/dirigeants/klasa/pull/471)] Removed `Gateway#defaults`. Refer to `Schema#defaults` instead. (kyranet)
