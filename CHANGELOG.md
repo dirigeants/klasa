@@ -14,6 +14,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Added
 
+- [[#862](https://github.com/dirigeants/klasa/pull/862)] Added `@klasa/request-handler` as a dependency. (kyranet)
 - [[#525](https://github.com/dirigeants/klasa/pull/525)] Add GatewayStorage#sync so they can be registered. (kyranet)
 - [[#487](https://github.com/dirigeants/klasa/pull/487)] Added Settings#resolve(...paths) (UnseenFaith)
 - [[#477](https://github.com/dirigeants/klasa/pull/477)] Added core `KlasaClient#settingsDelete` event handler to destroy instances in other shards. (kyranet)
@@ -134,6 +135,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Changed
 
+- [[#862](https://github.com/dirigeants/klasa/pull/862)] Changed `Gateway#syncMap` to `Gateway#requestHandler`, former being a `WeakMap`, latter being a `RequestHandler`. (kyranet)
 - [[#828](https://github.com/dirigeants/klasa/pull/828)] Moved all SettingsGateway related options into a namespaced `settings` option. (UnseenFaith)
 - [[#814](https://github.com/dirigeants/klasa/pull/814)] Changed `Settings#get` to always deep clone values. (UnseenFaith)
 - [[#807](https://github.com/dirigeants/klasa/pull/807)] Changed `Language#get`'s generic types to include an array of function values. (Favna)
@@ -263,6 +265,8 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Removed
 
+- [[#862](https://github.com/dirigeants/klasa/pull/862)] Removed `GatewayDriver#sync()`. (kyranet)
+- [[#862](https://github.com/dirigeants/klasa/pull/862)] Removed `Settings#synchronizing`. (kyranet)
 - [[#480](https://github.com/dirigeants/klasa/pull/480)] Removed `Gateway#store`. (kyranet)
 - [[#471](https://github.com/dirigeants/klasa/pull/471)] Removed `Gateway#defaults`. Refer to `Schema#defaults` instead. (kyranet)
 - [[#426](https://github.com/dirigeants/klasa/pull/426)] Removed `Gateway#getPath`. They're now resolved inside Settings. (kyranet)

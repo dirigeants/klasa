@@ -1,6 +1,7 @@
 const GatewayStorage = require('./GatewayStorage');
 const Settings = require('../Settings');
 const { Collection } = require('discord.js');
+const { RequestHandler } = require('@klasa/request-handler');
 
 /**
  * The Gateway class for persistent data interaction with a cache layer
@@ -25,18 +26,12 @@ class Gateway extends GatewayStorage {
 		this.cache = (name in this.client) && this.client[name] instanceof Map ? this.client[name] : new Collection();
 
 		/**
-		 * The synchronization queue for all Settings instances
+		 * The request handler that manages the synchronization queue
 		 * @since 0.5.0
-		 * @type {WeakMap<string, Promise<Settings>>}
+		 * @type {RequestHandler<string, *>}
+		 * @protected
 		 */
-		this.syncMap = new WeakMap();
-
-		/**
-		 * @since 0.5.0
-		 * @type {boolean}
-		 * @private
-		 */
-		Object.defineProperty(this, '_synced', { value: false, writable: true });
+		this.requestHandler = new RequestHandler(id => this.provider.get(this.name, id), ids => this.provider.getAll(this.name, ids));
 	}
 
 	/**
@@ -70,42 +65,18 @@ class Gateway extends GatewayStorage {
 	 */
 	create(target, id = target.id) {
 		const settings = new Settings(this, target, id);
-		if (this._synced && this.schema.size) settings.sync(true).catch(err => this.client.emit('error', err));
+		if (this.schema.size !== 0) settings.sync(true).catch(err => this.client.emit('error', err));
 		return settings;
 	}
 
 	/**
-	 * Sync either all entries from the cache with the persistent database, or a single one.
-	 * @since 0.0.1
-	 * @param {(Array<string>|string)} [input=Array<string>] An object containing a id property, like discord.js objects, or a string
-	 * @returns {?(Gateway|Settings)}
+	 * Runs a synchronization task for the gateway.
+	 * @since 0.5.0
+	 * @returns {this}
 	 */
-	async sync(input) {
-		// If the schema is empty, there's no point on running any operation
-		if (!this.schema.size) return this;
-		if (typeof input === 'undefined') input = [...this.cache.keys()];
-		if (Array.isArray(input)) {
-			this._synced = true;
-			const entries = await this.provider.getAll(this.name, input);
-			for (const entry of entries) {
-				if (!entry) continue;
-				const cache = this.get(entry.id);
-				if (cache) {
-					cache.existenceStatus = true;
-					cache._patch(entry);
-					this.client.emit('settingsSync', cache);
-				}
-			}
-
-			// Set all the remaining settings from unknown status in DB to not exists.
-			for (const entry of this.cache.values()) {
-				if (entry.settings.existenceStatus === null) entry.settings.existenceStatus = false;
-			}
-			return this;
-		}
-
-		const cache = this.get((input && input.id) || input);
-		return cache ? cache.sync(true) : null;
+	async sync() {
+		await this.requestHandler.wait();
+		return this;
 	}
 
 }

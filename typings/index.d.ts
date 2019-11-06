@@ -46,6 +46,10 @@ declare module 'klasa' {
 		WebhookClient
 	} from 'discord.js';
 
+	import {
+		RequestHandler
+	} from '@klasa/request-handler';
+
 	export const version: string;
 
 //#region Classes
@@ -248,11 +252,10 @@ declare module 'klasa' {
 	}
 
 	export class Settings extends SettingsFolder {
-		public constructor(manager: Gateway, target: any, id: string);
+		public constructor(manager: Gateway, target: unknown, id: string);
 		public readonly id: string;
 		public readonly gateway: Gateway;
-		public readonly target: any;
-		public readonly synchronizing: boolean;
+		public readonly target: unknown;
 		private existenceStatus: boolean | null;
 		public clone(): Settings;
 		public sync(force?: boolean): Promise<this>;
@@ -266,21 +269,17 @@ declare module 'klasa' {
 
 		public register(gateway: GatewayStorage): this;
 		public init(): Promise<void>;
-		public sync(input?: string[] | string): Promise<Array<Gateway>>;
 
 		public toJSON(): GatewayDriverJSON;
 		public toString(): string;
 	}
 
 	export class Gateway extends GatewayStorage {
-		protected syncMap: WeakMap<Settings, Promise<Settings>>;
+		protected requestHandler: RequestHandler<string, Record<string, unknown> & { id: string }>;
 		public cache: Collection<string, Record<string, any> & { settings: Settings }>;
 		public acquire(target: any, id?: string | number): Settings;
 		public create(target: any, id?: string | number): Settings;
 		public get(id: string | number): Settings | null;
-		public sync(input: string): Promise<Settings>;
-		public sync(input?: string[]): Promise<this>;
-		public sync(input?: string | string[]): Promise<Settings | this>;
 	}
 
 	export class QueryBuilder extends Map<string, Required<QueryBuilderDatatype>> {
@@ -304,8 +303,8 @@ declare module 'klasa' {
 		public readonly schema: SchemaFolder;
 		private readonly _provider: string;
 		public ready: boolean;
-		public sync(): Promise<this>;
 		public init(): Promise<void>;
+		public sync(): Promise<this>;
 		public toJSON(): GatewayJSON;
 		public toString(): string;
 	}

@@ -81,15 +81,6 @@ class GatewayStorage {
 	}
 
 	/**
-	 * Sync placeholder to allow GatewayStorage to be registered
-	 * @since 0.5.0
-	 * @returns {this}
-	 */
-	async sync() {
-		return this;
-	}
-
-	/**
 	 * Inits the current Gateway.
 	 * @since 0.5.0
 	 */
@@ -131,6 +122,15 @@ class GatewayStorage {
 			for (const [key, entry] of this.schema.paths) if (!columns.includes(key)) promises.push(provider.addColumn(this.name, entry));
 			await Promise.all(promises);
 		}
+	}
+
+	/**
+	 * Runs a synchronization task for the gateway.
+	 * @since 0.5.0
+	 * @returns {Promise<this>}
+	 */
+	sync() {
+		return Promise.resolve(this);
 	}
 
 	/**

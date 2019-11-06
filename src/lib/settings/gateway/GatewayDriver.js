@@ -74,16 +74,6 @@ class GatewayDriver extends Collection {
 	}
 
 	/**
-	 * Sync all gateways
-	 * @since 0.5.0
-	 * @param {(string|string[])} [input] The arguments to pass to each Gateway#sync
-	 * @returns {Promise<Array<Gateway>>}
-	 */
-	sync(input) {
-		return Promise.all([...this].map(([key, gateway]) => gateway.sync(typeof input === 'undefined' ? this.client.options.settings.gateways[key].syncArg : input)));
-	}
-
-	/**
 	 * The GatewayDriver with all gateways, types and keys as JSON.
 	 * @since 0.5.0
 	 * @returns {Object}
