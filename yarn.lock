@@ -513,8 +513,8 @@ flatted@^2.0.0:
   resolved "https://registry.yarnpkg.com/flatted/-/flatted-2.0.1.tgz#69e57caa8f0eacbc281d2e2cb458d46fdb449e08"
 
 fs-nextra@^0.4.5:
-  version "0.4.5"
-  resolved "https://registry.yarnpkg.com/fs-nextra/-/fs-nextra-0.4.5.tgz#0f44a00dd6c0547adaf59ce875e59941d0c70664"
+  version "0.4.6"
+  resolved "https://registry.yarnpkg.com/fs-nextra/-/fs-nextra-0.4.6.tgz#db83e1c8d451caad804ff1478e399875f7134c94"
 
 fs-then-native@^2.0.0:
   version "2.0.0"
