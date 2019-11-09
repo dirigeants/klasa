@@ -68,7 +68,7 @@ class Settings extends SettingsFolder {
 	 * Sync the data from the database with the cache.
 	 * @since 0.5.0
 	 * @param {boolean} [force=false] Whether the sync should download from the database
-	 * @returns {Promise<this>}
+	 * @returns {this}
 	 */
 	async sync(force = this.existenceStatus === null) {
 		// If not force and the instance has already been synchronized with the database, return this
