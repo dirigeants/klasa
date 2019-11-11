@@ -308,10 +308,10 @@ dmd@^4.0.4:
 
 "docgen@github:dirigeants/docsgen":
   version "0.0.1"
-  uid "83ca7708c72e29300750d0062d625407ff6a8e08"
-  resolved "https://codeload.github.com/dirigeants/docsgen/tar.gz/83ca7708c72e29300750d0062d625407ff6a8e08"
+  uid d8711776dc02342cf68f522d310d26ffdc1b79db
+  resolved "https://codeload.github.com/dirigeants/docsgen/tar.gz/d8711776dc02342cf68f522d310d26ffdc1b79db"
   dependencies:
-    fs-nextra "^0.4.5"
+    fs-nextra "^0.4.6"
     jsdoc-to-markdown "^5.0.2"
     yargs "^14.2.0"
 
@@ -512,9 +512,9 @@ flatted@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/flatted/-/flatted-2.0.1.tgz#69e57caa8f0eacbc281d2e2cb458d46fdb449e08"
 
-fs-nextra@^0.4.5:
-  version "0.4.5"
-  resolved "https://registry.yarnpkg.com/fs-nextra/-/fs-nextra-0.4.5.tgz#0f44a00dd6c0547adaf59ce875e59941d0c70664"
+fs-nextra@^0.4.5, fs-nextra@^0.4.6:
+  version "0.4.6"
+  resolved "https://registry.yarnpkg.com/fs-nextra/-/fs-nextra-0.4.6.tgz#db83e1c8d451caad804ff1478e399875f7134c94"
 
 fs-then-native@^2.0.0:
   version "2.0.0"
