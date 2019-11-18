@@ -292,7 +292,7 @@ module.exports = Structures.extend('Message', Message => {
 			this.prompter = null;
 
 			try {
-				const prefix = this._customPrefix() || this._mentionPrefix() || this._naturalPrefix() || this._prefixLess();
+				const prefix = this._mentionPrefix() || this._customPrefix() || this._naturalPrefix() || this._prefixLess();
 
 				if (!prefix) return;
 
