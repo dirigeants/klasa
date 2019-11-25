@@ -28,7 +28,7 @@
   "devDependencies": {
     "@types/node": "^12.7.2",
     "docgen": "github:dirigeants/docsgen",
-    "eslint": "^6.2.1",
+    "eslint": "^6.7.1",
     "eslint-config-klasa": "github:dirigeants/klasa-lint",
     "eslint-plugin-markdown": "^1.0.0",
     "markdownlint-cli": "^0.18.0",
