@@ -212,7 +212,7 @@ declare module 'klasa' {
 
 		private running: boolean;
 
-		public readonly task?: Task;
+		public readonly task: Task | null;
 		public run(): Promise<this>;
 		public update(options?: ScheduledTaskUpdateOptions): Promise<this>;
 		public delete(): Promise<Schedule>;
