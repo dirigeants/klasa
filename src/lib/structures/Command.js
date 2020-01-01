@@ -185,7 +185,7 @@ class Command extends AliasPiece {
 		 * @since 0.0.1
 		 * @type {CommandUsage}
 		 */
-		this.usage = new CommandUsage(this.client, options.usage, options.usageDelim, this);
+		this.usage = new CommandUsage(this, options.usage, options.usageDelim);
 
 		/**
 		 * The level at which cooldowns should apply
