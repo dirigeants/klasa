@@ -1,7 +1,7 @@
 module.exports = {
 	// KlasaClient
-	Client: require('./lib/Client'),
 	KlasaClient: require('./lib/Client'),
+	Client: require('./lib/Client'),
 
 	// lib/extensions
 	KlasaGuild: require('./lib/extensions/KlasaGuild'),
@@ -15,16 +15,6 @@ module.exports = {
 	// lib/schedule
 	Schedule: require('./lib/schedule/Schedule'),
 	ScheduledTask: require('./lib/schedule/ScheduledTask'),
-
-	// lib/settings
-	Settings: require('./lib/settings/Settings'),
-	SettingsFolder: require('./lib/settings/SettingsFolder'),
-	Gateway: require('./lib/settings/gateway/Gateway'),
-	GatewayDriver: require('./lib/settings/gateway/GatewayDriver'),
-	GatewayStorage: require('./lib/settings/gateway/GatewayStorage'),
-	Schema: require('./lib/settings/schema/Schema'),
-	SchemaFolder: require('./lib/settings/schema/SchemaFolder'),
-	SchemaEntry: require('./lib/settings/schema/SchemaEntry'),
 
 	// lib/structures/base
 	AliasPiece: require('./lib/structures/base/AliasPiece'),
@@ -50,11 +40,6 @@ module.exports = {
 	Monitor: require('./lib/structures/Monitor'),
 	MonitorStore: require('./lib/structures/MonitorStore'),
 	MultiArgument: require('./lib/structures/MultiArgument'),
-	Provider: require('./lib/structures/Provider'),
-	ProviderStore: require('./lib/structures/ProviderStore'),
-	Serializer: require('./lib/structures/Serializer'),
-	SerializerStore: require('./lib/structures/SerializerStore'),
-	SQLProvider: require('./lib/structures/SQLProvider'),
 	Task: require('./lib/structures/Task'),
 	TaskStore: require('./lib/structures/TaskStore'),
 
@@ -72,7 +57,6 @@ module.exports = {
 	constants: require('./lib/util/constants'),
 	Cron: require('./lib/util/Cron'),
 	Duration: require('./lib/util/Duration'),
-	QueryBuilder: require('./lib/util/QueryBuilder'),
 	RateLimit: require('./lib/util/RateLimit'),
 	RateLimitManager: require('./lib/util/RateLimitManager'),
 	ReactionHandler: require('./lib/util/ReactionHandler'),
@@ -86,6 +70,9 @@ module.exports = {
 	// version
 	version: require('../package').version
 };
+
+Object.assign(module.exports, require('@klasa/querybuilder'));
+Object.assign(module.exports, require('@klasa/settings-gateway'));
 
 /**
  * @external Channel

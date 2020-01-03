@@ -6,7 +6,7 @@ module.exports = class extends Serializer {
 		super(...args, { aliases: ['integer', 'float'] });
 	}
 
-	async deserialize(data, entry, language) {
+	async validate(data, { entry, language }) {
 		let number;
 		switch (entry.type) {
 			case 'integer':

@@ -2,7 +2,7 @@ const { Serializer } = require('klasa');
 
 module.exports = class extends Serializer {
 
-	async deserialize(data, entry, language) {
+	async validate(data, { entry, language }) {
 		let user = this.client.users.resolve(data);
 		if (user) return user;
 		if (this.constructor.regex.userOrMember.test(data)) user = await this.client.users.fetch(this.constructor.regex.userOrMember.exec(data)[1]).catch(() => null);

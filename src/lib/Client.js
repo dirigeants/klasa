@@ -17,18 +17,10 @@ const FinalizerStore = require('./structures/FinalizerStore');
 const InhibitorStore = require('./structures/InhibitorStore');
 const LanguageStore = require('./structures/LanguageStore');
 const MonitorStore = require('./structures/MonitorStore');
-const ProviderStore = require('./structures/ProviderStore');
-const SerializerStore = require('./structures/SerializerStore');
 const TaskStore = require('./structures/TaskStore');
 
 // lib/extensions
 const KlasaUserStore = require('./extensions/KlasaUserStore');
-
-// lib/settings
-const GatewayDriver = require('./settings/gateway/GatewayDriver');
-
-// lib/settings/schema
-const Schema = require('./settings/schema/Schema');
 
 // lib/util
 const KlasaConsole = require('./util/KlasaConsole');
@@ -146,6 +138,9 @@ class KlasaClient extends Discord.Client {
 		if (!util.isObject(options)) throw new TypeError('The Client Options for Klasa must be an object.');
 		options = util.mergeDefault(DEFAULTS.CLIENT, options);
 		super(options);
+
+		// Requiring here to avoid circular dependencies
+		const { SerializerStore, ProviderStore, GatewayDriver } = require('@klasa/settings-gateway');
 
 		/**
 		 * The options the client was instantiated with.
@@ -323,6 +318,8 @@ class KlasaClient extends Discord.Client {
 		 */
 		this.mentionPrefix = null;
 
+		this.constructor.registerGateways(this);
+
 		// Run all plugin functions in this context
 		for (const plugin of plugins) plugin.call(this);
 	}
@@ -478,6 +475,40 @@ class KlasaClient extends Discord.Client {
 		return this;
 	}
 
+	/**
+	 * Register all built-in gateways
+	 * @since 0.5.0
+	 * @param {KlasaClient} client The client to register the gateways into
+	 * @private
+	 */
+	static registerGateways(client) {
+		const { Gateway } = require('@klasa/settings-gateway');
+
+		// Setup default gateways and adjust client options as necessary
+		const { guilds, users, clientStorage } = client.options.settings.gateways;
+		guilds.schema = 'schema' in guilds ? guilds.schema : client.constructor.defaultGuildSchema;
+		users.schema = 'schema' in users ? users.schema : client.constructor.defaultUserSchema;
+		clientStorage.schema = 'schema' in clientStorage ? clientStorage.schema : client.constructor.defaultClientSchema;
+
+		const prefix = guilds.schema.get('prefix');
+		const language = guilds.schema.get('language');
+
+		if (!prefix || prefix.default === null) {
+			guilds.schema.add('prefix', 'string', { array: Array.isArray(client.options.prefix), default: client.options.prefix });
+		}
+
+		if (!language || language.default === null) {
+			guilds.schema.add('language', 'language', { default: client.options.language });
+		}
+
+		guilds.schema.add('disableNaturalPrefix', 'boolean', { configurable: Boolean(client.options.regexPrefix) });
+
+		client.gateways
+			.register(new Gateway(client, 'guilds', guilds))
+			.register(new Gateway(client, 'users', users))
+			.register(new Gateway(client, 'clientStorage', clientStorage));
+	}
+
 }
 
 module.exports = KlasaClient;
@@ -508,6 +539,8 @@ KlasaClient.defaultPermissionLevels = new PermissionLevels()
 	.add(9, ({ author, client }) => client.owners.has(author), { break: true })
 	.add(10, ({ author, client }) => client.owners.has(author));
 
+// Requiring here to avoid circular dependencies
+const { Schema } = require('@klasa/settings-gateway/dist/lib/schema/Schema');
 
 /**
  * The default Guild Schema
@@ -520,7 +553,7 @@ KlasaClient.defaultGuildSchema = new Schema()
 	.add('disableNaturalPrefix', 'boolean')
 	.add('disabledCommands', 'command', {
 		array: true,
-		filter: (client, command, entry, language) => {
+		filter: (client, command, { language }) => {
 			if (command.guarded) throw language.get('COMMAND_CONF_GUARDED', command.name);
 		}
 	});
