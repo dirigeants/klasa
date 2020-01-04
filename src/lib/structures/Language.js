@@ -43,7 +43,7 @@ class Language extends Piece {
 			const loc = join(core, ...this.file);
 			if (this.dir !== core && await pathExists(loc)) {
 				try {
-					const CorePiece = require(loc);
+					const CorePiece = (req => req.default || req)(require(loc));
 					if (!isClass(CorePiece)) return;
 					const coreLang = new CorePiece(this.client, this.store, this.file, true);
 					this.language = mergeDefault(coreLang.language, this.language);
