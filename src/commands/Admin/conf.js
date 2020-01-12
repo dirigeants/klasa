@@ -33,7 +33,7 @@ module.exports = class extends Command {
 
 		const value = key ? message.guild.settings.get(key) : message.guild.settings;
 		if (schemaOrEntry.type !== 'Folder') {
-			return message.sendLocale('COMMAND_CONF_GET', [key, this.displayEntry(schemaOrEntry, message.guild.settings.get(key), message.guild)]);
+			return message.sendLocale('COMMAND_CONF_GET', [key, this.displayEntry(schemaOrEntry, value, message.guild)]);
 		}
 
 		return message.sendLocale('COMMAND_CONF_SERVER', [
