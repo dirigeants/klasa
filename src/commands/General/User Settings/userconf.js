@@ -29,7 +29,7 @@ module.exports = class extends Command {
 
 	show(message, [key]) {
 		const schemaOrEntry = this.configurableSchemaKeys.get(key);
-		if (typeof schemaOrEntry === 'undefined') throw message.language.tget('COMMAND_CONF_GET_NOEXT', key);
+		if (typeof schemaOrEntry === 'undefined') throw message.language.get('COMMAND_CONF_GET_NOEXT', key);
 
 		const value = key ? message.author.settings.get(key) : message.author.settings;
 		if (schemaOrEntry.type !== 'Folder') {
