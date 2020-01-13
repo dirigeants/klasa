@@ -31,7 +31,7 @@ A more in-depth vision of arguments is that they are *arrays* of "possibles", th
 
 ## Repeating arguments
 
-Unlike in CLI, repeating arguments are **only** written as `[...]` and goes at the end of usage, making the last argument repeating. What does this mean? Let's say you want to have a [**choice**](https://github.com/dirigeants/klasa-pieces/blob/master/commands/Fun/choice.js) command, then you may want the user to write in multiple arguments, more likely with `,` as **usageDelim** to separate them. They you may put `<choice:string> [...]`, which makes the command take one or more parameters of this type.
+Unlike in CLI, repeating arguments are **only** written as `[...]` and goes at the end of usage, making the last argument repeating. What does this mean? Let's say you want to have a [**choice**](https://github.com/dirigeants/klasa-pieces/blob/master/commands/Fun/choice.js) command, then you may want the user to write in multiple arguments, more likely with `,` as **usageDelim** to separate them. Then you may put `<choice:string> [...]`, which makes the command take one or more parameters of this type.
 
 Unlike normal arguments, a repeating one can resolve into one or more parameters, all of the same type (or of the first one that resolves if using multiple possibles), that being said, it's advisable to use the [spread syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_operator) for arrays if you have multiple arguments.
 
