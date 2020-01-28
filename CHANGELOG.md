@@ -291,6 +291,7 @@ NOTE: For the contributors, you add new entries to this document following this 
 
 ### Fixed
 
+- [] Fixed shard count in the stats command.
 - [[#383](https://github.com/dirigeants/klasa/pull/383)] Fixed abstract `SQLProvider#qb` property being missing in typings. (kyranet)
 - [[#362](https://github.com/dirigeants/klasa/pull/362)] Fixed object mutation in `GatewayDriver#toJSON()`. (kyranet)
 - [[#355](https://github.com/dirigeants/klasa/pull/355)] Fixed Schedule not deleting entries that do not exist in ClientStorage but are still cached in Schedule#tasks. (kyranet)
