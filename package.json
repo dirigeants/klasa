@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@klasa/querybuilder": "^0.0.1",
-    "@klasa/settings-gateway": "^0.0.9",
+    "@klasa/settings-gateway": "^0.0.10",
     "fs-nextra": "^0.4.5"
   },
   "peerDependencies": {

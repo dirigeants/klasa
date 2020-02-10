@@ -37,10 +37,10 @@
   resolved "https://registry.yarnpkg.com/@klasa/request-handler/-/request-handler-0.0.3.tgz#ed72de611ece3dd99725cb797fc13e07bb05e618"
   integrity sha512-Z1O+Aa2kW/I4Uos4EZalByveIuQKRfuRx+JCsgsogDBd95N5Ub47AH+LEd5i+uzjnJ6iDHfodpVlaHojJ4Q+ZQ==
 
-"@klasa/settings-gateway@^0.0.9":
-  version "0.0.9"
-  resolved "https://registry.yarnpkg.com/@klasa/settings-gateway/-/settings-gateway-0.0.9.tgz#c56b97594e32eaa42a6adbab263f6b604430280e"
-  integrity sha512-HnXHPpuOBpwDFDCHBJc9wOKIMcXQqYNA60bwpW7VcyggqPBbP903ctFxUkzKLuaCg+le7XKw/KDS12Nt1gaFRA==
+"@klasa/settings-gateway@^0.0.10":
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/@klasa/settings-gateway/-/settings-gateway-0.0.10.tgz#aff30bb639d6a64861efbe6602fb2ef0d382c182"
+  integrity sha512-bz+b0I2qmcfA75RY4Cjzgig9+5Bw/EhE4g7bAETjBQXkxea1ed7rWQHgQiIVAErm9sgy69/7NIK5JoFXZZs68A==
   dependencies:
     "@discordjs/collection" "^0.1.3"
     "@klasa/querybuilder" "^0.0.1"
