@@ -32,7 +32,7 @@ class Gateway extends GatewayStorage {
 		 * @since 0.0.1
 		 * @type {external:Collection<string, Settings>|external:DataStore}
 		 */
-		this.cache = (type in this.client) && this.client[type] instanceof Map ? this.client[type] : new Collection();
+		this.cache = (type in this.client) && this.client[type].cache instanceof Map ? this.client[type].cache : new Collection();
 
 		/**
 		 * The synchronization queue for all Settings instances
