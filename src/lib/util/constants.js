@@ -27,7 +27,7 @@ exports.DEFAULTS = {
 		noPrefixDM: false,
 		prefix: '',
 		preserveSettings: true,
-		readyMessage: (client) => `Successfully initialized. Ready to serve ${client.guilds.size} guild${client.guilds.size === 1 ? '' : 's'}.`,
+		readyMessage: (client) => `Successfully initialized. Ready to serve ${client.guilds.cache.size} guild${client.guilds.cache.size === 1 ? '' : 's'}.`,
 		typing: false,
 		customPromptDefaults: {
 			time: 30000,
