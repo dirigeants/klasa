@@ -29,9 +29,7 @@ module.exports = class extends Command {
 			queries[Number(type === 'guild')].push(userOrGuild.id || userOrGuild);
 		}
 
-		const { errors } = await this.client.settings.update([['userBlacklist', queries[0]], ['guildBlacklist', queries[1]]]);
-		if (errors.length) throw String(errors[0]);
-
+		await this.client.settings.update([['userBlacklist', queries[0]], ['guildBlacklist', queries[1]]]);
 		return message.sendLocale('COMMAND_BLACKLIST_SUCCESS', changes);
 	}
 
