@@ -5,7 +5,7 @@ module.exports = class extends Serializer {
 
 	async deserialize(data, entry, language) {
 		if (data instanceof Guild) return data;
-		const guild = this.constructor.regex.channel.test(data) ? this.client.guilds.get(data) : null;
+		const guild = this.constructor.regex.channel.test(data) ? this.client.guilds.cache.get(data) : null;
 		if (guild) return guild;
 		throw language.get('RESOLVER_INVALID_GUILD', entry.key);
 	}
@@ -15,7 +15,7 @@ module.exports = class extends Serializer {
 	}
 
 	stringify(value) {
-		return (this.client.guilds.get(value) || { name: value }).name;
+		return (this.client.guilds.cache.get(value) || { name: value }).name;
 	}
 
 };

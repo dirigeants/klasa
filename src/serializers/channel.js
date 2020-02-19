@@ -19,7 +19,7 @@ module.exports = class extends Serializer {
 
 	async deserialize(data, entry, language, guild) {
 		if (data instanceof Channel) return this.checkChannel(data, entry, language);
-		const channel = this.constructor.regex.channel.test(data) ? (guild || this.client).channels.get(this.constructor.regex.channel.exec(data)[1]) : null;
+		const channel = this.constructor.regex.channel.test(data) ? (guild || this.client).channels.cache.get(this.constructor.regex.channel.exec(data)[1]) : null;
 		if (channel) return this.checkChannel(channel, entry, language);
 		throw language.get('RESOLVER_INVALID_CHANNEL', entry.key);
 	}
@@ -29,7 +29,7 @@ module.exports = class extends Serializer {
 	}
 
 	stringify(value, message) {
-		return (message.guild.channels.get(value) || { name: (value && value.name) || value }).name;
+		return (message.guild.channels.cache.get(value) || { name: (value && value.name) || value }).name;
 	}
 
 };

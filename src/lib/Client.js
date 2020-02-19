@@ -347,7 +347,7 @@ class KlasaClient extends Discord.Client {
 	get owners() {
 		const owners = new Set();
 		for (const owner of this.options.owners) {
-			const user = this.users.get(owner);
+			const user = this.users.cache.get(owner);
 			if (user) owners.add(user);
 		}
 		return owners;
@@ -453,7 +453,7 @@ class KlasaClient extends Discord.Client {
 			if (!channel.messages) continue;
 			channels++;
 
-			channel.messages.sweep(message => {
+			channel.messages.cache.sweep(message => {
 				if ((message.command || message.author === this.user) && now - (message.editedTimestamp || message.createdTimestamp) > commandLifetimeMs) return commandMessages++;
 				if (!message.command && message.author !== this.user && now - (message.editedTimestamp || message.createdTimestamp) > lifetimeMs) return messages++;
 				return false;

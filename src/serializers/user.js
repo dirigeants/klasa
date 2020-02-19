@@ -15,7 +15,7 @@ module.exports = class extends Serializer {
 	}
 
 	stringify(value) {
-		return (this.client.users.get(value) || { username: (value && value.username) || value }).username;
+		return (this.client.users.cache.get(value) || { username: (value && value.username) || value }).username;
 	}
 
 };
