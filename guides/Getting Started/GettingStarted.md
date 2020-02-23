@@ -29,13 +29,13 @@ new Client({
 {@typedef KlasaClientOptions}
 
 >1. ownerID is acquired from the Discord API if not provided: `client.application.owner.id`
->1. quotedStringSupport is can be overridden per command.
+>1. quotedStringSupport can be overridden per command.
 
 > KlasaClientOptions are merged with discord.js' ClientOptions, see [ClientOptions in the discord.js docs](https://discord.js.org/#/docs/main/master/typedef/ClientOptions).
 
 ## Running the bot
 
-Then, run the following in your folder:
+Then, run the following command in your folder:
 
 ```sh
 npm install
