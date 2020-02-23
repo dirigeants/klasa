@@ -126,6 +126,10 @@
         "path": "RichMenu.md"
     },
     {
+        "name": "Manage your bot process with PM2",
+        "path": "ManageProcess.md"
+    },
+    {
         "name": "Plugins",
         "path": "Plugins.md"
     }]
