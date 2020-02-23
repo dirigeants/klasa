@@ -136,7 +136,7 @@ class Store extends Collection {
 	 * @returns {Piece}
 	 */
 	set(piece) {
-		if (!(piece instanceof this.holds)) throw new Error(`Only ${this} may be stored in this Store.`);
+		if (!(piece instanceof this.holds)) throw new TypeError(`Only ${this} may be stored in this Store.`);
 		const existing = this.get(piece.name);
 		if (existing) this.delete(existing);
 		else if (this.client.listenerCount('pieceLoaded')) this.client.emit('pieceLoaded', piece);
