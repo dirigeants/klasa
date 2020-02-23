@@ -10,7 +10,7 @@ npm install --save discordjs/discord.js dirigeants/klasa#{@branch}
 
 ### Using Klasa
 
-Create a file called `app.js` (or whatever you prefer) which will initiate and configure Klasa.
+Create a file called `app.js` (or whatever name you prefer) which will initiate and configure Klasa.
 
 ```javascript
 const { Client } = require('klasa');
@@ -41,6 +41,8 @@ Then, run the following command in your folder:
 npm install
 node app.js
 ```
+
+Check out [this guide]() on how to keep your bot running 24/7.
 
 > **Requirements**: Requires Node 10.1.0 or higher to run. Depends on Discord.js v12.0.0-dev or higher (this is peer depended on, so you can choose a non-broken commit).
 
