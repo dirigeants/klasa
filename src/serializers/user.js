@@ -3,9 +3,9 @@ const { Serializer } = require('klasa');
 module.exports = class extends Serializer {
 
 	async deserialize(data, entry, language) {
-		let user = this.client.users.resolve(data);
+		let user = this.client.users.cache.resolve(data);
 		if (user) return user;
-		if (this.constructor.regex.userOrMember.test(data)) user = await this.client.users.fetch(this.constructor.regex.userOrMember.exec(data)[1]).catch(() => null);
+		if (this.constructor.regex.userOrMember.test(data)) user = await this.client.users.cache.fetch(this.constructor.regex.userOrMember.exec(data)[1]).catch(() => null);
 		if (user) return user;
 		throw language.get('RESOLVER_INVALID_USER', entry.key);
 	}
@@ -15,7 +15,7 @@ module.exports = class extends Serializer {
 	}
 
 	stringify(value) {
-		return (this.client.users.get(value) || { username: (value && value.username) || value }).username;
+		return (this.client.users.cache.get(value) || { username: (value && value.username) || value }).username;
 	}
 
 };

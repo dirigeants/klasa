@@ -23,7 +23,7 @@ class Gateway extends GatewayStorage {
 		 * @since 0.0.1
 		 * @type {external:Collection<string, Settings>|external:DataStore}
 		 */
-		this.cache = (name in this.client) && this.client[name] instanceof Map ? this.client[name] : new Collection();
+		this.cache = (name in this.client) && this.client[name].cache instanceof Map ? this.client[name].cache : new Collection();
 
 		/**
 		 * The request handler that manages the synchronization queue
