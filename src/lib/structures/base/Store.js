@@ -133,10 +133,10 @@ class Store extends Collection {
 	 * Sets up a piece in our store.
 	 * @since 0.0.1
 	 * @param {Piece} piece The piece we are setting up
-	 * @returns {?Piece}
+	 * @returns {Piece}
 	 */
 	set(piece) {
-		if (!(piece instanceof this.holds)) return this.client.emit('error', `Only ${this} may be stored in this Store.`);
+		if (!(piece instanceof this.holds)) throw new TypeError(`Only ${this} may be stored in this Store.`);
 		const existing = this.get(piece.name);
 		if (existing) this.delete(existing);
 		else if (this.client.listenerCount('pieceLoaded')) this.client.emit('pieceLoaded', piece);
