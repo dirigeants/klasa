@@ -34,7 +34,7 @@ class MultiArgument extends Argument {
 		let i = 0;
 
 		for (const arg of rest) {
-			if (max && i > max) break;
+			if (max && i >= max) break;
 			try {
 				const structure = await base.run(arg, possible, message);
 				structures.push(structure);
