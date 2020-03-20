@@ -347,7 +347,7 @@ class KlasaClient extends Discord.Client {
 	get owners() {
 		const owners = new Set();
 		for (const owner of this.options.owners) {
-			const user = this.users.get(owner);
+			const user = this.users.cache.get(owner);
 			if (user) owners.add(user);
 		}
 		return owners;
