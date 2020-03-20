@@ -47,7 +47,7 @@ const plugins = new Set();
 class KlasaClient extends Discord.Client {
 
 	/**
-	 * Defaulted as `Successfully initialized. Ready to serve ${this.guilds.size} guilds.`
+	 * Defaulted as `Successfully initialized. Ready to serve ${this.guilds.cache.size} guilds.`
 	 * @typedef {(string|Function)} ReadyMessage
 	 */
 
@@ -449,7 +449,7 @@ class KlasaClient extends Discord.Client {
 		let messages = 0;
 		let commandMessages = 0;
 
-		for (const channel of this.channels.values()) {
+		for (const channel of this.channels.cache.values()) {
 			if (!channel.messages) continue;
 			channels++;
 
