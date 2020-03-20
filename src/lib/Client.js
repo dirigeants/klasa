@@ -453,7 +453,7 @@ class KlasaClient extends Discord.Client {
 			if (!channel.messages) continue;
 			channels++;
 
-			channel.messages.sweep(message => {
+			channel.messages.cache.sweep(message => {
 				if ((message.command || message.author === this.user) && now - (message.editedTimestamp || message.createdTimestamp) > commandLifetimeMs) return commandMessages++;
 				if (!message.command && message.author !== this.user && now - (message.editedTimestamp || message.createdTimestamp) > lifetimeMs) return messages++;
 				return false;
