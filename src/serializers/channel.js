@@ -29,7 +29,7 @@ module.exports = class extends Serializer {
 	}
 
 	stringify(value, message) {
-		return (message.guild.channels.get(value) || { name: (value && value.name) || value }).name;
+		return (message.guild.channels.cache.get(value) || { name: (value && value.name) || value }).name;
 	}
 
 };
