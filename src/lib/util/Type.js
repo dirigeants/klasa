@@ -144,7 +144,7 @@ class Type {
 		const type = typeof value;
 		switch (type) {
 			case 'object': return value === null ? 'null' : (value.constructor && value.constructor.name) || 'any';
-			case 'function': return `${value.constructor.name}(${value.length}-arity)`;
+			case 'function': return `${value.constructor.name}${Number(value.length) ? `(${value.length}` : 'Function(0'}-arity)`;
 			case 'undefined': return 'void';
 			default: return type;
 		}
