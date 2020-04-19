@@ -64,7 +64,6 @@ module.exports = {
 	RichMenu: require('./lib/util/RichMenu'),
 	Stopwatch: require('./lib/util/Stopwatch'),
 	Timestamp: require('./lib/util/Timestamp'),
-	Type: require('./lib/util/Type'),
 	util: require('./lib/util/util'),
 
 	// version
@@ -73,6 +72,7 @@ module.exports = {
 
 Object.assign(module.exports, require('@klasa/querybuilder'));
 Object.assign(module.exports, require('@klasa/settings-gateway'));
+Object.assign(module.exports, require('@klasa/type'));
 
 /**
  * @external Channel

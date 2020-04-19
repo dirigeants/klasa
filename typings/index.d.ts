@@ -244,6 +244,10 @@ declare module 'klasa' {
 		QueryBuilderType
 	} from '@klasa/querybuilder';
 
+	export {
+		Type
+	} from '@klasa/type';
+
 //#endregion Settings
 
 //#region Pieces
@@ -762,31 +766,6 @@ declare module 'klasa' {
 		private static _resolveDate(time: Date | number | string): Date;
 		private static _display(template: string, time: Date | number | string): string;
 		private static _patch(pattern: string): TimestampObject[];
-	}
-
-	export class Type {
-		public constructor(value: any, parent?: Type);
-
-		public value: any;
-		public is: string;
-
-		private parent: Type | null;
-		private childKeys: Map<string, Type>;
-		private childValues: Map<string, Type>;
-
-		private readonly childTypes: string;
-
-		public toString(): string;
-
-		private addValue(value: any): void;
-		private addEntry(entry: [string, any]): void;
-		private parents(): Iterator<Type>;
-		private check(): void;
-		private isCircular(): boolean;
-
-		public static resolve(value: any): string;
-
-		private static list(values: Map<string, Type>): string;
 	}
 
 	class Util {
