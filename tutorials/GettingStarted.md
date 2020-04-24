@@ -60,7 +60,7 @@ new Client({
 >3: The directory of the main file. `path.dirname(require.main.filename)`  
 >4: quotedStringSupport is overridable per command  
 >5: `Successfully initialized. Ready to serve ${client.guilds.size} guilds.`  
->6: ID gotten from teh Discord api if not provided: `client.application.owner.id`  
+>6: ID gotten from the Discord api if not provided: `client.application.owner.id`  
 
 ## Running the bot
 
