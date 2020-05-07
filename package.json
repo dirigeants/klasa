@@ -26,14 +26,14 @@
     "discord.js": "github:discordjs/discord.js#master"
   },
   "devDependencies": {
-    "@types/node": "^13.1.8",
+    "@types/node": "^13.13.5",
     "docgen": "github:dirigeants/docsgen",
     "eslint": "^6.8.0",
     "eslint-config-klasa": "github:dirigeants/klasa-lint",
-    "eslint-plugin-markdown": "^1.0.0",
-    "markdownlint-cli": "^0.21.0",
-    "tslint": "^6.0.0",
-    "typescript": "^3.7.5"
+    "eslint-plugin-markdown": "^1.0.2",
+    "markdownlint-cli": "^0.23.0",
+    "tslint": "^6.1.2",
+    "typescript": "^3.8.3"
   },
   "engines": {
     "node": ">=10.1.0"
