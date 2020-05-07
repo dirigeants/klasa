@@ -1298,7 +1298,7 @@ declare module 'klasa' {
 		promptTime?: number;
 		quotedStringSupport?: boolean;
 		requiredSettings?: string[];
-		runIn?: Array<'text' | 'dm'>;
+		runIn?: Array<'text' | 'dm' | 'news'>;
 		subcommands?: boolean;
 		usage?: string;
 		usageDelim?: string;
