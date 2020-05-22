@@ -337,8 +337,8 @@ dmd@^4.0.5:
 
 "docgen@github:dirigeants/docsgen":
   version "0.0.1"
-  uid d8d050b1c9575df24721ddcb4af34b383033124b
-  resolved "https://codeload.github.com/dirigeants/docsgen/tar.gz/d8d050b1c9575df24721ddcb4af34b383033124b"
+  uid "1bfaabab0d8204c6e797e9e3767247c5eb1a3e94"
+  resolved "https://codeload.github.com/dirigeants/docsgen/tar.gz/1bfaabab0d8204c6e797e9e3767247c5eb1a3e94"
   dependencies:
     fs-nextra "^0.4.7"
     jsdoc-to-markdown "^5.0.3"
