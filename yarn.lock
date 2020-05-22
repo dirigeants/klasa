@@ -907,9 +907,9 @@ markdown-it@^8.4.2:
     mdurl "^1.0.1"
     uc.micro "^1.0.5"
 
-markdownlint-cli@^0.23.0:
-  version "0.23.0"
-  resolved "https://registry.yarnpkg.com/markdownlint-cli/-/markdownlint-cli-0.23.0.tgz#faada6ad054f105aa567f4e0e4402254da7842a8"
+markdownlint-cli@^0.23.1:
+  version "0.23.1"
+  resolved "https://registry.yarnpkg.com/markdownlint-cli/-/markdownlint-cli-0.23.1.tgz#2f21b5899e7260e2c6235cd336a7586d54031212"
   dependencies:
     commander "~2.9.0"
     deep-extend "~0.5.1"
@@ -920,19 +920,19 @@ markdownlint-cli@^0.23.0:
     jsonc-parser "~2.2.0"
     lodash.differencewith "~4.5.0"
     lodash.flatten "~4.4.0"
-    markdownlint "~0.20.2"
-    markdownlint-rule-helpers "~0.9.0"
+    markdownlint "~0.20.3"
+    markdownlint-rule-helpers "~0.10.0"
     minimatch "~3.0.4"
     minimist "~1.2.5"
     rc "~1.2.7"
 
-markdownlint-rule-helpers@~0.9.0:
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/markdownlint-rule-helpers/-/markdownlint-rule-helpers-0.9.0.tgz#fbe39bb879bebbcd5dd38c47d9b3c264c3b88643"
+markdownlint-rule-helpers@~0.10.0:
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/markdownlint-rule-helpers/-/markdownlint-rule-helpers-0.10.0.tgz#6dd53be6f2872cea959f336978a5a21f9a4ca11e"
 
-markdownlint@~0.20.2:
-  version "0.20.2"
-  resolved "https://registry.yarnpkg.com/markdownlint/-/markdownlint-0.20.2.tgz#fecd591da64f3c6ee39cc0a7294560c9c14cf299"
+markdownlint@~0.20.3:
+  version "0.20.3"
+  resolved "https://registry.yarnpkg.com/markdownlint/-/markdownlint-0.20.3.tgz#6f56d3e16d990af79d42e58bd2849f70b3358595"
   dependencies:
     markdown-it "10.0.0"
 
