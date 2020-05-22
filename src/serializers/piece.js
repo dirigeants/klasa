@@ -9,7 +9,7 @@ module.exports = class extends Serializer {
 		this.aliases = [...this.client.pieceStores.keys()].map(type => type.slice(0, -1));
 	}
 
-	async deserialize(data, entry, language) {
+	async validate(data, { entry, language }) {
 		if (entry.type === 'piece') {
 			for (const store of this.client.pieceStores.values()) {
 				const pce = store.get(data);

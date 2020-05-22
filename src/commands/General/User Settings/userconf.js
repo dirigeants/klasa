@@ -1,19 +1,23 @@
-const { Command, util: { toTitleCase, codeBlock } } = require('klasa');
+const { Command, Schema, util: { toTitleCase, codeBlock } } = require('klasa');
 
 module.exports = class extends Command {
 
 	constructor(...args) {
 		super(...args, {
+			runIn: ['text'],
+			permissionLevel: 6,
 			guarded: true,
 			subcommands: true,
-			description: language => language.get('COMMAND_CONF_USER_DESCRIPTION'),
+			description: language => language.get('COMMAND_CONF_SERVER_DESCRIPTION'),
 			usage: '<set|show|remove|reset> (key:key) (value:value)',
 			usageDelim: ' '
 		});
 
+		this.configurableSchemaKeys = new Map();
+
 		this
 			.createCustomResolver('key', (arg, possible, message, [action]) => {
-				if (action === 'show' || arg) return arg;
+				if (action === 'show' || arg) return arg || '';
 				throw message.language.get('COMMAND_CONF_NOKEY');
 			})
 			.createCustomResolver('value', (arg, possible, message, [action]) => {
@@ -24,46 +28,108 @@ module.exports = class extends Command {
 	}
 
 	show(message, [key]) {
-		const piece = this.getPath(key);
-		if (!piece || (piece.type === 'Folder' ? !piece.configurableKeys.length : !piece.configurable)) return message.sendLocale('COMMAND_CONF_GET_NOEXT', [key]);
-		if (piece.type === 'Folder') {
-			return message.sendLocale('COMMAND_CONF_USER', [
-				key ? `: ${key.split('.').map(toTitleCase).join('/')}` : '',
-				codeBlock('asciidoc', message.author.settings.display(message, piece))
-			]);
+		const schemaOrEntry = this.configurableSchemaKeys.get(key);
+		if (typeof schemaOrEntry === 'undefined') throw message.language.get('COMMAND_CONF_GET_NOEXT', key);
+
+		const value = key ? message.author.settings.get(key) : message.author.settings;
+		if (schemaOrEntry.type !== 'Folder') {
+			return message.sendLocale('COMMAND_CONF_GET', [key, this.displayEntry(schemaOrEntry, value)]);
 		}
-		return message.sendLocale('COMMAND_CONF_GET', [piece.path, message.author.settings.display(message, piece)]);
+
+		return message.sendLocale('COMMAND_CONF_SERVER', [
+			key ? `: ${key.split('.').map(toTitleCase).join('/')}` : '',
+			codeBlock('asciidoc', this.displayFolder(value))
+		]);
 	}
 
 	async set(message, [key, valueToSet]) {
-		const piece = this.check(message, key, await message.author.settings.update(key, valueToSet, { onlyConfigurable: true, arrayAction: 'add', guild: message.guild }));
-		return message.sendLocale('COMMAND_CONF_UPDATED', [key, message.author.settings.display(message, piece)]);
+		try {
+			const [update] = await message.author.settings.update(key, valueToSet, { onlyConfigurable: true, arrayAction: 'add' });
+			return message.sendLocale('COMMAND_CONF_UPDATED', [key, this.displayEntry(update.entry, update.next)]);
+		} catch (error) {
+			throw String(error);
+		}
 	}
 
 	async remove(message, [key, valueToRemove]) {
-		const piece = this.check(message, key, await message.author.settings.update(key, valueToRemove, { onlyConfigurable: true, arrayAction: 'remove', guild: message.guild }));
-		return message.sendLocale('COMMAND_CONF_UPDATED', [key, message.author.settings.display(message, piece)]);
+		try {
+			const [update] = await message.author.settings.update(key, valueToRemove, { onlyConfigurable: true, arrayAction: 'remove' });
+			return message.sendLocale('COMMAND_CONF_UPDATED', [key, this.displayEntry(update.entry, update.next)]);
+		} catch (error) {
+			throw String(error);
+		}
 	}
 
 	async reset(message, [key]) {
-		const piece = this.check(message, key, await message.author.settings.reset(key));
-		return message.sendLocale('COMMAND_CONF_RESET', [key, message.author.settings.display(message, piece)]);
-	}
-
-	check(message, key, { errors, updated }) {
-		if (errors.length) throw String(errors[0]);
-		if (!updated.length) throw message.language.get('COMMAND_CONF_NOCHANGE', key);
-		return updated[0].piece;
-	}
-
-	getPath(key) {
-		const { schema } = this.client.gateways.get('users');
-		if (!key) return schema;
 		try {
-			return schema.get(key);
-		} catch (__) {
-			return undefined;
+			const [update] = await message.author.settings.reset(key);
+			return message.sendLocale('COMMAND_CONF_RESET', [key, this.displayEntry(update.entry, update.next)]);
+		} catch (error) {
+			throw String(error);
 		}
+	}
+
+	init() {
+		const { schema } = this.client.gateways.get('users');
+		if (this.initFolderConfigurableRecursive(schema)) this.configurableSchemaKeys.set(schema.path, schema);
+	}
+
+	displayFolder(settings) {
+		const array = [];
+		const folders = [];
+		const sections = new Map();
+		let longest = 0;
+		for (const [key, value] of settings.schema.entries()) {
+			if (!this.configurableSchemaKeys.has(value.path)) continue;
+
+			if (value.type === 'Folder') {
+				folders.push(`// ${key}`);
+			} else {
+				const values = sections.get(value.type) || [];
+				values.push(key);
+
+				if (key.length > longest) longest = key.length;
+				if (values.length === 1) sections.set(value.type, values);
+			}
+		}
+		if (folders.length) array.push('= Folders =', ...folders.sort(), '');
+		if (sections.size) {
+			for (const keyType of [...sections.keys()].sort()) {
+				array.push(`= ${toTitleCase(keyType)}s =`,
+					...sections.get(keyType).sort().map(key => `${key.padEnd(longest)} :: ${this.displayEntry(settings.schema.get(key), settings.get(key))}`),
+					'');
+			}
+		}
+		return array.join('\n');
+	}
+
+	displayEntry(entry, value) {
+		return entry.array ?
+			this.displayEntryMultiple(entry, value) :
+			this.displayEntrySingle(entry, value);
+	}
+
+	displayEntrySingle(entry, value) {
+		return entry.serializer.stringify(value);
+	}
+
+	displayEntryMultiple(entry, values) {
+		return values.length === 0 ?
+			'None' :
+			`[ ${values.map(value => this.displayEntrySingle(entry, value)).join(' | ')} ]`;
+	}
+
+	initFolderConfigurableRecursive(folder) {
+		const previousConfigurableCount = this.configurableSchemaKeys.size;
+		for (const value of folder.values()) {
+			if (value instanceof Schema) {
+				if (this.initFolderConfigurableRecursive(value)) this.configurableSchemaKeys.set(value.path, value);
+			} else if (value.configurable) {
+				this.configurableSchemaKeys.set(value.path, value);
+			}
+		}
+
+		return previousConfigurableCount !== this.configurableSchemaKeys.size;
 	}
 
 };

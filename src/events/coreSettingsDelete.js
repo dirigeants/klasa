@@ -13,8 +13,8 @@ module.exports = class extends Event {
 				if (String(this.options.shards) !== '${this.client.options.shards}') {
 					const entry = this.gateways.get('${settings.gateway.name}').get('${settings.id}');
 					if (entry && entry.existenceStatus) {
-						entry.init(entry, entry.schema);
-						entry.existenceStatus = false;
+						entry._init(entry, entry.schema);
+						entry.existenceStatus = 2;
 						this.emit('settingsSync', entry);
 					}
 				}
