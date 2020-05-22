@@ -20,7 +20,7 @@
     "docs": "npx dg --source src --custom guides/.docconfig.json --output dist/docs.json --logging"
   },
   "dependencies": {
-    "fs-nextra": "^0.4.7"
+    "fs-nextra": "^0.5.1"
   },
   "peerDependencies": {
     "discord.js": "github:discordjs/discord.js#master"
