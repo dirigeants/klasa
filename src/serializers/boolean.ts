@@ -2,7 +2,7 @@ import { Serializer } from 'klasa';
 const truths = ['1', 'true', '+', 't', 'yes', 'y'];
 const falses = ['0', 'false', '-', 'f', 'no', 'n'];
 
-export class BooleanSerializer extends Serializer {
+export default class BooleanSerializer extends Serializer {
 
 	constructor(...args) {
 		super(...args, { aliases: ['bool'] });

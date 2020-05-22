@@ -1,6 +1,6 @@
 import { Serializer } from 'klasa';
 
-export class PieceSerializer extends Serializer {
+export default class PieceSerializer extends Serializer {
 
 	constructor(...args) {
 		super(...args, { aliases: ['command', 'language'] });

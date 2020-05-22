@@ -1,12 +1,12 @@
 import { Serializer } from 'klasa';
-import { Role } from 'discord.js';
+import { Role } from '@klasa/core';
 
-export class RoleSerializer extends Serializer {
+export default class RoleSerializer extends Serializer {
 
 	deserialize(data, piece, language, guild) {
 		if (!guild) throw this.client.languages.default.get('RESOLVER_INVALID_GUILD', piece.key);
 		if (data instanceof Role) return data;
-		const role = this.constructor.regex.role.test(data) ? guild.roles.cache.get(this.constructor.regex.role.exec(data)[1]) : guild.roles.cache.find(rol => rol.name === data) || null;
+		const role = this.constructor.regex.role.test(data) ? guild.roles.get(this.constructor.regex.role.exec(data)[1]) : guild.roles.find(rol => rol.name === data) || null;
 		if (role) return role;
 		throw language.get('RESOLVER_INVALID_ROLE', piece.key);
 	}
@@ -16,7 +16,7 @@ export class RoleSerializer extends Serializer {
 	}
 
 	stringify(value, message) {
-		return (message.guild.roles.cache.get(value) || { name: (value && value.name) || value }).name;
+		return (message.guild.roles.get(value) || { name: (value && value.name) || value }).name;
 	}
 
 }

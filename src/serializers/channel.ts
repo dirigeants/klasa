@@ -1,7 +1,7 @@
 import { Serializer } from 'klasa';
-import { Channel } from 'discord.js';
+import { Channel } from '@klasa/core';
 
-export class ChannelSerializer extends Serializer {
+export default class ChannelSerializer extends Serializer {
 
 	constructor(...args) {
 		super(...args, { aliases: ['textchannel', 'voicechannel', 'categorychannel'] });
@@ -19,7 +19,7 @@ export class ChannelSerializer extends Serializer {
 
 	deserialize(data, piece, language, guild) {
 		if (data instanceof Channel) return this.checkChannel(data, piece, language);
-		const channel = this.constructor.regex.channel.test(data) ? (guild || this.client).channels.cache.get(this.constructor.regex.channel.exec(data)[1]) : null;
+		const channel = this.constructor.regex.channel.test(data) ? (guild || this.client).channels.get(this.constructor.regex.channel.exec(data)[1]) : null;
 		if (channel) return this.checkChannel(channel, piece, language);
 		throw language.get('RESOLVER_INVALID_CHANNEL', piece.key);
 	}
@@ -29,7 +29,7 @@ export class ChannelSerializer extends Serializer {
 	}
 
 	stringify(value, message) {
-		return (message.guild.channels.cache.get(value) || { name: (value && value.name) || value }).name;
+		return (message.guild.channels.get(value) || { name: (value && value.name) || value }).name;
 	}
 
 }

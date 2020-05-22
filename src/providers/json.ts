@@ -2,7 +2,7 @@ import { Provider, util } from 'klasa';
 import { resolve } from 'path';
 import * as fs from 'fs-nextra';
 
-export class JsonProvider extends Provider {
+export default class JsonProvider extends Provider {
 
 	constructor(...args) {
 		super(...args);

@@ -2,7 +2,7 @@ import { Extendable } from './Extendable';
 import { Store } from '@klasa/core';
 
 /**
- * Stores all of our extendables that extend Discord.js and Klasa structures
+ * Stores all of our extendables that extend @klasa/core and Klasa structures
  * @extends Store
  */
 export class ExtendableStore extends Store {

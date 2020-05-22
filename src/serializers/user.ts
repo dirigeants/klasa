@@ -1,6 +1,6 @@
 import { Serializer } from 'klasa';
 
-export class UserSerializer extends Serializer {
+export default class UserSerializer extends Serializer {
 
 	async deserialize(data, piece, language) {
 		let user = this.client.users.resolve(data);
@@ -15,7 +15,7 @@ export class UserSerializer extends Serializer {
 	}
 
 	stringify(value) {
-		return (this.client.users.cache.get(value) || { username: (value && value.username) || value }).username;
+		return (this.client.users.get(value) || { username: (value && value.username) || value }).username;
 	}
 
 }

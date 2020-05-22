@@ -1,5 +1,5 @@
 import { mergeDefault } from '@klasa/utils';
-import { Collection } from 'discord.js';
+import { Cache } from '@klasa/cache';
 const quotes = ['"', "'", '“”', '‘’'];
 
 /**

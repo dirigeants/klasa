@@ -1,6 +1,6 @@
 import { Serializer } from 'klasa';
 
-export class NumberSerializer extends Serializer {
+export default class NumberSerializer extends Serializer {
 
 	constructor(...args) {
 		super(...args, { aliases: ['integer', 'float'] });

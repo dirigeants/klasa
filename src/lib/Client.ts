@@ -325,7 +325,7 @@ export class KlasaClient extends Client {
 	public get owners(): Set<User> {
 		const owners = new Set();
 		for (const owner of this.options.owners) {
-			const user = this.users.cache.get(owner);
+			const user = this.users.get(owner);
 			if (user) owners.add(user);
 		}
 		return owners;
@@ -359,7 +359,7 @@ export class KlasaClient extends Client {
 	 * If the message has been edited, the time of the edit is used rather than the time of the original message.
 	 * @since 0.5.0
 	 * @param {number} [lifetime=this.options.messageCacheLifetime] Messages that are older than this (in seconds)
-	 * will be removed from the caches. The default is based on [ClientOptions#messageCacheLifetime]{@link https://discord.js.org/#/docs/main/master/typedef/ClientOptions?scrollTo=messageCacheLifetime}
+	 * will be removed from the caches. The default is based on [ClientOptions#messageCacheLifetime]{@link https://@klasa/core.org/#/docs/main/master/typedef/ClientOptions?scrollTo=messageCacheLifetime}
 	 * @param {number} [commandLifetime=this.options.commandMessageLifetime] Messages that are older than this (in seconds)
 	 * will be removed from the caches. The default is based on {@link KlasaClientOptions#commandMessageLifetime}
 	 */

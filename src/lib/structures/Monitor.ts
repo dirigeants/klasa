@@ -32,7 +32,6 @@ export class Monitor extends Piece {
 
 		/**
 		 * The types of messages allowed for this monitor
-		 * @see https://discord.js.org/#/docs/main/master/typedef/MessageType
 		 * @since 0.5.0
 		 * @type {string[]}
 		 */
@@ -91,7 +90,7 @@ export class Monitor extends Piece {
 	/**
 	 * Run a monitor and catch any uncaught promises
 	 * @since 0.5.0
-	 * @param {KlasaMessage} message The message object from Discord.js
+	 * @param {KlasaMessage} message The message object from @klasa/core
 	 * @private
 	 */
 	async _run(message) {

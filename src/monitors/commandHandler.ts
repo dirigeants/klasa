@@ -1,6 +1,6 @@
 import { Monitor, Stopwatch } from 'klasa';
 
-export class CommandHandler extends Monitor {
+export default class CommandHandler extends Monitor {
 
 	constructor(...args) {
 		super(...args, { ignoreOthers: false });

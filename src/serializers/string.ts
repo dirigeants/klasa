@@ -1,6 +1,6 @@
 import { Serializer } from 'klasa';
 
-export class StringSerializer extends Serializer {
+export default class StringSerializer extends Serializer {
 
 	deserialize(data) {
 		return String(data);

@@ -78,7 +78,7 @@ export class Extendable extends Piece {
 	}
 
 	/**
-	 * The init method to apply the extend method to the Discord.js Class
+	 * The init method to apply the extend method to the @klasa/core Class
 	 * @since 0.0.1
 	 * @returns {void}
 	 */
