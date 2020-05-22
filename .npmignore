@@ -1,27 +1,25 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-
-# Dependency directories
-node_modules
-jspm_packages
-
-# Optional npm cache directory
-.npm
-
-# Optional REPL history
-.node_repl_history
-
+# .npmignore
+.get/
+node_modules/
+test/
+docs/
+scripts/
+src/
 .docstrap.json
 .eslintrc.json
 tslint.json
-azure-pipelines.yml
+.travis.yml
+appveyor.yml
+tsconfig.json
 package-lock.json
-guides
-docs
-.github
-CHANGELOG.md
-.eslintignore
-.eslintrcmd.json
-.markdownlint.json
+README.md
+yarn.lock
+coverage/
+.nyc_output/
+azure-pipelines.yml
+test-results.xml
+.nycrc.json
+.typedoc.json
+.github/
+dist/test/
+

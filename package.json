@@ -1,6 +1,6 @@
 {
   "name": "klasa",
-  "version": "0.5.0",
+  "version": "0.6.0-dev",
   "description": "Klasa: Croatian for 'class', is a class based remix on Komada.",
   "homepage": "https://klasa.js.org/",
   "bugs": {
@@ -8,34 +8,61 @@
   },
   "license": "MIT",
   "author": "BDistin",
-  "main": "src/index.js",
-  "types": "typings/index.d.ts",
+  "main": "dist/src/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/dirigeants/klasa.git"
   },
   "scripts": {
-    "lint": "npx eslint --fix src && npx eslint --fix --config .eslintrcmd.json --ext md guides && npx tslint --fix 'typings/*.ts'",
-    "test:lint": "npx eslint src && npx tslint 'typings/*.ts' && npx eslint --config .eslintrcmd.json --ext md guides && npx markdownlint guides README.md",
-    "docs": "npx dg --source src --custom guides/.docconfig.json --output dist/docs.json --logging"
-  },
+    "prepublishOnly": "yarn build",
+    "build": "tsc",
+    "test": "ava",
+    "test:lint": "eslint --ext ts src test",
+    "test:coverage": "npx nyc check-coverage --lines 0 --functions 0 --branches 0",
+    "coverage": "npx nyc --require source-map-support/register npm test",
+    "coverage:report": "npx nyc report --reporter=html",
+    "lint": "eslint --fix --ext ts src test",
+    "docs": "typedoc"  },
   "dependencies": {
-    "fs-nextra": "^0.4.7"
+    "fs-nextra": "^0.4.7",
+    "@klasa/utils": "^0.0.5",
+    "@klasa/cache": "^0.0.3"
   },
   "peerDependencies": {
-    "discord.js": "github:discordjs/discord.js#master"
+    "@klasa/core": "^0.0.1",
+    "@klasa/timer-manager": "0.0.1"
   },
   "devDependencies": {
-    "@types/node": "^13.13.5",
-    "docgen": "github:dirigeants/docsgen",
+    "@ava/typescript": "^1.1.1",
+    "@klasa/dapi-types": "^0.1.1",
+    "@types/node": "14",
+    "@types/node-fetch": "^2.5.7",
+    "@types/ws": "^7.2.4",
+    "@typescript-eslint/eslint-plugin": "^2.34.0",
+    "@typescript-eslint/parser": "^2.34.0",
+    "ava": "^3.8.2",
     "eslint": "^6.8.0",
-    "eslint-config-klasa": "github:dirigeants/klasa-lint",
-    "eslint-plugin-markdown": "^1.0.2",
-    "markdownlint-cli": "^0.23.0",
-    "tslint": "^6.1.2",
-    "typescript": "^3.8.3"
+    "eslint-config-klasa": "dirigeants/klasa-lint",
+    "nyc": "^15.0.1",
+    "source-map-support": "^0.5.19",
+    "typedoc": "^0.17.7",
+    "typescript": "^4.0.0-dev.20200522"
   },
   "engines": {
-    "node": ">=10.1.0"
+    "node": ">=12.6.0"
+  },
+  "ava": {
+    "files": [
+      "test/**/*.ts",
+      "!test/lib"
+    ],
+    "typescript": {
+      "extensions": [
+        "ts"
+      ],
+      "rewritePaths": {
+        "test/": "dist/test/"
+      }
+    }
   }
 }

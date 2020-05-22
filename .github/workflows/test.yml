@@ -1,0 +1,99 @@
+name: Unit Tests
+
+on:
+  push:
+    branches:
+      - master
+      - stable
+  pull_request:
+
+jobs:
+  test:
+    name: Node v${{ matrix.node_version }} - ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        node_version: [12, 14]
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+
+    steps:
+    - name: Checkout Project
+      uses: actions/checkout@v1
+    - name: Use Node.js ${{ matrix.node_version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node_version }}
+    - name: Restore CI Cache
+      uses: actions/cache@v1
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-${{ matrix.node_version }}-${{ hashFiles(matrix.os == 'windows-latest' && '**\yarn.lock' || '**/yarn.lock') }}
+    - name: Install Dependencies
+      run: yarn
+    - name: Build Project
+      run: yarn build
+    - name: Test
+      run: yarn coverage
+    - uses: actions/upload-artifact@v1
+      name: Upload Coverage Data
+      with:
+        name: ${{ runner.os }}-${{ matrix.node_version }}
+        path: .nyc_output
+  report:
+    needs: test
+    name: Generate Report
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout Project
+      uses: actions/checkout@v1
+    - name: Use Node.js 12
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12
+    - name: Restore CI Cache
+      uses: actions/cache@v1
+      with:
+        path: node_modules
+        key: Windows-12-${{ hashFiles('**\yarn.lock') }}
+    - name: Install Dependencies
+      run: yarn
+    - uses: actions/download-artifact@v1
+      name: Download Windows-12 Coverage Data
+      with:
+        name: Windows-12
+        path: .nyc_output
+    - uses: actions/download-artifact@v1
+      name: Download Windows-14 Coverage Data
+      with:
+        name: Windows-14
+        path: .nyc_output
+    - uses: actions/download-artifact@v1
+      name: Download macOS-12 Coverage Data
+      with:
+        name: macOS-12
+        path: .nyc_output
+    - uses: actions/download-artifact@v1
+      name: Download macOS-14 Coverage Data
+      with:
+        name: macOS-14
+        path: .nyc_output
+    - uses: actions/download-artifact@v1
+      name: Download Linux-12 Coverage Data
+      with:
+        name: Linux-12
+        path: .nyc_output
+    - uses: actions/download-artifact@v1
+      name: Download Linux-14 Coverage Data
+      with:
+        name: Linux-14
+        path: .nyc_output
+    - name: Report
+      run: yarn coverage:report
+    - uses: actions/upload-artifact@v1
+      name: Upload Report
+      with:
+        name: report
+        path: coverage
+    #- name: Test Cross Platform Coverage
+      #run: yarn test:coverage
