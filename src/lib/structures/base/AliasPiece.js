@@ -15,14 +15,13 @@ class AliasPiece extends Piece {
 
 	/**
 	 * @since 0.0.1
-	 * @param {KlasaClient} client The klasa client
 	 * @param {Store} store The store this piece is for
 	 * @param {string[]} file The path from the pieces folder to the extendable file
 	 * @param {string} directory The base directory to the pieces folder
 	 * @param {AliasPieceOptions} [options={}] The options for this piece
 	 */
-	constructor(client, store, file, directory, options = {}) {
-		super(client, store, file, directory, options);
+	constructor(store, file, directory, options = {}) {
+		super(store, file, directory, options);
 
 		/**
 		 * The aliases for this piece

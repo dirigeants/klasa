@@ -85,7 +85,7 @@ class ScheduledTask {
 		/**
 		 * If the task should catch up in the event the bot is down
 		 * @since 0.5.0
-		 * @type {string}
+		 * @type {boolean}
 		 */
 		this.catchUp = 'catchUp' in options ? options.catchUp : true;
 
@@ -236,8 +236,7 @@ class ScheduledTask {
 	 * @private
 	 */
 	static _generateID(client) {
-		const id = client.shard ? (Array.isArray(client.shard.id) ? client.shard.id[0] : client.shard.id).toString(36) : '';
-		return Date.now().toString(36) + id;
+		return `${Date.now().toString(36)}${client.options.shards[0].toString(36)}`;
 	}
 
 	/**

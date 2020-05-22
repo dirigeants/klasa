@@ -7,11 +7,17 @@ module.exports = class extends Inhibitor {
 	}
 
 	run(message, command) {
-		if (message.author === this.client.owner || command.cooldown <= 0) return;
+		if (this.client.owners.has(message.author) || command.cooldown <= 0) return;
 
-		const existing = command.cooldowns.get(message.levelID);
+		let existing;
 
-		if (existing && existing.limited) throw message.language.get('INHIBITOR_COOLDOWN', Math.ceil(existing.remainingTime / 1000));
+		try {
+			existing = this.client.finalizers.get('commandCooldown').getCooldown(message, command);
+		} catch (err) {
+			return;
+		}
+
+		if (existing && existing.limited) throw message.language.get('INHIBITOR_COOLDOWN', Math.ceil(existing.remainingTime / 1000), command.cooldownLevel !== 'author');
 	}
 
 };

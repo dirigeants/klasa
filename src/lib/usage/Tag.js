@@ -71,7 +71,7 @@ class Tag {
 		const types = [];
 		members = this.parseTrueMembers(members);
 		return members.map((member, i) => {
-			const current = `${members}: at tag #${count} at bound #${i + 1}`;
+			const current = `${members.join('|')}: at tag #${count} at bound #${i + 1}`;
 			let possible;
 			try {
 				possible = new Possible(this.pattern.exec(member));

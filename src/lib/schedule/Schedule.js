@@ -216,7 +216,7 @@ class Schedule {
 	 * @private
 	 */
 	_clearInterval() {
-		clearInterval(this._interval);
+		this.client.clearInterval(this._interval);
 		this._interval = null;
 	}
 

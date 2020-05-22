@@ -26,14 +26,13 @@ class Piece {
 
 	/**
 	 * @since 0.0.1
-	 * @param {KlasaClient} client The klasa client
 	 * @param {Store} store The store this piece is for
-	 * @param {string[]} file The path from the pieces folder to the extendable file
+	 * @param {string[]} file The path from the pieces folder to the piece file
 	 * @param {string} directory The base directory to the pieces folder
 	 * @param {PieceOptions} [options={}] The options for this piece
 	 */
-	constructor(client, store, file, directory, options = {}) {
-		const defaults = client.options.pieceDefaults[store.name];
+	constructor(store, file, directory, options = {}) {
+		const defaults = store.client.options.pieceDefaults[store.name];
 		if (defaults) options = mergeDefault(defaults, options);
 
 		/**
@@ -41,7 +40,7 @@ class Piece {
 		 * @since 0.0.1
 		 * @type {KlasaClient}
 		 */
-		this.client = client;
+		this.client = store.client;
 
 		/**
 		 * The file location where this Piece is stored

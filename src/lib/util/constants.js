@@ -32,13 +32,15 @@ exports.DEFAULTS = {
 		customPromptDefaults: {
 			time: 30000,
 			limit: Infinity,
-			quotedStringSupport: false
+			quotedStringSupport: false,
+			flagSupport: true
 		},
 		gateways: {
 			guilds: {},
 			users: {},
 			clientStorage: {}
 		},
+		owners: [],
 		// eslint-disable-next-line no-process-env
 		production: process.env.NODE_ENV === 'production',
 		prefixCaseInsensitive: false,
@@ -57,6 +59,7 @@ exports.DEFAULTS = {
 				description: '',
 				extendedHelp: language => language.get('COMMAND_HELP_NO_EXTENDED'),
 				enabled: true,
+				flagSupport: true,
 				guarded: false,
 				hidden: false,
 				nsfw: false,
@@ -171,29 +174,27 @@ exports.TIME = {
 	MONTHS: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
 
 	TIMESTAMP: {
-		TOKENS: {
-			/* eslint-disable id-length */
-			Y: 4,
-			Q: 1,
-			M: 4,
-			D: 4,
-			d: 4,
-			X: 1,
-			x: 1,
-			H: 2,
-			h: 2,
-			a: 1,
-			A: 1,
-			m: 2,
-			s: 2,
-			S: 3,
-			Z: 2,
-			l: 4,
-			L: 4,
-			T: 1,
-			t: 1
-			/* eslint-enable id-length */
-		}
+		TOKENS: new Map([
+			['Y', 4],
+			['Q', 1],
+			['M', 4],
+			['D', 4],
+			['d', 4],
+			['X', 1],
+			['x', 1],
+			['H', 2],
+			['h', 2],
+			['a', 1],
+			['A', 1],
+			['m', 2],
+			['s', 2],
+			['S', 3],
+			['Z', 2],
+			['l', 4],
+			['L', 4],
+			['T', 1],
+			['t', 1]
+		])
 	},
 
 	CRON: {

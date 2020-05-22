@@ -1,5 +1,77 @@
 const { TIME: { SECOND, MINUTE, DAY, DAYS, MONTHS, TIMESTAMP: { TOKENS } } } = require('./constants');
 
+/* eslint-disable max-len */
+const tokens = new Map([
+	// Dates
+	['Y', time => String(time.getFullYear()).slice(2)],
+	['YY', time => String(time.getFullYear()).slice(2)],
+	['YYY', time => String(time.getFullYear())],
+	['YYYY', time => String(time.getFullYear())],
+	['Q', time => String((time.getMonth() + 1) / 3)],
+	['M', time => String(time.getMonth() + 1)],
+	['MM', time => String(time.getMonth() + 1).padStart(2, '0')],
+	['MMM', time => MONTHS[time.getMonth()]],
+	['MMMM', time => MONTHS[time.getMonth()]],
+	['D', time => String(time.getDate())],
+	['DD', time => String(time.getDate()).padStart(2, '0')],
+	['DDD', time => {
+		const start = new Date(time.getFullYear(), 0, 0);
+		const diff = ((time.getMilliseconds() - start.getMilliseconds()) + (start.getTimezoneOffset() - time.getTimezoneOffset())) * MINUTE;
+		return String(Math.floor(diff / DAY));
+	}],
+	['DDDD', time => {
+		const start = new Date(time.getFullYear(), 0, 0);
+		const diff = ((time.getMilliseconds() - start.getMilliseconds()) + (start.getTimezoneOffset() - time.getTimezoneOffset())) * MINUTE;
+		return String(Math.floor(diff / DAY));
+	}],
+	['d', time => {
+		const day = String(time.getDate());
+		if (day !== '11' && day.endsWith('1')) return `${day}st`;
+		if (day !== '12' && day.endsWith('2')) return `${day}nd`;
+		if (day !== '13' && day.endsWith('3')) return `${day}rd`;
+		return `${day}th`;
+	}],
+	['dd', time => DAYS[time.getDay()].slice(0, 2)],
+	['ddd', time => DAYS[time.getDay()].slice(0, 3)],
+	['dddd', time => DAYS[time.getDay()]],
+	['X', time => String(time.valueOf() / SECOND)],
+	['x', time => String(time.valueOf())],
+
+	// Locales
+	['H', time => String(time.getHours())],
+	['HH', time => String(time.getHours()).padStart(2, '0')],
+	['h', time => String(time.getHours() % 12 || 12)],
+	['hh', time => String(time.getHours() % 12 || 12).padStart(2, '0')],
+	['a', time => time.getHours() < 12 ? 'am' : 'pm'],
+	['A', time => time.getHours() < 12 ? 'AM' : 'PM'],
+	['m', time => String(time.getMinutes())],
+	['mm', time => String(time.getMinutes()).padStart(2, '0')],
+	['s', time => String(time.getSeconds())],
+	['ss', time => String(time.getSeconds()).padStart(2, '0')],
+	['S', time => String(time.getMilliseconds())],
+	['SS', time => String(time.getMilliseconds()).padStart(2, '0')],
+	['SSS', time => String(time.getMilliseconds()).padStart(3, '0')],
+	['T', time => `${String(time.getHours() % 12 || 12)}:${String(time.getMinutes()).padStart(2, '0')} ${time.getHours() < 12 ? 'AM' : 'PM'}`],
+	['t', time => `${String(time.getHours() % 12 || 12)}:${String(time.getMinutes()).padStart(2, '0')}:${String(time.getSeconds()).padStart(2, '0')} ${time.getHours() < 12 ? 'am' : 'pm'}`],
+	['L', time => `${String(time.getMonth() + 1).padStart(2, '0')}/${String(time.getDate()).padStart(2, '0')}/${String(time.getFullYear())}`],
+	['l', time => `${String(time.getMonth() + 1)}/${String(time.getDate()).padStart(2, '0')}/${String(time.getFullYear())}`],
+	['LL', time => `${MONTHS[time.getMonth()]} ${String(time.getDate()).padStart(2, '0')}, ${String(time.getFullYear())}`],
+	['ll', time => `${MONTHS[time.getMonth()].slice(0, 3)} ${String(time.getDate()).padStart(2, '0')}, ${String(time.getFullYear())}`],
+	['LLL', time => `${MONTHS[time.getMonth()]} ${String(time.getDate()).padStart(2, '0')}, ${String(time.getFullYear())} ${String(time.getHours() % 12 || 12)}:${String(time.getMinutes()).padStart(2, '0')} ${time.getHours() < 12 ? 'AM' : 'PM'}`],
+	['lll', time => `${MONTHS[time.getMonth()].slice(0, 3)} ${String(time.getDate()).padStart(2, '0')}, ${String(time.getFullYear())} ${String(time.getHours() % 12 || 12)}:${String(time.getMinutes()).padStart(2, '0')} ${time.getHours() < 12 ? 'AM' : 'PM'}`],
+	['LLLL', time => `${DAYS[time.getDay()]}, ${MONTHS[time.getMonth()]} ${String(time.getDate()).padStart(2, '0')}, ${String(time.getFullYear())} ${String(time.getHours() % 12 || 12)}:${String(time.getMinutes()).padStart(2, '0')} ${time.getHours() < 12 ? 'AM' : 'PM'}`],
+	['llll', time => `${DAYS[time.getDay()].slice(0, 3)} ${MONTHS[time.getMonth()].slice(0, 3)} ${String(time.getDate()).padStart(2, '0')}, ${String(time.getFullYear())} ${String(time.getHours() % 12 || 12)}:${String(time.getMinutes()).padStart(2, '0')} ${time.getHours() < 12 ? 'AM' : 'PM'}`],
+	['Z', time => {
+		const offset = time.getTimezoneOffset();
+		return `${offset >= 0 ? '+' : '-'}${String(offset / -60).padStart(2, '0')}:${String(offset % 60).padStart(2, '0')}`;
+	}],
+	['ZZ', time => {
+		const offset = time.getTimezoneOffset();
+		return `${offset >= 0 ? '+' : '-'}${String(offset / -60).padStart(2, '0')}:${String(offset % 60).padStart(2, '0')}`;
+	}]
+]);
+/* eslint-enable max-len */
+
 /**
  * Klasa's Timestamp class, parses the pattern once, displays the desired Date or UNIX timestamp with the selected pattern.
  */
@@ -106,7 +178,7 @@ class Timestamp {
 	static _display(template, time) {
 		let output = '';
 		const parsedTime = Timestamp._resolveDate(time);
-		for (const { content, type } of template) output += content || Timestamp[type](parsedTime);
+		for (const { content, type } of template) output += content || tokens.get(type)(parsedTime);
 		return output;
 	}
 
@@ -122,9 +194,10 @@ class Timestamp {
 		for (let i = 0; i < pattern.length; i++) {
 			let current = '';
 			const currentChar = pattern[i];
-			if (currentChar in TOKENS) {
+			const tokenMax = TOKENS.get(currentChar);
+			if (typeof tokenMax === 'number') {
 				current += currentChar;
-				while (pattern[i + 1] === currentChar && current.length < TOKENS[currentChar]) current += pattern[++i];
+				while (pattern[i + 1] === currentChar && current.length < tokenMax) current += pattern[++i];
 				template.push({ type: current, content: null });
 			} else if (currentChar === '[') {
 				while (i + 1 < pattern.length && pattern[i + 1] !== ']') current += pattern[++i];
@@ -132,7 +205,7 @@ class Timestamp {
 				template.push({ type: 'literal', content: current });
 			} else {
 				current += currentChar;
-				while (i + 1 < pattern.length && !(pattern[i + 1] in TOKENS) && pattern[i + 1] !== '[') current += pattern[++i];
+				while (i + 1 < pattern.length && !TOKENS.has(pattern[i + 1]) && pattern[i + 1] !== '[') current += pattern[++i];
 				template.push({ type: 'literal', content: current });
 			}
 		}
@@ -153,114 +226,12 @@ class Timestamp {
 
 }
 
-/* eslint-disable id-length */
-
+/**
+ * The timezone offset in seconds.
+ * @since 0.5.0
+ * @type {number}
+ * @static
+ */
 Timestamp.timezoneOffset = new Date().getTimezoneOffset() * 60000;
-
-// Dates
-
-Timestamp.Y =
-Timestamp.YY = time => String(time.getFullYear()).slice(0, 2);
-
-Timestamp.YYY =
-Timestamp.YYYY = time => String(time.getFullYear());
-
-Timestamp.Q = time => String((time.getMonth() + 1) / 3);
-
-Timestamp.M = time => String(time.getMonth() + 1);
-
-Timestamp.MM = time => String(time.getMonth() + 1).padStart(2, '0');
-
-Timestamp.MMM =
-Timestamp.MMMM = time => MONTHS[time.getMonth()];
-
-Timestamp.D = time => String(time.getDate());
-
-Timestamp.DD = time => String(time.getDate()).padStart(2, '0');
-
-Timestamp.DDD =
-Timestamp.DDDD = time => {
-	const start = new Date(time.getFullYear(), 0, 0);
-	const diff = ((time.getMilliseconds() - start.getMilliseconds()) + (start.getTimezoneOffset() - time.getTimezoneOffset())) * MINUTE;
-	return String(Math.floor(diff / DAY));
-};
-
-Timestamp.d = time => {
-	const day = String(time.getDate());
-	if (day !== '11' && day.endsWith('1')) return `${day}st`;
-	if (day !== '12' && day.endsWith('2')) return `${day}nd`;
-	if (day !== '13' && day.endsWith('3')) return `${day}rd`;
-	return `${day}th`;
-};
-
-Timestamp.dd = time => DAYS[time.getDay()].slice(0, 2);
-
-Timestamp.ddd = time => DAYS[time.getDay()].slice(0, 3);
-
-Timestamp.dddd = time => DAYS[time.getDay()];
-
-Timestamp.X = time => String(time.valueOf() / SECOND);
-
-Timestamp.x = time => String(time.valueOf());
-
-// Times
-
-Timestamp.H = time => String(time.getHours());
-
-Timestamp.HH = time => String(time.getHours()).padStart(2, '0');
-
-Timestamp.h = time => String(time.getHours() % 12 || 12);
-
-Timestamp.hh = time => String(time.getHours() % 12 || 12).padStart(2, '0');
-
-Timestamp.a = time => time.getHours() < 12 ? 'am' : 'pm';
-
-Timestamp.A = time => time.getHours() < 12 ? 'AM' : 'PM';
-
-Timestamp.m = time => String(time.getMinutes());
-
-Timestamp.mm = time => String(time.getMinutes()).padStart(2, '0');
-
-Timestamp.s = time => String(time.getSeconds());
-
-Timestamp.ss = time => String(time.getSeconds()).padStart(2, '0');
-
-Timestamp.S = time => String(time.getMilliseconds());
-
-Timestamp.SS = time => String(time.getMilliseconds()).padStart(2, '0');
-
-Timestamp.SSS = time => String(time.getMilliseconds()).padStart(3, '0');
-
-// Locales
-
-/* eslint max-len:0 new-cap:0 */
-
-Timestamp.T = (time) => `${Timestamp.h(time)}:${Timestamp.mm(time)} ${Timestamp.A(time)}`;
-
-Timestamp.t = (time) => `${Timestamp.h(time)}:${Timestamp.mm(time)}:${Timestamp.ss(time)} ${Timestamp.A(time)}`;
-
-Timestamp.L = (time) => `${Timestamp.MM(time)}/${Timestamp.DD(time)}/${Timestamp.YYYY(time)}`;
-
-Timestamp.l = (time) => `${Timestamp.M(time)}/${Timestamp.DD(time)}/${Timestamp.YYYY(time)}`;
-
-Timestamp.LL = (time) => `${Timestamp.MMMM(time)} ${Timestamp.DD(time)}, ${Timestamp.YYYY(time)}`;
-
-Timestamp.ll = (time) => `${Timestamp.MMMM(time).slice(0, 3)} ${Timestamp.DD(time)}, ${Timestamp.YYYY(time)}`;
-
-Timestamp.LLL = (time) => `${Timestamp.LL(time)} ${Timestamp.T(time)}`;
-
-Timestamp.lll = (time) => `${Timestamp.ll(time)} ${Timestamp.T(time)}`;
-
-Timestamp.LLLL = (time) => `${Timestamp.dddd(time)}, ${Timestamp.LLL(time)}`;
-
-Timestamp.llll = (time) => `${Timestamp.ddd(time)} ${Timestamp.lll(time)}`;
-
-Timestamp.Z =
-Timestamp.ZZ = time => {
-	const offset = time.getTimezoneOffset();
-	return `${offset >= 0 ? '+' : '-'}${String(offset / -60).padStart(2, '0')}:${String(offset % 60).padStart(2, '0')}`;
-};
-
-/* eslint-enable id-length */
 
 module.exports = Timestamp;

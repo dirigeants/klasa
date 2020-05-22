@@ -15,10 +15,10 @@ module.exports = class extends Command {
 		piece.enable();
 		if (this.client.shard) {
 			await this.client.shard.broadcastEval(`
-				if (String(this.shard.id) !== '${this.client.shard.id}') this.${piece.store}.get('${piece.name}').enable();
+				if (String(this.options.shards) !== '${this.client.options.shards}') this.${piece.store}.get('${piece.name}').enable();
 			`);
 		}
-		return message.sendCode('diff', message.language.get('COMMAND_ENABLE', piece.type, piece.name));
+		return message.sendLocale('COMMAND_ENABLE', [piece.type, piece.name], { code: 'diff' });
 	}
 
 };
