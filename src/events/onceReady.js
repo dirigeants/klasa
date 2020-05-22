@@ -1,8 +1,8 @@
-const { Event, util } = require('klasa');
-const { Team } = require('discord.js');
+import { Event, util } from 'klasa';
+import { Team } from 'discord.js';
 let retries = 0;
 
-module.exports = class extends Event {
+export class extends Event {
 
 	constructor(...args) {
 		super(...args, {
@@ -48,4 +48,4 @@ module.exports = class extends Event {
 		return this.client.emit('klasaReady');
 	}
 
-};
+}

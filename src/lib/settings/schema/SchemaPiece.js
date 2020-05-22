@@ -1,4 +1,4 @@
-const { isFunction, isNumber } = require('../../util/util');
+import { isFunction, isNumber } from '../@klasa/utils';
 
 class SchemaPiece {
 
@@ -221,4 +221,4 @@ class SchemaPiece {
 
 }
 
-module.exports = SchemaPiece;
+export SchemaPiece;

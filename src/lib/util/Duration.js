@@ -148,7 +148,7 @@ class Duration {
 
 }
 
-module.exports = Duration;
+export Duration;
 
 /**
  * The RegExp used for the pattern parsing

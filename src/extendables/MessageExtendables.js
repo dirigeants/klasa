@@ -1,7 +1,7 @@
-const { Extendable } = require('klasa');
+import { Extendable } from 'klasa';
 const { Permissions: { FLAGS }, DMChannel, TextChannel } = require('discord.js');
 
-module.exports = class extends Extendable {
+export class extends Extendable {
 
 	constructor(...args) {
 		super(...args, { appliesTo: [DMChannel, TextChannel] });
@@ -23,4 +23,4 @@ module.exports = class extends Extendable {
 		return !this.guild || this.permissionsFor(this.guild.me).has(FLAGS.VIEW_CHANNEL, false);
 	}
 
-};
+}

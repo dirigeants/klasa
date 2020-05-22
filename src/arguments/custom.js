@@ -1,6 +1,6 @@
-const { Argument } = require('klasa');
+import { Argument } from 'klasa';
 
-module.exports = class extends Argument {
+export class extends Argument {
 
 	async run(arg, possible, message, custom) {
 		try {

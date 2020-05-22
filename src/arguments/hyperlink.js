@@ -1,7 +1,7 @@
-const { parse } = require('url');
-const { Argument } = require('klasa');
+import { parse } from 'url';
+import { Argument } from 'klasa';
 
-module.exports = class extends Argument {
+export class extends Argument {
 
 	constructor(...args) {
 		super(...args, { aliases: ['url'] });

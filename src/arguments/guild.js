@@ -1,6 +1,6 @@
-const { Argument } = require('klasa');
+import { Argument } from 'klasa';
 
-module.exports = class extends Argument {
+export class extends Argument {
 
 	run(arg, possible, message) {
 		const guild = this.constructor.regex.snowflake.test(arg) ? this.client.guilds.cache.get(arg) : null;

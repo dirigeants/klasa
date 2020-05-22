@@ -1,5 +1,5 @@
-const { Collection } = require('discord.js');
-const RateLimit = require('./RateLimit');
+import { Collection } from 'discord.js';
+import { RateLimit } from './RateLimit';
 
 /**
  * Manages {@link RateLimit}s
@@ -118,4 +118,4 @@ class RateLimitManager extends Collection {
 
 }
 
-module.exports = RateLimitManager;
+export RateLimitManager;

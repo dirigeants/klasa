@@ -1,6 +1,6 @@
-const { Inhibitor } = require('klasa');
+import { Inhibitor } from 'klasa';
 
-module.exports = class extends Inhibitor {
+export class extends Inhibitor {
 
 	run(message, command) {
 		if (!command.enabled) throw message.language.get('INHIBITOR_DISABLED_GLOBAL');

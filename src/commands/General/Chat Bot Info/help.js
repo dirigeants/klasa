@@ -1,7 +1,7 @@
 const { Command, util: { isFunction } } = require('klasa');
 const has = (obj, key) => Object.prototype.hasOwnProperty.call(obj, key);
 
-module.exports = class extends Command {
+export class extends Command {
 
 	constructor(...args) {
 		super(...args, {
@@ -66,4 +66,4 @@ module.exports = class extends Command {
 		return help;
 	}
 
-};
+}

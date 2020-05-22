@@ -1,6 +1,6 @@
-const { Inhibitor } = require('klasa');
+import { Inhibitor } from 'klasa';
 
-module.exports = class extends Inhibitor {
+export class extends Inhibitor {
 
 	constructor(...args) {
 		super(...args, { spamProtection: true });
@@ -20,4 +20,4 @@ module.exports = class extends Inhibitor {
 		if (existing && existing.limited) throw message.language.get('INHIBITOR_COOLDOWN', Math.ceil(existing.remainingTime / 1000), command.cooldownLevel !== 'author');
 	}
 
-};
+}

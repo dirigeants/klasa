@@ -1,9 +1,9 @@
-const { Console } = require('console');
-const { inspect } = require('util');
-const Colors = require('./Colors');
-const Timestamp = require('./Timestamp');
-const constants = require('./constants');
-const { mergeDefault } = require('./util');
+import { Console } from 'console';
+import { inspect } from 'util';
+import { Colors } from './Colors';
+import { Timestamp } from './Timestamp';
+import { constants } from './constants';
+import { mergeDefault } from './util';
 
 /**
  * Klasa's console class, extends NodeJS Console class.
@@ -246,4 +246,4 @@ class KlasaConsole extends Console {
 
 }
 
-module.exports = KlasaConsole;
+export KlasaConsole;

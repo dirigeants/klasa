@@ -1,8 +1,8 @@
-const { Command } = require('klasa');
-const fs = require('fs-nextra');
-const { resolve, join } = require('path');
+import { Command } from 'klasa';
+import { fs } from 'fs-nextra';
+import { resolve, join } from 'path';
 
-module.exports = class extends Command {
+export class extends Command {
 
 	constructor(...args) {
 		super(...args, {
@@ -32,4 +32,4 @@ module.exports = class extends Command {
 		}
 	}
 
-};
+}

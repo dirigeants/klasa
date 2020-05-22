@@ -1,6 +1,6 @@
-const { Command, Store, Stopwatch } = require('klasa');
+import { Command, Store, Stopwatch } from 'klasa';
 
-module.exports = class extends Command {
+export class extends Command {
 
 	constructor(...args) {
 		super(...args, {
@@ -58,4 +58,4 @@ module.exports = class extends Command {
 		return message.sendLocale('COMMAND_RELOAD_EVERYTHING', [timer.stop()]);
 	}
 
-};
+}

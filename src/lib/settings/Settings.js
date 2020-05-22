@@ -1,6 +1,6 @@
-const { isObject, deepClone, toTitleCase, arraysStrictEquals, objectToTuples, resolveGuild } = require('../util/util');
-const Type = require('../util/Type');
-const SchemaPiece = require('./schema/SchemaPiece');
+import { isObject, deepClone, toTitleCase, arraysStrictEquals, objectToTuples, resolveGuild } from '@klasa/utils';
+import { Type } from '../util/Type';
+import { SchemaPiece } from './schema/SchemaPiece';
 
 /**
  * <warning>Creating your own Settings instances is often discouraged and unneeded. SettingsGateway handles them internally for you.</warning>
@@ -520,4 +520,4 @@ class Settings {
 
 }
 
-module.exports = Settings;
+export Settings;

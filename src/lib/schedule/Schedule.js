@@ -1,4 +1,4 @@
-const ScheduledTask = require('./ScheduledTask');
+import { ScheduledTask } from './ScheduledTask';
 
 /**
  * <warning>Schedule is a singleton, use {@link KlasaClient#schedule} instead.</warning>
@@ -247,4 +247,4 @@ class Schedule {
 
 }
 
-module.exports = Schedule;
+export Schedule;

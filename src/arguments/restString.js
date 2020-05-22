@@ -1,6 +1,6 @@
-const { Argument } = require('klasa');
+import { Argument } from 'klasa';
 
-module.exports = class extends Argument {
+export class extends Argument {
 
 	constructor(...args) {
 		super(...args, { name: '...string', aliases: ['...str'] });
@@ -19,4 +19,4 @@ module.exports = class extends Argument {
 		return this.stringArg.run(rest, possible, message);
 	}
 
-};
+}

@@ -1,7 +1,7 @@
-const { Inhibitor, util } = require('klasa');
+import { Inhibitor, util } from 'klasa';
 const { Permissions, Permissions: { FLAGS } } = require('discord.js');
 
-module.exports = class extends Inhibitor {
+export class extends Inhibitor {
 
 	constructor(...args) {
 		super(...args);
@@ -23,4 +23,4 @@ module.exports = class extends Inhibitor {
 		if (missing.length) throw message.language.get('INHIBITOR_MISSING_BOT_PERMS', missing.map(key => this.friendlyPerms[key]).join(', '));
 	}
 
-};
+}

@@ -1,6 +1,6 @@
-const { Argument } = require('klasa');
+import { Argument } from 'klasa';
 
-module.exports = class extends Argument {
+export class extends Argument {
 
 	async run(arg, possible, message) {
 		// Regular Channel support
@@ -12,4 +12,4 @@ module.exports = class extends Argument {
 		throw message.language.get('RESOLVER_INVALID_CHANNEL', possible.name);
 	}
 
-};
+}

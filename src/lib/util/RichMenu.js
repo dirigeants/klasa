@@ -1,4 +1,4 @@
-const RichDisplay = require('./RichDisplay');
+import { RichDisplay } from './RichDisplay';
 
 /**
  * Klasa's RichMenu, for helping paginated embeds with reaction buttons
@@ -154,4 +154,4 @@ class RichMenu extends RichDisplay {
 
 }
 
-module.exports = RichMenu;
+export RichMenu;

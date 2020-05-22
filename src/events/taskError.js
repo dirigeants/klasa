@@ -1,6 +1,6 @@
-const { Event } = require('klasa');
+import { Event } from 'klasa';
 
-module.exports = class extends Event {
+export class extends Event {
 
 	run(scheduledTask, task, error) {
 		this.client.emit('wtf', `[TASK] ${task.path}\n${error ?

@@ -1,6 +1,6 @@
-const { Event } = require('klasa');
+import { Event } from 'klasa';
 
-module.exports = class extends Event {
+export class extends Event {
 
 	run(message, command, response, timer, finalizer, error) {
 		this.client.emit('wtf', `[FINALIZER] ${finalizer.path}\n${error ?

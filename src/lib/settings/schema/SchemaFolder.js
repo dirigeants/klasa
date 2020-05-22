@@ -1,4 +1,4 @@
-const Schema = require('./Schema');
+import { Schema } from './Schema';
 
 /**
  * A Folder for organizing {@link SchemaPiece}s
@@ -35,4 +35,4 @@ class SchemaFolder extends Schema {
 
 }
 
-module.exports = SchemaFolder;
+export SchemaFolder;

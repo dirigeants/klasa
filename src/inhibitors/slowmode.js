@@ -1,6 +1,6 @@
-const { Inhibitor, RateLimitManager } = require('klasa');
+import { Inhibitor, RateLimitManager } from 'klasa';
 
-module.exports = class extends Inhibitor {
+export class extends Inhibitor {
 
 	constructor(...args) {
 		super(...args, { spamProtection: true });
@@ -23,4 +23,4 @@ module.exports = class extends Inhibitor {
 		}
 	}
 
-};
+}

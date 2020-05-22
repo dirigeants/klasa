@@ -1,4 +1,4 @@
-const { isObject, mergeDefault } = require('./util');
+import { isObject, mergeDefault } from './util';
 const { DEFAULTS: { QUERYBUILDER } } = require('./constants');
 
 class QueryBuilder {
@@ -124,4 +124,4 @@ class QueryBuilder {
 
 }
 
-module.exports = QueryBuilder;
+export QueryBuilder;

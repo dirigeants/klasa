@@ -203,4 +203,4 @@ Colors.BACKGROUNDS = {
 	white: 107
 };
 
-module.exports = Colors;
+export Colors;

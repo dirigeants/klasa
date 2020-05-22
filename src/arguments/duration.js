@@ -1,6 +1,6 @@
-const { Argument, Duration } = require('klasa');
+import { Argument, Duration } from 'klasa';
 
-module.exports = class extends Argument {
+export class extends Argument {
 
 	run(arg, possible, message) {
 		const date = new Duration(arg).fromNow;

@@ -1,6 +1,6 @@
-const { Structures } = require('discord.js');
+import { Structures } from 'discord.js';
 
-module.exports = Structures.extend('Guild', Guild => {
+export Structures.extend('Guild', Guild => {
 	/**
 	 * Klasa's Extended Guild
 	 * @extends external:Guild

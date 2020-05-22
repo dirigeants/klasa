@@ -1,4 +1,4 @@
-const { Collection } = require('discord.js');
+import { Collection } from 'discord.js';
 
 const empty = Symbol('empty');
 
@@ -120,4 +120,4 @@ class PermissionLevels extends Collection {
 
 }
 
-module.exports = PermissionLevels;
+export PermissionLevels;

@@ -1,6 +1,6 @@
-const { Argument } = require('klasa');
+import { Argument } from 'klasa';
 
-module.exports = class extends Argument {
+export class extends Argument {
 
 	get date() {
 		return this.store.get('date');
@@ -25,4 +25,4 @@ module.exports = class extends Argument {
 		throw message.language.get('RESOLVER_INVALID_TIME', possible.name);
 	}
 
-};
+}

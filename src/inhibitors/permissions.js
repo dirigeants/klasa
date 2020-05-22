@@ -1,6 +1,6 @@
-const { Inhibitor } = require('klasa');
+import { Inhibitor } from 'klasa';
 
-module.exports = class extends Inhibitor {
+export class extends Inhibitor {
 
 	async run(message, command) {
 		const { broke, permission } = await this.client.permissionLevels.run(message, command.permissionLevel);

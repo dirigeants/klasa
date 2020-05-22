@@ -1,6 +1,6 @@
-const { Event } = require('klasa');
+import { Event } from 'klasa';
 
-module.exports = class extends Event {
+export class extends Event {
 
 	run(message, command, response) {
 		if (response && response.length) message.sendMessage(response);

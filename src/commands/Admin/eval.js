@@ -1,7 +1,7 @@
-const { Command, Stopwatch, Type, util } = require('klasa');
-const { inspect } = require('util');
+import { Command, Stopwatch, Type, util } from 'klasa';
+import { inspect } from 'util';
 
-module.exports = class extends Command {
+export class extends Command {
 
 	constructor(...args) {
 		super(...args, {
@@ -81,4 +81,4 @@ module.exports = class extends Command {
 		return asyncTime ? `⏱ ${asyncTime}<${syncTime}>` : `⏱ ${syncTime}`;
 	}
 
-};
+}

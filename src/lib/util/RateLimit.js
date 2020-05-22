@@ -114,4 +114,4 @@ class RateLimit {
 
 }
 
-module.exports = RateLimit;
+export RateLimit;

@@ -1,6 +1,6 @@
-const { Argument } = require('klasa');
+import { Argument } from 'klasa';
 
-module.exports = class extends Argument {
+export class extends Argument {
 
 	run(arg, possible, message) {
 		for (const store of this.client.pieceStores.values()) {

@@ -1,7 +1,7 @@
-const { Command } = require('klasa');
-const { User } = require('discord.js');
+import { Command } from 'klasa';
+import { User } from 'discord.js';
 
-module.exports = class extends Command {
+export class extends Command {
 
 	constructor(...args) {
 		super(...args, {
@@ -35,4 +35,4 @@ module.exports = class extends Command {
 		return message.sendLocale('COMMAND_BLACKLIST_SUCCESS', changes);
 	}
 
-};
+}

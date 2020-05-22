@@ -1,6 +1,6 @@
-const { Structures } = require('discord.js');
+import { Structures } from 'discord.js';
 
-module.exports = Structures.extend('User', User => {
+export Structures.extend('User', User => {
 	/**
 	 * Klasa's Extended User
 	 * @extends external:User

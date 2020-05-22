@@ -119,4 +119,4 @@ class Cron {
 
 }
 
-module.exports = Cron;
+export Cron;

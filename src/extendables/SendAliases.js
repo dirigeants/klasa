@@ -1,7 +1,7 @@
-const { Extendable } = require('klasa');
-const { TextChannel, DMChannel, User, APIMessage } = require('discord.js');
+import { Extendable } from 'klasa';
+import { TextChannel, DMChannel, User, APIMessage } from 'discord.js';
 
-module.exports = class extends Extendable {
+export class extends Extendable {
 
 	constructor(...args) {
 		super(...args, { appliesTo: [TextChannel, DMChannel, User] });
@@ -33,4 +33,4 @@ module.exports = class extends Extendable {
 		return this.send(content, options);
 	}
 
-};
+}

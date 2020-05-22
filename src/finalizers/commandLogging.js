@@ -1,6 +1,6 @@
-const { Finalizer, Colors } = require('klasa');
+import { Finalizer, Colors } from 'klasa';
 
-module.exports = class extends Finalizer {
+export class extends Finalizer {
 
 	constructor(...args) {
 		super(...args);
@@ -37,4 +37,4 @@ module.exports = class extends Finalizer {
 		return 'Direct Messages';
 	}
 
-};
+}

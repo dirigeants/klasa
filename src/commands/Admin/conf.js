@@ -1,6 +1,6 @@
 const { Command, util: { toTitleCase, codeBlock } } = require('klasa');
 
-module.exports = class extends Command {
+export class extends Command {
 
 	constructor(...args) {
 		super(...args, {
@@ -57,4 +57,4 @@ module.exports = class extends Command {
 		return null;
 	}
 
-};
+}

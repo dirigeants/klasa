@@ -1,7 +1,7 @@
 const { Structures, Collection, APIMessage, Permissions: { FLAGS } } = require('discord.js');
-const { regExpEsc } = require('../util/util');
+import { regExpEsc } from '@klasa/utils';
 
-module.exports = Structures.extend('Message', Message => {
+export Structures.extend('Message', Message => {
 	/**
 	 * Klasa's Extended Message
 	 * @extends external:Message

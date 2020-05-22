@@ -1,6 +1,6 @@
-const { Finalizer, RateLimitManager } = require('klasa');
+import { Finalizer, RateLimitManager } from 'klasa';
 
-module.exports = class extends Finalizer {
+export class extends Finalizer {
 
 	constructor(...args) {
 		super(...args);
@@ -26,4 +26,4 @@ module.exports = class extends Finalizer {
 		return cooldownManager.acquire(message.guild ? message[command.cooldownLevel].id : message.author.id);
 	}
 
-};
+}

@@ -1,7 +1,7 @@
-const { Event } = require('klasa');
+import { Event } from 'klasa';
 const gateways = ['users', 'clientStorage'];
 
-module.exports = class extends Event {
+export class extends Event {
 
 	constructor(...args) {
 		super(...args, { event: 'settingsUpdateEntry' });
@@ -25,4 +25,4 @@ module.exports = class extends Event {
 		if (!this.client.shard) this.disable();
 	}
 
-};
+}

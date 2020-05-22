@@ -1,4 +1,4 @@
-const { isFunction, deepClone } = require('../../util/util');
+import { isFunction, deepClone } from '../@klasa/utils';
 
 /**
  * The base Schema for {@link Gateway}s
@@ -214,4 +214,4 @@ class Schema extends Map {
 
 }
 
-module.exports = Schema;
+export Schema;

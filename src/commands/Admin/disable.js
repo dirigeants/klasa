@@ -1,6 +1,6 @@
-const { Command } = require('klasa');
+import { Command } from 'klasa';
 
-module.exports = class extends Command {
+export class extends Command {
 
 	constructor(...args) {
 		super(...args, {
@@ -24,4 +24,4 @@ module.exports = class extends Command {
 		return message.sendLocale('COMMAND_DISABLE', [piece.type, piece.name], { code: 'diff' });
 	}
 
-};
+}

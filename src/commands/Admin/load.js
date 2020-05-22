@@ -1,8 +1,8 @@
-const { Command, Stopwatch } = require('klasa');
-const { pathExists } = require('fs-nextra');
-const { join } = require('path');
+import { Command, Stopwatch } from 'klasa';
+import { pathExists } from 'fs-nextra';
+import { join } from 'path';
 
-module.exports = class extends Command {
+export class extends Command {
 
 	constructor(...args) {
 		super(...args, {
@@ -44,4 +44,4 @@ module.exports = class extends Command {
 		return undefined;
 	}
 
-};
+}

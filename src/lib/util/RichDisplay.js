@@ -1,5 +1,5 @@
-const { MessageEmbed: Embed } = require('discord.js');
-const ReactionHandler = require('./ReactionHandler');
+import { MessageEmbed: Embed } from 'discord.js';
+import { ReactionHandler } from './ReactionHandler';
 
 /**
  * Klasa's RichDisplay, for helping paginated embeds with reaction buttons
@@ -262,4 +262,4 @@ class RichDisplay {
 
 }
 
-module.exports = RichDisplay;
+export RichDisplay;

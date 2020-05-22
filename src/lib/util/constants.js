@@ -1,4 +1,4 @@
-const { mergeDefault, isObject } = require('./util');
+import { mergeDefault, isObject } from './util';
 
 const colorBase = {
 	shard: { background: 'cyan', text: 'black' },

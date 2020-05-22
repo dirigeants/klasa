@@ -1,6 +1,6 @@
-const GatewayStorage = require('./GatewayStorage');
-const Settings = require('./Settings');
-const { Collection } = require('discord.js');
+import { GatewayStorage } from './GatewayStorage';
+import { Settings } from './Settings';
+import { Collection } from 'discord.js';
 
 /**
  * <danger>You should never create a Gateway instance by yourself.
@@ -110,4 +110,4 @@ class Gateway extends GatewayStorage {
 
 }
 
-module.exports = Gateway;
+export Gateway;

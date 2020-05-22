@@ -1,6 +1,6 @@
-const { Language, util } = require('klasa');
+import { Language, util } from 'klasa';
 
-module.exports = class extends Language {
+export class extends Language {
 
 	constructor(...args) {
 		super(...args);
@@ -184,4 +184,4 @@ module.exports = class extends Language {
 		await super.init();
 	}
 
-};
+}

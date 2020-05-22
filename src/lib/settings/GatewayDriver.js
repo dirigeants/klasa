@@ -1,5 +1,5 @@
-const Gateway = require('./Gateway');
-const Schema = require('./schema/Schema');
+import { Gateway } from './Gateway';
+import { Schema } from './schema/Schema';
 
 /**
  * <warning>GatewayDriver is a singleton, use {@link KlasaClient#gateways} instead.</warning>
@@ -143,4 +143,4 @@ class GatewayDriver {
 
 }
 
-module.exports = GatewayDriver;
+export GatewayDriver;

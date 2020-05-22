@@ -204,4 +204,4 @@ class GatewayStorage {
 
 }
 
-module.exports = GatewayStorage;
+export GatewayStorage;

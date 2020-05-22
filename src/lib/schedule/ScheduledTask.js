@@ -1,5 +1,5 @@
-const Cron = require('../util/Cron');
-const { isObject } = require('../util/util');
+import { Cron } from '../util/Cron';
+import { isObject } from '@klasa/utils';
 
 /**
  * The structure for future tasks to be run
@@ -253,4 +253,4 @@ class ScheduledTask {
 
 }
 
-module.exports = ScheduledTask;
+export ScheduledTask;

@@ -1,4 +1,4 @@
-const { ReactionCollector } = require('discord.js');
+import { ReactionCollector } from 'discord.js';
 
 /**
  * Klasa's ReactionHandler, for handling RichDisplay and RichMenu reaction input
@@ -339,4 +339,4 @@ class ReactionHandler extends ReactionCollector {
 
 }
 
-module.exports = ReactionHandler;
+export ReactionHandler;

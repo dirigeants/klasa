@@ -1,7 +1,7 @@
-const { Command, version: klasaVersion, Duration } = require('klasa');
-const { version: discordVersion } = require('discord.js');
+import { Command, version: klasaVersion, Duration } from 'klasa';
+import { version: discordVersion } from 'discord.js';
 
-module.exports = class extends Command {
+export class extends Command {
 
 	constructor(...args) {
 		super(...args, {

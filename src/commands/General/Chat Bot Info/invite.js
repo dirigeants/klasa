@@ -1,6 +1,6 @@
-const { Command } = require('klasa');
+import { Command } from 'klasa';
 
-module.exports = class extends Command {
+export class extends Command {
 
 	constructor(...args) {
 		super(...args, {
