@@ -1,7 +1,7 @@
 /**
  * Handles generic RateLimits such as for {@link Command#cooldown}s
  */
-class RateLimit {
+export class RateLimit {
 
 	/**
 	 * @since 0.5.0
@@ -113,5 +113,3 @@ class RateLimit {
 	}
 
 }
-
-export RateLimit;

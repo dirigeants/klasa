@@ -1,4 +1,4 @@
-import { mergeDefault, isObject } from './util';
+import { mergeDefault, isObject } from '@klasa/utils';
 
 const colorBase = {
 	shard: { background: 'cyan', text: 'black' },
@@ -6,7 +6,7 @@ const colorBase = {
 	time: {}
 };
 
-exports.DEFAULTS = {
+export const DEFAULTS = {
 
 	CLIENT: {
 		commandEditing: false,
@@ -164,7 +164,7 @@ exports.DEFAULTS = {
 
 };
 
-exports.TIME = {
+export const TIME = {
 	SECOND: 1000,
 	MINUTE: 1000 * 60,
 	HOUR: 1000 * 60 * 60,
@@ -229,14 +229,15 @@ exports.TIME = {
 			thu: 4,
 			fri: 5,
 			sat: 6
-		}
+		},
+		tokensRegex: /^&/
 	}
 
 };
 
-exports.TIME.CRON.tokensRegex = new RegExp(Object.keys(exports.TIME.CRON.tokens).join('|'), 'g');
+TIME.CRON.tokensRegex = new RegExp(Object.keys(TIME.CRON.tokens).join('|'), 'g');
 
-exports.MENTION_REGEX = {
+export const MENTION_REGEX = {
 	userOrMember: /^(?:<@!?)?(\d{17,19})>?$/,
 	channel: /^(?:<#)?(\d{17,19})>?$/,
 	emoji: /^(?:<a?:\w{2,32}:)?(\d{17,19})>?$/,

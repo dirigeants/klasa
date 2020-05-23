@@ -22,19 +22,11 @@ export * from './lib/settings/schema/Schema';
 export * from './lib/settings/schema/SchemaFolder';
 export * from './lib/settings/schema/SchemaPiece';
 
-// lib/structures/base
-export * from './lib/structures/base/AliasPiece';
-export * from './lib/structures/base/AliasStore';
-export * from './lib/structures/base/Piece';
-export * from './lib/structures/base/Store';
-
 // lib/structures
 export * from './lib/structures/Argument';
 export * from './lib/structures/ArgumentStore';
 export * from './lib/structures/Command';
 export * from './lib/structures/CommandStore';
-export * from './lib/structures/Event';
-export * from './lib/structures/EventStore';
 export * from './lib/structures/Extendable';
 export * from './lib/structures/ExtendableStore';
 export * from './lib/structures/Finalizer';
@@ -75,4 +67,3 @@ export * from './lib/util/ReactionHandler';
 export * from './lib/util/RichDisplay';
 export * from './lib/util/RichMenu';
 export * from './lib/util/Stopwatch';
-export * from './lib/util/Timestamp';

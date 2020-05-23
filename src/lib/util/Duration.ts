@@ -49,7 +49,7 @@ const tokens = new Map([
 /**
  * Converts duration strings into ms and future dates
  */
-class Duration {
+export class Duration {
 
 	/**
 	 * Create a new Duration instance
@@ -146,33 +146,22 @@ class Duration {
 		return `${returnString + Math.round(duration / 365)} years`;
 	}
 
+	/**
+	 * The RegExp used for the pattern parsing
+	 * @since 0.5.0
+	 */
+	private static regex = /(-?\d*\.?\d+(?:e[-+]?\d+)?)\s*([a-zμ]*)/ig;
+
+	/**
+	 * The RegExp used for removing commas
+	 * @since 0.5.0
+	 */
+	private static commas = /,/g;
+
+	/**
+	 * The RegExp used for replacing a/an with 1
+	 * @since 0.5.0
+	 */
+	private static aan = /\ban?\b/ig;
+
 }
-
-export Duration;
-
-/**
- * The RegExp used for the pattern parsing
- * @since 0.5.0
- * @type {RegExp}
- * @static
- * @private
- */
-Duration.regex = /(-?\d*\.?\d+(?:e[-+]?\d+)?)\s*([a-zμ]*)/ig;
-
-/**
- * The RegExp used for removing commas
- * @since 0.5.0
- * @type {RegExp}
- * @static
- * @private
- */
-Duration.commas = /,/g;
-
-/**
- * The RegExp used for replacing a/an with 1
- * @since 0.5.0
- * @type {RegExp}
- * @static
- * @private
- */
-Duration.aan = /\ban?\b/ig;

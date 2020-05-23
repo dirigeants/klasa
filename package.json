@@ -48,6 +48,7 @@
     "ava": "^3.8.2",
     "eslint": "^6.8.0",
     "eslint-config-klasa": "dirigeants/klasa-lint",
+    "klasa": "^0.5.0",
     "nyc": "^15.0.1",
     "source-map-support": "^0.5.19",
     "typedoc": "^0.17.7",

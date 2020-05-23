@@ -1,10 +1,10 @@
-const { TIME: { DAY, CRON: { allowedNum, partRegex, wildcardRegex, predefined, tokens, tokensRegex } } } = require('./constants');
+import { TIME: { DAY, CRON: { allowedNum, partRegex, wildcardRegex, predefined, tokens, tokensRegex } } } from './constants';
 
 /**
  * Handles Cron strings and generates dates based on the cron string provided.
  * @see https://en.wikipedia.org/wiki/Cron
  */
-class Cron {
+export class Cron {
 
 	/**
 	 * @since 0.5.0
@@ -118,5 +118,3 @@ class Cron {
 	}
 
 }
-
-export Cron;

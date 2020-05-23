@@ -1933,6 +1933,13 @@ keyv@^3.0.0:
   dependencies:
     json-buffer "3.0.0"
 
+klasa@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/klasa/-/klasa-0.5.0.tgz#fc8f91945670469d14dc6184f3c5b1e3ee6c3afa"
+  integrity sha512-BrXP/rCvL7Sh4T3hnSOJTDbT5JT3Q3Di4sAg537OCzH/eRnYbeny4J99vkTGE5Lkm241HNH+kd+DURWaavBa6A==
+  dependencies:
+    fs-nextra "^0.4.7"
+
 latest-version@^5.0.0:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/latest-version/-/latest-version-5.1.0.tgz#119dfe908fe38d15dfa43ecd13fa12ec8832face"
