@@ -1,5 +1,5 @@
-import { AliasPiece } from './base/AliasPiece';
 import { MENTION_REGEX } from '../util/constants';
+import { AliasPiece } from '@klasa/core';
 
 /**
  * Base class for all Klasa Serializers. See {@tutorial CreatingSerializers} for more information how to use this class
@@ -15,7 +15,7 @@ export class Serializer extends AliasPiece {
 	 * @param {*} data The data to serialize
 	 * @returns {string|number|boolean}
 	 */
-	serialize(data) {
+	public serialize(data) {
 		return data;
 	}
 
@@ -29,7 +29,7 @@ export class Serializer extends AliasPiece {
 	 * @returns {*}
 	 * @abstract
 	 */
-	async deserialize() {
+	public async deserialize() {
 		throw new Error(`The deserialize method has not been implemented by ${this.type}:${this.name}`);
 	}
 
@@ -39,7 +39,7 @@ export class Serializer extends AliasPiece {
 	 * @param {*} data The data to stringify
 	 * @returns {string}
 	 */
-	stringify(data) {
+	public stringify(data) {
 		return String(data);
 	}
 

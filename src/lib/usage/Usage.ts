@@ -1,5 +1,8 @@
-import { Tag } from './Tag';
-import { TextPrompt } from './TextPrompt';
+import { Tag, TagRequirement } from './Tag';
+import { TextPrompt, TextPromptOptions } from './TextPrompt';
+import { KlasaClient } from '../Client';
+import { KlasaMessage } from '../extensions/KlasaMessage';
+import { Cache } from '@klasa/cache';
 
 const open = ['[', '(', '<'];
 const close = [']', ')', '>'];
@@ -11,79 +14,75 @@ const space = [' ', '\n'];
 export class Usage {
 
 	/**
+	 * The client this Usage was created with
 	 * @since 0.0.1
-	 * @param {KlasaClient} client The klasa client
-	 * @param {string} usageString The raw usage string
-	 * @param {string} usageDelim The deliminator for this usage
 	 */
-	constructor(client, usageString, usageDelim) {
-		/**
-		 * The client this Usage was created with
-		 * @since 0.0.1
-		 * @name Usage#client
-		 * @type {KlasaClient}
-		 * @readonly
-		 */
+	public readonly client!: KlasaClient;
+
+	/**
+	 * The usage string re-deliminated with the usageDelim
+	 * @since 0.0.1
+	 */
+	public deliminatedUsage: string;
+
+	/**
+	 * The usage string
+	 * @since 0.0.1
+	 */
+	public usageString: string;
+
+	/**
+	 * The usage delim
+	 * @since 0.5.0
+	 */
+	public usageDelim: string;
+
+	/**
+	 * The usage object to compare against later
+	 * @since 0.0.1
+	 */
+	public parsedUsage: Tag[];
+
+	/**
+	 * Stores one-off custom resolvers for use with the custom type arg
+	 * @since 0.5.0
+	 */
+	public customResolvers = new Cache<string, Function>();
+
+	/**
+	 * @since 0.0.1
+	 * @param client The klasa client
+	 * @param usageString The raw usage string
+	 * @param usageDelim The deliminator for this usage
+	 */
+	constructor(client: KlasaClient, usageString: string, usageDelim: string) {
 		Object.defineProperty(this, 'client', { value: client });
-
-		/**
-		 * The usage string re-deliminated with the usageDelim
-		 * @since 0.0.1
-		 * @type {string}
-		 */
 		this.deliminatedUsage = usageString !== '' ? ` ${usageString.split(' ').join(usageDelim)}` : '';
-
-		/**
-		 * The usage string
-		 * @since 0.0.1
-		 * @type {string}
-		 */
 		this.usageString = usageString;
-
-		/**
-		 * The usage delim
-		 * @since 0.5.0
-		 * @type {string}
-		 */
 		this.usageDelim = usageDelim;
-
-		/**
-		 * The usage object to compare against later
-		 * @since 0.0.1
-		 * @type {Tag[]}
-		 */
-		this.parsedUsage = this.constructor.parseUsage(this.usageString);
-
-		/**
-		 * Stores one-off custom resolvers for use with the custom type arg
-		 * @since 0.5.0
-		 * @type {Object}
-		 */
-		this.customResolvers = {};
+		this.parsedUsage = (this.constructor as typeof Usage).parseUsage(this.usageString);
 	}
 
 	/**
 	 * Registers a one-off custom resolver
-	 * @param {string} type The type of the usage argument
-	 * @param {Function} resolver The one-off custom resolver
-	 * @returns {this}
-	 * @chainable
 	 * @since 0.5.0
+	 * @param type The type of the usage argument
+	 * @param resolver The one-off custom resolver
+	 * @chainable
 	 */
-	createCustomResolver(type, resolver) {
-		this.customResolvers[type] = resolver;
+	public createCustomResolver(type: string, resolver: Function): this {
+		this.customResolvers.set(type, resolver);
 		return this;
 	}
 
 	/**
 	 * Customizes the response of an argument if it fails resolution.
-	 * @param {string} name The name of the usage argument
-	 * @param {(string|Function)} response The custom response or i18n function
-	 * @returns {this}
-	 * @chainable
 	 * @since 0.5.0
+	 * @param name The name of the usage argument
+	 * @param response The custom response or i18n function
+	 * @chainable
 	 */
-	customizeResponse(name, response) {
+	public customizeResponse(name: string, response: string | Function): this {
 		this.parsedUsage.some(tag => tag.register(name, response));
 		return this;
 	}
@@ -91,46 +90,41 @@ export class Usage {
 	/**
 	 * Creates a TextPrompt instance to collect and resolve arguments with.
 	 * @since 0.5.0
-	 * @param {KlasaMessage} message The message context from the prompt
-	 * @param {TextPromptOptions} [options] The options for the prompt
-	 * @returns {TextPrompt}
+	 * @param message The message context from the prompt
+	 * @param options The options for the prompt
 	 */
-	createPrompt(message, options = {}) {
+	public createPrompt(message: KlasaMessage, options: TextPromptOptions = {}): TextPrompt {
 		return new TextPrompt(message, this, options);
 	}
 
 	/**
 	 * Defines json stringify behavior of this class.
 	 * @since 0.5.0
-	 * @returns {Tag[]}
 	 */
-	toJSON() {
+	public toJSON(): Tag[] {
 		return this.parsedUsage;
 	}
 
 	/**
 	 * Defines to string behavior of this class.
 	 * @since 0.5.0
-	 * @returns {string}
 	 */
-	toString() {
+	public toString(): string {
 		return this.deliminatedUsage;
 	}
 
 	/**
 	 * Method responsible for building the usage object to check against
 	 * @since 0.0.1
-	 * @param {string} usageString The usage string to parse
-	 * @returns {Tag[]}
-	 * @private
+	 * @param usageString The usage string to parse
 	 */
-	static parseUsage(usageString) {
-		const usage = {
+	private static parseUsage(usageString: string): Tag[] {
+		const usage: UsageContext = {
 			tags: [],
 			opened: 0,
 			current: '',
 			openRegex: false,
-			openReq: false,
+			openReq: TagRequirement.Optional,
 			last: false,
 			char: 0,
 			from: 0,
@@ -139,7 +133,7 @@ export class Usage {
 		};
 
 		for (const [i, char] of Object.entries(usageString)) {
-			usage.char = i + 1;
+			usage.char = Number(i) + 1;
 			usage.from = usage.char - usage.current.length;
 			usage.at = `at char #${usage.char} '${char}'`;
 			usage.fromTo = `from char #${usage.from} to #${usage.char} '${usage.current}'`;
@@ -168,12 +162,10 @@ export class Usage {
 	/**
 	 * Method responsible for handling tag opens
 	 * @since 0.0.1
-	 * @param {Object} usage The current usage interim object
-	 * @param {string} char The character that triggered this function
-	 * @returns {void}
-	 * @private
+	 * @param usage The current usage interim object
+	 * @param char The character that triggered this function
 	 */
-	static tagOpen(usage, char) {
+	private static tagOpen(usage: UsageContext, char: string): void {
 		if (usage.opened) throw `${usage.at}: you may not open a tag inside another tag.`;
 		if (usage.current) throw `${usage.fromTo}: there can't be a literal outside a tag`;
 		usage.opened++;
@@ -183,12 +175,10 @@ export class Usage {
 	/**
 	 * Method responsible for handling tag closes
 	 * @since 0.0.1
-	 * @param {Object} usage The current usage interim object
-	 * @param {string} char The character that triggered this function
-	 * @returns {void}
-	 * @private
+	 * @param usage The current usage interim object
+	 * @param char The character that triggered this function
 	 */
-	static tagClose(usage, char) {
+	static tagClose(usage: UsageContext, char: string): void {
 		const required = close.indexOf(char);
 		if (!usage.opened) throw `${usage.at}: invalid close tag found`;
 		if (usage.openReq !== required) throw `${usage.at}: Invalid closure of '${open[usage.openReq]}${usage.current}' with '${close[required]}'`;
@@ -208,15 +198,26 @@ export class Usage {
 	/**
 	 * Method responsible for handling tag spacing
 	 * @since 0.0.1
-	 * @param {Object} usage The current usage interim object
-	 * @param {string} char The character that triggered this function
-	 * @returns {void}
-	 * @private
+	 * @param usage The current usage interim object
+	 * @param char The character that triggered this function
 	 */
-	static tagSpace(usage, char) {
+	private static tagSpace(usage: UsageContext, char: string): void {
 		if (char === '\n') throw `${usage.at}: there can't be a line break in the usage string`;
 		if (usage.opened) throw `${usage.at}: spaces aren't allowed inside a tag`;
 		if (usage.current) throw `${usage.fromTo}: there can't be a literal outside a tag.`;
 	}
 
+}
+
+interface UsageContext {
+	tags: Tag[];
+	opened: number;
+	current: string;
+	openRegex: boolean;
+	openReq: TagRequirement;
+	last: boolean;
+	char: number;
+	from: number;
+	at: string;
+	fromTo: string;
 }

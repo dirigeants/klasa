@@ -1,4 +1,7 @@
-import { Piece } from '@klasa/core';
+import { Piece, PieceOptions } from '@klasa/core';
+import { InhibitorStore } from './InhibitorStore';
+import { Command } from './Command';
+import { KlasaMessage } from '../extensions/KlasaMessage';
 
 /**
  * Base class for all Klasa Inhibitors. See {@tutorial CreatingInhibitors} for more information how to use this class
@@ -6,40 +9,33 @@ import { Piece } from '@klasa/core';
  * @tutorial CreatingInhibitors
  * @extends Piece
  */
-export class Inhibitor extends Piece {
+export abstract class Inhibitor extends Piece {
 
 	/**
-	 * @typedef {PieceOptions} InhibitorOptions
-	 * @property {boolean} [spamProtection=false] If this inhibitor is meant for spamProtection (disables the inhibitor while generating help)
+	 * If this inhibitor is meant for spamProtection (disables the inhibitor while generating help)
+	 * @since 0.0.1
 	 */
+	public spamProtection: boolean;
 
 	/**
 	 * @since 0.0.1
-	 * @param {InhibitorStore} store The Inhibitor Store
-	 * @param {string} file The path from the pieces folder to the inhibitor file
-	 * @param {string} directory The base directory to the pieces folder
-	 * @param {InhibitorOptions} [options={}] Optional Inhibitor settings
+	 * @param store The Inhibitor Store
+	 * @param file The path from the pieces folder to the inhibitor file
+	 * @param directory The base directory to the pieces folder
+	 * @param options Optional Inhibitor settings
 	 */
-	constructor(store, file, directory, options = {}) {
-		super(store, file, directory, options);
-
-		/**
-		 * If this inhibitor is meant for spamProtection (disables the inhibitor while generating help)
-		 * @since 0.0.1
-		 * @type {boolean}
-		 */
-		this.spamProtection = options.spamProtection;
+	constructor(store: InhibitorStore, directory: string, files: readonly string[], options: InhibitorOptions = {}) {
+		super(store, directory, files, options);
+		this.spamProtection = options.spamProtection ?? false;
 	}
 
 	/**
 	 * The async wrapper for running inhibitors
 	 * @since 0.5.0
-	 * @param {KlasaMessage} message The message that triggered this inhibitor
-	 * @param {Command} command The command to run
-	 * @returns {(void|string)}
-	 * @private
+	 * @param message The message that triggered this inhibitor
+	 * @param command The command to run
 	 */
-	async _run(message, command) {
+	private async _run(message: KlasaMessage, command: Command): Promise<boolean | string | void> {
 		try {
 			return await this.run(message, command);
 		} catch (err) {
@@ -52,23 +48,22 @@ export class Inhibitor extends Piece {
 	 * @since 0.0.1
 	 * @param {KlasaMessage} message The message that triggered this inhibitor
 	 * @param {Command} command The command to run
-	 * @returns {(void|string)}
 	 * @abstract
 	 */
-	async run() {
-		// Defined in extension Classes
-		throw new Error(`The run method has not been implemented by ${this.type}:${this.name}.`);
-	}
+	public abstract async run(message: KlasaMessage, command: Command): Promise<boolean | string | void>;
 
 	/**
 	 * Defines the JSON.stringify behavior of this inhibitor.
-	 * @returns {Object}
 	 */
-	toJSON() {
+	toJSON(): object {
 		return {
 			...super.toJSON(),
 			spamProtection: this.spamProtection
 		};
 	}
 
+}
+
+export interface InhibitorOptions extends PieceOptions {
+	spamProtection?: boolean;
 }

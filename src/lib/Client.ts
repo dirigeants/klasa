@@ -1,4 +1,4 @@
-import { Client, Permissions, ClientOptions, Application, User } from '@klasa/core';
+import { Permissions, ClientOptions, Application, User, Client, PieceOptions, EventOptions } from '@klasa/core';
 import { isObject, mergeDefault } from '@klasa/utils';
 import { PermissionLevels } from './permissions/PermissionLevels';
 
@@ -28,23 +28,323 @@ import { KlasaConsole, ConsoleOptions } from './util/KlasaConsole';
 import { KlasaClientDefaults, MENTION_REGEX } from './util/constants';
 
 import type { Settings } from './settings/Settings';
+import type { CommandOptions } from './structures/Command';
+import type { ExtendableOptions } from './structures/Extendable';
+import type { InhibitorOptions } from './structures/Inhibitor';
+import type { MonitorOptions } from './structures/Monitor';
+import { ChannelType } from '@klasa/dapi-types';
 
 export interface KlasaClientOptions extends ClientOptions {
-	commands: CommandHandlingOptions;
-	console: ConsoleOptions;
-	// todo: Write out KlasaClientOptions
+	/**
+	 * The command handler options
+	 * @default {}
+	 */
+	commands?: CommandHandlingOptions;
+
+	/**
+	 * Config options to pass to the client console
+	 * @default {}
+	 */
+	console?: ConsoleOptions;
+
+	/**
+	 * Config options to pass to console events
+	 */
+	consoleEvents?: ConsoleEvents;
+
+	/**
+	 * The default language Klasa should opt-in for the commands
+	 * @default 'en-US'
+	 */
+	language?: string;
+
+	/**
+	 * The discord user id for the users the bot should respect as the owner (gotten from Discord api if not provided)
+	 */
+	owners?: string[];
+
+	/**
+	 * The permission levels to use with this bot
+	 */
+	permissionLevels?: PermissionLevels;
+
+	/**
+	 * Overrides the defaults for all pieces
+	 */
+	pieceDefaults?: PieceDefaults;
+
+	/**
+	 * Whether the bot should handle unhandled promise rejections automatically (handles when false)
+	 * (also can be configured with process.env.NODE_ENV)
+	 */
+	production?: boolean;
+
+	/**
+	 * The ready message to be passed throughout Klasa's ready event
+	 * @default client => `Successfully initialized. Ready to serve ${client.guilds.size} guilds.`
+	 */
+	readyMessage?: string | ((client: Client) => string);
+
+	/**
+	 * The provider options
+	 * @default {}
+	 */
+	providers?: ProvidersOptions;
+
+	/**
+	 * The settings options
+	 * @default {}
+	 */
+	settings?: SettingsOptions;
+
+	/**
+	 * The options for the internal clock module that runs Schedule
+	 * @default {}
+	 */
+	schedule?: ScheduleOptions;
 }
 
 export interface CommandHandlingOptions {
-	editing: boolean;
-	logging: boolean;
-	lifetime: number;
-	// todo: Write out CommandHandlingOptions
+	/**
+	 * Whether the bot should update responses if the command is edited
+	 * @default false
+	 */
+	editing?: boolean;
+
+	/**
+	 * Whether the bot should log command usage
+	 * @default false
+	 */
+	logging?: boolean;
+
+	/**
+	 * The threshold for how old command messages can be before sweeping since the last edit in seconds
+	 * @default 1800
+	 */
+	lifetime?: number;
+
+	/**
+	 * Whether the bot should allow prefixless messages in DMs
+	 * @default false
+	 */
+	noPrefixDM?: boolean;
+
+	/**
+	 * The default prefix the bot should respond to
+	 * @default null
+	 */
+	prefix?: string | string[] | null;
+
+	/**
+	 * The regular expression prefix if one is provided
+	 * @default null
+	 */
+	regexPrefix?: RegExp;
+
+	/**
+	 * Amount of time in ms before the bot will respond to a users command since the last command that user has run
+	 * @default 0
+	 */
+	slowmode?: number;
+
+	/**
+	 * If the slowmode time should reset if a user spams commands faster than the slowmode allows for
+	 * @default false
+	 */
+	slowmodeAggressive?: boolean;
+
+	/**
+	 * Whether the bot should type while processing commands
+	 * @default false
+	 */
+	typing?: boolean;
+
+	/**
+	 * Whether the bot should respond to case insensitive prefix or not
+	 * @default false
+	 */
+	prefixCaseInsensitive?: boolean;
+
+	/**
+	 * The defaults for custom prompts
+	 * @default {}
+	 */
+	prompts?: CustomPromptDefaults;
 }
+
+export interface CustomPromptDefaults {
+	/**
+	 * The number of re-prompts before custom prompt gives up
+	 * @default Infinity
+	 */
+	limit: number;
+
+	/**
+	 * The time-limit for re-prompting custom prompts
+	 * @default 30000
+	 */
+	time: number;
+
+	/**
+	 * Whether the custom prompt should respect quoted strings
+	 * @default false
+	 */
+	quotedStringSupport: boolean;
+}
+
+// todo: need better name
+export interface PieceHandlingOptions {
+	createFolders: boolean;
+	defaults: PieceDefaults;
+	disabledPieces: string[];
+}
+
+export interface ProvidersOptions {
+	/**
+	 * The default provider to use.
+	 * @default 'en-US'
+	 */
+	default?: string;
+
+	/**
+	 * The connection options keyed by the provider naame
+	 */
+	[provider: string]: unknown;
+}
+
+export interface ScheduleOptions {
+	/**
+	 * The interval in milliseconds for the clock to check the tasks
+	 * @default 60000
+	 */
+	interval?: number;
+}
+
+export interface SettingsOptions {
+	/**
+	 * The options for each built-in gateway
+	 * @default {}
+	 */
+	gateways: GatewaysOptions;
+
+	/**
+	 * Whether the bot should preserve (non-default) settings when removed from a guild
+	 * @default true
+	 */
+	preserve: boolean;
+}
+
+// TODO(kyranet): fix this once SGN2 is available
+export interface GatewaysOptions extends Partial<Record<string, { schema: Schema }>> {
+	/**
+	 * The options for clientStorage's gateway
+	 * @default {}
+	 */
+	clientStorage?: { schema: Schema };
+
+	/**
+	 * The options for guilds' gateway
+	 * @default {}
+	 */
+	guilds?: { schema: Schema };
+
+	/**
+	 * The options for users' gateway
+	 * @default {}
+	 */
+	users?: { schema: Schema };
+}
+
+export interface ConsoleEvents {
+	/**
+	  * If the debug event should be enabled by default
+	  * @default false
+	  */
+	debug?: boolean;
+
+	/**
+	  * If the error event should be enabled by default
+	  * @default true
+	  */
+	error?: boolean;
+	/**
+	  * If the log event should be enabled by default
+	  * @default true
+	  */
+	log?: boolean;
+
+	/**
+	  * If the verbose event should be enabled by default
+	  * @default false
+	  */
+	verbose?: boolean;
+
+	/**
+	  * If the warn event should be enabled by default
+	  * @default true
+	  */
+	warn?: boolean;
+
+	/**
+	  * If the warn event should be enabled by default
+	  * @default true
+	  */
+	wtf?: boolean;
+}
+
+export interface PieceDefaults extends Partial<Record<string, PieceOptions>> {
+	/**
+	 * The default command options.
+	 * @default {}
+	 */
+	commands?: CommandOptions;
+
+	/**
+	 * The default event options.
+	 * @default {}
+	 */
+	events?: EventOptions;
+
+	/**
+	 * The default extendable options.
+	 * @default {}
+	 */
+	extendables?: ExtendableOptions;
+
+	/**
+	 * The default finalizer options.
+	 * @default {}
+	 */
+	finalizers?: PieceOptions;
+
+	/**
+	 * The default inhibitor options.
+	 * @default {}
+	 */
+	inhibitors?: InhibitorOptions;
+
+	/**
+	 * The default language options.
+	 * @default {}
+	 */
+	languages?: PieceOptions;
+
+	/**
+	 * The default monitor options.
+	 * @default {}
+	 */
+	monitors?: MonitorOptions;
+
+	/**
+	 * The default provider options.
+	 * @default {}
+	 */
+	providers?: PieceOptions;
+}
+
 
 /**
  * The client for handling everything. See {@tutorial GettingStarted} for more information how to get started using this class.
- * @extends external:Client
  * @tutorial GettingStarted
  */
 export class KlasaClient extends Client {
@@ -57,81 +357,6 @@ export class KlasaClient extends Client {
 	/**
 	 * Defaulted to KlasaClient.defaultPermissionLevels
 	 * @typedef {PermissionLevels} PermissionLevelsOverload
-	 */
-
-	/**
-	 * @typedef {external:DiscordClientOptions} KlasaClientOptions
-	 * @property {boolean} [commandEditing=false] Whether the bot should update responses if the command is edited
-	 * @property {boolean} [commandLogging=false] Whether the bot should log command usage
-	 * @property {number} [commandMessageLifetime=1800] The threshold for how old command messages can be before sweeping since the last edit in seconds
-	 * @property {ConsoleOptions} [console={}] Config options to pass to the client console
-	 * @property {ConsoleEvents} [consoleEvents={}] Config options to pass to the client console
-	 * @property {boolean} [createPiecesFolders=true] Whether Klasa should create pieces' folder at start up or not
-	 * @property {CustomPromptDefaults} [customPromptDefaults={}] The defaults for custom prompts
-	 * @property {string[]} [disabledCorePieces=[]] An array of disabled core piece types, e.g., ['commands', 'arguments']
-	 * @property {GatewaysOptions} [gateways={}] The options for each built-in gateway
-	 * @property {string} [language='en-US'] The default language Klasa should opt-in for the commands
-	 * @property {boolean} [noPrefixDM=false] Whether the bot should allow prefixless messages in DMs
-	 * @property {string[]} [owners] The discord user id for the users the bot should respect as the owner (gotten from Discord api if not provided)
-	 * @property {PermissionLevelsOverload} [permissionLevels] The permission levels to use with this bot
-	 * @property {PieceDefaults} [pieceDefaults={}] Overrides the defaults for all pieces
-	 * @property {string|string[]} [prefix] The default prefix the bot should respond to
-	 * @property {boolean} [preserveSettings=true] Whether the bot should preserve (non-default) settings when removed from a guild
-	 * @property {boolean} [production=false] Whether the bot should handle unhandled promise rejections automatically (handles when false) (also can be configured with process.env.NODE_ENV)
-	 * @property {ProvidersOptions} [providers] The provider options
-	 * @property {ReadyMessage} [readyMessage] readyMessage to be passed throughout Klasa's ready event
-	 * @property {RegExp} [regexPrefix] The regular expression prefix if one is provided
-	 * @property {ScheduleOptions} [schedule={}] The options for the internal clock module that runs Schedule
-	 * @property {number} [slowmode=0] Amount of time in ms before the bot will respond to a users command since the last command that user has run
-	 * @property {boolean} [slowmodeAggressive=false] If the slowmode time should reset if a user spams commands faster than the slowmode allows for
-	 * @property {boolean} [typing=false] Whether the bot should type while processing commands
-	 * @property {boolean} [prefixCaseInsensitive=false] Wether the bot should respond to case insensitive prefix or not
-	 */
-
-	/**
-	 * @typedef {Object} ProvidersOptions
-	 * @property {string} [default] The default provider to use
-	 */
-
-	/**
-	 * @typedef {Object} ScheduleOptions
-	 * @property {number} [interval=60000] The interval in milliseconds for the clock to check the tasks
-	 */
-
-	/**
-	 * @typedef {Object} GatewaysOptions
-	 * @property {GatewayDriverRegisterOptions} [clientStorage] The options for clientStorage's gateway
-	 * @property {GatewayDriverRegisterOptions} [guilds] The options for guilds' gateway
-	 * @property {GatewayDriverRegisterOptions} [users] The options for users' gateway
-	 */
-
-	/**
-	 * @typedef {Object} ConsoleEvents
-	 * @property {boolean} [debug=false] If the debug event should be enabled by default
-	 * @property {boolean} [error=true] If the error event should be enabled by default
-	 * @property {boolean} [log=true] If the log event should be enabled by default
-	 * @property {boolean} [verbose=false] If the verbose event should be enabled by default
-	 * @property {boolean} [warn=true] If the warn event should be enabled by default
-	 * @property {boolean} [wtf=true] If the wtf event should be enabled by default
-	 */
-
-	/**
-	 * @typedef {Object} PieceDefaults
-	 * @property {CommandOptions} [commands={}] The default command options
-	 * @property {EventOptions} [events={}] The default event options
-	 * @property {ExtendableOptions} [extendables={}] The default extendable options
-	 * @property {FinalizerOptions} [finalizers={}] The default finalizer options
-	 * @property {InhibitorOptions} [inhibitors={}] The default inhibitor options
-	 * @property {LanguageOptions} [languages={}] The default language options
-	 * @property {MonitorOptions} [monitors={}] The default monitor options
-	 * @property {ProviderOptions} [providers={}] The default provider options
-	 */
-
-	/**
-	 * @typedef {Object} CustomPromptDefaults
-	 * @property {number} [limit=Infinity] The number of re-prompts before custom prompt gives up
-	 * @property {number} [time=30000] The time-limit for re-prompting custom prompts
-	 * @property {boolean} [quotedStringSupport=false] Whether the custom prompt should respect quoted strings
 	 */
 
 	/**
@@ -268,29 +493,30 @@ export class KlasaClient extends Client {
 		this.permissionLevels = this.validatePermissionLevels();
 		this.gateways = new GatewayDriver(this);
 
-		const { guilds, users, clientStorage } = this.options.gateways;
-		const guildSchema = 'schema' in guilds ? guilds.schema : this.constructor.defaultGuildSchema;
-		const userSchema = 'schema' in users ? users.schema : this.constructor.defaultUserSchema;
-		const clientSchema = 'schema' in clientStorage ? clientStorage.schema : this.constructor.defaultClientSchema;
+		// TODO(kyranet): uncomment and fix once SGN2 is out
+		// const { guilds, users, clientStorage } = this.options.settings.gateways;
+		// const guildSchema = 'schema' in guilds ? guilds.schema : (this.constructor as typeof KlasaClient).defaultGuildSchema;
+		// const userSchema = 'schema' in users ? users.schema : (this.constructor as typeof KlasaClient).defaultUserSchema;
+		// const clientSchema = 'schema' in clientStorage ? clientStorage.schema : (this.constructor as typeof KlasaClient).defaultClientSchema;
 
-		// Update Guild Schema with Keys needed in Klasa
-		const prefixKey = guildSchema.get('prefix');
-		if (!prefixKey || prefixKey.default === null) {
-			guildSchema.add('prefix', 'string', { array: Array.isArray(this.options.prefix), default: this.options.prefix });
-		}
+		// // Update Guild Schema with Keys needed in Klasa
+		// const prefixKey = guildSchema.get('prefix');
+		// if (!prefixKey || prefixKey.default === null) {
+		// 	guildSchema.add('prefix', 'string', { array: Array.isArray(this.options.commands.prefix), default: this.options.commands.prefix });
+		// }
 
-		const languageKey = guildSchema.get('language');
-		if (!languageKey || languageKey.default === null) {
-			guildSchema.add('language', 'language', { default: this.options.language });
-		}
+		// const languageKey = guildSchema.get('language');
+		// if (!languageKey || languageKey.default === null) {
+		// 	guildSchema.add('language', 'language', { default: this.options.language });
+		// }
 
-		guildSchema.add('disableNaturalPrefix', 'boolean', { configurable: Boolean(this.options.regexPrefix) });
+		// guildSchema.add('disableNaturalPrefix', 'boolean', { configurable: Boolean(this.options.commands.regexPrefix) });
 
-		// Register default gateways
-		this.gateways
-			.register('guilds', { ...guilds, schema: guildSchema })
-			.register('users', { ...users, schema: userSchema })
-			.register('clientStorage', { ...clientStorage, schema: clientSchema });
+		// // Register default gateways
+		// this.gateways
+		// 	.register('guilds', { ...guilds, schema: guildSchema })
+		// 	.register('users', { ...users, schema: userSchema })
+		// 	.register('clientStorage', { ...clientStorage, schema: clientSchema });
 
 		this.settings = null;
 		this.application = null;
@@ -316,8 +542,10 @@ export class KlasaClient extends Client {
 	 * @since 0.0.1
 	 */
 	public get invite(): string {
-		const permissions = new Permissions(this.constructor.basePermissions).add(...this.commands.map(command => command.requiredPermissions)).bitfield;
-		return `https://discordapp.com/oauth2/authorize?client_id=${this.application.id}&permissions=${permissions}&scope=bot`;
+		const { application } = this;
+		if (!application) throw new Error(`${this.constructor.name}#invite is not available until ready.`);
+		const permissions = new Permissions((this.constructor as typeof KlasaClient).basePermissions).add(...this.commands.map(command => command.requiredPermissions)).bitfield;
+		return `https://discordapp.com/oauth2/authorize?client_id=${application.id}&permissions=${permissions}&scope=bot`;
 	}
 
 	/**
@@ -325,7 +553,7 @@ export class KlasaClient extends Client {
 	 * @since 0.5.0
 	 */
 	public get owners(): Set<User> {
-		const owners = new Set();
+		const owners = new Set<User>();
 		for (const owner of this.options.owners) {
 			const user = this.users.get(owner);
 			if (user) owners.add(user);
@@ -338,9 +566,8 @@ export class KlasaClient extends Client {
 	 * When ran, this function will update {@link KlasaClient#application}.
 	 * @since 0.0.1
 	 */
-	public async fetchApplication(): Promise<ClientApplication> {
-		// todo: see what's up with @klasa/core fetchApplication
-		this.application = await super.fetchApplication();
+	public async fetchApplication(): Promise<Application> {
+		this.application = await Application.fetch(this);
 		return this.application;
 	}
 
@@ -348,12 +575,12 @@ export class KlasaClient extends Client {
 	 * Validates the permission structure passed to the client
 	 * @since 0.0.1
 	 */
-	private validatePermissionLevels() {
+	private validatePermissionLevels(): PermissionLevels {
 		// todo: remove in favor of PermissionLevels#validate()
-		const permissionLevels = this.options.permissionLevels || this.constructor.defaultPermissionLevels;
+		const permissionLevels = this.options.permissionLevels || (this.constructor as typeof KlasaClient).defaultPermissionLevels;
 		if (!(permissionLevels instanceof PermissionLevels)) throw new Error('permissionLevels must be an instance of the PermissionLevels class');
-		if (permissionLevels.isValid()) return permissionLevels;
-		throw new Error(permissionLevels.debug());
+		// eslint-disable-next-line
+		return permissionLevels['validate']();
 	}
 
 	/**
@@ -365,6 +592,7 @@ export class KlasaClient extends Client {
 	 * @param {number} [commandLifetime=this.options.commandMessageLifetime] Messages that are older than this (in seconds)
 	 * will be removed from the caches. The default is based on {@link KlasaClientOptions#commandMessageLifetime}
 	 */
+	// TODO: messageCacheLifetime doesn't exist in core, should this be framework specific or library specific option?
 	protected sweepMessages(lifetime: number = this.options.messageCacheLifetime, commandLifetime: number = this.options.commands.lifetime): number {
 		if (typeof lifetime !== 'number' || isNaN(lifetime)) throw new TypeError('The lifetime must be a number.');
 		if (lifetime <= 0) {
@@ -379,8 +607,8 @@ export class KlasaClient extends Client {
 		let messages = 0;
 		let commandMessages = 0;
 
-		for (const channel of this.channels.values()) {
-			if (!channel.messages) continue;
+		for (const channel  of this.channels.values()) {
+			if (channel.type === ChannelType.GuildVoice) continue;
 			channels++;
 
 			channel.messages.sweep(message => {

@@ -1,4 +1,6 @@
 import { Argument } from './Argument';
+import { Possible } from '../usage/Possible';
+import { KlasaMessage } from '../extensions/KlasaMessage';
 
 /**
  * Base Abstracted class for Multi-Resolving D.JS and Klasa Structures.
@@ -13,9 +15,10 @@ export class MultiArgument extends Argument {
 	 * @readonly
 	 * @abstract
 	 */
-	get base() {
+	get base(): unknown {
 		throw new Error('A "base" getter must be implemented in extended classes.');
 	}
+
 
 	/**
 	 * The run method for handling MultiArguments (not to be implemented in extended classes)
@@ -24,7 +27,7 @@ export class MultiArgument extends Argument {
 	 * @param {Possible} possible This current usage possible
 	 * @param {KlasaMessage} message The message that triggered the command
 	 */
-	async run(argument, possible, message) {
+	public async run(argument: string, possible: Possible, message: KlasaMessage): Promise<any[]> {
 		const structures = [];
 		const { min, max } = possible;
 		const { args, usage: { usageDelim } } = message.prompter;

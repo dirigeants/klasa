@@ -1,29 +1,30 @@
 import { Inhibitor } from './Inhibitor';
-import { Store } from '@klasa/core';
+import { Store, PieceConstructor } from '@klasa/core';
 
 import type { KlasaClient } from '../Client';
+import type { Command } from './Command';
+import type { KlasaMessage } from '../extensions/KlasaMessage';
 
 /**
  * Stores all the inhibitors in Klasa
- * @extends Store
  */
 export class InhibitorStore extends Store<Inhibitor> {
 
 	constructor(client: KlasaClient) {
-		super(client, 'inhibitors', Inhibitor);
+		super(client, 'inhibitors', Inhibitor as PieceConstructor<Inhibitor>);
 	}
 
 	/**
 	 * Runs our inhibitors on the command.
 	 * @since 0.0.1
-	 * @param {KlasaMessage} message The message object from @klasa/core
-	 * @param {Command} command The command being ran.
-	 * @param {boolean} [selective=false] Whether or not we should ignore certain inhibitors to prevent spam.
-	 * @returns {void}
+	 * @param message The message object from @klasa/core
+	 * @param command The command being ran.
+	 * @param selective Whether or not we should ignore certain inhibitors to prevent spam.
 	 */
-	async run(message, command, selective = false) {
+	public async run(message: KlasaMessage, command: Command, selective = false): Promise<void> {
 		const mps = [];
-		for (const inhibitor of this.values()) if (inhibitor.enabled && (!selective || !inhibitor.spamProtection)) mps.push(inhibitor._run(message, command));
+		// eslint-disable-next-line dot-notation
+		for (const inhibitor of this.values()) if (inhibitor.enabled && (!selective || !inhibitor.spamProtection)) mps.push(inhibitor['_run'](message, command));
 		const results = (await Promise.all(mps)).filter(res => res);
 		if (results.includes(true)) throw undefined;
 		if (results.length) throw results;

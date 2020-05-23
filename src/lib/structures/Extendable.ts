@@ -1,4 +1,5 @@
-import { Piece } from '@klasa/core';
+import { Piece, PieceOptions } from '@klasa/core';
+import { ExtendableStore } from './ExtendableStore';
 
 /**
  * Base class for all Klasa Extendables. See {@tutorial CreatingExtendables} for more information how to use this class
@@ -8,17 +9,24 @@ import { Piece } from '@klasa/core';
  */
 export class Extendable extends Piece {
 
-	/**
-	 * @typedef {PieceOptions} ExtendableOptions
-	 * @property {any[]} [appliesTo=[]] What classes this extendable is for
-	 */
 
 	/**
-	 * @typedef {Object} OriginalPropertyDescriptors
-	 * @property {any} staticPropertyDescriptors The original static property descriptors for the class
-	 * @property {any} instancePropertyDescriptors The original instance property descriptors for the class
-	 * @private
+	 * The static property descriptors of this extendable
+	 * @since 0.5.0
 	 */
+	private staticPropertyDescriptors: any;
+
+	/**
+	 * The instance property descriptors of this extendable
+	 * @since 0.5.0
+	 */
+	private instancePropertyDescriptors: any;
+
+	/**
+	 * The original property descriptors for each of the original classes
+	 * @since 0.5.0
+	 */
+	private originals: Map<any, OriginalPropertyDescriptors>;
 
 	/**
 	 * @since 0.0.1
@@ -27,38 +35,20 @@ export class Extendable extends Piece {
 	 * @param {string} directory The base directory to the pieces folder
 	 * @param {ExtendableOptions} [options={}] The options for this extendable
 	 */
-	constructor(store, file, directory, options = {}) {
-		super(store, file, directory, options);
+	constructor(store: ExtendableStore, directory: string, files: readonly string[], options: ExtendableOptions = {}) {
+		super(store, directory, files, options);
 
 		const staticPropertyNames = Object.getOwnPropertyNames(this.constructor)
 			.filter(name => !['length', 'prototype', 'name'].includes(name));
 		const instancePropertyNames = Object.getOwnPropertyNames(this.constructor.prototype)
 			.filter(name => name !== 'constructor');
 
-		/**
-		 * The static property descriptors of this extendable
-		 * @since 0.5.0
-		 * @type {any}
-		 * @private
-		 */
 		this.staticPropertyDescriptors = Object.assign({}, ...staticPropertyNames
 			.map(name => ({ [name]: Object.getOwnPropertyDescriptor(this.constructor, name) })));
 
-		/**
-		 * The instance property descriptors of this extendable
-		 * @since 0.5.0
-		 * @type {any}
-		 * @private
-		 */
 		this.instancePropertyDescriptors = Object.assign({}, ...instancePropertyNames
 			.map(name => ({ [name]: Object.getOwnPropertyDescriptor(this.constructor.prototype, name) })));
 
-		/**
-		 * The original property descriptors for each of the original classes
-		 * @since 0.5.0
-		 * @type {Map<any, OriginalPropertyDescriptors>}
-		 * @private
-		 */
 		this.originals = new Map(options.appliesTo.map(structure => [structure, {
 			staticPropertyDescriptors: Object.assign({}, ...staticPropertyNames
 				.map(name => ({ [name]: Object.getOwnPropertyDescriptor(structure, name) || { value: undefined } }))),
@@ -70,29 +60,25 @@ export class Extendable extends Piece {
 	/**
 	 * The discord classes this extendable applies to
 	 * @since 0.0.1
-	 * @type {any[]}
 	 * @readonly
 	 */
-	get appliesTo() {
+	get appliesTo(): any[] {
 		return [...this.originals.keys()];
 	}
 
 	/**
 	 * The init method to apply the extend method to the @klasa/core Class
 	 * @since 0.0.1
-	 * @returns {void}
 	 */
-	async init() {
+	async init(): Promise<void> {
 		if (this.enabled) this.enable(true);
 	}
 
 	/**
 	 * Disables this piece
 	 * @since 0.0.1
-	 * @returns {this}
-	 * @chainable
 	 */
-	disable() {
+	disable(): this {
 		if (this.client.listenerCount('pieceDisabled')) this.client.emit('pieceDisabled', this);
 		this.enabled = false;
 		for (const [structure, originals] of this.originals) {
@@ -105,11 +91,9 @@ export class Extendable extends Piece {
 	/**
 	 * Enables this piece
 	 * @since 0.0.1
-	 * @param {boolean} [init=false] If the piece is being init or not
-	 * @returns {this}
-	 * @chainable
+	 * @param [init=false] If the piece is being init or not
 	 */
-	enable(init = false) {
+	public enable(init = false): this {
 		if (!init && this.client.listenerCount('pieceEnabled')) this.client.emit('pieceEnabled', this);
 		this.enabled = true;
 		for (const structure of this.originals.keys()) {
@@ -121,13 +105,21 @@ export class Extendable extends Piece {
 
 	/**
 	 * Defines the JSON.stringify behavior of this extendable.
-	 * @returns {Object}
 	 */
-	toJSON() {
+	toJSON(): object {
 		return {
 			...super.toJSON(),
 			appliesTo: this.appliesTo.map(fn => fn.name)
 		};
 	}
 
+}
+
+export interface ExtendableOptions extends PieceOptions {
+	appliesTo: any[];
+}
+
+export interface OriginalPropertyDescriptors {
+	staticPropertyDescriptors: any;
+	instancePropertyDescriptors: any;
 }

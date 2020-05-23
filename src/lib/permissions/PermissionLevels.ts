@@ -4,7 +4,7 @@ import type { Message } from '@klasa/core';
 
 const empty = Symbol('empty');
 
-export type CheckFunction = (message: Message) => boolean | Promise<boolean>;
+export type CheckFunction = (message: Message) => boolean | null | Promise<boolean | null>;
 
 export interface PermissionLevelsLevel {
 	check: CheckFunction;
@@ -100,6 +100,15 @@ export class PermissionLevels extends Cache<number, typeof empty | PermissionLev
 			if (level.break) return { broke: true, permission: false };
 		}
 		return { broke: false, permission: false };
+	}
+
+	/**
+	 * Validates the permission levels, throwing an error if something is wrong
+	 * @since 0.6.0
+	 */
+	protected validate(): this {
+		if (this.isValid()) return this;
+		throw new Error(this.debug());
 	}
 
 	/**

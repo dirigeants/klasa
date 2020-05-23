@@ -1,4 +1,6 @@
-import { TextPrompt } from './TextPrompt';
+import { TextPrompt, TextPromptOptions } from './TextPrompt';
+import type { KlasaMessage } from '../extensions/KlasaMessage';
+import type { CommandUsage } from './CommandUsage';
 
 /**
  * A class to handle argument collection and parameter resolution for commands
@@ -7,31 +9,30 @@ import { TextPrompt } from './TextPrompt';
 export class CommandPrompt extends TextPrompt {
 
 	/**
+	 * The typing state of this CommandPrompt
 	 * @since 0.5.0
-	 * @param {KlasaMessage} message The message for the command
-	 * @param {CommandUsage} usage The usage of the command
-	 * @param {TextPromptOptions} [options={}] The options for this CommandPrompt
 	 */
-	constructor(message, usage, options) {
+	private typing: boolean;
+
+	/**
+	 * @since 0.5.0
+	 * @param message The message for the command
+	 * @param usage The usage of the command
+	 * @param options The options for this CommandPrompt
+	 */
+	public constructor(message: KlasaMessage, usage: CommandUsage, options: TextPromptOptions = {}) {
 		super(message, usage, options);
-
-		/**
-		 * The typing state of this CommandPrompt
-		 * @since 0.5.0
-		 * @type {boolean}
-		 * @private
-		 */
 		this.typing = this.client.options.typing;
-
-		this._setup(this.message.content.slice(this.message.prefixLength).trim().split(' ').slice(1).join(' ').trim());
+		// eslint-disable-next-line dot-notation
+		this['_setup'](this.message.content.slice(this.message.prefixLength).trim().split(' ').slice(1).join(' ').trim());
 	}
 
 	/**
 	 * Runs the internal validation, and re-prompts according to the settings
 	 * @since 0.5.0
-	 * @returns {Promise<any[]>} The parameters resolved
+	 * @returns The parameters resolved
 	 */
-	run() {
+	public run(): Promise<unknown[]> {
 		return this.validateArgs();
 	}
 

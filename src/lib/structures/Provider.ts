@@ -5,9 +5,8 @@ import { isObject, mergeObjects, makeObject } from '@klasa/utils';
  * Base class for all Klasa Providers. See {@tutorial CreatingProviders} for more information how to use this class
  * to build custom providers.
  * @tutorial CreatingProviders
- * @extends {Piece}
  */
-class Provider extends Piece {
+export class Provider extends Piece {
 
 	/**
 	 * Inserts or creates a table in the database.
@@ -16,7 +15,7 @@ class Provider extends Piece {
 	 * @returns {*}
 	 * @abstract
 	 */
-	async createTable() {
+	public async createTable() {
 		throw new Error(`[PROVIDERS] ${this.path} | Missing method 'createTable' of ${this.constructor.name}`);
 	}
 
@@ -27,7 +26,7 @@ class Provider extends Piece {
 	 * @returns {*}
 	 * @abstract
 	 */
-	async deleteTable() {
+	public async deleteTable() {
 		throw new Error(`[PROVIDERS] ${this.path} | Missing method 'deleteTable' of ${this.constructor.name}`);
 	}
 
@@ -38,7 +37,7 @@ class Provider extends Piece {
 	 * @returns {boolean}
 	 * @abstract
 	 */
-	async hasTable() {
+	public async hasTable() {
 		throw new Error(`[PROVIDERS] ${this.path} | Missing method 'hasTable' of ${this.constructor.name}`);
 	}
 
@@ -51,7 +50,7 @@ class Provider extends Piece {
 	 * @returns {*}
 	 * @abstract
 	 */
-	async create() {
+	public async create() {
 		throw new Error(`[PROVIDERS] ${this.path} | Missing method 'create' of ${this.constructor.name}`);
 	}
 
@@ -63,7 +62,7 @@ class Provider extends Piece {
 	 * @returns {*}
 	 * @abstract
 	 */
-	async delete() {
+	public async delete() {
 		throw new Error(`[PROVIDERS] ${this.path} | Missing method 'delete' of ${this.constructor.name}`);
 	}
 
@@ -75,7 +74,7 @@ class Provider extends Piece {
 	 * @returns {Object<string, *>}
 	 * @abstract
 	 */
-	async get() {
+	public async get() {
 		throw new Error(`[PROVIDERS] ${this.path} | Missing method 'get' of ${this.constructor.name}`);
 	}
 
@@ -86,7 +85,7 @@ class Provider extends Piece {
 	 * @returns {Array<Object<string, *>>}
 	 * @abstract
 	 */
-	async getAll() {
+	public async getAll() {
 		throw new Error(`[PROVIDERS] ${this.path} | Missing method 'getAll' of ${this.constructor.name}`);
 	}
 
@@ -97,7 +96,7 @@ class Provider extends Piece {
 	 * @returns {string[]}
 	 * @abstract
 	 */
-	async getKeys() {
+	public async getKeys() {
 		throw new Error(`[PROVIDERS] ${this.path} | Missing method 'getKeys' of ${this.constructor.name}`);
 	}
 
@@ -109,7 +108,7 @@ class Provider extends Piece {
 	 * @returns {boolean}
 	 * @abstract
 	 */
-	async has() {
+	public async has() {
 		throw new Error(`[PROVIDERS] ${this.path} | Missing method 'has' of ${this.constructor.name}`);
 	}
 
@@ -122,7 +121,7 @@ class Provider extends Piece {
 	 * @returns {*}
 	 * @abstract
 	 */
-	async replace() {
+	public async replace() {
 		throw new Error(`[PROVIDERS] ${this.path} | Missing method 'replace' of ${this.constructor.name}`);
 	}
 
@@ -135,7 +134,7 @@ class Provider extends Piece {
 	 * @returns {*}
 	 * @abstract
 	 */
-	async update() {
+	public async update() {
 		throw new Error(`[PROVIDERS] ${this.path} | Missing method 'update' of ${this.constructor.name}`);
 	}
 
@@ -145,23 +144,23 @@ class Provider extends Piece {
 	 * @returns {*}
 	 * @abstract
 	 */
-	async shutdown() {
+	public async shutdown() {
 		// Optionally defined in extension Classes
 	}
 
-	async addColumn() {
+	public async addColumn() {
 		// Reserved for SQL databases
 	}
 
-	async removeColumn() {
+	public async removeColumn() {
 		// Reserved for SQL databases
 	}
 
-	async updateColumn() {
+	public async updateColumn() {
 		// Reserved for SQL databases
 	}
 
-	async getColumns() {
+	public async getColumns() {
 		// Reserved for SQL databases
 		return [];
 	}
@@ -181,5 +180,3 @@ class Provider extends Piece {
 	}
 
 }
-
-export Provider;

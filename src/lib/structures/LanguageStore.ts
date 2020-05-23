@@ -16,10 +16,8 @@ export class LanguageStore extends Store<Language> {
 	/**
 	 * The default language set in {@link KlasaClientOptions.language}
 	 * @since 0.2.1
-	 * @type {?Language}
-	 * @readonly
 	 */
-	get default() {
+	public get default(): Language | null {
 		return this.get(this.client.options.language) || null;
 	}
 

@@ -1,5 +1,5 @@
 import { Extendable } from './Extendable';
-import { Store } from '@klasa/core';
+import { Store, PieceConstructor } from '@klasa/core';
 
 import type { KlasaClient } from '../Client';
 
@@ -10,7 +10,7 @@ import type { KlasaClient } from '../Client';
 export class ExtendableStore extends Store<Extendable> {
 
 	constructor(client: KlasaClient) {
-		super(client, 'extendables', Extendable);
+		super(client, 'extendables', Extendable as PieceConstructor<Extendable>);
 	}
 
 	/**
@@ -19,7 +19,7 @@ export class ExtendableStore extends Store<Extendable> {
 	 * @param {Extendable|string} name A extendable object or a string representing a command or alias name
 	 * @returns {boolean}
 	 */
-	delete(name) {
+	delete(name: Extendable | string): boolean {
 		const extendable = this.resolve(name);
 		if (!extendable) return false;
 		extendable.disable();
@@ -30,7 +30,7 @@ export class ExtendableStore extends Store<Extendable> {
 	 * Clears the extendable from the store and removes the extensions.
 	 * @since 0.0.1
 	 */
-	clear() {
+	clear(): void {
 		for (const extendable of this.values()) this.delete(extendable);
 	}
 
@@ -40,9 +40,9 @@ export class ExtendableStore extends Store<Extendable> {
 	 * @param {Extendable} piece The extendable piece we are setting up
 	 * @returns {?Extendable}
 	 */
-	set(piece) {
+	public set(piece: Extendable): Extendable | null {
 		const extendable = super.set(piece);
-		if (!extendable) return undefined;
+		if (!extendable) return null;
 		extendable.init();
 		return extendable;
 	}

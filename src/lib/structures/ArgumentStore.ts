@@ -1,4 +1,4 @@
-import { AliasStore } from '@klasa/core';
+import { AliasStore, PieceConstructor } from '@klasa/core';
 import { Argument } from './Argument';
 
 import type { KlasaClient } from '../Client';
@@ -9,8 +9,8 @@ import type { KlasaClient } from '../Client';
  */
 export class ArgumentStore extends AliasStore<Argument> {
 
-	constructor(client: KlasaClient) {
-		super(client, 'arguments', Argument);
+	public constructor(client: KlasaClient) {
+		super(client, 'arguments', Argument as unknown as PieceConstructor<Argument>);
 	}
 
 }

@@ -18,7 +18,8 @@ export class Language extends Piece {
 	 * @param {...*} args Any arguments to pass to the lookup
 	 * @returns {string|Function}
 	 */
-	get(term, ...args) {
+	get(term: string, ...args: any[]): string | ((...args: any) => string) {
+		// todo: store needs to be augmented to be LanguageStore
 		if (!this.enabled && this !== this.store.default) return this.store.default.get(term, ...args);
 		const value = this.language[term];
 		/* eslint-disable new-cap */
@@ -38,10 +39,11 @@ export class Language extends Piece {
 	 * @returns {void}
 	 * @abstract
 	 */
-	async init() {
-		for (const core of this.store.coreDirectories) {
+	async init(): Promise<void> {
+		// eslint-disable-next-line dot-notation
+		for (const core of this.store['coreDirectories']) {
 			const loc = join(core, ...this.file);
-			if (this.dir !== core && await pathExists(loc)) {
+			if (this.directory !== core && await pathExists(loc)) {
 				try {
 					const CorePiece = (req => req.default || req)(require(loc));
 					if (!isClass(CorePiece)) return;

@@ -6,44 +6,45 @@ const regexTypes = ['reg', 'regex', 'regexp'];
 export class Possible {
 
 	/**
-	 * @param {string[]} regexResults The regex results from parsing the tag member
+	 * The name of this possible
 	 * @since 0.2.1
 	 */
-	constructor([, name, type = 'literal', min, max, regex, flags]) {
-		/**
-		 * The name of this possible
-		 * @since 0.2.1
-		 * @type {string}
-		 */
+	public name: string;
+
+	/**
+	 * The type of this possible
+	 * @since 0.2.1
+	 */
+	public type: string;
+
+	/**
+	 * The min of this possible
+	 * @since 0.2.1
+	 */
+	public min: number | null;
+
+	/**
+	 * The max of this possible
+	 * @since 0.2.1
+	 */
+	public max: number | null;
+
+	/**
+	 * The regex of this possible
+	 * @since 0.3.0
+	 */
+	public regex: RegExp | null;
+
+	/**
+	 * @param regexResults The regex results from parsing the tag member
+	 * @since 0.2.1
+	 */
+	public constructor([, name, type = 'literal', min, max, regex, flags]: readonly string[]) {
 		this.name = name;
-
-		/**
-		 * The type of this possible
-		 * @since 0.2.1
-		 * @type {string}
-		 */
 		this.type = type;
-
-		/**
-		 * The min of this possible
-		 * @since 0.2.1
-		 * @type {?number}
-		 */
-		this.min = min ? this.constructor.resolveLimit(min, 'min') : undefined;
-
-		/**
-		 * The max of this possible
-		 * @since 0.2.1
-		 * @type {?number}
-		 */
-		this.max = max ? this.constructor.resolveLimit(max, 'max') : undefined;
-
-		/**
-		 * The regex of this possible
-		 * @since 0.3.0
-		 * @type {?RegExp}
-		 */
-		this.regex = regexTypes.includes(this.type) && regex ? new RegExp(regex, flags) : undefined;
+		this.min = min ? (this.constructor as typeof Possible).resolveLimit(min, 'min') : null;
+		this.max = max ? (this.constructor as typeof Possible).resolveLimit(max, 'max') : null;
+		this.regex = regexTypes.includes(this.type) && regex ? new RegExp(regex, flags) : null;
 
 		if (regexTypes.includes(this.type) && !this.regex) throw 'Regex types must include a regular expression';
 	}
@@ -51,14 +52,13 @@ export class Possible {
 	/**
 	 * Resolves a limit
 	 * @since 0.2.1
-	 * @param {string} limit The limit to evaluate
-	 * @param {string} limitType The type of limit
-	 * @returns {number}
-	 * @private
+	 * @param limit The limit to evaluate
+	 * @param limitType The type of limit
 	 */
-	static resolveLimit(limit, limitType) {
-		if (isNaN(limit)) throw `${limitType} must be a number`;
-		return parseFloat(limit);
+	private static resolveLimit(limit: string, limitType: string): number {
+		const parsed = parseFloat(limit);
+		if (Number.isNaN(parsed)) throw `${limitType} must be a number`;
+		return parsed;
 	}
 
 }

@@ -1,55 +1,60 @@
 import { Possible } from './Possible';
 
+export const enum TagRequirement {
+	Optional,
+	SemiRequired,
+	Required
+}
+
 /**
  * Represents a usage Tag
  */
 export class Tag {
 
 	/**
-	 * @since 0.2.1
-	 * @param {string} members The tag contents to parse
-	 * @param {number} count The position of the tag in the usage string
-	 * @param {number} required The type of tag (0 optional, 1 semi-required, 2 required)
+	 * The type of this tag
+	 * @since 0.5.0
 	 */
-	constructor(members, count, required) {
-		/**
-		 * The type of this tag
-		 * @since 0.5.0
-		 * @type {number}
-		 */
+	public required: number;
+
+	/**
+	 * If this tag is repeating
+	 * @since 0.5.0
+	 */
+	public repeat: boolean;
+
+	/**
+	 * The possibilities of this tag
+	 * @since 0.2.1
+	 */
+	public possibles: Possible[];
+
+	/**
+	 * The custom response defined for this possible
+	 * @since 0.5.0
+	 */
+	public response: string | Function | null;
+
+	/**
+	 * @since 0.2.1
+	 * @param members The tag contents to parse
+	 * @param count The position of the tag in the usage string
+	 * @param required The type of tag
+	 */
+	constructor(members: string, count: number, required: TagRequirement) {
 		this.required = required;
-
-		/**
-		 * If this tag is repeating
-		 * @since 0.5.0
-		 * @type {boolean}
-		 */
 		this.repeat = false;
-
-		/**
-		 * The possibilities of this tag
-		 * @since 0.2.1
-		 * @type {Possible[]}
-		 */
-		this.possibles = this.constructor.parseMembers(members, count);
-
-		/**
-		 * The custom response defined for this possible
-		 * @since 0.5.0
-		 * @type {?(string|Function)}
-		 */
+		this.possibles = (this.constructor as typeof Tag).parseMembers(members, count);
 		this.response = null;
 	}
 
 	/**
 	 * Registers a response
 	 * @since 0.5.0
-	 * @param {string} name The argument name the response is for
-	 * @param {(string|Function)} response The custom response
-	 * @returns {boolean}
-	 * @private
+	 * @param name The argument name the response is for
+	 * @param response The custom response
 	 */
-	register(name, response) {
+	public register(name: string, response: string | Function): boolean {
 		if (this.response) return false;
 		if (this.possibles.some(val => val.name === name)) {
 			this.response = response;
@@ -61,20 +66,18 @@ export class Tag {
 	/**
 	 * Parses members into usable possibles
 	 * @since 0.2.1
-	 * @param {string} members The tag contents to parse
-	 * @param {number} count The position of the tag in the usage string
-	 * @returns {Possible[]}
-	 * @private
+	 * @param rawMembers The tag contents to parse
+	 * @param count The position of the tag in the usage string
 	 */
-	static parseMembers(members, count) {
-		const literals = [];
-		const types = [];
-		members = this.parseTrueMembers(members);
+	private static parseMembers(rawMembers: string, count: number): Possible[] {
+		const literals: string[] = [];
+		const types: string[] = [];
+		const members = this.parseTrueMembers(rawMembers);
 		return members.map((member, i) => {
 			const current = `${members.join('|')}: at tag #${count} at bound #${i + 1}`;
 			let possible;
 			try {
-				possible = new Possible(this.pattern.exec(member));
+				possible = new Possible(this.pattern.exec(member) as RegExpExecArray);
 			} catch (err) {
 				if (typeof err === 'string') throw `${current}: ${err}`;
 				throw `${current}: invalid syntax, non specific`;
@@ -94,11 +97,9 @@ export class Tag {
 	/**
 	 * Parses raw members true members
 	 * @since 0.2.1
-	 * @param {string} members The tag contents to parse
-	 * @returns {string[]}
-	 * @private
+	 * @param members The tag contents to parse
 	 */
-	static parseTrueMembers(members) {
+	private static parseTrueMembers(members: string): string[] {
 		const trueMembers = [];
 		let regex = false;
 		let current = '';

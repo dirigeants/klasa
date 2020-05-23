@@ -1,4 +1,4 @@
-import { extender, MessageBuilder, Permissions } from '@klasa/core';
+import { extender, MessageBuilder, Permissions, Message } from '@klasa/core';
 import { Cache } from '@klasa/cache';
 import { regExpEsc } from '@klasa/utils';
 
@@ -71,7 +71,7 @@ export class KlasaMessage extends extender.get('Message') {
 		this.prefixLength = this.prefixLength || null;
 		this.language = this.language || null;
 		// todo: This should/will eventually be mapped. (this.client.gateways.get('guilds').defaults)
-		this.guildSettings = this.guild ? (this.guild as KlasaGuild).settings : (this.client as KlasaClient).gateways.guilds.defaults;
+		this.guildSettings = this.guild ? this.guild.settings : this.client.gateways.guilds.defaults;
 		this.prompter = this.prompter || null;
 		this._responses = [];
 	}
@@ -80,7 +80,7 @@ export class KlasaMessage extends extender.get('Message') {
 	* The previous responses to this message
 	* @since 0.5.0
 	*/
-	get responses(): KlasaMessage[] {
+	public get responses(): KlasaMessage[] {
 		return this._responses.filter(msg => !msg.deleted);
 	}
 
@@ -88,7 +88,7 @@ export class KlasaMessage extends extender.get('Message') {
 	* The string arguments derived from the usageDelim of the command
 	* @since 0.0.1
 	*/
-	get args(): string[] {
+	public get args(): string[] {
 		return this.prompter ? this.prompter.args : [];
 	}
 
@@ -96,7 +96,7 @@ export class KlasaMessage extends extender.get('Message') {
 	* The parameters resolved by this class
 	* @since 0.0.1
 	*/
-	get params(): any[] {
+	public get params(): unknown[] {
 		return this.prompter ? this.prompter.params : [];
 	}
 
@@ -104,7 +104,7 @@ export class KlasaMessage extends extender.get('Message') {
 	* The flags resolved by this class
 	* @since 0.5.0
 	*/
-	get flagArgs(): object {
+	public get flagArgs(): Record<string, string> {
 		return this.prompter ? this.prompter.flags : {};
 	}
 
@@ -112,29 +112,18 @@ export class KlasaMessage extends extender.get('Message') {
 	* If the command reprompted for missing args
 	* @since 0.0.1
 	*/
-	get reprompted(): boolean {
+	public get reprompted(): boolean {
 		return this.prompter ? this.prompter.reprompted : false;
-	}
-
-	/**
-	* If this message can be reacted to by the bot
-	* @since 0.0.1
-	* @type {boolean}
-	* @readonly
-	*/
-	get reactable() {
-		if (!this.guild) return true;
-		return this.channel.readable && this.channel.permissionsFor(this.guild.me).has([FLAGS.ADD_REACTIONS, FLAGS.READ_MESSAGE_HISTORY], false);
 	}
 
 	/**
 	* The usable commands by the author in this message's context
 	* @since 0.0.1
 	*/
-	async usableCommands(): Promise<Cache<string, Command>> {
+	public async usableCommands(): Promise<Cache<string, Command>> {
 		const col = new Cache<string, Command>();
-		await Promise.all((this.client as KlasaClient).commands.map((command) =>
-			(this.client as KlasaClient).inhibitors.run(this, command, true)
+		await Promise.all(this.client.commands.map((command) =>
+			this.client.inhibitors.run(this, command, true)
 				.then(() => { col.set(command.name, command); })
 				.catch(() => {
 					// noop
@@ -147,8 +136,8 @@ export class KlasaMessage extends extender.get('Message') {
 	* Checks if the author of this message, has applicable permission in this message's context of at least min
 	* @since 0.0.1
 	*/
-	async hasAtLeastPermissionLevel(min: number): Promise<boolean> {
-		const { permission } = await (this.client as KlasaClient).permissionLevels.run(this, min);
+	public async hasAtLeastPermissionLevel(min: number): Promise<boolean> {
+		const { permission } = await this.client.permissionLevels.run(this, min);
 		return permission;
 	}
 
@@ -159,7 +148,7 @@ export class KlasaMessage extends extender.get('Message') {
 	* @param {external:MessageOptions} [options] The D.JS message options
 	* @returns {KlasaMessage|KlasaMessage[]}
 	*/
-	async sendMessage(content, options) {
+	public async sendMessage(content, options) {
 		const combinedOptions = APIMessage.transformOptions(content, options);
 
 		if ('files' in combinedOptions) return this.channel.send(combinedOptions);
@@ -198,7 +187,7 @@ export class KlasaMessage extends extender.get('Message') {
 	* @param {external:MessageOptions} [options] The D.JS message options
 	* @returns {Promise<KlasaMessage|KlasaMessage[]>}
 	*/
-	sendEmbed(embed, content, options) {
+	public sendEmbed(embed, content, options) {
 		return this.sendMessage(APIMessage.transformOptions(content, options, { embed }));
 	}
 
@@ -210,7 +199,7 @@ export class KlasaMessage extends extender.get('Message') {
 	* @param {external:MessageOptions} [options] The D.JS message options
 	* @returns {Promise<KlasaMessage|KlasaMessage[]>}
 	*/
-	sendCode(code, content, options) {
+	public sendCode(code, content, options) {
 		return this.sendMessage(APIMessage.transformOptions(content, options, { code }));
 	}
 
@@ -221,7 +210,7 @@ export class KlasaMessage extends extender.get('Message') {
 	* @param {external:MessageOptions} [options] The D.JS message options
 	* @returns {Promise<KlasaMessage|KlasaMessage[]>}
 	*/
-	send(content, options) {
+	public send(content, options) {
 		return this.sendMessage(content, options);
 	}
 
@@ -233,7 +222,7 @@ export class KlasaMessage extends extender.get('Message') {
 	* @param {external:MessageOptions} [options] The D.JS message options plus Language arguments
 	* @returns {Promise<KlasaMessage|KlasaMessage[]>}
 	*/
-	sendLocale(key, localeArgs = [], options = {}) {
+	public sendLocale(key, localeArgs = [], options = {}) {
 		if (!Array.isArray(localeArgs)) [options, localeArgs] = [localeArgs, []];
 		return this.sendMessage(APIMessage.transformOptions(this.language.get(key, ...localeArgs), undefined, options));
 	}
@@ -270,7 +259,7 @@ export class KlasaMessage extends extender.get('Message') {
 			this.prefix = prefix.regex;
 			this.prefixLength = prefix.length;
 			this.commandText = this.content.slice(prefix.length).trim().split(' ')[0].toLowerCase();
-			this.command = (this.client as KlasaClient).commands.get(this.commandText) || null;
+			this.command = this.client.commands.get(this.commandText) || null;
 
 			if (!this.command) return;
 
@@ -343,4 +332,7 @@ export class KlasaMessage extends extender.get('Message') {
 
 }
 
-extender.extend('Message', (__) => KlasaMessage);
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface KlasaMessage extends Message {}
+
+extender.extend('Message', () => KlasaMessage);

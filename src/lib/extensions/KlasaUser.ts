@@ -1,4 +1,4 @@
-import { extender } from '@klasa/core';
+import { extender, User, Constructor } from '@klasa/core';
 
 import type { Settings } from '../settings/Settings';
 
@@ -17,18 +17,20 @@ export class KlasaUser extends extender.get('User') {
 	public constructor(...args: any[]) {
 		super(...args);
 
-		this.settings = (this.client as KlasaClient).gateways.users.get(this.id, true);
+		this.settings = this.client.gateways.users.get(this.id, true);
 	}
 
 	/**
 	 * Returns the JSON-compatible object of this instance.
 	 * @since 0.5.0
-	 * @returns {KlasaUserJSON}
 	 */
-	toJSON() {
+	public toJSON(): object {
 		return { ...super.toJSON(), settings: this.settings };
 	}
 
 }
 
-extender.extend('User', (__): KlasaUser => KlasaUser);
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface KlasaUser extends User { }
+
+extender.extend('User', (): KlasaUser => KlasaUser);

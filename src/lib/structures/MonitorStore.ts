@@ -1,7 +1,8 @@
 import { Monitor } from './Monitor';
-import { Store } from '@klasa/core';
+import { Store, PieceConstructor } from '@klasa/core';
 
 import type { KlasaClient } from '../Client';
+import type { KlasaMessage } from '../extensions/KlasaMessage';
 
 /**
  * Stores all monitors for use in Klasa
@@ -10,7 +11,7 @@ import type { KlasaClient } from '../Client';
 export class MonitorStore extends Store<Monitor> {
 
 	constructor(client: KlasaClient) {
-		super(client, 'monitors', Monitor);
+		super(client, 'monitors', Monitor as PieceConstructor<Monitor>);
 	}
 
 	/**
@@ -18,8 +19,9 @@ export class MonitorStore extends Store<Monitor> {
 	 * @since 0.0.1
 	 * @param {KlasaMessage} message The message object from @klasa/core
 	 */
-	run(message) {
-		for (const monitor of this.values()) if (monitor.shouldRun(message)) monitor._run(message);
+	public run(message: KlasaMessage): void {
+		// eslint-disable-next-line dot-notation
+		for (const monitor of this.values()) if (monitor.shouldRun(message)) monitor['_run'](message);
 	}
 
 }
