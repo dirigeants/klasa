@@ -241,10 +241,10 @@
   resolved "https://registry.yarnpkg.com/@klasa/cache/-/cache-0.0.3.tgz#824595f247fbd6204a6278eae988d22eb783d00b"
   integrity sha512-8+V14gY0soYSd9j5NKel+gKpoEccwFnKYPEL2XALx+SOHzVMAmmfVBqO4cd3QzPdIW3770jklLY2SeXeEv9xvA==
 
-"@klasa/core@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@klasa/core/-/core-0.0.1.tgz#c5bd8192506c4012f411092a459c8b65084300b8"
-  integrity sha512-/Q9df6YN+Js+w+nXkzEFSpyX2MKXb/UOSKSFemSb3cCkuz6Yu/gBg3TUxtC/Sq2MTdhuF25rR4KSHN1cjeRbLg==
+"@klasa/core@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@klasa/core/-/core-0.0.2.tgz#0ad568a1a51396ea2c7141dc08d5052c9692af6b"
+  integrity sha512-4P7mqta/WuQnsLa9pzCUIimR+6Oe3tmjFq+mnG9PWm/hYfViadaYGJ4qbP+mSbik5PNtfkzYJc7tSBf+FZOv2g==
   dependencies:
     "@klasa/bitfield" "^0.0.2"
     "@klasa/cache" "^0.0.3"
@@ -253,7 +253,7 @@
     "@klasa/snowflake" "^0.0.1"
     "@klasa/timer-manager" "^0.0.1"
     "@klasa/utils" "^0.0.5"
-    "@klasa/ws" "^0.0.10"
+    "@klasa/ws" "^0.0.11"
     fs-nextra "^0.5.1"
 
 "@klasa/cron@^0.0.1":
@@ -332,10 +332,10 @@
   resolved "https://registry.yarnpkg.com/@klasa/utils/-/utils-0.0.5.tgz#42891d2412f3e428e8e53af1227daedf78324b1a"
   integrity sha512-5aZXx33QLGSAAGoCMghG2rQnk33r3aLZXrtPxpJl9AnIh5aI7HAIyuyJ/sHPfk9mOzCx/0NOaB+T8vOjiLD35g==
 
-"@klasa/ws@^0.0.10":
-  version "0.0.10"
-  resolved "https://registry.yarnpkg.com/@klasa/ws/-/ws-0.0.10.tgz#fad023886c5e4121610b7b5986d920a5ffa35dca"
-  integrity sha512-4/FWaW54jhOLvMoyzkHBeQLja6psv+Zug6Lvkc6wWpAGeo7UZ/Sv8G2ITiymr6DsWKeKduJou82CcwmCCt56Ww==
+"@klasa/ws@^0.0.11":
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/@klasa/ws/-/ws-0.0.11.tgz#064765f42ffcb3e0095e49389d2375b007d68b85"
+  integrity sha512-RTu1TfWEGzCYQOs75hoJnrXsD6baJxCrSeiXC70L/U+c3TxND+n2IKq0OAc+WMQKUB/kkVPnpATtPWMM6oKVVw==
   dependencies:
     "@klasa/async-queue" "^0.0.1"
     "@klasa/bitfield" "^0.0.2"

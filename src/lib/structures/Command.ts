@@ -146,10 +146,8 @@ export abstract class Command extends AliasPiece {
 	constructor(store: CommandStore, directory: string, files: readonly string[], options: Partial<CommandOptions> = {}) {
 		super(store, directory, files, options);
 
-		// todo: piece#name can't be readonly for this to exist
 		this.name = this.name.toLowerCase();
 
-		// todo: push doesn't exist on readonly array
 		if (options.autoAliases) {
 			if (this.name.includes('-')) this.aliases.push(this.name.replace(/-/g, ''));
 			for (const alias of this.aliases) if (alias.includes('-')) this.aliases.push(alias.replace(/-/g, ''));
