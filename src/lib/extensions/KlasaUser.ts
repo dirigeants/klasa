@@ -14,13 +14,10 @@ export class KlasaUser extends extender.get('User') {
 	 */
 	public settings: Settings;
 
-	/**
-	 * @param {...*} args Normal D.JS User args
-	 */
-	constructor(...args) {
+	public constructor(...args: any[]) {
 		super(...args);
 
-		this.settings = this.client.gateways.users.get(this.id, true);
+		this.settings = (this.client as KlasaClient).gateways.users.get(this.id, true);
 	}
 
 	/**

@@ -2,6 +2,7 @@ import { extender } from '@klasa/core';
 
 import type { Settings } from '../settings/Settings';
 import type { Language } from '../structures/Language';
+import { KlasaClient } from '../Client';
 
 /**
  * Klasa's Extended Guild
@@ -15,21 +16,17 @@ export class KlasaGuild extends extender.get('Guild') {
 	 */
 	public settings: Settings;
 
-	/**
-	 * @param {...*} args Normal D.JS Guild args
-	 */
-	constructor(...args) {
+	public constructor(...args: any[]) {
 		super(...args);
 
-		this.settings = this.client.gateways.guilds.get(this.id, true);
+		this.settings = (this.client as KlasaClient).gateways.guilds.get(this.id, true);
 	}
 
 	/**
 	 * The language configured for this guild
-	 * @type {?Language}
 	 */
-	get language(): Language {
-		return this.client.languages.get(this.settings.language) || null;
+	get language(): Language | null {
+		return (this.client as KlasaClient).languages.get(this.settings.language) || null;
 	}
 
 	/**

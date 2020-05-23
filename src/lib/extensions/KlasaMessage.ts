@@ -3,6 +3,17 @@ import { Cache } from '@klasa/cache';
 import { regExpEsc } from '@klasa/utils';
 
 import type { Command } from '../structures/Command';
+import { APIMessageData, ChannelType } from '@klasa/dapi-types';
+import { KlasaClient } from '../Client';
+import { Language } from '../structures/Language';
+import { Settings } from '../settings/Settings';
+import { KlasaGuild } from './KlasaGuild';
+import { CommandPrompt } from '../usage/CommandPrompt';
+
+export interface CachedPrefix {
+	length: number;
+	regex: RegExp | null;
+}
 
 /**
 * Klasa's Extended Message
@@ -11,109 +22,97 @@ import type { Command } from '../structures/Command';
 export class KlasaMessage extends extender.get('Message') {
 
 	/**
-	* @typedef {object} CachedPrefix
-	* @property {number} length The length of the prefix
-	* @property {RegExp | null} regex The RegExp for the prefix
-	*/
+	 * The command being ran.
+	 */
+	public command: Command | null;
 
 	/**
-	* @param {...*} args Normal D.JS Message args
-	*/
-	constructor(...args) {
+	 * The name of the command being ran.
+	 */
+
+	public commandText: string | null;
+
+	/**
+	 * The prefix used.
+	 */
+	public prefix: RegExp | null;
+
+	/**
+	 * The length of the prefix used.
+	 */
+	public prefixLength: number | null;
+
+	/**
+	 * The language for this message.
+	 */
+	public language: Language | null;
+
+	/**
+	 * The guild level settings for this context (guild || default)
+	 */
+	public guildSettings: Settings;
+
+	/**
+	 * A command prompt/argument handler.
+	 */
+	private prompter: CommandPrompt | null;
+
+	/**
+	 * All of the responses to this message.
+	 */
+	private readonly _responses: KlasaMessage[];
+
+	public constructor(...args: any[]) {
 		super(...args);
 
-		/**
-		* The command being run
-		* @since 0.0.1
-		* @type {?Command}
-		*/
 		this.command = this.command || null;
-
-		/**
-		* The name of the command being run
-		* @since 0.5.0
-		* @type {?string}
-		*/
 		this.commandText = this.commandText || null;
-
-		/**
-		* The prefix used
-		* @since 0.0.1
-		* @type {?RegExp}
-		*/
 		this.prefix = this.prefix || null;
-
-		/**
-		* The length of the prefix used
-		* @since 0.0.1
-		* @type {?number}
-		*/
-		this.prefixLength = typeof this.prefixLength === 'number' ? this.prefixLength : null;
-
-		/**
-		* A command prompt/argument handler
-		* @since 0.5.0
-		* @type {CommandPrompt}
-		* @private
-		*/
+		this.prefixLength = this.prefixLength || null;
+		this.language = this.language || null;
+		// todo: This should/will eventually be mapped. (this.client.gateways.get('guilds').defaults)
+		this.guildSettings = this.guild ? (this.guild as KlasaGuild).settings : (this.client as KlasaClient).gateways.guilds.defaults;
 		this.prompter = this.prompter || null;
-
-		/**
-		* The responses to this message
-		* @since 0.5.0
-		* @type {external:KlasaMessage[]}
-		* @private
-		*/
 		this._responses = [];
 	}
 
 	/**
 	* The previous responses to this message
 	* @since 0.5.0
-	* @type {KlasaMessage[]}
-	* @readonly
 	*/
-	get responses() {
+	get responses(): KlasaMessage[] {
 		return this._responses.filter(msg => !msg.deleted);
 	}
 
 	/**
 	* The string arguments derived from the usageDelim of the command
 	* @since 0.0.1
-	* @type {string[]}
-	* @readonly
 	*/
-	get args() {
+	get args(): string[] {
 		return this.prompter ? this.prompter.args : [];
 	}
 
 	/**
 	* The parameters resolved by this class
 	* @since 0.0.1
-	* @type {any[]}
-	* @readonly
 	*/
-	get params() {
+	get params(): any[] {
 		return this.prompter ? this.prompter.params : [];
 	}
 
 	/**
 	* The flags resolved by this class
 	* @since 0.5.0
-	* @type {Object}
-	* @readonly
 	*/
-	get flagArgs() {
+	get flagArgs(): object {
 		return this.prompter ? this.prompter.flags : {};
 	}
 
 	/**
 	* If the command reprompted for missing args
 	* @since 0.0.1
-	* @type {boolean}
-	* @readonly
 	*/
-	get reprompted() {
+	get reprompted(): boolean {
 		return this.prompter ? this.prompter.reprompted : false;
 	}
 
@@ -132,10 +131,10 @@ export class KlasaMessage extends extender.get('Message') {
 	* The usable commands by the author in this message's context
 	* @since 0.0.1
 	*/
-	async usableCommands(): Cache<string, Command> {
-		const col = new Cache();
-		await Promise.all(this.client.commands.map((command) =>
-			this.client.inhibitors.run(this, command, true)
+	async usableCommands(): Promise<Cache<string, Command>> {
+		const col = new Cache<string, Command>();
+		await Promise.all((this.client as KlasaClient).commands.map((command) =>
+			(this.client as KlasaClient).inhibitors.run(this, command, true)
 				.then(() => { col.set(command.name, command); })
 				.catch(() => {
 					// noop
@@ -147,11 +146,9 @@ export class KlasaMessage extends extender.get('Message') {
 	/**
 	* Checks if the author of this message, has applicable permission in this message's context of at least min
 	* @since 0.0.1
-	* @param {number} min The minimum level required
-	* @returns {boolean}
 	*/
-	async hasAtLeastPermissionLevel(min) {
-		const { permission } = await this.client.permissionLevels.run(this, min);
+	async hasAtLeastPermissionLevel(min: number): Promise<boolean> {
+		const { permission } = await (this.client as KlasaClient).permissionLevels.run(this, min);
 		return permission;
 	}
 
@@ -240,51 +237,24 @@ export class KlasaMessage extends extender.get('Message') {
 		if (!Array.isArray(localeArgs)) [options, localeArgs] = [localeArgs, []];
 		return this.sendMessage(APIMessage.transformOptions(this.language.get(key, ...localeArgs), undefined, options));
 	}
-
 	/**
-	* Since d.js is dumb and has 2 patch methods, this is for edits
-	* @since 0.5.0
-	* @param {*} data The data passed from the original constructor
-	* @private
-	*/
-	patch(data) {
-		super.patch(data);
-		this.language = this.guild ? this.guild.language : this.client.languages.default;
-		this._parseCommand();
-	}
-
-	/**
-	* Extends the patch method from D.JS to attach and update the language to this instance
-	* @since 0.5.0
-	* @param {*} data The data passed from the original constructor
-	* @private
-	*/
-	_patch(data) {
+	 * Extends the patch method from Message to attach and update the language to this instance
+	 * @since 0.5.0
+	 */
+	protected _patch(data: Partial<APIMessageData>): this {
 		super._patch(data);
 
-		/**
-		* The language in this setting
-		* @since 0.3.0
-		* @type {Language}
-		*/
-		this.language = this.guild ? this.guild.language : this.client.languages.default;
-
-		/**
-		* The guild level settings for this context (guild || default)
-		* @since 0.5.0
-		* @type {Settings}
-		*/
-		this.guildSettings = this.guild ? this.guild.settings : this.client.gateways.guilds.defaults;
+		this.language = this.guild ? (this.guild as KlasaGuild).language : (this.client as KlasaClient).languages.default;
 
 		this._parseCommand();
+		return this;
 	}
 
 	/**
 	* Parses this message as a command
 	* @since 0.5.0
-	* @private
 	*/
-	_parseCommand() {
+	private _parseCommand(): void {
 		// Clear existing command state so edits to non-commands do not re-run commands
 		this.prefix = null;
 		this.prefixLength = null;
@@ -300,7 +270,7 @@ export class KlasaMessage extends extender.get('Message') {
 			this.prefix = prefix.regex;
 			this.prefixLength = prefix.length;
 			this.commandText = this.content.slice(prefix.length).trim().split(' ')[0].toLowerCase();
-			this.command = this.client.commands.get(this.commandText) || null;
+			this.command = (this.client as KlasaClient).commands.get(this.commandText) || null;
 
 			if (!this.command) return;
 
@@ -318,13 +288,11 @@ export class KlasaMessage extends extender.get('Message') {
 	/**
 	* Checks if the per-guild or default prefix is used
 	* @since 0.5.0
-	* @returns {CachedPrefix | null}
-	* @private
 	*/
-	_customPrefix() {
+	private _customPrefix(): CachedPrefix | null {
 		if (!this.guildSettings.prefix) return null;
 		for (const prf of Array.isArray(this.guildSettings.prefix) ? this.guildSettings.prefix : [this.guildSettings.prefix]) {
-			const testingPrefix = this.constructor.prefixes.get(prf) || this.constructor.generateNewPrefix(prf, this.client.options.prefixCaseInsensitive ? 'i' : '');
+			const testingPrefix = KlasaMessage.prefixes.get(prf) || KlasaMessage.generateNewPrefix(prf, this.client.options.prefixCaseInsensitive ? 'i' : '');
 			if (testingPrefix.regex.test(this.content)) return testingPrefix;
 		}
 		return null;
@@ -333,10 +301,8 @@ export class KlasaMessage extends extender.get('Message') {
 	/**
 	* Checks if the mention was used as a prefix
 	* @since 0.5.0
-	* @returns {CachedPrefix | null}
-	* @private
 	*/
-	_mentionPrefix() {
+	private _mentionPrefix(): CachedPrefix | null {
 		const mentionPrefix = this.client.mentionPrefix.exec(this.content);
 		return mentionPrefix ? { length: mentionPrefix[0].length, regex: this.client.mentionPrefix } : null;
 	}
@@ -344,10 +310,8 @@ export class KlasaMessage extends extender.get('Message') {
 	/**
 	* Checks if the natural prefix is used
 	* @since 0.5.0
-	* @returns {CachedPrefix | null}
-	* @private
 	*/
-	_naturalPrefix() {
+	private _naturalPrefix(): CachedPrefix | null {
 		if (this.guildSettings.disableNaturalPrefix || !this.client.options.regexPrefix) return null;
 		const results = this.client.options.regexPrefix.exec(this.content);
 		return results ? { length: results[0].length, regex: this.client.options.regexPrefix } : null;
@@ -356,22 +320,16 @@ export class KlasaMessage extends extender.get('Message') {
 	/**
 	* Checks if a prefixless scenario is possible
 	* @since 0.5.0
-	* @returns {CachedPrefix | null}
-	* @private
 	*/
-	_prefixLess() {
-		return this.client.options.noPrefixDM && this.channel.type === 'dm' ? { length: 0, regex: null } : null;
+	private _prefixLess(): CachedPrefix | null {
+		return this.client.options.noPrefixDM && this.channel.type === ChannelType.DM ? { length: 0, regex: null } : null;
 	}
 
 	/**
 	* Caches a new prefix regexp
 	* @since 0.5.0
-	* @param {string} prefix The prefix to store
-	* @param {string} flags The flags for the RegExp
-	* @returns {CachedPrefix}
-	* @private
 	*/
-	static generateNewPrefix(prefix, flags) {
+	private static generateNewPrefix(prefix: string, flags: string): CachedPrefix {
 		const prefixObject = { length: prefix.length, regex: new RegExp(`^${regExpEsc(prefix)}`, flags) };
 		this.prefixes.set(prefix, prefixObject);
 		return prefixObject;
