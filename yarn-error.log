@@ -1,29 +1,29 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add @klasa/duration
+  C:\Program Files\nodejs\node.exe C:\Users\antor\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add @klasa/ratelimits @klasa/cron @klasa/stopwatch
 
 PATH: 
-  C:\Python27\;C:\Python27\Scripts;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Program Files\Git\cmd;C:\Program Files\Git LFS;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\ProgramData\chocolatey\bin;C:\Program Files (x86)\Yarn\bin\;C:\Program Files\nodejs\;C:\Users\aodud\.windows-build-tools\python27\;C:\Users\aodud\.windows-build-tools\python27\;C:\Users\aodud\AppData\Local\Microsoft\WindowsApps;C:\Users\aodud\AppData\Local\Programs\Microsoft VS Code Insiders\bin;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Users\aodud\.deno\bin;C:\Users\aodud\AppData\Local\Microsoft\WindowsApps;C:\Users\aodud\AppData\Local\Yarn\bin;C:\Users\aodud\AppData\Roaming\npm
+  C:\Program Files\PowerShell\7;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files\dotnet\;C:\Program Files\PowerShell\7\;C:\Program Files\Git\cmd;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Program Files\nodejs\;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files (x86)\Gpg4win\..\GnuPG\bin;C:\Users\antor\AppData\Local\Programs\Python\Python38-32\Scripts\;C:\Users\antor\AppData\Local\Programs\Python\Python38-32\;C:\Users\antor\AppData\Local\Microsoft\WindowsApps;C:\Users\antor\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\antor\AppData\Roaming\npm;C:\Program Files (x86)\GitHub CLI\
 
 Yarn version: 
-  1.19.1
+  1.22.4
 
 Node version: 
-  14.2.0
+  14.3.0
 
 Platform: 
   win32 x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/@klasa%2fduration: Not found
-      at Request.params.callback [as _callback] (C:\Program Files (x86)\Yarn\lib\cli.js:66035:18)
-      at Request.self.callback (C:\Program Files (x86)\Yarn\lib\cli.js:140564:22)
+  Error: https://registry.yarnpkg.com/@klasa%2fratelimits: Not found
+      at Request.params.callback [as _callback] (C:\Users\antor\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:66987:18)
+      at Request.self.callback (C:\Users\antor\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:140748:22)
       at Request.emit (events.js:315:20)
-      at Request.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:141536:10)
+      at Request.<anonymous> (C:\Users\antor\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:141720:10)
       at Request.emit (events.js:315:20)
-      at IncomingMessage.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:141458:12)
+      at IncomingMessage.<anonymous> (C:\Users\antor\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:141642:12)
       at Object.onceWrapper (events.js:421:28)
       at IncomingMessage.emit (events.js:327:22)
-      at endReadableNT (_stream_readable.js:1225:12)
+      at endReadableNT (_stream_readable.js:1224:12)
       at processTicksAndRejections (internal/process/task_queues.js:84:21)
 
 npm manifest: 
@@ -77,6 +77,7 @@ npm manifest:
       "ava": "^3.8.2",
       "eslint": "^6.8.0",
       "eslint-config-klasa": "dirigeants/klasa-lint",
+      "klasa": "^0.5.0",
       "nyc": "^15.0.1",
       "source-map-support": "^0.5.19",
       "typedoc": "^0.17.7",
@@ -2039,6 +2040,13 @@ Lockfile:
     integrity sha512-9ykJ/46SN/9KPM/sichzQ7OvXyGDYKGTaDlKMGCAlg2UK8KRy4jb0d8sFc+0Tt0YYnThq8X2RZgCg74RPxgcVA==
     dependencies:
       json-buffer "3.0.0"
+  
+  klasa@^0.5.0:
+    version "0.5.0"
+    resolved "https://registry.yarnpkg.com/klasa/-/klasa-0.5.0.tgz#fc8f91945670469d14dc6184f3c5b1e3ee6c3afa"
+    integrity sha512-BrXP/rCvL7Sh4T3hnSOJTDbT5JT3Q3Di4sAg537OCzH/eRnYbeny4J99vkTGE5Lkm241HNH+kd+DURWaavBa6A==
+    dependencies:
+      fs-nextra "^0.4.7"
   
   latest-version@^5.0.0:
     version "5.1.0"

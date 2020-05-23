@@ -256,15 +256,32 @@
     "@klasa/ws" "^0.0.10"
     fs-nextra "^0.5.1"
 
+"@klasa/cron@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@klasa/cron/-/cron-0.0.1.tgz#88f0325e00f6eaed19bd14657eb959cac448172b"
+  integrity sha512-YqT8ybFWY4CnW4il4IdntES+RV6vWEPQ5fZa3xzC3rhi6Nfq38yHTG0NtqqVqTlXZWyutgZq/2TPrCAk8jDd1A==
+
 "@klasa/dapi-types@^0.1.1":
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/@klasa/dapi-types/-/dapi-types-0.1.1.tgz#f207d58d9ff878598ea01c8c11aeece598cce726"
   integrity sha512-mTCTF7LxNFVewULTEaewlf+MpTYsGWKlkwHgmOqdw4HeS5OlQrRmeoWwg2drgjhXrdbYnXBV6s3LsiESqKIoAg==
 
+"@klasa/duration@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@klasa/duration/-/duration-0.0.1.tgz#16c48c500d82e51bf2dbd03a2b19aafeb863f184"
+  integrity sha512-Bwh+wOLqu1qcIy+iAUFLIUKf/SqnzjT9ATM9kGix/bpEQkY/fuQh1GllwFeAoVujJR2wX0D4tx46JUM3llko7A==
+
 "@klasa/event-iterator@^0.0.8":
   version "0.0.8"
   resolved "https://registry.yarnpkg.com/@klasa/event-iterator/-/event-iterator-0.0.8.tgz#e3338303895b0ef27135e63c78cc8ca01c2332b4"
   integrity sha512-X9CR+YRt2Wb9/vYVARlVkjFG6poL3s1+x3+Hpy9xCrrMEB8PKDwcYL2WUKs9VCw5DDIo2RbzSBFZ1NEKsRnZXw==
+
+"@klasa/ratelimits@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@klasa/ratelimits/-/ratelimits-0.0.1.tgz#21bb06af13422c3af8f137ca4b93ee57d3d0a4c0"
+  integrity sha512-pn2Wq/g6xNAJ4UZ9tEEZSKVzu7k3KBC+yEza6uCQbmC3yu9mOK5M7dc0B0x1GViBNsTksVdUQGo4rkCWg38Pag==
+  dependencies:
+    "@klasa/cache" "^0.0.3"
 
 "@klasa/rest@^0.4.0":
   version "0.4.0"
