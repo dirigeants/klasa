@@ -1,18 +1,15 @@
 import { Extendable } from './Extendable';
 import { Store } from '@klasa/core';
 
+import type { KlasaClient } from '../Client';
+
 /**
  * Stores all of our extendables that extend @klasa/core and Klasa structures
  * @extends Store
  */
-export class ExtendableStore extends Store {
+export class ExtendableStore extends Store<Extendable> {
 
-	/**
-	 * Constructs our ExtendableStore for use in Klasa
-	 * @since 0.0.1
-	 * @param {KlasaClient} client The Klasa client
-	 */
-	constructor(client) {
+	constructor(client: KlasaClient) {
 		super(client, 'extendables', Extendable);
 	}
 

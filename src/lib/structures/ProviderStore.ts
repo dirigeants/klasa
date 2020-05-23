@@ -1,18 +1,15 @@
 import { Provider } from './Provider';
 import { Store } from '@klasa/core';
 
+import type { KlasaClient } from '../Client';
+
 /**
  * Stores all providers for use in Klasa
  * @extends Store
  */
-export class ProviderStore extends Store {
+export class ProviderStore extends Store<Provider> {
 
-	/**
-	 * Constructs our ProviderStore for use in Klasa
-	 * @since 0.0.1
-	 * @param {KlasaClient} client The Klasa client
-	 */
-	constructor(client) {
+	constructor(client: KlasaClient) {
 		super(client, 'providers', Provider);
 	}
 

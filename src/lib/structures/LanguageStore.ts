@@ -1,18 +1,15 @@
 import { Language } from './Language';
 import { Store } from '@klasa/core';
 
+import type { KlasaClient } from '../Client';
+
 /**
  * Stores all languages for use in Klasa
  * @extends Store
  */
-export class LanguageStore extends Store {
+export class LanguageStore extends Store<Language> {
 
-	/**
-	 * Constructs our LanguageStore for use in Klasa
-	 * @since 0.2.1
-	 * @param {KlasaClient} client The Klasa client
-	 */
-	constructor(client) {
+	constructor(client: KlasaClient) {
 		super(client, 'languages', Language);
 	}
 

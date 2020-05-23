@@ -1,18 +1,15 @@
 import { Monitor } from './Monitor';
 import { Store } from '@klasa/core';
 
+import type { KlasaClient } from '../Client';
+
 /**
  * Stores all monitors for use in Klasa
  * @extends Store
  */
-export class MonitorStore extends Store {
+export class MonitorStore extends Store<Monitor> {
 
-	/**
-	 * Constructs our MonitorStore for use in Klasa
-	 * @since 0.0.1
-	 * @param {KlasaClient} client The Klasa Client
-	 */
-	constructor(client) {
+	constructor(client: KlasaClient) {
 		super(client, 'monitors', Monitor);
 	}
 

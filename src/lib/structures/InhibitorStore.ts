@@ -1,18 +1,15 @@
 import { Inhibitor } from './Inhibitor';
 import { Store } from '@klasa/core';
 
+import type { KlasaClient } from '../Client';
+
 /**
  * Stores all the inhibitors in Klasa
  * @extends Store
  */
-export class InhibitorStore extends Store {
+export class InhibitorStore extends Store<Inhibitor> {
 
-	/**
-	 * Constructs our InhibitorStore for use in Klasa
-	 * @since 0.0.1
-	 * @param {KlasaClient} client The Klasa Client
-	 */
-	constructor(client) {
+	constructor(client: KlasaClient) {
 		super(client, 'inhibitors', Inhibitor);
 	}
 
