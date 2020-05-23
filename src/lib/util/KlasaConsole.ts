@@ -1,14 +1,18 @@
+import { Timestamp } from '@klasa/timestamp';
+import * as constants from './constants';
+import { mergeDefault } from '@klasa/utils';
 import { Console } from 'console';
 import { inspect } from 'util';
 import { Colors } from './Colors';
-import { Timestamp } from './Timestamp';
-import { constants } from './constants';
-import { mergeDefault } from './util';
+
+export interface ConsoleOptions {
+	colors: boolean;
+}
 
 /**
  * Klasa's console class, extends NodeJS Console class.
  */
-class KlasaConsole extends Console {
+export class KlasaConsole extends Console {
 
 	/**
 	 * @typedef {Object} ConsoleOptions
@@ -245,5 +249,3 @@ class KlasaConsole extends Console {
 	}
 
 }
-
-export KlasaConsole;

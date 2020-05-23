@@ -1,12 +1,14 @@
 import { extender, MessageBuilder, Permissions } from '@klasa/core';
-import { Cache } from '@klasa/core';
+import { Cache } from '@klasa/cache';
 import { regExpEsc } from '@klasa/utils';
+
+import type { Command } from '../structures/Command';
 
 /**
 * Klasa's Extended Message
 * @extends external:Message
 */
-export class KlasaMessage extends Message {
+export class KlasaMessage extends extender.get('Message') {
 
 	/**
 	* @typedef {object} CachedPrefix
@@ -129,10 +131,9 @@ export class KlasaMessage extends Message {
 	/**
 	* The usable commands by the author in this message's context
 	* @since 0.0.1
-	* @returns {Collection<string, Command>} The filtered CommandStore
 	*/
-	async usableCommands() {
-		const col = new Collection();
+	async usableCommands(): Cache<string, Command> {
+		const col = new Cache();
 		await Promise.all(this.client.commands.map((command) =>
 			this.client.inhibitors.run(this, command, true)
 				.then(() => { col.set(command.name, command); })

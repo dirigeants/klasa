@@ -1,4 +1,6 @@
 import { mergeDefault, isObject } from '@klasa/utils';
+import { KlasaClientOptions } from '../Client';
+import { ConsoleOptions, QueryBuilderOptions } from 'klasa';
 
 const colorBase = {
 	shard: { background: 'cyan', text: 'black' },
@@ -6,162 +8,160 @@ const colorBase = {
 	time: {}
 };
 
-export const DEFAULTS = {
-
-	CLIENT: {
-		commandEditing: false,
-		commandLogging: false,
-		commandMessageLifetime: 1800,
-		console: {},
-		consoleEvents: {
-			debug: false,
-			error: true,
-			log: true,
-			verbose: false,
-			warn: true,
-			wtf: true
+export const KlasaClientDefaults: Required<KlasaClientOptions> = {
+	commandEditing: false,
+	commandLogging: false,
+	commandMessageLifetime: 1800,
+	console: {
+		colors: true
+	},
+	consoleEvents: {
+		debug: false,
+		error: true,
+		log: true,
+		verbose: false,
+		warn: true,
+		wtf: true
+	},
+	createPiecesFolders: true,
+	disabledCorePieces: [],
+	language: 'en-US',
+	noPrefixDM: false,
+	prefix: '',
+	preserveSettings: true,
+	readyMessage: (client) => `Successfully initialized. Ready to serve ${client.guilds.size} guild${client.guilds.size === 1 ? '' : 's'}.`,
+	typing: false,
+	customPromptDefaults: {
+		time: 30000,
+		limit: Infinity,
+		quotedStringSupport: false,
+		flagSupport: true
+	},
+	gateways: {
+		guilds: {},
+		users: {},
+		clientStorage: {}
+	},
+	owners: [],
+	// eslint-disable-next-line no-process-env
+	production: process.env.NODE_ENV === 'production',
+	prefixCaseInsensitive: false,
+	providers: { default: 'json' },
+	pieceDefaults: {
+		arguments: {
+			enabled: true,
+			aliases: []
 		},
-		createPiecesFolders: true,
-		disabledCorePieces: [],
-		language: 'en-US',
-		noPrefixDM: false,
-		prefix: '',
-		preserveSettings: true,
-		readyMessage: (client) => `Successfully initialized. Ready to serve ${client.guilds.size} guild${client.guilds.size === 1 ? '' : 's'}.`,
-		typing: false,
-		customPromptDefaults: {
-			time: 30000,
-			limit: Infinity,
+		commands: {
+			aliases: [],
+			autoAliases: true,
+			bucket: 1,
+			cooldown: 0,
+			cooldownLevel: 'author',
+			description: '',
+			extendedHelp: language => language.get('COMMAND_HELP_NO_EXTENDED'),
+			enabled: true,
+			flagSupport: true,
+			guarded: false,
+			hidden: false,
+			nsfw: false,
+			permissionLevel: 0,
+			promptLimit: 0,
+			promptTime: 30000,
+			requiredSettings: [],
+			requiredPermissions: 0,
+			runIn: ['text', 'dm'],
+			subcommands: false,
+			usage: '',
 			quotedStringSupport: false,
-			flagSupport: true
+			deletable: false
 		},
-		gateways: {
-			guilds: {},
-			users: {},
-			clientStorage: {}
+		events: {
+			enabled: true,
+			once: false
 		},
-		owners: [],
-		// eslint-disable-next-line no-process-env
-		production: process.env.NODE_ENV === 'production',
-		prefixCaseInsensitive: false,
-		providers: { default: 'json' },
-		pieceDefaults: {
-			arguments: {
-				enabled: true,
-				aliases: []
-			},
-			commands: {
-				aliases: [],
-				autoAliases: true,
-				bucket: 1,
-				cooldown: 0,
-				cooldownLevel: 'author',
-				description: '',
-				extendedHelp: language => language.get('COMMAND_HELP_NO_EXTENDED'),
-				enabled: true,
-				flagSupport: true,
-				guarded: false,
-				hidden: false,
-				nsfw: false,
-				permissionLevel: 0,
-				promptLimit: 0,
-				promptTime: 30000,
-				requiredSettings: [],
-				requiredPermissions: 0,
-				runIn: ['text', 'dm'],
-				subcommands: false,
-				usage: '',
-				quotedStringSupport: false,
-				deletable: false
-			},
-			events: {
-				enabled: true,
-				once: false
-			},
-			extendables: {
-				enabled: true,
-				klasa: false,
-				appliesTo: []
-			},
-			finalizers: { enabled: true },
-			inhibitors: {
-				enabled: true,
-				spamProtection: false
-			},
-			languages: { enabled: true },
-			monitors: {
-				enabled: true,
-				ignoreBots: true,
-				ignoreSelf: true,
-				ignoreOthers: true,
-				ignoreWebhooks: true,
-				ignoreEdits: true,
-				ignoreBlacklistedUsers: true,
-				ignoreBlacklistedGuilds: true,
-				allowedTypes: ['DEFAULT']
-			},
-			providers: { enabled: true },
-			serializers: {
-				enabled: true,
-				aliases: []
-			},
-			tasks: { enabled: true }
+		extendables: {
+			enabled: true,
+			klasa: false,
+			appliesTo: []
 		},
-		schedule: { interval: 60000 },
-		slowmode: 0,
-		slowmodeAggressive: false
+		finalizers: { enabled: true },
+		inhibitors: {
+			enabled: true,
+			spamProtection: false
+		},
+		languages: { enabled: true },
+		monitors: {
+			enabled: true,
+			ignoreBots: true,
+			ignoreSelf: true,
+			ignoreOthers: true,
+			ignoreWebhooks: true,
+			ignoreEdits: true,
+			ignoreBlacklistedUsers: true,
+			ignoreBlacklistedGuilds: true,
+			allowedTypes: ['DEFAULT']
+		},
+		providers: { enabled: true },
+		serializers: {
+			enabled: true,
+			aliases: []
+		},
+		tasks: { enabled: true }
 	},
+	schedule: { interval: 60000 },
+	slowmode: 0,
+	slowmodeAggressive: false
+};
 
-	CONSOLE: {
-		stdout: process.stdout,
-		stderr: process.stderr,
-		timestamps: true,
-		utc: false,
-		types: {
-			debug: 'log',
-			error: 'error',
-			log: 'log',
-			verbose: 'log',
-			warn: 'warn',
-			wtf: 'error'
-		},
-		colors: {
-			debug: mergeDefault(colorBase, { time: { background: 'magenta' } }),
-			error: mergeDefault(colorBase, { time: { background: 'red' } }),
-			log: mergeDefault(colorBase, { time: { background: 'blue' } }),
-			verbose: mergeDefault(colorBase, { time: { text: 'gray' } }),
-			warn: mergeDefault(colorBase, { time: { background: 'lightyellow', text: 'black' } }),
-			wtf: mergeDefault(colorBase, { message: { text: 'red' }, time: { background: 'red' } })
-		}
+export const ConsoleDefaults: Required<ConsoleOptions> = {
+	stdout: process.stdout,
+	stderr: process.stderr,
+	timestamps: true,
+	utc: false,
+	types: {
+		debug: 'log',
+		error: 'error',
+		log: 'log',
+		verbose: 'log',
+		warn: 'warn',
+		wtf: 'error'
 	},
-
-	QUERYBUILDER: {
-		datatypes: {
-			any: { type: 'TEXT' },
-			boolean: { type: 'BOOLEAN', resolver: value => value },
-			categorychannel: { type: 'VARCHAR(18)' },
-			channel: { type: 'VARCHAR(18)' },
-			command: { type: 'TEXT' },
-			float: { type: 'FLOAT', resolver: value => value },
-			guild: { type: 'VARCHAR(18)' },
-			integer: { type: 'INTEGER', resolver: value => value },
-			json: { type: 'JSON', resolver: (value) => `'${JSON.stringify(value).replace(/'/g, "''")}'` },
-			language: { type: 'VARCHAR(5)' },
-			role: { type: 'VARCHAR(18)' },
-			string: { type: ({ max }) => max ? `VARCHAR(${max})` : 'TEXT' },
-			textchannel: { type: 'VARCHAR(18)' },
-			url: { type: 'TEXT' },
-			user: { type: 'VARCHAR(18)' },
-			voicechannel: { type: 'VARCHAR(18)' }
-		},
-		queryBuilderOptions: {
-			array: () => 'TEXT',
-			resolver: (value) => `'${(isObject(value) ? JSON.stringify(value) : String(value)).replace(/'/g, "''")}'`,
-			arrayResolver: (values) => `'${JSON.stringify(values)}'`,
-			formatDatatype: (name, datatype, def = null) => `${name} ${datatype}${def !== null ? ` NOT NULL DEFAULT ${def}` : ''}`
-		}
+	colors: {
+		debug: mergeDefault(colorBase, { time: { background: 'magenta' } }),
+		error: mergeDefault(colorBase, { time: { background: 'red' } }),
+		log: mergeDefault(colorBase, { time: { background: 'blue' } }),
+		verbose: mergeDefault(colorBase, { time: { text: 'gray' } }),
+		warn: mergeDefault(colorBase, { time: { background: 'lightyellow', text: 'black' } }),
+		wtf: mergeDefault(colorBase, { message: { text: 'red' }, time: { background: 'red' } })
 	}
+};
 
+export const QueryBuilderDefaults: Required<QueryBuilderOptions> = {
+	datatypes: {
+		any: { type: 'TEXT' },
+		boolean: { type: 'BOOLEAN', resolver: value => value },
+		categorychannel: { type: 'VARCHAR(18)' },
+		channel: { type: 'VARCHAR(18)' },
+		command: { type: 'TEXT' },
+		float: { type: 'FLOAT', resolver: value => value },
+		guild: { type: 'VARCHAR(18)' },
+		integer: { type: 'INTEGER', resolver: value => value },
+		json: { type: 'JSON', resolver: (value) => `'${JSON.stringify(value).replace(/'/g, "''")}'` },
+		language: { type: 'VARCHAR(5)' },
+		role: { type: 'VARCHAR(18)' },
+		string: { type: ({ max }) => max ? `VARCHAR(${max})` : 'TEXT' },
+		textchannel: { type: 'VARCHAR(18)' },
+		url: { type: 'TEXT' },
+		user: { type: 'VARCHAR(18)' },
+		voicechannel: { type: 'VARCHAR(18)' }
+	},
+	queryBuilderOptions: {
+		array: () => 'TEXT',
+		resolver: (value) => `'${(isObject(value) ? JSON.stringify(value) : String(value)).replace(/'/g, "''")}'`,
+		arrayResolver: (values) => `'${JSON.stringify(values)}'`,
+		formatDatatype: (name, datatype, def = null) => `${name} ${datatype}${def !== null ? ` NOT NULL DEFAULT ${def}` : ''}`
+	}
 };
 
 export const TIME = {

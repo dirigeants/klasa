@@ -4,7 +4,7 @@ import { RateLimit } from './RateLimit';
 /**
  * Manages {@link RateLimit}s
  */
-class RateLimitManager extends Cache {
+export class RateLimitManager extends Cache<string, RateLimit> {
 
 	/**
 	 * @since 0.5.0
@@ -112,9 +112,7 @@ class RateLimitManager extends Cache {
 	}
 
 	static get [Symbol.species]() {
-		return Collection;
+		return Cache;
 	}
 
 }
-
-export RateLimitManager;

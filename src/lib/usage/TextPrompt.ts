@@ -156,7 +156,7 @@ export class TextPrompt {
 		 * @since 0.5.0
 		 * @type external:Collection
 		 */
-		this.responses = new Collection();
+		this.responses = new Cache();
 	}
 
 	/**

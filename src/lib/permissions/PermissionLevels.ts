@@ -1,14 +1,15 @@
 import { Cache } from '@klasa/cache';
 
+import type { Message } from '@klasa/core';
+
 const empty = Symbol('empty');
 
 /**
  * Permission levels. See {@tutorial UnderstandingPermissionLevels} for more information how to use this class
  * to define custom permissions.
- * @extends external:Collection
  * @tutorial UnderstandingPermissionLevels
  */
-export class PermissionLevels extends Cache {
+export class PermissionLevels extends Cache<string, symbol | ((message: Message) => boolean)> {
 
 	/**
 	 * @typedef {Object} PermissionLevelsData
@@ -115,9 +116,7 @@ export class PermissionLevels extends Cache {
 	}
 
 	static get [Symbol.species]() {
-		return Collection;
+		return Cache;
 	}
 
 }
-
-export PermissionLevels;

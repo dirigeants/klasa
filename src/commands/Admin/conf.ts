@@ -1,4 +1,5 @@
-const { Command, util: { toTitleCase, codeBlock } } = require('klasa');
+import { Command } from 'klasa';
+import { toTitleCase, codeBlock } from '@klasa/utils';
 
 export default class extends Command {
 

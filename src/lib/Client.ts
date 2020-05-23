@@ -1,4 +1,4 @@
-import { Client, Permissions, ClientOptions, ClientApplication } from '@klasa/core';
+import { Client, Permissions, ClientOptions, Application, User } from '@klasa/core';
 import { isObject, mergeDefault } from '@klasa/utils';
 import { PermissionLevels } from './permissions/PermissionLevels';
 
@@ -25,7 +25,9 @@ import { Schema } from './settings/schema/Schema';
 
 // lib/util
 import { KlasaConsole, ConsoleOptions } from './util/KlasaConsole';
-import { DEFAULTS, MENTION_REGEX } from './util/constants';
+import { KlasaClientDefaults, MENTION_REGEX } from './util/constants';
+
+import type { Settings } from './settings/Settings';
 
 export interface KlasaClientOptions extends ClientOptions {
 	commands: CommandHandlingOptions;
@@ -240,16 +242,16 @@ export class KlasaClient extends Client {
 	 * The application info cached from the discord api
 	 * @since 0.0.1
 	 */
-	public application: ClientApplication | null;
+	public application: Application | null;
 
 	/**
 	 * Constructs the Klasa client
 	 * @since 0.0.1
 	 * @param {KlasaClientOptions} [options={}] The config to pass to the new client
 	 */
-	public constructor(options = {}) {
+	public constructor(options: Partial<KlasaClientOptions> = {}) {
 		if (!isObject(options)) throw new TypeError('The Client Options for Klasa must be an object.');
-		options = mergeDefault(DEFAULTS.CLIENT, options);
+		options = mergeDefault(KlasaClientDefaults, options);
 		super(options);
 
 		this.console = new KlasaConsole(this.options.console);
