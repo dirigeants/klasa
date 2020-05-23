@@ -5,7 +5,7 @@
 You can install this branch of klasa with the following command:
 
 ```sh
-npm install --save discordjs/discord.js dirigeants/klasa#{@branch}
+npm install --save @klasa/core dirigeants/klasa#{@branch}
 ```
 
 ### Using Klasa
@@ -31,7 +31,7 @@ new Client({
 >1. ownerID is acquired from the Discord API if not provided: `client.application.owner.id`
 >1. quotedStringSupport is can be overridden per command.
 
-> KlasaClientOptions are merged with discord.js' ClientOptions, see [ClientOptions in the discord.js docs](https://discord.js.org/#/docs/main/master/typedef/ClientOptions).
+> KlasaClientOptions are merged with @klasa/core's ClientOptions, see [ClientOptions in the discord.js docs](https://discord.js.org/#/docs/main/master/typedef/ClientOptions).
 
 ## Running the bot
 

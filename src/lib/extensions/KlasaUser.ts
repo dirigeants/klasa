@@ -1,4 +1,4 @@
-import { extender, User, Constructor } from '@klasa/core';
+import { extender, User } from '@klasa/core';
 
 import type { Settings } from '../settings/Settings';
 

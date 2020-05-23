@@ -59,7 +59,8 @@ export class CommandUsage extends Usage {
 	 */
 	public fullUsage(message: KlasaMessage): string {
 		let prefix = message.prefixLength ? message.content.slice(0, message.prefixLength) : message.guildSettings.prefix;
-		if (message.prefix === this.client.mentionPrefix) prefix = `@${this.client.user.tag}`;
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+		if (message.prefix === this.client.mentionPrefix) prefix = `@${this.client.user!.tag}`;
 		else if (Array.isArray(prefix)) [prefix] = prefix;
 		return `${prefix.length !== 1 ? `${prefix} ` : prefix}${this.nearlyFullUsage}`;
 	}

@@ -16,10 +16,10 @@ export abstract class Finalizer extends Piece {
 	 * @since 0.0.1
 	 * @param message The message used to trigger this finalizer
 	 * @param command The command this finalizer is for (may be different than message.command)
-	 * @param response The bot's response message, if one is returned
+	 * @param responses The bot's response message, if one is returned
 	 * @param runTime The time it took to generate the command
 	 */
-	public abstract run(message: KlasaMessage, command: Command, response: KlasaMessage | KlasaMessage[] | undefined, runTime: Stopwatch): Promise<unknown> | unknown;
+	public abstract run(message: KlasaMessage, command: Command, responses: KlasaMessage[] | undefined, runTime: Stopwatch): Promise<unknown> | unknown;
 
 
 	/**
@@ -27,14 +27,14 @@ export abstract class Finalizer extends Piece {
 	 * @since 0.5.0
 	 * @param message The message that called the command
 	 * @param command The command this finalizer is for (may be different than message.command)
-	 * @param response The bot's response message, if one is returned
+	 * @param responses The bot's response message, if one is returned
 	 * @param runTime The time it took to generate the command
 	 */
-	private async _run(message: KlasaMessage, command: Command, response: KlasaMessage | KlasaMessage[] | undefined, runTime: Stopwatch): Promise<void> {
+	private async _run(message: KlasaMessage, command: Command, responses: KlasaMessage[] | undefined, runTime: Stopwatch): Promise<void> {
 		try {
-			await this.run(message, command, response, runTime);
+			await this.run(message, command, responses, runTime);
 		} catch (err) {
-			this.client.emit('finalizerError', message, command, response, runTime, this, err);
+			this.client.emit('finalizerError', message, command, responses, runTime, this, err);
 		}
 	}
 

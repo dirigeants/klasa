@@ -1,5 +1,5 @@
 import { Language } from './Language';
-import { Store } from '@klasa/core';
+import { Store, PieceConstructor } from '@klasa/core';
 
 import type { KlasaClient } from '../Client';
 
@@ -10,15 +10,15 @@ import type { KlasaClient } from '../Client';
 export class LanguageStore extends Store<Language> {
 
 	constructor(client: KlasaClient) {
-		super(client, 'languages', Language);
+		super(client, 'languages', Language as PieceConstructor<Language>);
 	}
 
 	/**
 	 * The default language set in {@link KlasaClientOptions.language}
 	 * @since 0.2.1
 	 */
-	public get default(): Language | null {
-		return this.get(this.client.options.language) || null;
+	public get default(): Language {
+		return this.get(this.client.options.language) as Language;
 	}
 
 }

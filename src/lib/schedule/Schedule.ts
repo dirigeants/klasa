@@ -1,4 +1,14 @@
+import { TimerManager } from '@klasa/timer-manager';
 import { ScheduledTask } from './ScheduledTask';
+
+import type { KlasaClient } from '../Client';
+
+export interface ScheduledTaskOptions {
+	name?: string;
+	id?: string;
+	repeat?: string;
+	data?: Record<string, unknown>;
+}
 
 /**
  * <warning>Schedule is a singleton, use {@link KlasaClient#schedule} instead.</warning>
@@ -7,55 +17,40 @@ import { ScheduledTask } from './ScheduledTask';
 export class Schedule {
 
 	/**
-	 * @typedef  {Object} ScheduledTaskOptions
-	 * @property {string} [id] The ID for the task. By default, it generates one in base36
-	 * @property {string} [repeat] The {@link Cron} pattern
-	 * @property {*} [data] The data to pass to the Task piece when the ScheduledTask is ready for execution
+	 * The Client instance that initialized this instance
+	 * @since 0.5.0
 	 */
+	public client: KlasaClient;
 
 	/**
+	 * An array of all processed ScheduledTask instances
 	 * @since 0.5.0
-	 * @param {KlasaClient} client The Client that initialized this instance
 	 */
-	constructor(client) {
-		/**
-		 * The Client instance that initialized this instance
-		 * @since 0.5.0
-		 * @type {KlasaClient}
-		 */
+	public tasks: ScheduledTask[] = [];
+
+	/**
+	 * The current interval that runs the tasks
+	 * @since 0.5.0
+	 */
+	#interval: NodeJS.Timer | null = null;
+
+	constructor(client: KlasaClient) {
 		this.client = client;
-
-		/**
-		 * An array of all processed ScheduledTask instances
-		 * @since 0.5.0
-		 * @type {ScheduledTask[]}
-		 */
-		this.tasks = [];
-
-		/**
-		 * The current interval that runs the tasks
-		 * @since 0.5.0
-		 * @type {NodeJS.Timer}
-		 * @private
-		 */
-		this._interval = null;
 	}
 
 	/**
 	 * Get all the tasks from the cache
 	 * @since 0.5.0
-	 * @type {ScheduledTaskOptions[]}
-	 * @private
 	 */
-	get _tasks() {
-		return this.client.settings.schedules;
+	private get _tasks(): ScheduledTaskOptions[] {
+		return this.client.settings.get('schedules');
 	}
 
 	/**
 	 * Init the Schedule
 	 * @since 0.5.0
 	 */
-	async init() {
+	public async init(): Promise<void> {
 		const tasks = this._tasks;
 		if (!tasks || !Array.isArray(tasks)) return;
 
@@ -74,7 +69,7 @@ export class Schedule {
 	 * Execute the current tasks
 	 * @since 0.5.0
 	 */
-	async execute() {
+	protected async execute(): Promise<void> {
 		if (!this.client.ready) return;
 		if (this.tasks.length) {
 			// Process the active tasks, they're sorted by the time they end
@@ -97,7 +92,7 @@ export class Schedule {
 	 * @param {string} id The id of the ScheduledTask you want
 	 * @returns {ScheduledTask}
 	 */
-	get(id) {
+	public get(id: string): ScheduledTask | undefined {
 		return this.tasks.find(entry => entry.id === id);
 	}
 
@@ -105,17 +100,16 @@ export class Schedule {
 	 * Return the next ScheduledTask pending for execution
 	 * @returns {ScheduledTask}
 	 */
-	next() {
+	public next(): ScheduledTask {
 		return this.tasks[0];
 	}
 
 	/**
 	 * Adds a new task to the database
 	 * @since 0.5.0
-	 * @param {string} taskName The name of the task
-	 * @param {(Date|number|string)} time The time or Cron pattern
-	 * @param {ScheduledTaskOptions} [options] The options for the ScheduleTask instance
-	 * @returns {?ScheduledTask}
+	 * @param taskName The name of the task
+	 * @param time The time or Cron pattern
+	 * @param options The options for the ScheduleTask instance
 	 * @example
 	 * // Create a new reminder that ends in 2018-03-09T12:30:00.000Z (UTC)
 	 * Schedule.create('reminder', new Date(Date.UTC(2018, 2, 9, 12, 30)), {
@@ -136,7 +130,7 @@ export class Schedule {
 	 * // a table in your database and query it by its entry id from the Task instance.
 	 * @see https://en.wikipedia.org/wiki/Cron For more details
 	 */
-	async create(taskName, time, options) {
+	public async create(taskName: string, time: Date | number | string, options?: ScheduledTaskOptions): Promise<ScheduledTask> {
 		const task = await this._add(taskName, time, options);
 		if (!task) return null;
 		await this.client.settings.update('schedules', task, { action: 'add' });
@@ -146,10 +140,9 @@ export class Schedule {
 	/**
 	 * Delete a Task by its ID
 	 * @since 0.5.0
-	 * @param {string} id The ID to search for
-	 * @returns {this}
+	 * @param id The ID to search for
 	 */
-	async delete(id) {
+	public async delete(id: string): Promise<this> {
 		const taskIndex = this.tasks.findIndex(entry => entry.id === id);
 		if (taskIndex === -1) throw new Error('This task does not exist.');
 
@@ -165,7 +158,7 @@ export class Schedule {
 	 * Clear all the ScheduledTasks
 	 * @since 0.5.0
 	 */
-	async clear() {
+	public async clear(): Promise<void> {
 		// this._tasks is unedited as Settings#clear will clear the array
 		await this.client.settings.reset('schedules');
 		this.tasks = [];
@@ -180,7 +173,7 @@ export class Schedule {
 	 * @returns {?ScheduledTask}
 	 * @private
 	 */
-	async _add(taskName, time, options) {
+	private async _add(taskName: string, time: Date | number | string, options?: ScheduledTaskOptions): Promise<ScheduledTask | null> {
 		const task = new ScheduledTask(this.client, taskName, time, options);
 
 		// If the task were due of time before the bot's intialization, delete if not recurring, else update for next period
@@ -199,11 +192,9 @@ export class Schedule {
 	/**
 	 * Inserts the ScheduledTask instance in its sorted position for optimization
 	 * @since 0.5.0
-	 * @param {ScheduledTask} task The ScheduledTask instance to insert
-	 * @returns {ScheduledTask}
-	 * @private
+	 * @param task The ScheduledTask instance to insert
 	 */
-	_insert(task) {
+	private _insert(task: ScheduledTask): ScheduledTask {
 		const index = this.tasks.findIndex(entry => entry.time > task.time);
 		if (index === -1) this.tasks.push(task);
 		else this.tasks.splice(index, 0, task);
@@ -215,9 +206,11 @@ export class Schedule {
 	 * @since 0.5.0
 	 * @private
 	 */
-	_clearInterval() {
-		this.client.clearInterval(this._interval);
-		this._interval = null;
+	private _clearInterval(): void {
+		if (this.#interval) {
+			TimerManager.clearInterval(this.#interval);
+			this.#interval = null;
+		}
 	}
 
 	/**
@@ -225,23 +218,16 @@ export class Schedule {
 	 * @since 0.5.0
 	 * @private
 	 */
-	_checkInterval() {
+	private _checkInterval(): void {
 		if (!this.tasks.length) this._clearInterval();
-		else if (!this._interval) this._interval = this.client.setInterval(this.execute.bind(this), this.client.options.schedule.interval);
+		else if (!this.#interval) this.#interval = TimerManager.setInterval(this.execute.bind(this), this.client.options.schedule.interval);
 	}
 
 	/**
 	 * Returns a new Iterator object that contains the values for each element contained in the task queue.
-	 * @name @@iterator
 	 * @since 0.5.0
-	 * @method
-	 * @instance
-	 * @generator
-	 * @returns {Iterator<ScheduledTask>}
-	 * @memberof Schedule
 	 */
-
-	*[Symbol.iterator]() {
+	public *[Symbol.iterator](): IterableIterator<ScheduledTask> {
 		yield* this.tasks;
 	}
 

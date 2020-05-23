@@ -1,5 +1,5 @@
 import type { Cache } from '@klasa/cache';
-import type { Application } from '@klasa/core';
+import type { Application, User } from '@klasa/core';
 import type { ArgumentStore } from '../structures/ArgumentStore';
 import type { Command } from '../structures/Command';
 import type { CommandStore } from '../structures/CommandStore';
@@ -8,7 +8,6 @@ import type { FinalizerStore } from '../structures/FinalizerStore';
 import type { GatewayDriver } from '../settings/GatewayDriver';
 import type { InhibitorStore } from '../structures/InhibitorStore';
 import type { KlasaConsole, ConsoleOptions } from '../util/KlasaConsole';
-import type { KlasaMessage } from '../extensions/KlasaMessage';
 import type { Language } from '../structures/Language';
 import type { LanguageStore } from '../structures/LanguageStore';
 import type { MonitorStore } from '../structures/MonitorStore';
@@ -22,7 +21,7 @@ import type {
 	CommandHandlingOptions,
 	ConsoleEvents,
 	PieceDefaults,
-	ProvidersOptions,
+	ProviderClientOptions,
 	ScheduleOptions,
 	SettingsOptions
 } from '../Client';
@@ -48,21 +47,25 @@ declare module '@klasa/core/dist/src/lib/client/Client' {
 		mentionPrefix: RegExp | null;
 		settings: Settings | null;
 		application: Application | null;
+		readonly owners: Set<User>;
 	}
 
 	export interface ClientOptions {
-		commands?: CommandHandlingOptions;
-		console?: ConsoleOptions;
-		consoleEvents?: ConsoleEvents;
-		language?: string;
-		owners?: string[];
-		permissionLevels?: PermissionLevels;
-		pieceDefaults?: PieceDefaults;
-		production?: boolean;
-		readyMessage?: string | ((client: Client) => string);
-		providers?: ProvidersOptions;
-		settings?: SettingsOptions;
-		schedule?: ScheduleOptions;
+		commands: CommandHandlingOptions;
+		console: ConsoleOptions;
+		consoleEvents: ConsoleEvents;
+		language: string;
+		owners: string[];
+		permissionLevels: (permissionLevels: PermissionLevels) => PermissionLevels;
+		production: boolean;
+		readyMessage: string | ((client: Client) => string);
+		providers: ProviderClientOptions;
+		settings: SettingsOptions;
+		schedule: ScheduleOptions;
+	}
+
+	export interface ClientPieceOptions {
+		defaults: PieceDefaults;
 	}
 
 }
@@ -93,8 +96,8 @@ declare module '@klasa/core/dist/src/lib/caching/structures/Message' {
 		prefixLength: number | null;
 		language: Language | null;
 		guildSettings: Settings;
-		readonly responses: KlasaMessage[];
-		readonly args: string[];
+		responses: Message[];
+		readonly args: (string | null)[];
 		readonly params: unknown[];
 		readonly flagArgs: Record<string, string>;
 		readonly reprompted: boolean;

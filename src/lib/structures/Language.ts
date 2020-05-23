@@ -1,25 +1,27 @@
 import { pathExists } from 'fs-nextra';
 import { join } from 'path';
-import { Piece } from '@klasa/core';
+import { Piece, PieceConstructor } from '@klasa/core';
 import { mergeDefault, isClass } from '@klasa/utils';
+import type { LanguageStore } from './LanguageStore';
+
+export type LanguageValue = string | string[] | ((...args: readonly unknown[]) => string);
 
 /**
  * Base class for all Klasa Languages. See {@tutorial CreatingLanguages} for more information how to use this class
  * to build custom languages.
  * @tutorial CreatingLanguages
- * @extends Piece
  */
-export class Language extends Piece {
+export abstract class Language extends Piece {
+
+	public abstract language: Record<string, LanguageValue>;
 
 	/**
 	 * The method to get language strings
 	 * @since 0.2.1
-	 * @param {string} term The string or function to look up
-	 * @param {...*} args Any arguments to pass to the lookup
-	 * @returns {string|Function}
+	 * @param term The string or function to look up
+	 * @param args Any arguments to pass to the lookup
 	 */
-	get(term: string, ...args: any[]): string | ((...args: any) => string) {
-		// todo: store needs to be augmented to be LanguageStore
+	public get(term: string, ...args: readonly unknown[]): string {
 		if (!this.enabled && this !== this.store.default) return this.store.default.get(term, ...args);
 		const value = this.language[term];
 		/* eslint-disable new-cap */
@@ -28,7 +30,7 @@ export class Language extends Piece {
 			case 'undefined':
 				if (this === this.store.default) return this.language.DEFAULT(term);
 				return `${this.language.DEFAULT(term)}\n\n**${this.language.DEFAULT_LANGUAGE}:**\n${this.store.default.get(term, ...args)}`;
-			default: return value;
+			default: return Array.isArray(value) ? value.join('\n') : value;
 		}
 		/* eslint-enable new-cap */
 	}
@@ -36,7 +38,6 @@ export class Language extends Piece {
 	/**
 	 * The init method to be optionally overwritten in actual languages
 	 * @since 0.2.1
-	 * @returns {void}
 	 * @abstract
 	 */
 	async init(): Promise<void> {
@@ -45,9 +46,10 @@ export class Language extends Piece {
 			const loc = join(core, ...this.file);
 			if (this.directory !== core && await pathExists(loc)) {
 				try {
-					const CorePiece = (req => req.default || req)(require(loc));
-					if (!isClass(CorePiece)) return;
-					const coreLang = new CorePiece(this.store, this.file, core);
+					const loaded = await import(loc) as { default: PieceConstructor<Language> } | PieceConstructor<Language>;
+					const LoadedPiece = 'default' in loaded ? loaded.default : loaded;
+					if (!isClass(LoadedPiece)) return;
+					const coreLang = new LoadedPiece(this.store, this.directory, this.file, core);
 					this.language = mergeDefault(coreLang.language, this.language);
 				} catch (error) {
 					return;
@@ -57,4 +59,8 @@ export class Language extends Piece {
 		return;
 	}
 
+}
+
+export interface Language {
+	store: LanguageStore;
 }

@@ -1,4 +1,5 @@
 import { Monitor, Stopwatch } from 'klasa';
+import { Message } from '@klasa/core';
 
 export default class CommandHandler extends Monitor {
 
@@ -7,7 +8,7 @@ export default class CommandHandler extends Monitor {
 		this.ignoreEdits = !this.client.options.commandEditing;
 	}
 
-	async run(message) {
+	private async run(message: Message): Promise<void | Message[]> {
 		if (message.guild && !message.guild.me) await message.guild.members.fetch(this.client.user);
 		if (!message.channel.postable) return undefined;
 		if (!message.commandText && message.prefix === this.client.mentionPrefix) {
@@ -20,9 +21,9 @@ export default class CommandHandler extends Monitor {
 		return this.runCommand(message);
 	}
 
-	async runCommand(message) {
+	private async runCommand(message: Message): Promise<void> {
 		const timer = new Stopwatch();
-		if (this.client.options.typing) message.channel.startTyping();
+		if (this.client.options.commands.typing) message.channel.typing.start();
 		try {
 			await this.client.inhibitors.run(message, message.command);
 			try {
@@ -42,8 +43,9 @@ export default class CommandHandler extends Monitor {
 			}
 		} catch (response) {
 			this.client.emit('commandInhibited', message, message.command, response);
+		} finally {
+			if (this.client.options.commands.typing) message.channel.typing.stop();
 		}
-		if (this.client.options.typing) message.channel.stopTyping();
 	}
 
 }

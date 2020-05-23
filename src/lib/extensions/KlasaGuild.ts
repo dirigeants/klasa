@@ -24,8 +24,8 @@ export class KlasaGuild extends extender.get('Guild') {
 	/**
 	 * The language configured for this guild
 	 */
-	get language(): Language | null {
-		return this.client.languages.get(this.settings.language) || null;
+	get language(): Language {
+		return this.client.languages.get(this.settings.get('language') as unknown as string) as Language;
 	}
 
 	/**

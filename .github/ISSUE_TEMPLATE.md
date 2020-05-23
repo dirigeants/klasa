@@ -16,7 +16,7 @@ follow up.
 
 ### Further details
 
-- **discord.js version**:
+- **@klasa/core version**:
 - **node.js version**:
 - **Klasa version**:
 - [ ] I have modified core files.

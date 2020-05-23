@@ -17,7 +17,7 @@ export class MonitorStore extends Store<Monitor> {
 	/**
 	 * Runs our monitors on the message.
 	 * @since 0.0.1
-	 * @param {KlasaMessage} message The message object from @klasa/core
+	 * @param message The message to be used in the {@link Monitor monitors}.
 	 */
 	public run(message: KlasaMessage): void {
 		// eslint-disable-next-line dot-notation

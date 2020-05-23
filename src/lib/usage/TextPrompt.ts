@@ -132,6 +132,12 @@ export class TextPrompt {
 	public flagSupport: boolean;
 
 	/**
+	 * The typing state of this CommandPrompt
+	 * @since 0.5.0
+	 */
+	protected typing: boolean;
+
+	/**
 	 * A cache of the users responses
 	 * @since 0.5.0
 	 */
@@ -168,11 +174,12 @@ export class TextPrompt {
 	 * @param options The options of this prompt
 	 */
 	constructor(message: KlasaMessage, usage: Usage, options: TextPromptOptions = {}) {
-		options = mergeDefault(message.client.options.customPromptDefaults, options);
+		options = mergeDefault(message.client.options.commands.prompts, options) as TextPromptOptions;
 		Object.defineProperty(this, 'client', { value: message.client });
 		this.message = message;
-		this.target = options.target || message.author;
-		this.channel = options.channel || message.channel;
+		this.target = options.target ?? message.author as KlasaUser;
+		this.typing = false;
+		this.channel = options.channel ?? message.channel;
 		this.usage = usage;
 		this.time = options.time as number;
 		this.limit = options.limit as number;
@@ -214,12 +221,14 @@ export class TextPrompt {
 	public async reprompt(prompt: string): Promise<unknown[]> {
 		this.#prompted++;
 		if (this.typing) this.message.channel.typing.stop();
-		const possibleAbortOptions = this.message.language.get('TEXT_PROMPT_ABORT_OPTIONS');
+		const possibleAbortOptions = this.message.language.get('TEXT_PROMPT_ABORT_OPTIONS') as string[];
 		const edits = this.message.edits.length;
 		const message = await this.prompt(
 			this.message.language.get('MONITOR_COMMAND_HANDLER_REPROMPT', `<@!${this.target.id}>`, prompt, this.time / 1000, possibleAbortOptions)
 		);
-		if (this.message.edits.length !== edits || message.prefix || possibleAbortOptions.includes(message.content.toLowerCase())) throw this.message.language.get('MONITOR_COMMAND_HANDLER_ABORTED');
+		if (this.message.edits.length !== edits || message.prefix || possibleAbortOptions.includes(message.content.toLowerCase())) {
+			throw this.message.language.get('MONITOR_COMMAND_HANDLER_ABORTED');
+		}
 
 		this.responses.set(message.id, message);
 
@@ -238,7 +247,7 @@ export class TextPrompt {
 	private async repeatingPrompt(): Promise<unknown[]> {
 		if (this.typing) this.message.channel.typing.stop();
 		let message;
-		const possibleCancelOptions = this.message.language.get('TEXT_PROMPT_ABORT_OPTIONS');
+		const possibleCancelOptions = this.message.language.get('TEXT_PROMPT_ABORT_OPTIONS') as string[];
 		try {
 			message = await this.prompt(
 				this.message.language.get('MONITOR_COMMAND_HANDLER_REPEATING_REPROMPT', `<@!${this.message.author.id}>`, this.#currentUsage.possibles[0].name, this.time / 1000, possibleCancelOptions)
@@ -265,10 +274,10 @@ export class TextPrompt {
 	protected async validateArgs(): Promise<unknown[]> {
 		if (this.params.length >= this.usage.parsedUsage.length && this.params.length >= this.args.length) {
 			return this.finalize();
-		} else if (this.usage.parsedUsage[this.params.length]) {
+		} else if (this.params.length < this.usage.parsedUsage.length) {
 			this.#currentUsage = this.usage.parsedUsage[this.params.length];
 			this.#required = this.#currentUsage.required;
-		} else if (this.#currentUsage.repeat) {
+		} else if (this.#currentUsage?.repeat) {
 			this.#required = 0;
 			this.#repeat = true;
 		} else {
@@ -386,7 +395,7 @@ export class TextPrompt {
 	 * @param delim The delimiter
 	 */
 	private static getArgs(content: string, delim: string): string[] {
-		const args = content.split(delim !== '' ? delim : undefined);
+		const args = delim !== '' ? content.split(delim) : [content];
 		return args.length === 1 && args[0] === '' ? [] : args;
 	}
 

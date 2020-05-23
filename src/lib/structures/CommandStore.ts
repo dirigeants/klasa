@@ -1,5 +1,5 @@
 import { Command } from './Command';
-import { AliasStore } from '@klasa/core';
+import { AliasStore, PieceConstructor } from '@klasa/core';
 
 import type { KlasaClient } from '../Client';
 
@@ -10,7 +10,7 @@ import type { KlasaClient } from '../Client';
 export class CommandStore extends AliasStore<Command> {
 
 	constructor(client: KlasaClient) {
-		super(client, 'commands', Command);
+		super(client, 'commands', Command as PieceConstructor<Command>);
 	}
 
 }

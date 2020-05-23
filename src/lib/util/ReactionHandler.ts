@@ -4,7 +4,7 @@ import { ReactionCollector } from '@klasa/core';
  * Klasa's ReactionHandler, for handling RichDisplay and RichMenu reaction input
  * @extends ReactionCollector
  */
-class ReactionHandler extends ReactionCollector {
+export class ReactionHandler extends ReactionCollector {
 
 	/**
 	 * A single unicode character
@@ -338,5 +338,3 @@ class ReactionHandler extends ReactionCollector {
 	}
 
 }
-
-export ReactionHandler;

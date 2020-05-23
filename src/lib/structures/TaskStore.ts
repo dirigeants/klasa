@@ -1,5 +1,5 @@
 import { Task } from './Task';
-import { Store } from '@klasa/core';
+import { Store, PieceConstructor } from '@klasa/core';
 
 import type { KlasaClient } from '../Client';
 
@@ -15,7 +15,7 @@ export class TaskStore extends Store<Task> {
 	 * @param {KlasaClient} client The Klasa client
 	 */
 	constructor(client: KlasaClient) {
-		super(client, 'tasks', Task);
+		super(client, 'tasks', Task as PieceConstructor<Task>);
 	}
 
 }

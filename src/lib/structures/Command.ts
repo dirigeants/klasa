@@ -143,7 +143,7 @@ export abstract class Command extends AliasPiece {
 	 * @param file The path from the pieces folder to the command file
 	 * @param options Optional Command settings
 	 */
-	constructor(store: CommandStore, directory: string, files: readonly string[], options: CommandOptions = {}) {
+	constructor(store: CommandStore, directory: string, files: readonly string[], options: Partial<CommandOptions> = {}) {
 		super(store, directory, files, options);
 
 		// todo: piece#name can't be readonly for this to exist
@@ -271,19 +271,18 @@ export abstract class Command extends AliasPiece {
 	 * @since 0.0.1
 	 * @param {KlasaMessage} message The command message mapped on top of the message used to trigger this command
 	 * @param {any[]} params The fully resolved parameters based on your usage / usageDelim
-	 * @returns {KlasaMessage|KlasaMessage[]} You should return the response message whenever possible
+	 * @returns {KlasaMessage[]} You should return the response message whenever possible
 	 * @abstract
 	 */
 
-	// todo: KlasaMessage[] only?
-	public abstract async run(message: KlasaMessage, params: any[]): Promise<KlasaMessage|KlasaMessage[]>;
+	public abstract async run(message: KlasaMessage, params: any[]): Promise<KlasaMessage[]>;
 
 
 	/**
 	 * Defines the JSON.stringify behavior of this command.
 	 * @returns {Object}
 	 */
-	toJSON() {
+	toJSON(): object {
 		return {
 			...super.toJSON(),
 			requiredPermissions: this.requiredPermissions.toArray(false),
@@ -335,10 +334,8 @@ export interface CommandOptions extends AliasPieceOptions {
 	quotedStringSupport: boolean;
 	requiredPermissions: PermissionsResolvable;
 	requiredSettings: string[];
-	// todo: idk if we want to limit this to ChannelType enum or not
 	runIn: string[];
 	subcommands: boolean;
 	usage: string;
 	usageDelim: string | undefined;
 }
-

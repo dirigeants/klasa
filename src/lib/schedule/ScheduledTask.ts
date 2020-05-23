@@ -1,5 +1,8 @@
-import { Cron } from '../util/Cron';
 import { isObject } from '@klasa/utils';
+import { Cron } from '../util/Cron';
+import { Schedule, ScheduledTaskOptions } from './Schedule';
+import { Task } from '../structures/Task';
+import { KlasaClient } from '../Client';
 
 /**
  * The structure for future tasks to be run
@@ -35,6 +38,55 @@ export class ScheduledTask {
 	 */
 
 	/**
+	 * The Client instance that initialized this instance
+	 * @since 0.5.0
+	 */
+	public client: KlasaClient;
+
+	/**
+	 * The name of the Task this scheduled task will run
+	 * @since 0.5.0
+	 */
+	public taskName: string;
+
+	/**
+	 * Whether this scheduled task is scheduled with the {@link Cron} pattern
+	 * @since 0.5.0
+	 */
+	public recurring: Cron | null;
+
+	/**
+	 * The Date when this scheduled task ends
+	 * @since 0.5.0
+	 */
+	public time: Date;
+
+	/**
+	 * The id for this scheduled task
+	 * @since 0.5.0
+	 */
+	public id: string;
+
+	/**
+	 * If the task should catch up in the event the bot is down
+	 * @since 0.5.0
+	 * @type {boolean}
+	 */
+	public catchUp: boolean;
+
+	/**
+	 * The stored metadata to send to the Task
+	 * @since 0.5.0
+	 */
+	public data: Record<string, unknown>;
+
+	/**
+	 * If the ScheduledTask is being run currently
+	 * @since 0.5.0
+	 */
+	#running = false;
+
+	/**
 	 * Initializes a new ScheduledTask
 	 * @since 0.5.0
 	 * @param {KlasaClient} client The client that initialized this instance
@@ -42,108 +94,51 @@ export class ScheduledTask {
 	 * @param {TimeResolvable} time The time or {@link Cron} pattern
 	 * @param {ScheduledTaskOptions} [options={}] The options for this ScheduledTask instance
 	 */
-	constructor(client, taskName, time, options = {}) {
-		const [_time, _recurring] = this.constructor._resolveTime(time);
+	public constructor(client: KlasaClient, taskName: string, time: TimeResolvable, options: ScheduledTaskUpdateOptions = {}) {
+		const [_time, _recurring] = (this.constructor as typeof ScheduledTask)._resolveTime(time);
 
-		/**
-		 * The Client instance that initialized this instance
-		 * @since 0.5.0
-		 * @name ScheduledTask#client
-		 * @type {KlasaClient}
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'client', { value: client });
-
-		/**
-		 * The name of the Task this scheduled task will run
-		 * @since 0.5.0
-		 * @type {string}
-		 */
+		this.client = client;
 		this.taskName = taskName;
-
-		/**
-		 * Whether this scheduled task is scheduled with the {@link Cron} pattern
-		 * @since 0.5.0
-		 * @type {?Cron}
-		 */
 		this.recurring = _recurring;
-
-		/**
-		 * The Date when this scheduled task ends
-		 * @since 0.5.0
-		 * @type {Date}
-		 */
-		this.time = 'time' in options ? new Date(options.time) : _time;
-
-		/**
-		 * The id for this scheduled task
-		 * @since 0.5.0
-		 * @type {string}
-		 */
-		this.id = options.id || this.constructor._generateID(this.client);
-
-		/**
-		 * If the task should catch up in the event the bot is down
-		 * @since 0.5.0
-		 * @type {boolean}
-		 */
+		this.time = _time;
+		this.id = options.id || (this.constructor as typeof ScheduledTask)._generateID(this.client);
 		this.catchUp = 'catchUp' in options ? options.catchUp : true;
-
-		/**
-		 * The stored metadata to send to the Task
-		 * @since 0.5.0
-		 * @type {*}
-		 */
 		this.data = 'data' in options && isObject(options.data) ? options.data : {};
 
-		/**
-		 * If the ScheduledTask is being run currently
-		 * @since 0.5.0
-		 * @type {boolean}
-		 * @private
-		 */
-		this.running = false;
-
-		this.constructor._validate(this);
+		(this.constructor as typeof ScheduledTask)._validate(this);
 	}
 
 	/**
 	 * The Schedule class that manages all scheduled tasks
 	 * @since 0.5.0
-	 * @name ScheduledTask#store
-	 * @type {Schedule}
-	 * @readonly
 	 */
-	get store() {
+	public get store(): Schedule {
 		return this.client.schedule;
 	}
 
 	/**
 	 * The Task instance this scheduled task will run
 	 * @since 0.5.0
-	 * @type {?Task}
-	 * @readonly
 	 */
-	get task() {
-		return this.client.tasks.get(this.taskName) || null;
+	public get task(): Task | null {
+		return this.client.tasks.get(this.taskName) ?? null;
 	}
 
 	/**
 	 * Run the current task and bump it if needed
 	 * @since 0.5.0
-	 * @returns {this}
 	 */
-	async run() {
+	public async run(): Promise<this> {
 		const { task } = this;
-		if (!task || !task.enabled || this.running) return this;
+		if (!task || !task.enabled || this.#running) return this;
 
-		this.running = true;
+		this.#running = true;
 		try {
 			await task.run({ id: this.id, ...this.data });
 		} catch (err) {
 			this.client.emit('taskError', this, task, err);
 		}
-		this.running = false;
+		this.#running = false;
 
 		if (!this.recurring) return this.delete();
 		return this.update({ time: this.recurring });
@@ -152,8 +147,7 @@ export class ScheduledTask {
 	/**
 	 * Update the task
 	 * @since 0.5.0
-	 * @param {ScheduledTaskUpdateOptions} [options={}] The options to update
-	 * @returns {this}
+	 * @param options The options to update
 	 * @example
 	 * // Update the data from the current scheduled task. Let's say I want to change the reminder content to remind me
 	 * // another thing
@@ -162,9 +156,9 @@ export class ScheduledTask {
 	 * // But you can also update the time this will end at, for example, to change it so it ends in 1 hour:
 	 * ScheduledTask.update({ time: Date.now() + 60000 * 60 });
 	 */
-	async update({ time, data, catchUp } = {}) {
+	public async update({ time, data, catchUp }: ScheduledTaskUpdateOptions = {}): this {
 		if (time) {
-			const [_time, _cron] = this.constructor._resolveTime(time);
+			const [_time, _cron] = (this.constructor as typeof ScheduledTask)._resolveTime(time);
 			this.time = _time;
 			this.store.tasks.splice(this.store.tasks.indexOf(this), 1);
 			this.store._insert(this);
@@ -184,13 +178,12 @@ export class ScheduledTask {
 	/**
 	 * Delete the task
 	 * @since 0.5.0
-	 * @returns {Promise<Schedule>}
 	 * @example
 	 * ScheduledTask.delete()
 	 *     .then(() => console.log('Successfully deleted the task'))
 	 *     .catch(console.error);
 	 */
-	delete() {
+	public delete(): Promise<Schedule> {
 		return this.store.delete(this.id);
 	}
 
@@ -199,7 +192,7 @@ export class ScheduledTask {
 	 * @since 0.5.0
 	 * @returns {ScheduledTaskJSON}
 	 */
-	toJSON() {
+	public toJSON() {
 		return {
 			id: this.id,
 			taskName: this.taskName,
@@ -213,11 +206,9 @@ export class ScheduledTask {
 	/**
 	 * Resolve the time and cron
 	 * @since 0.5.0
-	 * @param {TimeResolvable} time The time or {@link Cron} pattern
-	 * @returns {any[]}
-	 * @private
+	 * @param time The time or {@link Cron} pattern
 	 */
-	static _resolveTime(time) {
+	private static _resolveTime(time: TimeResolvable): [Date, Cron | null] {
 		if (time instanceof Date) return [time, null];
 		if (time instanceof Cron) return [time.next(), time];
 		if (typeof time === 'number') return [new Date(time), null];
@@ -231,21 +222,19 @@ export class ScheduledTask {
 	/**
 	 * Generate a new ID based on timestamp and shard
 	 * @since 0.5.0
-	 * @param {KlasaClient} client The Discord client
-	 * @returns {string}
-	 * @private
+	 * @param client The Discord client
 	 */
-	static _generateID(client) {
-		return `${Date.now().toString(36)}${client.options.shards[0].toString(36)}`;
+	private static _generateID(client: KlasaClient): string {
+		// todo: check if ws has a shards array exposed
+		return `${Date.now().toString(36)}${client.options.ws.shards[0].toString(36)}`;
 	}
 
 	/**
 	 * Validate a task
 	 * @since 0.5.0
-	 * @param {ScheduledTask} st The task to validate
-	 * @private
+	 * @param st The task to validate
 	 */
-	static _validate(st) {
+	private static _validate(st: ScheduledTask): void {
 		if (!st.task) throw new Error('invalid task');
 		if (!st.time) throw new Error('time or repeat option required');
 		if (Number.isNaN(st.time.getTime())) throw new Error('invalid time passed');

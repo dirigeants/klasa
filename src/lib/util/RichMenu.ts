@@ -1,50 +1,19 @@
 import { RichDisplay } from './RichDisplay';
+import { Embed, EmojiResolvable } from '@klasa/core';
 
 /**
  * Klasa's RichMenu, for helping paginated embeds with reaction buttons
- * @extends RichDisplay
  */
-class RichMenu extends RichDisplay {
+export class RichMenu extends RichDisplay {
 
-	/**
-	 * @typedef {RichDisplayEmojisObject} RichMenuEmojisObject
-	 * @property {Emoji} zero The emoji for the 'zero' button
-	 * @property {Emoji} one The emoji for the 'one' button
-	 * @property {Emoji} two The emoji for the 'two' button
-	 * @property {Emoji} three The emoji for the 'three' button
-	 * @property {Emoji} four The emoji for the 'four' button
-	 * @property {Emoji} five The emoji for the 'five' button
-	 * @property {Emoji} six The emoji for the 'six' button
-	 * @property {Emoji} seven The emoji for the 'seven' button
-	 * @property {Emoji} eight The emoji for the 'eight' button
-	 * @property {Emoji} nine The emoji for the 'nine' button
-	 */
-
-	/**
-	 * @typedef {Object} MenuOptions
-	 * @property {string} name The name of the option
-	 * @property {string} body The description of the option
-	 * @property {boolean} [inline=false] Whether the option should be inline
-	 */
-
-	/**
-	 * @typedef {Object} RichMenuRunOptions
-	 * @property {Function} [filter] A filter function to add to the ReactionHandler (Receives: Reaction, User)
-	 * @property {boolean} [stop=true] If a stop reaction should be included
-	 * @property {string} [prompt=message.language.get('REACTIONHANDLER_PROMPT')] The prompt to be used when awaiting user input on a page to jump to
-	 * @property {number} [startPage=0] The page to start the RichMenu on
-	 * @property {number} [max] The maximum total amount of reactions to collect
-	 * @property {number} [maxEmojis] The maximum number of emojis to collect
-	 * @property {number} [maxUsers] The maximum number of users to react
-	 * @property {number} [time] The maximum amount of time before this RichMenu should expire
-	 */
+	public emojis: RichMenuEmojisObject;
 
 	/**
 	 * Constructs our RichMenu instance
 	 * @since 0.4.0
-	 * @param {external:MessageEmbed} [embed=new MessageEmbed()] A Template embed to apply to all pages
+	 * @param embed A Template embed to apply to all pages
 	 */
-	constructor(embed) {
+	public constructor(embed = new Embed()) {
 		super(embed);
 
 		/**
@@ -154,4 +123,83 @@ class RichMenu extends RichDisplay {
 
 }
 
-export RichMenu;
+interface RichMenuEmojisObject {
+	/**
+	 * The emoji for the 'zero' button.
+	 * @since 0.4.0
+	 */
+	zero: EmojiResolvable;
+
+	/**
+	 * The emoji for the 'one' button.
+	 * @since 0.4.0
+	 */
+	one: EmojiResolvable;
+
+	/**
+	 * The emoji for the 'two' button.
+	 * @since 0.4.0
+	 */
+	two: EmojiResolvable;
+
+	/**
+	 * The emoji for the 'three' button.
+	 * @since 0.4.0
+	 */
+	three: EmojiResolvable;
+
+	/**
+	 * The emoji for the 'four' button.
+	 * @since 0.4.0
+	 */
+	four: EmojiResolvable;
+
+	/**
+	 * The emoji for the 'five' button.
+	 * @since 0.4.0
+	 */
+	five: EmojiResolvable;
+
+	/**
+	 * The emoji for the 'six' button.
+	 * @since 0.4.0
+	 */
+	six: EmojiResolvable;
+
+	/**
+	 * The emoji for the 'seven' button.
+	 * @since 0.4.0
+	 */
+	seven: EmojiResolvable;
+
+	/**
+	 * The emoji for the 'eight' button.
+	 * @since 0.4.0
+	 */
+	eight: EmojiResolvable;
+
+	/**
+	 * The emoji for the 'nine' button.
+	 * @since 0.4.0
+	 */
+	nine: EmojiResolvable;
+}
+
+/**
+ * @typedef {Object} MenuOptions
+ * @property {string} name The name of the option
+ * @property {string} body The description of the option
+ * @property {boolean} [inline=false] Whether the option should be inline
+ */
+
+/**
+ * @typedef {Object} RichMenuRunOptions
+ * @property {Function} [filter] A filter function to add to the ReactionHandler (Receives: Reaction, User)
+ * @property {boolean} [stop=true] If a stop reaction should be included
+ * @property {string} [prompt=message.language.get('REACTIONHANDLER_PROMPT')] The prompt to be used when awaiting user input on a page to jump to
+ * @property {number} [startPage=0] The page to start the RichMenu on
+ * @property {number} [max] The maximum total amount of reactions to collect
+ * @property {number} [maxEmojis] The maximum number of emojis to collect
+ * @property {number} [maxUsers] The maximum number of users to react
+ * @property {number} [time] The maximum amount of time before this RichMenu should expire
+ */

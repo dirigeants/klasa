@@ -4,7 +4,7 @@ An extremely simple working example can achieved by this code:
 
 ```javascript
 const { Command, RichDisplay } = require('klasa');
-const { MessageEmbed } = require('discord.js');
+const { Embed } = require('@klasa/core');
 
 module.exports = class extends Command {
 
@@ -14,8 +14,8 @@ module.exports = class extends Command {
 
 	async run(message) {
 		return new RichDisplay()
-			.addPage(new MessageEmbed().setDescription('First page'))
-			.addPage(new MessageEmbed().setDescription('Second page'))
+			.addPage(new Embed().setDescription('First page'))
+			.addPage(new Embed().setDescription('Second page'))
 			.run(await message.send('Loading...'));
 	}
 
@@ -34,7 +34,7 @@ const images = [
 module.exports = class extends Command {
 
 	async run(message) {
-		const display = new RichDisplay(new MessageEmbed()
+		const display = new RichDisplay(new Embed()
 			.setColor(0x673AB7)
 			.setAuthor(this.client.user.name, this.client.user.avatarURL())
 			.setTitle('Norway Pictures Slideshow')
@@ -55,15 +55,15 @@ module.exports = class extends Command {
 
 ## Code Analysis
 
-First we create a new {@link RichDisplay} instance, but this time we pass in a [`MessageEmbed`](https://discord.js.org/#/docs/main/master/class/MessageEmbed) instance, which will represent our template, from which we will be able to extend upon to create our pages later on:
+First we create a new {@link RichDisplay} instance, but this time we pass in a [`Embed`](https://discord.js.org/#/docs/main/master/class/Embed) instance, which will represent our template, from which we will be able to extend upon to create our pages later on:
 
 ```javascript
-const display = new RichDisplay(new MessageEmbed()
+const display = new RichDisplay(new Embed()
 	/* ... */
 );
 ```
 
-This [`MessageEmbed`](https://discord.js.org/#/docs/main/master/class/MessageEmbed) instance will be accessible to us by either calling the {@link RichDisplay.template} property of the {@link RichDisplay} instance, in a cloned manner, or directly through the {@link RichDisplay.addPage} method, if we pass in an arrow function or a callback.
+This [`Embed`](https://discord.js.org/#/docs/main/master/class/Embed) instance will be accessible to us by either calling the {@link RichDisplay.template} property of the {@link RichDisplay} instance, in a cloned manner, or directly through the {@link RichDisplay.addPage} method, if we pass in an arrow function or a callback.
 
 ```javascript
 for (const image of images) {

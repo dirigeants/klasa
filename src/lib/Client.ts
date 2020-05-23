@@ -1,4 +1,4 @@
-import { Permissions, ClientOptions, Application, User, Client, PieceOptions, EventOptions } from '@klasa/core';
+import { Permissions, ClientOptions, Application, User, Client, PieceOptions, EventOptions, isTextBasedChannel, AliasPieceOptions, ClientPieceOptions, ClientEvents } from '@klasa/core';
 import { isObject, mergeDefault } from '@klasa/utils';
 import { PermissionLevels } from './permissions/PermissionLevels';
 
@@ -24,84 +24,85 @@ import { GatewayDriver } from './settings/GatewayDriver';
 import { Schema } from './settings/schema/Schema';
 
 // lib/util
-import { KlasaConsole, ConsoleOptions } from './util/KlasaConsole';
+import { KlasaConsole, ConsoleOptions } from '@klasa/console';
 import { KlasaClientDefaults, MENTION_REGEX } from './util/constants';
 
 import type { Settings } from './settings/Settings';
-import type { CommandOptions } from './structures/Command';
+import type { CommandOptions, Command } from './structures/Command';
 import type { ExtendableOptions } from './structures/Extendable';
 import type { InhibitorOptions } from './structures/Inhibitor';
 import type { MonitorOptions } from './structures/Monitor';
-import { ChannelType } from '@klasa/dapi-types';
+import type { SchemaPiece } from './settings/schema/SchemaPiece';
+import type { Language } from './structures/Language';
 
 export interface KlasaClientOptions extends ClientOptions {
 	/**
 	 * The command handler options
 	 * @default {}
 	 */
-	commands?: CommandHandlingOptions;
+	commands: CommandHandlingOptions;
+
+	/**
+	 * Options regarding pieces
+	 */
+	pieces: PieceClientOptions;
 
 	/**
 	 * Config options to pass to the client console
 	 * @default {}
 	 */
-	console?: ConsoleOptions;
+	console: ConsoleOptions;
 
 	/**
 	 * Config options to pass to console events
 	 */
-	consoleEvents?: ConsoleEvents;
+	consoleEvents: ConsoleEvents;
 
 	/**
 	 * The default language Klasa should opt-in for the commands
 	 * @default 'en-US'
 	 */
-	language?: string;
+	language: string;
 
 	/**
 	 * The discord user id for the users the bot should respect as the owner (gotten from Discord api if not provided)
 	 */
-	owners?: string[];
+	owners: string[];
 
 	/**
 	 * The permission levels to use with this bot
 	 */
-	permissionLevels?: PermissionLevels;
-
-	/**
-	 * Overrides the defaults for all pieces
-	 */
-	pieceDefaults?: PieceDefaults;
+	permissionLevels: (permissionLevels: PermissionLevels) => PermissionLevels;
 
 	/**
 	 * Whether the bot should handle unhandled promise rejections automatically (handles when false)
 	 * (also can be configured with process.env.NODE_ENV)
 	 */
-	production?: boolean;
+	production: boolean;
 
 	/**
 	 * The ready message to be passed throughout Klasa's ready event
 	 * @default client => `Successfully initialized. Ready to serve ${client.guilds.size} guilds.`
 	 */
-	readyMessage?: string | ((client: Client) => string);
+	readyMessage: string | ((client: Client) => string);
 
 	/**
 	 * The provider options
 	 * @default {}
 	 */
-	providers?: ProvidersOptions;
+	providers: ProviderClientOptions;
 
 	/**
 	 * The settings options
 	 * @default {}
 	 */
-	settings?: SettingsOptions;
+	settings: SettingsOptions;
 
 	/**
 	 * The options for the internal clock module that runs Schedule
 	 * @default {}
 	 */
-	schedule?: ScheduleOptions;
+	schedule: ScheduleOptions;
 }
 
 export interface CommandHandlingOptions {
@@ -121,7 +122,7 @@ export interface CommandHandlingOptions {
 	 * The threshold for how old command messages can be before sweeping since the last edit in seconds
 	 * @default 1800
 	 */
-	lifetime?: number;
+	messageLifetime?: number;
 
 	/**
 	 * Whether the bot should allow prefixless messages in DMs
@@ -139,7 +140,7 @@ export interface CommandHandlingOptions {
 	 * The regular expression prefix if one is provided
 	 * @default null
 	 */
-	regexPrefix?: RegExp;
+	regexPrefix?: RegExp | null;
 
 	/**
 	 * Amount of time in ms before the bot will respond to a users command since the last command that user has run
@@ -190,16 +191,18 @@ export interface CustomPromptDefaults {
 	 * @default false
 	 */
 	quotedStringSupport: boolean;
+
+	/**
+	 * Whether or not to support to flags for custom prompts
+	 */
+	flagSupport: boolean;
 }
 
-// todo: need better name
-export interface PieceHandlingOptions {
-	createFolders: boolean;
+export interface PieceClientOptions extends ClientPieceOptions {
 	defaults: PieceDefaults;
-	disabledPieces: string[];
 }
 
-export interface ProvidersOptions {
+export interface ProviderClientOptions {
 	/**
 	 * The default provider to use.
 	 * @default 'en-US'
@@ -235,24 +238,24 @@ export interface SettingsOptions {
 }
 
 // TODO(kyranet): fix this once SGN2 is available
-export interface GatewaysOptions extends Partial<Record<string, { schema: Schema }>> {
+export interface GatewaysOptions extends Partial<Record<string, { schema: (schema: Schema) => Schema }>> {
 	/**
 	 * The options for clientStorage's gateway
 	 * @default {}
 	 */
-	clientStorage?: { schema: Schema };
+	clientStorage?: { schema: (schema: Schema) => Schema };
 
 	/**
 	 * The options for guilds' gateway
 	 * @default {}
 	 */
-	guilds?: { schema: Schema };
+	guilds?: { schema: (schema: Schema) => Schema };
 
 	/**
 	 * The options for users' gateway
 	 * @default {}
 	 */
-	users?: { schema: Schema };
+	users?: { schema: (schema: Schema) => Schema };
 }
 
 export interface ConsoleEvents {
@@ -292,7 +295,7 @@ export interface ConsoleEvents {
 	wtf?: boolean;
 }
 
-export interface PieceDefaults extends Partial<Record<string, PieceOptions>> {
+export interface PieceDefaults {
 	/**
 	 * The default command options.
 	 * @default {}
@@ -340,24 +343,31 @@ export interface PieceDefaults extends Partial<Record<string, PieceOptions>> {
 	 * @default {}
 	 */
 	providers?: PieceOptions;
-}
 
+	/**
+	 * The default argument options.
+	 * @default {}
+	 */
+	arguments?: AliasPieceOptions;
+
+	/**
+	 * The default serializer options.
+	 * @default {}
+	 */
+	serializers: AliasPieceOptions;
+
+	/**
+	 * The default task options.
+	 * @default {}
+	 */
+	tasks: PieceOptions;
+}
 
 /**
  * The client for handling everything. See {@tutorial GettingStarted} for more information how to get started using this class.
  * @tutorial GettingStarted
  */
 export class KlasaClient extends Client {
-
-	/**
-	 * Defaulted as `Successfully initialized. Ready to serve ${this.guilds.size} guilds.`
-	 * @typedef {(string|Function)} ReadyMessage
-	 */
-
-	/**
-	 * Defaulted to KlasaClient.defaultPermissionLevels
-	 * @typedef {PermissionLevels} PermissionLevelsOverload
-	 */
 
 	/**
 	 * The console for this instance of klasa. You can disable timestamps, colors, and add writable streams as configuration options to configure this.
@@ -476,7 +486,7 @@ export class KlasaClient extends Client {
 	 */
 	public constructor(options: Partial<KlasaClientOptions> = {}) {
 		if (!isObject(options)) throw new TypeError('The Client Options for Klasa must be an object.');
-		options = mergeDefault(KlasaClientDefaults, options);
+		options = mergeDefault(KlasaClientDefaults, options) as Required<KlasaClientOptions>;
 		super(options);
 
 		this.console = new KlasaConsole(this.options.console);
@@ -490,33 +500,36 @@ export class KlasaClient extends Client {
 		this.extendables = new ExtendableStore(this);
 		this.tasks = new TaskStore(this);
 		this.serializers = new SerializerStore(this);
-		this.permissionLevels = this.validatePermissionLevels();
+
+		this.permissionLevels = this.options.permissionLevels(new PermissionLevels());
+		// eslint-disable-next-line
+		this.permissionLevels['validate']();
+
 		this.gateways = new GatewayDriver(this);
 
-		// TODO(kyranet): uncomment and fix once SGN2 is out
-		// const { guilds, users, clientStorage } = this.options.settings.gateways;
-		// const guildSchema = 'schema' in guilds ? guilds.schema : (this.constructor as typeof KlasaClient).defaultGuildSchema;
-		// const userSchema = 'schema' in users ? users.schema : (this.constructor as typeof KlasaClient).defaultUserSchema;
-		// const clientSchema = 'schema' in clientStorage ? clientStorage.schema : (this.constructor as typeof KlasaClient).defaultClientSchema;
+		const { guilds, users, clientStorage } = this.options.settings.gateways;
+		const guildSchema = guilds.schema(new Schema());
+		const userSchema = users.schema(new Schema());
+		const clientSchema = clientStorage.schema(new Schema());
 
-		// // Update Guild Schema with Keys needed in Klasa
-		// const prefixKey = guildSchema.get('prefix');
-		// if (!prefixKey || prefixKey.default === null) {
-		// 	guildSchema.add('prefix', 'string', { array: Array.isArray(this.options.commands.prefix), default: this.options.commands.prefix });
-		// }
+		// Update Guild Schema with Keys needed in Klasa
+		const prefixKey = guildSchema.get('prefix');
+		if (!prefixKey || prefixKey.default === null) {
+			guildSchema.add('prefix', 'string', { array: Array.isArray(this.options.commands.prefix), default: this.options.commands.prefix });
+		}
 
-		// const languageKey = guildSchema.get('language');
-		// if (!languageKey || languageKey.default === null) {
-		// 	guildSchema.add('language', 'language', { default: this.options.language });
-		// }
+		const languageKey = guildSchema.get('language');
+		if (!languageKey || languageKey.default === null) {
+			guildSchema.add('language', 'language', { default: this.options.language });
+		}
 
-		// guildSchema.add('disableNaturalPrefix', 'boolean', { configurable: Boolean(this.options.commands.regexPrefix) });
+		guildSchema.add('disableNaturalPrefix', 'boolean', { configurable: Boolean(this.options.commands.regexPrefix) });
 
-		// // Register default gateways
-		// this.gateways
-		// 	.register('guilds', { ...guilds, schema: guildSchema })
-		// 	.register('users', { ...users, schema: userSchema })
-		// 	.register('clientStorage', { ...clientStorage, schema: clientSchema });
+		// Register default gateways
+		this.gateways
+			.register('guilds', { ...guilds, schema: guildSchema })
+			.register('users', { ...users, schema: userSchema })
+			.register('clientStorage', { ...clientStorage, schema: clientSchema });
 
 		this.settings = null;
 		this.application = null;
@@ -572,53 +585,45 @@ export class KlasaClient extends Client {
 	}
 
 	/**
-	 * Validates the permission structure passed to the client
-	 * @since 0.0.1
-	 */
-	private validatePermissionLevels(): PermissionLevels {
-		// todo: remove in favor of PermissionLevels#validate()
-		const permissionLevels = this.options.permissionLevels || (this.constructor as typeof KlasaClient).defaultPermissionLevels;
-		if (!(permissionLevels instanceof PermissionLevels)) throw new Error('permissionLevels must be an instance of the PermissionLevels class');
-		// eslint-disable-next-line
-		return permissionLevels['validate']();
-	}
-
-	/**
 	 * Sweeps all text-based channels' messages and removes the ones older than the max message or command message lifetime.
 	 * If the message has been edited, the time of the edit is used rather than the time of the original message.
 	 * @since 0.5.0
-	 * @param {number} [lifetime=this.options.messageCacheLifetime] Messages that are older than this (in seconds)
+	 * @param number Messages that are older than this (in .cachemillisecmessageL
 	 * will be removed from the caches. The default is based on [ClientOptions#messageCacheLifetime]{@link https://@klasa/core.org/#/docs/main/master/typedef/ClientOptions?scrollTo=messageCacheLifetime}
-	 * @param {number} [commandLifetime=this.options.commandMessageLifetime] Messages that are older than this (in seconds)
+	 * @param commandLifetime Messages that are older than this (in milliseconds)
 	 * will be removed from the caches. The default is based on {@link KlasaClientOptions#commandMessageLifetime}
 	 */
-	// TODO: messageCacheLifetime doesn't exist in core, should this be framework specific or library specific option?
-	protected sweepMessages(lifetime: number = this.options.messageCacheLifetime, commandLifetime: number = this.options.commands.lifetime): number {
+	protected sweepMessages(lifetime: number = this.options.cache.messageLifetime, commandLifetime: number = this.options.commands.messageLifetime): number {
 		if (typeof lifetime !== 'number' || isNaN(lifetime)) throw new TypeError('The lifetime must be a number.');
 		if (lifetime <= 0) {
 			this.emit('debug', 'Didn\'t sweep messages - lifetime is unlimited');
 			return -1;
 		}
 
-		const lifetimeMs = lifetime * 1000;
-		const commandLifetimeMs = commandLifetime * 1000;
 		const now = Date.now();
 		let channels = 0;
 		let messages = 0;
 		let commandMessages = 0;
 
-		for (const channel  of this.channels.values()) {
-			if (channel.type === ChannelType.GuildVoice) continue;
+		for (const channel of this.channels.values()) {
+			if (!isTextBasedChannel(channel)) continue;
 			channels++;
 
 			channel.messages.sweep(message => {
-				if ((message.command || message.author === this.user) && now - (message.editedTimestamp || message.createdTimestamp) > commandLifetimeMs) return commandMessages++;
-				if (!message.command && message.author !== this.user && now - (message.editedTimestamp || message.createdTimestamp) > lifetimeMs) return messages++;
+				if ((message.command || message.author === this.user) && now - (message.editedTimestamp || message.createdTimestamp) > commandLifetime) {
+					commandMessages++;
+					return true;
+				}
+				if (!message.command && message.author !== this.user && now - (message.editedTimestamp || message.createdTimestamp) > lifetime) {
+					messages++;
+					return true;
+				}
 				return false;
 			});
 		}
 
-		this.emit('debug', `Swept ${messages} messages older than ${lifetime} seconds and ${commandMessages} command messages older than ${commandLifetime} seconds in ${channels} text-based channels`);
+		this.emit(ClientEvents.Debug,
+			`Swept ${messages} messages older than ${lifetime} milliseconds and ${commandMessages} command messages older than ${commandLifetime} milliseconds in ${channels} text-based channels`);
 		return messages;
 	}
 
@@ -634,11 +639,10 @@ export class KlasaClient extends Client {
 	 */
 	public static defaultPermissionLevels = new PermissionLevels()
 		.add(0, () => true)
-		.add(6, ({ guild, member }) => guild && member.permissions.has(FLAGS.MANAGE_GUILD), { fetch: true })
-		.add(7, ({ guild, member }) => guild && member === guild.owner, { fetch: true })
+		.add(6, ({ member }) => member && member.permissions.has(Permissions.FLAGS.MANAGE_GUILD), { fetch: true })
+		.add(7, ({ member }) => member && member.id === member.guild.ownerID, { fetch: true })
 		.add(9, ({ author, client }) => client.owners.has(author), { break: true })
 		.add(10, ({ author, client }) => client.owners.has(author));
-
 
 	/**
 	 * The default Guild Schema
@@ -650,7 +654,8 @@ export class KlasaClient extends Client {
 		.add('disableNaturalPrefix', 'boolean')
 		.add('disabledCommands', 'command', {
 			array: true,
-			filter: (client, command, piece, language) => {
+			// Regarding this, it'll change a lot with SGN
+			filter: (_client: KlasaClient, command: Command, _piece: SchemaPiece, language: Language) => {
 				if (command.guarded) throw language.get('COMMAND_CONF_GUARDED', command.name);
 			}
 		});
@@ -667,7 +672,7 @@ export class KlasaClient extends Client {
 	 */
 	public static defaultClientSchema = new Schema()
 		.add('userBlacklist', 'user', { array: true })
-		.add('guildBlacklist', 'string', { array: true, filter: (__, value) => !MENTION_REGEX.snowflake.test(value) })
+		.add('guildBlacklist', 'string', { array: true, filter: (_client: KlasaClient, value: string) => !MENTION_REGEX.snowflake.test(value) })
 		.add('schedules', 'any', { array: true });
 
 }

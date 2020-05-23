@@ -10,7 +10,7 @@ import type { KlasaClient } from '../Client';
 export class ArgumentStore extends AliasStore<Argument> {
 
 	public constructor(client: KlasaClient) {
-		super(client, 'arguments', Argument as unknown as PieceConstructor<Argument>);
+		super(client, 'arguments', Argument as PieceConstructor<Argument>);
 	}
 
 }

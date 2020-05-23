@@ -1,10 +1,10 @@
-import { extender, MessageBuilder, Permissions, Message } from '@klasa/core';
+/* eslint-disable no-dupe-class-members */
+import { extender, MessageBuilder, Message, MessageOptions, SplitOptions } from '@klasa/core';
 import { Cache } from '@klasa/cache';
 import { regExpEsc } from '@klasa/utils';
 
 import type { Command } from '../structures/Command';
 import { APIMessageData, ChannelType } from '@klasa/dapi-types';
-import { KlasaClient } from '../Client';
 import { Language } from '../structures/Language';
 import { Settings } from '../settings/Settings';
 import { KlasaGuild } from './KlasaGuild';
@@ -16,51 +16,50 @@ export interface CachedPrefix {
 }
 
 /**
-* Klasa's Extended Message
-* @extends external:Message
-*/
+ * Klasa's Extended Message
+ */
 export class KlasaMessage extends extender.get('Message') {
 
 	/**
 	 * The command being ran.
 	 */
-	public command: Command | null;
+	public command!: Command | null;
 
 	/**
 	 * The name of the command being ran.
 	 */
 
-	public commandText: string | null;
+	public commandText!: string | null;
 
 	/**
 	 * The prefix used.
 	 */
-	public prefix: RegExp | null;
+	public prefix!: RegExp | null;
 
 	/**
 	 * The length of the prefix used.
 	 */
-	public prefixLength: number | null;
+	public prefixLength!: number | null;
 
 	/**
 	 * The language for this message.
 	 */
-	public language: Language | null;
+	public language!: Language;
 
 	/**
 	 * The guild level settings for this context (guild || default)
 	 */
-	public guildSettings: Settings;
+	public guildSettings!: Settings;
 
 	/**
 	 * A command prompt/argument handler.
 	 */
-	private prompter: CommandPrompt | null;
+	private prompter!: CommandPrompt | null;
 
 	/**
 	 * All of the responses to this message.
 	 */
-	private readonly _responses: KlasaMessage[];
+	#responses: Message[];
 
 	public constructor(...args: any[]) {
 		super(...args);
@@ -69,26 +68,25 @@ export class KlasaMessage extends extender.get('Message') {
 		this.commandText = this.commandText || null;
 		this.prefix = this.prefix || null;
 		this.prefixLength = this.prefixLength || null;
-		this.language = this.language || null;
 		// todo: This should/will eventually be mapped. (this.client.gateways.get('guilds').defaults)
 		this.guildSettings = this.guild ? this.guild.settings : this.client.gateways.guilds.defaults;
 		this.prompter = this.prompter || null;
-		this._responses = [];
+		this.#responses = [];
 	}
 
 	/**
 	* The previous responses to this message
 	* @since 0.5.0
 	*/
-	public get responses(): KlasaMessage[] {
-		return this._responses.filter(msg => !msg.deleted);
+	public get responses(): Message[] {
+		return this.#responses.filter(msg => !msg.deleted);
 	}
 
 	/**
 	* The string arguments derived from the usageDelim of the command
 	* @since 0.0.1
 	*/
-	public get args(): string[] {
+	public get args(): (string | null)[] {
 		return this.prompter ? this.prompter.args : [];
 	}
 
@@ -142,90 +140,69 @@ export class KlasaMessage extends extender.get('Message') {
 	}
 
 	/**
-	* Sends a message that will be editable via command editing (if nothing is attached)
-	* @since 0.0.1
-	* @param {external:StringResolvable|external:MessageEmbed|external:MessageAttachment} [content] The content to send
-	* @param {external:MessageOptions} [options] The D.JS message options
-	* @returns {KlasaMessage|KlasaMessage[]}
-	*/
-	public async sendMessage(content, options) {
-		const combinedOptions = APIMessage.transformOptions(content, options);
-
-		if ('files' in combinedOptions) return this.channel.send(combinedOptions);
-
-		const newMessages = new APIMessage(this.channel, combinedOptions).resolveData().split()
-			.map(mes => {
-				// Command editing should always remove embeds and content if none is provided
-				mes.data.embed = mes.data.embed || null;
-				mes.data.content = mes.data.content || null;
-				return mes;
-			});
+	 * Sends a message to the channel.
+	 * @param data The {@link MessageBuilder builder} to send.
+	 * @param options The split options for the message.
+	 * @since 0.0.1
+	 * @see https://discord.com/developers/docs/resources/channel#create-message
+	 * @example
+	 * message.send(new MessageBuilder()
+	 *     .setContent('Ping!')
+	 *     .setEmbed(new Embed().setDescription('From an embed!')));
+	 */
+	public send(data: MessageOptions, options?: SplitOptions): Promise<Message[]>;
+	/**
+	 * Sends a message to the channel.
+	 * @param data A callback with a {@link MessageBuilder builder} as an argument.
+	 * @param options The split options for the message.
+	 * @since 0.0.1
+	 * @see https://discord.com/developers/docs/resources/channel#create-message
+	 * @example
+	 * message.send(builder => builder
+	 *     .setContent('Ping!')
+	 *     .setEmbed(embed => embed.setDescription('From an embed!')));
+	 */
+	public send(data: (message: MessageBuilder) => MessageBuilder | Promise<MessageBuilder>, options?: SplitOptions): Promise<Message[]>;
+	public async send(data: MessageOptions | ((message: MessageBuilder) => MessageBuilder | Promise<MessageBuilder>), options: SplitOptions = {}): Promise<Message[]> {
+		const split = (typeof data === 'function' ? await data(new MessageBuilder()) : new MessageBuilder(data)).split(options);
 
 		const { responses } = this;
 		const promises = [];
-		const max = Math.max(newMessages.length, responses.length);
+		const deletes = [];
+		const max = Math.max(split.length, responses.length);
 
 		for (let i = 0; i < max; i++) {
-			if (i >= newMessages.length) responses[i].delete();
-			else if (responses.length > i) promises.push(responses[i].edit(newMessages[i]));
-			else promises.push(this.channel.send(newMessages[i]));
+			if (i >= split.length) deletes.push(responses[i].delete());
+			else if (responses.length > i) promises.push(responses[i].edit(split[i]));
+			else promises.push(this.channel.send(split[i]).then(([message]: Message[]): Message => message));
 		}
 
-		const newResponses = await Promise.all(promises);
+		this.#responses = await Promise.all(promises) as Message[];
+		await Promise.all(deletes);
 
-		// Can't store the clones because deleted will never be true
-		this._responses = newMessages.map((val, i) => responses[i] || newResponses[i]);
-
-		return newResponses.length === 1 ? newResponses[0] : newResponses;
+		return this.#responses.slice(0);
 	}
 
 	/**
-	* Sends an embed message that will be editable via command editing (if nothing is attached)
-	* @since 0.0.1
-	* @param {external:MessageEmbed} embed The embed to post
-	* @param {external:StringResolvable} [content] The content to send
-	* @param {external:MessageOptions} [options] The D.JS message options
-	* @returns {Promise<KlasaMessage|KlasaMessage[]>}
-	*/
-	public sendEmbed(embed, content, options) {
-		return this.sendMessage(APIMessage.transformOptions(content, options, { embed }));
-	}
-
+	 * Sends a message that will be editable via command editing (if nothing is attached)
+	 * @since 0.5.0
+	 * @param key The Language key to send
+	 * @param options The split options
+	 */
+	public sendLocale(key: string, options?: SplitOptions): Promise<Message[]>;
 	/**
-	* Sends a codeblock message that will be editable via command editing (if nothing is attached)
-	* @since 0.0.1
-	* @param {string} code The language of the codeblock
-	* @param {external:StringResolvable} content The content to send
-	* @param {external:MessageOptions} [options] The D.JS message options
-	* @returns {Promise<KlasaMessage|KlasaMessage[]>}
-	*/
-	public sendCode(code, content, options) {
-		return this.sendMessage(APIMessage.transformOptions(content, options, { code }));
-	}
-
-	/**
-	* Sends a message that will be editable via command editing (if nothing is attached)
-	* @since 0.0.1
-	* @param {external:StringResolvable|external:MessageEmbed|external:MessageAttachment} [content] The content to send
-	* @param {external:MessageOptions} [options] The D.JS message options
-	* @returns {Promise<KlasaMessage|KlasaMessage[]>}
-	*/
-	public send(content, options) {
-		return this.sendMessage(content, options);
-	}
-
-	/**
-	* Sends a message that will be editable via command editing (if nothing is attached)
-	* @since 0.5.0
-	* @param {string} key The Language key to send
-	* @param {Array<*>} [localeArgs] The language arguments to pass
-	* @param {external:MessageOptions} [options] The D.JS message options plus Language arguments
-	* @returns {Promise<KlasaMessage|KlasaMessage[]>}
-	*/
-	public sendLocale(key, localeArgs = [], options = {}) {
+	 * Sends a message that will be editable via command editing (if nothing is attached)
+	 * @since 0.5.0
+	 * @param key The Language key to send
+	 * @param localeArgs The language arguments to pass
+	 * @param options The split options
+	 */
+	public sendLocale(key: string, localeArgs?: unknown[], options?: SplitOptions): Promise<Message[]>;
+	public sendLocale(key: string, localeArgs: unknown[] | SplitOptions = [], options?: SplitOptions): Promise<Message[]> {
 		if (!Array.isArray(localeArgs)) [options, localeArgs] = [localeArgs, []];
-		return this.sendMessage(APIMessage.transformOptions(this.language.get(key, ...localeArgs), undefined, options));
+		return this.send(mb => mb.setContent(this.language.get(key, ...localeArgs as unknown[])), options);
 	}
+
 	/**
 	 * Extends the patch method from Message to attach and update the language to this instance
 	 * @since 0.5.0
@@ -233,7 +210,7 @@ export class KlasaMessage extends extender.get('Message') {
 	protected _patch(data: Partial<APIMessageData>): this {
 		super._patch(data);
 
-		this.language = this.guild ? (this.guild as KlasaGuild).language : (this.client as KlasaClient).languages.default;
+		this.language = this.guild ? (this.guild as KlasaGuild).language : this.client.languages.default;
 
 		this._parseCommand();
 		return this;
@@ -279,9 +256,10 @@ export class KlasaMessage extends extender.get('Message') {
 	* @since 0.5.0
 	*/
 	private _customPrefix(): CachedPrefix | null {
-		if (!this.guildSettings.prefix) return null;
-		for (const prf of Array.isArray(this.guildSettings.prefix) ? this.guildSettings.prefix : [this.guildSettings.prefix]) {
-			const testingPrefix = KlasaMessage.prefixes.get(prf) || KlasaMessage.generateNewPrefix(prf, this.client.options.prefixCaseInsensitive ? 'i' : '');
+		const prefix = this.guildSettings.get('prefix');
+		if (!prefix) return null;
+		for (const prf of Array.isArray(prefix) ? prefix : [prefix]) {
+			const testingPrefix = KlasaMessage.prefixes.get(prf) || KlasaMessage.generateNewPrefix(prf, this.client.options.commands.prefixCaseInsensitive ? 'i' : '');
 			if (testingPrefix.regex.test(this.content)) return testingPrefix;
 		}
 		return null;
@@ -292,7 +270,8 @@ export class KlasaMessage extends extender.get('Message') {
 	* @since 0.5.0
 	*/
 	private _mentionPrefix(): CachedPrefix | null {
-		const mentionPrefix = this.client.mentionPrefix.exec(this.content);
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+		const mentionPrefix = this.client.mentionPrefix!.exec(this.content);
 		return mentionPrefix ? { length: mentionPrefix[0].length, regex: this.client.mentionPrefix } : null;
 	}
 
@@ -301,9 +280,9 @@ export class KlasaMessage extends extender.get('Message') {
 	* @since 0.5.0
 	*/
 	private _naturalPrefix(): CachedPrefix | null {
-		if (this.guildSettings.disableNaturalPrefix || !this.client.options.regexPrefix) return null;
-		const results = this.client.options.regexPrefix.exec(this.content);
-		return results ? { length: results[0].length, regex: this.client.options.regexPrefix } : null;
+		if (this.guildSettings.get('disableNaturalPrefix') || !this.client.options.commands.regexPrefix) return null;
+		const results = this.client.options.commands.regexPrefix.exec(this.content);
+		return results ? { length: results[0].length, regex: this.client.options.commands.regexPrefix } : null;
 	}
 
 	/**
@@ -311,7 +290,7 @@ export class KlasaMessage extends extender.get('Message') {
 	* @since 0.5.0
 	*/
 	private _prefixLess(): CachedPrefix | null {
-		return this.client.options.noPrefixDM && this.channel.type === ChannelType.DM ? { length: 0, regex: null } : null;
+		return this.client.options.commands.noPrefixDM && this.channel.type === ChannelType.DM ? { length: 0, regex: null } : null;
 	}
 
 	/**

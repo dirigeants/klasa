@@ -3,22 +3,17 @@ import { Possible } from '../usage/Possible';
 import { KlasaMessage } from '../extensions/KlasaMessage';
 
 /**
- * Base Abstracted class for Multi-Resolving D.JS and Klasa Structures.
- * @extends Argument
+ * Base abstracted class for multi-resolving values.
  */
 export class MultiArgument extends Argument {
 
 	/**
 	 * A getter for the base argument
 	 * @since 0.5.0
-	 * @type {Argument}
-	 * @readonly
-	 * @abstract
 	 */
-	get base(): unknown {
+	public get base(): Argument {
 		throw new Error('A "base" getter must be implemented in extended classes.');
 	}
-
 
 	/**
 	 * The run method for handling MultiArguments (not to be implemented in extended classes)
