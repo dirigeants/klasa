@@ -13,4 +13,7 @@ test.js
 config.json
 
 .vscode/
+.idea/
+.vs/
+yarn-error.log
 docs.json
