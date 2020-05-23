@@ -588,12 +588,12 @@ export class KlasaClient extends Client {
 	 * Sweeps all text-based channels' messages and removes the ones older than the max message or command message lifetime.
 	 * If the message has been edited, the time of the edit is used rather than the time of the original message.
 	 * @since 0.5.0
-	 * @param number Messages that are older than this (in .cachemillisecmessageL
+	 * @param number Messages that are older than this (in milliseconds)
 	 * will be removed from the caches. The default is based on [ClientOptions#messageCacheLifetime]{@link https://@klasa/core.org/#/docs/main/master/typedef/ClientOptions?scrollTo=messageCacheLifetime}
 	 * @param commandLifetime Messages that are older than this (in milliseconds)
 	 * will be removed from the caches. The default is based on {@link KlasaClientOptions#commandMessageLifetime}
 	 */
-	protected sweepMessages(lifetime: number = this.options.cache.messageLifetime, commandLifetime: number = this.options.commands.messageLifetime): number {
+	protected _sweepMessages(lifetime: number = this.options.cache.messageLifetime, commandLifetime: number = this.options.commands.messageLifetime): number {
 		if (typeof lifetime !== 'number' || isNaN(lifetime)) throw new TypeError('The lifetime must be a number.');
 		if (lifetime <= 0) {
 			this.emit('debug', 'Didn\'t sweep messages - lifetime is unlimited');
