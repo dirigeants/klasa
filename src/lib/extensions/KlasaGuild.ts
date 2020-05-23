@@ -1,5 +1,8 @@
 import { extender } from '@klasa/core';
 
+import type { Settings } from '../settings/Settings';
+import type { Language } from '../structures/Language';
+
 /**
  * Klasa's Extended Guild
  * @extends external:Guild
@@ -7,9 +10,10 @@ import { extender } from '@klasa/core';
 export class KlasaGuild extends extender.get('Guild') {
 
 	/**
-	 * @typedef {external:GuildJSON} KlasaGuildJSON
-	 * @property {SettingsJSON} settings The per guild settings
+	 * The guild level settings for this context (guild || default)
+	 * @since 0.5.0
 	 */
+	public settings: Settings;
 
 	/**
 	 * @param {...*} args Normal D.JS Guild args
@@ -17,11 +21,6 @@ export class KlasaGuild extends extender.get('Guild') {
 	constructor(...args) {
 		super(...args);
 
-		/**
-		 * The guild level settings for this context (guild || default)
-		 * @since 0.5.0
-		 * @type {Settings}
-		 */
 		this.settings = this.client.gateways.guilds.get(this.id, true);
 	}
 
@@ -29,7 +28,7 @@ export class KlasaGuild extends extender.get('Guild') {
 	 * The language configured for this guild
 	 * @type {?Language}
 	 */
-	get language() {
+	get language(): Language {
 		return this.client.languages.get(this.settings.language) || null;
 	}
 

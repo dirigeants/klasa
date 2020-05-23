@@ -19,7 +19,6 @@ export interface PermissionLevelsData {
 	permission: boolean;
 }
 
-
 /**
  * Permission levels. See {@tutorial UnderstandingPermissionLevels} for more information how to use this class
  * to define custom permissions.

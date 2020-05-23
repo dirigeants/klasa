@@ -1,5 +1,7 @@
 import { extender } from '@klasa/core';
 
+import type { Settings } from '../settings/Settings';
+
 /**
  * Klasa's Extended User
  * @extends external:User
@@ -7,9 +9,10 @@ import { extender } from '@klasa/core';
 export class KlasaUser extends extender.get('User') {
 
 	/**
-	 * @typedef {external:UserJSON} KlasaUserJSON
-	 * @property {SettingsJSON} settings The per user settings
+	 * The user level settings for this context (user || default)
+	 * @since 0.5.0
 	 */
+	public settings: Settings;
 
 	/**
 	 * @param {...*} args Normal D.JS User args
@@ -17,11 +20,6 @@ export class KlasaUser extends extender.get('User') {
 	constructor(...args) {
 		super(...args);
 
-		/**
-		 * The user level settings for this context (user || default)
-		 * @since 0.5.0
-		 * @type {Settings}
-		 */
 		this.settings = this.client.gateways.users.get(this.id, true);
 	}
 
