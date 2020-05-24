@@ -1,8 +1,8 @@
 import { Serializer } from 'klasa';
 
-export default class StringSerializer extends Serializer {
+export default class CoreSerializer extends Serializer {
 
-	deserialize(data) {
+	public deserialize(data: unknown): string {
 		return String(data);
 	}
 

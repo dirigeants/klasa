@@ -1,165 +1,178 @@
-import { isFunction, deepClone } from '@klasa/utils';
+import { isFunction } from '@klasa/utils';
+import { SettingsFolder } from '../settings/SettingsFolder';
 
-/**
- * The base Schema for {@link Gateway}s
- * @extends Map
- * @since 0.5.0
- */
-export class Schema extends Map {
+/* eslint-disable no-dupe-class-members */
+
+export class Schema extends Map<string, SchemaFolder | SchemaEntry> {
 
 	/**
-	 * @param {string} [basePath=''] The base schema path
+	 * The base path for this schema.
 	 */
-	constructor(basePath = '') {
+	public readonly path: string;
+
+	/**
+	 * The type of this schema.
+	 */
+	public readonly type: 'Folder';
+
+	/**
+	 * The defaults for this schema.
+	 */
+	public readonly defaults: SettingsFolder;
+
+	/**
+	 * Whether or not this instance is ready.
+	 */
+	public ready: boolean;
+
+	/**
+	 * Constructs the schema
+	 */
+	public constructor(basePath = '') {
 		super();
 
-		/**
-		 * Returns the path for this schema
-		 * @since 0.5.0
-		 * @name Schema#path
-		 * @type {string}
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'path', { value: basePath });
-
-		/**
-		 * The type of this SchemaFolder (always 'Folder')
-		 * @since 0.5.0
-		 * @name SchemaFolder#type
-		 * @type {string}
-		 * @readonly
-		 */
-		Object.defineProperty(this, 'type', { value: 'Folder' });
+		this.ready = false;
+		this.path = basePath;
+		this.type = 'Folder';
+		this.defaults = new SettingsFolder(this);
 	}
 
 	/**
-	 * Get the configurable keys for the current SchemaFolder or Schema instance
-	 * @since 0.5.0
-	 * @readonly
-	 * @type {Array<string>}
+	 * Adds or replaces an entry to this instance.
+	 * @param key The key of the entry to add
+	 * @param value The entry to add
 	 */
-	get configurableKeys() {
-		const keys = [];
-		for (const piece of this.values(true)) if (piece.configurable) keys.push(piece.path);
-		return keys;
+	public set(key: string, value: SchemaFolder | SchemaEntry): this {
+		if (this.ready) throw new Error('Cannot modify the schema after being initialized.');
+		this.defaults.set(key, value instanceof Schema ? value.defaults : value.default);
+		return super.set(key, value);
 	}
 
 	/**
-	 * Get the defaults for the current SchemaFolder or Schema instance
-	 * @since 0.5.0
-	 * @readonly
-	 * @type {Object}
+	 * Removes an entry from this instance.
+	 * @param key The key of the element to remove
 	 */
-	get defaults() {
-		return Object.assign({}, ...[...this.values()].map(piece => ({ [piece.key]: piece.defaults || deepClone(piece.default) })));
+	public delete(key: string): boolean {
+		if (this.ready) throw new Error('Cannot modify the schema after being initialized.');
+		this.defaults.delete(key);
+		return super.delete(key);
 	}
 
 	/**
-	 * Get the paths for the current SchemaFolder or Schema instance
-	 * @since 0.5.0
-	 * @readonly
-	 * @type {Map<string, SchemaFolder|SchemaPiece>}
-	 */
-	get paths() {
-		const paths = new Map();
-		for (const piece of this.values(true)) paths.set(piece.path, piece);
-		return paths;
-	}
-
-	/**
-	 * Adds a Folder or Piece instance to the current SchemaFolder or Schema instance
-	 * @since 0.5.0
-	 * @param {string} key The name of this new piece you are trying to add.
-	 * @param {string|Function} typeOrCallback A function to add a folder or a string to add a new SchemaPiece
-	 * @param {SchemaPieceOptions} [options] An object of options used for SchemaPieces
-	 * @returns {this}
-	 * @chainable
+	 * Add a new entry to this folder.
+	 * @param key The name for the key to add
+	 * @param type The datatype, will be lowercased in the instance
+	 * @param options The options for the entry
 	 * @example
-	 * // callback is always passed the created folder to encourage chaining
-	 * Schema.add('folder', (folder) => folder.add('piece', 'textchannel'));
-	 * // or
-	 * Schema.add('piece', 'string', { default: 'klasa!' });
+	 * // Create a schema with a key of experience:
+	 * new Schema()
+	 *     .add('experience', 'integer', { minimum: 0 });
+	 *
+	 * @example
+	 * // Modify the built-in user schema to add experience and level:
+	 * KlasaClient.defaultUserSchema
+	 *     .add('experience', 'integer', { minimum: 0 })
+	 *     .add('level', 'integer', { minimum: 0 });
 	 */
-	add(key, typeOrCallback, options = {}) {
-		if (!typeOrCallback) throw new Error(`The type for ${key} must be a string for pieces, and a callback for folders`);
-
-		let Piece;
-		let type;
-		let callback;
+	public add(key: string, type: string, options?: SchemaEntryOptions): this;
+	/**
+	 * Add a nested folder to this one.
+	 * @param key The name for the folder to add
+	 * @param callback The callback receiving a SchemaFolder instance as a parameter
+	 * @example
+	 * // Create a schema with a key of experience contained in a folder named social:
+	 * // Later access with `schema.get('social.experience');`.
+	 * new Schema()
+	 *     .add('social', social => social
+	 *         .add('experience', 'integer', { minimum: 0 }));
+	 */
+	public add(key: string, callback: SchemaAddCallback): this;
+	public add(key: string, typeOrCallback: string | SchemaAddCallback, options?: SchemaEntryOptions): this {
+		let SchemaCtor: typeof SchemaEntry | typeof SchemaFolder;
+		let type: string;
+		let callback: SchemaAddCallback | null = null;
 		if (isFunction(typeOrCallback)) {
-			// .add('folder', (folder) => ());
-			callback = typeOrCallback;
 			type = 'Folder';
-			Piece = require('./SchemaFolder');
-		} else if (typeof typeOrCallback === 'string') {
-			// .add('piece', 'string', { optional options });
-			Piece = require('./SchemaPiece');
+			SchemaCtor = SchemaFolder;
+			callback = typeOrCallback;
+		} else {
 			type = typeOrCallback;
+			SchemaCtor = SchemaEntry;
 			callback = null;
 		}
 
-		// Get previous key and merge the new with the pre-existent if it exists
 		const previous = super.get(key);
-		if (previous) {
+		if (typeof previous !== 'undefined') {
 			if (type === 'Folder') {
-				// If the type of the new piece is a Folder, the previous must also be a Folder.
-				if (previous.type !== 'Folder') throw new Error(`The type for ${key} conflicts with the previous value, expected type Folder, got ${previous.type}.`);
-				// Call the callback with the pre-existent Folder
-				callback(previous); // eslint-disable-line callback-return
-				return this;
+				if (previous.type === 'Folder') {
+					// Call the callback with the pre-existent Folder
+					// eslint-disable-next-line callback-return, @typescript-eslint/ban-ts-ignore
+					// @ts-ignore
+					callback(previous as SchemaFolder);
+					return this;
+				}
+
+				// If the type of the new entry is a Folder, the previous must also be a Folder.
+				throw new Error(`The type for "${key}" conflicts with the previous value, expected type "Folder", got "${previous.type}".`);
 			}
-			// If the type of the new piece is not a Folder, the previous must also not be a Folder.
-			if (previous.type === 'Folder') throw new Error(`The type for ${key} conflicts with the previous value, expected a non-Folder, got ${previous.type}.`);
+
+			// If the type of the new entry is not a Folder, the previous must also not be a Folder.
+			if (previous.type === 'Folder') {
+				throw new Error(`The type for "${key}" conflicts with the previous value, expected a non-Folder, got "${previous.type}".`);
+			}
+
 			// Edit the previous key
-			previous.edit({ type, ...options });
+			const schemaEntry = previous as SchemaEntry;
+			schemaEntry.edit({ type, ...options });
+			this.defaults.set(key, schemaEntry.default);
 			return this;
 		}
-		const piece = new Piece(this, key, type, options);
+
+		const entry = new SchemaCtor(this, key, type, options);
 
 		// eslint-disable-next-line callback-return
-		if (callback) callback(piece);
-
-		this.set(key, piece);
-
+		if (callback !== null) callback(entry as SchemaFolder);
+		this.set(key, entry);
 		return this;
 	}
 
 	/**
-	 * Remove a key from the schema
-	 * @since 0.5.0
-	 * @param {string} key The key to remove
-	 * @returns {this}
+	 * Get a children entry from this schema.
+	 * @param path The key or path to get from this schema
+	 * @example
+	 * // Retrieve a key named experience that exists in this folder:
+	 * schema.get('experience');
+	 *
+	 * @example
+	 * // Retrieve a key named experience contained in a folder named social:
+	 * schema.get('social.experience');
 	 */
-	remove(key) {
-		super.delete(key);
-		return this;
-	}
+	public get(path: string): SchemaFolder | SchemaEntry | undefined {
+		const index = path.indexOf('.');
+		if (index === -1) return super.get(path);
 
-	/**
-	 * Get a SchemaPiece or a SchemaFolder given a path
-	 * @since 0.5.0
-	 * @param {string|string[]} key The key to get from the schema
-	 * @returns {?SchemaPiece|SchemaFolder}
-	 */
-	get(key) {
-		const path = typeof key === 'string' ? key.split('.') : key;
-		const [now, ...next] = path;
-		const piece = super.get(now);
-		if (!piece) return undefined;
-		return next.length && piece.type === 'Folder' ? piece.get(next) : piece;
+		const key = path.substring(0, index);
+		const value = super.get(key);
+
+		// If the returned value was undefined, return undefined
+		if (typeof value === 'undefined') return undefined;
+
+		// If the returned value is a SchemaFolder, return its result from SchemaFolder#get using remaining string
+		if (value.type === 'Folder') return (value as SchemaFolder).get(path.substring(index + 1));
+
+		// Trying to access to a subkey of an entry, return undefined
+		return undefined;
 	}
 
 	/**
 	 * Returns a new Iterator object that contains the keys for each element contained in this folder.
 	 * Identical to [Map.keys()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/keys)
-	 * @since 0.5.0
-	 * @param {boolean} recursive Whether the iteration should be recursive
-	 * @yields {string}
+	 * @param recursive Whether the iteration should be recursive
 	 */
-	*keys(recursive = false) {
+	public *keys(recursive = false): IterableIterator<string> {
 		if (recursive) {
 			for (const [key, value] of super.entries()) {
-				if (value.type === 'Folder') yield* value.keys(recursive);
+				if (value.type === 'Folder') yield* (value as SchemaFolder).keys(true);
 				else yield key;
 			}
 		} else {
@@ -168,16 +181,21 @@ export class Schema extends Map {
 	}
 
 	/**
+	 * Returns a new Iterator object that contains the values for each element contained in this folder and children folders.
+	 * Identical to [Map.values()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/values)
+	 * @param recursive Whether the iteration should be recursive
+	 */
+	public values(recursive: true): IterableIterator<SchemaEntry>;
+	/**
 	 * Returns a new Iterator object that contains the values for each element contained in this folder.
 	 * Identical to [Map.values()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/values)
-	 * @since 0.5.0
-	 * @param {boolean} recursive Whether the iteration should be recursive
-	 * @yields {(SchemaFolder|SchemaPiece)}
+	 * @param recursive Whether the iteration should be recursive
 	 */
-	*values(recursive = false) {
+	public values(recursive?: false): IterableIterator<SchemaFolder | SchemaEntry>;
+	public *values(recursive = false): IterableIterator<SchemaFolder | SchemaEntry> {
 		if (recursive) {
 			for (const value of super.values()) {
-				if (value.type === 'Folder') yield* value.values(recursive);
+				if (value.type === 'Folder') yield* (value as SchemaFolder).values(true);
 				else yield value;
 			}
 		} else {
@@ -186,16 +204,21 @@ export class Schema extends Map {
 	}
 
 	/**
+	 * Returns a new Iterator object that contains the `[key, value]` pairs for each element contained in this folder and children folders.
+	 * Identical to [Map.entries()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/entries)
+	 * @param recursive Whether the iteration should be recursive
+	 */
+	public entries(recursive: true): IterableIterator<[string, SchemaEntry]>;
+	/**
 	 * Returns a new Iterator object that contains the `[key, value]` pairs for each element contained in this folder.
 	 * Identical to [Map.entries()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/entries)
-	 * @since 0.5.0
-	 * @param {boolean} recursive Whether the iteration should be recursive
-	 * @yields {Array<string|SchemaFolder|SchemaPiece>}
+	 * @param recursive Whether the iteration should be recursive
 	 */
-	*entries(recursive = false) {
+	public entries(recursive?: false): IterableIterator<[string, SchemaFolder | SchemaEntry]>;
+	public *entries(recursive = false): IterableIterator<[string, SchemaFolder | SchemaEntry]> {
 		if (recursive) {
 			for (const [key, value] of super.entries()) {
-				if (value.type === 'Folder') yield* value.entries(recursive);
+				if (value.type === 'Folder') yield* (value as SchemaFolder).entries(true);
 				else yield [key, value];
 			}
 		} else {
@@ -204,12 +227,23 @@ export class Schema extends Map {
 	}
 
 	/**
-	 * Get a JSON object containing data from this SchemaFolder
-	 * @since 0.5.0
-	 * @returns {Object}
+	 * Returns an object literal composed of all children serialized recursively.
 	 */
-	toJSON() {
-		return Object.assign({}, ...[...this.values()].map(piece => ({ [piece.key]: piece.toJSON() })));
+	public toJSON(): SchemaJson {
+		return Object.fromEntries([...this.entries()].map(([key, value]) => [key, value.toJSON()]));
 	}
 
 }
+
+export interface SchemaAddCallback {
+	(folder: SchemaFolder): unknown;
+}
+
+// Those are interfaces because they reference themselves, resulting on a compiler error. The other is for consistency.
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface SchemaFolderJson extends Record<string, SchemaFolderJson | SchemaEntryJson> { }
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface SchemaJson extends Record<string, SchemaFolderJson | SchemaEntryJson> { }
+
+import { SchemaFolder } from './SchemaFolder';
+import { SchemaEntry, SchemaEntryOptions, SchemaEntryJson } from './SchemaEntry';

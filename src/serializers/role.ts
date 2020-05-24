@@ -1,22 +1,24 @@
-import { Serializer } from 'klasa';
+import { Serializer, SerializerUpdateContext } from 'klasa';
 import { Role } from '@klasa/core';
 
-export default class RoleSerializer extends Serializer {
+export default class CoreSerializer extends Serializer {
 
-	deserialize(data, piece, language, guild) {
-		if (!guild) throw this.client.languages.default.get('RESOLVER_INVALID_GUILD', piece.key);
+	public deserialize(data: string | Role, { language, entry, guild }: SerializerUpdateContext): Role {
+		if (!guild) throw this.client.languages.default.get('RESOLVER_INVALID_GUILD', entry.key);
 		if (data instanceof Role) return data;
-		const role = this.constructor.regex.role.test(data) ? guild.roles.get(this.constructor.regex.role.exec(data)[1]) : guild.roles.find(rol => rol.name === data) || null;
+
+		const parsed = Serializer.regex.role.exec(data);
+		const role = parsed ? guild.roles.get(parsed[1]) : guild.roles.findValue(value => value.name === data) || null;
 		if (role) return role;
-		throw language.get('RESOLVER_INVALID_ROLE', piece.key);
+		throw language.get('RESOLVER_INVALID_ROLE', entry.key);
 	}
 
-	serialize(value) {
+	public serialize(value: Role): string {
 		return value.id;
 	}
 
-	stringify(value, message) {
-		return (message.guild.roles.get(value) || { name: (value && value.name) || value }).name;
+	public stringify(value: Role): string {
+		return value.name;
 	}
 
 }

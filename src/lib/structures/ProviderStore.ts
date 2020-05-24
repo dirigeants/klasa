@@ -1,47 +1,42 @@
+import { PieceConstructor, Store } from '@klasa/core';
 import { Provider } from './Provider';
-import { Store } from '@klasa/core';
-
 import type { KlasaClient } from '../Client';
 
-/**
- * Stores all providers for use in Klasa
- * @extends Store
- */
 export class ProviderStore extends Store<Provider> {
 
-	constructor(client: KlasaClient) {
-		super(client, 'providers', Provider);
+	/**
+	 * Constructs our ProviderStore for use in Klasa.
+	 * @param client The client that instantiates this store
+	 */
+	public constructor(client: KlasaClient) {
+		super(client, 'monitors', Provider as PieceConstructor<Provider>);
 	}
 
 	/**
-	 * The default provider set in {@link KlasaClientOptions.providers}
-	 * @since 0.5.0
-	 * @type {?Provider}
-	 * @readonly
+	 * The default provider set in ClientOptions.providers
 	 */
-	get default() {
-		return this.get(this.client.options.providers.default) || null;
+	public get default(): Provider | null {
+		return this.get(this.client.options.providers.default as string) || null;
 	}
 
 	/**
 	 * Clears the providers from the store and waits for them to shutdown.
-	 * @since 0.0.1
 	 */
-	clear() {
+	public clear(): void {
 		for (const provider of this.values()) this.delete(provider);
 	}
 
 	/**
-	 * Deletes a provider from the store
-	 * @since 0.0.1
-	 * @param {Provider|string} name The provider object or a string representing the structure this store caches
-	 * @returns {boolean} whether or not the delete was successful.
+	 * Deletes a provider from the store.
+	 * @param name The Provider instance or its name
 	 */
-	delete(name) {
-		const pro = this.resolve(name);
-		if (!pro) return false;
-		pro.shutdown();
-		return super.delete(pro);
+	public delete(name: string | Provider): boolean {
+		const provider = this.resolve(name);
+		if (!provider) return false;
+
+		/* istanbul ignore next: Hard to coverage test the catch */
+		Promise.resolve(provider.shutdown()).catch((error) => this.client.emit('wtf', error));
+		return super.delete(provider);
 	}
 
 }

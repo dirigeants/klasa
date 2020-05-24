@@ -1,19 +1,24 @@
-import { Serializer } from 'klasa';
+import { Serializer, SerializerUpdateContext, SerializerStore } from 'klasa';
+import { Piece } from '@klasa/core';
 
-export default class PieceSerializer extends Serializer {
+export default class CoreSerializer extends Serializer {
 
-	constructor(...args) {
-		super(...args, { aliases: ['command', 'language'] });
+	public constructor(store: SerializerStore, directory: string, file: readonly string[]) {
+		super(store, directory, file, { aliases: ['command', 'language'] });
 	}
 
-	deserialize(data, piece, language) {
-		const store = this.client[`${piece.type}s`];
+	public deserialize(data: string | Piece, { language, entry }: SerializerUpdateContext): Piece {
+		const store = this.client[`${entry.type}s` as 'languages' | 'commands'];
 		const parsed = typeof data === 'string' ? store.get(data) : data;
 		if (parsed && parsed instanceof store.holds) return parsed;
-		throw language.get('RESOLVER_INVALID_PIECE', piece.key, piece.type);
+		throw language.get('RESOLVER_INVALID_PIECE', entry.key, entry.type);
 	}
 
-	serialize(value) {
+	public serialize(value: Piece): string {
+		return value.name;
+	}
+
+	public stringify(value: Piece): string {
 		return value.name;
 	}
 

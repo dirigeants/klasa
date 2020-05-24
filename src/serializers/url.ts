@@ -1,12 +1,12 @@
-import { Serializer } from 'klasa';
+import { Serializer, SerializerUpdateContext } from 'klasa';
 import { URL } from 'url';
 
-export default class URLSerializer extends Serializer {
+export default class CoreSerializer extends Serializer {
 
-	deserialize(data, piece, language) {
-		const url = URL.parse(data);
-		if (url.protocol && url.hostname) return data;
-		throw language.get('RESOLVER_INVALID_URL', piece.key);
+	public deserialize(data: string | URL, { language, entry }: SerializerUpdateContext): string {
+		const url = data instanceof URL ? data : new URL(data);
+		if (url.protocol && url.hostname) return url.href;
+		throw language.get('RESOLVER_INVALID_URL', entry.key);
 	}
 
 }

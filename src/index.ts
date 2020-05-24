@@ -14,13 +14,14 @@ export * from './lib/schedule/Schedule';
 export * from './lib/schedule/ScheduledTask';
 
 // lib/settings
-export * from './lib/settings/Settings';
-export * from './lib/settings/Gateway';
-export * from './lib/settings/GatewayDriver';
-export * from './lib/settings/GatewayStorage';
+export * from './lib/settings/gateway/Gateway';
+export * from './lib/settings/gateway/GatewayDriver';
+export * from './lib/settings/gateway/GatewayStorage';
 export * from './lib/settings/schema/Schema';
 export * from './lib/settings/schema/SchemaFolder';
-export * from './lib/settings/schema/SchemaPiece';
+export * from './lib/settings/schema/SchemaEntry';
+export * from './lib/settings/settings/Settings';
+export * from './lib/settings/settings/SettingsFolder';
 
 // lib/structures
 export * from './lib/structures/Argument';
@@ -55,9 +56,8 @@ export * from './lib/usage/Tag';
 export * from './lib/usage/TextPrompt';
 
 // lib/util
-export * from './lib/util/Colors';
-export * from './lib/util/KlasaConsole';
 export * from './lib/util/constants';
+export * from './lib/util/QueryBuilder';
 export * from './lib/util/ReactionHandler';
 export * from './lib/util/RichDisplay';
 export * from './lib/util/RichMenu';

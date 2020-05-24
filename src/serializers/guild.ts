@@ -1,21 +1,21 @@
-import { Serializer } from 'klasa';
+import { Serializer, SerializerUpdateContext } from 'klasa';
 import { Guild } from '@klasa/core';
 
-export default class GuildSerializer extends Serializer {
+export default class CoreSerializer extends Serializer {
 
-	deserialize(data, piece, language) {
+	public deserialize(data: string | Guild, { language, entry }: SerializerUpdateContext): Guild {
 		if (data instanceof Guild) return data;
-		const guild = this.constructor.regex.channel.test(data) ? this.client.guilds.get(data) : null;
+		const guild = Serializer.regex.snowflake.test(data) ? this.client.guilds.get(data) : null;
 		if (guild) return guild;
-		throw language.get('RESOLVER_INVALID_GUILD', piece.key);
+		throw language.get('RESOLVER_INVALID_GUILD', entry.key);
 	}
 
-	serialize(value) {
+	public serialize(value: Guild): string {
 		return value.id;
 	}
 
-	stringify(value) {
-		return (this.client.guilds.get(value) || { name: value }).name;
+	public stringify(value: Guild): string {
+		return value.name;
 	}
 
 }

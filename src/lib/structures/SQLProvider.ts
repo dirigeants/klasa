@@ -1,174 +1,159 @@
+import { objectToTuples } from '@klasa/utils';
 import { Provider } from './Provider';
-import { deepClone, tryParse, makeObject, isObject, objectToTuples } from '@klasa/utils';
-import { Gateway } from '../settings/Gateway';
-import { Type } from '@klasa/type';
+import type { SchemaFolder } from '../settings/schema/SchemaFolder';
+import type { SchemaEntry } from '../settings/schema/SchemaEntry';
+import type { SettingsUpdateResults } from '../settings/settings/SettingsFolder';
+import type { QueryBuilder } from '../util/QueryBuilder';
 
-/**
- * Base class for all Klasa SQL Providers. See {@tutorial CreatingSQLProviders} for more information how to use this class
- * to build custom providers.
- * @tutorial CreatingSQLProviders
- * @extends {Provider}
- */
-export class SQLProvider extends Provider {
+export abstract class SQLProvider extends Provider {
+
+	/**
+	 * The QueryBuilder instance for this SQL provider
+	 */
+	public abstract qb: QueryBuilder;
+
+	/**
+	 * Inserts or creates a table in the database.
+	 * @param table The table to check against
+	 * @param rows The rows to insert
+	 */
+	public abstract createTable(table: string, rows?: readonly [string, string][]): Promise<unknown>;
+
+	/**
+	 * Deletes or drops a table from the database.
+	 * @param table The table to check against
+	 */
+	public abstract deleteTable(table: string): Promise<unknown>;
+
+	/**
+	 * Checks if a table exists in the database.
+	 * @param table The table to check against
+	 */
+	public abstract hasTable(table: string): Promise<boolean>;
+
+	/**
+	 * Inserts new entry into a table.
+	 * @param table The table to update
+	 * @param entry The entry's ID to create
+	 * @param data The data to insert
+	 */
+	public abstract create(table: string, entry: string, data: object): Promise<unknown>;
+
+	/**
+	 * Removes entries from a table.
+	 * @param table The table to update
+	 * @param entry The ID of the entry to delete
+	 */
+	public abstract delete(table: string, entry: string): Promise<unknown>;
+
+	/**
+	 * Retrieve a single entry from a table.
+	 * @param table The table to query
+	 * @param entry The ID of the entry to retrieve
+	 */
+	public abstract get(table: string, entry: string): Promise<object | null>;
+
+	/**
+	 * Retrieve all entries from a table.
+	 * @param table The table to query
+	 * @param entries The ids to retrieve from the table
+	 */
+	public abstract getAll(table: string, entries?: readonly string[]): Promise<object[]>;
+
+	/**
+	 * Retrieves all entries' keys from a table.
+	 * @param table The table to query
+	 */
+	public abstract getKeys(table: string): Promise<string[]>;
+
+	/**
+	 * Check if an entry exists in a table.
+	 * @param table The table to update
+	 * @param entry The entry's ID to check against
+	 */
+	public abstract has(table: string, entry: string): Promise<boolean>;
+
+	/**
+	 * Updates an entry from a table.
+	 * @param table The table to update
+	 * @param entry The entry's ID to update
+	 * @param data The data to update
+	 */
+	public abstract update(table: string, entry: string, data: object): Promise<unknown>;
+
+	/**
+	 * Overwrites the data from an entry in a table.
+	 * @param table The table to update
+	 * @param entry The entry's ID to update
+	 * @param data The new data for the entry
+	 */
+	public abstract replace(table: string, entry: string, data: object): Promise<unknown>;
 
 	/**
 	 * The addColumn method which inserts/creates a new table to the database.
-	 * @since 0.5.0
-	 * @param {string} table The table to check against
-	 * @param {(SchemaFolder | SchemaPiece)} piece The SchemaFolder or SchemaPiece added to the schema
-	 * @returns {*}
-	 * @abstract
+	 * @param table The table to check against
+	 * @param entry The SchemaFolder or SchemaEntry added to the schema
 	 */
-	async addColumn() {
-		throw new Error(`[PROVIDERS] ${this.path} | Missing method 'addColumn' of ${this.constructor.name}`);
-	}
+	public abstract addColumn(table: string, entry: SchemaFolder | SchemaEntry): Promise<unknown>;
 
 	/**
 	 * The removeColumn method which inserts/creates a new table to the database.
 	 * @since 0.5.0
-	 * @param {string} table The table to check against
-	 * @param {string[]} columns The column names to remove
-	 * @returns {*}
-	 * @abstract
+	 * @param table The table to check against
+	 * @param columns The column names to remove
 	 */
-	async removeColumn() {
-		throw new Error(`[PROVIDERS] ${this.path} | Missing method 'removeColumn' of ${this.constructor.name}`);
-	}
+	public abstract removeColumn(table: string, columns: readonly string[]): Promise<unknown>;
 
 	/**
 	 * The updateColumn method which alters the datatype from a column.
-	 * @since 0.5.0
-	 * @param {string} table The table to check against
-	 * @param {SchemaPiece} piece The modified SchemaPiece
-	 * @returns {*}
-	 * @abstract
+	 * @param table The table to check against
+	 * @param entry The modified SchemaEntry
 	 */
-	async updateColumn() {
-		throw new Error(`[PROVIDERS] ${this.path} | Missing method 'updateColumn' of ${this.constructor.name}`);
-	}
+	public abstract updateColumn(table: string, entry: SchemaEntry): Promise<unknown>;
 
 	/**
 	 * The getColumns method which gets the name of all columns.
-	 * @since 0.5.0
-	 * @param {string} table The table to check against
-	 * @returns {string[]}
-	 * @abstract
+	 * @param table The table to check against
 	 */
-	async getColumns() {
-		throw new Error(`[PROVIDERS] ${this.path} | Missing method 'updateColumn' of ${this.constructor.name}`);
+	public abstract getColumns(table: string): Promise<string[]>;
+
+	/**
+	 * The query builder debug check for errors in the QueryBuilder, if one exists in the extended SQLProvider instance
+	 */
+	public async init(): Promise<void> {
+		if (!this.qb) return;
+		const errors = this.qb.debug();
+		if (errors) throw new Error(errors);
 	}
 
 	/**
-	 * Parse the gateway input for easier operation
-	 * @since 0.5.0
-	 * @param {(SettingsUpdateResultEntry[]|Array<Array<string>>|Object<string, *>)} [updated] The updated entries
-	 * @param {boolean} [resolve=true] Whether this should resolve the values using QueryBuilder#resolve or not
-	 * @returns {Array<any[]>}
-	 * @protected
+	 * Process the input from {@link Settings#update} or {@link Settings#reset} into an object with the keys and values
+	 * that can be used for schema-based (SQL) database drivers. If it receives a non-array, it is flattened into a
+	 * dotted object notation. Please note that this behaviour may be tricky when working with a {@link SchemaEntry}
+	 * which type accepts an object and it's not an array, as it'll be flattened into as many keys as properties it has.
 	 */
-	parseUpdateInput(updated, resolve) {
-		if (!updated) return [[], []];
-		if (Array.isArray(updated)) {
-			const keys = new Array(updated.length), values = new Array(updated.length);
-			const [first] = updated;
+	protected parseTupleUpdateInput(changes: object | SettingsUpdateResults): SqlProviderParsedTupleUpdateInput {
+		const keys: string[] = [];
+		const values: unknown[] = [];
 
-			// [[k1, v1], [k2, v2], ...]
-			if (Array.isArray(first) && first.length === 2) for (let i = 0; i < updated.length; i++) [keys[i], values[i]] = updated[i];
-
-			// [{ data: [k1, v1], piece: SchemaPiece1 }, { data: [k2, v2], piece: SchemaPiece2 }, ...]
-			else if (first.data && first.piece) this._parseGatewayInput(updated, keys, values, resolve);
-
-			// Unknown overload, throw
-			else throw new TypeError(`Expected void, [k, v][], SettingsUpdateResult[], or an object literal. Got: ${new Type(updated)}`);
-
-			return [keys, values];
-		}
-		if (!isObject(updated)) throw new TypeError(`Expected void, [k, v][], SettingsUpdateResult[], or an object literal. Got: ${new Type(updated)}`);
-
-		return objectToTuples(updated);
-	}
-
-	/**
-	 * Parses an entry
-	 * @since 0.5.0
-	 * @param {(string|Gateway)} gateway The gateway with the schema to parse
-	 * @param {Object} entry An entry to parse
-	 * @returns {Object}
-	 * @protected
-	 */
-	parseEntry(gateway, entry) {
-		if (!entry) return null;
-		if (typeof gateway === 'string') gateway = this.client.gateways[gateway];
-		if (!(gateway instanceof Gateway)) return entry;
-
-		const object = { id: entry.id };
-		for (const piece of gateway.schema.values(true)) {
-			if (entry[piece.path]) makeObject(piece.path, this.parseValue(entry[piece.path], piece), object);
-		}
-
-		return object;
-	}
-
-	/**
-	 * Parse SQL values.
-	 * @since 0.5.0
-	 * @param {*} value The value to parse
-	 * @param {SchemaPiece} schemaPiece The SchemaPiece this is parsing inner keys for
-	 * @returns {*}
-	 * @protected
-	 */
-	parseValue(value, schemaPiece) {
-		if (typeof value === 'undefined') return deepClone(schemaPiece.default);
-		if (schemaPiece.array) {
-			if (value === null) return deepClone(schemaPiece.default);
-			if (typeof value === 'string') value = tryParse(value);
-			if (!Array.isArray(value)) throw new Error(`Could not parse ${value} to an array. Returned empty array instead.`);
+		if (Array.isArray(changes)) {
+			for (const change of changes as SettingsUpdateResults) {
+				keys.push(change.entry.path);
+				values.push(change.next);
+			}
 		} else {
-			const type = typeof value;
-			switch (schemaPiece.type) {
-				case 'any':
-					if (type === 'string') return tryParse(value);
-					break;
-				case 'integer':
-					if (type === 'number') return value;
-					if (type === 'string') return Number(value);
-					if (value instanceof Buffer) return Number(value[0]);
-					break;
-				case 'boolean':
-					if (type === 'boolean') return value;
-					if (type === 'number') return value === 1;
-					if (type === 'string') return value === 'true';
-					if (value instanceof Buffer) return Boolean(value[0]);
-					break;
-				case 'string':
-					if (type === 'string') return /^\s|\s$/.test(value) ? value.trim() : value;
-					return String(value);
-				// no default
+			for (const [key, value] of objectToTuples(changes as Record<PropertyKey, unknown>)) {
+				keys.push(key);
+				values.push(value);
 			}
 		}
 
-		return value;
+		return { keys, values };
 	}
 
-	/**
-	 * Parse the SettingsUpdateResultEntry[] overload
-	 * @param {SettingsUpdateResultEntry[]} updated The updated keys
-	 * @param {string[]} keys The keys to update
-	 * @param {any[]} values The values to update
-	 * @param {boolean} [resolve = true] Whether this should resolve the values using QueryBuilder#resolve or not
-	 * @private
-	 */
-	_parseGatewayInput(updated, keys, values, resolve = true) {
-		// If QueryBuilder is available, try to resolve the data
-		if (resolve && this.qb) {
-			for (let i = 0; i < updated.length; i++) {
-				const entry = updated[i];
-				[keys[i]] = entry.data;
-				values[i] = this.qb.resolve(entry.piece, entry.data[1]);
-			}
-		} else {
-			for (let i = 0; i < updated.length; i++) [keys[i], values[i]] = updated[i].data;
-		}
-	}
+}
 
+export interface SqlProviderParsedTupleUpdateInput {
+	keys: string[];
+	values: unknown[];
 }

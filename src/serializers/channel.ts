@@ -1,35 +1,43 @@
-import { Serializer } from 'klasa';
-import { Channel } from '@klasa/core';
+import { Serializer, SerializerStore, SerializerUpdateContext, SchemaEntry, Language } from 'klasa';
+import { GuildBasedChannel, DMChannel, Channel, StoreChannel } from '@klasa/core';
+import { ChannelType } from '@klasa/dapi-types';
 
-export default class ChannelSerializer extends Serializer {
+// TODO(kyranet): remove this once @klasa/core releases
+type Channels = DMChannel | GuildBasedChannel | StoreChannel;
 
-	constructor(...args) {
-		super(...args, { aliases: ['textchannel', 'voicechannel', 'categorychannel'] });
+export default class CoreSerializer extends Serializer {
+
+	public constructor(store: SerializerStore, directory: string, file: readonly string[]) {
+		super(store, directory, file, { aliases: ['textchannel', 'voicechannel', 'categorychannel', 'storechannel', 'announcementchannel'] });
 	}
 
-	checkChannel(data, piece, language) {
-		if (
-			piece.type === 'channel' ||
-			(piece.type === 'textchannel' && data.type === 'text') ||
-			(piece.type === 'voicechannel' && data.type === 'voice') ||
-			(piece.type === 'categorychannel' && data.type === 'category')
-		) return data;
-		throw language.get('RESOLVER_INVALID_CHANNEL', piece.key);
+	public deserialize(data: string | Channels, { language, entry, guild }: SerializerUpdateContext): Channels {
+		if (data instanceof Channel) return this.checkChannel(data, entry, language);
+
+		const parsed = Serializer.regex.channel.exec(data);
+		const channel = parsed ? (guild || this.client).channels.get(parsed[1]) : null;
+		if (channel) return this.checkChannel(channel as Channels, entry, language);
+		throw language.get('RESOLVER_INVALID_CHANNEL', entry.key);
 	}
 
-	deserialize(data, piece, language, guild) {
-		if (data instanceof Channel) return this.checkChannel(data, piece, language);
-		const channel = this.constructor.regex.channel.test(data) ? (guild || this.client).channels.get(this.constructor.regex.channel.exec(data)[1]) : null;
-		if (channel) return this.checkChannel(channel, piece, language);
-		throw language.get('RESOLVER_INVALID_CHANNEL', piece.key);
-	}
-
-	serialize(value) {
+	public serialize(value: GuildBasedChannel): string {
 		return value.id;
 	}
 
-	stringify(value, message) {
-		return (message.guild.channels.get(value) || { name: (value && value.name) || value }).name;
+	public stringify(value: GuildBasedChannel): string {
+		return value.name;
+	}
+
+	private checkChannel(data: Channels, entry: SchemaEntry, language: Language): Channels {
+		if (
+			entry.type === 'channel' ||
+			(entry.type === 'textchannel' && data.type === ChannelType.GuildText) ||
+			(entry.type === 'voicechannel' && data.type === ChannelType.GuildVoice) ||
+			(entry.type === 'categorychannel' && data.type === ChannelType.GuildCategory) ||
+			(entry.type === 'storechannel' && data.type === ChannelType.GuildStore) ||
+			(entry.type === 'announcementchannel' && data.type === ChannelType.GuildAnnouncement)
+		) return data;
+		throw language.get('RESOLVER_INVALID_CHANNEL', entry.key);
 	}
 
 }

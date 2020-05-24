@@ -1,21 +1,24 @@
-import { Serializer } from 'klasa';
+import { Serializer, SerializerUpdateContext } from 'klasa';
+import { User } from '@klasa/core';
 
-export default class UserSerializer extends Serializer {
+export default class CoreSerializer extends Serializer {
 
-	async deserialize(data, piece, language) {
+	public async deserialize(data: string | User, { language, entry }: SerializerUpdateContext): Promise<User> {
 		let user = this.client.users.resolve(data);
 		if (user) return user;
-		if (this.constructor.regex.userOrMember.test(data)) user = await this.client.users.fetch(this.constructor.regex.userOrMember.exec(data)[1]).catch(() => null);
+
+		const resolved = Serializer.regex.userOrMember.exec(data as string);
+		if (resolved) user = await this.client.users.fetch(resolved[1]).catch(() => null);
 		if (user) return user;
-		throw language.get('RESOLVER_INVALID_USER', piece.key);
+		throw language.get('RESOLVER_INVALID_USER', entry.key);
 	}
 
-	serialize(value) {
+	public serialize(value: User): string {
 		return value.id;
 	}
 
-	stringify(value) {
-		return (this.client.users.get(value) || { username: (value && value.username) || value }).username;
+	public stringify(value: User): string {
+		return value.tag;
 	}
 
 }

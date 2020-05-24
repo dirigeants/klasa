@@ -1,24 +1,25 @@
-import { Serializer } from 'klasa';
+import { Serializer, SerializerStore, SerializerUpdateContext } from 'klasa';
 
-export default class NumberSerializer extends Serializer {
+export default class CoreSerializer extends Serializer {
 
-	constructor(...args) {
-		super(...args, { aliases: ['integer', 'float'] });
+	public constructor(store: SerializerStore, directory: string, file: readonly string[]) {
+		super(store, directory, file, { aliases: ['integer', 'float'] });
 	}
 
-	deserialize(data, piece, language) {
-		let number;
-		switch (piece.type) {
+	public deserialize(data: string | number, { language, entry }: SerializerUpdateContext): number | null {
+		let number: number;
+		switch (entry.type) {
 			case 'integer':
-				number = parseInt(data);
+				number = typeof data === 'number' ? data : parseInt(data);
 				if (Number.isInteger(number)) return number;
-				throw language.get('RESOLVER_INVALID_INT', piece.key);
+				throw language.get('RESOLVER_INVALID_INT', entry.key);
 			case 'number':
 			case 'float':
-				number = parseFloat(data);
-				if (!isNaN(number)) return number;
-				throw language.get('RESOLVER_INVALID_FLOAT', piece.key);
+				number = typeof data === 'number' ? data : parseFloat(data);
+				if (!Number.isNaN(number)) return number;
+				throw language.get('RESOLVER_INVALID_FLOAT', entry.key);
 		}
+
 		// noop
 		return null;
 	}

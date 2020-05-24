@@ -10,7 +10,7 @@ import type { KlasaMessage } from '../extensions/KlasaMessage';
  */
 export class MonitorStore extends Store<Monitor> {
 
-	constructor(client: KlasaClient) {
+	public constructor(client: KlasaClient) {
 		super(client, 'monitors', Monitor as PieceConstructor<Monitor>);
 	}
 

@@ -1,9 +1,10 @@
-import { DeepRequired, mergeDefault } from '@klasa/utils';
+import { DeepRequired, mergeDefault, isObject } from '@klasa/utils';
 import { ClientOptionsDefaults } from '@klasa/core';
+import { MessageType } from '@klasa/dapi-types';
 import { KlasaClient, KlasaClientOptions } from '../Client';
 import { Language, LanguageValue } from '../structures/Language';
-import { MessageType } from '@klasa/dapi-types';
 import { Schema } from '../settings/schema/Schema';
+import type { QueryBuilderEntryOptions, QueryBuilderDatatype } from './QueryBuilder';
 
 export const KlasaClientDefaults: DeepRequired<KlasaClientOptions> = mergeDefault(ClientOptionsDefaults, {
 	commands: {
@@ -126,12 +127,39 @@ export const KlasaClientDefaults: DeepRequired<KlasaClientOptions> = mergeDefaul
 	}
 });
 
-// Kyra wanna fix this kthxs, nah fix this idk why its happening
-// All yours (Jacz)
 export const MENTION_REGEX = {
 	userOrMember: /^(?:<@!?)?(\d{17,19})>?$/,
 	channel: /^(?:<#)?(\d{17,19})>?$/,
 	emoji: /^(?:<a?:\w{2,32}:)?(\d{17,19})>?$/,
 	role: /^(?:<@&)?(\d{17,19})>?$/,
 	snowflake: /^(\d{17,19})$/
+};
+
+export const DATATYPES: [string, QueryBuilderDatatype][] = [
+	['json', { type: 'JSON', serializer: (value): string => `'${JSON.stringify(value).replace(/'/g, "''")}'` }],
+	['any', { extends: 'json' }],
+	['boolean', { type: 'BOOLEAN', serializer: (value): string => `${value}` }],
+	['bool', { extends: 'boolean' }],
+	['snowflake', { type: 'VARCHAR(19)', serializer: (value): string => `'${value}'` }],
+	['channel', { extends: 'snowflake' }],
+	['textchannel', { extends: 'channel' }],
+	['voicechannel', { extends: 'channel' }],
+	['categorychannel', { extends: 'channel' }],
+	['guild', { extends: 'snowflake' }],
+	['number', { type: 'FLOAT', serializer: (value): string => `${value}` }],
+	['float', { extends: 'number' }],
+	['integer', { extends: 'number', type: 'INTEGER' }],
+	['command', { type: 'TEXT' }],
+	['language', { type: 'VARCHAR(5)' }],
+	['role', { extends: 'snowflake' }],
+	['string', { type: ({ maximum }): string => maximum ? `VARCHAR(${maximum})` : 'TEXT' }],
+	['url', { type: 'TEXT' }],
+	['user', { extends: 'snowflake' }]
+];
+
+export const OPTIONS: Required<QueryBuilderEntryOptions> = {
+	array: () => 'TEXT',
+	arraySerializer: (values) => `'${JSON.stringify(values).replace(/'/g, "''")}'`,
+	formatDatatype: (name, datatype, def = null) => `${name} ${datatype}${def !== null ? ` NOT NULL DEFAULT ${def}` : ''}`,
+	serializer: (value) => `'${(isObject(value) ? JSON.stringify(value) : String(value)).replace(/'/g, "''")}'`
 };
