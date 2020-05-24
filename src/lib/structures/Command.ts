@@ -1,4 +1,4 @@
-import { AliasPiece, AliasPieceOptions, Permissions, PermissionsResolvable } from '@klasa/core';
+import { AliasPiece, AliasPieceOptions, Permissions, PermissionsResolvable, Message } from '@klasa/core';
 import { isFunction } from '@klasa/utils';
 import { Usage } from '../usage/Usage';
 import { CommandUsage } from '../usage/CommandUsage';
@@ -143,7 +143,7 @@ export abstract class Command extends AliasPiece {
 	 * @param file The path from the pieces folder to the command file
 	 * @param options Optional Command settings
 	 */
-	constructor(store: CommandStore, directory: string, files: readonly string[], options: Partial<CommandOptions> = {}) {
+	public constructor(store: CommandStore, directory: string, files: readonly string[], options: Partial<CommandOptions> = {}) {
 		super(store, directory, files, options);
 
 		this.name = this.name.toLowerCase();
@@ -265,18 +265,6 @@ export abstract class Command extends AliasPiece {
 	}
 
 	/**
-	 * The run method to be overwritten in actual commands
-	 * @since 0.0.1
-	 * @param {KlasaMessage} message The command message mapped on top of the message used to trigger this command
-	 * @param {any[]} params The fully resolved parameters based on your usage / usageDelim
-	 * @returns {KlasaMessage[]} You should return the response message whenever possible
-	 * @abstract
-	 */
-
-	public abstract async run(message: KlasaMessage, params: any[]): Promise<KlasaMessage[]>;
-
-
-	/**
 	 * Defines the JSON.stringify behavior of this command.
 	 * @returns {Object}
 	 */
@@ -314,14 +302,25 @@ export abstract class Command extends AliasPiece {
 
 }
 
+export interface Command {
+	/**
+	 * The run method to be overwritten in actual commands
+	 * @since 0.0.1
+	 * @param message The command message mapped on top of the message used to trigger this command
+	 * @param params The fully resolved parameters based on your usage / usageDelim
+	 * @returns You should return the response message whenever possible
+	 */
+	run?(message: KlasaMessage, params: any[]): Promise<Message[]>;
+}
+
 export interface CommandOptions extends AliasPieceOptions {
 	autoAliases: boolean;
 	bucket: number;
 	cooldown: number;
 	cooldownLevel: string;
 	deletable: boolean;
-	description: string | Function;
-	extendedHelp: string | Function;
+	description: string | ((language: Language) => string);
+	extendedHelp: string | ((language: Language) => string);
 	flagSupport: boolean;
 	guarded: boolean;
 	hidden: boolean;

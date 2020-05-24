@@ -104,11 +104,9 @@ export class Schema extends Map<string, SchemaFolder | SchemaEntry> {
 		const previous = super.get(key);
 		if (typeof previous !== 'undefined') {
 			if (type === 'Folder') {
-				if (previous.type === 'Folder') {
+				if (SchemaFolder.is(previous)) {
 					// Call the callback with the pre-existent Folder
-					// eslint-disable-next-line callback-return, @typescript-eslint/ban-ts-ignore
-					// @ts-ignore
-					callback(previous as SchemaFolder);
+					callback!(previous);
 					return this;
 				}
 
@@ -117,7 +115,7 @@ export class Schema extends Map<string, SchemaFolder | SchemaEntry> {
 			}
 
 			// If the type of the new entry is not a Folder, the previous must also not be a Folder.
-			if (previous.type === 'Folder') {
+			if (SchemaFolder.is(previous)) {
 				throw new Error(`The type for "${key}" conflicts with the previous value, expected a non-Folder, got "${previous.type}".`);
 			}
 
@@ -158,7 +156,7 @@ export class Schema extends Map<string, SchemaFolder | SchemaEntry> {
 		if (typeof value === 'undefined') return undefined;
 
 		// If the returned value is a SchemaFolder, return its result from SchemaFolder#get using remaining string
-		if (value.type === 'Folder') return (value as SchemaFolder).get(path.substring(index + 1));
+		if (SchemaFolder.is(value)) return value.get(path.substring(index + 1));
 
 		// Trying to access to a subkey of an entry, return undefined
 		return undefined;
@@ -172,7 +170,7 @@ export class Schema extends Map<string, SchemaFolder | SchemaEntry> {
 	public *keys(recursive = false): IterableIterator<string> {
 		if (recursive) {
 			for (const [key, value] of super.entries()) {
-				if (value.type === 'Folder') yield* (value as SchemaFolder).keys(true);
+				if (SchemaFolder.is(value)) yield* value.keys(true);
 				else yield key;
 			}
 		} else {
@@ -195,7 +193,7 @@ export class Schema extends Map<string, SchemaFolder | SchemaEntry> {
 	public *values(recursive = false): IterableIterator<SchemaFolder | SchemaEntry> {
 		if (recursive) {
 			for (const value of super.values()) {
-				if (value.type === 'Folder') yield* (value as SchemaFolder).values(true);
+				if (SchemaFolder.is(value)) yield* value.values(true);
 				else yield value;
 			}
 		} else {
@@ -218,7 +216,7 @@ export class Schema extends Map<string, SchemaFolder | SchemaEntry> {
 	public *entries(recursive = false): IterableIterator<[string, SchemaFolder | SchemaEntry]> {
 		if (recursive) {
 			for (const [key, value] of super.entries()) {
-				if (value.type === 'Folder') yield* (value as SchemaFolder).entries(true);
+				if (SchemaFolder.is(value)) yield* value.entries(true);
 				else yield [key, value];
 			}
 		} else {
@@ -231,6 +229,15 @@ export class Schema extends Map<string, SchemaFolder | SchemaEntry> {
 	 */
 	public toJSON(): SchemaJson {
 		return Object.fromEntries([...this.entries()].map(([key, value]) => [key, value.toJSON()]));
+	}
+
+	/**
+	 * Check whether or not the value is a SchemaFolder.
+	 * @since 0.6.0
+	 * @param value The value to check.
+	 */
+	public static is(value: Schema | SchemaEntry): value is SchemaFolder {
+		return value.type === 'Folder';
 	}
 
 }

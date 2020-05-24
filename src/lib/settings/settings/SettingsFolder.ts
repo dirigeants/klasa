@@ -80,15 +80,15 @@ export class SettingsFolder extends Map<string, unknown> {
 		return Promise.all(paths.map(path => {
 			const entry = this.schema.get(path);
 			if (typeof entry === 'undefined') return undefined;
-			return entry.type === 'Folder' ?
+			return SchemaFolder.is(entry) ?
 				this._resolveFolder({
-					folder: entry as SchemaFolder,
+					folder: entry,
 					language,
 					guild,
 					extraContext: null
 				}) :
 				this._resolveEntry({
-					entry: entry as SchemaEntry,
+					entry,
 					language,
 					guild,
 					extraContext: null
@@ -190,7 +190,7 @@ export class SettingsFolder extends Map<string, unknown> {
 
 			// If the key does not exist, throw
 			if (typeof entry === 'undefined') throw language.get('SETTING_GATEWAY_KEY_NOEXT', path);
-			if (entry.type === 'Folder') this._resetSettingsFolder(changes, entry as SchemaFolder, language, onlyConfigurable);
+			if (SchemaFolder.is(entry)) this._resetSettingsFolder(changes, entry as SchemaFolder, language, onlyConfigurable);
 			else this._resetSettingsEntry(changes, entry as SchemaEntry, language, onlyConfigurable);
 		}
 
@@ -323,8 +323,8 @@ export class SettingsFolder extends Map<string, unknown> {
 		folder.base = this.base;
 
 		for (const [key, value] of schema.entries()) {
-			if (value.type === 'Folder') {
-				const settings = new SettingsFolder(value as SchemaFolder);
+			if (SchemaFolder.is(value)) {
+				const settings = new SettingsFolder(value);
 				folder.set(key, settings);
 				this._init(settings, value as SchemaFolder);
 			} else {
@@ -359,16 +359,16 @@ export class SettingsFolder extends Map<string, unknown> {
 	private async _resolveFolder(context: InternalFolderUpdateContext): Promise<object> {
 		const promises: Promise<[string, unknown]>[] = [];
 		for (const entry of context.folder.values()) {
-			if (entry.type === 'Folder') {
+			if (SchemaFolder.is(entry)) {
 				promises.push(this._resolveFolder({
-					folder: entry as SchemaFolder,
+					folder: entry,
 					language: context.language,
 					guild: context.guild,
 					extraContext: context.extraContext
 				}).then(value => [entry.key, value]));
 			} else {
 				promises.push(this._resolveEntry({
-					entry: entry as SchemaEntry,
+					entry,
 					language: context.language,
 					guild: context.guild,
 					extraContext: context.extraContext
@@ -467,10 +467,10 @@ export class SettingsFolder extends Map<string, unknown> {
 
 			// If the key does not exist, throw
 			if (typeof entry === 'undefined') throw language.get('SETTING_GATEWAY_KEY_NOEXT', path);
-			if (entry.type === 'Folder') {
+			if (SchemaFolder.is(entry)) {
 				const keys = onlyConfigurable ?
-					[...(entry as SchemaFolder).values()].filter(val => val.type !== 'Folder' && (val as SchemaEntry).configurable).map(val => val.key) :
-					[...(entry as SchemaFolder).keys()];
+					[...entry.values()].filter(val => SchemaEntry.is(val) && val.configurable).map(val => val.key) :
+					[...entry.keys()];
 				throw keys.length > 0 ?
 					language.get('SETTING_GATEWAY_CHOOSE_KEY', keys) :
 					language.get('SETTING_GATEWAY_UNCONFIGURABLE_FOLDER');

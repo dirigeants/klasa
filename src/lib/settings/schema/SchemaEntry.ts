@@ -177,6 +177,15 @@ export class SchemaEntry {
 		return null;
 	}
 
+	/**
+	 * Check whether or not the value is a SchemaEntry.
+	 * @since 0.6.0
+	 * @param value The value to check.
+	 */
+	public static is(value: Schema | SchemaEntry): value is SchemaEntry {
+		return value.type !== 'Folder';
+	}
+
 }
 
 export interface SchemaEntryOptions {

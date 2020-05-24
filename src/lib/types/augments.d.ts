@@ -5,9 +5,8 @@ import type { Command } from '../structures/Command';
 import type { CommandStore } from '../structures/CommandStore';
 import type { ExtendableStore } from '../structures/ExtendableStore';
 import type { FinalizerStore } from '../structures/FinalizerStore';
-import type { GatewayDriver } from '../settings/GatewayDriver';
+import type { GatewayDriver } from '../settings/gateway/GatewayDriver';
 import type { InhibitorStore } from '../structures/InhibitorStore';
-import type { KlasaConsole, ConsoleOptions } from '../util/KlasaConsole';
 import type { Language } from '../structures/Language';
 import type { LanguageStore } from '../structures/LanguageStore';
 import type { MonitorStore } from '../structures/MonitorStore';
@@ -15,7 +14,7 @@ import type { PermissionLevels } from '../permissions/PermissionLevels';
 import type { ProviderStore } from '../structures/ProviderStore';
 import type { Schedule } from '../schedule/Schedule';
 import type { SerializerStore } from '../structures/SerializerStore';
-import type { Settings } from '../settings/Settings';
+import type { Settings } from '../settings/settings/Settings';
 import type { TaskStore } from '../structures/TaskStore';
 import type {
 	CommandHandlingOptions,
