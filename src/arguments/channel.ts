@@ -1,14 +1,18 @@
-import { Argument } from 'klasa';
+import { Argument, Possible, KlasaMessage } from 'klasa';
+import { Channel } from '@klasa/core';
 
-export default class extends Argument {
+export default class CoreArgument extends Argument {
 
-	async run(arg, possible, message) {
+	public async run(argument: string, possible: Possible, message: KlasaMessage): Promise<Channel> {
 		// Regular Channel support
-		const channel = this.constructor.regex.channel.test(arg) ? await this.client.channels.fetch(this.constructor.regex.channel.exec(arg)[1]).catch(() => null) : null;
+		const channelID = Argument.regex.channel.exec(argument);
+		const channel = channelID ? await this.client.channels.fetch(channelID[1]).catch(() => null) : null;
 		if (channel) return channel;
+
 		// DM Channel support
-		const user = this.constructor.regex.userOrMember.test(arg) ? await this.client.users.fetch(this.constructor.regex.userOrMember.exec(arg)[1]).catch(() => null) : null;
-		if (user) return user.createDM();
+		const userID = Argument.regex.userOrMember.exec(argument);
+		const user = userID ? await this.client.users.fetch(userID[1]).catch(() => null) : null;
+		if (user) return user.openDM();
 		throw message.language.get('RESOLVER_INVALID_CHANNEL', possible.name);
 	}
 

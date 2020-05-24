@@ -1,6 +1,6 @@
 import { MultiArgument } from 'klasa';
 
-export default class extends MultiArgument {
+export default class CoreArgument extends MultiArgument {
 
 	constructor(...args) {
 		super(...args, { aliases: ['...dmChannel'] });

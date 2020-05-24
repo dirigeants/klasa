@@ -1,13 +1,13 @@
-import { MultiArgument } from 'klasa';
+import { Argument, MultiArgument, ArgumentStore } from 'klasa';
 
-export default class extends MultiArgument {
+export default class CoreMultiArgument extends MultiArgument {
 
-	constructor(...args) {
-		super(...args, { aliases: ['...channel'] });
+	public constructor(store: ArgumentStore, directory: string, file: readonly string[]) {
+		super(store, directory, file, { aliases: ['...channel'] });
 	}
 
-	get base() {
-		return this.store.get('channel');
+	public get base(): Argument {
+		return this.store.get('channel') as Argument;
 	}
 
 }

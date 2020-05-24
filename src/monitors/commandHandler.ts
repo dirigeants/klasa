@@ -1,11 +1,12 @@
-import { Monitor, Stopwatch } from 'klasa';
+import { Monitor } from 'klasa';
 import { Message } from '@klasa/core';
+import { Stopwatch } from '@klasa/stopwatch';
 
 export default class CommandHandler extends Monitor {
 
 	constructor(...args) {
 		super(...args, { ignoreOthers: false });
-		this.ignoreEdits = !this.client.options.commandEditing;
+		this.ignoreEdits = !this.client.options.commands.editing;
 	}
 
 	private async run(message: Message): Promise<void | Message[]> {

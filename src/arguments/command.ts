@@ -1,13 +1,13 @@
-import { Argument } from 'klasa';
+import { Argument, ArgumentStore, Command, KlasaMessage, Possible } from 'klasa';
 
-export default class extends Argument {
+export default class CoreArgument extends Argument {
 
-	constructor(...args) {
-		super(...args, { aliases: ['cmd'] });
+	public constructor(store: ArgumentStore, directory: string, file: readonly string[]) {
+		super(store, directory, file, { aliases: ['cmd'] });
 	}
 
-	run(arg, possible, message) {
-		const command = this.client.commands.get(arg.toLowerCase());
+	public run(argument: string, possible: Possible, message: KlasaMessage): Command {
+		const command = this.client.commands.get(argument.toLowerCase());
 		if (command) return command;
 		throw message.language.get('RESOLVER_INVALID_PIECE', possible.name, 'command');
 	}

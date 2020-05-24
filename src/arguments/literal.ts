@@ -1,6 +1,6 @@
 import { Argument } from 'klasa';
 
-export default class extends Argument {
+export default class CoreArgument extends Argument {
 
 	run(arg, possible, message) {
 		if (arg.toLowerCase() === possible.name.toLowerCase()) return possible.name;

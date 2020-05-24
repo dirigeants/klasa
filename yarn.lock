@@ -266,10 +266,10 @@
   resolved "https://registry.yarnpkg.com/@klasa/dapi-types/-/dapi-types-0.1.1.tgz#f207d58d9ff878598ea01c8c11aeece598cce726"
   integrity sha512-mTCTF7LxNFVewULTEaewlf+MpTYsGWKlkwHgmOqdw4HeS5OlQrRmeoWwg2drgjhXrdbYnXBV6s3LsiESqKIoAg==
 
-"@klasa/duration@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@klasa/duration/-/duration-0.0.1.tgz#16c48c500d82e51bf2dbd03a2b19aafeb863f184"
-  integrity sha512-Bwh+wOLqu1qcIy+iAUFLIUKf/SqnzjT9ATM9kGix/bpEQkY/fuQh1GllwFeAoVujJR2wX0D4tx46JUM3llko7A==
+"@klasa/duration@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@klasa/duration/-/duration-0.0.3.tgz#960e4ef09340fae9f97ff92b3485b8d2f7376439"
+  integrity sha512-T0RFw4c/TPwyzJ6yN7ZgC63Fo8epHWgsIFOk3S+Nb7GeMJhMPrRsGvcHTuocy4I1sDypMGUq+RfRtExx9kUdtQ==
 
 "@klasa/event-iterator@^0.0.8":
   version "0.0.8"

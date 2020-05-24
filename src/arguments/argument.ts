@@ -1,10 +1,10 @@
-import { Argument } from 'klasa';
+import { Argument, KlasaMessage, Possible } from 'klasa';
 
-export default class extends Argument {
+export default class CoreArgument extends Argument {
 
-	run(arg, possible, message) {
-		const argument = this.client.arguments.get(arg);
-		if (argument) return argument;
+	public run(argument: string, possible: Possible, message: KlasaMessage): Argument {
+		const entry = this.client.arguments.get(argument);
+		if (entry) return entry;
 		throw message.language.get('RESOLVER_INVALID_PIECE', possible.name, 'argument');
 	}
 

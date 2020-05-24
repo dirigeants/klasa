@@ -19,7 +19,7 @@ export abstract class Argument extends AliasPiece {
 	 * @param possible This current usage possible
 	 * @param message The message that triggered the command
 	 */
-	public abstract async run(argument: string, possible: Possible, message: KlasaMessage): Promise<unknown>;
+	public abstract run(argument: string, possible: Possible, message: KlasaMessage): unknown | Promise<unknown>;
 
 
 	/**

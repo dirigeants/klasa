@@ -1,6 +1,6 @@
 import { Argument } from 'klasa';
 
-export default class extends Argument {
+export default class CoreArgument extends Argument {
 
 	constructor(...args) {
 		super(...args, { aliases: ['reg', 'regex'] });

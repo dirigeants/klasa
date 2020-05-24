@@ -1,16 +1,17 @@
-import { Command, version: klasaVersion, Duration } from 'klasa';
-import { version: discordVersion } from '@klasa/core';
+import { version as klasaVersion, Command, KlasaMessage, CommandStore } from 'klasa';
+import { version as discordVersion } from '@klasa/core/package.json';
+import { Duration } from '@klasa/duration';
 
 export default class extends Command {
 
-	constructor(...args) {
-		super(...args, {
+	public constructor(store: CommandStore, directory: string, files: readonly string[]) {
+		super(store, directory, files, {
 			guarded: true,
 			description: language => language.get('COMMAND_STATS_DESCRIPTION')
 		});
 	}
 
-	async run(message) {
+	public async run(message: KlasaMessage) {
 		let [users, guilds, channels, memory] = [0, 0, 0, 0];
 
 		if (this.client.shard) {
@@ -33,4 +34,4 @@ export default class extends Command {
 		));
 	}
 
-};
+}

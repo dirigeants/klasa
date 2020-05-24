@@ -1,6 +1,6 @@
 import { Argument } from 'klasa';
 
-export default class extends Argument {
+export default class CoreArgument extends Argument {
 
 	run(arg, possible, message) {
 		for (const store of this.client.pieceStores.values()) {

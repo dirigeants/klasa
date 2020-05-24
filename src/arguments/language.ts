@@ -1,9 +1,9 @@
-import { Argument } from 'klasa';
+import { Argument, Language, Possible, KlasaMessage } from 'klasa';
 
-export default class extends Argument {
+export default class CoreArgument extends Argument {
 
-	run(arg, possible, message) {
-		const language = this.client.languages.get(arg);
+	public run(argument: string, possible: Possible, message: KlasaMessage): Language {
+		const language = this.client.languages.get(argument);
 		if (language) return language;
 		throw message.language.get('RESOLVER_INVALID_PIECE', possible.name, 'language');
 	}

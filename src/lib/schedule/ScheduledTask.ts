@@ -1,41 +1,14 @@
 import { isObject } from '@klasa/utils';
-import { Cron } from '../util/Cron';
-import { Schedule, ScheduledTaskOptions } from './Schedule';
+import { Cron } from '@klasa/cron';
+import { Schedule } from './Schedule';
 import { Task } from '../structures/Task';
 import { KlasaClient } from '../Client';
+import { isSet } from '@klasa/core';
 
 /**
  * The structure for future tasks to be run
  */
 export class ScheduledTask {
-
-	/**
-	 * @typedef  {(Date|number|Cron|string)} TimeResolvable
-	 */
-
-	/**
-	 * @typedef  {Object} ScheduledTaskOptions
-	 * @property {string} [id] The ID for the task. By default, it generates one in base36
-	 * @property {boolean} [catchUp=true] If the task should try to catch up if the bot is down
-	 * @property {*} [data] The data to pass to the Task piece when the ScheduledTask is ready for execution
-	 */
-
-	/**
-	 * @typedef  {Object} ScheduledTaskUpdateOptions
-	 * @property {TimeResolvable} [time] The time or {@link Cron} pattern
-	 * @property {boolean} [catchUp] If the task should try to catch up if the bot is down
-	 * @property {*} [data] The data to pass to the Task piece when the ScheduledTask is ready for execution
-	 */
-
-	/**
-	 * @typedef  {Object} ScheduledTaskJSON
-	 * @property {string} id The task's ID
-	 * @property {string} taskName The name of the Task piece this will execute
-	 * @property {number} time The UNIX timestamp for when this task ends at
-	 * @property {boolean} catchUp If the task should try to catch up if the bot is down
-	 * @property {string} [repeat] The {@link Cron} pattern
-	 * @property {Object<string,*>} data The data to pass to the Task piece when the ScheduledTask is ready for execution
-	 */
 
 	/**
 	 * The Client instance that initialized this instance
@@ -78,7 +51,7 @@ export class ScheduledTask {
 	 * The stored metadata to send to the Task
 	 * @since 0.5.0
 	 */
-	public data: Record<string, unknown>;
+	public data: Record<PropertyKey, unknown>;
 
 	/**
 	 * If the ScheduledTask is being run currently
@@ -102,7 +75,7 @@ export class ScheduledTask {
 		this.recurring = _recurring;
 		this.time = _time;
 		this.id = options.id || (this.constructor as typeof ScheduledTask)._generateID(this.client);
-		this.catchUp = 'catchUp' in options ? options.catchUp : true;
+		this.catchUp = isSet(options, 'catchUp') ? options.catchUp : true;
 		this.data = 'data' in options && isObject(options.data) ? options.data : {};
 
 		(this.constructor as typeof ScheduledTask)._validate(this);
@@ -134,14 +107,15 @@ export class ScheduledTask {
 
 		this.#running = true;
 		try {
-			await task.run({ id: this.id, ...this.data });
+			await task.run({ ...(this.data ?? {}), id: this.id });
 		} catch (err) {
 			this.client.emit('taskError', this, task, err);
 		}
 		this.#running = false;
 
-		if (!this.recurring) return this.delete();
-		return this.update({ time: this.recurring });
+		if (this.recurring) return this.update({ time: this.recurring });
+		await this.delete();
+		return this;
 	}
 
 	/**
@@ -156,7 +130,7 @@ export class ScheduledTask {
 	 * // But you can also update the time this will end at, for example, to change it so it ends in 1 hour:
 	 * ScheduledTask.update({ time: Date.now() + 60000 * 60 });
 	 */
-	public async update({ time, data, catchUp }: ScheduledTaskUpdateOptions = {}): this {
+	public async update({ time, data, catchUp }: ScheduledTaskUpdateOptions = {}): Promise<this> {
 		if (time) {
 			const [_time, _cron] = (this.constructor as typeof ScheduledTask)._resolveTime(time);
 			this.time = _time;
@@ -190,9 +164,8 @@ export class ScheduledTask {
 	/**
 	 * Override for JSON.stringify
 	 * @since 0.5.0
-	 * @returns {ScheduledTaskJSON}
 	 */
-	public toJSON() {
+	public toJSON(): ScheduledTaskJSON {
 		return {
 			id: this.id,
 			taskName: this.taskName,
@@ -239,5 +212,74 @@ export class ScheduledTask {
 		if (!st.time) throw new Error('time or repeat option required');
 		if (Number.isNaN(st.time.getTime())) throw new Error('invalid time passed');
 	}
+
+}
+
+export type TimeResolvable = Date | number | Cron | string;
+
+export interface ScheduledTaskOptions {
+	/**
+	 * The ID for the task. By default, it generates one in base36.
+	 * @since 0.5.0
+	 */
+	id?: string;
+
+	/**
+	 * If the task should try to catch up if the bot is down.
+	 * @since 0.5.0
+	 */
+	catchUp?: boolean;
+
+	/**
+	 * The data to pass to the Task piece when the ScheduledTask is ready for execution.
+	 * @since 0.5.0
+	 */
+	data?: Record<PropertyKey, unknown>;
+}
+
+export interface ScheduledTaskUpdateOptions extends ScheduledTaskOptions {
+	/**
+	 * The time or {@link Cron} pattern.
+	 * @since 0.5.0
+	 */
+	time?: TimeResolvable;
+}
+
+export interface ScheduledTaskJSON {
+	/**
+	 * The task's ID.
+	 * @since 0.5.0
+	 */
+	id: string;
+
+	/**
+	 * The name of the Task piece this will execute.
+	 * @since 0.5.0
+	 */
+	taskName: string;
+
+	/**
+	 * The UNIX timestamp for when this task ends at.
+	 * @since 0.5.0
+	 */
+	time: number;
+
+	/**
+	 * If the task should try to catch up if the bot is down.
+	 * @since 0.5.0
+	 */
+	catchUp: boolean;
+
+	/**
+	 * The {@link Cron} pattern.
+	 * @since 0.5.0
+	 */
+	repeat: string | null;
+
+	/**
+	 * The data to pass to the Task piece when the ScheduledTask is ready for execution.
+	 * @since 0.5.0
+	 */
+	data: Record<PropertyKey, unknown>;
 
 }

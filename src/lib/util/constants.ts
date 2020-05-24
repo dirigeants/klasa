@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+import Package = require('../../../package.json');
 import { DeepRequired, mergeDefault, isObject } from '@klasa/utils';
 import { ClientOptionsDefaults } from '@klasa/core';
 import { MessageType } from '@klasa/dapi-types';
@@ -5,6 +7,8 @@ import { KlasaClient, KlasaClientOptions } from '../Client';
 import { Language, LanguageValue } from '../structures/Language';
 import { Schema } from '../settings/schema/Schema';
 import type { QueryBuilderEntryOptions, QueryBuilderDatatype } from './QueryBuilder';
+
+export const version = Package.version;
 
 export const KlasaClientDefaults: DeepRequired<KlasaClientOptions> = mergeDefault(ClientOptionsDefaults, {
 	commands: {

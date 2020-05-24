@@ -18,7 +18,7 @@ import { SerializerStore } from './structures/SerializerStore';
 import { TaskStore } from './structures/TaskStore';
 
 // lib/settings
-import { GatewayDriver } from './settings/GatewayDriver';
+import { GatewayDriver } from './settings/gateway/GatewayDriver';
 
 // lib/settings/schema
 import { Schema } from './settings/schema/Schema';
@@ -27,13 +27,13 @@ import { Schema } from './settings/schema/Schema';
 import { KlasaConsole, ConsoleOptions } from '@klasa/console';
 import { KlasaClientDefaults, MENTION_REGEX } from './util/constants';
 
-import type { Settings } from './settings/Settings';
 import type { CommandOptions, Command } from './structures/Command';
 import type { ExtendableOptions } from './structures/Extendable';
 import type { InhibitorOptions } from './structures/Inhibitor';
 import type { MonitorOptions } from './structures/Monitor';
-import type { SchemaPiece } from './settings/schema/SchemaPiece';
-import type { Language } from './structures/Language';
+import type { SchemaEntry } from './settings/schema/SchemaEntry';
+import type { Settings } from './settings/settings/Settings';
+import { Gateway } from './settings/gateway/Gateway';
 
 export interface KlasaClientOptions extends ClientOptions {
 	/**
@@ -237,7 +237,6 @@ export interface SettingsOptions {
 	preserve: boolean;
 }
 
-// TODO(kyranet): fix this once SGN2 is available
 export interface GatewaysOptions extends Partial<Record<string, { schema: (schema: Schema) => Schema }>> {
 	/**
 	 * The options for clientStorage's gateway
@@ -300,67 +299,67 @@ export interface PieceDefaults {
 	 * The default command options.
 	 * @default {}
 	 */
-	commands?: CommandOptions;
+	commands?: Partial<CommandOptions>;
 
 	/**
 	 * The default event options.
 	 * @default {}
 	 */
-	events?: EventOptions;
+	events?: Partial<EventOptions>;
 
 	/**
 	 * The default extendable options.
 	 * @default {}
 	 */
-	extendables?: ExtendableOptions;
+	extendables?: Partial<ExtendableOptions>;
 
 	/**
 	 * The default finalizer options.
 	 * @default {}
 	 */
-	finalizers?: PieceOptions;
+	finalizers?: Partial<PieceOptions>;
 
 	/**
 	 * The default inhibitor options.
 	 * @default {}
 	 */
-	inhibitors?: InhibitorOptions;
+	inhibitors?: Partial<InhibitorOptions>;
 
 	/**
 	 * The default language options.
 	 * @default {}
 	 */
-	languages?: PieceOptions;
+	languages?: Partial<PieceOptions>;
 
 	/**
 	 * The default monitor options.
 	 * @default {}
 	 */
-	monitors?: MonitorOptions;
+	monitors?: Partial<MonitorOptions>;
 
 	/**
 	 * The default provider options.
 	 * @default {}
 	 */
-	providers?: PieceOptions;
+	providers?: Partial<PieceOptions>;
 
 	/**
 	 * The default argument options.
 	 * @default {}
 	 */
-	arguments?: AliasPieceOptions;
+	arguments?: Partial<AliasPieceOptions>;
 
 	/**
 	 * The default serializer options.
 	 * @default {}
 	 */
-	serializers: AliasPieceOptions;
+	serializers: Partial<AliasPieceOptions>;
 
 	/**
 	 * The default task options.
 	 * @default {}
 	 */
-	tasks: PieceOptions;
+	tasks: Partial<PieceOptions>;
 }
 
 /**
@@ -514,12 +513,12 @@ export class KlasaClient extends Client {
 
 		// Update Guild Schema with Keys needed in Klasa
 		const prefixKey = guildSchema.get('prefix');
-		if (!prefixKey || prefixKey.default === null) {
+		if (!prefixKey || (prefixKey as SchemaEntry).default === null) {
 			guildSchema.add('prefix', 'string', { array: Array.isArray(this.options.commands.prefix), default: this.options.commands.prefix });
 		}
 
 		const languageKey = guildSchema.get('language');
-		if (!languageKey || languageKey.default === null) {
+		if (!languageKey || (languageKey as SchemaEntry).default === null) {
 			guildSchema.add('language', 'language', { default: this.options.language });
 		}
 
@@ -527,9 +526,9 @@ export class KlasaClient extends Client {
 
 		// Register default gateways
 		this.gateways
-			.register('guilds', { ...guilds, schema: guildSchema })
-			.register('users', { ...users, schema: userSchema })
-			.register('clientStorage', { ...clientStorage, schema: clientSchema });
+			.register(new Gateway(this, 'guilds', { ...guilds, schema: guildSchema }))
+			.register(new Gateway(this, 'users', { ...users, schema: userSchema }))
+			.register(new Gateway(this, 'clientStorage', { ...clientStorage, schema: clientSchema }));
 
 		this.settings = null;
 		this.application = null;
@@ -655,7 +654,7 @@ export class KlasaClient extends Client {
 		.add('disabledCommands', 'command', {
 			array: true,
 			// Regarding this, it'll change a lot with SGN
-			filter: (_client: KlasaClient, command: Command, _piece: SchemaPiece, language: Language) => {
+			filter: (_client, command: Command, { language }) => {
 				if (command.guarded) throw language.get('COMMAND_CONF_GUARDED', command.name);
 			}
 		});
@@ -672,7 +671,7 @@ export class KlasaClient extends Client {
 	 */
 	public static defaultClientSchema = new Schema()
 		.add('userBlacklist', 'user', { array: true })
-		.add('guildBlacklist', 'string', { array: true, filter: (_client: KlasaClient, value: string) => !MENTION_REGEX.snowflake.test(value) })
+		.add('guildBlacklist', 'string', { array: true, filter: (_client, value: string) => !MENTION_REGEX.snowflake.test(value) })
 		.add('schedules', 'any', { array: true });
 
 }

@@ -15,6 +15,10 @@ export abstract class Task extends Piece {
 	 */
 
 
-	public abstract async run(data: any[]): Promise<void>;
+	public abstract async run(data: TaskData): Promise<void>;
 
+}
+
+export interface TaskData extends Record<PropertyKey, unknown> {
+	id: string;
 }
