@@ -135,7 +135,7 @@ export class ScheduledTask {
 			const [_time, _cron] = (this.constructor as typeof ScheduledTask)._resolveTime(time);
 			this.time = _time;
 			this.store.tasks.splice(this.store.tasks.indexOf(this), 1);
-			this.store._insert(this);
+			this.store['_insert'](this);
 			this.recurring = _cron;
 		}
 		if (data) this.data = data;
@@ -143,8 +143,8 @@ export class ScheduledTask {
 
 		// Sync the database if some of the properties changed or the time changed manually
 		// (recurring tasks bump the time automatically)
-		const _index = this.store._tasks.findIndex(entry => entry.id === this.id);
-		if (_index !== -1) await this.client.settings.update('schedules', this.toJSON(), { arrayPosition: _index });
+		const _index = this.store['_tasks'].findIndex(entry => entry.id === this.id);
+		if (_index !== -1) await this.client.settings!.update('schedules', this.toJSON(), { arrayPosition: _index });
 
 		return this;
 	}
@@ -199,7 +199,7 @@ export class ScheduledTask {
 	 */
 	private static _generateID(client: KlasaClient): string {
 		// todo: check if ws has a shards array exposed
-		return `${Date.now().toString(36)}${client.options.ws.shards[0].toString(36)}`;
+		return `${Date.now().toString(36)}${client.ws.shards.firstValue!.id.toString(36)}`;
 	}
 
 	/**

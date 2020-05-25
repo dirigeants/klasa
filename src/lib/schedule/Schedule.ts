@@ -1,14 +1,7 @@
 import { TimerManager } from '@klasa/timer-manager';
-import { ScheduledTask } from './ScheduledTask';
+import { ScheduledTask, ScheduledTaskOptions, ScheduledTaskJSON } from './ScheduledTask';
 
 import type { KlasaClient } from '../Client';
-
-export interface ScheduledTaskOptions {
-	name?: string;
-	id?: string;
-	repeat?: string;
-	data?: Record<string, unknown>;
-}
 
 /**
  * <warning>Schedule is a singleton, use {@link KlasaClient#schedule} instead.</warning>
@@ -42,8 +35,9 @@ export class Schedule {
 	 * Get all the tasks from the cache
 	 * @since 0.5.0
 	 */
-	private get _tasks(): ScheduledTaskOptions[] {
-		return this.client.settings.get('schedules');
+	protected get _tasks(): ScheduledTaskJSON[] {
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+		return this.client.settings!.get('schedules') as ScheduledTaskJSON[] ?? [];
 	}
 
 	/**
@@ -130,10 +124,11 @@ export class Schedule {
 	 * // a table in your database and query it by its entry id from the Task instance.
 	 * @see https://en.wikipedia.org/wiki/Cron For more details
 	 */
-	public async create(taskName: string, time: Date | number | string, options?: ScheduledTaskOptions): Promise<ScheduledTask> {
+	public async create(taskName: string, time: Date | number | string, options?: ScheduledTaskOptions): Promise<ScheduledTask | null> {
 		const task = await this._add(taskName, time, options);
 		if (!task) return null;
-		await this.client.settings.update('schedules', task, { action: 'add' });
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+		await this.client.settings!.update('schedules', task, { action: 'add' });
 		return task;
 	}
 
@@ -149,7 +144,8 @@ export class Schedule {
 		this.tasks.splice(taskIndex, 1);
 		// Get the task and use it to remove
 		const task = this._tasks.find(entry => entry.id === id);
-		if (task) await this.client.settings.update('schedules', task, { action: 'remove' });
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+		if (task) await this.client.settings!.update('schedules', task, { action: 'remove' });
 
 		return this;
 	}
@@ -160,7 +156,8 @@ export class Schedule {
 	 */
 	public async clear(): Promise<void> {
 		// this._tasks is unedited as Settings#clear will clear the array
-		await this.client.settings.reset('schedules');
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+		await this.client.settings!.reset('schedules');
 		this.tasks = [];
 	}
 
@@ -176,8 +173,8 @@ export class Schedule {
 	private async _add(taskName: string, time: Date | number | string, options?: ScheduledTaskOptions): Promise<ScheduledTask | null> {
 		const task = new ScheduledTask(this.client, taskName, time, options);
 
-		// If the task were due of time before the bot's intialization, delete if not recurring, else update for next period
-		if (!task.catchUp && task.time < Date.now()) {
+		// If the task were due of time before the bot's initialization, delete if not recurring, else update for next period
+		if (!task.catchUp && task.time.valueOf() < Date.now()) {
 			if (!task.recurring) {
 				await task.delete();
 				return null;
@@ -194,7 +191,7 @@ export class Schedule {
 	 * @since 0.5.0
 	 * @param task The ScheduledTask instance to insert
 	 */
-	private _insert(task: ScheduledTask): ScheduledTask {
+	protected _insert(task: ScheduledTask): ScheduledTask {
 		const index = this.tasks.findIndex(entry => entry.time > task.time);
 		if (index === -1) this.tasks.push(task);
 		else this.tasks.splice(index, 0, task);
