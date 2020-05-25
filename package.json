@@ -75,5 +75,8 @@
         "test/": "dist/test/"
       }
     }
-  }
+  },
+  "files": [
+    "dist/src"
+  ]
 }
