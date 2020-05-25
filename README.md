@@ -1,2 +1,1 @@
-# klasa
-A class remix on the Komada Bot Framework
+klasa build branch. Only automated commits here.
