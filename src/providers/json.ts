@@ -1,6 +1,7 @@
 import { mergeDefault, chunk, mergeObjects } from '@klasa/utils';
 import { Provider, ProviderStore } from 'klasa';
 import { resolve } from 'path';
+import { promises as fsp } from 'fs';
 import * as fsn from 'fs-nextra';
 
 export default class CoreProvider extends Provider {
@@ -38,7 +39,7 @@ export default class CoreProvider extends Provider {
 	 * @param table The name for the new directory
 	 */
 	public createTable(table: string): Promise<void> {
-		return fsn.mkdir(resolve(this.baseDirectory, table));
+		return fsp.mkdir(resolve(this.baseDirectory, table));
 	}
 
 	/**
@@ -78,7 +79,7 @@ export default class CoreProvider extends Provider {
 	 */
 	public async getKeys(table: string): Promise<string[]> {
 		const dir = resolve(this.baseDirectory, table);
-		const filenames = await fsn.readdir(dir);
+		const filenames = await fsp.readdir(dir);
 		const files = [];
 		for (const filename of filenames) {
 			if (filename.endsWith('.json')) files.push(filename.slice(0, filename.length - 5));
@@ -154,7 +155,7 @@ export default class CoreProvider extends Provider {
 	 * @param id The document name
 	 */
 	public async delete(table: string, id: string): Promise<void> {
-		await fsn.unlink(resolve(this.baseDirectory, table, `${id}.json`));
+		await fsp.unlink(resolve(this.baseDirectory, table, `${id}.json`));
 	}
 
 }
