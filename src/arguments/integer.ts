@@ -1,4 +1,4 @@
-import { Argument, ArgumentStore, Possible, KlasaMessage } from 'klasa';
+import { Argument, ArgumentStore, Possible, KlasaMessage, KlasaClient } from 'klasa';
 
 export default class CoreArgument extends Argument {
 
@@ -10,7 +10,7 @@ export default class CoreArgument extends Argument {
 		const { min, max } = possible;
 		const number = parseInt(argument);
 		if (!Number.isInteger(number)) throw message.language.get('RESOLVER_INVALID_INT', possible.name);
-		return Argument.minOrMax(this.client, number, min, max, possible, message) ? number : null;
+		return Argument.minOrMax(this.client as KlasaClient, number, min, max, possible, message) ? number : null;
 	}
 
 }
