@@ -2,18 +2,24 @@ import { PieceConstructor, Store } from '@klasa/core';
 import { Provider } from './Provider';
 import type { KlasaClient } from '../Client';
 
+/**
+ * Stores all {@link Provider} pieces for use in Klasa.
+ * @since 0.1.0
+ */
 export class ProviderStore extends Store<Provider> {
 
 	/**
 	 * Constructs our ProviderStore for use in Klasa.
-	 * @param client The client that instantiates this store
+	 * @since 0.1.0
+	 * @param client The Klasa client
 	 */
 	public constructor(client: KlasaClient) {
-		super(client, 'monitors', Provider as PieceConstructor<Provider>);
+		super(client, 'providers', Provider as PieceConstructor<Provider>);
 	}
 
 	/**
-	 * The default provider set in ClientOptions.providers
+	 * The default provider set in ClientOptions.providers.
+	 * @since 0.1.0
 	 */
 	public get default(): Provider | null {
 		return this.get(this.client.options.providers.default as string) || null;
@@ -21,6 +27,7 @@ export class ProviderStore extends Store<Provider> {
 
 	/**
 	 * Clears the providers from the store and waits for them to shutdown.
+	 * @since 0.1.0
 	 */
 	public clear(): void {
 		for (const provider of this.values()) this.remove(provider);
@@ -28,6 +35,7 @@ export class ProviderStore extends Store<Provider> {
 
 	/**
 	 * Deletes a provider from the store.
+	 * @since 0.6.0
 	 * @param name The Provider instance or its name
 	 */
 	public remove(name: string | Provider): boolean {

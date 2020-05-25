@@ -1,4 +1,5 @@
-import { Inhibitor, KlasaMessage, Command, InhibitorStore } from 'klasa';
+import { Inhibitor, KlasaMessage, Command, InhibitorStore, Finalizer } from 'klasa';
+import type { RateLimit } from '@klasa/ratelimits';
 
 export default class extends Inhibitor {
 
@@ -12,7 +13,7 @@ export default class extends Inhibitor {
 		let existing;
 
 		try {
-			existing = this.client.finalizers.get('commandCooldown')?.getCooldown(message, command);
+			existing = (this.client.finalizers.get('commandCooldown') as CommandCooldown).getCooldown(message, command);
 		} catch (err) {
 			return;
 		}
@@ -20,4 +21,8 @@ export default class extends Inhibitor {
 		if (existing && existing.limited) throw message.language.get('INHIBITOR_COOLDOWN', Math.ceil(existing.remainingTime / 1000), command.cooldownLevel !== 'author');
 	}
 
+}
+
+interface CommandCooldown extends Finalizer {
+	getCooldown(message: KlasaMessage, command: Command): RateLimit;
 }

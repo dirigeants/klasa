@@ -1,18 +1,23 @@
-import { Finalizer } from './Finalizer';
 import { Store, PieceConstructor } from '@klasa/core';
+import { Finalizer } from './Finalizer';
 
+import type { Stopwatch } from '@klasa/stopwatch';
 import type { KlasaClient } from '../Client';
-import { KlasaMessage } from '../extensions/KlasaMessage';
-import { Command } from './Command';
-import { Stopwatch } from '../util/Stopwatch';
+import type { KlasaMessage } from '../extensions/KlasaMessage';
+import type { Command } from './Command';
 
 /**
- * Stores all finalizers for use in Klasa.
- * @extends Store
+ * Stores all {@link Finalizer} pieces for use in Klasa.
+ * @since 0.0.1
  */
 export class FinalizerStore extends Store<Finalizer> {
 
-	constructor(client: KlasaClient) {
+	/**
+	 * Constructs our FinalizerStore for use in Klasa.
+	 * @since 0.0.1
+	 * @param client The Klasa client
+	 */
+	public constructor(client: KlasaClient) {
 		super(client, 'finalizers', Finalizer as PieceConstructor<Finalizer>);
 	}
 

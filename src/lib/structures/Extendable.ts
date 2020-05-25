@@ -14,13 +14,13 @@ export class Extendable extends Piece {
 	 * The static property descriptors of this extendable
 	 * @since 0.5.0
 	 */
-	private staticPropertyDescriptors: any;
+	private staticPropertyDescriptors: Record<string, PropertyDescriptor>;
 
 	/**
 	 * The instance property descriptors of this extendable
 	 * @since 0.5.0
 	 */
-	private instancePropertyDescriptors: any;
+	private instancePropertyDescriptors: Record<string, PropertyDescriptor>;
 
 	/**
 	 * The original property descriptors for each of the original classes
@@ -30,12 +30,12 @@ export class Extendable extends Piece {
 
 	/**
 	 * @since 0.0.1
-	 * @param {ExtendableStore} store The extendable store
-	 * @param {string[]} file The path from the pieces folder to the extendable file
-	 * @param {string} directory The base directory to the pieces folder
-	 * @param {ExtendableOptions} [options={}] The options for this extendable
+	 * @param store The extendable store
+	 * @param file The path from the pieces folder to the extendable file
+	 * @param directory The base directory to the pieces folder
+	 * @param options The options for this extendable
 	 */
-	constructor(store: ExtendableStore, directory: string, files: readonly string[], options: ExtendableOptions = {}) {
+	public constructor(store: ExtendableStore, directory: string, files: readonly string[], options: ExtendableOptions = {}) {
 		super(store, directory, files, options);
 
 		const staticPropertyNames = Object.getOwnPropertyNames(this.constructor)
@@ -49,7 +49,7 @@ export class Extendable extends Piece {
 		this.instancePropertyDescriptors = Object.assign({}, ...instancePropertyNames
 			.map(name => ({ [name]: Object.getOwnPropertyDescriptor(this.constructor.prototype, name) })));
 
-		this.originals = new Map(options.appliesTo.map(structure => [structure, {
+		this.originals = new Map(options.appliesTo?.map(structure => [structure, {
 			staticPropertyDescriptors: Object.assign({}, ...staticPropertyNames
 				.map(name => ({ [name]: Object.getOwnPropertyDescriptor(structure, name) || { value: undefined } }))),
 			instancePropertyDescriptors: Object.assign({}, ...instancePropertyNames
@@ -60,9 +60,8 @@ export class Extendable extends Piece {
 	/**
 	 * The discord classes this extendable applies to
 	 * @since 0.0.1
-	 * @readonly
 	 */
-	get appliesTo(): any[] {
+	public get appliesTo(): any[] {
 		return [...this.originals.keys()];
 	}
 
@@ -70,7 +69,7 @@ export class Extendable extends Piece {
 	 * The init method to apply the extend method to the @klasa/core Class
 	 * @since 0.0.1
 	 */
-	async init(): Promise<void> {
+	public async init(): Promise<void> {
 		if (this.enabled) this.enable(true);
 	}
 
@@ -78,7 +77,7 @@ export class Extendable extends Piece {
 	 * Disables this piece
 	 * @since 0.0.1
 	 */
-	disable(): this {
+	public disable(): this {
 		if (this.client.listenerCount('pieceDisabled')) this.client.emit('pieceDisabled', this);
 		this.enabled = false;
 		for (const [structure, originals] of this.originals) {
@@ -106,7 +105,7 @@ export class Extendable extends Piece {
 	/**
 	 * Defines the JSON.stringify behavior of this extendable.
 	 */
-	toJSON(): object {
+	public toJSON(): object {
 		return {
 			...super.toJSON(),
 			appliesTo: this.appliesTo.map(fn => fn.name)
@@ -116,10 +115,10 @@ export class Extendable extends Piece {
 }
 
 export interface ExtendableOptions extends PieceOptions {
-	appliesTo: any[];
+	appliesTo?: readonly Function[];
 }
 
 export interface OriginalPropertyDescriptors {
-	staticPropertyDescriptors: any;
-	instancePropertyDescriptors: any;
+	staticPropertyDescriptors: Record<string, PropertyDescriptor>;
+	instancePropertyDescriptors: Record<string, PropertyDescriptor>;
 }

@@ -1,13 +1,13 @@
-import { Event } from '@klasa/core';
+import { Event, EventStore, Guild } from '@klasa/core';
 
 export default class extends Event {
 
-	constructor(...args) {
-		super(...args, { event: 'guildDelete' });
+	public constructor(store: EventStore, directory: string, file: readonly string[]) {
+		super(store, directory, file, { event: 'guildDelete' });
 	}
 
-	run(guild) {
-		if (this.client.ready && guild.available && !this.client.options.preserveSettings) guild.settings.destroy().catch(() => null);
+	public run(guild: Guild): void {
+		if (this.client.ready && !guild.unavailable && !this.client.options.settings.preserve) guild.settings.destroy().catch(() => null);
 	}
 
 }

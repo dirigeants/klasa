@@ -311,7 +311,4 @@ export class KlasaMessage extends extender.get('Message') {
 
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface KlasaMessage extends Message {}
-
 extender.extend('Message', () => KlasaMessage);

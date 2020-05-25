@@ -1,6 +1,7 @@
-import { extender, User } from '@klasa/core';
+import { extender } from '@klasa/core';
 
 import type { Settings } from '../settings/Settings';
+import type { Gateway } from '../settings/gateway/Gateway';
 
 /**
  * Klasa's Extended User
@@ -14,10 +15,10 @@ export class KlasaUser extends extender.get('User') {
 	 */
 	public settings: Settings;
 
-	public constructor(...args: any[]) {
+	public constructor(...args: readonly unknown[]) {
 		super(...args);
 
-		this.settings = this.client.gateways.users.get(this.id, true);
+		this.settings = (this.client.gateways.get('users') as Gateway).acquire(this);
 	}
 
 	/**
@@ -30,7 +31,4 @@ export class KlasaUser extends extender.get('User') {
 
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface KlasaUser extends User { }
-
-extender.extend('User', (): KlasaUser => KlasaUser);
+extender.extend('User', () => KlasaUser);

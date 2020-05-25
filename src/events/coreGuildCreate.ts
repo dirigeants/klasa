@@ -1,14 +1,16 @@
-import { Event } from '@klasa/core';
+import { Event, EventStore, Guild } from '@klasa/core';
 
 export default class extends Event {
 
-	constructor(...args) {
-		super(...args, { event: 'guildCreate' });
+	public constructor(store: EventStore, directory: string, file: readonly string[]) {
+		super(store, directory, file, { event: 'guildCreate' });
 	}
 
-	run(guild) {
-		if (!guild.available) return;
-		if (this.client.settings.guildBlacklist.includes(guild.id)) {
+	public run(guild: Guild): void {
+		if (guild.unavailable) return;
+
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+		if ((this.client.settings!.get('guildBlacklist') as string[]).includes(guild.id)) {
 			guild.leave();
 			this.client.emit('warn', `Blacklisted guild detected: ${guild.name} [${guild.id}]`);
 		}

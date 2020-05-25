@@ -6,7 +6,7 @@ import { Message, Store, Piece } from '@klasa/core';
 
 export default class extends Command {
 
-	private regExp: RegExp;
+	private readonly regExp = /\\\\?|\//g;
 
 	constructor(store: CommandStore, directory: string, files: readonly string[]) {
 		super(store, directory, files, {
@@ -17,11 +17,10 @@ export default class extends Command {
 			usage: '[core] <Store:store> <path:...string>',
 			usageDelim: ' '
 		});
-		this.regExp = /\\\\?|\//g;
 	}
 
-	async run(message: KlasaMessage, [core, store, path]: [string, Store<Piece>, string]): Promise<Message[]> {
-		path = (path.endsWith('.js') ? path : `${path}.js`).split(this.regExp);
+	async run(message: KlasaMessage, [core, store, rawPath]: [string, Store<Piece>, string]): Promise<Message[]> {
+		const path = (rawPath.endsWith('.js') ? rawPath : `${rawPath}.js`).split(this.regExp);
 		const timer = new Stopwatch();
 		const piece = await (core ? this.tryEach(store, path) : store.load(store.userDirectory, path));
 
@@ -35,8 +34,8 @@ export default class extends Command {
 		}
 	}
 
-	async tryEach(store: Store<Piece>, path: string) {
-		for (const dir of store.coreDirectories) if (await pathExists(join(dir, ...path))) return store.load(dir, path);
+	private async tryEach(store: Store<Piece>, path: readonly string[]) {
+		for (const dir of store['coreDirectories']) if (await pathExists(join(dir, ...path))) return store.load(dir, path);
 		return undefined;
 	}
 

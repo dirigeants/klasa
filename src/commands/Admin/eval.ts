@@ -4,7 +4,7 @@ import { Message } from '@klasa/core';
 import { Stopwatch } from '@klasa/stopwatch';
 import { codeblock } from 'discord-md-tags';
 import { Type } from '@klasa/type';
-import { clean, isThenable } from '@klasa/utils';
+import { isThenable } from '@klasa/utils';
 
 export default class extends Command {
 
@@ -81,7 +81,7 @@ export default class extends Command {
 				showHidden: Boolean(flags.showHidden)
 			});
 		}
-		return { success, type, time: this.formatTime(syncTime, asyncTime), result: clean(result) };
+		return { success, type, time: this.formatTime(syncTime, asyncTime), result };
 	}
 
 	public formatTime(syncTime: string, asyncTime: string | undefined): string {

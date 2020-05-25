@@ -574,13 +574,15 @@ export class KlasaClient extends Client {
 	}
 
 	/**
-	 * Obtains the OAuth Application of the bot from Discord.
-	 * When ran, this function will update {@link KlasaClient#application}.
-	 * @since 0.0.1
+	 * Connects websocket to the api.
 	 */
-	public async fetchApplication(): Promise<Application> {
+	public async connect(): Promise<void> {
 		this.application = await Application.fetch(this);
-		return this.application;
+		if (!this.options.owners.length) {
+			if (this.application.team) this.options.owners.push(...this.application.team.members.keys());
+			else this.options.owners.push(this.application.owner.id);
+		}
+		return super.connect();
 	}
 
 	/**

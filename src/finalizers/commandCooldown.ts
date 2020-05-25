@@ -15,7 +15,7 @@ export default class extends Finalizer {
 		}
 	}
 
-	private getCooldown(message: KlasaMessage, command: Command): RateLimit {
+	public getCooldown(message: KlasaMessage, command: Command): RateLimit {
 		let cooldownManager = this.cooldowns.get(command);
 		if (!cooldownManager) {
 			cooldownManager = new RateLimitManager(command.bucket, command.cooldown * 1000);

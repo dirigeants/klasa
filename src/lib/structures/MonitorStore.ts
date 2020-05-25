@@ -5,11 +5,16 @@ import type { KlasaClient } from '../Client';
 import type { KlasaMessage } from '../extensions/KlasaMessage';
 
 /**
- * Stores all monitors for use in Klasa
- * @extends Store
+ * Stores all {@link Monitor} pieces for use in Klasa.
+ * @since 0.0.1
  */
 export class MonitorStore extends Store<Monitor> {
 
+	/**
+	 * Constructs our MonitorStore for use in Klasa.
+	 * @since 0.0.1
+	 * @param client The Klasa client
+	 */
 	public constructor(client: KlasaClient) {
 		super(client, 'monitors', Monitor as PieceConstructor<Monitor>);
 	}

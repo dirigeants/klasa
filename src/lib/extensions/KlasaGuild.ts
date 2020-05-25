@@ -1,7 +1,8 @@
-import { extender, Guild } from '@klasa/core';
+import { extender } from '@klasa/core';
 
 import type { Settings } from '../settings/Settings';
 import type { Language } from '../structures/Language';
+import type { Gateway } from '../settings/gateway/Gateway';
 
 /**
  * Klasa's Extended Guild
@@ -18,14 +19,14 @@ export class KlasaGuild extends extender.get('Guild') {
 	public constructor(...args: any[]) {
 		super(...args);
 
-		this.settings = this.client.gateways.guilds.get(this.id, true);
+		this.settings = (this.client.gateways.get('guilds') as Gateway).acquire(this);
 	}
 
 	/**
 	 * The language configured for this guild
 	 */
-	get language(): Language {
-		return this.client.languages.get(this.settings.get('language') as unknown as string) as Language;
+	public get language(): Language {
+		return this.client.languages.get(this.settings.get('language') as string) as Language;
 	}
 
 	/**
@@ -37,8 +38,5 @@ export class KlasaGuild extends extender.get('Guild') {
 	}
 
 }
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface KlasaGuild extends Guild { }
 
 extender.extend('Guild', () => KlasaGuild);

@@ -6,11 +6,16 @@ import type { Command } from './Command';
 import type { KlasaMessage } from '../extensions/KlasaMessage';
 
 /**
- * Stores all the inhibitors in Klasa
+ * Stores all {@link Inhibitor} pieces for use in Klasa
  */
 export class InhibitorStore extends Store<Inhibitor> {
 
-	constructor(client: KlasaClient) {
+	/**
+	 * Constructs our InhibitorStore for use in Klasa.
+	 * @since 0.0.1
+	 * @param client The Klasa client
+	 */
+	public constructor(client: KlasaClient) {
 		super(client, 'inhibitors', Inhibitor as PieceConstructor<Inhibitor>);
 	}
 
@@ -28,7 +33,6 @@ export class InhibitorStore extends Store<Inhibitor> {
 		const results = (await Promise.all(mps)).filter(res => res);
 		if (results.includes(true)) throw undefined;
 		if (results.length) throw results;
-		return undefined;
 	}
 
 }

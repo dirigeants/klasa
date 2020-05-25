@@ -1,15 +1,16 @@
-import { Event } from '@klasa/core';
+import { Event, EventStore } from '@klasa/core';
+import type { KlasaMessage } from 'klasa';
 
 export default class extends Event {
 
-	constructor(...args) {
-		super(...args, { event: 'messageDelete' });
+	public constructor(store: EventStore, directory: string, file: readonly string[]) {
+		super(store, directory, file, { event: 'messageDelete' });
 	}
 
-	run(message) {
+	public run(message: KlasaMessage): void {
 		if (message.command && message.command.deletable) {
 			for (const msg of message.responses) {
-				msg.delete();
+				if (!msg.deleted) msg.delete();
 			}
 		}
 	}

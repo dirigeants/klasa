@@ -1,6 +1,7 @@
 import { Argument } from './Argument';
 import { Possible } from '../usage/Possible';
 import { KlasaMessage } from '../extensions/KlasaMessage';
+import { CommandPrompt } from '../usage/CommandPrompt';
 
 /**
  * Base abstracted class for multi-resolving values.
@@ -25,7 +26,8 @@ export class MultiArgument extends Argument {
 	public async run(argument: string, possible: Possible, message: KlasaMessage): Promise<any[]> {
 		const structures = [];
 		const { min, max } = possible;
-		const { args, usage: { usageDelim } } = message.prompter;
+		// eslint-disable-next-line dot-notation
+		const { args, usage: { usageDelim } } = message['prompter'] as CommandPrompt;
 		const index = args.indexOf(argument);
 		const rest = args.splice(index, args.length - index);
 		const { base } = this;
@@ -34,7 +36,7 @@ export class MultiArgument extends Argument {
 		for (const arg of rest) {
 			if (max && i >= max) break;
 			try {
-				const structure = await base.run(arg, possible, message);
+				const structure = await base.run(arg as string, possible, message);
 				structures.push(structure);
 				i++;
 			} catch (err) {

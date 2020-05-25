@@ -4,17 +4,17 @@ import { Store, PieceConstructor } from '@klasa/core';
 import type { KlasaClient } from '../Client';
 
 /**
- * Stores all task pieces for use in Klasa
- * @extends Store
+ * Stores all {@link Task} pieces for use in Klasa.
+ * @since 0.5.0
  */
 export class TaskStore extends Store<Task> {
 
 	/**
-	 * Constructs our TaskStore for use in Klasa
+	 * Constructs our TaskStore for use in Klasa.
 	 * @since 0.5.0
-	 * @param {KlasaClient} client The Klasa client
+	 * @param client The Klasa client
 	 */
-	constructor(client: KlasaClient) {
+	public constructor(client: KlasaClient) {
 		super(client, 'tasks', Task as PieceConstructor<Task>);
 	}
 

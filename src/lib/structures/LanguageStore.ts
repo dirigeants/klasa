@@ -4,12 +4,17 @@ import { Store, PieceConstructor } from '@klasa/core';
 import type { KlasaClient } from '../Client';
 
 /**
- * Stores all languages for use in Klasa
- * @extends Store
+ * Stores all {@link Language} pieces for use in Klasa.
+ * @since 0.0.1
  */
 export class LanguageStore extends Store<Language> {
 
-	constructor(client: KlasaClient) {
+	/**
+	 * Constructs our LanguageStore for use in Klasa.
+	 * @since 0.0.1
+	 * @param client The Klasa client
+	 */
+	public constructor(client: KlasaClient) {
 		super(client, 'languages', Language as PieceConstructor<Language>);
 	}
 

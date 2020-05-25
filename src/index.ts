@@ -58,6 +58,3 @@ export * from './lib/usage/TextPrompt';
 // lib/util
 export * from './lib/util/constants';
 export * from './lib/util/QueryBuilder';
-export * from './lib/util/ReactionHandler';
-export * from './lib/util/RichDisplay';
-export * from './lib/util/RichMenu';

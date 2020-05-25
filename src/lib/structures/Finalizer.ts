@@ -1,7 +1,7 @@
 import { Piece } from '@klasa/core';
+import { Stopwatch } from '@klasa/stopwatch';
 import { KlasaMessage } from '../extensions/KlasaMessage';
 import { Command } from './Command';
-import { Stopwatch } from '../util/Stopwatch';
 
 /**
  * Base class for all Klasa Finalizers. See {@tutorial CreatingFinalizers} for more information how to use this class

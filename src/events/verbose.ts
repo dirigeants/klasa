@@ -2,11 +2,11 @@ import { Event } from '@klasa/core';
 
 export default class extends Event {
 
-	run(log) {
+	public run(log: string): void {
 		this.client.console.verbose(log);
 	}
 
-	init() {
+	public init(): void {
 		if (!this.client.options.consoleEvents.verbose) this.disable();
 	}
 

@@ -1,51 +1,37 @@
-import { Event, util } from 'klasa';
-import { Team } from '@klasa/core';
-let retries = 0;
+import { Event, EventStore, ClientUser } from '@klasa/core';
+import { isFunction } from '@klasa/utils';
+import type { Gateway } from 'klasa';
 
 export default class extends Event {
 
-	constructor(...args) {
-		super(...args, {
+	public constructor(store: EventStore, directory: string, file: readonly string[]) {
+		super(store, directory, file, {
 			once: true,
 			event: 'ready'
 		});
 	}
 
-	async run() {
-		try {
-			await this.client.fetchApplication();
-		} catch (err) {
-			if (++retries === 3) return process.exit();
-			this.client.emit('warning', `Unable to fetchApplication at this time, waiting 5 seconds and retrying. Retries left: ${retries - 3}`);
-			await util.sleep(5000);
-			return this.run();
-		}
+	public async run(): Promise<void> {
+		const clientUser = this.client.user as ClientUser;
+		this.client.mentionPrefix = new RegExp(`^<@!?${clientUser.id}>`);
 
-		if (!this.client.options.owners.length) {
-			if (this.client.application.owner instanceof Team) this.client.options.owners.push(...this.client.application.owner.members.keys());
-			else this.client.options.owners.push(this.client.application.owner.id);
-		}
-
-		this.client.mentionPrefix = new RegExp(`^<@!?${this.client.user.id}>`);
-
-		this.client.settings = this.client.gateways.clientStorage.get(this.client.user.id, true);
-		// Added for consistency with other datastores, Client#clients does not exist
-		this.client.gateways.clientStorage.set(this.client.user.id, this.client);
-		await this.client.gateways.sync();
+		const clientStorage = this.client.gateways.get('clientStorage') as Gateway;
+		this.client.settings = clientStorage.acquire(clientUser);
+		this.client.settings.sync();
 
 		// Init all the pieces
 		await Promise.all(this.client.pieceStores.filter(store => !['providers', 'extendables'].includes(store.name)).map(store => store.init()));
-		util.initClean(this.client);
 		this.client.ready = true;
 
 		// Init the schedule
 		await this.client.schedule.init();
 
 		if (this.client.options.readyMessage !== null) {
-			this.client.emit('log', util.isFunction(this.client.options.readyMessage) ? this.client.options.readyMessage(this.client) : this.client.options.readyMessage);
+			this.client.emit('log', isFunction(this.client.options.readyMessage) ? this.client.options.readyMessage(this.client) : this.client.options.readyMessage);
 		}
 
-		return this.client.emit('klasaReady');
+		this.client.emit('klasaReady');
+		return undefined;
 	}
 
 }

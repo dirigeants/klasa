@@ -1,5 +1,4 @@
-import { Argument, ArgumentStore, Possible, KlasaMessage, CustomUsageArgument } from 'klasa';
-import { CommandPrompt } from 'src/lib/usage/CommandPrompt';
+import { Argument, ArgumentStore, Possible, KlasaMessage, CustomUsageArgument, CommandPrompt } from 'klasa';
 
 export default class CoreArgument extends Argument {
 

@@ -178,7 +178,7 @@ export abstract class Command extends AliasPiece {
 		this.requiredSettings = options.requiredSettings;
 		this.runIn = options.runIn;
 		this.subcommands = options.subcommands;
-		this.usage = new CommandUsage(this.client, options.usage, options.usageDelim, this);
+		this.usage = new CommandUsage(this.client as KlasaClient, options.usage, options.usageDelim, this);
 		this.cooldownLevel = options.cooldownLevel;
 		if (!['author', 'channel', 'guild'].includes(this.cooldownLevel)) throw new Error('Invalid cooldownLevel');
 		this.bucket = options.bucket;
