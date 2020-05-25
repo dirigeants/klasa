@@ -1,11 +1,10 @@
-import { Argument } from 'klasa';
+import { Argument, KlasaMessage, Possible, CustomUsageArgument } from 'klasa';
 
 export default class CoreArgument extends Argument {
 
-	async run(arg, possible, message, custom) {
+	public async run(argument: string, possible: Possible, message: KlasaMessage, custom: CustomUsageArgument): Promise<unknown> {
 		try {
-			const resolved = await custom(arg, possible, message, message.params);
-			return resolved;
+			return await custom(argument, possible, message, message.params);
 		} catch (err) {
 			if (err) throw err;
 			throw message.language.get('RESOLVER_INVALID_CUSTOM', possible.name, possible.type);

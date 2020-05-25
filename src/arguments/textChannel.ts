@@ -1,10 +1,13 @@
-import { Argument } from 'klasa';
+import { Argument, Possible, KlasaMessage } from 'klasa';
+import { TextChannel } from '@klasa/core';
+import { ChannelType } from '@klasa/dapi-types';
 
 export default class CoreArgument extends Argument {
 
-	async run(arg, possible, message) {
-		const channel = this.constructor.regex.channel.test(arg) ? await this.client.channels.fetch(this.constructor.regex.channel.exec(arg)[1]).catch(() => null) : null;
-		if (channel && channel.type === 'text') return channel;
+	public async run(argument: string, possible: Possible, message: KlasaMessage): Promise<TextChannel> {
+		const channelID = Argument.regex.channel.exec(argument);
+		const channel = channelID ? await this.client.channels.fetch(channelID[1]).catch(() => null) : null;
+		if (channel && channel.type === ChannelType.GuildText) return channel as TextChannel;
 		throw message.language.get('RESOLVER_INVALID_CHANNEL', possible.name);
 	}
 

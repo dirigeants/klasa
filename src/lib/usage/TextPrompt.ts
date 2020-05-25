@@ -99,7 +99,7 @@ export class TextPrompt {
 	 * The string arguments derived from the usageDelim of the command
 	 * @since 0.0.1
 	 */
-	public args: (string | null)[] = [];
+	public args: (string | undefined | null)[] = [];
 
 	/**
 	 * The parameters resolved by this class

@@ -63,9 +63,9 @@ export abstract class Monitor extends Piece {
 	 * @param store The Monitor Store
 	 * @param directory The base directory to the pieces folder
 	 * @param files The path from the pieces folder to the monitor file
-	 * @param [options={}] Optional Monitor settings
+	 * @param options Optional Monitor settings
 	 */
-	constructor(store: MonitorStore, directory: string, files: readonly string[], options: MonitorOptions = {}) {
+	public constructor(store: MonitorStore, directory: string, files: readonly string[], options: MonitorOptions = {}) {
 		super(store, directory, files, options);
 		this.allowedTypes = options.allowedTypes as MessageType[];
 		this.ignoreBots = options.ignoreBots as boolean;
@@ -78,24 +78,11 @@ export abstract class Monitor extends Piece {
 	}
 
 	/**
-	 * Run a monitor and catch any uncaught promises
-	 * @since 0.5.0
-	 * @param message The message object from @klasa/core
-	 */
-	private async _run(message: KlasaMessage): Promise<void> {
-		try {
-			await this.run(message);
-		} catch (err) {
-			this.client.emit('monitorError', message, this, err);
-		}
-	}
-
-	/**
 	 * The run method to be overwritten in actual monitor pieces
 	 * @since 0.0.1
 	 * @param message The discord message
 	 */
-	public abstract async run(message: KlasaMessage): Promise<void>;
+	public abstract async run(message: KlasaMessage): Promise<unknown>;
 
 	/**
 	 * If the monitor should run based on the filter options
@@ -118,7 +105,7 @@ export abstract class Monitor extends Piece {
 	 * Defines the JSON.stringify behavior of this monitor.
 	 * @returns {Object}
 	 */
-	toJSON(): object {
+	public toJSON(): object {
 		return {
 			...super.toJSON(),
 			ignoreBots: this.ignoreBots,
@@ -129,6 +116,19 @@ export abstract class Monitor extends Piece {
 			ignoreBlacklistedUsers: this.ignoreBlacklistedUsers,
 			ignoreBlacklistedGuilds: this.ignoreBlacklistedGuilds
 		};
+	}
+
+	/**
+	 * Run a monitor and catch any uncaught promises
+	 * @since 0.5.0
+	 * @param message The message object from @klasa/core
+	 */
+	private async _run(message: KlasaMessage): Promise<void> {
+		try {
+			await this.run(message);
+		} catch (err) {
+			this.client.emit('monitorError', message, this, err);
+		}
 	}
 
 }
@@ -143,4 +143,3 @@ export interface MonitorOptions extends PieceOptions {
 	ignoreBlacklistedUsers?: boolean;
 	ignoreBlacklistedGuilds?: boolean;
 }
-

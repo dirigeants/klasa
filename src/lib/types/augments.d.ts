@@ -1,5 +1,5 @@
 import type { Cache } from '@klasa/cache';
-import type { Application, User } from '@klasa/core';
+import type { Application, User, MessageBuilder, SplitOptions, MessageOptions, Permissions } from '@klasa/core';
 import type { ArgumentStore } from '../structures/ArgumentStore';
 import type { Command } from '../structures/Command';
 import type { CommandStore } from '../structures/CommandStore';
@@ -46,7 +46,9 @@ declare module '@klasa/core/dist/src/lib/client/Client' {
 		mentionPrefix: RegExp | null;
 		settings: Settings | null;
 		application: Application | null;
+		readonly invite: string;
 		readonly owners: Set<User>;
+		fetchApplication(): Promise<Application>;
 	}
 
 	export interface ClientOptions {
@@ -93,15 +95,19 @@ declare module '@klasa/core/dist/src/lib/caching/structures/Message' {
 		commandText: string | null;
 		prefix: RegExp | null;
 		prefixLength: number | null;
-		language: Language | null;
+		language: Language;
 		guildSettings: Settings;
-		responses: Message[];
-		readonly args: (string | null)[];
+		readonly responses: Message[];
+		readonly args: (string | undefined | null)[];
 		readonly params: unknown[];
-		readonly flagArgs: Record<string, string>;
+		readonly flagArgs: Record < string, string >;
 		readonly reprompted: boolean;
-		usableCommands(): Promise<Cache<string, Command>>;
-		hasAtLeastPermissionLevel(minimum: number): Promise<boolean>;
+		usableCommands(): Promise < Cache < string, Command >>;
+		hasAtLeastPermissionLevel(min: number): Promise<boolean>;
+		send(data: MessageOptions, options?: SplitOptions): Promise<Message[]>;
+		send(data: (message: MessageBuilder) => MessageBuilder | Promise <MessageBuilder>, options?: SplitOptions): Promise<Message[]>;
+		sendLocale(key: string, options?: SplitOptions): Promise<Message[]>;
+		sendLocale(key: string, localeArgs?: unknown[], options?: SplitOptions): Promise<Message[]>;
 	}
 
 }

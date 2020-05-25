@@ -1,15 +1,15 @@
-import { Argument } from 'klasa';
+import { Argument, ArgumentStore, Possible, KlasaMessage } from 'klasa';
 
 export default class CoreArgument extends Argument {
 
-	constructor(...args) {
-		super(...args, { aliases: ['str'] });
+	public constructor(store: ArgumentStore, directory: string, file: readonly string[]) {
+		super(store, directory, file, { aliases: ['str'] });
 	}
 
-	run(arg, possible, message) {
-		if (!arg) throw message.language.get('RESOLVER_INVALID_STRING', possible.name);
+	public run(argument: string, possible: Possible, message: KlasaMessage): string | null {
+		if (!argument) throw message.language.get('RESOLVER_INVALID_STRING', possible.name);
 		const { min, max } = possible;
-		return this.constructor.minOrMax(this.client, arg.length, min, max, possible, message, 'RESOLVER_STRING_SUFFIX') ? arg : null;
+		return Argument.minOrMax(this.client, argument.length, min, max, possible, message, 'RESOLVER_STRING_SUFFIX') ? argument : null;
 	}
 
 }

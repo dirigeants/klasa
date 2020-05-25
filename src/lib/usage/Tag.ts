@@ -41,7 +41,7 @@ export class Tag {
 	 * @param count The position of the tag in the usage string
 	 * @param required The type of tag
 	 */
-	constructor(members: string, count: number, required: TagRequirement) {
+	public constructor(members: string, count: number, required: TagRequirement) {
 		this.required = required;
 		this.repeat = false;
 		this.possibles = (this.constructor as typeof Tag).parseMembers(members, count);

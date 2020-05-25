@@ -1,22 +1,24 @@
-import { Argument } from 'klasa';
+import { Argument, ArgumentStore, Possible, KlasaMessage, CustomUsageArgument } from 'klasa';
+import { CommandPrompt } from 'src/lib/usage/CommandPrompt';
 
 export default class CoreArgument extends Argument {
 
-	constructor(...args) {
-		super(...args, { name: '...string', aliases: ['...str'] });
+	public constructor(store: ArgumentStore, directory: string, file: readonly string[]) {
+		super(store, directory, file, { name: '...string', aliases: ['...str'] });
 	}
 
-	get stringArg() {
-		return this.store.get('string');
+	public get base(): Argument {
+		return this.store.get('string') as Argument;
 	}
 
-	run(arg, possible, message) {
-		if (!arg) throw message.language.get('RESOLVER_INVALID_STRING', possible.name);
-		const { args, usage: { usageDelim } } = message.prompter;
-		const index = args.indexOf(arg);
+	public run(argument: string, possible: Possible, message: KlasaMessage, custom: CustomUsageArgument): string {
+		if (!argument) throw message.language.get('RESOLVER_INVALID_STRING', possible.name);
+		// eslint-disable-next-line dot-notation
+		const { args, usage: { usageDelim } } = message['prompter'] as CommandPrompt;
+		const index = args.indexOf(argument);
 		const rest = args.splice(index, args.length - index).join(usageDelim);
 		args.push(rest);
-		return this.stringArg.run(rest, possible, message);
+		return this.base.run(rest, possible, message, custom) as string;
 	}
 
 }

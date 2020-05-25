@@ -1,9 +1,11 @@
-import { Argument } from 'klasa';
+import { Argument, Possible, KlasaMessage } from 'klasa';
+import { GuildMember } from '@klasa/core';
 
 export default class CoreArgument extends Argument {
 
-	async run(arg, possible, message) {
-		const member = this.constructor.regex.userOrMember.test(arg) ? await message.guild.members.fetch(this.constructor.regex.userOrMember.exec(arg)[1]).catch(() => null) : null;
+	public async run(argument: string, possible: Possible, message: KlasaMessage): Promise<GuildMember> {
+		const memberID = Argument.regex.userOrMember.exec(argument);
+		const member = memberID ? await message.guild?.members.fetch(memberID[1]).catch(() => null) : null;
 		if (member) return member;
 		throw message.language.get('RESOLVER_INVALID_MEMBER', possible.name);
 	}

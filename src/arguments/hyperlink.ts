@@ -1,15 +1,15 @@
 import { parse } from 'url';
-import { Argument } from 'klasa';
+import { Argument, ArgumentStore, Possible, KlasaMessage } from 'klasa';
 
 export default class CoreArgument extends Argument {
 
-	constructor(...args) {
-		super(...args, { aliases: ['url'] });
+	public constructor(store: ArgumentStore, directory: string, file: readonly string[]) {
+		super(store, directory, file, { aliases: ['url'] });
 	}
 
-	run(arg, possible, message) {
-		const res = parse(arg);
-		const hyperlink = res.protocol && res.hostname ? arg : null;
+	public run(argument: string, possible: Possible, message: KlasaMessage): string {
+		const res = parse(argument);
+		const hyperlink = res.protocol && res.hostname ? argument : null;
 		if (hyperlink !== null) return hyperlink;
 		throw message.language.get('RESOLVER_INVALID_URL', possible.name);
 	}

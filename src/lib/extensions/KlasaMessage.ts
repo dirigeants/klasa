@@ -6,9 +6,10 @@ import { regExpEsc } from '@klasa/utils';
 import type { Command } from '../structures/Command';
 import { APIMessageData, ChannelType } from '@klasa/dapi-types';
 import { Language } from '../structures/Language';
-import { Settings } from '../settings/Settings';
 import { KlasaGuild } from './KlasaGuild';
 import { CommandPrompt } from '../usage/CommandPrompt';
+import { Gateway } from '../settings/gateway/Gateway';
+import { Settings } from '../settings/settings/Settings';
 
 export interface CachedPrefix {
 	length: number;
@@ -68,8 +69,7 @@ export class KlasaMessage extends extender.get('Message') {
 		this.commandText = this.commandText || null;
 		this.prefix = this.prefix || null;
 		this.prefixLength = this.prefixLength || null;
-		// todo: This should/will eventually be mapped. (this.client.gateways.get('guilds').defaults)
-		this.guildSettings = this.guild ? this.guild.settings : this.client.gateways.guilds.defaults;
+		this.guildSettings = this.guild ? this.guild.settings : (this.client.gateways.get('guilds') as Gateway).schema.defaults as Settings;
 		this.prompter = this.prompter || null;
 		this.#responses = [];
 	}
@@ -86,7 +86,7 @@ export class KlasaMessage extends extender.get('Message') {
 	* The string arguments derived from the usageDelim of the command
 	* @since 0.0.1
 	*/
-	public get args(): (string | null)[] {
+	public get args(): (string | undefined | null)[] {
 		return this.prompter ? this.prompter.args : [];
 	}
 

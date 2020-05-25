@@ -3,6 +3,7 @@ import { TextPrompt, TextPromptOptions } from './TextPrompt';
 import { KlasaClient } from '../Client';
 import { KlasaMessage } from '../extensions/KlasaMessage';
 import { Cache } from '@klasa/cache';
+import { Possible } from './Possible';
 
 const open = ['[', '(', '<'];
 const close = [']', ')', '>'];
@@ -47,7 +48,7 @@ export class Usage {
 	 * Stores one-off custom resolvers for use with the custom type arg
 	 * @since 0.5.0
 	 */
-	public customResolvers = new Cache<string, Function>();
+	public customResolvers = new Cache<string, CustomUsageArgument>();
 
 	/**
 	 * @since 0.0.1
@@ -70,7 +71,7 @@ export class Usage {
 	 * @param resolver The one-off custom resolver
 	 * @chainable
 	 */
-	public createCustomResolver(type: string, resolver: Function): this {
+	public createCustomResolver(type: string, resolver: CustomUsageArgument): this {
 		this.customResolvers.set(type, resolver);
 		return this;
 	}
@@ -207,6 +208,17 @@ export class Usage {
 		if (usage.current) throw `${usage.fromTo}: there can't be a literal outside a tag.`;
 	}
 
+}
+
+export interface CustomUsageArgument {
+	/**
+	 * @since 0.5.0
+	 * @param argument The argument to be parsed.
+	 * @param possible The {@link Possible tag member} this argument belongs to.
+	 * @param message The message that is being parsed.
+	 * @param params The parsed parameters from the previous arguments.
+	 */
+	(argument: string, possible: Possible, message: KlasaMessage, params: unknown[]): unknown | Promise<unknown>;
 }
 
 interface UsageContext {

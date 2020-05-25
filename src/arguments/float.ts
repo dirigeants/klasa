@@ -1,16 +1,16 @@
-import { Argument } from 'klasa';
+import { Argument, ArgumentStore, Possible, KlasaMessage } from 'klasa';
 
 export default class CoreArgument extends Argument {
 
-	constructor(...args) {
-		super(...args, { aliases: ['num', 'number'] });
+	public constructor(store: ArgumentStore, directory: string, file: readonly string[]) {
+		super(store, directory, file, { aliases: ['num', 'number'] });
 	}
 
-	run(arg, possible, message) {
+	public run(argument: string, possible: Possible, message: KlasaMessage): number | null {
 		const { min, max } = possible;
-		const number = parseFloat(arg);
-		if (isNaN(number)) throw message.language.get('RESOLVER_INVALID_FLOAT', possible.name);
-		return this.constructor.minOrMax(this.client, number, min, max, possible, message) ? number : null;
+		const number = parseFloat(argument);
+		if (Number.isNaN(number)) throw message.language.get('RESOLVER_INVALID_FLOAT', possible.name);
+		return Argument.minOrMax(this.client, number, min, max, possible, message) ? number : null;
 	}
 
 }

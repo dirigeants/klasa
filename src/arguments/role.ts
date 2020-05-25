@@ -1,9 +1,11 @@
-import { Argument } from 'klasa';
+import { Argument, Possible, KlasaMessage } from 'klasa';
+import { Role } from '@klasa/core';
 
 export default class CoreArgument extends Argument {
 
-	run(arg, possible, message) {
-		const role = this.constructor.regex.role.test(arg) ? message.guild.roles.get(this.constructor.regex.role.exec(arg)[1]) : null;
+	public run(argument: string, possible: Possible, message: KlasaMessage): Role {
+		const roleID = Argument.regex.role.exec(argument);
+		const role = roleID ? message.guild?.roles.get(roleID[1]) : null;
 		if (role) return role;
 		throw message.language.get('RESOLVER_INVALID_ROLE', possible.name);
 	}

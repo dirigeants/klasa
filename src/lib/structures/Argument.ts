@@ -4,6 +4,7 @@ import { KlasaClient } from '../Client';
 import { Possible } from '../usage/Possible';
 import { KlasaMessage } from '../extensions/KlasaMessage';
 import { Language } from './Language';
+import { CustomUsageArgument } from '../usage/Usage';
 
 /**
  * Base class for all Klasa Arguments. See {@tutorial CreatingArguments} for more information how to use this class
@@ -19,7 +20,7 @@ export abstract class Argument extends AliasPiece {
 	 * @param possible This current usage possible
 	 * @param message The message that triggered the command
 	 */
-	public abstract run(argument: string, possible: Possible, message: KlasaMessage): unknown | Promise<unknown>;
+	public abstract run(argument: string, possible: Possible, message: KlasaMessage, custom: CustomUsageArgument): unknown | Promise<unknown>;
 
 
 	/**
@@ -33,7 +34,7 @@ export abstract class Argument extends AliasPiece {
 	 * @param message The message that triggered the command
 	 * @param suffix An error suffix
 	 */
-	protected static minOrMax(client: KlasaClient, value: number, min: number | null = null, max: number | null = null, possible: Possible, message: KlasaMessage, suffix: string): boolean {
+	protected static minOrMax(client: KlasaClient, value: number, min: number | null = null, max: number | null = null, possible: Possible, message: KlasaMessage, suffix?: string): boolean {
 		const language = (message ? message.language : client.languages.default) as Language;
 		suffix = suffix ? language.get(suffix) as string : '';
 		if (min !== null && max !== null) {
