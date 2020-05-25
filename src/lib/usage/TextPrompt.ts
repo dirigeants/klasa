@@ -1,13 +1,15 @@
+/* eslint-disable no-dupe-class-members */
 import { mergeDefault } from '@klasa/utils';
 import { Cache } from '@klasa/cache';
-
-import type { KlasaUser } from '../extensions/KlasaUser';
-import type { TextBasedChannel, MessageOptions } from '@klasa/core';
 import { Usage } from './Usage';
 import { KlasaMessage } from '../extensions/KlasaMessage';
 import { CommandUsage } from './CommandUsage';
 import { Tag, TagRequirement } from './Tag';
 import { KlasaClient } from '../Client';
+
+import type { KlasaUser } from '../extensions/KlasaUser';
+import type { TextBasedChannel, MessageOptions, MessageBuilder } from '@klasa/core';
+
 const quotes = ['"', "'", '“”', '‘’'];
 
 export interface TextPromptOptions {
@@ -200,13 +202,16 @@ export class TextPrompt {
 		return this.validateArgs();
 	}
 
+	private prompt(data: MessageOptions): Promise<KlasaMessage>
+	private prompt(data: (message: MessageBuilder) => MessageBuilder | Promise<MessageBuilder>): Promise<KlasaMessage>
 	/**
 	 * Prompts the target for a response
 	 * @since 0.5.0
-	 * @param text The text to prompt
+	 * @param data The message to prompt with
 	 */
-	private async prompt(text: MessageOptions): Promise<KlasaMessage> {
-		const [message] = await this.channel.send(text);
+	private async prompt(data: MessageOptions | ((message: MessageBuilder) => MessageBuilder | Promise<MessageBuilder>)): Promise<KlasaMessage> {
+		// @ts-expect-error
+		const [message] = await this.channel.send(data);
 		const responses = await message.channel.awaitMessages({ idle: this.time, limit: 1, filter: msg => msg.author === this.target });
 		message.delete();
 		if (responses.size === 0) throw this.message.language.get('MESSAGE_PROMPT_TIMEOUT');
@@ -221,12 +226,12 @@ export class TextPrompt {
 	public async reprompt(prompt: string): Promise<unknown[]> {
 		this.#prompted++;
 		if (this.typing) this.message.channel.typing.stop();
-		const possibleAbortOptions = this.message.language.get('TEXT_PROMPT_ABORT_OPTIONS') as string[];
-		const edits = this.message.edits.length;
-		const message = await this.prompt(
-			this.message.language.get('MONITOR_COMMAND_HANDLER_REPROMPT', `<@!${this.target.id}>`, prompt, this.time / 1000, possibleAbortOptions)
+		const abortTerm = this.message.language.get('TEXT_PROMPT_ABORT');
+		const oldContent = this.message.content;
+		const message = await this.prompt(mb => mb
+			.setContent(this.message.language.get('MONITOR_COMMAND_HANDLER_REPROMPT', `<@!${this.target.id}>`, prompt, this.time / 1000, abortTerm))
 		);
-		if (this.message.edits.length !== edits || message.prefix || possibleAbortOptions.includes(message.content.toLowerCase())) {
+		if (this.message.content !== oldContent || message.prefix || message.content.toLowerCase() === abortTerm) {
 			throw this.message.language.get('MONITOR_COMMAND_HANDLER_ABORTED');
 		}
 
@@ -247,17 +252,18 @@ export class TextPrompt {
 	private async repeatingPrompt(): Promise<unknown[]> {
 		if (this.typing) this.message.channel.typing.stop();
 		let message;
-		const possibleCancelOptions = this.message.language.get('TEXT_PROMPT_ABORT_OPTIONS') as string[];
+		const abortTerm = this.message.language.get('TEXT_PROMPT_ABORT');
 		try {
-			message = await this.prompt(
-				this.message.language.get('MONITOR_COMMAND_HANDLER_REPEATING_REPROMPT', `<@!${this.message.author.id}>`, this.#currentUsage.possibles[0].name, this.time / 1000, possibleCancelOptions)
+			message = await this.prompt(mb => mb
+				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+				.setContent(this.message.language.get('MONITOR_COMMAND_HANDLER_REPEATING_REPROMPT', `<@!${this.message.author.id}>`, this.#currentUsage!.possibles[0].name, this.time / 1000, abortTerm))
 			);
 			this.responses.set(message.id, message);
 		} catch (err) {
 			return this.validateArgs();
 		}
 
-		if (possibleCancelOptions.includes(message.content.toLowerCase())) return this.validateArgs();
+		if (message.content.toLowerCase() === abortTerm) return this.validateArgs();
 
 		if (this.typing) this.message.channel.typing.start();
 		this.args.push(message.content);
@@ -295,36 +301,43 @@ export class TextPrompt {
 	 * @returns The resolved parameters
 	 */
 	private async multiPossibles(index: number): Promise<unknown[]> {
-		const possible = this.#currentUsage.possibles[index];
-		const custom = this.usage.customResolvers[possible.type];
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+		const possible = this.#currentUsage!.possibles[index];
+		const custom = this.usage.customResolvers.get(possible.type);
 		const resolver = this.client.arguments.get(custom ? 'custom' : possible.type);
 
 		if (possible.name in this.flags) this.args.splice(this.params.length, 0, this.flags[possible.name]);
 		if (!resolver) {
 			this.client.emit('warn', `Unknown Argument Type encountered: ${possible.type}`);
-			if (this.#currentUsage.possibles.length === 1) return this.pushParam(undefined);
+			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+			if (this.#currentUsage!.possibles.length === 1) return this.pushParam(undefined);
 			return this.multiPossibles(++index);
 		}
 
 		try {
-			const res = await resolver.run(this.args[this.params.length], possible, this.message, custom);
+			const res = await resolver.run(this.args[this.params.length] as string, possible, this.message, custom);
 			if (typeof res === 'undefined' && this.#required === 1) this.args.splice(this.params.length, 0, undefined);
 			return this.pushParam(res);
 		} catch (err) {
-			if (index < this.#currentUsage.possibles.length - 1) return this.multiPossibles(++index);
+			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+			if (index < this.#currentUsage!.possibles.length - 1) return this.multiPossibles(++index);
 			if (!this.#required) {
-				this.args.splice(...this.#repeat ? [this.params.length, 1] : [this.params.length, 0, undefined]);
+				if (this.#repeat) this.args.splice(this.params.length, 1);
+				else this.args.splice(this.params.length, 0, undefined);
 				return this.#repeat ? this.validateArgs() : this.pushParam(undefined);
 			}
 
-			const { response } = this.#currentUsage;
+			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+			const { response } = this.#currentUsage!;
 			const error = typeof response === 'function' ? response(this.message, possible) : response;
 
 			if (this.#required === 1) return this.handleError(error || err);
-			if (this.#currentUsage.possibles.length === 1) {
+			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+			if (this.#currentUsage!.possibles.length === 1) {
 				return this.handleError(error || (this.args[this.params.length] === undefined ? this.message.language.get('COMMANDMESSAGE_MISSING_REQUIRED', possible.name) : err));
 			}
-			return this.handleError(error || this.message.language.get('COMMANDMESSAGE_NOMATCH', this.#currentUsage.possibles.map(poss => poss.name).join(', ')));
+			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+			return this.handleError(error || this.message.language.get('COMMANDMESSAGE_NOMATCH', this.#currentUsage!.possibles.map(poss => poss.name).join(', ')));
 		}
 	}
 

@@ -1,16 +1,17 @@
-import { Command } from 'klasa';
+import { Command, CommandStore, KlasaMessage } from 'klasa';
+import { Message } from '@klasa/core';
 
 export default class extends Command {
 
-	constructor(...args) {
-		super(...args, {
+	constructor(store: CommandStore, directory: string, files: string[]) {
+		super(store, directory, files, {
 			aliases: ['details', 'what'],
 			guarded: true,
 			description: language => language.get('COMMAND_INFO_DESCRIPTION')
 		});
 	}
 
-	async run(message) {
+	public async run(message: KlasaMessage): Promise<|Message[]> {
 		return message.sendLocale('COMMAND_INFO');
 	}
 

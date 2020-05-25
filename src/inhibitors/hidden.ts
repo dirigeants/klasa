@@ -1,8 +1,8 @@
-import { Inhibitor } from 'klasa';
+import { Inhibitor, KlasaMessage, Command } from 'klasa';
 
 export default class extends Inhibitor {
 
-	run(message, command) {
+	public run(message: KlasaMessage, command: Command): boolean {
 		return command.hidden && message.command !== command && !this.client.owners.has(message.author);
 	}
 

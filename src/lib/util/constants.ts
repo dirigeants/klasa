@@ -2,7 +2,7 @@
 import Package = require('../../../package.json');
 import { DeepRequired, mergeDefault, isObject } from '@klasa/utils';
 import { ClientOptionsDefaults } from '@klasa/core';
-import { MessageType } from '@klasa/dapi-types';
+import { MessageType, ChannelType } from '@klasa/dapi-types';
 import { KlasaClient, KlasaClientOptions } from '../Client';
 import { Language, LanguageValue } from '../structures/Language';
 import { Schema } from '../settings/schema/Schema';
@@ -72,7 +72,7 @@ export const KlasaClientDefaults: DeepRequired<KlasaClientOptions> = mergeDefaul
 				promptTime: 30000,
 				requiredSettings: [],
 				requiredPermissions: 0,
-				runIn: ['text', 'dm'],
+				runIn: [ChannelType.GuildText, ChannelType.DM],
 				subcommands: false,
 				usage: '',
 				usageDelim: '',

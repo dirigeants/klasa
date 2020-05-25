@@ -143,8 +143,8 @@ export class ScheduledTask {
 
 		// Sync the database if some of the properties changed or the time changed manually
 		// (recurring tasks bump the time automatically)
-		const _index = this.store['_tasks'].findIndex(entry => entry.id === this.id);
-		if (_index !== -1) await this.client.settings!.update('schedules', this.toJSON(), { arrayPosition: _index });
+		const arrayIndex = this.store['_tasks'].findIndex(entry => entry.id === this.id);
+		if (arrayIndex !== -1) await this.client.settings!.update('schedules', this.toJSON(), { arrayIndex });
 
 		return this;
 	}

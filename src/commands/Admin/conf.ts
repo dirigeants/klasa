@@ -1,6 +1,7 @@
 import { Argument, Command, CommandStore, GatewayStorage, KlasaMessage, Schema, SchemaEntry, SchemaFolder, SettingsFolder } from 'klasa';
 import { Message, Guild } from '@klasa/core';
 import { toTitleCase, codeBlock } from '@klasa/utils';
+import { ChannelType } from '@klasa/dapi-types';
 
 export default class extends Command {
 
@@ -8,7 +9,7 @@ export default class extends Command {
 
 	public constructor(store: CommandStore, directory: string, files: readonly string[]) {
 		super(store, directory, files, {
-			runIn: ['text'],
+			runIn: [ChannelType.GuildText],
 			permissionLevel: 6,
 			guarded: true,
 			subcommands: true,

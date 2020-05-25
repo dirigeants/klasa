@@ -206,5 +206,5 @@ export interface SchemaEntryEditOptions extends SchemaEntryOptions {
 export type SchemaEntryJson = Required<Omit<SchemaEntryEditOptions, 'filter'>>;
 
 export interface SchemaEntryFilterFunction {
-	(client: Client, value: unknown, context: SerializerUpdateContext): boolean;
+	(client: Client, value: any, context: SerializerUpdateContext): void | boolean;
 }

@@ -23,20 +23,20 @@ export class ProviderStore extends Store<Provider> {
 	 * Clears the providers from the store and waits for them to shutdown.
 	 */
 	public clear(): void {
-		for (const provider of this.values()) this.delete(provider);
+		for (const provider of this.values()) this.remove(provider);
 	}
 
 	/**
 	 * Deletes a provider from the store.
 	 * @param name The Provider instance or its name
 	 */
-	public delete(name: string | Provider): boolean {
+	public remove(name: string | Provider): boolean {
 		const provider = this.resolve(name);
 		if (!provider) return false;
 
 		/* istanbul ignore next: Hard to coverage test the catch */
 		Promise.resolve(provider.shutdown()).catch((error) => this.client.emit('wtf', error));
-		return super.delete(provider);
+		return super.remove(provider);
 	}
 
 }

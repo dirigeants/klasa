@@ -1,9 +1,10 @@
-import { Inhibitor } from 'klasa';
+import { Inhibitor, Command, KlasaMessage } from 'klasa';
+import { ChannelType } from '@klasa/dapi-types';
 
 export default class extends Inhibitor {
 
-	run(message, command) {
-		if (command.nsfw && !message.channel.nsfw) throw message.language.get('INHIBITOR_NSFW');
+	public run(message: KlasaMessage, command: Command): void {
+		if (command.nsfw && message.channel.type !== ChannelType.DM && !message.channel.nsfw) throw message.language.get('INHIBITOR_NSFW');
 	}
 
 }

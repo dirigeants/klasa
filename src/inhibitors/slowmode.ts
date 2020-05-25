@@ -1,16 +1,20 @@
-import { Inhibitor, RateLimitManager } from 'klasa';
+import { Inhibitor, KlasaMessage, InhibitorStore } from 'klasa';
+import { RateLimitManager } from '@klasa/ratelimits';
 
 export default class extends Inhibitor {
 
-	constructor(...args) {
-		super(...args, { spamProtection: true });
-		this.slowmode = new RateLimitManager(1, this.client.options.slowmode);
-		this.aggressive = this.client.options.slowmodeAggressive;
+	private readonly slowmode: RateLimitManager;
+	private readonly aggressive: boolean;
 
-		if (!this.client.options.slowmode) this.disable();
+	constructor(store: InhibitorStore, directory: string, files: readonly string[]) {
+		super(store, directory, files, { spamProtection: true });
+		this.slowmode = new RateLimitManager(1, this.client.options.commands.slowmode);
+		this.aggressive = this.client.options.commands.slowmodeAggressive;
+
+		if (!this.client.options.commands.slowmode) this.disable();
 	}
 
-	run(message) {
+	public run(message: KlasaMessage): void {
 		if (this.client.owners.has(message.author)) return;
 
 		const rateLimit = this.slowmode.acquire(message.author.id);

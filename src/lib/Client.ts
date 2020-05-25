@@ -32,7 +32,7 @@ import type { ExtendableOptions } from './structures/Extendable';
 import type { InhibitorOptions } from './structures/Inhibitor';
 import type { MonitorOptions } from './structures/Monitor';
 import type { SchemaEntry } from './settings/schema/SchemaEntry';
-import type { Settings } from './settings/settings/Settings';
+import type { Settings } from './settings/Settings';
 import { Gateway } from './settings/gateway/Gateway';
 
 export interface KlasaClientOptions extends ClientOptions {
@@ -653,7 +653,6 @@ export class KlasaClient extends Client {
 		.add('disableNaturalPrefix', 'boolean')
 		.add('disabledCommands', 'command', {
 			array: true,
-			// Regarding this, it'll change a lot with SGN
 			filter: (_client, command: Command, { language }) => {
 				if (command.guarded) throw language.get('COMMAND_CONF_GUARDED', command.name);
 			}

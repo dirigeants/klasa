@@ -1,16 +1,17 @@
-import { Command } from 'klasa';
+import { Command, CommandStore, KlasaMessage } from 'klasa';
+import { Message } from '@klasa/core';
 
 export default class extends Command {
 
-	constructor(...args) {
-		super(...args, {
+	constructor(store: CommandStore, directory: string, files: readonly string[]) {
+		super(store, directory, files, {
 			permissionLevel: 10,
 			guarded: true,
 			description: language => language.get('COMMAND_REBOOT_DESCRIPTION')
 		});
 	}
 
-	async run(message) {
+	public async run(message: KlasaMessage): Promise<Message[]> {
 		await message.sendLocale('COMMAND_REBOOT').catch(err => this.client.emit('error', err));
 		await Promise.all(this.client.providers.map(provider => provider.shutdown()));
 		process.exit();

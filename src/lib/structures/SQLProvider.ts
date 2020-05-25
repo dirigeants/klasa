@@ -2,7 +2,7 @@ import { objectToTuples } from '@klasa/utils';
 import { Provider } from './Provider';
 import type { SchemaFolder } from '../settings/schema/SchemaFolder';
 import type { SchemaEntry } from '../settings/schema/SchemaEntry';
-import type { SettingsUpdateResults } from '../settings/settings/SettingsFolder';
+import type { SettingsUpdateResults } from '../settings/SettingsFolder';
 import type { QueryBuilder } from '../util/QueryBuilder';
 
 export abstract class SQLProvider extends Provider {

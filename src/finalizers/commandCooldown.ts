@@ -1,13 +1,11 @@
-import { Finalizer, RateLimitManager } from 'klasa';
+import { Finalizer, KlasaMessage, Command } from 'klasa';
+import { RateLimitManager, RateLimit } from '@klasa/ratelimits';
 
 export default class extends Finalizer {
 
-	constructor(...args) {
-		super(...args);
-		this.cooldowns = new WeakMap();
-	}
+	public cooldowns = new WeakMap();
 
-	run(message, command) {
+	public run(message: KlasaMessage, command: Command): void {
 		if (command.cooldown <= 0 || this.client.owners.has(message.author)) return;
 
 		try {
@@ -17,13 +15,13 @@ export default class extends Finalizer {
 		}
 	}
 
-	getCooldown(message, command) {
+	private getCooldown(message: KlasaMessage, command: Command): RateLimit {
 		let cooldownManager = this.cooldowns.get(command);
 		if (!cooldownManager) {
 			cooldownManager = new RateLimitManager(command.bucket, command.cooldown * 1000);
 			this.cooldowns.set(command, cooldownManager);
 		}
-		return cooldownManager.acquire(message.guild ? message[command.cooldownLevel].id : message.author.id);
+		return cooldownManager.acquire(message.guild ? Reflect.get(message, command.cooldownLevel).id : message.author.id);
 	}
 
 }

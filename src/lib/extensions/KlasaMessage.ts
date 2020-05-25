@@ -9,7 +9,7 @@ import { Language } from '../structures/Language';
 import { KlasaGuild } from './KlasaGuild';
 import { CommandPrompt } from '../usage/CommandPrompt';
 import { Gateway } from '../settings/gateway/Gateway';
-import { Settings } from '../settings/settings/Settings';
+import { Settings } from '../settings/Settings';
 
 export interface CachedPrefix {
 	length: number;

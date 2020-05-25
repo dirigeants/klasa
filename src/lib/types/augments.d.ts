@@ -1,5 +1,5 @@
 import type { Cache } from '@klasa/cache';
-import type { Application, User, MessageBuilder, SplitOptions, MessageOptions, Permissions } from '@klasa/core';
+import type { Application, User, MessageBuilder, SplitOptions, MessageOptions } from '@klasa/core';
 import type { ArgumentStore } from '../structures/ArgumentStore';
 import type { Command } from '../structures/Command';
 import type { CommandStore } from '../structures/CommandStore';
@@ -14,7 +14,7 @@ import type { PermissionLevels } from '../permissions/PermissionLevels';
 import type { ProviderStore } from '../structures/ProviderStore';
 import type { Schedule } from '../schedule/Schedule';
 import type { SerializerStore } from '../structures/SerializerStore';
-import type { Settings } from '../settings/settings/Settings';
+import type { Settings } from '../settings/Settings';
 import type { TaskStore } from '../structures/TaskStore';
 import type {
 	CommandHandlingOptions,

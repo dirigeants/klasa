@@ -1,11 +1,15 @@
-import { Command, Stopwatch } from 'klasa';
+import { Command, CommandStore, KlasaMessage } from 'klasa';
+import { Stopwatch } from '@klasa/stopwatch';
 import { pathExists } from 'fs-nextra';
 import { join } from 'path';
+import { Message, Store, Piece } from '@klasa/core';
 
 export default class extends Command {
 
-	constructor(...args) {
-		super(...args, {
+	private regExp: RegExp;
+
+	constructor(store: CommandStore, directory: string, files: readonly string[]) {
+		super(store, directory, files, {
 			aliases: ['l'],
 			permissionLevel: 10,
 			guarded: true,
@@ -16,7 +20,7 @@ export default class extends Command {
 		this.regExp = /\\\\?|\//g;
 	}
 
-	async run(message, [core, store, path]) {
+	async run(message: KlasaMessage, [core, store, path]: [string, Store<Piece>, string]): Promise<Message[]> {
 		path = (path.endsWith('.js') ? path : `${path}.js`).split(this.regExp);
 		const timer = new Stopwatch();
 		const piece = await (core ? this.tryEach(store, path) : store.load(store.userDirectory, path));
@@ -24,14 +28,6 @@ export default class extends Command {
 		try {
 			if (!piece) throw message.language.get('COMMAND_LOAD_FAIL');
 			await piece.init();
-			if (this.client.shard) {
-				await this.client.shard.broadcastEval(`
-					if (String(this.options.shards) !== '${this.client.options.shards}') {
-						const piece = this.${piece.store}.load('${piece.directory}', ${JSON.stringify(path)});
-						if (piece) piece.init();
-					}
-				`);
-			}
 			return message.sendLocale('COMMAND_LOAD', [timer.stop(), store.name, piece.name]);
 		} catch (error) {
 			timer.stop();
@@ -39,7 +35,7 @@ export default class extends Command {
 		}
 	}
 
-	async tryEach(store, path) {
+	async tryEach(store: Store<Piece>, path: string) {
 		for (const dir of store.coreDirectories) if (await pathExists(join(dir, ...path))) return store.load(dir, path);
 		return undefined;
 	}

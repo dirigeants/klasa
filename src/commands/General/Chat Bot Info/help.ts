@@ -1,10 +1,13 @@
-import { Command } from 'klasa';
+import { Command, CommandStore, KlasaMessage } from 'klasa';
 import { isFunction } from '@klasa/utils';
+import { Message } from '@klasa/core';
+import { codeblock } from 'discord-md-tags';
+import { ChannelType } from '@klasa/dapi-types';
 
 export default class extends Command {
 
-	constructor(...args) {
-		super(...args, {
+	constructor(store: CommandStore, directory: string, files: string[]) {
+		super(store, directory, files, {
 			aliases: ['commands'],
 			guarded: true,
 			description: language => language.get('COMMAND_HELP_DESCRIPTION'),
@@ -13,11 +16,11 @@ export default class extends Command {
 
 		this.createCustomResolver('command', (arg, possible, message) => {
 			if (!arg || arg === '') return undefined;
-			return this.client.arguments.get('command').run(arg, possible, message);
+			return this.client.arguments.get('command')?.run(arg, possible, message);
 		});
 	}
 
-	async run(message, [command]) {
+	async run(message: KlasaMessage, [command]: [Command]): Promise<Message[]> {
 		if (command) {
 			const info = [
 				`= ${command.name} = `,
@@ -26,11 +29,11 @@ export default class extends Command {
 				message.language.get('COMMAND_HELP_EXTENDED'),
 				isFunction(command.extendedHelp) ? command.extendedHelp(message.language) : command.extendedHelp
 			].join('\n');
-			return message.sendMessage(info, { code: 'asciidoc' });
+			return message.send(mb => mb.setContent(codeblock('asciidoc') `${info}`));
 		}
 		const help = await this.buildHelp(message);
 		const categories = Object.keys(help);
-		const helpMessage = [];
+		const helpMessage: string[] = [];
 		for (let cat = 0; cat < categories.length; cat++) {
 			helpMessage.push(`**${categories[cat]} Commands**:`, '```asciidoc');
 			const subCategories = Object.keys(help[categories[cat]]);
@@ -38,15 +41,25 @@ export default class extends Command {
 			helpMessage.push('```', '\u200b');
 		}
 
-		return message.author.send(helpMessage, { split: { char: '\u200b' } })
-			.then(() => { if (message.channel.type !== 'dm') message.sendLocale('COMMAND_HELP_DM'); })
-			.catch(() => { if (message.channel.type !== 'dm') message.sendLocale('COMMAND_HELP_NODM'); });
+		const dm = await message.author.openDM();
+
+		let response: Message[];
+
+		try {
+			response = await dm.send(mb => mb.setContent(helpMessage.join('\n')), { char: '\u200b' });
+		} catch {
+			if (message.channel.type !== ChannelType.DM) await message.sendLocale('COMMAND_HELP_NODM');
+		}
+
+		if (message.channel.type !== ChannelType.DM) await message.sendLocale('COMMAND_HELP_DM');
+
+		return response;
 	}
 
-	async buildHelp(message) {
-		const help = {};
+	private async buildHelp(message: KlasaMessage): Promise<Record<string, Record<string, string[]>>> {
+		const help: Record<string, Record<string, string[]>> = {};
 
-		const { prefix } = message.guildSettings;
+		const prefix = message.guildSettings.get('prefix');
 		const commandNames = [...this.client.commands.keys()];
 		const longest = commandNames.reduce((long, str) => Math.max(long, str.length), 0);
 
@@ -54,8 +67,8 @@ export default class extends Command {
 			this.client.inhibitors.run(message, command, true)
 				.then(() => {
 					if (!Reflect.has(help, command.category)) help[command.category] = {};
-					if (!Reflect.has(help[command.category], command.subCategory)) help[command.category][command.subCategory] = [];
-					const description = isFunction(command.description) ? command.description(message.language) : command.description;
+					if (!Reflect.has(help[command.category], command.subCategory)) Reflect.set(help[command.category], command.subCategory, []);
+					const description = typeof command.description === 'function' ? command.description(message.language) : command.description;
 					help[command.category][command.subCategory].push(`${prefix}${command.name.padEnd(longest)} :: ${description}`);
 				})
 				.catch(() => {

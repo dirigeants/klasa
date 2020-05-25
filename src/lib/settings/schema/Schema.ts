@@ -1,5 +1,5 @@
 import { isFunction } from '@klasa/utils';
-import { SettingsFolder } from '../settings/SettingsFolder';
+import { SettingsFolder } from '../SettingsFolder';
 
 /* eslint-disable no-dupe-class-members */
 

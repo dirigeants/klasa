@@ -128,7 +128,7 @@ export class Schedule {
 		const task = await this._add(taskName, time, options);
 		if (!task) return null;
 		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-		await this.client.settings!.update('schedules', task, { action: 'add' });
+		await this.client.settings!.update('schedules', task, { arrayAction: 'add' });
 		return task;
 	}
 
@@ -145,7 +145,7 @@ export class Schedule {
 		// Get the task and use it to remove
 		const task = this._tasks.find(entry => entry.id === id);
 		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-		if (task) await this.client.settings!.update('schedules', task, { action: 'remove' });
+		if (task) await this.client.settings!.update('schedules', task, { arrayAction: 'remove' });
 
 		return this;
 	}

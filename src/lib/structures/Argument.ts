@@ -20,7 +20,7 @@ export abstract class Argument extends AliasPiece {
 	 * @param possible This current usage possible
 	 * @param message The message that triggered the command
 	 */
-	public abstract run(argument: string, possible: Possible, message: KlasaMessage, custom: CustomUsageArgument): unknown | Promise<unknown>;
+	public abstract run(argument: string, possible: Possible, message: KlasaMessage, custom?: CustomUsageArgument): unknown | Promise<unknown>;
 
 
 	/**

@@ -3,10 +3,11 @@ import { isFunction } from '@klasa/utils';
 import { Usage } from '../usage/Usage';
 import { CommandUsage } from '../usage/CommandUsage';
 import { CommandStore } from './CommandStore';
-import { Language } from './Language';
+import { Language, LanguageValue } from './Language';
 import { KlasaMessage } from '../extensions/KlasaMessage';
 import { Possible } from '../usage/Possible';
-
+import { ChannelType } from '@klasa/dapi-types';
+import { KlasaClient } from '../Client';
 
 /**
  * Base class for all Klasa Commands. See {@tutorial CreatingCommands} for more information how to use this class
@@ -104,7 +105,7 @@ export abstract class Command extends AliasPiece {
 	 * What channels the command should run in
 	 * @since 0.0.1
 	 */
-	public runIn: string[];
+	public runIn: ChannelType[];
 
 	/**
 	 * Whether to enable subcommands or not
@@ -143,7 +144,8 @@ export abstract class Command extends AliasPiece {
 	 * @param file The path from the pieces folder to the command file
 	 * @param options Optional Command settings
 	 */
-	public constructor(store: CommandStore, directory: string, files: readonly string[], options: Partial<CommandOptions> = {}) {
+	public constructor(store: CommandStore, directory: string, files: readonly string[], rawOptions: Partial<CommandOptions> = {}) {
+		const options = { ...store.client.options.pieces.defaults.commands, ...rawOptions };
 		super(store, directory, files, options);
 
 		this.name = this.name.toLowerCase();
@@ -157,15 +159,11 @@ export abstract class Command extends AliasPiece {
 		this.deletable = options.deletable;
 
 		this.description = isFunction(options.description) ?
-			(language = this.client.languages.default): string => options.description(language) :
+			(language = this.client.languages.default): string => (options.description as (language: Language) => string)(language) :
 			options.description;
 
 		this.extendedHelp = isFunction(options.extendedHelp) ?
-			(language = this.client.languages.default): string => options.extendedHelp(language) :
-			options.extendedHelp;
-
-		this.extendedHelp = isFunction(options.extendedHelp) ?
-			(language = this.client.languages.default): string => options.extendedHelp(language) :
+			(language = this.client.languages.default): string => (options.extendedHelp as (language: Language) => string)(language) :
 			options.extendedHelp;
 
 		this.fullCategory = files.slice(0, -1);
@@ -230,7 +228,7 @@ export abstract class Command extends AliasPiece {
 	 * @returns {Usage}
 	 */
 	public definePrompt(usageString: string, usageDelim: string): Usage {
-		return new Usage(this.client, usageString, usageDelim);
+		return new Usage(this.client as KlasaClient, usageString, usageDelim);
 	}
 
 	/**
@@ -319,8 +317,8 @@ export interface CommandOptions extends AliasPieceOptions {
 	cooldown: number;
 	cooldownLevel: string;
 	deletable: boolean;
-	description: string | ((language: Language) => string);
-	extendedHelp: string | ((language: Language) => string);
+	description: ((language: Language) => LanguageValue) | string;
+	extendedHelp: ((language: Language) => LanguageValue) | string;
 	flagSupport: boolean;
 	guarded: boolean;
 	hidden: boolean;
@@ -331,7 +329,7 @@ export interface CommandOptions extends AliasPieceOptions {
 	quotedStringSupport: boolean;
 	requiredPermissions: PermissionsResolvable;
 	requiredSettings: string[];
-	runIn: string[];
+	runIn: ChannelType[];
 	subcommands: boolean;
 	usage: string;
 	usageDelim: string | undefined;

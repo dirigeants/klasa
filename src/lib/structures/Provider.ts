@@ -1,6 +1,6 @@
 import { Piece } from "@klasa/core";
 import { mergeObjects, makeObject } from "@klasa/utils";
-import type { SettingsUpdateResults } from "../settings/settings/SettingsFolder";
+import type { SettingsUpdateResults } from "../settings/SettingsFolder";
 import type { SchemaFolder } from "../settings/schema/SchemaFolder";
 import type { SchemaEntry } from "../settings/schema/SchemaEntry";
 

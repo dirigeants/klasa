@@ -24,7 +24,7 @@ export abstract class Inhibitor extends Piece {
 	 * @param directory The base directory to the pieces folder
 	 * @param options Optional Inhibitor settings
 	 */
-	constructor(store: InhibitorStore, directory: string, files: readonly string[], options: InhibitorOptions = {}) {
+	public constructor(store: InhibitorStore, directory: string, files: readonly string[], options: InhibitorOptions = {}) {
 		super(store, directory, files, options);
 		this.spamProtection = options.spamProtection ?? false;
 	}
@@ -46,11 +46,10 @@ export abstract class Inhibitor extends Piece {
 	/**
 	 * The run method to be overwritten in actual inhibitors
 	 * @since 0.0.1
-	 * @param {KlasaMessage} message The message that triggered this inhibitor
-	 * @param {Command} command The command to run
-	 * @abstract
+	 * @param message The message that triggered this inhibitor
+	 * @param command The command to run
 	 */
-	public abstract async run(message: KlasaMessage, command: Command): Promise<boolean | string | void>;
+	public abstract run(message: KlasaMessage, command: Command): boolean | string | void | Promise<boolean | string | void>;
 
 	/**
 	 * Defines the JSON.stringify behavior of this inhibitor.

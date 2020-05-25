@@ -1,6 +1,6 @@
 import { RequestHandler, IdKeyed } from '@klasa/request-handler';
 import { GatewayStorage, GatewayStorageOptions } from './GatewayStorage';
-import { Settings } from '../settings/Settings';
+import { Settings } from '../Settings';
 import { Cache } from '@klasa/cache';
 import type { KlasaClient } from '../../Client';
 
