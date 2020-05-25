@@ -7,7 +7,7 @@ export default class extends Event {
 	}
 
 	public run(guild: Guild): void {
-		if (this.client.ready && !guild.unavailable && !this.client.options.settings.preserve) guild.settings.destroy().catch(() => null);
+		if (!guild.unavailable && !this.client.options.settings.preserve) guild.settings.destroy().catch(() => null);
 	}
 
 }

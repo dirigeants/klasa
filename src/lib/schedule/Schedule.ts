@@ -64,7 +64,6 @@ export class Schedule {
 	 * @since 0.5.0
 	 */
 	protected async execute(): Promise<void> {
-		if (!this.client.ready) return;
 		if (this.tasks.length) {
 			// Process the active tasks, they're sorted by the time they end
 			const now = Date.now();

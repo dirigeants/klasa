@@ -8,7 +8,7 @@ export default class extends Event {
 	}
 
 	public run(message: KlasaMessage): void {
-		if (this.client.ready) this.client.monitors.run(message);
+		this.client.monitors.run(message);
 	}
 
 }

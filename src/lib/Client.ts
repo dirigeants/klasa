@@ -455,12 +455,6 @@ export class KlasaClient extends Client {
 	public schedule: Schedule;
 
 	/**
-	 * Whether the client is truly ready or not
-	 * @since 0.0.1
-	 */
-	public ready: boolean;
-
-	/**
 	 * The regexp for a prefix mention
 	 * @since 0.5.0
 	 */
@@ -545,7 +539,6 @@ export class KlasaClient extends Client {
 			.registerStore(this.serializers);
 
 		this.schedule = new Schedule(this);
-		this.ready = false;
 		this.mentionPrefix = null;
 	}
 

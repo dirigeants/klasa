@@ -7,8 +7,8 @@ export default class extends Event {
 		super(store, directory, file, { event: 'messageUpdate' });
 	}
 
-	public run(previous: KlasaMessage, message: KlasaMessage): void {
-		if (this.client.ready && previous.content !== message.content) this.client.monitors.run(message);
+	public run(message: KlasaMessage, previous: KlasaMessage): void {
+		if (previous.content !== message.content) this.client.monitors.run(message);
 	}
 
 }
