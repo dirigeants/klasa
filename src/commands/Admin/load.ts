@@ -35,6 +35,7 @@ export default class extends Command {
 	}
 
 	private async tryEach(store: Store<Piece>, path: readonly string[]) {
+		// eslint-disable-next-line dot-notation
 		for (const dir of store['coreDirectories']) if (await pathExists(join(dir, ...path))) return store.load(dir, path);
 		return undefined;
 	}

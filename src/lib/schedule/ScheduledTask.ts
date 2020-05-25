@@ -107,7 +107,7 @@ export class ScheduledTask {
 
 		this.#running = true;
 		try {
-			await task.run({ ...(this.data ?? {}), id: this.id });
+			await task.run({ ...this.data ?? {}, id: this.id });
 		} catch (err) {
 			this.client.emit('taskError', this, task, err);
 		}
@@ -135,6 +135,7 @@ export class ScheduledTask {
 			const [_time, _cron] = (this.constructor as typeof ScheduledTask)._resolveTime(time);
 			this.time = _time;
 			this.store.tasks.splice(this.store.tasks.indexOf(this), 1);
+			// eslint-disable-next-line dot-notation
 			this.store['_insert'](this);
 			this.recurring = _cron;
 		}
@@ -143,6 +144,7 @@ export class ScheduledTask {
 
 		// Sync the database if some of the properties changed or the time changed manually
 		// (recurring tasks bump the time automatically)
+		// eslint-disable-next-line dot-notation
 		const arrayIndex = this.store['_tasks'].findIndex(entry => entry.id === this.id);
 		if (arrayIndex !== -1) await this.client.settings!.update('schedules', this.toJSON(), { arrayIndex });
 

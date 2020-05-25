@@ -8,7 +8,7 @@ import { Language, LanguageValue } from '../structures/Language';
 import { Schema } from '../settings/schema/Schema';
 import type { QueryBuilderEntryOptions, QueryBuilderDatatype } from './QueryBuilder';
 
-export const version = Package.version;
+export const { version } = Package;
 
 export const KlasaClientDefaults: DeepRequired<KlasaClientOptions> = mergeDefault(ClientOptionsDefaults, {
 	commands: {

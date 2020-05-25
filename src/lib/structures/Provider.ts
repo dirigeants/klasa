@@ -1,8 +1,8 @@
-import { Piece } from "@klasa/core";
-import { mergeObjects, makeObject } from "@klasa/utils";
-import type { SettingsUpdateResults } from "../settings/SettingsFolder";
-import type { SchemaFolder } from "../settings/schema/SchemaFolder";
-import type { SchemaEntry } from "../settings/schema/SchemaEntry";
+import { Piece } from '@klasa/core';
+import { mergeObjects, makeObject } from '@klasa/utils';
+import type { SettingsUpdateResults } from '../settings/SettingsFolder';
+import type { SchemaFolder } from '../settings/schema/SchemaFolder';
+import type { SchemaEntry } from '../settings/schema/SchemaEntry';
 
 export abstract class Provider extends Piece {
 
