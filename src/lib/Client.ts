@@ -1,4 +1,4 @@
-import { Permissions, ClientOptions, Application, User, Client, PieceOptions, EventOptions, isTextBasedChannel, AliasPieceOptions, ClientPieceOptions, ClientEvents } from '@klasa/core';
+import { Permissions, ClientOptions, Application, User, Client, PieceOptions, EventOptions, isTextBasedChannel, AliasPieceOptions, ClientPieceOptions, ClientEvents, ClientUser } from '@klasa/core';
 import { isObject, mergeDefault } from '@klasa/utils';
 import { PermissionLevels } from './permissions/PermissionLevels';
 
@@ -582,17 +582,41 @@ export class KlasaClient extends Client {
 			if (this.application.team) this.options.owners.push(...this.application.team.members.keys());
 			else this.options.owners.push(this.application.owner.id);
 		}
-		return super.connect();
+
+		await Promise.all(this.pieceStores.map(store => store.loadAll()));
+		try {
+			await this.ws.spawn();
+		} catch (err) {
+			await this.destroy();
+			throw err;
+		}
+		await Promise.all(this.pieceStores.map(store => store.init()));
+
+		const clientUser = this.user as ClientUser;
+		this.mentionPrefix = new RegExp(`^<@!?${clientUser.id}>`);
+
+		const clientStorage = this.gateways.get('clientStorage') as Gateway;
+		this.settings = clientStorage.acquire(clientUser);
+		this.settings.sync();
+
+		// Init the schedule
+		await this.schedule.init();
+
+		if (this.options.readyMessage !== null) {
+			this.emit('log', typeof this.options.readyMessage === 'function' ? this.options.readyMessage(this) : this.options.readyMessage);
+		}
+
+		this.emit(ClientEvents.Ready);
 	}
 
 	/**
 	 * Sweeps all text-based channels' messages and removes the ones older than the max message or command message lifetime.
 	 * If the message has been edited, the time of the edit is used rather than the time of the original message.
 	 * @since 0.5.0
-	 * @param number Messages that are older than this (in milliseconds)
-	 * will be removed from the caches. The default is based on [ClientOptions#messageCacheLifetime]{@link https://@klasa/core.org/#/docs/main/master/typedef/ClientOptions?scrollTo=messageCacheLifetime}
+	 * @param lifetime Messages that are older than this (in milliseconds)
+	 * will be removed from the caches. The default is based on {@link ClientOptions#messageLifetime}
 	 * @param commandLifetime Messages that are older than this (in milliseconds)
-	 * will be removed from the caches. The default is based on {@link KlasaClientOptions#commandMessageLifetime}
+	 * will be removed from the caches. The default is based on {@link CommandHandlingOptions#messageLifetime}
 	 */
 	protected _sweepMessages(lifetime: number = this.options.cache.messageLifetime, commandLifetime: number = this.options.commands.messageLifetime): number {
 		if (typeof lifetime !== 'number' || isNaN(lifetime)) throw new TypeError('The lifetime must be a number.');
