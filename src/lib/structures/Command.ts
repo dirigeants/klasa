@@ -144,9 +144,10 @@ export abstract class Command extends AliasPiece {
 	 * @param file The path from the pieces folder to the command file
 	 * @param options Optional Command settings
 	 */
-	public constructor(store: CommandStore, directory: string, files: readonly string[], rawOptions: Partial<CommandOptions> = {}) {
-		const options = { ...store.client.options.pieces.defaults.commands, ...rawOptions };
+	public constructor(store: CommandStore, directory: string, files: readonly string[], options: CommandOptions = {}) {
 		super(store, directory, files, options);
+
+		options = options as Required<CommandOptions>;
 
 		this.name = this.name.toLowerCase();
 
@@ -156,33 +157,33 @@ export abstract class Command extends AliasPiece {
 		}
 
 		this.requiredPermissions = new Permissions(options.requiredPermissions).freeze();
-		this.deletable = options.deletable;
+		this.deletable = options.deletable as boolean;
 
-		this.description = isFunction(options.description) ?
+		this.description = (isFunction(options.description) ?
 			(language = this.client.languages.default): string => (options.description as (language: Language) => string)(language) :
-			options.description;
+			options.description) as string | ((language: Language) => string);
 
-		this.extendedHelp = isFunction(options.extendedHelp) ?
+		this.extendedHelp = (isFunction(options.extendedHelp) ?
 			(language = this.client.languages.default): string => (options.extendedHelp as (language: Language) => string)(language) :
-			options.extendedHelp;
+			options.extendedHelp) as string | ((language: Language) => string);
 
 		this.fullCategory = files.slice(0, -1);
-		this.guarded = options.guarded;
-		this.hidden = options.hidden;
-		this.nsfw = options.nsfw;
-		this.permissionLevel = options.permissionLevel;
-		this.promptLimit = options.promptLimit;
-		this.promptTime = options.promptTime;
-		this.flagSupport = options.flagSupport;
-		this.quotedStringSupport = options.quotedStringSupport;
-		this.requiredSettings = options.requiredSettings;
-		this.runIn = options.runIn;
-		this.subcommands = options.subcommands;
-		this.usage = new CommandUsage(this.client as KlasaClient, options.usage, options.usageDelim, this);
-		this.cooldownLevel = options.cooldownLevel;
+		this.guarded = options.guarded as boolean;
+		this.hidden = options.hidden as boolean;
+		this.nsfw = options.nsfw as boolean;
+		this.permissionLevel = options.permissionLevel as number;
+		this.promptLimit = options.promptLimit as number;
+		this.promptTime = options.promptTime as number;
+		this.flagSupport = options.flagSupport as boolean;
+		this.quotedStringSupport = options.quotedStringSupport as boolean;
+		this.requiredSettings = options.requiredSettings as string[];
+		this.runIn = options.runIn as ChannelType[];
+		this.subcommands = options.subcommands as boolean;
+		this.usage = new CommandUsage(this.client as KlasaClient, options.usage as string, options.usageDelim as string, this);
+		this.cooldownLevel = options.cooldownLevel as string;
 		if (!['author', 'channel', 'guild'].includes(this.cooldownLevel)) throw new Error('Invalid cooldownLevel');
-		this.bucket = options.bucket;
-		this.cooldown = options.cooldown;
+		this.bucket = options.bucket as number;
+		this.cooldown = options.cooldown as number;
 	}
 
 	/**
@@ -312,25 +313,25 @@ export interface Command {
 }
 
 export interface CommandOptions extends AliasPieceOptions {
-	autoAliases: boolean;
-	bucket: number;
-	cooldown: number;
-	cooldownLevel: string;
-	deletable: boolean;
-	description: ((language: Language) => LanguageValue) | string;
-	extendedHelp: ((language: Language) => LanguageValue) | string;
-	flagSupport: boolean;
-	guarded: boolean;
-	hidden: boolean;
-	nsfw: boolean;
-	permissionLevel: number;
-	promptLimit: number;
-	promptTime: number;
-	quotedStringSupport: boolean;
-	requiredPermissions: PermissionsResolvable;
-	requiredSettings: string[];
-	runIn: ChannelType[];
-	subcommands: boolean;
-	usage: string;
-	usageDelim: string | undefined;
+	autoAliases?: boolean;
+	bucket?: number;
+	cooldown?: number;
+	cooldownLevel?: string;
+	deletable?: boolean;
+	description?: ((language: Language) => LanguageValue) | string;
+	extendedHelp?: ((language: Language) => LanguageValue) | string;
+	flagSupport?: boolean;
+	guarded?: boolean;
+	hidden?: boolean;
+	nsfw?: boolean;
+	permissionLevel?: number;
+	promptLimit?: number;
+	promptTime?: number;
+	quotedStringSupport?: boolean;
+	requiredPermissions?: PermissionsResolvable;
+	requiredSettings?: string[];
+	runIn?: ChannelType[];
+	subcommands?: boolean;
+	usage?: string;
+	usageDelim?: string | undefined;
 }

@@ -1,4 +1,14 @@
-import { Permissions, ClientOptions, Application, User, Client, PieceOptions, EventOptions, isTextBasedChannel, AliasPieceOptions, ClientPieceOptions, ClientEvents, ClientUser } from '@klasa/core';
+import {
+	Permissions,
+	ClientOptions,
+	Application,
+	User,
+	Client,
+	isTextBasedChannel,
+	ClientPieceOptions,
+	ClientEvents,
+	ClientUser
+} from '@klasa/core';
 import { isObject, mergeDefault } from '@klasa/utils';
 import { join } from 'path';
 import { PermissionLevels } from './permissions/PermissionLevels';
@@ -29,10 +39,7 @@ import { Schema } from './settings/schema/Schema';
 import { KlasaConsole, ConsoleOptions } from '@klasa/console';
 import { KlasaClientDefaults, MENTION_REGEX } from './util/constants';
 
-import type { CommandOptions, Command } from './structures/Command';
-import type { ExtendableOptions } from './structures/Extendable';
-import type { InhibitorOptions } from './structures/Inhibitor';
-import type { MonitorOptions } from './structures/Monitor';
+import type { Command } from './structures/Command';
 import type { SchemaEntry } from './settings/schema/SchemaEntry';
 import type { Settings } from './settings/Settings';
 
@@ -46,7 +53,7 @@ export interface KlasaClientOptions extends ClientOptions {
 	/**
 	 * Options regarding pieces
 	 */
-	pieces: PieceClientOptions;
+	pieces: ClientPieceOptions;
 
 	/**
 	 * Config options to pass to the client console
@@ -199,10 +206,6 @@ export interface CustomPromptDefaults {
 	flagSupport: boolean;
 }
 
-export interface PieceClientOptions extends ClientPieceOptions {
-	defaults: PieceDefaults;
-}
-
 export interface ProviderClientOptions {
 	/**
 	 * The default provider to use.
@@ -293,74 +296,6 @@ export interface ConsoleEvents {
 	  * @default true
 	  */
 	wtf?: boolean;
-}
-
-export interface PieceDefaults {
-	/**
-	 * The default command options.
-	 * @default {}
-	 */
-	commands?: Partial<CommandOptions>;
-
-	/**
-	 * The default event options.
-	 * @default {}
-	 */
-	events?: Partial<EventOptions>;
-
-	/**
-	 * The default extendable options.
-	 * @default {}
-	 */
-	extendables?: Partial<ExtendableOptions>;
-
-	/**
-	 * The default finalizer options.
-	 * @default {}
-	 */
-	finalizers?: Partial<PieceOptions>;
-
-	/**
-	 * The default inhibitor options.
-	 * @default {}
-	 */
-	inhibitors?: Partial<InhibitorOptions>;
-
-	/**
-	 * The default language options.
-	 * @default {}
-	 */
-	languages?: Partial<PieceOptions>;
-
-	/**
-	 * The default monitor options.
-	 * @default {}
-	 */
-	monitors?: Partial<MonitorOptions>;
-
-	/**
-	 * The default provider options.
-	 * @default {}
-	 */
-	providers?: Partial<PieceOptions>;
-
-	/**
-	 * The default argument options.
-	 * @default {}
-	 */
-	arguments?: Partial<AliasPieceOptions>;
-
-	/**
-	 * The default serializer options.
-	 * @default {}
-	 */
-	serializers: Partial<AliasPieceOptions>;
-
-	/**
-	 * The default task options.
-	 * @default {}
-	 */
-	tasks: Partial<PieceOptions>;
 }
 
 /**

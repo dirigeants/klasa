@@ -1,7 +1,7 @@
 import type { Cache } from '@klasa/cache';
-import type { Application, User, MessageBuilder, SplitOptions, MessageOptions } from '@klasa/core';
+import type { Application, User, MessageBuilder, SplitOptions, MessageOptions, PieceOptions, AliasPieceOptions } from '@klasa/core';
 import type { ArgumentStore } from '../structures/ArgumentStore';
-import type { Command } from '../structures/Command';
+import type { Command, CommandOptions } from '../structures/Command';
 import type { CommandStore } from '../structures/CommandStore';
 import type { ExtendableStore } from '../structures/ExtendableStore';
 import type { FinalizerStore } from '../structures/FinalizerStore';
@@ -20,11 +20,13 @@ import type { KlasaConsole, ConsoleOptions } from '@klasa/console';
 import type {
 	CommandHandlingOptions,
 	ConsoleEvents,
-	PieceDefaults,
 	ProviderClientOptions,
 	ScheduleOptions,
 	SettingsOptions
 } from '../Client';
+import type { ExtendableOptions } from '../structures/Extendable';
+import type { InhibitorOptions } from '../structures/Inhibitor';
+import type { MonitorOptions } from '../structures/Monitor';
 
 declare module '@klasa/core/dist/src/lib/client/Client' {
 
@@ -66,8 +68,17 @@ declare module '@klasa/core/dist/src/lib/client/Client' {
 		schedule: ScheduleOptions;
 	}
 
-	export interface ClientPieceOptions {
-		defaults: PieceDefaults;
+	export interface PieceDefaults {
+		commands: CommandOptions;
+		extendables?: Partial<ExtendableOptions>;
+		finalizers?: Partial<PieceOptions>;
+		inhibitors?: Partial<InhibitorOptions>;
+		languages?: Partial<PieceOptions>;
+		monitors?: Partial<MonitorOptions>;
+		providers?: Partial<PieceOptions>;
+		arguments?: Partial<AliasPieceOptions>;
+		serializers: Partial<AliasPieceOptions>;
+		tasks: Partial<PieceOptions>;
 	}
 
 }
