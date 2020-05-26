@@ -131,7 +131,7 @@ let KlasaClient = /** @class */ (() => {
                 else
                     this.options.owners.push(this.application.owner.id);
             }
-            const earlyLoadingStores = [this.providers, this.extendables];
+            const earlyLoadingStores = [this.providers, this.extendables, this.serializers];
             const lateLoadingStores = this.pieceStores.filter(store => !earlyLoadingStores.includes(store));
             await Promise.all(earlyLoadingStores.map(store => store.loadAll()));
             await Promise.all(earlyLoadingStores.map(store => store.init()));
