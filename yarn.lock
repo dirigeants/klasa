@@ -227,18 +227,29 @@
   resolved "https://registry.yarnpkg.com/@klasa/cache/-/cache-0.0.3.tgz#824595f247fbd6204a6278eae988d22eb783d00b"
   integrity sha512-8+V14gY0soYSd9j5NKel+gKpoEccwFnKYPEL2XALx+SOHzVMAmmfVBqO4cd3QzPdIW3770jklLY2SeXeEv9xvA==
 
+"@klasa/console@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@klasa/console/-/console-0.0.1.tgz#8b689eeaaced6d57513cc6ccded0f009cffd3c8a"
+  integrity sha512-EKW7hgyAZmS/v0KJKvHym8G6ta7X5f8xbJ861T7aibS4nRC9kdhFhYTmsdgL3pmKpUjOVtjNxSNqFRtlteNWgQ==
+  dependencies:
+    "@klasa/timestamp" "^0.0.1"
+    "@klasa/utils" "^0.0.8"
+
 "@klasa/core@dirigeants/core#build":
   version "0.0.3"
-  resolved "https://codeload.github.com/dirigeants/core/tar.gz/48ccecc563dc15c531d0260f467ec1489d32a160"
+  resolved "https://codeload.github.com/dirigeants/core/tar.gz/6bf9c0d9ed25c9de1af71ca43f30c5024674c063"
   dependencies:
     "@klasa/bitfield" "^0.0.2"
     "@klasa/cache" "^0.0.3"
+    "@klasa/dapi-types" "^0.1.1"
     "@klasa/event-iterator" "^0.0.8"
     "@klasa/rest" "^0.4.0"
     "@klasa/snowflake" "^0.0.1"
     "@klasa/timer-manager" "^0.0.1"
     "@klasa/utils" "^0.0.8"
     "@klasa/ws" "^0.0.12"
+    "@types/node" "^14.0.0"
+    "@types/node-fetch" "^2.5.7"
     fs-nextra "^0.5.1"
 
 "@klasa/cron@^0.0.1":
@@ -417,7 +428,7 @@
     "@types/node" "*"
     form-data "^3.0.0"
 
-"@types/node@*", "@types/node@14":
+"@types/node@*", "@types/node@14", "@types/node@^14.0.0":
   version "14.0.5"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-14.0.5.tgz#3d03acd3b3414cf67faf999aed11682ed121f22b"
   integrity sha512-90hiq6/VqtQgX8Sp0EzeIsv3r+ellbGj4URKj5j30tLlZvRUpnAe9YbYnjl3pJM93GyXU0tghHhvXHq+5rnCKA==
