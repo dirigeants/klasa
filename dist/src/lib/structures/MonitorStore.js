@@ -22,6 +22,8 @@ class MonitorStore extends core_1.Store {
      * @param message The message to be used in the {@link Monitor monitors}.
      */
     run(message) {
+        // todo: remove console log
+        console.log(message);
         // eslint-disable-next-line dot-notation
         for (const monitor of this.values())
             if (monitor.shouldRun(message))
