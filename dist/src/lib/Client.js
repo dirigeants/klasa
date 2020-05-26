@@ -128,8 +128,6 @@ let KlasaClient = /** @class */ (() => {
                     this.options.owners.push(this.application.owner.id);
             }
             await Promise.all(this.pieceStores.map(store => store.loadAll()));
-            await this.providers.init();
-            await this.extendables.init();
             try {
                 await this.ws.spawn();
             }
@@ -137,7 +135,7 @@ let KlasaClient = /** @class */ (() => {
                 await this.destroy();
                 throw err;
             }
-            await Promise.all(this.pieceStores.map(store => store instanceof ProviderStore_1.ProviderStore || store instanceof ExtendableStore_1.ExtendableStore ? Promise.resolve([]) : store.init()));
+            await Promise.all(this.pieceStores.map(store => store.init()));
             const clientUser = this.user;
             this.mentionPrefix = new RegExp(`^<@!?${clientUser.id}>`);
             const clientStorage = this.gateways.get('clientStorage');
