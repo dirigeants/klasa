@@ -4,4 +4,4 @@ src/lib/schedule @kyranet @UnseenFaith
 src/lib/settings @kyranet @UnseenFaith
 src/lib/structures @bdistin
 src/lib/usage @bdistin
-src/lib/Client.js @bdistin
+src/lib/Client.ts @bdistin
