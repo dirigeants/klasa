@@ -13,7 +13,7 @@ export type LanguageValue = string | string[] | ((...args: readonly unknown[]) =
  */
 export abstract class Language extends Piece {
 
-	public abstract language: Record<string, LanguageValue>;
+	public abstract language: Record<string, LanguageValue> & { DEFAULT: (term: string) => string };
 
 	/**
 	 * The method to get language strings
@@ -49,7 +49,7 @@ export abstract class Language extends Piece {
 					const loaded = await import(loc) as { default: PieceConstructor<Language> } | PieceConstructor<Language>;
 					const LoadedPiece = 'default' in loaded ? loaded.default : loaded;
 					if (!isClass(LoadedPiece)) return;
-					const coreLang = new LoadedPiece(this.store, this.directory, this.file, core);
+					const coreLang = new LoadedPiece(this.store, this.directory, this.file);
 					this.language = mergeDefault(coreLang.language, this.language);
 				} catch (error) {
 					return;

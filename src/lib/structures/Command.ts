@@ -266,7 +266,7 @@ export abstract class Command extends AliasPiece {
 	 * Defines the JSON.stringify behavior of this command.
 	 * @returns {Object}
 	 */
-	toJSON(): object {
+	toJSON(): Record<string, any> {
 		return {
 			...super.toJSON(),
 			requiredPermissions: this.requiredPermissions.toArray(false),

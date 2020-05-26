@@ -25,7 +25,7 @@ export class KlasaUser extends extender.get('User') {
 	 * Returns the JSON-compatible object of this instance.
 	 * @since 0.5.0
 	 */
-	public toJSON(): object {
+	public toJSON(): Record<string, any> {
 		return { ...super.toJSON(), settings: this.settings };
 	}
 

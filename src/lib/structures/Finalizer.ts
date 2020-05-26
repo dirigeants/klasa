@@ -30,7 +30,7 @@ export abstract class Finalizer extends Piece {
 	 * @param responses The bot's response message, if one is returned
 	 * @param runTime The time it took to generate the command
 	 */
-	private async _run(message: KlasaMessage, command: Command, responses: KlasaMessage[] | undefined, runTime: Stopwatch): Promise<void> {
+	protected async _run(message: KlasaMessage, command: Command, responses: KlasaMessage[] | undefined, runTime: Stopwatch): Promise<void> {
 		try {
 			await this.run(message, command, responses, runTime);
 		} catch (err) {

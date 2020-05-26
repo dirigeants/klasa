@@ -105,7 +105,7 @@ export abstract class Monitor extends Piece {
 	 * Defines the JSON.stringify behavior of this monitor.
 	 * @returns {Object}
 	 */
-	public toJSON(): object {
+	public toJSON(): Record<string, any> {
 		return {
 			...super.toJSON(),
 			ignoreBots: this.ignoreBots,
@@ -123,7 +123,7 @@ export abstract class Monitor extends Piece {
 	 * @since 0.5.0
 	 * @param message The message object from @klasa/core
 	 */
-	private async _run(message: KlasaMessage): Promise<void> {
+	protected async _run(message: KlasaMessage): Promise<void> {
 		try {
 			await this.run(message);
 		} catch (err) {

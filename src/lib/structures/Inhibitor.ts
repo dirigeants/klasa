@@ -35,7 +35,7 @@ export abstract class Inhibitor extends Piece {
 	 * @param message The message that triggered this inhibitor
 	 * @param command The command to run
 	 */
-	private async _run(message: KlasaMessage, command: Command): Promise<boolean | string | void> {
+	protected async _run(message: KlasaMessage, command: Command): Promise<boolean | string | void> {
 		try {
 			return await this.run(message, command);
 		} catch (err) {
@@ -54,7 +54,7 @@ export abstract class Inhibitor extends Piece {
 	/**
 	 * Defines the JSON.stringify behavior of this inhibitor.
 	 */
-	toJSON(): object {
+	toJSON(): Record<string, any> {
 		return {
 			...super.toJSON(),
 			spamProtection: this.spamProtection
