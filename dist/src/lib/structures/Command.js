@@ -18,9 +18,9 @@ class Command extends core_1.AliasPiece {
      * @param file The path from the pieces folder to the command file
      * @param options Optional Command settings
      */
-    constructor(store, directory, files, rawOptions = {}) {
-        const options = { ...store.client.options.pieces.defaults.commands, ...rawOptions };
+    constructor(store, directory, files, options = {}) {
         super(store, directory, files, options);
+        options = options;
         this.name = this.name.toLowerCase();
         if (options.autoAliases) {
             if (this.name.includes('-'))
@@ -31,12 +31,12 @@ class Command extends core_1.AliasPiece {
         }
         this.requiredPermissions = new core_1.Permissions(options.requiredPermissions).freeze();
         this.deletable = options.deletable;
-        this.description = utils_1.isFunction(options.description) ?
+        this.description = (utils_1.isFunction(options.description) ?
             (language = this.client.languages.default) => options.description(language) :
-            options.description;
-        this.extendedHelp = utils_1.isFunction(options.extendedHelp) ?
+            options.description);
+        this.extendedHelp = (utils_1.isFunction(options.extendedHelp) ?
             (language = this.client.languages.default) => options.extendedHelp(language) :
-            options.extendedHelp;
+            options.extendedHelp);
         this.fullCategory = files.slice(0, -1);
         this.guarded = options.guarded;
         this.hidden = options.hidden;

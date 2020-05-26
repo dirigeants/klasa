@@ -120,7 +120,7 @@ export declare abstract class Command extends AliasPiece {
      * @param file The path from the pieces folder to the command file
      * @param options Optional Command settings
      */
-    constructor(store: CommandStore, directory: string, files: readonly string[], rawOptions?: Partial<CommandOptions>);
+    constructor(store: CommandStore, directory: string, files: readonly string[], options?: CommandOptions);
     /**
      * The main category for the command
      * @since 0.0.1
@@ -192,25 +192,25 @@ export interface Command {
     run?(message: KlasaMessage, params: any[]): Promise<Message[]>;
 }
 export interface CommandOptions extends AliasPieceOptions {
-    autoAliases: boolean;
-    bucket: number;
-    cooldown: number;
-    cooldownLevel: string;
-    deletable: boolean;
-    description: ((language: Language) => LanguageValue) | string;
-    extendedHelp: ((language: Language) => LanguageValue) | string;
-    flagSupport: boolean;
-    guarded: boolean;
-    hidden: boolean;
-    nsfw: boolean;
-    permissionLevel: number;
-    promptLimit: number;
-    promptTime: number;
-    quotedStringSupport: boolean;
-    requiredPermissions: PermissionsResolvable;
-    requiredSettings: string[];
-    runIn: ChannelType[];
-    subcommands: boolean;
-    usage: string;
-    usageDelim: string | undefined;
+    autoAliases?: boolean;
+    bucket?: number;
+    cooldown?: number;
+    cooldownLevel?: string;
+    deletable?: boolean;
+    description?: ((language: Language) => LanguageValue) | string;
+    extendedHelp?: ((language: Language) => LanguageValue) | string;
+    flagSupport?: boolean;
+    guarded?: boolean;
+    hidden?: boolean;
+    nsfw?: boolean;
+    permissionLevel?: number;
+    promptLimit?: number;
+    promptTime?: number;
+    quotedStringSupport?: boolean;
+    requiredPermissions?: PermissionsResolvable;
+    requiredSettings?: string[];
+    runIn?: ChannelType[];
+    subcommands?: boolean;
+    usage?: string;
+    usageDelim?: string | undefined;
 }

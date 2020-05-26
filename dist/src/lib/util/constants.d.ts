@@ -19,9 +19,38 @@ export declare const KlasaClientDefaults: {
         gatewayVersion: number;
     };
     pieces: {
-        createFolders: boolean;
-        disabledCoreTypes: string[];
         defaults: {
+            actions: {
+                clientEvent: string;
+                once: never;
+                emitter: never;
+                event: string;
+                name: string;
+                enabled: boolean;
+            };
+            events: {
+                once: boolean;
+                emitter: "options" | "removeListener" | "connect" | "ready" | "user" | "ws" | "channels" | "guilds" | "users" | "dms" | "invites" | "userBaseDirectory" | "pieceStores" | "events" | "actions" | "emojis" | "token" | "registerStore" | "unregisterStore" | "destroy" | "console" | "arguments" | "commands" | "inhibitors" | "finalizers" | "monitors" | "languages" | "providers" | "extendables" | "tasks" | "serializers" | "permissionLevels" | "gateways" | "schedule" | "mentionPrefix" | "settings" | "application" | "invite" | "owners" | "fetchApplication" | "api" | "addListener" | "on" | "once" | "off" | "removeAllListeners" | "setMaxListeners" | "getMaxListeners" | "listeners" | "rawListeners" | "emit" | "listenerCount" | "prependListener" | "prependOnceListener" | "eventNames" | {
+                    addListener: (event: string | symbol, listener: (...args: any[]) => void) => import("events").EventEmitter;
+                    on: (event: string | symbol, listener: (...args: any[]) => void) => import("events").EventEmitter;
+                    once: (event: string | symbol, listener: (...args: any[]) => void) => import("events").EventEmitter;
+                    removeListener: (event: string | symbol, listener: (...args: any[]) => void) => import("events").EventEmitter;
+                    off: (event: string | symbol, listener: (...args: any[]) => void) => import("events").EventEmitter;
+                    removeAllListeners: (event?: string | symbol | undefined) => import("events").EventEmitter;
+                    setMaxListeners: (n: number) => import("events").EventEmitter;
+                    getMaxListeners: () => number;
+                    listeners: (event: string | symbol) => Function[];
+                    rawListeners: (event: string | symbol) => Function[];
+                    emit: (event: string | symbol, ...args: any[]) => boolean;
+                    listenerCount: (type: string | symbol) => number;
+                    prependListener: (event: string | symbol, listener: (...args: any[]) => void) => import("events").EventEmitter;
+                    prependOnceListener: (event: string | symbol, listener: (...args: any[]) => void) => import("events").EventEmitter;
+                    eventNames: () => (string | symbol)[];
+                };
+                event: string;
+                name: string;
+                enabled: boolean;
+            };
             commands: {
                 autoAliases: boolean;
                 bucket: number;
@@ -325,29 +354,6 @@ export declare const KlasaClientDefaults: {
                         }[[-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20][D_1] extends -1 ? "done" : "recur"] : A_1;
                     }[D_1 extends -1 ? "done" : "recur"][]);
                 };
-                name: string;
-                enabled: boolean;
-            };
-            events: {
-                once: boolean;
-                emitter: "options" | "removeListener" | "connect" | "ready" | "user" | "ws" | "channels" | "guilds" | "users" | "dms" | "invites" | "userBaseDirectory" | "pieceStores" | "events" | "actions" | "emojis" | "token" | "registerStore" | "unregisterStore" | "destroy" | "console" | "arguments" | "commands" | "inhibitors" | "finalizers" | "monitors" | "languages" | "providers" | "extendables" | "tasks" | "serializers" | "permissionLevels" | "gateways" | "schedule" | "mentionPrefix" | "settings" | "application" | "invite" | "owners" | "fetchApplication" | "api" | "addListener" | "on" | "once" | "off" | "removeAllListeners" | "setMaxListeners" | "getMaxListeners" | "listeners" | "rawListeners" | "emit" | "listenerCount" | "prependListener" | "prependOnceListener" | "eventNames" | {
-                    addListener: (event: string | symbol, listener: (...args: any[]) => void) => import("events").EventEmitter;
-                    on: (event: string | symbol, listener: (...args: any[]) => void) => import("events").EventEmitter;
-                    once: (event: string | symbol, listener: (...args: any[]) => void) => import("events").EventEmitter;
-                    removeListener: (event: string | symbol, listener: (...args: any[]) => void) => import("events").EventEmitter;
-                    off: (event: string | symbol, listener: (...args: any[]) => void) => import("events").EventEmitter;
-                    removeAllListeners: (event?: string | symbol | undefined) => import("events").EventEmitter;
-                    setMaxListeners: (n: number) => import("events").EventEmitter;
-                    getMaxListeners: () => number;
-                    listeners: (event: string | symbol) => Function[];
-                    rawListeners: (event: string | symbol) => Function[];
-                    emit: (event: string | symbol, ...args: any[]) => boolean;
-                    listenerCount: (type: string | symbol) => number;
-                    prependListener: (event: string | symbol, listener: (...args: any[]) => void) => import("events").EventEmitter;
-                    prependOnceListener: (event: string | symbol, listener: (...args: any[]) => void) => import("events").EventEmitter;
-                    eventNames: () => (string | symbol)[];
-                };
-                event: string;
                 name: string;
                 enabled: boolean;
             };
@@ -817,6 +823,8 @@ export declare const KlasaClientDefaults: {
                 enabled: boolean;
             };
         };
+        createFolders: boolean;
+        disabledCoreTypes: string[];
         disabledStores: never[];
     };
     cache: {
