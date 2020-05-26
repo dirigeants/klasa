@@ -34,6 +34,7 @@ export default class extends Command {
 		const schemaOrEntry = this.configurableSchemaKeys.get(key);
 		if (typeof schemaOrEntry === 'undefined') throw message.language.get('COMMAND_CONF_GET_NOEXT', key);
 
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		const value = key ? message.guild!.settings.get(key) : message.guild!.settings;
 		if (SchemaEntry.is(schemaOrEntry)) {
 			return message.sendLocale('COMMAND_CONF_GET', [key, this.displayEntry(schemaOrEntry, value, message.guild as Guild)]);
