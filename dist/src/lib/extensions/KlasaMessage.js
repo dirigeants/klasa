@@ -34,7 +34,6 @@ let KlasaMessage = /** @class */ (() => {
             this.commandText = this.commandText || null;
             this.prefix = this.prefix || null;
             this.prefixLength = this.prefixLength || null;
-            this.guildSettings = this.guild ? this.guild.settings : this.client.gateways.get('guilds').schema.defaults;
             this.prompter = this.prompter || null;
             __classPrivateFieldSet(this, _responses, []);
         }
@@ -124,6 +123,7 @@ let KlasaMessage = /** @class */ (() => {
         _patch(data) {
             super._patch(data);
             this.language = this.guild ? this.guild.language : this.client.languages.default;
+            this.guildSettings = this.guild ? this.guild.settings : this.client.gateways.get('guilds').schema.defaults;
             this._parseCommand();
             return this;
         }
