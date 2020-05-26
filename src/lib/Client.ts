@@ -519,7 +519,7 @@ export class KlasaClient extends Client {
 			else this.options.owners.push(this.application.owner.id);
 		}
 
-		const earlyLoadingStores = [this.providers, this.extendables] as Store<Piece>[];
+		const earlyLoadingStores = [this.providers, this.extendables, this.serializers] as Store<Piece>[];
 		const lateLoadingStores = this.pieceStores.filter(store => !earlyLoadingStores.includes(store));
 
 		await Promise.all(earlyLoadingStores.map(store => store.loadAll()));
