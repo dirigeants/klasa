@@ -1,5 +1,6 @@
 import { Permissions, ClientOptions, Application, User, Client, PieceOptions, EventOptions, isTextBasedChannel, AliasPieceOptions, ClientPieceOptions, ClientEvents, ClientUser } from '@klasa/core';
 import { isObject, mergeDefault } from '@klasa/utils';
+import { join } from 'path';
 import { PermissionLevels } from './permissions/PermissionLevels';
 
 // lib/schedule
@@ -539,6 +540,9 @@ export class KlasaClient extends Client {
 			.registerStore(this.tasks)
 			.registerStore(this.arguments)
 			.registerStore(this.serializers);
+
+		const coreDirectory = join(__dirname, '../');
+		for (const store of this.pieceStores.values()) store.registerCoreDirectory(coreDirectory);
 
 		this.schedule = new Schedule(this);
 		this.mentionPrefix = null;
