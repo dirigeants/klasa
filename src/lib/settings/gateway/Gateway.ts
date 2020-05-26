@@ -82,10 +82,10 @@ export class Gateway extends GatewayStorage {
 	 */
 	public create(target: IdKeyed<string>, id = target.id): Settings {
 		const settings = new Settings(this, target, id);
-		if (this.schema.size !== 0) {
-			/* istanbul ignore next: Hard to coverage test the catch */
+		/* if (this.schema.size !== 0) {
+			// istanbul ignore next: Hard to coverage test the catch
 			settings.sync(true).catch(error => this.client.emit('wtf', error));
-		}
+		} */
 		return settings;
 	}
 
