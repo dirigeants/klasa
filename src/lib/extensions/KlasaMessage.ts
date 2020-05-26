@@ -69,7 +69,6 @@ export class KlasaMessage extends extender.get('Message') {
 		this.commandText = this.commandText || null;
 		this.prefix = this.prefix || null;
 		this.prefixLength = this.prefixLength || null;
-		this.guildSettings = this.guild ? this.guild.settings : (this.client.gateways.get('guilds') as Gateway).schema.defaults as Settings;
 		this.prompter = this.prompter || null;
 		this.#responses = [];
 	}
@@ -211,6 +210,8 @@ export class KlasaMessage extends extender.get('Message') {
 		super._patch(data);
 
 		this.language = this.guild ? (this.guild as KlasaGuild).language : this.client.languages.default;
+
+		this.guildSettings = this.guild ? this.guild.settings : (this.client.gateways.get('guilds') as Gateway).schema.defaults as Settings;
 
 		this._parseCommand();
 		return this;
