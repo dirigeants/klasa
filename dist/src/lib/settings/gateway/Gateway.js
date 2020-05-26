@@ -65,10 +65,10 @@ class Gateway extends GatewayStorage_1.GatewayStorage {
      */
     create(target, id = target.id) {
         const settings = new Settings_1.Settings(this, target, id);
-        if (this.schema.size !== 0) {
-            /* istanbul ignore next: Hard to coverage test the catch */
+        /* if (this.schema.size !== 0) {
+            // istanbul ignore next: Hard to coverage test the catch
             settings.sync(true).catch(error => this.client.emit('wtf', error));
-        }
+        } */
         return settings;
     }
     /**
