@@ -227,10 +227,10 @@
   resolved "https://registry.yarnpkg.com/@klasa/cache/-/cache-0.0.3.tgz#824595f247fbd6204a6278eae988d22eb783d00b"
   integrity sha512-8+V14gY0soYSd9j5NKel+gKpoEccwFnKYPEL2XALx+SOHzVMAmmfVBqO4cd3QzPdIW3770jklLY2SeXeEv9xvA==
 
-"@klasa/console@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@klasa/console/-/console-0.0.1.tgz#8b689eeaaced6d57513cc6ccded0f009cffd3c8a"
-  integrity sha512-EKW7hgyAZmS/v0KJKvHym8G6ta7X5f8xbJ861T7aibS4nRC9kdhFhYTmsdgL3pmKpUjOVtjNxSNqFRtlteNWgQ==
+"@klasa/console@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@klasa/console/-/console-0.0.2.tgz#b64e46cf76e7660b9f09f81270315a6c67699ad5"
+  integrity sha512-pzm0pN9vJ158lhq59ZdjGRhglmtMb1mVsUA8JDKCUWyhBaiQWeHudCR4trqDmWSwYQIcAtOncwXZtq3qTNhAOg==
   dependencies:
     "@klasa/timestamp" "^0.0.1"
     "@klasa/utils" "^0.0.8"
