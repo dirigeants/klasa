@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@klasa/cache": "^0.0.3",
-    "@klasa/console": "^0.0.1",
+    "@klasa/console": "^0.0.2",
     "@klasa/cron": "^0.0.1",
     "@klasa/duration": "^0.0.3",
     "@klasa/ratelimits": "^0.0.1",
