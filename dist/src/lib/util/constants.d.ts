@@ -3,7 +3,7 @@ import { MessageType, ChannelType } from '@klasa/dapi-types';
 import { Language, LanguageValue } from '../structures/Language';
 import { Schema } from '../settings/schema/Schema';
 import type { QueryBuilderEntryOptions, QueryBuilderDatatype } from './QueryBuilder';
-export declare const version: string;
+export declare const version: any;
 export declare const KlasaClientDefaults: {
     ws: {
         shards: number | number[] | "auto";

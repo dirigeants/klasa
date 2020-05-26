@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OPTIONS = exports.DATATYPES = exports.MENTION_REGEX = exports.KlasaClientDefaults = exports.version = void 0;
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const Package = require("../../../package.json");
+const Package = require('../../../../package.json');
 const utils_1 = require("@klasa/utils");
 const core_1 = require("@klasa/core");
 const Client_1 = require("../Client");
