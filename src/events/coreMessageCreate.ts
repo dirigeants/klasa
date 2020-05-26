@@ -4,7 +4,7 @@ import type { KlasaMessage } from 'src/lib/extensions/KlasaMessage';
 export default class extends Event {
 
 	public constructor(store: EventStore, directory: string, file: readonly string[]) {
-		super(store, directory, file, { event: 'message' });
+		super(store, directory, file, { event: 'messageCreate' });
 	}
 
 	public run(message: KlasaMessage): void {
