@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-import Package = require('../../../package.json');
+import Package = require('../../../../package.json');
 import { mergeDefault, isObject } from '@klasa/utils';
 import { ClientOptionsDefaults } from '@klasa/core';
 import { MessageType, ChannelType } from '@klasa/dapi-types';
