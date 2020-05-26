@@ -48,6 +48,7 @@ export default class extends Command {
 
 	public async set(message: KlasaMessage, [key, valueToSet]: [string, string]): Promise<Message[]> {
 		try {
+			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			const [update] = await message.guild!.settings.update(key, valueToSet, { onlyConfigurable: true, arrayAction: 'add' });
 			return message.sendLocale('COMMAND_CONF_UPDATED', [key, this.displayEntry(update.entry, update.next, message.guild as Guild)]);
 		} catch (error) {
@@ -57,6 +58,7 @@ export default class extends Command {
 
 	public async remove(message: KlasaMessage, [key, valueToRemove]: [string, string]): Promise<Message[]> {
 		try {
+			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			const [update] = await message.guild!.settings.update(key, valueToRemove, { onlyConfigurable: true, arrayAction: 'remove' });
 			return message.sendLocale('COMMAND_CONF_UPDATED', [key, this.displayEntry(update.entry, update.next, message.guild as Guild)]);
 		} catch (error) {
@@ -66,6 +68,7 @@ export default class extends Command {
 
 	public async reset(message: KlasaMessage, [key]: [string]): Promise<Message[]> {
 		try {
+			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			const [update] = await message.guild!.settings.reset(key);
 			return message.sendLocale('COMMAND_CONF_RESET', [key, this.displayEntry(update.entry, update.next, message.guild as Guild)]);
 		} catch (error) {
@@ -73,12 +76,12 @@ export default class extends Command {
 		}
 	}
 
-	public init() {
+	public init(): void {
 		const { schema } = this.client.gateways.get('guilds') as GatewayStorage;
 		if (this.initFolderConfigurableRecursive(schema)) this.configurableSchemaKeys.set(schema.path, schema);
 	}
 
-	private displayFolder(settings: SettingsFolder) {
+	private displayFolder(settings: SettingsFolder): string {
 		const array = [];
 		const folders = [];
 		const sections = new Map<string, string[]>();
@@ -108,23 +111,24 @@ export default class extends Command {
 		return array.join('\n');
 	}
 
-	private displayEntry(entry: SchemaEntry, value: unknown, guild: Guild) {
+	private displayEntry(entry: SchemaEntry, value: unknown, guild: Guild): string {
 		return entry.array ?
 			this.displayEntryMultiple(entry, value as readonly unknown[], guild) :
 			this.displayEntrySingle(entry, value, guild);
 	}
 
-	private displayEntrySingle(entry: SchemaEntry, value: unknown, guild: Guild) {
+	private displayEntrySingle(entry: SchemaEntry, value: unknown, guild: Guild): string {
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		return entry.serializer!.stringify(value, guild);
 	}
 
-	private displayEntryMultiple(entry: SchemaEntry, values: readonly unknown[], guild: Guild) {
+	private displayEntryMultiple(entry: SchemaEntry, values: readonly unknown[], guild: Guild): string {
 		return values.length === 0 ?
 			'None' :
 			`[ ${values.map(value => this.displayEntrySingle(entry, value, guild)).join(' | ')} ]`;
 	}
 
-	private initFolderConfigurableRecursive(folder: Schema) {
+	private initFolderConfigurableRecursive(folder: Schema): string {
 		const previousConfigurableCount = this.configurableSchemaKeys.size;
 		for (const value of folder.values()) {
 			if (SchemaFolder.is(value)) {
