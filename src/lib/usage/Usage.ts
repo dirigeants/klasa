@@ -1,4 +1,4 @@
-import { Tag, TagRequirement } from './Tag';
+import { Tag, TagRequirement, TagResponse } from './Tag';
 import { TextPrompt, TextPromptOptions } from './TextPrompt';
 import { KlasaClient } from '../Client';
 import { KlasaMessage } from '../extensions/KlasaMessage';
@@ -83,7 +83,7 @@ export class Usage {
 	 * @param response The custom response or i18n function
 	 * @chainable
 	 */
-	public customizeResponse(name: string, response: string | Function): this {
+	public customizeResponse(name: string, response: string | TagResponse): this {
 		this.parsedUsage.some(tag => tag.register(name, response));
 		return this;
 	}

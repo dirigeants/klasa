@@ -140,17 +140,17 @@ export const MENTION_REGEX = {
 };
 
 export const DATATYPES: [string, QueryBuilderDatatype][] = [
-	['json', { type: 'JSON', serializer: (value): string => `'${JSON.stringify(value).replace(/'/g, "''")}'` }],
+	['json', { type: 'JSON', serializer: (value: unknown): string => `'${JSON.stringify(value).replace(/'/g, "''")}'` }],
 	['any', { extends: 'json' }],
-	['boolean', { type: 'BOOLEAN', serializer: (value): string => `${value}` }],
+	['boolean', { type: 'BOOLEAN', serializer: (value: unknown): string => `${value}` }],
 	['bool', { extends: 'boolean' }],
-	['snowflake', { type: 'VARCHAR(19)', serializer: (value): string => `'${value}'` }],
+	['snowflake', { type: 'VARCHAR(19)', serializer: (value: unknown): string => `'${value}'` }],
 	['channel', { extends: 'snowflake' }],
 	['textchannel', { extends: 'channel' }],
 	['voicechannel', { extends: 'channel' }],
 	['categorychannel', { extends: 'channel' }],
 	['guild', { extends: 'snowflake' }],
-	['number', { type: 'FLOAT', serializer: (value): string => `${value}` }],
+	['number', { type: 'FLOAT', serializer: (value: unknown): string => `${value}` }],
 	['float', { extends: 'number' }],
 	['integer', { extends: 'number', type: 'INTEGER' }],
 	['command', { type: 'TEXT' }],

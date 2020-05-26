@@ -23,6 +23,7 @@ export default class extends Command {
 
 		for (const userOrGuild of new Set(usersAndGuilds)) {
 			const type = userOrGuild instanceof User ? 'user' : 'guild';
+			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			const blacklist = this.client.settings!.get(`${type}Blacklist`) as string[];
 
 			const id = typeof userOrGuild === 'string' ? userOrGuild : userOrGuild.id;
@@ -35,6 +36,7 @@ export default class extends Command {
 			queries[Number(type === 'guild')].push(id);
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		await this.client.settings!.update([['userBlacklist', queries[0]], ['guildBlacklist', queries[1]]]);
 
 		return message.sendLocale('COMMAND_BLACKLIST_SUCCESS', changes);

@@ -210,6 +210,7 @@ export class TextPrompt {
 	 * @param data The message to prompt with
 	 */
 	private async prompt(data: MessageOptions | ((message: MessageBuilder) => MessageBuilder | Promise<MessageBuilder>)): Promise<KlasaMessage> {
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-expect-error
 		const [message] = await this.channel.send(data);
 		const responses = await message.channel.awaitMessages({ idle: this.time, limit: 1, filter: msg => msg.author === this.target });

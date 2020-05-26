@@ -1,9 +1,23 @@
 import { Possible } from './Possible';
+import { KlasaMessage } from '../extensions/KlasaMessage';
 
 export const enum TagRequirement {
 	Optional,
 	SemiRequired,
 	Required
+}
+
+/**
+ * Represents a Tag's response.
+ * @since 0.5.0
+ */
+export interface TagResponse {
+	/**
+	 * @since 0.5.0
+	 * @param message The message.
+	 * @param possible The possible.
+	 */
+	(message: KlasaMessage, possible: Possible): string;
 }
 
 /**
@@ -33,7 +47,7 @@ export class Tag {
 	 * The custom response defined for this possible
 	 * @since 0.5.0
 	 */
-	public response: string | Function | null;
+	public response: string | TagResponse | null;
 
 	/**
 	 * @since 0.2.1
@@ -54,7 +68,7 @@ export class Tag {
 	 * @param name The argument name the response is for
 	 * @param response The custom response
 	 */
-	public register(name: string, response: string | Function): boolean {
+	public register(name: string, response: string | TagResponse): boolean {
 		if (this.response) return false;
 		if (this.possibles.some(val => val.name === name)) {
 			this.response = response;

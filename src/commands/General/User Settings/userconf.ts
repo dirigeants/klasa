@@ -96,7 +96,9 @@ export default class extends Command {
 		if (sections.size) {
 			for (const keyType of [...sections.keys()].sort()) {
 				array.push(`= ${toTitleCase(keyType)}s =`,
+					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					...sections.get(keyType)!.sort().map(key =>
+						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 						`${key.padEnd(longest)} :: ${this.displayEntry(settings.schema.get(key) as SchemaEntry, settings.get(key), settings.base!.target as Guild)}`),
 					'');
 			}
@@ -111,6 +113,7 @@ export default class extends Command {
 	}
 
 	private displayEntrySingle(entry: SchemaEntry, value: unknown, guild: Guild | null) {
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		return entry.serializer!.stringify(value, guild);
 	}
 
