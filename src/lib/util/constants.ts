@@ -3,8 +3,8 @@ const Package = require('../../../../package.json');
 import { mergeDefault, isObject } from '@klasa/utils';
 import { ClientOptionsDefaults } from '@klasa/core';
 import { MessageType, ChannelType } from '@klasa/dapi-types';
+import * as Client from '../Client';
 
-import type { KlasaClient } from '../Client';
 import type { Language, LanguageValue } from '../structures/Language';
 import type { Schema } from '../settings/schema/Schema';
 import type { QueryBuilderEntryOptions, QueryBuilderDatatype } from './QueryBuilder';
@@ -42,7 +42,7 @@ export const KlasaClientDefaults = mergeDefault(ClientOptionsDefaults, {
 		wtf: true
 	},
 	language: 'en-US',
-	permissionLevels: () => KlasaClient.defaultPermissionLevels,
+	permissionLevels: () => Client.KlasaClient.defaultPermissionLevels,
 	readyMessage: (client) => `Successfully initialized. Ready to serve ${client.guilds.size} guild${client.guilds.size === 1 ? '' : 's'}.`,
 
 	owners: [],
@@ -119,13 +119,13 @@ export const KlasaClientDefaults = mergeDefault(ClientOptionsDefaults, {
 	settings: {
 		gateways: {
 			clientStorage: {
-				schema: (): Schema => KlasaClient.defaultClientSchema
+				schema: (): Schema => Client.KlasaClient.defaultClientSchema
 			},
 			users: {
-				schema: (): Schema => KlasaClient.defaultUserSchema
+				schema: (): Schema => Client.KlasaClient.defaultUserSchema
 			},
 			guilds: {
-				schema: (): Schema => KlasaClient.defaultGuildSchema
+				schema: (): Schema => Client.KlasaClient.defaultGuildSchema
 			}
 		},
 		preserve: true
