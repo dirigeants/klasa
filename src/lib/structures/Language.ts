@@ -4,7 +4,7 @@ import { Piece, PieceConstructor } from '@klasa/core';
 import { mergeDefault, isClass } from '@klasa/utils';
 import type { LanguageStore } from './LanguageStore';
 
-export type LanguageValue = string | string[] | ((...args: readonly unknown[]) => string);
+export type LanguageValue = string | ((...args: any[]) => string);
 
 /**
  * Base class for all Klasa Languages. See {@tutorial CreatingLanguages} for more information how to use this class

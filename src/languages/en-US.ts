@@ -1,9 +1,9 @@
-import { Language, LanguageStore } from 'klasa';
+import { Language, LanguageStore, LanguageValue } from 'klasa';
 import { codeBlock, toTitleCase } from '@klasa/utils';
 
 export default class extends Language {
 
-	public language: Record<string, string | ((...args: any[]) => string)>;
+	public language: Record<string, LanguageValue> & { DEFAULT: (term: string) => string };
 
 	constructor(store: LanguageStore, directory: string, file: string[]) {
 		super(store, directory, file);
