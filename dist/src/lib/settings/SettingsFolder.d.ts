@@ -1,10 +1,10 @@
-import { Schema } from './schema/Schema';
-import { Settings } from './Settings';
 import { SchemaFolder } from './schema/SchemaFolder';
 import { SchemaEntry } from './schema/SchemaEntry';
-import { SerializerUpdateContext } from '../structures/Serializer';
-import { KlasaClient } from '../Client';
-import { Guild } from '@klasa/core';
+import type { Schema } from './schema/Schema';
+import type { Settings } from './Settings';
+import type { SerializerUpdateContext } from '../structures/Serializer';
+import type { KlasaClient } from '../Client';
+import type { Guild } from '@klasa/core';
 export declare class SettingsFolder extends Map<string, unknown> {
     /**
      * The reference to the base Settings instance.

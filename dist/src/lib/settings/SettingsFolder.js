@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SettingsFolder = void 0;
+const utils_1 = require("@klasa/utils");
 const SchemaFolder_1 = require("./schema/SchemaFolder");
 const SchemaEntry_1 = require("./schema/SchemaEntry");
-const utils_1 = require("@klasa/utils");
 /* eslint-disable no-dupe-class-members */
 class SettingsFolder extends Map {
     constructor(schema) {
