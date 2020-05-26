@@ -1,10 +1,10 @@
 import { AliasPiece } from '@klasa/core';
 import { MENTION_REGEX } from '../util/constants';
-import { KlasaClient } from '../Client';
-import { Possible } from '../usage/Possible';
-import { KlasaMessage } from '../extensions/KlasaMessage';
-import { Language } from './Language';
-import { CustomUsageArgument } from '../usage/Usage';
+import type { KlasaClient } from '../Client';
+import type { Possible } from '../usage/Possible';
+import type { KlasaMessage } from '../extensions/KlasaMessage';
+import type { Language } from './Language';
+import type { CustomUsageArgument } from '../usage/Usage';
 
 /**
  * Base class for all Klasa Arguments. See {@tutorial CreatingArguments} for more information how to use this class

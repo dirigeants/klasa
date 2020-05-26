@@ -3,9 +3,10 @@ const Package = require('../../../../package.json');
 import { mergeDefault, isObject } from '@klasa/utils';
 import { ClientOptionsDefaults } from '@klasa/core';
 import { MessageType, ChannelType } from '@klasa/dapi-types';
-import { KlasaClient } from '../Client';
-import { Language, LanguageValue } from '../structures/Language';
-import { Schema } from '../settings/schema/Schema';
+
+import type { KlasaClient } from '../Client';
+import type { Language, LanguageValue } from '../structures/Language';
+import type { Schema } from '../settings/schema/Schema';
 import type { QueryBuilderEntryOptions, QueryBuilderDatatype } from './QueryBuilder';
 
 export const { version } = Package;

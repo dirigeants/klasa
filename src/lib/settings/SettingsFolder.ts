@@ -1,13 +1,13 @@
 import { isObject, objectToTuples, mergeObjects, makeObject, arrayStrictEquals } from '@klasa/utils';
-import { SchemaFolder } from './schema/SchemaFolder';
 import { SchemaEntry } from './schema/SchemaEntry';
 
-import type { Schema } from './schema/Schema';
-import type { Settings } from './Settings';
-import type { SerializerUpdateContext, Serializer } from '../structures/Serializer';
+import type { Guild } from '@klasa/core';
 import type { KlasaClient } from '../Client';
 import type { Language } from '../structures/Language';
-import type { Guild } from '@klasa/core';
+import type { Schema } from './schema/Schema';
+import type { SchemaFolder } from './schema/SchemaFolder';
+import type { SerializerUpdateContext, Serializer } from '../structures/Serializer';
+import type { Settings } from './Settings';
 
 /* eslint-disable no-dupe-class-members */
 
@@ -81,15 +81,15 @@ export class SettingsFolder extends Map<string, unknown> {
 		return Promise.all(paths.map(path => {
 			const entry = this.schema.get(path);
 			if (typeof entry === 'undefined') return undefined;
-			return SchemaFolder.is(entry) ?
-				this._resolveFolder({
-					folder: entry,
+			return SchemaEntry.is(entry) ?
+				this._resolveEntry({
+					entry,
 					language,
 					guild,
 					extraContext: null
 				}) :
-				this._resolveEntry({
-					entry,
+				this._resolveFolder({
+					folder: entry,
 					language,
 					guild,
 					extraContext: null
@@ -191,8 +191,8 @@ export class SettingsFolder extends Map<string, unknown> {
 
 			// If the key does not exist, throw
 			if (typeof entry === 'undefined') throw language.get('SETTING_GATEWAY_KEY_NOEXT', path);
-			if (SchemaFolder.is(entry)) this._resetSettingsFolder(changes, entry as SchemaFolder, language, onlyConfigurable);
-			else this._resetSettingsEntry(changes, entry as SchemaEntry, language, onlyConfigurable);
+			if (SchemaEntry.is(entry)) this._resetSettingsEntry(changes, entry, language, onlyConfigurable);
+			else this._resetSettingsFolder(changes, entry, language, onlyConfigurable);
 		}
 
 		if (changes.length !== 0) await this._save({ changes, guild, language, extraContext: extra });
@@ -324,12 +324,12 @@ export class SettingsFolder extends Map<string, unknown> {
 		folder.base = this.base;
 
 		for (const [key, value] of schema.entries()) {
-			if (SchemaFolder.is(value)) {
+			if (SchemaEntry.is(value)) {
+				folder.set(key, value.default);
+			} else {
 				const settings = new SettingsFolder(value);
 				folder.set(key, settings);
-				this._init(settings, value as SchemaFolder);
-			} else {
-				folder.set(key, (value as SchemaEntry).default);
+				this._init(settings, value);
 			}
 		}
 	}
@@ -360,16 +360,16 @@ export class SettingsFolder extends Map<string, unknown> {
 	private async _resolveFolder(context: InternalFolderUpdateContext): Promise<unknown> {
 		const promises: Promise<[string, unknown]>[] = [];
 		for (const entry of context.folder.values()) {
-			if (SchemaFolder.is(entry)) {
-				promises.push(this._resolveFolder({
-					folder: entry,
+			if (SchemaEntry.is(entry)) {
+				promises.push(this._resolveEntry({
+					entry,
 					language: context.language,
 					guild: context.guild,
 					extraContext: context.extraContext
 				}).then(value => [entry.key, value]));
 			} else {
-				promises.push(this._resolveEntry({
-					entry,
+				promises.push(this._resolveFolder({
+					folder: entry,
 					language: context.language,
 					guild: context.guild,
 					extraContext: context.extraContext
@@ -468,7 +468,7 @@ export class SettingsFolder extends Map<string, unknown> {
 
 			// If the key does not exist, throw
 			if (typeof entry === 'undefined') throw language.get('SETTING_GATEWAY_KEY_NOEXT', path);
-			if (SchemaFolder.is(entry)) {
+			if (!SchemaEntry.is(entry)) {
 				const keys = onlyConfigurable ?
 					[...entry.values()].filter(val => SchemaEntry.is(val) && val.configurable).map(val => val.key) :
 					[...entry.keys()];

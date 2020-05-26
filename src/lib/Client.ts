@@ -19,6 +19,7 @@ import { TaskStore } from './structures/TaskStore';
 
 // lib/settings
 import { GatewayDriver } from './settings/gateway/GatewayDriver';
+import { Gateway } from './settings/gateway/Gateway';
 
 // lib/settings/schema
 import { Schema } from './settings/schema/Schema';
@@ -33,7 +34,6 @@ import type { InhibitorOptions } from './structures/Inhibitor';
 import type { MonitorOptions } from './structures/Monitor';
 import type { SchemaEntry } from './settings/schema/SchemaEntry';
 import type { Settings } from './settings/Settings';
-import { Gateway } from './settings/gateway/Gateway';
 
 export interface KlasaClientOptions extends ClientOptions {
 	/**
