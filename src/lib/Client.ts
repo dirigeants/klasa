@@ -579,15 +579,13 @@ export class KlasaClient extends Client {
 		}
 
 		await Promise.all(this.pieceStores.map(store => store.loadAll()));
-		await this.providers.init();
-		await this.extendables.init();
 		try {
 			await this.ws.spawn();
 		} catch (err) {
 			await this.destroy();
 			throw err;
 		}
-		await Promise.all(this.pieceStores.map(store => store instanceof ProviderStore || store instanceof ExtendableStore ? Promise.resolve([]) : store.init()));
+		await Promise.all(this.pieceStores.map(store => store.init()));
 
 		const clientUser = this.user as ClientUser;
 		this.mentionPrefix = new RegExp(`^<@!?${clientUser.id}>`);
