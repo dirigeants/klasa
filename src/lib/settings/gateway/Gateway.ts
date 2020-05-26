@@ -82,11 +82,10 @@ export class Gateway extends GatewayStorage {
 	 */
 	public create(target: IdKeyed<string>, id = target.id): Settings {
 		const settings = new Settings(this, target, id);
-		// todo: Kyra check to make sure this is the intended change
-		/* if (this.schema.size !== 0) {
+		if (this.schema.size !== 0) {
 			// istanbul ignore next: Hard to coverage test the catch
 			settings.sync(true).catch(error => this.client.emit('wtf', error));
-		} */
+		}
 		return settings;
 	}
 

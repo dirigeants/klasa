@@ -7,7 +7,9 @@ import {
 	isTextBasedChannel,
 	ClientPieceOptions,
 	ClientEvents,
-	ClientUser
+	ClientUser,
+	Store,
+	Piece
 } from '@klasa/core';
 import { isObject, mergeDefault } from '@klasa/utils';
 import { join } from 'path';
@@ -517,22 +519,28 @@ export class KlasaClient extends Client {
 			else this.options.owners.push(this.application.owner.id);
 		}
 
-		await Promise.all(this.pieceStores.map(store => store.loadAll()));
+		const earlyLoadingStores = [this.providers, this.extendables] as Store<Piece>[];
+		const lateLoadingStores = this.pieceStores.filter(store => !earlyLoadingStores.includes(store));
+
+		await Promise.all(earlyLoadingStores.map(store => store.loadAll()));
+		await Promise.all(earlyLoadingStores.map(store => store.init()));
+		await this.gateways.init();
+
+		await Promise.all(lateLoadingStores.map(store => store.loadAll()));
 		try {
 			await this.ws.spawn();
 		} catch (err) {
 			await this.destroy();
 			throw err;
 		}
-		await Promise.all(this.pieceStores.map(store => store.init()));
+		await Promise.all(lateLoadingStores.map(store => store.init()));
 
 		const clientUser = this.user as ClientUser;
 		this.mentionPrefix = new RegExp(`^<@!?${clientUser.id}>`);
 
 		const clientStorage = this.gateways.get('clientStorage') as Gateway;
 		this.settings = clientStorage.acquire(clientUser);
-		// todo: see if the error goes away
-		// this.settings.sync();
+		this.settings.sync();
 
 		// Init the schedule
 		await this.schedule.init();
