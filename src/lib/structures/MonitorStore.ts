@@ -25,6 +25,8 @@ export class MonitorStore extends Store<Monitor> {
 	 * @param message The message to be used in the {@link Monitor monitors}.
 	 */
 	public run(message: KlasaMessage): void {
+		// todo: remove console log
+		console.log(message);
 		// eslint-disable-next-line dot-notation
 		for (const monitor of this.values()) if (monitor.shouldRun(message)) monitor['_run'](message);
 	}
