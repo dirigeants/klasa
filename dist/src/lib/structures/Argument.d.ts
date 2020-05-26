@@ -1,8 +1,8 @@
 import { AliasPiece } from '@klasa/core';
-import { KlasaClient } from '../Client';
-import { Possible } from '../usage/Possible';
-import { KlasaMessage } from '../extensions/KlasaMessage';
-import { CustomUsageArgument } from '../usage/Usage';
+import type { KlasaClient } from '../Client';
+import type { Possible } from '../usage/Possible';
+import type { KlasaMessage } from '../extensions/KlasaMessage';
+import type { CustomUsageArgument } from '../usage/Usage';
 /**
  * Base class for all Klasa Arguments. See {@tutorial CreatingArguments} for more information how to use this class
  * to build custom arguments.

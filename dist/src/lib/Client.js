@@ -19,12 +19,12 @@ const SerializerStore_1 = require("./structures/SerializerStore");
 const TaskStore_1 = require("./structures/TaskStore");
 // lib/settings
 const GatewayDriver_1 = require("./settings/gateway/GatewayDriver");
+const Gateway_1 = require("./settings/gateway/Gateway");
 // lib/settings/schema
 const Schema_1 = require("./settings/schema/Schema");
 // lib/util
 const console_1 = require("@klasa/console");
 const constants_1 = require("./util/constants");
-const Gateway_1 = require("./settings/gateway/Gateway");
 /**
  * The client for handling everything. See {@tutorial GettingStarted} for more information how to get started using this class.
  * @tutorial GettingStarted

@@ -5,7 +5,7 @@ exports.OPTIONS = exports.DATATYPES = exports.MENTION_REGEX = exports.KlasaClien
 const Package = require('../../../../package.json');
 const utils_1 = require("@klasa/utils");
 const core_1 = require("@klasa/core");
-const Client_1 = require("../Client");
+const Client = require("../Client");
 exports.version = Package.version;
 exports.KlasaClientDefaults = utils_1.mergeDefault(core_1.ClientOptionsDefaults, {
     commands: {
@@ -38,7 +38,7 @@ exports.KlasaClientDefaults = utils_1.mergeDefault(core_1.ClientOptionsDefaults,
         wtf: true
     },
     language: 'en-US',
-    permissionLevels: () => Client_1.KlasaClient.defaultPermissionLevels,
+    permissionLevels: () => Client.KlasaClient.defaultPermissionLevels,
     readyMessage: (client) => `Successfully initialized. Ready to serve ${client.guilds.size} guild${client.guilds.size === 1 ? '' : 's'}.`,
     owners: [],
     // eslint-disable-next-line no-process-env
@@ -114,13 +114,13 @@ exports.KlasaClientDefaults = utils_1.mergeDefault(core_1.ClientOptionsDefaults,
     settings: {
         gateways: {
             clientStorage: {
-                schema: () => Client_1.KlasaClient.defaultClientSchema
+                schema: () => Client.KlasaClient.defaultClientSchema
             },
             users: {
-                schema: () => Client_1.KlasaClient.defaultUserSchema
+                schema: () => Client.KlasaClient.defaultUserSchema
             },
             guilds: {
-                schema: () => Client_1.KlasaClient.defaultGuildSchema
+                schema: () => Client.KlasaClient.defaultGuildSchema
             }
         },
         preserve: true

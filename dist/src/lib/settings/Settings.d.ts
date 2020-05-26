@@ -1,5 +1,5 @@
 import { SettingsFolder, SettingsExistenceStatus } from './SettingsFolder';
-import { Gateway } from './gateway/Gateway';
+import type { Gateway } from './gateway/Gateway';
 export declare class Settings extends SettingsFolder {
     /**
      * The ID of the database entry this instance manages.

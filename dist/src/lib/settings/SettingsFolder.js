@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SettingsFolder = void 0;
 const utils_1 = require("@klasa/utils");
-const SchemaFolder_1 = require("./schema/SchemaFolder");
 const SchemaEntry_1 = require("./schema/SchemaEntry");
 /* eslint-disable no-dupe-class-members */
 class SettingsFolder extends Map {
@@ -64,15 +63,15 @@ class SettingsFolder extends Map {
             const entry = this.schema.get(path);
             if (typeof entry === 'undefined')
                 return undefined;
-            return SchemaFolder_1.SchemaFolder.is(entry) ?
-                this._resolveFolder({
-                    folder: entry,
+            return SchemaEntry_1.SchemaEntry.is(entry) ?
+                this._resolveEntry({
+                    entry,
                     language,
                     guild,
                     extraContext: null
                 }) :
-                this._resolveEntry({
-                    entry,
+                this._resolveFolder({
+                    folder: entry,
                     language,
                     guild,
                     extraContext: null
@@ -105,10 +104,10 @@ class SettingsFolder extends Map {
             // If the key does not exist, throw
             if (typeof entry === 'undefined')
                 throw language.get('SETTING_GATEWAY_KEY_NOEXT', path);
-            if (SchemaFolder_1.SchemaFolder.is(entry))
-                this._resetSettingsFolder(changes, entry, language, onlyConfigurable);
-            else
+            if (SchemaEntry_1.SchemaEntry.is(entry))
                 this._resetSettingsEntry(changes, entry, language, onlyConfigurable);
+            else
+                this._resetSettingsFolder(changes, entry, language, onlyConfigurable);
         }
         if (changes.length !== 0)
             await this._save({ changes, guild, language, extraContext: extra });
@@ -166,13 +165,13 @@ class SettingsFolder extends Map {
     _init(folder, schema) {
         folder.base = this.base;
         for (const [key, value] of schema.entries()) {
-            if (SchemaFolder_1.SchemaFolder.is(value)) {
+            if (SchemaEntry_1.SchemaEntry.is(value)) {
+                folder.set(key, value.default);
+            }
+            else {
                 const settings = new SettingsFolder(value);
                 folder.set(key, settings);
                 this._init(settings, value);
-            }
-            else {
-                folder.set(key, value.default);
             }
         }
     }
@@ -201,17 +200,17 @@ class SettingsFolder extends Map {
     async _resolveFolder(context) {
         const promises = [];
         for (const entry of context.folder.values()) {
-            if (SchemaFolder_1.SchemaFolder.is(entry)) {
-                promises.push(this._resolveFolder({
-                    folder: entry,
+            if (SchemaEntry_1.SchemaEntry.is(entry)) {
+                promises.push(this._resolveEntry({
+                    entry,
                     language: context.language,
                     guild: context.guild,
                     extraContext: context.extraContext
                 }).then(value => [entry.key, value]));
             }
             else {
-                promises.push(this._resolveEntry({
-                    entry,
+                promises.push(this._resolveFolder({
+                    folder: entry,
                     language: context.language,
                     guild: context.guild,
                     extraContext: context.extraContext
@@ -300,7 +299,7 @@ class SettingsFolder extends Map {
             // If the key does not exist, throw
             if (typeof entry === 'undefined')
                 throw language.get('SETTING_GATEWAY_KEY_NOEXT', path);
-            if (SchemaFolder_1.SchemaFolder.is(entry)) {
+            if (!SchemaEntry_1.SchemaEntry.is(entry)) {
                 const keys = onlyConfigurable ?
                     [...entry.values()].filter(val => SchemaEntry_1.SchemaEntry.is(val) && val.configurable).map(val => val.key) :
                     [...entry.keys()];

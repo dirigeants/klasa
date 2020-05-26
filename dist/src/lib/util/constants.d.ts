@@ -1,7 +1,7 @@
 /// <reference types="node" />
 import { MessageType, ChannelType } from '@klasa/dapi-types';
-import { Language, LanguageValue } from '../structures/Language';
-import { Schema } from '../settings/schema/Schema';
+import type { Language, LanguageValue } from '../structures/Language';
+import type { Schema } from '../settings/schema/Schema';
 import type { QueryBuilderEntryOptions, QueryBuilderDatatype } from './QueryBuilder';
 export declare const version: any;
 export declare const KlasaClientDefaults: {
