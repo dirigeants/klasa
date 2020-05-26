@@ -1,12 +1,13 @@
-import { Schema } from './schema/Schema';
-import { Settings } from './Settings';
+import { isObject, objectToTuples, mergeObjects, makeObject, arrayStrictEquals } from '@klasa/utils';
 import { SchemaFolder } from './schema/SchemaFolder';
 import { SchemaEntry } from './schema/SchemaEntry';
-import { isObject, objectToTuples, mergeObjects, makeObject, arrayStrictEquals } from '@klasa/utils';
-import { SerializerUpdateContext, Serializer } from '../structures/Serializer';
-import { KlasaClient } from '../Client';
-import { Language } from '../structures/Language';
-import { Guild } from '@klasa/core';
+
+import type { Schema } from './schema/Schema';
+import type { Settings } from './Settings';
+import type { SerializerUpdateContext, Serializer } from '../structures/Serializer';
+import type { KlasaClient } from '../Client';
+import type { Language } from '../structures/Language';
+import type { Guild } from '@klasa/core';
 
 /* eslint-disable no-dupe-class-members */
 
