@@ -123,7 +123,9 @@ let KlasaMessage = /** @class */ (() => {
         _patch(data) {
             super._patch(data);
             this.language = this.guild ? this.guild.language : this.client.languages.default;
-            this.guildSettings = this.guild ? this.guild.settings : this.client.gateways.get('guilds').schema.defaults;
+            if (!this.guildSettings) {
+                this.guildSettings = this.guild ? this.guild.settings : this.client.gateways.get('guilds').schema.defaults;
+            }
             this._parseCommand();
             return this;
         }
