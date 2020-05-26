@@ -31,7 +31,7 @@ export abstract class Provider extends Piece {
 	 * @param entry The entry's ID to create
 	 * @param data The data to insert
 	 */
-	public abstract create(table: string, entry: string, data: object | SettingsUpdateResults): Promise<unknown>;
+	public abstract create(table: string, entry: string, data: unknown | SettingsUpdateResults): Promise<unknown>;
 
 	/**
 	 * Removes entries from a table.
@@ -45,14 +45,14 @@ export abstract class Provider extends Piece {
 	 * @param table The table to query
 	 * @param entry The ID of the entry to retrieve
 	 */
-	public abstract get(table: string, entry: string): Promise<object | null>;
+	public abstract get(table: string, entry: string): Promise<unknown | null>;
 
 	/**
 	 * Retrieve all entries from a table.
 	 * @param table The table to query
 	 * @param entries The ids to retrieve from the table
 	 */
-	public abstract getAll(table: string, entries?: readonly string[]): Promise<object[]>;
+	public abstract getAll(table: string, entries?: readonly string[]): Promise<unknown[]>;
 
 	/**
 	 * Retrieves all entries' keys from a table.
@@ -73,7 +73,7 @@ export abstract class Provider extends Piece {
 	 * @param entry The entry's ID to update
 	 * @param data The data to update
 	 */
-	public abstract update(table: string, entry: string, data: object | SettingsUpdateResults): Promise<unknown>;
+	public abstract update(table: string, entry: string, data: unknown | SettingsUpdateResults): Promise<unknown>;
 
 	/**
 	 * Overwrites the data from an entry in a table.
@@ -81,7 +81,7 @@ export abstract class Provider extends Piece {
 	 * @param entry The entry's ID to update
 	 * @param data The new data for the entry
 	 */
-	public abstract replace(table: string, entry: string, data: object | SettingsUpdateResults): Promise<unknown>;
+	public abstract replace(table: string, entry: string, data: unknown | SettingsUpdateResults): Promise<unknown>;
 
 	/**
 	 * Shutdown method, this is called before the piece is unloaded.
@@ -139,11 +139,11 @@ export abstract class Provider extends Piece {
 	}
 
 	/**
-	 * Process the input from {@link Settings#update} or {@link Settings#reset} into a plain object that can be used for
+	 * Process the input from {@link Settings#update} or {@link Settings#reset} into a plain unknown that can be used for
 	 * document-based database drivers. If it receives a non-array, it returns the value without further processing.
 	 * @param changes The data that has been updated
 	 */
-	protected parseUpdateInput(changes: object | SettingsUpdateResults): Record<PropertyKey, unknown> {
+	protected parseUpdateInput(changes: unknown | SettingsUpdateResults): Record<PropertyKey, unknown> {
 		if (!Array.isArray(changes)) return changes as Record<PropertyKey, unknown>;
 
 		const updated: Record<PropertyKey, unknown> = {};

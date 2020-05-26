@@ -37,7 +37,7 @@ export abstract class SQLProvider extends Provider {
 	 * @param entry The entry's ID to create
 	 * @param data The data to insert
 	 */
-	public abstract create(table: string, entry: string, data: object): Promise<unknown>;
+	public abstract create(table: string, entry: string, data: unknown): Promise<unknown>;
 
 	/**
 	 * Removes entries from a table.
@@ -51,14 +51,14 @@ export abstract class SQLProvider extends Provider {
 	 * @param table The table to query
 	 * @param entry The ID of the entry to retrieve
 	 */
-	public abstract get(table: string, entry: string): Promise<object | null>;
+	public abstract get(table: string, entry: string): Promise<unknown | null>;
 
 	/**
 	 * Retrieve all entries from a table.
 	 * @param table The table to query
 	 * @param entries The ids to retrieve from the table
 	 */
-	public abstract getAll(table: string, entries?: readonly string[]): Promise<object[]>;
+	public abstract getAll(table: string, entries?: readonly string[]): Promise<unknown[]>;
 
 	/**
 	 * Retrieves all entries' keys from a table.
@@ -79,7 +79,7 @@ export abstract class SQLProvider extends Provider {
 	 * @param entry The entry's ID to update
 	 * @param data The data to update
 	 */
-	public abstract update(table: string, entry: string, data: object): Promise<unknown>;
+	public abstract update(table: string, entry: string, data: unknown): Promise<unknown>;
 
 	/**
 	 * Overwrites the data from an entry in a table.
@@ -87,7 +87,7 @@ export abstract class SQLProvider extends Provider {
 	 * @param entry The entry's ID to update
 	 * @param data The new data for the entry
 	 */
-	public abstract replace(table: string, entry: string, data: object): Promise<unknown>;
+	public abstract replace(table: string, entry: string, data: unknown): Promise<unknown>;
 
 	/**
 	 * The addColumn method which inserts/creates a new table to the database.
@@ -127,12 +127,12 @@ export abstract class SQLProvider extends Provider {
 	}
 
 	/**
-	 * Process the input from {@link Settings#update} or {@link Settings#reset} into an object with the keys and values
+	 * Process the input from {@link Settings#update} or {@link Settings#reset} into an unknown with the keys and values
 	 * that can be used for schema-based (SQL) database drivers. If it receives a non-array, it is flattened into a
-	 * dotted object notation. Please note that this behaviour may be tricky when working with a {@link SchemaEntry}
-	 * which type accepts an object and it's not an array, as it'll be flattened into as many keys as properties it has.
+	 * dotted unknown notation. Please note that this behaviour may be tricky when working with a {@link SchemaEntry}
+	 * which type accepts an unknown and it's not an array, as it'll be flattened into as many keys as properties it has.
 	 */
-	protected parseTupleUpdateInput(changes: object | SettingsUpdateResults): SqlProviderParsedTupleUpdateInput {
+	protected parseTupleUpdateInput(changes: unknown | SettingsUpdateResults): SqlProviderParsedTupleUpdateInput {
 		const keys: string[] = [];
 		const values: unknown[] = [];
 

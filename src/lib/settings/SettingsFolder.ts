@@ -303,8 +303,8 @@ export class SettingsFolder extends Map<string, unknown> {
 	 * Patch an object against this instance.
 	 * @param data The data to apply to this instance
 	 */
-	protected _patch(data: object): void {
-		for (const [key, value] of Object.entries(data)) {
+	protected _patch(data: unknown): void {
+		for (const [key, value] of Object.entries(data as Record<PropertyKey, unknown>)) {
 			// Retrieve the key and guard it, if it's undefined, it's not in the schema.
 			const childValue = super.get(key);
 			if (typeof childValue === 'undefined') continue;
@@ -356,7 +356,7 @@ export class SettingsFolder extends Map<string, unknown> {
 		}
 	}
 
-	private async _resolveFolder(context: InternalFolderUpdateContext): Promise<object> {
+	private async _resolveFolder(context: InternalFolderUpdateContext): Promise<unknown> {
 		const promises: Promise<[string, unknown]>[] = [];
 		for (const entry of context.folder.values()) {
 			if (SchemaFolder.is(entry)) {

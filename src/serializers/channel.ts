@@ -1,9 +1,6 @@
 import { Serializer, SerializerStore, SerializerUpdateContext, SchemaEntry, Language } from 'klasa';
-import { GuildBasedChannel, DMChannel, Channel, StoreChannel } from '@klasa/core';
+import { GuildBasedChannel, Channel, Channels } from '@klasa/core';
 import { ChannelType } from '@klasa/dapi-types';
-
-// TODO(kyranet): remove this once @klasa/core releases
-type Channels = DMChannel | GuildBasedChannel | StoreChannel;
 
 export default class CoreSerializer extends Serializer {
 

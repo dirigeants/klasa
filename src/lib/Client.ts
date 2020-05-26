@@ -482,7 +482,7 @@ export class KlasaClient extends Client {
 		mergeDefault(KlasaClientDefaults as unknown as Required<KlasaClientOptions>, options);
 		super(options);
 
-		// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-expect-error
 		this.console = new KlasaConsole(this.options.console);
 		this.arguments = new ArgumentStore(this);

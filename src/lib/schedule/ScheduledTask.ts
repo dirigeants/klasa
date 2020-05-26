@@ -146,6 +146,7 @@ export class ScheduledTask {
 		// (recurring tasks bump the time automatically)
 		// eslint-disable-next-line dot-notation
 		const arrayIndex = this.store['_tasks'].findIndex(entry => entry.id === this.id);
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		if (arrayIndex !== -1) await this.client.settings!.update('schedules', this.toJSON(), { arrayIndex });
 
 		return this;
@@ -200,7 +201,7 @@ export class ScheduledTask {
 	 * @param client The Discord client
 	 */
 	private static _generateID(client: KlasaClient): string {
-		// todo: check if ws has a shards array exposed
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		return `${Date.now().toString(36)}${client.ws.shards.firstValue!.id.toString(36)}`;
 	}
 

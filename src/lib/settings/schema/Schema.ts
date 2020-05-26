@@ -106,6 +106,7 @@ export class Schema extends Map<string, SchemaFolder | SchemaEntry> {
 			if (type === 'Folder') {
 				if (SchemaFolder.is(previous)) {
 					// Call the callback with the pre-existent Folder
+					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					callback!(previous);
 					return this;
 				}

@@ -1,6 +1,8 @@
 import { Piece, PieceOptions } from '@klasa/core';
 import { ExtendableStore } from './ExtendableStore';
 
+export type Constructor<T = unknown> = new (...args: readonly unknown[]) => T;
+
 /**
  * Base class for all Klasa Extendables. See {@tutorial CreatingExtendables} for more information how to use this class
  * to build custom extendables.
@@ -8,7 +10,6 @@ import { ExtendableStore } from './ExtendableStore';
  * @extends {Piece}
  */
 export class Extendable extends Piece {
-
 
 	/**
 	 * The static property descriptors of this extendable
@@ -105,7 +106,7 @@ export class Extendable extends Piece {
 	/**
 	 * Defines the JSON.stringify behavior of this extendable.
 	 */
-	public toJSON(): object {
+	public toJSON(): Record<string, unknown> {
 		return {
 			...super.toJSON(),
 			appliesTo: this.appliesTo.map(fn => fn.name)
@@ -115,7 +116,7 @@ export class Extendable extends Piece {
 }
 
 export interface ExtendableOptions extends PieceOptions {
-	appliesTo?: readonly Function[];
+	appliesTo?: readonly Constructor[];
 }
 
 export interface OriginalPropertyDescriptors {

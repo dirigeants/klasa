@@ -69,12 +69,12 @@ export default class extends Command {
 		}
 	}
 
-	public init() {
+	public init(): void {
 		const { schema } = this.client.gateways.get('users') as GatewayStorage;
 		if (this.initFolderConfigurableRecursive(schema)) this.configurableSchemaKeys.set(schema.path, schema);
 	}
 
-	private displayFolder(settings: SettingsFolder) {
+	private displayFolder(settings: SettingsFolder): string {
 		const array = [];
 		const folders = [];
 		const sections = new Map<string, string[]>();
@@ -106,24 +106,24 @@ export default class extends Command {
 		return array.join('\n');
 	}
 
-	private displayEntry(entry: SchemaEntry, value: unknown, guild: Guild | null) {
+	private displayEntry(entry: SchemaEntry, value: unknown, guild: Guild | null): string {
 		return entry.array ?
 			this.displayEntryMultiple(entry, value as readonly unknown[], guild) :
 			this.displayEntrySingle(entry, value, guild);
 	}
 
-	private displayEntrySingle(entry: SchemaEntry, value: unknown, guild: Guild | null) {
+	private displayEntrySingle(entry: SchemaEntry, value: unknown, guild: Guild | null): string {
 		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		return entry.serializer!.stringify(value, guild);
 	}
 
-	private displayEntryMultiple(entry: SchemaEntry, values: readonly unknown[], guild: Guild | null) {
+	private displayEntryMultiple(entry: SchemaEntry, values: readonly unknown[], guild: Guild | null): string {
 		return values.length === 0 ?
 			'None' :
 			`[ ${values.map(value => this.displayEntrySingle(entry, value, guild)).join(' | ')} ]`;
 	}
 
-	private initFolderConfigurableRecursive(folder: Schema) {
+	private initFolderConfigurableRecursive(folder: Schema): boolean {
 		const previousConfigurableCount = this.configurableSchemaKeys.size;
 		for (const value of folder.values()) {
 			if (SchemaFolder.is(value)) {

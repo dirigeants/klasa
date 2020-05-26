@@ -59,7 +59,7 @@ export class GatewayStorage {
 		if (errors.length) throw new Error(`[SCHEMA] There is an error with your schema.\n${errors.join('\n')}`);
 
 		// Initialize the defaults
-		// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore 2445
 		this.schema.defaults._init(this.schema.defaults, this.schema);
 
