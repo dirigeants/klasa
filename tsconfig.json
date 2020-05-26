@@ -1,0 +1,33 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "alwaysStrict": true,
+    "strict": true,
+    "lib": ["ESNext"],
+    "module": "commonjs",
+    "noUnusedParameters": true,
+    "outDir": "./dist",
+    "sourceMap": true,
+    "types": ["node", "ws", "node-fetch"],
+    "declaration": true,
+    "noUnusedLocals": true,
+    "removeComments": false,
+    "target": "ES2019",
+    "incremental": true,
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "klasa": ["src"]
+    }
+  },
+  "exclude": [
+    "node_modules",
+    "bin",
+    "examples",
+    "scripts"
+  ],
+  "include": [
+    "./src/**/*",
+    "./test/**/*"
+  ]
+}

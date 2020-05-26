@@ -2,7 +2,7 @@ While {@tutorial RichDisplay} allows you to create fully configurable paginated 
 
 Unlike {@tutorial RichDisplay}, {@link RichMenu} manages a page's content and layout automatically and instead of calling {@link RichDisplay.addPage} that allows to customize the template (if provided), the user is presented with the {@link RichMenu.addOption} method, which only requires a `name` and a `body` and handles the organization of the options automatically.
 
-Like {@tutorial RichDisplay} there is the option to define a template [`MessageEmbed`](https://discord.js.org/#/docs/main/master/class/MessageEmbed) in its constructor, but it will be applied automatically to each page of the menu.
+Like {@tutorial RichDisplay} there is the option to define a template [`Embed`](https://discord.js.org/#/docs/main/master/class/Embed) in its constructor, but it will be applied automatically to each page of the menu.
 
 An example of how {@link RichMenu} could be used is in a `help`-like command, this is a simple demo of how it would work:
 
@@ -23,7 +23,7 @@ module.exports = class extends Command {
 		}
 
 		const command = this.client.commands.get(this.menu.options[choice].name);
-		const info = new MessageEmbed()
+		const info = new Embed()
 			.setTitle(`Command \`${message.guild.settings.prefix}${command.name}\``)
 			.setDescription(typeof command.description === 'function' ? command.description(message) : command.description)
 			.addField('Usage:', command.usageString);
@@ -37,7 +37,7 @@ module.exports = class extends Command {
 	}
 
 	init() {
-		this.menu = new RichMenu(new MessageEmbed()
+		this.menu = new RichMenu(new Embed()
 			.setColor(0x673AB7)
 			.setAuthor(this.client.user.username, this.client.user.displayAvatarURL())
 			.setTitle('Advanced Commands Help:')
@@ -101,10 +101,10 @@ After obtaining the index of the selected option we can access the option's name
 const command = this.client.commands.get(menu.options[choice].name);
 ```
 
-Finally, we show the user the selected command by editing the original [`MessageEmbed`](https://discord.js.org/#/docs/main/master/class/MessageEmbed):
+Finally, we show the user the selected command by editing the original [`Embed`](https://discord.js.org/#/docs/main/master/class/Embed):
 
 ```javascript
-const info = new MessageEmbed()
+const info = new Embed()
 	.setTitle(`Command \`${message.guild.settings.prefix}${command.name}\``)
 	.setDescription(typeof command.description === 'function' ? command.description(message) : command.description)
 	.addField('Usage:', command.usageString);

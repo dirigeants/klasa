@@ -28,7 +28,7 @@ If you are using the master version of Klasa, make sure you provide the commit h
 
 ### Further details
 
-- **discord.js version**:
+- **@klasa/core version**:
 - **node.js version**:
 - **Klasa version**:
 - [ ] I have modified core files.

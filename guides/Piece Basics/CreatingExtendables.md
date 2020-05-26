@@ -1,4 +1,4 @@
-Extendables are functions that extend current Discord.js classes by adding methods or properties.
+Extendables are pieces that extend objects or classes by copying its properties and methods like a blueprint.
 
 Extendables have the following syntax:
 
@@ -88,7 +88,7 @@ and Message has both properties of `author` and `channel`.
 
 ```js
 const { Extendable } = require('klasa');
-const { Message } = require('discord.js');
+const { Message } = require('@klasa/core');
 const makePrompt = require('../lib/util/Prompt');
 
 module.exports = class extends Extendable {
