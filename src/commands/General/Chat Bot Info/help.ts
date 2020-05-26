@@ -43,7 +43,7 @@ export default class extends Command {
 
 		const dm = await message.author.openDM();
 
-		let response: Message[];
+		let response: Message[] = [];
 
 		try {
 			response = await dm.send(mb => mb.setContent(helpMessage.join('\n')), { char: '\u200b' });
