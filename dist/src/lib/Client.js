@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.KlasaClient = void 0;
 const core_1 = require("@klasa/core");
 const utils_1 = require("@klasa/utils");
+const path_1 = require("path");
 const PermissionLevels_1 = require("./permissions/PermissionLevels");
 // lib/schedule
 const Schedule_1 = require("./schedule/Schedule");
@@ -89,6 +90,9 @@ let KlasaClient = /** @class */ (() => {
                 .registerStore(this.tasks)
                 .registerStore(this.arguments)
                 .registerStore(this.serializers);
+            const coreDirectory = path_1.join(__dirname, '../');
+            for (const store of this.pieceStores.values())
+                store.registerCoreDirectory(coreDirectory);
             this.schedule = new Schedule_1.Schedule(this);
             this.mentionPrefix = null;
         }
