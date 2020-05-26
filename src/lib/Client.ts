@@ -479,9 +479,10 @@ export class KlasaClient extends Client {
 	 */
 	public constructor(options: Partial<KlasaClientOptions> = {}) {
 		if (!isObject(options)) throw new TypeError('The Client Options for Klasa must be an object.');
-		options = mergeDefault(KlasaClientDefaults, options) as Required<KlasaClientOptions>;
+		mergeDefault(KlasaClientDefaults as unknown as Required<KlasaClientOptions>, options);
 		super(options);
 
+		// @ts-expect-error
 		this.console = new KlasaConsole(this.options.console);
 		this.arguments = new ArgumentStore(this);
 		this.commands = new CommandStore(this);

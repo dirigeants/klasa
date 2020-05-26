@@ -21,7 +21,7 @@ export class Gateway extends GatewayStorage {
 	public constructor(client: KlasaClient, name: string, options: GatewayStorageOptions = {}) {
 		super(client, name, options);
 		this.cache = (this.name in this.client) && (this.client[this.name as keyof KlasaClient] instanceof Map) ?
-			this.client[this.name as keyof KlasaClient] :
+			this.client[this.name as keyof KlasaClient] as Map<string, ProxyMapEntry> :
 			new Cache<string, ProxyMapEntry>();
 		this.requestHandler = new RequestHandler(
 			(id): Promise<IdKeyed<string>> => {

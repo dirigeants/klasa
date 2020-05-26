@@ -16,6 +16,7 @@ import type { Schedule } from '../schedule/Schedule';
 import type { SerializerStore } from '../structures/SerializerStore';
 import type { Settings } from '../settings/Settings';
 import type { TaskStore } from '../structures/TaskStore';
+import type { KlasaConsole, ConsoleOptions } from '@klasa/console';
 import type {
 	CommandHandlingOptions,
 	ConsoleEvents,
@@ -53,7 +54,7 @@ declare module '@klasa/core/dist/src/lib/client/Client' {
 
 	export interface ClientOptions {
 		commands: CommandHandlingOptions;
-		console: ConsoleOptions;
+		console: Partial<ConsoleOptions>;
 		consoleEvents: ConsoleEvents;
 		language: string;
 		owners: string[];

@@ -1,16 +1,16 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 import Package = require('../../../package.json');
-import { DeepRequired, mergeDefault, isObject } from '@klasa/utils';
+import { mergeDefault, isObject } from '@klasa/utils';
 import { ClientOptionsDefaults } from '@klasa/core';
 import { MessageType, ChannelType } from '@klasa/dapi-types';
-import { KlasaClient, KlasaClientOptions } from '../Client';
+import { KlasaClient } from '../Client';
 import { Language, LanguageValue } from '../structures/Language';
 import { Schema } from '../settings/schema/Schema';
 import type { QueryBuilderEntryOptions, QueryBuilderDatatype } from './QueryBuilder';
 
 export const { version } = Package;
 
-export const KlasaClientDefaults: DeepRequired<KlasaClientOptions> = mergeDefault(ClientOptionsDefaults, {
+export const KlasaClientDefaults = mergeDefault(ClientOptionsDefaults, {
 	commands: {
 		editing: false,
 		logging: false,
@@ -30,7 +30,7 @@ export const KlasaClientDefaults: DeepRequired<KlasaClientOptions> = mergeDefaul
 		}
 	},
 	console: {
-		colors: true
+		useColor: true
 	},
 	consoleEvents: {
 		debug: false,
