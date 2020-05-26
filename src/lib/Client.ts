@@ -592,7 +592,7 @@ export class KlasaClient extends Client {
 
 		const clientStorage = this.gateways.get('clientStorage') as Gateway;
 		this.settings = clientStorage.acquire(clientUser);
-		this.settings.sync();
+		// this.settings.sync();
 
 		// Init the schedule
 		await this.schedule.init();
