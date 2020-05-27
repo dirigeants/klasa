@@ -58,3 +58,6 @@ export * from './lib/usage/TextPrompt';
 // lib/util
 export * from './lib/util/constants';
 export * from './lib/util/QueryBuilder';
+
+// lib/types
+export * from './lib/types/augments';
