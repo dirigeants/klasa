@@ -43,3 +43,4 @@ export * from './lib/usage/Tag';
 export * from './lib/usage/TextPrompt';
 export * from './lib/util/constants';
 export * from './lib/util/QueryBuilder';
+export * from './lib/types/augments';

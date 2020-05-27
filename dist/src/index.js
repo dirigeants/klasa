@@ -63,4 +63,6 @@ __exportStar(require("./lib/usage/TextPrompt"), exports);
 // lib/util
 __exportStar(require("./lib/util/constants"), exports);
 __exportStar(require("./lib/util/QueryBuilder"), exports);
+// lib/types
+__exportStar(require("./lib/types/augments"), exports);
 //# sourceMappingURL=index.js.map
