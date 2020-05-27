@@ -55,7 +55,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.COMMIT_TOKEN }}
   
-  TypeDocs(temp):
+  TypeDocs:
     name: TypeDocs(temp)
     runs-on: ubuntu-latest
     steps:
