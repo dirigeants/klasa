@@ -212,12 +212,12 @@ export interface CustomPromptDefaults {
 export interface ProviderClientOptions {
 	/**
 	 * The default provider to use.
-	 * @default 'en-US'
+	 * @default 'none'
 	 */
 	default?: string;
 
 	/**
-	 * The connection options keyed by the provider naame
+	 * The connection options keyed by the provider name
 	 */
 	[provider: string]: unknown;
 }
