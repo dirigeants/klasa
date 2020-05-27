@@ -8,7 +8,7 @@ class default_1 extends klasa_1.Command {
             guarded: true,
             subcommands: true,
             description: language => language.get('COMMAND_CONF_USER_DESCRIPTION'),
-            usage: '<set|show|remove|reset> (key:key) (value:value)',
+            usage: '<set|remove|reset|show:default> (key:key) (value:value)',
             usageDelim: ' '
         });
         this.configurableSchemaKeys = new Map();
