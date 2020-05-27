@@ -5,7 +5,7 @@ import { ChannelType } from '@klasa/dapi-types';
 export default class CoreSerializer extends Serializer {
 
 	public constructor(store: SerializerStore, directory: string, file: readonly string[]) {
-		super(store, directory, file, { aliases: ['textchannel', 'voicechannel', 'categorychannel', 'storechannel', 'announcementchannel'] });
+		super(store, directory, file, { aliases: ['textchannel', 'voicechannel', 'categorychannel', 'storechannel', 'newschannel'] });
 	}
 
 	public deserialize(data: string | Channels, { language, entry, guild }: SerializerUpdateContext): Channels {
@@ -32,7 +32,7 @@ export default class CoreSerializer extends Serializer {
 			(entry.type === 'voicechannel' && data.type === ChannelType.GuildVoice) ||
 			(entry.type === 'categorychannel' && data.type === ChannelType.GuildCategory) ||
 			(entry.type === 'storechannel' && data.type === ChannelType.GuildStore) ||
-			(entry.type === 'announcementchannel' && data.type === ChannelType.GuildAnnouncement)
+			(entry.type === 'newschannel' && data.type === ChannelType.GuildNews)
 		) return data;
 		throw language.get('RESOLVER_INVALID_CHANNEL', entry.key);
 	}
