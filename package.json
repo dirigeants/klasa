@@ -22,7 +22,8 @@
     "coverage": "npx nyc --require source-map-support/register npm test",
     "coverage:report": "npx nyc report --reporter=html",
     "lint": "eslint --fix --ext ts src test",
-    "docs": "typedoc"
+    "docs": "typedoc",
+    "docs:html": "typedoc --inputFiles src --mode modules --out docs"
   },
   "dependencies": {
     "@klasa/cache": "^0.0.3",
