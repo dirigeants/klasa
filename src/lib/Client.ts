@@ -9,7 +9,8 @@ import {
 	ClientEvents,
 	ClientUser,
 	Store,
-	Piece
+	Piece,
+	PermissionsFlags
 } from '@klasa/core';
 import { isObject, mergeDefault } from '@klasa/utils';
 import { join } from 'path';
@@ -607,7 +608,7 @@ export class KlasaClient extends Client {
 	 */
 	public static defaultPermissionLevels = new PermissionLevels()
 		.add(0, () => true)
-		.add(6, ({ member }) => member && member.permissions.has(Permissions.FLAGS.MANAGE_GUILD), { fetch: true })
+		.add(6, ({ member }) => member && member.permissions.has(Permissions.FLAGS[PermissionsFlags.ManageGuild]), { fetch: true })
 		.add(7, ({ member }) => member && member.id === member.guild.ownerID, { fetch: true })
 		.add(9, ({ author, client }) => client.owners.has(author), { break: true })
 		.add(10, ({ author, client }) => client.owners.has(author));
