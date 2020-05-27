@@ -4,7 +4,7 @@ const klasa_1 = require("klasa");
 const core_1 = require("@klasa/core");
 class CoreSerializer extends klasa_1.Serializer {
     constructor(store, directory, file) {
-        super(store, directory, file, { aliases: ['textchannel', 'voicechannel', 'categorychannel', 'storechannel', 'announcementchannel'] });
+        super(store, directory, file, { aliases: ['textchannel', 'voicechannel', 'categorychannel', 'storechannel', 'newschannel'] });
     }
     deserialize(data, { language, entry, guild }) {
         if (data instanceof core_1.Channel)
@@ -27,7 +27,7 @@ class CoreSerializer extends klasa_1.Serializer {
             (entry.type === 'voicechannel' && data.type === 2 /* GuildVoice */) ||
             (entry.type === 'categorychannel' && data.type === 4 /* GuildCategory */) ||
             (entry.type === 'storechannel' && data.type === 6 /* GuildStore */) ||
-            (entry.type === 'announcementchannel' && data.type === 5 /* GuildAnnouncement */))
+            (entry.type === 'newschannel' && data.type === 5 /* GuildNews */))
             return data;
         throw language.get('RESOLVER_INVALID_CHANNEL', entry.key);
     }
