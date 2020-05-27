@@ -4,7 +4,7 @@ import { KlasaMessage } from '../extensions/KlasaMessage';
 import { CommandUsage } from './CommandUsage';
 import { KlasaClient } from '../Client';
 import type { KlasaUser } from '../extensions/KlasaUser';
-import type { TextBasedChannel, MessageOptions } from '@klasa/core';
+import type { TextBasedChannel, MessageOptions, MessageBuilder } from '@klasa/core';
 export interface TextPromptOptions {
     /**
      * The intended target of this TextPrompt, if someone other than the author.
@@ -124,13 +124,8 @@ export declare class TextPrompt {
      * @param options The options of this prompt
      */
     constructor(message: KlasaMessage, usage: Usage, options?: TextPromptOptions);
-    /**
-     * Runs the custom prompt.
-     * @since 0.5.0
-     * @param prompt The message to initially prompt with
-     * @returns The parameters resolved
-     */
     run(prompt: MessageOptions): Promise<unknown[]>;
+    run(prompt: (message: MessageBuilder) => MessageBuilder | Promise<MessageBuilder>): Promise<unknown[]>;
     private prompt;
     /**
      * Collects missing required arguments.

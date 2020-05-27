@@ -96,6 +96,8 @@ let TextPrompt = /** @class */ (() => {
          * @returns The parameters resolved
          */
         async run(prompt) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
             const message = await this.prompt(prompt);
             this.responses.set(message.id, message);
             this._setup(message.content);
