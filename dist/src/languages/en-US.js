@@ -166,15 +166,15 @@ class default_1 extends klasa_1.Language {
             COMMAND_STATS: (memUsage, uptime, users, guilds, channels, klasaVersion, discordVersion, processVersion, message) => [
                 '= STATISTICS =',
                 '',
-                `• Mem Usage  :: ${memUsage} MB`,
-                `• Uptime     :: ${uptime}`,
-                `• Users      :: ${users}`,
-                `• Guilds     :: ${guilds}`,
-                `• Channels   :: ${channels}`,
-                `• Klasa      :: v${klasaVersion}`,
+                `• Mem Usage   :: ${memUsage} MB`,
+                `• Uptime      :: ${uptime}`,
+                `• Users       :: ${users}`,
+                `• Guilds      :: ${guilds}`,
+                `• Channels    :: ${channels}`,
+                `• Klasa       :: v${klasaVersion}`,
                 `• @klasa/core :: v${discordVersion}`,
-                `• Node.js    :: ${processVersion}`,
-                `• Shard      :: ${(message.guild ? message.guild.shard.id : 0) + 1} / ${this.client.options.ws.totalShards}`
+                `• Node.js     :: ${processVersion}`,
+                `• Shard       :: ${(message.guild ? message.guild.shard.id : 0) + 1} / ${this.client.options.ws.totalShards}`
             ].join('\n'),
             COMMAND_STATS_DESCRIPTION: 'Provides some details about the bot and stats.',
             MESSAGE_PROMPT_TIMEOUT: 'The prompt has timed out.',
