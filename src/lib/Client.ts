@@ -212,7 +212,7 @@ export interface CustomPromptDefaults {
 export interface ProviderClientOptions {
 	/**
 	 * The default provider to use.
-	 * @default 'none'
+	 * @default 'json'
 	 */
 	default?: string;
 
