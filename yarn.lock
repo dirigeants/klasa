@@ -237,11 +237,12 @@
 
 "@klasa/core@dirigeants/core#build":
   version "0.0.3"
-  resolved "https://codeload.github.com/dirigeants/core/tar.gz/248694458ae24fc47825277d5e78be2d095f0b0a"
+  uid "186aedd94f4f1787b548e91e1228c2847f4c0173"
+  resolved "https://codeload.github.com/dirigeants/core/tar.gz/186aedd94f4f1787b548e91e1228c2847f4c0173"
   dependencies:
     "@klasa/bitfield" "^0.0.3"
     "@klasa/cache" "^0.0.3"
-    "@klasa/dapi-types" "^0.1.1"
+    "@klasa/dapi-types" "^0.2.0"
     "@klasa/event-iterator" "^0.0.8"
     "@klasa/rest" "^0.4.0"
     "@klasa/snowflake" "^0.0.1"
@@ -261,6 +262,11 @@
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/@klasa/dapi-types/-/dapi-types-0.1.1.tgz#f207d58d9ff878598ea01c8c11aeece598cce726"
   integrity sha512-mTCTF7LxNFVewULTEaewlf+MpTYsGWKlkwHgmOqdw4HeS5OlQrRmeoWwg2drgjhXrdbYnXBV6s3LsiESqKIoAg==
+
+"@klasa/dapi-types@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@klasa/dapi-types/-/dapi-types-0.2.0.tgz#660b7f688cc9ec31e2d194b7bb9723cec0d28ae0"
+  integrity sha512-JPuqL0I7e1BCu9szsXq/owp/Ni8YHmsIHfNDQPy84qdNoRLyPcBrlwgmck9RrI5h/S5/LLNJ9Hu6Oy8bMYDqFw==
 
 "@klasa/duration@^0.0.3":
   version "0.0.3"
