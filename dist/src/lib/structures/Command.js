@@ -133,7 +133,7 @@ class Command extends core_1.AliasPiece {
     toJSON() {
         return {
             ...super.toJSON(),
-            requiredPermissions: this.requiredPermissions.toArray(false),
+            requiredPermissions: this.requiredPermissions.toArray(),
             bucket: this.bucket,
             category: this.category,
             cooldown: this.cooldown,

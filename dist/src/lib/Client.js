@@ -208,7 +208,7 @@ let KlasaClient = /** @class */ (() => {
      */
     KlasaClient.defaultPermissionLevels = new PermissionLevels_1.PermissionLevels()
         .add(0, () => true)
-        .add(6, ({ member }) => member && member.permissions.has(core_1.Permissions.FLAGS.MANAGE_GUILD), { fetch: true })
+        .add(6, ({ member }) => member && member.permissions.has(core_1.Permissions.FLAGS["MANAGE_GUILD" /* ManageGuild */]), { fetch: true })
         .add(7, ({ member }) => member && member.id === member.guild.ownerID, { fetch: true })
         .add(9, ({ author, client }) => client.owners.has(author), { break: true })
         .add(10, ({ author, client }) => client.owners.has(author));

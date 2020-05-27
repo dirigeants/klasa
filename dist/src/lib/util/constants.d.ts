@@ -8,9 +8,9 @@ export declare const KlasaClientDefaults: {
     ws: {
         shards: number | number[] | "auto";
         totalShards: number;
-        intents: number | "GUILDS" | "GUILD_MEMBERS" | "GUILD_BANS" | "GUILD_EMOJIS" | "GUILD_INTEGRATIONS" | "GUILD_WEBHOOKS" | "GUILD_INVITES" | "GUILD_VOICE_STATES" | "GUILD_PRESENCES" | "GUILD_MESSAGES" | "GUILD_MESSAGE_REACTIONS" | "GUILD_MESSAGE_TYPING" | "DIRECT_MESSAGES" | "DIRECT_MESSAGE_REACTIONS" | "DIRECT_MESSAGE_TYPING" | {
+        intents: number | import("@klasa/ws").IntentsFlags | {
             bitfield: number;
-        } | (number | "GUILDS" | "GUILD_MEMBERS" | "GUILD_BANS" | "GUILD_EMOJIS" | "GUILD_INTEGRATIONS" | "GUILD_WEBHOOKS" | "GUILD_INVITES" | "GUILD_VOICE_STATES" | "GUILD_PRESENCES" | "GUILD_MESSAGES" | "GUILD_MESSAGE_REACTIONS" | "GUILD_MESSAGE_TYPING" | "DIRECT_MESSAGES" | "DIRECT_MESSAGE_REACTIONS" | "DIRECT_MESSAGE_TYPING" | {
+        } | (number | import("@klasa/ws").IntentsFlags | {
             bitfield: number;
         })[];
         additionalOptions: {
@@ -67,7 +67,7 @@ export declare const KlasaClientDefaults: {
                 promptLimit: number;
                 promptTime: number;
                 quotedStringSupport: boolean;
-                requiredPermissions: number | (import("@klasa/bitfield").BitFieldObject & number) | ((number | import("@klasa/bitfield").BitFieldObject | "CREATE_INSTANT_INVITE" | "KICK_MEMBERS" | "BAN_MEMBERS" | "ADMINISTRATOR" | "MANAGE_CHANNELS" | "MANAGE_GUILD" | "ADD_REACTIONS" | "VIEW_AUDIT_LOG" | "PRIORITY_SPEAKER" | "STREAM" | "VIEW_CHANNEL" | "SEND_MESSAGES" | "SEND_TTS_MESSAGES" | "MANAGE_MESSAGES" | "EMBED_LINKS" | "ATTACH_FILES" | "READ_MESSAGE_HISTORY" | "MENTION_EVERYONE" | "USE_EXTERNAL_EMOJIS" | "VIEW_GUILD_INSIGHTS" | "CONNECT" | "SPEAK" | "MUTE_MEMBERS" | "DEAFEN_MEMBERS" | "MOVE_MEMBERS" | "USE_VAD" | "CHANGE_NICKNAME" | "MANAGE_NICKNAMES" | "MANAGE_ROLES" | "MANAGE_WEBHOOKS" | "MANAGE_EMOJIS")[] & number);
+                requiredPermissions: number | (import("@klasa/bitfield").BitFieldObject & number) | ((number | import("@klasa/bitfield").BitFieldObject | import("@klasa/core").PermissionsFlags)[] & number);
                 requiredSettings: {
                     [x: number]: never;
                     length: number;
