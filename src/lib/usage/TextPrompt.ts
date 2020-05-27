@@ -189,13 +189,17 @@ export class TextPrompt {
 		this.flagSupport = options.flagSupport as boolean;
 	}
 
+	public run(prompt: MessageOptions): Promise<unknown[]>
+	public run(prompt: (message: MessageBuilder) => MessageBuilder | Promise<MessageBuilder>): Promise<unknown[]>
 	/**
 	 * Runs the custom prompt.
 	 * @since 0.5.0
 	 * @param prompt The message to initially prompt with
 	 * @returns The parameters resolved
 	 */
-	public async run(prompt: MessageOptions): Promise<unknown[]> {
+	public async run(prompt: MessageOptions | ((message: MessageBuilder) => MessageBuilder | Promise<MessageBuilder>)): Promise<unknown[]> {
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-expect-error
 		const message = await this.prompt(prompt);
 		this.responses.set(message.id, message);
 		this._setup(message.content);
