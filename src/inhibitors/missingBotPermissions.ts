@@ -19,8 +19,8 @@ export default class extends Inhibitor {
 	public run(message: KlasaMessage, command: Command): void {
 		const missing = message.channel.type === ChannelType.GuildText ?
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-			message.guild!.me?.permissionsIn(message.channel).missing(command.requiredPermissions, false) ?? [] :
-			this.impliedPermissions.missing(command.requiredPermissions, false);
+			message.guild!.me?.permissionsIn(message.channel).missing(command.requiredPermissions) ?? [] :
+			this.impliedPermissions.missing(command.requiredPermissions);
 
 		if (missing.length) throw message.language.get('INHIBITOR_MISSING_BOT_PERMS', missing.map(key => this.friendlyPerms[key as Key]).join(', '));
 	}

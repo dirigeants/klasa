@@ -270,7 +270,7 @@ export abstract class Command extends AliasPiece {
 	toJSON(): Record<string, any> {
 		return {
 			...super.toJSON(),
-			requiredPermissions: this.requiredPermissions.toArray(false),
+			requiredPermissions: this.requiredPermissions.toArray(),
 			bucket: this.bucket,
 			category: this.category,
 			cooldown: this.cooldown,
