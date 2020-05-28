@@ -27,7 +27,7 @@ import type {
 import type { ExtendableOptions } from '../structures/Extendable';
 import type { InhibitorOptions } from '../structures/Inhibitor';
 import type { MonitorOptions } from '../structures/Monitor';
-import { CommandPrompt } from '../usage/CommandPrompt';
+import type { CommandPrompt } from '../usage/CommandPrompt';
 
 declare module '@klasa/core/dist/src/lib/client/Client' {
 
@@ -56,21 +56,21 @@ declare module '@klasa/core/dist/src/lib/client/Client' {
 	}
 
 	export interface ClientOptions {
-		commands: CommandHandlingOptions;
-		console: Partial<ConsoleOptions>;
-		consoleEvents: ConsoleEvents;
-		language: string;
-		owners: string[];
-		permissionLevels: (permissionLevels: PermissionLevels) => PermissionLevels;
-		production: boolean;
-		readyMessage: string | ((client: Client) => string);
-		providers: ProviderClientOptions;
-		settings: SettingsOptions;
-		schedule: ScheduleOptions;
+		commands?: Partial<CommandHandlingOptions>;
+		console?: Partial<ConsoleOptions>;
+		consoleEvents?: Partial<ConsoleEvents>;
+		language?: string;
+		owners?: string[];
+		permissionLevels?: (permissionLevels: PermissionLevels) => PermissionLevels;
+		production?: boolean;
+		readyMessage?: string | ((client: Client) => string);
+		providers?: Partial<ProviderClientOptions>;
+		settings?: Partial<SettingsOptions>;
+		schedule?: Partial<ScheduleOptions>;
 	}
 
 	export interface PieceDefaults {
-		commands: CommandOptions;
+		commands?: Partial<CommandOptions>;
 		extendables?: Partial<ExtendableOptions>;
 		finalizers?: Partial<PieceOptions>;
 		inhibitors?: Partial<InhibitorOptions>;
@@ -78,8 +78,8 @@ declare module '@klasa/core/dist/src/lib/client/Client' {
 		monitors?: Partial<MonitorOptions>;
 		providers?: Partial<PieceOptions>;
 		arguments?: Partial<AliasPieceOptions>;
-		serializers: Partial<AliasPieceOptions>;
-		tasks: Partial<PieceOptions>;
+		serializers?: Partial<AliasPieceOptions>;
+		tasks?: Partial<PieceOptions>;
 	}
 
 }

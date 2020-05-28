@@ -5,7 +5,6 @@ import {
 	User,
 	Client,
 	isTextBasedChannel,
-	ClientPieceOptions,
 	ClientEvents,
 	ClientUser,
 	Store,
@@ -51,69 +50,64 @@ export interface KlasaClientOptions extends ClientOptions {
 	 * The command handler options
 	 * @default {}
 	 */
-	commands: CommandHandlingOptions;
-
-	/**
-	 * Options regarding pieces
-	 */
-	pieces: ClientPieceOptions;
+	commands?: CommandHandlingOptions;
 
 	/**
 	 * Config options to pass to the client console
 	 * @default {}
 	 */
-	console: ConsoleOptions;
+	console?: ConsoleOptions;
 
 	/**
 	 * Config options to pass to console events
 	 */
-	consoleEvents: ConsoleEvents;
+	consoleEvents?: ConsoleEvents;
 
 	/**
 	 * The default language Klasa should opt-in for the commands
 	 * @default 'en-US'
 	 */
-	language: string;
+	language?: string;
 
 	/**
 	 * The discord user id for the users the bot should respect as the owner (gotten from Discord api if not provided)
 	 */
-	owners: string[];
+	owners?: string[];
 
 	/**
 	 * The permission levels to use with this bot
 	 */
-	permissionLevels: (permissionLevels: PermissionLevels) => PermissionLevels;
+	permissionLevels?: (permissionLevels: PermissionLevels) => PermissionLevels;
 
 	/**
 	 * Whether the bot should handle unhandled promise rejections automatically (handles when false)
 	 * (also can be configured with process.env.NODE_ENV)
 	 */
-	production: boolean;
+	production?: boolean;
 
 	/**
 	 * The ready message to be passed throughout Klasa's ready event
 	 * @default client => `Successfully initialized. Ready to serve ${client.guilds.size} guilds.`
 	 */
-	readyMessage: string | ((client: Client) => string);
+	readyMessage?: string | ((client: Client) => string);
 
 	/**
 	 * The provider options
 	 * @default {}
 	 */
-	providers: ProviderClientOptions;
+	providers?: ProviderClientOptions;
 
 	/**
 	 * The settings options
 	 * @default {}
 	 */
-	settings: SettingsOptions;
+	settings?: SettingsOptions;
 
 	/**
 	 * The options for the internal clock module that runs Schedule
 	 * @default {}
 	 */
-	schedule: ScheduleOptions;
+	schedule?: ScheduleOptions;
 }
 
 export interface CommandHandlingOptions {
@@ -189,24 +183,24 @@ export interface CustomPromptDefaults {
 	 * The number of re-prompts before custom prompt gives up
 	 * @default Infinity
 	 */
-	limit: number;
+	limit?: number;
 
 	/**
 	 * The time-limit for re-prompting custom prompts
 	 * @default 30000
 	 */
-	time: number;
+	time?: number;
 
 	/**
 	 * Whether the custom prompt should respect quoted strings
 	 * @default false
 	 */
-	quotedStringSupport: boolean;
+	quotedStringSupport?: boolean;
 
 	/**
 	 * Whether or not to support to flags for custom prompts
 	 */
-	flagSupport: boolean;
+	flagSupport?: boolean;
 }
 
 export interface ProviderClientOptions {
@@ -235,13 +229,13 @@ export interface SettingsOptions {
 	 * The options for each built-in gateway
 	 * @default {}
 	 */
-	gateways: GatewaysOptions;
+	gateways?: GatewaysOptions;
 
 	/**
 	 * Whether the bot should preserve (non-default) settings when removed from a guild
 	 * @default true
 	 */
-	preserve: boolean;
+	preserve?: boolean;
 }
 
 export interface GatewaysOptions extends Partial<Record<string, { schema: (schema: Schema) => Schema }>> {
