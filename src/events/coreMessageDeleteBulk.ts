@@ -6,11 +6,11 @@ export default class extends Event {
 		super(store, directory, file, { event: 'messageDeleteBulk' });
 	}
 
-	public run(messages: Message[]): void {
+	public async run(messages: Message[]): Promise<void> {
 		for (const message of messages.values()) {
 			if (message.command && message.command.deletable) {
 				for (const msg of message.responses) {
-					if (!msg.deleted) msg.delete().catch(error => this.client.emit('error', error));
+					if (!msg.deleted) await msg.delete();
 				}
 			}
 		}

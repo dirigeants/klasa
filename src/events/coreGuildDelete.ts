@@ -6,8 +6,8 @@ export default class extends Event {
 		super(store, directory, file, { event: 'guildDelete' });
 	}
 
-	public run(guild: Guild): void {
-		if (!guild.unavailable && !this.client.options.settings.preserve) guild.settings.destroy().catch(() => null);
+	public async run(guild: Guild): Promise<void> {
+		if (!guild.unavailable && !this.client.options.settings.preserve) await guild.settings.destroy();
 	}
 
 }

@@ -6,10 +6,10 @@ export default class extends Event {
 		super(store, directory, file, { event: 'messageDelete' });
 	}
 
-	public run(message: Message): void {
+	public async run(message: Message): Promise<void> {
 		if (message.command && message.command.deletable) {
 			for (const msg of message.responses) {
-				if (!msg.deleted) msg.delete();
+				if (!msg.deleted) await msg.delete();
 			}
 		}
 	}
