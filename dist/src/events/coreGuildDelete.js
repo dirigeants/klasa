@@ -5,9 +5,9 @@ class default_1 extends core_1.Event {
     constructor(store, directory, file) {
         super(store, directory, file, { event: 'guildDelete' });
     }
-    run(guild) {
+    async run(guild) {
         if (!guild.unavailable && !this.client.options.settings.preserve)
-            guild.settings.destroy().catch(() => null);
+            await guild.settings.destroy();
     }
 }
 exports.default = default_1;

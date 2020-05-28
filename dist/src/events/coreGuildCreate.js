@@ -5,12 +5,12 @@ class default_1 extends core_1.Event {
     constructor(store, directory, file) {
         super(store, directory, file, { event: 'guildCreate' });
     }
-    run(guild) {
+    async run(guild) {
         if (guild.unavailable)
             return;
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         if (this.client.settings.get('guildBlacklist').includes(guild.id)) {
-            guild.leave();
+            await guild.leave();
             this.client.emit('warn', `Blacklisted guild detected: ${guild.name} [${guild.id}]`);
         }
     }

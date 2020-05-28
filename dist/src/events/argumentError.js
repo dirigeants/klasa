@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@klasa/core");
 class default_1 extends core_1.Event {
-    run(message, _argument, _params, error) {
-        message.send(mb => mb.setContent(error)).catch(err => this.client.emit('wtf', err));
+    async run(message, _argument, _params, error) {
+        await message.send(mb => mb.setContent(error));
     }
 }
 exports.default = default_1;
