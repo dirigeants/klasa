@@ -1,7 +1,6 @@
-import { Piece } from '@klasa/core';
-import { Stopwatch } from '@klasa/stopwatch';
-import { KlasaMessage } from '../extensions/KlasaMessage';
-import { Command } from './Command';
+import { Piece, Message } from '@klasa/core';
+import type { Stopwatch } from '@klasa/stopwatch';
+import type { Command } from './Command';
 /**
  * Base class for all Klasa Finalizers. See {@tutorial CreatingFinalizers} for more information how to use this class
  * to build custom finalizers.
@@ -17,7 +16,7 @@ export declare abstract class Finalizer extends Piece {
      * @param responses The bot's response message, if one is returned
      * @param runTime The time it took to generate the command
      */
-    abstract run(message: KlasaMessage, command: Command, responses: KlasaMessage[] | undefined, runTime: Stopwatch): Promise<unknown> | unknown;
+    abstract run(message: Message, command: Command, responses: Message[] | undefined, runTime: Stopwatch): Promise<unknown> | unknown;
     /**
      * Run a finalizer and catch any uncaught promises
      * @since 0.5.0
@@ -26,5 +25,5 @@ export declare abstract class Finalizer extends Piece {
      * @param responses The bot's response message, if one is returned
      * @param runTime The time it took to generate the command
      */
-    protected _run(message: KlasaMessage, command: Command, responses: KlasaMessage[] | undefined, runTime: Stopwatch): Promise<void>;
+    protected _run(message: Message, command: Command, responses: Message[] | undefined, runTime: Stopwatch): Promise<void>;
 }

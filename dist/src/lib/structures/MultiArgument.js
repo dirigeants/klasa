@@ -18,13 +18,13 @@ class MultiArgument extends Argument_1.Argument {
      * @since 0.5.0
      * @param {string} argument The string argument string to resolve
      * @param {Possible} possible This current usage possible
-     * @param {KlasaMessage} message The message that triggered the command
+     * @param {Message} message The message that triggered the command
      */
     async run(argument, possible, message) {
         const structures = [];
         const { min, max } = possible;
-        // eslint-disable-next-line dot-notation
-        const { args, usage: { usageDelim } } = message['prompter'];
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const { args, usage: { usageDelim } } = message.prompter;
         const index = args.indexOf(argument);
         const rest = args.splice(index, args.length - index);
         const { base } = this;

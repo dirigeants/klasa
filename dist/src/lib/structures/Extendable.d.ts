@@ -1,5 +1,5 @@
 import { Piece, PieceOptions } from '@klasa/core';
-import { ExtendableStore } from './ExtendableStore';
+import type { ExtendableStore } from './ExtendableStore';
 export declare type Constructor<T = unknown> = new (...args: readonly unknown[]) => T;
 /**
  * Base class for all Klasa Extendables. See {@tutorial CreatingExtendables} for more information how to use this class

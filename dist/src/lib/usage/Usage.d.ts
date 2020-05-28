@@ -1,9 +1,8 @@
+import { Cache } from '@klasa/cache';
 import { Tag, TagRequirement, TagResponse } from './Tag';
 import { TextPrompt, TextPromptOptions } from './TextPrompt';
-import { KlasaClient } from '../Client';
-import { KlasaMessage } from '../extensions/KlasaMessage';
-import { Cache } from '@klasa/cache';
-import { Possible } from './Possible';
+import type { Client, Message } from '@klasa/core';
+import type { Possible } from './Possible';
 /**
  * Converts usage strings into objects to compare against later
  */
@@ -12,7 +11,7 @@ export declare class Usage {
      * The client this Usage was created with
      * @since 0.0.1
      */
-    readonly client: KlasaClient;
+    readonly client: Client;
     /**
      * The usage string re-deliminated with the usageDelim
      * @since 0.0.1
@@ -44,7 +43,7 @@ export declare class Usage {
      * @param usageString The raw usage string
      * @param usageDelim The deliminator for this usage
      */
-    constructor(client: KlasaClient, usageString: string, usageDelim: string);
+    constructor(client: Client, usageString: string, usageDelim: string);
     /**
      * Registers a one-off custom resolver
      * @since 0.5.0
@@ -67,7 +66,7 @@ export declare class Usage {
      * @param message The message context from the prompt
      * @param options The options for the prompt
      */
-    createPrompt(message: KlasaMessage, options?: TextPromptOptions): TextPrompt;
+    createPrompt(message: Message, options?: TextPromptOptions): TextPrompt;
     /**
      * Defines json stringify behavior of this class.
      * @since 0.5.0
@@ -114,7 +113,7 @@ export interface CustomUsageArgument {
      * @param message The message that is being parsed.
      * @param params The parsed parameters from the previous arguments.
      */
-    (argument: string, possible: Possible, message: KlasaMessage, params: unknown[]): unknown | Promise<unknown>;
+    (argument: string, possible: Possible, message: Message, params: unknown[]): unknown | Promise<unknown>;
 }
 interface UsageContext {
     tags: Tag[];

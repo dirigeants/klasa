@@ -1,6 +1,5 @@
 import { Extendable } from './Extendable';
-import { Store } from '@klasa/core';
-import type { KlasaClient } from '../Client';
+import { Store, Client } from '@klasa/core';
 /**
  * Stores all {@link Extendable} pieces for use in Klasa.
  * @since 0.0.1
@@ -11,7 +10,7 @@ export declare class ExtendableStore extends Store<Extendable> {
      * @since 0.0.1
      * @param client The Klasa client
      */
-    constructor(client: KlasaClient);
+    constructor(client: Client);
     /**
      * Deletes an extendable from the store.
      * @since 0.0.1

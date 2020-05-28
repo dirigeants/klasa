@@ -1,5 +1,5 @@
 import { TextPrompt, TextPromptOptions } from './TextPrompt';
-import type { KlasaMessage } from '../extensions/KlasaMessage';
+import type { Message } from '@klasa/core';
 import type { CommandUsage } from './CommandUsage';
 /**
  * A class to handle argument collection and parameter resolution for commands
@@ -12,7 +12,7 @@ export declare class CommandPrompt extends TextPrompt {
      * @param usage The usage of the command
      * @param options The options for this CommandPrompt
      */
-    constructor(message: KlasaMessage, usage: CommandUsage, options?: TextPromptOptions);
+    constructor(message: Message, usage: CommandUsage, options?: TextPromptOptions);
     /**
      * Runs the internal validation, and re-prompts according to the settings
      * @since 0.5.0

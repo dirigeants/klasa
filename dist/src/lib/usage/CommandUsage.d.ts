@@ -1,9 +1,8 @@
 import { Usage } from './Usage';
 import { CommandPrompt } from './CommandPrompt';
-import { KlasaClient } from '../Client';
-import { Command } from '../structures/Command';
-import { KlasaMessage } from '../extensions/KlasaMessage';
-import { TextPromptOptions } from './TextPrompt';
+import type { Client, Message } from '@klasa/core';
+import type { Command } from '../structures/Command';
+import type { TextPromptOptions } from './TextPrompt';
 /**
  * Converts usage strings into objects to compare against later
  */
@@ -30,20 +29,20 @@ export declare class CommandUsage extends Usage {
      * @param usageDelim The usage deliminator for this command
      * @param command The command this parsed usage is for
      */
-    constructor(client: KlasaClient, usageString: string, usageDelim: string, command: Command);
+    constructor(client: Client, usageString: string, usageDelim: string, command: Command);
     /**
      * Creates a CommandPrompt instance to collect and resolve arguments with
      * @since 0.5.0
      * @param message The message context from the prompt
      * @param options The options for the prompt
      */
-    createPrompt(message: KlasaMessage, options?: TextPromptOptions): CommandPrompt;
+    createPrompt(message: Message, options?: TextPromptOptions): CommandPrompt;
     /**
      * Creates a full usage string including prefix and commands/aliases for documentation/help purposes
      * @since 0.0.1
      * @param message The message context for which to generate usage for
      */
-    fullUsage(message: KlasaMessage): string;
+    fullUsage(message: Message): string;
     /**
      * Defines to string behavior of this class.
      * @since 0.5.0

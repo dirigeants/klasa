@@ -1,5 +1,6 @@
-import { Argument, ArgumentStore, Possible, KlasaMessage } from 'klasa';
+import { Argument, ArgumentStore, Possible } from 'klasa';
+import type { Message } from '@klasa/core';
 export default class CoreArgument extends Argument {
     constructor(store: ArgumentStore, directory: string, file: readonly string[]);
-    run(argument: string, possible: Possible, message: KlasaMessage): RegExpExecArray;
+    run(argument: string, possible: Possible, message: Message): RegExpExecArray;
 }

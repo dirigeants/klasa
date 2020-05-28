@@ -1,6 +1,5 @@
-import { Event, EventStore } from '@klasa/core';
-import type { KlasaMessage } from 'klasa';
+import { Event, EventStore, Message } from '@klasa/core';
 export default class extends Event {
     constructor(store: EventStore, directory: string, file: readonly string[]);
-    run(message: KlasaMessage): void;
+    run(message: Message): void;
 }

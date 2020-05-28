@@ -1,6 +1,5 @@
 import { Serializer } from './Serializer';
-import { AliasStore } from '@klasa/core';
-import { KlasaClient } from '../Client';
+import { AliasStore, Client } from '@klasa/core';
 /**
  * Stores all {@link Serializer} pieces for use in Klasa.
  * @since 0.5.0
@@ -11,5 +10,5 @@ export declare class SerializerStore extends AliasStore<Serializer> {
      * @since 0.5.0
      * @param client The Klasa client
      */
-    constructor(client: KlasaClient);
+    constructor(client: Client);
 }

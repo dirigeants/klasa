@@ -1,6 +1,6 @@
-import { Argument, ArgumentStore, Possible, KlasaMessage } from 'klasa';
-import { User } from '@klasa/core';
+import { Argument, ArgumentStore, Possible } from 'klasa';
+import type { User, Message } from '@klasa/core';
 export default class CoreArgument extends Argument {
     constructor(store: ArgumentStore, directory: string, file: readonly string[]);
-    run(argument: string, possible: Possible, message: KlasaMessage): Promise<User>;
+    run(argument: string, possible: Possible, message: Message): Promise<User>;
 }

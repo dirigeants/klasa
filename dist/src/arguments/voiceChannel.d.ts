@@ -1,5 +1,5 @@
-import { Argument, Possible, KlasaMessage } from 'klasa';
-import { VoiceChannel } from '@klasa/core';
+import { Argument, Possible } from 'klasa';
+import type { VoiceChannel, Message } from '@klasa/core';
 export default class CoreArgument extends Argument {
-    run(argument: string, possible: Possible, message: KlasaMessage): Promise<VoiceChannel>;
+    run(argument: string, possible: Possible, message: Message): Promise<VoiceChannel>;
 }

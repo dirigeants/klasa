@@ -1,6 +1,5 @@
-import { Store } from '@klasa/core';
+import { Store, Client } from '@klasa/core';
 import { Provider } from './Provider';
-import type { KlasaClient } from '../Client';
 /**
  * Stores all {@link Provider} pieces for use in Klasa.
  * @since 0.1.0
@@ -11,7 +10,7 @@ export declare class ProviderStore extends Store<Provider> {
      * @since 0.1.0
      * @param client The Klasa client
      */
-    constructor(client: KlasaClient);
+    constructor(client: Client);
     /**
      * The default provider set in ClientOptions.providers.
      * @since 0.1.0

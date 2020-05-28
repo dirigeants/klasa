@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TaskStore = void 0;
-const Task_1 = require("./Task");
 const core_1 = require("@klasa/core");
+const Task_1 = require("./Task");
 /**
  * Stores all {@link Task} pieces for use in Klasa.
  * @since 0.5.0

@@ -1,4 +1,5 @@
-import { Argument, KlasaMessage, Possible, CustomUsageArgument } from 'klasa';
+import { Argument, Possible, CustomUsageArgument } from 'klasa';
+import type { Message } from '@klasa/core';
 export default class CoreArgument extends Argument {
-    run(argument: string, possible: Possible, message: KlasaMessage, custom: CustomUsageArgument): Promise<unknown>;
+    run(argument: string, possible: Possible, message: Message, custom: CustomUsageArgument): Promise<unknown>;
 }

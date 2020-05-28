@@ -1,4 +1,5 @@
-import { Argument, Possible, KlasaMessage, Extendable } from 'klasa';
+import { Argument, Possible, Extendable } from 'klasa';
+import type { Message } from '@klasa/core';
 export default class CoreArgument extends Argument {
-    run(argument: string, possible: Possible, message: KlasaMessage): Extendable;
+    run(argument: string, possible: Possible, message: Message): Extendable;
 }

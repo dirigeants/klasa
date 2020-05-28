@@ -1,7 +1,5 @@
-import { AliasPiece } from '@klasa/core';
-import type { KlasaClient } from '../Client';
+import { AliasPiece, Client, Message } from '@klasa/core';
 import type { Possible } from '../usage/Possible';
-import type { KlasaMessage } from '../extensions/KlasaMessage';
 import type { CustomUsageArgument } from '../usage/Usage';
 /**
  * Base class for all Klasa Arguments. See {@tutorial CreatingArguments} for more information how to use this class
@@ -16,7 +14,7 @@ export declare abstract class Argument extends AliasPiece {
      * @param possible This current usage possible
      * @param message The message that triggered the command
      */
-    abstract run(argument: string, possible: Possible, message: KlasaMessage, custom?: CustomUsageArgument): unknown | Promise<unknown>;
+    abstract run(argument: string, possible: Possible, message: Message, custom?: CustomUsageArgument): unknown | Promise<unknown>;
     /**
      * Checks min and max values
      * @since 0.5.0
@@ -28,7 +26,7 @@ export declare abstract class Argument extends AliasPiece {
      * @param message The message that triggered the command
      * @param suffix An error suffix
      */
-    protected static minOrMax(client: KlasaClient, value: number, min: number | null | undefined, max: number | null | undefined, possible: Possible, message: KlasaMessage, suffix?: string): boolean;
+    protected static minOrMax(client: Client, value: number, min: number | null | undefined, max: number | null | undefined, possible: Possible, message: Message, suffix?: string): boolean;
     /**
      * Standard regular expressions for matching mentions and snowflake ids
      * @since 0.5.0

@@ -1,6 +1,5 @@
 import { Language } from './Language';
-import { Store } from '@klasa/core';
-import type { KlasaClient } from '../Client';
+import { Store, Client } from '@klasa/core';
 /**
  * Stores all {@link Language} pieces for use in Klasa.
  * @since 0.0.1
@@ -11,7 +10,7 @@ export declare class LanguageStore extends Store<Language> {
      * @since 0.0.1
      * @param client The Klasa client
      */
-    constructor(client: KlasaClient);
+    constructor(client: Client);
     /**
      * The default language set in {@link KlasaClientOptions.language}
      * @since 0.2.1

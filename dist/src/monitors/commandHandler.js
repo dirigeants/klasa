@@ -8,6 +8,7 @@ class CommandHandler extends klasa_1.Monitor {
         this.ignoreEdits = !this.client.options.commands.editing;
     }
     async run(message) {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         if (message.guild && !message.guild.me)
             await message.guild.members.fetch(this.client.user.id);
         if (!message.channel.postable)
@@ -33,8 +34,8 @@ class CommandHandler extends klasa_1.Monitor {
             const command = message.command;
             await this.client.inhibitors.run(message, command);
             try {
-                // eslint-disable-next-line dot-notation
-                await message['prompter'].run();
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                await message.prompter.run();
                 try {
                     // Obtain the sub-command name, defaulting to 'run', then retrieve it, check whether or not it's a
                     // function, and when true, call apply on it with the command context and the arguments.

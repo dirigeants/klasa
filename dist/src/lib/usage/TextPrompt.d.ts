@@ -1,16 +1,13 @@
 import { Cache } from '@klasa/cache';
-import { Usage } from './Usage';
-import { KlasaMessage } from '../extensions/KlasaMessage';
 import { CommandUsage } from './CommandUsage';
-import { KlasaClient } from '../Client';
-import type { KlasaUser } from '../extensions/KlasaUser';
-import type { TextBasedChannel, MessageOptions, MessageBuilder } from '@klasa/core';
+import type { TextBasedChannel, MessageOptions, MessageBuilder, Client, User, Message } from '@klasa/core';
+import type { Usage } from './Usage';
 export interface TextPromptOptions {
     /**
      * The intended target of this TextPrompt, if someone other than the author.
      * @default message.author
      */
-    target?: KlasaUser;
+    target?: User;
     /**
      * The channel to prompt in, if other than this channel.
      * @default message.channel
@@ -46,17 +43,17 @@ export declare class TextPrompt {
      * The client this TextPrompt was created with
      * @since 0.5.0
      */
-    readonly client: KlasaClient;
+    readonly client: Client;
     /**
      * The message this prompt is for
      * @since 0.5.0
      */
-    message: KlasaMessage;
+    message: Message;
     /**
      * The target this prompt is for
      * @since 0.5.0
      */
-    target: KlasaUser;
+    target: User;
     /**
      * The channel to prompt in
      * @since 0.5.0
@@ -116,14 +113,14 @@ export declare class TextPrompt {
      * A cache of the users responses
      * @since 0.5.0
      */
-    responses: Cache<string, KlasaMessage>;
+    responses: Cache<string, Message>;
     /**
      * @since 0.5.0
      * @param message The message this prompt is for
      * @param usage The usage for this prompt
      * @param options The options of this prompt
      */
-    constructor(message: KlasaMessage, usage: Usage, options?: TextPromptOptions);
+    constructor(message: Message, usage: Usage, options?: TextPromptOptions);
     run(prompt: MessageOptions): Promise<unknown[]>;
     run(prompt: (message: MessageBuilder) => MessageBuilder | Promise<MessageBuilder>): Promise<unknown[]>;
     private prompt;

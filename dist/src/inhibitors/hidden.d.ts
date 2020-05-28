@@ -1,4 +1,5 @@
-import { Inhibitor, KlasaMessage, Command } from 'klasa';
+import { Inhibitor, Command } from 'klasa';
+import type { Message } from '@klasa/core';
 export default class extends Inhibitor {
-    run(message: KlasaMessage, command: Command): boolean;
+    run(message: Message, command: Command): boolean;
 }

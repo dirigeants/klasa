@@ -1,5 +1,5 @@
-import { Event } from '@klasa/core';
-import type { KlasaMessage, Command } from 'klasa';
+import { Event, Message } from '@klasa/core';
+import type { Command } from 'klasa';
 export default class extends Event {
-    run(message: KlasaMessage, command: Command, _params: readonly unknown[], error: Error | string): void;
+    run(message: Message, command: Command, _params: readonly unknown[], error: Error | string): void;
 }

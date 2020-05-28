@@ -1,5 +1,5 @@
-import { Argument, Possible, KlasaMessage } from 'klasa';
-import { Channel } from '@klasa/core';
+import { Argument, Possible } from 'klasa';
+import type { Channel, Message } from '@klasa/core';
 export default class CoreArgument extends Argument {
-    run(argument: string, possible: Possible, message: KlasaMessage): Promise<Channel>;
+    run(argument: string, possible: Possible, message: Message): Promise<Channel>;
 }

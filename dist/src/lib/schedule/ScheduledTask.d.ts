@@ -1,7 +1,7 @@
 import { Cron } from '@klasa/cron';
 import { Schedule } from './Schedule';
 import { Task } from '../structures/Task';
-import { KlasaClient } from '../Client';
+import { Client } from '@klasa/core';
 /**
  * The structure for future tasks to be run
  */
@@ -11,7 +11,7 @@ export declare class ScheduledTask {
      * The Client instance that initialized this instance
      * @since 0.5.0
      */
-    client: KlasaClient;
+    client: Client;
     /**
      * The name of the Task this scheduled task will run
      * @since 0.5.0
@@ -46,12 +46,12 @@ export declare class ScheduledTask {
     /**
      * Initializes a new ScheduledTask
      * @since 0.5.0
-     * @param {KlasaClient} client The client that initialized this instance
-     * @param {string} taskName The name of the task this ScheduledTask is for
-     * @param {TimeResolvable} time The time or {@link Cron} pattern
-     * @param {ScheduledTaskOptions} [options={}] The options for this ScheduledTask instance
+     * @param client The client that initialized this instance
+     * @param taskName The name of the task this ScheduledTask is for
+     * @param time The time or {@link Cron} pattern
+     * @param options The options for this ScheduledTask instance
      */
-    constructor(client: KlasaClient, taskName: string, time: TimeResolvable, options?: ScheduledTaskUpdateOptions);
+    constructor(client: Client, taskName: string, time: TimeResolvable, options?: ScheduledTaskUpdateOptions);
     /**
      * The Schedule class that manages all scheduled tasks
      * @since 0.5.0

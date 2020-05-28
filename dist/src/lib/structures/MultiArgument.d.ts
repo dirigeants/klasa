@@ -1,6 +1,6 @@
 import { Argument } from './Argument';
-import { Possible } from '../usage/Possible';
-import { KlasaMessage } from '../extensions/KlasaMessage';
+import type { Message } from '@klasa/core';
+import type { Possible } from '../usage/Possible';
 /**
  * Base abstracted class for multi-resolving values.
  */
@@ -15,7 +15,7 @@ export declare class MultiArgument extends Argument {
      * @since 0.5.0
      * @param {string} argument The string argument string to resolve
      * @param {Possible} possible This current usage possible
-     * @param {KlasaMessage} message The message that triggered the command
+     * @param {Message} message The message that triggered the command
      */
-    run(argument: string, possible: Possible, message: KlasaMessage): Promise<any[]>;
+    run(argument: string, possible: Possible, message: Message): Promise<any[]>;
 }

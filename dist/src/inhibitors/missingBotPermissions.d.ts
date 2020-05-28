@@ -1,6 +1,7 @@
-import { Inhibitor, KlasaMessage, Command } from 'klasa';
+import { Inhibitor, Command } from 'klasa';
+import { Message } from '@klasa/core';
 export default class extends Inhibitor {
     private readonly impliedPermissions;
     private readonly friendlyPerms;
-    run(message: KlasaMessage, command: Command): void;
+    run(message: Message, command: Command): void;
 }

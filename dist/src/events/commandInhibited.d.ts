@@ -1,5 +1,5 @@
-import { Event } from '@klasa/core';
-import type { Command, KlasaMessage } from 'klasa';
+import { Event, Message } from '@klasa/core';
+import type { Command } from 'klasa';
 export default class extends Event {
-    run(message: KlasaMessage, _command: Command, response: string): void;
+    run(message: Message, _command: Command, response: string): void;
 }

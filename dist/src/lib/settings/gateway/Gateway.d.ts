@@ -1,7 +1,7 @@
 import { RequestHandler, IdKeyed } from '@klasa/request-handler';
 import { GatewayStorage, GatewayStorageOptions } from './GatewayStorage';
 import { Settings } from '../Settings';
-import type { KlasaClient } from '../../Client';
+import type { Client } from '@klasa/core';
 export declare class Gateway extends GatewayStorage {
     /**
      * The cached entries for this Gateway or the external datastore to get the settings from.
@@ -13,7 +13,7 @@ export declare class Gateway extends GatewayStorage {
      * @since 0.6.0
      */
     readonly requestHandler: RequestHandler<string, IdKeyed<string>>;
-    constructor(client: KlasaClient, name: string, options?: GatewayStorageOptions);
+    constructor(client: Client, name: string, options?: GatewayStorageOptions);
     /**
      * Gets an entry from the cache or creates one if it does not exist
      * @param target The target that holds a Settings instance of the holder for the new one

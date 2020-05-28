@@ -1,6 +1,6 @@
-import { Command, KlasaMessage, CommandStore } from 'klasa';
-import type { Message } from '@klasa/core';
+import { Command, CommandStore } from 'klasa';
+import { Message } from '@klasa/core';
 export default class extends Command {
     constructor(store: CommandStore, directory: string, files: readonly string[]);
-    run(message: KlasaMessage): Promise<Message[]>;
+    run(message: Message): Promise<Message[]>;
 }

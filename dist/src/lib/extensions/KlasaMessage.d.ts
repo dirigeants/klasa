@@ -1,9 +1,10 @@
 import { MessageBuilder, Message, MessageOptions, SplitOptions } from '@klasa/core';
 import { Cache } from '@klasa/cache';
-import type { Command } from '../structures/Command';
 import { APIMessageData } from '@klasa/dapi-types';
-import { Language } from '../structures/Language';
-import { Settings } from '../settings/Settings';
+import type { Command } from '../structures/Command';
+import type { Language } from '../structures/Language';
+import type { CommandPrompt } from '../usage/CommandPrompt';
+import type { Settings } from '../settings/Settings';
 export interface CachedPrefix {
     length: number;
     regex: RegExp | null;
@@ -31,6 +32,10 @@ export declare class KlasaMessage extends KlasaMessage_base {
      */
     prefixLength: number | null;
     /**
+     * A command prompt/argument handler.
+     */
+    prompter: CommandPrompt | null;
+    /**
      * The language for this message.
      */
     language: Language;
@@ -38,10 +43,6 @@ export declare class KlasaMessage extends KlasaMessage_base {
      * The guild level settings for this context (guild || default)
      */
     guildSettings: Settings;
-    /**
-     * A command prompt/argument handler.
-     */
-    private prompter;
     constructor(...args: any[]);
     /**
     * The previous responses to this message

@@ -1,7 +1,7 @@
 import { Cache } from '@klasa/cache';
-import { KlasaMessage } from '../extensions/KlasaMessage';
+import type { Message } from '@klasa/core';
 declare const empty: unique symbol;
-export declare type CheckFunction = (message: KlasaMessage) => boolean | null | Promise<boolean | null>;
+export declare type CheckFunction = (message: Message) => boolean | null | Promise<boolean | null>;
 export interface PermissionLevelsLevel {
     check: CheckFunction;
     fetch: boolean;
@@ -51,7 +51,7 @@ export declare class PermissionLevels extends Cache<number, typeof empty | Permi
      * @param message The message to pass to perm level functions
      * @param min The minimum permissionLevel ok to pass
      */
-    run(message: KlasaMessage, min: number): Promise<PermissionLevelsData>;
+    run(message: Message, min: number): Promise<PermissionLevelsData>;
     /**
      * Validates the permission levels, throwing an error if something is wrong
      * @since 0.6.0

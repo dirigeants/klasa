@@ -11,8 +11,8 @@ class CoreArgument extends klasa_1.Argument {
     run(argument, possible, message, custom) {
         if (!argument)
             throw message.language.get('RESOLVER_INVALID_STRING', possible.name);
-        // eslint-disable-next-line dot-notation
-        const { args, usage: { usageDelim } } = message['prompter'];
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const { args, usage: { usageDelim } } = message.prompter;
         const index = args.indexOf(argument);
         const rest = args.splice(index, args.length - index).join(usageDelim);
         args.push(rest);

@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MonitorStore = void 0;
-const Monitor_1 = require("./Monitor");
 const core_1 = require("@klasa/core");
+const Monitor_1 = require("./Monitor");
 /**
  * Stores all {@link Monitor} pieces for use in Klasa.
  * @since 0.0.1

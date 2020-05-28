@@ -1,17 +1,17 @@
 import { Cache } from '@klasa/cache';
 import type { GatewayStorage, GatewayStorageJson } from './GatewayStorage';
-import type { KlasaClient } from '../../Client';
+import type { Client } from '@klasa/core';
 export declare class GatewayDriver extends Cache<string, GatewayStorage> {
     /**
      * The client this GatewayDriver was created with.
      * @since 0.6.0
      */
-    readonly client: KlasaClient;
+    readonly client: Client;
     /**
      * Constructs a new instance of GatewayDriver.
      * @param client The client that manages this instance
      */
-    constructor(client: KlasaClient);
+    constructor(client: Client);
     /**
      * Registers a new gateway.
      * @param gateway The gateway to register

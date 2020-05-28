@@ -1,8 +1,6 @@
 import { Inhibitor } from './Inhibitor';
-import { Store } from '@klasa/core';
-import type { KlasaClient } from '../Client';
+import { Store, Client, Message } from '@klasa/core';
 import type { Command } from './Command';
-import type { KlasaMessage } from '../extensions/KlasaMessage';
 /**
  * Stores all {@link Inhibitor} pieces for use in Klasa
  */
@@ -12,7 +10,7 @@ export declare class InhibitorStore extends Store<Inhibitor> {
      * @since 0.0.1
      * @param client The Klasa client
      */
-    constructor(client: KlasaClient);
+    constructor(client: Client);
     /**
      * Runs our inhibitors on the command.
      * @since 0.0.1
@@ -20,5 +18,5 @@ export declare class InhibitorStore extends Store<Inhibitor> {
      * @param command The command being ran.
      * @param selective Whether or not we should ignore certain inhibitors to prevent spam.
      */
-    run(message: KlasaMessage, command: Command, selective?: boolean): Promise<void>;
+    run(message: Message, command: Command, selective?: boolean): Promise<void>;
 }

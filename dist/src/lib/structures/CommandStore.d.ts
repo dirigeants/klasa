@@ -1,6 +1,5 @@
 import { Command } from './Command';
-import { AliasStore } from '@klasa/core';
-import type { KlasaClient } from '../Client';
+import { AliasStore, Client } from '@klasa/core';
 /**
  * Stores all {@link Command} pieces for use in Klasa.
  * @since 0.0.1
@@ -11,5 +10,5 @@ export declare class CommandStore extends AliasStore<Command> {
      * @since 0.0.1
      * @param client The Klasa client
      */
-    constructor(client: KlasaClient);
+    constructor(client: Client);
 }

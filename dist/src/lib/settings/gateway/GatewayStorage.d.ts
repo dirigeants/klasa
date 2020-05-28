@@ -1,11 +1,11 @@
 import { Schema, SchemaJson } from '../schema/Schema';
 import type { Provider } from '../../structures/Provider';
-import type { KlasaClient } from '../../Client';
+import type { Client } from '@klasa/core';
 export declare class GatewayStorage {
     /**
      * The client this gateway was created with.
      */
-    readonly client: KlasaClient;
+    readonly client: Client;
     /**
      * The name of this gateway.
      */
@@ -22,7 +22,7 @@ export declare class GatewayStorage {
      * The provider's name that manages this gateway.
      */
     private readonly _provider;
-    constructor(client: KlasaClient, name: string, options?: GatewayStorageOptions);
+    constructor(client: Client, name: string, options?: GatewayStorageOptions);
     /**
      * The provider that manages this gateway's persistent data.
      */

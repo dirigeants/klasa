@@ -1,6 +1,5 @@
+import { Store, Client } from '@klasa/core';
 import { Task } from './Task';
-import { Store } from '@klasa/core';
-import type { KlasaClient } from '../Client';
 /**
  * Stores all {@link Task} pieces for use in Klasa.
  * @since 0.5.0
@@ -11,5 +10,5 @@ export declare class TaskStore extends Store<Task> {
      * @since 0.5.0
      * @param client The Klasa client
      */
-    constructor(client: KlasaClient);
+    constructor(client: Client);
 }

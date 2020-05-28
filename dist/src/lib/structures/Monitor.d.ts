@@ -1,7 +1,6 @@
-import { Piece, PieceOptions } from '@klasa/core';
-import { MonitorStore } from './MonitorStore';
-import { KlasaMessage } from '../extensions/KlasaMessage';
-import { MessageType } from '@klasa/dapi-types';
+import { Piece, PieceOptions, Message } from '@klasa/core';
+import type { MonitorStore } from './MonitorStore';
+import type { MessageType } from '@klasa/dapi-types';
 /**
  * Base class for all Klasa Monitors. See {@tutorial CreatingMonitors} for more information how to use this class
  * to build custom monitors.
@@ -61,13 +60,13 @@ export declare abstract class Monitor extends Piece {
      * @since 0.0.1
      * @param message The discord message
      */
-    abstract run(message: KlasaMessage): Promise<unknown>;
+    abstract run(message: Message): Promise<unknown>;
     /**
      * If the monitor should run based on the filter options
      * @since 0.5.0
      * @param message The message to check
      */
-    shouldRun(message: KlasaMessage): boolean;
+    shouldRun(message: Message): boolean;
     /**
      * Defines the JSON.stringify behavior of this monitor.
      * @returns {Object}
@@ -78,7 +77,7 @@ export declare abstract class Monitor extends Piece {
      * @since 0.5.0
      * @param message The message object from @klasa/core
      */
-    protected _run(message: KlasaMessage): Promise<void>;
+    protected _run(message: Message): Promise<void>;
 }
 export interface MonitorOptions extends PieceOptions {
     allowedTypes?: MessageType[];

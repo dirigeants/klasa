@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Usage = void 0;
+const cache_1 = require("@klasa/cache");
 const Tag_1 = require("./Tag");
 const TextPrompt_1 = require("./TextPrompt");
-const cache_1 = require("@klasa/cache");
 const open = ['[', '(', '<'];
 const close = [']', ')', '>'];
 const space = [' ', '\n'];

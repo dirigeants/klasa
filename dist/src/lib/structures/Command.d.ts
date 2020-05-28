@@ -1,11 +1,10 @@
 import { AliasPiece, AliasPieceOptions, Permissions, PermissionsResolvable, Message } from '@klasa/core';
+import { ChannelType } from '@klasa/dapi-types';
 import { Usage } from '../usage/Usage';
 import { CommandUsage } from '../usage/CommandUsage';
-import { CommandStore } from './CommandStore';
-import { Language, LanguageValue } from './Language';
-import { KlasaMessage } from '../extensions/KlasaMessage';
-import { Possible } from '../usage/Possible';
-import { ChannelType } from '@klasa/dapi-types';
+import type { CommandStore } from './CommandStore';
+import type { Language, LanguageValue } from './Language';
+import type { Possible } from '../usage/Possible';
 /**
  * Base class for all Klasa Commands. See {@tutorial CreatingCommands} for more information how to use this class
  * to build custom commands.
@@ -159,7 +158,7 @@ export declare abstract class Command extends AliasPiece {
      * @param {Function} resolver The one-off custom resolver
      * @chainable
      */
-    createCustomResolver(type: string, resolver: ((arg: any, possible: Possible, message: KlasaMessage, args: any[]) => any)): this;
+    createCustomResolver(type: string, resolver: ((arg: any, possible: Possible, message: Message, args: any[]) => any)): this;
     /**
      * Customizes the response of an argument if it fails resolution. See tutorial {@link CommandsCustomResponses}
      * @since 0.5.0
@@ -174,7 +173,7 @@ export declare abstract class Command extends AliasPiece {
      * this.customizeResponse('targetUser', (message) =>
      *     message.language.get('COMMAND_REQUIRED_USER_FRIENDLY'));
      */
-    customizeResponse(name: string, response: string | ((message: KlasaMessage) => string)): this;
+    customizeResponse(name: string, response: string | ((message: Message) => string)): this;
     /**
      * Defines the JSON.stringify behavior of this command.
      * @returns {Object}
@@ -189,7 +188,7 @@ export interface Command {
      * @param params The fully resolved parameters based on your usage / usageDelim
      * @returns You should return the response message whenever possible
      */
-    run?(message: KlasaMessage, params: any[]): Promise<Message[]>;
+    run?(message: Message, params: any[]): Promise<Message[]>;
 }
 export interface CommandOptions extends AliasPieceOptions {
     autoAliases?: boolean;

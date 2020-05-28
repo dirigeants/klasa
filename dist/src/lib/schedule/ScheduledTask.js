@@ -25,10 +25,10 @@ class ScheduledTask {
     /**
      * Initializes a new ScheduledTask
      * @since 0.5.0
-     * @param {KlasaClient} client The client that initialized this instance
-     * @param {string} taskName The name of the task this ScheduledTask is for
-     * @param {TimeResolvable} time The time or {@link Cron} pattern
-     * @param {ScheduledTaskOptions} [options={}] The options for this ScheduledTask instance
+     * @param client The client that initialized this instance
+     * @param taskName The name of the task this ScheduledTask is for
+     * @param time The time or {@link Cron} pattern
+     * @param options The options for this ScheduledTask instance
      */
     constructor(client, taskName, time, options = {}) {
         /**

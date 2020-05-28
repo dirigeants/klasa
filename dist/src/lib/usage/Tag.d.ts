@@ -1,5 +1,5 @@
 import { Possible } from './Possible';
-import { KlasaMessage } from '../extensions/KlasaMessage';
+import type { Message } from '@klasa/core';
 export declare const enum TagRequirement {
     Optional = 0,
     SemiRequired = 1,
@@ -15,7 +15,7 @@ export interface TagResponse {
      * @param message The message.
      * @param possible The possible.
      */
-    (message: KlasaMessage, possible: Possible): string;
+    (message: Message, possible: Possible): string;
 }
 /**
  * Represents a usage Tag

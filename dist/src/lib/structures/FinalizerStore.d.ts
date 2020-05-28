@@ -1,8 +1,6 @@
-import { Store } from '@klasa/core';
+import { Store, Client, Message } from '@klasa/core';
 import { Finalizer } from './Finalizer';
 import type { Stopwatch } from '@klasa/stopwatch';
-import type { KlasaClient } from '../Client';
-import type { KlasaMessage } from '../extensions/KlasaMessage';
 import type { Command } from './Command';
 /**
  * Stores all {@link Finalizer} pieces for use in Klasa.
@@ -14,7 +12,7 @@ export declare class FinalizerStore extends Store<Finalizer> {
      * @since 0.0.1
      * @param client The Klasa client
      */
-    constructor(client: KlasaClient);
+    constructor(client: Client);
     /**
      * Runs all of our finalizers after a command is ran successfully.
      * @since 0.0.1
@@ -23,5 +21,5 @@ export declare class FinalizerStore extends Store<Finalizer> {
      * @param responses The responses of the command
      * @param timer The timer run from start to queue of the command
      */
-    run(message: KlasaMessage, command: Command, responses: KlasaMessage[], timer: Stopwatch): void;
+    run(message: Message, command: Command, responses: Message[], timer: Stopwatch): void;
 }

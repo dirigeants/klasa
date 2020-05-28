@@ -1,5 +1,5 @@
 import { ScheduledTask, ScheduledTaskOptions, ScheduledTaskJSON } from './ScheduledTask';
-import type { KlasaClient } from '../Client';
+import type { Client } from '@klasa/core';
 /**
  * <warning>Schedule is a singleton, use {@link KlasaClient#schedule} instead.</warning>
  * The Schedule class that manages all scheduled tasks
@@ -10,13 +10,13 @@ export declare class Schedule {
      * The Client instance that initialized this instance
      * @since 0.5.0
      */
-    client: KlasaClient;
+    client: Client;
     /**
      * An array of all processed ScheduledTask instances
      * @since 0.5.0
      */
     tasks: ScheduledTask[];
-    constructor(client: KlasaClient);
+    constructor(client: Client);
     /**
      * Get all the tasks from the cache
      * @since 0.5.0

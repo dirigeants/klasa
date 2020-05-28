@@ -1,6 +1,5 @@
 import { SchemaEntry } from './schema/SchemaEntry';
-import type { Guild } from '@klasa/core';
-import type { KlasaClient } from '../Client';
+import type { Guild, Client } from '@klasa/core';
 import type { Schema } from './schema/Schema';
 import type { SchemaFolder } from './schema/SchemaFolder';
 import type { SerializerUpdateContext } from '../structures/Serializer';
@@ -18,7 +17,7 @@ export declare class SettingsFolder extends Map<string, unknown> {
     /**
      * The client that manages this instance.
      */
-    get client(): KlasaClient;
+    get client(): Client;
     /**
      * Get a value from the configuration. Accepts nested objects separating by dot
      * @param path The path of the key's value to get from this instance
