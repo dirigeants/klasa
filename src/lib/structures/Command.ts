@@ -1,13 +1,12 @@
 import { AliasPiece, AliasPieceOptions, Permissions, PermissionsResolvable, Message } from '@klasa/core';
 import { isFunction } from '@klasa/utils';
+import { ChannelType } from '@klasa/dapi-types';
 import { Usage } from '../usage/Usage';
 import { CommandUsage } from '../usage/CommandUsage';
-import { CommandStore } from './CommandStore';
-import { Language, LanguageValue } from './Language';
-import { KlasaMessage } from '../extensions/KlasaMessage';
-import { Possible } from '../usage/Possible';
-import { ChannelType } from '@klasa/dapi-types';
-import { KlasaClient } from '../Client';
+
+import type { CommandStore } from './CommandStore';
+import type { Language, LanguageValue } from './Language';
+import type { Possible } from '../usage/Possible';
 
 /**
  * Base class for all Klasa Commands. See {@tutorial CreatingCommands} for more information how to use this class
@@ -179,7 +178,7 @@ export abstract class Command extends AliasPiece {
 		this.requiredSettings = options.requiredSettings as string[];
 		this.runIn = options.runIn as ChannelType[];
 		this.subcommands = options.subcommands as boolean;
-		this.usage = new CommandUsage(this.client as KlasaClient, options.usage as string, options.usageDelim as string, this);
+		this.usage = new CommandUsage(this.client, options.usage as string, options.usageDelim as string, this);
 		this.cooldownLevel = options.cooldownLevel as string;
 		if (!['author', 'channel', 'guild'].includes(this.cooldownLevel)) throw new Error('Invalid cooldownLevel');
 		this.bucket = options.bucket as number;
@@ -229,7 +228,7 @@ export abstract class Command extends AliasPiece {
 	 * @returns {Usage}
 	 */
 	public definePrompt(usageString: string, usageDelim: string): Usage {
-		return new Usage(this.client as KlasaClient, usageString, usageDelim);
+		return new Usage(this.client, usageString, usageDelim);
 	}
 
 	/**
@@ -239,7 +238,7 @@ export abstract class Command extends AliasPiece {
 	 * @param {Function} resolver The one-off custom resolver
 	 * @chainable
 	 */
-	public createCustomResolver(type: string, resolver: ((arg: any, possible: Possible, message: KlasaMessage, args: any[]) => any)): this {
+	public createCustomResolver(type: string, resolver: ((arg: any, possible: Possible, message: Message, args: any[]) => any)): this {
 		this.usage.createCustomResolver(type, resolver);
 		return this;
 	}
@@ -258,7 +257,7 @@ export abstract class Command extends AliasPiece {
 	 * this.customizeResponse('targetUser', (message) =>
 	 *     message.language.get('COMMAND_REQUIRED_USER_FRIENDLY'));
 	 */
-	public customizeResponse(name: string, response: string | ((message: KlasaMessage) => string)): this {
+	public customizeResponse(name: string, response: string | ((message: Message) => string)): this {
 		this.usage.customizeResponse(name, response);
 		return this;
 	}
@@ -309,7 +308,7 @@ export interface Command {
 	 * @param params The fully resolved parameters based on your usage / usageDelim
 	 * @returns You should return the response message whenever possible
 	 */
-	run?(message: KlasaMessage, params: any[]): Promise<Message[]>;
+	run?(message: Message, params: any[]): Promise<Message[]>;
 }
 
 export interface CommandOptions extends AliasPieceOptions {

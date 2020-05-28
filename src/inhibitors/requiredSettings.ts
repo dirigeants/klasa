@@ -1,9 +1,11 @@
-import { Inhibitor, KlasaMessage, Command } from 'klasa';
+import { Inhibitor, Command } from 'klasa';
 import { ChannelType } from '@klasa/dapi-types';
+
+import type { Message } from '@klasa/core';
 
 export default class extends Inhibitor {
 
-	public run(message: KlasaMessage, command: Command): void {
+	public run(message: Message, command: Command): void {
 		if (!command.requiredSettings.length || message.channel.type !== ChannelType.GuildText) return;
 		// eslint-disable-next-line eqeqeq, @typescript-eslint/no-non-null-assertion
 		const requiredSettings = command.requiredSettings.filter(setting => message.guild!.settings.get(setting) == null);

@@ -1,14 +1,11 @@
 /* eslint-disable no-dupe-class-members */
 import { mergeDefault } from '@klasa/utils';
 import { Cache } from '@klasa/cache';
-import { Usage } from './Usage';
-import { KlasaMessage } from '../extensions/KlasaMessage';
 import { CommandUsage } from './CommandUsage';
 import { Tag, TagRequirement } from './Tag';
-import { KlasaClient } from '../Client';
 
-import type { KlasaUser } from '../extensions/KlasaUser';
-import type { TextBasedChannel, MessageOptions, MessageBuilder } from '@klasa/core';
+import type { TextBasedChannel, MessageOptions, MessageBuilder, Client, User, Message } from '@klasa/core';
+import type { Usage } from './Usage';
 
 const quotes = ['"', "'", '“”', '‘’'];
 
@@ -17,7 +14,7 @@ export interface TextPromptOptions {
 	 * The intended target of this TextPrompt, if someone other than the author.
 	 * @default message.author
 	 */
-	target?: KlasaUser;
+	target?: User;
 
 	/**
 	 * The channel to prompt in, if other than this channel.
@@ -59,19 +56,19 @@ export class TextPrompt {
 	 * The client this TextPrompt was created with
 	 * @since 0.5.0
 	 */
-	public readonly client!: KlasaClient;
+	public readonly client!: Client;
 
 	/**
 	 * The message this prompt is for
 	 * @since 0.5.0
 	 */
-	public message: KlasaMessage;
+	public message: Message;
 
 	/**
 	 * The target this prompt is for
 	 * @since 0.5.0
 	 */
-	public target: KlasaUser;
+	public target: User;
 
 	/**
 	 * The channel to prompt in
@@ -143,7 +140,7 @@ export class TextPrompt {
 	 * A cache of the users responses
 	 * @since 0.5.0
 	 */
-	public responses = new Cache<string, KlasaMessage>();
+	public responses = new Cache<string, Message>();
 
 	/**
 	 * Whether the current usage is a repeating arg
@@ -175,11 +172,11 @@ export class TextPrompt {
 	 * @param usage The usage for this prompt
 	 * @param options The options of this prompt
 	 */
-	constructor(message: KlasaMessage, usage: Usage, options: TextPromptOptions = {}) {
+	constructor(message: Message, usage: Usage, options: TextPromptOptions = {}) {
 		options = mergeDefault(message.client.options.commands.prompts, options) as TextPromptOptions;
 		Object.defineProperty(this, 'client', { value: message.client });
 		this.message = message;
-		this.target = options.target ?? message.author as KlasaUser;
+		this.target = options.target ?? message.author;
 		this.typing = false;
 		this.channel = options.channel ?? message.channel;
 		this.usage = usage;
@@ -206,21 +203,21 @@ export class TextPrompt {
 		return this.validateArgs();
 	}
 
-	private prompt(data: MessageOptions): Promise<KlasaMessage>
-	private prompt(data: (message: MessageBuilder) => MessageBuilder | Promise<MessageBuilder>): Promise<KlasaMessage>
+	private prompt(data: MessageOptions): Promise<Message>
+	private prompt(data: (message: MessageBuilder) => MessageBuilder | Promise<MessageBuilder>): Promise<Message>
 	/**
 	 * Prompts the target for a response
 	 * @since 0.5.0
 	 * @param data The message to prompt with
 	 */
-	private async prompt(data: MessageOptions | ((message: MessageBuilder) => MessageBuilder | Promise<MessageBuilder>)): Promise<KlasaMessage> {
+	private async prompt(data: MessageOptions | ((message: MessageBuilder) => MessageBuilder | Promise<MessageBuilder>)): Promise<Message> {
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-expect-error
 		const [message] = await this.channel.send(data);
 		const responses = await message.channel.awaitMessages({ idle: this.time, limit: 1, filter: msg => msg.author === this.target });
 		message.delete();
 		if (responses.size === 0) throw this.message.language.get('MESSAGE_PROMPT_TIMEOUT');
-		return responses.firstValue as KlasaMessage;
+		return responses.firstValue as Message;
 	}
 
 	/**

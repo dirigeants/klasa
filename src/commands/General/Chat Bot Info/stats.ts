@@ -1,9 +1,7 @@
-import { version as klasaVersion, Command, KlasaMessage, CommandStore } from 'klasa';
-import { version as discordVersion } from '@klasa/core/package.json';
+import { version as klasaVersion, Command, CommandStore } from 'klasa';
+import { version as coreVersion, Message } from '@klasa/core';
 import { Duration } from '@klasa/duration';
 import { codeblock } from 'discord-md-tags';
-
-import type { Message } from '@klasa/core';
 
 export default class extends Command {
 
@@ -14,7 +12,7 @@ export default class extends Command {
 		});
 	}
 
-	public async run(message: KlasaMessage): Promise<Message[]> {
+	public async run(message: Message): Promise<Message[]> {
 		return message.send(mb => mb
 			.setContent(codeblock('asciidoc') `${message.language.get('COMMAND_STATS',
 				(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2),
@@ -22,7 +20,7 @@ export default class extends Command {
 				this.client.users.size.toLocaleString(),
 				this.client.guilds.size.toLocaleString(),
 				this.client.channels.size.toLocaleString(),
-				klasaVersion, discordVersion, process.version, message
+				klasaVersion, coreVersion, process.version, message
 			)}`)
 		);
 	}

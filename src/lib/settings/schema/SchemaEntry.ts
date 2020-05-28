@@ -1,4 +1,5 @@
 import { isNumber, isFunction } from '@klasa/utils';
+
 import type { Client } from '@klasa/core';
 import type { Schema } from './Schema';
 import type { SchemaFolder } from './SchemaFolder';

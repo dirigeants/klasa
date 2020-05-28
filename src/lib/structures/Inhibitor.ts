@@ -1,7 +1,7 @@
-import { Piece, PieceOptions } from '@klasa/core';
-import { InhibitorStore } from './InhibitorStore';
-import { Command } from './Command';
-import { KlasaMessage } from '../extensions/KlasaMessage';
+import { Piece, PieceOptions, Message } from '@klasa/core';
+
+import type { InhibitorStore } from './InhibitorStore';
+import type { Command } from './Command';
 
 /**
  * Base class for all Klasa Inhibitors. See {@tutorial CreatingInhibitors} for more information how to use this class
@@ -35,7 +35,7 @@ export abstract class Inhibitor extends Piece {
 	 * @param message The message that triggered this inhibitor
 	 * @param command The command to run
 	 */
-	protected async _run(message: KlasaMessage, command: Command): Promise<boolean | string | void> {
+	protected async _run(message: Message, command: Command): Promise<boolean | string | void> {
 		try {
 			return await this.run(message, command);
 		} catch (err) {
@@ -49,7 +49,7 @@ export abstract class Inhibitor extends Piece {
 	 * @param message The message that triggered this inhibitor
 	 * @param command The command to run
 	 */
-	public abstract run(message: KlasaMessage, command: Command): boolean | string | void | Promise<boolean | string | void>;
+	public abstract run(message: Message, command: Command): boolean | string | void | Promise<boolean | string | void>;
 
 	/**
 	 * Defines the JSON.stringify behavior of this inhibitor.

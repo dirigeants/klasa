@@ -1,4 +1,5 @@
 import { SettingsFolder, SettingsExistenceStatus } from './SettingsFolder';
+
 import type { Gateway } from './gateway/Gateway';
 
 export class Settings extends SettingsFolder {

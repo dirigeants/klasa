@@ -2,8 +2,7 @@ import { isObject } from '@klasa/utils';
 import { Cron } from '@klasa/cron';
 import { Schedule } from './Schedule';
 import { Task } from '../structures/Task';
-import { KlasaClient } from '../Client';
-import { isSet } from '@klasa/core';
+import { isSet, Client } from '@klasa/core';
 
 /**
  * The structure for future tasks to be run
@@ -14,7 +13,7 @@ export class ScheduledTask {
 	 * The Client instance that initialized this instance
 	 * @since 0.5.0
 	 */
-	public client: KlasaClient;
+	public client: Client;
 
 	/**
 	 * The name of the Task this scheduled task will run
@@ -62,12 +61,12 @@ export class ScheduledTask {
 	/**
 	 * Initializes a new ScheduledTask
 	 * @since 0.5.0
-	 * @param {KlasaClient} client The client that initialized this instance
-	 * @param {string} taskName The name of the task this ScheduledTask is for
-	 * @param {TimeResolvable} time The time or {@link Cron} pattern
-	 * @param {ScheduledTaskOptions} [options={}] The options for this ScheduledTask instance
+	 * @param client The client that initialized this instance
+	 * @param taskName The name of the task this ScheduledTask is for
+	 * @param time The time or {@link Cron} pattern
+	 * @param options The options for this ScheduledTask instance
 	 */
-	public constructor(client: KlasaClient, taskName: string, time: TimeResolvable, options: ScheduledTaskUpdateOptions = {}) {
+	public constructor(client: Client, taskName: string, time: TimeResolvable, options: ScheduledTaskUpdateOptions = {}) {
 		const [_time, _recurring] = (this.constructor as typeof ScheduledTask)._resolveTime(time);
 
 		this.client = client;
@@ -200,7 +199,7 @@ export class ScheduledTask {
 	 * @since 0.5.0
 	 * @param client The Discord client
 	 */
-	private static _generateID(client: KlasaClient): string {
+	private static _generateID(client: Client): string {
 		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		return `${Date.now().toString(36)}${client.ws.shards.firstValue!.id.toString(36)}`;
 	}

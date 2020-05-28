@@ -1,8 +1,7 @@
 import { isObject, objectToTuples, mergeObjects, makeObject, arrayStrictEquals } from '@klasa/utils';
 import { SchemaEntry } from './schema/SchemaEntry';
 
-import type { Guild } from '@klasa/core';
-import type { KlasaClient } from '../Client';
+import type { Guild, Client } from '@klasa/core';
 import type { Language } from '../structures/Language';
 import type { Schema } from './schema/Schema';
 import type { SchemaFolder } from './schema/SchemaFolder';
@@ -32,7 +31,7 @@ export class SettingsFolder extends Map<string, unknown> {
 	/**
 	 * The client that manages this instance.
 	 */
-	public get client(): KlasaClient {
+	public get client(): Client {
 		if (this.base === null) throw new Error('Cannot retrieve gateway from a non-ready settings instance.');
 		return this.base.gateway.client;
 	}

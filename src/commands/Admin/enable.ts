@@ -1,6 +1,7 @@
-import { Command, CommandStore, KlasaMessage } from 'klasa';
-import { Message, Piece } from '@klasa/core';
+import { Command, CommandStore } from 'klasa';
 import { codeblock } from 'discord-md-tags';
+
+import type { Message, Piece } from '@klasa/core';
 
 export default class extends Command {
 
@@ -13,7 +14,7 @@ export default class extends Command {
 		});
 	}
 
-	public async run(message: KlasaMessage, [piece]: Piece[]): Promise<Message[]> {
+	public async run(message: Message, [piece]: Piece[]): Promise<Message[]> {
 		piece.enable();
 		return message.send(mb => mb.setContent(codeblock('diff') `${message.language.get('COMMAND_ENABLE', [piece.type, piece.name])}`));
 	}

@@ -1,5 +1,4 @@
-import { Event, EventStore } from '@klasa/core';
-import type { KlasaMessage } from 'src/lib/extensions/KlasaMessage';
+import { Event, EventStore, Message } from '@klasa/core';
 
 export default class extends Event {
 
@@ -7,7 +6,7 @@ export default class extends Event {
 		super(store, directory, file, { event: 'messageCreate' });
 	}
 
-	public run(message: KlasaMessage): void {
+	public run(message: Message): void {
 		this.client.monitors.run(message);
 	}
 

@@ -2,6 +2,7 @@ import { pathExists } from 'fs-nextra';
 import { join } from 'path';
 import { Piece, PieceConstructor } from '@klasa/core';
 import { mergeDefault, isClass } from '@klasa/utils';
+
 import type { LanguageStore } from './LanguageStore';
 
 export type LanguageValue = string | ((...args: any[]) => string);

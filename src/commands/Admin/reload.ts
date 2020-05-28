@@ -1,4 +1,4 @@
-import { Command, CommandStore, KlasaMessage } from 'klasa';
+import { Command, CommandStore } from 'klasa';
 import { Piece, Store, Message } from '@klasa/core';
 import { Stopwatch } from '@klasa/stopwatch';
 
@@ -14,7 +14,7 @@ export default class extends Command {
 		});
 	}
 
-	public async run(message: KlasaMessage, [piece]: [Piece | Store<Piece> | 'everything']): Promise<Message[]> {
+	public async run(message: Message, [piece]: [Piece | Store<Piece> | 'everything']): Promise<Message[]> {
 		if (piece === 'everything') return this.everything(message);
 		if (piece instanceof Store) {
 			const timer = new Stopwatch();
@@ -35,7 +35,7 @@ export default class extends Command {
 		}
 	}
 
-	public async everything(message: KlasaMessage): Promise<Message[]> {
+	public async everything(message: Message): Promise<Message[]> {
 		const timer = new Stopwatch();
 		await Promise.all(this.client.pieceStores.map(async (store) => {
 			await store.loadAll();

@@ -1,10 +1,10 @@
 import { Cache } from '@klasa/cache';
 
-import { KlasaMessage } from '../extensions/KlasaMessage';
+import type { Message } from '@klasa/core';
 
 const empty = Symbol('empty');
 
-export type CheckFunction = (message: KlasaMessage) => boolean | null | Promise<boolean | null>;
+export type CheckFunction = (message: Message) => boolean | null | Promise<boolean | null>;
 
 export interface PermissionLevelsLevel {
 	check: CheckFunction;
@@ -90,7 +90,7 @@ export class PermissionLevels extends Cache<number, typeof empty | PermissionLev
 	 * @param message The message to pass to perm level functions
 	 * @param min The minimum permissionLevel ok to pass
 	 */
-	public async run(message: KlasaMessage, min: number): Promise<PermissionLevelsData> {
+	public async run(message: Message, min: number): Promise<PermissionLevelsData> {
 		for (let i = min; i < this.size; i++) {
 			const level = this.get(i);
 			if (!level || level === empty) continue;

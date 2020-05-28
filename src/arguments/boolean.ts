@@ -1,4 +1,7 @@
-import { Argument, ArgumentStore, KlasaMessage, Possible } from 'klasa';
+import { Argument, ArgumentStore, Possible } from 'klasa';
+
+import type { Message } from '@klasa/core';
+
 const truths = ['1', 'true', '+', 't', 'yes', 'y'];
 const falses = ['0', 'false', '-', 'f', 'no', 'n'];
 
@@ -8,7 +11,7 @@ export default class CoreArgument extends Argument {
 		super(store, directory, file, { aliases: ['bool'] });
 	}
 
-	public run(argument: string, possible: Possible, message: KlasaMessage): boolean {
+	public run(argument: string, possible: Possible, message: Message): boolean {
 		const boolean = String(argument).toLowerCase();
 		if (truths.includes(boolean)) return true;
 		if (falses.includes(boolean)) return false;

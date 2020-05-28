@@ -1,5 +1,6 @@
-import { Command, CommandStore, KlasaMessage } from 'klasa';
-import { Message } from '@klasa/core';
+import { Command, CommandStore } from 'klasa';
+
+import type { Message } from '@klasa/core';
 
 export default class extends Command {
 
@@ -11,7 +12,7 @@ export default class extends Command {
 		});
 	}
 
-	public async run(message: KlasaMessage): Promise<Message[]> {
+	public async run(message: Message): Promise<Message[]> {
 		await message.sendLocale('COMMAND_REBOOT').catch(err => this.client.emit('error', err));
 		await Promise.all(this.client.providers.map(provider => provider.shutdown()));
 		process.exit();

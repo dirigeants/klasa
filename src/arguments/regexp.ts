@@ -1,4 +1,6 @@
-import { Argument, ArgumentStore, Possible, KlasaMessage } from 'klasa';
+import { Argument, ArgumentStore, Possible } from 'klasa';
+
+import type { Message } from '@klasa/core';
 
 export default class CoreArgument extends Argument {
 
@@ -6,7 +8,7 @@ export default class CoreArgument extends Argument {
 		super(store, directory, file, { aliases: ['reg', 'regex'] });
 	}
 
-	public run(argument: string, possible: Possible, message: KlasaMessage): RegExpExecArray {
+	public run(argument: string, possible: Possible, message: Message): RegExpExecArray {
 		const regex = possible.regex as RegExp;
 		const results = regex.exec(argument);
 		if (results) return results;

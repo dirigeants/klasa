@@ -2,14 +2,14 @@
 import { extender, MessageBuilder, Message, MessageOptions, SplitOptions } from '@klasa/core';
 import { Cache } from '@klasa/cache';
 import { regExpEsc } from '@klasa/utils';
+import { APIMessageData, ChannelType } from '@klasa/dapi-types';
 
 import type { Command } from '../structures/Command';
-import { APIMessageData, ChannelType } from '@klasa/dapi-types';
-import { Language } from '../structures/Language';
-import { KlasaGuild } from './KlasaGuild';
-import { CommandPrompt } from '../usage/CommandPrompt';
-import { Gateway } from '../settings/gateway/Gateway';
-import { Settings } from '../settings/Settings';
+import type { Language } from '../structures/Language';
+import type { CommandPrompt } from '../usage/CommandPrompt';
+import type { Gateway } from '../settings/gateway/Gateway';
+import type { Settings } from '../settings/Settings';
+
 
 export interface CachedPrefix {
 	length: number;
@@ -43,6 +43,11 @@ export class KlasaMessage extends extender.get('Message') {
 	public prefixLength!: number | null;
 
 	/**
+	 * A command prompt/argument handler.
+	 */
+	public prompter!: CommandPrompt | null;
+
+	/**
 	 * The language for this message.
 	 */
 	public language!: Language;
@@ -52,10 +57,6 @@ export class KlasaMessage extends extender.get('Message') {
 	 */
 	public guildSettings!: Settings;
 
-	/**
-	 * A command prompt/argument handler.
-	 */
-	private prompter!: CommandPrompt | null;
 
 	/**
 	 * All of the responses to this message.
@@ -209,7 +210,7 @@ export class KlasaMessage extends extender.get('Message') {
 	protected _patch(data: Partial<APIMessageData>): this {
 		super._patch(data);
 
-		this.language = this.guild ? (this.guild as KlasaGuild).language : this.client.languages.default;
+		this.language = this.guild ? this.guild.language : this.client.languages.default;
 
 		if (!this.guildSettings) {
 			this.guildSettings = this.guild ? this.guild.settings : (this.client.gateways.get('guilds') as Gateway).schema.defaults as Settings;

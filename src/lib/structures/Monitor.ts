@@ -1,7 +1,7 @@
-import { Piece, PieceOptions } from '@klasa/core';
-import { MonitorStore } from './MonitorStore';
-import { KlasaMessage } from '../extensions/KlasaMessage';
-import { MessageType } from '@klasa/dapi-types';
+import { Piece, PieceOptions, Message } from '@klasa/core';
+
+import type { MonitorStore } from './MonitorStore';
+import type { MessageType } from '@klasa/dapi-types';
 
 /**
  * Base class for all Klasa Monitors. See {@tutorial CreatingMonitors} for more information how to use this class
@@ -82,14 +82,14 @@ export abstract class Monitor extends Piece {
 	 * @since 0.0.1
 	 * @param message The discord message
 	 */
-	public abstract async run(message: KlasaMessage): Promise<unknown>;
+	public abstract async run(message: Message): Promise<unknown>;
 
 	/**
 	 * If the monitor should run based on the filter options
 	 * @since 0.5.0
 	 * @param message The message to check
 	 */
-	public shouldRun(message: KlasaMessage): boolean {
+	public shouldRun(message: Message): boolean {
 		return this.enabled &&
 			this.allowedTypes.includes(message.type) &&
 			!(this.ignoreBots && message.author.bot) &&
@@ -123,7 +123,7 @@ export abstract class Monitor extends Piece {
 	 * @since 0.5.0
 	 * @param message The message object from @klasa/core
 	 */
-	protected async _run(message: KlasaMessage): Promise<void> {
+	protected async _run(message: Message): Promise<void> {
 		try {
 			await this.run(message);
 		} catch (err) {

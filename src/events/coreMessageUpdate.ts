@@ -1,5 +1,4 @@
-import { Event, EventStore } from '@klasa/core';
-import type { KlasaMessage } from 'klasa';
+import { Event, EventStore, Message } from '@klasa/core';
 
 export default class extends Event {
 
@@ -7,7 +6,7 @@ export default class extends Event {
 		super(store, directory, file, { event: 'messageUpdate' });
 	}
 
-	public run(message: KlasaMessage, previous: KlasaMessage): void {
+	public run(message: Message, previous: Message): void {
 		if (previous.content !== message.content) this.client.monitors.run(message);
 	}
 

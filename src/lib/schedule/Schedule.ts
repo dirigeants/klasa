@@ -1,7 +1,7 @@
 import { TimerManager } from '@klasa/timer-manager';
 import { ScheduledTask, ScheduledTaskOptions, ScheduledTaskJSON } from './ScheduledTask';
 
-import type { KlasaClient } from '../Client';
+import type { Client } from '@klasa/core';
 
 /**
  * <warning>Schedule is a singleton, use {@link KlasaClient#schedule} instead.</warning>
@@ -13,7 +13,7 @@ export class Schedule {
 	 * The Client instance that initialized this instance
 	 * @since 0.5.0
 	 */
-	public client: KlasaClient;
+	public client: Client;
 
 	/**
 	 * An array of all processed ScheduledTask instances
@@ -27,7 +27,7 @@ export class Schedule {
 	 */
 	#interval: NodeJS.Timer | null = null;
 
-	constructor(client: KlasaClient) {
+	constructor(client: Client) {
 		this.client = client;
 	}
 

@@ -1,5 +1,6 @@
 import { objectToTuples } from '@klasa/utils';
 import { Provider } from './Provider';
+
 import type { SchemaFolder } from '../settings/schema/SchemaFolder';
 import type { SchemaEntry } from '../settings/schema/SchemaEntry';
 import type { SettingsUpdateResults } from '../settings/SettingsFolder';

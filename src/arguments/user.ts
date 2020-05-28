@@ -1,5 +1,6 @@
-import { Argument, ArgumentStore, Possible, KlasaMessage } from 'klasa';
-import { User } from '@klasa/core';
+import { Argument, ArgumentStore, Possible } from 'klasa';
+
+import type { User, Message } from '@klasa/core';
 
 export default class CoreArgument extends Argument {
 
@@ -7,7 +8,7 @@ export default class CoreArgument extends Argument {
 		super(store, directory, file, { aliases: ['mention'] });
 	}
 
-	public async run(argument: string, possible: Possible, message: KlasaMessage): Promise<User> {
+	public async run(argument: string, possible: Possible, message: Message): Promise<User> {
 		const userID = Argument.regex.userOrMember.exec(argument);
 		const user = userID ? await this.client.users.fetch(userID[1]).catch(() => null) : null;
 		if (user) return user;

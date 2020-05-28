@@ -1,5 +1,6 @@
-import { Command, CommandStore, KlasaMessage } from 'klasa';
-import { Message, Piece } from '@klasa/core';
+import { Command, CommandStore } from 'klasa';
+
+import type { Message, Piece } from '@klasa/core';
 
 export default class extends Command {
 
@@ -13,7 +14,7 @@ export default class extends Command {
 		});
 	}
 
-	public async run(message: KlasaMessage, [piece]: [Piece]): Promise<Message[]> {
+	public async run(message: Message, [piece]: [Piece]): Promise<Message[]> {
 		if ((piece.type === 'event' && piece.name === 'message') || (piece.type === 'monitor' && piece.name === 'commandHandler')) {
 			return message.sendLocale('COMMAND_UNLOAD_WARN');
 		}

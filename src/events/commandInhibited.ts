@@ -1,9 +1,10 @@
-import { Event } from '@klasa/core';
-import type { Command, KlasaMessage } from 'klasa';
+import { Event, Message } from '@klasa/core';
+
+import type { Command } from 'klasa';
 
 export default class extends Event {
 
-	public run(message: KlasaMessage, _command: Command, response: string): void {
+	public run(message: Message, _command: Command, response: string): void {
 		if (response && response.length) message.send(mb => mb.setContent(response));
 	}
 

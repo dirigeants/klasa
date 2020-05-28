@@ -1,9 +1,9 @@
+import { Cache } from '@klasa/cache';
 import { Tag, TagRequirement, TagResponse } from './Tag';
 import { TextPrompt, TextPromptOptions } from './TextPrompt';
-import { KlasaClient } from '../Client';
-import { KlasaMessage } from '../extensions/KlasaMessage';
-import { Cache } from '@klasa/cache';
-import { Possible } from './Possible';
+
+import type { Client, Message } from '@klasa/core';
+import type { Possible } from './Possible';
 
 const open = ['[', '(', '<'];
 const close = [']', ')', '>'];
@@ -18,7 +18,7 @@ export class Usage {
 	 * The client this Usage was created with
 	 * @since 0.0.1
 	 */
-	public readonly client!: KlasaClient;
+	public readonly client!: Client;
 
 	/**
 	 * The usage string re-deliminated with the usageDelim
@@ -56,7 +56,7 @@ export class Usage {
 	 * @param usageString The raw usage string
 	 * @param usageDelim The deliminator for this usage
 	 */
-	constructor(client: KlasaClient, usageString: string, usageDelim: string) {
+	constructor(client: Client, usageString: string, usageDelim: string) {
 		Object.defineProperty(this, 'client', { value: client });
 		this.deliminatedUsage = usageString !== '' ? ` ${usageString.split(' ').join(usageDelim)}` : '';
 		this.usageString = usageString;
@@ -94,7 +94,7 @@ export class Usage {
 	 * @param message The message context from the prompt
 	 * @param options The options for the prompt
 	 */
-	public createPrompt(message: KlasaMessage, options: TextPromptOptions = {}): TextPrompt {
+	public createPrompt(message: Message, options: TextPromptOptions = {}): TextPrompt {
 		return new TextPrompt(message, this, options);
 	}
 
@@ -218,7 +218,7 @@ export interface CustomUsageArgument {
 	 * @param message The message that is being parsed.
 	 * @param params The parsed parameters from the previous arguments.
 	 */
-	(argument: string, possible: Possible, message: KlasaMessage, params: unknown[]): unknown | Promise<unknown>;
+	(argument: string, possible: Possible, message: Message, params: unknown[]): unknown | Promise<unknown>;
 }
 
 interface UsageContext {

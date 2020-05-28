@@ -1,9 +1,7 @@
-import { Inhibitor, KlasaMessage, Command } from 'klasa';
-import { Permissions } from '@klasa/core';
+import { Inhibitor, Command } from 'klasa';
+import { Permissions, PermissionsFlags, Message } from '@klasa/core';
 import { toTitleCase } from '@klasa/utils';
 import { ChannelType } from '@klasa/dapi-types';
-
-type Key = keyof typeof Permissions.FLAGS;
 
 export default class extends Inhibitor {
 
@@ -14,15 +12,15 @@ export default class extends Inhibitor {
 	private readonly friendlyPerms = Object.keys(Permissions.FLAGS).reduce((obj, key) => {
 		Reflect.set(obj, key, toTitleCase(key.split('_').join(' ')));
 		return obj;
-	}, {}) as Record<Key, string>;
+	}, {}) as Record<PermissionsFlags, string>;
 
-	public run(message: KlasaMessage, command: Command): void {
-		const missing = message.channel.type === ChannelType.GuildText ?
+	public run(message: Message, command: Command): void {
+		const missing: PermissionsFlags[] = message.channel.type === ChannelType.GuildText ?
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-			message.guild!.me?.permissionsIn(message.channel).missing(command.requiredPermissions) ?? [] :
-			this.impliedPermissions.missing(command.requiredPermissions);
+			(message.guild!.me?.permissionsIn(message.channel).missing(command.requiredPermissions) ?? []) as PermissionsFlags[] :
+			this.impliedPermissions.missing(command.requiredPermissions) as PermissionsFlags[];
 
-		if (missing.length) throw message.language.get('INHIBITOR_MISSING_BOT_PERMS', missing.map(key => this.friendlyPerms[key as Key]).join(', '));
+		if (missing.length) throw message.language.get('INHIBITOR_MISSING_BOT_PERMS', missing.map(key => this.friendlyPerms[key]).join(', '));
 	}
 
 }

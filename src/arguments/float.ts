@@ -1,4 +1,6 @@
-import { Argument, ArgumentStore, Possible, KlasaMessage, KlasaClient } from 'klasa';
+import { Argument, ArgumentStore, Possible } from 'klasa';
+
+import type { Message } from '@klasa/core';
 
 export default class CoreArgument extends Argument {
 
@@ -6,11 +8,11 @@ export default class CoreArgument extends Argument {
 		super(store, directory, file, { aliases: ['num', 'number'] });
 	}
 
-	public run(argument: string, possible: Possible, message: KlasaMessage): number | null {
+	public run(argument: string, possible: Possible, message: Message): number | null {
 		const { min, max } = possible;
 		const number = parseFloat(argument);
 		if (Number.isNaN(number)) throw message.language.get('RESOLVER_INVALID_FLOAT', possible.name);
-		return Argument.minOrMax(this.client as KlasaClient, number, min, max, possible, message) ? number : null;
+		return Argument.minOrMax(this.client, number, min, max, possible, message) ? number : null;
 	}
 
 }

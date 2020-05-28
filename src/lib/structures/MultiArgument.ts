@@ -1,7 +1,7 @@
 import { Argument } from './Argument';
-import { Possible } from '../usage/Possible';
-import { KlasaMessage } from '../extensions/KlasaMessage';
-import { CommandPrompt } from '../usage/CommandPrompt';
+
+import type { Message } from '@klasa/core';
+import type { Possible } from '../usage/Possible';
 
 /**
  * Base abstracted class for multi-resolving values.
@@ -21,13 +21,13 @@ export class MultiArgument extends Argument {
 	 * @since 0.5.0
 	 * @param {string} argument The string argument string to resolve
 	 * @param {Possible} possible This current usage possible
-	 * @param {KlasaMessage} message The message that triggered the command
+	 * @param {Message} message The message that triggered the command
 	 */
-	public async run(argument: string, possible: Possible, message: KlasaMessage): Promise<any[]> {
+	public async run(argument: string, possible: Possible, message: Message): Promise<any[]> {
 		const structures = [];
 		const { min, max } = possible;
-		// eslint-disable-next-line dot-notation
-		const { args, usage: { usageDelim } } = message['prompter'] as CommandPrompt;
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+		const { args, usage: { usageDelim } } = message.prompter!;
 		const index = args.indexOf(argument);
 		const rest = args.splice(index, args.length - index);
 		const { base } = this;

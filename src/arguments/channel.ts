@@ -1,9 +1,10 @@
-import { Argument, Possible, KlasaMessage } from 'klasa';
-import { Channel } from '@klasa/core';
+import { Argument, Possible } from 'klasa';
+
+import type { Channel, Message } from '@klasa/core';
 
 export default class CoreArgument extends Argument {
 
-	public async run(argument: string, possible: Possible, message: KlasaMessage): Promise<Channel> {
+	public async run(argument: string, possible: Possible, message: Message): Promise<Channel> {
 		// Regular Channel support
 		const channelID = Argument.regex.channel.exec(argument);
 		const channel = channelID ? await this.client.channels.fetch(channelID[1]).catch(() => null) : null;

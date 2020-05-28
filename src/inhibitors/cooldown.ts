@@ -1,5 +1,7 @@
-import { Inhibitor, KlasaMessage, Command, InhibitorStore, Finalizer } from 'klasa';
+import { Inhibitor, Command, InhibitorStore, Finalizer } from 'klasa';
+
 import type { RateLimit } from '@klasa/ratelimits';
+import type { Message } from '@klasa/core';
 
 export default class extends Inhibitor {
 
@@ -7,7 +9,7 @@ export default class extends Inhibitor {
 		super(store, directory, files, { spamProtection: true });
 	}
 
-	public run(message: KlasaMessage, command: Command): void {
+	public run(message: Message, command: Command): void {
 		if (this.client.owners.has(message.author) || command.cooldown <= 0) return;
 
 		let existing;
@@ -24,5 +26,5 @@ export default class extends Inhibitor {
 }
 
 interface CommandCooldown extends Finalizer {
-	getCooldown(message: KlasaMessage, command: Command): RateLimit;
+	getCooldown(message: Message, command: Command): RateLimit;
 }

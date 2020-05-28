@@ -1,9 +1,7 @@
-import { Store, PieceConstructor } from '@klasa/core';
+import { Store, PieceConstructor, Client, Message } from '@klasa/core';
 import { Finalizer } from './Finalizer';
 
 import type { Stopwatch } from '@klasa/stopwatch';
-import type { KlasaClient } from '../Client';
-import type { KlasaMessage } from '../extensions/KlasaMessage';
 import type { Command } from './Command';
 
 /**
@@ -17,7 +15,7 @@ export class FinalizerStore extends Store<Finalizer> {
 	 * @since 0.0.1
 	 * @param client The Klasa client
 	 */
-	public constructor(client: KlasaClient) {
+	public constructor(client: Client) {
 		super(client, 'finalizers', Finalizer as PieceConstructor<Finalizer>);
 	}
 
@@ -29,7 +27,7 @@ export class FinalizerStore extends Store<Finalizer> {
 	 * @param responses The responses of the command
 	 * @param timer The timer run from start to queue of the command
 	 */
-	public run(message: KlasaMessage, command: Command, responses: KlasaMessage[], timer: Stopwatch): void {
+	public run(message: Message, command: Command, responses: Message[], timer: Stopwatch): void {
 		// eslint-disable-next-line dot-notation
 		for (const finalizer of this.values()) if (finalizer.enabled) finalizer['_run'](message, command, responses, timer);
 	}

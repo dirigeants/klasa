@@ -1,8 +1,9 @@
-import { Command, CommandStore, KlasaMessage } from 'klasa';
+import { Command, CommandStore } from 'klasa';
 import { Stopwatch } from '@klasa/stopwatch';
 import { pathExists } from 'fs-nextra';
 import { join } from 'path';
-import { Message, Store, Piece } from '@klasa/core';
+
+import type { Message, Store, Piece } from '@klasa/core';
 
 export default class extends Command {
 
@@ -19,7 +20,7 @@ export default class extends Command {
 		});
 	}
 
-	async run(message: KlasaMessage, [core, store, rawPath]: [string, Store<Piece>, string]): Promise<Message[]> {
+	async run(message: Message, [core, store, rawPath]: [string, Store<Piece>, string]): Promise<Message[]> {
 		const path = (rawPath.endsWith('.js') ? rawPath : `${rawPath}.js`).split(this.regExp);
 		const timer = new Stopwatch();
 		const piece = await (core ? this.tryEach(store, path) : store.load(store.userDirectory, path));

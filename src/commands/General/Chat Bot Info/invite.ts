@@ -1,5 +1,6 @@
-import { Command, CommandStore, KlasaMessage } from 'klasa';
-import { Message } from '@klasa/core';
+import { Command, CommandStore } from 'klasa';
+
+import type { Message } from '@klasa/core';
 
 export default class extends Command {
 
@@ -10,7 +11,7 @@ export default class extends Command {
 		});
 	}
 
-	public async run(message: KlasaMessage): Promise<Message[]> {
+	public async run(message: Message): Promise<Message[]> {
 		return message.sendLocale('COMMAND_INVITE');
 	}
 

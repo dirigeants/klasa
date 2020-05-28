@@ -27,6 +27,7 @@ import type {
 import type { ExtendableOptions } from '../structures/Extendable';
 import type { InhibitorOptions } from '../structures/Inhibitor';
 import type { MonitorOptions } from '../structures/Monitor';
+import { CommandPrompt } from '../usage/CommandPrompt';
 
 declare module '@klasa/core/dist/src/lib/client/Client' {
 
@@ -87,7 +88,7 @@ declare module '@klasa/core/dist/src/lib/caching/structures/guilds/Guild' {
 
 	export interface Guild {
 		settings: Settings;
-		language: Language | null;
+		language: Language;
 	}
 
 }
@@ -107,6 +108,7 @@ declare module '@klasa/core/dist/src/lib/caching/structures/Message' {
 		commandText: string | null;
 		prefix: RegExp | null;
 		prefixLength: number | null;
+		prompter: CommandPrompt | null;
 		language: Language;
 		guildSettings: Settings;
 		readonly responses: Message[];

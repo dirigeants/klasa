@@ -1,5 +1,6 @@
 import { Serializer, SerializerUpdateContext, SerializerStore } from 'klasa';
-import { Piece } from '@klasa/core';
+
+import type { Piece } from '@klasa/core';
 
 export default class CoreSerializer extends Serializer {
 

@@ -1,5 +1,6 @@
 import { TextPrompt, TextPromptOptions } from './TextPrompt';
-import type { KlasaMessage } from '../extensions/KlasaMessage';
+
+import type { Message } from '@klasa/core';
 import type { CommandUsage } from './CommandUsage';
 
 /**
@@ -14,7 +15,7 @@ export class CommandPrompt extends TextPrompt {
 	 * @param usage The usage of the command
 	 * @param options The options for this CommandPrompt
 	 */
-	public constructor(message: KlasaMessage, usage: CommandUsage, options: TextPromptOptions = {}) {
+	public constructor(message: Message, usage: CommandUsage, options: TextPromptOptions = {}) {
 		super(message, usage, options);
 		this.typing = this.client.options.commands.typing;
 		// eslint-disable-next-line dot-notation

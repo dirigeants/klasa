@@ -1,8 +1,9 @@
-import { Command, CommandStore, KlasaMessage } from 'klasa';
+import { Command, CommandStore } from 'klasa';
 import { isFunction } from '@klasa/utils';
-import { Message } from '@klasa/core';
 import { codeblock } from 'discord-md-tags';
 import { ChannelType } from '@klasa/dapi-types';
+
+import type { Message } from '@klasa/core';
 
 export default class extends Command {
 
@@ -20,7 +21,7 @@ export default class extends Command {
 		});
 	}
 
-	async run(message: KlasaMessage, [command]: [Command]): Promise<Message[]> {
+	async run(message: Message, [command]: [Command]): Promise<Message[]> {
 		if (command) {
 			const info = [
 				`= ${command.name} = `,
@@ -56,7 +57,7 @@ export default class extends Command {
 		return response;
 	}
 
-	private async buildHelp(message: KlasaMessage): Promise<Record<string, Record<string, string[]>>> {
+	private async buildHelp(message: Message): Promise<Record<string, Record<string, string[]>>> {
 		const help: Record<string, Record<string, string[]>> = {};
 
 		const prefix = message.guildSettings.get('prefix');

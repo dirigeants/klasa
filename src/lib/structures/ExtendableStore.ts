@@ -1,7 +1,5 @@
 import { Extendable } from './Extendable';
-import { Store, PieceConstructor } from '@klasa/core';
-
-import type { KlasaClient } from '../Client';
+import { Store, PieceConstructor, Client } from '@klasa/core';
 
 /**
  * Stores all {@link Extendable} pieces for use in Klasa.
@@ -14,7 +12,7 @@ export class ExtendableStore extends Store<Extendable> {
 	 * @since 0.0.1
 	 * @param client The Klasa client
 	 */
-	public constructor(client: KlasaClient) {
+	public constructor(client: Client) {
 		super(client, 'extendables', Extendable as PieceConstructor<Extendable>);
 	}
 

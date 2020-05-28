@@ -1,10 +1,11 @@
-import { Command, CommandStore, KlasaMessage } from 'klasa';
+import { Command, CommandStore } from 'klasa';
 import { inspect } from 'util';
-import { Message } from '@klasa/core';
 import { Stopwatch } from '@klasa/stopwatch';
 import { codeblock } from 'discord-md-tags';
 import { Type } from '@klasa/type';
 import { isThenable } from '@klasa/utils';
+
+import type { Message } from '@klasa/core';
 
 export default class extends Command {
 
@@ -19,7 +20,7 @@ export default class extends Command {
 		});
 	}
 
-	public async run(message: KlasaMessage, [code]: string[]): Promise<Message[]> {
+	public async run(message: Message, [code]: string[]): Promise<Message[]> {
 		const { success, result, time, type } = await this.eval(message, code);
 		const footer = codeblock('ts')`${type}`;
 		const output = message.language.get(success ? 'COMMAND_EVAL_OUTPUT' : 'COMMAND_EVAL_ERROR',
@@ -43,7 +44,7 @@ export default class extends Command {
 	}
 
 	// Eval the input
-	private async eval(message: KlasaMessage, code: string): Promise<EvalResults> {
+	private async eval(message: Message, code: string): Promise<EvalResults> {
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-expect-error
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars

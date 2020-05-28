@@ -1,5 +1,7 @@
-import { Inhibitor, KlasaMessage, InhibitorStore } from 'klasa';
+import { Inhibitor, InhibitorStore } from 'klasa';
 import { RateLimitManager } from '@klasa/ratelimits';
+
+import type { Message } from '@klasa/core';
 
 export default class extends Inhibitor {
 
@@ -14,7 +16,7 @@ export default class extends Inhibitor {
 		if (!this.client.options.commands.slowmode) this.disable();
 	}
 
-	public run(message: KlasaMessage): void {
+	public run(message: Message): void {
 		if (this.client.owners.has(message.author)) return;
 
 		const rateLimit = this.slowmode.acquire(message.author.id);

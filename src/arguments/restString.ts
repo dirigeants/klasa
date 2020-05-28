@@ -1,4 +1,6 @@
-import { Argument, ArgumentStore, Possible, KlasaMessage, CustomUsageArgument, CommandPrompt } from 'klasa';
+import { Argument, ArgumentStore, Possible, CustomUsageArgument } from 'klasa';
+
+import type { Message } from '@klasa/core';
 
 export default class CoreArgument extends Argument {
 
@@ -10,10 +12,10 @@ export default class CoreArgument extends Argument {
 		return this.store.get('string') as Argument;
 	}
 
-	public run(argument: string, possible: Possible, message: KlasaMessage, custom: CustomUsageArgument): string {
+	public run(argument: string, possible: Possible, message: Message, custom: CustomUsageArgument): string {
 		if (!argument) throw message.language.get('RESOLVER_INVALID_STRING', possible.name);
-		// eslint-disable-next-line dot-notation
-		const { args, usage: { usageDelim } } = message['prompter'] as CommandPrompt;
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+		const { args, usage: { usageDelim } } = message.prompter!;
 		const index = args.indexOf(argument);
 		const rest = args.splice(index, args.length - index).join(usageDelim);
 		args.push(rest);

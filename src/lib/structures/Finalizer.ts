@@ -1,7 +1,7 @@
-import { Piece } from '@klasa/core';
-import { Stopwatch } from '@klasa/stopwatch';
-import { KlasaMessage } from '../extensions/KlasaMessage';
-import { Command } from './Command';
+import { Piece, Message } from '@klasa/core';
+
+import type { Stopwatch } from '@klasa/stopwatch';
+import type { Command } from './Command';
 
 /**
  * Base class for all Klasa Finalizers. See {@tutorial CreatingFinalizers} for more information how to use this class
@@ -19,7 +19,7 @@ export abstract class Finalizer extends Piece {
 	 * @param responses The bot's response message, if one is returned
 	 * @param runTime The time it took to generate the command
 	 */
-	public abstract run(message: KlasaMessage, command: Command, responses: KlasaMessage[] | undefined, runTime: Stopwatch): Promise<unknown> | unknown;
+	public abstract run(message: Message, command: Command, responses: Message[] | undefined, runTime: Stopwatch): Promise<unknown> | unknown;
 
 
 	/**
@@ -30,7 +30,7 @@ export abstract class Finalizer extends Piece {
 	 * @param responses The bot's response message, if one is returned
 	 * @param runTime The time it took to generate the command
 	 */
-	protected async _run(message: KlasaMessage, command: Command, responses: KlasaMessage[] | undefined, runTime: Stopwatch): Promise<void> {
+	protected async _run(message: Message, command: Command, responses: Message[] | undefined, runTime: Stopwatch): Promise<void> {
 		try {
 			await this.run(message, command, responses, runTime);
 		} catch (err) {

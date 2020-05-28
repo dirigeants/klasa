@@ -1,4 +1,4 @@
-import { Command, CommandStore, KlasaMessage } from 'klasa';
+import { Command, CommandStore } from 'klasa';
 import { User, Message, Guild } from '@klasa/core';
 
 export default class extends Command {
@@ -17,7 +17,7 @@ export default class extends Command {
 		this.terms = ['usersAdded', 'usersRemoved', 'guildsAdded', 'guildsRemoved'];
 	}
 
-	public async run(message: KlasaMessage, usersAndGuilds: [User | Guild | string]): Promise<Message[]> {
+	public async run(message: Message, usersAndGuilds: [User | Guild | string]): Promise<Message[]> {
 		const changes: string[][] = [[], [], [], []];
 		const queries: string[][] = [[], []];
 

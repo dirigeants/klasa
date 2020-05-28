@@ -1,7 +1,9 @@
-import { Finalizer, KlasaMessage, Command } from 'klasa';
+import { Finalizer, Command } from 'klasa';
 import { ChannelType } from '@klasa/dapi-types';
-import { Stopwatch } from '@klasa/stopwatch';
 import { Colors } from '@klasa/console';
+
+import type { Message } from '@klasa/core';
+import type { Stopwatch } from '@klasa/stopwatch';
 
 export default class extends Finalizer {
 
@@ -11,7 +13,7 @@ export default class extends Finalizer {
 	private dm = new Colors({ background: 'magenta' });
 	private text = new Colors({ background: 'green', text: 'black' })
 
-	public run(message: KlasaMessage, command: Command, _response: KlasaMessage[], timer: Stopwatch): void {
+	public run(message: Message, command: Command, _response: Message[], timer: Stopwatch): void {
 		const shard = message.guild ? message.guild.shard.id : 0;
 		this.client.emit('log', [
 			this.shard.format(`[${shard}]`),

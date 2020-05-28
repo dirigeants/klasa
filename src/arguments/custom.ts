@@ -1,8 +1,10 @@
-import { Argument, KlasaMessage, Possible, CustomUsageArgument } from 'klasa';
+import { Argument, Possible, CustomUsageArgument } from 'klasa';
+
+import type { Message } from '@klasa/core';
 
 export default class CoreArgument extends Argument {
 
-	public async run(argument: string, possible: Possible, message: KlasaMessage, custom: CustomUsageArgument): Promise<unknown> {
+	public async run(argument: string, possible: Possible, message: Message, custom: CustomUsageArgument): Promise<unknown> {
 		try {
 			return await custom(argument, possible, message, message.params);
 		} catch (err) {

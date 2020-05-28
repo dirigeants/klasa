@@ -1,5 +1,6 @@
 import { AliasPiece, Guild } from '@klasa/core';
 import { MENTION_REGEX } from '../util/constants';
+
 import type { Language } from './Language';
 import type { SchemaEntry } from '../settings/schema/SchemaEntry';
 

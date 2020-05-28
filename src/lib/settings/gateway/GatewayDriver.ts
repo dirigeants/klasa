@@ -1,6 +1,7 @@
 import { Cache } from '@klasa/cache';
+
 import type { GatewayStorage, GatewayStorageJson } from './GatewayStorage';
-import type { KlasaClient } from '../../Client';
+import type { Client } from '@klasa/core';
 
 export class GatewayDriver extends Cache<string, GatewayStorage> {
 
@@ -8,13 +9,13 @@ export class GatewayDriver extends Cache<string, GatewayStorage> {
 	 * The client this GatewayDriver was created with.
 	 * @since 0.6.0
 	 */
-	public readonly client: KlasaClient;
+	public readonly client: Client;
 
 	/**
 	 * Constructs a new instance of GatewayDriver.
 	 * @param client The client that manages this instance
 	 */
-	public constructor(client: KlasaClient) {
+	public constructor(client: Client) {
 		super();
 		this.client = client;
 	}

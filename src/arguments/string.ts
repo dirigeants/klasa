@@ -1,4 +1,6 @@
-import { Argument, ArgumentStore, Possible, KlasaMessage, KlasaClient } from 'klasa';
+import { Argument, ArgumentStore, Possible } from 'klasa';
+
+import type { Message } from '@klasa/core';
 
 export default class CoreArgument extends Argument {
 
@@ -6,10 +8,10 @@ export default class CoreArgument extends Argument {
 		super(store, directory, file, { aliases: ['str'] });
 	}
 
-	public run(argument: string, possible: Possible, message: KlasaMessage): string | null {
+	public run(argument: string, possible: Possible, message: Message): string | null {
 		if (!argument) throw message.language.get('RESOLVER_INVALID_STRING', possible.name);
 		const { min, max } = possible;
-		return Argument.minOrMax(this.client as KlasaClient, argument.length, min, max, possible, message, 'RESOLVER_STRING_SUFFIX') ? argument : null;
+		return Argument.minOrMax(this.client, argument.length, min, max, possible, message, 'RESOLVER_STRING_SUFFIX') ? argument : null;
 	}
 
 }

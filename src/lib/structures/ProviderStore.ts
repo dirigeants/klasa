@@ -1,6 +1,5 @@
-import { PieceConstructor, Store } from '@klasa/core';
+import { PieceConstructor, Store, Client } from '@klasa/core';
 import { Provider } from './Provider';
-import type { KlasaClient } from '../Client';
 
 /**
  * Stores all {@link Provider} pieces for use in Klasa.
@@ -13,7 +12,7 @@ export class ProviderStore extends Store<Provider> {
 	 * @since 0.1.0
 	 * @param client The Klasa client
 	 */
-	public constructor(client: KlasaClient) {
+	public constructor(client: Client) {
 		super(client, 'providers', Provider as PieceConstructor<Provider>);
 	}
 

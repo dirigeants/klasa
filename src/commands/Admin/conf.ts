@@ -1,7 +1,8 @@
-import { Argument, Command, CommandStore, GatewayStorage, KlasaMessage, Schema, SchemaEntry, SchemaFolder, SettingsFolder } from 'klasa';
-import { Message, Guild } from '@klasa/core';
+import { Argument, Command, CommandStore, GatewayStorage, Schema, SchemaEntry, SchemaFolder, SettingsFolder } from 'klasa';
 import { toTitleCase, codeBlock } from '@klasa/utils';
 import { ChannelType } from '@klasa/dapi-types';
+
+import type { Message, Guild } from '@klasa/core';
 
 export default class extends Command {
 
@@ -30,7 +31,7 @@ export default class extends Command {
 			});
 	}
 
-	public show(message: KlasaMessage, [key]: [string]): Promise<Message[]> {
+	public show(message: Message, [key]: [string]): Promise<Message[]> {
 		const schemaOrEntry = this.configurableSchemaKeys.get(key);
 		if (typeof schemaOrEntry === 'undefined') throw message.language.get('COMMAND_CONF_GET_NOEXT', key);
 
@@ -46,7 +47,7 @@ export default class extends Command {
 		]);
 	}
 
-	public async set(message: KlasaMessage, [key, valueToSet]: [string, string]): Promise<Message[]> {
+	public async set(message: Message, [key, valueToSet]: [string, string]): Promise<Message[]> {
 		try {
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			const [update] = await message.guild!.settings.update(key, valueToSet, { onlyConfigurable: true, arrayAction: 'add' });
@@ -56,7 +57,7 @@ export default class extends Command {
 		}
 	}
 
-	public async remove(message: KlasaMessage, [key, valueToRemove]: [string, string]): Promise<Message[]> {
+	public async remove(message: Message, [key, valueToRemove]: [string, string]): Promise<Message[]> {
 		try {
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			const [update] = await message.guild!.settings.update(key, valueToRemove, { onlyConfigurable: true, arrayAction: 'remove' });
@@ -66,7 +67,7 @@ export default class extends Command {
 		}
 	}
 
-	public async reset(message: KlasaMessage, [key]: [string]): Promise<Message[]> {
+	public async reset(message: Message, [key]: [string]): Promise<Message[]> {
 		try {
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			const [update] = await message.guild!.settings.reset(key);

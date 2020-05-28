@@ -1,8 +1,9 @@
-import { Command, CommandStore, KlasaMessage } from 'klasa';
+import { Command, CommandStore } from 'klasa';
 import { copy } from 'fs-nextra';
 import { promises as fsp } from 'fs';
 import { resolve, join } from 'path';
-import { Piece, Message } from '@klasa/core';
+
+import type { Piece, Message } from '@klasa/core';
 
 export default class extends Command {
 
@@ -15,7 +16,7 @@ export default class extends Command {
 		});
 	}
 
-	public async run(message: KlasaMessage, [piece]: [Piece]): Promise<Message[]> {
+	public async run(message: Message, [piece]: [Piece]): Promise<Message[]> {
 		const file = join(...piece.file);
 		const fileLocation = resolve(piece.directory, file);
 		await fsp.access(fileLocation).catch(() => { throw message.language.get('COMMAND_TRANSFER_ERROR'); });

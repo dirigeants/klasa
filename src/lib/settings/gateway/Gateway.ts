@@ -2,7 +2,7 @@ import { RequestHandler, IdKeyed } from '@klasa/request-handler';
 import { GatewayStorage, GatewayStorageOptions } from './GatewayStorage';
 import { Settings } from '../Settings';
 import { Cache } from '@klasa/cache';
-import type { KlasaClient } from '../../Client';
+import type { Client } from '@klasa/core';
 
 export class Gateway extends GatewayStorage {
 
@@ -18,10 +18,10 @@ export class Gateway extends GatewayStorage {
 	 */
 	public readonly requestHandler: RequestHandler<string, IdKeyed<string>>;
 
-	public constructor(client: KlasaClient, name: string, options: GatewayStorageOptions = {}) {
+	public constructor(client: Client, name: string, options: GatewayStorageOptions = {}) {
 		super(client, name, options);
-		this.cache = (this.name in this.client) && (this.client[this.name as keyof KlasaClient] instanceof Map) ?
-			this.client[this.name as keyof KlasaClient] as Map<string, ProxyMapEntry> :
+		this.cache = (this.name in this.client) && (this.client[this.name as keyof Client] instanceof Map) ?
+			this.client[this.name as keyof Client] as Map<string, ProxyMapEntry> :
 			new Cache<string, ProxyMapEntry>();
 		this.requestHandler = new RequestHandler(
 			(id): Promise<IdKeyed<string>> => {

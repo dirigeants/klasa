@@ -1,5 +1,7 @@
 import { parse } from 'url';
-import { Argument, ArgumentStore, Possible, KlasaMessage } from 'klasa';
+import { Argument, ArgumentStore, Possible } from 'klasa';
+
+import type { Message } from '@klasa/core';
 
 export default class CoreArgument extends Argument {
 
@@ -7,7 +9,7 @@ export default class CoreArgument extends Argument {
 		super(store, directory, file, { aliases: ['url'] });
 	}
 
-	public run(argument: string, possible: Possible, message: KlasaMessage): string {
+	public run(argument: string, possible: Possible, message: Message): string {
 		const res = parse(argument);
 		const hyperlink = res.protocol && res.hostname ? argument : null;
 		if (hyperlink !== null) return hyperlink;

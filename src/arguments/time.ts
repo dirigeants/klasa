@@ -1,4 +1,6 @@
-import { Argument, Possible, KlasaMessage, CustomUsageArgument } from 'klasa';
+import { Argument, Possible, CustomUsageArgument } from 'klasa';
+
+import type { Message } from '@klasa/core';
 
 export default class CoreArgument extends Argument {
 
@@ -10,7 +12,7 @@ export default class CoreArgument extends Argument {
 		return this.store.get('duration') as Argument;
 	}
 
-	public run(argument: string, possible: Possible, message: KlasaMessage, custom: CustomUsageArgument): Date {
+	public run(argument: string, possible: Possible, message: Message, custom: CustomUsageArgument): Date {
 		let date: Date | undefined;
 		try {
 			date = this.date.run(argument, possible, message, custom) as Date;
