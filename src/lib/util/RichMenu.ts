@@ -2,6 +2,7 @@ import { RichDisplay, RichDisplayOptions } from './RichDisplay';
 import { ReactionMethods, ReactionHandler, ReactionHandlerOptions } from './ReactionHandler';
 
 import type { Message } from '@klasa/core';
+import { Cache } from '@klasa/cache';
 
 const choiceMethods = [
 	ReactionMethods.One,
@@ -45,17 +46,19 @@ export class RichMenu extends RichDisplay {
 	public constructor(options: RichDisplayOptions) {
 		super(options);
 
-		this._emojis
-			.set(ReactionMethods.One, '1️⃣')
-			.set(ReactionMethods.Two, '2️⃣')
-			.set(ReactionMethods.Three, '3️⃣')
-			.set(ReactionMethods.Four, '4️⃣')
-			.set(ReactionMethods.Five, '5️⃣')
-			.set(ReactionMethods.Six, '6️⃣')
-			.set(ReactionMethods.Seven, '7️⃣')
-			.set(ReactionMethods.Eight, '8️⃣')
-			.set(ReactionMethods.Nine, '9️⃣')
-			.set(ReactionMethods.Ten, '🔟');
+		this._emojis = new Cache([
+			[ReactionMethods.One, '1️⃣'],
+			[ReactionMethods.Two, '2️⃣'],
+			[ReactionMethods.Three, '3️⃣'],
+			[ReactionMethods.Four, '4️⃣'],
+			[ReactionMethods.Five, '5️⃣'],
+			[ReactionMethods.Six, '6️⃣'],
+			[ReactionMethods.Seven, '7️⃣'],
+			[ReactionMethods.Eight, '8️⃣'],
+			[ReactionMethods.Nine, '9️⃣'],
+			[ReactionMethods.Ten, '🔟'],
+			...this._emojis
+		]);
 	}
 
 	/**
