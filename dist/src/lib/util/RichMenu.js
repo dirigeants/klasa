@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RichMenu = void 0;
 const RichDisplay_1 = require("./RichDisplay");
+const cache_1 = require("@klasa/cache");
 const choiceMethods = [
     "one" /* One */,
     "two" /* Two */,
@@ -33,17 +34,19 @@ class RichMenu extends RichDisplay_1.RichDisplay {
          * @since 0.4.0
          */
         this.paginated = false;
-        this._emojis
-            .set("one" /* One */, '1️⃣')
-            .set("two" /* Two */, '2️⃣')
-            .set("three" /* Three */, '3️⃣')
-            .set("four" /* Four */, '4️⃣')
-            .set("five" /* Five */, '5️⃣')
-            .set("six" /* Six */, '6️⃣')
-            .set("seven" /* Seven */, '7️⃣')
-            .set("eight" /* Eight */, '8️⃣')
-            .set("nine" /* Nine */, '9️⃣')
-            .set("ten" /* Ten */, '🔟');
+        this._emojis = new cache_1.Cache([
+            ["one" /* One */, '1️⃣'],
+            ["two" /* Two */, '2️⃣'],
+            ["three" /* Three */, '3️⃣'],
+            ["four" /* Four */, '4️⃣'],
+            ["five" /* Five */, '5️⃣'],
+            ["six" /* Six */, '6️⃣'],
+            ["seven" /* Seven */, '7️⃣'],
+            ["eight" /* Eight */, '8️⃣'],
+            ["nine" /* Nine */, '9️⃣'],
+            ["ten" /* Ten */, '🔟'],
+            ...this._emojis
+        ]);
     }
     /**
      * You cannot directly add pages in a RichMenu
