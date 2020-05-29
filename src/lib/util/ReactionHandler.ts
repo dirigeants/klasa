@@ -6,8 +6,20 @@ import type { RichDisplay } from './RichDisplay';
 import type { RichMenu } from './RichMenu';
 
 export interface ReactionHandlerOptions extends ReactionIteratorOptions {
+	/**
+	 * The page to start on
+	 * @default 0
+	 */
 	startPage?: number;
+	/**
+	 * The text for the jump prompt
+	 * @default this.message.langauge.get('REACTIONHANDLER_PROMPT')
+	 */
 	prompt?: string;
+	/**
+	 * The timeout for the jump prompt
+	 * @default 30000
+	 */
 	jumpTimeout?: number;
 }
 
@@ -31,21 +43,76 @@ export const enum ReactionMethods {
 	Ten = 'ten'
 }
 
+/**
+ * Klasa's ReactionHandler, for handling RichDisplay and RichMenu reaction input
+ */
 export class ReactionHandler {
 
+	/**
+	 * The selection of a RichMenu (useless in a RichDisplay scenario)
+	 * @since 0.4.0
+	 */
 	public readonly selection: Promise<number | null>;
 
+	/**
+	 * The message of the RichDisplay/RichMenu
+	 * @since 0.6.0
+	 */
 	private readonly message: Message;
+
+	/**
+	 * The RichDisplay/RichMenu this Handler is for
+	 * @since 0.4.0
+	 */
 	private readonly display: RichDisplay;
+
+	/**
+	 * An emoji to method map, to map custom emojis to static method names
+	 * @since 0.4.0
+	 */
 	private readonly methodMap: Map<string, ReactionMethods>;
+
+	/**
+	 * The prompt to use when jumping pages
+	 * @since 0.4.0
+	 */
 	private readonly prompt: string;
+
+	/**
+	 * The amount of time before the jump menu should close
+	 * @since 0.4.0
+	 */
 	private readonly jumpTimeout: number;
 
+	/**
+	 * If this ReactionHandler has ended
+	 * @since 0.6.0
+	 */
 	#ended = false;
+
+	/**
+	 * If we are awaiting a jump response
+	 */
 	#awaiting = false;
+
+	/**
+	 * The current page the display is on
+	 * @since 0.4.0
+	 */
 	#currentPage: number;
+
+	/**
+	 * Causes this.selection to resolve
+	 * @since 0.4.0
+	 */
 	#resolve: ((value?: number | PromiseLike<number | null> | null | undefined) => void) | null = null;
 
+	/**
+	 * @param message The message to track reactions from
+	 * @param options The options for this reaction handler
+	 * @param display The display this reaction handler is for
+	 * @param emojis The emojis to manage this reaction handler
+	 */
 	public constructor(message: Message, options: ReactionHandlerOptions, display: RichDisplay, emojis: Cache<ReactionMethods, string>) {
 		if (message.channel.type === ChannelType.DM) throw new Error('RichDisplays and subclasses cannot be used in DMs, as they do not have enough permissions to perform in a UX friendly way.');
 		this.message = message;
@@ -60,12 +127,20 @@ export class ReactionHandler {
 		this.run([...emojis.values()], options);
 	}
 
+	/**
+	 * Stops this ReactionHandler
+	 * @since 0.6.0
+	 */
 	public stop(): boolean {
 		this.#ended = true;
 		if (this.#resolve) this.#resolve(null);
 		return true;
 	}
 
+	/**
+	 * Attempts to choose a value
+	 * @param value The id of the choice made
+	 */
 	private choose(value: number): Promise<void | boolean> {
 		if ((this.display as RichMenu).choices.length - 1 < value) return Promise.resolve();
 		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -74,6 +149,11 @@ export class ReactionHandler {
 		return Promise.resolve(true);
 	}
 
+	/**
+	 * Runs this ReactionHandler
+	 * @param emojis The emojis to react
+	 * @param options The options for the Iterator
+	 */
 	private async run(emojis: string[], options: ReactionIteratorOptions) {
 		try {
 			await this.setup(emojis);
@@ -98,10 +178,18 @@ export class ReactionHandler {
 		}
 	}
 
+	/**
+	 * Updates the message.
+	 * @since 0.4.0
+	 */
 	private async update(): Promise<void> {
 		await this.message.edit(mb => mb.setEmbed(this.display.pages[this.#currentPage]));
 	}
 
+	/**
+	 * Reacts the initial Emojis
+	 * @param emojis The initial emojis left to react
+	 */
 	private async setup(emojis: string[]): Promise<void> {
 		if (this.message.deleted) throw new Error('Deleted');
 		if (this.#ended) throw new Error('Ended');
@@ -111,6 +199,11 @@ export class ReactionHandler {
 	}
 
 	/* eslint-disable no-invalid-this, func-names */
+
+	/**
+	 * The reaction methods
+	 * @since 0.6.0
+	 */
 	private static methods: Map<ReactionMethods, (this: ReactionHandler, user: User) => Promise<void>> = new Map()
 		.set(ReactionMethods.First, function (this: ReactionHandler): Promise<void> {
 			this.#currentPage = 0;

@@ -2,14 +2,30 @@ import { Embed, Message } from '@klasa/core';
 import { Cache } from '@klasa/cache';
 import { ReactionMethods, ReactionHandlerOptions, ReactionHandler } from './ReactionHandler';
 
+type EmbedOrCallback = Embed | ((embed: Embed) => Embed);
+
 export interface RichDisplayOptions {
-	template?: (embed: Embed) => Embed;
+	/**
+	 * The template embed
+	 * @default Embed
+	 */
+	template?: EmbedOrCallback;
+	/**
+	 * If the stop emoji should be included
+	 * @default true
+	 */
 	stop?: boolean;
+	/**
+	 * If the jump emoji should be included
+	 * @default true
+	 */
 	jump?: boolean;
+	/**
+	 * If the first and last emojis should be included
+	 * @default true
+	 */
 	firstLast?: boolean;
 }
-
-type EmbedOrCallback = Embed | ((embed: Embed) => Embed);
 
 /**
  * Klasa's RichDisplay, for helping paginated embeds with reaction buttons
@@ -59,7 +75,7 @@ export class RichDisplay {
 	private footerSuffix = '';
 
 	public constructor(options: RichDisplayOptions = {}) {
-		this._template = options.template?.(new Embed()) ?? new Embed();
+		this._template = this.resolveEmbedOrCallback(options.template ?? new Embed());
 
 		this._emojis
 			.set(ReactionMethods.First, '⏮')
@@ -151,7 +167,7 @@ export class RichDisplay {
 	 * @param embed A callback with the embed template passed and the embed returned, or an embed
 	 */
 	public addPage(embed: EmbedOrCallback): this {
-		this.pages.push(this.handlePageGeneration(embed));
+		this.pages.push(this.resolveEmbedOrCallback(embed));
 		return this;
 	}
 
@@ -161,7 +177,7 @@ export class RichDisplay {
 	 * @param embed A callback with the embed template passed and the embed returned, or an embed
 	 */
 	public setInfoPage(embed: EmbedOrCallback): this {
-		this.infoPage = this.handlePageGeneration(embed);
+		this.infoPage = this.resolveEmbedOrCallback(embed);
 		return this;
 	}
 
@@ -187,7 +203,7 @@ export class RichDisplay {
 	 * @since 0.4.0
 	 * @param embed The callback or embed
 	 */
-	private handlePageGeneration(embed: EmbedOrCallback): Embed {
+	private resolveEmbedOrCallback(embed: EmbedOrCallback): Embed {
 		if (typeof embed === 'function') {
 			const page = embed(this.template);
 			if (page instanceof Embed) return page;
