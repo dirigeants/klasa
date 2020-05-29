@@ -12,7 +12,7 @@ class RichDisplay {
      * @param options The RichDisplay Options
      */
     constructor(options = {}) {
-        var _a;
+        var _a, _b, _c, _d;
         /**
          * The stored pages of the display
          * @since 0.4.0
@@ -53,13 +53,13 @@ class RichDisplay {
             .set("info" /* Info */, 'ℹ')
             .set("stop" /* Stop */, '⏹');
         // To maintain emoji order, we will delete from rather than insert according to options
-        if (!options.firstLast) {
+        if ((_b = options.firstLast) !== null && _b !== void 0 ? _b : true) {
             this._emojis.delete("first" /* First */);
             this._emojis.delete("last" /* Last */);
         }
-        if (!options.jump)
+        if ((_c = options.jump) !== null && _c !== void 0 ? _c : true)
             this._emojis.delete("jump" /* Jump */);
-        if (!options.stop)
+        if ((_d = options.stop) !== null && _d !== void 0 ? _d : true)
             this._emojis.delete("stop" /* Stop */);
     }
     /**
