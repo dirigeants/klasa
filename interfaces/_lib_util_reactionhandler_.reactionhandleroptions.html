@@ -101,6 +101,7 @@
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="_lib_util_reactionhandler_.reactionhandleroptions.html#idle" class="tsd-kind-icon">idle</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_lib_util_reactionhandler_.reactionhandleroptions.html#jumptimeout" class="tsd-kind-icon">jump<wbr>Timeout</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="_lib_util_reactionhandler_.reactionhandleroptions.html#limit" class="tsd-kind-icon">limit</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_lib_util_reactionhandler_.reactionhandleroptions.html#oncedone" class="tsd-kind-icon">once<wbr>Done</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_lib_util_reactionhandler_.reactionhandleroptions.html#prompt" class="tsd-kind-icon">prompt</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_lib_util_reactionhandler_.reactionhandleroptions.html#startpage" class="tsd-kind-icon">start<wbr>Page</a></li>
 							</ul>
@@ -148,7 +149,7 @@
 					<div class="tsd-signature tsd-kind-icon">jump<wbr>Timeout<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/8a613d40/src/lib/util/ReactionHandler.ts#L23">src/lib/util/ReactionHandler.ts:23</a></li>
+							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/1a2e4370/src/lib/util/ReactionHandler.ts#L23">src/lib/util/ReactionHandler.ts:23</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -179,12 +180,32 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="oncedone" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> once<wbr>Done</h3>
+					<div class="tsd-signature tsd-kind-icon">once<wbr>Done<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/1a2e4370/src/lib/util/ReactionHandler.ts#L28">src/lib/util/ReactionHandler.ts:28</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A callback to handle cleanup once this has ended</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>default</dt>
+							<dd><p>() =&gt; {}</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="prompt" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> prompt</h3>
 					<div class="tsd-signature tsd-kind-icon">prompt<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/8a613d40/src/lib/util/ReactionHandler.ts#L18">src/lib/util/ReactionHandler.ts:18</a></li>
+							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/1a2e4370/src/lib/util/ReactionHandler.ts#L18">src/lib/util/ReactionHandler.ts:18</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -204,7 +225,7 @@
 					<div class="tsd-signature tsd-kind-icon">start<wbr>Page<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/8a613d40/src/lib/util/ReactionHandler.ts#L13">src/lib/util/ReactionHandler.ts:13</a></li>
+							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/1a2e4370/src/lib/util/ReactionHandler.ts#L13">src/lib/util/ReactionHandler.ts:13</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -255,6 +276,9 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
 								<a href="_lib_util_reactionhandler_.reactionhandleroptions.html#limit" class="tsd-kind-icon">limit</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_lib_util_reactionhandler_.reactionhandleroptions.html#oncedone" class="tsd-kind-icon">once<wbr>Done</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="_lib_util_reactionhandler_.reactionhandleroptions.html#prompt" class="tsd-kind-icon">prompt</a>
