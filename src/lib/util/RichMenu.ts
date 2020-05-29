@@ -104,7 +104,7 @@ export class RichMenu extends RichDisplay {
 		if (this.paginated) return null;
 		super.addPage(embed => {
 			for (let i = 0, choice = this.choices[i + (page * 10)]; i + (page * 10) < this.choices.length && i < 10; i++, choice = this.choices[i + (page * 10)]) {
-				embed.addField(`(${i}) ${choice.name}`, choice.body, choice.inline);
+				embed.addField(`(${i + 1}) ${choice.name}`, choice.body, choice.inline);
 			}
 			return embed;
 		});
