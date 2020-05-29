@@ -53,13 +53,16 @@ class RichDisplay {
             .set("info" /* Info */, 'ℹ')
             .set("stop" /* Stop */, '⏹');
         // To maintain emoji order, we will delete from rather than insert according to options
-        if ((_b = !options.firstLast) !== null && _b !== void 0 ? _b : true) {
+        // eslint-disable-next-line @typescript-eslint/no-extra-parens
+        if (!((_b = options.firstLast) !== null && _b !== void 0 ? _b : true)) {
             this._emojis.delete("first" /* First */);
             this._emojis.delete("last" /* Last */);
         }
-        if ((_c = !options.jump) !== null && _c !== void 0 ? _c : true)
+        // eslint-disable-next-line @typescript-eslint/no-extra-parens
+        if (!((_c = options.jump) !== null && _c !== void 0 ? _c : true))
             this._emojis.delete("jump" /* Jump */);
-        if ((_d = !options.stop) !== null && _d !== void 0 ? _d : true)
+        // eslint-disable-next-line @typescript-eslint/no-extra-parens
+        if (!((_d = options.stop) !== null && _d !== void 0 ? _d : true))
             this._emojis.delete("stop" /* Stop */);
     }
     /**
