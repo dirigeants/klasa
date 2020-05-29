@@ -4,21 +4,61 @@ import { ReactionMethods, ReactionHandlerOptions, ReactionHandler } from './Reac
 
 export interface RichDisplayOptions {
 	template?: (embed: Embed) => Embed;
-	infoPage?: (embed: Embed) => Embed;
 	stop?: boolean;
 	jump?: boolean;
 	firstLast?: boolean;
 }
 
+type EmbedOrCallback = Embed | ((embed: Embed) => Embed);
+
+/**
+ * Klasa's RichDisplay, for helping paginated embeds with reaction buttons
+ */
 export class RichDisplay {
 
+	/**
+	 * The stored pages of the display
+	 * @since 0.4.0
+	 */
 	public pages: Embed[] = [];
+
+	/**
+	 * An optional Info page/embed
+	 * @since 0.4.0
+	 */
 	public infoPage: Embed | null = null;
 
+	/**
+	 * The emojis to use for this display
+	 * @since 0.4.0
+	 */
 	protected _emojis: Cache<ReactionMethods, string> = new Cache();
+
+	/**
+	 * The embed template
+	 * @since 0.4.0
+	 */
 	protected _template: Embed;
 
-	public constructor(options: RichDisplayOptions) {
+	/**
+	 * If footers have been applied to all pages
+	 * @since 0.4.0
+	 */
+	protected _footered = false;
+
+	/**
+	 * Adds a prefix to all footers (before page/pages)
+	 * @since 0.5.0
+	 */
+	private footerPrefix = '';
+
+	/**
+	 * Adds a suffix to all footers (after page/pages)
+	 * @since 0.5.0
+	 */
+	private footerSuffix = '';
+
+	public constructor(options: RichDisplayOptions = {}) {
 		this._template = options.template?.(new Embed()) ?? new Embed();
 
 		this._emojis
@@ -37,16 +77,29 @@ export class RichDisplay {
 			this._emojis.delete(ReactionMethods.Last);
 		}
 
-		if (options.infoPage) this.infoPage = options.infoPage(this.template);
-		else this._emojis.delete(ReactionMethods.Info);
-
 		if (!options.jump) this._emojis.delete(ReactionMethods.Jump);
 		if (!options.stop) this._emojis.delete(ReactionMethods.Stop);
 	}
 
-	public async run(message: Message, options: ReactionHandlerOptions): Promise<ReactionHandler> {
-		// todo: add the rest of the method logic
-		return new ReactionHandler(message, options, this, this._emojis);
+	/**
+	 * Runs the RichDisplay
+	 * @since 0.4.0
+	 * @param message A message to either edit, or use to send a new message for this RichDisplay
+	 * @param options The options to use while running this RichDisplay
+	 */
+	public async run(message: Message, options: ReactionHandlerOptions = {}): Promise<ReactionHandler> {
+		if (!this.infoPage) this._emojis.delete(ReactionMethods.Info);
+		if (!this._footered) this.footer();
+
+		let msg;
+		if (message.editable) {
+			await message.edit(mb => mb.setEmbed(this.pages[options.startPage || 0]));
+			msg = message;
+		} else {
+			[msg] = await message.channel.send(mb => mb.setEmbed(this.pages[options.startPage || 0]));
+		}
+
+		return new ReactionHandler(msg, options, this, this._emojis);
 	}
 
 	/**
@@ -61,7 +114,56 @@ export class RichDisplay {
 		return this;
 	}
 
-	// todo: Add the rest of the RichDisplay convenience methods
+	/**
+	 * Sets a prefix for all footers
+	 * @since 0.5.0
+	 * @param prefix The prefix you want to add
+	 */
+	public setFooterPrefix(prefix: string): this {
+		this._footered = false;
+		this.footerPrefix = prefix;
+		return this;
+	}
+
+	/**
+	 * Sets a suffix for all footers
+	 * @since 0.5.0
+	 * @param suffix The suffix you want to add
+	 */
+	public setFooterSuffix(suffix: string): this {
+		this._footered = false;
+		this.footerSuffix = suffix;
+		return this;
+	}
+
+	/**
+	 * Turns off the footer altering function
+	 * @since 0.5.0
+	 */
+	public useCustomFooters(): this {
+		this._footered = true;
+		return this;
+	}
+
+	/**
+	 * Adds a page to the RichDisplay
+	 * @since 0.4.0
+	 * @param embed A callback with the embed template passed and the embed returned, or an embed
+	 */
+	public addPage(embed: EmbedOrCallback): this {
+		this.pages.push(this.handlePageGeneration(embed));
+		return this;
+	}
+
+	/**
+	 * Adds an info page to the RichDisplay
+	 * @since 0.4.0
+	 * @param embed A callback with the embed template passed and the embed returned, or an embed
+	 */
+	public setInfoPage(embed: EmbedOrCallback): this {
+		this.infoPage = this.handlePageGeneration(embed);
+		return this;
+	}
 
 	/**
 	 * A new instance of the template embed
@@ -69,6 +171,30 @@ export class RichDisplay {
 	 */
 	protected get template(): Embed {
 		return new Embed(this._template);
+	}
+
+	/**
+	 * Adds page of pages footers to all pages
+	 * @since 0.4.0
+	 */
+	private footer(): void {
+		for (let i = 1; i <= this.pages.length; i++) this.pages[i - 1].setFooter(`${this.footerPrefix}${i}/${this.pages.length}${this.footerSuffix}`);
+		if (this.infoPage) this.infoPage.setFooter('ℹ');
+	}
+
+	/**
+	 * Resolves the callback or MessageEmbed into a MessageEmbed
+	 * @since 0.4.0
+	 * @param embed The callback or embed
+	 */
+	private handlePageGeneration(embed: EmbedOrCallback): Embed {
+		if (typeof embed === 'function') {
+			const page = embed(this.template);
+			if (page instanceof Embed) return page;
+		} else if (embed instanceof Embed) {
+			return embed;
+		}
+		throw new TypeError('Expected a MessageEmbed or Function returning a MessageEmbed');
 	}
 
 }
