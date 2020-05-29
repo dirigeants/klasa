@@ -21,4 +21,6 @@ export class RichMenu extends RichDisplay {
 			.set(ReactionMethods.Ten, '🔟');
 	}
 
+	// todo: Add RichMenu convenience methods
+
 }

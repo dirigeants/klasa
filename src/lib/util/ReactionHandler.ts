@@ -1,9 +1,9 @@
 import { ChannelType } from '@klasa/dapi-types';
 
 import type { Message, ReactionIteratorOptions, User } from '@klasa/core';
+import type { Cache } from '@klasa/cache';
 import type { RichDisplay } from './RichDisplay';
 import type { RichMenu } from './RichMenu';
-import type { Cache } from '@klasa/cache';
 
 export interface ReactionHandlerOptions extends ReactionIteratorOptions {
 	startPage?: number;
