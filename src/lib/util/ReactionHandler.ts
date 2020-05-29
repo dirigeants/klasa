@@ -21,6 +21,11 @@ export interface ReactionHandlerOptions extends ReactionIteratorOptions {
 	 * @default 30000
 	 */
 	jumpTimeout?: number;
+	/**
+	 * A callback to handle cleanup once this has ended
+	 * @default () => {}
+	 */
+	onceDone?: () => void;
 }
 
 export const enum ReactionMethods {
@@ -124,7 +129,7 @@ export class ReactionHandler {
 			this.#resolve = resolve;
 		}) : Promise.resolve(null);
 		this.#currentPage = options.startPage ?? 0;
-		this.run([...emojis.values()], options);
+		this.run([...emojis.values()], options).then(options.onceDone);
 	}
 
 	/**

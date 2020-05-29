@@ -202,7 +202,7 @@ export class RichDisplay {
 	}
 
 	/**
-	 * Resolves the callback or MessageEmbed into a MessageEmbed
+	 * Resolves the callback or Embed into a Embed
 	 * @since 0.4.0
 	 * @param embed The callback or embed
 	 */
@@ -213,7 +213,7 @@ export class RichDisplay {
 		} else if (embed instanceof Embed) {
 			return embed;
 		}
-		throw new TypeError('Expected a MessageEmbed or Function returning a MessageEmbed');
+		throw new TypeError('Expected a Embed or Function returning a Embed');
 	}
 
 }
