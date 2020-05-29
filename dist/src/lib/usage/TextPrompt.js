@@ -112,7 +112,7 @@ let TextPrompt = /** @class */ (() => {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-expect-error
             const [message] = await this.channel.send(data);
-            const responses = await message.channel.awaitMessages({ idle: this.time, limit: 1, filter: msg => msg.author === this.target });
+            const responses = await message.channel.awaitMessages({ idle: this.time, limit: 1, filter: ([msg]) => msg.author === this.target });
             message.delete();
             if (responses.size === 0)
                 throw this.message.language.get('MESSAGE_PROMPT_TIMEOUT');
