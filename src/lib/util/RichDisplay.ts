@@ -91,13 +91,13 @@ export class RichDisplay {
 
 		// To maintain emoji order, we will delete from rather than insert according to options
 
-		if (!options.firstLast) {
+		if (options.firstLast ?? true) {
 			this._emojis.delete(ReactionMethods.First);
 			this._emojis.delete(ReactionMethods.Last);
 		}
 
-		if (!options.jump) this._emojis.delete(ReactionMethods.Jump);
-		if (!options.stop) this._emojis.delete(ReactionMethods.Stop);
+		if (options.jump ?? true) this._emojis.delete(ReactionMethods.Jump);
+		if (options.stop ?? true) this._emojis.delete(ReactionMethods.Stop);
 	}
 
 	/**
