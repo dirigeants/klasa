@@ -141,8 +141,8 @@ export class ReactionHandler {
 	 * Attempts to choose a value
 	 * @param value The id of the choice made
 	 */
-	private choose(value: number): Promise<void | boolean> {
-		if ((this.display as RichMenu).choices.length - 1 < value) return Promise.resolve();
+	private choose(value: number): Promise<boolean> {
+		if ((this.display as RichMenu).choices.length - 1 < value) return Promise.resolve(false);
 		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		this.#resolve!(value);
 		this.#ended = true;
@@ -156,7 +156,7 @@ export class ReactionHandler {
 	 */
 	private async run(emojis: string[], options: ReactionIteratorOptions) {
 		try {
-			await this.setup(emojis);
+			this.setup(emojis);
 			for await (const [reaction, user] of this.message.reactions.iterate(options)) {
 				if (this.#ended) break;
 				if (user === reaction.client.user) continue;
@@ -182,20 +182,26 @@ export class ReactionHandler {
 	 * Updates the message.
 	 * @since 0.4.0
 	 */
-	private async update(): Promise<void> {
+	private async update(): Promise<boolean> {
+		if (this.message.deleted) return true;
 		await this.message.edit(mb => mb.setEmbed(this.display.pages[this.#currentPage]));
+		return false;
 	}
 
 	/**
 	 * Reacts the initial Emojis
 	 * @param emojis The initial emojis left to react
 	 */
-	private async setup(emojis: string[]): Promise<void> {
-		if (this.message.deleted) throw new Error('Deleted');
-		if (this.#ended) throw new Error('Ended');
-		await this.message.reactions.add(emojis.shift() as string);
+	private async setup(emojis: string[]): Promise<boolean> {
+		if (this.message.deleted) return this.stop();
+		if (this.#ended) return false;
+		try {
+			await this.message.reactions.add(emojis.shift() as string);
+		} catch {
+			return this.stop();
+		}
 		if (emojis.length) return this.setup(emojis);
-		return Promise.resolve();
+		return false;
 	}
 
 	/* eslint-disable no-invalid-this, func-names */
@@ -204,77 +210,79 @@ export class ReactionHandler {
 	 * The reaction methods
 	 * @since 0.6.0
 	 */
-	private static methods: Map<ReactionMethods, (this: ReactionHandler, user: User) => Promise<void>> = new Map()
-		.set(ReactionMethods.First, function (this: ReactionHandler): Promise<void> {
+	private static methods: Map<ReactionMethods, (this: ReactionHandler, user: User) => Promise<boolean>> = new Map()
+		.set(ReactionMethods.First, function (this: ReactionHandler): Promise<boolean> {
 			this.#currentPage = 0;
 			return this.update();
 		})
-		.set(ReactionMethods.Back, function (this: ReactionHandler): Promise<void> {
-			if (this.#currentPage <= 0) return Promise.resolve();
+		.set(ReactionMethods.Back, function (this: ReactionHandler): Promise<boolean> {
+			if (this.#currentPage <= 0) return Promise.resolve(false);
 			this.#currentPage--;
 			return this.update();
 		})
-		.set(ReactionMethods.Forward, function (this: ReactionHandler): Promise<void> {
-			if (this.#currentPage > this.display.pages.length - 1) return Promise.resolve();
+		.set(ReactionMethods.Forward, function (this: ReactionHandler): Promise<boolean> {
+			if (this.#currentPage > this.display.pages.length - 1) return Promise.resolve(false);
 			this.#currentPage++;
 			return this.update();
 		})
-		.set(ReactionMethods.Last, function (this: ReactionHandler): Promise<void> {
+		.set(ReactionMethods.Last, function (this: ReactionHandler): Promise<boolean> {
 			this.#currentPage = this.display.pages.length - 1;
 			return this.update();
 		})
-		.set(ReactionMethods.Jump, async function (this: ReactionHandler, user: User): Promise<void> {
-			if (this.#awaiting) return Promise.resolve();
+		.set(ReactionMethods.Jump, async function (this: ReactionHandler, user: User): Promise<boolean> {
+			if (this.#awaiting) return Promise.resolve(false);
 			this.#awaiting = true;
 			const [message] = await this.message.channel.send(mb => mb.setContent(this.prompt));
 			const collected = await this.message.channel.awaitMessages({ filter: ([mess]) => mess.author === user, limit: 1, idle: this.jumpTimeout });
 			this.#awaiting = false;
 			await message.delete();
 			const response = collected.firstValue;
-			if (!response) return Promise.resolve();
+			if (!response) return Promise.resolve(false);
 			const newPage = parseInt(response.content);
 			await response.delete();
 			if (newPage && newPage > 0 && newPage <= this.display.pages.length) {
 				this.#currentPage = newPage - 1;
 				return this.update();
 			}
-			return Promise.resolve();
+			return Promise.resolve(false);
 		})
-		.set(ReactionMethods.Info, async function (this: ReactionHandler): Promise<void> {
+		.set(ReactionMethods.Info, async function (this: ReactionHandler): Promise<boolean> {
+			if (this.message.deleted) return true;
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			await this.message.edit(mb => mb.setEmbed(this.display.infoPage!));
+			return false;
 		})
-		.set(ReactionMethods.Stop, function (this: ReactionHandler): Promise<boolean | void> {
+		.set(ReactionMethods.Stop, function (this: ReactionHandler): Promise<boolean> {
 			return Promise.resolve(this.stop());
 		})
-		.set(ReactionMethods.One, function (this: ReactionHandler): Promise<boolean | void> {
+		.set(ReactionMethods.One, function (this: ReactionHandler): Promise<boolean> {
 			return this.choose(this.#currentPage * 10);
 		})
-		.set(ReactionMethods.Two, function (this: ReactionHandler): Promise<boolean | void> {
+		.set(ReactionMethods.Two, function (this: ReactionHandler): Promise<boolean> {
 			return this.choose(1 + (this.#currentPage * 10));
 		})
-		.set(ReactionMethods.Three, function (this: ReactionHandler): Promise<boolean | void> {
+		.set(ReactionMethods.Three, function (this: ReactionHandler): Promise<boolean> {
 			return this.choose(2 + (this.#currentPage * 10));
 		})
-		.set(ReactionMethods.Four, function (this: ReactionHandler): Promise<boolean | void> {
+		.set(ReactionMethods.Four, function (this: ReactionHandler): Promise<boolean> {
 			return this.choose(3 + (this.#currentPage * 10));
 		})
-		.set(ReactionMethods.Five, function (this: ReactionHandler): Promise<boolean | void> {
+		.set(ReactionMethods.Five, function (this: ReactionHandler): Promise<boolean> {
 			return this.choose(4 + (this.#currentPage * 10));
 		})
-		.set(ReactionMethods.Six, function (this: ReactionHandler): Promise<boolean | void> {
+		.set(ReactionMethods.Six, function (this: ReactionHandler): Promise<boolean> {
 			return this.choose(5 + (this.#currentPage * 10));
 		})
-		.set(ReactionMethods.Seven, function (this: ReactionHandler): Promise<boolean | void> {
+		.set(ReactionMethods.Seven, function (this: ReactionHandler): Promise<boolean> {
 			return this.choose(6 + (this.#currentPage * 10));
 		})
-		.set(ReactionMethods.Eight, function (this: ReactionHandler): Promise<boolean | void> {
+		.set(ReactionMethods.Eight, function (this: ReactionHandler): Promise<boolean> {
 			return this.choose(7 + (this.#currentPage * 10));
 		})
-		.set(ReactionMethods.Nine, function (this: ReactionHandler): Promise<boolean | void> {
+		.set(ReactionMethods.Nine, function (this: ReactionHandler): Promise<boolean> {
 			return this.choose(8 + (this.#currentPage * 10));
 		})
-		.set(ReactionMethods.Ten, function (this: ReactionHandler): Promise<boolean | void> {
+		.set(ReactionMethods.Ten, function (this: ReactionHandler): Promise<boolean> {
 			return this.choose(9 + (this.#currentPage * 10));
 		});
 	/* eslint-enable no-invalid-this, func-names */
