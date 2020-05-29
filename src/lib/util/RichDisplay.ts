@@ -74,6 +74,9 @@ export class RichDisplay {
 	 */
 	private footerSuffix = '';
 
+	/**
+	 * @param options The RichDisplay Options
+	 */
 	public constructor(options: RichDisplayOptions = {}) {
 		this._template = this.resolveEmbedOrCallback(options.template ?? new Embed());
 

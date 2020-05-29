@@ -38,6 +38,9 @@ export class RichMenu extends RichDisplay {
 	 */
 	private paginated = false;
 
+	/**
+	 * @param options The RichDisplay options
+	 */
 	public constructor(options: RichDisplayOptions) {
 		super(options);
 

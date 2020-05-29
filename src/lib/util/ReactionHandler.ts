@@ -13,7 +13,7 @@ export interface ReactionHandlerOptions extends ReactionIteratorOptions {
 	startPage?: number;
 	/**
 	 * The text for the jump prompt
-	 * @default this.message.langauge.get('REACTIONHANDLER_PROMPT')
+	 * @default this.message.language.get('REACTIONHANDLER_PROMPT')
 	 */
 	prompt?: string;
 	/**
