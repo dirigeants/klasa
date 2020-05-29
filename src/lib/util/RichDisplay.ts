@@ -45,6 +45,7 @@ export class RichDisplay {
 	}
 
 	public async run(message: Message, options: ReactionHandlerOptions): Promise<ReactionHandler> {
+		// todo: add the rest of the method logic
 		return new ReactionHandler(message, options, this, this._emojis);
 	}
 
@@ -59,6 +60,8 @@ export class RichDisplay {
 		}
 		return this;
 	}
+
+	// todo: Add the rest of the RichDisplay convenience methods
 
 	/**
 	 * A new instance of the template embed
