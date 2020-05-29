@@ -159,7 +159,7 @@ class RichDisplay {
             this.infoPage.setFooter('ℹ');
     }
     /**
-     * Resolves the callback or MessageEmbed into a MessageEmbed
+     * Resolves the callback or Embed into a Embed
      * @since 0.4.0
      * @param embed The callback or embed
      */
@@ -172,7 +172,7 @@ class RichDisplay {
         else if (embed instanceof core_1.Embed) {
             return embed;
         }
-        throw new TypeError('Expected a MessageEmbed or Function returning a MessageEmbed');
+        throw new TypeError('Expected a Embed or Function returning a Embed');
     }
 }
 exports.RichDisplay = RichDisplay;

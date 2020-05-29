@@ -58,7 +58,7 @@ let ReactionHandler = /** @class */ (() => {
                 __classPrivateFieldSet(this, _resolve, resolve);
             }) : Promise.resolve(null);
             __classPrivateFieldSet(this, _currentPage, (_c = options.startPage) !== null && _c !== void 0 ? _c : 0);
-            this.run([...emojis.values()], options);
+            this.run([...emojis.values()], options).then(options.onceDone);
         }
         /**
          * Stops this ReactionHandler

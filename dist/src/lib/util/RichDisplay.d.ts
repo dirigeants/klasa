@@ -120,7 +120,7 @@ export declare class RichDisplay {
      */
     private footer;
     /**
-     * Resolves the callback or MessageEmbed into a MessageEmbed
+     * Resolves the callback or Embed into a Embed
      * @since 0.4.0
      * @param embed The callback or embed
      */

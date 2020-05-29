@@ -17,6 +17,11 @@ export interface ReactionHandlerOptions extends ReactionIteratorOptions {
      * @default 30000
      */
     jumpTimeout?: number;
+    /**
+     * A callback to handle cleanup once this has ended
+     * @default () => {}
+     */
+    onceDone?: () => void;
 }
 export declare const enum ReactionMethods {
     First = "first",
