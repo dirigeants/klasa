@@ -91,7 +91,7 @@ class RichMenu extends RichDisplay_1.RichDisplay {
             return null;
         super.addPage(embed => {
             for (let i = 0, choice = this.choices[i + (page * 10)]; i + (page * 10) < this.choices.length && i < 10; i++, choice = this.choices[i + (page * 10)]) {
-                embed.addField(`(${i}) ${choice.name}`, choice.body, choice.inline);
+                embed.addField(`(${i + 1}) ${choice.name}`, choice.body, choice.inline);
             }
             return embed;
         });
