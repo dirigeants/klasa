@@ -237,13 +237,12 @@
 
 "@klasa/core@dirigeants/core#build":
   version "0.0.3"
-  uid a7a25ee1b6fa51529701fbb9a0083f6a4d504461
-  resolved "https://codeload.github.com/dirigeants/core/tar.gz/a7a25ee1b6fa51529701fbb9a0083f6a4d504461"
+  resolved "https://codeload.github.com/dirigeants/core/tar.gz/3a1b05357793ee69c22266aa0d745e8c053f7ca6"
   dependencies:
     "@klasa/bitfield" "^0.0.3"
     "@klasa/cache" "^0.0.3"
     "@klasa/dapi-types" "^0.2.0"
-    "@klasa/event-iterator" "^0.0.8"
+    "@klasa/event-iterator" "^0.0.10"
     "@klasa/rest" "^0.4.0"
     "@klasa/snowflake" "^0.0.1"
     "@klasa/timer-manager" "^0.0.1"
@@ -268,10 +267,10 @@
   resolved "https://registry.yarnpkg.com/@klasa/duration/-/duration-0.0.3.tgz#960e4ef09340fae9f97ff92b3485b8d2f7376439"
   integrity sha512-T0RFw4c/TPwyzJ6yN7ZgC63Fo8epHWgsIFOk3S+Nb7GeMJhMPrRsGvcHTuocy4I1sDypMGUq+RfRtExx9kUdtQ==
 
-"@klasa/event-iterator@^0.0.8":
-  version "0.0.8"
-  resolved "https://registry.yarnpkg.com/@klasa/event-iterator/-/event-iterator-0.0.8.tgz#e3338303895b0ef27135e63c78cc8ca01c2332b4"
-  integrity sha512-X9CR+YRt2Wb9/vYVARlVkjFG6poL3s1+x3+Hpy9xCrrMEB8PKDwcYL2WUKs9VCw5DDIo2RbzSBFZ1NEKsRnZXw==
+"@klasa/event-iterator@^0.0.10":
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/@klasa/event-iterator/-/event-iterator-0.0.10.tgz#9805297be51ccb5767d31f700957ddb79ec4855b"
+  integrity sha512-AUr8d9+4YeHN2/b1C8EVSZTfLut/+j2u8zcrKRt3BFP5kxdHSg+RSOJ7wP+gQ0dvrVZMQNwbIg/xFVr9G1EsLA==
 
 "@klasa/ratelimits@^0.0.1":
   version "0.0.1"
