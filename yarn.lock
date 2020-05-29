@@ -217,11 +217,6 @@
   resolved "https://registry.yarnpkg.com/@klasa/bitfield/-/bitfield-0.0.3.tgz#8a3495b3600d6dd7066b770f05e250307b560890"
   integrity sha512-U8xrqbfg8Eqq+IL4TMy7rDG+QlJjQPGVel1aqVcIqJV2/XpQvsqIBz0UMUO3mEw7UsLN5E3Z71QpSIDvCfJWrg==
 
-"@klasa/cache@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@klasa/cache/-/cache-0.0.2.tgz#8e23691762f3a547370507f0617c69e7d18039a0"
-  integrity sha512-HmXjFOq1gSHxByBEKEIo7j5V63p12eYTSTAs6v0/qWKCUjemwSBadBg/nO0A8qZbP0sVyihk2BAsszPl+qhBDg==
-
 "@klasa/cache@^0.0.3":
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/@klasa/cache/-/cache-0.0.3.tgz#824595f247fbd6204a6278eae988d22eb783d00b"
@@ -237,13 +232,14 @@
 
 "@klasa/core@dirigeants/core#build":
   version "0.0.3"
-  resolved "https://codeload.github.com/dirigeants/core/tar.gz/b629a1575608ee2ce7bd4e967fbf26c77cd84c17"
+  uid "280723c2f6c47a7bbab9987175f301f0329b2087"
+  resolved "https://codeload.github.com/dirigeants/core/tar.gz/280723c2f6c47a7bbab9987175f301f0329b2087"
   dependencies:
     "@klasa/bitfield" "^0.0.3"
     "@klasa/cache" "^0.0.3"
     "@klasa/dapi-types" "^0.2.0"
     "@klasa/event-iterator" "^0.0.10"
-    "@klasa/rest" "^0.4.0"
+    "@klasa/rest" "^0.4.1"
     "@klasa/snowflake" "^0.0.1"
     "@klasa/timer-manager" "^0.0.1"
     "@klasa/utils" "^0.0.8"
@@ -284,16 +280,16 @@
   resolved "https://registry.yarnpkg.com/@klasa/request-handler/-/request-handler-0.0.3.tgz#ed72de611ece3dd99725cb797fc13e07bb05e618"
   integrity sha512-Z1O+Aa2kW/I4Uos4EZalByveIuQKRfuRx+JCsgsogDBd95N5Ub47AH+LEd5i+uzjnJ6iDHfodpVlaHojJ4Q+ZQ==
 
-"@klasa/rest@^0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@klasa/rest/-/rest-0.4.0.tgz#e1165f4283131a05631313d7525474cbcf0a88d1"
-  integrity sha512-jF2QybJ7sCshQ6jb0RBpAL/cljzaGXJVS7V85RQCwbKO4CJFpKufOMHuTgAjUj9a6iWgXfNkpmftmkQJBUNpAw==
+"@klasa/rest@^0.4.1":
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/@klasa/rest/-/rest-0.4.1.tgz#b1d6cbaa9a87bc1aa526a64c31bd5a2dc5a1a911"
+  integrity sha512-wGVVSlWMGo32GKZaU95v9KL9V3ED9/t0lPl8+bE/KBlotbaETkZk402Fh7Bj3UMD2NZGu4hObqIir2Q5vwZM7Q==
   dependencies:
     "@klasa/async-queue" "^0.0.1"
-    "@klasa/cache" "^0.0.2"
+    "@klasa/cache" "^0.0.3"
     "@klasa/snowflake" "^0.0.1"
     "@klasa/timer-manager" "^0.0.1"
-    "@klasa/utils" "^0.0.4"
+    "@klasa/utils" "^0.0.8"
     abort-controller "^3.0.0"
     form-data "^3.0.0"
     node-fetch "^2.6.0"
@@ -322,11 +318,6 @@
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/@klasa/type/-/type-0.0.1.tgz#ef2dda6069ba8d26d1835033bac227029106998d"
   integrity sha512-gCacZ/FtVyYw+lJy5FmuHPfVkrLwN0FiAwLck2BLVgpUcalaC4GHIyK9U2CiHcegwPYDK8/Ef7yBwUC/xkGi3Q==
-
-"@klasa/utils@^0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@klasa/utils/-/utils-0.0.4.tgz#4bf010b09d0f93b39245523ed22a09571d56508c"
-  integrity sha512-9gZSGN/As3sxZumZ9ZwyQ+KcNSenzY8tR1orRakv8HKK0WH0gG7QrsP/1O2TD4uHxUyr8dysCjt73RYPfzuDWQ==
 
 "@klasa/utils@^0.0.8":
   version "0.0.8"
