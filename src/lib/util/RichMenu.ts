@@ -1,6 +1,7 @@
 import { RichDisplay, RichDisplayOptions } from './RichDisplay';
 import { ReactionMethods, ReactionHandler, ReactionHandlerOptions } from './ReactionHandler';
-import { Message } from '@klasa/core';
+
+import type { Message } from '@klasa/core';
 
 const choiceMethods = [
 	ReactionMethods.One,
