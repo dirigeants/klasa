@@ -5,6 +5,7 @@ export * from './lib/Client';
 export * from './lib/extensions/KlasaGuild';
 export * from './lib/extensions/KlasaMessage';
 export * from './lib/extensions/KlasaUser';
+export * from './lib/extensions/KlasaUserStore';
 
 // lib/permissions
 export * from './lib/permissions/PermissionLevels';

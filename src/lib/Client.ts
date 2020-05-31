@@ -15,6 +15,9 @@ import { isObject, mergeDefault } from '@klasa/utils';
 import { join } from 'path';
 import { PermissionLevels } from './permissions/PermissionLevels';
 
+// lib/extensions
+import { KlasaUserStore } from './extensions/KlasaUserStore';
+
 // lib/schedule
 import { Schedule } from './schedule/Schedule';
 
@@ -420,6 +423,8 @@ export class KlasaClient extends Client {
 		if (!isObject(options)) throw new TypeError('The Client Options for Klasa must be an object.');
 		mergeDefault(KlasaClientDefaults as unknown as Required<KlasaClientOptions>, options);
 		super(options);
+
+		Reflect.set(this, 'users', new KlasaUserStore(this));
 
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-expect-error
