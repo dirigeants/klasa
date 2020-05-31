@@ -505,7 +505,7 @@ export class KlasaClient extends Client {
 		this.application = await Application.fetch(this);
 
 		if (!this.options.owners.length) {
-			if (this.application.team) for (const user of this.application.team.members.map(member => member.user)) this.owners.add(user);
+			if (this.application.team) for (const member of this.application.team.members.values()) this.owners.add(member.user);
 			else this.owners.add(this.application.owner);
 		} else {
 			for (const id of this.options.owners) this.owners.add(await this.users.fetch(id));
