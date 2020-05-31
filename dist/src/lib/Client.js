@@ -115,8 +115,8 @@ let KlasaClient = /** @class */ (() => {
             this.application = await core_1.Application.fetch(this);
             if (!this.options.owners.length) {
                 if (this.application.team)
-                    for (const user of this.application.team.members.map(member => member.user))
-                        this.owners.add(user);
+                    for (const member of this.application.team.members.values())
+                        this.owners.add(member.user);
                 else
                     this.owners.add(this.application.owner);
             }
