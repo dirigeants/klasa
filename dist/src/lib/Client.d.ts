@@ -326,6 +326,11 @@ export declare class KlasaClient extends Client {
      */
     application: Application | null;
     /**
+     * The owners for this bot
+     * @since 0.5.0
+     */
+    owners: Set<User>;
+    /**
      * Constructs the Klasa client
      * @since 0.0.1
      * @param {KlasaClientOptions} [options={}] The config to pass to the new client
@@ -336,11 +341,6 @@ export declare class KlasaClient extends Client {
      * @since 0.0.1
      */
     get invite(): string;
-    /**
-     * The owners for this bot
-     * @since 0.5.0
-     */
-    get owners(): Set<User>;
     /**
      * Connects websocket to the api.
      */

@@ -95,6 +95,7 @@ let KlasaClient = /** @class */ (() => {
                 store.registerCoreDirectory(coreDirectory);
             this.schedule = new Schedule_1.Schedule(this);
             this.mentionPrefix = null;
+            this.owners = new Set();
         }
         /**
          * The invite link for the bot
@@ -108,28 +109,20 @@ let KlasaClient = /** @class */ (() => {
             return `https://discordapp.com/oauth2/authorize?client_id=${application.id}&permissions=${permissions}&scope=bot`;
         }
         /**
-         * The owners for this bot
-         * @since 0.5.0
-         */
-        get owners() {
-            const owners = new Set();
-            for (const owner of this.options.owners) {
-                const user = this.users.get(owner);
-                if (user)
-                    owners.add(user);
-            }
-            return owners;
-        }
-        /**
          * Connects websocket to the api.
          */
         async connect() {
             this.application = await core_1.Application.fetch(this);
             if (!this.options.owners.length) {
                 if (this.application.team)
-                    this.options.owners.push(...this.application.team.members.keys());
+                    for (const user of this.application.team.members.map(member => member.user))
+                        this.owners.add(user);
                 else
-                    this.options.owners.push(this.application.owner.id);
+                    this.owners.add(this.application.owner);
+            }
+            else {
+                for (const id of this.options.owners)
+                    this.owners.add(await this.users.fetch(id));
             }
             const earlyLoadingStores = [this.providers, this.extendables, this.serializers];
             const lateLoadingStores = this.pieceStores.filter(store => !earlyLoadingStores.includes(store));
