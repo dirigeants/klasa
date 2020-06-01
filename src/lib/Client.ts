@@ -486,7 +486,7 @@ export class KlasaClient extends Client {
 		this.mentionPrefix = null;
 		this.owners = new Set();
 
-		if (this.constructor === KlasaClient) for (const plugin of KlasaClient.plugins) plugin.call(this);
+		if (this.constructor === KlasaClient) this.loadPlugins();
 	}
 
 	/**
