@@ -6,7 +6,7 @@ export default class CoreSerializer extends Serializer {
 		super(store, directory, file, { aliases: ['integer', 'float'] });
 	}
 
-	public deserialize(data: string | number, { language, entry }: SerializerUpdateContext): number | null {
+	public async validate(data: string | number, { entry, language }: SerializerUpdateContext): Promise<number | null> {
 		let number: number;
 		switch (entry.type) {
 			case 'integer':

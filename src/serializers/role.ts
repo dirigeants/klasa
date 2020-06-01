@@ -3,7 +3,7 @@ import { Role } from '@klasa/core';
 
 export default class CoreSerializer extends Serializer {
 
-	public deserialize(data: string | Role, { language, entry, guild }: SerializerUpdateContext): Role {
+	public async validate(data: string | Role, { entry, language, guild }: SerializerUpdateContext): Promise<Role> {
 		if (!guild) throw this.client.languages.default.get('RESOLVER_INVALID_GUILD', entry.key);
 		if (data instanceof Role) return data;
 
