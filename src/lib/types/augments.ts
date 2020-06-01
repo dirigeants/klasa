@@ -101,7 +101,7 @@ declare module '@klasa/core/dist/src/lib/caching/structures/User' {
 
 }
 
-declare module '@klasa/core/dist/src/lib/caching/structures/Messages/Message' {
+declare module '@klasa/core/dist/src/lib/caching/structures/messages/Message' {
 
 	export interface Message {
 		command: Command | null;
