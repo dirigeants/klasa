@@ -97,8 +97,7 @@ let KlasaClient = /** @class */ (() => {
             this.mentionPrefix = null;
             this.owners = new Set();
             if (this.constructor === KlasaClient)
-                for (const plugin of KlasaClient.plugins)
-                    plugin.call(this);
+                this.loadPlugins();
         }
         /**
          * The invite link for the bot
