@@ -380,7 +380,6 @@ export class KlasaClient extends Client {
 	 */
 	public gateways: GatewayDriver;
 
-
 	/**
 	 * The Schedule that runs the tasks
 	 * @since 0.5.0
