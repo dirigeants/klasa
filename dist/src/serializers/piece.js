@@ -5,7 +5,7 @@ class CoreSerializer extends klasa_1.Serializer {
     constructor(store, directory, file) {
         super(store, directory, file, { aliases: ['command', 'language'] });
     }
-    deserialize(data, { language, entry }) {
+    async validate(data, { entry, language }) {
         const store = this.client[`${entry.type}s`];
         const parsed = typeof data === 'string' ? store.get(data) : data;
         if (parsed && parsed instanceof store.holds)

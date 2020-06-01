@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const klasa_1 = require("klasa");
 const core_1 = require("@klasa/core");
 class CoreSerializer extends klasa_1.Serializer {
-    deserialize(data, { language, entry, guild }) {
+    async validate(data, { entry, language, guild }) {
         if (!guild)
             throw this.client.languages.default.get('RESOLVER_INVALID_GUILD', entry.key);
         if (data instanceof core_1.Role)

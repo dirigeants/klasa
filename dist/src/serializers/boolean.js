@@ -7,7 +7,7 @@ class CoreSerializer extends klasa_1.Serializer {
     constructor(store, directory, file) {
         super(store, directory, file, { aliases: ['bool'] });
     }
-    deserialize(data, { language, entry }) {
+    async validate(data, { entry, language }) {
         const boolean = String(data).toLowerCase();
         if (truths.includes(boolean))
             return true;

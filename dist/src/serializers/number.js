@@ -5,7 +5,7 @@ class CoreSerializer extends klasa_1.Serializer {
     constructor(store, directory, file) {
         super(store, directory, file, { aliases: ['integer', 'float'] });
     }
-    deserialize(data, { language, entry }) {
+    async validate(data, { entry, language }) {
         let number;
         switch (entry.type) {
             case 'integer':

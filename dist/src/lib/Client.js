@@ -142,7 +142,7 @@ let KlasaClient = /** @class */ (() => {
             this.mentionPrefix = new RegExp(`^<@!?${clientUser.id}>`);
             const clientStorage = this.gateways.get('clientStorage');
             this.settings = clientStorage.acquire(clientUser);
-            this.settings.sync();
+            await this.settings.sync();
             // Init the schedule
             await this.schedule.init();
             if (this.options.readyMessage !== null) {

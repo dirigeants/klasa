@@ -6,7 +6,7 @@ class CoreSerializer extends klasa_1.Serializer {
     constructor(store, directory, file) {
         super(store, directory, file, { aliases: ['textchannel', 'voicechannel', 'categorychannel', 'storechannel', 'newschannel'] });
     }
-    deserialize(data, { language, entry, guild }) {
+    async validate(data, { entry, language, guild }) {
         if (data instanceof core_1.Channel)
             return this.checkChannel(data, entry, language);
         const parsed = klasa_1.Serializer.regex.channel.exec(data);

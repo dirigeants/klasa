@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const klasa_1 = require("klasa");
 class CoreSerializer extends klasa_1.Serializer {
-    async deserialize(data, { language, entry }) {
+    async validate(data, { entry, language }) {
         let user = this.client.users.resolve(data);
         if (user)
             return user;

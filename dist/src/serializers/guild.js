@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const klasa_1 = require("klasa");
 const core_1 = require("@klasa/core");
 class CoreSerializer extends klasa_1.Serializer {
-    deserialize(data, { language, entry }) {
+    async validate(data, { entry, language }) {
         if (data instanceof core_1.Guild)
             return data;
         const guild = klasa_1.Serializer.regex.snowflake.test(data) ? this.client.guilds.get(data) : null;
