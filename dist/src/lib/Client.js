@@ -139,7 +139,6 @@ let KlasaClient = /** @class */ (() => {
                 await this.destroy();
                 throw err;
             }
-            await Promise.all(lateLoadingStores.map(store => store.init()));
             const clientUser = this.user;
             this.mentionPrefix = new RegExp(`^<@!?${clientUser.id}>`);
             const clientStorage = this.gateways.get('clientStorage');
@@ -147,6 +146,7 @@ let KlasaClient = /** @class */ (() => {
             await this.settings.sync();
             // Init the schedule
             await this.schedule.init();
+            await Promise.all(lateLoadingStores.map(store => store.init()));
             if (this.options.readyMessage !== null) {
                 this.emit('log', typeof this.options.readyMessage === 'function' ? this.options.readyMessage(this) : this.options.readyMessage);
             }
