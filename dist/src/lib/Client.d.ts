@@ -340,7 +340,7 @@ export declare class KlasaClient extends Client {
      * The invite link for the bot
      * @since 0.0.1
      */
-    get invite(): string;
+    get invite(): string | null;
     /**
      * Connects websocket to the api.
      */

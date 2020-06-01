@@ -42,7 +42,7 @@ declare module '@klasa/core/dist/src/lib/client/Client' {
         mentionPrefix: RegExp | null;
         settings: Settings | null;
         application: Application | null;
-        readonly invite: string;
+        readonly invite: string | null;
         readonly owners: Set<User>;
         fetchApplication(): Promise<Application>;
     }

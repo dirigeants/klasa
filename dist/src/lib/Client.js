@@ -106,7 +106,7 @@ let KlasaClient = /** @class */ (() => {
         get invite() {
             const { application } = this;
             if (!application)
-                throw new Error(`${this.constructor.name}#invite is not available until ready.`);
+                return null;
             const permissions = new core_1.Permissions(this.constructor.basePermissions).add(...this.commands.map(command => command.requiredPermissions)).bitfield;
             return `https://discordapp.com/oauth2/authorize?client_id=${application.id}&permissions=${permissions}&scope=bot`;
         }
