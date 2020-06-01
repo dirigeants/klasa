@@ -4,7 +4,7 @@ import type { User } from '@klasa/core';
 
 export default class CoreSerializer extends Serializer {
 
-	public async deserialize(data: string | User, { language, entry }: SerializerUpdateContext): Promise<User> {
+	public async validate(data: string | User, { language, entry }: SerializerUpdateContext): Promise<User> {
 		let user = this.client.users.resolve(data);
 		if (user) return user;
 
