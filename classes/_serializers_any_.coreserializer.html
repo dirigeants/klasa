@@ -112,10 +112,10 @@
 								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="_serializers_any_.coreserializer.html#type" class="tsd-kind-icon">type</a></li>
 							</ul>
 						</section>
-						<section class="tsd-index-section ">
+						<section class="tsd-index-section tsd-is-inherited">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="_serializers_any_.coreserializer.html#deserialize" class="tsd-kind-icon">deserialize</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_serializers_any_.coreserializer.html#deserialize" class="tsd-kind-icon">deserialize</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_serializers_any_.coreserializer.html#disable" class="tsd-kind-icon">disable</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_serializers_any_.coreserializer.html#enable" class="tsd-kind-icon">enable</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_serializers_any_.coreserializer.html#init" class="tsd-kind-icon">init</a></li>
@@ -353,7 +353,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_lib_structures_serializer_.serializer.html">Serializer</a>.<a href="_lib_structures_serializer_.serializer.html#regex">regex</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/f9065d47/src/lib/structures/Serializer.ts#L81">src/lib/structures/Serializer.ts:81</a></li>
+							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/400a7ba2/src/lib/structures/Serializer.ts#L81">src/lib/structures/Serializer.ts:81</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -442,26 +442,37 @@
 					</ul>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group ">
+			<section class="tsd-panel-group tsd-member-group tsd-is-inherited">
 				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 					<a name="deserialize" class="tsd-anchor"></a>
 					<h3>deserialize</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">deserialize<span class="tsd-signature-symbol">(</span>data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span></li>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">deserialize<span class="tsd-signature-symbol">(</span>data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span>, _context<span class="tsd-signature-symbol">: </span><a href="../interfaces/_lib_structures_serializer_.serializerupdatecontext.html" class="tsd-signature-type">SerializerUpdateContext</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overrides <a href="_lib_structures_serializer_.serializer.html">Serializer</a>.<a href="_lib_structures_serializer_.serializer.html#deserialize">deserialize</a></p>
+								<p>Inherited from <a href="_lib_structures_serializer_.serializer.html">Serializer</a>.<a href="_lib_structures_serializer_.serializer.html#deserialize">deserialize</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/f9065d47/src/serializers/any.ts#L5">src/serializers/any.ts:5</a></li>
+									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/400a7ba2/src/lib/structures/Serializer.ts#L35">src/lib/structures/Serializer.ts:35</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>The deserialize method to be overwritten in actual Serializers.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>data: <span class="tsd-signature-type">unknown</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The data to deserialize</p>
+									</div>
+								</li>
+								<li>
+									<h5>_context: <a href="../interfaces/_lib_structures_serializer_.serializerupdatecontext.html" class="tsd-signature-type">SerializerUpdateContext</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">unknown</span></h4>
@@ -596,7 +607,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_lib_structures_serializer_.serializer.html">Serializer</a>.<a href="_lib_structures_serializer_.serializer.html#resolve">resolve</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/f9065d47/src/lib/structures/Serializer.ts#L25">src/lib/structures/Serializer.ts:25</a></li>
+									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/400a7ba2/src/lib/structures/Serializer.ts#L25">src/lib/structures/Serializer.ts:25</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -631,7 +642,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_lib_structures_serializer_.serializer.html">Serializer</a>.<a href="_lib_structures_serializer_.serializer.html#serialize">serialize</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/f9065d47/src/lib/structures/Serializer.ts#L43">src/lib/structures/Serializer.ts:43</a></li>
+									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/400a7ba2/src/lib/structures/Serializer.ts#L43">src/lib/structures/Serializer.ts:43</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -663,7 +674,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_lib_structures_serializer_.serializer.html">Serializer</a>.<a href="_lib_structures_serializer_.serializer.html#stringify">stringify</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/f9065d47/src/lib/structures/Serializer.ts#L53">src/lib/structures/Serializer.ts:53</a></li>
+									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/400a7ba2/src/lib/structures/Serializer.ts#L53">src/lib/structures/Serializer.ts:53</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -784,7 +795,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_lib_structures_serializer_.serializer.html">Serializer</a>.<a href="_lib_structures_serializer_.serializer.html#validate">validate</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/f9065d47/src/lib/structures/Serializer.ts#L15">src/lib/structures/Serializer.ts:15</a></li>
+									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/400a7ba2/src/lib/structures/Serializer.ts#L15">src/lib/structures/Serializer.ts:15</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -819,7 +830,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_lib_structures_serializer_.serializer.html">Serializer</a>.<a href="_lib_structures_serializer_.serializer.html#minormax">minOrMax</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/f9065d47/src/lib/structures/Serializer.ts#L63">src/lib/structures/Serializer.ts:63</a></li>
+									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/400a7ba2/src/lib/structures/Serializer.ts#L63">src/lib/structures/Serializer.ts:63</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -916,7 +927,7 @@
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
 								<a href="_serializers_any_.coreserializer.html#type" class="tsd-kind-icon">type</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 								<a href="_serializers_any_.coreserializer.html#deserialize" class="tsd-kind-icon">deserialize</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
@@ -975,11 +986,6 @@
 				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
-				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
-			</ul>
-			<ul class="tsd-legend">
 				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
 				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
 				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
@@ -987,6 +993,10 @@
 			<ul class="tsd-legend">
 				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
 				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
