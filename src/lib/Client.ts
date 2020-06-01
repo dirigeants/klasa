@@ -493,9 +493,9 @@ export class KlasaClient extends Client {
 	 * The invite link for the bot
 	 * @since 0.0.1
 	 */
-	public get invite(): string {
+	public get invite(): string | null {
 		const { application } = this;
-		if (!application) throw new Error(`${this.constructor.name}#invite is not available until ready.`);
+		if (!application) return null;
 		const permissions = new Permissions((this.constructor as typeof KlasaClient).basePermissions).add(...this.commands.map(command => command.requiredPermissions)).bitfield;
 		return `https://discordapp.com/oauth2/authorize?client_id=${application.id}&permissions=${permissions}&scope=bot`;
 	}
