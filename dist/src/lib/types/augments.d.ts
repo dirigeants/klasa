@@ -83,7 +83,7 @@ declare module '@klasa/core/dist/src/lib/caching/structures/User' {
         settings: Settings;
     }
 }
-declare module '@klasa/core/dist/src/lib/caching/structures/Message' {
+declare module '@klasa/core/dist/src/lib/caching/structures/messages/Message' {
     interface Message {
         command: Command | null;
         commandText: string | null;
