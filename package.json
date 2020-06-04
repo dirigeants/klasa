@@ -59,7 +59,7 @@
     "nyc": "^15.1.0",
     "source-map-support": "^0.5.19",
     "typedoc": "^0.17.7",
-    "typescript": "^3.9.3"
+    "typescript": "^3.9.5"
   },
   "engines": {
     "node": ">=12.6.0"
