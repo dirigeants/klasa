@@ -963,6 +963,8 @@ export declare const KlasaClientDefaults: {
             cork: () => void;
             uncork: () => void;
             readable: boolean;
+            readonly readableEncoding: BufferEncoding;
+            readonly readableEnded: boolean;
             readonly readableHighWaterMark: number;
             readonly readableLength: number;
             readonly readableObjectMode: boolean;
@@ -1090,6 +1092,8 @@ export declare const KlasaClientDefaults: {
             cork: () => void;
             uncork: () => void;
             readable: boolean;
+            readonly readableEncoding: BufferEncoding;
+            readonly readableEnded: boolean;
             readonly readableHighWaterMark: number;
             readonly readableLength: number;
             readonly readableObjectMode: boolean;
