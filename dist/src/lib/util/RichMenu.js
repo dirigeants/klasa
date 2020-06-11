@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RichMenu = void 0;
 const RichDisplay_1 = require("./RichDisplay");
+require("./ReactionHandler");
 const cache_1 = require("@klasa/cache");
 const choiceMethods = [
     "one" /* One */,

@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const klasa_1 = require("klasa");
 const core_1 = require("@klasa/core");
+require("@klasa/dapi-types");
 class CoreSerializer extends klasa_1.Serializer {
     constructor(store, directory, file) {
         super(store, directory, file, { aliases: ['textchannel', 'voicechannel', 'categorychannel', 'storechannel', 'newschannel'] });

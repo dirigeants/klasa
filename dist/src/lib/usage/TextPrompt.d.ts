@@ -1,7 +1,7 @@
 import { Cache } from '@klasa/cache';
-import { CommandUsage } from './CommandUsage';
 import type { TextBasedChannel, MessageOptions, MessageBuilder, Client, User, Message } from '@klasa/core';
 import type { Usage } from './Usage';
+import type { CommandUsage } from './CommandUsage';
 export interface TextPromptOptions {
     /**
      * The intended target of this TextPrompt, if someone other than the author.

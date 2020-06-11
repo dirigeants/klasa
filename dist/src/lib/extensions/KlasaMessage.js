@@ -19,6 +19,7 @@ exports.KlasaMessage = void 0;
 const core_1 = require("@klasa/core");
 const cache_1 = require("@klasa/cache");
 const utils_1 = require("@klasa/utils");
+require("@klasa/dapi-types");
 /**
  * Klasa's Extended Message
  */

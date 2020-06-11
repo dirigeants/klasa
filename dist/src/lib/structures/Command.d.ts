@@ -1,10 +1,10 @@
 import { AliasPiece, AliasPieceOptions, Permissions, PermissionsResolvable, Message } from '@klasa/core';
-import { ChannelType } from '@klasa/dapi-types';
 import { Usage } from '../usage/Usage';
 import { CommandUsage } from '../usage/CommandUsage';
 import type { CommandStore } from './CommandStore';
 import type { Language, LanguageValue } from './Language';
 import type { Possible } from '../usage/Possible';
+import type { ChannelType } from '@klasa/dapi-types';
 /**
  * Base class for all Klasa Commands. See {@tutorial CreatingCommands} for more information how to use this class
  * to build custom commands.

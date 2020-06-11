@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const klasa_1 = require("klasa");
+require("@klasa/dapi-types");
 const console_1 = require("@klasa/console");
 class default_1 extends klasa_1.Finalizer {
     constructor() {

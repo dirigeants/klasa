@@ -5,6 +5,7 @@ exports.OPTIONS = exports.DATATYPES = exports.MENTION_REGEX = exports.KlasaClien
 const Package = require('../../../../package.json');
 const utils_1 = require("@klasa/utils");
 const core_1 = require("@klasa/core");
+require("@klasa/dapi-types");
 const Client = require("../Client");
 exports.version = Package.version;
 exports.KlasaClientDefaults = utils_1.mergeDefault(core_1.ClientOptionsDefaults, {

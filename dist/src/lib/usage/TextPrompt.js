@@ -18,6 +18,7 @@ exports.TextPrompt = void 0;
 /* eslint-disable no-dupe-class-members */
 const utils_1 = require("@klasa/utils");
 const cache_1 = require("@klasa/cache");
+require("./Tag");
 const quotes = ['"', "'", '“”', '‘’'];
 /**
  * A class to handle argument collection and parameter resolution

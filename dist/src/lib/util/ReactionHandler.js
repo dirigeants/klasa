@@ -15,6 +15,7 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 var _ended, _awaiting, _currentPage, _resolve;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ReactionHandler = void 0;
+require("@klasa/dapi-types");
 /**
  * Klasa's ReactionHandler, for handling RichDisplay and RichMenu reaction input
  */

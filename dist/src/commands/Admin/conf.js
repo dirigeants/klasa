@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const klasa_1 = require("klasa");
 const utils_1 = require("@klasa/utils");
+require("@klasa/dapi-types");
 class default_1 extends klasa_1.Command {
     constructor(store, directory, files) {
         super(store, directory, files, {

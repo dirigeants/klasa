@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const klasa_1 = require("klasa");
 const core_1 = require("@klasa/core");
 const utils_1 = require("@klasa/utils");
+require("@klasa/dapi-types");
 class default_1 extends klasa_1.Inhibitor {
     constructor() {
         super(...arguments);
