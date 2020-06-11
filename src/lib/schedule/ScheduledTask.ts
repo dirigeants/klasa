@@ -1,8 +1,9 @@
 import { isObject } from '@klasa/utils';
 import { Cron } from '@klasa/cron';
-import { Schedule } from './Schedule';
-import { Task } from '../structures/Task';
 import { isSet, Client } from '@klasa/core';
+
+import type { Schedule } from './Schedule';
+import type { Task } from '../structures/Task';
 
 /**
  * The structure for future tasks to be run

@@ -1,11 +1,11 @@
 /* eslint-disable no-dupe-class-members */
 import { mergeDefault } from '@klasa/utils';
 import { Cache } from '@klasa/cache';
-import { CommandUsage } from './CommandUsage';
 import { Tag, TagRequirement } from './Tag';
 
 import type { TextBasedChannel, MessageOptions, MessageBuilder, Client, User, Message } from '@klasa/core';
 import type { Usage } from './Usage';
+import type { CommandUsage } from './CommandUsage';
 
 const quotes = ['"', "'", '“”', '‘’'];
 
