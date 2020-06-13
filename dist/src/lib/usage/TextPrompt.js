@@ -184,7 +184,7 @@ class TextPrompt {
             __classPrivateFieldSet(this, _required, __classPrivateFieldGet(this, _currentUsage).required);
         }
         else if ((_a = __classPrivateFieldGet(this, _currentUsage)) === null || _a === void 0 ? void 0 : _a.repeat) {
-            __classPrivateFieldSet(this, _required, 0);
+            __classPrivateFieldSet(this, _required, 0 /* Optional */);
             __classPrivateFieldSet(this, _repeat, true);
         }
         else {
@@ -209,13 +209,13 @@ class TextPrompt {
         if (!resolver) {
             this.client.emit('warn', `Unknown Argument Type encountered: ${possible.type}`);
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            if (__classPrivateFieldGet(this, _currentUsage).possibles.length === 1)
+            if (__classPrivateFieldGet(this, _currentUsage).possibles.length === (index + 1))
                 return this.pushParam(undefined);
             return this.multiPossibles(++index);
         }
         try {
             const res = await resolver.run(this.args[this.params.length], possible, this.message, custom);
-            if (typeof res === 'undefined' && __classPrivateFieldGet(this, _required) === 1)
+            if (typeof res === 'undefined' && __classPrivateFieldGet(this, _required) === 1 /* SemiRequired */)
                 this.args.splice(this.params.length, 0, undefined);
             return this.pushParam(res);
         }
@@ -233,7 +233,7 @@ class TextPrompt {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             const { response } = __classPrivateFieldGet(this, _currentUsage);
             const error = typeof response === 'function' ? response(this.message, possible) : response;
-            if (__classPrivateFieldGet(this, _required) === 1)
+            if (__classPrivateFieldGet(this, _required) === 1 /* SemiRequired */)
                 return this.handleError(error || err);
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             if (__classPrivateFieldGet(this, _currentUsage).possibles.length === 1) {
