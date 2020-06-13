@@ -286,7 +286,7 @@ export class TextPrompt {
 			this.#currentUsage = this.usage.parsedUsage[this.params.length];
 			this.#required = this.#currentUsage.required;
 		} else if (this.#currentUsage?.repeat) {
-			this.#required = 0;
+			this.#required = TagRequirement.Optional;
 			this.#repeat = true;
 		} else {
 			return this.finalize();
@@ -312,13 +312,13 @@ export class TextPrompt {
 		if (!resolver) {
 			this.client.emit('warn', `Unknown Argument Type encountered: ${possible.type}`);
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-			if (this.#currentUsage!.possibles.length === 1) return this.pushParam(undefined);
+			if (this.#currentUsage!.possibles.length === (index + 1)) return this.pushParam(undefined);
 			return this.multiPossibles(++index);
 		}
 
 		try {
 			const res = await resolver.run(this.args[this.params.length] as string, possible, this.message, custom);
-			if (typeof res === 'undefined' && this.#required === 1) this.args.splice(this.params.length, 0, undefined);
+			if (typeof res === 'undefined' && this.#required === TagRequirement.SemiRequired) this.args.splice(this.params.length, 0, undefined);
 			return this.pushParam(res);
 		} catch (err) {
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -333,7 +333,7 @@ export class TextPrompt {
 			const { response } = this.#currentUsage!;
 			const error = typeof response === 'function' ? response(this.message, possible) : response;
 
-			if (this.#required === 1) return this.handleError(error || err);
+			if (this.#required === TagRequirement.SemiRequired) return this.handleError(error || err);
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			if (this.#currentUsage!.possibles.length === 1) {
 				return this.handleError(error || (this.args[this.params.length] === undefined ? this.message.language.get('COMMANDMESSAGE_MISSING_REQUIRED', possible.name) : err));
