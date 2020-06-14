@@ -135,7 +135,7 @@ export class Usage {
 
 		for (let i = 0; i < usageString.length; i++) {
 			const char = usageString[i];
-			usage.char = Number(i) + 1;
+			usage.char = i + 1;
 			usage.from = usage.char - usage.current.length;
 			usage.at = `at char #${usage.char} '${char}'`;
 			usage.fromTo = `from char #${usage.from} to #${usage.char} '${usage.current}'`;
