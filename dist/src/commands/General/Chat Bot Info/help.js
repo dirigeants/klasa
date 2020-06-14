@@ -14,7 +14,7 @@ class default_1 extends klasa_1.Command {
         });
         this.createCustomResolver('command', (arg, possible, message) => {
             var _a;
-            if (!arg || arg === '')
+            if (!arg)
                 return undefined;
             return (_a = this.client.arguments.get('command')) === null || _a === void 0 ? void 0 : _a.run(arg, possible, message);
         });
