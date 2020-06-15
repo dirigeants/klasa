@@ -1098,10 +1098,10 @@ dir-glob@^3.0.1:
   dependencies:
     path-type "^4.0.0"
 
-discord-md-tags@0.0.6:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/discord-md-tags/-/discord-md-tags-0.0.6.tgz#74da8f05a02f90ad6b097219d345adf7eab81849"
-  integrity sha512-W3wiKU+JX0NnDSQbFUcTVorO0hnIRdSStVzz+hXdrMfbV2PrGXeEUh+d25HVtwe8660mZYEyTwapBGprhuL5uw==
+discord-md-tags@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/discord-md-tags/-/discord-md-tags-1.0.0.tgz#53eda7c909f3ba4d85bbaa998910664fdd07585e"
+  integrity sha512-EcaAryPk3G+fdHhIq5P3NamxHOneV2GOyWygA0RyZtHCm+ty1z5Rf/9/3ZzZJBhYnRxUDYw+tMHsD612zLw7qA==
 
 doctrine@^3.0.0:
   version "3.0.0"
