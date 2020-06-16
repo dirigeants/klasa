@@ -97,7 +97,7 @@
 					<div class="tsd-signature tsd-kind-icon">DATATYPES<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><a href="../interfaces/_lib_util_querybuilder_.querybuilderdatatype.html" class="tsd-signature-type">QueryBuilderDatatype</a><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = [[&#x27;json&#x27;, { type: &#x27;JSON&#x27;, serializer: (value: unknown): string &#x3D;&gt; &#x60;&#x27;${JSON.stringify(value).replace(/&#x27;/g, &quot;&#x27;&#x27;&quot;)}&#x27;&#x60; }],[&#x27;any&#x27;, { extends: &#x27;json&#x27; }],[&#x27;boolean&#x27;, { type: &#x27;BOOLEAN&#x27;, serializer: (value: unknown): string &#x3D;&gt; &#x60;${value}&#x60; }],[&#x27;bool&#x27;, { extends: &#x27;boolean&#x27; }],[&#x27;snowflake&#x27;, { type: &#x27;VARCHAR(19)&#x27;, serializer: (value: unknown): string &#x3D;&gt; &#x60;&#x27;${value}&#x27;&#x60; }],[&#x27;channel&#x27;, { extends: &#x27;snowflake&#x27; }],[&#x27;textchannel&#x27;, { extends: &#x27;channel&#x27; }],[&#x27;voicechannel&#x27;, { extends: &#x27;channel&#x27; }],[&#x27;categorychannel&#x27;, { extends: &#x27;channel&#x27; }],[&#x27;guild&#x27;, { extends: &#x27;snowflake&#x27; }],[&#x27;number&#x27;, { type: &#x27;FLOAT&#x27;, serializer: (value: unknown): string &#x3D;&gt; &#x60;${value}&#x60; }],[&#x27;float&#x27;, { extends: &#x27;number&#x27; }],[&#x27;integer&#x27;, { extends: &#x27;number&#x27;, type: &#x27;INTEGER&#x27; }],[&#x27;command&#x27;, { type: &#x27;TEXT&#x27; }],[&#x27;language&#x27;, { type: &#x27;VARCHAR(5)&#x27; }],[&#x27;role&#x27;, { extends: &#x27;snowflake&#x27; }],[&#x27;string&#x27;, { type: ({ maximum }): string &#x3D;&gt; maximum ? &#x60;VARCHAR(${maximum})&#x60; : &#x27;TEXT&#x27; }],[&#x27;url&#x27;, { type: &#x27;TEXT&#x27; }],[&#x27;user&#x27;, { extends: &#x27;snowflake&#x27; }]]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/3dd2cbdc/src/lib/util/constants.ts#L143">src/lib/util/constants.ts:143</a></li>
+							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/ded51714/src/lib/util/constants.ts#L143">src/lib/util/constants.ts:143</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -107,7 +107,7 @@
 					<div class="tsd-signature tsd-kind-icon">Klasa<wbr>Client<wbr>Defaults<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol"> = mergeDefault(ClientOptionsDefaults, {commands: {editing: false,logging: false,messageLifetime: 1800,noPrefixDM: false,prefix: null,regexPrefix: null,slowmode: 0,slowmodeAggressive: false,typing: false,prefixCaseInsensitive: false,prompts: {limit: Infinity,time: 30000,quotedStringSupport: false,flagSupport: false}},console: {useColor: true},consoleEvents: {debug: false,error: true,log: true,verbose: false,warn: true,wtf: true},language: &#x27;en-US&#x27;,permissionLevels: () &#x3D;&gt; Client.KlasaClient.defaultPermissionLevels,readyMessage: (client) &#x3D;&gt; &#x60;Successfully initialized. Ready to serve ${client.guilds.size} guild${client.guilds.size &#x3D;&#x3D;&#x3D; 1 ? &#x27;&#x27; : &#x27;s&#x27;}.&#x60;,owners: [],// eslint-disable-next-line no-process-envproduction: process.env.NODE_ENV &#x3D;&#x3D;&#x3D; &#x27;production&#x27;,providers: { default: &#x27;json&#x27; },pieces: {defaults: {arguments: {enabled: true,aliases: []},commands: {aliases: [],autoAliases: true,bucket: 1,cooldown: 0,cooldownLevel: &#x27;author&#x27;,description: &#x27;&#x27;,extendedHelp: (language: Language): LanguageValue &#x3D;&gt; language.get(&#x27;COMMAND_HELP_NO_EXTENDED&#x27;),enabled: true,flagSupport: true,guarded: false,hidden: false,nsfw: false,permissionLevel: 0,promptLimit: 0,promptTime: 30000,requiredSettings: [],requiredPermissions: 0,runIn: [ChannelType.GuildText, ChannelType.DM],subcommands: false,usage: &#x27;&#x27;,usageDelim: &#x27;&#x27;,quotedStringSupport: false,deletable: false},events: {enabled: true,once: false},extendables: {enabled: true,appliesTo: []},finalizers: { enabled: true },inhibitors: {enabled: true,spamProtection: false},languages: { enabled: true },monitors: {enabled: true,ignoreBots: true,ignoreSelf: true,ignoreOthers: true,ignoreWebhooks: true,ignoreEdits: true,ignoreBlacklistedUsers: true,ignoreBlacklistedGuilds: true,allowedTypes: [MessageType.Default]},providers: { enabled: true },serializers: {enabled: true,aliases: []},tasks: { enabled: true }},disabledStores: [],createFolders: true},schedule: { interval: 60000 },settings: {gateways: {clientStorage: {schema: (): Schema &#x3D;&gt; Client.KlasaClient.defaultClientSchema},users: {schema: (): Schema &#x3D;&gt; Client.KlasaClient.defaultUserSchema},guilds: {schema: (): Schema &#x3D;&gt; Client.KlasaClient.defaultGuildSchema}},preserve: true}})</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/3dd2cbdc/src/lib/util/constants.ts#L14">src/lib/util/constants.ts:14</a></li>
+							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/ded51714/src/lib/util/constants.ts#L14">src/lib/util/constants.ts:14</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -122,7 +122,7 @@
 					<div class="tsd-signature tsd-kind-icon">Package<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> = require(&#x27;../../../../package.json&#x27;)</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/3dd2cbdc/src/lib/util/constants.ts#L2">src/lib/util/constants.ts:2</a></li>
+							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/ded51714/src/lib/util/constants.ts#L2">src/lib/util/constants.ts:2</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -132,7 +132,7 @@
 					<div class="tsd-signature tsd-kind-icon">version<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">any</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/3dd2cbdc/src/lib/util/constants.ts#L12">src/lib/util/constants.ts:12</a></li>
+							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/ded51714/src/lib/util/constants.ts#L12">src/lib/util/constants.ts:12</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -145,7 +145,7 @@
 					<div class="tsd-signature tsd-kind-icon">MENTION_<wbr>REGEX<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/3dd2cbdc/src/lib/util/constants.ts#L135">src/lib/util/constants.ts:135</a></li>
+							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/ded51714/src/lib/util/constants.ts#L135">src/lib/util/constants.ts:135</a></li>
 						</ul>
 					</aside>
 					<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-object-literal">
@@ -154,7 +154,7 @@
 						<div class="tsd-signature tsd-kind-icon">channel<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol"> = /^(?:&lt;#)?(\d{17,19})&gt;?$/</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/3dd2cbdc/src/lib/util/constants.ts#L137">src/lib/util/constants.ts:137</a></li>
+								<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/ded51714/src/lib/util/constants.ts#L137">src/lib/util/constants.ts:137</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -164,7 +164,7 @@
 						<div class="tsd-signature tsd-kind-icon">emoji<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol"> = /^(?:&lt;a?:\w{2,32}:)?(\d{17,19})&gt;?$/</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/3dd2cbdc/src/lib/util/constants.ts#L138">src/lib/util/constants.ts:138</a></li>
+								<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/ded51714/src/lib/util/constants.ts#L138">src/lib/util/constants.ts:138</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -174,7 +174,7 @@
 						<div class="tsd-signature tsd-kind-icon">role<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol"> = /^(?:&lt;@&amp;)?(\d{17,19})&gt;?$/</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/3dd2cbdc/src/lib/util/constants.ts#L139">src/lib/util/constants.ts:139</a></li>
+								<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/ded51714/src/lib/util/constants.ts#L139">src/lib/util/constants.ts:139</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -184,7 +184,7 @@
 						<div class="tsd-signature tsd-kind-icon">snowflake<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol"> = /^(\d{17,19})$/</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/3dd2cbdc/src/lib/util/constants.ts#L140">src/lib/util/constants.ts:140</a></li>
+								<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/ded51714/src/lib/util/constants.ts#L140">src/lib/util/constants.ts:140</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -194,7 +194,7 @@
 						<div class="tsd-signature tsd-kind-icon">user<wbr>OrMember<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RegExp</span><span class="tsd-signature-symbol"> = /^(?:&lt;@!?)?(\d{17,19})&gt;?$/</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/3dd2cbdc/src/lib/util/constants.ts#L136">src/lib/util/constants.ts:136</a></li>
+								<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/ded51714/src/lib/util/constants.ts#L136">src/lib/util/constants.ts:136</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -205,7 +205,7 @@
 					<div class="tsd-signature tsd-kind-icon">OPTIONS<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/3dd2cbdc/src/lib/util/constants.ts#L165">src/lib/util/constants.ts:165</a></li>
+							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/ded51714/src/lib/util/constants.ts#L165">src/lib/util/constants.ts:165</a></li>
 						</ul>
 					</aside>
 					<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-object-literal">
@@ -218,7 +218,7 @@
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/3dd2cbdc/src/lib/util/constants.ts#L166">src/lib/util/constants.ts:166</a></li>
+										<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/ded51714/src/lib/util/constants.ts#L166">src/lib/util/constants.ts:166</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
@@ -235,7 +235,7 @@
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/3dd2cbdc/src/lib/util/constants.ts#L167">src/lib/util/constants.ts:167</a></li>
+										<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/ded51714/src/lib/util/constants.ts#L167">src/lib/util/constants.ts:167</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -258,7 +258,7 @@
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/3dd2cbdc/src/lib/util/constants.ts#L168">src/lib/util/constants.ts:168</a></li>
+										<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/ded51714/src/lib/util/constants.ts#L168">src/lib/util/constants.ts:168</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
@@ -287,7 +287,7 @@
 							<li class="tsd-description">
 								<aside class="tsd-sources">
 									<ul>
-										<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/3dd2cbdc/src/lib/util/constants.ts#L169">src/lib/util/constants.ts:169</a></li>
+										<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/ded51714/src/lib/util/constants.ts#L169">src/lib/util/constants.ts:169</a></li>
 									</ul>
 								</aside>
 								<h4 class="tsd-parameters-title">Parameters</h4>
