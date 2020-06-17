@@ -108,7 +108,8 @@ class ReactionHandler {
             // noop
         }
         finally {
-            if (!this.message.deleted) {
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            if (!this.message.deleted && this.message.client.guilds.has(this.message.guild.id)) {
                 try {
                     await this.message.reactions.remove();
                 }
