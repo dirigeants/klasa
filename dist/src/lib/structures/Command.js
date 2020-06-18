@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Command = void 0;
 const core_1 = require("@klasa/core");
 const utils_1 = require("@klasa/utils");
+const ratelimits_1 = require("@klasa/ratelimits");
 const Usage_1 = require("../usage/Usage");
 const CommandUsage_1 = require("../usage/CommandUsage");
 /**
@@ -53,8 +54,7 @@ class Command extends core_1.AliasPiece {
         this.cooldownLevel = options.cooldownLevel;
         if (!['author', 'channel', 'guild'].includes(this.cooldownLevel))
             throw new Error('Invalid cooldownLevel');
-        this.bucket = options.bucket;
-        this.cooldown = options.cooldown;
+        this.cooldowns = new ratelimits_1.RateLimitManager(options.cooldown, options.bucket);
     }
     /**
      * The main category for the command
@@ -71,22 +71,6 @@ class Command extends core_1.AliasPiece {
      */
     get subCategory() {
         return this.fullCategory[1] || 'General';
-    }
-    /**
-     * The usage deliminator for the command input
-     * @since 0.0.1
-     * @readonly
-     */
-    get usageDelim() {
-        return this.usage.usageDelim;
-    }
-    /**
-     * The usage string for the command
-     * @since 0.0.1
-     * @readonly
-     */
-    get usageString() {
-        return this.usage.usageString;
     }
     /**
      * Creates a Usage to run custom prompts off of
@@ -134,9 +118,7 @@ class Command extends core_1.AliasPiece {
         return {
             ...super.toJSON(),
             requiredPermissions: this.requiredPermissions.toArray(),
-            bucket: this.bucket,
             category: this.category,
-            cooldown: this.cooldown,
             deletable: this.deletable,
             description: utils_1.isFunction(this.description) ? this.description(this.client.languages.default) : this.description,
             extendedHelp: utils_1.isFunction(this.extendedHelp) ? this.extendedHelp(this.client.languages.default) : this.extendedHelp,
@@ -156,9 +138,7 @@ class Command extends core_1.AliasPiece {
                 usageString: this.usage.usageString,
                 usageDelim: this.usage.usageDelim,
                 nearlyFullUsage: this.usage.nearlyFullUsage
-            },
-            usageDelim: this.usageDelim,
-            usageString: this.usageString
+            }
         };
     }
 }

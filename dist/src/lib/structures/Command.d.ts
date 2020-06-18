@@ -1,10 +1,12 @@
 import { AliasPiece, AliasPieceOptions, Permissions, PermissionsResolvable, Message } from '@klasa/core';
+import { RateLimitManager } from '@klasa/ratelimits';
 import { Usage } from '../usage/Usage';
 import { CommandUsage } from '../usage/CommandUsage';
 import type { CommandStore } from './CommandStore';
 import type { Language, LanguageValue } from './Language';
 import type { Possible } from '../usage/Possible';
 import type { ChannelType } from '@klasa/dapi-types';
+export declare type CooldownLevel = 'author' | 'channel' | 'guild';
 /**
  * Base class for all Klasa Commands. See {@tutorial CreatingCommands} for more information how to use this class
  * to build custom commands.
@@ -101,17 +103,12 @@ export declare abstract class Command extends AliasPiece {
      * The level at which cooldowns should apply
      * @since 0.5.0
      */
-    cooldownLevel: string;
+    cooldownLevel: CooldownLevel;
     /**
-     * The number of times this command can be run before ratelimited by the cooldown
-     * @since 0.5.0
+     * The cooldowns for this command
+     * @since 0.6.0
      */
-    bucket: number;
-    /**
-     * The amount of time before the users can run the command again in seconds based on cooldownLevel
-     * @since 0.5.0
-     */
-    cooldown: number;
+    cooldowns: RateLimitManager;
     /**
      * @since 0.0.1
      * @param store The Command store
@@ -132,18 +129,6 @@ export declare abstract class Command extends AliasPiece {
      * @readonly
      */
     get subCategory(): string;
-    /**
-     * The usage deliminator for the command input
-     * @since 0.0.1
-     * @readonly
-     */
-    get usageDelim(): string;
-    /**
-     * The usage string for the command
-     * @since 0.0.1
-     * @readonly
-     */
-    get usageString(): string;
     /**
      * Creates a Usage to run custom prompts off of
      * @param {string} usageString The string designating all parameters expected
@@ -194,7 +179,7 @@ export interface CommandOptions extends AliasPieceOptions {
     autoAliases?: boolean;
     bucket?: number;
     cooldown?: number;
-    cooldownLevel?: string;
+    cooldownLevel?: CooldownLevel;
     deletable?: boolean;
     description?: ((language: Language) => LanguageValue) | string;
     extendedHelp?: ((language: Language) => LanguageValue) | string;

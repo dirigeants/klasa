@@ -108,7 +108,6 @@ exports.KlasaClientDefaults = utils_1.mergeDefault(core_1.ClientOptionsDefaults,
             },
             tasks: { enabled: true }
         },
-        disabledStores: [],
         createFolders: true
     },
     schedule: { interval: 60000 },

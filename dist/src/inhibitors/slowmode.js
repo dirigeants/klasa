@@ -5,7 +5,7 @@ const ratelimits_1 = require("@klasa/ratelimits");
 class default_1 extends klasa_1.Inhibitor {
     constructor(store, directory, files) {
         super(store, directory, files, { spamProtection: true });
-        this.slowmode = new ratelimits_1.RateLimitManager(1, this.client.options.commands.slowmode);
+        this.slowmode = new ratelimits_1.RateLimitManager(this.client.options.commands.slowmode);
         this.aggressive = this.client.options.commands.slowmodeAggressive;
         if (!this.client.options.commands.slowmode)
             this.disable();
