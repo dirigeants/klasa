@@ -164,7 +164,7 @@ ava('Settings#resolve', async (test): Promise<void> => {
 	test.deepEqual(await settings.resolve('count', 'messages'), [65, []]);
 
 	// Update and give it an actual value
-	await provider.update(gateway.name, settings.id, { messages: 'Hello' });
+	await provider.update(gateway.name, settings.id, { messages: ['Hello'] });
 	await settings.sync(true);
 	test.deepEqual(await settings.resolve('messages'), [['Hello']]);
 
@@ -223,8 +223,8 @@ ava('Settings#reset (Multiple[Array] | Exists)', async (test): Promise<void> => 
 	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: ['world'] });
 	const results = await settings.reset(['count', 'messages']);
 	test.is(results.length, 1);
-	test.is(results[0].previous, 'world');
-	test.is(results[0].next, null);
+	test.deepEqual(results[0].previous, ['world']);
+	test.deepEqual(results[0].next, []);
 	test.is(results[0].entry, gateway.schema.get('messages'));
 	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: [] });
 });
@@ -304,8 +304,8 @@ ava('Settings#reset (Root | Exists)', async (test): Promise<void> => {
 	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: ['world'] });
 	const results = await settings.reset();
 	test.is(results.length, 1);
-	test.is(results[0].previous, 'world');
-	test.is(results[0].next, null);
+	test.deepEqual(results[0].previous, ['world']);
+	test.deepEqual(results[0].next, []);
 	test.is(results[0].entry, gateway.schema.get('messages'));
 	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: [] });
 });
@@ -447,11 +447,11 @@ ava('Settings#update (Multiple)', async (test): Promise<void> => {
 
 	// messages
 	test.deepEqual(results[1].previous, []);
-	test.deepEqual(results[1].next, [4]);
+	test.deepEqual(results[1].next, ['4']);
 	test.is(results[1].entry, schema.get('messages') as SchemaEntry);
 
 	// persistence
-	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, count: 6, messages: [4] });
+	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, count: 6, messages: ['4'] });
 });
 
 ava('Settings#update (Multiple | Object)', async (test): Promise<void> => {

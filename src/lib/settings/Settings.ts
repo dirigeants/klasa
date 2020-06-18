@@ -1,6 +1,5 @@
-import { isObject } from 'util';
 import { Cache } from '@klasa/cache';
-import { objectToTuples, arrayStrictEquals } from '@klasa/utils';
+import { objectToTuples, arrayStrictEquals, isObject } from '@klasa/utils';
 
 import type { Client, Guild } from '@klasa/core';
 import type { SerializerUpdateContext, Serializer } from '../structures/Serializer';
