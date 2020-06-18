@@ -92,7 +92,7 @@ export abstract class SQLProvider extends Provider {
 	/**
 	 * The addColumn method which inserts/creates a new table to the database.
 	 * @param table The table to check against
-	 * @param entry The SchemaFolder or SchemaEntry added to the schema
+	 * @param entry The SchemaEntry added to the schema
 	 */
 	public abstract addColumn(table: string, entry: SchemaEntry): Promise<unknown>;
 
