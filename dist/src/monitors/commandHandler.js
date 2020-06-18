@@ -30,9 +30,9 @@ class CommandHandler extends klasa_1.Monitor {
         const timer = new stopwatch_1.Stopwatch();
         if (this.client.options.commands.typing)
             message.channel.typing.start();
+        let token = null;
         try {
             const command = message.command;
-            let token = null;
             if (!this.client.owners.has(message.author) && command.cooldowns.time) {
                 const ratelimit = command.cooldowns.acquire(message.guild ? Reflect.get(message, command.cooldownLevel).id : message.author.id);
                 if (ratelimit.limited)
@@ -65,10 +65,14 @@ class CommandHandler extends klasa_1.Monitor {
                 }
             }
             catch (argumentError) {
+                if (token)
+                    token.reject();
                 this.client.emit('argumentError', message, command, message.params, argumentError);
             }
         }
         catch (response) {
+            if (token)
+                token.reject();
             this.client.emit('commandInhibited', message, message.command, response);
         }
         finally {
