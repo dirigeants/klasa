@@ -32,10 +32,10 @@ export default class CommandHandler extends Monitor {
 	private async runCommand(message: Message): Promise<void> {
 		const timer = new Stopwatch();
 		if (this.client.options.commands.typing) message.channel.typing.start();
+		let token: RateLimitToken | null = null;
 		try {
 			const command = message.command as Command;
 
-			let token: RateLimitToken | null = null;
 			if (!this.client.owners.has(message.author) && command.cooldowns.time) {
 				const ratelimit = command.cooldowns.acquire(message.guild ? Reflect.get(message, command.cooldownLevel).id : message.author.id);
 				if (ratelimit.limited) throw message.language.get('INHIBITOR_COOLDOWN', Math.ceil(ratelimit.remainingTime / 1000), command.cooldownLevel !== 'author');
@@ -66,9 +66,11 @@ export default class CommandHandler extends Monitor {
 					this.client.emit('commandError', message, command, message.params, error);
 				}
 			} catch (argumentError) {
+				if (token) token.reject();
 				this.client.emit('argumentError', message, command, message.params, argumentError);
 			}
 		} catch (response) {
+			if (token) token.reject();
 			this.client.emit('commandInhibited', message, message.command, response);
 		} finally {
 			if (this.client.options.commands.typing) message.channel.typing.stop();
