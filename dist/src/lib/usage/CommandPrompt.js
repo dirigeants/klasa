@@ -14,11 +14,10 @@ class CommandPrompt extends TextPrompt_1.TextPrompt {
      * @param options The options for this CommandPrompt
      */
     constructor(message, usage, options = {}) {
-        var _a;
         super(message, usage, options);
         this.typing = this.client.options.commands.typing;
         // eslint-disable-next-line dot-notation
-        this['_setup'](this.message.content.slice((_a = this.message.prefixLength) !== null && _a !== void 0 ? _a : undefined).trim().split(' ').slice(1).join(' ').trim());
+        this['_setup'](this.message.content.slice(this.message.prefixLength ?? undefined).trim().split(' ').slice(1).join(' ').trim());
     }
     /**
      * Runs the internal validation, and re-prompts according to the settings

@@ -1,18 +1,4 @@
 "use strict";
-var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, privateMap) {
-    if (!privateMap.has(receiver)) {
-        throw new TypeError("attempted to get private field on non-instance");
-    }
-    return privateMap.get(receiver);
-};
-var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, privateMap, value) {
-    if (!privateMap.has(receiver)) {
-        throw new TypeError("attempted to set private field on non-instance");
-    }
-    privateMap.set(receiver, value);
-    return value;
-};
-var _repeat, _required, _prompted, _currentUsage;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TextPrompt = void 0;
 /* eslint-disable no-dupe-class-members */
@@ -31,7 +17,6 @@ class TextPrompt {
      * @param options The options of this prompt
      */
     constructor(message, usage, options = {}) {
-        var _a, _b;
         /**
          * If the command reprompted for missing args
          * @since 0.0.1
@@ -61,34 +46,54 @@ class TextPrompt {
          * Whether the current usage is a repeating arg
          * @since 0.0.1
          */
-        _repeat.set(this, false);
+        this.#repeat = false;
         /**
          * Whether the current usage is required
          * @since 0.0.1
          */
-        _required.set(this, 0 /* Optional */);
+        this.#required = 0 /* Optional */;
         /**
          * How many time this class has reprompted
          * @since 0.0.1
          */
-        _prompted.set(this, 0);
+        this.#prompted = 0;
         /**
          * A cache of the current usage while validating
          * @since 0.0.1
          */
-        _currentUsage.set(this, null);
+        this.#currentUsage = null;
         options = utils_1.mergeDefault(message.client.options.commands.prompts, options);
         Object.defineProperty(this, 'client', { value: message.client });
         this.message = message;
-        this.target = (_a = options.target) !== null && _a !== void 0 ? _a : message.author;
+        this.target = options.target ?? message.author;
         this.typing = false;
-        this.channel = (_b = options.channel) !== null && _b !== void 0 ? _b : message.channel;
+        this.channel = options.channel ?? message.channel;
         this.usage = usage;
         this.time = options.time;
         this.limit = options.limit;
         this.quotedStringSupport = options.quotedStringSupport;
         this.flagSupport = options.flagSupport;
     }
+    /**
+     * Whether the current usage is a repeating arg
+     * @since 0.0.1
+     */
+    #repeat;
+    /**
+     * Whether the current usage is required
+     * @since 0.0.1
+     */
+    #required;
+    /**
+     * How many time this class has reprompted
+     * @since 0.0.1
+     */
+    #prompted;
+    /**
+     * A cache of the current usage while validating
+     * @since 0.0.1
+     */
+    #currentUsage;
     /**
      * Runs the custom prompt.
      * @since 0.5.0
@@ -124,7 +129,7 @@ class TextPrompt {
      * @param prompt The reprompt error
      */
     async reprompt(prompt) {
-        __classPrivateFieldSet(this, _prompted, +__classPrivateFieldGet(this, _prompted) + 1);
+        this.#prompted++;
         if (this.typing)
             this.message.channel.typing.stop();
         const abortTerm = this.message.language.get('TEXT_PROMPT_ABORT');
@@ -155,7 +160,7 @@ class TextPrompt {
         try {
             message = await this.prompt(mb => mb
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                .setContent(this.message.language.get('MONITOR_COMMAND_HANDLER_REPEATING_REPROMPT', `<@!${this.message.author.id}>`, __classPrivateFieldGet(this, _currentUsage).possibles[0].name, this.time / 1000, abortTerm)));
+                .setContent(this.message.language.get('MONITOR_COMMAND_HANDLER_REPEATING_REPROMPT', `<@!${this.message.author.id}>`, this.#currentUsage.possibles[0].name, this.time / 1000, abortTerm)));
             this.responses.set(message.id, message);
         }
         catch (err) {
@@ -175,22 +180,21 @@ class TextPrompt {
      * @returns The resolved parameters
      */
     async validateArgs() {
-        var _a;
         if (this.params.length >= this.usage.parsedUsage.length && this.params.length >= this.args.length) {
             return this.finalize();
         }
         else if (this.params.length < this.usage.parsedUsage.length) {
-            __classPrivateFieldSet(this, _currentUsage, this.usage.parsedUsage[this.params.length]);
-            __classPrivateFieldSet(this, _required, __classPrivateFieldGet(this, _currentUsage).required);
+            this.#currentUsage = this.usage.parsedUsage[this.params.length];
+            this.#required = this.#currentUsage.required;
         }
-        else if ((_a = __classPrivateFieldGet(this, _currentUsage)) === null || _a === void 0 ? void 0 : _a.repeat) {
-            __classPrivateFieldSet(this, _required, 0 /* Optional */);
-            __classPrivateFieldSet(this, _repeat, true);
+        else if (this.#currentUsage?.repeat) {
+            this.#required = 0 /* Optional */;
+            this.#repeat = true;
         }
         else {
             return this.finalize();
         }
-        __classPrivateFieldSet(this, _prompted, 0);
+        this.#prompted = 0;
         return this.multiPossibles(0);
     }
     /**
@@ -201,7 +205,7 @@ class TextPrompt {
      */
     async multiPossibles(index) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const possible = __classPrivateFieldGet(this, _currentUsage).possibles[index];
+        const possible = this.#currentUsage.possibles[index];
         const custom = this.usage.customResolvers.get(possible.type);
         const resolver = this.client.arguments.get(custom ? 'custom' : possible.type);
         if (possible.name in this.flags)
@@ -209,38 +213,38 @@ class TextPrompt {
         if (!resolver) {
             this.client.emit('warn', `Unknown Argument Type encountered: ${possible.type}`);
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            if (__classPrivateFieldGet(this, _currentUsage).possibles.length === (index + 1))
+            if (this.#currentUsage.possibles.length === (index + 1))
                 return this.pushParam(undefined);
             return this.multiPossibles(++index);
         }
         try {
             const res = await resolver.run(this.args[this.params.length], possible, this.message, custom);
-            if (typeof res === 'undefined' && __classPrivateFieldGet(this, _required) === 1 /* SemiRequired */)
+            if (typeof res === 'undefined' && this.#required === 1 /* SemiRequired */)
                 this.args.splice(this.params.length, 0, undefined);
             return this.pushParam(res);
         }
         catch (err) {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            if (index < __classPrivateFieldGet(this, _currentUsage).possibles.length - 1)
+            if (index < this.#currentUsage.possibles.length - 1)
                 return this.multiPossibles(++index);
-            if (!__classPrivateFieldGet(this, _required)) {
-                if (__classPrivateFieldGet(this, _repeat))
+            if (!this.#required) {
+                if (this.#repeat)
                     this.args.splice(this.params.length, 1);
                 else
                     this.args.splice(this.params.length, 0, undefined);
-                return __classPrivateFieldGet(this, _repeat) ? this.validateArgs() : this.pushParam(undefined);
+                return this.#repeat ? this.validateArgs() : this.pushParam(undefined);
             }
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            const { response } = __classPrivateFieldGet(this, _currentUsage);
+            const { response } = this.#currentUsage;
             const error = typeof response === 'function' ? response(this.message, possible) : response;
-            if (__classPrivateFieldGet(this, _required) === 1 /* SemiRequired */)
+            if (this.#required === 1 /* SemiRequired */)
                 return this.handleError(error || err);
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            if (__classPrivateFieldGet(this, _currentUsage).possibles.length === 1) {
+            if (this.#currentUsage.possibles.length === 1) {
                 return this.handleError(error || (this.args[this.params.length] === undefined ? this.message.language.get('COMMANDMESSAGE_MISSING_REQUIRED', possible.name) : err));
             }
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            return this.handleError(error || this.message.language.get('COMMANDMESSAGE_NOMATCH', __classPrivateFieldGet(this, _currentUsage).possibles.map(poss => poss.name).join(', ')));
+            return this.handleError(error || this.message.language.get('COMMANDMESSAGE_NOMATCH', this.#currentUsage.possibles.map(poss => poss.name).join(', ')));
         }
     }
     /**
@@ -259,7 +263,7 @@ class TextPrompt {
      */
     async handleError(err) {
         this.args.splice(this.params.length, 1, null);
-        if (this.limit && __classPrivateFieldGet(this, _prompted) < this.limit)
+        if (this.limit && this.#prompted < this.limit)
             return this.reprompt(err);
         throw err;
     }
@@ -357,7 +361,6 @@ class TextPrompt {
     }
 }
 exports.TextPrompt = TextPrompt;
-_repeat = new WeakMap(), _required = new WeakMap(), _prompted = new WeakMap(), _currentUsage = new WeakMap();
 /**
  * Map of RegExps caching usageDelim's RegExps.
  * @since 0.5.0

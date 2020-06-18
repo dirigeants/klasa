@@ -1,18 +1,4 @@
 "use strict";
-var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, privateMap) {
-    if (!privateMap.has(receiver)) {
-        throw new TypeError("attempted to get private field on non-instance");
-    }
-    return privateMap.get(receiver);
-};
-var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, privateMap, value) {
-    if (!privateMap.has(receiver)) {
-        throw new TypeError("attempted to set private field on non-instance");
-    }
-    privateMap.set(receiver, value);
-    return value;
-};
-var _running;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ScheduledTask = void 0;
 const utils_1 = require("@klasa/utils");
@@ -35,7 +21,7 @@ class ScheduledTask {
          * If the ScheduledTask is being run currently
          * @since 0.5.0
          */
-        _running.set(this, false);
+        this.#running = false;
         const [_time, _recurring] = this.constructor._resolveTime(time);
         this.client = client;
         this.taskName = taskName;
@@ -46,6 +32,11 @@ class ScheduledTask {
         this.data = 'data' in options && utils_1.isObject(options.data) ? options.data : {};
         this.constructor._validate(this);
     }
+    /**
+     * If the ScheduledTask is being run currently
+     * @since 0.5.0
+     */
+    #running;
     /**
      * The Schedule class that manages all scheduled tasks
      * @since 0.5.0
@@ -58,26 +49,24 @@ class ScheduledTask {
      * @since 0.5.0
      */
     get task() {
-        var _a;
-        return (_a = this.client.tasks.get(this.taskName)) !== null && _a !== void 0 ? _a : null;
+        return this.client.tasks.get(this.taskName) ?? null;
     }
     /**
      * Run the current task and bump it if needed
      * @since 0.5.0
      */
     async run() {
-        var _a;
         const { task } = this;
-        if (!task || !task.enabled || __classPrivateFieldGet(this, _running))
+        if (!task || !task.enabled || this.#running)
             return this;
-        __classPrivateFieldSet(this, _running, true);
+        this.#running = true;
         try {
-            await task.run({ ...(_a = this.data) !== null && _a !== void 0 ? _a : {}, id: this.id });
+            await task.run({ ...this.data ?? {}, id: this.id });
         }
         catch (err) {
             this.client.emit('taskError', this, task, err);
         }
-        __classPrivateFieldSet(this, _running, false);
+        this.#running = false;
         if (this.recurring)
             return this.update({ time: this.recurring });
         await this.delete();
@@ -184,5 +173,4 @@ class ScheduledTask {
     }
 }
 exports.ScheduledTask = ScheduledTask;
-_running = new WeakMap();
 //# sourceMappingURL=ScheduledTask.js.map

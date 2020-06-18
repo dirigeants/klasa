@@ -1,18 +1,4 @@
 "use strict";
-var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, privateMap, value) {
-    if (!privateMap.has(receiver)) {
-        throw new TypeError("attempted to set private field on non-instance");
-    }
-    privateMap.set(receiver, value);
-    return value;
-};
-var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, privateMap) {
-    if (!privateMap.has(receiver)) {
-        throw new TypeError("attempted to get private field on non-instance");
-    }
-    return privateMap.get(receiver);
-};
-var _responses;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.KlasaMessage = void 0;
 /* eslint-disable no-dupe-class-members */
@@ -26,23 +12,23 @@ require("@klasa/dapi-types");
 class KlasaMessage extends core_1.extender.get('Message') {
     constructor(...args) {
         super(...args);
-        /**
-         * All of the responses to this message.
-         */
-        _responses.set(this, void 0);
         this.command = this.command || null;
         this.commandText = this.commandText || null;
         this.prefix = this.prefix || null;
         this.prefixLength = this.prefixLength || null;
         this.prompter = this.prompter || null;
-        __classPrivateFieldSet(this, _responses, []);
+        this.#responses = [];
     }
+    /**
+     * All of the responses to this message.
+     */
+    #responses;
     /**
     * The previous responses to this message
     * @since 0.5.0
     */
     get responses() {
-        return __classPrivateFieldGet(this, _responses).filter(msg => !msg.deleted);
+        return this.#responses.filter(msg => !msg.deleted);
     }
     /**
     * The string arguments derived from the usageDelim of the command
@@ -107,9 +93,9 @@ class KlasaMessage extends core_1.extender.get('Message') {
             else
                 promises.push(this.channel.send(split[i]).then(([message]) => message));
         }
-        __classPrivateFieldSet(this, _responses, await Promise.all(promises));
+        this.#responses = await Promise.all(promises);
         await Promise.all(deletes);
-        return __classPrivateFieldGet(this, _responses).slice(0);
+        return this.#responses.slice(0);
     }
     sendLocale(key, localeArgs = [], options) {
         if (!Array.isArray(localeArgs))
@@ -213,7 +199,6 @@ class KlasaMessage extends core_1.extender.get('Message') {
     }
 }
 exports.KlasaMessage = KlasaMessage;
-_responses = new WeakMap();
 /**
 * Cache of RegExp prefixes
 * @since 0.5.0

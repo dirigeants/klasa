@@ -73,8 +73,7 @@ class QueryBuilder extends Map {
      * // -> prefix VARCHAR(10)[]
      */
     generateDatatype(schemaEntry) {
-        var _a;
-        const datatype = (_a = this.get(schemaEntry.type)) !== null && _a !== void 0 ? _a : null;
+        const datatype = this.get(schemaEntry.type) ?? null;
         if (!datatype)
             throw new Error('A datatype was generated without an existing query generator.');
         const parsedDefault = this.serialize(schemaEntry.default, schemaEntry, datatype);

@@ -17,7 +17,6 @@ class Extendable extends core_1.Piece {
      * @param options The options for this extendable
      */
     constructor(store, directory, files, options = {}) {
-        var _a;
         super(store, directory, files, options);
         const staticPropertyNames = Object.getOwnPropertyNames(this.constructor)
             .filter(name => !['length', 'prototype', 'name'].includes(name));
@@ -27,7 +26,7 @@ class Extendable extends core_1.Piece {
             .map(name => ({ [name]: Object.getOwnPropertyDescriptor(this.constructor, name) })));
         this.instancePropertyDescriptors = Object.assign({}, ...instancePropertyNames
             .map(name => ({ [name]: Object.getOwnPropertyDescriptor(this.constructor.prototype, name) })));
-        this.originals = new Map((_a = options.appliesTo) === null || _a === void 0 ? void 0 : _a.map(structure => [structure, {
+        this.originals = new Map(options.appliesTo?.map(structure => [structure, {
                 staticPropertyDescriptors: Object.assign({}, ...staticPropertyNames
                     .map(name => ({ [name]: Object.getOwnPropertyDescriptor(structure, name) || { value: undefined } }))),
                 instancePropertyDescriptors: Object.assign({}, ...instancePropertyNames

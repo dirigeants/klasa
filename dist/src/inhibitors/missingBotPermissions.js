@@ -16,10 +16,9 @@ class default_1 extends klasa_1.Inhibitor {
         }, {});
     }
     run(message, command) {
-        var _a, _b;
         const missing = message.channel.type === 0 /* GuildText */ ?
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            ((_b = (_a = message.guild.me) === null || _a === void 0 ? void 0 : _a.permissionsIn(message.channel).missing(command.requiredPermissions)) !== null && _b !== void 0 ? _b : []) :
+            (message.guild.me?.permissionsIn(message.channel).missing(command.requiredPermissions) ?? []) :
             this.impliedPermissions.missing(command.requiredPermissions);
         if (missing.length)
             throw message.language.get('INHIBITOR_MISSING_BOT_PERMS', missing.map(key => this.friendlyPerms[key]).join(', '));

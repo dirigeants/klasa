@@ -30,7 +30,7 @@
     "@klasa/console": "^0.0.3",
     "@klasa/cron": "^0.0.1",
     "@klasa/duration": "^0.0.3",
-    "@klasa/ratelimits": "^0.0.2",
+    "@klasa/ratelimits": "^0.0.3",
     "@klasa/request-handler": "^0.0.3",
     "@klasa/stopwatch": "^0.0.1",
     "@klasa/timer-manager": "0.0.1",
