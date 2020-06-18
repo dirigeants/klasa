@@ -3,7 +3,7 @@ import { Cache } from '@klasa/cache';
 import { createClient } from './lib/SettingsClient';
 import {
 	Gateway,
-	GatewayDriver,
+	GatewayStore,
 	KlasaClient
 } from '../src';
 
@@ -21,7 +21,7 @@ ava('GatewayDriver Properties', (test): void => {
 	test.plan(3);
 
 	const { client } = test.context;
-	const gatewayDriver = new GatewayDriver(client);
+	const gatewayDriver = new GatewayStore(client);
 
 	test.true(gatewayDriver instanceof Cache);
 	test.is(gatewayDriver.client, client);

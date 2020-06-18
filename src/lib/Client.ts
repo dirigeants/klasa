@@ -33,7 +33,7 @@ import { SerializerStore } from './structures/SerializerStore';
 import { TaskStore } from './structures/TaskStore';
 
 // lib/settings
-import { GatewayDriver } from './settings/gateway/GatewayDriver';
+import { GatewayStore } from './settings/gateway/GatewayStore';
 import { Gateway } from './settings/gateway/Gateway';
 
 // lib/settings/schema
@@ -383,7 +383,7 @@ export class KlasaClient extends Client {
 	 * The GatewayDriver instance where the gateways are stored
 	 * @since 0.5.0
 	 */
-	public gateways: GatewayDriver;
+	public gateways: GatewayStore;
 
 	/**
 	 * The Schedule that runs the tasks
@@ -443,7 +443,7 @@ export class KlasaClient extends Client {
 		// eslint-disable-next-line
 		this.permissionLevels['validate']();
 
-		this.gateways = new GatewayDriver(this);
+		this.gateways = new GatewayStore(this);
 
 		const { guilds, users, clientStorage } = this.options.settings.gateways;
 		const guildSchema = guilds.schema(new Schema());

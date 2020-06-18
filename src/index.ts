@@ -15,8 +15,7 @@ export * from './lib/schedule/ScheduledTask';
 
 // lib/settings
 export * from './lib/settings/gateway/Gateway';
-export * from './lib/settings/gateway/GatewayDriver';
-export * from './lib/settings/gateway/GatewayStorage';
+export * from './lib/settings/gateway/GatewayStore';
 export * from './lib/settings/schema/Schema';
 export * from './lib/settings/schema/SchemaEntry';
 export * from './lib/settings/Settings';
