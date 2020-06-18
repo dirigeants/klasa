@@ -22,7 +22,7 @@ export default class extends Inhibitor {
 		const rateLimit = this.slowmode.acquire(message.author.id);
 
 		try {
-			rateLimit.drip();
+			rateLimit.consume();
 		} catch (err) {
 			if (this.aggressive) rateLimit.resetTime();
 			throw true;
