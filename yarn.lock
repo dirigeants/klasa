@@ -234,16 +234,16 @@
   version "0.0.3"
   resolved "https://codeload.github.com/dirigeants/core/tar.gz/93e4b4a91bc31c7b59072f60cfc169be4eec959f"
   dependencies:
-    "@klasa/bitfield" "^0.0.3"
+    "@klasa/bitfield" "^0.0.2"
     "@klasa/cache" "^0.0.3"
-    "@klasa/dapi-types" "^0.2.1"
-    "@klasa/event-iterator" "^0.0.10"
-    "@klasa/rest" "^0.5.3"
+    "@klasa/dapi-types" "^0.1.1"
+    "@klasa/event-iterator" "^0.0.8"
+    "@klasa/rest" "^0.4.0"
     "@klasa/snowflake" "^0.0.1"
     "@klasa/timer-manager" "^0.0.1"
     "@klasa/utils" "^0.0.8"
-    "@klasa/ws" "^0.0.13"
-    "@types/node" "^14.0.13"
+    "@klasa/ws" "^0.0.12"
+    "@types/node" "^14.0.0"
     "@types/node-fetch" "^2.5.7"
     fs-nextra "^0.5.1"
 
@@ -267,10 +267,10 @@
   resolved "https://registry.yarnpkg.com/@klasa/event-iterator/-/event-iterator-0.0.10.tgz#9805297be51ccb5767d31f700957ddb79ec4855b"
   integrity sha512-AUr8d9+4YeHN2/b1C8EVSZTfLut/+j2u8zcrKRt3BFP5kxdHSg+RSOJ7wP+gQ0dvrVZMQNwbIg/xFVr9G1EsLA==
 
-"@klasa/ratelimits@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@klasa/ratelimits/-/ratelimits-0.0.3.tgz#4c2c54b26b2a8f8e196392740741247105a40edd"
-  integrity sha512-nsUCB/RuPFPGJnknbMdcbS9eqvin5BHJ9Arq00gBUtQSMCXByJpMFpJeaRkTNbR3R/11mdb66JEkfJULKk1KnA==
+"@klasa/ratelimits@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@klasa/ratelimits/-/ratelimits-0.0.4.tgz#b7d87a2202966a879f4237f26d6a22f1d93e2ce1"
+  integrity sha512-3RQvwqNOshPgTgmmc5WFvQ7qUF0OliP/F5Vcp3v3ZgkBIcqKCYGXHLAJcB2Ut3adJIZutU1WkRYa3jaWZ8UO8g==
   dependencies:
     "@klasa/cache" "^0.0.3"
 
