@@ -1,6 +1,7 @@
-import { Schema, SchemaJson } from '../schema/Schema';
+import { Schema } from '../schema/Schema';
 import type { Provider } from '../../structures/Provider';
 import type { Client } from '@klasa/core';
+import type { SchemaEntryJson } from '../schema/SchemaEntry';
 
 export class GatewayStorage {
 
@@ -71,8 +72,8 @@ export class GatewayStorage {
 		const columns = await provider.getColumns(this.name);
 		if (columns.length) {
 			const promises = [];
-			for (const entry of this.schema.values(true)) {
-				if (!columns.includes(entry.path)) promises.push(provider.addColumn(this.name, entry));
+			for (const entry of this.schema.values()) {
+				if (!columns.includes(entry.key)) promises.push(provider.addColumn(this.name, entry));
 			}
 			await Promise.all(promises);
 		}
@@ -133,5 +134,5 @@ export interface GatewayStorageOptions {
 export interface GatewayStorageJson {
 	name: string;
 	provider: string;
-	schema: SchemaJson;
+	schema: Record<string, SchemaEntryJson>;
 }

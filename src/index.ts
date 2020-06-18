@@ -18,10 +18,8 @@ export * from './lib/settings/gateway/Gateway';
 export * from './lib/settings/gateway/GatewayDriver';
 export * from './lib/settings/gateway/GatewayStorage';
 export * from './lib/settings/schema/Schema';
-export * from './lib/settings/schema/SchemaFolder';
 export * from './lib/settings/schema/SchemaEntry';
 export * from './lib/settings/Settings';
-export * from './lib/settings/SettingsFolder';
 
 // lib/structures
 export * from './lib/structures/Argument';
