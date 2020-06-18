@@ -30,7 +30,7 @@ export default class extends Command {
 				message.language.get('COMMAND_HELP_EXTENDED'),
 				isFunction(command.extendedHelp) ? command.extendedHelp(message.language) : command.extendedHelp
 			].join('\n');
-			return message.send(mb => mb.setContent(codeblock('asciidoc') `${info}`));
+			return message.reply(mb => mb.setContent(codeblock('asciidoc') `${info}`));
 		}
 		const help = await this.buildHelp(message);
 		const categories = Object.keys(help);
@@ -49,10 +49,10 @@ export default class extends Command {
 		try {
 			response = await dm.send(mb => mb.setContent(helpMessage.join('\n')), { char: '\u200b' });
 		} catch {
-			if (message.channel.type !== ChannelType.DM) await message.sendLocale('COMMAND_HELP_NODM');
+			if (message.channel.type !== ChannelType.DM) await message.replyLocale('COMMAND_HELP_NODM');
 		}
 
-		if (message.channel.type !== ChannelType.DM) await message.sendLocale('COMMAND_HELP_DM');
+		if (message.channel.type !== ChannelType.DM) await message.replyLocale('COMMAND_HELP_DM');
 
 		return response;
 	}

@@ -39,7 +39,7 @@ export default class extends Command {
 		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		await this.client.settings!.update([['userBlacklist', queries[0]], ['guildBlacklist', queries[1]]]);
 
-		return message.sendLocale('COMMAND_BLACKLIST_SUCCESS', changes);
+		return message.replyLocale('COMMAND_BLACKLIST_SUCCESS', changes);
 	}
 
 }

@@ -34,10 +34,10 @@ export default class extends Command {
 
 		const value = key ? message.author.settings.get(key) : message.author.settings;
 		if (SchemaEntry.is(schemaOrEntry)) {
-			return message.sendLocale('COMMAND_CONF_GET', [key, this.displayEntry(schemaOrEntry, value, message.guild)]);
+			return message.replyLocale('COMMAND_CONF_GET', [key, this.displayEntry(schemaOrEntry, value, message.guild)]);
 		}
 
-		return message.sendLocale('COMMAND_CONF_SERVER', [
+		return message.replyLocale('COMMAND_CONF_SERVER', [
 			key ? `: ${key.split('.').map(toTitleCase).join('/')}` : '',
 			codeBlock('asciidoc', this.displayFolder(value as SettingsFolder))
 		]);
@@ -46,7 +46,7 @@ export default class extends Command {
 	public async set(message: Message, [key, valueToSet]: [string, string]): Promise<Message[]> {
 		try {
 			const [update] = await message.author.settings.update(key, valueToSet, { onlyConfigurable: true, arrayAction: 'add' });
-			return message.sendLocale('COMMAND_CONF_UPDATED', [key, this.displayEntry(update.entry, update.next, message.guild)]);
+			return message.replyLocale('COMMAND_CONF_UPDATED', [key, this.displayEntry(update.entry, update.next, message.guild)]);
 		} catch (error) {
 			throw String(error);
 		}
@@ -55,7 +55,7 @@ export default class extends Command {
 	public async remove(message: Message, [key, valueToRemove]: [string, string]): Promise<Message[]> {
 		try {
 			const [update] = await message.author.settings.update(key, valueToRemove, { onlyConfigurable: true, arrayAction: 'remove' });
-			return message.sendLocale('COMMAND_CONF_UPDATED', [key, this.displayEntry(update.entry, update.next, message.guild as Guild)]);
+			return message.replyLocale('COMMAND_CONF_UPDATED', [key, this.displayEntry(update.entry, update.next, message.guild as Guild)]);
 		} catch (error) {
 			throw String(error);
 		}
@@ -64,7 +64,7 @@ export default class extends Command {
 	public async reset(message: Message, [key]: [string]): Promise<Message[]> {
 		try {
 			const [update] = await message.author.settings.reset(key);
-			return message.sendLocale('COMMAND_CONF_RESET', [key, this.displayEntry(update.entry, update.next, message.guild as Guild)]);
+			return message.replyLocale('COMMAND_CONF_RESET', [key, this.displayEntry(update.entry, update.next, message.guild as Guild)]);
 		} catch (error) {
 			throw String(error);
 		}

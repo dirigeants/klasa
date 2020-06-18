@@ -38,10 +38,10 @@ export default class extends Command {
 		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		const value = key ? message.guild!.settings.get(key) : message.guild!.settings;
 		if (SchemaEntry.is(schemaOrEntry)) {
-			return message.sendLocale('COMMAND_CONF_GET', [key, this.displayEntry(schemaOrEntry, value, message.guild as Guild)]);
+			return message.replyLocale('COMMAND_CONF_GET', [key, this.displayEntry(schemaOrEntry, value, message.guild as Guild)]);
 		}
 
-		return message.sendLocale('COMMAND_CONF_SERVER', [
+		return message.replyLocale('COMMAND_CONF_SERVER', [
 			key ? `: ${key.split('.').map(toTitleCase).join('/')}` : '',
 			codeBlock('asciidoc', this.displayFolder(value as SettingsFolder))
 		]);
@@ -51,7 +51,7 @@ export default class extends Command {
 		try {
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			const [update] = await message.guild!.settings.update(key, valueToSet, { onlyConfigurable: true, arrayAction: 'add' });
-			return message.sendLocale('COMMAND_CONF_UPDATED', [key, this.displayEntry(update.entry, update.next, message.guild as Guild)]);
+			return message.replyLocale('COMMAND_CONF_UPDATED', [key, this.displayEntry(update.entry, update.next, message.guild as Guild)]);
 		} catch (error) {
 			throw String(error);
 		}
@@ -61,7 +61,7 @@ export default class extends Command {
 		try {
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			const [update] = await message.guild!.settings.update(key, valueToRemove, { onlyConfigurable: true, arrayAction: 'remove' });
-			return message.sendLocale('COMMAND_CONF_UPDATED', [key, this.displayEntry(update.entry, update.next, message.guild as Guild)]);
+			return message.replyLocale('COMMAND_CONF_UPDATED', [key, this.displayEntry(update.entry, update.next, message.guild as Guild)]);
 		} catch (error) {
 			throw String(error);
 		}
@@ -71,7 +71,7 @@ export default class extends Command {
 		try {
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			const [update] = await message.guild!.settings.reset(key);
-			return message.sendLocale('COMMAND_CONF_RESET', [key, this.displayEntry(update.entry, update.next, message.guild as Guild)]);
+			return message.replyLocale('COMMAND_CONF_RESET', [key, this.displayEntry(update.entry, update.next, message.guild as Guild)]);
 		} catch (error) {
 			throw String(error);
 		}
