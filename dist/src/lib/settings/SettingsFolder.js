@@ -54,10 +54,11 @@ class SettingsFolder extends Map {
      * @param paths The paths to resolve
      */
     resolve(...paths) {
+        var _a;
         if (this.base === null)
             return Promise.reject(new Error('Cannot retrieve guild from a non-ready settings instance.'));
         const guild = this.client.guilds.resolve(this.base.target);
-        const language = guild?.language ?? this.base.gateway.client.languages.default;
+        const language = (_a = guild === null || guild === void 0 ? void 0 : guild.language) !== null && _a !== void 0 ? _a : this.base.gateway.client.languages.default;
         return Promise.all(paths.map(path => {
             const entry = this.schema.get(path);
             if (typeof entry === 'undefined')
@@ -78,6 +79,7 @@ class SettingsFolder extends Map {
         }));
     }
     async reset(paths = [...this.keys()], options = {}) {
+        var _a;
         if (this.base === null) {
             throw new Error('Cannot reset keys from a non-ready settings instance.');
         }
@@ -94,7 +96,7 @@ class SettingsFolder extends Map {
         const { client, schema } = this;
         const onlyConfigurable = typeof options.onlyConfigurable === 'undefined' ? false : options.onlyConfigurable;
         const guild = client.guilds.resolve(typeof options.guild === 'undefined' ? this.base.target : options.guild);
-        const language = guild?.language ?? client.languages.default;
+        const language = (_a = guild === null || guild === void 0 ? void 0 : guild.language) !== null && _a !== void 0 ? _a : client.languages.default;
         const extra = options.extraContext;
         const changes = [];
         for (const path of paths) {
@@ -282,12 +284,13 @@ class SettingsFolder extends Map {
         }
     }
     async _processUpdate(entries, options) {
+        var _a;
         const { client, schema } = this;
         const onlyConfigurable = typeof options.onlyConfigurable === 'undefined' ? false : options.onlyConfigurable;
         const arrayAction = typeof options.arrayAction === 'undefined' ? "auto" /* Auto */ : options.arrayAction;
         const arrayIndex = typeof options.arrayIndex === 'undefined' ? null : options.arrayIndex;
         const guild = client.guilds.resolve(typeof options.guild === 'undefined' ? this.base.target : options.guild);
-        const language = guild?.language ?? client.languages.default;
+        const language = (_a = guild === null || guild === void 0 ? void 0 : guild.language) !== null && _a !== void 0 ? _a : client.languages.default;
         const extra = options.extraContext;
         const internalOptions = { arrayAction, arrayIndex, onlyConfigurable };
         const promises = [];

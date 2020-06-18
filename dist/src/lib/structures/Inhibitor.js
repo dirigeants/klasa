@@ -17,8 +17,9 @@ class Inhibitor extends core_1.Piece {
      * @param options Optional Inhibitor settings
      */
     constructor(store, directory, files, options = {}) {
+        var _a;
         super(store, directory, files, options);
-        this.spamProtection = options.spamProtection ?? false;
+        this.spamProtection = (_a = options.spamProtection) !== null && _a !== void 0 ? _a : false;
     }
     /**
      * The async wrapper for running inhibitors

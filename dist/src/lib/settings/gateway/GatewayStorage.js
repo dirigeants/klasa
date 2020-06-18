@@ -17,7 +17,8 @@ class GatewayStorage {
      * The provider that manages this gateway's persistent data.
      */
     get provider() {
-        return this.client.providers.get(this._provider) ?? null;
+        var _a;
+        return (_a = this.client.providers.get(this._provider)) !== null && _a !== void 0 ? _a : null;
     }
     /**
      * Initializes the gateway.

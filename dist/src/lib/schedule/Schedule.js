@@ -1,4 +1,18 @@
 "use strict";
+var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, privateMap) {
+    if (!privateMap.has(receiver)) {
+        throw new TypeError("attempted to get private field on non-instance");
+    }
+    return privateMap.get(receiver);
+};
+var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, privateMap, value) {
+    if (!privateMap.has(receiver)) {
+        throw new TypeError("attempted to set private field on non-instance");
+    }
+    privateMap.set(receiver, value);
+    return value;
+};
+var _interval;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Schedule = void 0;
 const timer_manager_1 = require("@klasa/timer-manager");
@@ -18,21 +32,17 @@ class Schedule {
          * The current interval that runs the tasks
          * @since 0.5.0
          */
-        this.#interval = null;
+        _interval.set(this, null);
         this.client = client;
     }
-    /**
-     * The current interval that runs the tasks
-     * @since 0.5.0
-     */
-    #interval;
     /**
      * Get all the tasks from the cache
      * @since 0.5.0
      */
     get _tasks() {
+        var _a;
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        return this.client.settings.get('schedules') ?? [];
+        return (_a = this.client.settings.get('schedules')) !== null && _a !== void 0 ? _a : [];
     }
     /**
      * Init the Schedule
@@ -191,9 +201,9 @@ class Schedule {
      * @private
      */
     _clearInterval() {
-        if (this.#interval) {
-            timer_manager_1.TimerManager.clearInterval(this.#interval);
-            this.#interval = null;
+        if (__classPrivateFieldGet(this, _interval)) {
+            timer_manager_1.TimerManager.clearInterval(__classPrivateFieldGet(this, _interval));
+            __classPrivateFieldSet(this, _interval, null);
         }
     }
     /**
@@ -204,14 +214,14 @@ class Schedule {
     _checkInterval() {
         if (!this.tasks.length)
             this._clearInterval();
-        else if (!this.#interval)
-            this.#interval = timer_manager_1.TimerManager.setInterval(this.execute.bind(this), this.client.options.schedule.interval);
+        else if (!__classPrivateFieldGet(this, _interval))
+            __classPrivateFieldSet(this, _interval, timer_manager_1.TimerManager.setInterval(this.execute.bind(this), this.client.options.schedule.interval));
     }
     /**
      * Returns a new Iterator object that contains the values for each element contained in the task queue.
      * @since 0.5.0
      */
-    *[Symbol.iterator]() {
+    *[(_interval = new WeakMap(), Symbol.iterator)]() {
         yield* this.tasks;
     }
 }

@@ -13,9 +13,10 @@ class default_1 extends klasa_1.Command {
             usage: '(Command:command)'
         });
         this.createCustomResolver('command', (arg, possible, message) => {
+            var _a;
             if (!arg)
                 return undefined;
-            return this.client.arguments.get('command')?.run(arg, possible, message);
+            return (_a = this.client.arguments.get('command')) === null || _a === void 0 ? void 0 : _a.run(arg, possible, message);
         });
     }
     async run(message, [command]) {

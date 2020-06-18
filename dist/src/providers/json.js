@@ -7,9 +7,10 @@ const fs_1 = require("fs");
 const fsn = require("fs-nextra");
 class CoreProvider extends klasa_1.Provider {
     constructor(store, directory, file) {
+        var _a;
         super(store, directory, file);
         const baseDirectory = path_1.resolve(this.client.userBaseDirectory, 'bwd', 'provider', 'json');
-        const defaults = utils_1.mergeDefault({ baseDirectory }, this.client.options.providers.json ?? {});
+        const defaults = utils_1.mergeDefault({ baseDirectory }, (_a = this.client.options.providers.json) !== null && _a !== void 0 ? _a : {});
         this.baseDirectory = defaults.baseDirectory;
     }
     /**
@@ -123,7 +124,7 @@ class CoreProvider extends klasa_1.Provider {
      */
     async update(table, id, data) {
         const existent = await this.get(table, id);
-        await fsn.outputJSONAtomic(path_1.resolve(this.baseDirectory, table, `${id}.json`), utils_1.mergeObjects(existent ?? { id }, this.parseUpdateInput(data)));
+        await fsn.outputJSONAtomic(path_1.resolve(this.baseDirectory, table, `${id}.json`), utils_1.mergeObjects(existent !== null && existent !== void 0 ? existent : { id }, this.parseUpdateInput(data)));
     }
     /**
      * Replace all the data from a document.
