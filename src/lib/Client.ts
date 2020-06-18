@@ -147,12 +147,6 @@ export interface CommandHandlingOptions {
 	prefix?: string | string[] | null;
 
 	/**
-	 * The regular expression prefix if one is provided
-	 * @default null
-	 */
-	regexPrefix?: RegExp | null;
-
-	/**
 	 * Amount of time in ms before the bot will respond to a users command since the last command that user has run
 	 * @default 0
 	 */
@@ -616,7 +610,6 @@ export class KlasaClient extends Client {
 	public static defaultGuildSchema = new Schema()
 		.add('prefix', 'string')
 		.add('language', 'language')
-		.add('disableNaturalPrefix', 'boolean')
 		.add('disabledCommands', 'command', {
 			array: true,
 			filter: (_client, command: Command, { language }) => {
