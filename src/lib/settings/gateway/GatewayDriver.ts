@@ -50,14 +50,14 @@ export class GatewayDriver extends Cache<string, GatewayStorage> {
 	 * Initializes all gateways.
 	 */
 	public async init(): Promise<void> {
-		await Promise.all([...this.values()].map(gateway => gateway.init()));
+		await Promise.all(this.map(gateway => gateway.init()));
 	}
 
 	/**
 	 * The gateway driver with all serialized gateways.
 	 */
 	public toJSON(): GatewayDriverJson {
-		return Object.fromEntries([...this.entries()].map(([key, value]) => [key, value.toJSON()]));
+		return Object.fromEntries(this.map((value, key) => [key, value.toJSON()]));
 	}
 
 }
