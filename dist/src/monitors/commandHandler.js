@@ -55,24 +55,24 @@ class CommandHandler extends klasa_1.Monitor {
                     const response = await result;
                     this.client.finalizers.run(message, command, response, timer);
                     if (token)
-                        token.resolve();
+                        token.commit();
                     this.client.emit('commandSuccess', message, command, message.params, response);
                 }
                 catch (error) {
                     if (token)
-                        token.reject();
+                        token.revert();
                     this.client.emit('commandError', message, command, message.params, error);
                 }
             }
             catch (argumentError) {
                 if (token)
-                    token.reject();
+                    token.revert();
                 this.client.emit('argumentError', message, command, message.params, argumentError);
             }
         }
         catch (response) {
             if (token)
-                token.reject();
+                token.revert();
             this.client.emit('commandInhibited', message, message.command, response);
         }
         finally {

@@ -15,7 +15,7 @@ class default_1 extends klasa_1.Inhibitor {
             return;
         const rateLimit = this.slowmode.acquire(message.author.id);
         try {
-            rateLimit.drip();
+            rateLimit.consume();
         }
         catch (err) {
             if (this.aggressive)
