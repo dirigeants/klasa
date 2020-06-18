@@ -178,7 +178,7 @@ export abstract class Command extends AliasPiece {
 		this.usage = new CommandUsage(this.client, options.usage as string, options.usageDelim as string, this);
 		this.cooldownLevel = options.cooldownLevel as CooldownLevel;
 		if (!['author', 'channel', 'guild'].includes(this.cooldownLevel)) throw new Error('Invalid cooldownLevel');
-		this.cooldowns = new RateLimitManager(options.cooldown as number, options.bucket);
+		this.cooldowns = new RateLimitManager(options.cooldown as number, options.bucket as number);
 	}
 
 	/**
