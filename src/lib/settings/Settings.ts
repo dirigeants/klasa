@@ -30,7 +30,7 @@ export class Settings extends Map<string, unknown> {
 	public existenceStatus: SettingsExistenceStatus;
 
 	public constructor(gateway: Gateway, target: unknown, id: string) {
-		super(gateway.schema);
+		super();
 		this.id = id;
 		this.gateway = gateway;
 		this.target = target;

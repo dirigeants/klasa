@@ -20,7 +20,7 @@ ava.beforeEach(async (test): Promise<void> => {
 });
 
 ava('GatewayStorage Properties', (test): void => {
-	test.plan(9);
+	test.plan(7);
 
 	const gateway = new GatewayStorage(test.context.client, 'MockGateway');
 	test.is(gateway.client, test.context.client);
@@ -30,8 +30,6 @@ ava('GatewayStorage Properties', (test): void => {
 
 	test.true(gateway.schema instanceof Schema);
 	test.is(gateway.schema.size, 0);
-	test.is(gateway.schema.path, '');
-	test.is(gateway.schema.type, 'Folder');
 	test.deepEqual(gateway.toJSON(), {
 		name: 'MockGateway',
 		provider: 'json',

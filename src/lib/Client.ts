@@ -461,8 +461,6 @@ export class KlasaClient extends Client {
 			guildSchema.add('language', 'language', { default: this.options.language });
 		}
 
-		guildSchema.add('disableNaturalPrefix', 'boolean', { configurable: Boolean(this.options.commands.regexPrefix) });
-
 		// Register default gateways
 		this.gateways
 			.register(new Gateway(this, 'guilds', { ...guilds, schema: guildSchema }))

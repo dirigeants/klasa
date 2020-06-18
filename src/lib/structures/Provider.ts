@@ -1,9 +1,8 @@
 import { Piece } from '@klasa/core';
 import { mergeObjects, makeObject } from '@klasa/utils';
 
-import type { SettingsUpdateResults } from '../settings/SettingsFolder';
-import type { SchemaFolder } from '../settings/schema/SchemaFolder';
 import type { SchemaEntry } from '../settings/schema/SchemaEntry';
+import type { SettingsUpdateResults } from '../settings/Settings';
 
 export abstract class Provider extends Piece {
 
@@ -95,11 +94,11 @@ export abstract class Provider extends Piece {
 	/**
 	 * The addColumn method which inserts/creates a new table to the database.
 	 * @param table The table to check against
-	 * @param entry The SchemaFolder or SchemaEntry added to the schema
+	 * @param entry The SchemaEntry added to the schema
 	 */
 	/* istanbul ignore next: Implemented in SQLProvider, always unused. */
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	public async addColumn(_table: string, _entry: SchemaFolder | SchemaEntry): Promise<unknown> {
+	public async addColumn(_table: string, _entry: SchemaEntry): Promise<unknown> {
 		// Reserved for SQL databases
 		return undefined;
 	}

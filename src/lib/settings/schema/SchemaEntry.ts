@@ -52,11 +52,6 @@ export class SchemaEntry {
 	public inclusive: boolean;
 
 	/**
-	 * Whether or not this entry should be configurable by the configuration command.
-	 */
-	public configurable: boolean;
-
-	/**
 	 * The filter to use for this entry when resolving.
 	 */
 	public filter: SchemaEntryFilterFunction | null;
@@ -76,7 +71,6 @@ export class SchemaEntry {
 		this.minimum = typeof options.minimum === 'undefined' ? null : options.minimum;
 		this.maximum = typeof options.maximum === 'undefined' ? null : options.maximum;
 		this.inclusive = typeof options.inclusive === 'undefined' ? false : options.inclusive;
-		this.configurable = typeof options.configurable === 'undefined' ? this.type !== 'any' : options.configurable;
 		this.filter = typeof options.filter === 'undefined' ? null : options.filter;
 		this.shouldResolve = typeof options.resolve === 'undefined' ? true : options.resolve;
 	}
@@ -96,7 +90,6 @@ export class SchemaEntry {
 	public edit(options: SchemaEntryEditOptions = {}): this {
 		if (typeof options.type === 'string') this.type = options.type.toLowerCase();
 		if (typeof options.array !== 'undefined') this.array = options.array;
-		if (typeof options.configurable !== 'undefined') this.configurable = options.configurable;
 		if (typeof options.default !== 'undefined') this.default = options.default;
 		if (typeof options.filter !== 'undefined') this.filter = options.filter;
 		if (typeof options.inclusive !== 'undefined') this.inclusive = options.inclusive;
@@ -118,7 +111,6 @@ export class SchemaEntry {
 		return {
 			type: this.type,
 			array: this.array,
-			configurable: this.configurable,
 			default: this.default,
 			inclusive: this.inclusive,
 			maximum: this.maximum,
@@ -140,9 +132,6 @@ export class SchemaEntry {
 
 		// Check array
 		if (typeof this.array !== 'boolean') throw new TypeError(`[KEY] ${this.key} - Parameter 'array' must be a boolean.`);
-
-		// Check configurable
-		if (typeof this.configurable !== 'boolean') throw new TypeError(`[KEY] ${this.key} - Parameter 'configurable' must be a boolean.`);
 
 		// Check limits
 		if (this.minimum !== null && !isNumber(this.minimum)) throw new TypeError(`[KEY] ${this.key} - Parameter 'minimum' must be a number or null.`);
@@ -175,7 +164,6 @@ export class SchemaEntry {
 
 export interface SchemaEntryOptions {
 	array?: boolean;
-	configurable?: boolean;
 	default?: unknown;
 	filter?: SchemaEntryFilterFunction | null;
 	inclusive?: boolean;

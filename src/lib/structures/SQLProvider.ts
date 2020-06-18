@@ -1,10 +1,9 @@
 import { objectToTuples } from '@klasa/utils';
 import { Provider } from './Provider';
 
-import type { SchemaFolder } from '../settings/schema/SchemaFolder';
 import type { SchemaEntry } from '../settings/schema/SchemaEntry';
-import type { SettingsUpdateResults } from '../settings/SettingsFolder';
 import type { QueryBuilder } from '../util/QueryBuilder';
+import type { SettingsUpdateResults } from '../settings/Settings';
 
 export abstract class SQLProvider extends Provider {
 
@@ -95,7 +94,7 @@ export abstract class SQLProvider extends Provider {
 	 * @param table The table to check against
 	 * @param entry The SchemaFolder or SchemaEntry added to the schema
 	 */
-	public abstract addColumn(table: string, entry: SchemaFolder | SchemaEntry): Promise<unknown>;
+	public abstract addColumn(table: string, entry: SchemaEntry): Promise<unknown>;
 
 	/**
 	 * The removeColumn method which inserts/creates a new table to the database.
@@ -139,7 +138,7 @@ export abstract class SQLProvider extends Provider {
 
 		if (Array.isArray(changes)) {
 			for (const change of changes as SettingsUpdateResults) {
-				keys.push(change.entry.path);
+				keys.push(change.entry.key);
 				values.push(change.next);
 			}
 		} else {

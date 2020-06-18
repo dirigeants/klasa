@@ -7,18 +7,16 @@ import {
 } from '../src';
 
 ava('SchemaEntry Properties', (test): void => {
-	test.plan(15);
+	test.plan(13);
 
 	const schema = new Schema();
 	const schemaEntry = new SchemaEntry(schema, 'test', 'textchannel');
 
 	test.is(schemaEntry.client, null);
 	test.is(schemaEntry.key, 'test');
-	test.is(schemaEntry.path, 'test');
 	test.is(schemaEntry.type, 'textchannel');
 	test.is(schemaEntry.parent, schema);
 	test.is(schemaEntry.array, false);
-	test.is(schemaEntry.configurable, true);
 	test.is(schemaEntry.default, null);
 	test.is(schemaEntry.filter, null);
 	test.is(schemaEntry.inclusive, false);
@@ -28,7 +26,6 @@ ava('SchemaEntry Properties', (test): void => {
 	test.throws(() => schemaEntry.serializer, { instanceOf: Error });
 	test.deepEqual(schemaEntry.toJSON(), {
 		array: false,
-		configurable: true,
 		default: null,
 		inclusive: false,
 		maximum: null,
@@ -39,12 +36,11 @@ ava('SchemaEntry Properties', (test): void => {
 });
 
 ava('SchemaEntry#edit', (test): void => {
-	test.plan(8);
+	test.plan(7);
 
 	const schema = new Schema();
 	const schemaEntry = new SchemaEntry(schema, 'test', 'textchannel', {
 		array: false,
-		configurable: false,
 		default: 1,
 		filter: (): boolean => true,
 		inclusive: false,
@@ -56,7 +52,6 @@ ava('SchemaEntry#edit', (test): void => {
 	schemaEntry.edit({
 		type: 'guild',
 		array: true,
-		configurable: true,
 		default: [1],
 		filter: null,
 		inclusive: true,
@@ -67,7 +62,6 @@ ava('SchemaEntry#edit', (test): void => {
 
 	test.is(schemaEntry.type, 'guild');
 	test.is(schemaEntry.array, true);
-	test.is(schemaEntry.configurable, true);
 	test.is(schemaEntry.filter, null);
 	test.is(schemaEntry.shouldResolve, true);
 	test.is(schemaEntry.maximum, 200);
@@ -76,7 +70,7 @@ ava('SchemaEntry#edit', (test): void => {
 });
 
 ava('SchemaEntry#check', (test): void => {
-	test.plan(11);
+	test.plan(10);
 
 	const client = createClient();
 	const schema = new Schema();
@@ -107,11 +101,6 @@ ava('SchemaEntry#check', (test): void => {
 	schemaEntry.array = 'true';
 	test.throws(throwsCheck, { message: /Parameter 'array' must be a boolean/i });
 	schemaEntry.array = false;
-
-	// @ts-expect-error
-	schemaEntry.configurable = 'true';
-	test.throws(throwsCheck, { message: /Parameter 'configurable' must be a boolean/i });
-	schemaEntry.configurable = true;
 
 	// @ts-expect-error
 	schemaEntry.minimum = '123';
@@ -150,7 +139,6 @@ ava('SchemaEntry#toJSON', (test): void => {
 	const schema = new Schema();
 	const schemaEntry = new SchemaEntry(schema, 'test', 'textchannel', {
 		array: true,
-		configurable: false,
 		default: [],
 		inclusive: true,
 		maximum: 1000,
@@ -163,7 +151,6 @@ ava('SchemaEntry#toJSON', (test): void => {
 	test.deepEqual(json, {
 		type: 'textchannel',
 		array: true,
-		configurable: false,
 		default: [],
 		inclusive: true,
 		maximum: 1000,
