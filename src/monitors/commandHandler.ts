@@ -2,6 +2,7 @@ import { Command, Monitor, MonitorStore } from 'klasa';
 import { Stopwatch } from '@klasa/stopwatch';
 
 import type { Message } from '@klasa/core';
+import type { RateLimitToken } from '@klasa/ratelimits';
 
 export default class CommandHandler extends Monitor {
 
@@ -33,6 +34,14 @@ export default class CommandHandler extends Monitor {
 		if (this.client.options.commands.typing) message.channel.typing.start();
 		try {
 			const command = message.command as Command;
+
+			let token: RateLimitToken | null = null;
+			if (!this.client.owners.has(message.author) && command.cooldowns.time) {
+				const ratelimit = command.cooldowns.acquire(message.guild ? Reflect.get(message, command.cooldownLevel).id : message.author.id);
+				if (ratelimit.limited) throw message.language.get('INHIBITOR_COOLDOWN', Math.ceil(ratelimit.remainingTime / 1000), command.cooldownLevel !== 'author');
+				token = ratelimit.take();
+			}
+
 			await this.client.inhibitors.run(message, command);
 			try {
 				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -49,8 +58,11 @@ export default class CommandHandler extends Monitor {
 					const response = await result;
 
 					this.client.finalizers.run(message, command, response, timer);
+
+					if (token) token.resolve();
 					this.client.emit('commandSuccess', message, command, message.params, response);
 				} catch (error) {
+					if (token) token.reject();
 					this.client.emit('commandError', message, command, message.params, error);
 				}
 			} catch (argumentError) {

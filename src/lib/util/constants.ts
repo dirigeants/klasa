@@ -112,7 +112,6 @@ export const KlasaClientDefaults = mergeDefault(ClientOptionsDefaults, {
 			},
 			tasks: { enabled: true }
 		},
-		disabledStores: [],
 		createFolders: true
 	},
 	schedule: { interval: 60000 },
