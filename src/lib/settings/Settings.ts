@@ -1,4 +1,5 @@
 import { isObject } from 'util';
+import { Cache } from '@klasa/cache';
 import { objectToTuples, arrayStrictEquals } from '@klasa/utils';
 
 import type { Client, Guild } from '@klasa/core';
@@ -6,7 +7,7 @@ import type { SerializerUpdateContext, Serializer } from '../structures/Serializ
 import type { SchemaEntry } from './schema/SchemaEntry';
 import type { Gateway } from './gateway/Gateway';
 
-export class Settings extends Map<string, unknown> {
+export class Settings extends Cache<string, unknown> {
 
 	/**
 	 * The ID of the database entry this instance manages.
@@ -187,7 +188,7 @@ export class Settings extends Map<string, unknown> {
 			const entry = gateway.schema.get(path);
 
 			// If the key does not exist, throw
-			if (typeof entry === 'undefined') throw language.get('SETTING_GATEWAY_KEY_NOEXT', path);
+			if (typeof entry === 'undefined') throw new Error(language.get('SETTING_GATEWAY_KEY_NOEXT', path));
 			this._resetSettingsEntry(changes, entry);
 		}
 
@@ -267,7 +268,7 @@ export class Settings extends Map<string, unknown> {
 	public update(entries: ReadonlyKeyedObject, options?: SettingsUpdateOptions): Promise<SettingsUpdateResults>;
 	public async update(pathOrEntries: PathOrEntries, valueOrOptions?: ValueOrOptions, options?: SettingsUpdateOptions): Promise<SettingsUpdateResults> {
 		if (this.existenceStatus === SettingsExistenceStatus.Unsynchronized) {
-			throw new Error('Cannot update keys from a pending to synchronize settings instance. Perhaps you want to call `sync()` first.');
+			throw new Error('Cannot reset keys from an unsynchronized settings instance. Perhaps you want to call `sync()` first.');
 		}
 
 		let entries: [string, unknown][];
@@ -275,7 +276,7 @@ export class Settings extends Map<string, unknown> {
 			entries = [[pathOrEntries, valueOrOptions as unknown]];
 			options = typeof options === 'undefined' ? {} : options;
 		} else if (isObject(pathOrEntries)) {
-			entries = objectToTuples(pathOrEntries as ReadonlyKeyedObject) as [string, unknown][];
+			entries = Object.entries(pathOrEntries as ReadonlyKeyedObject) as [string, unknown][];
 			options = typeof valueOrOptions === 'undefined' ? {} : valueOrOptions as SettingsUpdateOptions;
 		} else {
 			entries = pathOrEntries as [string, unknown][];
@@ -289,7 +290,7 @@ export class Settings extends Map<string, unknown> {
 	 * Overload to serialize this entry to JSON.
 	 */
 	public toJSON(): SettingsJson {
-		return Object.fromEntries([...super.entries()].map(([key, value]) => [key, value]));
+		return Object.fromEntries(this.map((value, key) => [key, value]));
 	}
 
 	/**

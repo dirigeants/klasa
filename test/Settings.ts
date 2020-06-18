@@ -24,7 +24,7 @@ ava.beforeEach(async (test): Promise<void> => {
 	const client = createClient();
 	const schema = new Schema()
 		.add('count', 'number')
-		.add('messages', 'string');
+		.add('messages', 'string', { array: true });
 	const gateway = new Gateway(client, 'settings-test', {
 		provider: 'json',
 		schema
@@ -58,7 +58,7 @@ ava('Settings Properties', (test): void => {
 	test.is(settings.existenceStatus, SettingsExistenceStatus.Unsynchronized);
 	test.deepEqual(settings.toJSON(), {
 		count: null,
-		messages: null
+		messages: []
 	});
 });
 
@@ -143,10 +143,10 @@ ava('Settings#pluck', async (test): Promise<void> => {
 	await settings.sync();
 
 	test.deepEqual(settings.pluck('count'), [65]);
-	test.deepEqual(settings.pluck('messages'), [null]);
+	test.deepEqual(settings.pluck('messages'), [[]]);
 	test.deepEqual(settings.pluck('invalid.path'), [undefined]);
-	test.deepEqual(settings.pluck('count', 'messages'), [65, null]);
-	test.deepEqual(settings.pluck('count', 'messages', 'invalid.path'), [65, null, undefined]);
+	test.deepEqual(settings.pluck('count', 'messages'), [65, []]);
+	test.deepEqual(settings.pluck('count', 'messages', 'invalid.path'), [65, [], undefined]);
 });
 
 ava('Settings#resolve', async (test): Promise<void> => {
@@ -161,12 +161,12 @@ ava('Settings#resolve', async (test): Promise<void> => {
 	test.deepEqual(await settings.resolve('count'), [65]);
 
 	// Check if multiple values are resolved correctly
-	test.deepEqual(await settings.resolve('count', 'messages'), [65, null]);
+	test.deepEqual(await settings.resolve('count', 'messages'), [65, []]);
 
 	// Update and give it an actual value
 	await provider.update(gateway.name, settings.id, { messages: 'Hello' });
 	await settings.sync(true);
-	test.deepEqual(await settings.resolve('messages'), ['Hello']);
+	test.deepEqual(await settings.resolve('messages'), [['Hello']]);
 
 	// Invalid path
 	test.deepEqual(await settings.resolve('invalid.path'), [undefined]);
@@ -217,16 +217,16 @@ ava('Settings#reset (Multiple[Array] | Exists)', async (test): Promise<void> => 
 	test.plan(6);
 
 	const { settings, gateway, provider } = test.context;
-	await provider.create(gateway.name, settings.id, { messages: 'world' });
+	await provider.create(gateway.name, settings.id, { messages: ['world'] });
 	await settings.sync();
 
-	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: 'world' });
+	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: ['world'] });
 	const results = await settings.reset(['count', 'messages']);
 	test.is(results.length, 1);
 	test.is(results[0].previous, 'world');
 	test.is(results[0].next, null);
 	test.is(results[0].entry, gateway.schema.get('messages'));
-	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: null });
+	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: [] });
 });
 
 ava('Settings#reset (Multiple[Object] | Not Exists)', async (test): Promise<void> => {
@@ -244,16 +244,16 @@ ava('Settings#reset (Multiple[Object] | Exists)', async (test): Promise<void> =>
 	test.plan(6);
 
 	const { settings, gateway, provider } = test.context;
-	await provider.create(gateway.name, settings.id, { messages: 'world' });
+	await provider.create(gateway.name, settings.id, { messages: ['world'] });
 	await settings.sync();
 
-	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: 'world' });
+	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: ['world'] });
 	const results = await settings.reset({ count: true, messages: true });
 	test.is(results.length, 1);
-	test.is(results[0].previous, 'world');
-	test.is(results[0].next, null);
+	test.deepEqual(results[0].previous, ['world']);
+	test.deepEqual(results[0].next, []);
 	test.is(results[0].entry, gateway.schema.get('messages'));
-	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: null });
+	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: [] });
 });
 
 ava('Settings#reset (Multiple[Object-Deep] | Not Exists)', async (test): Promise<void> => {
@@ -271,16 +271,16 @@ ava('Settings#reset (Multiple[Object-Deep] | Exists)', async (test): Promise<voi
 	test.plan(6);
 
 	const { settings, gateway, provider } = test.context;
-	await provider.create(gateway.name, settings.id, { messages: 'world' });
+	await provider.create(gateway.name, settings.id, { messages: ['world'] });
 	await settings.sync();
 
-	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: 'world' });
+	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: ['world'] });
 	const results = await settings.reset({ count: true, messages: true });
 	test.is(results.length, 1);
-	test.is(results[0].previous, 'world');
-	test.is(results[0].next, null);
+	test.deepEqual(results[0].previous, ['world']);
+	test.deepEqual(results[0].next, []);
 	test.is(results[0].entry, gateway.schema.get('messages'));
-	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: null });
+	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: [] });
 });
 
 ava('Settings#reset (Root | Not Exists)', async (test): Promise<void> => {
@@ -298,16 +298,16 @@ ava('Settings#reset (Root | Exists)', async (test): Promise<void> => {
 	test.plan(6);
 
 	const { settings, gateway, provider } = test.context;
-	await provider.create(gateway.name, settings.id, { messages: 'world' });
+	await provider.create(gateway.name, settings.id, { messages: ['world'] });
 	await settings.sync();
 
-	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: 'world' });
+	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: ['world'] });
 	const results = await settings.reset();
 	test.is(results.length, 1);
 	test.is(results[0].previous, 'world');
 	test.is(results[0].next, null);
 	test.is(results[0].entry, gateway.schema.get('messages'));
-	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: null });
+	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: [] });
 });
 
 ava('Settings#reset (Array | Empty)', async (test): Promise<void> => {
@@ -318,7 +318,7 @@ ava('Settings#reset (Array | Empty)', async (test): Promise<void> => {
 	await settings.sync();
 
 	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id });
-	const results = await settings.reset('uses');
+	const results = await settings.reset('messages');
 	test.is(results.length, 0);
 	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id });
 });
@@ -327,16 +327,16 @@ ava('Settings#reset (Array | Filled)', async (test): Promise<void> => {
 	test.plan(6);
 
 	const { settings, gateway, schema, provider } = test.context;
-	await provider.create(gateway.name, settings.id, { uses: [1, 2, 4] });
+	await provider.create(gateway.name, settings.id, { messages: ['1', '2', '4'] });
 	await settings.sync();
 
-	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, uses: [1, 2, 4] });
-	const results = await settings.reset('uses');
+	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: ['1', '2', '4'] });
+	const results = await settings.reset('messages');
 	test.is(results.length, 1);
-	test.deepEqual(results[0].previous, [1, 2, 4]);
-	test.is(results[0].next, (schema.get('uses') as SchemaEntry).default);
-	test.is(results[0].entry, schema.get('uses') as SchemaEntry);
-	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, uses: [] });
+	test.deepEqual(results[0].previous, ['1', '2', '4']);
+	test.is(results[0].next, (schema.get('messages') as SchemaEntry).default);
+	test.is(results[0].entry, schema.get('messages') as SchemaEntry);
+	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: [] });
 });
 
 ava('Settings#reset (Events | Not Exists)', async (test): Promise<void> => {
@@ -408,14 +408,10 @@ ava('Settings#reset (Invalid Key)', async (test): Promise<void> => {
 	test.plan(1);
 
 	const { settings, gateway, provider } = test.context;
-	await provider.create(gateway.name, settings.id, { messages: 'world' });
+	await provider.create(gateway.name, settings.id, { messages: ['world'] });
 	await settings.sync();
-	try {
-		await settings.reset('invalid.path');
-		test.fail('This Settings#reset call must error.');
-	} catch (error) {
-		test.is(error, '[SETTING_GATEWAY_KEY_NOEXT]: invalid.path');
-	}
+
+	await test.throwsAsync(() => settings.reset('invalid.path'), { message: '[SETTING_GATEWAY_KEY_NOEXT]: invalid.path' });
 });
 
 ava('Settings#update (Single)', async (test): Promise<void> => {
@@ -441,7 +437,7 @@ ava('Settings#update (Multiple)', async (test): Promise<void> => {
 	const { settings, gateway, schema, provider } = test.context;
 	await settings.sync();
 
-	const results = await settings.update([['count', 6], ['uses', [4]]]);
+	const results = await settings.update([['count', 6], ['messages', [4]]]);
 	test.is(results.length, 2);
 
 	// count
@@ -449,13 +445,13 @@ ava('Settings#update (Multiple)', async (test): Promise<void> => {
 	test.is(results[0].next, 6);
 	test.is(results[0].entry, schema.get('count') as SchemaEntry);
 
-	// uses
+	// messages
 	test.deepEqual(results[1].previous, []);
 	test.deepEqual(results[1].next, [4]);
-	test.is(results[1].entry, schema.get('uses') as SchemaEntry);
+	test.is(results[1].entry, schema.get('messages') as SchemaEntry);
 
 	// persistence
-	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, count: 6, uses: [4] });
+	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, count: 6, messages: [4] });
 });
 
 ava('Settings#update (Multiple | Object)', async (test): Promise<void> => {
@@ -464,7 +460,7 @@ ava('Settings#update (Multiple | Object)', async (test): Promise<void> => {
 	const { settings, gateway, schema, provider } = test.context;
 	await settings.sync();
 
-	const results = await settings.update({ count: 6, uses: [4] });
+	const results = await settings.update({ count: 6, messages: [4] });
 	test.is(results.length, 2);
 
 	// count
@@ -472,13 +468,13 @@ ava('Settings#update (Multiple | Object)', async (test): Promise<void> => {
 	test.is(results[0].next, 6);
 	test.is(results[0].entry, schema.get('count') as SchemaEntry);
 
-	// uses
+	// messages
 	test.deepEqual(results[1].previous, []);
-	test.deepEqual(results[1].next, [4]);
-	test.is(results[1].entry, schema.get('uses') as SchemaEntry);
+	test.deepEqual(results[1].next, ['4']);
+	test.is(results[1].entry, schema.get('messages') as SchemaEntry);
 
 	// persistence
-	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, count: 6, uses: [4] });
+	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, count: 6, messages: ['4'] });
 });
 
 ava('Settings#update (Not Exists | Default Value)', async (test): Promise<void> => {
@@ -488,8 +484,8 @@ ava('Settings#update (Not Exists | Default Value)', async (test): Promise<void> 
 	await settings.sync();
 
 	test.is(await provider.get(gateway.name, settings.id), null);
-	await settings.update('uses', null);
-	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, uses: [] });
+	await settings.update('messages', null);
+	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: [] });
 });
 
 ava('Settings#update (ArrayAction | Empty | Default)', async (test): Promise<void> => {
@@ -498,29 +494,29 @@ ava('Settings#update (ArrayAction | Empty | Default)', async (test): Promise<voi
 	const { settings, gateway, provider } = test.context;
 	await settings.sync();
 
-	const schemaEntry = gateway.schema.get('uses') as SchemaEntry;
-	const results = await settings.update('uses', [1, 2]);
+	const schemaEntry = gateway.schema.get('messages') as SchemaEntry;
+	const results = await settings.update('messages', ['1', '2']);
 	test.is(results.length, 1);
 	test.is(results[0].previous, schemaEntry.default);
-	test.deepEqual(results[0].next, [1, 2]);
+	test.deepEqual(results[0].next, ['1', '2']);
 	test.is(results[0].entry, schemaEntry);
-	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, uses: [1, 2] });
+	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: ['1', '2'] });
 });
 
 ava('Settings#update (ArrayAction | Filled | Default)', async (test): Promise<void> => {
 	test.plan(6);
 
 	const { settings, gateway, schema, provider } = test.context;
-	await provider.create(gateway.name, settings.id, { uses: [1, 2, 4] });
+	await provider.create(gateway.name, settings.id, { messages: ['1', '2', '4'] });
 	await settings.sync();
 
-	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, uses: [1, 2, 4] });
-	const results = await settings.update('uses', [1, 2, 4]);
+	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: ['1', '2', '4'] });
+	const results = await settings.update('messages', ['1', '2', '4']);
 	test.is(results.length, 1);
-	test.deepEqual(results[0].previous, [1, 2, 4]);
+	test.deepEqual(results[0].previous, ['1', '2', '4']);
 	test.deepEqual(results[0].next, []);
-	test.is(results[0].entry, schema.get('uses') as SchemaEntry);
-	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, uses: [] });
+	test.is(results[0].entry, schema.get('messages') as SchemaEntry);
+	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: [] });
 });
 
 ava('Settings#update (ArrayAction | Empty | Auto)', async (test): Promise<void> => {
@@ -529,29 +525,29 @@ ava('Settings#update (ArrayAction | Empty | Auto)', async (test): Promise<void> 
 	const { settings, gateway, provider } = test.context;
 	await settings.sync();
 
-	const schemaEntry = gateway.schema.get('uses') as SchemaEntry;
-	const results = await settings.update('uses', [1, 2], { arrayAction: 'auto' });
+	const schemaEntry = gateway.schema.get('messages') as SchemaEntry;
+	const results = await settings.update('messages', ['1', '2'], { arrayAction: 'auto' });
 	test.is(results.length, 1);
 	test.is(results[0].previous, schemaEntry.default);
-	test.deepEqual(results[0].next, [1, 2]);
+	test.deepEqual(results[0].next, ['1', '2']);
 	test.is(results[0].entry, schemaEntry);
-	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, uses: [1, 2] });
+	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: ['1', '2'] });
 });
 
 ava('Settings#update (ArrayAction | Filled | Auto)', async (test): Promise<void> => {
 	test.plan(6);
 
 	const { settings, gateway, schema, provider } = test.context;
-	await provider.create(gateway.name, settings.id, { uses: [1, 2, 4] });
+	await provider.create(gateway.name, settings.id, { messages: ['1', '2', '4'] });
 	await settings.sync();
 
-	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, uses: [1, 2, 4] });
-	const results = await settings.update('uses', [1, 2, 4], { arrayAction: 'auto' });
+	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: ['1', '2', '4'] });
+	const results = await settings.update('messages', ['1', '2', '4'], { arrayAction: 'auto' });
 	test.is(results.length, 1);
-	test.deepEqual(results[0].previous, [1, 2, 4]);
+	test.deepEqual(results[0].previous, ['1', '2', '4']);
 	test.deepEqual(results[0].next, []);
-	test.is(results[0].entry, schema.get('uses') as SchemaEntry);
-	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, uses: [] });
+	test.is(results[0].entry, schema.get('messages') as SchemaEntry);
+	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: [] });
 });
 
 ava('Settings#update (ArrayAction | Empty | Add)', async (test): Promise<void> => {
@@ -560,29 +556,29 @@ ava('Settings#update (ArrayAction | Empty | Add)', async (test): Promise<void> =
 	const { settings, gateway, provider } = test.context;
 	await settings.sync();
 
-	const schemaEntry = gateway.schema.get('uses') as SchemaEntry;
-	const results = await settings.update('uses', [1, 2], { arrayAction: 'add' });
+	const schemaEntry = gateway.schema.get('messages') as SchemaEntry;
+	const results = await settings.update('messages', ['1', '2'], { arrayAction: 'add' });
 	test.is(results.length, 1);
 	test.is(results[0].previous, schemaEntry.default);
-	test.deepEqual(results[0].next, [1, 2]);
+	test.deepEqual(results[0].next, ['1', '2']);
 	test.is(results[0].entry, schemaEntry);
-	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, uses: [1, 2] });
+	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: ['1', '2'] });
 });
 
 ava('Settings#update (ArrayAction | Filled | Add)', async (test): Promise<void> => {
 	test.plan(6);
 
 	const { settings, gateway, schema, provider } = test.context;
-	await provider.create(gateway.name, settings.id, { uses: [1, 2, 4] });
+	await provider.create(gateway.name, settings.id, { messages: ['1', '2', '4'] });
 	await settings.sync();
 
-	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, uses: [1, 2, 4] });
-	const results = await settings.update('uses', [3, 5, 6], { arrayAction: 'add' });
+	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: ['1', '2', '4'] });
+	const results = await settings.update('messages', ['3', '5', '6'], { arrayAction: 'add' });
 	test.is(results.length, 1);
-	test.deepEqual(results[0].previous, [1, 2, 4]);
-	test.deepEqual(results[0].next, [1, 2, 4, 3, 5, 6]);
-	test.is(results[0].entry, schema.get('uses') as SchemaEntry);
-	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, uses: [1, 2, 4, 3, 5, 6] });
+	test.deepEqual(results[0].previous, ['1', '2', '4']);
+	test.deepEqual(results[0].next, ['1', '2', '4', '3', '5', '6']);
+	test.is(results[0].entry, schema.get('messages') as SchemaEntry);
+	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: ['1', '2', '4', '3', '5', '6'] });
 });
 
 ava('Settings#update (ArrayAction | Empty | Remove)', async (test): Promise<void> => {
@@ -590,7 +586,7 @@ ava('Settings#update (ArrayAction | Empty | Remove)', async (test): Promise<void
 
 	const { settings, provider, gateway } = test.context;
 	await settings.sync();
-	await test.throwsAsync(() => settings.update('uses', [1, 2], { arrayAction: 'remove' }), { message: '[SETTING_GATEWAY_MISSING_VALUE]: uses 1' });
+	await test.throwsAsync(() => settings.update('messages', ['1', '2'], { arrayAction: 'remove' }), { message: '[SETTING_GATEWAY_MISSING_VALUE]: messages 1' });
 	test.is(await provider.get(gateway.name, settings.id), null);
 });
 
@@ -598,32 +594,32 @@ ava('Settings#update (ArrayAction | Filled | Remove)', async (test): Promise<voi
 	test.plan(5);
 
 	const { settings, gateway, provider } = test.context;
-	await provider.create(gateway.name, settings.id, { uses: [1, 2, 4] });
+	await provider.create(gateway.name, settings.id, { messages: ['1', '2', '4'] });
 	await settings.sync();
 
-	const schemaEntry = gateway.schema.get('uses') as SchemaEntry;
-	const results = await settings.update('uses', [1, 2], { arrayAction: 'remove' });
+	const schemaEntry = gateway.schema.get('messages') as SchemaEntry;
+	const results = await settings.update('messages', ['1', '2'], { arrayAction: 'remove' });
 	test.is(results.length, 1);
-	test.deepEqual(results[0].previous, [1, 2, 4]);
-	test.deepEqual(results[0].next, [4]);
+	test.deepEqual(results[0].previous, ['1', '2', '4']);
+	test.deepEqual(results[0].next, ['4']);
 	test.is(results[0].entry, schemaEntry);
-	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, uses: [4] });
+	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: ['4'] });
 });
 
 ava('Settings#update (ArrayAction | Filled | Remove With Nulls)', async (test): Promise<void> => {
 	test.plan(5);
 
 	const { settings, gateway, provider } = test.context;
-	await provider.create(gateway.name, settings.id, { uses: [1, 2, 3, 4] });
+	await provider.create(gateway.name, settings.id, { messages: ['1', '2', '3', '4'] });
 	await settings.sync();
 
-	const schemaEntry = gateway.schema.get('uses') as SchemaEntry;
-	const results = await settings.update('uses', [null, null], { arrayAction: 'remove', arrayIndex: 1 });
+	const schemaEntry = gateway.schema.get('messages') as SchemaEntry;
+	const results = await settings.update('messages', [null, null], { arrayAction: 'remove', arrayIndex: 1 });
 	test.is(results.length, 1);
-	test.deepEqual(results[0].previous, [1, 2, 3, 4]);
-	test.deepEqual(results[0].next, [1, 4]);
+	test.deepEqual(results[0].previous, ['1', '2', '3', '4']);
+	test.deepEqual(results[0].next, ['1', '4']);
 	test.is(results[0].entry, schemaEntry);
-	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, uses: [1, 4] });
+	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: ['1', '4'] });
 });
 
 ava('Settings#update (ArrayAction | Empty | Overwrite)', async (test): Promise<void> => {
@@ -632,29 +628,29 @@ ava('Settings#update (ArrayAction | Empty | Overwrite)', async (test): Promise<v
 	const { settings, gateway, provider } = test.context;
 	await settings.sync();
 
-	const schemaEntry = gateway.schema.get('uses') as SchemaEntry;
-	const results = await settings.update('uses', [1, 2, 4], { arrayAction: 'overwrite' });
+	const schemaEntry = gateway.schema.get('messages') as SchemaEntry;
+	const results = await settings.update('messages', ['1', '2', '4'], { arrayAction: 'overwrite' });
 	test.is(results.length, 1);
 	test.is(results[0].previous, schemaEntry.default);
-	test.deepEqual(results[0].next, [1, 2, 4]);
+	test.deepEqual(results[0].next, ['1', '2', '4']);
 	test.is(results[0].entry, schemaEntry);
-	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, uses: [1, 2, 4] });
+	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: ['1', '2', '4'] });
 });
 
 ava('Settings#update (ArrayAction | Filled | Overwrite)', async (test): Promise<void> => {
 	test.plan(6);
 
 	const { settings, gateway, schema, provider } = test.context;
-	await provider.create(gateway.name, settings.id, { uses: [1, 2, 4] });
+	await provider.create(gateway.name, settings.id, { messages: ['1', '2', '4'] });
 	await settings.sync();
 
-	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, uses: [1, 2, 4] });
-	const results = await settings.update('uses', [3, 5, 6], { arrayAction: 'overwrite' });
+	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: ['1', '2', '4'] });
+	const results = await settings.update('messages', ['3', '5', '6'], { arrayAction: 'overwrite' });
 	test.is(results.length, 1);
-	test.deepEqual(results[0].previous, [1, 2, 4]);
-	test.deepEqual(results[0].next, [3, 5, 6]);
-	test.is(results[0].entry, schema.get('uses') as SchemaEntry);
-	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, uses: [3, 5, 6] });
+	test.deepEqual(results[0].previous, ['1', '2', '4']);
+	test.deepEqual(results[0].next, ['3', '5', '6']);
+	test.is(results[0].entry, schema.get('messages') as SchemaEntry);
+	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: ['3', '5', '6'] });
 });
 
 ava('Settings#update (ArrayIndex | Empty | Auto)', async (test): Promise<void> => {
@@ -663,29 +659,29 @@ ava('Settings#update (ArrayIndex | Empty | Auto)', async (test): Promise<void> =
 	const { settings, gateway, schema, provider } = test.context;
 	await settings.sync();
 
-	const schemaEntry = schema.get('uses') as SchemaEntry;
-	const results = await settings.update('uses', [1, 2, 3], { arrayIndex: 0 });
+	const schemaEntry = schema.get('messages') as SchemaEntry;
+	const results = await settings.update('messages', ['1', '2', '3'], { arrayIndex: 0 });
 	test.is(results.length, 1);
 	test.is(results[0].previous, schemaEntry.default);
-	test.deepEqual(results[0].next, [1, 2, 3]);
+	test.deepEqual(results[0].next, ['1', '2', '3']);
 	test.is(results[0].entry, schemaEntry);
-	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, uses: [1, 2, 3] });
+	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: ['1', '2', '3'] });
 });
 
 ava('Settings#update (ArrayIndex | Filled | Auto)', async (test): Promise<void> => {
 	test.plan(5);
 
 	const { settings, gateway, schema, provider } = test.context;
-	await provider.create(gateway.name, settings.id, { uses: [1, 2, 4] });
+	await provider.create(gateway.name, settings.id, { messages: ['1', '2', '4'] });
 	await settings.sync();
 
-	const schemaEntry = schema.get('uses') as SchemaEntry;
-	const results = await settings.update('uses', [5, 6], { arrayIndex: 0 });
+	const schemaEntry = schema.get('messages') as SchemaEntry;
+	const results = await settings.update('messages', ['5', '6'], { arrayIndex: 0 });
 	test.is(results.length, 1);
-	test.deepEqual(results[0].previous, [1, 2, 4]);
-	test.deepEqual(results[0].next, [5, 6, 4]);
+	test.deepEqual(results[0].previous, ['1', '2', '4']);
+	test.deepEqual(results[0].next, ['5', '6', '4']);
 	test.is(results[0].entry, schemaEntry);
-	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, uses: [5, 6, 4] });
+	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: ['5', '6', '4'] });
 });
 
 ava('Settings#update (ArrayIndex | Empty | Add)', async (test): Promise<void> => {
@@ -694,40 +690,40 @@ ava('Settings#update (ArrayIndex | Empty | Add)', async (test): Promise<void> =>
 	const { settings, gateway, schema, provider } = test.context;
 	await settings.sync();
 
-	const schemaEntry = schema.get('uses') as SchemaEntry;
-	const results = await settings.update('uses', [1, 2, 3], { arrayIndex: 0, arrayAction: 'add' });
+	const schemaEntry = schema.get('messages') as SchemaEntry;
+	const results = await settings.update('messages', ['1', '2', '3'], { arrayIndex: 0, arrayAction: 'add' });
 	test.is(results.length, 1);
 	test.is(results[0].previous, schemaEntry.default);
-	test.deepEqual(results[0].next, [1, 2, 3]);
+	test.deepEqual(results[0].next, ['1', '2', '3']);
 	test.is(results[0].entry, schemaEntry);
-	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, uses: [1, 2, 3] });
+	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: ['1', '2', '3'] });
 });
 
 ava('Settings#update (ArrayIndex | Filled | Add)', async (test): Promise<void> => {
 	test.plan(5);
 
 	const { settings, gateway, schema, provider } = test.context;
-	await provider.create(gateway.name, settings.id, { uses: [1, 2, 4] });
+	await provider.create(gateway.name, settings.id, { messages: ['1', '2', '4'] });
 	await settings.sync();
 
-	const schemaEntry = schema.get('uses') as SchemaEntry;
-	const results = await settings.update('uses', [5, 6], { arrayIndex: 0, arrayAction: 'add' });
+	const schemaEntry = schema.get('messages') as SchemaEntry;
+	const results = await settings.update('messages', ['5', '6'], { arrayIndex: 0, arrayAction: 'add' });
 	test.is(results.length, 1);
-	test.deepEqual(results[0].previous, [1, 2, 4]);
-	test.deepEqual(results[0].next, [5, 6, 1, 2, 4]);
+	test.deepEqual(results[0].previous, ['1', '2', '4']);
+	test.deepEqual(results[0].next, ['5', '6', '1', '2', '4']);
 	test.is(results[0].entry, schemaEntry);
-	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, uses: [5, 6, 1, 2, 4] });
+	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: ['5', '6', '1', '2', '4'] });
 });
 
 ava('Settings#update (ArrayIndex | Filled | Add | Error)', async (test): Promise<void> => {
 	test.plan(2);
 
 	const { settings, gateway, provider } = test.context;
-	await provider.create(gateway.name, settings.id, { uses: [1, 2, 4] });
+	await provider.create(gateway.name, settings.id, { messages: ['1', '2', '4'] });
 	await settings.sync();
 
-	await test.throwsAsync(() => settings.update('uses', 4, { arrayAction: 'add' }), { message: '[SETTING_GATEWAY_DUPLICATE_VALUE]: uses 4' });
-	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, uses: [1, 2, 4] });
+	await test.throwsAsync(() => settings.update('messages', '4', { arrayAction: 'add' }), { message: '[SETTING_GATEWAY_DUPLICATE_VALUE]: messages 4' });
+	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: ['1', '2', '4'] });
 });
 
 ava('Settings#update (ArrayIndex | Empty | Remove)', async (test): Promise<void> => {
@@ -736,40 +732,40 @@ ava('Settings#update (ArrayIndex | Empty | Remove)', async (test): Promise<void>
 	const { settings, gateway, schema, provider } = test.context;
 	await settings.sync();
 
-	const schemaEntry = schema.get('uses') as SchemaEntry;
-	const results = await settings.update('uses', [1, 2], { arrayIndex: 0, arrayAction: 'remove' });
+	const schemaEntry = schema.get('messages') as SchemaEntry;
+	const results = await settings.update('messages', ['1', '2'], { arrayIndex: 0, arrayAction: 'remove' });
 	test.is(results.length, 1);
 	test.is(results[0].previous, schemaEntry.default);
 	test.deepEqual(results[0].next, []);
 	test.is(results[0].entry, schemaEntry);
-	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, uses: [] });
+	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: [] });
 });
 
 ava('Settings#update (ArrayIndex | Filled | Remove)', async (test): Promise<void> => {
 	test.plan(5);
 
 	const { settings, gateway, schema, provider } = test.context;
-	await provider.create(gateway.name, settings.id, { uses: [1, 2, 4] });
+	await provider.create(gateway.name, settings.id, { messages: ['1', '2', '4'] });
 	await settings.sync();
 
-	const schemaEntry = schema.get('uses') as SchemaEntry;
-	const results = await settings.update('uses', [1, 2], { arrayIndex: 1, arrayAction: 'remove' });
+	const schemaEntry = schema.get('messages') as SchemaEntry;
+	const results = await settings.update('messages', ['1', '2'], { arrayIndex: 1, arrayAction: 'remove' });
 	test.is(results.length, 1);
-	test.deepEqual(results[0].previous, [1, 2, 4]);
-	test.deepEqual(results[0].next, [1]);
+	test.deepEqual(results[0].previous, ['1', '2', '4']);
+	test.deepEqual(results[0].next, ['1']);
 	test.is(results[0].entry, schemaEntry);
-	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, uses: [1] });
+	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: ['1'] });
 });
 
 ava('Settings#update (ArrayIndex | Filled | Remove | Error)', async (test): Promise<void> => {
 	test.plan(2);
 
 	const { settings, gateway, provider } = test.context;
-	await provider.create(gateway.name, settings.id, { uses: [1, 2, 4] });
+	await provider.create(gateway.name, settings.id, { messages: ['1', '2', '4'] });
 	await settings.sync();
 
-	await test.throwsAsync(() => settings.update('uses', 3, { arrayAction: 'remove' }), { message: '[SETTING_GATEWAY_MISSING_VALUE]: uses 3' });
-	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, uses: [1, 2, 4] });
+	await test.throwsAsync(() => settings.update('messages', 3, { arrayAction: 'remove' }), { message: '[SETTING_GATEWAY_MISSING_VALUE]: messages 3' });
+	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: ['1', '2', '4'] });
 });
 
 ava('Settings#update (Events | Not Exists)', async (test): Promise<void> => {
@@ -914,28 +910,24 @@ ava('Settings#update (Uninitialized)', async (test): Promise<void> => {
 	test.plan(1);
 
 	const { settings } = test.context;
-	await test.throwsAsync(() => settings.update('count', 6), { message: 'Cannot update keys from a non-ready settings instance.' });
+	await test.throwsAsync(() => settings.update('count', 6), { message: 'Cannot reset keys from an unsynchronized settings instance. Perhaps you want to call `sync()` first.' });
 });
 
 ava('Settings#update (Unsynchronized)', async (test): Promise<void> => {
 	test.plan(1);
 
 	const { settings } = test.context;
-	await test.throwsAsync(() => settings.update('count', 6), { message: 'Cannot update keys from a pending to synchronize settings instance. Perhaps you want to call `sync()` first.' });
+	await test.throwsAsync(() => settings.update('count', 6), { message: 'Cannot reset keys from an unsynchronized settings instance. Perhaps you want to call `sync()` first.' });
 });
 
 ava('Settings#update (Invalid Key)', async (test): Promise<void> => {
 	test.plan(1);
 
 	const { settings, gateway, provider } = test.context;
-	await provider.create(gateway.name, settings.id, { messages: 'world' });
+	await provider.create(gateway.name, settings.id, { messages: ['world'] });
 	await settings.sync();
-	try {
-		await settings.update('invalid.path', 420);
-		test.fail('This Settings#update call must error.');
-	} catch (error) {
-		test.is(error, '[SETTING_GATEWAY_KEY_NOEXT]: invalid.path');
-	}
+
+	await test.throwsAsync(() => settings.update('invalid.path', 420), { message: '[SETTING_GATEWAY_KEY_NOEXT]: invalid.path' });
 });
 
 ava('Settings#toJSON', async (test): Promise<void> => {
@@ -944,11 +936,11 @@ ava('Settings#toJSON', async (test): Promise<void> => {
 	const { settings, gateway, provider } = test.context;
 
 	// Non-synced entry should have schema defaults
-	test.deepEqual(settings.toJSON(), { uses: [], count: null, messages: { hello: null, ignoring: { amount: null } } });
+	test.deepEqual(settings.toJSON(), { messages: [], count: null });
 
-	await provider.create(gateway.name, settings.id, { count: 123, messages: { ignoring: { amount: 420 } } });
+	await provider.create(gateway.name, settings.id, { count: 123, messages: [] });
 	await settings.sync();
 
 	// Synced entry should use synced values or schema defaults
-	test.deepEqual(settings.toJSON(), { uses: [], count: 123, messages: null });
+	test.deepEqual(settings.toJSON(), { messages: [], count: 123 });
 });

@@ -1,9 +1,10 @@
 import { SchemaEntry, SchemaEntryOptions, SchemaEntryJson } from './SchemaEntry';
 import { Settings } from '../Settings';
+import { Cache } from '@klasa/cache';
 
 /* eslint-disable no-dupe-class-members */
 
-export class Schema extends Map<string, SchemaEntry> {
+export class Schema extends Cache<string, SchemaEntry> {
 
 	/**
 	 * The defaults for this schema.
@@ -82,7 +83,7 @@ export class Schema extends Map<string, SchemaEntry> {
 	 * Returns an object literal composed of all children serialized recursively.
 	 */
 	public toJSON(): Record<string, SchemaEntryJson> {
-		return Object.fromEntries([...this.entries()].map(([key, value]) => [key, value.toJSON()]));
+		return Object.fromEntries(this.map((value, key) => [key, value.toJSON()]));
 	}
 
 }
