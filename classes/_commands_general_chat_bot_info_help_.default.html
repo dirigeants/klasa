@@ -96,10 +96,9 @@
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-not-exported"><a href="_commands_general_chat_bot_info_help_.default.html#aliases" class="tsd-kind-icon">aliases</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-not-exported"><a href="_commands_general_chat_bot_info_help_.default.html#bucket" class="tsd-kind-icon">bucket</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-not-exported"><a href="_commands_general_chat_bot_info_help_.default.html#client" class="tsd-kind-icon">client</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-not-exported"><a href="_commands_general_chat_bot_info_help_.default.html#cooldown" class="tsd-kind-icon">cooldown</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-not-exported"><a href="_commands_general_chat_bot_info_help_.default.html#cooldownlevel" class="tsd-kind-icon">cooldown<wbr>Level</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-not-exported"><a href="_commands_general_chat_bot_info_help_.default.html#cooldowns" class="tsd-kind-icon">cooldowns</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-not-exported"><a href="_commands_general_chat_bot_info_help_.default.html#deletable" class="tsd-kind-icon">deletable</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-not-exported"><a href="_commands_general_chat_bot_info_help_.default.html#description" class="tsd-kind-icon">description</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-not-exported"><a href="_commands_general_chat_bot_info_help_.default.html#directory" class="tsd-kind-icon">directory</a></li>
@@ -131,8 +130,6 @@
 								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-not-exported"><a href="_commands_general_chat_bot_info_help_.default.html#path" class="tsd-kind-icon">path</a></li>
 								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-not-exported"><a href="_commands_general_chat_bot_info_help_.default.html#subcategory" class="tsd-kind-icon">sub<wbr>Category</a></li>
 								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-not-exported"><a href="_commands_general_chat_bot_info_help_.default.html#type" class="tsd-kind-icon">type</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-not-exported"><a href="_commands_general_chat_bot_info_help_.default.html#usagedelim" class="tsd-kind-icon">usage<wbr>Delim</a></li>
-								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-not-exported"><a href="_commands_general_chat_bot_info_help_.default.html#usagestring" class="tsd-kind-icon">usage<wbr>String</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section tsd-is-not-exported">
@@ -168,7 +165,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="_lib_structures_command_.command.html">Command</a>.<a href="_lib_structures_command_.command.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/10556e64/src/commands/General/Chat Bot Info/help.ts#L8">src/commands/General/Chat Bot Info/help.ts:8</a></li>
+									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/1378b74b/src/commands/General/Chat Bot Info/help.ts#L8">src/commands/General/Chat Bot Info/help.ts:8</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -212,27 +209,6 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-not-exported">
-					<a name="bucket" class="tsd-anchor"></a>
-					<h3>bucket</h3>
-					<div class="tsd-signature tsd-kind-icon">bucket<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<p>Inherited from <a href="_lib_structures_command_.command.html">Command</a>.<a href="_lib_structures_command_.command.html#bucket">bucket</a></p>
-						<ul>
-							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/10556e64/src/lib/structures/Command.ts#L131">src/lib/structures/Command.ts:131</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>The number of times this command can be run before ratelimited by the cooldown</p>
-						</div>
-						<dl class="tsd-comment-tags">
-							<dt>since</dt>
-							<dd><p>0.5.0</p>
-							</dd>
-						</dl>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-not-exported">
 					<a name="client" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> client</h3>
 					<div class="tsd-signature tsd-kind-icon">client<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_lib_types_augments_._client_client_.client.html" class="tsd-signature-type">Client</a></div>
@@ -254,34 +230,13 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-not-exported">
-					<a name="cooldown" class="tsd-anchor"></a>
-					<h3>cooldown</h3>
-					<div class="tsd-signature tsd-kind-icon">cooldown<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<p>Inherited from <a href="_lib_structures_command_.command.html">Command</a>.<a href="_lib_structures_command_.command.html#cooldown">cooldown</a></p>
-						<ul>
-							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/10556e64/src/lib/structures/Command.ts#L137">src/lib/structures/Command.ts:137</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>The amount of time before the users can run the command again in seconds based on cooldownLevel</p>
-						</div>
-						<dl class="tsd-comment-tags">
-							<dt>since</dt>
-							<dd><p>0.5.0</p>
-							</dd>
-						</dl>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-not-exported">
 					<a name="cooldownlevel" class="tsd-anchor"></a>
 					<h3>cooldown<wbr>Level</h3>
-					<div class="tsd-signature tsd-kind-icon">cooldown<wbr>Level<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<div class="tsd-signature tsd-kind-icon">cooldown<wbr>Level<span class="tsd-signature-symbol">:</span> <a href="../modules/_lib_structures_command_.html#cooldownlevel" class="tsd-signature-type">CooldownLevel</a></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_lib_structures_command_.command.html">Command</a>.<a href="_lib_structures_command_.command.html#cooldownlevel">cooldownLevel</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/10556e64/src/lib/structures/Command.ts#L125">src/lib/structures/Command.ts:125</a></li>
+							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/1378b74b/src/lib/structures/Command.ts#L128">src/lib/structures/Command.ts:128</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -296,13 +251,34 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-not-exported">
+					<a name="cooldowns" class="tsd-anchor"></a>
+					<h3>cooldowns</h3>
+					<div class="tsd-signature tsd-kind-icon">cooldowns<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RateLimitManager</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="_lib_structures_command_.command.html">Command</a>.<a href="_lib_structures_command_.command.html#cooldowns">cooldowns</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/1378b74b/src/lib/structures/Command.ts#L134">src/lib/structures/Command.ts:134</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The cooldowns for this command</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>since</dt>
+							<dd><p>0.6.0</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-not-exported">
 					<a name="deletable" class="tsd-anchor"></a>
 					<h3>deletable</h3>
 					<div class="tsd-signature tsd-kind-icon">deletable<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_lib_structures_command_.command.html">Command</a>.<a href="_lib_structures_command_.command.html#deletable">deletable</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/10556e64/src/lib/structures/Command.ts#L28">src/lib/structures/Command.ts:28</a></li>
+							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/1378b74b/src/lib/structures/Command.ts#L31">src/lib/structures/Command.ts:31</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -323,7 +299,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_lib_structures_command_.command.html">Command</a>.<a href="_lib_structures_command_.command.html#description">description</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/10556e64/src/lib/structures/Command.ts#L34">src/lib/structures/Command.ts:34</a></li>
+							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/1378b74b/src/lib/structures/Command.ts#L37">src/lib/structures/Command.ts:37</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -386,7 +362,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_lib_structures_command_.command.html">Command</a>.<a href="_lib_structures_command_.command.html#extendedhelp">extendedHelp</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/10556e64/src/lib/structures/Command.ts#L40">src/lib/structures/Command.ts:40</a></li>
+							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/1378b74b/src/lib/structures/Command.ts#L43">src/lib/structures/Command.ts:43</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -428,7 +404,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_lib_structures_command_.command.html">Command</a>.<a href="_lib_structures_command_.command.html#flagsupport">flagSupport</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/10556e64/src/lib/structures/Command.ts#L89">src/lib/structures/Command.ts:89</a></li>
+							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/1378b74b/src/lib/structures/Command.ts#L92">src/lib/structures/Command.ts:92</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -449,7 +425,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_lib_structures_command_.command.html">Command</a>.<a href="_lib_structures_command_.command.html#fullcategory">fullCategory</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/10556e64/src/lib/structures/Command.ts#L47">src/lib/structures/Command.ts:47</a></li>
+							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/1378b74b/src/lib/structures/Command.ts#L50">src/lib/structures/Command.ts:50</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -470,7 +446,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_lib_structures_command_.command.html">Command</a>.<a href="_lib_structures_command_.command.html#guarded">guarded</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/10556e64/src/lib/structures/Command.ts#L53">src/lib/structures/Command.ts:53</a></li>
+							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/1378b74b/src/lib/structures/Command.ts#L56">src/lib/structures/Command.ts:56</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -491,7 +467,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_lib_structures_command_.command.html">Command</a>.<a href="_lib_structures_command_.command.html#hidden">hidden</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/10556e64/src/lib/structures/Command.ts#L59">src/lib/structures/Command.ts:59</a></li>
+							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/1378b74b/src/lib/structures/Command.ts#L62">src/lib/structures/Command.ts:62</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -533,7 +509,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_lib_structures_command_.command.html">Command</a>.<a href="_lib_structures_command_.command.html#nsfw">nsfw</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/10556e64/src/lib/structures/Command.ts#L65">src/lib/structures/Command.ts:65</a></li>
+							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/1378b74b/src/lib/structures/Command.ts#L68">src/lib/structures/Command.ts:68</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -554,7 +530,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_lib_structures_command_.command.html">Command</a>.<a href="_lib_structures_command_.command.html#permissionlevel">permissionLevel</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/10556e64/src/lib/structures/Command.ts#L71">src/lib/structures/Command.ts:71</a></li>
+							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/1378b74b/src/lib/structures/Command.ts#L74">src/lib/structures/Command.ts:74</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -575,7 +551,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_lib_structures_command_.command.html">Command</a>.<a href="_lib_structures_command_.command.html#promptlimit">promptLimit</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/10556e64/src/lib/structures/Command.ts#L77">src/lib/structures/Command.ts:77</a></li>
+							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/1378b74b/src/lib/structures/Command.ts#L80">src/lib/structures/Command.ts:80</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -596,7 +572,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_lib_structures_command_.command.html">Command</a>.<a href="_lib_structures_command_.command.html#prompttime">promptTime</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/10556e64/src/lib/structures/Command.ts#L83">src/lib/structures/Command.ts:83</a></li>
+							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/1378b74b/src/lib/structures/Command.ts#L86">src/lib/structures/Command.ts:86</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -617,7 +593,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_lib_structures_command_.command.html">Command</a>.<a href="_lib_structures_command_.command.html#quotedstringsupport">quotedStringSupport</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/10556e64/src/lib/structures/Command.ts#L95">src/lib/structures/Command.ts:95</a></li>
+							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/1378b74b/src/lib/structures/Command.ts#L98">src/lib/structures/Command.ts:98</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -638,7 +614,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_lib_structures_command_.command.html">Command</a>.<a href="_lib_structures_command_.command.html#requiredpermissions">requiredPermissions</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/10556e64/src/lib/structures/Command.ts#L22">src/lib/structures/Command.ts:22</a></li>
+							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/1378b74b/src/lib/structures/Command.ts#L25">src/lib/structures/Command.ts:25</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -659,7 +635,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_lib_structures_command_.command.html">Command</a>.<a href="_lib_structures_command_.command.html#requiredsettings">requiredSettings</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/10556e64/src/lib/structures/Command.ts#L101">src/lib/structures/Command.ts:101</a></li>
+							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/1378b74b/src/lib/structures/Command.ts#L104">src/lib/structures/Command.ts:104</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -680,7 +656,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_lib_structures_command_.command.html">Command</a>.<a href="_lib_structures_command_.command.html#runin">runIn</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/10556e64/src/lib/structures/Command.ts#L107">src/lib/structures/Command.ts:107</a></li>
+							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/1378b74b/src/lib/structures/Command.ts#L110">src/lib/structures/Command.ts:110</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -722,7 +698,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_lib_structures_command_.command.html">Command</a>.<a href="_lib_structures_command_.command.html#subcommands">subcommands</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/10556e64/src/lib/structures/Command.ts#L113">src/lib/structures/Command.ts:113</a></li>
+							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/1378b74b/src/lib/structures/Command.ts#L116">src/lib/structures/Command.ts:116</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -743,7 +719,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_lib_structures_command_.command.html">Command</a>.<a href="_lib_structures_command_.command.html#usage">usage</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/10556e64/src/lib/structures/Command.ts#L119">src/lib/structures/Command.ts:119</a></li>
+							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/1378b74b/src/lib/structures/Command.ts#L122">src/lib/structures/Command.ts:122</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -771,7 +747,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_lib_structures_command_.command.html">Command</a>.<a href="_lib_structures_command_.command.html#category">category</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/10556e64/src/lib/structures/Command.ts#L193">src/lib/structures/Command.ts:193</a></li>
+									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/1378b74b/src/lib/structures/Command.ts#L189">src/lib/structures/Command.ts:189</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -829,7 +805,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_lib_structures_command_.command.html">Command</a>.<a href="_lib_structures_command_.command.html#subcategory">subCategory</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/10556e64/src/lib/structures/Command.ts#L202">src/lib/structures/Command.ts:202</a></li>
+									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/1378b74b/src/lib/structures/Command.ts#L198">src/lib/structures/Command.ts:198</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -876,66 +852,6 @@
 						</li>
 					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-not-exported">
-					<a name="usagedelim" class="tsd-anchor"></a>
-					<h3>usage<wbr>Delim</h3>
-					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> usageDelim<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<p>Inherited from <a href="_lib_structures_command_.command.html">Command</a>.<a href="_lib_structures_command_.command.html#usagedelim">usageDelim</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/10556e64/src/lib/structures/Command.ts#L211">src/lib/structures/Command.ts:211</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>The usage deliminator for the command input</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>since</dt>
-									<dd><p>0.0.1</p>
-									</dd>
-									<dt>readonly</dt>
-									<dd></dd>
-								</dl>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-not-exported">
-					<a name="usagestring" class="tsd-anchor"></a>
-					<h3>usage<wbr>String</h3>
-					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-not-exported">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> usageString<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<p>Inherited from <a href="_lib_structures_command_.command.html">Command</a>.<a href="_lib_structures_command_.command.html#usagestring">usageString</a></p>
-								<ul>
-									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/10556e64/src/lib/structures/Command.ts#L220">src/lib/structures/Command.ts:220</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>The usage string for the command</p>
-								</div>
-								<dl class="tsd-comment-tags">
-									<dt>since</dt>
-									<dd><p>0.0.1</p>
-									</dd>
-									<dt>readonly</dt>
-									<dd></dd>
-								</dl>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
-						</li>
-					</ul>
-				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-not-exported">
 				<h2>Methods</h2>
@@ -949,7 +865,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/10556e64/src/commands/General/Chat Bot Info/help.ts#L60">src/commands/General/Chat Bot Info/help.ts:60</a></li>
+									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/1378b74b/src/commands/General/Chat Bot Info/help.ts#L60">src/commands/General/Chat Bot Info/help.ts:60</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -973,7 +889,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_lib_structures_command_.command.html">Command</a>.<a href="_lib_structures_command_.command.html#createcustomresolver">createCustomResolver</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/10556e64/src/lib/structures/Command.ts#L241">src/lib/structures/Command.ts:241</a></li>
+									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/1378b74b/src/lib/structures/Command.ts#L219">src/lib/structures/Command.ts:219</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1045,7 +961,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_lib_structures_command_.command.html">Command</a>.<a href="_lib_structures_command_.command.html#customizeresponse">customizeResponse</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/10556e64/src/lib/structures/Command.ts#L260">src/lib/structures/Command.ts:260</a></li>
+									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/1378b74b/src/lib/structures/Command.ts#L238">src/lib/structures/Command.ts:238</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1097,7 +1013,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_lib_structures_command_.command.html">Command</a>.<a href="_lib_structures_command_.command.html#defineprompt">definePrompt</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/10556e64/src/lib/structures/Command.ts#L230">src/lib/structures/Command.ts:230</a></li>
+									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/1378b74b/src/lib/structures/Command.ts#L208">src/lib/structures/Command.ts:208</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1252,7 +1168,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="_lib_structures_command_.command.html">Command</a>.<a href="_lib_structures_command_.command.html#run">run</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/10556e64/src/commands/General/Chat Bot Info/help.ts#L24">src/commands/General/Chat Bot Info/help.ts:24</a></li>
+									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/1378b74b/src/commands/General/Chat Bot Info/help.ts#L24">src/commands/General/Chat Bot Info/help.ts:24</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1280,7 +1196,7 @@
 								<p>Inherited from <a href="_lib_structures_command_.command.html">Command</a>.<a href="_lib_structures_command_.command.html#tojson">toJSON</a></p>
 								<p>Overrides <a href="_lib_structures_serializer_.serializer.html">Serializer</a>.<a href="_lib_structures_serializer_.serializer.html#tojson">toJSON</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/10556e64/src/lib/structures/Command.ts#L269">src/lib/structures/Command.ts:269</a></li>
+									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/1378b74b/src/lib/structures/Command.ts#L247">src/lib/structures/Command.ts:247</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1376,16 +1292,13 @@
 								<a href="_commands_general_chat_bot_info_help_.default.html#aliases" class="tsd-kind-icon">aliases</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-not-exported">
-								<a href="_commands_general_chat_bot_info_help_.default.html#bucket" class="tsd-kind-icon">bucket</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-not-exported">
 								<a href="_commands_general_chat_bot_info_help_.default.html#client" class="tsd-kind-icon">client</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-not-exported">
-								<a href="_commands_general_chat_bot_info_help_.default.html#cooldown" class="tsd-kind-icon">cooldown</a>
+								<a href="_commands_general_chat_bot_info_help_.default.html#cooldownlevel" class="tsd-kind-icon">cooldown<wbr>Level</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-not-exported">
-								<a href="_commands_general_chat_bot_info_help_.default.html#cooldownlevel" class="tsd-kind-icon">cooldown<wbr>Level</a>
+								<a href="_commands_general_chat_bot_info_help_.default.html#cooldowns" class="tsd-kind-icon">cooldowns</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-not-exported">
 								<a href="_commands_general_chat_bot_info_help_.default.html#deletable" class="tsd-kind-icon">deletable</a>
@@ -1464,12 +1377,6 @@
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-not-exported">
 								<a href="_commands_general_chat_bot_info_help_.default.html#type" class="tsd-kind-icon">type</a>
-							</li>
-							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-not-exported">
-								<a href="_commands_general_chat_bot_info_help_.default.html#usagedelim" class="tsd-kind-icon">usage<wbr>Delim</a>
-							</li>
-							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited tsd-is-not-exported">
-								<a href="_commands_general_chat_bot_info_help_.default.html#usagestring" class="tsd-kind-icon">usage<wbr>String</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-not-exported">
 								<a href="_commands_general_chat_bot_info_help_.default.html#buildhelp" class="tsd-kind-icon">build<wbr>Help</a>
