@@ -379,7 +379,7 @@ export class Settings extends Map<string, unknown> {
 			const entry = gateway.schema.get(path);
 
 			// If the key does not exist, throw
-			if (typeof entry === 'undefined') throw language.get('SETTING_GATEWAY_KEY_NOEXT', path);
+			if (typeof entry === 'undefined') throw new Error(language.get('SETTING_GATEWAY_KEY_NOEXT', path));
 			promises.push(this._updateSettingsEntry(path, value, { entry: entry as SchemaEntry, language, guild, extraContext: extra }, internalOptions));
 		}
 
@@ -491,7 +491,7 @@ export class Settings extends Map<string, unknown> {
 		if (serializer === null) throw new TypeError('The serializer was not available during the update.');
 		const parsed = await serializer.validate(value, context);
 
-		if (context.entry.filter !== null && context.entry.filter(this.client, parsed, context)) throw context.language.get('SETTING_GATEWAY_INVALID_FILTERED_VALUE', context.entry, value);
+		if (context.entry.filter !== null && context.entry.filter(this.client, parsed, context)) throw new Error(context.language.get('SETTING_GATEWAY_INVALID_FILTERED_VALUE', context.entry, value));
 		return serializer.serialize(parsed);
 	}
 

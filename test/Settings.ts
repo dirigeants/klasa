@@ -20,7 +20,7 @@ const ava = unknownTest as TestInterface<{
 	provider: Provider
 }>;
 
-ava.before(async (test): Promise<void> => {
+ava.beforeEach(async (test): Promise<void> => {
 	const client = createClient();
 	const schema = new Schema()
 		.add('count', 'number')
@@ -143,10 +143,10 @@ ava('Settings#pluck', async (test): Promise<void> => {
 	await settings.sync();
 
 	test.deepEqual(settings.pluck('count'), [65]);
-	test.deepEqual(settings.pluck('messages.hello'), [null]);
+	test.deepEqual(settings.pluck('messages'), [null]);
 	test.deepEqual(settings.pluck('invalid.path'), [undefined]);
-	test.deepEqual(settings.pluck('count', 'messages.hello', 'invalid.path'), [65, null, undefined]);
-	test.deepEqual(settings.pluck('count', 'messages'), [65, { hello: null, ignoring: { amount: null } }]);
+	test.deepEqual(settings.pluck('count', 'messages'), [65, null]);
+	test.deepEqual(settings.pluck('count', 'messages', 'invalid.path'), [65, null, undefined]);
 });
 
 ava('Settings#resolve', async (test): Promise<void> => {
@@ -161,20 +161,15 @@ ava('Settings#resolve', async (test): Promise<void> => {
 	test.deepEqual(await settings.resolve('count'), [65]);
 
 	// Check if multiple values are resolved correctly
-	test.deepEqual(await settings.resolve('count', 'messages'), [65, { hello: null, ignoring: { amount: null } }]);
+	test.deepEqual(await settings.resolve('count', 'messages'), [65, null]);
 
 	// Update and give it an actual value
 	await provider.update(gateway.name, settings.id, { messages: 'Hello' });
 	await settings.sync(true);
-	test.deepEqual(await settings.resolve('messages'), [{ data: 'Hello' }]);
+	test.deepEqual(await settings.resolve('messages'), ['Hello']);
 
 	// Invalid path
 	test.deepEqual(await settings.resolve('invalid.path'), [undefined]);
-});
-
-ava('Settings#resolve (Folder)', async (test): Promise<void> => {
-	const { settings } = test.context;
-	test.deepEqual(await settings.resolve('messages'), [{ hello: null, ignoring: { amount: null } }]);
 });
 
 ava('Settings#reset (Single | Not Exists)', async (test): Promise<void> => {
@@ -214,7 +209,7 @@ ava('Settings#reset (Multiple[Array] | Not Exists)', async (test): Promise<void>
 	await settings.sync();
 
 	test.is(await provider.get(gateway.name, settings.id), null);
-	test.deepEqual(await settings.reset(['count', 'messages.hello']), []);
+	test.deepEqual(await settings.reset(['count', 'messages']), []);
 	test.is(await provider.get(gateway.name, settings.id), null);
 });
 
@@ -226,11 +221,11 @@ ava('Settings#reset (Multiple[Array] | Exists)', async (test): Promise<void> => 
 	await settings.sync();
 
 	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: 'world' });
-	const results = await settings.reset(['count', 'messages.hello']);
+	const results = await settings.reset(['count', 'messages']);
 	test.is(results.length, 1);
 	test.is(results[0].previous, 'world');
 	test.is(results[0].next, null);
-	test.is(results[0].entry, gateway.schema.get('messages.hello'));
+	test.is(results[0].entry, gateway.schema.get('messages'));
 	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: null });
 });
 
@@ -241,7 +236,7 @@ ava('Settings#reset (Multiple[Object] | Not Exists)', async (test): Promise<void
 	await settings.sync();
 
 	test.is(await provider.get(gateway.name, settings.id), null);
-	test.deepEqual(await settings.reset({ count: true, 'messages.hello': true }), []);
+	test.deepEqual(await settings.reset({ count: true, messages: true }), []);
 	test.is(await provider.get(gateway.name, settings.id), null);
 });
 
@@ -253,11 +248,11 @@ ava('Settings#reset (Multiple[Object] | Exists)', async (test): Promise<void> =>
 	await settings.sync();
 
 	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: 'world' });
-	const results = await settings.reset({ count: true, 'messages.hello': true });
+	const results = await settings.reset({ count: true, messages: true });
 	test.is(results.length, 1);
 	test.is(results[0].previous, 'world');
 	test.is(results[0].next, null);
-	test.is(results[0].entry, gateway.schema.get('messages.hello'));
+	test.is(results[0].entry, gateway.schema.get('messages'));
 	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: null });
 });
 
@@ -284,7 +279,7 @@ ava('Settings#reset (Multiple[Object-Deep] | Exists)', async (test): Promise<voi
 	test.is(results.length, 1);
 	test.is(results[0].previous, 'world');
 	test.is(results[0].next, null);
-	test.is(results[0].entry, gateway.schema.get('messages.hello'));
+	test.is(results[0].entry, gateway.schema.get('messages'));
 	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: null });
 });
 
@@ -311,34 +306,7 @@ ava('Settings#reset (Root | Exists)', async (test): Promise<void> => {
 	test.is(results.length, 1);
 	test.is(results[0].previous, 'world');
 	test.is(results[0].next, null);
-	test.is(results[0].entry, gateway.schema.get('messages.hello'));
-	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: null });
-});
-
-ava('Settings#reset (Folder | Not Exists)', async (test): Promise<void> => {
-	test.plan(3);
-
-	const { settings, gateway, provider } = test.context;
-	await settings.sync();
-
-	test.is(await provider.get(gateway.name, settings.id), null);
-	test.deepEqual(await settings.reset('messages'), []);
-	test.is(await provider.get(gateway.name, settings.id), null);
-});
-
-ava('Settings#reset (Folder | Exists)', async (test): Promise<void> => {
-	test.plan(6);
-
-	const { settings, gateway, provider } = test.context;
-	await provider.create(gateway.name, settings.id, { messages: 'world' });
-	await settings.sync();
-
-	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: 'world' });
-	const results = await settings.reset('messages');
-	test.is(results.length, 1);
-	test.is(results[0].previous, 'world');
-	test.is(results[0].next, null);
-	test.is(results[0].entry, gateway.schema.get('messages.hello'));
+	test.is(results[0].entry, gateway.schema.get('messages'));
 	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, messages: null });
 });
 
@@ -511,20 +479,6 @@ ava('Settings#update (Multiple | Object)', async (test): Promise<void> => {
 
 	// persistence
 	test.deepEqual(await provider.get(gateway.name, settings.id), { id: settings.id, count: 6, uses: [4] });
-});
-
-ava('Settings#update (Folder)', async (test): Promise<void> => {
-	test.plan(1);
-
-	const { settings } = test.context;
-	await settings.sync();
-
-	try {
-		await settings.update('messages', 420);
-		test.fail('This Settings#update call must error.');
-	} catch (error) {
-		test.is(error, '[SETTING_GATEWAY_CHOOSE_KEY]: ignoring hello');
-	}
 });
 
 ava('Settings#update (Not Exists | Default Value)', async (test): Promise<void> => {
@@ -996,5 +950,5 @@ ava('Settings#toJSON', async (test): Promise<void> => {
 	await settings.sync();
 
 	// Synced entry should use synced values or schema defaults
-	test.deepEqual(settings.toJSON(), { uses: [], count: 123, messages: { hello: null, ignoring: { amount: 420 } } });
+	test.deepEqual(settings.toJSON(), { uses: [], count: 123, messages: null });
 });

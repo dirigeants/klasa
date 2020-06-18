@@ -6,8 +6,6 @@ export class MockLanguage extends Language {
 		DEFAULT: (key: string, ...args: unknown[]): string => `[DEFAULT]: ${key} ${args.join(' ')}`,
 		SETTING_GATEWAY_KEY_NOEXT: (key: string): string => `[SETTING_GATEWAY_KEY_NOEXT]: ${key}`,
 		SETTING_GATEWAY_CHOOSE_KEY: (keys: string[]): string => `[SETTING_GATEWAY_CHOOSE_KEY]: ${keys.join(' ')}`,
-		SETTING_GATEWAY_UNCONFIGURABLE_FOLDER: '[SETTING_GATEWAY_UNCONFIGURABLE_FOLDER]',
-		SETTING_GATEWAY_UNCONFIGURABLE_KEY: (key: string): string => `[SETTING_GATEWAY_UNCONFIGURABLE_KEY]: ${key}`,
 		SETTING_GATEWAY_MISSING_VALUE: (entry: SchemaEntry, value: string): string => `[SETTING_GATEWAY_MISSING_VALUE]: ${entry.key} ${value}`,
 		SETTING_GATEWAY_DUPLICATE_VALUE: (entry: SchemaEntry, value: string): string => `[SETTING_GATEWAY_DUPLICATE_VALUE]: ${entry.key} ${value}`,
 		SETTING_GATEWAY_INVALID_FILTERED_VALUE: (entry: SchemaEntry, value: unknown): string => `[SETTING_GATEWAY_INVALID_FILTERED_VALUE]: ${entry.key} ${value}`,

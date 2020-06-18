@@ -1,5 +1,4 @@
 import { Piece } from '@klasa/core';
-import { mergeObjects, makeObject } from '@klasa/utils';
 
 import type { SchemaEntry } from '../settings/schema/SchemaEntry';
 import type { SettingsUpdateResults } from '../settings/Settings';
@@ -146,9 +145,7 @@ export abstract class Provider extends Piece {
 	protected parseUpdateInput(changes: unknown | SettingsUpdateResults): Record<PropertyKey, unknown> {
 		if (!Array.isArray(changes)) return changes as Record<PropertyKey, unknown>;
 
-		const updated: Record<PropertyKey, unknown> = {};
-		for (const change of changes) mergeObjects(updated, makeObject(change.entry.path, change.next));
-		return updated;
+		return Object.fromEntries(changes.map(change => [change.entry.key, change.next]));
 	}
 
 }

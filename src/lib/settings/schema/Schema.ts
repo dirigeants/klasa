@@ -22,8 +22,9 @@ export class Schema extends Map<string, SchemaEntry> {
 		super();
 
 		this.ready = false;
-		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-		this.defaults = new Settings(null!, null, '');
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-expect-error
+		this.defaults = new Settings({ schema: this }, null, '');
 	}
 
 	/**
