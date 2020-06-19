@@ -47,18 +47,6 @@ export abstract class Monitor extends Piece {
 	public ignoreEdits: boolean;
 
 	/**
-	 * Wether the monitor should ignore blacklisted users
-	 * @since 0.5.0
-	 */
-	public ignoreBlacklistedUsers: boolean;
-
-	/**
-	 * Wether the monitor should ignore blacklisted guilds
-	 * @since 0.5.0
-	 */
-	public ignoreBlacklistedGuilds: boolean;
-
-	/**
 	 * @since 0.0.1
 	 * @param store The Monitor Store
 	 * @param directory The base directory to the pieces folder
@@ -73,8 +61,6 @@ export abstract class Monitor extends Piece {
 		this.ignoreOthers = options.ignoreOthers as boolean;
 		this.ignoreWebhooks = options.ignoreWebhooks as boolean;
 		this.ignoreEdits = options.ignoreEdits as boolean;
-		this.ignoreBlacklistedUsers = options.ignoreBlacklistedUsers as boolean;
-		this.ignoreBlacklistedGuilds = options.ignoreBlacklistedGuilds as boolean;
 	}
 
 	/**
@@ -97,8 +83,6 @@ export abstract class Monitor extends Piece {
 			!(this.ignoreOthers && this.client.user !== message.author) &&
 			!(this.ignoreWebhooks && message.webhookID) &&
 			!(this.ignoreEdits && message.editedTimestamp);
-		// !(this.ignoreBlacklistedUsers && this.client.settings.userBlacklist.includes(message.author.id)) &&
-		// !(this.ignoreBlacklistedGuilds && message.guild && this.client.settings.guildBlacklist.includes(message.guild.id));
 	}
 
 	/**
@@ -112,9 +96,7 @@ export abstract class Monitor extends Piece {
 			ignoreSelf: this.ignoreSelf,
 			ignoreOthers: this.ignoreOthers,
 			ignoreWebhooks: this.ignoreWebhooks,
-			ignoreEdits: this.ignoreEdits,
-			ignoreBlacklistedUsers: this.ignoreBlacklistedUsers,
-			ignoreBlacklistedGuilds: this.ignoreBlacklistedGuilds
+			ignoreEdits: this.ignoreEdits
 		};
 	}
 
@@ -140,6 +122,4 @@ export interface MonitorOptions extends PieceOptions {
 	ignoreOthers?: boolean;
 	ignoreWebhooks?: boolean;
 	ignoreEdits?: boolean;
-	ignoreBlacklistedUsers?: boolean;
-	ignoreBlacklistedGuilds?: boolean;
 }

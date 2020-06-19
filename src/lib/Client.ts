@@ -41,7 +41,7 @@ import { Schema } from './settings/schema/Schema';
 
 // lib/util
 import { KlasaConsole, ConsoleOptions } from '@klasa/console';
-import { KlasaClientDefaults, MENTION_REGEX } from './util/constants';
+import { KlasaClientDefaults } from './util/constants';
 
 import type { Command, CommandOptions } from './structures/Command';
 import type { SchemaEntry } from './settings/schema/SchemaEntry';
@@ -637,8 +637,6 @@ export class KlasaClient extends Client {
 	 * @since 0.5.0
 	 */
 	public static defaultClientSchema = new Schema()
-		.add('userBlacklist', 'user', { array: true })
-		.add('guildBlacklist', 'string', { array: true, filter: (_client, value: string) => !MENTION_REGEX.snowflake.test(value) })
 		.add('schedules', 'any', { array: true });
 
 }
