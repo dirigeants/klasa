@@ -232,8 +232,6 @@ KlasaClient.defaultUserSchema = new Schema_1.Schema();
  * @since 0.5.0
  */
 KlasaClient.defaultClientSchema = new Schema_1.Schema()
-    .add('userBlacklist', 'user', { array: true })
-    .add('guildBlacklist', 'string', { array: true, filter: (_client, value) => !constants_1.MENTION_REGEX.snowflake.test(value) })
     .add('schedules', 'any', { array: true });
 /**
  * Emitted when Klasa is fully ready and initialized.

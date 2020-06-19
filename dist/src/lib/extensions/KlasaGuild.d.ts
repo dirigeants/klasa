@@ -22,4 +22,10 @@ export declare class KlasaGuild extends KlasaGuild_base {
      */
     toJSON(): Record<string, any>;
 }
+declare module '@klasa/core/dist/src/lib/caching/structures/guilds/Guild' {
+    interface Guild {
+        settings: Settings;
+        language: Language;
+    }
+}
 export {};

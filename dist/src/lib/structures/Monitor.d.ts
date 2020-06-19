@@ -38,16 +38,6 @@ export declare abstract class Monitor extends Piece {
      */
     ignoreEdits: boolean;
     /**
-     * Wether the monitor should ignore blacklisted users
-     * @since 0.5.0
-     */
-    ignoreBlacklistedUsers: boolean;
-    /**
-     * Wether the monitor should ignore blacklisted guilds
-     * @since 0.5.0
-     */
-    ignoreBlacklistedGuilds: boolean;
-    /**
      * @since 0.0.1
      * @param store The Monitor Store
      * @param directory The base directory to the pieces folder
@@ -86,6 +76,4 @@ export interface MonitorOptions extends PieceOptions {
     ignoreOthers?: boolean;
     ignoreWebhooks?: boolean;
     ignoreEdits?: boolean;
-    ignoreBlacklistedUsers?: boolean;
-    ignoreBlacklistedGuilds?: boolean;
 }

@@ -36,9 +36,9 @@ class default_1 extends klasa_1.Command {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const value = key ? message.guild.settings.get(key) : message.guild.settings;
         if (klasa_1.SchemaEntry.is(schemaOrEntry)) {
-            return message.sendLocale('COMMAND_CONF_GET', [key, this.displayEntry(schemaOrEntry, value, message.guild)]);
+            return message.replyLocale('COMMAND_CONF_GET', [key, this.displayEntry(schemaOrEntry, value, message.guild)]);
         }
-        return message.sendLocale('COMMAND_CONF_SERVER', [
+        return message.replyLocale('COMMAND_CONF_SERVER', [
             key ? `: ${key.split('.').map(utils_1.toTitleCase).join('/')}` : '',
             utils_1.codeBlock('asciidoc', this.displayFolder(value))
         ]);
@@ -47,7 +47,7 @@ class default_1 extends klasa_1.Command {
         try {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             const [update] = await message.guild.settings.update(key, valueToSet, { onlyConfigurable: true, arrayAction: 'add' });
-            return message.sendLocale('COMMAND_CONF_UPDATED', [key, this.displayEntry(update.entry, update.next, message.guild)]);
+            return message.replyLocale('COMMAND_CONF_UPDATED', [key, this.displayEntry(update.entry, update.next, message.guild)]);
         }
         catch (error) {
             throw String(error);
@@ -57,7 +57,7 @@ class default_1 extends klasa_1.Command {
         try {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             const [update] = await message.guild.settings.update(key, valueToRemove, { onlyConfigurable: true, arrayAction: 'remove' });
-            return message.sendLocale('COMMAND_CONF_UPDATED', [key, this.displayEntry(update.entry, update.next, message.guild)]);
+            return message.replyLocale('COMMAND_CONF_UPDATED', [key, this.displayEntry(update.entry, update.next, message.guild)]);
         }
         catch (error) {
             throw String(error);
@@ -67,7 +67,7 @@ class default_1 extends klasa_1.Command {
         try {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             const [update] = await message.guild.settings.reset(key);
-            return message.sendLocale('COMMAND_CONF_RESET', [key, this.displayEntry(update.entry, update.next, message.guild)]);
+            return message.replyLocale('COMMAND_CONF_RESET', [key, this.displayEntry(update.entry, update.next, message.guild)]);
         }
         catch (error) {
             throw String(error);

@@ -15,10 +15,10 @@ class default_1 extends klasa_1.Command {
         if ((piece.type === 'event' && piece.name === 'coreMessage') ||
             (piece.type === 'monitor' && piece.name === 'commandHandler') ||
             (piece.type === 'action' && piece.name === 'MESSAGE_CREATE')) {
-            return message.sendLocale('COMMAND_DISABLE_WARN');
+            return message.replyLocale('COMMAND_DISABLE_WARN');
         }
         piece.disable();
-        return message.send(mb => mb.setContent(discord_md_tags_1.codeblock('diff') `${message.language.get('COMMAND_DISABLE', [piece.type, piece.name])}`));
+        return message.reply(mb => mb.setContent(discord_md_tags_1.codeblock('diff') `${message.language.get('COMMAND_DISABLE', [piece.type, piece.name])}`));
     }
 }
 exports.default = default_1;

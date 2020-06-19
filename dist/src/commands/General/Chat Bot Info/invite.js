@@ -9,7 +9,7 @@ class default_1 extends klasa_1.Command {
         });
     }
     async run(message) {
-        return message.sendLocale('COMMAND_INVITE');
+        return message.replyLocale('COMMAND_INVITE');
     }
     async init() {
         if (this.client.application && !this.client.application.botPublic)

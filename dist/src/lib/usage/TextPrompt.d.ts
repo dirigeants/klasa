@@ -110,11 +110,6 @@ export declare class TextPrompt {
      */
     protected typing: boolean;
     /**
-     * A cache of the users responses
-     * @since 0.5.0
-     */
-    responses: Cache<string, Message>;
-    /**
      * @since 0.5.0
      * @param message The message this prompt is for
      * @param usage The usage for this prompt

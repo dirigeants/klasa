@@ -13,10 +13,10 @@ class default_1 extends klasa_1.Command {
     }
     async run(message, [piece]) {
         if ((piece.type === 'event' && piece.name === 'message') || (piece.type === 'monitor' && piece.name === 'commandHandler')) {
-            return message.sendLocale('COMMAND_UNLOAD_WARN');
+            return message.replyLocale('COMMAND_UNLOAD_WARN');
         }
         piece.unload();
-        return message.sendLocale('COMMAND_UNLOAD', [piece.type, piece.name]);
+        return message.replyLocale('COMMAND_UNLOAD', [piece.type, piece.name]);
     }
 }
 exports.default = default_1;

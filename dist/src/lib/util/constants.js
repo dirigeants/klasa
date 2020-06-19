@@ -97,8 +97,6 @@ exports.KlasaClientDefaults = utils_1.mergeDefault(core_1.ClientOptionsDefaults,
                 ignoreOthers: true,
                 ignoreWebhooks: true,
                 ignoreEdits: true,
-                ignoreBlacklistedUsers: true,
-                ignoreBlacklistedGuilds: true,
                 allowedTypes: [0 /* Default */]
             },
             providers: { enabled: true },

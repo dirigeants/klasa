@@ -66,6 +66,4 @@ __exportStar(require("./lib/util/QueryBuilder"), exports);
 __exportStar(require("./lib/util/ReactionHandler"), exports);
 __exportStar(require("./lib/util/RichDisplay"), exports);
 __exportStar(require("./lib/util/RichMenu"), exports);
-// lib/types
-__exportStar(require("./lib/types/augments"), exports);
 //# sourceMappingURL=index.js.map

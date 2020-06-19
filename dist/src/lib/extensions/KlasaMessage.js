@@ -93,7 +93,7 @@ class KlasaMessage extends core_1.extender.get('Message') {
         const { permission } = await this.client.permissionLevels.run(this, min);
         return permission;
     }
-    async send(data, options = {}) {
+    async reply(data, options = {}) {
         const split = (typeof data === 'function' ? await data(new core_1.MessageBuilder()) : new core_1.MessageBuilder(data)).split(options);
         const { responses } = this;
         const promises = [];
@@ -111,10 +111,10 @@ class KlasaMessage extends core_1.extender.get('Message') {
         await Promise.all(deletes);
         return __classPrivateFieldGet(this, _responses).slice(0);
     }
-    sendLocale(key, localeArgs = [], options) {
+    replyLocale(key, localeArgs = [], options) {
         if (!Array.isArray(localeArgs))
             [options, localeArgs] = [localeArgs, []];
-        return this.send(mb => mb.setContent(this.language.get(key, ...localeArgs)), options);
+        return this.reply(mb => mb.setContent(this.language.get(key, ...localeArgs)), options);
     }
     /**
      * Extends the patch method from Message to attach and update the language to this instance

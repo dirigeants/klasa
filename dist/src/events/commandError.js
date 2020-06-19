@@ -7,9 +7,9 @@ class default_1 extends core_1.Event {
         if (error instanceof Error)
             this.client.emit('wtf', `[COMMAND] ${command.path}\n${error.stack || error}`);
         if (typeof error === 'string')
-            await message.send(mb => mb.setContent(error));
+            await message.reply(mb => mb.setContent(error));
         else
-            await message.send(mb => mb.setContent(discord_md_tags_1.codeblock('JSON') `${error.message}`));
+            await message.reply(mb => mb.setContent(discord_md_tags_1.codeblock('JSON') `${error.message}`));
     }
 }
 exports.default = default_1;

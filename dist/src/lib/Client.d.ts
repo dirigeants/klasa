@@ -1,4 +1,4 @@
-import { Permissions, ClientOptions, Application, User, Client } from '@klasa/core';
+import { Permissions, ClientOptions, Application, User, Client, PieceOptions, AliasPieceOptions } from '@klasa/core';
 import { PermissionLevels } from './permissions/PermissionLevels';
 import { Schedule } from './schedule/Schedule';
 import { ArgumentStore } from './structures/ArgumentStore';
@@ -14,7 +14,11 @@ import { TaskStore } from './structures/TaskStore';
 import { GatewayDriver } from './settings/gateway/GatewayDriver';
 import { Schema } from './settings/schema/Schema';
 import { KlasaConsole, ConsoleOptions } from '@klasa/console';
+import type { CommandOptions } from './structures/Command';
 import type { Settings } from './settings/Settings';
+import type { ExtendableOptions } from './structures/Extendable';
+import type { InhibitorOptions } from './structures/Inhibitor';
+import type { MonitorOptions } from './structures/Monitor';
 export interface KlasaClientOptions extends ClientOptions {
     /**
      * The command handler options
@@ -380,6 +384,56 @@ export declare class KlasaClient extends Client {
      * @since 0.5.0
      */
     static defaultClientSchema: Schema;
+}
+declare module '@klasa/core/dist/src/lib/client/Client' {
+    interface Client {
+        console: KlasaConsole;
+        arguments: ArgumentStore;
+        commands: CommandStore;
+        inhibitors: InhibitorStore;
+        finalizers: FinalizerStore;
+        monitors: MonitorStore;
+        languages: LanguageStore;
+        providers: ProviderStore;
+        extendables: ExtendableStore;
+        tasks: TaskStore;
+        serializers: SerializerStore;
+        permissionLevels: PermissionLevels;
+        gateways: GatewayDriver;
+        schedule: Schedule;
+        ready: boolean;
+        mentionPrefix: RegExp | null;
+        settings: Settings | null;
+        application: Application | null;
+        readonly invite: string | null;
+        readonly owners: Set<User>;
+        fetchApplication(): Promise<Application>;
+    }
+    interface ClientOptions {
+        commands?: Partial<CommandHandlingOptions>;
+        console?: Partial<ConsoleOptions>;
+        consoleEvents?: Partial<ConsoleEvents>;
+        language?: string;
+        owners?: string[];
+        permissionLevels?: (permissionLevels: PermissionLevels) => PermissionLevels;
+        production?: boolean;
+        readyMessage?: string | ((client: Client) => string);
+        providers?: Partial<ProviderClientOptions>;
+        settings?: Partial<SettingsOptions>;
+        schedule?: Partial<ScheduleOptions>;
+    }
+    interface PieceDefaults {
+        commands?: Partial<CommandOptions>;
+        extendables?: Partial<ExtendableOptions>;
+        finalizers?: Partial<PieceOptions>;
+        inhibitors?: Partial<InhibitorOptions>;
+        languages?: Partial<PieceOptions>;
+        monitors?: Partial<MonitorOptions>;
+        providers?: Partial<PieceOptions>;
+        arguments?: Partial<AliasPieceOptions>;
+        serializers?: Partial<AliasPieceOptions>;
+        tasks?: Partial<PieceOptions>;
+    }
 }
 /**
  * Emitted when Klasa is fully ready and initialized.

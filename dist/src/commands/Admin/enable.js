@@ -13,7 +13,7 @@ class default_1 extends klasa_1.Command {
     }
     async run(message, [piece]) {
         piece.enable();
-        return message.send(mb => mb.setContent(discord_md_tags_1.codeblock('diff') `${message.language.get('COMMAND_ENABLE', [piece.type, piece.name])}`));
+        return message.reply(mb => mb.setContent(discord_md_tags_1.codeblock('diff') `${message.language.get('COMMAND_ENABLE', [piece.type, piece.name])}`));
     }
 }
 exports.default = default_1;

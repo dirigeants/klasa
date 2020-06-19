@@ -15,7 +15,7 @@ class CommandHandler extends klasa_1.Monitor {
             return undefined;
         if (!message.commandText && message.prefix === this.client.mentionPrefix) {
             const prefix = message.guildSettings.get('prefix');
-            return message.sendLocale('PREFIX_REMINDER', [prefix.length ? prefix : undefined]);
+            return message.replyLocale('PREFIX_REMINDER', [prefix.length ? prefix : undefined]);
         }
         if (!message.commandText)
             return undefined;

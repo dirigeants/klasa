@@ -20,11 +20,11 @@ class default_1 extends klasa_1.Command {
         try {
             await fs_nextra_1.copy(fileLocation, path_1.join(piece.store.userDirectory, file));
             piece.store.load(piece.store.userDirectory, piece.file);
-            return message.sendLocale('COMMAND_TRANSFER_SUCCESS', [piece.type, piece.name]);
+            return message.replyLocale('COMMAND_TRANSFER_SUCCESS', [piece.type, piece.name]);
         }
         catch (err) {
             this.client.emit('error', err.stack);
-            return message.sendLocale('COMMAND_TRANSFER_FAILED', [piece.type, piece.name]);
+            return message.replyLocale('COMMAND_TRANSFER_FAILED', [piece.type, piece.name]);
         }
     }
 }

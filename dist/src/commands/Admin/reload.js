@@ -20,18 +20,18 @@ class default_1 extends klasa_1.Command {
             const timer = new stopwatch_1.Stopwatch();
             await piece.loadAll();
             await piece.init();
-            return message.sendLocale('COMMAND_RELOAD_ALL', [piece, timer.stop()]);
+            return message.replyLocale('COMMAND_RELOAD_ALL', [piece, timer.stop()]);
         }
         try {
             const item = await piece.reload();
             if (!item)
                 throw new Error('Failed to reload.');
             const timer = new stopwatch_1.Stopwatch();
-            return message.sendLocale('COMMAND_RELOAD', [item.type, item.name, timer.stop()]);
+            return message.replyLocale('COMMAND_RELOAD', [item.type, item.name, timer.stop()]);
         }
         catch (err) {
             piece.store.add(piece);
-            return message.sendLocale('COMMAND_RELOAD_FAILED', [piece.type, piece.name]);
+            return message.replyLocale('COMMAND_RELOAD_FAILED', [piece.type, piece.name]);
         }
     }
     async everything(message) {
@@ -40,7 +40,7 @@ class default_1 extends klasa_1.Command {
             await store.loadAll();
             await store.init();
         }));
-        return message.sendLocale('COMMAND_RELOAD_EVERYTHING', [timer.stop()]);
+        return message.replyLocale('COMMAND_RELOAD_EVERYTHING', [timer.stop()]);
     }
 }
 exports.default = default_1;

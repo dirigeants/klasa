@@ -86,11 +86,11 @@ export declare class KlasaMessage extends KlasaMessage_base {
      * @since 0.0.1
      * @see https://discord.com/developers/docs/resources/channel#create-message
      * @example
-     * message.send(new MessageBuilder()
+     * message.reply(new MessageBuilder()
      *     .setContent('Ping!')
      *     .setEmbed(new Embed().setDescription('From an embed!')));
      */
-    send(data: MessageOptions, options?: SplitOptions): Promise<Message[]>;
+    reply(data: MessageOptions, options?: SplitOptions): Promise<Message[]>;
     /**
      * Sends a message to the channel.
      * @param data A callback with a {@link MessageBuilder builder} as an argument.
@@ -98,18 +98,18 @@ export declare class KlasaMessage extends KlasaMessage_base {
      * @since 0.0.1
      * @see https://discord.com/developers/docs/resources/channel#create-message
      * @example
-     * message.send(builder => builder
+     * message.reply(builder => builder
      *     .setContent('Ping!')
      *     .setEmbed(embed => embed.setDescription('From an embed!')));
      */
-    send(data: (message: MessageBuilder) => MessageBuilder | Promise<MessageBuilder>, options?: SplitOptions): Promise<Message[]>;
+    reply(data: (message: MessageBuilder) => MessageBuilder | Promise<MessageBuilder>, options?: SplitOptions): Promise<Message[]>;
     /**
      * Sends a message that will be editable via command editing (if nothing is attached)
      * @since 0.5.0
      * @param key The Language key to send
      * @param options The split options
      */
-    sendLocale(key: string, options?: SplitOptions): Promise<Message[]>;
+    replyLocale(key: string, options?: SplitOptions): Promise<Message[]>;
     /**
      * Sends a message that will be editable via command editing (if nothing is attached)
      * @since 0.5.0
@@ -117,7 +117,7 @@ export declare class KlasaMessage extends KlasaMessage_base {
      * @param localeArgs The language arguments to pass
      * @param options The split options
      */
-    sendLocale(key: string, localeArgs?: unknown[], options?: SplitOptions): Promise<Message[]>;
+    replyLocale(key: string, localeArgs?: unknown[], options?: SplitOptions): Promise<Message[]>;
     /**
      * Extends the patch method from Message to attach and update the language to this instance
      * @since 0.5.0
@@ -158,5 +158,27 @@ export declare class KlasaMessage extends KlasaMessage_base {
     * @since 0.5.0
     */
     private static prefixes;
+}
+declare module '@klasa/core/dist/src/lib/caching/structures/messages/Message' {
+    interface Message {
+        command: Command | null;
+        commandText: string | null;
+        prefix: RegExp | null;
+        prefixLength: number | null;
+        prompter: CommandPrompt | null;
+        language: Language;
+        guildSettings: Settings;
+        readonly responses: Message[];
+        readonly args: (string | undefined | null)[];
+        readonly params: unknown[];
+        readonly flagArgs: Record<string, string>;
+        readonly reprompted: boolean;
+        usableCommands(): Promise<Cache<string, Command>>;
+        hasAtLeastPermissionLevel(min: number): Promise<boolean>;
+        reply(data: MessageOptions, options?: SplitOptions): Promise<Message[]>;
+        reply(data: (message: MessageBuilder) => MessageBuilder | Promise<MessageBuilder>, options?: SplitOptions): Promise<Message[]>;
+        replyLocale(key: string, options?: SplitOptions): Promise<Message[]>;
+        replyLocale(key: string, localeArgs?: unknown[], options?: SplitOptions): Promise<Message[]>;
+    }
 }
 export {};

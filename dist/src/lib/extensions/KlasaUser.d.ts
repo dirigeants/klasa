@@ -17,4 +17,9 @@ export declare class KlasaUser extends KlasaUser_base {
      */
     toJSON(): Record<string, any>;
 }
+declare module '@klasa/core/dist/src/lib/caching/structures/User' {
+    interface User {
+        settings: Settings;
+    }
+}
 export {};

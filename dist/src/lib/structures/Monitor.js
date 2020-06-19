@@ -23,8 +23,6 @@ class Monitor extends core_1.Piece {
         this.ignoreOthers = options.ignoreOthers;
         this.ignoreWebhooks = options.ignoreWebhooks;
         this.ignoreEdits = options.ignoreEdits;
-        this.ignoreBlacklistedUsers = options.ignoreBlacklistedUsers;
-        this.ignoreBlacklistedGuilds = options.ignoreBlacklistedGuilds;
     }
     /**
      * If the monitor should run based on the filter options
@@ -39,8 +37,6 @@ class Monitor extends core_1.Piece {
             !(this.ignoreOthers && this.client.user !== message.author) &&
             !(this.ignoreWebhooks && message.webhookID) &&
             !(this.ignoreEdits && message.editedTimestamp);
-        // !(this.ignoreBlacklistedUsers && this.client.settings.userBlacklist.includes(message.author.id)) &&
-        // !(this.ignoreBlacklistedGuilds && message.guild && this.client.settings.guildBlacklist.includes(message.guild.id));
     }
     /**
      * Defines the JSON.stringify behavior of this monitor.
@@ -53,9 +49,7 @@ class Monitor extends core_1.Piece {
             ignoreSelf: this.ignoreSelf,
             ignoreOthers: this.ignoreOthers,
             ignoreWebhooks: this.ignoreWebhooks,
-            ignoreEdits: this.ignoreEdits,
-            ignoreBlacklistedUsers: this.ignoreBlacklistedUsers,
-            ignoreBlacklistedGuilds: this.ignoreBlacklistedGuilds
+            ignoreEdits: this.ignoreEdits
         };
     }
     /**

@@ -28,7 +28,7 @@ class default_1 extends klasa_1.Command {
                 message.language.get('COMMAND_HELP_EXTENDED'),
                 utils_1.isFunction(command.extendedHelp) ? command.extendedHelp(message.language) : command.extendedHelp
             ].join('\n');
-            return message.send(mb => mb.setContent(discord_md_tags_1.codeblock('asciidoc') `${info}`));
+            return message.reply(mb => mb.setContent(discord_md_tags_1.codeblock('asciidoc') `${info}`));
         }
         const help = await this.buildHelp(message);
         const categories = Object.keys(help);
@@ -47,10 +47,10 @@ class default_1 extends klasa_1.Command {
         }
         catch {
             if (message.channel.type !== 1 /* DM */)
-                await message.sendLocale('COMMAND_HELP_NODM');
+                await message.replyLocale('COMMAND_HELP_NODM');
         }
         if (message.channel.type !== 1 /* DM */)
-            await message.sendLocale('COMMAND_HELP_DM');
+            await message.replyLocale('COMMAND_HELP_DM');
         return response;
     }
     async buildHelp(message) {

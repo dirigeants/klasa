@@ -46,4 +46,3 @@ export * from './lib/util/QueryBuilder';
 export * from './lib/util/ReactionHandler';
 export * from './lib/util/RichDisplay';
 export * from './lib/util/RichMenu';
-export * from './lib/types/augments';

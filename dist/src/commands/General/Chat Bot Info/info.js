@@ -10,7 +10,7 @@ class default_1 extends klasa_1.Command {
         });
     }
     async run(message) {
-        return message.sendLocale('COMMAND_INFO');
+        return message.replyLocale('COMMAND_INFO');
     }
 }
 exports.default = default_1;

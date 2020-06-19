@@ -32,9 +32,9 @@ class default_1 extends klasa_1.Command {
             throw message.language.get('COMMAND_CONF_GET_NOEXT', key);
         const value = key ? message.author.settings.get(key) : message.author.settings;
         if (klasa_1.SchemaEntry.is(schemaOrEntry)) {
-            return message.sendLocale('COMMAND_CONF_GET', [key, this.displayEntry(schemaOrEntry, value, message.guild)]);
+            return message.replyLocale('COMMAND_CONF_GET', [key, this.displayEntry(schemaOrEntry, value, message.guild)]);
         }
-        return message.sendLocale('COMMAND_CONF_SERVER', [
+        return message.replyLocale('COMMAND_CONF_SERVER', [
             key ? `: ${key.split('.').map(utils_1.toTitleCase).join('/')}` : '',
             utils_1.codeBlock('asciidoc', this.displayFolder(value))
         ]);
@@ -42,7 +42,7 @@ class default_1 extends klasa_1.Command {
     async set(message, [key, valueToSet]) {
         try {
             const [update] = await message.author.settings.update(key, valueToSet, { onlyConfigurable: true, arrayAction: 'add' });
-            return message.sendLocale('COMMAND_CONF_UPDATED', [key, this.displayEntry(update.entry, update.next, message.guild)]);
+            return message.replyLocale('COMMAND_CONF_UPDATED', [key, this.displayEntry(update.entry, update.next, message.guild)]);
         }
         catch (error) {
             throw String(error);
@@ -51,7 +51,7 @@ class default_1 extends klasa_1.Command {
     async remove(message, [key, valueToRemove]) {
         try {
             const [update] = await message.author.settings.update(key, valueToRemove, { onlyConfigurable: true, arrayAction: 'remove' });
-            return message.sendLocale('COMMAND_CONF_UPDATED', [key, this.displayEntry(update.entry, update.next, message.guild)]);
+            return message.replyLocale('COMMAND_CONF_UPDATED', [key, this.displayEntry(update.entry, update.next, message.guild)]);
         }
         catch (error) {
             throw String(error);
@@ -60,7 +60,7 @@ class default_1 extends klasa_1.Command {
     async reset(message, [key]) {
         try {
             const [update] = await message.author.settings.reset(key);
-            return message.sendLocale('COMMAND_CONF_RESET', [key, this.displayEntry(update.entry, update.next, message.guild)]);
+            return message.replyLocale('COMMAND_CONF_RESET', [key, this.displayEntry(update.entry, update.next, message.guild)]);
         }
         catch (error) {
             throw String(error);

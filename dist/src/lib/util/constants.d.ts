@@ -106,8 +106,6 @@ export declare const KlasaClientDefaults: {
                 ignoreOthers: boolean;
                 ignoreWebhooks: boolean;
                 ignoreEdits: boolean;
-                ignoreBlacklistedUsers: boolean;
-                ignoreBlacklistedGuilds: boolean;
                 name: string;
                 enabled: boolean;
             };

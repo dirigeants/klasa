@@ -53,11 +53,6 @@ class TextPrompt {
          */
         this.params = [];
         /**
-         * A cache of the users responses
-         * @since 0.5.0
-         */
-        this.responses = new cache_1.Cache();
-        /**
          * Whether the current usage is a repeating arg
          * @since 0.0.1
          */
@@ -99,7 +94,6 @@ class TextPrompt {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         const message = await this.prompt(prompt);
-        this.responses.set(message.id, message);
         this._setup(message.content);
         return this.validateArgs();
     }
@@ -134,7 +128,6 @@ class TextPrompt {
         if (this.message.content !== oldContent || message.prefix || message.content.toLowerCase() === abortTerm) {
             throw this.message.language.get('MONITOR_COMMAND_HANDLER_ABORTED');
         }
-        this.responses.set(message.id, message);
         if (this.typing)
             this.message.channel.typing.start();
         this.args[this.args.lastIndexOf(null)] = message.content;
@@ -156,7 +149,6 @@ class TextPrompt {
             message = await this.prompt(mb => mb
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 .setContent(this.message.language.get('MONITOR_COMMAND_HANDLER_REPEATING_REPROMPT', `<@!${this.message.author.id}>`, __classPrivateFieldGet(this, _currentUsage).possibles[0].name, this.time / 1000, abortTerm)));
-            this.responses.set(message.id, message);
         }
         catch (err) {
             return this.validateArgs();

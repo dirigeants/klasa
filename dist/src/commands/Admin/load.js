@@ -24,7 +24,7 @@ class default_1 extends klasa_1.Command {
             if (!piece)
                 throw message.language.get('COMMAND_LOAD_FAIL');
             await piece.init();
-            return message.sendLocale('COMMAND_LOAD', [timer.stop(), store.name, piece.name]);
+            return message.replyLocale('COMMAND_LOAD', [timer.stop(), store.name, piece.name]);
         }
         catch (error) {
             timer.stop();

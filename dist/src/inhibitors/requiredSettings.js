@@ -2,9 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const klasa_1 = require("klasa");
 require("@klasa/dapi-types");
+const GuildTextBasedChannels = [5 /* GuildNews */, 0 /* GuildText */];
 class default_1 extends klasa_1.Inhibitor {
     run(message, command) {
-        if (!command.requiredSettings.length || message.channel.type !== 0 /* GuildText */)
+        if (!command.requiredSettings.length || !GuildTextBasedChannels.includes(message.channel.type))
             return;
         // eslint-disable-next-line eqeqeq, @typescript-eslint/no-non-null-assertion
         const requiredSettings = command.requiredSettings.filter(setting => message.guild.settings.get(setting) == null);

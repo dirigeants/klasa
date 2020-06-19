@@ -9,8 +9,8 @@ class default_1 extends klasa_1.Command {
         });
     }
     async run(message) {
-        const [msg] = await message.sendLocale('COMMAND_PING');
-        return message.sendLocale('COMMAND_PINGPONG', [(msg.editedTimestamp || msg.createdTimestamp) - (message.editedTimestamp || message.createdTimestamp), Math.round(this.client.ws.ping)]);
+        const [msg] = await message.replyLocale('COMMAND_PING');
+        return message.replyLocale('COMMAND_PINGPONG', [(msg.editedTimestamp || msg.createdTimestamp) - (message.editedTimestamp || message.createdTimestamp), Math.round(this.client.ws.ping)]);
     }
 }
 exports.default = default_1;
