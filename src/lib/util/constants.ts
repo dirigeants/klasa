@@ -101,8 +101,6 @@ export const KlasaClientDefaults = mergeDefault(ClientOptionsDefaults, {
 				ignoreOthers: true,
 				ignoreWebhooks: true,
 				ignoreEdits: true,
-				ignoreBlacklistedUsers: true,
-				ignoreBlacklistedGuilds: true,
 				allowedTypes: [MessageType.Default]
 			},
 			providers: { enabled: true },
