@@ -15,7 +15,7 @@ export default class extends Inhibitor {
 	}, {}) as Record<PermissionsFlags, string>;
 
 	public run(message: Message, command: Command): void {
-		const missing: PermissionsFlags[] = message.channel.type === ChannelType.GuildText ?
+		const missing: PermissionsFlags[] = message.channel.type === ChannelType.GuildNews || message.channel.type === ChannelType.GuildText ?
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			(message.guild!.me?.permissionsIn(message.channel).missing(command.requiredPermissions) ?? []) as PermissionsFlags[] :
 			this.impliedPermissions.missing(command.requiredPermissions) as PermissionsFlags[];
