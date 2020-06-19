@@ -18,10 +18,10 @@ export default class extends Command {
 		if ((piece.type === 'event' && piece.name === 'coreMessage') ||
 		(piece.type === 'monitor' && piece.name === 'commandHandler') ||
 		(piece.type === 'action' && piece.name === 'MESSAGE_CREATE')) {
-			return message.sendLocale('COMMAND_DISABLE_WARN');
+			return message.replyLocale('COMMAND_DISABLE_WARN');
 		}
 		piece.disable();
-		return message.send(mb => mb.setContent(codeblock('diff') `${message.language.get('COMMAND_DISABLE', [piece.type, piece.name])}`));
+		return message.reply(mb => mb.setContent(codeblock('diff') `${message.language.get('COMMAND_DISABLE', [piece.type, piece.name])}`));
 	}
 
 }

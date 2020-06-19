@@ -13,7 +13,7 @@ export default class extends Command {
 	}
 
 	public async run(message: Message): Promise<Message[]> {
-		return message.send(mb => mb
+		return message.reply(mb => mb
 			.setContent(codeblock('asciidoc') `${message.language.get('COMMAND_STATS',
 				(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2),
 				Duration.toNow(Date.now() - (process.uptime() * 1000)),

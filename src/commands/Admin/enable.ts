@@ -16,7 +16,7 @@ export default class extends Command {
 
 	public async run(message: Message, [piece]: Piece[]): Promise<Message[]> {
 		piece.enable();
-		return message.send(mb => mb.setContent(codeblock('diff') `${message.language.get('COMMAND_ENABLE', [piece.type, piece.name])}`));
+		return message.reply(mb => mb.setContent(codeblock('diff') `${message.language.get('COMMAND_ENABLE', [piece.type, piece.name])}`));
 	}
 
 }

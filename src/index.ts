@@ -61,6 +61,3 @@ export * from './lib/util/QueryBuilder';
 export * from './lib/util/ReactionHandler';
 export * from './lib/util/RichDisplay';
 export * from './lib/util/RichMenu';
-
-// lib/types
-export * from './lib/types/augments';

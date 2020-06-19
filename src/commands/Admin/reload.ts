@@ -20,7 +20,7 @@ export default class extends Command {
 			const timer = new Stopwatch();
 			await piece.loadAll();
 			await piece.init();
-			return message.sendLocale('COMMAND_RELOAD_ALL', [piece, timer.stop()]);
+			return message.replyLocale('COMMAND_RELOAD_ALL', [piece, timer.stop()]);
 		}
 
 		try {
@@ -28,10 +28,10 @@ export default class extends Command {
 			if (!item) throw new Error('Failed to reload.');
 
 			const timer = new Stopwatch();
-			return message.sendLocale('COMMAND_RELOAD', [item.type, item.name, timer.stop()]);
+			return message.replyLocale('COMMAND_RELOAD', [item.type, item.name, timer.stop()]);
 		} catch (err) {
 			piece.store.add(piece);
-			return message.sendLocale('COMMAND_RELOAD_FAILED', [piece.type, piece.name]);
+			return message.replyLocale('COMMAND_RELOAD_FAILED', [piece.type, piece.name]);
 		}
 	}
 
@@ -41,7 +41,7 @@ export default class extends Command {
 			await store.loadAll();
 			await store.init();
 		}));
-		return message.sendLocale('COMMAND_RELOAD_EVERYTHING', [timer.stop()]);
+		return message.replyLocale('COMMAND_RELOAD_EVERYTHING', [timer.stop()]);
 	}
 
 }

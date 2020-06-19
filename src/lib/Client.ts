@@ -9,7 +9,9 @@ import {
 	ClientUser,
 	Store,
 	Piece,
-	PermissionsFlags
+	PermissionsFlags,
+	PieceOptions,
+	AliasPieceOptions
 } from '@klasa/core';
 import { isObject, mergeDefault } from '@klasa/utils';
 import { join } from 'path';
@@ -39,11 +41,14 @@ import { Schema } from './settings/schema/Schema';
 
 // lib/util
 import { KlasaConsole, ConsoleOptions } from '@klasa/console';
-import { KlasaClientDefaults, MENTION_REGEX } from './util/constants';
+import { KlasaClientDefaults } from './util/constants';
 
-import type { Command } from './structures/Command';
+import type { Command, CommandOptions } from './structures/Command';
 import type { SchemaEntry } from './settings/schema/SchemaEntry';
 import type { Settings } from './settings/Settings';
+import type { ExtendableOptions } from './structures/Extendable';
+import type { InhibitorOptions } from './structures/Inhibitor';
+import type { MonitorOptions } from './structures/Monitor';
 
 export interface KlasaClientOptions extends ClientOptions {
 	/**
@@ -632,11 +637,65 @@ export class KlasaClient extends Client {
 	 * @since 0.5.0
 	 */
 	public static defaultClientSchema = new Schema()
-		.add('userBlacklist', 'user', { array: true })
-		.add('guildBlacklist', 'string', { array: true, filter: (_client, value: string) => !MENTION_REGEX.snowflake.test(value) })
 		.add('schedules', 'any', { array: true });
 
 }
+
+declare module '@klasa/core/dist/src/lib/client/Client' {
+
+	export interface Client {
+		console: KlasaConsole;
+		arguments: ArgumentStore;
+		commands: CommandStore;
+		inhibitors: InhibitorStore;
+		finalizers: FinalizerStore;
+		monitors: MonitorStore;
+		languages: LanguageStore;
+		providers: ProviderStore;
+		extendables: ExtendableStore;
+		tasks: TaskStore;
+		serializers: SerializerStore;
+		permissionLevels: PermissionLevels;
+		gateways: GatewayDriver;
+		schedule: Schedule;
+		ready: boolean;
+		mentionPrefix: RegExp | null;
+		settings: Settings | null;
+		application: Application | null;
+		readonly invite: string | null;
+		readonly owners: Set<User>;
+		fetchApplication(): Promise<Application>;
+	}
+
+	export interface ClientOptions {
+		commands?: Partial<CommandHandlingOptions>;
+		console?: Partial<ConsoleOptions>;
+		consoleEvents?: Partial<ConsoleEvents>;
+		language?: string;
+		owners?: string[];
+		permissionLevels?: (permissionLevels: PermissionLevels) => PermissionLevels;
+		production?: boolean;
+		readyMessage?: string | ((client: Client) => string);
+		providers?: Partial<ProviderClientOptions>;
+		settings?: Partial<SettingsOptions>;
+		schedule?: Partial<ScheduleOptions>;
+	}
+
+	export interface PieceDefaults {
+		commands?: Partial<CommandOptions>;
+		extendables?: Partial<ExtendableOptions>;
+		finalizers?: Partial<PieceOptions>;
+		inhibitors?: Partial<InhibitorOptions>;
+		languages?: Partial<PieceOptions>;
+		monitors?: Partial<MonitorOptions>;
+		providers?: Partial<PieceOptions>;
+		arguments?: Partial<AliasPieceOptions>;
+		serializers?: Partial<AliasPieceOptions>;
+		tasks?: Partial<PieceOptions>;
+	}
+
+}
+
 
 /**
  * Emitted when Klasa is fully ready and initialized.

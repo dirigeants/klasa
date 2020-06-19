@@ -5,7 +5,6 @@ import type { Client, Message } from '@klasa/core';
 import type { Command } from '../structures/Command';
 import type { TextPromptOptions } from './TextPrompt';
 
-
 /**
  * Converts usage strings into objects to compare against later
  */

@@ -13,7 +13,7 @@ export default class extends Command {
 	}
 
 	public async run(message: Message): Promise<Message[]> {
-		await message.sendLocale('COMMAND_REBOOT').catch(err => this.client.emit('error', err));
+		await message.replyLocale('COMMAND_REBOOT').catch(err => this.client.emit('error', err));
 		await Promise.all(this.client.providers.map(provider => provider.shutdown()));
 		process.exit();
 	}

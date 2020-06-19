@@ -10,7 +10,6 @@ import type { CommandPrompt } from '../usage/CommandPrompt';
 import type { Gateway } from '../settings/gateway/Gateway';
 import type { Settings } from '../settings/Settings';
 
-
 export interface CachedPrefix {
 	length: number;
 	regex: RegExp | null;
@@ -56,7 +55,6 @@ export class KlasaMessage extends extender.get('Message') {
 	 * The guild level settings for this context (guild || default)
 	 */
 	public guildSettings!: Settings;
-
 
 	/**
 	 * All of the responses to this message.
@@ -146,11 +144,11 @@ export class KlasaMessage extends extender.get('Message') {
 	 * @since 0.0.1
 	 * @see https://discord.com/developers/docs/resources/channel#create-message
 	 * @example
-	 * message.send(new MessageBuilder()
+	 * message.reply(new MessageBuilder()
 	 *     .setContent('Ping!')
 	 *     .setEmbed(new Embed().setDescription('From an embed!')));
 	 */
-	public send(data: MessageOptions, options?: SplitOptions): Promise<Message[]>;
+	public reply(data: MessageOptions, options?: SplitOptions): Promise<Message[]>;
 	/**
 	 * Sends a message to the channel.
 	 * @param data A callback with a {@link MessageBuilder builder} as an argument.
@@ -158,12 +156,12 @@ export class KlasaMessage extends extender.get('Message') {
 	 * @since 0.0.1
 	 * @see https://discord.com/developers/docs/resources/channel#create-message
 	 * @example
-	 * message.send(builder => builder
+	 * message.reply(builder => builder
 	 *     .setContent('Ping!')
 	 *     .setEmbed(embed => embed.setDescription('From an embed!')));
 	 */
-	public send(data: (message: MessageBuilder) => MessageBuilder | Promise<MessageBuilder>, options?: SplitOptions): Promise<Message[]>;
-	public async send(data: MessageOptions | ((message: MessageBuilder) => MessageBuilder | Promise<MessageBuilder>), options: SplitOptions = {}): Promise<Message[]> {
+	public reply(data: (message: MessageBuilder) => MessageBuilder | Promise<MessageBuilder>, options?: SplitOptions): Promise<Message[]>;
+	public async reply(data: MessageOptions | ((message: MessageBuilder) => MessageBuilder | Promise<MessageBuilder>), options: SplitOptions = {}): Promise<Message[]> {
 		const split = (typeof data === 'function' ? await data(new MessageBuilder()) : new MessageBuilder(data)).split(options);
 
 		const { responses } = this;
@@ -189,7 +187,7 @@ export class KlasaMessage extends extender.get('Message') {
 	 * @param key The Language key to send
 	 * @param options The split options
 	 */
-	public sendLocale(key: string, options?: SplitOptions): Promise<Message[]>;
+	public replyLocale(key: string, options?: SplitOptions): Promise<Message[]>;
 	/**
 	 * Sends a message that will be editable via command editing (if nothing is attached)
 	 * @since 0.5.0
@@ -197,10 +195,10 @@ export class KlasaMessage extends extender.get('Message') {
 	 * @param localeArgs The language arguments to pass
 	 * @param options The split options
 	 */
-	public sendLocale(key: string, localeArgs?: unknown[], options?: SplitOptions): Promise<Message[]>;
-	public sendLocale(key: string, localeArgs: unknown[] | SplitOptions = [], options?: SplitOptions): Promise<Message[]> {
+	public replyLocale(key: string, localeArgs?: unknown[], options?: SplitOptions): Promise<Message[]>;
+	public replyLocale(key: string, localeArgs: unknown[] | SplitOptions = [], options?: SplitOptions): Promise<Message[]> {
 		if (!Array.isArray(localeArgs)) [options, localeArgs] = [localeArgs, []];
-		return this.send(mb => mb.setContent(this.language.get(key, ...localeArgs as unknown[])), options);
+		return this.reply(mb => mb.setContent(this.language.get(key, ...localeArgs as unknown[])), options);
 	}
 
 	/**
@@ -316,3 +314,28 @@ export class KlasaMessage extends extender.get('Message') {
 }
 
 extender.extend('Message', () => KlasaMessage);
+
+declare module '@klasa/core/dist/src/lib/caching/structures/messages/Message' {
+
+	export interface Message {
+		command: Command | null;
+		commandText: string | null;
+		prefix: RegExp | null;
+		prefixLength: number | null;
+		prompter: CommandPrompt | null;
+		language: Language;
+		guildSettings: Settings;
+		readonly responses: Message[];
+		readonly args: (string | undefined | null)[];
+		readonly params: unknown[];
+		readonly flagArgs: Record <string, string>;
+		readonly reprompted: boolean;
+		usableCommands(): Promise <Cache <string, Command>>;
+		hasAtLeastPermissionLevel(min: number): Promise<boolean>;
+		reply(data: MessageOptions, options?: SplitOptions): Promise<Message[]>;
+		reply(data: (message: MessageBuilder) => MessageBuilder | Promise <MessageBuilder>, options?: SplitOptions): Promise<Message[]>;
+		replyLocale(key: string, options?: SplitOptions): Promise<Message[]>;
+		replyLocale(key: string, localeArgs?: unknown[], options?: SplitOptions): Promise<Message[]>;
+	}
+
+}

@@ -13,7 +13,7 @@ export default class extends Command {
 	}
 
 	public async run(message: Message): Promise<|Message[]> {
-		return message.sendLocale('COMMAND_INFO');
+		return message.replyLocale('COMMAND_INFO');
 	}
 
 }

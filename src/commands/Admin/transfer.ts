@@ -23,10 +23,10 @@ export default class extends Command {
 		try {
 			await copy(fileLocation, join(piece.store.userDirectory, file));
 			piece.store.load(piece.store.userDirectory, piece.file);
-			return message.sendLocale('COMMAND_TRANSFER_SUCCESS', [piece.type, piece.name]);
+			return message.replyLocale('COMMAND_TRANSFER_SUCCESS', [piece.type, piece.name]);
 		} catch (err) {
 			this.client.emit('error', err.stack);
-			return message.sendLocale('COMMAND_TRANSFER_FAILED', [piece.type, piece.name]);
+			return message.replyLocale('COMMAND_TRANSFER_FAILED', [piece.type, piece.name]);
 		}
 	}
 

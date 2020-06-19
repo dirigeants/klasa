@@ -13,8 +13,6 @@ export abstract class Task extends Piece {
 	 * @since 0.5.0
 	 * @param data The data from the ScheduledTask instance
 	 */
-
-
 	public abstract async run(data: TaskData): Promise<void>;
 
 }
