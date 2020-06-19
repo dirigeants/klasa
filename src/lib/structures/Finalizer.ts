@@ -21,7 +21,6 @@ export abstract class Finalizer extends Piece {
 	 */
 	public abstract run(message: Message, command: Command, responses: Message[] | undefined, runTime: Stopwatch): Promise<unknown> | unknown;
 
-
 	/**
 	 * Run a finalizer and catch any uncaught promises
 	 * @since 0.5.0

@@ -21,7 +21,6 @@ export abstract class Argument extends AliasPiece {
 	 */
 	public abstract run(argument: string, possible: Possible, message: Message, custom?: CustomUsageArgument): unknown | Promise<unknown>;
 
-
 	/**
 	 * Checks min and max values
 	 * @since 0.5.0

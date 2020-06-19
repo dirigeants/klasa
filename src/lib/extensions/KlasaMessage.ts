@@ -10,7 +10,6 @@ import type { CommandPrompt } from '../usage/CommandPrompt';
 import type { Gateway } from '../settings/gateway/Gateway';
 import type { Settings } from '../settings/Settings';
 
-
 export interface CachedPrefix {
 	length: number;
 	regex: RegExp | null;
@@ -56,7 +55,6 @@ export class KlasaMessage extends extender.get('Message') {
 	 * The guild level settings for this context (guild || default)
 	 */
 	public guildSettings!: Settings;
-
 
 	/**
 	 * All of the responses to this message.
