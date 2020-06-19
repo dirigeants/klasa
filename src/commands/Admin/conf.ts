@@ -36,20 +36,20 @@ export default class extends Command {
 
 	public show(message: Message, [key]: [string]): Promise<Message[]> {
 		const guild = message.guild as Guild;
-		if (!key) return message.sendLocale('COMMAND_CONF_SERVER', [key, codeblock('asciidoc')`${this.displayFolder(guild.settings)}`]);
+		if (!key) return message.replyLocale('COMMAND_CONF_SERVER', [key, codeblock('asciidoc')`${this.displayFolder(guild.settings)}`]);
 
 		const entry = this.gateway.schema.get(key);
 		if (!entry) throw message.language.get('COMMAND_CONF_GET_NOEXT', key);
 
 		const value = guild.settings.get(key);
-		return message.sendLocale('COMMAND_CONF_GET', [key, this.displayEntry(entry, value, guild)]);
+		return message.replyLocale('COMMAND_CONF_GET', [key, this.displayEntry(entry, value, guild)]);
 	}
 
 	public async set(message: Message, [key, valueToSet]: [string, string]): Promise<Message[]> {
 		try {
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			const [update] = await message.guild!.settings.update(key, valueToSet, { arrayAction: 'add' });
-			return message.sendLocale('COMMAND_CONF_UPDATED', [key, this.displayEntry(update.entry, update.next, message.guild as Guild)]);
+			return message.replyLocale('COMMAND_CONF_UPDATED', [key, this.displayEntry(update.entry, update.next, message.guild as Guild)]);
 		} catch (error) {
 			throw String(error);
 		}
@@ -59,7 +59,7 @@ export default class extends Command {
 		try {
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			const [update] = await message.guild!.settings.update(key, valueToRemove, { arrayAction: 'remove' });
-			return message.sendLocale('COMMAND_CONF_UPDATED', [key, this.displayEntry(update.entry, update.next, message.guild as Guild)]);
+			return message.replyLocale('COMMAND_CONF_UPDATED', [key, this.displayEntry(update.entry, update.next, message.guild as Guild)]);
 		} catch (error) {
 			throw String(error);
 		}

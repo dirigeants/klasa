@@ -374,7 +374,7 @@ export class KlasaClient extends Client {
 	public permissionLevels: PermissionLevels;
 
 	/**
-	 * The GatewayDriver instance where the gateways are stored
+	 * The GatewayStore instance where the gateways are stored
 	 * @since 0.5.0
 	 */
 	public gateways: GatewayStore;
@@ -647,7 +647,7 @@ declare module '@klasa/core/dist/src/lib/client/Client' {
 		tasks: TaskStore;
 		serializers: SerializerStore;
 		permissionLevels: PermissionLevels;
-		gateways: GatewayDriver;
+		gateways: GatewayStore;
 		schedule: Schedule;
 		ready: boolean;
 		mentionPrefix: RegExp | null;
