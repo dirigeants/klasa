@@ -167,7 +167,7 @@ export class Settings extends Cache<string, unknown> {
 	public async reset(object: ReadonlyKeyedObject, options?: Readonly<SettingsResetOptions>): Promise<SettingsUpdateResults>;
 	public async reset(paths: string | ReadonlyKeyedObject | readonly string[] = [...this.keys()], options: Readonly<SettingsResetOptions> = {}): Promise<SettingsUpdateResults> {
 		if (this.existenceStatus === SettingsExistenceStatus.Unsynchronized) {
-			throw new Error('Cannot reset keys from a pending to synchronize settings instance. Perhaps you want to call `sync()` first.');
+			throw new Error('Cannot reset keys from an unsynchronized settings instance. Perhaps you want to call `sync()` first.');
 		}
 
 		if (this.existenceStatus === SettingsExistenceStatus.NotExists) {
