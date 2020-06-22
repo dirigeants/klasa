@@ -33,7 +33,7 @@ import { SerializerStore } from './structures/SerializerStore';
 import { TaskStore } from './structures/TaskStore';
 
 // lib/settings
-import { GatewayDriver } from './settings/gateway/GatewayDriver';
+import { GatewayStore } from './settings/gateway/GatewayStore';
 import { Gateway } from './settings/gateway/Gateway';
 
 // lib/settings/schema
@@ -145,12 +145,6 @@ export interface CommandHandlingOptions {
 	 * @default null
 	 */
 	prefix?: string | string[] | null;
-
-	/**
-	 * The regular expression prefix if one is provided
-	 * @default null
-	 */
-	regexPrefix?: RegExp | null;
 
 	/**
 	 * Amount of time in ms before the bot will respond to a users command since the last command that user has run
@@ -380,10 +374,10 @@ export class KlasaClient extends Client {
 	public permissionLevels: PermissionLevels;
 
 	/**
-	 * The GatewayDriver instance where the gateways are stored
+	 * The GatewayStore instance where the gateways are stored
 	 * @since 0.5.0
 	 */
-	public gateways: GatewayDriver;
+	public gateways: GatewayStore;
 
 	/**
 	 * The Schedule that runs the tasks
@@ -443,7 +437,7 @@ export class KlasaClient extends Client {
 		// eslint-disable-next-line
 		this.permissionLevels['validate']();
 
-		this.gateways = new GatewayDriver(this);
+		this.gateways = new GatewayStore(this);
 
 		const { guilds, users, clientStorage } = this.options.settings.gateways;
 		const guildSchema = guilds.schema(new Schema());
@@ -460,8 +454,6 @@ export class KlasaClient extends Client {
 		if (!languageKey || (languageKey as SchemaEntry).default === null) {
 			guildSchema.add('language', 'language', { default: this.options.language });
 		}
-
-		guildSchema.add('disableNaturalPrefix', 'boolean', { configurable: Boolean(this.options.commands.regexPrefix) });
 
 		// Register default gateways
 		this.gateways
@@ -618,7 +610,6 @@ export class KlasaClient extends Client {
 	public static defaultGuildSchema = new Schema()
 		.add('prefix', 'string')
 		.add('language', 'language')
-		.add('disableNaturalPrefix', 'boolean')
 		.add('disabledCommands', 'command', {
 			array: true,
 			filter: (_client, command: Command, { language }) => {
@@ -656,7 +647,7 @@ declare module '@klasa/core/dist/src/lib/client/Client' {
 		tasks: TaskStore;
 		serializers: SerializerStore;
 		permissionLevels: PermissionLevels;
-		gateways: GatewayDriver;
+		gateways: GatewayStore;
 		schedule: Schedule;
 		ready: boolean;
 		mentionPrefix: RegExp | null;

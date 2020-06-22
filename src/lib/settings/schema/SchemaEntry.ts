@@ -1,9 +1,8 @@
 import { isNumber, isFunction } from '@klasa/utils';
 
 import type { Client } from '@klasa/core';
-import type { Schema } from './Schema';
-import type { SchemaFolder } from './SchemaFolder';
 import type { Serializer, SerializerUpdateContext } from '../../structures/Serializer';
+import type { Schema } from './Schema';
 
 export class SchemaEntry {
 
@@ -15,17 +14,12 @@ export class SchemaEntry {
 	/**
 	 * The schema that manages this instance.
 	 */
-	public readonly parent: Schema | SchemaFolder;
+	public readonly parent: Schema;
 
 	/**
 	 * The key of this entry relative to its parent.
 	 */
 	public readonly key: string;
-
-	/**
-	 * The absolute key of this entry.
-	 */
-	public readonly path: string;
 
 	/**
 	 * The type of data this entry manages.
@@ -58,11 +52,6 @@ export class SchemaEntry {
 	public inclusive: boolean;
 
 	/**
-	 * Whether or not this entry should be configurable by the configuration command.
-	 */
-	public configurable: boolean;
-
-	/**
 	 * The filter to use for this entry when resolving.
 	 */
 	public filter: SchemaEntryFilterFunction | null;
@@ -72,18 +61,16 @@ export class SchemaEntry {
 	 */
 	public shouldResolve: boolean;
 
-	public constructor(parent: Schema | SchemaFolder, key: string, type: string, options: SchemaEntryOptions = {}) {
+	public constructor(parent: Schema, key: string, type: string, options: SchemaEntryOptions = {}) {
 		this.client = null;
 		this.parent = parent;
 		this.key = key;
-		this.path = this.parent.path.length === 0 ? this.key : `${this.parent.path}.${this.key}`;
 		this.type = type.toLowerCase();
 		this.array = typeof options.array === 'undefined' ? typeof options.default === 'undefined' ? false : Array.isArray(options.default) : options.array;
 		this.default = typeof options.default === 'undefined' ? this._generateDefaultValue() : options.default;
 		this.minimum = typeof options.minimum === 'undefined' ? null : options.minimum;
 		this.maximum = typeof options.maximum === 'undefined' ? null : options.maximum;
 		this.inclusive = typeof options.inclusive === 'undefined' ? false : options.inclusive;
-		this.configurable = typeof options.configurable === 'undefined' ? this.type !== 'any' : options.configurable;
 		this.filter = typeof options.filter === 'undefined' ? null : options.filter;
 		this.shouldResolve = typeof options.resolve === 'undefined' ? true : options.resolve;
 	}
@@ -103,7 +90,6 @@ export class SchemaEntry {
 	public edit(options: SchemaEntryEditOptions = {}): this {
 		if (typeof options.type === 'string') this.type = options.type.toLowerCase();
 		if (typeof options.array !== 'undefined') this.array = options.array;
-		if (typeof options.configurable !== 'undefined') this.configurable = options.configurable;
 		if (typeof options.default !== 'undefined') this.default = options.default;
 		if (typeof options.filter !== 'undefined') this.filter = options.filter;
 		if (typeof options.inclusive !== 'undefined') this.inclusive = options.inclusive;
@@ -125,7 +111,6 @@ export class SchemaEntry {
 		return {
 			type: this.type,
 			array: this.array,
-			configurable: this.configurable,
 			default: this.default,
 			inclusive: this.inclusive,
 			maximum: this.maximum,
@@ -142,30 +127,27 @@ export class SchemaEntry {
 		if (this.client === null) throw new Error('Cannot retrieve serializers from non-initialized SchemaEntry.');
 
 		// Check type
-		if (typeof this.type !== 'string') throw new TypeError(`[KEY] ${this.path} - Parameter 'type' must be a string.`);
-		if (!this.client.serializers.has(this.type)) throw new TypeError(`[KEY] ${this.path} - '${this.type}' is not a valid type.`);
+		if (typeof this.type !== 'string') throw new TypeError(`[KEY] ${this.key} - Parameter 'type' must be a string.`);
+		if (!this.client.serializers.has(this.type)) throw new TypeError(`[KEY] ${this.key} - '${this.type}' is not a valid type.`);
 
 		// Check array
-		if (typeof this.array !== 'boolean') throw new TypeError(`[KEY] ${this.path} - Parameter 'array' must be a boolean.`);
-
-		// Check configurable
-		if (typeof this.configurable !== 'boolean') throw new TypeError(`[KEY] ${this.path} - Parameter 'configurable' must be a boolean.`);
+		if (typeof this.array !== 'boolean') throw new TypeError(`[KEY] ${this.key} - Parameter 'array' must be a boolean.`);
 
 		// Check limits
-		if (this.minimum !== null && !isNumber(this.minimum)) throw new TypeError(`[KEY] ${this.path} - Parameter 'minimum' must be a number or null.`);
-		if (this.maximum !== null && !isNumber(this.maximum)) throw new TypeError(`[KEY] ${this.path} - Parameter 'maximum' must be a number or null.`);
+		if (this.minimum !== null && !isNumber(this.minimum)) throw new TypeError(`[KEY] ${this.key} - Parameter 'minimum' must be a number or null.`);
+		if (this.maximum !== null && !isNumber(this.maximum)) throw new TypeError(`[KEY] ${this.key} - Parameter 'maximum' must be a number or null.`);
 		if (this.minimum !== null && this.maximum !== null && this.minimum > this.maximum) {
-			throw new TypeError(`[KEY] ${this.path} - Parameter 'minimum' must contain a value lower than the parameter 'maximum'.`);
+			throw new TypeError(`[KEY] ${this.key} - Parameter 'minimum' must contain a value lower than the parameter 'maximum'.`);
 		}
 
 		// Check filter
-		if (this.filter !== null && !isFunction(this.filter)) throw new TypeError(`[KEY] ${this.path} - Parameter 'filter' must be a function`);
+		if (this.filter !== null && !isFunction(this.filter)) throw new TypeError(`[KEY] ${this.key} - Parameter 'filter' must be a function`);
 
 		// Check default
 		if (this.array) {
-			if (!Array.isArray(this.default)) throw new TypeError(`[DEFAULT] ${this.path} - Default key must be an array if the key stores an array.`);
+			if (!Array.isArray(this.default)) throw new TypeError(`[DEFAULT] ${this.key} - Default key must be an array if the key stores an array.`);
 		} else if (this.default !== null) {
-			if (['boolean', 'string'].includes(this.type) && typeof this.default !== this.type) throw new TypeError(`[DEFAULT] ${this.path} - Default key must be a ${this.type}.`);
+			if (['boolean', 'string'].includes(this.type) && typeof this.default !== this.type) throw new TypeError(`[DEFAULT] ${this.key} - Default key must be a ${this.type}.`);
 		}
 	}
 
@@ -178,20 +160,10 @@ export class SchemaEntry {
 		return null;
 	}
 
-	/**
-	 * Check whether or not the value is a SchemaEntry.
-	 * @since 0.6.0
-	 * @param value The value to check.
-	 */
-	public static is(value: Schema | SchemaEntry): value is SchemaEntry {
-		return value.type !== 'Folder';
-	}
-
 }
 
 export interface SchemaEntryOptions {
 	array?: boolean;
-	configurable?: boolean;
 	default?: unknown;
 	filter?: SchemaEntryFilterFunction | null;
 	inclusive?: boolean;

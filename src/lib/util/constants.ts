@@ -18,7 +18,6 @@ export const KlasaClientDefaults = mergeDefault(ClientOptionsDefaults, {
 		messageLifetime: 1800,
 		noPrefixDM: false,
 		prefix: null,
-		regexPrefix: null,
 		slowmode: 0,
 		slowmodeAggressive: false,
 		typing: false,
