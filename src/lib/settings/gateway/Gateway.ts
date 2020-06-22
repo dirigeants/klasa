@@ -1,6 +1,6 @@
 import { RequestHandler, IdKeyed } from '@klasa/request-handler';
-import { Settings } from '../Settings';
 import { Cache } from '@klasa/cache';
+import { Settings } from '../Settings';
 import { Schema } from '../schema/Schema';
 
 import type { Client } from '@klasa/core';
@@ -44,13 +44,13 @@ export class Gateway {
 	/**
 	 * The provider's name that manages this gateway.
 	 */
-	private readonly _provider: string;
+	readonly #provider: string;
 
 	public constructor(client: Client, name: string, options: GatewayOptions = {}) {
 		this.client = client;
 		this.name = name;
 		this.schema = options.schema || new Schema();
-		this._provider = options.provider || client.options.providers.default || '';
+		this.#provider = options.provider ?? client.options.providers.default;
 		this.cache = (this.name in this.client) && (this.client[this.name as keyof Client] instanceof Map) ?
 			this.client[this.name as keyof Client] as Map<string, ProxyMapEntry> :
 			new Cache<string, ProxyMapEntry>();
@@ -124,7 +124,7 @@ export class Gateway {
 	 * The provider that manages this gateway's persistent data.
 	 */
 	public get provider(): Provider | null {
-		return this.client.providers.get(this._provider) ?? null;
+		return this.client.providers.get(this.#provider) ?? null;
 	}
 
 	/**
@@ -136,7 +136,7 @@ export class Gateway {
 
 		// Check the provider's existence.
 		const { provider } = this;
-		if (provider === null) throw new Error(`The gateway "${this.name}" could not find the provider "${this._provider}".`);
+		if (provider === null) throw new Error(`The gateway "${this.name}" could not find the provider "${this.#provider}".`);
 		this.ready = true;
 
 		const errors = [...this._initializeSchemaEntries(this.schema)];
@@ -177,7 +177,7 @@ export class Gateway {
 	public toJSON(): GatewayJson {
 		return {
 			name: this.name,
-			provider: this._provider,
+			provider: this.#provider,
 			schema: this.schema.toJSON()
 		};
 	}

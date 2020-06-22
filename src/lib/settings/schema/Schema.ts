@@ -1,6 +1,6 @@
+import { Cache } from '@klasa/cache';
 import { SchemaEntry, SchemaEntryOptions, SchemaEntryJson } from './SchemaEntry';
 import { Settings } from '../Settings';
-import { Cache } from '@klasa/cache';
 
 /* eslint-disable no-dupe-class-members */
 
