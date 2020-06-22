@@ -401,7 +401,7 @@ ava('Settings#reset (Unsynchronized)', async (test): Promise<void> => {
 	test.plan(1);
 
 	const { settings } = test.context;
-	await test.throwsAsync(() => settings.reset(), { message: 'Cannot reset keys from a pending to synchronize settings instance. Perhaps you want to call `sync()` first.' });
+	await test.throwsAsync(() => settings.reset(), { message: 'Cannot reset keys from an unsynchronized settings instance. Perhaps you want to call `sync()` first.' });
 });
 
 ava('Settings#reset (Invalid Key)', async (test): Promise<void> => {
