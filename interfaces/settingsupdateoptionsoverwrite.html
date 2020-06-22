@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ScheduleOptions | klasa</title>
+	<title>SettingsUpdateOptionsOverwrite | klasa</title>
 	<meta name="description" content="Documentation for klasa">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,21 +56,38 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="scheduleoptions.html">ScheduleOptions</a>
+					<a href="settingsupdateoptionsoverwrite.html">SettingsUpdateOptionsOverwrite</a>
 				</li>
 			</ul>
-			<h1>Interface ScheduleOptions</h1>
+			<h1>Interface SettingsUpdateOptionsOverwrite</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>The options for {@link Settings#update} when specifying <code>arrayAction</code> as overwrite.</p>
+					</div>
+					<dl class="tsd-comment-tags">
+						<dt>memberof</dt>
+						<dd><p>Settings</p>
+						</dd>
+					</dl>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">ScheduleOptions</span>
+						<a href="settingsresetoptions.html" class="tsd-signature-type">SettingsResetOptions</a>
+						<ul class="tsd-hierarchy">
+							<li>
+								<span class="target">SettingsUpdateOptionsOverwrite</span>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
@@ -81,7 +98,9 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="scheduleoptions.html#interval" class="tsd-kind-icon">interval</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="settingsupdateoptionsoverwrite.html#arrayaction" class="tsd-kind-icon">array<wbr>Action</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="settingsupdateoptionsoverwrite.html#extracontext" class="tsd-kind-icon">extra<wbr>Context</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="settingsupdateoptionsoverwrite.html#guild" class="tsd-kind-icon">guild</a></li>
 							</ul>
 						</section>
 					</div>
@@ -90,23 +109,60 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="interval" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> interval</h3>
-					<div class="tsd-signature tsd-kind-icon">interval<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+					<a name="arrayaction" class="tsd-anchor"></a>
+					<h3>array<wbr>Action</h3>
+					<div class="tsd-signature tsd-kind-icon">array<wbr>Action<span class="tsd-signature-symbol">:</span> <a href="../enums/arrayactions.html#overwrite" class="tsd-signature-type">Overwrite</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"overwrite"</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/7ab41365/src/lib/Client.ts#L223">src/lib/Client.ts:223</a></li>
+							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/7ab41365/src/lib/settings/Settings.ts#L553">src/lib/settings/Settings.ts:553</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>The interval in milliseconds for the clock to check the tasks</p>
+							<p>The array action, in this case overwrite and not supporting <code>arrayIndex</code>.</p>
 						</div>
 						<dl class="tsd-comment-tags">
-							<dt>default</dt>
-							<dd><p>60000</p>
+							<dt>example</dt>
+							<dd><p>settings.get(&#39;words&#39;);
+								// -&gt; [&#39;foo&#39;, &#39;bar&#39;]</p>
+								<p>await settings.update(&#39;words&#39;, [&#39;hello&#39;, &#39;world&#39;], { arrayAction: &#39;overwrite&#39; });
+									settings.get(&#39;words&#39;);
+								// -&gt; [&#39;hello&#39;, &#39;world&#39;]</p>
 							</dd>
 						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="extracontext" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> extra<wbr>Context</h3>
+					<div class="tsd-signature tsd-kind-icon">extra<wbr>Context<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">unknown</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="settingsresetoptions.html">SettingsResetOptions</a>.<a href="settingsresetoptions.html#extracontext">extraContext</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/7ab41365/src/lib/settings/Settings.ts#L535">src/lib/settings/Settings.ts:535</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The extra context to be passed through resolvers and events.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="guild" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> guild</h3>
+					<div class="tsd-signature tsd-kind-icon">guild<span class="tsd-signature-symbol">:</span> <a href="_caching_structures_guilds_guild_.guild.html" class="tsd-signature-type">Guild</a></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="settingsresetoptions.html">SettingsResetOptions</a>.<a href="settingsresetoptions.html#guild">guild</a></p>
+						<ul>
+							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/7ab41365/src/lib/settings/Settings.ts#L531">src/lib/settings/Settings.ts:531</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The guild to use as the context. It&#39;s not required when the settings&#39; target can be resolved into a Guild, e.g.
+							a TextChannel, a Role, a GuildMember, or a Guild instance.</p>
+						</div>
 					</div>
 				</section>
 			</section>
@@ -124,10 +180,16 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface">
-						<a href="scheduleoptions.html" class="tsd-kind-icon">Schedule<wbr>Options</a>
+						<a href="settingsupdateoptionsoverwrite.html" class="tsd-kind-icon">Settings<wbr>Update<wbr>Options<wbr>Overwrite</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="scheduleoptions.html#interval" class="tsd-kind-icon">interval</a>
+								<a href="settingsupdateoptionsoverwrite.html#arrayaction" class="tsd-kind-icon">array<wbr>Action</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="settingsupdateoptionsoverwrite.html#extracontext" class="tsd-kind-icon">extra<wbr>Context</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="settingsupdateoptionsoverwrite.html#guild" class="tsd-kind-icon">guild</a>
 							</li>
 						</ul>
 					</li>

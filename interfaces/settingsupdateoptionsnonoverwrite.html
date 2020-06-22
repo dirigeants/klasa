@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>QueryBuilderEntryOptions | klasa</title>
+	<title>SettingsUpdateOptionsNonOverwrite | klasa</title>
 	<meta name="description" content="Documentation for klasa">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,24 +56,36 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="querybuilderentryoptions.html">QueryBuilderEntryOptions</a>
+					<a href="settingsupdateoptionsnonoverwrite.html">SettingsUpdateOptionsNonOverwrite</a>
 				</li>
 			</ul>
-			<h1>Interface QueryBuilderEntryOptions</h1>
+			<h1>Interface SettingsUpdateOptionsNonOverwrite</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>The options for {@link Settings#update} when not specifying <code>arrayAction</code> as overwrite or leaving it default.</p>
+					</div>
+					<dl class="tsd-comment-tags">
+						<dt>memberof</dt>
+						<dd><p>Settings</p>
+						</dd>
+					</dl>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">QueryBuilderEntryOptions</span>
+						<a href="settingsresetoptions.html" class="tsd-signature-type">SettingsResetOptions</a>
 						<ul class="tsd-hierarchy">
 							<li>
-								<a href="querybuilderdatatype.html" class="tsd-signature-type">QueryBuilderDatatype</a>
+								<span class="target">SettingsUpdateOptionsNonOverwrite</span>
 							</li>
 						</ul>
 					</li>
@@ -86,10 +98,10 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="querybuilderentryoptions.html#array" class="tsd-kind-icon">array</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="querybuilderentryoptions.html#arrayserializer" class="tsd-kind-icon">array<wbr>Serializer</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="querybuilderentryoptions.html#formatdatatype" class="tsd-kind-icon">format<wbr>Datatype</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="querybuilderentryoptions.html#serializer" class="tsd-kind-icon">serializer</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="settingsupdateoptionsnonoverwrite.html#arrayaction" class="tsd-kind-icon">array<wbr>Action</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="settingsupdateoptionsnonoverwrite.html#arrayindex" class="tsd-kind-icon">array<wbr>Index</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="settingsupdateoptionsnonoverwrite.html#extracontext" class="tsd-kind-icon">extra<wbr>Context</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited"><a href="settingsupdateoptionsnonoverwrite.html#guild" class="tsd-kind-icon">guild</a></li>
 							</ul>
 						</section>
 					</div>
@@ -98,83 +110,66 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="array" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> array</h3>
-					<div class="tsd-signature tsd-kind-icon">array<span class="tsd-signature-symbol">:</span> <a href="querybuilderarray.html" class="tsd-signature-type">QueryBuilderArray</a></div>
+					<a name="arrayaction" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> array<wbr>Action</h3>
+					<div class="tsd-signature tsd-kind-icon">array<wbr>Action<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Exclude</span><span class="tsd-signature-symbol">&lt;</span><a href="../enums/arrayactions.html" class="tsd-signature-type">ArrayActions</a><span class="tsd-signature-symbol">, </span><a href="../enums/arrayactions.html#overwrite" class="tsd-signature-type">Overwrite</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Exclude</span><span class="tsd-signature-symbol">&lt;</span><a href="../globals.html#arrayactionsstring" class="tsd-signature-type">ArrayActionsString</a><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">"overwrite"</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/7ab41365/src/lib/util/QueryBuilder.ts#L197">src/lib/util/QueryBuilder.ts:197</a></li>
+							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/7ab41365/src/lib/settings/Settings.ts#L564">src/lib/settings/Settings.ts:564</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>The default array handler for this instance</p>
+							<p>The array action to take, check <a href="../enums/arrayactions.html">ArrayActions</a> for the available actions.</p>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>since</dt>
-							<dd><p>0.6.0</p>
-							</dd>
-						</dl>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="arrayserializer" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> array<wbr>Serializer</h3>
-					<div class="tsd-signature tsd-kind-icon">array<wbr>Serializer<span class="tsd-signature-symbol">:</span> <a href="querybuilderarrayserializer.html" class="tsd-signature-type">QueryBuilderArraySerializer</a></div>
+					<a name="arrayindex" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> array<wbr>Index</h3>
+					<div class="tsd-signature tsd-kind-icon">array<wbr>Index<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/7ab41365/src/lib/util/QueryBuilder.ts#L203">src/lib/util/QueryBuilder.ts:203</a></li>
+							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/7ab41365/src/lib/settings/Settings.ts#L568">src/lib/settings/Settings.ts:568</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>The default array handler for this instance</p>
+							<p>The index to do the array updates at. This is option is ignored when <code>arrayAction</code> is set to overwrite.</p>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>since</dt>
-							<dd><p>0.6.0</p>
-							</dd>
-						</dl>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="formatdatatype" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> format<wbr>Datatype</h3>
-					<div class="tsd-signature tsd-kind-icon">format<wbr>Datatype<span class="tsd-signature-symbol">:</span> <a href="querybuilderformatdatatype.html" class="tsd-signature-type">QueryBuilderFormatDatatype</a></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="extracontext" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> extra<wbr>Context</h3>
+					<div class="tsd-signature tsd-kind-icon">extra<wbr>Context<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">unknown</span></div>
 					<aside class="tsd-sources">
+						<p>Inherited from <a href="settingsresetoptions.html">SettingsResetOptions</a>.<a href="settingsresetoptions.html#extracontext">extraContext</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/7ab41365/src/lib/util/QueryBuilder.ts#L209">src/lib/util/QueryBuilder.ts:209</a></li>
+							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/7ab41365/src/lib/settings/Settings.ts#L535">src/lib/settings/Settings.ts:535</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>The default datatype formatter for the SQL database</p>
+							<p>The extra context to be passed through resolvers and events.</p>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>since</dt>
-							<dd><p>0.6.0</p>
-							</dd>
-						</dl>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="serializer" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> serializer</h3>
-					<div class="tsd-signature tsd-kind-icon">serializer<span class="tsd-signature-symbol">:</span> <a href="querybuilderserializer.html" class="tsd-signature-type">QueryBuilderSerializer</a></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+					<a name="guild" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> guild</h3>
+					<div class="tsd-signature tsd-kind-icon">guild<span class="tsd-signature-symbol">:</span> <a href="_caching_structures_guilds_guild_.guild.html" class="tsd-signature-type">Guild</a></div>
 					<aside class="tsd-sources">
+						<p>Inherited from <a href="settingsresetoptions.html">SettingsResetOptions</a>.<a href="settingsresetoptions.html#guild">guild</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/7ab41365/src/lib/util/QueryBuilder.ts#L215">src/lib/util/QueryBuilder.ts:215</a></li>
+							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/7ab41365/src/lib/settings/Settings.ts#L531">src/lib/settings/Settings.ts:531</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>The default serializer for this instance</p>
+							<p>The guild to use as the context. It&#39;s not required when the settings&#39; target can be resolved into a Guild, e.g.
+							a TextChannel, a Role, a GuildMember, or a Guild instance.</p>
 						</div>
-						<dl class="tsd-comment-tags">
-							<dt>since</dt>
-							<dd><p>0.6.0</p>
-							</dd>
-						</dl>
 					</div>
 				</section>
 			</section>
@@ -192,19 +187,19 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface">
-						<a href="querybuilderentryoptions.html" class="tsd-kind-icon">Query<wbr>Builder<wbr>Entry<wbr>Options</a>
+						<a href="settingsupdateoptionsnonoverwrite.html" class="tsd-kind-icon">Settings<wbr>Update<wbr>Options<wbr>Non<wbr>Overwrite</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="querybuilderentryoptions.html#array" class="tsd-kind-icon">array</a>
+								<a href="settingsupdateoptionsnonoverwrite.html#arrayaction" class="tsd-kind-icon">array<wbr>Action</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="querybuilderentryoptions.html#arrayserializer" class="tsd-kind-icon">array<wbr>Serializer</a>
+								<a href="settingsupdateoptionsnonoverwrite.html#arrayindex" class="tsd-kind-icon">array<wbr>Index</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="querybuilderentryoptions.html#formatdatatype" class="tsd-kind-icon">format<wbr>Datatype</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="settingsupdateoptionsnonoverwrite.html#extracontext" class="tsd-kind-icon">extra<wbr>Context</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="querybuilderentryoptions.html#serializer" class="tsd-kind-icon">serializer</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited">
+								<a href="settingsupdateoptionsnonoverwrite.html#guild" class="tsd-kind-icon">guild</a>
 							</li>
 						</ul>
 					</li>
