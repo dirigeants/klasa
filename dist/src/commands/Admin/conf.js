@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const klasa_1 = require("klasa");
 const utils_1 = require("@klasa/utils");
 require("@klasa/dapi-types");
+const discord_md_tags_1 = require("discord-md-tags");
 class default_1 extends klasa_1.Command {
     constructor(store, directory, files) {
         super(store, directory, files, {
@@ -14,7 +15,6 @@ class default_1 extends klasa_1.Command {
             usage: '<set|remove|reset|show:default> (key:key) (value:value)',
             usageDelim: ' '
         });
-        this.configurableSchemaKeys = new Map();
         this
             .createCustomResolver('key', (arg, _possible, message, [action]) => {
             if (action === 'show' || arg)
@@ -29,24 +29,23 @@ class default_1 extends klasa_1.Command {
             throw message.language.get('COMMAND_CONF_NOVALUE');
         });
     }
+    get gateway() {
+        return this.client.gateways.get('guilds');
+    }
     show(message, [key]) {
-        const schemaOrEntry = this.configurableSchemaKeys.get(key);
-        if (typeof schemaOrEntry === 'undefined')
+        const guild = message.guild;
+        if (!key)
+            return message.replyLocale('COMMAND_CONF_SERVER', [key, discord_md_tags_1.codeblock('asciidoc') `${this.displayFolder(guild.settings)}`]);
+        const entry = this.gateway.schema.get(key);
+        if (!entry)
             throw message.language.get('COMMAND_CONF_GET_NOEXT', key);
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const value = key ? message.guild.settings.get(key) : message.guild.settings;
-        if (klasa_1.SchemaEntry.is(schemaOrEntry)) {
-            return message.replyLocale('COMMAND_CONF_GET', [key, this.displayEntry(schemaOrEntry, value, message.guild)]);
-        }
-        return message.replyLocale('COMMAND_CONF_SERVER', [
-            key ? `: ${key.split('.').map(utils_1.toTitleCase).join('/')}` : '',
-            utils_1.codeBlock('asciidoc', this.displayFolder(value))
-        ]);
+        const value = guild.settings.get(key);
+        return message.replyLocale('COMMAND_CONF_GET', [key, this.displayEntry(entry, value, guild)]);
     }
     async set(message, [key, valueToSet]) {
         try {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            const [update] = await message.guild.settings.update(key, valueToSet, { onlyConfigurable: true, arrayAction: 'add' });
+            const [update] = await message.guild.settings.update(key, valueToSet, { arrayAction: 'add' });
             return message.replyLocale('COMMAND_CONF_UPDATED', [key, this.displayEntry(update.entry, update.next, message.guild)]);
         }
         catch (error) {
@@ -56,7 +55,7 @@ class default_1 extends klasa_1.Command {
     async remove(message, [key, valueToRemove]) {
         try {
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            const [update] = await message.guild.settings.update(key, valueToRemove, { onlyConfigurable: true, arrayAction: 'remove' });
+            const [update] = await message.guild.settings.update(key, valueToRemove, { arrayAction: 'remove' });
             return message.replyLocale('COMMAND_CONF_UPDATED', [key, this.displayEntry(update.entry, update.next, message.guild)]);
         }
         catch (error) {
@@ -73,40 +72,25 @@ class default_1 extends klasa_1.Command {
             throw String(error);
         }
     }
-    init() {
-        const { schema } = this.client.gateways.get('guilds');
-        if (this.initFolderConfigurableRecursive(schema))
-            this.configurableSchemaKeys.set(schema.path, schema);
-    }
     displayFolder(settings) {
         const array = [];
-        const folders = [];
         const sections = new Map();
         let longest = 0;
-        for (const [key, value] of settings.schema.entries()) {
-            if (!this.configurableSchemaKeys.has(value.path))
-                continue;
-            if (value.type === 'Folder') {
-                folders.push(`// ${key}`);
-            }
-            else {
-                const values = sections.get(value.type) || [];
-                values.push(key);
-                if (key.length > longest)
-                    longest = key.length;
-                if (values.length === 1)
-                    sections.set(value.type, values);
-            }
+        for (const [key, value] of settings.gateway.schema.entries()) {
+            const values = sections.get(value.type) || [];
+            values.push(key);
+            if (key.length > longest)
+                longest = key.length;
+            if (values.length === 1)
+                sections.set(value.type, values);
         }
-        if (folders.length)
-            array.push('= Folders =', ...folders.sort(), '');
         if (sections.size) {
             for (const keyType of [...sections.keys()].sort()) {
                 array.push(`= ${utils_1.toTitleCase(keyType)}s =`, 
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 ...sections.get(keyType).sort().map(key => 
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                `${key.padEnd(longest)} :: ${this.displayEntry(settings.schema.get(key), settings.get(key), settings.base.target)}`), '');
+                `${key.padEnd(longest)} :: ${this.displayEntry(settings.gateway.schema.get(key), settings.get(key), settings.target)}`), '');
             }
         }
         return array.join('\n');
@@ -124,19 +108,6 @@ class default_1 extends klasa_1.Command {
         return values.length === 0 ?
             'None' :
             `[ ${values.map(value => this.displayEntrySingle(entry, value, guild)).join(' | ')} ]`;
-    }
-    initFolderConfigurableRecursive(folder) {
-        const previousConfigurableCount = this.configurableSchemaKeys.size;
-        for (const value of folder.values()) {
-            if (klasa_1.SchemaFolder.is(value)) {
-                if (this.initFolderConfigurableRecursive(value))
-                    this.configurableSchemaKeys.set(value.path, value);
-            }
-            else if (value.configurable) {
-                this.configurableSchemaKeys.set(value.path, value);
-            }
-        }
-        return previousConfigurableCount !== this.configurableSchemaKeys.size;
     }
 }
 exports.default = default_1;

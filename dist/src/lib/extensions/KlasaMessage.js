@@ -141,7 +141,7 @@ class KlasaMessage extends core_1.extender.get('Message') {
         this.command = null;
         this.prompter = null;
         try {
-            const prefix = this._mentionPrefix() || this._customPrefix() || this._naturalPrefix() || this._prefixLess();
+            const prefix = this._mentionPrefix() || this._customPrefix() || this._prefixLess();
             if (!prefix)
                 return;
             this.prefix = prefix.regex;
@@ -184,16 +184,6 @@ class KlasaMessage extends core_1.extender.get('Message') {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const mentionPrefix = this.client.mentionPrefix.exec(this.content);
         return mentionPrefix ? { length: mentionPrefix[0].length, regex: this.client.mentionPrefix } : null;
-    }
-    /**
-    * Checks if the natural prefix is used
-    * @since 0.5.0
-    */
-    _naturalPrefix() {
-        if (this.guildSettings.get('disableNaturalPrefix') || !this.client.options.commands.regexPrefix)
-            return null;
-        const results = this.client.options.commands.regexPrefix.exec(this.content);
-        return results ? { length: results[0].length, regex: this.client.options.commands.regexPrefix } : null;
     }
     /**
     * Checks if a prefixless scenario is possible

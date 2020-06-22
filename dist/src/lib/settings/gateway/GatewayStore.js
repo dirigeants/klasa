@@ -1,17 +1,16 @@
-import { Cache } from '@klasa/cache';
-import type { GatewayStorage, GatewayStorageJson } from './GatewayStorage';
-import type { Client } from '@klasa/core';
-export declare class GatewayDriver extends Cache<string, GatewayStorage> {
-    /**
-     * The client this GatewayDriver was created with.
-     * @since 0.6.0
-     */
-    readonly client: Client;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.GatewayStore = void 0;
+const cache_1 = require("@klasa/cache");
+class GatewayStore extends cache_1.Cache {
     /**
      * Constructs a new instance of GatewayDriver.
      * @param client The client that manages this instance
      */
-    constructor(client: Client);
+    constructor(client) {
+        super();
+        this.client = client;
+    }
     /**
      * Registers a new gateway.
      * @param gateway The gateway to register
@@ -31,16 +30,24 @@ export declare class GatewayDriver extends Cache<string, GatewayStorage> {
      * // register calls can be chained
      * client
      *     .register(new Gateway(client, 'channels'))
-     *     .register(new GatewayStorage(client, 'moderations', { provider: 'postgres' }));
+     *     .register(new Gateway(client, 'moderations', { provider: 'postgres' }));
      */
-    register(gateway: GatewayStorage): this;
+    register(gateway) {
+        this.set(gateway.name, gateway);
+        return this;
+    }
     /**
      * Initializes all gateways.
      */
-    init(): Promise<void>;
+    async init() {
+        await Promise.all(this.map(gateway => gateway.init()));
+    }
     /**
      * The gateway driver with all serialized gateways.
      */
-    toJSON(): GatewayDriverJson;
+    toJSON() {
+        return Object.fromEntries(this.map((value, key) => [key, value.toJSON()]));
+    }
 }
-export declare type GatewayDriverJson = Record<string, GatewayStorageJson>;
+exports.GatewayStore = GatewayStore;
+//# sourceMappingURL=GatewayStore.js.map

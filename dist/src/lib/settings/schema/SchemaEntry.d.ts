@@ -1,7 +1,6 @@
 import type { Client } from '@klasa/core';
-import type { Schema } from './Schema';
-import type { SchemaFolder } from './SchemaFolder';
 import type { Serializer, SerializerUpdateContext } from '../../structures/Serializer';
+import type { Schema } from './Schema';
 export declare class SchemaEntry {
     /**
      * The KlasaClient for this SchemaEntry.
@@ -10,15 +9,11 @@ export declare class SchemaEntry {
     /**
      * The schema that manages this instance.
      */
-    readonly parent: Schema | SchemaFolder;
+    readonly parent: Schema;
     /**
      * The key of this entry relative to its parent.
      */
     readonly key: string;
-    /**
-     * The absolute key of this entry.
-     */
-    readonly path: string;
     /**
      * The type of data this entry manages.
      */
@@ -44,10 +39,6 @@ export declare class SchemaEntry {
      */
     inclusive: boolean;
     /**
-     * Whether or not this entry should be configurable by the configuration command.
-     */
-    configurable: boolean;
-    /**
      * The filter to use for this entry when resolving.
      */
     filter: SchemaEntryFilterFunction | null;
@@ -55,7 +46,7 @@ export declare class SchemaEntry {
      * Whether or not values managed by this entry should be resolved.
      */
     shouldResolve: boolean;
-    constructor(parent: Schema | SchemaFolder, key: string, type: string, options?: SchemaEntryOptions);
+    constructor(parent: Schema, key: string, type: string, options?: SchemaEntryOptions);
     /**
      * Get the serializer that manages this instance.
      */
@@ -78,16 +69,9 @@ export declare class SchemaEntry {
      * The default value generator, called when type and array are given but not the default itself.
      */
     private _generateDefaultValue;
-    /**
-     * Check whether or not the value is a SchemaEntry.
-     * @since 0.6.0
-     * @param value The value to check.
-     */
-    static is(value: Schema | SchemaEntry): value is SchemaEntry;
 }
 export interface SchemaEntryOptions {
     array?: boolean;
-    configurable?: boolean;
     default?: unknown;
     filter?: SchemaEntryFilterFunction | null;
     inclusive?: boolean;

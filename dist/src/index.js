@@ -23,13 +23,10 @@ __exportStar(require("./lib/schedule/Schedule"), exports);
 __exportStar(require("./lib/schedule/ScheduledTask"), exports);
 // lib/settings
 __exportStar(require("./lib/settings/gateway/Gateway"), exports);
-__exportStar(require("./lib/settings/gateway/GatewayDriver"), exports);
-__exportStar(require("./lib/settings/gateway/GatewayStorage"), exports);
+__exportStar(require("./lib/settings/gateway/GatewayStore"), exports);
 __exportStar(require("./lib/settings/schema/Schema"), exports);
-__exportStar(require("./lib/settings/schema/SchemaFolder"), exports);
 __exportStar(require("./lib/settings/schema/SchemaEntry"), exports);
 __exportStar(require("./lib/settings/Settings"), exports);
-__exportStar(require("./lib/settings/SettingsFolder"), exports);
 // lib/structures
 __exportStar(require("./lib/structures/Argument"), exports);
 __exportStar(require("./lib/structures/ArgumentStore"), exports);

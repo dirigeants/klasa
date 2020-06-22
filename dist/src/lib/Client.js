@@ -19,7 +19,7 @@ const ProviderStore_1 = require("./structures/ProviderStore");
 const SerializerStore_1 = require("./structures/SerializerStore");
 const TaskStore_1 = require("./structures/TaskStore");
 // lib/settings
-const GatewayDriver_1 = require("./settings/gateway/GatewayDriver");
+const GatewayStore_1 = require("./settings/gateway/GatewayStore");
 const Gateway_1 = require("./settings/gateway/Gateway");
 // lib/settings/schema
 const Schema_1 = require("./settings/schema/Schema");
@@ -57,7 +57,7 @@ class KlasaClient extends core_1.Client {
         this.permissionLevels = this.options.permissionLevels(new PermissionLevels_1.PermissionLevels());
         // eslint-disable-next-line
         this.permissionLevels['validate']();
-        this.gateways = new GatewayDriver_1.GatewayDriver(this);
+        this.gateways = new GatewayStore_1.GatewayStore(this);
         const { guilds, users, clientStorage } = this.options.settings.gateways;
         const guildSchema = guilds.schema(new Schema_1.Schema());
         const userSchema = users.schema(new Schema_1.Schema());
@@ -71,7 +71,6 @@ class KlasaClient extends core_1.Client {
         if (!languageKey || languageKey.default === null) {
             guildSchema.add('language', 'language', { default: this.options.language });
         }
-        guildSchema.add('disableNaturalPrefix', 'boolean', { configurable: Boolean(this.options.commands.regexPrefix) });
         // Register default gateways
         this.gateways
             .register(new Gateway_1.Gateway(this, 'guilds', { ...guilds, schema: guildSchema }))
@@ -214,7 +213,6 @@ KlasaClient.defaultPermissionLevels = new PermissionLevels_1.PermissionLevels()
 KlasaClient.defaultGuildSchema = new Schema_1.Schema()
     .add('prefix', 'string')
     .add('language', 'language')
-    .add('disableNaturalPrefix', 'boolean')
     .add('disabledCommands', 'command', {
     array: true,
     filter: (_client, command, { language }) => {

@@ -159,7 +159,6 @@ export declare const KlasaClientDefaults: {
         messageLifetime: number;
         noPrefixDM: boolean;
         prefix: string | string[];
-        regexPrefix: RegExp;
         slowmode: number;
         slowmodeAggressive: boolean;
         typing: boolean;

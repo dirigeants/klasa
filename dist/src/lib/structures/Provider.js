@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Provider = void 0;
 const core_1 = require("@klasa/core");
-const utils_1 = require("@klasa/utils");
 class Provider extends core_1.Piece {
     /**
      * Shutdown method, this is called before the piece is unloaded.
@@ -14,7 +13,7 @@ class Provider extends core_1.Piece {
     /**
      * The addColumn method which inserts/creates a new table to the database.
      * @param table The table to check against
-     * @param entry The SchemaFolder or SchemaEntry added to the schema
+     * @param entry The SchemaEntry added to the schema
      */
     /* istanbul ignore next: Implemented in SQLProvider, always unused. */
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -62,10 +61,7 @@ class Provider extends core_1.Piece {
     parseUpdateInput(changes) {
         if (!Array.isArray(changes))
             return changes;
-        const updated = {};
-        for (const change of changes)
-            utils_1.mergeObjects(updated, utils_1.makeObject(change.entry.path, change.next));
-        return updated;
+        return Object.fromEntries(changes.map(change => [change.entry.key, change.next]));
     }
 }
 exports.Provider = Provider;

@@ -11,7 +11,7 @@ import { MonitorStore } from './structures/MonitorStore';
 import { ProviderStore } from './structures/ProviderStore';
 import { SerializerStore } from './structures/SerializerStore';
 import { TaskStore } from './structures/TaskStore';
-import { GatewayDriver } from './settings/gateway/GatewayDriver';
+import { GatewayStore } from './settings/gateway/GatewayStore';
 import { Schema } from './settings/schema/Schema';
 import { KlasaConsole, ConsoleOptions } from '@klasa/console';
 import type { CommandOptions } from './structures/Command';
@@ -99,11 +99,6 @@ export interface CommandHandlingOptions {
      * @default null
      */
     prefix?: string | string[] | null;
-    /**
-     * The regular expression prefix if one is provided
-     * @default null
-     */
-    regexPrefix?: RegExp | null;
     /**
      * Amount of time in ms before the bot will respond to a users command since the last command that user has run
      * @default 0
@@ -305,10 +300,10 @@ export declare class KlasaClient extends Client {
      */
     permissionLevels: PermissionLevels;
     /**
-     * The GatewayDriver instance where the gateways are stored
+     * The GatewayStore instance where the gateways are stored
      * @since 0.5.0
      */
-    gateways: GatewayDriver;
+    gateways: GatewayStore;
     /**
      * The Schedule that runs the tasks
      * @since 0.5.0
@@ -399,7 +394,7 @@ declare module '@klasa/core/dist/src/lib/client/Client' {
         tasks: TaskStore;
         serializers: SerializerStore;
         permissionLevels: PermissionLevels;
-        gateways: GatewayDriver;
+        gateways: GatewayStore;
         schedule: Schedule;
         ready: boolean;
         mentionPrefix: RegExp | null;

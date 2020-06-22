@@ -25,7 +25,7 @@ class SQLProvider extends Provider_1.Provider {
         const values = [];
         if (Array.isArray(changes)) {
             for (const change of changes) {
-                keys.push(change.entry.path);
+                keys.push(change.entry.key);
                 values.push(change.next);
             }
         }

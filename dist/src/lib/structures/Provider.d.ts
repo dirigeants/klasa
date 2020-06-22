@@ -1,7 +1,6 @@
 import { Piece } from '@klasa/core';
-import type { SettingsUpdateResults } from '../settings/SettingsFolder';
-import type { SchemaFolder } from '../settings/schema/SchemaFolder';
 import type { SchemaEntry } from '../settings/schema/SchemaEntry';
+import type { SettingsUpdateResults } from '../settings/Settings';
 export declare abstract class Provider extends Piece {
     /**
      * Inserts or creates a table in the database.
@@ -76,9 +75,9 @@ export declare abstract class Provider extends Piece {
     /**
      * The addColumn method which inserts/creates a new table to the database.
      * @param table The table to check against
-     * @param entry The SchemaFolder or SchemaEntry added to the schema
+     * @param entry The SchemaEntry added to the schema
      */
-    addColumn(_table: string, _entry: SchemaFolder | SchemaEntry): Promise<unknown>;
+    addColumn(_table: string, _entry: SchemaEntry): Promise<unknown>;
     /**
      * The removeColumn method which inserts/creates a new table to the database.
      * @since 0.5.0

@@ -1,8 +1,7 @@
 import { Provider } from './Provider';
-import type { SchemaFolder } from '../settings/schema/SchemaFolder';
 import type { SchemaEntry } from '../settings/schema/SchemaEntry';
-import type { SettingsUpdateResults } from '../settings/SettingsFolder';
 import type { QueryBuilder } from '../util/QueryBuilder';
+import type { SettingsUpdateResults } from '../settings/Settings';
 export declare abstract class SQLProvider extends Provider {
     /**
      * The QueryBuilder instance for this SQL provider
@@ -77,9 +76,9 @@ export declare abstract class SQLProvider extends Provider {
     /**
      * The addColumn method which inserts/creates a new table to the database.
      * @param table The table to check against
-     * @param entry The SchemaFolder or SchemaEntry added to the schema
+     * @param entry The SchemaEntry added to the schema
      */
-    abstract addColumn(table: string, entry: SchemaFolder | SchemaEntry): Promise<unknown>;
+    abstract addColumn(table: string, entry: SchemaEntry): Promise<unknown>;
     /**
      * The removeColumn method which inserts/creates a new table to the database.
      * @since 0.5.0

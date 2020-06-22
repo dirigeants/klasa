@@ -80,7 +80,7 @@ class QueryBuilder extends Map {
         const parsedDefault = this.serialize(schemaEntry.default, schemaEntry, datatype);
         const type = typeof datatype.type === 'function' ? datatype.type(schemaEntry) : datatype.type;
         const parsedDatatype = schemaEntry.array ? datatype.array(type) : type;
-        return datatype.formatDatatype(schemaEntry.path, parsedDatatype, parsedDefault);
+        return datatype.formatDatatype(schemaEntry.key, parsedDatatype, parsedDefault);
     }
     /**
      * Parses the value

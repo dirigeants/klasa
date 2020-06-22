@@ -139,11 +139,6 @@ export declare class KlasaMessage extends KlasaMessage_base {
     */
     private _mentionPrefix;
     /**
-    * Checks if the natural prefix is used
-    * @since 0.5.0
-    */
-    private _naturalPrefix;
-    /**
     * Checks if a prefixless scenario is possible
     * @since 0.5.0
     */

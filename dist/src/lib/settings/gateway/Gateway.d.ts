@@ -1,8 +1,23 @@
 import { RequestHandler, IdKeyed } from '@klasa/request-handler';
-import { GatewayStorage, GatewayStorageOptions } from './GatewayStorage';
 import { Settings } from '../Settings';
+import { Schema } from '../schema/Schema';
 import type { Client } from '@klasa/core';
-export declare class Gateway extends GatewayStorage {
+import type { Provider } from 'klasa';
+import type { SchemaEntryJson } from '../schema/SchemaEntry';
+export declare class Gateway {
+    #private;
+    /**
+     * The client this gateway was created with.
+     */
+    readonly client: Client;
+    /**
+     * The name of this gateway.
+     */
+    readonly name: string;
+    /**
+     * The schema for this gateway.
+     */
+    readonly schema: Schema;
     /**
      * The cached entries for this Gateway or the external datastore to get the settings from.
      * @since 0.6.0
@@ -13,7 +28,11 @@ export declare class Gateway extends GatewayStorage {
      * @since 0.6.0
      */
     readonly requestHandler: RequestHandler<string, IdKeyed<string>>;
-    constructor(client: Client, name: string, options?: GatewayStorageOptions);
+    /**
+     * Whether or not this gateway has been initialized.
+     */
+    ready: boolean;
+    constructor(client: Client, name: string, options?: GatewayOptions);
     /**
      * Gets an entry from the cache or creates one if it does not exist
      * @param target The target that holds a Settings instance of the holder for the new one
@@ -51,9 +70,31 @@ export declare class Gateway extends GatewayStorage {
      */
     create(target: IdKeyed<string>, id?: string): Settings;
     /**
+     * The provider that manages this gateway's persistent data.
+     */
+    get provider(): Provider | null;
+    /**
+     * Initializes the gateway.
+     */
+    init(): Promise<void>;
+    /**
      * Runs a synchronization task for the gateway.
      */
     sync(): Promise<this>;
+    /**
+     * Get A JSON object containing the schema and the options.
+     */
+    toJSON(): GatewayJson;
+    private _initializeSchemaEntries;
+}
+export interface GatewayOptions {
+    schema?: Schema;
+    provider?: string;
+}
+export interface GatewayJson {
+    name: string;
+    provider: string;
+    schema: Record<string, SchemaEntryJson>;
 }
 export interface ProxyMapEntry {
     settings: Settings;
