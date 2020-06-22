@@ -1,5 +1,5 @@
 {
     "inputFiles": ["./src"],
-    "mode": "modules",
+    "mode": "file",
     "json": "./docs.json"
 }
