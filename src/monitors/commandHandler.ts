@@ -59,18 +59,18 @@ export default class CommandHandler extends Monitor {
 
 					this.client.finalizers.run(message, command, response, timer);
 
-					if (token) token.commit();
+					token?.commit();
 					this.client.emit('commandSuccess', message, command, message.params, response);
 				} catch (error) {
-					if (token) token.revert();
+					token?.revert();
 					this.client.emit('commandError', message, command, message.params, error);
 				}
 			} catch (argumentError) {
-				if (token) token.revert();
+				token?.revert();
 				this.client.emit('argumentError', message, command, message.params, argumentError);
 			}
 		} catch (response) {
-			if (token) token.revert();
+			token?.revert();
 			this.client.emit('commandInhibited', message, message.command, response);
 		} finally {
 			if (this.client.options.commands.typing) message.channel.typing.stop();
