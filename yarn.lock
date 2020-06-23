@@ -232,8 +232,8 @@
 
 "@klasa/core@dirigeants/core#build":
   version "0.0.3"
-  uid "6badd298d654c7607b41722def06c57bc80c3253"
-  resolved "https://codeload.github.com/dirigeants/core/tar.gz/6badd298d654c7607b41722def06c57bc80c3253"
+  uid ac7dd7cd64720804aa9bb0b46079c080d978e813
+  resolved "https://codeload.github.com/dirigeants/core/tar.gz/ac7dd7cd64720804aa9bb0b46079c080d978e813"
   dependencies:
     "@klasa/bitfield" "^0.0.3"
     "@klasa/cache" "^0.0.3"
