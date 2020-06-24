@@ -18,7 +18,7 @@ export default class CoreAction extends Action {
 	}
 
 	public build(data: GuildCreateDispatch): Guild {
-		// eslint-disable-next-line @typescript-eslint/naming-convention
+		// eslint-disable-next-line camelcase
 		return new (extender.get('Guild'))(this.client, data.d, data.shard_id);
 	}
 
