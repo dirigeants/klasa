@@ -11,7 +11,7 @@ export default class CoreSerializer extends Serializer {
 	public async validate(data: string | Piece, { entry, language }: SerializerUpdateContext): Promise<Piece> {
 		const store = this.client[`${entry.type}s` as 'languages' | 'commands'];
 		const parsed = typeof data === 'string' ? store.get(data) : data;
-		if (parsed && parsed instanceof store.holds) return parsed;
+		if (parsed && parsed instanceof store.Holds) return parsed;
 		throw language.get('RESOLVER_INVALID_PIECE', entry.key, entry.type);
 	}
 
