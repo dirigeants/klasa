@@ -24,7 +24,7 @@ ava('ProviderStore Properties', (test): void => {
 	// Test the store's properties
 	test.true(providers instanceof ProviderStore);
 	test.is(providers.client, test.context.client);
-	test.is(providers.holds, Provider);
+	test.is(providers.Holds, Provider);
 	test.is(providers.name, 'providers');
 
 	// Mock provider from tests
