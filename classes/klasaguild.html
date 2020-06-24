@@ -177,6 +177,7 @@
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="klasaguild.html#fetchpreview" class="tsd-kind-icon">fetch<wbr>Preview</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="klasaguild.html#fetchregions" class="tsd-kind-icon">fetch<wbr>Regions</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="klasaguild.html#fetchvanityurl" class="tsd-kind-icon">fetch<wbr>VanityURL</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="klasaguild.html#iconurl" class="tsd-kind-icon">iconURL</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="klasaguild.html#leave" class="tsd-kind-icon">leave</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="klasaguild.html#modify" class="tsd-kind-icon">modify</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="klasaguild.html#prune" class="tsd-kind-icon">prune</a></li>
@@ -201,7 +202,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides Guild.__constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/e6c4caba/src/lib/extensions/KlasaGuild.ts#L17">src/lib/extensions/KlasaGuild.ts:17</a></li>
+									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/dcc73106/src/lib/extensions/KlasaGuild.ts#L17">src/lib/extensions/KlasaGuild.ts:17</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1044,7 +1045,7 @@
 					<aside class="tsd-sources">
 						<p>Overrides <a href="../interfaces/_caching_structures_guilds_guild_.guild.html">Guild</a>.<a href="../interfaces/_caching_structures_guilds_guild_.guild.html#settings">settings</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/e6c4caba/src/lib/extensions/KlasaGuild.ts#L17">src/lib/extensions/KlasaGuild.ts:17</a></li>
+							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/dcc73106/src/lib/extensions/KlasaGuild.ts#L17">src/lib/extensions/KlasaGuild.ts:17</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -1343,7 +1344,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="../interfaces/_caching_structures_guilds_guild_.guild.html">Guild</a>.<a href="../interfaces/_caching_structures_guilds_guild_.guild.html#language">language</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/e6c4caba/src/lib/extensions/KlasaGuild.ts#L28">src/lib/extensions/KlasaGuild.ts:28</a></li>
+									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/dcc73106/src/lib/extensions/KlasaGuild.ts#L28">src/lib/extensions/KlasaGuild.ts:28</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1426,7 +1427,7 @@
 								<p>Inherited from <a href="klasaguild.html">KlasaGuild</a>.<a href="klasaguild.html#_patch">_patch</a></p>
 								<p>Overrides Structure._patch</p>
 								<ul>
-									<li>Defined in node_modules/@klasa/core/dist/src/lib/caching/structures/guilds/Guild.d.ts:354</li>
+									<li>Defined in node_modules/@klasa/core/dist/src/lib/caching/structures/guilds/Guild.d.ts:359</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -1592,6 +1593,38 @@
 								</dl>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">GuildVanityURL</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+					<a name="iconurl" class="tsd-anchor"></a>
+					<h3>iconURL</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon">iconURL<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ImageURLOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="klasaguild.html">KlasaGuild</a>.<a href="klasaguild.html#iconurl">iconURL</a></p>
+								<ul>
+									<li>Defined in node_modules/@klasa/core/dist/src/lib/caching/structures/guilds/Guild.d.ts:353</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns the icon url for the guild if one is available.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-type">ImageURLOptions</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The image size and format options.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -1778,7 +1811,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="klasamessage.html">KlasaMessage</a>.<a href="klasamessage.html#tojson">toJSON</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/e6c4caba/src/lib/extensions/KlasaGuild.ts#L36">src/lib/extensions/KlasaGuild.ts:36</a></li>
+									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/dcc73106/src/lib/extensions/KlasaGuild.ts#L36">src/lib/extensions/KlasaGuild.ts:36</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1806,7 +1839,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="klasaguild.html">KlasaGuild</a>.<a href="klasaguild.html#tostring">toString</a></p>
 								<ul>
-									<li>Defined in node_modules/@klasa/core/dist/src/lib/caching/structures/guilds/Guild.d.ts:353</li>
+									<li>Defined in node_modules/@klasa/core/dist/src/lib/caching/structures/guilds/Guild.d.ts:358</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2045,6 +2078,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 								<a href="klasaguild.html#fetchvanityurl" class="tsd-kind-icon">fetch<wbr>VanityURL</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
+								<a href="klasaguild.html#iconurl" class="tsd-kind-icon">iconURL</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 								<a href="klasaguild.html#leave" class="tsd-kind-icon">leave</a>
