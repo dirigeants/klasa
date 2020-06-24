@@ -237,7 +237,7 @@
 
 "@klasa/core@dirigeants/core#build":
   version "0.0.3"
-  resolved "https://codeload.github.com/dirigeants/core/tar.gz/b53e68b599285ddee783db24f904ee435f34494f"
+  resolved "https://codeload.github.com/dirigeants/core/tar.gz/dcdcd6894a0f7c0435a8c77158843613d9c9686f"
   dependencies:
     "@klasa/bitfield" "^0.0.4"
     "@klasa/cache" "^0.0.3"
