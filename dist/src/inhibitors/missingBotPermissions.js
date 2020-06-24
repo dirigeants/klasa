@@ -9,11 +9,6 @@ class default_1 extends klasa_1.Inhibitor {
         this.impliedPermissions = new core_1.Permissions(515136).freeze();
         // VIEW_CHANNEL, SEND_MESSAGES, SEND_TTS_MESSAGES, EMBED_LINKS, ATTACH_FILES,
         // READ_MESSAGE_HISTORY, MENTION_EVERYONE, USE_EXTERNAL_EMOJIS, ADD_REACTIONS
-        // These are permissions that can be set in a channel permission overwrite but is meaningless in the context
-        // So we add the ones we had back after calculating the permissions in the channel (after overwrites)
-        this.guildScopePermissions = new core_1.Permissions(1275592878).freeze();
-        // KICK_MEMBERS, BAN_MEMBERS, ADMINISTRATOR, MANAGE_GUILD, VIEW_AUDIT_LOG,
-        // VIEW_GUILD_INSIGHTS, CHANGE_NICKNAME, MANAGE_NICKNAMES, MANAGE_EMOJIS
         this.friendlyPerms = Object.keys(core_1.Permissions.FLAGS).reduce((obj, key) => {
             Reflect.set(obj, key, utils_1.toTitleCase(key.split('_').join(' ')));
             return obj;
@@ -21,16 +16,10 @@ class default_1 extends klasa_1.Inhibitor {
     }
     run(message, command) {
         var _a;
-        let missing;
-        if (core_1.isGuildTextBasedChannel(message.channel)) {
+        const missing = core_1.isGuildTextBasedChannel(message.channel) ?
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            const guildPerms = message.guild.me.permissions.mask(this.guildScopePermissions);
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            missing = ((_a = message.guild.me.permissionsIn(message.channel).add(guildPerms).missing(command.requiredPermissions)) !== null && _a !== void 0 ? _a : []);
-        }
-        else {
-            missing = this.impliedPermissions.missing(command.requiredPermissions);
-        }
+            ((_a = message.guild.me.permissionsIn(message.channel).missing(command.requiredPermissions)) !== null && _a !== void 0 ? _a : []) :
+            this.impliedPermissions.missing(command.requiredPermissions);
         if (missing.length)
             throw message.language.get('INHIBITOR_MISSING_BOT_PERMS', missing.map(key => this.friendlyPerms[key]).join(', '));
     }
