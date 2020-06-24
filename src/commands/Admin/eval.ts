@@ -36,11 +36,11 @@ export default class extends Command {
 					.addFile({ file: Buffer.from(result), name: 'output.txt' }));
 			}
 			this.client.emit('log', result);
-			return message.sendLocale('COMMAND_EVAL_SENDCONSOLE', [time, footer]);
+			return message.replyLocale('COMMAND_EVAL_SENDCONSOLE', [time, footer]);
 		}
 
 		// If it's a message that can be sent correctly, send it
-		return message.send(mb => mb.setContent(output));
+		return message.reply(mb => mb.setContent(output));
 	}
 
 	// Eval the input

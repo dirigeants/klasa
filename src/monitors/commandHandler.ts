@@ -2,6 +2,7 @@ import { Command, Monitor, MonitorStore } from 'klasa';
 import { Stopwatch } from '@klasa/stopwatch';
 
 import type { Message } from '@klasa/core';
+import type { RateLimitToken } from '@klasa/ratelimits';
 
 export default class CommandHandler extends Monitor {
 
@@ -16,7 +17,7 @@ export default class CommandHandler extends Monitor {
 		if (!message.channel.postable) return undefined;
 		if (!message.commandText && message.prefix === this.client.mentionPrefix) {
 			const prefix = message.guildSettings.get('prefix') as string | string[];
-			return message.sendLocale('PREFIX_REMINDER', [prefix.length ? prefix : undefined]);
+			return message.replyLocale('PREFIX_REMINDER', [prefix.length ? prefix : undefined]);
 		}
 		if (!message.commandText) return undefined;
 		if (!message.command) {
@@ -31,8 +32,16 @@ export default class CommandHandler extends Monitor {
 	private async runCommand(message: Message): Promise<void> {
 		const timer = new Stopwatch();
 		if (this.client.options.commands.typing) message.channel.typing.start();
+		let token: RateLimitToken | null = null;
 		try {
 			const command = message.command as Command;
+
+			if (!this.client.owners.has(message.author) && command.cooldowns.time) {
+				const ratelimit = command.cooldowns.acquire(message.guild ? Reflect.get(message, command.cooldownLevel).id : message.author.id);
+				if (ratelimit.limited) throw message.language.get('INHIBITOR_COOLDOWN', Math.ceil(ratelimit.remainingTime / 1000), command.cooldownLevel !== 'author');
+				token = ratelimit.take();
+			}
+
 			await this.client.inhibitors.run(message, command);
 			try {
 				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -49,14 +58,19 @@ export default class CommandHandler extends Monitor {
 					const response = await result;
 
 					this.client.finalizers.run(message, command, response, timer);
+
+					if (token) token.commit();
 					this.client.emit('commandSuccess', message, command, message.params, response);
 				} catch (error) {
+					if (token) token.revert();
 					this.client.emit('commandError', message, command, message.params, error);
 				}
 			} catch (argumentError) {
+				if (token) token.revert();
 				this.client.emit('argumentError', message, command, message.params, argumentError);
 			}
 		} catch (response) {
+			if (token) token.revert();
 			this.client.emit('commandInhibited', message, message.command, response);
 		} finally {
 			if (this.client.options.commands.typing) message.channel.typing.stop();

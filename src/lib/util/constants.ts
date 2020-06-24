@@ -18,7 +18,6 @@ export const KlasaClientDefaults = mergeDefault(ClientOptionsDefaults, {
 		messageLifetime: 1800,
 		noPrefixDM: false,
 		prefix: null,
-		regexPrefix: null,
 		slowmode: 0,
 		slowmodeAggressive: false,
 		typing: false,
@@ -101,8 +100,6 @@ export const KlasaClientDefaults = mergeDefault(ClientOptionsDefaults, {
 				ignoreOthers: true,
 				ignoreWebhooks: true,
 				ignoreEdits: true,
-				ignoreBlacklistedUsers: true,
-				ignoreBlacklistedGuilds: true,
 				allowedTypes: [MessageType.Default]
 			},
 			providers: { enabled: true },
@@ -112,7 +109,6 @@ export const KlasaClientDefaults = mergeDefault(ClientOptionsDefaults, {
 			},
 			tasks: { enabled: true }
 		},
-		disabledStores: [],
 		createFolders: true
 	},
 	schedule: { interval: 60000 },

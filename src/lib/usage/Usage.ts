@@ -133,8 +133,9 @@ export class Usage {
 			fromTo: ''
 		};
 
-		for (const [i, char] of Object.entries(usageString)) {
-			usage.char = Number(i) + 1;
+		for (let i = 0; i < usageString.length; i++) {
+			const char = usageString[i];
+			usage.char = i + 1;
 			usage.from = usage.char - usage.current.length;
 			usage.at = `at char #${usage.char} '${char}'`;
 			usage.fromTo = `from char #${usage.from} to #${usage.char} '${usage.current}'`;

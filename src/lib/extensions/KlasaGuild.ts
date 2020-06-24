@@ -40,3 +40,12 @@ export class KlasaGuild extends extender.get('Guild') {
 }
 
 extender.extend('Guild', () => KlasaGuild);
+
+declare module '@klasa/core/dist/src/lib/caching/structures/guilds/Guild' {
+
+	export interface Guild {
+		settings: Settings;
+		language: Language;
+	}
+
+}

@@ -41,6 +41,7 @@ jobs:
         TARGET_BRANCH="build"
         git clone $REPO out -b $TARGET_BRANCH
         yarn build
+        rm -rfv out/dist/*
         echo -e "\n# Move the generated docs to the newly-checked-out repo, to be committed and pushed"
         mv package.json out/package.json
         mv LICENSE out/LICENSE

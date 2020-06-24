@@ -10,7 +10,7 @@ export default class extends Inhibitor {
 
 	constructor(store: InhibitorStore, directory: string, files: readonly string[]) {
 		super(store, directory, files, { spamProtection: true });
-		this.slowmode = new RateLimitManager(1, this.client.options.commands.slowmode);
+		this.slowmode = new RateLimitManager(this.client.options.commands.slowmode);
 		this.aggressive = this.client.options.commands.slowmodeAggressive;
 
 		if (!this.client.options.commands.slowmode) this.disable();
@@ -22,7 +22,7 @@ export default class extends Inhibitor {
 		const rateLimit = this.slowmode.acquire(message.author.id);
 
 		try {
-			rateLimit.drip();
+			rateLimit.consume();
 		} catch (err) {
 			if (this.aggressive) rateLimit.resetTime();
 			throw true;

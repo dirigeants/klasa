@@ -3,7 +3,7 @@ import { Guild } from '@klasa/core';
 
 export default class CoreSerializer extends Serializer {
 
-	public deserialize(data: string | Guild, { language, entry }: SerializerUpdateContext): Guild {
+	public async validate(data: string | Guild, { entry, language }: SerializerUpdateContext): Promise<Guild> {
 		if (data instanceof Guild) return data;
 		const guild = Serializer.regex.snowflake.test(data) ? this.client.guilds.get(data) : null;
 		if (guild) return guild;

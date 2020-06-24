@@ -1,12 +1,15 @@
 import { AliasPiece, AliasPieceOptions, Permissions, PermissionsResolvable, Message } from '@klasa/core';
 import { isFunction } from '@klasa/utils';
-import { ChannelType } from '@klasa/dapi-types';
+import { RateLimitManager } from '@klasa/ratelimits';
 import { Usage } from '../usage/Usage';
 import { CommandUsage } from '../usage/CommandUsage';
 
 import type { CommandStore } from './CommandStore';
 import type { Language, LanguageValue } from './Language';
 import type { Possible } from '../usage/Possible';
+import type { ChannelType } from '@klasa/dapi-types';
+
+export type CooldownLevel = 'author' | 'channel' | 'guild';
 
 /**
  * Base class for all Klasa Commands. See {@tutorial CreatingCommands} for more information how to use this class
@@ -122,19 +125,13 @@ export abstract class Command extends AliasPiece {
 	 * The level at which cooldowns should apply
 	 * @since 0.5.0
 	 */
-	public cooldownLevel: string;
+	public cooldownLevel: CooldownLevel;
 
 	/**
-	 * The number of times this command can be run before ratelimited by the cooldown
-	 * @since 0.5.0
+	 * The cooldowns for this command
+	 * @since 0.6.0
 	 */
-	public bucket: number;
-
-	/**
-	 * The amount of time before the users can run the command again in seconds based on cooldownLevel
-	 * @since 0.5.0
-	 */
-	public cooldown: number;
+	public cooldowns: RateLimitManager;
 
 	/**
 	 * @since 0.0.1
@@ -179,10 +176,9 @@ export abstract class Command extends AliasPiece {
 		this.runIn = options.runIn as ChannelType[];
 		this.subcommands = options.subcommands as boolean;
 		this.usage = new CommandUsage(this.client, options.usage as string, options.usageDelim as string, this);
-		this.cooldownLevel = options.cooldownLevel as string;
+		this.cooldownLevel = options.cooldownLevel as CooldownLevel;
 		if (!['author', 'channel', 'guild'].includes(this.cooldownLevel)) throw new Error('Invalid cooldownLevel');
-		this.bucket = options.bucket as number;
-		this.cooldown = options.cooldown as number;
+		this.cooldowns = new RateLimitManager(options.cooldown as number, options.bucket as number);
 	}
 
 	/**
@@ -201,24 +197,6 @@ export abstract class Command extends AliasPiece {
 	 */
 	get subCategory(): string {
 		return this.fullCategory[1] || 'General';
-	}
-
-	/**
-	 * The usage deliminator for the command input
-	 * @since 0.0.1
-	 * @readonly
-	 */
-	get usageDelim(): string {
-		return this.usage.usageDelim;
-	}
-
-	/**
-	 * The usage string for the command
-	 * @since 0.0.1
-	 * @readonly
-	 */
-	get usageString(): string {
-		return this.usage.usageString;
 	}
 
 	/**
@@ -270,9 +248,7 @@ export abstract class Command extends AliasPiece {
 		return {
 			...super.toJSON(),
 			requiredPermissions: this.requiredPermissions.toArray(),
-			bucket: this.bucket,
 			category: this.category,
-			cooldown: this.cooldown,
 			deletable: this.deletable,
 			description: isFunction(this.description) ? this.description(this.client.languages.default) : this.description,
 			extendedHelp: isFunction(this.extendedHelp) ? this.extendedHelp(this.client.languages.default) : this.extendedHelp,
@@ -292,9 +268,7 @@ export abstract class Command extends AliasPiece {
 				usageString: this.usage.usageString,
 				usageDelim: this.usage.usageDelim,
 				nearlyFullUsage: this.usage.nearlyFullUsage
-			},
-			usageDelim: this.usageDelim,
-			usageString: this.usageString
+			}
 		};
 	}
 
@@ -315,7 +289,7 @@ export interface CommandOptions extends AliasPieceOptions {
 	autoAliases?: boolean;
 	bucket?: number;
 	cooldown?: number;
-	cooldownLevel?: string;
+	cooldownLevel?: CooldownLevel;
 	deletable?: boolean;
 	description?: ((language: Language) => LanguageValue) | string;
 	extendedHelp?: ((language: Language) => LanguageValue) | string;

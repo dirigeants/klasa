@@ -9,7 +9,7 @@ export default class CoreSerializer extends Serializer {
 		super(store, directory, file, { aliases: ['bool'] });
 	}
 
-	public deserialize(data: unknown, { language, entry }: SerializerUpdateContext): boolean {
+	public async validate(data: unknown, { entry, language }: SerializerUpdateContext): Promise<boolean> {
 		const boolean = String(data).toLowerCase();
 		if (truths.includes(boolean)) return true;
 		if (falses.includes(boolean)) return false;

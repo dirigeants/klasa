@@ -12,7 +12,7 @@ export default class extends Command {
 	}
 
 	public async run(message: Message): Promise<Message[]> {
-		return message.sendLocale('COMMAND_INVITE');
+		return message.replyLocale('COMMAND_INVITE');
 	}
 
 	public async init(): Promise<void> {

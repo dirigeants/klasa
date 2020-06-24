@@ -1,11 +1,11 @@
 /* eslint-disable no-dupe-class-members */
 import { mergeDefault } from '@klasa/utils';
 import { Cache } from '@klasa/cache';
-import { CommandUsage } from './CommandUsage';
 import { Tag, TagRequirement } from './Tag';
 
 import type { TextBasedChannel, MessageOptions, MessageBuilder, Client, User, Message } from '@klasa/core';
 import type { Usage } from './Usage';
+import type { CommandUsage } from './CommandUsage';
 
 const quotes = ['"', "'", '“”', '‘’'];
 
@@ -137,12 +137,6 @@ export class TextPrompt {
 	protected typing: boolean;
 
 	/**
-	 * A cache of the users responses
-	 * @since 0.5.0
-	 */
-	public responses = new Cache<string, Message>();
-
-	/**
 	 * Whether the current usage is a repeating arg
 	 * @since 0.0.1
 	 */
@@ -198,7 +192,6 @@ export class TextPrompt {
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-expect-error
 		const message = await this.prompt(prompt);
-		this.responses.set(message.id, message);
 		this._setup(message.content);
 		return this.validateArgs();
 	}
@@ -237,8 +230,6 @@ export class TextPrompt {
 			throw this.message.language.get('MONITOR_COMMAND_HANDLER_ABORTED');
 		}
 
-		this.responses.set(message.id, message);
-
 		if (this.typing) this.message.channel.typing.start();
 		this.args[this.args.lastIndexOf(null)] = message.content;
 		this.reprompted = true;
@@ -260,7 +251,6 @@ export class TextPrompt {
 				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 				.setContent(this.message.language.get('MONITOR_COMMAND_HANDLER_REPEATING_REPROMPT', `<@!${this.message.author.id}>`, this.#currentUsage!.possibles[0].name, this.time / 1000, abortTerm))
 			);
-			this.responses.set(message.id, message);
 		} catch (err) {
 			return this.validateArgs();
 		}
@@ -286,7 +276,7 @@ export class TextPrompt {
 			this.#currentUsage = this.usage.parsedUsage[this.params.length];
 			this.#required = this.#currentUsage.required;
 		} else if (this.#currentUsage?.repeat) {
-			this.#required = 0;
+			this.#required = TagRequirement.Optional;
 			this.#repeat = true;
 		} else {
 			return this.finalize();
@@ -312,13 +302,13 @@ export class TextPrompt {
 		if (!resolver) {
 			this.client.emit('warn', `Unknown Argument Type encountered: ${possible.type}`);
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-			if (this.#currentUsage!.possibles.length === 1) return this.pushParam(undefined);
+			if (this.#currentUsage!.possibles.length === (index + 1)) return this.pushParam(undefined);
 			return this.multiPossibles(++index);
 		}
 
 		try {
 			const res = await resolver.run(this.args[this.params.length] as string, possible, this.message, custom);
-			if (typeof res === 'undefined' && this.#required === 1) this.args.splice(this.params.length, 0, undefined);
+			if (typeof res === 'undefined' && this.#required === TagRequirement.SemiRequired) this.args.splice(this.params.length, 0, undefined);
 			return this.pushParam(res);
 		} catch (err) {
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -333,7 +323,7 @@ export class TextPrompt {
 			const { response } = this.#currentUsage!;
 			const error = typeof response === 'function' ? response(this.message, possible) : response;
 
-			if (this.#required === 1) return this.handleError(error || err);
+			if (this.#required === TagRequirement.SemiRequired) return this.handleError(error || err);
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			if (this.#currentUsage!.possibles.length === 1) {
 				return this.handleError(error || (this.args[this.params.length] === undefined ? this.message.language.get('COMMANDMESSAGE_MISSING_REQUIRED', possible.name) : err));

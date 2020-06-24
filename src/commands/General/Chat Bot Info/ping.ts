@@ -12,8 +12,8 @@ export default class extends Command {
 	}
 
 	async run(message: Message): Promise<Message[]> {
-		const [msg] = await message.sendLocale('COMMAND_PING');
-		return message.sendLocale('COMMAND_PINGPONG', [(msg.editedTimestamp || msg.createdTimestamp) - (message.editedTimestamp || message.createdTimestamp), Math.round(this.client.ws.ping)]);
+		const [msg] = await message.replyLocale('COMMAND_PING');
+		return message.replyLocale('COMMAND_PINGPONG', [(msg.editedTimestamp || msg.createdTimestamp) - (message.editedTimestamp || message.createdTimestamp), Math.round(this.client.ws.ping)]);
 	}
 
 }

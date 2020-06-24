@@ -9,7 +9,9 @@ import {
 	ClientUser,
 	Store,
 	Piece,
-	PermissionsFlags
+	PermissionsFlags,
+	PieceOptions,
+	AliasPieceOptions
 } from '@klasa/core';
 import { isObject, mergeDefault } from '@klasa/utils';
 import { join } from 'path';
@@ -34,7 +36,7 @@ import { SerializerStore } from './structures/SerializerStore';
 import { TaskStore } from './structures/TaskStore';
 
 // lib/settings
-import { GatewayDriver } from './settings/gateway/GatewayDriver';
+import { GatewayStore } from './settings/gateway/GatewayStore';
 import { Gateway } from './settings/gateway/Gateway';
 
 // lib/settings/schema
@@ -42,11 +44,14 @@ import { Schema } from './settings/schema/Schema';
 
 // lib/util
 import { KlasaConsole, ConsoleOptions } from '@klasa/console';
-import { KlasaClientDefaults, MENTION_REGEX } from './util/constants';
+import { KlasaClientDefaults } from './util/constants';
 
-import type { Command } from './structures/Command';
+import type { Command, CommandOptions } from './structures/Command';
 import type { SchemaEntry } from './settings/schema/SchemaEntry';
 import type { Settings } from './settings/Settings';
+import type { ExtendableOptions } from './structures/Extendable';
+import type { InhibitorOptions } from './structures/Inhibitor';
+import type { MonitorOptions } from './structures/Monitor';
 
 export interface KlasaClientOptions extends ClientOptions {
 	/**
@@ -143,12 +148,6 @@ export interface CommandHandlingOptions {
 	 * @default null
 	 */
 	prefix?: string | string[] | null;
-
-	/**
-	 * The regular expression prefix if one is provided
-	 * @default null
-	 */
-	regexPrefix?: RegExp | null;
 
 	/**
 	 * Amount of time in ms before the bot will respond to a users command since the last command that user has run
@@ -378,11 +377,10 @@ export class KlasaClient extends Client {
 	public permissionLevels: PermissionLevels;
 
 	/**
-	 * The GatewayDriver instance where the gateways are stored
+	 * The GatewayStore instance where the gateways are stored
 	 * @since 0.5.0
 	 */
-	public gateways: GatewayDriver;
-
+	public gateways: GatewayStore;
 
 	/**
 	 * The Schedule that runs the tasks
@@ -444,7 +442,7 @@ export class KlasaClient extends Client {
 		// eslint-disable-next-line
 		this.permissionLevels['validate']();
 
-		this.gateways = new GatewayDriver(this);
+		this.gateways = new GatewayStore(this);
 
 		const { guilds, users, clientStorage } = this.options.settings.gateways;
 		const guildSchema = guilds.schema(new Schema());
@@ -461,8 +459,6 @@ export class KlasaClient extends Client {
 		if (!languageKey || (languageKey as SchemaEntry).default === null) {
 			guildSchema.add('language', 'language', { default: this.options.language });
 		}
-
-		guildSchema.add('disableNaturalPrefix', 'boolean', { configurable: Boolean(this.options.commands.regexPrefix) });
 
 		// Register default gateways
 		this.gateways
@@ -490,15 +486,17 @@ export class KlasaClient extends Client {
 		this.schedule = new Schedule(this);
 		this.mentionPrefix = null;
 		this.owners = new Set();
+
+		if (this.constructor === KlasaClient) this.loadPlugins();
 	}
 
 	/**
 	 * The invite link for the bot
 	 * @since 0.0.1
 	 */
-	public get invite(): string {
+	public get invite(): string | null {
 		const { application } = this;
-		if (!application) throw new Error(`${this.constructor.name}#invite is not available until ready.`);
+		if (!application) return null;
 		const permissions = new Permissions((this.constructor as typeof KlasaClient).basePermissions).add(...this.commands.map(command => command.requiredPermissions)).bitfield;
 		return `https://discordapp.com/oauth2/authorize?client_id=${application.id}&permissions=${permissions}&scope=bot`;
 	}
@@ -530,17 +528,18 @@ export class KlasaClient extends Client {
 			await this.destroy();
 			throw err;
 		}
-		await Promise.all(lateLoadingStores.map(store => store.init()));
 
 		const clientUser = this.user as ClientUser;
 		this.mentionPrefix = new RegExp(`^<@!?${clientUser.id}>`);
 
 		const clientStorage = this.gateways.get('clientStorage') as Gateway;
 		this.settings = clientStorage.acquire(clientUser);
-		this.settings.sync();
+		await this.settings.sync();
 
 		// Init the schedule
 		await this.schedule.init();
+
+		await Promise.all(lateLoadingStores.map(store => store.init()));
 
 		if (this.options.readyMessage !== null) {
 			this.emit('log', typeof this.options.readyMessage === 'function' ? this.options.readyMessage(this) : this.options.readyMessage);
@@ -616,7 +615,6 @@ export class KlasaClient extends Client {
 	public static defaultGuildSchema = new Schema()
 		.add('prefix', 'string')
 		.add('language', 'language')
-		.add('disableNaturalPrefix', 'boolean')
 		.add('disabledCommands', 'command', {
 			array: true,
 			filter: (_client, command: Command, { language }) => {
@@ -635,11 +633,65 @@ export class KlasaClient extends Client {
 	 * @since 0.5.0
 	 */
 	public static defaultClientSchema = new Schema()
-		.add('userBlacklist', 'user', { array: true })
-		.add('guildBlacklist', 'string', { array: true, filter: (_client, value: string) => !MENTION_REGEX.snowflake.test(value) })
 		.add('schedules', 'any', { array: true });
 
 }
+
+declare module '@klasa/core/dist/src/lib/client/Client' {
+
+	export interface Client {
+		console: KlasaConsole;
+		arguments: ArgumentStore;
+		commands: CommandStore;
+		inhibitors: InhibitorStore;
+		finalizers: FinalizerStore;
+		monitors: MonitorStore;
+		languages: LanguageStore;
+		providers: ProviderStore;
+		extendables: ExtendableStore;
+		tasks: TaskStore;
+		serializers: SerializerStore;
+		permissionLevels: PermissionLevels;
+		gateways: GatewayStore;
+		schedule: Schedule;
+		ready: boolean;
+		mentionPrefix: RegExp | null;
+		settings: Settings | null;
+		application: Application | null;
+		readonly invite: string | null;
+		readonly owners: Set<User>;
+		fetchApplication(): Promise<Application>;
+	}
+
+	export interface ClientOptions {
+		commands?: Partial<CommandHandlingOptions>;
+		console?: Partial<ConsoleOptions>;
+		consoleEvents?: Partial<ConsoleEvents>;
+		language?: string;
+		owners?: string[];
+		permissionLevels?: (permissionLevels: PermissionLevels) => PermissionLevels;
+		production?: boolean;
+		readyMessage?: string | ((client: Client) => string);
+		providers?: Partial<ProviderClientOptions>;
+		settings?: Partial<SettingsOptions>;
+		schedule?: Partial<ScheduleOptions>;
+	}
+
+	export interface PieceDefaults {
+		commands?: Partial<CommandOptions>;
+		extendables?: Partial<ExtendableOptions>;
+		finalizers?: Partial<PieceOptions>;
+		inhibitors?: Partial<InhibitorOptions>;
+		languages?: Partial<PieceOptions>;
+		monitors?: Partial<MonitorOptions>;
+		providers?: Partial<PieceOptions>;
+		arguments?: Partial<AliasPieceOptions>;
+		serializers?: Partial<AliasPieceOptions>;
+		tasks?: Partial<PieceOptions>;
+	}
+
+}
+
 
 /**
  * Emitted when Klasa is fully ready and initialized.

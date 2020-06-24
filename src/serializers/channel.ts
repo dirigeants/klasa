@@ -8,7 +8,7 @@ export default class CoreSerializer extends Serializer {
 		super(store, directory, file, { aliases: ['textchannel', 'voicechannel', 'categorychannel', 'storechannel', 'newschannel'] });
 	}
 
-	public deserialize(data: string | Channels, { language, entry, guild }: SerializerUpdateContext): Channels {
+	public async validate(data: string | Channels, { entry, language, guild }: SerializerUpdateContext): Promise<Channels> {
 		if (data instanceof Channel) return this.checkChannel(data, entry, language);
 
 		const parsed = Serializer.regex.channel.exec(data);

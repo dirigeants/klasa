@@ -32,3 +32,11 @@ export class KlasaUser extends extender.get('User') {
 }
 
 extender.extend('User', () => KlasaUser);
+
+declare module '@klasa/core/dist/src/lib/caching/structures/User' {
+
+	export interface User {
+		settings: Settings;
+	}
+
+}

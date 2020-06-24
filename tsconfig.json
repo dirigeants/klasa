@@ -12,6 +12,7 @@
     "declaration": true,
     "noUnusedLocals": true,
     "removeComments": false,
+    "importsNotUsedAsValues": "error",
     "target": "ES2019",
     "incremental": true,
     "resolveJsonModule": true,

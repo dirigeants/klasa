@@ -28,7 +28,7 @@ export default class extends Command {
 		try {
 			if (!piece) throw message.language.get('COMMAND_LOAD_FAIL');
 			await piece.init();
-			return message.sendLocale('COMMAND_LOAD', [timer.stop(), store.name, piece.name]);
+			return message.replyLocale('COMMAND_LOAD', [timer.stop(), store.name, piece.name]);
 		} catch (error) {
 			timer.stop();
 			throw message.language.get('COMMAND_LOAD_ERROR', store.name, piece ? piece.name : path.join('/'), error);
