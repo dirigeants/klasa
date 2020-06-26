@@ -237,7 +237,8 @@
 
 "@klasa/core@dirigeants/core#build":
   version "0.0.3"
-  resolved "https://codeload.github.com/dirigeants/core/tar.gz/dcdcd6894a0f7c0435a8c77158843613d9c9686f"
+  uid "108318bfbbda2ed621673b94ebc5217cfc9625dd"
+  resolved "https://codeload.github.com/dirigeants/core/tar.gz/108318bfbbda2ed621673b94ebc5217cfc9625dd"
   dependencies:
     "@klasa/bitfield" "^0.0.4"
     "@klasa/cache" "^0.0.3"
@@ -247,7 +248,7 @@
     "@klasa/snowflake" "^0.0.1"
     "@klasa/timer-manager" "^0.0.1"
     "@klasa/utils" "^0.0.8"
-    "@klasa/ws" "^0.0.13"
+    "@klasa/ws" "^0.0.14"
     "@types/node" "^14.0.14"
     "@types/node-fetch" "^2.5.7"
     fs-nextra "^0.5.1"
@@ -328,10 +329,10 @@
   resolved "https://registry.yarnpkg.com/@klasa/utils/-/utils-0.0.8.tgz#8b017d8f7a771e5c1894b85f8dafefc219fc9d76"
   integrity sha512-6G/P9/HM8fTanKUFPrODFmmD3ff8Jwr7gG//2BsTeWfGBBulDn/H8ObWRJjIu81nLKX1I4iQ1jNcK5uOfso6ug==
 
-"@klasa/ws@^0.0.13":
-  version "0.0.13"
-  resolved "https://registry.yarnpkg.com/@klasa/ws/-/ws-0.0.13.tgz#82cb380baf591c35f48cf307b93d6a8c6103a2f5"
-  integrity sha512-RQQEuaAMP1HETBSpHNSeALSfH1gjnMYVlk82/CHfvLi5o8YFMjmILG8RGQs6WX9YvDxnPDLFCIQ6Dvt9GC+8cA==
+"@klasa/ws@^0.0.14":
+  version "0.0.14"
+  resolved "https://registry.yarnpkg.com/@klasa/ws/-/ws-0.0.14.tgz#c278fb4f3362cd945026acfe458dc1ce02875847"
+  integrity sha512-lSvcXMUGBDvqK+Y5wtEJORoZTNwj+krUJdMln6oQURTikQ16Wvq5Uyx9TA3nsKk5Ht5DSBkfHGW1qe246HDYDQ==
   dependencies:
     "@klasa/async-queue" "^0.0.1"
     "@klasa/bitfield" "^0.0.3"
@@ -341,7 +342,7 @@
   optionalDependencies:
     bufferutil "^4.0.1"
     utf-8-validate "^5.0.2"
-    zlib-sync "^0.1.6"
+    zlib-sync "^0.1.7"
 
 "@nodelib/fs.scandir@2.1.3":
   version "2.1.3"
@@ -3142,7 +3143,7 @@ yargs@^15.0.2, yargs@^15.3.1:
     y18n "^4.0.0"
     yargs-parser "^18.1.1"
 
-zlib-sync@^0.1.6:
+zlib-sync@^0.1.7:
   version "0.1.7"
   resolved "https://registry.yarnpkg.com/zlib-sync/-/zlib-sync-0.1.7.tgz#b0b24f9428e434943e306ad586428ef8baf3ed60"
   integrity sha512-UmciU6ZrIwtwPC8noMzq+kGMdiWwNRZ3wC0SbED4Ew5Ikqx14MqDPRs/Pbk+3rZPh5SzsOgUBs1WRE0iieddpg==
