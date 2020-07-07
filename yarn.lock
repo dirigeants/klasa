@@ -237,8 +237,8 @@
 
 "@klasa/core@dirigeants/core#build":
   version "0.0.3"
-  uid eb4b655f16a04f3b6c06f895ecf0baf1b681ba5e
-  resolved "https://codeload.github.com/dirigeants/core/tar.gz/eb4b655f16a04f3b6c06f895ecf0baf1b681ba5e"
+  uid c783633444a839929e9a591e54ff0dc653f520a1
+  resolved "https://codeload.github.com/dirigeants/core/tar.gz/c783633444a839929e9a591e54ff0dc653f520a1"
   dependencies:
     "@klasa/bitfield" "^0.0.4"
     "@klasa/cache" "^0.0.3"
@@ -249,7 +249,7 @@
     "@klasa/timer-manager" "^0.0.1"
     "@klasa/utils" "^0.0.8"
     "@klasa/ws" "^0.0.14"
-    "@types/node" "^14.0.14"
+    "@types/node" "^14.0.18"
     "@types/node-fetch" "^2.5.7"
     fs-nextra "^0.5.1"
 
@@ -413,7 +413,7 @@
     "@types/node" "*"
     form-data "^3.0.0"
 
-"@types/node@*", "@types/node@14", "@types/node@^14.0.14":
+"@types/node@*", "@types/node@14", "@types/node@^14.0.18":
   version "14.0.18"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-14.0.18.tgz#5111b2285659442f9f95697386a2b42b875bd7e9"
   integrity sha512-0Z3nS5acM0cIV4JPzrj9g/GH0Et5vmADWtip3YOXOp1NpOLU8V3KoZDc8ny9c1pe/YSYYzQkAWob6dyV/EWg4g==
