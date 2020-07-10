@@ -114,6 +114,7 @@
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="klasauser.html#email" class="tsd-kind-icon">email</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="klasauser.html#flags" class="tsd-kind-icon">flags</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited"><a href="klasauser.html#id" class="tsd-kind-icon">id</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="klasauser.html#lastmessageid" class="tsd-kind-icon">last<wbr>MessageID</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="klasauser.html#locale" class="tsd-kind-icon">locale</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="klasauser.html#mfaenabled" class="tsd-kind-icon">mfa<wbr>Enabled</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="klasauser.html#premiumtype" class="tsd-kind-icon">premium<wbr>Type</a></li>
@@ -128,6 +129,8 @@
 							<h3>Accessors</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="klasauser.html#channel" class="tsd-kind-icon">channel</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="klasauser.html#createdat" class="tsd-kind-icon">created<wbr>At</a></li>
+								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="klasauser.html#createdtimestamp" class="tsd-kind-icon">created<wbr>Timestamp</a></li>
 								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="klasauser.html#defaultavatarurl" class="tsd-kind-icon">default<wbr>AvatarURL</a></li>
 								<li class="tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited"><a href="klasauser.html#tag" class="tsd-kind-icon">tag</a></li>
 							</ul>
@@ -162,7 +165,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides User.__constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/ba4afcbf/src/lib/extensions/KlasaUser.ts#L16">src/lib/extensions/KlasaUser.ts:16</a></li>
+									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/93ffa183/src/lib/extensions/KlasaUser.ts#L16">src/lib/extensions/KlasaUser.ts:16</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -323,6 +326,27 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+					<a name="lastmessageid" class="tsd-anchor"></a>
+					<h3>last<wbr>MessageID</h3>
+					<div class="tsd-signature tsd-kind-icon">last<wbr>MessageID<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></div>
+					<aside class="tsd-sources">
+						<p>Inherited from <a href="klasauser.html">KlasaUser</a>.<a href="klasauser.html#lastmessageid">lastMessageID</a></p>
+						<ul>
+							<li>Defined in node_modules/@klasa/core/dist/src/lib/caching/structures/User.d.ts:83</li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The id for the last message recieved for this user</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>since</dt>
+							<dd><p>0.0.3</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 					<a name="locale" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> locale</h3>
 					<div class="tsd-signature tsd-kind-icon">locale<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
@@ -419,7 +443,7 @@
 					<aside class="tsd-sources">
 						<p>Overrides <a href="../interfaces/_caching_structures_user_.user.html">User</a>.<a href="../interfaces/_caching_structures_user_.user.html#settings">settings</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/ba4afcbf/src/lib/extensions/KlasaUser.ts#L16">src/lib/extensions/KlasaUser.ts:16</a></li>
+							<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/93ffa183/src/lib/extensions/KlasaUser.ts#L16">src/lib/extensions/KlasaUser.ts:16</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -510,7 +534,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="klasauser.html">KlasaUser</a>.<a href="klasauser.html#channel">channel</a></p>
 								<ul>
-									<li>Defined in node_modules/@klasa/core/dist/src/lib/caching/structures/User.d.ts:84</li>
+									<li>Defined in node_modules/@klasa/core/dist/src/lib/caching/structures/User.d.ts:89</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -528,6 +552,52 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
+					<a name="createdat" class="tsd-anchor"></a>
+					<h3>created<wbr>At</h3>
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> createdAt<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Date</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="klasaguild.html">KlasaGuild</a>.<a href="klasaguild.html#createdat">createdAt</a></p>
+								<ul>
+									<li>Defined in node_modules/@klasa/core/dist/src/lib/caching/structures/base/Structure.d.ts:15</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>The Date when this object was created at</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Date</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
+					<a name="createdtimestamp" class="tsd-anchor"></a>
+					<h3>created<wbr>Timestamp</h3>
+					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
+						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> createdTimestamp<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from <a href="klasaguild.html">KlasaGuild</a>.<a href="klasaguild.html#createdtimestamp">createdTimestamp</a></p>
+								<ul>
+									<li>Defined in node_modules/@klasa/core/dist/src/lib/caching/structures/base/Structure.d.ts:19</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>The time when this object was created at</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
 					<a name="defaultavatarurl" class="tsd-anchor"></a>
 					<h3>default<wbr>AvatarURL</h3>
 					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
@@ -538,7 +608,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="klasauser.html">KlasaUser</a>.<a href="klasauser.html#defaultavatarurl">defaultAvatarURL</a></p>
 								<ul>
-									<li>Defined in node_modules/@klasa/core/dist/src/lib/caching/structures/User.d.ts:115</li>
+									<li>Defined in node_modules/@klasa/core/dist/src/lib/caching/structures/User.d.ts:120</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -561,7 +631,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="klasauser.html">KlasaUser</a>.<a href="klasauser.html#tag">tag</a></p>
 								<ul>
-									<li>Defined in node_modules/@klasa/core/dist/src/lib/caching/structures/User.d.ts:89</li>
+									<li>Defined in node_modules/@klasa/core/dist/src/lib/caching/structures/User.d.ts:94</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -593,7 +663,7 @@
 								<p>Inherited from <a href="klasauser.html">KlasaUser</a>.<a href="klasauser.html#_patch">_patch</a></p>
 								<p>Overrides Structure._patch</p>
 								<ul>
-									<li>Defined in node_modules/@klasa/core/dist/src/lib/caching/structures/User.d.ts:121</li>
+									<li>Defined in node_modules/@klasa/core/dist/src/lib/caching/structures/User.d.ts:126</li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -617,7 +687,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="klasauser.html">KlasaUser</a>.<a href="klasauser.html#avatarurl">avatarURL</a></p>
 								<ul>
-									<li>Defined in node_modules/@klasa/core/dist/src/lib/caching/structures/User.d.ts:106</li>
+									<li>Defined in node_modules/@klasa/core/dist/src/lib/caching/structures/User.d.ts:111</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -649,7 +719,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="klasaguild.html">KlasaGuild</a>.<a href="klasaguild.html#clone">clone</a></p>
 								<ul>
-									<li>Defined in node_modules/@klasa/core/dist/src/lib/caching/structures/base/Structure.d.ts:15</li>
+									<li>Defined in node_modules/@klasa/core/dist/src/lib/caching/structures/base/Structure.d.ts:23</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -672,7 +742,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="klasauser.html">KlasaUser</a>.<a href="klasauser.html#closedm">closeDM</a></p>
 								<ul>
-									<li>Defined in node_modules/@klasa/core/dist/src/lib/caching/structures/User.d.ts:101</li>
+									<li>Defined in node_modules/@klasa/core/dist/src/lib/caching/structures/User.d.ts:106</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -703,7 +773,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="klasauser.html">KlasaUser</a>.<a href="klasauser.html#displayavatarurl">displayAvatarURL</a></p>
 								<ul>
-									<li>Defined in node_modules/@klasa/core/dist/src/lib/caching/structures/User.d.ts:111</li>
+									<li>Defined in node_modules/@klasa/core/dist/src/lib/caching/structures/User.d.ts:116</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -735,7 +805,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="klasauser.html">KlasaUser</a>.<a href="klasauser.html#opendm">openDM</a></p>
 								<ul>
-									<li>Defined in node_modules/@klasa/core/dist/src/lib/caching/structures/User.d.ts:95</li>
+									<li>Defined in node_modules/@klasa/core/dist/src/lib/caching/structures/User.d.ts:100</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -766,7 +836,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="klasamessage.html">KlasaMessage</a>.<a href="klasamessage.html#tojson">toJSON</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/ba4afcbf/src/lib/extensions/KlasaUser.ts#L28">src/lib/extensions/KlasaUser.ts:28</a></li>
+									<li>Defined in <a href="https://github.com/dirigeants/klasa/blob/93ffa183/src/lib/extensions/KlasaUser.ts#L28">src/lib/extensions/KlasaUser.ts:28</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -794,7 +864,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="klasauser.html">KlasaUser</a>.<a href="klasauser.html#tostring">toString</a></p>
 								<ul>
-									<li>Defined in node_modules/@klasa/core/dist/src/lib/caching/structures/User.d.ts:120</li>
+									<li>Defined in node_modules/@klasa/core/dist/src/lib/caching/structures/User.d.ts:125</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -822,7 +892,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="klasaguild.html">KlasaGuild</a>.<a href="klasaguild.html#valueof">valueOf</a></p>
 								<ul>
-									<li>Defined in node_modules/@klasa/core/dist/src/lib/caching/structures/base/Structure.d.ts:24</li>
+									<li>Defined in node_modules/@klasa/core/dist/src/lib/caching/structures/base/Structure.d.ts:32</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -876,6 +946,9 @@
 								<a href="klasauser.html#id" class="tsd-kind-icon">id</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="klasauser.html#lastmessageid" class="tsd-kind-icon">last<wbr>MessageID</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
 								<a href="klasauser.html#locale" class="tsd-kind-icon">locale</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
@@ -901,6 +974,12 @@
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
 								<a href="klasauser.html#channel" class="tsd-kind-icon">channel</a>
+							</li>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
+								<a href="klasauser.html#createdat" class="tsd-kind-icon">created<wbr>At</a>
+							</li>
+							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
+								<a href="klasauser.html#createdtimestamp" class="tsd-kind-icon">created<wbr>Timestamp</a>
 							</li>
 							<li class=" tsd-kind-get-signature tsd-parent-kind-class tsd-is-inherited">
 								<a href="klasauser.html#defaultavatarurl" class="tsd-kind-icon">default<wbr>AvatarURL</a>
