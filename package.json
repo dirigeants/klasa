@@ -36,7 +36,7 @@
     "@klasa/timer-manager": "0.0.1",
     "@klasa/timestamp": "^0.0.1",
     "@klasa/type": "^0.0.1",
-    "@klasa/utils": "^0.0.8",
+    "@klasa/utils": "^0.1.0",
     "discord-md-tags": "1.0.0",
     "fs-nextra": "^0.5.1"
   },
