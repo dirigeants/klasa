@@ -245,19 +245,19 @@
 
 "@klasa/core@dirigeants/core#build":
   version "0.0.3"
-  uid "101b131f06411fe16e9080448eddac98821a3f1e"
-  resolved "https://codeload.github.com/dirigeants/core/tar.gz/101b131f06411fe16e9080448eddac98821a3f1e"
+  uid "11bd83b8bf632da76c2b5cdecb1ac99c58d35efe"
+  resolved "https://codeload.github.com/dirigeants/core/tar.gz/11bd83b8bf632da76c2b5cdecb1ac99c58d35efe"
   dependencies:
     "@klasa/bitfield" "^0.0.4"
     "@klasa/cache" "^0.0.3"
-    "@klasa/dapi-types" "^0.2.1"
+    "@klasa/dapi-types" "^0.3.0"
     "@klasa/event-iterator" "^0.0.10"
     "@klasa/rest" "^0.5.4"
     "@klasa/snowflake" "^0.0.1"
     "@klasa/timer-manager" "^0.0.1"
     "@klasa/utils" "^0.0.8"
     "@klasa/ws" "^0.0.14"
-    "@types/node" "^14.0.20"
+    "@types/node" "^14.0.23"
     "@types/node-fetch" "^2.5.7"
     fs-nextra "^0.5.1"
 
@@ -266,10 +266,15 @@
   resolved "https://registry.yarnpkg.com/@klasa/cron/-/cron-0.0.1.tgz#88f0325e00f6eaed19bd14657eb959cac448172b"
   integrity sha512-YqT8ybFWY4CnW4il4IdntES+RV6vWEPQ5fZa3xzC3rhi6Nfq38yHTG0NtqqVqTlXZWyutgZq/2TPrCAk8jDd1A==
 
-"@klasa/dapi-types@^0.2.1", "@klasa/dapi-types@^0.2.2":
+"@klasa/dapi-types@^0.2.2":
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/@klasa/dapi-types/-/dapi-types-0.2.2.tgz#87a10ecd9f0a611b123765997c358c929a81e131"
   integrity sha512-axDQx4AfiuLiBUqrPBn5AJC5lDUhMyAKyGFY6x3Nm1WZjw5mU+r4/+7hDAvdrVpxe957fB3kC69vYqnXNy05GA==
+
+"@klasa/dapi-types@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@klasa/dapi-types/-/dapi-types-0.3.0.tgz#710c9965b9676af7804a6d4f178e0147b7d0ab91"
+  integrity sha512-9jG3b4XNXeNMCKECQcxd5u1A0YW2Ff75ywJYks9uTPSNu1x29ZAgYnkOag/NEB4PCItkfp2fik6FwNDmfnQ6cA==
 
 "@klasa/duration@^0.0.3":
   version "0.0.3"
@@ -421,7 +426,7 @@
     "@types/node" "*"
     form-data "^3.0.0"
 
-"@types/node@*", "@types/node@14", "@types/node@^14.0.20":
+"@types/node@*", "@types/node@14", "@types/node@^14.0.23":
   version "14.0.23"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-14.0.23.tgz#676fa0883450ed9da0bb24156213636290892806"
   integrity sha512-Z4U8yDAl5TFkmYsZdFPdjeMa57NOvnaf1tljHzhouaPEp7LCj2JKkejpI1ODviIAQuW4CcQmxkQ77rnLsOOoKw==
