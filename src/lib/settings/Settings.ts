@@ -425,7 +425,7 @@ export class Settings extends Cache<string, unknown> {
 		if (options.arrayAction === ArrayActions.Auto) {
 			// Array action auto must add or remove values, depending on their existence
 			for (const value of values) {
-				const index = clone.indexOf(value);
+				const index = serializer.indexOf(clone, value, context);
 				if (index === -1) clone.push(value);
 				else clone.splice(index, 1);
 			}
@@ -438,7 +438,7 @@ export class Settings extends Cache<string, unknown> {
 		} else if (options.arrayAction === ArrayActions.Remove) {
 			// Array action remove must add values, throw on non-existent
 			for (const value of values) {
-				const index = clone.indexOf(value);
+				const index = serializer.indexOf(clone, value, context);
 				if (index === -1) throw new Error(context.language.get('SETTING_GATEWAY_MISSING_VALUE', context.entry, serializer.stringify(value, context.guild)));
 				clone.splice(index, 1);
 			}

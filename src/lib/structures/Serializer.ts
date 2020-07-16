@@ -17,6 +17,17 @@ export abstract class Serializer extends AliasPiece {
 	}
 
 	/**
+	 * The indexOf method to be overwritten in non-primitive Serializers.
+	 * @param array The array to be looked up at
+	 * @param data The entry to find in the array
+	 * @param context The context in which this serializer is called
+	 */
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	public indexOf(array: readonly unknown[], data: unknown, _context: SerializerUpdateContext): number {
+		return array.indexOf(data);
+	}
+
+	/**
 	 * Resolve a value given directly from the {@link Settings#resolve} call.
 	 * @param data The data to resolve
 	 * @param context The context in which this serializer is called
