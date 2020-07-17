@@ -195,19 +195,23 @@ export declare class Settings extends Cache<string, unknown> {
  */
 export declare const enum SettingsExistenceStatus {
     /**
+     * The settings exists only as a source of defaults and should not sync or other forms of updating.
+     */
+    Defaults = 0,
+    /**
      * The settings has not been synchronized, in this status, any update operation will error. To prevent this, call
      * `settings.sync()` first.
      */
-    Unsynchronized = 0,
+    Unsynchronized = 1,
     /**
      * The settings entry exists in disk, any disk operation will be done through an update.
      */
-    Exists = 1,
+    Exists = 2,
     /**
      * The settings entry does not exist in disk, the first disk operation will be done through a create. Afterwards it
      * sets itself to Exists.
      */
-    NotExists = 2
+    NotExists = 3
 }
 /**
  * The options for {@link Settings#reset}.

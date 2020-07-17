@@ -9,7 +9,7 @@ class Settings extends cache_1.Cache {
         this.id = id;
         this.gateway = gateway;
         this.target = target;
-        this.existenceStatus = 0 /* Unsynchronized */;
+        this.existenceStatus = 1 /* Unsynchronized */;
         this._init();
     }
     /**
@@ -24,19 +24,19 @@ class Settings extends cache_1.Cache {
      * Sync the data from the database with the cache.
      * @param force Whether or not this should force a database synchronization
      */
-    async sync(force = this.existenceStatus === 0 /* Unsynchronized */) {
+    async sync(force = this.existenceStatus === 1 /* Unsynchronized */) {
         // If not force and the instance has already been synchronized with the database, return this
-        if (!force && this.existenceStatus !== 0 /* Unsynchronized */)
+        if (this.existenceStatus === 0 /* Defaults */ || (!force && this.existenceStatus !== 1 /* Unsynchronized */))
             return this;
         // Push a synchronization task to the request handler queue
         const data = await this.gateway.requestHandler.push(this.id);
         if (data) {
-            this.existenceStatus = 1 /* Exists */;
+            this.existenceStatus = 2 /* Exists */;
             this._patch(data);
             this.gateway.client.emit('settingsSync', this);
         }
         else {
-            this.existenceStatus = 2 /* NotExists */;
+            this.existenceStatus = 3 /* NotExists */;
         }
         return this;
     }
@@ -44,8 +44,10 @@ class Settings extends cache_1.Cache {
      * Delete this entry from the database and clean all the values to their defaults.
      */
     async destroy() {
+        if (this.existenceStatus === 0 /* Defaults */)
+            return this;
         await this.sync();
-        if (this.existenceStatus === 1 /* Exists */) {
+        if (this.existenceStatus === 2 /* Exists */) {
             const { provider } = this.gateway;
             /* istanbul ignore if: Hard to coverage test the catch */
             if (provider === null)
@@ -53,7 +55,7 @@ class Settings extends cache_1.Cache {
             await provider.delete(this.gateway.name, this.id);
             this.gateway.client.emit('settingsDelete', this);
             this._init();
-            this.existenceStatus = 2 /* NotExists */;
+            this.existenceStatus = 3 /* NotExists */;
         }
         return this;
     }
@@ -95,10 +97,13 @@ class Settings extends cache_1.Cache {
     }
     async reset(paths = [...this.keys()], options = {}) {
         var _a;
-        if (this.existenceStatus === 0 /* Unsynchronized */) {
+        if (this.existenceStatus === 0 /* Defaults */) {
+            throw new Error('Cannot reset keys from an default settings instance.');
+        }
+        if (this.existenceStatus === 1 /* Unsynchronized */) {
             throw new Error('Cannot reset keys from an unsynchronized settings instance. Perhaps you want to call `sync()` first.');
         }
-        if (this.existenceStatus === 2 /* NotExists */) {
+        if (this.existenceStatus === 3 /* NotExists */) {
             return [];
         }
         if (typeof paths === 'string')
@@ -122,8 +127,11 @@ class Settings extends cache_1.Cache {
         return changes;
     }
     async update(pathOrEntries, valueOrOptions, options) {
-        if (this.existenceStatus === 0 /* Unsynchronized */) {
-            throw new Error('Cannot reset keys from an unsynchronized settings instance. Perhaps you want to call `sync()` first.');
+        if (this.existenceStatus === 0 /* Defaults */) {
+            throw new Error('Cannot update values from an default settings instance.');
+        }
+        if (this.existenceStatus === 1 /* Unsynchronized */) {
+            throw new Error('Cannot update values from an unsynchronized settings instance. Perhaps you want to call `sync()` first.');
         }
         let entries;
         if (typeof pathOrEntries === 'string') {
@@ -172,14 +180,14 @@ class Settings extends cache_1.Cache {
         /* istanbul ignore if: Extremely hard to reproduce in coverage testing */
         if (gateway.provider === null)
             throw new Error('Cannot update due to the gateway missing a reference to the provider.');
-        if (this.existenceStatus === 1 /* Exists */) {
+        if (this.existenceStatus === 2 /* Exists */) {
             await gateway.provider.update(gateway.name, id, context.changes);
             this._patch(updateObject);
             gateway.client.emit('settingsUpdate', this, updateObject, context);
         }
         else {
             await gateway.provider.create(gateway.name, id, context.changes);
-            this.existenceStatus = 1 /* Exists */;
+            this.existenceStatus = 2 /* Exists */;
             this._patch(updateObject);
             gateway.client.emit('settingsCreate', this, updateObject, context);
         }

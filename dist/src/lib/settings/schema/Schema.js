@@ -15,6 +15,7 @@ class Schema extends cache_1.Cache {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         this.defaults = new Settings_1.Settings({ schema: this }, null, '');
+        this.defaults.existenceStatus = 0 /* Defaults */;
     }
     /**
      * Adds or replaces an entry to this instance.
