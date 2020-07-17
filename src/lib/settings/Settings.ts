@@ -53,7 +53,7 @@ export class Settings extends Cache<string, unknown> {
 	 */
 	public async sync(force = this.existenceStatus === SettingsExistenceStatus.Unsynchronized): Promise<this> {
 		// If not force and the instance has already been synchronized with the database, return this
-		if (!force && this.existenceStatus !== SettingsExistenceStatus.Unsynchronized) return this;
+		if (this.existenceStatus === SettingsExistenceStatus.Defaults || (!force && this.existenceStatus !== SettingsExistenceStatus.Unsynchronized)) return this;
 
 		// Push a synchronization task to the request handler queue
 		const data = await this.gateway.requestHandler.push(this.id);
@@ -72,6 +72,7 @@ export class Settings extends Cache<string, unknown> {
 	 * Delete this entry from the database and clean all the values to their defaults.
 	 */
 	public async destroy(): Promise<this> {
+		if (this.existenceStatus === SettingsExistenceStatus.Defaults) return this;
 		await this.sync();
 		if (this.existenceStatus === SettingsExistenceStatus.Exists) {
 			const { provider } = this.gateway;
@@ -166,6 +167,9 @@ export class Settings extends Cache<string, unknown> {
 	 */
 	public async reset(object: ReadonlyKeyedObject, options?: Readonly<SettingsResetOptions>): Promise<SettingsUpdateResults>;
 	public async reset(paths: string | ReadonlyKeyedObject | readonly string[] = [...this.keys()], options: Readonly<SettingsResetOptions> = {}): Promise<SettingsUpdateResults> {
+		if (this.existenceStatus === SettingsExistenceStatus.Defaults) {
+			throw new Error('Cannot reset keys from an default settings instance.');
+		}
 		if (this.existenceStatus === SettingsExistenceStatus.Unsynchronized) {
 			throw new Error('Cannot reset keys from an unsynchronized settings instance. Perhaps you want to call `sync()` first.');
 		}
@@ -266,8 +270,11 @@ export class Settings extends Cache<string, unknown> {
 	 */
 	public update(entries: ReadonlyKeyedObject, options?: SettingsUpdateOptions): Promise<SettingsUpdateResults>;
 	public async update(pathOrEntries: PathOrEntries, valueOrOptions?: ValueOrOptions, options?: SettingsUpdateOptions): Promise<SettingsUpdateResults> {
+		if (this.existenceStatus === SettingsExistenceStatus.Defaults) {
+			throw new Error('Cannot update values from an default settings instance.');
+		}
 		if (this.existenceStatus === SettingsExistenceStatus.Unsynchronized) {
-			throw new Error('Cannot reset keys from an unsynchronized settings instance. Perhaps you want to call `sync()` first.');
+			throw new Error('Cannot update values from an unsynchronized settings instance. Perhaps you want to call `sync()` first.');
 		}
 
 		let entries: [string, unknown][];
@@ -503,6 +510,10 @@ export class Settings extends Cache<string, unknown> {
  * @memberof Settings
  */
 export const enum SettingsExistenceStatus {
+	/**
+	 * The settings exists only as a source of defaults and should not sync or other forms of updating.
+	 */
+	Defaults,
 	/**
 	 * The settings has not been synchronized, in this status, any update operation will error. To prevent this, call
 	 * `settings.sync()` first.

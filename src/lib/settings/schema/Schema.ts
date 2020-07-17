@@ -1,6 +1,6 @@
 import { Cache } from '@klasa/cache';
 import { SchemaEntry, SchemaEntryOptions, SchemaEntryJson } from './SchemaEntry';
-import { Settings } from '../Settings';
+import { Settings, SettingsExistenceStatus } from '../Settings';
 
 /* eslint-disable no-dupe-class-members */
 
@@ -26,6 +26,7 @@ export class Schema extends Cache<string, SchemaEntry> {
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-expect-error
 		this.defaults = new Settings({ schema: this }, null, '');
+		this.defaults.existenceStatus = SettingsExistenceStatus.Defaults;
 	}
 
 	/**
