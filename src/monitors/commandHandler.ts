@@ -14,7 +14,8 @@ export default class CommandHandler extends Monitor {
 	public async run(message: Message): Promise<void | Message[]> {
 		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		if (message.guild && !message.guild.me) await message.guild.members.fetch(this.client.user!.id);
-		if (!message.channel.postable) return undefined;
+		if (!message.channel.postable || (!message.commandText && !message.prefix)) return undefined;
+		await Promise.all([message.guildSettings.sync(), message.author.settings.sync()]);
 		if (!message.commandText && message.prefix === this.client.mentionPrefix) {
 			const prefix = message.guildSettings.get('prefix') as string | string[];
 			return message.replyLocale('PREFIX_REMINDER', [prefix.length ? prefix : undefined]);
