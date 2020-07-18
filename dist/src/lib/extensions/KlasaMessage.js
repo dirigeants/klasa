@@ -116,6 +116,9 @@ class KlasaMessage extends core_1.extender.get('Message') {
             [options, localeArgs] = [localeArgs, []];
         return this.reply(mb => mb.setContent(this.language.get(key, ...localeArgs)), options);
     }
+    toJSON() {
+        return { ...super.toJSON(), prompter: undefined };
+    }
     /**
      * Extends the patch method from Message to attach and update the language to this instance
      * @since 0.5.0

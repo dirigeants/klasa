@@ -118,6 +118,7 @@ export declare class KlasaMessage extends KlasaMessage_base {
      * @param options The split options
      */
     replyLocale(key: string, localeArgs?: unknown[], options?: SplitOptions): Promise<Message[]>;
+    toJSON(): Record<string, unknown>;
     /**
      * Extends the patch method from Message to attach and update the language to this instance
      * @since 0.5.0
