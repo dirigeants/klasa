@@ -90,7 +90,8 @@ class ReactionHandler {
     async run(emojis, options) {
         var _a, _b;
         try {
-            this.setup(emojis);
+            if (this.setup(emojis))
+                return;
             for await (const [reaction, user] of this.message.reactions.iterate(options)) {
                 if (__classPrivateFieldGet(this, _ended))
                     break;
