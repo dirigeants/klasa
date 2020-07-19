@@ -161,14 +161,15 @@ export class ReactionHandler {
 	 */
 	private async run(emojis: string[], options: ReactionIteratorOptions): Promise<void> {
 		try {
-			if (this.setup(emojis)) return;
-			for await (const [reaction, user] of this.message.reactions.iterate(options)) {
-				if (this.#ended) break;
-				if (user === reaction.client.user) continue;
-				const method = this.methodMap.get((reaction.emoji.name ?? reaction.emoji.id) as string);
-				if (!method) continue;
-				const signals = await Promise.all([reaction.users.remove(user.id), (this.constructor as typeof ReactionHandler).methods.get(method)?.call(this, user)]);
-				if (signals[1]) break;
+			if (!this.setup(emojis)) {
+				for await (const [reaction, user] of this.message.reactions.iterate(options)) {
+					if (this.#ended) break;
+					if (user === reaction.client.user) continue;
+					const method = this.methodMap.get((reaction.emoji.name ?? reaction.emoji.id) as string);
+					if (!method) continue;
+					const signals = await Promise.all([reaction.users.remove(user.id), (this.constructor as typeof ReactionHandler).methods.get(method)?.call(this, user)]);
+					if (signals[1]) break;
+				}
 			}
 		} catch {
 			// noop
@@ -200,7 +201,7 @@ export class ReactionHandler {
 	 */
 	private async setup(emojis: string[]): Promise<boolean> {
 		if (this.message.deleted) return this.stop();
-		if (this.#ended) return false;
+		if (this.#ended) return true;
 		try {
 			await this.message.reactions.add(emojis.shift() as string);
 		} catch {
