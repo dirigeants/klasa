@@ -910,14 +910,14 @@ ava('Settings#update (Uninitialized)', async (test): Promise<void> => {
 	test.plan(1);
 
 	const { settings } = test.context;
-	await test.throwsAsync(() => settings.update('count', 6), { message: 'Cannot reset keys from an unsynchronized settings instance. Perhaps you want to call `sync()` first.' });
+	await test.throwsAsync(() => settings.update('count', 6), { message: 'Cannot update values from an unsynchronized settings instance. Perhaps you want to call `sync()` first.' });
 });
 
 ava('Settings#update (Unsynchronized)', async (test): Promise<void> => {
 	test.plan(1);
 
 	const { settings } = test.context;
-	await test.throwsAsync(() => settings.update('count', 6), { message: 'Cannot reset keys from an unsynchronized settings instance. Perhaps you want to call `sync()` first.' });
+	await test.throwsAsync(() => settings.update('count', 6), { message: 'Cannot update values from an unsynchronized settings instance. Perhaps you want to call `sync()` first.' });
 });
 
 ava('Settings#update (Invalid Key)', async (test): Promise<void> => {
