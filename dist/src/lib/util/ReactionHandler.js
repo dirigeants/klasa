@@ -90,19 +90,19 @@ class ReactionHandler {
     async run(emojis, options) {
         var _a, _b;
         try {
-            if (this.setup(emojis))
-                return;
-            for await (const [reaction, user] of this.message.reactions.iterate(options)) {
-                if (__classPrivateFieldGet(this, _ended))
-                    break;
-                if (user === reaction.client.user)
-                    continue;
-                const method = this.methodMap.get(((_a = reaction.emoji.name) !== null && _a !== void 0 ? _a : reaction.emoji.id));
-                if (!method)
-                    continue;
-                const signals = await Promise.all([reaction.users.remove(user.id), (_b = this.constructor.methods.get(method)) === null || _b === void 0 ? void 0 : _b.call(this, user)]);
-                if (signals[1])
-                    break;
+            if (!this.setup(emojis)) {
+                for await (const [reaction, user] of this.message.reactions.iterate(options)) {
+                    if (__classPrivateFieldGet(this, _ended))
+                        break;
+                    if (user === reaction.client.user)
+                        continue;
+                    const method = this.methodMap.get(((_a = reaction.emoji.name) !== null && _a !== void 0 ? _a : reaction.emoji.id));
+                    if (!method)
+                        continue;
+                    const signals = await Promise.all([reaction.users.remove(user.id), (_b = this.constructor.methods.get(method)) === null || _b === void 0 ? void 0 : _b.call(this, user)]);
+                    if (signals[1])
+                        break;
+                }
             }
         }
         catch {
@@ -138,7 +138,7 @@ class ReactionHandler {
         if (this.message.deleted)
             return this.stop();
         if (__classPrivateFieldGet(this, _ended))
-            return false;
+            return true;
         try {
             await this.message.reactions.add(emojis.shift());
         }
