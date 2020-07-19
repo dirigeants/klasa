@@ -159,9 +159,9 @@ export class ReactionHandler {
 	 * @param emojis The emojis to react
 	 * @param options The options for the Iterator
 	 */
-	private async run(emojis: string[], options: ReactionIteratorOptions) {
+	private async run(emojis: string[], options: ReactionIteratorOptions): Promise<void> {
 		try {
-			this.setup(emojis);
+			if (this.setup(emojis)) return;
 			for await (const [reaction, user] of this.message.reactions.iterate(options)) {
 				if (this.#ended) break;
 				if (user === reaction.client.user) continue;
