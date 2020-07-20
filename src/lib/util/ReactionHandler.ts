@@ -1,5 +1,3 @@
-import { ChannelType } from '@klasa/dapi-types';
-
 import type { Message, ReactionIteratorOptions, User } from '@klasa/core';
 import type { Cache } from '@klasa/cache';
 import type { RichDisplay } from './RichDisplay';
@@ -119,7 +117,7 @@ export class ReactionHandler {
 	 * @param emojis The emojis to manage this reaction handler
 	 */
 	public constructor(message: Message, options: ReactionHandlerOptions, display: RichDisplay, emojis: Cache<ReactionMethods, string>) {
-		if (message.channel.type === ChannelType.DM) throw new Error('RichDisplays and subclasses cannot be used in DMs, as they do not have enough permissions to perform in a UX friendly way.');
+		if (!message.guild) throw new Error('RichDisplays and subclasses cannot be used in DMs, as they do not have enough permissions to perform in a UX friendly way.');
 		this.message = message;
 		this.display = display;
 		this.methodMap = new Map(emojis.map((value, key) => [value, key]));
