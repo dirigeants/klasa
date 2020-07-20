@@ -15,7 +15,6 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
 var _ended, _awaiting, _currentPage, _resolve;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ReactionHandler = void 0;
-require("@klasa/dapi-types");
 /**
  * Klasa's ReactionHandler, for handling RichDisplay and RichMenu reaction input
  */
@@ -47,7 +46,7 @@ class ReactionHandler {
          * @since 0.4.0
          */
         _resolve.set(this, null);
-        if (message.channel.type === 1 /* DM */)
+        if (!message.guild)
             throw new Error('RichDisplays and subclasses cannot be used in DMs, as they do not have enough permissions to perform in a UX friendly way.');
         this.message = message;
         this.display = display;
