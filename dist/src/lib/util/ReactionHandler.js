@@ -167,7 +167,7 @@ ReactionHandler.methods = new Map()
     return this.update();
 })
     .set("forward" /* Forward */, function () {
-    if (__classPrivateFieldGet(this, _currentPage) > this.display.pages.length - 1)
+    if (__classPrivateFieldGet(this, _currentPage) >= this.display.pages.length - 1)
         return Promise.resolve(false);
     __classPrivateFieldSet(this, _currentPage, +__classPrivateFieldGet(this, _currentPage) + 1);
     return this.update();
