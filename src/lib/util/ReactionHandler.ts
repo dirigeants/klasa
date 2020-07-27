@@ -225,7 +225,7 @@ export class ReactionHandler {
 			return this.update();
 		})
 		.set(ReactionMethods.Forward, function (this: ReactionHandler): Promise<boolean> {
-			if (this.#currentPage > this.display.pages.length - 1) return Promise.resolve(false);
+			if (this.#currentPage >= this.display.pages.length - 1) return Promise.resolve(false);
 			this.#currentPage++;
 			return this.update();
 		})
