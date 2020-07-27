@@ -146,7 +146,7 @@ class ReactionHandler extends ReactionCollector {
 	 * @returns {void}
 	 */
 	forward() {
-		if (this.currentPage > this.display.pages.length - 1) return;
+		if (this.currentPage >= this.display.pages.length - 1) return;
 		this.currentPage++;
 		this.update();
 	}
