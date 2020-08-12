@@ -332,7 +332,7 @@ class KlasaClient extends Discord.Client {
 	 */
 	get invite() {
 		const permissions = new Permissions(this.constructor.basePermissions).add(...this.commands.map(command => command.requiredPermissions)).bitfield;
-		return `https://discordapp.com/oauth2/authorize?client_id=${this.application.id}&permissions=${permissions}&scope=bot`;
+		return `https://discord.com/oauth2/authorize?client_id=${this.application.id}&permissions=${permissions}&scope=bot`;
 	}
 
 	/**
